@@ -418,3 +418,30 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   cursor: pointer;
   line-height: 1;
 }
+.lightbox .lb-prev,
+.lightbox .lb-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.6rem;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background .2s, border-color .2s;
+  z-index: 101;
+  line-height: 1;
+}
+.lightbox .lb-prev { left: 24px; }
+.lightbox .lb-next { right: 24px; }
+.lightbox .lb-prev:hover,
+.lightbox .lb-next:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+}
