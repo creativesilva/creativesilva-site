@@ -339,7 +339,7 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
 }
 .contact-info a:hover { color: var(--accent); }
 
-/* ---------- "You may also like" cross-links ---------- */
+/* ---------- "You may also like" cross-links — slider ---------- */
 .also-like {
   margin-top: 96px;
   padding-top: 48px;
@@ -355,25 +355,38 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   margin-bottom: 28px;
   font-weight: 600;
 }
-.also-like-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+.also-like-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-.also-like-grid a {
+.also-like-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  flex: 1;
+  min-width: 0;
+}
+.also-like-track::-webkit-scrollbar { display: none; }
+.also-like-track > a {
+  flex: 0 0 calc(33.333% - 11px);
   position: relative;
   display: block;
   aspect-ratio: 4 / 3;
   overflow: hidden;
+  scroll-snap-align: start;
 }
-.also-like-grid img {
+.also-like-track > a img {
   width: 100%; height: 100%;
   object-fit: cover;
   opacity: 0.75;
   transition: opacity .3s, transform .6s;
 }
-.also-like-grid a:hover img { opacity: 1; transform: scale(1.04); }
-.also-like-grid .label {
+.also-like-track > a:hover img { opacity: 1; transform: scale(1.04); }
+.also-like-track .label {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
   font-family: var(--font-head);
@@ -382,8 +395,35 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   font-size: 0.85rem;
   background: rgba(0,0,0,0.4);
 }
+.slider-btn {
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s, border-color .2s, opacity .2s;
+  line-height: 1;
+}
+.slider-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+.slider-btn[aria-hidden="true"] {
+  visibility: hidden;
+  pointer-events: none;
+}
 @media (max-width: 720px) {
-  .also-like-grid { grid-template-columns: 1fr; }
+  .also-like-track > a { flex: 0 0 calc(50% - 8px); }
+}
+@media (max-width: 480px) {
+  .also-like-track > a { flex: 0 0 80%; }
 }
 
 /* ---------- Footer ---------- */
