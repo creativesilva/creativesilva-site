@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Chris Silva — Photographer</title>
-  <meta name="description" content="Fine art photography by Chris Silva — portraits, cityscapes, the streets, and the working class." />
+  <meta name="description" content="Fine art photography by Chris Silva. Black and white film and digital work from Santa Maria, California. Portraits, cityscapes, streets, and working class." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -29,7 +29,62 @@
   </header>
 
   <main>
+
+    <!-- Hero slider -->
+    <section class="hero-slider" aria-label="Portfolio highlights">
+      <div class="hero-slides">
+
+        <div class="hero-slide active"
+             data-collection="Portraits"
+             data-title="Forged by the Streets">
+          <img src="images/Portraits-1.jpg" alt="Forged by the Streets" />
+        </div>
+
+        <div class="hero-slide"
+             data-collection="Cityscapes"
+             data-title="New York Inception">
+          <img src="images/City-1.jpg" alt="New York Inception" />
+        </div>
+
+        <div class="hero-slide"
+             data-collection="The Streets"
+             data-title="Claimed by the Borough">
+          <img src="images/SILVA-25.jpg" alt="Claimed by the Borough" />
+        </div>
+
+        <div class="hero-slide"
+             data-collection="Working Class"
+             data-title="Work They Call a Crime">
+          <img src="images/Working-1.jpg" alt="Work They Call a Crime" />
+        </div>
+
+      </div>
+
+      <div class="hero-caption">
+        <span class="hero-collection">Portraits</span>
+        <span class="hero-title">Forged by the Streets</span>
+      </div>
+
+      <button class="hero-btn hero-btn--prev" aria-label="Previous">&#8592;</button>
+      <button class="hero-btn hero-btn--next" aria-label="Next">&#8594;</button>
+
+      <div class="hero-dots" role="tablist" aria-label="Select slide">
+        <button class="hero-dot active" aria-label="Slide 1" role="tab"></button>
+        <button class="hero-dot" aria-label="Slide 2" role="tab"></button>
+        <button class="hero-dot" aria-label="Slide 3" role="tab"></button>
+        <button class="hero-dot" aria-label="Slide 4" role="tab"></button>
+      </div>
+    </section>
+
+    <!-- Statement -->
+    <div class="home-statement">
+      <p>The world does not need more images.<br />It needs photographs with consequence.<br />Images that challenge. That bruise. That endure.</p>
+      <p class="home-byline">Chris Silva &nbsp;&middot;&nbsp; Fine Art Photography &nbsp;&middot;&nbsp; Santa Maria, California</p>
+    </div>
+
+    <!-- Gallery index -->
     <section class="container">
+      <h2 class="section-label">Selected Works</h2>
       <div class="gallery-index">
         <a class="gallery-card" href="portraits.html">
           <img src="images/Portraits-1.jpg" alt="Portraits" loading="lazy" />
@@ -40,14 +95,13 @@
           <span class="label">The Streets</span>
         </a>
         <a class="gallery-card" href="cityscapes.html">
-          <img src="images/City-1.jpg" alt="CITYSCAPES" loading="lazy" />
-          <span class="label">CITYSCAPES</span>
+          <img src="images/City-1.jpg" alt="Cityscapes" loading="lazy" />
+          <span class="label">Cityscapes</span>
         </a>
         <a class="gallery-card" href="working-class.html">
           <img src="images/Working-1.jpg" alt="Working Class" loading="lazy" />
           <span class="label">Working Class</span>
         </a>
-
       </div>
 
       <section class="also-like">
@@ -59,6 +113,7 @@
         </div>
       </section>
     </section>
+
   </main>
 
   <footer class="site-footer">
