@@ -82,6 +82,7 @@
 (function () {
   document.querySelectorAll(".gallery-grid").forEach(function (grid) {
     grid.querySelectorAll(".gallery-item").forEach(function (item) {
+      if (item.classList.contains("gallery-item--feature")) return;
       var img = item.querySelector("img");
       if (!img) return;
       function applyRatio() {
