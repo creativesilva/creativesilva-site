@@ -90,6 +90,39 @@
     if (e.key === "ArrowRight")  showImage(currentIndex + 1);
   });
 
+  // "You may also like" slider
+  document.querySelectorAll(".also-like-slider-wrap").forEach(function (wrap) {
+    var track   = wrap.querySelector(".also-like-track");
+    var prevBtn = wrap.querySelector(".slider-btn--prev");
+    var nextBtn = wrap.querySelector(".slider-btn--next");
+    if (!track || !prevBtn || !nextBtn) return;
+
+    function scrollAmount() {
+      var first = track.firstElementChild;
+      if (!first) return 300;
+      var gap = parseFloat(getComputedStyle(track).gap) || 16;
+      return first.offsetWidth + gap;
+    }
+
+    function refresh() {
+      var atStart = track.scrollLeft <= 2;
+      var atEnd   = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
+      prevBtn.setAttribute("aria-hidden", atStart ? "true" : "false");
+      nextBtn.setAttribute("aria-hidden", atEnd   ? "true" : "false");
+    }
+
+    prevBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      track.scrollBy({ left: -scrollAmount(), behavior: "smooth" });
+    });
+    nextBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      track.scrollBy({ left: scrollAmount(), behavior: "smooth" });
+    });
+    track.addEventListener("scroll", refresh, { passive: true });
+    refresh();
+  });
+
   // Smooth scroll for back-to-top
   document.querySelectorAll(".back-to-top").forEach(function (el) {
     el.addEventListener("click", function (e) {
