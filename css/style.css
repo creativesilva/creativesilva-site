@@ -268,8 +268,25 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   background: #000;
 }
 .gallery-item:hover img { transform: scale(1.025); opacity: 0.92; }
+
+/* Feature: an item that stands alone, centered, showing the full frame */
+.gallery-item--feature {
+  flex: 0 0 100% !important;
+  height: auto !important;
+  max-width: 880px;
+  margin: 4px auto !important;
+}
+.gallery-item--feature img {
+  width: 100%;
+  height: auto;
+  max-height: 560px;
+  object-fit: contain;
+}
+
 @media (max-width: 600px) {
   .gallery-item { height: 200px; }
+  .gallery-item--feature { max-width: 100%; }
+  .gallery-item--feature img { max-height: none; }
 }
 
 /* ---------- Text pages (Statement / Bio) ---------- */
