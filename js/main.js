@@ -16,7 +16,7 @@
   var titleEl = slider.querySelector(".hero-title");
   var current = 0;
   var timer;
-  var INTERVAL  = 5000;
+  var INTERVAL  = 14000;
   var SLIDE_PAD = 6; // px padding on each side of a slide (matches CSS)
 
   function sliderW()  { return slider.offsetWidth; }
@@ -40,24 +40,20 @@
     if (titleEl) titleEl.textContent = slides[current].dataset.title      || "";
   }
 
-  function start()   { timer = setInterval(function () { goTo(current + 1); }, INTERVAL); }
-  function stop()    { clearInterval(timer); }
-  function restart() { stop(); start(); }
+  function start()   { if (!timer) timer = setInterval(function () { goTo(current + 1); }, INTERVAL); }
+  function stop()    { clearInterval(timer); timer = null; }
 
   // Set initial position without transition flash
   track.style.transition = "none";
   applyTransform(0);
   requestAnimationFrame(function () { track.style.transition = ""; });
 
-  if (prevBtn) prevBtn.addEventListener("click", function () { goTo(current - 1); restart(); });
-  if (nextBtn) nextBtn.addEventListener("click", function () { goTo(current + 1); restart(); });
+  if (prevBtn) prevBtn.addEventListener("click", function () { goTo(current - 1); });
+  if (nextBtn) nextBtn.addEventListener("click", function () { goTo(current + 1); });
 
   dots.forEach(function (dot, i) {
-    dot.addEventListener("click", function () { goTo(i); restart(); });
+    dot.addEventListener("click", function () { goTo(i); });
   });
-
-  slider.addEventListener("mouseenter", stop);
-  slider.addEventListener("mouseleave", start);
 
   // Touch / swipe
   var touchX = 0;
@@ -66,14 +62,14 @@
   }, { passive: true });
   slider.addEventListener("touchend", function (e) {
     var dx = touchX - e.changedTouches[0].clientX;
-    if (Math.abs(dx) > 40) { goTo(dx > 0 ? current + 1 : current - 1); restart(); }
+    if (Math.abs(dx) > 40) { goTo(dx > 0 ? current + 1 : current - 1); }
   });
 
   // Keyboard
   document.addEventListener("keydown", function (e) {
     if (lb && lb.classList.contains("open")) return; // don't hijack lightbox keys
-    if (e.key === "ArrowLeft")  { goTo(current - 1); restart(); }
-    if (e.key === "ArrowRight") { goTo(current + 1); restart(); }
+    if (e.key === "ArrowLeft")  { goTo(current - 1); }
+    if (e.key === "ArrowRight") { goTo(current + 1); }
   });
 
   // Recalculate on resize
