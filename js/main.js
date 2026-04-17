@@ -1,26 +1,41 @@
-// CreativeSilva.com — hero slider + lightbox + also-like slider
+// CreativeSilva.com — peek hero slider + justified gallery + lightbox + also-like slider
 
-// ---------- Hero slider ----------
+// ---------- Hero slider (peek carousel) ----------
 (function () {
-  var slider = document.querySelector(".hero-slider");
+  var slider  = document.querySelector(".hero-slider");
   if (!slider) return;
 
-  var slides   = Array.from(slider.querySelectorAll(".hero-slide"));
-  var dots     = Array.from(slider.querySelectorAll(".hero-dot"));
-  var prevBtn  = slider.querySelector(".hero-btn--prev");
-  var nextBtn  = slider.querySelector(".hero-btn--next");
-  var colEl    = slider.querySelector(".hero-collection");
-  var titleEl  = slider.querySelector(".hero-title");
-  var current  = 0;
-  var timer;
-  var INTERVAL = 5000;
+  var track   = slider.querySelector(".hero-slides-track");
+  if (!track) return;
 
-  function goTo(index) {
+  var slides  = Array.from(track.querySelectorAll(".hero-slide"));
+  var dots    = Array.from(slider.querySelectorAll(".hero-dot"));
+  var prevBtn = slider.querySelector(".hero-btn--prev");
+  var nextBtn = slider.querySelector(".hero-btn--next");
+  var colEl   = slider.querySelector(".hero-collection");
+  var titleEl = slider.querySelector(".hero-title");
+  var current = 0;
+  var timer;
+  var INTERVAL  = 5000;
+  var SLIDE_PAD = 6; // px padding on each side of a slide (matches CSS)
+
+  function sliderW()  { return slider.offsetWidth; }
+  function slideW()   { return sliderW() * 0.8; }   // 80% of container
+  function peekW()    { return sliderW() * 0.1; }   // 10% on each side
+
+  function applyTransform(i) {
+    var step   = slideW() + SLIDE_PAD * 2;
+    var offset = peekW() - i * step;
+    track.style.transform = "translateX(" + offset + "px)";
+  }
+
+  function goTo(i) {
     slides[current].classList.remove("active");
     dots[current].classList.remove("active");
-    current = (index + slides.length) % slides.length;
+    current = (i + slides.length) % slides.length;
     slides[current].classList.add("active");
     dots[current].classList.add("active");
+    applyTransform(current);
     if (colEl)   colEl.textContent   = slides[current].dataset.collection || "";
     if (titleEl) titleEl.textContent = slides[current].dataset.title      || "";
   }
@@ -28,6 +43,11 @@
   function start()   { timer = setInterval(function () { goTo(current + 1); }, INTERVAL); }
   function stop()    { clearInterval(timer); }
   function restart() { stop(); start(); }
+
+  // Set initial position without transition flash
+  track.style.transition = "none";
+  applyTransform(0);
+  requestAnimationFrame(function () { track.style.transition = ""; });
 
   if (prevBtn) prevBtn.addEventListener("click", function () { goTo(current - 1); restart(); });
   if (nextBtn) nextBtn.addEventListener("click", function () { goTo(current + 1); restart(); });
@@ -51,22 +71,47 @@
 
   // Keyboard
   document.addEventListener("keydown", function (e) {
+    if (lb && lb.classList.contains("open")) return; // don't hijack lightbox keys
     if (e.key === "ArrowLeft")  { goTo(current - 1); restart(); }
     if (e.key === "ArrowRight") { goTo(current + 1); restart(); }
   });
 
+  // Recalculate on resize
+  window.addEventListener("resize", function () { applyTransform(current); });
+
   start();
 }());
 
-// CreativeSilva.com — minimal lightbox + lazy fade-in
+// ---------- Justified gallery (Pixiset-style flush rows) ----------
+(function () {
+  document.querySelectorAll(".gallery-grid").forEach(function (grid) {
+    grid.querySelectorAll(".gallery-item").forEach(function (item) {
+      var img = item.querySelector("img");
+      if (!img) return;
+      function applyRatio() {
+        var r = img.naturalWidth / img.naturalHeight;
+        if (!r || r <= 0) r = 1.5;
+        item.style.flexGrow  = r;
+        item.style.flexBasis = Math.round(r * 200) + "px";
+      }
+      if (img.complete && img.naturalWidth > 0) {
+        applyRatio();
+      } else {
+        img.addEventListener("load", applyRatio);
+      }
+    });
+  });
+}());
 
+// ---------- Lightbox ----------
+var lb; // shared reference so keyboard handler above can check
 (function () {
   // Collect all gallery images on the page (standard gallery + magazine covers)
   const items = Array.from(document.querySelectorAll(".gallery-item img, .magazine-cover img"));
   let currentIndex = 0;
 
   // Build lightbox
-  const lb = document.createElement("div");
+  lb = document.createElement("div");
   lb.className = "lightbox";
   lb.innerHTML =
     '<button class="lb-close" aria-label="Close">&times;</button>' +
@@ -76,8 +121,8 @@
     '<div class="lb-caption"></div>';
   document.body.appendChild(lb);
 
-  const lbImg  = lb.querySelector("img");
-  const lbCap  = lb.querySelector(".lb-caption");
+  const lbImg   = lb.querySelector("img");
+  const lbCap   = lb.querySelector(".lb-caption");
   const lbClose = lb.querySelector(".lb-close");
   const lbPrev  = lb.querySelector(".lb-prev");
   const lbNext  = lb.querySelector(".lb-next");
@@ -92,7 +137,6 @@
     if (cap) {
       lbCap.textContent = cap.textContent;
     } else {
-      // Magazine cover credit: student name + publication
       const credit = figure ? figure.querySelector(".magazine-credit") : null;
       if (credit) {
         const name = credit.querySelector(".student-name");
@@ -102,7 +146,6 @@
         lbCap.textContent = "";
       }
     }
-    // Hide arrows when only one image in the gallery
     const show = items.length > 1 ? "" : "none";
     lbPrev.style.display = show;
     lbNext.style.display = show;
@@ -120,12 +163,10 @@
     document.body.style.overflow = "";
   }
 
-  // Wire up each gallery image
   items.forEach(function (img, index) {
     img.addEventListener("click", function () { openLightbox(index); });
   });
 
-  // Close on backdrop click only (not on image or arrows)
   lb.addEventListener("click", function (e) {
     if (e.target === lb) closeLightbox();
   });
@@ -142,15 +183,14 @@
     showImage(currentIndex + 1);
   });
 
-  // Keyboard: Escape to close, arrows to navigate
   document.addEventListener("keydown", function (e) {
     if (!lb.classList.contains("open")) return;
-    if (e.key === "Escape")      closeLightbox();
-    if (e.key === "ArrowLeft")   showImage(currentIndex - 1);
-    if (e.key === "ArrowRight")  showImage(currentIndex + 1);
+    if (e.key === "Escape")     closeLightbox();
+    if (e.key === "ArrowLeft")  showImage(currentIndex - 1);
+    if (e.key === "ArrowRight") showImage(currentIndex + 1);
   });
 
-  // "You may also like" slider
+  // "Also View" slider
   document.querySelectorAll(".also-like-slider-wrap").forEach(function (wrap) {
     var track   = wrap.querySelector(".also-like-track");
     var prevBtn = wrap.querySelector(".slider-btn--prev");
