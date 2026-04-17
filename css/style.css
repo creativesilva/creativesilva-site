@@ -291,6 +291,25 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   color: #e8e8e8;
 }
 .prose p:last-child { margin-bottom: 0; }
+.prose-figure {
+  margin: 36px auto 40px;
+  max-width: 520px;
+}
+.prose-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.prose-figure figcaption {
+  margin-top: 12px;
+  font-family: var(--font-head);
+  text-align: center;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
 @media (max-width: 820px) {
   .statement-layout { grid-template-columns: 1fr; gap: 32px; }
 }
