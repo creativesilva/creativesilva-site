@@ -783,7 +783,7 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   margin: 0 0 28px;
 }
 .showcase-signature {
-  text-align: right;
+  text-align: center;
   color: var(--text-dim);
   font-size: 0.85rem;
   letter-spacing: 0.04em;
