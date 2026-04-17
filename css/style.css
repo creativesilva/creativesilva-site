@@ -63,7 +63,7 @@ img { display: block; max-width: 100%; height: auto; }
   background: rgba(15, 15, 15, 0.85);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--accent);
 }
 .header-inner {
   max-width: var(--max-width);
@@ -508,6 +508,10 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   position: relative;
   opacity: 0.42;
   transition: opacity 0.7s ease;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 .hero-slide.active { opacity: 1; }
 .hero-slide img {
@@ -536,6 +540,7 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   display: flex;
   flex-direction: column;
   gap: 5px;
+  pointer-events: none;
 }
 .hero-collection {
   font-family: var(--font-head);
@@ -620,43 +625,36 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
 }
 .home-statement p {
   font-family: var(--font-head);
-  font-size: clamp(1.15rem, 2.6vw, 1.85rem);
+  font-size: clamp(0.9rem, 1.6vw, 1.15rem);
   font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  line-height: 1.6;
+  letter-spacing: 0.08em;
+  line-height: 1.7;
   color: var(--text);
-  max-width: 840px;
+  max-width: 720px;
   margin: 0 auto;
 }
 .home-byline {
-  padding: 48px 32px 40px;
+  padding: 44px 32px 40px;
   text-align: center;
-}
-.home-byline::before {
-  content: "";
-  display: block;
-  width: 44px;
-  height: 1px;
-  background: var(--accent);
-  margin: 0 auto 28px;
 }
 .byline-name {
   display: block;
   font-family: var(--font-head);
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: 0.2em;
   color: var(--text);
   text-transform: uppercase;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 .byline-role {
   display: block;
   font-family: var(--font-head);
-  font-size: 0.65rem;
-  letter-spacing: 0.26em;
-  color: var(--text-faint);
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: var(--text);
   text-transform: uppercase;
 }
 
