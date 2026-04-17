@@ -598,7 +598,7 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   margin: 0 auto;
 }
 .home-byline {
-  margin-top: 30px;
+  margin-top: 56px;
   font-family: var(--font-head);
   font-size: 0.7rem;
   letter-spacing: 0.24em;
