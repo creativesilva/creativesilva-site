@@ -599,9 +599,31 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
 }
 .home-byline {
   margin-top: 56px;
+  text-align: center;
+}
+.home-byline::before {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 1px;
+  background: var(--accent);
+  margin: 0 auto 28px;
+}
+.byline-name {
+  display: block;
   font-family: var(--font-head);
-  font-size: 0.7rem;
-  letter-spacing: 0.24em;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--text);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.byline-role {
+  display: block;
+  font-family: var(--font-head);
+  font-size: 0.65rem;
+  letter-spacing: 0.26em;
   color: var(--text-faint);
   text-transform: uppercase;
 }
