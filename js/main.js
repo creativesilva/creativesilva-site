@@ -1,8 +1,8 @@
 // CreativeSilva.com — minimal lightbox + lazy fade-in
 
 (function () {
-  // Collect all gallery images on the page
-  const items = Array.from(document.querySelectorAll(".gallery-item img"));
+  // Collect all gallery images on the page (standard gallery + magazine covers)
+  const items = Array.from(document.querySelectorAll(".gallery-item img, .magazine-cover img"));
   let currentIndex = 0;
 
   // Build lightbox
@@ -27,9 +27,21 @@
     const img    = items[currentIndex];
     const figure = img.closest("figure");
     const cap    = figure ? figure.querySelector("figcaption") : null;
-    lbImg.src        = img.src;
-    lbImg.alt        = img.alt || "";
-    lbCap.textContent = cap ? cap.textContent : "";
+    lbImg.src = img.src;
+    lbImg.alt = img.alt || "";
+    if (cap) {
+      lbCap.textContent = cap.textContent;
+    } else {
+      // Magazine cover credit: student name + publication
+      const credit = figure ? figure.querySelector(".magazine-credit") : null;
+      if (credit) {
+        const name = credit.querySelector(".student-name");
+        const pub  = credit.querySelector(".publication");
+        lbCap.textContent = (name && pub) ? name.textContent + " \u00b7 " + pub.textContent : "";
+      } else {
+        lbCap.textContent = "";
+      }
+    }
     // Hide arrows when only one image in the gallery
     const show = items.length > 1 ? "" : "none";
     lbPrev.style.display = show;
