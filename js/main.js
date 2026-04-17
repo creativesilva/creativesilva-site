@@ -1,3 +1,63 @@
+// CreativeSilva.com — hero slider + lightbox + also-like slider
+
+// ---------- Hero slider ----------
+(function () {
+  var slider = document.querySelector(".hero-slider");
+  if (!slider) return;
+
+  var slides   = Array.from(slider.querySelectorAll(".hero-slide"));
+  var dots     = Array.from(slider.querySelectorAll(".hero-dot"));
+  var prevBtn  = slider.querySelector(".hero-btn--prev");
+  var nextBtn  = slider.querySelector(".hero-btn--next");
+  var colEl    = slider.querySelector(".hero-collection");
+  var titleEl  = slider.querySelector(".hero-title");
+  var current  = 0;
+  var timer;
+  var INTERVAL = 5000;
+
+  function goTo(index) {
+    slides[current].classList.remove("active");
+    dots[current].classList.remove("active");
+    current = (index + slides.length) % slides.length;
+    slides[current].classList.add("active");
+    dots[current].classList.add("active");
+    if (colEl)   colEl.textContent   = slides[current].dataset.collection || "";
+    if (titleEl) titleEl.textContent = slides[current].dataset.title      || "";
+  }
+
+  function start()   { timer = setInterval(function () { goTo(current + 1); }, INTERVAL); }
+  function stop()    { clearInterval(timer); }
+  function restart() { stop(); start(); }
+
+  if (prevBtn) prevBtn.addEventListener("click", function () { goTo(current - 1); restart(); });
+  if (nextBtn) nextBtn.addEventListener("click", function () { goTo(current + 1); restart(); });
+
+  dots.forEach(function (dot, i) {
+    dot.addEventListener("click", function () { goTo(i); restart(); });
+  });
+
+  slider.addEventListener("mouseenter", stop);
+  slider.addEventListener("mouseleave", start);
+
+  // Touch / swipe
+  var touchX = 0;
+  slider.addEventListener("touchstart", function (e) {
+    touchX = e.touches[0].clientX;
+  }, { passive: true });
+  slider.addEventListener("touchend", function (e) {
+    var dx = touchX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 40) { goTo(dx > 0 ? current + 1 : current - 1); restart(); }
+  });
+
+  // Keyboard
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft")  { goTo(current - 1); restart(); }
+    if (e.key === "ArrowRight") { goTo(current + 1); restart(); }
+  });
+
+  start();
+}());
+
 // CreativeSilva.com — minimal lightbox + lazy fade-in
 
 (function () {
