@@ -540,7 +540,7 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
 /* ---------- Homepage hero slider (peek carousel) ---------- */
 .hero-slider {
   position: relative;
-  height: clamp(340px, 52vh, 580px);
+  height: clamp(480px, 72vh, 760px);
   overflow: hidden;
   background: #000;
 }
@@ -670,7 +670,7 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
 
 /* ---------- Homepage statement + byline ---------- */
 .home-statement {
-  padding: 64px 32px 48px;
+  padding: 32px 32px 24px;
   text-align: center;
 }
 .home-statement p {
@@ -685,7 +685,7 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   margin: 0 auto;
 }
 .home-byline {
-  padding: 44px 32px 40px;
+  padding: 32px 32px 32px;
   text-align: center;
 }
 .byline-name {
@@ -980,8 +980,19 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
     margin-bottom: 36px;
   }
 
-  /* Hero slider — full bleed, no peek */
-  .hero-slider { height: clamp(260px, 58vh, 400px); }
+  /* Put the hero slider FIRST on mobile; statement sits below it */
+  main { display: flex; flex-direction: column; }
+  .hero-slider    { order: 1; }
+  .home-statement { order: 2; }
+  .home-byline    { order: 3; }
+  .container      { order: 4; }
+
+  /* Tighten the statement spacing when it's sandwiched under the slider */
+  .home-statement { padding: 28px 18px 8px; }
+  .home-byline    { padding: 18px 18px 28px; }
+
+  /* Hero slider — full bleed, no peek; images taller on phone */
+  .hero-slider { height: clamp(420px, 78vh, 620px); }
   .hero-slide {
     flex: 0 0 100%;
     padding: 0;
@@ -1004,14 +1015,12 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   .hero-btn--next { right: 8px; }
   .hero-dots { bottom: 12px; }
 
-  /* Home statement + byline */
-  .home-statement { padding: 40px 18px 24px; }
+  /* Home statement + byline typography (padding is set above in the reorder block) */
   .home-statement p {
     font-size: 0.92rem;
     letter-spacing: 0.06em;
     line-height: 1.65;
   }
-  .home-byline { padding: 24px 18px 28px; }
   .byline-name { font-size: 0.88rem; letter-spacing: 0.16em; margin-bottom: 10px; }
   .byline-role { font-size: 0.7rem; letter-spacing: 0.16em; line-height: 1.6; }
 

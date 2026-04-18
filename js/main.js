@@ -1,6 +1,6 @@
 // CreativeSilva.com — peek hero slider + justified gallery + lightbox + also-like slider
 
-// ---------- Hero slider (peek carousel) ----------
+// ---------- Hero slider (infinite conveyor-belt carousel) ----------
 (function () {
   var slider  = document.querySelector(".hero-slider");
   if (!slider) return;
@@ -8,19 +8,40 @@
   var track   = slider.querySelector(".hero-slides-track");
   if (!track) return;
 
-  var slides  = Array.from(track.querySelectorAll(".hero-slide"));
+  var originals = Array.from(track.querySelectorAll(".hero-slide"));
+  if (originals.length === 0) return;
+
   var dots    = Array.from(slider.querySelectorAll(".hero-dot"));
   var prevBtn = slider.querySelector(".hero-btn--prev");
   var nextBtn = slider.querySelector(".hero-btn--next");
   var colEl   = slider.querySelector(".hero-collection");
   var titleEl = slider.querySelector(".hero-title");
-  var current = 0;
-  var timer;
-  var INTERVAL  = 14000;
 
-  function sliderW() { return slider.offsetWidth; }
-  // Read the actual rendered slide width (includes CSS flex-basis + padding).
-  // This lets CSS control layout — 80% peek on desktop, 100% full-bleed on mobile.
+  var n = originals.length;
+
+  // Clone first and last slides to build an infinite loop.
+  // After clones: [lastClone, s0, s1, ..., s(n-1), firstClone]
+  // Real slides occupy indexes 1..n in the slides[] array.
+  var firstClone = originals[0].cloneNode(true);
+  var lastClone  = originals[n - 1].cloneNode(true);
+  firstClone.classList.remove("active");
+  lastClone.classList.remove("active");
+  firstClone.setAttribute("aria-hidden", "true");
+  lastClone.setAttribute("aria-hidden", "true");
+  track.insertBefore(lastClone, originals[0]);
+  track.appendChild(firstClone);
+
+  var slides = Array.from(track.querySelectorAll(".hero-slide"));
+  var total  = slides.length; // n + 2
+
+  var current = 1;            // start on the first real slide
+  var timer;
+  var INTERVAL      = 14000;
+  var isTransitioning = false;
+
+  function sliderW()  { return slider.offsetWidth; }
+  // Read the actual rendered slide width so CSS controls layout
+  // (80% peek on desktop, 100% full-bleed on mobile).
   function slideStep() {
     return slides[0] ? slides[0].getBoundingClientRect().width : sliderW() * 0.8;
   }
@@ -28,36 +49,78 @@
     return Math.max(0, (sliderW() - slideStep()) / 2);
   }
 
-  function applyTransform(i) {
-    var step   = slideStep();
-    var offset = peekW() - i * step;
-    track.style.transform = "translateX(" + offset + "px)";
+  function setTransform(i, animate) {
+    var offset = peekW() - i * slideStep();
+    if (animate) {
+      track.style.transform = "translateX(" + offset + "px)";
+    } else {
+      track.style.transition = "none";
+      track.style.transform  = "translateX(" + offset + "px)";
+      // Force reflow so the no-transition paint commits before we restore it.
+      void track.offsetWidth;
+      track.style.transition = "";
+    }
+  }
+
+  // Map slides[] index -> originals[] index (for dots + data lookup)
+  function realIndex(i) {
+    if (i === 0)         return n - 1;
+    if (i === total - 1) return 0;
+    return i - 1;
+  }
+
+  function updateActiveVisual(i) {
+    slides.forEach(function (s) { s.classList.remove("active"); });
+    slides[i].classList.add("active");
+    var r = realIndex(i);
+    dots.forEach(function (d, di) {
+      if (di === r) d.classList.add("active");
+      else          d.classList.remove("active");
+    });
+    var src = originals[r];
+    if (colEl)   colEl.textContent   = src.dataset.collection || "";
+    if (titleEl) titleEl.textContent = src.dataset.title      || "";
   }
 
   function goTo(i) {
-    slides[current].classList.remove("active");
-    dots[current].classList.remove("active");
-    current = (i + slides.length) % slides.length;
-    slides[current].classList.add("active");
-    dots[current].classList.add("active");
-    applyTransform(current);
-    if (colEl)   colEl.textContent   = slides[current].dataset.collection || "";
-    if (titleEl) titleEl.textContent = slides[current].dataset.title      || "";
+    if (isTransitioning) return;
+    isTransitioning = true;
+    current = i;
+    setTransform(current, true);
+    updateActiveVisual(current);
   }
 
-  function start()   { if (!timer) timer = setInterval(function () { goTo(current + 1); }, INTERVAL); }
-  function stop()    { clearInterval(timer); timer = null; }
+  // After an animated slide, if we landed on a clone, jump to its real twin
+  // with no animation so the belt appears continuous.
+  track.addEventListener("transitionend", function (e) {
+    if (e.propertyName && e.propertyName !== "transform") return;
+    isTransitioning = false;
+    if (current === total - 1) {
+      current = 1;
+      setTransform(current, false);
+      updateActiveVisual(current);
+    } else if (current === 0) {
+      current = n;
+      setTransform(current, false);
+      updateActiveVisual(current);
+    }
+  });
 
-  // Set initial position without transition flash
-  track.style.transition = "none";
-  applyTransform(0);
-  requestAnimationFrame(function () { track.style.transition = ""; });
+  // Initial position (no animation flash)
+  setTransform(current, false);
+  updateActiveVisual(current);
 
-  if (prevBtn) prevBtn.addEventListener("click", function () { goTo(current - 1); });
-  if (nextBtn) nextBtn.addEventListener("click", function () { goTo(current + 1); });
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  if (prevBtn) prevBtn.addEventListener("click", prev);
+  if (nextBtn) nextBtn.addEventListener("click", next);
 
   dots.forEach(function (dot, i) {
-    dot.addEventListener("click", function () { goTo(i); });
+    dot.addEventListener("click", function () {
+      if (isTransitioning) return;
+      goTo(i + 1); // +1 because slides[] is offset by the leading lastClone
+    });
   });
 
   // Touch / swipe
@@ -67,19 +130,20 @@
   }, { passive: true });
   slider.addEventListener("touchend", function (e) {
     var dx = touchX - e.changedTouches[0].clientX;
-    if (Math.abs(dx) > 40) { goTo(dx > 0 ? current + 1 : current - 1); }
+    if (Math.abs(dx) > 40) { dx > 0 ? next() : prev(); }
   });
 
   // Keyboard
   document.addEventListener("keydown", function (e) {
     if (lb && lb.classList.contains("open")) return; // don't hijack lightbox keys
-    if (e.key === "ArrowLeft")  { goTo(current - 1); }
-    if (e.key === "ArrowRight") { goTo(current + 1); }
+    if (e.key === "ArrowLeft")  prev();
+    if (e.key === "ArrowRight") next();
   });
 
-  // Recalculate on resize
-  window.addEventListener("resize", function () { applyTransform(current); });
+  // Recalculate on resize (no animation — just reposition)
+  window.addEventListener("resize", function () { setTransform(current, false); });
 
+  function start() { if (!timer) timer = setInterval(next, INTERVAL); }
   start();
 }());
 
