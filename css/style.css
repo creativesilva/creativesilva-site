@@ -1070,26 +1070,28 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   /* Section label */
   .section-label { letter-spacing: 0.18em; margin-bottom: 20px; }
 
-  /* Homepage "Selected Works" tiles — match the Also View card sizing
-     so all thumbnails are the same height across the page. */
-  .gallery-index {
-    display: flex;
-    grid-template-columns: none;
-    gap: 16px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    padding-bottom: 4px;
-    margin: 0 -18px;
-    padding-left: 18px;
-    padding-right: 18px;
+  /* Homepage teaser ONLY — 2x2 grid so all four collections are visible. */
+  .gallery-index--scroll {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    overflow: visible;
   }
-  .gallery-index::-webkit-scrollbar { display: none; }
-  .gallery-card {
-    flex: 0 0 80%;
+  .gallery-index--scroll .gallery-card {
     aspect-ratio: 4 / 3;
-    scroll-snap-align: start;
+  }
+  .gallery-index--scroll .gallery-card .label {
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* Also View on every page — make cards fully visible on mobile
+     (the default 0.75 opacity lets the blurred backdrop bleed through). */
+  .also-like-track > a img { opacity: 1; }
+  .also-like-track .label {
+    background: rgba(0,0,0,0.55);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
   }
 
   /* Gallery detail pages — single column, uniform width, centered */
