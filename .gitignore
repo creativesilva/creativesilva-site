@@ -7,3 +7,6 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
+
+# Local image backup (pre-compression originals — not needed in repo)
+images_original/
