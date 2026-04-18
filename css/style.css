@@ -35,9 +35,18 @@ body::before {
   background-image: url("../images/City_Background_Blur.jpg");
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
+  background-color: var(--bg);
   background-attachment: fixed;
   filter: blur(2px);
   z-index: -2;
+}
+/* On phones, fit the entire image top-to-bottom (no crop) rather than cover. */
+@media (max-width: 640px) {
+  body::before {
+    background-size: contain;
+    background-position: center center;
+  }
 }
 body::after {
   content: "";
@@ -995,47 +1004,26 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
     margin-bottom: 36px;
   }
 
-  /* ----------------------------------------------------
-     Homepage parallax hero — hero stays fixed behind the
-     page; content tiles slide up over it as you scroll.
-     Show the FULL image top-to-bottom via object-fit:contain.
-     ---------------------------------------------------- */
-  .hero-slider {
-    position: fixed;
-    top: var(--header-height);
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: clamp(420px, 78vh, 620px);
-    z-index: 1;
-  }
-  /* Reserve space under the header for the fixed hero, then content flows below */
-  body:has(.hero-slider) main { padding-top: clamp(420px, 78vh, 620px); }
+  /* Put the hero slider FIRST on mobile; statement sits below it */
+  main { display: flex; flex-direction: column; }
+  .hero-slider    { order: 1; }
+  .home-statement { order: 2; }
+  .home-byline    { order: 3; }
+  .container      { order: 4; }
+
+  /* Tighten statement spacing when sandwiched under the slider */
+  .home-statement { padding: 28px 18px 8px; }
+  .home-byline    { padding: 18px 18px 28px; }
+
+  /* Hero slider — full bleed, no peek; images taller on phone.
+     Functions identically to desktop: tap/swipe, arrows, auto-advance, dots. */
+  .hero-slider { height: clamp(420px, 70vh, 620px); }
   .hero-slide {
     flex: 0 0 100%;
     padding: 0;
     opacity: 1;
   }
   .hero-slide.active::after { left: 0; right: 0; }
-  .hero-slide img {
-    object-fit: contain;
-    background: #000;
-  }
-
-  /* Content scrolls up over the fixed hero, opaque bg required */
-  .home-statement,
-  .home-byline,
-  main > .container {
-    position: relative;
-    z-index: 2;
-    background: var(--bg);
-  }
-  .site-footer { position: relative; z-index: 2; background: var(--bg); }
-
-  /* Tighten the statement spacing when it's sandwiched between hero and tiles */
-  .home-statement { padding: 28px 18px 8px; }
-  .home-byline    { padding: 18px 18px 28px; }
-
   .hero-caption {
     left: 18px;
     right: 18px;
@@ -1043,8 +1031,13 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   }
   .hero-collection { font-size: 0.6rem; letter-spacing: 0.22em; }
   .hero-title { font-size: 1.35rem; }
-  /* Hide desktop-style hero arrows on mobile; swipe + auto-advance only */
-  .hero-btn { display: none; }
+  .hero-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 0.85rem;
+  }
+  .hero-btn--prev { left: 8px; }
+  .hero-btn--next { right: 8px; }
   .hero-dots { bottom: 12px; }
 
   /* Home statement + byline typography (padding is set above in the reorder block) */
