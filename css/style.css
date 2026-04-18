@@ -941,3 +941,141 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   background: rgba(255, 255, 255, 0.18);
   border-color: rgba(255, 255, 255, 0.4);
 }
+
+/* ==========================================================
+   MOBILE REFINEMENTS — phones (<= 640px)
+   Placed last so these rules win against earlier breakpoints.
+   ========================================================== */
+@media (max-width: 640px) {
+  /* Header */
+  .header-inner {
+    padding: 10px 14px;
+    gap: 8px;
+  }
+  .brand img { height: 40px; }
+  .nav-left,
+  .nav-right {
+    gap: 14px;
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* Shared container padding */
+  .container,
+  .container-narrow { padding: 40px 18px; }
+
+  /* Page title */
+  .page-title {
+    font-size: clamp(1.7rem, 7vw, 2.2rem);
+    letter-spacing: 0.06em;
+  }
+
+  /* Gallery header — keep title tight; hide prev/next labels */
+  .gallery-header { gap: 8px; }
+  .gallery-nav-btn .nav-label { display: none; }
+  .gallery-nav-btn .nav-arrow { font-size: 1.3rem; }
+
+  .gallery-intro {
+    font-size: 0.95rem;
+    margin-bottom: 36px;
+  }
+
+  /* Hero slider — full bleed, no peek */
+  .hero-slider { height: clamp(260px, 58vh, 400px); }
+  .hero-slide {
+    flex: 0 0 100%;
+    padding: 0;
+    opacity: 1;
+  }
+  .hero-slide.active::after { left: 0; right: 0; }
+  .hero-caption {
+    left: 18px;
+    right: 18px;
+    bottom: 44px;
+  }
+  .hero-collection { font-size: 0.6rem; letter-spacing: 0.22em; }
+  .hero-title { font-size: 1.35rem; }
+  .hero-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 0.85rem;
+  }
+  .hero-btn--prev { left: 8px; }
+  .hero-btn--next { right: 8px; }
+  .hero-dots { bottom: 12px; }
+
+  /* Home statement + byline */
+  .home-statement { padding: 40px 18px 24px; }
+  .home-statement p {
+    font-size: 0.92rem;
+    letter-spacing: 0.06em;
+    line-height: 1.65;
+  }
+  .home-byline { padding: 24px 18px 28px; }
+  .byline-name { font-size: 0.88rem; letter-spacing: 0.16em; margin-bottom: 10px; }
+  .byline-role { font-size: 0.7rem; letter-spacing: 0.16em; line-height: 1.6; }
+
+  /* Section label */
+  .section-label { letter-spacing: 0.18em; margin-bottom: 20px; }
+
+  /* Gallery tiles — JS sets flex-basis inline; we only tune CSS height + caption */
+  .gallery-item { height: 220px; }
+  .gallery-item figcaption {
+    font-size: 0.68rem;
+    padding: 30px 10px 10px;
+  }
+
+  /* Statement / Biography prose */
+  .prose p {
+    font-size: 0.98rem;
+    line-height: 1.72;
+  }
+  .statement-layout .headshot,
+  .prose-figure {
+    max-width: 100%;
+    margin: 0 auto 24px;
+  }
+
+  /* Student Work showcase intro */
+  .showcase-tag { font-size: 0.66rem; letter-spacing: 0.18em; }
+  .showcase-project { font-size: 0.8rem; margin-bottom: 24px; }
+  .showcase-quote {
+    font-size: 0.96rem;
+    line-height: 1.75;
+    padding-left: 16px;
+    border-left-width: 2px;
+    margin-bottom: 22px;
+  }
+  .showcase-signature { font-size: 0.8rem; line-height: 1.7; }
+  .showcase-signature-rule { width: 140px; margin: 14px auto; }
+
+  /* Magazine grid */
+  .magazine-grid { gap: 24px 14px; }
+  .student-name { font-size: 0.82rem; }
+  .publication { font-size: 0.72rem; }
+
+  /* Also View row */
+  .also-like { margin-top: 56px; padding-top: 32px; }
+  .also-like h2 { font-size: 0.85rem; margin-bottom: 20px; }
+  .also-like-slider-wrap { gap: 6px; }
+  .slider-btn { width: 32px; height: 32px; font-size: 0.9rem; }
+
+  /* Footer */
+  .site-footer {
+    padding: 24px 18px 40px;
+    margin-top: 48px;
+    font-size: 0.78rem;
+  }
+
+  /* Lightbox arrows */
+  .lightbox { padding: 16px; }
+  .lightbox .lb-prev,
+  .lightbox .lb-next {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+  .lightbox .lb-prev { left: 8px; }
+  .lightbox .lb-next { right: 8px; }
+  .lightbox .lb-close { top: 12px; right: 16px; font-size: 1.7rem; }
+}

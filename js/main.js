@@ -17,14 +17,19 @@
   var current = 0;
   var timer;
   var INTERVAL  = 14000;
-  var SLIDE_PAD = 6; // px padding on each side of a slide (matches CSS)
 
-  function sliderW()  { return slider.offsetWidth; }
-  function slideW()   { return sliderW() * 0.8; }   // 80% of container
-  function peekW()    { return sliderW() * 0.1; }   // 10% on each side
+  function sliderW() { return slider.offsetWidth; }
+  // Read the actual rendered slide width (includes CSS flex-basis + padding).
+  // This lets CSS control layout — 80% peek on desktop, 100% full-bleed on mobile.
+  function slideStep() {
+    return slides[0] ? slides[0].getBoundingClientRect().width : sliderW() * 0.8;
+  }
+  function peekW() {
+    return Math.max(0, (sliderW() - slideStep()) / 2);
+  }
 
   function applyTransform(i) {
-    var step   = slideW() + SLIDE_PAD * 2;
+    var step   = slideStep();
     var offset = peekW() - i * step;
     track.style.transform = "translateX(" + offset + "px)";
   }
