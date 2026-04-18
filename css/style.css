@@ -41,11 +41,34 @@ body::before {
   filter: blur(2px);
   z-index: -2;
 }
-/* On phones, fit the entire image top-to-bottom (no crop) rather than cover. */
-@media (max-width: 640px) {
+/* On phones (portrait): fill the viewport VERTICALLY. The image keeps its
+   aspect ratio, so the sides extend past the edges of the screen — that's
+   intentional. The pseudo-element is locked to the largest viewport height
+   (100lvh) so it doesn't resize as the iOS URL bar shows/hides, which is
+   what made the background appear to "react" to scrolling. */
+@media (max-width: 640px) and (orientation: portrait) {
   body::before {
-    background-size: contain;
+    inset: auto;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100lvh;
+    background-size: auto 100%;
     background-position: center center;
+    background-attachment: scroll; /* element is already fixed; this avoids iOS glitches */
+  }
+}
+/* Landscape on a phone: cover works nicely since the image is landscape too. */
+@media (max-width: 900px) and (orientation: landscape) {
+  body::before {
+    inset: auto;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100lvh;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: scroll;
   }
 }
 body::after {
@@ -1031,13 +1054,8 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   }
   .hero-collection { font-size: 0.6rem; letter-spacing: 0.22em; }
   .hero-title { font-size: 1.35rem; }
-  .hero-btn {
-    width: 34px;
-    height: 34px;
-    font-size: 0.85rem;
-  }
-  .hero-btn--prev { left: 8px; }
-  .hero-btn--next { right: 8px; }
+  /* Hide the prev/next arrows on phone — swipe only */
+  .hero-btn { display: none; }
   .hero-dots { bottom: 12px; }
 
   /* Home statement + byline typography (padding is set above in the reorder block) */
