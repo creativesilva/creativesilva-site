@@ -799,10 +799,15 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   font-style: normal;
   line-height: 1.8;
 }
-.showcase-signature-sub {
-  font-size: 0.78rem;
-  opacity: 0.7;
-  letter-spacing: 0.03em;
+.showcase-signature-block {
+  display: block;
+}
+.showcase-signature-rule {
+  width: 180px;
+  height: 1px;
+  background: rgba(255,255,255,0.22);
+  border: 0;
+  margin: 18px auto;
 }
 
 /* Magazine cover grid — 3 top, 2 centered bottom */
