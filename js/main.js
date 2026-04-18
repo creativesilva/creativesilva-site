@@ -147,6 +147,35 @@
   start();
 }());
 
+// ---------- Gallery collection swipe nav (swipe the header to go prev/next) ----------
+(function () {
+  var header = document.querySelector(".gallery-header");
+  if (!header) return;
+  var prev   = header.querySelector(".gallery-nav-btn.prev");
+  var next   = header.querySelector(".gallery-nav-btn.next");
+  var intro  = document.querySelector(".gallery-intro");
+
+  function attachSwipe(el) {
+    if (!el) return;
+    var startX = 0, startY = 0;
+    el.addEventListener("touchstart", function (e) {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+    el.addEventListener("touchend", function (e) {
+      var dx = e.changedTouches[0].clientX - startX;
+      var dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) < 60) return;
+      if (Math.abs(dy) > Math.abs(dx)) return; // ignore vertical-dominant
+      if (dx < 0 && next) window.location.href = next.href;
+      else if (dx > 0 && prev) window.location.href = prev.href;
+    });
+  }
+
+  attachSwipe(header);
+  attachSwipe(intro);
+}());
+
 // ---------- Justified gallery (Pixiset-style flush rows) ----------
 (function () {
   document.querySelectorAll(".gallery-grid").forEach(function (grid) {
@@ -254,6 +283,23 @@ var lb; // shared reference so keyboard handler above can check
     if (e.key === "Escape")     closeLightbox();
     if (e.key === "ArrowLeft")  showImage(currentIndex - 1);
     if (e.key === "ArrowRight") showImage(currentIndex + 1);
+  });
+
+  // Touch / swipe — left/right to navigate, down to dismiss
+  var lbTouchX = 0, lbTouchY = 0;
+  lb.addEventListener("touchstart", function (e) {
+    lbTouchX = e.touches[0].clientX;
+    lbTouchY = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener("touchend", function (e) {
+    if (!lb.classList.contains("open")) return;
+    var dx = e.changedTouches[0].clientX - lbTouchX;
+    var dy = e.changedTouches[0].clientY - lbTouchY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      showImage(dx < 0 ? currentIndex + 1 : currentIndex - 1);
+    } else if (dy > 90 && Math.abs(dy) > Math.abs(dx)) {
+      closeLightbox();
+    }
   });
 
   // "Also View" slider
