@@ -5,135 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Step 1: Mood Board - Commercial Photography Final - Photo 1B</title>
   <style>
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #0a0a0a;
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-      color: #fff;
-    }
-
-    .silva-nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(10, 10, 10, 0.94);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 0 20px;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .silva-nav-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.5);
-      overflow: hidden;
-    }
-    .silva-nav-left a {
-      color: rgba(255,255,255,0.72);
-      text-decoration: none;
-      white-space: nowrap;
-      transition: color 0.15s;
-    }
-    .silva-nav-left a:hover { color: #fff; }
-    .silva-nav-sep { opacity: 0.3; flex-shrink: 0; }
-    .silva-nav-crumb { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    .silva-copy-btn {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      background: #007474;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      flex-shrink: 0;
-      transition: background 0.15s, transform 0.1s;
-      font-family: inherit;
-    }
-    .silva-copy-btn:hover { background: #008888; }
-    .silva-copy-btn:active { transform: scale(0.97); }
-    .silva-copy-btn.copied { background: #22c571; }
-
-    /* ── Step nav arrows ── */
-    .silva-step-nav {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-    .silva-step-btn {
-      display: inline-flex;
-      align-items: center;
-      height: 32px;
-      padding: 0 13px;
-      border-radius: 6px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.72);
-      text-decoration: none;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      white-space: nowrap;
-      transition: background 0.15s, color 0.15s;
-      cursor: pointer;
-      font-family: inherit;
-      user-select: none;
-    }
-    .silva-step-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
-    .silva-step-btn.disabled {
-      opacity: 0.28;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-    .silva-step-indicator {
-      font-size: 11px;
-      color: rgba(255,255,255,0.38);
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      padding: 0 2px;
-    }
-
-    .silva-page {
-      width: 100%;
-      padding: 24px 28px 60px;
-    }
-
+    :root { --course-accent: #007474; }
+    .sdot-active { box-shadow: 0 0 0 3px rgba(0, 116, 116, 0.28); }
   </style>
+  <link rel="stylesheet" href="/css/silva-module.css" />
 </head>
 <body>
 
   <nav class="silva-nav" aria-label="Module library navigation">
-    <div class="silva-nav-left">
-      <a href="/curriculum.html">&#8592; Curriculum</a>
-      <span class="silva-nav-sep">/</span>
-      <a href="/curriculum.html#photo1">Photo 1B</a>
-      <span class="silva-nav-sep">/</span>
-      <a href="overview.html">Sauce Baby</a>
-      <span class="silva-nav-sep">/</span>
-      <span class="silva-nav-crumb">Step 1: Mood Board</span>
+    <div class="silva-nav-inner">
+
+      <div class="silva-breadcrumb">
+        <a href="/curriculum.html">Curriculum</a>
+        <span class="bc-sep">›</span>
+        <a href="/curriculum.html#photo1">Photo 1B</a>
+        <span class="bc-sep">›</span>
+        <a href="overview.html">Sauce Baby</a>
+        <span class="bc-sep">›</span>
+        <span class="bc-current">Step 1: Mood Board</span>
+      </div>
+
+      <div class="silva-nav-spacer"></div>
+
+      <div class="silva-dots" aria-label="Module progress">
+        <a href="overview.html" class="sdot sdot-module sdot-link" title="Module Overview">M</a>
+        <span class="sdot sdot-active" title="Step 1: Mood Board">1</span>
+        <span class="sdot" title="Step 2: Planning (coming soon)">2</span>
+        <span class="sdot" title="Step 3: Shoot and Contact Sheet (coming soon)">3</span>
+        <span class="sdot" title="Step 4: Final Edits (coming soon)">4</span>
+        <span class="sdot" title="Step 5: Reflection (coming soon)">5</span>
+      </div>
+
+      <div class="silva-step-nav">
+        <a href="overview.html" class="silva-step-btn">&#8592; Prev</a>
+        <span class="silva-step-btn disabled">Next &#8594;</span>
+      </div>
+
+      <div class="silva-nav-div"></div>
+
+      <button class="silva-copy-btn" onclick="silvaCopyHTML()" aria-label="Copy Canvas HTML to clipboard">
+        &#128203; Copy Canvas HTML
+      </button>
+
     </div>
-    <div class="silva-step-nav" aria-label="Step navigation">
-      <a href="overview.html" class="silva-step-btn" title="Module Overview">&#8592; Prev</a>
-      <span class="silva-step-indicator">1 / 5</span>
-      <span class="silva-step-btn disabled" title="Step 2 not yet published">Next &#8594;</span>
-    </div>
-    <button class="silva-copy-btn" onclick="silvaCopyHTML()" aria-label="Copy Canvas HTML to clipboard">
-      &#128203; Copy Canvas HTML
-    </button>
   </nav>
 
   <div class="silva-page">
