@@ -67,6 +67,46 @@
     .silva-copy-btn:active { transform: scale(0.97); }
     .silva-copy-btn.copied { background: #22c571; }
 
+    /* ── Step nav arrows ── */
+    .silva-step-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .silva-step-btn {
+      display: inline-flex;
+      align-items: center;
+      height: 32px;
+      padding: 0 13px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.72);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+      cursor: pointer;
+      font-family: inherit;
+      user-select: none;
+    }
+    .silva-step-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+    .silva-step-btn.disabled {
+      opacity: 0.28;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .silva-step-indicator {
+      font-size: 11px;
+      color: rgba(255,255,255,0.38);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 0 2px;
+    }
+
     .silva-page {
       width: 100%;
       padding: 24px 28px 60px;
@@ -85,6 +125,11 @@
       <a href="overview.html">Sauce Baby</a>
       <span class="silva-nav-sep">/</span>
       <span class="silva-nav-crumb">Step 1: Mood Board</span>
+    </div>
+    <div class="silva-step-nav" aria-label="Step navigation">
+      <a href="overview.html" class="silva-step-btn" title="Module Overview">&#8592; Prev</a>
+      <span class="silva-step-indicator">1 / 5</span>
+      <span class="silva-step-btn disabled" title="Step 2 not yet published">Next &#8594;</span>
     </div>
     <button class="silva-copy-btn" onclick="silvaCopyHTML()" aria-label="Copy Canvas HTML to clipboard">
       &#128203; Copy Canvas HTML
