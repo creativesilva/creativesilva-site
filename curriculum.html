@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Curriculum — Chris Silva</title>
+  <meta name="description" content="Canvas module library for PVHS Digital Arts and Photography courses." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=20260418d" />
+  <style>
+    /* ── Curriculum-specific styles ── */
+
+    .curriculum-intro {
+      max-width: 720px;
+      margin: 0 auto 56px;
+      text-align: center;
+    }
+
+    .curriculum-intro p {
+      font-size: 1rem;
+      color: var(--text-dim);
+      line-height: 1.75;
+    }
+
+    .curriculum-label {
+      font-family: var(--font-head);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    /* ── Staging banner ── */
+    .staging-banner {
+      display: none;
+      background: rgba(204, 0, 0, 0.12);
+      border: 1px solid rgba(204, 0, 0, 0.35);
+      padding: 10px 20px;
+      text-align: center;
+      font-family: var(--font-head);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 36px;
+    }
+    .staging-banner.visible { display: block; }
+
+    /* ── Course grid ── */
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-bottom: 64px;
+    }
+
+    @media (max-width: 680px) {
+      .course-grid { grid-template-columns: 1fr; }
+    }
+
+    .course-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 32px;
+      position: relative;
+      transition: border-color 0.2s ease;
+    }
+
+    .course-card:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .course-card-accent {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+    }
+
+    .course-code {
+      font-family: var(--font-head);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 6px;
+    }
+
+    .course-title {
+      font-family: var(--font-head);
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+
+    .course-desc {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.65;
+      margin-bottom: 24px;
+    }
+
+    /* ── Module list within a course card ── */
+    .module-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .module-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      text-decoration: none;
+      color: var(--text);
+      transition: background 0.15s ease, border-color 0.15s ease;
+      cursor: default;
+    }
+
+    .module-row[href] {
+      cursor: pointer;
+    }
+
+    .module-row[href]:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .module-row-name {
+      font-family: var(--font-head);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .module-status {
+      font-family: var(--font-head);
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border: 1px solid;
+      flex-shrink: 0;
+    }
+
+    .module-status.published {
+      color: #5fcc8a;
+      border-color: rgba(95, 204, 138, 0.35);
+      background: rgba(95, 204, 138, 0.07);
+    }
+
+    .module-status.staged {
+      color: var(--accent);
+      border-color: rgba(204, 0, 0, 0.35);
+      background: rgba(204, 0, 0, 0.07);
+    }
+
+    .module-status.draft {
+      color: var(--text-faint);
+      border-color: rgba(255, 255, 255, 0.12);
+      background: transparent;
+    }
+
+    .module-page-count {
+      font-size: 0.72rem;
+      color: var(--text-faint);
+      flex-shrink: 0;
+    }
+
+    /* ── Empty state within a course card ── */
+    .course-empty {
+      padding: 20px 0 4px;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .course-empty p {
+      font-family: var(--font-head);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    /* ── "Add module" note — only visible in staging mode ── */
+    .staging-hint {
+      display: none;
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      margin-top: 12px;
+      font-style: italic;
+      line-height: 1.5;
+    }
+    .staging-mode .staging-hint { display: block; }
+
+    /* ── Footer note ── */
+    .curriculum-footer-note {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .curriculum-footer-note p {
+      font-family: var(--font-head);
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      line-height: 1.9;
+    }
+
+    .curriculum-footer-note a {
+      color: var(--text-dim);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .curriculum-footer-note a:hover {
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <nav class="nav-left" aria-label="Primary">
+        <a href="artist-statement.html">Artist Statement</a>
+        <a href="artist-biography.html">Artist Biography</a>
+      </nav>
+      <a class="brand" href="index.html" aria-label="Chris Silva — Home">
+        <img src="logos/CS_Logo_Vector.svg" alt="Chris Silva" />
+      </a>
+      <nav class="nav-right" aria-label="Primary">
+        <a href="work.html">Selected Works</a>
+        <a href="student-work.html">Student Work</a>
+        <a href="curriculum.html" class="active">Curriculum</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="container">
+
+      <h1 class="page-title">Curriculum</h1>
+
+      <div class="staging-banner" id="staging-banner" role="status">
+        Staging Mode Active — Draft &amp; Staged Modules Visible
+      </div>
+
+      <div class="curriculum-intro">
+        <p class="curriculum-label">PVHS Digital Arts &amp; Photography</p>
+        <p>Canvas module library for all four CTE courses. Published modules are live in Canvas. Use <code>?staging</code> in the URL to preview staged content.</p>
+      </div>
+
+      <div class="course-grid" id="course-grid">
+        <!-- Rendered by curriculum.js -->
+      </div>
+
+      <div class="curriculum-footer-note">
+        <p>
+          Module HTML is hosted here and embedded into Canvas via the Rich Content Editor.<br>
+          Images are served from
+          <a href="https://github.com/creativesilva/silva-canvas-modules" target="_blank" rel="noopener">silva-canvas-modules</a>
+          on GitHub Pages.
+        </p>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a href="#" class="back-to-top">Back to Top</a>
+    <div>www.creativesilva.com</div>
+  </footer>
+
+  <script>
+    // ── Module Registry ────────────────────────────────────────────────────────
+    // To add a module: append an object to MODULES below.
+    // status options:  "published" | "staged" | "draft"
+    //   published  → visible to everyone
+    //   staged     → visible only in ?staging mode (for testing)
+    //   draft      → never shown in the UI (placeholder only)
+    //
+    // url: path to the module landing page, or "" if not ready yet.
+    // ─────────────────────────────────────────────────────────────────────────
+    const MODULES = [
+      // Example (uncomment and fill in to add a real module):
+      // {
+      //   course: "photo2",
+      //   name: "Commercial Photography: Sauce Baby",
+      //   pages: 6,
+      //   status: "staged",
+      //   url: ""
+      // }
+    ];
+
+    // ── Course Definitions ────────────────────────────────────────────────────
+    const COURSES = [
+      {
+        id: "da1",
+        code: "DA 1",
+        title: "Digital Arts 1",
+        accent: "#6b6ef5",
+        desc: "Foundations of digital design, typography, layout, and visual communication using industry-standard tools."
+      },
+      {
+        id: "da2",
+        code: "DA 2",
+        title: "Digital Arts 2",
+        accent: "#a855f7",
+        desc: "Advanced design and motion: brand identity, video production, and portfolio-ready client work."
+      },
+      {
+        id: "photo1",
+        code: "PHOTO 1",
+        title: "Photography 1",
+        accent: "#007474",
+        desc: "Camera fundamentals, exposure, composition, lighting, and darkroom/digital editing workflows."
+      },
+      {
+        id: "photo2",
+        code: "PHOTO 2",
+        title: "Photography 2",
+        accent: "#cc0000",
+        desc: "Advanced techniques, editorial and commercial photography, client projects, and portfolio development."
+      }
+    ];
+
+    // ── Staging Mode ──────────────────────────────────────────────────────────
+    const STAGING = new URLSearchParams(window.location.search).has("staging");
+    if (STAGING) {
+      document.body.classList.add("staging-mode");
+      document.getElementById("staging-banner").classList.add("visible");
+    }
+
+    // ── Render ────────────────────────────────────────────────────────────────
+    function visibleModules(courseId) {
+      return MODULES.filter(m => {
+        if (m.course !== courseId) return false;
+        if (m.status === "published") return true;
+        if (m.status === "staged" && STAGING) return true;
+        return false;
+      });
+    }
+
+    function statusLabel(s) {
+      if (s === "published") return "Live";
+      if (s === "staged")    return "Staged";
+      return "Draft";
+    }
+
+    function buildCourseCard(course) {
+      const mods = visibleModules(course.id);
+
+      const moduleRows = mods.length
+        ? mods.map(m => {
+            const tag = `<span class="module-status ${m.status}">${statusLabel(m.status)}</span>`;
+            const pages = `<span class="module-page-count">${m.pages}p</span>`;
+            const inner = `<span class="module-row-name">${m.name}</span>${pages}${tag}`;
+            return m.url
+              ? `<a class="module-row" href="${m.url}">${inner}</a>`
+              : `<div class="module-row">${inner}</div>`;
+          }).join("")
+        : "";
+
+      const empty = mods.length === 0
+        ? `<div class="course-empty"><p>No published modules yet</p></div>`
+        : "";
+
+      const hint = STAGING
+        ? `<p class="staging-hint">To add a module: append an entry to MODULES in curriculum.html and set status to "staged" or "published".</p>`
+        : "";
+
+      return `
+        <div class="course-card">
+          <div class="course-card-accent" style="background:${course.accent}"></div>
+          <p class="course-code">${course.code}</p>
+          <h2 class="course-title">${course.title}</h2>
+          <p class="course-desc">${course.desc}</p>
+          ${mods.length ? `<div class="module-list">${moduleRows}</div>` : empty}
+          ${hint}
+        </div>
+      `;
+    }
+
+    document.getElementById("course-grid").innerHTML =
+      COURSES.map(buildCourseCard).join("");
+  </script>
+
+</body>
+</html>
