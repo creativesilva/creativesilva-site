@@ -233,6 +233,12 @@ body {
 }
 
 /* ═══════════════════════════════════════════
+   CANVAS CONTENT STANDARDS (inline styles — classes are stripped by Canvas RCE)
+   Float-right image:  float:right;width:30%;min-width:180px;height:auto;border-radius:12px;border:1px solid rgba(255,255,255,0.12);margin:0 0 16px 20px;
+   Full-width image:   width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,0.12);display:block;
+   ═══════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════
    BOTTOM PAGE NAV
    ═══════════════════════════════════════════ */
 
