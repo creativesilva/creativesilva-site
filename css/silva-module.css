@@ -239,7 +239,7 @@ body {
    Subtitle (18pt bold): font-size:18pt;font-weight:bold — wrapped in <strong>
    Body (14pt):        font-size:14pt  (no bold)
    Small label (12pt): font-size:12pt  (no bold)
-   Float-right image:  float:right;width:30%;min-width:180px;height:auto;border-radius:12px;border:1px solid rgba(255,255,255,0.12);margin:0 0 16px 20px;
+   Float-right image:  float:right;width:36%;min-width:216px;height:auto;border-radius:12px;border:1px solid rgba(255,255,255,0.12);margin:0 0 16px 20px;
    Full-width image:   width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,0.12);display:block;
    ═══════════════════════════════════════════ */
 
