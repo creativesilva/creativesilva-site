@@ -13,7 +13,7 @@
       top: 0; left: 0; width: 100%; height: 100%;
       z-index: 0;
       background: url('/assets/PV_LOGO_BACKGROUND.svg') center center / 65% auto no-repeat;
-      opacity: 0.45;
+      opacity: 0.65;
       pointer-events: none;
     }
 
@@ -69,28 +69,45 @@
   <div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background:rgba(8,8,8,0.92);border-radius:30px;overflow:hidden;">
 
     <!-- ── HEADER ── -->
-    <div style="background:linear-gradient(135deg,rgba(0,0,0,0.72) 0%,rgba(0,80,80,0.55) 100%);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:36px 32px 30px;text-align:center;border-bottom:1px solid rgba(0,180,180,0.18);">
-      <div style="font-size:12pt;letter-spacing:0.18em;text-transform:uppercase;color:#5eead4;margin-bottom:8px;">Pioneer Valley High School</div>
-      <div style="font-size:28pt;font-weight:700;color:#ffffff;line-height:1.1;letter-spacing:0.02em;"><strong>Mr. Silva</strong></div>
-      <div style="font-size:14pt;color:rgba(255,255,255,0.50);margin-top:6px;font-style:italic;">CTE Photography &amp; Digital Arts</div>
+    <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid rgba(0,180,180,0.18);overflow:hidden;">
+
+      <!-- PV logo tile -->
+      <div style="background:rgba(0,116,116,0.28);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:24px 20px;border-right:1px solid rgba(0,180,180,0.15);">
+        <img src="/assets/PV Logo 50%.svg" alt="Pioneer Valley" style="width:100%;height:auto;display:block;" />
+      </div>
+
+      <!-- Title text — centered -->
+      <div style="background:linear-gradient(135deg,rgba(0,0,0,0.72) 0%,rgba(0,80,80,0.55) 100%);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:36px 32px 30px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <div style="font-size:12pt;letter-spacing:0.18em;text-transform:uppercase;color:#5eead4;margin-bottom:8px;">Pioneer Valley High School</div>
+        <div style="font-size:28pt;font-weight:700;color:#ffffff;line-height:1.1;letter-spacing:0.02em;"><strong>Mr. Silva</strong></div>
+        <div style="font-size:14pt;color:rgba(255,255,255,0.50);margin-top:6px;font-style:italic;">CTE Photography &amp; Digital Arts</div>
+      </div>
+
     </div>
 
     <!-- ── BODY ── -->
     <div style="padding:28px 28px 40px;">
 
-      <!-- About / Bio card -->
-      <div class="glass-teal" style="background:rgba(0,116,116,0.20);border:1px solid rgba(0,180,180,0.22);border-left:5px solid #007474;border-radius:20px;padding:26px 28px;margin-bottom:18px;overflow:hidden;">
+      <!-- About / Bio card — PV logo tile + content -->
+      <div style="border:1px solid rgba(0,180,180,0.22);border-left:5px solid #007474;border-radius:20px;margin-bottom:18px;overflow:hidden;display:grid;grid-template-columns:160px 1fr;">
 
-        <div style="font-size:12pt;letter-spacing:0.14em;text-transform:uppercase;color:#5eead4;margin-bottom:8px;">About Your Teacher</div>
-        <div style="font-size:18pt;line-height:1.2;color:#ffffff;margin-bottom:16px;"><strong>Welcome to Photography &amp; Digital Arts.</strong></div>
+        <!-- Left: PV logo tile -->
+        <div class="glass-teal" style="background:rgba(0,116,116,0.28);display:flex;align-items:center;justify-content:center;padding:20px 16px;border-right:1px solid rgba(0,180,180,0.15);">
+          <img src="/assets/PV Logo 50%.svg" alt="Pioneer Valley" style="width:100%;height:auto;display:block;" />
+        </div>
 
-        <img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV_Tribal_Rugby.png"
-             alt="Mr. Silva"
-             style="float:right;width:36%;min-width:200px;max-width:280px;height:auto;border-radius:16px;border:2px solid rgba(0,180,180,0.35);margin:0 0 16px 24px;" />
+        <!-- Right: Content -->
+        <div class="glass-teal" style="background:rgba(0,116,116,0.10);padding:26px 28px;overflow:hidden;">
+          <div style="font-size:18pt;font-weight:700;line-height:1.2;letter-spacing:0.12em;text-transform:uppercase;color:#5eead4;margin-bottom:16px;">About Your Teacher</div>
 
-        <div style="font-size:14pt;line-height:1.78;color:rgba(255,255,255,0.88);">I&rsquo;m Mr. Silva, and this course is all about exploring your creativity through the lens. I&rsquo;ve been a professional photographer for over 15 years and co-own a wedding, event, and portrait photography company with my wife.</div>
-        <div style="font-size:14pt;line-height:1.78;color:rgba(255,255,255,0.88);margin-top:12px;">In this class you&rsquo;ll work on creative projects and have the chance to check out cameras to document school events, sports, and everyday campus life, capturing energy, perspective, and personality. We&rsquo;ll challenge how you see the familiar and help you develop your own visual style.</div>
-        <div style="font-size:14pt;line-height:1.78;color:rgba(255,255,255,0.88);margin-top:12px;"><strong>Be ready to experiment, express, and grow.</strong></div>
+          <img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV_Tribal_Rugby.png"
+               alt="Mr. Silva"
+               style="float:right;width:36%;min-width:200px;max-width:280px;height:auto;border-radius:16px;border:2px solid rgba(0,180,180,0.35);margin:0 0 16px 24px;" />
+
+          <div style="font-size:14pt;line-height:1.78;color:rgba(255,255,255,0.88);">I&rsquo;m Mr. Silva, and this course is all about exploring your creativity through the lens. I&rsquo;ve been a professional photographer for over 15 years and co-own a wedding, event, and portrait photography company with my wife.</div>
+          <div style="font-size:14pt;line-height:1.78;color:rgba(255,255,255,0.88);margin-top:12px;">In this class you&rsquo;ll work on creative projects and have the chance to check out cameras to document school events, sports, and everyday campus life, capturing energy, perspective, and personality. We&rsquo;ll challenge how you see the familiar and help you develop your own visual style.</div>
+          <div style="font-size:14pt;line-height:1.78;color:rgba(255,255,255,0.88);margin-top:12px;"><strong>Be ready to experiment, express, and grow.</strong></div>
+        </div>
 
       </div>
 
@@ -104,36 +121,24 @@
 
           <div style="display:flex;flex-direction:column;gap:12px;">
 
-            <div style="display:flex;align-items:flex-start;gap:14px;">
-              <div style="font-size:18pt;line-height:1;flex-shrink:0;margin-top:2px;">&#128222;</div>
-              <div>
-                <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">School Phone</div>
-                <div style="font-size:14pt;color:#ffffff;">805.922.1305 &nbsp;ex. 5322</div>
-              </div>
+            <div style="border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:12px;">
+              <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">School Phone</div>
+              <div style="font-size:14pt;color:#ffffff;">805.922.1305 &nbsp;ex. 5322</div>
             </div>
 
-            <div style="display:flex;align-items:flex-start;gap:14px;">
-              <div style="font-size:18pt;line-height:1;flex-shrink:0;margin-top:2px;">&#128172;</div>
-              <div>
-                <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Text Only</div>
-                <div style="font-size:14pt;color:#ffffff;">805.631.0001</div>
-              </div>
+            <div style="border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:12px;">
+              <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Text Only</div>
+              <div style="font-size:14pt;color:#ffffff;">805.631.0001</div>
             </div>
 
-            <div style="display:flex;align-items:flex-start;gap:14px;">
-              <div style="font-size:18pt;line-height:1;flex-shrink:0;margin-top:2px;">&#9993;</div>
-              <div>
-                <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Email</div>
-                <div style="font-size:14pt;color:#ffffff;">csilva@smjuhsd.org</div>
-              </div>
+            <div style="border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:12px;">
+              <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Email</div>
+              <div style="font-size:14pt;color:#ffffff;">csilva@smjuhsd.org</div>
             </div>
 
-            <div style="display:flex;align-items:flex-start;gap:14px;">
-              <div style="font-size:18pt;line-height:1;flex-shrink:0;margin-top:2px;">&#9200;</div>
-              <div>
-                <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Response Time</div>
-                <div style="font-size:14pt;color:#ffffff;">Within 24 hours</div>
-              </div>
+            <div>
+              <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Response Time</div>
+              <div style="font-size:14pt;color:#ffffff;">Within 24 hours</div>
             </div>
 
           </div>
@@ -146,36 +151,24 @@
 
           <div style="display:flex;flex-direction:column;gap:14px;">
 
-            <div style="display:flex;align-items:flex-start;gap:14px;">
-              <div style="font-size:18pt;line-height:1;flex-shrink:0;margin-top:2px;">&#128690;</div>
-              <div>
-                <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Fun Fact</div>
-                <div style="font-size:14pt;color:rgba(255,255,255,0.88);line-height:1.6;">I used to be in a street bike motorcycle club.</div>
-              </div>
+            <div style="border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:14px;">
+              <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Fun Fact</div>
+              <div style="font-size:14pt;color:rgba(255,255,255,0.88);line-height:1.6;">I used to be in a street bike motorcycle club.</div>
             </div>
 
-            <div style="display:flex;align-items:flex-start;gap:14px;">
-              <div style="font-size:18pt;line-height:1;flex-shrink:0;margin-top:2px;">&#128483;</div>
-              <div>
-                <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Favorite Quote</div>
-                <div style="font-size:14pt;color:rgba(255,255,255,0.88);line-height:1.6;font-style:italic;">&ldquo;Leave it better than you found it.&rdquo;</div>
-              </div>
+            <div style="border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:14px;">
+              <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Favorite Quote</div>
+              <div style="font-size:14pt;color:rgba(255,255,255,0.88);line-height:1.6;font-style:italic;">&ldquo;Leave it better than you found it.&rdquo;</div>
             </div>
 
-            <div style="display:flex;align-items:flex-start;gap:14px;">
-              <div style="font-size:18pt;line-height:1;flex-shrink:0;margin-top:2px;">&#127944;</div>
-              <div>
-                <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Hobbies</div>
-                <div style="font-size:14pt;color:rgba(255,255,255,0.88);line-height:1.6;">Off-roading in my 4Runner and watching Rugby.</div>
-              </div>
+            <div style="border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:14px;">
+              <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Hobbies</div>
+              <div style="font-size:14pt;color:rgba(255,255,255,0.88);line-height:1.6;">Off-roading in my 4Runner and following the All Blacks, New Zealand's national rugby team.</div>
             </div>
 
-            <div style="display:flex;align-items:flex-start;gap:14px;">
-              <div style="font-size:18pt;line-height:1;flex-shrink:0;margin-top:2px;">&#127866;</div>
-              <div>
-                <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Favorite Treat</div>
-                <div style="font-size:14pt;color:rgba(255,255,255,0.88);line-height:1.6;">Protein Bars</div>
-              </div>
+            <div>
+              <div style="font-size:12pt;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Favorite Treat</div>
+              <div style="font-size:14pt;color:rgba(255,255,255,0.88);line-height:1.6;">Protein Bars</div>
             </div>
 
           </div>
