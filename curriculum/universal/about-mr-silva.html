@@ -7,24 +7,10 @@
   <style>
     :root { --course-accent: #007474; }
 
-    /* ── Fixed PV watermark behind everything (website only) ── */
-    .pv-watermark {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      z-index: 0;
-      background: url('/assets/PV_LOGO_BACKGROUND.svg') center center / 65% auto no-repeat;
-      opacity: 0.65;
-      pointer-events: none;
-    }
-
-    /* ── Stack page content above watermark ── */
     .silva-nav  { position: sticky; top: 0; z-index: 100; }
     .silva-page { position: relative; z-index: 1; }
 
-    /* ── Override #top solid background so watermark bleeds through ── */
-    #top { background: transparent !important; }
-
-    /* ── Glassmorphism card base (website) ── */
+    /* ── Glassmorphism card base (website only) ── */
     .glass-teal {
       background: rgba(0, 116, 116, 0.20) !important;
       backdrop-filter: blur(16px);
@@ -40,8 +26,6 @@
 </head>
 <body>
 
-  <!-- Fixed watermark (website only — not inside #top, not copied to Canvas) -->
-  <div class="pv-watermark" aria-hidden="true"></div>
 
   <nav class="silva-nav" aria-label="Module library navigation">
     <div class="silva-nav-inner">
@@ -66,14 +50,14 @@
 
   <!-- #top is transparent on the website so the PV watermark shows through.
        The inline background is kept for Canvas (Canvas strips the <style> override). -->
-  <div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background:rgba(8,8,8,0.92);border-radius:30px;overflow:hidden;">
+  <div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;background-image:linear-gradient(rgba(8,8,8,0.72),rgba(8,8,8,0.72)),url('https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV_LOGO_BACKGROUND.svg');background-position:center center,center center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed;background-size:auto,65%;border-radius:30px;overflow:hidden;">
 
     <!-- ── BODY ── -->
     <div style="padding:28px 28px 40px;">
 
       <!-- Title card — same tile style as bio card, PV logo ghosted left -->
       <div class="glass-teal" style="position:relative;background:rgba(0,116,116,0.20);border:1px solid rgba(0,180,180,0.22);border-left:5px solid #007474;border-radius:20px;padding:36px 32px;margin-bottom:18px;overflow:hidden;text-align:center;">
-        <img src="/assets/PV%20Logo%2050%25.svg" alt="" aria-hidden="true"
+        <img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV%20Logo%2050%25.svg" alt="" aria-hidden="true"
              style="position:absolute;left:16px;top:50%;transform:translateY(-50%);width:130px;height:auto;pointer-events:none;" />
         <div style="font-size:12pt;letter-spacing:0.18em;text-transform:uppercase;color:#5eead4;margin-bottom:8px;">Pioneer Valley High School</div>
         <div style="font-size:28pt;font-weight:700;color:#ffffff;line-height:1.1;letter-spacing:0.02em;"><strong>Mr. Silva</strong></div>
