@@ -317,56 +317,63 @@
         url: "curriculum/universal/about-mr-silva.html"
       },
       {
-        course: "photo1",
+        course: "da1b",
+        name: "Course Home",
+        pages: 1,
+        status: "published",
+        url: "curriculum/digarts1/digarts1b-home.html"
+      },
+      {
+        course: "photo1b",
         name: "Course Home",
         pages: 1,
         status: "published",
         url: "curriculum/photo1/photo1b-home.html"
       },
       {
-        course: "photo1",
+        course: "photo1b",
         name: "Sauce Baby: Creative Brief",
         pages: 5,
         status: "published",
         url: "curriculum/photo1/sauce-baby/creative-brief.html"
       },
       {
-        course: "photo1",
+        course: "photo1b",
         name: "Commercial Photography Final: Sauce Baby",
         pages: 6,
         status: "published",
         url: "curriculum/photo1/sauce-baby/overview.html"
       },
       {
-        course: "photo1",
+        course: "photo1b",
         name: "Step 1: Food Photography Mood Board",
         pages: 5,
         status: "published",
         url: "curriculum/photo1/sauce-baby/step1-mood-board.html"
       },
       {
-        course: "photo1",
+        course: "photo1b",
         name: "Step 2: Sauce Baby Shot Planning Document",
         pages: 6,
         status: "published",
         url: "curriculum/photo1/sauce-baby/step2-planning.html"
       },
       {
-        course: "photo1",
+        course: "photo1b",
         name: "Step 3: Shoot and Contact Sheet",
         pages: 8,
         status: "published",
         url: "curriculum/photo1/sauce-baby/step3-shoot-contact.html"
       },
       {
-        course: "photo1",
+        course: "photo1b",
         name: "Step 4: Final Edits",
         pages: 7,
         status: "published",
         url: "curriculum/photo1/sauce-baby/step4-final-edits.html"
       },
       {
-        course: "photo1",
+        course: "photo1b",
         name: "Step 5: Written Reflection",
         pages: 5,
         status: "published",
@@ -384,11 +391,18 @@
         desc: "Shared pages used across Photography and Digital Arts — About Mr. Silva, policies, and universal resources."
       },
       {
-        id: "da1",
-        code: "DA 1",
-        title: "Digital Arts 1",
+        id: "da1a",
+        code: "DA 1A",
+        title: "Digital Arts 1A",
         accent: "#6b6ef5",
-        desc: "Foundations of digital design, typography, layout, and visual communication using industry-standard tools."
+        desc: "First semester foundations: design principles, typography, color theory, and introduction to Adobe Creative Cloud."
+      },
+      {
+        id: "da1b",
+        code: "DA 1B",
+        title: "Digital Arts 1B",
+        accent: "#6b6ef5",
+        desc: "Second semester applications: logo design, branding, marketing graphics, layout, and professional production workflows."
       },
       {
         id: "da2",
@@ -398,11 +412,18 @@
         desc: "Advanced design and motion: brand identity, video production, and portfolio-ready client work."
       },
       {
-        id: "photo1",
-        code: "PHOTO 1",
-        title: "Photography 1",
+        id: "photo1a",
+        code: "PHOTO 1A",
+        title: "Photography 1A",
         accent: "#007474",
-        desc: "Camera fundamentals, exposure, composition, lighting, and darkroom/digital editing workflows."
+        desc: "First semester fundamentals: camera controls, exposure, composition, and basic digital editing workflows."
+      },
+      {
+        id: "photo1b",
+        code: "PHOTO 1B",
+        title: "Photography 1B",
+        accent: "#007474",
+        desc: "Second semester growth: advanced lighting, intentional creative practice, professional photography projects, and portfolio building."
       },
       {
         id: "photo2",
@@ -459,7 +480,7 @@
         : "";
 
       return `
-        <div class="course-card">
+        <div class="course-card" id="${course.id}">
           <div class="course-card-accent" style="background:${course.accent}"></div>
           <p class="course-code">${course.code}</p>
           <h2 class="course-title">${course.title}</h2>
