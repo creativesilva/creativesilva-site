@@ -241,9 +241,128 @@
     .curriculum-footer-note a:hover {
       color: var(--text);
     }
+    /* ── PIN gate ── */
+    #pin-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #060606;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-body, Arial, sans-serif);
+    }
+    #pin-gate.hidden { display: none; }
+
+    .pin-card {
+      width: 100%;
+      max-width: 360px;
+      background: #0e0e0e;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-top: 3px solid #007474;
+      border-radius: 16px;
+      padding: 40px 36px 36px;
+      text-align: center;
+    }
+    .pin-card img {
+      width: 80px;
+      height: auto;
+      margin-bottom: 20px;
+      opacity: 0.85;
+    }
+    .pin-card h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #5eead4;
+      margin: 0 0 6px;
+    }
+    .pin-card p {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.38);
+      margin: 0 0 28px;
+      line-height: 1.6;
+    }
+    .pin-card input {
+      width: 100%;
+      box-sizing: border-box;
+      background: #1a1a1a;
+      border: 1.5px solid rgba(255,255,255,0.10);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1.4rem;
+      letter-spacing: 0.3em;
+      text-align: center;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 14px;
+    }
+    .pin-card input:focus { border-color: #007474; }
+    .pin-card button {
+      width: 100%;
+      background: #007474;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 13px;
+      cursor: pointer;
+      transition: filter 0.15s;
+    }
+    .pin-card button:hover { filter: brightness(1.15); }
+    .pin-error {
+      font-size: 0.78rem;
+      color: #f87171;
+      margin-top: 12px;
+      min-height: 18px;
+      letter-spacing: 0.05em;
+    }
   </style>
 </head>
 <body>
+
+  <!-- PIN gate — hidden immediately if session is already authenticated -->
+  <div id="pin-gate">
+    <div class="pin-card">
+      <img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV_Logo_Full.png" alt="PVHS" />
+      <h2>Curriculum Library</h2>
+      <p>Private access only.<br>Enter your code to continue.</p>
+      <input type="password" id="pin-input" inputmode="numeric" autocomplete="off" placeholder="••••••" maxlength="10" />
+      <button onclick="silvaCheckPin()">Continue</button>
+      <div class="pin-error" id="pin-error"></div>
+    </div>
+  </div>
+  <script>
+    // Run synchronously before page renders so content never flashes
+    if (sessionStorage.getItem('silva-auth') === 'ok') {
+      document.getElementById('pin-gate').classList.add('hidden');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      var input = document.getElementById('pin-input');
+      if (input) {
+        input.focus();
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') silvaCheckPin();
+        });
+      }
+    });
+    function silvaCheckPin() {
+      var val = document.getElementById('pin-input').value.trim();
+      if (val === '332331') {
+        sessionStorage.setItem('silva-auth', 'ok');
+        document.getElementById('pin-gate').classList.add('hidden');
+      } else {
+        document.getElementById('pin-error').textContent = 'Incorrect code. Try again.';
+        document.getElementById('pin-input').value = '';
+        document.getElementById('pin-input').focus();
+      }
+    }
+  </script>
 
   <header class="site-header">
     <div class="header-inner">
@@ -274,7 +393,7 @@
 
       <div class="curriculum-intro">
         <p class="curriculum-label">PVHS Digital Arts &amp; Photography</p>
-        <p>Canvas module library for all four CTE courses. Published modules are live in Canvas. Use <code>?staging</code> in the URL to preview staged content.</p>
+        <p>This is where I build the curriculum I use every day. Every module here is designed, tested, and actively running in my CTE Photography and Digital Arts classes at Pioneer Valley High School. Pages are built to drop directly into Canvas: copy the HTML, paste it into the Rich Content Editor, and it is ready for students. Browse by course below. Add <code>?staging</code> to the URL to preview modules still in development.</p>
       </div>
 
       <div class="course-grid" id="course-grid">
