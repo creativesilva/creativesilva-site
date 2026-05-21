@@ -213,6 +213,29 @@ body {
 .silva-copy-btn:active { transform: scale(0.97); }
 .silva-copy-btn.copied { background: #1db869; }
 
+.silva-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 13px;
+  background: transparent;
+  color: var(--course-accent);
+  border: 1.5px solid var(--course-accent);
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s, filter 0.15s, transform 0.1s;
+  font-family: inherit;
+}
+.silva-download-btn:hover { background: rgba(0, 116, 116, 0.14); filter: brightness(1.1); }
+.silva-download-btn:active { transform: scale(0.97); }
+
 /* ── Page wrapper ── */
 
 .silva-page {

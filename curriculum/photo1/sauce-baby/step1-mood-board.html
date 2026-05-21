@@ -48,6 +48,10 @@
         &#128203; Copy Canvas HTML
       </button>
 
+      <button class="silva-download-btn" onclick="silvaDownloadHTML()" aria-label="Download Canvas HTML as file">
+        &#128229; Download HTML
+      </button>
+
     </div>
   </nav>
 
@@ -351,6 +355,20 @@
       }).catch(function() {
         alert('Copy failed. Try selecting the page source manually.');
       });
+    }
+
+    function silvaDownloadHTML() {
+      var el = document.getElementById('top');
+      var html = el.outerHTML;
+      var blob = new Blob([html], { type: 'text/html' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = location.pathname.split('/').pop().replace('.html', '') + '-canvas.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
   </script>
 
