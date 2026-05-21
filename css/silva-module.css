@@ -236,6 +236,33 @@ body {
 .silva-download-btn:hover { background: rgba(0, 116, 116, 0.14); filter: brightness(1.1); }
 .silva-download-btn:active { transform: scale(0.97); }
 
+/* Download left, Copy right */
+.silva-download-btn { order: 1; }
+.silva-copy-btn     { order: 2; }
+
+/* ── Prev / Next module arrows (injected by silva-nav.js) ── */
+
+.silva-nav-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  font-size: 15px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.silva-nav-arrow:hover {
+  border-color: var(--course-accent);
+  color: var(--course-accent);
+  background: rgba(0, 116, 116, 0.12);
+}
+
 /* ── Page wrapper ── */
 
 .silva-page {
