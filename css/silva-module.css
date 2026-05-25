@@ -283,6 +283,66 @@ body {
 }
 
 /* ═══════════════════════════════════════════
+   MOBILE — phones (≤ 640px)
+   All overrides target .silva-page / #top so
+   Canvas paste (which only copies #top innerHTML
+   with its inline styles) is completely unaffected.
+   ═══════════════════════════════════════════ */
+@media (max-width: 640px) {
+
+  /* 1. Reduce outer page padding so #top gets more width */
+  .silva-page {
+    padding: 10px 8px 40px;
+  }
+
+  /* 2. Compact nav on phones: tighten padding, hide download button */
+  .silva-nav-inner {
+    padding: 0 10px;
+  }
+  .silva-download-btn {
+    display: none;
+  }
+  .silva-copy-btn {
+    font-size: 10px;
+    padding: 0 10px;
+    letter-spacing: 0.02em;
+  }
+
+  /* 3. Pull back #top's own inline padding (28px each side → 14px) */
+  #top {
+    padding: 14px 14px 24px !important;
+    border-radius: 16px !important;
+  }
+
+  /* 4. Title card: shrink the PV logo; hide the empty balancing spacer div */
+  #top img[style*="width:144px"] {
+    width: 72px !important;
+  }
+  #top div[style*="width:144px"] {
+    display: none !important;
+  }
+  /* Scale back the big name headline (28pt → 18pt) */
+  #top div[style*="font-size:28pt"] {
+    font-size: 18pt !important;
+  }
+
+  /* 5. Bio photo: remove float so it goes full-width above the text */
+  #top img[style*="float:right"] {
+    float: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 0 16px 0 !important;
+    display: block !important;
+  }
+
+  /* 6. Multi-column grids → single column */
+  #top div[style*="minmax(260px"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ═══════════════════════════════════════════
    CANVAS CONTENT STANDARDS (inline styles — classes are stripped by Canvas RCE)
    Font family:        font-family:Arial,sans-serif  (set on #top div, inherits)
    Title (24pt bold):  font-size:24pt;font-weight:bold  — wrapped in <strong>
