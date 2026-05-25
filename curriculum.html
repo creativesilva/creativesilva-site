@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20260418d" />
+  <link rel="stylesheet" href="css/style.css?v=20260524a" />
   <style>
     /* ── Curriculum-specific styles ── */
 
@@ -241,6 +241,41 @@
     .curriculum-footer-note a:hover {
       color: var(--text);
     }
+
+    /* ── Mobile ── */
+    @media (max-width: 640px) {
+      .curriculum-intro {
+        margin-bottom: 36px;
+      }
+      .curriculum-intro p {
+        font-size: 0.92rem;
+      }
+      .course-card {
+        padding: 20px 18px;
+      }
+      .course-title {
+        font-size: 1.2rem;
+      }
+      .course-desc {
+        font-size: 0.85rem;
+        margin-bottom: 16px;
+      }
+      .module-row {
+        padding: 9px 10px;
+        gap: 8px;
+      }
+      .module-row-name {
+        font-size: 0.76rem;
+      }
+      .module-page-count {
+        display: none;
+      }
+      .course-grid {
+        gap: 14px;
+        margin-bottom: 40px;
+      }
+    }
+
     /* ── PIN gate ── */
     #pin-gate {
       position: fixed;
