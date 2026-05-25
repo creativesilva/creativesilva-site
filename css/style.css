@@ -1027,14 +1027,7 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
     margin-bottom: 36px;
   }
 
-  /* Put the hero slider FIRST on mobile; statement sits below it */
-  main { display: flex; flex-direction: column; }
-  .hero-slider    { order: 1; }
-  .home-statement { order: 2; }
-  .home-byline    { order: 3; }
-  .container      { order: 4; }
-
-  /* Tighten statement spacing when sandwiched under the slider */
+  /* Tighten statement spacing below the slider */
   .home-statement { padding: 28px 18px 8px; }
   .home-byline    { padding: 18px 18px 28px; }
 
