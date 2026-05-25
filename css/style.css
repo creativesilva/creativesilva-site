@@ -994,17 +994,22 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
    Placed last so these rules win against earlier breakpoints.
    ========================================================== */
 @media (max-width: 640px) {
-  /* Header */
+  /* Header — 3 compact rows: brand / left-nav / right-nav */
   .header-inner {
-    padding: 10px 14px;
-    gap: 8px;
+    padding: 6px 14px;
+    gap: 3px;
   }
-  .brand img { height: 40px; }
+  .brand img { height: 34px; }
   .nav-left,
   .nav-right {
+    flex: 0 0 100%;
     gap: 14px;
-    font-size: 0.66rem;
-    letter-spacing: 0.1em;
+    font-size: 0.62rem;
+    letter-spacing: 0.07em;
+  }
+  .nav-left a,
+  .nav-right a {
+    padding: 3px 0;
   }
 
   /* Shared container padding */
