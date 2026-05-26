@@ -50,9 +50,9 @@
     }
     .staging-banner.visible { display: block; }
 
-    /* ── Build Resources card (full-width, sits above course grid) ── */
+    /* ── Build Resources card (sits as first tile inside the course grid) ── */
     .build-resources {
-      margin-bottom: 32px;
+      /* No extra margin — the course-grid gap handles spacing */
     }
 
     .resource-tabs {
@@ -509,46 +509,45 @@
         <p>This is where I build the curriculum I use every day. Every module here is designed, tested, and actively running in my CTE Photography and Digital Arts classes at Pioneer Valley High School. Pages are built to drop directly into Canvas: copy the HTML, paste it into the Rich Content Editor, and it is ready for students. Browse by course below. Add <code>?staging</code> to the URL to preview modules still in development.</p>
       </div>
 
-      <div class="course-card build-resources">
-        <span class="course-card-accent" style="background:#5f8fbf;"></span>
-        <p class="course-code">Teacher Resources</p>
-        <h2 class="course-title">Build Resources</h2>
-        <p class="course-desc">Markdown specs, prompts, and frameworks for the AI tools I use to build curriculum. Download any file and paste into a fresh agent session to get it up to speed instantly.</p>
+      <div class="course-grid" id="course-grid">
+        <div class="course-card build-resources">
+          <span class="course-card-accent" style="background:#5f8fbf;"></span>
+          <p class="course-code">Teacher Resources</p>
+          <h2 class="course-title">Build Resources</h2>
+          <p class="course-desc">Markdown specs, prompts, and frameworks for the AI tools I use to build curriculum. Download any file and paste into a fresh agent session to get it up to speed instantly.</p>
 
-        <div class="resource-tabs" role="tablist">
-          <button type="button" class="resource-tab active" data-tab="ai-build" role="tab" aria-selected="true">AI Build Docs</button>
-          <button type="button" class="resource-tab" data-tab="image-models" role="tab" aria-selected="false">Image Models</button>
-          <button type="button" class="resource-tab" data-tab="video-models" role="tab" aria-selected="false">Video Models</button>
-        </div>
+          <div class="resource-tabs" role="tablist">
+            <button type="button" class="resource-tab active" data-tab="ai-build" role="tab" aria-selected="true">AI Build Docs</button>
+            <button type="button" class="resource-tab" data-tab="image-models" role="tab" aria-selected="false">Image Models</button>
+            <button type="button" class="resource-tab" data-tab="video-models" role="tab" aria-selected="false">Video Models</button>
+          </div>
 
-        <div class="resource-tab-panel active" data-panel="ai-build" role="tabpanel">
-          <div class="module-list">
-            <a href="/CANVAS_BUILD_FRAMEWORK.md" download="CANVAS_BUILD_FRAMEWORK.md" class="module-row">
-              <span class="module-row-name">CANVAS_BUILD_FRAMEWORK.md</span>
-              <span class="resource-dl-badge">&#11015; Download</span>
-            </a>
-            <a href="/CLAUDE.md" download="CLAUDE.md" class="module-row">
-              <span class="module-row-name">CLAUDE.md</span>
-              <span class="resource-dl-badge">&#11015; Download</span>
-            </a>
-            <a href="/AGENTS.md" download="AGENTS.md" class="module-row">
-              <span class="module-row-name">AGENTS.md</span>
-              <span class="resource-dl-badge">&#11015; Download</span>
-            </a>
+          <div class="resource-tab-panel active" data-panel="ai-build" role="tabpanel">
+            <div class="module-list">
+              <a href="/CANVAS_BUILD_FRAMEWORK.md" download="CANVAS_BUILD_FRAMEWORK.md" class="module-row">
+                <span class="module-row-name">CANVAS_BUILD_FRAMEWORK.md</span>
+                <span class="resource-dl-badge">&#11015; Download</span>
+              </a>
+              <a href="/CLAUDE.md" download="CLAUDE.md" class="module-row">
+                <span class="module-row-name">CLAUDE.md</span>
+                <span class="resource-dl-badge">&#11015; Download</span>
+              </a>
+              <a href="/AGENTS.md" download="AGENTS.md" class="module-row">
+                <span class="module-row-name">AGENTS.md</span>
+                <span class="resource-dl-badge">&#11015; Download</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="resource-tab-panel" data-panel="image-models" role="tabpanel">
+            <div class="resource-empty">Coming soon. Prompt libraries, style guides, and reference packs for the image generation models used in class projects.</div>
+          </div>
+
+          <div class="resource-tab-panel" data-panel="video-models" role="tabpanel">
+            <div class="resource-empty">Coming soon. Prompt libraries, shot lists, and motion reference packs for video generation models.</div>
           </div>
         </div>
-
-        <div class="resource-tab-panel" data-panel="image-models" role="tabpanel">
-          <div class="resource-empty">Coming soon. Prompt libraries, style guides, and reference packs for the image generation models used in class projects.</div>
-        </div>
-
-        <div class="resource-tab-panel" data-panel="video-models" role="tabpanel">
-          <div class="resource-empty">Coming soon. Prompt libraries, shot lists, and motion reference packs for video generation models.</div>
-        </div>
-      </div>
-
-      <div class="course-grid" id="course-grid">
-        <!-- Rendered by curriculum.js -->
+        <!-- Course cards appended by JS below -->
       </div>
 
       <div class="curriculum-footer-note">
@@ -810,8 +809,8 @@
       `;
     }
 
-    document.getElementById("course-grid").innerHTML =
-      COURSES.map(buildCourseCard).join("");
+    document.getElementById("course-grid")
+      .insertAdjacentHTML("beforeend", COURSES.map(buildCourseCard).join(""));
 
     // ── Build Resources tab switcher ────────────────────────────────────────
     document.querySelectorAll('.resource-tab').forEach(function (tab) {
