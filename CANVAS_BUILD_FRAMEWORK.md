@@ -20,6 +20,7 @@ When the user says "build a new Canvas assignment" (or similar):
 6. **Commit and push** following §8.
 
 **Hard rules** (apply to every build, no exceptions):
+- **Every page that uses AI-generated imagery includes the AI Image Disclaimer footer** at the bottom of both EN and ES language sections (see §16).
 - No em dashes anywhere. Use colons, commas, or restructure the sentence.
 - All images and downloadable files hosted at `raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/...` (never Canvas-hosted URLs, never relative paths).
 - URL-encode spaces in asset paths as `%20`.
@@ -813,6 +814,74 @@ When you see any of these in the pasted old HTML, treat it as a signal that a re
 8. **Leaving "copy" in a filename** (e.g., `Jimenez_Mockups copy.ai`). Rename before committing.
 9. **Skipping the Spanish translation** and just pasting English in the ES block. Either translate it properly or set Q5 = English-only.
 10. **Bloated step cards.** If a card needs more than ~80 words, split it. Students will skim.
+
+---
+
+## 16. AI Image Disclaimer Footer (Required on Any Page Using AI Imagery)
+
+Every page that uses AI-generated imagery must include a small disclaimer footer at the bottom of each language section. This addresses:
+
+- Transparency about AI use (parents, students, admin)
+- Known biases in AI image generators (body proportions, features, stereotypes)
+- Distinguishing AI hero/staged photos from real student work on the same page
+- Honest invitation for feedback
+
+### When to include
+- ✅ Any page with AI-generated photos of people (hero images, journal photos, staged scenes)
+- ✅ Any page with AI-generated branding mockups, product staging, or composite imagery
+- ❌ Pages that ONLY use real photos (e.g., About Mr. Silva using his actual headshot)
+- ❌ Pages with no imagery at all
+
+### Where to place
+- Inside the EN language section: AFTER the last content card (typically "What to Submit" or "Begin Now"), BEFORE the closing `</div><!-- /English padding -->`
+- Inside the ES language section: same position, mirrored
+- Never in the title header card. Never above the fold.
+
+### Wording (do NOT alter unless the teacher explicitly approves changes)
+
+**English:**
+```
+The images on this page are AI-generated and do not show real students. AI tools can produce exaggerated body proportions, features, or other distortions that sometimes reflect biases built into the technology. All images are made to be school-appropriate. I keep working to improve the process. Questions and feedback welcome.
+```
+
+**Spanish:**
+```
+Las imágenes en esta página son generadas con IA y no muestran a estudiantes reales. Las herramientas de IA pueden producir proporciones del cuerpo exageradas, rasgos u otras distorsiones que a veces reflejan los sesgos de esta tecnología. Todas las imágenes son creadas para ser apropiadas para la escuela. Sigo trabajando para mejorar el proceso. Preguntas y comentarios son bienvenidos.
+```
+
+### HTML template (dark mode, swap accent color per page palette)
+
+```html
+<!-- AI Image Disclaimer -->
+<div style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.10);">
+  <div style="font-size:10pt;color:rgba(255,255,255,0.50);line-height:1.55;font-style:italic;">
+    <span style="color:{ACCENT_LIGHT};font-style:normal;font-weight:bold;">&#9432;</span> The images on this page are AI-generated and do not show real students. AI tools can produce exaggerated body proportions, features, or other distortions that sometimes reflect biases built into the technology. All images are made to be school-appropriate. I keep working to improve the process. Questions and feedback welcome.
+  </div>
+</div>
+```
+
+For Spanish, swap the comment to `<!-- Aviso sobre Imágenes IA -->` and use the Spanish copy with proper HTML entities for accents.
+
+### Accent color (the ⓘ icon)
+
+| Page palette | `{ACCENT_LIGHT}` value |
+|--------------|-----------------------|
+| Photo 1B / Revisit (dark teal) | `#80e0e0` |
+| Jimenez / Custom Client (dark blue) | `#9ecbff` |
+| Sauce Baby (dark purple) | `#d9b3ff` |
+| PVHS Stock (light teal page) | `#007474` (use solid teal, not light) |
+
+### Styling rules
+
+- **Tiny**: 10pt font size (smaller than body, larger than copyright fine print)
+- **Subtle**: muted text color (50% opacity white on dark / 50% black on light)
+- **Italic** body text to visually separate from main content
+- **Bold non-italic icon** in the page's light-accent color for a small visual cue
+- **Border-top divider** above to mark the boundary
+- **Tucked**: never inside another card; sits as its own block at the very bottom
+
+### Pre-commit check
+Search the page for `AI Image Disclaimer` (EN comment) and `Aviso sobre Im&aacute;genes IA` (ES comment). Both must be present on AI-imagery pages. If either is missing, add it before commit.
 
 ---
 
