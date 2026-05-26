@@ -395,3 +395,38 @@ body {
   cursor: not-allowed;
   pointer-events: none;
 }
+
+/* ═══════════════════════════════════════════
+   SILVA-SCROLL: styled scrollbar for long instruction sections
+   Used on creativesilva.com preview. Canvas strips custom scrollbar
+   styling, so always pair this class with a "Scroll for more" text
+   hint and a bottom-fade gradient on the container (see framework §13).
+   ═══════════════════════════════════════════ */
+
+.silva-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.silva-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 5px;
+}
+.silva-scroll::-webkit-scrollbar-thumb {
+  background: #5f8fbf;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.silva-scroll::-webkit-scrollbar-thumb:hover {
+  background: #9ecbff;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+.silva-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}
+/* Firefox */
+.silva-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #5f8fbf rgba(255, 255, 255, 0.04);
+}
