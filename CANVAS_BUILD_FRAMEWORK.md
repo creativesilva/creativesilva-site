@@ -25,6 +25,10 @@ When the user says "build a new Canvas assignment" (or similar):
 - URL-encode spaces in asset paths as `%20`.
 - Use smart quotes via HTML entities (`&#x2018;` `&#x2019;` `&#x201C;` `&#x201D;`) in copy.
 - Page must include the copy/download script block AND the `<script src="/js/silva-nav.js">` tag.
+- **All student-facing copy written at 5th grade reading level** in both English and Spanish (see §12).
+- **Every Overview card includes exactly 6 vocabulary words** as a responsive grid (3 across × 2 rows on wide, collapses on narrow), with kid-friendly definitions (see §5.B).
+- **Long sections must have a visible scroll affordance** (vertical scroll box with "scroll for more" hint and bottom fade, OR horizontal scroll with swipe hint, depending on content type — see §13).
+- **Cards stay under ~60 words.** If longer, split into two cards. Anti-bloat is a hard rule.
 
 ---
 
@@ -266,8 +270,8 @@ The header is intentionally wide and shallow (roughly 16:6 proportions). One row
 
 For Spanish mirror, swap the breadcrumb text + title and change `href="#espanol"` to `href="#top"` and link label to `Back to English`.
 
-### B. Overview Card (float-right hero image)
-The hero image is the showcase. Width 52%, no max-width cap, strong shadow.
+### B. Overview Card (float-right hero image + required vocab grid)
+The hero image is the showcase. Width 52%, no max-width cap, strong shadow. The Overview card MUST end with a 6-word vocabulary grid.
 
 ```html
 <div style="background:linear-gradient(180deg,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.04) 100%);border:1px solid rgba(255,255,255,0.08);border-left:6px solid #5f8fbf;border-radius:24px;padding:30px;margin-bottom:24px;overflow:hidden;">
@@ -278,7 +282,39 @@ The hero image is the showcase. Width 52%, no max-width cap, strong shadow.
   <div style="margin-bottom:14px;"><span style="font-size:18pt;color:#ffffff;"><strong>What You Are Building</strong></span></div>
   <div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{OVERVIEW_PARAGRAPH_1}</span></div>
   <div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{OVERVIEW_PARAGRAPH_2}</span></div>
-  <div style="line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{OVERVIEW_PARAGRAPH_3}</span></div>
+  <div style="margin-bottom:22px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{OVERVIEW_PARAGRAPH_3}</span></div>
+
+  <!-- Clear the float before the vocab grid so it sits full-width below -->
+  <div style="clear:both;"></div>
+
+  <!-- VOCABULARY GRID: exactly 6 cards, 3 across on wide screens, responsive collapse -->
+  <div style="margin-bottom:10px;"><span style="font-size:14pt;color:#9ecbff;"><strong>Vocabulary You Will Use</strong></span></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+    <div style="background:rgba(0,0,0,0.32);border:1px solid rgba(95,143,191,0.28);border-left:3px solid #5f8fbf;border-radius:12px;padding:14px 16px;">
+      <div style="color:#9ecbff;font-size:13pt;margin-bottom:4px;"><strong>{WORD_1}</strong></div>
+      <div style="color:rgba(255,255,255,0.88);font-size:11pt;line-height:1.5;">{KID_FRIENDLY_DEF_1}</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.32);border:1px solid rgba(95,143,191,0.28);border-left:3px solid #5f8fbf;border-radius:12px;padding:14px 16px;">
+      <div style="color:#9ecbff;font-size:13pt;margin-bottom:4px;"><strong>{WORD_2}</strong></div>
+      <div style="color:rgba(255,255,255,0.88);font-size:11pt;line-height:1.5;">{KID_FRIENDLY_DEF_2}</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.32);border:1px solid rgba(95,143,191,0.28);border-left:3px solid #5f8fbf;border-radius:12px;padding:14px 16px;">
+      <div style="color:#9ecbff;font-size:13pt;margin-bottom:4px;"><strong>{WORD_3}</strong></div>
+      <div style="color:rgba(255,255,255,0.88);font-size:11pt;line-height:1.5;">{KID_FRIENDLY_DEF_3}</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.32);border:1px solid rgba(95,143,191,0.28);border-left:3px solid #5f8fbf;border-radius:12px;padding:14px 16px;">
+      <div style="color:#9ecbff;font-size:13pt;margin-bottom:4px;"><strong>{WORD_4}</strong></div>
+      <div style="color:rgba(255,255,255,0.88);font-size:11pt;line-height:1.5;">{KID_FRIENDLY_DEF_4}</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.32);border:1px solid rgba(95,143,191,0.28);border-left:3px solid #5f8fbf;border-radius:12px;padding:14px 16px;">
+      <div style="color:#9ecbff;font-size:13pt;margin-bottom:4px;"><strong>{WORD_5}</strong></div>
+      <div style="color:rgba(255,255,255,0.88);font-size:11pt;line-height:1.5;">{KID_FRIENDLY_DEF_5}</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.32);border:1px solid rgba(95,143,191,0.28);border-left:3px solid #5f8fbf;border-radius:12px;padding:14px 16px;">
+      <div style="color:#9ecbff;font-size:13pt;margin-bottom:4px;"><strong>{WORD_6}</strong></div>
+      <div style="color:rgba(255,255,255,0.88);font-size:11pt;line-height:1.5;">{KID_FRIENDLY_DEF_6}</div>
+    </div>
+  </div>
 </div>
 ```
 
@@ -287,6 +323,14 @@ The hero image is the showcase. Width 52%, no max-width cap, strong shadow.
 - Always add `box-shadow:0 8px 40px rgba(0,0,0,0.6)` for impact.
 - Parent container needs `overflow:hidden` to clear the float.
 - Margin `0 0 22px 30px` keeps body text from hugging the image.
+- Add `<div style="clear:both;"></div>` between body paragraphs and the vocab grid so the grid sits full-width below the image, not wrapped beside it.
+
+**Vocabulary grid rules:**
+- Exactly **6 words**. Not 4, not 8. Six fills two clean rows of three on wide screens and gracefully collapses to 2x3 or 1x6 on narrow.
+- Words must be drawn from the content of this specific module (terms students will actually encounter in the steps below).
+- Definitions: under 15 words, 5th grade reading level, plain English. Skip the dictionary-style "n." or pronunciation guides.
+- For Spanish mirror, label becomes `Vocabulario Que Vas a Usar` and definitions translated to 5th grade Spanish (see §12).
+- The `repeat(auto-fit, minmax(180px, 1fr))` grid is responsive: 3 cols on desktop, 2 cols on tablet, 1 col on phone. No media queries needed.
 
 ### C. Project File Download Card (optional)
 ```html
@@ -304,31 +348,40 @@ For things like Google Image Search tips, glossary, video embed. Use the same ac
 
 ### E. How to Complete (orange section, scroll-boxed step cards)
 
+Long instruction lists use the visible-affordance vertical scroll pattern from §13. The "Scroll for more" hint + bottom gradient fade work even in Canvas (where custom scrollbar styling is stripped).
+
 ```html
 <div style="background:linear-gradient(180deg,rgba(255,107,26,0.22) 0%,rgba(255,107,26,0.08) 100%);border:1px solid rgba(255,107,26,0.3);border-left:6px solid #FF6B1A;border-radius:24px;padding:30px;margin-bottom:24px;">
   <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ff6b1a;"><strong>How to Complete Step {NN}</strong></span></div>
-  <div style="margin-bottom:16px;"><span style="font-size:18pt;color:#ffffff;"><strong>Step-by-Step Instructions</strong></span></div>
+  <div style="margin-bottom:10px;"><span style="font-size:18pt;color:#ffffff;"><strong>Step-by-Step Instructions</strong></span></div>
 
-  <div style="max-height:480px;overflow-y:auto;padding-right:6px;">
+  <!-- Scroll affordance: tells students there's more inside -->
+  <div style="font-size:11pt;color:#ffb27c;margin-bottom:8px;opacity:0.85;">&#8595; Scroll inside the box to see all {N} steps</div>
 
-    <!-- REPEAT THIS CARD PER STEP. Update the title number and content. -->
-    <div style="background:rgba(0,0,0,0.28);border:1px solid rgba(255,107,26,0.2);border-left:4px solid #FF6B1A;border-radius:18px;padding:18px 20px;margin-bottom:12px;">
-      <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ff6b1a;"><strong>{NN}. {STEP_TITLE}</strong></span></div>
-      <div style="line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{STEP_BODY}</span></div>
+  <!-- Scroll box with visible border and bottom-fade gradient for "more below" cue -->
+  <div class="silva-scroll" style="max-height:480px;overflow-y:auto;padding:12px 14px 18px;border:1px solid rgba(255,107,26,0.18);border-radius:14px;background:linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.18) 88%, rgba(255,107,26,0.18) 100%);">
+
+    <!-- REPEAT THIS CARD PER STEP. Keep body under 60 words. -->
+    <div style="background:rgba(0,0,0,0.32);border:1px solid rgba(255,107,26,0.2);border-left:4px solid #FF6B1A;border-radius:14px;padding:16px 18px;margin-bottom:12px;">
+      <div style="margin-bottom:6px;"><span style="font-size:14pt;color:#ff6b1a;"><strong>{NN}. {STEP_TITLE}</strong></span></div>
+      <div style="line-height:1.65;"><span style="font-size:13pt;color:rgba(255,255,255,0.90);">{STEP_BODY}</span></div>
     </div>
 
     <!-- last card uses margin-bottom:0 instead of 12px -->
 
-  </div><!-- /scroll -->
+  </div><!-- /silva-scroll -->
 </div>
 ```
 
 **Step card rules:**
 - Number cards as `01.`, `02.`, `03.` (zero-padded).
-- Keep body text under ~80 words per card; break long content into multiple cards.
+- Body text under **60 words per card**. If longer, split into two cards.
 - Use `<strong>` for filenames, menu commands, key actions.
 - Use `<br />` only inside a single card's body when listing sub-bullets; never use `<br />` to space cards.
 - Last card sets `margin-bottom:0` so the scroll box ends clean.
+- Always include the `&#8595; Scroll inside the box...` hint above the scroll container so students know more content is below the fold.
+- Always include the bottom-fade gradient in the scroll container background so users have a visual cue that content continues even when the OS scrollbar is hidden.
+- The `silva-scroll` class hooks the styled scrollbar CSS in `silva-module.css` (visible on creativesilva.com; gracefully degrades in Canvas where custom scrollbars are stripped).
 
 ### F. What to Submit Card
 ```html
@@ -392,12 +445,18 @@ Mental pass through the page. Every box must be true.
 - [ ] No em dashes anywhere (search the file for `—` and `&mdash;`).
 - [ ] All asset URLs use `raw.githubusercontent.com/creativesilva/creativesilva-site/main/...`.
 - [ ] Smart quotes used in long-form copy.
-- [ ] Step section wrapped in `max-height:480px;overflow-y:auto` scroll box.
+- [ ] **Overview card contains exactly 6 vocabulary cards** in the responsive grid.
+- [ ] **Vocabulary definitions read at 5th grade level** (under 15 words, plain language, no jargon).
+- [ ] **All body copy and step instructions read at 5th grade level** (run the §12 sniff test).
+- [ ] **Cards under 60 words.** If longer, split.
+- [ ] Step section wrapped in scroll container with `&#8595; Scroll inside...` hint above AND bottom-fade gradient.
+- [ ] Scroll container has `class="silva-scroll"` for styled scrollbar hook.
+- [ ] Horizontal scroll rows (if used) have `&#8592; Swipe or scroll &#8594;` hint below.
 - [ ] Last step card uses `margin-bottom:0`.
 - [ ] `silvaCopyHTML()` and `silvaDownloadHTML()` script block present.
 - [ ] `<script src="/js/silva-nav.js"></script>` present.
 - [ ] Download filename in `silvaDownloadHTML()` matches page slug (e.g., `{slug}-canvas.html`).
-- [ ] If bilingual: ES block exists, anchor toggles work both directions, no English text leaked into ES.
+- [ ] If bilingual: ES block exists, anchor toggles work both directions, **Spanish copy at 5th grade level** (use tú, simple verbs, no formal usted register), no English text leaked into ES.
 - [ ] Entry added to `curriculum.html` for each course in Q2.
 
 ---
@@ -464,7 +523,285 @@ When in doubt, copy the structure from these proven builds:
 
 ---
 
-## 12. Common Mistakes to Avoid
+## 12. Writing Voice & Reading Level (5th Grade, EN + ES)
+
+PVHS students read at a wide range of levels. Writing every assignment at a **5th grade reading level** means every student can succeed regardless of where they're at. This is not dumbing down: it's removing friction so the design challenge stays the focus.
+
+### English: 5th grade rules
+
+1. **Short sentences.** Aim for 12-15 words. Hard cap at 20.
+2. **Plain words.** Use the everyday word, not the fancy one.
+   - "use" not "utilize"
+   - "help" not "facilitate"
+   - "show" not "demonstrate"
+   - "start" not "commence"
+   - "make" not "construct"
+   - "find" not "locate" or "identify"
+   - "look at" not "examine"
+   - "before" not "prior to"
+   - "after" not "subsequent to"
+   - "about" not "regarding"
+3. **Active voice always.** "Open the file" not "The file should be opened."
+4. **One idea per sentence.** Split compound sentences.
+5. **Lead with the action.** "Click Save." not "It is important that you remember to click Save."
+6. **No filler phrases.** Cut these on sight:
+   - "It is important to note that..." → just say the thing
+   - "In this assignment, students will..." → "You will..."
+   - "Please be sure to..." → just give the instruction
+   - "As mentioned previously..." → trust the reader
+7. **Use "you" and "your".** Direct address. Treat the student as a person, not a category.
+8. **Define jargon inline the first time.** "Embed the image (this means copy it into the file so it cannot break)."
+9. **Numbers over words for steps.** "5 items" not "five items" when it's a count.
+10. **Test it:** read the sentence out loud. If you stumble, rewrite it.
+
+### Spanish: 5th grade rules (Santa Maria / Mexican Spanish register)
+
+1. **Use tú, not usted.** Students are peers, not strangers. "Abre el archivo" not "Abra usted el archivo."
+2. **Present indicative beats subjunctive.** "Necesitas hacer esto" not "Es necesario que hagas esto."
+3. **Common verbs only.** hacer, ver, poner, abrir, guardar, escoger, encontrar, usar. Skip Latinate verbs.
+4. **Short sentences.** Same 12-15 word target.
+5. **Avoid passive constructions** with "se". "Guarda el archivo" not "El archivo se guarda."
+6. **Cognates are your friend** for technical terms students already know in English: archivo, imagen, color, copia, salvar/guardar, exportar.
+7. **Common kid-friendly words for definitions:**
+   - "cosa" or "elemento" not "objeto"
+   - "foto" not "imagen" when casual
+   - "elegir" or "escoger" not "seleccionar"
+   - "hacer" not "realizar" or "crear"
+   - "ver" not "visualizar" or "observar"
+8. **Use accents correctly.** `&aacute;` `&eacute;` `&iacute;` `&oacute;` `&uacute;` `&ntilde;` `&iexcl;` `&iquest;`.
+9. **Regional flavor:** the Santa Maria community is largely Mexican-American. Lean Mexican Spanish (avoid Castilian "vosotros", avoid Argentine "vos"). When unsure, use neutral Latin American Spanish.
+
+### Anti-bloat sniff test
+
+Before committing, scan every card and ask:
+- Could I cut this sentence and still get the point across? → Cut it.
+- Does this card go over 60 words? → Split it.
+- Am I explaining why before saying what to do? → Flip the order.
+- Did I use a word a 5th grader wouldn't say at recess? → Swap it.
+- Did I write "In this step, you will..." as a sentence opener? → Just start with the verb.
+
+### Vocabulary words: how to pick the 6
+
+The Overview's 6 vocab words are not a generic glossary. Each word must be:
+- A term the student will actually encounter in the step cards or submission
+- A word a 5th grader might not know yet
+- Either a domain term (mockup, embed, vector) or a process term (preset, artboard, proof)
+- Defined in under 15 words, in language that doesn't itself need definitions
+
+Examples (Jimenez Step 05):
+- **Mockup** — A fake photo of your design on a real item, like a shirt or sign.
+- **Artboard** — One page inside an Illustrator file. One file can hold many.
+- **Embed** — Copy an image into the file so it cannot break or go missing.
+- **Vector** — A drawing made of lines and shapes, not dots, so it stays sharp at any size.
+- **Preset** — A saved setup. You pick it once and it fills in all the right options.
+- **Proof** — A practice version you show the client before the final.
+
+Spanish translations should match the same plain register:
+- **Mockup** — Una foto falsa de tu diseño en algo real, como una camisa o un letrero.
+- **Mesa de trabajo** — Una página dentro de un archivo de Illustrator. Un archivo puede tener muchas.
+
+---
+
+## 13. Scroll & Overflow Patterns
+
+Long content needs visible scroll cues. Default browser scrollbars are often invisible on dark backgrounds, and Canvas strips most custom scrollbar CSS. **Always pair scroll with a visible affordance** (hint text, gradient fade, or arrow).
+
+### When to use vertical vs horizontal scroll
+
+| Content type | Pattern | Why |
+|--------------|---------|-----|
+| Step-by-step instructions (6+ cards) | Vertical scroll box | Students read top to bottom, expect to scroll |
+| FAQ / Q&A list | Vertical scroll box | Same reading flow |
+| Vocabulary (exactly 6 words) | Responsive grid, NO scroll | 6 fits cleanly without overflow |
+| Tips / "Did you know" | Vertical scroll if 5+ entries | Otherwise inline |
+| Example image gallery (4+) | Horizontal scroll row | Visual content scans side to side |
+| Comparison cards (before/after, A/B/C) | Horizontal scroll row | Side-by-side comparison is the point |
+| Reference table (wide) | Horizontal scroll | Tables can't reflow narrow without breaking |
+| Video embeds | NO scroll, stack vertically | Iframes don't scroll well inside scroll boxes |
+
+### Vertical scroll box (canonical pattern)
+
+Used in §5.E for step instructions. Repeated here for clarity.
+
+```html
+<!-- Hint above the scroll box -->
+<div style="font-size:11pt;color:#ffb27c;margin-bottom:8px;opacity:0.85;">&#8595; Scroll inside the box to see all {N} steps</div>
+
+<!-- The scroll box itself -->
+<div class="silva-scroll" style="max-height:480px;overflow-y:auto;padding:12px 14px 18px;border:1px solid rgba(255,107,26,0.18);border-radius:14px;background:linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.18) 88%, rgba(255,107,26,0.18) 100%);">
+  <!-- cards here -->
+</div>
+```
+
+Three visible affordances stacked:
+1. **Text hint above** — tells students there's more inside, gives the count
+2. **Bordered container** — makes the scroll boundary obvious
+3. **Bottom gradient fade** — visual "more below" cue that works without scrollbar
+
+### Horizontal scroll row (for galleries, comparison cards)
+
+```html
+<!-- Hint below the scroll row -->
+<div style="overflow-x:auto;display:flex;gap:14px;padding:6px 2px 14px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;border:1px solid rgba(95,143,191,0.18);border-radius:14px;background:rgba(0,0,0,0.18);">
+  <div style="flex:0 0 260px;scroll-snap-align:start;background:rgba(0,0,0,0.32);border:1px solid rgba(95,143,191,0.22);border-radius:12px;padding:14px 16px;margin:8px 0 8px 8px;">
+    <!-- card 1 content -->
+  </div>
+  <div style="flex:0 0 260px;scroll-snap-align:start;background:rgba(0,0,0,0.32);border:1px solid rgba(95,143,191,0.22);border-radius:12px;padding:14px 16px;margin:8px 0;">
+    <!-- card 2 content -->
+  </div>
+  <!-- ...add gap on last card right side: margin:8px 8px 8px 0; -->
+</div>
+<div style="font-size:11pt;color:#9ecbff;opacity:0.75;text-align:center;margin-top:6px;">&#8592; Swipe or scroll to see more &#8594;</div>
+```
+
+Key inline styles for horizontal scroll:
+- `overflow-x:auto` — enables horizontal scroll
+- `display:flex; gap:14px` — lays cards in a row
+- `scroll-snap-type:x mandatory` + `scroll-snap-align:start` on cards — snaps to each card
+- `-webkit-overflow-scrolling:touch` — momentum scroll on iOS
+- `flex:0 0 260px` on cards — fixed width per card (don't let them shrink)
+
+### Styled scrollbar CSS (lives in `silva-module.css`)
+
+The `silva-scroll` class hooks these styles. Visible on creativesilva.com preview; degrades gracefully in Canvas (Canvas strips custom scrollbar styles, falls back to OS default).
+
+```css
+.silva-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.silva-scroll::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.04);
+  border-radius: 5px;
+}
+.silva-scroll::-webkit-scrollbar-thumb {
+  background: #5f8fbf;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.silva-scroll::-webkit-scrollbar-thumb:hover {
+  background: #9ecbff;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+/* Firefox */
+.silva-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #5f8fbf rgba(255,255,255,0.04);
+}
+```
+
+If `silva-module.css` does not yet contain these rules, add them as part of the build.
+
+### Rule of thumb on scroll height
+
+- Vertical scroll: `max-height:480px` keeps about 3 cards visible at a time on desktop. Don't go over 540px (loses the "scroll me" feel).
+- Horizontal scroll: don't fix height. Let cards size naturally. Cap visible width with the container.
+
+---
+
+## 14. Migrating Legacy Canvas Code to This Framework
+
+When the user pastes outdated Canvas HTML and asks to upgrade it, follow this exact sequence. Do NOT try to surgically edit the old HTML. Build a fresh page using the framework and port the content in.
+
+### Step 1: Parse the old code
+
+Read the pasted code and extract:
+- Project / client name
+- Step number (if part of a series)
+- Step / assignment title
+- Overview paragraphs (often labeled "Description", "Introduction", or "Overview")
+- Step-by-step instructions (often a `<ol>` or a series of `<h3>` blocks)
+- Image references (note all `<img src="...">` URLs)
+- Download links (any `<a href>` pointing to .ai, .psd, .pdf, .zip files)
+- Submission requirements (often labeled "Deliverables", "Submit", "What to Turn In")
+- Bilingual content (is there a `lang="es"` section, a "Español" anchor, or two separate language blocks?)
+
+### Step 2: Run the intake questions from §1
+
+Confirm with the user even if the old code answers most. Specifically ALWAYS ask:
+- **Style variant** (Stock or Custom) — legacy code is often plain HTML with no theme; user choice matters here
+- **6 vocabulary words** — almost no legacy page has these; you must collect them
+- **Reading level confirmation** — legacy code is usually written for teachers, not students; confirm permission to rewrite at 5th grade level
+- **Hero image** — old code may reference broken or Canvas-hosted images; confirm what to use
+
+### Step 3: Extract and rewrite content
+
+Pull copy from the old HTML and rewrite each chunk per §12. Do not paste old paragraphs verbatim. Mapping:
+
+| Legacy section | New section |
+|---------------|------------|
+| Title / heading | §5.A Title Card |
+| Overview / Description / Introduction | §5.B Overview Card body |
+| (NEW — gather from user) | §5.B Vocabulary grid (6 words) |
+| Downloads / Resources / Template | §5.C Project File Download |
+| Tips / Notes / Hints | §5.D Tips Card |
+| Instructions / Steps / Procedure | §5.E Step cards (renumber as 01., 02., 03.) |
+| Deliverables / Submission / Turn In | §5.F What to Submit |
+
+### Step 4: Migrate assets
+
+For every image and downloadable file in the old HTML:
+- If hosted at `canvas.instructure.com/files/...` or any Canvas URL, ask the user to provide the original file and add it to `/assets/`.
+- If hosted at a third-party URL (Imgur, Dropbox, Google Drive), ask the user if it should be moved to `/assets/`. Default: yes.
+- If already at `raw.githubusercontent.com/creativesilva/creativesilva-site/...`, keep as is.
+- Rename any file containing "copy" in its name.
+
+### Step 5: Build the new page
+
+Create a fresh file at `curriculum/shared/{slug}.html`. Use the §4 outer scaffold. Drop the rewritten content into the §5 section templates. Do NOT try to preserve old inline styles, classes, or structure.
+
+### Step 6: Add what was missing
+
+Legacy pages are almost always missing all of these. Add them all:
+- Title card with PV logo, breadcrumb, language toggle
+- Vocabulary grid (6 cards) inside the Overview
+- Scroll affordance ("Scroll inside..." hint + bottom gradient) on long instruction sections
+- Spanish translation if bilingual was requested
+- Copy/Download Canvas HTML buttons
+- raw.githubusercontent URLs replacing all relative or Canvas-hosted image paths
+- `silvaCopyHTML()` / `silvaDownloadHTML()` script block at the bottom
+- `<script src="/js/silva-nav.js">` tag
+
+### Step 7: Run the §8 Pre-Delivery Checklist
+
+Every item must pass before commit.
+
+### Step 8: Commit and push per §9
+
+Use a commit message like: `Migrate {Project} {Step} from legacy Canvas HTML to framework`.
+
+### Legacy code red flags to look for
+
+When you see any of these in the pasted old HTML, treat it as a signal that a rewrite (not a patch) is the right move:
+
+- `<table>` used for layout (instead of content tabular data)
+- Inline `<font face="...">` or mixed font families
+- Hard-coded pixel widths (`width="600"`) that won't reflow
+- `<center>` or `<marquee>` tags (yes, they still show up)
+- Em dashes everywhere (`—`, `&mdash;`)
+- Canvas-hosted image URLs (`canvas.instructure.com/files/...`)
+- Long unbroken paragraphs (over 80 words)
+- Teacher-voice copy like "Students will be expected to demonstrate..."
+- Passive voice throughout
+- No vocabulary section
+- No language toggle (even if school has bilingual students)
+- Inline `style="font-family:Times..."` or other non-Arial fonts
+- Buttons that link to "javascript:void(0)" or other dead handlers
+- Images sized in absolute pixels with no `max-width` or `min-width`
+
+### What NOT to do
+
+- **Don't preserve the old layout** out of "respect" for the original. The whole point of the migration is to standardize.
+- **Don't keep teacher-voice copy.** Rewrite it to student-voice at 5th grade level.
+- **Don't try to make one giant Edit** to convert old HTML to new. Build fresh; port content in.
+- **Don't skip the vocabulary cards** because the old code didn't have them. They are required.
+- **Don't migrate without asking the user for the 6 vocab words.** You can suggest a starter set drawn from the content, but the teacher gets final say.
+
+---
+
+## 15. Common Mistakes to Avoid
 
 1. **Capping the hero image with `max-width`.** Don't. It needs to scale.
 2. **Forgetting `overflow:hidden` on a parent that contains a float-right image.** The next section will break layout.
