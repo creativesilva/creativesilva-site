@@ -50,87 +50,74 @@
     }
     .staging-banner.visible { display: block; }
 
-    /* ── AI Build Docs (teacher-only resource panel) ── */
-    .build-docs {
-      max-width: 960px;
-      margin: 0 auto 56px;
-      padding: 28px;
-      background: linear-gradient(180deg, rgba(95, 143, 191, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
-      border: 1px solid rgba(95, 143, 191, 0.18);
-      border-left: 3px solid #5f8fbf;
+    /* ── Build Resources card (full-width, sits above course grid) ── */
+    .build-resources {
+      margin-bottom: 32px;
     }
-    .build-docs-label {
-      font-family: var(--font-head);
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      color: #9ecbff;
-      margin-bottom: 8px;
-    }
-    .build-docs-title {
-      font-family: var(--font-head);
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: var(--text);
-      margin: 0 0 6px;
-    }
-    .build-docs-sub {
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      margin: 0 0 22px;
-      line-height: 1.6;
-    }
-    .build-docs-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-    @media (max-width: 760px) {
-      .build-docs-grid { grid-template-columns: 1fr; }
-    }
-    .build-doc-card {
-      background: rgba(0, 0, 0, 0.28);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-left: 2px solid #5f8fbf;
-      padding: 18px 18px 16px;
+
+    .resource-tabs {
       display: flex;
-      flex-direction: column;
-      min-width: 0;
+      flex-wrap: wrap;
+      gap: 4px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 20px;
     }
-    .build-doc-name {
-      font-family: var(--font-head);
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      color: #ffffff;
-      margin: 0 0 6px;
-      word-break: break-word;
-    }
-    .build-doc-desc {
-      font-size: 0.78rem;
-      color: var(--text-dim);
-      line-height: 1.55;
-      margin: 0 0 14px;
-      flex: 1;
-    }
-    .build-doc-dl {
-      display: inline-block;
-      align-self: flex-start;
-      padding: 7px 14px;
-      background: #5f8fbf;
-      color: #ffffff;
-      text-decoration: none;
+
+    .resource-tab {
       font-family: var(--font-head);
       font-size: 0.7rem;
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      transition: background 0.15s ease;
+      color: var(--text-faint);
+      background: transparent;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      padding: 10px 16px;
+      margin-bottom: -1px;
+      cursor: pointer;
+      transition: color 0.15s ease, border-color 0.15s ease;
     }
-    .build-doc-dl:hover {
-      background: #9ecbff;
-      color: #0b2948;
+    .resource-tab:hover {
+      color: var(--text-dim);
+    }
+    .resource-tab.active {
+      color: #9ecbff;
+      border-bottom-color: #5f8fbf;
+    }
+
+    .resource-tab-panel {
+      display: none;
+    }
+    .resource-tab-panel.active {
+      display: block;
+    }
+
+    .resource-dl-badge {
+      font-family: var(--font-head);
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #9ecbff;
+      padding: 3px 9px;
+      border: 1px solid rgba(95, 143, 191, 0.5);
+      flex-shrink: 0;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .module-row:hover .resource-dl-badge {
+      background: #5f8fbf;
+      color: #ffffff;
+      border-color: #5f8fbf;
+    }
+
+    .resource-empty {
+      padding: 18px 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed rgba(255, 255, 255, 0.10);
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      line-height: 1.6;
     }
 
     /* ── Course grid ── */
@@ -522,26 +509,41 @@
         <p>This is where I build the curriculum I use every day. Every module here is designed, tested, and actively running in my CTE Photography and Digital Arts classes at Pioneer Valley High School. Pages are built to drop directly into Canvas: copy the HTML, paste it into the Rich Content Editor, and it is ready for students. Browse by course below. Add <code>?staging</code> to the URL to preview modules still in development.</p>
       </div>
 
-      <div class="build-docs">
-        <p class="build-docs-label">Teacher Resources</p>
-        <h2 class="build-docs-title">AI Build Docs</h2>
-        <p class="build-docs-sub">Memory and spec files for the AI agents I use to build Canvas modules. Download any of these and paste into a fresh Claude or Codex session to get the agent up to speed instantly.</p>
-        <div class="build-docs-grid">
-          <div class="build-doc-card">
-            <p class="build-doc-name">CANVAS_BUILD_FRAMEWORK.md</p>
-            <p class="build-doc-desc">The full spec: intake questions, style variants, section templates, vocab grid, scroll patterns, 5th grade reading rules, legacy migration. Single source of truth.</p>
-            <a href="/CANVAS_BUILD_FRAMEWORK.md" download="CANVAS_BUILD_FRAMEWORK.md" class="build-doc-dl">&#11015; Download</a>
+      <div class="course-card build-resources">
+        <span class="course-card-accent" style="background:#5f8fbf;"></span>
+        <p class="course-code">Teacher Resources</p>
+        <h2 class="course-title">Build Resources</h2>
+        <p class="course-desc">Markdown specs, prompts, and frameworks for the AI tools I use to build curriculum. Download any file and paste into a fresh agent session to get it up to speed instantly.</p>
+
+        <div class="resource-tabs" role="tablist">
+          <button type="button" class="resource-tab active" data-tab="ai-build" role="tab" aria-selected="true">AI Build Docs</button>
+          <button type="button" class="resource-tab" data-tab="image-models" role="tab" aria-selected="false">Image Models</button>
+          <button type="button" class="resource-tab" data-tab="video-models" role="tab" aria-selected="false">Video Models</button>
+        </div>
+
+        <div class="resource-tab-panel active" data-panel="ai-build" role="tabpanel">
+          <div class="module-list">
+            <a href="/CANVAS_BUILD_FRAMEWORK.md" download="CANVAS_BUILD_FRAMEWORK.md" class="module-row">
+              <span class="module-row-name">CANVAS_BUILD_FRAMEWORK.md</span>
+              <span class="resource-dl-badge">&#11015; Download</span>
+            </a>
+            <a href="/CLAUDE.md" download="CLAUDE.md" class="module-row">
+              <span class="module-row-name">CLAUDE.md</span>
+              <span class="resource-dl-badge">&#11015; Download</span>
+            </a>
+            <a href="/AGENTS.md" download="AGENTS.md" class="module-row">
+              <span class="module-row-name">AGENTS.md</span>
+              <span class="resource-dl-badge">&#11015; Download</span>
+            </a>
           </div>
-          <div class="build-doc-card">
-            <p class="build-doc-name">CLAUDE.md</p>
-            <p class="build-doc-desc">Project memory optimized for Claude. Narrative orientation, hard rules, common pitfalls, working-style notes. Auto-loaded by Claude Code.</p>
-            <a href="/CLAUDE.md" download="CLAUDE.md" class="build-doc-dl">&#11015; Download</a>
-          </div>
-          <div class="build-doc-card">
-            <p class="build-doc-name">AGENTS.md</p>
-            <p class="build-doc-desc">Project memory optimized for Codex (and other directive agents). DO/DO NOT rules, file layout, command templates, quick-answer cheat sheet.</p>
-            <a href="/AGENTS.md" download="AGENTS.md" class="build-doc-dl">&#11015; Download</a>
-          </div>
+        </div>
+
+        <div class="resource-tab-panel" data-panel="image-models" role="tabpanel">
+          <div class="resource-empty">Coming soon. Prompt libraries, style guides, and reference packs for the image generation models used in class projects.</div>
+        </div>
+
+        <div class="resource-tab-panel" data-panel="video-models" role="tabpanel">
+          <div class="resource-empty">Coming soon. Prompt libraries, shot lists, and motion reference packs for video generation models.</div>
         </div>
       </div>
 
@@ -810,6 +812,22 @@
 
     document.getElementById("course-grid").innerHTML =
       COURSES.map(buildCourseCard).join("");
+
+    // ── Build Resources tab switcher ────────────────────────────────────────
+    document.querySelectorAll('.resource-tab').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var target = tab.getAttribute('data-tab');
+        var card = tab.closest('.build-resources');
+        card.querySelectorAll('.resource-tab').forEach(function (t) {
+          var isActive = t === tab;
+          t.classList.toggle('active', isActive);
+          t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+        card.querySelectorAll('.resource-tab-panel').forEach(function (panel) {
+          panel.classList.toggle('active', panel.getAttribute('data-panel') === target);
+        });
+      });
+    });
   </script>
 
 </body>
