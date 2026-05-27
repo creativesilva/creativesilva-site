@@ -373,6 +373,18 @@
       font-size: 0.95rem;
       text-align: center;
     }
+    .vw-lightbox-filename {
+      color: rgba(255,255,255,0.55);
+      font-size: 0.78rem;
+      text-align: center;
+      font-style: italic;
+      max-width: 90vw;
+      word-break: break-all;
+      margin-top: -8px;
+    }
+    .vw-lightbox-filename:empty {
+      display: none;
+    }
     .vw-lightbox-drive-link {
       display: inline-block;
       padding: 8px 18px;
@@ -663,7 +675,8 @@
         <img class="vw-lightbox-img" id="vw-lightbox-img" alt="" />
       </div>
       <div class="vw-lightbox-caption" id="vw-lightbox-caption"></div>
-      <a class="vw-lightbox-drive-link" id="vw-lightbox-drive-link" href="#" target="_blank" rel="noopener">View on Google Drive &rarr;</a>
+      <div class="vw-lightbox-filename" id="vw-lightbox-filename"></div>
+      <a class="vw-lightbox-drive-link" id="vw-lightbox-drive-link" href="#" target="_blank" rel="noopener">Find on Google Drive &rarr;</a>
     </div>
   </div>
 
@@ -682,9 +695,20 @@
     var EMAILJS_TEMPLATE_ID = 'template_freuseb';
     // ─────────────────────────────────────────────────────────
 
-    // Drive folder URLs (used as fallback link inside lightbox)
-    var PHOTO_DRIVE_URL = 'https://drive.google.com/drive/folders/10ZX4D5d9MogPxA14UhPPz8Oke4xTwDrV?usp=drive_link';
-    var BRAND_DRIVE_URL = 'https://drive.google.com/drive/folders/1C7ubBD6FUWBdSiK5cfKKrlUy9rShFOeR?usp=drive_link';
+    // Drive folder base URLs (no query string so we can append ?q= for per-student search)
+    var PHOTO_DRIVE_BASE = 'https://drive.google.com/drive/folders/10ZX4D5d9MogPxA14UhPPz8Oke4xTwDrV';
+    var BRAND_DRIVE_BASE = 'https://drive.google.com/drive/folders/1C7ubBD6FUWBdSiK5cfKKrlUy9rShFOeR';
+    // Convenience full URLs (used in the top "Browse All" buttons in the section markup)
+    var PHOTO_DRIVE_URL = PHOTO_DRIVE_BASE + '?usp=drive_link';
+    var BRAND_DRIVE_URL = BRAND_DRIVE_BASE + '?usp=drive_link';
+
+    // Build a Drive URL that opens the folder pre-filtered to a given student's filename prefix.
+    // Drive accepts ?q= on folder URLs and shows the matching files filtered. If the filter does
+    // not narrow perfectly (Drive UI behavior varies), the judge still lands in the right folder
+    // and can use the search box at the top.
+    function studentDriveUrl(folderBase, studentPrefix) {
+      return folderBase + '?q=' + encodeURIComponent(studentPrefix);
+    }
 
     // Lightbox state + gallery caches keyed by student prefix
     var photoGalleries = {};
@@ -726,8 +750,9 @@
           images: s.images.map(function (img) {
             return '/assets/student-work/product-photography-large/' + encodeURIComponent(img.large);
           }),
+          originals: s.images.map(function (img) { return img.original; }),
           display: s.display_name,
-          driveUrl: PHOTO_DRIVE_URL
+          driveUrl: studentDriveUrl(PHOTO_DRIVE_BASE, s.student)
         };
         var imgs = s.images.map(function (img, idx) {
           return '<img src="/assets/student-work/product-photography/' + encodeURIComponent(img.thumb) +
@@ -759,8 +784,9 @@
         // Cache for lightbox (single image per student, first page of PDF)
         brandGalleries[s.student] = {
           images: ['/assets/student-work/company-branding-large/' + encodeURIComponent(s.large)],
-          display: fullDisplay + ' — first page (open in Drive for all 3 pages)',
-          driveUrl: BRAND_DRIVE_URL
+          originals: [s.original],
+          display: fullDisplay + ' (first page — open in Drive for all 3 pages)',
+          driveUrl: studentDriveUrl(BRAND_DRIVE_BASE, s.student)
         };
         return [
           '<article class="vote-card" data-student="' + student + '">',
@@ -819,6 +845,7 @@
       if (!entry) return;
       currentLightbox = {
         images: entry.images,
+        originals: entry.originals || [],
         index: startIndex || 0,
         label: entry.display,
         driveUrl: entry.driveUrl
@@ -838,6 +865,9 @@
         caption += ' (' + (currentLightbox.index + 1) + ' of ' + currentLightbox.images.length + ')';
       }
       document.getElementById('vw-lightbox-caption').textContent = caption;
+      var originalName = currentLightbox.originals[currentLightbox.index] || '';
+      document.getElementById('vw-lightbox-filename').textContent =
+        originalName ? ('Drive filename: ' + originalName) : '';
       document.getElementById('vw-lightbox-drive-link').href = currentLightbox.driveUrl;
       var multi = currentLightbox.images.length > 1;
       document.querySelector('.vw-lightbox-prev').hidden = !multi;
