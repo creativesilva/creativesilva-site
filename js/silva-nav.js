@@ -26,6 +26,9 @@
     '/curriculum/digarts2/digarts2b-home.html',
     '/curriculum/photo1/photo1b-home.html',
 
+    // Cross-course resources
+    '/curriculum/shared/photo-course-resources.html',
+
     // Photo 1B: Sauce Baby (commercial photography final)
     '/curriculum/photo1/sauce-baby/creative-brief.html',
     '/curriculum/photo1/sauce-baby/overview.html',
