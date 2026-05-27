@@ -504,7 +504,7 @@
 
   <script src="/js/main.js?v=20260418d" defer></script>
 
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
     // EmailJS credentials
     var EMAILJS_PUBLIC_KEY  = 'z2UjAu1N-IFmF2pbc';
@@ -521,7 +521,7 @@
     var currentLightbox = null;
 
     if (window.emailjs && EMAILJS_PUBLIC_KEY.indexOf('REPLACE_WITH') === -1) {
-      emailjs.init(EMAILJS_PUBLIC_KEY);
+      emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
     }
 
     fetch('/assets/student-work/manifest.json')
