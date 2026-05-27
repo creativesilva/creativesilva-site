@@ -213,6 +213,27 @@
       border-color: rgba(255, 255, 255, 0.14);
     }
 
+    /* Featured row: module overview (the home/landing page for a module) */
+    .module-row.featured {
+      background: rgba(0, 184, 184, 0.12);
+      border: 1px solid rgba(0, 184, 184, 0.45);
+      border-left: 4px solid #00b8b8;
+    }
+    .module-row.featured[href]:hover {
+      background: rgba(0, 184, 184, 0.20);
+      border-color: rgba(0, 184, 184, 0.65);
+    }
+    .module-row.featured .module-row-name {
+      color: #80e0e0;
+    }
+    .module-row.featured .module-status.published {
+      color: #80e0e0;
+      border-color: rgba(128, 224, 224, 0.6);
+    }
+    .module-row.featured .module-page-count {
+      color: rgba(128, 224, 224, 0.7);
+    }
+
     .module-row-name {
       font-family: var(--font-head);
       font-size: 0.82rem;
@@ -597,6 +618,7 @@
         name: "Spring Final: Jimenez Mobile Detailing",
         pages: 1,
         status: "published",
+        featured: true,
         url: "curriculum/shared/jimenez-spring-final.html"
       },
       {
@@ -618,6 +640,7 @@
         name: "Spring Final: Jimenez Mobile Detailing",
         pages: 1,
         status: "published",
+        featured: true,
         url: "curriculum/shared/jimenez-spring-final.html"
       },
       {
@@ -639,6 +662,7 @@
         name: "The Revisit Project: Module Overview",
         pages: 1,
         status: "published",
+        featured: true,
         url: "curriculum/shared/revisit-project-overview.html"
       },
       {
@@ -667,6 +691,7 @@
         name: "Commercial Photography Final: Sauce Baby",
         pages: 6,
         status: "published",
+        featured: true,
         url: "curriculum/photo1/sauce-baby/overview.html"
       },
       {
@@ -804,9 +829,10 @@
             const tag = `<span class="module-status ${m.status}">${statusLabel(m.status)}</span>`;
             const pages = `<span class="module-page-count">${m.pages}p</span>`;
             const inner = `<span class="module-row-name">${m.name}</span>${pages}${tag}`;
+            const cls = m.featured ? "module-row featured" : "module-row";
             return m.url
-              ? `<a class="module-row" href="${m.url}">${inner}</a>`
-              : `<div class="module-row">${inner}</div>`;
+              ? `<a class="${cls}" href="${m.url}">${inner}</a>`
+              : `<div class="${cls}">${inner}</div>`;
           }).join("")
         : "";
 
