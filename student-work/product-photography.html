@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Product Photography | Spring Final Voting | Chris Silva</title>
+  <meta name="description" content="Vote in the Spring 2026 Product Photography final for PVHS Photography 1B." />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Chris Silva" />
+  <meta property="og:title" content="Product Photography | Spring Final Voting" />
+  <meta property="og:description" content="Spring 2026 Product Photography final for Photography 1B at Pioneer Valley High School. Judges rank 1st, 2nd, and 3rd place." />
+  <meta property="og:url" content="https://www.creativesilva.com/student-work/product-photography.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css?v=20260524b" />
+
+  <style>
+    .sw-back-link {
+      display: inline-block;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      margin-bottom: 24px;
+      padding: 6px 0;
+    }
+    .sw-back-link:hover { color: #ffffff; }
+    .sw-back-link::before { content: "← "; }
+
+    .voting-intro {
+      margin: 16px 0 24px;
+    }
+    .voting-intro h2 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.05em;
+      margin: 0 0 14px;
+      text-transform: uppercase;
+    }
+    .voting-intro p {
+      color: rgba(255,255,255,0.72);
+      max-width: 760px;
+      line-height: 1.7;
+      font-size: 1rem;
+      margin: 0 0 10px;
+    }
+
+    .vote-competition {
+      margin: 36px 0;
+      padding: 32px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+    }
+    .vote-competition h3 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.55rem;
+      margin: 0 0 6px;
+      color: #ffffff;
+      letter-spacing: 0.03em;
+    }
+    .vote-competition .vote-meta {
+      color: rgba(255,255,255,0.55);
+      font-size: 0.9rem;
+      margin: 0 0 20px;
+    }
+
+    .vote-folder-link {
+      display: inline-block;
+      padding: 9px 18px;
+      background: rgba(95,143,191,0.20);
+      color: #9ecbff;
+      text-decoration: none;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      margin-bottom: 22px;
+      border: 1px solid rgba(95,143,191,0.45);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .vote-folder-link:hover {
+      background: rgba(95,143,191,0.30);
+      color: #ffffff;
+    }
+
+    .vote-judge-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 26px;
+      flex-wrap: wrap;
+    }
+    .vote-judge-row label {
+      font-family: 'Oswald', sans-serif;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+    .vote-judge-input {
+      flex: 1 1 280px;
+      max-width: 420px;
+      padding: 10px 14px;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    .vote-judge-input:focus {
+      outline: 0;
+      border-color: #5f8fbf;
+    }
+
+    .vote-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .vote-grid-loading {
+      color: rgba(255,255,255,0.4);
+      font-style: italic;
+      padding: 40px 0;
+      text-align: center;
+      grid-column: 1 / -1;
+    }
+
+    .vote-card {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .vote-card:hover {
+      border-color: rgba(255,255,255,0.22);
+    }
+    .vote-card-images {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      background: rgba(0,0,0,0.6);
+    }
+    .vote-card-images img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+      cursor: zoom-in;
+      transition: opacity 0.15s ease;
+    }
+    .vote-card-images img:hover {
+      opacity: 0.75;
+    }
+    .vote-card-info {
+      padding: 12px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .vote-card-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.92rem;
+      margin: 0;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      word-break: break-word;
+      line-height: 1.2;
+    }
+    .vote-card-ranks {
+      display: flex;
+      gap: 6px;
+    }
+    .vote-card-ranks label {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 7px 4px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.82);
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.05em;
+      user-select: none;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .vote-card-ranks label:hover { background: rgba(255,255,255,0.10); }
+    .vote-card-ranks input[type="radio"] {
+      margin: 0;
+      cursor: pointer;
+      accent-color: #5f8fbf;
+    }
+    .vote-card-ranks label:has(input[type="radio"]:checked) {
+      background: rgba(95,143,191,0.35);
+      border-color: #5f8fbf;
+      color: #ffffff;
+    }
+    .vote-card-ranks label:has(input[type="radio"]:disabled) {
+      opacity: 0.28;
+      cursor: not-allowed;
+    }
+
+    .vote-submit-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .vote-submit-btn {
+      display: inline-block;
+      padding: 14px 32px;
+      background: #ff6b1a;
+      color: #ffffff;
+      border: 0;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .vote-submit-btn:hover { background: #ff7d3a; }
+    .vote-submit-btn:disabled {
+      background: rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.40);
+      cursor: not-allowed;
+    }
+    .vote-clear-btn {
+      display: inline-block;
+      padding: 12px 22px;
+      background: transparent;
+      color: rgba(255,255,255,0.75);
+      border: 1px solid rgba(255,255,255,0.30);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .vote-clear-btn:hover {
+      background: rgba(255,255,255,0.08);
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.50);
+    }
+    .vote-clear-hint {
+      display: block;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.78rem;
+      margin-top: 4px;
+      font-style: italic;
+    }
+    .vote-status {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+    .vote-drive-embed {
+      margin-top: 32px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.10);
+    }
+    .vote-drive-embed h4 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #ffffff;
+      margin: 0 0 6px;
+    }
+    .vote-drive-embed p {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.88rem;
+      margin: 0 0 16px;
+      line-height: 1.5;
+    }
+    .vote-drive-embed iframe {
+      width: 100%;
+      height: 620px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      background: #f6f7f9;
+      display: block;
+    }
+
+    /* Lightbox */
+    .vw-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 60px;
+    }
+    .vw-lightbox.open { display: flex; }
+    .vw-lightbox-content {
+      position: relative;
+      max-width: 92vw;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .vw-lightbox-img-wrap {
+      flex: 1;
+      max-width: 92vw;
+      max-height: 78vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .vw-lightbox-img {
+      max-width: 92vw;
+      max-height: 78vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.8);
+    }
+    .vw-lightbox-caption {
+      color: rgba(255,255,255,0.92);
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+    .vw-lightbox-filename {
+      color: rgba(255,255,255,0.55);
+      font-size: 0.78rem;
+      text-align: center;
+      font-style: italic;
+      max-width: 90vw;
+      word-break: break-all;
+      margin-top: -8px;
+    }
+    .vw-lightbox-filename:empty { display: none; }
+    .vw-lightbox-drive-link {
+      display: inline-block;
+      padding: 8px 18px;
+      background: rgba(255,255,255,0.10);
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      border: 1px solid rgba(255,255,255,0.30);
+      letter-spacing: 0.05em;
+    }
+    .vw-lightbox-drive-link:hover { background: rgba(255,255,255,0.18); }
+    .vw-lightbox-close,
+    .vw-lightbox-prev,
+    .vw-lightbox-next {
+      position: absolute;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.30);
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 1.6rem;
+      line-height: 1;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .vw-lightbox-close:hover,
+    .vw-lightbox-prev:hover,
+    .vw-lightbox-next:hover { background: rgba(255,255,255,0.25); }
+    .vw-lightbox-close {
+      top: -10px;
+      right: -10px;
+      font-size: 1.4rem;
+    }
+    .vw-lightbox-prev {
+      left: -70px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .vw-lightbox-next {
+      right: -70px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .vw-lightbox-prev[hidden],
+    .vw-lightbox-next[hidden] { display: none; }
+    @media (max-width: 720px) {
+      .vw-lightbox-prev { left: -8px; }
+      .vw-lightbox-next { right: -8px; }
+      .vw-lightbox-close { top: -36px; right: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <nav class="nav-left" aria-label="Primary">
+        <a href="/artist-statement.html">Artist Statement</a>
+        <a href="/artist-biography.html">Artist Biography</a>
+      </nav>
+      <a class="brand" href="/index.html" aria-label="Chris Silva, Home">
+        <img src="/logos/CS_Logo_Vector.svg" alt="Chris Silva" />
+      </a>
+      <nav class="nav-right" aria-label="Primary">
+        <a href="/work.html">Selected Works</a>
+        <a href="/student-work.html" class="active">Student Work</a>
+        <a href="/curriculum.html">Curriculum</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="container">
+      <a class="sw-back-link" href="/student-work.html">Back to Student Work</a>
+
+      <div class="gallery-header">
+        <h1 class="page-title">Product Photography</h1>
+      </div>
+
+      <section class="voting-intro">
+        <h2>Spring Final Voting</h2>
+        <p>Judges: rank 1st, 2nd, and 3rd place. Each card represents one student. Selecting a student in one rank automatically disables them in the other ranks. You can only rank each student once.</p>
+        <p>Click any thumbnail to see the work full-size. Click <strong>Browse All Originals on Google Drive</strong> to view every submission at full resolution while you judge.</p>
+        <p><strong>Prizes:</strong> 1st place $150, 2nd place $100, 3rd place $50.</p>
+      </section>
+
+      <section class="vote-competition" id="photo-comp">
+        <h3>Photography Competition</h3>
+        <p class="vote-meta">Product Photography &nbsp;&middot;&nbsp; Photography 1B</p>
+
+        <a class="vote-folder-link" id="photo-drive-link" href="https://drive.google.com/drive/folders/10ZX4D5d9MogPxA14UhPPz8Oke4xTwDrV?usp=drive_link" target="_blank" rel="noopener">&#128279; Browse All Originals on Google Drive</a>
+
+        <div class="vote-judge-row">
+          <label for="photo-judge">Judge name:</label>
+          <input class="vote-judge-input" id="photo-judge" type="text" placeholder="Your full name" autocomplete="off" />
+        </div>
+
+        <p class="vote-clear-hint">Tip: click a 1st/2nd/3rd button you already picked to clear that selection. Or use Clear All below to start over.</p>
+
+        <div class="vote-grid" id="photo-grid">
+          <div class="vote-grid-loading">Loading student submissions...</div>
+        </div>
+
+        <div class="vote-submit-row">
+          <button class="vote-submit-btn" type="button" onclick="submitVotes()">Submit Photography Votes</button>
+          <button class="vote-clear-btn" type="button" onclick="clearVotes()">Clear All Selections</button>
+          <span class="vote-status" id="photo-status"></span>
+        </div>
+
+        <div class="vote-drive-embed">
+          <h4>Full-Size Originals (embedded from Google Drive)</h4>
+          <p>Scroll through all student submissions below. Click any thumbnail to open the file in Google Drive for a full-size view.</p>
+          <iframe src="https://drive.google.com/embeddedfolderview?id=10ZX4D5d9MogPxA14UhPPz8Oke4xTwDrV#grid" title="Product Photography submissions on Google Drive"></iframe>
+        </div>
+      </section>
+
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a href="#" class="back-to-top">Back to Top</a>
+    <div>www.creativesilva.com</div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="vw-lightbox" id="vw-lightbox" onclick="closeLightbox(event)" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="vw-lightbox-content" onclick="event.stopPropagation()">
+      <button type="button" class="vw-lightbox-close" onclick="closeLightbox()" aria-label="Close">&times;</button>
+      <button type="button" class="vw-lightbox-prev" onclick="lightboxNav(-1)" aria-label="Previous image">&lsaquo;</button>
+      <button type="button" class="vw-lightbox-next" onclick="lightboxNav(1)" aria-label="Next image">&rsaquo;</button>
+      <div class="vw-lightbox-img-wrap">
+        <img class="vw-lightbox-img" id="vw-lightbox-img" alt="" />
+      </div>
+      <div class="vw-lightbox-caption" id="vw-lightbox-caption"></div>
+      <div class="vw-lightbox-filename" id="vw-lightbox-filename"></div>
+      <a class="vw-lightbox-drive-link" id="vw-lightbox-drive-link" href="#" target="_blank" rel="noopener">Find on Google Drive &rarr;</a>
+    </div>
+  </div>
+
+  <script src="/js/main.js?v=20260418d" defer></script>
+
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    // EmailJS credentials
+    var EMAILJS_PUBLIC_KEY  = 'z2UjAu1N-IFmF2pbc';
+    var EMAILJS_SERVICE_ID  = 'service_i53d3dk';
+    var EMAILJS_TEMPLATE_ID = 'template_freuseb';
+
+    var PHOTO_DRIVE_BASE = 'https://drive.google.com/drive/folders/10ZX4D5d9MogPxA14UhPPz8Oke4xTwDrV';
+
+    function studentDriveUrl(folderBase, studentPrefix) {
+      return folderBase + '?q=' + encodeURIComponent(studentPrefix);
+    }
+
+    var photoGalleries = {};
+    var currentLightbox = null;
+
+    if (window.emailjs && EMAILJS_PUBLIC_KEY.indexOf('REPLACE_WITH') === -1) {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+    }
+
+    fetch('/assets/student-work/manifest.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        renderPhotoCards(data.product_photography);
+        setupRankExclusion();
+      })
+      .catch(function (err) {
+        document.getElementById('photo-grid').innerHTML = '<div class="vote-grid-loading">Could not load submissions. Refresh the page or contact Mr. Silva.</div>';
+        console.error(err);
+      });
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    function renderPhotoCards(students) {
+      var grid = document.getElementById('photo-grid');
+      grid.innerHTML = students.map(function (s) {
+        var display = escapeHtml(s.display_name);
+        var student = escapeHtml(s.student);
+        photoGalleries[s.student] = {
+          images: s.images.map(function (img) {
+            return '/assets/student-work/product-photography-large/' + encodeURIComponent(img.large);
+          }),
+          originals: s.images.map(function (img) { return img.original; }),
+          display: s.display_name,
+          driveUrl: studentDriveUrl(PHOTO_DRIVE_BASE, s.student)
+        };
+        var imgs = s.images.map(function (img, idx) {
+          return '<img src="/assets/student-work/product-photography/' + encodeURIComponent(img.thumb) +
+                 '" alt="" loading="lazy" onclick="openLightbox(\'' + student + '\', ' + idx + ')" />';
+        }).join('');
+        return [
+          '<article class="vote-card" data-student="' + student + '">',
+          '  <div class="vote-card-images">' + imgs + '</div>',
+          '  <div class="vote-card-info">',
+          '    <h4 class="vote-card-name">' + display + '</h4>',
+          '    <div class="vote-card-ranks">',
+          '      <label><input type="radio" name="photo-rank-1" value="' + student + '" data-display="' + display + '" /> 1st</label>',
+          '      <label><input type="radio" name="photo-rank-2" value="' + student + '" data-display="' + display + '" /> 2nd</label>',
+          '      <label><input type="radio" name="photo-rank-3" value="' + student + '" data-display="' + display + '" /> 3rd</label>',
+          '    </div>',
+          '  </div>',
+          '</article>'
+        ].join('');
+      }).join('');
+    }
+
+    var radioPreClickState = new WeakMap();
+    function setupRankExclusion() {
+      var radios = document.querySelectorAll('input[name^="photo-rank-"]');
+      radios.forEach(function (radio) {
+        radio.addEventListener('mousedown', function () {
+          radioPreClickState.set(this, this.checked);
+        });
+        radio.addEventListener('click', function () {
+          if (radioPreClickState.get(this) === true) {
+            this.checked = false;
+            this.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        });
+        radio.addEventListener('change', function () {
+          var selectedStudents = new Set();
+          ['1', '2', '3'].forEach(function (r) {
+            var sel = document.querySelector('input[name="photo-rank-' + r + '"]:checked');
+            if (sel) selectedStudents.add(sel.value);
+          });
+          radios.forEach(function (r) {
+            r.disabled = (selectedStudents.has(r.value) && !r.checked);
+          });
+        });
+      });
+    }
+
+    function openLightbox(studentPrefix, startIndex) {
+      var entry = photoGalleries[studentPrefix];
+      if (!entry) return;
+      currentLightbox = {
+        images: entry.images,
+        originals: entry.originals || [],
+        index: startIndex || 0,
+        label: entry.display,
+        driveUrl: entry.driveUrl
+      };
+      updateLightbox();
+      var box = document.getElementById('vw-lightbox');
+      box.classList.add('open');
+      box.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function updateLightbox() {
+      if (!currentLightbox) return;
+      document.getElementById('vw-lightbox-img').src = currentLightbox.images[currentLightbox.index];
+      var caption = currentLightbox.label;
+      if (currentLightbox.images.length > 1) {
+        caption += ' (' + (currentLightbox.index + 1) + ' of ' + currentLightbox.images.length + ')';
+      }
+      document.getElementById('vw-lightbox-caption').textContent = caption;
+      var originalName = currentLightbox.originals[currentLightbox.index] || '';
+      document.getElementById('vw-lightbox-filename').textContent =
+        originalName ? ('Drive filename: ' + originalName) : '';
+      document.getElementById('vw-lightbox-drive-link').href = currentLightbox.driveUrl;
+      var multi = currentLightbox.images.length > 1;
+      document.querySelector('.vw-lightbox-prev').hidden = !multi;
+      document.querySelector('.vw-lightbox-next').hidden = !multi;
+    }
+
+    function lightboxNav(delta) {
+      if (!currentLightbox) return;
+      var n = currentLightbox.images.length;
+      currentLightbox.index = (currentLightbox.index + delta + n) % n;
+      updateLightbox();
+    }
+
+    function closeLightbox(event) {
+      if (event && event.target !== event.currentTarget && !event.target.classList.contains('vw-lightbox-close')) return;
+      var box = document.getElementById('vw-lightbox');
+      box.classList.remove('open');
+      box.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      currentLightbox = null;
+    }
+
+    document.addEventListener('keydown', function (e) {
+      var box = document.getElementById('vw-lightbox');
+      if (!box || !box.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') lightboxNav(-1);
+      else if (e.key === 'ArrowRight') lightboxNav(1);
+    });
+
+    function clearVotes() {
+      var radios = document.querySelectorAll('input[name^="photo-rank-"]');
+      radios.forEach(function (r) {
+        r.checked = false;
+        r.disabled = false;
+        radioPreClickState.delete(r);
+      });
+      var statusEl = document.getElementById('photo-status');
+      statusEl.textContent = 'All selections cleared.';
+      setTimeout(function () {
+        if (statusEl.textContent === 'All selections cleared.') statusEl.textContent = '';
+      }, 2200);
+    }
+
+    function submitVotes() {
+      var judgeName = document.getElementById('photo-judge').value.trim();
+      var statusEl = document.getElementById('photo-status');
+      if (!judgeName) {
+        statusEl.textContent = 'Please enter your judge name first.';
+        return;
+      }
+      var r1 = document.querySelector('input[name="photo-rank-1"]:checked');
+      var r2 = document.querySelector('input[name="photo-rank-2"]:checked');
+      var r3 = document.querySelector('input[name="photo-rank-3"]:checked');
+      if (!r1 || !r2 || !r3) {
+        statusEl.textContent = 'Please rank 1st, 2nd, and 3rd place before submitting.';
+        return;
+      }
+      var compName = 'Product Photography (Photography 1B)';
+
+      var summary = 'Submit your votes for ' + compName + '?\n\n' +
+        '1st: ' + r1.dataset.display + '\n' +
+        '2nd: ' + r2.dataset.display + '\n' +
+        '3rd: ' + r3.dataset.display + '\n\n' +
+        'Judge: ' + judgeName;
+      if (!confirm(summary)) return;
+
+      if (EMAILJS_PUBLIC_KEY.indexOf('REPLACE_WITH') !== -1) {
+        statusEl.textContent = 'EmailJS not configured yet. Mr. Silva needs to swap in the real credentials.';
+        return;
+      }
+
+      statusEl.textContent = 'Sending...';
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        competition: compName,
+        first_place: r1.dataset.display,
+        second_place: r2.dataset.display,
+        third_place: r3.dataset.display,
+        judge_name: judgeName,
+        voted_at: new Date().toLocaleString()
+      }).then(function () {
+        statusEl.textContent = 'Thank you ' + judgeName + '! Your vote for ' + compName + ' was submitted.';
+        document.querySelector('#photo-comp .vote-submit-btn').disabled = true;
+      }).catch(function (err) {
+        statusEl.textContent = 'Error sending vote: ' + (err.text || err.message || 'Unknown error');
+        console.error(err);
+      });
+    }
+  </script>
+</body>
+</html>
