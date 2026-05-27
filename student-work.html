@@ -315,6 +315,126 @@
       background: #f6f7f9;
       display: block;
     }
+
+    /* Make voting-card images look clickable */
+    .vote-card-images img {
+      cursor: zoom-in;
+      transition: opacity 0.15s ease;
+    }
+    .vote-card-images img:hover {
+      opacity: 0.75;
+    }
+
+    /* Lightbox overlay */
+    .vw-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 60px;
+    }
+    .vw-lightbox.open {
+      display: flex;
+    }
+    .vw-lightbox-content {
+      position: relative;
+      max-width: 92vw;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .vw-lightbox-img-wrap {
+      flex: 1;
+      max-width: 92vw;
+      max-height: 78vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .vw-lightbox-img {
+      max-width: 92vw;
+      max-height: 78vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.8);
+    }
+    .vw-lightbox-caption {
+      color: rgba(255,255,255,0.92);
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+    .vw-lightbox-drive-link {
+      display: inline-block;
+      padding: 8px 18px;
+      background: rgba(255,255,255,0.10);
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      border: 1px solid rgba(255,255,255,0.30);
+      letter-spacing: 0.05em;
+    }
+    .vw-lightbox-drive-link:hover {
+      background: rgba(255,255,255,0.18);
+    }
+    .vw-lightbox-close,
+    .vw-lightbox-prev,
+    .vw-lightbox-next {
+      position: absolute;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.30);
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 1.6rem;
+      line-height: 1;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .vw-lightbox-close:hover,
+    .vw-lightbox-prev:hover,
+    .vw-lightbox-next:hover {
+      background: rgba(255,255,255,0.25);
+    }
+    .vw-lightbox-close {
+      top: -10px;
+      right: -10px;
+      font-size: 1.4rem;
+    }
+    .vw-lightbox-prev {
+      left: -70px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .vw-lightbox-next {
+      right: -70px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .vw-lightbox-prev[hidden],
+    .vw-lightbox-next[hidden] {
+      display: none;
+    }
+    @media (max-width: 720px) {
+      .vw-lightbox-prev { left: -8px; }
+      .vw-lightbox-next { right: -8px; }
+      .vw-lightbox-close { top: -36px; right: 0; }
+    }
   </style>
 </head>
 <body>
@@ -531,6 +651,22 @@
     <div>www.creativesilva.com</div>
   </footer>
 
+  <!-- ═══════════════════════════════════════════
+       Lightbox for student work click-to-enlarge
+       ═══════════════════════════════════════════ -->
+  <div class="vw-lightbox" id="vw-lightbox" onclick="closeLightbox(event)" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="vw-lightbox-content" onclick="event.stopPropagation()">
+      <button type="button" class="vw-lightbox-close" onclick="closeLightbox()" aria-label="Close">&times;</button>
+      <button type="button" class="vw-lightbox-prev" onclick="lightboxNav(-1)" aria-label="Previous image">&lsaquo;</button>
+      <button type="button" class="vw-lightbox-next" onclick="lightboxNav(1)" aria-label="Next image">&rsaquo;</button>
+      <div class="vw-lightbox-img-wrap">
+        <img class="vw-lightbox-img" id="vw-lightbox-img" alt="" />
+      </div>
+      <div class="vw-lightbox-caption" id="vw-lightbox-caption"></div>
+      <a class="vw-lightbox-drive-link" id="vw-lightbox-drive-link" href="#" target="_blank" rel="noopener">View on Google Drive &rarr;</a>
+    </div>
+  </div>
+
   <script src="js/main.js?v=20260418d" defer></script>
 
   <!-- ═══════════════════════════════════════════
@@ -545,6 +681,15 @@
     var EMAILJS_SERVICE_ID  = 'service_i53d3dk';
     var EMAILJS_TEMPLATE_ID = 'template_freuseb';
     // ─────────────────────────────────────────────────────────
+
+    // Drive folder URLs (used as fallback link inside lightbox)
+    var PHOTO_DRIVE_URL = 'https://drive.google.com/drive/folders/10ZX4D5d9MogPxA14UhPPz8Oke4xTwDrV?usp=drive_link';
+    var BRAND_DRIVE_URL = 'https://drive.google.com/drive/folders/1C7ubBD6FUWBdSiK5cfKKrlUy9rShFOeR?usp=drive_link';
+
+    // Lightbox state + gallery caches keyed by student prefix
+    var photoGalleries = {};
+    var brandGalleries = {};
+    var currentLightbox = null;
 
     if (window.emailjs && EMAILJS_PUBLIC_KEY.indexOf('REPLACE_WITH') === -1) {
       emailjs.init(EMAILJS_PUBLIC_KEY);
@@ -574,11 +719,20 @@
     function renderPhotoCards(students) {
       var grid = document.getElementById('photo-grid');
       grid.innerHTML = students.map(function (s) {
-        var imgs = s.images.map(function (img) {
-          return '<img src="/assets/student-work/product-photography/' + encodeURIComponent(img.thumb) + '" alt="" loading="lazy" />';
-        }).join('');
         var display = escapeHtml(s.display_name);
         var student = escapeHtml(s.student);
+        // Cache the large image URLs for the lightbox
+        photoGalleries[s.student] = {
+          images: s.images.map(function (img) {
+            return '/assets/student-work/product-photography-large/' + encodeURIComponent(img.large);
+          }),
+          display: s.display_name,
+          driveUrl: PHOTO_DRIVE_URL
+        };
+        var imgs = s.images.map(function (img, idx) {
+          return '<img src="/assets/student-work/product-photography/' + encodeURIComponent(img.thumb) +
+                 '" alt="" loading="lazy" onclick="openLightbox(\'photo\', \'' + student + '\', ' + idx + ')" />';
+        }).join('');
         return [
           '<article class="vote-card" data-student="' + student + '">',
           '  <div class="vote-card-images">' + imgs + '</div>',
@@ -602,10 +756,17 @@
         var student = escapeHtml(s.student);
         var course = escapeHtml(s.course);
         var fullDisplay = display + ' (' + course + ')';
+        // Cache for lightbox (single image per student, first page of PDF)
+        brandGalleries[s.student] = {
+          images: ['/assets/student-work/company-branding-large/' + encodeURIComponent(s.large)],
+          display: fullDisplay + ' — first page (open in Drive for all 3 pages)',
+          driveUrl: BRAND_DRIVE_URL
+        };
         return [
           '<article class="vote-card" data-student="' + student + '">',
           '  <div class="vote-card-images vote-card-images-single">',
-          '    <img src="/assets/student-work/company-branding/' + encodeURIComponent(s.thumb) + '" alt="" loading="lazy" />',
+          '    <img src="/assets/student-work/company-branding/' + encodeURIComponent(s.thumb) +
+                 '" alt="" loading="lazy" onclick="openLightbox(\'brand\', \'' + student + '\', 0)" />',
           '  </div>',
           '  <div class="vote-card-info">',
           '    <h4 class="vote-card-name">' + display + ' <span class="vote-card-course">' + course + '</span></h4>',
@@ -650,6 +811,63 @@
         });
       });
     }
+
+    // ─── Lightbox: open / nav / close + keyboard ───────────────
+    function openLightbox(comp, studentPrefix, startIndex) {
+      var galleries = comp === 'photo' ? photoGalleries : brandGalleries;
+      var entry = galleries[studentPrefix];
+      if (!entry) return;
+      currentLightbox = {
+        images: entry.images,
+        index: startIndex || 0,
+        label: entry.display,
+        driveUrl: entry.driveUrl
+      };
+      updateLightbox();
+      var box = document.getElementById('vw-lightbox');
+      box.classList.add('open');
+      box.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function updateLightbox() {
+      if (!currentLightbox) return;
+      document.getElementById('vw-lightbox-img').src = currentLightbox.images[currentLightbox.index];
+      var caption = currentLightbox.label;
+      if (currentLightbox.images.length > 1) {
+        caption += ' (' + (currentLightbox.index + 1) + ' of ' + currentLightbox.images.length + ')';
+      }
+      document.getElementById('vw-lightbox-caption').textContent = caption;
+      document.getElementById('vw-lightbox-drive-link').href = currentLightbox.driveUrl;
+      var multi = currentLightbox.images.length > 1;
+      document.querySelector('.vw-lightbox-prev').hidden = !multi;
+      document.querySelector('.vw-lightbox-next').hidden = !multi;
+    }
+
+    function lightboxNav(delta) {
+      if (!currentLightbox) return;
+      var n = currentLightbox.images.length;
+      currentLightbox.index = (currentLightbox.index + delta + n) % n;
+      updateLightbox();
+    }
+
+    function closeLightbox(event) {
+      // Only close when clicking the backdrop, the close button, or pressing Escape.
+      if (event && event.target !== event.currentTarget && !event.target.classList.contains('vw-lightbox-close')) return;
+      var box = document.getElementById('vw-lightbox');
+      box.classList.remove('open');
+      box.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      currentLightbox = null;
+    }
+
+    document.addEventListener('keydown', function (e) {
+      var box = document.getElementById('vw-lightbox');
+      if (!box || !box.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') lightboxNav(-1);
+      else if (e.key === 'ArrowRight') lightboxNav(1);
+    });
 
     // Clear all selections for a competition
     function clearVotes(comp) {
