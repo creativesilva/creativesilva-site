@@ -25,6 +25,244 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css?v=20260524b" />
+
+  <!-- Spring Final voting page styles -->
+  <style>
+    .voting-intro {
+      margin: 80px 0 24px;
+      padding-top: 50px;
+      border-top: 1px solid rgba(255,255,255,0.10);
+    }
+    .voting-intro h2 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.05em;
+      margin: 0 0 14px;
+      text-transform: uppercase;
+    }
+    .voting-intro p {
+      color: rgba(255,255,255,0.72);
+      max-width: 760px;
+      line-height: 1.7;
+      font-size: 1rem;
+      margin: 0 0 10px;
+    }
+
+    .vote-competition {
+      margin: 36px 0;
+      padding: 32px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+    }
+    .vote-competition h3 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.55rem;
+      margin: 0 0 6px;
+      color: #ffffff;
+      letter-spacing: 0.03em;
+    }
+    .vote-competition .vote-meta {
+      color: rgba(255,255,255,0.55);
+      font-size: 0.9rem;
+      margin: 0 0 20px;
+    }
+
+    .vote-folder-link {
+      display: inline-block;
+      padding: 9px 18px;
+      background: rgba(95,143,191,0.20);
+      color: #9ecbff;
+      text-decoration: none;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      margin-bottom: 22px;
+      border: 1px solid rgba(95,143,191,0.45);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .vote-folder-link:hover {
+      background: rgba(95,143,191,0.30);
+      color: #ffffff;
+    }
+
+    .vote-judge-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 26px;
+      flex-wrap: wrap;
+    }
+    .vote-judge-row label {
+      font-family: 'Oswald', sans-serif;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+    .vote-judge-input {
+      flex: 1 1 280px;
+      max-width: 420px;
+      padding: 10px 14px;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    .vote-judge-input:focus {
+      outline: 0;
+      border-color: #5f8fbf;
+    }
+
+    .vote-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .vote-grid-loading {
+      color: rgba(255,255,255,0.4);
+      font-style: italic;
+      padding: 40px 0;
+      text-align: center;
+      grid-column: 1 / -1;
+    }
+
+    .vote-card {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .vote-card:hover {
+      border-color: rgba(255,255,255,0.22);
+    }
+    .vote-card-images {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      background: rgba(0,0,0,0.6);
+    }
+    .vote-card-images img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+    }
+    .vote-card-images-single {
+      grid-template-columns: 1fr;
+    }
+    .vote-card-images-single img {
+      aspect-ratio: 4/5;
+    }
+    .vote-card-info {
+      padding: 12px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .vote-card-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.92rem;
+      margin: 0;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      word-break: break-word;
+      line-height: 1.2;
+    }
+    .vote-card-course {
+      display: inline-block;
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.55);
+      margin-left: 6px;
+      padding: 2px 7px;
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 999px;
+      font-family: inherit;
+      letter-spacing: 0.08em;
+      vertical-align: middle;
+    }
+    .vote-card-ranks {
+      display: flex;
+      gap: 6px;
+    }
+    .vote-card-ranks label {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 7px 4px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.82);
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.05em;
+      user-select: none;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .vote-card-ranks label:hover {
+      background: rgba(255,255,255,0.10);
+    }
+    .vote-card-ranks input[type="radio"] {
+      margin: 0;
+      cursor: pointer;
+      accent-color: #5f8fbf;
+    }
+    .vote-card-ranks label:has(input[type="radio"]:checked) {
+      background: rgba(95,143,191,0.35);
+      border-color: #5f8fbf;
+      color: #ffffff;
+    }
+    .vote-card-ranks label:has(input[type="radio"]:disabled) {
+      opacity: 0.28;
+      cursor: not-allowed;
+    }
+
+    .vote-submit-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .vote-submit-btn {
+      display: inline-block;
+      padding: 14px 32px;
+      background: #ff6b1a;
+      color: #ffffff;
+      border: 0;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .vote-submit-btn:hover {
+      background: #ff7d3a;
+    }
+    .vote-submit-btn:disabled {
+      background: rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.40);
+      cursor: not-allowed;
+    }
+    .vote-status {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -133,6 +371,65 @@
 
       </div>
 
+      <!-- ═══════════════════════════════════════════
+           SPRING FINAL VOTING SECTIONS
+           Two competitions: Product Photography (Photo 1B)
+           and Company Branding (Digital Arts 1B + 2B pooled).
+           Voting cards rendered from /assets/student-work/manifest.json
+           by the JS at the bottom of the page.
+           ═══════════════════════════════════════════ -->
+
+      <section class="voting-intro">
+        <h2>Spring Final Voting</h2>
+        <p>Judges: rank 1st, 2nd, and 3rd place in each competition below. Each card represents one student. Selecting a student in one rank automatically disables them in the other ranks. You can only rank each student once per competition.</p>
+        <p>Click <strong>Browse All Originals on Google Drive</strong> at the top of each competition to view the full-size submissions while you judge.</p>
+        <p><strong>Prizes per competition:</strong> 1st place $150, 2nd place $100, 3rd place $50.</p>
+      </section>
+
+      <!-- COMPETITION 1: Photography (Product Photography, Photo 1B) -->
+      <section class="vote-competition" id="photo-comp">
+        <h3>Photography Competition</h3>
+        <p class="vote-meta">Product Photography &nbsp;&middot;&nbsp; Photography 1B</p>
+
+        <a class="vote-folder-link" id="photo-drive-link" href="REPLACE_WITH_PRODUCT_PHOTOGRAPHY_GOOGLE_DRIVE_FOLDER_URL" target="_blank" rel="noopener">&#128279; Browse All Originals on Google Drive</a>
+
+        <div class="vote-judge-row">
+          <label for="photo-judge">Judge name:</label>
+          <input class="vote-judge-input" id="photo-judge" type="text" placeholder="Your full name" autocomplete="off" />
+        </div>
+
+        <div class="vote-grid" id="photo-grid">
+          <div class="vote-grid-loading">Loading student submissions...</div>
+        </div>
+
+        <div class="vote-submit-row">
+          <button class="vote-submit-btn" type="button" onclick="submitVotes('photo')">Submit Photography Votes</button>
+          <span class="vote-status" id="photo-status"></span>
+        </div>
+      </section>
+
+      <!-- COMPETITION 2: Digital Arts (Company Branding, DA1B + DA2B pooled) -->
+      <section class="vote-competition" id="brand-comp">
+        <h3>Digital Arts Competition</h3>
+        <p class="vote-meta">Company Branding &nbsp;&middot;&nbsp; Digital Arts 1B and 2B (combined pool)</p>
+
+        <a class="vote-folder-link" id="brand-drive-link" href="REPLACE_WITH_COMPANY_BRANDING_GOOGLE_DRIVE_FOLDER_URL" target="_blank" rel="noopener">&#128279; Browse All Originals on Google Drive</a>
+
+        <div class="vote-judge-row">
+          <label for="brand-judge">Judge name:</label>
+          <input class="vote-judge-input" id="brand-judge" type="text" placeholder="Your full name" autocomplete="off" />
+        </div>
+
+        <div class="vote-grid" id="brand-grid">
+          <div class="vote-grid-loading">Loading student submissions...</div>
+        </div>
+
+        <div class="vote-submit-row">
+          <button class="vote-submit-btn" type="button" onclick="submitVotes('brand')">Submit Digital Arts Votes</button>
+          <span class="vote-status" id="brand-status"></span>
+        </div>
+      </section>
+
       <div class="showcase-signature">
         <div class="showcase-signature-block">
           Mr. Chris Silva &nbsp;|&nbsp; Visual and Performing Arts Instructor<br />
@@ -164,5 +461,158 @@
   </footer>
 
   <script src="js/main.js?v=20260418d" defer></script>
+
+  <!-- ═══════════════════════════════════════════
+       SPRING FINAL VOTING — EmailJS + card render + voting logic
+       Before this works, replace the 3 EmailJS placeholders below
+       with the real values from dashboard.emailjs.com/admin.
+       ═══════════════════════════════════════════ -->
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    // ─── REPLACE THESE 3 VALUES with credentials from dashboard.emailjs.com ───
+    var EMAILJS_PUBLIC_KEY  = 'REPLACE_WITH_PUBLIC_KEY';
+    var EMAILJS_SERVICE_ID  = 'REPLACE_WITH_SERVICE_ID';
+    var EMAILJS_TEMPLATE_ID = 'REPLACE_WITH_TEMPLATE_ID';
+    // ─────────────────────────────────────────────────────────────────────────
+
+    if (window.emailjs && EMAILJS_PUBLIC_KEY.indexOf('REPLACE_WITH') === -1) {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+    }
+
+    // Load manifest and render cards
+    fetch('/assets/student-work/manifest.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        renderPhotoCards(data.product_photography);
+        renderBrandCards(data.company_branding);
+        setupRankExclusion('photo');
+        setupRankExclusion('brand');
+      })
+      .catch(function (err) {
+        document.getElementById('photo-grid').innerHTML = '<div class="vote-grid-loading">Could not load submissions. Refresh the page or contact Mr. Silva.</div>';
+        document.getElementById('brand-grid').innerHTML = '<div class="vote-grid-loading">Could not load submissions. Refresh the page or contact Mr. Silva.</div>';
+        console.error(err);
+      });
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    function renderPhotoCards(students) {
+      var grid = document.getElementById('photo-grid');
+      grid.innerHTML = students.map(function (s) {
+        var imgs = s.images.map(function (img) {
+          return '<img src="/assets/student-work/product-photography/' + encodeURIComponent(img.thumb) + '" alt="" loading="lazy" />';
+        }).join('');
+        var display = escapeHtml(s.display_name);
+        var student = escapeHtml(s.student);
+        return [
+          '<article class="vote-card" data-student="' + student + '">',
+          '  <div class="vote-card-images">' + imgs + '</div>',
+          '  <div class="vote-card-info">',
+          '    <h4 class="vote-card-name">' + display + '</h4>',
+          '    <div class="vote-card-ranks">',
+          '      <label><input type="radio" name="photo-rank-1" value="' + student + '" data-display="' + display + '" /> 1st</label>',
+          '      <label><input type="radio" name="photo-rank-2" value="' + student + '" data-display="' + display + '" /> 2nd</label>',
+          '      <label><input type="radio" name="photo-rank-3" value="' + student + '" data-display="' + display + '" /> 3rd</label>',
+          '    </div>',
+          '  </div>',
+          '</article>'
+        ].join('');
+      }).join('');
+    }
+
+    function renderBrandCards(students) {
+      var grid = document.getElementById('brand-grid');
+      grid.innerHTML = students.map(function (s) {
+        var display = escapeHtml(s.display_name);
+        var student = escapeHtml(s.student);
+        var course = escapeHtml(s.course);
+        var fullDisplay = display + ' (' + course + ')';
+        return [
+          '<article class="vote-card" data-student="' + student + '">',
+          '  <div class="vote-card-images vote-card-images-single">',
+          '    <img src="/assets/student-work/company-branding/' + encodeURIComponent(s.thumb) + '" alt="" loading="lazy" />',
+          '  </div>',
+          '  <div class="vote-card-info">',
+          '    <h4 class="vote-card-name">' + display + ' <span class="vote-card-course">' + course + '</span></h4>',
+          '    <div class="vote-card-ranks">',
+          '      <label><input type="radio" name="brand-rank-1" value="' + student + '" data-display="' + fullDisplay + '" /> 1st</label>',
+          '      <label><input type="radio" name="brand-rank-2" value="' + student + '" data-display="' + fullDisplay + '" /> 2nd</label>',
+          '      <label><input type="radio" name="brand-rank-3" value="' + student + '" data-display="' + fullDisplay + '" /> 3rd</label>',
+          '    </div>',
+          '  </div>',
+          '</article>'
+        ].join('');
+      }).join('');
+    }
+
+    // Enforce: each student can only be ranked once per competition
+    function setupRankExclusion(prefix) {
+      var radios = document.querySelectorAll('input[name^="' + prefix + '-rank-"]');
+      radios.forEach(function (radio) {
+        radio.addEventListener('change', function () {
+          var selectedStudents = new Set();
+          ['1', '2', '3'].forEach(function (r) {
+            var sel = document.querySelector('input[name="' + prefix + '-rank-' + r + '"]:checked');
+            if (sel) selectedStudents.add(sel.value);
+          });
+          radios.forEach(function (r) {
+            r.disabled = (selectedStudents.has(r.value) && !r.checked);
+          });
+        });
+      });
+    }
+
+    function submitVotes(comp) {
+      var judgeName = document.getElementById(comp + '-judge').value.trim();
+      var statusEl = document.getElementById(comp + '-status');
+      if (!judgeName) {
+        statusEl.textContent = 'Please enter your judge name first.';
+        return;
+      }
+      var r1 = document.querySelector('input[name="' + comp + '-rank-1"]:checked');
+      var r2 = document.querySelector('input[name="' + comp + '-rank-2"]:checked');
+      var r3 = document.querySelector('input[name="' + comp + '-rank-3"]:checked');
+      if (!r1 || !r2 || !r3) {
+        statusEl.textContent = 'Please rank 1st, 2nd, and 3rd place before submitting.';
+        return;
+      }
+      var compName = comp === 'photo'
+        ? 'Product Photography (Photography 1B)'
+        : 'Company Branding (Digital Arts 1B + 2B)';
+
+      var summary = 'Submit your votes for ' + compName + '?\n\n' +
+        '1st: ' + r1.dataset.display + '\n' +
+        '2nd: ' + r2.dataset.display + '\n' +
+        '3rd: ' + r3.dataset.display + '\n\n' +
+        'Judge: ' + judgeName;
+      if (!confirm(summary)) return;
+
+      if (EMAILJS_PUBLIC_KEY.indexOf('REPLACE_WITH') !== -1) {
+        statusEl.textContent = 'EmailJS not configured yet. Mr. Silva needs to swap in the real credentials.';
+        return;
+      }
+
+      statusEl.textContent = 'Sending...';
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        competition: compName,
+        first_place: r1.dataset.display,
+        second_place: r2.dataset.display,
+        third_place: r3.dataset.display,
+        judge_name: judgeName,
+        voted_at: new Date().toLocaleString()
+      }).then(function () {
+        statusEl.textContent = 'Thank you ' + judgeName + '! Your vote for ' + compName + ' was submitted.';
+        document.querySelector('#' + comp + '-comp .vote-submit-btn').disabled = true;
+      }).catch(function (err) {
+        statusEl.textContent = 'Error sending vote: ' + (err.text || err.message || 'Unknown error');
+        console.error(err);
+      });
+    }
+  </script>
+
 </body>
 </html>
