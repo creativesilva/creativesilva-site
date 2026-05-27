@@ -20,6 +20,7 @@ When the user says "build a new Canvas assignment" (or similar):
 6. **Commit and push** following §8.
 
 **Hard rules** (apply to every build, no exceptions):
+- **Every assignment page includes the full top nav** with breadcrumb, `silva-dots` (module step circles), `silva-step-nav` (prev/next within the module), `silva-nav-div` separator, and Copy/Download Canvas HTML buttons. The hamburger menu and global prev/next arrows are auto-injected by `silva-nav.js`. **Every new page must also be added to the `SEQUENCE` array in `js/silva-nav.js`** so the global prev/next arrows wrap correctly.
 - **Every page that uses AI-generated imagery includes the AI Image Disclaimer footer** at the bottom of both EN and ES language sections (see §16).
 - No em dashes anywhere. Use colons, commas, or restructure the sentence.
 - All images and downloadable files hosted at `raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/...` (never Canvas-hosted URLs, never relative paths).
