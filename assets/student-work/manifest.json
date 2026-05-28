@@ -2961,7 +2961,7 @@
       "student": "villasamara",
       "display_name": "Villasamara",
       "course": "DA2B",
-      "pages_submitted": 3,
+      "pages_submitted": 2,
       "images": [
         {
           "thumb": "villasamara_1.jpg",
@@ -2974,14 +2974,9 @@
           "large": "villasamara_2_lg.jpg",
           "original": "villasamara_LATE_40596_14430316_samVJimenez_Logo_Refresh_Page_2.jpg",
           "page": 2
-        },
-        {
-          "thumb": "villasamara_3.jpg",
-          "large": "villasamara_3_lg.jpg",
-          "original": "villasamara_LATE_40596_14430316_samVJimenez_Logo_Refresh_Page_3.jpg",
-          "page": 3
         }
-      ]
+      ],
+      "incomplete": true
     }
   ]
 }
