@@ -556,6 +556,61 @@
     }
     .vote-stickybar-status:empty { min-height: 0; margin-top: 0; }
 
+    /* ═══════════════ Judge / Student mode toggle ═══════════════ */
+    .vote-mode-toggle {
+      display: inline-flex;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      padding: 3px;
+      gap: 2px;
+      flex: 0 0 auto;
+    }
+    .vote-mode-toggle button {
+      background: transparent;
+      border: 0;
+      color: rgba(255,255,255,0.55);
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .vote-mode-toggle button.active {
+      background: #5f8fbf;
+      color: #ffffff;
+    }
+    body.mode-student .vote-mode-toggle button[data-mode="student"].active {
+      background: #cc0000;          /* red accent in student mode */
+    }
+
+    .student-warning {
+      display: none;
+      margin: 16px 0 22px;
+      padding: 14px 18px;
+      background: rgba(204, 0, 0, 0.10);
+      border: 1px solid rgba(204, 0, 0, 0.40);
+      border-left: 4px solid #cc0000;
+      border-radius: 8px;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+    body.mode-student .student-warning { display: block; }
+    .student-warning strong {
+      color: #ff7066;
+      display: block;
+      margin-bottom: 6px;
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.86rem;
+    }
+
     /* ═══════════════ Desktop polish ═══════════════ */
     @media (min-width: 1100px) {
       .vote-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
@@ -642,8 +697,12 @@
            submit from anywhere on the page without scrolling to the bottom. -->
       <div class="vote-stickybar" id="vote-stickybar">
         <div class="vote-stickybar-inner">
+          <div class="vote-mode-toggle" role="tablist" aria-label="Voting mode">
+            <button type="button" class="active" data-mode="judge" onclick="setVoteMode('judge')">Judge</button>
+            <button type="button" data-mode="student" onclick="setVoteMode('student')">Student</button>
+          </div>
           <div class="vote-stickybar-judge">
-            <label for="photo-judge">Judge:</label>
+            <label for="photo-judge" id="photo-judge-label">Judge:</label>
             <input id="photo-judge" type="text" placeholder="Your full name" autocomplete="off" />
           </div>
           <div class="vote-stickybar-picks">
@@ -657,6 +716,12 @@
           </div>
         </div>
         <div class="vote-stickybar-status" id="photo-status"></div>
+      </div>
+
+      <!-- Student-only People's Choice warning (only visible when toggle = Student) -->
+      <div class="student-warning" id="student-warning">
+        <strong>People's Choice Voting &middot; Mr. Silva's class only</strong>
+        Enter your real Student ID number. I cross-check every vote against my class roster: votes from numbers not on the roster are deleted. <strong style="display:inline; color:inherit; font-family:inherit; letter-spacing:0; text-transform:none;">One vote per student ID</strong>: duplicate votes are also deleted. This is the honor system, but I check every single one.
       </div>
 
       <section class="voting-intro">
@@ -727,6 +792,31 @@
 
     if (window.emailjs && EMAILJS_PUBLIC_KEY.indexOf('REPLACE_WITH') === -1) {
       emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+    }
+
+    // Judge / Student mode toggle. Swaps the input label, placeholder,
+    // and keyboard type. Mode is sent in the EmailJS payload as voter_type
+    // so Mr. Silva can sort judge votes from people's-choice student votes.
+    var voteMode = 'judge';
+    function setVoteMode(mode) {
+      voteMode = mode;
+      document.body.classList.toggle('mode-student', mode === 'student');
+      document.querySelectorAll('.vote-mode-toggle button').forEach(function (btn) {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+      });
+      var label = document.getElementById('photo-judge-label');
+      var input = document.getElementById('photo-judge');
+      if (mode === 'student') {
+        label.textContent = 'Student #:';
+        input.placeholder = 'Your student ID number';
+        input.setAttribute('inputmode', 'numeric');
+        input.value = '';
+      } else {
+        label.textContent = 'Judge:';
+        input.placeholder = 'Your full name';
+        input.removeAttribute('inputmode');
+        input.value = '';
+      }
     }
 
     fetch('/assets/student-work/manifest.json')
@@ -897,10 +987,18 @@
     }
 
     function submitVotes() {
-      var judgeName = document.getElementById('photo-judge').value.trim();
+      var voterValue = document.getElementById('photo-judge').value.trim();
       var statusEl = document.getElementById('photo-status');
-      if (!judgeName) {
-        statusEl.textContent = 'Please enter your judge name first.';
+      var isStudent = voteMode === 'student';
+      if (!voterValue) {
+        statusEl.textContent = isStudent
+          ? 'Please enter your Student ID number first.'
+          : 'Please enter your judge name first.';
+        return;
+      }
+      // Light validation: student mode expects digits only
+      if (isStudent && !/^\d{3,12}$/.test(voterValue)) {
+        statusEl.textContent = 'Student ID should be numbers only (3 to 12 digits).';
         return;
       }
       var r1 = document.querySelector('input[name="photo-rank-1"]:checked');
@@ -911,12 +1009,14 @@
         return;
       }
       var compName = 'Product Photography (Photography 1B)';
+      var voterLabel = isStudent ? 'Student #' : 'Judge';
 
-      var summary = 'Submit your votes for ' + compName + '?\n\n' +
+      var summary = 'Submit your ' + (isStudent ? 'People’s Choice' : 'judge') +
+        ' vote for ' + compName + '?\n\n' +
         '1st: ' + r1.dataset.display + '\n' +
         '2nd: ' + r2.dataset.display + '\n' +
         '3rd: ' + r3.dataset.display + '\n\n' +
-        'Judge: ' + judgeName;
+        voterLabel + ': ' + voterValue;
       if (!confirm(summary)) return;
 
       if (EMAILJS_PUBLIC_KEY.indexOf('REPLACE_WITH') !== -1) {
@@ -930,10 +1030,14 @@
         first_place: r1.dataset.display,
         second_place: r2.dataset.display,
         third_place: r3.dataset.display,
-        judge_name: judgeName,
+        judge_name: voterValue,        // carries name or student #
+        voter_type: voteMode,          // "judge" or "student"
         voted_at: new Date().toLocaleString()
       }).then(function () {
-        statusEl.textContent = 'Thank you ' + judgeName + '! Your vote for ' + compName + ' was submitted.';
+        var thanks = isStudent
+          ? 'Thanks! Student #' + voterValue + ' counted for ' + compName + '. I will cross-check against the roster.'
+          : 'Thank you ' + voterValue + '! Your vote for ' + compName + ' was submitted.';
+        statusEl.textContent = thanks;
         document.querySelector('.vote-stickybar-submit').disabled = true;
       }).catch(function (err) {
         statusEl.textContent = 'Error sending vote: ' + (err.text || err.message || 'Unknown error');
