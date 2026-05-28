@@ -601,6 +601,12 @@
       line-height: 1.55;
     }
     body.mode-student .student-warning { display: block; }
+
+    /* Show different prize/reward text depending on Judge vs Student mode */
+    .judge-only { display: block; }
+    .student-only { display: none; }
+    body.mode-student .judge-only { display: none; }
+    body.mode-student .student-only { display: block; }
     .student-warning strong {
       color: #ff7066;
       display: block;
@@ -727,7 +733,8 @@
       <section class="voting-intro">
         <h2>Spring Final Voting</h2>
         <p>Rank 1st, 2nd, and 3rd place. Each card is one student. Selecting a student in one rank disables them in the others. Click any thumbnail to see the work full-size. Your picks track in the bar pinned at the top, so you can hit Submit from anywhere on the page.</p>
-        <p><strong>Prizes:</strong> 1st place $150, 2nd place $100, 3rd place $50.</p>
+        <p class="judge-only"><strong>Prizes:</strong> 1st place $150, 2nd place $100, 3rd place $50.</p>
+        <p class="student-only"><strong>People&rsquo;s Choice:</strong> Your 1st, 2nd, and 3rd picks will be considered for <strong>honorable mentions</strong> and invited to the pizza party alongside the judge-picked winners.</p>
       </section>
 
       <section class="vote-competition" id="photo-comp">
