@@ -47,6 +47,7 @@
 
     // Digital Arts: Jimenez Mobile Detailing (spring final)
     '/curriculum/shared/jimenez-spring-final.html',
+    '/curriculum/shared/jimenez-step01-research.html',
     '/curriculum/shared/jimenez-step04-illustrator.html',
     '/curriculum/shared/jimenez-step05-mockups.html',
     '/curriculum/shared/jimenez-step06-social-media.html',
