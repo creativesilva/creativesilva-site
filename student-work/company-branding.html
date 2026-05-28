@@ -146,20 +146,42 @@
     }
     .vote-card-images {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr);
       gap: 2px;
       background: rgba(0,0,0,0.6);
     }
     .vote-card-images img {
       width: 100%;
-      aspect-ratio: 4/5;
-      object-fit: cover;
+      aspect-ratio: 3/4;            /* portrait pages */
+      object-fit: contain;          /* show whole page, no crop */
       display: block;
       cursor: zoom-in;
       transition: opacity 0.15s ease;
+      background: #ffffff;
     }
     .vote-card-images img:hover {
       opacity: 0.75;
+    }
+    .vote-card-images-single {
+      grid-template-columns: 1fr;
+    }
+    .vote-card-images-single img {
+      aspect-ratio: 3/4;
+    }
+    .vote-card-incomplete {
+      display: inline-block;
+      font-size: 0.58rem;
+      color: #ffb37a;
+      margin-left: 6px;
+      padding: 2px 7px;
+      border: 1px solid rgba(255, 107, 26, 0.55);
+      background: rgba(255, 107, 26, 0.12);
+      border-radius: 999px;
+      font-family: inherit;
+      letter-spacing: 0.08em;
+      vertical-align: middle;
+      text-transform: uppercase;
+      font-weight: 600;
     }
     .vote-card-info {
       padding: 12px 14px 14px;
@@ -762,20 +784,29 @@
         var student = escapeHtml(s.student);
         var course = escapeHtml(s.course);
         var fullDisplay = display + ' (' + course + ')';
+        // Cache large image URLs + originals for the lightbox
         brandGalleries[s.student] = {
-          images: ['/assets/student-work/company-branding-large/' + encodeURIComponent(s.large)],
-          originals: [s.original],
-          display: fullDisplay + ' (first page, open in Drive for all 3 pages)',
+          images: s.images.map(function (img) {
+            return '/assets/student-work/company-branding-large/' + encodeURIComponent(img.large);
+          }),
+          originals: s.images.map(function (img) { return img.original; }),
+          display: fullDisplay,
           driveUrl: studentDriveUrl(BRAND_DRIVE_BASE, s.student)
         };
+        // Render thumbnail grid: 2x2 if 3+ images, single if 1
+        var imgs = s.images.map(function (img, idx) {
+          return '<img src="/assets/student-work/company-branding/' + encodeURIComponent(img.thumb) +
+                 '" alt="Page ' + img.page + '" loading="lazy" onclick="openLightbox(\'' + student + '\', ' + idx + ')" />';
+        }).join('');
+        var imgsClass = s.images.length === 1 ? 'vote-card-images vote-card-images-single' : 'vote-card-images';
+        var incompleteBadge = s.incomplete
+          ? '<span class="vote-card-incomplete" title="Submitted ' + s.pages_submitted + ' of 3 pages">' + s.pages_submitted + '/3 pages</span>'
+          : '';
         return [
           '<article class="vote-card" data-student="' + student + '">',
-          '  <div class="vote-card-images">',
-          '    <img src="/assets/student-work/company-branding/' + encodeURIComponent(s.thumb) +
-                 '" alt="" loading="lazy" onclick="openLightbox(\'' + student + '\', 0)" />',
-          '  </div>',
+          '  <div class="' + imgsClass + '">' + imgs + '</div>',
           '  <div class="vote-card-info">',
-          '    <h4 class="vote-card-name">' + display + ' <span class="vote-card-course">' + course + '</span></h4>',
+          '    <h4 class="vote-card-name">' + display + ' <span class="vote-card-course">' + course + '</span>' + incompleteBadge + '</h4>',
           '    <div class="vote-card-ranks">',
           '      <label><input type="radio" name="brand-rank-1" value="' + student + '" data-display="' + fullDisplay + '" /><span>1st</span></label>',
           '      <label><input type="radio" name="brand-rank-2" value="' + student + '" data-display="' + fullDisplay + '" /><span>2nd</span></label>',
