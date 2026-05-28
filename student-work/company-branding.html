@@ -425,6 +425,194 @@
       .vw-lightbox-next { right: -8px; }
       .vw-lightbox-close { top: -36px; right: 0; }
     }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Sticky voting bar (pinned just below the site header)
+       ═══════════════════════════════════════════════════════════════ */
+    .vote-stickybar {
+      position: sticky;
+      top: 84px;
+      z-index: 49;
+      background: rgba(15, 15, 15, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      padding: 12px 32px;
+      margin: 0 -32px 24px;
+    }
+    .vote-stickybar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .vote-stickybar-judge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+    .vote-stickybar-judge label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.70);
+    }
+    .vote-stickybar-judge input {
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 6px;
+      color: #fff;
+      padding: 7px 11px;
+      font-size: 0.92rem;
+      width: 220px;
+      font-family: inherit;
+    }
+    .vote-stickybar-judge input:focus {
+      outline: 0;
+      border-color: #5f8fbf;
+    }
+    .vote-stickybar-picks {
+      display: flex;
+      gap: 6px;
+      flex: 1 1 auto;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+    .pick-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 11px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.55);
+      min-width: 0;
+      max-width: 100%;
+    }
+    .pick-chip.filled {
+      background: rgba(95,143,191,0.28);
+      border-color: #5f8fbf;
+      color: #ffffff;
+    }
+    .pick-rank {
+      font-weight: 700;
+      flex-shrink: 0;
+      color: rgba(255,255,255,0.62);
+    }
+    .pick-chip.filled .pick-rank { color: #9ecbff; }
+    .pick-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 160px;
+    }
+    .vote-stickybar-actions {
+      display: flex;
+      gap: 6px;
+      flex: 0 0 auto;
+    }
+    .vote-stickybar-submit {
+      padding: 9px 22px;
+      background: #ff6b1a;
+      color: #fff;
+      border: 0;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .vote-stickybar-submit:hover { background: #ff7d3a; }
+    .vote-stickybar-submit:disabled {
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.40);
+      cursor: not-allowed;
+    }
+    .vote-stickybar-clear {
+      padding: 9px 14px;
+      background: transparent;
+      color: rgba(255,255,255,0.70);
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .vote-stickybar-clear:hover { background: rgba(255,255,255,0.07); color: #fff; }
+    .vote-stickybar-status {
+      max-width: 1200px;
+      margin: 6px auto 0;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.62);
+      font-style: italic;
+      text-align: center;
+      min-height: 1.1em;
+    }
+    .vote-stickybar-status:empty { min-height: 0; margin-top: 0; }
+
+    /* Desktop polish */
+    @media (min-width: 1100px) {
+      .vote-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    }
+    @media (min-width: 1400px) {
+      .vote-grid { grid-template-columns: repeat(5, 1fr); }
+    }
+
+    /* Mobile tightening */
+    @media (max-width: 720px) {
+      .vote-stickybar {
+        top: 64px;
+        padding: 10px 14px;
+        margin: 0 -16px 16px;
+      }
+      .vote-stickybar-inner { gap: 8px; }
+      .vote-stickybar-judge { flex: 1 1 100%; }
+      .vote-stickybar-judge input { width: 100%; flex: 1; }
+      .vote-stickybar-picks { flex: 1 1 100%; gap: 4px; }
+      .pick-chip {
+        flex: 1;
+        font-size: 0.68rem;
+        padding: 5px 7px;
+        justify-content: center;
+        gap: 4px;
+      }
+      .pick-name { max-width: 70px; font-size: 0.68rem; }
+      .vote-stickybar-actions { flex: 1 1 100%; gap: 6px; }
+      .vote-stickybar-submit { flex: 1; padding: 11px 16px; font-size: 0.82rem; }
+      .vote-stickybar-clear { flex: 0 0 auto; padding: 11px 14px; }
+
+      .voting-intro { margin: 12px 0 18px; }
+      .voting-intro h2 { font-size: 1.45rem; margin-bottom: 10px; }
+      .voting-intro p { font-size: 0.86rem; line-height: 1.6; }
+      .vote-competition { padding: 16px 12px; margin: 18px 0; border-radius: 14px; }
+      .vote-competition h3 { font-size: 1.2rem; }
+      .vote-competition .vote-meta { font-size: 0.82rem; margin-bottom: 14px; }
+      .vote-folder-link { padding: 10px 14px; font-size: 0.82rem; }
+      .vote-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
+      .vote-card { border-radius: 10px; }
+      .vote-card-info { padding: 9px 9px 11px; gap: 7px; }
+      .vote-card-name { font-size: 0.74rem; letter-spacing: 0.02em; }
+      .vote-card-course { font-size: 0.56rem; padding: 1px 5px; }
+      .vote-card-ranks { gap: 3px; }
+      .vote-card-ranks label { font-size: 0.68rem; padding: 7px 2px; gap: 3px; }
+      .vote-drive-embed { margin-top: 22px; padding-top: 20px; }
+      .vote-drive-embed h4 { font-size: 0.98rem; }
+      .vote-drive-embed p { font-size: 0.82rem; }
+      .vote-drive-embed iframe { height: 420px; }
+      .sw-back-link { margin-bottom: 14px; font-size: 0.72rem; }
+    }
   </style>
 </head>
 <body>
@@ -454,10 +642,30 @@
         <h1 class="page-title">Company Branding</h1>
       </div>
 
+      <!-- Sticky voting bar: pinned just below the site header so judges can
+           submit from anywhere on the page without scrolling to the bottom. -->
+      <div class="vote-stickybar" id="vote-stickybar">
+        <div class="vote-stickybar-inner">
+          <div class="vote-stickybar-judge">
+            <label for="brand-judge">Judge:</label>
+            <input id="brand-judge" type="text" placeholder="Your full name" autocomplete="off" />
+          </div>
+          <div class="vote-stickybar-picks">
+            <span class="pick-chip" id="brand-chip-1"><span class="pick-rank">1st</span><span class="pick-name" id="brand-pick-1">&hellip;</span></span>
+            <span class="pick-chip" id="brand-chip-2"><span class="pick-rank">2nd</span><span class="pick-name" id="brand-pick-2">&hellip;</span></span>
+            <span class="pick-chip" id="brand-chip-3"><span class="pick-rank">3rd</span><span class="pick-name" id="brand-pick-3">&hellip;</span></span>
+          </div>
+          <div class="vote-stickybar-actions">
+            <button class="vote-stickybar-submit" type="button" onclick="submitVotes()">Submit</button>
+            <button class="vote-stickybar-clear" type="button" onclick="clearVotes()">Clear</button>
+          </div>
+        </div>
+        <div class="vote-stickybar-status" id="brand-status"></div>
+      </div>
+
       <section class="voting-intro">
         <h2>Spring Final Voting</h2>
-        <p>Judges: rank 1st, 2nd, and 3rd place. Each card represents one student. Digital Arts 1B and 2B are pooled into one competition. Selecting a student in one rank automatically disables them in the other ranks.</p>
-        <p>Click any thumbnail to see the first page full-size. Click <strong>Browse All Originals on Google Drive</strong> to flip through all three pages of every PDF.</p>
+        <p>Rank 1st, 2nd, and 3rd place. Each card is one student. Digital Arts 1B and 2B are pooled into one competition. Click any thumbnail to see the first page full-size. Your picks track in the bar pinned at the top, so you can hit Submit from anywhere on the page.</p>
         <p><strong>Prizes:</strong> 1st place $150, 2nd place $100, 3rd place $50.</p>
       </section>
 
@@ -467,21 +675,10 @@
 
         <a class="vote-folder-link" id="brand-drive-link" href="https://drive.google.com/drive/folders/10ZX4D5d9MogPxA14UhPPz8Oke4xTwDrV?usp=drive_link" target="_blank" rel="noopener">&#128279; Browse All Originals on Google Drive</a>
 
-        <div class="vote-judge-row">
-          <label for="brand-judge">Judge name:</label>
-          <input class="vote-judge-input" id="brand-judge" type="text" placeholder="Your full name" autocomplete="off" />
-        </div>
-
-        <p class="vote-clear-hint">Tip: click a 1st/2nd/3rd button you already picked to clear that selection. Or use Clear All below to start over.</p>
+        <p class="vote-clear-hint">Tip: click a 1st/2nd/3rd button you already picked to clear that selection. Use Clear in the top bar to start over.</p>
 
         <div class="vote-grid" id="brand-grid">
           <div class="vote-grid-loading">Loading student submissions...</div>
-        </div>
-
-        <div class="vote-submit-row">
-          <button class="vote-submit-btn" type="button" onclick="submitVotes()">Submit Digital Arts Votes</button>
-          <button class="vote-clear-btn" type="button" onclick="clearVotes()">Clear All Selections</button>
-          <span class="vote-status" id="brand-status"></span>
         </div>
 
         <div class="vote-drive-embed">
@@ -606,7 +803,25 @@
           radios.forEach(function (r) {
             r.disabled = (selectedStudents.has(r.value) && !r.checked);
           });
+          updateStickyChips();
         });
+      });
+      updateStickyChips();
+    }
+
+    // Sync the sticky-bar chips with current radio selections
+    function updateStickyChips() {
+      ['1', '2', '3'].forEach(function (r) {
+        var sel = document.querySelector('input[name="brand-rank-' + r + '"]:checked');
+        var chip = document.getElementById('brand-chip-' + r);
+        var nameEl = document.getElementById('brand-pick-' + r);
+        if (sel) {
+          nameEl.textContent = sel.dataset.display;
+          chip.classList.add('filled');
+        } else {
+          nameEl.textContent = '…'; // ellipsis
+          chip.classList.remove('filled');
+        }
       });
     }
 
@@ -675,6 +890,7 @@
         r.disabled = false;
         radioPreClickState.delete(r);
       });
+      updateStickyChips();
       var statusEl = document.getElementById('brand-status');
       statusEl.textContent = 'All selections cleared.';
       setTimeout(function () {
@@ -720,7 +936,7 @@
         voted_at: new Date().toLocaleString()
       }).then(function () {
         statusEl.textContent = 'Thank you ' + judgeName + '! Your vote for ' + compName + ' was submitted.';
-        document.querySelector('#brand-comp .vote-submit-btn').disabled = true;
+        document.querySelector('.vote-stickybar-submit').disabled = true;
       }).catch(function (err) {
         statusEl.textContent = 'Error sending vote: ' + (err.text || err.message || 'Unknown error');
         console.error(err);
