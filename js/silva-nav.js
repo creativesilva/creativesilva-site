@@ -37,6 +37,7 @@
     '/curriculum/photo1/sauce-baby/step3-shoot-contact.html',
     '/curriculum/photo1/sauce-baby/step4-final-edits.html',
     '/curriculum/photo1/sauce-baby/step5-reflection.html',
+    '/curriculum/photo1/sauce-baby/sauce-baby-bonus-vote.html',
 
     // Photo 1B: The Revisit Project (end-of-year)
     '/curriculum/shared/revisit-project-overview.html',
