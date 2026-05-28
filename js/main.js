@@ -109,6 +109,10 @@
   // Initial position (no animation flash)
   setTransform(current, false);
   updateActiveVisual(current);
+  // Reveal the slider only after it's positioned correctly.
+  // The matching CSS rule starts the slider at opacity:0 and fades in
+  // on .ready so refresh doesn't show the pre-transform slide.
+  slider.classList.add("ready");
 
   function next() { goTo(current + 1); }
   function prev() { goTo(current - 1); }
