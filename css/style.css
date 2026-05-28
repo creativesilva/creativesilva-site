@@ -588,6 +588,19 @@ main { min-height: calc(100vh - var(--header-height) - 120px); }
   height: clamp(480px, 72vh, 760px);
   overflow: hidden;
   background: #000;
+  /* Hide on first paint to avoid a flash of the unpositioned track
+     (slider JS adds .ready after setting the initial transform).
+     Fallback animation reveals it after 2.5s even if JS never runs. */
+  opacity: 0;
+  animation: hero-slider-fallback 0s linear 2.5s forwards;
+  transition: opacity 0.3s ease;
+}
+.hero-slider.ready {
+  opacity: 1;
+  animation: none;
+}
+@keyframes hero-slider-fallback {
+  to { opacity: 1; }
 }
 .hero-slides-track {
   display: flex;
