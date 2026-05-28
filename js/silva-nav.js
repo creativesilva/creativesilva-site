@@ -49,7 +49,8 @@
     '/curriculum/shared/jimenez-step04-illustrator.html',
     '/curriculum/shared/jimenez-step05-mockups.html',
     '/curriculum/shared/jimenez-step06-social-media.html',
-    '/curriculum/shared/jimenez-step07-reflection.html'
+    '/curriculum/shared/jimenez-step07-reflection.html',
+    '/curriculum/shared/jimenez-bonus-vote.html'
   ];
 
   function injectArrows(navInner) {
