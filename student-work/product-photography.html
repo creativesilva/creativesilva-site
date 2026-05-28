@@ -183,11 +183,13 @@
     }
     .vote-card-ranks label {
       flex: 1;
+      min-width: 0;
       display: flex;
+      flex-direction: column;          /* circle on top, label below */
       align-items: center;
       justify-content: center;
-      gap: 5px;
-      padding: 7px 4px;
+      gap: 3px;
+      padding: 7px 2px;
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.18);
       border-radius: 7px;
@@ -417,9 +419,13 @@
     /* ═══════════════════════════════════════════════════════════════
        Sticky voting bar (pinned just below the site header)
        ═══════════════════════════════════════════════════════════════ */
+    /* On voting pages, the site header scrolls away normally so the sticky
+       voting bar can pin to the very top of the viewport. */
+    .site-header { position: static !important; }
+
     .vote-stickybar {
       position: sticky;
-      top: 84px;                  /* site header height */
+      top: 0;
       z-index: 49;
       background: rgba(15, 15, 15, 0.96);
       backdrop-filter: blur(12px);
@@ -561,7 +567,7 @@
     /* ═══════════════ Mobile tightening ═══════════════ */
     @media (max-width: 720px) {
       .vote-stickybar {
-        top: 64px;                /* mobile header is shorter */
+        top: 0;
         padding: 10px 14px;
         margin: 0 -16px 16px;
       }
@@ -763,9 +769,9 @@
           '  <div class="vote-card-info">',
           '    <h4 class="vote-card-name">' + display + '</h4>',
           '    <div class="vote-card-ranks">',
-          '      <label><input type="radio" name="photo-rank-1" value="' + student + '" data-display="' + display + '" /> 1st</label>',
-          '      <label><input type="radio" name="photo-rank-2" value="' + student + '" data-display="' + display + '" /> 2nd</label>',
-          '      <label><input type="radio" name="photo-rank-3" value="' + student + '" data-display="' + display + '" /> 3rd</label>',
+          '      <label><input type="radio" name="photo-rank-1" value="' + student + '" data-display="' + display + '" /><span>1st</span></label>',
+          '      <label><input type="radio" name="photo-rank-2" value="' + student + '" data-display="' + display + '" /><span>2nd</span></label>',
+          '      <label><input type="radio" name="photo-rank-3" value="' + student + '" data-display="' + display + '" /><span>3rd</span></label>',
           '    </div>',
           '  </div>',
           '</article>'
