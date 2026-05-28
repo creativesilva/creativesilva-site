@@ -607,6 +607,120 @@
     .student-only { display: none; }
     body.mode-student .judge-only { display: none; }
     body.mode-student .student-only { display: block; }
+
+    /* ═══════════════════════════════════════════════════════════
+       First-visit explainer modal (judge vs student onboarding)
+       ═══════════════════════════════════════════════════════════ */
+    .vote-explainer-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .vote-explainer-modal.open { display: flex; animation: vw-fadein 0.25s ease; }
+    @keyframes vw-fadein { from { opacity: 0; } to { opacity: 1; } }
+    .vote-explainer-card {
+      position: relative;
+      background: #0e0e0e;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 20px;
+      padding: 36px 30px 28px;
+      max-width: 480px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+    }
+    .vote-explainer-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.10);
+      border: 0;
+      color: #fff;
+      font-size: 1.4rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .vote-explainer-close:hover { background: rgba(255,255,255,0.20); }
+    .vote-explainer-card h2 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.04em;
+      color: #fff;
+      margin: 0 0 8px;
+      text-transform: uppercase;
+      padding-right: 40px;
+    }
+    .vote-explainer-intro {
+      color: rgba(255,255,255,0.70);
+      font-size: 0.92rem;
+      margin: 0 0 20px;
+      line-height: 1.5;
+    }
+    .vote-explainer-option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      color: inherit;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    }
+    .vote-explainer-option:hover {
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-1px);
+    }
+    .vote-explainer-judge-btn:hover { border-color: #5f8fbf; }
+    .vote-explainer-student-btn:hover { border-color: #cc0000; }
+    .vote-explainer-tag {
+      display: inline-block;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      padding: 3px 9px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .vote-explainer-judge-btn .vote-explainer-tag {
+      background: rgba(95,143,191,0.25);
+      color: #9ecbff;
+    }
+    .vote-explainer-student-btn .vote-explainer-tag {
+      background: rgba(204,0,0,0.25);
+      color: #ff7066;
+    }
+    .vote-explainer-option-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .vote-explainer-option-desc {
+      color: rgba(255,255,255,0.72);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
     .student-warning strong {
       color: #ff7066;
       display: block;
@@ -690,6 +804,27 @@
       </nav>
     </div>
   </header>
+
+  <!-- First-visit explainer modal -->
+  <div class="vote-explainer-modal" id="vote-explainer-modal" role="dialog" aria-modal="true" aria-labelledby="vote-explainer-title">
+    <div class="vote-explainer-card">
+      <button type="button" class="vote-explainer-close" onclick="dismissVoteExplainer()" aria-label="Close">&times;</button>
+      <h2 id="vote-explainer-title">Welcome! How are you voting?</h2>
+      <p class="vote-explainer-intro">There are two ways to vote on this page. Pick the one that fits you to start.</p>
+
+      <button type="button" class="vote-explainer-option vote-explainer-judge-btn" onclick="chooseExplainerMode('judge')">
+        <span class="vote-explainer-tag">JUDGE MODE</span>
+        <div class="vote-explainer-option-label">I'm a Judge</div>
+        <div class="vote-explainer-option-desc">For invited judges only. Enter your full name. Your votes set the official 1st, 2nd, and 3rd place cash prize winners.</div>
+      </button>
+
+      <button type="button" class="vote-explainer-option vote-explainer-student-btn" onclick="chooseExplainerMode('student')">
+        <span class="vote-explainer-tag">STUDENT MODE</span>
+        <div class="vote-explainer-option-label">I'm a Student</div>
+        <div class="vote-explainer-option-desc">For Mr. Silva's class. Enter your real Student ID number. Your top 3 picks earn People's Choice honorable mentions and a pizza party invite.</div>
+      </button>
+    </div>
+  </div>
 
   <main>
     <section class="container">
@@ -825,6 +960,39 @@
         input.value = '';
       }
     }
+
+    // First-visit explainer modal: shows once per browser. Stores a flag in
+    // localStorage so returning visitors do not see it again. Tapping a mode
+    // button sets that mode and dismisses the modal.
+    function showVoteExplainerIfNeeded() {
+      try {
+        if (localStorage.getItem('vw-voteExplainerSeen') === 'yes') return;
+      } catch (e) { /* localStorage blocked, just show */ }
+      setTimeout(function () {
+        var m = document.getElementById('vote-explainer-modal');
+        if (m) m.classList.add('open');
+      }, 600);
+    }
+    function chooseExplainerMode(mode) {
+      setVoteMode(mode);
+      dismissVoteExplainer();
+      // Focus the input so they can start typing right away
+      var input = document.getElementById('photo-judge');
+      if (input) setTimeout(function () { input.focus(); }, 200);
+    }
+    function dismissVoteExplainer() {
+      var m = document.getElementById('vote-explainer-modal');
+      if (m) m.classList.remove('open');
+      try { localStorage.setItem('vw-voteExplainerSeen', 'yes'); } catch (e) {}
+    }
+    // Dismiss on backdrop click (not card click)
+    document.addEventListener('click', function (e) {
+      var m = document.getElementById('vote-explainer-modal');
+      if (m && m.classList.contains('open') && e.target === m) {
+        dismissVoteExplainer();
+      }
+    });
+    showVoteExplainerIfNeeded();
 
     fetch('/assets/student-work/manifest.json')
       .then(function (r) { return r.json(); })
