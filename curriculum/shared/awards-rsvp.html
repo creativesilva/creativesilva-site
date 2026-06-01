@@ -71,7 +71,7 @@
 
         <div>
           <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Bringing a Guest? <span style="color:#ffb27c;">*</span></strong></label>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;">
+          <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(160px,1fr);overflow-x:auto;gap:10px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
             <label style="background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:14pt;color:#ffffff;">
               <input type="radio" name="bringing_guest" value="No" required onchange="rsvpToggleGuest(false)" style="margin:0;" />
               <span>No, just me</span>
