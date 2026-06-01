@@ -70,7 +70,7 @@
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px;">
         <div style="background:rgba(0,0,0,0.32);border:1px solid rgba(0,184,184,0.22);border-radius:16px;padding:16px 18px;text-align:center;">
           <div style="font-size:11pt;letter-spacing:0.14em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Date</strong></div>
-          <div style="font-size:18pt;color:#ffffff;line-height:1.2;"><strong>TBD</strong></div>
+          <div style="font-size:18pt;color:#ffffff;line-height:1.2;"><strong>Tue, Jun 2 2026</strong></div>
         </div>
         <div style="background:rgba(0,0,0,0.32);border:1px solid rgba(0,184,184,0.22);border-radius:16px;padding:16px 18px;text-align:center;">
           <div style="font-size:11pt;letter-spacing:0.14em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Time</strong></div>
@@ -131,12 +131,91 @@
       </div>
 
       <!-- Honorary spots from Ms. Garcia's classes -->
-      <div style="background:rgba(0,0,0,0.32);border:1px dashed rgba(0,184,184,0.35);border-radius:18px;padding:20px 24px;margin-bottom:24px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center;">
-        <div style="font-size:34pt;line-height:1;color:#80e0e0;">&#127881;</div>
-        <div>
-          <div style="font-size:11pt;letter-spacing:0.14em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Plus 2 Honorary Spots</strong></div>
-          <div style="font-size:15pt;color:#ffffff;line-height:1.5;">Two top-tier students from <strong>Ms. Garcia&rsquo;s 2nd and 3rd period Photography</strong> classes will also be honored. <em style="color:rgba(255,255,255,0.66);">Invitations pending.</em></div>
+      <div style="background:rgba(0,0,0,0.32);border:1px dashed rgba(0,184,184,0.35);border-radius:18px;padding:22px 24px;margin-bottom:24px;">
+        <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:start;margin-bottom:14px;">
+          <div style="font-size:34pt;line-height:1;color:#80e0e0;">&#127881;</div>
+          <div>
+            <div style="font-size:11pt;letter-spacing:0.14em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Plus 4 Honorary Spots</strong></div>
+            <div style="font-size:15pt;color:#ffffff;line-height:1.5;">Four top-tier students from <strong>Ms. Garcia&rsquo;s 2nd and 3rd period Photography</strong> classes have also earned a seat. Welcome to the party.</div>
+          </div>
         </div>
+        <ol start="13" style="margin:0;padding-left:54px;font-size:14pt;line-height:2;color:rgba(255,255,255,0.92);columns:2;column-gap:32px;">
+          <li>Guereca, Xavier</li>
+          <li>Fuerte Burgos, Jamin</li>
+          <li>Lopez, Edan</li>
+          <li>Alonso-Esquivel, Andrea</li>
+        </ol>
+      </div>
+
+      <!-- Invite-Only Guest Policy -->
+      <div style="background:linear-gradient(180deg,rgba(255,107,26,0.16) 0%,rgba(255,107,26,0.04) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;border-radius:24px;padding:28px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ffb27c;"><strong>Invite Only</strong></span></div>
+        <div style="margin-bottom:14px;"><span style="font-size:22pt;color:#ffffff;"><strong>You + One Guest, Tops</strong></span></div>
+        <div style="line-height:1.78;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">This is a private celebration for the students named above. If you would like to bring someone along, you are welcome to bring <strong>one guest</strong> (a parent, sibling, or close friend). We love that you want to share the moment, but headcount matters for pizza and drinks. Please keep it to a plus-one so everyone gets fed and celebrated properly.</span></div>
+      </div>
+
+      <!-- RSVP Form -->
+      <div id="rsvp" style="background:linear-gradient(180deg,rgba(0,116,116,0.20) 0%,rgba(0,116,116,0.06) 100%);border:1px solid rgba(0,184,184,0.32);border-left:6px solid #00b8b8;border-radius:24px;padding:28px;margin-bottom:24px;scroll-margin-top:20px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>RSVP Required</strong></span></div>
+        <div style="margin-bottom:8px;"><span style="font-size:22pt;color:#ffffff;"><strong>Will You Be There?</strong></span></div>
+        <div style="margin-bottom:18px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.82);">We need an accurate headcount so we order enough pizza and drinks. Please RSVP by <strong>Friday, May 29</strong>.</span></div>
+
+        <!-- Fallback link for students viewing inside Canvas (scripts may be stripped) -->
+        <div style="background:rgba(0,0,0,0.32);border:1px dashed rgba(0,184,184,0.30);border-radius:14px;padding:14px 18px;margin-bottom:18px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">
+          <strong style="color:#80e0e0;">If the form below does not work,</strong> open the official RSVP page here:
+          <a href="https://www.creativesilva.com/curriculum/shared/awards-pizza-party.html#rsvp" target="_blank" rel="noopener" style="color:#FF6B1A;text-decoration:underline;"><strong>creativesilva.com/awards-pizza-party#rsvp</strong></a>
+        </div>
+
+        <form id="awards-rsvp-form" onsubmit="return awardsSubmitRSVP(event)" style="display:grid;gap:14px;">
+
+          <div>
+            <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Full Name <span style="color:#ffb27c;">*</span></strong></label>
+            <input type="text" name="full_name" required placeholder="First and last name" style="width:100%;background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:12px 14px;color:#ffffff;font-size:14pt;font-family:Arial,sans-serif;box-sizing:border-box;" />
+          </div>
+
+          <div>
+            <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Student ID Number <span style="color:#ffb27c;">*</span></strong></label>
+            <input type="text" name="student_id" required inputmode="numeric" pattern="[0-9]{4,10}" placeholder="Your student ID (digits only)" style="width:100%;background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:12px 14px;color:#ffffff;font-size:14pt;font-family:Arial,sans-serif;box-sizing:border-box;" />
+            <div style="margin-top:6px;font-size:11pt;color:rgba(255,255,255,0.55);">Used to verify your RSVP against the invite list.</div>
+          </div>
+
+          <div>
+            <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Class &amp; Period <span style="color:#ffb27c;">*</span></strong></label>
+            <select name="class_period" required style="width:100%;background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:12px 14px;color:#ffffff;font-size:14pt;font-family:Arial,sans-serif;box-sizing:border-box;">
+              <option value="">Pick one</option>
+              <option value="Mr. Silva - Digital Arts 1B">Mr. Silva &mdash; Digital Arts 1B</option>
+              <option value="Mr. Silva - Digital Arts 2B">Mr. Silva &mdash; Digital Arts 2B</option>
+              <option value="Mr. Silva - Photography 1B">Mr. Silva &mdash; Photography 1B</option>
+              <option value="Ms. Garcia - Photo 2nd Period">Ms. Garcia &mdash; Photography (2nd Period)</option>
+              <option value="Ms. Garcia - Photo 3rd Period">Ms. Garcia &mdash; Photography (3rd Period)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Bringing a Guest? (Max +1) <span style="color:#ffb27c;">*</span></strong></label>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+              <label style="background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:14pt;color:#ffffff;">
+                <input type="radio" name="bringing_guest" value="No" required onchange="awardsToggleGuest(false)" style="margin:0;" />
+                <span>No, just me</span>
+              </label>
+              <label style="background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:14pt;color:#ffffff;">
+                <input type="radio" name="bringing_guest" value="Yes" required onchange="awardsToggleGuest(true)" style="margin:0;" />
+                <span>Yes, +1 guest</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="awards-guest-field" style="display:none;">
+            <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Guest&rsquo;s Full Name</strong></label>
+            <input type="text" name="guest_name" placeholder="Your guest&rsquo;s first and last name" style="width:100%;background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:12px 14px;color:#ffffff;font-size:14pt;font-family:Arial,sans-serif;box-sizing:border-box;" />
+          </div>
+
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:4px;">
+            <button type="submit" id="awards-rsvp-submit" style="background:#FF6B1A;color:#ffffff;border:0;padding:14px 28px;border-radius:999px;font-size:14pt;font-family:Arial,sans-serif;cursor:pointer;"><strong>Send My RSVP</strong></button>
+            <div id="awards-rsvp-status" style="font-size:13pt;color:#80e0e0;line-height:1.4;flex:1;min-width:200px;"></div>
+          </div>
+
+        </form>
       </div>
 
       <!-- Image Slider: The Work -->
@@ -356,7 +435,7 @@
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px;">
         <div style="background:rgba(0,0,0,0.32);border:1px solid rgba(0,184,184,0.22);border-radius:16px;padding:16px 18px;text-align:center;">
           <div style="font-size:11pt;letter-spacing:0.14em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Fecha</strong></div>
-          <div style="font-size:18pt;color:#ffffff;line-height:1.2;"><strong>Por Definir</strong></div>
+          <div style="font-size:18pt;color:#ffffff;line-height:1.2;"><strong>Mar, 2 Jun 2026</strong></div>
         </div>
         <div style="background:rgba(0,0,0,0.32);border:1px solid rgba(0,184,184,0.22);border-radius:16px;padding:16px 18px;text-align:center;">
           <div style="font-size:11pt;letter-spacing:0.14em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Hora</strong></div>
@@ -415,12 +494,90 @@
       </div>
 
       <!-- Lugares de honor adicionales -->
-      <div style="background:rgba(0,0,0,0.32);border:1px dashed rgba(0,184,184,0.35);border-radius:18px;padding:20px 24px;margin-bottom:24px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center;">
-        <div style="font-size:34pt;line-height:1;color:#80e0e0;">&#127881;</div>
-        <div>
-          <div style="font-size:11pt;letter-spacing:0.14em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>M&aacute;s 2 Lugares de Honor</strong></div>
-          <div style="font-size:15pt;color:#ffffff;line-height:1.5;">Dos estudiantes destacados de las clases de <strong>Fotograf&iacute;a del 2do y 3er per&iacute;odo de la Sra. Garc&iacute;a</strong> tambi&eacute;n ser&aacute;n honrados. <em style="color:rgba(255,255,255,0.66);">Invitaciones pendientes.</em></div>
+      <div style="background:rgba(0,0,0,0.32);border:1px dashed rgba(0,184,184,0.35);border-radius:18px;padding:22px 24px;margin-bottom:24px;">
+        <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:start;margin-bottom:14px;">
+          <div style="font-size:34pt;line-height:1;color:#80e0e0;">&#127881;</div>
+          <div>
+            <div style="font-size:11pt;letter-spacing:0.14em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>M&aacute;s 4 Lugares de Honor</strong></div>
+            <div style="font-size:15pt;color:#ffffff;line-height:1.5;">Cuatro estudiantes destacados de las clases de <strong>Fotograf&iacute;a del 2do y 3er per&iacute;odo de la Sra. Garc&iacute;a</strong> tambi&eacute;n se ganaron un lugar. Bienvenidos a la fiesta.</div>
+          </div>
         </div>
+        <ol start="13" style="margin:0;padding-left:54px;font-size:14pt;line-height:2;color:rgba(255,255,255,0.92);columns:2;column-gap:32px;">
+          <li>Guereca, Xavier</li>
+          <li>Fuerte Burgos, Jamin</li>
+          <li>Lopez, Edan</li>
+          <li>Alonso-Esquivel, Andrea</li>
+        </ol>
+      </div>
+
+      <!-- Politica de Invitados ES -->
+      <div style="background:linear-gradient(180deg,rgba(255,107,26,0.16) 0%,rgba(255,107,26,0.04) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;border-radius:24px;padding:28px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ffb27c;"><strong>S&oacute;lo por Invitaci&oacute;n</strong></span></div>
+        <div style="margin-bottom:14px;"><span style="font-size:22pt;color:#ffffff;"><strong>T&uacute; + Un Invitado, M&aacute;ximo</strong></span></div>
+        <div style="line-height:1.78;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">Esta es una celebraci&oacute;n privada para los estudiantes nombrados arriba. Si te gustar&iacute;a traer a alguien, puedes traer a <strong>un invitado</strong> (un padre, hermano o amigo cercano). Nos encanta que quieras compartir el momento, pero el conteo importa para la pizza y las bebidas. Por favor mant&eacute;nlo a un invitado para que todos coman y celebren bien.</span></div>
+      </div>
+
+      <!-- Formulario RSVP ES -->
+      <div id="rsvp-es" style="background:linear-gradient(180deg,rgba(0,116,116,0.20) 0%,rgba(0,116,116,0.06) 100%);border:1px solid rgba(0,184,184,0.32);border-left:6px solid #00b8b8;border-radius:24px;padding:28px;margin-bottom:24px;scroll-margin-top:20px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>RSVP Requerido</strong></span></div>
+        <div style="margin-bottom:8px;"><span style="font-size:22pt;color:#ffffff;"><strong>&iquest;Vas a Venir?</strong></span></div>
+        <div style="margin-bottom:18px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.82);">Necesitamos un conteo exacto para ordenar suficiente pizza y bebidas. Por favor confirma antes del <strong>viernes 29 de mayo</strong>.</span></div>
+
+        <div style="background:rgba(0,0,0,0.32);border:1px dashed rgba(0,184,184,0.30);border-radius:14px;padding:14px 18px;margin-bottom:18px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">
+          <strong style="color:#80e0e0;">Si el formulario no funciona,</strong> abre la p&aacute;gina oficial de RSVP aqu&iacute;:
+          <a href="https://www.creativesilva.com/curriculum/shared/awards-pizza-party.html#rsvp" target="_blank" rel="noopener" style="color:#FF6B1A;text-decoration:underline;"><strong>creativesilva.com/awards-pizza-party#rsvp</strong></a>
+        </div>
+
+        <form id="awards-rsvp-form-es" onsubmit="return awardsSubmitRSVPes(event)" style="display:grid;gap:14px;">
+
+          <div>
+            <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Nombre Completo <span style="color:#ffb27c;">*</span></strong></label>
+            <input type="text" name="full_name" required placeholder="Nombre y apellido" style="width:100%;background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:12px 14px;color:#ffffff;font-size:14pt;font-family:Arial,sans-serif;box-sizing:border-box;" />
+          </div>
+
+          <div>
+            <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>N&uacute;mero de Estudiante <span style="color:#ffb27c;">*</span></strong></label>
+            <input type="text" name="student_id" required inputmode="numeric" pattern="[0-9]{4,10}" placeholder="Tu ID de estudiante (solo n&uacute;meros)" style="width:100%;background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:12px 14px;color:#ffffff;font-size:14pt;font-family:Arial,sans-serif;box-sizing:border-box;" />
+            <div style="margin-top:6px;font-size:11pt;color:rgba(255,255,255,0.55);">Para verificar tu RSVP con la lista de invitados.</div>
+          </div>
+
+          <div>
+            <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Clase y Per&iacute;odo <span style="color:#ffb27c;">*</span></strong></label>
+            <select name="class_period" required style="width:100%;background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:12px 14px;color:#ffffff;font-size:14pt;font-family:Arial,sans-serif;box-sizing:border-box;">
+              <option value="">Elige una</option>
+              <option value="Mr. Silva - Digital Arts 1B">Sr. Silva &mdash; Artes Digitales 1B</option>
+              <option value="Mr. Silva - Digital Arts 2B">Sr. Silva &mdash; Artes Digitales 2B</option>
+              <option value="Mr. Silva - Photography 1B">Sr. Silva &mdash; Fotograf&iacute;a 1B</option>
+              <option value="Ms. Garcia - Photo 2nd Period">Sra. Garc&iacute;a &mdash; Fotograf&iacute;a (2do Per&iacute;odo)</option>
+              <option value="Ms. Garcia - Photo 3rd Period">Sra. Garc&iacute;a &mdash; Fotograf&iacute;a (3er Per&iacute;odo)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>&iquest;Traes Invitado? (M&aacute;x +1) <span style="color:#ffb27c;">*</span></strong></label>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+              <label style="background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:14pt;color:#ffffff;">
+                <input type="radio" name="bringing_guest" value="No" required onchange="awardsToggleGuestEs(false)" style="margin:0;" />
+                <span>No, solo yo</span>
+              </label>
+              <label style="background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:14pt;color:#ffffff;">
+                <input type="radio" name="bringing_guest" value="Yes" required onchange="awardsToggleGuestEs(true)" style="margin:0;" />
+                <span>S&iacute;, +1 invitado</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="awards-guest-field-es" style="display:none;">
+            <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Nombre Completo del Invitado</strong></label>
+            <input type="text" name="guest_name" placeholder="Nombre y apellido del invitado" style="width:100%;background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:12px 14px;color:#ffffff;font-size:14pt;font-family:Arial,sans-serif;box-sizing:border-box;" />
+          </div>
+
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:4px;">
+            <button type="submit" id="awards-rsvp-submit-es" style="background:#FF6B1A;color:#ffffff;border:0;padding:14px 28px;border-radius:999px;font-size:14pt;font-family:Arial,sans-serif;cursor:pointer;"><strong>Enviar Mi RSVP</strong></button>
+            <div id="awards-rsvp-status-es" style="font-size:13pt;color:#80e0e0;line-height:1.4;flex:1;min-width:200px;"></div>
+          </div>
+
+        </form>
       </div>
 
       <!-- Cash Prizes ES (money background) -->
@@ -515,6 +672,95 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+    }
+  </script>
+
+  <!-- EmailJS SDK + RSVP form handler. Live page works as-is. Canvas paste may strip these scripts; fallback link in the RSVP card points students to the live page. -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    if (window.emailjs) { emailjs.init({ publicKey: '68UkiTjqHIKZMkeCC' }); }
+
+    function awardsToggleGuest(show) {
+      var f = document.getElementById('awards-guest-field');
+      if (f) f.style.display = show ? 'block' : 'none';
+    }
+    function awardsToggleGuestEs(show) {
+      var f = document.getElementById('awards-guest-field-es');
+      if (f) f.style.display = show ? 'block' : 'none';
+    }
+
+    function awardsSendRSVP(formId, btnId, statusId, locale) {
+      var form = document.getElementById(formId);
+      var btn = document.getElementById(btnId);
+      var status = document.getElementById(statusId);
+      if (!form || !btn || !status) return false;
+
+      var name = (form.full_name.value || '').trim();
+      var studentId = (form.student_id.value || '').trim();
+      var classPeriod = form.class_period.value;
+      var guest = form.bringing_guest.value;
+      var guestName = (form.guest_name && form.guest_name.value || '').trim();
+
+      btn.disabled = true;
+      btn.style.opacity = '0.6';
+      btn.innerHTML = locale === 'es' ? '<strong>Enviando&hellip;</strong>' : '<strong>Sending&hellip;</strong>';
+      status.style.color = '#80e0e0';
+      status.textContent = '';
+
+      var message =
+        'RSVP - Spring Awards Pizza Party\n' +
+        'Event: Tue, Jun 2 2026, 12:25-1:05 PM, Room 322\n\n' +
+        'Student Name: ' + name + '\n' +
+        'Student ID: ' + studentId + '\n' +
+        'Class/Period: ' + classPeriod + '\n' +
+        'Bringing Guest: ' + guest + '\n' +
+        'Guest Name: ' + (guestName || 'N/A') + '\n' +
+        'Headcount: ' + (guest === 'Yes' ? '2' : '1') + '\n' +
+        'Submitted via: ' + (locale === 'es' ? 'Spanish form' : 'English form');
+
+      if (!window.emailjs) {
+        status.style.color = '#ffb27c';
+        status.textContent = locale === 'es'
+          ? 'El servicio de RSVP no esta disponible aqui. Abre creativesilva.com para enviar tu RSVP.'
+          : 'RSVP service unavailable here. Open creativesilva.com to submit your RSVP.';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.innerHTML = locale === 'es' ? '<strong>Enviar Mi RSVP</strong>' : '<strong>Send My RSVP</strong>';
+        return false;
+      }
+
+      emailjs.send('service_4mhkbik', 'template_creativesilva', {
+        name: name + ' (RSVP)',
+        email: studentId + '@rsvp.awards',
+        message: message
+      }).then(function() {
+        status.style.color = '#7fe88a';
+        status.innerHTML = locale === 'es'
+          ? '&#10003; <strong>RSVP recibido.</strong> Nos vemos el 2 de junio a las 12:25 en el Salon 322.'
+          : '&#10003; <strong>RSVP received.</strong> See you Tue Jun 2 at 12:25 in Room 322.';
+        btn.innerHTML = locale === 'es' ? '<strong>RSVP Enviado</strong>' : '<strong>RSVP Sent</strong>';
+        btn.style.background = '#00b8b8';
+        var inputs = form.querySelectorAll('input, select, button');
+        for (var i = 0; i < inputs.length; i++) inputs[i].disabled = true;
+      }, function(err) {
+        status.style.color = '#ffb27c';
+        status.textContent = (locale === 'es' ? 'No se pudo enviar el RSVP. ' : 'Could not send RSVP. ')
+          + (err && err.text ? '(' + err.text + ')' : '');
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.innerHTML = locale === 'es' ? '<strong>Enviar Mi RSVP</strong>' : '<strong>Send My RSVP</strong>';
+      });
+
+      return false;
+    }
+
+    function awardsSubmitRSVP(e) {
+      e.preventDefault();
+      return awardsSendRSVP('awards-rsvp-form', 'awards-rsvp-submit', 'awards-rsvp-status', 'en');
+    }
+    function awardsSubmitRSVPes(e) {
+      e.preventDefault();
+      return awardsSendRSVP('awards-rsvp-form-es', 'awards-rsvp-submit-es', 'awards-rsvp-status-es', 'es');
     }
   </script>
 
