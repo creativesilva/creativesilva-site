@@ -45,6 +45,14 @@
     '/curriculum/shared/revisit-step02-edit.html',
     '/curriculum/shared/revisit-step03-reflection.html',
 
+    // Digital Arts: Company Branding (prep module)
+    '/curriculum/shared/branding-introduction.html',
+    '/curriculum/shared/branding-step01-research.html',
+    '/curriculum/shared/branding-step02-chat.html',
+    '/curriculum/shared/branding-step03-sketch.html',
+    '/curriculum/shared/branding-step04-digital.html',
+    '/curriculum/shared/branding-step05-mockup.html',
+
     // Digital Arts: Jimenez Mobile Detailing (spring final)
     '/curriculum/shared/jimenez-spring-final.html',
     '/curriculum/shared/jimenez-step01-research.html',
