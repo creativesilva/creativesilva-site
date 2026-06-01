@@ -109,10 +109,27 @@
   // Initial position (no animation flash)
   setTransform(current, false);
   updateActiveVisual(current);
-  // Reveal the slider only after it's positioned correctly.
-  // The matching CSS rule starts the slider at opacity:0 and fades in
-  // on .ready so refresh doesn't show the pre-transform slide.
-  slider.classList.add("ready");
+
+  // Reveal the slider only after the active slide's image is actually
+  // painted. Without this we get a flash of black where the image hasn't
+  // finished loading yet while the right-peek slide IS visible — looks
+  // like a half-loaded page. The matching CSS rule starts the slider at
+  // opacity:0 and fades in on .ready.
+  var firstImg = originals[0].querySelector("img");
+  var revealed = false;
+  function reveal() {
+    if (revealed) return;
+    revealed = true;
+    slider.classList.add("ready");
+  }
+  if (!firstImg || (firstImg.complete && firstImg.naturalWidth > 0)) {
+    reveal();
+  } else {
+    firstImg.addEventListener("load",  reveal);
+    firstImg.addEventListener("error", reveal);
+    // Safety net: reveal anyway after 2s so a slow image never traps the page.
+    setTimeout(reveal, 2000);
+  }
 
   function next() { goTo(current + 1); }
   function prev() { goTo(current - 1); }
