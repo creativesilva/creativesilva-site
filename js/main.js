@@ -110,26 +110,49 @@
   setTransform(current, false);
   updateActiveVisual(current);
 
-  // Reveal the slider only after the active slide's image is actually
-  // painted. Without this we get a flash of black where the image hasn't
-  // finished loading yet while the right-peek slide IS visible — looks
-  // like a half-loaded page. The matching CSS rule starts the slider at
-  // opacity:0 and fades in on .ready.
-  var firstImg = originals[0].querySelector("img");
+  // Reveal the slider only after ALL initially-visible images are decoded
+  // and ready to paint. The visible slots are: left peek (clone of last
+  // real slide), active slide, right peek (next real slide). If any of
+  // those three is mid-decode when we reveal, that slot paints black for
+  // a beat and the page looks half-loaded.
+  //
+  // Even with link preload + fetchpriority:high, the browser fetches the
+  // bytes early but doesn't guarantee decode is finished by JS-run time.
+  // img.decode() is the W3C-blessed way to wait for paint-ready. On older
+  // browsers without decode(), fall back to load event.
   var revealed = false;
   function reveal() {
     if (revealed) return;
     revealed = true;
     slider.classList.add("ready");
   }
-  if (!firstImg || (firstImg.complete && firstImg.naturalWidth > 0)) {
-    reveal();
-  } else {
-    firstImg.addEventListener("load",  reveal);
-    firstImg.addEventListener("error", reveal);
-    // Safety net: reveal anyway after 2s so a slow image never traps the page.
-    setTimeout(reveal, 2000);
+  function imageReady(img) {
+    if (!img) return Promise.resolve();
+    if (img.complete && img.naturalWidth > 0 && typeof img.decode !== "function") {
+      return Promise.resolve();
+    }
+    if (typeof img.decode === "function") {
+      // decode() rejects if the image errored; treat that as ready (we
+      // still want to reveal the slider so the user sees something).
+      return img.decode().catch(function () { return; });
+    }
+    return new Promise(function (resolve) {
+      img.addEventListener("load",  resolve);
+      img.addEventListener("error", resolve);
+    });
   }
+  // slides[] layout after cloning: [lastClone, s0..s(n-1), firstClone]
+  // The three visible slots at startup are slides[0] (left peek),
+  // slides[1] (active), slides[2] (right peek).
+  var visibleImgs = [
+    slides[0] && slides[0].querySelector("img"),
+    slides[1] && slides[1].querySelector("img"),
+    slides[2] && slides[2].querySelector("img")
+  ];
+  Promise.all(visibleImgs.map(imageReady)).then(reveal);
+  // Safety net: if anything stalls, reveal at 2.5s regardless. The CSS
+  // fallback animation handles the JS-disabled case at the same threshold.
+  setTimeout(reveal, 2500);
 
   function next() { goTo(current + 1); }
   function prev() { goTo(current - 1); }
