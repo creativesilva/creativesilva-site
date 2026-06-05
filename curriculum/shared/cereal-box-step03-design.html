@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cereal Box Group Project: Step 03 Design Choices</title>
+  <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only.svg" />
+  <link rel="apple-touch-icon" href="/logos/CS_Logo_Only.svg" />
+  <style>:root { --course-accent: #007474; }</style>
+  <link rel="stylesheet" href="/css/silva-module.css" />
+</head>
+<body>
+
+  <nav class="silva-nav" aria-label="Module navigation">
+    <div class="silva-nav-inner">
+      <div class="silva-breadcrumb">
+        <a href="/curriculum.html">Curriculum</a>
+        <span class="bc-sep">&rsaquo;</span>
+        <a href="/curriculum.html" class="bc-hide-sm">Digital Arts</a>
+        <span class="bc-sep bc-hide-sm">&rsaquo;</span>
+        <a href="cereal-box-introduction.html" class="bc-hide-sm">Cereal Box Project</a>
+        <span class="bc-sep bc-hide-sm">&rsaquo;</span>
+        <span class="bc-current">Step 03: Design Choices</span>
+      </div>
+
+      <div class="silva-nav-spacer"></div>
+
+      <div class="silva-dots" aria-label="Module progress">
+        <a href="cereal-box-introduction.html" class="sdot sdot-link sdot-module" title="Module Overview">M</a>
+        <a href="cereal-box-elements-of-art.html" class="sdot sdot-link" title="Elements of Art">E</a>
+        <a href="cereal-box-step01-research.html" class="sdot sdot-link" title="Step 01: Cereal Box Research">1</a>
+        <a href="cereal-box-step02-sketchbook.html" class="sdot sdot-link" title="Step 02: Elements of Art Sketchbook">2</a>
+        <span class="sdot sdot-active" title="Step 03: Design Choices">3</span>
+        <a href="cereal-box-step04-sketch.html" class="sdot sdot-link" title="Step 04: Concept Sketch">4</a>
+        <a href="cereal-box-step05-digital.html" class="sdot sdot-link" title="Step 05: Digital Design">5</a>
+        <a href="cereal-box-step06-reflection.html" class="sdot sdot-link" title="Step 06: Project Reflection">6</a>
+      </div>
+
+      <div class="silva-step-nav">
+        <a href="cereal-box-step02-sketchbook.html" class="silva-step-btn">&#8592; Step 02</a>
+        <a href="cereal-box-step04-sketch.html" class="silva-step-btn">Step 04 &#8594;</a>
+      </div>
+
+      <div class="silva-nav-div"></div>
+
+      <button class="silva-copy-btn" onclick="silvaCopyHTML()" aria-label="Copy Canvas HTML to clipboard">
+        &#128203; Copy Canvas HTML
+      </button>
+      <button class="silva-download-btn" onclick="silvaDownloadHTML()" aria-label="Download Canvas HTML as file">
+        &#128229; Download HTML
+      </button>
+    </div>
+  </nav>
+
+  <div class="silva-page">
+  <div id="silva-module-content">
+
+  <div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%),url('https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV_Panther_Watermark.png');background-position:center center,center center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed;border-radius:30px;overflow:hidden;">
+
+    <!-- ════════════════════════ ENGLISH ════════════════════════ -->
+    <div style="padding:28px 28px 40px;">
+
+      <!-- Banner Header -->
+      <div style="background:linear-gradient(135deg,#000000 0%,#003838 40%,#007474 100%);padding:20px 28px 22px;margin:-28px -28px 24px -28px;">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">
+          <div style="justify-self:start;">
+            <img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:min(90px,15vw);height:auto;display:block;" />
+          </div>
+          <div style="justify-self:center;text-align:center;">
+            <div style="margin-bottom:6px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Digital Arts &nbsp;&bull;&nbsp; Cereal Box Project &nbsp;&bull;&nbsp; Step 03</strong></span></div>
+            <div style="color:#ffffff;font-size:22pt;font-weight:700;line-height:1.1;"><strong>Design Choices</strong></div>
+            <div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:13pt;font-style:italic;"><strong>Team huddle. Lock in the name, mascot, colors, and fonts.</strong></span></div>
+          </div>
+          <div style="justify-self:end;">
+            <a href="#espanol" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;border-radius:999px;display:inline-block;font-size:11pt;white-space:nowrap;"><strong>Clic para Espa&ntilde;ol</strong></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overview -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;overflow:hidden;">
+        <img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/images/cereal/design-choices.png" alt="A team of students choosing colors, fonts, and a mascot" style="float:right;width:46%;min-width:220px;height:auto;border-radius:18px;margin:0 0 18px 26px;border:1px solid rgba(255,255,255,0.10);" />
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Team Lock-In</strong></span></div>
+        <div style="margin-bottom:14px;"><span style="font-size:20pt;color:#ffffff;"><strong>Make the Big Choices Together</strong></span></div>
+        <div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">It is time for your team to make the big design choices for your cereal box. You will agree on the cereal name, the shopper you are selling to, the mascot, the colors, the fonts, and the tagline.</span></div>
+        <div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">Lock in these choices now so every panel of the box looks like one team made it. Different colors and fonts on each side ruin the brand.</span></div>
+        <div style="line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">You will fill out a Word doc so everyone leaves with the same plan, the same HEX colors, and the same font names.</span></div>
+      </div>
+
+      <!-- How To Complete -->
+      <div style="background:linear-gradient(180deg,rgba(255,107,26,0.22) 0%,rgba(255,107,26,0.08) 100%);border:1px solid rgba(255,107,26,0.3);border-left:6px solid #FF6B1A;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ffb27c;"><strong>How to Complete This Assignment</strong></span></div>
+        <div style="margin-bottom:14px;"><span style="font-size:20pt;color:#ffffff;"><strong>Three Steps to Finish</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:18px;">Meet with your team. Fill out the Design Choices Word doc. Save it to OneDrive and submit on Canvas.</div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#FF6B1A;color:#ffffff;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>01</strong></div>
+            <div style="font-size:14pt;color:#ffffff;margin-bottom:6px;"><strong>Team Huddle</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Meet with your group. Talk through every choice. Nobody leaves the huddle until everyone agrees.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#FF6B1A;color:#ffffff;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>02</strong></div>
+            <div style="font-size:14pt;color:#ffffff;margin-bottom:6px;"><strong>Fill Your Own Word Doc</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Every student fills out their own copy. Same answers as your team. Same HEX codes. Same font names.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#FF6B1A;color:#ffffff;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>03</strong></div>
+            <div style="font-size:14pt;color:#ffffff;margin-bottom:6px;"><strong>Save and Submit</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Save to OneDrive. Upload the docx file to this Canvas assignment.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Design Decisions -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>What the Doc Locks In</strong></span></div>
+        <div style="margin-bottom:18px;"><span style="font-size:20pt;color:#ffffff;"><strong>The Six Team Decisions</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.82);margin-bottom:18px;">Scroll through. These are the six choices every team member writes down the same way.</div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(260px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Decision 01</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Cereal Name</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">The full name of your cereal. Short, fun, easy to say. Write it exactly how it will go on the box.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Decision 02</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Target Audience</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Who is the cereal for? Kids, teens, athletes, busy adults. Write the age group and the lifestyle.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Decision 03</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Mascot Sketch</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">A quick sketch or paragraph of your mascot. Animal, monster, person, food character. Give it a name.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Decision 04</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Color Palette</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Pick 3 to 5 colors. Write the <strong>HEX code</strong> for each one. Everyone uses the same codes in Illustrator.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Decision 05</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Three Fonts</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Pick three fonts: one fun font for the title, one accent font, one easy-to-read font for small text.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Decision 06</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Tagline</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">A short phrase that sells your cereal. Short, fun, easy to say. Goes on the front of the box.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Important Rule -->
+      <div style="background:linear-gradient(180deg,rgba(230,36,41,0.18) 0%,rgba(230,36,41,0.05) 100%);border:1px solid rgba(230,36,41,0.30);border-left:6px solid #E62429;border-radius:24px;padding:28px 30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ffb3b6;"><strong>Important Rule</strong></span></div>
+        <div style="margin-bottom:12px;"><span style="font-size:20pt;color:#ffffff;"><strong>Every Student Turns In Their Own Doc</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:10px;">This is a team project, but <strong>every single student turns in their own Word doc</strong>. Same answers as your team. Your own copy.</div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);">This proves you know the plan, the HEX codes, and the fonts. No one rides on a teammate&rsquo;s submission.</div>
+      </div>
+
+      <!-- File Naming -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Save It the Right Way</strong></span></div>
+        <div style="margin-bottom:14px;"><span style="font-size:20pt;color:#ffffff;"><strong>File Naming</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:14px;">Save your Word doc to your school <strong>OneDrive</strong>. Use this exact file name pattern:</div>
+        <div style="background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:16px 20px;margin-bottom:14px;font-family:Courier,monospace;font-size:14pt;color:#80e0e0;"><strong>CerealBoxDesignChoices_LastName_FirstName.docx</strong></div>
+        <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.78);">Example: <em>CerealBoxDesignChoices_Silva_Chris.docx</em></div>
+      </div>
+
+      <!-- What to Submit -->
+      <div style="background:linear-gradient(180deg,rgba(255,107,26,0.22) 0%,rgba(255,107,26,0.08) 100%);border:1px solid rgba(255,107,26,0.3);border-left:6px solid #FF6B1A;border-radius:24px;padding:28px 30px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ffb27c;"><strong>What to Submit</strong></span></div>
+        <div style="margin-bottom:12px;"><span style="font-size:20pt;color:#ffffff;"><strong>Upload Your Word Doc</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:10px;">When every team decision is in your doc, save it to OneDrive. Then upload the <strong>.docx</strong> file to this Canvas assignment.</div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);">When you finish, click the <strong>Done</strong> button at the bottom of this Canvas page to move to Step 04.</div>
+      </div>
+
+      <!-- AI Disclaimer -->
+      <div style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.10);">
+        <div style="font-size:10pt;color:rgba(255,255,255,0.50);line-height:1.55;font-style:italic;">
+          <span style="color:#80e0e0;font-style:normal;font-weight:bold;">&#9432;</span> Some images on this page are AI-generated and do not show real students. AI tools can produce exaggerated body proportions, features, or other distortions that sometimes reflect biases built into the technology. All images are made to be school-appropriate.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════ ESPA&Ntilde;OL ════════════════════════ -->
+    <div id="espanol" style="border-top:2px solid rgba(255,255,255,0.10);">
+    <div style="padding:28px 28px 40px;">
+
+      <!-- Banner ES -->
+      <div style="background:linear-gradient(135deg,#000000 0%,#003838 40%,#007474 100%);padding:20px 28px 22px;margin:-28px -28px 24px -28px;">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">
+          <div style="justify-self:start;">
+            <img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:min(90px,15vw);height:auto;display:block;" />
+          </div>
+          <div style="justify-self:center;text-align:center;">
+            <div style="margin-bottom:6px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Artes Digitales &nbsp;&bull;&nbsp; Proyecto de Caja de Cereal &nbsp;&bull;&nbsp; Paso 03</strong></span></div>
+            <div style="color:#ffffff;font-size:22pt;font-weight:700;line-height:1.1;"><strong>Decisiones de Dise&ntilde;o</strong></div>
+            <div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:13pt;font-style:italic;"><strong>Re&uacute;nete con tu equipo. Define el nombre, la mascota, los colores y las letras.</strong></span></div>
+          </div>
+          <div style="justify-self:end;">
+            <a href="#top" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;border-radius:999px;display:inline-block;font-size:11pt;white-space:nowrap;"><strong>Back to English</strong></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen ES -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;overflow:hidden;">
+        <img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/images/cereal/design-choices.png" alt="Un equipo de estudiantes escogiendo colores, letras y mascota" style="float:right;width:46%;min-width:220px;height:auto;border-radius:18px;margin:0 0 18px 26px;border:1px solid rgba(255,255,255,0.10);" />
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Decisiones del Equipo</strong></span></div>
+        <div style="margin-bottom:14px;"><span style="font-size:20pt;color:#ffffff;"><strong>Tomen las Decisiones Grandes Juntos</strong></span></div>
+        <div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">Es hora de que tu equipo tome las decisiones grandes de dise&ntilde;o para su caja de cereal. Van a estar de acuerdo en el nombre, el comprador al que se le vende, la mascota, los colores, las letras y el eslogan.</span></div>
+        <div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">Cierren estas decisiones ahora para que cada panel de la caja se vea como que un solo equipo lo hizo. Si cada lado tiene colores y letras diferentes, se rompe la marca.</span></div>
+        <div style="line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">Llenas un documento Word para que todos salgan con el mismo plan, los mismos c&oacute;digos HEX y los mismos nombres de tipograf&iacute;a.</span></div>
+      </div>
+
+      <!-- C&oacute;mo Completar ES -->
+      <div style="background:linear-gradient(180deg,rgba(255,107,26,0.22) 0%,rgba(255,107,26,0.08) 100%);border:1px solid rgba(255,107,26,0.3);border-left:6px solid #FF6B1A;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ffb27c;"><strong>C&oacute;mo Completar Esta Tarea</strong></span></div>
+        <div style="margin-bottom:14px;"><span style="font-size:20pt;color:#ffffff;"><strong>Tres Pasos Para Terminar</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:18px;">Re&uacute;nete con tu equipo. Llena el documento Word de Decisiones de Dise&ntilde;o. Gu&aacute;rdalo en OneDrive y entr&eacute;galo en Canvas.</div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#FF6B1A;color:#ffffff;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>01</strong></div>
+            <div style="font-size:14pt;color:#ffffff;margin-bottom:6px;"><strong>Junta de Equipo</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Re&uacute;nanse en grupo. Hablen cada decisi&oacute;n. Nadie sale de la junta hasta que todos est&eacute;n de acuerdo.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#FF6B1A;color:#ffffff;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>02</strong></div>
+            <div style="font-size:14pt;color:#ffffff;margin-bottom:6px;"><strong>Llena Tu Propio Documento</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Cada estudiante llena su propia copia. Mismas respuestas que el equipo. Mismos HEX. Mismos nombres de tipograf&iacute;a.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#FF6B1A;color:#ffffff;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>03</strong></div>
+            <div style="font-size:14pt;color:#ffffff;margin-bottom:6px;"><strong>Guarda y Entrega</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Guarda en OneDrive. Sube el archivo docx a esta tarea de Canvas.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Decisiones ES -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Lo Que Cierra el Documento</strong></span></div>
+        <div style="margin-bottom:18px;"><span style="font-size:20pt;color:#ffffff;"><strong>Las Seis Decisiones del Equipo</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.82);margin-bottom:18px;">Desliza. Estas son las seis decisiones que cada miembro del equipo escribe igual.</div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(260px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Decisi&oacute;n 01</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Nombre del Cereal</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">El nombre completo de tu cereal. Corto, divertido, f&aacute;cil de decir. Escr&iacute;belo igual como ir&aacute; en la caja.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Decisi&oacute;n 02</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>P&uacute;blico Objetivo</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">&iquest;Para qui&eacute;n es el cereal? Ni&ntilde;os, j&oacute;venes, atletas, adultos ocupados. Escribe el grupo de edad y el estilo de vida.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Decisi&oacute;n 03</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Boceto de Mascota</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Un boceto r&aacute;pido o un p&aacute;rrafo de tu mascota. Animal, monstruo, persona, personaje comida. P&oacute;nle nombre.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Decisi&oacute;n 04</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Paleta de Colores</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Escojan 3 a 5 colores. Escribe el <strong>c&oacute;digo HEX</strong> de cada uno. Todos usar&aacute;n los mismos c&oacute;digos en Illustrator.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Decisi&oacute;n 05</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Tres Tipograf&iacute;as</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Escojan tres tipograf&iacute;as: una divertida para el t&iacute;tulo, una de acento y una f&aacute;cil de leer para el texto peque&ntilde;o.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Decisi&oacute;n 06</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Eslogan</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Una frase corta que vende tu cereal. Corta, divertida, f&aacute;cil de decir. Va en el frente de la caja.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Regla Importante ES -->
+      <div style="background:linear-gradient(180deg,rgba(230,36,41,0.18) 0%,rgba(230,36,41,0.05) 100%);border:1px solid rgba(230,36,41,0.30);border-left:6px solid #E62429;border-radius:24px;padding:28px 30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ffb3b6;"><strong>Regla Importante</strong></span></div>
+        <div style="margin-bottom:12px;"><span style="font-size:20pt;color:#ffffff;"><strong>Cada Estudiante Entrega su Propio Documento</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:10px;">Este es un proyecto de equipo, pero <strong>cada estudiante entrega su propio documento Word</strong>. Mismas respuestas que el equipo. Tu propia copia.</div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);">Esto demuestra que sabes el plan, los HEX y las tipograf&iacute;as. Nadie se monta en la entrega de un compa&ntilde;ero.</div>
+      </div>
+
+      <!-- Nombre de Archivo ES -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Gu&aacute;rdalo Bien</strong></span></div>
+        <div style="margin-bottom:14px;"><span style="font-size:20pt;color:#ffffff;"><strong>Nombre del Archivo</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:14px;">Guarda tu documento Word en tu <strong>OneDrive</strong> escolar. Usa exactamente este patr&oacute;n de nombre:</div>
+        <div style="background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:16px 20px;margin-bottom:14px;font-family:Courier,monospace;font-size:14pt;color:#80e0e0;"><strong>CajaCerealDecisiones_Apellido_Nombre.docx</strong></div>
+        <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.78);">Ejemplo: <em>CajaCerealDecisiones_Silva_Chris.docx</em></div>
+      </div>
+
+      <!-- Qu&eacute; Entregar ES -->
+      <div style="background:linear-gradient(180deg,rgba(255,107,26,0.22) 0%,rgba(255,107,26,0.08) 100%);border:1px solid rgba(255,107,26,0.3);border-left:6px solid #FF6B1A;border-radius:24px;padding:28px 30px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ffb27c;"><strong>Qu&eacute; Debes Entregar</strong></span></div>
+        <div style="margin-bottom:12px;"><span style="font-size:20pt;color:#ffffff;"><strong>Sube tu Documento Word</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:10px;">Cuando cada decisi&oacute;n del equipo est&eacute; en tu documento, gu&aacute;rdalo en OneDrive. Despu&eacute;s sube el archivo <strong>.docx</strong> a esta tarea de Canvas.</div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);">Cuando termines, haz clic en el bot&oacute;n <strong>Done</strong> al final de esta p&aacute;gina de Canvas para ir al Paso 04.</div>
+      </div>
+
+      <!-- Aviso IA ES -->
+      <div style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.10);">
+        <div style="font-size:10pt;color:rgba(255,255,255,0.50);line-height:1.55;font-style:italic;">
+          <span style="color:#80e0e0;font-style:normal;font-weight:bold;">&#9432;</span> Algunas im&aacute;genes de esta p&aacute;gina son generadas por IA y no muestran a estudiantes reales. Las herramientas de IA pueden producir proporciones corporales o rasgos exagerados que a veces reflejan los sesgos de la tecnolog&iacute;a. Todas las im&aacute;genes son apropiadas para la escuela.
+        </div>
+      </div>
+
+    </div>
+    </div>
+
+  </div>
+  </div>
+  </div>
+
+  <script>
+    function silvaCopyHTML() {
+      const el = document.getElementById('top');
+      const html = el.outerHTML;
+      navigator.clipboard.writeText(html).then(function() {
+        var btn = document.querySelector('.silva-copy-btn');
+        btn.textContent = '✓ Copied to clipboard!';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.innerHTML = '&#128203; Copy Canvas HTML';
+          btn.classList.remove('copied');
+        }, 2500);
+      }).catch(function() { alert('Copy failed. Try selecting the page source manually.'); });
+    }
+    function silvaDownloadHTML() {
+      var el = document.getElementById('top');
+      var html = el.outerHTML;
+      var blob = new Blob([html], { type: 'text/html' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'cereal-box-step03-design-canvas.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+
+  <script src="/js/silva-nav.js"></script>
+</body>
+</html>

@@ -45,6 +45,16 @@
     '/curriculum/shared/revisit-step02-edit.html',
     '/curriculum/shared/revisit-step03-reflection.html',
 
+    // Digital Arts: Cereal Box Group Project
+    '/curriculum/shared/cereal-box-introduction.html',
+    '/curriculum/shared/cereal-box-elements-of-art.html',
+    '/curriculum/shared/cereal-box-step01-research.html',
+    '/curriculum/shared/cereal-box-step02-sketchbook.html',
+    '/curriculum/shared/cereal-box-step03-design.html',
+    '/curriculum/shared/cereal-box-step04-sketch.html',
+    '/curriculum/shared/cereal-box-step05-digital.html',
+    '/curriculum/shared/cereal-box-step06-reflection.html',
+
     // Digital Arts: Company Branding (prep module)
     '/curriculum/shared/branding-introduction.html',
     '/curriculum/shared/branding-step01-research.html',
