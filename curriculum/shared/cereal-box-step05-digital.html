@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cereal Box Group Project: Step 05 Digital Design</title>
+  <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only.svg" />
+  <link rel="apple-touch-icon" href="/logos/CS_Logo_Only.svg" />
+  <style>:root { --course-accent: #007474; }</style>
+  <link rel="stylesheet" href="/css/silva-module.css" />
+</head>
+<body>
+
+  <nav class="silva-nav" aria-label="Module navigation">
+    <div class="silva-nav-inner">
+      <div class="silva-breadcrumb">
+        <a href="/curriculum.html">Curriculum</a>
+        <span class="bc-sep">&rsaquo;</span>
+        <a href="/curriculum.html" class="bc-hide-sm">Digital Arts</a>
+        <span class="bc-sep bc-hide-sm">&rsaquo;</span>
+        <a href="cereal-box-introduction.html" class="bc-hide-sm">Cereal Box Project</a>
+        <span class="bc-sep bc-hide-sm">&rsaquo;</span>
+        <span class="bc-current">Step 05: Digital Design</span>
+      </div>
+
+      <div class="silva-nav-spacer"></div>
+
+      <div class="silva-dots" aria-label="Module progress">
+        <a href="cereal-box-introduction.html" class="sdot sdot-link sdot-module" title="Module Overview">M</a>
+        <a href="cereal-box-elements-of-art.html" class="sdot sdot-link" title="Elements of Art">E</a>
+        <a href="cereal-box-step01-research.html" class="sdot sdot-link" title="Step 01: Cereal Box Research">1</a>
+        <a href="cereal-box-step02-sketchbook.html" class="sdot sdot-link" title="Step 02: Elements of Art Sketchbook">2</a>
+        <a href="cereal-box-step03-design.html" class="sdot sdot-link" title="Step 03: Design Choices">3</a>
+        <a href="cereal-box-step04-sketch.html" class="sdot sdot-link" title="Step 04: Concept Sketch">4</a>
+        <span class="sdot sdot-active" title="Step 05: Digital Design">5</span>
+        <a href="cereal-box-step06-reflection.html" class="sdot sdot-link" title="Step 06: Project Reflection">6</a>
+      </div>
+
+      <div class="silva-step-nav">
+        <a href="cereal-box-step04-sketch.html" class="silva-step-btn">&#8592; Step 04</a>
+        <a href="cereal-box-step06-reflection.html" class="silva-step-btn">Step 06 &#8594;</a>
+      </div>
+
+      <div class="silva-nav-div"></div>
+
+      <button class="silva-copy-btn" onclick="silvaCopyHTML()" aria-label="Copy Canvas HTML to clipboard">
+        &#128203; Copy Canvas HTML
+      </button>
+      <button class="silva-download-btn" onclick="silvaDownloadHTML()" aria-label="Download Canvas HTML as file">
+        &#128229; Download HTML
+      </button>
+    </div>
+  </nav>
+
+  <div class="silva-page">
+  <div id="silva-module-content">
+
+  <div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%),url('https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV_Panther_Watermark.png');background-position:center center,center center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed;border-radius:30px;overflow:hidden;">
+
+    <!-- ════════════════════════ ENGLISH ════════════════════════ -->
+    <div style="padding:28px 28px 40px;">
+
+      <!-- Banner Header -->
+      <div style="background:linear-gradient(135deg,#000000 0%,#003838 40%,#007474 100%);padding:20px 28px 22px;margin:-28px -28px 24px -28px;">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">
+          <div style="justify-self:start;">
+            <img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:min(90px,15vw);height:auto;display:block;" />
+          </div>
+          <div style="justify-self:center;text-align:center;">
+            <div style="margin-bottom:6px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Digital Arts &nbsp;&bull;&nbsp; Cereal Box Project &nbsp;&bull;&nbsp; Step 05</strong></span></div>
+            <div style="color:#ffffff;font-size:22pt;font-weight:700;line-height:1.1;"><strong>Digital Design</strong></div>
+            <div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:13pt;font-style:italic;"><strong>Design. Export. Build the print template.</strong></span></div>
+          </div>
+          <div style="justify-self:end;">
+            <a href="#espanol" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;border-radius:999px;display:inline-block;font-size:11pt;white-space:nowrap;"><strong>Clic para Espa&ntilde;ol</strong></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overview -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;overflow:hidden;">
+        <img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/images/cereal/building.png" alt="Adobe Illustrator artboard with cereal box panels in progress" style="float:right;width:46%;min-width:220px;height:auto;border-radius:18px;margin:0 0 18px 26px;border:1px solid rgba(255,255,255,0.10);" />
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Build the Real Thing</strong></span></div>
+        <div style="margin-bottom:14px;"><span style="font-size:20pt;color:#ffffff;"><strong>From Sketch to Adobe Illustrator</strong></span></div>
+        <div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">Your sketches are approved. Time to build the final cereal box in <strong>Adobe Illustrator</strong>. You only design the two sides you were assigned. Your team will share JPG exports so every student can build the same print template.</span></div>
+        <div style="line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">When you finish, you will print the box on thick paper, cut, fold, and build a real product.</span></div>
+      </div>
+
+      <!-- Package Design Files Download -->
+      <div style="background:linear-gradient(180deg,rgba(230,36,41,0.18) 0%,rgba(230,36,41,0.05) 100%);border:1px solid rgba(230,36,41,0.30);border-left:6px solid #E62429;border-radius:24px;padding:28px 30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ffb3b6;"><strong>Important First Step</strong></span></div>
+        <div style="margin-bottom:12px;"><span style="font-size:20pt;color:#ffffff;"><strong>Download the Package Design Files</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:14px;">Before you start anything, download the project zip from Canvas. It has all 6 blank panel files and the print template you will need.</div>
+        <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.78);font-style:italic;">Look for <strong>Package Design Files.zip</strong> in the Files section of your Canvas course.</div>
+      </div>
+
+      <!-- Designer Roles -->
+      <div style="background:linear-gradient(180deg,rgba(0,194,255,0.18) 0%,rgba(0,194,255,0.06) 100%);border:1px solid rgba(0,194,255,0.24);border-left:6px solid #00c2ff;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#7dd3fc;"><strong>Team Roles</strong></span></div>
+        <div style="margin-bottom:18px;"><span style="font-size:20pt;color:#ffffff;"><strong>Who Designs What</strong></span></div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,194,255,0.22);border-left:4px solid #00c2ff;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00c2ff;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Designer 1</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Front and Top</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Open the Front panel .ai file and the Top panel .ai file.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,194,255,0.22);border-left:4px solid #00c2ff;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00c2ff;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Designer 2</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Back and Bottom</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Open the Back panel .ai file and the Bottom panel .ai file.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,194,255,0.22);border-left:4px solid #00c2ff;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00c2ff;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Designer 3</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Left and Right</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Open the Left panel .ai file and the Right panel .ai file.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Design Rules -->
+      <div style="background:linear-gradient(180deg,rgba(255,107,26,0.22) 0%,rgba(255,107,26,0.08) 100%);border:1px solid rgba(255,107,26,0.3);border-left:6px solid #FF6B1A;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ffb27c;"><strong>Design Rules</strong></span></div>
+        <div style="margin-bottom:14px;"><span style="font-size:20pt;color:#ffffff;"><strong>How to Make It Match the Team</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:18px;">You only do your two panels, but you MUST work with your team so the whole box looks like one product.</div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="font-size:14pt;color:#ffb27c;margin-bottom:6px;"><strong>Same HEX, Same Fonts</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Use the exact HEX colors and fonts from your Step 03 doc. No swapping mid-design.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="font-size:14pt;color:#ffb27c;margin-bottom:6px;"><strong>Visual Hierarchy</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">The most important info is the biggest and boldest. Less important info is smaller.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="font-size:14pt;color:#ffb27c;margin-bottom:6px;"><strong>Clean and Readable</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Keep it neat. Small words still need to be easy to read on the real printed box.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="font-size:14pt;color:#ffb27c;margin-bottom:6px;"><strong>MagicSchool AI for Copy</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Use MagicSchool AI to draft fun text for your box. Then edit it to match your brand voice.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="font-size:14pt;color:#ffb27c;margin-bottom:6px;"><strong>Firefly or Photoshop for Images</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Use Adobe Firefly or Photoshop for images. Then place those images into your Illustrator panel.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="font-size:14pt;color:#ffb27c;margin-bottom:6px;"><strong>Looks Real</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Your final panels should look like a real product. Treat it like a job.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- What Goes on Each Side -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Panel Contents</strong></span></div>
+        <div style="margin-bottom:18px;"><span style="font-size:20pt;color:#ffffff;"><strong>What Goes on Each Side?</strong></span></div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(260px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Front</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Front Panel</strong></div>
+            <div style="font-size:13pt;font-style:italic;color:rgba(255,255,255,0.74);margin-bottom:8px;">The main selling side.</div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Cereal name or logo &bull; Company name &bull; Tagline &bull; Main claim &bull; Mascot or big main image</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Back</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Back Panel</strong></div>
+            <div style="font-size:13pt;font-style:italic;color:rgba(255,255,255,0.74);margin-bottom:8px;">Tell people why it is special.</div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Short story or mission &bull; Bullet points (no long paragraphs) &bull; Small logo &bull; Optional game, puzzle, website, or QR code</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Top</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Top Panel</strong></div>
+            <div style="font-size:13pt;font-style:italic;color:rgba(255,255,255,0.74);margin-bottom:8px;">Keep it simple.</div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Sell-by date &bull; Small logo &bull; Tagline</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Bottom</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Bottom Panel</strong></div>
+            <div style="font-size:13pt;font-style:italic;color:rgba(255,255,255,0.74);margin-bottom:8px;">Product info.</div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Barcode &bull; Company name &bull; Other basic product info</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Right</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Right Side Panel</strong></div>
+            <div style="font-size:13pt;font-style:italic;color:rgba(255,255,255,0.74);margin-bottom:8px;">Nutrition matters.</div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Small logo &bull; Nutrition facts (make the image high-quality so we can read it)</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Left</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Left Side Panel</strong></div>
+            <div style="font-size:13pt;font-style:italic;color:rgba(255,255,255,0.74);margin-bottom:8px;">Simple but strong.</div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Small logo &bull; Tagline &bull; Extra fun details to make it stand out</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Files You Must Make -->
+      <div style="background:linear-gradient(180deg,rgba(0,194,255,0.18) 0%,rgba(0,194,255,0.06) 100%);border:1px solid rgba(0,194,255,0.24);border-left:6px solid #00c2ff;border-radius:24px;padding:28px 30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#7dd3fc;"><strong>Files You Must Make</strong></span></div>
+        <div style="margin-bottom:12px;"><span style="font-size:20pt;color:#ffffff;"><strong>JPGs for the Team, PDFs for the Grade</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:10px;">Save your finished panels as <strong>high-quality JPGs</strong>. Share those with your team so everyone can build the same print template.</div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);">For Canvas submission, you turn in <strong>3 PDFs</strong>: the print template plus the two panels you personally designed.</div>
+      </div>
+
+      <!-- PART A: Export JPGs -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Part A</strong></span></div>
+        <div style="margin-bottom:18px;"><span style="font-size:20pt;color:#ffffff;"><strong>Export Your Panels as JPG</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.82);margin-bottom:18px;">Do this for each panel file (.ai) you designed.</div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(280px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A1</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Open your finished panel file in <strong>Adobe Illustrator</strong>.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A2</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Top menu: <strong>File &rsaquo; Export &rsaquo; Export As...</strong></div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A3</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">At the bottom of the save window, change the format to <strong>JPEG (.jpg)</strong>.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#FF6B1A;color:#ffffff;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A4 KEY</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Check the box <strong>Use Artboards</strong>. This makes sure only what is inside your artboard gets exported.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A5</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Save inside your <strong>Package Design</strong> folder. Click <strong>Export</strong>.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A6</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">In the JPEG Options box, set: <strong>Color Model</strong> CMYK, <strong>Quality</strong> 10 (Maximum), <strong>Resolution</strong> High (300 ppi), <strong>Anti-Aliasing</strong> Art Optimized.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A7</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Click <strong>OK</strong>. Your JPG is saved.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A8</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);"><strong>Repeat steps A1 to A7</strong> for your other panel. Share both JPGs with your teammates.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PART B: Build Print Template -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Part B</strong></span></div>
+        <div style="margin-bottom:18px;"><span style="font-size:20pt;color:#ffffff;"><strong>Build the Print Template</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.82);margin-bottom:18px;">You need all <strong>6 JPG panels</strong> from your team before you start this part. Print Template has 2 artboards: Artboard 1 = Front + Back + Right; Artboard 2 = Top + Bottom + Left.</div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(280px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>B1</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Open the <strong>Print Template</strong> .ai file from the zip you downloaded.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>B2</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Top menu: <strong>File &rsaquo; Place...</strong></div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#FF6B1A;color:#ffffff;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>B3 KEY</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Find the first panel JPG. <strong>Uncheck the Link box</strong> at the bottom before you Place. This embeds the image inside your file.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>B4</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Click <strong>Place</strong>. Click on the artboard to drop the image. Drag and resize to fit perfectly inside its panel area.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>B5</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);"><strong>Repeat B2 to B4</strong> for all 6 JPG panels. Each one on the correct artboard, in the correct spot.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>B6</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Zoom in and check every panel. No gaps. No overlap. Lines should be clean.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>B7</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Save your work: <strong>File &rsaquo; Save</strong> (keeps the .ai file).</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PART C: Save as PDF + Upload -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Part C</strong></span></div>
+        <div style="margin-bottom:18px;"><span style="font-size:20pt;color:#ffffff;"><strong>Save as PDF and Upload</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.82);margin-bottom:18px;">You turn in <strong>3 PDF files</strong>: one for the print template, two for the panels you designed.</div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(280px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>C1</strong></div>
+            <div style="font-size:14pt;color:#ffffff;margin-bottom:6px;"><strong>PDF #1: Print Template</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">With the Print Template open, <strong>File &rsaquo; Save As...</strong> Change file type to <strong>Adobe PDF (.pdf)</strong>. Click Save. Leave default settings. Click Save PDF.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>C2</strong></div>
+            <div style="font-size:14pt;color:#ffffff;margin-bottom:6px;"><strong>PDF #2: Your First Panel</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Open your first panel .ai file. <strong>File &rsaquo; Save As...</strong> Change file type to <strong>Adobe PDF (.pdf)</strong>. Save with default settings.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>C3</strong></div>
+            <div style="font-size:14pt;color:#ffffff;margin-bottom:6px;"><strong>PDF #3: Your Second Panel</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Do the same for your second panel .ai file. Now you have 3 PDFs ready.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>C4</strong></div>
+            <div style="font-size:14pt;color:#ffffff;margin-bottom:6px;"><strong>Upload All 3 PDFs</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Go to this Canvas assignment and click <strong>Submit Assignment</strong>. Upload all 3 PDFs. Hit Submit.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Final Checklist -->
+      <div style="background:linear-gradient(180deg,rgba(0,194,255,0.18) 0%,rgba(0,194,255,0.06) 100%);border:1px solid rgba(0,194,255,0.24);border-left:6px solid #00c2ff;border-radius:24px;padding:28px 30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#7dd3fc;"><strong>Submission Checklist</strong></span></div>
+        <div style="margin-bottom:14px;"><span style="font-size:20pt;color:#ffffff;"><strong>You Should Be Uploading:</strong></span></div>
+        <div style="font-size:14pt;line-height:1.9;color:rgba(255,255,255,0.88);">&#9989; PDF of your <strong>Print Template</strong> (all 6 panels on 2 artboards)<br />&#9989; PDF of your <strong>first panel design</strong><br />&#9989; PDF of your <strong>second panel design</strong></div>
+        <div style="margin-top:14px;font-size:13pt;line-height:1.6;color:#ffda75;"><strong>Do not upload JPG files to Canvas.</strong> JPGs are only for sharing with your team.</div>
+      </div>
+
+      <!-- What's Next -->
+      <div style="background:linear-gradient(180deg,rgba(255,107,26,0.22) 0%,rgba(255,107,26,0.08) 100%);border:1px solid rgba(255,107,26,0.3);border-left:6px solid #FF6B1A;border-radius:24px;padding:28px 30px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ffb27c;"><strong>What Happens Next</strong></span></div>
+        <div style="margin-bottom:12px;"><span style="font-size:20pt;color:#ffffff;"><strong>Print, Cut, Fold, Build</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:10px;">After you turn in your 3 PDFs, we will print your box on thick paper. You will cut, fold, and build the real cereal box in class.</div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);">When your PDFs are uploaded, click the <strong>Done</strong> button at the bottom of this Canvas page to move to Step 06 Reflection.</div>
+      </div>
+
+      <!-- AI Disclaimer -->
+      <div style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.10);">
+        <div style="font-size:10pt;color:rgba(255,255,255,0.50);line-height:1.55;font-style:italic;">
+          <span style="color:#80e0e0;font-style:normal;font-weight:bold;">&#9432;</span> Some images on this page are AI-generated and do not show real students. AI tools can produce exaggerated body proportions, features, or other distortions that sometimes reflect biases built into the technology. All images are made to be school-appropriate.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════ ESPA&Ntilde;OL ════════════════════════ -->
+    <div id="espanol" style="border-top:2px solid rgba(255,255,255,0.10);">
+    <div style="padding:28px 28px 40px;">
+
+      <!-- Banner ES -->
+      <div style="background:linear-gradient(135deg,#000000 0%,#003838 40%,#007474 100%);padding:20px 28px 22px;margin:-28px -28px 24px -28px;">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">
+          <div style="justify-self:start;">
+            <img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:min(90px,15vw);height:auto;display:block;" />
+          </div>
+          <div style="justify-self:center;text-align:center;">
+            <div style="margin-bottom:6px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Artes Digitales &nbsp;&bull;&nbsp; Proyecto de Caja de Cereal &nbsp;&bull;&nbsp; Paso 05</strong></span></div>
+            <div style="color:#ffffff;font-size:22pt;font-weight:700;line-height:1.1;"><strong>Dise&ntilde;o Digital</strong></div>
+            <div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:13pt;font-style:italic;"><strong>Dise&ntilde;a. Exporta. Arma la plantilla de impresi&oacute;n.</strong></span></div>
+          </div>
+          <div style="justify-self:end;">
+            <a href="#top" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;border-radius:999px;display:inline-block;font-size:11pt;white-space:nowrap;"><strong>Back to English</strong></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen ES -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;overflow:hidden;">
+        <img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/images/cereal/building.png" alt="Mesa de trabajo de Adobe Illustrator con paneles de caja de cereal en progreso" style="float:right;width:46%;min-width:220px;height:auto;border-radius:18px;margin:0 0 18px 26px;border:1px solid rgba(255,255,255,0.10);" />
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Construye la Cosa Real</strong></span></div>
+        <div style="margin-bottom:14px;"><span style="font-size:20pt;color:#ffffff;"><strong>Del Boceto a Adobe Illustrator</strong></span></div>
+        <div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">Tus bocetos est&aacute;n aprobados. Es hora de construir la caja final en <strong>Adobe Illustrator</strong>. Solo dise&ntilde;as los dos lados que te tocaron. Tu equipo va a compartir JPGs para que cada estudiante construya la misma plantilla de impresi&oacute;n.</span></div>
+        <div style="line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">Cuando termines, vamos a imprimir la caja en papel grueso, cortar, doblar y construir un producto real.</span></div>
+      </div>
+
+      <!-- Descarga ES -->
+      <div style="background:linear-gradient(180deg,rgba(230,36,41,0.18) 0%,rgba(230,36,41,0.05) 100%);border:1px solid rgba(230,36,41,0.30);border-left:6px solid #E62429;border-radius:24px;padding:28px 30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ffb3b6;"><strong>Primer Paso Importante</strong></span></div>
+        <div style="margin-bottom:12px;"><span style="font-size:20pt;color:#ffffff;"><strong>Descarga los Archivos de Dise&ntilde;o</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:14px;">Antes de empezar nada, descarga el zip del proyecto desde Canvas. Tiene los 6 paneles en blanco y la plantilla de impresi&oacute;n que vas a necesitar.</div>
+        <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.78);font-style:italic;">Busca <strong>Package Design Files.zip</strong> en la secci&oacute;n de Archivos del curso de Canvas.</div>
+      </div>
+
+      <!-- Roles ES -->
+      <div style="background:linear-gradient(180deg,rgba(0,194,255,0.18) 0%,rgba(0,194,255,0.06) 100%);border:1px solid rgba(0,194,255,0.24);border-left:6px solid #00c2ff;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#7dd3fc;"><strong>Roles del Equipo</strong></span></div>
+        <div style="margin-bottom:18px;"><span style="font-size:20pt;color:#ffffff;"><strong>Qui&eacute;n Dise&ntilde;a Qu&eacute;</strong></span></div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,194,255,0.22);border-left:4px solid #00c2ff;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00c2ff;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Dise&ntilde;ador 1</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Frente y Arriba</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Abre el archivo .ai del panel Frente y el archivo .ai del panel Arriba.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,194,255,0.22);border-left:4px solid #00c2ff;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00c2ff;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Dise&ntilde;ador 2</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Atr&aacute;s y Abajo</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Abre el archivo .ai del panel Atr&aacute;s y el archivo .ai del panel Abajo.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,194,255,0.22);border-left:4px solid #00c2ff;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00c2ff;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Dise&ntilde;ador 3</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Lados Izquierdo y Derecho</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Abre el archivo .ai del panel Izquierdo y el archivo .ai del panel Derecho.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Reglas ES -->
+      <div style="background:linear-gradient(180deg,rgba(255,107,26,0.22) 0%,rgba(255,107,26,0.08) 100%);border:1px solid rgba(255,107,26,0.3);border-left:6px solid #FF6B1A;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ffb27c;"><strong>Reglas de Dise&ntilde;o</strong></span></div>
+        <div style="margin-bottom:14px;"><span style="font-size:20pt;color:#ffffff;"><strong>C&oacute;mo Combinarlo con el Equipo</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:18px;">Solo haces tus dos paneles, pero DEBES trabajar con tu equipo para que la caja se vea como un solo producto.</div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="font-size:14pt;color:#ffb27c;margin-bottom:6px;"><strong>Mismos HEX, Mismas Letras</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Usa los HEX y tipograf&iacute;as exactas del documento del Paso 03. Nada de cambios a media obra.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="font-size:14pt;color:#ffb27c;margin-bottom:6px;"><strong>Jerarqu&iacute;a Visual</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">La informaci&oacute;n m&aacute;s importante es la m&aacute;s grande y fuerte. La menos importante es m&aacute;s peque&ntilde;a.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="font-size:14pt;color:#ffb27c;margin-bottom:6px;"><strong>Limpio y Legible</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Mantenlo limpio. Las palabras peque&ntilde;as tambi&eacute;n deben ser f&aacute;ciles de leer impresas.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="font-size:14pt;color:#ffb27c;margin-bottom:6px;"><strong>MagicSchool AI para el Texto</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Usa MagicSchool AI para borrar texto divertido para tu caja. Despu&eacute;s ed&iacute;talo al estilo de tu marca.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="font-size:14pt;color:#ffb27c;margin-bottom:6px;"><strong>Firefly o Photoshop para Im&aacute;genes</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Usa Adobe Firefly o Photoshop para im&aacute;genes. Despu&eacute;s ponlas en tu panel de Illustrator.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(255,107,26,0.28);border-left:4px solid #FF6B1A;border-radius:14px;padding:18px;">
+            <div style="font-size:14pt;color:#ffb27c;margin-bottom:6px;"><strong>Se Ve Real</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Tus paneles finales deben verse como un producto real. Tr&aacute;talo como un trabajo.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Qu&eacute; va en cada lado ES -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Contenido de Paneles</strong></span></div>
+        <div style="margin-bottom:18px;"><span style="font-size:20pt;color:#ffffff;"><strong>&iquest;Qu&eacute; va en cada lado?</strong></span></div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(260px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Frente</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Panel Frontal</strong></div>
+            <div style="font-size:13pt;font-style:italic;color:rgba(255,255,255,0.74);margin-bottom:8px;">El lado principal para vender.</div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Nombre del cereal o logo &bull; Nombre de la compa&ntilde;&iacute;a &bull; Eslogan &bull; Mensaje principal &bull; Mascota o imagen principal grande</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Atr&aacute;s</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Panel Trasero</strong></div>
+            <div style="font-size:13pt;font-style:italic;color:rgba(255,255,255,0.74);margin-bottom:8px;">Di por qu&eacute; es especial.</div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Historia corta o misi&oacute;n &bull; Vi&ntilde;etas (no p&aacute;rrafos largos) &bull; Logo peque&ntilde;o &bull; Opcional: juego, rompecabezas, sitio web o c&oacute;digo QR</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Arriba</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Panel Superior</strong></div>
+            <div style="font-size:13pt;font-style:italic;color:rgba(255,255,255,0.74);margin-bottom:8px;">Mantenlo simple.</div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Fecha de caducidad &bull; Logo peque&ntilde;o &bull; Eslogan</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Abajo</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Panel Inferior</strong></div>
+            <div style="font-size:13pt;font-style:italic;color:rgba(255,255,255,0.74);margin-bottom:8px;">Info del producto.</div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">C&oacute;digo de barras &bull; Nombre de la compa&ntilde;&iacute;a &bull; Otra info b&aacute;sica del producto</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Derecho</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Lado Derecho</strong></div>
+            <div style="font-size:13pt;font-style:italic;color:rgba(255,255,255,0.74);margin-bottom:8px;">La nutrici&oacute;n importa.</div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Logo peque&ntilde;o &bull; Datos nutricionales (imagen de alta calidad para que se pueda leer)</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:10pt;letter-spacing:0.10em;text-transform:uppercase;margin-bottom:10px;"><strong>Izquierdo</strong></div>
+            <div style="font-size:16pt;color:#ffffff;margin-bottom:6px;"><strong>Lado Izquierdo</strong></div>
+            <div style="font-size:13pt;font-style:italic;color:rgba(255,255,255,0.74);margin-bottom:8px;">Simple pero fuerte.</div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Logo peque&ntilde;o &bull; Eslogan &bull; Detalles divertidos extra para destacar</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Archivos ES -->
+      <div style="background:linear-gradient(180deg,rgba(0,194,255,0.18) 0%,rgba(0,194,255,0.06) 100%);border:1px solid rgba(0,194,255,0.24);border-left:6px solid #00c2ff;border-radius:24px;padding:28px 30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#7dd3fc;"><strong>Archivos que Debes Crear</strong></span></div>
+        <div style="margin-bottom:12px;"><span style="font-size:20pt;color:#ffffff;"><strong>JPGs para el Equipo, PDFs para la Nota</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:10px;">Guarda tus paneles terminados como <strong>JPGs de alta calidad</strong>. Comp&aacute;rtelos con tu equipo para que todos puedan construir la misma plantilla.</div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);">Para Canvas, entregas <strong>3 PDFs</strong>: la plantilla de impresi&oacute;n y los dos paneles que dise&ntilde;aste t&uacute;.</div>
+      </div>
+
+      <!-- Parte A ES -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Parte A</strong></span></div>
+        <div style="margin-bottom:18px;"><span style="font-size:20pt;color:#ffffff;"><strong>Exportar tus Paneles como JPG</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.82);margin-bottom:18px;">Hazlo con cada archivo de panel (.ai) que dise&ntilde;aste.</div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(280px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A1</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Abre tu archivo de panel terminado en <strong>Adobe Illustrator</strong>.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A2</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Men&uacute; de arriba: <strong>File &rsaquo; Export &rsaquo; Export As...</strong></div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A3</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Abajo de la ventana, cambia el formato a <strong>JPEG (.jpg)</strong>.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#FF6B1A;color:#ffffff;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A4 CLAVE</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Marca la casilla <strong>Use Artboards</strong>. Esto asegura que solo se exporte lo que est&aacute; dentro de tu mesa de trabajo.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A5</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Guarda dentro de tu carpeta <strong>Package Design</strong>. Haz clic en <strong>Export</strong>.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A6</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">En la caja de opciones JPEG: <strong>Color Model</strong> CMYK, <strong>Quality</strong> 10 (M&aacute;ximo), <strong>Resolution</strong> High (300 ppi), <strong>Anti-Aliasing</strong> Art Optimized.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A7</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Haz clic en <strong>OK</strong>. Tu JPG est&aacute; guardado.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>A8</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);"><strong>Repite los pasos A1 al A7</strong> para tu otro panel. Comparte los dos JPGs con tus compa&ntilde;eros.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Parte B ES -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Parte B</strong></span></div>
+        <div style="margin-bottom:18px;"><span style="font-size:20pt;color:#ffffff;"><strong>Armar la Plantilla de Impresi&oacute;n</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.82);margin-bottom:18px;">Necesitas los <strong>6 JPGs</strong> de tu equipo antes de empezar. La Plantilla tiene 2 mesas: Mesa 1 = Frente + Atr&aacute;s + Derecho; Mesa 2 = Arriba + Abajo + Izquierdo.</div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(280px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>B1</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Abre el archivo <strong>Print Template</strong> .ai del zip que descargaste.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>B2</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Men&uacute; de arriba: <strong>File &rsaquo; Place...</strong></div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#FF6B1A;color:#ffffff;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>B3 CLAVE</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Busca el primer JPG. <strong>Desmarca la casilla Link</strong> antes de Place. Esto incrusta la imagen en el archivo.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>B4</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Haz clic en <strong>Place</strong>. Coloca la imagen en la mesa. Arrastra y cambia el tama&ntilde;o para que quede perfecta en su panel.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>B5</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);"><strong>Repite B2 a B4</strong> con los 6 JPGs. Cada uno en la mesa correcta, en el lugar correcto.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>B6</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Haz zoom y revisa cada panel. Sin huecos. Sin encimadas. Las l&iacute;neas deben estar limpias.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>B7</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.86);">Guarda: <strong>File &rsaquo; Save</strong> (conserva el archivo .ai).</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Parte C ES -->
+      <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;border-radius:24px;padding:30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#80e0e0;"><strong>Parte C</strong></span></div>
+        <div style="margin-bottom:18px;"><span style="font-size:20pt;color:#ffffff;"><strong>Guardar como PDF y Subir</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.82);margin-bottom:18px;">Entregas <strong>3 PDFs</strong>: uno de la plantilla de impresi&oacute;n y dos de los paneles que dise&ntilde;aste.</div>
+
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(280px,1fr);overflow-x:auto;gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>C1</strong></div>
+            <div style="font-size:14pt;color:#ffffff;margin-bottom:6px;"><strong>PDF #1: Plantilla de Impresi&oacute;n</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Con la Plantilla abierta, <strong>File &rsaquo; Save As...</strong> Cambia el tipo a <strong>Adobe PDF (.pdf)</strong>. Haz clic en Save. Deja las opciones por default. Save PDF.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>C2</strong></div>
+            <div style="font-size:14pt;color:#ffffff;margin-bottom:6px;"><strong>PDF #2: Tu Primer Panel</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Abre tu primer archivo de panel .ai. <strong>File &rsaquo; Save As...</strong> Cambia el tipo a <strong>Adobe PDF (.pdf)</strong>. Guarda con default.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>C3</strong></div>
+            <div style="font-size:14pt;color:#ffffff;margin-bottom:6px;"><strong>PDF #3: Tu Segundo Panel</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Haz lo mismo con tu segundo archivo de panel .ai. Ya tienes 3 PDFs listos.</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.30);border:1px solid rgba(0,184,184,0.22);border-left:4px solid #00b8b8;border-radius:14px;padding:18px;">
+            <div style="display:inline-block;background:#00b8b8;color:#003838;border-radius:999px;padding:4px 11px;font-size:11pt;margin-bottom:10px;"><strong>C4</strong></div>
+            <div style="font-size:14pt;color:#ffffff;margin-bottom:6px;"><strong>Sube los 3 PDFs</strong></div>
+            <div style="font-size:13pt;line-height:1.6;color:rgba(255,255,255,0.84);">Ve a esta tarea de Canvas y haz clic en <strong>Submit Assignment</strong>. Sube los 3 PDFs. Haz clic en Submit.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Checklist ES -->
+      <div style="background:linear-gradient(180deg,rgba(0,194,255,0.18) 0%,rgba(0,194,255,0.06) 100%);border:1px solid rgba(0,194,255,0.24);border-left:6px solid #00c2ff;border-radius:24px;padding:28px 30px;margin-bottom:24px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#7dd3fc;"><strong>Lista de Entrega</strong></span></div>
+        <div style="margin-bottom:14px;"><span style="font-size:20pt;color:#ffffff;"><strong>Debes Subir:</strong></span></div>
+        <div style="font-size:14pt;line-height:1.9;color:rgba(255,255,255,0.88);">&#9989; PDF de tu <strong>Plantilla de Impresi&oacute;n</strong> (los 6 paneles en 2 mesas)<br />&#9989; PDF de tu <strong>primer dise&ntilde;o de panel</strong><br />&#9989; PDF de tu <strong>segundo dise&ntilde;o de panel</strong></div>
+        <div style="margin-top:14px;font-size:13pt;line-height:1.6;color:#ffda75;"><strong>No subas JPGs a Canvas.</strong> Los JPGs son solo para compartir con tu equipo.</div>
+      </div>
+
+      <!-- Qu&eacute; sigue ES -->
+      <div style="background:linear-gradient(180deg,rgba(255,107,26,0.22) 0%,rgba(255,107,26,0.08) 100%);border:1px solid rgba(255,107,26,0.3);border-left:6px solid #FF6B1A;border-radius:24px;padding:28px 30px;">
+        <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#ffb27c;"><strong>Qu&eacute; Sigue</strong></span></div>
+        <div style="margin-bottom:12px;"><span style="font-size:20pt;color:#ffffff;"><strong>Imprimir, Cortar, Doblar, Armar</strong></span></div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:10px;">Despu&eacute;s de entregar tus 3 PDFs, vamos a imprimir tu caja en papel grueso. Vas a cortar, doblar y armar la caja real en clase.</div>
+        <div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);">Cuando subas los PDFs, haz clic en el bot&oacute;n <strong>Done</strong> al final de esta p&aacute;gina de Canvas para ir al Paso 06 Reflexi&oacute;n.</div>
+      </div>
+
+      <!-- Aviso IA ES -->
+      <div style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.10);">
+        <div style="font-size:10pt;color:rgba(255,255,255,0.50);line-height:1.55;font-style:italic;">
+          <span style="color:#80e0e0;font-style:normal;font-weight:bold;">&#9432;</span> Algunas im&aacute;genes de esta p&aacute;gina son generadas por IA y no muestran a estudiantes reales. Las herramientas de IA pueden producir proporciones corporales o rasgos exagerados que a veces reflejan los sesgos de la tecnolog&iacute;a. Todas las im&aacute;genes son apropiadas para la escuela.
+        </div>
+      </div>
+
+    </div>
+    </div>
+
+  </div>
+  </div>
+  </div>
+
+  <script>
+    function silvaCopyHTML() {
+      const el = document.getElementById('top');
+      const html = el.outerHTML;
+      navigator.clipboard.writeText(html).then(function() {
+        var btn = document.querySelector('.silva-copy-btn');
+        btn.textContent = '✓ Copied to clipboard!';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.innerHTML = '&#128203; Copy Canvas HTML';
+          btn.classList.remove('copied');
+        }, 2500);
+      }).catch(function() { alert('Copy failed. Try selecting the page source manually.'); });
+    }
+    function silvaDownloadHTML() {
+      var el = document.getElementById('top');
+      var html = el.outerHTML;
+      var blob = new Blob([html], { type: 'text/html' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'cereal-box-step05-digital-canvas.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+
+  <script src="/js/silva-nav.js"></script>
+</body>
+</html>
