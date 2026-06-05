@@ -29,6 +29,10 @@
     // Cross-course resources
     '/curriculum/shared/photo-course-resources.html',
 
+    // Photography 1B: Final Exam Study Materials
+    '/curriculum/shared/photo1b-finals-quiz-prep.html',
+    '/curriculum/shared/photo1b-finals-study-guide.html',
+
     // Photo 1B: Sauce Baby (commercial photography final)
     '/curriculum/photo1/sauce-baby/creative-brief.html',
     '/curriculum/photo1/sauce-baby/overview.html',
