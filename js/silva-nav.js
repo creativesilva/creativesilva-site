@@ -32,6 +32,7 @@
     // Photography 1B: Final Exam Study Materials
     '/curriculum/shared/photo1b-finals-quiz-prep.html',
     '/curriculum/shared/photo1b-finals-study-guide.html',
+    '/curriculum/shared/photo1b-spring-final-quiz-intro.html',
 
     // Photo 1B: Sauce Baby (commercial photography final)
     '/curriculum/photo1/sauce-baby/creative-brief.html',
