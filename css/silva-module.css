@@ -511,30 +511,25 @@ body {
    against the dark background.
    ═══════════════════════════════════════════ */
 body #top *[style*="overflow-x:auto"]::-webkit-scrollbar {
-  height: 14px !important;
-  background: rgba(0, 0, 0, 0.55) !important;
+  height: 10px !important;
+  background: rgba(0, 0, 0, 0.50) !important;
 }
 body #top *[style*="overflow-x:auto"]::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.55) !important;
-  border-top: 2px solid rgba(0, 184, 184, 0.45) !important;
+  background: rgba(0, 0, 0, 0.50) !important;
 }
 body #top *[style*="overflow-x:auto"]::-webkit-scrollbar-thumb {
-  background: #00b8b8 !important;
-  border-top: 3px solid #80e0e0 !important;
-  border-bottom: 1px solid #00b8b8 !important;
-  min-width: 60px !important;
+  background: rgba(255, 255, 255, 0.10) !important;
 }
 body #top *[style*="overflow-x:auto"]::-webkit-scrollbar-thumb:hover {
-  background: #80e0e0 !important;
-  border-top: 3px solid #ffffff !important;
+  background: rgba(255, 255, 255, 0.18) !important;
 }
 body #top *[style*="overflow-x:auto"]::-webkit-scrollbar-corner {
   background: transparent !important;
 }
 /* Firefox */
 body #top *[style*="overflow-x:auto"] {
-  scrollbar-width: auto !important;
-  scrollbar-color: #00b8b8 rgba(0, 0, 0, 0.55) !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(255, 255, 255, 0.10) rgba(0, 0, 0, 0.50) !important;
 }
 
 /* Drag-or-swipe hint: only show when actually needed.
