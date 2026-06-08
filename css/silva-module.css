@@ -511,29 +511,27 @@ body {
    against the dark background.
    ═══════════════════════════════════════════ */
 #top *[style*="overflow-x:auto"]::-webkit-scrollbar {
-  height: 12px;
+  height: 14px;
 }
 #top *[style*="overflow-x:auto"]::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.40);
-  border-top: 1px solid rgba(0, 184, 184, 0.20);
+  background: rgba(0, 0, 0, 0.50);
+  border-top: 1px solid rgba(0, 184, 184, 0.35);
 }
 #top *[style*="overflow-x:auto"]::-webkit-scrollbar-thumb {
-  background: rgba(0, 184, 184, 0.75);
-  border: 2px solid transparent;
-  background-clip: padding-box;
+  background: #00b8b8;
+  border-top: 2px solid #80e0e0;
+  border-bottom: 1px solid #00b8b8;
 }
 #top *[style*="overflow-x:auto"]::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 184, 184, 1);
-  background-clip: padding-box;
-  border: 2px solid transparent;
+  background: #80e0e0;
 }
 #top *[style*="overflow-x:auto"]::-webkit-scrollbar-corner {
   background: transparent;
 }
 /* Firefox */
 #top *[style*="overflow-x:auto"] {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 184, 184, 0.75) rgba(0, 0, 0, 0.40);
+  scrollbar-width: auto;
+  scrollbar-color: #00b8b8 rgba(0, 0, 0, 0.50);
 }
 
 /* ═══════════════════════════════════════════
