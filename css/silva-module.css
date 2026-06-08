@@ -510,28 +510,40 @@ body {
    for the creativesilva.com preview so the scroll cue is visible
    against the dark background.
    ═══════════════════════════════════════════ */
-#top *[style*="overflow-x:auto"]::-webkit-scrollbar {
-  height: 14px;
+body #top *[style*="overflow-x:auto"]::-webkit-scrollbar {
+  height: 14px !important;
+  background: rgba(0, 0, 0, 0.55) !important;
 }
-#top *[style*="overflow-x:auto"]::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.50);
-  border-top: 1px solid rgba(0, 184, 184, 0.35);
+body #top *[style*="overflow-x:auto"]::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.55) !important;
+  border-top: 2px solid rgba(0, 184, 184, 0.45) !important;
 }
-#top *[style*="overflow-x:auto"]::-webkit-scrollbar-thumb {
-  background: #00b8b8;
-  border-top: 2px solid #80e0e0;
-  border-bottom: 1px solid #00b8b8;
+body #top *[style*="overflow-x:auto"]::-webkit-scrollbar-thumb {
+  background: #00b8b8 !important;
+  border-top: 3px solid #80e0e0 !important;
+  border-bottom: 1px solid #00b8b8 !important;
+  min-width: 60px !important;
 }
-#top *[style*="overflow-x:auto"]::-webkit-scrollbar-thumb:hover {
-  background: #80e0e0;
+body #top *[style*="overflow-x:auto"]::-webkit-scrollbar-thumb:hover {
+  background: #80e0e0 !important;
+  border-top: 3px solid #ffffff !important;
 }
-#top *[style*="overflow-x:auto"]::-webkit-scrollbar-corner {
-  background: transparent;
+body #top *[style*="overflow-x:auto"]::-webkit-scrollbar-corner {
+  background: transparent !important;
 }
 /* Firefox */
-#top *[style*="overflow-x:auto"] {
-  scrollbar-width: auto;
-  scrollbar-color: #00b8b8 rgba(0, 0, 0, 0.50);
+body #top *[style*="overflow-x:auto"] {
+  scrollbar-width: auto !important;
+  scrollbar-color: #00b8b8 rgba(0, 0, 0, 0.55) !important;
+}
+
+/* Drag-or-swipe hint: only show when actually needed.
+   Most monitors are 1920-2560px wide. The biggest category (Branding,
+   9 cards x 260px + gaps) needs ~2500px to fit without scroll. So at
+   2500px+ everything fits; below, scrolling is needed. */
+.scroll-hint { display: block; }
+@media (min-width: 2500px) {
+  .scroll-hint { display: none !important; }
 }
 
 /* ═══════════════════════════════════════════
