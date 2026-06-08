@@ -504,6 +504,39 @@ body {
 }
 
 /* ═══════════════════════════════════════════
+   #TOP HORIZONTAL SCROLLERS: angular teal scrollbar
+   Targets the inline overflow-x:auto card grids inside #top. Canvas
+   strips this — fine, Canvas has its own scrollbar. This is purely
+   for the creativesilva.com preview so the scroll cue is visible
+   against the dark background.
+   ═══════════════════════════════════════════ */
+#top *[style*="overflow-x:auto"]::-webkit-scrollbar {
+  height: 12px;
+}
+#top *[style*="overflow-x:auto"]::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.40);
+  border-top: 1px solid rgba(0, 184, 184, 0.20);
+}
+#top *[style*="overflow-x:auto"]::-webkit-scrollbar-thumb {
+  background: rgba(0, 184, 184, 0.75);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+#top *[style*="overflow-x:auto"]::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 184, 184, 1);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+#top *[style*="overflow-x:auto"]::-webkit-scrollbar-corner {
+  background: transparent;
+}
+/* Firefox */
+#top *[style*="overflow-x:auto"] {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 184, 184, 0.75) rgba(0, 0, 0, 0.40);
+}
+
+/* ═══════════════════════════════════════════
    SILVA-SCROLL: styled scrollbar for long instruction sections
    Used on creativesilva.com preview. Canvas strips custom scrollbar
    styling, so always pair this class with a "Scroll for more" text
