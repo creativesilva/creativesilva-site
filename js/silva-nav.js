@@ -32,6 +32,7 @@
     // Photography 1B: Final Exam Study Materials
     '/curriculum/shared/photo1b-finals-quiz-prep.html',
     '/curriculum/shared/photo1b-spring-final-quiz-intro.html',
+    '/curriculum/shared/photo1b-spring-final-silva-intro.html',
 
     // Photo 1B: Sauce Baby (commercial photography final)
     '/curriculum/photo1/sauce-baby/creative-brief.html',
@@ -51,6 +52,7 @@
 
     // Digital Arts: Final Exam Study Materials
     '/curriculum/shared/da-finals-quiz-prep.html',
+    '/curriculum/shared/da-spring-final-intro.html',
     '/curriculum/shared/da-finals-study-guide.html',
 
     // Digital Arts: Cereal Box Group Project
