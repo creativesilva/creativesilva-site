@@ -53,7 +53,6 @@
     // Digital Arts: Final Exam Study Materials
     '/curriculum/shared/da-finals-quiz-prep.html',
     '/curriculum/shared/da-spring-final-intro.html',
-    '/curriculum/shared/da-finals-study-guide.html',
 
     // Digital Arts: Cereal Box Group Project
     '/curriculum/shared/cereal-box-introduction.html',
