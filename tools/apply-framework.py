@@ -44,17 +44,17 @@ def pass_angular(html):
     for m in OPEN_DIV.finditer(html):
         style = m.group(1)
         out.append(html[pos:m.start()]); pos = m.end()
-        bl = re.search(r'border-left:(\d+)px solid (#[0-9a-fA-F]{3,6})', style)
-        pad_m = re.search(r'padding:([0-9px ]+?);', style)
+        bl = re.search(r'border-left:\s*(\d+)px solid (#[0-9a-fA-F]{3,6})', style)
+        pad_m = re.search(r'padding:\s*([0-9px ]+?);', style)
         if not bl or not pad_m:
             out.append(m.group(0)); continue
         width = int(bl.group(1)); color = bl.group(2)
         pt,pr,pb,pl = parse_padding(pad_m.group(1).strip())
         is_section = width >= 5 and pt >= 22
         s = style
-        s = re.sub(r'border:[^;]*;', '', s)
-        s = re.sub(r'border-left:\d+px solid #[0-9a-fA-F]{3,6};?', '', s)
-        s = re.sub(r'border-radius:[^;]*;?', '', s)
+        s = re.sub(r'border:\s*[^;]*;', '', s)
+        s = re.sub(r'border-left:\s*\d+px solid #[0-9a-fA-F]{3,6};?', '', s)
+        s = re.sub(r'border-radius:\s*[^;]*;?', '', s)
         s = s.strip(';') + ';'
         fw = 2 if is_section else 1
         sh = 4 if is_section else 3
