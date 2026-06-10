@@ -27,10 +27,12 @@ TILE = re.compile(
 )
 
 def wedge(accent):
-    bright = hex_rgba(accent, '0.16')
-    dark = 'rgba(0,0,0,0.34)'
-    return (f'linear-gradient(135deg,{bright} 0%,{bright} 10%,'
-            f'{dark} 10%,{dark} 100%)')
+    # LOCKED to the original stat-tile corner: bright accent at 0.20,
+    # a small 8% triangle, then rgba(0,0,0,0.40). Do not retune.
+    bright = hex_rgba(accent, '0.20')
+    dark = 'rgba(0,0,0,0.40)'
+    return (f'linear-gradient(135deg,{bright} 0%,{bright} 8%,'
+            f'{dark} 8%,{dark} 100%)')
 
 def process(html):
     n=[0]
