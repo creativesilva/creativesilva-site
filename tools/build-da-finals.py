@@ -323,7 +323,7 @@ def build_block(lang):
       </div>'''
 
     # ---- WELCOME / 01 ----
-    welcome_chip = 'WELCOME / 01' if is_en else 'BIENVENIDA / 01'
+    welcome_chip = 'WELCOME / 01 / 04' if is_en else 'BIENVENIDA / 01 / 04'
     welcome_title = 'Lecture & Note Taking' if is_en else 'Clase y Toma de Notas'
     welcome_body1 = ('Every term below could show up on the test. Every term comes straight from the work you have done this year: the Cereal Box Group Project, Company Branding, Jimenez Mobile Detailing, and the in-class lectures.' if is_en
                      else 'Cualquier término de abajo puede salir en el examen. Cada uno viene del trabajo que hiciste este año: el Proyecto Grupal de la Caja de Cereal, Branding de Compañía, Jimenez Mobile Detailing y las clases en el salón.')
@@ -347,7 +347,7 @@ def build_block(lang):
         welcome_inner, pad_t=0, pad_r=0, pad_b=0, pad_l=0)
 
     # ---- TEST FORMAT / 02 ----
-    fmt_chip = 'TEST FORMAT / 02' if is_en else 'FORMATO DEL EXAMEN / 02'
+    fmt_chip = 'TEST FORMAT / 02 / 04' if is_en else 'FORMATO DEL EXAMEN / 02 / 04'
     fmt_title = 'What the Test Looks Like' if is_en else 'Cómo Se Ve el Examen'
     stat_tiles_data = [
         (('TOTAL TERMS', '50', 'Every term below could be on the test. Learn all of them.'),
@@ -381,7 +381,7 @@ def build_block(lang):
         ORANGE, ORANGE_DIM, f'linear-gradient(180deg,{ORANGE_BG_STRONG} 0%,{ORANGE_BG_WEAK} 100%)', fmt_inner)
 
     # ---- STUDY / 03 ----
-    study_chip = 'STUDY / 03' if is_en else 'ESTUDIO / 03'
+    study_chip = 'STUDY / 03 / 04' if is_en else 'ESTUDIO / 03 / 04'
     study_title = 'Build Your Own Study Guide' if is_en else 'Construye Tu Propia Guía de Estudio'
     study_body1 = ('During today’s lecture session, copy the terms you do not know into your sketchbook. Write the definition in your own words. Sketch a tiny example next to each one.' if is_en
                    else 'Durante la clase de hoy, copia los términos que no sepas en tu cuaderno. Escribe la definición con tus propias palabras. Haz un dibujito al lado de cada uno.')
@@ -416,7 +416,7 @@ def build_block(lang):
         categories_html += gen_category(cat_idx, len(CATEGORIES), title, tiles_html, scroll_hint_text) + '\n'
 
     # ---- STUDY GUIDE / 04 (merged Take It With You + Study Plan + Download) ----
-    sg_chip = 'STUDY GUIDE / 04' if is_en else 'GUÍA DE ESTUDIO / 04'
+    sg_chip = 'STUDY GUIDE / 04 / 04' if is_en else 'GUÍA DE ESTUDIO / 04 / 04'
     sg_title = 'Bring Your Sketchbook to the Test' if is_en else 'Trae Tu Cuaderno al Examen'
     sg_steps = ('''<strong style="color:{eyebrow};">01 /</strong> Read each term out loud. Hear the word.<br />
           <strong style="color:{eyebrow};">02 /</strong> Write the ones you do not know into your sketchbook.<br />

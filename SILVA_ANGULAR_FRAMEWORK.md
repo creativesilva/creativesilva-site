@@ -94,7 +94,7 @@ Hairline divider under each card title:
 ```
 (32px wide on inner tiles.)
 
-Chip numbering: number the main narrative sections sequentially, for example `WELCOME / 01`, `TEST FORMAT / 02`, `STUDY / 03`, and the closing or download card continues that count. Grouped repeating sections get their own `XX / total` series, for example categories run `CATEGORY 01 / 08` through `CATEGORY 08 / 08`.
+Chip numbering (LOCKED): every main section chip reads `LABEL / NN / TT`, where NN is the section number and TT is the total number of main sections on the page, so a student sees where they are and how long the page is (e.g. `STUDY / 03 / 07`). The English block and the Spanish mirror are each their own series and BOTH restart at `01` (the Spanish first section is `01 / TT`, never continued from English). Grouped repeating sub-sections keep their own two-number sub-series and are NOT counted in the main total: categories run `CATEGORY 01 / 08` through `CATEGORY 08 / 08`, term tiles run `TERM 01 / 50`, etc. `tools/number-sections.py` applies and re-locks this; it is idempotent.
 
 ## 7. Page Structure
 
