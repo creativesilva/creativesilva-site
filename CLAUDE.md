@@ -44,9 +44,9 @@ When in doubt, ship clean, balanced, and minimal. Bloated copy and visual clutte
 
    **`SILVA_ANGULAR_FRAMEWORK.md`** is the standalone, self-contained version of the locked angular style (same rules as §3.5, no legacy noise). It is the only doc offered on the public Build Resources card. When building in the current style, follow it.
 
-2. **`css/silva-module.css`** — the only stylesheet the framework uses. Includes the site nav, page chrome, copy/download buttons, mobile rules, and the `silva-scroll` styled scrollbar. Edit cautiously; most pages depend on it.
+2. **`css/silva-module.css`**: the only stylesheet the framework uses. Includes the site nav, page chrome, copy/download buttons, mobile rules, and the `silva-scroll` styled scrollbar. Edit cautiously; most pages depend on it.
 
-3. **`js/silva-nav.js`** — site nav behavior. Every Canvas page loads it via `<script src="/js/silva-nav.js"></script>` at the bottom.
+3. **`js/silva-nav.js`**: site nav behavior. Every Canvas page loads it via `<script src="/js/silva-nav.js"></script>` at the bottom.
 
 ---
 
@@ -111,7 +111,7 @@ If you're building in the current style, diff against `da-finals-quiz-prep.html`
   )"
   ```
 - Co-author tag on every commit Claude makes.
-- Push immediately after commit when working on Canvas pages — Chris is usually waiting to paste the code into Canvas.
+- Push immediately after commit when working on Canvas pages. Chris is usually waiting to paste the code into Canvas.
 
 ---
 
