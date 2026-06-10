@@ -36,7 +36,7 @@
   <div class="silva-page">
   <div id="silva-module-content">
 
-  <div id="top" style="width:100%;max-width:680px;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background:#080808;border-radius:30px;overflow:hidden;">
+  <div id="top" style="width:100%;max-width:680px;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background:#080808;overflow:hidden;">
 
     <div style="padding:28px 28px 40px;">
 
@@ -47,7 +47,7 @@
       </div>
 
       <!-- Quick event details -->
-      <div style="background:rgba(0,0,0,0.32);border:1px solid rgba(0,184,184,0.22);border-radius:18px;padding:18px 22px;margin-bottom:22px;">
+      <div style="background:rgba(0,0,0,0.32);border:1px solid rgba(0,184,184,0.22);padding:18px 22px;margin-bottom:22px;">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 18px;font-size:13pt;line-height:1.5;color:rgba(255,255,255,0.92);">
           <div><strong style="color:#80e0e0;">When:</strong><br />Tue, Jun 2 2026<br />12:25 &ndash; 1:05 PM</div>
           <div><strong style="color:#80e0e0;">Where:</strong><br />Room 322<br />Mr. Silva&rsquo;s Room</div>
@@ -60,23 +60,23 @@
 
         <div>
           <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Full Name <span style="color:#ffb27c;">*</span></strong></label>
-          <input type="text" name="full_name" required placeholder="First and last name" style="width:100%;background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:12px 14px;color:#ffffff;font-size:14pt;box-sizing:border-box;" />
+          <input type="text" name="full_name" required placeholder="First and last name" style="width:100%;background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);padding:12px 14px;color:#ffffff;font-size:14pt;box-sizing:border-box;" />
         </div>
 
         <div>
           <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Student ID Number <span style="color:#ffb27c;">*</span></strong></label>
-          <input type="text" name="student_id" required inputmode="numeric" pattern="[0-9]{4,10}" placeholder="Digits only" style="width:100%;background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:12px 14px;color:#ffffff;font-size:14pt;box-sizing:border-box;" />
+          <input type="text" name="student_id" required inputmode="numeric" pattern="[0-9]{4,10}" placeholder="Digits only" style="width:100%;background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);padding:12px 14px;color:#ffffff;font-size:14pt;box-sizing:border-box;" />
           <div style="margin-top:6px;font-size:11pt;color:rgba(255,255,255,0.55);">Used to match your RSVP to the invite list.</div>
         </div>
 
         <div>
           <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Bringing a Guest? <span style="color:#ffb27c;">*</span></strong></label>
           <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(160px,1fr);overflow-x:auto;gap:10px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
-            <label style="background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:14pt;color:#ffffff;">
+            <label style="background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:14pt;color:#ffffff;">
               <input type="radio" name="bringing_guest" value="No" required onchange="rsvpToggleGuest(false)" style="margin:0;" />
               <span>No, just me</span>
             </label>
-            <label style="background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:14pt;color:#ffffff;">
+            <label style="background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:14pt;color:#ffffff;">
               <input type="radio" name="bringing_guest" value="Yes" required onchange="rsvpToggleGuest(true)" style="margin:0;" />
               <span>Yes, +1 guest</span>
             </label>
@@ -85,11 +85,11 @@
 
         <div id="rsvp-guest-field" style="display:none;">
           <label style="display:block;font-size:11pt;letter-spacing:0.10em;text-transform:uppercase;color:#80e0e0;margin-bottom:6px;"><strong>Guest&rsquo;s Full Name</strong></label>
-          <input type="text" name="guest_name" placeholder="Your guest&rsquo;s first and last name" style="width:100%;background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);border-radius:12px;padding:12px 14px;color:#ffffff;font-size:14pt;box-sizing:border-box;" />
+          <input type="text" name="guest_name" placeholder="Your guest&rsquo;s first and last name" style="width:100%;background:rgba(0,0,0,0.40);border:1px solid rgba(0,184,184,0.30);padding:12px 14px;color:#ffffff;font-size:14pt;box-sizing:border-box;" />
         </div>
 
         <div style="margin-top:6px;">
-          <button type="submit" id="rsvp-submit" style="width:100%;background:#FF6B1A;color:#ffffff;border:0;padding:16px 28px;border-radius:999px;font-size:15pt;cursor:pointer;"><strong>&#10004; Send My RSVP</strong></button>
+          <button type="submit" id="rsvp-submit" style="width:100%;background:#FF6B1A;color:#ffffff;border:0;padding:16px 28px;font-size:15pt;cursor:pointer;"><strong>&#10004; Send My RSVP</strong></button>
         </div>
 
         <div id="rsvp-status" style="font-size:13pt;color:#80e0e0;line-height:1.5;min-height:1.5em;"></div>
