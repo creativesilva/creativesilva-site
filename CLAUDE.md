@@ -55,12 +55,13 @@ When in doubt, ship clean, balanced, and minimal. Bloated copy and visual clutte
 These are non-negotiable. The user has flagged em dashes as a hard ban via global memory; the others come from accumulated feedback during builds.
 
 1. **No em dashes.** Anywhere. Ever. Use colons, commas, parentheticals, or restructure the sentence. Applies to commit messages, code comments, copy, headings, everything. Before committing any file, mentally search for `—` and `&mdash;` and replace.
-2. **Smart quotes via HTML entities** in long-form copy (`&#x2018;` `&#x2019;` `&#x201C;` `&#x201D;`).
-3. **5th grade reading level** for all student-facing copy in both English and Spanish. See framework §12. This means short sentences, plain words, active voice, "you" not "the student".
-4. **All assets hosted at `raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/...`**. Never use Canvas-hosted URLs. Never use relative paths in pages that get pasted into Canvas (the path won't resolve from inside Canvas).
-5. **URL-encode spaces** in asset paths as `%20`.
-6. **No filenames with "copy" in them** (e.g., `Jimenez_Mockups copy.ai`). Rename before committing.
-7. **No `.env` files, no credentials, no secrets.** Standard.
+2. **No emojis in student-facing content.** They read cheap. Use a text label, a colored chip, or a typographic arrow (`&larr;` `&rarr;`). `tools/strip-emojis.py` strips them from the `#top` region. Builder-only nav icons (Copy/Download HTML buttons) are exempt since students never see them.
+3. **Smart quotes via HTML entities** in long-form copy (`&#x2018;` `&#x2019;` `&#x201C;` `&#x201D;`).
+4. **5th grade reading level** for all student-facing copy in both English and Spanish. See framework §12. This means short sentences, plain words, active voice, "you" not "the student".
+5. **All assets hosted at `raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/...`**. Never use Canvas-hosted URLs. Never use relative paths in pages that get pasted into Canvas (the path won't resolve from inside Canvas).
+6. **URL-encode spaces** in asset paths as `%20`.
+7. **No filenames with "copy" in them** (e.g., `Jimenez_Mockups copy.ai`). Rename before committing.
+8. **No `.env` files, no credentials, no secrets.** Standard.
 
 ---
 

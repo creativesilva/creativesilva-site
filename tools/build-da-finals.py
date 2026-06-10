@@ -299,7 +299,7 @@ def build_block(lang):
     banner_eyebrow = 'DIGITAL ARTS / FINAL EXAM / STUDY GUIDE' if is_en else 'ARTES DIGITALES / EXAMEN FINAL / GUÍA DE ESTUDIO'
     banner_title = '50 Industry Terms You Must Know' if is_en else '50 Términos de la Industria que Debes Saber'
     banner_tagline = 'Real terms. Real designers use them every day. So will you.' if is_en else 'Términos reales. Los diseñadores los usan todos los días. Tú también lo harás.'
-    banner_btn = '📥 Word Doc' if is_en else '📥 Documento Word'
+    banner_btn = 'Word Doc' if is_en else 'Documento Word'
     banner_toggle = 'Clic para Español' if is_en else 'Back to English'
     banner_toggle_href = '#espanol' if is_en else '#top'
 
@@ -430,7 +430,7 @@ def build_block(lang):
                         else 'El día del examen, tu cuaderno es tu único recurso. Que las notas valgan.')
     sg_line_print = ('Want a printable copy? Grab the full 50-term study guide as a Word document. Open it on your phone, print it, or save it to OneDrive for offline review.' if is_en
                      else '¿Quieres una copia para imprimir? Descarga la guía completa de 50 términos como documento Word. Ábrela en tu celular, imprímela o guárdala en OneDrive para repasar sin internet.')
-    sg_btn = '📥 Download Word Doc' if is_en else '📥 Descargar Documento Word'
+    sg_btn = 'Download Word Doc' if is_en else 'Descargar Documento Word'
 
     sg_inner = (
         f'{chip(sg_chip, ORANGE, ORANGE_EYEBROW)}'
