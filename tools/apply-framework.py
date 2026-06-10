@@ -101,6 +101,22 @@ TITLE = (r'<div style="font-size:(?:18|19|20|22|24)pt[^"]*"><strong>(?:(?!</?div
 PAIR = re.compile(r'(' + LEAF + r')\s*(' + TITLE + r')', re.S)
 TAGS = re.compile(r'<[^>]+>')
 
+ACCENT_UP = {'aacute':'Aacute','eacute':'Eacute','iacute':'Iacute','oacute':'Oacute',
+             'uacute':'Uacute','ntilde':'Ntilde','uuml':'Uuml','auml':'Auml','ouml':'Ouml','iuml':'Iuml'}
+
+def smart_upper(t):
+    """Uppercase label text. HTML entities are not naively uppercased
+    (which would break them); accented-letter entities are swapped for
+    their uppercase form (&eacute; -> &Eacute;) so a chip like
+    'DE QUE TRATA' shows a real uppercase accent. Other entities
+    (&amp;, &bull;, ...) are left as-is."""
+    def conv(p):
+        if p.startswith('&') and p.endswith(';'):
+            name = p[1:-1]
+            return f'&{ACCENT_UP[name.lower()]};' if name.lower() in ACCENT_UP else p
+        return p.upper()
+    return ''.join(conv(p) for p in re.split(r'(&[a-zA-Z]+;)', t))
+
 def pass_parity(html):
     stripes = [(m.start(), m.group(1)) for m in STRIPE.finditer(html)]
     def accent_at(pos):
@@ -131,7 +147,7 @@ def pass_parity(html):
             f'border-left:3px solid {accent};padding:5px 12px 5px 10px;'
             f'font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;'
             f'color:{eb};text-transform:uppercase;margin-bottom:12px;">'
-            f'<strong>{text.upper()} / {nn}</strong></div>'
+            f'<strong>{smart_upper(text)} / {nn}</strong></div>'
         )
         hair = f'<div style="height:2px;background:{accent};width:60px;margin-bottom:18px;"></div>'
         return chip + title_div + hair
