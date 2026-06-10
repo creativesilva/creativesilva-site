@@ -12,6 +12,7 @@ Generator: `tools/build-da-finals.py`.
 ## 1. Non-Negotiable Rules
 
 - Never use em dashes. No `—`, no `&mdash;`. Use a colon, comma, or a new sentence.
+- No emojis in student-facing content. They read cheap. Use a text label, a colored chip, or an arrow (`&larr;` `&rarr;`) instead. (`tools/strip-emojis.py` removes them from the `#top` region.)
 - Student-facing language at about a 5th grade reading level. Short, direct sentences. Active voice. Use "you" and "your".
 - All Canvas assets use raw GitHub URLs (`https://raw.githubusercontent.com/...`). No Canvas-hosted file URLs, no relative paths, no invented filenames. Spaces in paths become `%20`.
 - Bilingual by default: full English block first, then a full Spanish mirror below the `#espanol` anchor. English only when explicitly requested.
