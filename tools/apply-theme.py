@@ -37,13 +37,14 @@ THEMES = {
       '230,36,41': '164,22,26',   # red -> rust red
       '0,56,56': '40,20,2',       # page-background tint -> dark orange
     },
-    # logo: text placeholder until the MRC logo file is added to assets
-    'logo_text': 'MRC',
+    'logo_url': 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/mrc/MRC_Logo.png',
+    'logo_alt': 'Mark Richardson Center',
+    'logo_width': '150px',
+    'logo_vw': '28vw',
+    # eyebrow drops the center name because the logo already carries it
     'brand': [
-      ('Pioneer Valley High School Logo', 'Mark Richardson Center'),
-      ('Pioneer Valley High School', 'Mark Richardson Center'),
-      ('DIGITAL ARTS / FINAL EXAM / STUDY GUIDE', 'MARK RICHARDSON CENTER / INTRO TO DIGITAL ARTS'),
-      ('ARTES DIGITALES / EXAMEN FINAL / GU&Iacute;A DE ESTUDIO', 'CENTRO MARK RICHARDSON / INTRODUCCI&Oacute;N AL ARTE DIGITAL'),
+      ('DIGITAL ARTS / FINAL EXAM / STUDY GUIDE', 'INTRO TO DIGITAL ARTS'),
+      ('ARTES DIGITALES / EXAMEN FINAL / GU&Iacute;A DE ESTUDIO', 'INTRODUCCI&Oacute;N AL ARTE DIGITAL'),
     ],
   },
 }
@@ -60,11 +61,15 @@ def apply(theme_name, src, dst):
     # hex colors (case-insensitive)
     for a,b in t['hex'].items():
         html = re.sub(re.escape(a), b, html, flags=re.I)
-    # logo -> text placeholder wordmark
-    if t.get('logo_text'):
+    # logo: real image if a URL is given, else a text placeholder wordmark
+    if t.get('logo_url'):
+        img = (f'<img src="{t["logo_url"]}" alt="{t.get("logo_alt","")}" '
+               f'style="width:min({t.get("logo_width","120px")},{t.get("logo_vw","20vw")});'
+               f'height:auto;display:block;">')
+        html = LOGO_IMG.sub(img, html)
+    elif t.get('logo_text'):
         wordmark = (f'<div style="font-size:20pt;color:#c95201;font-weight:700;'
-                    f'letter-spacing:0.04em;"><strong>{t["logo_text"]}</strong></div>'
-                    f'<!--LOGO PLACEHOLDER: swap for the MRC logo img-->')
+                    f'letter-spacing:0.04em;"><strong>{t["logo_text"]}</strong></div>')
         html = LOGO_IMG.sub(wordmark, html)
     # brand text swaps
     for a,b in t['brand']:
