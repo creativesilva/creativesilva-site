@@ -39,8 +39,8 @@ THEMES = {
     },
     'logo_url': 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/mrc/MRC_Logo.png',
     'logo_alt': 'Mark Richardson Center',
-    'logo_width': '150px',
-    'logo_vw': '28vw',
+    'logo_width': '90px',
+    'logo_vw': '15vw',
     # eyebrow drops the center name because the logo already carries it
     'brand': [
       ('DIGITAL ARTS / FINAL EXAM / STUDY GUIDE', 'INTRO TO DIGITAL ARTS'),
