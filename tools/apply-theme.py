@@ -13,37 +13,37 @@ import re, sys, os
 
 THEMES = {
   'mrc': {
-    # Marc Richardson Center: orange #c95201 + grays + black (monochrome).
-    # teal/cyan/red roles all collapse onto orange + gray.
+    # Mark Richardson Center: four-color system mapped to framework roles.
+    # primary=orange #c95201, action=gold #e9b949, info=steel blue
+    # #3a7ca5, rules=rust red #a4161a, support=grays + black.
     'hex': {
-      '#00b8b8': '#c95201',  # primary accent
+      '#00b8b8': '#c95201',  # primary/content accent (was teal)
       '#007474': '#c95201',  # banner accent
       '#003838': '#4a1e02',  # banner dark-mid (dark orange)
-      '#80e0e0': '#eda268',  # light eyebrow (light orange)
-      '#FF6B1A': '#c95201',  # action -> brand orange
-      '#ff6b1a': '#c95201',
-      '#ffb27c': '#eda268',  # light action
-      '#00c2ff': '#a6a6a6',  # info -> light gray
-      '#7dd3fc': '#c2c2c2',  # light info
-      '#E62429': '#c95201',  # rules (no red in brand) -> orange
-      '#ffb3b6': '#eda268',
-      '#003838': '#4a1e02',
+      '#80e0e0': '#eda268',  # light primary eyebrow (light orange)
+      '#FF6B1A': '#e9b949',  # action/format (was orange) -> gold
+      '#ff6b1a': '#e9b949',
+      '#ffb27c': '#f6dd9d',  # light action (light gold)
+      '#00c2ff': '#3a7ca5',  # info/study (was cyan) -> steel blue
+      '#7dd3fc': '#9ecbe6',  # light info (light steel blue)
+      '#E62429': '#a4161a',  # rules (was red) -> rust red
+      '#ffb3b6': '#e09b9d',  # light rules (light rust)
     },
     'rgb': {
-      '0,184,184': '201,82,1',
-      '0,116,116': '201,82,1',
-      '255,107,26': '201,82,1',
-      '0,194,255': '166,166,166',
-      '230,36,41': '201,82,1',
-      '0,56,56': '40,20,2',     # page-background tint
+      '0,184,184': '201,82,1',    # teal -> orange
+      '0,116,116': '201,82,1',    # dark teal tint -> orange
+      '255,107,26': '233,185,73', # orange -> gold
+      '0,194,255': '58,124,165',  # cyan -> steel blue
+      '230,36,41': '164,22,26',   # red -> rust red
+      '0,56,56': '40,20,2',       # page-background tint -> dark orange
     },
-    # logo: text placeholder until the real MRC logo is supplied
+    # logo: text placeholder until the MRC logo file is added to assets
     'logo_text': 'MRC',
     'brand': [
-      ('Pioneer Valley High School Logo', 'Marc Richardson Center'),
-      ('Pioneer Valley High School', 'Marc Richardson Center'),
-      ('DIGITAL ARTS / FINAL EXAM / STUDY GUIDE', 'MARC RICHARDSON CENTER / INTRO TO DIGITAL ARTS'),
-      ('ARTES DIGITALES / EXAMEN FINAL / GU&Iacute;A DE ESTUDIO', 'CENTRO MARC RICHARDSON / INTRODUCCI&Oacute;N AL ARTE DIGITAL'),
+      ('Pioneer Valley High School Logo', 'Mark Richardson Center'),
+      ('Pioneer Valley High School', 'Mark Richardson Center'),
+      ('DIGITAL ARTS / FINAL EXAM / STUDY GUIDE', 'MARK RICHARDSON CENTER / INTRO TO DIGITAL ARTS'),
+      ('ARTES DIGITALES / EXAMEN FINAL / GU&Iacute;A DE ESTUDIO', 'CENTRO MARK RICHARDSON / INTRODUCCI&Oacute;N AL ARTE DIGITAL'),
     ],
   },
 }
