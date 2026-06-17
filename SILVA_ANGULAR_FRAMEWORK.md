@@ -120,6 +120,24 @@ Term tiles and stat tiles sit in a horizontal scroll row:
 <div class="scroll-hint" style="text-align:center;font-size:8pt;color:rgba(0,184,184,0.55);letter-spacing:0.22em;text-transform:uppercase;margin-top:14px;font-family:Arial,sans-serif;"><strong>« drag or swipe for more »</strong></div>
 ```
 
+## 8.5 Image Placeholders (when no image is supplied)
+
+When a page needs an image the user has not provided yet, do NOT leave a
+gap or a broken `<img>`. Drop an on-brand placeholder box in its place:
+a gradient-frame card with a dark fill, an `IMAGE PLACEHOLDER` eyebrow
+label (in the page accent), and an italic, muted description of what the
+image should be, written like an AI image prompt (who is in it, what
+they are doing, the setting). Float it right or run it full width to
+match where the real image will go. Swap the real `<img>` in (with the
+standard 2px gradient frame) once the user supplies it.
+
+```html
+<div style="background:linear-gradient(135deg,rgba(R,G,B,0.12) 0%,rgba(0,0,0,0.45) 100%);border:2px solid transparent;border-image:linear-gradient(135deg,<SOLID> 0%,<DIM> 100%) 1;padding:26px 22px;text-align:center;float:right;width:42%;min-width:240px;margin:0 0 18px 26px;">
+  <div style="font-size:10pt;letter-spacing:0.22em;text-transform:uppercase;color:<EYEBROW>;margin-bottom:10px;"><strong>Image Placeholder</strong></div>
+  <div style="font-size:11.5pt;line-height:1.6;color:rgba(255,255,255,0.66);font-style:italic;">FLOAT-RIGHT IMAGE: who, doing what, where.</div>
+</div>
+```
+
 ## 9. Build Checklist
 
 - Zero rounded corners anywhere.
