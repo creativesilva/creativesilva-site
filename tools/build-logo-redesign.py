@@ -300,9 +300,12 @@ tools = [
     tile('Align', 'Center It Up', 'Use the <strong>Move tool</strong> and the <strong>Align</strong> buttons to center your logo on the artboard so it looks balanced and clean.'),
     tile('Keep It Simple', 'Simple and Bold', 'Strong shapes, few colors, high contrast. Your logo should read in one second, even when it is shrunk down small.'),
 ]
+def link(href, inner):
+    return '<a href="%s" style="display:block;text-decoration:none;color:inherit;">%s</a>' % (href, inner)
+
 fonts = [
-    tile('Source 01', 'dafont.com', 'A huge library of <strong>free</strong> fonts you can download. Browse by style, then download the font file to the computer.'),
-    tile('Source 02', 'Adobe Fonts', 'Hundreds of quality fonts built right into your Adobe account. Turn one on and it shows up in Photoshop, no download needed.'),
+    link('https://www.dafont.com', tile('Source 01', 'dafont.com', 'A huge library of <strong>free</strong> fonts you can download. Browse by style, then download the font file to the computer. <strong>Click to open &rarr;</strong>')),
+    link('https://fonts.adobe.com', tile('Source 02', 'Adobe Fonts', 'Hundreds of quality fonts built right into your Adobe account. Turn one on and it shows up in Photoshop, no download needed. <strong>Click to open &rarr;</strong>')),
 ]
 page(
     'logo-redesign-step03-digital.html',
