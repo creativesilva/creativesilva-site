@@ -300,12 +300,14 @@ tools = [
     tile('Align', 'Center It Up', 'Use the <strong>Move tool</strong> and the <strong>Align</strong> buttons to center your logo on the artboard so it looks balanced and clean.'),
     tile('Keep It Simple', 'Simple and Bold', 'Strong shapes, few colors, high contrast. Your logo should read in one second, even when it is shrunk down small.'),
 ]
-def link(href, inner):
-    return '<a href="%s" style="display:block;text-decoration:none;color:inherit;">%s</a>' % (href, inner)
+def ilink(href, label):
+    """Inline hyperlink that survives the Canvas sanitizer (no block wrapper)."""
+    return ('<a href="%s" style="color:#eda268;text-decoration:underline;"><strong>%s &rarr;</strong></a>'
+            % (href, label))
 
 fonts = [
-    link('https://www.dafont.com', tile('Source 01', 'dafont.com', 'A huge library of <strong>free</strong> fonts you can download. Browse by style, then download the font file to the computer. <strong>Click to open &rarr;</strong>')),
-    link('https://fonts.adobe.com', tile('Source 02', 'Adobe Fonts', 'Hundreds of quality fonts built right into your Adobe account. Turn one on and it shows up in Photoshop, no download needed. <strong>Click to open &rarr;</strong>')),
+    tile('Source 01', 'dafont.com', 'A huge library of <strong>free</strong> fonts you can download. Browse by style, then download the font file to the computer.<br />' + ilink('https://www.dafont.com', 'Open dafont.com')),
+    tile('Source 02', 'Adobe Fonts', 'Hundreds of quality fonts built right into your Adobe account. Turn one on and it shows up in Photoshop, no download needed.<br />' + ilink('https://fonts.adobe.com', 'Open Adobe Fonts')),
 ]
 page(
     'logo-redesign-step03-digital.html',
