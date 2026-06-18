@@ -15,6 +15,7 @@ import os
 OUT = os.path.join(os.path.dirname(__file__), '..', 'curriculum', 'mrc')
 
 ACCENT = '#c95201'
+RAW = 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/mrc/images/'
 FRAME = 'border:2px solid transparent;border-image:linear-gradient(135deg,#c95201 0%,rgba(201,82,1,0.08) 100%) 1;'
 CARD_BG = 'background:linear-gradient(180deg,rgba(201,82,1,0.10) 0%,rgba(201,82,1,0.03) 100%);'
 WEDGE = 'background:linear-gradient(135deg,rgba(201,82,1,0.20) 0%,rgba(201,82,1,0.20) 8%,rgba(0,0,0,0.40) 8%,rgba(0,0,0,0.40) 100%);'
@@ -205,7 +206,7 @@ page(
              para('A logo is the face of a brand. It is one small mark that stands for a whole company: its products, its style, and its promise to you.')
              + para('You already recognize hundreds of logos in a split second, even with no name attached. A checkmark. A bitten apple. A pair of golden arches. That fast recognition is the whole job of a logo.')
              + para('The best logos are simple enough to draw from memory. That is not an accident. It is the result of careful design.'),
-             ph('FLOAT-RIGHT IMAGE: the Starbucks logo evolution, 1971 to today. Four versions in a row showing the mark getting simpler at each step, ending in the clean green siren.')),
+             floatimg(RAW + 'logo-overview-float.jpg', 'The Starbucks logo evolution from 1971 to today, getting simpler at each step')),
         card('SIMPLE WINS / 02 / 04', 'The More Successful, the Simpler',
              para('Look at how the Starbucks logo changed over time. The first version in 1971 had a detailed siren, a brown color, and the words &ldquo;Starbucks Coffee&rdquo; wrapped around a ring. Each redesign removed something: the outer text, then the ring, until only a clean green siren was left.')
              + para('This happens to almost every big brand. As a company grows, its logo gets <strong>simpler, not fancier</strong>. Nike dropped its name and kept the swoosh. Apple dropped the rainbow stripes and the word &ldquo;Apple.&rdquo; Shell, McDonald&rsquo;s, and Mastercard all did the same.')
@@ -247,7 +248,7 @@ page(
              + para('Draw <strong>three different thumbnails</strong> of your logo. Make each one a different idea, not the same drawing three times. Try these three directions:')
              + scrollrow(directions)
              + para('Keep them rough. Thumbnails are about ideas, not clean lines. You will polish your best one later.'),
-             ph('FLOAT-RIGHT IMAGE: an MRC student&rsquo;s sketchbook open on a desk, showing three small thumbnail boxes, each a rough redesign of a famous logo, with a pencil resting on the page.')),
+             floatimg(RAW + 'logo-thumbnails-float.png', 'An MRC student sketching three logo thumbnails in a sketchbook')),
         card('GET A CHECK / 03 / 03', 'Bring Them to Mr. Silva',
              para('Before you go any further, bring your three thumbnails to Mr. Silva for a quick visual check. This is a required checkpoint.')
              + para('Mr. Silva will look at your ideas and give you insight: which direction is strongest, what to push, and what to simplify even more.')
@@ -282,7 +283,7 @@ page(
              + para('Turn your photos in to Step 2 in Canvas. Name your file:')
              + fname('FirstName LastInitial - Logo Sketch')
              + notecard('TURN IN', 'What to Submit', 'Clear photos of all three thumbnails plus your one polished final sketch.'),
-             ph('FLOAT-RIGHT IMAGE: an MRC student using a smartphone to take a clear, well-lit photo of their logo sketch lying flat on the desk, phone held straight above the paper.')),
+             floatimg(RAW + 'logo-sketch-float.png', 'An MRC student photographing her logo sketches with a smartphone')),
     ],
 )
 
@@ -319,7 +320,7 @@ page(
              para('Rebuild your final sketch as a clean digital logo. Lead with the Pen tool, then use whatever else you need. Scroll for pointers on each tool.')
              + '<div style="clear:both;"></div>'
              + vscroll(tools),
-             ph('FLOAT-RIGHT IMAGE: an MRC student building a logo in Photoshop, using the Pen tool to draw smooth paths on a large 2000 by 2000 artboard, the original paper sketch taped beside the screen.')),
+             floatimg(RAW + 'logo-digital-float.png', 'An MRC student rebuilding the redesigned logo in Photoshop')),
         card('ADD TYPE AND FONTS / 03 / 04', 'Find the Right Font',
              para('Many logos include the brand name or a few letters. Choose a font that matches your new style: bold and clean, fun, sharp, or retro. Use one or two fonts at most.')
              + para('You can get fonts from two places. Pick one and add the font you like.')
