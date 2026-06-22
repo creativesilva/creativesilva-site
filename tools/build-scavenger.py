@@ -151,7 +151,7 @@ body = ''.join([
     card('THE MISSION / 01 / 08', 'Your First Photo Hunt',
          para('Today you grab a real camera and go hunting, not for animals, but for great shots. The Mark Richardson Center is full of them: livestock and crops, big machines, rusted metal, rough wood, and an American flag.')
          + para('Here is the twist: this is a <strong>contest</strong>. Everyone shoots the same 15 shots, and the best set wins a prize. You do not need to know every button. You just need to look closely and frame each shot with care. This is how every photographer starts: by learning to <strong>see</strong>.'),
-         ph('FLOAT-RIGHT IMAGE: an MRC student outdoors holding a DSLR camera up to their eye, aiming at a tractor or a barn, bright daylight on the trade-school campus.')),
+         ph('FLOAT-RIGHT IMAGE: Patricia Guererro (21, athletic build, long black hair in a high ponytail with a red scrunchie, gray-and-black Santa Maria Academy of Arts raglan tee, charcoal jeans, black-and-red Air Jordan 4s) standing outdoors on the MRC trade-school campus, holding a DSLR camera up to her eye and aiming it at a tractor in bright daylight.')),
     card('THE PRIZE / 02 / 08', 'Win a $20 Chick-fil-A Gift Card',
          para('The student with the best set of 15 photos wins a <strong>$20 Chick-fil-A gift card</strong>. One winner, chosen by Mr. Silva.')
          + para('Every shot counts, so give each one your best effort. A strong, complete set beats a few lucky photos.')
