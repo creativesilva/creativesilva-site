@@ -1,0 +1,193 @@
+#!/usr/bin/env python3
+"""Generate the MRC Digital Arts 1A "Photo Scavenger Hunt" overview page
+(English only) on the locked Angular Gradient Framework (orange #c95201).
+One Canvas page: the mission, how it works, camera basics, composition
+basics, safety rules, and a turn-in section with a Download Shot List
+(PDF) button. The actual hunt list is a printable PDF (built separately).
+"""
+import os
+
+OUT = os.path.join(os.path.dirname(__file__), '..', 'curriculum', 'mrc')
+
+RAW = 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/mrc/images/'
+PDF_URL = 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/mrc/handouts/MRC_Photo_Scavenger_Hunt.pdf'
+FRAME = 'border:2px solid transparent;border-image:linear-gradient(135deg,#c95201 0%,rgba(201,82,1,0.08) 100%) 1;'
+CARD_BG = 'background:linear-gradient(180deg,rgba(201,82,1,0.10) 0%,rgba(201,82,1,0.03) 100%);'
+WEDGE = 'background:linear-gradient(135deg,rgba(201,82,1,0.20) 0%,rgba(201,82,1,0.20) 8%,rgba(0,0,0,0.40) 8%,rgba(0,0,0,0.40) 100%);'
+
+def chip(label):
+    return ('<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #c95201;'
+            'padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;'
+            'color:#eda268;text-transform:uppercase;margin-bottom:12px;"><strong>%s</strong></div>' % label)
+
+def tb(title):
+    return ('<div style="font-size:22pt;color:#ffffff;line-height:1.15;margin-bottom:10px;"><strong>%s</strong></div>'
+            '<div style="height:2px;background:#c95201;width:60px;margin-bottom:20px;"></div>' % title)
+
+def para(text):
+    return ('<div style="font-size:14pt;line-height:1.78;color:rgba(255,255,255,0.88);margin-bottom:14px;">%s</div>'
+            % text)
+
+def floatimg(src, alt):
+    return ('<img src="%s" alt="%s" style="float:right;width:42%%;min-width:240px;margin:0 0 18px 26px;%s" />'
+            % (src, alt, FRAME))
+
+def ph(desc):
+    return ('<div style="background:linear-gradient(135deg,rgba(201,82,1,0.12) 0%,rgba(0,0,0,0.45) 100%);'
+            'border:2px solid transparent;border-image:linear-gradient(135deg,#c95201 0%,rgba(201,82,1,0.08) 100%) 1;'
+            'padding:26px 22px;text-align:center;float:right;width:42%;min-width:240px;margin:0 0 18px 26px;">'
+            '<div style="font-size:10pt;letter-spacing:0.22em;text-transform:uppercase;color:#eda268;margin-bottom:10px;">'
+            '<strong>Image Placeholder</strong></div>'
+            '<div style="font-size:11.5pt;line-height:1.6;color:rgba(255,255,255,0.66);font-style:italic;">'
+            + desc + '</div></div>')
+
+def card(label, title, body, floatel=''):
+    return ('<div style="%s%spadding:30px;margin-bottom:24px;position:relative;overflow:hidden;">'
+            '<div style="height:4px;background:#c95201;margin:-30px -30px 24px -30px;"></div>'
+            '%s%s%s%s</div>' % (CARD_BG, FRAME, floatel, chip(label), tb(title), body))
+
+def tile(eyebrow, title, body):
+    return ('<div style="%sborder:1px solid transparent;border-image:linear-gradient(135deg,#c95201 0%%,'
+            'rgba(201,82,1,0.08) 100%%) 1;padding:20px 22px 24px;position:relative;overflow:hidden;">'
+            '<div style="height:3px;background:#c95201;margin:-20px -22px 12px -22px;"></div>'
+            '<div style="font-size:9pt;letter-spacing:0.22em;color:#eda268;text-transform:uppercase;margin-bottom:8px;">'
+            '<strong>%s</strong></div>'
+            '<div style="font-size:16pt;color:#ffffff;line-height:1.15;margin-bottom:8px;"><strong>%s</strong></div>'
+            '<div style="height:2px;background:#c95201;width:32px;margin-bottom:10px;"></div>'
+            '<div style="font-size:13pt;line-height:1.55;color:rgba(255,255,255,0.84);">%s</div></div>'
+            % (WEDGE, eyebrow, title, body))
+
+def notecard(eyebrow, title, body):
+    return ('<div style="%sborder:1px solid transparent;border-image:linear-gradient(135deg,#c95201 0%%,'
+            'rgba(201,82,1,0.08) 100%%) 1;padding:20px 22px 24px;position:relative;overflow:hidden;margin-top:4px;">'
+            '<div style="height:3px;background:#c95201;margin:-20px -22px 12px -22px;"></div>'
+            '<div style="font-size:9pt;letter-spacing:0.22em;color:#eda268;text-transform:uppercase;margin-bottom:8px;">'
+            '<strong>%s</strong></div>'
+            '<div style="font-size:16pt;color:#ffffff;line-height:1.15;margin-bottom:8px;"><strong>%s</strong></div>'
+            '<div style="height:2px;background:#c95201;width:32px;margin-bottom:10px;"></div>'
+            '<div style="font-size:13pt;line-height:1.55;color:rgba(255,255,255,0.84);">%s</div></div>'
+            % (WEDGE, eyebrow, title, body))
+
+def scrollrow(tiles, hint='&laquo; drag or swipe for more &raquo;'):
+    inner = ''.join(tiles)
+    return ('<div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(255px,1fr);overflow-x:auto;'
+            'gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">%s</div>'
+            '<div style="text-align:center;font-size:8pt;color:rgba(201,82,1,0.65);letter-spacing:0.22em;'
+            'text-transform:uppercase;margin-top:14px;font-family:Arial,sans-serif;"><strong>%s</strong></div>'
+            % (inner, hint))
+
+def dlbutton(href, label):
+    return ('<a href="%s" download="" style="background:rgba(255,255,255,0.92);color:#4a1e02;text-decoration:none;'
+            'padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #c95201;">'
+            '<strong>%s</strong></a>' % (href, label))
+
+def banner(eyebrow, title, tagline):
+    return ('<div style="background:linear-gradient(135deg,#000000 0%%,#4a1e02 40%%,#c95201 100%%);'
+            'padding:20px 28px 22px;margin:-28px -28px 24px -28px;border-bottom:3px solid #c95201;">'
+            '<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">'
+            '<div style="justify-self:start;"><img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/mrc/MRC_Logo.png" alt="Mark Richardson Center" style="width:min(90px,15vw);height:auto;display:block;" /></div>'
+            '<div style="justify-self:center;text-align:center;">'
+            '<div style="margin-bottom:6px;"><span style="font-size:14pt;color:#eda268;"><strong>%s</strong></span></div>'
+            '<div style="color:#ffffff;font-size:24pt;font-weight:700;line-height:1.1;"><strong>%s</strong></div>'
+            '<div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:13pt;font-style:italic;"><strong>%s</strong></span></div>'
+            '</div>'
+            '<div style="justify-self:end;"></div>'
+            '</div></div>' % (eyebrow, title, tagline))
+
+NAV = '''  <nav class="silva-nav" aria-label="Module navigation">
+    <div class="silva-nav-inner">
+      <div class="silva-breadcrumb">
+        <a href="/curriculum.html">Curriculum</a>
+        <span class="bc-sep">&rsaquo;</span>
+        <a href="/curriculum.html#mrc-da1a" class="bc-hide-sm">Digital Arts 1A</a>
+        <span class="bc-sep bc-hide-sm">&rsaquo;</span>
+        <span class="bc-current">Photo Scavenger Hunt</span>
+      </div>
+      <div class="silva-nav-spacer"></div>
+      <button class="silva-copy-btn" onclick="silvaCopyHTML()" aria-label="Copy Canvas HTML to clipboard">&#128203; Copy Canvas HTML</button>
+      <button class="silva-download-btn" onclick="silvaDownloadHTML()" aria-label="Download Canvas HTML as file">&#128229; Download HTML</button>
+    </div>
+  </nav>'''
+
+SCRIPTS = '''  <script>
+    function silvaCopyHTML() {
+      const el = document.getElementById('top'); const html = el.outerHTML;
+      navigator.clipboard.writeText(html).then(function() {
+        var btn = document.querySelector('.silva-copy-btn');
+        btn.textContent = '\\u2713 Copied to clipboard!'; btn.classList.add('copied');
+        setTimeout(function() { btn.innerHTML = '&#128203; Copy Canvas HTML'; btn.classList.remove('copied'); }, 2500);
+      }).catch(function() { alert('Copy failed. Try selecting the page source manually.'); });
+    }
+    function silvaDownloadHTML() {
+      var el = document.getElementById('top'); var html = el.outerHTML;
+      var blob = new Blob([html], { type: 'text/html' }); var url = URL.createObjectURL(blob);
+      var a = document.createElement('a'); a.href = url; a.download = 'mrc-photo-scavenger-hunt-canvas.html';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    }
+  </script>
+  <script src="/js/silva-nav.js"></script>'''
+
+# composition concept tiles (define every term used on the paper list)
+comp = [
+    tile('Composition', 'Leading Lines', 'Use a road, fence, or row of crops to pull your eye into the photo.'),
+    tile('Composition', 'Rule of Thirds', 'Put your subject off to one side, not dead center. It feels more natural.'),
+    tile('Composition', 'Framing', 'Shoot through a gate, window, or branches to frame your subject.'),
+    tile('Composition', 'Texture', 'Get close to a rough surface so the viewer can almost feel it.'),
+    tile('Composition', 'Pattern', 'Find shapes that repeat, like fence posts or stacked pipes.'),
+    tile('Composition', 'Fill the Frame', 'Get close so your subject fills the whole photo, with no empty space.'),
+    tile('Composition', 'Point of View', 'Shoot from down low or up high, not just from eye level.'),
+    tile('Composition', 'Symmetry', 'Line up a balanced shot where both halves match.'),
+    tile('Composition', 'Negative Space', 'Leave lots of empty space around a small subject to make it pop.'),
+]
+
+body = ''.join([
+    card('THE MISSION / 01 / 06', 'Your First Photo Hunt',
+         para('Today you grab a real camera and go hunting, not for animals, but for great shots. The Mark Richardson Center is full of them: livestock and crops, big machines and work trucks, rusted metal, rough wood, and an American flag.')
+         + para('You do not need to know every button. You just need to look closely and frame each shot with care. This is how every photographer starts: by learning to <strong>see</strong>.'),
+         ph('FLOAT-RIGHT IMAGE: an MRC student outdoors holding a DSLR camera up to their eye, aiming at a tractor or a barn, bright daylight on the trade-school campus.')),
+    card('HOW IT WORKS / 02 / 06', 'Hunt, Shoot, Check Off',
+         para('You get a paper shot list with about 20 items. Some are <strong>things to find</strong>, like an American flag or a tractor. Some are <strong>composition challenges</strong>, like leading lines or texture.')
+         + para('Find each item, frame it well, take the shot, and check it off your list. Work with your group, but everyone takes their own photos.')
+         + notecard('THE GOAL', 'Quality Over Speed', 'It is not a race. One well-framed photo beats five quick snapshots. Slow down and look before you press the shutter.')),
+    card('YOUR CAMERA, MADE EASY / 03 / 06', 'Let the Camera Do the Work',
+         para('Set the dial to <strong>AUTO</strong>. In auto mode the camera handles the focus, the light, and the color for you. Your only job is <strong>what to point it at</strong> and <strong>how to frame it</strong>.')
+         + para('Hold the camera with both hands and tuck your elbows into your body to stay steady. Press the shutter button <strong>halfway</strong> to lock focus, wait for the beep or the green box, then press the rest of the way to take the shot.')
+         + para('Blurry photo? Hold still, press halfway again, and let it focus before you shoot.')),
+    card('COMPOSITION BASICS / 04 / 06', 'How to Frame a Great Shot',
+         para('Composition means how you arrange what is in your photo. These are the moves on your shot list. Learn them here, then go find them out there.')
+         + scrollrow(comp)),
+    card('RULES OF THE HUNT / 05 / 06', 'Stay Safe, Shoot Smart',
+         para('You will be outdoors around animals and heavy equipment. Safety comes first, every time.')
+         + para('<strong>Keep your distance</strong> from livestock and machinery. Never climb on or reach into equipment, and never enter a pen or a gated area. Watch your footing on uneven ground.')
+         + para('Stay with your group and your teacher. Respect the campus and the animals. Photograph the work, but do not touch tools or machines that are not yours.')),
+    card('TURN IT IN / 06 / 06', 'Pick Your Best and Submit',
+         para('Back in class, look through everything you shot. Pick your <strong>8 to 10 best</strong> photos, the ones with the strongest framing, and upload them to this assignment in Canvas.')
+         + para('Download the printable shot list below, grab a camera, and go.')
+         + '<div style="margin-top:18px;">' + dlbutton(PDF_URL, 'Download the Shot List (PDF)') + '</div>'),
+])
+
+html = ('<!DOCTYPE html>\n<html lang="en">\n<head>\n'
+        '  <meta charset="UTF-8" />\n'
+        '  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n'
+        '  <title>Photo Scavenger Hunt | Digital Arts 1A | Mark Richardson Center</title>\n'
+        '  <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only.svg" />\n'
+        '  <link rel="apple-touch-icon" href="/logos/CS_Logo_Only.svg" />\n'
+        '  <style>:root { --course-accent: #c95201; }</style>\n'
+        '  <link rel="stylesheet" href="/css/silva-module.css" />\n'
+        '</head>\n<body>\n' + NAV + '\n'
+        '  <div class="silva-page">\n  <div id="silva-module-content">\n'
+        '  <div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;'
+        'background-color:#080808;background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,'
+        'rgba(40,20,2,0.94) 50%,rgba(8,8,8,0.97) 100%);background-position:center center;'
+        'background-repeat:no-repeat;background-attachment:fixed;overflow:hidden;">\n\n'
+        '    <div style="padding:28px 28px 40px;">\n      '
+        + banner('Digital Arts 1A &nbsp;&bull;&nbsp; Module', 'Photo Scavenger Hunt',
+                 'Grab a camera and go see the MRC.')
+        + body +
+        '\n    </div>\n\n  </div>\n  </div>\n  </div>\n' + SCRIPTS + '\n</body>\n</html>\n')
+
+path = os.path.join(OUT, 'scavenger-hunt-overview.html')
+open(path, 'w').write(html)
+print('scavenger-hunt-overview.html  divs=%s  em=%d'
+      % ('OK' if html.count('<div') == html.count('</div>') else 'IMBALANCE',
+         html.count('—') + html.count('&mdash;')))
