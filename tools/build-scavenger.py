@@ -127,7 +127,7 @@ SCRIPTS = '''  <script>
   </script>
   <script src="/js/silva-nav.js"></script>'''
 
-# composition concept tiles (define every term used on the paper list)
+# composition concept tiles (define every shot challenge on the paper list)
 comp = [
     tile('Composition', 'Leading Lines', 'Use a road, fence, or row of crops to pull your eye into the photo.'),
     tile('Composition', 'Rule of Thirds', 'Put your subject off to one side, not dead center. It feels more natural.'),
@@ -135,33 +135,48 @@ comp = [
     tile('Composition', 'Texture', 'Get close to a rough surface so the viewer can almost feel it.'),
     tile('Composition', 'Pattern', 'Find shapes that repeat, like fence posts or stacked pipes.'),
     tile('Composition', 'Fill the Frame', 'Get close so your subject fills the whole photo, with no empty space.'),
-    tile('Composition', 'Point of View', 'Shoot from down low or up high, not just from eye level.'),
-    tile('Composition', 'Symmetry', 'Line up a balanced shot where both halves match.'),
+    tile('Composition', 'Low Angle', 'Crouch down low and shoot upward for a bold, powerful angle.'),
     tile('Composition', 'Negative Space', 'Leave lots of empty space around a small subject to make it pop.'),
 ]
 
+# what the judges score every set on
+judges = [
+    tile('Judging', 'Accuracy', 'Your photo clearly shows the prompt. A texture shot is really about texture.'),
+    tile('Judging', 'Composition', 'You used the technique and framed it with care, not just a quick snapshot.'),
+    tile('Judging', 'Creativity', 'A fresh or clever take that stands out from everyone else.'),
+    tile('Judging', 'Image Quality', 'Sharp focus, good light, and clean. Not blurry and not too dark.'),
+]
+
 body = ''.join([
-    card('THE MISSION / 01 / 06', 'Your First Photo Hunt',
-         para('Today you grab a real camera and go hunting, not for animals, but for great shots. The Mark Richardson Center is full of them: livestock and crops, big machines and work trucks, rusted metal, rough wood, and an American flag.')
-         + para('You do not need to know every button. You just need to look closely and frame each shot with care. This is how every photographer starts: by learning to <strong>see</strong>.'),
+    card('THE MISSION / 01 / 08', 'Your First Photo Hunt',
+         para('Today you grab a real camera and go hunting, not for animals, but for great shots. The Mark Richardson Center is full of them: livestock and crops, big machines, rusted metal, rough wood, and an American flag.')
+         + para('Here is the twist: this is a <strong>contest</strong>. Everyone shoots the same 15 shots, and the best set wins a prize. You do not need to know every button. You just need to look closely and frame each shot with care. This is how every photographer starts: by learning to <strong>see</strong>.'),
          ph('FLOAT-RIGHT IMAGE: an MRC student outdoors holding a DSLR camera up to their eye, aiming at a tractor or a barn, bright daylight on the trade-school campus.')),
-    card('HOW IT WORKS / 02 / 06', 'Hunt, Shoot, Check Off',
-         para('You get a paper shot list with about 20 items. Some are <strong>things to find</strong>, like an American flag or a tractor. Some are <strong>composition challenges</strong>, like leading lines or texture.')
-         + para('Find each item, frame it well, take the shot, and check it off your list. Work with your group, but everyone takes their own photos.')
+    card('THE PRIZE / 02 / 08', 'Win a $20 Chick-fil-A Gift Card',
+         para('The student with the best set of 15 photos wins a <strong>$20 Chick-fil-A gift card</strong>. One winner, chosen by Mr. Silva.')
+         + para('Every shot counts, so give each one your best effort. A strong, complete set beats a few lucky photos.')
+         + notecard('THE PRIZE', '$20 Chick-fil-A Gift Card', 'The best full set of 15 photos takes it home. Make every shot count.')),
+    card('HOW IT WORKS / 03 / 08', 'The Same 15 Shots for Everyone',
+         para('You get a paper shot list with <strong>15 shots</strong>. Everyone shoots the same list, so it is a fair contest. Some are <strong>things to find</strong>, like an American flag or a tractor. Some are <strong>shot challenges</strong>, like leading lines or texture.')
+         + para('Take lots of photos as you go. Shoot each item more than once to get it right. Later you will pick your single best photo for each of the 15.')
          + notecard('THE GOAL', 'Quality Over Speed', 'It is not a race. One well-framed photo beats five quick snapshots. Slow down and look before you press the shutter.')),
-    card('YOUR CAMERA, MADE EASY / 03 / 06', 'Let the Camera Do the Work',
+    card('YOUR CAMERA, MADE EASY / 04 / 08', 'Let the Camera Do the Work',
          para('Set the dial to <strong>AUTO</strong>. In auto mode the camera handles the focus, the light, and the color for you. Your only job is <strong>what to point it at</strong> and <strong>how to frame it</strong>.')
          + para('Hold the camera with both hands and tuck your elbows into your body to stay steady. Press the shutter button <strong>halfway</strong> to lock focus, wait for the beep or the green box, then press the rest of the way to take the shot.')
          + para('Blurry photo? Hold still, press halfway again, and let it focus before you shoot.')),
-    card('COMPOSITION BASICS / 04 / 06', 'How to Frame a Great Shot',
-         para('Composition means how you arrange what is in your photo. These are the moves on your shot list. Learn them here, then go find them out there.')
+    card('COMPOSITION BASICS / 05 / 08', 'How to Frame a Great Shot',
+         para('Composition means how you arrange what is in your photo. These are the shot challenges on your list. Learn them here, then go find them out there.')
          + scrollrow(comp)),
-    card('RULES OF THE HUNT / 05 / 06', 'Stay Safe, Shoot Smart',
+    card('HOW YOU WIN / 06 / 08', 'What the Judges Look For',
+         para('Mr. Silva will score every set on four things. Keep them in mind for every single shot.')
+         + scrollrow(judges)),
+    card('RULES OF THE HUNT / 07 / 08', 'Stay Safe, Shoot Smart',
          para('You will be outdoors around animals and heavy equipment. Safety comes first, every time.')
          + para('<strong>Keep your distance</strong> from livestock and machinery. Never climb on or reach into equipment, and never enter a pen or a gated area. Watch your footing on uneven ground.')
          + para('Stay with your group and your teacher. Respect the campus and the animals. Photograph the work, but do not touch tools or machines that are not yours.')),
-    card('TURN IT IN / 06 / 06', 'Pick Your Best and Submit',
-         para('Back in class, look through everything you shot. Pick your <strong>8 to 10 best</strong> photos, the ones with the strongest framing, and upload them to this assignment in Canvas.')
+    card('TURN IT IN / 08 / 08', 'Cull Your Best and Submit',
+         para('Back in class, look through everything you shot. For each of the 15 prompts, pick your <strong>single best photo</strong>. Choosing your strongest shot and dropping the rest is called <strong>culling</strong>.')
+         + para('Submit all <strong>15 photos as JPG files</strong> to this assignment in Canvas, one for each prompt. Tip: name each file with its number, like <strong>01 American Flag</strong>, so they stay in order.')
          + para('Download the printable shot list below, grab a camera, and go.')
          + '<div style="margin-top:18px;">' + dlbutton(PDF_URL, 'Download the Shot List (PDF)') + '</div>'),
 ])
@@ -182,7 +197,7 @@ html = ('<!DOCTYPE html>\n<html lang="en">\n<head>\n'
         'background-repeat:no-repeat;background-attachment:fixed;overflow:hidden;">\n\n'
         '    <div style="padding:28px 28px 40px;">\n      '
         + banner('Digital Arts 1A &nbsp;&bull;&nbsp; Module', 'Photo Scavenger Hunt',
-                 'Grab a camera and go see the MRC.')
+                 'Fifteen shots. Best set wins the prize.')
         + body +
         '\n    </div>\n\n  </div>\n  </div>\n  </div>\n' + SCRIPTS + '\n</body>\n</html>\n')
 

@@ -17,13 +17,10 @@ LOGO = 'data:image/png;base64,' + base64.b64encode(logo).decode()
 FIND = [
     'An American flag',
     'A tractor or heavy machine',
-    'A work truck',
     'An animal (livestock)',
     'A crop or plant growing',
-    'A tool (hand or shop)',
-    'A fence',
     'Rusty or weathered metal',
-    'Wood grain, up close',
+    'A tool (hand or shop)',
     'The MRC logo or a campus sign',
 ]
 SHOTS = [
@@ -33,9 +30,7 @@ SHOTS = [
     ('Texture', 'fill the frame with a rough surface'),
     ('Pattern', 'shapes that repeat'),
     ('Fill the frame', 'get close, no empty space'),
-    ('Low angle', 'shoot from down low'),
-    ('High angle', 'shoot from up high'),
-    ('Symmetry', 'both halves match'),
+    ('Low angle', 'shoot from down low, looking up'),
     ('Negative space', 'small subject, lots of empty space'),
 ]
 
@@ -93,9 +88,9 @@ html = '''<!DOCTYPE html>
   </div>
 
   <div class="intro">
-    Shoot in <b>AUTO</b> mode and put all your focus on <b>framing</b>. Find each item, take your best
-    shot, and check it off. Hold the camera steady, press the shutter halfway to focus, then take the photo.
-    Pick your <b>8 to 10 best</b> to turn in on Canvas.
+    Everyone shoots the <b>same 15 shots</b>. Shoot in <b>AUTO</b> and put all your focus on <b>framing</b>.
+    Take lots of photos, then turn in your single best <b>JPG</b> for each of the 15 on Canvas.
+    Best set wins a <b>$20 Chick-fil-A gift card</b>.
   </div>
 
   <div class="fields">
@@ -116,7 +111,7 @@ html = '''<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    Stay safe: keep your distance from livestock and machinery, and stay with your group. &nbsp; <b>Have fun and shoot a lot.</b>
+    Judged on <b>accuracy, composition, creativity, and image quality</b>. &nbsp; Stay safe: keep your distance from livestock and machinery, and stay with your group.
   </div>
 </body></html>
 ''' % {'logo': LOGO, 'find': find_html, 'shots': shot_html}
