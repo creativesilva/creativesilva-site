@@ -248,7 +248,7 @@ page(
              + para('Draw <strong>three different thumbnails</strong> of your logo. Make each one a different idea, not the same drawing three times. Try these three directions:')
              + scrollrow(directions)
              + para('Keep them rough. Thumbnails are about ideas, not clean lines. You will polish your best one later.'),
-             floatimg(RAW + 'logo-thumbnails-float.png', 'An MRC student sketching three logo thumbnails in a sketchbook')),
+             floatimg(RAW + 'logo-thumbnails-float.png', 'Renee Lopez sketching three logo thumbnails in a sketchbook')),
         card('GET A CHECK / 03 / 03', 'Bring Them to Mr. Silva',
              para('Before you go any further, bring your three thumbnails to Mr. Silva for a quick visual check. This is a required checkpoint.')
              + para('Mr. Silva will look at your ideas and give you insight: which direction is strongest, what to push, and what to simplify even more.')
@@ -283,7 +283,7 @@ page(
              + para('Turn your photos in to Step 2 in Canvas. Name your file:')
              + fname('FirstName LastInitial - Logo Sketch')
              + notecard('TURN IN', 'What to Submit', 'Clear photos of all three thumbnails plus your one polished final sketch.'),
-             floatimg(RAW + 'logo-sketch-float.png', 'An MRC student photographing her logo sketches with a smartphone')),
+             floatimg(RAW + 'logo-sketch-float.png', 'Renee Lopez photographing her logo sketches with a smartphone')),
     ],
 )
 
@@ -325,7 +325,7 @@ page(
              para('Rebuild your final sketch as a clean digital logo. Lead with the Pen tool, then use whatever else you need. Scroll for pointers on each tool.')
              + '<div style="clear:both;"></div>'
              + vscroll(tools),
-             floatimg(RAW + 'logo-digital-float.png', 'An MRC student rebuilding the redesigned logo in Photoshop')),
+             floatimg(RAW + 'logo-digital-float.png', 'Renee Lopez rebuilding the redesigned logo in Photoshop')),
         card('ADD TYPE AND FONTS / 03 / 04', 'Find the Right Font',
              para('Many logos include the brand name or a few letters. Choose a font that matches your new style: bold and clean, fun, sharp, or retro. Use one or two fonts at most.')
              + para('You can get fonts from two places. Pick one and add the font you like.')
