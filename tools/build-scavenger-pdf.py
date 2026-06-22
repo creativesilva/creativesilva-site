@@ -95,8 +95,7 @@ html = '''<!DOCTYPE html>
 
   <div class="fields">
     <span class="f">Name: <span class="line"></span></span>
-    <span class="f">Period: <span class="line sm"></span></span>
-    <span class="f">Date: <span class="line sm"></span></span>
+    <span class="f">Date: <span class="line"></span></span>
   </div>
 
   <div class="cols">
