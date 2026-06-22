@@ -151,7 +151,7 @@ body = ''.join([
     card('THE MISSION / 01 / 08', 'Your First Photo Hunt',
          para('Today you grab a real camera and go hunting, not for animals, but for great shots. The Mark Richardson Center is full of them: livestock and crops, big machines, rusted metal, rough wood, and an American flag.')
          + para('Here is the twist: this is a <strong>contest</strong>. Everyone shoots the same 15 shots, and the best set wins a prize. You do not need to know every button. You just need to look closely and frame each shot with care. This is how every photographer starts: by learning to <strong>see</strong>.'),
-         ph('FLOAT-RIGHT IMAGE: Patricia Guererro (21, athletic build, long black hair in a high ponytail with a red scrunchie, gray-and-black Santa Maria Academy of Arts raglan tee, charcoal jeans, black-and-red Air Jordan 4s) standing outdoors on the MRC trade-school campus, holding a DSLR camera up to her eye and aiming it at a tractor in bright daylight.')),
+         floatimg(RAW + 'scavenger-mission-float.png', 'Patricia Guererro photographing an orange MRC tractor at golden hour outside the Mark Richardson Center')),
     card('THE PRIZE / 02 / 08', 'Win a $20 Chick-fil-A Gift Card',
          para('The student with the best set of 15 photos wins a <strong>$20 Chick-fil-A gift card</strong>. One winner, chosen by Mr. Silva.')
          + para('Every shot counts, so give each one your best effort. A strong, complete set beats a few lucky photos.')
@@ -159,7 +159,8 @@ body = ''.join([
     card('HOW IT WORKS / 03 / 08', 'The Same 15 Shots for Everyone',
          para('You get a paper shot list with <strong>15 shots</strong>. Everyone shoots the same list, so it is a fair contest. Some are <strong>things to find</strong>, like an American flag or a tractor. Some are <strong>shot challenges</strong>, like leading lines or texture.')
          + para('Take lots of photos as you go. Shoot each item more than once to get it right. Later you will pick your single best photo for each of the 15.')
-         + notecard('THE GOAL', 'Quality Over Speed', 'It is not a race. One well-framed photo beats five quick snapshots. Slow down and look before you press the shutter.')),
+         + notecard('THE GOAL', 'Quality Over Speed', 'It is not a race. One well-framed photo beats five quick snapshots. Slow down and look before you press the shutter.'),
+         ph('FLOAT-RIGHT IMAGE: Julian (21, 6 feet tall, lean, dark curly hair with a taper fade, red-and-black plaid flannel open over a black tee, ripped black skinny jeans, silver cross necklace) standing outdoors on the MRC campus, holding the printed photo scavenger hunt shot list in one hand and a DSLR camera in the other, glancing at the list as he plans his next shot.')),
     card('YOUR CAMERA, MADE EASY / 04 / 08', 'Let the Camera Do the Work',
          para('Set the dial to <strong>AUTO</strong>. In auto mode the camera handles the focus, the light, and the color for you. Your only job is <strong>what to point it at</strong> and <strong>how to frame it</strong>.')
          + para('Hold the camera with both hands and tuck your elbows into your body to stay steady. Press the shutter button <strong>halfway</strong> to lock focus, wait for the beep or the green box, then press the rest of the way to take the shot.')
