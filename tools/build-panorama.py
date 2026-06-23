@@ -219,7 +219,7 @@ page(
         card('THE TWO PARTS / 02 / 04', 'Capture, Then Merge',
              para('This is a two-part project. In <strong>Part A</strong> (Step 1) you photograph RAW images for two panoramas with a camera and tripod. In <strong>Part B</strong> (Step 2) you stitch and edit them in Photoshop. Then you finish with a short reflection.')
              + para('You will make at least <strong>two panoramas</strong>, each built from <strong>4 to 5 photos</strong>.')
-             + notecard('START HERE', 'Download Your Project Folder', 'Download the <strong>Panorama</strong> folder below and move it into your <strong>OneDrive Photography</strong> folder. Inside you will find a <strong>RAW Images</strong> folder for your photos and your <strong>reflection</strong> sheet. Keep all of your project work in this one folder from start to finish.')
+             + notecard('START HERE', 'Download Your Project Folder', 'Download the <strong>Panorama</strong> folder below and move it into your <strong>OneDrive Digital Arts</strong> folder. Inside you will find a <strong>RAW Images</strong> folder for your photos and your <strong>reflection</strong> sheet. Keep all of your project work in this one folder from start to finish.')
              + '<div style="margin-top:18px;">' + dlbutton(ZIP_URL, 'Download the Panorama Project Folder') + '</div>'),
         card('SHOOTING IN RAW / 03 / 04', 'Why RAW This Time',
              para('This time you shoot in <strong>RAW</strong>, not JPEG. A RAW file keeps all the data the camera sensor captured, so you can fix exposure and color later with no loss in quality. On our Canon cameras, RAW files end in <strong>.CR3</strong>.')
@@ -271,7 +271,7 @@ page(
              + vscroll(shoot),
              floatimg(RAW + 'pano-camera-mf.png', 'Canon camera back with the AF / MF button circled')),
         card('ORGANIZE YOUR FILES / 04 / 05', 'Keep It Organized',
-             para('Use the <strong>Panorama</strong> folder you downloaded from the overview. If you have not yet, move it into your <strong>OneDrive Photography</strong> folder.')
+             para('Use the <strong>Panorama</strong> folder you downloaded from the overview. If you have not yet, move it into your <strong>OneDrive Digital Arts</strong> folder.')
              + para('Offload all your <strong>.CR3</strong> RAW files into the <strong>RAW Images</strong> subfolder inside it. Keep every part of this project organized here from start to finish, including your reflection at the end.')),
         card('TURN IT IN / 05 / 05', 'Screenshot Your RAW Folder',
              para('Open <strong>Finder</strong> and switch to <strong>Icon view</strong> so you can see the photo thumbnails.')
