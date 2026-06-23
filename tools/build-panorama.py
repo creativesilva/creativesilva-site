@@ -14,6 +14,7 @@ downloadable Word template (built by build-panorama-reflection.js).
 import os
 
 OUT = os.path.join(os.path.dirname(__file__), '..', 'curriculum', 'mrc')
+RAW = 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/mrc/images/'
 DOCX_URL = 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/mrc/study-guides/MRC_Panorama_Reflection.docx'
 
 FRAME = 'border:2px solid transparent;border-image:linear-gradient(135deg,#c95201 0%,rgba(201,82,1,0.08) 100%) 1;'
@@ -45,6 +46,23 @@ def ph(desc):
             '<strong>Image Placeholder</strong></div>'
             '<div style="font-size:11.5pt;line-height:1.6;color:rgba(255,255,255,0.66);font-style:italic;">'
             + desc + '</div></div>')
+
+def headerph(desc):
+    """Full-width ultra-wide header placeholder (16:6 hero image)."""
+    return ('<div style="background:linear-gradient(135deg,rgba(201,82,1,0.12) 0%,rgba(0,0,0,0.45) 100%);'
+            'border:2px solid transparent;border-image:linear-gradient(135deg,#c95201 0%,rgba(201,82,1,0.08) 100%) 1;'
+            'padding:46px 30px;text-align:center;margin-bottom:24px;">'
+            '<div style="font-size:10pt;letter-spacing:0.22em;text-transform:uppercase;color:#eda268;margin-bottom:10px;">'
+            '<strong>Header Image Placeholder &bull; 16:6 Ultra-Wide</strong></div>'
+            '<div style="font-size:12pt;line-height:1.6;color:rgba(255,255,255,0.66);font-style:italic;max-width:760px;margin:0 auto;">'
+            + desc + '</div></div>')
+
+def imgfull(src, alt, caption):
+    """Full-width framed example image with a small caption."""
+    return ('<img src="%s" alt="%s" style="width:100%%;display:block;margin:6px 0 8px;%s" />'
+            '<div style="font-size:9pt;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);'
+            'text-align:center;margin-bottom:6px;font-family:Arial,sans-serif;"><strong>%s</strong></div>'
+            % (src, alt, FRAME, caption))
 
 def card(label, title, body, floatel=''):
     return ('<div style="%s%spadding:30px;margin-bottom:24px;position:relative;overflow:hidden;">'
@@ -189,10 +207,10 @@ page(
     'Digital Arts 1A &nbsp;&bull;&nbsp; Module', 'Panorama Project',
     'Stitch many photos into one wide world.',
     [
+        headerph('Over-the-shoulder rear view at a 45-degree angle of Renee Lopez (21, warm medium-brown skin, shoulder-length curly dark-brown hair, gold hoop earrings, gray MS monogram tee, light-blue flared jeans), framed from the knees up, standing at a DSLR camera on a tripod and aiming it toward the Mark Richardson Center campus far in the distance. Golden hour, long warm shadows. The campus is a futuristic agricultural trade school of brushed steel, glass, and sculptural structural panels with soft orange ambient glows. Mid-ground rows of crops and fenced-off corrals with livestock. Shallow depth of field on the campus, sharp on Renee and the tripod. Warm amber palette, gentle lens flare, photoreal.'),
         card('WHAT IS A PANORAMA / 01 / 04', 'One Photo, Wide as the World',
              para('A panorama is a very wide photo made by joining several photos into one. It captures far more than a single shot can: a whole landscape, a long hallway, or a city skyline.')
-             + para('You take a row of photos that <strong>overlap</strong>, then the computer stitches them edge to edge into one wide image. The result tells a visual story across movement and space.'),
-             ph('FLOAT-RIGHT IMAGE: Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) standing behind a DSLR camera on a tripod, framing a wide view of the MRC trade-school campus in daylight.')),
+             + para('You take a row of photos that <strong>overlap</strong>, then the computer stitches them edge to edge into one wide image. The result tells a visual story across movement and space.')),
         card('THE TWO PARTS / 02 / 04', 'Capture, Then Merge',
              para('This is a two-part project. In <strong>Part A</strong> (Step 1) you photograph RAW images for two panoramas with a camera and tripod. In <strong>Part B</strong> (Step 2) you stitch and edit them in Photoshop. Then you finish with a short reflection.')
              + para('You will make at least <strong>two panoramas</strong>, each built from <strong>4 to 5 photos</strong>.')),
@@ -241,16 +259,20 @@ page(
              ph('FLOAT-RIGHT IMAGE: Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) leaning to a DSLR camera mounted on a tripod, checking the settings, outdoors at the MRC campus.')),
         card('SHOOT THE PANORAMA / 03 / 05', 'Pan Slow and Overlap',
              para('Now capture your photos. Move across the scene in even, overlapping steps.')
+             + para('<strong>Focus pro tip:</strong> if the camera will not lock focus, flip the <strong>AF / MF</strong> switch to <strong>MF</strong> (manual focus). That turns on the focus ring on the lens so you can twist it to set focus by hand. Switch it back to <strong>AF</strong> when you finish, for the next student.')
              + '<div style="clear:both;"></div>'
-             + vscroll(shoot)),
+             + vscroll(shoot),
+             floatimg(RAW + 'pano-camera-mf.png', 'Canon camera back with the AF / MF button circled')),
         card('ORGANIZE YOUR FILES / 04 / 05', 'Keep It Organized',
              para('In your <strong>OneDrive Photography</strong> folder, make a <strong>Panorama</strong> folder with a <strong>RAW Images</strong> subfolder inside it.')
              + para('Offload all your <strong>.CR3</strong> RAW files into the <strong>RAW Images</strong> folder. Keep every part of this project organized here from start to finish.')),
         card('TURN IT IN / 05 / 05', 'Screenshot Your RAW Folder',
              para('Open <strong>Finder</strong> and switch to <strong>Icon view</strong> so you can see the photo thumbnails.')
              + para('Open your <strong>RAW Images</strong> folder. Make sure the window shows the folder name <strong>RAW Images</strong> at the top and your image thumbnails inside. No contact sheet, just the folder.')
-             + para('Take a screenshot: press <strong>Command + Shift + 4</strong> and drag a box around the folder window. Name the file:')
+             + para('Press the <strong>F15</strong> key to take the screenshot. On our Macs, F15 saves the screenshot straight to your <strong>Desktop</strong> as a PNG.')
+             + para('Find it on the Desktop and rename it:')
              + fname('FirstName LastInitial - Panorama (PNG)')
+             + imgfull(RAW + 'pano-raw-folder-screenshot.png', 'Example screenshot of a RAW Images folder in Finder Icon view', 'Your screenshot should look like this')
              + para('Upload the PNG screenshot to Step 1 in Canvas to finish Part A.')),
     ],
 )
@@ -281,7 +303,7 @@ page(
              para('Set up the merge in the Photomerge window. Scroll through each step.')
              + '<div style="clear:both;"></div>'
              + vscroll(merge),
-             ph('FLOAT-RIGHT IMAGE: Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) at an iMac in the MRC computer lab, a wide stitched panorama open on the Photoshop screen.')),
+             ph('FLOAT-RIGHT IMAGE: Julian (21, lean, dark curly hair with a taper fade, red-and-black plaid flannel over a black tee, silver cross necklace) seen over the shoulder at an iMac in the MRC computer lab, a wide stitched panorama of the campus open on the Photoshop screen mid-merge, cool screen glow on his face and warm orange lab lighting.')),
         card('CLEAN IT UP / 03 / 04', 'Flatten, Crop, Adjust',
              para('Flatten the layers into one image: <strong>Layer &gt; Flatten Image</strong>.')
              + para('If you did not use Content Aware Fill, crop off the uneven transparent edges with the <strong>Crop tool</strong>.')
