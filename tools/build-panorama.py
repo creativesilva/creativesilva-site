@@ -15,7 +15,7 @@ import os
 
 OUT = os.path.join(os.path.dirname(__file__), '..', 'curriculum', 'mrc')
 RAW = 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/mrc/images/'
-DOCX_URL = 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/mrc/study-guides/MRC_Panorama_Reflection.docx'
+ZIP_URL = 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/mrc/handouts/Panorama.zip'
 
 FRAME = 'border:2px solid transparent;border-image:linear-gradient(135deg,#c95201 0%,rgba(201,82,1,0.08) 100%) 1;'
 CARD_BG = 'background:linear-gradient(180deg,rgba(201,82,1,0.10) 0%,rgba(201,82,1,0.03) 100%);'
@@ -213,7 +213,9 @@ page(
              + para('You take a row of photos that <strong>overlap</strong>, then the computer stitches them edge to edge into one wide image. The result tells a visual story across movement and space.')),
         card('THE TWO PARTS / 02 / 04', 'Capture, Then Merge',
              para('This is a two-part project. In <strong>Part A</strong> (Step 1) you photograph RAW images for two panoramas with a camera and tripod. In <strong>Part B</strong> (Step 2) you stitch and edit them in Photoshop. Then you finish with a short reflection.')
-             + para('You will make at least <strong>two panoramas</strong>, each built from <strong>4 to 5 photos</strong>.')),
+             + para('You will make at least <strong>two panoramas</strong>, each built from <strong>4 to 5 photos</strong>.')
+             + notecard('START HERE', 'Download Your Project Folder', 'Download the <strong>Panorama</strong> folder below and move it into your <strong>OneDrive Photography</strong> folder. Inside you will find a <strong>RAW Images</strong> folder for your photos and your <strong>reflection</strong> sheet. Keep all of your project work in this one folder from start to finish.')
+             + '<div style="margin-top:18px;">' + dlbutton(ZIP_URL, 'Download the Panorama Project Folder') + '</div>'),
         card('SHOOTING IN RAW / 03 / 04', 'Why RAW This Time',
              para('This time you shoot in <strong>RAW</strong>, not JPEG. A RAW file keeps all the data the camera sensor captured, so you can fix exposure and color later with no loss in quality. On our Canon cameras, RAW files end in <strong>.CR3</strong>.')
              + para('RAW files are larger and need editing software to open and merge. That is exactly what Photoshop is for in Part B.')),
@@ -264,8 +266,8 @@ page(
              + vscroll(shoot),
              floatimg(RAW + 'pano-camera-mf.png', 'Canon camera back with the AF / MF button circled')),
         card('ORGANIZE YOUR FILES / 04 / 05', 'Keep It Organized',
-             para('In your <strong>OneDrive Photography</strong> folder, make a <strong>Panorama</strong> folder with a <strong>RAW Images</strong> subfolder inside it.')
-             + para('Offload all your <strong>.CR3</strong> RAW files into the <strong>RAW Images</strong> folder. Keep every part of this project organized here from start to finish.')),
+             para('Use the <strong>Panorama</strong> folder you downloaded from the overview. If you have not yet, move it into your <strong>OneDrive Photography</strong> folder.')
+             + para('Offload all your <strong>.CR3</strong> RAW files into the <strong>RAW Images</strong> subfolder inside it. Keep every part of this project organized here from start to finish, including your reflection at the end.')),
         card('TURN IT IN / 05 / 05', 'Screenshot Your RAW Folder',
              para('Open <strong>Finder</strong> and switch to <strong>Icon view</strong> so you can see the photo thumbnails.')
              + para('Open your <strong>RAW Images</strong> folder. Make sure the window shows the folder name <strong>RAW Images</strong> at the top and your image thumbnails inside. No contact sheet, just the folder.')
@@ -336,13 +338,12 @@ page(
     'Look back at what you made.',
     [
         card('HOW IT WORKS / 01 / 02', 'Answer Four Questions',
-             para('A reflection helps you learn from your work. Download the reflection template below, answer all four questions in complete sentences, and turn it in.')
+             para('A reflection helps you learn from your work. Open the <strong>reflection document</strong> inside your <strong>Panorama project folder</strong> (the one you downloaded at the start). Answer all four questions in complete sentences.')
              + scrollrow(questions)),
         card('TURN IT IN / 02 / 02', 'Submit Your Reflection',
-             para('Open the template, type your answers, and save it. Name your file:')
+             para('Type your answers into the reflection document and save it. Name your file:')
              + fname('FirstName LastInitial - Panorama Reflection.docx')
-             + para('Upload your finished reflection to Step 3 in Canvas to complete the project.')
-             + '<div style="margin-top:18px;">' + dlbutton(DOCX_URL, 'Download the Reflection Template') + '</div>'),
+             + para('Upload your finished reflection to Step 3 in Canvas to complete the project.')),
     ],
 )
 
