@@ -57,6 +57,11 @@ def headerph(desc):
             '<div style="font-size:12pt;line-height:1.6;color:rgba(255,255,255,0.66);font-style:italic;max-width:760px;margin:0 auto;">'
             + desc + '</div></div>')
 
+def headerimg(src, alt):
+    """Full-width ultra-wide header image (16:6 hero)."""
+    return ('<img src="%s" alt="%s" style="width:100%%;display:block;margin-bottom:24px;%s" />'
+            % (src, alt, FRAME))
+
 def imgfull(src, alt, caption):
     """Full-width framed example image with a small caption."""
     return ('<img src="%s" alt="%s" style="width:100%%;display:block;margin:6px 0 8px;%s" />'
@@ -207,7 +212,7 @@ page(
     'Digital Arts 1A &nbsp;&bull;&nbsp; Module', 'Panorama Project',
     'Stitch many photos into one wide world.',
     [
-        headerph('Over-the-shoulder rear view at a 45-degree angle of Renee Lopez (21, warm medium-brown skin, shoulder-length curly dark-brown hair, gold hoop earrings, gray MS monogram tee, light-blue flared jeans), framed from the knees up, standing at a DSLR camera on a tripod and aiming it toward the Mark Richardson Center campus far in the distance. Golden hour, long warm shadows. The campus is a futuristic agricultural trade school of brushed steel, glass, and sculptural structural panels with soft orange ambient glows. Mid-ground rows of crops and fenced-off corrals with livestock. Shallow depth of field on the campus, sharp on Renee and the tripod. Warm amber palette, gentle lens flare, photoreal.'),
+        headerimg(RAW + 'pano-header.png', 'A photography student capturing a wide panorama of the futuristic MRC campus at golden hour, with crops and livestock corrals in the foreground'),
         card('WHAT IS A PANORAMA / 01 / 04', 'One Photo, Wide as the World',
              para('A panorama is a very wide photo made by joining several photos into one. It captures far more than a single shot can: a whole landscape, a long hallway, or a city skyline.')
              + para('You take a row of photos that <strong>overlap</strong>, then the computer stitches them edge to edge into one wide image. The result tells a visual story across movement and space.')),
@@ -258,7 +263,7 @@ page(
              para('Get your gear ready before you shoot. Scroll through each setup step.')
              + '<div style="clear:both;"></div>'
              + vscroll(setup),
-             ph('FLOAT-RIGHT IMAGE: Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) leaning to a DSLR camera mounted on a tripod, checking the settings, outdoors at the MRC campus.')),
+             floatimg(RAW + 'pano-capture-float.png', 'Ricardo Gomez setting up a DSLR camera on a tripod at the MRC campus')),
         card('SHOOT THE PANORAMA / 03 / 05', 'Pan Slow and Overlap',
              para('Now capture your photos. Move across the scene in even, overlapping steps.')
              + para('<strong>Focus pro tip:</strong> if the camera will not lock focus, flip the <strong>AF / MF</strong> switch to <strong>MF</strong> (manual focus). That turns on the focus ring on the lens so you can twist it to set focus by hand. Switch it back to <strong>AF</strong> when you finish, for the next student.')
@@ -305,7 +310,7 @@ page(
              para('Set up the merge in the Photomerge window. Scroll through each step.')
              + '<div style="clear:both;"></div>'
              + vscroll(merge),
-             ph('FLOAT-RIGHT IMAGE: Julian (21, lean, dark curly hair with a taper fade, red-and-black plaid flannel over a black tee, silver cross necklace) seen over the shoulder at an iMac in the MRC computer lab, a wide stitched panorama of the campus open on the Photoshop screen mid-merge, cool screen glow on his face and warm orange lab lighting.')),
+             floatimg(RAW + 'pano-merge-float.png', 'Julian merging a panorama in Photoshop at an iMac in the MRC computer lab')),
         card('CLEAN IT UP / 03 / 04', 'Flatten, Crop, Adjust',
              para('Flatten the layers into one image: <strong>Layer &gt; Flatten Image</strong>.')
              + para('If you did not use Content Aware Fill, crop off the uneven transparent edges with the <strong>Crop tool</strong>.')
@@ -339,7 +344,9 @@ page(
     [
         card('HOW IT WORKS / 01 / 02', 'Answer Four Questions',
              para('A reflection helps you learn from your work. Open the <strong>reflection document</strong> inside your <strong>Panorama project folder</strong> (the one you downloaded at the start). Answer all four questions in complete sentences.')
-             + scrollrow(questions)),
+             + '<div style="clear:both;"></div>'
+             + scrollrow(questions),
+             floatimg(RAW + 'pano-reflection-float.png', 'Renee Lopez typing her panorama reflection at an iMac in the MRC computer lab')),
         card('TURN IT IN / 02 / 02', 'Submit Your Reflection',
              para('Type your answers into the reflection document and save it. Name your file:')
              + fname('FirstName LastInitial - Panorama Reflection.docx')
