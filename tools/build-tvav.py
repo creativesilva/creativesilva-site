@@ -14,8 +14,11 @@ Project-folder and reflection buttons are placeholders with no link yet.
 import os
 
 OUT = os.path.join(os.path.dirname(__file__), '..', 'curriculum', 'mrc')
+RAWBASE = 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/'
+ZIP_URL = RAWBASE + 'assets/mrc/handouts/TV-AV.zip'
+DOCX_URL = RAWBASE + 'assets/mrc/study-guides/MRC_TV_AV_Reflection.docx'
 
-FRAME = 'border:2px solid transparent;border-image:linear-gradient(135deg,#c95201 0%,rgba(201,82,1,0.08) 100%) 1;'
+FRAME ='border:2px solid transparent;border-image:linear-gradient(135deg,#c95201 0%,rgba(201,82,1,0.08) 100%) 1;'
 CARD_BG = 'background:linear-gradient(180deg,rgba(201,82,1,0.10) 0%,rgba(201,82,1,0.03) 100%);'
 WEDGE = 'background:linear-gradient(135deg,rgba(201,82,1,0.20) 0%,rgba(201,82,1,0.20) 8%,rgba(0,0,0,0.40) 8%,rgba(0,0,0,0.40) 100%);'
 
@@ -96,11 +99,10 @@ def fname(text):
     return ('<div style="font-size:14pt;color:#eda268;margin-bottom:14px;font-family:Arial,sans-serif;">'
             '<strong>%s</strong></div>' % text)
 
-def pendingbutton(label):
-    # framework button with no destination yet (link added later)
-    return ('<a href="#" style="background:rgba(255,255,255,0.92);color:#4a1e02;text-decoration:none;'
+def dlbutton(href, label):
+    return ('<a href="%s" download="" style="background:rgba(255,255,255,0.92);color:#4a1e02;text-decoration:none;'
             'padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #c95201;">'
-            '<strong>%s</strong></a>' % label)
+            '<strong>%s</strong></a>' % (href, label))
 
 def banner(eyebrow, title, tagline):
     return ('<div style="background:linear-gradient(135deg,#000000 0%%,#4a1e02 40%%,#c95201 100%%);'
@@ -219,7 +221,7 @@ page(
              para('You will shoot, edit, and reflect, just like a real photographer. Three steps, three turn-ins.')
              + scrollrow(mission)
              + notecard('START HERE', 'Download Your Project Folder', 'Download the project folder below and move it into your <strong>OneDrive Digital Arts</strong> folder. Inside is a <strong>RAW Images</strong> folder for your photos and your reflection sheet.')
-             + '<div style="margin-top:18px;">' + pendingbutton('Download the Project Folder') + '</div>'),
+             + '<div style="margin-top:18px;">' + dlbutton(ZIP_URL, 'Download the Project Folder') + '</div>'),
     ],
 )
 
@@ -323,7 +325,7 @@ page(
              para('Type your answers, save the document, and name it:')
              + fname('FirstName LastInitial - TV and AV Reflection.docx')
              + para('Upload your finished reflection to Step 3 in Canvas to complete the project.')
-             + '<div style="margin-top:18px;">' + pendingbutton('Download the Reflection Template') + '</div>'),
+             + '<div style="margin-top:18px;">' + dlbutton(DOCX_URL, 'Download the Reflection Template') + '</div>'),
     ],
 )
 
