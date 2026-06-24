@@ -322,12 +322,11 @@ page(
     [
         card('OPEN PHOTOMERGE / 01 / 04', 'Start Photomerge',
              para('Open Photoshop. Go to <strong>File &gt; Automate &gt; Photomerge</strong>. This is the tool that stitches your photos into one panorama.')
-             + para('You will run it <strong>twice</strong>: once for your <strong>campus</strong> photos and once for your <strong>home</strong> photos.')),
+             + para('You will run it <strong>twice</strong>: once for your <strong>campus</strong> photos and once for your <strong>home</strong> photos.'),
+             floatimg(RAW + 'pano-merge-float.png', 'Julian merging a panorama in Photoshop at an iMac in the MRC computer lab')),
         card('BUILD THE PANORAMA / 02 / 04', 'Choose and Blend',
              para('Set up the merge in the Photomerge window. Scroll through each step.')
-             + '<div style="clear:both;"></div>'
-             + vscroll(merge),
-             floatimg(RAW + 'pano-merge-float.png', 'Julian merging a panorama in Photoshop at an iMac in the MRC computer lab')),
+             + vscroll(merge)),
         card('CLEAN IT UP / 03 / 04', 'Flatten, Crop, Adjust',
              para('Flatten the layers into one image: <strong>Layer &gt; Flatten Image</strong>.')
              + para('Crop off any uneven or fake-looking edges with the <strong>Crop tool</strong>. If you left Content Aware Fill on and it looks great, you may not need to crop much at all.')
