@@ -246,6 +246,7 @@ page(
         card('SKETCH THREE THUMBNAILS / 02 / 03', 'Three Quick Ideas',
              para('A thumbnail is a small, quick sketch, about the size of a business card. The small size keeps you fast and loose, so you try real ideas instead of fussing over details.')
              + para('Draw <strong>three different thumbnails</strong> of your logo. Make each one a different idea, not the same drawing three times. Try these three directions:')
+             + '<div style="clear:both;"></div>'
              + scrollrow(directions)
              + para('Keep them rough. Thumbnails are about ideas, not clean lines. You will polish your best one later.'),
              floatimg(RAW + 'logo-thumbnails-float.png', 'Renee Lopez sketching three logo thumbnails in a sketchbook')),
