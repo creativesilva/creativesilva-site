@@ -333,11 +333,11 @@ page(
              + para('Crop off any uneven or fake-looking edges with the <strong>Crop tool</strong>. If you left Content Aware Fill on and it looks great, you may not need to crop much at all.')
              + para('Adjust your photo with the <strong>Camera Raw Filter</strong> (<strong>Filter &gt; Camera Raw Filter</strong>) or adjustment layers. Fix the exposure, contrast, and color until it looks great.')
              + para('Now do this whole process again for your <strong>other</strong> panorama (your home one).')),
-        card('SAVE AND SUBMIT / 04 / 04', 'Save Big, Submit Both',
-             para('Save each panorama as a layered <strong>.PSD</strong> in your <strong>Panorama</strong> folder so you keep your work.')
-             + para('Then export each as a large <strong>JPG</strong>: <strong>File &gt; Save a Copy</strong>, choose JPG, full size. Name them:')
+        card('SAVE AND SUBMIT / 04 / 04', 'Save as JPG and Submit',
+             para('After editing, flatten your image with <strong>Layer &gt; Flatten Image</strong> if you have not already. PSD files are very large, so you only need to keep a PSD if you want one for yourself.')
+             + para('You turn in a <strong>JPG</strong>, not a PSD. Use <strong>File &gt; Save a Copy</strong>, choose <strong>JPG</strong>, full size, and save it to your <strong>Panorama</strong> folder. Name each one by its location:')
              + fname('FirstName LastInitial - Panorama Campus.jpg &nbsp;and&nbsp; FirstName LastInitial - Panorama Home.jpg')
-             + para('Submit <strong>both</strong> finished panorama JPGs, your campus one and your home one, to Step 2 in Canvas.')),
+             + para('Submit at least <strong>two</strong> panorama JPGs to Step 2 in Canvas: at least <strong>one from campus</strong> and at least <strong>one taken off campus without a tripod</strong>. Proud of more than one? Submit those too.')),
     ],
 )
 
