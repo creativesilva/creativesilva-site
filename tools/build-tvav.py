@@ -328,12 +328,12 @@ page(
     [
         card('ANSWER FOUR QUESTIONS / 01 / 02', 'Reflect on Your Work',
              para('A reflection helps you learn from your work. Open the <strong>reflection document</strong> in your project folder and answer all four questions in complete sentences.')
-             + scrollrow(questions),
-             floatimg(IMG + 'tvav-reflection-float.png', 'Patricia Guererro reviewing her edited photos at an iMac in the MRC computer lab')),
+             + scrollrow(questions)),
         card('TURN IT IN / 02 / 02', 'Submit Your Reflection',
              para('The reflection document is already inside your <strong>project folder</strong> (the one you downloaded at the start). Type your answers, save the document, and name it:')
              + fname('FirstName LastInitial - TV and AV Reflection.docx')
-             + para('Upload your finished reflection to Step 3 in Canvas to complete the project.')),
+             + para('Upload your finished reflection to Step 3 in Canvas to complete the project.'),
+             floatimg(IMG + 'tvav-reflection-float.png', 'Patricia Guererro reviewing her edited photos at an iMac in the MRC computer lab')),
     ],
 )
 
