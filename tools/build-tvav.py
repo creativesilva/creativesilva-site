@@ -297,7 +297,7 @@ page(
         card('CULL YOUR BEST / 01 / 03', 'Pick the Best Eight',
              para('Look through everything you shot. Pick your <strong>best eight</strong>: two shallow and two deep from <strong>AV</strong>, and two freeze and two blur from <strong>TV</strong>.')
              + para('Choosing your strongest shots and dropping the rest is called <strong>culling</strong>. Keep the photos that show each effect the clearest.'),
-             ph('Patricia Guererro (21, athletic, long black hair in a high ponytail, gray Santa Maria Academy of Arts tee) seated at an iMac in the MRC computer lab, viewed over her shoulder, a grid of her photos open in Adobe Camera Raw while she picks her best shots. Cool screen glow on her face, warm orange lab lighting, photoreal.')),
+             floatimg(IMG + 'tvav-edit-float.jpg', 'Patricia Guererro editing her photos in Adobe Camera Raw at an iMac in the MRC computer lab')),
         card('EDIT YOUR PHOTOS / 02 / 03', 'Make Them Pop',
              para('Open your eight photos in <strong>Photoshop</strong> or <strong>Adobe Camera Raw</strong>. Because they are RAW files, you have lots of room to fix them.')
              + para('Adjust the <strong>exposure, contrast, and color</strong>, and crop for a stronger frame. Keep it looking natural and real, do not overdo it.')),
