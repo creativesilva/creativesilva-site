@@ -329,7 +329,7 @@ page(
         card('ANSWER FOUR QUESTIONS / 01 / 02', 'Reflect on Your Work',
              para('A reflection helps you learn from your work. Open the <strong>reflection document</strong> in your project folder and answer all four questions in complete sentences.')
              + scrollrow(questions),
-             ph('Patricia Guererro (21, athletic, long black hair in a high ponytail, gray Santa Maria Academy of Arts tee) sitting back at the MRC lab, looking thoughtfully at her edited photos on the iMac screen, a notebook and pen beside her. Warm reflective mood, soft orange lab lighting, photoreal, over-the-shoulder view.')),
+             floatimg(IMG + 'tvav-reflection-float.png', 'Patricia Guererro reviewing her edited photos at an iMac in the MRC computer lab')),
         card('TURN IT IN / 02 / 02', 'Submit Your Reflection',
              para('Type your answers, save the document, and name it:')
              + fname('FirstName LastInitial - TV and AV Reflection.docx')
