@@ -331,10 +331,9 @@ page(
              + scrollrow(questions),
              floatimg(IMG + 'tvav-reflection-float.png', 'Patricia Guererro reviewing her edited photos at an iMac in the MRC computer lab')),
         card('TURN IT IN / 02 / 02', 'Submit Your Reflection',
-             para('Type your answers, save the document, and name it:')
+             para('The reflection document is already inside your <strong>project folder</strong> (the one you downloaded at the start). Type your answers, save the document, and name it:')
              + fname('FirstName LastInitial - TV and AV Reflection.docx')
-             + para('Upload your finished reflection to Step 3 in Canvas to complete the project.')
-             + '<div style="margin-top:18px;">' + dlbutton(DOCX_URL, 'Download the Reflection Template') + '</div>'),
+             + para('Upload your finished reflection to Step 3 in Canvas to complete the project.')),
     ],
 )
 
