@@ -243,9 +243,16 @@ setup = [
 shoot = [
     tile('Shoot 01', 'Take 4 to 5 Photos', 'Shoot 4 to 5 RAW photos for one panorama, moving across the scene from one side to the other.'),
     tile('Shoot 02', 'Pan Slow and Level', 'Turn slowly in a level, horizontal motion. Keep the camera flat the whole way across.'),
-    tile('Shoot 03', 'Overlap Each Shot', 'Overlap each photo with the one before it by <strong>15 to 20 percent</strong> so the computer can match them up.'),
+    tile('Shoot 03', 'Overlap Each Shot', 'Overlap each photo with the one before it by <strong>about a third</strong> so Photoshop can match them up. More on this rule next.'),
     tile('Shoot 04', 'Lock Focus (Optional)', 'For a blurry background, turn off autofocus after your first shot so focus stays the same. Turn autofocus back on when you finish, for the next student.'),
-    tile('Shoot 05', 'Do It Again', 'Move to a different spot and shoot your second panorama the same way. Two panoramas total.'),
+    tile('Shoot 05', 'Check Your Shots', 'Look at your photos on the back screen. If one is blurry or you missed the overlap, shoot the whole set again.'),
+]
+handheld = [
+    tile('Tip 01', 'Use a Wide Lens', 'Zoom out wide if you can. A wide view is more forgiving and hides small wobbles between shots.'),
+    tile('Tip 02', 'Brace Your Arms', 'Tuck your elbows tight against your sides and hold the camera with both hands. Your body becomes the tripod.'),
+    tile('Tip 03', 'Turn at the Hips', 'Keep your feet planted and rotate your whole upper body from the hips. That makes a smooth, even sweep.'),
+    tile('Tip 04', 'Try a Tabletop', 'No steady hands? Rest the camera on a flat surface like a table or a wall, and slide or turn it a little at a time in one direction.'),
+    tile('Tip 05', 'Overlap Even More', 'Without a tripod your aim drifts, so overlap each shot by a third or more. Extra overlap saves a handheld stitch.'),
 ]
 page(
     'panorama-step01-capture.html',
@@ -256,31 +263,41 @@ page(
     'Panorama Project &nbsp;&bull;&nbsp; Step 1', 'Capture Your RAW Images',
     'Camera, tripod, and RAW files.',
     [
-        card('CHOOSE TWO LOCATIONS / 01 / 05', 'Pick Two Scenes',
-             para('Choose <strong>2 locations</strong>, indoors or outdoors. Look for interesting textures, structures, or open space. Pick scenes that are wide and tell a story across the frame.')
-             + para('You will shoot two different panoramas, each <strong>4 to 5 photos</strong>.')),
-        card('SET UP YOUR CAMERA / 02 / 05', 'Camera and Tripod Setup',
-             para('Get your gear ready before you shoot. Scroll through each setup step.')
+        card('YOUR TWO PANORAMAS / 01 / 07', 'One on Campus, One at Home',
+             para('You will make <strong>two panoramas</strong> for this project. You shoot one here on campus in class, with the camera on a <strong>tripod</strong>. You shoot the other one at home for homework, holding the <strong>Canon R50</strong> in your hands.')
+             + para('Each panorama is <strong>4 to 5 photos</strong> that overlap. Look for wide scenes with interesting textures, structures, or open space.')),
+        card('SET UP YOUR CAMERA / 02 / 07', 'Camera and Tripod Setup',
+             para('Get your gear ready before you shoot the campus panorama. Scroll through each setup step.')
              + '<div style="clear:both;"></div>'
              + vscroll(setup),
              floatimg(RAW + 'pano-capture-float.png', 'Ricardo Gomez setting up a DSLR camera on a tripod at the MRC campus')),
-        card('SHOOT THE PANORAMA / 03 / 05', 'Pan Slow and Overlap',
+        card('SHOOT THE PANORAMA / 03 / 07', 'Pan Slow and Overlap',
              para('Now capture your photos. Move across the scene in even, overlapping steps.')
              + para('<strong>Focus pro tip:</strong> if the camera will not lock focus, flip the <strong>AF / MF</strong> switch to <strong>MF</strong> (manual focus). That turns on the focus ring on the lens so you can twist it to set focus by hand. Switch it back to <strong>AF</strong> when you finish, for the next student.')
              + '<div style="clear:both;"></div>'
              + vscroll(shoot),
              floatimg(RAW + 'pano-camera-mf.png', 'Canon camera back with the AF / MF button circled')),
-        card('ORGANIZE YOUR FILES / 04 / 05', 'Keep It Organized',
+        card('THE KEY RULE / 04 / 07', 'Overlap Is Everything',
+             para('This is the most important rule in the whole project: your photos must <strong>overlap</strong>. Overlap means each photo shares part of the same view with the photo next to it.')
+             + para('Photoshop builds your panorama by matching the parts that repeat. If two photos share enough of the same details, it lines them up and blends them into one smooth image. If they do not share enough, the stitch breaks, leaves gaps, or looks crooked.')
+             + para('Overlap each photo with the one before it by <strong>about a third</strong> (30 to 40 percent). When you are not sure, <strong>overlap more, not less</strong>. Extra overlap is free insurance for a clean stitch.')
+             + notecard('PRO TIP', 'Pick a Marker', 'Find an object near the right edge of your photo, like a post or a tree. Put that same object near the left edge of your next photo. That guarantees enough overlap every time.')),
+        card('ORGANIZE YOUR FILES / 05 / 07', 'Keep It Organized',
              para('Use the <strong>Panorama</strong> folder you downloaded from the overview. If you have not yet, move it into your <strong>OneDrive Digital Arts</strong> folder.')
              + para('Offload all your <strong>.CR3</strong> RAW files into the <strong>RAW Images</strong> subfolder inside it. Keep every part of this project organized here from start to finish, including your reflection at the end.')),
-        card('TURN IT IN / 05 / 05', 'Screenshot Your RAW Folder',
+        card('TURN IT IN / 06 / 07', 'Screenshot Your RAW Folder',
              para('Open <strong>Finder</strong> and switch to <strong>Icon view</strong> so you can see the photo thumbnails.')
              + para('Open your <strong>RAW Images</strong> folder. Make sure the window shows the folder name <strong>RAW Images</strong> at the top and your image thumbnails inside. No contact sheet, just the folder.')
              + para('Press the <strong>F15</strong> key to take the screenshot. On our Macs, F15 saves the screenshot straight to your <strong>Desktop</strong> as a PNG.')
              + para('Find it on the Desktop and rename it:')
              + fname('FirstName LastInitial - Panorama (PNG)')
              + imgfull(RAW + 'pano-raw-folder-screenshot.png', 'Example screenshot of a RAW Images folder in Finder Icon view', 'Your screenshot should look like this')
-             + para('Upload the PNG screenshot to Step 1 in Canvas to finish Part A.')),
+             + para('Upload the PNG screenshot of your <strong>campus</strong> photos to Step 1 in Canvas to finish Part A.')),
+        card('TAKE IT HOME / 07 / 07', 'Shoot One Without a Tripod',
+             para('For homework, take the <strong>Canon R50</strong> home and shoot your <strong>second panorama</strong> off campus, with no tripod. You will edit it next to your campus one in Step 2.')
+             + para('No tripod is harder, but these tricks keep your photos steady and even. Same rules apply: pan slowly, keep the camera level, and overlap a lot.')
+             + scrollrow(handheld)
+             + notecard('REMEMBER', 'Same Direction, Even Steps', 'Move in one direction only, in small even steps. Do not skip ahead or jump back, and keep your overlap high.')),
     ],
 )
 
@@ -291,7 +308,7 @@ merge = [
     tile('Merge 01', 'Keep Layout on Auto', 'In the Photomerge window, leave <strong>Layout</strong> set to <strong>Auto</strong>. It works best for most panoramas.'),
     tile('Merge 02', 'Browse and Select', 'Click <strong>Browse</strong>. Go to your <strong>RAW Images</strong> folder and select the 4 to 5 <strong>.CR3</strong> files for <strong>one</strong> panorama. Click OK.'),
     tile('Merge 03', 'Check the Boxes', 'Turn on <strong>Blend Images Together</strong>, <strong>Vignette Removal</strong>, and <strong>Geometric Distortion Correction</strong>.'),
-    tile('Merge 04', 'Fill the Edges', 'Also check <strong>Content Aware Fill Transparent Areas</strong> to fill the empty edges for you. Then click <strong>OK</strong>.'),
+    tile('Merge 04', 'Fill the Edges', 'Also check <strong>Content Aware Fill Transparent Areas</strong> to fill the empty edges for you, then click <strong>OK</strong>. <strong>Watch out:</strong> if the fill looks fake or messy, you can crop those edges off later, or run Photomerge again with this box unchecked.'),
     tile('Merge 05', 'Let It Build', 'Photoshop opens each RAW file through Camera Raw, lines them up, and blends them into one layered panorama. Give it a minute.'),
 ]
 page(
@@ -305,7 +322,7 @@ page(
     [
         card('OPEN PHOTOMERGE / 01 / 04', 'Start Photomerge',
              para('Open Photoshop. Go to <strong>File &gt; Automate &gt; Photomerge</strong>. This is the tool that stitches your photos into one panorama.')
-             + para('You will run this once for each panorama, so you will do it twice.')),
+             + para('You will run it <strong>twice</strong>: once for your <strong>campus</strong> photos and once for your <strong>home</strong> photos.')),
         card('BUILD THE PANORAMA / 02 / 04', 'Choose and Blend',
              para('Set up the merge in the Photomerge window. Scroll through each step.')
              + '<div style="clear:both;"></div>'
@@ -313,14 +330,14 @@ page(
              floatimg(RAW + 'pano-merge-float.png', 'Julian merging a panorama in Photoshop at an iMac in the MRC computer lab')),
         card('CLEAN IT UP / 03 / 04', 'Flatten, Crop, Adjust',
              para('Flatten the layers into one image: <strong>Layer &gt; Flatten Image</strong>.')
-             + para('If you did not use Content Aware Fill, crop off the uneven transparent edges with the <strong>Crop tool</strong>.')
+             + para('Crop off any uneven or fake-looking edges with the <strong>Crop tool</strong>. If you left Content Aware Fill on and it looks great, you may not need to crop much at all.')
              + para('Adjust your photo with the <strong>Camera Raw Filter</strong> (<strong>Filter &gt; Camera Raw Filter</strong>) or adjustment layers. Fix the exposure, contrast, and color until it looks great.')
-             + para('Now do this whole process again for your <strong>second</strong> panorama.')),
+             + para('Now do this whole process again for your <strong>other</strong> panorama (your home one).')),
         card('SAVE AND SUBMIT / 04 / 04', 'Save Big, Submit Both',
-             para('Save each panorama as a layered <strong>.PSD</strong> in your OneDrive Panorama folder so you keep your work.')
+             para('Save each panorama as a layered <strong>.PSD</strong> in your <strong>Panorama</strong> folder so you keep your work.')
              + para('Then export each as a large <strong>JPG</strong>: <strong>File &gt; Save a Copy</strong>, choose JPG, full size. Name them:')
-             + fname('FirstName LastInitial - Panorama 1.jpg &nbsp;and&nbsp; FirstName LastInitial - Panorama 2.jpg')
-             + para('Submit <strong>both</strong> panorama JPGs to Step 2 in Canvas.')),
+             + fname('FirstName LastInitial - Panorama Campus.jpg &nbsp;and&nbsp; FirstName LastInitial - Panorama Home.jpg')
+             + para('Submit <strong>both</strong> finished panorama JPGs, your campus one and your home one, to Step 2 in Canvas.')),
     ],
 )
 
