@@ -17,6 +17,7 @@ OUT = os.path.join(os.path.dirname(__file__), '..', 'curriculum', 'mrc')
 RAWBASE = 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/'
 ZIP_URL = RAWBASE + 'assets/mrc/handouts/TV-AV.zip'
 DOCX_URL = RAWBASE + 'assets/mrc/study-guides/MRC_TV_AV_Reflection.docx'
+IMG = RAWBASE + 'assets/mrc/images/'
 
 FRAME ='border:2px solid transparent;border-image:linear-gradient(135deg,#c95201 0%,rgba(201,82,1,0.08) 100%) 1;'
 CARD_BG = 'background:linear-gradient(180deg,rgba(201,82,1,0.10) 0%,rgba(201,82,1,0.03) 100%);'
@@ -43,6 +44,14 @@ def ph(desc):
             '<strong>Image Placeholder</strong></div>'
             '<div style="font-size:11.5pt;line-height:1.6;color:rgba(255,255,255,0.66);font-style:italic;">'
             + desc + '</div></div>')
+
+def floatimg(src, alt):
+    return ('<img src="%s" alt="%s" style="float:right;width:42%%;min-width:240px;margin:0 0 18px 26px;%s" />'
+            % (src, alt, FRAME))
+
+def headerimg(src, alt):
+    return ('<img src="%s" alt="%s" style="width:100%%;display:block;margin-bottom:24px;%s" />'
+            % (src, alt, FRAME))
 
 def headerph(desc):
     return ('<div style="background:linear-gradient(135deg,rgba(201,82,1,0.12) 0%,rgba(0,0,0,0.45) 100%);'
@@ -201,7 +210,7 @@ page(
     'Digital Arts 1A &nbsp;&bull;&nbsp; Module', 'Camera Modes: TV &amp; AV',
     'Take control of motion and focus.',
     [
-        headerph('Ultra-wide 16:6 cinematic header. Patricia Guererro (21, athletic build, long black hair in a high ponytail, gray-and-black Santa Maria Academy of Arts raglan tee) on the MRC campus, holding a Canon EOS R50 mirrorless camera up to her eye and framing a shot, slightly turned and confident. Behind her the futuristic brushed-steel-and-glass MRC campus at golden hour with soft orange ambient glows, the background thrown into a soft blur (shallow depth of field). Photoreal, warm cinematic light, sharp focus on Patricia and the camera, gentle lens flare.'),
+        headerimg(IMG + 'tvav-header.png', 'Patricia Guererro framing a shot with a Canon camera in front of the MRC campus at golden hour'),
         card('TWO CAMERA MODES / 01 / 05', 'Take the Wheel',
              para('Until now, you shot in <strong>Auto</strong> and the camera made every choice for you. Now you take the wheel with two new modes on your <strong>Canon EOS R50</strong>: <strong>TV</strong> and <strong>AV</strong>.')
              + para('These are <strong>semi-manual</strong> modes. You make one important choice, and the camera figures out the rest. They are the easiest way to start controlling how your photos look.')),
@@ -254,7 +263,7 @@ page(
         card('YOUR EIGHT SHOTS / 01 / 05', 'What to Capture',
              para('You and your partner will capture <strong>eight photos</strong> around the MRC campus: <strong>four in AV mode</strong> and <strong>four in TV mode</strong>.')
              + para('Keep your <strong>ISO on Auto</strong> the whole time. That lets the camera handle brightness while you focus on your one setting.'),
-             ph('Patricia Guererro (21, athletic, long black hair in a high ponytail, gray Santa Maria Academy of Arts tee) crouched and panning a Canon EOS R50 to follow a running subject on the MRC campus. Bright daylight, dynamic energy, her hands and the camera tack sharp, the moving subject and background streaked with slight motion blur. Photoreal, three-quarter rear view.')),
+             floatimg(IMG + 'tvav-capture-float.png', 'Patricia Guererro photographing a jumping subject to capture motion at the MRC campus')),
         card('SET UP THE CAMERA / 02 / 05', 'Before You Shoot',
              para('Get the camera ready before each set of shots. Scroll through each setting.')
              + '<div style="clear:both;"></div>'
