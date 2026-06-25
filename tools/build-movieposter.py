@@ -329,10 +329,11 @@ page(
     'Movie Poster &nbsp;&bull;&nbsp; Step 2', 'Shoot Your Scene',
     'Capture your moody hero image.',
     [
-        card('SHOOT YOUR SCENE / 01 / 05', 'Set the Mood on Location',
-             para('Take your actor to a moody spot: the field, the barn, or the shop, after the light gets low. Build fear with <strong>shadow and angle</strong>, not action.')
-             + para('A <strong>studio</strong> with a <strong>backdrop and constant lighting</strong> is great for a moody portrait, because you control every shadow.'),
-             ph('Hyper-realistic on-location photo of Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) holding a Canon DSLR vertically, photographing his actor in a moody scene at the MRC at dusk: the actor stands in a dim barn doorway lit from one side, with deep shadows behind them and low fog. Ricardo is focused and framing the shot. Cinematic and suspenseful, tasteful PG-13 (no blood or weapons), photoreal, three-quarter rear view.')),
+        card('SHOOT YOUR SCENE / 01 / 05', 'Shoot by Day, Go Dark Later',
+             para('Take your actor to a moody spot: the field, the barn, or the shop. Build fear with <strong>shadow and angle</strong>, not action.')
+             + para('We cannot be on campus at night, so you will shoot in the <strong>daytime</strong> and turn it into night later in Photoshop. A <strong>studio</strong> with a <strong>backdrop and constant lighting</strong> is also great, because you control every shadow.')
+             + notecard('SHOOT FOR NIGHT', 'Make the Convert Easy', 'Shoot on an overcast day or in open shade so the light is soft and even. Keep some <strong>sky</strong> in your frame so you can replace it, and keep harsh sun off your subject. Soft daytime photos turn into night the cleanest.'),
+             ph('Hyper-realistic on-location photo of Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) holding a Canon DSLR vertically, photographing his actor on an overcast afternoon at the MRC: the actor stands in a barn doorway lit softly from one side, with the dim barn behind them. Ricardo is focused and framing the shot. Soft even daylight, photoreal, tasteful PG-13 (no blood or weapons), three-quarter rear view.')),
         card('MAKE A STRONG HERO SHOT / 02 / 05', 'Frame the Key Art',
              para('Your hero image carries the whole poster. Scroll through each pointer as you shoot.')
              + scrollrow(heroshot)),
@@ -381,8 +382,9 @@ page(
         card('ADD YOUR WORDS / 03 / 05', 'Tagline, Credits, and Rating',
              para('Use the <strong>Type tool</strong> to add the rest of the words. Scroll through each pointer.')
              + scrollrow(words)),
-        card('SET THE MOOD / 04 / 05', 'Make It Scary',
-             para('Use the <strong>Camera Raw Filter</strong> (<strong>Filter &gt; Camera Raw Filter</strong>) to grade your poster dark and moody: lower the brightness, cool the colors, deepen the shadows, and add a <strong>vignette</strong> around the edges.')
+        card('SET THE MOOD / 04 / 05', 'Turn Day into Night',
+             para('You shot in the daytime, so now make it <strong>night</strong>. First swap the bright sky: go to <strong>Edit &gt; Sky Replacement</strong> and pick a dark, stormy, or night sky. This is the biggest step from day to night.')
+             + para('Then grade the whole poster with the <strong>Camera Raw Filter</strong> (<strong>Filter &gt; Camera Raw Filter</strong>): lower the brightness, cool the colors toward blue, deepen the shadows, and add a <strong>vignette</strong> around the edges.')
              + para('Blend in your <strong>supporting images</strong> for fog or texture. The whole poster should feel cold and tense, like a real horror one-sheet.')),
         card('SAVE AND SUBMIT / 05 / 05', 'Save as JPG and Submit',
              para('When your poster is done, flatten it with <strong>Layer &gt; Flatten Image</strong>. Keep a PSD only if you want one.')
