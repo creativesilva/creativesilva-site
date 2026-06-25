@@ -303,7 +303,7 @@ page(
              para('On paper, sketch a quick <strong>thumbnail</strong> of your poster. Plan where each piece goes:')
              + para('Block out your <strong>hero image</strong>, put the big <strong>title</strong> near the bottom, mark a spot for the <strong>tagline</strong>, and leave a thin strip at the very bottom for the <strong>billing block</strong>.')
              + para('Leave room for the title. Do not plan to bury it in a busy part of the photo.'),
-             ph('Hyper-realistic photo of Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) at a desk in the MRC studio, sketching a movie poster layout in a sketchbook: a rough thumbnail with a tall hero-image area, a big title near the bottom, a tagline line, and a thin billing block. Pencil in hand, moody horror movie posters pinned on the wall behind him. Warm desk light against a dark room, photoreal, three-quarter view.')),
+             floatimg(IMG + 'movieposter-plan-float.png', 'Ricardo Gomez sketching a movie poster layout in a sketchbook at the MRC studio')),
         card('GET IT CHECKED / 04 / 04', 'Get Approved',
              para('Before you shoot, show Mr. Silva your <strong>concept</strong>, your <strong>cast and location</strong>, and your <strong>layout sketch</strong>. This is a required checkpoint.')
              + notecard('CHECKPOINT', 'Approval First, Shoot Second', 'Your concept must be approved so it stays PG-13 and school-safe. Get the green light, then grab a camera for Step 2.')),
@@ -333,7 +333,7 @@ page(
              para('Take your actor to a moody spot: the field, the barn, or the shop. Build fear with <strong>shadow and angle</strong>, not action.')
              + para('We cannot be on campus at night, so you will shoot in the <strong>daytime</strong> and turn it into night later in Photoshop. A <strong>studio</strong> with a <strong>backdrop and constant lighting</strong> is also great, because you control every shadow.')
              + notecard('SHOOT FOR NIGHT', 'Make the Convert Easy', 'Shoot on an overcast day or in open shade so the light is soft and even. Keep some <strong>sky</strong> in your frame so you can replace it, and keep harsh sun off your subject. Soft daytime photos turn into night the cleanest.'),
-             ph('Hyper-realistic on-location photo of Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) holding a Canon DSLR vertically, photographing his actor on an overcast afternoon at the MRC: the actor stands in a barn doorway lit softly from one side, with the dim barn behind them. Ricardo is focused and framing the shot. Soft even daylight, photoreal, tasteful PG-13 (no blood or weapons), three-quarter rear view.')),
+             floatimg(IMG + 'movieposter-capture-float.png', 'Ricardo Gomez photographing his actor in a doorway in daylight at the MRC')),
         card('MAKE A STRONG HERO SHOT / 02 / 05', 'Frame the Key Art',
              para('Your hero image carries the whole poster. Scroll through each pointer as you shoot.')
              + scrollrow(heroshot)),
@@ -375,7 +375,7 @@ page(
         card('SET UP YOUR POSTER / 01 / 05', 'Start a New File',
              para('Open Photoshop. Go to <strong>File &gt; New</strong> and make a tall (portrait) poster, about <strong>11 by 17 inches</strong>, RGB color, 300 ppi.')
              + para('Open your hero photo through <strong>Camera Raw</strong>, place it on your page, and let it <strong>bleed</strong> to the edges. Darken the background so it feels moody. Save your work as a <strong>.PSD</strong> in your project folder.'),
-             ph('Hyper-realistic over-the-shoulder photo of Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) at an iMac in the MRC computer lab, designing a dark, moody scary-movie poster in Photoshop: a tall hero image of a character in fog fills the screen, with a big stylized movie title near the bottom, a tagline, and a thin billing block, just like a real theatrical poster. Cool screen glow on his face, dim lab lighting, photoreal.')),
+             floatimg(IMG + 'movieposter-design-float.png', 'Ricardo Gomez designing a dark, moody movie poster in Photoshop at an iMac in the MRC lab')),
         card('DESIGN THE TITLE TREATMENT / 02 / 05', 'Make the Title',
              para('Your movie title is the star. Make it big and bold, usually near the <strong>bottom</strong> of the poster. Pick a font that matches the scary mood. You can download free fonts from <strong>dafont.com</strong> or use <strong>Adobe Fonts</strong>.')
              + para('Add a soft glow, a rough edge, or a shadow so the title stands out against the dark image.')),
@@ -419,7 +419,7 @@ page(
              para('The reflection document is inside your <strong>project folder</strong>. Type your answers, save the document, and name it:')
              + fname('FirstName LastInitial - Movie Poster Reflection.docx')
              + para('Upload your finished reflection to Step 4 in Canvas to complete the project.'),
-             ph('Hyper-realistic photo of Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) sitting back at the MRC lab, holding a printed proof of his finished scary-movie poster and looking at it, his iMac showing the same dark, moody poster behind him. Soft dim lab lighting, photoreal, over-the-shoulder view.')),
+             floatimg(IMG + 'movieposter-reflection-float.png', 'Ricardo Gomez holding a printed proof of his finished movie poster at the MRC lab')),
     ],
 )
 
