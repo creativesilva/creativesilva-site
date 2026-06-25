@@ -50,6 +50,10 @@ def floatimg(src, alt):
     return ('<img src="%s" alt="%s" style="float:right;width:42%%;min-width:240px;margin:0 0 18px 26px;%s" />'
             % (src, alt, FRAME))
 
+def headerimg(src, alt):
+    return ('<img src="%s" alt="%s" style="width:100%%;display:block;margin-bottom:24px;%s" />'
+            % (src, alt, FRAME))
+
 def imgfull(src, alt, caption):
     return ('<img src="%s" alt="%s" style="width:100%%;display:block;margin:6px 0 8px;%s" />'
             '<div style="font-size:9pt;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);'
@@ -255,7 +259,7 @@ page(
     'Digital Arts 1A &nbsp;&bull;&nbsp; Module', 'Magazine Cover',
     'Tell the MRC story in one cover.',
     [
-        headerph('Ultra-wide 16:6 hyper-realistic, behind-the-scenes photo of a magazine cover shoot on the Mark Richardson Center campus at golden hour. Julian (21, lean, dark curly hair with a taper fade, red-and-black plaid flannel over a black tee) crouches with a Canon DSLR, photographing his subject: a confident young MRC agriculture student in a work shirt standing beside a tractor and a fenced livestock corral, crop rows in the mid-ground. Warm low sun, gentle lens flare, shallow depth of field. Editorial photojournalism mood like the cover of a real farming magazine (Successful Farming / Progressive Farmer / Farm Journal). Photoreal, sharp detail, natural skin tones.'),
+        headerimg(IMG + 'magcover-header.png', 'Julian photographing an MRC agriculture student by a tractor for a magazine cover shoot at golden hour'),
         card('WHAT IS A MAGAZINE COVER / 01 / 07', 'One Image, One Story',
              para('A magazine cover is the front page that makes you want to pick it up. It uses <strong>one strong photo</strong> and a few <strong>bold words</strong> to sell the whole magazine in a single glance.')
              + para('Look at a real cover: a big name at the top (the <strong>masthead</strong>), one powerful photo behind it, and short headlines that tease the stories inside.')
@@ -309,7 +313,7 @@ page(
              para('On paper, sketch a quick <strong>thumbnail</strong> of your cover. Plan where each piece goes:')
              + para('Put the <strong>masthead</strong> at the top, block out your <strong>hero photo</strong>, mark where your <strong>title</strong> and <strong>breakout points</strong> go down one side, and box out spots for your <strong>two breakout images</strong>.')
              + para('Leave room for the text. Do not plan to cover your subject&rsquo;s face with the masthead or headlines.'),
-             ph('Hyper-realistic photo of Julian (21, lean, dark curly hair with a taper fade, red-and-black plaid flannel over a black tee) at a desk in the MRC studio, sketching a magazine cover layout in a sketchbook: a rough thumbnail showing a masthead box at the top, a large hero-photo area, a column of cover-line bars, and two small breakout boxes in the corner. Pencil in hand, real farming magazine covers pinned on the wall behind him. Warm light, photoreal, three-quarter view.')),
+             floatimg(IMG + 'magcover-plan-float.png', 'Julian sketching a magazine cover layout in a sketchbook at the MRC studio')),
         card('GET IT CHECKED / 04 / 04', 'Bring It to Mr. Silva',
              para('Before you shoot, show Mr. Silva your <strong>person</strong>, your <strong>interview notes</strong>, and your <strong>layout sketch</strong>. This is a quick checkpoint, no upload needed.')
              + notecard('CHECKPOINT', 'Plan First, Shoot Second', 'A clear plan and good interview make a stronger cover. Get the green light, then grab a camera for Step 2.')),
@@ -381,7 +385,7 @@ page(
         card('SET UP YOUR COVER / 01 / 05', 'Start a New File',
              para('Open Photoshop. Go to <strong>File &gt; New</strong> and make a tall (portrait) magazine page, about <strong>8.5 by 11 inches</strong>, RGB color, 300 ppi.')
              + para('Open your best hero photo through <strong>Camera Raw</strong>, place it on your page, and let it <strong>bleed</strong> all the way to the edges with no white border. Save your work as a <strong>.PSD</strong> in your project folder.'),
-             ph('Hyper-realistic over-the-shoulder photo of Julian (21, lean, dark curly hair with a taper fade, red-and-black plaid flannel over a black tee) at an iMac in the MRC computer lab, designing a farming magazine cover in Photoshop: a bold vertical hero photo fills the screen with a large masthead at the top, stacked cover lines down one side, and two small breakout boxes in a corner, just like a real agriculture magazine. Cool screen glow on his face, warm orange lab lighting, photoreal.')),
+             floatimg(IMG + 'magcover-design-float.png', 'Julian designing a farming magazine cover in Photoshop at an iMac in the MRC lab')),
         card('ADD THE MASTHEAD / 02 / 05', 'Place the Logo',
              para('Open the magazine <strong>logo</strong> from your project folder and place it at the <strong>top</strong> of your cover.')
              + para('Size it big and bold, like the real magazine. The masthead is the brand, so it should be one of the first things you see.')),
@@ -424,7 +428,7 @@ page(
              para('The reflection document is inside your <strong>project folder</strong>. Type your answers, save the document, and name it:')
              + fname('FirstName LastInitial - Magazine Cover Reflection.docx')
              + para('Upload your finished reflection to Step 4 in Canvas to complete the project.'),
-             ph('Hyper-realistic photo of Julian (21, lean, dark curly hair with a taper fade, red-and-black plaid flannel over a black tee) sitting back at the MRC lab, holding a printed proof of his finished farming magazine cover and looking at it thoughtfully, his iMac showing the same cover behind him. Warm reflective mood, soft orange lab lighting, photoreal, over-the-shoulder view.')),
+             floatimg(IMG + 'magcover-reflection-float.png', 'Julian holding a printed proof of his finished farming magazine cover at the MRC lab')),
     ],
 )
 
