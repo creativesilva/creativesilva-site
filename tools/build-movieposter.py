@@ -1,0 +1,424 @@
+#!/usr/bin/env python3
+"""Generate the MRC Digital Arts 1A "Magazine Cover" module (English).
+Five Canvas pages on the locked Angular Gradient Framework (orange
+#c95201), lead character Julian:
+
+  1 overview               magcover-overview.html
+  2 step01 plan            magcover-step01-plan.html
+  3 step02 capture (RAW)   magcover-step02-capture.html
+  4 step03 design (PS)     magcover-step03-design.html
+  5 step04 reflection      magcover-step04-reflection.html
+
+Students design a real-looking agriculture magazine cover (Successful
+Farming, Progressive Farmer, or Farm Journal) featuring the MRC campus.
+Project folder + logos are supplied by the teacher (button no-link for
+now). Image slots are placeholders with hyper-real generation prompts.
+"""
+import os
+
+OUT = os.path.join(os.path.dirname(__file__), '..', 'curriculum', 'mrc')
+RAWBASE = 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/'
+IMG = RAWBASE + 'assets/mrc/images/'
+
+FRAME = 'border:2px solid transparent;border-image:linear-gradient(135deg,#c95201 0%,rgba(201,82,1,0.08) 100%) 1;'
+CARD_BG = 'background:linear-gradient(180deg,rgba(201,82,1,0.10) 0%,rgba(201,82,1,0.03) 100%);'
+WEDGE = 'background:linear-gradient(135deg,rgba(201,82,1,0.20) 0%,rgba(201,82,1,0.20) 8%,rgba(0,0,0,0.40) 8%,rgba(0,0,0,0.40) 100%);'
+
+def chip(label):
+    return ('<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #c95201;'
+            'padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;'
+            'color:#eda268;text-transform:uppercase;margin-bottom:12px;"><strong>%s</strong></div>' % label)
+
+def tb(title):
+    return ('<div style="font-size:22pt;color:#ffffff;line-height:1.15;margin-bottom:10px;"><strong>%s</strong></div>'
+            '<div style="height:2px;background:#c95201;width:60px;margin-bottom:20px;"></div>' % title)
+
+def para(text):
+    return ('<div style="font-size:14pt;line-height:1.78;color:rgba(255,255,255,0.88);margin-bottom:14px;">%s</div>'
+            % text)
+
+def ilink(href, label):
+    return ('<a href="%s" style="color:#eda268;text-decoration:underline;"><strong>%s &rarr;</strong></a>'
+            % (href, label))
+
+def refimg(src, alt):
+    # small reference cover thumbnail inside a magazine tile
+    return ('<img src="%s" alt="%s" style="display:block;width:150px;height:auto;margin:0 auto 12px;%s" />'
+            % (src, alt, FRAME))
+
+def floatimg(src, alt):
+    return ('<img src="%s" alt="%s" style="float:right;width:42%%;min-width:240px;margin:0 0 18px 26px;%s" />'
+            % (src, alt, FRAME))
+
+def headerimg(src, alt):
+    return ('<img src="%s" alt="%s" style="width:100%%;display:block;margin-bottom:24px;%s" />'
+            % (src, alt, FRAME))
+
+def imgfull(src, alt, caption):
+    return ('<img src="%s" alt="%s" style="width:100%%;display:block;margin:6px 0 8px;%s" />'
+            '<div style="font-size:9pt;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);'
+            'text-align:center;margin-bottom:6px;font-family:Arial,sans-serif;"><strong>%s</strong></div>'
+            % (src, alt, FRAME, caption))
+
+def ph(desc):
+    return ('<div style="background:linear-gradient(135deg,rgba(201,82,1,0.12) 0%,rgba(0,0,0,0.45) 100%);'
+            'border:2px solid transparent;border-image:linear-gradient(135deg,#c95201 0%,rgba(201,82,1,0.08) 100%) 1;'
+            'padding:26px 22px;text-align:center;float:right;width:42%;min-width:240px;margin:0 0 18px 26px;">'
+            '<div style="font-size:10pt;letter-spacing:0.22em;text-transform:uppercase;color:#eda268;margin-bottom:10px;">'
+            '<strong>Image Placeholder</strong></div>'
+            '<div style="font-size:11.5pt;line-height:1.6;color:rgba(255,255,255,0.66);font-style:italic;">'
+            + desc + '</div></div>')
+
+def headerph(desc):
+    return ('<div style="background:linear-gradient(135deg,rgba(201,82,1,0.12) 0%,rgba(0,0,0,0.45) 100%);'
+            'border:2px solid transparent;border-image:linear-gradient(135deg,#c95201 0%,rgba(201,82,1,0.08) 100%) 1;'
+            'padding:46px 30px;text-align:center;margin-bottom:24px;">'
+            '<div style="font-size:10pt;letter-spacing:0.22em;text-transform:uppercase;color:#eda268;margin-bottom:10px;">'
+            '<strong>Header Image Placeholder &bull; 16:6 Ultra-Wide</strong></div>'
+            '<div style="font-size:12pt;line-height:1.6;color:rgba(255,255,255,0.66);font-style:italic;max-width:780px;margin:0 auto;">'
+            + desc + '</div></div>')
+
+def card(label, title, body, floatel=''):
+    return ('<div style="%s%spadding:30px;margin-bottom:24px;position:relative;overflow:hidden;">'
+            '<div style="height:4px;background:#c95201;margin:-30px -30px 24px -30px;"></div>'
+            '%s%s%s%s</div>' % (CARD_BG, FRAME, floatel, chip(label), tb(title), body))
+
+def tile(eyebrow, title, body):
+    return ('<div style="%sborder:1px solid transparent;border-image:linear-gradient(135deg,#c95201 0%%,'
+            'rgba(201,82,1,0.08) 100%%) 1;padding:20px 22px 24px;position:relative;overflow:hidden;">'
+            '<div style="height:3px;background:#c95201;margin:-20px -22px 12px -22px;"></div>'
+            '<div style="font-size:9pt;letter-spacing:0.22em;color:#eda268;text-transform:uppercase;margin-bottom:8px;">'
+            '<strong>%s</strong></div>'
+            '<div style="font-size:16pt;color:#ffffff;line-height:1.15;margin-bottom:8px;"><strong>%s</strong></div>'
+            '<div style="height:2px;background:#c95201;width:32px;margin-bottom:10px;"></div>'
+            '<div style="font-size:13pt;line-height:1.55;color:rgba(255,255,255,0.84);">%s</div></div>'
+            % (WEDGE, eyebrow, title, body))
+
+def notecard(eyebrow, title, body):
+    return ('<div style="%sborder:1px solid transparent;border-image:linear-gradient(135deg,#c95201 0%%,'
+            'rgba(201,82,1,0.08) 100%%) 1;padding:20px 22px 24px;position:relative;overflow:hidden;margin:4px 0 14px;">'
+            '<div style="height:3px;background:#c95201;margin:-20px -22px 12px -22px;"></div>'
+            '<div style="font-size:9pt;letter-spacing:0.22em;color:#eda268;text-transform:uppercase;margin-bottom:8px;">'
+            '<strong>%s</strong></div>'
+            '<div style="font-size:16pt;color:#ffffff;line-height:1.15;margin-bottom:8px;"><strong>%s</strong></div>'
+            '<div style="height:2px;background:#c95201;width:32px;margin-bottom:10px;"></div>'
+            '<div style="font-size:13pt;line-height:1.55;color:rgba(255,255,255,0.84);">%s</div></div>'
+            % (WEDGE, eyebrow, title, body))
+
+def scrollrow(tiles, hint='&laquo; drag or swipe for more &raquo;'):
+    inner = ''.join(tiles)
+    return ('<div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(255px,1fr);overflow-x:auto;'
+            'gap:14px;padding-bottom:8px;-webkit-overflow-scrolling:touch;">%s</div>'
+            '<div style="text-align:center;font-size:8pt;color:rgba(201,82,1,0.65);letter-spacing:0.22em;'
+            'text-transform:uppercase;margin-top:14px;font-family:Arial,sans-serif;"><strong>%s</strong></div>'
+            % (inner, hint))
+
+def vscroll(tiles, hint='&#8597; scroll for more steps &#8597;'):
+    inner = ''.join('<div style="margin-bottom:12px;">%s</div>' % t for t in tiles)
+    return ('<div style="max-height:560px;overflow-y:auto;padding-right:8px;-webkit-overflow-scrolling:touch;">%s</div>'
+            '<div style="text-align:center;font-size:8pt;color:rgba(201,82,1,0.65);letter-spacing:0.22em;'
+            'text-transform:uppercase;margin-top:14px;font-family:Arial,sans-serif;"><strong>%s</strong></div>'
+            % (inner, hint))
+
+def fname(text):
+    return ('<div style="font-size:14pt;color:#eda268;margin-bottom:14px;font-family:Arial,sans-serif;">'
+            '<strong>%s</strong></div>' % text)
+
+def pendingbutton(label):
+    # framework button, link to be added once the teacher supplies the project folder
+    return ('<a href="#" style="background:rgba(255,255,255,0.92);color:#4a1e02;text-decoration:none;'
+            'padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #c95201;">'
+            '<strong>%s</strong></a>' % label)
+
+def banner(eyebrow, title, tagline):
+    return ('<div style="background:linear-gradient(135deg,#000000 0%%,#4a1e02 40%%,#c95201 100%%);'
+            'padding:20px 28px 22px;margin:-28px -28px 24px -28px;border-bottom:3px solid #c95201;">'
+            '<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">'
+            '<div style="justify-self:start;"><img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/mrc/MRC_Logo.png" alt="Mark Richardson Center" style="width:min(90px,15vw);height:auto;display:block;" /></div>'
+            '<div style="justify-self:center;text-align:center;">'
+            '<div style="margin-bottom:6px;"><span style="font-size:14pt;color:#eda268;"><strong>%s</strong></span></div>'
+            '<div style="color:#ffffff;font-size:24pt;font-weight:700;line-height:1.1;"><strong>%s</strong></div>'
+            '<div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:13pt;font-style:italic;"><strong>%s</strong></span></div>'
+            '</div>'
+            '<div style="justify-self:end;"></div>'
+            '</div></div>' % (eyebrow, title, tagline))
+
+def stepnav(links):
+    btns = ''.join('<a href="%s" class="silva-step-btn">%s</a>' % (href, lbl) for href, lbl in links)
+    return '<div class="silva-step-nav">%s</div><div class="silva-nav-div"></div>' % btns
+
+NAV = '''  <nav class="silva-nav" aria-label="Module navigation">
+    <div class="silva-nav-inner">
+      <div class="silva-breadcrumb">
+        <a href="/curriculum.html">Curriculum</a>
+        <span class="bc-sep">&rsaquo;</span>
+        <a href="/curriculum.html#mrc-da1a" class="bc-hide-sm">Digital Arts 1A</a>
+        <span class="bc-sep bc-hide-sm">&rsaquo;</span>
+        <span class="bc-current">%(crumb)s</span>
+      </div>
+      <div class="silva-nav-spacer"></div>
+      %(stepnav)s
+      <button class="silva-copy-btn" onclick="silvaCopyHTML()" aria-label="Copy Canvas HTML to clipboard">&#128203; Copy Canvas HTML</button>
+      <button class="silva-download-btn" onclick="silvaDownloadHTML()" aria-label="Download Canvas HTML as file">&#128229; Download HTML</button>
+    </div>
+  </nav>'''
+
+SCRIPTS = '''  <script>
+    function silvaCopyHTML() {
+      const el = document.getElementById('top'); const html = el.outerHTML;
+      navigator.clipboard.writeText(html).then(function() {
+        var btn = document.querySelector('.silva-copy-btn');
+        btn.textContent = '\\u2713 Copied to clipboard!'; btn.classList.add('copied');
+        setTimeout(function() { btn.innerHTML = '&#128203; Copy Canvas HTML'; btn.classList.remove('copied'); }, 2500);
+      }).catch(function() { alert('Copy failed. Try selecting the page source manually.'); });
+    }
+    function silvaDownloadHTML() {
+      var el = document.getElementById('top'); var html = el.outerHTML;
+      var blob = new Blob([html], { type: 'text/html' }); var url = URL.createObjectURL(blob);
+      var a = document.createElement('a'); a.href = url; a.download = '%(dl)s';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    }
+  </script>
+  <script src="/js/silva-nav.js"></script>'''
+
+def page(filename, title_tag, crumb, links, dl, eyebrow, btitle, tagline, cards):
+    body = ''.join(cards)
+    html = ('<!DOCTYPE html>\n<html lang="en">\n<head>\n'
+            '  <meta charset="UTF-8" />\n'
+            '  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n'
+            '  <title>%s</title>\n' % title_tag +
+            '  <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only.svg" />\n'
+            '  <link rel="apple-touch-icon" href="/logos/CS_Logo_Only.svg" />\n'
+            '  <style>:root { --course-accent: #c95201; }</style>\n'
+            '  <link rel="stylesheet" href="/css/silva-module.css" />\n'
+            '</head>\n<body>\n' +
+            (NAV % {'crumb': crumb, 'stepnav': stepnav(links)}) + '\n'
+            '  <div class="silva-page">\n  <div id="silva-module-content">\n'
+            '  <div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;'
+            'background-color:#080808;background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,'
+            'rgba(40,20,2,0.94) 50%,rgba(8,8,8,0.97) 100%);background-position:center center;'
+            'background-repeat:no-repeat;background-attachment:fixed;overflow:hidden;">\n\n'
+            '    <div style="padding:28px 28px 40px;">\n      ' +
+            banner(eyebrow, btitle, tagline) + body +
+            '\n    </div>\n\n  </div>\n  </div>\n  </div>\n' +
+            (SCRIPTS % {'dl': dl}) + '\n</body>\n</html>\n')
+    open(os.path.join(OUT, filename), 'w').write(html)
+    print('  %s  divs=%s  em=%d' % (filename, 'OK' if html.count('<div') == html.count('</div>') else 'IMBALANCE',
+                                    html.count('—') + html.count('&mdash;')))
+
+# =========================================================================
+# PAGE 1 — OVERVIEW
+# =========================================================================
+concepts = [
+    tile('Concept 01', 'The Cornfield', 'A student cuts through the MRC cornfield at dusk and the rows close behind them. The maze keeps changing, and they are not alone.<br /><strong>Tagline:</strong> &ldquo;You can&rsquo;t find your way out.&rdquo;'),
+    tile('Concept 02', 'Night Shift', 'A student locks up the ag-mechanics shop alone after dark. The machines power on by themselves, and a shadow moves in the sparks.<br /><strong>Tagline:</strong> &ldquo;Some machines never clock out.&rdquo;'),
+    tile('Concept 03', 'The Scarecrow', 'The field scarecrow disappears each morning and turns up a little closer to campus each night. Nobody believes it, until it is at the door.<br /><strong>Tagline:</strong> &ldquo;It only moves when no one is looking.&rdquo;'),
+]
+vocab = [
+    tile('Term 01', 'Title Treatment', 'The styled design of the movie&rsquo;s name. The font and look set the mood before you read a word.'),
+    tile('Term 02', 'Tagline', 'One short, haunting line that hooks you, like &ldquo;You can&rsquo;t find your way out.&rdquo;'),
+    tile('Term 03', 'Key Art', 'The main image of the poster, also called the hero image. It carries the whole feeling of the movie.'),
+    tile('Term 04', 'Billing Block', 'The thin block of credits at the bottom: the cast, the director, and the studio.'),
+    tile('Term 05', 'Mood and Tone', 'The feeling the poster gives, set with color, light, and shadow. Scary posters are dark and moody.'),
+    tile('Term 06', 'Teaser vs Theatrical', 'A teaser poster shows just enough to spark curiosity. A theatrical poster shows more right before release.'),
+]
+required = [
+    tile('Must-Have 01', 'Title Treatment', 'Your movie title, big and styled to match the scary mood.'),
+    tile('Must-Have 02', 'Tagline', 'One short, creepy line that hooks the viewer.'),
+    tile('Must-Have 03', 'Hero Image', 'One strong, moody photo of your character or scene that fills the poster.'),
+    tile('Must-Have 04', 'Billing Block', 'A credits block at the bottom: cast, director, and studio.'),
+    tile('Must-Have 05', 'Rating and Date', 'The PG-13 rating and a release line, like &ldquo;In theaters this fall.&rdquo;'),
+    tile('Must-Have 06', 'Dark Mood', 'A moody color grade with deep shadows. It must feel scary, not bright.'),
+]
+mission = [
+    tile('STEP 01', 'Plan', 'Pick or pitch a PG-13 scary concept, cast it, and sketch your poster.'),
+    tile('STEP 02', 'Capture', 'Shoot your moody hero image and supporting shots, then turn in a RAW folder screenshot.'),
+    tile('STEP 03', 'Design', 'Build the poster with a title treatment, a tagline, and a billing block.'),
+    tile('STEP 04', 'Reflect', 'Answer four questions about your poster and the choices you made.'),
+]
+page(
+    'movieposter-overview.html',
+    'Overview | Movie Poster | Digital Arts 1A | Mark Richardson Center',
+    'Overview', [('movieposter-step01-plan.html', 'Step 1 &#8594;')],
+    'mrc-movieposter-overview-canvas.html',
+    'Digital Arts 1A &nbsp;&bull;&nbsp; Module', 'Movie Poster',
+    'Sell the scare in one image.',
+    [
+        headerph('Ultra-wide 16:6 hyper-realistic, behind-the-scenes photo of a scary-movie poster shoot at the Mark Richardson Center at dusk. Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) holds a Canon DSLR and directs his scene: a student actor stands at the edge of a darkening cornfield holding a flashlight, with low fog rolling between the rows and the MRC building glowing faintly in the distance. Cool blue moonlight with one warm light source, deep shadows, cinematic and suspenseful but tasteful and PG-13 (no blood, no gore, no weapons). Photoreal, moody color grade, film-still feel.'),
+        card('WHAT IS A MOVIE POSTER / 01 / 07', 'One Image, One Scare',
+             para('A movie poster is one image that makes you want to see the film. It uses <strong>one strong photo</strong>, a <strong>title</strong>, and a short <strong>tagline</strong> to sell the whole story in a single glance.')
+             + para('A scary movie poster does it with <strong>mood</strong>: dark shadows, cold color, and a feeling that something is wrong.')
+             + para('For this project you will design a real-looking <strong>movie poster</strong> for a PG-13 scary movie set at the Mark Richardson Center.')),
+        card('PICK YOUR CONCEPT / 02 / 07', 'Choose a Scary Story',
+             para('Pick <strong>one</strong> of these three concepts, or pitch your own PG-13 idea. Each one is set right here at the MRC.')
+             + scrollrow(concepts)
+             + para('Want your own story? Pitch a PG-13, school-appropriate idea to Mr. Silva for approval first.')),
+        card('KEEP IT PG-13 / 03 / 07', 'Scary, Not Gross',
+             para('Scary is great. <strong>Gross is not.</strong> Your movie must stay <strong>PG-13</strong> and school-appropriate. Build fear with <strong>mood, shadow, and suspense</strong>, not blood, gore, or weapons.')
+             + para('Think about the scariest part of a movie, the part before anything even happens: the dark hallway, the sound behind you, the thing you cannot quite see. That is your goal.')
+             + notecard('THE RULE', 'Get It Approved', 'Mr. Silva must approve your concept before you shoot. No blood, no gore, no weapons, nothing that breaks school rules. When in doubt, ask.')),
+        card('WHAT YOUR POSTER MUST HAVE / 04 / 07', 'Set the Standard',
+             para('Every finished poster must include all six of these. This is the standard you are graded on.')
+             + scrollrow(required)),
+        card('WORK AS A TEAM / 05 / 07', 'Brainstorm Together, Build Your Own',
+             para('You may work in a <strong>group</strong>. Slow down and brainstorm together: share concept ideas, act in each other&rsquo;s shoots, and trade photos so everyone has plenty to work with.')
+             + para('But every student turns in their <strong>own unique poster</strong>. Same group and same shoot, different design. Your title, your mood, and your choices must be your own.')
+             + notecard('TEAM RULE', 'Share Ideas, Not Posters', 'Help each other with ideas, acting, and photos. Then make a poster that is one hundred percent yours.')),
+        card('WORDS TO KNOW / 06 / 07', 'Movie Poster Vocabulary',
+             para('Learn these six terms. You will use them all the way through the project.')
+             + scrollrow(vocab)),
+        card('YOUR MISSION / 07 / 07', 'What You Will Do',
+             para('You will work like a real movie marketing artist in four steps: plan, capture, design, and reflect.')
+             + scrollrow(mission)
+             + '<div style="margin-top:18px;">' + pendingbutton('Download the Project Folder') + '</div>'),
+    ],
+)
+
+# =========================================================================
+# PAGE 2 — STEP 01 PLAN
+# =========================================================================
+decide = [
+    tile('Decide 01', 'Title', 'Name your movie. Short and creepy works best.'),
+    tile('Decide 02', 'Tagline', 'Write one haunting line that hooks the viewer.'),
+    tile('Decide 03', 'Character', 'Cast a friend as your lead. Who is the story about?'),
+    tile('Decide 04', 'Location', 'Pick a moody spot: the field, the barn, or the shop, after dark.'),
+    tile('Decide 05', 'Mood', 'Decide your feeling and colors: cold blues, deep shadows, low fog.'),
+]
+page(
+    'movieposter-step01-plan.html',
+    'Step 1: Plan | Movie Poster | Digital Arts 1A | Mark Richardson Center',
+    'Step 1',
+    [('movieposter-overview.html', '&#8592; Overview'), ('movieposter-step02-capture.html', 'Step 2 &#8594;')],
+    'mrc-movieposter-step01-plan-canvas.html',
+    'Movie Poster &nbsp;&bull;&nbsp; Step 1', 'Plan Your Poster',
+    'Pick your story and sketch the layout.',
+    [
+        card('PICK YOUR CONCEPT / 01 / 04', 'Choose or Pitch',
+             para('Choose one of the three concepts from the overview, or pitch your own PG-13 idea. Then write your <strong>logline</strong>: one sentence that says who the story is about, where it happens, and what is wrong.')
+             + notecard('KEEP IT PG-13', 'Get It Approved First', 'Your concept must be school-appropriate and approved by Mr. Silva before you shoot. Scary with mood and suspense, never with blood, gore, or weapons.')),
+        card('WRITE AND CAST / 02 / 04', 'Build Your Movie',
+             para('Now decide the pieces of your movie. These choices give you the words and the look for your poster. Scroll through each one.')
+             + scrollrow(decide)),
+        card('SKETCH YOUR LAYOUT / 03 / 04', 'Plan the Poster',
+             para('On paper, sketch a quick <strong>thumbnail</strong> of your poster. Plan where each piece goes:')
+             + para('Block out your <strong>hero image</strong>, put the big <strong>title</strong> near the bottom, mark a spot for the <strong>tagline</strong>, and leave a thin strip at the very bottom for the <strong>billing block</strong>.')
+             + para('Leave room for the title. Do not plan to bury it in a busy part of the photo.'),
+             ph('Hyper-realistic photo of Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) at a desk in the MRC studio, sketching a movie poster layout in a sketchbook: a rough thumbnail with a tall hero-image area, a big title near the bottom, a tagline line, and a thin billing block. Pencil in hand, moody horror movie posters pinned on the wall behind him. Warm desk light against a dark room, photoreal, three-quarter view.')),
+        card('GET IT CHECKED / 04 / 04', 'Get Approved',
+             para('Before you shoot, show Mr. Silva your <strong>concept</strong>, your <strong>cast and location</strong>, and your <strong>layout sketch</strong>. This is a required checkpoint.')
+             + notecard('CHECKPOINT', 'Approval First, Shoot Second', 'Your concept must be approved so it stays PG-13 and school-safe. Get the green light, then grab a camera for Step 2.')),
+    ],
+)
+
+# =========================================================================
+# PAGE 3 — STEP 02 CAPTURE
+# =========================================================================
+heroshot = [
+    tile('Shot 01', 'Shoot Vertical', 'Turn the camera tall (portrait). Posters are tall, so your hero photo should be too.'),
+    tile('Shot 02', 'Use Dramatic Light', 'Light from one side, from below, or with a flashlight. Hard shadows feel scary.'),
+    tile('Shot 03', 'Strong Expression', 'Direct your character: a stare, a look back, fear in the eyes. Mood is everything.'),
+    tile('Shot 04', 'Leave Title Room', 'Keep the top or bottom a little open so your title and tagline will fit later.'),
+    tile('Shot 05', 'Shoot a Lot', 'Try many angles, low and high. Creepy angles make a creepy poster.'),
+]
+page(
+    'movieposter-step02-capture.html',
+    'Step 2: Capture | Movie Poster | Digital Arts 1A | Mark Richardson Center',
+    'Step 2',
+    [('movieposter-step01-plan.html', '&#8592; Step 1'), ('movieposter-step03-design.html', 'Step 3 &#8594;')],
+    'mrc-movieposter-step02-capture-canvas.html',
+    'Movie Poster &nbsp;&bull;&nbsp; Step 2', 'Shoot Your Scene',
+    'Capture your moody hero image.',
+    [
+        card('SHOOT YOUR SCENE / 01 / 05', 'Set the Mood on Location',
+             para('Take your actor to a moody spot: the field, the barn, or the shop, after the light gets low. Build fear with <strong>shadow and angle</strong>, not action.')
+             + para('A <strong>studio</strong> with a <strong>backdrop and constant lighting</strong> is great for a moody portrait, because you control every shadow.'),
+             ph('Hyper-realistic on-location photo of Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) holding a Canon DSLR vertically, photographing his actor in a moody scene at the MRC at dusk: the actor stands in a dim barn doorway lit from one side, with deep shadows behind them and low fog. Ricardo is focused and framing the shot. Cinematic and suspenseful, tasteful PG-13 (no blood or weapons), photoreal, three-quarter rear view.')),
+        card('MAKE A STRONG HERO SHOT / 02 / 05', 'Frame the Key Art',
+             para('Your hero image carries the whole poster. Scroll through each pointer as you shoot.')
+             + scrollrow(heroshot)),
+        card('SHOOT SUPPORTING IMAGES / 03 / 05', 'Two More Photos',
+             para('You will blend extra images into your poster for atmosphere. While you are out shooting, capture at least <strong>two more images</strong>.')
+             + para('Good extras: fog, the empty location, a creepy detail, a texture, or a second angle of your character. Shoot plenty so you have choices when you design.')),
+        card('ORGANIZE YOUR FILES / 04 / 05', 'Keep It Organized',
+             para('Use the <strong>project folder</strong> you downloaded from the overview. If you have not yet, move it into your <strong>OneDrive Digital Arts</strong> folder.')
+             + para('Offload all your <strong>RAW</strong> files into the <strong>RAW Images</strong> subfolder inside it. Keep every part of this project organized here.')),
+        card('TURN IT IN / 05 / 05', 'Screenshot Your RAW Folder',
+             para('Open <strong>Finder</strong> and switch to <strong>Icon view</strong> so you can see the photo thumbnails.')
+             + para('Open your <strong>RAW Images</strong> folder so the window shows the folder name and your thumbnails inside. Press the <strong>F15</strong> key to take the screenshot. On our Macs, F15 saves it straight to your <strong>Desktop</strong> as a PNG.')
+             + para('Find it on the Desktop and rename it:')
+             + fname('FirstName LastInitial - Movie Poster (PNG)')
+             + imgfull(IMG + 'pano-raw-folder-screenshot.png', 'Example screenshot of a RAW Images folder in Finder Icon view', 'Your screenshot should look like this')
+             + para('Upload the PNG screenshot to Step 2 in Canvas.')),
+    ],
+)
+
+# =========================================================================
+# PAGE 4 — STEP 03 DESIGN
+# =========================================================================
+words = [
+    tile('Words 01', 'Tagline', 'Place your one creepy line near the title. Keep it short and easy to read.'),
+    tile('Words 02', 'Billing Block', 'Add the thin credits block at the very bottom: cast, director, and studio.'),
+    tile('Words 03', 'Rating and Date', 'Add the PG-13 rating and a release line, like &ldquo;In theaters this fall.&rdquo;'),
+    tile('Words 04', 'Use Type Hierarchy', 'Make the title the biggest, the tagline smaller, and the billing block smallest.'),
+    tile('Words 05', 'Keep It Readable', 'Dark posters can hide text. Add a soft glow or shadow so your words still pop.'),
+]
+page(
+    'movieposter-step03-design.html',
+    'Step 3: Design | Movie Poster | Digital Arts 1A | Mark Richardson Center',
+    'Step 3',
+    [('movieposter-step02-capture.html', '&#8592; Step 2'), ('movieposter-step04-reflection.html', 'Step 4 &#8594;')],
+    'mrc-movieposter-step03-design-canvas.html',
+    'Movie Poster &nbsp;&bull;&nbsp; Step 3', 'Build Your Poster',
+    'Design it like the real thing.',
+    [
+        card('SET UP YOUR POSTER / 01 / 05', 'Start a New File',
+             para('Open Photoshop. Go to <strong>File &gt; New</strong> and make a tall (portrait) poster, about <strong>11 by 17 inches</strong>, RGB color, 300 ppi.')
+             + para('Open your hero photo through <strong>Camera Raw</strong>, place it on your page, and let it <strong>bleed</strong> to the edges. Darken the background so it feels moody. Save your work as a <strong>.PSD</strong> in your project folder.'),
+             ph('Hyper-realistic over-the-shoulder photo of Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) at an iMac in the MRC computer lab, designing a dark, moody scary-movie poster in Photoshop: a tall hero image of a character in fog fills the screen, with a big stylized movie title near the bottom, a tagline, and a thin billing block, just like a real theatrical poster. Cool screen glow on his face, dim lab lighting, photoreal.')),
+        card('DESIGN THE TITLE TREATMENT / 02 / 05', 'Make the Title',
+             para('Your movie title is the star. Make it big and bold, usually near the <strong>bottom</strong> of the poster. Pick a font that matches the scary mood. You can download free fonts from <strong>dafont.com</strong> or use <strong>Adobe Fonts</strong>.')
+             + para('Add a soft glow, a rough edge, or a shadow so the title stands out against the dark image.')),
+        card('ADD YOUR WORDS / 03 / 05', 'Tagline, Credits, and Rating',
+             para('Use the <strong>Type tool</strong> to add the rest of the words. Scroll through each pointer.')
+             + scrollrow(words)),
+        card('SET THE MOOD / 04 / 05', 'Make It Scary',
+             para('Use the <strong>Camera Raw Filter</strong> (<strong>Filter &gt; Camera Raw Filter</strong>) to grade your poster dark and moody: lower the brightness, cool the colors, deepen the shadows, and add a <strong>vignette</strong> around the edges.')
+             + para('Blend in your <strong>supporting images</strong> for fog or texture. The whole poster should feel cold and tense, like a real horror one-sheet.')),
+        card('SAVE AND SUBMIT / 05 / 05', 'Save as JPG and Submit',
+             para('When your poster is done, flatten it with <strong>Layer &gt; Flatten Image</strong>. Keep a PSD only if you want one.')
+             + para('Turn in a <strong>JPG</strong>, not a PSD. Use <strong>File &gt; Save a Copy</strong>, choose <strong>JPG</strong>, full size. Name it:')
+             + fname('FirstName LastInitial - Movie Poster.jpg')
+             + para('Submit your finished poster JPG to Step 3 in Canvas.')),
+    ],
+)
+
+# =========================================================================
+# PAGE 5 — STEP 04 REFLECTION
+# =========================================================================
+questions = [
+    tile('Question 01', 'Your Concept', 'Which concept did you choose or pitch, and what makes it scary?'),
+    tile('Question 02', 'The Mood', 'How did you use light, angle, and color to make your poster feel scary?'),
+    tile('Question 03', 'The Hard Part', 'What was hardest for you: the shoot, the title, or the mood? How did you solve it?'),
+    tile('Question 04', 'The Trailer', 'If your movie were real, what would the trailer show? Would you watch it?'),
+]
+page(
+    'movieposter-step04-reflection.html',
+    'Step 4: Reflection | Movie Poster | Digital Arts 1A | Mark Richardson Center',
+    'Step 4',
+    [('movieposter-step03-design.html', '&#8592; Step 3')],
+    'mrc-movieposter-step04-reflection-canvas.html',
+    'Movie Poster &nbsp;&bull;&nbsp; Step 4', 'Reflection',
+    'Look back at your poster.',
+    [
+        card('ANSWER FOUR QUESTIONS / 01 / 02', 'Reflect on Your Work',
+             para('A reflection helps you learn from your work. Open the <strong>reflection document</strong> in your project folder and answer all four questions in complete sentences.')
+             + scrollrow(questions)),
+        card('TURN IT IN / 02 / 02', 'Submit Your Reflection',
+             para('The reflection document is inside your <strong>project folder</strong>. Type your answers, save the document, and name it:')
+             + fname('FirstName LastInitial - Movie Poster Reflection.docx')
+             + para('Upload your finished reflection to Step 4 in Canvas to complete the project.'),
+             ph('Hyper-realistic photo of Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) sitting back at the MRC lab, holding a printed proof of his finished scary-movie poster and looking at it, his iMac showing the same dark, moody poster behind him. Soft dim lab lighting, photoreal, over-the-shoulder view.')),
+    ],
+)
+
+print('done')
