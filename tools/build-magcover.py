@@ -342,7 +342,7 @@ page(
         card('SHOOT ON LOCATION / 01 / 05', 'Photojournalism Style',
              para('Go where the story is: the barn, the field, the shop, the field house. Shoot <strong>real moments</strong>, not stiff poses. This is <strong>photojournalism</strong>.')
              + para('A <strong>studio</strong> is set up with a <strong>backdrop and constant lighting</strong> if your story needs it, but on-location photos usually feel more real and tell a stronger story.'),
-             ph('Hyper-realistic on-location photojournalism photo of Julian (21, lean, dark curly hair with a taper fade, red-and-black plaid flannel over a black tee) holding a Canon DSLR vertically (portrait orientation), photographing his cover subject: an MRC agriculture student kneeling beside livestock in a corral on the MRC campus at golden hour. Julian is focused and framing the shot, leaving open space at the top for a masthead. Documentary feel, warm light, photoreal, three-quarter rear view.')),
+             floatimg(IMG + 'magcover-capture-float.png', 'Julian photographing his cover subject kneeling beside cattle at the MRC campus at golden hour')),
         card('MAKE A STRONG HERO SHOT / 02 / 05', 'Frame the Cover Image',
              para('Your hero image carries the whole cover. Scroll through each pointer as you shoot.')
              + scrollrow(heroshot)),
