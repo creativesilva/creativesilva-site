@@ -219,18 +219,25 @@ vocab = [
     tile('Term 05', 'Bleed', 'When the photo runs all the way to the edge of the page with no white border. Covers almost always bleed.'),
     tile('Term 06', 'Photojournalism', 'Telling a true story with photos taken on location, in real moments, not posed in a studio.'),
 ]
-great = [
-    tile('Tip 01', 'One Strong Subject', 'Pick one clear subject for your hero photo. A cover with one bold focal point beats a busy one.'),
-    tile('Tip 02', 'Leave Room for Text', 'Frame your photo with empty space at the top and one side so the masthead and cover lines have a home.'),
-    tile('Tip 03', 'Shoot Vertical', 'Magazine covers are tall (portrait). Turn the camera vertical when you shoot your hero image.'),
-    tile('Tip 04', 'Keep It Real', 'This is photojournalism. Real people, real places, and real moments make the strongest covers.'),
-    tile('Tip 05', 'Match the Style', 'Study your magazine&rsquo;s real covers and match their fonts, colors, and mood.'),
+required = [
+    tile('Must-Have 01', 'Masthead', 'The real magazine logo, big and bold at the top.'),
+    tile('Must-Have 02', 'Hero Image', 'One strong photo of your subject that bleeds to the edges.'),
+    tile('Must-Have 03', 'Main Title', 'A bold headline cover line, pulled from your interview.'),
+    tile('Must-Have 04', 'Subtitle', 'A short line under the title that adds detail. This is the deck.'),
+    tile('Must-Have 05', 'Breakout Points', 'At least three cover lines that tease other parts of the story.'),
+    tile('Must-Have 06', 'Two Breakout Boxes', 'Two small boxes, each with its own photo and a few words, for extra stories.'),
 ]
 mission = [
-    tile('STEP 01', 'Plan', 'Pick your magazine and your story, then sketch your cover layout.'),
-    tile('STEP 02', 'Capture', 'Shoot your hero photo on location, then turn in a screenshot of your RAW folder.'),
-    tile('STEP 03', 'Design', 'Build the cover in Photoshop with the real masthead and your cover lines.'),
+    tile('STEP 01', 'Plan', 'Pick your topic and person, interview them, and sketch your cover layout.'),
+    tile('STEP 02', 'Capture', 'Shoot your hero photo and two breakout photos, then turn in a RAW folder screenshot.'),
+    tile('STEP 03', 'Design', 'Build the cover in Photoshop with the masthead, your words, and two breakout boxes.'),
     tile('STEP 04', 'Reflect', 'Answer four questions about your cover and the choices you made.'),
+]
+interview = [
+    tile('Ask 01', 'What do you do here?', 'Get their role and their everyday work in their own words.'),
+    tile('Ask 02', 'Why does it matter?', 'Find the bigger story. This often becomes your main title.'),
+    tile('Ask 03', 'What are you proud of?', 'A strong quote or fact, perfect for a breakout point.'),
+    tile('Ask 04', 'What is next for you?', 'Where are they headed? Great for a teaser cover line.'),
 ]
 page(
     'magcover-overview.html',
@@ -241,27 +248,30 @@ page(
     'Tell the MRC story in one cover.',
     [
         headerph('Ultra-wide 16:6 hyper-realistic, behind-the-scenes photo of a magazine cover shoot on the Mark Richardson Center campus at golden hour. Julian (21, lean, dark curly hair with a taper fade, red-and-black plaid flannel over a black tee) crouches with a Canon DSLR, photographing his subject: a confident young MRC agriculture student in a work shirt standing beside a tractor and a fenced livestock corral, crop rows in the mid-ground. Warm low sun, gentle lens flare, shallow depth of field. Editorial photojournalism mood like the cover of a real farming magazine (Successful Farming / Progressive Farmer / Farm Journal). Photoreal, sharp detail, natural skin tones.'),
-        card('WHAT IS A MAGAZINE COVER / 01 / 06', 'One Image, One Story',
+        card('WHAT IS A MAGAZINE COVER / 01 / 07', 'One Image, One Story',
              para('A magazine cover is the front page that makes you want to pick it up. It uses <strong>one strong photo</strong> and a few <strong>bold words</strong> to sell the whole magazine in a single glance.')
              + para('Look at a real cover: a big name at the top (the <strong>masthead</strong>), one powerful photo behind it, and short headlines that tease the stories inside.')
              + para('For this project you will design a real-looking <strong>agriculture magazine cover</strong> that puts the Mark Richardson Center in the spotlight.')),
-        card('PICK YOUR MAGAZINE / 02 / 06', 'Choose One of Three',
-             para('You will design your cover in the style of one real farming magazine. Pick <strong>one</strong> of these three. Click to study their real covers for ideas.')
+        card('PICK YOUR MAGAZINE / 02 / 07', 'Choose One of Three',
+             para('You will design your cover in the style of one real farming magazine. Pick <strong>one</strong> of these three. Click to study each one and learn its tone and the kind of images it uses.')
              + scrollrow(mags)
              + para('You will get the real magazine logo from your <strong>project folder</strong> to make your cover look authentic.')),
-        card('THE BRIEF / 03 / 06', 'Your Assignment from Admin',
-             para('Here is your creative brief from the <strong>MRC administration</strong>:')
-             + notecard('FROM MRC ADMIN', 'Show the Heart of Our Campus', 'We want a cover that makes people stop and look. Show what makes the Mark Richardson Center special: our people, our work, and our future.')
-             + para('<strong>What you could highlight:</strong> the agriculture program, livestock and crops, the welding or automotive shops, new equipment, a campus event, or how the MRC grows and builds.')
-             + para('<strong>Who you could highlight:</strong> a standout student, an instructor, a team, or someone hard at work.')
-             + para('You have lots of <strong>creative freedom</strong>. Tell a true story. A studio is set up if you need it, but shots taken <strong>on location</strong> usually tell a stronger story.')),
-        card('WORDS TO KNOW / 04 / 06', 'Magazine Vocabulary',
+        card('PICK YOUR TOPIC / 03 / 07', 'Topic, Person, and Interview',
+             para('Your topic must fit the <strong>CTE agriculture theme</strong> of our campus: farming, livestock, crops, equipment, the trades, sustainability, or the people who make it all work.')
+             + para('Choose a real person to feature: a <strong>student, an administrator, or a teacher</strong>. Then <strong>interview them</strong>. Their answers give you the words for your cover.')
+             + para('From your interview, gather the content for your <strong>title</strong>, your <strong>subtitle</strong>, and your <strong>breakout points</strong>, all the words you see on a real cover.')
+             + notecard('REPORTER MODE', 'Interview First', 'Ask good questions and write down quotes and real facts. Real words make a real cover. You will do this in Step 1.')),
+        card('WHAT YOUR COVER MUST HAVE / 04 / 07', 'Set the Standard',
+             para('Every finished cover must include all six of these. This is the standard you are graded on.')
+             + scrollrow(required)),
+        card('WORK AS A TEAM / 05 / 07', 'Brainstorm Together, Build Your Own',
+             para('You may work in a <strong>group</strong>. Slow down and brainstorm together: share topic ideas, plan interviews, and trade photos and content so everyone has plenty to work with.')
+             + para('But every student turns in their <strong>own unique cover</strong>. Same group and same shoot, different design. Your layout, your title, and your choices must be your own.')
+             + notecard('TEAM RULE', 'Share Ideas, Not Covers', 'Help each other with ideas, interviews, and photos. Then make a cover that is one hundred percent yours.')),
+        card('WORDS TO KNOW / 06 / 07', 'Magazine Vocabulary',
              para('Learn these six terms. You will use them all the way through the project.')
              + scrollrow(vocab)),
-        card('WHAT MAKES A GREAT COVER / 05 / 06', 'Cover Design Tips',
-             para('Keep these in mind from your first shot to your final design.')
-             + scrollrow(great)),
-        card('YOUR MISSION / 06 / 06', 'What You Will Do',
+        card('YOUR MISSION / 07 / 07', 'What You Will Do',
              para('You will work like a real photo editor in four steps: plan, capture, design, and reflect.')
              + scrollrow(mission)
              + '<div style="margin-top:18px;">' + pendingbutton('Download the Project Folder') + '</div>'),
@@ -280,17 +290,21 @@ page(
     'Magazine Cover &nbsp;&bull;&nbsp; Step 1', 'Plan Your Cover',
     'Pick your story and sketch the layout.',
     [
-        card('PICK YOUR STORY / 01 / 03', 'Choose Your Subject',
-             para('Read the brief again and choose <strong>one story</strong> to tell on your cover. Pick a real subject you can photograph: a person, an animal, a machine, or a place on campus.')
-             + para('Choose your <strong>angle</strong> too. What is the headline? &ldquo;Future Farmers,&rdquo; &ldquo;Built at the MRC,&rdquo; &ldquo;Meet the Welder.&rdquo; Your photo and your words should tell the same story.')),
-        card('SKETCH YOUR LAYOUT / 02 / 03', 'Plan the Cover',
+        card('PICK YOUR TOPIC / 01 / 04', 'Topic and Person',
+             para('Choose a <strong>topic</strong> that fits the <strong>CTE agriculture theme</strong> of our campus, and a real person to feature: a <strong>student, an administrator, or a teacher</strong>.')
+             + para('Pick someone you can photograph and talk to. Your topic and your person should tell the same story, like &ldquo;Future Farmers,&rdquo; &ldquo;Built at the MRC,&rdquo; or &ldquo;Meet the Welder.&rdquo;')
+             + notecard('TEAM TIME', 'Brainstorm Together', 'Work with your group to share topic ideas and plan who to interview. Slow down and talk it out, then each of you builds your own unique cover.')),
+        card('INTERVIEW YOUR SUBJECT / 02 / 04', 'Get the Words',
+             para('Now <strong>interview</strong> your person. Their answers become the words on your cover: your <strong>title</strong>, your <strong>subtitle</strong>, and your <strong>breakout points</strong>. Write down quotes and real facts.')
+             + scrollrow(interview)),
+        card('SKETCH YOUR LAYOUT / 03 / 04', 'Plan the Cover',
              para('On paper, sketch a quick <strong>thumbnail</strong> of your cover. Plan where each piece goes:')
-             + para('Put the <strong>masthead</strong> box at the top. Block out where your <strong>hero photo</strong> will sit. Mark where 3 or 4 <strong>cover lines</strong> will go down one side.')
+             + para('Put the <strong>masthead</strong> at the top, block out your <strong>hero photo</strong>, mark where your <strong>title</strong> and <strong>breakout points</strong> go down one side, and box out spots for your <strong>two breakout images</strong>.')
              + para('Leave room for the text. Do not plan to cover your subject&rsquo;s face with the masthead or headlines.'),
-             ph('Hyper-realistic photo of Julian (21, lean, dark curly hair with a taper fade, red-and-black plaid flannel over a black tee) at a desk in the MRC studio, sketching a magazine cover layout in a sketchbook: a rough thumbnail showing a masthead box at the top, a large hero-photo area, and a few cover-line bars down one side. Pencil in hand, real farming magazine covers pinned on the wall behind him. Warm light, photoreal, three-quarter view.')),
-        card('GET IT CHECKED / 03 / 03', 'Bring It to Mr. Silva',
-             para('Before you shoot, show Mr. Silva your <strong>subject idea</strong> and your <strong>layout sketch</strong>. This is a quick checkpoint, no upload needed.')
-             + notecard('CHECKPOINT', 'Plan First, Shoot Second', 'A clear plan makes a stronger photo. Get the green light, then grab a camera for Step 2.')),
+             ph('Hyper-realistic photo of Julian (21, lean, dark curly hair with a taper fade, red-and-black plaid flannel over a black tee) at a desk in the MRC studio, sketching a magazine cover layout in a sketchbook: a rough thumbnail showing a masthead box at the top, a large hero-photo area, a column of cover-line bars, and two small breakout boxes in the corner. Pencil in hand, real farming magazine covers pinned on the wall behind him. Warm light, photoreal, three-quarter view.')),
+        card('GET IT CHECKED / 04 / 04', 'Bring It to Mr. Silva',
+             para('Before you shoot, show Mr. Silva your <strong>person</strong>, your <strong>interview notes</strong>, and your <strong>layout sketch</strong>. This is a quick checkpoint, no upload needed.')
+             + notecard('CHECKPOINT', 'Plan First, Shoot Second', 'A clear plan and good interview make a stronger cover. Get the green light, then grab a camera for Step 2.')),
     ],
 )
 
@@ -313,17 +327,20 @@ page(
     'Magazine Cover &nbsp;&bull;&nbsp; Step 2', 'Shoot Your Cover Photo',
     'Capture your hero image on location.',
     [
-        card('SHOOT ON LOCATION / 01 / 04', 'Photojournalism Style',
+        card('SHOOT ON LOCATION / 01 / 05', 'Photojournalism Style',
              para('Go where the story is: the barn, the field, the shop, the field house. Shoot <strong>real moments</strong>, not stiff poses. This is <strong>photojournalism</strong>.')
-             + para('A studio is set up if your story needs it, but on-location photos usually feel more real and tell a stronger story.'),
+             + para('A <strong>studio</strong> is set up with a <strong>backdrop and constant lighting</strong> if your story needs it, but on-location photos usually feel more real and tell a stronger story.'),
              ph('Hyper-realistic on-location photojournalism photo of Julian (21, lean, dark curly hair with a taper fade, red-and-black plaid flannel over a black tee) holding a Canon DSLR vertically (portrait orientation), photographing his cover subject: an MRC agriculture student kneeling beside livestock in a corral on the MRC campus at golden hour. Julian is focused and framing the shot, leaving open space at the top for a masthead. Documentary feel, warm light, photoreal, three-quarter rear view.')),
-        card('MAKE A STRONG HERO SHOT / 02 / 04', 'Frame the Cover Image',
+        card('MAKE A STRONG HERO SHOT / 02 / 05', 'Frame the Cover Image',
              para('Your hero image carries the whole cover. Scroll through each pointer as you shoot.')
              + scrollrow(heroshot)),
-        card('ORGANIZE YOUR FILES / 03 / 04', 'Keep It Organized',
+        card('SHOOT YOUR BREAKOUT IMAGES / 03 / 05', 'Two More Photos',
+             para('Your cover also needs <strong>two breakout boxes</strong>, each with its own small photo. While you are on location, shoot at least <strong>two more images</strong> for them.')
+             + para('Good breakout shots: a close-up detail, a tool or piece of equipment, a wide shot of the place, or a second angle of your subject. Shoot extra so you have choices when you design.')),
+        card('ORGANIZE YOUR FILES / 04 / 05', 'Keep It Organized',
              para('Use the <strong>project folder</strong> you downloaded from the overview. If you have not yet, move it into your <strong>OneDrive Digital Arts</strong> folder.')
              + para('Offload all your <strong>RAW</strong> files into the <strong>RAW Images</strong> subfolder inside it. Keep every part of this project organized here.')),
-        card('TURN IT IN / 04 / 04', 'Screenshot Your RAW Folder',
+        card('TURN IT IN / 05 / 05', 'Screenshot Your RAW Folder',
              para('Open <strong>Finder</strong> and switch to <strong>Icon view</strong> so you can see the photo thumbnails.')
              + para('Open your <strong>RAW Images</strong> folder so the window shows the folder name and your thumbnails inside. Press the <strong>F15</strong> key to take the screenshot. On our Macs, F15 saves it straight to your <strong>Desktop</strong> as a PNG.')
              + para('Find it on the Desktop and rename it:')
@@ -337,11 +354,12 @@ page(
 # PAGE 4 — STEP 03 DESIGN
 # =========================================================================
 coverlines = [
-    tile('Line 01', 'Write a Main Headline', 'One big, bold cover line is the star. Make it short and exciting, like &ldquo;Built at the MRC&rdquo; or &ldquo;Future Farmers.&rdquo;'),
-    tile('Line 02', 'Add Teasers', 'Add 2 or 3 smaller cover lines that hint at other stories. These are your teasers.'),
-    tile('Line 03', 'Use Type Hierarchy', 'Make the main headline the biggest. Make the teasers smaller. Size shows the reader what matters most.'),
-    tile('Line 04', 'Keep Text Off the Face', 'Place your words in the open space you left when you shot. Never cover your subject&rsquo;s face or eyes.'),
-    tile('Line 05', 'Match the Magazine', 'Use fonts and colors close to your real magazine&rsquo;s style so your cover looks authentic.'),
+    tile('Words 01', 'Main Title', 'One big, bold headline is the star. Pull it from your interview, short and exciting, like &ldquo;Built at the MRC.&rdquo;'),
+    tile('Words 02', 'Subtitle', 'Add a short line under the title (the deck) that gives one more detail about your story.'),
+    tile('Words 03', 'Breakout Points', 'Add at least three smaller cover lines that tease other parts of the story, using quotes and facts from your interview.'),
+    tile('Words 04', 'Use Type Hierarchy', 'Make the title the biggest, the subtitle smaller, and the breakout points smaller still. Size shows what matters most.'),
+    tile('Words 05', 'Keep Text Off the Face', 'Place your words in the open space you left when you shot. Never cover your subject&rsquo;s face or eyes.'),
+    tile('Words 06', 'Match the Magazine', 'Use fonts and colors close to your real magazine&rsquo;s style so your cover looks authentic.'),
 ]
 page(
     'magcover-step03-design.html',
@@ -352,17 +370,20 @@ page(
     'Magazine Cover &nbsp;&bull;&nbsp; Step 3', 'Build Your Cover',
     'Design it like the real thing.',
     [
-        card('SET UP YOUR COVER / 01 / 04', 'Start a New File',
+        card('SET UP YOUR COVER / 01 / 05', 'Start a New File',
              para('Open Photoshop. Go to <strong>File &gt; New</strong> and make a tall (portrait) magazine page, about <strong>8.5 by 11 inches</strong>, RGB color, 300 ppi.')
              + para('Open your best hero photo through <strong>Camera Raw</strong>, place it on your page, and let it <strong>bleed</strong> all the way to the edges with no white border. Save your work as a <strong>.PSD</strong> in your project folder.'),
-             ph('Hyper-realistic over-the-shoulder photo of Julian (21, lean, dark curly hair with a taper fade, red-and-black plaid flannel over a black tee) at an iMac in the MRC computer lab, designing a farming magazine cover in Photoshop: a bold vertical hero photo fills the screen with a large masthead at the top and stacked cover lines down one side, just like a real agriculture magazine. Cool screen glow on his face, warm orange lab lighting, photoreal.')),
-        card('ADD THE MASTHEAD / 02 / 04', 'Place the Logo',
+             ph('Hyper-realistic over-the-shoulder photo of Julian (21, lean, dark curly hair with a taper fade, red-and-black plaid flannel over a black tee) at an iMac in the MRC computer lab, designing a farming magazine cover in Photoshop: a bold vertical hero photo fills the screen with a large masthead at the top, stacked cover lines down one side, and two small breakout boxes in a corner, just like a real agriculture magazine. Cool screen glow on his face, warm orange lab lighting, photoreal.')),
+        card('ADD THE MASTHEAD / 02 / 05', 'Place the Logo',
              para('Open the magazine <strong>logo</strong> from your project folder and place it at the <strong>top</strong> of your cover.')
              + para('Size it big and bold, like the real magazine. The masthead is the brand, so it should be one of the first things you see.')),
-        card('WRITE YOUR COVER LINES / 03 / 04', 'Add Your Headlines',
-             para('Use the <strong>Type tool</strong> to add your cover lines. Scroll through each pointer.')
+        card('ADD YOUR WORDS / 03 / 05', 'Title, Subtitle, and Breakout Points',
+             para('Use the <strong>Type tool</strong> to add all the words from your interview. Scroll through each pointer.')
              + scrollrow(coverlines)),
-        card('SAVE AND SUBMIT / 04 / 04', 'Save as JPG and Submit',
+        card('ADD TWO BREAKOUT BOXES / 04 / 05', 'Feature Two More Stories',
+             para('Add your <strong>two breakout boxes</strong>. Each one is a small box with one of your <strong>breakout photos</strong> inside and a few words next to it, like a mini cover line.')
+             + para('Keep them the same size and lined up neatly so they look clean and on purpose, just like the breakout boxes on a real cover.')),
+        card('SAVE AND SUBMIT / 05 / 05', 'Save as JPG and Submit',
              para('When your cover is done, flatten it with <strong>Layer &gt; Flatten Image</strong>. Keep a PSD only if you want one.')
              + para('Turn in a <strong>JPG</strong>, not a PSD. Use <strong>File &gt; Save a Copy</strong>, choose <strong>JPG</strong>, full size. Name it:')
              + fname('FirstName LastInitial - Magazine Cover.jpg')
@@ -375,8 +396,8 @@ page(
 # =========================================================================
 questions = [
     tile('Question 01', 'Your Magazine', 'Which magazine did you design for, and why did it fit your story?'),
-    tile('Question 02', 'Your Story', 'What story does your cover tell? Who or what did you highlight, and why?'),
-    tile('Question 03', 'The Hard Part', 'What was harder for you, shooting or designing? How did you solve the problem?'),
+    tile('Question 02', 'Your Person', 'Who did you interview, and what did they say that shaped the words on your cover?'),
+    tile('Question 03', 'The Hard Part', 'What was hardest for you: the interview, the shoot, or the design? How did you solve it?'),
     tile('Question 04', 'The Big Picture', 'If a real magazine printed your cover, what would people learn about the MRC?'),
 ]
 page(
