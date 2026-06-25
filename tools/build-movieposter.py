@@ -244,7 +244,7 @@ page(
     'Digital Arts 1A &nbsp;&bull;&nbsp; Module', 'Movie Poster',
     'Sell the scare in one image.',
     [
-        headerph('Ultra-wide 16:6 hyper-realistic, behind-the-scenes photo of a scary-movie poster shoot at the Mark Richardson Center at dusk. Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) holds a Canon DSLR and directs his scene: a student actor stands by the livestock pens holding a flashlight, with cattle standing unnaturally still in the shadows behind the rails and low ground fog drifting over a knee-high crop field. The MRC building glows faintly in the distance. Cool blue moonlight with one warm light source, deep shadows, cinematic and suspenseful but tasteful and PG-13 (no blood, no gore, no weapons). Photoreal, moody color grade, film-still feel.'),
+        headerimg(IMG + 'movieposter-header.png', 'A nighttime movie poster shoot at the MRC: a student photographer captures an actor holding a flashlight in a foggy field'),
         card('WHAT IS A MOVIE POSTER / 01 / 07', 'One Image, One Scare',
              para('A movie poster is one image that makes you want to see the film. It uses <strong>one strong photo</strong>, a <strong>title</strong>, and a short <strong>tagline</strong> to sell the whole story in a single glance.')
              + para('A scary movie poster does it with <strong>mood</strong>: dark shadows, cold color, and a feeling that something is wrong.')
