@@ -210,9 +210,9 @@ def page(filename, title_tag, crumb, links, dl, eyebrow, btitle, tagline, cards)
 # PAGE 1 — OVERVIEW
 # =========================================================================
 concepts = [
-    tile('Concept 01', 'The Cornfield', 'A student cuts through the MRC cornfield at dusk and the rows close behind them. The maze keeps changing, and they are not alone.<br /><strong>Tagline:</strong> &ldquo;You can&rsquo;t find your way out.&rdquo;'),
-    tile('Concept 02', 'Night Shift', 'A student locks up the ag-mechanics shop alone after dark. The machines power on by themselves, and a shadow moves in the sparks.<br /><strong>Tagline:</strong> &ldquo;Some machines never clock out.&rdquo;'),
-    tile('Concept 03', 'The Scarecrow', 'The field scarecrow disappears each morning and turns up a little closer to campus each night. Nobody believes it, until it is at the door.<br /><strong>Tagline:</strong> &ldquo;It only moves when no one is looking.&rdquo;'),
+    tile('Concept 01', 'The Herd', 'After dark, the cattle in the MRC pens stop acting like cattle. They stand in perfect rows, all facing the same way, watching the barn door. The night-feed student is not alone.<br /><strong>Tagline:</strong> &ldquo;The herd is watching.&rdquo;'),
+    tile('Concept 02', 'The Pen', 'Something is wrong in the hog barn. The pigs go quiet, then they do not. Whatever has gotten into them has learned how to open the gate.<br /><strong>Tagline:</strong> &ldquo;The pen never goes quiet anymore.&rdquo;'),
+    tile('Concept 03', 'Night Shift', 'A student locks up the ag-mechanics shop alone after dark. The machines power on by themselves, and a shadow moves in the sparks.<br /><strong>Tagline:</strong> &ldquo;Some machines never clock out.&rdquo;'),
 ]
 vocab = [
     tile('Term 01', 'Title Treatment', 'The styled design of the movie&rsquo;s name. The font and look set the mood before you read a word.'),
@@ -244,7 +244,7 @@ page(
     'Digital Arts 1A &nbsp;&bull;&nbsp; Module', 'Movie Poster',
     'Sell the scare in one image.',
     [
-        headerph('Ultra-wide 16:6 hyper-realistic, behind-the-scenes photo of a scary-movie poster shoot at the Mark Richardson Center at dusk. Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) holds a Canon DSLR and directs his scene: a student actor stands at the edge of a darkening cornfield holding a flashlight, with low fog rolling between the rows and the MRC building glowing faintly in the distance. Cool blue moonlight with one warm light source, deep shadows, cinematic and suspenseful but tasteful and PG-13 (no blood, no gore, no weapons). Photoreal, moody color grade, film-still feel.'),
+        headerph('Ultra-wide 16:6 hyper-realistic, behind-the-scenes photo of a scary-movie poster shoot at the Mark Richardson Center at dusk. Ricardo Gomez (21, muscular athletic build, short dark textured hair, gray bomber jacket with red trim) holds a Canon DSLR and directs his scene: a student actor stands by the livestock pens holding a flashlight, with cattle standing unnaturally still in the shadows behind the rails and low ground fog drifting over a knee-high crop field. The MRC building glows faintly in the distance. Cool blue moonlight with one warm light source, deep shadows, cinematic and suspenseful but tasteful and PG-13 (no blood, no gore, no weapons). Photoreal, moody color grade, film-still feel.'),
         card('WHAT IS A MOVIE POSTER / 01 / 07', 'One Image, One Scare',
              para('A movie poster is one image that makes you want to see the film. It uses <strong>one strong photo</strong>, a <strong>title</strong>, and a short <strong>tagline</strong> to sell the whole story in a single glance.')
              + para('A scary movie poster does it with <strong>mood</strong>: dark shadows, cold color, and a feeling that something is wrong.')
