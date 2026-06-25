@@ -41,6 +41,11 @@ def ilink(href, label):
     return ('<a href="%s" style="color:#eda268;text-decoration:underline;"><strong>%s &rarr;</strong></a>'
             % (href, label))
 
+def refimg(src, alt):
+    # small reference cover thumbnail inside a magazine tile
+    return ('<img src="%s" alt="%s" style="display:block;width:150px;height:auto;margin:0 auto 12px;%s" />'
+            % (src, alt, FRAME))
+
 def floatimg(src, alt):
     return ('<img src="%s" alt="%s" style="float:right;width:42%%;min-width:240px;margin:0 0 18px 26px;%s" />'
             % (src, alt, FRAME))
@@ -202,14 +207,17 @@ def page(filename, title_tag, crumb, links, dl, eyebrow, btitle, tagline, cards)
 # =========================================================================
 mags = [
     tile('Option 01', 'Successful Farming',
-         'A big, clean masthead with one bold livestock or crop photo. Published at agriculture.com.<br />'
-         + ilink('https://www.agriculture.com', 'See real covers')),
+         refimg(IMG + 'magcover-ref-successful.webp', 'Successful Farming magazine cover, for reference')
+         + 'A big, clean masthead with one bold livestock or crop photo. Published at agriculture.com.<br />'
+         + ilink('https://www.agriculture.com', 'Visit the site')),
     tile('Option 02', 'Progressive Farmer',
-         'A modern look from DTN, often shot from above or on location in the field.<br />'
-         + ilink('https://www.dtnpf.com/agriculture/web/ag/magazine', 'See real covers')),
+         refimg(IMG + 'magcover-ref-progressive.webp', 'Progressive Farmer magazine cover, for reference')
+         + 'A modern look from DTN, often shot from above or on location in the field.<br />'
+         + ilink('https://www.dtnpf.com/agriculture/web/ag/magazine', 'Visit the site')),
     tile('Option 03', 'Farm Journal',
-         'Classic, friendly covers that often feature a real farmer up close.<br />'
-         + ilink('https://www.farmjournal.com', 'See real covers')),
+         refimg(IMG + 'magcover-ref-farmjournal.png', 'Farm Journal magazine cover, for reference')
+         + 'Classic, friendly covers that often feature a real farmer up close.<br />'
+         + ilink('https://www.farmjournal.com', 'Visit the site')),
 ]
 vocab = [
     tile('Term 01', 'Masthead', 'The magazine&rsquo;s name and logo at the top of the cover. It is the brand, and usually the biggest text.'),
