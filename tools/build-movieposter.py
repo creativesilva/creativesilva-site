@@ -210,9 +210,9 @@ def page(filename, title_tag, crumb, links, dl, eyebrow, btitle, tagline, cards)
 # PAGE 1 — OVERVIEW
 # =========================================================================
 concepts = [
-    tile('Concept 01', 'The Herd', 'After dark, the cattle in the MRC pens stop acting like cattle. They stand in perfect rows, all facing the same way, watching the barn door. The night-feed student is not alone.<br /><strong>Tagline:</strong> &ldquo;The herd is watching.&rdquo;'),
-    tile('Concept 02', 'The Pen', 'Something is wrong in the hog barn. The pigs go quiet, then they do not. Whatever has gotten into them has learned how to open the gate.<br /><strong>Tagline:</strong> &ldquo;The pen never goes quiet anymore.&rdquo;'),
-    tile('Concept 03', 'Night Shift', 'A student locks up the ag-mechanics shop alone after dark. The machines power on by themselves, and a shadow moves in the sparks.<br /><strong>Tagline:</strong> &ldquo;Some machines never clock out.&rdquo;'),
+    tile('Idea 01', 'The Herd', 'After dark, the cattle in the MRC pens stop acting like cattle. They stand in perfect rows, all facing the same way, watching the barn door. The night-feed student is not alone.<br /><strong>Tagline:</strong> &ldquo;The herd is watching.&rdquo;'),
+    tile('Idea 02', 'The Pen', 'Something is wrong in the hog barn. The pigs go quiet, then they do not. Whatever has gotten into them has learned how to open the gate.<br /><strong>Tagline:</strong> &ldquo;The pen never goes quiet anymore.&rdquo;'),
+    tile('Idea 03', 'Night Shift', 'A student locks up the ag-mechanics shop alone after dark. The machines power on by themselves, and a shadow moves in the sparks.<br /><strong>Tagline:</strong> &ldquo;Some machines never clock out.&rdquo;'),
 ]
 vocab = [
     tile('Term 01', 'Title Treatment', 'The styled design of the movie&rsquo;s name. The font and look set the mood before you read a word.'),
@@ -249,10 +249,10 @@ page(
              para('A movie poster is one image that makes you want to see the film. It uses <strong>one strong photo</strong>, a <strong>title</strong>, and a short <strong>tagline</strong> to sell the whole story in a single glance.')
              + para('A scary movie poster does it with <strong>mood</strong>: dark shadows, cold color, and a feeling that something is wrong.')
              + para('For this project you will design a real-looking <strong>movie poster</strong> for a PG-13 scary movie set at the Mark Richardson Center.')),
-        card('PICK YOUR CONCEPT / 02 / 07', 'Choose a Scary Story',
-             para('Pick <strong>one</strong> of these three concepts, or pitch your own PG-13 idea. Each one is set right here at the MRC.')
+        card('MOVIE IDEAS / 02 / 07', 'Three Ideas to Get You Started',
+             para('Need a starting point? Here are three scary movie <strong>ideas</strong> set right here at the MRC. Use one as it is, or let it spark something of your own.')
              + scrollrow(concepts)
-             + para('Want your own story? Pitch a PG-13, school-appropriate idea to Mr. Silva for approval first.')),
+             + para('<strong>Have a better idea? Pitch it.</strong> If you have your own creative concept, run it by <strong>Mr. Silva for approval</strong> first. As long as it stays PG-13 and school-appropriate, original ideas are encouraged.')),
         card('KEEP IT PG-13 / 03 / 07', 'Scary, Not Gross',
              para('Scary is great. <strong>Gross is not.</strong> Your movie must stay <strong>PG-13</strong> and school-appropriate. Build fear with <strong>mood, shadow, and suspense</strong>, not blood, gore, or weapons.')
              + para('Think about the scariest part of a movie, the part before anything even happens: the dark hallway, the sound behind you, the thing you cannot quite see. That is your goal.')
@@ -294,7 +294,7 @@ page(
     'Pick your story and sketch the layout.',
     [
         card('PICK YOUR CONCEPT / 01 / 04', 'Choose or Pitch',
-             para('Choose one of the three concepts from the overview, or pitch your own PG-13 idea. Then write your <strong>logline</strong>: one sentence that says who the story is about, where it happens, and what is wrong.')
+             para('Use one of the three ideas from the overview as a starting point, or pitch your own creative concept to <strong>Mr. Silva for approval</strong>. Then write your <strong>logline</strong>: one sentence that says who the story is about, where it happens, and what is wrong.')
              + notecard('KEEP IT PG-13', 'Get It Approved First', 'Your concept must be school-appropriate and approved by Mr. Silva before you shoot. Scary with mood and suspense, never with blood, gore, or weapons.')),
         card('WRITE AND CAST / 02 / 04', 'Build Your Movie',
              para('Now decide the pieces of your movie. These choices give you the words and the look for your poster. Scroll through each one.')
