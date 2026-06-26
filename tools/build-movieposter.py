@@ -274,9 +274,9 @@ page(
              + para('But every student turns in their <strong>own unique poster</strong>. Same group and same shoot, different design. Your title, your mood, and your choices must be your own.')
              + notecard('TEAM RULE', 'Share Ideas, Not Posters', 'Help each other with ideas, acting, and photos. Then make a poster that is one hundred percent yours.')),
         card('LEARN THE LIGHTING / 06 / 08', 'Watch This Before We Shoot',
-             para('Most scary posters turn <strong>day into night</strong>, and the secret is <strong>lighting</strong>. We have a <strong>Godox AD200</strong> portable flash with a light stand and a trigger that connects to your <strong>Canon EOS R50</strong>.')
-             + para('Watch this short tutorial to see how the lighting works (click the thumbnail). When we head out to shoot, Mr. Silva will coach you, but if you have studied this first it will all make sense fast and we can move quickly together.'),
-             videothumb('https://www.youtube.com/watch?v=fPJC1e_MmS0', IMG + 'movieposter-lighting-thumb.png', 'Watch the lighting tutorial on YouTube')),
+             videothumb('https://www.youtube.com/watch?v=fPJC1e_MmS0', IMG + 'movieposter-lighting-thumb.png', 'Watch the lighting tutorial on YouTube')
+             + para('Most scary posters turn <strong>day into night</strong>, and the secret is <strong>lighting</strong>. We have a <strong>Godox AD200</strong> portable flash with a light stand and a trigger that connects to your <strong>Canon EOS R50</strong>.')
+             + para('Watch this short tutorial to see how the lighting works (click the thumbnail). When we head out to shoot, Mr. Silva will coach you, but if you have studied this first it will all make sense fast and we can move quickly together.')),
         card('WORDS TO KNOW / 07 / 08', 'Movie Poster Vocabulary',
              para('Learn these six terms. You will use them all the way through the project.')
              + scrollrow(vocab)),
