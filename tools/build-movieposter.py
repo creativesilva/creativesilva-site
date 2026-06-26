@@ -91,7 +91,7 @@ def headerph(desc):
 def card(label, title, body, floatel=''):
     return ('<div style="%s%spadding:30px;margin-bottom:24px;position:relative;overflow:hidden;">'
             '<div style="height:4px;background:#c95201;margin:-30px -30px 24px -30px;"></div>'
-            '%s%s%s%s</div>' % (CARD_BG, FRAME, floatel, chip(label), tb(title), body))
+            '%s%s%s%s</div>' % (CARD_BG, FRAME, chip(label), tb(title), floatel, body))
 
 def tile(eyebrow, title, body):
     return ('<div style="%sborder:1px solid transparent;border-image:linear-gradient(135deg,#c95201 0%%,'
@@ -342,7 +342,7 @@ page(
              + scrollrow(decide)),
         card('SKETCH YOUR LAYOUT / 04 / 06', 'Plan the Poster',
              para('On paper, sketch a quick <strong>thumbnail</strong> of your poster. Use <strong>design hierarchy</strong>: plan where each piece goes and how big it is.')
-             + para('Show your <strong>protagonist</strong> as the main focus and your <strong>antagonist</strong> (villain or monster) as a clear threat. Put the big <strong>title</strong> near the bottom, mark spots for the <strong>tagline</strong> and <strong>subtitle</strong>, the <strong>production logo</strong>, and the <strong>actor names</strong> and credits.')
+             + para('Show your <strong>protagonist</strong> as the main focus and your <strong>antagonist</strong> (villain or monster) as a clear threat. Then decide where the <strong>title</strong>, <strong>tagline</strong>, <strong>subtitle</strong>, <strong>production logo</strong>, and <strong>actor names</strong> go. That layout is your call: use what you learned from the real posters in your research.')
              + para('Leave room for the text. Both characters and the title should read at a glance.'),
              floatimg(IMG + 'movieposter-plan-float.png', 'Ricardo Gomez sketching a movie poster layout in a sketchbook at the MRC studio')),
         card('SCOUT YOUR LOCATION / 05 / 06', 'Scout Before You Shoot',
@@ -405,11 +405,11 @@ page(
 # PAGE 4 — STEP 03 DESIGN
 # =========================================================================
 words = [
-    tile('Words 01', 'Tagline and Subtitle', 'Add your one creepy <strong>tagline</strong> and a short <strong>subtitle</strong> near the title. Keep both short and easy to read.'),
-    tile('Words 02', 'Actor Names', 'Add 2 to 3 <strong>actor names</strong>. The biggest names often go across the top; the rest sit in the credits block at the bottom.'),
-    tile('Words 03', 'Production Logo', 'Add your made-up <strong>production company</strong> logo or name. It usually sits small near the top or in the bottom credits.'),
-    tile('Words 04', 'Billing and Rating', 'Add a thin <strong>billing block</strong> at the bottom (cast, director, studio) plus the PG-13 rating and a release line.'),
-    tile('Words 05', 'Use Type Hierarchy', 'Make the title the biggest, the names and tagline medium, and the credits smallest. Size tells the eye what matters most.'),
+    tile('Words 01', 'Tagline and Subtitle', 'Add your one creepy <strong>tagline</strong> and a short <strong>subtitle</strong>. Keep both short and easy to read. You decide where they go.'),
+    tile('Words 02', 'Actor Names', 'Add 2 to 3 <strong>actor names</strong>. Decide which names are biggest and where they belong, the way you saw on the real posters you studied.'),
+    tile('Words 03', 'Production Logo', 'Add your made-up <strong>production company</strong> logo or name. You choose how big it is and where it sits.'),
+    tile('Words 04', 'Billing and Rating', 'Add a thin <strong>billing block</strong> (cast, director, studio) plus the PG-13 rating and a release line.'),
+    tile('Words 05', 'Use Type Hierarchy', 'This is the real challenge: make the most important words biggest and the least important smallest. Size and placement tell the eye what matters. The order is your call.'),
     tile('Words 06', 'Keep It Readable', 'Dark posters can hide text. Add a soft glow or shadow so every word still pops.'),
 ]
 dafont_steps = [
@@ -447,7 +447,7 @@ page(
              + scrollrow(adobe_steps)
              + notecard('TIP', 'Match the Mood', 'Scary movies love rough, sharp, or hand-drawn fonts. Pick one that feels like your story, then make it big in the next step.')),
         card('DESIGN THE TITLE TREATMENT / 03 / 06', 'Make the Title',
-             para('Your movie title is the star. Using the font you just installed, make it big and bold, usually near the <strong>bottom</strong> of the poster.')
+             para('Your movie title is the star. Using the font you just installed, make it big and bold. <strong>You decide where it lives</strong> on the poster, use what you learned from the real posters you studied.')
              + para('Add a soft glow, a rough edge, or a shadow so the title stands out against the dark image.')),
         card('ADD YOUR WORDS / 04 / 06', 'Tagline, Credits, and Rating',
              para('Use the <strong>Type tool</strong> to add the rest of the words. Scroll through each pointer.')
