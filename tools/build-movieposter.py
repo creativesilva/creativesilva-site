@@ -376,6 +376,18 @@ words = [
     tile('Words 04', 'Use Type Hierarchy', 'Make the title the biggest, the tagline smaller, and the billing block smallest.'),
     tile('Words 05', 'Keep It Readable', 'Dark posters can hide text. Add a soft glow or shadow so your words still pop.'),
 ]
+dafont_steps = [
+    tile('daFont 01', 'Browse and Download', 'Go to <strong>dafont.com</strong>, find a font you like (try the Horror or Gothic categories), and click <strong>Download</strong>. A .zip saves to your Downloads.'),
+    tile('daFont 02', 'Unzip the File', 'In Finder, open <strong>Downloads</strong> and double-click the .zip to unzip it. Inside is a font file that ends in <strong>.ttf</strong> or <strong>.otf</strong>.'),
+    tile('daFont 03', 'Install the Font', 'Double-click the font file. <strong>Font Book</strong> opens with a preview. Click <strong>Install Font</strong>. The font is now on the Mac.'),
+    tile('daFont 04', 'Use It in Photoshop', 'If Photoshop was open, quit and reopen it so it sees the new font. Pick the <strong>Type tool</strong> and find your font in the font menu.'),
+]
+adobe_steps = [
+    tile('Adobe 01', 'Open Adobe Fonts', 'Go to <strong>fonts.adobe.com</strong> and sign in with your school Adobe account, the same one you use for Photoshop.'),
+    tile('Adobe 02', 'Find a Font', 'Browse or search for a font that fits your scary mood. Use the filters for a bold or display style.'),
+    tile('Adobe 03', 'Activate It', 'Open the font family and turn on the <strong>Add font</strong> toggle. Adobe installs it for you, with no download.'),
+    tile('Adobe 04', 'Use It in Photoshop', 'Back in Photoshop, pick the <strong>Type tool</strong> and find your activated font in the font menu. It shows a small cloud icon.'),
+]
 page(
     'movieposter-step03-design.html',
     'Step 3: Design | Movie Poster | Digital Arts 1A | Mark Richardson Center',
@@ -385,21 +397,30 @@ page(
     'Movie Poster &nbsp;&bull;&nbsp; Step 3', 'Build Your Poster',
     'Design it like the real thing.',
     [
-        card('SET UP YOUR POSTER / 01 / 05', 'Start a New File',
+        card('SET UP YOUR POSTER / 01 / 06', 'Start a New File',
              para('Open Photoshop. Go to <strong>File &gt; New</strong> and make a tall (portrait) poster, about <strong>11 by 17 inches</strong>, RGB color, 300 ppi.')
              + para('Open your hero photo through <strong>Camera Raw</strong>, place it on your page, and let it <strong>bleed</strong> to the edges. Darken the background so it feels moody. Save your work as a <strong>.PSD</strong> in your project folder.'),
              floatimg(IMG + 'movieposter-design-float.png', 'Ricardo Gomez designing a dark, moody movie poster in Photoshop at an iMac in the MRC lab')),
-        card('DESIGN THE TITLE TREATMENT / 02 / 05', 'Make the Title',
-             para('Your movie title is the star. Make it big and bold, usually near the <strong>bottom</strong> of the poster. Pick a font that matches the scary mood. You can download free fonts from <strong>dafont.com</strong> or use <strong>Adobe Fonts</strong>.')
+        card('GET YOUR FONTS / 02 / 06', 'Find and Install a Font',
+             para('Your title needs the right font. You have two places to get one: '
+                  '<a href="https://www.dafont.com" style="color:#eda268;text-decoration:underline;"><strong>dafont.com</strong></a> (free downloads) and '
+                  '<a href="https://fonts.adobe.com" style="color:#eda268;text-decoration:underline;"><strong>Adobe Fonts</strong></a> (built into your Adobe account). Here is how to use each.')
+             + para('<strong>Option A: dafont.com</strong>, download and install:')
+             + scrollrow(dafont_steps)
+             + para('<strong>Option B: Adobe Fonts</strong>, activate with no download:')
+             + scrollrow(adobe_steps)
+             + notecard('TIP', 'Match the Mood', 'Scary movies love rough, sharp, or hand-drawn fonts. Pick one that feels like your story, then make it big in the next step.')),
+        card('DESIGN THE TITLE TREATMENT / 03 / 06', 'Make the Title',
+             para('Your movie title is the star. Using the font you just installed, make it big and bold, usually near the <strong>bottom</strong> of the poster.')
              + para('Add a soft glow, a rough edge, or a shadow so the title stands out against the dark image.')),
-        card('ADD YOUR WORDS / 03 / 05', 'Tagline, Credits, and Rating',
+        card('ADD YOUR WORDS / 04 / 06', 'Tagline, Credits, and Rating',
              para('Use the <strong>Type tool</strong> to add the rest of the words. Scroll through each pointer.')
              + scrollrow(words)),
-        card('SET THE MOOD / 04 / 05', 'Turn Day into Night',
+        card('SET THE MOOD / 05 / 06', 'Turn Day into Night',
              para('You shot in the daytime, so now make it <strong>night</strong>. First swap the bright sky: go to <strong>Edit &gt; Sky Replacement</strong> and pick a dark, stormy, or night sky. This is the biggest step from day to night.')
              + para('Then grade the whole poster with the <strong>Camera Raw Filter</strong> (<strong>Filter &gt; Camera Raw Filter</strong>): lower the brightness, cool the colors toward blue, deepen the shadows, and add a <strong>vignette</strong> around the edges.')
              + para('Blend in your <strong>supporting images</strong> for fog or texture. The whole poster should feel cold and tense, like a real horror one-sheet.')),
-        card('SAVE AND SUBMIT / 05 / 05', 'Save as JPG and Submit',
+        card('SAVE AND SUBMIT / 06 / 06', 'Save as JPG and Submit',
              para('When your poster is done, flatten it with <strong>Layer &gt; Flatten Image</strong>. Keep a PSD only if you want one.')
              + para('Turn in a <strong>JPG</strong>, not a PSD. Use <strong>File &gt; Save a Copy</strong>, choose <strong>JPG</strong>, full size. Name it:')
              + fname('FirstName LastInitial - Movie Poster.jpg')
