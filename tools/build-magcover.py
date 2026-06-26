@@ -297,7 +297,7 @@ page(
              + para('But every student turns in their <strong>own unique cover</strong>. Same group and same shoot, different design. Your layout, your title, and your choices must be your own.')
              + notecard('TEAM RULE', 'Share Ideas, Not Covers', 'Help each other with ideas, interviews, and photos. Then make a cover that is one hundred percent yours.')),
         card('LEARN THE LIGHTING / 06 / 08', 'Watch This Before We Shoot',
-             videothumb('https://www.youtube.com/watch?v=fPJC1e_MmS0', IMG + 'movieposter-lighting-thumb.png', 'Watch the lighting tutorial on YouTube')
+             videothumb('https://www.youtube.com/watch?v=eBcTFRFcZWU&amp;t=38s', IMG + 'magcover-lighting-thumb.png', 'Watch the magazine lighting tutorial on YouTube')
              + para('A great cover photo uses great <strong>lighting</strong>. For this project you must light your subject with an <strong>off-camera flash</strong>: we have a <strong>Godox AD200</strong> with a light stand and a trigger that connects to your <strong>Canon EOS R50</strong>.')
              + para('Watch this short tutorial (click the thumbnail) to see how it works. Mr. Silva will coach you on the shoot, but study it first so we move quickly together.')),
         card('WORDS TO KNOW / 07 / 08', 'Magazine Vocabulary',
