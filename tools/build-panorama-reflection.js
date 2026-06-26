@@ -1,14 +1,16 @@
-// MRC Panorama Project reflection template (Word .docx).
+// MRC Panorama Project reflection template (Word .docx), worksheet style.
+// Each question has a bordered answer box that grows as the student types.
 // Run: NODE_PATH=$(npm root -g) node tools/build-panorama-reflection.js
 const fs = require('fs');
 const path = require('path');
 const {
   Document, Packer, Paragraph, TextRun, ImageRun, AlignmentType, BorderStyle,
-  HeadingLevel,
+  Table, TableRow, TableCell, WidthType, HeightRule, ShadingType,
 } = require('docx');
 
 const ORANGE = 'C95201';
 const DARK = '4A1E02';
+const CONTENT_W = 9360;
 const root = path.join(__dirname, '..');
 const logo = fs.readFileSync(path.join(root, 'assets/mrc/MRC_Logo.png'));
 
@@ -19,27 +21,35 @@ const QUESTIONS = [
   'What did you like most about this project? And if you could shoot a panorama of anywhere in the world, where would it be, and why?',
 ];
 
-// a writing line: an empty paragraph with a bottom border
-function writeLine() {
-  return new Paragraph({
-    spacing: { before: 220, after: 0 },
-    border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: 'BBBBBB', space: 1 } },
-    children: [new TextRun('')],
+function answerBox() {
+  const b = { style: BorderStyle.SINGLE, size: 8, color: '888888' };
+  return new Table({
+    width: { size: CONTENT_W, type: WidthType.DXA },
+    columnWidths: [CONTENT_W],
+    rows: [new TableRow({
+      height: { value: 1300, rule: HeightRule.ATLEAST },
+      children: [new TableCell({
+        width: { size: CONTENT_W, type: WidthType.DXA },
+        borders: { top: b, bottom: b, left: b, right: b },
+        shading: { fill: 'FAFAFA', type: ShadingType.CLEAR },
+        margins: { top: 100, bottom: 100, left: 140, right: 140 },
+        children: [new Paragraph({ children: [new TextRun('')] })],
+      })],
+    })],
   });
 }
 
 function question(n, text) {
-  const out = [
+  return [
     new Paragraph({
-      spacing: { before: 300, after: 60 },
+      spacing: { before: 320, after: 100 },
       children: [
         new TextRun({ text: `${n}.  `, bold: true, color: ORANGE, size: 24, font: 'Arial' }),
         new TextRun({ text, bold: true, color: DARK, size: 24, font: 'Arial' }),
       ],
     }),
+    answerBox(),
   ];
-  for (let i = 0; i < 4; i++) out.push(writeLine());
-  return out;
 }
 
 const doc = new Document({
@@ -75,9 +85,10 @@ const doc = new Document({
       }),
       new Paragraph({
         spacing: { after: 60 },
-        children: [new TextRun({ text: 'Answer each question in complete sentences.', italics: true, size: 22, color: '555555' })],
+        children: [new TextRun({ text: 'Answer each question in complete sentences. The box grows as you type.', italics: true, size: 22, color: '555555' })],
       }),
       ...QUESTIONS.flatMap((q, i) => question(i + 1, q)),
+      new Paragraph({ children: [new TextRun('')] }),
     ],
   }],
 });
