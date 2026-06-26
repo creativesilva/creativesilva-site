@@ -238,15 +238,17 @@ vocab = [
     tile('Term 06', 'Teaser vs Theatrical', 'A teaser poster shows just enough to spark curiosity. A theatrical poster shows more right before release.'),
 ]
 required = [
-    tile('Must-Have 01', 'Title Treatment', 'Your movie title, big and styled to match the scary mood.'),
-    tile('Must-Have 02', 'Tagline', 'One short, creepy line that hooks the viewer.'),
-    tile('Must-Have 03', 'Hero Image', 'One strong, moody photo of your character or scene that fills the poster.'),
-    tile('Must-Have 04', 'Billing Block', 'A credits block at the bottom: cast, director, and studio.'),
-    tile('Must-Have 05', 'Rating and Date', 'The PG-13 rating and a release line, like &ldquo;In theaters this fall.&rdquo;'),
-    tile('Must-Have 06', 'Dark Mood', 'A moody color grade with deep shadows. It must feel scary, not bright.'),
+    tile('Must-Have 01', 'A Clear Protagonist', 'Show the star, the hero we follow. We should know who to root for at a glance.'),
+    tile('Must-Have 02', 'A Clear Antagonist', 'Show the villain or scary monster. The threat should be obvious and recognizable right away.'),
+    tile('Must-Have 03', 'Title', 'The movie name, big and styled to match the scary mood.'),
+    tile('Must-Have 04', 'Tagline', 'One short, creepy line that hooks the viewer.'),
+    tile('Must-Have 05', 'Subtitle', 'A short second line that adds detail or sets up the story.'),
+    tile('Must-Have 06', 'Production Logo', 'A production company or studio logo. Make one up for your film.'),
+    tile('Must-Have 07', 'Actor Names', 'At least two or three actor names (your cast), placed with the credits.'),
+    tile('Must-Have 08', 'Mood and Hierarchy', 'A dark, moody color grade, and clear type hierarchy so the eye knows what matters most.'),
 ]
 mission = [
-    tile('STEP 01', 'Plan', 'Pick or pitch a PG-13 scary concept, cast it, and sketch your poster.'),
+    tile('STEP 01', 'Plan', 'Pick a concept, research the genre, cast your hero and villain, and sketch your poster.'),
     tile('STEP 02', 'Capture', 'Shoot your moody hero image and supporting shots, then turn in a RAW folder screenshot.'),
     tile('STEP 03', 'Design', 'Build the poster with a title treatment, a tagline, and a billing block.'),
     tile('STEP 04', 'Reflect', 'Answer four questions about your poster and the choices you made.'),
@@ -273,7 +275,7 @@ page(
              + para('Think about the scariest part of a movie, the part before anything even happens: the dark hallway, the sound behind you, the thing you cannot quite see. That is your goal.')
              + notecard('THE RULE', 'Get It Approved', 'Mr. Silva must approve your concept before you shoot. No blood, no gore, no weapons, nothing that breaks school rules. When in doubt, ask.')),
         card('WHAT YOUR POSTER MUST HAVE / 04 / 08', 'Set the Standard',
-             para('Every finished poster must include all six of these. This is the standard you are graded on.')
+             para('Every finished poster must include all eight of these. This is the standard you are graded on. The protagonist and antagonist should be clear and recognizable at first glance.')
              + scrollrow(required)),
         card('WORK AS A TEAM / 05 / 08', 'Brainstorm Together, Build Your Own',
              para('You may work in a <strong>group</strong>. Slow down and brainstorm together: share concept ideas, act in each other&rsquo;s shoots, and trade photos so everyone has plenty to work with.')
@@ -296,12 +298,21 @@ page(
 # =========================================================================
 # PAGE 2 — STEP 01 PLAN
 # =========================================================================
+research = [
+    tile('Look At 01', 'Color Schemes', 'What colors set the mood? Notice the black, cold blue, deep red, or sickly green in horror posters.'),
+    tile('Look At 02', 'Font Choices', 'Are the titles sharp, rough, hand-drawn, or clean? How does the lettering make you feel?'),
+    tile('Look At 03', 'Layout', 'Where do the title, the faces, and the credits sit? How is the empty space used?'),
+    tile('Look At 04', 'Hero and Villain', 'How do they show the good guy and the threat? The villain often looms large or hides in shadow.'),
+    tile('Look At 05', 'Genre Trends', 'What do recent scary-movie posters have in common? Find ideas you can borrow.'),
+]
 decide = [
-    tile('Decide 01', 'Title', 'Name your movie. Short and creepy works best.'),
-    tile('Decide 02', 'Tagline', 'Write one haunting line that hooks the viewer.'),
-    tile('Decide 03', 'Character', 'Cast a friend as your lead. Who is the story about?'),
-    tile('Decide 04', 'Location', 'Pick a moody spot: the field, the barn, or the shop, after dark.'),
-    tile('Decide 05', 'Mood', 'Decide your feeling and colors: cold blues, deep shadows, low fog.'),
+    tile('Decide 01', 'Protagonist', 'Who is the hero, the star we follow? Cast a friend to play them.'),
+    tile('Decide 02', 'Antagonist', 'Who or what is the villain or monster? How will you show the threat?'),
+    tile('Decide 03', 'Title', 'Name your movie. Short and creepy works best.'),
+    tile('Decide 04', 'Tagline', 'Write one haunting line that hooks the viewer.'),
+    tile('Decide 05', 'Subtitle', 'A short second line that adds detail or sets up the story.'),
+    tile('Decide 06', 'Studio and Cast', 'Make up a production company name and pick two or three actor names for the credits.'),
+    tile('Decide 07', 'Location and Mood', 'Pick a moody spot and your colors: cold blues, deep shadows, low fog.'),
 ]
 page(
     'movieposter-step01-plan.html',
@@ -312,18 +323,22 @@ page(
     'Movie Poster &nbsp;&bull;&nbsp; Step 1', 'Plan Your Poster',
     'Pick your story and sketch the layout.',
     [
-        card('PICK YOUR CONCEPT / 01 / 04', 'Choose or Pitch',
+        card('PICK YOUR CONCEPT / 01 / 05', 'Choose or Pitch',
              para('Use one of the three ideas from the overview as a starting point, or pitch your own creative concept to <strong>Mr. Silva for approval</strong>. Then write your <strong>logline</strong>: one sentence that says who the story is about, where it happens, and what is wrong.')
              + notecard('KEEP IT PG-13', 'Get It Approved First', 'Your concept must be school-appropriate and approved by Mr. Silva before you shoot. Scary with mood and suspense, never with blood, gore, or weapons.')),
-        card('WRITE AND CAST / 02 / 04', 'Build Your Movie',
-             para('Now decide the pieces of your movie. These choices give you the words and the look for your poster. Scroll through each one.')
+        card('RESEARCH THE GENRE / 02 / 05', 'Study Real Scary Posters',
+             para('Before you design anything, study how real scary movie posters work. As a group, pull up posters from horror and thriller films and notice what they share. Spend real time on this, good research leads to good design.')
+             + scrollrow(research)
+             + notecard('TEAM RESEARCH', 'Decide Together', 'Talk through what you find and agree as a group on a <strong>color scheme</strong>, a <strong>font style</strong>, and a <strong>layout direction</strong> before you build. Then each of you makes your own poster from that shared plan.')),
+        card('WRITE AND CAST / 03 / 05', 'Build Your Movie',
+             para('Now decide the pieces of your movie. These choices give you the people, the words, and the look for your poster. Scroll through each one.')
              + scrollrow(decide)),
-        card('SKETCH YOUR LAYOUT / 03 / 04', 'Plan the Poster',
-             para('On paper, sketch a quick <strong>thumbnail</strong> of your poster. Plan where each piece goes:')
-             + para('Block out your <strong>hero image</strong>, put the big <strong>title</strong> near the bottom, mark a spot for the <strong>tagline</strong>, and leave a thin strip at the very bottom for the <strong>billing block</strong>.')
-             + para('Leave room for the title. Do not plan to bury it in a busy part of the photo.'),
+        card('SKETCH YOUR LAYOUT / 04 / 05', 'Plan the Poster',
+             para('On paper, sketch a quick <strong>thumbnail</strong> of your poster. Use <strong>design hierarchy</strong>: plan where each piece goes and how big it is.')
+             + para('Show your <strong>protagonist</strong> as the main focus and your <strong>antagonist</strong> (villain or monster) as a clear threat. Put the big <strong>title</strong> near the bottom, mark spots for the <strong>tagline</strong> and <strong>subtitle</strong>, the <strong>production logo</strong>, and the <strong>actor names</strong> and credits.')
+             + para('Leave room for the text. Both characters and the title should read at a glance.'),
              floatimg(IMG + 'movieposter-plan-float.png', 'Ricardo Gomez sketching a movie poster layout in a sketchbook at the MRC studio')),
-        card('GET IT CHECKED / 04 / 04', 'Get Approved',
+        card('GET IT CHECKED / 05 / 05', 'Get Approved',
              para('Before you shoot, show Mr. Silva your <strong>concept</strong>, your <strong>cast and location</strong>, and your <strong>layout sketch</strong>. This is a required checkpoint.')
              + notecard('CHECKPOINT', 'Approval First, Shoot Second', 'Your concept must be approved so it stays PG-13 and school-safe. Get the green light, then grab a camera for Step 2.')),
     ],
@@ -353,12 +368,13 @@ page(
              + para('We cannot be on campus at night, so you will shoot in the <strong>daytime</strong> and turn it into night later in Photoshop. A <strong>studio</strong> with a <strong>backdrop and constant lighting</strong> is also great, because you control every shadow.')
              + notecard('SHOOT FOR NIGHT', 'Make the Convert Easy', 'Shoot on an overcast day or in open shade so the light is soft and even. Keep some <strong>sky</strong> in your frame so you can replace it, and keep harsh sun off your subject. Soft daytime photos turn into night the cleanest.'),
              floatimg(IMG + 'movieposter-capture-float.png', 'Ricardo Gomez photographing his actor in a doorway in daylight at the MRC')),
-        card('MAKE A STRONG HERO SHOT / 02 / 05', 'Frame the Key Art',
-             para('Your hero image carries the whole poster. Scroll through each pointer as you shoot.')
+        card('SHOOT YOUR PROTAGONIST / 02 / 05', 'Frame the Hero',
+             para('Start with your <strong>protagonist</strong>, the star of the film. This hero shot carries the whole poster. Scroll through each pointer as you shoot.')
              + scrollrow(heroshot)),
-        card('SHOOT SUPPORTING IMAGES / 03 / 05', 'Two More Photos',
-             para('You will blend extra images into your poster for atmosphere. While you are out shooting, capture at least <strong>two more images</strong>.')
-             + para('Good extras: fog, the empty location, a creepy detail, a texture, or a second angle of your character. Shoot plenty so you have choices when you design.')),
+        card('SHOOT YOUR ANTAGONIST / 03 / 05', 'Capture the Threat',
+             para('Now capture your <strong>antagonist</strong>, the villain or scary monster, so it reads as a clear threat. Keep it PG-13: scary, not gross.')
+             + para('Ideas: a second actor in deep <strong>shadow</strong>, a <strong>silhouette</strong> in a doorway, a figure in a mask, a pair of eyes, or a looming shape you will darken later. Often the villain looms large or hides in the dark.')
+             + para('Also grab <strong>two or more atmosphere shots</strong>: fog, the empty location, a creepy detail, or a texture, to blend in when you design.')),
         card('ORGANIZE YOUR FILES / 04 / 05', 'Keep It Organized',
              para('Use the <strong>project folder</strong> you downloaded from the overview. If you have not yet, move it into your <strong>OneDrive Digital Arts</strong> folder.')
              + para('Offload all your <strong>RAW</strong> files into the <strong>RAW Images</strong> subfolder inside it. Keep every part of this project organized here.')),
@@ -376,11 +392,12 @@ page(
 # PAGE 4 — STEP 03 DESIGN
 # =========================================================================
 words = [
-    tile('Words 01', 'Tagline', 'Place your one creepy line near the title. Keep it short and easy to read.'),
-    tile('Words 02', 'Billing Block', 'Add the thin credits block at the very bottom: cast, director, and studio.'),
-    tile('Words 03', 'Rating and Date', 'Add the PG-13 rating and a release line, like &ldquo;In theaters this fall.&rdquo;'),
-    tile('Words 04', 'Use Type Hierarchy', 'Make the title the biggest, the tagline smaller, and the billing block smallest.'),
-    tile('Words 05', 'Keep It Readable', 'Dark posters can hide text. Add a soft glow or shadow so your words still pop.'),
+    tile('Words 01', 'Tagline and Subtitle', 'Add your one creepy <strong>tagline</strong> and a short <strong>subtitle</strong> near the title. Keep both short and easy to read.'),
+    tile('Words 02', 'Actor Names', 'Add 2 to 3 <strong>actor names</strong>. The biggest names often go across the top; the rest sit in the credits block at the bottom.'),
+    tile('Words 03', 'Production Logo', 'Add your made-up <strong>production company</strong> logo or name. It usually sits small near the top or in the bottom credits.'),
+    tile('Words 04', 'Billing and Rating', 'Add a thin <strong>billing block</strong> at the bottom (cast, director, studio) plus the PG-13 rating and a release line.'),
+    tile('Words 05', 'Use Type Hierarchy', 'Make the title the biggest, the names and tagline medium, and the credits smallest. Size tells the eye what matters most.'),
+    tile('Words 06', 'Keep It Readable', 'Dark posters can hide text. Add a soft glow or shadow so every word still pops.'),
 ]
 dafont_steps = [
     tile('daFont 01', 'Browse and Download', 'Go to <strong>dafont.com</strong>, find a font you like (try the Horror or Gothic categories), and click <strong>Download</strong>. A .zip saves to your Downloads.'),
@@ -405,7 +422,7 @@ page(
     [
         card('SET UP YOUR POSTER / 01 / 06', 'Start a New File',
              para('Open Photoshop. Go to <strong>File &gt; New</strong> and make a tall (portrait) poster, about <strong>11 by 17 inches</strong>, RGB color, 300 ppi.')
-             + para('Open your hero photo through <strong>Camera Raw</strong>, place it on your page, and let it <strong>bleed</strong> to the edges. Darken the background so it feels moody. Save your work as a <strong>.PSD</strong> in your project folder.'),
+             + para('Place your <strong>protagonist</strong> as the main image and let it <strong>bleed</strong> to the edges. Bring in your <strong>antagonist</strong> (villain or monster) too, looming or in shadow, so both are clear at a glance. Darken the background so it feels moody, and save as a <strong>.PSD</strong> in your project folder.'),
              floatimg(IMG + 'movieposter-design-float.png', 'Ricardo Gomez designing a dark, moody movie poster in Photoshop at an iMac in the MRC lab')),
         card('GET YOUR FONTS / 02 / 06', 'Find and Install a Font',
              para('Your title needs the right font. You have two places to get one: '
