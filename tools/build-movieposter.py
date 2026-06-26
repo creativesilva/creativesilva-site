@@ -46,6 +46,15 @@ def refimg(src, alt):
     return ('<img src="%s" alt="%s" style="display:block;width:150px;height:auto;margin:0 auto 12px;%s" />'
             % (src, alt, FRAME))
 
+def videothumb(href, src, alt):
+    # clickable video thumbnail; opens the link in a new tab (Canvas-safe: anchor wraps an inline img)
+    return ('<div style="text-align:center;margin-top:8px;">'
+            '<a href="%s" target="_blank" rel="noopener"><img src="%s" alt="%s" '
+            'style="display:block;width:100%%;max-width:560px;margin:0 auto;%s" /></a>'
+            '<div style="font-size:9pt;letter-spacing:0.16em;text-transform:uppercase;color:#eda268;'
+            'text-align:center;margin-top:10px;font-family:Arial,sans-serif;"><strong>&#9658; Click to watch on YouTube</strong></div></div>'
+            % (href, src, alt, FRAME))
+
 def floatimg(src, alt):
     return ('<img src="%s" alt="%s" style="float:right;width:42%%;min-width:240px;margin:0 0 18px 26px;%s" />'
             % (src, alt, FRAME))
@@ -245,29 +254,33 @@ page(
     'Sell the scare in one image.',
     [
         headerimg(IMG + 'movieposter-header.png', 'A nighttime movie poster shoot at the MRC: a student photographer captures an actor holding a flashlight in a foggy field'),
-        card('WHAT IS A MOVIE POSTER / 01 / 07', 'One Image, One Scare',
+        card('WHAT IS A MOVIE POSTER / 01 / 08', 'One Image, One Scare',
              para('A movie poster is one image that makes you want to see the film. It uses <strong>one strong photo</strong>, a <strong>title</strong>, and a short <strong>tagline</strong> to sell the whole story in a single glance.')
              + para('A scary movie poster does it with <strong>mood</strong>: dark shadows, cold color, and a feeling that something is wrong.')
              + para('For this project you will design a real-looking <strong>movie poster</strong> for a PG-13 scary movie set at the Mark Richardson Center.')),
-        card('MOVIE IDEAS / 02 / 07', 'Three Ideas to Get You Started',
+        card('MOVIE IDEAS / 02 / 08', 'Three Ideas to Get You Started',
              para('Need a starting point? Here are three scary movie <strong>ideas</strong> set right here at the MRC. Use one as it is, or let it spark something of your own.')
              + scrollrow(concepts)
              + para('<strong>Have a better idea? Pitch it.</strong> If you have your own creative concept, run it by <strong>Mr. Silva for approval</strong> first. As long as it stays PG-13 and school-appropriate, original ideas are encouraged.')),
-        card('KEEP IT PG-13 / 03 / 07', 'Scary, Not Gross',
+        card('KEEP IT PG-13 / 03 / 08', 'Scary, Not Gross',
              para('Scary is great. <strong>Gross is not.</strong> Your movie must stay <strong>PG-13</strong> and school-appropriate. Build fear with <strong>mood, shadow, and suspense</strong>, not blood, gore, or weapons.')
              + para('Think about the scariest part of a movie, the part before anything even happens: the dark hallway, the sound behind you, the thing you cannot quite see. That is your goal.')
              + notecard('THE RULE', 'Get It Approved', 'Mr. Silva must approve your concept before you shoot. No blood, no gore, no weapons, nothing that breaks school rules. When in doubt, ask.')),
-        card('WHAT YOUR POSTER MUST HAVE / 04 / 07', 'Set the Standard',
+        card('WHAT YOUR POSTER MUST HAVE / 04 / 08', 'Set the Standard',
              para('Every finished poster must include all six of these. This is the standard you are graded on.')
              + scrollrow(required)),
-        card('WORK AS A TEAM / 05 / 07', 'Brainstorm Together, Build Your Own',
+        card('WORK AS A TEAM / 05 / 08', 'Brainstorm Together, Build Your Own',
              para('You may work in a <strong>group</strong>. Slow down and brainstorm together: share concept ideas, act in each other&rsquo;s shoots, and trade photos so everyone has plenty to work with.')
              + para('But every student turns in their <strong>own unique poster</strong>. Same group and same shoot, different design. Your title, your mood, and your choices must be your own.')
              + notecard('TEAM RULE', 'Share Ideas, Not Posters', 'Help each other with ideas, acting, and photos. Then make a poster that is one hundred percent yours.')),
-        card('WORDS TO KNOW / 06 / 07', 'Movie Poster Vocabulary',
+        card('LEARN THE LIGHTING / 06 / 08', 'Watch This Before We Shoot',
+             para('Most scary posters turn <strong>day into night</strong>, and the secret is <strong>lighting</strong>. We have a <strong>Godox AD200</strong> portable flash with a light stand and a trigger that connects to your <strong>Canon EOS R50</strong>.')
+             + para('Watch this short tutorial to see how the lighting works. When we head out to shoot, Mr. Silva will coach you, but if you have studied this first it will all make sense fast and we can move quickly together.')
+             + videothumb('https://www.youtube.com/watch?v=fPJC1e_MmS0', IMG + 'movieposter-lighting-thumb.png', 'Watch the lighting tutorial on YouTube')),
+        card('WORDS TO KNOW / 07 / 08', 'Movie Poster Vocabulary',
              para('Learn these six terms. You will use them all the way through the project.')
              + scrollrow(vocab)),
-        card('YOUR MISSION / 07 / 07', 'What You Will Do',
+        card('YOUR MISSION / 08 / 08', 'What You Will Do',
              para('You will work like a real movie marketing artist in four steps: plan, capture, design, and reflect.')
              + scrollrow(mission)
              + '<div style="margin-top:18px;">' + pendingbutton('Download the Project Folder') + '</div>'),
