@@ -41,6 +41,15 @@ def ilink(href, label):
     return ('<a href="%s" style="color:#eda268;text-decoration:underline;"><strong>%s &rarr;</strong></a>'
             % (href, label))
 
+def videothumb(href, src, alt):
+    # small clickable video thumbnail, floated right (Canvas-safe: anchor wraps an inline img)
+    return ('<div style="float:right;width:34%%;min-width:200px;margin:0 0 14px 24px;text-align:center;">'
+            '<a href="%s" target="_blank" rel="noopener"><img src="%s" alt="%s" '
+            'style="display:block;width:100%%;%s" /></a>'
+            '<div style="font-size:8.5pt;letter-spacing:0.16em;text-transform:uppercase;color:#eda268;'
+            'margin-top:8px;font-family:Arial,sans-serif;"><strong>&#9658; Watch on YouTube</strong></div></div>'
+            % (href, src, alt, FRAME))
+
 def refimg(src, alt):
     # small reference cover thumbnail inside a magazine tile
     return ('<img src="%s" alt="%s" style="display:block;width:150px;height:auto;margin:0 auto 12px;%s" />'
@@ -251,6 +260,13 @@ interview = [
     tile('Ask 03', 'What are you proud of?', 'A strong quote or fact, perfect for a breakout point.'),
     tile('Ask 04', 'What is next for you?', 'Where are they headed? Great for a teaser cover line.'),
 ]
+scout = [
+    tile('Scout 01', 'Walk the Spot', 'Visit your location ahead of time with just a camera. No tripod and no flash, travel light.'),
+    tile('Scout 02', 'Shoot References', 'Take quick reference photos of a few spots and angles. These are notes, not your final shots.'),
+    tile('Scout 03', 'Read the Light', 'Notice where the light falls and how the background looks. Look for the cleanest, strongest angle.'),
+    tile('Scout 04', 'Decide on a Computer', 'Back in the lab, study your reference photos on the big screen and pick your best spot and angle.'),
+    tile('Scout 05', 'Plan the Setup', 'Decide where you, your subject, and your flash will go before you haul all the gear out.'),
+]
 page(
     'magcover-overview.html',
     'Overview | Magazine Cover | Digital Arts 1A | Mark Richardson Center',
@@ -260,30 +276,34 @@ page(
     'Tell the MRC story in one cover.',
     [
         headerimg(IMG + 'magcover-header.png', 'Julian photographing an MRC agriculture student by a tractor for a magazine cover shoot at golden hour'),
-        card('WHAT IS A MAGAZINE COVER / 01 / 07', 'One Image, One Story',
+        card('WHAT IS A MAGAZINE COVER / 01 / 08', 'One Image, One Story',
              para('A magazine cover is the front page that makes you want to pick it up. It uses <strong>one strong photo</strong> and a few <strong>bold words</strong> to sell the whole magazine in a single glance.')
              + para('Look at a real cover: a big name at the top (the <strong>masthead</strong>), one powerful photo behind it, and short headlines that tease the stories inside.')
              + para('For this project you will design a real-looking <strong>agriculture magazine cover</strong> that puts the Mark Richardson Center in the spotlight.')),
-        card('PICK YOUR MAGAZINE / 02 / 07', 'Choose One of Three',
+        card('PICK YOUR MAGAZINE / 02 / 08', 'Choose One of Three',
              para('You will design your cover in the style of one real farming magazine. Pick <strong>one</strong> of these three. Click to study each one and learn its tone and the kind of images it uses.')
              + scrollrow(mags)
              + para('You will get the real magazine logo from your <strong>project folder</strong> to make your cover look authentic.')),
-        card('PICK YOUR TOPIC / 03 / 07', 'Topic, Person, and Interview',
+        card('PICK YOUR TOPIC / 03 / 08', 'Topic, Person, and Interview',
              para('Your topic must fit the <strong>CTE agriculture theme</strong> of our campus: farming, livestock, crops, equipment, the trades, sustainability, or the people who make it all work.')
              + para('Choose a real person to feature: a <strong>student, an administrator, or a teacher</strong>. Then <strong>interview them</strong>. Their answers give you the words for your cover.')
              + para('From your interview, gather the content for your <strong>title</strong>, your <strong>subtitle</strong>, and your <strong>breakout points</strong>, all the words you see on a real cover.')
              + notecard('REPORTER MODE', 'Interview First', 'Ask good questions and write down quotes and real facts. Real words make a real cover. You will do this in Step 1.')),
-        card('WHAT YOUR COVER MUST HAVE / 04 / 07', 'Set the Standard',
+        card('WHAT YOUR COVER MUST HAVE / 04 / 08', 'Set the Standard',
              para('Every finished cover must include all six of these. This is the standard you are graded on.')
              + scrollrow(required)),
-        card('WORK AS A TEAM / 05 / 07', 'Brainstorm Together, Build Your Own',
+        card('WORK AS A TEAM / 05 / 08', 'Brainstorm Together, Build Your Own',
              para('You may work in a <strong>group</strong>. Slow down and brainstorm together: share topic ideas, plan interviews, and trade photos and content so everyone has plenty to work with.')
              + para('But every student turns in their <strong>own unique cover</strong>. Same group and same shoot, different design. Your layout, your title, and your choices must be your own.')
              + notecard('TEAM RULE', 'Share Ideas, Not Covers', 'Help each other with ideas, interviews, and photos. Then make a cover that is one hundred percent yours.')),
-        card('WORDS TO KNOW / 06 / 07', 'Magazine Vocabulary',
+        card('LEARN THE LIGHTING / 06 / 08', 'Watch This Before We Shoot',
+             videothumb('https://www.youtube.com/watch?v=fPJC1e_MmS0', IMG + 'movieposter-lighting-thumb.png', 'Watch the lighting tutorial on YouTube')
+             + para('A great cover photo uses great <strong>lighting</strong>. For this project you must light your subject with an <strong>off-camera flash</strong>: we have a <strong>Godox AD200</strong> with a light stand and a trigger that connects to your <strong>Canon EOS R50</strong>.')
+             + para('Watch this short tutorial (click the thumbnail) to see how it works. Mr. Silva will coach you on the shoot, but study it first so we move quickly together.')),
+        card('WORDS TO KNOW / 07 / 08', 'Magazine Vocabulary',
              para('Learn these six terms. You will use them all the way through the project.')
              + scrollrow(vocab)),
-        card('YOUR MISSION / 07 / 07', 'What You Will Do',
+        card('YOUR MISSION / 08 / 08', 'What You Will Do',
              para('You will work like a real photo editor in four steps: plan, capture, design, and reflect.')
              + scrollrow(mission)
              + '<div style="margin-top:18px;">' + pendingbutton('Download the Project Folder') + '</div>'),
@@ -302,21 +322,26 @@ page(
     'Magazine Cover &nbsp;&bull;&nbsp; Step 1', 'Plan Your Cover',
     'Pick your story and sketch the layout.',
     [
-        card('PICK YOUR TOPIC / 01 / 04', 'Topic and Person',
+        card('PICK YOUR TOPIC / 01 / 05', 'Topic and Person',
              para('Choose a <strong>topic</strong> that fits the <strong>CTE agriculture theme</strong> of our campus, and a real person to feature: a <strong>student, an administrator, or a teacher</strong>.')
              + para('Pick someone you can photograph and talk to. Your topic and your person should tell the same story, like &ldquo;Future Farmers,&rdquo; &ldquo;Built at the MRC,&rdquo; or &ldquo;Meet the Welder.&rdquo;')
              + notecard('TEAM TIME', 'Brainstorm Together', 'Work with your group to share topic ideas and plan who to interview. Slow down and talk it out, then each of you builds your own unique cover.')),
-        card('INTERVIEW YOUR SUBJECT / 02 / 04', 'Get the Words',
+        card('INTERVIEW YOUR SUBJECT / 02 / 05', 'Get the Words',
              para('Now <strong>interview</strong> your person. Their answers become the words on your cover: your <strong>title</strong>, your <strong>subtitle</strong>, and your <strong>breakout points</strong>. Write down quotes and real facts.')
              + scrollrow(interview)),
-        card('SKETCH YOUR LAYOUT / 03 / 04', 'Plan the Cover',
+        card('SKETCH YOUR LAYOUT / 03 / 05', 'Plan the Cover',
              para('On paper, sketch a quick <strong>thumbnail</strong> of your cover. Plan where each piece goes:')
              + para('Put the <strong>masthead</strong> at the top, block out your <strong>hero photo</strong>, mark where your <strong>title</strong> and <strong>breakout points</strong> go down one side, and box out spots for your <strong>two breakout images</strong>.')
              + para('Leave room for the text. Do not plan to cover your subject&rsquo;s face with the masthead or headlines.'),
              floatimg(IMG + 'magcover-plan-float.png', 'Julian sketching a magazine cover layout in a sketchbook at the MRC studio')),
-        card('GET IT CHECKED / 04 / 04', 'Bring It to Mr. Silva',
-             para('Before you shoot, show Mr. Silva your <strong>person</strong>, your <strong>interview notes</strong>, and your <strong>layout sketch</strong>. This is a quick checkpoint, no upload needed.')
-             + notecard('CHECKPOINT', 'Plan First, Shoot Second', 'A clear plan and good interview make a stronger cover. Get the green light, then grab a camera for Step 2.')),
+        card('SCOUT YOUR LOCATION / 04 / 05', 'Scout Before You Shoot',
+             para('Real photographers <strong>scout</strong> a location before the real shoot. Scouting means visiting a spot early to study the light, the angles, and the background, so shoot day runs smoothly.')
+             + para('Go out with <strong>just your camera</strong>, no flash or tripod yet, and take reference photos. You are not making finals, you are gathering notes to choose the best spot.')
+             + scrollrow(scout)
+             + notecard('WHY SCOUT', 'A Scouted Shoot Is a Fast Shoot', 'When you already know your spot and your setup, shoot day is spent making great photos instead of figuring out where to stand. Then you bring out the flash and gear.')),
+        card('GET IT CHECKED / 05 / 05', 'Bring It to Mr. Silva',
+             para('Before you shoot, show Mr. Silva your <strong>person</strong>, your <strong>interview notes</strong>, your <strong>scouting photos</strong>, and your <strong>layout sketch</strong>. This is a quick checkpoint, no upload needed.')
+             + notecard('CHECKPOINT', 'Plan First, Shoot Second', 'A clear plan and good interview make a stronger cover. Get the green light, then bring out the camera and flash for Step 2.')),
     ],
 )
 
@@ -340,8 +365,9 @@ page(
     'Capture your hero image on location.',
     [
         card('SHOOT ON LOCATION / 01 / 05', 'Photojournalism Style',
-             para('Go where the story is: the barn, the field, the shop, the field house. Shoot <strong>real moments</strong>, not stiff poses. This is <strong>photojournalism</strong>.')
-             + para('A <strong>studio</strong> is set up with a <strong>backdrop and constant lighting</strong> if your story needs it, but on-location photos usually feel more real and tell a stronger story.'),
+             para('Go to the spot you scouted: the barn, the field, the shop, the field house. Shoot <strong>real moments</strong>, not stiff poses. This is <strong>photojournalism</strong>.')
+             + notecard('REQUIRED', 'Light It With the Off-Camera Flash', 'You must light your subject with the <strong>off-camera flash</strong> (the Godox AD200 on a stand, triggered from your Canon R50), not just natural light. A flash lets you control the look and mood and make your subject pop, like a real magazine portrait. Watch the lighting video in the overview first.')
+             + para('A <strong>studio</strong> with a backdrop is also set up if your story needs it.'),
              floatimg(IMG + 'magcover-capture-float.png', 'Julian photographing his cover subject kneeling beside cattle at the MRC campus at golden hour')),
         card('MAKE A STRONG HERO SHOT / 02 / 05', 'Frame the Cover Image',
              para('Your hero image carries the whole cover. Scroll through each pointer as you shoot.')

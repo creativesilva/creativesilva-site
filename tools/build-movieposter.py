@@ -314,6 +314,13 @@ decide = [
     tile('Decide 06', 'Studio and Cast', 'Make up a production company name and pick two or three actor names for the credits.'),
     tile('Decide 07', 'Location and Mood', 'Pick a moody spot and your colors: cold blues, deep shadows, low fog.'),
 ]
+scout = [
+    tile('Scout 01', 'Walk the Spot', 'Visit your location ahead of time with just a camera. No tripod and no flash, travel light.'),
+    tile('Scout 02', 'Shoot References', 'Take quick reference photos of a few spots and angles. These are notes, not your final shots.'),
+    tile('Scout 03', 'Read the Light', 'Notice where the light falls and how the background looks. Look for the cleanest, strongest angle.'),
+    tile('Scout 04', 'Decide on a Computer', 'Back in the lab, study your reference photos on the big screen and pick your best spot and angle.'),
+    tile('Scout 05', 'Plan the Setup', 'Decide where you, your subject, and your flash will go before you haul all the gear out.'),
+]
 page(
     'movieposter-step01-plan.html',
     'Step 1: Plan | Movie Poster | Digital Arts 1A | Mark Richardson Center',
@@ -323,24 +330,29 @@ page(
     'Movie Poster &nbsp;&bull;&nbsp; Step 1', 'Plan Your Poster',
     'Pick your story and sketch the layout.',
     [
-        card('PICK YOUR CONCEPT / 01 / 05', 'Choose or Pitch',
+        card('PICK YOUR CONCEPT / 01 / 06', 'Choose or Pitch',
              para('Use one of the three ideas from the overview as a starting point, or pitch your own creative concept to <strong>Mr. Silva for approval</strong>. Then write your <strong>logline</strong>: one sentence that says who the story is about, where it happens, and what is wrong.')
              + notecard('KEEP IT PG-13', 'Get It Approved First', 'Your concept must be school-appropriate and approved by Mr. Silva before you shoot. Scary with mood and suspense, never with blood, gore, or weapons.')),
-        card('RESEARCH THE GENRE / 02 / 05', 'Study Real Scary Posters',
+        card('RESEARCH THE GENRE / 02 / 06', 'Study Real Scary Posters',
              para('Before you design anything, study how real scary movie posters work. As a group, pull up posters from horror and thriller films and notice what they share. Spend real time on this, good research leads to good design.')
              + scrollrow(research)
              + notecard('TEAM RESEARCH', 'Decide Together', 'Talk through what you find and agree as a group on a <strong>color scheme</strong>, a <strong>font style</strong>, and a <strong>layout direction</strong> before you build. Then each of you makes your own poster from that shared plan.')),
-        card('WRITE AND CAST / 03 / 05', 'Build Your Movie',
+        card('WRITE AND CAST / 03 / 06', 'Build Your Movie',
              para('Now decide the pieces of your movie. These choices give you the people, the words, and the look for your poster. Scroll through each one.')
              + scrollrow(decide)),
-        card('SKETCH YOUR LAYOUT / 04 / 05', 'Plan the Poster',
+        card('SKETCH YOUR LAYOUT / 04 / 06', 'Plan the Poster',
              para('On paper, sketch a quick <strong>thumbnail</strong> of your poster. Use <strong>design hierarchy</strong>: plan where each piece goes and how big it is.')
              + para('Show your <strong>protagonist</strong> as the main focus and your <strong>antagonist</strong> (villain or monster) as a clear threat. Put the big <strong>title</strong> near the bottom, mark spots for the <strong>tagline</strong> and <strong>subtitle</strong>, the <strong>production logo</strong>, and the <strong>actor names</strong> and credits.')
              + para('Leave room for the text. Both characters and the title should read at a glance.'),
              floatimg(IMG + 'movieposter-plan-float.png', 'Ricardo Gomez sketching a movie poster layout in a sketchbook at the MRC studio')),
-        card('GET IT CHECKED / 05 / 05', 'Get Approved',
-             para('Before you shoot, show Mr. Silva your <strong>concept</strong>, your <strong>cast and location</strong>, and your <strong>layout sketch</strong>. This is a required checkpoint.')
-             + notecard('CHECKPOINT', 'Approval First, Shoot Second', 'Your concept must be approved so it stays PG-13 and school-safe. Get the green light, then grab a camera for Step 2.')),
+        card('SCOUT YOUR LOCATION / 05 / 06', 'Scout Before You Shoot',
+             para('Real photographers <strong>scout</strong> a location before the real shoot. Scouting means visiting a spot early to study the light, the angles, and the background, so shoot day runs smoothly.')
+             + para('Go out with <strong>just your camera</strong>, no flash or tripod yet, and take reference photos. You are not making finals, you are gathering notes to choose the best spot.')
+             + scrollrow(scout)
+             + notecard('WHY SCOUT', 'A Scouted Shoot Is a Fast Shoot', 'When you already know your spot and your setup, shoot day is spent making great photos instead of figuring out where to stand. Then you bring out the flash and gear.')),
+        card('GET IT CHECKED / 06 / 06', 'Get Approved',
+             para('Before you shoot, show Mr. Silva your <strong>concept</strong>, your <strong>cast and location</strong>, your <strong>scouting photos</strong>, and your <strong>layout sketch</strong>. This is a required checkpoint.')
+             + notecard('CHECKPOINT', 'Approval First, Shoot Second', 'Your concept must be approved so it stays PG-13 and school-safe. Get the green light, then bring out the camera and flash for Step 2.')),
     ],
 )
 
@@ -364,8 +376,9 @@ page(
     'Capture your moody hero image.',
     [
         card('SHOOT YOUR SCENE / 01 / 05', 'Shoot by Day, Go Dark Later',
-             para('Take your actor to a moody spot: the field, the barn, or the shop. Build fear with <strong>shadow and angle</strong>, not action.')
-             + para('We cannot be on campus at night, so you will shoot in the <strong>daytime</strong> and turn it into night later in Photoshop. A <strong>studio</strong> with a <strong>backdrop and constant lighting</strong> is also great, because you control every shadow.')
+             para('Go to the spot you scouted: the field, the barn, or the shop. Build fear with <strong>light, shadow, and angle</strong>, not action.')
+             + para('We cannot be on campus at night, so you will shoot in the <strong>daytime</strong> and turn it into night later in Photoshop.')
+             + notecard('REQUIRED', 'Light It With the Off-Camera Flash', 'You must light your shot with the <strong>off-camera flash</strong> (the Godox AD200 on a stand, triggered from your Canon R50), not just natural light. The flash lets you shape the look and mood: light from one side, from below, or rim-light your subject from behind. Watch the lighting video in the overview first.')
              + notecard('SHOOT FOR NIGHT', 'Make the Convert Easy', 'Shoot on an overcast day or in open shade so the light is soft and even. Keep some <strong>sky</strong> in your frame so you can replace it, and keep harsh sun off your subject. Soft daytime photos turn into night the cleanest.'),
              floatimg(IMG + 'movieposter-capture-float.png', 'Ricardo Gomez photographing his actor in a doorway in daylight at the MRC')),
         card('SHOOT YOUR PROTAGONIST / 02 / 05', 'Frame the Hero',
