@@ -412,9 +412,10 @@ page(
 # =========================================================================
 questions = [
     tile('Question 01', 'Your Concept', 'Which concept did you choose or pitch, and what makes it scary?'),
-    tile('Question 02', 'The Mood', 'How did you use light, angle, and color to make your poster feel scary?'),
-    tile('Question 03', 'The Hard Part', 'What was hardest for you: the shoot, the title, or the mood? How did you solve it?'),
-    tile('Question 04', 'The Trailer', 'If your movie were real, what would the trailer show? Would you watch it?'),
+    tile('Question 02', 'Working Together', 'This was your first project with a partner. How did teaming up on the concept help you, and what was tricky about working together?'),
+    tile('Question 03', 'Off-Camera Light', 'This was your first time using an off-camera flash to light a shot. How did the flash change your photo, and what did you learn about lighting?'),
+    tile('Question 04', 'Day to Night', 'How did you turn your daytime photo into a scary night scene? What did you change in Photoshop?'),
+    tile('Question 05', 'The Trailer', 'If your movie were real, what would the trailer show? Would you watch it?'),
 ]
 page(
     'movieposter-step04-reflection.html',
@@ -425,8 +426,8 @@ page(
     'Movie Poster &nbsp;&bull;&nbsp; Step 4', 'Reflection',
     'Look back at your poster.',
     [
-        card('ANSWER FOUR QUESTIONS / 01 / 02', 'Reflect on Your Work',
-             para('A reflection helps you learn from your work. Open the <strong>reflection document</strong> in your project folder and answer all four questions in complete sentences.')
+        card('ANSWER FIVE QUESTIONS / 01 / 02', 'Reflect on Your Work',
+             para('A reflection helps you learn from your work. Open the <strong>reflection document</strong> in your project folder and answer all five questions in complete sentences.')
              + scrollrow(questions)),
         card('TURN IT IN / 02 / 02', 'Submit Your Reflection',
              para('The reflection document is inside your <strong>project folder</strong>. Type your answers, save the document, and name it:')
