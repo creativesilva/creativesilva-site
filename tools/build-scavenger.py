@@ -50,7 +50,7 @@ def ph(desc):
 def card(label, title, body, floatel=''):
     return ('<div style="%s%spadding:30px;margin-bottom:24px;position:relative;overflow:hidden;">'
             '<div style="height:4px;background:#c95201;margin:-30px -30px 24px -30px;"></div>'
-            '%s%s%s%s</div>' % (CARD_BG, FRAME, floatel, chip(label), tb(title), body))
+            '%s%s%s%s</div>' % (CARD_BG, FRAME, chip(label), tb(title), floatel, body))
 
 def tile(eyebrow, title, body):
     return ('<div style="%sborder:1px solid transparent;border-image:linear-gradient(135deg,#c95201 0%%,'
