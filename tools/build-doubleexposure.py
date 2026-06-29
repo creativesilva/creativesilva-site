@@ -41,7 +41,7 @@ def videorow(videos):
     """Two clickable tutorial thumbnails (anchor wraps the inline img, Canvas-safe) with a caption bar."""
     cells = ''.join(
         '<div>'
-        '<a href="%s" target="_blank" rel="noopener"><img src="%s" alt="%s" style="display:block;width:100%%;%s" /></a>'
+        '<a class="inline_disabled" href="%s" target="_blank" rel="noopener"><img src="%s" alt="%s" style="display:block;width:100%%;%s" /></a>'
         '<div style="background:rgba(255,255,255,0.92);color:#4a1e02;padding:9px 14px;text-align:center;font-size:10.5pt;'
         'border-top:2px solid #c95201;font-family:Arial,sans-serif;"><strong>&#9658; %s</strong></div>'
         '</div>' % (href, src, alt, FRAME, label)

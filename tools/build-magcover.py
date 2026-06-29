@@ -44,7 +44,7 @@ def ilink(href, label):
 def videothumb(href, src, alt):
     # small clickable video thumbnail, floated right (Canvas-safe: anchor wraps an inline img)
     return ('<div style="float:right;width:34%%;min-width:200px;margin:0 0 14px 24px;text-align:center;">'
-            '<a href="%s" target="_blank" rel="noopener"><img src="%s" alt="%s" '
+            '<a class="inline_disabled" href="%s" target="_blank" rel="noopener"><img src="%s" alt="%s" '
             'style="display:block;width:100%%;%s" /></a>'
             '<div style="font-size:8.5pt;letter-spacing:0.16em;text-transform:uppercase;color:#eda268;'
             'margin-top:8px;font-family:Arial,sans-serif;"><strong>&#9658; Watch on YouTube</strong></div></div>'
