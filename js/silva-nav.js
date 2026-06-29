@@ -56,6 +56,7 @@
     '/curriculum/mrc/movieposter-step02-capture.html',
     '/curriculum/mrc/movieposter-step03-design.html',
     '/curriculum/mrc/movieposter-step04-reflection.html',
+    '/curriculum/mrc/double-exposure.html',
 
     // Course homes
     '/curriculum/digarts1/digarts1b-home.html',
