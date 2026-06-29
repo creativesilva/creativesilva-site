@@ -80,6 +80,10 @@ def card(label, title, body):
             '<div style="height:4px;background:#c95201;margin:-30px -30px 24px -30px;"></div>'
             '%s%s%s</div>' % (CARD_BG, FRAME, chip(label), tb(title), body))
 
+def floatimg(src, alt):
+    return ('<img src="%s" alt="%s" style="float:right;width:42%%;min-width:240px;margin:0 0 18px 26px;%s" />'
+            % (src, alt, FRAME))
+
 def headerimg(src, alt):
     return ('<div style="margin-bottom:24px;"><img src="%s" alt="%s" style="width:100%%;height:auto;display:block;%s" /></div>'
             % (src, alt, FRAME))
@@ -170,7 +174,8 @@ vocab = [
 body = ''.join([
     headerimg(IMG + 'doubleexposure-header.png', 'An MRC student photographing a classmate for a portrait against a plain wall at the Santa Maria Academy of Arts'),
     card('WHAT IS A DOUBLE EXPOSURE / 01 / 07', 'Two Photos, One Image',
-         para('A <strong>double exposure</strong> blends two photos into a single image. The classic look is a <strong>portrait or silhouette</strong> filled with a second picture: a forest, a city, clouds, or water. It is one of the fastest ways to make something that looks like real art.')
+         floatimg(IMG + 'doubleexposure-example.png', 'A finished double exposure: a profile portrait blended with a mountain landscape')
+         + para('A <strong>double exposure</strong> blends two photos into a single image. The classic look is a <strong>portrait or silhouette</strong> filled with a second picture: a forest, a city, clouds, or water. It is one of the fastest ways to make something that looks like real art.')
          + para('The secret is <strong>blending modes</strong>: a Photoshop setting that changes how one layer mixes with the layer underneath it. Today you will photograph a portrait, cut out your subject, and fuse it with a second image.')),
     card('WATCH THE TUTORIALS / 02 / 07', 'See It Done First',
          para('Watch both short tutorials before you start. They walk through the exact steps in Photoshop. <strong>Click a thumbnail</strong> to open it on YouTube.')
