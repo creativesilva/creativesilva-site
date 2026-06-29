@@ -80,6 +80,14 @@ def card(label, title, body):
             '<div style="height:4px;background:#c95201;margin:-30px -30px 24px -30px;"></div>'
             '%s%s%s</div>' % (CARD_BG, FRAME, chip(label), tb(title), body))
 
+def headerimg(src, alt):
+    return ('<div style="margin-bottom:24px;"><img src="%s" alt="%s" style="width:100%%;height:auto;display:block;%s" /></div>'
+            % (src, alt, FRAME))
+
+def ilink(href, label):
+    return ('<a href="%s" target="_blank" rel="noopener" style="color:#eda268;text-decoration:underline;"><strong>%s</strong></a>'
+            % (href, label))
+
 def banner(eyebrow, title, tagline):
     return ('<div style="background:linear-gradient(135deg,#000000 0%%,#4a1e02 40%%,#c95201 100%%);'
             'padding:20px 28px 22px;margin:-28px -28px 24px -28px;border-bottom:3px solid #c95201;">'
@@ -133,30 +141,59 @@ videos = [
      'Double Exposure tutorial two, Photoshop', 'Watch Tutorial 2'),
 ]
 
-steps = [
-    tile('Step 01', 'Open Your Base', 'Open your first photo. A <strong>portrait</strong> or a clean <strong>silhouette</strong> works best. This is your bottom layer.'),
-    tile('Step 02', 'Add a Second Image', 'Place a second photo on top as a new layer: a <strong>landscape</strong>, a sky, trees, or a texture.'),
-    tile('Step 03', 'Change the Blend Mode', 'In the Layers panel, change the top layer&rsquo;s blend mode. Try <strong>Screen</strong> or <strong>Lighten</strong> to drop the dark areas, or <strong>Multiply</strong> to drop the light.'),
-    tile('Step 04', 'Mask and Move', 'Add a <strong>layer mask</strong> and paint with black to hide parts you do not want. Move and resize the top image until it sits right.'),
-    tile('Step 05', 'Adjust to Finish', 'Tweak <strong>brightness, contrast, and color</strong> so the two photos read as one image.'),
+mask_steps = [
+    tile('Cut Out 01', 'Open Select and Mask', 'With your portrait layer active, go to <strong>Select &gt; Select and Mask</strong> to open the workspace.'),
+    tile('Cut Out 02', 'Click Select Subject', 'At the top, click <strong>Select Subject</strong>. Photoshop finds the person automatically.'),
+    tile('Cut Out 03', 'Refine the Edges', 'Run the <strong>Refine Edge</strong> brush along the hair and edges to clean up the selection.'),
+    tile('Cut Out 04', 'Output to Layer Mask', 'Set <strong>Output To: Layer Mask</strong> and click OK. Your subject is cut out and the background is gone.'),
+    tile('Cut Out 05', 'Why a Simple Background', 'This is why you shoot against a <strong>plain, solid background</strong>: the subject separates cleanly and masks in seconds.'),
+]
+
+blend_steps = [
+    tile('Blend 01', 'Find the Menu', 'In the <strong>Layers</strong> panel, click the dropdown that says <strong>Normal</strong> at the top. That is the blend mode menu for the selected layer.'),
+    tile('Blend 02', 'What It Does', 'A blend mode changes how the top layer mixes with the layer below it, based on the light and dark pixels.'),
+    tile('Blend 03', 'Screen', '<strong>Screen</strong> drops the dark areas and keeps the bright ones. Great for a light texture over a darker portrait.'),
+    tile('Blend 04', 'Lighten', '<strong>Lighten</strong> keeps whichever pixels are brighter. Similar to Screen, a little punchier.'),
+    tile('Blend 05', 'Multiply', '<strong>Multiply</strong> drops the bright areas and keeps the dark ones. Great for dark trees over a lighter portrait.'),
+    tile('Blend 06', 'Cycle and Compare', 'Move down the list and watch the live preview. Pick the mode that fuses your two images best.'),
+]
+
+vocab = [
+    tile('Vocabulary', 'Double Exposure', 'Two images blended into one. The look comes from old film cameras exposing a single frame twice.'),
+    tile('Vocabulary', 'Blending Mode', 'A layer setting that controls how a layer mixes with the one below it.'),
+    tile('Vocabulary', 'Layer Mask', 'A black-and-white attachment that hides or shows parts of a layer. Black hides, white shows.'),
+    tile('Vocabulary', 'Select and Mask', 'The Photoshop workspace for making and refining a selection, especially around hair and edges.'),
+    tile('Vocabulary', 'Opacity', 'How see-through a layer is, from 0% (invisible) to 100% (solid).'),
+    tile('Vocabulary', 'Silhouette', 'A subject shown as a solid dark shape against a lighter background.'),
 ]
 
 body = ''.join([
-    headerph('A wide hero image for the Double Exposure exercise: a portrait or silhouette fused with a landscape or texture, MRC orange accents.'),
-    card('WHAT IS A DOUBLE EXPOSURE / 01 / 04', 'Two Photos, One Image',
+    headerimg(IMG + 'doubleexposure-header.png', 'An MRC student photographing a classmate for a portrait against a plain wall at the Santa Maria Academy of Arts'),
+    card('WHAT IS A DOUBLE EXPOSURE / 01 / 07', 'Two Photos, One Image',
          para('A <strong>double exposure</strong> blends two photos into a single image. The classic look is a <strong>portrait or silhouette</strong> filled with a second picture: a forest, a city, clouds, or water. It is one of the fastest ways to make something that looks like real art.')
-         + para('The secret is <strong>blending modes</strong>: a Photoshop setting that changes how one layer mixes with the layer underneath it. Today you will stack two images and use blending modes to fuse them.')),
-    card('WATCH THE TUTORIALS / 02 / 04', 'See It Done First',
+         + para('The secret is <strong>blending modes</strong>: a Photoshop setting that changes how one layer mixes with the layer underneath it. Today you will photograph a portrait, cut out your subject, and fuse it with a second image.')),
+    card('WATCH THE TUTORIALS / 02 / 07', 'See It Done First',
          para('Watch both short tutorials before you start. They walk through the exact steps in Photoshop. <strong>Click a thumbnail</strong> to open it on YouTube.')
          + videorow(videos)),
-    card('HOW TO BLEND / 03 / 04', 'Make Your Own',
-         para('Here is the quick version. Follow the videos for the full details, then build your own.')
-         + scrollrow(steps)
-         + notecard('BLENDING MODES', 'Screen, Lighten, Multiply', 'Blending modes control how layers mix. <strong>Screen</strong> and <strong>Lighten</strong> keep the bright parts of the top layer; <strong>Multiply</strong> keeps the dark parts. Cycle through them and watch what happens, there is no wrong answer.')),
-    card('TURN IT IN / 04 / 04', 'Export and Submit',
-         para('When your double exposure looks good, flatten it with <strong>Layer &gt; Flatten Image</strong>, then export a <strong>JPG</strong> with <strong>File &gt; Save a Copy</strong>.')
-         + para('Submit your JPG to this assignment in Canvas. Name it: <strong>FirstName LastInitial - Double Exposure.jpg</strong>')
-         + para('Experiment and have fun. There is no single right look, so try a few image combinations and pick your favorite.')),
+    card('GET YOUR TWO IMAGES / 03 / 07', 'Shoot One, Source One',
+         para('You need <strong>two images</strong>. The first one you must <strong>photograph yourself</strong>.')
+         + para('<strong>Image 1, the portrait:</strong> Photograph a <strong>portrait or headshot</strong> of a person. Shoot them against a <strong>solid, simple background</strong> like a plain wall, so you can cut them out cleanly later.')
+         + para('<strong>Image 2, the blend image:</strong> This is the picture that fills your subject. You can <strong>photograph it</strong> too, or download one free from <strong>Unsplash</strong>. Good choices: trees, mountains, a city skyline, fog, smoke, or water.')
+         + notecard('FREE IMAGES', 'How to Use Unsplash', 'Go to ' + ilink('https://unsplash.com', 'unsplash.com &rarr;') + ' and search for what you want, like &ldquo;forest&rdquo; or &ldquo;mountains.&rdquo; Every photo on Unsplash is <strong>free to download and use</strong>. Click a photo, click the <strong>Download free</strong> button on the top right, and save it. Then open it in Photoshop.')),
+    card('CUT OUT YOUR SUBJECT / 04 / 07', 'Mask With Select and Mask',
+         para('To blend cleanly, separate your subject from their background. You know this workflow: <strong>Select &gt; Select and Mask &gt; Select Subject</strong>. Here is the quick refresher.')
+         + scrollrow(mask_steps)),
+    card('BLEND WITH BLENDING MODES / 05 / 07', 'Fuse the Two Images',
+         para('Place your <strong>blend image</strong> on top of your cut-out portrait, then change its <strong>blend mode</strong> to fuse them. Here is where to find blend modes and what the main ones do.')
+         + scrollrow(blend_steps)
+         + notecard('EXPERIMENT', 'There Is No Wrong Answer', 'Cycle through the blend modes and watch the preview. Move and resize your blend image, lower the <strong>opacity</strong>, and add a <strong>layer mask</strong> to hide parts you do not want. Keep going until the two photos feel like one.')),
+    card('WORDS TO KNOW / 06 / 07', 'Double Exposure Vocabulary',
+         para('Learn these six terms. You will use them through the whole exercise.')
+         + scrollrow(vocab)),
+    card('TURN IT IN / 07 / 07', 'Export and Submit',
+         para('Make <strong>two or three different double exposures</strong> using different blend images or different blend modes. Experimenting is the point, so do not stop at one.')
+         + para('For each one, flatten it with <strong>Layer &gt; Flatten Image</strong> and export a <strong>JPG</strong> with <strong>File &gt; Save a Copy</strong>.')
+         + para('Submit your <strong>2 to 3 final JPG files</strong> to this assignment in Canvas. Name them: <strong>FirstName LastInitial - Double Exposure 1.jpg</strong>, and so on.')),
 ])
 
 html = ('<!DOCTYPE html>\n<html lang="en">\n<head>\n'
