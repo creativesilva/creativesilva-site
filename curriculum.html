@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Curriculum — Chris Silva</title>
+  <title>Curriculum | Chris Silva</title>
   <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only.svg" />
   <link rel="apple-touch-icon" href="/logos/CS_Logo_Only.svg" />
   <meta name="description" content="Canvas module library for PVHS Digital Arts and Photography courses." />
@@ -252,6 +252,86 @@
     }
     .course-acc-body .course-desc { margin-bottom: 18px; }
     .course-acc-body .module-list { margin-bottom: 0; }
+
+    /* ── Build Resources: category sub-accordions ── */
+    .cat-acc {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+      margin-bottom: 8px;
+    }
+    .cat-acc:last-child { margin-bottom: 0; }
+    summary.cat-head {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px; cursor: pointer; list-style: none; user-select: none;
+    }
+    summary.cat-head::-webkit-details-marker { display: none; }
+    summary.cat-head:hover { background: rgba(255,255,255,0.02); }
+    .cat-name {
+      flex: 1; font-family: var(--font-head); font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--text);
+    }
+    .cat-chevron {
+      width: 8px; height: 8px; border-right: 2px solid var(--text-faint);
+      border-bottom: 2px solid var(--text-faint); transform: rotate(-45deg);
+      transition: transform 0.2s ease; flex-shrink: 0;
+    }
+    .cat-acc[open] .cat-chevron { transform: rotate(45deg); }
+    .cat-body { padding: 4px 18px 18px; }
+    .cat-empty {
+      font-size: 0.8rem; color: var(--text-faint); font-style: italic;
+      padding: 8px 0; line-height: 1.5;
+    }
+    .cat-subgroup {
+      font-family: var(--font-head); font-size: 0.6rem; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint);
+      margin: 16px 0 10px;
+    }
+    .cat-subgroup:first-child { margin-top: 6px; }
+
+    /* Icon gallery */
+    .icon-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 10px;
+    }
+    .icon-cell {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      text-decoration: none; color: var(--text-dim);
+      border: 1px solid rgba(255,255,255,0.06); padding: 12px 8px;
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+    .icon-cell:hover { border-color: rgba(255,255,255,0.22); color: var(--text); }
+    .icon-thumb {
+      width: 100%; height: 62px; display: flex; align-items: center; justify-content: center;
+      background: #f4f4f4; padding: 10px;
+    }
+    .icon-thumb img { max-width: 100%; max-height: 100%; display: block; }
+    .icon-cap { font-size: 0.58rem; letter-spacing: 0.03em; text-align: center; word-break: break-word; line-height: 1.3; }
+
+    /* Logos grid (compact, inside Build Resources) */
+    .cat-body .logo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+    .cat-body .logo-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); }
+    .cat-body .logo-tile {
+      background: #f4f4f4; height: 120px; display: flex; align-items: center; justify-content: center;
+      padding: 18px; text-align: center; color: #888; font-family: var(--font-head);
+      font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.6;
+    }
+    .cat-body .logo-tile img { max-width: 100%; max-height: 100%; display: block; }
+    .cat-body .logo-card.pending { border-style: dashed; }
+    .cat-body .logo-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; }
+    .cat-body .logo-name { font-family: var(--font-head); font-size: 0.72rem; font-weight: 600; color: var(--text); letter-spacing: 0.03em; }
+    .cat-body .logo-fmt { display: block; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-top: 2px; }
+    .cat-body .logo-dl { flex-shrink: 0; font-family: var(--font-head); font-size: 0.56rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); text-decoration: none; border: 1px solid rgba(255,255,255,0.16); padding: 6px 10px; }
+    .cat-body .logo-dl:hover { color: var(--text); border-color: rgba(255,255,255,0.4); }
+
+    /* Characters password gate */
+    .char-gate { padding: 8px 0 4px; }
+    .char-gate.hidden { display: none; }
+    .char-gate-label { font-family: var(--font-head); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
+    .char-gate-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .char-gate-row input { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.16); color: var(--text); padding: 9px 12px; font-family: var(--font-body); font-size: 0.9rem; width: 180px; }
+    .char-gate-row button { font-family: var(--font-head); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text); background: rgba(95,143,191,0.2); border: 1px solid rgba(95,143,191,0.5); padding: 9px 16px; cursor: pointer; }
+    .char-gate-row button:hover { background: rgba(95,143,191,0.35); }
+    .char-gate-err { display: none; color: var(--accent); font-size: 0.72rem; margin-top: 8px; }
+    .char-gate-err.show { display: block; }
 
     /* ── Module list within a course card ── */
     .module-list {
@@ -600,54 +680,114 @@
       <h1 class="page-title">Curriculum</h1>
 
       <div class="staging-banner" id="staging-banner" role="status">
-        Staging Mode Active — Draft &amp; Staged Modules Visible
-      </div>
-
-      <div class="curriculum-intro">
-        <p class="curriculum-label">PVHS Digital Arts &amp; Photography</p>
-        <p>This is where I build the curriculum I use every day. Every module here is designed, tested, and actively running in my CTE Photography and Digital Arts classes at Pioneer Valley High School. Pages are built to drop directly into Canvas: copy the HTML, paste it into the Rich Content Editor, and it is ready for students. Browse by course below. Add <code>?staging</code> to the URL to preview modules still in development.</p>
+        Staging Mode Active: Draft &amp; Staged Modules Visible
       </div>
 
       <div class="course-grid" id="course-grid">
-        <div class="course-card build-resources">
-          <span class="course-card-accent" style="background:#5f8fbf;"></span>
-          <p class="course-code">Teacher Resources</p>
-          <h2 class="course-title">Build Resources</h2>
-          <p class="course-desc">Markdown specs, prompts, and frameworks for the AI tools I use to build curriculum. Download any file and paste into a fresh agent session to get it up to speed instantly.</p>
+        <details class="course-acc" id="build-resources">
+          <summary class="course-acc-head">
+            <span class="course-card-accent" style="background:#5f8fbf;"></span>
+            <span class="course-acc-headtext">
+              <p class="course-code">Teacher Resources</p>
+              <h2 class="course-title">Build Resources</h2>
+            </span>
+            <span class="course-acc-meta"><span class="course-acc-chevron"></span></span>
+          </summary>
+          <div class="course-acc-body">
 
-          <div class="resource-tabs" role="tablist">
-            <button type="button" class="resource-tab active" data-tab="ai-build" role="tab" aria-selected="true">AI Build Docs</button>
-            <button type="button" class="resource-tab" data-tab="image-models" role="tab" aria-selected="false">Image Models</button>
-            <button type="button" class="resource-tab" data-tab="video-models" role="tab" aria-selected="false">Video Models</button>
-            <button type="button" class="resource-tab" data-tab="brand-logos" role="tab" aria-selected="false">Brand Logos</button>
-          </div>
+            <details class="cat-acc">
+              <summary class="cat-head"><span class="cat-name">Markdown Files</span><span class="cat-chevron"></span></summary>
+              <div class="cat-body">
+                <div class="module-list">
+                  <a href="/SILVA_ANGULAR_FRAMEWORK.md" download class="module-row"><span class="module-row-name">SILVA_ANGULAR_FRAMEWORK.md</span><span class="resource-dl-badge">&#11015; Download</span></a>
+                  <a href="/CANVAS_BUILD_FRAMEWORK.md" download class="module-row"><span class="module-row-name">CANVAS_BUILD_FRAMEWORK.md</span><span class="resource-dl-badge">&#11015; Download</span></a>
+                </div>
+              </div>
+            </details>
 
-          <div class="resource-tab-panel active" data-panel="ai-build" role="tabpanel">
-            <div class="module-list">
-              <a href="/SILVA_ANGULAR_FRAMEWORK.md" download="SILVA_ANGULAR_FRAMEWORK.md" class="module-row">
-                <span class="module-row-name">SILVA_ANGULAR_FRAMEWORK.md</span>
-                <span class="resource-dl-badge">&#11015; Download</span>
-              </a>
+            <details class="cat-acc">
+              <summary class="cat-head"><span class="cat-name">Prompts</span><span class="cat-chevron"></span></summary>
+              <div class="cat-body"><div class="cat-empty">No prompt files in the repo yet. Drop them in and they will list here.</div></div>
+            </details>
+
+            <details class="cat-acc">
+              <summary class="cat-head"><span class="cat-name">Logos</span><span class="cat-chevron"></span></summary>
+              <div class="cat-body">
+                <div class="logo-grid">
+                  <div class="logo-card"><div class="logo-tile"><img src="/logos/CS_Logo_Only.svg" alt="Chris Silva logo, icon only" /></div><div class="logo-meta"><span class="logo-name">CS Logo <span class="logo-fmt">Icon &middot; SVG</span></span><a class="logo-dl" href="/logos/CS_Logo_Only.svg" download>Download</a></div></div>
+                  <div class="logo-card"><div class="logo-tile"><img src="/logos/CS_Logo_Vector.svg" alt="Chris Silva logo, full vector" /></div><div class="logo-meta"><span class="logo-name">CS Logo <span class="logo-fmt">Full &middot; SVG</span></span><a class="logo-dl" href="/logos/CS_Logo_Vector.svg" download>Download</a></div></div>
+                  <div class="logo-card pending"><div class="logo-tile">PV Monogram<br />(no panther)<br />drop file to add</div><div class="logo-meta"><span class="logo-name">PV Monogram <span class="logo-fmt">Pending</span></span></div></div>
+                </div>
+              </div>
+            </details>
+
+            <details class="cat-acc">
+              <summary class="cat-head"><span class="cat-name">Characters</span><span class="cat-chevron"></span></summary>
+              <div class="cat-body">
+                <div class="char-gate" id="char-gate">
+                  <p class="char-gate-label">Password required</p>
+                  <div class="char-gate-row">
+                    <input type="password" id="char-pin" inputmode="numeric" autocomplete="off" placeholder="Enter password" />
+                    <button type="button" id="char-pin-btn">Unlock</button>
+                  </div>
+                  <p class="char-gate-err" id="char-pin-err">Incorrect password.</p>
+                </div>
+                <div class="char-content" id="char-content" hidden>
+                  <div class="cat-empty">Character reference sheets go here. Drop the cast files in and the gallery will build out.</div>
+                </div>
+              </div>
+            </details>
+
+            <details class="cat-acc">
+              <summary class="cat-head"><span class="cat-name">Icons</span><span class="cat-chevron"></span></summary>
+              <div class="cat-body">
+            <p class="cat-subgroup">Navigation: Teal</p>
+            <div class="icon-grid">
+              <a class="icon-cell" href="/assets/Icons/Icons-Teal/Course_Overview_Icon.png" download title="Course_Overview_Icon"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/Course_Overview_Icon.png" alt="Course_Overview_Icon" /></span><span class="icon-cap">Course_Overview_Icon</span></a>
+              <a class="icon-cell" href="/assets/Icons/Icons-Teal/About_Your_Teacher.png" download title="About_Your_Teacher"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/About_Your_Teacher.png" alt="About_Your_Teacher" /></span><span class="icon-cap">About_Your_Teacher</span></a>
+              <a class="icon-cell" href="/assets/Icons/Icons-Teal/Learning_Modules.png" download title="Learning_Modules"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/Learning_Modules.png" alt="Learning_Modules" /></span><span class="icon-cap">Learning_Modules</span></a>
+              <a class="icon-cell" href="/assets/Icons/Icons-Teal/Course_Resources.png" download title="Course_Resources"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/Course_Resources.png" alt="Course_Resources" /></span><span class="icon-cap">Course_Resources</span></a>
+              <a class="icon-cell" href="/assets/Icons/Icons-Teal/Tech_Essentials.png" download title="Tech_Essentials"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/Tech_Essentials.png" alt="Tech_Essentials" /></span><span class="icon-cap">Tech_Essentials</span></a>
             </div>
-          </div>
-
-          <div class="resource-tab-panel" data-panel="image-models" role="tabpanel">
-            <div class="resource-empty">Coming soon. Prompt libraries, style guides, and reference packs for the image generation models used in class projects.</div>
-          </div>
-
-          <div class="resource-tab-panel" data-panel="video-models" role="tabpanel">
-            <div class="resource-empty">Coming soon. Prompt libraries, shot lists, and motion reference packs for video generation models.</div>
-          </div>
-
-          <div class="resource-tab-panel" data-panel="brand-logos" role="tabpanel">
-            <div class="module-list">
-              <a href="/curriculum/universal/brand-logos.html" class="module-row">
-                <span class="module-row-name">Brand &amp; Logo Library</span>
-                <span class="resource-dl-badge">Open &#8594;</span>
-              </a>
+            <p class="cat-subgroup">Navigation: Orange (MRC)</p>
+            <div class="icon-grid">
+              <a class="icon-cell" href="/assets/mrc/icons/Course_Overview_Icon.png" download title="Course_Overview_Icon"><span class="icon-thumb"><img src="/assets/mrc/icons/Course_Overview_Icon.png" alt="Course_Overview_Icon" /></span><span class="icon-cap">Course_Overview_Icon</span></a>
+              <a class="icon-cell" href="/assets/mrc/icons/About_Your_Teacher.png" download title="About_Your_Teacher"><span class="icon-thumb"><img src="/assets/mrc/icons/About_Your_Teacher.png" alt="About_Your_Teacher" /></span><span class="icon-cap">About_Your_Teacher</span></a>
+              <a class="icon-cell" href="/assets/mrc/icons/Learning_Modules.png" download title="Learning_Modules"><span class="icon-thumb"><img src="/assets/mrc/icons/Learning_Modules.png" alt="Learning_Modules" /></span><span class="icon-cap">Learning_Modules</span></a>
+              <a class="icon-cell" href="/assets/mrc/icons/Course_Resources.png" download title="Course_Resources"><span class="icon-thumb"><img src="/assets/mrc/icons/Course_Resources.png" alt="Course_Resources" /></span><span class="icon-cap">Course_Resources</span></a>
+              <a class="icon-cell" href="/assets/mrc/icons/Tech_Essentials.png" download title="Tech_Essentials"><span class="icon-thumb"><img src="/assets/mrc/icons/Tech_Essentials.png" alt="Tech_Essentials" /></span><span class="icon-cap">Tech_Essentials</span></a>
             </div>
+            <p class="cat-subgroup">Navigation: Illustrated</p>
+            <div class="icon-grid">
+              <a class="icon-cell" href="/assets/Icons/Course%20Overview.png" download title="Course Overview"><span class="icon-thumb"><img src="/assets/Icons/Course%20Overview.png" alt="Course Overview" /></span><span class="icon-cap">Course Overview</span></a>
+              <a class="icon-cell" href="/assets/Icons/About%20Teacher.png" download title="About Teacher"><span class="icon-thumb"><img src="/assets/Icons/About%20Teacher.png" alt="About Teacher" /></span><span class="icon-cap">About Teacher</span></a>
+              <a class="icon-cell" href="/assets/Icons/Learning%20Modules.png" download title="Learning Modules"><span class="icon-thumb"><img src="/assets/Icons/Learning%20Modules.png" alt="Learning Modules" /></span><span class="icon-cap">Learning Modules</span></a>
+              <a class="icon-cell" href="/assets/Icons/Course%20Resources.png" download title="Course Resources"><span class="icon-thumb"><img src="/assets/Icons/Course%20Resources.png" alt="Course Resources" /></span><span class="icon-cap">Course Resources</span></a>
+              <a class="icon-cell" href="/assets/Icons/Tech%20Essentials.png" download title="Tech Essentials"><span class="icon-thumb"><img src="/assets/Icons/Tech%20Essentials.png" alt="Tech Essentials" /></span><span class="icon-cap">Tech Essentials</span></a>
+            </div>
+            <p class="cat-subgroup">Utility</p>
+            <div class="icon-grid">
+              <a class="icon-cell" href="/assets/Icons/book.png" download title="book"><span class="icon-thumb"><img src="/assets/Icons/book.png" alt="book" /></span><span class="icon-cap">book</span></a>
+              <a class="icon-cell" href="/assets/Icons/bookmark.png" download title="bookmark"><span class="icon-thumb"><img src="/assets/Icons/bookmark.png" alt="bookmark" /></span><span class="icon-cap">bookmark</span></a>
+              <a class="icon-cell" href="/assets/Icons/flag.png" download title="flag"><span class="icon-thumb"><img src="/assets/Icons/flag.png" alt="flag" /></span><span class="icon-cap">flag</span></a>
+              <a class="icon-cell" href="/assets/Icons/gear.png" download title="gear"><span class="icon-thumb"><img src="/assets/Icons/gear.png" alt="gear" /></span><span class="icon-cap">gear</span></a>
+              <a class="icon-cell" href="/assets/Icons/paper.png" download title="paper"><span class="icon-thumb"><img src="/assets/Icons/paper.png" alt="paper" /></span><span class="icon-cap">paper</span></a>
+              <a class="icon-cell" href="/assets/Icons/lightbulb-orange.svg" download title="lightbulb-orange"><span class="icon-thumb"><img src="/assets/Icons/lightbulb-orange.svg" alt="lightbulb-orange" /></span><span class="icon-cap">lightbulb-orange</span></a>
+            </div>
+              </div>
+            </details>
+
+            <details class="cat-acc">
+              <summary class="cat-head"><span class="cat-name">Brand Logos</span><span class="cat-chevron"></span></summary>
+              <div class="cat-body">
+                <div class="module-list">
+                  <a href="/curriculum/universal/brand-logos.html" class="module-row"><span class="module-row-name">Brand &amp; Logo Library</span><span class="resource-dl-badge">Open &#8594;</span></a>
+                </div>
+              </div>
+            </details>
+
           </div>
-        </div>
+        </details>
         <!-- Course cards appended by JS below -->
       </div>
 
@@ -1071,7 +1211,6 @@
             </span>
           </summary>
           <div class="course-acc-body">
-            <p class="course-desc">${course.desc}</p>
             ${mods.length ? `<div class="module-list">${moduleRows}</div>` : empty}
             ${hint}
           </div>
@@ -1122,21 +1261,31 @@
       });
     })();
 
-    // ── Build Resources tab switcher ────────────────────────────────────────
-    document.querySelectorAll('.resource-tab').forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        var target = tab.getAttribute('data-tab');
-        var card = tab.closest('.build-resources');
-        card.querySelectorAll('.resource-tab').forEach(function (t) {
-          var isActive = t === tab;
-          t.classList.toggle('active', isActive);
-          t.setAttribute('aria-selected', isActive ? 'true' : 'false');
-        });
-        card.querySelectorAll('.resource-tab-panel').forEach(function (panel) {
-          panel.classList.toggle('active', panel.getAttribute('data-panel') === target);
-        });
-      });
-    });
+    // ── Characters category password gate (password: 1980) ─────────────────
+    (function () {
+      var CHAR_KEY = 'silva-char-auth';
+      var gate = document.getElementById('char-gate');
+      var content = document.getElementById('char-content');
+      var input = document.getElementById('char-pin');
+      var btn = document.getElementById('char-pin-btn');
+      var err = document.getElementById('char-pin-err');
+      if (!gate || !content) return;
+      function unlock() { gate.classList.add('hidden'); content.hidden = false; }
+      if (sessionStorage.getItem(CHAR_KEY) === 'ok') { unlock(); }
+      function tryPin() {
+        if (input.value.trim() === '1980') {
+          sessionStorage.setItem(CHAR_KEY, 'ok');
+          err.classList.remove('show');
+          unlock();
+        } else {
+          err.classList.add('show');
+          input.value = '';
+          input.focus();
+        }
+      }
+      if (btn) btn.addEventListener('click', tryPin);
+      if (input) input.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryPin(); });
+    })();
   </script>
 
 </body>
