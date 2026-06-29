@@ -224,8 +224,7 @@ page(
     [
         headerimg(IMG + 'doubleexposure-header.png', 'An MRC student photographing a classmate for a portrait against a plain wall at the Santa Maria Academy of Arts'),
         card('WHAT IS A DOUBLE EXPOSURE / 01 / 04', 'Two Photos, One Image',
-             floatimg(IMG + 'doubleexposure-example.png', 'A finished double exposure: a profile portrait blended with a mountain landscape')
-             + para('A <strong>double exposure</strong> blends two photos into a single image. The classic look is a <strong>portrait or silhouette</strong> filled with a second picture: a forest, a city, clouds, or water. It is one of the fastest ways to make something that looks like real art.')
+             para('A <strong>double exposure</strong> blends two photos into a single image. The classic look is a <strong>portrait or silhouette</strong> filled with a second picture: a forest, a city, clouds, or water. It is one of the fastest ways to make something that looks like real art.')
              + para('The secret is <strong>blending modes</strong>: a Photoshop setting that changes how one layer mixes with the layer underneath it. In Step 1 you will photograph a portrait in RAW, process it, cut out your subject, and fuse it with a second image.')),
         card('WATCH THE TUTORIALS / 02 / 04', 'See It Done First',
              para('Watch both short tutorials before you start. They walk through the exact steps in Photoshop. <strong>Click a thumbnail</strong> to open it on YouTube.')
@@ -236,7 +235,7 @@ page(
         card('YOUR MISSION / 04 / 04', 'What You Will Do',
              para('This is a one-step exercise. Everything happens in <strong>Step 1: Capture, Edit, and Create</strong>. Here is the plan at a glance.')
              + scrollrow(mission)
-             + para('When you are ready, open ' + ilink('double-exposure-step01-create.html', 'Step 1 &rarr;') + ' and make your double exposures.')),
+             + para('When you are ready, go to <strong>Step 1: Capture, Edit, and Create</strong> and make your double exposures.')),
     ],
 )
 
@@ -251,9 +250,11 @@ page(
     'Shoot it, process it, blend it, export it.',
     [
         card('GET YOUR TWO IMAGES / 01 / 05', 'Shoot One, Source One',
-             para('You need <strong>two images</strong>. The first one you must <strong>photograph yourself</strong>.')
+             floatimg(IMG + 'doubleexposure-example.png', 'A finished double exposure: a profile portrait blended with a mountain landscape')
+             + para('You need <strong>two images</strong>. The first one you must <strong>photograph yourself</strong>.')
              + para('<strong>Image 1, the portrait:</strong> Photograph a <strong>portrait or headshot</strong> of a person. Shoot them against a <strong>solid, simple background</strong> like a plain wall, so you can cut them out cleanly later.')
              + para('<strong>Image 2, the blend image:</strong> This is the picture that fills your subject. You can <strong>photograph it</strong> too, or download one free from <strong>Unsplash</strong>. Good choices: trees, mountains, a city skyline, fog, smoke, or water.')
+             + '<div style="clear:both;"></div>'
              + notecard('FREE IMAGES', 'Find One That Is Free', 'Search for a blend image on ' + ilink('https://unsplash.com', 'unsplash.com &rarr;') + ' or the web, like &ldquo;forest&rdquo; or &ldquo;mountains.&rdquo; Heads up: <strong>not every image is free to download</strong>. Some need an <strong>account</strong> or a paid plan, and search results often link to <strong>paid stock sites</strong> like Shutterstock or iStock. <strong>Search for free images</strong>, then browse and pick one that is <strong>entirely free</strong> and also works for your photo. On Unsplash, open the photo and click <strong>Download free</strong>, then bring it into Photoshop.')),
         card('OPEN YOUR RAW FILE / 02 / 05', 'Process the RAW First',
              para('You are shooting your portrait in <strong>RAW</strong>, a Canon <strong>.CR3</strong> file. Before you blend anything, open it and lock in your look in <strong>Camera Raw</strong>.')
