@@ -124,14 +124,10 @@
 
     /* ── Course grid ── */
     .course-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
       margin-bottom: 64px;
-    }
-
-    @media (max-width: 680px) {
-      .course-grid { grid-template-columns: 1fr; }
     }
 
     .course-card {
@@ -182,6 +178,80 @@
       line-height: 1.65;
       margin-bottom: 24px;
     }
+
+    /* ── Course accordion ── */
+    .course-acc {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+      transition: border-color 0.2s ease;
+    }
+    .course-acc:hover,
+    .course-acc[open] {
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    summary.course-acc-head {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 22px 28px 22px 32px;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+    }
+    summary.course-acc-head::-webkit-details-marker { display: none; }
+    summary.course-acc-head:hover { background: rgba(255, 255, 255, 0.02); }
+
+    .course-acc-headtext { flex: 1; min-width: 0; }
+    .course-acc-head .course-code { margin-bottom: 5px; }
+    .course-acc-head .course-title {
+      margin-bottom: 0;
+      font-size: 1.25rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .course-acc-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .course-acc-count {
+      font-family: var(--font-head);
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+    .course-acc-count .live { color: #5fcc8a; }
+    .course-acc-count.empty { color: var(--text-faint); }
+
+    .course-acc-chevron {
+      width: 9px;
+      height: 9px;
+      border-right: 2px solid var(--text-dim);
+      border-bottom: 2px solid var(--text-dim);
+      transform: rotate(-45deg);
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+      margin-right: 2px;
+    }
+    .course-acc[open] .course-acc-chevron { transform: rotate(45deg); }
+
+    .course-acc-body {
+      padding: 4px 32px 28px 32px;
+      animation: accOpen 0.22s ease;
+    }
+    @keyframes accOpen {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .course-acc-body .course-desc { margin-bottom: 18px; }
+    .course-acc-body .module-list { margin-bottom: 0; }
 
     /* ── Module list within a course card ── */
     .module-list {
@@ -372,9 +442,16 @@
         display: none;
       }
       .course-grid {
-        gap: 14px;
+        gap: 10px;
         margin-bottom: 40px;
       }
+      summary.course-acc-head {
+        padding: 16px 16px;
+        gap: 12px;
+      }
+      .course-acc-head .course-title { font-size: 1.05rem; }
+      .course-acc-body { padding: 2px 16px 20px 16px; }
+      .course-acc-count { display: none; }
     }
 
     /* ── PIN gate ── */
@@ -965,20 +1042,75 @@
         ? `<p class="staging-hint">To add a module: append an entry to MODULES in curriculum.html and set status to "staged" or "published".</p>`
         : "";
 
+      const liveCount = mods.filter(m => m.status === "published").length;
+      const countBadge = mods.length
+        ? `<span class="course-acc-count">${mods.length} module${mods.length === 1 ? "" : "s"} &middot; <span class="live">${liveCount} live</span></span>`
+        : `<span class="course-acc-count empty">Coming soon</span>`;
+
       return `
-        <div class="course-card" id="${course.id}">
-          <div class="course-card-accent" style="background:${course.accent}"></div>
-          <p class="course-code">${course.code}</p>
-          <h2 class="course-title">${course.title}</h2>
-          <p class="course-desc">${course.desc}</p>
-          ${mods.length ? `<div class="module-list">${moduleRows}</div>` : empty}
-          ${hint}
-        </div>
+        <details class="course-acc" id="${course.id}">
+          <summary class="course-acc-head">
+            <span class="course-card-accent" style="background:${course.accent}"></span>
+            <span class="course-acc-headtext">
+              <p class="course-code">${course.code}</p>
+              <h2 class="course-title">${course.title}</h2>
+            </span>
+            <span class="course-acc-meta">
+              ${countBadge}
+              <span class="course-acc-chevron"></span>
+            </span>
+          </summary>
+          <div class="course-acc-body">
+            <p class="course-desc">${course.desc}</p>
+            ${mods.length ? `<div class="module-list">${moduleRows}</div>` : empty}
+            ${hint}
+          </div>
+        </details>
       `;
     }
 
     document.getElementById("course-grid")
       .insertAdjacentHTML("beforeend", COURSES.map(buildCourseCard).join(""));
+
+    // ── Accordion: deep-link, remembered open-state, sensible default ──────────
+    (function initAccordion() {
+      const KEY = "curriculumOpenCourses";
+      const items = Array.from(document.querySelectorAll("details.course-acc"));
+      if (!items.length) return;
+
+      let saved = [];
+      try { saved = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) {}
+
+      const hashId = decodeURIComponent((location.hash || "").replace(/^#/, ""));
+      let opened = false;
+
+      items.forEach(d => { if (saved.includes(d.id)) { d.open = true; opened = true; } });
+
+      const target = hashId && document.getElementById(hashId);
+      if (target && target.matches("details.course-acc")) { target.open = true; opened = true; }
+
+      if (!opened) { items[0].open = true; }
+
+      function persist() {
+        const open = items.filter(d => d.open).map(d => d.id);
+        try { localStorage.setItem(KEY, JSON.stringify(open)); } catch (e) {}
+      }
+      items.forEach(d => d.addEventListener("toggle", persist));
+
+      if (target) {
+        setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+      }
+
+      // Clicking a course link elsewhere on the page opens its accordion
+      window.addEventListener("hashchange", () => {
+        const id = decodeURIComponent((location.hash || "").replace(/^#/, ""));
+        const t = id && document.getElementById(id);
+        if (t && t.matches("details.course-acc")) {
+          t.open = true;
+          t.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    })();
 
     // ── Build Resources tab switcher ────────────────────────────────────────
     document.querySelectorAll('.resource-tab').forEach(function (tab) {
