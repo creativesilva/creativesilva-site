@@ -162,6 +162,14 @@ blend_steps = [
     tile('Blend 06', 'Cycle and Compare', 'Move down the list and watch the live preview. Pick the mode that fuses your two images best.'),
 ]
 
+raw_steps = [
+    tile('RAW 01', 'Shoot in RAW', 'Set your camera to <strong>RAW</strong>. Your Canon saves a <strong>.CR3</strong> file that holds far more detail than a JPG, so you can push the edit further without it falling apart.'),
+    tile('RAW 02', 'Open It in Photoshop', 'In Photoshop, go to <strong>File &gt; Open</strong> (or press <strong>Command + O</strong>) and choose your <strong>.CR3</strong> file.'),
+    tile('RAW 03', 'Camera Raw Opens', 'Because it is a RAW file, the <strong>Camera Raw</strong> window opens automatically. This is where you set your look before the photo ever reaches Photoshop.'),
+    tile('RAW 04', 'Lock In Your Aesthetic', 'Adjust <strong>exposure, contrast, white balance, and color</strong> until the portrait has the mood you want. These are the same sliders as the Camera Raw Filter. Set your aesthetic here.'),
+    tile('RAW 05', 'Open Onto the Artboard', 'Click <strong>Open</strong> (or Open Image) to drop the processed photo onto a Photoshop <strong>artboard</strong>, ready to cut out and blend.'),
+]
+
 vocab = [
     tile('Vocabulary', 'Double Exposure', 'Two images blended into one. The look comes from old film cameras exposing a single frame twice.'),
     tile('Vocabulary', 'Blending Mode', 'A layer setting that controls how a layer mixes with the one below it.'),
@@ -169,33 +177,39 @@ vocab = [
     tile('Vocabulary', 'Select and Mask', 'The Photoshop workspace for making and refining a selection, especially around hair and edges.'),
     tile('Vocabulary', 'Opacity', 'How see-through a layer is, from 0% (invisible) to 100% (solid).'),
     tile('Vocabulary', 'Silhouette', 'A subject shown as a solid dark shape against a lighter background.'),
+    tile('Vocabulary', 'RAW (CR3)', 'An unprocessed image straight off the camera sensor. Canon&rsquo;s version is the .CR3. It holds far more editing data than a JPG.'),
+    tile('Vocabulary', 'Camera Raw', 'The window that opens when you open a RAW file, where you set exposure, color, and contrast before Photoshop.'),
 ]
 
 body = ''.join([
     headerimg(IMG + 'doubleexposure-header.png', 'An MRC student photographing a classmate for a portrait against a plain wall at the Santa Maria Academy of Arts'),
-    card('WHAT IS A DOUBLE EXPOSURE / 01 / 07', 'Two Photos, One Image',
+    card('WHAT IS A DOUBLE EXPOSURE / 01 / 08', 'Two Photos, One Image',
          floatimg(IMG + 'doubleexposure-example.png', 'A finished double exposure: a profile portrait blended with a mountain landscape')
          + para('A <strong>double exposure</strong> blends two photos into a single image. The classic look is a <strong>portrait or silhouette</strong> filled with a second picture: a forest, a city, clouds, or water. It is one of the fastest ways to make something that looks like real art.')
-         + para('The secret is <strong>blending modes</strong>: a Photoshop setting that changes how one layer mixes with the layer underneath it. Today you will photograph a portrait, cut out your subject, and fuse it with a second image.')),
-    card('WATCH THE TUTORIALS / 02 / 07', 'See It Done First',
+         + para('The secret is <strong>blending modes</strong>: a Photoshop setting that changes how one layer mixes with the layer underneath it. Today you will photograph a portrait in RAW, process it in Camera Raw, cut out your subject, and fuse it with a second image.')),
+    card('WATCH THE TUTORIALS / 02 / 08', 'See It Done First',
          para('Watch both short tutorials before you start. They walk through the exact steps in Photoshop. <strong>Click a thumbnail</strong> to open it on YouTube.')
          + videorow(videos)),
-    card('GET YOUR TWO IMAGES / 03 / 07', 'Shoot One, Source One',
+    card('GET YOUR TWO IMAGES / 03 / 08', 'Shoot One, Source One',
          para('You need <strong>two images</strong>. The first one you must <strong>photograph yourself</strong>.')
          + para('<strong>Image 1, the portrait:</strong> Photograph a <strong>portrait or headshot</strong> of a person. Shoot them against a <strong>solid, simple background</strong> like a plain wall, so you can cut them out cleanly later.')
          + para('<strong>Image 2, the blend image:</strong> This is the picture that fills your subject. You can <strong>photograph it</strong> too, or download one free from <strong>Unsplash</strong>. Good choices: trees, mountains, a city skyline, fog, smoke, or water.')
          + notecard('FREE IMAGES', 'Find One That Is Free', 'Search for a blend image on ' + ilink('https://unsplash.com', 'unsplash.com &rarr;') + ' or the web, like &ldquo;forest&rdquo; or &ldquo;mountains.&rdquo; Heads up: <strong>not every image is free to download</strong>. Some need an <strong>account</strong> or a paid plan, and search results often link to <strong>paid stock sites</strong> like Shutterstock or iStock. <strong>Search for free images</strong>, then browse and pick one that is <strong>entirely free</strong> and also works for your photo. On Unsplash, open the photo and click <strong>Download free</strong>, then bring it into Photoshop.')),
-    card('CUT OUT YOUR SUBJECT / 04 / 07', 'Mask With Select and Mask',
+    card('OPEN YOUR RAW FILE / 04 / 08', 'Process the RAW First',
+         para('You are shooting your portrait in <strong>RAW</strong>, a Canon <strong>.CR3</strong> file. Before you blend anything, open it and lock in your look in <strong>Camera Raw</strong>.')
+         + scrollrow(raw_steps)
+         + notecard('WHY RAW', 'More Room to Edit', 'A RAW file keeps all the data straight off the sensor, so you can fix exposure and color with no quality loss. Set your aesthetic in Camera Raw first, then click Open to keep building in Photoshop.')),
+    card('CUT OUT YOUR SUBJECT / 05 / 08', 'Mask With Select and Mask',
          para('To blend cleanly, separate your subject from their background. You know this workflow: <strong>Select &gt; Select and Mask &gt; Select Subject</strong>. Here is the quick refresher.')
          + scrollrow(mask_steps)),
-    card('BLEND WITH BLENDING MODES / 05 / 07', 'Fuse the Two Images',
+    card('BLEND WITH BLENDING MODES / 06 / 08', 'Fuse the Two Images',
          para('Place your <strong>blend image</strong> on top of your cut-out portrait, then change its <strong>blend mode</strong> to fuse them. Here is where to find blend modes and what the main ones do.')
          + scrollrow(blend_steps)
          + notecard('EXPERIMENT', 'There Is No Wrong Answer', 'Cycle through the blend modes and watch the preview. Move and resize your blend image, lower the <strong>opacity</strong>, and add a <strong>layer mask</strong> to hide parts you do not want. Keep going until the two photos feel like one.')),
-    card('WORDS TO KNOW / 06 / 07', 'Double Exposure Vocabulary',
-         para('Learn these six terms. You will use them through the whole exercise.')
+    card('WORDS TO KNOW / 07 / 08', 'Double Exposure Vocabulary',
+         para('Learn these eight terms. You will use them through the whole exercise.')
          + scrollrow(vocab)),
-    card('TURN IT IN / 07 / 07', 'Export and Submit',
+    card('TURN IT IN / 08 / 08', 'Export and Submit',
          para('Make <strong>two or three different double exposures</strong> using different blend images or different blend modes. Experimenting is the point, so do not stop at one.')
          + para('For each one, flatten it with <strong>Layer &gt; Flatten Image</strong> and export a <strong>JPG</strong> with <strong>File &gt; Save a Copy</strong>.')
          + para('Submit your <strong>2 to 3 final JPG files</strong> to this assignment in Canvas. Name them: <strong>FirstName LastInitial - Double Exposure 1.jpg</strong>, and so on.')),
