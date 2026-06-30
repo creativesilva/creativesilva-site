@@ -100,6 +100,14 @@ def banner(eyebrow, title, tagline):
             '<div style="justify-self:end;"></div>'
             '</div></div>' % (eyebrow, title, tagline))
 
+def stepnav(links):
+    btns = ''.join('<a href="%s" class="silva-step-btn">%s</a>' % (href, lbl) for href, lbl in links)
+    return '<div class="silva-step-nav">%s</div><div class="silva-nav-div"></div>' % btns
+
+def ilink(href, label):
+    return ('<a href="%s" target="_blank" rel="noopener" style="color:#eda268;text-decoration:underline;"><strong>%s</strong></a>'
+            % (href, label))
+
 NAV = '''  <nav class="silva-nav" aria-label="Module navigation">
     <div class="silva-nav-inner">
       <div class="silva-breadcrumb">
@@ -107,9 +115,10 @@ NAV = '''  <nav class="silva-nav" aria-label="Module navigation">
         <span class="bc-sep">&rsaquo;</span>
         <a href="/curriculum.html#mrc-da1a" class="bc-hide-sm">Digital Arts 1A</a>
         <span class="bc-sep bc-hide-sm">&rsaquo;</span>
-        <span class="bc-current">Photo Scavenger Hunt</span>
+        <span class="bc-current">%(crumb)s</span>
       </div>
       <div class="silva-nav-spacer"></div>
+      %(stepnav)s
       <button class="silva-copy-btn" onclick="silvaCopyHTML()" aria-label="Copy Canvas HTML to clipboard">&#128203; Copy Canvas HTML</button>
       <button class="silva-download-btn" onclick="silvaDownloadHTML()" aria-label="Download Canvas HTML as file">&#128229; Download HTML</button>
     </div>
@@ -127,11 +136,36 @@ SCRIPTS = '''  <script>
     function silvaDownloadHTML() {
       var el = document.getElementById('top'); var html = el.outerHTML;
       var blob = new Blob([html], { type: 'text/html' }); var url = URL.createObjectURL(blob);
-      var a = document.createElement('a'); a.href = url; a.download = 'mrc-photo-scavenger-hunt-canvas.html';
+      var a = document.createElement('a'); a.href = url; a.download = '%(dl)s';
       document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
     }
   </script>
   <script src="/js/silva-nav.js"></script>'''
+
+def page(filename, title_tag, crumb, links, dl, eyebrow, btitle, tagline, cards):
+    body = ''.join(cards)
+    html = ('<!DOCTYPE html>\n<html lang="en">\n<head>\n'
+            '  <meta charset="UTF-8" />\n'
+            '  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n'
+            '  <title>%s</title>\n' % title_tag +
+            '  <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only.svg" />\n'
+            '  <link rel="apple-touch-icon" href="/logos/CS_Logo_Only.svg" />\n'
+            '  <style>:root { --course-accent: #c95201; }</style>\n'
+            '  <link rel="stylesheet" href="/css/silva-module.css" />\n'
+            '</head>\n<body>\n' +
+            (NAV % {'crumb': crumb, 'stepnav': stepnav(links)}) + '\n'
+            '  <div class="silva-page">\n  <div id="silva-module-content">\n'
+            '  <div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;'
+            'background-color:#080808;background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,'
+            'rgba(40,20,2,0.94) 50%,rgba(8,8,8,0.97) 100%);background-position:center center;'
+            'background-repeat:no-repeat;background-attachment:fixed;overflow:hidden;">\n\n'
+            '    <div style="padding:28px 28px 40px;">\n      ' +
+            banner(eyebrow, btitle, tagline) + body +
+            '\n    </div>\n\n  </div>\n  </div>\n  </div>\n' +
+            (SCRIPTS % {'dl': dl}) + '\n</body>\n</html>\n')
+    open(os.path.join(OUT, filename), 'w').write(html)
+    print('  %s  divs=%s  em=%d' % (filename, 'OK' if html.count('<div') == html.count('</div>') else 'IMBALANCE',
+                                    html.count('—') + html.count('&mdash;')))
 
 # composition concept tiles (define every shot challenge on the paper list)
 comp = [
@@ -153,64 +187,77 @@ judges = [
     tile('Judging', 'Image Quality', 'Sharp focus, good light, and clean. Not blurry and not too dark.'),
 ]
 
-body = ''.join([
-    card('THE MISSION / 01 / 08', 'Your First Photo Hunt',
-         para('Today you grab a real camera and go hunting, not for animals, but for great shots. The Mark Richardson Center is full of them: livestock and crops, big machines, rusted metal, rough wood, and an American flag.')
-         + para('Here is the twist: this is a <strong>contest</strong>. Everyone shoots the same 15 shots, and the best set wins a prize. You do not need to know every button. You just need to look closely and frame each shot with care. This is how every photographer starts: by learning to <strong>see</strong>.'),
-         floatimg(RAW + 'scavenger-mission-float.png', 'Patricia Guererro photographing an orange MRC tractor at golden hour outside the Mark Richardson Center')),
-    card('THE PRIZE / 02 / 08', 'Win a $20 Chick-fil-A Gift Card',
-         thumb(RAW + 'chick-fil-a-meal.png', 'A Chick-fil-A meal: chicken sandwich, waffle fries, and a drink')
-         + para('The student with the best set of 15 photos wins a <strong>$20 Chick-fil-A gift card</strong>. One winner, chosen by Mr. Silva.')
-         + para('Every shot counts, so give each one your best effort. A strong, complete set beats a few lucky photos.')
-         + notecard('THE PRIZE', '$20 Chick-fil-A Gift Card', 'The best full set of 15 photos takes it home. Make every shot count.')),
-    card('HOW IT WORKS / 03 / 08', 'The Same 15 Shots for Everyone',
-         para('You get a paper shot list with <strong>15 shots</strong>. Everyone shoots the same list, so it is a fair contest. Some are <strong>things to find</strong>, like an American flag or a tractor. Some are <strong>shot challenges</strong>, like leading lines or texture.')
-         + para('Take lots of photos as you go. Shoot each item more than once to get it right. Later you will pick your single best photo for each of the 15.')
-         + notecard('THE GOAL', 'Quality Over Speed', 'It is not a race. One well-framed photo beats five quick snapshots. Slow down and look before you press the shutter.'),
-         floatimg(RAW + 'scavenger-list-float.png', 'Julian reading the printed photo scavenger hunt shot list outside the MRC at golden hour, a Canon camera around his neck')),
-    card('YOUR CAMERA, MADE EASY / 04 / 08', 'Let the Camera Do the Work',
-         para('Set the dial to <strong>AUTO</strong>. In auto mode the camera handles the focus, the light, and the color for you. Your only job is <strong>what to point it at</strong> and <strong>how to frame it</strong>.')
-         + para('Hold the camera with both hands and tuck your elbows into your body to stay steady. Press the shutter button <strong>halfway</strong> to lock focus, wait for the beep or the green box, then press the rest of the way to take the shot.')
-         + para('Blurry photo? Hold still, press halfway again, and let it focus before you shoot.')),
-    card('COMPOSITION BASICS / 05 / 08', 'How to Frame a Great Shot',
-         para('Composition means how you arrange what is in your photo. These are the shot challenges on your list. Learn them here, then go find them out there.')
-         + scrollrow(comp)),
-    card('HOW YOU WIN / 06 / 08', 'What the Judges Look For',
-         para('Mr. Silva will score every set on four things. Keep them in mind for every single shot.')
-         + scrollrow(judges)),
-    card('RULES OF THE HUNT / 07 / 08', 'Stay Safe, Shoot Smart',
-         para('You will be outdoors around animals and heavy equipment. Safety comes first, every time.')
-         + para('<strong>Keep your distance</strong> from livestock and machinery. Never climb on or reach into equipment, and never enter a pen or a gated area. Watch your footing on uneven ground.')
-         + para('Stay with your group and your teacher. Respect the campus and the animals. Photograph the work, but do not touch tools or machines that are not yours.')),
-    card('TURN IT IN / 08 / 08', 'Cull Your Best and Submit',
-         para('Back in class, look through everything you shot. For each of the 15 prompts, pick your <strong>single best photo</strong>. Choosing your strongest shot and dropping the rest is called <strong>culling</strong>.')
-         + para('Submit all <strong>15 photos as JPG files</strong> to this assignment in Canvas, one for each prompt. Tip: name each file with its number, like <strong>01 American Flag</strong>, so they stay in order.')
-         + para('Download the printable shot list below, grab a camera, and go.')
-         + '<div style="margin-top:18px;">' + dlbutton(PDF_URL, 'Download the Shot List (PDF)') + '</div>'),
-])
+vocab_scav = [
+    tile('Vocabulary', 'Composition', 'How you arrange the things in your photo inside the frame.'),
+    tile('Vocabulary', 'Leading Lines', 'Lines in a scene, like a road or fence, that pull the eye toward your subject.'),
+    tile('Vocabulary', 'Rule of Thirds', 'Placing your subject off-center for a more natural, balanced shot.'),
+    tile('Vocabulary', 'Framing', 'Shooting through something, like a gate or branches, to frame your subject.'),
+    tile('Vocabulary', 'Fill the Frame', 'Getting close so your subject fills the photo, with no wasted empty space.'),
+    tile('Vocabulary', 'Culling', 'Choosing your single best photo and dropping the rest.'),
+]
 
-html = ('<!DOCTYPE html>\n<html lang="en">\n<head>\n'
-        '  <meta charset="UTF-8" />\n'
-        '  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n'
-        '  <title>Photo Scavenger Hunt | Digital Arts 1A | Mark Richardson Center</title>\n'
-        '  <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only.svg" />\n'
-        '  <link rel="apple-touch-icon" href="/logos/CS_Logo_Only.svg" />\n'
-        '  <style>:root { --course-accent: #c95201; }</style>\n'
-        '  <link rel="stylesheet" href="/css/silva-module.css" />\n'
-        '</head>\n<body>\n' + NAV + '\n'
-        '  <div class="silva-page">\n  <div id="silva-module-content">\n'
-        '  <div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;'
-        'background-color:#080808;background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,'
-        'rgba(40,20,2,0.94) 50%,rgba(8,8,8,0.97) 100%);background-position:center center;'
-        'background-repeat:no-repeat;background-attachment:fixed;overflow:hidden;">\n\n'
-        '    <div style="padding:28px 28px 40px;">\n      '
-        + banner('Digital Arts 1A &nbsp;&bull;&nbsp; Module', 'Photo Scavenger Hunt',
-                 'Fifteen shots. Best set wins the prize.')
-        + body +
-        '\n    </div>\n\n  </div>\n  </div>\n  </div>\n' + SCRIPTS + '\n</body>\n</html>\n')
+print('Photo Scavenger Hunt (2-page module):')
+page(
+    'scavenger-hunt-overview.html',
+    'Photo Scavenger Hunt | Digital Arts 1A | Mark Richardson Center',
+    'Photo Scavenger Hunt',
+    [('scavenger-hunt-step01-hunt.html', 'Step 1 &#8594;')],
+    'mrc-scavenger-hunt-overview-canvas.html',
+    'Digital Arts 1A &nbsp;&bull;&nbsp; Module', 'Photo Scavenger Hunt',
+    'Fifteen shots. Best set wins the prize.',
+    [
+        card('THE MISSION / 01 / 05', 'Your First Photo Hunt',
+             para('Today you grab a real camera and go hunting, not for animals, but for great shots. The Mark Richardson Center is full of them: livestock and crops, big machines, rusted metal, rough wood, and an American flag.')
+             + para('Here is the twist: this is a <strong>contest</strong>. Everyone shoots the same 15 shots, and the best set wins a prize. You do not need to know every button. You just need to look closely and frame each shot with care. This is how every photographer starts: by learning to <strong>see</strong>.'),
+             floatimg(RAW + 'scavenger-mission-float.png', 'Patricia Guererro photographing an orange MRC tractor at golden hour outside the Mark Richardson Center')),
+        card('THE PRIZE / 02 / 05', 'Win a $20 Chick-fil-A Gift Card',
+             thumb(RAW + 'chick-fil-a-meal.png', 'A Chick-fil-A meal: chicken sandwich, waffle fries, and a drink')
+             + para('The student with the best set of 15 photos wins a <strong>$20 Chick-fil-A gift card</strong>. One winner, chosen by Mr. Silva.')
+             + para('Every shot counts, so give each one your best effort. A strong, complete set beats a few lucky photos.')
+             + notecard('THE PRIZE', '$20 Chick-fil-A Gift Card', 'The best full set of 15 photos takes it home. Make every shot count.')),
+        card('HOW IT WORKS / 03 / 05', 'The Same 15 Shots for Everyone',
+             para('You get a paper shot list with <strong>15 shots</strong>. Everyone shoots the same list, so it is a fair contest. Some are <strong>things to find</strong>, like an American flag or a tractor. Some are <strong>shot challenges</strong>, like leading lines or texture.')
+             + para('Take lots of photos as you go. Shoot each item more than once to get it right. Later you will pick your single best photo for each of the 15.')
+             + notecard('THE GOAL', 'Quality Over Speed', 'It is not a race. One well-framed photo beats five quick snapshots. Slow down and look before you press the shutter.'),
+             floatimg(RAW + 'scavenger-list-float.png', 'Julian reading the printed photo scavenger hunt shot list outside the MRC at golden hour, a Canon camera around his neck')),
+        card('WORDS TO KNOW / 04 / 05', 'Photo Vocabulary',
+             para('Learn these six terms. You will use them all over the hunt.')
+             + scrollrow(vocab_scav)),
+        card('RESOURCES / 05 / 05', 'Get the List and Learn',
+             para('Download the shot list before you head out, and brush up on composition. Click to open in a new tab.')
+             + scrollrow([
+                 tile('Resource', 'The 15-Shot List', 'Everyone hunts the same 15 shots. Download the printable list below, print it, and check off each one as you go.'),
+                 tile('Resource', 'Composition Basics', 'A beginner guide to rule of thirds, leading lines, and framing. ' + ilink('https://tamron-americas.com/blog/photo-composition-beginners-guide/', 'Open &rarr;')),
+             ])
+             + '<div style="margin-top:18px;">' + dlbutton(PDF_URL, 'Download the Shot List (PDF)') + '</div>'),
+    ],
+)
 
-path = os.path.join(OUT, 'scavenger-hunt-overview.html')
-open(path, 'w').write(html)
-print('scavenger-hunt-overview.html  divs=%s  em=%d'
-      % ('OK' if html.count('<div') == html.count('</div>') else 'IMBALANCE',
-         html.count('—') + html.count('&mdash;')))
+page(
+    'scavenger-hunt-step01-hunt.html',
+    'Step 1: The Hunt | Photo Scavenger Hunt | Digital Arts 1A | Mark Richardson Center',
+    'Step 1',
+    [('scavenger-hunt-overview.html', '&#8592; Overview')],
+    'mrc-scavenger-hunt-step01-canvas.html',
+    'Photo Scavenger Hunt &nbsp;&bull;&nbsp; Step 1', 'Shoot the Hunt',
+    'Camera ready. Go find your shots.',
+    [
+        card('YOUR CAMERA, MADE EASY / 01 / 05', 'Let the Camera Do the Work',
+             para('Set the dial to <strong>AUTO</strong>. In auto mode the camera handles the focus, the light, and the color for you. Your only job is <strong>what to point it at</strong> and <strong>how to frame it</strong>.')
+             + para('Hold the camera with both hands and tuck your elbows into your body to stay steady. Press the shutter button <strong>halfway</strong> to lock focus, wait for the beep or the green box, then press the rest of the way to take the shot.')
+             + para('Blurry photo? Hold still, press halfway again, and let it focus before you shoot.')),
+        card('COMPOSITION BASICS / 02 / 05', 'How to Frame a Great Shot',
+             para('Composition means how you arrange what is in your photo. These are the shot challenges on your list. Learn them here, then go find them out there.')
+             + scrollrow(comp)),
+        card('HOW YOU WIN / 03 / 05', 'What the Judges Look For',
+             para('Mr. Silva will score every set on four things. Keep them in mind for every single shot.')
+             + scrollrow(judges)),
+        card('RULES OF THE HUNT / 04 / 05', 'Stay Safe, Shoot Smart',
+             para('You will be outdoors around animals and heavy equipment. Safety comes first, every time.')
+             + para('<strong>Keep your distance</strong> from livestock and machinery. Never climb on or reach into equipment, and never enter a pen or a gated area. Watch your footing on uneven ground.')
+             + para('Stay with your group and your teacher. Respect the campus and the animals. Photograph the work, but do not touch tools or machines that are not yours.')),
+        card('TURN IT IN / 05 / 05', 'Cull Your Best and Submit',
+             para('Back in class, look through everything you shot. For each of the 15 prompts, pick your <strong>single best photo</strong>. Choosing your strongest shot and dropping the rest is called <strong>culling</strong>.')
+             + para('Submit all <strong>15 photos as JPG files</strong> to this assignment in Canvas, one for each prompt. Tip: name each file with its number, like <strong>01 American Flag</strong>, so they stay in order.')),
+    ],
+)
