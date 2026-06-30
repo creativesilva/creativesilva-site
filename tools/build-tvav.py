@@ -111,7 +111,7 @@ def fname(text):
 def dlbutton(href, label):
     return ('<a href="%s" download="" style="background:rgba(255,255,255,0.92);color:#4a1e02;text-decoration:none;'
             'padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #c95201;">'
-            '<strong>%s</strong></a>' % (href, label))
+            '<strong>%s &#11015;</strong></a>' % (href, label))
 
 def banner(eyebrow, title, tagline):
     return ('<div style="background:linear-gradient(135deg,#000000 0%%,#4a1e02 40%%,#c95201 100%%);'

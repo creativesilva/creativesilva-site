@@ -143,7 +143,7 @@ def pendingbutton(label):
 def dlbutton(href, label):
     return ('<a href="%s" download style="background:rgba(255,255,255,0.92);color:#4a1e02;text-decoration:none;'
             'padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #c95201;">'
-            '<strong>&#11015; %s</strong></a>' % (href, label))
+            '<strong>%s &#11015;</strong></a>' % (href, label))
 
 def bpara(text):
     return ('<div style="font-size:13.5pt;line-height:1.72;color:rgba(255,255,255,0.86);margin-bottom:12px;">%s</div>'
