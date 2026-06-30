@@ -273,7 +273,7 @@
     // Bottom pager (centered) — includes its own COPY HTML at the right.
     var host = document.querySelector('.silva-page');
     var bottom = buildPager();
-    if (host && bottom) { host.appendChild(bottom); }
+    if (host && bottom) { bottom.classList.add('pg-bottom'); host.appendChild(bottom); }
 
     if (!nav || !navInner) { return; }
 
