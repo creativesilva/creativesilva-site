@@ -269,7 +269,8 @@ page(
         card('MOVIE IDEAS / 02 / 08', 'Three Ideas to Get You Started',
              para('Need a starting point? Here are three scary movie <strong>ideas</strong> set right here at the MRC. Use one as it is, or let it spark something of your own.')
              + scrollrow(concepts)
-             + para('<strong>Have a better idea? Pitch it.</strong> If you have your own creative concept, run it by <strong>Mr. Silva for approval</strong> first. As long as it stays PG-13 and school-appropriate, original ideas are encouraged.')),
+             + para('<strong>Have a better idea? Pitch it.</strong> If you have your own creative concept, run it by <strong>Mr. Silva for approval</strong> first. As long as it stays PG-13 and school-appropriate, original ideas are encouraged.')
+             + notecard('DO THIS FIRST', 'Start With Movies You Love', 'Pull up the posters from your <strong>favorite scary movies</strong>. Look at what they do to make you feel scared. You will dig into this more in Step 1, but let those posters spark your own ideas now.')),
         card('KEEP IT PG-13 / 03 / 08', 'Scary, Not Gross',
              para('Scary is great. <strong>Gross is not.</strong> Your movie must stay <strong>PG-13</strong> and school-appropriate. Build fear with <strong>mood, shadow, and suspense</strong>, not blood, gore, or weapons.')
              + para('Think about the scariest part of a movie, the part before anything even happens: the dark hallway, the sound behind you, the thing you cannot quite see. That is your goal.')
@@ -299,11 +300,11 @@ page(
 # PAGE 2 — STEP 01 PLAN
 # =========================================================================
 research = [
-    tile('Look At 01', 'Color Schemes', 'What colors set the mood? Notice the black, cold blue, deep red, or sickly green in horror posters.'),
-    tile('Look At 02', 'Font Choices', 'Are the titles sharp, rough, hand-drawn, or clean? How does the lettering make you feel?'),
-    tile('Look At 03', 'Layout', 'Where do the title, the faces, and the credits sit? How is the empty space used?'),
-    tile('Look At 04', 'Hero and Villain', 'How do they show the good guy and the threat? The villain often looms large or hides in shadow.'),
-    tile('Look At 05', 'Genre Trends', 'What do recent scary-movie posters have in common? Find ideas you can borrow.'),
+    tile('Look For 01', 'Colors', 'What colors keep coming back? Look across a few posters and find the pattern yourself.'),
+    tile('Look For 02', 'Fonts', 'Are the titles sharp, rough, hand-drawn, or clean? How does the lettering make you feel?'),
+    tile('Look For 03', 'Layout', 'Where do the title, the faces, and the credits sit? How is the empty space used?'),
+    tile('Look For 04', 'Hero and Villain', 'How do they show the good guy and the threat? Notice where each one sits and how big they are.'),
+    tile('Look For 05', 'Repeated Tricks', 'What shows up on poster after poster? Those repeats are what works in the genre. Find them.'),
 ]
 decide = [
     tile('Decide 01', 'Protagonist', 'Who is the hero, the star we follow? Cast a friend to play them.'),
@@ -312,7 +313,7 @@ decide = [
     tile('Decide 04', 'Tagline', 'Write one haunting line that hooks the viewer.'),
     tile('Decide 05', 'Subtitle', 'A short second line that adds detail or sets up the story.'),
     tile('Decide 06', 'Studio and Cast', 'Make up a production company name and pick two or three actor names for the credits.'),
-    tile('Decide 07', 'Location and Mood', 'Pick a moody spot and your colors: cold blues, deep shadows, low fog.'),
+    tile('Decide 07', 'Location and Mood', 'Pick your spot and the mood you want it to feel like. What colors fit your story?'),
 ]
 scout = [
     tile('Scout 01', 'Walk the Spot', 'Visit your location ahead of time with just a camera. No tripod and no flash, travel light.'),
@@ -333,10 +334,11 @@ page(
         card('PICK YOUR CONCEPT / 01 / 06', 'Choose or Pitch',
              para('Use one of the three ideas from the overview as a starting point, or pitch your own creative concept to <strong>Mr. Silva for approval</strong>. Then write your <strong>logline</strong>: one sentence that says who the story is about, where it happens, and what is wrong.')
              + notecard('KEEP IT PG-13', 'Get It Approved First', 'Your concept must be school-appropriate and approved by Mr. Silva before you shoot. Scary with mood and suspense, never with blood, gore, or weapons.')),
-        card('RESEARCH THE GENRE / 02 / 06', 'Study Real Scary Posters',
-             para('Before you design anything, study how real scary movie posters work. As a group, pull up posters from horror and thriller films and notice what they share. Spend real time on this, good research leads to good design.')
+        card('RESEARCH THE GENRE / 02 / 06', 'Study Scary Posters You Love',
+             para('Start with the scary movies <strong>you</strong> love. Pull up their posters and really look. Then look up a few more from horror and thriller films you have heard about.')
+             + para('Hunt for what <strong>keeps showing up</strong>. Good scary posters repeat the tricks that work, so the same colors, fonts, and ideas come back again and again. Your job is to spot those patterns yourself. Spend real time here, good research leads to good design.')
              + scrollrow(research)
-             + notecard('TEAM RESEARCH', 'Decide Together', 'Talk through what you find and agree as a group on a <strong>color scheme</strong>, a <strong>font style</strong>, and a <strong>layout direction</strong> before you build. Then each of you makes your own poster from that shared plan.')),
+             + notecard('SHARE WHAT YOU FIND', 'Borrow the Best, Make It Yours', 'Talk through what each of you noticed. You will see the same tricks come up a lot. Borrow the ones you like, then make your own choices. Your poster does not have to look like anyone else&rsquo;s.')),
         card('WRITE AND CAST / 03 / 06', 'Build Your Movie',
              para('Now decide the pieces of your movie. These choices give you the people, the words, and the look for your poster. Scroll through each one.')
              + scrollrow(decide)),
