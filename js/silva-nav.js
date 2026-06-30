@@ -28,6 +28,7 @@
     '/curriculum/mrc/about-mr-silva.html',
     '/curriculum/mrc/course-objectives.html',
     '/curriculum/mrc/athlete-poster-assignment.html',
+    '/curriculum/mrc/athlete-poster-step01.html',
     '/curriculum/mrc/pictographs-overview.html',
     '/curriculum/mrc/pictographs-step01-capture.html',
     '/curriculum/mrc/pictographs-step02-sketch.html',
