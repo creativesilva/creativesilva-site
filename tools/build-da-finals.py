@@ -469,7 +469,7 @@ PAGE = f'''<!DOCTYPE html>
   <nav class="silva-nav" aria-label="Final Exam navigation">
     <div class="silva-nav-inner">
       <div class="silva-breadcrumb">
-        <a href="/curriculum.html">Curriculum</a>
+        <a href="/curriculum.html">Curriculum Catalog</a>
         <span class="bc-sep">&rsaquo;</span>
         <a href="/curriculum.html" class="bc-hide-sm">Digital Arts</a>
         <span class="bc-sep bc-hide-sm">&rsaquo;</span>

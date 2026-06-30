@@ -1,369 +1,576 @@
 # AGENTS.md
 
-Agent instructions for any AI coding assistant (Codex, Cursor, Aider, etc.) working on `creativesilva-site`. Filename follows the OpenAI Codex convention.
+# PVHS Canvas Curriculum Builder for Codex Web
 
-This is the directive/rule-based companion to `CLAUDE.md`. Read both if you're a multi-tool agent; read only this if you're Codex.
+This repository powers Creative Silva curriculum pages and Canvas-ready assignment HTML. Codex must act as a careful curriculum production assistant, not just a code editor.
 
----
+Codex should create, revise, translate, validate, and link assignment pages using the established Silva module framework.
 
-## REPO IDENTITY
+## 1. Primary Mission
 
-```
-Name:       creativesilva-site
-Owner:      creativesilva (GitHub) / Chris Silva (human)
-Domain:     www.creativesilva.com (CNAME, GitHub Pages)
-Branch:     main (deploys on push, ~60s latency)
-Stack:      Static HTML/CSS/JS. No build step. No framework.
-Purpose:    Public portfolio + Canvas assignment page host for PVHS CTE classes
-```
+When the user asks for a new assignment, module page, design revision, translation, or migration:
 
----
+1. Read this file first.
+2. Read `CANVAS_BUILD_FRAMEWORK.md`.
+3. Inspect the closest existing finished page before editing.
+4. Create or update the correct HTML file.
+5. Keep the work Canvas-safe.
+6. Validate the page before finishing.
+7. Summarize exactly what changed.
 
-## DO
+Do not invent a new design system. Match the existing PVHS and Creative Silva curriculum framework.
 
-- [x] Read `CANVAS_BUILD_FRAMEWORK.md` before any Canvas page work
-- [x] Use absolute `raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/...` URLs for all image and file references in Canvas pages
-- [x] URL-encode spaces as `%20` in asset paths
-- [x] Write all student copy at 5th grade reading level (EN and ES)
-- [x] Include exactly 6 vocabulary cards in every Canvas page Overview section
-- [x] Use HTML entities for accented characters: `&aacute;` `&eacute;` `&ntilde;` etc.
-- [x] Use HTML entities for smart quotes: `&#x2018;` `&#x2019;` `&#x201C;` `&#x201D;`
-- [x] Add `class="silva-scroll"` to any vertical scroll container
-- [x] Pair every scroll container with a visible affordance: text hint + bottom-fade gradient
-- [x] Keep cards under 60 words; split if longer
-- [x] Add new Canvas pages to `curriculum.html` for every course they belong to
-- [x] Use HEREDOC for multi-line `git commit -m` messages
-- [x] Include `Co-Authored-By: <agent-name> <noreply@...>` trailer on commits
-- [x] Push to `main` immediately after commit when the user is waiting to paste HTML into Canvas
+## 2. Files Codex Must Treat as Source of Truth
 
-## DO NOT
+Always prefer repo files over assumptions.
 
-- [ ] Em dashes (`—`, `&mdash;`). Anywhere. Hard ban. Use `:`, `,`, or restructure.
-- [ ] Canvas-hosted URLs (`canvas.instructure.com/files/...`) in any page
-- [ ] Relative image paths in pages that get pasted into Canvas
-- [ ] Filenames containing "copy" (rename before committing)
-- [ ] `max-width` cap on hero/showcase images (let them scale)
-- [ ] `WidthType.PERCENTAGE` in docx-js (use DXA; percentages break in Google Docs)
-- [ ] `--amend` git commits unless explicitly asked
-- [ ] `--no-verify` to skip hooks unless explicitly asked
-- [ ] Force push to `main`
-- [ ] Commit without an explicit user request
-- [ ] Commit `.env`, credentials, or secrets
-- [ ] Use `git add -A` or `git add .`; stage files by name
-- [ ] Edit `silva-module.css` or `silva-nav.js` unless framework requires it
-- [ ] Skip the 6-vocab-words intake question
-- [ ] Try to surgically patch legacy Canvas HTML; rebuild from framework templates instead
+Required reference files:
 
----
+- `CANVAS_BUILD_FRAMEWORK.md` (see §3.5 for the LOCKED Angular Gradient Framework)
+- `curriculum/shared/da-finals-quiz-prep.html` (master reference for the Angular Gradient / Finals style)
+- `tools/build-da-finals.py` (generator that emits the master page; encodes the locked card/button/chip rules)
+- `curriculum/shared/jimenez-step05-mockups.html`
+- `curriculum/shared/jimenez-spring-final.html`
+- `curriculum.html`
+- `css/silva-module.css`
+- `js/silva-nav.js`
+- Existing assignment pages in `curriculum/shared/`
 
-## FILE LAYOUT
+If files disagree, follow this order:
 
-```
-.
-├── CANVAS_BUILD_FRAMEWORK.md   ← single source of truth for assignment page builds
-├── CLAUDE.md                   ← project memory (narrative, for Claude)
-├── AGENTS.md                   ← this file (directive, for Codex)
-├── CNAME                       ← www.creativesilva.com
-├── index.html                  ← public landing
-├── curriculum.html             ← index of every assignment, links to pages
-├── assets/                     ← all images, AI/PSD files, logos. Public via raw.github URL
-│   ├── PV LOGO NEW.png        ← canonical PVHS logo (URL-encode space as %20)
-│   ├── Jimenez_Mockups.ai     ← example downloadable template
-│   └── ...
-├── css/
-│   └── silva-module.css        ← all .silva-* classes used by Canvas pages
-├── js/
-│   └── silva-nav.js            ← site nav behavior, loaded by every Canvas page
-├── curriculum/
-│   └── shared/                 ← cross-course assignment pages (most live here)
-│       ├── jimenez-step05-mockups.html  ← canonical reference build
-│       └── jimenez-spring-final.html
-└── (legacy course-specific dirs: digarts1/, photo1/, etc.)
+1. Current user request
+2. This `AGENTS.md`
+3. `CANVAS_BUILD_FRAMEWORK.md`
+4. Closest finished assignment example
+5. Older legacy pages
+
+## 3. Critical Non-Negotiable Rules
+
+These rules apply to every build and edit.
+
+- Do not use em dashes. Never use `—` or `&mdash;`.
+- Use student-facing language at about 5th grade reading level.
+- Keep sentences short and direct.
+- Use active voice.
+- Use "you" and "your" for student directions.
+- Keep each card under about 60 words.
+- Split long content into smaller cards.
+- Every Overview section must include exactly 6 vocabulary words.
+- Vocabulary definitions must be kid-friendly and under 15 words.
+- Long step sections must use a visible scroll box.
+- Step scroll boxes must include a scroll hint and bottom fade.
+- All Canvas assets must use raw GitHub URLs.
+- Do not use Canvas-hosted file URLs.
+- Do not use relative image or download paths inside Canvas copy content.
+- Do not invent asset filenames or image URLs.
+- Do not rename user assets unless asked.
+- Do not remove the copy/download script.
+- Do not remove `<script src="/js/silva-nav.js"></script>`.
+- Do not remove the PVHS logo.
+- Do not push directly to `main` unless the user explicitly asks.
+- Prefer a branch or pull request workflow when available.
+
+## 4. Canonical Asset Rules
+
+All images and downloadable files should live in:
+
+```text
+assets/
 ```
 
----
+All Canvas-facing image and download URLs must use this pattern:
 
-## CANONICAL URLs
-
-```
-Site:              https://www.creativesilva.com
-GitHub:            https://github.com/creativesilva/creativesilva-site
-Asset base:        https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/
-PVHS Logo:         https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV%20LOGO%20NEW.png
-Live page format:  https://www.creativesilva.com/curriculum/shared/{slug}.html
+```text
+https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/{URL_ENCODED_FILENAME}
 ```
 
----
+The PVHS logo must use this exact URL:
 
-## CANVAS BUILD: MINIMUM VIABLE STEPS
-
-```
-1. Read CANVAS_BUILD_FRAMEWORK.md
-2. Ask intake (§1):
-   - Assignment title + project context
-   - Course(s) it belongs to (da1b, da2b, photo1, photo2, yearbook)
-   - Style variant (Stock | Custom)
-   - If Custom: 3 brand hex codes
-   - Bilingual? (EN-only | EN+ES)
-   - Hero image filename in /assets/
-   - Step card count
-   - Downloadable project file? (filename if yes)
-   - Submission format
-   - Prev/next step references
-   - [REQUIRED] 6 vocabulary words with kid-friendly definitions
-3. Create /curriculum/shared/{slug}.html using framework §4 scaffold + §5 templates
-4. Add entry to curriculum.html for each course in answer 2
-5. Run framework §8 pre-delivery checklist (15 items)
-6. Commit and push to main
-7. Confirm to user: https://www.creativesilva.com/curriculum/shared/{slug}.html
+```text
+https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV%20LOGO%20NEW.png
 ```
 
----
+Filename rules:
 
-## REQUIRED PAGE STRUCTURE (Canvas Assignment)
+- Spaces are allowed in the repo, but must become `%20` in URLs.
+- Do not use filenames that contain `copy`.
+- Prefer clear filenames that describe the assignment or asset.
+- If the asset does not exist in the repo, stop and report it as missing.
+- If the user gives a Canvas, Google Drive, Dropbox, or other external asset link, ask for the file to be added to `assets/` unless the user explicitly says otherwise.
 
-Every Canvas assignment page MUST contain, in this order inside the `#top` div:
+## 5. Default Build Locations
 
-```
-A. Title Card (wide ~16:6, single row: logo | breadcrumb+title centered | language toggle)
-B. Overview Card (float-right hero image + 3 body paragraphs + 6-card vocabulary grid)
-C. Project File Download Card (only if downloadable file exists)
-D. Tips / Resources Card (only if relevant)
-E. How to Complete (orange section, step cards inside scroll box with text hint + gradient fade)
-F. What to Submit Card
+New Canvas assignment pages normally go here:
 
-[if bilingual, repeat A-F in #espanol div with Spanish translation]
-```
-
-Page MUST end with:
-
-```html
-<script>
-  function silvaCopyHTML() { /* see framework §4 */ }
-  function silvaDownloadHTML() { /* see framework §4 */ }
-</script>
-<script src="/js/silva-nav.js"></script>
+```text
+curriculum/shared/{slug}.html
 ```
 
----
+Published pages normally need an entry in:
 
-## STYLE TOKENS
-
-### PVHS Stock variant
-```
-page-bg:        #ffffff
-header-grad:    linear-gradient(135deg,#003e3e 0%,#007474 50%,#1f7a5a 100%)
-accent-primary: #007474
-accent-soft:    #c8e6e0
+```text
+curriculum.html
 ```
 
-### Custom Client variant (Jimenez example)
-```
-page-bg:        #080808
-header-grad:    linear-gradient(135deg,#000000 0%,#1c1c1c 45%,#0b2948 100%)
-accent-primary: #5f8fbf
-accent-label:   #9ecbff
-orange-steps:   #FF6B1A
-text-body:      rgba(255,255,255,0.88)
-card-bg-sub:    rgba(0,0,0,0.28)
-```
+Course slugs:
 
----
-
-## VOCABULARY GRID (REQUIRED IN EVERY OVERVIEW)
-
-Exactly 6 words. Responsive grid via CSS Grid `repeat(auto-fit, minmax(180px, 1fr))`. 3 across desktop, 2 tablet, 1 phone. No media queries.
-
-```html
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
-  <!-- repeat 6 times -->
-  <div style="background:rgba(0,0,0,0.32);border:1px solid rgba(95,143,191,0.28);border-left:3px solid #5f8fbf;border-radius:12px;padding:14px 16px;">
-    <div style="color:#9ecbff;font-size:13pt;margin-bottom:4px;"><strong>{WORD}</strong></div>
-    <div style="color:rgba(255,255,255,0.88);font-size:11pt;line-height:1.5;">{DEF_UNDER_15_WORDS}</div>
-  </div>
-</div>
+```text
+Digital Arts 1B: da1b
+Digital Arts 2B: da2b
+Photo 1: photo1
+Photo 2: photo2
+Yearbook: yearbook
 ```
 
-Definitions: under 15 words, 5th grade language, no jargon nested inside.
+Live page pattern:
 
----
+```text
+https://www.creativesilva.com/curriculum/shared/{slug}.html
+```
 
-## SCROLL PATTERNS
+## 6. Codex Task Modes
 
-### Vertical (instructions, long lists)
+Use the correct mode based on the user request.
+
+### Mode A: New Assignment Build
+
+Use when the user asks for a new assignment or module.
+
+Required minimum intake:
+
+- Assignment title
+- Course or courses
+- Style variant: PVHS Stock or Custom Client
+- Bilingual choice: English only or English plus Spanish
+- Hero image filename or confirmation that no hero image is ready yet
+- Step count or rough task flow
+- Submission format
+- Any downloadable project file
+
+If information is missing:
+
+- Ask one short batched clarification question.
+- If only non-critical details are missing, use safe defaults and list assumptions.
+- Never invent image filenames, download filenames, or client brand colors.
+
+Safe defaults when user does not specify:
+
+- Bilingual: English plus Spanish
+- Style: PVHS Stock
+- Step count: 6 to 8 concise steps
+- Reading level: 5th grade
+- Output file: `curriculum/shared/{slug}.html`
+- Add to `curriculum.html`: yes, when course is known
+- Vocabulary: choose 6 terms from the actual assignment content
+
+### Mode B: Design or Layout Revision
+
+Use when the user asks to adjust an existing page design.
+
+Workflow:
+
+1. Find and read the existing page.
+2. Identify the exact section to modify.
+3. Preserve all required scripts, anchors, image paths, and Canvas copy root.
+4. Make the smallest safe edit that solves the request.
+5. Re-run the validation checklist.
+6. Summarize before and after.
+
+Never redesign the whole page unless the user asks for a full rebuild.
+
+### Mode C: English and Spanish Copy Revision
+
+Use when the user asks for better wording, translation, or simpler student directions.
+
+Rules:
+
+- Preserve structure unless the user asks for layout changes.
+- Use short English sentences.
+- Use `tú` voice in Spanish.
+- Use neutral Mexican-American classroom Spanish.
+- Use HTML entities for Spanish punctuation and accents.
+- Do not leave English text inside the Spanish section.
+- Do not translate filenames, app names, menu labels, or required submission file types unless helpful.
+
+Spanish entity examples:
+
+```text
+&aacute; &eacute; &iacute; &oacute; &uacute; &ntilde; &iexcl; &iquest;
+```
+
+### Mode D: Legacy Canvas Migration
+
+Use when the user pastes old Canvas HTML or asks to modernize an old assignment.
+
+Do not patch the old layout. Rebuild fresh using the framework.
+
+Migration workflow:
+
+1. Extract title, course, project, steps, assets, downloads, and submission requirements.
+2. Replace old layout with the current Silva module framework.
+3. Replace Canvas-hosted assets with raw GitHub asset URLs.
+4. Add the title card, overview, 6 vocabulary cards, scroll-boxed steps, and submit card.
+5. Add Spanish if requested or if the page is intended to be bilingual.
+6. Keep the copy/download buttons and nav script.
+7. Validate before finishing.
+
+### Mode E: Curriculum Index Update
+
+Use when adding a page to `curriculum.html`.
+
+Add the new page to each requested course array using this shape:
+
+```javascript
+{ course: "{course-slug}",
+  name: "{Step NN}: {Short Title}",
+  pages: 1,
+  status: "published",
+  url: "curriculum/shared/{slug}.html"
+},
+```
+
+Make sure:
+
+- The course slug is correct.
+- The title is short enough for the curriculum page.
+- The URL matches the created file.
+- The page is not duplicated in the same course list.
+
+## 7. Required Page Structure
+
+Every assignment page must preserve this outer pattern:
+
+```text
+Full HTML document
+Site nav
+silva-page wrapper
+silva-module-content wrapper
+#top Canvas copy root
+English section
+Spanish section, if bilingual
+copy/download script
+/js/silva-nav.js script
+```
+
+Inside each language section, use this order:
+
+1. Title Card
+2. Overview Card with hero image and 6 vocabulary cards
+3. Project File Download Card, only if needed
+4. Tips or Resources Card, only if needed
+5. How to Complete Card with scroll-boxed step cards
+6. What to Submit Card
+
+## 8. Title Card Requirements
+
+The title card must include:
+
+- PVHS logo on the left
+- Centered breadcrumb
+- Assignment title
+- Language toggle if bilingual
+- Compact wide layout
+- No wasted vertical space
+
+For bilingual pages:
+
+- English toggle links to `#espanol`
+- Spanish toggle links to `#top`
+- English label: `Clic para Espa&ntilde;ol`
+- Spanish label: `Back to English`
+
+## 9. Overview Requirements
+
+Every Overview card must include:
+
+- A float-right hero image when an image is available
+- Hero image width near 52 percent
+- No max-width cap on the hero image
+- `min-width:220px`
+- Border radius and shadow
+- Parent container with `overflow:hidden`
+- Clear float before vocabulary grid
+- Exactly 6 vocabulary cards
+
+If the hero image is missing, do not invent one. Build the page with a clear placeholder note in the Codex summary, not in the student-facing HTML, unless the user asks for a placeholder.
+
+## 10. Step Section Requirements
+
+Step sections must use the orange treatment.
+
+Required scroll hint:
+
 ```html
 <div style="font-size:11pt;color:#ffb27c;margin-bottom:8px;opacity:0.85;">&#8595; Scroll inside the box to see all {N} steps</div>
-<div class="silva-scroll" style="max-height:480px;overflow-y:auto;padding:12px 14px 18px;border:1px solid rgba(255,107,26,0.18);border-radius:14px;background:linear-gradient(to bottom,rgba(0,0,0,0.18) 0%,rgba(0,0,0,0.18) 88%,rgba(255,107,26,0.18) 100%);">
-  <!-- cards -->
-</div>
 ```
 
-### Horizontal (galleries, comparisons)
-```html
-<div style="overflow-x:auto;display:flex;gap:14px;padding:6px 2px 14px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;border:1px solid rgba(95,143,191,0.18);border-radius:14px;background:rgba(0,0,0,0.18);">
-  <div style="flex:0 0 260px;scroll-snap-align:start;..."><!-- card --></div>
-</div>
-<div style="font-size:11pt;color:#9ecbff;opacity:0.75;text-align:center;margin-top:6px;">&#8592; Swipe or scroll to see more &#8594;</div>
+Required scroll container traits:
+
+- `class="silva-scroll"`
+- `max-height:480px`
+- `overflow-y:auto`
+- visible border
+- bottom-fade gradient
+- step cards inside the scroll box
+
+Step card rules:
+
+- Use `01.`, `02.`, `03.` numbering.
+- Keep body text under about 60 words.
+- Use strong tags for file names, menu commands, and key actions.
+- Last card must use `margin-bottom:0`.
+- Do not use line breaks to space cards.
+
+## 11. Writing Rules
+
+English:
+
+- Use direct student voice.
+- Use plain words.
+- Avoid teacher voice.
+- Say "You will..." instead of "Students will be expected to..."
+- Start with the action.
+- Avoid filler phrases.
+- Avoid long paragraphs.
+
+Spanish:
+
+- Use `tú`, not `usted`.
+- Use clear classroom Spanish.
+- Use common verbs: abrir, guardar, usar, hacer, poner, ver, escoger.
+- Keep sentences short.
+- Use HTML entities for accents.
+- Avoid Castilian or Argentine regional forms.
+- Do not leave English copy in Spanish sections.
+
+## 12. Style Variants
+
+### PVHS Stock
+
+Use for general school assignments.
+
+Preferred tokens:
+
+```text
+page background: #ffffff
+page text: #0e2a30
+header gradient: #003e3e to #007474 to #1f7a5a
+accent: #007474
+soft accent: #c8e6e0
+card background: #f5fbfa
+card border: #cfe6df
 ```
 
-### Decision rule
-- Text content read top-to-bottom → vertical
-- Visual comparison side-by-side → horizontal
-- Exactly 6 items → no scroll, use the vocabulary grid pattern
-- 4+ images for comparison → horizontal
-- Video embed → no scroll, stack
+### Custom Client
 
----
+Use for client projects, mockups, brand work, or when the assignment has a special brand identity.
 
-## WRITING RULES (5TH GRADE, EN + ES)
+Default custom pattern:
 
-### English
-- Max 15 words per sentence (hard cap 20)
-- Active voice always
-- "Use" not "utilize". "Help" not "facilitate". "Show" not "demonstrate".
-- "You" / "your", never "the student"
-- One idea per sentence
-- Lead with the verb. "Click Save." not "It is important that you click Save."
-- No filler: cut "It is important to note that", "Please be sure to", "As mentioned previously"
+```text
+page background: #080808
+page text: #ffffff
+header gradient: #000000 to #1c1c1c to brand dark tone
+client accent: user-provided accent
+label accent: lighter accent
+steps accent: #FF6B1A
+```
 
-### Spanish (Mexican Spanish, Santa Maria community)
-- Use `tú`, never `usted`
-- Present indicative over subjunctive
-- Common verbs only: hacer, ver, poner, abrir, guardar, escoger, encontrar, usar
-- Avoid passive `se` constructions
-- HTML entities for accents and `ñ`
+If brand colors are missing, ask the user for them. Do not invent custom brand colors unless asked to make a reasonable first pass.
 
-### Anti-bloat sniff test (run before commit)
-1. Can I cut this sentence and still get the point? → Cut.
-2. Card over 60 words? → Split.
-3. Explaining why before saying what? → Flip.
-4. Word a 5th grader wouldn't say? → Swap.
-5. Sentence opener "In this step..."? → Just start with the verb.
+## 13. Validation Checklist
 
----
+Before finishing, Codex must check the changed files.
 
-## GIT WORKFLOW
+Content checks:
+
+- Page title matches assignment.
+- Breadcrumb matches project context.
+- Copy is student-facing.
+- English is simple and direct.
+- Spanish uses `tú` and has no English leftovers.
+- Overview has exactly 6 vocabulary cards.
+- Each vocabulary definition is under 15 words.
+- Step cards are concise.
+- Submission instructions are clear.
+
+HTML checks:
+
+- PVHS logo URL is canonical.
+- Asset URLs use raw GitHub.
+- No Canvas-hosted asset URLs.
+- No broken relative asset URLs inside `#top`.
+- Hero image uses float-right pattern when present.
+- Float parent uses `overflow:hidden`.
+- Step section uses scroll hint.
+- Scroll container uses `class="silva-scroll"`.
+- Last step card has `margin-bottom:0`.
+- Copy/download script exists.
+- `/js/silva-nav.js` script exists.
+
+Search checks:
+
+Run these checks or equivalent manual searches:
 
 ```bash
-# ALWAYS stage by filename, never -A or .
-cd /Users/riva/RIVA_CODE/creativesilva-site
-git add curriculum/shared/{slug}.html assets/{new-assets} curriculum.html
-
-# ALWAYS use HEREDOC for commits
-git commit -m "$(cat <<'EOF'
-Short subject under 70 chars (no em dashes)
-
-Optional body explaining the why.
-
-Co-Authored-By: <agent> <noreply@example.com>
-EOF
-)"
-
-git push origin main
+grep -n "—\|&mdash;" curriculum/shared/{slug}.html
+grep -n "canvas.instructure.com\|smjuhsd.instructure.com" curriculum/shared/{slug}.html
+grep -n "src=\"assets/\|href=\"assets/\|src=\"/" curriculum/shared/{slug}.html
+grep -n "silvaCopyHTML\|silvaDownloadHTML\|silva-nav.js" curriculum/shared/{slug}.html
 ```
 
-### Commit message rules
-- Subject line under 70 chars
-- No em dashes (yes, even in commit messages)
-- Body explains "why", not "what"
-- Always include Co-Authored-By trailer
-- Never `--amend` unless asked
-- Never `--no-verify` unless asked
-- Never force push
+Expected result:
 
----
+- No em dash matches.
+- No Canvas-hosted asset URL matches.
+- No unsafe relative asset URL inside `#top`.
+- Required scripts are present.
 
-## LEGACY CODE MIGRATION
+If repo scripts exist, run them too. Do not make up passing test results. If tests were not run, say so.
 
-When user pastes old Canvas HTML and asks for upgrade:
+## 14. Commit and Pull Request Rules
 
-```
-1. Parse: extract project/step/title/overview/steps/images/downloads/submission
-2. Run intake §1 — ALWAYS ask for 6 vocab words (legacy code never has them)
-3. Map old → new sections per framework §14 mapping table
-4. Migrate assets: move Canvas-hosted images to /assets/, rename "copy" files
-5. Build fresh page using framework §4 scaffold + §5 templates
-   (DO NOT try to edit old HTML in place)
-6. Add missing: title card, vocab grid, scroll affordances, ES translation, script block
-7. Run §8 checklist
-8. Commit: "Migrate {Project} {Step} from legacy Canvas HTML to framework"
-```
+Prefer pull requests for Codex Web work.
 
-Legacy red flags = signal to rebuild not patch:
-- `<table>` for layout
-- Canvas-hosted image URLs
-- Em dashes throughout
-- Teacher-voice copy
-- No vocabulary section
-- Hard-coded pixel widths
-- Inline `<font>` or non-Arial font-family
+Do:
 
----
+- Create or update the page file.
+- Update `curriculum.html` when requested or required.
+- Include new assets only when they exist in the repo or were provided by the user.
+- Use a clear commit message.
+- Summarize changed files.
 
-## PRE-DELIVERY CHECKLIST (RUN BEFORE COMMIT)
+Do not:
 
-Reproduced from framework §8 for quick reference. All must be true.
+- Push straight to `main` unless asked.
+- Commit unrelated files.
+- Reformat the whole repo.
+- Rewrite unrelated assignments.
+- Claim the page was published unless the commit or PR was actually created.
 
-```
-□ Page <title> matches assignment
-□ --course-accent matches chosen variant
-□ PVHS logo from canonical raw URL
-□ Hero image: 52% width, no max-width cap, box-shadow present
-□ Float-right parent has overflow:hidden
-□ Breadcrumb matches project context
-□ Zero em dashes (grep for — and &mdash;)
-□ All asset URLs use raw.githubusercontent.com
-□ Smart quote entities in long-form copy
-□ Overview contains exactly 6 vocab cards
-□ Vocab defs under 15 words, 5th grade level
-□ All body/instruction copy at 5th grade level
-□ All cards under 60 words
-□ Scroll containers: text hint above + gradient fade + silva-scroll class
-□ Horizontal scrolls: swipe hint below
-□ Last step card uses margin-bottom:0
-□ silvaCopyHTML() / silvaDownloadHTML() script block present
-□ <script src="/js/silva-nav.js"></script> present
-□ Download filename matches page slug
-□ If bilingual: ES block present, anchors work both ways, Spanish at 5th grade level
-□ Entry added to curriculum.html for each target course
+Good commit message pattern:
+
+```text
+Add {Assignment Title} for {Course or Project}
 ```
 
----
+Good PR summary pattern:
 
-## REFERENCE BUILDS
+```text
+Summary:
+- Added `curriculum/shared/{slug}.html`
+- Added bilingual Canvas-ready assignment content
+- Added or updated curriculum link for {course}
+- Verified asset URLs use raw GitHub paths
 
-| File | Purpose |
-|------|---------|
-| `curriculum/shared/jimenez-step05-mockups.html` | Canonical Custom Client build. Diff against this when in doubt. |
-| `curriculum/shared/jimenez-spring-final.html` | Earlier build (legacy pattern reference) |
-| `css/silva-module.css` | All `.silva-*` classes |
-| `js/silva-nav.js` | Site nav behavior |
+Validation:
+- Checked for em dashes
+- Checked for Canvas-hosted asset links
+- Checked copy/download scripts
+- Checked Spanish section, if bilingual
+```
 
----
+## 15. Standard User Prompt Template
 
-## QUICK ANSWERS
+When the user wants a new assignment, they can paste this:
 
-**Q: Where do new Canvas pages go?**
-A: `/curriculum/shared/{kebab-case-slug}.html`
+```text
+Build a new Canvas assignment page.
 
-**Q: How do I get an asset into a Canvas page?**
-A: Drop it in `/assets/`, commit it, reference via `https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/{FILENAME}` with spaces URL-encoded as `%20`.
+Course:
+Assignment title:
+Project or unit:
+Style: PVHS Stock or Custom Client
+Bilingual: English plus Spanish or English only
+Hero image filename in assets:
+Download file in assets, if any:
+Submission format:
+Rough steps:
+Special notes:
 
-**Q: When does a page go live?**
-A: ~60s after `git push origin main`. URL is `https://www.creativesilva.com/{path}`.
+Follow AGENTS.md and CANVAS_BUILD_FRAMEWORK.md.
+Create the page in curriculum/shared/.
+Update curriculum.html.
+Use raw GitHub asset URLs.
+Keep the writing at 5th grade level.
+Validate before finishing.
+```
 
-**Q: Should I use Markdown or HTML for Canvas pages?**
-A: HTML only. Canvas pastes raw HTML, not Markdown.
+## 16. Standard Design Revision Prompt Template
 
-**Q: Can I add a new CSS class?**
-A: Avoid it. Canvas's RCE strips most classes. Use inline `style="..."`. The exception is `silva-scroll` and the site nav classes, which already exist.
+When the user wants an existing page edited, they can paste this:
 
-**Q: User asked to ship right now. What's the fastest path?**
-A: Build, push, paste live URL. No extra commentary. Confirm the Copy Canvas HTML button works.
+```text
+Revise this existing Canvas assignment page:
 
-**Q: User says "take creative control." What does that mean?**
-A: Make aesthetic decisions yourself. Respect the framework structure. Keep it clean, balanced, minimal. Show the result; don't ask for color-by-color approval.
+File:
+Change needed:
+Keep:
+Do not change:
 
----
+Follow AGENTS.md and CANVAS_BUILD_FRAMEWORK.md.
+Make the smallest safe edit.
+Validate before finishing.
+Summarize the changed files.
+```
 
-**END.** For deeper context see `CANVAS_BUILD_FRAMEWORK.md` (canonical) and `CLAUDE.md` (narrative).
+## 17. Standard Translation Prompt Template
+
+When the user wants bilingual cleanup, they can paste this:
+
+```text
+Revise the English and Spanish copy on this page:
+
+File:
+Goal:
+Reading level: 5th grade
+Spanish voice: tú, neutral Mexican-American classroom Spanish
+
+Keep the layout.
+Do not change asset paths.
+Validate before finishing.
+```
+
+## 18. When Codex Is Unsure
+
+If unsure, Codex should not guess silently.
+
+Allowed safe assumptions:
+
+- Use PVHS Stock style for general school content.
+- Use English plus Spanish if the user mentions bilingual or Spanish.
+- Use the closest existing page as the structural model.
+- Create a clear slug from the assignment title.
+- Choose 6 vocabulary words from the step content.
+
+Never assume:
+
+- Missing asset filenames
+- Missing download files
+- Brand colors for a custom client
+- The correct course when none is stated
+- That a Canvas-hosted asset is acceptable
+- That a page is published before the PR or commit exists
+
+## 19. Final Response Requirements for Codex
+
+At the end of each Codex task, respond with:
+
+```text
+Changed files:
+- ...
+
+What I built:
+- ...
+
+Validation:
+- ...
+
+Assumptions or missing items:
+- ...
+
+Next recommended step:
+- ...
+```
+
+Keep the final response short, concrete, and honest.
