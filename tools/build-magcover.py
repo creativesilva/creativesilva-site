@@ -145,6 +145,28 @@ def dlbutton(href, label):
             'padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #c95201;">'
             '<strong>&#11015; %s</strong></a>' % (href, label))
 
+def bpara(text):
+    return ('<div style="font-size:13.5pt;line-height:1.72;color:rgba(255,255,255,0.86);margin-bottom:12px;">%s</div>'
+            % text)
+
+def scrollbox(headline, accolade, body):
+    # vertical scrolling brief, big headline on top for hierarchy (not cards)
+    return ('<div style="font-size:30pt;color:#ffffff;line-height:1.05;margin-bottom:4px;"><strong>%s</strong></div>'
+            '<div style="font-size:13pt;color:#eda268;text-transform:uppercase;letter-spacing:0.14em;margin-bottom:14px;">'
+            '<strong>%s</strong></div>'
+            '<div class="silva-scroll" style="max-height:300px;overflow-y:auto;border:1px solid rgba(201,82,1,0.30);'
+            'background:rgba(0,0,0,0.22);padding:18px 20px;">%s</div>'
+            '<div style="text-align:center;font-size:8pt;color:rgba(201,82,1,0.65);letter-spacing:0.22em;'
+            'text-transform:uppercase;margin-top:10px;font-family:Arial,sans-serif;"><strong>&#8597; scroll the brief &#8597;</strong></div>'
+            % (headline, accolade, body))
+
+TEDDY_BRIEF = (
+    bpara('<strong>Teddy</strong> is the security officer at the Mark Richardson CTE Center and Ag Farm, but her real focus is people. She practices &ldquo;relational security&rdquo;: she learns every student&rsquo;s name, greets them by it, and makes the whole campus feel seen and safe. Students know her not just as an officer, but as a trusted mentor.')
+    + bpara('She is also the <strong>campus photographer</strong>. Her photos of student grit and determination have appeared in school assemblies, school board reports, and local media, building real pride in the MRC.')
+    + bpara('Teddy goes far beyond her job description. She checks on the animals daily, feeds livestock on weekends, helps the Robotics team prepare late into the night, waters the campus flowers, and pulls weeds, all because she cares. She even became <strong>forklift certified</strong> to keep students safe in an active CTE environment.')
+    + bpara('Principal Dr. Paul Robinson calls her vigilant and dedicated, and bus drivers, teachers, and students all trust her. As her nomination puts it, Teddy proves that <strong>kindness and heart</strong> are the most powerful tools for building a strong school community.')
+)
+
 def banner(eyebrow, title, tagline):
     return ('<div style="background:linear-gradient(135deg,#000000 0%%,#4a1e02 40%%,#c95201 100%%);'
             'padding:20px 28px 22px;margin:-28px -28px 24px -28px;border-bottom:3px solid #c95201;">'
@@ -248,10 +270,10 @@ vocab = [
 ]
 required = [
     tile('Must-Have 01', 'Masthead', 'The real magazine logo, big and bold at the top.'),
-    tile('Must-Have 02', 'Hero Image', 'One strong photo of your subject that bleeds to the edges.'),
-    tile('Must-Have 03', 'Main Title', 'A bold headline cover line, pulled from your interview.'),
+    tile('Must-Have 02', 'Hero Image', 'One strong photo of <strong>Teddy</strong> that bleeds to the edges.'),
+    tile('Must-Have 03', 'Main Title', 'A bold headline about Teddy and her honor, the biggest text on the cover.'),
     tile('Must-Have 04', 'Subtitle', 'A short line under the title that adds detail. This is the deck.'),
-    tile('Must-Have 05', 'Breakout Points', 'At least three cover lines that tease other parts of the story.'),
+    tile('Must-Have 05', 'Breakout Points', 'At least three smaller cover lines that tease other MRC stories.'),
     tile('Must-Have 06', 'Two Breakout Boxes', 'Two small boxes, each with its own photo and a few words, for extra stories.'),
 ]
 mission = [
@@ -260,11 +282,11 @@ mission = [
     tile('STEP 03', 'Design', 'Build the cover in Photoshop with the masthead, your words, and two breakout boxes.'),
     tile('STEP 04', 'Reflect', 'Answer four questions about your cover and the choices you made.'),
 ]
-interview = [
-    tile('Ask 01', 'What do you do here?', 'Get their role and their everyday work in their own words.'),
-    tile('Ask 02', 'Why does it matter?', 'Find the bigger story. This often becomes your main title.'),
-    tile('Ask 03', 'What are you proud of?', 'A strong quote or fact, perfect for a breakout point.'),
-    tile('Ask 04', 'What is next for you?', 'Where are they headed? Great for a teaser cover line.'),
+brief_pull = [
+    tile('Pull 01', 'Your Main Title', 'The biggest headline. Make it about Teddy and her honor, like &ldquo;The Heartbeat of MRC.&rdquo;'),
+    tile('Pull 02', 'Your Subtitle', 'One short line under the title that adds a detail from her story, like relational security or campus photographer.'),
+    tile('Pull 03', 'A Strong Quote or Fact', 'Something specific from the brief, like forklift certified or feeds livestock on weekends. Great for a breakout point.'),
+    tile('Pull 04', 'Other Campus Stories', 'Two or three other things happening on campus to tease in your smaller boxes: the Ag Farm, Robotics, student projects.'),
 ]
 scout = [
     tile('Scout 01', 'Walk the Spot', 'Visit your location ahead of time with just a camera. No tripod and no flash, travel light.'),
@@ -285,16 +307,16 @@ page(
         card('WHAT IS A MAGAZINE COVER / 01 / 08', 'One Image, One Story',
              para('A magazine cover is the front page that makes you want to pick it up. It uses <strong>one strong photo</strong> and a few <strong>bold words</strong> to sell the whole magazine in a single glance.')
              + para('Look at a real cover: a big name at the top (the <strong>masthead</strong>), one powerful photo behind it, and short headlines that tease the stories inside.')
-             + para('For this project you will design a real-looking <strong>agriculture magazine cover</strong> that puts the Mark Richardson Center in the spotlight.')),
+             + para('For this project you will design a real-looking <strong>agriculture magazine cover</strong> featuring <strong>Teddy</strong>, the MRC security officer and campus photographer being honored as a <strong>Classified Employee of the Year</strong> nominee. She is your cover star.')),
         card('PICK YOUR MAGAZINE / 02 / 08', 'Choose One of Three',
              para('You will design your cover in the style of one real farming magazine. Pick <strong>one</strong> of these three. Click to study each one and learn its tone and the kind of images it uses.')
              + scrollrow(mags)
-             + para('You will get the real magazine logo from your <strong>project folder</strong> to make your cover look authentic.')),
-        card('PICK YOUR TOPIC / 03 / 08', 'Topic, Person, and Interview',
-             para('Your topic must fit the <strong>CTE agriculture theme</strong> of our campus: farming, livestock, crops, equipment, the trades, sustainability, or the people who make it all work.')
-             + para('Choose a real person to feature: a <strong>student, an administrator, or a teacher</strong>. Then <strong>interview them</strong>. Their answers give you the words for your cover.')
-             + para('From your interview, gather the content for your <strong>title</strong>, your <strong>subtitle</strong>, and your <strong>breakout points</strong>, all the words you see on a real cover.')
-             + notecard('REPORTER MODE', 'Interview First', 'Ask good questions and write down quotes and real facts. Real words make a real cover. You will do this in Step 1.')),
+             + para('All three magazine logos are <strong>already in your template</strong> as layers. When you design, just turn on the layer for the magazine you chose. No need to find or place a logo yourself.')),
+        card('YOUR ASSIGNMENT / 03 / 08', 'You Are Shooting Teddy',
+             para('You have been <strong>contracted</strong> to shoot the cover featuring <strong>Teddy</strong>. Her photo is your <strong>hero image</strong>, and the <strong>biggest headline</strong> on the cover is about her and her honor.')
+             + para('Read her brief below. Pull your main <strong>title</strong> and <strong>subtitle</strong> from it. Your smaller <strong>cover lines</strong> and <strong>breakout boxes</strong> can tease other things happening on campus: the Ag Farm, the livestock, the Robotics team, student projects.')
+             + scrollbox('Teddy', 'Classified Employee of the Year Nominee', TEDDY_BRIEF)
+             + notecard('THE FOCUS', 'Teddy Is the Star', 'Your cover can mention other campus stories in the smaller boxes, but the <strong>name, the cover photo, and the largest text</strong> must all be about Teddy and her honor.')),
         card('WHAT YOUR COVER MUST HAVE / 04 / 08', 'Set the Standard',
              para('Every finished cover must include all six of these. This is the standard you are graded on.')
              + scrollrow(required)),
@@ -328,17 +350,18 @@ page(
     'Magazine Cover &nbsp;&bull;&nbsp; Step 1', 'Plan Your Cover',
     'Pick your story and sketch the layout.',
     [
-        card('PICK YOUR TOPIC / 01 / 05', 'Topic and Person',
-             para('Choose a <strong>topic</strong> that fits the <strong>CTE agriculture theme</strong> of our campus, and a real person to feature: a <strong>student, an administrator, or a teacher</strong>.')
-             + para('Pick someone you can photograph and talk to. Your topic and your person should tell the same story, like &ldquo;Future Farmers,&rdquo; &ldquo;Built at the MRC,&rdquo; or &ldquo;Meet the Welder.&rdquo;')
-             + notecard('TEAM TIME', 'Brainstorm Together', 'Work with your group to share topic ideas and plan who to interview. Slow down and talk it out, then each of you builds your own unique cover.')),
-        card('INTERVIEW YOUR SUBJECT / 02 / 05', 'Get the Words',
-             para('Now <strong>interview</strong> your person. Their answers become the words on your cover: your <strong>title</strong>, your <strong>subtitle</strong>, and your <strong>breakout points</strong>. Write down quotes and real facts.')
-             + scrollrow(interview)),
+        card('YOUR COVER STAR / 01 / 05', 'The Cover Is About Teddy',
+             para('Your subject is <strong>Teddy</strong>, the MRC security officer and campus photographer being honored as a <strong>Classified Employee of the Year</strong> nominee. You will photograph her and build the whole cover around her.')
+             + para('Her <strong>brief</strong> is your source, like a press kit a real photo editor is handed. Read it closely, then turn her story into one strong cover.')
+             + notecard('TEAM TIME', 'Brainstorm Together', 'Work with your group to plan your shots and pick which other campus stories to tease in the breakout boxes. Then each of you builds your own unique cover.')),
+        card('READ THE BRIEF / 02 / 05', 'Pull Your Words From Teddy&rsquo;s Story',
+             para('Read Teddy&rsquo;s brief and pull out the words for your cover. Your <strong>main title</strong> comes from her honor and her story, your <strong>subtitle</strong> adds one detail, and your <strong>breakout points</strong> tease other campus stories.')
+             + scrollbox('Teddy', 'Classified Employee of the Year Nominee', TEDDY_BRIEF)
+             + scrollrow(brief_pull)),
         card('SKETCH YOUR LAYOUT / 03 / 05', 'Plan the Cover',
              para('On paper, sketch a quick <strong>thumbnail</strong> of your cover. Plan where each piece goes:')
-             + para('Put the <strong>masthead</strong> at the top, block out your <strong>hero photo</strong>, mark where your <strong>title</strong> and <strong>breakout points</strong> go down one side, and box out spots for your <strong>two breakout images</strong>.')
-             + para('Leave room for the text. Do not plan to cover your subject&rsquo;s face with the masthead or headlines.'),
+             + para('Put the <strong>masthead</strong> at the top, block out your <strong>hero photo of Teddy</strong>, mark where your <strong>main title</strong> (the biggest text, about her) and your smaller <strong>breakout points</strong> go down one side, and box out spots for your <strong>two breakout images</strong>.')
+             + para('Leave room for the text. Do not plan to cover <strong>Teddy&rsquo;s face</strong> with the masthead or headlines.'),
              floatimg(IMG + 'magcover-plan-float.png', 'Julian sketching a magazine cover layout in a sketchbook at the MRC studio')),
         card('SCOUT YOUR LOCATION / 04 / 05', 'Scout Before You Shoot',
              para('Real photographers <strong>scout</strong> a location before the real shoot. Scouting means visiting a spot early to study the light, the angles, and the background, so shoot day runs smoothly.')
@@ -371,7 +394,7 @@ page(
     'Capture your hero image on location.',
     [
         card('SHOOT ON LOCATION / 01 / 05', 'Photojournalism Style',
-             para('Go to the spot you scouted: the barn, the field, the shop, the field house. Shoot <strong>real moments</strong>, not stiff poses. This is <strong>photojournalism</strong>.')
+             para('Photograph <strong>Teddy</strong> where she works: greeting students, out at the Ag Farm, with the animals, or around campus. Shoot <strong>real moments</strong>, not stiff poses. This is <strong>photojournalism</strong>.')
              + notecard('SHOOT VERTICAL', 'Hold the Camera Tall (Portrait)', 'Your cover is a <strong>tall, vertical</strong> shape, so every photo must be shot in <strong>portrait orientation</strong>. Turn the camera <strong>sideways so the frame is taller than it is wide</strong>. A wide (landscape) photo will not fill the cover and leaves empty gaps. If your shot is wider than it is tall, turn the camera and take it again.')
              + notecard('REQUIRED', 'Light It With the Off-Camera Flash', 'You must light your subject with the <strong>off-camera flash</strong> (the Godox AD200 on a stand, triggered from your Canon R50), not just natural light. A flash lets you control the look and mood and make your subject pop, like a real magazine portrait. Watch the lighting video in the overview first.')
              + para('A <strong>studio</strong> with a backdrop is also set up if your story needs it.'),
@@ -381,7 +404,7 @@ page(
              + scrollrow(heroshot)),
         card('SHOOT YOUR BREAKOUT IMAGES / 03 / 05', 'Two More Photos',
              para('Your cover also needs <strong>two breakout boxes</strong>, each with its own small photo. While you are on location, shoot at least <strong>two more images</strong> for them.')
-             + para('Good breakout shots: a close-up detail, a tool or piece of equipment, a wide shot of the place, or a second angle of your subject. Shoot extra so you have choices when you design.')),
+             + para('Good breakout shots tease <strong>other campus stories</strong>: the livestock, a Robotics build, a tool or crop, a wide shot of the Ag Farm, or a second angle of Teddy. Shoot extra so you have choices when you design.')),
         card('ORGANIZE YOUR FILES / 04 / 05', 'Keep It Organized',
              para('Use the <strong>project folder</strong> you downloaded from the overview. If you have not yet, move it into your <strong>OneDrive Digital Arts</strong> folder.')
              + para('Offload all your <strong>RAW</strong> files into the <strong>RAW Images</strong> subfolder inside it. Keep every part of this project organized here.')),
@@ -399,11 +422,11 @@ page(
 # PAGE 4 — STEP 03 DESIGN
 # =========================================================================
 coverlines = [
-    tile('Words 01', 'Main Title', 'One big, bold headline is the star. Pull it from your interview, short and exciting, like &ldquo;Built at the MRC.&rdquo;'),
-    tile('Words 02', 'Subtitle', 'Add a short line under the title (the deck) that gives one more detail about your story.'),
-    tile('Words 03', 'Breakout Points', 'Add at least three smaller cover lines that tease other parts of the story, using quotes and facts from your interview.'),
-    tile('Words 04', 'Use Type Hierarchy', 'Make the title the biggest, the subtitle smaller, and the breakout points smaller still. Size shows what matters most.'),
-    tile('Words 05', 'Keep Text Off the Face', 'Place your words in the open space you left when you shot. Never cover your subject&rsquo;s face or eyes.'),
+    tile('Words 01', 'Main Title', 'One big, bold headline about <strong>Teddy</strong> is the star, and the <strong>largest text</strong> on the cover. Pull it from her brief, short and powerful, like &ldquo;The Heartbeat of MRC.&rdquo;'),
+    tile('Words 02', 'Subtitle', 'Add a short line under the title (the deck) that gives one more detail about Teddy and her honor.'),
+    tile('Words 03', 'Breakout Points', 'Add at least three smaller cover lines that tease <strong>other campus stories</strong> (the Ag Farm, livestock, Robotics), using facts from the brief or what you saw on campus.'),
+    tile('Words 04', 'Use Type Hierarchy', 'Make Teddy&rsquo;s title the biggest, the subtitle smaller, and the breakout points smaller still. Size shows what matters most.'),
+    tile('Words 05', 'Keep Text Off the Face', 'Place your words in the open space you left when you shot. Never cover Teddy&rsquo;s face or eyes.'),
     tile('Words 06', 'Match the Magazine', 'Use fonts and colors close to your real magazine&rsquo;s style so your cover looks authentic.'),
 ]
 page(
@@ -415,13 +438,16 @@ page(
     'Magazine Cover &nbsp;&bull;&nbsp; Step 3', 'Build Your Cover',
     'Design it like the real thing.',
     [
-        card('SET UP YOUR COVER / 01 / 05', 'Start a New File',
-             para('Open Photoshop. Go to <strong>File &gt; New</strong> and make a tall (portrait) magazine page, about <strong>8.5 by 11 inches</strong>, RGB color, 300 ppi.')
-             + para('Open your best hero photo through <strong>Camera Raw</strong>, place it on your page, and let it <strong>bleed</strong> all the way to the edges with no white border. Save your work as a <strong>.PSD</strong> in your project folder.'),
-             floatimg(IMG + 'magcover-design-float.png', 'Julian designing a farming magazine cover in Photoshop at an iMac in the MRC lab')),
-        card('ADD THE MASTHEAD / 02 / 05', 'Place the Logo',
-             para('Open the magazine <strong>logo</strong> from your project folder and place it at the <strong>top</strong> of your cover.')
-             + para('Size it big and bold, like the real magazine. The masthead is the brand, so it should be one of the first things you see.')),
+        card('SET UP YOUR COVER / 01 / 05', 'Open the Template',
+             para('Open the <strong>Magazine Cover template</strong> from your project folder with <strong>File &gt; Open</strong>. It is already built for you: tall (portrait), <strong>8.5 by 11 inches</strong>, RGB color, 300 ppi. You do not need to make your own.')
+             + para('You will see <strong>cyan guide lines</strong> a little in from each edge. These lines <strong>do not print</strong>. They mark the <strong>text-safe area</strong>: keep your <strong>masthead, headlines, cover lines, and anything important</strong> inside the lines so nothing gets trimmed off.')
+             + para('Your <strong>cover photo must full bleed</strong>. Open your best hero photo of <strong>Teddy</strong> through <strong>Camera Raw</strong>, place it, and extend it <strong>past the cyan lines all the way to the edges</strong> of the page, with no white border. Covers are cut at the edge, so the photo has to run right off the page.')
+             + notecard('LOCK THEM', 'Lock Your Guides', 'So you do not move the guides by accident, go to <strong>View &gt; Lock Guides</strong>. They will stay put while you work.')
+             + para('Save your work as a <strong>.PSD</strong> in your project folder.'),
+             floatimg(IMG + 'magcover-template-guides.png', 'The magazine cover template open in Photoshop, showing the cyan text-safe guide lines and the magazine logo layers')),
+        card('ADD THE MASTHEAD / 02 / 05', 'Turn On Your Logo Layer',
+             para('All three magazine logos are <strong>already in the template</strong> as layers. In the <strong>Layers</strong> panel, find the logo for the magazine you chose and <strong>turn its layer on</strong> (click the eye icon). Hide the other two.')
+             + para('The masthead is the brand, so it sits big and bold at the <strong>top</strong> of your cover. Keep it inside the cyan guides.')),
         card('ADD YOUR WORDS / 03 / 05', 'Title, Subtitle, and Breakout Points',
              para('Use the <strong>Type tool</strong> to add all the words from your interview. Scroll through each pointer.')
              + scrollrow(coverlines)),
@@ -440,10 +466,10 @@ page(
 # PAGE 5 — STEP 04 REFLECTION
 # =========================================================================
 questions = [
-    tile('Question 01', 'Your Magazine', 'Which magazine did you design for, and why did it fit your story?'),
-    tile('Question 02', 'Your Person', 'Who did you interview, and what did they say that shaped the words on your cover?'),
-    tile('Question 03', 'The Hard Part', 'What was hardest for you: the interview, the shoot, or the design? How did you solve it?'),
-    tile('Question 04', 'The Big Picture', 'If a real magazine printed your cover, what would people learn about the MRC?'),
+    tile('Question 01', 'Your Magazine', 'Which magazine did you design for, and why did it fit Teddy&rsquo;s story?'),
+    tile('Question 02', 'Your Headline', 'What did you choose for your main title about Teddy, and why does it capture her?'),
+    tile('Question 03', 'The Hard Part', 'What was hardest for you: the shoot, the layout, or the design? How did you solve it?'),
+    tile('Question 04', 'The Big Picture', 'If a real magazine printed your cover, what would people learn about Teddy and the MRC?'),
 ]
 page(
     'magcover-step04-reflection.html',
