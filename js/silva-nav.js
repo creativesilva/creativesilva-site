@@ -15,9 +15,9 @@
  *    module after. Both gray out at the ends. Pager lives outside #top, so it
  *    is website-only and never copied into Canvas.
  *
- * 3. Injects a matching pager into the top nav bar, drops the Download
- *    button and the redundant step-nav arrows, and shortens the Copy button
- *    to "COPY HTML". Also injects a hamburger button for mobile.
+ * 3. Each pager includes its own COPY HTML button at the right. The top
+ *    pager replaces the old toolbar buttons (Copy, Download) and step-nav.
+ *    Also injects a hamburger button for mobile.
  *
  * To add a page: drop its path into the right MODULES group, in order.
  */
@@ -215,25 +215,26 @@
     next.innerHTML = 'Next &nbsp;&#8250;';
     pager.appendChild(next);
 
+    pager.appendChild(makeCopyBtn());
     return pager;
   }
 
-  // Simplify the existing Copy button to "COPY HTML" (no icon, no "Canvas")
-  // and rebind it so it stays labelled that way after a copy.
-  function setupCopyButton(navInner) {
-    var cp = navInner.querySelector('.silva-copy-btn');
-    if (!cp) { return; }
-    cp.removeAttribute('onclick');
-    cp.textContent = 'COPY HTML';
-    cp.addEventListener('click', function () {
+  // The COPY HTML button that lives inside each pager, right of Next.
+  function makeCopyBtn() {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pg-copy';
+    b.textContent = 'COPY HTML';
+    b.addEventListener('click', function () {
       var el = document.getElementById('top');
       if (!el) { return; }
       navigator.clipboard.writeText(el.outerHTML).then(function () {
-        cp.textContent = '✓ Copied!';
-        cp.classList.add('copied');
-        setTimeout(function () { cp.textContent = 'COPY HTML'; cp.classList.remove('copied'); }, 2500);
+        b.textContent = '✓ Copied!';
+        b.classList.add('copied');
+        setTimeout(function () { b.textContent = 'COPY HTML'; b.classList.remove('copied'); }, 2500);
       }).catch(function () { alert('Copy failed. Try selecting the page source manually.'); });
     });
+    return b;
   }
 
   function injectBurger(navInner, nav) {
@@ -269,30 +270,28 @@
     var nav = document.querySelector('.silva-nav');
     var navInner = document.querySelector('.silva-nav-inner');
 
-    // Bottom pager (full-width, centered)
+    // Bottom pager (centered) — includes its own COPY HTML at the right.
     var host = document.querySelector('.silva-page');
     var bottom = buildPager();
     if (host && bottom) { host.appendChild(bottom); }
 
     if (!nav || !navInner) { return; }
 
-    // Slim the top bar: drop the Download button and the now-redundant
-    // step-nav buttons + divider (the pager carries prev/next), and shorten
-    // the Copy button to "COPY HTML" to make room for a matching top pager.
-    var dl = navInner.querySelector('.silva-download-btn');
-    if (dl) { dl.parentNode.removeChild(dl); }
-    var sn = navInner.querySelector('.silva-step-nav');
-    if (sn) { sn.style.display = 'none'; }
-    var nd = navInner.querySelector('.silva-nav-div');
-    if (nd) { nd.style.display = 'none'; }
-    setupCopyButton(navInner);
-
-    // Top pager: same look as the bottom one, placed just before COPY HTML.
+    // Top pager: same pill, sits in the nav bar. Since the pager carries its
+    // own COPY HTML and prev/next, drop the old toolbar buttons (Copy,
+    // Download) and the now-redundant step-nav + divider.
     var top = buildPager();
     if (top) {
+      var dl = navInner.querySelector('.silva-download-btn');
+      if (dl) { dl.parentNode.removeChild(dl); }
+      var cb = navInner.querySelector('.silva-copy-btn');
+      if (cb) { cb.parentNode.removeChild(cb); }
+      var sn = navInner.querySelector('.silva-step-nav');
+      if (sn) { sn.style.display = 'none'; }
+      var nd = navInner.querySelector('.silva-nav-div');
+      if (nd) { nd.style.display = 'none'; }
       top.classList.add('pg-top');
-      var cp = navInner.querySelector('.silva-copy-btn');
-      if (cp) { navInner.insertBefore(top, cp); } else { navInner.appendChild(top); }
+      navInner.appendChild(top);
     }
 
     injectBurger(navInner, nav);
