@@ -366,6 +366,7 @@ page(
     [
         card('SHOOT ON LOCATION / 01 / 05', 'Photojournalism Style',
              para('Go to the spot you scouted: the barn, the field, the shop, the field house. Shoot <strong>real moments</strong>, not stiff poses. This is <strong>photojournalism</strong>.')
+             + notecard('SHOOT VERTICAL', 'Hold the Camera Tall (Portrait)', 'Your cover is a <strong>tall, vertical</strong> shape, so every photo must be shot in <strong>portrait orientation</strong>. Turn the camera <strong>sideways so the frame is taller than it is wide</strong>. A wide (landscape) photo will not fill the cover and leaves empty gaps. If your shot is wider than it is tall, turn the camera and take it again.')
              + notecard('REQUIRED', 'Light It With the Off-Camera Flash', 'You must light your subject with the <strong>off-camera flash</strong> (the Godox AD200 on a stand, triggered from your Canon R50), not just natural light. A flash lets you control the look and mood and make your subject pop, like a real magazine portrait. Watch the lighting video in the overview first.')
              + para('A <strong>studio</strong> with a backdrop is also set up if your story needs it.'),
              floatimg(IMG + 'magcover-capture-float.png', 'Julian photographing his cover subject kneeling beside cattle at the MRC campus at golden hour')),
