@@ -19,6 +19,7 @@ import os
 OUT = os.path.join(os.path.dirname(__file__), '..', 'curriculum', 'mrc')
 RAWBASE = 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/'
 IMG = RAWBASE + 'assets/mrc/images/'
+ZIP_URL = RAWBASE + 'assets/mrc/handouts/Magazine_Cover_Project.zip'
 
 FRAME = 'border:2px solid transparent;border-image:linear-gradient(135deg,#c95201 0%,rgba(201,82,1,0.08) 100%) 1;'
 CARD_BG = 'background:linear-gradient(180deg,rgba(201,82,1,0.10) 0%,rgba(201,82,1,0.03) 100%);'
@@ -138,6 +139,11 @@ def pendingbutton(label):
     return ('<a href="#" style="background:rgba(255,255,255,0.92);color:#4a1e02;text-decoration:none;'
             'padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #c95201;">'
             '<strong>%s</strong></a>' % label)
+
+def dlbutton(href, label):
+    return ('<a href="%s" download style="background:rgba(255,255,255,0.92);color:#4a1e02;text-decoration:none;'
+            'padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #c95201;">'
+            '<strong>&#11015; %s</strong></a>' % (href, label))
 
 def banner(eyebrow, title, tagline):
     return ('<div style="background:linear-gradient(135deg,#000000 0%%,#4a1e02 40%%,#c95201 100%%);'
@@ -306,7 +312,7 @@ page(
         card('YOUR MISSION / 08 / 08', 'What You Will Do',
              para('You will work like a real photo editor in four steps: plan, capture, design, and reflect.')
              + scrollrow(mission)
-             + '<div style="margin-top:18px;">' + pendingbutton('Download the Project Folder') + '</div>'),
+             + '<div style="margin-top:18px;">' + dlbutton(ZIP_URL, 'Download the Project Folder') + '</div>'),
     ],
 )
 
