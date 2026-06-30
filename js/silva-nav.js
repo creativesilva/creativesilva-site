@@ -38,6 +38,7 @@
     '/curriculum/mrc/logo-redesign-step02-final-sketch.html',
     '/curriculum/mrc/logo-redesign-step03-digital.html',
     '/curriculum/mrc/scavenger-hunt-overview.html',
+    '/curriculum/mrc/scavenger-hunt-step01-hunt.html',
     '/curriculum/mrc/panorama-overview.html',
     '/curriculum/mrc/panorama-step01-capture.html',
     '/curriculum/mrc/panorama-step02-merge.html',
