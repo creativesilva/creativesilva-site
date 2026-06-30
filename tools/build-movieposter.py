@@ -456,7 +456,7 @@ page(
              videothumb('https://www.youtube.com/watch?v=WmbYzkcjQ7E', IMG + 'movieposter-daynight-thumb.png', 'Turning day into night in Photoshop with LUT profiles, one-minute tutorial')
              + para('You shot in the daytime, so now make it <strong>night</strong>. First swap the bright sky: go to <strong>Edit &gt; Sky Replacement</strong> and pick a dark, stormy, or night sky. This is the biggest step from day to night.')
              + para('Then grade the whole poster with the <strong>Camera Raw Filter</strong> (<strong>Filter &gt; Camera Raw Filter</strong>): lower the brightness, cool the colors toward blue, deepen the shadows, and add a <strong>vignette</strong> around the edges.')
-             + para('For a fast color grade, watch the <strong>one-minute tutorial</strong> (top right) on turning <strong>day into night with LUT profiles</strong> (Edit &gt; Color Lookup).')
+             + para('For a fast color grade, watch the <strong>one-minute tutorial</strong> on turning <strong>day into night with LUT profiles</strong> (Edit &gt; Color Lookup).')
              + para('Blend in your <strong>supporting images</strong> for fog or texture. The whole poster should feel cold and tense, like a real horror one-sheet.')),
         card('SAVE AND SUBMIT / 06 / 06', 'Save as JPG and Submit',
              para('When your poster is done, flatten it with <strong>Layer &gt; Flatten Image</strong>. Keep a PSD only if you want one.')
