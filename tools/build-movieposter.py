@@ -446,7 +446,8 @@ page(
              + para('For a fast color grade, watch the <strong>one-minute tutorial</strong> on turning <strong>day into night with LUT profiles</strong> (Edit &gt; Color Lookup). Then blend in your <strong>supporting images</strong> for fog or texture until it feels like a real horror one-sheet.')),
         card('MATCH THE MOOD / 03 / 07', 'Make Every Choice Match',
              para('Now that your mood is set, <strong>match every choice to it</strong>. A poster feels right when the color, the font, and the lighting all tell the same story.')
-             + para('Pick a <strong>font</strong> that feels scary: rough, sharp, or hand-drawn. Use <strong>colors</strong> that fit the dread, like black, cold blue, or deep red. Keep your <strong>lighting</strong> dark and your shadows heavy. If any piece does not feel scary, change it.')),
+             + para('Pick a <strong>font</strong> that feels scary: rough, sharp, or hand-drawn. Use <strong>colors</strong> that fit the dread, like black, cold blue, or deep red. Keep your <strong>lighting</strong> dark and your shadows heavy. If any piece does not feel scary, change it.'),
+             floatimg(IMG + 'movieposter-design-float.png', 'Ricardo Gomez designing a dark, moody movie poster in Photoshop at an iMac in the MRC lab')),
         card('GET YOUR FONTS / 04 / 07', 'Find and Install a Font',
              para('Your title needs the right font. You have two places to get one: '
                   '<a href="https://www.dafont.com" style="color:#eda268;text-decoration:underline;"><strong>dafont.com</strong></a> (free downloads) and '
