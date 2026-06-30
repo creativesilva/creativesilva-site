@@ -575,3 +575,90 @@ body #top *[style*="overflow-x:auto"] {
   scrollbar-width: thin;
   scrollbar-color: #5f8fbf rgba(255, 255, 255, 0.04);
 }
+
+/* ============================================================
+   Amazon-style module pager (injected by silva-nav.js).
+   Website-only: lives outside #top, never copied into Canvas.
+   ============================================================ */
+.silva-pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: fit-content;
+  max-width: 94%;
+  margin: 6px auto 46px;
+  padding: 9px 12px;
+  background: #0f0f0f;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 6px 26px rgba(0, 0, 0, 0.45);
+  font-family: Arial, Helvetica, sans-serif;
+}
+.silva-pager a,
+.silva-pager span {
+  box-sizing: border-box;
+}
+.silva-pager .pg-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 7px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.silva-pager a.pg-num:hover {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.38);
+}
+.silva-pager .pg-num.active {
+  background: var(--course-accent, #c95201);
+  border-color: var(--course-accent, #c95201);
+  color: #ffffff;
+}
+.silva-pager .pg-edge {
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.silva-pager a.pg-edge:hover {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.38);
+}
+.silva-pager .pg-prev { margin-right: 4px; }
+.silva-pager .pg-next { margin-left: 4px; }
+.silva-pager .pg-disabled {
+  opacity: 0.32;
+  cursor: default;
+}
+.silva-pager .pg-ellipsis {
+  display: inline-flex;
+  align-items: flex-end;
+  height: 34px;
+  padding: 0 2px;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 700;
+}
+@media (max-width: 520px) {
+  .silva-pager { gap: 5px; padding: 8px 10px; }
+  .silva-pager .pg-edge { padding: 0 11px; }
+  .silva-pager .pg-num { min-width: 30px; height: 30px; }
+  .silva-pager .pg-ellipsis { height: 30px; }
+}
