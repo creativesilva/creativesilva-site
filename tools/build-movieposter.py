@@ -439,27 +439,26 @@ page(
              + para('Your <strong>background must full bleed</strong>. Extend the background, and your <strong>protagonist</strong>, <strong>past the cyan lines all the way to the edges</strong> of the artboard, with no white gaps. Posters are cut at the edge, so the art has to run right off the page.')
              + para('Bring in your <strong>antagonist</strong> (villain or monster) too, looming or in shadow, so both characters are clear at a glance. Darken the background so it feels moody, and save as a <strong>.PSD</strong> in your project folder.'),
              floatimg(IMG + 'movieposter-template-guides.png', 'The 13 by 19 inch movie poster template in Photoshop, showing the cyan text-safe guide lines a half inch in from each edge')),
-        card('GET YOUR FONTS / 02 / 06', 'Find and Install a Font',
+        card('SET THE MOOD / 02 / 06', 'Turn Day into Night',
+             videothumb('https://www.youtube.com/watch?v=WmbYzkcjQ7E', IMG + 'movieposter-daynight-thumb.png', 'Turning day into night in Photoshop with LUT profiles, one-minute tutorial')
+             + para('Set the mood early. It is one of the first edits and it shapes every choice after it. You shot in the daytime, so make it <strong>night</strong> and grade the whole poster dark, cold, and tense.')
+             + para('Swap the bright sky first: <strong>Edit &gt; Sky Replacement</strong>, and pick a dark, stormy, or night sky. Then grade with the <strong>Camera Raw Filter</strong> (<strong>Filter &gt; Camera Raw Filter</strong>): lower the brightness, cool the colors toward blue, deepen the shadows, and add a <strong>vignette</strong>.')
+             + para('For a fast color grade, watch the <strong>one-minute tutorial</strong> on turning <strong>day into night with LUT profiles</strong> (Edit &gt; Color Lookup). Then blend in your <strong>supporting images</strong> for fog or texture until it feels like a real horror one-sheet.')
+             + notecard('MATCH IT', 'Make Everything Match the Mood', 'Once the mood is set, match every choice to it: a <strong>font</strong> that feels scary (rough, sharp, or hand-drawn), <strong>colors</strong> like black, cold blue, or deep red, and dark <strong>lighting</strong>. If a piece does not feel scary, change it.')),
+        card('GET YOUR FONTS / 03 / 06', 'Find and Install a Font',
              para('Your title needs the right font. You have two places to get one: '
                   '<a href="https://www.dafont.com" style="color:#eda268;text-decoration:underline;"><strong>dafont.com</strong></a> (free downloads) and '
                   '<a href="https://fonts.adobe.com" style="color:#eda268;text-decoration:underline;"><strong>Adobe Fonts</strong></a> (built into your Adobe account). Here is how to use each.')
              + para('<strong>Option A: dafont.com</strong>, download and install:')
              + scrollrow(dafont_steps)
              + para('<strong>Option B: Adobe Fonts</strong>, activate with no download:')
-             + scrollrow(adobe_steps)
-             + notecard('TIP', 'Match the Mood', 'Scary movies love rough, sharp, or hand-drawn fonts. Pick one that feels like your story, then make it big in the next step.')),
-        card('DESIGN THE TITLE TREATMENT / 03 / 06', 'Make the Title',
+             + scrollrow(adobe_steps)),
+        card('DESIGN THE TITLE TREATMENT / 04 / 06', 'Make the Title',
              para('Your movie title is the star. Using the font you just installed, make it big and bold. <strong>You decide where it lives</strong> on the poster, use what you learned from the real posters you studied.')
              + para('Add a soft glow, a rough edge, or a shadow so the title stands out against the dark image.')),
-        card('ADD YOUR WORDS / 04 / 06', 'Tagline, Credits, and Rating',
+        card('ADD YOUR WORDS / 05 / 06', 'Tagline, Credits, and Rating',
              para('Use the <strong>Type tool</strong> to add the rest of the words. Scroll through each pointer.')
              + scrollrow(words)),
-        card('SET THE MOOD / 05 / 06', 'Turn Day into Night',
-             videothumb('https://www.youtube.com/watch?v=WmbYzkcjQ7E', IMG + 'movieposter-daynight-thumb.png', 'Turning day into night in Photoshop with LUT profiles, one-minute tutorial')
-             + para('You shot in the daytime, so now make it <strong>night</strong>. First swap the bright sky: go to <strong>Edit &gt; Sky Replacement</strong> and pick a dark, stormy, or night sky. This is the biggest step from day to night.')
-             + para('Then grade the whole poster with the <strong>Camera Raw Filter</strong> (<strong>Filter &gt; Camera Raw Filter</strong>): lower the brightness, cool the colors toward blue, deepen the shadows, and add a <strong>vignette</strong> around the edges.')
-             + para('For a fast color grade, watch the <strong>one-minute tutorial</strong> on turning <strong>day into night with LUT profiles</strong> (Edit &gt; Color Lookup).')
-             + para('Blend in your <strong>supporting images</strong> for fog or texture. The whole poster should feel cold and tense, like a real horror one-sheet.')),
         card('SAVE AND SUBMIT / 06 / 06', 'Save as JPG and Submit',
              para('When your poster is done, flatten it with <strong>Layer &gt; Flatten Image</strong>. Keep a PSD only if you want one.')
              + para('Turn in a <strong>JPG</strong>, not a PSD. Use <strong>File &gt; Save a Copy</strong>, choose <strong>JPG</strong>, full size. Name it:')
