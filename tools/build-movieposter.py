@@ -433,10 +433,12 @@ page(
     'Movie Poster &nbsp;&bull;&nbsp; Step 3', 'Build Your Poster',
     'Design it like the real thing.',
     [
-        card('SET UP YOUR POSTER / 01 / 06', 'Start a New File',
-             para('Open Photoshop. Go to <strong>File &gt; New</strong> and make a tall (portrait) poster, about <strong>11 by 17 inches</strong>, RGB color, 300 ppi.')
-             + para('Place your <strong>protagonist</strong> as the main image and let it <strong>bleed</strong> to the edges. Bring in your <strong>antagonist</strong> (villain or monster) too, looming or in shadow, so both are clear at a glance. Darken the background so it feels moody, and save as a <strong>.PSD</strong> in your project folder.'),
-             floatimg(IMG + 'movieposter-design-float.png', 'Ricardo Gomez designing a dark, moody movie poster in Photoshop at an iMac in the MRC lab')),
+        card('SET UP YOUR POSTER / 01 / 06', 'Open the Template',
+             para('Open the <strong>Movie Poster Template</strong> from your project folder with <strong>File &gt; Open</strong>. It is already built for you: <strong>13 by 19 inches</strong>, RGB color, 300 ppi. You do not need to make your own.')
+             + para('You will see <strong>cyan guide lines</strong> a half inch in from every edge. These lines <strong>do not print</strong>. They mark the <strong>text-safe area</strong>: keep your <strong>title, actor names, production logo, and anything important</strong> inside the lines so nothing gets trimmed off.')
+             + para('Your <strong>background must full bleed</strong>. Extend the background, and your <strong>protagonist</strong>, <strong>past the cyan lines all the way to the edges</strong> of the artboard, with no white gaps. Posters are cut at the edge, so the art has to run right off the page.')
+             + para('Bring in your <strong>antagonist</strong> (villain or monster) too, looming or in shadow, so both characters are clear at a glance. Darken the background so it feels moody, and save as a <strong>.PSD</strong> in your project folder.'),
+             floatimg(IMG + 'movieposter-template-guides.png', 'The 13 by 19 inch movie poster template in Photoshop, showing the cyan text-safe guide lines a half inch in from each edge')),
         card('GET YOUR FONTS / 02 / 06', 'Find and Install a Font',
              para('Your title needs the right font. You have two places to get one: '
                   '<a href="https://www.dafont.com" style="color:#eda268;text-decoration:underline;"><strong>dafont.com</strong></a> (free downloads) and '
