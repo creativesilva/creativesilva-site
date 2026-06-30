@@ -345,7 +345,9 @@ page(
         card('SKETCH YOUR LAYOUT / 04 / 06', 'Plan the Poster',
              para('On paper, sketch a quick <strong>thumbnail</strong> of your poster. Use <strong>design hierarchy</strong>: plan where each piece goes and how big it is.')
              + para('Show your <strong>protagonist</strong> as the main focus and your <strong>antagonist</strong> (villain or monster) as a clear threat. Then decide where the <strong>title</strong>, <strong>tagline</strong>, <strong>subtitle</strong>, <strong>production logo</strong>, and <strong>actor names</strong> go. That layout is your call: use what you learned from the real posters in your research.')
-             + para('Leave room for the text. Both characters and the title should read at a glance.'),
+             + para('Leave room for the text. Both characters and the title should read at a glance.')
+             + notecard('TURN IT IN', 'Photograph Your Sketch', 'When your sketch is done, take a clear <strong>photo of it with your phone</strong>. Turn in that <strong>.jpg</strong> to Step 1 in Canvas for grading. Name it:')
+             + fname('FirstName LastInitial - Movie Poster Sketch.jpg'),
              floatimg(IMG + 'movieposter-plan-float.png', 'Ricardo Gomez sketching a movie poster layout in a sketchbook at the MRC studio')),
         card('SCOUT YOUR LOCATION / 05 / 06', 'Scout Before You Shoot',
              para('Real photographers <strong>scout</strong> a location before the real shoot. Scouting means visiting a spot early to study the light, the angles, and the background, so shoot day runs smoothly.')

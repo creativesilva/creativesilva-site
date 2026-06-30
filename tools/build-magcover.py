@@ -357,7 +357,9 @@ page(
         card('SKETCH YOUR LAYOUT / 03 / 05', 'Plan the Cover',
              para('On paper, sketch a quick <strong>thumbnail</strong> of your cover. Plan where each piece goes:')
              + para('Put the <strong>masthead</strong> at the top, block out your <strong>hero photo of Teddy</strong>, mark where your <strong>main title</strong> (the biggest text, about her) and your smaller <strong>breakout points</strong> go down one side, and box out spots for your <strong>two breakout images</strong>.')
-             + para('Leave room for the text. Do not plan to cover <strong>Teddy&rsquo;s face</strong> with the masthead or headlines.'),
+             + para('Leave room for the text. Do not plan to cover <strong>Teddy&rsquo;s face</strong> with the masthead or headlines.')
+             + notecard('TURN IT IN', 'Photograph Your Sketch', 'When your sketch is done, take a clear <strong>photo of it with your phone</strong>. Turn in that <strong>.jpg</strong> to Step 1 in Canvas for grading. Name it:')
+             + fname('FirstName LastInitial - Magazine Cover Sketch.jpg'),
              floatimg(IMG + 'magcover-plan-float.png', 'Julian sketching a magazine cover layout in a sketchbook at the MRC studio')),
         card('SCOUT YOUR LOCATION / 04 / 05', 'Scout Before You Shoot',
              para('Real photographers <strong>scout</strong> a location before the real shoot. Scouting means visiting a spot early to study the light, the angles, and the background, so shoot day runs smoothly.')
