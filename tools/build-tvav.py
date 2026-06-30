@@ -197,6 +197,24 @@ triangle = [
     tile('Part 02', 'Shutter Speed', 'How long the lens stays open. It controls whether motion looks frozen or blurry.'),
     tile('Part 03', 'ISO', 'How sensitive the camera is to light. Keep this on <strong>Auto</strong> and let the camera handle it.'),
 ]
+def ilink(href, label):
+    return ('<a href="%s" target="_blank" rel="noopener" style="color:#eda268;text-decoration:underline;"><strong>%s</strong></a>'
+            % (href, label))
+
+vocab_tvav = [
+    tile('Vocabulary', 'TV (Shutter Priority)', 'A mode where you pick the shutter speed and the camera sets the aperture.'),
+    tile('Vocabulary', 'AV (Aperture Priority)', 'A mode where you pick the aperture and the camera sets the shutter speed.'),
+    tile('Vocabulary', 'Aperture (f-stop)', 'How wide the lens opens. A low f-number blurs the background; a high one keeps more in focus.'),
+    tile('Vocabulary', 'Shutter Speed', 'How long the shutter stays open. Fast freezes motion; slow blurs it.'),
+    tile('Vocabulary', 'Depth of Field', 'How much of the photo is in focus from front to back.'),
+    tile('Vocabulary', 'Exposure Triangle', 'Aperture, shutter speed, and ISO working together to set the brightness.'),
+]
+
+res_tvav = [
+    tile('Resource', 'Canon: Shooting Modes', 'When to use Program, Shutter Priority (TV), and Aperture Priority (AV), from Canon. ' + ilink('https://snapshot.canon-asia.com/reg/article/eng/photographing-people-when-to-use-program-mode-shutter-priority-and-aperture-priority', 'Open &rarr;')),
+    tile('Resource', 'TV vs AV Explained', 'A clear beginner guide to aperture priority and shutter priority modes. ' + ilink('https://digital-photography-school.com/aperture-and-shutter-priority-modes/', 'Open &rarr;')),
+]
+
 mission = [
     tile('STEP 01', 'Capture', 'Shoot eight photos: four in AV and four in TV. Turn in a screenshot of your RAW folder.'),
     tile('STEP 02', 'Cull &amp; Edit', 'Pick and polish your best eight photos, then submit them as JPGs.'),
@@ -211,22 +229,28 @@ page(
     'Take control of motion and focus.',
     [
         headerimg(IMG + 'tvav-header.png', 'Patricia Guererro framing a shot with a Canon camera in front of the MRC campus at golden hour'),
-        card('TWO CAMERA MODES / 01 / 05', 'Take the Wheel',
+        card('TWO CAMERA MODES / 01 / 07', 'Take the Wheel',
              para('Until now, you shot in <strong>Auto</strong> and the camera made every choice for you. Now you take the wheel with two new modes on your <strong>Canon EOS R50</strong>: <strong>TV</strong> and <strong>AV</strong>.')
              + para('These are <strong>semi-manual</strong> modes. You make one important choice, and the camera figures out the rest. They are the easiest way to start controlling how your photos look.')),
-        card('THE EXPOSURE TRIANGLE / 02 / 05', 'Three Things Make a Photo Bright',
+        card('THE EXPOSURE TRIANGLE / 02 / 07', 'Three Things Make a Photo Bright',
              para('Every photo gets its brightness from three things working together. Photographers call this the <strong>exposure triangle</strong>.')
              + scrollrow(triangle)
              + para('In TV and AV you control <strong>one</strong> of these, and the camera balances the other two. With ISO on <strong>Auto</strong>, you only think about one setting at a time.')),
-        card('AV MODE / 03 / 05', 'AV: You Control Focus',
+        card('AV MODE / 03 / 07', 'AV: You Control Focus',
              para('<strong>AV</strong> means <strong>Aperture Priority</strong>. You pick the <strong>aperture</strong> (the f-number), and the camera picks the shutter speed for you.')
              + para('Aperture controls <strong>depth of field</strong>, how much of your photo is sharp. A <strong>low f-number</strong> like <strong>f/1.8</strong> blurs the background, perfect for a portrait. A <strong>high f-number</strong> like <strong>f/11</strong> keeps everything sharp, perfect for a wide scene.')
              + para('Use AV when <strong>focus</strong> matters most: portraits, close-up details, or scenes with lots of depth.')),
-        card('TV MODE / 04 / 05', 'TV: You Control Motion',
+        card('TV MODE / 04 / 07', 'TV: You Control Motion',
              para('<strong>TV</strong> means <strong>Shutter Priority</strong>. You pick the <strong>shutter speed</strong>, and the camera picks the aperture for you.')
              + para('Shutter speed controls <strong>motion</strong>. A <strong>fast</strong> shutter like <strong>1/500</strong> freezes action razor sharp. A <strong>slow</strong> shutter like <strong>1/30</strong> lets moving things blur into streaks.')
              + para('Use TV when <strong>movement</strong> matters most: sports, running, bikes, flowing water, or anything in motion.')),
-        card('YOUR MISSION / 05 / 05', 'What You Will Do',
+        card('WORDS TO KNOW / 05 / 07', 'Camera Mode Vocabulary',
+             para('Learn these six terms. You will use them through the whole module.')
+             + scrollrow(vocab_tvav)),
+        card('RESOURCES / 06 / 07', 'Watch and Learn',
+             para('Want more on these modes? These break down TV and AV with examples. Click to open in a new tab.')
+             + scrollrow(res_tvav)),
+        card('YOUR MISSION / 07 / 07', 'What You Will Do',
              para('You will shoot, edit, and reflect, just like a real photographer. Three steps, three turn-ins.')
              + scrollrow(mission)
              + notecard('START HERE', 'Download Your Project Folder', 'Download the project folder below and move it into your <strong>OneDrive Digital Arts</strong> folder. Inside is a <strong>RAW Images</strong> folder for your photos and your reflection sheet.')

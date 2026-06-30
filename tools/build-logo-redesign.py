@@ -188,6 +188,24 @@ principles = [
     tile('Principle 04', 'Timeless', 'Avoids trendy tricks that will look old and dated in a year.'),
     tile('Principle 05', 'One Color', 'A great logo still reads clearly in plain black or plain white.'),
 ]
+def ilink(href, label):
+    return ('<a href="%s" target="_blank" rel="noopener" style="color:#eda268;text-decoration:underline;"><strong>%s</strong></a>'
+            % (href, label))
+
+vocab_logo = [
+    tile('Vocabulary', 'Logo', 'A simple, memorable mark that stands for a whole brand: its products, style, and promise.'),
+    tile('Vocabulary', 'Rebrand', 'Updating a logo to feel modern while keeping what makes it recognizable.'),
+    tile('Vocabulary', 'Simplify', 'Removing detail so a logo works tiny, huge, and in one color. The core of this project.'),
+    tile('Vocabulary', 'Negative Space', 'The empty area around and inside a logo. Good designers shape it on purpose.'),
+    tile('Vocabulary', 'Typography', 'The style and spacing of the lettering in a logo.'),
+    tile('Vocabulary', 'Wordmark', 'A logo made from the brand&rsquo;s name in a custom typeface, like Coca-Cola.'),
+]
+
+res_logo = [
+    tile('Resource', 'Adobe: Design a Logo', 'Logo design fundamentals from Adobe: shapes, type, and color. ' + ilink('https://www.adobe.com/learn/illustrator/web/logo-design', 'Open &rarr;')),
+    tile('Resource', 'Beginner Logo Tutorial', 'A free step-by-step walkthrough of designing a logo from scratch. ' + ilink('https://logosbynick.com/beginner-logo-tutorial-for-adobe-illustrator/', 'Open &rarr;')),
+]
+
 mission = [
     tile('STEP 01', 'Thumbnails', 'Sketch three quick redesign ideas for a famous logo, then bring them to Mr. Silva for a check.'),
     tile('STEP 02', 'Final Sketch', 'Use the feedback to draw one polished final sketch, photograph your work, and turn it in.'),
@@ -202,19 +220,25 @@ page(
     'Digital Arts 1A &nbsp;&bull;&nbsp; Module', 'Logo Redesign',
     'The best logos say the most with the least.',
     [
-        card('WHY LOGOS MATTER / 01 / 04', 'A Logo Is a Brand&rsquo;s Face',
+        card('WHY LOGOS MATTER / 01 / 06', 'A Logo Is a Brand&rsquo;s Face',
              para('A logo is the face of a brand. It is one small mark that stands for a whole company: its products, its style, and its promise to you.')
              + para('You already recognize hundreds of logos in a split second, even with no name attached. A checkmark. A bitten apple. A pair of golden arches. That fast recognition is the whole job of a logo.')
              + para('The best logos are simple enough to draw from memory. That is not an accident. It is the result of careful design.'),
              floatimg(RAW + 'logo-overview-float.jpg', 'The Starbucks logo evolution from 1971 to today, getting simpler at each step')),
-        card('SIMPLE WINS / 02 / 04', 'The More Successful, the Simpler',
+        card('SIMPLE WINS / 02 / 06', 'The More Successful, the Simpler',
              para('Look at how the Starbucks logo changed over time. The first version in 1971 had a detailed siren, a brown color, and the words &ldquo;Starbucks Coffee&rdquo; wrapped around a ring. Each redesign removed something: the outer text, then the ring, until only a clean green siren was left.')
              + para('This happens to almost every big brand. As a company grows, its logo gets <strong>simpler, not fancier</strong>. Nike dropped its name and kept the swoosh. Apple dropped the rainbow stripes and the word &ldquo;Apple.&rdquo; Shell, McDonald&rsquo;s, and Mastercard all did the same.')
              + para('Why? A simple logo works everywhere: tiny on a phone screen, huge on a billboard, stamped on a cup, or stitched on a shirt. It is easy to remember and hard to mess up. Simple is not lazy. Simple is powerful.')),
-        card('THE BIG IDEA / 03 / 04', 'Less, but Better',
+        card('THE BIG IDEA / 03 / 06', 'Less, but Better',
              para('Great designers follow a few rules to keep a logo strong. Keep these in mind for your own redesign.')
              + scrollrow(principles)),
-        card('YOUR MISSION / 04 / 04', 'What You Will Do',
+        card('WORDS TO KNOW / 04 / 06', 'Logo Vocabulary',
+             para('Learn these six terms. You will use them through the whole project.')
+             + scrollrow(vocab_logo)),
+        card('RESOURCES / 05 / 06', 'Watch and Learn',
+             para('Want a deeper look at logo design? These cover the fundamentals. Click to open in a new tab.')
+             + scrollrow(res_logo)),
+        card('YOUR MISSION / 06 / 06', 'What You Will Do',
              para('You will take a famous logo you already know and reimagine it. You will work like a real designer: sketch first, get feedback, then build a polished digital version. Three steps, three turn-ins.')
              + scrollrow(mission)),
     ],
