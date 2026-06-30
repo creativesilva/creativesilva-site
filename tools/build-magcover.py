@@ -164,7 +164,7 @@ TEDDY_BRIEF = (
     bpara('<strong>Teddy</strong> is the security officer at the Mark Richardson CTE Center and Ag Farm, but her real focus is people. She practices &ldquo;relational security&rdquo;: she learns every student&rsquo;s name, greets them by it, and makes the whole campus feel seen and safe. Students know her not just as an officer, but as a trusted mentor.')
     + bpara('She is also the <strong>campus photographer</strong>. Her photos of student grit and determination have appeared in school assemblies, school board reports, and local media, building real pride in the MRC.')
     + bpara('Teddy goes far beyond her job description. She checks on the animals daily, feeds livestock on weekends, helps the Robotics team prepare late into the night, waters the campus flowers, and pulls weeds, all because she cares. She even became <strong>forklift certified</strong> to keep students safe in an active CTE environment.')
-    + bpara('Principal Dr. Paul Robinson calls her vigilant and dedicated, and bus drivers, teachers, and students all trust her. As her nomination puts it, Teddy proves that <strong>kindness and heart</strong> are the most powerful tools for building a strong school community.')
+    + bpara('Principal Dr. Paul Robinson calls her vigilant and dedicated, and bus drivers, teachers, and students all trust her. She was named the <strong>2025/2026 Classified Employee of the Year</strong>, and as her nomination put it, Teddy proves that <strong>kindness and heart</strong> are the most powerful tools for building a strong school community.')
 )
 
 def banner(eyebrow, title, tagline):
@@ -307,7 +307,7 @@ page(
         card('WHAT IS A MAGAZINE COVER / 01 / 08', 'One Image, One Story',
              para('A magazine cover is the front page that makes you want to pick it up. It uses <strong>one strong photo</strong> and a few <strong>bold words</strong> to sell the whole magazine in a single glance.')
              + para('Look at a real cover: a big name at the top (the <strong>masthead</strong>), one powerful photo behind it, and short headlines that tease the stories inside.')
-             + para('For this project you will design a real-looking <strong>agriculture magazine cover</strong> featuring <strong>Teddy</strong>, the MRC security officer and campus photographer being honored as a <strong>Classified Employee of the Year</strong> nominee. She is your cover star.')),
+             + para('For this project you will design a real-looking <strong>agriculture magazine cover</strong> featuring <strong>Teddy</strong>, the MRC security officer and campus photographer named the <strong>2025/2026 Classified Employee of the Year</strong>. She is your cover star.')),
         card('PICK YOUR MAGAZINE / 02 / 08', 'Choose One of Three',
              para('You will design your cover in the style of one real farming magazine. Pick <strong>one</strong> of these three. Click to study each one and learn its tone and the kind of images it uses.')
              + scrollrow(mags)
@@ -315,7 +315,7 @@ page(
         card('YOUR ASSIGNMENT / 03 / 08', 'You Are Shooting Teddy',
              para('You have been <strong>contracted</strong> to shoot the cover featuring <strong>Teddy</strong>. Her photo is your <strong>hero image</strong>, and the <strong>biggest headline</strong> on the cover is about her and her honor.')
              + para('Read her brief below. Pull your main <strong>title</strong> and <strong>subtitle</strong> from it. Your smaller <strong>cover lines</strong> and <strong>breakout boxes</strong> can tease other things happening on campus: the Ag Farm, the livestock, the Robotics team, student projects.')
-             + scrollbox('Teddy', 'Classified Employee of the Year Nominee', TEDDY_BRIEF)
+             + scrollbox('Teddy', 'Winner, 2025/2026 Classified Employee of the Year', TEDDY_BRIEF)
              + notecard('THE FOCUS', 'Teddy Is the Star', 'Your cover can mention other campus stories in the smaller boxes, but the <strong>name, the cover photo, and the largest text</strong> must all be about Teddy and her honor.')),
         card('WHAT YOUR COVER MUST HAVE / 04 / 08', 'Set the Standard',
              para('Every finished cover must include all six of these. This is the standard you are graded on.')
@@ -351,12 +351,12 @@ page(
     'Pick your story and sketch the layout.',
     [
         card('YOUR COVER STAR / 01 / 05', 'The Cover Is About Teddy',
-             para('Your subject is <strong>Teddy</strong>, the MRC security officer and campus photographer being honored as a <strong>Classified Employee of the Year</strong> nominee. You will photograph her and build the whole cover around her.')
+             para('Your subject is <strong>Teddy</strong>, the MRC security officer and campus photographer named the <strong>2025/2026 Classified Employee of the Year</strong>. You will photograph her and build the whole cover around her.')
              + para('Her <strong>brief</strong> is your source, like a press kit a real photo editor is handed. Read it closely, then turn her story into one strong cover.')
              + notecard('TEAM TIME', 'Brainstorm Together', 'Work with your group to plan your shots and pick which other campus stories to tease in the breakout boxes. Then each of you builds your own unique cover.')),
         card('READ THE BRIEF / 02 / 05', 'Pull Your Words From Teddy&rsquo;s Story',
              para('Read Teddy&rsquo;s brief and pull out the words for your cover. Your <strong>main title</strong> comes from her honor and her story, your <strong>subtitle</strong> adds one detail, and your <strong>breakout points</strong> tease other campus stories.')
-             + scrollbox('Teddy', 'Classified Employee of the Year Nominee', TEDDY_BRIEF)
+             + scrollbox('Teddy', 'Winner, 2025/2026 Classified Employee of the Year', TEDDY_BRIEF)
              + scrollrow(brief_pull)),
         card('SKETCH YOUR LAYOUT / 03 / 05', 'Plan the Cover',
              para('On paper, sketch a quick <strong>thumbnail</strong> of your cover. Plan where each piece goes:')
