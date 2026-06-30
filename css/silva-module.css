@@ -662,3 +662,18 @@ body #top *[style*="overflow-x:auto"] {
   .silva-pager .pg-num { min-width: 30px; height: 30px; }
   .silva-pager .pg-ellipsis { height: 30px; }
 }
+
+/* Top pager: same pill, but sits inside the nav bar (no centering margin
+   or shadow) and runs a touch more compact to fit the toolbar height. */
+.silva-pager.pg-top {
+  margin: 0;
+  box-shadow: none;
+  padding: 6px 8px;
+  gap: 5px;
+}
+.silva-pager.pg-top .pg-num { min-width: 30px; height: 30px; font-size: 12px; }
+.silva-pager.pg-top .pg-edge { height: 30px; padding: 0 11px; font-size: 12px; }
+.silva-pager.pg-top .pg-ellipsis { height: 30px; }
+@media (max-width: 760px) {
+  .silva-pager.pg-top { display: none; }
+}

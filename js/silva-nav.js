@@ -15,8 +15,9 @@
  *    module after. Both gray out at the ends. Pager lives outside #top, so it
  *    is website-only and never copied into Canvas.
  *
- * 3. Auto-injects prev/next arrow buttons into .silva-nav-inner (global,
- *    page-by-page loop) and a hamburger button for mobile.
+ * 3. Injects a matching pager into the top nav bar, drops the Download
+ *    button and the redundant step-nav arrows, and shortens the Copy button
+ *    to "COPY HTML". Also injects a hamburger button for mobile.
  *
  * To add a page: drop its path into the right MODULES group, in order.
  */
@@ -168,11 +169,9 @@
     return out;
   }
 
-  function injectPager() {
+  function buildPager() {
     var at = locate();
-    if (!at) { return; }
-    var host = document.querySelector('.silva-page');
-    if (!host || document.querySelector('.silva-pager')) { return; }
+    if (!at) { return null; }
     var mod = MODULES[at.g];
 
     var pager = document.createElement('nav');
@@ -216,37 +215,25 @@
     next.innerHTML = 'Next &nbsp;&#8250;';
     pager.appendChild(next);
 
-    host.appendChild(pager);
+    return pager;
   }
 
-  function injectArrows(navInner) {
-    var path = window.location.pathname;
-    var idx = -1;
-    for (var i = 0; i < SEQUENCE.length; i++) {
-      if (samePath(path, SEQUENCE[i])) { idx = i; break; }
-    }
-    if (idx === -1) { return; }
-
-    var n = SEQUENCE.length;
-    var prevUrl = SEQUENCE[(idx - 1 + n) % n];
-    var nextUrl = SEQUENCE[(idx + 1) % n];
-
-    var prevBtn = document.createElement('a');
-    prevBtn.href = prevUrl;
-    prevBtn.className = 'silva-nav-arrow silva-nav-arrow-prev';
-    prevBtn.setAttribute('aria-label', 'Previous page');
-    prevBtn.setAttribute('title', 'Previous page');
-    prevBtn.innerHTML = '&#8592;';
-
-    var nextBtn = document.createElement('a');
-    nextBtn.href = nextUrl;
-    nextBtn.className = 'silva-nav-arrow silva-nav-arrow-next';
-    nextBtn.setAttribute('aria-label', 'Next page');
-    nextBtn.setAttribute('title', 'Next page');
-    nextBtn.innerHTML = '&#8594;';
-
-    navInner.insertBefore(prevBtn, navInner.firstChild);
-    navInner.appendChild(nextBtn);
+  // Simplify the existing Copy button to "COPY HTML" (no icon, no "Canvas")
+  // and rebind it so it stays labelled that way after a copy.
+  function setupCopyButton(navInner) {
+    var cp = navInner.querySelector('.silva-copy-btn');
+    if (!cp) { return; }
+    cp.removeAttribute('onclick');
+    cp.textContent = 'COPY HTML';
+    cp.addEventListener('click', function () {
+      var el = document.getElementById('top');
+      if (!el) { return; }
+      navigator.clipboard.writeText(el.outerHTML).then(function () {
+        cp.textContent = '✓ Copied!';
+        cp.classList.add('copied');
+        setTimeout(function () { cp.textContent = 'COPY HTML'; cp.classList.remove('copied'); }, 2500);
+      }).catch(function () { alert('Copy failed. Try selecting the page source manually.'); });
+    });
   }
 
   function injectBurger(navInner, nav) {
@@ -281,9 +268,33 @@
   function init() {
     var nav = document.querySelector('.silva-nav');
     var navInner = document.querySelector('.silva-nav-inner');
-    injectPager();
+
+    // Bottom pager (full-width, centered)
+    var host = document.querySelector('.silva-page');
+    var bottom = buildPager();
+    if (host && bottom) { host.appendChild(bottom); }
+
     if (!nav || !navInner) { return; }
-    injectArrows(navInner);
+
+    // Slim the top bar: drop the Download button and the now-redundant
+    // step-nav buttons + divider (the pager carries prev/next), and shorten
+    // the Copy button to "COPY HTML" to make room for a matching top pager.
+    var dl = navInner.querySelector('.silva-download-btn');
+    if (dl) { dl.parentNode.removeChild(dl); }
+    var sn = navInner.querySelector('.silva-step-nav');
+    if (sn) { sn.style.display = 'none'; }
+    var nd = navInner.querySelector('.silva-nav-div');
+    if (nd) { nd.style.display = 'none'; }
+    setupCopyButton(navInner);
+
+    // Top pager: same look as the bottom one, placed just before COPY HTML.
+    var top = buildPager();
+    if (top) {
+      top.classList.add('pg-top');
+      var cp = navInner.querySelector('.silva-copy-btn');
+      if (cp) { navInner.insertBefore(top, cp); } else { navInner.appendChild(top); }
+    }
+
     injectBurger(navInner, nav);
   }
 
