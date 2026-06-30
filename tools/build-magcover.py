@@ -164,7 +164,7 @@ TEDDY_BRIEF = (
     bpara('<strong>Teddy</strong> is the security officer at the Mark Richardson CTE Center and Ag Farm, but her real focus is people. She practices &ldquo;relational security&rdquo;: she learns every student&rsquo;s name, greets them by it, and makes the whole campus feel seen and safe. Students know her not just as an officer, but as a trusted mentor.')
     + bpara('She is also the <strong>campus photographer</strong>. Her photos of student grit and determination have appeared in school assemblies, school board reports, and local media, building real pride in the MRC.')
     + bpara('Teddy goes far beyond her job description. She checks on the animals daily, feeds livestock on weekends, helps the Robotics team prepare late into the night, waters the campus flowers, and pulls weeds, all because she cares. She even became <strong>forklift certified</strong> to keep students safe in an active CTE environment.')
-    + bpara('Principal Dr. Paul Robinson calls her vigilant and dedicated, and bus drivers, teachers, and students all trust her. She was named the <strong>2025/2026 Classified Employee of the Year</strong>, and as her nomination put it, Teddy proves that <strong>kindness and heart</strong> are the most powerful tools for building a strong school community.')
+    + bpara('Principal Dr. Paul Robinson calls her watchful and dedicated, and bus drivers, teachers, and students all trust her. She was named the <strong>2025/2026 Classified Employee of the Year</strong>, and as her nomination put it, Teddy proves that <strong>kindness and heart</strong> are the most powerful tools for building a strong school community.')
 )
 
 def banner(eyebrow, title, tagline):
@@ -277,7 +277,7 @@ required = [
     tile('Must-Have 06', 'Two Breakout Boxes', 'Two small boxes, each with its own photo and a few words, for extra stories.'),
 ]
 mission = [
-    tile('STEP 01', 'Plan', 'Pick your topic and person, interview them, and sketch your cover layout.'),
+    tile('STEP 01', 'Plan', 'Read Teddy&rsquo;s brief, plan your shots, and sketch your cover layout.'),
     tile('STEP 02', 'Capture', 'Shoot your hero photo and two breakout photos, then turn in a RAW folder screenshot.'),
     tile('STEP 03', 'Design', 'Build the cover in Photoshop with the masthead, your words, and two breakout boxes.'),
     tile('STEP 04', 'Reflect', 'Answer four questions about your cover and the choices you made.'),
@@ -304,34 +304,30 @@ page(
     'Tell the MRC story in one cover.',
     [
         headerimg(IMG + 'magcover-header.png', 'Julian photographing an MRC agriculture student by a tractor for a magazine cover shoot at golden hour'),
-        card('WHAT IS A MAGAZINE COVER / 01 / 08', 'One Image, One Story',
+        card('WHAT IS A MAGAZINE COVER / 01 / 07', 'One Image, One Story',
              para('A magazine cover is the front page that makes you want to pick it up. It uses <strong>one strong photo</strong> and a few <strong>bold words</strong> to sell the whole magazine in a single glance.')
              + para('Look at a real cover: a big name at the top (the <strong>masthead</strong>), one powerful photo behind it, and short headlines that tease the stories inside.')
              + para('For this project you will design a real-looking <strong>agriculture magazine cover</strong> featuring <strong>Teddy</strong>, the MRC security officer and campus photographer named the <strong>2025/2026 Classified Employee of the Year</strong>. She is your cover star.')),
-        card('PICK YOUR MAGAZINE / 02 / 08', 'Choose One of Three',
+        card('PICK YOUR MAGAZINE / 02 / 07', 'Choose One of Three',
              para('You will design your cover in the style of one real farming magazine. Pick <strong>one</strong> of these three. Click to study each one and learn its tone and the kind of images it uses.')
              + scrollrow(mags)
              + para('All three magazine logos are <strong>already in your template</strong> as layers. When you design, just turn on the layer for the magazine you chose. No need to find or place a logo yourself.')),
-        card('YOUR ASSIGNMENT / 03 / 08', 'You Are Shooting Teddy',
+        card('YOUR ASSIGNMENT / 03 / 07', 'You Are Shooting Teddy',
              para('You have been <strong>contracted</strong> to shoot the cover featuring <strong>Teddy</strong>. Her photo is your <strong>hero image</strong>, and the <strong>biggest headline</strong> on the cover is about her and her honor.')
              + para('Read her brief below. Pull your main <strong>title</strong> and <strong>subtitle</strong> from it. Your smaller <strong>cover lines</strong> and <strong>breakout boxes</strong> can tease other things happening on campus: the Ag Farm, the livestock, the Robotics team, student projects.')
              + scrollbox('Teddy', 'Winner, 2025/2026 Classified Employee of the Year', TEDDY_BRIEF)
              + notecard('THE FOCUS', 'Teddy Is the Star', 'Your cover can mention other campus stories in the smaller boxes, but the <strong>name, the cover photo, and the largest text</strong> must all be about Teddy and her honor.')),
-        card('WHAT YOUR COVER MUST HAVE / 04 / 08', 'Set the Standard',
+        card('WHAT YOUR COVER MUST HAVE / 04 / 07', 'Set the Standard',
              para('Every finished cover must include all six of these. This is the standard you are graded on.')
              + scrollrow(required)),
-        card('WORK AS A TEAM / 05 / 08', 'Brainstorm Together, Build Your Own',
-             para('You may work in a <strong>group</strong>. Slow down and brainstorm together: share topic ideas, plan interviews, and trade photos and content so everyone has plenty to work with.')
+        card('WORK AS A TEAM / 05 / 07', 'Brainstorm Together, Build Your Own',
+             para('You may work in a <strong>group</strong>. Slow down and brainstorm together: share ideas, plan your shots, and trade photos and content so everyone has plenty to work with.')
              + para('But every student turns in their <strong>own unique cover</strong>. Same group and same shoot, different design. Your layout, your title, and your choices must be your own.')
-             + notecard('TEAM RULE', 'Share Ideas, Not Covers', 'Help each other with ideas, interviews, and photos. Then make a cover that is one hundred percent yours.')),
-        card('LEARN THE LIGHTING / 06 / 08', 'Watch This Before We Shoot',
-             videothumb('https://www.youtube.com/watch?v=eBcTFRFcZWU&amp;t=38s', IMG + 'magcover-lighting-thumb.png', 'Watch the magazine lighting tutorial on YouTube')
-             + para('A great cover photo uses great <strong>lighting</strong>. For this project you must light your subject with an <strong>off-camera flash</strong>: we have a <strong>Godox AD200</strong> with a light stand and a trigger that connects to your <strong>Canon EOS R50</strong>.')
-             + para('Watch this short tutorial (click the thumbnail) to see how it works. Mr. Silva will coach you on the shoot, but study it first so we move quickly together.')),
-        card('WORDS TO KNOW / 07 / 08', 'Magazine Vocabulary',
+             + notecard('TEAM RULE', 'Share Ideas, Not Covers', 'Help each other with ideas, planning, and photos. Then make a cover that is one hundred percent yours.')),
+        card('WORDS TO KNOW / 06 / 07', 'Magazine Vocabulary',
              para('Learn these six terms. You will use them all the way through the project.')
              + scrollrow(vocab)),
-        card('YOUR MISSION / 08 / 08', 'What You Will Do',
+        card('YOUR MISSION / 07 / 07', 'What You Will Do',
              para('You will work like a real photo editor in four steps: plan, capture, design, and reflect.')
              + scrollrow(mission)
              + '<div style="margin-top:18px;">' + dlbutton(ZIP_URL, 'Download the Project Folder') + '</div>'),
@@ -369,8 +365,8 @@ page(
              + scrollrow(scout)
              + notecard('WHY SCOUT', 'A Scouted Shoot Is a Fast Shoot', 'When you already know your spot and your setup, shoot day is spent making great photos instead of figuring out where to stand. Then you bring out the flash and gear.')),
         card('GET IT CHECKED / 05 / 05', 'Bring It to Mr. Silva',
-             para('Before you shoot, show Mr. Silva your <strong>person</strong>, your <strong>interview notes</strong>, your <strong>scouting photos</strong>, and your <strong>layout sketch</strong>. This is a quick checkpoint, no upload needed.')
-             + notecard('CHECKPOINT', 'Plan First, Shoot Second', 'A clear plan and good interview make a stronger cover. Get the green light, then bring out the camera and flash for Step 2.')),
+             para('Before you shoot, show Mr. Silva your <strong>plan</strong>, your <strong>scouting photos</strong>, and your <strong>layout sketch</strong>. This is a quick checkpoint, no upload needed.')
+             + notecard('CHECKPOINT', 'Plan First, Shoot Second', 'A clear plan and strong photos make a stronger cover. Get the green light, then bring out the camera and flash for Step 2.')),
     ],
 )
 
@@ -393,22 +389,26 @@ page(
     'Magazine Cover &nbsp;&bull;&nbsp; Step 2', 'Shoot Your Cover Photo',
     'Capture your hero image on location.',
     [
-        card('SHOOT ON LOCATION / 01 / 05', 'Photojournalism Style',
+        card('LEARN THE LIGHTING / 01 / 06', 'Watch This Before You Shoot',
+             videothumb('https://www.youtube.com/watch?v=eBcTFRFcZWU&amp;t=38s', IMG + 'magcover-lighting-thumb.png', 'Watch the magazine lighting tutorial on YouTube')
+             + para('A great cover photo uses great <strong>lighting</strong>. For this shoot you must light Teddy with an <strong>off-camera flash</strong>: we have a <strong>Godox AD200</strong> with a light stand and a trigger that connects to your <strong>Canon EOS R50</strong>.')
+             + para('Watch this short tutorial (click the thumbnail) to see how it works. Mr. Silva will coach you on the shoot, but study it first so we move quickly together.')),
+        card('SHOOT ON LOCATION / 02 / 06', 'Photojournalism Style',
              para('Photograph <strong>Teddy</strong> where she works: greeting students, out at the Ag Farm, with the animals, or around campus. Shoot <strong>real moments</strong>, not stiff poses. This is <strong>photojournalism</strong>.')
              + notecard('SHOOT VERTICAL', 'Hold the Camera Tall (Portrait)', 'Your cover is a <strong>tall, vertical</strong> shape, so every photo must be shot in <strong>portrait orientation</strong>. Turn the camera <strong>sideways so the frame is taller than it is wide</strong>. A wide (landscape) photo will not fill the cover and leaves empty gaps. If your shot is wider than it is tall, turn the camera and take it again.')
-             + notecard('REQUIRED', 'Light It With the Off-Camera Flash', 'You must light your subject with the <strong>off-camera flash</strong> (the Godox AD200 on a stand, triggered from your Canon R50), not just natural light. A flash lets you control the look and mood and make your subject pop, like a real magazine portrait. Watch the lighting video in the overview first.')
+             + notecard('REQUIRED', 'Light It With the Off-Camera Flash', 'You must light your subject with the <strong>off-camera flash</strong> (the Godox AD200 on a stand, triggered from your Canon R50), not just natural light. A flash lets you control the look and mood and make your subject pop, like a real magazine portrait. Watch the lighting tutorial at the top of this page first.')
              + para('A <strong>studio</strong> with a backdrop is also set up if your story needs it.'),
              floatimg(IMG + 'magcover-capture-float.png', 'Julian photographing his cover subject kneeling beside cattle at the MRC campus at golden hour')),
-        card('MAKE A STRONG HERO SHOT / 02 / 05', 'Frame the Cover Image',
+        card('MAKE A STRONG HERO SHOT / 03 / 06', 'Frame the Cover Image',
              para('Your hero image carries the whole cover. Scroll through each pointer as you shoot.')
              + scrollrow(heroshot)),
-        card('SHOOT YOUR BREAKOUT IMAGES / 03 / 05', 'Two More Photos',
+        card('SHOOT YOUR BREAKOUT IMAGES / 04 / 06', 'Two More Photos',
              para('Your cover also needs <strong>two breakout boxes</strong>, each with its own small photo. While you are on location, shoot at least <strong>two more images</strong> for them.')
              + para('Good breakout shots tease <strong>other campus stories</strong>: the livestock, a Robotics build, a tool or crop, a wide shot of the Ag Farm, or a second angle of Teddy. Shoot extra so you have choices when you design.')),
-        card('ORGANIZE YOUR FILES / 04 / 05', 'Keep It Organized',
+        card('ORGANIZE YOUR FILES / 05 / 06', 'Keep It Organized',
              para('Use the <strong>project folder</strong> you downloaded from the overview. If you have not yet, move it into your <strong>OneDrive Digital Arts</strong> folder.')
              + para('Offload all your <strong>RAW</strong> files into the <strong>RAW Images</strong> subfolder inside it. Keep every part of this project organized here.')),
-        card('TURN IT IN / 05 / 05', 'Screenshot Your RAW Folder',
+        card('TURN IT IN / 06 / 06', 'Screenshot Your RAW Folder',
              para('Open <strong>Finder</strong> and switch to <strong>Icon view</strong> so you can see the photo thumbnails.')
              + para('Open your <strong>RAW Images</strong> folder so the window shows the folder name and your thumbnails inside. Press the <strong>F15</strong> key to take the screenshot. On our Macs, F15 saves it straight to your <strong>Desktop</strong> as a PNG.')
              + para('Find it on the Desktop and rename it:')
@@ -449,7 +449,7 @@ page(
              para('All three magazine logos are <strong>already in the template</strong> as layers. In the <strong>Layers</strong> panel, find the logo for the magazine you chose and <strong>turn its layer on</strong> (click the eye icon). Hide the other two.')
              + para('The masthead is the brand, so it sits big and bold at the <strong>top</strong> of your cover. Keep it inside the cyan guides.')),
         card('ADD YOUR WORDS / 03 / 05', 'Title, Subtitle, and Breakout Points',
-             para('Use the <strong>Type tool</strong> to add all the words from your interview. Scroll through each pointer.')
+             para('Use the <strong>Type tool</strong> to add all the words from the brief. Scroll through each pointer.')
              + scrollrow(coverlines)),
         card('ADD TWO BREAKOUT BOXES / 04 / 05', 'Feature Two More Stories',
              para('Add your <strong>two breakout boxes</strong>. Each one is a small box with one of your <strong>breakout photos</strong> inside and a few words next to it, like a mini cover line.')
