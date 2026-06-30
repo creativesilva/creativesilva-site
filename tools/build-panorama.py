@@ -199,6 +199,24 @@ def page(filename, title_tag, crumb, links, dl, eyebrow, btitle, tagline, cards)
 # =========================================================================
 # PAGE 1 — OVERVIEW
 # =========================================================================
+def ilink(href, label):
+    return ('<a href="%s" target="_blank" rel="noopener" style="color:#eda268;text-decoration:underline;"><strong>%s</strong></a>'
+            % (href, label))
+
+vocab_pano = [
+    tile('Vocabulary', 'Panorama', 'A very wide photo made by joining several overlapping photos into one.'),
+    tile('Vocabulary', 'Overlap', 'The shared area between two photos. About a third of overlap lets Photoshop match them up.'),
+    tile('Vocabulary', 'Photomerge', 'The Photoshop command that stitches a row of photos into one panorama.'),
+    tile('Vocabulary', 'Stitch', 'To blend overlapping photos edge to edge into one seamless wide image.'),
+    tile('Vocabulary', 'RAW (CR3)', 'An unprocessed image straight off the sensor. Canon&rsquo;s is the .CR3, with far more editing data than a JPG.'),
+    tile('Vocabulary', 'AV (Aperture Priority)', 'A camera mode where you pick the aperture (f-stop) and the camera sets the shutter speed.'),
+]
+
+res_pano = [
+    tile('Resource', 'Adobe: Photomerge', 'The official Photoshop guide to stitching photos into a panorama. ' + ilink('https://helpx.adobe.com/photoshop/desktop/repair-retouch/clean-restore-images/create-panoramic-images-with-photomerge.html', 'Open &rarr;')),
+    tile('Resource', 'Stitch a Panorama', 'A clear step-by-step walkthrough of building a Photoshop panorama. ' + ilink('https://expertphotography.com/photoshop-panorama', 'Open &rarr;')),
+]
+
 mission = [
     tile('STEP 01', 'Capture', 'Shoot RAW images for two panoramas with a camera and tripod, then turn in a screenshot of your RAW folder.'),
     tile('STEP 02', 'Merge & Edit', 'Stitch each set of photos into one wide panorama in Photoshop, then submit two finished JPGs.'),
@@ -213,18 +231,24 @@ page(
     'Stitch many photos into one wide world.',
     [
         headerimg(RAW + 'pano-header.png', 'A photography student capturing a wide panorama of the futuristic MRC campus at golden hour, with crops and livestock corrals in the foreground'),
-        card('WHAT IS A PANORAMA / 01 / 04', 'One Photo, Wide as the World',
+        card('WHAT IS A PANORAMA / 01 / 06', 'One Photo, Wide as the World',
              para('A panorama is a very wide photo made by joining several photos into one. It captures far more than a single shot can: a whole landscape, a long hallway, or a city skyline.')
              + para('You take a row of photos that <strong>overlap</strong>, then the computer stitches them edge to edge into one wide image. The result tells a visual story across movement and space.')),
-        card('THE TWO PARTS / 02 / 04', 'Capture, Then Merge',
+        card('THE TWO PARTS / 02 / 06', 'Capture, Then Merge',
              para('This is a two-part project. In <strong>Part A</strong> (Step 1) you photograph RAW images for two panoramas with a camera and tripod. In <strong>Part B</strong> (Step 2) you stitch and edit them in Photoshop. Then you finish with a short reflection.')
              + para('You will make at least <strong>two panoramas</strong>, each built from <strong>4 to 5 photos</strong>.')
              + notecard('START HERE', 'Download Your Project Folder', 'Download the <strong>Panorama</strong> folder below and move it into your <strong>OneDrive Digital Arts</strong> folder. Inside you will find a <strong>RAW Images</strong> folder for your photos and your <strong>reflection</strong> sheet. Keep all of your project work in this one folder from start to finish.')
              + '<div style="margin-top:18px;">' + dlbutton(ZIP_URL, 'Download the Panorama Project Folder') + '</div>'),
-        card('SHOOTING IN RAW / 03 / 04', 'Why RAW This Time',
+        card('SHOOTING IN RAW / 03 / 06', 'Why RAW This Time',
              para('This time you shoot in <strong>RAW</strong>, not JPEG. A RAW file keeps all the data the camera sensor captured, so you can fix exposure and color later with no loss in quality. On our Canon cameras, RAW files end in <strong>.CR3</strong>.')
              + para('RAW files are larger and need editing software to open and merge. That is exactly what Photoshop is for in Part B.')),
-        card('YOUR MISSION / 04 / 04', 'What You Will Do',
+        card('WORDS TO KNOW / 04 / 06', 'Panorama Vocabulary',
+             para('Learn these six terms. You will use them through the whole project.')
+             + scrollrow(vocab_pano)),
+        card('RESOURCES / 05 / 06', 'Watch and Learn',
+             para('Want to see it done first? These walk through stitching panoramas in Photoshop. Click to open in a new tab.')
+             + scrollrow(res_pano)),
+        card('YOUR MISSION / 06 / 06', 'What You Will Do',
              para('You will work like a real photographer: capture, merge, and reflect. Three steps, three turn-ins.')
              + scrollrow(mission)),
     ],
