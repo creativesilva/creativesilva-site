@@ -66,6 +66,14 @@
      '/curriculum/mrc/movieposter-step04-reflection.html'],
     ['/curriculum/mrc/double-exposure-overview.html',
      '/curriculum/mrc/double-exposure-step01-create.html'],
+    ['/curriculum/mrc/cereal-box-introduction.html',
+     '/curriculum/mrc/cereal-box-elements-of-art.html',
+     '/curriculum/mrc/cereal-box-step01-research.html',
+     '/curriculum/mrc/cereal-box-step02-sketchbook.html',
+     '/curriculum/mrc/cereal-box-step03-design.html',
+     '/curriculum/mrc/cereal-box-step04-sketch.html',
+     '/curriculum/mrc/cereal-box-step05-digital.html',
+     '/curriculum/mrc/cereal-box-step06-reflection.html'],
 
     // Course homes
     ['/curriculum/digarts1/digarts1b-home.html'],
