@@ -709,8 +709,8 @@
               <summary class="cat-head"><span class="cat-name">Markdown Files</span><span class="cat-chevron"></span></summary>
               <div class="cat-body">
                 <div class="module-list">
-                  <a href="/SILVA_ANGULAR_FRAMEWORK.md" download class="module-row"><span class="module-row-name">SILVA_ANGULAR_FRAMEWORK.md</span><span class="resource-dl-badge">&#11015; Download</span></a>
-                  <a href="/CANVAS_BUILD_FRAMEWORK.md" download class="module-row"><span class="module-row-name">CANVAS_BUILD_FRAMEWORK.md</span><span class="resource-dl-badge">&#11015; Download</span></a>
+                  <a href="/SILVA_ANGULAR_FRAMEWORK.md" download class="module-row featured"><span class="module-row-name">SILVA_ANGULAR_FRAMEWORK.md</span><span class="resource-dl-badge">&#11015; Download</span></a>
+                  <a href="/CANVAS_BUILD_FRAMEWORK.md" download class="module-row featured"><span class="module-row-name">CANVAS_BUILD_FRAMEWORK.md</span><span class="resource-dl-badge">&#11015; Download</span></a>
                 </div>
               </div>
             </details>
@@ -1203,7 +1203,7 @@
             const tag = `<span class="module-status ${m.status}">${statusLabel(m.status)}</span>`;
             const pages = `<span class="module-page-count">${m.pages}p</span>`;
             const inner = `<span class="module-row-name">${m.name}</span>${pages}${tag}`;
-            const cls = m.featured ? "module-row featured" : "module-row";
+            const cls = "module-row featured"; // all rows styled teal (featured flag ignored for now)
             return m.url
               ? `<a class="${cls}" href="${m.url}">${inner}</a>`
               : `<div class="${cls}">${inner}</div>`;
