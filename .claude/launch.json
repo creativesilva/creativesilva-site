@@ -4,7 +4,13 @@
     {
       "name": "creativesilva-site",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8743", "--directory", "/Users/riva/RIVA_CODE/creativesilva-site"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8743",
+        "--directory",
+        "/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
+      ],
       "port": 8743
     }
   ]
