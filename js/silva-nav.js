@@ -73,7 +73,8 @@
      '/curriculum/mrc/cereal-box-step03-design.html',
      '/curriculum/mrc/cereal-box-step04-sketch.html',
      '/curriculum/mrc/cereal-box-step05-digital.html',
-     '/curriculum/mrc/cereal-box-step06-reflection.html'],
+     '/curriculum/mrc/cereal-box-step06-social-media.html',
+     '/curriculum/mrc/cereal-box-step07-reflection.html'],
 
     // Course homes
     ['/curriculum/digarts1/digarts1b-home.html'],
