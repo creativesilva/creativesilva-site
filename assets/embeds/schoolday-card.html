@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PVHS School Day Countdown</title>
+  <title>PVHS Next Day Off Countdown</title>
   <!--
-    Standalone school-day countdown card, embedded via <iframe> on Canvas home pages.
-    Single source of truth: it loads schedule-data.js LIVE from the pvhs_tools app,
-    so the 180-day calendar stays in sync with that app automatically. Update the
-    school year in one place (pvhs_tools/schedule-data.js) and this card follows.
+    School-day countdown to the NEXT day off (holiday or long weekend), embedded
+    via <iframe> on Canvas home pages. It loads schedule-data.js LIVE from the
+    pvhs_tools app, so the day-off DATE is always derived from the real calendar
+    (the next weekday with no school). Holiday NAMES are labeled from the small
+    map below; update it each school year alongside the pvhs_tools calendar.
   -->
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -68,24 +69,37 @@
       align-items: baseline;
       justify-content: space-between;
       width: 100%;
+      gap: 8px;
       margin-top: 6px;
     }
-    .meta span {
-      font-size: 8px;
-      letter-spacing: 0.10em;
+    .meta .off-name {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.32);
+      color: #5eead4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .meta .off-date {
+      font-size: 8.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.40);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
   </style>
 </head>
 <body>
   <div class="card">
     <div class="num" id="num">&ndash;</div>
-    <div class="label">School Days Left</div>
+    <div class="label">School Days Until</div>
     <div class="bar-wrap"><div class="bar-fill" id="bar"></div></div>
     <div class="meta">
-      <span id="progress">Day &ndash; of &ndash;</span>
-      <span id="last">Last Day: &ndash;</span>
+      <span class="off-name" id="off-name">&ndash;</span>
+      <span class="off-date" id="off-date">&ndash;</span>
     </div>
   </div>
 
@@ -95,31 +109,90 @@
     (function () {
       var numEl  = document.getElementById('num');
       var barEl  = document.getElementById('bar');
-      var progEl = document.getElementById('progress');
-      var lastEl = document.getElementById('last');
+      var nameEl = document.getElementById('off-name');
+      var dateEl = document.getElementById('off-date');
 
-      // Guard: if the data file did not load, leave the placeholder dashes.
       if (typeof schoolDays === 'undefined' || !schoolDays.length) { return; }
 
-      // Today's date in Pacific time as YYYY-MM-DD (matches schoolDays format).
-      var todayStr = new Intl.DateTimeFormat('en-CA', {
-        timeZone: 'America/Los_Angeles',
-        year: 'numeric', month: '2-digit', day: '2-digit'
+      // Named holidays / breaks for the 2026-27 year. Key = first weekday off.
+      // Update this map each school year to match the pvhs_tools calendar.
+      var HOLIDAY_NAMES = {
+        '2026-09-07': 'Labor Day',
+        '2026-11-11': 'Veterans Day',
+        '2026-11-23': 'Thanksgiving Break',
+        '2026-12-21': 'Winter Break',
+        '2027-01-18': 'MLK Day',
+        '2027-02-15': 'Presidents Day',
+        '2027-05-25': 'Memorial Day'
+      };
+
+      var set   = {};
+      for (var i = 0; i < schoolDays.length; i++) { set[schoolDays[i]] = true; }
+      var first = schoolDays[0];
+      var last  = schoolDays[schoolDays.length - 1];
+
+      var today = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit'
       }).format(new Date());
 
-      var total = schoolDays.length;                                  // 180
-      var left  = schoolDays.filter(function (d) { return d >= todayStr; }).length;
-      var done  = total - left;
-      var pct   = total ? Math.round((done / total) * 100) : 0;
+      function shift(ds, n) {
+        var d = new Date(ds + 'T12:00:00');
+        d.setDate(d.getDate() + n);
+        var y = d.getFullYear(), m = ('0' + (d.getMonth() + 1)).slice(-2), day = ('0' + d.getDate()).slice(-2);
+        return y + '-' + m + '-' + day;
+      }
+      function weekday(ds) { return new Date(ds + 'T12:00:00').getDay(); } // 0 Sun .. 6 Sat
 
-      numEl.textContent  = left;
+      var start = today < first ? first : today;
+
+      // Next day off = next weekday (Mon-Fri) with no school, on or before the last day.
+      var nextOff = null, c = start;
+      for (var k = 0; k < 400; k++) {
+        c = shift(c, 1);
+        if (c > last) break;
+        var wd = weekday(c);
+        if (wd === 0 || wd === 6) continue;
+        if (!set[c]) { nextOff = c; break; }
+      }
+
+      // Previous day off (for the progress bar's current stretch).
+      var prevOff = null, b = start;
+      for (var j = 0; j < 400; j++) {
+        b = shift(b, -1);
+        if (b < first) break;
+        var wb = weekday(b);
+        if (wb === 0 || wb === 6) continue;
+        if (!set[b]) { prevOff = b; break; }
+      }
+
+      var boundary = nextOff || shift(last, 1); // if no more holidays, count to end of year
+      var remaining = schoolDays.filter(function (d) { return d >= today && d < boundary; }).length;
+      var stretch   = schoolDays.filter(function (d) {
+        return (prevOff ? d > prevOff : true) && d < boundary;
+      }).length;
+      var elapsed = stretch - remaining;
+      var pct = stretch ? Math.max(0, Math.min(100, Math.round(elapsed / stretch * 100))) : 0;
+
+      // Name the day off.
+      var name;
+      if (!nextOff) {
+        name = 'Summer Break';
+      } else if (HOLIDAY_NAMES[nextOff]) {
+        name = HOLIDAY_NAMES[nextOff];
+      } else {
+        var dayAfter = shift(nextOff, 1);
+        var multi = weekday(dayAfter) !== 0 && weekday(dayAfter) !== 6 && !set[dayAfter];
+        name = multi ? 'Break' : 'Day Off';
+      }
+
+      var dateStr = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/Los_Angeles', weekday: 'short', month: 'short', day: 'numeric'
+      }).format(new Date(boundary + 'T12:00:00'));
+
+      numEl.textContent  = remaining;
       barEl.style.width  = pct + '%';
-      progEl.textContent = 'Day ' + Math.min(done + (left > 0 ? 1 : 0), total) + ' of ' + total;
-
-      var lastSD = schoolDays[schoolDays.length - 1];
-      lastEl.textContent = 'Last Day: ' + new Intl.DateTimeFormat('en-US', {
-        timeZone: 'America/Los_Angeles', month: 'short', day: 'numeric'
-      }).format(new Date(lastSD + 'T12:00:00'));
+      nameEl.textContent = name;
+      dateEl.textContent = dateStr;
     })();
   </script>
 </body>
