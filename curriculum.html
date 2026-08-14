@@ -1280,6 +1280,7 @@
     // ── Course Documents (downloadable, editable Word docs) ──
     const DOCBASE = "assets/course-documents/";
     const COURSE_DOCS = {
+      universal: { extras: [{ file: "Interview-Your-Peer-Bilingual.docx", label: "Interview Your Peer (Bilingual)" }] },
       da1a:    { syllabus: "Digital-Arts-1-Syllabus-2026-2027.docx",  agreement: "Digital-Arts-1-Lab-and-Equipment-Agreement-2026-2027.docx" },
       da1b:    { syllabus: "Digital-Arts-1-Syllabus-2026-2027.docx",  agreement: "Digital-Arts-1-Lab-and-Equipment-Agreement-2026-2027.docx" },
       da2a:    {},
@@ -1295,16 +1296,12 @@
         + `<span class="course-doc-name">${label}</span>`
         + `<span class="course-doc-dl">Download</span></a>`;
     }
-    // Shared handouts shown under every course's Course Documents.
-    const SHARED_DOCS = [
-      { file: "Interview-Your-Peer-Bilingual.docx", label: "Interview Your Peer (Bilingual)" },
-    ];
     function docsBlock(course) {
       const d = COURSE_DOCS[course.id];
       if (!d) return "";
       let inner = (d.syllabus ? docLink(d.syllabus, "Course Syllabus") : "")
         + (d.agreement ? docLink(d.agreement, "Lab &amp; Equipment Agreement") : "")
-        + SHARED_DOCS.map(s => docLink(s.file, s.label)).join("");
+        + (d.extras ? d.extras.map(s => docLink(s.file, s.label)).join("") : "");
       if (!inner) inner = `<div class="course-doc-empty">No documents posted yet.</div>`;
       return `<div class="course-docs" style="--doc-accent:${course.accent}">`
         + `<div class="course-docs-label">Course Documents</div>${inner}</div>`;
