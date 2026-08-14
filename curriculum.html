@@ -1280,7 +1280,10 @@
     // ── Course Documents (downloadable, editable Word docs) ──
     const DOCBASE = "assets/course-documents/";
     const COURSE_DOCS = {
-      universal: { extras: [{ file: "Interview-Your-Peer-Bilingual.docx", label: "Interview Your Peer (Bilingual)" }] },
+      universal: {
+        extras: [{ file: "Interview-Your-Peer-Bilingual.docx", label: "Interview Your Peer (Bilingual)" }],
+        links: [{ url: "https://creativesilva.github.io/pvhs_tools/index.html", label: "PVHS Tools App" }],
+      },
       da1a:    { syllabus: "Digital-Arts-1-Syllabus-2026-2027.docx",  agreement: "Digital-Arts-1-Lab-and-Equipment-Agreement-2026-2027.docx" },
       da1b:    { syllabus: "Digital-Arts-1-Syllabus-2026-2027.docx",  agreement: "Digital-Arts-1-Lab-and-Equipment-Agreement-2026-2027.docx" },
       da2a:    {},
@@ -1305,6 +1308,19 @@
       if (!inner) inner = `<div class="course-doc-empty">No documents posted yet.</div>`;
       return `<div class="course-docs" style="--doc-accent:${course.accent}">`
         + `<div class="course-docs-label">Course Documents</div>${inner}</div>`;
+    }
+    function linkRow(url, label) {
+      return `<a class="course-doc" href="${url}" target="_blank" rel="noopener">`
+        + `<span class="course-doc-ico">APP</span>`
+        + `<span class="course-doc-name">${label}</span>`
+        + `<span class="course-doc-dl">Open &#8599;</span></a>`;
+    }
+    function linksBlock(course) {
+      const d = COURSE_DOCS[course.id];
+      if (!d || !d.links || !d.links.length) return "";
+      const inner = d.links.map(l => linkRow(l.url, l.label)).join("");
+      return `<div class="course-docs" style="--doc-accent:${course.accent}">`
+        + `<div class="course-docs-label">Class Tools</div>${inner}</div>`;
     }
 
     function buildCourseCard(course) {
@@ -1350,6 +1366,7 @@
           </summary>
           <div class="course-acc-body">
             ${docsBlock(course)}
+            ${linksBlock(course)}
             ${mods.length ? `<div class="module-list">${moduleRows}</div>` : empty}
             ${hint}
           </div>
