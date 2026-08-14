@@ -253,6 +253,22 @@
     .course-acc-body .course-desc { margin-bottom: 18px; }
     .course-acc-body .module-list { margin-bottom: 0; }
 
+    /* ── Archived courses ── */
+    .archived-heading {
+      font-family: var(--font-head);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin: 40px 0 4px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .course-acc.archived { opacity: 0.68; }
+    .course-acc.archived:hover,
+    .course-acc.archived[open] { opacity: 1; }
+
     /* ── Build Resources: category sub-accordions ── */
     .cat-acc {
       border: 1px solid rgba(255,255,255,0.08);
@@ -1137,7 +1153,8 @@
         code: "MRC · DA 1A",
         title: "Summer Digital Arts",
         accent: "#c95201",
-        desc: "Mark Richardson Center summer intro to the Digital Arts pathway. A hands-on first look at design: logos, branding, layout, color, and digital illustration with Adobe Creative Cloud."
+        archived: true,
+        desc: "Mark Richardson Center summer intro to the Digital Arts pathway. A hands-on first look at design: logos, branding, layout, color, and digital illustration with Adobe Creative Cloud. Archived reference: not currently taught, kept to pull from and restyle for PVHS later."
       },
       {
         id: "da1a",
@@ -1249,7 +1266,7 @@
         : `<span class="course-acc-count empty">Coming soon</span>`;
 
       return `
-        <details class="course-acc" id="${course.id}">
+        <details class="course-acc${course.archived ? " archived" : ""}" id="${course.id}">
           <summary class="course-acc-head">
             <span class="course-card-accent" style="background:${course.accent}"></span>
             <span class="course-acc-headtext">
@@ -1269,8 +1286,16 @@
       `;
     }
 
-    document.getElementById("course-grid")
-      .insertAdjacentHTML("beforeend", COURSES.map(buildCourseCard).join(""));
+    (function renderCourses() {
+      const grid = document.getElementById("course-grid");
+      const active = COURSES.filter(c => !c.archived);
+      const archived = COURSES.filter(c => c.archived);
+      grid.insertAdjacentHTML("beforeend", active.map(buildCourseCard).join(""));
+      if (archived.length) {
+        grid.insertAdjacentHTML("beforeend",
+          `<div class="archived-heading">Archived Courses</div>` + archived.map(buildCourseCard).join(""));
+      }
+    })();
 
     // ── Accordion: deep-link, remembered open-state, sensible default ──────────
     (function initAccordion() {
