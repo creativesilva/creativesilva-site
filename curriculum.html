@@ -1288,14 +1288,15 @@
       da1b:    { syllabus: "Digital-Arts-1-Syllabus-2026-2027.docx",  agreement: "Digital-Arts-1-Lab-and-Equipment-Agreement-2026-2027.docx" },
       da2a:    {},
       da2b:    {},
-      photo1a: { syllabus: "Photography-1-Syllabus-2026-2027.docx",   agreement: "Photography-1-Lab-and-Equipment-Agreement-2026-2027.docx" },
-      photo1b: { syllabus: "Photography-1-Syllabus-2026-2027.docx",   agreement: "Photography-1-Lab-and-Equipment-Agreement-2026-2027.docx" },
+      photo1a: { syllabus: "Photography-1-Syllabus-2026-2027_V2.docx", agreement: "Photography-1-Lab-and-Equipment-Agreement-2026-2027_V2.docx", extras: [{ file: "Photography-1-Lab-and-Equipment-Agreement-2026-2027.pdf", label: "Lab &amp; Equipment Agreement (PDF)" }] },
+      photo1b: { syllabus: "Photography-1-Syllabus-2026-2027_V2.docx", agreement: "Photography-1-Lab-and-Equipment-Agreement-2026-2027_V2.docx", extras: [{ file: "Photography-1-Lab-and-Equipment-Agreement-2026-2027.pdf", label: "Lab &amp; Equipment Agreement (PDF)" }] },
       photo2a: { syllabus: "Photography-2-Syllabus-2026-2027.docx",   agreement: "Photography-2-Lab-and-Equipment-Agreement-2026-2027.docx" },
       photo2b: { syllabus: "Photography-2-Syllabus-2026-2027.docx",   agreement: "Photography-2-Lab-and-Equipment-Agreement-2026-2027.docx" },
     };
     function docLink(file, label) {
+      const ext = file.split(".").pop().toUpperCase();
       return `<a class="course-doc" href="${DOCBASE}${encodeURIComponent(file)}" download>`
-        + `<span class="course-doc-ico">DOCX</span>`
+        + `<span class="course-doc-ico">${ext}</span>`
         + `<span class="course-doc-name">${label}</span>`
         + `<span class="course-doc-dl">Download</span></a>`;
     }
