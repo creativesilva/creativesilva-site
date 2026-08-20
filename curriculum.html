@@ -1303,6 +1303,7 @@
       universal: {
         extras: [{ file: "Interview-Your-Peer-Bilingual_v2.docx", label: "Interview Your Peer (Bilingual)" }],
         links: [{ url: "https://creativesilva.github.io/pvhs_tools/index.html", label: "PVHS Tools App" }],
+        local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/2026-08-19_PVHS_Dashboard_v8.html", label: "Enrolled Student Dashboard" }],
       },
       da1a:    { syllabus: "Digital-Arts-1-Syllabus-2026-2027.docx",  agreement: "Digital-Arts-1-Lab-and-Equipment-Agreement-2026-2027.docx" },
       da1b:    { syllabus: "Digital-Arts-1-Syllabus-2026-2027.docx",  agreement: "Digital-Arts-1-Lab-and-Equipment-Agreement-2026-2027.docx" },
@@ -1336,12 +1337,35 @@
         + `<span class="course-doc-name">${label}</span>`
         + `<span class="course-doc-dl">Open</span></a>`;
     }
+    // Local file:// link. Browsers block file:// clicks from an https page, so on the
+    // live site this copies the path (paste into a new tab). Opened as a local file, it just works.
+    function localRow(path, label) {
+      const safe = path.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+      return `<a class="course-doc" href="${safe}" data-local="${safe}" onclick="return openLocal(event, this)">`
+        + `<span class="course-doc-ico">LOCAL</span>`
+        + `<span class="course-doc-name">${label}</span>`
+        + `<span class="course-doc-dl">Copy path</span></a>`;
+    }
+    function openLocal(e, el) {
+      if (location.protocol === "file:") return true;            // local page: open the file directly
+      e.preventDefault();
+      const path = el.getAttribute("data-local");
+      const dl = el.querySelector(".course-doc-dl");
+      const flash = (msg) => { const prev = dl.textContent; dl.textContent = msg; setTimeout(() => { dl.textContent = prev; }, 1900); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(path).then(() => flash("Copied")).catch(() => window.prompt("Copy this path, then paste into a new browser tab:", path));
+      } else {
+        window.prompt("Copy this path, then paste into a new browser tab:", path);
+      }
+      return false;
+    }
     function linksBlock(course) {
       const d = COURSE_DOCS[course.id];
-      if (!d || !d.links || !d.links.length) return "";
-      const inner = d.links.map(l => linkRow(l.url, l.label)).join("");
+      const links = (d && d.links) ? d.links.map(l => linkRow(l.url, l.label)).join("") : "";
+      const locals = (d && d.local) ? d.local.map(l => localRow(l.path, l.label)).join("") : "";
+      if (!links && !locals) return "";
       return `<div class="course-docs">`
-        + `<div class="course-docs-label">Class Tools</div>${inner}</div>`;
+        + `<div class="course-docs-label">Class Tools</div>${links}${locals}</div>`;
     }
 
     function buildCourseCard(course) {
