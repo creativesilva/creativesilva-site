@@ -307,6 +307,33 @@
       border: 1px dashed rgba(255, 255, 255, 0.12); color: var(--text-dim); font-size: 0.85rem;
     }
 
+    /* ── QR popup ── */
+    #qr-modal { display: none; position: fixed; inset: 0; z-index: 1000;
+      align-items: center; justify-content: center; padding: 24px; }
+    #qr-modal.open { display: flex; }
+    .qr-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.72); }
+    .qr-card { position: relative; z-index: 1; width: min(92vw, 380px);
+      background: #111414; border: 1px solid rgba(255, 255, 255, 0.12);
+      border-top: 3px solid var(--qr-accent, #007474);
+      padding: 26px 26px 22px; text-align: center; }
+    .qr-close { position: absolute; top: 8px; right: 10px; background: none; border: 0;
+      color: var(--text-faint); font-size: 1.5rem; line-height: 1; cursor: pointer; padding: 4px 8px; }
+    .qr-close:hover { color: #ffffff; }
+    .qr-title { font-family: var(--font-head); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--text); margin-bottom: 16px; }
+    .qr-imgwrap { background: #ffffff; padding: 14px; display: inline-block; }
+    .qr-img { display: block; width: min(74vw, 300px); height: auto; image-rendering: pixelated; }
+    .qr-hint { color: var(--text-dim); font-size: 0.78rem; line-height: 1.5; margin: 16px 0 18px; }
+    .qr-dl { display: inline-block; text-decoration: none;
+      font-family: var(--font-head); font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--qr-accent, #007474); padding: 8px 18px;
+      border: 1px solid color-mix(in srgb, var(--qr-accent, #007474) 55%, transparent);
+      background: color-mix(in srgb, var(--qr-accent, #007474) 10%, transparent);
+      transition: background 0.15s ease, border-color 0.15s ease; }
+    .qr-dl:hover { background: color-mix(in srgb, var(--qr-accent, #007474) 20%, transparent);
+      border-color: color-mix(in srgb, var(--qr-accent, #007474) 85%, transparent); }
+
     /* ── Archived courses ── */
     .archived-heading {
       font-family: var(--font-head);
@@ -1303,6 +1330,8 @@
       universal: {
         extras: [{ file: "Interview-Your-Peer-Bilingual_v2.docx", label: "Interview Your Peer (Bilingual)" }],
         links: [{ url: "https://creativesilva.github.io/pvhs_tools/index.html", label: "PVHS Tools App" }],
+        forms: [{ url: "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform", label: "Camera Check Out Form" }],
+        qr: [{ src: "assets/qr/camera-checkout-qr.png", label: "Camera Check Out QR Code", download: "PVHS-Camera-Checkout-QR.png" }],
         local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/2026-08-19_PVHS_Dashboard_v8.html", label: "Enrolled Student Dashboard" }],
       },
       da1a:    { syllabus: "Digital-Arts-1-Syllabus-2026-2027.docx",  agreement: "Digital-Arts-1-Lab-and-Equipment-Agreement-2026-2027.docx" },
@@ -1359,13 +1388,63 @@
       }
       return false;
     }
+    function formRow(url, label) {
+      return `<a class="course-doc" href="${url}" target="_blank" rel="noopener">`
+        + `<span class="course-doc-ico">FORM</span>`
+        + `<span class="course-doc-name">${label}</span>`
+        + `<span class="course-doc-dl">Open</span></a>`;
+    }
+    // QR row: click opens a popup to view it larger, with a Download button.
+    function qrRow(src, label, download) {
+      const dl = (download || "qr-code.png").replace(/"/g, "&quot;");
+      return `<a class="course-doc" href="${src}" data-qr="${src}" data-dl="${dl}" onclick="return openQR(event, this)">`
+        + `<span class="course-doc-ico">QR</span>`
+        + `<span class="course-doc-name">${label}</span>`
+        + `<span class="course-doc-dl">View QR</span></a>`;
+    }
+    function openQR(e, el) {
+      e.preventDefault();
+      const src = el.getAttribute("data-qr");
+      const dl = el.getAttribute("data-dl");
+      const name = el.querySelector(".course-doc-name").textContent;
+      const accent = getComputedStyle(el).borderLeftColor || "#007474";
+      let m = document.getElementById("qr-modal");
+      if (!m) {
+        m = document.createElement("div");
+        m.id = "qr-modal";
+        m.innerHTML = `<div class="qr-backdrop" onclick="closeQR()"></div>`
+          + `<div class="qr-card" role="dialog" aria-modal="true" aria-label="QR code">`
+          + `<button class="qr-close" onclick="closeQR()" aria-label="Close">&times;</button>`
+          + `<div class="qr-title"></div>`
+          + `<div class="qr-imgwrap"><img class="qr-img" alt="QR code" /></div>`
+          + `<div class="qr-hint">Point a phone camera at the code to open the form.</div>`
+          + `<a class="qr-dl" download>Download QR</a></div>`;
+        document.body.appendChild(m);
+      }
+      m.style.setProperty("--qr-accent", accent);
+      m.querySelector(".qr-title").textContent = name;
+      m.querySelector(".qr-img").src = src;
+      const a = m.querySelector(".qr-dl");
+      a.href = src; a.setAttribute("download", dl);
+      m.classList.add("open");
+      document.addEventListener("keydown", qrEsc);
+      return false;
+    }
+    function closeQR() {
+      const m = document.getElementById("qr-modal");
+      if (m) m.classList.remove("open");
+      document.removeEventListener("keydown", qrEsc);
+    }
+    function qrEsc(e) { if (e.key === "Escape") closeQR(); }
     function linksBlock(course) {
       const d = COURSE_DOCS[course.id];
       const links = (d && d.links) ? d.links.map(l => linkRow(l.url, l.label)).join("") : "";
+      const forms = (d && d.forms) ? d.forms.map(f => formRow(f.url, f.label)).join("") : "";
+      const qrs = (d && d.qr) ? d.qr.map(q => qrRow(q.src, q.label, q.download)).join("") : "";
       const locals = (d && d.local) ? d.local.map(l => localRow(l.path, l.label)).join("") : "";
-      if (!links && !locals) return "";
+      if (!links && !forms && !qrs && !locals) return "";
       return `<div class="course-docs">`
-        + `<div class="course-docs-label">Class Tools</div>${links}${locals}</div>`;
+        + `<div class="course-docs-label">Class Tools</div>${links}${forms}${qrs}${locals}</div>`;
     }
 
     function buildCourseCard(course) {
