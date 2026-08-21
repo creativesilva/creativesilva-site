@@ -40,7 +40,7 @@ To get a bright-teal-top-left to dim-bottom-right gradient frame (matching the c
 
 **Opaque vs translucent body:**
 - **Small elements (nav buttons, icon tiles, inner cards):** body MUST be opaque (`#041d1c`), or the frame gradient bleeds through the whole small box and washes it with a gradient (the whole box sits in the bright-top-left zone).
-- **Large section cards:** use a semi-transparent dark body (e.g. `rgba(4,29,28,0.55)`) so the page's panther watermark reads through the card. On a large box only the top-left corner is in the bright zone, so the frame tint is limited to the corner while the rest shows the watermark. Keep the corner wedge opaque (`#094043`).
+- **Large section cards:** use a semi-transparent dark **teal** body (`rgba(0,116,116,0.30)`, i.e. the #007474 teal at 0.30, with the wedge at `rgba(0,116,116,0.55)`) so the page's panther watermark reads through. Keep it teal, not a near-black, or the panel goes murky. the card. On a large box only the top-left corner is in the bright zone, so the frame tint is limited to the corner while the rest shows the watermark. Keep the corner wedge opaque (`#094043`).
 
 ### 2.3 Clickable buttons in Canvas
 
