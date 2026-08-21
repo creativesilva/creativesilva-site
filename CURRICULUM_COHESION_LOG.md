@@ -19,10 +19,13 @@ Every framed box on every page should read as the same object. Locked spec:
   `<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;">`.
   The 2px padding shows the gradient as a bright-teal-top-left to dim-bottom-right frame.
   `border-image` is stripped by Canvas, so it must never be used for a frame.
-- **Body opacity by size.** Small boxes (buttons, tiles, inner cards) use an **opaque** body
-  `linear-gradient(135deg,#094043 0,#094043 28px,#041d1c 28px,#041d1c 100%)` or the frame
-  bleeds and washes them. Large section cards use a **semi-transparent dark teal** body
-  (`#094043 0,#094043 28px,rgba(4,29,28,0.45) 28px,rgba(4,29,28,0.45) 100%`: opaque wedge, only the dark fill translucent) so the panther watermark reads through while the section stays dark.
+- **Two treatments by size.** **Small boxes** (buttons, inner cards, framed images) use the
+  gradient-frame wrapper + an **opaque** body
+  `linear-gradient(135deg,#094043 0,#094043 28px,#041d1c 28px,#041d1c 100%)` + 28px triangle
+  (opaque or the frame bleeds). **Large section cards** do NOT use the wrapper: they use the
+  home-page welcome-card recipe, `background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;`
+  (faint translucent teal so the panther watermark reads through; solid border + teal left
+  accent, Canvas-safe; no wrapper, no triangle).
 - **28px triangle eyebrow.** Fixed `28px` corner wedge (never a %), so it is the same size
   on a wide box and a square box.
 - **Square corners.** No `border-radius` (stripped anyway).
