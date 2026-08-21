@@ -22,11 +22,43 @@ Generator: `tools/build-da-finals.py`.
 
 The Canvas Rich Content Editor sanitizer strips a lot. Build only with what survives.
 
-PRESERVED: inline `background` (solid color or single linear-gradient), `border` / `border-top` / `border-image`, `padding`, `margin`, `display:grid` / `flex`, `<img>` tags, inline `color` / `font-size`, `letter-spacing`, `text-transform`, `<strong>`.
+PRESERVED: inline `background` (solid color or single linear-gradient, multi-stop is fine), solid `border` / `border-top` (with a real color), `padding`, `margin`, `display:block` / `grid` / `flex`, `<img>` tags, inline `color` / `font-size`, `letter-spacing`, `text-transform`, `<strong>`, `<table>` / `<tr>` / `<td>` structure.
 
-STRIPPED: `border-radius`, `box-shadow`, `opacity`, `position:absolute`, `<style>` blocks, `<script>` inside the copied region, `transition`, `animation`, `:hover`, pseudo-elements, `background-image: url(...)` on most elements, `filter`.
+STRIPPED (verified the hard way, 2026-08-21): `border-image` (a `border:2px solid transparent;border-image:...` becomes an INVISIBLE border), `grid-template-columns` values containing `repeat()` (the whole declaration is dropped, collapsing the grid; explicit tracks like `minmax(0,1fr) minmax(0,1fr) ...` survive), `border-radius`, `box-shadow`, `opacity`, `position:absolute`, `<style>` blocks, `<script>` inside the copied region, `transition`, `animation`, `:hover`, pseudo-elements, `background-image: url(...)` on most elements, `filter`.
 
 Design implication: everything is angular (zero rounded corners). Accents are drawn with borders, gradients, and CSS-border shapes, never shadows or rounded chips.
+
+**Canvas does NOT sanitize `<iframe>` content.** The school-day countdown card renders inside an iframe, so it keeps `border-image` and anything else. Inline HTML pasted into the page IS sanitized. So a countdown card (iframe) and a nav button (inline) will NOT match if the button leans on `border-image`. Build inline elements to match iframe elements using only preserved CSS (see §7.5).
+
+### 2.1 Multi-column layout: use a table, not grid
+
+CSS grid columns collapse in Canvas (see `repeat()` above, and grid support is flaky generally). For a fixed N-column row (e.g. the 5 nav buttons), use a `<table role="presentation" style="width:100%;border-collapse:collapse;table-layout:fixed;"><tbody><tr>` with one `<td style="width:20%;vertical-align:top;padding:0 6px;">` per column. Table columns come from the `<td>` structure itself, so they survive even if every CSS property is stripped.
+
+### 2.2 Gradient frame without border-image
+
+To get a bright-teal-top-left to dim-bottom-right gradient frame (matching the countdown card) on sanitized inline HTML: wrap the element in a `<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;">` (the frame) and give the inner element an **opaque** body background. The 2px padding reveals the frame gradient as a border. The body MUST be opaque, or the frame bleeds through and washes the whole element with a gradient. Opaque body used: teal corner wedge `#094043`, dark body `#041d1c`.
+
+### 2.3 Clickable buttons in Canvas
+
+An `<a>` that wraps block `<div>` children loses its click area in Canvas (when the anchor's display is stripped, an inline anchor around block content collapses to a zero-height sliver). Build button links as a single `<a display:block>` wrapping only **inline** content (`<img>`, `<span>`, `<br>`). Put any block wrapper (like the gradient frame `<div>`) OUTSIDE the anchor, not inside it.
+
+### 2.4 LOCKED course-home nav button (verbatim)
+
+This is the approved nav button, matches the countdown card, Canvas-safe, clickable. One `<td>` per button; icon + English title + Spanish subtitle live INSIDE the framed box. Do not revert to border-image, grid, or stacked-outside labels.
+
+```html
+<td style="width:20%;vertical-align:top;padding:0 6px;">
+  <div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;">
+    <a href="COURSE_URL" style="display:block;text-decoration:none;color:inherit;background:linear-gradient(135deg,#094043 0,#094043 28px,#041d1c 28px,#041d1c 100%);padding:18px 10px 14px;text-align:center;">
+      <img src="ICON_URL" alt="Course Overview" style="display:block;width:50%;max-width:74px;height:auto;margin:0 auto 12px;" />
+      <span style="font-size:11pt;letter-spacing:0.05em;text-transform:uppercase;color:#ffffff;line-height:1.25;"><strong>Course Overview</strong></span><br />
+      <span style="font-size:9pt;color:#5eead4;font-style:italic;line-height:1.3;">Resumen del Curso</span>
+    </a>
+  </div>
+</td>
+```
+
+The countdown card (`assets/embeds/schoolday-card.html`) uses the same opaque body (`#094043` wedge / `#041d1c` at a fixed `28px` stop) and a matching gradient frame, so the two read as one system. Keep the triangle stop in **pixels** (28px), never a percentage: a percentage scales with box size, so the wedge would not match between the wide countdown and the squarer buttons.
 
 ## 3. Palette Tokens
 
