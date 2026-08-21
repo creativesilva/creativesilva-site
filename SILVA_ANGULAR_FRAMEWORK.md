@@ -38,9 +38,9 @@ CSS grid columns collapse in Canvas (see `repeat()` above, and grid support is f
 
 To get a bright-teal-top-left to dim-bottom-right gradient frame (matching the countdown card) on sanitized inline HTML: wrap the element in a `<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;">` (the frame) and give the inner element a body background. The 2px padding reveals the frame gradient as a border. Body colors: teal corner wedge `#094043`, dark body `#041d1c`.
 
-**Opaque vs translucent body:**
-- **Small elements (nav buttons, icon tiles, inner cards):** body MUST be opaque (`#041d1c`), or the frame gradient bleeds through the whole small box and washes it with a gradient (the whole box sits in the bright-top-left zone).
-- **Large section cards:** use a semi-transparent dark body (`#094043 0,#094043 28px,rgba(4,29,28,0.45) 28px,rgba(4,29,28,0.45) 100%`: opaque wedge, only the dark fill translucent) so the panther watermark reads through while the section stays dark. On a large box only the top-left corner is in the bright zone, so the frame tint is limited to the corner while the rest shows the watermark. Keep the corner wedge opaque (`#094043`).
+**Two treatments by size (the cohesive system the home pages use):**
+- **Small boxes (nav buttons, inner cards, framed images):** gradient-frame wrapper + an **opaque** body (`#094043` wedge / `#041d1c`) + 28px triangle. Opaque so the frame does not bleed.
+- **Large section cards:** do NOT use the gradient-frame wrapper. Use the home-page welcome-card recipe: `background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;`. The very faint translucent teal lets the panther watermark read through; the solid 1px border + 6px teal left accent are Canvas-safe. No wrapper, no triangle on large sections. (Forcing the small-box wrapper onto a large section and faking translucency by lowering the body opacity fights the frame and looks murky, do not do it.)
 
 ### 2.3 Clickable buttons in Canvas
 
