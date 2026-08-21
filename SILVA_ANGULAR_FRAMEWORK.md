@@ -36,7 +36,11 @@ CSS grid columns collapse in Canvas (see `repeat()` above, and grid support is f
 
 ### 2.2 Gradient frame without border-image
 
-To get a bright-teal-top-left to dim-bottom-right gradient frame (matching the countdown card) on sanitized inline HTML: wrap the element in a `<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;">` (the frame) and give the inner element an **opaque** body background. The 2px padding reveals the frame gradient as a border. The body MUST be opaque, or the frame bleeds through and washes the whole element with a gradient. Opaque body used: teal corner wedge `#094043`, dark body `#041d1c`.
+To get a bright-teal-top-left to dim-bottom-right gradient frame (matching the countdown card) on sanitized inline HTML: wrap the element in a `<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;">` (the frame) and give the inner element a body background. The 2px padding reveals the frame gradient as a border. Body colors: teal corner wedge `#094043`, dark body `#041d1c`.
+
+**Opaque vs translucent body:**
+- **Small elements (nav buttons, icon tiles, inner cards):** body MUST be opaque (`#041d1c`), or the frame gradient bleeds through the whole small box and washes it with a gradient (the whole box sits in the bright-top-left zone).
+- **Large section cards:** use a semi-transparent dark body (e.g. `rgba(4,29,28,0.55)`) so the page's panther watermark reads through the card. On a large box only the top-left corner is in the bright zone, so the frame tint is limited to the corner while the rest shows the watermark. Keep the corner wedge opaque (`#094043`).
 
 ### 2.3 Clickable buttons in Canvas
 

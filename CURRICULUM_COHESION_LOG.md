@@ -19,9 +19,11 @@ Every framed box on every page should read as the same object. Locked spec:
   `<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;">`.
   The 2px padding shows the gradient as a bright-teal-top-left to dim-bottom-right frame.
   `border-image` is stripped by Canvas, so it must never be used for a frame.
-- **Opaque body.** The inner box background must be opaque or the frame bleeds through and
-  washes the box. Body gradient (with the corner triangle baked in):
-  `linear-gradient(135deg,#094043 0,#094043 28px,#041d1c 28px,#041d1c 100%)`.
+- **Body opacity by size.** Small boxes (buttons, tiles, inner cards) use an **opaque** body
+  `linear-gradient(135deg,#094043 0,#094043 28px,#041d1c 28px,#041d1c 100%)` or the frame
+  bleeds and washes them. Large section cards use a **semi-transparent** dark body
+  (`...#094043 28px,rgba(4,29,28,0.55) 28px,rgba(4,29,28,0.55) 100%`) so the page's panther
+  watermark reads through; on a large box the frame tint only reaches the top-left corner.
 - **28px triangle eyebrow.** Fixed `28px` corner wedge (never a %), so it is the same size
   on a wide box and a square box.
 - **Square corners.** No `border-radius` (stripped anyway).
