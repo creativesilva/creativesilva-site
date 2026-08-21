@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PVHS Next Day Off Countdown</title>
+  <title>PVHS School Days Countdown</title>
   <!--
-    School-day countdown to the NEXT day off (holiday or long weekend), embedded
-    via <iframe> on Canvas home pages. It loads schedule-data.js LIVE from the
-    pvhs_tools app, so the day-off DATE is always derived from the real calendar
-    (the next weekday with no school). Holiday NAMES are labeled from the small
-    map below; update it each school year alongside the pvhs_tools calendar.
+    School-day countdown embedded via <iframe> on Canvas home pages.
+    MAIN number  = total school days left in the year (today through the last day).
+    SECONDARY    = school days until the next day off (holiday or long weekend),
+                   with the break name and date.
+    It loads schedule-data.js LIVE from the pvhs_tools app, so all dates derive
+    from the real calendar. Holiday NAMES come from the map below; update it each
+    school year alongside the pvhs_tools calendar.
   -->
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -22,19 +24,20 @@
     }
     .card {
       width: 100%; height: 100%;
-      padding: 14px 16px 13px;
+      padding: 12px 16px 11px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      background: rgba(0, 6, 6, 0.58);
-      border: 1px solid rgba(0, 116, 116, 0.30);
-      border-left: 4px solid #007474;
-      border-radius: 12px;
+      /* Angular nav-tile aesthetic: top-left teal triangle eyebrow over a dark body */
+      background: linear-gradient(135deg, rgba(0,184,184,0.20) 0%, rgba(0,184,184,0.20) 8%, rgba(0,6,6,0.66) 8%, rgba(0,6,6,0.66) 100%);
+      border: 2px solid transparent;
+      border-image: linear-gradient(135deg, #00b8b8 0%, rgba(0,184,184,0.08) 100%) 1;
+      overflow: hidden;
     }
     .num {
-      font-size: clamp(30px, 22vw, 46px);
+      font-size: clamp(28px, 20vw, 44px);
       font-weight: 700;
       font-variant-numeric: tabular-nums;
       letter-spacing: 0.02em;
@@ -47,59 +50,50 @@
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: rgba(255, 255, 255, 0.55);
-      padding-top: 5px;
+      padding-top: 4px;
     }
     .bar-wrap {
       width: 100%;
       height: 5px;
       background: rgba(255, 255, 255, 0.10);
-      border-radius: 3px;
       overflow: hidden;
-      margin-top: 12px;
+      margin-top: 10px;
     }
     .bar-fill {
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #007474 0%, #5eead4 100%);
-      border-radius: 3px;
       transition: width 0.6s ease;
     }
-    .meta {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      width: 100%;
-      gap: 8px;
-      margin-top: 6px;
-    }
-    .meta .off-name {
+    .next { width: 100%; margin-top: 9px; }
+    .next-line {
       font-size: 9px;
       font-weight: 700;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.10em;
       text-transform: uppercase;
-      color: #5eead4;
+      color: rgba(255, 255, 255, 0.58);
+    }
+    .next-line b { color: #5eead4; font-size: 11px; }
+    .next-sub {
+      font-size: 8.5px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.42);
+      margin-top: 2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-    .meta .off-date {
-      font-size: 8.5px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.40);
-      white-space: nowrap;
-      flex-shrink: 0;
     }
   </style>
 </head>
 <body>
   <div class="card">
     <div class="num" id="num">&ndash;</div>
-    <div class="label">School Days Until</div>
+    <div class="label">School Days Left</div>
     <div class="bar-wrap"><div class="bar-fill" id="bar"></div></div>
-    <div class="meta">
-      <span class="off-name" id="off-name">&ndash;</span>
-      <span class="off-date" id="off-date">&ndash;</span>
+    <div class="next">
+      <div class="next-line"><b id="to-break">&ndash;</b> <span id="to-break-label">school days to next break</span></div>
+      <div class="next-sub"><span id="off-name">&ndash;</span> &middot; <span id="off-date">&ndash;</span></div>
     </div>
   </div>
 
@@ -107,10 +101,12 @@
   <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
   <script>
     (function () {
-      var numEl  = document.getElementById('num');
-      var barEl  = document.getElementById('bar');
-      var nameEl = document.getElementById('off-name');
-      var dateEl = document.getElementById('off-date');
+      var numEl   = document.getElementById('num');
+      var barEl   = document.getElementById('bar');
+      var breakEl = document.getElementById('to-break');
+      var breakLb = document.getElementById('to-break-label');
+      var nameEl  = document.getElementById('off-name');
+      var dateEl  = document.getElementById('off-date');
 
       if (typeof schoolDays === 'undefined' || !schoolDays.length) { return; }
 
@@ -126,7 +122,7 @@
         '2027-05-25': 'Memorial Day'
       };
 
-      var set   = {};
+      var set = {};
       for (var i = 0; i < schoolDays.length; i++) { set[schoolDays[i]] = true; }
       var first = schoolDays[0];
       var last  = schoolDays[schoolDays.length - 1];
@@ -145,6 +141,11 @@
 
       var start = today < first ? first : today;
 
+      // MAIN: total school days left in the year (today through the last day).
+      var total    = schoolDays.length;
+      var daysLeft = schoolDays.filter(function (d) { return d >= today; }).length;
+      var pct = total ? Math.max(0, Math.min(100, Math.round((total - daysLeft) / total * 100))) : 0;
+
       // Next day off = next weekday (Mon-Fri) with no school, on or before the last day.
       var nextOff = null, c = start;
       for (var k = 0; k < 400; k++) {
@@ -155,23 +156,9 @@
         if (!set[c]) { nextOff = c; break; }
       }
 
-      // Previous day off (for the progress bar's current stretch).
-      var prevOff = null, b = start;
-      for (var j = 0; j < 400; j++) {
-        b = shift(b, -1);
-        if (b < first) break;
-        var wb = weekday(b);
-        if (wb === 0 || wb === 6) continue;
-        if (!set[b]) { prevOff = b; break; }
-      }
-
-      var boundary = nextOff || shift(last, 1); // if no more holidays, count to end of year
-      var remaining = schoolDays.filter(function (d) { return d >= today && d < boundary; }).length;
-      var stretch   = schoolDays.filter(function (d) {
-        return (prevOff ? d > prevOff : true) && d < boundary;
-      }).length;
-      var elapsed = stretch - remaining;
-      var pct = stretch ? Math.max(0, Math.min(100, Math.round(elapsed / stretch * 100))) : 0;
+      // SECONDARY: school days from today until that next day off.
+      var boundary = nextOff || shift(last, 1); // no more holidays: count to end of year
+      var toBreak  = schoolDays.filter(function (d) { return d >= today && d < boundary; }).length;
 
       // Name the day off.
       var name;
@@ -189,10 +176,12 @@
         timeZone: 'America/Los_Angeles', weekday: 'short', month: 'short', day: 'numeric'
       }).format(new Date(boundary + 'T12:00:00'));
 
-      numEl.textContent  = remaining;
-      barEl.style.width  = pct + '%';
-      nameEl.textContent = name;
-      dateEl.textContent = dateStr;
+      numEl.textContent   = daysLeft;
+      barEl.style.width   = pct + '%';
+      breakEl.textContent = toBreak;
+      breakLb.textContent = (toBreak === 1 ? 'school day to next break' : 'school days to next break');
+      nameEl.textContent  = name;
+      dateEl.textContent  = dateStr;
     })();
   </script>
 </body>
