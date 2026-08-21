@@ -22,9 +22,7 @@ Every framed box on every page should read as the same object. Locked spec:
 - **Body opacity by size.** Small boxes (buttons, tiles, inner cards) use an **opaque** body
   `linear-gradient(135deg,#094043 0,#094043 28px,#041d1c 28px,#041d1c 100%)` or the frame
   bleeds and washes them. Large section cards use a **semi-transparent dark teal** body
-  (`rgba(0,116,116,0.55) 0,rgba(0,116,116,0.55) 28px,rgba(0,116,116,0.30) 28px,rgba(0,116,116,0.30) 100%`,
-  the #007474 teal, translucent) so the panther watermark reads through. Keep it teal, not a
-  near-black, or the panel looks murky.
+  (`#094043 0,#094043 28px,rgba(4,29,28,0.45) 28px,rgba(4,29,28,0.45) 100%`: opaque wedge, only the dark fill translucent) so the panther watermark reads through while the section stays dark.
 - **28px triangle eyebrow.** Fixed `28px` corner wedge (never a %), so it is the same size
   on a wide box and a square box.
 - **Square corners.** No `border-radius` (stripped anyway).
