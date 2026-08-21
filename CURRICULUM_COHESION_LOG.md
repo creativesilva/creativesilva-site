@@ -61,7 +61,8 @@ Status key: DONE = on the locked square spec. PENDING = still on old technique. 
 | Course home nav buttons (all 8) | wrapper + triangle | table | DONE | 2026-08-21 |
 | `assets/embeds/schoolday-card.html` | border-image (iframe OK) + 28px triangle | n/a | DONE | reference element |
 | Course home hero images (all 8) | `border-image` | n/a | PENDING | invisible frame in Canvas; convert to wrapper |
-| `curriculum/universal/about-mr-silva.html` | wrapper + triangle | grid (explicit tracks, ok) | DONE | 2026-08-21; outer cards `#041d1c`, inner cards lighter `#0f524f`; teacher image shrunk ~25% + framed; added IG + website links |
+| `curriculum/universal/about-mr-silva.html` | large=welcome-card, small=wrapper+triangle | grid (explicit tracks, ok) | DONE + verified in Canvas student view | 2026-08-21; large sections use the welcome-card recipe (faint teal + 1px border + 6px left accent, watermark shows); inner cards + framed teacher photo (24%) use the wrapper + triangle; IG + website links added |
+| CANVAS_BUILD_FRAMEWORK.md / SILVA_ANGULAR_FRAMEWORK.md §4 "Card Borders" | old border-image recipe | n/a | PENDING | §4 still documents the border-image card frame (invisible in Canvas). Reconcile to the two-treatment system (large=welcome-card, small=wrapper+triangle) before it misleads a future build. §2 is already corrected. |
 | Other `curriculum/universal/*` pages | ? | ? | PENDING | audit for border-image / repeat() |
 | `curriculum/shared/*` module pages | ? | ? | PENDING | audit; da-finals uses angular already |
 | `curriculum/{da1b,da2b,photo1b,photo2b}` course pages | ? | ? | PENDING | audit when built |
@@ -78,3 +79,9 @@ Status key: DONE = on the locked square spec. PENDING = still on old technique. 
   `border-image` (frames go invisible) and `grid-template-columns:repeat()` (columns
   collapse; use a table). Applied to all 8 course-home nav buttons. Began upgrading
   `about-mr-silva.html`.
+- **2026-08-21** — Resolved the two-treatment system after several iterations on
+  `about-mr-silva.html`: **large sections** use the home welcome-card recipe (faint
+  translucent teal + solid border + 6px teal left accent, so the watermark reads
+  through); **small boxes** use the gradient-frame wrapper + opaque body + 28px
+  triangle. Do NOT force the small-box wrapper onto a large section (looks murky).
+  About page verified phenomenal in Canvas including student view. Teacher photo at 24%.
