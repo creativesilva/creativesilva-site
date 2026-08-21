@@ -21,9 +21,10 @@ Every framed box on every page should read as the same object. Locked spec:
   `border-image` is stripped by Canvas, so it must never be used for a frame.
 - **Body opacity by size.** Small boxes (buttons, tiles, inner cards) use an **opaque** body
   `linear-gradient(135deg,#094043 0,#094043 28px,#041d1c 28px,#041d1c 100%)` or the frame
-  bleeds and washes them. Large section cards use a **semi-transparent** dark body
-  (`...#094043 28px,rgba(4,29,28,0.55) 28px,rgba(4,29,28,0.55) 100%`) so the page's panther
-  watermark reads through; on a large box the frame tint only reaches the top-left corner.
+  bleeds and washes them. Large section cards use a **semi-transparent dark teal** body
+  (`rgba(0,116,116,0.55) 0,rgba(0,116,116,0.55) 28px,rgba(0,116,116,0.30) 28px,rgba(0,116,116,0.30) 100%`,
+  the #007474 teal, translucent) so the panther watermark reads through. Keep it teal, not a
+  near-black, or the panel looks murky.
 - **28px triangle eyebrow.** Fixed `28px` corner wedge (never a %), so it is the same size
   on a wide box and a square box.
 - **Square corners.** No `border-radius` (stripped anyway).
