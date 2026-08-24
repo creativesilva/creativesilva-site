@@ -156,6 +156,10 @@ Rules:
 
 **Resources live on the Overview only (LOCKED):** every downloadable resource (preset, template, reference file, link) goes on the module Overview page. Step pages never repeat a resource download link; they reference it in prose and point back to the Overview with a short italic line ("The X is on the Overview page." / "El X est&aacute; en la p&aacute;gina de Resumen."). One predictable place for resources builds an intuitive Canvas routine.
 
+**Downloadable files must be zipped (LOCKED):** never link a raw non-image file (`.lrtemplate`, `.docx` presets, etc.) directly from `raw.githubusercontent.com`. Cross-origin, the browser ignores the `download` attribute and GitHub serves the file as `text/plain`, so clicking just shows the file as a wall of text instead of downloading. Put the file(s) in a `.zip` and link that (browsers always download `.zip`). Bundle related files into ONE zip and add a short note that the download contains all of them.
+
+**Vocabulary / Key Words card (LOCKED):** the 6-term vocab grid is a `<table>` (3 columns x 2 rows). Give every term box the SAME size for uniformity: put a `min-height` on each opaque body div (e.g. `min-height:132px`) and write the 6 definitions at roughly the same length so no box towers over another. Always include a quiz-disclaimer note at the top of the card (teal note box, eyebrow "ON THE QUIZ" / "EN EL EXAMEN") telling students the words appear on the mid-semester quiz and the end-of-semester quiz before finals. Definitions stay concise (not too detailed) but clear, EN + ES at 5th grade.
+
 ## 8. Horizontal Scroll Rows
 
 Term tiles and stat tiles sit in a horizontal scroll row:
