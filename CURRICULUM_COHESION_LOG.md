@@ -37,12 +37,12 @@ reference; it lives in an iframe (not sanitized) and uses the same colors + 28px
 
 ## Page-order + resource rules (LOCKED, apply to every module)
 
-- **Overview opening sequence is fixed.** Every overview page opens in this exact order:
-  (1) title/header bar, (2) eyebrow + heading + ONE short intro paragraph (the quick verbiage),
-  (3) the 21:9 hero image, (4) then everything else (rest of the verbiage, example/sample
-  images, history, vocab). The hero must be the **FIRST image on the page**: no example, sample,
-  or gallery image ever appears above the hero. Title + quick paragraph + hero always open the
-  page, everything else falls below.
+- **Overview opening sequence is fixed.** Every overview page opens with ONE Assignment/Overview
+  section card whose body holds, in order: eyebrow, heading, ONE short intro paragraph (the quick
+  verbiage), then the 21:9 hero image **framed inside that same card body**. The hero is part of
+  the Assignment/Overview section, never a standalone image and never its own section. After that
+  card come the rest of the sections (example/sample images, history, vocab). The hero is the
+  **FIRST image on the page**: no example/sample/gallery image ever appears above it.
 - **All resources live on the Overview page.** Every downloadable/tool/preset/reference link
   goes on the module Overview only. Step pages never repeat a resource download link: they
   reference it in prose and point back to the Overview (a short italic line). This builds a
