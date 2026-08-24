@@ -146,13 +146,13 @@ div.silva-page > div#silva-module-content
 
 Banner: teal gradient bar, PV logo left, centered eyebrow + title + hairline + tagline, language toggle button on the right (the only button in the banner). The single document download button lives at the END of the page in the closing card, not in the banner.
 
-**Overview opening sequence (LOCKED):** every overview page opens in this exact order:
-1. banner (PV logo + title)
-2. eyebrow + heading + ONE short intro paragraph (the quick "what this is" verbiage)
-3. the 21:9 hero/header image
-4. everything else: the rest of the verbiage, example/sample images, history, vocab, etc.
+**Overview opening sequence (LOCKED):** every overview page opens with a single **Assignment / Overview section card** whose body contains, in order: the eyebrow, the heading, ONE short intro paragraph (the quick "what this is" verbiage), and then the 21:9 hero image **framed inside that same card body**. The hero is part of the Assignment/Overview section, NOT a standalone image and NOT its own section. After that card come the remaining sections (example/sample images, history, vocab, etc.).
 
-The 21:9 hero must be the **FIRST image on the page**. No example, sample, or gallery image may appear above the hero. Title + one quick paragraph + hero image always open the page; all other content falls below that.
+Rules:
+- The 21:9 hero is the **FIRST image on the page** and lives **inside the Assignment/Overview card body**, directly under the intro paragraph (keep its teal gradient frame).
+- It is never a standalone image block floating between sections.
+- No example, sample, or gallery image ever appears above the hero.
+- Build order example (Pictograms): `s1` (eyebrow + heading + one paragraph + hero, all in one `large()` card) then `ex` (examples) then the rest.
 
 **Resources live on the Overview only (LOCKED):** every downloadable resource (preset, template, reference file, link) goes on the module Overview page. Step pages never repeat a resource download link; they reference it in prose and point back to the Overview with a short italic line ("The X is on the Overview page." / "El X est&aacute; en la p&aacute;gina de Resumen."). One predictable place for resources builds an intuitive Canvas routine.
 
