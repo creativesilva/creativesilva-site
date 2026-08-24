@@ -146,7 +146,13 @@ div.silva-page > div#silva-module-content
 
 Banner: teal gradient bar, PV logo left, centered eyebrow + title + hairline + tagline, language toggle button on the right (the only button in the banner). The single document download button lives at the END of the page in the closing card, not in the banner.
 
-**Section order (LOCKED):** banner, then the **intro verbiage** (the first overview card with the opening paragraphs), then the 21:9 hero/header image, then the remaining section cards. The hero image is NEVER the first element under the banner: it always sits beneath the intro text so the student reads what the module is before seeing the header image.
+**Overview opening sequence (LOCKED):** every overview page opens in this exact order:
+1. banner (PV logo + title)
+2. eyebrow + heading + ONE short intro paragraph (the quick "what this is" verbiage)
+3. the 21:9 hero/header image
+4. everything else: the rest of the verbiage, example/sample images, history, vocab, etc.
+
+The 21:9 hero must be the **FIRST image on the page**. No example, sample, or gallery image may appear above the hero. Title + one quick paragraph + hero image always open the page; all other content falls below that.
 
 **Resources live on the Overview only (LOCKED):** every downloadable resource (preset, template, reference file, link) goes on the module Overview page. Step pages never repeat a resource download link; they reference it in prose and point back to the Overview with a short italic line ("The X is on the Overview page." / "El X est&aacute; en la p&aacute;gina de Resumen."). One predictable place for resources builds an intuitive Canvas routine.
 
