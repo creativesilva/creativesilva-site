@@ -37,9 +37,12 @@ reference; it lives in an iframe (not sanitized) and uses the same colors + 28px
 
 ## Page-order + resource rules (LOCKED, apply to every module)
 
-- **Hero/header image is never first.** Order on a module page: title/header bar, then the
-  **intro verbiage** (opening overview paragraphs), then the 21:9 hero image beneath the intro,
-  then the rest of the cards. Students read what the module is before they see the banner.
+- **Overview opening sequence is fixed.** Every overview page opens in this exact order:
+  (1) title/header bar, (2) eyebrow + heading + ONE short intro paragraph (the quick verbiage),
+  (3) the 21:9 hero image, (4) then everything else (rest of the verbiage, example/sample
+  images, history, vocab). The hero must be the **FIRST image on the page**: no example, sample,
+  or gallery image ever appears above the hero. Title + quick paragraph + hero always open the
+  page, everything else falls below.
 - **All resources live on the Overview page.** Every downloadable/tool/preset/reference link
   goes on the module Overview only. Step pages never repeat a resource download link: they
   reference it in prose and point back to the Overview (a short italic line). This builds a
