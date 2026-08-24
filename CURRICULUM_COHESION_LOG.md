@@ -35,6 +35,16 @@ Every framed box on every page should read as the same object. Locked spec:
 The school-day countdown card (`assets/embeds/schoolday-card.html`) is the visual
 reference; it lives in an iframe (not sanitized) and uses the same colors + 28px triangle.
 
+## Page-order + resource rules (LOCKED, apply to every module)
+
+- **Hero/header image is never first.** Order on a module page: title/header bar, then the
+  **intro verbiage** (opening overview paragraphs), then the 21:9 hero image beneath the intro,
+  then the rest of the cards. Students read what the module is before they see the banner.
+- **All resources live on the Overview page.** Every downloadable/tool/preset/reference link
+  goes on the module Overview only. Step pages never repeat a resource download link: they
+  reference it in prose and point back to the Overview (a short italic line). This builds a
+  predictable, intuitive Canvas routine so students always know where to find what they need.
+
 ## Canvas sanitizer: what is stripped (build around it)
 
 STRIPPED: `border-image`, `grid-template-columns` with `repeat()`, `border-radius`,
