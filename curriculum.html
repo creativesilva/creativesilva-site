@@ -355,6 +355,26 @@
     .course-acc.archived:hover,
     .course-acc.archived[open] { opacity: 1; }
 
+    /* ── Non Active: collapsible group (hidden by default) ── */
+    .nonactive-group { margin-top: 40px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+    .nonactive-group > summary {
+      font-family: var(--font-head); font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.26em; text-transform: uppercase; color: var(--text-faint);
+      cursor: pointer; list-style: none; padding: 6px 0; user-select: none;
+      transition: color 0.15s ease;
+    }
+    .nonactive-group > summary::-webkit-details-marker { display: none; }
+    .nonactive-group > summary::before {
+      content: "\25B8"; display: inline-block; margin-right: 12px;
+      transition: transform 0.15s ease; color: var(--text-faint);
+    }
+    .nonactive-group[open] > summary::before { transform: rotate(90deg); }
+    .nonactive-group > summary:hover { color: var(--text-dim); }
+    .nonactive-body { margin-top: 12px; }
+    .nonactive-body > .course-acc { opacity: 0.72; }
+    .nonactive-body > .course-acc:hover,
+    .nonactive-body > .course-acc[open] { opacity: 1; }
+
     /* ── Build Resources: category sub-accordions ── */
     .cat-acc {
       border: 1px solid rgba(255,255,255,0.08);
@@ -1264,6 +1284,7 @@
       },
       {
         id: "da1b",
+        inactive: true,
         code: "DA 1B",
         title: "Digital Arts 1B",
         accent: "var(--accent-purple)",
@@ -1271,6 +1292,7 @@
       },
       {
         id: "da2a",
+        inactive: true,
         code: "DA 2A",
         title: "Digital Arts 2A",
         accent: "var(--accent-blue)",
@@ -1278,6 +1300,7 @@
       },
       {
         id: "da2b",
+        inactive: true,
         code: "DA 2B",
         title: "Digital Arts 2B",
         accent: "var(--accent-blue)",
@@ -1292,6 +1315,7 @@
       },
       {
         id: "photo1b",
+        inactive: true,
         code: "PH 1B",
         title: "Photography 1B",
         accent: "var(--accent-teal)",
@@ -1306,6 +1330,7 @@
       },
       {
         id: "photo2b",
+        inactive: true,
         code: "PH 2B",
         title: "Photography 2B",
         accent: "var(--accent-red)",
@@ -1525,9 +1550,15 @@
 
     (function renderCourses() {
       const grid = document.getElementById("course-grid");
-      const active = COURSES.filter(c => !c.archived);
+      const active = COURSES.filter(c => !c.archived && !c.inactive);
+      const inactive = COURSES.filter(c => c.inactive && !c.archived);
       const archived = COURSES.filter(c => c.archived);
       grid.insertAdjacentHTML("beforeend", active.map(buildCourseCard).join(""));
+      if (inactive.length) {
+        grid.insertAdjacentHTML("beforeend",
+          `<details class="nonactive-group"><summary>Non Active <span style="opacity:0.55;">(${inactive.length})</span></summary>`
+          + `<div class="nonactive-body">${inactive.map(buildCourseCard).join("")}</div></details>`);
+      }
       if (archived.length) {
         grid.insertAdjacentHTML("beforeend",
           `<div class="archived-heading">Archived Courses</div>` + archived.map(buildCourseCard).join(""));
