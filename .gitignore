@@ -11,3 +11,5 @@ Thumbs.db
 # Local image backup (pre-compression originals — not needed in repo)
 images_original/
 curriculum/Spring Final/
+assets/_incoming/*
+!assets/_incoming/README.md
