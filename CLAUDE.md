@@ -114,6 +114,7 @@ If you're building in the current style, diff against `da-finals-quiz-prep.html`
   ```
 - Co-author tag on every commit Claude makes.
 - Push immediately after commit when working on Canvas pages. Chris is usually waiting to paste the code into Canvas.
+- **Always confirm live, then ping.** After every push, verify the change is actually live on the public `www.creativesilva.com` URL (poll for the new marker; GitHub Pages + CDN lag), then explicitly tell Chris it is confirmed live and where. Never stop at "pushed." A background watcher polling the live URL is the standard way; relay its confirmation promptly.
 
 ---
 
