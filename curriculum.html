@@ -273,12 +273,17 @@
       text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px;
     }
     .course-doc {
-      display: flex; align-items: center; gap: 12px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
       padding: 11px 14px; margin-bottom: 6px; text-decoration: none;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.10);
       border-left: 3px solid var(--course-accent, #007474);
       transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .course-doc-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto; }
+    .course-doc-actions .course-doc-dl:hover {
+      border-color: color-mix(in srgb, var(--course-accent, #007474) 90%, transparent);
+      background: color-mix(in srgb, var(--course-accent, #007474) 22%, transparent);
     }
     .course-doc:hover {
       background: rgba(255, 255, 255, 0.06);
@@ -1334,8 +1339,7 @@
       universal: {
         extras: [{ file: "Interview-Your-Peer-Bilingual_v2.docx", label: "Interview Your Peer (Bilingual)" }],
         links: [{ url: "https://creativesilva.github.io/pvhs_tools/index.html", label: "PVHS Tools App" }],
-        forms: [{ url: "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform", label: "Camera Check Out Form" }],
-        qr: [{ src: "assets/qr/camera-checkout-qr.png", label: "Camera Check Out QR Code", download: "PVHS-Camera-Checkout-QR.png" }],
+        camera: { label: "Camera Check Out", form: "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform", qr: "assets/qr/camera-checkout-qr.png", download: "PVHS-Camera-Checkout-QR.png" },
         local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" }],
       },
       da1a:    { syllabus: "Digital-Arts-1-Syllabus-2026-2027.docx",  agreement: "Digital-Arts-1-Lab-and-Equipment-Agreement-2026-2027.docx" },
@@ -1406,12 +1410,25 @@
         + `<span class="course-doc-name">${label}</span>`
         + `<span class="course-doc-dl">View QR</span></a>`;
     }
+    // Consolidated camera row: form + view QR + download QR, all on one line.
+    function cameraRow(c) {
+      const dl = (c.download || "qr-code.png").replace(/"/g, "&quot;");
+      return `<div class="course-doc">`
+        + `<span class="course-doc-ico">CAM</span>`
+        + `<span class="course-doc-name">${c.label}</span>`
+        + `<span class="course-doc-actions">`
+        + `<a class="course-doc-dl" href="${c.form}" target="_blank" rel="noopener">Open Form</a>`
+        + `<a class="course-doc-dl" href="${c.qr}" data-qr="${c.qr}" data-dl="${dl}" onclick="return openQR(event, this)">View QR</a>`
+        + `<a class="course-doc-dl" href="${c.qr}" download="${dl}">Download</a>`
+        + `</span></div>`;
+    }
     function openQR(e, el) {
       e.preventDefault();
+      const row = el.closest(".course-doc") || el;
       const src = el.getAttribute("data-qr");
       const dl = el.getAttribute("data-dl");
-      const name = el.querySelector(".course-doc-name").textContent;
-      const accent = getComputedStyle(el).borderLeftColor || "#007474";
+      const name = row.querySelector(".course-doc-name").textContent;
+      const accent = getComputedStyle(row).borderLeftColor || "#007474";
       let m = document.getElementById("qr-modal");
       if (!m) {
         m = document.createElement("div");
@@ -1443,12 +1460,13 @@
     function linksBlock(course) {
       const d = COURSE_DOCS[course.id];
       const links = (d && d.links) ? d.links.map(l => linkRow(l.url, l.label)).join("") : "";
+      const cams = (d && d.camera) ? cameraRow(d.camera) : "";
       const forms = (d && d.forms) ? d.forms.map(f => formRow(f.url, f.label)).join("") : "";
       const qrs = (d && d.qr) ? d.qr.map(q => qrRow(q.src, q.label, q.download)).join("") : "";
       const locals = (d && d.local) ? d.local.map(l => localRow(l.path, l.label)).join("") : "";
-      if (!links && !forms && !qrs && !locals) return "";
+      if (!links && !cams && !forms && !qrs && !locals) return "";
       return `<div class="course-docs">`
-        + `<div class="course-docs-label">Class Tools</div>${links}${forms}${qrs}${locals}</div>`;
+        + `<div class="course-docs-label">Class Tools</div>${links}${cams}${forms}${qrs}${locals}</div>`;
     }
 
     function buildCourseCard(course) {
