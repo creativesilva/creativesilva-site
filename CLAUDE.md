@@ -95,6 +95,20 @@ If you're building in the current style, diff against `da-finals-quiz-prep.html`
 
 ---
 
+## Curriculum Catalog (`curriculum.html`) is Chris's TEACHER MENU
+
+`curriculum.html` is Chris's own dashboard for navigating and storing everything, NOT code pasted into Canvas. Never confuse a catalog change with a Canvas-page change: leave the styled syllabus/module pages (the things pasted into Canvas) alone unless he asks. The catalog is driven by JS data + render functions (`MODULES`, `COURSES`, `COURSE_DOCS`, `SLIDE_DECKS`, `buildCourseCard`, `renderCourses`).
+
+Locked structure (2026-08-27):
+- **Card order:** Digital Arts 1A, Photography 1A, Photography 2A, All Courses, Build Resources, then the collapsible **Non Active** group last. Active order is the `COURSES` array order (filtered by `!inactive`); Build Resources is relocated in `renderCourses` to sit after the active cards.
+- **Per-course items, in order:** Slide Decks accordion (staff) &rarr; Course Home &rarr; Course Overview &rarr; Course Syllabus &rarr; `Module 0N: <Name>`. Modules are numbered/renamed in `MODULES` (drop the `(N pages)` suffix; the page-count badge shows it).
+- **Syllabus + Lab Agreement = ONE "Course Documents" row** (`syllabusLabRow`) with two actions: a **merged 4-page PDF** and a **zip of all 4 files** (both PDFs + both editable Word docs). Built by `tools`/scratchpad: export each syllabus docx to PDF, trim to its Word `<Pages>` count (LibreOffice adds a blank trailing page to 2-page Word syllabi), then merge syllabus(2pp)+lab(2pp) via pypdf and zip the four files. This is teacher file-storage for quick print-and-send-home, NOT student-facing.
+- **Slide Decks** are a staff-facing accordion per course (`SLIDE_DECKS` + `slideDecksBlock`), one line per deck with a `.pptx` download. Students never get the editable master (they only see the scrollable slide-image view inside the module). No dedicated slide-decks page.
+- **Non Active** holds inactive course cards AND inactive standalone pages (mark a `MODULES` entry `inactive: true`, e.g. a seasonal announcement, and it moves to a "Seasonal / Inactive Pages" list in that group).
+- The catalog sits behind a PIN gate (Chris knows the code); the course grid still renders behind it.
+
+---
+
 ## Git Workflow
 
 - Commit only when the user asks. Never auto-commit. If unclear, ask.
