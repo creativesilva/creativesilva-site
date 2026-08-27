@@ -66,7 +66,7 @@
 
     /* ── Build Resources card (sits as first tile inside the course grid) ── */
     .build-resources {
-      /* No extra margin — the course-grid gap handles spacing */
+      /* No extra margin: the course-grid gap handles spacing */
     }
 
     .resource-tabs {
@@ -372,6 +372,21 @@
     .nonactive-group > summary:hover { color: var(--text-dim); }
     .nonactive-body { margin-top: 12px; }
     .nonactive-body > .course-acc { opacity: 0.72; }
+
+    /* ── Slide Decks accordion (inside a course card, staff-facing) ── */
+    .slide-decks-acc { margin: 0 0 14px; border: 1px solid rgba(255, 255, 255, 0.08); border-left: 3px solid var(--course-accent, #007474); background: rgba(255, 255, 255, 0.02); }
+    .slide-decks-sum {
+      display: flex; align-items: center; gap: 10px; cursor: pointer; list-style: none;
+      padding: 10px 14px; user-select: none;
+    }
+    .slide-decks-sum::-webkit-details-marker { display: none; }
+    .slide-decks-sum::before {
+      content: "\25B8"; display: inline-block; transition: transform 0.15s ease; color: var(--text-faint); font-size: 0.8rem;
+    }
+    .slide-decks-acc[open] > .slide-decks-sum::before { transform: rotate(90deg); }
+    .slide-decks-title { font-family: var(--font-head); font-size: 0.74rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dim); }
+    .slide-decks-meta { margin-left: auto; font-size: 0.7rem; letter-spacing: 0.04em; color: var(--text-faint); }
+    .slide-decks-body { padding: 2px 10px 10px; }
     .nonactive-body > .course-acc:hover,
     .nonactive-body > .course-acc[open] { opacity: 1; }
 
@@ -577,7 +592,7 @@
       color: var(--text-faint);
     }
 
-    /* ── "Add module" note — only visible in staging mode ── */
+    /* ── "Add module" note: only visible in staging mode ── */
     .staging-hint {
       display: none;
       font-size: 0.75rem;
@@ -747,7 +762,7 @@
 </head>
 <body>
 
-  <!-- PIN gate — hidden immediately if session is already authenticated -->
+  <!-- PIN gate: hidden immediately if session is already authenticated -->
   <div id="pin-gate">
     <div class="pin-card">
       <img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV_Logo_Full.png" alt="PVHS" />
@@ -1091,7 +1106,7 @@
         name: "Spring Awards Pizza Party Announcement",
         pages: 1,
         status: "published",
-        featured: true,
+        inactive: true,
         url: "curriculum/shared/awards-pizza-party.html"
       },
       {
@@ -1247,45 +1262,58 @@
       { course: "da1a",    name: "Course Home", pages: 1, status: "published", url: "curriculum/digarts1/digarts1a-home.html" },
       { course: "da1a",    name: "Course Overview", pages: 1, status: "published", url: "curriculum/digarts1/digarts1a-course-overview.html" },
       { course: "da1a",    name: "Course Syllabus", pages: 1, status: "published", url: "curriculum/digarts1/digarts1a-syllabus.html" },
-      { course: "da1a",    name: "Color Theory (2 pages)", pages: 2, status: "published", url: "curriculum/shared/digarts1-color-theory-overview.html" },
-      { course: "da1a",    name: "Slide Decks (staff)", pages: 1, status: "published", url: "curriculum/digarts1/digarts1a-slide-decks.html" },
-      { course: "da1a",    name: "Pictograms (3 pages)", pages: 3, status: "published", url: "curriculum/shared/digarts1-pictograms-overview.html" },
+      { course: "da1a",    name: "Module 01: Pictograms", pages: 3, status: "published", url: "curriculum/shared/digarts1-pictograms-overview.html" },
+      { course: "da1a",    name: "Module 02: Color Theory", pages: 2, status: "published", url: "curriculum/shared/digarts1-color-theory-overview.html" },
       { course: "da2a",    name: "Course Home", pages: 1, status: "published", url: "curriculum/digarts2/digarts2a-home.html" },
       { course: "photo1a", name: "Course Home", pages: 1, status: "published", url: "curriculum/photo1/photo1a-home.html" },
       { course: "photo1a", name: "Course Overview", pages: 1, status: "published", url: "curriculum/photo1/photo1a-course-overview.html" },
       { course: "photo1a", name: "Course Syllabus", pages: 1, status: "published", url: "curriculum/photo1/photo1a-syllabus.html" },
-      { course: "photo1a", name: "Self-Portrait (3 pages)", pages: 3, status: "published", url: "curriculum/shared/photo1-self-portrait-overview.html" },
+      { course: "photo1a", name: "Module 01: Self-Portrait", pages: 3, status: "published", url: "curriculum/shared/photo1-self-portrait-overview.html" },
       { course: "photo2a", name: "Course Home", pages: 1, status: "published", url: "curriculum/photo2/photo2a-home.html" },
       { course: "photo2a", name: "Course Overview", pages: 1, status: "published", url: "curriculum/photo2/photo2a-course-overview.html" },
       { course: "photo2a", name: "Course Syllabus", pages: 1, status: "published", url: "curriculum/photo2/photo2a-syllabus.html" },
-      { course: "photo2a", name: "Composition Photo Walk (4 pages)", pages: 4, status: "published", url: "curriculum/shared/photo2-composition-overview.html" },
-      { course: "photo2a", name: "Off-Camera Flash (4 pages)", pages: 4, status: "published", url: "curriculum/shared/photo2-ocf-overview.html" },
+      { course: "photo2a", name: "Module 01: Composition Photo Walk", pages: 4, status: "published", url: "curriculum/shared/photo2-composition-overview.html" },
+      { course: "photo2a", name: "Module 02: Off-Camera Flash", pages: 4, status: "published", url: "curriculum/shared/photo2-ocf-overview.html" },
       { course: "photo2b", name: "Course Home", pages: 1, status: "published", url: "curriculum/photo2/photo2b-home.html" }
     ];
 
     // ── Course Definitions ────────────────────────────────────────────────────
     const COURSES = [
       {
-        id: "universal",
-        code: "",
-        title: "All Courses",
-        accent: "var(--accent-green)",
-        desc: "Shared pages used across Photography and Digital Arts — About Mr. Silva, policies, and universal resources."
-      },
-      {
-        id: "mrc-da1a",
-        code: "MRC · DA 1A",
-        title: "Summer Digital Arts",
-        accent: "var(--accent-orange)",
-        archived: true,
-        desc: "Mark Richardson Center summer intro to the Digital Arts pathway. A hands-on first look at design: logos, branding, layout, color, and digital illustration with Adobe Creative Cloud. Archived reference: not currently taught, kept to pull from and restyle for PVHS later."
-      },
-      {
         id: "da1a",
         code: "DA 1A",
         title: "Digital Arts 1A",
         accent: "var(--accent-purple)",
         desc: "First semester foundations: design principles, typography, color theory, and introduction to Adobe Creative Cloud."
+      },
+      {
+        id: "photo1a",
+        code: "PH 1A",
+        title: "Photography 1A",
+        accent: "var(--accent-teal)",
+        desc: "First semester fundamentals: camera controls, exposure, composition, and basic digital editing workflows."
+      },
+      {
+        id: "photo2a",
+        code: "PH 2A",
+        title: "Photography 2A",
+        accent: "var(--accent-red)",
+        desc: "First semester advanced techniques: editorial photography, lighting setups, and commercial client projects."
+      },
+      {
+        id: "universal",
+        code: "",
+        title: "All Courses",
+        accent: "var(--accent-green)",
+        desc: "Shared pages used across Photography and Digital Arts: About Mr. Silva, policies, and universal resources."
+      },
+      {
+        id: "mrc-da1a",
+        inactive: true,
+        code: "MRC · DA 1A",
+        title: "Summer Digital Arts",
+        accent: "var(--accent-orange)",
+        desc: "Mark Richardson Center summer intro to the Digital Arts pathway. A hands-on first look at design: logos, branding, layout, color, and digital illustration with Adobe Creative Cloud. Not currently taught, kept to pull from and restyle for PVHS later."
       },
       {
         id: "da1b",
@@ -1312,26 +1340,12 @@
         desc: "Second semester capstone: video production, portfolio development, and professional presentation."
       },
       {
-        id: "photo1a",
-        code: "PH 1A",
-        title: "Photography 1A",
-        accent: "var(--accent-teal)",
-        desc: "First semester fundamentals: camera controls, exposure, composition, and basic digital editing workflows."
-      },
-      {
         id: "photo1b",
         inactive: true,
         code: "PH 1B",
         title: "Photography 1B",
         accent: "var(--accent-teal)",
         desc: "Second semester growth: advanced lighting, intentional creative practice, professional photography projects, and portfolio building."
-      },
-      {
-        id: "photo2a",
-        code: "PH 2A",
-        title: "Photography 2A",
-        accent: "var(--accent-red)",
-        desc: "First semester advanced techniques: editorial photography, lighting setups, and commercial client projects."
       },
       {
         id: "photo2b",
@@ -1354,6 +1368,7 @@
     function visibleModules(courseId) {
       return MODULES.filter(m => {
         if (m.course !== courseId) return false;
+        if (m.inactive) return false;
         if (m.status === "published") return true;
         if (m.status === "staged" && STAGING) return true;
         return false;
@@ -1375,14 +1390,21 @@
         camera: { label: "Camera Check Out", form: "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform", qr: "assets/qr/camera-checkout-qr.png", download: "PVHS-Camera-Checkout-QR.png" },
         local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" }],
       },
-      da1a:    { syllabus: "Digital-Arts-1-Syllabus-2026-2027.docx",  agreement: "Digital-Arts-1-Lab-and-Equipment-Agreement-2026-2027.docx" },
-      da1b:    { syllabus: "Digital-Arts-1-Syllabus-2026-2027.docx",  agreement: "Digital-Arts-1-Lab-and-Equipment-Agreement-2026-2027.docx" },
+      da1a:    { syllabusLab: { zip: "Digital-Arts-1-Syllabus-and-Lab.zip", merged: "Digital-Arts-1-Syllabus-and-Lab-Merged.pdf" } },
+      da1b:    { syllabusLab: { zip: "Digital-Arts-1-Syllabus-and-Lab.zip", merged: "Digital-Arts-1-Syllabus-and-Lab-Merged.pdf" } },
       da2a:    {},
       da2b:    {},
-      photo1a: { syllabus: "Photography-1-Syllabus-2026-2027_V2.docx", agreement: "Photography-1-Lab-and-Equipment-Agreement-2026-2027_V2.docx", extras: [{ file: "Photography-1-Lab-and-Equipment-Agreement-2026-2027.pdf", label: "Lab &amp; Equipment Agreement (PDF)" }] },
-      photo1b: { syllabus: "Photography-1-Syllabus-2026-2027_V2.docx", agreement: "Photography-1-Lab-and-Equipment-Agreement-2026-2027_V2.docx", extras: [{ file: "Photography-1-Lab-and-Equipment-Agreement-2026-2027.pdf", label: "Lab &amp; Equipment Agreement (PDF)" }] },
-      photo2a: { syllabus: "Photography-2-Syllabus-2026-2027.docx",   agreement: "Photography-2-Lab-and-Equipment-Agreement-2026-2027.docx" },
-      photo2b: { syllabus: "Photography-2-Syllabus-2026-2027.docx",   agreement: "Photography-2-Lab-and-Equipment-Agreement-2026-2027.docx" },
+      photo1a: { syllabusLab: { zip: "Photography-1-Syllabus-and-Lab.zip", merged: "Photography-1-Syllabus-and-Lab-Merged.pdf" } },
+      photo1b: { syllabusLab: { zip: "Photography-1-Syllabus-and-Lab.zip", merged: "Photography-1-Syllabus-and-Lab-Merged.pdf" } },
+      photo2a: { syllabusLab: { zip: "Photography-2-Syllabus-and-Lab.zip", merged: "Photography-2-Syllabus-and-Lab-Merged.pdf" } },
+      photo2b: { syllabusLab: { zip: "Photography-2-Syllabus-and-Lab.zip", merged: "Photography-2-Syllabus-and-Lab-Merged.pdf" } },
+    };
+    // Slide decks (staff-facing master PowerPoints), grouped per course.
+    const SLIDE_DECKS = {
+      da1a: [
+        { label: "Module 02: Color Theory (English)", file: "DA1-Color-Theory-Slides-EN-v2.pptx" },
+        { label: "Module 02: Color Theory (Spanish)", file: "DA1-Color-Theory-Slides-ES-v2.pptx" },
+      ],
     };
     function docLink(file, label) {
       const ext = file.split(".").pop().toUpperCase();
@@ -1391,15 +1413,38 @@
         + `<span class="course-doc-name">${label}</span>`
         + `<span class="course-doc-dl">Download</span></a>`;
     }
+    // One combined row: syllabus + lab agreement, with the merged 4-page PDF and the all-4-files zip.
+    function syllabusLabRow(sl) {
+      return `<div class="course-doc">`
+        + `<span class="course-doc-ico">DOCS</span>`
+        + `<span class="course-doc-name">Syllabus &amp; Lab Agreement (Print &amp; Sign)</span>`
+        + `<span class="course-doc-actions">`
+        + `<a class="course-doc-dl" href="${DOCBASE}${encodeURIComponent(sl.merged)}" download>Merged PDF (4pp)</a>`
+        + `<a class="course-doc-dl" href="${DOCBASE}${encodeURIComponent(sl.zip)}" download>Zip (all 4)</a>`
+        + `</span></div>`;
+    }
     function docsBlock(course) {
       const d = COURSE_DOCS[course.id];
       if (!d) return "";
-      let inner = (d.syllabus ? docLink(d.syllabus, "Course Syllabus") : "")
-        + (d.agreement ? docLink(d.agreement, "Lab &amp; Equipment Agreement") : "")
+      let inner = (d.syllabusLab ? syllabusLabRow(d.syllabusLab) : "")
         + (d.extras ? d.extras.map(s => docLink(s.file, s.label)).join("") : "");
-      if (!inner) inner = `<div class="course-doc-empty">No documents posted yet.</div>`;
+      if (!inner) return "";
       return `<div class="course-docs">`
         + `<div class="course-docs-label">Course Documents</div>${inner}</div>`;
+    }
+    // Staff-facing slide decks, collapsed into an accordion (one line per deck + download).
+    function slideDecksBlock(course) {
+      const decks = SLIDE_DECKS[course.id];
+      if (!decks || !decks.length) return "";
+      const rows = decks.map(d =>
+        `<a class="course-doc" href="${DOCBASE}${encodeURIComponent(d.file)}" download>`
+        + `<span class="course-doc-ico">PPTX</span>`
+        + `<span class="course-doc-name">${d.label}</span>`
+        + `<span class="course-doc-dl">Download</span></a>`).join("");
+      return `<details class="slide-decks-acc">`
+        + `<summary class="slide-decks-sum"><span class="slide-decks-title">Slide Decks</span>`
+        + `<span class="slide-decks-meta">${decks.length} deck${decks.length === 1 ? "" : "s"} &middot; staff</span></summary>`
+        + `<div class="slide-decks-body">${rows}</div></details>`;
     }
     function linkRow(url, label) {
       return `<a class="course-doc" href="${url}" target="_blank" rel="noopener">`
@@ -1544,9 +1589,10 @@
             </span>
           </summary>
           <div class="course-acc-body">
+            ${slideDecksBlock(course)}
+            ${mods.length ? `<div class="module-list">${moduleRows}</div>` : empty}
             ${docsBlock(course)}
             ${linksBlock(course)}
-            ${mods.length ? `<div class="module-list">${moduleRows}</div>` : empty}
             ${hint}
           </div>
         </details>
@@ -1559,10 +1605,22 @@
       const inactive = COURSES.filter(c => c.inactive && !c.archived);
       const archived = COURSES.filter(c => c.archived);
       grid.insertAdjacentHTML("beforeend", active.map(buildCourseCard).join(""));
-      if (inactive.length) {
+      // Build Resources sits after the active courses (before Non Active).
+      const br = document.getElementById("build-resources");
+      if (br) grid.appendChild(br);
+      // Non Active: inactive course cards, plus any inactive standalone pages (e.g. seasonal announcements).
+      const inactiveMods = MODULES.filter(m => m.inactive && m.status === "published");
+      if (inactive.length || inactiveMods.length) {
+        let body = inactive.map(buildCourseCard).join("");
+        if (inactiveMods.length) {
+          const rows = inactiveMods.map(m =>
+            `<a class="module-row featured" href="${m.url}"><span class="module-row-name">${m.name}</span><span class="module-page-count">${m.pages}p</span></a>`).join("");
+          body += `<div class="course-docs"><div class="course-docs-label">Seasonal / Inactive Pages</div>`
+            + `<div class="module-list">${rows}</div></div>`;
+        }
         grid.insertAdjacentHTML("beforeend",
-          `<details class="nonactive-group"><summary>Non Active <span style="opacity:0.55;">(${inactive.length})</span></summary>`
-          + `<div class="nonactive-body">${inactive.map(buildCourseCard).join("")}</div></details>`);
+          `<details class="nonactive-group"><summary>Non Active <span style="opacity:0.55;">(${inactive.length + inactiveMods.length})</span></summary>`
+          + `<div class="nonactive-body">${body}</div></details>`);
       }
       if (archived.length) {
         grid.insertAdjacentHTML("beforeend",
