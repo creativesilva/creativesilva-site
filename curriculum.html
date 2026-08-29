@@ -1390,13 +1390,13 @@
         camera: { label: "Camera Check Out", form: "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform", qr: "assets/qr/camera-checkout-qr.png", download: "PVHS-Camera-Checkout-QR.png" },
         local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" }],
       },
-      da1a:    { syllabusLab: { zip: "Digital-Arts-1-Syllabus-and-Lab.zip", merged: "Digital-Arts-1-Syllabus-and-Lab-Merged.pdf" } },
+      da1a:    { syllabusLab: { zip: "Digital-Arts-1-Syllabus-and-Lab.zip", merged: "Digital-Arts-1-Syllabus-and-Lab-Merged.pdf" }, videos: [{ url: "https://vimeo.com/showcase/10188771?share=copy&amp;fl=sm&amp;fe=fs", label: "Vimeo Showcase" }] },
       da1b:    { syllabusLab: { zip: "Digital-Arts-1-Syllabus-and-Lab.zip", merged: "Digital-Arts-1-Syllabus-and-Lab-Merged.pdf" } },
       da2a:    {},
       da2b:    {},
-      photo1a: { syllabusLab: { zip: "Photography-1-Syllabus-and-Lab.zip", merged: "Photography-1-Syllabus-and-Lab-Merged.pdf" } },
+      photo1a: { syllabusLab: { zip: "Photography-1-Syllabus-and-Lab.zip", merged: "Photography-1-Syllabus-and-Lab-Merged.pdf" }, videos: [{ url: "https://vimeo.com/showcase/11854006?fl=so&amp;fe=fs", label: "Vimeo Showcase" }] },
       photo1b: { syllabusLab: { zip: "Photography-1-Syllabus-and-Lab.zip", merged: "Photography-1-Syllabus-and-Lab-Merged.pdf" } },
-      photo2a: { syllabusLab: { zip: "Photography-2-Syllabus-and-Lab.zip", merged: "Photography-2-Syllabus-and-Lab-Merged.pdf" } },
+      photo2a: { syllabusLab: { zip: "Photography-2-Syllabus-and-Lab.zip", merged: "Photography-2-Syllabus-and-Lab-Merged.pdf" }, videos: [{ url: "https://vimeo.com/showcase/11854006?fl=so&amp;fe=fs", label: "Vimeo Showcase" }] },
       photo2b: { syllabusLab: { zip: "Photography-2-Syllabus-and-Lab.zip", merged: "Photography-2-Syllabus-and-Lab-Merged.pdf" } },
     };
     // Slide decks (staff-facing master PowerPoints), grouped per course.
@@ -1451,6 +1451,12 @@
         + `<span class="course-doc-ico">APP</span>`
         + `<span class="course-doc-name">${label}</span>`
         + `<span class="course-doc-dl">Open</span></a>`;
+    }
+    function videoRow(url, label) {
+      return `<a class="course-doc" href="${url}" target="_blank" rel="noopener">`
+        + `<span class="course-doc-ico">VIDEO</span>`
+        + `<span class="course-doc-name">${label}</span>`
+        + `<span class="course-doc-dl">Watch</span></a>`;
     }
     // Local file:// link. Browsers block file:// clicks from an https page, so on the
     // live site this copies the path (paste into a new tab). Opened as a local file, it just works.
@@ -1538,13 +1544,14 @@
     function linksBlock(course) {
       const d = COURSE_DOCS[course.id];
       const links = (d && d.links) ? d.links.map(l => linkRow(l.url, l.label)).join("") : "";
+      const vids = (d && d.videos) ? d.videos.map(v => videoRow(v.url, v.label)).join("") : "";
       const cams = (d && d.camera) ? cameraRow(d.camera) : "";
       const forms = (d && d.forms) ? d.forms.map(f => formRow(f.url, f.label)).join("") : "";
       const qrs = (d && d.qr) ? d.qr.map(q => qrRow(q.src, q.label, q.download)).join("") : "";
       const locals = (d && d.local) ? d.local.map(l => localRow(l.path, l.label)).join("") : "";
-      if (!links && !cams && !forms && !qrs && !locals) return "";
+      if (!links && !vids && !cams && !forms && !qrs && !locals) return "";
       return `<div class="course-docs">`
-        + `<div class="course-docs-label">Class Tools</div>${links}${cams}${forms}${qrs}${locals}</div>`;
+        + `<div class="course-docs-label">Class Tools</div>${links}${vids}${cams}${forms}${qrs}${locals}</div>`;
     }
 
     function buildCourseCard(course) {
