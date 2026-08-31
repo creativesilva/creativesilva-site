@@ -17,7 +17,7 @@ now). Image slots are placeholders with hyper-real generation prompts.
 import os
 
 OUT = os.path.join(os.path.dirname(__file__), '..', 'curriculum', 'mrc')
-RAWBASE = 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/'
+RAWBASE = 'https://www.creativesilva.com/'
 IMG = RAWBASE + 'assets/mrc/images/'
 ZIP_URL = RAWBASE + 'assets/mrc/handouts/Magazine_Cover_Project.zip'
 
@@ -171,7 +171,7 @@ def banner(eyebrow, title, tagline):
     return ('<div style="background:linear-gradient(135deg,#000000 0%%,#4a1e02 40%%,#c95201 100%%);'
             'padding:20px 28px 22px;margin:-28px -28px 24px -28px;border-bottom:3px solid #c95201;">'
             '<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">'
-            '<div style="justify-self:start;"><img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/mrc/MRC_Logo.png" alt="Mark Richardson Center" style="width:min(90px,15vw);height:auto;display:block;" /></div>'
+            '<div style="justify-self:start;"><img src="https://www.creativesilva.com/assets/mrc/MRC_Logo.png" alt="Mark Richardson Center" style="width:min(90px,15vw);height:auto;display:block;" /></div>'
             '<div style="justify-self:center;text-align:center;">'
             '<div style="margin-bottom:6px;"><span style="font-size:14pt;color:#eda268;"><strong>%s</strong></span></div>'
             '<div style="color:#ffffff;font-size:24pt;font-weight:700;line-height:1.1;"><strong>%s</strong></div>'
