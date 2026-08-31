@@ -308,7 +308,7 @@ def build_block(lang):
       <div style="background:linear-gradient(135deg,#000000 0%,#003838 40%,#007474 100%);padding:24px 28px 26px;margin:-28px -28px 24px -28px;border-bottom:3px solid {TEAL};">
         <div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">
           <div style="justify-self:start;">
-            <img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:min(90px,15vw);height:auto;display:block;" />
+            <img src="https://www.creativesilva.com/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:min(90px,15vw);height:auto;display:block;" />
           </div>
           <div style="justify-self:center;text-align:center;">
             <div style="margin-bottom:8px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.30em;color:{TEAL_EYEBROW};text-transform:uppercase;"><strong>{banner_eyebrow}</strong></div>
@@ -332,7 +332,7 @@ def build_block(lang):
 
     welcome_inner = (
         f'<div style="padding:14px 14px 0;">'
-        f'<img src="https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/images/da-finals/art-elements-hero.png" alt="Mr. Silva teaching the 7 Elements of Art in the PV Digital Arts Lab" style="width:100%;height:auto;display:block;{image_border(TEAL, TEAL_DIM)};box-sizing:border-box;" />'
+        f'<img src="https://www.creativesilva.com/assets/images/da-finals/art-elements-hero.png" alt="Mr. Silva teaching the 7 Elements of Art in the PV Digital Arts Lab" style="width:100%;height:auto;display:block;{image_border(TEAL, TEAL_DIM)};box-sizing:border-box;" />'
         f'</div>'
         f'<div style="padding:26px 30px 30px;">'
         f'{chip(welcome_chip, TEAL, TEAL_EYEBROW)}'
@@ -439,7 +439,7 @@ def build_block(lang):
         f'<div style="font-size:14pt;line-height:1.8;color:rgba(255,255,255,0.88);margin-bottom:14px;">{sg_steps}</div>'
         f'<div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:18px;">{sg_line_test_day}</div>'
         f'<div style="font-size:14pt;line-height:1.7;color:rgba(255,255,255,0.88);margin-bottom:22px;">{sg_line_print}</div>'
-        f'<div>{button(sg_btn, "https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/study-guides/DA_Finals_Study_Guide.docx", ORANGE, download=True)}</div>'
+        f'<div>{button(sg_btn, "https://www.creativesilva.com/assets/study-guides/DA_Finals_Study_Guide.docx", ORANGE, download=True)}</div>'
     )
     study_guide = '\n      <!-- STUDY GUIDE / 04 -->\n      ' + outer_card(
         ORANGE, ORANGE_DIM, 'linear-gradient(180deg,rgba(255,107,26,0.18) 0%,rgba(255,107,26,0.05) 100%)',
@@ -490,7 +490,7 @@ PAGE = f'''<!DOCTYPE html>
   <div class="silva-page">
   <div id="silva-module-content">
 
-  <div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%),url('https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV_Panther_Watermark.png');background-position:center center,center center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed;overflow:hidden;">
+  <div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%),url('https://www.creativesilva.com/assets/PV_Panther_Watermark.png');background-position:center center,center center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed;overflow:hidden;">
 
     <!-- ════════════════════════ ENGLISH ════════════════════════ -->
     <div style="padding:28px 28px 40px;">

@@ -37,7 +37,7 @@ THEMES = {
       '230,36,41': '164,22,26',   # red -> rust red
       '0,56,56': '40,20,2',       # page-background tint -> dark orange
     },
-    'logo_url': 'https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/mrc/MRC_Logo.png',
+    'logo_url': 'https://www.creativesilva.com/assets/mrc/MRC_Logo.png',
     'logo_alt': 'Mark Richardson Center',
     'logo_width': '90px',
     'logo_vw': '15vw',
