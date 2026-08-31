@@ -63,6 +63,8 @@ These are non-negotiable. The user has flagged em dashes as a hard ban via globa
 6. **URL-encode spaces** in asset paths as `%20`.
 7. **No filenames with "copy" in them** (e.g., `Jimenez_Mockups copy.ai`). Rename before committing.
 8. **No `.env` files, no credentials, no secrets.** Standard.
+9. **Reflection documents (LOCKED 2026-08-31): text-box style + SEPARATE English and Spanish docs, never bilingual.** Every reflection/worksheet `.docx` uses the bordered-answer-box template (PV logo header, teal `#007474` title with a teal bottom border, subtitle line, Name/Date fill line, an italic "the box grows as you type" instruction, then each question = bold teal number + bold question + a bordered answer box, border `888888` / shading `FAFAFA` / min-height ~1300 DXA, that grows as the student types). NEVER blank underlines for answers. And NEVER a single bilingual doc: build one complete English document AND one complete Spanish document, 100%, no shortcuts. On a bilingual module page, link the English doc in the English section and the Spanish doc in the Spanish section. Reference builder: `tools/build-composition-reflection.js` (same family as the other `tools/build-*-reflection.js`).
+10. **Photo capture assignments carry an honesty/integrity notice:** students must take FRESH photos, planned and captured on purpose for that assignment. They may NOT reuse pictures already in their camera roll from before the class. Add a clear orange note saying so (EN + ES), on the capture step and the overview.
 
 ---
 
