@@ -15,7 +15,7 @@ Generator: `tools/build-da-finals.py`.
 - Never use the words **shoot, shooting, shot, shots** (or **screenshot**). Hard ban, as absolute as the em-dash ban: in a school these words evoke school shootings. Use capture / take photos / photograph, a session, photo / image / frame, "captured in RAW", "screen capture". Applies to EN and ES, headings, chips, alt text, comments.
 - No emojis in student-facing content. They read cheap. Use a text label, a colored chip, or an arrow (`&larr;` `&rarr;`) instead. (`tools/strip-emojis.py` removes them from the `#top` region.)
 - Student-facing language at about a 5th grade reading level. Short, direct sentences. Active voice. Use "you" and "your".
-- All Canvas assets use raw GitHub URLs (`https://raw.githubusercontent.com/...`). No Canvas-hosted file URLs, no relative paths, no invented filenames. Spaces in paths become `%20`.
+- All Canvas assets host from `https://www.creativesilva.com/assets/...` (the ONLY district-whitelisted domain; raw GitHub / jsDelivr render as broken images in the student Canvas iOS app). No Canvas-hosted file URLs, no relative paths, no invented filenames. Spaces in paths become `%20`.
 - Bilingual by default: full English block first, then a full Spanish mirror below the `#espanol` anchor. English only when explicitly requested.
 - Keep the copy/download script and `<script src="/js/silva-nav.js"></script>`. Keep the PVHS logo.
 
@@ -195,6 +195,6 @@ standard 2px gradient frame) once the user supplies it.
 - Every card: translucent tint background, gradient border-image frame, solid top-stripe child. Watermark visible through cards.
 - Every button: gray base, fixed size, section-colored 2px top bar.
 - Bilingual EN block then ES mirror, unless English-only was requested.
-- All asset URLs are raw GitHub, spaces as `%20`.
+- All asset URLs host from `www.creativesilva.com`, spaces as `%20`.
 - No em dashes. 5th grade reading level. Active voice.
 - Div opens equal div closes.

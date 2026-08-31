@@ -476,28 +476,33 @@ Long instruction lists use the visible-affordance vertical scroll pattern from Â
 
 ## 6. Asset Hosting Rules
 
-All non-text assets must live in `/Users/riva/RIVA_CODE/creativesilva-site/assets/` and be committed to the repo.
+All non-text assets must live in the repo `assets/` folder and be committed.
 
 **Naming:**
 - Lowercase preferred but not required.
 - No "copy" in filenames.
 - Spaces are OK but must be URL-encoded as `%20` in src/href.
 - Use descriptive names: `Jimenez_Mockups.ai` not `template.ai`.
+- Version swapped assets (`-v2`, `-v3`) to bust the CDN cache; repoint every reference.
 
-**Image URLs always look like:**
+**Image URLs always host from `www.creativesilva.com`** (the ONLY district-whitelisted domain; `raw.githubusercontent.com` and `cdn.jsdelivr.net` render as BROKEN images in the student Canvas iOS app, see hard rule #5). They look like:
 ```
-https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/{FILENAME}
+https://www.creativesilva.com/assets/{PATH}
 ```
 
 **PVHS logo (always use this exact URL):**
 ```
-https://raw.githubusercontent.com/creativesilva/creativesilva-site/main/assets/PV%20LOGO%20NEW.png
+https://www.creativesilva.com/assets/PV%20LOGO%20NEW.png
 ```
 
-**Workflow when user provides a new image:**
-1. Confirm filename and that it's been added to `/assets/`.
-2. Reference it via the full raw.githubusercontent URL.
-3. Commit the asset together with the HTML page.
+**`assets/_incoming/` is a MOVE-through drop zone, not storage.** Chris drops raw images there for you to process; the folder is a staging area and must not balloon with used files.
+
+**Workflow when user provides a new image (drops it in `assets/_incoming/`):**
+1. View it, then optimize/resize for web (`sips`; heroes ~1600-1920px, floats ~1000-1200px, keep well under ~1MB).
+2. Rename to convention (versioned to bust cache) and place under `assets/images/<course>/<module>/`.
+3. Wire it into the page via its `https://www.creativesilva.com/assets/...` URL, commit with the HTML, push.
+4. Confirm live on the public URL.
+5. THEN delete the raw original(s) out of `assets/_incoming/`, including superseded versions (remove the replaced v1 AND the v2 raw once v2 is placed and live). The optimized asset is the only retained copy.
 
 ---
 
