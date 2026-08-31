@@ -202,7 +202,6 @@ def overview():
     HEAD_EN=banner("Digital Arts 1A &bull; Sketchbook Cover Art","Sketchbook Cover Art","Design a cover worth showing off.","#espanol","Clic para Espa&ntilde;ol")
     HEAD_ES=banner("Arte Digital 1A &bull; Arte de la Portada","Arte de la Portada","Dise&ntilde;a una portada digna de presumir.","#top","Back to English")
     en=HEAD_EN
-    en+=deliverables_box("DELIVERABLES &middot; WHAT YOU TURN IN","Two separate assignments, each graded on its own:",[("Step 1:","your 2 cover images, front and back (JPG)."),("Step 2:","your completed reflection (Word doc).")])
     en+=card("THE COMPETITION / OVERVIEW","Make Your Sketchbook Your Own",
         para("Time to make your sketchbook yours. You will decorate and personalize the manila cover of your 8.5 by 11 inch sketchbook and turn it into art you are proud of. This is a friendly class competition: the best cover wins a prize. You have one week, and you may take your sketchbook home to keep working on it.")
         + framed_hero(HEADER_IMG,"Sketchbook Cover"))
@@ -229,18 +228,13 @@ def overview():
     en+=card("VOCABULARY / 6 TERMS","Key Words",
         note_orange("Heads up: these key words will be on the quiz.")
         + vocab_grid(VOCAB_EN))
-    en+=card("RESEARCH &amp; TURN IN","Fonts and Deliverables",
+    en+=card("RESEARCH / FONTS","Fonts and Reflection",
         para("Pick your 2 typefaces on Adobe Fonts. Only this website is approved for the competition. On Adobe Fonts you can type your own word into the Sample Text box to see how it looks in any font.")
         + adobe_link("Adobe Fonts (fonts.adobe.com)")
-        + bullets([
-            ("Step 1:","turn in your 2 cover images (front and back), taken with your school iPad."),
-            ("Step 2:","turn in your completed reflection (download below)."),
-          ])
         + para("Download the reflection here. Fill it out after your cover is done.")
         + dl_link(REFLECT_EN,"Sketchbook Cover Reflection (Word)"))
 
     es=HEAD_ES
-    es+=deliverables_box("ENTREGABLES &middot; QU&Eacute; ENTREGAS","Dos tareas separadas, cada una se califica por su cuenta:",[("Paso 1:","tus 2 im&aacute;genes de la portada, frente y reverso (JPG)."),("Paso 2:","tu reflexi&oacute;n completa (documento de Word).")])
     es+=card("LA COMPETENCIA / RESUMEN","Haz Tuyo Tu Cuaderno",
         para("Es hora de hacer tuyo tu cuaderno. Vas a decorar y personalizar la portada de manila de tu cuaderno de 8.5 por 11 pulgadas y convertirla en arte del que te sientas orgulloso. Esta es una competencia amistosa de la clase: la mejor portada gana un premio. Tienes una semana, y puedes llevar tu cuaderno a casa para seguir trabajando.")
         + framed_hero(HEADER_IMG,"Portada del Cuaderno"))
@@ -267,13 +261,9 @@ def overview():
     es+=card("VOCABULARIO / 6 T&Eacute;RMINOS","Palabras Clave",
         note_orange("Atenci&oacute;n: estas palabras clave estar&aacute;n en el examen.")
         + vocab_grid(VOCAB_ES))
-    es+=card("INVESTIGACI&Oacute;N Y ENTREGA","Fuentes y Entregables",
+    es+=card("INVESTIGACI&Oacute;N / FUENTES","Fuentes y Reflexi&oacute;n",
         para("Elige tus 2 tipos de letra en Adobe Fonts. Solo este sitio web est&aacute; aprobado para la competencia. En Adobe Fonts puedes escribir tu propia palabra en la casilla de Texto de Muestra para ver c&oacute;mo se ve en cualquier fuente.")
         + adobe_link("Adobe Fonts (fonts.adobe.com)")
-        + bullets([
-            ("Paso 1:","entrega tus 2 im&aacute;genes de la portada (frente y reverso), tomadas con tu iPad de la escuela."),
-            ("Paso 2:","entrega tu reflexi&oacute;n completa (desc&aacute;rgala abajo)."),
-          ])
         + para("Descarga la reflexi&oacute;n aqu&iacute;. Ll&eacute;nala cuando termines tu portada.")
         + dl_link(REFLECT_ES,"Reflexi&oacute;n de la Portada (Word)"))
 
@@ -287,7 +277,6 @@ def step01():
     HEAD_EN=banner("Digital Arts 1A &bull; Sketchbook Cover Art","Sketchbook Cover Art","Design your covers, then turn in two photos.","#espanol","Clic para Espa&ntilde;ol")
     HEAD_ES=banner("Arte Digital 1A &bull; Arte de la Portada","Arte de la Portada","Dise&ntilde;a tus portadas y entrega dos fotos.","#top","Back to English")
     en=HEAD_EN
-    en+=deliverables_box("DELIVERABLES &middot; STEP 1","Turn in for this step (graded on its own):",[("2 images:","a clean photo of your FRONT cover and one of your BACK cover (JPG), uploaded to this Canvas assignment.")])
     en+=card("STEP 01 / DESIGN &amp; CREATE","Design Your Cover",
         cooper_float("One of your 3 words must be drawn in Cooper Black. Use this alphabet as your guide. Tap the image to open it full size.")
         + para("Now design your cover. Plan where your name, period, and 3 words will go, then decorate the front and the back. Take your time and make it yours. You can work in class and take your sketchbook home for more.")
@@ -316,7 +305,6 @@ def step01():
         + note_orange("This is Step 1 and it is graded on its own. The reflection is turned in separately on Step 2."))
 
     es=HEAD_ES
-    es+=deliverables_box("ENTREGABLES &middot; PASO 1","Entrega en este paso (se califica por su cuenta):",[("2 im&aacute;genes:","una foto limpia de tu portada del FRENTE y otra del REVERSO (JPG), subidas a esta tarea de Canvas.")])
     es+=card("PASO 01 / DISE&Ntilde;A Y CREA","Dise&ntilde;a Tu Portada",
         cooper_float("Una de tus 3 palabras debe estar dibujada en Cooper Black. Usa este alfabeto como gu&iacute;a. Toca la imagen para abrirla en tama&ntilde;o completo.")
         + para("Ahora dise&ntilde;a tu portada. Planea d&oacute;nde ir&aacute;n tu nombre, tu periodo y tus 3 palabras, y luego decora el frente y el reverso. T&oacute;mate tu tiempo y hazla tuya. Puedes trabajar en clase y llevar tu cuaderno a casa para m&aacute;s.")
@@ -354,7 +342,6 @@ def step02():
     HEAD_EN=banner("Digital Arts 1A &bull; Sketchbook Cover Art","Sketchbook Cover Art","Complete and upload your reflection.","#espanol","Clic para Espa&ntilde;ol")
     HEAD_ES=banner("Arte Digital 1A &bull; Arte de la Portada","Arte de la Portada","Completa y sube tu reflexi&oacute;n.","#top","Back to English")
     en=HEAD_EN
-    en+=deliverables_box("DELIVERABLES &middot; STEP 2","Turn in for this step (graded on its own):",[("1 reflection:","your completed reflection Word document, uploaded to this Canvas assignment.")])
     en+=card("REFLECT / STEP 02","Complete and Upload the Reflection",
         reflect_typing_float("A student typing the reflection on a computer","Type your answers right in the document.")
         + para("Finish with a short reflection. It asks about your 3 words, your Cooper Black word, and the 2 Adobe Fonts typefaces you chose, plus how you can test a font on Adobe Fonts.")
@@ -367,7 +354,6 @@ def step02():
         + note_orange("This step is graded on its own. Your 2 cover images were turned in on Step 1. Be honest and turn in your own work."))
 
     es=HEAD_ES
-    es+=deliverables_box("ENTREGABLES &middot; PASO 2","Entrega en este paso (se califica por su cuenta):",[("1 reflexi&oacute;n:","tu documento de Word de la reflexi&oacute;n completo, subido a esta tarea de Canvas.")])
     es+=card("REFLEXIONA / PASO 02","Completa y Sube la Reflexi&oacute;n",
         reflect_typing_float("Un estudiante escribiendo la reflexi&oacute;n en la computadora","Escribe tus respuestas en el documento.")
         + para("Termina con una reflexi&oacute;n corta. Pregunta sobre tus 3 palabras, tu palabra en Cooper Black y los 2 tipos de letra de Adobe Fonts que elegiste, y c&oacute;mo puedes probar una fuente en Adobe Fonts.")

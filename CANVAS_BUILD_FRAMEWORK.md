@@ -529,7 +529,7 @@ Mental pass through the page. Every box must be true.
 - [ ] Breadcrumb in title card matches the page's project context.
 - [ ] No em dashes anywhere (search the file for `—` and `&mdash;`).
 - [ ] All asset URLs host from `https://www.creativesilva.com/assets/...` (NEVER raw.githubusercontent.com or jsDelivr: they break in the student Canvas iOS app).
-- [ ] **Deliverables callout on every step AND the overview** (each step = its own graded submission with its own deliverable, unless Chris says otherwise). See hard rule #11.
+- [ ] **Deliverables callout on each submitting step, placed LOW on that step, NEVER on the overview** (each step = its own graded submission with its own deliverable, unless Chris says otherwise). See hard rule #11.
 - [ ] Smart quotes used in long-form copy.
 - [ ] **Overview card contains exactly 6 vocabulary cards** in the responsive grid.
 - [ ] **Vocabulary definitions read at 5th grade level** (under 15 words, plain language, no jargon).
