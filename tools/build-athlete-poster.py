@@ -68,13 +68,20 @@ def stepblock(n,title,body):
       f'<div style="font-size:15pt;color:#ffffff;margin-bottom:6px;"><strong>{title}</strong></div>'
       f'<div style="font-size:13.5pt;color:rgba(255,255,255,0.88);line-height:1.65;">{body}</div></div>')
 
-def support(thumb,title,desc,url,openlabel):
-    return ('<div style="margin-bottom:22px;max-width:540px;">'
-      f'<a href="{url}" target="_blank" rel="noopener" style="display:block;text-decoration:none;background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;line-height:0;">'
-      f'<img src="{thumb}" alt="{title}" style="display:block;width:100%;height:auto;" /></a>'
-      f'<div style="margin-top:10px;"><span style="font-size:14pt;color:#ffffff;"><strong>{title}</strong></span></div>'
-      f'<div style="font-size:12.5pt;color:rgba(255,255,255,0.82);line-height:1.6;margin:4px 0 10px;">{desc}</div>'
-      f'<a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:9px 18px;border-top:2px solid #00b8b8;font-size:11pt;letter-spacing:0.04em;"><strong>{openlabel}</strong></a></div>')
+def support_tile(thumb,title,desc,url,openlabel):
+    return ('<div style="flex:0 0 290px;width:290px;box-sizing:border-box;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(0,116,116,0.14) 0%,rgba(0,116,116,0.04) 100%);border:1px solid rgba(0,184,184,0.28);border-top:4px solid #00b8b8;">'
+      f'<a href="{url}" target="_blank" rel="noopener" style="display:block;line-height:0;"><img src="{thumb}" alt="{title}" style="display:block;width:100%;height:163px;object-fit:cover;" /></a>'
+      '<div style="padding:14px 16px 16px;display:flex;flex-direction:column;flex:1 1 auto;">'
+      f'<div style="font-size:13.5pt;color:#ffffff;margin-bottom:6px;"><strong>{title}</strong></div>'
+      f'<div style="font-size:11.5pt;color:rgba(255,255,255,0.82);line-height:1.55;flex:1 1 auto;margin-bottom:14px;">{desc}</div>'
+      f'<div><a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:9px 16px;border-top:2px solid #00b8b8;font-size:10.5pt;letter-spacing:0.04em;"><strong>{openlabel}</strong></a></div>'
+      '</div></div>')
+
+def support_tiles(items):
+    tiles="".join(support_tile(*it) for it in items)
+    return ('<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;">'
+      f'<div style="display:flex;gap:16px;min-width:min-content;align-items:stretch;">{tiles}</div></div>'
+      '<div style="font-size:10pt;color:rgba(255,255,255,0.5);margin-top:8px;letter-spacing:0.08em;">&laquo; swipe or scroll for more &raquo;</div>')
 
 def deliverables_box(title,lead,items):
     lis=""
@@ -196,9 +203,11 @@ def overview():
         + vocab_grid(VOCAB_EN))
     en+=card("RESOURCES / SUPPORT","Tutorials to Help You",
         para("Three short Adobe guides for the trickiest parts. Tap a video to open it in a new tab. You can watch them again any time.")
-        + support(TUT_WORK,"Introduction to the Workspace","Get to know the Photoshop workspace: the panels, the tools, and where everything lives.",URL_WORK,"Watch: Workspace &rarr;")
-        + support(TUT_SEL,"Introduction to Selections","Learn how to select part of an image. This is the first step to cutting your athlete out.",URL_SEL,"Watch: Selections &rarr;")
-        + support(TUT_MASK,"Get to Know Layer Masks","Use layer masks to hide and show parts of a layer without erasing anything.",URL_MASK,"Watch: Layer Masks &rarr;"))
+        + support_tiles([
+            (TUT_WORK,"Introduction to the Workspace","Get to know the Photoshop workspace: the panels, the tools, and where everything lives.",URL_WORK,"Watch: Workspace &rarr;"),
+            (TUT_SEL,"Introduction to Selections","Learn how to select part of an image. This is the first step to cutting your athlete out.",URL_SEL,"Watch: Selections &rarr;"),
+            (TUT_MASK,"Get to Know Layer Masks","Use layer masks to hide and show parts of a layer without erasing anything.",URL_MASK,"Watch: Layer Masks &rarr;"),
+        ]))
 
     es=banner("Arte Digital 1A &bull; Photoshop","P&oacute;ster Motivacional de Atleta","Dise&ntilde;a un p&oacute;ster que anime a tu atleta favorito.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","Lo Que Vas a Crear",
@@ -217,9 +226,11 @@ def overview():
         + vocab_grid(VOCAB_ES))
     es+=card("RECURSOS / APOYO","Tutoriales Para Ayudarte",
         para("Tres gu&iacute;as cortas de Adobe para las partes m&aacute;s dif&iacute;ciles. Toca un video para abrirlo en una pesta&ntilde;a nueva. Puedes verlos las veces que necesites.")
-        + support(TUT_WORK,"Introducci&oacute;n al Espacio de Trabajo","Conoce el espacio de trabajo de Photoshop: los paneles, las herramientas y d&oacute;nde est&aacute; todo.",URL_WORK,"Ver: Espacio de Trabajo &rarr;")
-        + support(TUT_SEL,"Introducci&oacute;n a las Selecciones","Aprende a seleccionar parte de una imagen. Es el primer paso para recortar a tu atleta.",URL_SEL,"Ver: Selecciones &rarr;")
-        + support(TUT_MASK,"Conoce las M&aacute;scaras de Capa","Usa m&aacute;scaras de capa para ocultar y mostrar partes de una capa sin borrar nada.",URL_MASK,"Ver: M&aacute;scaras de Capa &rarr;"))
+        + support_tiles([
+            (TUT_WORK,"Introducci&oacute;n al Espacio de Trabajo","Conoce el espacio de trabajo de Photoshop: los paneles, las herramientas y d&oacute;nde est&aacute; todo.",URL_WORK,"Ver: Espacio de Trabajo &rarr;"),
+            (TUT_SEL,"Introducci&oacute;n a las Selecciones","Aprende a seleccionar parte de una imagen. Es el primer paso para recortar a tu atleta.",URL_SEL,"Ver: Selecciones &rarr;"),
+            (TUT_MASK,"Conoce las M&aacute;scaras de Capa","Usa m&aacute;scaras de capa para ocultar y mostrar partes de una capa sin borrar nada.",URL_MASK,"Ver: M&aacute;scaras de Capa &rarr;"),
+        ]))
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
