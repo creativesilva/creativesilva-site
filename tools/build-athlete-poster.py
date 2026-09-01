@@ -14,8 +14,8 @@ URL_WORK="https://www.adobe.com/learn/photoshop/in-app/introduction-to-the-works
 URL_SEL="https://www.adobe.com/learn/photoshop/in-app/introduction-to-selections"
 URL_MASK="https://www.adobe.com/learn/photoshop/in-app/get-to-know-layer-masks"
 
-OVER="athlete-poster-assignment.html"
-S1="athlete-poster-step01.html"
+OVER="digarts1-athlete-poster-overview.html"
+S1="digarts1-athlete-poster-step01.html"
 
 def ent(s):
     m={"á":"&aacute;","é":"&eacute;","í":"&iacute;","ó":"&oacute;","ú":"&uacute;",
@@ -302,5 +302,5 @@ for fname,gen in [(OVER,overview),(S1,step01)]:
     low=html.lower()
     for w in ["shoot","shooting","shot","shots","screenshot"]:
         assert not re.search(r'\b'+w+r'\b', low), f"banned '{w}' in {fname}"
-    open(os.path.join(ROOT,"curriculum/mrc",fname),"w",encoding="utf-8").write(html)
+    open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
     print("wrote", fname, len(html), "bytes")
