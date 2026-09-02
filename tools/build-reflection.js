@@ -204,6 +204,25 @@ const DOCS = [
     '¿Cuál fue la parte más difícil del diseño?',
     '¿Qué disfrutaste de este proyecto?',
   ]},
+  // Studio Session / Panther of the Quarter (Photography 2A)
+  { ...EN, outfile: 'Studio-Session-Reflection-EN.docx', title: 'Studio Session: Reflection', subtitle: PVHS_EN('Photography 2A'), questions: [
+    'Who was in your group, and what role did each person play (Photographer, Art Director, or Lighting Assistant)? List your name and your two group members.',
+    'What did you think of the studio session process, from start to finish?',
+    'Would you have preferred a different role? Explain why or why not.',
+    'What part of the project did you enjoy the most?',
+    'What was the most challenging part, and how did you handle it?',
+    'What, if anything, would you do differently next time?',
+    'How did you make your editing decisions? Describe several specific changes you made to your images.',
+  ]},
+  { ...ES, outfile: 'Studio-Session-Reflection-ES.docx', title: 'Sesión de Estudio: Reflexión', subtitle: PVHS_ES('Fotografía 2A'), questions: [
+    '¿Quiénes estaban en tu grupo y qué rol tuvo cada uno (Fotógrafo, Director de Arte o Asistente de Iluminación)? Escribe tu nombre y el de tus dos compañeros.',
+    '¿Qué te pareció el proceso de la sesión de estudio, de principio a fin?',
+    '¿Habrías preferido un rol diferente? Explica por qué sí o por qué no.',
+    '¿Qué parte del proyecto disfrutaste más?',
+    '¿Cuál fue la parte más difícil, y cómo la resolviste?',
+    '¿Qué harías diferente la próxima vez, si acaso algo?',
+    '¿Cómo tomaste tus decisiones de edición? Describe varios cambios específicos que hiciste a tus imágenes.',
+  ]},
 ];
 
 (async () => { for (const d of DOCS) await buildDoc(d); })();
