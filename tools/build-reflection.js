@@ -191,6 +191,17 @@ const DOCS = [
     '¿Cuál medio o medios (las herramientas o materiales que usaste, como lápiz, marcador o lápiz de color) usaste, y por qué?',
     '¿De qué estás más orgulloso en tu portada?',
   ]},
+  // Athlete Poster (Digital Arts 1A)
+  { ...EN, outfile: 'Athlete-Poster-Reflection-EN.docx', title: 'Athlete Poster: Reflection', subtitle: PVHS_EN('Digital Arts 1A'), questions: [
+    'Which person did you choose for your poster, and why?',
+    'What was the hardest part of the design?',
+    'What did you enjoy about this project?',
+  ]},
+  { ...ES, outfile: 'Athlete-Poster-Reflection-ES.docx', title: 'Póster de Atleta: Reflexión', subtitle: PVHS_ES('Arte Digital 1A'), questions: [
+    '¿Qué persona elegiste para tu póster, y por qué?',
+    '¿Cuál fue la parte más difícil del diseño?',
+    '¿Qué disfrutaste de este proyecto?',
+  ]},
 ];
 
 (async () => { for (const d of DOCS) await buildDoc(d); })();

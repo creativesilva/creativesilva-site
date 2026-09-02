@@ -12,6 +12,8 @@ FIX_RASTER=f"{IMG}/fix-rasterize.png"
 FIX_SMVIEW=f"{IMG}/fix-select-mask-view.png"
 FIX_OUTPUT=f"{IMG}/fix-output-to.png"
 FIX_BLUR=f"{IMG}/fix-motion-blur.png"
+REFLECT_EN=f"{SITE}/assets/course-documents/Athlete-Poster-Reflection-EN.docx"
+REFLECT_ES=f"{SITE}/assets/course-documents/Athlete-Poster-Reflection-ES.docx"
 TUT_WORK=f"{IMG}/tut-workspace.png"
 TUT_SEL=f"{IMG}/tut-selections.png"
 TUT_MASK=f"{IMG}/tut-layer-masks.png"
@@ -22,6 +24,7 @@ URL_MASK="https://www.adobe.com/learn/photoshop/in-app/get-to-know-layer-masks"
 OVER="digarts1-athlete-poster-overview.html"
 S1="digarts1-athlete-poster-step01.html"
 S2="digarts1-athlete-poster-step02.html"
+S3="digarts1-athlete-poster-step03.html"
 
 def ent(s):
     m={"á":"&aacute;","é":"&eacute;","í":"&iacute;","ó":"&oacute;","ú":"&uacute;",
@@ -90,6 +93,9 @@ def support_tile(thumb,title,desc,url,openlabel):
       f'<div style="font-size:11.5pt;color:rgba(255,255,255,0.82);line-height:1.55;flex:1 1 auto;margin-bottom:14px;">{desc}</div>'
       f'<div><a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:9px 16px;border-top:2px solid #00b8b8;font-size:10.5pt;letter-spacing:0.04em;"><strong>{openlabel}</strong></a></div>'
       '</div></div>')
+
+def dl_link(url,label):
+    return (f'<div style="margin-top:6px;"><a href="{url}" download style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:10px 20px;border-top:2px solid #00b8b8;font-size:11pt;letter-spacing:0.04em;"><strong>{label}</strong></a></div>')
 
 def support_tiles(items):
     tiles="".join(support_tile(*it) for it in items)
@@ -222,6 +228,9 @@ def overview():
             (TUT_SEL,"Introduction to Selections","Learn how to select part of an image. This is the first step to cutting your athlete out.",URL_SEL,"Watch: Selections &rarr;"),
             (TUT_MASK,"Get to Know Layer Masks","Use layer masks to hide and show parts of a layer without erasing anything.",URL_MASK,"Watch: Layer Masks &rarr;"),
         ]))
+    en+=card("REFLECTION / DOWNLOAD","Get the Reflection Document",
+        para("Download the reflection here. Fill it out after your poster is done, then turn it in on Step 03.")
+        + dl_link(REFLECT_EN,"Athlete Poster Reflection (Word)"))
 
     es=banner("Arte Digital 1A &bull; Photoshop","P&oacute;ster Motivacional de Atleta","Dise&ntilde;a un p&oacute;ster que anime a tu atleta favorito.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","Lo Que Vas a Crear",
@@ -245,8 +254,11 @@ def overview():
             (TUT_SEL,"Introducci&oacute;n a las Selecciones","Aprende a seleccionar parte de una imagen. Es el primer paso para recortar a tu atleta.",URL_SEL,"Ver: Selecciones &rarr;"),
             (TUT_MASK,"Conoce las M&aacute;scaras de Capa","Usa m&aacute;scaras de capa para ocultar y mostrar partes de una capa sin borrar nada.",URL_MASK,"Ver: M&aacute;scaras de Capa &rarr;"),
         ]))
+    es+=card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
+        para("Descarga la reflexi&oacute;n aqu&iacute;. Ll&eacute;nala cuando termines tu p&oacute;ster y entr&eacute;gala en el Paso 03.")
+        + dl_link(REFLECT_ES,"Reflexi&oacute;n del P&oacute;ster (Word)"))
 
-    dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
+    dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
     return wrap_page("Motivational Athlete Poster | Digital Arts 1A | PVHS", nav("Overview",dots,stepnav), top_wrap(en,es), bottom)
@@ -328,7 +340,7 @@ def step01():
         [("1 p&oacute;ster:","tu p&oacute;ster final aplanado, guardado como JPG, subido a esta tarea de Canvas.")])
     es+=note_orange("Tu p&oacute;ster debe ser tu propio trabajo original. S&eacute; honesto y entrega tu propio dise&ntilde;o.")
 
-    dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)
+    dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
     return wrap_page("Step 1: Build | Motivational Athlete Poster | Digital Arts 1A | PVHS", nav("Step 01",dots,stepnav), top_wrap(en,es), bottom)
@@ -388,12 +400,48 @@ def step02():
         [("1 p&oacute;ster m&oacute;vil:","tu versi&oacute;n tama&ntilde;o tel&eacute;fono, aplanada y guardada como JPG, subida a esta tarea de Canvas.")])
     es+=note_orange("Esta es tu propia segunda versi&oacute;n. S&eacute; honesto y entrega tu propio dise&ntilde;o.")
 
-    dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)
-    stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><span></span></div>'
+    dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)+dot(S3,'3',"Step 03",False)
+    stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
     return wrap_page("Step 2: Mobile Version | Motivational Athlete Poster | Digital Arts 1A | PVHS", nav("Step 02",dots,stepnav), top_wrap(en,es), bottom)
 
-for fname,gen in [(OVER,overview),(S1,step01),(S2,step02)]:
+# ---------------- STEP 03 (REFLECTION) ----------------
+def step03():
+    global STEPLBL
+    STEPLBL="STEP"
+    en=banner("Motivational Athlete Poster &bull; Step 3","Turn In Your Reflection","Answer three quick questions about your poster.","#espanol","Clic para Espa&ntilde;ol")
+    en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
+        para("Finish the project with a short reflection. It asks who you chose, the hardest part of the design, and what you enjoyed.")
+        + note_orange("The reflection Word document is on the Overview page. Open the Overview to download it.")
+        + bullets([
+            ("Open it:","open the reflection Word document you downloaded from the Overview."),
+            ("Answer all 3:","type your answers in the boxes, in full sentences."),
+            ("Save and upload:","save the document and upload it to this Canvas assignment."),
+        ]))
+    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+        [("1 reflection:","your completed reflection Word document, uploaded to this Canvas assignment.")])
+    en+=note_orange("Answer honestly, in your own words.")
+
+    STEPLBL="PASO"
+    es=banner("P&oacute;ster Motivacional de Atleta &bull; Paso 3","Entrega Tu Reflexi&oacute;n","Contesta tres preguntas cortas sobre tu p&oacute;ster.","#top","Back to English")
+    es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
+        para("Termina el proyecto con una reflexi&oacute;n corta. Pregunta a qui&eacute;n elegiste, la parte m&aacute;s dif&iacute;cil del dise&ntilde;o y qu&eacute; disfrutaste.")
+        + note_orange("El documento de Word de la reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen. Abre el Resumen para descargarlo.")
+        + bullets([
+            ("&Aacute;brelo:","abre el documento de Word de la reflexi&oacute;n que descargaste del Resumen."),
+            ("Contesta las 3:","escribe tus respuestas en los cuadros, en oraciones completas."),
+            ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
+        ]))
+    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+        [("1 reflexi&oacute;n:","tu documento de Word de la reflexi&oacute;n completo, subido a esta tarea de Canvas.")])
+    es+=note_orange("Contesta con honestidad, en tus propias palabras.")
+
+    dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot("",'3',"Step 03",True)
+    stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'
+    return wrap_page("Step 3: Reflection | Motivational Athlete Poster | Digital Arts 1A | PVHS", nav("Step 03",dots,stepnav), top_wrap(en,es), bottom)
+
+for fname,gen in [(OVER,overview),(S1,step01),(S2,step02),(S3,step03)]:
     html=ent(gen())
     assert "—" not in html and "&mdash;" not in html, "em dash in "+fname
     low=html.lower()
