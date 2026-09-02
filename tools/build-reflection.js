@@ -194,11 +194,13 @@ const DOCS = [
   // Athlete Poster (Digital Arts 1A)
   { ...EN, outfile: 'Athlete-Poster-Reflection-EN.docx', title: 'Athlete Poster: Reflection', subtitle: PVHS_EN('Digital Arts 1A'), questions: [
     'Which person did you choose for your poster, and why?',
+    'What font (typeface) did you choose for your quote, and why does it fit your poster?',
     'What was the hardest part of the design?',
     'What did you enjoy about this project?',
   ]},
   { ...ES, outfile: 'Athlete-Poster-Reflection-ES.docx', title: 'Póster de Atleta: Reflexión', subtitle: PVHS_ES('Arte Digital 1A'), questions: [
     '¿Qué persona elegiste para tu póster, y por qué?',
+    '¿Qué tipo de letra elegiste para tu frase, y por qué queda bien con tu póster?',
     '¿Cuál fue la parte más difícil del diseño?',
     '¿Qué disfrutaste de este proyecto?',
   ]},
