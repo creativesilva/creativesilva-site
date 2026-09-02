@@ -74,6 +74,14 @@ def stepblock(n,title,body):
       f'<div style="font-size:15pt;color:#ffffff;margin-bottom:6px;"><strong>{title}</strong></div>'
       f'<div style="font-size:13.5pt;color:rgba(255,255,255,0.88);line-height:1.65;">{body}</div></div>')
 
+def scrollbox(n, inner):
+    hint=(f'Scroll inside the box to see all {n} steps' if STEPLBL=="STEP"
+          else f'Despl&aacute;zate en el cuadro para ver los {n} pasos')
+    return (f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
+      '<div class="silva-scroll" style="max-height:460px;overflow-y:auto;padding:14px 16px 20px;border:1px solid rgba(0,184,184,0.22);border-radius:14px;'
+      'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.16) 100%);">'
+      f'{inner}</div>')
+
 def support_tile(thumb,title,desc,url,openlabel):
     return ('<div style="flex:0 0 290px;width:290px;box-sizing:border-box;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(0,116,116,0.14) 0%,rgba(0,116,116,0.04) 100%);border:1px solid rgba(0,184,184,0.28);border-top:4px solid #00b8b8;">'
       f'<a href="{url}" target="_blank" rel="noopener" style="display:block;line-height:0;"><img src="{thumb}" alt="{title}" style="display:block;width:100%;height:163px;object-fit:cover;" /></a>'
@@ -255,16 +263,18 @@ def step01():
         + stepblock(3,"Make Your Project Folder","Inside Digital Arts, make a new folder: go to <strong>File &gt; New Folder</strong> (or press <strong>Shift + Command + N</strong>). Name it <strong>Motivational Poster</strong>. Save all your work for this project inside it."))
     en+=card("START IN PHOTOSHOP","Open and Create Your Document",
         para("Never used Photoshop? No problem. Follow these steps exactly and your poster file will be ready to build.")
-        + stepblock(4,"Open Photoshop","Click the Photoshop icon in the <strong>Dock</strong> at the bottom of the screen. If you do not see it, press <strong>Command + Spacebar</strong>, type &lsquo;Photoshop,&rsquo; and press <strong>Return</strong>.")
+        + scrollbox(6,
+          stepblock(4,"Open Photoshop","Click the Photoshop icon in the <strong>Dock</strong> at the bottom of the screen. If you do not see it, press <strong>Command + Spacebar</strong>, type &lsquo;Photoshop,&rsquo; and press <strong>Return</strong>.")
         + stepblock(5,"Start a New File","On the start screen, click <strong>New file</strong>. You can also go to <strong>File &gt; New</strong> at the top.")
         + stepblock(6,"Pick Print, Then Letter","At the top of the New Document window, click <strong>Print</strong>. Then click the <strong>Letter</strong> preset. It is already 8.5 &times; 11 inches at 300 PPI.")
         + stepblock(7,"Check Your Settings","On the right side, make sure Width is <strong>8.5 Inches</strong>, Height is <strong>11</strong>, Orientation is <strong>Portrait</strong> (the tall one), Resolution is <strong>300 Pixels/Inch</strong>, and Color Mode is <strong>RGB Color</strong>. Name it &lsquo;Motivational Poster.&rsquo;")
         + framed(NEWDOC,"Photoshop New Document window set to Letter, 8.5 by 11 inches, 300 PPI, RGB",maxw="640px")
         + stepblock(8,"Click Create","Click the blue <strong>Create</strong> button. Your blank poster opens, ready to work on.")
-        + stepblock(9,"Save Into Your Folder","Go to <strong>File &gt; Save As</strong> and save it inside your <strong>Motivational Poster</strong> folder. Keep it as a Photoshop file (.psd) while you work, so you can keep editing your layers."))
+        + stepblock(9,"Save Into Your Folder","Go to <strong>File &gt; Save As</strong> and save it inside your <strong>Motivational Poster</strong> folder. Keep it as a Photoshop file (.psd) while you work, so you can keep editing your layers.")))
     en+=card("BUILD YOUR POSTER","Cut Out, Blur, Glow, Finish",
         para("Now build the poster. Work through the steps in order. Take your time.")
-        + stepblock(10,"Find Your Athlete Photo","Go to Google Images and search your athlete&rsquo;s name. Click <strong>Tools</strong>, set <strong>Size</strong> to <strong>Large</strong>, and pick a sharp, high-resolution photo. Save it. High resolution matters because this is print size.")
+        + scrollbox(9,
+          stepblock(10,"Find Your Athlete Photo","Go to Google Images and search your athlete&rsquo;s name. Click <strong>Tools</strong>, set <strong>Size</strong> to <strong>Large</strong>, and pick a sharp, high-resolution photo. Save it. High resolution matters because this is print size.")
         + stepblock(11,"Bring the Photo In, Then Rasterize","In Photoshop, go to <strong>File &gt; Place Embedded</strong>, pick your athlete photo, and press Return to drop it in. It arrives as a <strong>Smart Object</strong>, which blocks many edits. Right-click the new layer and choose <strong>Rasterize Layer</strong> so filters and Select and Mask will work.")
         + framed(FIX_RASTER,"Right-click the layer and choose Rasterize Layer",maxw="340px")
         + stepblock(12,"Cut Out the Athlete","Click <strong>Select &gt; Subject</strong> to grab your athlete. Then click <strong>Select and Mask</strong>. Press <strong>V</strong> to set the View to <strong>Overlay</strong>, the red view: the red makes your selection easy to see. Clean the edges with the brush. At the bottom, set <strong>Output To: New Layer</strong>.")
@@ -276,7 +286,7 @@ def step01():
         + stepblock(15,"Make the Logo Glow","Click the logo layer. Double-click it to open <strong>Layer Style</strong>. Turn on <strong>Outer Glow</strong> so the logo pops.")
         + stepblock(16,"Add Your Words","Pick the <strong>Type tool (T)</strong>. Add a short motivational quote and your athlete&rsquo;s name. Keep the words big and easy to read.")
         + stepblock(17,"Match Your Colors","Use the <strong>Eyedropper tool (I)</strong> to pull colors from the photo. Use those colors for your text so the whole poster matches.")
-        + stepblock(18,"Flatten and Export","When you are happy, go to <strong>Layer &gt; Flatten Image</strong>. Then <strong>File &gt; Export &gt; Export As</strong>, choose <strong>JPG</strong>, and save it into your Motivational Poster folder. That JPG is what you turn in."))
+        + stepblock(18,"Flatten and Export","When you are happy, go to <strong>Layer &gt; Flatten Image</strong>. Then <strong>File &gt; Export &gt; Export As</strong>, choose <strong>JPG</strong>, and save it into your Motivational Poster folder. That JPG is what you turn in.")))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
         [("1 poster:","your final flattened poster, saved as a JPG, uploaded to this Canvas assignment.")])
     en+=note_orange("Your poster must be your own original work. Be honest and turn in your own design.")
@@ -290,16 +300,18 @@ def step01():
         + stepblock(3,"Crea Tu Carpeta del Proyecto","Dentro de Digital Arts, crea una carpeta nueva: ve a <strong>Archivo &gt; Nueva Carpeta</strong> (o presiona <strong>Shift + Command + N</strong>). Ll&aacute;mala <strong>Motivational Poster</strong>. Guarda todo tu trabajo de este proyecto dentro de ella."))
     es+=card("EMPIEZA EN PHOTOSHOP","Abre y Crea Tu Documento",
         para("&iquest;Nunca usaste Photoshop? No hay problema. Sigue estos pasos tal cual y tu archivo del p&oacute;ster quedar&aacute; listo para construir.")
-        + stepblock(4,"Abre Photoshop","Haz clic en el &iacute;cono de Photoshop en el <strong>Dock</strong>, abajo en la pantalla. Si no lo ves, presiona <strong>Command + Barra espaciadora</strong>, escribe &lsquo;Photoshop&rsquo; y presiona <strong>Return</strong>.")
+        + scrollbox(6,
+          stepblock(4,"Abre Photoshop","Haz clic en el &iacute;cono de Photoshop en el <strong>Dock</strong>, abajo en la pantalla. Si no lo ves, presiona <strong>Command + Barra espaciadora</strong>, escribe &lsquo;Photoshop&rsquo; y presiona <strong>Return</strong>.")
         + stepblock(5,"Crea un Archivo Nuevo","En la pantalla de inicio, haz clic en <strong>Nuevo archivo</strong>. Tambi&eacute;n puedes ir a <strong>Archivo &gt; Nuevo</strong> arriba.")
         + stepblock(6,"Elige Impresi&oacute;n y Luego Carta","Arriba en la ventana de Nuevo Documento, haz clic en <strong>Impresi&oacute;n</strong>. Luego haz clic en el ajuste <strong>Carta</strong> (Letter). Ya viene en 8.5 &times; 11 pulgadas a 300 PPI.")
         + stepblock(7,"Revisa Tus Ajustes","A la derecha, aseg&uacute;rate de que el Ancho sea <strong>8.5 Pulgadas</strong>, la Altura <strong>11</strong>, la Orientaci&oacute;n <strong>Vertical</strong> (la alta), la Resoluci&oacute;n <strong>300 P&iacute;xeles/Pulgada</strong> y el Modo de Color <strong>RGB</strong>. Ponle de nombre &lsquo;Motivational Poster.&rsquo;")
         + framed(NEWDOC,"Ventana de Nuevo Documento de Photoshop en Carta, 8.5 por 11 pulgadas, 300 PPI, RGB",maxw="640px")
         + stepblock(8,"Haz Clic en Crear","Haz clic en el bot&oacute;n azul <strong>Crear</strong>. Tu p&oacute;ster en blanco se abre, listo para trabajar.")
-        + stepblock(9,"Guarda en Tu Carpeta","Ve a <strong>Archivo &gt; Guardar Como</strong> y gu&aacute;rdalo dentro de tu carpeta <strong>Motivational Poster</strong>. D&eacute;jalo como archivo de Photoshop (.psd) mientras trabajas, para que puedas seguir editando tus capas."))
+        + stepblock(9,"Guarda en Tu Carpeta","Ve a <strong>Archivo &gt; Guardar Como</strong> y gu&aacute;rdalo dentro de tu carpeta <strong>Motivational Poster</strong>. D&eacute;jalo como archivo de Photoshop (.psd) mientras trabajas, para que puedas seguir editando tus capas.")))
     es+=card("CONSTRUYE TU P&Oacute;STER","Recorta, Desenfoca, Resplandor, Termina",
         para("Ahora construye el p&oacute;ster. Ve paso a paso, en orden. T&oacute;mate tu tiempo.")
-        + stepblock(10,"Busca la Foto de Tu Atleta","Ve a Google Im&aacute;genes y busca el nombre de tu atleta. Haz clic en <strong>Herramientas</strong>, pon <strong>Tama&ntilde;o</strong> en <strong>Grande</strong>, y elige una foto n&iacute;tida y de alta resoluci&oacute;n. Gu&aacute;rdala. La alta resoluci&oacute;n importa porque es tama&ntilde;o de impresi&oacute;n.")
+        + scrollbox(9,
+          stepblock(10,"Busca la Foto de Tu Atleta","Ve a Google Im&aacute;genes y busca el nombre de tu atleta. Haz clic en <strong>Herramientas</strong>, pon <strong>Tama&ntilde;o</strong> en <strong>Grande</strong>, y elige una foto n&iacute;tida y de alta resoluci&oacute;n. Gu&aacute;rdala. La alta resoluci&oacute;n importa porque es tama&ntilde;o de impresi&oacute;n.")
         + stepblock(11,"Trae la Foto y Rasteriza","En Photoshop, ve a <strong>Archivo &gt; Colocar Incrustado</strong>, elige la foto de tu atleta y presiona Return para colocarla. Llega como <strong>Objeto Inteligente</strong>, que bloquea muchas ediciones. Haz clic derecho en la capa nueva y elige <strong>Rasterizar Capa</strong> para que funcionen los filtros y Seleccionar y Aplicar M&aacute;scara.")
         + framed(FIX_RASTER,"Haz clic derecho en la capa y elige Rasterizar Capa",maxw="340px")
         + stepblock(12,"Recorta al Atleta","Haz clic en <strong>Seleccionar &gt; Sujeto</strong> para tomar a tu atleta. Luego haz clic en <strong>Seleccionar y Aplicar M&aacute;scara</strong>. Presiona <strong>V</strong> para poner la Vista en <strong>Superposici&oacute;n</strong>, la vista roja: el rojo hace tu selecci&oacute;n f&aacute;cil de ver. Limpia los bordes con el pincel. Abajo, pon <strong>Salida a: Nueva Capa</strong>.")
@@ -311,7 +323,7 @@ def step01():
         + stepblock(15,"Haz que el Logo Brille","Haz clic en la capa del logo. Haz doble clic para abrir <strong>Estilo de Capa</strong>. Activa <strong>Resplandor Exterior</strong> para que el logo resalte.")
         + stepblock(16,"Agrega Tus Palabras","Elige la <strong>herramienta Texto (T)</strong>. Agrega una frase motivadora corta y el nombre de tu atleta. Mant&eacute;n las palabras grandes y f&aacute;ciles de leer.")
         + stepblock(17,"Combina Tus Colores","Usa la <strong>herramienta Cuentagotas (I)</strong> para sacar colores de la foto. Usa esos colores en tu texto para que todo el p&oacute;ster combine.")
-        + stepblock(18,"Aplana y Exporta","Cuando est&eacute;s contento, ve a <strong>Capa &gt; Acoplar Imagen</strong>. Luego <strong>Archivo &gt; Exportar &gt; Exportar Como</strong>, elige <strong>JPG</strong> y gu&aacute;rdalo en tu carpeta Motivational Poster. Ese JPG es lo que entregas."))
+        + stepblock(18,"Aplana y Exporta","Cuando est&eacute;s contento, ve a <strong>Capa &gt; Acoplar Imagen</strong>. Luego <strong>Archivo &gt; Exportar &gt; Exportar Como</strong>, elige <strong>JPG</strong> y gu&aacute;rdalo en tu carpeta Motivational Poster. Ese JPG es lo que entregas.")))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
         [("1 p&oacute;ster:","tu p&oacute;ster final aplanado, guardado como JPG, subido a esta tarea de Canvas.")])
     es+=note_orange("Tu p&oacute;ster debe ser tu propio trabajo original. S&eacute; honesto y entrega tu propio dise&ntilde;o.")
@@ -331,17 +343,19 @@ def step02():
         + stepblock(1,"Check OneDrive Is Syncing","Look at the OneDrive cloud icon in the top-right menu bar, next to the clock. If it shows a red X or a warning, click it and sign in with your school account to clear it.")
         + stepblock(2,"Open Your Project Folder","In Finder, open <strong>OneDrive &gt; Digital Arts &gt; Motivational Poster</strong>, the folder you made in Step 1. Save this phone version in there too."))
     en+=card("MAKE THE MOBILE FILE","Create a Phone-Size Document",
-        stepblock(3,"Start a New File","Open Photoshop and click <strong>New file</strong> (or <strong>File &gt; New</strong>).")
+        scrollbox(3,
+          stepblock(3,"Start a New File","Open Photoshop and click <strong>New file</strong> (or <strong>File &gt; New</strong>).")
         + stepblock(4,"Pick Mobile, Then iPhone","At the top of the New Document window, click the <strong>Mobile</strong> tab. Click the <strong>iPhone X</strong> preset: it is <strong>1125 &times; 2436 pixels at 72 PPI</strong>, Portrait. Make sure Color Mode is <strong>RGB</strong>. Name it &lsquo;Motivational Wallpaper&rsquo; and click <strong>Create</strong>.")
         + framed(NEWDOC_MOBILE,"Photoshop New Document window on the Mobile tab with the iPhone X preset",maxw="640px")
-        + stepblock(5,"Save Into Your Folder","Go to <strong>File &gt; Save As</strong> and save it in your <strong>Motivational Poster</strong> folder as a Photoshop file (.psd)."))
+        + stepblock(5,"Save Into Your Folder","Go to <strong>File &gt; Save As</strong> and save it in your <strong>Motivational Poster</strong> folder as a Photoshop file (.psd).")))
     en+=card("REBUILD FOR THE PHONE","Same Steps, Tall Layout",
         para("You know the tools now. Build the same poster, but arrange it for a tall, narrow phone screen.")
-        + stepblock(6,"Bring In and Rasterize","Go to <strong>File &gt; Place Embedded</strong> and drop in your athlete photo. Right-click the layer and choose <strong>Rasterize Layer</strong>, just like Step 1.")
+        + scrollbox(5,
+          stepblock(6,"Bring In and Rasterize","Go to <strong>File &gt; Place Embedded</strong> and drop in your athlete photo. Right-click the layer and choose <strong>Rasterize Layer</strong>, just like Step 1.")
         + stepblock(7,"Cut Out the Athlete","Use <strong>Select &gt; Subject</strong>, then <strong>Select and Mask</strong>. Press <strong>V</strong> for the red Overlay view, clean the edges, and set <strong>Output To: New Layer</strong>.")
         + stepblock(8,"Blur the Background","Behind your athlete, add <strong>Filter &gt; Blur &gt; Motion Blur</strong> (Motion Blur, not Gaussian). Angle 0, high Distance.")
         + stepblock(9,"Logo and Words","Add the team logo with an <strong>Outer Glow</strong>. Add your quote and your athlete&rsquo;s name with the <strong>Type tool (T)</strong>.")
-        + stepblock(10,"Arrange It Tall","The phone screen is narrow and very tall. Stack your athlete and your words up and down and fill the whole screen. Leave a little space at the very top and bottom for the phone&rsquo;s clock and home bar."))
+        + stepblock(10,"Arrange It Tall","The phone screen is narrow and very tall. Stack your athlete and your words up and down and fill the whole screen. Leave a little space at the very top and bottom for the phone&rsquo;s clock and home bar.")))
     en+=card("TURN IT IN","Flatten and Export",
         stepblock(11,"Export as JPG","When you are happy, go to <strong>Layer &gt; Flatten Image</strong>, then <strong>File &gt; Export &gt; Export As</strong>, choose <strong>JPG</strong>, and save it into your Motivational Poster folder."))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
@@ -355,17 +369,19 @@ def step02():
         + stepblock(1,"Revisa que OneDrive Est&eacute; Sincronizando","Mira el &iacute;cono de nube de OneDrive en la barra de men&uacute;s arriba a la derecha, junto al reloj. Si muestra una X roja o una advertencia, haz clic e inicia sesi&oacute;n con tu cuenta escolar para quitarla.")
         + stepblock(2,"Abre Tu Carpeta del Proyecto","En Finder, abre <strong>OneDrive &gt; Digital Arts &gt; Motivational Poster</strong>, la carpeta que hiciste en el Paso 1. Guarda esta versi&oacute;n de tel&eacute;fono ah&iacute; tambi&eacute;n."))
     es+=card("CREA EL ARCHIVO M&Oacute;VIL","Crea un Documento Tama&ntilde;o Tel&eacute;fono",
-        stepblock(3,"Crea un Archivo Nuevo","Abre Photoshop y haz clic en <strong>Nuevo archivo</strong> (o <strong>Archivo &gt; Nuevo</strong>).")
+        scrollbox(3,
+          stepblock(3,"Crea un Archivo Nuevo","Abre Photoshop y haz clic en <strong>Nuevo archivo</strong> (o <strong>Archivo &gt; Nuevo</strong>).")
         + stepblock(4,"Elige M&oacute;vil y Luego iPhone","Arriba en la ventana de Nuevo Documento, haz clic en la pesta&ntilde;a <strong>M&oacute;vil</strong>. Haz clic en el ajuste <strong>iPhone X</strong>: es <strong>1125 &times; 2436 p&iacute;xeles a 72 PPI</strong>, Vertical. Aseg&uacute;rate de que el Modo de Color sea <strong>RGB</strong>. Ll&aacute;malo &lsquo;Motivational Wallpaper&rsquo; y haz clic en <strong>Crear</strong>.")
         + framed(NEWDOC_MOBILE,"Ventana de Nuevo Documento de Photoshop en la pesta&ntilde;a M&oacute;vil con el ajuste iPhone X",maxw="640px")
-        + stepblock(5,"Guarda en Tu Carpeta","Ve a <strong>Archivo &gt; Guardar Como</strong> y gu&aacute;rdalo en tu carpeta <strong>Motivational Poster</strong> como archivo de Photoshop (.psd)."))
+        + stepblock(5,"Guarda en Tu Carpeta","Ve a <strong>Archivo &gt; Guardar Como</strong> y gu&aacute;rdalo en tu carpeta <strong>Motivational Poster</strong> como archivo de Photoshop (.psd).")))
     es+=card("RECONSTRUYE PARA EL TEL&Eacute;FONO","Mismos Pasos, Dise&ntilde;o Alto",
         para("Ya conoces las herramientas. Haz el mismo p&oacute;ster, pero acom&oacute;dalo para una pantalla de tel&eacute;fono alta y angosta.")
-        + stepblock(6,"Trae y Rasteriza","Ve a <strong>Archivo &gt; Colocar Incrustado</strong> y coloca la foto de tu atleta. Haz clic derecho en la capa y elige <strong>Rasterizar Capa</strong>, igual que en el Paso 1.")
+        + scrollbox(5,
+          stepblock(6,"Trae y Rasteriza","Ve a <strong>Archivo &gt; Colocar Incrustado</strong> y coloca la foto de tu atleta. Haz clic derecho en la capa y elige <strong>Rasterizar Capa</strong>, igual que en el Paso 1.")
         + stepblock(7,"Recorta al Atleta","Usa <strong>Seleccionar &gt; Sujeto</strong>, luego <strong>Seleccionar y Aplicar M&aacute;scara</strong>. Presiona <strong>V</strong> para la vista roja Superposici&oacute;n, limpia los bordes y pon <strong>Salida a: Nueva Capa</strong>.")
         + stepblock(8,"Desenfoca el Fondo","Detr&aacute;s de tu atleta, agrega <strong>Filtro &gt; Desenfocar &gt; Desenfoque de Movimiento</strong> (de Movimiento, no Gaussiano). &Aacute;ngulo 0, Distancia alta.")
         + stepblock(9,"Logo y Palabras","Agrega el logo del equipo con un <strong>Resplandor Exterior</strong>. Agrega tu frase y el nombre de tu atleta con la <strong>herramienta Texto (T)</strong>.")
-        + stepblock(10,"Acom&oacute;dalo Alto","La pantalla del tel&eacute;fono es angosta y muy alta. Apila a tu atleta y tus palabras de arriba a abajo y llena toda la pantalla. Deja un poco de espacio arriba y abajo para el reloj y la barra de inicio del tel&eacute;fono."))
+        + stepblock(10,"Acom&oacute;dalo Alto","La pantalla del tel&eacute;fono es angosta y muy alta. Apila a tu atleta y tus palabras de arriba a abajo y llena toda la pantalla. Deja un poco de espacio arriba y abajo para el reloj y la barra de inicio del tel&eacute;fono.")))
     es+=card("ENTR&Eacute;GALO","Aplana y Exporta",
         stepblock(11,"Exporta como JPG","Cuando est&eacute;s contento, ve a <strong>Capa &gt; Acoplar Imagen</strong>, luego <strong>Archivo &gt; Exportar &gt; Exportar Como</strong>, elige <strong>JPG</strong> y gu&aacute;rdalo en tu carpeta Motivational Poster."))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
