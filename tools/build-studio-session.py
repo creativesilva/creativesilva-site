@@ -168,11 +168,10 @@ def overview():
             ("Waist-up portrait:","framed from about the waist up."),
             ("Headshot:","framed from the shoulders up."),
         ]))
-    en+=card("GET YOUR FILES / RESOURCES","Raw Files and Presets",
-        para("Download your group&rsquo;s raw files from the class Google Drive, then set up your folders and import into Lightroom Classic (full steps on Step 01). The Lightroom contact sheet presets are here too.")
+    en+=card("GET YOUR FILES / RESOURCES","Your Raw Files",
+        para("Download your group&rsquo;s raw files from the class Google Drive, then set up your folders and import into Lightroom Classic (full steps on Step 01). You should already have the Lightroom contact sheet presets installed; if not, they are on the Photography 2A course overview.")
         + '<div style="margin-top:6px;">'
         + dl_link(GDRIVE,"Google Drive: Raw Files",download=False)
-        + dl_link(PRESETS,"Contact Sheet Presets (ZIP)")
         + '</div>')
     en+=card("REFLECTION / DOWNLOAD","Get the Reflection Document",
         para("Download the reflection here. Complete it after you finish editing, then turn it in on Step 03.")
@@ -194,11 +193,10 @@ def overview():
             ("Retrato de cintura para arriba:","encuadrado m&aacute;s o menos de la cintura para arriba."),
             ("Headshot:","encuadrado de los hombros para arriba."),
         ]))
-    es+=card("OBT&Eacute;N TUS ARCHIVOS / RECURSOS","Archivos Raw y Presets",
-        para("Descarga los archivos raw de tu grupo del Google Drive de la clase, luego crea tus carpetas e imp&oacute;rtalos a Lightroom Classic (los pasos completos est&aacute;n en el Paso 01). Los presets de hoja de contactos de Lightroom tambi&eacute;n est&aacute;n aqu&iacute;.")
+    es+=card("OBT&Eacute;N TUS ARCHIVOS / RECURSOS","Tus Archivos Raw",
+        para("Descarga los archivos raw de tu grupo del Google Drive de la clase, luego crea tus carpetas e imp&oacute;rtalos a Lightroom Classic (los pasos completos est&aacute;n en el Paso 01). Ya deber&iacute;as tener instalados los presets de hoja de contactos de Lightroom; si no, est&aacute;n en el resumen del curso de Fotograf&iacute;a 2A.")
         + '<div style="margin-top:6px;">'
         + dl_link(GDRIVE,"Google Drive: Archivos Raw",download=False)
-        + dl_link(PRESETS,"Presets de Hoja de Contactos (ZIP)")
         + '</div>')
     es+=card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
         para("Descarga la reflexi&oacute;n aqu&iacute;. Compl&eacute;tala cuando termines de editar y entr&eacute;gala en el Paso 03.")
@@ -229,7 +227,7 @@ def step01():
     en+=card("IMPORT / LIGHTROOM CLASSIC","Import and Contact Sheet",
         scrollbox(3,
           stepblock(4,"Import Your Take","Open <strong>Lightroom Classic</strong>. Click <strong>Import</strong>, point to your <strong>Raw</strong> folder, select all your group&rsquo;s images, and import them.")
-          + stepblock(5,"Build a Full-Take Contact Sheet","Using the contact sheet preset (on the Overview), build a contact sheet of your <strong>entire take</strong>: every image your group captured. Use more than one sheet if you have a lot of images.")
+          + stepblock(5,"Build a Full-Take Contact Sheet","Using your contact sheet preset (it is also on the Photography 2A course overview if you need it), build a contact sheet of your <strong>entire take</strong>: every image your group captured. Use more than one sheet if you have a lot of images.")
           + stepblock(6,"Export the Contact Sheet","Export the contact sheet as a PDF or JPG so you can turn it in.")))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
         [("1 contact sheet:","a contact sheet of your entire take, uploaded to this Canvas assignment.")])
@@ -251,7 +249,7 @@ def step01():
     es+=card("IMPORTA / LIGHTROOM CLASSIC","Importa y Hoja de Contactos",
         scrollbox(3,
           stepblock(4,"Importa Tu Toma","Abre <strong>Lightroom Classic</strong>. Haz clic en <strong>Importar</strong>, apunta a tu carpeta <strong>Raw</strong>, selecciona todas las im&aacute;genes de tu grupo e imp&oacute;rtalas.")
-          + stepblock(5,"Arma una Hoja de Contactos de Toda la Toma","Con el preset de hoja de contactos (en el Resumen), arma una hoja de contactos de <strong>toda tu toma</strong>: cada imagen que captur&oacute; tu grupo. Usa m&aacute;s de una hoja si tienes muchas im&aacute;genes.")
+          + stepblock(5,"Arma una Hoja de Contactos de Toda la Toma","Con tu preset de hoja de contactos (tambi&eacute;n en el resumen del curso de Fotograf&iacute;a 2A si lo necesitas), arma una hoja de contactos de <strong>toda tu toma</strong>: cada imagen que captur&oacute; tu grupo. Usa m&aacute;s de una hoja si tienes muchas im&aacute;genes.")
           + stepblock(6,"Exporta la Hoja de Contactos","Exporta la hoja de contactos como PDF o JPG para poder entregarla.")))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
         [("1 hoja de contactos:","una hoja de contactos de toda tu toma, subida a esta tarea de Canvas.")])
@@ -277,7 +275,7 @@ def step02():
           + stepblock(6,"Make Color and Black &amp; White","You need four finals: <strong>waist-up in color</strong>, <strong>headshot in color</strong>, <strong>waist-up in black and white</strong>, and <strong>headshot in black and white</strong>. For the black-and-white versions, make a copy of each and apply a <strong>Black &amp; White</strong> treatment.")
           + stepblock(7,"Export and Rename","Export each of the four as a <strong>high-resolution JPG</strong>. Rename the files clearly: <strong>waist_up_color</strong>, <strong>headshot_color</strong>, <strong>waist_up_bw</strong>, and <strong>headshot_bw</strong>.")))
     en+=card("CONTACT SHEET / SIX-UP","Show Your Four Finals",
-        para("Build a <strong>6-Up contact sheet</strong> of your four final images using the contact sheet preset (on the Overview), and export it."))
+        para("Build a <strong>6-Up contact sheet</strong> of your four final images using your contact sheet preset (also on the Photography 2A course overview if you need it), and export it."))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own): 5 files",
         [("1 contact sheet:","a 6-Up contact sheet of your four final images."),
          ("4 images:","your four finals as high-resolution JPGs, named waist_up_color, headshot_color, waist_up_bw, and headshot_bw.")])
@@ -295,7 +293,7 @@ def step02():
           + stepblock(6,"Haz Color y Blanco y Negro","Necesitas cuatro finales: <strong>cintura para arriba en color</strong>, <strong>headshot en color</strong>, <strong>cintura para arriba en blanco y negro</strong> y <strong>headshot en blanco y negro</strong>. Para las versiones en blanco y negro, haz una copia de cada una y aplica un tratamiento <strong>Blanco y Negro</strong>.")
           + stepblock(7,"Exporta y Renombra","Exporta cada uno de los cuatro como <strong>JPG de alta resoluci&oacute;n</strong>. Renombra los archivos con claridad: <strong>waist_up_color</strong>, <strong>headshot_color</strong>, <strong>waist_up_bw</strong> y <strong>headshot_bw</strong>.")))
     es+=card("HOJA DE CONTACTOS / 6-UP","Muestra Tus Cuatro Finales",
-        para("Arma una <strong>hoja de contactos 6-Up</strong> de tus cuatro im&aacute;genes finales con el preset de hoja de contactos (en el Resumen), y exp&oacute;rtala."))
+        para("Arma una <strong>hoja de contactos 6-Up</strong> de tus cuatro im&aacute;genes finales con tu preset de hoja de contactos (tambi&eacute;n en el resumen del curso si lo necesitas), y exp&oacute;rtala."))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta): 5 archivos",
         [("1 hoja de contactos:","una hoja de contactos 6-Up de tus cuatro im&aacute;genes finales."),
          ("4 im&aacute;genes:","tus cuatro finales como JPG de alta resoluci&oacute;n, con los nombres waist_up_color, headshot_color, waist_up_bw y headshot_bw.")])
