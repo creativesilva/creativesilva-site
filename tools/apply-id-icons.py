@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-# Assignment identification icons (framework). The first card's eyebrow row becomes a
-# space-between flex row: the ORIGINAL eyebrow/title stays on the LEFT, and the assignment
-# icon + a short orange description is justified RIGHT (wraps below on narrow screens).
-# EN in #top, ES in #espanol. Idempotent (skips pages whose first eyebrow is already an
-# <!--IDEYE--> row) and strips any legacy full-width <!--IDCHIP--> bar. Re-run after
-# regenerating any builder module.
+# Assignment identification icons (framework). The first card's TITLE row (the big
+# heading, e.g. "Reflection") becomes a space-between flex row: the heading stays on the
+# LEFT, and a short orange description followed by the assignment icon sits on the RIGHT
+# (icon at the far-right edge). The small eyebrow/step line above it is left untouched.
+# The right group wraps below on narrow screens. EN in #top, ES in #espanol.
+# Idempotent: strips any legacy full-width <!--IDCHIP--> bar AND unwraps any prior
+# <!--IDEYE--> row (whichever line it was on) before rebuilding, so icon/layout swaps
+# re-apply cleanly. Re-run after regenerating any builder module.
 #
 # Icon family (assets/Icons/assignment): overview, your-device, camera-kit, photo-walk,
 # reflection. Still needed (no icon yet): editing, contact sheet, research/find, worksheet,
@@ -14,6 +16,7 @@ ROOT=os.path.join(os.path.dirname(__file__), "..", "curriculum", "shared")
 SITE="https://www.creativesilva.com"
 ICO=SITE+"/assets/Icons/assignment"
 EYE_SIG='<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #00b8b8;'
+HEAD_SIG='<div style="margin-bottom:8px;"><span style="font-size:20pt;'   # first card's big title row
 
 DESC={
  "overview":("overview-v2.png","Downloads on This Page","Descargas en Esta P&aacute;gina"),
@@ -23,11 +26,11 @@ DESC={
  "reflection":("reflection-v2.png","Written Reflection","Reflexi&oacute;n Escrita"),
 }
 def id_right(kind, es):
-    # text first, icon last so the icon sits at the far right edge of the row
+    # text first, icon last so the icon sits at the far right edge of the title row
     icon,en_d,es_d=DESC[kind]; desc=es_d if es else en_d
-    return ('<div style="display:flex;align-items:center;gap:9px;flex:0 0 auto;">'
-      f'<span style="font-size:9pt;letter-spacing:0.10em;text-transform:uppercase;color:#ffb27c;line-height:1.25;max-width:180px;text-align:right;"><strong>{desc}</strong></span>'
-      f'<img src="{ICO}/{icon}" alt="{desc}" style="width:38px;height:38px;display:block;flex:0 0 auto;" /></div>')
+    return ('<div style="display:flex;align-items:center;gap:11px;flex:0 0 auto;">'
+      f'<span style="font-size:10.5pt;letter-spacing:0.10em;text-transform:uppercase;color:#ffb27c;line-height:1.25;max-width:210px;text-align:right;"><strong>{desc}</strong></span>'
+      f'<img src="{ICO}/{icon}" alt="{desc}" style="width:46px;height:46px;display:block;flex:0 0 auto;" /></div>')
 
 def match_close(h, open_idx):
     j=open_idx+4; depth=1
@@ -47,24 +50,31 @@ def strip_idchip(h):
         ds=h.find('<div', m); h=h[:m]+h[match_close(h, ds):]
 
 def strip_ideye(h):
-    # unwrap a prior IDEYE flex row back to its original bare eyebrow so the
-    # row can be rebuilt with the current layout/icon (keeps the applier idempotent)
+    # unwrap a prior IDEYE flex row back to its bare inner element (the eyebrow row from
+    # the old layout, or the title row from the current one), restoring that element's own
+    # bottom margin, so the row can be rebuilt cleanly. Keeps the applier idempotent.
     while True:
         m=h.find('<!--IDEYE-->')
         if m==-1: return h
         wrap_open=h.find('<div', m)
         wrap_close=match_close(h, wrap_open)
-        i=h.find(EYE_SIG, wrap_open)          # first inner div = original eyebrow
-        eb=h[i:h.find('</div>', i)+6]
-        h=h[:m]+eb+h[wrap_close:]
+        inner=h.find('<div', wrap_open+4)     # first child = the wrapped eyebrow OR title
+        seg=h[inner:match_close(h, inner)]
+        if seg.startswith(EYE_SIG) and 'margin-bottom:' not in seg:
+            seg=seg.replace('text-transform:uppercase;','text-transform:uppercase;margin-bottom:12px;',1)
+        elif 'font-size:20pt' in seg[:90] and 'margin-bottom:' not in seg:
+            seg=seg.replace('<div style="','<div style="margin-bottom:8px;',1)
+        h=h[:m]+seg+h[wrap_close:]
 
-def wrap_first_eyebrow(h, frm, kind, es):
+def wrap_title(h, frm, kind, es):
+    # keep the eyebrow/step line as-is; wrap the big title row with the icon on the right
     i=h.find(EYE_SIG, frm); assert i!=-1, "eyebrow not found"
-    end=h.find('</div>', i)+6
-    eb=h[i:end].replace('margin-bottom:12px;','',1)   # move bottom margin to the row
-    row=('<!--IDEYE--><div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:12px;">'
-      + eb + id_right(kind,es) + '</div>')
-    return h[:i]+row+h[end:]
+    t=h.find(HEAD_SIG, i); assert t!=-1, "title row not found"
+    end=h.find('</div>', t)+6
+    title=h[t:end].replace('margin-bottom:8px;','',1)   # move bottom margin to the row
+    row=('<!--IDEYE--><div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px;">'
+      + title + id_right(kind,es) + '</div>')
+    return h[:t]+row+h[end:]
 
 def apply(fname, kind):
     p=os.path.join(ROOT,fname)
@@ -73,8 +83,8 @@ def apply(fname, kind):
     h=strip_idchip(h)
     h=strip_ideye(h)                          # unwrap any prior row, then rebuild
     esp=h.find('id="espanol"')
-    h=wrap_first_eyebrow(h, esp, kind, True)                 # ES first (later in doc)
-    h=wrap_first_eyebrow(h, h.find('id="top"'), kind, False) # then EN
+    h=wrap_title(h, esp, kind, True)                 # ES first (later in doc)
+    h=wrap_title(h, h.find('id="top"'), kind, False) # then EN
     open(p,'w',encoding='utf-8').write(h); print("  id["+kind+"]:", fname)
 
 MAP={
