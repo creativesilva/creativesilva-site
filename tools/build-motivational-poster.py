@@ -73,7 +73,10 @@ def ec_note(label,t):
 
 def framed(src,alt,maxw=None):
     mw=f'max-width:{maxw};' if maxw else ''
-    return f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;{mw}"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
+    # click to enlarge in-place (self-contained inline onclick, no script/style; opens #ml-lightbox)
+    oc="var b=document.getElementById('ml-lightbox');if(b){b.getElementsByTagName('img')[0].src=this.src;b.style.display='flex';}"
+    return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;{mw}">'
+      f'<img src="{src}" alt="{alt}" onclick="{oc}" style="display:block;width:100%;height:auto;cursor:zoom-in;" /></div>')
 
 STEPLBL="STEP"
 def stepblock(n,title,body):
@@ -146,12 +149,19 @@ def vocab_grid(terms):
     return f'<table role="presentation" style="width:100%;border-collapse:collapse;table-layout:fixed;"><tbody>{body}</tbody></table>'
 
 def top_wrap(en,es):
+    # LIGHTBOX TEST (self-contained inline; part of #top so Copy Canvas HTML carries it).
+    # Tapping any framed image sets this overlay's img and shows it; tapping the overlay closes it.
+    lightbox=('<div id="ml-lightbox" onclick="this.style.display=\'none\';" '
+      'style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;background:rgba(0,0,0,0.92);'
+      'align-items:center;justify-content:center;padding:16px;cursor:zoom-out;box-sizing:border-box;">'
+      '<img alt="Enlarged view" style="max-width:96%;max-height:96%;display:block;" /></div>')
     return ('<div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;'
       "background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%),"
       f"url('{SITE}/assets/PV_Panther_Watermark.png');"
       'background-position:center center,center center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed;overflow:hidden;">'
       '<div style="padding:28px 28px 40px;">'+en+'</div>'
       '<div id="espanol" style="border-top:2px solid rgba(255,255,255,0.10);"><div style="padding:28px 28px 40px;">'+es+'</div></div>'
+      + lightbox +
       '</div>')
 
 def dot(href,label,title,active,module=False):

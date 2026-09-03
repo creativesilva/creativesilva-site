@@ -459,6 +459,10 @@
     .cat-body .logo-fmt { display: block; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-top: 2px; }
     .cat-body .logo-dl { flex-shrink: 0; font-family: var(--font-head); font-size: 0.56rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); text-decoration: none; border: 1px solid rgba(255,255,255,0.16); padding: 6px 10px; }
     .cat-body .logo-dl:hover { color: var(--text); border-color: rgba(255,255,255,0.4); }
+    .cat-body .logo-actions { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
+    .cat-body .logo-copy { font-family: var(--font-head); font-size: 0.56rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); background: none; cursor: pointer; border: 1px solid rgba(255,140,60,0.5); padding: 6px 10px; }
+    .cat-body .logo-copy:hover { color: var(--text); border-color: #FF6B1A; }
+    .cat-body .logo-copy.copied { color: #fff; border-color: #FF6B1A; background: rgba(255,107,26,0.2); }
 
     /* Characters password gate */
     .char-gate { padding: 8px 0 4px; }
@@ -883,6 +887,8 @@
                   <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Panther_Watermark.png" alt="PV panther watermark" /></div><div class="logo-meta"><span class="logo-name">PV Panther <span class="logo-fmt">Watermark &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Panther_Watermark.png" download>Download</a></div></div>
                   <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_LOGO_BACKGROUND.png" alt="PV panther on square background" /></div><div class="logo-meta"><span class="logo-name">PV Panther <span class="logo-fmt">Square &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_LOGO_BACKGROUND.png" download>Download</a></div></div>
                   <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Monogram.png" alt="PV monogram without panther" /></div><div class="logo-meta"><span class="logo-name">PV without Panther <span class="logo-fmt">Monogram &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Monogram.png" download>Download</a></div></div>
+                  <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Square_Logo.png" alt="PV panther square logo" /></div><div class="logo-meta"><span class="logo-name">PV Panther <span class="logo-fmt">Square &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Square_Logo.png" download>Download</a></div></div>
+                  <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/Icon_PV_LOGO.svg" alt="PV panther icon, vector" /></div><div class="logo-meta"><span class="logo-name">PV Panther <span class="logo-fmt">Icon &middot; SVG</span></span><a class="logo-dl" href="/assets/Icons/Icon_PV_LOGO.svg" download>Download</a></div></div>
                 </div>
                 <p class="cat-subgroup">Programs</p>
                 <div class="logo-grid">
@@ -897,6 +903,14 @@
                 <div class="logo-grid">
                   <div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/sauce-baby/sauce-baby-logo.png" alt="Sauce Baby logo" /></div><div class="logo-meta"><span class="logo-name">Sauce Baby <span class="logo-fmt">PNG</span></span><a class="logo-dl" href="/assets/images/photo1/sauce-baby/sauce-baby-logo.png" download>Download</a></div></div>
                   <div class="logo-card"><div class="logo-tile"><img src="/curriculum/digarts1/Jimenez%20Logo.jpg" alt="Jimenez Mobile Detailing logo" /></div><div class="logo-meta"><span class="logo-name">Jimenez Mobile Detailing <span class="logo-fmt">JPG</span></span><a class="logo-dl" href="/curriculum/digarts1/Jimenez%20Logo.jpg" download>Download</a></div></div>
+                </div>
+                <p class="cat-subgroup">Assignment Icons</p>
+                <div class="logo-grid">
+                  <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/overview-v2.png" alt="Overview / downloads assignment icon" /></div><div class="logo-meta"><span class="logo-name">Overview / Downloads <span class="logo-fmt">Assignment Icon &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/overview-v2.png" download>Download</a></div></div>
+                  <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/reflection-v2.png" alt="Reflection assignment icon" /></div><div class="logo-meta"><span class="logo-name">Reflection <span class="logo-fmt">Assignment Icon &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/reflection-v2.png" download>Download</a></div></div>
+                  <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/photo-walk.png" alt="In-class photo walk assignment icon" /></div><div class="logo-meta"><span class="logo-name">In-Class Photo Walk <span class="logo-fmt">Assignment Icon &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/photo-walk.png" download>Download</a></div></div>
+                  <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/camera-kit.png" alt="Reserve a camera kit assignment icon" /></div><div class="logo-meta"><span class="logo-name">Reserve a Camera Kit <span class="logo-fmt">Assignment Icon &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/camera-kit.png" download>Download</a></div></div>
+                  <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/your-device.png" alt="Your own device required assignment icon" /></div><div class="logo-meta"><span class="logo-name">Your Own Device <span class="logo-fmt">Assignment Icon &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/your-device.png" download>Download</a></div></div>
                 </div>
               </div>
             </details>
@@ -1789,6 +1803,54 @@
       }
       if (btn) btn.addEventListener('click', tryPin);
       if (input) input.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryPin(); });
+    })();
+  </script>
+
+  <!-- Logos: add a Copy button next to every Download that puts the full-quality image (PNG) on the clipboard, ready to paste into ChatGPT etc. Teacher-facing backend. -->
+  <script>
+    (function () {
+      async function copyLogoImage(url, btn) {
+        var original = btn.getAttribute('data-label') || 'Copy';
+        try {
+          var resp = await fetch(url);
+          var blob = await resp.blob();
+          var pngBlob;
+          if (blob.type === 'image/png') {
+            pngBlob = blob;
+          } else {
+            // rasterize non-PNG (JPG, SVG) to PNG via canvas
+            var objUrl = URL.createObjectURL(blob);
+            var img = new Image();
+            await new Promise(function (res, rej) { img.onload = res; img.onerror = rej; img.src = objUrl; });
+            var w = img.naturalWidth || 1024, h = img.naturalHeight || 1024;
+            var cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+            cv.getContext('2d').drawImage(img, 0, 0, w, h);
+            URL.revokeObjectURL(objUrl);
+            pngBlob = await new Promise(function (r) { cv.toBlob(r, 'image/png'); });
+          }
+          await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob })]);
+          btn.textContent = 'Copied!'; btn.classList.add('copied');
+          setTimeout(function () { btn.textContent = original; btn.classList.remove('copied'); }, 1600);
+        } catch (e) {
+          btn.textContent = 'Copy failed';
+          setTimeout(function () { btn.textContent = original; }, 2000);
+        }
+      }
+      document.querySelectorAll('.logo-card').forEach(function (card) {
+        var dl = card.querySelector('.logo-dl');
+        if (!dl) return;
+        var url = dl.getAttribute('href');
+        var actions = document.createElement('span');
+        actions.className = 'logo-actions';
+        var copy = document.createElement('button');
+        copy.type = 'button'; copy.className = 'logo-copy'; copy.textContent = 'Copy';
+        copy.setAttribute('data-label', 'Copy');
+        copy.setAttribute('aria-label', 'Copy image to clipboard');
+        copy.addEventListener('click', function () { copyLogoImage(url, copy); });
+        dl.parentNode.insertBefore(actions, dl);
+        actions.appendChild(copy);
+        actions.appendChild(dl);
+      });
     })();
   </script>
 
