@@ -5,7 +5,7 @@ import os, re
 SITE="https://www.creativesilva.com"
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 IMG=f"{SITE}/assets/images/photo2/studio-session"
-HEADER=f"{IMG}/studio-header-v2.png"
+HEADER=f"{IMG}/studio-header-v3.jpg"
 EDIT_EXAMPLE=f"{IMG}/studio-header.jpg"
 GDRIVE="https://drive.google.com/drive/folders/1sqOMXOYG0FhDJ3519k2DaXWQsawsvIqO?usp=sharing"
 PRESETS=f"{SITE}/assets/PVHS_Contact_Sheet_Presets.zip"
