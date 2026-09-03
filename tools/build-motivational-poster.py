@@ -230,7 +230,7 @@ def overview():
         para("You will design a motivational poster of someone who inspires you, in Photoshop. Your subject can be a real person or a fictional character: an athlete, a musician, a leader, a superhero, anyone who motivates you. You will cut your subject out of their background, add a bold motion-blurred background behind them, and finish with a real quote they actually said, their name, and colors that all work together. The goal is a clean, hype-worthy poster you would be proud to print and hang up.")
         + framed(EXAMPLE,"Example motivational poster")
         + note_orange("Keep it school-appropriate. Your subject and everything on the poster must meet school standards: no drugs, alcohol, tobacco, weapons, violence, profanity, or other inappropriate content or characters. If you are unsure whether a choice is appropriate, ask Mr. Silva before you begin.")
-        + note_orange("Your quote must be a real quote your subject actually said. For a fictional character, use a real line from their movie, show, game, or comic. Choose a font (typeface) for the words that fits the mood and style of your poster.")
+        + note_orange("Your quote must be a real quote your subject actually said. For a fictional character, use a real line from their movie, show, game, or comic. Choose a font (typeface) for the words that fits the mood and style of your poster. Your font choice is important: write down the exact name of the font you use, because you will be asked to list it in your reflection document.")
         + ec_note("EXTRA CREDIT","Add a logo or symbol connected to your subject (a team logo, a band logo, an emblem) behind them, with a glow or outline. This part is optional."))
     en+=card("QUICK SPECS","Set It Up Right",
         bullets([
@@ -259,7 +259,7 @@ def overview():
         para("Vas a dise&ntilde;ar un p&oacute;ster motivacional de alguien que te inspira, en Photoshop. Tu sujeto puede ser una persona real o un personaje de ficci&oacute;n: un atleta, un m&uacute;sico, un l&iacute;der, un superh&eacute;roe, cualquiera que te motive. Vas a recortar a tu sujeto de su fondo, agregar un fondo con desenfoque de movimiento detr&aacute;s, y terminar con una frase real que haya dicho, su nombre y colores que combinen. La meta es un p&oacute;ster limpio y llamativo que te sientas orgulloso de imprimir y colgar.")
         + framed(EXAMPLE,"Ejemplo de p&oacute;ster motivacional")
         + note_orange("Mant&eacute;nlo apropiado para la escuela. Tu sujeto y todo lo que est&eacute; en el p&oacute;ster debe cumplir con las normas escolares: nada de drogas, alcohol, tabaco, armas, violencia, groser&iacute;as ni otro contenido o personajes inapropiados. Si no est&aacute;s seguro de si una opci&oacute;n es apropiada, preg&uacute;ntale al Sr. Silva antes de empezar.")
-        + note_orange("Tu frase debe ser una frase real que tu sujeto haya dicho. Para un personaje de ficci&oacute;n, usa una l&iacute;nea real de su pel&iacute;cula, serie, videojuego o c&oacute;mic. Elige un tipo de letra para las palabras que quede con el estilo y el ambiente de tu p&oacute;ster.")
+        + note_orange("Tu frase debe ser una frase real que tu sujeto haya dicho. Para un personaje de ficci&oacute;n, usa una l&iacute;nea real de su pel&iacute;cula, serie, videojuego o c&oacute;mic. Elige un tipo de letra para las palabras que quede con el estilo y el ambiente de tu p&oacute;ster. Tu elecci&oacute;n de fuente es importante: anota el nombre exacto de la fuente que uses, porque te pedir&aacute;n que la escribas en tu documento de reflexi&oacute;n.")
         + ec_note("CR&Eacute;DITO EXTRA","Agrega un logo o s&iacute;mbolo relacionado con tu sujeto (un logo de equipo, un logo de banda, un emblema) detr&aacute;s de &eacute;l, con un resplandor o contorno. Esta parte es opcional."))
     es+=card("DATOS R&Aacute;PIDOS","Config&uacute;ralo Bien",
         bullets([
@@ -460,13 +460,13 @@ def step02():
 def step03():
     global STEPLBL
     STEPLBL="STEP"
-    en=banner("Motivational Poster &bull; Step 3","Turn In Your Reflection","Answer four quick questions about your poster.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Motivational Poster &bull; Step 3","Turn In Your Reflection","Reflect on your whole design process.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
-        para("Finish the project with a short reflection. It asks who you chose, the font you picked, the hardest part, and what you enjoyed.")
+        para("Finish the project with a reflection. It covers your whole process: who you chose and why, the exact name of the font you used, how you built the print poster AND the mobile wallpaper, the hardest part, and what you are most proud of.")
         + note_orange("The reflection Word document is on the Overview page. Open the Overview to download it.")
         + bullets([
             ("Open it:","open the reflection Word document you downloaded from the Overview."),
-            ("Answer all 4:","type your answers in the boxes, in full sentences."),
+            ("Answer every question:","type your answers in the boxes, in full sentences."),
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
         ]))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
@@ -474,13 +474,13 @@ def step03():
     en+=note_orange("Answer honestly, in your own words.")
 
     STEPLBL="PASO"
-    es=banner("P&oacute;ster Motivacional &bull; Paso 3","Entrega Tu Reflexi&oacute;n","Contesta cuatro preguntas cortas sobre tu p&oacute;ster.","#top","Back to English")
+    es=banner("P&oacute;ster Motivacional &bull; Paso 3","Entrega Tu Reflexi&oacute;n","Reflexiona sobre todo tu proceso de dise&ntilde;o.","#top","Back to English")
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
-        para("Termina el proyecto con una reflexi&oacute;n corta. Pregunta a qui&eacute;n elegiste, el tipo de letra que usaste, la parte m&aacute;s dif&iacute;cil y qu&eacute; disfrutaste.")
+        para("Termina el proyecto con una reflexi&oacute;n. Cubre todo tu proceso: a qui&eacute;n elegiste y por qu&eacute;, el nombre exacto de la fuente que usaste, c&oacute;mo hiciste el p&oacute;ster para imprimir Y el fondo de pantalla del tel&eacute;fono, la parte m&aacute;s dif&iacute;cil y de qu&eacute; est&aacute;s m&aacute;s orgulloso.")
         + note_orange("El documento de Word de la reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen. Abre el Resumen para descargarlo.")
         + bullets([
             ("&Aacute;brelo:","abre el documento de Word de la reflexi&oacute;n que descargaste del Resumen."),
-            ("Contesta las 4:","escribe tus respuestas en los cuadros, en oraciones completas."),
+            ("Contesta cada pregunta:","escribe tus respuestas en los cuadros, en oraciones completas."),
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
         ]))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",

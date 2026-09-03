@@ -206,18 +206,22 @@ const DOCS = [
     '¿Cuál medio o medios (las herramientas o materiales que usaste, como lápiz, marcador o lápiz de color) usaste, y por qué?',
     '¿De qué estás más orgulloso en tu portada?',
   ]},
-  // Motivational Poster (Digital Arts 1A)
+  // Motivational Poster (Digital Arts 1A) - covers the whole process: print poster + mobile wallpaper
   { ...EN, outfile: 'Motivational-Poster-Reflection-EN.docx', title: 'Motivational Poster: Reflection', subtitle: PVHS_EN('Digital Arts 1A'), questions: [
-    'Who did you choose for your poster (a real person or a fictional character), and why do they inspire you?',
-    'What font (typeface) did you choose for your quote, and why does it fit your poster?',
-    'What was the hardest part of the design?',
-    'What did you enjoy about this project?',
+    'Who did you choose for your poster (a real person or a fictional character), and why do they inspire you? What is the real quote you used?',
+    'What is the exact name of the font (typeface) you used for your words, and why does it fit your poster?',
+    'Walk through how you made the PRINT poster: cutting your subject off their background, blurring the background, and adding your words and colors.',
+    'Walk through how you made the MOBILE wallpaper version: what did you change to fit the tall, narrow phone screen?',
+    'What was the hardest part of the whole process, and how did you work through it?',
+    'What are you most proud of, and what did you enjoy most? (If you did the extra-credit logo, tell us about it.)',
   ]},
   { ...ES, outfile: 'Motivational-Poster-Reflection-ES.docx', title: 'Póster Motivacional: Reflexión', subtitle: PVHS_ES('Arte Digital 1A'), questions: [
-    '¿A quién elegiste para tu póster (una persona real o un personaje de ficción), y por qué te inspira?',
-    '¿Qué tipo de letra elegiste para tu frase, y por qué queda bien con tu póster?',
-    '¿Cuál fue la parte más difícil del diseño?',
-    '¿Qué disfrutaste de este proyecto?',
+    '¿A quién elegiste para tu póster (una persona real o un personaje de ficción), y por qué te inspira? ¿Cuál es la frase real que usaste?',
+    '¿Cuál es el nombre exacto del tipo de letra (fuente) que usaste para tus palabras, y por qué queda bien con tu póster?',
+    'Explica cómo hiciste el póster para IMPRIMIR: recortar a tu sujeto de su fondo, desenfocar el fondo, y agregar tus palabras y colores.',
+    'Explica cómo hiciste la versión de FONDO DE PANTALLA para el teléfono: ¿qué cambiaste para que quedara en la pantalla alta y angosta del teléfono?',
+    '¿Cuál fue la parte más difícil de todo el proceso, y cómo la resolviste?',
+    '¿De qué estás más orgulloso, y qué disfrutaste más? (Si hiciste el logo de crédito extra, cuéntanos sobre él.)',
   ]},
   // Studio Session / Panther of the Quarter (Photography 2A)
   { ...EN, outfile: 'Studio-Session-Reflection-EN.docx', title: 'Studio Session: Reflection', subtitle: PVHS_EN('Photography 2A'), questions: [
