@@ -20,8 +20,8 @@ HEAD_SIG='<div style="margin-bottom:8px;"><span style="font-size:20pt;'   # firs
 
 DESC={
  "overview":("overview-v3.png","Module Overview","Resumen del M&oacute;dulo"),
- "your-device":("your-device-v2.png","Your Own Device Required","Requiere Tu Propio Dispositivo"),
- "camera-kit":("camera-kit-v2.png","Reserve a Camera Kit","Reserva un Equipo de C&aacute;mara"),
+ "your-device":("your-device-v2.png","Equipment: Your Device","Equipo: Tu Dispositivo"),
+ "camera-kit":("camera-kit-v2.png","Equipment: Camera Kit","Equipo: Kit de C&aacute;mara"),
  "photo-walk":("photo-walk-v2.png","In-Class Photo Walk","Caminata Fotogr&aacute;fica en Clase"),
  "reflection":("reflection-v3.png","Written Reflection","Reflexi&oacute;n Escrita"),
  "design":("design-v1.png","Design &amp; Create","Dise&ntilde;a y Crea"),
