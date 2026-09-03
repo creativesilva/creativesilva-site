@@ -5,7 +5,7 @@ import os, re
 SITE="https://www.creativesilva.com"
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 IMG=f"{SITE}/assets/images/photo2/studio-session"
-HEADER=f"{IMG}/studio-header-v3.jpg"
+HEADER=f"{IMG}/studio-header-v4.jpg"
 EDIT_EXAMPLE=f"{IMG}/studio-header.jpg"
 GDRIVE="https://drive.google.com/drive/folders/1sqOMXOYG0FhDJ3519k2DaXWQsawsvIqO?usp=sharing"
 PRESETS=f"{SITE}/assets/PVHS_Contact_Sheet_Presets.zip"
@@ -181,7 +181,7 @@ def overview():
     en=banner("Photography 2A &bull; Studio Session","Studio Session","Photograph the Panther of the Quarter honorees.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("THE PROJECT / OVERVIEW","Panther of the Quarter Portraits",
         para("Our studio is hosting the Panther of the Quarter (POTQ) honorees. There are 20 honorees to photograph for the school newsletter. For each honoree you will create a waist-up portrait and a shoulder-up headshot in our studio, then edit the results to a professional finish.")
-        + framed(HEADER,"A three-person student crew photographing a Panther of the Quarter honoree in the studio"))
+        + framed(HEADER,"The three-person studio crew at work, labeled Art Director, Photographer, and Lighting Assistant, with the Talent posing on the backdrop"))
     en+=card("YOUR CREW / THREE ROLES","Work as a Team of Three",
         para("You will work in groups of three and rotate through three professional roles. Each group photographs one or two of the 20 honorees, and then each person edits the images their group captured.")
         + bullets([
@@ -206,7 +206,7 @@ def overview():
     es=banner("Fotograf&iacute;a 2A &bull; Sesi&oacute;n de Estudio","Sesi&oacute;n de Estudio","Fotograf&iacute;a a los honorados Pantera del Trimestre.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","Retratos de la Pantera del Trimestre",
         para("Nuestro estudio recibe a los honorados de la Pantera del Trimestre (POTQ). Hay 20 honorados que fotografiar para el bolet&iacute;n de la escuela. Para cada honorado crear&aacute;s un retrato de cintura para arriba y un retrato de hombros para arriba (headshot) en nuestro estudio, y luego editar&aacute;s los resultados con un acabado profesional.")
-        + framed(HEADER,"Un equipo de tres estudiantes fotografiando a un honorado de la Pantera del Trimestre en el estudio"))
+        + framed(HEADER,"El equipo de estudio de tres personas trabajando, con las etiquetas Director de Arte, Fot&oacute;grafo y Asistente de Iluminaci&oacute;n, y el Talento posando frente al fondo"))
     es+=card("TU EQUIPO / TRES ROLES","Trabaja en Equipo de Tres",
         para("Trabajar&aacute;s en grupos de tres y rotar&aacute;n por tres roles profesionales. Cada grupo fotograf&iacute;a a uno o dos de los 20 honorados, y luego cada persona edita las im&aacute;genes que captur&oacute; su grupo.")
         + bullets([
