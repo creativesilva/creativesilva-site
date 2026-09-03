@@ -79,18 +79,20 @@ def float_right(src,alt):
 
 DL_ICON=f"{SITE}/assets/Icons/assignment/overview-v2.png"   # the "downloads" folder icon
 
-def dl_link(url,label,download=True):
+def dl_link(url,label,download=True,row=False):
+    # row=True drops the button's vertical margin so it centers cleanly beside the icon
     if download:
         # official orange (#FF6B1A) so a file download stands out for students
-        return (f'<a href="{url}" download style="display:inline-block;text-decoration:none;background:#FF6B1A;color:#ffffff;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;margin:0 10px 8px 0;"><strong>{label}</strong></a>')
+        mgn='margin:0;' if row else 'margin:0 10px 8px 0;'
+        return (f'<a href="{url}" download style="display:inline-block;text-decoration:none;background:#FF6B1A;color:#ffffff;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;{mgn}"><strong>{label}</strong></a>')
     # external read / reference link keeps the light style (not a file download)
     return (f'<a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:10px 20px;border-top:2px solid #00b8b8;font-size:11pt;letter-spacing:0.04em;margin:0 10px 10px 0;"><strong>{label}</strong></a>')
 
 def dl_row(url,label):
-    # the downloads folder icon sitting next to the file's orange download button
+    # the downloads folder icon perfectly centered beside the file's orange download button
     return ('<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;">'
       f'<img src="{DL_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;display:block;" />'
-      + dl_link(url,label) + '</div>')
+      + dl_link(url,label,row=True) + '</div>')
 
 def vocab_grid(quiz_label, quiz_body, terms):
     # 6 uniform tiles, 3 per row, with an always-on quiz note (framework requirement)
