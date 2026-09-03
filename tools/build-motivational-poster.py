@@ -102,7 +102,7 @@ def support_tile(thumb,title,desc,url,openlabel):
       f'<div><a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:9px 16px;border-top:2px solid #00b8b8;font-size:10.5pt;letter-spacing:0.04em;"><strong>{openlabel}</strong></a></div>'
       '</div></div>')
 
-DL_ICON=f"{SITE}/assets/Icons/assignment/overview-v2.png"   # the downloads folder icon (lives IN the download section)
+DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"   # the downloads folder icon (lives IN the download section)
 
 def download_card(eyebrow,heading,inner):
     # orange-styled download section (framework): orange border/eyebrow/rule

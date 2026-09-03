@@ -19,11 +19,16 @@ EYE_SIG='<div style="display:inline-block;background:rgba(0,0,0,0.40);border-lef
 HEAD_SIG='<div style="margin-bottom:8px;"><span style="font-size:20pt;'   # first card's big title row
 
 DESC={
- "overview":("overview-v2.png","Downloads on This Page","Descargas en Esta P&aacute;gina"),
- "your-device":("your-device.png","Your Own Device Required","Requiere Tu Propio Dispositivo"),
- "camera-kit":("camera-kit.png","Reserve a Camera Kit","Reserva un Equipo de C&aacute;mara"),
- "photo-walk":("photo-walk.png","In-Class Photo Walk","Caminata Fotogr&aacute;fica en Clase"),
- "reflection":("reflection-v2.png","Written Reflection","Reflexi&oacute;n Escrita"),
+ "overview":("overview-v3.png","Module Overview","Resumen del M&oacute;dulo"),
+ "your-device":("your-device-v2.png","Your Own Device Required","Requiere Tu Propio Dispositivo"),
+ "camera-kit":("camera-kit-v2.png","Reserve a Camera Kit","Reserva un Equipo de C&aacute;mara"),
+ "photo-walk":("photo-walk-v2.png","In-Class Photo Walk","Caminata Fotogr&aacute;fica en Clase"),
+ "reflection":("reflection-v3.png","Written Reflection","Reflexi&oacute;n Escrita"),
+ "design":("design-v1.png","Design &amp; Create","Dise&ntilde;a y Crea"),
+ "edit":("edit-v1.png","Cull &amp; Edit","Selecciona y Edita"),
+ "research":("research-v1.png","Find &amp; Collect","Busca y Re&uacute;ne"),
+ "worksheet":("worksheet-v1.png","Worksheet","Hoja de Trabajo"),
+ "sketch":("sketch-v1.png","Sketch by Hand","Dibuja a Mano"),
 }
 def id_right(kind, es):
     # text first, icon last so the icon sits at the far right edge of the title row
@@ -87,30 +92,45 @@ def apply(fname, kind):
     h=wrap_title(h, h.find('id="top"'), kind, False) # then EN
     open(p,'w',encoding='utf-8').write(h); print("  id["+kind+"]:", fname)
 
+# Every active page carries a top-right type icon. Overviews = the Overview (compass) icon;
+# steps = their activity. The Downloads (folder) icon is NOT here: it lives in the orange
+# download section (builders' DL_ICON), never at the top-right.
 MAP={
+ # ---- Digital Arts 1A ----
  "digarts1-pictograms-overview.html":"overview",
+ "digarts1-pictograms-step01-find-save.html":"research",
+ "digarts1-pictograms-step02-sketch-reflect.html":"sketch",
  "digarts1-color-theory-overview.html":"overview",
+ "digarts1-color-theory-step01-analysis.html":"worksheet",
  "digarts1-sketchbook-cover-overview.html":"overview",
+ "digarts1-sketchbook-cover-step01-design.html":"design",
  "digarts1-sketchbook-cover-step02-submit-reflect.html":"reflection",
- # overview has no top-right icon: the downloads folder icon lives in the orange download section instead
+ "digarts1-motivational-poster-overview.html":"overview",
+ "digarts1-motivational-poster-step01.html":"design",
+ "digarts1-motivational-poster-step02.html":"design",
  "digarts1-motivational-poster-step03.html":"reflection",
+ # ---- Photography 1A ----
  "photo1-self-portrait-overview.html":"overview",
  "photo1-self-portrait-step01-capture.html":"your-device",
  "photo1-self-portrait-step02-reflection.html":"reflection",
  "photo1-composition-concepts-overview.html":"overview",
  "photo1-composition-concepts-step01-capture.html":"your-device",
  "photo1-composition-concepts-step02-reflection.html":"reflection",
- "photo1-leading-lines-overview.html":"photo-walk",   # photo-walk module: identify as a walk at top-right; downloads icon moves to the reflection section
+ "photo1-leading-lines-overview.html":"overview",
  "photo1-leading-lines-step01-capture.html":"photo-walk",
  "photo1-leading-lines-step02-reflection.html":"reflection",
+ # ---- Photography 2A ----
  "photo2-composition-overview.html":"overview",
  "photo2-composition-step01-photowalk.html":"photo-walk",
+ "photo2-composition-step02-cull-export.html":"edit",
  "photo2-composition-step03-reflection.html":"reflection",
  "photo2-ocf-overview.html":"overview",
+ "photo2-ocf-step01-inspiration.html":"research",
  "photo2-ocf-step02-photowalk.html":"photo-walk",
  "photo2-ocf-step03-reflection.html":"reflection",
  "photo2-studio-session-overview.html":"overview",
  "photo2-studio-session-step01-capture.html":"camera-kit",
+ "photo2-studio-session-step02-cull-edit.html":"edit",
  "photo2-studio-session-step03-reflection.html":"reflection",
 }
 for f,k in MAP.items(): apply(f,k)

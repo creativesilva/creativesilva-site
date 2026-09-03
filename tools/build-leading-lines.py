@@ -77,7 +77,7 @@ def float_right(src,alt):
     return ('<div style="float:right;width:40%;min-width:230px;margin:0 0 14px 22px;">'
       f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div></div>')
 
-DL_ICON=f"{SITE}/assets/Icons/assignment/overview-v2.png"   # the "downloads" folder icon
+DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"   # the "downloads" folder icon
 
 def dl_link(url,label,download=True,row=False):
     # row=True drops the button's vertical margin so it centers cleanly beside the icon
