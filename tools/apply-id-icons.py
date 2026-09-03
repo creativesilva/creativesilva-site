@@ -92,7 +92,7 @@ MAP={
  "digarts1-color-theory-overview.html":"overview",
  "digarts1-sketchbook-cover-overview.html":"overview",
  "digarts1-sketchbook-cover-step02-submit-reflect.html":"reflection",
- "digarts1-motivational-poster-overview.html":"overview",
+ # overview has no top-right icon: the downloads folder icon lives in the orange download section instead
  "digarts1-motivational-poster-step03.html":"reflection",
  "photo1-self-portrait-overview.html":"overview",
  "photo1-self-portrait-step01-capture.html":"your-device",

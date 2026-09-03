@@ -99,9 +99,22 @@ def support_tile(thumb,title,desc,url,openlabel):
       f'<div><a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:9px 16px;border-top:2px solid #00b8b8;font-size:10.5pt;letter-spacing:0.04em;"><strong>{openlabel}</strong></a></div>'
       '</div></div>')
 
-def dl_link(url,label):
-    # official orange (#FF6B1A) so the file download stands out for students
-    return (f'<div style="margin-top:8px;"><a href="{url}" download style="display:inline-block;text-decoration:none;background:#FF6B1A;color:#ffffff;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;"><strong>{label}</strong></a></div>')
+DL_ICON=f"{SITE}/assets/Icons/assignment/overview-v2.png"   # the downloads folder icon (lives IN the download section)
+
+def download_card(eyebrow,heading,inner):
+    # orange-styled download section (framework): orange border/eyebrow/rule
+    return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #FF6B1A;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#ffb27c;text-transform:uppercase;margin-bottom:12px;">'
+      f'<strong>{eyebrow}</strong></div>'
+      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
+      '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
+      f'{inner}</div>')
+
+def dl_row(url,label):
+    # downloads folder icon + orange download button, vertically centered
+    btn=(f'<a href="{url}" download style="display:inline-block;text-decoration:none;background:#FF6B1A;color:#ffffff;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;margin:0;"><strong>{label}</strong></a>')
+    return ('<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;">'
+      f'<img src="{DL_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;display:block;" />'+btn+'</div>')
 
 def support_tiles(items):
     tiles="".join(support_tile(*it) for it in items)
@@ -237,9 +250,9 @@ def overview():
             (TUT_SEL,"Introduction to Selections","Learn how to select part of an image. This is the first step to cutting your subject out.",URL_SEL,"Watch: Selections &rarr;"),
             (TUT_MASK,"Get to Know Layer Masks","Use layer masks to hide and show parts of a layer without erasing anything.",URL_MASK,"Watch: Layer Masks &rarr;"),
         ]))
-    en+=card("REFLECTION / DOWNLOAD","Download Reflection Document",
+    en+=download_card("REFLECTION / DOWNLOAD","Download Reflection Document",
         para("Download the reflection here. Fill it out after your poster is done, then turn it in on Step 03.")
-        + dl_link(REFLECT_EN,"Reflection Document (Word)"))
+        + dl_row(REFLECT_EN,"Reflection Document (Word)"))
 
     es=banner("Arte Digital 1A &bull; Photoshop","P&oacute;ster Motivacional","Dise&ntilde;a un p&oacute;ster que anime a alguien que te inspira.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","Lo Que Vas a Crear",
@@ -266,9 +279,9 @@ def overview():
             (TUT_SEL,"Introducci&oacute;n a las Selecciones","Aprende a seleccionar parte de una imagen. Es el primer paso para recortar a tu sujeto.",URL_SEL,"Ver: Selecciones &rarr;"),
             (TUT_MASK,"Conoce las M&aacute;scaras de Capa","Usa m&aacute;scaras de capa para ocultar y mostrar partes de una capa sin borrar nada.",URL_MASK,"Ver: M&aacute;scaras de Capa &rarr;"),
         ]))
-    es+=card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
+    es+=download_card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
         para("Descarga la reflexi&oacute;n aqu&iacute;. Ll&eacute;nala cuando termines tu p&oacute;ster y entr&eacute;gala en el Paso 03.")
-        + dl_link(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)"))
+        + dl_row(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)"))
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
