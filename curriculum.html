@@ -1500,20 +1500,27 @@
         + `<span class="course-doc-name">${label}</span>`
         + `<span class="course-doc-dl">Open</span></a>`;
     }
+    function toggleSteps(el) {
+      const box = el.closest('.course-doc').nextElementSibling;
+      if (!box) return;
+      box.hidden = !box.hidden;
+      el.innerHTML = box.hidden ? '&#128214; Read' : '&#9650; Hide';
+    }
     function videoRow(url, label, instructions) {
-      const watch = `<a class="course-doc" href="${url}" target="_blank" rel="noopener">`
+      if (!instructions) {
+        return `<a class="course-doc" href="${url}" target="_blank" rel="noopener">`
+          + `<span class="course-doc-ico">VIDEO</span>`
+          + `<span class="course-doc-name">${label}</span>`
+          + `<span class="course-doc-dl">Watch</span></a>`;
+      }
+      // Video row with two inline actions: Watch (opens the video) and Read (toggles the steps below).
+      return `<div class="course-doc">`
         + `<span class="course-doc-ico">VIDEO</span>`
         + `<span class="course-doc-name">${label}</span>`
-        + `<span class="course-doc-dl">Watch</span></a>`;
-      if (!instructions) return watch;
-      return watch
-        + `<details style="margin:0;">`
-        + `<summary class="course-doc" style="cursor:pointer;list-style:none;">`
-        + `<span class="course-doc-ico">GUIDE</span>`
-        + `<span class="course-doc-name">See Instructions</span>`
-        + `<span class="course-doc-dl">Open</span></summary>`
-        + `<div style="max-height:360px;overflow-y:auto;margin:6px 0 2px;padding:14px 16px;border:1px solid rgba(0,184,184,0.28);border-radius:12px;background:rgba(0,0,0,0.30);line-height:1.5;font-size:13px;color:rgba(255,255,255,0.9);">${instructions}</div>`
-        + `</details>`;
+        + `<a class="course-doc-dl" href="${url}" target="_blank" rel="noopener">&#9654; Watch</a>`
+        + `<span class="course-doc-dl" role="button" tabindex="0" style="cursor:pointer;" onclick="toggleSteps(this)">&#128214; Read</span>`
+        + `</div>`
+        + `<div class="gp-steps" hidden style="max-height:360px;overflow-y:auto;margin:6px 0 8px;padding:14px 16px;border:1px solid rgba(0,184,184,0.28);border-radius:12px;background:rgba(0,0,0,0.30);line-height:1.5;font-size:13px;color:rgba(255,255,255,0.9);">${instructions}</div>`;
     }
     // Local file:// link. Browsers block file:// clicks from an https page, so on the
     // live site this copies the path (paste into a new tab). Opened as a local file, it just works.
