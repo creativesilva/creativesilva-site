@@ -16,17 +16,18 @@ ICO=SITE+"/assets/Icons/assignment"
 EYE_SIG='<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #00b8b8;'
 
 DESC={
- "overview":("overview.png","Downloads on This Page","Descargas en Esta P&aacute;gina"),
+ "overview":("overview-v2.png","Downloads on This Page","Descargas en Esta P&aacute;gina"),
  "your-device":("your-device.png","Your Own Device Required","Requiere Tu Propio Dispositivo"),
  "camera-kit":("camera-kit.png","Reserve a Camera Kit","Reserva un Equipo de C&aacute;mara"),
  "photo-walk":("photo-walk.png","In-Class Photo Walk","Caminata Fotogr&aacute;fica en Clase"),
- "reflection":("reflection.png","Written Reflection","Reflexi&oacute;n Escrita"),
+ "reflection":("reflection-v2.png","Written Reflection","Reflexi&oacute;n Escrita"),
 }
 def id_right(kind, es):
+    # text first, icon last so the icon sits at the far right edge of the row
     icon,en_d,es_d=DESC[kind]; desc=es_d if es else en_d
     return ('<div style="display:flex;align-items:center;gap:9px;flex:0 0 auto;">'
-      f'<img src="{ICO}/{icon}" alt="{desc}" style="width:38px;height:38px;display:block;flex:0 0 auto;" />'
-      f'<span style="font-size:9pt;letter-spacing:0.10em;text-transform:uppercase;color:#ffb27c;line-height:1.25;max-width:180px;"><strong>{desc}</strong></span></div>')
+      f'<span style="font-size:9pt;letter-spacing:0.10em;text-transform:uppercase;color:#ffb27c;line-height:1.25;max-width:180px;text-align:right;"><strong>{desc}</strong></span>'
+      f'<img src="{ICO}/{icon}" alt="{desc}" style="width:38px;height:38px;display:block;flex:0 0 auto;" /></div>')
 
 def match_close(h, open_idx):
     j=open_idx+4; depth=1
@@ -45,6 +46,18 @@ def strip_idchip(h):
         if m==-1: return h
         ds=h.find('<div', m); h=h[:m]+h[match_close(h, ds):]
 
+def strip_ideye(h):
+    # unwrap a prior IDEYE flex row back to its original bare eyebrow so the
+    # row can be rebuilt with the current layout/icon (keeps the applier idempotent)
+    while True:
+        m=h.find('<!--IDEYE-->')
+        if m==-1: return h
+        wrap_open=h.find('<div', m)
+        wrap_close=match_close(h, wrap_open)
+        i=h.find(EYE_SIG, wrap_open)          # first inner div = original eyebrow
+        eb=h[i:h.find('</div>', i)+6]
+        h=h[:m]+eb+h[wrap_close:]
+
 def wrap_first_eyebrow(h, frm, kind, es):
     i=h.find(EYE_SIG, frm); assert i!=-1, "eyebrow not found"
     end=h.find('</div>', i)+6
@@ -58,8 +71,7 @@ def apply(fname, kind):
     if not os.path.exists(p): print("  MISSING:", fname); return
     h=open(p,encoding='utf-8').read()
     h=strip_idchip(h)
-    if '<!--IDEYE-->' in h:
-        open(p,'w',encoding='utf-8').write(h); print("  ok (already):", fname); return
+    h=strip_ideye(h)                          # unwrap any prior row, then rebuild
     esp=h.find('id="espanol"')
     h=wrap_first_eyebrow(h, esp, kind, True)                 # ES first (later in doc)
     h=wrap_first_eyebrow(h, h.find('id="top"'), kind, False) # then EN
