@@ -172,6 +172,23 @@ const DOCS = [
     '¿Cuál fue el más difícil? ¿Por qué?',
     '¿Qué harías diferente la próxima vez?',
   ]},
+  // Leading Lines Photo Walk (Photography 1A)
+  { ...EN, outfile: 'Leading-Lines-Reflection-EN.docx', title: 'Leading Lines Photo Walk: Reflection', subtitle: PVHS_EN('Photography 1A'), questions: [
+    'Who was your camera partner? Write their full name.',
+    'What is a leading line, in your own words? Give one example you found on the walk.',
+    'Look at your 6 photos. Which one shows leading lines the best, and what makes it strong?',
+    'How did you cull your photos? How did you decide which one was the best of each example?',
+    'How did working with your partner help you? Did the two of you find different kinds of lines?',
+    'What would you do differently on your next photo walk to find better leading lines?',
+  ]},
+  { ...ES, outfile: 'Leading-Lines-Reflection-ES.docx', title: 'Caminata de Líneas Guía: Reflexión', subtitle: PVHS_ES('Fotografía 1A'), questions: [
+    '¿Quién fue tu compañero de cámara? Escribe su nombre completo.',
+    '¿Qué es una línea guía, en tus propias palabras? Da un ejemplo que encontraste en la caminata.',
+    'Mira tus 6 fotos. ¿Cuál muestra mejor las líneas guía, y qué la hace fuerte?',
+    '¿Cómo seleccionaste (cull) tus fotos? ¿Cómo decidiste cuál era la mejor de cada ejemplo?',
+    '¿Cómo te ayudó trabajar con tu compañero? ¿Encontraron ustedes diferentes tipos de líneas?',
+    '¿Qué harías diferente en tu próxima caminata para encontrar mejores líneas guía?',
+  ]},
   // Sketchbook Cover (Digital Arts 1A) -- "medium" gets a plain-language parenthetical
   { ...EN, outfile: 'Sketchbook-Cover-Reflection-EN.docx', title: 'Sketchbook Cover Art: Reflection', subtitle: PVHS_EN('Digital Arts 1A'), questions: [
     'What are the 3 motivational words on your cover?',
