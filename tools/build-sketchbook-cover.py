@@ -90,8 +90,22 @@ def adobe_link(label):
       f'<a href="{ADOBE_URL}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:10px 20px;border-top:2px solid #00b8b8;font-size:11pt;letter-spacing:0.04em;"><strong>{label}</strong></a>'
       '</span></div>')
 
-def dl_link(url,label):
-    return (f'<div style="margin-top:4px;"><a href="{url}" download style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:10px 20px;border-top:2px solid #00b8b8;font-size:11pt;letter-spacing:0.04em;margin:0 12px 12px 0;"><strong>{label}</strong></a></div>')
+DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"   # downloads folder icon (in the download section)
+
+def download_card(eyebrow,heading,inner):
+    # orange-styled download section (framework standard)
+    return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #FF6B1A;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#ffb27c;text-transform:uppercase;margin-bottom:12px;">'
+      f'<strong>{eyebrow}</strong></div>'
+      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
+      '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
+      f'{inner}</div>')
+
+def dl_row(url,label):
+    # downloads folder icon + orange download button, vertically centered
+    btn=(f'<a href="{url}" download style="display:inline-block;text-decoration:none;background:#FF6B1A;color:#ffffff;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;margin:0;"><strong>{label}</strong></a>')
+    return ('<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;">'
+      f'<img src="{DL_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;display:block;" />'+btn+'</div>')
 
 def framed_hero(src,alt):
     return f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 0;"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
@@ -228,11 +242,12 @@ def overview():
     en+=card("VOCABULARY / 6 TERMS","Key Words",
         note_orange("Heads up: these key words will be on the quiz.")
         + vocab_grid(VOCAB_EN))
-    en+=card("RESEARCH / FONTS","Fonts and Reflection",
+    en+=card("RESEARCH / FONTS","Choose Your Fonts",
         para("Pick your 2 typefaces on Adobe Fonts. Only this website is approved for the competition. On Adobe Fonts you can type your own word into the Sample Text box to see how it looks in any font.")
-        + adobe_link("Adobe Fonts (fonts.adobe.com)")
-        + para("Download the reflection here. Fill it out after your cover is done.")
-        + dl_link(REFLECT_EN,"Sketchbook Cover Reflection (Word)"))
+        + adobe_link("Adobe Fonts (fonts.adobe.com)"))
+    en+=download_card("REFLECTION / DOWNLOAD","Download Reflection Document",
+        para("Download the reflection here. Fill it out after your cover is done, then turn it in on Step 02.")
+        + dl_row(REFLECT_EN,"Reflection Document (Word)"))
 
     es=HEAD_ES
     es+=card("LA COMPETENCIA / RESUMEN","Haz Tuyo Tu Cuaderno",
@@ -261,11 +276,12 @@ def overview():
     es+=card("VOCABULARIO / 6 T&Eacute;RMINOS","Palabras Clave",
         note_orange("Atenci&oacute;n: estas palabras clave estar&aacute;n en el examen.")
         + vocab_grid(VOCAB_ES))
-    es+=card("INVESTIGACI&Oacute;N / FUENTES","Fuentes y Reflexi&oacute;n",
+    es+=card("INVESTIGACI&Oacute;N / FUENTES","Elige Tus Fuentes",
         para("Elige tus 2 tipos de letra en Adobe Fonts. Solo este sitio web est&aacute; aprobado para la competencia. En Adobe Fonts puedes escribir tu propia palabra en la casilla de Texto de Muestra para ver c&oacute;mo se ve en cualquier fuente.")
-        + adobe_link("Adobe Fonts (fonts.adobe.com)")
-        + para("Descarga la reflexi&oacute;n aqu&iacute;. Ll&eacute;nala cuando termines tu portada.")
-        + dl_link(REFLECT_ES,"Reflexi&oacute;n de la Portada (Word)"))
+        + adobe_link("Adobe Fonts (fonts.adobe.com)"))
+    es+=download_card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
+        para("Descarga la reflexi&oacute;n aqu&iacute;. Ll&eacute;nala cuando termines tu portada, luego entr&eacute;gala en el Paso 02.")
+        + dl_row(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)"))
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'

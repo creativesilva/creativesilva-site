@@ -81,10 +81,30 @@ def scrollbox(n, inner):
       'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.16) 100%);">'
       f'{inner}</div>')
 
-def dl_link(url,label,download=True):
-    dl='download ' if download else ''
-    tgt='' if download else 'target="_blank" rel="noopener" '
-    return (f'<a href="{url}" {dl}{tgt}style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:10px 20px;border-top:2px solid #00b8b8;font-size:11pt;letter-spacing:0.04em;margin:0 10px 10px 0;"><strong>{label}</strong></a>')
+DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"   # downloads folder icon (in the download section)
+
+def dl_link(url,label,download=True,row=False):
+    if download:
+        # official orange (#FF6B1A) so a file download stands out for students
+        mgn='margin:0;' if row else 'margin:0 10px 8px 0;'
+        return (f'<a href="{url}" download style="display:inline-block;text-decoration:none;background:#FF6B1A;color:#ffffff;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;{mgn}"><strong>{label}</strong></a>')
+    # external read / reference link keeps the light style (not a file download)
+    return (f'<a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:10px 20px;border-top:2px solid #00b8b8;font-size:11pt;letter-spacing:0.04em;margin:0 10px 10px 0;"><strong>{label}</strong></a>')
+
+def download_card(eyebrow,heading,inner):
+    # orange-styled download section (framework standard)
+    return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #FF6B1A;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#ffb27c;text-transform:uppercase;margin-bottom:12px;">'
+      f'<strong>{eyebrow}</strong></div>'
+      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
+      '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
+      f'{inner}</div>')
+
+def dl_row(url,label):
+    # downloads folder icon + orange download button, vertically centered
+    return ('<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;">'
+      f'<img src="{DL_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;display:block;" />'
+      + dl_link(url,label,row=True) + '</div>')
 
 def deliverables_box(title,lead,items):
     lis=""
@@ -179,9 +199,9 @@ def overview():
         + '<div style="margin-top:6px;">'
         + dl_link(GDRIVE,"Google Drive: Raw Files",download=False)
         + '</div>')
-    en+=card("REFLECTION / DOWNLOAD","Get the Reflection Document",
+    en+=download_card("REFLECTION / DOWNLOAD","Download Reflection Document",
         para("Download the reflection here. Complete it after you finish editing, then turn it in on Step 03.")
-        + '<div style="margin-top:6px;">' + dl_link(REFLECT_EN,"Studio Session Reflection (Word)") + '</div>')
+        + dl_row(REFLECT_EN,"Reflection Document (Word)"))
 
     es=banner("Fotograf&iacute;a 2A &bull; Sesi&oacute;n de Estudio","Sesi&oacute;n de Estudio","Fotograf&iacute;a a los honorados Pantera del Trimestre.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","Retratos de la Pantera del Trimestre",
@@ -204,9 +224,9 @@ def overview():
         + '<div style="margin-top:6px;">'
         + dl_link(GDRIVE,"Google Drive: Archivos Raw",download=False)
         + '</div>')
-    es+=card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
+    es+=download_card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
         para("Descarga la reflexi&oacute;n aqu&iacute;. Compl&eacute;tala cuando termines de editar y entr&eacute;gala en el Paso 03.")
-        + '<div style="margin-top:6px;">' + dl_link(REFLECT_ES,"Reflexi&oacute;n de la Sesi&oacute;n (Word)") + '</div>')
+        + dl_row(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)"))
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
