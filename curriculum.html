@@ -1500,11 +1500,36 @@
         + `<span class="course-doc-name">${label}</span>`
         + `<span class="course-doc-dl">Open</span></a>`;
     }
-    function toggleSteps(el) {
-      const box = el.closest('.course-doc').nextElementSibling;
-      if (!box) return;
-      box.hidden = !box.hidden;
-      el.innerHTML = box.hidden ? '&#128214; Read' : '&#9650; Hide';
+    function openStepsModal(btn) {
+      const row = btn.closest('.course-doc');
+      const src = row.nextElementSibling;
+      const nameEl = row.querySelector('.course-doc-name');
+      const title = nameEl ? nameEl.textContent : 'Instructions';
+      let ov = document.getElementById('steps-modal');
+      if (!ov) {
+        ov = document.createElement('div');
+        ov.id = 'steps-modal';
+        ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.74);display:none;align-items:center;justify-content:center;padding:24px;';
+        ov.addEventListener('click', function (e) { if (e.target === ov) closeStepsModal(); });
+        ov.innerHTML = '<div style="background:#0d1414;border:1px solid rgba(0,184,184,0.35);border-radius:16px;width:min(940px,96vw);max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,0.65);">'
+          + '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;border-bottom:1px solid rgba(0,184,184,0.25);flex:0 0 auto;">'
+          + '<span id="steps-modal-title" style="font-size:17px;font-weight:700;color:#fff;"></span>'
+          + '<button type="button" onclick="closeStepsModal()" aria-label="Close" style="cursor:pointer;background:rgba(255,255,255,0.10);color:#fff;border:0;border-radius:8px;font-size:14px;line-height:1;padding:9px 13px;">&#10005; Close</button></div>'
+          + '<div id="steps-modal-body" style="overflow-y:auto;padding:22px 24px;line-height:1.55;font-size:14px;color:rgba(255,255,255,0.92);"></div></div>';
+        document.body.appendChild(ov);
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeStepsModal(); });
+      }
+      ov.querySelector('#steps-modal-title').textContent = title;
+      const body = ov.querySelector('#steps-modal-body');
+      body.innerHTML = src ? src.innerHTML : '';
+      body.scrollTop = 0;
+      ov.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    function closeStepsModal() {
+      const ov = document.getElementById('steps-modal');
+      if (ov) ov.style.display = 'none';
+      document.body.style.overflow = '';
     }
     function videoRow(url, label, instructions) {
       if (!instructions) {
@@ -1513,14 +1538,14 @@
           + `<span class="course-doc-name">${label}</span>`
           + `<span class="course-doc-dl">Watch</span></a>`;
       }
-      // Video row with two inline actions: Watch (opens the video) and Read (toggles the steps below).
+      // Video row with two inline actions: Watch (opens the video) and Read (opens a full-screen modal).
       return `<div class="course-doc">`
         + `<span class="course-doc-ico">VIDEO</span>`
         + `<span class="course-doc-name">${label}</span>`
         + `<a class="course-doc-dl" href="${url}" target="_blank" rel="noopener">&#9654; Watch</a>`
-        + `<span class="course-doc-dl" role="button" tabindex="0" style="cursor:pointer;" onclick="toggleSteps(this)">&#128214; Read</span>`
+        + `<span class="course-doc-dl" role="button" tabindex="0" style="cursor:pointer;" onclick="openStepsModal(this)">&#128214; Read</span>`
         + `</div>`
-        + `<div class="gp-steps" hidden style="max-height:360px;overflow-y:auto;margin:6px 0 8px;padding:14px 16px;border:1px solid rgba(0,184,184,0.28);border-radius:12px;background:rgba(0,0,0,0.30);line-height:1.5;font-size:13px;color:rgba(255,255,255,0.9);">${instructions}</div>`;
+        + `<div class="gp-steps" hidden>${instructions}</div>`;
     }
     // Local file:// link. Browsers block file:// clicks from an https page, so on the
     // live site this copies the path (paste into a new tab). Opened as a local file, it just works.
