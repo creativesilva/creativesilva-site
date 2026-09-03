@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
-# Digital Arts 1A - Motivational Athlete Poster (Photoshop). Converted from the MRC
-# orange build to the PVHS teal angular framework. Overview + Step 01, bilingual.
+# Digital Arts 1A - Motivational Poster (Photoshop). Any school-appropriate figure who
+# inspires you: a real person OR a fictional character, with a real quote. The logo/symbol
+# behind the subject is optional EXTRA CREDIT. PVHS teal angular framework, bilingual.
 import os, re
 SITE="https://www.creativesilva.com"
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
-IMG=f"{SITE}/assets/images/digarts1/athlete-poster"
-ATHLETE=f"{SITE}/assets/mrc/images/MRC_Athlete.png"   # existing embedded image, kept for now
+IMG=f"{SITE}/assets/images/digarts1/motivational-poster"
+EXAMPLE=f"{SITE}/assets/mrc/images/MRC_Athlete.png"   # example motivational poster
 NEWDOC=f"{IMG}/new-document.png"
 NEWDOC_MOBILE=f"{IMG}/new-document-mobile.png"
 FIX_RASTER=f"{IMG}/fix-rasterize.png"
 FIX_SMVIEW=f"{IMG}/fix-select-mask-view.png"
 FIX_OUTPUT=f"{IMG}/fix-output-to.png"
 FIX_BLUR=f"{IMG}/fix-motion-blur.png"
-REFLECT_EN=f"{SITE}/assets/course-documents/Athlete-Poster-Reflection-EN.docx"
-REFLECT_ES=f"{SITE}/assets/course-documents/Athlete-Poster-Reflection-ES.docx"
+REFLECT_EN=f"{SITE}/assets/course-documents/Motivational-Poster-Reflection-EN.docx"
+REFLECT_ES=f"{SITE}/assets/course-documents/Motivational-Poster-Reflection-ES.docx"
 TUT_WORK=f"{IMG}/tut-workspace.png"
 TUT_SEL=f"{IMG}/tut-selections.png"
 TUT_MASK=f"{IMG}/tut-layer-masks.png"
@@ -21,10 +22,10 @@ URL_WORK="https://www.adobe.com/learn/photoshop/in-app/introduction-to-the-works
 URL_SEL="https://www.adobe.com/learn/photoshop/in-app/introduction-to-selections"
 URL_MASK="https://www.adobe.com/learn/photoshop/in-app/get-to-know-layer-masks"
 
-OVER="digarts1-athlete-poster-overview.html"
-S1="digarts1-athlete-poster-step01.html"
-S2="digarts1-athlete-poster-step02.html"
-S3="digarts1-athlete-poster-step03.html"
+OVER="digarts1-motivational-poster-overview.html"
+S1="digarts1-motivational-poster-step01.html"
+S2="digarts1-motivational-poster-step02.html"
+S3="digarts1-motivational-poster-step03.html"
 
 def ent(s):
     m={"á":"&aacute;","é":"&eacute;","í":"&iacute;","ó":"&oacute;","ú":"&uacute;",
@@ -66,6 +67,10 @@ def bullets(items):
 def note_orange(t):
     return (f'<div style="background:rgba(255,107,26,0.10);border:1px solid rgba(255,107,26,0.30);border-left:4px solid #FF6B1A;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
 
+def ec_note(label,t):
+    # EXTRA CREDIT callout (teal, distinct from the orange warnings)
+    return (f'<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.35);border-left:4px solid #00b8b8;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.92);"><strong style="color:#80e0e0;">{label}:</strong> {t}</div>')
+
 def framed(src,alt,maxw=None):
     mw=f'max-width:{maxw};' if maxw else ''
     return f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;{mw}"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
@@ -95,7 +100,8 @@ def support_tile(thumb,title,desc,url,openlabel):
       '</div></div>')
 
 def dl_link(url,label):
-    return (f'<div style="margin-top:6px;"><a href="{url}" download style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:10px 20px;border-top:2px solid #00b8b8;font-size:11pt;letter-spacing:0.04em;"><strong>{label}</strong></a></div>')
+    # official orange (#FF6B1A) so the file download stands out for students
+    return (f'<div style="margin-top:8px;"><a href="{url}" download style="display:inline-block;text-decoration:none;background:#FF6B1A;color:#ffffff;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;"><strong>{label}</strong></a></div>')
 
 def support_tiles(items):
     tiles="".join(support_tile(*it) for it in items)
@@ -144,7 +150,7 @@ def nav(current,dots,stepnav):
     return ('      <div class="silva-breadcrumb">\n'
             '        <a href="/curriculum.html">Curriculum Catalog</a>\n'
             '        <span class="bc-sep">&rsaquo;</span>\n'
-            f'        <a href="{OVER}" class="bc-hide-sm">Motivational Athlete Poster</a>\n'
+            f'        <a href="{OVER}" class="bc-hide-sm">Motivational Poster</a>\n'
             '        <span class="bc-sep bc-hide-sm">&rsaquo;</span>\n'
             f'        <span class="bc-current">{current}</span>\n'
             '      </div>\n'
@@ -189,16 +195,16 @@ def wrap_page(title,nav_inner,top_html,bottom):
 
 VOCAB_EN=[
  ("Resolution (PPI)","Pixels per inch. More resolution means a sharper print. This poster needs 300."),
- ("Select and Mask","The Photoshop tool that cuts your athlete cleanly off their background."),
- ("Layer","A stacked level in Photoshop. Your athlete, logo, background, and text each live on their own layer."),
+ ("Select and Mask","The Photoshop tool that cuts your subject cleanly off their background."),
+ ("Layer","A stacked level in Photoshop. Your subject, background, and text each live on their own layer."),
  ("Motion Blur","A filter that adds fast streaks, so the background looks full of speed and energy."),
  ("Layer Style","Effects you add to a layer, like Outer Glow or Drop Shadow, to make it pop."),
  ("Color Palette","The set of colors you use. Pull them from the photo so the whole poster matches."),
 ]
 VOCAB_ES=[
  ("Resoluci&oacute;n (PPI)","P&iacute;xeles por pulgada. M&aacute;s resoluci&oacute;n significa una impresi&oacute;n m&aacute;s n&iacute;tida. Este p&oacute;ster necesita 300."),
- ("Seleccionar y Aplicar M&aacute;scara","La herramienta de Photoshop que recorta a tu atleta limpiamente de su fondo."),
- ("Capa","Un nivel apilado en Photoshop. Tu atleta, el logo, el fondo y el texto viven cada uno en su propia capa."),
+ ("Seleccionar y Aplicar M&aacute;scara","La herramienta de Photoshop que recorta a tu sujeto limpiamente de su fondo."),
+ ("Capa","Un nivel apilado en Photoshop. Tu sujeto, el fondo y el texto viven cada uno en su propia capa."),
  ("Desenfoque de Movimiento","Un filtro que agrega rayas r&aacute;pidas, para que el fondo se vea lleno de velocidad y energ&iacute;a."),
  ("Estilo de Capa","Efectos que agregas a una capa, como Resplandor Exterior o Sombra, para que resalte."),
  ("Paleta de Colores","El conjunto de colores que usas. S&aacute;calos de la foto para que todo el p&oacute;ster combine."),
@@ -206,11 +212,13 @@ VOCAB_ES=[
 
 # ---------------- OVERVIEW ----------------
 def overview():
-    en=banner("Digital Arts 1A &bull; Photoshop","Motivational Athlete Poster","Design a poster that hypes up your favorite athlete.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Digital Arts 1A &bull; Photoshop","Motivational Poster","Design a poster that hypes up someone who inspires you.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("THE PROJECT / OVERVIEW","What You Will Make",
-        para("You will design a motivational poster of your favorite athlete in Photoshop. You will cut the athlete out of their background, add a bold motion-blurred background behind them, drop in their team logo with a glow, and finish with a real quote the athlete actually said, their name, and colors that all work together. The goal is a clean, hype-worthy poster you would be proud to print and hang up.")
-        + framed(ATHLETE,"Example motivational athlete poster")
-        + note_orange("Your quote must be a real quote your athlete actually said. Choose a font (typeface) for the words that fits the mood and style of your poster."))
+        para("You will design a motivational poster of someone who inspires you, in Photoshop. Your subject can be a real person or a fictional character: an athlete, a musician, a leader, a superhero, anyone who motivates you. You will cut your subject out of their background, add a bold motion-blurred background behind them, and finish with a real quote they actually said, their name, and colors that all work together. The goal is a clean, hype-worthy poster you would be proud to print and hang up.")
+        + framed(EXAMPLE,"Example motivational poster")
+        + note_orange("Keep it school-appropriate. Your subject and everything on the poster must meet school standards: no drugs, alcohol, tobacco, weapons, violence, profanity, or other inappropriate content or characters. If you are unsure whether a choice is appropriate, ask Mr. Silva before you begin.")
+        + note_orange("Your quote must be a real quote your subject actually said. For a fictional character, use a real line from their movie, show, game, or comic. Choose a font (typeface) for the words that fits the mood and style of your poster.")
+        + ec_note("EXTRA CREDIT","Add a logo or symbol connected to your subject (a team logo, a band logo, an emblem) behind them, with a glow or outline. This part is optional."))
     en+=card("QUICK SPECS","Set It Up Right",
         bullets([
             ("Artboard:","8.5 &times; 11 inches, portrait. This is print size."),
@@ -226,18 +234,20 @@ def overview():
         para("Three short Adobe guides for the trickiest parts. Tap a video to open it in a new tab. You can watch them again any time.")
         + support_tiles([
             (TUT_WORK,"Introduction to the Workspace","Get to know the Photoshop workspace: the panels, the tools, and where everything lives.",URL_WORK,"Watch: Workspace &rarr;"),
-            (TUT_SEL,"Introduction to Selections","Learn how to select part of an image. This is the first step to cutting your athlete out.",URL_SEL,"Watch: Selections &rarr;"),
+            (TUT_SEL,"Introduction to Selections","Learn how to select part of an image. This is the first step to cutting your subject out.",URL_SEL,"Watch: Selections &rarr;"),
             (TUT_MASK,"Get to Know Layer Masks","Use layer masks to hide and show parts of a layer without erasing anything.",URL_MASK,"Watch: Layer Masks &rarr;"),
         ]))
-    en+=card("REFLECTION / DOWNLOAD","Get the Reflection Document",
+    en+=card("REFLECTION / DOWNLOAD","Download Reflection Document",
         para("Download the reflection here. Fill it out after your poster is done, then turn it in on Step 03.")
-        + dl_link(REFLECT_EN,"Athlete Poster Reflection (Word)"))
+        + dl_link(REFLECT_EN,"Reflection Document (Word)"))
 
-    es=banner("Arte Digital 1A &bull; Photoshop","P&oacute;ster Motivacional de Atleta","Dise&ntilde;a un p&oacute;ster que anime a tu atleta favorito.","#top","Back to English")
+    es=banner("Arte Digital 1A &bull; Photoshop","P&oacute;ster Motivacional","Dise&ntilde;a un p&oacute;ster que anime a alguien que te inspira.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","Lo Que Vas a Crear",
-        para("Vas a dise&ntilde;ar un p&oacute;ster motivacional de tu atleta favorito en Photoshop. Vas a recortar al atleta de su fondo, agregar un fondo con desenfoque de movimiento detr&aacute;s, colocar el logo de su equipo con un resplandor, y terminar con una frase real que el atleta haya dicho, su nombre y colores que combinen. La meta es un p&oacute;ster limpio y llamativo que te sientas orgulloso de imprimir y colgar.")
-        + framed(ATHLETE,"Ejemplo de p&oacute;ster motivacional de atleta")
-        + note_orange("Tu frase debe ser una frase real que tu atleta haya dicho. Elige un tipo de letra para las palabras que quede con el estilo y el ambiente de tu p&oacute;ster."))
+        para("Vas a dise&ntilde;ar un p&oacute;ster motivacional de alguien que te inspira, en Photoshop. Tu sujeto puede ser una persona real o un personaje de ficci&oacute;n: un atleta, un m&uacute;sico, un l&iacute;der, un superh&eacute;roe, cualquiera que te motive. Vas a recortar a tu sujeto de su fondo, agregar un fondo con desenfoque de movimiento detr&aacute;s, y terminar con una frase real que haya dicho, su nombre y colores que combinen. La meta es un p&oacute;ster limpio y llamativo que te sientas orgulloso de imprimir y colgar.")
+        + framed(EXAMPLE,"Ejemplo de p&oacute;ster motivacional")
+        + note_orange("Mant&eacute;nlo apropiado para la escuela. Tu sujeto y todo lo que est&eacute; en el p&oacute;ster debe cumplir con las normas escolares: nada de drogas, alcohol, tabaco, armas, violencia, groser&iacute;as ni otro contenido o personajes inapropiados. Si no est&aacute;s seguro de si una opci&oacute;n es apropiada, preg&uacute;ntale al Sr. Silva antes de empezar.")
+        + note_orange("Tu frase debe ser una frase real que tu sujeto haya dicho. Para un personaje de ficci&oacute;n, usa una l&iacute;nea real de su pel&iacute;cula, serie, videojuego o c&oacute;mic. Elige un tipo de letra para las palabras que quede con el estilo y el ambiente de tu p&oacute;ster.")
+        + ec_note("CR&Eacute;DITO EXTRA","Agrega un logo o s&iacute;mbolo relacionado con tu sujeto (un logo de equipo, un logo de banda, un emblema) detr&aacute;s de &eacute;l, con un resplandor o contorno. Esta parte es opcional."))
     es+=card("DATOS R&Aacute;PIDOS","Config&uacute;ralo Bien",
         bullets([
             ("Lienzo:","8.5 &times; 11 pulgadas, vertical. Es tama&ntilde;o de impresi&oacute;n."),
@@ -253,23 +263,23 @@ def overview():
         para("Tres gu&iacute;as cortas de Adobe para las partes m&aacute;s dif&iacute;ciles. Toca un video para abrirlo en una pesta&ntilde;a nueva. Puedes verlos las veces que necesites.")
         + support_tiles([
             (TUT_WORK,"Introducci&oacute;n al Espacio de Trabajo","Conoce el espacio de trabajo de Photoshop: los paneles, las herramientas y d&oacute;nde est&aacute; todo.",URL_WORK,"Ver: Espacio de Trabajo &rarr;"),
-            (TUT_SEL,"Introducci&oacute;n a las Selecciones","Aprende a seleccionar parte de una imagen. Es el primer paso para recortar a tu atleta.",URL_SEL,"Ver: Selecciones &rarr;"),
+            (TUT_SEL,"Introducci&oacute;n a las Selecciones","Aprende a seleccionar parte de una imagen. Es el primer paso para recortar a tu sujeto.",URL_SEL,"Ver: Selecciones &rarr;"),
             (TUT_MASK,"Conoce las M&aacute;scaras de Capa","Usa m&aacute;scaras de capa para ocultar y mostrar partes de una capa sin borrar nada.",URL_MASK,"Ver: M&aacute;scaras de Capa &rarr;"),
         ]))
     es+=card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
         para("Descarga la reflexi&oacute;n aqu&iacute;. Ll&eacute;nala cuando termines tu p&oacute;ster y entr&eacute;gala en el Paso 03.")
-        + dl_link(REFLECT_ES,"Reflexi&oacute;n del P&oacute;ster (Word)"))
+        + dl_link(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)"))
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
-    return wrap_page("Motivational Athlete Poster | Digital Arts 1A | PVHS", nav("Overview",dots,stepnav), top_wrap(en,es), bottom)
+    return wrap_page("Motivational Poster | Digital Arts 1A | PVHS", nav("Overview",dots,stepnav), top_wrap(en,es), bottom)
 
 # ---------------- STEP 01 ----------------
 def step01():
     global STEPLBL
     STEPLBL="STEP"
-    en=banner("Motivational Athlete Poster &bull; Step 1","Build the Poster","Set up OneDrive, open Photoshop, then build.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Motivational Poster &bull; Step 1","Build the Poster","Set up OneDrive, open Photoshop, then build.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("BEFORE YOU START / ONEDRIVE","Check OneDrive and Make Your Folder",
         para("Do this first, every time. It keeps your work saving to the cloud so you never lose it.")
         + stepblock(1,"Check OneDrive Is Syncing","Look at the menu bar in the top-right corner of the screen, next to the date and time. Find the OneDrive cloud icon. A steady gray or blue cloud means it is syncing. If the cloud has a red X or a warning sign, click it and sign in with your school account to clear the error before you go on.")
@@ -294,32 +304,32 @@ def step01():
             ("Rectangular Marquee tool:","looks like a <strong>dotted rectangle</strong>. It draws a box-shaped selection. Shortcut key: <strong>M</strong>."),
             ("Type tool:","looks like a capital <strong>T</strong>. It adds words. Shortcut key: <strong>T</strong>."),
             ("Eyedropper tool:","looks like a small <strong>eyedropper</strong>. It grabs a color from your photo. Shortcut key: <strong>I</strong>."),
-            ("Layers panel (lower right):","every part of your poster (photo, cut-out athlete, logo, words) sits on its own <strong>layer</strong>, stacked like clear sheets. The top layer shows in front."),
+            ("Layers panel (lower right):","every part of your poster (photo, cut-out subject, words) sits on its own <strong>layer</strong>, stacked like clear sheets. The top layer shows in front."),
             ("The eye icon:","click the little <strong>eye</strong> to the left of a layer to HIDE it; click again to SHOW it. This is how you turn layers on and off."),
             ("Selecting a layer:","click a layer once to select it. Whatever you do next happens to THAT layer, so always check which one is highlighted."),
         ]))
-    en+=card("BUILD YOUR POSTER","Cut Out, Blur, Glow, Finish",
+    en+=card("BUILD YOUR POSTER","Cut Out, Blur, Finish",
         para("Now build the poster. Work through the steps in order. Take your time.")
         + scrollbox(9,
-          stepblock(10,"Find Your Athlete Photo","Go to Google Images and search your athlete&rsquo;s name. Click <strong>Tools</strong>, set <strong>Size</strong> to <strong>Large</strong>, and pick a sharp, high-resolution photo. Save it. High resolution matters because this is print size.")
-        + stepblock(11,"Bring the Photo In, Then Rasterize","In Photoshop, go to <strong>File &gt; Place Embedded</strong>, pick your athlete photo, and press Return to drop it in. It arrives as a <strong>Smart Object</strong>, which blocks many edits. Right-click the new layer and choose <strong>Rasterize Layer</strong> so filters and Select and Mask will work.")
+          stepblock(10,"Find Your Subject's Photo","Go to Google Images and search your subject&rsquo;s name. Click <strong>Tools</strong>, set <strong>Size</strong> to <strong>Large</strong>, and pick a sharp, high-resolution photo. Save it. High resolution matters because this is print size.")
+        + stepblock(11,"Bring the Photo In, Then Rasterize","In Photoshop, go to <strong>File &gt; Place Embedded</strong>, pick your subject&rsquo;s photo, and press Return to drop it in. It arrives as a <strong>Smart Object</strong>, which blocks many edits. Right-click the new layer and choose <strong>Rasterize Layer</strong> so filters and Select and Mask will work.")
         + framed(FIX_RASTER,"Right-click the layer and choose Rasterize Layer",maxw="340px")
-        + stepblock(12,"Recrop First, Then Cut Out","<strong>Important:</strong> recrop the photo first so Select Subject lines up. Pick the <strong>Rectangular Marquee tool (M)</strong>, press <strong>Command + A</strong> to Select All, then go to <strong>Image &gt; Crop</strong>. If you skip this, the mask will be off. Now click <strong>Select &gt; Subject</strong> to grab your athlete, then click <strong>Select and Mask</strong>. Press <strong>V</strong> to set the View to <strong>Overlay</strong>, the red view, so your selection is easy to see. Clean the edges with the brush. At the bottom, set <strong>Output To: New Layer</strong>.")
+        + stepblock(12,"Recrop First, Then Cut Out","<strong>Important:</strong> recrop the photo first so Select Subject lines up. Pick the <strong>Rectangular Marquee tool (M)</strong>, press <strong>Command + A</strong> to Select All, then go to <strong>Image &gt; Crop</strong>. If you skip this, the mask will be off. Now click <strong>Select &gt; Subject</strong> to grab your subject, then click <strong>Select and Mask</strong>. Press <strong>V</strong> to set the View to <strong>Overlay</strong>, the red view, so your selection is easy to see. Clean the edges with the brush. At the bottom, set <strong>Output To: New Layer</strong>.")
         + framed(FIX_SMVIEW,"Press V for the Overlay (red) view",maxw="290px")
         + framed(FIX_OUTPUT,"Set Output To: New Layer",maxw="360px")
-        + stepblock(13,"Blur the Background","In the <strong>Layers</strong> panel on the right, click the <strong>eye</strong> next to the original photo layer to turn it back ON, then click that layer once to select it (it sits under your cut-out athlete). Go to <strong>Filter &gt; Blur</strong> and pick the ONE that best fits your image: <strong>Motion Blur</strong> (speed streaks), <strong>Gaussian Blur</strong> (soft and dreamy), or <strong>Radial Blur</strong> (a zoom or a spin). Move the sliders, then click OK. Do not like it? Press <strong>Command + Z</strong> to undo and try another.")
+        + stepblock(13,"Blur the Background","In the <strong>Layers</strong> panel on the right, click the <strong>eye</strong> next to the original photo layer to turn it back ON, then click that layer once to select it (it sits under your cut-out subject). Go to <strong>Filter &gt; Blur</strong> and pick the ONE that best fits your image: <strong>Motion Blur</strong> (speed streaks), <strong>Gaussian Blur</strong> (soft and dreamy), or <strong>Radial Blur</strong> (a zoom or a spin). Move the sliders, then click OK. Do not like it? Press <strong>Command + Z</strong> to undo and try another.")
         + framed(FIX_BLUR,"Filter &gt; Blur: pick Motion, Gaussian, or Radial",maxw="400px")
-        + stepblock(14,"Add the Team Logo","Find your athlete&rsquo;s team or organization logo online in high resolution and save it. Bring it in with <strong>File &gt; Place Embedded</strong>. It lands on its own <strong>layer</strong>. In the Layers panel, <strong>drag</strong> that layer so it sits between your athlete and the blurred background.")
-        + stepblock(15,"Make It Pop with Layer Styles","<strong>Layer Styles</strong> are effects you add to one layer. In the Layers panel, <strong>double-click</strong> just to the right of your logo layer&rsquo;s name to open the <strong>Layer Style</strong> window. Turn on one or more: <strong>Outer Glow</strong> (a glow around the edges), <strong>Stroke</strong> (an outline), or <strong>Drop Shadow</strong> (a shadow behind it). You can combine them. Click OK. You can add these to your words too.")
-        + stepblock(16,"Add Your Words","Find the <strong>Type tool</strong> in the Tools panel on the left: it looks like a capital <strong>T</strong> (or press <strong>T</strong>). Click and <strong>drag a box</strong> on your poster, then type your <strong>real quote</strong>. Draw another box for your athlete&rsquo;s name. In the bar at the top, pick a <strong>font (typeface)</strong> that fits your poster and make the size big enough to read. Tip: add Layer Styles (Step 15) to your text so it stands out.")
-        + stepblock(17,"Match Your Colors","Find the <strong>Eyedropper tool</strong> in the left Tools panel (it looks like an eyedropper, or press <strong>I</strong>). Click a color inside your photo to grab it. Then, with your text layer selected, use that color for your words so the whole poster matches.")
+        + stepblock(14,"Add Your Words","Find the <strong>Type tool</strong> in the Tools panel on the left: it looks like a capital <strong>T</strong> (or press <strong>T</strong>). Click and <strong>drag a box</strong> on your poster, then type your <strong>real quote</strong>. Draw another box for your subject&rsquo;s name. In the bar at the top, pick a <strong>font (typeface)</strong> that fits your poster and make the size big enough to read.")
+        + stepblock(15,"Make It Pop with Layer Styles","<strong>Layer Styles</strong> are effects you add to one layer. In the Layers panel, <strong>double-click</strong> just to the right of a layer&rsquo;s name (start with your text layer) to open the <strong>Layer Style</strong> window. Turn on one or more: <strong>Outer Glow</strong> (a glow around the edges), <strong>Stroke</strong> (an outline), or <strong>Drop Shadow</strong> (a shadow behind it). You can combine them. Click OK.")
+        + stepblock(16,"Match Your Colors","Find the <strong>Eyedropper tool</strong> in the left Tools panel (it looks like an eyedropper, or press <strong>I</strong>). Click a color inside your photo to grab it. Then, with your text layer selected, use that color for your words so the whole poster matches.")
+        + stepblock(17,"Extra Credit: Add a Logo or Symbol","<strong>Optional, for extra credit.</strong> Find a logo or symbol connected to your subject (a team logo, a band logo, an emblem) in high resolution and save it. Bring it in with <strong>File &gt; Place Embedded</strong>. It lands on its own <strong>layer</strong>. In the Layers panel, <strong>drag</strong> that layer so it sits between your subject and the blurred background. Give it a <strong>Layer Style</strong> (Step 15) like an Outer Glow so it stands out.")
         + stepblock(18,"Flatten and Export","When you are happy, go to <strong>Layer &gt; Flatten Image</strong>. Then <strong>File &gt; Export &gt; Export As</strong>, choose <strong>JPG</strong>, and save it into your Motivational Poster folder. That JPG is what you turn in.")))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
         [("1 poster:","your final flattened poster, saved as a JPG, uploaded to this Canvas assignment.")])
     en+=note_orange("Your poster must be your own original work. Be honest and turn in your own design.")
 
     STEPLBL="PASO"
-    es=banner("P&oacute;ster Motivacional de Atleta &bull; Paso 1","Construye el P&oacute;ster","Configura OneDrive, abre Photoshop y construye.","#top","Back to English")
+    es=banner("P&oacute;ster Motivacional &bull; Paso 1","Construye el P&oacute;ster","Configura OneDrive, abre Photoshop y construye.","#top","Back to English")
     es+=card("ANTES DE EMPEZAR / ONEDRIVE","Revisa OneDrive y Crea Tu Carpeta",
         para("Haz esto primero, cada vez. Mantiene tu trabajo guard&aacute;ndose en la nube para que nunca lo pierdas.")
         + stepblock(1,"Revisa que OneDrive Est&eacute; Sincronizando","Mira la barra de men&uacute;s en la esquina superior derecha de la pantalla, junto a la fecha y la hora. Busca el &iacute;cono de nube de OneDrive. Una nube gris o azul fija significa que est&aacute; sincronizando. Si la nube tiene una X roja o un signo de advertencia, haz clic en ella e inicia sesi&oacute;n con tu cuenta escolar para quitar el error antes de seguir.")
@@ -344,25 +354,25 @@ def step01():
             ("Herramienta Marco Rectangular:","parece un <strong>rect&aacute;ngulo punteado</strong>. Dibuja una selecci&oacute;n en forma de caja. Atajo: <strong>M</strong>."),
             ("Herramienta Texto:","parece una <strong>T</strong> may&uacute;scula. Agrega palabras. Atajo: <strong>T</strong>."),
             ("Herramienta Cuentagotas:","parece un <strong>cuentagotas</strong> peque&ntilde;o. Toma un color de tu foto. Atajo: <strong>I</strong>."),
-            ("Panel de Capas (abajo a la derecha):","cada parte de tu p&oacute;ster (foto, atleta recortado, logo, palabras) va en su propia <strong>capa</strong>, apiladas como hojas transparentes. La capa de arriba se ve al frente."),
+            ("Panel de Capas (abajo a la derecha):","cada parte de tu p&oacute;ster (foto, sujeto recortado, palabras) va en su propia <strong>capa</strong>, apiladas como hojas transparentes. La capa de arriba se ve al frente."),
             ("El &iacute;cono del ojo:","haz clic en el <strong>ojo</strong> a la izquierda de una capa para OCULTARLA; haz clic otra vez para MOSTRARLA. As&iacute; enciendes y apagas las capas."),
             ("Seleccionar una capa:","haz clic una vez en una capa para elegirla. Lo que hagas despu&eacute;s le pasa a ESA capa, revisa siempre cu&aacute;l est&aacute; marcada."),
         ]))
-    es+=card("CONSTRUYE TU P&Oacute;STER","Recorta, Desenfoca, Resplandor, Termina",
+    es+=card("CONSTRUYE TU P&Oacute;STER","Recorta, Desenfoca, Termina",
         para("Ahora construye el p&oacute;ster. Ve paso a paso, en orden. T&oacute;mate tu tiempo.")
         + scrollbox(9,
-          stepblock(10,"Busca la Foto de Tu Atleta","Ve a Google Im&aacute;genes y busca el nombre de tu atleta. Haz clic en <strong>Herramientas</strong>, pon <strong>Tama&ntilde;o</strong> en <strong>Grande</strong>, y elige una foto n&iacute;tida y de alta resoluci&oacute;n. Gu&aacute;rdala. La alta resoluci&oacute;n importa porque es tama&ntilde;o de impresi&oacute;n.")
-        + stepblock(11,"Trae la Foto y Rasteriza","En Photoshop, ve a <strong>Archivo &gt; Colocar Incrustado</strong>, elige la foto de tu atleta y presiona Return para colocarla. Llega como <strong>Objeto Inteligente</strong>, que bloquea muchas ediciones. Haz clic derecho en la capa nueva y elige <strong>Rasterizar Capa</strong> para que funcionen los filtros y Seleccionar y Aplicar M&aacute;scara.")
+          stepblock(10,"Busca la Foto de Tu Sujeto","Ve a Google Im&aacute;genes y busca el nombre de tu sujeto. Haz clic en <strong>Herramientas</strong>, pon <strong>Tama&ntilde;o</strong> en <strong>Grande</strong>, y elige una foto n&iacute;tida y de alta resoluci&oacute;n. Gu&aacute;rdala. La alta resoluci&oacute;n importa porque es tama&ntilde;o de impresi&oacute;n.")
+        + stepblock(11,"Trae la Foto y Rasteriza","En Photoshop, ve a <strong>Archivo &gt; Colocar Incrustado</strong>, elige la foto de tu sujeto y presiona Return para colocarla. Llega como <strong>Objeto Inteligente</strong>, que bloquea muchas ediciones. Haz clic derecho en la capa nueva y elige <strong>Rasterizar Capa</strong> para que funcionen los filtros y Seleccionar y Aplicar M&aacute;scara.")
         + framed(FIX_RASTER,"Haz clic derecho en la capa y elige Rasterizar Capa",maxw="340px")
-        + stepblock(12,"Reencuadra Primero, Luego Recorta","<strong>Importante:</strong> reencuadra la foto primero para que Seleccionar Sujeto quede bien. Elige la <strong>herramienta Marco Rectangular (M)</strong>, presiona <strong>Command + A</strong> para Seleccionar Todo, luego ve a <strong>Imagen &gt; Recortar</strong>. Si te saltas esto, la m&aacute;scara quedar&aacute; mal. Ahora haz clic en <strong>Seleccionar &gt; Sujeto</strong> para tomar a tu atleta, luego haz clic en <strong>Seleccionar y Aplicar M&aacute;scara</strong>. Presiona <strong>V</strong> para poner la Vista en <strong>Superposici&oacute;n</strong>, la vista roja, para ver bien tu selecci&oacute;n. Limpia los bordes con el pincel. Abajo, pon <strong>Salida a: Nueva Capa</strong>.")
+        + stepblock(12,"Reencuadra Primero, Luego Recorta","<strong>Importante:</strong> reencuadra la foto primero para que Seleccionar Sujeto quede bien. Elige la <strong>herramienta Marco Rectangular (M)</strong>, presiona <strong>Command + A</strong> para Seleccionar Todo, luego ve a <strong>Imagen &gt; Recortar</strong>. Si te saltas esto, la m&aacute;scara quedar&aacute; mal. Ahora haz clic en <strong>Seleccionar &gt; Sujeto</strong> para tomar a tu sujeto, luego haz clic en <strong>Seleccionar y Aplicar M&aacute;scara</strong>. Presiona <strong>V</strong> para poner la Vista en <strong>Superposici&oacute;n</strong>, la vista roja, para ver bien tu selecci&oacute;n. Limpia los bordes con el pincel. Abajo, pon <strong>Salida a: Nueva Capa</strong>.")
         + framed(FIX_SMVIEW,"Presiona V para la vista Superposici&oacute;n (roja)",maxw="290px")
         + framed(FIX_OUTPUT,"Pon Salida a: Nueva Capa",maxw="360px")
-        + stepblock(13,"Desenfoca el Fondo","En el panel de <strong>Capas</strong> a la derecha, haz clic en el <strong>ojo</strong> junto a la capa original de la foto para ENCENDERLA, luego haz clic una vez en esa capa para seleccionarla (va debajo de tu atleta recortado). Ve a <strong>Filtro &gt; Desenfocar</strong> y elige el que MEJOR quede con tu imagen: Desenfoque de <strong>Movimiento</strong> (rayas de velocidad), <strong>Gaussiano</strong> (suave y so&ntilde;ador) o <strong>Radial</strong> (un zoom o giro). Mueve los deslizadores y haz clic en OK. &iquest;No te gusta? Presiona <strong>Command + Z</strong> para deshacer y prueba otro.")
+        + stepblock(13,"Desenfoca el Fondo","En el panel de <strong>Capas</strong> a la derecha, haz clic en el <strong>ojo</strong> junto a la capa original de la foto para ENCENDERLA, luego haz clic una vez en esa capa para seleccionarla (va debajo de tu sujeto recortado). Ve a <strong>Filtro &gt; Desenfocar</strong> y elige el que MEJOR quede con tu imagen: Desenfoque de <strong>Movimiento</strong> (rayas de velocidad), <strong>Gaussiano</strong> (suave y so&ntilde;ador) o <strong>Radial</strong> (un zoom o giro). Mueve los deslizadores y haz clic en OK. &iquest;No te gusta? Presiona <strong>Command + Z</strong> para deshacer y prueba otro.")
         + framed(FIX_BLUR,"Filtro &gt; Desenfocar: elige Movimiento, Gaussiano o Radial",maxw="400px")
-        + stepblock(14,"Agrega el Logo del Equipo","Busca el logo del equipo u organizaci&oacute;n de tu atleta en alta resoluci&oacute;n y gu&aacute;rdalo. Tr&aacute;elo con <strong>Archivo &gt; Colocar Incrustado</strong>. Llega en su propia <strong>capa</strong>. En el panel de Capas, <strong>arrastra</strong> esa capa para que quede entre tu atleta y el fondo desenfocado.")
-        + stepblock(15,"Haz que Resalte con Estilos de Capa","Los <strong>Estilos de Capa</strong> son efectos que agregas a una capa. En el panel de Capas, <strong>haz doble clic</strong> justo a la derecha del nombre de la capa del logo para abrir la ventana de <strong>Estilo de Capa</strong>. Activa uno o m&aacute;s: <strong>Resplandor Exterior</strong> (un brillo en los bordes), <strong>Trazo</strong> (un contorno) o <strong>Sombra Paralela</strong> (una sombra detr&aacute;s). Puedes combinarlos. Haz clic en OK. Tambi&eacute;n puedes agregarlos a tus palabras.")
-        + stepblock(16,"Agrega Tus Palabras","Busca la <strong>herramienta Texto</strong> en el panel de Herramientas a la izquierda: parece una <strong>T</strong> may&uacute;scula (o presiona <strong>T</strong>). Haz clic y <strong>arrastra una caja</strong> en tu p&oacute;ster, luego escribe tu <strong>frase real</strong>. Dibuja otra caja para el nombre de tu atleta. En la barra de arriba, elige un <strong>tipo de letra</strong> que quede con tu p&oacute;ster y haz el tama&ntilde;o grande para que se lea. Consejo: agrega Estilos de Capa (Paso 15) a tus palabras para que resalten.")
-        + stepblock(17,"Combina Tus Colores","Busca la <strong>herramienta Cuentagotas</strong> en el panel de Herramientas a la izquierda (parece un cuentagotas, o presiona <strong>I</strong>). Haz clic en un color dentro de tu foto para tomarlo. Luego, con tu capa de texto seleccionada, usa ese color en tus palabras para que todo el p&oacute;ster combine.")
+        + stepblock(14,"Agrega Tus Palabras","Busca la <strong>herramienta Texto</strong> en el panel de Herramientas a la izquierda: parece una <strong>T</strong> may&uacute;scula (o presiona <strong>T</strong>). Haz clic y <strong>arrastra una caja</strong> en tu p&oacute;ster, luego escribe tu <strong>frase real</strong>. Dibuja otra caja para el nombre de tu sujeto. En la barra de arriba, elige un <strong>tipo de letra</strong> que quede con tu p&oacute;ster y haz el tama&ntilde;o grande para que se lea.")
+        + stepblock(15,"Haz que Resalte con Estilos de Capa","Los <strong>Estilos de Capa</strong> son efectos que agregas a una capa. En el panel de Capas, <strong>haz doble clic</strong> justo a la derecha del nombre de una capa (empieza con tu capa de texto) para abrir la ventana de <strong>Estilo de Capa</strong>. Activa uno o m&aacute;s: <strong>Resplandor Exterior</strong> (un brillo en los bordes), <strong>Trazo</strong> (un contorno) o <strong>Sombra Paralela</strong> (una sombra detr&aacute;s). Puedes combinarlos. Haz clic en OK.")
+        + stepblock(16,"Combina Tus Colores","Busca la <strong>herramienta Cuentagotas</strong> en el panel de Herramientas a la izquierda (parece un cuentagotas, o presiona <strong>I</strong>). Haz clic en un color dentro de tu foto para tomarlo. Luego, con tu capa de texto seleccionada, usa ese color en tus palabras para que todo el p&oacute;ster combine.")
+        + stepblock(17,"Cr&eacute;dito Extra: Agrega un Logo o S&iacute;mbolo","<strong>Opcional, para cr&eacute;dito extra.</strong> Busca un logo o s&iacute;mbolo relacionado con tu sujeto (un logo de equipo, un logo de banda, un emblema) en alta resoluci&oacute;n y gu&aacute;rdalo. Tr&aacute;elo con <strong>Archivo &gt; Colocar Incrustado</strong>. Llega en su propia <strong>capa</strong>. En el panel de Capas, <strong>arrastra</strong> esa capa para que quede entre tu sujeto y el fondo desenfocado. Dale un <strong>Estilo de Capa</strong> (Paso 15) como un Resplandor Exterior para que resalte.")
         + stepblock(18,"Aplana y Exporta","Cuando est&eacute;s contento, ve a <strong>Capa &gt; Acoplar Imagen</strong>. Luego <strong>Archivo &gt; Exportar &gt; Exportar Como</strong>, elige <strong>JPG</strong> y gu&aacute;rdalo en tu carpeta Motivational Poster. Ese JPG es lo que entregas.")))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
         [("1 p&oacute;ster:","tu p&oacute;ster final aplanado, guardado como JPG, subido a esta tarea de Canvas.")])
@@ -371,13 +381,13 @@ def step01():
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
-    return wrap_page("Step 1: Build | Motivational Athlete Poster | Digital Arts 1A | PVHS", nav("Step 01",dots,stepnav), top_wrap(en,es), bottom)
+    return wrap_page("Step 1: Build | Motivational Poster | Digital Arts 1A | PVHS", nav("Step 01",dots,stepnav), top_wrap(en,es), bottom)
 
 # ---------------- STEP 02 (MOBILE) ----------------
 def step02():
     global STEPLBL
     STEPLBL="STEP"
-    en=banner("Motivational Athlete Poster &bull; Step 2","Make the Mobile Version","Remake your poster to fit a phone screen.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Motivational Poster &bull; Step 2","Make the Mobile Version","Remake your poster to fit a phone screen.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("BEFORE YOU START / ONEDRIVE","Same Folder, New Size",
         para("You already made the print poster. Now make a second version, sized for a phone screen.")
         + stepblock(1,"Check OneDrive Is Syncing","Look at the OneDrive cloud icon in the top-right menu bar, next to the clock. If it shows a red X or a warning, click it and sign in with your school account to clear it.")
@@ -391,11 +401,11 @@ def step02():
     en+=card("REBUILD FOR THE PHONE","Same Steps, Tall Layout",
         para("You know the tools now. Build the same poster, but arrange it for a tall, narrow phone screen.")
         + scrollbox(5,
-          stepblock(6,"Bring In and Rasterize","Go to <strong>File &gt; Place Embedded</strong> and drop in your athlete photo. Right-click the layer and choose <strong>Rasterize Layer</strong>, just like Step 1.")
+          stepblock(6,"Bring In and Rasterize","Go to <strong>File &gt; Place Embedded</strong> and drop in your subject&rsquo;s photo. Right-click the layer and choose <strong>Rasterize Layer</strong>, just like Step 1.")
         + stepblock(7,"Recrop, Then Cut Out","<strong>First recrop</strong> so Select Subject lines up: <strong>Rectangular Marquee (M)</strong>, <strong>Command + A</strong>, then <strong>Image &gt; Crop</strong> (skip it and the mask will be off). Then use <strong>Select &gt; Subject</strong> and <strong>Select and Mask</strong>. Press <strong>V</strong> for the red Overlay view, clean the edges, and set <strong>Output To: New Layer</strong>.")
-        + stepblock(8,"Blur the Background","Behind your athlete, go to <strong>Filter &gt; Blur</strong> and pick the one that fits your image: <strong>Motion</strong>, <strong>Gaussian</strong>, or <strong>Radial</strong> Blur. Adjust it and click OK.")
-        + stepblock(9,"Logo and Words","Add the team logo with an <strong>Outer Glow</strong>. Add your <strong>real quote</strong> and your athlete&rsquo;s name with the <strong>Type tool (T)</strong>, in a <strong>font</strong> that fits the style.")
-        + stepblock(10,"Arrange It Tall","The phone screen is narrow and very tall. Stack your athlete and your words up and down and fill the whole screen. Leave a little space at the very top and bottom for the phone&rsquo;s clock and home bar.")))
+        + stepblock(8,"Blur the Background","Behind your subject, go to <strong>Filter &gt; Blur</strong> and pick the one that fits your image: <strong>Motion</strong>, <strong>Gaussian</strong>, or <strong>Radial</strong> Blur. Adjust it and click OK.")
+        + stepblock(9,"Add Your Words","Add your <strong>real quote</strong> and your subject&rsquo;s name with the <strong>Type tool (T)</strong>, in a <strong>font</strong> that fits the style. Tip: add Layer Styles like an Outer Glow so the words stand out. For extra credit, add a logo or symbol behind your subject.")
+        + stepblock(10,"Arrange It Tall","The phone screen is narrow and very tall. Stack your subject and your words up and down and fill the whole screen. Leave a little space at the very top and bottom for the phone&rsquo;s clock and home bar.")))
     en+=card("TURN IT IN","Flatten and Export",
         stepblock(11,"Export as JPG","When you are happy, go to <strong>Layer &gt; Flatten Image</strong>, then <strong>File &gt; Export &gt; Export As</strong>, choose <strong>JPG</strong>, and save it into your Motivational Poster folder."))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
@@ -403,7 +413,7 @@ def step02():
     en+=note_orange("This is your own second version. Be honest and turn in your own design.")
 
     STEPLBL="PASO"
-    es=banner("P&oacute;ster Motivacional de Atleta &bull; Paso 2","Haz la Versi&oacute;n M&oacute;vil","Rehaz tu p&oacute;ster para que quepa en la pantalla de un tel&eacute;fono.","#top","Back to English")
+    es=banner("P&oacute;ster Motivacional &bull; Paso 2","Haz la Versi&oacute;n M&oacute;vil","Rehaz tu p&oacute;ster para que quepa en la pantalla de un tel&eacute;fono.","#top","Back to English")
     es+=card("ANTES DE EMPEZAR / ONEDRIVE","Misma Carpeta, Nuevo Tama&ntilde;o",
         para("Ya hiciste el p&oacute;ster para imprimir. Ahora haz una segunda versi&oacute;n, del tama&ntilde;o de una pantalla de tel&eacute;fono.")
         + stepblock(1,"Revisa que OneDrive Est&eacute; Sincronizando","Mira el &iacute;cono de nube de OneDrive en la barra de men&uacute;s arriba a la derecha, junto al reloj. Si muestra una X roja o una advertencia, haz clic e inicia sesi&oacute;n con tu cuenta escolar para quitarla.")
@@ -417,11 +427,11 @@ def step02():
     es+=card("RECONSTRUYE PARA EL TEL&Eacute;FONO","Mismos Pasos, Dise&ntilde;o Alto",
         para("Ya conoces las herramientas. Haz el mismo p&oacute;ster, pero acom&oacute;dalo para una pantalla de tel&eacute;fono alta y angosta.")
         + scrollbox(5,
-          stepblock(6,"Trae y Rasteriza","Ve a <strong>Archivo &gt; Colocar Incrustado</strong> y coloca la foto de tu atleta. Haz clic derecho en la capa y elige <strong>Rasterizar Capa</strong>, igual que en el Paso 1.")
+          stepblock(6,"Trae y Rasteriza","Ve a <strong>Archivo &gt; Colocar Incrustado</strong> y coloca la foto de tu sujeto. Haz clic derecho en la capa y elige <strong>Rasterizar Capa</strong>, igual que en el Paso 1.")
         + stepblock(7,"Reencuadra, Luego Recorta","<strong>Primero reencuadra</strong> para que Seleccionar Sujeto quede bien: <strong>Marco Rectangular (M)</strong>, <strong>Command + A</strong>, luego <strong>Imagen &gt; Recortar</strong> (si te lo saltas, la m&aacute;scara quedar&aacute; mal). Luego usa <strong>Seleccionar &gt; Sujeto</strong> y <strong>Seleccionar y Aplicar M&aacute;scara</strong>. Presiona <strong>V</strong> para la vista roja Superposici&oacute;n, limpia los bordes y pon <strong>Salida a: Nueva Capa</strong>.")
-        + stepblock(8,"Desenfoca el Fondo","Detr&aacute;s de tu atleta, ve a <strong>Filtro &gt; Desenfocar</strong> y elige el que quede con tu imagen: Desenfoque de <strong>Movimiento</strong>, <strong>Gaussiano</strong> o <strong>Radial</strong>. Aj&uacute;stalo y haz clic en OK.")
-        + stepblock(9,"Logo y Palabras","Agrega el logo del equipo con un <strong>Resplandor Exterior</strong>. Agrega tu <strong>frase real</strong> y el nombre de tu atleta con la <strong>herramienta Texto (T)</strong>, en un <strong>tipo de letra</strong> que quede con el estilo.")
-        + stepblock(10,"Acom&oacute;dalo Alto","La pantalla del tel&eacute;fono es angosta y muy alta. Apila a tu atleta y tus palabras de arriba a abajo y llena toda la pantalla. Deja un poco de espacio arriba y abajo para el reloj y la barra de inicio del tel&eacute;fono.")))
+        + stepblock(8,"Desenfoca el Fondo","Detr&aacute;s de tu sujeto, ve a <strong>Filtro &gt; Desenfocar</strong> y elige el que quede con tu imagen: Desenfoque de <strong>Movimiento</strong>, <strong>Gaussiano</strong> o <strong>Radial</strong>. Aj&uacute;stalo y haz clic en OK.")
+        + stepblock(9,"Agrega Tus Palabras","Agrega tu <strong>frase real</strong> y el nombre de tu sujeto con la <strong>herramienta Texto (T)</strong>, en un <strong>tipo de letra</strong> que quede con el estilo. Consejo: agrega Estilos de Capa como un Resplandor Exterior para que las palabras resalten. Para cr&eacute;dito extra, agrega un logo o s&iacute;mbolo detr&aacute;s de tu sujeto.")
+        + stepblock(10,"Acom&oacute;dalo Alto","La pantalla del tel&eacute;fono es angosta y muy alta. Apila a tu sujeto y tus palabras de arriba a abajo y llena toda la pantalla. Deja un poco de espacio arriba y abajo para el reloj y la barra de inicio del tel&eacute;fono.")))
     es+=card("ENTR&Eacute;GALO","Aplana y Exporta",
         stepblock(11,"Exporta como JPG","Cuando est&eacute;s contento, ve a <strong>Capa &gt; Acoplar Imagen</strong>, luego <strong>Archivo &gt; Exportar &gt; Exportar Como</strong>, elige <strong>JPG</strong> y gu&aacute;rdalo en tu carpeta Motivational Poster."))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
@@ -431,13 +441,13 @@ def step02():
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
-    return wrap_page("Step 2: Mobile Version | Motivational Athlete Poster | Digital Arts 1A | PVHS", nav("Step 02",dots,stepnav), top_wrap(en,es), bottom)
+    return wrap_page("Step 2: Mobile Version | Motivational Poster | Digital Arts 1A | PVHS", nav("Step 02",dots,stepnav), top_wrap(en,es), bottom)
 
 # ---------------- STEP 03 (REFLECTION) ----------------
 def step03():
     global STEPLBL
     STEPLBL="STEP"
-    en=banner("Motivational Athlete Poster &bull; Step 3","Turn In Your Reflection","Answer four quick questions about your poster.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Motivational Poster &bull; Step 3","Turn In Your Reflection","Answer four quick questions about your poster.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
         para("Finish the project with a short reflection. It asks who you chose, the font you picked, the hardest part, and what you enjoyed.")
         + note_orange("The reflection Word document is on the Overview page. Open the Overview to download it.")
@@ -451,7 +461,7 @@ def step03():
     en+=note_orange("Answer honestly, in your own words.")
 
     STEPLBL="PASO"
-    es=banner("P&oacute;ster Motivacional de Atleta &bull; Paso 3","Entrega Tu Reflexi&oacute;n","Contesta cuatro preguntas cortas sobre tu p&oacute;ster.","#top","Back to English")
+    es=banner("P&oacute;ster Motivacional &bull; Paso 3","Entrega Tu Reflexi&oacute;n","Contesta cuatro preguntas cortas sobre tu p&oacute;ster.","#top","Back to English")
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         para("Termina el proyecto con una reflexi&oacute;n corta. Pregunta a qui&eacute;n elegiste, el tipo de letra que usaste, la parte m&aacute;s dif&iacute;cil y qu&eacute; disfrutaste.")
         + note_orange("El documento de Word de la reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen. Abre el Resumen para descargarlo.")
@@ -467,7 +477,7 @@ def step03():
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot("",'3',"Step 03",True)
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'
-    return wrap_page("Step 3: Reflection | Motivational Athlete Poster | Digital Arts 1A | PVHS", nav("Step 03",dots,stepnav), top_wrap(en,es), bottom)
+    return wrap_page("Step 3: Reflection | Motivational Poster | Digital Arts 1A | PVHS", nav("Step 03",dots,stepnav), top_wrap(en,es), bottom)
 
 for fname,gen in [(OVER,overview),(S1,step01),(S2,step02),(S3,step03)]:
     html=ent(gen())
