@@ -5,7 +5,8 @@ import os, re
 SITE="https://www.creativesilva.com"
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 IMG=f"{SITE}/assets/images/photo2/studio-session"
-HEADER=f"{IMG}/studio-header.jpg"
+HEADER=f"{IMG}/studio-header-v2.png"
+EDIT_EXAMPLE=f"{IMG}/studio-header.jpg"
 GDRIVE="https://drive.google.com/drive/folders/1sqOMXOYG0FhDJ3519k2DaXWQsawsvIqO?usp=sharing"
 PRESETS=f"{SITE}/assets/PVHS_Contact_Sheet_Presets.zip"
 REFLECT_EN=f"{SITE}/assets/course-documents/Studio-Session-Reflection-EN.docx"
@@ -59,6 +60,11 @@ def note_orange(t):
 def framed(src,alt,maxw=None):
     mw=f'max-width:{maxw};' if maxw else ''
     return f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;{mw}"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
+
+def float_right(src,alt,cap):
+    return ('<div style="float:right;width:40%;min-width:230px;margin:0 0 14px 22px;">'
+      f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
+      f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div></div>')
 
 STEPLBL="STEP"
 def stepblock(n,title,body):
@@ -155,7 +161,7 @@ def overview():
     en=banner("Photography 2A &bull; Studio Session","Studio Session","Photograph the Panther of the Quarter honorees.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("THE PROJECT / OVERVIEW","Panther of the Quarter Portraits",
         para("Our studio is hosting the Panther of the Quarter (POTQ) honorees. There are 20 honorees to photograph for the school newsletter. For each honoree you will create a waist-up portrait and a shoulder-up headshot in our studio, then edit the results to a professional finish.")
-        + framed(HEADER,"A raw studio portrait next to the edited, retouched version"))
+        + framed(HEADER,"A three-person student crew photographing a Panther of the Quarter honoree in the studio"))
     en+=card("YOUR CREW / THREE ROLES","Work as a Team of Three",
         para("You will work in groups of three and rotate through three professional roles. Each group photographs one or two of the 20 honorees, and then each person edits the images their group captured.")
         + bullets([
@@ -180,7 +186,7 @@ def overview():
     es=banner("Fotograf&iacute;a 2A &bull; Sesi&oacute;n de Estudio","Sesi&oacute;n de Estudio","Fotograf&iacute;a a los honorados Pantera del Trimestre.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","Retratos de la Pantera del Trimestre",
         para("Nuestro estudio recibe a los honorados de la Pantera del Trimestre (POTQ). Hay 20 honorados que fotografiar para el bolet&iacute;n de la escuela. Para cada honorado crear&aacute;s un retrato de cintura para arriba y un retrato de hombros para arriba (headshot) en nuestro estudio, y luego editar&aacute;s los resultados con un acabado profesional.")
-        + framed(HEADER,"Un retrato de estudio sin editar junto a la versi&oacute;n editada y retocada"))
+        + framed(HEADER,"Un equipo de tres estudiantes fotografiando a un honorado de la Pantera del Trimestre en el estudio"))
     es+=card("TU EQUIPO / TRES ROLES","Trabaja en Equipo de Tres",
         para("Trabajar&aacute;s en grupos de tres y rotar&aacute;n por tres roles profesionales. Cada grupo fotograf&iacute;a a uno o dos de los 20 honorados, y luego cada persona edita las im&aacute;genes que captur&oacute; su grupo.")
         + bullets([
@@ -265,7 +271,9 @@ def step02():
     STEPLBL="STEP"
     en=banner("Studio Session &bull; Step 2","Cull and Edit","Pick your best, edit, and export four finals.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("EDIT / LIGHTROOM CLASSIC","Cull, Edit, and Export",
-        para("Now edit the images your group captured. Work in Lightroom Classic.")
+        float_right(EDIT_EXAMPLE,"A raw studio portrait on the left next to the edited, retouched final on the right","Your editing goal: raw frame on the left, finished portrait on the right.")
+        + para("Now you will edit the images your group captured, all in Lightroom Classic. Your goal is the change you see here: start from a flat, raw frame and finish with a clean, natural, professional portrait. Work through the steps below in order.")
+        + '<div style="clear:both;"></div>'
         + scrollbox(7,
           stepblock(1,"Cull Your Best","Look through your take and pick your strongest <strong>waist-up portrait</strong> and your strongest <strong>headshot</strong>.")
           + stepblock(2,"Crop and Frame","Crop each image to a clean, well-balanced frame: waist-up for the portrait, shoulders-up for the headshot.")
@@ -283,7 +291,9 @@ def step02():
     STEPLBL="PASO"
     es=banner("Sesi&oacute;n de Estudio &bull; Paso 2","Selecciona y Edita","Elige tus mejores, edita y exporta cuatro finales.","#top","Back to English")
     es+=card("EDITA / LIGHTROOM CLASSIC","Selecciona, Edita y Exporta",
-        para("Ahora edita las im&aacute;genes que captur&oacute; tu grupo. Trabaja en Lightroom Classic.")
+        float_right(EDIT_EXAMPLE,"Un retrato de estudio sin editar a la izquierda junto al final editado y retocado a la derecha","Tu meta de edici&oacute;n: la toma sin editar a la izquierda, el retrato terminado a la derecha.")
+        + para("Ahora editar&aacute;s las im&aacute;genes que captur&oacute; tu grupo, todo en Lightroom Classic. Tu meta es el cambio que ves aqu&iacute;: empieza con una toma plana sin editar y termina con un retrato limpio, natural y profesional. Sigue los pasos de abajo en orden.")
+        + '<div style="clear:both;"></div>'
         + scrollbox(7,
           stepblock(1,"Selecciona Tus Mejores","Revisa tu toma y elige tu mejor <strong>retrato de cintura para arriba</strong> y tu mejor <strong>headshot</strong>.")
           + stepblock(2,"Recorta y Encuadra","Recorta cada imagen a un encuadre limpio y equilibrado: cintura para arriba en el retrato, hombros para arriba en el headshot.")
