@@ -100,7 +100,7 @@ MAP={
  "photo1-composition-concepts-overview.html":"overview",
  "photo1-composition-concepts-step01-capture.html":"your-device",
  "photo1-composition-concepts-step02-reflection.html":"reflection",
- "photo1-leading-lines-overview.html":"overview",
+ "photo1-leading-lines-overview.html":"photo-walk",   # photo-walk module: identify as a walk at top-right; downloads icon moves to the reflection section
  "photo1-leading-lines-step01-capture.html":"photo-walk",
  "photo1-leading-lines-step02-reflection.html":"reflection",
  "photo2-composition-overview.html":"overview",

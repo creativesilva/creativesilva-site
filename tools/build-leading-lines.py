@@ -77,10 +77,20 @@ def float_right(src,alt):
     return ('<div style="float:right;width:40%;min-width:230px;margin:0 0 14px 22px;">'
       f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div></div>')
 
+DL_ICON=f"{SITE}/assets/Icons/assignment/overview-v2.png"   # the "downloads" folder icon
+
 def dl_link(url,label,download=True):
-    dl='download ' if download else ''
-    tgt='' if download else 'target="_blank" rel="noopener" '
-    return (f'<a href="{url}" {dl}{tgt}style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:10px 20px;border-top:2px solid #00b8b8;font-size:11pt;letter-spacing:0.04em;margin:0 10px 10px 0;"><strong>{label}</strong></a>')
+    if download:
+        # official orange (#FF6B1A) so a file download stands out for students
+        return (f'<a href="{url}" download style="display:inline-block;text-decoration:none;background:#FF6B1A;color:#ffffff;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;margin:0 10px 8px 0;"><strong>{label}</strong></a>')
+    # external read / reference link keeps the light style (not a file download)
+    return (f'<a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:10px 20px;border-top:2px solid #00b8b8;font-size:11pt;letter-spacing:0.04em;margin:0 10px 10px 0;"><strong>{label}</strong></a>')
+
+def dl_row(url,label):
+    # the downloads folder icon sitting next to the file's orange download button
+    return ('<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;">'
+      f'<img src="{DL_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;display:block;" />'
+      + dl_link(url,label) + '</div>')
 
 def vocab_grid(quiz_label, quiz_body, terms):
     # 6 uniform tiles, 3 per row, with an always-on quiz note (framework requirement)
@@ -196,9 +206,9 @@ def overview():
            ("Composition","How you arrange everything inside the frame."),
            ("JPG","A common photo file that is ready to share without editing."),
            ("Vanishing Point","The spot far away where leading lines seem to meet.")]))
-    en+=card("REFLECTION / DOWNLOAD","Get the Reflection Document",
+    en+=card("REFLECTION / DOWNLOAD","Download Reflection Document",
         para("Download the reflection here. Fill it out after the walk, then turn it in on Step 02. It asks you to name your partner.")
-        + '<div style="margin-top:6px;">' + dl_link(REFLECT_EN,"Leading Lines Reflection (Word)") + '</div>')
+        + dl_row(REFLECT_EN,"Reflection Document (Word)"))
 
     es=banner("Fotograf&iacute;a 1A &bull; L&iacute;neas Gu&iacute;a","Caminata de L&iacute;neas Gu&iacute;a","Trabaja en pareja, toma fotos de l&iacute;neas gu&iacute;a y selecciona tus mejores seis.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","L&iacute;neas Gu&iacute;a en la Caminata",
@@ -229,7 +239,7 @@ def overview():
            ("Vanishing Point (Punto de Fuga)","El punto a lo lejos donde las l&iacute;neas gu&iacute;a parecen unirse.")]))
     es+=card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
         para("Descarga la reflexi&oacute;n aqu&iacute;. Compl&eacute;tala despu&eacute;s de la caminata y entr&eacute;gala en el Paso 02. Te pide el nombre de tu compa&ntilde;ero.")
-        + '<div style="margin-top:6px;">' + dl_link(REFLECT_ES,"Reflexi&oacute;n de L&iacute;neas Gu&iacute;a (Word)") + '</div>')
+        + dl_row(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)"))
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
