@@ -1379,10 +1379,62 @@
 
     // ── Course Documents (downloadable, editable Word docs) ──
     const DOCBASE = "assets/course-documents/";
+    // Condensed, no-fluff step-by-step for the Aeries + Canvas grade passback video.
+    const GRADE_PASSBACK_STEPS = `
+      <div style="margin:0 0 8px;color:rgba(255,255,255,0.78);">SMJUHSD grade passback setup. Keep your Canvas course open in one tab and Aeries in another, side by side.</div>
+      <div style="margin:8px 0 3px;color:#80e0e0;font-weight:700;">Create the Aeries grade books</div>
+      <ol style="margin:0 0 4px 18px;padding:0;">
+        <li style="margin-bottom:5px;">In Aeries, open the left menu and click <b>Grade Book</b>.</li>
+        <li style="margin-bottom:5px;">Click <b>Mass Add Grade Books</b>. Select the courses that match your Canvas course for the current term, then click <b>Next</b>.</li>
+        <li style="margin-bottom:5px;">Choose <b>semester</b> grading periods (not year long), select the current term, and click <b>Create Grade Books</b>.</li>
+        <li style="margin-bottom:5px;">Switch to <b>Table View</b>.</li>
+      </ol>
+      <div style="margin:8px 0 3px;color:#80e0e0;font-weight:700;">Link the grade books</div>
+      <ol style="margin:0 0 4px 18px;padding:0;">
+        <li style="margin-bottom:5px;">Click <b>Link Grade Books</b>. For each grade book you want set up identically, change the group number from <b>0 to 1</b> (link each one separately), then click <b>Save</b>.</li>
+      </ol>
+      <div style="margin:8px 0 3px;color:#80e0e0;font-weight:700;">Set the grade book options</div>
+      <ol style="margin:0 0 4px 18px;padding:0;">
+        <li style="margin-bottom:5px;">Click <b>Manage Grade Book</b> on your course, then the <b>Edit Grade Book</b> tab. Verify the correct term and section; associated and primaries match, with no extra checkmarks. Save if you changed anything.</li>
+        <li style="margin-bottom:5px;">Open the <b>Grade Book Options</b> tab and set:
+          <ul style="margin:4px 0 0 16px;padding:0;">
+            <li style="margin-bottom:4px;"><b>Apply assignment scores immediately:</b> leave on, and make sure <b>grading completed</b> is selected so missing scores count as missing.</li>
+            <li style="margin-bottom:4px;"><b>Add / Drop students automatically:</b> check it.</li>
+            <li style="margin-bottom:4px;"><b>Hide overall percentage:</b> leave OFF. Keep the overall percentage or final mark visible to you and students.</li>
+            <li style="margin-bottom:4px;"><b>Hide grade book from parents / students:</b> leave UNCHECKED. One grade book per period or section.</li>
+          </ul>
+          Use <b>Copy options to other grade books</b> to apply the same settings, then <b>Save</b>.</li>
+      </ol>
+      <div style="margin:8px 0 3px;color:#80e0e0;font-weight:700;">Match categories to Canvas assignment groups</div>
+      <ol style="margin:0 0 4px 18px;padding:0;">
+        <li style="margin-bottom:5px;">In Canvas, open <b>Assignments</b>. Assignment groups must match your Aeries categories <b>exactly</b>: spelling, special characters, and spaces.</li>
+        <li style="margin-bottom:5px;">Copy each Canvas assignment group name, then in Aeries click <b>Add New Category</b> and paste it. Repeat for every group, and add any extra categories you use (for example Participation). <b>Save</b>.</li>
+        <li style="margin-bottom:5px;">If your department uses <b>weighted scoring</b>, check the box and set category percentages to total <b>100%</b>. Otherwise leave it unchecked. <b>Save</b>.</li>
+      </ol>
+      <div style="margin:8px 0 3px;color:#80e0e0;font-weight:700;">Unlink, add students, back up</div>
+      <ol style="margin:0 0 4px 18px;padding:0;">
+        <li style="margin-bottom:5px;">Click <b>Link Grade Books</b> and change the group numbers back to <b>0</b>. <b>Save</b>.</li>
+        <li style="margin-bottom:5px;"><b>Manage Grade Book &gt; Manage Students &gt; Add Students</b>. Select all entering students (green bar), click <b>Add All Students</b>, then <b>Close</b> when it says Process Completed.</li>
+        <li style="margin-bottom:5px;">Open <b>Backups</b>, check the box next to Grade Book, and click <b>Backup Grade Books</b> to create a restore point.</li>
+      </ol>
+      <div style="margin:8px 0 3px;color:#80e0e0;font-weight:700;">Test the passback (Canvas to Aeries)</div>
+      <ol style="margin:0 0 4px 18px;padding:0;">
+        <li style="margin-bottom:5px;">In Canvas <b>Assignments</b>, click <b>+ Assignment</b>. Title it <b>Grade Pass Back Test Assignment Ignore</b>, 1 point, submission type <b>No Submission</b>, and make sure <b>Sync to Aeries</b> is on. Assign to <b>Everyone</b> with a due date of the day before, then <b>Save &amp; Publish</b>.</li>
+        <li style="margin-bottom:5px;">On the <b>Grades</b> page, hover the assignment, click the three dots, choose <b>Set Default Grade</b>, enter <b>1</b>, and confirm.</li>
+        <li style="margin-bottom:5px;">Click <b>Sync &gt; Sync to SIS</b>, verify the test assignment is selected, and click <b>Post Grades</b>. Click <b>see progress</b> and refresh until you see the green check and <b>Completed</b>. A red exclamation means an error: click <b>Completed &gt; Warnings and Errors</b> to read it.</li>
+      </ol>
+      <div style="margin:8px 0 3px;color:#80e0e0;font-weight:700;">Confirm in Aeries</div>
+      <ol style="margin:0 0 2px 18px;padding:0;">
+        <li style="margin-bottom:5px;">Open <b>Scores by Class</b> and confirm the score appears.</li>
+        <li style="margin-bottom:5px;">Mark the assignment <b>grading complete</b>: click the dropdown arrow and check the box (the background turns blue). Repeat for each section.</li>
+        <li style="margin-bottom:0;">Done. New Canvas assignments will now pass back to Aeries.</li>
+      </ol>`;
+
     const COURSE_DOCS = {
       universal: {
         extras: [{ file: "Interview-Your-Peer-Bilingual_v2.docx", label: "Interview Your Peer (Bilingual)" }],
         links: [{ url: "https://creativesilva.github.io/pvhs_tools/index.html", label: "PVHS Tools App" }],
+        videos: [{ url: "https://vimeo.com/1157058491/eafe248754?share=copy&amp;fl=cl&amp;fe=ci", label: "Aeries + Canvas Grade Passback", instructions: GRADE_PASSBACK_STEPS }],
         camera: { label: "Camera Check Out", form: "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform", qr: "assets/qr/camera-checkout-qr.png", download: "PVHS-Camera-Checkout-QR.png" },
         local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" }],
       },
@@ -1448,11 +1500,20 @@
         + `<span class="course-doc-name">${label}</span>`
         + `<span class="course-doc-dl">Open</span></a>`;
     }
-    function videoRow(url, label) {
-      return `<a class="course-doc" href="${url}" target="_blank" rel="noopener">`
+    function videoRow(url, label, instructions) {
+      const watch = `<a class="course-doc" href="${url}" target="_blank" rel="noopener">`
         + `<span class="course-doc-ico">VIDEO</span>`
         + `<span class="course-doc-name">${label}</span>`
         + `<span class="course-doc-dl">Watch</span></a>`;
+      if (!instructions) return watch;
+      return watch
+        + `<details style="margin:0;">`
+        + `<summary class="course-doc" style="cursor:pointer;list-style:none;">`
+        + `<span class="course-doc-ico">GUIDE</span>`
+        + `<span class="course-doc-name">See Instructions</span>`
+        + `<span class="course-doc-dl">Open</span></summary>`
+        + `<div style="max-height:360px;overflow-y:auto;margin:6px 0 2px;padding:14px 16px;border:1px solid rgba(0,184,184,0.28);border-radius:12px;background:rgba(0,0,0,0.30);line-height:1.5;font-size:13px;color:rgba(255,255,255,0.9);">${instructions}</div>`
+        + `</details>`;
     }
     // Local file:// link. Browsers block file:// clicks from an https page, so on the
     // live site this copies the path (paste into a new tab). Opened as a local file, it just works.
@@ -1540,7 +1601,7 @@
     function linksBlock(course) {
       const d = COURSE_DOCS[course.id];
       const links = (d && d.links) ? d.links.map(l => linkRow(l.url, l.label)).join("") : "";
-      const vids = (d && d.videos) ? d.videos.map(v => videoRow(v.url, v.label)).join("") : "";
+      const vids = (d && d.videos) ? d.videos.map(v => videoRow(v.url, v.label, v.instructions)).join("") : "";
       const cams = (d && d.camera) ? cameraRow(d.camera) : "";
       const forms = (d && d.forms) ? d.forms.map(f => formRow(f.url, f.label)).join("") : "";
       const qrs = (d && d.qr) ? d.qr.map(q => qrRow(q.src, q.label, q.download)).join("") : "";
