@@ -7,7 +7,9 @@
 import os, re
 SITE="https://www.creativesilva.com"
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
-IMG=f"{SITE}/assets/images/photo1/leading-lines"   # for future art (header, step01 float)
+IMG=f"{SITE}/assets/images/photo1/leading-lines"
+HEADER=f"{IMG}/leading-lines-header-v1.jpg"
+FLOAT=f"{IMG}/leading-lines-step01-float-v1.jpg"
 ARTICLE="https://digital-photography-school.com/how-to-use-leading-lines-for-better-compositions/"
 REFLECT_EN=f"{SITE}/assets/course-documents/Leading-Lines-Reflection-EN.docx"
 REFLECT_ES=f"{SITE}/assets/course-documents/Leading-Lines-Reflection-ES.docx"
@@ -66,6 +68,14 @@ def placeholder(label, minh, mw=None):
 def float_placeholder(label):
     return ('<div style="float:right;width:40%;min-width:230px;margin:0 0 14px 22px;">'
       + placeholder(label, 220) + '</div>')
+
+def framed(src,alt):
+    return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;">'
+      f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>')
+
+def float_right(src,alt):
+    return ('<div style="float:right;width:40%;min-width:230px;margin:0 0 14px 22px;">'
+      f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div></div>')
 
 def dl_link(url,label,download=True):
     dl='download ' if download else ''
@@ -162,7 +172,7 @@ def overview():
     en=banner("Photography 1A &bull; Leading Lines","Leading Lines Photo Walk","Pair up, take leading-line photos, and cull your best six.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("THE PROJECT / OVERVIEW","Leading Lines on the Walk",
         para("On this photo walk you and a partner hunt for leading lines: lines that pull your eye through a photo toward the subject. You share one class camera, two students per camera. Each of you takes 3 different examples of leading lines. Then you swap photos, cull your best, and turn in 6 photos in all.")
-        + placeholder("Header image coming soon", 220))
+        + framed(HEADER,"Two Pioneer Valley students on a photo walk, one holding a Canon camera, outside the Academy of Arts building"))
     en+=card("THE CONCEPT / WHAT TO LOOK FOR","How Leading Lines Work",
         para("A leading line is any line that guides your eye through the photo. It can be a road, a fence, a hallway, a row of lockers, a shadow, or a crack in the sidewalk. Strong leading lines often run from the front of the photo toward the subject in the back.")
         + para("Sometimes the lines seem to meet at one spot far away. That spot is the vanishing point. Lines that head toward a vanishing point add depth and make a flat photo feel three-dimensional.")
@@ -193,7 +203,7 @@ def overview():
     es=banner("Fotograf&iacute;a 1A &bull; L&iacute;neas Gu&iacute;a","Caminata de L&iacute;neas Gu&iacute;a","Trabaja en pareja, toma fotos de l&iacute;neas gu&iacute;a y selecciona tus mejores seis.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","L&iacute;neas Gu&iacute;a en la Caminata",
         para("En esta caminata fotogr&aacute;fica t&uacute; y un compa&ntilde;ero buscan l&iacute;neas gu&iacute;a: l&iacute;neas que llevan tu mirada a trav&eacute;s de la foto hacia el sujeto. Comparten una c&aacute;mara de la clase, dos estudiantes por c&aacute;mara. Cada uno toma 3 ejemplos diferentes de l&iacute;neas gu&iacute;a. Luego intercambian fotos, seleccionan sus mejores y entregan 6 fotos en total.")
-        + placeholder("Imagen de encabezado pr&oacute;ximamente", 220))
+        + framed(HEADER,"Dos estudiantes de Pioneer Valley en una caminata fotogr&aacute;fica, uno con una c&aacute;mara Canon, afuera del edificio Academy of Arts"))
     es+=card("EL CONCEPTO / QU&Eacute; BUSCAR","C&oacute;mo Funcionan las L&iacute;neas Gu&iacute;a",
         para("Una l&iacute;nea gu&iacute;a es cualquier l&iacute;nea que lleva tu mirada a trav&eacute;s de la foto. Puede ser un camino, una reja, un pasillo, una fila de casilleros, una sombra o una grieta en la acera. Las l&iacute;neas gu&iacute;a fuertes suelen ir desde el frente de la foto hacia el sujeto al fondo.")
         + para("A veces las l&iacute;neas parecen unirse en un solo punto a lo lejos. Ese punto es el punto de fuga. Las l&iacute;neas que van hacia un punto de fuga dan profundidad y hacen que una foto plana se sienta tridimensional.")
@@ -230,7 +240,7 @@ def overview():
 def step01():
     en=banner("Leading Lines &bull; Step 1","Capture, Cull &amp; Submit","Take your leading lines, then pick your best six.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("CAPTURE / ON THE WALK","Take Your Leading Lines",
-        float_placeholder("Step image coming soon")
+        float_right(FLOAT,"A student kneeling to photograph down a long covered walkway whose columns lead the eye to a vanishing point, while a partner watches")
         + para("Pair up and share one class camera, two students per camera. Set the camera to JPG. Then walk campus and hunt for leading lines.")
         + bullets([
             ("Take 3 examples:","each of you takes 3 different examples of leading lines."),
@@ -258,7 +268,7 @@ def step01():
 
     es=banner("L&iacute;neas Gu&iacute;a &bull; Paso 1","Captura, Selecciona y Entrega","Toma tus l&iacute;neas gu&iacute;a y luego elige tus mejores seis.","#top","Back to English")
     es+=card("CAPTURA / EN LA CAMINATA","Toma Tus L&iacute;neas Gu&iacute;a",
-        float_placeholder("Imagen del paso pr&oacute;ximamente")
+        float_right(FLOAT,"Un estudiante arrodillado fotografiando por un pasillo largo cuyas columnas gu&iacute;an la mirada hacia un punto de fuga, mientras un compa&ntilde;ero observa")
         + para("Formen pareja y compartan una c&aacute;mara de la clase, dos estudiantes por c&aacute;mara. Pon la c&aacute;mara en JPG. Luego caminen por la escuela y busquen l&iacute;neas gu&iacute;a.")
         + bullets([
             ("Toma 3 ejemplos:","cada uno toma 3 ejemplos diferentes de l&iacute;neas gu&iacute;a."),
