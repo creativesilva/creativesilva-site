@@ -161,18 +161,16 @@ const DOCS = [
   ]},
   // Composition Concepts (Photography 1A)
   { ...EN, outfile: 'Composition-Concepts-Reflection-EN.docx', title: 'Composition Concepts: Reflection', subtitle: PVHS_EN('Photography 1A'), questions: [
-    'What are the 3 composition concepts you chose?',
-    'For each of your 3 photos, describe how you showed the concept.',
-    'Which concept was the hardest to capture? Why?',
-    'Which photo is your favorite? Why?',
-    'What did you learn about composition from this project?',
+    'Which 3 composition concepts did you choose?',
+    'Which one did you enjoy the most, or find easiest to execute? Why?',
+    'Which one was the hardest? Why?',
+    'What would you do differently next time?',
   ]},
   { ...ES, outfile: 'Composition-Concepts-Reflection-ES.docx', title: 'Conceptos de Composición: Reflexión', subtitle: PVHS_ES('Fotografía 1A'), questions: [
-    '¿Cuáles son los 3 conceptos de composición que elegiste?',
-    'Para cada una de tus 3 fotos, describe cómo mostraste el concepto.',
-    '¿Cuál concepto fue el más difícil de capturar? ¿Por qué?',
-    '¿Cuál foto es tu favorita? ¿Por qué?',
-    '¿Qué aprendiste sobre la composición en este proyecto?',
+    '¿Cuáles 3 conceptos de composición elegiste?',
+    '¿Cuál disfrutaste más, o te resultó más fácil de hacer? ¿Por qué?',
+    '¿Cuál fue el más difícil? ¿Por qué?',
+    '¿Qué harías diferente la próxima vez?',
   ]},
   // Sketchbook Cover (Digital Arts 1A) -- "medium" gets a plain-language parenthetical
   { ...EN, outfile: 'Sketchbook-Cover-Reflection-EN.docx', title: 'Sketchbook Cover Art: Reflection', subtitle: PVHS_EN('Digital Arts 1A'), questions: [
