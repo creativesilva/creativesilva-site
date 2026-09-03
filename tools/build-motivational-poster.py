@@ -72,11 +72,19 @@ def ec_note(label,t):
     return (f'<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.35);border-left:4px solid #00b8b8;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.92);"><strong style="color:#80e0e0;">{label}:</strong> {t}</div>')
 
 def framed(src,alt,maxw=None):
-    mw=f'max-width:{maxw};' if maxw else ''
-    # click to enlarge in-place (self-contained inline onclick, no script/style; opens #ml-lightbox)
-    oc="var b=document.getElementById('ml-lightbox');if(b){b.getElementsByTagName('img')[0].src=this.src;b.style.display='flex';}"
-    return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;{mw}">'
-      f'<img src="{src}" alt="{alt}" onclick="{oc}" style="display:block;width:100%;height:auto;cursor:zoom-in;" /></div>')
+    # Canvas-safe tap-to-enlarge (round 2): native <details>, NO JavaScript, NO <style> block.
+    # Collapsed shows the image at its normal size; tapping expands a full-width version below.
+    # If Canvas keeps <details>, the toggle works with no new tab. If Canvas strips the tag but
+    # keeps children, both images just show (no breakage).
+    smw=f'max-width:{maxw};' if maxw else ''
+    frame='background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;'
+    return (f'<details style="margin:6px 0 4px;">'
+      f'<summary style="cursor:zoom-in;list-style:none;">'
+      f'<div style="{frame}{smw}"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
+      f'<div style="font-size:9.5pt;letter-spacing:0.14em;text-transform:uppercase;color:#80e0e0;margin-top:5px;">Tap image to enlarge</div>'
+      f'</summary>'
+      f'<div style="{frame}margin-top:8px;"><img src="{src}" alt="{alt}, enlarged" style="display:block;width:100%;height:auto;" /></div>'
+      f'</details>')
 
 STEPLBL="STEP"
 def stepblock(n,title,body):
@@ -149,19 +157,12 @@ def vocab_grid(terms):
     return f'<table role="presentation" style="width:100%;border-collapse:collapse;table-layout:fixed;"><tbody>{body}</tbody></table>'
 
 def top_wrap(en,es):
-    # LIGHTBOX TEST (self-contained inline; part of #top so Copy Canvas HTML carries it).
-    # Tapping any framed image sets this overlay's img and shows it; tapping the overlay closes it.
-    lightbox=('<div id="ml-lightbox" onclick="this.style.display=\'none\';" '
-      'style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;background:rgba(0,0,0,0.92);'
-      'align-items:center;justify-content:center;padding:16px;cursor:zoom-out;box-sizing:border-box;">'
-      '<img alt="Enlarged view" style="max-width:96%;max-height:96%;display:block;" /></div>')
     return ('<div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;'
       "background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%),"
       f"url('{SITE}/assets/PV_Panther_Watermark.png');"
       'background-position:center center,center center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed;overflow:hidden;">'
       '<div style="padding:28px 28px 40px;">'+en+'</div>'
       '<div id="espanol" style="border-top:2px solid rgba(255,255,255,0.10);"><div style="padding:28px 28px 40px;">'+es+'</div></div>'
-      + lightbox +
       '</div>')
 
 def dot(href,label,title,active,module=False):
