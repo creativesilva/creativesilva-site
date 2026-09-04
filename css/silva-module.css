@@ -72,6 +72,42 @@ body {
 }
 .silva-breadcrumb a:hover { color: #80e0e0; }
 
+/* Top-left "Curriculum Catalog" dropdown (teacher navigation; iPad + desktop) */
+.silva-breadcrumb.catmenu-open { overflow: visible; }   /* let the dropdown escape the breadcrumb clip while open */
+.silva-catmenu { position: relative; display: inline-block; }
+.silva-catmenu-trigger { cursor: pointer; }
+.silva-catmenu-caret { font-size: 0.7em; margin-left: 5px; opacity: 0.85; }
+.silva-catmenu-panel {
+  display: none; position: absolute; top: 100%; left: 0; margin-top: 9px;
+  min-width: 280px; max-height: 78vh; overflow-y: auto;
+  background: #06201f; border: 1px solid rgba(0, 184, 184, 0.35); border-top: 3px solid #00b8b8;
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.55); border-radius: 5px; padding: 6px; z-index: 10000;
+}
+.silva-catmenu.open .silva-catmenu-panel { display: block; }
+.silva-catmenu-course {
+  display: block; width: 100%; box-sizing: border-box; text-align: left; background: none; border: 0;
+  color: #eaf7f7; font-family: inherit; font-size: 0.92rem; font-weight: 700; letter-spacing: 0.03em;
+  padding: 11px 13px; cursor: pointer; border-radius: 3px;
+}
+.silva-catmenu-course:hover { background: rgba(0, 184, 184, 0.14); }
+.silva-catmenu-course .cm-caret {
+  display: inline-block; width: 14px; margin-right: 8px; color: #00b8b8;
+  transition: transform 0.15s ease;
+}
+.silva-catmenu-course.open .cm-caret { transform: rotate(90deg); }
+.silva-catmenu-modules { display: none; padding: 2px 0 8px; }
+.silva-catmenu-modules.open { display: block; }
+.silva-catmenu-module {
+  display: block; color: rgba(255, 255, 255, 0.82); text-decoration: none;
+  font-size: 0.88rem; padding: 9px 13px 9px 35px; border-radius: 3px;
+}
+.silva-catmenu-module:hover { background: rgba(0, 184, 184, 0.18); color: #fff; }
+.silva-catmenu-full {
+  display: block; margin: 6px 4px 2px; padding: 10px 9px; border-top: 1px solid rgba(255, 255, 255, 0.12);
+  color: #80e0e0; text-decoration: none; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.silva-catmenu-full:hover { color: #fff; }
+
 .silva-breadcrumb .bc-sep {
   font-size: 11px;
   color: rgba(0, 184, 184, 0.55);

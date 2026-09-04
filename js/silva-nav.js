@@ -23,6 +23,29 @@
  */
 
 (function () {
+  // ===== Top-left "Curriculum Catalog" dropdown menu (teacher navigation) =====
+  // Active courses -> their modules -> the module's OVERVIEW url (first page).
+  // TO ADD A MODULE TO THE MENU: add a line to the right course's `modules` list.
+  // This is the single source for the dropdown; keep it in sync with new modules.
+  var MENU = [
+    { course: 'Digital Arts 1A', modules: [
+      { name: 'Pictograms',          url: '/curriculum/shared/digarts1-pictograms-overview.html' },
+      { name: 'Color Theory',        url: '/curriculum/shared/digarts1-color-theory-overview.html' },
+      { name: 'Sketchbook Cover',    url: '/curriculum/shared/digarts1-sketchbook-cover-overview.html' },
+      { name: 'Motivational Poster', url: '/curriculum/shared/digarts1-motivational-poster-overview.html' }
+    ]},
+    { course: 'Photography 1A', modules: [
+      { name: 'Self-Portrait',            url: '/curriculum/shared/photo1-self-portrait-overview.html' },
+      { name: 'Composition Concepts',     url: '/curriculum/shared/photo1-composition-concepts-overview.html' },
+      { name: 'Leading Lines Photo Walk', url: '/curriculum/shared/photo1-leading-lines-overview.html' }
+    ]},
+    { course: 'Photography 2A', modules: [
+      { name: 'Composition Photo Walk', url: '/curriculum/shared/photo2-composition-overview.html' },
+      { name: 'Off-Camera Flash',       url: '/curriculum/shared/photo2-ocf-overview.html' },
+      { name: 'Studio Session',         url: '/curriculum/shared/photo2-studio-session-overview.html' }
+    ]}
+  ];
+
   var MODULES = [
     // Universal / shared single pages
     ['/curriculum/universal/about-mr-silva.html'],
@@ -275,6 +298,79 @@
     navInner.appendChild(burger);
   }
 
+  // Turn the top-left "Curriculum Catalog" breadcrumb into a click dropdown:
+  // Catalog -> course list -> (click a course) its modules -> (click a module) its overview.
+  // Accordion style so it works the same on iPad (touch) and desktop (mouse).
+  function injectCatalogMenu() {
+    var crumb = document.querySelector('.silva-breadcrumb a[href$="curriculum.html"]');
+    if (!crumb || crumb.getAttribute('data-catmenu') === '1') { return; }
+    crumb.setAttribute('data-catmenu', '1');
+
+    var wrap = document.createElement('span');
+    wrap.className = 'silva-catmenu';
+    crumb.parentNode.insertBefore(wrap, crumb);
+    wrap.appendChild(crumb);
+    crumb.classList.add('silva-catmenu-trigger');
+    var caret = document.createElement('span');
+    caret.className = 'silva-catmenu-caret';
+    caret.innerHTML = '&#9662;';
+    crumb.appendChild(caret);
+
+    var panel = document.createElement('div');
+    panel.className = 'silva-catmenu-panel';
+    panel.setAttribute('role', 'menu');
+
+    MENU.forEach(function (c) {
+      var course = document.createElement('button');
+      course.type = 'button';
+      course.className = 'silva-catmenu-course';
+      course.innerHTML = '<span class="cm-caret">&#9656;</span>' + c.course;
+      var sub = document.createElement('div');
+      sub.className = 'silva-catmenu-modules';
+      c.modules.forEach(function (mod) {
+        var a = document.createElement('a');
+        a.href = mod.url;
+        a.className = 'silva-catmenu-module';
+        a.textContent = mod.name;
+        sub.appendChild(a);
+      });
+      course.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var willOpen = !course.classList.contains('open');
+        panel.querySelectorAll('.silva-catmenu-course.open').forEach(function (o) { o.classList.remove('open'); });
+        panel.querySelectorAll('.silva-catmenu-modules.open').forEach(function (o) { o.classList.remove('open'); });
+        if (willOpen) { course.classList.add('open'); sub.classList.add('open'); }
+      });
+      panel.appendChild(course);
+      panel.appendChild(sub);
+    });
+
+    var full = document.createElement('a');
+    full.href = '/curriculum.html';
+    full.className = 'silva-catmenu-full';
+    full.innerHTML = 'Open full catalog &#8594;';
+    panel.appendChild(full);
+
+    wrap.appendChild(panel);
+
+    // .silva-breadcrumb has overflow:hidden (for truncation); lift it only while open
+    var bc = crumb.closest('.silva-breadcrumb');
+    function setOpen(open) {
+      wrap.classList.toggle('open', open);
+      if (bc) { bc.classList.toggle('catmenu-open', open); }
+    }
+    crumb.addEventListener('click', function (e) {
+      e.preventDefault();
+      setOpen(!wrap.classList.contains('open'));
+    });
+    document.addEventListener('click', function (e) {
+      if (!wrap.contains(e.target)) { setOpen(false); }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { setOpen(false); }
+    });
+  }
+
   function init() {
     var nav = document.querySelector('.silva-nav');
     var navInner = document.querySelector('.silva-nav-inner');
@@ -304,6 +400,7 @@
     }
 
     injectBurger(navInner, nav);
+    injectCatalogMenu();
   }
 
   if (document.readyState === 'loading') {
