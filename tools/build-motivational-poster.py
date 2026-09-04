@@ -13,6 +13,10 @@ FIX_RASTER=f"{IMG}/fix-rasterize.png"
 FIX_SMVIEW=f"{IMG}/fix-select-mask-view.png"
 FIX_OUTPUT=f"{IMG}/fix-output-to.png"
 FIX_BLUR=f"{IMG}/fix-motion-blur.png"
+SAVE_COLLAPSED=f"{IMG}/save-copy-collapsed.png"
+SAVE_EXPANDED=f"{IMG}/save-copy-expanded.png"
+SAVE_FORMAT=f"{IMG}/save-copy-format-jpeg.png"
+SAVE_JPEG=f"{IMG}/save-copy-jpeg-options.png"
 REFLECT_EN=f"{SITE}/assets/course-documents/Motivational-Poster-Reflection-EN.docx"
 REFLECT_ES=f"{SITE}/assets/course-documents/Motivational-Poster-Reflection-ES.docx"
 TUT_WORK=f"{IMG}/tut-workspace.png"
@@ -325,7 +329,7 @@ def step01():
         ]))
     en+=card("BUILD YOUR POSTER","Cut Out, Blur, Finish",
         para("Now build the poster. Work through the steps in order. Take your time.")
-        + scrollbox(9,
+        + scrollbox(8,
           stepblock(10,"Find Your Subject's Photo","Go to Google Images and search your subject&rsquo;s name. Click <strong>Tools</strong>, set <strong>Size</strong> to <strong>Large</strong>, and pick a sharp, high-resolution photo. Save it. High resolution matters because this is print size.")
         + stepblock(11,"Bring the Photo In, Then Rasterize","In Photoshop, go to <strong>File &gt; Place Embedded</strong>, pick your subject&rsquo;s photo, and press Return to drop it in. It arrives as a <strong>Smart Object</strong>, which blocks many edits. Right-click the new layer and choose <strong>Rasterize Layer</strong> so filters and Select and Mask will work.")
         + framed(FIX_RASTER,"Right-click the layer and choose Rasterize Layer",maxw="340px")
@@ -337,8 +341,18 @@ def step01():
         + stepblock(14,"Add Your Words","Find the <strong>Type tool</strong> in the Tools panel on the left: it looks like a capital <strong>T</strong> (or press <strong>T</strong>). Click and <strong>drag a box</strong> on your poster, then type your <strong>real quote</strong>. Draw another box for your subject&rsquo;s name. In the bar at the top, pick a <strong>font (typeface)</strong> that fits your poster and make the size big enough to read.")
         + stepblock(15,"Make It Pop with Layer Styles","<strong>Layer Styles</strong> are effects you add to one layer. In the Layers panel, <strong>double-click</strong> just to the right of a layer&rsquo;s name (start with your text layer) to open the <strong>Layer Style</strong> window. Turn on one or more: <strong>Outer Glow</strong> (a glow around the edges), <strong>Stroke</strong> (an outline), or <strong>Drop Shadow</strong> (a shadow behind it). You can combine them. Click OK.")
         + stepblock(16,"Match Your Colors","Find the <strong>Eyedropper tool</strong> in the left Tools panel (it looks like an eyedropper, or press <strong>I</strong>). Click a color inside your photo to grab it. Then, with your text layer selected, use that color for your words so the whole poster matches.")
-        + stepblock(17,"Extra Credit: Add a Logo or Symbol","<strong>Optional, for extra credit.</strong> Find a logo or symbol connected to your subject (a team logo, a band logo, an emblem) in high resolution and save it. Bring it in with <strong>File &gt; Place Embedded</strong>. It lands on its own <strong>layer</strong>. In the Layers panel, <strong>drag</strong> that layer so it sits between your subject and the blurred background. Give it a <strong>Layer Style</strong> (Step 15) like an Outer Glow so it stands out.")
-        + stepblock(18,"Save a Copy as JPG","When you are happy, go to <strong>File &gt; Save a Copy</strong>. In the Save window, set the <strong>Format</strong> to <strong>JPG (JPEG)</strong>, and save it into your Motivational Poster folder. That JPG is what you turn in.")))
+        + stepblock(17,"Extra Credit: Add a Logo or Symbol","<strong>Optional, for extra credit.</strong> Find a logo or symbol connected to your subject (a team logo, a band logo, an emblem) in high resolution and save it. Bring it in with <strong>File &gt; Place Embedded</strong>. It lands on its own <strong>layer</strong>. In the Layers panel, <strong>drag</strong> that layer so it sits between your subject and the blurred background. Give it a <strong>Layer Style</strong> (Step 15) like an Outer Glow so it stands out.")))
+    en+=card("SAVE / TURN IN","Save Your Poster as a JPG",
+        para("Your poster is done. Now save a JPG copy to turn in. Follow each step in order.")
+        + scrollbox(4,
+          stepblock(18,"Open Save a Copy","Go to <strong>File &gt; Save a Copy</strong>. A small Save window opens.")
+          + framed(SAVE_COLLAPSED,"Photoshop Save a Copy window, collapsed, with the expand arrow to the right of the Where menu",maxw="560px")
+          + stepblock(19,"Expand and Find Your Folder","Click the small <strong>arrow</strong> just to the right of the <strong>Where</strong> menu to open the full browser. In the sidebar, open your <strong>Digital Arts &gt; Motivational Poster</strong> folder so your JPG saves there.")
+          + framed(SAVE_EXPANDED,"The Save a Copy window expanded into the full Mac file browser with the sidebar",maxw="600px")
+          + stepblock(20,"Choose JPEG, Then Save","At the bottom, open the <strong>Format</strong> menu and choose <strong>JPEG</strong>. Then click <strong>Save</strong>.")
+          + framed(SAVE_FORMAT,"The Format menu open with JPEG selected",maxw="440px")
+          + stepblock(21,"Pick the Quality","The <strong>JPEG Options</strong> box appears. Set the <strong>Quality</strong> to <strong>Maximum</strong> (12), then click <strong>OK</strong>. That JPG is what you turn in.")
+          + framed(SAVE_JPEG,"The JPEG Options box with Quality set to Maximum",maxw="360px")))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
         [("1 poster:","your final poster, saved as a JPG, uploaded to this Canvas assignment.")])
     en+=note_orange("Your poster must be your own original work. Be honest and turn in your own design.")
@@ -375,7 +389,7 @@ def step01():
         ]))
     es+=card("CONSTRUYE TU P&Oacute;STER","Recorta, Desenfoca, Termina",
         para("Ahora construye el p&oacute;ster. Ve paso a paso, en orden. T&oacute;mate tu tiempo.")
-        + scrollbox(9,
+        + scrollbox(8,
           stepblock(10,"Busca la Foto de Tu Sujeto","Ve a Google Im&aacute;genes y busca el nombre de tu sujeto. Haz clic en <strong>Herramientas</strong>, pon <strong>Tama&ntilde;o</strong> en <strong>Grande</strong>, y elige una foto n&iacute;tida y de alta resoluci&oacute;n. Gu&aacute;rdala. La alta resoluci&oacute;n importa porque es tama&ntilde;o de impresi&oacute;n.")
         + stepblock(11,"Trae la Foto y Rasteriza","En Photoshop, ve a <strong>Archivo &gt; Colocar Incrustado</strong>, elige la foto de tu sujeto y presiona Return para colocarla. Llega como <strong>Objeto Inteligente</strong>, que bloquea muchas ediciones. Haz clic derecho en la capa nueva y elige <strong>Rasterizar Capa</strong> para que funcionen los filtros y Seleccionar y Aplicar M&aacute;scara.")
         + framed(FIX_RASTER,"Haz clic derecho en la capa y elige Rasterizar Capa",maxw="340px")
@@ -387,8 +401,18 @@ def step01():
         + stepblock(14,"Agrega Tus Palabras","Busca la <strong>herramienta Texto</strong> en el panel de Herramientas a la izquierda: parece una <strong>T</strong> may&uacute;scula (o presiona <strong>T</strong>). Haz clic y <strong>arrastra una caja</strong> en tu p&oacute;ster, luego escribe tu <strong>frase real</strong>. Dibuja otra caja para el nombre de tu sujeto. En la barra de arriba, elige un <strong>tipo de letra</strong> que quede con tu p&oacute;ster y haz el tama&ntilde;o grande para que se lea.")
         + stepblock(15,"Haz que Resalte con Estilos de Capa","Los <strong>Estilos de Capa</strong> son efectos que agregas a una capa. En el panel de Capas, <strong>haz doble clic</strong> justo a la derecha del nombre de una capa (empieza con tu capa de texto) para abrir la ventana de <strong>Estilo de Capa</strong>. Activa uno o m&aacute;s: <strong>Resplandor Exterior</strong> (un brillo en los bordes), <strong>Trazo</strong> (un contorno) o <strong>Sombra Paralela</strong> (una sombra detr&aacute;s). Puedes combinarlos. Haz clic en OK.")
         + stepblock(16,"Combina Tus Colores","Busca la <strong>herramienta Cuentagotas</strong> en el panel de Herramientas a la izquierda (parece un cuentagotas, o presiona <strong>I</strong>). Haz clic en un color dentro de tu foto para tomarlo. Luego, con tu capa de texto seleccionada, usa ese color en tus palabras para que todo el p&oacute;ster combine.")
-        + stepblock(17,"Cr&eacute;dito Extra: Agrega un Logo o S&iacute;mbolo","<strong>Opcional, para cr&eacute;dito extra.</strong> Busca un logo o s&iacute;mbolo relacionado con tu sujeto (un logo de equipo, un logo de banda, un emblema) en alta resoluci&oacute;n y gu&aacute;rdalo. Tr&aacute;elo con <strong>Archivo &gt; Colocar Incrustado</strong>. Llega en su propia <strong>capa</strong>. En el panel de Capas, <strong>arrastra</strong> esa capa para que quede entre tu sujeto y el fondo desenfocado. Dale un <strong>Estilo de Capa</strong> (Paso 15) como un Resplandor Exterior para que resalte.")
-        + stepblock(18,"Guarda una Copia como JPG","Cuando est&eacute;s contento, ve a <strong>Archivo &gt; Guardar una Copia</strong>. En la ventana de Guardar, pon el <strong>Formato</strong> en <strong>JPG (JPEG)</strong> y gu&aacute;rdalo en tu carpeta Motivational Poster. Ese JPG es lo que entregas.")))
+        + stepblock(17,"Cr&eacute;dito Extra: Agrega un Logo o S&iacute;mbolo","<strong>Opcional, para cr&eacute;dito extra.</strong> Busca un logo o s&iacute;mbolo relacionado con tu sujeto (un logo de equipo, un logo de banda, un emblema) en alta resoluci&oacute;n y gu&aacute;rdalo. Tr&aacute;elo con <strong>Archivo &gt; Colocar Incrustado</strong>. Llega en su propia <strong>capa</strong>. En el panel de Capas, <strong>arrastra</strong> esa capa para que quede entre tu sujeto y el fondo desenfocado. Dale un <strong>Estilo de Capa</strong> (Paso 15) como un Resplandor Exterior para que resalte.")))
+    es+=card("GUARDA / ENTR&Eacute;GALO","Guarda Tu P&oacute;ster como JPG",
+        para("Tu p&oacute;ster est&aacute; listo. Ahora guarda una copia en JPG para entregar. Sigue cada paso en orden.")
+        + scrollbox(4,
+          stepblock(18,"Abre Guardar una Copia","Ve a <strong>Archivo &gt; Guardar una Copia</strong>. Se abre una ventana peque&ntilde;a de Guardar.")
+          + framed(SAVE_COLLAPSED,"La ventana Guardar una Copia de Photoshop, contra&iacute;da, con la flecha para expandir a la derecha del men&uacute; Where (D&oacute;nde)",maxw="560px")
+          + stepblock(19,"Expande y Busca Tu Carpeta","Haz clic en la <strong>flecha</strong> peque&ntilde;a justo a la derecha del men&uacute; <strong>Where (D&oacute;nde)</strong> para abrir el explorador completo. En la barra lateral, abre tu carpeta <strong>Digital Arts &gt; Motivational Poster</strong> para que tu JPG se guarde ah&iacute;.")
+          + framed(SAVE_EXPANDED,"La ventana Guardar una Copia expandida al explorador completo de la Mac con la barra lateral",maxw="600px")
+          + stepblock(20,"Elige JPEG y Guarda","Abajo, abre el men&uacute; <strong>Format (Formato)</strong> y elige <strong>JPEG</strong>. Luego haz clic en <strong>Save (Guardar)</strong>.")
+          + framed(SAVE_FORMAT,"El men&uacute; Format abierto con JPEG seleccionado",maxw="440px")
+          + stepblock(21,"Elige la Calidad","Aparece el cuadro <strong>JPEG Options</strong>. Pon la <strong>Quality (Calidad)</strong> en <strong>Maximum (M&aacute;xima)</strong> (12), luego haz clic en <strong>OK</strong>. Ese JPG es lo que entregas.")
+          + framed(SAVE_JPEG,"El cuadro JPEG Options con la calidad en M&aacute;xima",maxw="360px")))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
         [("1 p&oacute;ster:","tu p&oacute;ster final, guardado como JPG, subido a esta tarea de Canvas.")])
     es+=note_orange("Tu p&oacute;ster debe ser tu propio trabajo original. S&eacute; honesto y entrega tu propio dise&ntilde;o.")
@@ -422,7 +446,7 @@ def step02():
         + stepblock(9,"Add Your Words","Add your <strong>real quote</strong> and your subject&rsquo;s name with the <strong>Type tool (T)</strong>, in a <strong>font</strong> that fits the style. Tip: add Layer Styles like an Outer Glow so the words stand out. For extra credit, add a logo or symbol behind your subject.")
         + stepblock(10,"Arrange It Tall","The phone screen is narrow and very tall. Stack your subject and your words up and down and fill the whole screen. Leave a little space at the very top and bottom for the phone&rsquo;s clock and home bar.")))
     en+=card("TURN IT IN","Save a Copy as JPG",
-        stepblock(11,"Save a Copy as JPG","When you are happy, go to <strong>File &gt; Save a Copy</strong>, set the <strong>Format</strong> to <strong>JPG (JPEG)</strong>, and save it into your Motivational Poster folder."))
+        stepblock(11,"Save a Copy as JPG","Save your JPG the same way as Step 1: go to <strong>File &gt; Save a Copy</strong>, click the <strong>arrow</strong> next to <strong>Where</strong> to open the full browser, open your <strong>Motivational Poster</strong> folder, set the <strong>Format</strong> to <strong>JPEG</strong>, and click <strong>Save</strong>. In the <strong>JPEG Options</strong> box, set Quality to <strong>Maximum</strong> and click <strong>OK</strong>. That JPG is what you turn in."))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
         [("1 mobile poster:","your phone-size version, saved as a JPG, uploaded to this Canvas assignment.")])
     en+=note_orange("This is your own second version. Be honest and turn in your own design.")
@@ -448,7 +472,7 @@ def step02():
         + stepblock(9,"Agrega Tus Palabras","Agrega tu <strong>frase real</strong> y el nombre de tu sujeto con la <strong>herramienta Texto (T)</strong>, en un <strong>tipo de letra</strong> que quede con el estilo. Consejo: agrega Estilos de Capa como un Resplandor Exterior para que las palabras resalten. Para cr&eacute;dito extra, agrega un logo o s&iacute;mbolo detr&aacute;s de tu sujeto.")
         + stepblock(10,"Acom&oacute;dalo Alto","La pantalla del tel&eacute;fono es angosta y muy alta. Apila a tu sujeto y tus palabras de arriba a abajo y llena toda la pantalla. Deja un poco de espacio arriba y abajo para el reloj y la barra de inicio del tel&eacute;fono.")))
     es+=card("ENTR&Eacute;GALO","Guarda una Copia como JPG",
-        stepblock(11,"Guarda una Copia como JPG","Cuando est&eacute;s contento, ve a <strong>Archivo &gt; Guardar una Copia</strong>, pon el <strong>Formato</strong> en <strong>JPG (JPEG)</strong> y gu&aacute;rdalo en tu carpeta Motivational Poster."))
+        stepblock(11,"Guarda una Copia como JPG","Guarda tu JPG igual que en el Paso 1: ve a <strong>Archivo &gt; Guardar una Copia</strong>, haz clic en la <strong>flecha</strong> junto a <strong>Where (D&oacute;nde)</strong> para abrir el explorador completo, abre tu carpeta <strong>Motivational Poster</strong>, pon el <strong>Format (Formato)</strong> en <strong>JPEG</strong> y haz clic en <strong>Save (Guardar)</strong>. En el cuadro <strong>JPEG Options</strong>, pon la calidad en <strong>Maximum (M&aacute;xima)</strong> y haz clic en <strong>OK</strong>. Ese JPG es lo que entregas."))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
         [("1 p&oacute;ster m&oacute;vil:","tu versi&oacute;n tama&ntilde;o tel&eacute;fono, guardada como JPG, subida a esta tarea de Canvas.")])
     es+=note_orange("Esta es tu propia segunda versi&oacute;n. S&eacute; honesto y entrega tu propio dise&ntilde;o.")
