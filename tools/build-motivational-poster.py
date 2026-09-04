@@ -72,19 +72,10 @@ def ec_note(label,t):
     return (f'<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.35);border-left:4px solid #00b8b8;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.92);"><strong style="color:#80e0e0;">{label}:</strong> {t}</div>')
 
 def framed(src,alt,maxw=None):
-    # Canvas-safe tap-to-enlarge (round 2): native <details>, NO JavaScript, NO <style> block.
-    # Collapsed shows the image at its normal size; tapping expands a full-width version below.
-    # If Canvas keeps <details>, the toggle works with no new tab. If Canvas strips the tag but
-    # keeps children, both images just show (no breakage).
-    smw=f'max-width:{maxw};' if maxw else ''
-    frame='background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;'
-    return (f'<details style="margin:6px 0 4px;">'
-      f'<summary style="cursor:zoom-in;list-style:none;">'
-      f'<div style="{frame}{smw}"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
-      f'<div style="font-size:9.5pt;letter-spacing:0.14em;text-transform:uppercase;color:#80e0e0;margin-top:5px;">Tap image to enlarge</div>'
-      f'</summary>'
-      f'<div style="{frame}margin-top:8px;"><img src="{src}" alt="{alt}, enlarged" style="display:block;width:100%;height:auto;" /></div>'
-      f'</details>')
+    # Plain framed image. Canvas strips both JS lightboxes and <details>, so in-place enlarge is
+    # not possible in pasted Canvas HTML; images just display at their normal size.
+    mw=f'max-width:{maxw};' if maxw else ''
+    return f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;{mw}"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
 
 STEPLBL="STEP"
 def stepblock(n,title,body):
