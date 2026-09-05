@@ -96,16 +96,18 @@ body {
 .silva-catmenu-course.open .cm-caret { transform: rotate(90deg); }
 .silva-catmenu-modules { display: none; padding: 2px 0 8px; }
 .silva-catmenu-modules.open { display: block; }
-.silva-catmenu-module {
+.silva-catmenu-panel .silva-catmenu-module {
   display: block; color: rgba(255, 255, 255, 0.82); text-decoration: none;
-  font-size: 0.88rem; padding: 9px 13px 9px 35px; border-radius: 3px;
+  font-size: 0.88rem; font-weight: 500; letter-spacing: normal; text-transform: none;
+  padding: 9px 13px 9px 35px; border-radius: 3px;
 }
-.silva-catmenu-module:hover { background: rgba(0, 184, 184, 0.18); color: #fff; }
-.silva-catmenu-full {
-  display: block; margin: 6px 4px 2px; padding: 10px 9px; border-top: 1px solid rgba(255, 255, 255, 0.12);
-  color: #80e0e0; text-decoration: none; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;
+.silva-catmenu-panel .silva-catmenu-module:hover { background: rgba(0, 184, 184, 0.18); color: #fff; }
+.silva-catmenu-panel .silva-catmenu-full {
+  display: block; box-sizing: border-box; color: #eaf7f7; text-decoration: none;
+  font-size: 0.92rem; font-weight: 700; letter-spacing: 0.03em; text-transform: none; padding: 11px 13px;
+  border-radius: 3px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); margin-bottom: 4px;
 }
-.silva-catmenu-full:hover { color: #fff; }
+.silva-catmenu-panel .silva-catmenu-full:hover { background: rgba(0, 184, 184, 0.14); color: #fff; }
 
 .silva-breadcrumb .bc-sep {
   font-size: 11px;
