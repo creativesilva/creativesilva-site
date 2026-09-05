@@ -762,6 +762,41 @@
       min-height: 18px;
       letter-spacing: 0.05em;
     }
+
+    /* Centered "Jump to a Module" dropdown (catalog home only) */
+    .cat-jump-wrap { text-align: center; margin: 2px 0 30px; }
+    .cat-jump { position: relative; display: inline-block; text-align: left; }
+    .cat-jump-trigger {
+      font-family: var(--font-head, 'Oswald', sans-serif); font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase; color: #eaf7f7; cursor: pointer;
+      background: rgba(0, 184, 184, 0.10); border: 1px solid rgba(0, 184, 184, 0.32); border-top: 2px solid #00b8b8;
+      padding: 11px 20px; border-radius: 3px;
+    }
+    .cat-jump-trigger:hover { border-color: rgba(0, 184, 184, 0.6); }
+    .cat-jump-trigger .cj-caret { font-size: 0.75em; margin-left: 7px; opacity: 0.85; transition: transform 0.15s ease; }
+    .cat-jump.open .cat-jump-trigger .cj-caret { transform: rotate(180deg); }
+    .cat-jump-panel {
+      display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 10px;
+      min-width: 300px; max-height: 72vh; overflow-y: auto; text-align: left;
+      background: #06201f; border: 1px solid rgba(0, 184, 184, 0.35); border-top: 3px solid #00b8b8;
+      box-shadow: 0 14px 44px rgba(0, 0, 0, 0.55); border-radius: 5px; padding: 6px; z-index: 500;
+    }
+    .cat-jump.open .cat-jump-panel { display: block; }
+    .cat-jump-panel .cj-course {
+      display: block; width: 100%; box-sizing: border-box; text-align: left; background: none; border: 0;
+      color: #eaf7f7; font-family: var(--font-head, 'Oswald', sans-serif); font-size: 0.92rem; font-weight: 700;
+      letter-spacing: 0.03em; text-transform: uppercase; padding: 11px 13px; cursor: pointer; border-radius: 3px;
+    }
+    .cat-jump-panel .cj-course:hover { background: rgba(0, 184, 184, 0.14); }
+    .cat-jump-panel .cj-cc { display: inline-block; width: 14px; margin-right: 8px; color: #00b8b8; transition: transform 0.15s ease; }
+    .cat-jump-panel .cj-course.open .cj-cc { transform: rotate(90deg); }
+    .cat-jump-panel .cj-mods { display: none; padding: 2px 0 8px; }
+    .cat-jump-panel .cj-mods.open { display: block; }
+    .cat-jump-panel .cj-mod {
+      display: block; color: rgba(255, 255, 255, 0.82); text-decoration: none; font-size: 0.88rem;
+      font-weight: 500; letter-spacing: 0.03em; text-transform: uppercase; padding: 9px 13px 9px 35px; border-radius: 3px;
+    }
+    .cat-jump-panel .cj-mod:hover { background: rgba(0, 184, 184, 0.18); color: #fff; }
   </style>
 </head>
 <body>
@@ -825,6 +860,13 @@
     <section class="container">
 
       <h1 class="page-title">Curriculum Catalog</h1>
+
+      <div class="cat-jump-wrap">
+        <div class="cat-jump" id="cat-jump">
+          <button type="button" class="cat-jump-trigger" aria-haspopup="true" aria-expanded="false">Jump to a Module <span class="cj-caret">&#9662;</span></button>
+          <div class="cat-jump-panel" role="menu"></div>
+        </div>
+      </div>
 
       <div class="staging-banner" id="staging-banner" role="status">
         Staging Mode Active: Draft &amp; Staged Modules Visible
@@ -1743,6 +1785,56 @@
         grid.insertAdjacentHTML("beforeend",
           `<div class="archived-heading">Archived Courses</div>` + archived.map(buildCourseCard).join(""));
       }
+    })();
+
+    // Centered "Jump to a Module" dropdown, built from the same COURSES/MODULES
+    // data (so it auto-updates when a module is added). Active teaching courses ->
+    // their published "Module NN" entries -> that module's overview.
+    (function buildCatalogJump() {
+      var wrap = document.getElementById('cat-jump');
+      var panel = wrap && wrap.querySelector('.cat-jump-panel');
+      if (!wrap || !panel) return;
+      ['da1a', 'photo1a', 'photo2a'].forEach(function (cid) {
+        var course = COURSES.find(function (c) { return c.id === cid; });
+        var mods = MODULES.filter(function (m) {
+          return m.course === cid && /^Module\s*\d/i.test(m.name) && m.status === 'published';
+        });
+        if (!course || !mods.length) return;
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cj-course';
+        btn.innerHTML = '<span class="cj-cc">&#9656;</span>' + course.title;
+        var sub = document.createElement('div');
+        sub.className = 'cj-mods';
+        mods.forEach(function (m) {
+          var a = document.createElement('a');
+          a.href = '/' + m.url.replace(/^\//, '');
+          a.className = 'cj-mod';
+          a.textContent = m.name.replace(/^Module\s*\d+:\s*/i, '');
+          sub.appendChild(a);
+        });
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var willOpen = !btn.classList.contains('open');
+          panel.querySelectorAll('.cj-course.open').forEach(function (o) { o.classList.remove('open'); });
+          panel.querySelectorAll('.cj-mods.open').forEach(function (o) { o.classList.remove('open'); });
+          if (willOpen) { btn.classList.add('open'); sub.classList.add('open'); }
+        });
+        panel.appendChild(btn);
+        panel.appendChild(sub);
+      });
+      var trigger = wrap.querySelector('.cat-jump-trigger');
+      trigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = wrap.classList.toggle('open');
+        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      document.addEventListener('click', function (e) {
+        if (!wrap.contains(e.target)) { wrap.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { wrap.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
+      });
     })();
 
     // ── Accordion: deep-link, remembered open-state, sensible default ──────────

@@ -348,6 +348,13 @@
       panel.appendChild(sub);
     });
 
+    // Leave the catalog for the portfolio site (last item, below the courses)
+    var leave = document.createElement('a');
+    leave.href = '/';
+    leave.className = 'silva-catmenu-leave';
+    leave.innerHTML = '<span class="cm-caret">&#9656;</span>creativesilva.com';
+    panel.appendChild(leave);
+
     wrap.appendChild(panel);
 
     // .silva-breadcrumb has overflow:hidden (for truncation); lift it only while open
