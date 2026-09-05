@@ -311,10 +311,7 @@
     crumb.parentNode.insertBefore(wrap, crumb);
     wrap.appendChild(crumb);
     crumb.classList.add('silva-catmenu-trigger');
-    var caret = document.createElement('span');
-    caret.className = 'silva-catmenu-caret';
-    caret.innerHTML = '&#9662;';
-    crumb.appendChild(caret);
+    crumb.textContent = 'Catalog';   // teacher-facing; no need for "Curriculum", no down-caret
 
     var panel = document.createElement('div');
     panel.className = 'silva-catmenu-panel';
