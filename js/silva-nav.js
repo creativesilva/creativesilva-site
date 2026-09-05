@@ -320,7 +320,7 @@
     var full = document.createElement('a');
     full.href = '/curriculum.html';
     full.className = 'silva-catmenu-full';
-    full.innerHTML = 'Open full catalog &#8594;';
+    full.innerHTML = '<span class="cm-caret">&#9656;</span>Open full catalog';
     panel.appendChild(full);   // first item, before the courses
 
     MENU.forEach(function (c) {
