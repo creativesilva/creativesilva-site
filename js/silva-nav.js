@@ -317,6 +317,12 @@
     panel.className = 'silva-catmenu-panel';
     panel.setAttribute('role', 'menu');
 
+    var full = document.createElement('a');
+    full.href = '/curriculum.html';
+    full.className = 'silva-catmenu-full';
+    full.innerHTML = 'Open full catalog &#8594;';
+    panel.appendChild(full);   // first item, before the courses
+
     MENU.forEach(function (c) {
       var course = document.createElement('button');
       course.type = 'button';
@@ -341,12 +347,6 @@
       panel.appendChild(course);
       panel.appendChild(sub);
     });
-
-    var full = document.createElement('a');
-    full.href = '/curriculum.html';
-    full.className = 'silva-catmenu-full';
-    full.innerHTML = 'Open full catalog &#8594;';
-    panel.appendChild(full);
 
     wrap.appendChild(panel);
 
