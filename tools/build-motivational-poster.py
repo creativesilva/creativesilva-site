@@ -6,7 +6,7 @@ import os, re
 SITE="https://www.creativesilva.com"
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 IMG=f"{SITE}/assets/images/digarts1/motivational-poster"
-EXAMPLE=f"{SITE}/assets/mrc/images/MRC_Athlete.png"   # example motivational poster
+EXAMPLE=f"{SITE}/assets/images/digarts1/motivational-poster/motivational-poster-header-v2.png"   # example motivational poster (header)
 NEWDOC=f"{IMG}/new-document.png"
 NEWDOC_MOBILE=f"{IMG}/new-document-mobile.png"
 FIX_RASTER=f"{IMG}/fix-rasterize.png"
