@@ -819,9 +819,9 @@
     }
     .cs-lightbox-imgwrap {
       background: #f4f4f4; border-radius: 8px; padding: 22px; display: flex; align-items: center; justify-content: center;
-      max-width: 92vw; max-height: 80vh; box-shadow: 0 24px 70px rgba(0,0,0,0.6);
+      max-width: 92vw; max-height: 74vh; box-shadow: 0 24px 70px rgba(0,0,0,0.6);
     }
-    .cs-lightbox-imgwrap img { max-width: calc(92vw - 44px); max-height: calc(80vh - 44px); display: block; }
+    .cs-lightbox-imgwrap img { max-width: calc(92vw - 44px); max-height: calc(74vh - 44px); display: block; }
     .cs-lightbox-cap {
       font-family: var(--font-head); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em;
       text-transform: uppercase; color: rgba(255,255,255,0.85); text-align: center;
@@ -829,11 +829,32 @@
     .cs-lightbox-close {
       position: absolute; top: -14px; right: -14px; width: 40px; height: 40px; border-radius: 50%;
       border: none; background: #fff; color: #111; font-size: 22px; line-height: 40px; text-align: center;
-      cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.5); z-index: 2;
     }
     .cs-lightbox-close:hover { background: #007474; color: #fff; }
+    /* Prev / next arrows on the backdrop edges */
+    .cs-lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%;
+      border: none; background: rgba(0,0,0,0.55); color: #fff; font-size: 30px; line-height: 1; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; padding: 0 0 4px;
+    }
+    .cs-lightbox-nav:hover { background: #007474; }
+    .cs-lightbox-prev { left: 2vw; }
+    .cs-lightbox-next { right: 2vw; }
+    /* Copy + Download in the expanded view */
+    .cs-lightbox-actions { display: flex; gap: 10px; align-items: center; }
+    .cs-lightbox-copy, .cs-lightbox-dl {
+      font-family: var(--font-head); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+      color: #fff; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3); padding: 9px 16px;
+      cursor: pointer; text-decoration: none; border-radius: 3px;
+    }
+    .cs-lightbox-copy:hover, .cs-lightbox-dl:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.55); }
+    .cs-lightbox-copy.copied { background: #007474; border-color: #007474; }
     @media (max-width: 600px) {
       .cs-lightbox-close { top: -10px; right: -10px; width: 34px; height: 34px; line-height: 34px; font-size: 19px; }
+      .cs-lightbox-nav { width: 40px; height: 40px; font-size: 25px; }
+      .cs-lightbox-prev { left: 6px; }
+      .cs-lightbox-next { right: 6px; }
     }
   </style>
 </head>
@@ -923,6 +944,41 @@
           <div class="course-acc-body">
 
             <details class="cat-acc">
+              <summary class="cat-head"><span class="cat-name">Characters</span><span class="cat-chevron"></span></summary>
+              <div class="cat-body">
+                <div class="char-gate" id="char-gate">
+                  <p class="char-gate-label">Password required</p>
+                  <div class="char-gate-row">
+                    <input type="password" id="char-pin" inputmode="numeric" autocomplete="off" placeholder="Enter password" />
+                    <button type="button" id="char-pin-btn">Unlock</button>
+                  </div>
+                  <p class="char-gate-err" id="char-pin-err">Incorrect password.</p>
+                </div>
+                <div class="char-content" id="char-content" hidden>
+                  <p class="cat-subgroup">Cast</p>
+                  <div class="logo-grid">
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/renee-character-sheet-v2.jpg" alt="Renee character sheet" /></div><div class="logo-meta"><span class="logo-name">Renee <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/renee-character-sheet-v2.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/ricardo-character-sheet-v3.jpg" alt="Ricardo character sheet" /></div><div class="logo-meta"><span class="logo-name">Ricardo <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/ricardo-character-sheet-v3.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/patricia-character-sheet-v4.jpg" alt="Patricia character sheet" /></div><div class="logo-meta"><span class="logo-name">Patricia <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/patricia-character-sheet-v4.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/anthony-character-sheet-v2.jpg" alt="Anthony character sheet" /></div><div class="logo-meta"><span class="logo-name">Anthony <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/anthony-character-sheet-v2.jpg" download>Download</a></div></div>
+                  </div>
+                  <p class="cat-subgroup">Items</p>
+                  <div class="logo-grid">
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-eos-r50-v1.png" alt="Canon EOS R50 camera" /></div><div class="logo-meta"><span class="logo-name">Canon EOS R50 <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-eos-r50-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-eos-r5-pro-v1.png" alt="Canon EOS R5 pro camera" /></div><div class="logo-meta"><span class="logo-name">Canon EOS R5 Pro <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-eos-r5-pro-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-camera-bag-v2.png" alt="Canon camera bag" /></div><div class="logo-meta"><span class="logo-name">Canon Camera Bag <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-camera-bag-v2.png" download>Download</a></div></div>
+                  </div>
+                  <p class="cat-subgroup">Campus</p>
+                  <div class="logo-grid">
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/PV%20LOGO%20NEW.png" alt="PV monogram with panther, primary" /></div><div class="logo-meta"><span class="logo-name">PV with Panther <span class="logo-fmt">Primary &middot; PNG</span></span><a class="logo-dl" href="/assets/PV%20LOGO%20NEW.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Monogram.png" alt="PV monogram without panther" /></div><div class="logo-meta"><span class="logo-name">PV without Panther <span class="logo-fmt">Monogram &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Monogram.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-campus-front-v1.jpg" alt="PV Academy of Arts campus front" /></div><div class="logo-meta"><span class="logo-name">Academy of Arts Campus Front <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-campus-front-v1.jpg" download>Download</a></div></div>
+                  </div>
+                </div>
+              </div>
+            </details>
+
+            <details class="cat-acc">
               <summary class="cat-head"><span class="cat-name">Videos</span><span class="cat-chevron"></span></summary>
               <div class="cat-body">
                 <p class="cat-subgroup">Canvas &amp; Aeries Setup</p>
@@ -997,41 +1053,6 @@
                   <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/research-v1.png" alt="Find and collect assignment icon" /></div><div class="logo-meta"><span class="logo-name">Find &amp; Collect <span class="logo-fmt">Assignment Icon &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/research-v1.png" download>Download</a></div></div>
                   <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/worksheet-v1.png" alt="Worksheet assignment icon" /></div><div class="logo-meta"><span class="logo-name">Worksheet <span class="logo-fmt">Assignment Icon &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/worksheet-v1.png" download>Download</a></div></div>
                   <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/sketch-v1.png" alt="Sketch by hand assignment icon" /></div><div class="logo-meta"><span class="logo-name">Sketch by Hand <span class="logo-fmt">Assignment Icon &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/sketch-v1.png" download>Download</a></div></div>
-                </div>
-              </div>
-            </details>
-
-            <details class="cat-acc">
-              <summary class="cat-head"><span class="cat-name">Characters</span><span class="cat-chevron"></span></summary>
-              <div class="cat-body">
-                <div class="char-gate" id="char-gate">
-                  <p class="char-gate-label">Password required</p>
-                  <div class="char-gate-row">
-                    <input type="password" id="char-pin" inputmode="numeric" autocomplete="off" placeholder="Enter password" />
-                    <button type="button" id="char-pin-btn">Unlock</button>
-                  </div>
-                  <p class="char-gate-err" id="char-pin-err">Incorrect password.</p>
-                </div>
-                <div class="char-content" id="char-content" hidden>
-                  <p class="cat-subgroup">Cast</p>
-                  <div class="logo-grid">
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/renee-character-sheet-v2.jpg" alt="Renee character sheet" /></div><div class="logo-meta"><span class="logo-name">Renee <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/renee-character-sheet-v2.jpg" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/ricardo-character-sheet-v3.jpg" alt="Ricardo character sheet" /></div><div class="logo-meta"><span class="logo-name">Ricardo <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/ricardo-character-sheet-v3.jpg" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/patricia-character-sheet-v4.jpg" alt="Patricia character sheet" /></div><div class="logo-meta"><span class="logo-name">Patricia <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/patricia-character-sheet-v4.jpg" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/anthony-character-sheet-v2.jpg" alt="Anthony character sheet" /></div><div class="logo-meta"><span class="logo-name">Anthony <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/anthony-character-sheet-v2.jpg" download>Download</a></div></div>
-                  </div>
-                  <p class="cat-subgroup">Items</p>
-                  <div class="logo-grid">
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-eos-r50-v1.png" alt="Canon EOS R50 camera" /></div><div class="logo-meta"><span class="logo-name">Canon EOS R50 <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-eos-r50-v1.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-eos-r5-pro-v1.png" alt="Canon EOS R5 pro camera" /></div><div class="logo-meta"><span class="logo-name">Canon EOS R5 Pro <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-eos-r5-pro-v1.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-camera-bag-v2.png" alt="Canon camera bag" /></div><div class="logo-meta"><span class="logo-name">Canon Camera Bag <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-camera-bag-v2.png" download>Download</a></div></div>
-                  </div>
-                  <p class="cat-subgroup">Campus</p>
-                  <div class="logo-grid">
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/PV%20LOGO%20NEW.png" alt="PV monogram with panther, primary" /></div><div class="logo-meta"><span class="logo-name">PV with Panther <span class="logo-fmt">Primary &middot; PNG</span></span><a class="logo-dl" href="/assets/PV%20LOGO%20NEW.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Monogram.png" alt="PV monogram without panther" /></div><div class="logo-meta"><span class="logo-name">PV without Panther <span class="logo-fmt">Monogram &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Monogram.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-campus-front-v1.jpg" alt="PV Academy of Arts campus front" /></div><div class="logo-meta"><span class="logo-name">Academy of Arts Campus Front <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-campus-front-v1.jpg" download>Download</a></div></div>
-                  </div>
                 </div>
               </div>
             </details>
@@ -2006,28 +2027,29 @@
         actions.appendChild(dl);
       });
 
-      /* Click-to-enlarge lightbox for any logo/character image in the catalog */
+      /* Click-to-enlarge lightbox with prev/next + copy/download */
       var lb = document.createElement('div');
       lb.className = 'cs-lightbox'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true');
-      lb.innerHTML = '<div class="cs-lightbox-stage">'
+      lb.innerHTML = '<button type="button" class="cs-lightbox-nav cs-lightbox-prev" aria-label="Previous">&#8249;</button>'
+        + '<button type="button" class="cs-lightbox-nav cs-lightbox-next" aria-label="Next">&#8250;</button>'
+        + '<div class="cs-lightbox-stage">'
         + '<button type="button" class="cs-lightbox-close" aria-label="Close">&times;</button>'
         + '<div class="cs-lightbox-imgwrap"><img alt=""></div>'
-        + '<div class="cs-lightbox-cap"></div></div>';
+        + '<div class="cs-lightbox-cap"></div>'
+        + '<div class="cs-lightbox-actions">'
+        + '<button type="button" class="cs-lightbox-copy">Copy</button>'
+        + '<a class="cs-lightbox-dl" download>Download</a>'
+        + '</div></div>';
       document.body.appendChild(lb);
       var lbImg = lb.querySelector('img');
       var lbCap = lb.querySelector('.cs-lightbox-cap');
-      function closeLightbox() { lb.classList.remove('open'); lbImg.src = ''; }
-      function openLightbox(src, caption, alt) {
-        lbImg.src = src; lbImg.alt = alt || caption || '';
-        lbCap.textContent = caption || '';
-        lb.classList.add('open');
-      }
-      lb.addEventListener('click', function (e) {
-        if (e.target === lb || e.target.closest('.cs-lightbox-close')) closeLightbox();
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && lb.classList.contains('open')) closeLightbox();
-      });
+      var lbCopy = lb.querySelector('.cs-lightbox-copy');
+      var lbDl = lb.querySelector('.cs-lightbox-dl');
+      var lbPrev = lb.querySelector('.cs-lightbox-prev');
+      var lbNext = lb.querySelector('.cs-lightbox-next');
+
+      // Ordered set of every clickable tile in the catalog, in DOM order
+      var slides = [];
       document.querySelectorAll('.logo-card .logo-tile').forEach(function (tile) {
         var img = tile.querySelector('img');
         if (!img) return;
@@ -2036,7 +2058,45 @@
         var nameEl = card && card.querySelector('.logo-name');
         var full = (dl && dl.getAttribute('href')) || img.getAttribute('src');
         var caption = nameEl ? nameEl.textContent.replace(/\s+/g, ' ').trim() : (img.getAttribute('alt') || '');
-        tile.addEventListener('click', function () { openLightbox(full, caption, img.getAttribute('alt')); });
+        var idx = slides.length;
+        slides.push({ full: full, caption: caption, alt: img.getAttribute('alt') || '' });
+        tile.addEventListener('click', function () { openLightbox(idx); });
+      });
+
+      var current = -1;
+      var multi = slides.length > 1;
+      lbPrev.style.display = multi ? '' : 'none';
+      lbNext.style.display = multi ? '' : 'none';
+
+      function render() {
+        var s = slides[current];
+        if (!s) return;
+        lbImg.src = s.full; lbImg.alt = s.alt || s.caption || '';
+        lbCap.textContent = s.caption || '';
+        lbDl.setAttribute('href', s.full);
+        lbCopy.textContent = 'Copy'; lbCopy.classList.remove('copied');
+      }
+      function openLightbox(i) { current = i; render(); lb.classList.add('open'); }
+      function closeLightbox() { lb.classList.remove('open'); lbImg.src = ''; }
+      function step(delta) {
+        if (!slides.length) return;
+        current = (current + delta + slides.length) % slides.length;
+        render();
+      }
+
+      lbPrev.addEventListener('click', function () { step(-1); });
+      lbNext.addEventListener('click', function () { step(1); });
+      lbCopy.addEventListener('click', function () {
+        var s = slides[current]; if (s) copyLogoImage(s.full, lbCopy);
+      });
+      lb.addEventListener('click', function (e) {
+        if (e.target === lb || e.target.closest('.cs-lightbox-close')) closeLightbox();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (!lb.classList.contains('open')) return;
+        if (e.key === 'Escape') closeLightbox();
+        else if (e.key === 'ArrowLeft') step(-1);
+        else if (e.key === 'ArrowRight') step(1);
       });
     })();
   </script>
