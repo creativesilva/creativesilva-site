@@ -832,15 +832,13 @@
       cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.5); z-index: 2;
     }
     .cs-lightbox-close:hover { background: #007474; color: #fff; }
-    /* Prev / next arrows on the backdrop edges */
+    /* Prev / next arrows flanking the Copy + Download buttons */
     .cs-lightbox-nav {
-      position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%;
-      border: none; background: rgba(0,0,0,0.55); color: #fff; font-size: 30px; line-height: 1; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; padding: 0 0 4px;
+      width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(255,255,255,0.12);
+      color: #fff; font-size: 24px; line-height: 1; cursor: pointer; flex: none;
+      display: flex; align-items: center; justify-content: center; padding: 0 0 3px;
     }
     .cs-lightbox-nav:hover { background: #007474; }
-    .cs-lightbox-prev { left: 2vw; }
-    .cs-lightbox-next { right: 2vw; }
     /* Copy + Download in the expanded view */
     .cs-lightbox-actions { display: flex; gap: 10px; align-items: center; }
     .cs-lightbox-copy, .cs-lightbox-dl {
@@ -852,9 +850,7 @@
     .cs-lightbox-copy.copied { background: #007474; border-color: #007474; }
     @media (max-width: 600px) {
       .cs-lightbox-close { top: -10px; right: -10px; width: 34px; height: 34px; line-height: 34px; font-size: 19px; }
-      .cs-lightbox-nav { width: 40px; height: 40px; font-size: 25px; }
-      .cs-lightbox-prev { left: 6px; }
-      .cs-lightbox-next { right: 6px; }
+      .cs-lightbox-nav { width: 36px; height: 36px; font-size: 22px; }
     }
   </style>
 </head>
@@ -2030,15 +2026,15 @@
       /* Click-to-enlarge lightbox with prev/next + copy/download */
       var lb = document.createElement('div');
       lb.className = 'cs-lightbox'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true');
-      lb.innerHTML = '<button type="button" class="cs-lightbox-nav cs-lightbox-prev" aria-label="Previous">&#8249;</button>'
-        + '<button type="button" class="cs-lightbox-nav cs-lightbox-next" aria-label="Next">&#8250;</button>'
-        + '<div class="cs-lightbox-stage">'
+      lb.innerHTML = '<div class="cs-lightbox-stage">'
         + '<button type="button" class="cs-lightbox-close" aria-label="Close">&times;</button>'
         + '<div class="cs-lightbox-imgwrap"><img alt=""></div>'
         + '<div class="cs-lightbox-cap"></div>'
         + '<div class="cs-lightbox-actions">'
+        + '<button type="button" class="cs-lightbox-nav cs-lightbox-prev" aria-label="Previous">&#8249;</button>'
         + '<button type="button" class="cs-lightbox-copy">Copy</button>'
         + '<a class="cs-lightbox-dl" download>Download</a>'
+        + '<button type="button" class="cs-lightbox-nav cs-lightbox-next" aria-label="Next">&#8250;</button>'
         + '</div></div>';
       document.body.appendChild(lb);
       var lbImg = lb.querySelector('img');
