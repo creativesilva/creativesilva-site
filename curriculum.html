@@ -453,6 +453,14 @@
       font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.6;
     }
     .cat-body .logo-tile img { max-width: 100%; max-height: 100%; display: block; }
+    .cat-body .logo-tile { position: relative; cursor: zoom-in; }
+    .cat-body .logo-tile::after {
+      content: ""; position: absolute; top: 8px; right: 8px; width: 22px; height: 22px;
+      border-radius: 50%; background: rgba(0,0,0,0.55) no-repeat center/12px 12px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cline x1='15.5' y1='15.5' x2='21' y2='21'/%3E%3C/svg%3E");
+      opacity: 0; transition: opacity .15s ease; pointer-events: none;
+    }
+    .cat-body .logo-tile:hover::after { opacity: 1; }
     .cat-body .logo-card.pending { border-style: dashed; }
     .cat-body .logo-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; }
     .cat-body .logo-name { font-family: var(--font-head); font-size: 0.72rem; font-weight: 600; color: var(--text); letter-spacing: 0.03em; }
@@ -797,6 +805,36 @@
       font-weight: 500; letter-spacing: 0.03em; text-transform: uppercase; padding: 9px 13px 9px 35px; border-radius: 3px;
     }
     .cat-jump-panel .cj-mod:hover { background: rgba(0, 184, 184, 0.18); color: #fff; }
+
+    /* Image lightbox (teacher-facing catalog only) */
+    .cs-lightbox {
+      position: fixed; inset: 0; z-index: 4000; display: none;
+      align-items: center; justify-content: center; padding: 4vh 4vw;
+      background: rgba(6, 10, 12, 0.9); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+    }
+    .cs-lightbox.open { display: flex; }
+    .cs-lightbox-stage {
+      position: relative; max-width: 92vw; max-height: 92vh; display: flex; flex-direction: column;
+      align-items: center; gap: 14px;
+    }
+    .cs-lightbox-imgwrap {
+      background: #f4f4f4; border-radius: 8px; padding: 22px; display: flex; align-items: center; justify-content: center;
+      max-width: 92vw; max-height: 80vh; box-shadow: 0 24px 70px rgba(0,0,0,0.6);
+    }
+    .cs-lightbox-imgwrap img { max-width: calc(92vw - 44px); max-height: calc(80vh - 44px); display: block; }
+    .cs-lightbox-cap {
+      font-family: var(--font-head); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: rgba(255,255,255,0.85); text-align: center;
+    }
+    .cs-lightbox-close {
+      position: absolute; top: -14px; right: -14px; width: 40px; height: 40px; border-radius: 50%;
+      border: none; background: #fff; color: #111; font-size: 22px; line-height: 40px; text-align: center;
+      cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+    .cs-lightbox-close:hover { background: #007474; color: #fff; }
+    @media (max-width: 600px) {
+      .cs-lightbox-close { top: -10px; right: -10px; width: 34px; height: 34px; line-height: 34px; font-size: 19px; }
+    }
   </style>
 </head>
 <body>
@@ -1953,6 +1991,39 @@
         dl.parentNode.insertBefore(actions, dl);
         actions.appendChild(copy);
         actions.appendChild(dl);
+      });
+
+      /* Click-to-enlarge lightbox for any logo/character image in the catalog */
+      var lb = document.createElement('div');
+      lb.className = 'cs-lightbox'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true');
+      lb.innerHTML = '<div class="cs-lightbox-stage">'
+        + '<button type="button" class="cs-lightbox-close" aria-label="Close">&times;</button>'
+        + '<div class="cs-lightbox-imgwrap"><img alt=""></div>'
+        + '<div class="cs-lightbox-cap"></div></div>';
+      document.body.appendChild(lb);
+      var lbImg = lb.querySelector('img');
+      var lbCap = lb.querySelector('.cs-lightbox-cap');
+      function closeLightbox() { lb.classList.remove('open'); lbImg.src = ''; }
+      function openLightbox(src, caption, alt) {
+        lbImg.src = src; lbImg.alt = alt || caption || '';
+        lbCap.textContent = caption || '';
+        lb.classList.add('open');
+      }
+      lb.addEventListener('click', function (e) {
+        if (e.target === lb || e.target.closest('.cs-lightbox-close')) closeLightbox();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lb.classList.contains('open')) closeLightbox();
+      });
+      document.querySelectorAll('.logo-card .logo-tile').forEach(function (tile) {
+        var img = tile.querySelector('img');
+        if (!img) return;
+        var card = tile.closest('.logo-card');
+        var dl = card && card.querySelector('.logo-dl');
+        var nameEl = card && card.querySelector('.logo-name');
+        var full = (dl && dl.getAttribute('href')) || img.getAttribute('src');
+        var caption = nameEl ? nameEl.textContent.replace(/\s+/g, ' ').trim() : (img.getAttribute('alt') || '');
+        tile.addEventListener('click', function () { openLightbox(full, caption, img.getAttribute('alt')); });
       });
     })();
   </script>
