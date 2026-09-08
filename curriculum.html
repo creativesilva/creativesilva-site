@@ -412,8 +412,13 @@
       border-bottom: 2px solid var(--text-faint); transform: rotate(-45deg);
       transition: transform 0.2s ease; flex-shrink: 0;
     }
-    .cat-acc[open] .cat-chevron { transform: rotate(45deg); }
+    .cat-acc[open] > summary.cat-head > .cat-chevron { transform: rotate(45deg); }
     .cat-body { padding: 4px 18px 18px; }
+    /* Nested sub-accordions (Image Generation Tools, Graphics) */
+    .cat-body .cat-acc { background: rgba(255,255,255,0.015); margin-bottom: 6px; }
+    .cat-body .cat-acc > summary.cat-head { padding: 11px 14px; }
+    .cat-body .cat-acc .cat-name { font-size: 0.66rem; color: var(--text-dim); }
+    .cat-body .cat-acc .cat-body { padding: 2px 14px 14px; }
     .cat-empty {
       font-size: 0.8rem; color: var(--text-faint); font-style: italic;
       padding: 8px 0; line-height: 1.5;
@@ -940,7 +945,7 @@
           <div class="course-acc-body">
 
             <details class="cat-acc">
-              <summary class="cat-head"><span class="cat-name">Characters</span><span class="cat-chevron"></span></summary>
+              <summary class="cat-head"><span class="cat-name">Image Generation Tools</span><span class="cat-chevron"></span></summary>
               <div class="cat-body">
                 <div class="char-gate" id="char-gate">
                   <p class="char-gate-label">Password required</p>
@@ -951,28 +956,38 @@
                   <p class="char-gate-err" id="char-pin-err">Incorrect password.</p>
                 </div>
                 <div class="char-content" id="char-content" hidden>
-                  <p class="cat-subgroup">Cast</p>
-                  <div class="logo-grid">
+                  <details class="cat-acc" open>
+                    <summary class="cat-head"><span class="cat-name">Cast</span><span class="cat-chevron"></span></summary>
+                    <div class="cat-body"><div class="logo-grid">
                     <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/renee-character-sheet-v2.jpg" alt="Renee character sheet" /></div><div class="logo-meta"><span class="logo-name">Renee <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/renee-character-sheet-v2.jpg" download>Download</a></div></div>
                     <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/ricardo-character-sheet-v3.jpg" alt="Ricardo character sheet" /></div><div class="logo-meta"><span class="logo-name">Ricardo <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/ricardo-character-sheet-v3.jpg" download>Download</a></div></div>
                     <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/patricia-character-sheet-v4.jpg" alt="Patricia character sheet" /></div><div class="logo-meta"><span class="logo-name">Patricia <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/patricia-character-sheet-v4.jpg" download>Download</a></div></div>
                     <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/anthony-character-sheet-v2.jpg" alt="Anthony character sheet" /></div><div class="logo-meta"><span class="logo-name">Anthony <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/anthony-character-sheet-v2.jpg" download>Download</a></div></div>
                     <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/mr-silva-character-sheet-v2.jpg" alt="Mr. Silva character sheet" /></div><div class="logo-meta"><span class="logo-name">Mr. Silva <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/mr-silva-character-sheet-v2.jpg" download>Download</a></div></div>
-                  </div>
-                  <p class="cat-subgroup">Items</p>
-                  <div class="logo-grid">
+                    </div></div>
+                  </details>
+                  <details class="cat-acc">
+                    <summary class="cat-head"><span class="cat-name">Items</span><span class="cat-chevron"></span></summary>
+                    <div class="cat-body"><div class="logo-grid">
                     <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-eos-r50-v1.png" alt="Canon EOS R50 camera" /></div><div class="logo-meta"><span class="logo-name">Canon EOS R50 <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-eos-r50-v1.png" download>Download</a></div></div>
                     <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-eos-r5-pro-v1.png" alt="Canon EOS R5 pro camera" /></div><div class="logo-meta"><span class="logo-name">Canon EOS R5 Pro <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-eos-r5-pro-v1.png" download>Download</a></div></div>
                     <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-camera-bag-v2.png" alt="Canon camera bag" /></div><div class="logo-meta"><span class="logo-name">Canon Camera Bag <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-camera-bag-v2.png" download>Download</a></div></div>
                     <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/iphone-mockup-v1.jpg" alt="iPhone green screen mockup" /></div><div class="logo-meta"><span class="logo-name">iPhone Mockup <span class="logo-fmt">Item &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/items/iphone-mockup-v1.jpg" download>Download</a></div></div>
                     <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/imac-27-mockup-v1.jpg" alt="iMac 27 inch green screen mockup" /></div><div class="logo-meta"><span class="logo-name">iMac 27&Prime; Mockup <span class="logo-fmt">Item &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/items/imac-27-mockup-v1.jpg" download>Download</a></div></div>
-                  </div>
-                  <p class="cat-subgroup">Campus</p>
-                  <div class="logo-grid">
+                    </div></div>
+                  </details>
+                  <details class="cat-acc">
+                    <summary class="cat-head"><span class="cat-name">Campus</span><span class="cat-chevron"></span></summary>
+                    <div class="cat-body"><div class="logo-grid">
                     <div class="logo-card"><div class="logo-tile"><img src="/assets/PV%20LOGO%20NEW.png" alt="PV monogram with panther, primary" /></div><div class="logo-meta"><span class="logo-name">PV with Panther <span class="logo-fmt">Primary &middot; PNG</span></span><a class="logo-dl" href="/assets/PV%20LOGO%20NEW.png" download>Download</a></div></div>
                     <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Monogram.png" alt="PV monogram without panther" /></div><div class="logo-meta"><span class="logo-name">PV without Panther <span class="logo-fmt">Monogram &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Monogram.png" download>Download</a></div></div>
                     <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-campus-front-v1.jpg" alt="PV Academy of Arts campus front" /></div><div class="logo-meta"><span class="logo-name">Academy of Arts Campus Front <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-campus-front-v1.jpg" download>Download</a></div></div>
-                  </div>
+                    </div></div>
+                  </details>
+                  <details class="cat-acc">
+                    <summary class="cat-head"><span class="cat-name">Prompts</span><span class="cat-chevron"></span></summary>
+                    <div class="cat-body"><div class="cat-empty">Repeatable text prompts go here: copy-paste blocks for campus, classroom aesthetic, lighting, and more, the same way you copy the HTML snippets. Drop the text files in and they will list here.</div></div>
+                  </details>
                 </div>
               </div>
             </details>
@@ -1008,13 +1023,11 @@
             </details>
 
             <details class="cat-acc">
-              <summary class="cat-head"><span class="cat-name">Prompts</span><span class="cat-chevron"></span></summary>
-              <div class="cat-body"><div class="cat-empty">No prompt files in the repo yet. Drop them in and they will list here.</div></div>
-            </details>
-
-            <details class="cat-acc">
-              <summary class="cat-head"><span class="cat-name">Logos</span><span class="cat-chevron"></span></summary>
+              <summary class="cat-head"><span class="cat-name">Graphics</span><span class="cat-chevron"></span></summary>
               <div class="cat-body">
+                <details class="cat-acc">
+                  <summary class="cat-head"><span class="cat-name">Logos</span><span class="cat-chevron"></span></summary>
+                  <div class="cat-body">
                 <p class="cat-subgroup">Pioneer Valley HS</p>
                 <div class="logo-grid">
                   <div class="logo-card"><div class="logo-tile"><img src="/assets/PV%20LOGO%20NEW.png" alt="PV monogram with panther, primary" /></div><div class="logo-meta"><span class="logo-name">PV with Panther <span class="logo-fmt">Primary &middot; PNG</span></span><a class="logo-dl" href="/assets/PV%20LOGO%20NEW.png" download>Download</a></div></div>
@@ -1094,6 +1107,8 @@
               <a class="icon-cell" href="/assets/Icons/Icon_PV_App.svg" download title="PV App"><span class="icon-thumb"><img src="/assets/Icons/Icon_PV_App.svg" alt="PV App icon" /></span><span class="icon-cap">PV App</span></a>
               <a class="icon-cell" href="/assets/Icons/Icon_PV_LOGO.svg" download title="PV Logo"><span class="icon-thumb"><img src="/assets/Icons/Icon_PV_LOGO.svg" alt="PV Logo icon" /></span><span class="icon-cap">PV Logo</span></a>
             </div>
+              </div>
+            </details>
               </div>
             </details>
 
