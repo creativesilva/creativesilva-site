@@ -13,6 +13,13 @@ FIX_RASTER=f"{IMG}/fix-rasterize.png"
 FIX_SMVIEW=f"{IMG}/fix-select-mask-view.png"
 FIX_OUTPUT=f"{IMG}/fix-output-to.png"
 FIX_BLUR=f"{IMG}/fix-motion-blur.png"
+WP_PLACE=f"{IMG}/wallpaper-place.png"
+WP_COPY=f"{IMG}/wallpaper-copy.png"
+WP_PASTE=f"{IMG}/wallpaper-paste.png"
+WP_LAYERS=f"{IMG}/wallpaper-layers.png"
+WP_MASK=f"{IMG}/wallpaper-select-mask.png"
+WP_BLUR=f"{IMG}/wallpaper-blur.png"
+WP_GLOW=f"{IMG}/wallpaper-outer-glow.png"
 SAVE_COLLAPSED=f"{IMG}/save-copy-collapsed.png"
 SAVE_EXPANDED=f"{IMG}/save-copy-expanded.png"
 SAVE_FORMAT=f"{IMG}/save-copy-format-jpeg.png"
@@ -441,9 +448,16 @@ def step02():
         para("You know the tools now. Build the same poster, but arrange it for a tall, narrow phone screen.")
         + scrollbox(5,
           stepblock(6,"Bring In and Rasterize","Go to <strong>File &gt; Place Embedded</strong> and drop in your subject&rsquo;s photo. Right-click the layer and choose <strong>Rasterize Layer</strong>, just like Step 1.")
+        + framed(WP_PLACE,"The subject photo placed on the tall phone artboard",maxw="300px")
         + stepblock(7,"Copy to a New Layer, Then Cut Out","After you rasterize, press <strong>Command + A</strong> to Select All. Go to <strong>Edit &gt; Copy</strong>, then <strong>Edit &gt; Paste</strong>. Photoshop drops in a new layer the same size as your artboard. In the <strong>Layers</strong> panel, drag the old layer to the <strong>trash</strong>. Then use <strong>Select &gt; Subject</strong> and <strong>Select and Mask</strong>. Press <strong>V</strong> for the red Overlay view, clean the edges, and set <strong>Output To: New Layer</strong>.")
+        + framed(WP_COPY,"Edit menu with Copy selected",maxw="340px")
+        + framed(WP_PASTE,"Edit menu with Paste selected",maxw="340px")
+        + framed(WP_LAYERS,"Layers panel: the new pasted layer sits above the old layer, so drag the old one to the trash",maxw="300px")
+        + framed(WP_MASK,"Select and Mask in the red Overlay view, with Output To set to New Layer",maxw="620px")
         + stepblock(8,"Blur the Background","Behind your subject, go to <strong>Filter &gt; Blur</strong> and pick the one that fits your image: <strong>Motion</strong>, <strong>Gaussian</strong>, or <strong>Radial</strong> Blur. Adjust it and click OK.")
+        + framed(WP_BLUR,"Motion Blur dialog on the background layer",maxw="360px")
         + stepblock(9,"Add Your Words","Add your <strong>real quote</strong> and your subject&rsquo;s name with the <strong>Type tool (T)</strong>, in a <strong>font</strong> that fits the style. Tip: add Layer Styles like an Outer Glow so the words stand out. For extra credit, add a logo or symbol behind your subject.")
+        + framed(WP_GLOW,"Layer Style with Outer Glow added to the quote so the words stand out",maxw="420px")
         + stepblock(10,"Arrange It Tall","The phone screen is narrow and very tall. Stack your subject and your words up and down and fill the whole screen. Leave a little space at the very top and bottom for the phone&rsquo;s clock and home bar.")))
     en+=card("TURN IT IN","Save a Copy as JPG",
         stepblock(11,"Save a Copy as JPG","Save your JPG the same way as Step 1: go to <strong>File &gt; Save a Copy</strong>, click the <strong>arrow</strong> next to <strong>Where</strong> to open the full browser, open your <strong>Motivational Poster</strong> folder, set the <strong>Format</strong> to <strong>JPEG</strong>, and click <strong>Save</strong>. In the <strong>JPEG Options</strong> box, set Quality to <strong>Maximum</strong> and click <strong>OK</strong>. That JPG is what you turn in."))
@@ -467,9 +481,16 @@ def step02():
         para("Ya conoces las herramientas. Haz el mismo p&oacute;ster, pero acom&oacute;dalo para una pantalla de tel&eacute;fono alta y angosta.")
         + scrollbox(5,
           stepblock(6,"Trae y Rasteriza","Ve a <strong>Archivo &gt; Colocar Incrustado</strong> y coloca la foto de tu sujeto. Haz clic derecho en la capa y elige <strong>Rasterizar Capa</strong>, igual que en el Paso 1.")
+        + framed(WP_PLACE,"La foto del sujeto colocada en el lienzo alto del tel&eacute;fono",maxw="300px")
         + stepblock(7,"Copia a una Capa Nueva, Luego Recorta al Sujeto","Despu&eacute;s de rasterizar, presiona <strong>Command + A</strong> para Seleccionar Todo. Ve a <strong>Edici&oacute;n &gt; Copiar</strong>, luego <strong>Edici&oacute;n &gt; Pegar</strong>. Photoshop coloca una capa nueva del mismo tama&ntilde;o que tu lienzo. En el panel de <strong>Capas</strong>, arrastra la capa vieja a la <strong>papelera</strong>. Luego usa <strong>Seleccionar &gt; Sujeto</strong> y <strong>Seleccionar y Aplicar M&aacute;scara</strong>. Presiona <strong>V</strong> para la vista roja Superposici&oacute;n, limpia los bordes y pon <strong>Salida a: Nueva Capa</strong>.")
+        + framed(WP_COPY,"Men&uacute; Edici&oacute;n con Copiar seleccionado",maxw="340px")
+        + framed(WP_PASTE,"Men&uacute; Edici&oacute;n con Pegar seleccionado",maxw="340px")
+        + framed(WP_LAYERS,"Panel de Capas: la capa nueva pegada queda encima de la capa vieja, as&iacute; que arrastra la vieja a la papelera",maxw="300px")
+        + framed(WP_MASK,"Seleccionar y Aplicar M&aacute;scara en la vista roja Superposici&oacute;n, con Salida a: Nueva Capa",maxw="620px")
         + stepblock(8,"Desenfoca el Fondo","Detr&aacute;s de tu sujeto, ve a <strong>Filtro &gt; Desenfocar</strong> y elige el que quede con tu imagen: Desenfoque de <strong>Movimiento</strong>, <strong>Gaussiano</strong> o <strong>Radial</strong>. Aj&uacute;stalo y haz clic en OK.")
+        + framed(WP_BLUR,"Cuadro de Desenfoque de Movimiento sobre la capa del fondo",maxw="360px")
         + stepblock(9,"Agrega Tus Palabras","Agrega tu <strong>frase real</strong> y el nombre de tu sujeto con la <strong>herramienta Texto (T)</strong>, en un <strong>tipo de letra</strong> que quede con el estilo. Consejo: agrega Estilos de Capa como un Resplandor Exterior para que las palabras resalten. Para cr&eacute;dito extra, agrega un logo o s&iacute;mbolo detr&aacute;s de tu sujeto.")
+        + framed(WP_GLOW,"Estilo de Capa con Resplandor Exterior en la frase para que las palabras resalten",maxw="420px")
         + stepblock(10,"Acom&oacute;dalo Alto","La pantalla del tel&eacute;fono es angosta y muy alta. Apila a tu sujeto y tus palabras de arriba a abajo y llena toda la pantalla. Deja un poco de espacio arriba y abajo para el reloj y la barra de inicio del tel&eacute;fono.")))
     es+=card("ENTR&Eacute;GALO","Guarda una Copia como JPG",
         stepblock(11,"Guarda una Copia como JPG","Guarda tu JPG igual que en el Paso 1: ve a <strong>Archivo &gt; Guardar una Copia</strong>, haz clic en la <strong>flecha</strong> junto a <strong>Where (D&oacute;nde)</strong> para abrir el explorador completo, abre tu carpeta <strong>Motivational Poster</strong>, pon el <strong>Format (Formato)</strong> en <strong>JPEG</strong> y haz clic en <strong>Save (Guardar)</strong>. En el cuadro <strong>JPEG Options</strong>, pon la calidad en <strong>Maximum (M&aacute;xima)</strong> y haz clic en <strong>OK</strong>. Ese JPG es lo que entregas."))
