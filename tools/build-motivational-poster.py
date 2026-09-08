@@ -20,6 +20,7 @@ WP_LAYERS=f"{IMG}/wallpaper-layers.png"
 WP_MASK=f"{IMG}/wallpaper-select-mask.png"
 WP_BLUR=f"{IMG}/wallpaper-blur.png"
 WP_GLOW=f"{IMG}/wallpaper-outer-glow.png"
+WP_FLOAT=f"{IMG}/wallpaper-float.jpg"
 SAVE_COLLAPSED=f"{IMG}/save-copy-collapsed.png"
 SAVE_EXPANDED=f"{IMG}/save-copy-expanded.png"
 SAVE_FORMAT=f"{IMG}/save-copy-format-jpeg.png"
@@ -81,6 +82,12 @@ def note_orange(t):
 def ec_note(label,t):
     # EXTRA CREDIT callout (teal, distinct from the orange warnings)
     return (f'<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.35);border-left:4px solid #00b8b8;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.92);"><strong style="color:#80e0e0;">{label}:</strong> {t}</div>')
+
+def float_right(src,alt):
+    # Teal-framed image floated right inside a card (card() has overflow:hidden, so it clears).
+    return (f'<div style="float:right;width:44%;min-width:240px;margin:0 0 16px 24px;'
+            f'background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;line-height:0;">'
+            f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>')
 
 def framed(src,alt,maxw=None):
     # Plain framed image. Canvas strips both JS lightboxes and <details>, so in-place enlarge is
@@ -435,7 +442,8 @@ def step02():
     STEPLBL="STEP"
     en=banner("Motivational Poster &bull; Step 2","Make the Mobile Version","Remake your poster to fit a phone screen.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("BEFORE YOU START / ONEDRIVE","Same Folder, New Size",
-        para("You already made the print poster. Now make a second version, sized for a phone screen.")
+        float_right(WP_FLOAT,"A student in the design lab holding her phone with the finished wallpaper, the same design open in Photoshop behind her")
+        + para("You already made the print poster. Now make a second version, sized for a phone screen.")
         + stepblock(1,"Check OneDrive Is Syncing","Look at the OneDrive cloud icon in the top-right menu bar, next to the clock. If it shows a red X or a warning, click it and sign in with your school account to clear it.")
         + stepblock(2,"Open Your Project Folder","In Finder, open <strong>OneDrive &gt; Digital Arts &gt; Motivational Poster</strong>, the folder you made in Step 1. Save this phone version in there too."))
     en+=card("MAKE THE MOBILE FILE","Create a Phone-Size Document",
@@ -468,7 +476,8 @@ def step02():
     STEPLBL="PASO"
     es=banner("P&oacute;ster Motivacional &bull; Paso 2","Haz la Versi&oacute;n M&oacute;vil","Rehaz tu p&oacute;ster para que quepa en la pantalla de un tel&eacute;fono.","#top","Back to English")
     es+=card("ANTES DE EMPEZAR / ONEDRIVE","Misma Carpeta, Nuevo Tama&ntilde;o",
-        para("Ya hiciste el p&oacute;ster para imprimir. Ahora haz una segunda versi&oacute;n, del tama&ntilde;o de una pantalla de tel&eacute;fono.")
+        float_right(WP_FLOAT,"Una estudiante en el laboratorio de dise&ntilde;o sostiene su tel&eacute;fono con el fondo de pantalla terminado, con el mismo dise&ntilde;o abierto en Photoshop detr&aacute;s")
+        + para("Ya hiciste el p&oacute;ster para imprimir. Ahora haz una segunda versi&oacute;n, del tama&ntilde;o de una pantalla de tel&eacute;fono.")
         + stepblock(1,"Revisa que OneDrive Est&eacute; Sincronizando","Mira el &iacute;cono de nube de OneDrive en la barra de men&uacute;s arriba a la derecha, junto al reloj. Si muestra una X roja o una advertencia, haz clic e inicia sesi&oacute;n con tu cuenta escolar para quitarla.")
         + stepblock(2,"Abre Tu Carpeta del Proyecto","En Finder, abre <strong>OneDrive &gt; Digital Arts &gt; Motivational Poster</strong>, la carpeta que hiciste en el Paso 1. Guarda esta versi&oacute;n de tel&eacute;fono ah&iacute; tambi&eacute;n."))
     es+=card("CREA EL ARCHIVO M&Oacute;VIL","Crea un Documento Tama&ntilde;o Tel&eacute;fono",
