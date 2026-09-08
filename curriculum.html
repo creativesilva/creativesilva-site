@@ -1636,16 +1636,21 @@
     }
     // Staff-facing slide decks, collapsed into an accordion (one line per deck + download).
     function slideDecksBlock(course) {
-      const decks = SLIDE_DECKS[course.id];
-      if (!decks || !decks.length) return "";
-      const rows = decks.map(d =>
-        `<a class="course-doc" href="${DOCBASE}${encodeURIComponent(d.file)}" download>`
-        + `<span class="course-doc-ico">PPTX</span>`
-        + `<span class="course-doc-name">${d.label}</span>`
-        + `<span class="course-doc-dl">Download</span></a>`).join("");
+      // Every published (active) course gets a Slide Decks section, even when empty,
+      // so decks can be dropped in later. Inactive courses are skipped.
+      if (course.inactive) return "";
+      const decks = SLIDE_DECKS[course.id] || [];
+      const rows = decks.length
+        ? decks.map(d =>
+            `<a class="course-doc" href="${DOCBASE}${encodeURIComponent(d.file)}" download>`
+            + `<span class="course-doc-ico">PPTX</span>`
+            + `<span class="course-doc-name">${d.label}</span>`
+            + `<span class="course-doc-dl">Download</span></a>`).join("")
+        : `<div style="padding:10px 2px;color:var(--text-faint);font-size:0.82rem;font-style:italic;">No slide decks yet.</div>`;
+      const meta = decks.length ? `${decks.length} deck${decks.length === 1 ? "" : "s"} &middot; staff` : `staff`;
       return `<details class="slide-decks-acc">`
         + `<summary class="slide-decks-sum"><span class="slide-decks-title">Slide Decks</span>`
-        + `<span class="slide-decks-meta">${decks.length} deck${decks.length === 1 ? "" : "s"} &middot; staff</span></summary>`
+        + `<span class="slide-decks-meta">${meta}</span></summary>`
         + `<div class="slide-decks-body">${rows}</div></details>`;
     }
     function linkRow(url, label) {
