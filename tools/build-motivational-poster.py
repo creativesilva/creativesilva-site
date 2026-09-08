@@ -79,6 +79,29 @@ def bullets(items):
 def note_orange(t):
     return (f'<div style="background:rgba(255,107,26,0.10);border:1px solid rgba(255,107,26,0.30);border-left:4px solid #FF6B1A;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
 
+def type_tip(lang):
+    # Type coaching callout (teal): match the typeface to the image, contrast, readability.
+    if lang=="en":
+        body=("<strong style=\"color:#80e0e0;\">Make your type fit the image:</strong> "
+          "Pick a <strong>typeface</strong> that matches the mood: bold and heavy for sports or action, "
+          "clean and simple for a calm look. Use just <strong>one or two fonts</strong>. "
+          "Give the words <strong>contrast</strong> so they are easy to read: light text over the dark parts of "
+          "the photo, dark text over the light parts. If the background is busy, add a <strong>Stroke</strong>, "
+          "<strong>Drop Shadow</strong>, or <strong>Outer Glow</strong> (Layer Styles) so the letters lift off the "
+          "photo. Keep the <strong>quote larger</strong> than the name, and keep your words off the busiest part "
+          "of the image so they stay readable.")
+    else:
+        body=("<strong style=\"color:#80e0e0;\">Haz que tu tipo de letra combine con la imagen:</strong> "
+          "Elige un <strong>tipo de letra</strong> que combine con el &aacute;nimo: grueso y fuerte para deportes o "
+          "acci&oacute;n, limpio y simple para algo tranquilo. Usa solo <strong>uno o dos tipos de letra</strong>. "
+          "Dale <strong>contraste</strong> a las palabras para que se lean f&aacute;cil: texto claro sobre las partes "
+          "oscuras de la foto, texto oscuro sobre las partes claras. Si el fondo est&aacute; ocupado, agrega un "
+          "<strong>Trazo</strong>, <strong>Sombra Paralela</strong> o <strong>Resplandor Exterior</strong> (Estilos "
+          "de Capa) para que las letras se separen de la foto. Haz la <strong>frase m&aacute;s grande</strong> que el "
+          "nombre, y mant&eacute;n tus palabras fuera de la parte m&aacute;s ocupada de la imagen para que se lean bien.")
+    return (f'<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.30);border-left:4px solid #00b8b8;'
+            f'padding:11px 14px;margin:2px 0 12px;font-size:12pt;color:rgba(255,255,255,0.90);line-height:1.55;">{body}</div>')
+
 def ec_note(label,t):
     # EXTRA CREDIT callout (teal, distinct from the orange warnings)
     return (f'<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.35);border-left:4px solid #00b8b8;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.92);"><strong style="color:#80e0e0;">{label}:</strong> {t}</div>')
@@ -88,6 +111,15 @@ def float_right(src,alt):
     return (f'<div style="float:right;width:44%;min-width:240px;margin:0 0 16px 24px;'
             f'background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;line-height:0;">'
             f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>')
+
+def capframe(src,caption,maxw=None):
+    # Framed image with a short visible caption beneath it, so a run of images reads step by step.
+    mw=f'max-width:{maxw};' if maxw else ''
+    return (f'<div style="{mw}margin:8px 0 16px;">'
+            f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;line-height:0;">'
+            f'<img src="{src}" alt="{caption}" style="display:block;width:100%;height:auto;" /></div>'
+            f'<div style="font-size:11.5pt;color:rgba(255,255,255,0.74);line-height:1.5;margin-top:7px;">'
+            f'<strong style="color:#80e0e0;">&rarr;</strong> {caption}</div></div>')
 
 def framed(src,alt,maxw=None):
     # Plain framed image. Canvas strips both JS lightboxes and <details>, so in-place enlarge is
@@ -352,7 +384,8 @@ def step01():
         + framed(FIX_OUTPUT,"Set Output To: New Layer",maxw="360px")
         + stepblock(13,"Blur the Background","In the <strong>Layers</strong> panel on the right, click the <strong>eye</strong> next to the original photo layer to turn it back ON, then click that layer once to select it (it sits under your cut-out subject). Go to <strong>Filter &gt; Blur</strong> and pick the ONE that best fits your image: <strong>Motion Blur</strong> (speed streaks), <strong>Gaussian Blur</strong> (soft and dreamy), or <strong>Radial Blur</strong> (a zoom or a spin). Move the sliders, then click OK. Do not like it? Press <strong>Command + Z</strong> to undo and try another.")
         + framed(FIX_BLUR,"Filter &gt; Blur: pick Motion, Gaussian, or Radial",maxw="400px")
-        + stepblock(14,"Add Your Words","Find the <strong>Type tool</strong> in the Tools panel on the left: it looks like a capital <strong>T</strong> (or press <strong>T</strong>). Click and <strong>drag a box</strong> on your poster, then type your <strong>real quote</strong>. Draw another box for your subject&rsquo;s name. In the bar at the top, pick a <strong>font (typeface)</strong> that fits your poster and make the size big enough to read.")
+        + stepblock(14,"Add Your Words","Select the <strong>Type tool (T)</strong> from the Tools panel on the left (it looks like a capital <strong>T</strong>). Click and <strong>drag</strong> to draw a <strong>text box</strong>: dragging makes <strong>paragraph text</strong>, which keeps your quote inside the box you draw. Type your <strong>real quote</strong> in the box. Highlight the text, then use the <strong>Options bar</strong> at the top (or open <strong>Window &gt; Character</strong>) to set the <strong>font</strong>, the <strong>style</strong> (like Bold or Italic), the <strong>size</strong>, and the <strong>color</strong>. Draw a second, smaller text box for your subject&rsquo;s name.")
+        + type_tip("en")
         + stepblock(15,"Make It Pop with Layer Styles","<strong>Layer Styles</strong> are effects you add to one layer. In the Layers panel, <strong>double-click</strong> just to the right of a layer&rsquo;s name (start with your text layer) to open the <strong>Layer Style</strong> window. Turn on one or more: <strong>Outer Glow</strong> (a glow around the edges), <strong>Stroke</strong> (an outline), or <strong>Drop Shadow</strong> (a shadow behind it). You can combine them. Click OK.")
         + stepblock(16,"Match Your Colors","Find the <strong>Eyedropper tool</strong> in the left Tools panel (it looks like an eyedropper, or press <strong>I</strong>). Click a color inside your photo to grab it. Then, with your text layer selected, use that color for your words so the whole poster matches.")
         + stepblock(17,"Extra Credit: Add a Logo or Symbol","<strong>Optional, for extra credit.</strong> Find a logo or symbol connected to your subject (a team logo, a band logo, an emblem) in high resolution and save it. Bring it in with <strong>File &gt; Place Embedded</strong>. It lands on its own <strong>layer</strong>. In the Layers panel, <strong>drag</strong> that layer so it sits between your subject and the blurred background. Give it a <strong>Layer Style</strong> (Step 15) like an Outer Glow so it stands out.")))
@@ -412,7 +445,8 @@ def step01():
         + framed(FIX_OUTPUT,"Pon Salida a: Nueva Capa",maxw="360px")
         + stepblock(13,"Desenfoca el Fondo","En el panel de <strong>Capas</strong> a la derecha, haz clic en el <strong>ojo</strong> junto a la capa original de la foto para ENCENDERLA, luego haz clic una vez en esa capa para seleccionarla (va debajo de tu sujeto recortado). Ve a <strong>Filtro &gt; Desenfocar</strong> y elige el que MEJOR quede con tu imagen: Desenfoque de <strong>Movimiento</strong> (rayas de velocidad), <strong>Gaussiano</strong> (suave y so&ntilde;ador) o <strong>Radial</strong> (un zoom o giro). Mueve los deslizadores y haz clic en OK. &iquest;No te gusta? Presiona <strong>Command + Z</strong> para deshacer y prueba otro.")
         + framed(FIX_BLUR,"Filtro &gt; Desenfocar: elige Movimiento, Gaussiano o Radial",maxw="400px")
-        + stepblock(14,"Agrega Tus Palabras","Busca la <strong>herramienta Texto</strong> en el panel de Herramientas a la izquierda: parece una <strong>T</strong> may&uacute;scula (o presiona <strong>T</strong>). Haz clic y <strong>arrastra una caja</strong> en tu p&oacute;ster, luego escribe tu <strong>frase real</strong>. Dibuja otra caja para el nombre de tu sujeto. En la barra de arriba, elige un <strong>tipo de letra</strong> que quede con tu p&oacute;ster y haz el tama&ntilde;o grande para que se lea.")
+        + stepblock(14,"Agrega Tus Palabras","Elige la <strong>herramienta Texto (T)</strong> en el panel de Herramientas a la izquierda (parece una <strong>T</strong> may&uacute;scula). Haz clic y <strong>arrastra</strong> para dibujar una <strong>caja de texto</strong>: arrastrar crea <strong>texto de p&aacute;rrafo</strong>, que mantiene tu frase dentro de la caja que dibujas. Escribe tu <strong>frase real</strong> en la caja. Selecciona el texto, luego usa la <strong>barra de opciones</strong> de arriba (o abre <strong>Ventana &gt; Car&aacute;cter</strong>) para elegir el <strong>tipo de letra</strong>, el <strong>estilo</strong> (como Negrita o Cursiva), el <strong>tama&ntilde;o</strong> y el <strong>color</strong>. Dibuja una segunda caja de texto, m&aacute;s peque&ntilde;a, para el nombre de tu sujeto.")
+        + type_tip("es")
         + stepblock(15,"Haz que Resalte con Estilos de Capa","Los <strong>Estilos de Capa</strong> son efectos que agregas a una capa. En el panel de Capas, <strong>haz doble clic</strong> justo a la derecha del nombre de una capa (empieza con tu capa de texto) para abrir la ventana de <strong>Estilo de Capa</strong>. Activa uno o m&aacute;s: <strong>Resplandor Exterior</strong> (un brillo en los bordes), <strong>Trazo</strong> (un contorno) o <strong>Sombra Paralela</strong> (una sombra detr&aacute;s). Puedes combinarlos. Haz clic en OK.")
         + stepblock(16,"Combina Tus Colores","Busca la <strong>herramienta Cuentagotas</strong> en el panel de Herramientas a la izquierda (parece un cuentagotas, o presiona <strong>I</strong>). Haz clic en un color dentro de tu foto para tomarlo. Luego, con tu capa de texto seleccionada, usa ese color en tus palabras para que todo el p&oacute;ster combine.")
         + stepblock(17,"Cr&eacute;dito Extra: Agrega un Logo o S&iacute;mbolo","<strong>Opcional, para cr&eacute;dito extra.</strong> Busca un logo o s&iacute;mbolo relacionado con tu sujeto (un logo de equipo, un logo de banda, un emblema) en alta resoluci&oacute;n y gu&aacute;rdalo. Tr&aacute;elo con <strong>Archivo &gt; Colocar Incrustado</strong>. Llega en su propia <strong>capa</strong>. En el panel de Capas, <strong>arrastra</strong> esa capa para que quede entre tu sujeto y el fondo desenfocado. Dale un <strong>Estilo de Capa</strong> (Paso 15) como un Resplandor Exterior para que resalte.")))
@@ -456,16 +490,17 @@ def step02():
         para("You know the tools now. Build the same poster, but arrange it for a tall, narrow phone screen.")
         + scrollbox(5,
           stepblock(6,"Bring In and Rasterize","Go to <strong>File &gt; Place Embedded</strong> and drop in your subject&rsquo;s photo. Right-click the layer and choose <strong>Rasterize Layer</strong>, just like Step 1.")
-        + framed(WP_PLACE,"The subject photo placed on the tall phone artboard",maxw="300px")
+        + capframe(WP_PLACE,"<strong>File &gt; Place Embedded</strong> drops your photo onto the tall phone artboard.",maxw="300px")
         + stepblock(7,"Copy to a New Layer, Then Cut Out","After you rasterize, press <strong>Command + A</strong> to Select All. Go to <strong>Edit &gt; Copy</strong>, then <strong>Edit &gt; Paste</strong>. Photoshop drops in a new layer the same size as your artboard. In the <strong>Layers</strong> panel, drag the old layer to the <strong>trash</strong>. Then use <strong>Select &gt; Subject</strong> and <strong>Select and Mask</strong>. Press <strong>V</strong> for the red Overlay view, clean the edges, and set <strong>Output To: New Layer</strong>.")
-        + framed(WP_COPY,"Edit menu with Copy selected",maxw="340px")
-        + framed(WP_PASTE,"Edit menu with Paste selected",maxw="340px")
-        + framed(WP_LAYERS,"Layers panel: the new pasted layer sits above the old layer, so drag the old one to the trash",maxw="300px")
-        + framed(WP_MASK,"Select and Mask in the red Overlay view, with Output To set to New Layer",maxw="620px")
+        + capframe(WP_COPY,"With everything selected (Command + A), open <strong>Edit &gt; Copy</strong>.",maxw="340px")
+        + capframe(WP_PASTE,"Then choose <strong>Edit &gt; Paste</strong>. Photoshop pastes a new layer the same size as your artboard.",maxw="340px")
+        + capframe(WP_LAYERS,"In the <strong>Layers</strong> panel the new layer sits on top. Drag the old layer to the <strong>trash</strong> to delete it.",maxw="300px")
+        + capframe(WP_MASK,"Run <strong>Select &gt; Subject</strong>, then <strong>Select and Mask</strong>. In the red Overlay view, clean the edges and set <strong>Output To: New Layer</strong>.",maxw="620px")
         + stepblock(8,"Blur the Background","Behind your subject, go to <strong>Filter &gt; Blur</strong> and pick the one that fits your image: <strong>Motion</strong>, <strong>Gaussian</strong>, or <strong>Radial</strong> Blur. Adjust it and click OK.")
-        + framed(WP_BLUR,"Motion Blur dialog on the background layer",maxw="360px")
-        + stepblock(9,"Add Your Words","Add your <strong>real quote</strong> and your subject&rsquo;s name with the <strong>Type tool (T)</strong>, in a <strong>font</strong> that fits the style. Tip: add Layer Styles like an Outer Glow so the words stand out. For extra credit, add a logo or symbol behind your subject.")
-        + framed(WP_GLOW,"Layer Style with Outer Glow added to the quote so the words stand out",maxw="420px")
+        + capframe(WP_BLUR,"On the background layer, open <strong>Filter &gt; Blur</strong>, adjust the amount, and click OK.",maxw="360px")
+        + stepblock(9,"Add Your Words","Select the <strong>Type tool (T)</strong>. Click and <strong>drag</strong> to draw a <strong>text box</strong> (paragraph text keeps your quote inside the box), then type your <strong>real quote</strong>. Highlight it and use the <strong>Options bar</strong> or <strong>Window &gt; Character</strong> to set the <strong>font</strong>, <strong>style</strong>, <strong>size</strong>, and <strong>color</strong>. Draw a smaller text box for your subject&rsquo;s name. For extra credit, add a logo or symbol behind your subject.")
+        + type_tip("en")
+        + capframe(WP_GLOW,"Double-click the text layer to add a <strong>Layer Style</strong> like <strong>Outer Glow</strong> so the words stand out.",maxw="420px")
         + stepblock(10,"Arrange It Tall","The phone screen is narrow and very tall. Stack your subject and your words up and down and fill the whole screen. Leave a little space at the very top and bottom for the phone&rsquo;s clock and home bar.")))
     en+=card("TURN IT IN","Save a Copy as JPG",
         stepblock(11,"Save a Copy as JPG","Save your JPG the same way as Step 1: go to <strong>File &gt; Save a Copy</strong>, click the <strong>arrow</strong> next to <strong>Where</strong> to open the full browser, open your <strong>Motivational Poster</strong> folder, set the <strong>Format</strong> to <strong>JPEG</strong>, and click <strong>Save</strong>. In the <strong>JPEG Options</strong> box, set Quality to <strong>Maximum</strong> and click <strong>OK</strong>. That JPG is what you turn in."))
@@ -490,16 +525,17 @@ def step02():
         para("Ya conoces las herramientas. Haz el mismo p&oacute;ster, pero acom&oacute;dalo para una pantalla de tel&eacute;fono alta y angosta.")
         + scrollbox(5,
           stepblock(6,"Trae y Rasteriza","Ve a <strong>Archivo &gt; Colocar Incrustado</strong> y coloca la foto de tu sujeto. Haz clic derecho en la capa y elige <strong>Rasterizar Capa</strong>, igual que en el Paso 1.")
-        + framed(WP_PLACE,"La foto del sujeto colocada en el lienzo alto del tel&eacute;fono",maxw="300px")
+        + capframe(WP_PLACE,"<strong>Archivo &gt; Colocar Incrustado</strong> coloca tu foto en el lienzo alto del tel&eacute;fono.",maxw="300px")
         + stepblock(7,"Copia a una Capa Nueva, Luego Recorta al Sujeto","Despu&eacute;s de rasterizar, presiona <strong>Command + A</strong> para Seleccionar Todo. Ve a <strong>Edici&oacute;n &gt; Copiar</strong>, luego <strong>Edici&oacute;n &gt; Pegar</strong>. Photoshop coloca una capa nueva del mismo tama&ntilde;o que tu lienzo. En el panel de <strong>Capas</strong>, arrastra la capa vieja a la <strong>papelera</strong>. Luego usa <strong>Seleccionar &gt; Sujeto</strong> y <strong>Seleccionar y Aplicar M&aacute;scara</strong>. Presiona <strong>V</strong> para la vista roja Superposici&oacute;n, limpia los bordes y pon <strong>Salida a: Nueva Capa</strong>.")
-        + framed(WP_COPY,"Men&uacute; Edici&oacute;n con Copiar seleccionado",maxw="340px")
-        + framed(WP_PASTE,"Men&uacute; Edici&oacute;n con Pegar seleccionado",maxw="340px")
-        + framed(WP_LAYERS,"Panel de Capas: la capa nueva pegada queda encima de la capa vieja, as&iacute; que arrastra la vieja a la papelera",maxw="300px")
-        + framed(WP_MASK,"Seleccionar y Aplicar M&aacute;scara en la vista roja Superposici&oacute;n, con Salida a: Nueva Capa",maxw="620px")
+        + capframe(WP_COPY,"Con todo seleccionado (Command + A), abre <strong>Edici&oacute;n &gt; Copiar</strong>.",maxw="340px")
+        + capframe(WP_PASTE,"Luego elige <strong>Edici&oacute;n &gt; Pegar</strong>. Photoshop pega una capa nueva del mismo tama&ntilde;o que tu lienzo.",maxw="340px")
+        + capframe(WP_LAYERS,"En el panel de <strong>Capas</strong> la capa nueva queda encima. Arrastra la capa vieja a la <strong>papelera</strong> para borrarla.",maxw="300px")
+        + capframe(WP_MASK,"Usa <strong>Seleccionar &gt; Sujeto</strong>, luego <strong>Seleccionar y Aplicar M&aacute;scara</strong>. En la vista roja, limpia los bordes y pon <strong>Salida a: Nueva Capa</strong>.",maxw="620px")
         + stepblock(8,"Desenfoca el Fondo","Detr&aacute;s de tu sujeto, ve a <strong>Filtro &gt; Desenfocar</strong> y elige el que quede con tu imagen: Desenfoque de <strong>Movimiento</strong>, <strong>Gaussiano</strong> o <strong>Radial</strong>. Aj&uacute;stalo y haz clic en OK.")
-        + framed(WP_BLUR,"Cuadro de Desenfoque de Movimiento sobre la capa del fondo",maxw="360px")
-        + stepblock(9,"Agrega Tus Palabras","Agrega tu <strong>frase real</strong> y el nombre de tu sujeto con la <strong>herramienta Texto (T)</strong>, en un <strong>tipo de letra</strong> que quede con el estilo. Consejo: agrega Estilos de Capa como un Resplandor Exterior para que las palabras resalten. Para cr&eacute;dito extra, agrega un logo o s&iacute;mbolo detr&aacute;s de tu sujeto.")
-        + framed(WP_GLOW,"Estilo de Capa con Resplandor Exterior en la frase para que las palabras resalten",maxw="420px")
+        + capframe(WP_BLUR,"En la capa del fondo, abre <strong>Filtro &gt; Desenfocar</strong>, ajusta la cantidad y haz clic en OK.",maxw="360px")
+        + stepblock(9,"Agrega Tus Palabras","Elige la <strong>herramienta Texto (T)</strong>. Haz clic y <strong>arrastra</strong> para dibujar una <strong>caja de texto</strong> (el texto de p&aacute;rrafo mantiene tu frase dentro de la caja), luego escribe tu <strong>frase real</strong>. Selecci&oacute;nala y usa la <strong>barra de opciones</strong> o <strong>Ventana &gt; Car&aacute;cter</strong> para elegir el <strong>tipo de letra</strong>, el <strong>estilo</strong>, el <strong>tama&ntilde;o</strong> y el <strong>color</strong>. Dibuja una caja m&aacute;s peque&ntilde;a para el nombre de tu sujeto. Para cr&eacute;dito extra, agrega un logo o s&iacute;mbolo detr&aacute;s de tu sujeto.")
+        + type_tip("es")
+        + capframe(WP_GLOW,"Haz doble clic en la capa de texto para agregar un <strong>Estilo de Capa</strong> como <strong>Resplandor Exterior</strong> para que las palabras resalten.",maxw="420px")
         + stepblock(10,"Acom&oacute;dalo Alto","La pantalla del tel&eacute;fono es angosta y muy alta. Apila a tu sujeto y tus palabras de arriba a abajo y llena toda la pantalla. Deja un poco de espacio arriba y abajo para el reloj y la barra de inicio del tel&eacute;fono.")))
     es+=card("ENTR&Eacute;GALO","Guarda una Copia como JPG",
         stepblock(11,"Guarda una Copia como JPG","Guarda tu JPG igual que en el Paso 1: ve a <strong>Archivo &gt; Guardar una Copia</strong>, haz clic en la <strong>flecha</strong> junto a <strong>Where (D&oacute;nde)</strong> para abrir el explorador completo, abre tu carpeta <strong>Motivational Poster</strong>, pon el <strong>Format (Formato)</strong> en <strong>JPEG</strong> y haz clic en <strong>Save (Guardar)</strong>. En el cuadro <strong>JPEG Options</strong>, pon la calidad en <strong>Maximum (M&aacute;xima)</strong> y haz clic en <strong>OK</strong>. Ese JPG es lo que entregas."))
