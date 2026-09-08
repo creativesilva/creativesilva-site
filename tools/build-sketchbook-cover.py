@@ -7,7 +7,7 @@ IMGDIR=f"{SITE}/assets/images/digarts1/sketchbook-cover"
 COOPER=f"{IMGDIR}/cooper-black-example.png"
 ADOBE_ICON=f"{IMGDIR}/adobe-fonts-icon.png"
 STOPWATCH=f"{IMGDIR}/stopwatch-icon.png"
-HEADER_IMG=f"{IMGDIR}/sketchbook-cover-header.png"
+HEADER_IMG=f"{IMGDIR}/sketchbook-cover-header-v2.jpg"
 CHICKFILA=f"{IMGDIR}/chick-fil-a-prize.jpg"
 REFLECT_TYPING=f"{IMGDIR}/reflection-typing-v2.png"
 ADOBE_URL="https://fonts.adobe.com"
@@ -225,7 +225,7 @@ def overview():
         + datebox("Competition",
             '<div style="font-size:13pt;color:rgba(255,255,255,0.92);line-height:1.7;">'
             '<strong style="color:#80e0e0;">Due:</strong> Friday, September 4<br>'
-            '<strong style="color:#80e0e0;">Winner announced:</strong> Tuesday, September 9<br>'
+            '<strong style="color:#80e0e0;">Winner announced:</strong> Wednesday, September 9<br>'
             '<strong style="color:#80e0e0;">Prize:</strong> a Chick-fil-A gift card for the best cover</div>'))
     en+=card("REQUIREMENTS","Your Cover Must Have",
         bullets([
@@ -259,7 +259,7 @@ def overview():
         + datebox("Competencia",
             '<div style="font-size:13pt;color:rgba(255,255,255,0.92);line-height:1.7;">'
             '<strong style="color:#80e0e0;">Fecha de entrega:</strong> viernes 4 de septiembre<br>'
-            '<strong style="color:#80e0e0;">Ganador se anuncia:</strong> martes 9 de septiembre<br>'
+            '<strong style="color:#80e0e0;">Ganador se anuncia:</strong> mi&eacute;rcoles 9 de septiembre<br>'
             '<strong style="color:#80e0e0;">Premio:</strong> una tarjeta de regalo de Chick-fil-A para la mejor portada</div>'))
     es+=card("REQUISITOS","Tu Portada Debe Tener",
         bullets([
