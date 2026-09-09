@@ -12,7 +12,6 @@ IMG=f"{SITE}/assets/images/photo2/build-your-own-preset"
 HEADER=f"{IMG}/overview-hero-v1.jpg"
 SLIDE=IMG+"/preset-slide-{:02d}.jpg"
 SLIDE_PDF=f"{SITE}/assets/course-documents/Build-Your-Own-Preset-Guide.pdf"
-CONTACT_ZIP=f"{SITE}/assets/PVHS_Contact_Sheet_Presets.zip"
 REFLECT_EN=f"{SITE}/assets/course-documents/Build-Your-Own-Preset-Reflection-EN.docx"
 REFLECT_ES=f"{SITE}/assets/course-documents/Build-Your-Own-Preset-Reflection-ES.docx"
 
@@ -231,10 +230,9 @@ def overview():
            ("Exposure","How bright or dark the whole photo is."),
            ("Contrast","The difference between the darkest darks and the brightest lights."),
            ("HSL","Hue, Saturation, Luminance: the panel that lets you change each color on its own.")]))
-    en+=card("RESOURCES / DOWNLOAD","Download Your Resources",
-        para("Grab these before you start. The reflection is due on Step 04. The contact sheet templates install into the Lightroom Classic Print module and make your contact sheets for you.")
-        + dl_row(REFLECT_EN,"Reflection Document (Word)")
-        + '<div style="margin-top:10px;">' + dl_row(CONTACT_ZIP,"Contact Sheet Templates (12-Up &amp; 6-Up, Zip)") + '</div>')
+    en+=card("REFLECTION / DOWNLOAD","Download Reflection Document",
+        para("Download the reflection here. Fill it out after you finish your series, then turn it in on Step 04.")
+        + dl_row(REFLECT_EN,"Reflection Document (Word)"))
 
     es=banner("Fotograf&iacute;a 2A &bull; M&oacute;dulo 04","Crea Tu Propio Preset","Captura una serie, edita una foto y guarda tu estilo como preset.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","Crea un Estilo y Gu&aacute;rdalo",
@@ -267,10 +265,9 @@ def overview():
            ("Exposure (Exposici&oacute;n)","Qu&eacute; tan clara u oscura est&aacute; toda la foto."),
            ("Contrast (Contraste)","La diferencia entre las sombras m&aacute;s oscuras y las luces m&aacute;s brillantes."),
            ("HSL","Tono, Saturaci&oacute;n, Luminancia: el panel que te deja cambiar cada color por separado.")]))
-    es+=card("RECURSOS / DESCARGA","Descarga Tus Recursos",
-        para("Descarga esto antes de empezar. La reflexi&oacute;n se entrega en el Paso 04. Las plantillas de hoja de contactos se instalan en el m&oacute;dulo Imprimir de Lightroom Classic y crean tus hojas de contactos por ti.")
-        + dl_row(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)")
-        + '<div style="margin-top:10px;">' + dl_row(CONTACT_ZIP,"Plantillas de Hoja de Contactos (12 y 6, Zip)") + '</div>')
+    es+=card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
+        para("Descarga la reflexi&oacute;n aqu&iacute;. Compl&eacute;tala despu&eacute;s de terminar tu serie y entr&eacute;gala en el Paso 04.")
+        + dl_row(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)"))
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
@@ -301,11 +298,10 @@ def step01():
             ("Cull:","keep at least 12 strong images that go together as a series."),
         ]))
     en+=card("CONTACT SHEET / SHOW YOUR SERIES","Make Your 12-Image Contact Sheet",
-        para("A contact sheet is one page that shows all your photos as small thumbnails. Use the 12-Up contact sheet template from the Overview, in the Lightroom Classic Print module, then save it as a JPG or PDF.")
-        + note_orange("The contact sheet templates are on the Overview page. Open the Overview to download and install them.")
+        para("A contact sheet is one page that shows all your photos as small thumbnails. Make yours with the 12-Up contact sheet layout in the Lightroom Classic Print module, then save it as a JPG or PDF.")
         + bullets([
             ("Select your 12:","pick the images from your culled series."),
-            ("Use the 12-Up template:","in the Print module, choose the 12-Up contact sheet."),
+            ("Use the 12-Up layout:","in the Print module, choose the 12-Up contact sheet."),
             ("Save the page:","export the contact sheet as a JPG or PDF to turn in."),
         ]))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
@@ -334,11 +330,10 @@ def step01():
             ("Selecciona:","qu&eacute;date con al menos 12 im&aacute;genes fuertes que van juntas como serie."),
         ]))
     es+=card("HOJA DE CONTACTOS / MUESTRA TU SERIE","Crea Tu Hoja de Contactos de 12 Im&aacute;genes",
-        para("Una hoja de contactos es una p&aacute;gina que muestra todas tus fotos como miniaturas. Usa la plantilla de 12 im&aacute;genes de la p&aacute;gina de Resumen, en el m&oacute;dulo Imprimir de Lightroom Classic, y gu&aacute;rdala como JPG o PDF.")
-        + note_orange("Las plantillas de hoja de contactos est&aacute;n en la p&aacute;gina de Resumen. Abre el Resumen para descargarlas e instalarlas.")
+        para("Una hoja de contactos es una p&aacute;gina que muestra todas tus fotos como miniaturas. Crea la tuya con el dise&ntilde;o de hoja de contactos de 12 en el m&oacute;dulo Imprimir de Lightroom Classic, y gu&aacute;rdala como JPG o PDF.")
         + bullets([
             ("Selecciona tus 12:","elige las im&aacute;genes de tu serie seleccionada."),
-            ("Usa la plantilla de 12:","en el m&oacute;dulo Imprimir, elige la hoja de contactos de 12."),
+            ("Usa el dise&ntilde;o de 12:","en el m&oacute;dulo Imprimir, elige la hoja de contactos de 12."),
             ("Guarda la p&aacute;gina:","exporta la hoja de contactos como JPG o PDF para entregar."),
         ]))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
@@ -423,13 +418,12 @@ def step03():
             ("Keep the look:","small fixes only, so the series still feels like one set."),
         ]))
     en+=card("DELIVER / YOUR BEST SIX","Export and Make Your Final Contact Sheet",
-        para("Now pick your 6 strongest images. Export them at high resolution, and make a 6-image contact sheet with the 6-Up template from the Overview.")
+        para("Now pick your 6 strongest images. Export them at high resolution, and make a 6-image contact sheet with the 6-Up contact sheet layout in the Print module.")
         + bullets([
             ("Pick your best 6:","choose the 6 strongest photos from your synced series."),
             ("Export high-resolution:","export the 6 as high-quality JPGs."),
-            ("Make the 6-Up contact sheet:","use the 6-Up template in the Print module, then save it as a JPG or PDF."),
-        ])
-        + note_orange("The contact sheet templates are on the Overview page. Open the Overview to download them."))
+            ("Make the 6-Up contact sheet:","use the 6-Up layout in the Print module, then save it as a JPG or PDF."),
+        ]))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own): 7 files",
         [("1 contact sheet:","your 6-image contact sheet (JPG or PDF)."),
          ("6 high-resolution images:","your 6 best photos, exported at high resolution, uploaded to this Canvas assignment.")])
@@ -451,13 +445,12 @@ def step03():
             ("Mant&eacute;n el estilo:","solo arreglos peque&ntilde;os, para que la serie siga sinti&eacute;ndose como un grupo."),
         ]))
     es+=card("ENTREGA / TUS MEJORES SEIS","Exporta y Crea Tu Hoja de Contactos Final",
-        para("Ahora elige tus 6 im&aacute;genes m&aacute;s fuertes. Exp&oacute;rtalas en alta resoluci&oacute;n y crea una hoja de contactos de 6 im&aacute;genes con la plantilla de 6 de la p&aacute;gina de Resumen.")
+        para("Ahora elige tus 6 im&aacute;genes m&aacute;s fuertes. Exp&oacute;rtalas en alta resoluci&oacute;n y crea una hoja de contactos de 6 im&aacute;genes con el dise&ntilde;o de hoja de contactos de 6 en el m&oacute;dulo Imprimir.")
         + bullets([
             ("Elige tus mejores 6:","escoge las 6 fotos m&aacute;s fuertes de tu serie sincronizada."),
             ("Exporta en alta resoluci&oacute;n:","exporta las 6 como JPG de alta calidad."),
-            ("Crea la hoja de 6:","usa la plantilla de 6 en el m&oacute;dulo Imprimir y gu&aacute;rdala como JPG o PDF."),
-        ])
-        + note_orange("Las plantillas de hoja de contactos est&aacute;n en la p&aacute;gina de Resumen. Abre el Resumen para descargarlas."))
+            ("Crea la hoja de 6:","usa el dise&ntilde;o de 6 en el m&oacute;dulo Imprimir y gu&aacute;rdala como JPG o PDF."),
+        ]))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta): 7 archivos",
         [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG o PDF)."),
          ("6 im&aacute;genes en alta resoluci&oacute;n:","tus 6 mejores fotos, exportadas en alta resoluci&oacute;n, subidas a esta tarea de Canvas.")])
