@@ -42,7 +42,8 @@
     { course: 'Photography 2A', modules: [
       { name: 'Composition Photo Walk', url: '/curriculum/shared/photo2-composition-overview.html' },
       { name: 'Off-Camera Flash',       url: '/curriculum/shared/photo2-ocf-overview.html' },
-      { name: 'Studio Session',         url: '/curriculum/shared/photo2-studio-session-overview.html' }
+      { name: 'Studio Session',         url: '/curriculum/shared/photo2-studio-session-overview.html' },
+      { name: 'Build Your Own Preset',  url: '/curriculum/shared/photo2-preset-overview.html' }
     ]}
   ];
 
@@ -196,7 +197,12 @@
     ['/curriculum/shared/photo2-studio-session-overview.html',
      '/curriculum/shared/photo2-studio-session-step01-capture.html',
      '/curriculum/shared/photo2-studio-session-step02-cull-edit.html',
-     '/curriculum/shared/photo2-studio-session-step03-reflection.html']
+     '/curriculum/shared/photo2-studio-session-step03-reflection.html'],
+    ['/curriculum/shared/photo2-preset-overview.html',
+     '/curriculum/shared/photo2-preset-step01-photowalk.html',
+     '/curriculum/shared/photo2-preset-step02-edit-preset.html',
+     '/curriculum/shared/photo2-preset-step03-deliver.html',
+     '/curriculum/shared/photo2-preset-step04-reflection.html']
   ];
 
   var SEQUENCE = [];

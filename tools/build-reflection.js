@@ -242,6 +242,23 @@ const DOCS = [
     '¿Qué harías diferente la próxima vez, si acaso algo?',
     '¿Cómo tomaste tus decisiones de edición? Describe varios cambios específicos que hiciste a tus imágenes.',
   ]},
+  // Build Your Own Preset (Photography 2A)
+  { ...EN, outfile: 'Build-Your-Own-Preset-Reflection-EN.docx', title: 'Build Your Own Preset: Reflection', subtitle: PVHS_EN('Photography 2A'), questions: [
+    'What series did you choose (natural light portraits, close-ups of flowers, architecture, or something else), and why did you pick it?',
+    'Describe the look you built with your preset. Which settings did you change the most (White Balance, Exposure, Contrast, HSL), and what feeling were you going for?',
+    'How well did your preset work when you synced it across all your photos? Which photos still needed extra fine-tuning after the sync, and why?',
+    'A preset saves you time. When would you use this same preset again on a future project?',
+    'What was the hardest part of building or applying your preset, and how did you handle it?',
+    'What would you do differently next time to make your series look more consistent?',
+  ]},
+  { ...ES, outfile: 'Build-Your-Own-Preset-Reflection-ES.docx', title: 'Crea Tu Propio Preset: Reflexión', subtitle: PVHS_ES('Fotografía 2A'), questions: [
+    '¿Qué serie elegiste (retratos con luz natural, primeros planos de flores, arquitectura u otra cosa), y por qué la escogiste?',
+    'Describe el estilo que creaste con tu preset. ¿Qué ajustes cambiaste más (Balance de Blancos, Exposición, Contraste, HSL), y qué sensación buscabas?',
+    '¿Qué tan bien funcionó tu preset cuando lo sincronizaste en todas tus fotos? ¿Cuáles fotos aún necesitaron ajustes extra después de sincronizar, y por qué?',
+    'Un preset te ahorra tiempo. ¿Cuándo volverías a usar este mismo preset en un proyecto futuro?',
+    '¿Cuál fue la parte más difícil de crear o aplicar tu preset, y cómo la resolviste?',
+    '¿Qué harías diferente la próxima vez para que tu serie se vea más consistente?',
+  ]},
 ];
 
 (async () => { for (const d of DOCS) await buildDoc(d); })();

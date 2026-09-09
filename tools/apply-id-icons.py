@@ -26,6 +26,8 @@ DESC={
  "reflection":("reflection-v3.png","Written Reflection","Reflexi&oacute;n Escrita"),
  "design":("design-v1.png","Design &amp; Create","Dise&ntilde;a y Crea"),
  "edit":("edit-v1.png","Cull &amp; Edit","Selecciona y Edita"),
+ "preset":("edit-v1.png","Edit &amp; Create Preset","Edita y Crea el Preset"),
+ "deliver":("design-v1.png","Deliver Your Series","Entrega tu Serie"),
  "research":("research-v1.png","Find &amp; Collect","Busca y Re&uacute;ne"),
  "worksheet":("worksheet-v1.png","Worksheet","Hoja de Trabajo"),
  "sketch":("sketch-v1.png","Sketch by Hand","Dibuja a Mano"),
@@ -132,6 +134,11 @@ MAP={
  "photo2-studio-session-step01-capture.html":"camera-kit",
  "photo2-studio-session-step02-cull-edit.html":"edit",
  "photo2-studio-session-step03-reflection.html":"reflection",
+ "photo2-preset-overview.html":"overview",
+ "photo2-preset-step01-photowalk.html":"photo-walk",
+ "photo2-preset-step02-edit-preset.html":"preset",
+ "photo2-preset-step03-deliver.html":"deliver",
+ "photo2-preset-step04-reflection.html":"reflection",
 }
 for f,k in MAP.items(): apply(f,k)
 print("total mapped:", len(MAP))
