@@ -937,7 +937,7 @@
           <summary class="course-acc-head">
             <span class="course-card-accent" style="background:#5f8fbf;"></span>
             <span class="course-acc-headtext">
-              <p class="course-code">Teacher Resources</p>
+              <p class="course-code">Build &amp; Design</p>
               <h2 class="course-title">Build Resources</h2>
             </span>
             <span class="course-acc-meta"><span class="course-acc-chevron"></span></span>
@@ -1589,19 +1589,27 @@
     const COURSE_DOCS = {
       universal: {
         extras: [{ file: "Interview-Your-Peer-Bilingual_v2.docx", label: "Interview Your Peer (Bilingual)" }],
-        links: [{ url: "https://creativesilva.github.io/pvhs_tools/index.html", label: "PVHS Tools App" }],
-        videos: [{ url: "https://vimeo.com/1157058491/eafe248754?share=copy&amp;fl=cl&amp;fe=ci", label: "Aeries + Canvas Grade Passback", instructions: GRADE_PASSBACK_STEPS }],
-        camera: { label: "Camera Check Out", form: "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform", qr: "assets/qr/camera-checkout-qr.png", download: "PVHS-Camera-Checkout-QR.png" },
-        local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" }],
       },
-      da1a:    { syllabusLab: { zip: "Digital-Arts-1-Syllabus-and-Lab.zip", merged: "Digital-Arts-1-Syllabus-and-Lab-Merged.pdf" }, videos: [{ url: "https://vimeo.com/showcase/10188771?share=copy&amp;fl=sm&amp;fe=fs", label: "Vimeo Showcase" }] },
+      da1a:    { syllabusLab: { zip: "Digital-Arts-1-Syllabus-and-Lab.zip", merged: "Digital-Arts-1-Syllabus-and-Lab-Merged.pdf" } },
       da1b:    { syllabusLab: { zip: "Digital-Arts-1-Syllabus-and-Lab.zip", merged: "Digital-Arts-1-Syllabus-and-Lab-Merged.pdf" } },
       da2a:    {},
       da2b:    {},
-      photo1a: { syllabusLab: { zip: "Photography-1-Syllabus-and-Lab.zip", merged: "Photography-1-Syllabus-and-Lab-Merged.pdf" }, videos: [{ url: "https://vimeo.com/showcase/11854006?fl=so&amp;fe=fs", label: "Vimeo Showcase" }] },
+      photo1a: { syllabusLab: { zip: "Photography-1-Syllabus-and-Lab.zip", merged: "Photography-1-Syllabus-and-Lab-Merged.pdf" } },
       photo1b: { syllabusLab: { zip: "Photography-1-Syllabus-and-Lab.zip", merged: "Photography-1-Syllabus-and-Lab-Merged.pdf" } },
-      photo2a: { syllabusLab: { zip: "Photography-2-Syllabus-and-Lab.zip", merged: "Photography-2-Syllabus-and-Lab-Merged.pdf" }, videos: [{ url: "https://vimeo.com/showcase/11854006?fl=so&amp;fe=fs", label: "Vimeo Showcase" }] },
+      photo2a: { syllabusLab: { zip: "Photography-2-Syllabus-and-Lab.zip", merged: "Photography-2-Syllabus-and-Lab-Merged.pdf" } },
       photo2b: { syllabusLab: { zip: "Photography-2-Syllabus-and-Lab.zip", merged: "Photography-2-Syllabus-and-Lab-Merged.pdf" } },
+    };
+    // Teacher Resources: operational teacher tools, consolidated into ONE card
+    // (kept off the course cards and All Courses, which are for Canvas-pasteable content).
+    const TEACHER_RESOURCES = {
+      videos: [
+        { url: "https://vimeo.com/1157058491/eafe248754?share=copy&amp;fl=cl&amp;fe=ci", label: "Aeries + Canvas Grade Passback", instructions: GRADE_PASSBACK_STEPS },
+        { url: "https://vimeo.com/showcase/10188771?share=copy&amp;fl=sm&amp;fe=fs", label: "Digital Arts Showcase" },
+        { url: "https://vimeo.com/showcase/11854006?fl=so&amp;fe=fs", label: "Photography Showcase" },
+      ],
+      links: [{ url: "https://creativesilva.github.io/pvhs_tools/index.html", label: "PVHS Tools App" }],
+      camera: { label: "Camera Check Out", form: "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform", qr: "assets/qr/camera-checkout-qr.png", download: "PVHS-Camera-Checkout-QR.png" },
+      local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" }],
     };
     // Slide decks (staff-facing master PowerPoints), grouped per course.
     const SLIDE_DECKS = {
@@ -1813,6 +1821,31 @@
         + `<div class="slide-decks-body">${tools}${decks}</div></details>`;
     }
 
+    // One consolidated Teacher Resources card (operational tools), built from TEACHER_RESOURCES.
+    function buildTeacherResources() {
+      const t = TEACHER_RESOURCES;
+      const vids   = (t.videos || []).map(v => videoRow(v.url, v.label, v.instructions)).join("");
+      const links  = (t.links  || []).map(l => linkRow(l.url, l.label)).join("");
+      const cams   = t.camera ? cameraRow(t.camera) : "";
+      const locals = (t.local  || []).map(l => localRow(l.path, l.label)).join("");
+      const inner  = `${vids}${links}${cams}${locals}`;
+      if (!inner) return "";
+      return `
+        <details class="course-acc" id="teacher-resources" style="--course-accent:#FF6B1A">
+          <summary class="course-acc-head">
+            <span class="course-card-accent" style="background:#FF6B1A;"></span>
+            <span class="course-acc-headtext">
+              <p class="course-code">Class Tools &amp; Setup</p>
+              <h2 class="course-title">Teacher Resources</h2>
+            </span>
+            <span class="course-acc-meta"><span class="course-acc-chevron"></span></span>
+          </summary>
+          <div class="course-acc-body">
+            <div class="course-docs"><div class="course-docs-label">Class Tools</div>${inner}</div>
+          </div>
+        </details>`;
+    }
+
     function buildCourseCard(course) {
       const mods = visibleModules(course.id);
 
@@ -1857,7 +1890,6 @@
           <div class="course-acc-body">
             ${mods.length ? `<div class="module-list">${moduleRows}</div>` : empty}
             ${docsBlock(course)}
-            ${linksBlock(course)}
             ${hint}
           </div>
         </details>
@@ -1873,6 +1905,8 @@
       // Build Resources sits after the active courses (before Non Active).
       const br = document.getElementById("build-resources");
       if (br) grid.appendChild(br);
+      // Teacher Resources (operational tools) sits right after Build Resources.
+      grid.insertAdjacentHTML("beforeend", buildTeacherResources());
       // Non Active: inactive course cards, plus any inactive standalone pages (e.g. seasonal announcements).
       const inactiveMods = MODULES.filter(m => m.inactive && m.status === "published");
       if (inactive.length || inactiveMods.length) {
