@@ -2083,11 +2083,8 @@
       var items = document.createElement('div');
       items.className = 'cat-bar-items';
 
-      var full = document.createElement('a');
-      full.className = 'cat-bar-item';
-      full.href = '#course-grid';
-      full.textContent = 'Full Catalog';
-      items.appendChild(full);
+      // (No "Full Catalog" item here: you are already on the full catalog page.
+      // "Open full catalog" still lives in the module pages' top-left Catalog menu.)
 
       function closeAll() {
         bar.querySelectorAll('.cat-bar-course.open').forEach(function (o) { o.classList.remove('open'); });
