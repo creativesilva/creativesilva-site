@@ -46,6 +46,24 @@ def card(eyebrow,heading,inner):
 def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
 
+
+def downloads_block(es):
+    # CANONICAL downloads section (orange framework standard), placed right after the
+    # intro/header card on every module Overview. Holds the reflection now; future
+    # modules add more dl_row(...) lines here.
+    eyebrow="DESCARGAS" if es else "DOWNLOADS"
+    heading="Descarga Tus Archivos" if es else "Download Your Files"
+    lead=("Descarga aqu&iacute; todo lo que necesitas para este m&oacute;dulo. Consigue tus archivos antes de empezar." if es
+          else "Download everything you need for this module here. Get your files before you start.")
+    reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
+    ref=REFLECT_ES if es else REFLECT_EN
+    return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #FF6B1A;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#ffb27c;text-transform:uppercase;margin-bottom:12px;">'
+      f'<strong>{eyebrow}</strong></div>'
+      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
+      '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
+      f'{para(lead)}{dl_row(ref,reflabel)}</div>')
+
 def bullets(items):
     r=""
     for b,rest in items:
@@ -182,6 +200,11 @@ def overview():
     en+=card("THE PROJECT / OVERVIEW","Panther of the Quarter Portraits",
         para("Our studio is hosting the Panther of the Quarter (POTQ) honorees. There are 20 honorees to photograph for the school newsletter. For each honoree you will create a waist-up portrait and a shoulder-up headshot in our studio, then edit the results to a professional finish.")
         + framed(HEADER,"The three-person studio crew at work, labeled Art Director, Photographer, and Lighting Assistant, with the Talent posing on the backdrop"))
+    en+=download_card("DOWNLOADS","Download Your Files",
+        para("Download everything you need for this module here. Get your files before you start.")
+        + para("<strong>Raw files:</strong> download your group&rsquo;s raw files from the class Google Drive, then set up your folders and import into Lightroom Classic (full steps on Step 01). You should already have the Lightroom contact sheet presets installed; if not, they are on the Photography 2A course overview.")
+        + '<div style="margin:2px 0 14px;">' + dl_link(GDRIVE,"Google Drive: Raw Files",download=False) + '</div>'
+        + dl_row(REFLECT_EN,"Reflection Document (Word)"))
     en+=card("YOUR CREW / THREE ROLES","Work as a Team of Three",
         para("You will work in groups of three and rotate through three professional roles. Each group photographs one or two of the 20 honorees, and then each person edits the images their group captured.")
         + bullets([
@@ -194,19 +217,16 @@ def overview():
             ("Waist-up portrait:","framed from about the waist up."),
             ("Headshot:","framed from the shoulders up."),
         ]))
-    en+=card("GET YOUR FILES / RESOURCES","Your Raw Files",
-        para("Download your group&rsquo;s raw files from the class Google Drive, then set up your folders and import into Lightroom Classic (full steps on Step 01). You should already have the Lightroom contact sheet presets installed; if not, they are on the Photography 2A course overview.")
-        + '<div style="margin-top:6px;">'
-        + dl_link(GDRIVE,"Google Drive: Raw Files",download=False)
-        + '</div>')
-    en+=download_card("REFLECTION / DOWNLOAD","Download Reflection Document",
-        para("Download the reflection here. Complete it after you finish editing, then turn it in on Step 03.")
-        + dl_row(REFLECT_EN,"Reflection Document (Word)"))
 
     es=banner("Fotograf&iacute;a 2A &bull; Sesi&oacute;n de Estudio","Sesi&oacute;n de Estudio","Fotograf&iacute;a a los honorados Pantera del Trimestre.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","Retratos de la Pantera del Trimestre",
         para("Nuestro estudio recibe a los honorados de la Pantera del Trimestre (POTQ). Hay 20 honorados que fotografiar para el bolet&iacute;n de la escuela. Para cada honorado crear&aacute;s un retrato de cintura para arriba y un retrato de hombros para arriba (headshot) en nuestro estudio, y luego editar&aacute;s los resultados con un acabado profesional.")
         + framed(HEADER,"El equipo de estudio de tres personas trabajando, con las etiquetas Director de Arte, Fot&oacute;grafo y Asistente de Iluminaci&oacute;n, y el Talento posando frente al fondo"))
+    es+=download_card("DESCARGAS","Descarga Tus Archivos",
+        para("Descarga aqu&iacute; todo lo que necesitas para este m&oacute;dulo. Consigue tus archivos antes de empezar.")
+        + para("<strong>Archivos raw:</strong> descarga los archivos raw de tu grupo del Google Drive de la clase, luego crea tus carpetas e imp&oacute;rtalos a Lightroom Classic (los pasos completos est&aacute;n en el Paso 01). Ya deber&iacute;as tener instalados los presets de hoja de contactos de Lightroom; si no, est&aacute;n en el resumen del curso de Fotograf&iacute;a 2A.")
+        + '<div style="margin:2px 0 14px;">' + dl_link(GDRIVE,"Google Drive: Archivos Raw",download=False) + '</div>'
+        + dl_row(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)"))
     es+=card("TU EQUIPO / TRES ROLES","Trabaja en Equipo de Tres",
         para("Trabajar&aacute;s en grupos de tres y rotar&aacute;n por tres roles profesionales. Cada grupo fotograf&iacute;a a uno o dos de los 20 honorados, y luego cada persona edita las im&aacute;genes que captur&oacute; su grupo.")
         + bullets([
@@ -219,14 +239,6 @@ def overview():
             ("Retrato de cintura para arriba:","encuadrado m&aacute;s o menos de la cintura para arriba."),
             ("Headshot:","encuadrado de los hombros para arriba."),
         ]))
-    es+=card("OBT&Eacute;N TUS ARCHIVOS / RECURSOS","Tus Archivos Raw",
-        para("Descarga los archivos raw de tu grupo del Google Drive de la clase, luego crea tus carpetas e imp&oacute;rtalos a Lightroom Classic (los pasos completos est&aacute;n en el Paso 01). Ya deber&iacute;as tener instalados los presets de hoja de contactos de Lightroom; si no, est&aacute;n en el resumen del curso de Fotograf&iacute;a 2A.")
-        + '<div style="margin-top:6px;">'
-        + dl_link(GDRIVE,"Google Drive: Archivos Raw",download=False)
-        + '</div>')
-    es+=download_card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
-        para("Descarga la reflexi&oacute;n aqu&iacute;. Compl&eacute;tala cuando termines de editar y entr&eacute;gala en el Paso 03.")
-        + dl_row(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)"))
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
@@ -242,7 +254,7 @@ def step01():
         para("Do this first so your files stay safe in the cloud.")
         + stepblock(1,"Check OneDrive Is Syncing","Look at the OneDrive cloud icon in the top-right menu bar, next to the clock. If it shows a red X or a warning, click it and sign in with your school account to clear it.")
         + stepblock(2,"Make Your Folders","In Finder, open <strong>OneDrive &gt; Photography</strong>. Make a folder called <strong>POTQ</strong>, and inside it make a folder called <strong>Raw</strong> (so the path is OneDrive &gt; Photography &gt; POTQ &gt; Raw).")
-        + stepblock(3,"Download Your Raw Files","Open the class <strong>Google Drive</strong> (link on the Overview), find your group&rsquo;s honoree files, and download them into your <strong>Raw</strong> folder."))
+        + stepblock(3,"Download Your Raw Files","Open the class <strong>Google Drive</strong> (link on this module&rsquo;s Overview page, marked M at the top), find your group&rsquo;s honoree files, and download them into your <strong>Raw</strong> folder."))
     en+=card("IN THE STUDIO / THE SESSION","Photograph Your Honorees",
         para("In your group, rotate through the three roles and photograph your assigned honoree or honorees. Capture two frames of each: a waist-up portrait and a headshot.")
         + bullets([
@@ -264,7 +276,7 @@ def step01():
         para("Haz esto primero para que tus archivos queden seguros en la nube.")
         + stepblock(1,"Revisa que OneDrive Est&eacute; Sincronizando","Mira el &iacute;cono de nube de OneDrive en la barra de men&uacute;s arriba a la derecha, junto al reloj. Si muestra una X roja o una advertencia, haz clic e inicia sesi&oacute;n con tu cuenta escolar para quitarla.")
         + stepblock(2,"Crea Tus Carpetas","En Finder, abre <strong>OneDrive &gt; Photography</strong>. Crea una carpeta llamada <strong>POTQ</strong> y dentro de ella una carpeta llamada <strong>Raw</strong> (la ruta queda OneDrive &gt; Photography &gt; POTQ &gt; Raw).")
-        + stepblock(3,"Descarga Tus Archivos Raw","Abre el <strong>Google Drive</strong> de la clase (el enlace est&aacute; en el Resumen), busca los archivos del honorado de tu grupo y desc&aacute;rgalos en tu carpeta <strong>Raw</strong>."))
+        + stepblock(3,"Descarga Tus Archivos Raw","Abre el <strong>Google Drive</strong> de la clase (el enlace est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, marcada con M arriba), busca los archivos del honorado de tu grupo y desc&aacute;rgalos en tu carpeta <strong>Raw</strong>."))
     es+=card("EN EL ESTUDIO / LA SESI&Oacute;N","Fotograf&iacute;a a Tus Honorados",
         para("En tu grupo, roten por los tres roles y fotograf&iacute;en a su honorado o honorados. Captura dos tomas de cada uno: un retrato de cintura para arriba y un headshot.")
         + bullets([
@@ -344,9 +356,9 @@ def step03():
     en=banner("Studio Session &bull; Step 3","Turn In Your Reflection","Reflect on the process, your role, and your edits.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
         para("Finish the project with a short reflection. It asks about your group and roles, the whole studio process, what you enjoyed and found hardest, and how you made your editing choices.")
-        + note_orange("The reflection Word document is on the Overview page. Open the Overview to download it.")
+        + note_orange("The reflection is on this module&rsquo;s Overview page: the first page of this module, marked M in the steps at the top. Open it to download the reflection.")
         + bullets([
-            ("Open it:","open the reflection Word document you downloaded from the Overview."),
+            ("Open it:","open the reflection Word document from this module&rsquo;s Overview page (marked M at the top)."),
             ("Answer every question:","type your answers in the boxes, in full sentences."),
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
         ]))
@@ -358,9 +370,9 @@ def step03():
     es=banner("Sesi&oacute;n de Estudio &bull; Paso 3","Entrega Tu Reflexi&oacute;n","Reflexiona sobre el proceso, tu rol y tus ediciones.","#top","Back to English")
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         para("Termina el proyecto con una reflexi&oacute;n corta. Pregunta sobre tu grupo y los roles, todo el proceso del estudio, qu&eacute; disfrutaste y qu&eacute; fue lo m&aacute;s dif&iacute;cil, y c&oacute;mo tomaste tus decisiones de edici&oacute;n.")
-        + note_orange("El documento de Word de la reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen. Abre el Resumen para descargarlo.")
+        + note_orange("La reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo: la primera p&aacute;gina de este m&oacute;dulo, marcada con M en los pasos de arriba. &Aacute;brela para descargar la reflexi&oacute;n.")
         + bullets([
-            ("&Aacute;brelo:","abre el documento de Word de la reflexi&oacute;n que descargaste del Resumen."),
+            ("&Aacute;brelo:","abre el documento de Word de la reflexi&oacute;n desde la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."),
             ("Contesta cada pregunta:","escribe tus respuestas en los cuadros, en oraciones completas."),
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
         ]))

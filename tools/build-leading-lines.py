@@ -47,6 +47,24 @@ def card(eyebrow,heading,inner):
 def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
 
+
+def downloads_block(es):
+    # CANONICAL downloads section (orange framework standard), placed right after the
+    # intro/header card on every module Overview. Holds the reflection now; future
+    # modules add more dl_row(...) lines here.
+    eyebrow="DESCARGAS" if es else "DOWNLOADS"
+    heading="Descarga Tus Archivos" if es else "Download Your Files"
+    lead=("Descarga aqu&iacute; todo lo que necesitas para este m&oacute;dulo. Consigue tus archivos antes de empezar." if es
+          else "Download everything you need for this module here. Get your files before you start.")
+    reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
+    ref=REFLECT_ES if es else REFLECT_EN
+    return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #FF6B1A;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#ffb27c;text-transform:uppercase;margin-bottom:12px;">'
+      f'<strong>{eyebrow}</strong></div>'
+      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
+      '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
+      f'{para(lead)}{dl_row(ref,reflabel)}</div>')
+
 def bullets(items):
     r=""
     for b,rest in items:
@@ -185,6 +203,7 @@ def overview():
     en+=card("THE PROJECT / OVERVIEW","Leading Lines on the Walk",
         para("On this photo walk you and a partner hunt for leading lines: lines that pull your eye through a photo toward the subject. You share one class camera, two students per camera. Each of you takes 3 different examples of leading lines. Then you swap photos, cull your best, and turn in 6 photos in all.")
         + framed(HEADER,"Two Pioneer Valley students on a photo walk, one holding a Canon camera, outside the Academy of Arts building"))
+    en+=downloads_block(False)
     en+=card("THE CONCEPT / WHAT TO LOOK FOR","How Leading Lines Work",
         para("A leading line is any line that guides your eye through the photo. It can be a road, a fence, a hallway, a row of lockers, a shadow, or a crack in the sidewalk. Strong leading lines often run from the front of the photo toward the subject in the back.")
         + para("Sometimes the lines seem to meet at one spot far away. That spot is the vanishing point. Lines that head toward a vanishing point add depth and make a flat photo feel three-dimensional.")
@@ -208,14 +227,12 @@ def overview():
            ("Composition","How you arrange everything inside the frame."),
            ("JPG","A common photo file that is ready to share without editing."),
            ("Vanishing Point","The spot far away where leading lines seem to meet.")]))
-    en+=card("REFLECTION / DOWNLOAD","Download Reflection Document",
-        para("Download the reflection here. Fill it out after the walk, then turn it in on Step 02. It asks you to name your partner.")
-        + dl_row(REFLECT_EN,"Reflection Document (Word)"))
 
     es=banner("Fotograf&iacute;a 1A &bull; L&iacute;neas Gu&iacute;a","Caminata de L&iacute;neas Gu&iacute;a","Trabaja en pareja, toma fotos de l&iacute;neas gu&iacute;a y selecciona tus mejores seis.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","L&iacute;neas Gu&iacute;a en la Caminata",
         para("En esta caminata fotogr&aacute;fica t&uacute; y un compa&ntilde;ero buscan l&iacute;neas gu&iacute;a: l&iacute;neas que llevan tu mirada a trav&eacute;s de la foto hacia el sujeto. Comparten una c&aacute;mara de la clase, dos estudiantes por c&aacute;mara. Cada uno toma 3 ejemplos diferentes de l&iacute;neas gu&iacute;a. Luego intercambian fotos, seleccionan sus mejores y entregan 6 fotos en total.")
         + framed(HEADER,"Dos estudiantes de Pioneer Valley en una caminata fotogr&aacute;fica, uno con una c&aacute;mara Canon, afuera del edificio Academy of Arts"))
+    es+=downloads_block(True)
     es+=card("EL CONCEPTO / QU&Eacute; BUSCAR","C&oacute;mo Funcionan las L&iacute;neas Gu&iacute;a",
         para("Una l&iacute;nea gu&iacute;a es cualquier l&iacute;nea que lleva tu mirada a trav&eacute;s de la foto. Puede ser un camino, una reja, un pasillo, una fila de casilleros, una sombra o una grieta en la acera. Las l&iacute;neas gu&iacute;a fuertes suelen ir desde el frente de la foto hacia el sujeto al fondo.")
         + para("A veces las l&iacute;neas parecen unirse en un solo punto a lo lejos. Ese punto es el punto de fuga. Las l&iacute;neas que van hacia un punto de fuga dan profundidad y hacen que una foto plana se sienta tridimensional.")
@@ -239,9 +256,6 @@ def overview():
            ("Composition (Composici&oacute;n)","C&oacute;mo acomodas todo dentro del encuadre."),
            ("JPG","Un archivo de foto com&uacute;n, listo para compartir sin editar."),
            ("Vanishing Point (Punto de Fuga)","El punto a lo lejos donde las l&iacute;neas gu&iacute;a parecen unirse.")]))
-    es+=card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
-        para("Descarga la reflexi&oacute;n aqu&iacute;. Compl&eacute;tala despu&eacute;s de la caminata y entr&eacute;gala en el Paso 02. Te pide el nombre de tu compa&ntilde;ero.")
-        + dl_row(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)"))
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
@@ -316,9 +330,9 @@ def step02():
     en=banner("Leading Lines &bull; Step 2","Turn In Your Reflection","Reflect on the walk, your partner, and your photos.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("STEP 02 / REFLECT","Complete and Upload the Reflection",
         para("Finish with a short reflection. It asks you to name your partner, explain what leading lines are, tell how you culled, and pick your favorite photo.")
-        + note_orange("The reflection Word document is on the Overview page. Open the Overview to download it.")
+        + note_orange("The reflection is on this module&rsquo;s Overview page: the first page of this module, marked M in the steps at the top. Open it to download the reflection.")
         + bullets([
-            ("Open it:","open the reflection Word document you downloaded from the Overview."),
+            ("Open it:","open the reflection Word document from this module&rsquo;s Overview page (marked M at the top)."),
             ("Name your partner:","write your partner&rsquo;s full name where it asks."),
             ("Answer every question:","type your answers in the boxes, in full sentences."),
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
@@ -330,9 +344,9 @@ def step02():
     es=banner("L&iacute;neas Gu&iacute;a &bull; Paso 2","Entrega Tu Reflexi&oacute;n","Reflexiona sobre la caminata, tu compa&ntilde;ero y tus fotos.","#top","Back to English")
     es+=card("PASO 02 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         para("Termina con una reflexi&oacute;n corta. Te pide el nombre de tu compa&ntilde;ero, explicar qu&eacute; son las l&iacute;neas gu&iacute;a, contar c&oacute;mo seleccionaste (cull) y elegir tu foto favorita.")
-        + note_orange("El documento de Word de la reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen. Abre el Resumen para descargarlo.")
+        + note_orange("La reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo: la primera p&aacute;gina de este m&oacute;dulo, marcada con M en los pasos de arriba. &Aacute;brela para descargar la reflexi&oacute;n.")
         + bullets([
-            ("&Aacute;brelo:","abre el documento de Word de la reflexi&oacute;n que descargaste del Resumen."),
+            ("&Aacute;brelo:","abre el documento de Word de la reflexi&oacute;n desde la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."),
             ("Nombra a tu compa&ntilde;ero:","escribe el nombre completo de tu compa&ntilde;ero donde lo pide."),
             ("Contesta cada pregunta:","escribe tus respuestas en los cuadros, en oraciones completas."),
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),

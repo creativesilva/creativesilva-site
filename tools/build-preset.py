@@ -50,6 +50,24 @@ def card(eyebrow,heading,inner):
 def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
 
+
+def downloads_block(es):
+    # CANONICAL downloads section (orange framework standard), placed right after the
+    # intro/header card on every module Overview. Holds the reflection now; future
+    # modules add more dl_row(...) lines here.
+    eyebrow="DESCARGAS" if es else "DOWNLOADS"
+    heading="Descarga Tus Archivos" if es else "Download Your Files"
+    lead=("Descarga aqu&iacute; todo lo que necesitas para este m&oacute;dulo. Consigue tus archivos antes de empezar." if es
+          else "Download everything you need for this module here. Get your files before you start.")
+    reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
+    ref=REFLECT_ES if es else REFLECT_EN
+    return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #FF6B1A;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#ffb27c;text-transform:uppercase;margin-bottom:12px;">'
+      f'<strong>{eyebrow}</strong></div>'
+      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
+      '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
+      f'{para(lead)}{dl_row(ref,reflabel)}</div>')
+
 def bullets(items):
     r=""
     for b,rest in items:
@@ -204,6 +222,7 @@ def overview():
         para("In this project you pick a subject you love and capture a whole series of it: natural light portraits, close-ups of flowers, buildings on campus, or your own idea. You capture at least 12 images that go together, edit the first one until it looks the way you want, and then save those edits as a preset. A preset is your look, saved once, ready to drop on every photo in the series.")
         + para("Then you sync your preset across the series so all your photos share the same feel, pick your best 6, and turn them in.")
         + framed(HEADER,"A Lightroom Classic edit of a natural light portrait, with the Develop panel sliders open on the right"))
+    en+=downloads_block(False)
     en+=card("THE CONCEPT / WHAT IS A PRESET","One Look, Every Photo",
         para("A preset saves all your Develop settings in one click: white balance, exposure, contrast, color, and more. Once you save it, you can add that same look to one photo or a hundred photos at the same time.")
         + para("This is how photographers keep a series looking like it belongs together. Same light, same mood, same colors. Build the look once, then let the preset do the repeat work for you.")
@@ -230,15 +249,13 @@ def overview():
            ("Exposure","How bright or dark the whole photo is."),
            ("Contrast","The difference between the darkest darks and the brightest lights."),
            ("HSL","Hue, Saturation, Luminance: the panel that lets you change each color on its own.")]))
-    en+=card("REFLECTION / DOWNLOAD","Download Reflection Document",
-        para("Download the reflection here. Fill it out after you finish your series, then turn it in on Step 04.")
-        + dl_row(REFLECT_EN,"Reflection Document (Word)"))
 
     es=banner("Fotograf&iacute;a 2A &bull; M&oacute;dulo 04","Crea Tu Propio Preset","Captura una serie, edita una foto y guarda tu estilo como preset.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","Crea un Estilo y Gu&aacute;rdalo",
         para("En este proyecto eliges un tema que te encante y capturas toda una serie: retratos con luz natural, primeros planos de flores, edificios de la escuela o tu propia idea. Capturas al menos 12 im&aacute;genes que van juntas, editas la primera hasta que se vea como quieres, y luego guardas esos ajustes como un preset. Un preset es tu estilo, guardado una vez, listo para poner en cada foto de la serie.")
         + para("Despu&eacute;s sincronizas tu preset en toda la serie para que todas tus fotos tengan la misma sensaci&oacute;n, eliges tus mejores 6 y las entregas.")
         + framed(HEADER,"Una edici&oacute;n en Lightroom Classic de un retrato con luz natural, con los controles del panel Revelar abiertos a la derecha"))
+    es+=downloads_block(True)
     es+=card("EL CONCEPTO / QU&Eacute; ES UN PRESET","Un Estilo, Todas las Fotos",
         para("Un preset guarda todos tus ajustes de Revelar con un clic: balance de blancos, exposici&oacute;n, contraste, color y m&aacute;s. Una vez que lo guardas, puedes poner ese mismo estilo en una foto o en cien fotos al mismo tiempo.")
         + para("As&iacute; es como los fot&oacute;grafos logran que una serie se vea unida. La misma luz, el mismo &aacute;nimo, los mismos colores. Crea el estilo una vez y deja que el preset haga el trabajo repetido por ti.")
@@ -265,9 +282,6 @@ def overview():
            ("Exposure (Exposici&oacute;n)","Qu&eacute; tan clara u oscura est&aacute; toda la foto."),
            ("Contrast (Contraste)","La diferencia entre las sombras m&aacute;s oscuras y las luces m&aacute;s brillantes."),
            ("HSL","Tono, Saturaci&oacute;n, Luminancia: el panel que te deja cambiar cada color por separado.")]))
-    es+=card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
-        para("Descarga la reflexi&oacute;n aqu&iacute;. Compl&eacute;tala despu&eacute;s de terminar tu serie y entr&eacute;gala en el Paso 04.")
-        + dl_row(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)"))
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'

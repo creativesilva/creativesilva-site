@@ -43,6 +43,24 @@ def card(eyebrow,heading,inner):
 def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
 
+
+def downloads_block(es):
+    # CANONICAL downloads section (orange framework standard), placed right after the
+    # intro/header card on every module Overview. Holds the reflection now; future
+    # modules add more dl_row(...) lines here.
+    eyebrow="DESCARGAS" if es else "DOWNLOADS"
+    heading="Descarga Tus Archivos" if es else "Download Your Files"
+    lead=("Descarga aqu&iacute; todo lo que necesitas para este m&oacute;dulo. Consigue tus archivos antes de empezar." if es
+          else "Download everything you need for this module here. Get your files before you start.")
+    reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
+    ref=REFLECT_ES if es else REFLECT_EN
+    return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #FF6B1A;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#ffb27c;text-transform:uppercase;margin-bottom:12px;">'
+      f'<strong>{eyebrow}</strong></div>'
+      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
+      '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
+      f'{para(lead)}{dl_row(ref,reflabel)}</div>')
+
 def bullets(items):
     r=""
     for b,rest in items:
@@ -219,6 +237,7 @@ def overview():
     en+=card("THE COMPETITION / OVERVIEW","Make Your Sketchbook Your Own",
         para("Time to make your sketchbook yours. You will decorate and personalize the manila cover of your 8.5 by 11 inch sketchbook and turn it into art you are proud of. This is a friendly class competition: the best cover wins a prize. You have one week, and you may take your sketchbook home to keep working on it.")
         + framed_hero(HEADER_IMG,"Sketchbook Cover"))
+    en+=downloads_block(False)
     en+=card("THE PRIZE / KEY DATES","Rules and Dates",
         f'<div style="float:right;width:36%;min-width:220px;margin:0 0 14px 22px;background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;line-height:0;"><img src="{CHICKFILA}" alt="Chick-fil-A prize" style="display:block;width:100%;height:auto;" /></div>'
         + para("This is a competition, so do your very best work. Here is what you need to know:")
@@ -245,14 +264,12 @@ def overview():
     en+=card("RESEARCH / FONTS","Choose Your Fonts",
         para("Pick your 2 typefaces on Adobe Fonts. Only this website is approved for the competition. On Adobe Fonts you can type your own word into the Sample Text box to see how it looks in any font.")
         + adobe_link("Adobe Fonts (fonts.adobe.com)"))
-    en+=download_card("REFLECTION / DOWNLOAD","Download Reflection Document",
-        para("Download the reflection here. Fill it out after your cover is done, then turn it in on Step 02.")
-        + dl_row(REFLECT_EN,"Reflection Document (Word)"))
 
     es=HEAD_ES
     es+=card("LA COMPETENCIA / RESUMEN","Haz Tuyo Tu Cuaderno",
         para("Es hora de hacer tuyo tu cuaderno. Vas a decorar y personalizar la portada de manila de tu cuaderno de 8.5 por 11 pulgadas y convertirla en arte del que te sientas orgulloso. Esta es una competencia amistosa de la clase: la mejor portada gana un premio. Tienes una semana, y puedes llevar tu cuaderno a casa para seguir trabajando.")
         + framed_hero(HEADER_IMG,"Portada del Cuaderno"))
+    es+=downloads_block(True)
     es+=card("EL PREMIO / FECHAS CLAVE","Reglas y Fechas",
         f'<div style="float:right;width:36%;min-width:220px;margin:0 0 14px 22px;background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;line-height:0;"><img src="{CHICKFILA}" alt="Premio de Chick-fil-A" style="display:block;width:100%;height:auto;" /></div>'
         + para("Esta es una competencia, as&iacute; que haz tu mejor trabajo. Esto es lo que necesitas saber:")
@@ -279,9 +296,6 @@ def overview():
     es+=card("INVESTIGACI&Oacute;N / FUENTES","Elige Tus Fuentes",
         para("Elige tus 2 tipos de letra en Adobe Fonts. Solo este sitio web est&aacute; aprobado para la competencia. En Adobe Fonts puedes escribir tu propia palabra en la casilla de Texto de Muestra para ver c&oacute;mo se ve en cualquier fuente.")
         + adobe_link("Adobe Fonts (fonts.adobe.com)"))
-    es+=download_card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
-        para("Descarga la reflexi&oacute;n aqu&iacute;. Ll&eacute;nala cuando termines tu portada, luego entr&eacute;gala en el Paso 02.")
-        + dl_row(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)"))
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
@@ -361,7 +375,7 @@ def step02():
     en+=card("REFLECT / STEP 02","Complete and Upload the Reflection",
         reflect_typing_float("A student typing the reflection on a computer","Type your answers right in the document.")
         + para("Finish with a short reflection. It asks about your 3 words, your Cooper Black word, and the 2 Adobe Fonts typefaces you chose, plus how you can test a font on Adobe Fonts.")
-        + note_orange("The reflection Word document is on the Overview page. Open the Overview to download it.")
+        + note_orange("The reflection is on this module&rsquo;s Overview page: the first page of this module, marked M in the steps at the top. Open it to download the reflection.")
         + para("Type your answers, save the document, and upload it to this Canvas assignment."))
     en+=card("TURN IT IN / DELIVERABLES","What You Turn In",
         bullets([
@@ -373,7 +387,7 @@ def step02():
     es+=card("REFLEXIONA / PASO 02","Completa y Sube la Reflexi&oacute;n",
         reflect_typing_float("Un estudiante escribiendo la reflexi&oacute;n en la computadora","Escribe tus respuestas en el documento.")
         + para("Termina con una reflexi&oacute;n corta. Pregunta sobre tus 3 palabras, tu palabra en Cooper Black y los 2 tipos de letra de Adobe Fonts que elegiste, y c&oacute;mo puedes probar una fuente en Adobe Fonts.")
-        + note_orange("El documento de Word de la reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen. Abre el Resumen para descargarlo.")
+        + note_orange("La reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo: la primera p&aacute;gina de este m&oacute;dulo, marcada con M en los pasos de arriba. &Aacute;brela para descargar la reflexi&oacute;n.")
         + para("Escribe tus respuestas, guarda el documento y s&uacute;belo a esta tarea de Canvas."))
     es+=card("ENTR&Eacute;GALO / ENTREGABLES","Qu&eacute; Entregas",
         bullets([
