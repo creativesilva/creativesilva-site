@@ -114,6 +114,9 @@ body {
   border-radius: 3px; border-top: 1px solid rgba(255, 255, 255, 0.12); margin-top: 4px;
 }
 .silva-catmenu-panel .silva-catmenu-leave:hover { background: rgba(0, 184, 184, 0.14); color: #fff; }
+/* Open full catalog + Build Resources are a grouped pair; one faint divider then courses. */
+.silva-catmenu-panel .silva-catmenu-full { border-bottom: none; margin-bottom: 0; }
+.silva-catmenu-div { height: 1px; background: rgba(255, 255, 255, 0.14); margin: 7px 10px 9px; }
 
 .silva-breadcrumb .bc-sep {
   font-size: 11px;

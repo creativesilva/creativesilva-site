@@ -163,8 +163,13 @@
      '/curriculum/shared/jimenez-bonus-vote.html'],
 
     // ── Active teaching catalog: Digital Arts 1A -> Photography 1A -> Photography 2A ──
-    // Ordered to match the curriculum catalog so the pager's Next flows module-to-module
-    // and course-to-course. Kept last so the final module (Studio Session) ends cleanly.
+    // Ordered to match the curriculum catalog so the pager's Prev/Next walk the whole
+    // course both ways: each course opens with a "Course Pages" group (Home, Overview,
+    // Syllabus, + Resources where it exists) that behaves like module 0, then its modules.
+    // ACTIVE_FIRST/ACTIVE_LAST (computed below) bound this walkable span. Kept last.
+    ['/curriculum/digarts1/digarts1a-home.html',
+     '/curriculum/digarts1/digarts1a-course-overview.html',
+     '/curriculum/digarts1/digarts1a-syllabus.html'],
     ['/curriculum/shared/digarts1-pictograms-overview.html',
      '/curriculum/shared/digarts1-pictograms-step01-find-save.html',
      '/curriculum/shared/digarts1-pictograms-step02-sketch-reflect.html'],
@@ -177,6 +182,10 @@
      '/curriculum/shared/digarts1-motivational-poster-step01.html',
      '/curriculum/shared/digarts1-motivational-poster-step02.html',
      '/curriculum/shared/digarts1-motivational-poster-step03.html'],
+    ['/curriculum/photo1/photo1a-home.html',
+     '/curriculum/photo1/photo1a-course-overview.html',
+     '/curriculum/photo1/photo1a-syllabus.html',
+     '/curriculum/shared/photo1a-course-resources.html'],
     ['/curriculum/shared/photo1-self-portrait-overview.html',
      '/curriculum/shared/photo1-self-portrait-step01-capture.html',
      '/curriculum/shared/photo1-self-portrait-step02-reflection.html'],
@@ -186,6 +195,9 @@
     ['/curriculum/shared/photo1-leading-lines-overview.html',
      '/curriculum/shared/photo1-leading-lines-step01-capture.html',
      '/curriculum/shared/photo1-leading-lines-step02-reflection.html'],
+    ['/curriculum/photo2/photo2a-home.html',
+     '/curriculum/photo2/photo2a-course-overview.html',
+     '/curriculum/photo2/photo2a-syllabus.html'],
     ['/curriculum/shared/photo2-composition-overview.html',
      '/curriculum/shared/photo2-composition-step01-photowalk.html',
      '/curriculum/shared/photo2-composition-step02-cull-export.html',
@@ -224,6 +236,21 @@
     return null;
   }
 
+  // The active teaching span (Digital Arts 1A Course Pages ... Photography 2A last step).
+  // Inside it, Prev/Next chain across group boundaries so you can walk the whole course,
+  // and course-to-course, both ways. Outside it (legacy pages), behavior is unchanged.
+  function groupIndexOf(url) {
+    for (var i = 0; i < MODULES.length; i++) {
+      for (var j = 0; j < MODULES[i].length; j++) {
+        if (samePath(MODULES[i][j], url)) { return i; }
+      }
+    }
+    return -1;
+  }
+  var ACTIVE_FIRST = groupIndexOf('/curriculum/digarts1/digarts1a-home.html');
+  var ACTIVE_LAST = groupIndexOf('/curriculum/shared/photo2-preset-step04-reflection.html');
+  function inActive(g) { return ACTIVE_FIRST !== -1 && g >= ACTIVE_FIRST && g <= ACTIVE_LAST; }
+
   // Amazon-style page window: show all when small, else first/last plus a
   // 3-wide window around the current page, with ellipsis for the gaps.
   function pageWindow(total, cur) {
@@ -253,13 +280,21 @@
     pager.className = 'silva-pager';
     pager.setAttribute('aria-label', 'Module page navigation');
 
-    // Previous: the step before this one. On the overview (page 0) there is no
-    // previous step, so the arrow is disabled (use the dots or catalog instead).
-    var prevHref = at.p > 0 ? mod[at.p - 1] : null;
+    // Previous: the step before this one. On page 0, inside the active span, hand
+    // back to the previous group's last page (previous module, or the course's
+    // Course Pages, or the previous course) so you can walk the whole course back.
+    var prevHref = null, prevLabel = '&#8249;&nbsp; Previous';
+    if (at.p > 0) {
+      prevHref = mod[at.p - 1];
+    } else if (inActive(at.g) && at.g > ACTIVE_FIRST) {
+      var pmod = MODULES[at.g - 1];
+      prevHref = pmod[pmod.length - 1];
+      prevLabel = '&#8249;&nbsp; Previous Module';
+    }
     var prev = document.createElement(prevHref ? 'a' : 'span');
     prev.className = 'pg-edge pg-prev' + (prevHref ? '' : ' pg-disabled');
     if (prevHref) { prev.href = prevHref; }
-    prev.innerHTML = '&#8249;&nbsp; Previous';
+    prev.innerHTML = prevLabel;
     pager.appendChild(prev);
 
     // Page numbers (only meaningful when the module has more than one page)
@@ -284,11 +319,14 @@
     }
 
     // Next: the next step in this module. On the last step, hand off to the next
-    // module's first page (labeled "Next Module"). Disabled only at the very end.
+    // group's first page (labeled "Next Module"). Inside the active span this is
+    // bounded by ACTIVE_LAST so the final step ends cleanly; outside, unchanged.
     var atLast = at.p >= mod.length - 1;
     var nextHref = null, nextLabel = 'Next &nbsp;&#8250;';
     if (!atLast) { nextHref = mod[at.p + 1]; }
-    else if (at.g < MODULES.length - 1) { nextHref = MODULES[at.g + 1][0]; nextLabel = 'Next Module &nbsp;&#8250;'; }
+    else if (inActive(at.g)) {
+      if (at.g < ACTIVE_LAST) { nextHref = MODULES[at.g + 1][0]; nextLabel = 'Next Module &nbsp;&#8250;'; }
+    } else if (at.g < MODULES.length - 1) { nextHref = MODULES[at.g + 1][0]; nextLabel = 'Next Module &nbsp;&#8250;'; }
     var next = document.createElement(nextHref ? 'a' : 'span');
     next.className = 'pg-edge pg-next' + (nextHref ? '' : ' pg-disabled');
     if (nextHref) { next.href = nextHref; }
@@ -370,6 +408,18 @@
     full.className = 'silva-catmenu-full';
     full.innerHTML = '<span class="cm-caret">&#9656;</span>Open full catalog';
     panel.appendChild(full);   // first item, before the courses
+
+    // Build Resources: the teacher build/design tools, right below the full catalog.
+    var build = document.createElement('a');
+    build.href = '/curriculum.html#build-resources';
+    build.className = 'silva-catmenu-full silva-catmenu-build';
+    build.innerHTML = '<span class="cm-caret">&#9656;</span>Build Resources';
+    panel.appendChild(build);
+
+    // Faint divider, then the courses.
+    var div = document.createElement('div');
+    div.className = 'silva-catmenu-div';
+    panel.appendChild(div);
 
     MENU.forEach(function (c) {
       var course = document.createElement('button');
