@@ -159,7 +159,44 @@
      '/curriculum/shared/jimenez-step05-mockups.html',
      '/curriculum/shared/jimenez-step06-social-media.html',
      '/curriculum/shared/jimenez-step07-reflection.html',
-     '/curriculum/shared/jimenez-bonus-vote.html']
+     '/curriculum/shared/jimenez-bonus-vote.html'],
+
+    // ── Active teaching catalog: Digital Arts 1A -> Photography 1A -> Photography 2A ──
+    // Ordered to match the curriculum catalog so the pager's Next flows module-to-module
+    // and course-to-course. Kept last so the final module (Studio Session) ends cleanly.
+    ['/curriculum/shared/digarts1-pictograms-overview.html',
+     '/curriculum/shared/digarts1-pictograms-step01-find-save.html',
+     '/curriculum/shared/digarts1-pictograms-step02-sketch-reflect.html'],
+    ['/curriculum/shared/digarts1-color-theory-overview.html',
+     '/curriculum/shared/digarts1-color-theory-step01-analysis.html'],
+    ['/curriculum/shared/digarts1-sketchbook-cover-overview.html',
+     '/curriculum/shared/digarts1-sketchbook-cover-step01-design.html',
+     '/curriculum/shared/digarts1-sketchbook-cover-step02-submit-reflect.html'],
+    ['/curriculum/shared/digarts1-motivational-poster-overview.html',
+     '/curriculum/shared/digarts1-motivational-poster-step01.html',
+     '/curriculum/shared/digarts1-motivational-poster-step02.html',
+     '/curriculum/shared/digarts1-motivational-poster-step03.html'],
+    ['/curriculum/shared/photo1-self-portrait-overview.html',
+     '/curriculum/shared/photo1-self-portrait-step01-capture.html',
+     '/curriculum/shared/photo1-self-portrait-step02-reflection.html'],
+    ['/curriculum/shared/photo1-composition-concepts-overview.html',
+     '/curriculum/shared/photo1-composition-concepts-step01-capture.html',
+     '/curriculum/shared/photo1-composition-concepts-step02-reflection.html'],
+    ['/curriculum/shared/photo1-leading-lines-overview.html',
+     '/curriculum/shared/photo1-leading-lines-step01-capture.html',
+     '/curriculum/shared/photo1-leading-lines-step02-reflection.html'],
+    ['/curriculum/shared/photo2-composition-overview.html',
+     '/curriculum/shared/photo2-composition-step01-photowalk.html',
+     '/curriculum/shared/photo2-composition-step02-cull-export.html',
+     '/curriculum/shared/photo2-composition-step03-reflection.html'],
+    ['/curriculum/shared/photo2-ocf-overview.html',
+     '/curriculum/shared/photo2-ocf-step01-inspiration.html',
+     '/curriculum/shared/photo2-ocf-step02-photowalk.html',
+     '/curriculum/shared/photo2-ocf-step03-reflection.html'],
+    ['/curriculum/shared/photo2-studio-session-overview.html',
+     '/curriculum/shared/photo2-studio-session-step01-capture.html',
+     '/curriculum/shared/photo2-studio-session-step02-cull-edit.html',
+     '/curriculum/shared/photo2-studio-session-step03-reflection.html']
   ];
 
   var SEQUENCE = [];
@@ -210,11 +247,12 @@
     pager.className = 'silva-pager';
     pager.setAttribute('aria-label', 'Module page navigation');
 
-    // Previous module
-    var hasPrev = at.g > 0;
-    var prev = document.createElement(hasPrev ? 'a' : 'span');
-    prev.className = 'pg-edge pg-prev' + (hasPrev ? '' : ' pg-disabled');
-    if (hasPrev) { prev.href = MODULES[at.g - 1][0]; }
+    // Previous: the step before this one. On the overview (page 0) there is no
+    // previous step, so the arrow is disabled (use the dots or catalog instead).
+    var prevHref = at.p > 0 ? mod[at.p - 1] : null;
+    var prev = document.createElement(prevHref ? 'a' : 'span');
+    prev.className = 'pg-edge pg-prev' + (prevHref ? '' : ' pg-disabled');
+    if (prevHref) { prev.href = prevHref; }
     prev.innerHTML = '&#8249;&nbsp; Previous';
     pager.appendChild(prev);
 
@@ -239,12 +277,16 @@
       });
     }
 
-    // Next module
-    var hasNext = at.g < MODULES.length - 1;
-    var next = document.createElement(hasNext ? 'a' : 'span');
-    next.className = 'pg-edge pg-next' + (hasNext ? '' : ' pg-disabled');
-    if (hasNext) { next.href = MODULES[at.g + 1][0]; }
-    next.innerHTML = 'Next &nbsp;&#8250;';
+    // Next: the next step in this module. On the last step, hand off to the next
+    // module's first page (labeled "Next Module"). Disabled only at the very end.
+    var atLast = at.p >= mod.length - 1;
+    var nextHref = null, nextLabel = 'Next &nbsp;&#8250;';
+    if (!atLast) { nextHref = mod[at.p + 1]; }
+    else if (at.g < MODULES.length - 1) { nextHref = MODULES[at.g + 1][0]; nextLabel = 'Next Module &nbsp;&#8250;'; }
+    var next = document.createElement(nextHref ? 'a' : 'span');
+    next.className = 'pg-edge pg-next' + (nextHref ? '' : ' pg-disabled');
+    if (nextHref) { next.href = nextHref; }
+    next.innerHTML = nextLabel;
     pager.appendChild(next);
 
     pager.appendChild(makeCopyBtn());
