@@ -799,46 +799,49 @@
     .pg-btn.flash { background: rgba(0,184,184,0.30); }
     .course-pages-acc .module-row-name { color: #80e0e0; }
 
-    .cat-jump-wrap { text-align: left; margin: 0 0 20px; }
-    .cat-jump-panel .cj-full, .cat-jump-panel .cj-build {
-      display: block; box-sizing: border-box; color: #eaf7f7; text-decoration: none;
-      font-family: var(--font-head, 'Oswald', sans-serif); font-size: 0.82rem; font-weight: 700;
-      letter-spacing: 0.10em; text-transform: uppercase; padding: 11px 15px; border-radius: 3px;
+    /* Full-width quick-menu bar spanning above the course grid (ties the catalog
+       into the site's dark-teal nav). Each course opens its module list. */
+    .cat-bar {
+      margin: 0 0 22px; border: 1px solid rgba(0, 184, 184, 0.30); border-top: 2px solid #00b8b8;
+      border-radius: 4px; background: linear-gradient(135deg, rgba(0, 56, 56, 0.55) 0%, rgba(0, 116, 116, 0.28) 100%);
     }
-    .cat-jump-panel .cj-full:hover, .cat-jump-panel .cj-build:hover { background: rgba(0, 184, 184, 0.14); color: #fff; }
-    .cat-jump-panel .cj-div { height: 1px; background: rgba(255, 255, 255, 0.14); margin: 7px 12px 9px; }
-    .cat-jump { position: relative; display: inline-block; text-align: left; }
-    .cat-jump-trigger {
-      font-family: var(--font-head, 'Oswald', sans-serif); font-size: 0.8rem; font-weight: 600;
-      letter-spacing: 0.14em; text-transform: uppercase; color: #eaf7f7; cursor: pointer;
-      background: rgba(0, 184, 184, 0.10); border: 1px solid rgba(0, 184, 184, 0.32); border-top: 2px solid #00b8b8;
-      padding: 11px 20px; border-radius: 3px;
+    .cat-bar-inner { display: flex; align-items: stretch; flex-wrap: wrap; }
+    .cat-bar-label {
+      display: flex; align-items: center; padding: 0 18px; background: rgba(0, 0, 0, 0.28);
+      border-right: 1px solid rgba(0, 184, 184, 0.25); color: #80e0e0;
+      font-family: var(--font-head, 'Oswald', sans-serif); font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; font-size: 0.78rem;
     }
-    .cat-jump-trigger:hover { border-color: rgba(0, 184, 184, 0.6); }
-    .cat-jump-trigger .cj-caret { font-size: 0.75em; margin-left: 7px; opacity: 0.85; transition: transform 0.15s ease; }
-    .cat-jump.open .cat-jump-trigger .cj-caret { transform: rotate(180deg); }
-    .cat-jump-panel {
-      display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 10px;
-      min-width: 300px; max-height: 72vh; overflow-y: auto; text-align: left;
+    .cat-bar-items { display: flex; align-items: stretch; flex-wrap: wrap; flex: 1 1 auto; }
+    .cat-bar-item, .cbc-trigger {
+      display: flex; align-items: center; gap: 7px; padding: 13px 18px; white-space: nowrap;
+      font-family: var(--font-head, 'Oswald', sans-serif); font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; font-size: 0.8rem; color: #eaf7f7; text-decoration: none;
+      background: none; border: 0; cursor: pointer;
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .cat-bar-item:hover, .cbc-trigger:hover, .cat-bar-course.open .cbc-trigger { background: rgba(0, 184, 184, 0.18); color: #fff; }
+    .cat-bar-course { position: relative; display: flex; }
+    .cbc-caret { font-size: 0.7em; opacity: 0.8; transition: transform 0.15s ease; }
+    .cat-bar-course.open .cbc-caret { transform: rotate(180deg); }
+    .cbc-menu {
+      display: none; position: absolute; top: 100%; left: 0; margin-top: 2px; min-width: 240px; z-index: 600;
       background: #06201f; border: 1px solid rgba(0, 184, 184, 0.35); border-top: 3px solid #00b8b8;
-      box-shadow: 0 14px 44px rgba(0, 0, 0, 0.55); border-radius: 5px; padding: 6px; z-index: 500;
+      box-shadow: 0 14px 44px rgba(0, 0, 0, 0.55); border-radius: 0 0 5px 5px; padding: 6px;
     }
-    .cat-jump.open .cat-jump-panel { display: block; }
-    .cat-jump-panel .cj-course {
-      display: block; width: 100%; box-sizing: border-box; text-align: left; background: none; border: 0;
-      color: #eaf7f7; font-family: var(--font-head, 'Oswald', sans-serif); font-size: 0.92rem; font-weight: 700;
-      letter-spacing: 0.03em; text-transform: uppercase; padding: 11px 13px; cursor: pointer; border-radius: 3px;
+    .cat-bar-course.open .cbc-menu { display: block; }
+    .cbc-mod {
+      display: block; color: rgba(255, 255, 255, 0.85); text-decoration: none; font-size: 0.85rem; font-weight: 500;
+      letter-spacing: 0.03em; text-transform: uppercase; padding: 9px 13px; border-radius: 3px;
     }
-    .cat-jump-panel .cj-course:hover { background: rgba(0, 184, 184, 0.14); }
-    .cat-jump-panel .cj-cc { display: inline-block; width: 14px; margin-right: 8px; color: #00b8b8; transition: transform 0.15s ease; }
-    .cat-jump-panel .cj-course.open .cj-cc { transform: rotate(90deg); }
-    .cat-jump-panel .cj-mods { display: none; padding: 2px 0 8px; }
-    .cat-jump-panel .cj-mods.open { display: block; }
-    .cat-jump-panel .cj-mod {
-      display: block; color: rgba(255, 255, 255, 0.82); text-decoration: none; font-size: 0.88rem;
-      font-weight: 500; letter-spacing: 0.03em; text-transform: uppercase; padding: 9px 13px 9px 35px; border-radius: 3px;
+    .cbc-mod:hover { background: rgba(0, 184, 184, 0.18); color: #fff; }
+    .cat-bar-item.cat-bar-build { color: #ffca9e; margin-left: auto; border-right: 0; border-left: 1px solid rgba(255, 255, 255, 0.06); }
+    .cat-bar-item.cat-bar-build:hover { background: rgba(255, 107, 26, 0.18); color: #fff; }
+    @media (max-width: 640px) {
+      .cat-bar-label { width: 100%; justify-content: center; padding: 9px 0; border-right: 0; border-bottom: 1px solid rgba(0, 184, 184, 0.25); }
+      .cat-bar-item, .cbc-trigger { padding: 11px 13px; font-size: 0.72rem; }
+      .cat-bar-item.cat-bar-build { margin-left: 0; }
     }
-    .cat-jump-panel .cj-mod:hover { background: rgba(0, 184, 184, 0.18); color: #fff; }
 
     /* Image lightbox (teacher-facing catalog only) */
     .cs-lightbox {
@@ -948,18 +951,13 @@
   <main>
     <section class="container">
 
-      <div class="cat-jump-wrap">
-        <div class="cat-jump" id="cat-jump">
-          <button type="button" class="cat-jump-trigger" aria-haspopup="true" aria-expanded="false">Catalog <span class="cj-caret">&#9662;</span></button>
-          <div class="cat-jump-panel" role="menu"></div>
-        </div>
-      </div>
-
       <h1 class="page-title">Curriculum Catalog</h1>
 
       <div class="staging-banner" id="staging-banner" role="status">
         Staging Mode Active: Draft &amp; Staged Modules Visible
       </div>
+
+      <nav class="cat-bar" id="cat-bar" aria-label="Quick catalog menu"></nav>
 
       <div class="course-grid" id="course-grid">
         <details class="course-acc" id="build-resources">
@@ -2043,30 +2041,32 @@
       }
     })();
 
-    // Centered "Jump to a Module" dropdown, built from the same COURSES/MODULES
-    // data (so it auto-updates when a module is added). Active teaching courses ->
-    // their published "Module NN" entries -> that module's overview.
-    (function buildCatalogJump() {
-      var wrap = document.getElementById('cat-jump');
-      var panel = wrap && wrap.querySelector('.cat-jump-panel');
-      if (!wrap || !panel) return;
+    // Full-width quick-menu bar above the course grid, built from the same
+    // COURSES/MODULES data (auto-updates when a module is added). Each course
+    // opens its published "Module NN" list -> that module's overview.
+    (function buildCatBar() {
+      var bar = document.getElementById('cat-bar');
+      if (!bar) return;
+      var inner = document.createElement('div');
+      inner.className = 'cat-bar-inner';
 
-      // Mirror the module-page catalog menu: Open full catalog + Build Resources,
-      // then a faint divider, then the courses -> modules.
+      var label = document.createElement('span');
+      label.className = 'cat-bar-label';
+      label.textContent = 'Catalog';
+      inner.appendChild(label);
+
+      var items = document.createElement('div');
+      items.className = 'cat-bar-items';
+
       var full = document.createElement('a');
+      full.className = 'cat-bar-item';
       full.href = '#course-grid';
-      full.className = 'cj-full';
-      full.textContent = 'Open full catalog';
-      panel.appendChild(full);
-      var build = document.createElement('a');
-      build.href = '#build-resources';
-      build.className = 'cj-build';
-      build.textContent = 'Build Resources';
-      build.addEventListener('click', function () { var d = document.getElementById('build-resources'); if (d) { d.open = true; } });
-      panel.appendChild(build);
-      var cjdiv = document.createElement('div');
-      cjdiv.className = 'cj-div';
-      panel.appendChild(cjdiv);
+      full.textContent = 'Full Catalog';
+      items.appendChild(full);
+
+      function closeAll() {
+        bar.querySelectorAll('.cat-bar-course.open').forEach(function (o) { o.classList.remove('open'); });
+      }
 
       ['da1a', 'photo1a', 'photo2a'].forEach(function (cid) {
         var course = COURSES.find(function (c) { return c.id === cid; });
@@ -2074,41 +2074,47 @@
           return m.course === cid && /^Module\s*\d/i.test(m.name) && m.status === 'published';
         });
         if (!course || !mods.length) return;
+        var wrap = document.createElement('div');
+        wrap.className = 'cat-bar-course';
         var btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'cj-course';
-        btn.innerHTML = '<span class="cj-cc">&#9656;</span>' + course.title;
-        var sub = document.createElement('div');
-        sub.className = 'cj-mods';
+        btn.className = 'cbc-trigger';
+        btn.setAttribute('aria-haspopup', 'true');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.innerHTML = course.title + ' <span class="cbc-caret">&#9662;</span>';
+        var menu = document.createElement('div');
+        menu.className = 'cbc-menu';
         mods.forEach(function (m) {
           var a = document.createElement('a');
           a.href = '/' + m.url.replace(/^\//, '');
-          a.className = 'cj-mod';
+          a.className = 'cbc-mod';
           a.textContent = m.name.replace(/^Module\s*\d+:\s*/i, '');
-          sub.appendChild(a);
+          menu.appendChild(a);
         });
         btn.addEventListener('click', function (e) {
           e.stopPropagation();
-          var willOpen = !btn.classList.contains('open');
-          panel.querySelectorAll('.cj-course.open').forEach(function (o) { o.classList.remove('open'); });
-          panel.querySelectorAll('.cj-mods.open').forEach(function (o) { o.classList.remove('open'); });
-          if (willOpen) { btn.classList.add('open'); sub.classList.add('open'); }
+          var willOpen = !wrap.classList.contains('open');
+          closeAll();
+          if (willOpen) { wrap.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+          else { btn.setAttribute('aria-expanded', 'false'); }
         });
-        panel.appendChild(btn);
-        panel.appendChild(sub);
+        wrap.appendChild(btn);
+        wrap.appendChild(menu);
+        items.appendChild(wrap);
       });
-      var trigger = wrap.querySelector('.cat-jump-trigger');
-      trigger.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var open = wrap.classList.toggle('open');
-        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
-      });
-      document.addEventListener('click', function (e) {
-        if (!wrap.contains(e.target)) { wrap.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') { wrap.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
-      });
+
+      var build = document.createElement('a');
+      build.className = 'cat-bar-item cat-bar-build';
+      build.href = '#build-resources';
+      build.textContent = 'Build Resources';
+      build.addEventListener('click', function () { var d = document.getElementById('build-resources'); if (d) { d.open = true; } });
+      items.appendChild(build);
+
+      inner.appendChild(items);
+      bar.appendChild(inner);
+
+      document.addEventListener('click', function (e) { if (!bar.contains(e.target)) closeAll(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
     })();
 
     // ── Accordion: deep-link, remembered open-state, sensible default ──────────
