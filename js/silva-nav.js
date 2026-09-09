@@ -222,6 +222,10 @@
     for (var p = 0; p < MODULES[m].length; p++) { SEQUENCE.push(MODULES[m][p]); }
   }
 
+  // Expose the page grouping so other pages (the curriculum catalog) can list a
+  // module's pages without duplicating the data. Read-only convenience mirror.
+  try { window.SILVA_MODULES = MODULES; } catch (e) {}
+
   function samePath(a, b) {
     return a === b || a === b.replace(/^\//, '') || ('/' + a) === b;
   }
