@@ -69,6 +69,24 @@ def card(eyebrow,heading,inner):
 def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
 
+
+def downloads_block(es):
+    # CANONICAL downloads section (orange framework standard), placed right after the
+    # intro/header card on every module Overview. Holds the reflection now; future
+    # modules add more dl_row(...) lines here.
+    eyebrow="DESCARGAS" if es else "DOWNLOADS"
+    heading="Descarga Tus Archivos" if es else "Download Your Files"
+    lead=("Descarga aqu&iacute; todo lo que necesitas para este m&oacute;dulo. Consigue tus archivos antes de empezar." if es
+          else "Download everything you need for this module here. Get your files before you start.")
+    reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
+    ref=REFLECT_ES if es else REFLECT_EN
+    return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #FF6B1A;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#ffb27c;text-transform:uppercase;margin-bottom:12px;">'
+      f'<strong>{eyebrow}</strong></div>'
+      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
+      '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
+      f'{para(lead)}{dl_row(ref,reflabel)}</div>')
+
 def bullets(items):
     r=""
     for b,rest in items:
@@ -285,6 +303,7 @@ def overview():
         + note_orange("Keep it school-appropriate. Your subject and everything on the poster must meet school standards: no drugs, alcohol, tobacco, weapons, violence, profanity, or other inappropriate content or characters. If you are unsure whether a choice is appropriate, ask Mr. Silva before you begin.")
         + note_orange("Your quote must be a real quote your subject actually said. For a fictional character, use a real line from their movie, show, game, or comic. Choose a font (typeface) for the words that fits the mood and style of your poster. Your font choice is important: write down the exact name of the font you use, because you will be asked to list it in your reflection document.")
         + ec_note("EXTRA CREDIT","Add a logo or symbol connected to your subject (a team logo, a band logo, an emblem) behind them, with a glow or outline. This part is optional."))
+    en+=downloads_block(False)
     en+=card("QUICK SPECS","Set It Up Right",
         bullets([
             ("Artboard:","8.5 &times; 11 inches, portrait. This is print size."),
@@ -303,9 +322,6 @@ def overview():
             (TUT_SEL,"Introduction to Selections","Learn how to select part of an image. This is the first step to cutting your subject out.",URL_SEL,"Watch: Selections &rarr;"),
             (TUT_MASK,"Get to Know Layer Masks","Use layer masks to hide and show parts of a layer without erasing anything.",URL_MASK,"Watch: Layer Masks &rarr;"),
         ]))
-    en+=download_card("REFLECTION / DOWNLOAD","Download Reflection Document",
-        para("Download the reflection here. Fill it out after your poster is done, then turn it in on Step 03.")
-        + dl_row(REFLECT_EN,"Reflection Document (Word)"))
 
     es=banner("Arte Digital 1A &bull; Photoshop","P&oacute;ster Motivacional","Dise&ntilde;a un p&oacute;ster que anime a alguien que te inspira.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","Lo Que Vas a Crear",
@@ -314,6 +330,7 @@ def overview():
         + note_orange("Mant&eacute;nlo apropiado para la escuela. Tu sujeto y todo lo que est&eacute; en el p&oacute;ster debe cumplir con las normas escolares: nada de drogas, alcohol, tabaco, armas, violencia, groser&iacute;as ni otro contenido o personajes inapropiados. Si no est&aacute;s seguro de si una opci&oacute;n es apropiada, preg&uacute;ntale al Sr. Silva antes de empezar.")
         + note_orange("Tu frase debe ser una frase real que tu sujeto haya dicho. Para un personaje de ficci&oacute;n, usa una l&iacute;nea real de su pel&iacute;cula, serie, videojuego o c&oacute;mic. Elige un tipo de letra para las palabras que quede con el estilo y el ambiente de tu p&oacute;ster. Tu elecci&oacute;n de fuente es importante: anota el nombre exacto de la fuente que uses, porque te pedir&aacute;n que la escribas en tu documento de reflexi&oacute;n.")
         + ec_note("CR&Eacute;DITO EXTRA","Agrega un logo o s&iacute;mbolo relacionado con tu sujeto (un logo de equipo, un logo de banda, un emblema) detr&aacute;s de &eacute;l, con un resplandor o contorno. Esta parte es opcional."))
+    es+=downloads_block(True)
     es+=card("DATOS R&Aacute;PIDOS","Config&uacute;ralo Bien",
         bullets([
             ("Lienzo:","8.5 &times; 11 pulgadas, vertical. Es tama&ntilde;o de impresi&oacute;n."),
@@ -332,9 +349,6 @@ def overview():
             (TUT_SEL,"Introducci&oacute;n a las Selecciones","Aprende a seleccionar parte de una imagen. Es el primer paso para recortar a tu sujeto.",URL_SEL,"Ver: Selecciones &rarr;"),
             (TUT_MASK,"Conoce las M&aacute;scaras de Capa","Usa m&aacute;scaras de capa para ocultar y mostrar partes de una capa sin borrar nada.",URL_MASK,"Ver: M&aacute;scaras de Capa &rarr;"),
         ]))
-    es+=download_card("REFLEXI&Oacute;N / DESCARGA","Descarga el Documento de Reflexi&oacute;n",
-        para("Descarga la reflexi&oacute;n aqu&iacute;. Ll&eacute;nala cuando termines tu p&oacute;ster y entr&eacute;gala en el Paso 03.")
-        + dl_row(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)"))
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
@@ -557,9 +571,9 @@ def step03():
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
         float_right(REFLECT_FLOAT,"A student filling out the Motivational Poster reflection document on a lab computer")
         + para("Finish the project with a reflection. It covers your whole process: who you chose and why, the exact name of the font you used, how you built the print poster AND the mobile wallpaper, the hardest part, and what you are most proud of.")
-        + note_orange("The reflection Word document is on the Overview page. Open the Overview to download it.")
+        + note_orange("The reflection is on this module&rsquo;s Overview page: the first page of this module, marked M in the steps at the top. Open it to download the reflection.")
         + bullets([
-            ("Open it:","open the reflection Word document you downloaded from the Overview."),
+            ("Open it:","open the reflection Word document from this module&rsquo;s Overview page (marked M at the top)."),
             ("Answer every question:","type your answers in the boxes, in full sentences."),
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
         ]))
@@ -572,9 +586,9 @@ def step03():
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         float_right(REFLECT_FLOAT,"Una estudiante completando el documento de reflexi&oacute;n del p&oacute;ster motivacional en una computadora del laboratorio")
         + para("Termina el proyecto con una reflexi&oacute;n. Cubre todo tu proceso: a qui&eacute;n elegiste y por qu&eacute;, el nombre exacto de la fuente que usaste, c&oacute;mo hiciste el p&oacute;ster para imprimir Y el fondo de pantalla del tel&eacute;fono, la parte m&aacute;s dif&iacute;cil y de qu&eacute; est&aacute;s m&aacute;s orgulloso.")
-        + note_orange("El documento de Word de la reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen. Abre el Resumen para descargarlo.")
+        + note_orange("La reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo: la primera p&aacute;gina de este m&oacute;dulo, marcada con M en los pasos de arriba. &Aacute;brela para descargar la reflexi&oacute;n.")
         + bullets([
-            ("&Aacute;brelo:","abre el documento de Word de la reflexi&oacute;n que descargaste del Resumen."),
+            ("&Aacute;brelo:","abre el documento de Word de la reflexi&oacute;n desde la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."),
             ("Contesta cada pregunta:","escribe tus respuestas en los cuadros, en oraciones completas."),
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
         ]))
