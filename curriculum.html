@@ -1608,6 +1608,9 @@
         { label: "Module 02: Color Theory (English)", file: "DA1-Color-Theory-Slides-EN-v2.pptx" },
         { label: "Module 02: Color Theory (Spanish)", file: "DA1-Color-Theory-Slides-ES-v2.pptx" },
       ],
+      photo1a: [
+        { label: "LRC Import Workflow", file: "Photo1-LRC-Import-Workflow-v5.pptx" },
+      ],
     };
     function docLink(file, label) {
       const ext = file.split(".").pop().toUpperCase();
@@ -1790,6 +1793,8 @@
       document.removeEventListener("keydown", qrEsc);
     }
     function qrEsc(e) { if (e.key === "Escape") closeQR(); }
+    // Class Tools: an expandable menu holding the videos/links/tools plus a nested,
+    // further-expandable Slide Decks list (ordered as entered in SLIDE_DECKS).
     function linksBlock(course) {
       const d = COURSE_DOCS[course.id];
       const links = (d && d.links) ? d.links.map(l => linkRow(l.url, l.label)).join("") : "";
@@ -1798,9 +1803,13 @@
       const forms = (d && d.forms) ? d.forms.map(f => formRow(f.url, f.label)).join("") : "";
       const qrs = (d && d.qr) ? d.qr.map(q => qrRow(q.src, q.label, q.download)).join("") : "";
       const locals = (d && d.local) ? d.local.map(l => localRow(l.path, l.label)).join("") : "";
-      if (!links && !vids && !cams && !forms && !qrs && !locals) return "";
-      return `<div class="course-docs">`
-        + `<div class="course-docs-label">Class Tools</div>${links}${vids}${cams}${forms}${qrs}${locals}</div>`;
+      const tools = `${links}${vids}${cams}${forms}${qrs}${locals}`;
+      const decks = slideDecksBlock(course); // nested Slide Decks expandable (published courses)
+      if (!tools && !decks) return "";
+      return `<details class="slide-decks-acc class-tools-acc">`
+        + `<summary class="slide-decks-sum"><span class="slide-decks-title">Class Tools</span>`
+        + `<span class="slide-decks-meta">staff</span></summary>`
+        + `<div class="slide-decks-body">${tools}${decks}</div></details>`;
     }
 
     function buildCourseCard(course) {
@@ -1845,7 +1854,6 @@
             </span>
           </summary>
           <div class="course-acc-body">
-            ${slideDecksBlock(course)}
             ${mods.length ? `<div class="module-list">${moduleRows}</div>` : empty}
             ${docsBlock(course)}
             ${linksBlock(course)}
