@@ -21,6 +21,7 @@ WP_MASK=f"{IMG}/wallpaper-select-mask.png"
 WP_BLUR=f"{IMG}/wallpaper-blur.png"
 WP_GLOW=f"{IMG}/wallpaper-outer-glow.png"
 WP_FLOAT=f"{IMG}/wallpaper-float.jpg"
+REFLECT_FLOAT=f"{IMG}/reflection-float-v1.jpg"
 SAVE_COLLAPSED=f"{IMG}/save-copy-collapsed.png"
 SAVE_EXPANDED=f"{IMG}/save-copy-expanded.png"
 SAVE_FORMAT=f"{IMG}/save-copy-format-jpeg.png"
@@ -554,7 +555,8 @@ def step03():
     STEPLBL="STEP"
     en=banner("Motivational Poster &bull; Step 3","Turn In Your Reflection","Reflect on your whole design process.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
-        para("Finish the project with a reflection. It covers your whole process: who you chose and why, the exact name of the font you used, how you built the print poster AND the mobile wallpaper, the hardest part, and what you are most proud of.")
+        float_right(REFLECT_FLOAT,"A student filling out the Motivational Poster reflection document on a lab computer")
+        + para("Finish the project with a reflection. It covers your whole process: who you chose and why, the exact name of the font you used, how you built the print poster AND the mobile wallpaper, the hardest part, and what you are most proud of.")
         + note_orange("The reflection Word document is on the Overview page. Open the Overview to download it.")
         + bullets([
             ("Open it:","open the reflection Word document you downloaded from the Overview."),
@@ -568,7 +570,8 @@ def step03():
     STEPLBL="PASO"
     es=banner("P&oacute;ster Motivacional &bull; Paso 3","Entrega Tu Reflexi&oacute;n","Reflexiona sobre todo tu proceso de dise&ntilde;o.","#top","Back to English")
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
-        para("Termina el proyecto con una reflexi&oacute;n. Cubre todo tu proceso: a qui&eacute;n elegiste y por qu&eacute;, el nombre exacto de la fuente que usaste, c&oacute;mo hiciste el p&oacute;ster para imprimir Y el fondo de pantalla del tel&eacute;fono, la parte m&aacute;s dif&iacute;cil y de qu&eacute; est&aacute;s m&aacute;s orgulloso.")
+        float_right(REFLECT_FLOAT,"Una estudiante completando el documento de reflexi&oacute;n del p&oacute;ster motivacional en una computadora del laboratorio")
+        + para("Termina el proyecto con una reflexi&oacute;n. Cubre todo tu proceso: a qui&eacute;n elegiste y por qu&eacute;, el nombre exacto de la fuente que usaste, c&oacute;mo hiciste el p&oacute;ster para imprimir Y el fondo de pantalla del tel&eacute;fono, la parte m&aacute;s dif&iacute;cil y de qu&eacute; est&aacute;s m&aacute;s orgulloso.")
         + note_orange("El documento de Word de la reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen. Abre el Resumen para descargarlo.")
         + bullets([
             ("&Aacute;brelo:","abre el documento de Word de la reflexi&oacute;n que descargaste del Resumen."),
