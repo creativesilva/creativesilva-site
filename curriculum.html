@@ -1807,7 +1807,7 @@
       const tools = `${links}${vids}${cams}${forms}${qrs}${locals}`;
       const decks = slideDecksBlock(course); // nested Slide Decks expandable (published courses)
       if (!tools && !decks) return "";
-      return `<details class="slide-decks-acc class-tools-acc">`
+      return `<details class="slide-decks-acc class-tools-acc" open>`
         + `<summary class="slide-decks-sum"><span class="slide-decks-title">Class Tools</span>`
         + `<span class="slide-decks-meta">staff</span></summary>`
         + `<div class="slide-decks-body">${tools}${decks}</div></details>`;
