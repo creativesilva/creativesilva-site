@@ -266,9 +266,9 @@ def step01():
         scrollbox(3,
           stepblock(4,"Import Your Take","Open <strong>Lightroom Classic</strong>. Click <strong>Import</strong>, point to your <strong>Raw</strong> folder, select all your group&rsquo;s images, and import them.")
           + stepblock(5,"Build a Full-Take Contact Sheet","Using your contact sheet preset (it is also on the Photography 2A course overview if you need it), build a contact sheet of your <strong>entire take</strong>: every image your group captured. Use more than one sheet if you have a lot of images.")
-          + stepblock(6,"Export the Contact Sheet","Export the contact sheet as a PDF or JPG so you can turn it in.")))
+          + stepblock(6,"Export the Contact Sheet","Export the contact sheet as a high-resolution JPG so you can turn it in.")))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
-        [("1 contact sheet:","a contact sheet of your entire take (JPG or PDF), uploaded to this Canvas assignment.")])
+        [("1 contact sheet:","a contact sheet of your entire take (high-resolution JPG), uploaded to this Canvas assignment.")])
 
     STEPLBL="PASO"
     es=banner("Sesi&oacute;n de Estudio &bull; Paso 1","Captura e Importa","Fotograf&iacute;a en el estudio, luego importa tu toma.","#top","Back to English")
@@ -288,9 +288,9 @@ def step01():
         scrollbox(3,
           stepblock(4,"Importa Tu Toma","Abre <strong>Lightroom Classic</strong>. Haz clic en <strong>Importar</strong>, apunta a tu carpeta <strong>Raw</strong>, selecciona todas las im&aacute;genes de tu grupo e imp&oacute;rtalas.")
           + stepblock(5,"Arma una Hoja de Contactos de Toda la Toma","Con tu preset de hoja de contactos (tambi&eacute;n en el resumen del curso de Fotograf&iacute;a 2A si lo necesitas), arma una hoja de contactos de <strong>toda tu toma</strong>: cada imagen que captur&oacute; tu grupo. Usa m&aacute;s de una hoja si tienes muchas im&aacute;genes.")
-          + stepblock(6,"Exporta la Hoja de Contactos","Exporta la hoja de contactos como PDF o JPG para poder entregarla.")))
+          + stepblock(6,"Exporta la Hoja de Contactos","Exporta la hoja de contactos como JPG de alta resoluci&oacute;n para poder entregarla.")))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
-        [("1 hoja de contactos:","una hoja de contactos de toda tu toma (JPG o PDF), subida a esta tarea de Canvas.")])
+        [("1 hoja de contactos:","una hoja de contactos de toda tu toma (JPG de alta resoluci&oacute;n), subida a esta tarea de Canvas.")])
 
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
@@ -316,9 +316,9 @@ def step02():
           + stepblock(6,"Fine-Tune the Black &amp; White","With the black-and-white photo selected, open the <strong>B&amp;W</strong> panel (the color mix). Each slider brightens or darkens what used to be a color: for example, lowering <strong>Red / Orange</strong> deepens skin tones and raising them lifts the face. Nudge the sliders and the <strong>Contrast</strong> until the portrait looks strong.")
           + stepblock(7,"Export All Four as JPG","Select all four photos (2 color + 2 black and white), go to <strong>File &gt; Export</strong>, and export as <strong>high-resolution JPG</strong>. Rename them clearly: <strong>waist_up_color</strong>, <strong>headshot_color</strong>, <strong>waist_up_bw</strong>, and <strong>headshot_bw</strong>.")))
     en+=card("CONTACT SHEET / SHOW YOUR FOUR","Build a Contact Sheet of Your 4 Finals",
-        para("After your four images are done, build a <strong>contact sheet</strong> of them using your contact sheet preset (it is also on the Photography 2A course overview if you need it), and export it as a JPG or PDF. This puts all four finals on one sheet."))
+        para("After your four images are done, build a <strong>contact sheet</strong> of them using your contact sheet preset (it is also on the Photography 2A course overview if you need it), and export it as a high-resolution JPG. This puts all four finals on one sheet."))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own): 5 files minimum",
-        [("1 contact sheet:","a contact sheet of your four final images, exported as a JPG or PDF."),
+        [("1 contact sheet:","a contact sheet of your four final images, exported as a high-resolution JPG."),
          ("4 images:","your four finals as high-resolution JPGs: <strong>waist_up_color</strong>, <strong>headshot_color</strong>, <strong>waist_up_bw</strong>, and <strong>headshot_bw</strong>."),
          ("More than one honoree?","if your group photographed more than one honoree, upload a contact sheet plus four images for each. The minimum to complete this step is one honoree (contact sheet + 4 images).")])
 
@@ -338,9 +338,9 @@ def step02():
           + stepblock(6,"Ajusta el Blanco y Negro","Con la foto en blanco y negro seleccionada, abre el panel <strong>B&amp;N</strong> (la mezcla de color). Cada control aclara u oscurece lo que antes era un color: por ejemplo, bajar <strong>Rojo / Naranja</strong> hace m&aacute;s profundos los tonos de piel y subirlos aclara la cara. Mueve los controles y el <strong>Contraste</strong> hasta que el retrato se vea fuerte.")
           + stepblock(7,"Exporta las Cuatro como JPG","Selecciona las cuatro fotos (2 en color + 2 en blanco y negro), ve a <strong>Archivo &gt; Exportar</strong> y exporta como <strong>JPG de alta resoluci&oacute;n</strong>. Renombra con claridad: <strong>waist_up_color</strong>, <strong>headshot_color</strong>, <strong>waist_up_bw</strong> y <strong>headshot_bw</strong>.")))
     es+=card("HOJA DE CONTACTOS / MUESTRA TUS CUATRO","Arma una Hoja de Contactos de Tus 4 Finales",
-        para("Cuando tus cuatro im&aacute;genes est&eacute;n listas, arma una <strong>hoja de contactos</strong> de ellas con tu preset de hoja de contactos (tambi&eacute;n est&aacute; en el resumen del curso de Fotograf&iacute;a 2A si lo necesitas), y exp&oacute;rtala como JPG o PDF. As&iacute; quedan las cuatro finales en una sola hoja."))
+        para("Cuando tus cuatro im&aacute;genes est&eacute;n listas, arma una <strong>hoja de contactos</strong> de ellas con tu preset de hoja de contactos (tambi&eacute;n est&aacute; en el resumen del curso de Fotograf&iacute;a 2A si lo necesitas), y exp&oacute;rtala como JPG de alta resoluci&oacute;n. As&iacute; quedan las cuatro finales en una sola hoja."))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta): 5 archivos m&iacute;nimo",
-        [("1 hoja de contactos:","una hoja de contactos de tus cuatro im&aacute;genes finales, exportada como JPG o PDF."),
+        [("1 hoja de contactos:","una hoja de contactos de tus cuatro im&aacute;genes finales, exportada como JPG de alta resoluci&oacute;n."),
          ("4 im&aacute;genes:","tus cuatro finales como JPG de alta resoluci&oacute;n: <strong>waist_up_color</strong>, <strong>headshot_color</strong>, <strong>waist_up_bw</strong> y <strong>headshot_bw</strong>."),
          ("&iquest;M&aacute;s de un honorado?","si tu grupo fotografi&oacute; a m&aacute;s de un honorado, sube una hoja de contactos m&aacute;s cuatro im&aacute;genes por cada uno. El m&iacute;nimo para completar este paso es un honorado (hoja de contactos + 4 im&aacute;genes).")])
 

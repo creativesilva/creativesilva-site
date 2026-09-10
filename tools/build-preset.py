@@ -319,14 +319,14 @@ def step01():
             ("Cull:","keep at least 12 strong images that go together as a series."),
         ]))
     en+=card("CONTACT SHEET / SHOW YOUR SERIES","Make Your 12-Image Contact Sheet",
-        para("A contact sheet is one page that shows all your photos as small thumbnails. Make yours with the 12-Up contact sheet layout in the Lightroom Classic Print module, then save it as a JPG or PDF.")
+        para("A contact sheet is one page that shows all your photos as small thumbnails. Make yours with the 12-Up contact sheet layout in the Lightroom Classic Print module, then save it as a high-resolution JPG.")
         + bullets([
             ("Select your 12:","pick the images from your culled series."),
             ("Use the 12-Up layout:","in the Print module, choose the 12-Up contact sheet."),
-            ("Save the page:","export the contact sheet as a JPG or PDF to turn in."),
+            ("Save the page:","export the contact sheet as a high-resolution JPG to turn in."),
         ]))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
-        [("1 contact sheet:","your 12-image contact sheet (JPG or PDF), showing your culled series, uploaded to this Canvas assignment.")])
+        [("1 contact sheet:","your 12-image contact sheet (high-resolution JPG), showing your culled series, uploaded to this Canvas assignment.")])
 
     es=banner("Crea Tu Propio Preset &bull; Paso 1","Caminata: Captura y Selecci&oacute;n","Elige una serie, captura 12 o m&aacute;s y entrega una hoja de contactos.","#top","Back to English")
     es+=card("ELIGE / TU SERIE","Elige un Tema y una Luz",
@@ -352,14 +352,14 @@ def step01():
             ("Selecciona:","qu&eacute;date con al menos 12 im&aacute;genes fuertes que van juntas como serie."),
         ]))
     es+=card("HOJA DE CONTACTOS / MUESTRA TU SERIE","Crea Tu Hoja de Contactos de 12 Im&aacute;genes",
-        para("Una hoja de contactos es una p&aacute;gina que muestra todas tus fotos como miniaturas. Crea la tuya con el dise&ntilde;o de hoja de contactos de 12 en el m&oacute;dulo Imprimir de Lightroom Classic, y gu&aacute;rdala como JPG o PDF.")
+        para("Una hoja de contactos es una p&aacute;gina que muestra todas tus fotos como miniaturas. Crea la tuya con el dise&ntilde;o de hoja de contactos de 12 en el m&oacute;dulo Imprimir de Lightroom Classic, y gu&aacute;rdala como JPG de alta resoluci&oacute;n.")
         + bullets([
             ("Selecciona tus 12:","elige las im&aacute;genes de tu serie seleccionada."),
             ("Usa el dise&ntilde;o de 12:","en el m&oacute;dulo Imprimir, elige la hoja de contactos de 12."),
-            ("Guarda la p&aacute;gina:","exporta la hoja de contactos como JPG o PDF para entregar."),
+            ("Guarda la p&aacute;gina:","exporta la hoja de contactos como JPG de alta resoluci&oacute;n para entregar."),
         ]))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
-        [("1 hoja de contactos:","tu hoja de contactos de 12 im&aacute;genes (JPG o PDF), que muestra tu serie seleccionada, subida a esta tarea de Canvas.")])
+        [("1 hoja de contactos:","tu hoja de contactos de 12 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tu serie seleccionada, subida a esta tarea de Canvas.")])
 
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
@@ -444,10 +444,10 @@ def step03():
         + bullets([
             ("Pick your best 6:","choose the 6 strongest photos from your synced series."),
             ("Export high-resolution:","export the 6 as high-quality JPGs."),
-            ("Make the 6-Up contact sheet:","use the 6-Up layout in the Print module, then save it as a JPG or PDF."),
+            ("Make the 6-Up contact sheet:","use the 6-Up layout in the Print module, then save it as a high-resolution JPG."),
         ]))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own): 7 files",
-        [("1 contact sheet:","your 6-image contact sheet (JPG or PDF)."),
+        [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG)."),
          ("6 high-resolution images:","your 6 best photos, exported as high-resolution JPGs, uploaded to this Canvas assignment.")])
 
     es=banner("Crea Tu Propio Preset &bull; Paso 3","Entrega Tu Serie","Sincroniza tu preset, haz ajustes y entrega tus mejores seis.","#top","Back to English")
@@ -471,10 +471,10 @@ def step03():
         + bullets([
             ("Elige tus mejores 6:","escoge las 6 fotos m&aacute;s fuertes de tu serie sincronizada."),
             ("Exporta en alta resoluci&oacute;n:","exporta las 6 como JPG de alta calidad."),
-            ("Crea la hoja de 6:","usa el dise&ntilde;o de 6 en el m&oacute;dulo Imprimir y gu&aacute;rdala como JPG o PDF."),
+            ("Crea la hoja de 6:","usa el dise&ntilde;o de 6 en el m&oacute;dulo Imprimir y gu&aacute;rdala como JPG de alta resoluci&oacute;n."),
         ]))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta): 7 archivos",
-        [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG o PDF)."),
+        [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG de alta resoluci&oacute;n)."),
          ("6 im&aacute;genes en alta resoluci&oacute;n:","tus 6 mejores fotos, exportadas como JPG de alta resoluci&oacute;n, subidas a esta tarea de Canvas.")])
 
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a><a href="{S4}" class="silva-step-btn">Step 04 &#8594;</a>'

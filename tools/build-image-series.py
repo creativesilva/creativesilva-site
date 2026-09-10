@@ -9,6 +9,9 @@
 import os, re
 SITE="https://www.creativesilva.com"
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
+HEADER=f"{SITE}/assets/images/photo1/image-series/header-v1.png"   # overview header art
+# shared with the Photo 2 Build-Your-Own-Preset module (same capture image, one hosted copy)
+BEE=f"{SITE}/assets/images/photo2/build-your-own-preset/capture-float-v1.jpg"
 LRC=f"{SITE}/assets/images/photo1/lrc-import"          # existing import slide deck images
 SLIDE=LRC+"/lrc-slide-{:02d}.jpg"
 SLIDE_PDF=f"{SITE}/assets/course-documents/Lightroom-Import-Guide.pdf"
@@ -96,6 +99,11 @@ def note_orange(t):
 def framed(src,alt):
     return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;">'
       f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>')
+
+def float_right(src,alt,cap):
+    return ('<div style="float:right;width:40%;min-width:230px;margin:0 0 14px 22px;">'
+      f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
+      f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div></div>')
 
 DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"
 
@@ -224,10 +232,11 @@ def overview():
     en+=card("THE PROJECT / OVERVIEW","Capture a Series That Belongs Together",
         para("On this photo walk you use a classroom camera kit to capture a cohesive series: a group of photos that feel linked, like a family of images. Your series can be circles, shapes, colors, textures, reflections, or your own idea. What matters is that the photos clearly go together.")
         + para("You capture in RAW, offload your photos to OneDrive, and import them into Lightroom Classic. You build your first contact sheet, then cull to your best 6, do a light edit, and turn in a final contact sheet.")
-        + placeholder("Header image coming soon"))
+        + framed(HEADER,"Image Series Photo Walk header: a row of linked photos that form one cohesive series"))
     en+=downloads_block(False)
     en+=card("THE CONCEPT / WHAT MAKES A SERIES","A Family of Images",
-        para("A series is more than a pile of photos. The images share something: the same subject, the same shapes, the same colors, or the same feeling. When someone looks at all of them together, they can tell the photos belong to each other.")
+        float_right(BEE,"A Pioneer Valley student kneeling to photograph a pink flower with a bee, using a Canon camera in golden light in front of the PV campus","Capturing a natural-light series on campus.")
+        + para("A series is more than a pile of photos. The images share something: the same subject, the same shapes, the same colors, or the same feeling. When someone looks at all of them together, they can tell the photos belong to each other.")
         + bullets([
             ("Pick one idea:","circles, shapes, colors, textures, reflections, or your own theme."),
             ("Keep it consistent:","repeat that idea across every photo so they feel linked."),
@@ -255,10 +264,11 @@ def overview():
     es+=card("EL PROYECTO / RESUMEN","Captura una Serie Que Va Junta",
         para("En esta caminata fotogr&aacute;fica usas un kit de c&aacute;mara de la clase para capturar una serie cohesiva: un grupo de fotos que se sienten unidas, como una familia de im&aacute;genes. Tu serie puede ser de c&iacute;rculos, formas, colores, texturas, reflejos o tu propia idea. Lo importante es que las fotos claramente van juntas.")
         + para("Capturas en RAW, descargas tus fotos a OneDrive y las importas a Lightroom Classic. Creas tu primera hoja de contactos, luego eliges tus mejores 6, haces una edici&oacute;n ligera y entregas una hoja de contactos final.")
-        + placeholder("Imagen de encabezado pronto"))
+        + framed(HEADER,"Encabezado de la Caminata de Serie de Im&aacute;genes: una fila de fotos unidas que forman una serie cohesiva"))
     es+=downloads_block(True)
     es+=card("EL CONCEPTO / QU&Eacute; HACE UNA SERIE","Una Familia de Im&aacute;genes",
-        para("Una serie es m&aacute;s que un mont&oacute;n de fotos. Las im&aacute;genes comparten algo: el mismo tema, las mismas formas, los mismos colores o la misma sensaci&oacute;n. Cuando alguien las ve todas juntas, puede notar que las fotos van una con otra.")
+        float_right(BEE,"Una estudiante de Pioneer Valley arrodillada fotografiando una flor rosa con una abeja, con una c&aacute;mara Canon en luz dorada frente al campus de PV","Capturando una serie con luz natural en el campus.")
+        + para("Una serie es m&aacute;s que un mont&oacute;n de fotos. Las im&aacute;genes comparten algo: el mismo tema, las mismas formas, los mismos colores o la misma sensaci&oacute;n. Cuando alguien las ve todas juntas, puede notar que las fotos van una con otra.")
         + bullets([
             ("Elige una idea:","c&iacute;rculos, formas, colores, texturas, reflejos o tu propio tema."),
             ("Mant&eacute;nla consistente:","repite esa idea en cada foto para que se sientan unidas."),
@@ -320,14 +330,14 @@ def step01():
         para("Now import your series into Lightroom Classic. The slide deck below walks you through every click. Scroll through all 12 slides, and download the PDF if you want it open while you work.")
         + slide_deck(False))
     en+=card("CONTACT SHEET / SHOW YOUR SERIES","Make Your 12-Image Contact Sheet",
-        para("A contact sheet is one page that shows all your photos as small thumbnails. Make yours with the 12-Up contact sheet layout in the Lightroom Classic Print module, then save it as a JPG or PDF. The template is on this module&rsquo;s Overview page (marked M at the top).")
+        para("A contact sheet is one page that shows all your photos as small thumbnails. Make yours with the 12-Up contact sheet layout in the Lightroom Classic Print module, then save it as a high-resolution JPG. The template is on this module&rsquo;s Overview page (marked M at the top).")
         + bullets([
             ("Select your images:","pick the photos from your imported series."),
             ("Use the 12-Up layout:","in the Print module, choose the 12-Up contact sheet."),
-            ("Save the page:","export the contact sheet as a JPG or PDF to turn in."),
+            ("Save the page:","export the contact sheet as a high-resolution JPG to turn in."),
         ]))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
-        [("1 contact sheet:","your 12-image contact sheet (JPG or PDF), showing your imported series, uploaded to this Canvas assignment.")])
+        [("1 contact sheet:","your 12-image contact sheet (high-resolution JPG), showing your imported series, uploaded to this Canvas assignment.")])
 
     es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 1","Captura e Importa","Pon RAW, captura tu serie, desc&aacute;rgala a OneDrive e imp&oacute;rtala.","#top","Back to English")
     es+=card("AJUSTE DE C&Aacute;MARA / PON RAW","Primero Pon Tu C&aacute;mara en RAW",
@@ -361,14 +371,14 @@ def step01():
         para("Ahora importa tu serie a Lightroom Classic. Las diapositivas de abajo te gu&iacute;an en cada clic. Despl&aacute;zate por las 12 diapositivas y descarga el PDF si quieres tenerlo abierto mientras trabajas.")
         + slide_deck(True))
     es+=card("HOJA DE CONTACTOS / MUESTRA TU SERIE","Crea Tu Hoja de Contactos de 12 Im&aacute;genes",
-        para("Una hoja de contactos es una p&aacute;gina que muestra todas tus fotos como miniaturas. Crea la tuya con el dise&ntilde;o de hoja de contactos de 12 en el m&oacute;dulo Imprimir de Lightroom Classic, y gu&aacute;rdala como JPG o PDF. La plantilla est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
+        para("Una hoja de contactos es una p&aacute;gina que muestra todas tus fotos como miniaturas. Crea la tuya con el dise&ntilde;o de hoja de contactos de 12 en el m&oacute;dulo Imprimir de Lightroom Classic, y gu&aacute;rdala como JPG de alta resoluci&oacute;n. La plantilla est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
         + bullets([
             ("Selecciona tus im&aacute;genes:","elige las fotos de tu serie importada."),
             ("Usa el dise&ntilde;o de 12:","en el m&oacute;dulo Imprimir, elige la hoja de contactos de 12."),
-            ("Guarda la p&aacute;gina:","exporta la hoja de contactos como JPG o PDF para entregar."),
+            ("Guarda la p&aacute;gina:","exporta la hoja de contactos como JPG de alta resoluci&oacute;n para entregar."),
         ]))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
-        [("1 hoja de contactos:","tu hoja de contactos de 12 im&aacute;genes (JPG o PDF), que muestra tu serie importada, subida a esta tarea de Canvas.")])
+        [("1 hoja de contactos:","tu hoja de contactos de 12 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tu serie importada, subida a esta tarea de Canvas.")])
 
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
@@ -394,14 +404,14 @@ def step02():
         ])
         + note_orange("Keep your edits consistent across all 6 so the series still feels like one family of images."))
     en+=card("CONTACT SHEET / YOUR BEST SIX","Make Your 6-Image Contact Sheet",
-        para("Now make a 6-image contact sheet of your edited picks. Use the 6-Up contact sheet layout in the Print module, then save it as a JPG or PDF. The template is on this module&rsquo;s Overview page (marked M at the top).")
+        para("Now make a 6-image contact sheet of your edited picks. Use the 6-Up contact sheet layout in the Print module, then save it as a high-resolution JPG. The template is on this module&rsquo;s Overview page (marked M at the top).")
         + bullets([
             ("Select your 6:","pick your 6 edited images."),
             ("Use the 6-Up layout:","in the Print module, choose the 6-Up contact sheet."),
-            ("Save the page:","export the contact sheet as a JPG or PDF to turn in."),
+            ("Save the page:","export the contact sheet as a high-resolution JPG to turn in."),
         ]))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
-        [("1 contact sheet:","your 6-image contact sheet (JPG or PDF), showing your 6 edited picks, uploaded to this Canvas assignment.")])
+        [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG), showing your 6 edited picks, uploaded to this Canvas assignment.")])
 
     es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 2","Selecciona y Edita","Elige tus mejores 6, haz una edici&oacute;n ligera y entrega una hoja de contactos de 6.","#top","Back to English")
     es+=card("SELECCIONA / QU&Eacute;DATE CON LAS FUERTES","Selecciona (Cull) Tus Mejores 6",
@@ -421,14 +431,14 @@ def step02():
         ])
         + note_orange("Mant&eacute;n tus ediciones consistentes en las 6 para que la serie siga sinti&eacute;ndose como una familia de im&aacute;genes."))
     es+=card("HOJA DE CONTACTOS / TUS MEJORES SEIS","Crea Tu Hoja de Contactos de 6 Im&aacute;genes",
-        para("Ahora crea una hoja de contactos de 6 im&aacute;genes con tus elegidas editadas. Usa el dise&ntilde;o de hoja de contactos de 6 en el m&oacute;dulo Imprimir, y gu&aacute;rdala como JPG o PDF. La plantilla est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
+        para("Ahora crea una hoja de contactos de 6 im&aacute;genes con tus elegidas editadas. Usa el dise&ntilde;o de hoja de contactos de 6 en el m&oacute;dulo Imprimir, y gu&aacute;rdala como JPG de alta resoluci&oacute;n. La plantilla est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
         + bullets([
             ("Selecciona tus 6:","elige tus 6 im&aacute;genes editadas."),
             ("Usa el dise&ntilde;o de 6:","en el m&oacute;dulo Imprimir, elige la hoja de contactos de 6."),
-            ("Guarda la p&aacute;gina:","exporta la hoja de contactos como JPG o PDF para entregar."),
+            ("Guarda la p&aacute;gina:","exporta la hoja de contactos como JPG de alta resoluci&oacute;n para entregar."),
         ]))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
-        [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG o PDF), que muestra tus 6 elegidas editadas, subida a esta tarea de Canvas.")])
+        [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tus 6 elegidas editadas, subida a esta tarea de Canvas.")])
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
