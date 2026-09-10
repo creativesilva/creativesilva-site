@@ -47,6 +47,21 @@ def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
 
 
+AREA="Photo"   # OneDrive top folder for this course's project folders
+
+def folder_note(es):
+    # Every orange downloads block tells students to make a module project folder and move
+    # their files from Downloads into OneDrive > {AREA} > that folder, so work stays together.
+    if es:
+        return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
+          '<strong style="color:#ffb27c;">Mantente organizado:</strong> crea una carpeta nueva y ll&aacute;mala como este m&oacute;dulo. '
+          'Cuando cada archivo termine de descargarse, mu&eacute;velo de tu carpeta de Descargas a '
+          f'OneDrive &rarr; {AREA} &rarr; esa carpeta del proyecto para que todos tus archivos queden juntos.</div>')
+    return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
+      '<strong style="color:#ffb27c;">Stay organized:</strong> make a new folder and name it after this module. '
+      'As each file finishes downloading, move it out of your Downloads folder into '
+      f'OneDrive &rarr; {AREA} &rarr; that project folder so all your files stay together.</div>')
+
 def downloads_block(es):
     # CANONICAL downloads section (orange framework standard), placed right after the
     # intro/header card on every module Overview. Holds the reflection now; future
@@ -62,7 +77,7 @@ def downloads_block(es):
       f'<strong>{eyebrow}</strong></div>'
       f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
       '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
-      f'{para(lead)}{dl_row(ref,reflabel)}</div>')
+      f'{para(lead)}{dl_row(ref,reflabel)}' + folder_note(es) + '</div>')
 
 def bullets(items):
     r=""
@@ -204,7 +219,8 @@ def overview():
         para("Download everything you need for this module here. Get your files before you start.")
         + para("<strong>Raw files:</strong> download your group&rsquo;s raw files from the class Google Drive, then set up your folders and import into Lightroom Classic (full steps on Step 01). You should already have the Lightroom contact sheet presets installed; if not, they are on the Photography 2A course overview.")
         + '<div style="margin:2px 0 14px;">' + dl_link(GDRIVE,"Google Drive: Raw Files",download=False) + '</div>'
-        + dl_row(REFLECT_EN,"Reflection Document (Word)"))
+        + dl_row(REFLECT_EN,"Reflection Document (Word)")
+        + folder_note(False))
     en+=card("YOUR CREW / THREE ROLES","Work as a Team of Three",
         para("You will work in groups of three and rotate through three professional roles. Each group photographs one or two of the 20 honorees, and then each person edits the images their group captured.")
         + bullets([
@@ -226,7 +242,8 @@ def overview():
         para("Descarga aqu&iacute; todo lo que necesitas para este m&oacute;dulo. Consigue tus archivos antes de empezar.")
         + para("<strong>Archivos raw:</strong> descarga los archivos raw de tu grupo del Google Drive de la clase, luego crea tus carpetas e imp&oacute;rtalos a Lightroom Classic (los pasos completos est&aacute;n en el Paso 01). Ya deber&iacute;as tener instalados los presets de hoja de contactos de Lightroom; si no, est&aacute;n en el resumen del curso de Fotograf&iacute;a 2A.")
         + '<div style="margin:2px 0 14px;">' + dl_link(GDRIVE,"Google Drive: Archivos Raw",download=False) + '</div>'
-        + dl_row(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)"))
+        + dl_row(REFLECT_ES,"Documento de Reflexi&oacute;n (Word)")
+        + folder_note(True))
     es+=card("TU EQUIPO / TRES ROLES","Trabaja en Equipo de Tres",
         para("Trabajar&aacute;s en grupos de tres y rotar&aacute;n por tres roles profesionales. Cada grupo fotograf&iacute;a a uno o dos de los 20 honorados, y luego cada persona edita las im&aacute;genes que captur&oacute; su grupo.")
         + bullets([
