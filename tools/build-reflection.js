@@ -104,9 +104,9 @@ function buildDoc(cfg) {
 }
 
 // ---- shared labels ----
-const EN = { nameLabel: 'Name', periodLabel: 'Period', dateLabel: 'Date',
+const EN = { nameLabel: 'Name:', periodLabel: 'Period:', dateLabel: 'Date:',
   instructions: 'Take your time and answer in full sentences.', placeholder: 'Type your answer here.' };
-const ES = { nameLabel: 'Nombre', periodLabel: 'Periodo', dateLabel: 'Fecha',
+const ES = { nameLabel: 'Nombre:', periodLabel: 'Periodo:', dateLabel: 'Fecha:',
   instructions: 'Tómate tu tiempo y responde con oraciones completas.', placeholder: 'Escribe tu respuesta aquí.' };
 const PVHS_EN = (course) => `${course} · Pioneer Valley High School · Mr. Silva`;
 const PVHS_ES = (course) => `${course} · Pioneer Valley High School · Sr. Silva`;
