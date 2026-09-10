@@ -93,8 +93,11 @@ def deliverables_box(title, lead, items):
         lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#FF6B1A;">&bull;</span> '
               f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
     return ('<div style="background:rgba(255,107,26,0.12);border:1px solid rgba(255,107,26,0.35);border-left:5px solid #FF6B1A;padding:16px 18px;margin:0 0 24px;">'
+      '<div style="display:flex;align-items:flex-start;gap:12px;">'
+      '<div style="flex:1 1 auto;min-width:0;">'
       f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffb27c;margin-bottom:8px;"><strong>{title}</strong></div>'
-      f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div>'
+      f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div></div>'
+      f'<img src="{SITE}/assets/Icons/assignment/deliverables-v1.png" alt="Deliverables" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
       f'{lis}</div>')
 
 def datebox(label, rows_html):
@@ -322,6 +325,8 @@ def step01():
     HEAD_EN=banner("Digital Arts 1A &bull; Sketchbook Cover Art","Sketchbook Cover Art","Design your covers, then turn in two photos.","#espanol","Clic para Espa&ntilde;ol")
     HEAD_ES=banner("Arte Digital 1A &bull; Arte de la Portada","Arte de la Portada","Dise&ntilde;a tus portadas y entrega dos fotos.","#top","Back to English")
     en=HEAD_EN
+    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+        [("2 images:","a photo of your front cover and a photo of your back cover (2 JPGs), uploaded to this Canvas assignment.")])
     en+=card("STEP 01 / DESIGN &amp; CREATE","Design Your Cover",
         cooper_float("One of your 3 words must be drawn in Cooper Black. Use this alphabet as your guide. Tap the image to open it full size.")
         + para("Now design your cover. Plan where your name, period, and 3 words will go, then decorate the front and the back. Take your time and make it yours. You can work in class and take your sketchbook home for more.")
@@ -341,7 +346,7 @@ def step01():
     en+=card("REMEMBER","Before You Finish",
         note_orange("Check your cover: both sides decorated, name and period in the top right corner, at least 3 words, and each word clear and easy to read."))
 
-    en+=card("STEP 01 / TURN IT IN","Photograph and Upload Your 2 Images",
+    en+=card("CAPTURE &amp; UPLOAD","Photograph and Upload Your 2 Images",
         para("When both covers are done, take a clean, clear photo of your FRONT cover and another of your BACK cover with your school iPad. Use good light, hold the iPad straight above the cover, and avoid glare. Upload both images (2 files) to this Canvas assignment.")
         + bullets([
             ("2 JPGs:","one photo of the front cover, one photo of the back cover."),
@@ -350,6 +355,8 @@ def step01():
         + note_orange("This is Step 1 and it is graded on its own. The reflection is turned in separately on Step 2."))
 
     es=HEAD_ES
+    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+        [("2 im&aacute;genes:","una foto de tu portada del frente y una de tu portada del reverso (2 JPG), subidas a esta tarea de Canvas.")])
     es+=card("PASO 01 / DISE&Ntilde;A Y CREA","Dise&ntilde;a Tu Portada",
         cooper_float("Una de tus 3 palabras debe estar dibujada en Cooper Black. Usa este alfabeto como gu&iacute;a. Toca la imagen para abrirla en tama&ntilde;o completo.")
         + para("Ahora dise&ntilde;a tu portada. Planea d&oacute;nde ir&aacute;n tu nombre, tu periodo y tus 3 palabras, y luego decora el frente y el reverso. T&oacute;mate tu tiempo y hazla tuya. Puedes trabajar en clase y llevar tu cuaderno a casa para m&aacute;s.")
@@ -369,7 +376,7 @@ def step01():
     es+=card("RECUERDA","Antes de Terminar",
         note_orange("Revisa tu portada: las dos caras decoradas, nombre y periodo en la esquina superior derecha, al menos 3 palabras, y cada palabra clara y f&aacute;cil de leer."))
 
-    es+=card("PASO 01 / ENTR&Eacute;GALO","Fotograf&iacute;a y Sube Tus 2 Im&aacute;genes",
+    es+=card("CAPTURA Y SUBE","Fotograf&iacute;a y Sube Tus 2 Im&aacute;genes",
         para("Cuando las dos portadas est&eacute;n listas, toma una foto limpia y clara de tu portada del FRENTE y otra del REVERSO con tu iPad de la escuela. Usa buena luz, sostiene el iPad recto sobre la portada y evita el reflejo. Sube las dos im&aacute;genes (2 archivos) a esta tarea de Canvas.")
         + bullets([
             ("2 JPG:","una foto de la portada del frente, una del reverso."),
@@ -387,28 +394,24 @@ def step02():
     HEAD_EN=banner("Digital Arts 1A &bull; Sketchbook Cover Art","Sketchbook Cover Art","Complete and upload your reflection.","#espanol","Clic para Espa&ntilde;ol")
     HEAD_ES=banner("Arte Digital 1A &bull; Arte de la Portada","Arte de la Portada","Completa y sube tu reflexi&oacute;n.","#top","Back to English")
     en=HEAD_EN
+    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+        [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=card("REFLECT / STEP 02","Complete and Upload the Reflection",
         reflect_typing_float("A student typing the reflection on a computer","Type your answers right in the document.")
         + para("Finish with a short reflection. It asks about your 3 words, your Cooper Black word, and the 2 Adobe Fonts typefaces you chose, plus how you can test a font on Adobe Fonts.")
         + note_orange("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
-        + para("Type your answers, save the document, and upload it to this Canvas assignment."))
-    en+=card("TURN IT IN / DELIVERABLES","What You Turn In",
-        bullets([
-            ("1 reflection:","your completed reflection Word document (.docx)."),
-        ])
-        + note_orange("This step is graded on its own. Your 2 cover images were turned in on Step 1. Be honest and turn in your own work."))
+        + para("Type your answers, save the document, and upload it to this Canvas assignment.")
+        + note_orange("Your 2 cover images were turned in on Step 1. Be honest and turn in your own work."))
 
     es=HEAD_ES
+    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completo, subido a esta tarea de Canvas.")])
     es+=card("REFLEXIONA / PASO 02","Completa y Sube la Reflexi&oacute;n",
         reflect_typing_float("Un estudiante escribiendo la reflexi&oacute;n en la computadora","Escribe tus respuestas en el documento.")
         + para("Termina con una reflexi&oacute;n corta. Pregunta sobre tus 3 palabras, tu palabra en Cooper Black y los 2 tipos de letra de Adobe Fonts que elegiste, y c&oacute;mo puedes probar una fuente en Adobe Fonts.")
         + note_orange("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
-        + para("Escribe tus respuestas, guarda el documento y s&uacute;belo a esta tarea de Canvas."))
-    es+=card("ENTR&Eacute;GALO / ENTREGABLES","Qu&eacute; Entregas",
-        bullets([
-            ("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completo."),
-        ])
-        + note_orange("Este paso se califica por su cuenta. Tus 2 im&aacute;genes de la portada se entregaron en el Paso 1. S&eacute; honesto y entrega tu propio trabajo."))
+        + para("Escribe tus respuestas, guarda el documento y s&uacute;belo a esta tarea de Canvas.")
+        + note_orange("Tus 2 im&aacute;genes de la portada se entregaron en el Paso 1. S&eacute; honesto y entrega tu propio trabajo."))
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a>'

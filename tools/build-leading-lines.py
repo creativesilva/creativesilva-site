@@ -148,8 +148,12 @@ def deliverables_box(title,lead,items):
         lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#FF6B1A;">&bull;</span> '
               f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
     return ('<div style="background:rgba(255,107,26,0.12);border:1px solid rgba(255,107,26,0.35);border-left:5px solid #FF6B1A;padding:16px 18px;margin:0 0 8px;">'
+      '<div style="display:flex;align-items:flex-start;gap:12px;">'
+      '<div style="flex:1 1 auto;min-width:0;">'
       f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffb27c;margin-bottom:8px;"><strong>{title}</strong></div>'
-      f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div>{lis}</div>')
+      f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div></div>'
+      f'<img src="{SITE}/assets/Icons/assignment/deliverables-v1.png" alt="Deliverables" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
+      f'{lis}</div>')
 
 def top_wrap(en,es):
     return ('<div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;'
@@ -280,6 +284,8 @@ def overview():
 # ---------------- STEP 01 ----------------
 def step01():
     en=banner("Leading Lines &bull; Step 1","Capture, Cull &amp; Submit","Take your leading lines, then select your best six.","#espanol","Clic para Espa&ntilde;ol")
+    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own): 6 files",
+        [("6 JPGs:","your best 3 leading-line photos and your partner&rsquo;s best 3, uploaded to this Canvas assignment.")])
     en+=card("CAPTURE / ON THE WALK","Take Your Leading Lines",
         float_right(FLOAT,"A student kneeling to photograph down a long covered walkway whose columns lead the eye to a vanishing point, while a partner watches")
         + para("Pair up and share one class camera, two students per camera. Set the camera to JPG. Then walk campus and hunt for leading lines.")
@@ -304,10 +310,10 @@ def step01():
             ("Your partner&rsquo;s 3:","keep the best photo of each of your partner&rsquo;s 3 examples."),
             ("6 in all:","that is 6 photos, 3 of yours and 3 of your partner&rsquo;s."),
         ]))
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own): 6 files",
-        [("6 JPGs:","your best 3 leading-line photos and your partner&rsquo;s best 3, uploaded to this Canvas assignment.")])
 
     es=banner("L&iacute;neas Gu&iacute;a &bull; Paso 1","Captura, Selecciona y Entrega","Toma tus l&iacute;neas gu&iacute;a y luego elige tus mejores seis.","#top","Back to English")
+    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta): 6 archivos",
+        [("6 JPG:","tus mejores 3 fotos de l&iacute;neas gu&iacute;a y las mejores 3 de tu compa&ntilde;ero, subidas a esta tarea de Canvas.")])
     es+=card("CAPTURA / EN LA CAMINATA","Toma Tus L&iacute;neas Gu&iacute;a",
         float_right(FLOAT,"Un estudiante arrodillado fotografiando por un pasillo largo cuyas columnas gu&iacute;an la mirada hacia un punto de fuga, mientras un compa&ntilde;ero observa")
         + para("Formen pareja y compartan una c&aacute;mara de la clase, dos estudiantes por c&aacute;mara. Pon la c&aacute;mara en JPG. Luego caminen por la escuela y busquen l&iacute;neas gu&iacute;a.")
@@ -332,8 +338,6 @@ def step01():
             ("Los 3 de tu compa&ntilde;ero:","qu&eacute;date con la mejor foto de cada uno de los 3 ejemplos de tu compa&ntilde;ero."),
             ("6 en total:","son 6 fotos, 3 tuyas y 3 de tu compa&ntilde;ero."),
         ]))
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta): 6 archivos",
-        [("6 JPG:","tus mejores 3 fotos de l&iacute;neas gu&iacute;a y las mejores 3 de tu compa&ntilde;ero, subidas a esta tarea de Canvas.")])
 
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
@@ -343,6 +347,8 @@ def step01():
 # ---------------- STEP 02 ----------------
 def step02():
     en=banner("Leading Lines &bull; Step 2","Turn In Your Reflection","Reflect on the walk, your partner, and your photos.","#espanol","Clic para Espa&ntilde;ol")
+    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+        [("1 reflection:","your completed reflection Word document (.docx), with your partner named, uploaded to this Canvas assignment.")])
     en+=card("STEP 02 / REFLECT","Complete and Upload the Reflection",
         para("Finish with a short reflection. It asks you to name your partner, explain what leading lines are, tell how you culled, and select your favorite photo.")
         + note_orange("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
@@ -352,11 +358,11 @@ def step02():
             ("Answer every question:","type your answers in the boxes, in full sentences."),
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
         ]))
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
-        [("1 reflection:","your completed reflection Word document (.docx), with your partner named, uploaded to this Canvas assignment.")])
     en+=note_orange("Answer honestly, in your own words.")
 
     es=banner("L&iacute;neas Gu&iacute;a &bull; Paso 2","Entrega Tu Reflexi&oacute;n","Reflexiona sobre la caminata, tu compa&ntilde;ero y tus fotos.","#top","Back to English")
+    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n, con el nombre de tu compa&ntilde;ero, subido a esta tarea de Canvas.")])
     es+=card("PASO 02 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         para("Termina con una reflexi&oacute;n corta. Te pide el nombre de tu compa&ntilde;ero, explicar qu&eacute; son las l&iacute;neas gu&iacute;a, contar c&oacute;mo seleccionaste (cull) y elegir tu foto favorita.")
         + note_orange("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
@@ -366,8 +372,6 @@ def step02():
             ("Contesta cada pregunta:","escribe tus respuestas en los cuadros, en oraciones completas."),
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
         ]))
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
-        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n, con el nombre de tu compa&ntilde;ero, subido a esta tarea de Canvas.")])
     es+=note_orange("Contesta con honestidad, en tus propias palabras.")
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)
