@@ -10,6 +10,7 @@ SITE="https://www.creativesilva.com"
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 END_IMG=f"{SITE}/assets/images/digarts1/live-stream-graphic/live-stream-end-example-v1.jpg"
 ASSETS_ZIP=f"{SITE}/assets/course-documents/Live-Stream-Graphic-Assets.zip"
+SLIDES_PDF=f"{SITE}/assets/course-documents/Live-Stream-Graphic-Slides.pdf"
 
 OVER="digarts1-live-stream-graphic-overview.html"
 S1="digarts1-live-stream-graphic-step01.html"
@@ -65,7 +66,7 @@ def note_orange(t):
 
 def scrollbox(es, inner):
     # long step sequences go in a contained scroll panel so the page looks less intimidating
-    hint=('Scroll inside the box to see all 7 steps' if not es else 'Despl&aacute;zate en el cuadro para ver los 7 pasos')
+    hint=('Scroll inside the box to see all 13 steps' if not es else 'Despl&aacute;zate en el cuadro para ver los 13 pasos')
     return (f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
       '<div class="silva-scroll" style="max-height:520px;overflow-y:auto;padding:16px 18px 20px;border:1px solid rgba(0,184,184,0.22);border-radius:14px;'
       'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.16) 100%);">'
@@ -198,7 +199,7 @@ def overview():
     en+=card("THE PROJECT / OVERVIEW","Build a Live Stream Graphic",
         float_right(END_IMG,"Finished History 301 Live Stream graphic: an arch photo with an orange bar on the left, a blue bar on the right, a green wash, and the words HISTORY 301 and LIVE STREAM in white","What your finished graphic will look like.")
         + para("In this project you follow clear steps in Adobe Photoshop to build a live stream promo graphic. Everyone starts from the same photo and follows the same steps, so all your graphics will come out looking alike.")
-        + para("You will make a new Photoshop file, add a photo, add two colored bars, add a green color wash, add the words &ldquo;History 301&rdquo; and &ldquo;Live Stream,&rdquo; add a blue spatter, and export your finished image to turn in.")
+        + para("You will make a new Photoshop file, add a photo, add two colored bars, add the words &ldquo;History 301&rdquo; and &ldquo;Live Stream,&rdquo; add a green color wash, paint a blue spatter, move the photo and use Generative Fill to fill the gap, and export your finished image to turn in.")
         + '<div style="clear:both;"></div>'
         + note_orange("This is a follow-along how-to, not a free-choice project. Do the steps in order so your result matches the example."))
     en+=card("SKILLS / WHAT YOU WILL LEARN","New Photoshop Skills",
@@ -206,9 +207,10 @@ def overview():
         + bullets([
             ("Start a file:","make a new Photoshop document the right size."),
             ("Add a photo:","place a photo into your design and size it."),
-            ("Select and fill:","make a box selection and fill it with a color."),
+            ("Select and fill:","use the Rectangular Marquee to make a box and fill it with color."),
             ("Add type:","add and style words (text) on your image."),
             ("Layers and blending:","stack layers and use a blending mode to mix colors."),
+            ("Adjustment layers and AI:","add a solid color layer, and use Generative Fill to extend the photo."),
             ("Export:","save a finished copy to hand in."),
         ]))
     en+=card("VOCABULARY / 6 TERMS","Key Words",
@@ -223,13 +225,13 @@ def overview():
     en+=card("DOWNLOADS / GET YOUR FILES","Download Your Files",
         para("Grab the project files here. The Lesson Slides show a picture for every step.")
         + dl_row(ASSETS_ZIP,"Project Files (ZIP)")
-        + '<div style="margin-top:10px;">' + pdf_placeholder("Lesson Slides (PDF) &middot; link coming soon") + '</div>')
+        + '<div style="margin-top:10px;">' + dl_row(SLIDES_PDF,"Lesson Slides (PDF)") + '</div>')
 
     es=banner("Arte Digital 1A &bull; M&oacute;dulo 05","Gr&aacute;fico de Live Stream","Sigue los pasos para crear una imagen promocional de live stream en Photoshop.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","Crea un Gr&aacute;fico de Live Stream",
         float_right(END_IMG,"Gr&aacute;fico terminado de History 301 Live Stream: una foto de un arco con una barra naranja a la izquierda, una barra azul a la derecha, un ba&ntilde;o verde y las palabras HISTORY 301 y LIVE STREAM en blanco","As&iacute; se ver&aacute; tu gr&aacute;fico terminado.")
         + para("En este proyecto sigues pasos claros en Adobe Photoshop para crear un gr&aacute;fico promocional de live stream. Todos empiezan con la misma foto y siguen los mismos pasos, as&iacute; que todos los gr&aacute;ficos quedar&aacute;n parecidos.")
-        + para("Vas a crear un archivo nuevo de Photoshop, agregar una foto, agregar dos barras de color, agregar un ba&ntilde;o de color verde, agregar las palabras &ldquo;History 301&rdquo; y &ldquo;Live Stream,&rdquo; agregar un salpicado azul y exportar tu imagen terminada para entregar.")
+        + para("Vas a crear un archivo nuevo de Photoshop, agregar una foto, agregar dos barras de color, agregar las palabras &ldquo;History 301&rdquo; y &ldquo;Live Stream,&rdquo; agregar un ba&ntilde;o de color verde, pintar un salpicado azul, mover la foto y usar Relleno Generativo para llenar el hueco, y exportar tu imagen terminada para entregar.")
         + '<div style="clear:both;"></div>'
         + note_orange("Esto es un instructivo para seguir paso a paso, no un proyecto de elecci&oacute;n libre. Haz los pasos en orden para que tu resultado se parezca al ejemplo."))
     es+=card("HABILIDADES / LO QUE APRENDER&Aacute;S","Nuevas Habilidades de Photoshop",
@@ -237,9 +239,10 @@ def overview():
         + bullets([
             ("Crear un archivo:","haz un documento nuevo de Photoshop del tama&ntilde;o correcto."),
             ("Agregar una foto:","coloca una foto en tu dise&ntilde;o y ajusta su tama&ntilde;o."),
-            ("Seleccionar y rellenar:","haz una selecci&oacute;n de caja y rell&eacute;nala con un color."),
+            ("Seleccionar y rellenar:","usa el Marco Rectangular para hacer una caja y rellenarla con color."),
             ("Agregar texto:","agrega y da estilo a las palabras (texto) en tu imagen."),
             ("Capas y mezcla:","apila capas y usa un modo de fusi&oacute;n para mezclar colores."),
+            ("Capas de ajuste e IA:","agrega una capa de color s&oacute;lido y usa Relleno Generativo para extender la foto."),
             ("Exportar:","guarda una copia terminada para entregar."),
         ]))
     es+=card("VOCABULARIO / 6 T&Eacute;RMINOS","Palabras Clave",
@@ -254,7 +257,7 @@ def overview():
     es+=card("DESCARGAS / OBT&Eacute;N TUS ARCHIVOS","Descarga Tus Archivos",
         para("Consigue aqu&iacute; los archivos del proyecto. Las Diapositivas de la Lecci&oacute;n muestran una imagen de cada paso.")
         + dl_row(ASSETS_ZIP,"Archivos del Proyecto (ZIP)")
-        + '<div style="margin-top:10px;">' + pdf_placeholder("Diapositivas de la Lecci&oacute;n (PDF) &middot; enlace pronto") + '</div>')
+        + '<div style="margin-top:10px;">' + dl_row(SLIDES_PDF,"Diapositivas de la Lecci&oacute;n (PDF)") + '</div>')
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
@@ -265,57 +268,86 @@ def step01():
     en=banner("Live Stream Graphic &bull; Step 1","Build It in Photoshop","Follow the steps in order to build your graphic.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("BEFORE YOU START / THE SLIDES","Follow Along With the Slides",
         para("Do these steps in Adobe Photoshop, in order. The Lesson Slides show a picture for each step, so open them next to Photoshop as you work.")
-        + pdf_placeholder("Lesson Slides (PDF) &middot; link coming soon")
+        + dl_row(SLIDES_PDF,"Lesson Slides (PDF)")
         + note_orange("Use color codes exactly as written (like ff7f00) so your colors match the example."))
     en+=card("STEP-BY-STEP / DO THESE IN ORDER","Build Your Graphic",
         para("Do these steps in Adobe Photoshop, in order. Scroll through the box below, and open the Lesson Slides to see a picture for each step.")
         + scrollbox(False,
-            phase("Step 1 &middot; Start a New File",[
+            phase("Step 1 &middot; New Document",[
                 ("Open Photoshop.",""),
-                ("Make a new file:","choose File &gt; New. Click Film &amp; Video, then click HDTV 1080p (1920 by 1080). Click Create."),
+                ("Make a new file:","choose File &gt; New. Click the Film &amp; Video tab, then click the HDTV 1080p preset (1920 by 1080). Click Create."),
                 ("Save it:","choose File &gt; Save As, name it 01Working, and click Save. Click OK if a box pops up."),
             ])
-            + phase("Step 2 &middot; Place the Arch Photo",[
+            + phase("Step 2 &middot; Place the Photo",[
                 ("Place the photo:","choose File &gt; Place Embedded. Find Arch.jpg in your project files, and click Place."),
-                ("Fill the canvas:","drag a corner of the photo so it covers the whole canvas. Drag the middle to center the building."),
-                ("Lock it in:","press Enter (Windows) or Return (Mac)."),
+                ("Fill the width:","drag a corner handle out so the photo covers the whole width of the canvas."),
+                ("Lock it in:","click the checkmark in the top bar, or press Enter (Windows) or Return (Mac)."),
+            ],intro="Do not center the building yet. You move it near the end.")
+            + phase("Step 3 &middot; Set Units to Pixels",[
+                ("Open the setting:","choose Edit &gt; Preferences &gt; Units &amp; Rulers (Windows) or Photoshop &gt; Settings &gt; Units &amp; Rulers (Mac)."),
+                ("Choose pixels:","set Rulers to Pixels, and click OK. You only do this once."),
             ])
-            + phase("Step 3 &middot; Add an Orange Bar and a Blue Bar",[
-                ("Make a new layer:","in the Layers panel, click the Arch layer. Click the Create a New Layer button. Double-click the new layer&rsquo;s name and change it to Rectangles."),
-                ("Set units to pixels:","choose Edit &gt; Preferences &gt; Units &amp; Rulers (Windows) or Photoshop &gt; Settings &gt; Units &amp; Rulers (Mac). Set Rulers to Pixels, and click OK."),
-                ("Draw the orange box:","pick the Rectangular Marquee tool. Start at the top-left corner and drag right and down to make a thin, tall box, about 96 wide and 1080 tall."),
-                ("Fill it orange:","choose Edit &gt; Fill. Set Contents to Color, type the code ff7f00, and click OK. Click OK again."),
-                ("Clear the selection:","choose Select &gt; Deselect."),
-                ("Draw the blue box:","with the Rectangular Marquee tool, start at the top-right corner and drag left and down to make a wider box, about 660 wide and 1080 tall."),
-                ("Fill it blue:","choose Edit &gt; Fill. Set Contents to Color, type the code 0053b2, and click OK. Click OK again."),
-                ("Clear the selection:","choose Select &gt; Deselect."),
-                ("Let the photo show through:","in the Layers panel, click the mode menu that says Normal, and choose Color."),
-            ],intro="You will add two colored bars on their own layer, so you do not change the photo.")
-            + phase("Step 4 &middot; Add a Green Color Layer",[
+            + phase("Step 4 &middot; New Layer",[
                 ("Pick the layer:","in the Layers panel, click the Arch layer."),
-                ("Add a solid color:","click the Create New Fill or Adjustment Layer button (the half-filled circle) at the bottom of the Layers panel, and choose Solid Color."),
-                ("Choose dark green:","type the code 0c3303, and click OK."),
-                ("Blend it in:","set this new layer&rsquo;s mode menu (Normal) to Hard Light. Then change its Opacity to 90%."),
-                ("Hide the guides:","choose View &gt; Show &gt; Guides to turn them off."),
+                ("Add a layer:","click the Create a New Layer button at the bottom of the Layers panel."),
+                ("Name it:","double-click the new layer&rsquo;s name, type Rectangles, and press Enter or Return."),
             ])
-            + phase("Step 5 &middot; Add the Type",[
-                ("Pick the Type tool:","pick the Horizontal Type tool (the T). In the bar at the top, choose a bold font, set the size to 210 pt, click Center, and set the color to white."),
-                ("Type the title:","click near the middle of the canvas and type HISTORY 301 in capital letters. Click the checkmark to finish."),
-                ("Center it:","pick the Move tool and drag the words to center them."),
-                ("Add the second line:","pick the Horizontal Type tool again. Set the size to 165 pt and click Right align. Click near the lower-right and type LIVE STREAM. Click the checkmark."),
+            + phase("Step 5 &middot; Orange Bar",[
+                ("Get ready:","make sure the Rectangles layer is selected. Pick the Rectangular Marquee tool (press M)."),
+                ("Draw the box:","start just outside the top-left corner and drag down and right. Release when the info reads W 96px and H 1080px."),
+                ("Fill it orange:","in the Contextual Task Bar, click Fill Selection, then Fill Color. Type ff7f00 in the # field, click OK, then OK again."),
+                ("Clear it:","choose Select &gt; Deselect."),
             ])
-            + phase("Step 6 &middot; Paint a Blue Spatter Behind &ldquo;Live&rdquo;",[
-                ("Make a paint layer:","in the Layers panel, click the Rectangles layer. Hold Alt (Windows) or Option (Mac) and click the Create a New Layer button. Name it Paint, and click OK."),
-                ("Set the color:","click the foreground color box at the bottom of the Tools panel. Type the code 4099ff, and click OK."),
-                ("Pick a spatter brush:","pick the Brush tool. Choose Window &gt; Brushes, open the Special Effects Brushes group, and pick a spatter brush. Set the brush Size to about 80."),
-                ("Paint it:","with the Paint layer selected, drag over the word LIVE to build up a blue spatter behind it."),
+            + phase("Step 6 &middot; Blue Bar",[
+                ("Draw the box:","with the Rectangular Marquee tool, start just outside the top-right corner and drag down and left. Release when the info reads W 660px and H 1080px."),
+                ("Fill it blue:","choose Edit &gt; Fill. Set Contents to Color, type 0053b2, and click OK, then OK again."),
+                ("Clear it:","choose Select &gt; Deselect."),
+            ])
+            + phase("Step 7 &middot; Color Blend Mode",[
+                ("Blend the bars:","in the Layers panel, click the blend mode menu (it says Normal) at the top-left, and choose Color. Now the photo shows through both bars."),
                 ("Save:","choose File &gt; Save."),
             ])
-            + phase("Step 7 &middot; Export Your Finished Image",[
+            + phase("Step 8 &middot; Title Text",[
+                ("Set up type:","pick the Horizontal Type tool (press T). In the top bar, choose a bold serif font (the deck uses Abril Fatface), set the size to 210 pt, click Center, and set the color to white (ffffff)."),
+                ("Turn on All Caps:","in the Properties panel, click the All Caps (TT) button."),
+                ("Type the title:","click near the lower-center of the canvas and type History 301. It shows as HISTORY 301."),
+                ("Finish:","click the checkmark, or press Ctrl+Enter (Windows) or Cmd+Return (Mac). Do not press plain Enter."),
+                ("Center it:","pick the Move tool (press V) and drag the words to center them."),
+            ])
+            + phase("Step 9 &middot; Subtitle Text",[
+                ("Start a new line:","choose Select &gt; Deselect Layers so Photoshop makes a new type layer."),
+                ("Change the type:","with the Type tool, change the font to a condensed bold italic (the deck uses Acumin Pro Condensed Black Italic), set the size to 165 pt, and click Right align."),
+                ("Type it:","click near the right side, about two-thirds down the canvas, and type Live Stream. It shows as LIVE STREAM."),
+                ("Finish:","click the checkmark to commit."),
+            ])
+            + phase("Step 10 &middot; Solid Color Layer",[
+                ("Pick the layer:","in the Layers panel, click the Arch layer."),
+                ("Add a solid color:","click the Create New Fill or Adjustment Layer button (the half-filled circle) at the bottom of the Layers panel, and choose Solid Color."),
+                ("Choose dark green:","type 0c3303, and click OK."),
+                ("Blend it in:","set this layer&rsquo;s blend mode to Hard Light, then change its Opacity to 90%."),
+                ("Hide the guides:","choose View &gt; Show &gt; Guides to turn off the cyan guides."),
+            ],intro="This dark green layer makes the white text easier to read.")
+            + phase("Step 11 &middot; Sample and Paint",[
+                ("Sample a blue:","pick the Eyedropper tool (press I) and click a lighter blue area on the right side to load that color."),
+                ("Brighten it:","choose Window &gt; Color. From the panel menu, choose Web Color Sliders, type 4099ff, and press Enter."),
+                ("Make a paint layer:","in the Layers panel, click the Rectangles layer. Hold Alt (Windows) or Option (Mac) and click the Create a New Layer button. Name it Paint, and click OK."),
+                ("Pick a spatter brush:","pick the Brush tool (press B). Choose Window &gt; Brushes, open the Special Effects Brushes group, and pick Kyle&rsquo;s Spatter Brushes - Spatter Bot Tilt. Set the brush Size to 80px."),
+                ("Paint it:","with the Paint layer selected, drag in small circles over the word LIVE to build up a blue spatter. Choose File &gt; Save."),
+            ])
+            + phase("Step 12 &middot; Move and Generative Fill",[
+                ("Set up the Move tool:","pick the Move tool (press V). In the top bar, uncheck Auto-Select."),
+                ("Center the building:","in the Layers panel, click the Arch layer. Drag the photo on the canvas until the building is centered in the green area. A gap shows on the left."),
+                ("See the gap:","hold Alt (Windows) or Option (Mac) and click the eye icon on the Arch layer to hide the other layers."),
+                ("Select the gap:","pick the Rectangular Marquee tool (press M) and drag to select the empty left gap. Overlap the photo edge a little."),
+                ("Fill it with AI:","click the Arch layer in the Layers panel. In the Contextual Task Bar, click Generative Fill, leave the box blank, and click Generate. Click Agree if asked."),
+                ("Pick the best:","in the Properties panel, click each Variation and choose the one that looks most natural."),
+                ("Show everything:","right-click (Windows) or Control-click (Mac) the eye icon on the Generative Fill layer, and choose Show/Hide All Other Layers. Choose File &gt; Save."),
+            ])
+            + phase("Step 13 &middot; Export",[
                 ("Open Export As:","choose File &gt; Export &gt; Export As."),
                 ("Set the file type:","set Format to JPG and Quality to 6."),
-                ("Set the size:","set Width to 1280. The Height changes to 720 on its own."),
-                ("Match the colors:","turn on Convert to sRGB."),
+                ("Set the size:","set Width to 1280 and press Tab. The Height becomes 720."),
+                ("Match the colors:","make sure Convert to sRGB and Embed Color Profile are on."),
                 ("Save the copy:","click Export, name it 01Working, and click Save."),
             ])
         ))
@@ -325,57 +357,86 @@ def step01():
     es=banner("Gr&aacute;fico de Live Stream &bull; Paso 1","Cr&eacute;alo en Photoshop","Sigue los pasos en orden para crear tu gr&aacute;fico.","#top","Back to English")
     es+=card("ANTES DE EMPEZAR / LAS DIAPOSITIVAS","Sigue las Diapositivas",
         para("Haz estos pasos en Adobe Photoshop, en orden. Las Diapositivas de la Lecci&oacute;n muestran una imagen de cada paso, as&iacute; que &aacute;brelas junto a Photoshop mientras trabajas.")
-        + pdf_placeholder("Diapositivas de la Lecci&oacute;n (PDF) &middot; enlace pronto")
+        + dl_row(SLIDES_PDF,"Diapositivas de la Lecci&oacute;n (PDF)")
         + note_orange("Usa los c&oacute;digos de color tal como est&aacute;n escritos (como ff7f00) para que tus colores coincidan con el ejemplo."))
     es+=card("PASO A PASO / HAZLOS EN ORDEN","Crea Tu Gr&aacute;fico",
         para("Haz estos pasos en Adobe Photoshop, en orden. Despl&aacute;zate por el cuadro de abajo y abre las Diapositivas de la Lecci&oacute;n para ver una imagen de cada paso.")
         + scrollbox(True,
-            phase("Paso 1 &middot; Crea un Archivo Nuevo",[
+            phase("Paso 1 &middot; Documento Nuevo",[
                 ("Abre Photoshop.",""),
-                ("Crea un archivo nuevo:","elige Archivo &gt; Nuevo. Haz clic en Cine y Video, luego en HDTV 1080p (1920 por 1080). Haz clic en Crear."),
+                ("Crea un archivo nuevo:","elige Archivo &gt; Nuevo. Haz clic en la pesta&ntilde;a Cine y Video, luego en el ajuste HDTV 1080p (1920 por 1080). Haz clic en Crear."),
                 ("Gu&aacute;rdalo:","elige Archivo &gt; Guardar Como, nombra el archivo 01Working y haz clic en Guardar. Haz clic en OK si aparece un cuadro."),
             ])
-            + phase("Paso 2 &middot; Coloca la Foto del Arco",[
+            + phase("Paso 2 &middot; Coloca la Foto",[
                 ("Coloca la foto:","elige Archivo &gt; Colocar Incrustado. Busca Arch.jpg en tus archivos del proyecto y haz clic en Colocar."),
-                ("Llena el lienzo:","arrastra una esquina de la foto para que cubra todo el lienzo. Arrastra el centro para centrar el edificio."),
-                ("Fija la foto:","presiona Enter (Windows) o Return (Mac)."),
+                ("Llena el ancho:","arrastra una esquina hacia afuera para que la foto cubra todo el ancho del lienzo."),
+                ("F&iacute;jala:","haz clic en la palomita de la barra de arriba, o presiona Enter (Windows) o Return (Mac)."),
+            ],intro="No centres el edificio todav&iacute;a. Lo mueves casi al final.")
+            + phase("Paso 3 &middot; Pon las Unidades en P&iacute;xeles",[
+                ("Abre el ajuste:","elige Edici&oacute;n &gt; Preferencias &gt; Unidades y Reglas (Windows) o Photoshop &gt; Ajustes &gt; Unidades y Reglas (Mac)."),
+                ("Elige p&iacute;xeles:","pon Reglas en P&iacute;xeles y haz clic en OK. Solo lo haces una vez."),
             ])
-            + phase("Paso 3 &middot; Agrega una Barra Naranja y una Azul",[
-                ("Crea una capa nueva:","en el panel Capas, haz clic en la capa Arch. Haz clic en el bot&oacute;n Crear una Capa Nueva. Haz doble clic en el nombre de la capa nueva y c&aacute;mbialo a Rectangles."),
-                ("Pon las unidades en p&iacute;xeles:","elige Edici&oacute;n &gt; Preferencias &gt; Unidades y Reglas (Windows) o Photoshop &gt; Ajustes &gt; Unidades y Reglas (Mac). Pon Reglas en P&iacute;xeles y haz clic en OK."),
-                ("Dibuja la caja naranja:","elige la herramienta Marco Rectangular. Empieza en la esquina superior izquierda y arrastra a la derecha y hacia abajo para hacer una caja delgada y alta, de m&aacute;s o menos 96 de ancho y 1080 de alto."),
-                ("Rell&eacute;nala de naranja:","elige Edici&oacute;n &gt; Rellenar. Pon Contenido en Color, escribe el c&oacute;digo ff7f00 y haz clic en OK. Haz clic en OK otra vez."),
-                ("Quita la selecci&oacute;n:","elige Selecci&oacute;n &gt; Deseleccionar."),
-                ("Dibuja la caja azul:","con la herramienta Marco Rectangular, empieza en la esquina superior derecha y arrastra a la izquierda y hacia abajo para hacer una caja m&aacute;s ancha, de m&aacute;s o menos 660 de ancho y 1080 de alto."),
-                ("Rell&eacute;nala de azul:","elige Edici&oacute;n &gt; Rellenar. Pon Contenido en Color, escribe el c&oacute;digo 0053b2 y haz clic en OK. Haz clic en OK otra vez."),
-                ("Quita la selecci&oacute;n:","elige Selecci&oacute;n &gt; Deseleccionar."),
-                ("Deja ver la foto:","en el panel Capas, haz clic en el men&uacute; de modo que dice Normal y elige Color."),
-            ],intro="Vas a agregar dos barras de color en su propia capa, para no cambiar la foto.")
-            + phase("Paso 4 &middot; Agrega una Capa de Color Verde",[
+            + phase("Paso 4 &middot; Capa Nueva",[
                 ("Elige la capa:","en el panel Capas, haz clic en la capa Arch."),
-                ("Agrega un color s&oacute;lido:","haz clic en el bot&oacute;n Crear Nueva Capa de Relleno o Ajuste (el c&iacute;rculo medio lleno) abajo del panel Capas y elige Color S&oacute;lido."),
-                ("Elige verde oscuro:","escribe el c&oacute;digo 0c3303 y haz clic en OK."),
-                ("M&eacute;zclalo:","pon el men&uacute; de modo (Normal) de esta capa nueva en Luz Fuerte. Luego cambia su Opacidad a 90%."),
-                ("Oculta las gu&iacute;as:","elige Vista &gt; Mostrar &gt; Gu&iacute;as para apagarlas."),
+                ("Agrega una capa:","haz clic en el bot&oacute;n Crear una Capa Nueva abajo del panel Capas."),
+                ("N&oacute;mbrala:","haz doble clic en el nombre de la capa nueva, escribe Rectangles y presiona Enter o Return."),
             ])
-            + phase("Paso 5 &middot; Agrega el Texto",[
-                ("Elige la herramienta Texto:","elige la herramienta Texto Horizontal (la T). En la barra de arriba, elige una fuente en negrita, pon el tama&ntilde;o en 210 pt, haz clic en Centrar y pon el color en blanco."),
-                ("Escribe el t&iacute;tulo:","haz clic cerca del centro del lienzo y escribe HISTORY 301 en letras may&uacute;sculas. Haz clic en la palomita para terminar."),
-                ("Cent&eacute;ralo:","elige la herramienta Mover y arrastra las palabras para centrarlas."),
-                ("Agrega la segunda l&iacute;nea:","elige otra vez la herramienta Texto Horizontal. Pon el tama&ntilde;o en 165 pt y haz clic en Alinear a la derecha. Haz clic cerca de la esquina inferior derecha y escribe LIVE STREAM. Haz clic en la palomita."),
+            + phase("Paso 5 &middot; Barra Naranja",[
+                ("Prep&aacute;rate:","aseg&uacute;rate de que la capa Rectangles est&eacute; seleccionada. Elige la herramienta Marco Rectangular (presiona M)."),
+                ("Dibuja la caja:","empieza justo afuera de la esquina superior izquierda y arrastra hacia abajo y a la derecha. Suelta cuando la info diga W 96px y H 1080px."),
+                ("Rell&eacute;nala de naranja:","en la Barra de Tareas Contextual, haz clic en Rellenar Selecci&oacute;n, luego en Rellenar con Color. Escribe ff7f00 en el campo #, haz clic en OK y OK otra vez."),
+                ("Qu&iacute;tala:","elige Selecci&oacute;n &gt; Deseleccionar."),
             ])
-            + phase("Paso 6 &middot; Pinta un Salpicado Azul Detr&aacute;s de &ldquo;Live&rdquo;",[
-                ("Crea una capa para pintar:","en el panel Capas, haz clic en la capa Rectangles. Mant&eacute;n Alt (Windows) u Option (Mac) y haz clic en el bot&oacute;n Crear una Capa Nueva. Nombra la capa Paint y haz clic en OK."),
-                ("Pon el color:","haz clic en la caja de color frontal abajo del panel de Herramientas. Escribe el c&oacute;digo 4099ff y haz clic en OK."),
-                ("Elige un pincel de salpicado:","elige la herramienta Pincel. Elige Ventana &gt; Pinceles, abre el grupo Pinceles de Efectos Especiales y elige un pincel de salpicado. Pon el Tama&ntilde;o del pincel en m&aacute;s o menos 80."),
-                ("Pinta:","con la capa Paint seleccionada, arrastra sobre la palabra LIVE para crear un salpicado azul detr&aacute;s de ella."),
+            + phase("Paso 6 &middot; Barra Azul",[
+                ("Dibuja la caja:","con la herramienta Marco Rectangular, empieza justo afuera de la esquina superior derecha y arrastra hacia abajo y a la izquierda. Suelta cuando la info diga W 660px y H 1080px."),
+                ("Rell&eacute;nala de azul:","elige Edici&oacute;n &gt; Rellenar. Pon Contenido en Color, escribe 0053b2 y haz clic en OK, luego OK otra vez."),
+                ("Qu&iacute;tala:","elige Selecci&oacute;n &gt; Deseleccionar."),
+            ])
+            + phase("Paso 7 &middot; Modo de Fusi&oacute;n Color",[
+                ("Mezcla las barras:","en el panel Capas, haz clic en el men&uacute; de modo de fusi&oacute;n (dice Normal) arriba a la izquierda y elige Color. Ahora la foto se ve a trav&eacute;s de las dos barras."),
                 ("Guarda:","elige Archivo &gt; Guardar."),
             ])
-            + phase("Paso 7 &middot; Exporta Tu Imagen Terminada",[
+            + phase("Paso 8 &middot; Texto del T&iacute;tulo",[
+                ("Prepara el texto:","elige la herramienta Texto Horizontal (presiona T). En la barra de arriba, elige una fuente serif en negrita (el deck usa Abril Fatface), pon el tama&ntilde;o en 210 pt, haz clic en Centrar y pon el color en blanco (ffffff)."),
+                ("Activa May&uacute;sculas:","en el panel Propiedades, haz clic en el bot&oacute;n May&uacute;sculas (TT)."),
+                ("Escribe el t&iacute;tulo:","haz clic cerca del centro-inferior del lienzo y escribe History 301. Se ve como HISTORY 301."),
+                ("Termina:","haz clic en la palomita, o presiona Ctrl+Enter (Windows) o Cmd+Return (Mac). No presiones solo Enter."),
+                ("Cent&eacute;ralo:","elige la herramienta Mover (presiona V) y arrastra las palabras para centrarlas."),
+            ])
+            + phase("Paso 9 &middot; Texto del Subt&iacute;tulo",[
+                ("Empieza una l&iacute;nea nueva:","elige Selecci&oacute;n &gt; Deseleccionar Capas para que Photoshop haga una capa de texto nueva."),
+                ("Cambia el texto:","con la herramienta Texto, cambia la fuente a una condensada en negrita cursiva (el deck usa Acumin Pro Condensed Black Italic), pon el tama&ntilde;o en 165 pt y haz clic en Alinear a la derecha."),
+                ("Escr&iacute;belo:","haz clic cerca del lado derecho, como a dos tercios hacia abajo, y escribe Live Stream. Se ve como LIVE STREAM."),
+                ("Termina:","haz clic en la palomita para confirmar."),
+            ])
+            + phase("Paso 10 &middot; Capa de Color S&oacute;lido",[
+                ("Elige la capa:","en el panel Capas, haz clic en la capa Arch."),
+                ("Agrega un color s&oacute;lido:","haz clic en el bot&oacute;n Crear Nueva Capa de Relleno o Ajuste (el c&iacute;rculo medio lleno) abajo del panel Capas y elige Color S&oacute;lido."),
+                ("Elige verde oscuro:","escribe 0c3303 y haz clic en OK."),
+                ("M&eacute;zclalo:","pon el modo de fusi&oacute;n de esta capa en Luz Fuerte, luego cambia su Opacidad a 90%."),
+                ("Oculta las gu&iacute;as:","elige Vista &gt; Mostrar &gt; Gu&iacute;as para apagar las gu&iacute;as cian."),
+            ],intro="Esta capa verde oscuro hace que el texto blanco se lea mejor.")
+            + phase("Paso 11 &middot; Muestrea y Pinta",[
+                ("Muestrea un azul:","elige la herramienta Cuentagotas (presiona I) y haz clic en una zona azul m&aacute;s clara del lado derecho para cargar ese color."),
+                ("Acl&aacute;ralo:","elige Ventana &gt; Color. Del men&uacute; del panel, elige Deslizadores de Color Web, escribe 4099ff y presiona Enter."),
+                ("Crea una capa para pintar:","en el panel Capas, haz clic en la capa Rectangles. Mant&eacute;n Alt (Windows) u Option (Mac) y haz clic en el bot&oacute;n Crear una Capa Nueva. N&oacute;mbrala Paint y haz clic en OK."),
+                ("Elige un pincel de salpicado:","elige la herramienta Pincel (presiona B). Elige Ventana &gt; Pinceles, abre el grupo Pinceles de Efectos Especiales y elige Kyle&rsquo;s Spatter Brushes - Spatter Bot Tilt. Pon el Tama&ntilde;o del pincel en 80px."),
+                ("Pinta:","con la capa Paint seleccionada, arrastra en c&iacute;rculos peque&ntilde;os sobre la palabra LIVE para crear un salpicado azul. Elige Archivo &gt; Guardar."),
+            ])
+            + phase("Paso 12 &middot; Mueve y Relleno Generativo",[
+                ("Prepara la herramienta Mover:","elige la herramienta Mover (presiona V). En la barra de arriba, desmarca Selecci&oacute;n Autom&aacute;tica (Auto-Select)."),
+                ("Centra el edificio:","en el panel Capas, haz clic en la capa Arch. Arrastra la foto en el lienzo hasta que el edificio quede centrado en la zona verde. Aparece un hueco a la izquierda."),
+                ("Ve el hueco:","mant&eacute;n Alt (Windows) u Option (Mac) y haz clic en el &iacute;cono de ojo de la capa Arch para ocultar las dem&aacute;s capas."),
+                ("Selecciona el hueco:","elige la herramienta Marco Rectangular (presiona M) y arrastra para seleccionar el hueco vac&iacute;o de la izquierda. Traslapa un poco el borde de la foto."),
+                ("Rell&eacute;nalo con IA:","haz clic en la capa Arch en el panel Capas. En la Barra de Tareas Contextual, haz clic en Relleno Generativo, deja el cuadro en blanco y haz clic en Generar. Haz clic en Aceptar si te lo pide."),
+                ("Elige la mejor:","en el panel Propiedades, haz clic en cada Variaci&oacute;n y elige la que se vea m&aacute;s natural."),
+                ("Muestra todo:","haz clic derecho (Windows) o Control-clic (Mac) en el &iacute;cono de ojo de la capa Relleno Generativo y elige Mostrar/Ocultar Todas las Dem&aacute;s Capas. Elige Archivo &gt; Guardar."),
+            ])
+            + phase("Paso 13 &middot; Exporta",[
                 ("Abre Exportar Como:","elige Archivo &gt; Exportar &gt; Exportar Como."),
                 ("Elige el tipo de archivo:","pon Formato en JPG y Calidad en 6."),
-                ("Pon el tama&ntilde;o:","pon el Ancho en 1280. El Alto cambia a 720 solo."),
-                ("Iguala los colores:","activa Convertir a sRGB."),
+                ("Pon el tama&ntilde;o:","pon el Ancho en 1280 y presiona Tab. El Alto se vuelve 720."),
+                ("Iguala los colores:","aseg&uacute;rate de que Convertir a sRGB e Incrustar Perfil de Color est&eacute;n activados."),
                 ("Guarda la copia:","haz clic en Exportar, nombra el archivo 01Working y haz clic en Guardar."),
             ])
         ))
