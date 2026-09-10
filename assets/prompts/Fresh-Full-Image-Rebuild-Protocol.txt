@@ -1,0 +1,65 @@
+FRESH FULL-IMAGE REBUILD PROTOCOL
+
+Generate this as a completely new image from scratch.
+
+This request is for a full scene reconstruction, not a light edit, refinement, variation, patch, correction pass, or partial modification of a previous image.
+
+Do not reuse the previous image as a base.
+Do not preserve its composition, camera angle, crop, perspective, pose, staging, lighting setup, background arrangement, object placement, anatomy solution, or spatial relationships unless I explicitly instruct you to keep one of those elements.
+
+If reference images are attached, treat them only as visual reference material for things such as:
+- subject identity
+- clothing
+- props
+- furniture
+- architectural design
+- materials
+- color language
+- environment aesthetic
+- product details
+- overall visual canon
+
+Do not assume the reference image's viewpoint or composition must be preserved.
+
+Rebuild the requested image from the ground up using the current written instructions as the primary source of truth.
+
+Recalculate and reconstruct:
+- composition
+- camera position
+- camera perspective
+- subject placement
+- body pose and anatomy
+- object geometry
+- environment geometry
+- lighting
+- shadows
+- reflections
+- depth
+- occlusion
+- materials
+- textures
+- foreground and background relationships
+
+All visible elements should be regenerated as part of the new scene rather than inherited from the previous result.
+
+Prioritize:
+- highest possible image quality
+- realistic geometry
+- physically believable structure
+- accurate proportions
+- clean perspective
+- coherent lighting
+- realistic materials
+- correct object contact
+- correct depth and occlusion
+- natural photographic realism
+- strong adherence to the current prompt
+
+Do not take shortcuts by keeping old scene structure simply because it already exists.
+
+If the new prompt changes the camera angle, composition, character position, environment layout, or framing, fully honor those changes even if they differ significantly from the previous image.
+
+Treat prior generations as reference only unless I specifically request an edit.
+
+FINAL INSTRUCTION:
+Create a fresh, newly constructed image from scratch based on the current prompt. Do not perform a partial edit or reuse the previous image's scene solution.
