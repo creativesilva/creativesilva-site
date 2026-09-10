@@ -41,6 +41,16 @@ def card(eyebrow,heading,inner):
       '<div style="height:2px;background:#00b8b8;width:60px;margin-bottom:18px;"></div>'
       f'{inner}</div>')
 
+def downloads_card(eyebrow,heading,inner):
+    # CANONICAL orange downloads card (framework standard), placed right after the
+    # intro/header card on the Overview so students grab files before starting.
+    return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #FF6B1A;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#ffb27c;text-transform:uppercase;margin-bottom:12px;">'
+      f'<strong>{eyebrow}</strong></div>'
+      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
+      '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
+      f'{inner}</div>')
+
 def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
 
@@ -202,6 +212,10 @@ def overview():
         + para("You will make a new Photoshop file, add a photo, add two colored bars, add the words &ldquo;History 301&rdquo; and &ldquo;Live Stream,&rdquo; add a green color wash, paint a blue spatter, move the photo and use Generative Fill to fill the gap, and export your finished image to turn in.")
         + '<div style="clear:both;"></div>'
         + note_orange("This is a follow-along how-to, not a free-choice project. Do the steps in order so your result matches the example."))
+    en+=downloads_card("DOWNLOADS / GET YOUR FILES","Download Your Files",
+        para("Grab the project files here before you start. The Lesson Slides show a picture for every step.")
+        + dl_row(ASSETS_ZIP,"Project Files (ZIP)")
+        + '<div style="margin-top:10px;">' + dl_row(SLIDES_PDF,"Lesson Slides (PDF)") + '</div>')
     en+=card("SKILLS / WHAT YOU WILL LEARN","New Photoshop Skills",
         para("This project teaches you the basics you will use in every Photoshop project after this one:")
         + bullets([
@@ -222,10 +236,6 @@ def overview():
            ("Type","Words (text) you add to your image. Type sits on its own layer."),
            ("Blending Mode","A setting that changes how a layer&rsquo;s colors mix with the layers under it."),
            ("Export","To save a finished copy of your work as a JPG or PNG to share or hand in.")]))
-    en+=card("DOWNLOADS / GET YOUR FILES","Download Your Files",
-        para("Grab the project files here. The Lesson Slides show a picture for every step.")
-        + dl_row(ASSETS_ZIP,"Project Files (ZIP)")
-        + '<div style="margin-top:10px;">' + dl_row(SLIDES_PDF,"Lesson Slides (PDF)") + '</div>')
 
     es=banner("Arte Digital 1A &bull; M&oacute;dulo 05","Gr&aacute;fico de Live Stream","Sigue los pasos para crear una imagen promocional de live stream en Photoshop.","#top","Back to English")
     es+=card("EL PROYECTO / RESUMEN","Crea un Gr&aacute;fico de Live Stream",
@@ -234,6 +244,10 @@ def overview():
         + para("Vas a crear un archivo nuevo de Photoshop, agregar una foto, agregar dos barras de color, agregar las palabras &ldquo;History 301&rdquo; y &ldquo;Live Stream,&rdquo; agregar un ba&ntilde;o de color verde, pintar un salpicado azul, mover la foto y usar Relleno Generativo para llenar el hueco, y exportar tu imagen terminada para entregar.")
         + '<div style="clear:both;"></div>'
         + note_orange("Esto es un instructivo para seguir paso a paso, no un proyecto de elecci&oacute;n libre. Haz los pasos en orden para que tu resultado se parezca al ejemplo."))
+    es+=downloads_card("DESCARGAS / OBT&Eacute;N TUS ARCHIVOS","Descarga Tus Archivos",
+        para("Consigue aqu&iacute; los archivos del proyecto antes de empezar. Las Diapositivas de la Lecci&oacute;n muestran una imagen de cada paso.")
+        + dl_row(ASSETS_ZIP,"Archivos del Proyecto (ZIP)")
+        + '<div style="margin-top:10px;">' + dl_row(SLIDES_PDF,"Diapositivas de la Lecci&oacute;n (PDF)") + '</div>')
     es+=card("HABILIDADES / LO QUE APRENDER&Aacute;S","Nuevas Habilidades de Photoshop",
         para("Este proyecto te ense&ntilde;a lo b&aacute;sico que usar&aacute;s en cada proyecto de Photoshop despu&eacute;s de este:")
         + bullets([
@@ -254,10 +268,6 @@ def overview():
            ("Type (Texto)","Las palabras que agregas a tu imagen. El texto va en su propia capa."),
            ("Blending Mode (Modo de Fusi&oacute;n)","Un ajuste que cambia c&oacute;mo se mezclan los colores de una capa con las capas de abajo."),
            ("Export (Exportar)","Guardar una copia terminada de tu trabajo como JPG o PNG para compartir o entregar.")]))
-    es+=card("DESCARGAS / OBT&Eacute;N TUS ARCHIVOS","Descarga Tus Archivos",
-        para("Consigue aqu&iacute; los archivos del proyecto. Las Diapositivas de la Lecci&oacute;n muestran una imagen de cada paso.")
-        + dl_row(ASSETS_ZIP,"Archivos del Proyecto (ZIP)")
-        + '<div style="margin-top:10px;">' + dl_row(SLIDES_PDF,"Diapositivas de la Lecci&oacute;n (PDF)") + '</div>')
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
