@@ -241,7 +241,7 @@ def overview():
     en=banner("Photography 2A &bull; Module 04","Build Your Own Preset","Capture a series, edit one photo, and save your look as a preset.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("THE PROJECT / OVERVIEW","Make a Look, Then Save It",
         para("In this project you pick a subject you love and capture a whole series of it: natural light portraits, close-ups of flowers, buildings on campus, or your own idea. You capture at least 12 images that go together, edit the first one until it looks the way you want, and then save those edits as a preset. A preset is your look, saved once, ready to drop on every photo in the series.")
-        + para("Then you sync your preset across the series so all your photos share the same feel, pick your best 6, and turn them in.")
+        + para("Then you sync your preset across the series so all your photos share the same feel, select your best 6, and turn them in.")
         + framed(HEADER,"A Lightroom Classic edit of a natural light portrait, with the Develop panel sliders open on the right"))
     en+=downloads_block(False)
     en+=card("THE CONCEPT / WHAT IS A PRESET","One Look, Every Photo",
@@ -336,7 +336,7 @@ def step01():
     en+=card("CONTACT SHEET / SHOW YOUR SERIES","Make Your 12-Image Contact Sheet",
         para("A contact sheet is one page that shows all your photos as small thumbnails. Make yours with the 12-Up contact sheet layout in the Lightroom Classic Print module, then save it as a high-resolution JPG.")
         + bullets([
-            ("Select your 12:","pick the images from your culled series."),
+            ("Select your 12:","select the images from your culled series."),
             ("Use the 12-Up layout:","in the Print module, choose the 12-Up contact sheet."),
             ("Save the page:","export the contact sheet as a high-resolution JPG to turn in."),
         ]))
@@ -387,7 +387,7 @@ def step02():
         para("Start here. This slide deck walks you through what a preset is, how to edit your look, and how to save it. Scroll through all 12 slides, and download the PDF if you want to keep it open while you work.")
         + slide_deck(False))
     en+=card("EDIT / YOUR FIRST IMAGE","Build Your Look on One Photo",
-        para("Pick the strongest image from your series. Open it in the Develop module and edit it until it looks exactly how you want. This one photo becomes the recipe for the whole series.")
+        para("Select the strongest image from your series. Open it in the Develop module and edit it until it looks exactly how you want. This one photo becomes the recipe for the whole series.")
         + bullets([
             ("Open in Develop:","select your best image and press D to open the Develop module."),
             ("White Balance:","set the colors warm, cool, or true to life to match the mood you want."),
@@ -455,9 +455,9 @@ def step03():
             ("Keep the look:","small fixes only, so the series still feels like one set."),
         ]))
     en+=card("DELIVER / YOUR BEST SIX","Export and Make Your Final Contact Sheet",
-        para("Now pick your 6 strongest images. Export them at high resolution, and make a 6-image contact sheet with the 6-Up contact sheet layout in the Print module.")
+        para("Now select your 6 strongest images. Export them at high resolution, and make a 6-image contact sheet with the 6-Up contact sheet layout in the Print module.")
         + bullets([
-            ("Pick your best 6:","choose the 6 strongest photos from your synced series."),
+            ("Select your best 6:","choose the 6 strongest photos from your synced series."),
             ("Export high-resolution:","export the 6 as high-quality JPGs."),
             ("Make the 6-Up contact sheet:","use the 6-Up layout in the Print module, then save it as a high-resolution JPG."),
         ]))
