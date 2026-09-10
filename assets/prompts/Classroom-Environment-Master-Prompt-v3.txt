@@ -18,6 +18,7 @@ These instructions have highest priority.
 [FURNITURE / WORKSTATION COUNT OR SPECIAL LAYOUT] =
 [SPECIAL CHANGES FOR THIS SCENE] =
 
+
 REFERENCE USE
 
 Use the attached classroom image only as a reference for:
@@ -48,6 +49,7 @@ The current scene instructions above override the reference image's:
 
 If the requested viewpoint reveals areas not visible in the reference, infer them logically from the same design system.
 
+
 ENVIRONMENT DNA
 
 Create a premium digital arts / photography / creative technology classroom that feels:
@@ -72,18 +74,112 @@ Do not make it look like:
 - a trade-show booth
 - a sterile CGI showroom
 
+
 SPATIAL LOGIC
 
 - Generously scaled rectangular classroom.
 - Wide, realistic circulation paths.
 - Believable clearance between desks, chairs, walls, and people.
 - One exterior wall may use floor-to-ceiling glazing with slender dark metal mullions.
-- Do not force the window wall into every shot.
+- Do not force the window wall into every frame.
 - Other walls use clean cool-gray, silver, or soft metallic architectural panels.
 - Use thin restrained panel seams.
 - Ceiling uses clean modern panels with long recessed linear white lights and discreet integrated fixtures.
 - Maintain long sightlines and visual breathing room.
 - Furniture count and layout are determined by the current scene, not the reference image.
+
+
+GEOMETRY, ALIGNMENT & CONSTRUCTION LOCK
+
+Geometric accuracy is a major priority.
+
+Do not rush the architectural construction of the room.
+
+Prioritize structural accuracy, alignment, believable perspective, and clean geometry over speed, decorative detail, or unnecessary complexity.
+
+Establish the classroom as a coherent architectural space before resolving small surface details.
+
+The classroom has a clearly defined FRONT teaching wall.
+
+Unless the current scene explicitly specifies a different arrangement:
+- all student desks face the front of the classroom
+- all computer monitors face the front of the classroom
+- desk rows run parallel to one another
+- desks within each row share consistent orientation
+- corresponding desks align cleanly across rows
+- workstation spacing follows a deliberate architectural grid
+- aisles remain straight, intentional, and consistently spaced
+
+Desks must NOT appear:
+- randomly rotated
+- slightly crooked
+- scattered
+- misaligned
+- unintentionally staggered
+- warped
+- twisted
+- floating
+- intersecting other furniture
+- facing random directions
+
+Maintain consistent desk dimensions throughout the classroom.
+
+All equivalent desks should use:
+- the same tabletop width
+- the same tabletop depth
+- the same tabletop thickness
+- the same leg design
+- the same leg spacing
+- the same desk height
+- the same structural construction
+
+Perspective may make distant desks appear smaller, but their actual physical dimensions remain identical.
+
+Furniture alignment must obey the perspective of the requested camera position.
+
+Parallel desk edges should converge naturally toward the correct vanishing point when perspective requires it.
+
+Do not independently distort individual desks to create depth.
+
+Straight architectural elements must remain straight in 3D space:
+- desk edges
+- wall seams
+- window mullions
+- ceiling panels
+- linear lights
+- door frames
+- floor joints
+- architectural trim
+
+These lines may converge naturally through perspective but must not bend, bow, ripple, kink, or warp.
+
+Maintain a coherent shared perspective system across the entire image.
+
+All desks, walls, windows, ceiling lines, floor lines, and architectural structures must agree with the same camera position and vanishing-point geometry.
+
+Do not create conflicting perspective systems in different parts of the image.
+
+Desk legs must remain vertical and structurally plausible unless perspective naturally changes their projected angle.
+
+Each desk must make believable floor contact.
+
+No desk legs may:
+- merge into neighboring desks
+- disappear without logical occlusion
+- multiply
+- bend unnaturally
+- terminate above the floor
+- pass through objects
+- change construction from desk to desk
+
+Chairs should occupy logical positions relative to their assigned workstation.
+
+Chairs may rotate naturally based on the person using them, but the DESKS themselves remain aligned with the classroom layout unless explicitly directed otherwise.
+
+Camera freedom does NOT mean furniture-layout randomness.
+
+The virtual camera may move freely around the room while the underlying classroom remains organized, aligned, and architecturally coherent.
+
 
 FLOOR
 
@@ -95,6 +191,7 @@ FLOOR
 - Real contact shadows under desk legs, casters, shoes, and equipment.
 - Do not make the floor look like wet glass or mirror-polished marble.
 
+
 WALLS
 
 - Large flush architectural panels.
@@ -104,6 +201,7 @@ WALLS
 - Clean wall-wash lighting and discreet recessed downlights.
 - No unnecessary posters, slogans, plaques, banners, labels, charts, logos, or invented text.
 - Keep the walls visually quiet and subordinate to the people and activity.
+
 
 DESKS / WORKSTATIONS
 
@@ -122,6 +220,10 @@ DESKS / WORKSTATIONS
 - Cables hidden, internally routed, or extremely discreet.
 - Restrained under-edge accent lighting is allowed.
 - Maintain consistent furniture design across the room.
+- Every desk must belong logically to the classroom grid.
+- Desk alignment remains intentional even when viewed from an oblique camera angle.
+- Do not mistake perspective convergence for random furniture rotation.
+
 
 CHAIRS — HARD GEOMETRY LOCK
 
@@ -146,6 +248,7 @@ The chairs are a critical identity feature.
 - Keep chair proportions and construction consistent throughout the room.
 - Chairs may rotate naturally, but their design cannot change.
 
+
 WORKSTATION TECHNOLOGY WHEN VISIBLE
 
 - Premium 27-inch silver all-in-one desktop computers.
@@ -156,8 +259,11 @@ WORKSTATION TECHNOLOGY WHEN VISIBLE
 - White wireless mouse.
 - Hidden or nearly invisible cable routing.
 - Maintain consistent computer scale.
+- Monitors assigned to aligned desks should share the same logical orientation toward the front of the classroom unless someone has physically adjusted one.
+- Do not randomly rotate monitors from workstation to workstation.
 - Do not duplicate or distort screens, stands, keyboards, mice, or hardware.
 - Only show technology that would logically be visible from the requested viewpoint.
+
 
 LIGHTING
 
@@ -189,6 +295,7 @@ Lighting must produce:
 - realistic light interaction with mesh chair backs
 - dimensionality without artificial HDR
 
+
 EXTERIOR CAMPUS WHEN VISIBLE
 
 Show a clean, premium academic campus with:
@@ -210,28 +317,80 @@ Do not add:
 - flying vehicles
 - excessive sci-fi architecture
 
-REALISM / QUALITY
 
-- Hyper-realistic architectural photography.
-- Full-frame-camera realism.
-- Natural scale and perspective.
-- Correct vanishing points.
-- Correct occlusion.
-- Correct furniture clearance.
-- Correct object-to-floor contact.
-- Correct human-to-chair interaction.
-- Correct desk and chair geometry at every depth.
-- Straight architectural lines should remain straight when appropriate for the requested lens and camera orientation.
-- Surfaces must show subtle micro-texture, realistic roughness, and believable reflections.
-- Avoid plastic-looking surfaces.
-- Avoid melted geometry.
-- Avoid duplicate hardware.
-- Avoid impossible desk legs.
-- Avoid doubled casters.
-- Avoid random seams.
-- Avoid warped monitors.
-- Avoid inconsistent furniture designs.
-- Avoid the artificial over-clean AI-render look.
+REALISM / QUALITY — HIGHEST PRIORITY
+
+Image quality and physical believability take priority over speed.
+
+Do not simplify, rush, or approximate the room geometry merely to complete the image quickly.
+
+Resolve large-scale architectural geometry first:
+1. room proportions
+2. camera perspective
+3. vanishing points
+4. desk grid
+5. workstation alignment
+6. furniture spacing
+7. walls, floor, windows, and ceiling relationships
+8. subject placement and occlusion
+9. lighting
+10. materials and fine detail
+
+The finished image should withstand close visual inspection.
+
+Prioritize:
+- hyper-realistic architectural photography
+- professional full-frame-camera realism
+- precise room geometry
+- deliberate furniture alignment
+- natural scale
+- mathematically coherent perspective
+- consistent vanishing points
+- straight architectural lines
+- correct occlusion
+- correct furniture clearance
+- correct object-to-floor contact
+- correct human-to-chair interaction
+- correct desk and chair geometry at every depth
+- consistent repeated-object construction
+- realistic material roughness
+- subtle micro-texture
+- physically believable reflections
+- believable lighting and shadow direction
+
+Straight lines must remain geometrically clean when the requested lens and camera orientation call for them.
+
+Wide-angle perspective may create natural optical convergence, but do not introduce arbitrary bending or AI-style warping.
+
+Repeated furniture must look manufactured from the same design specifications rather than independently invented for each position.
+
+Before treating the scene as complete, maintain visual consistency across foreground, middle ground, and background furniture.
+
+Avoid:
+- crooked desks
+- randomly angled desks
+- uneven desk spacing
+- inconsistent desk sizes
+- mismatched desk heights
+- warped tabletops
+- bowed straight lines
+- inconsistent vanishing points
+- furniture floating above the floor
+- melted geometry
+- impossible desk legs
+- duplicated hardware
+- doubled casters
+- random seams
+- warped monitors
+- inconsistent furniture designs
+- unnecessary architectural clutter
+- plastic-looking surfaces
+- artificial over-clean AI-render appearance
+
+The goal is not merely a visually attractive classroom.
+
+The goal is a classroom that looks physically constructed, professionally designed, carefully aligned, and genuinely photographed.
+
 
 CAMERA FREEDOM
 
@@ -256,6 +415,11 @@ Examples:
 
 A viewpoint that differs radically from the attached reference is intentional.
 
+Moving the camera does not change the underlying architectural organization of the classroom.
+
+The room remains geometrically coherent and the workstation grid remains aligned regardless of camera viewpoint.
+
+
 FINAL PRIORITY LOCK
 
 Preserve the classroom's design DNA, not the source composition.
@@ -265,3 +429,9 @@ Treat the attached reference as a materials, fixtures, furniture, lighting, and 
 Render the new viewpoint specified in the SCENE OVERRIDES section.
 
 Do not reproduce the reference image's camera angle unless that exact angle is explicitly requested.
+
+QUALITY OVER SPEED.
+
+Do not sacrifice geometry, alignment, perspective, construction logic, or physical believability for faster generation.
+
+The finished result should look like a carefully photographed real classroom in which the architecture and furniture could actually be measured and built.
