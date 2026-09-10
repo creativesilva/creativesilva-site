@@ -75,10 +75,10 @@ def note_orange(t):
 def deliverables_box(title, lead, items):
     lis=""
     for b,rest in items:
-        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#00b8b8;">&bull;</span> '
+        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#FF6B1A;">&bull;</span> '
               f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
-    return ('<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.35);border-left:5px solid #00b8b8;padding:16px 18px;margin:0 0 24px;">'
-      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#80e0e0;margin-bottom:8px;"><strong>{title}</strong></div>'
+    return ('<div style="background:rgba(255,107,26,0.12);border:1px solid rgba(255,107,26,0.35);border-left:5px solid #FF6B1A;padding:16px 18px;margin:0 0 24px;">'
+      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffb27c;margin-bottom:8px;"><strong>{title}</strong></div>'
       f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div>'
       f'{lis}</div>')
 
@@ -329,7 +329,7 @@ def step01():
     en+=card("STEP 01 / TURN IT IN","Photograph and Upload Your 2 Images",
         para("When both covers are done, take a clean, clear photo of your FRONT cover and another of your BACK cover with your school iPad. Use good light, hold the iPad straight above the cover, and avoid glare. Upload both images (2 files) to this Canvas assignment.")
         + bullets([
-            ("2 files:","one photo of the front cover, one photo of the back cover."),
+            ("2 JPGs:","one photo of the front cover, one photo of the back cover."),
             ("Clean and clear:","good light, straight on, the whole cover in the frame."),
         ])
         + note_orange("This is Step 1 and it is graded on its own. The reflection is turned in separately on Step 2."))
@@ -357,7 +357,7 @@ def step01():
     es+=card("PASO 01 / ENTR&Eacute;GALO","Fotograf&iacute;a y Sube Tus 2 Im&aacute;genes",
         para("Cuando las dos portadas est&eacute;n listas, toma una foto limpia y clara de tu portada del FRENTE y otra del REVERSO con tu iPad de la escuela. Usa buena luz, sostiene el iPad recto sobre la portada y evita el reflejo. Sube las dos im&aacute;genes (2 archivos) a esta tarea de Canvas.")
         + bullets([
-            ("2 archivos:","una foto de la portada del frente, una del reverso."),
+            ("2 JPG:","una foto de la portada del frente, una del reverso."),
             ("Limpia y clara:","buena luz, de frente, con toda la portada en el encuadre."),
         ])
         + note_orange("Este es el Paso 1 y se califica por su cuenta. La reflexi&oacute;n se entrega por separado en el Paso 2."))
@@ -379,7 +379,7 @@ def step02():
         + para("Type your answers, save the document, and upload it to this Canvas assignment."))
     en+=card("TURN IT IN / DELIVERABLES","What You Turn In",
         bullets([
-            ("1 reflection:","your completed reflection Word document."),
+            ("1 reflection:","your completed reflection Word document (.docx)."),
         ])
         + note_orange("This step is graded on its own. Your 2 cover images were turned in on Step 1. Be honest and turn in your own work."))
 
@@ -391,7 +391,7 @@ def step02():
         + para("Escribe tus respuestas, guarda el documento y s&uacute;belo a esta tarea de Canvas."))
     es+=card("ENTR&Eacute;GALO / ENTREGABLES","Qu&eacute; Entregas",
         bullets([
-            ("1 reflexi&oacute;n:","tu documento de Word de la reflexi&oacute;n completo."),
+            ("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completo."),
         ])
         + note_orange("Este paso se califica por su cuenta. Tus 2 im&aacute;genes de la portada se entregaron en el Paso 1. S&eacute; honesto y entrega tu propio trabajo."))
 

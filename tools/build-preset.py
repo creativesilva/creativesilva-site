@@ -10,6 +10,7 @@ SITE="https://www.creativesilva.com"
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 IMG=f"{SITE}/assets/images/photo2/build-your-own-preset"
 HEADER=f"{IMG}/overview-hero-v1.jpg"
+CAPTURE_FLOAT=f"{IMG}/capture-float-v1.jpg"
 SLIDE=IMG+"/preset-slide-{:02d}.jpg"
 SLIDE_PDF=f"{SITE}/assets/course-documents/Build-Your-Own-Preset-Guide.pdf"
 REFLECT_EN=f"{SITE}/assets/course-documents/Build-Your-Own-Preset-Reflection-EN.docx"
@@ -92,6 +93,11 @@ def framed(src,alt):
     return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;">'
       f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>')
 
+def float_right(src,alt,cap):
+    return ('<div style="float:right;width:40%;min-width:230px;margin:0 0 14px 22px;">'
+      f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
+      f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div></div>')
+
 DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"
 
 def dl_link(url,label,download=True,row=False):
@@ -140,10 +146,10 @@ def vocab_grid(quiz_label, quiz_body, terms):
 def deliverables_box(title,lead,items):
     lis=""
     for b,rest in items:
-        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#00b8b8;">&bull;</span> '
+        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#FF6B1A;">&bull;</span> '
               f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
-    return ('<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.35);border-left:5px solid #00b8b8;padding:16px 18px;margin:0 0 8px;">'
-      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#80e0e0;margin-bottom:8px;"><strong>{title}</strong></div>'
+    return ('<div style="background:rgba(255,107,26,0.12);border:1px solid rgba(255,107,26,0.35);border-left:5px solid #FF6B1A;padding:16px 18px;margin:0 0 8px;">'
+      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffb27c;margin-bottom:8px;"><strong>{title}</strong></div>'
       f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div>{lis}</div>')
 
 def top_wrap(en,es):
@@ -298,7 +304,8 @@ def step01():
             ("Keep the look steady:","same subject, same feel, so the photos read as one set."),
         ]))
     en+=card("CAPTURE / 12 OR MORE","Capture Your Series",
-        para("Now go capture your series. Take at least 12 images that work together. Move around, try different angles, and get close, but keep the subject and the light consistent.")
+        float_right(CAPTURE_FLOAT,"A Pioneer Valley student kneeling to photograph a pink flower with a bee, using a Canon camera in golden light in front of the PV campus","Capturing a natural-light series on campus.")
+        + para("Now go capture your series. Take at least 12 images that work together. Move around, try different angles, and get close, but keep the subject and the light consistent.")
         + bullets([
             ("At least 12 images:","capture more than you need so you have strong ones to choose from."),
             ("Keep them consistent:","same subject and similar light, so one preset will fit them all."),
@@ -330,7 +337,8 @@ def step01():
             ("Mant&eacute;n el estilo:","el mismo tema, la misma sensaci&oacute;n, para que las fotos se lean como un solo grupo."),
         ]))
     es+=card("CAPTURA / 12 O M&Aacute;S","Captura Tu Serie",
-        para("Ahora ve a capturar tu serie. Toma al menos 12 im&aacute;genes que van juntas. Mu&eacute;vete, prueba diferentes &aacute;ngulos y ac&eacute;rcate, pero mant&eacute;n el tema y la luz consistentes.")
+        float_right(CAPTURE_FLOAT,"Una estudiante de Pioneer Valley arrodillada fotografiando una flor rosa con una abeja, con una c&aacute;mara Canon en luz dorada frente al campus de PV","Capturando una serie con luz natural en el campus.")
+        + para("Ahora ve a capturar tu serie. Toma al menos 12 im&aacute;genes que van juntas. Mu&eacute;vete, prueba diferentes &aacute;ngulos y ac&eacute;rcate, pero mant&eacute;n el tema y la luz consistentes.")
         + bullets([
             ("Al menos 12 im&aacute;genes:","captura m&aacute;s de las que necesitas para tener buenas opciones."),
             ("Mant&eacute;nlas consistentes:","mismo tema y luz parecida, para que un preset les quede a todas."),
@@ -440,7 +448,7 @@ def step03():
         ]))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own): 7 files",
         [("1 contact sheet:","your 6-image contact sheet (JPG or PDF)."),
-         ("6 high-resolution images:","your 6 best photos, exported at high resolution, uploaded to this Canvas assignment.")])
+         ("6 high-resolution images:","your 6 best photos, exported as high-resolution JPGs, uploaded to this Canvas assignment.")])
 
     es=banner("Crea Tu Propio Preset &bull; Paso 3","Entrega Tu Serie","Sincroniza tu preset, haz ajustes y entrega tus mejores seis.","#top","Back to English")
     es+=card("APLICA / SINCRONIZA TU PRESET","Pon Tu Estilo en Toda la Serie",
@@ -467,7 +475,7 @@ def step03():
         ]))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta): 7 archivos",
         [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG o PDF)."),
-         ("6 im&aacute;genes en alta resoluci&oacute;n:","tus 6 mejores fotos, exportadas en alta resoluci&oacute;n, subidas a esta tarea de Canvas.")])
+         ("6 im&aacute;genes en alta resoluci&oacute;n:","tus 6 mejores fotos, exportadas como JPG de alta resoluci&oacute;n, subidas a esta tarea de Canvas.")])
 
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a><a href="{S4}" class="silva-step-btn">Step 04 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><a href="{S4}" class="silva-bottom-btn">Step 04 &#8594;</a></div>'
@@ -480,12 +488,12 @@ def step04():
         para("Finish with a short reflection. It asks about the series you chose, the look you built, how your preset worked across your photos, and what you would do differently next time.")
         + note_orange("The reflection is on this module&rsquo;s Overview page: the first page of this module, marked M in the steps at the top. Open it to download the reflection.")
         + bullets([
-            ("Open it:","open the reflection Word document from this module&rsquo;s Overview page (marked M at the top)."),
+            ("Open it:","open the reflection Word document (.docx) from this module&rsquo;s Overview page (marked M at the top)."),
             ("Answer every question:","type your answers in the boxes, in full sentences."),
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
         ]))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
-        [("1 reflection:","your completed reflection Word document, uploaded to this Canvas assignment.")])
+        [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=note_orange("Answer honestly, in your own words.")
 
     es=banner("Crea Tu Propio Preset &bull; Paso 4","Reflexi&oacute;n","Cuenta la historia de tu serie y tu preset.","#top","Back to English")
@@ -493,12 +501,12 @@ def step04():
         para("Termina con una reflexi&oacute;n corta. Te pregunta sobre la serie que elegiste, el estilo que creaste, c&oacute;mo funcion&oacute; tu preset en tus fotos y qu&eacute; har&iacute;as diferente la pr&oacute;xima vez.")
         + note_orange("La reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo: la primera p&aacute;gina de este m&oacute;dulo, marcada con M en los pasos de arriba. &Aacute;brela para descargar la reflexi&oacute;n.")
         + bullets([
-            ("&Aacute;brelo:","abre el documento de Word de la reflexi&oacute;n desde la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."),
+            ("&Aacute;brelo:","abre el documento de Word (.docx) de la reflexi&oacute;n desde la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."),
             ("Contesta cada pregunta:","escribe tus respuestas en los cuadros, en oraciones completas."),
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
         ]))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
-        [("1 reflexi&oacute;n:","tu documento de Word de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
+        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
     es+=note_orange("Contesta con honestidad, en tus propias palabras.")
 
     stepnav=f'<a href="{S3}" class="silva-step-btn">&#8592; Step 03</a>'

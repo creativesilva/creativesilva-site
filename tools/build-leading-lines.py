@@ -130,10 +130,10 @@ def vocab_grid(quiz_label, quiz_body, terms):
 def deliverables_box(title,lead,items):
     lis=""
     for b,rest in items:
-        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#00b8b8;">&bull;</span> '
+        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#FF6B1A;">&bull;</span> '
               f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
-    return ('<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.35);border-left:5px solid #00b8b8;padding:16px 18px;margin:0 0 8px;">'
-      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#80e0e0;margin-bottom:8px;"><strong>{title}</strong></div>'
+    return ('<div style="background:rgba(255,107,26,0.12);border:1px solid rgba(255,107,26,0.35);border-left:5px solid #FF6B1A;padding:16px 18px;margin:0 0 8px;">'
+      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffb27c;margin-bottom:8px;"><strong>{title}</strong></div>'
       f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div>{lis}</div>')
 
 def top_wrap(en,es):
@@ -332,13 +332,13 @@ def step02():
         para("Finish with a short reflection. It asks you to name your partner, explain what leading lines are, tell how you culled, and pick your favorite photo.")
         + note_orange("The reflection is on this module&rsquo;s Overview page: the first page of this module, marked M in the steps at the top. Open it to download the reflection.")
         + bullets([
-            ("Open it:","open the reflection Word document from this module&rsquo;s Overview page (marked M at the top)."),
+            ("Open it:","open the reflection Word document (.docx) from this module&rsquo;s Overview page (marked M at the top)."),
             ("Name your partner:","write your partner&rsquo;s full name where it asks."),
             ("Answer every question:","type your answers in the boxes, in full sentences."),
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
         ]))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
-        [("1 reflection:","your completed reflection Word document, with your partner named, uploaded to this Canvas assignment.")])
+        [("1 reflection:","your completed reflection Word document (.docx), with your partner named, uploaded to this Canvas assignment.")])
     en+=note_orange("Answer honestly, in your own words.")
 
     es=banner("L&iacute;neas Gu&iacute;a &bull; Paso 2","Entrega Tu Reflexi&oacute;n","Reflexiona sobre la caminata, tu compa&ntilde;ero y tus fotos.","#top","Back to English")
@@ -346,13 +346,13 @@ def step02():
         para("Termina con una reflexi&oacute;n corta. Te pide el nombre de tu compa&ntilde;ero, explicar qu&eacute; son las l&iacute;neas gu&iacute;a, contar c&oacute;mo seleccionaste (cull) y elegir tu foto favorita.")
         + note_orange("La reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo: la primera p&aacute;gina de este m&oacute;dulo, marcada con M en los pasos de arriba. &Aacute;brela para descargar la reflexi&oacute;n.")
         + bullets([
-            ("&Aacute;brelo:","abre el documento de Word de la reflexi&oacute;n desde la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."),
+            ("&Aacute;brelo:","abre el documento de Word (.docx) de la reflexi&oacute;n desde la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."),
             ("Nombra a tu compa&ntilde;ero:","escribe el nombre completo de tu compa&ntilde;ero donde lo pide."),
             ("Contesta cada pregunta:","escribe tus respuestas en los cuadros, en oraciones completas."),
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
         ]))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
-        [("1 reflexi&oacute;n:","tu documento de Word de la reflexi&oacute;n, con el nombre de tu compa&ntilde;ero, subido a esta tarea de Canvas.")])
+        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n, con el nombre de tu compa&ntilde;ero, subido a esta tarea de Canvas.")])
     es+=note_orange("Contesta con honestidad, en tus propias palabras.")
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)
