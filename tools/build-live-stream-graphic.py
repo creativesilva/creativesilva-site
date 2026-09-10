@@ -119,10 +119,10 @@ def vocab_grid(quiz_label, quiz_body, terms):
 def deliverables_box(title,lead,items):
     lis=""
     for b,rest in items:
-        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#00b8b8;">&bull;</span> '
+        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#FF6B1A;">&bull;</span> '
               f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
-    return ('<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.35);border-left:5px solid #00b8b8;padding:16px 18px;margin:0 0 8px;">'
-      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#80e0e0;margin-bottom:8px;"><strong>{title}</strong></div>'
+    return ('<div style="background:rgba(255,107,26,0.12);border:1px solid rgba(255,107,26,0.35);border-left:5px solid #FF6B1A;padding:16px 18px;margin:0 0 8px;">'
+      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffb27c;margin-bottom:8px;"><strong>{title}</strong></div>'
       f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div>{lis}</div>')
 
 def top_wrap(en,es):

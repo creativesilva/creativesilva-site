@@ -127,10 +127,10 @@ def dl_row(url,label):
 def deliverables_box(title,lead,items):
     lis=""
     for b,rest in items:
-        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#00b8b8;">&bull;</span> '
+        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#FF6B1A;">&bull;</span> '
               f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
-    return ('<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.35);border-left:5px solid #00b8b8;padding:16px 18px;margin:0 0 8px;">'
-      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#80e0e0;margin-bottom:8px;"><strong>{title}</strong></div>'
+    return ('<div style="background:rgba(255,107,26,0.12);border:1px solid rgba(255,107,26,0.35);border-left:5px solid #FF6B1A;padding:16px 18px;margin:0 0 8px;">'
+      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffb27c;margin-bottom:8px;"><strong>{title}</strong></div>'
       f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div>{lis}</div>')
 
 def top_wrap(en,es):
@@ -268,7 +268,7 @@ def step01():
           + stepblock(5,"Build a Full-Take Contact Sheet","Using your contact sheet preset (it is also on the Photography 2A course overview if you need it), build a contact sheet of your <strong>entire take</strong>: every image your group captured. Use more than one sheet if you have a lot of images.")
           + stepblock(6,"Export the Contact Sheet","Export the contact sheet as a PDF or JPG so you can turn it in.")))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
-        [("1 contact sheet:","a contact sheet of your entire take, uploaded to this Canvas assignment.")])
+        [("1 contact sheet:","a contact sheet of your entire take (JPG or PDF), uploaded to this Canvas assignment.")])
 
     STEPLBL="PASO"
     es=banner("Sesi&oacute;n de Estudio &bull; Paso 1","Captura e Importa","Fotograf&iacute;a en el estudio, luego importa tu toma.","#top","Back to English")
@@ -290,7 +290,7 @@ def step01():
           + stepblock(5,"Arma una Hoja de Contactos de Toda la Toma","Con tu preset de hoja de contactos (tambi&eacute;n en el resumen del curso de Fotograf&iacute;a 2A si lo necesitas), arma una hoja de contactos de <strong>toda tu toma</strong>: cada imagen que captur&oacute; tu grupo. Usa m&aacute;s de una hoja si tienes muchas im&aacute;genes.")
           + stepblock(6,"Exporta la Hoja de Contactos","Exporta la hoja de contactos como PDF o JPG para poder entregarla.")))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
-        [("1 hoja de contactos:","una hoja de contactos de toda tu toma, subida a esta tarea de Canvas.")])
+        [("1 hoja de contactos:","una hoja de contactos de toda tu toma (JPG o PDF), subida a esta tarea de Canvas.")])
 
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
@@ -358,12 +358,12 @@ def step03():
         para("Finish the project with a short reflection. It asks about your group and roles, the whole studio process, what you enjoyed and found hardest, and how you made your editing choices.")
         + note_orange("The reflection is on this module&rsquo;s Overview page: the first page of this module, marked M in the steps at the top. Open it to download the reflection.")
         + bullets([
-            ("Open it:","open the reflection Word document from this module&rsquo;s Overview page (marked M at the top)."),
+            ("Open it:","open the reflection Word document (.docx) from this module&rsquo;s Overview page (marked M at the top)."),
             ("Answer every question:","type your answers in the boxes, in full sentences."),
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
         ]))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
-        [("1 reflection:","your completed reflection Word document, uploaded to this Canvas assignment.")])
+        [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=note_orange("Answer honestly, in your own words.")
 
     STEPLBL="PASO"
@@ -372,12 +372,12 @@ def step03():
         para("Termina el proyecto con una reflexi&oacute;n corta. Pregunta sobre tu grupo y los roles, todo el proceso del estudio, qu&eacute; disfrutaste y qu&eacute; fue lo m&aacute;s dif&iacute;cil, y c&oacute;mo tomaste tus decisiones de edici&oacute;n.")
         + note_orange("La reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo: la primera p&aacute;gina de este m&oacute;dulo, marcada con M en los pasos de arriba. &Aacute;brela para descargar la reflexi&oacute;n.")
         + bullets([
-            ("&Aacute;brelo:","abre el documento de Word de la reflexi&oacute;n desde la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."),
+            ("&Aacute;brelo:","abre el documento de Word (.docx) de la reflexi&oacute;n desde la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."),
             ("Contesta cada pregunta:","escribe tus respuestas en los cuadros, en oraciones completas."),
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
         ]))
     es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
-        [("1 reflexi&oacute;n:","tu documento de Word de la reflexi&oacute;n completo, subido a esta tarea de Canvas.")])
+        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completo, subido a esta tarea de Canvas.")])
     es+=note_orange("Contesta con honestidad, en tus propias palabras.")
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot("",'3',"Step 03",True)
