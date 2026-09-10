@@ -164,8 +164,12 @@ def deliverables_box(title,lead,items):
         lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#FF6B1A;">&bull;</span> '
               f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
     return ('<div style="background:rgba(255,107,26,0.12);border:1px solid rgba(255,107,26,0.35);border-left:5px solid #FF6B1A;padding:16px 18px;margin:0 0 8px;">'
+      '<div style="display:flex;align-items:flex-start;gap:12px;">'
+      '<div style="flex:1 1 auto;min-width:0;">'
       f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffb27c;margin-bottom:8px;"><strong>{title}</strong></div>'
-      f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div>{lis}</div>')
+      f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div></div>'
+      f'<img src="{SITE}/assets/Icons/assignment/deliverables-v1.png" alt="Deliverables" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
+      f'{lis}</div>')
 
 def top_wrap(en,es):
     return ('<div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;'
@@ -311,6 +315,8 @@ def overview():
 # ---------------- STEP 01 ----------------
 def step01():
     en=banner("Build Your Own Preset &bull; Step 1","Photo Walk: Capture &amp; Cull","Pick a series, capture 12 or more, then turn in a contact sheet.","#espanol","Clic para Espa&ntilde;ol")
+    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+        [("1 contact sheet:","your 12-image contact sheet (high-resolution JPG), showing your culled series, uploaded to this Canvas assignment.")])
     en+=card("CHOOSE / YOUR SERIES","Pick One Subject and One Light",
         para("A series is a group of photos that belong together. To make that happen, pick one subject and one kind of light, then stick with it. When your photos already match, your preset will make them match even more.")
         + bullets([
@@ -340,10 +346,10 @@ def step01():
             ("Use the 12-Up layout:","in the Print module, choose the 12-Up contact sheet."),
             ("Save the page:","export the contact sheet as a high-resolution JPG to turn in."),
         ]))
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
-        [("1 contact sheet:","your 12-image contact sheet (high-resolution JPG), showing your culled series, uploaded to this Canvas assignment.")])
 
     es=banner("Crea Tu Propio Preset &bull; Paso 1","Caminata: Captura y Selecci&oacute;n","Elige una serie, captura 12 o m&aacute;s y entrega una hoja de contactos.","#top","Back to English")
+    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+        [("1 hoja de contactos:","tu hoja de contactos de 12 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tu serie seleccionada, subida a esta tarea de Canvas.")])
     es+=card("ELIGE / TU SERIE","Elige un Tema y una Luz",
         para("Una serie es un grupo de fotos que van juntas. Para lograrlo, elige un tema y un tipo de luz, y qu&eacute;date con eso. Cuando tus fotos ya combinan, tu preset las har&aacute; combinar a&uacute;n m&aacute;s.")
         + bullets([
@@ -373,8 +379,6 @@ def step01():
             ("Usa el dise&ntilde;o de 12:","en el m&oacute;dulo Imprimir, elige la hoja de contactos de 12."),
             ("Guarda la p&aacute;gina:","exporta la hoja de contactos como JPG de alta resoluci&oacute;n para entregar."),
         ]))
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
-        [("1 hoja de contactos:","tu hoja de contactos de 12 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tu serie seleccionada, subida a esta tarea de Canvas.")])
 
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
@@ -383,6 +387,8 @@ def step01():
 # ---------------- STEP 02 ----------------
 def step02():
     en=banner("Build Your Own Preset &bull; Step 2","Edit &amp; Create Your Preset","Edit your first image, then save your look as a preset.","#espanol","Clic para Espa&ntilde;ol")
+    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+        [("1 preset file:","your exported Lightroom preset (the .xmp file), uploaded to this Canvas assignment.")])
     en+=card("WATCH / THE SLIDE DECK","Presets in Lightroom Classic",
         para("Start here. This slide deck walks you through what a preset is, how to edit your look, and how to save it. Scroll through all 12 slides, and download the PDF if you want to keep it open while you work.")
         + slide_deck(False))
@@ -404,10 +410,10 @@ def step02():
             ("Check the settings:","keep the boxes checked for the settings you changed, then click Create."),
             ("Export the file:","right-click your preset in the panel and choose Export. Save the .xmp file so you can turn it in."),
         ]))
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
-        [("1 preset file:","your exported Lightroom preset (the .xmp file), uploaded to this Canvas assignment.")])
 
     es=banner("Crea Tu Propio Preset &bull; Paso 2","Edita y Crea Tu Preset","Edita tu primera imagen y guarda tu estilo como preset.","#top","Back to English")
+    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+        [("1 archivo de preset:","tu preset de Lightroom exportado (el archivo .xmp), subido a esta tarea de Canvas.")])
     es+=card("MIRA / LAS DIAPOSITIVAS","Presets en Lightroom Classic",
         para("Empieza aqu&iacute;. Estas diapositivas te explican qu&eacute; es un preset, c&oacute;mo editar tu estilo y c&oacute;mo guardarlo. Despl&aacute;zate por las 12 diapositivas y descarga el PDF si quieres tenerlo abierto mientras trabajas.")
         + slide_deck(True))
@@ -429,8 +435,6 @@ def step02():
             ("Revisa los ajustes:","deja marcadas las casillas de los ajustes que cambiaste y haz clic en Crear."),
             ("Exporta el archivo:","haz clic derecho en tu preset y elige Exportar. Guarda el archivo .xmp para poder entregarlo."),
         ]))
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
-        [("1 archivo de preset:","tu preset de Lightroom exportado (el archivo .xmp), subido a esta tarea de Canvas.")])
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
@@ -439,6 +443,9 @@ def step02():
 # ---------------- STEP 03 ----------------
 def step03():
     en=banner("Build Your Own Preset &bull; Step 3","Deliver Your Series","Sync your preset, fine-tune, and turn in your best six.","#espanol","Clic para Espa&ntilde;ol")
+    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own): 7 files",
+        [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG)."),
+         ("6 high-resolution images:","your 6 best photos, exported as high-resolution JPGs, uploaded to this Canvas assignment.")])
     en+=card("APPLY / SYNC YOUR PRESET","Put Your Look on the Whole Series",
         para("This is where your preset saves you time. Add your look to every photo in your series at once.")
         + steps([
@@ -461,11 +468,11 @@ def step03():
             ("Export high-resolution:","export the 6 as high-quality JPGs."),
             ("Make the 6-Up contact sheet:","use the 6-Up layout in the Print module, then save it as a high-resolution JPG."),
         ]))
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own): 7 files",
-        [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG)."),
-         ("6 high-resolution images:","your 6 best photos, exported as high-resolution JPGs, uploaded to this Canvas assignment.")])
 
     es=banner("Crea Tu Propio Preset &bull; Paso 3","Entrega Tu Serie","Sincroniza tu preset, haz ajustes y entrega tus mejores seis.","#top","Back to English")
+    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta): 7 archivos",
+        [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG de alta resoluci&oacute;n)."),
+         ("6 im&aacute;genes en alta resoluci&oacute;n:","tus 6 mejores fotos, exportadas como JPG de alta resoluci&oacute;n, subidas a esta tarea de Canvas.")])
     es+=card("APLICA / SINCRONIZA TU PRESET","Pon Tu Estilo en Toda la Serie",
         para("Aqu&iacute; es donde tu preset te ahorra tiempo. Pon tu estilo en cada foto de tu serie de una vez.")
         + steps([
@@ -488,9 +495,6 @@ def step03():
             ("Exporta en alta resoluci&oacute;n:","exporta las 6 como JPG de alta calidad."),
             ("Crea la hoja de 6:","usa el dise&ntilde;o de 6 en el m&oacute;dulo Imprimir y gu&aacute;rdala como JPG de alta resoluci&oacute;n."),
         ]))
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta): 7 archivos",
-        [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG de alta resoluci&oacute;n)."),
-         ("6 im&aacute;genes en alta resoluci&oacute;n:","tus 6 mejores fotos, exportadas como JPG de alta resoluci&oacute;n, subidas a esta tarea de Canvas.")])
 
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a><a href="{S4}" class="silva-step-btn">Step 04 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><a href="{S4}" class="silva-bottom-btn">Step 04 &#8594;</a></div>'
@@ -499,6 +503,8 @@ def step03():
 # ---------------- STEP 04 ----------------
 def step04():
     en=banner("Build Your Own Preset &bull; Step 4","Reflection","Tell the story of your series and your preset.","#espanol","Clic para Espa&ntilde;ol")
+    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+        [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=card("STEP 04 / REFLECT","Complete and Upload the Reflection",
         para("Finish with a short reflection. It asks about the series you chose, the look you built, how your preset worked across your photos, and what you would do differently next time.")
         + note_orange("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
@@ -507,11 +513,11 @@ def step04():
             ("Answer every question:","type your answers in the boxes, in full sentences."),
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
         ]))
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
-        [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=note_orange("Answer honestly, in your own words.")
 
     es=banner("Crea Tu Propio Preset &bull; Paso 4","Reflexi&oacute;n","Cuenta la historia de tu serie y tu preset.","#top","Back to English")
+    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
     es+=card("PASO 04 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         para("Termina con una reflexi&oacute;n corta. Te pregunta sobre la serie que elegiste, el estilo que creaste, c&oacute;mo funcion&oacute; tu preset en tus fotos y qu&eacute; har&iacute;as diferente la pr&oacute;xima vez.")
         + note_orange("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
@@ -520,8 +526,6 @@ def step04():
             ("Contesta cada pregunta:","escribe tus respuestas en los cuadros, en oraciones completas."),
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
         ]))
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
-        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
     es+=note_orange("Contesta con honestidad, en tus propias palabras.")
 
     stepnav=f'<a href="{S3}" class="silva-step-btn">&#8592; Step 03</a>'
