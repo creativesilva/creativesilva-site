@@ -1,0 +1,267 @@
+CLASSROOM ENVIRONMENT MASTER PROMPT
+ANGLE-INDEPENDENT REFERENCE LOCK
+
+SCENE OVERRIDES — FILL THESE FIRST
+These instructions have highest priority.
+
+[SUBJECT / ACTION] =
+[SUBJECT LOCATION WITHIN ROOM] =
+[CAMERA POSITION WITHIN ROOM] =
+[CAMERA HEIGHT] =
+[CAMERA DIRECTION / YAW] =
+[CAMERA PITCH / TILT] =
+[FRAMING] =
+[LENS / FOCAL LENGTH] =
+[APERTURE / DEPTH OF FIELD] =
+[ASPECT RATIO] =
+[LIGHTING MOOD / TIME OF DAY] =
+[FURNITURE / WORKSTATION COUNT OR SPECIAL LAYOUT] =
+[SPECIAL CHANGES FOR THIS SCENE] =
+
+REFERENCE USE
+
+Use the attached classroom image only as a reference for:
+- architecture
+- materials
+- furniture design
+- lighting language
+- color palette
+- level of realism
+- overall luxury and modernity
+
+Do NOT treat the image as a fixed composition, fixed camera angle, fixed crop, fixed desk layout, or background plate.
+
+Reconstruct the classroom as a coherent 3D environment that can be viewed from any physically plausible angle.
+
+The current scene instructions above override the reference image's:
+- camera angle
+- camera height
+- lens perspective
+- crop
+- subject position
+- desk count
+- workstation count
+- chair placement
+- object placement
+- visible walls
+- window visibility
+
+If the requested viewpoint reveals areas not visible in the reference, infer them logically from the same design system.
+
+ENVIRONMENT DNA
+
+Create a premium digital arts / photography / creative technology classroom that feels:
+- expansive
+- luxurious
+- exceptionally clean
+- modern
+- technologically advanced
+- slightly futuristic
+- architecturally plausible
+- physically buildable
+- visually calm
+- top-of-the-line
+
+It must look like a real high-end academic creative lab photographed with a professional full-frame camera.
+
+Do not make it look like:
+- a gaming room
+- a cyberpunk set
+- a spaceship
+- a corporate cubicle office
+- a trade-show booth
+- a sterile CGI showroom
+
+SPATIAL LOGIC
+
+- Generously scaled rectangular classroom.
+- Wide, realistic circulation paths.
+- Believable clearance between desks, chairs, walls, and people.
+- One exterior wall may use floor-to-ceiling glazing with slender dark metal mullions.
+- Do not force the window wall into every shot.
+- Other walls use clean cool-gray, silver, or soft metallic architectural panels.
+- Use thin restrained panel seams.
+- Ceiling uses clean modern panels with long recessed linear white lights and discreet integrated fixtures.
+- Maintain long sightlines and visual breathing room.
+- Furniture count and layout are determined by the current scene, not the reference image.
+
+FLOOR
+
+- Light-to-midtone sealed polished concrete.
+- Subtle natural mottling and fine material variation.
+- Mild physically plausible reflectivity.
+- Soft imperfect reflections from windows, furniture, people, and accent lighting.
+- Optional subtle slab seams or expansion joints when logical.
+- Real contact shadows under desk legs, casters, shoes, and equipment.
+- Do not make the floor look like wet glass or mirror-polished marble.
+
+WALLS
+
+- Large flush architectural panels.
+- Cool light gray, soft silver, or restrained metallic finishes.
+- Thin dark seams.
+- Narrow integrated teal accent-light reveals where appropriate.
+- Clean wall-wash lighting and discreet recessed downlights.
+- No unnecessary posters, slogans, plaques, banners, labels, charts, logos, or invented text.
+- Keep the walls visually quiet and subordinate to the people and activity.
+
+DESKS / WORKSTATIONS
+
+- Freestanding rectangular workstation desks.
+- Minimal precise construction.
+- Brushed or satin silver / aluminum work surfaces.
+- Realistic metal grain and soft reflections.
+- Clean square or rectangular metal legs.
+- Realistic tabletop thickness.
+- Structurally believable leg-to-top connections and floor contact.
+- No floating tops.
+- No impossible geometry.
+- No bulky storage pedestals.
+- No gaming-desk shapes.
+- No unnecessary cable clutter.
+- Cables hidden, internally routed, or extremely discreet.
+- Restrained under-edge accent lighting is allowed.
+- Maintain consistent furniture design across the room.
+
+CHAIRS — HARD GEOMETRY LOCK
+
+The chairs are a critical identity feature.
+
+- Modern ergonomic task chair.
+- Absolutely no armrests.
+- Open lightweight silhouette.
+- Brushed or matte aluminum perimeter frame.
+- Fine translucent charcoal-gray mesh back.
+- Mesh must remain visibly permeable.
+- When a person is seated, their torso, waist, clothing, and body silhouette must remain perceptible through the mesh.
+- Do not render the back as opaque fabric, solid plastic, or a solid black panel.
+- Black or deep-charcoal upholstered seat cushion.
+- Realistic central gas-lift column.
+- Exactly five-point base.
+- Exactly five base arms.
+- Exactly five caster positions.
+- Never six.
+- Base is brushed or matte aluminum, not mirror chrome.
+- Black dual-wheel casters with correct floor contact.
+- Keep chair proportions and construction consistent throughout the room.
+- Chairs may rotate naturally, but their design cannot change.
+
+WORKSTATION TECHNOLOGY WHEN VISIBLE
+
+- Premium 27-inch silver all-in-one desktop computers.
+- Realistic slim proportions.
+- Silver aluminum stand and base.
+- Clean black display bezel or glass face where appropriate.
+- Low-profile white keyboard.
+- White wireless mouse.
+- Hidden or nearly invisible cable routing.
+- Maintain consistent computer scale.
+- Do not duplicate or distort screens, stands, keyboards, mice, or hardware.
+- Only show technology that would logically be visible from the requested viewpoint.
+
+LIGHTING
+
+Use a physically believable layered lighting system.
+
+Natural daylight:
+- Bright clean daylight when glazing is visible or nearby.
+- Preserve exterior detail through windows.
+- Avoid blown-out white windows.
+
+Cool-white architectural ambient light:
+- Long recessed linear ceiling fixtures.
+- Soft wall washes.
+- Restrained integrated downlights.
+- Bright enough for a professional classroom without flattening all shadows.
+
+Teal accent light:
+- Core design hue: #007474.
+- Use as a restrained architectural accent only.
+- Natural emission bloom may appear slightly brighter or more cyan, but the underlying color identity remains #007474.
+- Do not turn the room into a nightclub, gaming lab, or cyberpunk environment.
+
+Lighting must produce:
+- believable global illumination
+- soft shadow falloff
+- realistic contact shadows
+- correct reflected light on metal
+- subtle floor reflections
+- realistic light interaction with mesh chair backs
+- dimensionality without artificial HDR
+
+EXTERIOR CAMPUS WHEN VISIBLE
+
+Show a clean, premium academic campus with:
+- mature trees
+- landscaped planting beds
+- lawns or planted open space
+- pedestrian walkways
+- modern academic architecture
+- restrained glass, concrete, and metal
+
+The campus may feel slightly futuristic but must remain believable and physically buildable.
+
+Do not add:
+- random signs
+- invented slogans
+- unnecessary lettering
+- fantasy skyscrapers
+- holograms
+- flying vehicles
+- excessive sci-fi architecture
+
+REALISM / QUALITY
+
+- Hyper-realistic architectural photography.
+- Full-frame-camera realism.
+- Natural scale and perspective.
+- Correct vanishing points.
+- Correct occlusion.
+- Correct furniture clearance.
+- Correct object-to-floor contact.
+- Correct human-to-chair interaction.
+- Correct desk and chair geometry at every depth.
+- Straight architectural lines should remain straight when appropriate for the requested lens and camera orientation.
+- Surfaces must show subtle micro-texture, realistic roughness, and believable reflections.
+- Avoid plastic-looking surfaces.
+- Avoid melted geometry.
+- Avoid duplicate hardware.
+- Avoid impossible desk legs.
+- Avoid doubled casters.
+- Avoid random seams.
+- Avoid warped monitors.
+- Avoid inconsistent furniture designs.
+- Avoid the artificial over-clean AI-render look.
+
+CAMERA FREEDOM
+
+The virtual camera may move anywhere inside the reconstructed room.
+
+Examples:
+- front wall toward rear
+- rear wall toward front
+- window side looking inward
+- solid-wall side toward windows
+- front or back corner
+- centered aisle
+- desk-height view
+- standing eye level
+- slightly elevated
+- over-the-shoulder
+- beside a workstation
+- behind, in front of, or in profile to a seated person
+- compressed telephoto view across the room
+- wide environmental view
+- tight shallow-depth-of-field portrait
+
+A viewpoint that differs radically from the attached reference is intentional.
+
+FINAL PRIORITY LOCK
+
+Preserve the classroom's design DNA, not the source composition.
+
+Treat the attached reference as a materials, fixtures, furniture, lighting, and architectural design board for a complete room.
+
+Render the new viewpoint specified in the SCENE OVERRIDES section.
+
+Do not reproduce the reference image's camera angle unless that exact angle is explicitly requested.
