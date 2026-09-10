@@ -390,7 +390,7 @@ def step02():
     en+=card("REFLECT / STEP 02","Complete and Upload the Reflection",
         reflect_typing_float("A student typing the reflection on a computer","Type your answers right in the document.")
         + para("Finish with a short reflection. It asks about your 3 words, your Cooper Black word, and the 2 Adobe Fonts typefaces you chose, plus how you can test a font on Adobe Fonts.")
-        + note_orange("The reflection is on this module&rsquo;s Overview page: the first page of this module, marked M in the steps at the top. Open it to download the reflection.")
+        + note_orange("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + para("Type your answers, save the document, and upload it to this Canvas assignment."))
     en+=card("TURN IT IN / DELIVERABLES","What You Turn In",
         bullets([
@@ -402,7 +402,7 @@ def step02():
     es+=card("REFLEXIONA / PASO 02","Completa y Sube la Reflexi&oacute;n",
         reflect_typing_float("Un estudiante escribiendo la reflexi&oacute;n en la computadora","Escribe tus respuestas en el documento.")
         + para("Termina con una reflexi&oacute;n corta. Pregunta sobre tus 3 palabras, tu palabra en Cooper Black y los 2 tipos de letra de Adobe Fonts que elegiste, y c&oacute;mo puedes probar una fuente en Adobe Fonts.")
-        + note_orange("La reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo: la primera p&aacute;gina de este m&oacute;dulo, marcada con M en los pasos de arriba. &Aacute;brela para descargar la reflexi&oacute;n.")
+        + note_orange("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
         + para("Escribe tus respuestas, guarda el documento y s&uacute;belo a esta tarea de Canvas."))
     es+=card("ENTR&Eacute;GALO / ENTREGABLES","Qu&eacute; Entregas",
         bullets([
