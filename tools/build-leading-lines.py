@@ -48,6 +48,21 @@ def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
 
 
+AREA="Photo"   # OneDrive top folder for this course's project folders
+
+def folder_note(es):
+    # Every orange downloads block tells students to make a module project folder and move
+    # their files from Downloads into OneDrive > {AREA} > that folder, so work stays together.
+    if es:
+        return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
+          '<strong style="color:#ffb27c;">Mantente organizado:</strong> crea una carpeta nueva y ll&aacute;mala como este m&oacute;dulo. '
+          'Cuando cada archivo termine de descargarse, mu&eacute;velo de tu carpeta de Descargas a '
+          f'OneDrive &rarr; {AREA} &rarr; esa carpeta del proyecto para que todos tus archivos queden juntos.</div>')
+    return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
+      '<strong style="color:#ffb27c;">Stay organized:</strong> make a new folder and name it after this module. '
+      'As each file finishes downloading, move it out of your Downloads folder into '
+      f'OneDrive &rarr; {AREA} &rarr; that project folder so all your files stay together.</div>')
+
 def downloads_block(es):
     # CANONICAL downloads section (orange framework standard), placed right after the
     # intro/header card on every module Overview. Holds the reflection now; future
@@ -63,7 +78,7 @@ def downloads_block(es):
       f'<strong>{eyebrow}</strong></div>'
       f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
       '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
-      f'{para(lead)}{dl_row(ref,reflabel)}</div>')
+      f'{para(lead)}{dl_row(ref,reflabel)}' + folder_note(es) + '</div>')
 
 def bullets(items):
     r=""

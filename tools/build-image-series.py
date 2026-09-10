@@ -16,6 +16,8 @@ LRC=f"{SITE}/assets/images/photo1/lrc-import"          # existing import slide d
 SLIDE=LRC+"/lrc-slide-{:02d}.jpg"
 SLIDE_PDF=f"{SITE}/assets/course-documents/Lightroom-Import-Guide.pdf"
 CONTACT_ZIP=f"{SITE}/assets/PVHS_Contact_Sheet_Presets.zip"
+INSTALL_VIDEO="https://vimeo.com/1164128764/e1842e523e?share=copy&amp;fl=sv&amp;fe=ci"
+AREA="Photo"   # OneDrive top folder for this course's project folders (Photo vs Digital Arts)
 REFLECT_EN=f"{SITE}/assets/course-documents/Image-Series-Reflection-EN.docx"
 REFLECT_ES=f"{SITE}/assets/course-documents/Image-Series-Reflection-ES.docx"
 
@@ -59,6 +61,29 @@ def placeholder(label, minh=240):
       'display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;margin:6px 0 4px;box-sizing:border-box;">'
       f'<span style="font-size:11pt;letter-spacing:0.16em;text-transform:uppercase;color:#80e0e0;line-height:1.5;">{label}</span></div>')
 
+def folder_note(es):
+    # Every orange downloads block tells students to make a module project folder and move
+    # their files from Downloads into OneDrive > {AREA} > that folder, so work stays together.
+    if es:
+        return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
+          '<strong style="color:#ffb27c;">Mantente organizado:</strong> crea una carpeta nueva y ll&aacute;mala como este m&oacute;dulo. '
+          'Cuando cada archivo termine de descargarse, mu&eacute;velo de tu carpeta de Descargas a '
+          f'OneDrive &rarr; {AREA} &rarr; esa carpeta del proyecto para que todos tus archivos queden juntos.</div>')
+    return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
+      '<strong style="color:#ffb27c;">Stay organized:</strong> make a new folder and name it after this module. '
+      'As each file finishes downloading, move it out of your Downloads folder into '
+      f'OneDrive &rarr; {AREA} &rarr; that project folder so all your files stay together.</div>')
+
+def install_note(es):
+    # sits under a contact-sheet-templates download row: how to install the presets once
+    if es:
+        return ('<div style="margin-top:6px;font-size:11.5pt;color:rgba(255,255,255,0.80);line-height:1.5;">'
+          f'&iquest;Nuevo con esto? <a href="{INSTALL_VIDEO}" target="_blank" rel="noopener" style="color:#ffb27c;"><strong>Mira el video de instalaci&oacute;n</strong></a>, '
+          'luego col&oacute;calos en Lightroom Classic &rarr; m&oacute;dulo Imprimir. Solo los instalas una vez.</div>')
+    return ('<div style="margin-top:6px;font-size:11.5pt;color:rgba(255,255,255,0.80);line-height:1.5;">'
+      f'New to these? <a href="{INSTALL_VIDEO}" target="_blank" rel="noopener" style="color:#ffb27c;"><strong>Watch the install video</strong></a>, '
+      'then drop them into Lightroom Classic &rarr; Print module. You only install them once.</div>')
+
 def downloads_block(es):
     # CANONICAL orange downloads section, right after the intro/header card. This module
     # holds the reflection AND the contact sheet templates (first module to introduce them).
@@ -75,7 +100,8 @@ def downloads_block(es):
       f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
       '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
       f'{para(lead)}{dl_row(ref,reflabel)}'
-      f'<div style="margin-top:10px;">{dl_row(CONTACT_ZIP,cslabel)}</div></div>')
+      f'<div style="margin-top:10px;">{dl_row(CONTACT_ZIP,cslabel)}{install_note(es)}</div>'
+      + folder_note(es) + '</div>')
 
 def bullets(items):
     r=""
@@ -126,12 +152,14 @@ def slide_deck(es):
              else 'Importar a Lightroom, diapositiva {} de 12')
     imgs=""
     for i in range(1,13):
-        imgs+=('<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:0 0 12px;">'
-               f'<img src="{SLIDE.format(i)}" alt="{alt_lbl.format(i)}" style="display:block;width:100%;height:auto;" /></div>')
+        # slides stack FLUSH (margin:0) so the next 16:9 slide peeks into the 16:11 window
+        imgs+=(f'<img src="{SLIDE.format(i)}" alt="{alt_lbl.format(i)}" style="display:block;width:100%;height:auto;margin:0;border-bottom:2px solid rgba(0,184,184,0.35);" />')
     return ('<div style="margin-bottom:12px;">'
       f'<a href="{SLIDE_PDF}" download style="display:inline-block;background:#FF6B1A;color:#ffffff;text-decoration:none;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;"><strong>&#128229; {pdf_lbl}</strong></a></div>'
       f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.9;">&#8595; {hint}</div>'
-      '<div class="silva-scroll" style="aspect-ratio:16/11;max-height:82vh;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid rgba(0,184,184,0.22);background:rgba(0,0,0,0.22);padding:8px;box-sizing:border-box;">'
+      # SLIDE-DECK SCROLLABLE (LOCKED): a 16:11 window shows one 16:9 slide in full with a sliver of
+      # the next slide peeking in to invite scrolling. No max-height, no padding, flush slides.
+      '<div class="silva-scroll" style="aspect-ratio:16/11;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid rgba(0,184,184,0.22);background:rgba(0,0,0,0.22);box-sizing:border-box;">'
       + imgs + '</div>')
 
 def vocab_grid(quiz_label, quiz_body, terms):

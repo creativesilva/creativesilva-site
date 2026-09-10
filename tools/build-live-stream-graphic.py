@@ -41,6 +41,21 @@ def card(eyebrow,heading,inner):
       '<div style="height:2px;background:#00b8b8;width:60px;margin-bottom:18px;"></div>'
       f'{inner}</div>')
 
+AREA="Digital Arts"   # OneDrive top folder for this course's project folders
+
+def folder_note(es):
+    # Every orange downloads block tells students to make a module project folder and move
+    # their files from Downloads into OneDrive > Digital Arts > that folder, so work stays together.
+    if es:
+        return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
+          '<strong style="color:#ffb27c;">Mantente organizado:</strong> crea una carpeta nueva y ll&aacute;mala como este m&oacute;dulo. '
+          'Cuando cada archivo termine de descargarse, mu&eacute;velo de tu carpeta de Descargas a '
+          f'OneDrive &rarr; {AREA} &rarr; esa carpeta del proyecto para que todos tus archivos queden juntos.</div>')
+    return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
+      '<strong style="color:#ffb27c;">Stay organized:</strong> make a new folder and name it after this module. '
+      'As each file finishes downloading, move it out of your Downloads folder into '
+      f'OneDrive &rarr; {AREA} &rarr; that project folder so all your files stay together.</div>')
+
 def downloads_card(eyebrow,heading,inner):
     # CANONICAL orange downloads card (framework standard), placed right after the
     # intro/header card on the Overview so students grab files before starting.
@@ -215,7 +230,8 @@ def overview():
     en+=downloads_card("DOWNLOADS / GET YOUR FILES","Download Your Files",
         para("Grab the project files here before you start. The Lesson Slides show a picture for every step.")
         + dl_row(ASSETS_ZIP,"Project Files (ZIP)")
-        + '<div style="margin-top:10px;">' + dl_row(SLIDES_PDF,"Lesson Slides (PDF)") + '</div>')
+        + '<div style="margin-top:10px;">' + dl_row(SLIDES_PDF,"Lesson Slides (PDF)") + '</div>'
+        + folder_note(False))
     en+=card("SKILLS / WHAT YOU WILL LEARN","New Photoshop Skills",
         para("This project teaches you the basics you will use in every Photoshop project after this one:")
         + bullets([
@@ -247,7 +263,8 @@ def overview():
     es+=downloads_card("DESCARGAS / OBT&Eacute;N TUS ARCHIVOS","Descarga Tus Archivos",
         para("Consigue aqu&iacute; los archivos del proyecto antes de empezar. Las Diapositivas de la Lecci&oacute;n muestran una imagen de cada paso.")
         + dl_row(ASSETS_ZIP,"Archivos del Proyecto (ZIP)")
-        + '<div style="margin-top:10px;">' + dl_row(SLIDES_PDF,"Diapositivas de la Lecci&oacute;n (PDF)") + '</div>')
+        + '<div style="margin-top:10px;">' + dl_row(SLIDES_PDF,"Diapositivas de la Lecci&oacute;n (PDF)") + '</div>'
+        + folder_note(True))
     es+=card("HABILIDADES / LO QUE APRENDER&Aacute;S","Nuevas Habilidades de Photoshop",
         para("Este proyecto te ense&ntilde;a lo b&aacute;sico que usar&aacute;s en cada proyecto de Photoshop despu&eacute;s de este:")
         + bullets([
