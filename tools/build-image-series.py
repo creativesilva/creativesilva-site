@@ -10,8 +10,6 @@ import os, re
 SITE="https://www.creativesilva.com"
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 HEADER=f"{SITE}/assets/images/photo1/image-series/header-v1.png"   # overview header art
-# shared with the Photo 2 Build-Your-Own-Preset module (same capture image, one hosted copy)
-BEE=f"{SITE}/assets/images/photo2/build-your-own-preset/capture-float-v1.jpg"
 EDIT_FLOAT=f"{SITE}/assets/images/photo1/image-series/edit-float-v1.jpg"  # step 2 editing image
 CAPTURE_FLOAT=f"{SITE}/assets/images/photo1/image-series/capture-float-v1.jpg"  # step 1 capture image
 LRC=f"{SITE}/assets/images/photo1/lrc-import"          # existing import slide deck images
@@ -237,8 +235,7 @@ def overview():
         + framed(HEADER,"Image Series Photo Walk header: a row of linked photos that form one cohesive series"))
     en+=downloads_block(False)
     en+=card("THE CONCEPT / WHAT MAKES A SERIES","A Family of Images",
-        float_right(BEE,"A Pioneer Valley student kneeling to photograph a pink flower with a bee, using a Canon camera in golden light in front of the PV campus","Capturing a natural-light series on campus.")
-        + para("A series is more than a pile of photos. The images share something: the same subject, the same shapes, the same colors, or the same feeling. When someone looks at all of them together, they can tell the photos belong to each other.")
+        para("A series is more than a pile of photos. The images share something: the same subject, the same shapes, the same colors, or the same feeling. When someone looks at all of them together, they can tell the photos belong to each other.")
         + bullets([
             ("Pick one idea:","circles, shapes, colors, textures, reflections, or your own theme."),
             ("Keep it consistent:","repeat that idea across every photo so they feel linked."),
@@ -269,8 +266,7 @@ def overview():
         + framed(HEADER,"Encabezado de la Caminata de Serie de Im&aacute;genes: una fila de fotos unidas que forman una serie cohesiva"))
     es+=downloads_block(True)
     es+=card("EL CONCEPTO / QU&Eacute; HACE UNA SERIE","Una Familia de Im&aacute;genes",
-        float_right(BEE,"Una estudiante de Pioneer Valley arrodillada fotografiando una flor rosa con una abeja, con una c&aacute;mara Canon en luz dorada frente al campus de PV","Capturando una serie con luz natural en el campus.")
-        + para("Una serie es m&aacute;s que un mont&oacute;n de fotos. Las im&aacute;genes comparten algo: el mismo tema, las mismas formas, los mismos colores o la misma sensaci&oacute;n. Cuando alguien las ve todas juntas, puede notar que las fotos van una con otra.")
+        para("Una serie es m&aacute;s que un mont&oacute;n de fotos. Las im&aacute;genes comparten algo: el mismo tema, las mismas formas, los mismos colores o la misma sensaci&oacute;n. Cuando alguien las ve todas juntas, puede notar que las fotos van una con otra.")
         + bullets([
             ("Elige una idea:","c&iacute;rculos, formas, colores, texturas, reflejos o tu propio tema."),
             ("Mant&eacute;nla consistente:","repite esa idea en cada foto para que se sientan unidas."),
