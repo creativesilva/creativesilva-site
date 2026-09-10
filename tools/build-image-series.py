@@ -12,6 +12,7 @@ ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 HEADER=f"{SITE}/assets/images/photo1/image-series/header-v1.png"   # overview header art
 # shared with the Photo 2 Build-Your-Own-Preset module (same capture image, one hosted copy)
 BEE=f"{SITE}/assets/images/photo2/build-your-own-preset/capture-float-v1.jpg"
+EDIT_FLOAT=f"{SITE}/assets/images/photo1/image-series/edit-float-v1.jpg"  # step 2 editing image
 LRC=f"{SITE}/assets/images/photo1/lrc-import"          # existing import slide deck images
 SLIDE=LRC+"/lrc-slide-{:02d}.jpg"
 SLIDE_PDF=f"{SITE}/assets/course-documents/Lightroom-Import-Guide.pdf"
@@ -395,7 +396,8 @@ def step02():
             ("Flag your picks:","in Lightroom, mark your 6 so they are easy to find."),
         ]))
     en+=card("EDIT / A LIGHT TOUCH","Give Each Photo a Light Edit",
-        para("Now do a light edit on your 6 in the Develop module. Small changes only: the goal is clean, natural photos that still feel like one series.")
+        float_right(EDIT_FLOAT,"A Pioneer Valley student editing her photos on an iMac in the lab, with her Canon EOS R5 on the desk","Editing your series in Lightroom Classic.")
+        + para("Now do a light edit on your 6 in the Develop module. Small changes only: the goal is clean, natural photos that still feel like one series.")
         + bullets([
             ("Exposure:","make the photo brighter or darker until it looks right."),
             ("Highlights:","pull back the brightest areas so they are not blown out."),
@@ -422,7 +424,8 @@ def step02():
             ("Marca tus elegidas:","en Lightroom, marca tus 6 para encontrarlas f&aacute;cil."),
         ]))
     es+=card("EDITA / UN TOQUE LIGERO","Dale a Cada Foto una Edici&oacute;n Ligera",
-        para("Ahora haz una edici&oacute;n ligera de tus 6 en el m&oacute;dulo Revelar. Solo cambios peque&ntilde;os: la meta es fotos limpias y naturales que sigan sinti&eacute;ndose como una sola serie.")
+        float_right(EDIT_FLOAT,"Una estudiante de Pioneer Valley editando sus fotos en una iMac en el laboratorio, con su Canon EOS R5 sobre el escritorio","Editando tu serie en Lightroom Classic.")
+        + para("Ahora haz una edici&oacute;n ligera de tus 6 en el m&oacute;dulo Revelar. Solo cambios peque&ntilde;os: la meta es fotos limpias y naturales que sigan sinti&eacute;ndose como una sola serie.")
         + bullets([
             ("Exposici&oacute;n:","haz la foto m&aacute;s clara o m&aacute;s oscura hasta que se vea bien."),
             ("Luces (Highlights):","baja las zonas m&aacute;s brillantes para que no se quemen."),
