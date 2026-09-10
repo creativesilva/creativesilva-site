@@ -367,7 +367,7 @@ def step01():
                 ("See the gap:","hold Alt (Windows) or Option (Mac) and click the eye icon on the Arch layer to hide the other layers."),
                 ("Select the gap:","pick the Rectangular Marquee tool (press M) and drag to select the empty left gap. Overlap the photo edge a little."),
                 ("Fill it with AI:","click the Arch layer in the Layers panel. In the Contextual Task Bar, click Generative Fill, leave the box blank, and click Generate. Click Agree if asked."),
-                ("Pick the best:","in the Properties panel, click each Variation and choose the one that looks most natural."),
+                ("Select the best:","in the Properties panel, click each Variation and choose the one that looks most natural."),
                 ("Show everything:","right-click (Windows) or Control-click (Mac) the eye icon on the Generative Fill layer, and choose Show/Hide All Other Layers. Choose File &gt; Save."),
             ])
             + phase("Step 13 &middot; Export",[

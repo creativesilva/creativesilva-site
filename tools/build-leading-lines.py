@@ -228,7 +228,7 @@ def overview():
             ("Pair up:","two students share one class camera."),
             ("Take:","each person takes 3 different examples of leading lines. Different lines, different spots, not the same photo twice."),
             ("Share:","swap your photos so each partner has the other&rsquo;s 3 examples."),
-            ("Cull:","pick the single best photo of each example. You keep your best 3 and your partner&rsquo;s best 3."),
+            ("Cull:","select the single best photo of each example. You keep your best 3 and your partner&rsquo;s best 3."),
             ("Submit:","turn in 6 photos in all (your 3 plus your partner&rsquo;s 3)."),
         ])
         + note_orange("You take photos as JPG. You will not edit them, so get the photo right in the camera.")
@@ -279,7 +279,7 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Leading Lines &bull; Step 1","Capture, Cull &amp; Submit","Take your leading lines, then pick your best six.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Leading Lines &bull; Step 1","Capture, Cull &amp; Submit","Take your leading lines, then select your best six.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("CAPTURE / ON THE WALK","Take Your Leading Lines",
         float_right(FLOAT,"A student kneeling to photograph down a long covered walkway whose columns lead the eye to a vanishing point, while a partner watches")
         + para("Pair up and share one class camera, two students per camera. Set the camera to JPG. Then walk campus and hunt for leading lines.")
@@ -297,8 +297,8 @@ def step01():
             ("Import first:","bring the camera to a computer and import the photos."),
             ("Share both sets:","give your partner your photos and get theirs, so you each have all six examples as JPGs."),
         ]))
-    en+=card("CULL / PICK YOUR BEST","Cull to Your Best 6",
-        para("Now cull. Culling means looking through your photos and keeping only the best. For each example, pick the single strongest photo.")
+    en+=card("CULL / SELECT YOUR BEST","Cull to Your Best 6",
+        para("Now cull. Culling means looking through your photos and keeping only the best. For each example, select the single strongest photo.")
         + bullets([
             ("Your 3:","keep your best photo of each of your 3 examples."),
             ("Your partner&rsquo;s 3:","keep the best photo of each of your partner&rsquo;s 3 examples."),
@@ -344,7 +344,7 @@ def step01():
 def step02():
     en=banner("Leading Lines &bull; Step 2","Turn In Your Reflection","Reflect on the walk, your partner, and your photos.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("STEP 02 / REFLECT","Complete and Upload the Reflection",
-        para("Finish with a short reflection. It asks you to name your partner, explain what leading lines are, tell how you culled, and pick your favorite photo.")
+        para("Finish with a short reflection. It asks you to name your partner, explain what leading lines are, tell how you culled, and select your favorite photo.")
         + note_orange("The reflection is on this module&rsquo;s Overview page: the first page of this module, marked M in the steps at the top. Open it to download the reflection.")
         + bullets([
             ("Open it:","open the reflection Word document (.docx) from this module&rsquo;s Overview page (marked M at the top)."),

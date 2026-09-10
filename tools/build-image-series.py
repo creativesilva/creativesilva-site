@@ -287,7 +287,7 @@ def overview():
     en+=card("HOW IT WORKS / YOUR PLAN","Your Three Steps",
         steps([
             ("Capture &amp; Import:","set the camera to RAW, capture your cohesive series, offload to OneDrive, import into Lightroom Classic, and turn in a 12-image contact sheet."),
-            ("Cull &amp; Edit:","pick your best 6, do a light edit (exposure, highlights, shadows, color temperature), and turn in a 6-image contact sheet."),
+            ("Cull &amp; Edit:","select your best 6, do a light edit (exposure, highlights, shadows, color temperature), and turn in a 6-image contact sheet."),
             ("Reflection:","tell the story of your series."),
         ])
         + note_orange("Capture in RAW, not JPG. Set your Canon EOS R50 to RAW before you start. Step 01 shows you how.")
@@ -375,7 +375,7 @@ def step01():
     en+=card("CONTACT SHEET / SHOW YOUR SERIES","Make Your 12-Image Contact Sheet",
         para("A contact sheet is one page that shows all your photos as small thumbnails. Make yours with the 12-Up contact sheet layout in the Lightroom Classic Print module, then save it as a high-resolution JPG. The template is on this module&rsquo;s Overview page (marked M at the top).")
         + bullets([
-            ("Select your images:","pick the photos from your imported series."),
+            ("Select your images:","select the photos from your imported series."),
             ("Use the 12-Up layout:","in the Print module, choose the 12-Up contact sheet."),
             ("Save the page:","export the contact sheet as a high-resolution JPG to turn in."),
         ]))
@@ -430,13 +430,13 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Image Series Photo Walk &bull; Step 2","Cull &amp; Edit","Pick your best 6, do a light edit, and turn in a 6-image contact sheet.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Image Series Photo Walk &bull; Step 2","Cull &amp; Edit","Select your best 6, do a light edit, and turn in a 6-image contact sheet.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("CULL / KEEP THE STRONG ONES","Cull to Your Best 6",
-        para("Culling means looking through your photos and keeping only the strongest. Pick the 6 images that best show your series. Drop the blurry, the too-dark, and the repeats.")
+        para("Culling means looking through your photos and keeping only the strongest. Select the 6 images that best show your series. Drop the blurry, the too-dark, and the repeats.")
         + bullets([
-            ("Look for your best:","pick the 6 photos that are sharp, well-framed, and clearly part of your series."),
+            ("Look for your best:","select the 6 photos that are sharp, well-framed, and clearly part of your series."),
             ("Keep it cohesive:","choose 6 that feel like they belong together."),
-            ("Flag your picks:","in Lightroom, mark your 6 so they are easy to find."),
+            ("Flag your selections:","in Lightroom, mark your 6 so they are easy to find."),
         ]))
     en+=card("EDIT / A LIGHT TOUCH","Give Each Photo a Light Edit",
         float_right(EDIT_FLOAT,"A Pioneer Valley student editing her photos on an iMac in the lab, with her Canon EOS R5 on the desk","Editing your series in Lightroom Classic.")
@@ -449,14 +449,14 @@ def step02():
         ])
         + note_orange("Keep your edits consistent across all 6 so the series still feels like one family of images."))
     en+=card("CONTACT SHEET / YOUR BEST SIX","Make Your 6-Image Contact Sheet",
-        para("Now make a 6-image contact sheet of your edited picks. Use the 6-Up contact sheet layout in the Print module, then save it as a high-resolution JPG. The template is on this module&rsquo;s Overview page (marked M at the top).")
+        para("Now make a 6-image contact sheet of your edited selections. Use the 6-Up contact sheet layout in the Print module, then save it as a high-resolution JPG. The template is on this module&rsquo;s Overview page (marked M at the top).")
         + bullets([
-            ("Select your 6:","pick your 6 edited images."),
+            ("Select your 6:","select your 6 edited images."),
             ("Use the 6-Up layout:","in the Print module, choose the 6-Up contact sheet."),
             ("Save the page:","export the contact sheet as a high-resolution JPG to turn in."),
         ]))
     en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
-        [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG), showing your 6 edited picks, uploaded to this Canvas assignment.")])
+        [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG), showing your 6 edited selections, uploaded to this Canvas assignment.")])
 
     es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 2","Selecciona y Edita","Elige tus mejores 6, haz una edici&oacute;n ligera y entrega una hoja de contactos de 6.","#top","Back to English")
     es+=card("SELECCIONA / QU&Eacute;DATE CON LAS FUERTES","Selecciona (Cull) Tus Mejores 6",
