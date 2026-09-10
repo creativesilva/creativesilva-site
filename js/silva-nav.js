@@ -37,7 +37,8 @@
     { course: 'Photography 1A', modules: [
       { name: 'Self-Portrait',            url: '/curriculum/shared/photo1-self-portrait-overview.html' },
       { name: 'Composition Concepts',     url: '/curriculum/shared/photo1-composition-concepts-overview.html' },
-      { name: 'Leading Lines Photo Walk', url: '/curriculum/shared/photo1-leading-lines-overview.html' }
+      { name: 'Leading Lines Photo Walk', url: '/curriculum/shared/photo1-leading-lines-overview.html' },
+      { name: 'Image Series Photo Walk',  url: '/curriculum/shared/photo1-image-series-overview.html' }
     ]},
     { course: 'Photography 2A', modules: [
       { name: 'Composition Photo Walk', url: '/curriculum/shared/photo2-composition-overview.html' },
@@ -195,6 +196,10 @@
     ['/curriculum/shared/photo1-leading-lines-overview.html',
      '/curriculum/shared/photo1-leading-lines-step01-capture.html',
      '/curriculum/shared/photo1-leading-lines-step02-reflection.html'],
+    ['/curriculum/shared/photo1-image-series-overview.html',
+     '/curriculum/shared/photo1-image-series-step01-capture-import.html',
+     '/curriculum/shared/photo1-image-series-step02-cull-edit.html',
+     '/curriculum/shared/photo1-image-series-step03-reflection.html'],
     ['/curriculum/photo2/photo2a-home.html',
      '/curriculum/photo2/photo2a-course-overview.html',
      '/curriculum/photo2/photo2a-syllabus.html'],
