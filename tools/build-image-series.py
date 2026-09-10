@@ -12,6 +12,7 @@ ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 HEADER=f"{SITE}/assets/images/photo1/image-series/header-v1.png"   # overview header art
 EDIT_FLOAT=f"{SITE}/assets/images/photo1/image-series/edit-float-v1.jpg"  # step 2 editing image
 CAPTURE_FLOAT=f"{SITE}/assets/images/photo1/image-series/capture-float-v1.jpg"  # step 1 capture image
+REFLECT_FLOAT=f"{SITE}/assets/images/photo1/image-series/reflection-float-v1.jpg"  # step 3 reflection image
 LRC=f"{SITE}/assets/images/photo1/lrc-import"          # existing import slide deck images
 SLIDE=LRC+"/lrc-slide-{:02d}.jpg"
 SLIDE_PDF=f"{SITE}/assets/course-documents/Lightroom-Import-Guide.pdf"
@@ -485,7 +486,8 @@ def step02():
 def step03():
     en=banner("Image Series Photo Walk &bull; Step 3","Reflection","Tell the story of your series.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
-        para("Finish with a short reflection. It asks about the series you chose, how you offloaded and imported your photos, the 6 you kept, and the edits you made.")
+        float_right(REFLECT_FLOAT,"A Pioneer Valley student typing her Image Series reflection in the Word document on an iMac in the lab","Type your answers right in the reflection document.")
+        + para("Finish with a short reflection. It asks about the series you chose, how you offloaded and imported your photos, the 6 you kept, and the edits you made.")
         + note_orange("The reflection is on this module&rsquo;s Overview page: the first page of this module, marked M in the steps at the top. Open it to download the reflection.")
         + bullets([
             ("Open it:","open the reflection Word document (.docx) from this module&rsquo;s Overview page (marked M at the top)."),
@@ -498,7 +500,8 @@ def step03():
 
     es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 3","Reflexi&oacute;n","Cuenta la historia de tu serie.","#top","Back to English")
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
-        para("Termina con una reflexi&oacute;n corta. Te pregunta sobre la serie que elegiste, c&oacute;mo descargaste e importaste tus fotos, las 6 que guardaste y las ediciones que hiciste.")
+        float_right(REFLECT_FLOAT,"Una estudiante de Pioneer Valley escribiendo su reflexi&oacute;n de la Serie de Im&aacute;genes en el documento de Word en una iMac en el laboratorio","Escribe tus respuestas directamente en el documento de reflexi&oacute;n.")
+        + para("Termina con una reflexi&oacute;n corta. Te pregunta sobre la serie que elegiste, c&oacute;mo descargaste e importaste tus fotos, las 6 que guardaste y las ediciones que hiciste.")
         + note_orange("La reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo: la primera p&aacute;gina de este m&oacute;dulo, marcada con M en los pasos de arriba. &Aacute;brela para descargar la reflexi&oacute;n.")
         + bullets([
             ("&Aacute;brelo:","abre el documento de Word (.docx) de la reflexi&oacute;n desde la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."),
