@@ -76,21 +76,27 @@ def folder_note(es):
       'As each file finishes downloading, move it out of your Downloads folder into '
       f'OneDrive &rarr; {AREA} &rarr; that project folder so all your files stay together.</div>')
 
-def install_note(es):
-    # sits under a contact-sheet-templates download row: a small clickable video thumbnail + how to install once
+def contact_install_card(es):
+    # TEAL section (placed under "A Family of Images"): clickable video thumbnail (float-right)
+    # + how to install the contact sheet presets once. The templates themselves download from Downloads.
     alt=("Miniatura del video: instalar los ajustes de hoja de contactos en Lightroom Classic" if es
          else "Video thumbnail: installing the contact sheet presets in Lightroom Classic")
-    thumb=(f'<a href="{INSTALL_VIDEO}" target="_blank" rel="noopener" style="flex:0 0 auto;display:block;">'
-      f'<img src="{INSTALL_THUMB}" alt="{alt}" style="display:block;width:150px;height:auto;border:1px solid rgba(0,184,184,0.35);border-top:2px solid #ff6b1a;" /></a>')
+    thumb=('<div style="float:right;width:40%;min-width:230px;margin:0 0 14px 22px;">'
+      f'<a href="{INSTALL_VIDEO}" target="_blank" rel="noopener" style="display:block;background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;">'
+      f'<img src="{INSTALL_THUMB}" alt="{alt}" style="display:block;width:100%;height:auto;" /></a>'
+      f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">'
+      + ("Toca para ver el video de instalaci&oacute;n." if es else "Tap to watch the install video.") + '</div></div>')
     if es:
-        text=('&iquest;Nuevo con esto? <a href="{v}" target="_blank" rel="noopener" style="color:#ffb27c;"><strong>Mira el video de instalaci&oacute;n</strong></a>, '
-          'luego col&oacute;calos en Lightroom Classic &rarr; m&oacute;dulo Imprimir. Solo los instalas una vez.').format(v=INSTALL_VIDEO)
+        eyebrow="HOJAS DE CONTACTO / INSTALA UNA VEZ"; heading="Instala Tus Ajustes de Hoja de Contactos"
+        body=(para("Usas dos ajustes (presets) de Lightroom Classic para armar tus hojas de contactos: uno de 12 y uno de 6. Los instalas <strong>una sola vez</strong> y quedan listos para siempre.")
+          + para('<a href="'+INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#ffb27c;"><strong>Mira el video de instalaci&oacute;n</strong></a>, luego coloca los ajustes en Lightroom Classic &rarr; m&oacute;dulo Imprimir.')
+          + para("Descarga las plantillas desde la secci&oacute;n de Descargas de arriba."))
     else:
-        text=('New to these? <a href="{v}" target="_blank" rel="noopener" style="color:#ffb27c;"><strong>Watch the install video</strong></a>, '
-          'then drop them into Lightroom Classic &rarr; Print module. You only install them once.').format(v=INSTALL_VIDEO)
-    return ('<div style="margin-top:8px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">'
-      + thumb
-      + f'<div style="flex:1 1 220px;font-size:11.5pt;color:rgba(255,255,255,0.80);line-height:1.5;">{text}</div></div>')
+        eyebrow="CONTACT SHEETS / INSTALL ONCE"; heading="Install Your Contact Sheet Presets"
+        body=(para("You use two Lightroom Classic presets to build your contact sheets: a 12-Up and a 6-Up. Install them <strong>one time</strong> and they are ready every time after that.")
+          + para('<a href="'+INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#ffb27c;"><strong>Watch the install video</strong></a>, then drop the presets into Lightroom Classic &rarr; Print module.')
+          + para("Download the templates from the Downloads section above."))
+    return card(eyebrow, heading, thumb + body + '<div style="clear:both;"></div>')
 
 def downloads_block(es):
     # CANONICAL orange downloads section, right after the intro/header card. This module
@@ -108,7 +114,7 @@ def downloads_block(es):
       f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
       '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
       f'{para(lead)}{dl_row(ref,reflabel)}'
-      f'<div style="margin-top:10px;">{dl_row(CONTACT_ZIP,cslabel)}{install_note(es)}</div>'
+      f'<div style="margin-top:10px;">{dl_row(CONTACT_ZIP,cslabel)}</div>'
       + folder_note(es) + '</div>')
 
 def bullets(items):
@@ -277,6 +283,7 @@ def overview():
             ("Keep it consistent:","repeat that idea across every photo so they feel linked."),
             ("Think like a set:","each photo is part of a group, not a one-off."),
         ]))
+    en+=contact_install_card(False)
     en+=card("HOW IT WORKS / YOUR PLAN","Your Three Steps",
         steps([
             ("Capture &amp; Import:","set the camera to RAW, capture your cohesive series, offload to OneDrive, import into Lightroom Classic, and turn in a 12-image contact sheet."),
@@ -308,6 +315,7 @@ def overview():
             ("Mant&eacute;nla consistente:","repite esa idea en cada foto para que se sientan unidas."),
             ("Piensa como un grupo:","cada foto es parte de un conjunto, no una foto suelta."),
         ]))
+    es+=contact_install_card(True)
     es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Tres Pasos",
         steps([
             ("Captura e Importa:","pon la c&aacute;mara en RAW, captura tu serie cohesiva, desc&aacute;rgala a OneDrive, imp&oacute;rtala a Lightroom Classic y entrega una hoja de contactos de 12 im&aacute;genes."),
