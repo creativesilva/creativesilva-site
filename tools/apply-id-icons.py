@@ -111,6 +111,8 @@ MAP={
  "digarts1-motivational-poster-step01.html":"design",
  "digarts1-motivational-poster-step02.html":"design",
  "digarts1-motivational-poster-step03.html":"reflection",
+ "digarts1-live-stream-graphic-overview.html":"overview",
+ "digarts1-live-stream-graphic-step01.html":"design",
  # ---- Photography 1A ----
  "photo1-self-portrait-overview.html":"overview",
  "photo1-self-portrait-step01-capture.html":"your-device",
