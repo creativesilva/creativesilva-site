@@ -121,6 +121,10 @@ MAP={
  "photo1-leading-lines-overview.html":"overview",
  "photo1-leading-lines-step01-capture.html":"photo-walk",
  "photo1-leading-lines-step02-reflection.html":"reflection",
+ "photo1-image-series-overview.html":"overview",
+ "photo1-image-series-step01-capture-import.html":"photo-walk",
+ "photo1-image-series-step02-cull-edit.html":"edit",
+ "photo1-image-series-step03-reflection.html":"reflection",
  # ---- Photography 2A ----
  "photo2-composition-overview.html":"overview",
  "photo2-composition-step01-photowalk.html":"photo-walk",

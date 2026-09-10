@@ -259,6 +259,23 @@ const DOCS = [
     '¿Cuál fue la parte más difícil de crear o aplicar tu preset, y cómo la resolviste?',
     '¿Qué harías diferente la próxima vez para que tu serie se vea más consistente?',
   ]},
+  // Image Series Photo Walk (Photography 1A)
+  { ...EN, outfile: 'Image-Series-Reflection-EN.docx', title: 'Image Series Photo Walk: Reflection', subtitle: PVHS_EN('Photography 1A'), questions: [
+    'What was your series about (circles, shapes, colors, textures, reflections, or your own idea), and how do your photos feel like a family of images?',
+    'How did offloading to OneDrive and importing into Lightroom Classic go? Was anything tricky?',
+    'Which 6 photos did you keep, and why did you choose those over the others?',
+    'What light edits did you make (exposure, highlights, shadows, color temperature), and how did they help your series?',
+    'What was the hardest part of this project, and how did you handle it?',
+    'What would you do differently next time to make your series feel more cohesive?',
+  ]},
+  { ...ES, outfile: 'Image-Series-Reflection-ES.docx', title: 'Caminata de Serie de Imágenes: Reflexión', subtitle: PVHS_ES('Fotografía 1A'), questions: [
+    '¿De qué trató tu serie (círculos, formas, colores, texturas, reflejos o tu propia idea), y cómo se sienten tus fotos como una familia de imágenes?',
+    '¿Cómo te fue al descargar a OneDrive e importar a Lightroom Classic? ¿Hubo algo difícil?',
+    '¿Cuáles 6 fotos guardaste, y por qué elegiste esas y no las demás?',
+    '¿Qué ediciones ligeras hiciste (exposición, luces, sombras, temperatura de color), y cómo ayudaron a tu serie?',
+    '¿Cuál fue la parte más difícil de este proyecto, y cómo la resolviste?',
+    '¿Qué harías diferente la próxima vez para que tu serie se sienta más cohesiva?',
+  ]},
 ];
 
 (async () => { for (const d of DOCS) await buildDoc(d); })();
