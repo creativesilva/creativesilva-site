@@ -13,6 +13,7 @@ HEADER=f"{SITE}/assets/images/photo1/image-series/header-v1.png"   # overview he
 # shared with the Photo 2 Build-Your-Own-Preset module (same capture image, one hosted copy)
 BEE=f"{SITE}/assets/images/photo2/build-your-own-preset/capture-float-v1.jpg"
 EDIT_FLOAT=f"{SITE}/assets/images/photo1/image-series/edit-float-v1.jpg"  # step 2 editing image
+CAPTURE_FLOAT=f"{SITE}/assets/images/photo1/image-series/capture-float-v1.jpg"  # step 1 capture image
 LRC=f"{SITE}/assets/images/photo1/lrc-import"          # existing import slide deck images
 SLIDE=LRC+"/lrc-slide-{:02d}.jpg"
 SLIDE_PDF=f"{SITE}/assets/course-documents/Lightroom-Import-Guide.pdf"
@@ -311,7 +312,8 @@ def step01():
         ])
         + note_orange("If you are not sure, ask Mr. Silva to check your setting before you start."))
     en+=card("CAPTURE / ON THE WALK","Capture Your Cohesive Series",
-        para("Now go capture your series with the camera kit. Pick one idea and repeat it so the photos feel like a family. Take at least 12 images so you have strong ones to choose from.")
+        float_right(CAPTURE_FLOAT,"A Pioneer Valley student kneeling to photograph a bee on a pink flower with a Canon EOS R5 on campus in golden light","Capturing a cohesive series on campus.")
+        + para("Now go capture your series with the camera kit. Pick one idea and repeat it so the photos feel like a family. Take at least 12 images so you have strong ones to choose from.")
         + bullets([
             ("Pick your idea:","circles, shapes, colors, textures, reflections, or your own theme."),
             ("At least 12 images:","capture more than you need for the series."),
@@ -352,7 +354,8 @@ def step01():
         ])
         + note_orange("Si no est&aacute;s seguro, pide al Sr. Silva que revise tu ajuste antes de empezar."))
     es+=card("CAPTURA / EN LA CAMINATA","Captura Tu Serie Cohesiva",
-        para("Ahora ve a capturar tu serie con el kit de c&aacute;mara. Elige una idea y rep&iacute;tela para que las fotos se sientan como una familia. Toma al menos 12 im&aacute;genes para tener buenas opciones.")
+        float_right(CAPTURE_FLOAT,"Una estudiante de Pioneer Valley arrodillada fotografiando una abeja en una flor rosa con una Canon EOS R5 en el campus con luz dorada","Capturando una serie cohesiva en el campus.")
+        + para("Ahora ve a capturar tu serie con el kit de c&aacute;mara. Elige una idea y rep&iacute;tela para que las fotos se sientan como una familia. Toma al menos 12 im&aacute;genes para tener buenas opciones.")
         + bullets([
             ("Elige tu idea:","c&iacute;rculos, formas, colores, texturas, reflejos o tu propio tema."),
             ("Al menos 12 im&aacute;genes:","captura m&aacute;s de las que necesitas para la serie."),
