@@ -32,7 +32,8 @@
       { name: 'Pictograms',          url: '/curriculum/shared/digarts1-pictograms-overview.html' },
       { name: 'Color Theory',        url: '/curriculum/shared/digarts1-color-theory-overview.html' },
       { name: 'Sketchbook Cover',    url: '/curriculum/shared/digarts1-sketchbook-cover-overview.html' },
-      { name: 'Motivational Poster', url: '/curriculum/shared/digarts1-motivational-poster-overview.html' }
+      { name: 'Motivational Poster', url: '/curriculum/shared/digarts1-motivational-poster-overview.html' },
+      { name: 'Live Stream Graphic',  url: '/curriculum/shared/digarts1-live-stream-graphic-overview.html' }
     ]},
     { course: 'Photography 1A', modules: [
       { name: 'Self-Portrait',            url: '/curriculum/shared/photo1-self-portrait-overview.html' },
@@ -183,6 +184,8 @@
      '/curriculum/shared/digarts1-motivational-poster-step01.html',
      '/curriculum/shared/digarts1-motivational-poster-step02.html',
      '/curriculum/shared/digarts1-motivational-poster-step03.html'],
+    ['/curriculum/shared/digarts1-live-stream-graphic-overview.html',
+     '/curriculum/shared/digarts1-live-stream-graphic-step01.html'],
     ['/curriculum/photo1/photo1a-home.html',
      '/curriculum/photo1/photo1a-course-overview.html',
      '/curriculum/photo1/photo1a-syllabus.html',
