@@ -1,0 +1,23 @@
+BLANK ARTBOARD RESET
+
+Reset the image-generation state for the next request.
+
+Start from a completely blank artboard.
+
+Ignore all previous generated images, compositions, camera angles, crops, subjects, poses, environments, layouts, lighting solutions, object placements, and image-edit instructions unless I explicitly reintroduce them.
+
+Do not use any previous image as a base.
+Do not inherit visual structure or composition from prior generations.
+Do not continue, modify, remix, or refine the previous image.
+
+Treat the NEXT image prompt as a completely independent first-generation request.
+
+Use only:
+1. the next written image prompt
+2. any reference images I explicitly designate for that new request
+
+NO CARRYOVER.
+NO INHERITANCE.
+NO CONTINUITY.
+NEW IMAGE FROM SCRATCH.
+BLANK ARTBOARD.
