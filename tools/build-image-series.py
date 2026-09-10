@@ -17,6 +17,7 @@ SLIDE=LRC+"/lrc-slide-{:02d}.jpg"
 SLIDE_PDF=f"{SITE}/assets/course-documents/Lightroom-Import-Guide.pdf"
 CONTACT_ZIP=f"{SITE}/assets/PVHS_Contact_Sheet_Presets.zip"
 INSTALL_VIDEO="https://vimeo.com/1164128764/e1842e523e?share=copy&amp;fl=sv&amp;fe=ci"
+INSTALL_THUMB=f"{SITE}/assets/images/photo1/image-series/install-video-thumb-v1.jpg"
 AREA="Photo"   # OneDrive top folder for this course's project folders (Photo vs Digital Arts)
 REFLECT_EN=f"{SITE}/assets/course-documents/Image-Series-Reflection-EN.docx"
 REFLECT_ES=f"{SITE}/assets/course-documents/Image-Series-Reflection-ES.docx"
@@ -75,14 +76,20 @@ def folder_note(es):
       f'OneDrive &rarr; {AREA} &rarr; that project folder so all your files stay together.</div>')
 
 def install_note(es):
-    # sits under a contact-sheet-templates download row: how to install the presets once
+    # sits under a contact-sheet-templates download row: a small clickable video thumbnail + how to install once
+    alt=("Miniatura del video: instalar los ajustes de hoja de contactos en Lightroom Classic" if es
+         else "Video thumbnail: installing the contact sheet presets in Lightroom Classic")
+    thumb=(f'<a href="{INSTALL_VIDEO}" target="_blank" rel="noopener" style="flex:0 0 auto;display:block;">'
+      f'<img src="{INSTALL_THUMB}" alt="{alt}" style="display:block;width:150px;height:auto;border:1px solid rgba(0,184,184,0.35);border-top:2px solid #ff6b1a;" /></a>')
     if es:
-        return ('<div style="margin-top:6px;font-size:11.5pt;color:rgba(255,255,255,0.80);line-height:1.5;">'
-          f'&iquest;Nuevo con esto? <a href="{INSTALL_VIDEO}" target="_blank" rel="noopener" style="color:#ffb27c;"><strong>Mira el video de instalaci&oacute;n</strong></a>, '
-          'luego col&oacute;calos en Lightroom Classic &rarr; m&oacute;dulo Imprimir. Solo los instalas una vez.</div>')
-    return ('<div style="margin-top:6px;font-size:11.5pt;color:rgba(255,255,255,0.80);line-height:1.5;">'
-      f'New to these? <a href="{INSTALL_VIDEO}" target="_blank" rel="noopener" style="color:#ffb27c;"><strong>Watch the install video</strong></a>, '
-      'then drop them into Lightroom Classic &rarr; Print module. You only install them once.</div>')
+        text=('&iquest;Nuevo con esto? <a href="{v}" target="_blank" rel="noopener" style="color:#ffb27c;"><strong>Mira el video de instalaci&oacute;n</strong></a>, '
+          'luego col&oacute;calos en Lightroom Classic &rarr; m&oacute;dulo Imprimir. Solo los instalas una vez.').format(v=INSTALL_VIDEO)
+    else:
+        text=('New to these? <a href="{v}" target="_blank" rel="noopener" style="color:#ffb27c;"><strong>Watch the install video</strong></a>, '
+          'then drop them into Lightroom Classic &rarr; Print module. You only install them once.').format(v=INSTALL_VIDEO)
+    return ('<div style="margin-top:8px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">'
+      + thumb
+      + f'<div style="flex:1 1 220px;font-size:11.5pt;color:rgba(255,255,255,0.80);line-height:1.5;">{text}</div></div>')
 
 def downloads_block(es):
     # CANONICAL orange downloads section, right after the intro/header card. This module
