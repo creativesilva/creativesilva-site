@@ -5,182 +5,36 @@
 # (no work-area touring, no Generative Fill). NO reflection (it is a guided how-to).
 # Overview + 1 step, bilingual EN/ES. End-example float image on the Overview; no header image;
 # no image on Step 01 (the picture-by-picture guide is the Lesson Slides PDF, added later).
+# Chip-header framework via silva_framework. Module-specific: scrollable 13-step guide (scrollbox +
+# phase) kept as the content of a purple Module Resource card.
 import os, re
-SITE="https://www.creativesilva.com"
-ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
+from silva_framework import *
+
+ROOT=os.path.join(os.path.dirname(__file__),"..")
 END_IMG=f"{SITE}/assets/images/digarts1/live-stream-graphic/live-stream-end-example-v1.jpg"
 ASSETS_ZIP=f"{SITE}/assets/course-documents/Live-Stream-Graphic-Assets.zip"
 SLIDES_PDF=f"{SITE}/assets/course-documents/Live-Stream-Graphic-Slides.pdf"
+AREA="Digital Arts Folder"   # OneDrive top folder for this course's project folders
 
 OVER="digarts1-live-stream-graphic-overview.html"
 S1="digarts1-live-stream-graphic-step01.html"
 
-def ent(s):
-    m={"á":"&aacute;","é":"&eacute;","í":"&iacute;","ó":"&oacute;","ú":"&uacute;",
-       "Á":"&Aacute;","É":"&Eacute;","Í":"&Iacute;","Ó":"&Oacute;","Ú":"&Uacute;",
-       "ñ":"&ntilde;","Ñ":"&Ntilde;","ü":"&uuml;","¿":"&iquest;","¡":"&iexcl;",
-       "“":"&ldquo;","”":"&rdquo;","‘":"&lsquo;","’":"&rsquo;","–":"&ndash;","•":"&bull;","×":"&times;"}
-    return "".join(m.get(c, c if ord(c)<128 else "&#x{:X};".format(ord(c))) for c in s)
-
-def banner(label,title,subtitle,es_href,es_label):
-    return ('<div style="background:linear-gradient(135deg,#000000 0%,#003838 40%,#007474 100%);padding:20px 28px 22px;margin:-28px -28px 24px -28px;">'
-      '<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">'
-      f'<div style="justify-self:start;"><img src="{SITE}/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:min(90px,15vw);height:auto;display:block;" /></div>'
-      '<div style="justify-self:center;text-align:center;">'
-      f'<div style="margin-bottom:6px;"><span style="font-size:13pt;color:#80e0e0;"><strong>{label}</strong></span></div>'
-      f'<div style="color:#ffffff;font-size:23pt;line-height:1.1;"><strong>{title}</strong></div>'
-      f'<div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:13pt;font-style:italic;"><strong>{subtitle}</strong></span></div></div>'
-      f'<div style="justify-self:end;"><a href="{es_href}" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #ff6b1a;"><strong>{es_label}</strong></a></div>'
-      '</div></div>')
-
-def card(eyebrow,heading,inner):
-    return ('<div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #00b8b8;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#80e0e0;text-transform:uppercase;margin-bottom:12px;">'
-      f'<strong>{eyebrow}</strong></div>'
-      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
-      '<div style="height:2px;background:#00b8b8;width:60px;margin-bottom:18px;"></div>'
-      f'{inner}</div>')
-
-AREA="Digital Arts Folder"   # OneDrive top folder for this course's project folders
-
-def folder_note(es):
-    # Every orange downloads block tells students to make a module project folder and move
-    # their files from Downloads into OneDrive > Digital Arts > that folder, so work stays together.
-    if es:
-        return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
-          '<strong style="color:#ffb27c;">Mantente organizado:</strong> crea una carpeta nueva y ll&aacute;mala como este m&oacute;dulo. '
-          'Cuando cada archivo termine de descargarse, mu&eacute;velo de tu carpeta de Descargas a '
-          f'OneDrive &rarr; {AREA} &rarr; esa carpeta del proyecto para que todos tus archivos queden juntos.</div>')
-    return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
-      '<strong style="color:#ffb27c;">Stay organized:</strong> make a new folder and name it after this module. '
-      'As each file finishes downloading, move it out of your Downloads folder into '
-      f'OneDrive &rarr; {AREA} &rarr; that project folder so all your files stay together.</div>')
-
-def downloads_card(eyebrow,heading,inner):
-    # CANONICAL orange downloads card (framework standard), placed right after the
-    # intro/header card on the Overview so students grab files before starting.
+def downloads_block(es):
+    # Orange Downloads section (Overview only). This module holds the project files and the
+    # lesson slides. Both buttons share one flex-wrap row.
+    heading="Descarga Tus Archivos" if es else "Download Your Files"
+    lead=("Consigue aqu&iacute; los archivos del proyecto antes de empezar. Las Diapositivas de la Lecci&oacute;n muestran una imagen de cada paso." if es
+          else "Grab the project files here before you start. The Lesson Slides show a picture for every step.")
+    zlabel="Archivos del Proyecto (ZIP)" if es else "Project Files (ZIP)"
+    slabel="Diapositivas de la Lecci&oacute;n (PDF)" if es else "Lesson Slides (PDF)"
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #FF6B1A;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#ffb27c;text-transform:uppercase;margin-bottom:12px;">'
-      f'<strong>{eyebrow}</strong></div>'
-      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
-      '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
-      f'{inner}</div>')
-
-
-RESICON=f"{SITE}/assets/Icons/assignment/resources-v1.png"
-def resources_card(eyebrow,heading,inner):
-    # PURPLE Resources section (LOCKED): in-depth how-to / reference. Distinct from teal content,
-    # orange Downloads, gold Deliverables.
-    return ('<div style="background:linear-gradient(180deg,rgba(139,92,246,0.10) 0%,rgba(139,92,246,0.03) 100%);border:1px solid rgba(139,92,246,0.28);border-left:6px solid #8b5cf6;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #8b5cf6;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#c4b5fd;text-transform:uppercase;margin-bottom:12px;">'
-      f'<strong>{eyebrow}</strong></div>'
-      '<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px;">'
-      f'<div style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></div>'
-      f'<img src="{RESICON}" alt="Resource" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
-      '<div style="height:2px;background:#8b5cf6;width:60px;margin-bottom:18px;"></div>'
-      f'{inner}</div>')
-
-def para(t):
-    return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
-
-def bullets(items):
-    r=""
-    for b,rest in items:
-        inner=(f'<strong>{b}</strong> {rest}' if b else rest)
-        r+=('<div style="margin-bottom:8px;line-height:1.55;"><span style="color:#00b8b8;">&bull;</span> '
-            f'<span style="font-size:13.5pt;color:rgba(255,255,255,0.88);">{inner}</span></div>')
-    return f'<div style="margin-bottom:6px;">{r}</div>'
-
-def steps(items):
-    r=""
-    for i,(b,rest) in enumerate(items,1):
-        lead=(f'<strong>{b}</strong> ' if b else '')
-        r+=('<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;">'
-            f'<span style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#FF6B1A;color:#ffffff;font-size:12pt;line-height:26px;text-align:center;"><strong>{i}</strong></span>'
-            f'<span style="font-size:13.5pt;color:rgba(255,255,255,0.88);line-height:1.5;">{lead}{rest}</span></div>')
-    return f'<div style="margin:4px 0 6px;">{r}</div>'
-
-def note_orange(t):
-    return (f'<div style="background:rgba(255,107,26,0.10);border:1px solid rgba(255,107,26,0.30);border-left:4px solid #FF6B1A;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
-
-def scrollbox(es, inner):
-    # long step sequences go in a contained scroll panel so the page looks less intimidating
-    hint=('Scroll inside the box to see all 13 steps' if not es else 'Despl&aacute;zate en el cuadro para ver los 13 pasos')
-    return (f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
-      '<div class="silva-scroll" style="max-height:520px;overflow-y:auto;padding:16px 18px 20px;border:1px solid rgba(0,184,184,0.22);border-radius:14px;'
-      'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.16) 100%);">'
-      f'{inner}</div>')
-
-def phase(title, items, intro=''):
-    introhtml=(f'<div style="margin-bottom:10px;line-height:1.6;"><span style="font-size:13pt;color:rgba(255,255,255,0.86);">{intro}</span></div>' if intro else '')
-    return ('<div style="border-left:3px solid #00b8b8;padding:2px 0 2px 16px;margin:0 0 22px;">'
-      f'<div style="font-size:15pt;color:#ffffff;margin-bottom:8px;"><strong>{title}</strong></div>'
-      f'{introhtml}{steps(items)}</div>')
-
-def float_right(src,alt,cap):
-    return ('<div style="float:right;width:44%;min-width:250px;margin:0 0 14px 22px;">'
-      f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
-      f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div></div>')
-
-DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"
-
-def dl_link(url,label,row=False):
-    mgn='margin:0;' if row else 'margin:0 10px 8px 0;'
-    return (f'<a href="{url}" download style="display:inline-block;text-decoration:none;background:#FF6B1A;color:#ffffff;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;{mgn}"><strong>{label}</strong></a>')
-
-def dl_row(url,label):
-    return ('<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;">'
-      f'<img src="{DL_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;display:block;" />'
-      + dl_link(url,label,row=True) + '</div>')
-
-def pdf_placeholder(label):
-    # dashed placeholder for the Lesson Slides PDF link (Chris adds the deck + link later)
-    return ('<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;">'
-      f'<img src="{DL_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;opacity:0.45;display:block;" />'
-      '<div style="flex:1 1 auto;min-width:230px;border:2px dashed rgba(0,184,184,0.45);background:rgba(0,184,184,0.06);'
-      'padding:11px 16px;box-sizing:border-box;font-size:11pt;letter-spacing:0.06em;text-transform:uppercase;color:#80e0e0;">'
-      f'<strong>{label}</strong></div></div>')
-
-def vocab_grid(quiz_label, quiz_body, terms):
-    note=('<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.30);border-left:4px solid #00b8b8;padding:12px 16px;margin-bottom:18px;">'
-      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#80e0e0;margin-bottom:5px;"><strong>{quiz_label}</strong></div>'
-      f'<div style="font-size:12pt;color:rgba(255,255,255,0.90);line-height:1.5;">{quiz_body}</div></div>')
-    cell=('<td style="width:33.33%;vertical-align:top;padding:6px;">'
-      '<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;height:100%;box-sizing:border-box;">'
-      '<div style="background:linear-gradient(135deg,#094043 0,#094043 28px,#041d1c 28px,#041d1c 100%);padding:16px;min-height:132px;height:100%;box-sizing:border-box;">'
-      '<div style="font-size:12pt;color:#ffffff;margin-bottom:5px;"><strong>{term}</strong></div>'
-      '<div style="font-size:10.5pt;line-height:1.5;color:rgba(255,255,255,0.80);">{defn}</div></div></div></td>')
-    rows=""
-    for i in range(0,len(terms),3):
-        rows+='<tr>'+''.join(cell.format(term=t,defn=d) for t,d in terms[i:i+3])+'</tr>'
-    return note+f'<table role="presentation" style="width:100%;border-collapse:collapse;table-layout:fixed;"><tbody>{rows}</tbody></table>'
-
-def deliverables_box(title,lead,items):
-    lis=""
-    for b,rest in items:
-        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#f5b301;">&bull;</span> '
-              f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
-    return ('<div style="background:rgba(245,179,1,0.12);border:1px solid rgba(245,179,1,0.35);border-left:5px solid #f5b301;padding:16px 18px;margin:0 0 8px;">'
-      '<div style="display:flex;align-items:flex-start;gap:12px;">'
-      '<div style="flex:1 1 auto;min-width:0;">'
-      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffd166;margin-bottom:8px;"><strong>{title}</strong></div>'
-      f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div></div>'
-      f'<img src="{SITE}/assets/Icons/assignment/deliverables-v4.png" alt="Deliverables" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
-      f'{lis}</div>')
-
-def top_wrap(en,es):
-    return ('<div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;'
-      "background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%),"
-      f"url('{SITE}/assets/PV_Panther_Watermark.png');"
-      'background-position:center center,center center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed;overflow:hidden;">'
-      '<div style="padding:28px 28px 40px;">'+en+'</div>'
-      '<div id="espanol" style="border-top:2px solid rgba(255,255,255,0.10);"><div style="padding:28px 28px 40px;">'+es+'</div></div>'
-      '</div>')
-
-def dot(href,label,title,active,module=False):
-    if active: return f'<span class="sdot sdot-active" title="{title}">{label}</span>'
-    cls="sdot sdot-link sdot-module" if module else "sdot sdot-link"
-    return f'<a href="{href}" class="{cls}" title="{title}">{label}</a>'
+      + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
+      + para(lead)
+      + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">'
+      + dl_link(ASSETS_ZIP,zlabel,row=True)
+      + dl_link(SLIDES_PDF,slabel,row=True)
+      + '</div>'
+      + folder_note(es, AREA) + '</div>')
 
 def nav(current,dots,stepnav):
     return ('      <div class="silva-breadcrumb">\n'
@@ -194,41 +48,6 @@ def nav(current,dots,stepnav):
             f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
             f'      <div class="silva-step-nav">{stepnav}</div>')
 
-def wrap_page(title,nav_inner,top_html,bottom):
-    return f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{title}</title>
-  <link rel="icon" type="image/svg+xml" href="https://www.creativesilva.com/logos/CS_Logo_Only.svg" />
-  <style>:root {{ --course-accent: #007474; }}</style>
-  <link rel="stylesheet" href="/css/silva-module.css" />
-</head>
-<body>
-  <nav class="silva-nav" aria-label="Module navigation">
-    <div class="silva-nav-inner">
-{nav_inner}
-      <div class="silva-nav-div"></div>
-      <button class="silva-copy-btn" onclick="silvaCopyHTML()" aria-label="Copy Canvas HTML to clipboard">&#128203; Copy Canvas HTML</button>
-      <button class="silva-download-btn" onclick="silvaDownloadHTML()" aria-label="Download Canvas HTML as file">&#128229; Download HTML</button>
-    </div>
-  </nav>
-  <div class="silva-page">
-  <div id="silva-module-content">
-  {top_html}
-  </div>
-  {bottom}
-  </div>
-  <script>
-    function silvaCopyHTML() {{ var el=document.getElementById('top'); navigator.clipboard.writeText(el.outerHTML).then(function(){{var b=document.querySelector('.silva-copy-btn');b.textContent='\\u2713 Copied!';b.classList.add('copied');setTimeout(function(){{b.innerHTML='&#128203; Copy Canvas HTML';b.classList.remove('copied');}},2500);}}).catch(function(){{alert('Copy failed. Select the source manually.');}}); }}
-    function silvaDownloadHTML() {{ var el=document.getElementById('top'); var blob=new Blob([el.outerHTML],{{type:'text/html'}}); var url=URL.createObjectURL(blob); var a=document.createElement('a'); a.href=url; a.download=location.pathname.split('/').pop().replace('.html','')+'-canvas.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }}
-  </script>
-  <script src="/js/silva-nav.js"></script>
-</body>
-</html>
-'''
-
 def dots_for(active_idx):
     hrefs=[OVER,S1]; titles=[("M","Overview"),("1","Step 01")]
     r=""
@@ -236,20 +55,32 @@ def dots_for(active_idx):
         r+=dot("" if i==active_idx else hrefs[i], lab, title, i==active_idx, module=(i==0 and active_idx!=0))
     return r
 
+def scrollbox(es, inner):
+    # Long step sequence in a contained scroll panel so the page looks less intimidating.
+    # Purple accents: this guide is the content of the purple Module Resource card (cohesion).
+    hint=('Scroll inside the box to see all 13 steps' if not es else 'Despl&aacute;zate en el cuadro para ver los 13 pasos')
+    return (f'<div style="font-size:11pt;color:#c4b5fd;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
+      '<div class="silva-scroll" style="max-height:520px;overflow-y:auto;padding:16px 18px 20px;border:1px solid rgba(139,92,246,0.28);border-radius:14px;'
+      'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(139,92,246,0.16) 100%);">'
+      f'{inner}</div>')
+
+def phase(title, items, intro=''):
+    # One lesson phase inside the scroll panel: a purple left-accent bar, the phase title, then
+    # the numbered steps with purple badges to match the Module Resource section.
+    introhtml=(f'<div style="margin-bottom:10px;line-height:1.6;"><span style="font-size:13pt;color:rgba(255,255,255,0.86);">{intro}</span></div>' if intro else '')
+    return ('<div style="border-left:4px solid #8b5cf6;padding:2px 0 2px 16px;margin:0 0 22px;">'
+      f'<div style="font-size:15pt;color:#ffffff;margin-bottom:8px;"><strong>{title}</strong></div>'
+      f'{introhtml}{steps(items, "#8b5cf6")}</div>')
+
 # ---------------- OVERVIEW ----------------
 def overview():
     en=banner("Digital Arts 1A &bull; Module 05","Live Stream Graphic","Follow the steps to build a live stream promo image in Photoshop.","#espanol","Clic para Espa&ntilde;ol")
-    en+=card("THE PROJECT / OVERVIEW","Build a Live Stream Graphic",
+    en+=type_card("overview","The Module Overview","Build a Live Stream Graphic",
         float_right(END_IMG,"Finished History 301 Live Stream graphic: an arch photo with an orange bar on the left, a blue bar on the right, a green wash, and the words HISTORY 301 and LIVE STREAM in white","What your finished graphic will look like.")
         + para("In this project you follow clear steps in Adobe Photoshop to build a live stream promo graphic. Everyone starts from the same photo and follows the same steps, so all your graphics will come out looking alike.")
         + para("You will make a new Photoshop file, add a photo, add two colored bars, add the words &ldquo;History 301&rdquo; and &ldquo;Live Stream,&rdquo; add a green color wash, paint a blue spatter, move the photo and use Generative Fill to fill the gap, and export your finished image to turn in.")
-        + '<div style="clear:both;"></div>'
-        + note_orange("This is a follow-along how-to, not a free-choice project. Do the steps in order so your result matches the example."))
-    en+=downloads_card("DOWNLOADS / GET YOUR FILES","Download Your Files",
-        para("Grab the project files here before you start. The Lesson Slides show a picture for every step.")
-        + dl_row(ASSETS_ZIP,"Project Files (ZIP)")
-        + '<div style="margin-top:10px;">' + dl_row(SLIDES_PDF,"Lesson Slides (PDF)") + '</div>'
-        + folder_note(False))
+        + note("This is a follow-along how-to, not a free-choice project. Do the steps in order so your result matches the example."))
+    en+=downloads_block(False)
     en+=card("SKILLS / WHAT YOU WILL LEARN","New Photoshop Skills",
         para("This project teaches you the basics you will use in every Photoshop project after this one:")
         + bullets([
@@ -261,7 +92,7 @@ def overview():
             ("Adjustment layers and AI:","add a solid color layer, and use Generative Fill to extend the photo."),
             ("Export:","save a finished copy to hand in."),
         ]))
-    en+=card("VOCABULARY / 6 TERMS","Key Words",
+    en+=resources_card("Key Words",
         vocab_grid("On the Quiz",
           "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
           [("Layer","One level of your image. Layers stack on top of each other, and you can edit one without changing the others."),
@@ -269,20 +100,15 @@ def overview():
            ("Fill","To pour a color into a selection or a layer."),
            ("Type","Words (text) you add to your image. Type sits on its own layer."),
            ("Blending Mode","A setting that changes how a layer&rsquo;s colors mix with the layers under it."),
-           ("Export","To save a finished copy of your work as a JPG or PNG to share or hand in.")]))
+           ("Export","To save a finished copy of your work as a JPG or PNG to share or hand in.")]), False)
 
     es=banner("Arte Digital 1A &bull; M&oacute;dulo 05","Gr&aacute;fico de Live Stream","Sigue los pasos para crear una imagen promocional de live stream en Photoshop.","#top","Back to English")
-    es+=card("EL PROYECTO / RESUMEN","Crea un Gr&aacute;fico de Live Stream",
+    es+=type_card("overview","El Resumen del M&oacute;dulo","Crea un Gr&aacute;fico de Live Stream",
         float_right(END_IMG,"Gr&aacute;fico terminado de History 301 Live Stream: una foto de un arco con una barra naranja a la izquierda, una barra azul a la derecha, un ba&ntilde;o verde y las palabras HISTORY 301 y LIVE STREAM en blanco","As&iacute; se ver&aacute; tu gr&aacute;fico terminado.")
         + para("En este proyecto sigues pasos claros en Adobe Photoshop para crear un gr&aacute;fico promocional de live stream. Todos empiezan con la misma foto y siguen los mismos pasos, as&iacute; que todos los gr&aacute;ficos quedar&aacute;n parecidos.")
         + para("Vas a crear un archivo nuevo de Photoshop, agregar una foto, agregar dos barras de color, agregar las palabras &ldquo;History 301&rdquo; y &ldquo;Live Stream,&rdquo; agregar un ba&ntilde;o de color verde, pintar un salpicado azul, mover la foto y usar Relleno Generativo para llenar el hueco, y exportar tu imagen terminada para entregar.")
-        + '<div style="clear:both;"></div>'
-        + note_orange("Esto es un instructivo para seguir paso a paso, no un proyecto de elecci&oacute;n libre. Haz los pasos en orden para que tu resultado se parezca al ejemplo."))
-    es+=downloads_card("DESCARGAS / OBT&Eacute;N TUS ARCHIVOS","Descarga Tus Archivos",
-        para("Consigue aqu&iacute; los archivos del proyecto antes de empezar. Las Diapositivas de la Lecci&oacute;n muestran una imagen de cada paso.")
-        + dl_row(ASSETS_ZIP,"Archivos del Proyecto (ZIP)")
-        + '<div style="margin-top:10px;">' + dl_row(SLIDES_PDF,"Diapositivas de la Lecci&oacute;n (PDF)") + '</div>'
-        + folder_note(True))
+        + note("Esto es un instructivo para seguir paso a paso, no un proyecto de elecci&oacute;n libre. Haz los pasos en orden para que tu resultado se parezca al ejemplo."))
+    es+=downloads_block(True)
     es+=card("HABILIDADES / LO QUE APRENDER&Aacute;S","Nuevas Habilidades de Photoshop",
         para("Este proyecto te ense&ntilde;a lo b&aacute;sico que usar&aacute;s en cada proyecto de Photoshop despu&eacute;s de este:")
         + bullets([
@@ -294,7 +120,7 @@ def overview():
             ("Capas de ajuste e IA:","agrega una capa de color s&oacute;lido y usa Relleno Generativo para extender la foto."),
             ("Exportar:","guarda una copia terminada para entregar."),
         ]))
-    es+=card("VOCABULARIO / 6 T&Eacute;RMINOS","Palabras Clave",
+    es+=resources_card("Palabras Clave",
         vocab_grid("En el Examen",
           "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
           [("Layer (Capa)","Un nivel de tu imagen. Las capas se apilan una sobre otra y puedes editar una sin cambiar las dem&aacute;s."),
@@ -302,7 +128,7 @@ def overview():
            ("Fill (Rellenar)","Poner un color dentro de una selecci&oacute;n o una capa."),
            ("Type (Texto)","Las palabras que agregas a tu imagen. El texto va en su propia capa."),
            ("Blending Mode (Modo de Fusi&oacute;n)","Un ajuste que cambia c&oacute;mo se mezclan los colores de una capa con las capas de abajo."),
-           ("Export (Exportar)","Guardar una copia terminada de tu trabajo como JPG o PNG para compartir o entregar.")]))
+           ("Export (Exportar)","Guardar una copia terminada de tu trabajo como JPG o PNG para compartir o entregar.")]), True)
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
@@ -311,13 +137,13 @@ def overview():
 # ---------------- STEP 01 ----------------
 def step01():
     en=banner("Live Stream Graphic &bull; Step 1","Build It in Photoshop","Follow the steps in order to build your graphic.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+    en+=deliverables_box(False,
         [("1 image:","your finished Live Stream graphic (01Working.jpg), uploaded to this Canvas assignment.")])
     en+=card("BEFORE YOU START / THE SLIDES","Follow Along With the Slides",
         para("Do these steps in Adobe Photoshop, in order. The Lesson Slides show a picture for each step, so open them next to Photoshop as you work.")
         + dl_row(SLIDES_PDF,"Lesson Slides (PDF)")
-        + note_orange("Use color codes exactly as written (like ff7f00) so your colors match the example."))
-    en+=resources_card("RESOURCE / STEP-BY-STEP GUIDE","Build Your Graphic",
+        + note("Use color codes exactly as written (like ff7f00) so your colors match the example."))
+    en+=resources_card("Build Your Graphic",
         para("Do these steps in Adobe Photoshop, in order. Scroll through the box below, and open the Lesson Slides to see a picture for each step.")
         + scrollbox(False,
             phase("Step 1 &middot; New Document",[
@@ -397,16 +223,16 @@ def step01():
                 ("Match the colors:","make sure Convert to sRGB and Embed Color Profile are on."),
                 ("Save the copy:","click Export, name it 01Working, and click Save."),
             ])
-        ))
+        ), False)
 
     es=banner("Gr&aacute;fico de Live Stream &bull; Paso 1","Cr&eacute;alo en Photoshop","Sigue los pasos en orden para crear tu gr&aacute;fico.","#top","Back to English")
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+    es+=deliverables_box(True,
         [("1 imagen:","tu gr&aacute;fico de Live Stream terminado (01Working.jpg), subido a esta tarea de Canvas.")])
     es+=card("ANTES DE EMPEZAR / LAS DIAPOSITIVAS","Sigue las Diapositivas",
         para("Haz estos pasos en Adobe Photoshop, en orden. Las Diapositivas de la Lecci&oacute;n muestran una imagen de cada paso, as&iacute; que &aacute;brelas junto a Photoshop mientras trabajas.")
         + dl_row(SLIDES_PDF,"Diapositivas de la Lecci&oacute;n (PDF)")
-        + note_orange("Usa los c&oacute;digos de color tal como est&aacute;n escritos (como ff7f00) para que tus colores coincidan con el ejemplo."))
-    es+=resources_card("RECURSO / GU&Iacute;A PASO A PASO","Crea Tu Gr&aacute;fico",
+        + note("Usa los c&oacute;digos de color tal como est&aacute;n escritos (como ff7f00) para que tus colores coincidan con el ejemplo."))
+    es+=resources_card("Crea Tu Gr&aacute;fico",
         para("Haz estos pasos en Adobe Photoshop, en orden. Despl&aacute;zate por el cuadro de abajo y abre las Diapositivas de la Lecci&oacute;n para ver una imagen de cada paso.")
         + scrollbox(True,
             phase("Paso 1 &middot; Documento Nuevo",[
@@ -486,7 +312,7 @@ def step01():
                 ("Iguala los colores:","aseg&uacute;rate de que Convertir a sRGB e Incrustar Perfil de Color est&eacute;n activados."),
                 ("Guarda la copia:","haz clic en Exportar, nombra el archivo 01Working y haz clic en Guardar."),
             ])
-        ))
+        ), True)
 
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><span></span></div>'
@@ -494,9 +320,6 @@ def step01():
 
 for fname,gen in [(OVER,overview),(S1,step01)]:
     html=ent(gen())
-    assert "—" not in html and "&mdash;" not in html, "em dash in "+fname
-    low=html.lower()
-    for w in ["shoot","shooting","shot","shots","shoots","screenshot"]:
-        assert not re.search(r'\b'+w+r'\b', low), f"banned '{w}' in {fname}"
+    ban_check(html, fname)
     open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
     print("wrote", fname, len(html), "bytes")
