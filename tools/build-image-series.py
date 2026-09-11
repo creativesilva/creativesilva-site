@@ -219,18 +219,18 @@ def vocab_grid(quiz_label, quiz_body, terms):
         rows+='<tr>'+''.join(cell.format(term=t,defn=d) for t,d in terms[i:i+3])+'</tr>'
     return note+f'<table role="presentation" style="width:100%;border-collapse:collapse;table-layout:fixed;"><tbody>{rows}</tbody></table>'
 
+DELIVER_ICON=f"{SITE}/assets/Icons/assignment/deliverables-v2.png"
 def deliverables_box(title,lead,items):
+    # GOLD deliverables section, chip header (icon on the LEFT + gold title, accent rule
+    # below), matching every other section. Sits at the TOP of the step.
     lis=""
     for b,rest in items:
         lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#f5b301;">&bull;</span> '
               f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
-    return ('<div style="background:rgba(245,179,1,0.12);border:1px solid rgba(245,179,1,0.35);border-left:5px solid #f5b301;padding:16px 18px;margin:0 0 8px;">'
-      '<div style="display:flex;align-items:flex-start;gap:12px;">'
-      '<div style="flex:1 1 auto;min-width:0;">'
-      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffd166;margin-bottom:8px;"><strong>{title}</strong></div>'
-      f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div></div>'
-      f'<img src="{SITE}/assets/Icons/assignment/deliverables-v2.png" alt="Deliverables" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
-      f'{lis}</div>')
+    return ('<div style="background:linear-gradient(180deg,rgba(245,179,1,0.12) 0%,rgba(245,179,1,0.03) 100%);border:1px solid rgba(245,179,1,0.35);border-left:6px solid #f5b301;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      + section_header(DELIVER_ICON, title, "#f5b301", "#ffd166")
+      + f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div>'
+      + f'{lis}</div>')
 
 def top_wrap(en,es):
     return ('<div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;'
