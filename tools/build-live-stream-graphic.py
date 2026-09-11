@@ -41,7 +41,7 @@ def card(eyebrow,heading,inner):
       '<div style="height:2px;background:#00b8b8;width:60px;margin-bottom:18px;"></div>'
       f'{inner}</div>')
 
-AREA="Digital Arts"   # OneDrive top folder for this course's project folders
+AREA="Digital Arts Folder"   # OneDrive top folder for this course's project folders
 
 def folder_note(es):
     # Every orange downloads block tells students to make a module project folder and move

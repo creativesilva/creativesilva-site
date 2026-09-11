@@ -48,7 +48,7 @@ def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
 
 
-AREA="Photo"   # OneDrive top folder for this course's project folders
+AREA="Photography Folder"   # OneDrive top folder for this course's project folders
 
 def folder_note(es):
     # Every orange downloads block tells students to make a module project folder and move
