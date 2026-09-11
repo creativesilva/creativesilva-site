@@ -218,7 +218,7 @@ def deliverables_box(title,lead,items):
       '<div style="flex:1 1 auto;min-width:0;">'
       f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffd166;margin-bottom:8px;"><strong>{title}</strong></div>'
       f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div></div>'
-      f'<img src="{SITE}/assets/Icons/assignment/deliverables-v2.png" alt="Deliverables" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
+      f'<img src="{SITE}/assets/Icons/assignment/deliverables-v3.png" alt="Deliverables" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
       f'{lis}</div>')
 
 def vocab_grid(terms):
