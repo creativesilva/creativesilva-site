@@ -143,9 +143,10 @@ def steps(items, accent="#00b8b8"):
     # Numbered how-to list. Badge inherits the parent section's accent (teal by default).
     r=""
     for i,(b,rest) in enumerate(items,1):
+        body=(f'<strong>{b}</strong> {rest}' if b else rest)
         r+=('<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;">'
             f'<span style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:{accent};color:#ffffff;font-size:12pt;line-height:26px;text-align:center;"><strong>{i}</strong></span>'
-            f'<span style="font-size:13.5pt;color:rgba(255,255,255,0.88);line-height:1.5;"><strong>{b}</strong> {rest}</span></div>')
+            f'<span style="font-size:13.5pt;color:rgba(255,255,255,0.88);line-height:1.5;">{body}</span></div>')
     return f'<div style="margin:4px 0 6px;">{r}</div>'
 
 def note_orange(t):
