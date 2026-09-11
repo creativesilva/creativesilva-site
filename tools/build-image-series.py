@@ -135,14 +135,11 @@ def downloads_block(es):
           else "Download everything you need for this module here. Get your files before you start.")
     reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
     cslabel=("Plantillas de Hoja de Contactos (12 y 6, ZIP)" if es else "Contact Sheet Templates (12-Up &amp; 6-Up, ZIP)")
-    # Slide-deck downloads are labeled by the DECK'S TITLE, then "(Slide Deck)" after it.
-    slabel=("Importando Fotos (Presentaci&oacute;n)" if es else "Importing Photos (Slide Deck)")
     ref=REFLECT_ES if es else REFLECT_EN
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
       + f'{para(lead)}<div style="margin-top:8px;">{dl_link(ref,reflabel,row=True)}</div>'
       + f'<div style="margin-top:10px;">{dl_link(CONTACT_ZIP,cslabel,row=True)}</div>'
-      + f'<div style="margin-top:10px;">{dl_link(SLIDE_PDF,slabel,row=True)}</div>'
       + folder_note(es) + '</div>')
 
 def bullets(items):
@@ -193,24 +190,19 @@ def dl_row(url,label):
       f'<img src="{DL_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;display:block;" />'
       + dl_link(url,label,row=True) + '</div>')
 
+SLIDE_THUMB=f"{SITE}/assets/images/photo1/image-series/importing-photos-slidedeck-thumb-v1.jpg"
 def slide_deck(es):
-    # The slide-deck VIEW lives here (Resources card). The PDF download itself lives in the
-    # Overview Downloads section, where students already look for every file to keep.
-    hint=('Scroll inside the window to see all 12 slides' if not es
-          else 'Despl&aacute;zate en la ventana para ver las 12 diapositivas')
-    alt_lbl=('Lightroom import, slide {} of 12' if not es
-             else 'Importar a Lightroom, diapositiva {} de 12')
-    imgs=""
-    for i in range(1,13):
-        # slides stack FLUSH (margin:0) so the next 16:9 slide peeks into the 16:11 window.
-        # PURPLE accents: the slide deck always sits inside the purple Resources card.
-        imgs+=(f'<img src="{SLIDE.format(i)}" alt="{alt_lbl.format(i)}" style="display:block;width:100%;height:auto;margin:0;border-bottom:2px solid rgba(139,92,246,0.35);" />')
-    return (
-      f'<div style="font-size:11pt;color:#c4b5fd;margin-bottom:8px;opacity:0.9;">&#8595; {hint}</div>'
-      # SLIDE-DECK SCROLLABLE (LOCKED): a 16:11 window shows one 16:9 slide in full with a sliver of
-      # the next slide peeking in to invite scrolling. No max-height, no padding, flush slides.
-      '<div class="silva-scroll" style="aspect-ratio:16/11;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid rgba(139,92,246,0.28);background:rgba(0,0,0,0.22);box-sizing:border-box;">'
-      + imgs + '</div>')
+    # Click-to-open PDF: the thumbnail links to the hosted slide-deck PDF, which opens as a
+    # standalone page in a new tab. The browser's built-in PDF viewer handles reading + download,
+    # so there is no separate download button. PURPLE accents (this sits in the Resources card).
+    alt=("Importing Photos into Lightroom Classic slide deck cover" if not es
+         else "Portada de la presentaci&oacute;n Importando Fotos a Lightroom Classic")
+    cap=("Click to open the slide deck. It opens as a PDF in a new tab, where you can read it full screen and download it." if not es
+         else "Haz clic para abrir la presentaci&oacute;n. Se abre como PDF en una pesta&ntilde;a nueva, donde puedes verla en pantalla completa y descargarla.")
+    return ('<div style="margin:6px 0 4px;max-width:560px;">'
+      f'<a href="{SLIDE_PDF}" target="_blank" rel="noopener" style="display:block;background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;">'
+      f'<img src="{SLIDE_THUMB}" alt="{alt}" style="display:block;width:100%;height:auto;" /></a>'
+      f'<div style="font-size:10.5pt;color:#c4b5fd;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div></div>')
 
 def vocab_grid(quiz_label, quiz_body, terms):
     note=('<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.30);border-left:4px solid #00b8b8;padding:12px 16px;margin-bottom:18px;">'
@@ -411,7 +403,7 @@ def step01():
             ("Let it sync:","wait for OneDrive to finish syncing. The cloud icon turns to a check when it is done."),
         ]))
     en+=resources_card("Import Into Lightroom Classic",
-        para("Now import your series into Lightroom Classic. The slide deck below walks you through every click. Scroll through all 12 slides. Want it open while you work? The slide deck is in the Downloads section on this module&rsquo;s Overview page.")
+        para("Now import your series into Lightroom Classic. Open the slide deck below to see every step. It opens as a PDF in a new tab, so you can read it full screen and download it if you want.")
         + slide_deck(False), False)
     en+=contact_install_card(False)
     en+=card("CONTACT SHEET / SHOW YOUR SERIES","Make Your 12-Image Contact Sheet",
@@ -453,7 +445,7 @@ def step01():
             ("Deja que sincronice:","espera a que OneDrive termine de sincronizar. El &iacute;cono de nube cambia a una palomita cuando termina."),
         ]))
     es+=resources_card("Importa a Lightroom Classic",
-        para("Ahora importa tu serie a Lightroom Classic. Las diapositivas de abajo te gu&iacute;an en cada clic. Despl&aacute;zate por las 12 diapositivas. &iquest;Quieres tenerla abierta mientras trabajas? La presentaci&oacute;n est&aacute; en la secci&oacute;n de Descargas en la p&aacute;gina de Resumen de este m&oacute;dulo.")
+        para("Ahora importa tu serie a Lightroom Classic. Abre la presentaci&oacute;n de abajo para ver cada paso. Se abre como PDF en una pesta&ntilde;a nueva, para que la veas en pantalla completa y la descargues si quieres.")
         + slide_deck(True), True)
     es+=contact_install_card(True)
     es+=card("HOJA DE CONTACTOS / MUESTRA TU SERIE","Crea Tu Hoja de Contactos de 12 Im&aacute;genes",
