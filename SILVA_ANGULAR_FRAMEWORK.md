@@ -82,6 +82,48 @@ Page background: #080808 with a teal vertical gradient overlay + PV watermark.
 
 Use color by purpose: teal for content/categories, orange for format and action sections, cyan for study/info, red for rules.
 
+## 3.5 Combined Chip Header + Accent Cohesion (LOCKED 2026-09-11)
+
+Reference implementation: `tools/build-image-series.py` (the template module). The chip rollout is in progress across all modules. This section SUPERSEDES the separate eyebrow-chip + heading + hairline pattern (§6) for module pages.
+
+**Combined chip header.** Every section title is ONE dark rectangle ("chip") holding the section icon on the LEFT and one big color-coded title, with a short accent rule directly under it. No separate eyebrow above, no repeated heading below.
+```html
+<div style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);border-left:5px solid <ACCENT>;padding:9px 18px 9px 12px;margin-bottom:12px;max-width:100%;box-sizing:border-box;">
+  <img src="<ICON>" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />
+  <span style="font-family:Arial,sans-serif;font-size:17pt;color:<LIGHT>;letter-spacing:0.01em;line-height:1.15;"><strong><TITLE></strong></span></div>
+<div style="height:2px;background:<ACCENT>;width:60px;margin-bottom:18px;"></div>
+```
+Helper: `section_header(icon,title,accent,light)`. Chip icons are 44px (10% up from the original 40px, LOCKED 2026-09-11).
+
+**Four-color accent system (LOCKED 2026-09-10).** Each section purpose has ONE color so students read the page at a glance:
+
+| Purpose | Accent / light | Icon |
+|---------|----------------|------|
+| Content | `#00b8b8` / `#80e0e0` | `step-check-teal-v2.png` (or the step's type icon) |
+| Downloads | `#FF6B1A` / `#ffb27c` | `downloads-v1.png` |
+| Resources | `#8b5cf6` / `#c4b5fd` | `resources-v1.png` |
+| Deliverables | `#f5b301` / `#ffd166` | `deliverables-v2.png` |
+
+Section container box: `background:linear-gradient(180deg,<accent 0.10-0.12> 0%,<accent 0.03> 100%);border:1px solid <accent 0.22-0.35>;border-left:6px solid <ACCENT>;padding:30px;overflow:hidden;margin-bottom:24px;`.
+
+**Each section is internally cohesive (LOCKED 2026-09-11).** Inside a section EVERY inline accent inherits that section's color: bullets, numbered step badges, image/thumbnail frames, captions, inline links, sub-panel borders, secondary buttons. No mixing colors inside one card. The only exceptions: a photographic image itself (only its frame/overlay/caption recolor), and the distinct semantic callout BOXES (the orange `note` alert, and the Downloads/Resources/Deliverables boxes) which read as their own boxed element, not an accent bleeding into another section.
+
+**Content icon = step-check.** Content cards use the light-teal step-check badge (`step-check-teal-v2.png`) so working through a step reads like checking a box. Master SVG in `assets/Icons/assignment/_src/step-check.svg`; it must render with a TRANSPARENT background (the check is knocked out of a filled teal disc, everything else transparent).
+
+**Overview first card = "The Module Overview" type chip** (`type_card("overview",...)`) with the light-teal overview icon, then the card's own heading. Chris works in MODULES and STEPS, never "assignments".
+
+**Deliverables box** = the gold chip header (icon on the LEFT), at the TOP of each step, opening with a forecast line, then the turn-in bullets. Helper `deliverables_box(es, items)`. Forecast:
+- EN: &#x201C;Work through every task on this page to finish this step the right way. At the end you turn in the work below, graded on its own:&#x201D;
+- ES: &#x201C;Trabaja cada tarea de esta p&aacute;gina para terminar bien este paso. Al final entregas lo siguiente, que se califica por su cuenta:&#x201D;
+
+**Resources chip calls itself out:** the purple chip title reads &#x201C;Module Resource: &lt;title&gt;&#x201D; / &#x201C;Recurso del M&oacute;dulo: &lt;title&gt;&#x201D; so students know it is reference/how-to. Helper `resources_card(heading, inner, es)`.
+
+**Slide-deck downloads move to the Downloads section.** The slide-deck VIEW (16:11 scroll window) stays in its purple Resources card, but the deck's PDF download lives ONLY in the Overview Downloads section, labeled by the DECK'S TITLE then &#x201C;(Slide Deck)&#x201D;, e.g. &#x201C;Importing Photos (Slide Deck)&#x201D; / &#x201C;Importando Fotos (Presentaci&oacute;n)&#x201D;. The Resources card points students to the Overview Downloads for the PDF; there is NO inline PDF button.
+
+**Teacher-facing icon library** = Build Resources &rarr; Graphics &rarr; Logos &rarr; &#x201C;Module Icons&#x201D; (renamed from &#x201C;Assignment Icons&#x201D;), holding every color variant including the teal content family on dark tiles. The five accent hexes are copy-pastable in Build Resources &rarr; Color Palette: each hex button's lettering IS its color on a contrasting chip, and a click copies the BARE number (no `#`).
+
+**Open decision (pending Chris):** whether each STEP also opens with an identity chip naming its activity (In-Class Photo Walk / Cull &amp; Edit / Written Reflection). Until decided, a step opens with a plain content chip and the banner names the step.
+
 ## 4. Card Borders — THE CRITICAL RULE
 
 Cards stay translucent so the PV watermark shows through. The accent frame

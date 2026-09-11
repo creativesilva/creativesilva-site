@@ -43,7 +43,7 @@ def banner(label,title,subtitle,es_href,es_label):
       f'<div style="margin-bottom:6px;"><span style="font-size:13pt;color:#80e0e0;"><strong>{label}</strong></span></div>'
       f'<div style="color:#ffffff;font-size:23pt;line-height:1.1;"><strong>{title}</strong></div>'
       f'<div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:13pt;font-style:italic;"><strong>{subtitle}</strong></span></div></div>'
-      f'<div style="justify-self:end;"><a href="{es_href}" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #ff6b1a;"><strong>{es_label}</strong></a></div>'
+      f'<div style="justify-self:end;"><a href="{es_href}" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #00b8b8;"><strong>{es_label}</strong></a></div>'
       '</div></div>')
 
 CONTENT_ICON=f"{SITE}/assets/Icons/assignment/step-check-teal-v2.png"
@@ -165,6 +165,11 @@ def steps(items, accent="#00b8b8"):
 
 def note_orange(t):
     return (f'<div style="background:rgba(255,107,26,0.10);border:1px solid rgba(255,107,26,0.30);border-left:4px solid #FF6B1A;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
+
+def note(t):
+    # TEAL note: a callout that lives INSIDE a teal content card, so it matches the section
+    # color (cohesion). Use note_orange only for the own-device fresh-photos integrity notice.
+    return (f'<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.30);border-left:4px solid #00b8b8;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
 
 def framed(src,alt):
     return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;">'
@@ -329,7 +334,7 @@ def overview():
             ("Cull &amp; Edit:","select your best 6, do a light edit (exposure, highlights, shadows, color temperature), and turn in a 6-image contact sheet."),
             ("Reflection:","tell the story of your series."),
         ])
-        + note_orange("Capture in RAW, not JPG. Set your Canon EOS R50 to RAW before you start. Step 01 shows you how."))
+        + note("Capture in RAW, not JPG. Set your Canon EOS R50 to RAW before you start. Step 01 shows you how."))
     en+=card("VOCABULARY / 6 TERMS","Key Words",
         vocab_grid("On the Quiz",
           "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
@@ -360,7 +365,7 @@ def overview():
             ("Selecciona y Edita:","elige tus mejores 6, haz una edici&oacute;n ligera (exposici&oacute;n, luces, sombras, temperatura de color) y entrega una hoja de contactos de 6 im&aacute;genes."),
             ("Reflexi&oacute;n:","cuenta la historia de tu serie."),
         ])
-        + note_orange("Captura en RAW, no en JPG. Pon tu Canon EOS R50 en RAW antes de empezar. El Paso 01 te ense&ntilde;a c&oacute;mo."))
+        + note("Captura en RAW, no en JPG. Pon tu Canon EOS R50 en RAW antes de empezar. El Paso 01 te ense&ntilde;a c&oacute;mo."))
     es+=card("VOCABULARIO / 6 T&Eacute;RMINOS","Palabras Clave",
         vocab_grid("En el Examen",
           "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
@@ -389,7 +394,7 @@ def step01():
             ("Turn JPEG off:","set the JPEG option to the dash (&ndash;) so the camera saves RAW only, no JPG."),
             ("Save:","press SET to save, then tap the shutter halfway to close the menu."),
         ])
-        + note_orange("If you are not sure, ask Mr. Silva to check your setting before you start."))
+        + note("If you are not sure, ask Mr. Silva to check your setting before you start."))
     en+=card("CAPTURE / ON THE WALK","Capture Your Cohesive Series",
         float_right(CAPTURE_FLOAT,"A Pioneer Valley student kneeling to photograph a bee on a pink flower with a Canon EOS R5 on campus in golden light","Capturing a cohesive series on campus.")
         + para("Now go capture your series with the camera kit. Pick one idea and repeat it so the photos feel like a family. Take at least 12 images so you have strong ones to choose from.")
@@ -430,7 +435,7 @@ def step01():
             ("Apaga el JPEG:","pon la opci&oacute;n JPEG en el gui&oacute;n (&ndash;) para que la c&aacute;mara guarde solo RAW, sin JPG."),
             ("Guarda:","presiona SET para guardar, luego toca el disparador a la mitad para cerrar el men&uacute;."),
         ])
-        + note_orange("Si no est&aacute;s seguro, pide al Sr. Silva que revise tu ajuste antes de empezar."))
+        + note("Si no est&aacute;s seguro, pide al Sr. Silva que revise tu ajuste antes de empezar."))
     es+=card("CAPTURA / EN LA CAMINATA","Captura Tu Serie Cohesiva",
         float_right(CAPTURE_FLOAT,"Una estudiante de Pioneer Valley arrodillada fotografiando una abeja en una flor rosa con una Canon EOS R5 en el campus con luz dorada","Capturando una serie cohesiva en el campus.")
         + para("Ahora ve a capturar tu serie con el kit de c&aacute;mara. Elige una idea y rep&iacute;tela para que las fotos se sientan como una familia. Toma al menos 12 im&aacute;genes para tener buenas opciones.")
@@ -484,7 +489,7 @@ def step02():
             ("Shadows:","lift the darkest areas so you can see detail."),
             ("Color temperature (White Balance):","warm it up or cool it down so the colors look true and match across your series."),
         ])
-        + note_orange("Keep your edits consistent across all 6 so the series still feels like one family of images."))
+        + note("Keep your edits consistent across all 6 so the series still feels like one family of images."))
     en+=card("CONTACT SHEET / YOUR BEST SIX","Make Your 6-Image Contact Sheet",
         para("Now make a 6-image contact sheet of your edited selections. Use the 6-Up contact sheet layout in the Print module, then save it as a high-resolution JPG. The template is on this module&rsquo;s Overview page (marked M at the top).")
         + bullets([
@@ -512,7 +517,7 @@ def step02():
             ("Sombras (Shadows):","sube las zonas m&aacute;s oscuras para ver el detalle."),
             ("Temperatura de color (Balance de Blancos):","cali&eacute;ntala o enfr&iacute;ala para que los colores se vean reales y combinen en tu serie."),
         ])
-        + note_orange("Mant&eacute;n tus ediciones consistentes en las 6 para que la serie siga sinti&eacute;ndose como una familia de im&aacute;genes."))
+        + note("Mant&eacute;n tus ediciones consistentes en las 6 para que la serie siga sinti&eacute;ndose como una familia de im&aacute;genes."))
     es+=card("HOJA DE CONTACTOS / TUS MEJORES SEIS","Crea Tu Hoja de Contactos de 6 Im&aacute;genes",
         para("Ahora crea una hoja de contactos de 6 im&aacute;genes con tus elegidas editadas. Usa el dise&ntilde;o de hoja de contactos de 6 en el m&oacute;dulo Imprimir, y gu&aacute;rdala como JPG de alta resoluci&oacute;n. La plantilla est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
         + bullets([
@@ -533,13 +538,13 @@ def step03():
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
         float_right(REFLECT_FLOAT,"A Pioneer Valley student typing her Image Series reflection in the Word document on an iMac in the lab","Type your answers right in the reflection document.")
         + para("Finish with a short reflection. It asks about the series you chose, how you offloaded and imported your photos, the 6 you kept, and the edits you made.")
-        + note_orange("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
+        + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + bullets([
             ("Open it:","open the reflection Word document (.docx) from your project folder."),
             ("Answer every question:","type your answers in the boxes, in full sentences."),
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
-        ]))
-    en+=note_orange("Answer honestly, in your own words.")
+        ])
+        + note("Answer honestly, in your own words."))
 
     es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 3","Reflexi&oacute;n","Cuenta la historia de tu serie.","#top","Back to English")
     es+=deliverables_box(True,
@@ -547,13 +552,13 @@ def step03():
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         float_right(REFLECT_FLOAT,"Una estudiante de Pioneer Valley escribiendo su reflexi&oacute;n de la Serie de Im&aacute;genes en el documento de Word en una iMac en el laboratorio","Escribe tus respuestas directamente en el documento de reflexi&oacute;n.")
         + para("Termina con una reflexi&oacute;n corta. Te pregunta sobre la serie que elegiste, c&oacute;mo descargaste e importaste tus fotos, las 6 que guardaste y las ediciones que hiciste.")
-        + note_orange("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
+        + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
         + bullets([
             ("&Aacute;brelo:","abre el documento de Word (.docx) de la reflexi&oacute;n desde tu carpeta del proyecto."),
             ("Contesta cada pregunta:","escribe tus respuestas en los cuadros, en oraciones completas."),
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
-        ]))
-    es+=note_orange("Contesta con honestidad, en tus propias palabras.")
+        ])
+        + note("Contesta con honestidad, en tus propias palabras."))
 
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'
