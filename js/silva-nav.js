@@ -348,12 +348,12 @@
     next.innerHTML = nextLabel;
     pager.appendChild(next);
 
-    pager.appendChild(makeCopyBtn());
     pager.appendChild(makeUrlBtn());
+    pager.appendChild(makeCopyBtn());
     return pager;
   }
 
-  // The COPY HTML button that lives inside each pager, right of Next.
+  // COPY HTML: the rightmost pager pill, sits just right of COPY URL.
   function makeCopyBtn() {
     var b = document.createElement('button');
     b.type = 'button';
@@ -371,7 +371,7 @@
     return b;
   }
 
-  // COPY URL: same pager pill and same .pg-copy shape/style as COPY HTML, right of it.
+  // COPY URL: same pager pill and same .pg-copy shape/style as COPY HTML, just left of it.
   function makeUrlBtn() {
     var b = document.createElement('button');
     b.type = 'button';
