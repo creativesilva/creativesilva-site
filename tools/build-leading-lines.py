@@ -235,8 +235,7 @@ def overview():
             ("Cull:","select the single best photo of each example. You keep your best 3 and your partner&rsquo;s best 3."),
             ("Submit:","turn in 6 photos in all (your 3 plus your partner&rsquo;s 3)."),
         ])
-        + note_orange("You take photos as JPG. You will not edit them, so get the photo right in the camera.")
-        + note_orange("Take your photos on this walk, on purpose, for this assignment. They must be new photos from today, not old ones."))
+        + note_orange("You take photos as JPG. You will not edit them, so get the photo right in the camera."))
     en+=card("VOCABULARY / 6 TERMS","Key Words",
         vocab_grid("On the Quiz",
           "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
@@ -264,8 +263,7 @@ def overview():
             ("Selecciona (cull):","elige la mejor foto de cada ejemplo. Te quedas con tus mejores 3 y los mejores 3 de tu compa&ntilde;ero."),
             ("Entrega:","entrega 6 fotos en total (tus 3 m&aacute;s los 3 de tu compa&ntilde;ero)."),
         ])
-        + note_orange("Tomas las fotos en JPG. No las vas a editar, as&iacute; que logra la foto bien desde la c&aacute;mara.")
-        + note_orange("Toma tus fotos en esta caminata, a prop&oacute;sito, para esta tarea. Deben ser fotos nuevas de hoy, no fotos viejas."))
+        + note_orange("Tomas las fotos en JPG. No las vas a editar, as&iacute; que logra la foto bien desde la c&aacute;mara."))
     es+=card("VOCABULARIO / 6 T&Eacute;RMINOS","Palabras Clave",
         vocab_grid("En el Examen",
           "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
@@ -295,8 +293,7 @@ def step01():
             ("Get it right in camera:","you will not edit these, so frame it well and check the photo."),
             ("Take a few extra:","take a couple of extra photos of each example so you have choices when you cull."),
         ])
-        + '<div style="clear:both;"></div>'
-        + note_orange("Take your photos on this walk, on purpose, for this assignment. They must be new photos from today, not old ones."))
+        + '<div style="clear:both;"></div>')
     en+=card("SHARE / WITH YOUR PARTNER","Swap Your Photos",
         para("When you both finish, share your photos so each of you has all of them: your 3 examples and your partner&rsquo;s 3 examples.")
         + bullets([
@@ -323,8 +320,7 @@ def step01():
             ("Logra la foto en la c&aacute;mara:","no vas a editarlas, as&iacute; que encuadra bien y revisa la foto."),
             ("Toma algunas de m&aacute;s:","toma un par de fotos extra de cada ejemplo para tener opciones al seleccionar."),
         ])
-        + '<div style="clear:both;"></div>'
-        + note_orange("Toma tus fotos en esta caminata, a prop&oacute;sito, para esta tarea. Deben ser fotos nuevas de hoy, no fotos viejas."))
+        + '<div style="clear:both;"></div>')
     es+=card("COMPARTE / CON TU COMPA&Ntilde;ERO","Intercambien Sus Fotos",
         para("Cuando ambos terminen, compartan sus fotos para que cada uno tenga todas: tus 3 ejemplos y los 3 ejemplos de tu compa&ntilde;ero.")
         + bullets([
