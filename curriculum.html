@@ -1502,6 +1502,7 @@
       { course: "da1a",    name: "Course Home", pages: 1, status: "published", url: "curriculum/digarts1/digarts1a-home.html" },
       { course: "da1a",    name: "Course Overview", pages: 1, status: "published", url: "curriculum/digarts1/digarts1a-course-overview.html" },
       { course: "da1a",    name: "Course Syllabus", pages: 1, status: "published", url: "curriculum/digarts1/digarts1a-syllabus.html" },
+      { course: "da1a",    type: "announcement", name: "Cover Decoration Contest Winners", pages: 1, status: "published", url: "curriculum/shared/digarts1-cover-decoration-winners.html" },
       { course: "da1a",    name: "Module 01: Pictograms", pages: 3, status: "published", url: "curriculum/shared/digarts1-pictograms-overview.html" },
       { course: "da1a",    name: "Module 02: Color Theory", pages: 2, status: "published", url: "curriculum/shared/digarts1-color-theory-overview.html" },
       { course: "da1a",    name: "Module 03: Sketchbook Cover Art", pages: 3, status: "published", url: "curriculum/shared/digarts1-sketchbook-cover-overview.html" },
@@ -2042,8 +2043,9 @@
 
     function buildCourseCard(course) {
       const all = visibleModules(course.id);
-      const coursePages = all.filter(m => !isModuleEntry(m));
-      const modules = all.filter(isModuleEntry);
+      const announcements = all.filter(m => m.type === "announcement");
+      const coursePages = all.filter(m => !isModuleEntry(m) && m.type !== "announcement");
+      const modules = all.filter(m => isModuleEntry(m) && m.type !== "announcement");
 
       // "Course Pages": Home, Overview, Syllabus (+ Resources) packaged like a module.
       const coursePagesAcc = coursePages.length
@@ -2053,9 +2055,17 @@
           </details>`
         : "";
 
-      const moduleRows = coursePagesAcc + modules.map(moduleAcc).join("");
+      // "Announcements": single-page, non-assignment posts (celebrations, notices), before the modules.
+      const announcementsAcc = announcements.length
+        ? `<details class="module-acc announcements-acc">
+            <summary class="module-acc-head"><span class="module-row-name">Announcements</span><span class="module-page-count">${announcements.length}p</span><span class="macc-chev"></span></summary>
+            <div class="module-acc-body">${announcements.map(a => pageRow(a.name, a.url)).join("")}</div>
+          </details>`
+        : "";
 
-      const empty = (coursePages.length + modules.length) === 0
+      const moduleRows = coursePagesAcc + announcementsAcc + modules.map(moduleAcc).join("");
+
+      const empty = (coursePages.length + announcements.length + modules.length) === 0
         ? `<div class="course-empty"><p>No published modules yet</p></div>`
         : "";
 
@@ -2082,7 +2092,7 @@
             </span>
           </summary>
           <div class="course-acc-body">
-            ${(coursePages.length + modules.length) ? `<div class="module-list">${moduleRows}</div>` : empty}
+            ${(coursePages.length + announcements.length + modules.length) ? `<div class="module-list">${moduleRows}</div>` : empty}
             ${docsBlock(course)}
             ${hint}
           </div>
