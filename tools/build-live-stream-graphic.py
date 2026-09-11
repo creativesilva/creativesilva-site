@@ -178,7 +178,8 @@ def step02():
     en+=deliverables_box(False,
         [("Inspiration (PNG):","one or more screen captures of thumbnails from the channel you chose, saved as PNG in your &lsquo;"+FOLDER+"&rsquo; folder and uploaded to this Canvas assignment.")])
     en+=card("STEP 02 / INSPIRATION","Study One Channel You Love on YouTube",
-        para("Before you design your own, look at what already works. A thumbnail is the small preview image on a YouTube video, the one that makes you want to click. Pick ONE specific channel you like and study ITS thumbnails, not random search results.")
+        float_right(YT_IMG,"A YouTube channel page open in a browser, showing a row of the channel&rsquo;s video thumbnails that share the same bold-text, big-face design language","One channel you chose. See how its thumbnails share a design language.")
+        + para("Before you design your own, look at what already works. A thumbnail is the small preview image on a YouTube video, the one that makes you want to click. Pick ONE specific channel you like and study ITS thumbnails, not random search results.")
         + para("Look at the channel&rsquo;s design language: the colors, fonts, faces, and layout it uses again and again, so all its videos look like they belong to the same channel.")
         + steps([
             ("","Pick one specific YouTube channel you like, then open it and click its Home or Videos tab."),
@@ -187,14 +188,14 @@ def step02():
             ("","Move your screen captures into your &lsquo;"+FOLDER+"&rsquo; folder."),
             ("","Upload one or several of them to this Canvas assignment."),
         ])
-        + note("What makes a thumbnail work? A big, clear subject; a few bold words; strong colors; and it still reads when it is small. Look for those in your channel&rsquo;s thumbnails."),
-        floatimg=float_right(YT_IMG,"A YouTube channel page open in a browser, showing a row of the channel&rsquo;s video thumbnails that share the same bold-text, big-face design language","One channel you chose. See how its thumbnails share a design language."))
+        + note("What makes a thumbnail work? A big, clear subject; a few bold words; strong colors; and it still reads when it is small. Look for those in your channel&rsquo;s thumbnails."))
 
     es=banner("Gr&aacute;fico de Live Stream &bull; Paso 2","Busca Tu Inspiraci&oacute;n","Elige un canal que te encante y estudia sus miniaturas.","#top","Back to English")
     es+=deliverables_box(True,
         [("Inspiraci&oacute;n (PNG):","una o varias capturas de pantalla de miniaturas del canal que elegiste, guardadas en formato PNG en tu carpeta &lsquo;"+FOLDER+"&rsquo; y subidas a esta tarea de Canvas.")])
     es+=card("PASO 02 / INSPIRACI&Oacute;N","Estudia Un Canal Que Te Encante en YouTube",
-        para("Antes de dise&ntilde;ar la tuya, mira lo que ya funciona. Una miniatura es la imagen peque&ntilde;a de vista previa de un video de YouTube, la que te dan ganas de hacer clic. Elige UN canal espec&iacute;fico que te guste y estudia SUS miniaturas, no resultados de b&uacute;squeda al azar.")
+        float_right(YT_IMG,"La p&aacute;gina de un canal de YouTube abierta en un navegador, mostrando una fila de las miniaturas del canal que comparten el mismo lenguaje de dise&ntilde;o de texto en negrita y caras grandes","Un canal que elegiste. Mira c&oacute;mo sus miniaturas comparten un lenguaje de dise&ntilde;o.")
+        + para("Antes de dise&ntilde;ar la tuya, mira lo que ya funciona. Una miniatura es la imagen peque&ntilde;a de vista previa de un video de YouTube, la que te dan ganas de hacer clic. Elige UN canal espec&iacute;fico que te guste y estudia SUS miniaturas, no resultados de b&uacute;squeda al azar.")
         + para("Mira el lenguaje de dise&ntilde;o del canal: los colores, las fuentes, las caras y el dise&ntilde;o que usa una y otra vez, para que todos sus videos se vean del mismo canal.")
         + steps([
             ("","Elige un canal espec&iacute;fico de YouTube que te guste, luego &aacute;brelo y haz clic en su pesta&ntilde;a Inicio o Videos."),
@@ -203,8 +204,7 @@ def step02():
             ("","Mueve tus capturas de pantalla a tu carpeta &lsquo;"+FOLDER+"&rsquo;."),
             ("","Sube una o varias a esta tarea de Canvas."),
         ])
-        + note("&iquest;Qu&eacute; hace buena a una miniatura? Un sujeto grande y claro; pocas palabras en negrita; colores fuertes; y que a&uacute;n se entienda cuando es peque&ntilde;a. Busca eso en las miniaturas de tu canal."),
-        floatimg=float_right(YT_IMG,"La p&aacute;gina de un canal de YouTube abierta en un navegador, mostrando una fila de las miniaturas del canal que comparten el mismo lenguaje de dise&ntilde;o de texto en negrita y caras grandes","Un canal que elegiste. Mira c&oacute;mo sus miniaturas comparten un lenguaje de dise&ntilde;o."))
+        + note("&iquest;Qu&eacute; hace buena a una miniatura? Un sujeto grande y claro; pocas palabras en negrita; colores fuertes; y que a&uacute;n se entienda cuando es peque&ntilde;a. Busca eso en las miniaturas de tu canal."))
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
