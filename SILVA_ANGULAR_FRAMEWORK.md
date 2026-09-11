@@ -203,6 +203,8 @@ div.silva-page > div#silva-module-content
 
 Banner: teal gradient bar, PV logo left, centered eyebrow + title + hairline + tagline, language toggle button on the right (the only button in the banner). The single document download button lives at the END of the page in the closing card, not in the banner.
 
+**Pager copy buttons: COPY URL then COPY HTML, one matched pair (LOCKED 2026-09-11).** The `silva-pager` (built by `js/silva-nav.js`, both the top-nav and bottom pager) ends with the two copy buttons as a matched pair inside the SAME rectangular pager section, in this order left&#8594;right: **COPY URL, then COPY HTML** (URL sits just left of HTML). Both are `.pg-copy` pills: identical rectangular shape, identical size, uppercase text label, NO emoji, NOT rounded, NOT smaller than each other. `makeUrlBtn()` is appended before `makeCopyBtn()`. The static `wrap_page` fallback buttons in `tools/silva_framework.py` follow the same order (Copy URL row before Copy Canvas HTML). Do not reorder or restyle one without the other: they are a cohesive pair.
+
 **Overview opening sequence (LOCKED):** every overview page opens with a single **Assignment / Overview section card** whose body contains, in order: the eyebrow, the heading, ONE short intro paragraph (the quick "what this is" verbiage), and then the 21:9 hero image **framed inside that same card body**. The hero is part of the Assignment/Overview section, NOT a standalone image and NOT its own section. After that card come the remaining sections (example/sample images, history, vocab, etc.).
 
 Rules:
