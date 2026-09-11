@@ -11,6 +11,8 @@ IMG=f"{SITE}/assets/images/digarts1/cover-decoration"
 ELENA=f"{IMG}/cover-decoration-1st-elena-v1.jpg"
 BRYAN=f"{IMG}/cover-decoration-hm-bryan-v1.jpg"
 GUADALUPE=f"{IMG}/cover-decoration-hm-guadalupe-v1.jpg"
+CFA_LOGO=f"{IMG}/chick-fil-a-logo-v1.png"
+INO_LOGO=f"{IMG}/in-n-out-logo-v1.png"
 OUT="digarts1-cover-decoration-winners.html"
 
 GOLD=("#f5b301","rgba(245,179,1,0.12)","rgba(245,179,1,0.35)","#ffd166")
@@ -36,9 +38,12 @@ def art(src, alt, cap, c):
       f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
       f'<div style="font-size:11pt;color:{light};text-align:center;margin:6px 0 2px;opacity:0.9;letter-spacing:0.04em;">{cap}</div>')
 
-def prize(text, c):
-    accent,_,_,light=c
-    return f'<div style="margin-top:14px;font-size:14pt;color:{light};line-height:1.5;"><strong>{text}</strong></div>'
+def prize_row(text, logo, alt, c):
+    # prize line: the fast-food logo beside the prize text, cohesive with the card accent.
+    _,_,_,light=c
+    return ('<div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;margin-top:16px;">'
+      f'<img src="{logo}" alt="{alt}" style="height:50px;width:auto;max-width:100%;display:block;flex:0 0 auto;" />'
+      f'<span style="font-size:14pt;color:{light};line-height:1.4;"><strong>{text}</strong></span></div>')
 
 def side(es):
     banner_html = banner(
@@ -60,7 +65,7 @@ def side(es):
             ("Portada de cuaderno de primer lugar de Elena Arroyo: dos paneles a l&aacute;piz de color, una escena de naturaleza con criaturas y una escena dram&aacute;tica con una figura enorme sobre un muro y un soldado" if es
              else "Elena Arroyo&rsquo;s first-place sketchbook cover: two colored-pencil panels, a green nature scene with creatures and a dramatic scene with a towering figure over a wall and a soldier"),
             "&ldquo;Do Not Falter&rdquo;", GOLD)
-        + prize(("Ganadora de una tarjeta de regalo de $15 de Chick-fil-A." if es else "Winner of a $15 Chick-fil-A gift card."), GOLD))
+        + prize_row(("Ganadora de una tarjeta de regalo de $15 de Chick-fil-A." if es else "Winner of a $15 Chick-fil-A gift card."), CFA_LOGO, "Chick-fil-A", GOLD))
     # honorable mentions
     hm = box(TEAL,
         chip(("Menci&oacute;n Honor&iacute;fica" if es else "Honorable Mention"), TEAL)
@@ -77,8 +82,9 @@ def side(es):
     # next contest teaser
     nxt = box(ORANGE,
         chip(("Muy Pronto" if es else "Coming Soon"), ORANGE)
-        + para("El siguiente concurso ya viene, con una tarjeta de regalo de $15 de In-N-Out para el ganador. &iquest;No ganaste esta vez? Tienes otra oportunidad muy pronto, as&iacute; que sigue creando arte." if es
-               else "The next contest is on its way, with a $15 In-N-Out gift card for the winner. Did not win this time? You have another chance very soon, so keep making art."))
+        + para("El siguiente concurso ya viene. &iquest;No ganaste esta vez? Tienes otra oportunidad muy pronto, as&iacute; que sigue creando arte." if es
+               else "The next contest is on its way. Did not win this time? You have another chance very soon, so keep making art.")
+        + prize_row(("Pr&oacute;ximo premio: una tarjeta de regalo de $15 de In-N-Out." if es else "Next prize: a $15 In-N-Out gift card."), INO_LOGO, "In-N-Out Burger", ORANGE))
     return banner_html + intro + first + hm + nxt
 
 def build():
