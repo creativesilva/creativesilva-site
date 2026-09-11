@@ -13,6 +13,7 @@ ROOT=os.path.join(os.path.dirname(__file__),"..")
 IMG=f"{SITE}/assets/images/digarts1/live-stream-graphic"
 END_IMG=f"{IMG}/live-stream-end-example-v1.jpg"
 SLIDES_THUMB=f"{IMG}/live-stream-slides-cover-v1.jpg"
+SLIDES_THUMB_ES=f"{IMG}/live-stream-slides-cover-es-v1.jpg"
 YT_IMG=f"{IMG}/live-stream-youtube-channel-v1.jpg"
 ASSETS_ZIP=f"{SITE}/assets/course-documents/Live-Stream-Graphic-Assets.zip"
 SLIDES_PDF_EN=f"{SITE}/assets/course-documents/Live-Stream-Graphic-Slides.pdf"
@@ -23,8 +24,8 @@ AREA="Digital Arts Folder"
 FOLDER="PS Lesson 01"   # the student project folder for this lesson
 
 def slide_deck(es):
-    # Click-to-open Lesson Slides PDF (EN or ES), shown as a purple cover thumbnail (new tab).
-    return slide_deck_thumb(SLIDES_PDF_ES if es else SLIDES_PDF_EN, es, thumb=SLIDES_THUMB)
+    # Click-to-open Lesson Slides PDF (EN or ES), shown as its own language cover thumbnail (new tab).
+    return slide_deck_thumb(SLIDES_PDF_ES if es else SLIDES_PDF_EN, es, thumb=SLIDES_THUMB_ES if es else SLIDES_THUMB)
 
 OVER="digarts1-live-stream-graphic-overview.html"
 S1="digarts1-live-stream-graphic-step01.html"
