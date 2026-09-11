@@ -53,22 +53,28 @@ TYPE_ICON={"overview":f"{SITE}/assets/Icons/assignment/overview-teal-v1.png",
   "reflection":f"{SITE}/assets/Icons/assignment/reflection-teal-v1.png"}
 TEAL_BOX='<div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
 
-def card(eyebrow,heading,inner):
-    # content card: teal chip [content icon + heading] + rule + content (eyebrow now folded away)
-    return TEAL_BOX + section_header(CONTENT_ICON, heading, "#00b8b8", "#80e0e0") + f'{inner}</div>'
+def card(eyebrow,heading,inner,floatimg=""):
+    # content card: teal chip [content icon + heading] + rule + content (eyebrow now folded away).
+    # Any float-right image/thumbnail is emitted BEFORE the chip so its TOP aligns with the top of
+    # the title chip rectangle (LOCKED 2026-09-11). floatimg is an explicit float; a FLOAT-marked
+    # image anywhere in inner is hoisted out to the same spot.
+    hf, inner = _hoist(inner)
+    return TEAL_BOX + floatimg + hf + section_header(CONTENT_ICON, heading, "#00b8b8", "#80e0e0") + f'{inner}</div>'
 
-def type_card(kind,label,heading,inner):
+def type_card(kind,label,heading,inner,floatimg=""):
     # FIRST card of a page: teal chip [type icon + type label] then the card's own heading + content
+    hf, inner = _hoist(inner)
     hd=(f'<div style="margin-bottom:14px;"><span style="font-size:18pt;color:#ffffff;"><strong>{heading}</strong></span></div>' if heading else '')
-    return TEAL_BOX + section_header(TYPE_ICON[kind], label, "#00b8b8", "#80e0e0") + hd + f'{inner}</div>'
+    return TEAL_BOX + floatimg + hf + section_header(TYPE_ICON[kind], label, "#00b8b8", "#80e0e0") + hd + f'{inner}</div>'
 
 RESICON=f"{SITE}/assets/Icons/assignment/resources-v1.png"
-def resources_card(heading,inner,es=False):
+def resources_card(heading,inner,es=False,floatimg=""):
     # PURPLE Resources section: chip [gear icon + "Module Resource: <heading>"] + content.
-    # The title calls out that it is a resource so students know it is reference/how-to.
+    # floatimg (a float-right thumbnail) is emitted BEFORE the chip so it top-aligns with the title.
+    hf, inner = _hoist(inner)
     label=("Recurso del M&oacute;dulo: " if es else "Module Resource: ")+heading
     return ('<div style="background:linear-gradient(180deg,rgba(139,92,246,0.10) 0%,rgba(139,92,246,0.03) 100%);border:1px solid rgba(139,92,246,0.28);border-left:6px solid #8b5cf6;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      + section_header(RESICON, label, "#8b5cf6", "#c4b5fd") + f'{inner}</div>')
+      + floatimg + hf + section_header(RESICON, label, "#8b5cf6", "#c4b5fd") + f'{inner}</div>')
 
 def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
@@ -97,13 +103,9 @@ def contact_install_card(es):
     # + how to install the contact sheet presets once. The templates themselves download from Downloads.
     alt=("Miniatura del video: instalar los ajustes de hoja de contactos en Lightroom Classic" if es
          else "Video thumbnail: installing the contact sheet presets in Lightroom Classic")
-    # Purple Resources section: every accent is purple so the card reads as one theme.
-    # Thumbnail frame #8b5cf6, caption + video link light purple #c4b5fd.
-    thumb=('<div style="float:right;width:40%;min-width:230px;margin:0 0 14px 22px;">'
-      f'<a href="{INSTALL_VIDEO}" target="_blank" rel="noopener" style="display:block;background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;">'
-      f'<img src="{INSTALL_THUMB}" alt="{alt}" style="display:block;width:100%;height:auto;" /></a>'
-      f'<div style="font-size:10.5pt;color:#c4b5fd;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">'
-      + ("Toca para ver el video de instalaci&oacute;n." if es else "Tap to watch the install video.") + '</div></div>')
+    # Purple Resources section: the video thumbnail floats right and top-aligns with the chip.
+    tcap=("Toca para ver el video de instalaci&oacute;n." if es else "Tap to watch the install video.")
+    thumb=purple_thumb(INSTALL_VIDEO, INSTALL_THUMB, alt, tcap)
     if es:
         eyebrow="RECURSO / INSTALA LOS AJUSTES"; heading="Instala Tus Ajustes de Hoja de Contactos"
         body=(para("Usas dos ajustes (presets) de Lightroom Classic para armar tus hojas de contactos: uno de 12 y uno de 6. Los instalas <strong>una sola vez</strong> y quedan listos para siempre.")
@@ -114,7 +116,7 @@ def contact_install_card(es):
         body=(para("You use two Lightroom Classic presets to build your contact sheets: a 12-Up and a 6-Up. Install them <strong>one time</strong> and they are ready every time after that.")
           + para('<a href="'+INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>, then drop the presets into Lightroom Classic &rarr; Print module.')
           + para("The contact sheet templates are in the Downloads section on this module&rsquo;s Overview page."))
-    return resources_card(heading, thumb + body + '<div style="clear:both;"></div>', es)
+    return resources_card(heading, body, es, floatimg=thumb)
 
 def section_header(icon,title,accent,light):
     # COMBINED section header (LOCKED 2026-09-10): one dark rectangle holding the section icon
@@ -172,10 +174,31 @@ def framed(src,alt):
     return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;">'
       f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>')
 
+# Every float-right image/thumbnail uses this width, and is emitted BEFORE its section chip
+# (via the card `floatimg` arg) so its TOP aligns with the top of the title chip rectangle.
+FLOAT_W='float:right;width:42%;min-width:280px;margin:0 0 14px 22px;'
 def float_right(src,alt,cap):
-    return ('<div style="float:right;width:40%;min-width:230px;margin:0 0 14px 22px;">'
+    # Wrapped in FLOAT markers so the card helpers can hoist it ABOVE the chip (top-aligned),
+    # no matter where it sits in the card's inner content.
+    return ('<!--FLOAT-->'
+      f'<div style="{FLOAT_W}">'
       f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
-      f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div></div>')
+      f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div></div>'
+      '<!--/FLOAT-->')
+
+FLOAT_RE=re.compile(r'<!--FLOAT-->(.*?)<!--/FLOAT-->', re.S)
+def _hoist(inner):
+    # pull any FLOAT-marked block out of inner so it can be emitted before the section chip
+    floats="".join(FLOAT_RE.findall(inner))
+    return floats, FLOAT_RE.sub("", inner)
+
+def purple_thumb(href,src,alt,cap):
+    # Float-right clickable thumbnail for a PURPLE Resources card (slide deck, install video).
+    # Same width as float_right so all thumbnails match; opens the target in a new tab.
+    return (f'<div style="{FLOAT_W}">'
+      f'<a href="{href}" target="_blank" rel="noopener" style="display:block;background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;">'
+      f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></a>'
+      f'<div style="font-size:10.5pt;color:#c4b5fd;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div></div>')
 
 DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"
 
@@ -192,17 +215,13 @@ def dl_row(url,label):
 
 SLIDE_THUMB=f"{SITE}/assets/images/photo1/image-series/importing-photos-slidedeck-thumb-v1.jpg"
 def slide_deck(es):
-    # Click-to-open PDF: the thumbnail links to the hosted slide-deck PDF, which opens as a
-    # standalone page in a new tab. The browser's built-in PDF viewer handles reading + download,
-    # so there is no separate download button. PURPLE accents (this sits in the Resources card).
+    # Click-to-open PDF: a float-right thumbnail linking to the hosted slide-deck PDF, which opens
+    # as a standalone page in a new tab (browser's built-in PDF viewer handles reading + download).
     alt=("Importing Photos into Lightroom Classic slide deck cover" if not es
          else "Portada de la presentaci&oacute;n Importando Fotos a Lightroom Classic")
-    cap=("Click to open the slide deck. It opens as a PDF in a new tab, where you can read it full screen and download it." if not es
-         else "Haz clic para abrir la presentaci&oacute;n. Se abre como PDF en una pesta&ntilde;a nueva, donde puedes verla en pantalla completa y descargarla.")
-    return ('<div style="margin:6px 0 4px;max-width:560px;">'
-      f'<a href="{SLIDE_PDF}" target="_blank" rel="noopener" style="display:block;background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;">'
-      f'<img src="{SLIDE_THUMB}" alt="{alt}" style="display:block;width:100%;height:auto;" /></a>'
-      f'<div style="font-size:10.5pt;color:#c4b5fd;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div></div>')
+    cap=("Click to open the slide deck (opens the PDF in a new tab)." if not es
+         else "Haz clic para abrir la presentaci&oacute;n (abre el PDF en una pesta&ntilde;a nueva).")
+    return purple_thumb(SLIDE_PDF, SLIDE_THUMB, alt, cap)
 
 def vocab_grid(quiz_label, quiz_body, terms):
     note=('<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.30);border-left:4px solid #00b8b8;padding:12px 16px;margin-bottom:18px;">'
@@ -224,8 +243,8 @@ def deliverables_box(es,items):
     # below), matching every other section. Sits at the TOP of the step. Opens with a
     # forecast: finish the tasks on this page, then turn in the work below.
     title="ENTREGABLES &middot; ENTR&Eacute;GALO" if es else "DELIVERABLES &middot; TURN IT IN"
-    lead=("Trabaja cada tarea de esta p&aacute;gina para terminar bien este paso. Al final entregas lo siguiente, que se califica por su cuenta:" if es
-          else "Work through every task on this page to finish this step the right way. At the end you turn in the work below, graded on its own:")
+    lead=("Trabaja cada tarea de esta p&aacute;gina para terminar bien este paso. Cada paso de este m&oacute;dulo tiene su propia calificaci&oacute;n, as&iacute; que entrega lo siguiente:" if es
+          else "Work through every task on this page to finish this step the right way. Each step in this module gets its own grade, so turn in the work below:")
     lis=""
     for b,rest in items:
         lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#f5b301;">&bull;</span> '
@@ -403,8 +422,8 @@ def step01():
             ("Let it sync:","wait for OneDrive to finish syncing. The cloud icon turns to a check when it is done."),
         ]))
     en+=resources_card("Import Into Lightroom Classic",
-        para("Now import your series into Lightroom Classic. Open the slide deck below to see every step. It opens as a PDF in a new tab, so you can read it full screen and download it if you want.")
-        + slide_deck(False), False)
+        para("Now import your series into Lightroom Classic. Open the slide deck to see every step. It opens as a PDF in a new tab, so you can read it full screen and download it if you want."),
+        False, floatimg=slide_deck(False))
     en+=contact_install_card(False)
     en+=card("CONTACT SHEET / SHOW YOUR SERIES","Make Your 12-Image Contact Sheet",
         para("A contact sheet is one page that shows all your photos as small thumbnails. Make yours with the 12-Up contact sheet layout in the Lightroom Classic Print module, then save it as a high-resolution JPG. The template is on this module&rsquo;s Overview page (marked M at the top).")
@@ -445,8 +464,8 @@ def step01():
             ("Deja que sincronice:","espera a que OneDrive termine de sincronizar. El &iacute;cono de nube cambia a una palomita cuando termina."),
         ]))
     es+=resources_card("Importa a Lightroom Classic",
-        para("Ahora importa tu serie a Lightroom Classic. Abre la presentaci&oacute;n de abajo para ver cada paso. Se abre como PDF en una pesta&ntilde;a nueva, para que la veas en pantalla completa y la descargues si quieres.")
-        + slide_deck(True), True)
+        para("Ahora importa tu serie a Lightroom Classic. Abre la presentaci&oacute;n para ver cada paso. Se abre como PDF en una pesta&ntilde;a nueva, para que la veas en pantalla completa y la descargues si quieres."),
+        True, floatimg=slide_deck(True))
     es+=contact_install_card(True)
     es+=card("HOJA DE CONTACTOS / MUESTRA TU SERIE","Crea Tu Hoja de Contactos de 12 Im&aacute;genes",
         para("Una hoja de contactos es una p&aacute;gina que muestra todas tus fotos como miniaturas. Crea la tuya con el dise&ntilde;o de hoja de contactos de 12 en el m&oacute;dulo Imprimir de Lightroom Classic, y gu&aacute;rdala como JPG de alta resoluci&oacute;n. La plantilla est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")

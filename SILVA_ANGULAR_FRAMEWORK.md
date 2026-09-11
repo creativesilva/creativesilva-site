@@ -110,11 +110,13 @@ Section container box: `background:linear-gradient(180deg,<accent 0.10-0.12> 0%,
 
 **Content icon = step-check.** Content cards use the light-teal step-check badge (`step-check-teal-v2.png`) so working through a step reads like checking a box. Master SVG in `assets/Icons/assignment/_src/step-check.svg`; it must render with a TRANSPARENT background (the check is knocked out of a filled teal disc, everything else transparent).
 
+**Float-right images and thumbnails top-align with the title chip (LOCKED 2026-09-11).** Every float-right image/thumbnail is emitted in the card BEFORE the `section_header` chip, so its TOP lines up with the top of the title chip rectangle (never starting lower, beside the body text). All float-right images/thumbnails share one width (`float:right;width:42%;min-width:280px;margin:0 0 14px 22px;`), so thumbnails in sibling cards match in size. In the builder, `float_right()` wraps itself in `<!--FLOAT-->` markers and the card helpers hoist it above the chip; clickable Resources thumbnails (`purple_thumb()`, e.g. the slide-deck and install-video thumbnails) pass through the card's `floatimg` argument to the same spot. Content-photo floats are teal-framed; Resources thumbnails are purple-framed.
+
 **Overview first card = "The Module Overview" type chip** (`type_card("overview",...)`) with the light-teal overview icon, then the card's own heading. Chris works in MODULES and STEPS, never "assignments".
 
 **Deliverables box** = the gold chip header (icon on the LEFT), at the TOP of each step, opening with a forecast line, then the turn-in bullets. Helper `deliverables_box(es, items)`. Forecast:
-- EN: &#x201C;Work through every task on this page to finish this step the right way. At the end you turn in the work below, graded on its own:&#x201D;
-- ES: &#x201C;Trabaja cada tarea de esta p&aacute;gina para terminar bien este paso. Al final entregas lo siguiente, que se califica por su cuenta:&#x201D;
+- EN: &#x201C;Work through every task on this page to finish this step the right way. Each step in this module gets its own grade, so turn in the work below:&#x201D;
+- ES: &#x201C;Trabaja cada tarea de esta p&aacute;gina para terminar bien este paso. Cada paso de este m&oacute;dulo tiene su propia calificaci&oacute;n, as&iacute; que entrega lo siguiente:&#x201D;
 
 **Resources chip calls itself out:** the purple chip title reads &#x201C;Module Resource: &lt;title&gt;&#x201D; / &#x201C;Recurso del M&oacute;dulo: &lt;title&gt;&#x201D; so students know it is reference/how-to. Helper `resources_card(heading, inner, es)`.
 
