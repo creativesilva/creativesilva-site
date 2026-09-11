@@ -227,12 +227,13 @@ def slide_deck(es):
     return purple_thumb(SLIDE_PDF, SLIDE_THUMB, alt, cap)
 
 def vocab_grid(quiz_label, quiz_body, terms):
-    note=('<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.30);border-left:4px solid #00b8b8;padding:12px 16px;margin-bottom:18px;">'
-      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#80e0e0;margin-bottom:5px;"><strong>{quiz_label}</strong></div>'
+    # Key Words is a PURPLE Resource (Chris: vocab is technically a resource). All accents purple.
+    note=('<div style="background:rgba(139,92,246,0.10);border:1px solid rgba(139,92,246,0.30);border-left:4px solid #8b5cf6;padding:12px 16px;margin-bottom:18px;">'
+      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#c4b5fd;margin-bottom:5px;"><strong>{quiz_label}</strong></div>'
       f'<div style="font-size:12pt;color:rgba(255,255,255,0.90);line-height:1.5;">{quiz_body}</div></div>')
     cell=('<td style="width:33.33%;vertical-align:top;padding:6px;">'
-      '<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;height:100%;box-sizing:border-box;">'
-      '<div style="background:linear-gradient(135deg,#094043 0,#094043 28px,#041d1c 28px,#041d1c 100%);padding:16px;min-height:132px;height:100%;box-sizing:border-box;">'
+      '<div style="background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;height:100%;box-sizing:border-box;">'
+      '<div style="background:linear-gradient(135deg,#241d3a 0,#241d3a 28px,#140f24 28px,#140f24 100%);padding:16px;min-height:132px;height:100%;box-sizing:border-box;">'
       '<div style="font-size:12pt;color:#ffffff;margin-bottom:5px;"><strong>{term}</strong></div>'
       '<div style="font-size:10.5pt;line-height:1.5;color:rgba(255,255,255,0.80);">{defn}</div></div></div></td>')
     rows=""
@@ -348,7 +349,7 @@ def overview():
             ("Reflection:","tell the story of your series."),
         ])
         + note("Capture in RAW, not JPG. Set your Canon EOS R50 to RAW before you start. Step 01 shows you how."))
-    en+=card("VOCABULARY / 6 TERMS","Key Words",
+    en+=resources_card("Key Words",
         vocab_grid("On the Quiz",
           "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
           [("Series / Cohesive","A group of photos that belong together and feel like one family of images."),
@@ -378,7 +379,7 @@ def overview():
             ("Reflexi&oacute;n:","cuenta la historia de tu serie."),
         ])
         + note("Captura en RAW, no en JPG. Pon tu Canon EOS R50 en RAW antes de empezar. El Paso 01 te ense&ntilde;a c&oacute;mo."))
-    es+=card("VOCABULARIO / 6 T&Eacute;RMINOS","Palabras Clave",
+    es+=resources_card("Palabras Clave",
         vocab_grid("En el Examen",
           "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
           [("Series / Cohesive (Serie / Cohesiva)","Un grupo de fotos que van juntas y se sienten como una familia de im&aacute;genes."),
@@ -386,7 +387,7 @@ def overview():
            ("OneDrive","El almacenamiento en la nube donde descargas y guardas tus fotos a salvo."),
            ("Import (Importar)","Llevar tus fotos a Lightroom Classic para organizarlas y editarlas."),
            ("Contact Sheet (Hoja de Contactos)","Una p&aacute;gina que muestra todas tus fotos como miniaturas."),
-           ("White Balance (Balance de Blancos)","El ajuste que hace que los colores se vean c&aacute;lidos, fr&iacute;os o reales.")]))
+           ("White Balance (Balance de Blancos)","El ajuste que hace que los colores se vean c&aacute;lidos, fr&iacute;os o reales.")]), True)
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
