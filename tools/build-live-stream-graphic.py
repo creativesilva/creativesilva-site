@@ -15,6 +15,7 @@ END_IMG=f"{IMG}/live-stream-end-example-v1.jpg"
 SLIDES_THUMB=f"{IMG}/live-stream-slides-cover-v1.jpg"
 SLIDES_THUMB_ES=f"{IMG}/live-stream-slides-cover-es-v1.jpg"
 YT_IMG=f"{IMG}/live-stream-youtube-channel-v1.jpg"
+DESIGN_FLOAT=f"{IMG}/live-stream-design-float-v1.jpg"
 ASSETS_ZIP=f"{SITE}/assets/course-documents/Live-Stream-Graphic-Assets.zip"
 SLIDES_PDF_EN=f"{SITE}/assets/course-documents/Live-Stream-Graphic-Slides.pdf"
 SLIDES_PDF_ES=f"{SITE}/assets/course-documents/Live-Stream-Graphic-Slides-ES.pdf"
@@ -216,7 +217,8 @@ def step03():
     en+=deliverables_box(False,
         [("1 thumbnail (JPG):","your finished, polished YouTube thumbnail, exported as a JPG and uploaded to this Canvas assignment.")])
     en+=card("STEP 03 / DESIGN","Design Your Thumbnail",
-        para("Now make your own. Use the Photoshop skills from your Step 1 warm-up and the ideas you gathered in Step 2.")
+        float_right(DESIGN_FLOAT,"A Pioneer Valley student in the design lab making his own YouTube thumbnail in Photoshop, a bold &lsquo;5 Ways to Score Like a Pro&rsquo; basketball design on the iMac screen","Design your own thumbnail in Photoshop, bold and easy to read.")
+        + para("Now make your own. Use the Photoshop skills from your Step 1 warm-up and the ideas you gathered in Step 2.")
         + steps([
             ("","Make a new Photoshop file at 1280 by 720 pixels, the YouTube thumbnail size."),
             ("","Add a background: a photo, a solid color, or a gradient."),
@@ -231,7 +233,8 @@ def step03():
     es+=deliverables_box(True,
         [("1 miniatura (JPG):","tu miniatura de YouTube terminada y pulida, exportada como JPG y subida a esta tarea de Canvas.")])
     es+=card("PASO 03 / DISE&Ntilde;O","Dise&ntilde;a Tu Miniatura",
-        para("Ahora crea la tuya. Usa las habilidades de Photoshop de tu calentamiento del Paso 1 y las ideas que juntaste en el Paso 2.")
+        float_right(DESIGN_FLOAT,"Un estudiante de Pioneer Valley en el laboratorio creando su propia miniatura de YouTube en Photoshop, un dise&ntilde;o de baloncesto en negrita &lsquo;5 Ways to Score Like a Pro&rsquo; en la pantalla de la iMac","Dise&ntilde;a tu propia miniatura en Photoshop, en negrita y f&aacute;cil de leer.")
+        + para("Ahora crea la tuya. Usa las habilidades de Photoshop de tu calentamiento del Paso 1 y las ideas que juntaste en el Paso 2.")
         + steps([
             ("","Crea un archivo nuevo de Photoshop de 1280 por 720 p&iacute;xeles, el tama&ntilde;o de una miniatura de YouTube."),
             ("","Agrega un fondo: una foto, un color s&oacute;lido o un degradado."),
