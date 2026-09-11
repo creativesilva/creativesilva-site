@@ -46,7 +46,7 @@ def banner(label,title,subtitle,es_href,es_label):
       f'<div style="justify-self:end;"><a href="{es_href}" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #ff6b1a;"><strong>{es_label}</strong></a></div>'
       '</div></div>')
 
-CONTENT_ICON=f"{SITE}/assets/Icons/assignment/step-check-teal-v1.png"
+CONTENT_ICON=f"{SITE}/assets/Icons/assignment/step-check-teal-v2.png"
 TYPE_ICON={"overview":f"{SITE}/assets/Icons/assignment/overview-teal-v1.png",
   "photo-walk":f"{SITE}/assets/Icons/assignment/photo-walk-teal-v1.png",
   "edit":f"{SITE}/assets/Icons/assignment/edit-teal-v1.png",
@@ -122,7 +122,7 @@ def section_header(icon,title,accent,light):
     # small-eyebrow + separate-heading pair.
     return ('<div style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);'
       f'border-left:5px solid {accent};padding:9px 18px 9px 12px;margin-bottom:12px;max-width:100%;box-sizing:border-box;">'
-      f'<img src="{icon}" alt="" style="width:40px;height:40px;display:block;flex:0 0 auto;" />'
+      f'<img src="{icon}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
       f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:{light};letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>'
       f'<div style="height:2px;background:{accent};width:60px;margin-bottom:18px;"></div>')
 
