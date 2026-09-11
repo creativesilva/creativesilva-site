@@ -66,6 +66,20 @@ def downloads_card(eyebrow,heading,inner):
       '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
       f'{inner}</div>')
 
+
+RESICON=f"{SITE}/assets/Icons/assignment/resources-v1.png"
+def resources_card(eyebrow,heading,inner):
+    # PURPLE Resources section (LOCKED): in-depth how-to / reference. Distinct from teal content,
+    # orange Downloads, gold Deliverables.
+    return ('<div style="background:linear-gradient(180deg,rgba(139,92,246,0.10) 0%,rgba(139,92,246,0.03) 100%);border:1px solid rgba(139,92,246,0.28);border-left:6px solid #8b5cf6;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #8b5cf6;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#c4b5fd;text-transform:uppercase;margin-bottom:12px;">'
+      f'<strong>{eyebrow}</strong></div>'
+      '<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px;">'
+      f'<div style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></div>'
+      f'<img src="{RESICON}" alt="Resource" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
+      '<div style="height:2px;background:#8b5cf6;width:60px;margin-bottom:18px;"></div>'
+      f'{inner}</div>')
+
 def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
 
@@ -303,7 +317,7 @@ def step01():
         para("Do these steps in Adobe Photoshop, in order. The Lesson Slides show a picture for each step, so open them next to Photoshop as you work.")
         + dl_row(SLIDES_PDF,"Lesson Slides (PDF)")
         + note_orange("Use color codes exactly as written (like ff7f00) so your colors match the example."))
-    en+=card("STEP-BY-STEP / DO THESE IN ORDER","Build Your Graphic",
+    en+=resources_card("RESOURCE / STEP-BY-STEP GUIDE","Build Your Graphic",
         para("Do these steps in Adobe Photoshop, in order. Scroll through the box below, and open the Lesson Slides to see a picture for each step.")
         + scrollbox(False,
             phase("Step 1 &middot; New Document",[
@@ -392,7 +406,7 @@ def step01():
         para("Haz estos pasos en Adobe Photoshop, en orden. Las Diapositivas de la Lecci&oacute;n muestran una imagen de cada paso, as&iacute; que &aacute;brelas junto a Photoshop mientras trabajas.")
         + dl_row(SLIDES_PDF,"Diapositivas de la Lecci&oacute;n (PDF)")
         + note_orange("Usa los c&oacute;digos de color tal como est&aacute;n escritos (como ff7f00) para que tus colores coincidan con el ejemplo."))
-    es+=card("PASO A PASO / HAZLOS EN ORDEN","Crea Tu Gr&aacute;fico",
+    es+=resources_card("RECURSO / GU&Iacute;A PASO A PASO","Crea Tu Gr&aacute;fico",
         para("Haz estos pasos en Adobe Photoshop, en orden. Despl&aacute;zate por el cuadro de abajo y abre las Diapositivas de la Lecci&oacute;n para ver una imagen de cada paso.")
         + scrollbox(True,
             phase("Paso 1 &middot; Documento Nuevo",[
