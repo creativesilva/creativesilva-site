@@ -133,7 +133,8 @@ def downloads_block(es):
           else "Download everything you need for this module here. Get your files before you start.")
     reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
     cslabel=("Plantillas de Hoja de Contactos (12 y 6, ZIP)" if es else "Contact Sheet Templates (12-Up &amp; 6-Up, ZIP)")
-    slabel=("Presentaci&oacute;n de Importaci&oacute;n a Lightroom" if es else "Lightroom Import Slide Deck")
+    # Slide-deck downloads are labeled by the DECK'S TITLE, then "(Slide Deck)" after it.
+    slabel=("Importando Fotos (Presentaci&oacute;n)" if es else "Importing Photos (Slide Deck)")
     ref=REFLECT_ES if es else REFLECT_EN
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
