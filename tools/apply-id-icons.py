@@ -22,7 +22,7 @@ DESC={
  "overview":("overview-v3.png","Module Overview","Resumen del M&oacute;dulo"),
  "your-device":("your-device-v2.png","Equipment: Your Device","Equipo: Tu Dispositivo"),
  "camera-kit":("camera-kit-v2.png","Equipment: Camera Kit","Equipo: Kit de C&aacute;mara"),
- "photo-walk":("photo-walk-v2.png","In-Class Photo Walk","Caminata Fotogr&aacute;fica en Clase"),
+ "photo-walk":("photo-walk-v3.png","In-Class Photo Walk","Caminata Fotogr&aacute;fica en Clase"),
  "reflection":("reflection-v3.png","Written Reflection","Reflexi&oacute;n Escrita"),
  "design":("design-v1.png","Design &amp; Create","Dise&ntilde;a y Crea"),
  "edit":("edit-v1.png","Cull &amp; Edit","Selecciona y Edita"),
