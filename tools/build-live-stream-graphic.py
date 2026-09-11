@@ -88,7 +88,7 @@ def dots_for(active_idx):
 
 # ---------------- OVERVIEW ----------------
 def overview():
-    en=banner("Digital Arts 1A &bull; Module 05","Live Stream Graphic","Learn Photoshop, then design your own YouTube thumbnail.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Digital Arts 1A &bull; Module 05 &bull; Photoshop: Lesson 01","Live Stream Graphic","Learn Photoshop, then design your own YouTube thumbnail.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Build a Graphic, Then Design Your Own Thumbnail",
         float_right(END_IMG,"Finished History 301 Live Stream graphic: an arch photo with an orange bar on the left, a blue bar on the right, a green wash, and the words HISTORY 301 and LIVE STREAM in white","The live stream graphic you build in Step 1 (your warm-up).")
         + para("In this project you learn Adobe Photoshop, then use it to make something of your own. First, in Step 1, you follow clear steps to build a live stream promo graphic, so everyone learns the same tools. Then, in Steps 2 to 4, you find YouTube thumbnail inspiration, design your own thumbnail, and reflect on it.")
@@ -116,7 +116,7 @@ def overview():
            ("Blending Mode","A setting that changes how a layer&rsquo;s colors mix with the layers under it."),
            ("Thumbnail","The small preview image on a YouTube video. A good one grabs attention and reads clearly even when it is small.")]), False)
 
-    es=banner("Arte Digital 1A &bull; M&oacute;dulo 05","Gr&aacute;fico de Live Stream","Aprende Photoshop y luego dise&ntilde;a tu propia miniatura de YouTube.","#top","Back to English")
+    es=banner("Arte Digital 1A &bull; M&oacute;dulo 05 &bull; Photoshop: Lecci&oacute;n 01","Gr&aacute;fico de Live Stream","Aprende Photoshop y luego dise&ntilde;a tu propia miniatura de YouTube.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Crea un Gr&aacute;fico y Luego Dise&ntilde;a Tu Propia Miniatura",
         float_right(END_IMG,"Gr&aacute;fico terminado de History 301 Live Stream: una foto de un arco con una barra naranja a la izquierda, una barra azul a la derecha, un ba&ntilde;o verde y las palabras HISTORY 301 y LIVE STREAM en blanco","El gr&aacute;fico de live stream que creas en el Paso 1 (tu calentamiento).")
         + para("En este proyecto aprendes Adobe Photoshop y luego lo usas para crear algo tuyo. Primero, en el Paso 1, sigues pasos claros para crear un gr&aacute;fico promocional de live stream, para que todos aprendan las mismas herramientas. Luego, en los Pasos 2 al 4, buscas inspiraci&oacute;n de miniaturas de YouTube, dise&ntilde;as tu propia miniatura y reflexionas sobre ella.")
@@ -150,7 +150,7 @@ def overview():
 
 # ---------------- STEP 01 : warm-up build ----------------
 def step01():
-    en=banner("Live Stream Graphic &bull; Step 1","Build It in Photoshop","Follow the steps to build your warm-up graphic.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Live Stream Graphic &bull; Photoshop: Lesson 01 &bull; Step 1","Build It in Photoshop","Follow the steps to build your warm-up graphic.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("1 image (JPG):","your finished Live Stream graphic (01Working.jpg), uploaded to this Canvas assignment.")])
     en+=resources_card("Lesson Slides",
@@ -159,7 +159,7 @@ def step01():
         + note("This build is your warm-up. You will use these same skills to design your own YouTube thumbnail in Step 3."),
         False, floatimg=slide_deck(False))
 
-    es=banner("Gr&aacute;fico de Live Stream &bull; Paso 1","Cr&eacute;alo en Photoshop","Sigue los pasos para crear tu gr&aacute;fico de calentamiento.","#top","Back to English")
+    es=banner("Gr&aacute;fico de Live Stream &bull; Photoshop: Lecci&oacute;n 01 &bull; Paso 1","Cr&eacute;alo en Photoshop","Sigue los pasos para crear tu gr&aacute;fico de calentamiento.","#top","Back to English")
     es+=deliverables_box(True,
         [("1 imagen (JPG):","tu gr&aacute;fico de Live Stream terminado (01Working.jpg), subido a esta tarea de Canvas.")])
     es+=resources_card("Diapositivas de la Lecci&oacute;n",
@@ -174,7 +174,7 @@ def step01():
 
 # ---------------- STEP 02 : YouTube thumbnail inspiration ----------------
 def step02():
-    en=banner("Live Stream Graphic &bull; Step 2","Find Your Inspiration","Pick one channel you love and study its thumbnails.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Live Stream Graphic &bull; Photoshop: Lesson 01 &bull; Step 2","Find Your Inspiration","Pick one channel you love and study its thumbnails.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("Inspiration (PNG):","one or more screen captures of thumbnails from the channel you chose, saved as PNG in your &lsquo;"+FOLDER+"&rsquo; folder and uploaded to this Canvas assignment.")])
     en+=card("STEP 02 / INSPIRATION","Study One Channel You Love on YouTube",
@@ -190,7 +190,7 @@ def step02():
         ])
         + note("What makes a thumbnail work? A big, clear subject; a few bold words; strong colors; and it still reads when it is small. Look for those in your channel&rsquo;s thumbnails."))
 
-    es=banner("Gr&aacute;fico de Live Stream &bull; Paso 2","Busca Tu Inspiraci&oacute;n","Elige un canal que te encante y estudia sus miniaturas.","#top","Back to English")
+    es=banner("Gr&aacute;fico de Live Stream &bull; Photoshop: Lecci&oacute;n 01 &bull; Paso 2","Busca Tu Inspiraci&oacute;n","Elige un canal que te encante y estudia sus miniaturas.","#top","Back to English")
     es+=deliverables_box(True,
         [("Inspiraci&oacute;n (PNG):","una o varias capturas de pantalla de miniaturas del canal que elegiste, guardadas en formato PNG en tu carpeta &lsquo;"+FOLDER+"&rsquo; y subidas a esta tarea de Canvas.")])
     es+=card("PASO 02 / INSPIRACI&Oacute;N","Estudia Un Canal Que Te Encante en YouTube",
@@ -212,7 +212,7 @@ def step02():
 
 # ---------------- STEP 03 : design your own thumbnail ----------------
 def step03():
-    en=banner("Live Stream Graphic &bull; Step 3","Design Your Own Thumbnail","Make your own YouTube thumbnail in Photoshop.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Live Stream Graphic &bull; Photoshop: Lesson 01 &bull; Step 3","Design Your Own Thumbnail","Make your own YouTube thumbnail in Photoshop.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("1 thumbnail (JPG):","your finished, polished YouTube thumbnail, exported as a JPG and uploaded to this Canvas assignment.")])
     en+=card("STEP 03 / DESIGN","Design Your Thumbnail",
@@ -227,7 +227,7 @@ def step03():
         ])
         + note("Test it small. Shrink your thumbnail down. Can you still read the words and tell what the video is about? If yes, you nailed it."))
 
-    es=banner("Gr&aacute;fico de Live Stream &bull; Paso 3","Dise&ntilde;a Tu Propia Miniatura","Crea tu propia miniatura de YouTube en Photoshop.","#top","Back to English")
+    es=banner("Gr&aacute;fico de Live Stream &bull; Photoshop: Lecci&oacute;n 01 &bull; Paso 3","Dise&ntilde;a Tu Propia Miniatura","Crea tu propia miniatura de YouTube en Photoshop.","#top","Back to English")
     es+=deliverables_box(True,
         [("1 miniatura (JPG):","tu miniatura de YouTube terminada y pulida, exportada como JPG y subida a esta tarea de Canvas.")])
     es+=card("PASO 03 / DISE&Ntilde;O","Dise&ntilde;a Tu Miniatura",
@@ -248,7 +248,7 @@ def step03():
 
 # ---------------- STEP 04 : reflection ----------------
 def step04():
-    en=banner("Live Stream Graphic &bull; Step 4","Turn In Your Reflection","Reflect on the thumbnail you made.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Live Stream Graphic &bull; Photoshop: Lesson 01 &bull; Step 4","Turn In Your Reflection","Reflect on the thumbnail you made.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=card("STEP 04 / REFLECT","Complete and Upload the Reflection",
@@ -261,7 +261,7 @@ def step04():
         ])
         + note("Answer honestly, in your own words, about your own thumbnail."))
 
-    es=banner("Gr&aacute;fico de Live Stream &bull; Paso 4","Entrega Tu Reflexi&oacute;n","Reflexiona sobre la miniatura que creaste.","#top","Back to English")
+    es=banner("Gr&aacute;fico de Live Stream &bull; Photoshop: Lecci&oacute;n 01 &bull; Paso 4","Entrega Tu Reflexi&oacute;n","Reflexiona sobre la miniatura que creaste.","#top","Back to English")
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n, subido a esta tarea de Canvas.")])
     es+=card("PASO 04 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
