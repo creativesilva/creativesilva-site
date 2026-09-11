@@ -113,11 +113,13 @@ def contact_install_card(es):
 
 def section_header(icon,title,accent,light):
     # COMBINED section header (LOCKED 2026-09-10): one dark rectangle holding the section icon
-    # + one big color-coded title. Replaces the old small-eyebrow + separate-heading pair.
+    # + one big color-coded title, then the short accent rule under it. Replaces the old
+    # small-eyebrow + separate-heading pair.
     return ('<div style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);'
-      f'border-left:5px solid {accent};padding:9px 18px 9px 12px;margin-bottom:18px;max-width:100%;box-sizing:border-box;">'
+      f'border-left:5px solid {accent};padding:9px 18px 9px 12px;margin-bottom:12px;max-width:100%;box-sizing:border-box;">'
       f'<img src="{icon}" alt="" style="width:40px;height:40px;display:block;flex:0 0 auto;" />'
-      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:{light};letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>')
+      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:{light};letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>'
+      f'<div style="height:2px;background:{accent};width:60px;margin-bottom:18px;"></div>')
 
 def downloads_block(es):
     # CANONICAL orange downloads section, right after the intro/header card. This module
