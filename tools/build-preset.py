@@ -14,6 +14,7 @@ HEADER=f"{IMG}/overview-hero-v1.jpg"
 CAPTURE_FLOAT=f"{IMG}/capture-float-v1.jpg"
 SLIDE=IMG+"/preset-slide-{:02d}.jpg"
 SLIDE_PDF=f"{SITE}/assets/course-documents/Build-Your-Own-Preset-Guide.pdf"
+SLIDE_THUMB=f"{IMG}/preset-slides-cover-v1.jpg"
 REFLECT_EN=f"{SITE}/assets/course-documents/Build-Your-Own-Preset-Reflection-EN.docx"
 REFLECT_ES=f"{SITE}/assets/course-documents/Build-Your-Own-Preset-Reflection-ES.docx"
 AREA="Photography Folder"   # OneDrive top folder for this course's project folders
@@ -42,7 +43,7 @@ def downloads_block(es):
 def slide_deck(es):
     # Click-to-open PDF slide deck (shared pattern): a purple cover thumbnail links to the hosted
     # PDF, opening it in a new tab. Placeholder cover until Chris supplies a real one.
-    return slide_deck_thumb(SLIDE_PDF, es)
+    return slide_deck_thumb(SLIDE_PDF, es, thumb=SLIDE_THUMB)
 
 def nav(current,dots,stepnav):
     return ('      <div class="silva-breadcrumb">\n'
