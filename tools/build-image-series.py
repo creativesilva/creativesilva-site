@@ -243,15 +243,17 @@ def vocab_grid(quiz_label, quiz_body, terms):
       f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#c4b5fd;margin-bottom:5px;"><strong>{quiz_label}</strong></div>'
       f'<div style="font-size:12pt;color:rgba(255,255,255,0.90);line-height:1.5;">{quiz_body}</div></div>')
     hintline=f'<div style="font-size:10.5pt;color:#c4b5fd;margin-bottom:12px;opacity:0.9;">&#9662; {hint}</div>'
+    # TWO columns (flex-wrap): 2 terms per row on iPad/desktop, collapsing to 1 column only when
+    # too narrow (each term flex:1 1 45% with a min-width). Saves vertical space.
     items=""
     for n,(term,defn) in enumerate(terms,1):
-        items+=('<details style="background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;margin-bottom:10px;">'
+        items+=('<details style="flex:1 1 45%;min-width:260px;background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;">'
           '<summary style="background:linear-gradient(135deg,#241d3a 0,#241d3a 30px,#140f24 30px,#140f24 100%);padding:12px 14px;cursor:pointer;">'
           f'<span style="font-size:12pt;color:#c4b5fd;"><strong>{n:02d}</strong></span> '
           f'<span style="font-size:12.5pt;color:#ffffff;"><strong>{term}</strong></span></summary>'
           f'<div style="padding:12px 14px 8px;font-size:11pt;line-height:1.55;color:rgba(255,255,255,0.85);">{defn}</div>'
           '</details>')
-    return note+hintline+items
+    return note+hintline+f'<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;">{items}</div>'
 
 DELIVER_ICON=f"{SITE}/assets/Icons/assignment/deliverables-v4.png"
 def deliverables_box(es,items):
