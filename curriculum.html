@@ -307,6 +307,9 @@
       border-color: color-mix(in srgb, var(--course-accent, #007474) 75%, transparent);
       background: color-mix(in srgb, var(--course-accent, #007474) 16%, transparent);
     }
+    .course-doc-dl.pending, .course-doc:hover .course-doc-dl.pending {
+      color: #c77b3a; border-color: rgba(199,123,58,0.4); background: rgba(199,123,58,0.08); cursor: default;
+    }
     .course-doc-empty {
       padding: 11px 14px; background: rgba(255, 255, 255, 0.02);
       border: 1px dashed rgba(255, 255, 255, 0.12); color: var(--text-dim); font-size: 0.85rem;
@@ -1721,15 +1724,20 @@
       camera: { label: "Camera Check Out", form: "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform", qr: "assets/qr/camera-checkout-qr.png", download: "PVHS-Camera-Checkout-QR.png" },
       local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" }],
     };
-    // Slide decks (staff-facing master PowerPoints), grouped per course.
+    // Slide decks (staff-facing masters), grouped per course. Each deck keeps BOTH the editable
+    // PPTX original and the PDF; a null means that file is not placed yet (shows as "pending").
     const SLIDE_DECKS = {
       da1a: [
-        { label: "Module 02: Color Theory (English)", file: "DA1-Color-Theory-Slides-EN-v2.pptx" },
-        { label: "Module 02: Color Theory (Spanish)", file: "DA1-Color-Theory-Slides-ES-v2.pptx" },
-        { label: "Module 05: Live Stream Graphic (English)", file: "DA1-Live-Stream-Graphic-Slides-EN-v4.pptx" },
+        { label: "Module 02: Color Theory (English)", pptx: "DA1-Color-Theory-Slides-EN-v2.pptx", pdf: null },
+        { label: "Module 02: Color Theory (Spanish)", pptx: "DA1-Color-Theory-Slides-ES-v2.pptx", pdf: null },
+        { label: "Module 05: Live Stream Graphic (English)", pptx: "DA1-Live-Stream-Graphic-Slides-EN-v4.pptx", pdf: "Live-Stream-Graphic-Slides.pdf" },
+        { label: "Module 05: Live Stream Graphic (Spanish)", pptx: "DA1-Live-Stream-Graphic-Slides-ES-v4.pptx", pdf: "Live-Stream-Graphic-Slides-ES.pdf" },
       ],
       photo1a: [
-        { label: "LRC Import Workflow", file: "Photo1-LRC-Import-Workflow-v5.pptx" },
+        { label: "Image Series: Lightroom Import Workflow", pptx: "Photo1-LRC-Import-Workflow-v5.pptx", pdf: "Lightroom-Import-Guide.pdf" },
+      ],
+      photo2a: [
+        { label: "Build Your Own Preset: Presets in Lightroom Classic", pptx: null, pdf: "Build-Your-Own-Preset-Guide.pdf" },
       ],
     };
     function docLink(file, label) {
@@ -1764,12 +1772,16 @@
       // so decks can be dropped in later. Inactive courses are skipped.
       if (course.inactive) return "";
       const decks = SLIDE_DECKS[course.id] || [];
+      const act = (file, kind) => file
+        ? `<a class="course-doc-dl" href="${DOCBASE}${encodeURIComponent(file)}" download>${kind}</a>`
+        : `<span class="course-doc-dl pending" title="Not placed yet">${kind} pending</span>`;
       const rows = decks.length
         ? decks.map(d =>
-            `<a class="course-doc" href="${DOCBASE}${encodeURIComponent(d.file)}" download>`
-            + `<span class="course-doc-ico">PPTX</span>`
+            `<div class="course-doc">`
+            + `<span class="course-doc-ico">DECK</span>`
             + `<span class="course-doc-name">${d.label}</span>`
-            + `<span class="course-doc-dl">Download</span></a>`).join("")
+            + `<span class="course-doc-actions">${act(d.pptx, "PPTX")}${act(d.pdf, "PDF")}</span>`
+            + `</div>`).join("")
         : `<div style="padding:10px 2px;color:var(--text-faint);font-size:0.82rem;font-style:italic;">No slide decks yet.</div>`;
       const meta = decks.length ? `${decks.length} deck${decks.length === 1 ? "" : "s"} &middot; staff` : `staff`;
       return `<details class="slide-decks-acc">`
