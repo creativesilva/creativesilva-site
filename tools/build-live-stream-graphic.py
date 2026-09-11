@@ -144,14 +144,14 @@ def vocab_grid(quiz_label, quiz_body, terms):
 def deliverables_box(title,lead,items):
     lis=""
     for b,rest in items:
-        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#FF6B1A;">&bull;</span> '
+        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#f5b301;">&bull;</span> '
               f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
-    return ('<div style="background:rgba(255,107,26,0.12);border:1px solid rgba(255,107,26,0.35);border-left:5px solid #FF6B1A;padding:16px 18px;margin:0 0 8px;">'
+    return ('<div style="background:rgba(245,179,1,0.12);border:1px solid rgba(245,179,1,0.35);border-left:5px solid #f5b301;padding:16px 18px;margin:0 0 8px;">'
       '<div style="display:flex;align-items:flex-start;gap:12px;">'
       '<div style="flex:1 1 auto;min-width:0;">'
-      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffb27c;margin-bottom:8px;"><strong>{title}</strong></div>'
+      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffd166;margin-bottom:8px;"><strong>{title}</strong></div>'
       f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div></div>'
-      f'<img src="{SITE}/assets/Icons/assignment/deliverables-v1.png" alt="Deliverables" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
+      f'<img src="{SITE}/assets/Icons/assignment/deliverables-v2.png" alt="Deliverables" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
       f'{lis}</div>')
 
 def top_wrap(en,es):
