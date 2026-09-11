@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # Digital Arts 1A - Motivational Poster (Photoshop). Any school-appropriate figure who
 # inspires you: a real person OR a fictional character, with a real quote. The logo/symbol
-# behind the subject is optional EXTRA CREDIT. PVHS teal angular framework, bilingual.
+# behind the subject is optional EXTRA CREDIT. Chip-header framework via silva_framework, bilingual.
 import os, re
-SITE="https://www.creativesilva.com"
-ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
+from silva_framework import *
+
+ROOT=os.path.join(os.path.dirname(__file__),"..")
 IMG=f"{SITE}/assets/images/digarts1/motivational-poster"
 EXAMPLE=f"{SITE}/assets/images/digarts1/motivational-poster/motivational-poster-header-v2.png"   # example motivational poster (header)
 NEWDOC=f"{IMG}/new-document.png"
@@ -34,84 +35,63 @@ TUT_MASK=f"{IMG}/tut-layer-masks.png"
 URL_WORK="https://www.adobe.com/learn/photoshop/in-app/introduction-to-the-workspace"
 URL_SEL="https://www.adobe.com/learn/photoshop/in-app/introduction-to-selections"
 URL_MASK="https://www.adobe.com/learn/photoshop/in-app/get-to-know-layer-masks"
+AREA="Digital Arts Folder"   # OneDrive top folder for this course's project folders
 
 OVER="digarts1-motivational-poster-overview.html"
 S1="digarts1-motivational-poster-step01.html"
 S2="digarts1-motivational-poster-step02.html"
 S3="digarts1-motivational-poster-step03.html"
 
-def ent(s):
-    m={"á":"&aacute;","é":"&eacute;","í":"&iacute;","ó":"&oacute;","ú":"&uacute;",
-       "Á":"&Aacute;","É":"&Eacute;","Í":"&Iacute;","Ó":"&Oacute;","Ú":"&Uacute;",
-       "ñ":"&ntilde;","Ñ":"&Ntilde;","ü":"&uuml;","¿":"&iquest;","¡":"&iexcl;",
-       "“":"&ldquo;","”":"&rdquo;","‘":"&lsquo;","’":"&rsquo;","–":"&ndash;","•":"&bull;","×":"&times;"}
-    return "".join(m.get(c, c if ord(c)<128 else "&#x{:X};".format(ord(c))) for c in s)
+STEPLBL="STEP"
 
-def banner(label,title,subtitle,es_href,es_label):
-    return ('<div style="background:linear-gradient(135deg,#000000 0%,#003838 40%,#007474 100%);padding:20px 28px 22px;margin:-28px -28px 24px -28px;">'
-      '<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">'
-      f'<div style="justify-self:start;"><img src="{SITE}/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:min(90px,15vw);height:auto;display:block;" /></div>'
-      '<div style="justify-self:center;text-align:center;">'
-      f'<div style="margin-bottom:6px;"><span style="font-size:13pt;color:#80e0e0;"><strong>{label}</strong></span></div>'
-      f'<div style="color:#ffffff;font-size:23pt;line-height:1.1;"><strong>{title}</strong></div>'
-      f'<div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:13pt;font-style:italic;"><strong>{subtitle}</strong></span></div></div>'
-      f'<div style="justify-self:end;"><a href="{es_href}" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #ff6b1a;"><strong>{es_label}</strong></a></div>'
-      '</div></div>')
+# ---------------- module-specific content helpers ----------------
+def framed(src,alt,maxw=None):
+    # Module variant of framed: the shared framework framed() has no max-width, but the Photoshop
+    # walkthrough's dialog/menu captures rely on maxw to display at sensible sizes (a full-width
+    # blow-up of a small context menu looks wrong). Same teal frame as the framework otherwise.
+    # Canvas strips both JS lightboxes and <details>, so in-place enlarge is not possible in pasted
+    # Canvas HTML; images just display at their set size.
+    mw=f'max-width:{maxw};' if maxw else ''
+    return f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;{mw}"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
 
-def card(eyebrow,heading,inner):
-    return ('<div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #00b8b8;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#80e0e0;text-transform:uppercase;margin-bottom:12px;">'
-      f'<strong>{eyebrow}</strong></div>'
-      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
-      '<div style="height:2px;background:#00b8b8;width:60px;margin-bottom:18px;"></div>'
+def capframe(src,caption,maxw=None):
+    # Framed image with a short visible caption beneath it, so a run of images reads step by step.
+    mw=f'max-width:{maxw};' if maxw else ''
+    return (f'<div style="{mw}margin:8px 0 16px;">'
+            f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;line-height:0;">'
+            f'<img src="{src}" alt="{caption}" style="display:block;width:100%;height:auto;" /></div>'
+            f'<div style="font-size:11.5pt;color:rgba(255,255,255,0.74);line-height:1.5;margin-top:7px;">'
+            f'<strong style="color:#80e0e0;">&rarr;</strong> {caption}</div></div>')
+
+def stepblock(n,title,body):
+    return ('<div style="border-left:4px solid #00b8b8;padding:2px 0 2px 16px;margin:0 0 18px;">'
+      f'<div style="font-size:9.5pt;letter-spacing:0.18em;text-transform:uppercase;color:#80e0e0;margin-bottom:4px;"><strong>{STEPLBL} {n}</strong></div>'
+      f'<div style="font-size:15pt;color:#ffffff;margin-bottom:6px;"><strong>{title}</strong></div>'
+      f'<div style="font-size:13.5pt;color:rgba(255,255,255,0.88);line-height:1.65;">{body}</div></div>')
+
+def scrollbox(n, inner):
+    hint=(f'Scroll inside the box to see all {n} steps' if STEPLBL=="STEP"
+          else f'Despl&aacute;zate en el cuadro para ver los {n} pasos')
+    return (f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
+      '<div class="silva-scroll" style="max-height:460px;overflow-y:auto;padding:14px 16px 20px;border:1px solid rgba(0,184,184,0.22);border-radius:14px;'
+      'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.16) 100%);">'
       f'{inner}</div>')
 
-def para(t):
-    return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
+def support_tile(thumb,title,desc,url,openlabel):
+    # PURPLE tiles: these live inside the purple Tutorials Resources card (section cohesion).
+    return ('<div style="flex:0 0 290px;width:290px;box-sizing:border-box;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(139,92,246,0.14) 0%,rgba(139,92,246,0.04) 100%);border:1px solid rgba(139,92,246,0.28);border-top:4px solid #8b5cf6;">'
+      f'<a href="{url}" target="_blank" rel="noopener" style="display:block;line-height:0;"><img src="{thumb}" alt="{title}" style="display:block;width:100%;height:163px;object-fit:cover;" /></a>'
+      '<div style="padding:14px 16px 16px;display:flex;flex-direction:column;flex:1 1 auto;">'
+      f'<div style="font-size:13.5pt;color:#ffffff;margin-bottom:6px;"><strong>{title}</strong></div>'
+      f'<div style="font-size:11.5pt;color:rgba(255,255,255,0.82);line-height:1.55;flex:1 1 auto;margin-bottom:14px;">{desc}</div>'
+      f'<div><a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:9px 16px;border-top:2px solid #8b5cf6;font-size:10.5pt;letter-spacing:0.04em;"><strong>{openlabel}</strong></a></div>'
+      '</div></div>')
 
-
-AREA="Digital Arts Folder"   # OneDrive top folder for this course's project folders
-
-def folder_note(es):
-    # Every orange downloads block tells students to make a module project folder and move
-    # their files from Downloads into OneDrive > {AREA} > that folder, so work stays together.
-    if es:
-        return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
-          '<strong style="color:#ffb27c;">Mantente organizado:</strong> crea una carpeta nueva y ll&aacute;mala como este m&oacute;dulo. '
-          'Cuando cada archivo termine de descargarse, mu&eacute;velo de tu carpeta de Descargas a '
-          f'OneDrive &rarr; {AREA} &rarr; esa carpeta del proyecto para que todos tus archivos queden juntos.</div>')
-    return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
-      '<strong style="color:#ffb27c;">Stay organized:</strong> make a new folder and name it after this module. '
-      'As each file finishes downloading, move it out of your Downloads folder into '
-      f'OneDrive &rarr; {AREA} &rarr; that project folder so all your files stay together.</div>')
-
-def downloads_block(es):
-    # CANONICAL downloads section (orange framework standard), placed right after the
-    # intro/header card on every module Overview. Holds the reflection now; future
-    # modules add more dl_row(...) lines here.
-    eyebrow="DESCARGAS" if es else "DOWNLOADS"
-    heading="Descarga Tus Archivos" if es else "Download Your Files"
-    lead=("Descarga aqu&iacute; todo lo que necesitas para este m&oacute;dulo. Consigue tus archivos antes de empezar." if es
-          else "Download everything you need for this module here. Get your files before you start.")
-    reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
-    ref=REFLECT_ES if es else REFLECT_EN
-    return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #FF6B1A;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#ffb27c;text-transform:uppercase;margin-bottom:12px;">'
-      f'<strong>{eyebrow}</strong></div>'
-      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
-      '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
-      f'{para(lead)}{dl_row(ref,reflabel)}' + folder_note(es) + '</div>')
-
-def bullets(items):
-    r=""
-    for b,rest in items:
-        inner=(f'<strong>{b}</strong> {rest}' if b else rest)
-        r+=('<div style="margin-bottom:8px;line-height:1.55;"><span style="color:#00b8b8;">&bull;</span> '
-            f'<span style="font-size:13.5pt;color:rgba(255,255,255,0.88);">{inner}</span></div>')
-    return f'<div style="margin-bottom:6px;">{r}</div>'
-
-def note_orange(t):
-    return (f'<div style="background:rgba(255,107,26,0.10);border:1px solid rgba(255,107,26,0.30);border-left:4px solid #FF6B1A;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
+def support_tiles(items):
+    tiles="".join(support_tile(*it) for it in items)
+    return ('<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;">'
+      f'<div style="display:flex;gap:16px;min-width:min-content;align-items:stretch;">{tiles}</div></div>'
+      '<div style="font-size:10pt;color:rgba(255,255,255,0.5);margin-top:8px;letter-spacing:0.08em;">&laquo; swipe or scroll for more &raquo;</div>')
 
 def type_tip(lang):
     # Type coaching callout (teal): match the typeface to the image, contrast, readability.
@@ -140,114 +120,20 @@ def ec_note(label,t):
     # EXTRA CREDIT callout (teal, distinct from the orange warnings)
     return (f'<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.35);border-left:4px solid #00b8b8;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.92);"><strong style="color:#80e0e0;">{label}:</strong> {t}</div>')
 
-def float_right(src,alt):
-    # Teal-framed image floated right inside a card (card() has overflow:hidden, so it clears).
-    return (f'<div style="float:right;width:44%;min-width:240px;margin:0 0 16px 24px;'
-            f'background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;line-height:0;">'
-            f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>')
-
-def capframe(src,caption,maxw=None):
-    # Framed image with a short visible caption beneath it, so a run of images reads step by step.
-    mw=f'max-width:{maxw};' if maxw else ''
-    return (f'<div style="{mw}margin:8px 0 16px;">'
-            f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;line-height:0;">'
-            f'<img src="{src}" alt="{caption}" style="display:block;width:100%;height:auto;" /></div>'
-            f'<div style="font-size:11.5pt;color:rgba(255,255,255,0.74);line-height:1.5;margin-top:7px;">'
-            f'<strong style="color:#80e0e0;">&rarr;</strong> {caption}</div></div>')
-
-def framed(src,alt,maxw=None):
-    # Plain framed image. Canvas strips both JS lightboxes and <details>, so in-place enlarge is
-    # not possible in pasted Canvas HTML; images just display at their normal size.
-    mw=f'max-width:{maxw};' if maxw else ''
-    return f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;{mw}"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
-
-STEPLBL="STEP"
-def stepblock(n,title,body):
-    return ('<div style="border-left:3px solid #00b8b8;padding:2px 0 2px 16px;margin:0 0 18px;">'
-      f'<div style="font-size:9.5pt;letter-spacing:0.18em;text-transform:uppercase;color:#80e0e0;margin-bottom:4px;"><strong>{STEPLBL} {n}</strong></div>'
-      f'<div style="font-size:15pt;color:#ffffff;margin-bottom:6px;"><strong>{title}</strong></div>'
-      f'<div style="font-size:13.5pt;color:rgba(255,255,255,0.88);line-height:1.65;">{body}</div></div>')
-
-def scrollbox(n, inner):
-    hint=(f'Scroll inside the box to see all {n} steps' if STEPLBL=="STEP"
-          else f'Despl&aacute;zate en el cuadro para ver los {n} pasos')
-    return (f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
-      '<div class="silva-scroll" style="max-height:460px;overflow-y:auto;padding:14px 16px 20px;border:1px solid rgba(0,184,184,0.22);border-radius:14px;'
-      'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.16) 100%);">'
-      f'{inner}</div>')
-
-def support_tile(thumb,title,desc,url,openlabel):
-    return ('<div style="flex:0 0 290px;width:290px;box-sizing:border-box;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(0,116,116,0.14) 0%,rgba(0,116,116,0.04) 100%);border:1px solid rgba(0,184,184,0.28);border-top:4px solid #00b8b8;">'
-      f'<a href="{url}" target="_blank" rel="noopener" style="display:block;line-height:0;"><img src="{thumb}" alt="{title}" style="display:block;width:100%;height:163px;object-fit:cover;" /></a>'
-      '<div style="padding:14px 16px 16px;display:flex;flex-direction:column;flex:1 1 auto;">'
-      f'<div style="font-size:13.5pt;color:#ffffff;margin-bottom:6px;"><strong>{title}</strong></div>'
-      f'<div style="font-size:11.5pt;color:rgba(255,255,255,0.82);line-height:1.55;flex:1 1 auto;margin-bottom:14px;">{desc}</div>'
-      f'<div><a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:9px 16px;border-top:2px solid #00b8b8;font-size:10.5pt;letter-spacing:0.04em;"><strong>{openlabel}</strong></a></div>'
-      '</div></div>')
-
-DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"   # the downloads folder icon (lives IN the download section)
-
-def download_card(eyebrow,heading,inner):
-    # orange-styled download section (framework): orange border/eyebrow/rule
+def downloads_block(es):
+    # Orange Downloads section (Overview only). Motivational Poster holds the reflection doc.
+    heading="Descarga Tus Archivos" if es else "Download Your Files"
+    lead=("Descarga aqu&iacute; todo lo que necesitas para este m&oacute;dulo. Consigue tus archivos antes de empezar." if es
+          else "Download everything you need for this module here. Get your files before you start.")
+    reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
+    ref=REFLECT_ES if es else REFLECT_EN
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #FF6B1A;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#ffb27c;text-transform:uppercase;margin-bottom:12px;">'
-      f'<strong>{eyebrow}</strong></div>'
-      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
-      '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
-      f'{inner}</div>')
-
-def dl_row(url,label):
-    # downloads folder icon + orange download button, vertically centered
-    btn=(f'<a href="{url}" download style="display:inline-block;text-decoration:none;background:#FF6B1A;color:#ffffff;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;margin:0;"><strong>{label}</strong></a>')
-    return ('<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;">'
-      f'<img src="{DL_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;display:block;" />'+btn+'</div>')
-
-def support_tiles(items):
-    tiles="".join(support_tile(*it) for it in items)
-    return ('<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;">'
-      f'<div style="display:flex;gap:16px;min-width:min-content;align-items:stretch;">{tiles}</div></div>'
-      '<div style="font-size:10pt;color:rgba(255,255,255,0.5);margin-top:8px;letter-spacing:0.08em;">&laquo; swipe or scroll for more &raquo;</div>')
-
-def deliverables_box(title,lead,items):
-    lis=""
-    for b,rest in items:
-        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#f5b301;">&bull;</span> '
-              f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
-    return ('<div style="background:rgba(245,179,1,0.12);border:1px solid rgba(245,179,1,0.35);border-left:5px solid #f5b301;padding:16px 18px;margin:0 0 8px;">'
-      '<div style="display:flex;align-items:flex-start;gap:12px;">'
-      '<div style="flex:1 1 auto;min-width:0;">'
-      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffd166;margin-bottom:8px;"><strong>{title}</strong></div>'
-      f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div></div>'
-      f'<img src="{SITE}/assets/Icons/assignment/deliverables-v4.png" alt="Deliverables" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
-      f'{lis}</div>')
-
-def vocab_grid(terms):
-    rows=[terms[i:i+3] for i in range(0,len(terms),3)]
-    body=""
-    for row in rows:
-        tds=""
-        for term,d in row:
-            tds+=('<td style="width:33.33%;vertical-align:top;padding:6px;">'
-                  '<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;height:100%;box-sizing:border-box;">'
-                  '<div style="background:linear-gradient(135deg,#094043 0,#094043 28px,#041d1c 28px,#041d1c 100%);padding:16px;height:100%;box-sizing:border-box;">'
-                  f'<div style="font-size:12pt;color:#ffffff;margin-bottom:5px;"><strong>{term}</strong></div>'
-                  f'<div style="font-size:10.5pt;line-height:1.5;color:rgba(255,255,255,0.80);">{d}</div></div></div></td>')
-        body+=f'<tr>{tds}</tr>'
-    return f'<table role="presentation" style="width:100%;border-collapse:collapse;table-layout:fixed;"><tbody>{body}</tbody></table>'
-
-def top_wrap(en,es):
-    return ('<div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;'
-      "background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%),"
-      f"url('{SITE}/assets/PV_Panther_Watermark.png');"
-      'background-position:center center,center center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed;overflow:hidden;">'
-      '<div style="padding:28px 28px 40px;">'+en+'</div>'
-      '<div id="espanol" style="border-top:2px solid rgba(255,255,255,0.10);"><div style="padding:28px 28px 40px;">'+es+'</div></div>'
-      '</div>')
-
-def dot(href,label,title,active,module=False):
-    if active: return f'<span class="sdot sdot-active" title="{title}">{label}</span>'
-    cls="sdot sdot-link sdot-module" if module else "sdot sdot-link"
-    return f'<a href="{href}" class="{cls}" title="{title}">{label}</a>'
+      + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
+      + para(lead)
+      + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">'
+      + dl_link(ref,reflabel,row=True)
+      + '</div>'
+      + folder_note(es, AREA) + '</div>')
 
 def nav(current,dots,stepnav):
     return ('      <div class="silva-breadcrumb">\n'
@@ -260,41 +146,6 @@ def nav(current,dots,stepnav):
             '      <div class="silva-nav-spacer"></div>\n'
             f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
             f'      <div class="silva-step-nav">{stepnav}</div>')
-
-def wrap_page(title,nav_inner,top_html,bottom):
-    return f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{title}</title>
-  <link rel="icon" type="image/svg+xml" href="https://www.creativesilva.com/logos/CS_Logo_Only.svg" />
-  <style>:root {{ --course-accent: #007474; }}</style>
-  <link rel="stylesheet" href="/css/silva-module.css" />
-</head>
-<body>
-  <nav class="silva-nav" aria-label="Module navigation">
-    <div class="silva-nav-inner">
-{nav_inner}
-      <div class="silva-nav-div"></div>
-      <button class="silva-copy-btn" onclick="silvaCopyHTML()" aria-label="Copy Canvas HTML to clipboard">&#128203; Copy Canvas HTML</button>
-      <button class="silva-download-btn" onclick="silvaDownloadHTML()" aria-label="Download Canvas HTML as file">&#128229; Download HTML</button>
-    </div>
-  </nav>
-  <div class="silva-page">
-  <div id="silva-module-content">
-  {top_html}
-  </div>
-  {bottom}
-  </div>
-  <script>
-    function silvaCopyHTML() {{ var el=document.getElementById('top'); navigator.clipboard.writeText(el.outerHTML).then(function(){{var b=document.querySelector('.silva-copy-btn');b.textContent='\\u2713 Copied!';b.classList.add('copied');setTimeout(function(){{b.innerHTML='&#128203; Copy Canvas HTML';b.classList.remove('copied');}},2500);}}).catch(function(){{alert('Copy failed. Select the source manually.');}}); }}
-    function silvaDownloadHTML() {{ var el=document.getElementById('top'); var blob=new Blob([el.outerHTML],{{type:'text/html'}}); var url=URL.createObjectURL(blob); var a=document.createElement('a'); a.href=url; a.download=location.pathname.split('/').pop().replace('.html','')+'-canvas.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }}
-  </script>
-  <script src="/js/silva-nav.js"></script>
-</body>
-</html>
-'''
 
 VOCAB_EN=[
  ("Resolution (PPI)","Pixels per inch. More resolution means a sharper print. This poster needs 300."),
@@ -316,11 +167,11 @@ VOCAB_ES=[
 # ---------------- OVERVIEW ----------------
 def overview():
     en=banner("Digital Arts 1A &bull; Photoshop","Motivational Poster","Design a poster that hypes up someone who inspires you.","#espanol","Clic para Espa&ntilde;ol")
-    en+=card("THE PROJECT / OVERVIEW","What You Will Make",
+    en+=type_card("overview","The Module Overview","What You Will Make",
         para("You will design a motivational poster of someone who inspires you, in Photoshop. Your subject can be a real person or a fictional character: an athlete, a musician, a leader, a superhero, anyone who motivates you. You will cut your subject out of their background, add a bold motion-blurred background behind them, and finish with a real quote they actually said, their name, and colors that all work together. The goal is a clean, hype-worthy poster you would be proud to print and hang up.")
         + framed(EXAMPLE,"Example motivational poster")
-        + note_orange("Keep it school-appropriate. Your subject and everything on the poster must meet school standards: no drugs, alcohol, tobacco, weapons, violence, profanity, or other inappropriate content or characters. If you are unsure whether a choice is appropriate, ask Mr. Silva before you begin.")
-        + note_orange("Your quote must be a real quote your subject actually said. For a fictional character, use a real line from their movie, show, game, or comic. Choose a font (typeface) for the words that fits the mood and style of your poster. Your font choice is important: write down the exact name of the font you use, because you will be asked to list it in your reflection document.")
+        + note("Keep it school-appropriate. Your subject and everything on the poster must meet school standards: no drugs, alcohol, tobacco, weapons, violence, profanity, or other inappropriate content or characters. If you are unsure whether a choice is appropriate, ask Mr. Silva before you begin.")
+        + note("Your quote must be a real quote your subject actually said. For a fictional character, use a real line from their movie, show, game, or comic. Choose a font (typeface) for the words that fits the mood and style of your poster. Your font choice is important: write down the exact name of the font you use, because you will be asked to list it in your reflection document.")
         + ec_note("EXTRA CREDIT","Add a logo or symbol connected to your subject (a team logo, a band logo, an emblem) behind them, with a glow or outline. This part is optional."))
     en+=downloads_block(False)
     en+=card("QUICK SPECS","Set It Up Right",
@@ -330,24 +181,25 @@ def overview():
             ("Color mode:","RGB. You set this when you create the file."),
             ("Submit:","one JPG, the final file you turn in."),
         ])
-        + note_orange("New to Photoshop? Step 01 walks you through every click, starting with opening the app and making your file."))
-    en+=card("WORDS TO KNOW","Poster Vocabulary",
-        note_orange("Heads up: these six key words may be on a quiz.")
-        + vocab_grid(VOCAB_EN))
-    en+=card("RESOURCES / SUPPORT","Tutorials to Help You",
+        + note("New to Photoshop? Step 01 walks you through every click, starting with opening the app and making your file."))
+    en+=resources_card("Key Words",
+        vocab_grid("On the Quiz",
+          "Heads up: these six key words may be on a quiz.",
+          VOCAB_EN), False)
+    en+=resources_card("Tutorials to Help You",
         para("Three short Adobe guides for the trickiest parts. Tap a video to open it in a new tab. You can watch them again any time.")
         + support_tiles([
             (TUT_WORK,"Introduction to the Workspace","Get to know the Photoshop workspace: the panels, the tools, and where everything lives.",URL_WORK,"Watch: Workspace &rarr;"),
             (TUT_SEL,"Introduction to Selections","Learn how to select part of an image. This is the first step to cutting your subject out.",URL_SEL,"Watch: Selections &rarr;"),
             (TUT_MASK,"Get to Know Layer Masks","Use layer masks to hide and show parts of a layer without erasing anything.",URL_MASK,"Watch: Layer Masks &rarr;"),
-        ]))
+        ]), False)
 
     es=banner("Arte Digital 1A &bull; Photoshop","P&oacute;ster Motivacional","Dise&ntilde;a un p&oacute;ster que anime a alguien que te inspira.","#top","Back to English")
-    es+=card("EL PROYECTO / RESUMEN","Lo Que Vas a Crear",
+    es+=type_card("overview","El Resumen del M&oacute;dulo","Lo Que Vas a Crear",
         para("Vas a dise&ntilde;ar un p&oacute;ster motivacional de alguien que te inspira, en Photoshop. Tu sujeto puede ser una persona real o un personaje de ficci&oacute;n: un atleta, un m&uacute;sico, un l&iacute;der, un superh&eacute;roe, cualquiera que te motive. Vas a recortar a tu sujeto de su fondo, agregar un fondo con desenfoque de movimiento detr&aacute;s, y terminar con una frase real que haya dicho, su nombre y colores que combinen. La meta es un p&oacute;ster limpio y llamativo que te sientas orgulloso de imprimir y colgar.")
         + framed(EXAMPLE,"Ejemplo de p&oacute;ster motivacional")
-        + note_orange("Mant&eacute;nlo apropiado para la escuela. Tu sujeto y todo lo que est&eacute; en el p&oacute;ster debe cumplir con las normas escolares: nada de drogas, alcohol, tabaco, armas, violencia, groser&iacute;as ni otro contenido o personajes inapropiados. Si no est&aacute;s seguro de si una opci&oacute;n es apropiada, preg&uacute;ntale al Sr. Silva antes de empezar.")
-        + note_orange("Tu frase debe ser una frase real que tu sujeto haya dicho. Para un personaje de ficci&oacute;n, usa una l&iacute;nea real de su pel&iacute;cula, serie, videojuego o c&oacute;mic. Elige un tipo de letra para las palabras que quede con el estilo y el ambiente de tu p&oacute;ster. Tu elecci&oacute;n de fuente es importante: anota el nombre exacto de la fuente que uses, porque te pedir&aacute;n que la escribas en tu documento de reflexi&oacute;n.")
+        + note("Mant&eacute;nlo apropiado para la escuela. Tu sujeto y todo lo que est&eacute; en el p&oacute;ster debe cumplir con las normas escolares: nada de drogas, alcohol, tabaco, armas, violencia, groser&iacute;as ni otro contenido o personajes inapropiados. Si no est&aacute;s seguro de si una opci&oacute;n es apropiada, preg&uacute;ntale al Sr. Silva antes de empezar.")
+        + note("Tu frase debe ser una frase real que tu sujeto haya dicho. Para un personaje de ficci&oacute;n, usa una l&iacute;nea real de su pel&iacute;cula, serie, videojuego o c&oacute;mic. Elige un tipo de letra para las palabras que quede con el estilo y el ambiente de tu p&oacute;ster. Tu elecci&oacute;n de fuente es importante: anota el nombre exacto de la fuente que uses, porque te pedir&aacute;n que la escribas en tu documento de reflexi&oacute;n.")
         + ec_note("CR&Eacute;DITO EXTRA","Agrega un logo o s&iacute;mbolo relacionado con tu sujeto (un logo de equipo, un logo de banda, un emblema) detr&aacute;s de &eacute;l, con un resplandor o contorno. Esta parte es opcional."))
     es+=downloads_block(True)
     es+=card("DATOS R&Aacute;PIDOS","Config&uacute;ralo Bien",
@@ -357,17 +209,18 @@ def overview():
             ("Modo de color:","RGB. Lo eliges al crear el archivo."),
             ("Entrega:","un JPG, el archivo final que entregas."),
         ])
-        + note_orange("&iquest;Nuevo en Photoshop? El Paso 01 te gu&iacute;a en cada clic, empezando por abrir la app y crear tu archivo."))
-    es+=card("PALABRAS CLAVE","Vocabulario del P&oacute;ster",
-        note_orange("Atenci&oacute;n: estas seis palabras clave pueden estar en un examen.")
-        + vocab_grid(VOCAB_ES))
-    es+=card("RECURSOS / APOYO","Tutoriales Para Ayudarte",
+        + note("&iquest;Nuevo en Photoshop? El Paso 01 te gu&iacute;a en cada clic, empezando por abrir la app y crear tu archivo."))
+    es+=resources_card("Palabras Clave",
+        vocab_grid("En el Examen",
+          "Atenci&oacute;n: estas seis palabras clave pueden estar en un examen.",
+          VOCAB_ES), True)
+    es+=resources_card("Tutoriales Para Ayudarte",
         para("Tres gu&iacute;as cortas de Adobe para las partes m&aacute;s dif&iacute;ciles. Toca un video para abrirlo en una pesta&ntilde;a nueva. Puedes verlos las veces que necesites.")
         + support_tiles([
             (TUT_WORK,"Introducci&oacute;n al Espacio de Trabajo","Conoce el espacio de trabajo de Photoshop: los paneles, las herramientas y d&oacute;nde est&aacute; todo.",URL_WORK,"Ver: Espacio de Trabajo &rarr;"),
             (TUT_SEL,"Introducci&oacute;n a las Selecciones","Aprende a seleccionar parte de una imagen. Es el primer paso para recortar a tu sujeto.",URL_SEL,"Ver: Selecciones &rarr;"),
             (TUT_MASK,"Conoce las M&aacute;scaras de Capa","Usa m&aacute;scaras de capa para ocultar y mostrar partes de una capa sin borrar nada.",URL_MASK,"Ver: M&aacute;scaras de Capa &rarr;"),
-        ]))
+        ]), True)
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
@@ -379,7 +232,7 @@ def step01():
     global STEPLBL
     STEPLBL="STEP"
     en=banner("Motivational Poster &bull; Step 1","Build the Poster","Set up OneDrive, open Photoshop, then build.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+    en+=deliverables_box(False,
         [("1 poster:","your final poster, saved as a JPG, uploaded to this Canvas assignment.")])
     en+=card("BEFORE YOU START / ONEDRIVE","Check OneDrive and Make Your Folder",
         para("Do this first, every time. It keeps your work saving to the cloud so you never lose it.")
@@ -435,12 +288,12 @@ def step01():
           + stepblock(20,"Choose JPEG, Then Save","At the bottom, open the <strong>Format</strong> menu and choose <strong>JPEG</strong>. Then click <strong>Save</strong>.")
           + framed(SAVE_FORMAT,"The Format menu open with JPEG selected",maxw="440px")
           + stepblock(21,"Pick the Quality","The <strong>JPEG Options</strong> box appears. Set the <strong>Quality</strong> to <strong>Maximum</strong> (12), then click <strong>OK</strong>. That JPG is what you turn in.")
-          + framed(SAVE_JPEG,"The JPEG Options box with Quality set to Maximum",maxw="360px")))
-    en+=note_orange("Your poster must be your own original work. Be honest and turn in your own design.")
+          + framed(SAVE_JPEG,"The JPEG Options box with Quality set to Maximum",maxw="360px"))
+        + note("Your poster must be your own original work. Be honest and turn in your own design."))
 
     STEPLBL="PASO"
     es=banner("P&oacute;ster Motivacional &bull; Paso 1","Construye el P&oacute;ster","Configura OneDrive, abre Photoshop y construye.","#top","Back to English")
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+    es+=deliverables_box(True,
         [("1 p&oacute;ster:","tu p&oacute;ster final, guardado como JPG, subido a esta tarea de Canvas.")])
     es+=card("ANTES DE EMPEZAR / ONEDRIVE","Revisa OneDrive y Crea Tu Carpeta",
         para("Haz esto primero, cada vez. Mantiene tu trabajo guard&aacute;ndose en la nube para que nunca lo pierdas.")
@@ -496,8 +349,8 @@ def step01():
           + stepblock(20,"Elige JPEG y Guarda","Abajo, abre el men&uacute; <strong>Format (Formato)</strong> y elige <strong>JPEG</strong>. Luego haz clic en <strong>Save (Guardar)</strong>.")
           + framed(SAVE_FORMAT,"El men&uacute; Format abierto con JPEG seleccionado",maxw="440px")
           + stepblock(21,"Elige la Calidad","Aparece el cuadro <strong>JPEG Options</strong>. Pon la <strong>Quality (Calidad)</strong> en <strong>Maximum (M&aacute;xima)</strong> (12), luego haz clic en <strong>OK</strong>. Ese JPG es lo que entregas.")
-          + framed(SAVE_JPEG,"El cuadro JPEG Options con la calidad en M&aacute;xima",maxw="360px")))
-    es+=note_orange("Tu p&oacute;ster debe ser tu propio trabajo original. S&eacute; honesto y entrega tu propio dise&ntilde;o.")
+          + framed(SAVE_JPEG,"El cuadro JPEG Options con la calidad en M&aacute;xima",maxw="360px"))
+        + note("Tu p&oacute;ster debe ser tu propio trabajo original. S&eacute; honesto y entrega tu propio dise&ntilde;o."))
 
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
@@ -509,10 +362,10 @@ def step02():
     global STEPLBL
     STEPLBL="STEP"
     en=banner("Motivational Poster &bull; Step 2","Make the Mobile Version","Remake your poster to fit a phone screen.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+    en+=deliverables_box(False,
         [("1 mobile poster:","your phone-size version, saved as a JPG, uploaded to this Canvas assignment.")])
     en+=card("BEFORE YOU START / ONEDRIVE","Same Folder, New Size",
-        float_right(WP_FLOAT,"A student in the design lab holding her phone with the finished wallpaper, the same design open in Photoshop behind her")
+        float_right(WP_FLOAT,"A student in the design lab holding her phone with the finished wallpaper, the same design open in Photoshop behind her","Your design, sized for a phone screen.")
         + para("You already made the print poster. Now make a second version, sized for a phone screen.")
         + stepblock(1,"Check OneDrive Is Syncing","Look at the OneDrive cloud icon in the top-right menu bar, next to the clock. If it shows a red X or a warning, click it and sign in with your school account to clear it.")
         + stepblock(2,"Open Your Project Folder","In Finder, open <strong>OneDrive &gt; Digital Arts &gt; Motivational Poster</strong>, the folder you made in Step 1. Save this phone version in there too."))
@@ -539,15 +392,15 @@ def step02():
         + capframe(WP_GLOW,"Double-click the text layer to add a <strong>Layer Style</strong> like <strong>Outer Glow</strong> so the words stand out.",maxw="420px")
         + stepblock(10,"Arrange It Tall","The phone screen is narrow and very tall. Stack your subject and your words up and down and fill the whole screen. Leave a little space at the very top and bottom for the phone&rsquo;s clock and home bar.")))
     en+=card("TURN IT IN","Save a Copy as JPG",
-        stepblock(11,"Save a Copy as JPG","Save your JPG the same way as Step 1: go to <strong>File &gt; Save a Copy</strong>, click the <strong>arrow</strong> next to <strong>Where</strong> to open the full browser, open your <strong>Motivational Poster</strong> folder, set the <strong>Format</strong> to <strong>JPEG</strong>, and click <strong>Save</strong>. In the <strong>JPEG Options</strong> box, set Quality to <strong>Maximum</strong> and click <strong>OK</strong>. That JPG is what you turn in."))
-    en+=note_orange("This is your own second version. Be honest and turn in your own design.")
+        stepblock(11,"Save a Copy as JPG","Save your JPG the same way as Step 1: go to <strong>File &gt; Save a Copy</strong>, click the <strong>arrow</strong> next to <strong>Where</strong> to open the full browser, open your <strong>Motivational Poster</strong> folder, set the <strong>Format</strong> to <strong>JPEG</strong>, and click <strong>Save</strong>. In the <strong>JPEG Options</strong> box, set Quality to <strong>Maximum</strong> and click <strong>OK</strong>. That JPG is what you turn in.")
+        + note("This is your own second version. Be honest and turn in your own design."))
 
     STEPLBL="PASO"
     es=banner("P&oacute;ster Motivacional &bull; Paso 2","Haz la Versi&oacute;n M&oacute;vil","Rehaz tu p&oacute;ster para que quepa en la pantalla de un tel&eacute;fono.","#top","Back to English")
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+    es+=deliverables_box(True,
         [("1 p&oacute;ster m&oacute;vil:","tu versi&oacute;n tama&ntilde;o tel&eacute;fono, guardada como JPG, subida a esta tarea de Canvas.")])
     es+=card("ANTES DE EMPEZAR / ONEDRIVE","Misma Carpeta, Nuevo Tama&ntilde;o",
-        float_right(WP_FLOAT,"Una estudiante en el laboratorio de dise&ntilde;o sostiene su tel&eacute;fono con el fondo de pantalla terminado, con el mismo dise&ntilde;o abierto en Photoshop detr&aacute;s")
+        float_right(WP_FLOAT,"Una estudiante en el laboratorio de dise&ntilde;o sostiene su tel&eacute;fono con el fondo de pantalla terminado, con el mismo dise&ntilde;o abierto en Photoshop detr&aacute;s","Tu dise&ntilde;o, hecho para la pantalla del tel&eacute;fono.")
         + para("Ya hiciste el p&oacute;ster para imprimir. Ahora haz una segunda versi&oacute;n, del tama&ntilde;o de una pantalla de tel&eacute;fono.")
         + stepblock(1,"Revisa que OneDrive Est&eacute; Sincronizando","Mira el &iacute;cono de nube de OneDrive en la barra de men&uacute;s arriba a la derecha, junto al reloj. Si muestra una X roja o una advertencia, haz clic e inicia sesi&oacute;n con tu cuenta escolar para quitarla.")
         + stepblock(2,"Abre Tu Carpeta del Proyecto","En Finder, abre <strong>OneDrive &gt; Digital Arts &gt; Motivational Poster</strong>, la carpeta que hiciste en el Paso 1. Guarda esta versi&oacute;n de tel&eacute;fono ah&iacute; tambi&eacute;n."))
@@ -574,8 +427,8 @@ def step02():
         + capframe(WP_GLOW,"Haz doble clic en la capa de texto para agregar un <strong>Estilo de Capa</strong> como <strong>Resplandor Exterior</strong> para que las palabras resalten.",maxw="420px")
         + stepblock(10,"Acom&oacute;dalo Alto","La pantalla del tel&eacute;fono es angosta y muy alta. Apila a tu sujeto y tus palabras de arriba a abajo y llena toda la pantalla. Deja un poco de espacio arriba y abajo para el reloj y la barra de inicio del tel&eacute;fono.")))
     es+=card("ENTR&Eacute;GALO","Guarda una Copia como JPG",
-        stepblock(11,"Guarda una Copia como JPG","Guarda tu JPG igual que en el Paso 1: ve a <strong>Archivo &gt; Guardar una Copia</strong>, haz clic en la <strong>flecha</strong> junto a <strong>Where (D&oacute;nde)</strong> para abrir el explorador completo, abre tu carpeta <strong>Motivational Poster</strong>, pon el <strong>Format (Formato)</strong> en <strong>JPEG</strong> y haz clic en <strong>Save (Guardar)</strong>. En el cuadro <strong>JPEG Options</strong>, pon la calidad en <strong>Maximum (M&aacute;xima)</strong> y haz clic en <strong>OK</strong>. Ese JPG es lo que entregas."))
-    es+=note_orange("Esta es tu propia segunda versi&oacute;n. S&eacute; honesto y entrega tu propio dise&ntilde;o.")
+        stepblock(11,"Guarda una Copia como JPG","Guarda tu JPG igual que en el Paso 1: ve a <strong>Archivo &gt; Guardar una Copia</strong>, haz clic en la <strong>flecha</strong> junto a <strong>Where (D&oacute;nde)</strong> para abrir el explorador completo, abre tu carpeta <strong>Motivational Poster</strong>, pon el <strong>Format (Formato)</strong> en <strong>JPEG</strong> y haz clic en <strong>Save (Guardar)</strong>. En el cuadro <strong>JPEG Options</strong>, pon la calidad en <strong>Maximum (M&aacute;xima)</strong> y haz clic en <strong>OK</strong>. Ese JPG es lo que entregas.")
+        + note("Esta es tu propia segunda versi&oacute;n. S&eacute; honesto y entrega tu propio dise&ntilde;o."))
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
@@ -587,33 +440,33 @@ def step03():
     global STEPLBL
     STEPLBL="STEP"
     en=banner("Motivational Poster &bull; Step 3","Turn In Your Reflection","Reflect on your whole design process.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+    en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
-        float_right(REFLECT_FLOAT,"A student filling out the Motivational Poster reflection document on a lab computer")
+        float_right(REFLECT_FLOAT,"A student filling out the Motivational Poster reflection document on a lab computer","Finish the project with your reflection.")
         + para("Finish the project with a reflection. It covers your whole process: who you chose and why, the exact name of the font you used, how you built the print poster AND the mobile wallpaper, the hardest part, and what you are most proud of.")
-        + note_orange("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
+        + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + bullets([
             ("Open it:","open the reflection Word document (.docx) from your project folder."),
             ("Answer every question:","type your answers in the boxes, in full sentences."),
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
-        ]))
-    en+=note_orange("Answer honestly, in your own words.")
+        ])
+        + note("Answer honestly, in your own words."))
 
     STEPLBL="PASO"
     es=banner("P&oacute;ster Motivacional &bull; Paso 3","Entrega Tu Reflexi&oacute;n","Reflexiona sobre todo tu proceso de dise&ntilde;o.","#top","Back to English")
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+    es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completo, subido a esta tarea de Canvas.")])
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
-        float_right(REFLECT_FLOAT,"Una estudiante completando el documento de reflexi&oacute;n del p&oacute;ster motivacional en una computadora del laboratorio")
+        float_right(REFLECT_FLOAT,"Una estudiante completando el documento de reflexi&oacute;n del p&oacute;ster motivacional en una computadora del laboratorio","Termina el proyecto con tu reflexi&oacute;n.")
         + para("Termina el proyecto con una reflexi&oacute;n. Cubre todo tu proceso: a qui&eacute;n elegiste y por qu&eacute;, el nombre exacto de la fuente que usaste, c&oacute;mo hiciste el p&oacute;ster para imprimir Y el fondo de pantalla del tel&eacute;fono, la parte m&aacute;s dif&iacute;cil y de qu&eacute; est&aacute;s m&aacute;s orgulloso.")
-        + note_orange("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
+        + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
         + bullets([
             ("&Aacute;brelo:","abre el documento de Word (.docx) de la reflexi&oacute;n desde tu carpeta del proyecto."),
             ("Contesta cada pregunta:","escribe tus respuestas en los cuadros, en oraciones completas."),
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
-        ]))
-    es+=note_orange("Contesta con honestidad, en tus propias palabras.")
+        ])
+        + note("Contesta con honestidad, en tus propias palabras."))
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot("",'3',"Step 03",True)
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
@@ -622,9 +475,6 @@ def step03():
 
 for fname,gen in [(OVER,overview),(S1,step01),(S2,step02),(S3,step03)]:
     html=ent(gen())
-    assert "—" not in html and "&mdash;" not in html, "em dash in "+fname
-    low=html.lower()
-    for w in ["shoot","shooting","shot","shots","screenshot"]:
-        assert not re.search(r'\b'+w+r'\b', low), f"banned '{w}' in {fname}"
+    ban_check(html, fname)
     open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
     print("wrote", fname, len(html), "bytes")

@@ -3,11 +3,12 @@
 # Students choose a series (natural light portraits, close-ups of flowers, architecture, etc.),
 # capture 12+ images that hang together as a series, cull, edit the first image and SAVE a
 # Lightroom Classic preset, then sync that preset across the whole series and deliver their best 6.
-# Dark teal angular framework. Overview + 4 steps, bilingual EN/ES, 5th-grade.
+# Chip-header framework via silva_framework. Overview + 4 steps, bilingual EN/ES, 5th-grade.
 # Step 02 embeds the scrollable "Presets in Lightroom Classic" slide deck (12 slides + PDF).
 import os, re
-SITE="https://www.creativesilva.com"
-ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
+from silva_framework import *
+
+ROOT=os.path.join(os.path.dirname(__file__),"..")
 IMG=f"{SITE}/assets/images/photo2/build-your-own-preset"
 HEADER=f"{IMG}/overview-hero-v1.jpg"
 CAPTURE_FLOAT=f"{IMG}/capture-float-v1.jpg"
@@ -15,6 +16,7 @@ SLIDE=IMG+"/preset-slide-{:02d}.jpg"
 SLIDE_PDF=f"{SITE}/assets/course-documents/Build-Your-Own-Preset-Guide.pdf"
 REFLECT_EN=f"{SITE}/assets/course-documents/Build-Your-Own-Preset-Reflection-EN.docx"
 REFLECT_ES=f"{SITE}/assets/course-documents/Build-Your-Own-Preset-Reflection-ES.docx"
+AREA="Photography Folder"   # OneDrive top folder for this course's project folders
 
 OVER="photo2-preset-overview.html"
 S1="photo2-preset-step01-photowalk.html"
@@ -22,109 +24,20 @@ S2="photo2-preset-step02-edit-preset.html"
 S3="photo2-preset-step03-deliver.html"
 S4="photo2-preset-step04-reflection.html"
 
-def ent(s):
-    m={"á":"&aacute;","é":"&eacute;","í":"&iacute;","ó":"&oacute;","ú":"&uacute;",
-       "Á":"&Aacute;","É":"&Eacute;","Í":"&Iacute;","Ó":"&Oacute;","Ú":"&Uacute;",
-       "ñ":"&ntilde;","Ñ":"&Ntilde;","ü":"&uuml;","¿":"&iquest;","¡":"&iexcl;",
-       "“":"&ldquo;","”":"&rdquo;","‘":"&lsquo;","’":"&rsquo;","–":"&ndash;","•":"&bull;","×":"&times;"}
-    return "".join(m.get(c, c if ord(c)<128 else "&#x{:X};".format(ord(c))) for c in s)
-
-def banner(label,title,subtitle,es_href,es_label):
-    return ('<div style="background:linear-gradient(135deg,#000000 0%,#003838 40%,#007474 100%);padding:20px 28px 22px;margin:-28px -28px 24px -28px;">'
-      '<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">'
-      f'<div style="justify-self:start;"><img src="{SITE}/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:min(90px,15vw);height:auto;display:block;" /></div>'
-      '<div style="justify-self:center;text-align:center;">'
-      f'<div style="margin-bottom:6px;"><span style="font-size:13pt;color:#80e0e0;"><strong>{label}</strong></span></div>'
-      f'<div style="color:#ffffff;font-size:23pt;line-height:1.1;"><strong>{title}</strong></div>'
-      f'<div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:13pt;font-style:italic;"><strong>{subtitle}</strong></span></div></div>'
-      f'<div style="justify-self:end;"><a href="{es_href}" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #ff6b1a;"><strong>{es_label}</strong></a></div>'
-      '</div></div>')
-
-def card(eyebrow,heading,inner):
-    return ('<div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #00b8b8;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#80e0e0;text-transform:uppercase;margin-bottom:12px;">'
-      f'<strong>{eyebrow}</strong></div>'
-      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
-      '<div style="height:2px;background:#00b8b8;width:60px;margin-bottom:18px;"></div>'
-      f'{inner}</div>')
-
-def para(t):
-    return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
-
-
-AREA="Photography Folder"   # OneDrive top folder for this course's project folders
-
-def folder_note(es):
-    # Every orange downloads block tells students to make a module project folder and move
-    # their files from Downloads into OneDrive > {AREA} > that folder, so work stays together.
-    if es:
-        return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
-          '<strong style="color:#ffb27c;">Mantente organizado:</strong> crea una carpeta nueva y ll&aacute;mala como este m&oacute;dulo. '
-          'Cuando cada archivo termine de descargarse, mu&eacute;velo de tu carpeta de Descargas a '
-          f'OneDrive &rarr; {AREA} &rarr; esa carpeta del proyecto para que todos tus archivos queden juntos.</div>')
-    return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
-      '<strong style="color:#ffb27c;">Stay organized:</strong> make a new folder and name it after this module. '
-      'As each file finishes downloading, move it out of your Downloads folder into '
-      f'OneDrive &rarr; {AREA} &rarr; that project folder so all your files stay together.</div>')
-
 def downloads_block(es):
-    # CANONICAL downloads section (orange framework standard), placed right after the
-    # intro/header card on every module Overview. Holds the reflection now; future
-    # modules add more dl_row(...) lines here.
-    eyebrow="DESCARGAS" if es else "DOWNLOADS"
+    # Orange Downloads section (Overview only). Build Your Own Preset holds the reflection doc.
     heading="Descarga Tus Archivos" if es else "Download Your Files"
     lead=("Descarga aqu&iacute; todo lo que necesitas para este m&oacute;dulo. Consigue tus archivos antes de empezar." if es
           else "Download everything you need for this module here. Get your files before you start.")
     reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
     ref=REFLECT_ES if es else REFLECT_EN
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #FF6B1A;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#ffb27c;text-transform:uppercase;margin-bottom:12px;">'
-      f'<strong>{eyebrow}</strong></div>'
-      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
-      '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
-      f'{para(lead)}{dl_row(ref,reflabel)}' + folder_note(es) + '</div>')
-
-def bullets(items):
-    r=""
-    for b,rest in items:
-        inner=(f'<strong>{b}</strong> {rest}' if b else rest)
-        r+=('<div style="margin-bottom:8px;line-height:1.55;"><span style="color:#00b8b8;">&bull;</span> '
-            f'<span style="font-size:13.5pt;color:rgba(255,255,255,0.88);">{inner}</span></div>')
-    return f'<div style="margin-bottom:6px;">{r}</div>'
-
-def steps(items):
-    # numbered teal circles, like the slide deck's own step list
-    r=""
-    for i,(b,rest) in enumerate(items,1):
-        r+=('<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;">'
-            f'<span style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#FF6B1A;color:#ffffff;font-size:12pt;line-height:26px;text-align:center;"><strong>{i}</strong></span>'
-            f'<span style="font-size:13.5pt;color:rgba(255,255,255,0.88);line-height:1.5;"><strong>{b}</strong> {rest}</span></div>')
-    return f'<div style="margin:4px 0 6px;">{r}</div>'
-
-def note_orange(t):
-    return (f'<div style="background:rgba(255,107,26,0.10);border:1px solid rgba(255,107,26,0.30);border-left:4px solid #FF6B1A;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
-
-def framed(src,alt):
-    return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;">'
-      f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>')
-
-def float_right(src,alt,cap):
-    return ('<div style="float:right;width:40%;min-width:230px;margin:0 0 14px 22px;">'
-      f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
-      f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div></div>')
-
-DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"
-
-def dl_link(url,label,download=True,row=False):
-    if download:
-        mgn='margin:0;' if row else 'margin:0 10px 8px 0;'
-        return (f'<a href="{url}" download style="display:inline-block;text-decoration:none;background:#FF6B1A;color:#ffffff;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;{mgn}"><strong>{label}</strong></a>')
-    return (f'<a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:10px 20px;border-top:2px solid #00b8b8;font-size:11pt;letter-spacing:0.04em;margin:0 10px 10px 0;"><strong>{label}</strong></a>')
-
-def dl_row(url,label):
-    return ('<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;">'
-      f'<img src="{DL_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;display:block;" />'
-      + dl_link(url,label,row=True) + '</div>')
+      + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
+      + para(lead)
+      + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">'
+      + dl_link(ref,reflabel,row=True)
+      + '</div>'
+      + folder_note(es, AREA) + '</div>')
 
 def slide_deck(es):
     # 16:11 scrollable viewer: a 16:9 slide fills the window and the top of the next slide
@@ -134,56 +47,16 @@ def slide_deck(es):
     pdf_lbl=('Download the Slides (PDF)' if not es else 'Descarga las Diapositivas (PDF)')
     alt_lbl=('Presets in Lightroom Classic, slide {} of 12' if not es
              else 'Presets en Lightroom Classic, diapositiva {} de 12')
+    # PURPLE accents throughout: this slide deck sits inside the purple Resources card (cohesion).
     imgs=""
     for i in range(1,13):
-        imgs+=('<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:0 0 12px;">'
+        imgs+=('<div style="background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;margin:0 0 12px;">'
                f'<img src="{SLIDE.format(i)}" alt="{alt_lbl.format(i)}" style="display:block;width:100%;height:auto;" /></div>')
     return ('<div style="margin-bottom:12px;">'
-      f'<a href="{SLIDE_PDF}" download style="display:inline-block;background:#FF6B1A;color:#ffffff;text-decoration:none;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;"><strong>&#128229; {pdf_lbl}</strong></a></div>'
-      f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.9;">&#8595; {hint}</div>'
-      '<div class="silva-scroll" style="aspect-ratio:16/11;max-height:82vh;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid rgba(0,184,184,0.22);background:rgba(0,0,0,0.22);padding:8px;box-sizing:border-box;">'
+      f'<a href="{SLIDE_PDF}" download style="display:inline-block;background:#8b5cf6;color:#ffffff;text-decoration:none;padding:11px 22px;border-top:2px solid #c4b5fd;font-size:11pt;letter-spacing:0.04em;"><strong>&#128229; {pdf_lbl}</strong></a></div>'
+      f'<div style="font-size:11pt;color:#c4b5fd;margin-bottom:8px;opacity:0.9;">&#8595; {hint}</div>'
+      '<div class="silva-scroll" style="aspect-ratio:16/11;max-height:82vh;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid rgba(139,92,246,0.28);background:rgba(0,0,0,0.22);padding:8px;box-sizing:border-box;">'
       + imgs + '</div>')
-
-def vocab_grid(quiz_label, quiz_body, terms):
-    note=('<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.30);border-left:4px solid #00b8b8;padding:12px 16px;margin-bottom:18px;">'
-      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#80e0e0;margin-bottom:5px;"><strong>{quiz_label}</strong></div>'
-      f'<div style="font-size:12pt;color:rgba(255,255,255,0.90);line-height:1.5;">{quiz_body}</div></div>')
-    cell=('<td style="width:33.33%;vertical-align:top;padding:6px;">'
-      '<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;height:100%;box-sizing:border-box;">'
-      '<div style="background:linear-gradient(135deg,#094043 0,#094043 28px,#041d1c 28px,#041d1c 100%);padding:16px;min-height:132px;height:100%;box-sizing:border-box;">'
-      '<div style="font-size:12pt;color:#ffffff;margin-bottom:5px;"><strong>{term}</strong></div>'
-      '<div style="font-size:10.5pt;line-height:1.5;color:rgba(255,255,255,0.80);">{defn}</div></div></div></td>')
-    rows=""
-    for i in range(0,len(terms),3):
-        rows+='<tr>'+''.join(cell.format(term=t,defn=d) for t,d in terms[i:i+3])+'</tr>'
-    return note+f'<table role="presentation" style="width:100%;border-collapse:collapse;table-layout:fixed;"><tbody>{rows}</tbody></table>'
-
-def deliverables_box(title,lead,items):
-    lis=""
-    for b,rest in items:
-        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#f5b301;">&bull;</span> '
-              f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
-    return ('<div style="background:rgba(245,179,1,0.12);border:1px solid rgba(245,179,1,0.35);border-left:5px solid #f5b301;padding:16px 18px;margin:0 0 8px;">'
-      '<div style="display:flex;align-items:flex-start;gap:12px;">'
-      '<div style="flex:1 1 auto;min-width:0;">'
-      f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#ffd166;margin-bottom:8px;"><strong>{title}</strong></div>'
-      f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div></div>'
-      f'<img src="{SITE}/assets/Icons/assignment/deliverables-v4.png" alt="Deliverables" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
-      f'{lis}</div>')
-
-def top_wrap(en,es):
-    return ('<div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;'
-      "background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%),"
-      f"url('{SITE}/assets/PV_Panther_Watermark.png');"
-      'background-position:center center,center center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed;overflow:hidden;">'
-      '<div style="padding:28px 28px 40px;">'+en+'</div>'
-      '<div id="espanol" style="border-top:2px solid rgba(255,255,255,0.10);"><div style="padding:28px 28px 40px;">'+es+'</div></div>'
-      '</div>')
-
-def dot(href,label,title,active,module=False):
-    if active: return f'<span class="sdot sdot-active" title="{title}">{label}</span>'
-    cls="sdot sdot-link sdot-module" if module else "sdot sdot-link"
-    return f'<a href="{href}" class="{cls}" title="{title}">{label}</a>'
 
 def nav(current,dots,stepnav):
     return ('      <div class="silva-breadcrumb">\n'
@@ -197,41 +70,6 @@ def nav(current,dots,stepnav):
             f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
             f'      <div class="silva-step-nav">{stepnav}</div>')
 
-def wrap_page(title,nav_inner,top_html,bottom):
-    return f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{title}</title>
-  <link rel="icon" type="image/svg+xml" href="https://www.creativesilva.com/logos/CS_Logo_Only.svg" />
-  <style>:root {{ --course-accent: #007474; }}</style>
-  <link rel="stylesheet" href="/css/silva-module.css" />
-</head>
-<body>
-  <nav class="silva-nav" aria-label="Module navigation">
-    <div class="silva-nav-inner">
-{nav_inner}
-      <div class="silva-nav-div"></div>
-      <button class="silva-copy-btn" onclick="silvaCopyHTML()" aria-label="Copy Canvas HTML to clipboard">&#128203; Copy Canvas HTML</button>
-      <button class="silva-download-btn" onclick="silvaDownloadHTML()" aria-label="Download Canvas HTML as file">&#128229; Download HTML</button>
-    </div>
-  </nav>
-  <div class="silva-page">
-  <div id="silva-module-content">
-  {top_html}
-  </div>
-  {bottom}
-  </div>
-  <script>
-    function silvaCopyHTML() {{ var el=document.getElementById('top'); navigator.clipboard.writeText(el.outerHTML).then(function(){{var b=document.querySelector('.silva-copy-btn');b.textContent='\\u2713 Copied!';b.classList.add('copied');setTimeout(function(){{b.innerHTML='&#128203; Copy Canvas HTML';b.classList.remove('copied');}},2500);}}).catch(function(){{alert('Copy failed. Select the source manually.');}}); }}
-    function silvaDownloadHTML() {{ var el=document.getElementById('top'); var blob=new Blob([el.outerHTML],{{type:'text/html'}}); var url=URL.createObjectURL(blob); var a=document.createElement('a'); a.href=url; a.download=location.pathname.split('/').pop().replace('.html','')+'-canvas.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }}
-  </script>
-  <script src="/js/silva-nav.js"></script>
-</body>
-</html>
-'''
-
 DOTS_TITLES=[("M","Overview"),("1","Step 01"),("2","Step 02"),("3","Step 03"),("4","Step 04")]
 def dots_for(active_idx):
     hrefs=[OVER,S1,S2,S3,S4]
@@ -243,7 +81,7 @@ def dots_for(active_idx):
 # ---------------- OVERVIEW ----------------
 def overview():
     en=banner("Photography 2A &bull; Module 04","Build Your Own Preset","Capture a series, edit one photo, and save your look as a preset.","#espanol","Clic para Espa&ntilde;ol")
-    en+=card("THE PROJECT / OVERVIEW","Make a Look, Then Save It",
+    en+=type_card("overview","The Module Overview","Make a Look, Then Save It",
         para("In this project you pick a subject you love and capture a whole series of it: natural light portraits, close-ups of flowers, buildings on campus, or your own idea. You capture at least 12 images that go together, edit the first one until it looks the way you want, and then save those edits as a preset. A preset is your look, saved once, ready to drop on every photo in the series.")
         + para("Then you sync your preset across the series so all your photos share the same feel, select your best 6, and turn them in.")
         + framed(HEADER,"A Lightroom Classic edit of a natural light portrait, with the Develop panel sliders open on the right"))
@@ -264,7 +102,7 @@ def overview():
             ("Deliver Your Series:","sync your preset across the series, fine-tune, and turn in a 6-image contact sheet plus all 6 high-resolution images."),
             ("Reflection:","tell the story of your series and your preset."),
         ]))
-    en+=card("VOCABULARY / 6 TERMS","Key Words",
+    en+=resources_card("Key Words",
         vocab_grid("On the Quiz",
           "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
           [("Preset","Saved Develop settings you can add to any photo in one click."),
@@ -272,10 +110,10 @@ def overview():
            ("White Balance","The setting that makes the colors look warm, cool, or true to life."),
            ("Exposure","How bright or dark the whole photo is."),
            ("Contrast","The difference between the darkest darks and the brightest lights."),
-           ("HSL","Hue, Saturation, Luminance: the panel that lets you change each color on its own.")]))
+           ("HSL","Hue, Saturation, Luminance: the panel that lets you change each color on its own.")]), False)
 
     es=banner("Fotograf&iacute;a 2A &bull; M&oacute;dulo 04","Crea Tu Propio Preset","Captura una serie, edita una foto y guarda tu estilo como preset.","#top","Back to English")
-    es+=card("EL PROYECTO / RESUMEN","Crea un Estilo y Gu&aacute;rdalo",
+    es+=type_card("overview","El Resumen del M&oacute;dulo","Crea un Estilo y Gu&aacute;rdalo",
         para("En este proyecto eliges un tema que te encante y capturas toda una serie: retratos con luz natural, primeros planos de flores, edificios de la escuela o tu propia idea. Capturas al menos 12 im&aacute;genes que van juntas, editas la primera hasta que se vea como quieres, y luego guardas esos ajustes como un preset. Un preset es tu estilo, guardado una vez, listo para poner en cada foto de la serie.")
         + para("Despu&eacute;s sincronizas tu preset en toda la serie para que todas tus fotos tengan la misma sensaci&oacute;n, eliges tus mejores 6 y las entregas.")
         + framed(HEADER,"Una edici&oacute;n en Lightroom Classic de un retrato con luz natural, con los controles del panel Revelar abiertos a la derecha"))
@@ -296,7 +134,7 @@ def overview():
             ("Entrega Tu Serie:","sincroniza tu preset en la serie, haz ajustes finos y entrega una hoja de contactos de 6 im&aacute;genes m&aacute;s las 6 im&aacute;genes en alta resoluci&oacute;n."),
             ("Reflexi&oacute;n:","cuenta la historia de tu serie y tu preset."),
         ]))
-    es+=card("VOCABULARIO / 6 T&Eacute;RMINOS","Palabras Clave",
+    es+=resources_card("Palabras Clave",
         vocab_grid("En el Examen",
           "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
           [("Preset","Ajustes de Revelar guardados que puedes poner en cualquier foto con un clic."),
@@ -304,7 +142,7 @@ def overview():
            ("White Balance (Balance de Blancos)","El ajuste que hace que los colores se vean c&aacute;lidos, fr&iacute;os o reales."),
            ("Exposure (Exposici&oacute;n)","Qu&eacute; tan clara u oscura est&aacute; toda la foto."),
            ("Contrast (Contraste)","La diferencia entre las sombras m&aacute;s oscuras y las luces m&aacute;s brillantes."),
-           ("HSL","Tono, Saturaci&oacute;n, Luminancia: el panel que te deja cambiar cada color por separado.")]))
+           ("HSL","Tono, Saturaci&oacute;n, Luminancia: el panel que te deja cambiar cada color por separado.")]), True)
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
@@ -313,7 +151,7 @@ def overview():
 # ---------------- STEP 01 ----------------
 def step01():
     en=banner("Build Your Own Preset &bull; Step 1","Photo Walk: Capture &amp; Cull","Pick a series, capture 12 or more, then turn in a contact sheet.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+    en+=deliverables_box(False,
         [("1 contact sheet:","your 12-image contact sheet (high-resolution JPG), showing your culled series, uploaded to this Canvas assignment.")])
     en+=card("CHOOSE / YOUR SERIES","Pick One Subject and One Light",
         para("A series is a group of photos that belong together. To make that happen, pick one subject and one kind of light, then stick with it. When your photos already match, your preset will make them match even more.")
@@ -345,7 +183,7 @@ def step01():
         ]))
 
     es=banner("Crea Tu Propio Preset &bull; Paso 1","Caminata: Captura y Selecci&oacute;n","Elige una serie, captura 12 o m&aacute;s y entrega una hoja de contactos.","#top","Back to English")
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+    es+=deliverables_box(True,
         [("1 hoja de contactos:","tu hoja de contactos de 12 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tu serie seleccionada, subida a esta tarea de Canvas.")])
     es+=card("ELIGE / TU SERIE","Elige un Tema y una Luz",
         para("Una serie es un grupo de fotos que van juntas. Para lograrlo, elige un tema y un tipo de luz, y qu&eacute;date con eso. Cuando tus fotos ya combinan, tu preset las har&aacute; combinar a&uacute;n m&aacute;s.")
@@ -383,11 +221,11 @@ def step01():
 # ---------------- STEP 02 ----------------
 def step02():
     en=banner("Build Your Own Preset &bull; Step 2","Edit &amp; Create Your Preset","Edit your first image, then save your look as a preset.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+    en+=deliverables_box(False,
         [("1 preset file:","your exported Lightroom preset (the .xmp file), uploaded to this Canvas assignment.")])
-    en+=card("WATCH / THE SLIDE DECK","Presets in Lightroom Classic",
+    en+=resources_card("Presets in Lightroom Classic",
         para("Start here. This slide deck walks you through what a preset is, how to edit your look, and how to save it. Scroll through all 12 slides, and download the PDF if you want to keep it open while you work.")
-        + slide_deck(False))
+        + slide_deck(False), False)
     en+=card("EDIT / YOUR FIRST IMAGE","Build Your Look on One Photo",
         para("Select the strongest image from your series. Open it in the Develop module and edit it until it looks exactly how you want. This one photo becomes the recipe for the whole series.")
         + bullets([
@@ -396,7 +234,7 @@ def step02():
             ("Exposure and Contrast:","get the brightness right, then add or lower contrast for punch."),
             ("Color with HSL:","use the HSL panel to make each color pop or calm down."),
         ])
-        + note_orange("Make real changes. Your preset is only as good as the look you build here."))
+        + note("Make real changes. Your preset is only as good as the look you build here."))
     en+=card("CREATE / SAVE YOUR PRESET","Save Your Look as a Preset",
         para("Now save those settings as your own preset so you can add them to any photo with one click.")
         + steps([
@@ -408,11 +246,11 @@ def step02():
         ]))
 
     es=banner("Crea Tu Propio Preset &bull; Paso 2","Edita y Crea Tu Preset","Edita tu primera imagen y guarda tu estilo como preset.","#top","Back to English")
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+    es+=deliverables_box(True,
         [("1 archivo de preset:","tu preset de Lightroom exportado (el archivo .xmp), subido a esta tarea de Canvas.")])
-    es+=card("MIRA / LAS DIAPOSITIVAS","Presets en Lightroom Classic",
+    es+=resources_card("Presets en Lightroom Classic",
         para("Empieza aqu&iacute;. Estas diapositivas te explican qu&eacute; es un preset, c&oacute;mo editar tu estilo y c&oacute;mo guardarlo. Despl&aacute;zate por las 12 diapositivas y descarga el PDF si quieres tenerlo abierto mientras trabajas.")
-        + slide_deck(True))
+        + slide_deck(True), True)
     es+=card("EDITA / TU PRIMERA IMAGEN","Crea Tu Estilo en Una Foto",
         para("Elige la imagen m&aacute;s fuerte de tu serie. &Aacute;brela en el m&oacute;dulo Revelar y ed&iacute;tala hasta que se vea justo como quieres. Esta foto se convierte en la receta para toda la serie.")
         + bullets([
@@ -421,7 +259,7 @@ def step02():
             ("Exposici&oacute;n y Contraste:","logra el brillo correcto y luego sube o baja el contraste para dar fuerza."),
             ("Color con HSL:","usa el panel HSL para hacer que cada color resalte o se calme."),
         ])
-        + note_orange("Haz cambios de verdad. Tu preset ser&aacute; tan bueno como el estilo que crees aqu&iacute;."))
+        + note("Haz cambios de verdad. Tu preset ser&aacute; tan bueno como el estilo que crees aqu&iacute;."))
     es+=card("CREA / GUARDA TU PRESET","Guarda Tu Estilo como Preset",
         para("Ahora guarda esos ajustes como tu propio preset para poder ponerlos en cualquier foto con un clic.")
         + steps([
@@ -439,7 +277,7 @@ def step02():
 # ---------------- STEP 03 ----------------
 def step03():
     en=banner("Build Your Own Preset &bull; Step 3","Deliver Your Series","Sync your preset, fine-tune, and turn in your best six.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own): 7 files",
+    en+=deliverables_box(False,
         [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG)."),
          ("6 high-resolution images:","your 6 best photos, exported as high-resolution JPGs, uploaded to this Canvas assignment.")])
     en+=card("APPLY / SYNC YOUR PRESET","Put Your Look on the Whole Series",
@@ -466,7 +304,7 @@ def step03():
         ]))
 
     es=banner("Crea Tu Propio Preset &bull; Paso 3","Entrega Tu Serie","Sincroniza tu preset, haz ajustes y entrega tus mejores seis.","#top","Back to English")
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta): 7 archivos",
+    es+=deliverables_box(True,
         [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG de alta resoluci&oacute;n)."),
          ("6 im&aacute;genes en alta resoluci&oacute;n:","tus 6 mejores fotos, exportadas como JPG de alta resoluci&oacute;n, subidas a esta tarea de Canvas.")])
     es+=card("APLICA / SINCRONIZA TU PRESET","Pon Tu Estilo en Toda la Serie",
@@ -499,30 +337,30 @@ def step03():
 # ---------------- STEP 04 ----------------
 def step04():
     en=banner("Build Your Own Preset &bull; Step 4","Reflection","Tell the story of your series and your preset.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+    en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=card("STEP 04 / REFLECT","Complete and Upload the Reflection",
         para("Finish with a short reflection. It asks about the series you chose, the look you built, how your preset worked across your photos, and what you would do differently next time.")
-        + note_orange("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
+        + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + bullets([
             ("Open it:","open the reflection Word document (.docx) from your project folder."),
             ("Answer every question:","type your answers in the boxes, in full sentences."),
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
-        ]))
-    en+=note_orange("Answer honestly, in your own words.")
+        ])
+        + note("Answer honestly, in your own words."))
 
     es=banner("Crea Tu Propio Preset &bull; Paso 4","Reflexi&oacute;n","Cuenta la historia de tu serie y tu preset.","#top","Back to English")
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+    es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
     es+=card("PASO 04 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         para("Termina con una reflexi&oacute;n corta. Te pregunta sobre la serie que elegiste, el estilo que creaste, c&oacute;mo funcion&oacute; tu preset en tus fotos y qu&eacute; har&iacute;as diferente la pr&oacute;xima vez.")
-        + note_orange("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
+        + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
         + bullets([
             ("&Aacute;brelo:","abre el documento de Word (.docx) de la reflexi&oacute;n desde tu carpeta del proyecto."),
             ("Contesta cada pregunta:","escribe tus respuestas en los cuadros, en oraciones completas."),
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
-        ]))
-    es+=note_orange("Contesta con honestidad, en tus propias palabras.")
+        ])
+        + note("Contesta con honestidad, en tus propias palabras."))
 
     stepnav=f'<a href="{S3}" class="silva-step-btn">&#8592; Step 03</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S3}" class="silva-bottom-btn">&#8592; Step 03</a><span></span></div>'
@@ -530,9 +368,6 @@ def step04():
 
 for fname,gen in [(OVER,overview),(S1,step01),(S2,step02),(S3,step03),(S4,step04)]:
     html=ent(gen())
-    assert "—" not in html and "&mdash;" not in html, "em dash in "+fname
-    low=html.lower()
-    for w in ["shoot","shooting","shot","shots","shoots","screenshot"]:
-        assert not re.search(r'\b'+w+r'\b', low), f"banned '{w}' in {fname}"
+    ban_check(html, fname)
     open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
     print("wrote", fname, len(html), "bytes")
