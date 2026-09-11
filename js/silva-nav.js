@@ -185,7 +185,10 @@
      '/curriculum/shared/digarts1-motivational-poster-step02.html',
      '/curriculum/shared/digarts1-motivational-poster-step03.html'],
     ['/curriculum/shared/digarts1-live-stream-graphic-overview.html',
-     '/curriculum/shared/digarts1-live-stream-graphic-step01.html'],
+     '/curriculum/shared/digarts1-live-stream-graphic-step01.html',
+     '/curriculum/shared/digarts1-live-stream-graphic-step02-inspiration.html',
+     '/curriculum/shared/digarts1-live-stream-graphic-step03-design.html',
+     '/curriculum/shared/digarts1-live-stream-graphic-step04-reflection.html'],
     ['/curriculum/photo1/photo1a-home.html',
      '/curriculum/photo1/photo1a-course-overview.html',
      '/curriculum/photo1/photo1a-syllabus.html',
@@ -346,6 +349,7 @@
     pager.appendChild(next);
 
     pager.appendChild(makeCopyBtn());
+    pager.appendChild(makeUrlBtn());
     return pager;
   }
 
@@ -363,6 +367,22 @@
         b.classList.add('copied');
         setTimeout(function () { b.textContent = 'COPY HTML'; b.classList.remove('copied'); }, 2500);
       }).catch(function () { alert('Copy failed. Try selecting the page source manually.'); });
+    });
+    return b;
+  }
+
+  // COPY URL: same pager pill and same .pg-copy shape/style as COPY HTML, right of it.
+  function makeUrlBtn() {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pg-copy';
+    b.textContent = 'COPY URL';
+    b.addEventListener('click', function () {
+      navigator.clipboard.writeText(location.href).then(function () {
+        b.textContent = '✓ Copied!';
+        b.classList.add('copied');
+        setTimeout(function () { b.textContent = 'COPY URL'; b.classList.remove('copied'); }, 2500);
+      }).catch(function () { alert('Copy failed. Copy the address bar manually.'); });
     });
     return b;
   }
@@ -503,8 +523,8 @@
     if (top) {
       var dl = navInner.querySelector('.silva-download-btn');
       if (dl) { dl.parentNode.removeChild(dl); }
-      var cb = navInner.querySelector('.silva-copy-btn');
-      if (cb) { cb.parentNode.removeChild(cb); }
+      var cbs = navInner.querySelectorAll('.silva-copy-btn');
+      for (var ci = 0; ci < cbs.length; ci++) { cbs[ci].parentNode.removeChild(cbs[ci]); }
       var sn = navInner.querySelector('.silva-step-nav');
       if (sn) { sn.style.display = 'none'; }
       var nd = navInner.querySelector('.silva-nav-div');
