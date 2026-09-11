@@ -53,28 +53,34 @@ TYPE_ICON={"overview":f"{SITE}/assets/Icons/assignment/overview-teal-v1.png",
   "reflection":f"{SITE}/assets/Icons/assignment/reflection-teal-v1.png"}
 TEAL_BOX='<div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
 
-def card(eyebrow,heading,inner,floatimg=""):
-    # content card: teal chip [content icon + heading] + rule + content (eyebrow now folded away).
-    # Any float-right image/thumbnail is emitted BEFORE the chip so its TOP aligns with the top of
-    # the title chip rectangle (LOCKED 2026-09-11). floatimg is an explicit float; a FLOAT-marked
-    # image anywhere in inner is hoisted out to the same spot.
+def _lay(box_open, chip, inner, floatimg):
+    # Card body layout. With a float image/thumbnail: a wrapping flex row of [text column: chip +
+    # body] and [thumbnail column]. align-items:flex-start top-aligns the thumbnail with the title
+    # chip; flex-wrap drops the thumbnail BELOW the text when the page gets too narrow (never above).
+    # Canvas preserves display:flex, so this survives paste. Without a float: chip then body.
     hf, inner = _hoist(inner)
-    return TEAL_BOX + floatimg + hf + section_header(CONTENT_ICON, heading, "#00b8b8", "#80e0e0") + f'{inner}</div>'
+    thumb = floatimg + hf
+    if thumb:
+        return (box_open
+          + '<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 26px;">'
+          + f'<div style="flex:1 1 320px;min-width:0;">{chip}{inner}</div>'
+          + f'<div style="flex:0 1 360px;">{thumb}</div>'
+          + '</div></div>')
+    return box_open + chip + inner + '</div>'
+
+def card(eyebrow,heading,inner,floatimg=""):
+    return _lay(TEAL_BOX, section_header(CONTENT_ICON, heading, "#00b8b8", "#80e0e0"), inner, floatimg)
 
 def type_card(kind,label,heading,inner,floatimg=""):
-    # FIRST card of a page: teal chip [type icon + type label] then the card's own heading + content
-    hf, inner = _hoist(inner)
     hd=(f'<div style="margin-bottom:14px;"><span style="font-size:18pt;color:#ffffff;"><strong>{heading}</strong></span></div>' if heading else '')
-    return TEAL_BOX + floatimg + hf + section_header(TYPE_ICON[kind], label, "#00b8b8", "#80e0e0") + hd + f'{inner}</div>'
+    return _lay(TEAL_BOX, section_header(TYPE_ICON[kind], label, "#00b8b8", "#80e0e0") + hd, inner, floatimg)
 
 RESICON=f"{SITE}/assets/Icons/assignment/resources-v1.png"
+PURPLE_BOX='<div style="background:linear-gradient(180deg,rgba(139,92,246,0.10) 0%,rgba(139,92,246,0.03) 100%);border:1px solid rgba(139,92,246,0.28);border-left:6px solid #8b5cf6;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
 def resources_card(heading,inner,es=False,floatimg=""):
     # PURPLE Resources section: chip [gear icon + "Module Resource: <heading>"] + content.
-    # floatimg (a float-right thumbnail) is emitted BEFORE the chip so it top-aligns with the title.
-    hf, inner = _hoist(inner)
     label=("Recurso del M&oacute;dulo: " if es else "Module Resource: ")+heading
-    return ('<div style="background:linear-gradient(180deg,rgba(139,92,246,0.10) 0%,rgba(139,92,246,0.03) 100%);border:1px solid rgba(139,92,246,0.28);border-left:6px solid #8b5cf6;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      + floatimg + hf + section_header(RESICON, label, "#8b5cf6", "#c4b5fd") + f'{inner}</div>')
+    return _lay(PURPLE_BOX, section_header(RESICON, label, "#8b5cf6", "#c4b5fd"), inner, floatimg)
 
 def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
@@ -174,31 +180,28 @@ def framed(src,alt):
     return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;">'
       f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>')
 
-# Every float-right image/thumbnail uses this width, and is emitted BEFORE its section chip
-# (via the card `floatimg` arg) so its TOP aligns with the top of the title chip rectangle.
-FLOAT_W='float:right;width:42%;min-width:280px;margin:0 0 14px 22px;'
+# Float-right images/thumbnails are plain blocks; the card's flex layout (_lay) sizes them into
+# the thumbnail column and handles top-alignment + dropping below the title when the page is narrow.
 def float_right(src,alt,cap):
-    # Wrapped in FLOAT markers so the card helpers can hoist it ABOVE the chip (top-aligned),
+    # Teal-framed content photo. FLOAT-marked so a card hoists it into the thumbnail column
     # no matter where it sits in the card's inner content.
     return ('<!--FLOAT-->'
-      f'<div style="{FLOAT_W}">'
       f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
-      f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div></div>'
+      f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div>'
       '<!--/FLOAT-->')
 
 FLOAT_RE=re.compile(r'<!--FLOAT-->(.*?)<!--/FLOAT-->', re.S)
 def _hoist(inner):
-    # pull any FLOAT-marked block out of inner so it can be emitted before the section chip
+    # pull any FLOAT-marked block out of inner so the card can place it in the thumbnail column
     floats="".join(FLOAT_RE.findall(inner))
     return floats, FLOAT_RE.sub("", inner)
 
 def purple_thumb(href,src,alt,cap):
-    # Float-right clickable thumbnail for a PURPLE Resources card (slide deck, install video).
-    # Same width as float_right so all thumbnails match; opens the target in a new tab.
-    return (f'<div style="{FLOAT_W}">'
-      f'<a href="{href}" target="_blank" rel="noopener" style="display:block;background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;">'
+    # Purple-framed clickable thumbnail for a Resources card (slide deck, install video); opens in a
+    # new tab. Passed via the card's floatimg arg, so it lands in the same thumbnail column.
+    return (f'<a href="{href}" target="_blank" rel="noopener" style="display:block;background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;">'
       f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></a>'
-      f'<div style="font-size:10.5pt;color:#c4b5fd;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div></div>')
+      f'<div style="font-size:10.5pt;color:#c4b5fd;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div>')
 
 DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"
 
@@ -237,7 +240,7 @@ def vocab_grid(quiz_label, quiz_body, terms):
         rows+='<tr>'+''.join(cell.format(term=t,defn=d) for t,d in terms[i:i+3])+'</tr>'
     return note+f'<table role="presentation" style="width:100%;border-collapse:collapse;table-layout:fixed;"><tbody>{rows}</tbody></table>'
 
-DELIVER_ICON=f"{SITE}/assets/Icons/assignment/deliverables-v3.png"
+DELIVER_ICON=f"{SITE}/assets/Icons/assignment/deliverables-v4.png"
 def deliverables_box(es,items):
     # GOLD deliverables section, chip header (icon on the LEFT + gold title, accent rule
     # below), matching every other section. Sits at the TOP of the step. Opens with a
