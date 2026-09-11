@@ -55,7 +55,7 @@
     ['/curriculum/shared/awards-pizza-party.html'],
     ['/curriculum/shared/tech-overview.html'],
 
-    // MRC — Summer Digital Arts 1A (Mark Richardson Center)
+    // MRC: Summer Digital Arts 1A (Mark Richardson Center)
     ['/curriculum/mrc/digital-arts-1a-home.html'],
     ['/curriculum/mrc/about-mr-silva.html'],
     ['/curriculum/mrc/course-objectives.html'],
@@ -509,7 +509,7 @@
     var nav = document.querySelector('.silva-nav');
     var navInner = document.querySelector('.silva-nav-inner');
 
-    // Bottom pager (centered) — includes its own COPY HTML at the right.
+    // Bottom pager (centered): carries its own COPY URL + COPY HTML at the right.
     var host = document.querySelector('.silva-page');
     var bottom = buildPager();
     if (host && bottom) { bottom.classList.add('pg-bottom'); host.appendChild(bottom); }
