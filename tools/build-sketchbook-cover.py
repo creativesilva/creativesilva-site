@@ -39,11 +39,11 @@ def cooper_float(caption):
       '<!--/FLOAT-->')
 
 def adobe_link(label):
-    # Adobe Fonts icon + link button (the only approved font site for this competition).
+    # Adobe Fonts icon + link button. PURPLE top accent: it lives inside a purple Resources card.
     return ('<div style="margin:8px 0 4px;">'
       '<span style="display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap;">'
       f'<img src="{ADOBE_ICON}" alt="Adobe Fonts icon" style="width:40px;height:40px;display:block;flex:0 0 auto;" />'
-      f'<a href="{ADOBE_URL}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:10px 20px;border-top:2px solid #00b8b8;font-size:11pt;letter-spacing:0.04em;"><strong>{label}</strong></a>'
+      f'<a href="{ADOBE_URL}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#2a1a4a;padding:10px 20px;border-top:2px solid #8b5cf6;font-size:11pt;letter-spacing:0.04em;"><strong>{label}</strong></a>'
       '</span></div>')
 
 def downloads_block(es):
@@ -121,9 +121,9 @@ def overview():
         vocab_grid("On the Quiz",
           "Heads up: these key words will be on the quiz.",
           VOCAB_EN), False)
-    en+=card("RESEARCH / FONTS","Choose Your Fonts",
+    en+=resources_card("Adobe Fonts",
         para("Pick your 2 typefaces on Adobe Fonts. Only this website is approved for the competition. On Adobe Fonts you can type your own word into the Sample Text box to see how it looks in any font.")
-        + adobe_link("Adobe Fonts (fonts.adobe.com)"))
+        + adobe_link("Adobe Fonts (fonts.adobe.com)"), False)
 
     es=banner("Arte Digital 1A &bull; Arte de la Portada","Arte de la Portada","Dise&ntilde;a una portada digna de presumir.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Haz Tuyo Tu Cuaderno",
@@ -154,9 +154,9 @@ def overview():
         vocab_grid("En el Examen",
           "Atenci&oacute;n: estas palabras clave estar&aacute;n en el examen.",
           VOCAB_ES), True)
-    es+=card("INVESTIGACI&Oacute;N / FUENTES","Elige Tus Fuentes",
+    es+=resources_card("Adobe Fonts",
         para("Elige tus 2 tipos de letra en Adobe Fonts. Solo este sitio web est&aacute; aprobado para la competencia. En Adobe Fonts puedes escribir tu propia palabra en la casilla de Texto de Muestra para ver c&oacute;mo se ve en cualquier fuente.")
-        + adobe_link("Adobe Fonts (fonts.adobe.com)"))
+        + adobe_link("Adobe Fonts (fonts.adobe.com)"), True)
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
@@ -181,9 +181,10 @@ def step01():
         + bullets([
             ("1 word in Cooper Black:","use the alphabet on the right as your guide."),
             ("2 words in Adobe Fonts:","pick 2 clear typefaces from Adobe Fonts, one for each word."),
-        ])
-        + para("On Adobe Fonts, type your own word into the Sample Text box to see how it looks in any font before you draw it. Only this website is approved for the competition.")
-        + adobe_link("Adobe Fonts (fonts.adobe.com)"))
+        ]))
+    en+=resources_card("Adobe Fonts",
+        para("On Adobe Fonts, type your own word into the Sample Text box to see how it looks in any font before you draw it. Only this website is approved for the competition.")
+        + adobe_link("Adobe Fonts (fonts.adobe.com)"), False)
     en+=card("REMEMBER","Before You Finish",
         note("Check your cover: both sides decorated, name and period in the top right corner, at least 3 words, and each word clear and easy to read."))
     en+=card("CAPTURE &amp; UPLOAD","Photograph and Upload Your 2 Images",
@@ -210,9 +211,10 @@ def step01():
         + bullets([
             ("1 palabra en Cooper Black:","usa el alfabeto de la derecha como gu&iacute;a."),
             ("2 palabras en Adobe Fonts:","elige 2 tipos de letra claros de Adobe Fonts, uno para cada palabra."),
-        ])
-        + para("En Adobe Fonts, escribe tu propia palabra en la casilla de Texto de Muestra para ver c&oacute;mo se ve en cualquier fuente antes de dibujarla. Solo este sitio web est&aacute; aprobado para la competencia.")
-        + adobe_link("Adobe Fonts (fonts.adobe.com)"))
+        ]))
+    es+=resources_card("Adobe Fonts",
+        para("En Adobe Fonts, escribe tu propia palabra en la casilla de Texto de Muestra para ver c&oacute;mo se ve en cualquier fuente antes de dibujarla. Solo este sitio web est&aacute; aprobado para la competencia.")
+        + adobe_link("Adobe Fonts (fonts.adobe.com)"), True)
     es+=card("RECUERDA","Antes de Terminar",
         note("Revisa tu portada: las dos caras decoradas, nombre y periodo en la esquina superior derecha, al menos 3 palabras, y cada palabra clara y f&aacute;cil de leer."))
     es+=card("CAPTURA Y SUBE","Fotograf&iacute;a y Sube Tus 2 Im&aacute;genes",
