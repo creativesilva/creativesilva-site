@@ -133,7 +133,7 @@ def downloads_block(es):
           else "Download everything you need for this module here. Get your files before you start.")
     reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
     cslabel=("Plantillas de Hoja de Contactos (12 y 6, ZIP)" if es else "Contact Sheet Templates (12-Up &amp; 6-Up, ZIP)")
-    slabel=("Diapositivas de Importaci&oacute;n a Lightroom (PDF)" if es else "Lightroom Import Slides (PDF)")
+    slabel=("Presentaci&oacute;n de Importaci&oacute;n a Lightroom" if es else "Lightroom Import Slide Deck")
     ref=REFLECT_ES if es else REFLECT_EN
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
@@ -401,7 +401,7 @@ def step01():
             ("Let it sync:","wait for OneDrive to finish syncing. The cloud icon turns to a check when it is done."),
         ]))
     en+=resources_card("RESOURCE / LIGHTROOM IMPORT","Import Into Lightroom Classic",
-        para("Now import your series into Lightroom Classic. The slide deck below walks you through every click. Scroll through all 12 slides. Want it open while you work? The PDF is in the Downloads section on this module&rsquo;s Overview page.")
+        para("Now import your series into Lightroom Classic. The slide deck below walks you through every click. Scroll through all 12 slides. Want it open while you work? The slide deck is in the Downloads section on this module&rsquo;s Overview page.")
         + slide_deck(False))
     en+=card("CONTACT SHEET / SHOW YOUR SERIES","Make Your 12-Image Contact Sheet",
         para("A contact sheet is one page that shows all your photos as small thumbnails. Make yours with the 12-Up contact sheet layout in the Lightroom Classic Print module, then save it as a high-resolution JPG. The template is on this module&rsquo;s Overview page (marked M at the top).")
@@ -442,7 +442,7 @@ def step01():
             ("Deja que sincronice:","espera a que OneDrive termine de sincronizar. El &iacute;cono de nube cambia a una palomita cuando termina."),
         ]))
     es+=resources_card("RECURSO / IMPORTAR A LIGHTROOM","Importa a Lightroom Classic",
-        para("Ahora importa tu serie a Lightroom Classic. Las diapositivas de abajo te gu&iacute;an en cada clic. Despl&aacute;zate por las 12 diapositivas. &iquest;Quieres tenerlo abierto mientras trabajas? El PDF est&aacute; en la secci&oacute;n de Descargas en la p&aacute;gina de Resumen de este m&oacute;dulo.")
+        para("Ahora importa tu serie a Lightroom Classic. Las diapositivas de abajo te gu&iacute;an en cada clic. Despl&aacute;zate por las 12 diapositivas. &iquest;Quieres tenerla abierta mientras trabajas? La presentaci&oacute;n est&aacute; en la secci&oacute;n de Descargas en la p&aacute;gina de Resumen de este m&oacute;dulo.")
         + slide_deck(True))
     es+=card("HOJA DE CONTACTOS / MUESTRA TU SERIE","Crea Tu Hoja de Contactos de 12 Im&aacute;genes",
         para("Una hoja de contactos es una p&aacute;gina que muestra todas tus fotos como miniaturas. Crea la tuya con el dise&ntilde;o de hoja de contactos de 12 en el m&oacute;dulo Imprimir de Lightroom Classic, y gu&aacute;rdala como JPG de alta resoluci&oacute;n. La plantilla est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
