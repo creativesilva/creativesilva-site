@@ -144,10 +144,15 @@ def downloads_block(es):
     reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
     cslabel=("Plantillas de Hoja de Contactos (12 y 6, ZIP)" if es else "Contact Sheet Templates (12-Up &amp; 6-Up, ZIP)")
     ref=REFLECT_ES if es else REFLECT_EN
+    # Download buttons share ONE row (flex-wrap), wrapping to the next line only when the page is
+    # too narrow, never permanently stacked (LOCKED 2026-09-11): saves vertical space.
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
-      + f'{para(lead)}<div style="margin-top:8px;">{dl_link(ref,reflabel,row=True)}</div>'
-      + f'<div style="margin-top:10px;">{dl_link(CONTACT_ZIP,cslabel,row=True)}</div>'
+      + para(lead)
+      + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">'
+      + dl_link(ref,reflabel,row=True)
+      + dl_link(CONTACT_ZIP,cslabel,row=True)
+      + '</div>'
       + folder_note(es) + '</div>')
 
 def bullets(items):
