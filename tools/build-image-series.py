@@ -19,7 +19,7 @@ SLIDE_PDF=f"{SITE}/assets/course-documents/Lightroom-Import-Guide.pdf"
 CONTACT_ZIP=f"{SITE}/assets/PVHS_Contact_Sheet_Presets.zip"
 INSTALL_VIDEO="https://vimeo.com/1164128764/e1842e523e?share=copy&amp;fl=sv&amp;fe=ci"
 INSTALL_THUMB=f"{SITE}/assets/images/photo1/image-series/install-video-thumb-v2.jpg"
-AREA="Photo"   # OneDrive top folder for this course's project folders (Photo vs Digital Arts)
+AREA="Photography Folder"   # OneDrive top folder wording (Photography Folder vs Digital Arts Folder)
 REFLECT_EN=f"{SITE}/assets/course-documents/Image-Series-Reflection-EN.docx"
 REFLECT_ES=f"{SITE}/assets/course-documents/Image-Series-Reflection-ES.docx"
 
@@ -233,18 +233,25 @@ def slide_deck(es):
 
 def vocab_grid(quiz_label, quiz_body, terms):
     # Key Words is a PURPLE Resource (Chris: vocab is technically a resource). All accents purple.
-    note=('<div style="background:rgba(139,92,246,0.10);border:1px solid rgba(139,92,246,0.30);border-left:4px solid #8b5cf6;padding:12px 16px;margin-bottom:18px;">'
+    # Collapsible accordion: each term is a <details> the student taps to reveal the definition
+    # (matches the Composition Concepts style). Native <details>, no JS: works on the linked page
+    # view (View Page). NOTE: Canvas's paste sanitizer strips <details>, so this interactivity
+    # only survives when the page is LINKED, not when pasted into Canvas.
+    es = "Examen" in quiz_label
+    hint = "Toca una palabra para abrir su significado." if es else "Tap a word to open its meaning."
+    note=('<div style="background:rgba(139,92,246,0.10);border:1px solid rgba(139,92,246,0.30);border-left:4px solid #8b5cf6;padding:12px 16px;margin-bottom:14px;">'
       f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#c4b5fd;margin-bottom:5px;"><strong>{quiz_label}</strong></div>'
       f'<div style="font-size:12pt;color:rgba(255,255,255,0.90);line-height:1.5;">{quiz_body}</div></div>')
-    cell=('<td style="width:33.33%;vertical-align:top;padding:6px;">'
-      '<div style="background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;height:100%;box-sizing:border-box;">'
-      '<div style="background:linear-gradient(135deg,#241d3a 0,#241d3a 28px,#140f24 28px,#140f24 100%);padding:16px;min-height:132px;height:100%;box-sizing:border-box;">'
-      '<div style="font-size:12pt;color:#ffffff;margin-bottom:5px;"><strong>{term}</strong></div>'
-      '<div style="font-size:10.5pt;line-height:1.5;color:rgba(255,255,255,0.80);">{defn}</div></div></div></td>')
-    rows=""
-    for i in range(0,len(terms),3):
-        rows+='<tr>'+''.join(cell.format(term=t,defn=d) for t,d in terms[i:i+3])+'</tr>'
-    return note+f'<table role="presentation" style="width:100%;border-collapse:collapse;table-layout:fixed;"><tbody>{rows}</tbody></table>'
+    hintline=f'<div style="font-size:10.5pt;color:#c4b5fd;margin-bottom:12px;opacity:0.9;">&#9662; {hint}</div>'
+    items=""
+    for n,(term,defn) in enumerate(terms,1):
+        items+=('<details style="background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;margin-bottom:10px;">'
+          '<summary style="background:linear-gradient(135deg,#241d3a 0,#241d3a 30px,#140f24 30px,#140f24 100%);padding:12px 14px;cursor:pointer;">'
+          f'<span style="font-size:12pt;color:#c4b5fd;"><strong>{n:02d}</strong></span> '
+          f'<span style="font-size:12.5pt;color:#ffffff;"><strong>{term}</strong></span></summary>'
+          f'<div style="padding:12px 14px 8px;font-size:11pt;line-height:1.55;color:rgba(255,255,255,0.85);">{defn}</div>'
+          '</details>')
+    return note+hintline+items
 
 DELIVER_ICON=f"{SITE}/assets/Icons/assignment/deliverables-v4.png"
 def deliverables_box(es,items):
@@ -407,10 +414,10 @@ def step01():
         para("This project must be captured in RAW, not JPG. RAW keeps the most detail so your edits look clean. Set your Canon EOS R50 to RAW before you take any photos.")
         + steps([
             ("Press MENU:","press the MENU button on the back of the camera."),
-            ("Open the red Camera menu:","go to the red Camera tab (the camera icon) and choose Image quality."),
-            ("Choose RAW:","set the image type to RAW."),
-            ("Turn JPEG off:","set the JPEG option to the dash (&ndash;) so the camera saves RAW only, no JPG."),
-            ("Save:","press SET to save, then tap the shutter halfway to close the menu."),
+            ("Open the Shooting menu, page 1:","go to the red Shooting tab (the camera icon), open page 1, and choose Image quality."),
+            ("Set RAW:","turn the Main dial to set the top row to RAW."),
+            ("Turn JPEG off:","use the left and right keys to set the JPEG row to the dash (&ndash;), so the camera saves RAW only, no JPG."),
+            ("Save:","press the SET button to save, then tap the shutter halfway to close the menu."),
         ])
         + note("If you are not sure, ask Mr. Silva to check your setting before you start."))
     en+=card("CAPTURE / ON THE WALK","Capture Your Cohesive Series",
@@ -449,10 +456,10 @@ def step01():
         para("Este proyecto debe capturarse en RAW, no en JPG. RAW guarda el mayor detalle para que tus ediciones se vean limpias. Pon tu Canon EOS R50 en RAW antes de tomar cualquier foto.")
         + steps([
             ("Presiona MENU:","presiona el bot&oacute;n MENU en la parte de atr&aacute;s de la c&aacute;mara."),
-            ("Abre el men&uacute; rojo de C&aacute;mara:","ve a la pesta&ntilde;a roja de C&aacute;mara (Captura) y elige Calidad de imagen."),
-            ("Elige RAW:","pon el tipo de imagen en RAW."),
-            ("Apaga el JPEG:","pon la opci&oacute;n JPEG en el gui&oacute;n (&ndash;) para que la c&aacute;mara guarde solo RAW, sin JPG."),
-            ("Guarda:","presiona SET para guardar, luego toca el disparador a la mitad para cerrar el men&uacute;."),
+            ("Abre el men&uacute; de Toma de fotograf&iacute;as, p&aacute;gina 1:","ve a la pesta&ntilde;a roja de Toma de fotograf&iacute;as (el &iacute;cono de c&aacute;mara), abre la p&aacute;gina 1 y elige Calidad de imagen."),
+            ("Pon RAW:","gira el dial principal para poner la fila de arriba en RAW."),
+            ("Apaga el JPEG:","usa las teclas izquierda y derecha para poner la fila de JPEG en el gui&oacute;n (&ndash;), para que la c&aacute;mara guarde solo RAW, sin JPG."),
+            ("Guarda:","presiona el bot&oacute;n SET para guardar, luego toca el disparador a la mitad para cerrar el men&uacute;."),
         ])
         + note("Si no est&aacute;s seguro, pide al Sr. Silva que revise tu ajuste antes de empezar."))
     es+=card("CAPTURA / EN LA CAMINATA","Captura Tu Serie Cohesiva",
@@ -588,6 +595,11 @@ for fname,gen in [(OVER,overview),(S1,step01),(S2,step02),(S3,step03)]:
     html=ent(gen())
     assert "—" not in html and "&mdash;" not in html, "em dash in "+fname
     low=html.lower()
+    # Manufacturer exception (Chris, 2026-09-11): a maker's real menu/product name may use an
+    # otherwise-banned word (e.g. Canon's "Shooting" menu). Strip those exact phrases before the
+    # ban scan so the accurate term is allowed, while a bare violence word anywhere else still trips.
+    for allow in ["shooting tab","shooting menu"]:
+        low=low.replace(allow,"")
     for w in ["shoot","shooting","shot","shots","shoots","screenshot"]:
         assert not re.search(r'\b'+w+r'\b', low), f"banned '{w}' in {fname}"
     open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
