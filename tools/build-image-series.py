@@ -54,6 +54,19 @@ def card(eyebrow,heading,inner):
       '<div style="height:2px;background:#00b8b8;width:60px;margin-bottom:18px;"></div>'
       f'{inner}</div>')
 
+RESICON=f"{SITE}/assets/Icons/assignment/resources-v1.png"
+def resources_card(eyebrow,heading,inner):
+    # PURPLE Resources section (LOCKED): in-depth how-to / reference (slide decks, install
+    # videos, step-by-step guides). Distinct from teal content, orange Downloads, gold Deliverables.
+    return ('<div style="background:linear-gradient(180deg,rgba(139,92,246,0.10) 0%,rgba(139,92,246,0.03) 100%);border:1px solid rgba(139,92,246,0.28);border-left:6px solid #8b5cf6;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #8b5cf6;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#c4b5fd;text-transform:uppercase;margin-bottom:12px;">'
+      f'<strong>{eyebrow}</strong></div>'
+      '<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px;">'
+      f'<div style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></div>'
+      f'<img src="{RESICON}" alt="Resource" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
+      '<div style="height:2px;background:#8b5cf6;width:60px;margin-bottom:18px;"></div>'
+      f'{inner}</div>')
+
 def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
 
@@ -87,16 +100,16 @@ def contact_install_card(es):
       f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">'
       + ("Toca para ver el video de instalaci&oacute;n." if es else "Tap to watch the install video.") + '</div></div>')
     if es:
-        eyebrow="HOJAS DE CONTACTO / INSTALA UNA VEZ"; heading="Instala Tus Ajustes de Hoja de Contactos"
+        eyebrow="RECURSO / INSTALA LOS AJUSTES"; heading="Instala Tus Ajustes de Hoja de Contactos"
         body=(para("Usas dos ajustes (presets) de Lightroom Classic para armar tus hojas de contactos: uno de 12 y uno de 6. Los instalas <strong>una sola vez</strong> y quedan listos para siempre.")
           + para('<a href="'+INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#ffb27c;"><strong>Mira el video de instalaci&oacute;n</strong></a>, luego coloca los ajustes en Lightroom Classic &rarr; m&oacute;dulo Imprimir.')
           + para("Descarga las plantillas desde la secci&oacute;n de Descargas de arriba."))
     else:
-        eyebrow="CONTACT SHEETS / INSTALL ONCE"; heading="Install Your Contact Sheet Presets"
+        eyebrow="RESOURCE / INSTALL THE PRESETS"; heading="Install Your Contact Sheet Presets"
         body=(para("You use two Lightroom Classic presets to build your contact sheets: a 12-Up and a 6-Up. Install them <strong>one time</strong> and they are ready every time after that.")
           + para('<a href="'+INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#ffb27c;"><strong>Watch the install video</strong></a>, then drop the presets into Lightroom Classic &rarr; Print module.')
           + para("Download the templates from the Downloads section above."))
-    return card(eyebrow, heading, thumb + body + '<div style="clear:both;"></div>')
+    return resources_card(eyebrow, heading, thumb + body + '<div style="clear:both;"></div>')
 
 def downloads_block(es):
     # CANONICAL orange downloads section, right after the intro/header card. This module
@@ -372,7 +385,7 @@ def step01():
             ("Copy your RAW files:","copy all your RAW photos from the card into that OneDrive folder."),
             ("Let it sync:","wait for OneDrive to finish syncing. The cloud icon turns to a check when it is done."),
         ]))
-    en+=card("IMPORT / INTO LIGHTROOM","Import Into Lightroom Classic",
+    en+=resources_card("RESOURCE / LIGHTROOM IMPORT","Import Into Lightroom Classic",
         para("Now import your series into Lightroom Classic. The slide deck below walks you through every click. Scroll through all 12 slides, and download the PDF if you want it open while you work.")
         + slide_deck(False))
     en+=card("CONTACT SHEET / SHOW YOUR SERIES","Make Your 12-Image Contact Sheet",
@@ -413,7 +426,7 @@ def step01():
             ("Copia tus archivos RAW:","copia todas tus fotos RAW de la tarjeta a esa carpeta de OneDrive."),
             ("Deja que sincronice:","espera a que OneDrive termine de sincronizar. El &iacute;cono de nube cambia a una palomita cuando termina."),
         ]))
-    es+=card("IMPORTA / A LIGHTROOM","Importa a Lightroom Classic",
+    es+=resources_card("RECURSO / IMPORTAR A LIGHTROOM","Importa a Lightroom Classic",
         para("Ahora importa tu serie a Lightroom Classic. Las diapositivas de abajo te gu&iacute;an en cada clic. Despl&aacute;zate por las 12 diapositivas y descarga el PDF si quieres tenerlo abierto mientras trabajas.")
         + slide_deck(True))
     es+=card("HOJA DE CONTACTOS / MUESTRA TU SERIE","Crea Tu Hoja de Contactos de 12 Im&aacute;genes",
