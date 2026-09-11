@@ -35,11 +35,15 @@ def ent(s):
        "“":"&ldquo;","”":"&rdquo;","‘":"&lsquo;","’":"&rsquo;","–":"&ndash;","•":"&bull;","×":"&times;"}
     return "".join(m.get(c, c if ord(c)<128 else "&#x{:X};".format(ord(c))) for c in s)
 
-def banner(label,title,subtitle,es_href,es_label):
+HICON_PHOTO_WALK=f"{SITE}/assets/Icons/assignment/photo-walk-white-v1.png"
+def banner(label,title,subtitle,es_href,es_label,hicon=HICON_PHOTO_WALK):
+    # Image Series is a photo walk, so the banner crowns the title with the white photo-walk icon.
+    crown=(f'<div style="margin-bottom:8px;"><img src="{hicon}" alt="" style="width:38px;height:38px;display:inline-block;" /></div>' if hicon else '')
     return ('<div style="background:linear-gradient(135deg,#000000 0%,#003838 40%,#007474 100%);padding:20px 28px 22px;margin:-28px -28px 24px -28px;">'
       '<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">'
       f'<div style="justify-self:start;"><img src="{SITE}/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:min(90px,15vw);height:auto;display:block;" /></div>'
       '<div style="justify-self:center;text-align:center;">'
+      f'{crown}'
       f'<div style="margin-bottom:6px;"><span style="font-size:13pt;color:#80e0e0;"><strong>{label}</strong></span></div>'
       f'<div style="color:#ffffff;font-size:23pt;line-height:1.1;"><strong>{title}</strong></div>'
       f'<div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:13pt;font-style:italic;"><strong>{subtitle}</strong></span></div></div>'
@@ -61,10 +65,16 @@ def _lay(box_open, chip, inner, floatimg):
     hf, inner = _hoist(inner)
     thumb = floatimg + hf
     if thumb:
+        # Generated CONTENT photo (float_right) is showcased ~half the card width; resource
+        # THUMBNAIL (floatimg: slide deck / video) stays compact. Both drop below when narrow.
+        if hf:
+            textcol='flex:1 1 44%;min-width:0;'; imgcol='flex:1 1 44%;min-width:300px;'
+        else:
+            textcol='flex:1 1 320px;min-width:0;'; imgcol='flex:0 1 360px;'
         return (box_open
-          + '<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 26px;">'
-          + f'<div style="flex:1 1 320px;min-width:0;">{chip}{inner}</div>'
-          + f'<div style="flex:0 1 360px;">{thumb}</div>'
+          + '<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 30px;">'
+          + f'<div style="{textcol}">{chip}{inner}</div>'
+          + f'<div style="{imgcol}">{thumb}</div>'
           + '</div></div>')
     return box_open + chip + inner + '</div>'
 
@@ -315,6 +325,7 @@ def wrap_page(title,nav_inner,top_html,bottom):
 {nav_inner}
       <div class="silva-nav-div"></div>
       <button class="silva-copy-btn" onclick="silvaCopyHTML()" aria-label="Copy Canvas HTML to clipboard">&#128203; Copy Canvas HTML</button>
+      <button class="silva-copy-btn silva-url-btn" onclick="silvaCopyURL()" aria-label="Copy this page URL to clipboard">&#128279; Copy URL</button>
       <button class="silva-download-btn" onclick="silvaDownloadHTML()" aria-label="Download Canvas HTML as file">&#128229; Download HTML</button>
     </div>
   </nav>
@@ -327,6 +338,7 @@ def wrap_page(title,nav_inner,top_html,bottom):
   <script>
     function silvaCopyHTML() {{ var el=document.getElementById('top'); navigator.clipboard.writeText(el.outerHTML).then(function(){{var b=document.querySelector('.silva-copy-btn');b.textContent='\\u2713 Copied!';b.classList.add('copied');setTimeout(function(){{b.innerHTML='&#128203; Copy Canvas HTML';b.classList.remove('copied');}},2500);}}).catch(function(){{alert('Copy failed. Select the source manually.');}}); }}
     function silvaDownloadHTML() {{ var el=document.getElementById('top'); var blob=new Blob([el.outerHTML],{{type:'text/html'}}); var url=URL.createObjectURL(blob); var a=document.createElement('a'); a.href=url; a.download=location.pathname.split('/').pop().replace('.html','')+'-canvas.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }}
+    function silvaCopyURL() {{ navigator.clipboard.writeText(location.href).then(function(){{var b=document.querySelector('.silva-url-btn');b.textContent='\\u2713 Copied!';b.classList.add('copied');setTimeout(function(){{b.innerHTML='&#128279; Copy URL';b.classList.remove('copied');}},2500);}}).catch(function(){{alert('Copy failed. Copy the address bar manually.');}}); }}
   </script>
   <script src="/js/silva-nav.js"></script>
 </body>

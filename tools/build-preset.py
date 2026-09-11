@@ -40,23 +40,9 @@ def downloads_block(es):
       + folder_note(es, AREA) + '</div>')
 
 def slide_deck(es):
-    # 16:11 scrollable viewer: a 16:9 slide fills the window and the top of the next slide
-    # peeks in, so students know to scroll. Orange PDF button sits above it.
-    hint=('Scroll inside the window to see all 12 slides' if not es
-          else 'Despl&aacute;zate en la ventana para ver las 12 diapositivas')
-    pdf_lbl=('Download the Slides (PDF)' if not es else 'Descarga las Diapositivas (PDF)')
-    alt_lbl=('Presets in Lightroom Classic, slide {} of 12' if not es
-             else 'Presets en Lightroom Classic, diapositiva {} de 12')
-    # PURPLE accents throughout: this slide deck sits inside the purple Resources card (cohesion).
-    imgs=""
-    for i in range(1,13):
-        imgs+=('<div style="background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;margin:0 0 12px;">'
-               f'<img src="{SLIDE.format(i)}" alt="{alt_lbl.format(i)}" style="display:block;width:100%;height:auto;" /></div>')
-    return ('<div style="margin-bottom:12px;">'
-      f'<a href="{SLIDE_PDF}" download style="display:inline-block;background:#8b5cf6;color:#ffffff;text-decoration:none;padding:11px 22px;border-top:2px solid #c4b5fd;font-size:11pt;letter-spacing:0.04em;"><strong>&#128229; {pdf_lbl}</strong></a></div>'
-      f'<div style="font-size:11pt;color:#c4b5fd;margin-bottom:8px;opacity:0.9;">&#8595; {hint}</div>'
-      '<div class="silva-scroll" style="aspect-ratio:16/11;max-height:82vh;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid rgba(139,92,246,0.28);background:rgba(0,0,0,0.22);padding:8px;box-sizing:border-box;">'
-      + imgs + '</div>')
+    # Click-to-open PDF slide deck (shared pattern): a purple cover thumbnail links to the hosted
+    # PDF, opening it in a new tab. Placeholder cover until Chris supplies a real one.
+    return slide_deck_thumb(SLIDE_PDF, es)
 
 def nav(current,dots,stepnav):
     return ('      <div class="silva-breadcrumb">\n'
@@ -224,8 +210,8 @@ def step02():
     en+=deliverables_box(False,
         [("1 preset file:","your exported Lightroom preset (the .xmp file), uploaded to this Canvas assignment.")])
     en+=resources_card("Presets in Lightroom Classic",
-        para("Start here. This slide deck walks you through what a preset is, how to edit your look, and how to save it. Scroll through all 12 slides, and download the PDF if you want to keep it open while you work.")
-        + slide_deck(False), False)
+        para("Start here. This slide deck walks you through what a preset is, how to edit your look, and how to save it. Open it to see every step: it opens as a PDF in a new tab, so you can read it full screen and download it."),
+        False, floatimg=slide_deck(False))
     en+=card("EDIT / YOUR FIRST IMAGE","Build Your Look on One Photo",
         para("Select the strongest image from your series. Open it in the Develop module and edit it until it looks exactly how you want. This one photo becomes the recipe for the whole series.")
         + bullets([
@@ -249,8 +235,8 @@ def step02():
     es+=deliverables_box(True,
         [("1 archivo de preset:","tu preset de Lightroom exportado (el archivo .xmp), subido a esta tarea de Canvas.")])
     es+=resources_card("Presets en Lightroom Classic",
-        para("Empieza aqu&iacute;. Estas diapositivas te explican qu&eacute; es un preset, c&oacute;mo editar tu estilo y c&oacute;mo guardarlo. Despl&aacute;zate por las 12 diapositivas y descarga el PDF si quieres tenerlo abierto mientras trabajas.")
-        + slide_deck(True), True)
+        para("Empieza aqu&iacute;. Estas diapositivas te explican qu&eacute; es un preset, c&oacute;mo editar tu estilo y c&oacute;mo guardarlo. &Aacute;brela para ver cada paso: se abre como PDF en una pesta&ntilde;a nueva, para que la veas en pantalla completa y la descargues."),
+        True, floatimg=slide_deck(True))
     es+=card("EDITA / TU PRIMERA IMAGEN","Crea Tu Estilo en Una Foto",
         para("Elige la imagen m&aacute;s fuerte de tu serie. &Aacute;brela en el m&oacute;dulo Revelar y ed&iacute;tala hasta que se vea justo como quieres. Esta foto se convierte en la receta para toda la serie.")
         + bullets([

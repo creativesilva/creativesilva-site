@@ -5,6 +5,10 @@
 # Chip-header framework via silva_framework. Overview + 2 steps, bilingual EN/ES, 5th-grade.
 import os, re
 from silva_framework import *
+import silva_framework as _sf
+def banner(label,title,subtitle,es_href,es_label):
+    # Leading Lines is a photo walk: crown the banner with the white photo-walk icon.
+    return _sf.banner(label,title,subtitle,es_href,es_label,HICON_PHOTO_WALK)
 
 ROOT=os.path.join(os.path.dirname(__file__),"..")
 IMG=f"{SITE}/assets/images/photo1/leading-lines"
@@ -55,8 +59,10 @@ def overview():
     en+=downloads_block(False)
     en+=card("THE CONCEPT / WHAT TO LOOK FOR","How Leading Lines Work",
         para("A leading line is any line that guides your eye through the photo. It can be a road, a fence, a hallway, a row of lockers, a shadow, or a crack in the sidewalk. Strong leading lines often run from the front of the photo toward the subject in the back.")
-        + para("Sometimes the lines seem to meet at one spot far away. That spot is the vanishing point. Lines that head toward a vanishing point add depth and make a flat photo feel three-dimensional.")
-        + '<div style="margin-top:6px;">' + dl_link(ARTICLE,"Read: Leading Lines Guide",download=False) + '</div>')
+        + para("Sometimes the lines seem to meet at one spot far away. That spot is the vanishing point. Lines that head toward a vanishing point add depth and make a flat photo feel three-dimensional."))
+    en+=resources_card("Leading Lines Guide",
+        para("Want more examples? This short guide shows leading lines and vanishing points in real photos.")
+        + '<div style="margin-top:6px;">' + reslink(ARTICLE,"Read the Leading Lines Guide") + '</div>', False)
     en+=card("HOW IT WORKS / YOU AND YOUR PARTNER","Work as a Pair",
         bullets([
             ("Pair up:","two students share one class camera."),
@@ -71,7 +77,7 @@ def overview():
           "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
           [("Leading Lines","Lines that guide your eye through a photo toward the subject."),
            ("Cull","To look through your photos and keep only the best ones."),
-           ("Take","To capture a photo with the camera, as in &ldquo;take a photo.&rdquo;"),
+           ("Take","A photographer&rsquo;s take is all the images they take for one session, gig, or project. A wedding take can be several thousand images."),
            ("Composition","How you arrange everything inside the frame."),
            ("JPG","A common photo file that is ready to share without editing."),
            ("Vanishing Point","The spot far away where leading lines seem to meet.")]), False)
@@ -83,8 +89,10 @@ def overview():
     es+=downloads_block(True)
     es+=card("EL CONCEPTO / QU&Eacute; BUSCAR","C&oacute;mo Funcionan las L&iacute;neas Gu&iacute;a",
         para("Una l&iacute;nea gu&iacute;a es cualquier l&iacute;nea que lleva tu mirada a trav&eacute;s de la foto. Puede ser un camino, una reja, un pasillo, una fila de casilleros, una sombra o una grieta en la acera. Las l&iacute;neas gu&iacute;a fuertes suelen ir desde el frente de la foto hacia el sujeto al fondo.")
-        + para("A veces las l&iacute;neas parecen unirse en un solo punto a lo lejos. Ese punto es el punto de fuga. Las l&iacute;neas que van hacia un punto de fuga dan profundidad y hacen que una foto plana se sienta tridimensional.")
-        + '<div style="margin-top:6px;">' + dl_link(ARTICLE,"Leer: Gu&iacute;a de L&iacute;neas Gu&iacute;a",download=False) + '</div>')
+        + para("A veces las l&iacute;neas parecen unirse en un solo punto a lo lejos. Ese punto es el punto de fuga. Las l&iacute;neas que van hacia un punto de fuga dan profundidad y hacen que una foto plana se sienta tridimensional."))
+    es+=resources_card("Gu&iacute;a de L&iacute;neas Gu&iacute;a",
+        para("&iquest;Quieres m&aacute;s ejemplos? Esta gu&iacute;a corta muestra l&iacute;neas gu&iacute;a y puntos de fuga en fotos reales.")
+        + '<div style="margin-top:6px;">' + reslink(ARTICLE,"Lee la Gu&iacute;a de L&iacute;neas Gu&iacute;a") + '</div>', True)
     es+=card("C&Oacute;MO FUNCIONA / T&Uacute; Y TU COMPA&Ntilde;ERO","Trabaja en Pareja",
         bullets([
             ("Formen pareja:","dos estudiantes comparten una c&aacute;mara de la clase."),
@@ -99,7 +107,7 @@ def overview():
           "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
           [("Leading Lines (L&iacute;neas Gu&iacute;a)","L&iacute;neas que llevan tu mirada a trav&eacute;s de la foto hacia el sujeto."),
            ("Cull (Seleccionar)","Revisar tus fotos y quedarte solo con las mejores."),
-           ("Take (Tomar)","Capturar una foto con la c&aacute;mara, como en &ldquo;tomar una foto.&rdquo;"),
+           ("Take (Toma Completa)","El take de un fot&oacute;grafo son todas las im&aacute;genes que toma para una sesi&oacute;n, trabajo o proyecto. El take de una boda puede tener varios miles de im&aacute;genes."),
            ("Composition (Composici&oacute;n)","C&oacute;mo acomodas todo dentro del encuadre."),
            ("JPG","Un archivo de foto com&uacute;n, listo para compartir sin editar."),
            ("Vanishing Point (Punto de Fuga)","El punto a lo lejos donde las l&iacute;neas gu&iacute;a parecen unirse.")]), True)

@@ -18,16 +18,36 @@ def ent(s):
        "“":"&ldquo;","”":"&rdquo;","‘":"&lsquo;","’":"&rsquo;","–":"&ndash;","•":"&bull;","×":"&times;"}
     return "".join(m.get(c, c if ord(c)<128 else "&#x{:X};".format(ord(c))) for c in s)
 
-def banner(label,title,subtitle,es_href,es_label):
+def banner(label,title,subtitle,es_href,es_label,hicon=""):
+    # hicon: optional WHITE module-type icon that crowns the title (centered above the eyebrow).
+    # Used on photo-walk modules (white photo-walk icon) and own-device modules (white your-device).
+    crown=(f'<div style="margin-bottom:8px;"><img src="{hicon}" alt="" style="width:38px;height:38px;display:inline-block;" /></div>' if hicon else '')
     return ('<div style="background:linear-gradient(135deg,#000000 0%,#003838 40%,#007474 100%);padding:20px 28px 22px;margin:-28px -28px 24px -28px;">'
       '<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">'
       f'<div style="justify-self:start;"><img src="{SITE}/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:min(90px,15vw);height:auto;display:block;" /></div>'
       '<div style="justify-self:center;text-align:center;">'
+      f'{crown}'
       f'<div style="margin-bottom:6px;"><span style="font-size:13pt;color:#80e0e0;"><strong>{label}</strong></span></div>'
       f'<div style="color:#ffffff;font-size:23pt;line-height:1.1;"><strong>{title}</strong></div>'
       f'<div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:13pt;font-style:italic;"><strong>{subtitle}</strong></span></div></div>'
       f'<div style="justify-self:end;"><a href="{es_href}" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #00b8b8;"><strong>{es_label}</strong></a></div>'
       '</div></div>')
+
+# White header-crown icons (module-type identity in the banner). Rendered from the SVG masters.
+HICON_PHOTO_WALK=f"{SITE}/assets/Icons/assignment/photo-walk-white-v1.png"
+HICON_YOUR_DEVICE=f"{SITE}/assets/Icons/assignment/your-device-white-v1.png"
+
+SLIDE_PLACEHOLDER=f"{SITE}/assets/images/shared/slide-deck-placeholder-v1.jpg"
+def slide_deck_thumb(pdf_url, es, thumb=None, cap=None):
+    # Click-to-open PDF slide deck: a purple cover thumbnail linking to the hosted PDF, which opens
+    # as a standalone page in a new tab (native browser PDF viewer handles reading + download).
+    # Every module's slide deck uses this. thumb defaults to the shared placeholder until Chris
+    # supplies a real cover thumbnail.
+    thumb = thumb or SLIDE_PLACEHOLDER
+    alt = ("Portada de la presentaci&oacute;n (PDF)" if es else "Slide deck cover (PDF)")
+    cap = cap or ("Haz clic para abrir la presentaci&oacute;n. Se abre como PDF en una pesta&ntilde;a nueva, donde puedes verla en pantalla completa y descargarla." if es
+                  else "Click to open the slide deck. It opens as a PDF in a new tab, where you can read it full screen and download it.")
+    return purple_thumb(pdf_url, thumb, alt, cap)
 
 CONTENT_ICON=f"{SITE}/assets/Icons/assignment/step-check-teal-v2.png"
 TYPE_ICON={"overview":f"{SITE}/assets/Icons/assignment/overview-teal-v1.png",
@@ -63,10 +83,17 @@ def _lay(box_open, chip, inner, floatimg):
     hf, inner = _hoist(inner)
     thumb = floatimg + hf
     if thumb:
+        # A generated CONTENT photo (float_right, hoisted) is showcased at ~half the card width;
+        # a resource THUMBNAIL (floatimg: slide deck / video) stays compact. Both drop below the
+        # text when the page gets too narrow (flex-wrap).
+        if hf:
+            textcol='flex:1 1 44%;min-width:0;'; imgcol='flex:1 1 44%;min-width:300px;'
+        else:
+            textcol='flex:1 1 320px;min-width:0;'; imgcol='flex:0 1 360px;'
         return (box_open
-          + '<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 26px;">'
-          + f'<div style="flex:1 1 320px;min-width:0;">{chip}{inner}</div>'
-          + f'<div style="flex:0 1 360px;">{thumb}</div>'
+          + '<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 30px;">'
+          + f'<div style="{textcol}">{chip}{inner}</div>'
+          + f'<div style="{imgcol}">{thumb}</div>'
           + '</div></div>')
     return box_open + chip + inner + '</div>'
 
@@ -154,6 +181,11 @@ def dl_link(url,label,download=True,row=False):
         return (f'<a href="{url}" download style="display:inline-block;text-decoration:none;background:#FF6B1A;color:#ffffff;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;{mgn}"><strong>{label}</strong></a>')
     return (f'<a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#003838;padding:10px 20px;border-top:2px solid #00b8b8;font-size:11pt;letter-spacing:0.04em;margin:0 10px 10px 0;"><strong>{label}</strong></a>')
 
+def reslink(url,label):
+    # External reference / read link, styled for a PURPLE Resources card (cream button, purple top
+    # accent). Batch several under one resources_card when they belong to the same step.
+    return (f'<a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;background:rgba(255,255,255,0.92);color:#2a1a4a;padding:10px 20px;border-top:2px solid #8b5cf6;font-size:11pt;letter-spacing:0.04em;margin:0 10px 10px 0;"><strong>{label}</strong></a>')
+
 def dl_row(url,label):
     return ('<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;">'
       f'<img src="{DL_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;display:block;" />'
@@ -226,6 +258,7 @@ def wrap_page(title,nav_inner,top_html,bottom):
 {nav_inner}
       <div class="silva-nav-div"></div>
       <button class="silva-copy-btn" onclick="silvaCopyHTML()" aria-label="Copy Canvas HTML to clipboard">&#128203; Copy Canvas HTML</button>
+      <button class="silva-copy-btn silva-url-btn" onclick="silvaCopyURL()" aria-label="Copy this page URL to clipboard">&#128279; Copy URL</button>
       <button class="silva-download-btn" onclick="silvaDownloadHTML()" aria-label="Download Canvas HTML as file">&#128229; Download HTML</button>
     </div>
   </nav>
@@ -238,6 +271,7 @@ def wrap_page(title,nav_inner,top_html,bottom):
   <script>
     function silvaCopyHTML() {{ var el=document.getElementById('top'); navigator.clipboard.writeText(el.outerHTML).then(function(){{var b=document.querySelector('.silva-copy-btn');b.textContent='\\u2713 Copied!';b.classList.add('copied');setTimeout(function(){{b.innerHTML='&#128203; Copy Canvas HTML';b.classList.remove('copied');}},2500);}}).catch(function(){{alert('Copy failed. Select the source manually.');}}); }}
     function silvaDownloadHTML() {{ var el=document.getElementById('top'); var blob=new Blob([el.outerHTML],{{type:'text/html'}}); var url=URL.createObjectURL(blob); var a=document.createElement('a'); a.href=url; a.download=location.pathname.split('/').pop().replace('.html','')+'-canvas.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }}
+    function silvaCopyURL() {{ navigator.clipboard.writeText(location.href).then(function(){{var b=document.querySelector('.silva-url-btn');b.textContent='\\u2713 Copied!';b.classList.add('copied');setTimeout(function(){{b.innerHTML='&#128279; Copy URL';b.classList.remove('copied');}},2500);}}).catch(function(){{alert('Copy failed. Copy the address bar manually.');}}); }}
   </script>
   <script src="/js/silva-nav.js"></script>
 </body>

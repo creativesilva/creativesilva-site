@@ -72,6 +72,15 @@ def overview():
             ("Waist-up portrait:","framed from about the waist up."),
             ("Headshot:","framed from the shoulders up."),
         ]))
+    en+=resources_card("Key Words",
+        vocab_grid("On the Quiz",
+          "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
+          [("Studio","An indoor space with lights and a backdrop for controlled photos."),
+           ("Backdrop","The plain background behind the person in a studio photo."),
+           ("Headshot","A portrait framed from the shoulders up."),
+           ("Portrait","A photo of a person that shows who they are."),
+           ("Reflector","A surface that bounces light back onto the subject to fill in shadows."),
+           ("Contact Sheet","One page that shows all your photos as small thumbnails.")]), False)
 
     es=banner("Fotograf&iacute;a 2A &bull; Sesi&oacute;n de Estudio","Sesi&oacute;n de Estudio","Fotograf&iacute;a a los honorados Pantera del Trimestre.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Retratos de la Pantera del Trimestre",
@@ -90,6 +99,15 @@ def overview():
             ("Retrato de cintura para arriba:","encuadrado m&aacute;s o menos de la cintura para arriba."),
             ("Headshot:","encuadrado de los hombros para arriba."),
         ]))
+    es+=resources_card("Palabras Clave",
+        vocab_grid("En el Examen",
+          "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
+          [("Studio (Estudio)","Un espacio interior con luces y un fondo para tomar fotos controladas."),
+           ("Backdrop (Fondo)","El fondo liso detr&aacute;s de la persona en una foto de estudio."),
+           ("Headshot (Retrato de Hombros)","Un retrato encuadrado de los hombros para arriba."),
+           ("Portrait (Retrato)","Una foto de una persona que muestra qui&eacute;n es."),
+           ("Reflector","Una superficie que rebota la luz hacia el sujeto para rellenar sombras."),
+           ("Contact Sheet (Hoja de Contactos)","Una p&aacute;gina que muestra todas tus fotos como miniaturas.")]), True)
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
