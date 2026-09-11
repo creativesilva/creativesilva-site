@@ -74,9 +74,12 @@ def strip_ideye(h):
         h=h[:m]+seg+h[wrap_close:]
 
 def wrap_title(h, frm, kind, es):
-    # keep the eyebrow/step line as-is; wrap the big title row with the icon on the right
-    i=h.find(EYE_SIG, frm); assert i!=-1, "eyebrow not found"
-    t=h.find(HEAD_SIG, i); assert t!=-1, "title row not found"
+    # keep the eyebrow/step line as-is; wrap the big title row with the icon on the right.
+    # Pages migrated to the combined chip-header format have no legacy eyebrow: skip them.
+    i=h.find(EYE_SIG, frm)
+    if i==-1: return h
+    t=h.find(HEAD_SIG, i)
+    if t==-1: return h
     end=h.find('</div>', t)+6
     title=h[t:end].replace('margin-bottom:8px;','',1)   # move bottom margin to the row
     row=('<!--IDEYE--><div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px;">'

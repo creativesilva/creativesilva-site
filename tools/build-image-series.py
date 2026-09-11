@@ -46,26 +46,27 @@ def banner(label,title,subtitle,es_href,es_label):
       f'<div style="justify-self:end;"><a href="{es_href}" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #ff6b1a;"><strong>{es_label}</strong></a></div>'
       '</div></div>')
 
+CONTENT_ICON=f"{SITE}/assets/Icons/assignment/content-teal-v1.png"
+TYPE_ICON={"overview":f"{SITE}/assets/Icons/assignment/overview-teal-v1.png",
+  "photo-walk":f"{SITE}/assets/Icons/assignment/photo-walk-teal-v1.png",
+  "edit":f"{SITE}/assets/Icons/assignment/edit-teal-v1.png",
+  "reflection":f"{SITE}/assets/Icons/assignment/reflection-teal-v1.png"}
+TEAL_BOX='<div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+
 def card(eyebrow,heading,inner):
-    return ('<div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #00b8b8;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#80e0e0;text-transform:uppercase;margin-bottom:12px;">'
-      f'<strong>{eyebrow}</strong></div>'
-      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
-      '<div style="height:2px;background:#00b8b8;width:60px;margin-bottom:18px;"></div>'
-      f'{inner}</div>')
+    # content card: teal chip [content icon + heading] + rule + content (eyebrow now folded away)
+    return TEAL_BOX + section_header(CONTENT_ICON, heading, "#00b8b8", "#80e0e0") + f'{inner}</div>'
+
+def type_card(kind,label,heading,inner):
+    # FIRST card of a page: teal chip [type icon + type label] then the card's own heading + content
+    hd=(f'<div style="margin-bottom:14px;"><span style="font-size:18pt;color:#ffffff;"><strong>{heading}</strong></span></div>' if heading else '')
+    return TEAL_BOX + section_header(TYPE_ICON[kind], label, "#00b8b8", "#80e0e0") + hd + f'{inner}</div>'
 
 RESICON=f"{SITE}/assets/Icons/assignment/resources-v1.png"
 def resources_card(eyebrow,heading,inner):
-    # PURPLE Resources section (LOCKED): in-depth how-to / reference (slide decks, install
-    # videos, step-by-step guides). Distinct from teal content, orange Downloads, gold Deliverables.
+    # PURPLE Resources section: chip [gear icon + heading] + content.
     return ('<div style="background:linear-gradient(180deg,rgba(139,92,246,0.10) 0%,rgba(139,92,246,0.03) 100%);border:1px solid rgba(139,92,246,0.28);border-left:6px solid #8b5cf6;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #8b5cf6;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#c4b5fd;text-transform:uppercase;margin-bottom:12px;">'
-      f'<strong>{eyebrow}</strong></div>'
-      '<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px;">'
-      f'<div style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></div>'
-      f'<img src="{RESICON}" alt="Resource" style="width:44px;height:44px;flex:0 0 auto;display:block;" /></div>'
-      '<div style="height:2px;background:#8b5cf6;width:60px;margin-bottom:18px;"></div>'
-      f'{inner}</div>')
+      + section_header(RESICON, heading, "#8b5cf6", "#c4b5fd") + f'{inner}</div>')
 
 def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
@@ -295,7 +296,7 @@ def dots_for(active_idx):
 # ---------------- OVERVIEW ----------------
 def overview():
     en=banner("Photography 1A &bull; Module 04","Image Series Photo Walk","Capture a cohesive series with the camera kit, offload, import, and edit.","#espanol","Clic para Espa&ntilde;ol")
-    en+=card("THE PROJECT / OVERVIEW","Capture a Series That Belongs Together",
+    en+=type_card("overview","The Module Overview","Capture a Series That Belongs Together",
         para("On this photo walk you use a classroom camera kit to capture a cohesive series: a group of photos that feel linked, like a family of images. Your series can be circles, shapes, colors, textures, reflections, or your own idea. What matters is that the photos clearly go together.")
         + para("You capture in RAW, offload your photos to OneDrive, and import them into Lightroom Classic. You build your first contact sheet, then cull to your best 6, do a light edit, and turn in a final contact sheet.")
         + framed(HEADER,"Image Series Photo Walk header: a row of linked photos that form one cohesive series"))
@@ -326,7 +327,7 @@ def overview():
            ("White Balance","The setting that makes colors look warm, cool, or true to life.")]))
 
     es=banner("Fotograf&iacute;a 1A &bull; M&oacute;dulo 04","Caminata de Serie de Im&aacute;genes","Captura una serie cohesiva con el kit de c&aacute;mara, desc&aacute;rgala, imp&oacute;rtala y edita.","#top","Back to English")
-    es+=card("EL PROYECTO / RESUMEN","Captura una Serie Que Va Junta",
+    es+=type_card("overview","El Resumen del M&oacute;dulo","Captura una Serie Que Va Junta",
         para("En esta caminata fotogr&aacute;fica usas un kit de c&aacute;mara de la clase para capturar una serie cohesiva: un grupo de fotos que se sienten unidas, como una familia de im&aacute;genes. Tu serie puede ser de c&iacute;rculos, formas, colores, texturas, reflejos o tu propia idea. Lo importante es que las fotos claramente van juntas.")
         + para("Capturas en RAW, descargas tus fotos a OneDrive y las importas a Lightroom Classic. Creas tu primera hoja de contactos, luego eliges tus mejores 6, haces una edici&oacute;n ligera y entregas una hoja de contactos final.")
         + framed(HEADER,"Encabezado de la Caminata de Serie de Im&aacute;genes: una fila de fotos unidas que forman una serie cohesiva"))
