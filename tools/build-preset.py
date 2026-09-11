@@ -263,8 +263,7 @@ def overview():
             ("Edit &amp; Create Your Preset:","edit your first image in the Develop module, then save those settings as a preset. Turn in your preset file."),
             ("Deliver Your Series:","sync your preset across the series, fine-tune, and turn in a 6-image contact sheet plus all 6 high-resolution images."),
             ("Reflection:","tell the story of your series and your preset."),
-        ])
-        + note_orange("Capture your photos on purpose for this project. They must be new images you take for this assignment, not pictures already in your camera roll from before."))
+        ]))
     en+=card("VOCABULARY / 6 TERMS","Key Words",
         vocab_grid("On the Quiz",
           "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
@@ -296,8 +295,7 @@ def overview():
             ("Edita y Crea Tu Preset:","edita tu primera imagen en el m&oacute;dulo Revelar y guarda esos ajustes como un preset. Entrega tu archivo de preset."),
             ("Entrega Tu Serie:","sincroniza tu preset en la serie, haz ajustes finos y entrega una hoja de contactos de 6 im&aacute;genes m&aacute;s las 6 im&aacute;genes en alta resoluci&oacute;n."),
             ("Reflexi&oacute;n:","cuenta la historia de tu serie y tu preset."),
-        ])
-        + note_orange("Captura tus fotos a prop&oacute;sito para este proyecto. Deben ser im&aacute;genes nuevas que tomes para esta tarea, no fotos que ya ten&iacute;as en tu galer&iacute;a de antes."))
+        ]))
     es+=card("VOCABULARIO / 6 T&Eacute;RMINOS","Palabras Clave",
         vocab_grid("En el Examen",
           "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
@@ -331,8 +329,7 @@ def step01():
             ("At least 12 images:","capture more than you need so you have strong ones to choose from."),
             ("Keep them consistent:","same subject and similar light, so one preset will fit them all."),
             ("Watch your framing:","fill the frame and keep your subject sharp."),
-        ])
-        + note_orange("Capture your photos on purpose for this project. They must be new images you take for this assignment, not pictures already in your camera roll from before."))
+        ]))
     en+=card("CULL / KEEP THE STRONG ONES","Import and Cull",
         para("Bring your photos into Lightroom Classic, then cull. Culling means looking through your photos and keeping the strongest ones. Drop the blurry, the too-dark, and the repeats.")
         + bullets([
@@ -364,8 +361,7 @@ def step01():
             ("Al menos 12 im&aacute;genes:","captura m&aacute;s de las que necesitas para tener buenas opciones."),
             ("Mant&eacute;nlas consistentes:","mismo tema y luz parecida, para que un preset les quede a todas."),
             ("Cuida el encuadre:","llena el cuadro y mant&eacute;n tu sujeto n&iacute;tido."),
-        ])
-        + note_orange("Captura tus fotos a prop&oacute;sito para este proyecto. Deben ser im&aacute;genes nuevas que tomes para esta tarea, no fotos que ya ten&iacute;as en tu galer&iacute;a de antes."))
+        ]))
     es+=card("SELECCIONA / QU&Eacute;DATE CON LAS FUERTES","Importa y Selecciona",
         para("Lleva tus fotos a Lightroom Classic y luego selecciona (cull). Seleccionar significa revisar tus fotos y quedarte con las m&aacute;s fuertes. Descarta las borrosas, las muy oscuras y las repetidas.")
         + bullets([

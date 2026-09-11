@@ -294,8 +294,7 @@ def overview():
             ("Cull &amp; Edit:","select your best 6, do a light edit (exposure, highlights, shadows, color temperature), and turn in a 6-image contact sheet."),
             ("Reflection:","tell the story of your series."),
         ])
-        + note_orange("Capture in RAW, not JPG. Set your Canon EOS R50 to RAW before you start. Step 01 shows you how.")
-        + note_orange("Capture your photos on purpose for this project. They must be new images you take on this walk, not pictures already in your camera roll from before."))
+        + note_orange("Capture in RAW, not JPG. Set your Canon EOS R50 to RAW before you start. Step 01 shows you how."))
     en+=card("VOCABULARY / 6 TERMS","Key Words",
         vocab_grid("On the Quiz",
           "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
@@ -326,8 +325,7 @@ def overview():
             ("Selecciona y Edita:","elige tus mejores 6, haz una edici&oacute;n ligera (exposici&oacute;n, luces, sombras, temperatura de color) y entrega una hoja de contactos de 6 im&aacute;genes."),
             ("Reflexi&oacute;n:","cuenta la historia de tu serie."),
         ])
-        + note_orange("Captura en RAW, no en JPG. Pon tu Canon EOS R50 en RAW antes de empezar. El Paso 01 te ense&ntilde;a c&oacute;mo.")
-        + note_orange("Captura tus fotos a prop&oacute;sito para este proyecto. Deben ser im&aacute;genes nuevas que tomes en esta caminata, no fotos que ya ten&iacute;as en tu galer&iacute;a de antes."))
+        + note_orange("Captura en RAW, no en JPG. Pon tu Canon EOS R50 en RAW antes de empezar. El Paso 01 te ense&ntilde;a c&oacute;mo."))
     es+=card("VOCABULARIO / 6 T&Eacute;RMINOS","Palabras Clave",
         vocab_grid("En el Examen",
           "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
@@ -365,8 +363,7 @@ def step01():
             ("At least 12 images:","capture more than you need for the series."),
             ("Keep it cohesive:","repeat your idea so every photo clearly belongs to the set."),
             ("Watch your framing:","fill the frame and keep your subject sharp."),
-        ])
-        + note_orange("Capture your photos on purpose for this project. They must be new images from this walk, not pictures already in your camera roll from before."))
+        ]))
     en+=card("OFFLOAD / SAVE TO ONEDRIVE","Offload Your Photos to OneDrive",
         para("When you finish, offload your RAW photos to OneDrive so they are safe and ready to import.")
         + steps([
@@ -407,8 +404,7 @@ def step01():
             ("Al menos 12 im&aacute;genes:","captura m&aacute;s de las que necesitas para la serie."),
             ("Mant&eacute;nla cohesiva:","repite tu idea para que cada foto claramente pertenezca al grupo."),
             ("Cuida el encuadre:","llena el cuadro y mant&eacute;n tu sujeto n&iacute;tido."),
-        ])
-        + note_orange("Captura tus fotos a prop&oacute;sito para este proyecto. Deben ser im&aacute;genes nuevas de esta caminata, no fotos que ya ten&iacute;as en tu galer&iacute;a de antes."))
+        ]))
     es+=card("DESCARGA / GUARDA EN ONEDRIVE","Descarga Tus Fotos a OneDrive",
         para("Cuando termines, descarga tus fotos RAW a OneDrive para que est&eacute;n a salvo y listas para importar.")
         + steps([
