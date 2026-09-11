@@ -14,6 +14,7 @@ ROOT=os.path.join(os.path.dirname(__file__),"..")
 IMG=f"{SITE}/assets/images/photo1/leading-lines"
 HEADER=f"{IMG}/leading-lines-header-v1.jpg"
 FLOAT=f"{IMG}/leading-lines-step01-float-v1.jpg"
+REFLECT_FLOAT=f"{IMG}/reflection-float-v1.jpg"
 ARTICLE="https://digital-photography-school.com/how-to-use-leading-lines-for-better-compositions/"
 REFLECT_EN=f"{SITE}/assets/course-documents/Leading-Lines-Reflection-EN.docx"
 REFLECT_ES=f"{SITE}/assets/course-documents/Leading-Lines-Reflection-ES.docx"
@@ -182,7 +183,8 @@ def step02():
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), with your partner named, uploaded to this Canvas assignment.")])
     en+=card("STEP 02 / REFLECT","Complete and Upload the Reflection",
-        para("Finish with a short reflection. It asks you to name your partner, explain what leading lines are, tell how you culled, and select your favorite photo.")
+        float_right(REFLECT_FLOAT,"A Pioneer Valley student typing his Leading Lines reflection in the Word document on an iMac in the lab, a Canon camera on the desk","Type your answers right in the reflection document.")
+        + para("Finish with a short reflection. It asks you to name your partner, explain what leading lines are, tell how you culled, and select your favorite photo.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + bullets([
             ("Open it:","open the reflection Word document (.docx) from your project folder."),
@@ -196,7 +198,8 @@ def step02():
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n, con el nombre de tu compa&ntilde;ero, subido a esta tarea de Canvas.")])
     es+=card("PASO 02 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
-        para("Termina con una reflexi&oacute;n corta. Te pide el nombre de tu compa&ntilde;ero, explicar qu&eacute; son las l&iacute;neas gu&iacute;a, contar c&oacute;mo seleccionaste (cull) y elegir tu foto favorita.")
+        float_right(REFLECT_FLOAT,"Un estudiante de Pioneer Valley escribiendo su reflexi&oacute;n de L&iacute;neas Gu&iacute;a en el documento de Word en una iMac en el laboratorio, con una c&aacute;mara Canon sobre el escritorio","Escribe tus respuestas directamente en el documento de reflexi&oacute;n.")
+        + para("Termina con una reflexi&oacute;n corta. Te pide el nombre de tu compa&ntilde;ero, explicar qu&eacute; son las l&iacute;neas gu&iacute;a, contar c&oacute;mo seleccionaste (cull) y elegir tu foto favorita.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
         + bullets([
             ("&Aacute;brelo:","abre el documento de Word (.docx) de la reflexi&oacute;n desde tu carpeta del proyecto."),
