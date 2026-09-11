@@ -276,6 +276,21 @@ const DOCS = [
     '¿Cuál fue la parte más difícil de este proyecto, y cómo la resolviste?',
     '¿Qué harías diferente la próxima vez para que tu serie se sienta más cohesiva?',
   ]},
+  // YouTube Thumbnail (Digital Arts 1A) -- reflection on the student's OWN thumbnail (Live Stream Graphic module, step 4)
+  { ...EN, outfile: 'Live-Stream-Graphic-Reflection-EN.docx', title: 'YouTube Thumbnail: Reflection', subtitle: PVHS_EN('Digital Arts 1A'), questions: [
+    'What is your YouTube thumbnail for? Name the channel or video and tell what it is about.',
+    'What thumbnails did you save as inspiration, and what did you like about them?',
+    'Walk through how you designed your own thumbnail. Which Photoshop skills from the warm-up did you use (layers, type, selections, color, blending)?',
+    'A good thumbnail grabs attention and reads clearly even when it is small. How does yours do that?',
+    'What are you most proud of in your thumbnail, and what would you change to make it better next time?',
+  ]},
+  { ...ES, outfile: 'Live-Stream-Graphic-Reflection-ES.docx', title: 'Miniatura de YouTube: Reflexión', subtitle: PVHS_ES('Arte Digital 1A'), questions: [
+    '¿Para qué es tu miniatura de YouTube? Nombra el canal o el video y di de qué trata.',
+    '¿Qué miniaturas guardaste como inspiración, y qué te gustó de ellas?',
+    'Explica cómo diseñaste tu propia miniatura. ¿Cuáles habilidades de Photoshop del calentamiento usaste (capas, texto, selecciones, color, fusión)?',
+    'Una buena miniatura llama la atención y se entiende clara aunque sea pequeña. ¿Cómo lo logra la tuya?',
+    '¿De qué estás más orgulloso en tu miniatura, y qué cambiarías para mejorarla la próxima vez?',
+  ]},
 ];
 
 (async () => { for (const d of DOCS) await buildDoc(d); })();
