@@ -18,7 +18,7 @@ SLIDE=LRC+"/lrc-slide-{:02d}.jpg"
 SLIDE_PDF=f"{SITE}/assets/course-documents/Lightroom-Import-Guide.pdf"
 CONTACT_ZIP=f"{SITE}/assets/PVHS_Contact_Sheet_Presets.zip"
 INSTALL_VIDEO="https://vimeo.com/1164128764/e1842e523e?share=copy&amp;fl=sv&amp;fe=ci"
-INSTALL_THUMB=f"{SITE}/assets/images/photo1/image-series/install-video-thumb-v1.jpg"
+INSTALL_THUMB=f"{SITE}/assets/images/photo1/image-series/install-video-thumb-v2.jpg"
 AREA="Photo"   # OneDrive top folder for this course's project folders (Photo vs Digital Arts)
 REFLECT_EN=f"{SITE}/assets/course-documents/Image-Series-Reflection-EN.docx"
 REFLECT_ES=f"{SITE}/assets/course-documents/Image-Series-Reflection-ES.docx"
