@@ -37,17 +37,16 @@ def ent(s):
 
 HICON_PHOTO_WALK=f"{SITE}/assets/Icons/assignment/photo-walk-white-v1.png"
 def banner(label,title,subtitle,es_href,es_label,hicon=HICON_PHOTO_WALK):
-    # Image Series is a photo walk, so the banner crowns the title with the white photo-walk icon.
-    crown=(f'<div style="margin-bottom:8px;"><img src="{hicon}" alt="" style="width:38px;height:38px;display:inline-block;" /></div>' if hicon else '')
+    # Image Series is a photo walk: white photo-walk icon on the RIGHT, left of the language toggle.
+    hicon_img=(f'<img src="{hicon}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />' if hicon else '')
     return ('<div style="background:linear-gradient(135deg,#000000 0%,#003838 40%,#007474 100%);padding:20px 28px 22px;margin:-28px -28px 24px -28px;">'
       '<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">'
       f'<div style="justify-self:start;"><img src="{SITE}/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:min(90px,15vw);height:auto;display:block;" /></div>'
       '<div style="justify-self:center;text-align:center;">'
-      f'{crown}'
       f'<div style="margin-bottom:6px;"><span style="font-size:13pt;color:#80e0e0;"><strong>{label}</strong></span></div>'
       f'<div style="color:#ffffff;font-size:23pt;line-height:1.1;"><strong>{title}</strong></div>'
       f'<div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:13pt;font-style:italic;"><strong>{subtitle}</strong></span></div></div>'
-      f'<div style="justify-self:end;"><a href="{es_href}" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #00b8b8;"><strong>{es_label}</strong></a></div>'
+      f'<div style="justify-self:end;display:flex;align-items:center;gap:14px;">{hicon_img}<a href="{es_href}" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #00b8b8;"><strong>{es_label}</strong></a></div>'
       '</div></div>')
 
 CONTENT_ICON=f"{SITE}/assets/Icons/assignment/step-check-teal-v2.png"
