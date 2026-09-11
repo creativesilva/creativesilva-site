@@ -2116,6 +2116,7 @@
             </span>
           </summary>
           <div class="course-acc-body">
+            ${slideDecksBlock(course)}
             ${(coursePages.length + announcements.length + modules.length) ? `<div class="module-list">${moduleRows}</div>` : empty}
             ${docsBlock(course)}
             ${hint}
