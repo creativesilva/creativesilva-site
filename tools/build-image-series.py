@@ -95,20 +95,22 @@ def contact_install_card(es):
     # + how to install the contact sheet presets once. The templates themselves download from Downloads.
     alt=("Miniatura del video: instalar los ajustes de hoja de contactos en Lightroom Classic" if es
          else "Video thumbnail: installing the contact sheet presets in Lightroom Classic")
+    # Purple Resources section: every accent is purple so the card reads as one theme.
+    # Thumbnail frame #8b5cf6, caption + video link light purple #c4b5fd.
     thumb=('<div style="float:right;width:40%;min-width:230px;margin:0 0 14px 22px;">'
-      f'<a href="{INSTALL_VIDEO}" target="_blank" rel="noopener" style="display:block;background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;">'
+      f'<a href="{INSTALL_VIDEO}" target="_blank" rel="noopener" style="display:block;background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;">'
       f'<img src="{INSTALL_THUMB}" alt="{alt}" style="display:block;width:100%;height:auto;" /></a>'
-      f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">'
+      f'<div style="font-size:10.5pt;color:#c4b5fd;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">'
       + ("Toca para ver el video de instalaci&oacute;n." if es else "Tap to watch the install video.") + '</div></div>')
     if es:
         eyebrow="RECURSO / INSTALA LOS AJUSTES"; heading="Instala Tus Ajustes de Hoja de Contactos"
         body=(para("Usas dos ajustes (presets) de Lightroom Classic para armar tus hojas de contactos: uno de 12 y uno de 6. Los instalas <strong>una sola vez</strong> y quedan listos para siempre.")
-          + para('<a href="'+INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#ffb27c;"><strong>Mira el video de instalaci&oacute;n</strong></a>, luego coloca los ajustes en Lightroom Classic &rarr; m&oacute;dulo Imprimir.')
+          + para('<a href="'+INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Mira el video de instalaci&oacute;n</strong></a>, luego coloca los ajustes en Lightroom Classic &rarr; m&oacute;dulo Imprimir.')
           + para("Descarga las plantillas desde la secci&oacute;n de Descargas de arriba."))
     else:
         eyebrow="RESOURCE / INSTALL THE PRESETS"; heading="Install Your Contact Sheet Presets"
         body=(para("You use two Lightroom Classic presets to build your contact sheets: a 12-Up and a 6-Up. Install them <strong>one time</strong> and they are ready every time after that.")
-          + para('<a href="'+INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#ffb27c;"><strong>Watch the install video</strong></a>, then drop the presets into Lightroom Classic &rarr; Print module.')
+          + para('<a href="'+INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>, then drop the presets into Lightroom Classic &rarr; Print module.')
           + para("Download the templates from the Downloads section above."))
     return resources_card(eyebrow, heading, thumb + body + '<div style="clear:both;"></div>')
 
@@ -146,11 +148,13 @@ def bullets(items):
             f'<span style="font-size:13.5pt;color:rgba(255,255,255,0.88);">{inner}</span></div>')
     return f'<div style="margin-bottom:6px;">{r}</div>'
 
-def steps(items):
+def steps(items, accent="#00b8b8"):
+    # Numbered how-to list. Badge inherits the parent section's accent (teal by default,
+    # since steps live in teal content cards); pass a section color to keep it cohesive.
     r=""
     for i,(b,rest) in enumerate(items,1):
         r+=('<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;">'
-            f'<span style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#FF6B1A;color:#ffffff;font-size:12pt;line-height:26px;text-align:center;"><strong>{i}</strong></span>'
+            f'<span style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:{accent};color:#ffffff;font-size:12pt;line-height:26px;text-align:center;"><strong>{i}</strong></span>'
             f'<span style="font-size:13.5pt;color:rgba(255,255,255,0.88);line-height:1.5;"><strong>{b}</strong> {rest}</span></div>')
     return f'<div style="margin:4px 0 6px;">{r}</div>'
 
@@ -187,14 +191,15 @@ def slide_deck(es):
              else 'Importar a Lightroom, diapositiva {} de 12')
     imgs=""
     for i in range(1,13):
-        # slides stack FLUSH (margin:0) so the next 16:9 slide peeks into the 16:11 window
-        imgs+=(f'<img src="{SLIDE.format(i)}" alt="{alt_lbl.format(i)}" style="display:block;width:100%;height:auto;margin:0;border-bottom:2px solid rgba(0,184,184,0.35);" />')
+        # slides stack FLUSH (margin:0) so the next 16:9 slide peeks into the 16:11 window.
+        # PURPLE accents: the slide deck always sits inside the purple Resources card.
+        imgs+=(f'<img src="{SLIDE.format(i)}" alt="{alt_lbl.format(i)}" style="display:block;width:100%;height:auto;margin:0;border-bottom:2px solid rgba(139,92,246,0.35);" />')
     return ('<div style="margin-bottom:12px;">'
-      f'<a href="{SLIDE_PDF}" download style="display:inline-block;background:#FF6B1A;color:#ffffff;text-decoration:none;padding:11px 22px;border-top:2px solid #ffb27c;font-size:11pt;letter-spacing:0.04em;"><strong>&#128229; {pdf_lbl}</strong></a></div>'
-      f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.9;">&#8595; {hint}</div>'
+      f'<a href="{SLIDE_PDF}" download style="display:inline-block;background:#8b5cf6;color:#ffffff;text-decoration:none;padding:11px 22px;border-top:2px solid #c4b5fd;font-size:11pt;letter-spacing:0.04em;"><strong>&#128229; {pdf_lbl}</strong></a></div>'
+      f'<div style="font-size:11pt;color:#c4b5fd;margin-bottom:8px;opacity:0.9;">&#8595; {hint}</div>'
       # SLIDE-DECK SCROLLABLE (LOCKED): a 16:11 window shows one 16:9 slide in full with a sliver of
       # the next slide peeking in to invite scrolling. No max-height, no padding, flush slides.
-      '<div class="silva-scroll" style="aspect-ratio:16/11;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid rgba(0,184,184,0.22);background:rgba(0,0,0,0.22);box-sizing:border-box;">'
+      '<div class="silva-scroll" style="aspect-ratio:16/11;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid rgba(139,92,246,0.28);background:rgba(0,0,0,0.22);box-sizing:border-box;">'
       + imgs + '</div>')
 
 def vocab_grid(quiz_label, quiz_body, terms):
