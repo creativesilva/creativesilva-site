@@ -132,7 +132,7 @@ Section container box: `background:linear-gradient(180deg,<accent 0.10-0.12> 0%,
 
 **Step identity (RESOLVED 2026-09-11).** A step opens with its gold Deliverables box at the top, then plain content chips; the banner names the step and the white header module-type icon (above) carries the module identity. The old right-side ID-eye chip (the `<!--IDEYE-->` icon + label) is RETIRED and removed from every module.
 
-## 4. Card Borders — THE CRITICAL RULE
+## 4. Card Borders: THE CRITICAL RULE
 
 Cards stay translucent so the PV watermark shows through. The accent frame
 is a diagonal gradient on the card itself. The bright solid top stripe is a
@@ -160,7 +160,7 @@ Inner tile (1px gradient frame, 3px solid top stripe):
 
 The stripe child's negative margins must equal the card's top/left/right padding so it sits flush to the inner border edge. Optional inner-tile wedge background for extra accent: `linear-gradient(135deg,<accent 0.14> 0%,<accent 0.14> 10%,rgba(0,0,0,0.32) 10%,rgba(0,0,0,0.32) 100%)`. No corner triangles.
 
-## 5. Buttons — THE FRAMEWORK RULE
+## 5. Buttons: THE FRAMEWORK RULE
 
 Every button on every page is identical except the top accent color.
 ```html
