@@ -46,7 +46,7 @@ def banner(label,title,subtitle,es_href,es_label):
       f'<div style="justify-self:end;"><a href="{es_href}" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #ff6b1a;"><strong>{es_label}</strong></a></div>'
       '</div></div>')
 
-CONTENT_ICON=f"{SITE}/assets/Icons/assignment/content-teal-v1.png"
+CONTENT_ICON=f"{SITE}/assets/Icons/assignment/step-check-teal-v1.png"
 TYPE_ICON={"overview":f"{SITE}/assets/Icons/assignment/overview-teal-v1.png",
   "photo-walk":f"{SITE}/assets/Icons/assignment/photo-walk-teal-v1.png",
   "edit":f"{SITE}/assets/Icons/assignment/edit-teal-v1.png",
@@ -63,10 +63,12 @@ def type_card(kind,label,heading,inner):
     return TEAL_BOX + section_header(TYPE_ICON[kind], label, "#00b8b8", "#80e0e0") + hd + f'{inner}</div>'
 
 RESICON=f"{SITE}/assets/Icons/assignment/resources-v1.png"
-def resources_card(eyebrow,heading,inner):
-    # PURPLE Resources section: chip [gear icon + heading] + content.
+def resources_card(heading,inner,es=False):
+    # PURPLE Resources section: chip [gear icon + "Module Resource: <heading>"] + content.
+    # The title calls out that it is a resource so students know it is reference/how-to.
+    label=("Recurso del M&oacute;dulo: " if es else "Module Resource: ")+heading
     return ('<div style="background:linear-gradient(180deg,rgba(139,92,246,0.10) 0%,rgba(139,92,246,0.03) 100%);border:1px solid rgba(139,92,246,0.28);border-left:6px solid #8b5cf6;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      + section_header(RESICON, heading, "#8b5cf6", "#c4b5fd") + f'{inner}</div>')
+      + section_header(RESICON, label, "#8b5cf6", "#c4b5fd") + f'{inner}</div>')
 
 def para(t):
     return f'<div style="margin-bottom:14px;line-height:1.72;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{t}</span></div>'
@@ -112,7 +114,7 @@ def contact_install_card(es):
         body=(para("You use two Lightroom Classic presets to build your contact sheets: a 12-Up and a 6-Up. Install them <strong>one time</strong> and they are ready every time after that.")
           + para('<a href="'+INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>, then drop the presets into Lightroom Classic &rarr; Print module.')
           + para("Download the templates from the Downloads section above."))
-    return resources_card(eyebrow, heading, thumb + body + '<div style="clear:both;"></div>')
+    return resources_card(heading, thumb + body + '<div style="clear:both;"></div>', es)
 
 def section_header(icon,title,accent,light):
     # COMBINED section header (LOCKED 2026-09-10): one dark rectangle holding the section icon
@@ -220,16 +222,20 @@ def vocab_grid(quiz_label, quiz_body, terms):
     return note+f'<table role="presentation" style="width:100%;border-collapse:collapse;table-layout:fixed;"><tbody>{rows}</tbody></table>'
 
 DELIVER_ICON=f"{SITE}/assets/Icons/assignment/deliverables-v2.png"
-def deliverables_box(title,lead,items):
+def deliverables_box(es,items):
     # GOLD deliverables section, chip header (icon on the LEFT + gold title, accent rule
-    # below), matching every other section. Sits at the TOP of the step.
+    # below), matching every other section. Sits at the TOP of the step. Opens with a
+    # forecast: finish the tasks on this page, then turn in the work below.
+    title="ENTREGABLES &middot; ENTR&Eacute;GALO" if es else "DELIVERABLES &middot; TURN IT IN"
+    lead=("Trabaja cada tarea de esta p&aacute;gina para terminar bien este paso. Al final entregas lo siguiente, que se califica por su cuenta:" if es
+          else "Work through every task on this page to finish this step the right way. At the end you turn in the work below, graded on its own:")
     lis=""
     for b,rest in items:
         lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#f5b301;">&bull;</span> '
               f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
     return ('<div style="background:linear-gradient(180deg,rgba(245,179,1,0.12) 0%,rgba(245,179,1,0.03) 100%);border:1px solid rgba(245,179,1,0.35);border-left:6px solid #f5b301;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       + section_header(DELIVER_ICON, title, "#f5b301", "#ffd166")
-      + f'<div style="font-size:13pt;color:#ffffff;margin-bottom:8px;"><strong>{lead}</strong></div>'
+      + f'<div style="font-size:13pt;color:#ffffff;margin-bottom:10px;line-height:1.5;">{lead}</div>'
       + f'{lis}</div>')
 
 def top_wrap(en,es):
@@ -372,7 +378,7 @@ def overview():
 # ---------------- STEP 01 ----------------
 def step01():
     en=banner("Image Series Photo Walk &bull; Step 1","Capture &amp; Import","Set RAW, capture your series, offload to OneDrive, and import.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+    en+=deliverables_box(False,
         [("1 contact sheet:","your 12-image contact sheet (high-resolution JPG), showing your imported series, uploaded to this Canvas assignment.")])
     en+=card("CAMERA SETUP / SET TO RAW","Set Your Camera to RAW First",
         para("This project must be captured in RAW, not JPG. RAW keeps the most detail so your edits look clean. Set your Canon EOS R50 to RAW before you take any photos.")
@@ -401,9 +407,9 @@ def step01():
             ("Copy your RAW files:","copy all your RAW photos from the card into that OneDrive folder."),
             ("Let it sync:","wait for OneDrive to finish syncing. The cloud icon turns to a check when it is done."),
         ]))
-    en+=resources_card("RESOURCE / LIGHTROOM IMPORT","Import Into Lightroom Classic",
+    en+=resources_card("Import Into Lightroom Classic",
         para("Now import your series into Lightroom Classic. The slide deck below walks you through every click. Scroll through all 12 slides. Want it open while you work? The slide deck is in the Downloads section on this module&rsquo;s Overview page.")
-        + slide_deck(False))
+        + slide_deck(False), False)
     en+=card("CONTACT SHEET / SHOW YOUR SERIES","Make Your 12-Image Contact Sheet",
         para("A contact sheet is one page that shows all your photos as small thumbnails. Make yours with the 12-Up contact sheet layout in the Lightroom Classic Print module, then save it as a high-resolution JPG. The template is on this module&rsquo;s Overview page (marked M at the top).")
         + bullets([
@@ -413,7 +419,7 @@ def step01():
         ]))
 
     es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 1","Captura e Importa","Pon RAW, captura tu serie, desc&aacute;rgala a OneDrive e imp&oacute;rtala.","#top","Back to English")
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+    es+=deliverables_box(True,
         [("1 hoja de contactos:","tu hoja de contactos de 12 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tu serie importada, subida a esta tarea de Canvas.")])
     es+=card("AJUSTE DE C&Aacute;MARA / PON RAW","Primero Pon Tu C&aacute;mara en RAW",
         para("Este proyecto debe capturarse en RAW, no en JPG. RAW guarda el mayor detalle para que tus ediciones se vean limpias. Pon tu Canon EOS R50 en RAW antes de tomar cualquier foto.")
@@ -442,9 +448,9 @@ def step01():
             ("Copia tus archivos RAW:","copia todas tus fotos RAW de la tarjeta a esa carpeta de OneDrive."),
             ("Deja que sincronice:","espera a que OneDrive termine de sincronizar. El &iacute;cono de nube cambia a una palomita cuando termina."),
         ]))
-    es+=resources_card("RECURSO / IMPORTAR A LIGHTROOM","Importa a Lightroom Classic",
+    es+=resources_card("Importa a Lightroom Classic",
         para("Ahora importa tu serie a Lightroom Classic. Las diapositivas de abajo te gu&iacute;an en cada clic. Despl&aacute;zate por las 12 diapositivas. &iquest;Quieres tenerla abierta mientras trabajas? La presentaci&oacute;n est&aacute; en la secci&oacute;n de Descargas en la p&aacute;gina de Resumen de este m&oacute;dulo.")
-        + slide_deck(True))
+        + slide_deck(True), True)
     es+=card("HOJA DE CONTACTOS / MUESTRA TU SERIE","Crea Tu Hoja de Contactos de 12 Im&aacute;genes",
         para("Una hoja de contactos es una p&aacute;gina que muestra todas tus fotos como miniaturas. Crea la tuya con el dise&ntilde;o de hoja de contactos de 12 en el m&oacute;dulo Imprimir de Lightroom Classic, y gu&aacute;rdala como JPG de alta resoluci&oacute;n. La plantilla est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
         + bullets([
@@ -460,7 +466,7 @@ def step01():
 # ---------------- STEP 02 ----------------
 def step02():
     en=banner("Image Series Photo Walk &bull; Step 2","Cull &amp; Edit","Select your best 6, do a light edit, and turn in a 6-image contact sheet.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+    en+=deliverables_box(False,
         [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG), showing your 6 edited selections, uploaded to this Canvas assignment.")])
     en+=card("CULL / KEEP THE STRONG ONES","Cull to Your Best 6",
         para("Culling means looking through your photos and keeping only the strongest. Select the 6 images that best show your series. Drop the blurry, the too-dark, and the repeats.")
@@ -488,7 +494,7 @@ def step02():
         ]))
 
     es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 2","Selecciona y Edita","Elige tus mejores 6, haz una edici&oacute;n ligera y entrega una hoja de contactos de 6.","#top","Back to English")
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+    es+=deliverables_box(True,
         [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tus 6 elegidas editadas, subida a esta tarea de Canvas.")])
     es+=card("SELECCIONA / QU&Eacute;DATE CON LAS FUERTES","Selecciona (Cull) Tus Mejores 6",
         para("Seleccionar (cull) significa revisar tus fotos y quedarte solo con las m&aacute;s fuertes. Elige las 6 im&aacute;genes que mejor muestran tu serie. Descarta las borrosas, las muy oscuras y las repetidas.")
@@ -522,7 +528,7 @@ def step02():
 # ---------------- STEP 03 ----------------
 def step03():
     en=banner("Image Series Photo Walk &bull; Step 3","Reflection","Tell the story of your series.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box("DELIVERABLES &middot; TURN IT IN","Turn in for this step (graded on its own):",
+    en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
         float_right(REFLECT_FLOAT,"A Pioneer Valley student typing her Image Series reflection in the Word document on an iMac in the lab","Type your answers right in the reflection document.")
@@ -536,7 +542,7 @@ def step03():
     en+=note_orange("Answer honestly, in your own words.")
 
     es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 3","Reflexi&oacute;n","Cuenta la historia de tu serie.","#top","Back to English")
-    es+=deliverables_box("ENTREGABLES &middot; ENTR&Eacute;GALO","Entrega en este paso (se califica por su cuenta):",
+    es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         float_right(REFLECT_FLOAT,"Una estudiante de Pioneer Valley escribiendo su reflexi&oacute;n de la Serie de Im&aacute;genes en el documento de Word en una iMac en el laboratorio","Escribe tus respuestas directamente en el documento de reflexi&oacute;n.")
