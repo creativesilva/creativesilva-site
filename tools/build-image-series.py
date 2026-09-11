@@ -218,7 +218,7 @@ def vocab_grid(quiz_label, quiz_body, terms):
         rows+='<tr>'+''.join(cell.format(term=t,defn=d) for t,d in terms[i:i+3])+'</tr>'
     return note+f'<table role="presentation" style="width:100%;border-collapse:collapse;table-layout:fixed;"><tbody>{rows}</tbody></table>'
 
-DELIVER_ICON=f"{SITE}/assets/Icons/assignment/deliverables-v2.png"
+DELIVER_ICON=f"{SITE}/assets/Icons/assignment/deliverables-v3.png"
 def deliverables_box(es,items):
     # GOLD deliverables section, chip header (icon on the LEFT + gold title, accent rule
     # below), matching every other section. Sits at the TOP of the step. Opens with a
