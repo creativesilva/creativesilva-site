@@ -46,7 +46,7 @@ def page_label(fn):
     rest=m.group(2).replace("-"," ").strip().title()
     return f"Step {int(m.group(1)):02d}"+(f" &middot; {rest}" if rest else "")
 
-def card(path, module_title, page, role, alt):
+def card(path, module_title, page, role, alt, page_url):
     ext=path.rsplit(".",1)[-1].upper()
     name=f'{module_title} &rsaquo; {page}'
     alt=alt or f"{module_title} {re.sub('&[a-z]+;','',page)} {role.lower()}"
@@ -54,6 +54,7 @@ def card(path, module_title, page, role, alt):
       f'<img src="{path}" alt="{alt}" /></div>'
       f'<div class="logo-meta"><span class="logo-name">{name} '
       f'<span class="logo-fmt">{role} &middot; {ext}</span></span>'
+      f'<a class="logo-view" href="{page_url}">View Page</a>'
       f'<a class="logo-dl" href="{path}" download>Download</a></div></div>')
 
 def collect():
@@ -68,7 +69,7 @@ def collect():
             h=open(overview,encoding="utf-8").read()
             m=HERO_RE.search(h)
             if m and m.group(1) not in seen:
-                seen.add(m.group(1)); bycourse[course].append(card(m.group(1),title,"Overview","Header",m.group(2)))
+                seen.add(m.group(1)); bycourse[course].append(card(m.group(1),title,"Overview","Header",m.group(2),"/"+overview_url))
         # floats: images in the 44% float column, each step in order
         for sp in [overview_url]+steps:
             p=os.path.join(ROOT,sp)
@@ -76,16 +77,18 @@ def collect():
             h=open(p,encoding="utf-8").read(); fn=os.path.basename(sp)
             for m in FLOAT_RE.finditer(h):
                 if m.group(1) in seen: continue
-                seen.add(m.group(1)); bycourse[course].append(card(m.group(1),title,page_label(fn),"Float",m.group(2)))
+                seen.add(m.group(1)); bycourse[course].append(card(m.group(1),title,page_label(fn),"Float",m.group(2),"/"+sp))
     return bycourse
 
 def render(bycourse):
+    # each course is its own collapsible sub-accordion (nested cat-acc), collapsed by default
     out=[]
     for c in COURSE_ORDER:
         cards=bycourse[c]
         if not cards: continue
-        out.append(f'<p class="cat-subgroup">{COURSE_NAME[c]} <span style="opacity:0.6;font-weight:400;">({len(cards)})</span></p>')
-        out.append('<div class="logo-grid">'+"".join(cards)+'</div>')
+        out.append('<details class="cat-acc"><summary class="cat-head">'
+          f'<span class="cat-name">{COURSE_NAME[c]} ({len(cards)})</span><span class="cat-chevron"></span></summary>'
+          '<div class="cat-body"><div class="logo-grid">'+"".join(cards)+'</div></div></details>')
     return "\n                      ".join(out)
 
 def main():
