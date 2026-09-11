@@ -111,6 +111,14 @@ def contact_install_card(es):
           + para("Download the templates from the Downloads section above."))
     return resources_card(eyebrow, heading, thumb + body + '<div style="clear:both;"></div>')
 
+def section_header(icon,title,accent,light):
+    # COMBINED section header (LOCKED 2026-09-10): one dark rectangle holding the section icon
+    # + one big color-coded title. Replaces the old small-eyebrow + separate-heading pair.
+    return ('<div style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);'
+      f'border-left:5px solid {accent};padding:9px 18px 9px 12px;margin-bottom:18px;max-width:100%;box-sizing:border-box;">'
+      f'<img src="{icon}" alt="" style="width:40px;height:40px;display:block;flex:0 0 auto;" />'
+      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:{light};letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>')
+
 def downloads_block(es):
     # CANONICAL orange downloads section, right after the intro/header card. This module
     # holds the reflection AND the contact sheet templates (first module to introduce them).
@@ -122,12 +130,9 @@ def downloads_block(es):
     cslabel=("Plantillas de Hoja de Contactos (12 y 6, ZIP)" if es else "Contact Sheet Templates (12-Up &amp; 6-Up, ZIP)")
     ref=REFLECT_ES if es else REFLECT_EN
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      '<div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #FF6B1A;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#ffb27c;text-transform:uppercase;margin-bottom:12px;">'
-      f'<strong>{eyebrow}</strong></div>'
-      f'<div style="margin-bottom:8px;"><span style="font-size:20pt;color:#ffffff;"><strong>{heading}</strong></span></div>'
-      '<div style="height:2px;background:#FF6B1A;width:60px;margin-bottom:18px;"></div>'
-      f'{para(lead)}{dl_row(ref,reflabel)}'
-      f'<div style="margin-top:10px;">{dl_row(CONTACT_ZIP,cslabel)}</div>'
+      + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
+      + f'{para(lead)}<div style="margin-top:8px;">{dl_link(ref,reflabel,row=True)}</div>'
+      + f'<div style="margin-top:10px;">{dl_link(CONTACT_ZIP,cslabel,row=True)}</div>'
       + folder_note(es) + '</div>')
 
 def bullets(items):
