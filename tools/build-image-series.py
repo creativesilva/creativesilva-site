@@ -108,12 +108,12 @@ def contact_install_card(es):
         eyebrow="RECURSO / INSTALA LOS AJUSTES"; heading="Instala Tus Ajustes de Hoja de Contactos"
         body=(para("Usas dos ajustes (presets) de Lightroom Classic para armar tus hojas de contactos: uno de 12 y uno de 6. Los instalas <strong>una sola vez</strong> y quedan listos para siempre.")
           + para('<a href="'+INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Mira el video de instalaci&oacute;n</strong></a>, luego coloca los ajustes en Lightroom Classic &rarr; m&oacute;dulo Imprimir.')
-          + para("Descarga las plantillas desde la secci&oacute;n de Descargas de arriba."))
+          + para("Las plantillas de hoja de contactos est&aacute;n en la secci&oacute;n de Descargas en la p&aacute;gina de Resumen de este m&oacute;dulo."))
     else:
         eyebrow="RESOURCE / INSTALL THE PRESETS"; heading="Install Your Contact Sheet Presets"
         body=(para("You use two Lightroom Classic presets to build your contact sheets: a 12-Up and a 6-Up. Install them <strong>one time</strong> and they are ready every time after that.")
           + para('<a href="'+INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>, then drop the presets into Lightroom Classic &rarr; Print module.')
-          + para("Download the templates from the Downloads section above."))
+          + para("The contact sheet templates are in the Downloads section on this module&rsquo;s Overview page."))
     return resources_card(heading, thumb + body + '<div style="clear:both;"></div>', es)
 
 def section_header(icon,title,accent,light):
@@ -327,7 +327,6 @@ def overview():
             ("Keep it consistent:","repeat that idea across every photo so they feel linked."),
             ("Think like a set:","each photo is part of a group, not a one-off."),
         ]))
-    en+=contact_install_card(False)
     en+=card("HOW IT WORKS / YOUR PLAN","Your Three Steps",
         steps([
             ("Capture &amp; Import:","set the camera to RAW, capture your cohesive series, offload to OneDrive, import into Lightroom Classic, and turn in a 12-image contact sheet."),
@@ -358,7 +357,6 @@ def overview():
             ("Mant&eacute;nla consistente:","repite esa idea en cada foto para que se sientan unidas."),
             ("Piensa como un grupo:","cada foto es parte de un conjunto, no una foto suelta."),
         ]))
-    es+=contact_install_card(True)
     es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Tres Pasos",
         steps([
             ("Captura e Importa:","pon la c&aacute;mara en RAW, captura tu serie cohesiva, desc&aacute;rgala a OneDrive, imp&oacute;rtala a Lightroom Classic y entrega una hoja de contactos de 12 im&aacute;genes."),
@@ -415,6 +413,7 @@ def step01():
     en+=resources_card("Import Into Lightroom Classic",
         para("Now import your series into Lightroom Classic. The slide deck below walks you through every click. Scroll through all 12 slides. Want it open while you work? The slide deck is in the Downloads section on this module&rsquo;s Overview page.")
         + slide_deck(False), False)
+    en+=contact_install_card(False)
     en+=card("CONTACT SHEET / SHOW YOUR SERIES","Make Your 12-Image Contact Sheet",
         para("A contact sheet is one page that shows all your photos as small thumbnails. Make yours with the 12-Up contact sheet layout in the Lightroom Classic Print module, then save it as a high-resolution JPG. The template is on this module&rsquo;s Overview page (marked M at the top).")
         + bullets([
@@ -456,6 +455,7 @@ def step01():
     es+=resources_card("Importa a Lightroom Classic",
         para("Ahora importa tu serie a Lightroom Classic. Las diapositivas de abajo te gu&iacute;an en cada clic. Despl&aacute;zate por las 12 diapositivas. &iquest;Quieres tenerla abierta mientras trabajas? La presentaci&oacute;n est&aacute; en la secci&oacute;n de Descargas en la p&aacute;gina de Resumen de este m&oacute;dulo.")
         + slide_deck(True), True)
+    es+=contact_install_card(True)
     es+=card("HOJA DE CONTACTOS / MUESTRA TU SERIE","Crea Tu Hoja de Contactos de 12 Im&aacute;genes",
         para("Una hoja de contactos es una p&aacute;gina que muestra todas tus fotos como miniaturas. Crea la tuya con el dise&ntilde;o de hoja de contactos de 12 en el m&oacute;dulo Imprimir de Lightroom Classic, y gu&aacute;rdala como JPG de alta resoluci&oacute;n. La plantilla est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
         + bullets([
