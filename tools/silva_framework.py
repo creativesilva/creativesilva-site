@@ -161,13 +161,15 @@ def framed(src,alt):
     return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;">'
       f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>')
 
-def float_right(src,alt,cap):
+def float_right(src,alt,cap=""):
     # Teal-framed content photo. FLOAT-marked so a card hoists it into the thumbnail column
-    # (top-aligned with the title chip, drops below when narrow).
+    # (top-aligned with the title chip, drops below when narrow). Caption is optional: with an
+    # empty caption no caption line is emitted (no stray empty div under the image).
+    capdiv=(f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div>' if cap else '')
     return ('<!--FLOAT-->'
       f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
-      f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div>'
-      '<!--/FLOAT-->')
+      + capdiv
+      + '<!--/FLOAT-->')
 
 def purple_thumb(href,src,alt,cap):
     # Purple-framed clickable thumbnail for a Resources card (slide deck, install video); new tab.
