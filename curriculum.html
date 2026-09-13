@@ -2314,13 +2314,16 @@
       function pad2(n) { return n < 10 ? "0" + n : "" + n; }
       function sheetRow(name, s, i) {
         var url = CHARBASE + s.file;
+        var cap = name + " " + pad2(i + 1) + " &middot; " + s.outfit;
         var label = name + " " + pad2(i + 1) + ' <span class="page-sub">&middot; ' + s.outfit + "</span>";
+        // page-name + "View Image" both open the shadowbox lightbox (wired in the Logos IIFE,
+        // which builds the slide set from .cast-list .page-row); href stays as a fallback.
         return '<div class="page-row">'
-          + '<a class="page-name" href="' + url + '" target="_blank" rel="noopener">' + label + "</a>"
+          + '<a class="page-name" href="' + url + '">' + label + "</a>"
           + '<span class="page-acts">'
           + '<button type="button" class="pg-btn" onclick="castCopyImage(\'' + url + '\', this)">Copy Image</button>'
           + '<a class="pg-btn" href="' + url + '" download>Download</a>'
-          + '<a class="pg-btn pg-view" href="' + url + '" target="_blank" rel="noopener">View Page</a>'
+          + '<a class="pg-btn pg-view" href="' + url + '" data-full="' + url + '" data-caption="' + cap + '">View Image</a>'
           + "</span></div>";
       }
       function charAcc(ch) {
@@ -2420,8 +2423,22 @@
       var lbPrev = lb.querySelector('.cs-lightbox-prev');
       var lbNext = lb.querySelector('.cs-lightbox-next');
 
-      // Ordered set of every clickable tile in the catalog, in DOM order
+      // Ordered set of every clickable image in the catalog, in DOM order.
       var slides = [];
+      // Cast outfit sheets first (they sit before the logo-card grids): both the row name
+      // and its "View Image" button open the same shadowbox, one slide per sheet.
+      document.querySelectorAll('.cast-list .page-row').forEach(function (row) {
+        var viewEl = row.querySelector('.pg-view');
+        var full = viewEl && viewEl.getAttribute('data-full');
+        if (!full) return;
+        var caption = viewEl.getAttribute('data-caption') || '';
+        var idx = slides.length;
+        slides.push({ full: full, caption: caption, alt: caption });
+        var open = function (e) { if (e) { e.preventDefault(); } openLightbox(idx); };
+        viewEl.addEventListener('click', open);
+        var nameEl = row.querySelector('.page-name');
+        if (nameEl) { nameEl.addEventListener('click', open); nameEl.style.cursor = 'zoom-in'; }
+      });
       document.querySelectorAll('.logo-card .logo-tile').forEach(function (tile) {
         var img = tile.querySelector('img');
         if (!img) return;
