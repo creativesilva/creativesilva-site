@@ -2340,32 +2340,45 @@
   <!-- Logos: add a Copy button next to every Download that puts the full-quality image (PNG) on the clipboard, ready to paste into ChatGPT etc. Teacher-facing backend. -->
   <script>
     (function () {
-      async function copyLogoImage(url, btn) {
-        var original = btn.getAttribute('data-label') || 'Copy';
-        try {
+      // Copy the image to the clipboard as PNG. clipboard.write is called SYNCHRONOUSLY
+      // in the click and handed a PROMISE that resolves to the PNG blob, so Safari keeps
+      // the user gesture through the async fetch/rasterize (awaiting first loses it and the
+      // write throws with no "Copied"). Chrome supports the promise form too.
+      function copyLogoImage(url, btn) {
+        var original = btn.getAttribute('data-label') || btn.textContent || 'Copy';
+        btn.setAttribute('data-label', original);
+        function done(ok) {
+          btn.textContent = ok ? 'Copied!' : 'Copy failed';
+          if (ok) { btn.classList.add('copied'); }
+          setTimeout(function () { btn.textContent = original; btn.classList.remove('copied'); }, ok ? 1600 : 2200);
+        }
+        var pngPromise = (async function () {
           var resp = await fetch(url);
           var blob = await resp.blob();
-          var pngBlob;
-          if (blob.type === 'image/png') {
-            pngBlob = blob;
-          } else {
-            // rasterize non-PNG (JPG, SVG) to PNG via canvas
-            var objUrl = URL.createObjectURL(blob);
+          if (blob.type === 'image/png') { return blob; }
+          // rasterize non-PNG (JPG, SVG) to PNG via canvas
+          var objUrl = URL.createObjectURL(blob);
+          try {
             var img = new Image();
             await new Promise(function (res, rej) { img.onload = res; img.onerror = rej; img.src = objUrl; });
             var w = img.naturalWidth || 1024, h = img.naturalHeight || 1024;
             var cv = document.createElement('canvas'); cv.width = w; cv.height = h;
             cv.getContext('2d').drawImage(img, 0, 0, w, h);
-            URL.revokeObjectURL(objUrl);
-            pngBlob = await new Promise(function (r) { cv.toBlob(r, 'image/png'); });
-          }
-          await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob })]);
-          btn.textContent = 'Copied!'; btn.classList.add('copied');
-          setTimeout(function () { btn.textContent = original; btn.classList.remove('copied'); }, 1600);
-        } catch (e) {
-          btn.textContent = 'Copy failed';
-          setTimeout(function () { btn.textContent = original; }, 2000);
-        }
+            return await new Promise(function (r) { cv.toBlob(r, 'image/png'); });
+          } finally { URL.revokeObjectURL(objUrl); }
+        })();
+        if (!(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write)) { done(false); return; }
+        try {
+          navigator.clipboard.write([new ClipboardItem({ 'image/png': pngPromise })])
+            .then(function () { done(true); })
+            .catch(function () {
+              // Fallback for engines that reject a promise-valued ClipboardItem: resolve then write.
+              pngPromise
+                .then(function (b) { return navigator.clipboard.write([new ClipboardItem({ 'image/png': b })]); })
+                .then(function () { done(true); })
+                .catch(function () { done(false); });
+            });
+        } catch (e) { done(false); }
       }
       window.castCopyImage = copyLogoImage; // reused by the Cast per-sheet "Copy Image" buttons
       document.querySelectorAll('.logo-card').forEach(function (card) {
