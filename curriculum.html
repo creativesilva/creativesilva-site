@@ -801,6 +801,8 @@
     .page-row:last-child { border-bottom: none; }
     .page-name { font-size: 0.82rem; color: rgba(255,255,255,0.86); letter-spacing: 0.02em; text-decoration: none; cursor: pointer; }
     .page-name:hover { color: #fff; text-decoration: underline; }
+    .page-sub { color: var(--text-dim); font-weight: 400; }
+    .cast-list .module-acc:first-child { margin-top: 0; }
     .page-acts { display: flex; gap: 6px; flex-wrap: wrap; }
     .pg-btn { font-family: inherit; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #eaf7f7; text-decoration: none; cursor: pointer; background: rgba(0,184,184,0.10); border: 1px solid rgba(0,184,184,0.30); border-top: 2px solid #00b8b8; padding: 6px 12px; border-radius: 3px; white-space: nowrap; }
     .pg-btn:hover { border-color: rgba(0,184,184,0.6); background: rgba(0,184,184,0.16); }
@@ -995,13 +997,7 @@
                 <div class="char-content" id="char-content" hidden>
                   <details class="cat-acc" open>
                     <summary class="cat-head"><span class="cat-name">Cast</span><span class="cat-chevron"></span></summary>
-                    <div class="cat-body"><div class="logo-grid">
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/renee-character-sheet-v2.jpg" alt="Renee character sheet" /></div><div class="logo-meta"><span class="logo-name">Renee <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/renee-character-sheet-v2.jpg" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/ricardo-character-sheet-v3.jpg" alt="Ricardo character sheet" /></div><div class="logo-meta"><span class="logo-name">Ricardo <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/ricardo-character-sheet-v3.jpg" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/patricia-character-sheet-v6.jpg" alt="Patricia character sheet" /></div><div class="logo-meta"><span class="logo-name">Patricia <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/patricia-character-sheet-v6.jpg" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/anthony-character-sheet-v2.jpg" alt="Anthony character sheet" /></div><div class="logo-meta"><span class="logo-name">Anthony <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/anthony-character-sheet-v2.jpg" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/mr-silva-character-sheet-v2.jpg" alt="Mr. Silva character sheet" /></div><div class="logo-meta"><span class="logo-name">Mr. Silva <span class="logo-fmt">Character Sheet &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/mr-silva-character-sheet-v2.jpg" download>Download</a></div></div>
-                    </div></div>
+                    <div class="cat-body"><div id="cast-list" class="cast-list"></div></div>
                   </details>
                   <details class="cat-acc">
                     <summary class="cat-head"><span class="cat-name">Live Image Catalog</span><span class="cat-chevron"></span></summary>
@@ -1043,24 +1039,21 @@
                     <summary class="cat-head"><span class="cat-name">Prompts</span><span class="cat-chevron"></span></summary>
                     <div class="cat-body"><div style="display:flex;flex-direction:column;gap:10px;">
                     <div style="border:1px solid var(--line,rgba(255,255,255,0.12));border-radius:10px;padding:14px 16px;background:rgba(255,255,255,0.02);">
-                      <div style="font-weight:600;margin-bottom:4px;">Classroom Environment Master Prompt <span class="logo-fmt">v3 &middot; TXT</span></div>
-                      <div style="font-size:0.85rem;color:var(--text-faint,#9aa);line-height:1.5;margin-bottom:12px;">Angle-independent reference lock for generating the premium PV creative-lab classroom from any camera angle, now with a geometry, alignment, and quality lock that keeps desks gridded, perspective coherent, and lines straight. Fill in the SCENE OVERRIDES at the top, then paste into ChatGPT along with your reference image.</div>
+                      <div style="font-weight:600;margin-bottom:10px;">Classroom Environment Master Prompt <span style="font-weight:400;color:var(--text-dim);">(PV lab scene, any angle)</span> <span class="logo-fmt">v3 &middot; TXT</span></div>
                       <div style="display:flex;gap:8px;flex-wrap:wrap;">
                         <button type="button" class="pg-btn" onclick="silvaCopyPrompt('/assets/prompts/Classroom-Environment-Master-Prompt-v3.txt', this)">Copy Full Text</button>
                         <a class="pg-btn pg-view" href="/assets/prompts/Classroom-Environment-Master-Prompt-v3.txt" download>Download</a>
                       </div>
                     </div>
                     <div style="border:1px solid var(--line,rgba(255,255,255,0.12));border-radius:10px;padding:14px 16px;background:rgba(255,255,255,0.02);">
-                      <div style="font-weight:600;margin-bottom:4px;">Fresh Full-Image Rebuild Protocol <span class="logo-fmt">TXT</span></div>
-                      <div style="font-size:0.85rem;color:var(--text-faint,#9aa);line-height:1.5;margin-bottom:12px;">Forces a full-scene rebuild from scratch instead of a light edit of the previous image. Paste it ahead of your prompt when you want a brand-new composition, camera angle, and staging, keeping the reference only as visual canon.</div>
+                      <div style="font-weight:600;margin-bottom:10px;">Fresh Full-Image Rebuild Protocol <span style="font-weight:400;color:var(--text-dim);">(force a full rebuild)</span> <span class="logo-fmt">TXT</span></div>
                       <div style="display:flex;gap:8px;flex-wrap:wrap;">
                         <button type="button" class="pg-btn" onclick="silvaCopyPrompt('/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt', this)">Copy Full Text</button>
                         <a class="pg-btn pg-view" href="/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt" download>Download</a>
                       </div>
                     </div>
                     <div style="border:1px solid var(--line,rgba(255,255,255,0.12));border-radius:10px;padding:14px 16px;background:rgba(255,255,255,0.02);">
-                      <div style="font-weight:600;margin-bottom:4px;">Blank Artboard Reset <span class="logo-fmt">TXT</span></div>
-                      <div style="font-size:0.85rem;color:var(--text-faint,#9aa);line-height:1.5;margin-bottom:12px;">A short reset that clears the image tool&rsquo;s memory so the next request starts from a blank artboard, with no carryover of prior composition, camera, or edits. Paste it before a brand-new prompt when the model keeps clinging to an earlier image.</div>
+                      <div style="font-weight:600;margin-bottom:10px;">Blank Artboard Reset <span style="font-weight:400;color:var(--text-dim);">(clear the canvas memory)</span> <span class="logo-fmt">TXT</span></div>
                       <div style="display:flex;gap:8px;flex-wrap:wrap;">
                         <button type="button" class="pg-btn" onclick="silvaCopyPrompt('/assets/prompts/Blank-Artboard-Reset.txt', this)">Copy Full Text</button>
                         <a class="pg-btn pg-view" href="/assets/prompts/Blank-Artboard-Reset.txt" download>Download</a>
@@ -2296,6 +2289,54 @@
     })();
   </script>
 
+  <!-- Cast: per-character accordion (name row, click to reveal that character's outfit sheets), matching the module row layout. Data-driven: add a sheet by adding one line to a character's `sheets`. castCopyImage() is defined in the Logos script below. -->
+  <script>
+    (function () {
+      var CHARBASE = "/assets/images/characters/";
+      var CAST = [
+        { name: "Renee", sheets: [
+          { outfit: "Flare-Legged Jeans", file: "renee-character-sheet-v2.jpg" },
+          { outfit: "Capri Pants", file: "renee-capri-pants-v1.jpg" }
+        ] },
+        { name: "Ricardo", sheets: [
+          { outfit: "Gray Bomber Jacket", file: "ricardo-character-sheet-v3.jpg" }
+        ] },
+        { name: "Patricia", sheets: [
+          { outfit: "PV Raglan Tee", file: "patricia-character-sheet-v6.jpg" }
+        ] },
+        { name: "Anthony", sheets: [
+          { outfit: "Teal Varsity Jacket", file: "anthony-character-sheet-v2.jpg" }
+        ] },
+        { name: "Mr. Silva", sheets: [
+          { outfit: "Teal Button-Up Shirt", file: "mr-silva-character-sheet-v2.jpg" }
+        ] }
+      ];
+      function pad2(n) { return n < 10 ? "0" + n : "" + n; }
+      function sheetRow(name, s, i) {
+        var url = CHARBASE + s.file;
+        var label = name + " " + pad2(i + 1) + ' <span class="page-sub">&middot; ' + s.outfit + "</span>";
+        return '<div class="page-row">'
+          + '<a class="page-name" href="' + url + '" target="_blank" rel="noopener">' + label + "</a>"
+          + '<span class="page-acts">'
+          + '<button type="button" class="pg-btn" onclick="castCopyImage(\'' + url + '\', this)">Copy Image</button>'
+          + '<a class="pg-btn" href="' + url + '" download>Download</a>'
+          + '<a class="pg-btn pg-view" href="' + url + '" target="_blank" rel="noopener">View Page</a>'
+          + "</span></div>";
+      }
+      function charAcc(ch) {
+        var rows = ch.sheets.map(function (s, i) { return sheetRow(ch.name, s, i); }).join("");
+        var n = ch.sheets.length;
+        return '<details class="module-acc cast-char-acc">'
+          + '<summary class="module-acc-head"><span class="module-row-name">' + ch.name + "</span>"
+          + '<span class="module-page-count">' + n + " sheet" + (n === 1 ? "" : "s") + "</span>"
+          + '<span class="macc-chev"></span></summary>'
+          + '<div class="module-acc-body">' + rows + "</div></details>";
+      }
+      var host = document.getElementById("cast-list");
+      if (host) { host.innerHTML = CAST.map(charAcc).join(""); }
+    })();
+  </script>
+
   <!-- Logos: add a Copy button next to every Download that puts the full-quality image (PNG) on the clipboard, ready to paste into ChatGPT etc. Teacher-facing backend. -->
   <script>
     (function () {
@@ -2326,6 +2367,7 @@
           setTimeout(function () { btn.textContent = original; }, 2000);
         }
       }
+      window.castCopyImage = copyLogoImage; // reused by the Cast per-sheet "Copy Image" buttons
       document.querySelectorAll('.logo-card').forEach(function (card) {
         var dl = card.querySelector('.logo-dl');
         if (!dl) return;
