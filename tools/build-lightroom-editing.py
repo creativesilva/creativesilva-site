@@ -59,7 +59,7 @@ def crop_aspect_float(es):
       f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div>'
       '</div>')
 
-STAR_RATING=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-star-rating-float-v1.jpg"
+STAR_RATING=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-star-rating-float-v2.jpg"
 def star_float(es):
     # A PROPER float-right content image (the Library filtered to 5 stars). Even though it is a
     # Lightroom screen capture, it is a normal 44% content float (float_right), NOT a compact
