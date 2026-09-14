@@ -31,7 +31,7 @@ DECK_THUMB=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-slidedeck-th
 # Overview 21:9 hero
 HEADER=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-header-v1.jpg"
 # Reflection step float (AI content photo: a student typing the reflection) -> standard 44% float
-REFLECT_FLOAT=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-reflection-float-v1.jpg"
+REFLECT_FLOAT=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-reflection-float-v2.jpg"
 # Existing Lightroom import deck (reused on the Overview; English guide).
 IMPORT_PDF=f"{SITE}/assets/course-documents/Lightroom-Import-Guide.pdf"
 IMPORT_COVER=f"{SITE}/assets/images/photo1/image-series/importing-photos-slidedeck-thumb-v1.jpg"
