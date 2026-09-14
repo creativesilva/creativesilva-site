@@ -24,6 +24,8 @@ DECK_COVER_EN=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-cover-en-
 DECK_COVER_ES=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-cover-es-v1.jpg"
 # Overview 21:9 hero
 HEADER=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-header-v1.jpg"
+# Reflection step float (AI content photo: a student typing the reflection) -> standard 44% float
+REFLECT_FLOAT=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-reflection-float-v1.jpg"
 # Existing Lightroom import deck (reused on the Overview; English guide).
 IMPORT_PDF=f"{SITE}/assets/course-documents/Lightroom-Import-Guide.pdf"
 IMPORT_COVER=f"{SITE}/assets/images/photo1/image-series/importing-photos-slidedeck-thumb-v1.jpg"
@@ -348,7 +350,7 @@ def step03():
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
-        float_ph("FLOAT IMAGE &bull; STUDENT TYPING THE REFLECTION &bull; DROP ART HERE")
+        float_right(REFLECT_FLOAT,"A Pioneer Valley student typing the Lightroom Editing reflection in the Word document on an iMac in the creative lab, with other students editing behind her","Type your answers right in the reflection document.")
         + para("Finish with a short reflection. It asks where your photos came from, how you cropped, what Develop edits you made, and how you culled to your best 6.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + bullets([
@@ -362,7 +364,7 @@ def step03():
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
-        float_ph("IMAGEN FLOTANTE &bull; ESTUDIANTE ESCRIBIENDO LA REFLEXI&Oacute;N &bull; PON EL ARTE AQU&Iacute;")
+        float_right(REFLECT_FLOAT,"Una estudiante de Pioneer Valley escribiendo la reflexi&oacute;n de Edici&oacute;n en Lightroom en el documento de Word en una iMac en el laboratorio creativo, con otros estudiantes editando detr&aacute;s","Escribe tus respuestas directamente en el documento de reflexi&oacute;n.")
         + para("Termina con una reflexi&oacute;n corta. Te pregunta de d&oacute;nde salieron tus fotos, c&oacute;mo recortaste, qu&eacute; ediciones del m&oacute;dulo Revelar hiciste y c&oacute;mo elegiste tus mejores 6.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
         + bullets([
