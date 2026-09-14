@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
 # Photography 1A - Module 05: Lightroom Editing (Lightroom Classic, Develop Basics).
-# An in-depth dive into real editing: import, crop + develop in the Develop module, cull to the
-# best 6 with 5-star ratings, build a PVHS 6-Up contact sheet, and export 6 high-resolution JPEGs.
+# An in-depth dive into real editing: crop + develop in the Develop module, cull to the best 6
+# with 5-star ratings, build a PVHS 6-Up contact sheet, and export 6 high-resolution JPEGs.
 # Students may edit photos they already captured OR photograph new ones for this project.
 # Major focus: CROPPING (keep the original ratio or a real store frame size, never a made-up size)
-# and editing in Lightroom Classic. Built on the shared silva_framework. Overview + 3 steps,
-# bilingual EN/ES, 5th-grade. HEADER + all float images are PLACEHOLDERS (Chris drops art in later).
-# The Develop Basics slide deck is a click-to-open PDF (opens in a new tab), EN + ES.
+# and editing in Lightroom Classic. Built on the shared silva_framework. Bilingual EN/ES, 5th-grade.
+# HEADER + float images are PLACEHOLDERS (Chris drops art in later). The Develop Basics slide deck
+# is a click-to-open PDF (opens in a new tab), EN + ES.
+#
+# EXPERIMENT (Chris, 2026-09-14): Edit & Crop is NOT its own step. Because nothing is turned in for
+# it, the Edit & Crop content (Develop Basics deck, the Crop rule + aspect float, the Develop
+# workflow) is merged onto the OVERVIEW, leaving Overview + 2 turn-in steps (Cull/Contact/Export,
+# Reflection). Chris may keep this or revert it with a single git revert; the prior 3-step build is
+# HEAD 1c93d3d.
+#
 # Import is NOT its own step (students already learned import): the import guide lives on the
 # Overview. Contact-sheet presets are a one-time install (introduced in Image Series), so this
 # module does NOT re-offer the template download or an install card; it references the installed
@@ -35,9 +42,8 @@ REFLECT_ES=f"{SITE}/assets/course-documents/Lightroom-Editing-Reflection-ES.docx
 COURSE_RESOURCES=f"{SITE}/curriculum/shared/photo1a-course-resources.html"
 
 OVER="photo1-lightroom-editing-overview.html"
-S1="photo1-lightroom-editing-step01-edit-crop.html"
-S2="photo1-lightroom-editing-step02-cull-export.html"
-S3="photo1-lightroom-editing-step03-reflection.html"
+S1="photo1-lightroom-editing-step01-cull-export.html"
+S2="photo1-lightroom-editing-step02-reflection.html"
 
 # ---- module-local helpers ----
 def float_ph(label):
@@ -112,8 +118,8 @@ def import_resource(es):
     return resources_card("Importing Into Lightroom Classic", body, False, floatimg=import_deck(False))
 
 # ---- nav / dots ----
-DOTS_TITLES=[("M","Overview"),("1","Step 01"),("2","Step 02"),("3","Step 03")]
-HREFS=[OVER,S1,S2,S3]
+DOTS_TITLES=[("M","Overview"),("1","Step 01"),("2","Step 02")]
+HREFS=[OVER,S1,S2]
 def dots_for(active_idx):
     r=""
     for i,(lab,title) in enumerate(DOTS_TITLES):
@@ -140,6 +146,9 @@ def overview():
         + framed(HEADER,"A Pioneer Valley student editing a cityscape photo in the Lightroom Classic Develop module on an iMac in the creative lab, a Canon EOS camera on the desk, with other students editing behind her"))
     en+=downloads_block(False)
     en+=import_resource(False)
+    en+=resources_card("Develop Basics Slide Deck",
+        para("This is your main guide for the whole module. Open the slide deck to see every Develop tool step by step: the workspace, crop and straighten, camera profile, white balance, exposure and contrast, highlights and shadows, and the presence sliders. It opens as a PDF in a new tab, so you can read it full screen and keep it open while you edit."),
+        False, floatimg=deck(False))
     en+=card("THE BIG IDEA / EDITING MATTERS","Editing Is Where a Photo Becomes Finished",
         para("A great photo is made twice: once when you capture it, and again when you edit it. In the Develop module you correct color, set the right brightness, recover detail, and crop for a stronger composition. Small, careful edits turn a good frame into a finished image.")
         + bullets([
@@ -147,64 +156,6 @@ def overview():
             ("Develop the tones:","set your white balance, exposure, highlights, shadows, and presence."),
             ("Keep it natural:","subtle edits look professional; maxed-out sliders do not."),
         ]))
-    en+=card("HOW IT WORKS / YOUR PLAN","Your Three Steps",
-        steps([
-            ("Edit &amp; Crop:","crop to a real size and develop each photo in the Develop module. This is the main focus of the module."),
-            ("Cull, Contact Sheet &amp; Export:","rate and cull to your best 6, build a 6-Up contact sheet, and export your 6 finals as high-resolution JPEGs."),
-            ("Reflection:","tell the story of your edits and your crop choices."),
-        ])
-        + note("Your final turn-in is 7 files: your 6-Up contact sheet plus your 6 exported high-resolution JPEGs."))
-    en+=resources_card("Key Words",
-        vocab_grid("On the Quiz",
-          "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
-          [("Develop Module","The editing workspace in Lightroom Classic where you crop, correct color, and enhance your photos."),
-           ("Crop / Aspect Ratio","Trimming your frame to a shape. Keep the original ratio or pick a real print size like 4x6, 5x7, or 8x10. Never a made-up size."),
-           ("White Balance","The setting that makes colors look warm, cool, or true to life, and removes color casts."),
-           ("Exposure","The overall brightness of a photo, set with the Exposure slider in the Tone section."),
-           ("Cull","Looking through your photos and keeping only the strongest ones. In this class you cull with the 5-star rating."),
-           ("Contact Sheet","One page that shows a set of your photos as small thumbnails, saved as a high-resolution JPG.")]))
-
-    es=banner("Fotograf&iacute;a 1A &bull; M&oacute;dulo 05","Edici&oacute;n en Lightroom","Importa, recorta y revela en Lightroom Classic, elige tus mejores 6 y exporta tus finales.","#top","Back to English")
-    es+=type_card("edit","El Resumen del M&oacute;dulo","Profundiza en la Edici&oacute;n Real",
-        para("Esta semana profundizas en la edici&oacute;n real en Lightroom Classic. Trabajar&aacute;s en el m&oacute;dulo Revelar: el lugar donde recortas, corriges el color y das vida a tus fotos. La edici&oacute;n no es destructiva, lo que significa que tu archivo de foto original nunca cambia.")
-        + para("Puedes editar fotos que <strong>ya capturaste</strong>, o tomar <strong>fotos nuevas</strong> para este proyecto. En ambos casos, las importar&aacute;s, las recortar&aacute;s y revelar&aacute;s, elegir&aacute;s tus mejores 6, crear&aacute;s una hoja de contactos de 6 y exportar&aacute;s tus 6 finales como JPEG de alta resoluci&oacute;n.")
-        + framed(HEADER,"Una estudiante de Pioneer Valley editando una foto de una ciudad en el m&oacute;dulo Revelar de Lightroom Classic en una iMac en el laboratorio creativo, una c&aacute;mara Canon EOS en el escritorio, con otros estudiantes editando detr&aacute;s de ella"))
-    es+=downloads_block(True)
-    es+=import_resource(True)
-    es+=card("LA GRAN IDEA / EDITAR IMPORTA","Editar Es Donde una Foto Queda Terminada",
-        para("Una gran foto se hace dos veces: una cuando la capturas y otra cuando la editas. En el m&oacute;dulo Revelar corriges el color, ajustas el brillo, recuperas detalle y recortas para una composici&oacute;n m&aacute;s fuerte. Ediciones peque&ntilde;as y cuidadas convierten una buena toma en una imagen terminada.")
-        + bullets([
-            ("Recorta con prop&oacute;sito:","ajusta la composici&oacute;n y endereza un horizonte torcido, usando un tama&ntilde;o real, no uno inventado."),
-            ("Revela los tonos:","ajusta tu balance de blancos, exposici&oacute;n, luces, sombras y presencia."),
-            ("Mant&eacute;nlo natural:","las ediciones sutiles se ven profesionales; los controles al m&aacute;ximo no."),
-        ]))
-    es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Tres Pasos",
-        steps([
-            ("Editar y Recortar:","recorta a un tama&ntilde;o real y revela cada foto en el m&oacute;dulo Revelar. Este es el enfoque principal del m&oacute;dulo."),
-            ("Selecciona, Hoja de Contactos y Exporta:","califica y elige tus mejores 6, crea una hoja de contactos de 6 y exporta tus 6 finales como JPEG de alta resoluci&oacute;n."),
-            ("Reflexi&oacute;n:","cuenta la historia de tus ediciones y tus decisiones de recorte."),
-        ])
-        + note("Tu entrega final son 7 archivos: tu hoja de contactos de 6 m&aacute;s tus 6 JPEG de alta resoluci&oacute;n exportados."))
-    es+=resources_card("Palabras Clave",
-        vocab_grid("En el Examen",
-          "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
-          [("Develop Module (M&oacute;dulo Revelar)","El espacio de edici&oacute;n en Lightroom Classic donde recortas, corriges el color y mejoras tus fotos."),
-           ("Crop / Aspect Ratio (Recorte / Proporci&oacute;n)","Recortar tu cuadro a una forma. Mant&eacute;n la proporci&oacute;n original o elige un tama&ntilde;o real de impresi&oacute;n como 4x6, 5x7 u 8x10. Nunca un tama&ntilde;o inventado."),
-           ("White Balance (Balance de Blancos)","El ajuste que hace que los colores se vean c&aacute;lidos, fr&iacute;os o reales, y quita los tintes de color."),
-           ("Exposure (Exposici&oacute;n)","El brillo general de una foto, ajustado con el control de Exposici&oacute;n en la secci&oacute;n de Tono."),
-           ("Cull (Seleccionar)","Revisar tus fotos y quedarte solo con las m&aacute;s fuertes. En esta clase seleccionas con la calificaci&oacute;n de 5 estrellas."),
-           ("Contact Sheet (Hoja de Contactos)","Una p&aacute;gina que muestra un conjunto de tus fotos como miniaturas, guardada como JPG de alta resoluci&oacute;n.")]), True)
-
-    stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
-    return wrap_page("Lightroom Editing | Photography 1A | PVHS", nav("Overview",dots_for(0),stepnav), top_wrap(en,es), bottom)
-
-# ================= STEP 01: EDIT & CROP =================
-def step01():
-    en=banner("Lightroom Editing &bull; Step 1","Edit &amp; Crop","Crop to a real size and develop each photo in the Develop module.","#espanol","Clic para Espa&ntilde;ol")
-    en+=resources_card("Develop Basics Slide Deck",
-        para("This is your main guide for the whole module. Open the slide deck to see every Develop tool step by step: the workspace, crop and straighten, camera profile, white balance, exposure and contrast, highlights and shadows, and the presence sliders. It opens as a PDF in a new tab, so you can read it full screen and keep it open while you edit."),
-        False, floatimg=deck(False))
     en+=card("CROP / THE RULE","Crop to a Real Size, Never a Made-Up One",
         para("Cropping is the biggest focus of this module. A good crop tightens your composition and fixes a tilted horizon. But you cannot just drag the crop box to any random shape. You must crop to a <strong>real size</strong>.")
         + para("<strong>You have two choices when you crop:</strong>")
@@ -232,11 +183,40 @@ def step01():
             ("Presence:","add a little Texture, Clarity, and Vibrance to finish. Go easy: subtle looks best."),
         ])
         + note("Editing is non-destructive. Your original file is never changed, so you can always press Reset and start over."))
+    en+=card("HOW IT WORKS / YOUR PLAN","What You Turn In",
+        para("You edit and crop your photos right here on this page, using the slide deck and the steps above. That is the main focus of the module. When your edits are done, you have two turn-in steps:")
+        + steps([
+            ("Cull, Contact Sheet &amp; Export:","rate and cull to your best 6, build a 6-Up contact sheet, and export your 6 finals as high-resolution JPEGs."),
+            ("Reflection:","tell the story of your edits and your crop choices."),
+        ])
+        + note("Your final turn-in is 7 files on Step 1 (your 6-Up contact sheet plus your 6 exported high-resolution JPEGs), plus your reflection on Step 2."))
+    en+=resources_card("Key Words",
+        vocab_grid("On the Quiz",
+          "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
+          [("Develop Module","The editing workspace in Lightroom Classic where you crop, correct color, and enhance your photos."),
+           ("Crop / Aspect Ratio","Trimming your frame to a shape. Keep the original ratio or pick a real print size like 4x6, 5x7, or 8x10. Never a made-up size."),
+           ("White Balance","The setting that makes colors look warm, cool, or true to life, and removes color casts."),
+           ("Exposure","The overall brightness of a photo, set with the Exposure slider in the Tone section."),
+           ("Cull","Looking through your photos and keeping only the strongest ones. In this class you cull with the 5-star rating."),
+           ("Contact Sheet","One page that shows a set of your photos as small thumbnails, saved as a high-resolution JPG.")]))
 
-    es=banner("Edici&oacute;n en Lightroom &bull; Paso 1","Edita y Recorta","Recorta a un tama&ntilde;o real y revela cada foto en el m&oacute;dulo Revelar.","#top","Back to English")
+    es=banner("Fotograf&iacute;a 1A &bull; M&oacute;dulo 05","Edici&oacute;n en Lightroom","Importa, recorta y revela en Lightroom Classic, elige tus mejores 6 y exporta tus finales.","#top","Back to English")
+    es+=type_card("edit","El Resumen del M&oacute;dulo","Profundiza en la Edici&oacute;n Real",
+        para("Esta semana profundizas en la edici&oacute;n real en Lightroom Classic. Trabajar&aacute;s en el m&oacute;dulo Revelar: el lugar donde recortas, corriges el color y das vida a tus fotos. La edici&oacute;n no es destructiva, lo que significa que tu archivo de foto original nunca cambia.")
+        + para("Puedes editar fotos que <strong>ya capturaste</strong>, o tomar <strong>fotos nuevas</strong> para este proyecto. En ambos casos, las importar&aacute;s, las recortar&aacute;s y revelar&aacute;s, elegir&aacute;s tus mejores 6, crear&aacute;s una hoja de contactos de 6 y exportar&aacute;s tus 6 finales como JPEG de alta resoluci&oacute;n.")
+        + framed(HEADER,"Una estudiante de Pioneer Valley editando una foto de una ciudad en el m&oacute;dulo Revelar de Lightroom Classic en una iMac en el laboratorio creativo, una c&aacute;mara Canon EOS en el escritorio, con otros estudiantes editando detr&aacute;s de ella"))
+    es+=downloads_block(True)
+    es+=import_resource(True)
     es+=resources_card("Presentaci&oacute;n de Conceptos de Revelado",
         para("Esta es tu gu&iacute;a principal para todo el m&oacute;dulo. Abre la presentaci&oacute;n para ver cada herramienta de Revelar paso a paso: el espacio de trabajo, recortar y enderezar, el perfil de c&aacute;mara, el balance de blancos, la exposici&oacute;n y el contraste, las luces y sombras, y los controles de presencia. Se abre como PDF en una pesta&ntilde;a nueva, para verla en pantalla completa y tenerla abierta mientras editas."),
         True, floatimg=deck(True))
+    es+=card("LA GRAN IDEA / EDITAR IMPORTA","Editar Es Donde una Foto Queda Terminada",
+        para("Una gran foto se hace dos veces: una cuando la capturas y otra cuando la editas. En el m&oacute;dulo Revelar corriges el color, ajustas el brillo, recuperas detalle y recortas para una composici&oacute;n m&aacute;s fuerte. Ediciones peque&ntilde;as y cuidadas convierten una buena toma en una imagen terminada.")
+        + bullets([
+            ("Recorta con prop&oacute;sito:","ajusta la composici&oacute;n y endereza un horizonte torcido, usando un tama&ntilde;o real, no uno inventado."),
+            ("Revela los tonos:","ajusta tu balance de blancos, exposici&oacute;n, luces, sombras y presencia."),
+            ("Mant&eacute;nlo natural:","las ediciones sutiles se ven profesionales; los controles al m&aacute;ximo no."),
+        ]))
     es+=card("RECORTE / LA REGLA","Recorta a un Tama&ntilde;o Real, Nunca a Uno Inventado",
         para("El recorte es el enfoque m&aacute;s grande de este m&oacute;dulo. Un buen recorte ajusta tu composici&oacute;n y endereza un horizonte torcido. Pero no puedes arrastrar el cuadro de recorte a cualquier forma al azar. Debes recortar a un <strong>tama&ntilde;o real</strong>.")
         + para("<strong>Tienes dos opciones al recortar:</strong>")
@@ -264,14 +244,30 @@ def step01():
             ("Presencia:","agrega un poco de Textura, Claridad y Vibrancia para terminar. Con calma: lo sutil se ve mejor."),
         ])
         + note("La edici&oacute;n no es destructiva. Tu archivo original nunca cambia, as&iacute; que siempre puedes presionar Restablecer y empezar de nuevo."))
+    es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Lo Que Entregas",
+        para("Editas y recortas tus fotos aqu&iacute; mismo en esta p&aacute;gina, usando la presentaci&oacute;n y los pasos de arriba. Ese es el enfoque principal del m&oacute;dulo. Cuando termines tus ediciones, tienes dos pasos de entrega:")
+        + steps([
+            ("Selecciona, Hoja de Contactos y Exporta:","califica y elige tus mejores 6, crea una hoja de contactos de 6 y exporta tus 6 finales como JPEG de alta resoluci&oacute;n."),
+            ("Reflexi&oacute;n:","cuenta la historia de tus ediciones y tus decisiones de recorte."),
+        ])
+        + note("Tu entrega final son 7 archivos en el Paso 1 (tu hoja de contactos de 6 m&aacute;s tus 6 JPEG de alta resoluci&oacute;n exportados), m&aacute;s tu reflexi&oacute;n en el Paso 2."))
+    es+=resources_card("Palabras Clave",
+        vocab_grid("En el Examen",
+          "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
+          [("Develop Module (M&oacute;dulo Revelar)","El espacio de edici&oacute;n en Lightroom Classic donde recortas, corriges el color y mejoras tus fotos."),
+           ("Crop / Aspect Ratio (Recorte / Proporci&oacute;n)","Recortar tu cuadro a una forma. Mant&eacute;n la proporci&oacute;n original o elige un tama&ntilde;o real de impresi&oacute;n como 4x6, 5x7 u 8x10. Nunca un tama&ntilde;o inventado."),
+           ("White Balance (Balance de Blancos)","El ajuste que hace que los colores se vean c&aacute;lidos, fr&iacute;os o reales, y quita los tintes de color."),
+           ("Exposure (Exposici&oacute;n)","El brillo general de una foto, ajustado con el control de Exposici&oacute;n en la secci&oacute;n de Tono."),
+           ("Cull (Seleccionar)","Revisar tus fotos y quedarte solo con las m&aacute;s fuertes. En esta clase seleccionas con la calificaci&oacute;n de 5 estrellas."),
+           ("Contact Sheet (Hoja de Contactos)","Una p&aacute;gina que muestra un conjunto de tus fotos como miniaturas, guardada como JPG de alta resoluci&oacute;n.")]), True)
 
-    stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
-    return wrap_page("Step 1: Edit and Crop | Lightroom Editing | Photography 1A | PVHS", nav("Step 01",dots_for(1),stepnav), top_wrap(en,es), bottom)
+    stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
+    return wrap_page("Lightroom Editing | Photography 1A | PVHS", nav("Overview",dots_for(0),stepnav), top_wrap(en,es), bottom)
 
-# ================= STEP 02: CULL, CONTACT SHEET & EXPORT =================
-def step02():
-    en=banner("Lightroom Editing &bull; Step 2","Cull, Contact Sheet &amp; Export","Rate and cull to 6, build a 6-Up contact sheet, and export your finals.","#espanol","Clic para Espa&ntilde;ol")
+# ================= STEP 01: CULL, CONTACT SHEET & EXPORT =================
+def cull_export():
+    en=banner("Lightroom Editing &bull; Step 1","Cull, Contact Sheet &amp; Export","Rate and cull to 6, build a 6-Up contact sheet, and export your finals.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("1 contact sheet:","your 6-Up contact sheet (high-resolution JPG) showing your best 6 edited images."),
          ("6 final images:","your 6 edited photos, each exported as a high-resolution JPG."),
@@ -304,7 +300,7 @@ def step02():
         ])
         + note("Turn in all 7 files here: your 6-Up contact sheet plus your 6 exported high-resolution JPGs."))
 
-    es=banner("Edici&oacute;n en Lightroom &bull; Paso 2","Selecciona, Hoja de Contactos y Exporta","Califica y elige 6, crea una hoja de contactos de 6 y exporta tus finales.","#top","Back to English")
+    es=banner("Edici&oacute;n en Lightroom &bull; Paso 1","Selecciona, Hoja de Contactos y Exporta","Califica y elige 6, crea una hoja de contactos de 6 y exporta tus finales.","#top","Back to English")
     es+=deliverables_box(True,
         [("1 hoja de contactos:","tu hoja de contactos de 6 (JPG de alta resoluci&oacute;n) que muestra tus mejores 6 im&aacute;genes editadas."),
          ("6 im&aacute;genes finales:","tus 6 fotos editadas, cada una exportada como JPG de alta resoluci&oacute;n."),
@@ -337,16 +333,16 @@ def step02():
         ])
         + note("Entrega los 7 archivos aqu&iacute;: tu hoja de contactos de 6 m&aacute;s tus 6 JPG de alta resoluci&oacute;n exportados."))
 
-    stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
-    return wrap_page("Step 2: Cull, Contact Sheet and Export | Lightroom Editing | Photography 1A | PVHS", nav("Step 02",dots_for(2),stepnav), top_wrap(en,es), bottom)
+    stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
+    return wrap_page("Step 1: Cull, Contact Sheet and Export | Lightroom Editing | Photography 1A | PVHS", nav("Step 01",dots_for(1),stepnav), top_wrap(en,es), bottom)
 
-# ================= STEP 03: REFLECTION =================
-def step03():
-    en=banner("Lightroom Editing &bull; Step 3","Reflection","Tell the story of your edits and your crop choices.","#espanol","Clic para Espa&ntilde;ol")
+# ================= STEP 02: REFLECTION =================
+def reflection():
+    en=banner("Lightroom Editing &bull; Step 2","Reflection","Tell the story of your edits and your crop choices.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
-    en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
+    en+=card("STEP 02 / REFLECT","Complete and Upload the Reflection",
         float_right(REFLECT_FLOAT,"A Pioneer Valley student typing the Lightroom Editing reflection in the Word document on an iMac in the creative lab, with other students editing behind her","Type your answers right in the reflection document.")
         + para("Finish with a short reflection. It asks where your photos came from, how you cropped, what Develop edits you made, and how you culled to your best 6.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
@@ -357,10 +353,10 @@ def step03():
         ])
         + note("Answer honestly, in your own words."))
 
-    es=banner("Edici&oacute;n en Lightroom &bull; Paso 3","Reflexi&oacute;n","Cuenta la historia de tus ediciones y tus decisiones de recorte.","#top","Back to English")
+    es=banner("Edici&oacute;n en Lightroom &bull; Paso 2","Reflexi&oacute;n","Cuenta la historia de tus ediciones y tus decisiones de recorte.","#top","Back to English")
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
-    es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
+    es+=card("PASO 02 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         float_right(REFLECT_FLOAT,"Una estudiante de Pioneer Valley escribiendo la reflexi&oacute;n de Edici&oacute;n en Lightroom en el documento de Word en una iMac en el laboratorio creativo, con otros estudiantes editando detr&aacute;s","Escribe tus respuestas directamente en el documento de reflexi&oacute;n.")
         + para("Termina con una reflexi&oacute;n corta. Te pregunta de d&oacute;nde salieron tus fotos, c&oacute;mo recortaste, qu&eacute; ediciones del m&oacute;dulo Revelar hiciste y c&oacute;mo elegiste tus mejores 6.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
@@ -371,11 +367,11 @@ def step03():
         ])
         + note("Contesta con honestidad, en tus propias palabras."))
 
-    stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'
-    return wrap_page("Step 3: Reflection | Lightroom Editing | Photography 1A | PVHS", nav("Step 03",dots_for(3),stepnav), top_wrap(en,es), bottom)
+    stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><span></span></div>'
+    return wrap_page("Step 2: Reflection | Lightroom Editing | Photography 1A | PVHS", nav("Step 02",dots_for(2),stepnav), top_wrap(en,es), bottom)
 
-for fname,gen in [(OVER,overview),(S1,step01),(S2,step02),(S3,step03)]:
+for fname,gen in [(OVER,overview),(S1,cull_export),(S2,reflection)]:
     html=ent(gen())
     ban_check(html, fname)
     open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
