@@ -521,15 +521,18 @@
 
     if (!nav || !navInner) { return; }
 
-    // Top pager: same pill, sits in the nav bar. Since the pager carries its
-    // own COPY HTML and prev/next, drop the old toolbar buttons (Copy,
-    // Download) and the now-redundant step-nav + divider.
+    // Top pager: same pill, sits in the nav bar. Since the pager carries its own
+    // prev/next + page numbers + COPY buttons, drop the old toolbar buttons (Copy,
+    // Download) and the now-redundant dot nav + step-nav + divider (the pager fully
+    // replaces the M/1/2/3 circle dots; the bottom pager covers mobile).
     var top = buildPager();
     if (top) {
       var dl = navInner.querySelector('.silva-download-btn');
       if (dl) { dl.parentNode.removeChild(dl); }
       var cbs = navInner.querySelectorAll('.silva-copy-btn');
       for (var ci = 0; ci < cbs.length; ci++) { cbs[ci].parentNode.removeChild(cbs[ci]); }
+      var sd = navInner.querySelector('.silva-dots');
+      if (sd) { sd.style.display = 'none'; }
       var sn = navInner.querySelector('.silva-step-nav');
       if (sn) { sn.style.display = 'none'; }
       var nd = navInner.querySelector('.silva-nav-div');
