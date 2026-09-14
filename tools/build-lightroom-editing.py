@@ -58,6 +58,18 @@ def crop_aspect_float(es):
       f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div>'
       '</div>')
 
+STAR_RATING=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-star-rating-float-v1.jpg"
+def star_float(es):
+    # Landscape UI reference (the Library filtered to 5 stars). It is a screen capture, so it is
+    # shown as a compact reference float (floatimg column), not the 44% AI-content column, and stays
+    # out of the image catalog (which excludes screen captures), consistent with the crop aspect float.
+    alt=("La vista de Biblioteca de Lightroom Classic filtrada a fotos de 5 estrellas, con la barra de filtros en Atributo" if es
+         else "The Lightroom Classic Library view filtered to 5-star photos, with the Filter Bar set to Attribute")
+    cap=("Filtra a 5 estrellas para ver solo tus mejores." if es else "Filter to 5 stars to see only your best.")
+    return ('<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;">'
+      f'<img src="{STAR_RATING}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
+      f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div>')
+
 def deck(es):
     # Develop Basics slide deck: click-to-open PDF (opens in a new tab), per language.
     pdf = DECK_PDF_ES if es else DECK_PDF_EN
@@ -266,14 +278,14 @@ def step02():
          ("6 final images:","your 6 edited photos, each exported as a high-resolution JPG."),
          ("7 files total:","upload all 7 files (the contact sheet plus the 6 images) to this Canvas assignment.")])
     en+=card("CULL / RATE AND SORT","Cull to Your Best 6 with 5-Star Ratings",
-        float_ph("FLOAT IMAGE &bull; 5-STAR RATING IN LIGHTROOM &bull; DROP ART HERE")
-        + para("Culling means keeping only your strongest work. In this class you cull with the 5-star rating. Only give 5 stars to photos you are proud of and want to keep.")
+        para("Culling means keeping only your strongest work. In this class you cull with the 5-star rating. Only give 5 stars to photos you are proud of and want to keep.")
         + steps([
             ("Rate your best:","with a photo selected, press 5 on your keyboard to give it 5 stars. Repeat for each keeper."),
             ("Show only 5-star photos:","press the backslash key (\\) to open the Filter Bar, click Attribute, then click the 5th star."),
             ("Land on your best 6:","choose the 6 strongest edited images. Make sure they are your best work."),
         ])
-        + note("Press 0 to remove a rating if you change your mind. You want exactly 6 for this project."))
+        + note("Press 0 to remove a rating if you change your mind. You want exactly 6 for this project."),
+        floatimg=star_float(False))
     en+=card("CONTACT SHEET / SHOW YOUR SIX","Build Your 6-Up Contact Sheet",
         para("A contact sheet is one page that shows your photos as thumbnails. Build a 6-Up contact sheet of your best 6 using your PVHS 6-Up preset in the Print module, then save it as a high-resolution JPG.")
         + steps([
@@ -299,14 +311,14 @@ def step02():
          ("6 im&aacute;genes finales:","tus 6 fotos editadas, cada una exportada como JPG de alta resoluci&oacute;n."),
          ("7 archivos en total:","sube los 7 archivos (la hoja de contactos m&aacute;s las 6 im&aacute;genes) a esta tarea de Canvas.")])
     es+=card("SELECCIONA / CALIFICA Y ORDENA","Elige Tus Mejores 6 con 5 Estrellas",
-        float_ph("IMAGEN FLOTANTE &bull; CALIFICACI&Oacute;N DE 5 ESTRELLAS EN LIGHTROOM &bull; PON EL ARTE AQU&Iacute;")
-        + para("Seleccionar (cull) significa quedarte solo con tu trabajo m&aacute;s fuerte. En esta clase seleccionas con la calificaci&oacute;n de 5 estrellas. Solo da 5 estrellas a las fotos de las que est&aacute;s orgulloso y quieres guardar.")
+        para("Seleccionar (cull) significa quedarte solo con tu trabajo m&aacute;s fuerte. En esta clase seleccionas con la calificaci&oacute;n de 5 estrellas. Solo da 5 estrellas a las fotos de las que est&aacute;s orgulloso y quieres guardar.")
         + steps([
             ("Califica tus mejores:","con una foto seleccionada, presiona 5 en el teclado para darle 5 estrellas. Repite con cada una que guardes."),
             ("Muestra solo las de 5 estrellas:","presiona la tecla de barra invertida (\\) para abrir la Barra de Filtros, haz clic en Atributo y luego en la 5.&ordf; estrella."),
             ("Llega a tus mejores 6:","elige las 6 im&aacute;genes editadas m&aacute;s fuertes. Aseg&uacute;rate de que sean tu mejor trabajo."),
         ])
-        + note("Presiona 0 para quitar una calificaci&oacute;n si cambias de opini&oacute;n. Necesitas exactamente 6 para este proyecto."))
+        + note("Presiona 0 para quitar una calificaci&oacute;n si cambias de opini&oacute;n. Necesitas exactamente 6 para este proyecto."),
+        floatimg=star_float(True))
     es+=card("HOJA DE CONTACTOS / MUESTRA TUS SEIS","Crea Tu Hoja de Contactos de 6",
         para("Una hoja de contactos es una p&aacute;gina que muestra tus fotos como miniaturas. Crea una hoja de contactos de 6 con tus mejores 6 usando tu ajuste PVHS de 6 en el m&oacute;dulo Imprimir, y gu&aacute;rdala como JPG de alta resoluci&oacute;n.")
         + steps([
