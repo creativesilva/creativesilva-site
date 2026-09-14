@@ -291,6 +291,23 @@ const DOCS = [
     'Una buena miniatura llama la atención y se entiende clara aunque sea pequeña. ¿Cómo lo logra la tuya?',
     '¿De qué estás más orgulloso en tu miniatura, y qué cambiarías para mejorarla la próxima vez?',
   ]},
+  // Lightroom Editing (Photography 1A) -- Develop Basics: crop, edit, cull, contact sheet, export
+  { ...EN, outfile: 'Lightroom-Editing-Reflection-EN.docx', title: 'Lightroom Editing: Reflection', subtitle: PVHS_EN('Photography 1A'), questions: [
+    'Where did the photos you edited come from: images you had already captured, or new photos you took for this project? What are they of?',
+    'How did importing your photos into Lightroom Classic and organizing them go? Was anything tricky?',
+    'When you cropped, did you keep the original ratio or use a standard frame size like 4x6, 5x7, 8x10, 11x14, or 24x36? Which crops did you choose, and why? Remember: no made-up sizes.',
+    'What Develop edits did you make (camera profile, white balance, exposure, highlights and shadows, whites and blacks, presence), and how did they improve your photos?',
+    'How did you cull to your best 6 using the 5-star rating, and why did you keep those over the others?',
+    'What are you most proud of in your final 6, and what would you do differently next time?',
+  ]},
+  { ...ES, outfile: 'Lightroom-Editing-Reflection-ES.docx', title: 'Edición en Lightroom: Reflexión', subtitle: PVHS_ES('Fotografía 1A'), questions: [
+    '¿De dónde salieron las fotos que editaste: imágenes que ya habías capturado, o fotos nuevas que tomaste para este proyecto? ¿De qué son?',
+    '¿Cómo te fue al importar tus fotos a Lightroom Classic y organizarlas? ¿Hubo algo difícil?',
+    'Cuando recortaste, ¿mantuviste la proporción original o usaste un tamaño de marco estándar como 4x6, 5x7, 8x10, 11x14 o 24x36? ¿Qué recortes elegiste, y por qué? Recuerda: nada de tamaños inventados.',
+    '¿Qué ediciones del módulo Revelar hiciste (perfil de cámara, balance de blancos, exposición, luces y sombras, blancos y negros, presencia), y cómo mejoraron tus fotos?',
+    '¿Cómo elegiste (cull) tus mejores 6 usando la calificación de 5 estrellas, y por qué guardaste esas y no las demás?',
+    '¿De qué estás más orgulloso en tus 6 finales, y qué harías diferente la próxima vez?',
+  ]},
 ];
 
 (async () => { for (const d of DOCS) await buildDoc(d); })();

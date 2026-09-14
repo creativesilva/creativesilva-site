@@ -39,7 +39,8 @@
       { name: 'Self-Portrait',            url: '/curriculum/shared/photo1-self-portrait-overview.html' },
       { name: 'Composition Concepts',     url: '/curriculum/shared/photo1-composition-concepts-overview.html' },
       { name: 'Leading Lines Photo Walk', url: '/curriculum/shared/photo1-leading-lines-overview.html' },
-      { name: 'Image Series Photo Walk',  url: '/curriculum/shared/photo1-image-series-overview.html' }
+      { name: 'Image Series Photo Walk',  url: '/curriculum/shared/photo1-image-series-overview.html' },
+      { name: 'Lightroom Editing',        url: '/curriculum/shared/photo1-lightroom-editing-overview.html' }
     ]},
     { course: 'Photography 2A', modules: [
       { name: 'Composition Photo Walk', url: '/curriculum/shared/photo2-composition-overview.html' },
@@ -206,6 +207,11 @@
      '/curriculum/shared/photo1-image-series-step01-capture-import.html',
      '/curriculum/shared/photo1-image-series-step02-cull-edit.html',
      '/curriculum/shared/photo1-image-series-step03-reflection.html'],
+    ['/curriculum/shared/photo1-lightroom-editing-overview.html',
+     '/curriculum/shared/photo1-lightroom-editing-step01-import.html',
+     '/curriculum/shared/photo1-lightroom-editing-step02-edit-crop.html',
+     '/curriculum/shared/photo1-lightroom-editing-step03-cull-export.html',
+     '/curriculum/shared/photo1-lightroom-editing-step04-reflection.html'],
     ['/curriculum/photo2/photo2a-home.html',
      '/curriculum/photo2/photo2a-course-overview.html',
      '/curriculum/photo2/photo2a-syllabus.html'],
