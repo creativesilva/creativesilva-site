@@ -22,6 +22,8 @@ DECK_PDF_EN=f"{SITE}/assets/course-documents/Photo1-LRC-Develop-Basics-Slides-EN
 DECK_PDF_ES=f"{SITE}/assets/course-documents/Photo1-LRC-Develop-Basics-Slides-ES-v1.pdf"
 DECK_COVER_EN=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-cover-en-v1.jpg"
 DECK_COVER_ES=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-cover-es-v1.jpg"
+# Overview 21:9 hero
+HEADER=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-header-v1.jpg"
 # Existing Lightroom import deck (reused on the Overview; English guide).
 IMPORT_PDF=f"{SITE}/assets/course-documents/Lightroom-Import-Guide.pdf"
 IMPORT_COVER=f"{SITE}/assets/images/photo1/image-series/importing-photos-slidedeck-thumb-v1.jpg"
@@ -110,7 +112,7 @@ def overview():
     en+=type_card("edit","The Module Overview","Go Deeper Into Real Editing",
         para("This week you take a deeper dive into real editing in Lightroom Classic. You will work in the Develop module: the place where you crop, fix color, and bring your photos to life. Editing is non-destructive, which means your original photo file is never changed.")
         + para("You can edit photos you have <strong>already captured</strong>, or take <strong>new photos</strong> for this project. Either way, you will import them, crop and develop them, cull down to your best 6, build a 6-Up contact sheet, and export your 6 finals as high-resolution JPEGs.")
-        + placeholder("HEADER IMAGE &bull; 21:9 &bull; DROP ART HERE"))
+        + framed(HEADER,"A Pioneer Valley student editing a cityscape photo in the Lightroom Classic Develop module on an iMac in the creative lab, a Canon EOS camera on the desk, with other students editing behind her"))
     en+=downloads_block(False)
     en+=import_resource(False)
     en+=card("THE BIG IDEA / EDITING MATTERS","Editing Is Where a Photo Becomes Finished",
@@ -141,7 +143,7 @@ def overview():
     es+=type_card("edit","El Resumen del M&oacute;dulo","Profundiza en la Edici&oacute;n Real",
         para("Esta semana profundizas en la edici&oacute;n real en Lightroom Classic. Trabajar&aacute;s en el m&oacute;dulo Revelar: el lugar donde recortas, corriges el color y das vida a tus fotos. La edici&oacute;n no es destructiva, lo que significa que tu archivo de foto original nunca cambia.")
         + para("Puedes editar fotos que <strong>ya capturaste</strong>, o tomar <strong>fotos nuevas</strong> para este proyecto. En ambos casos, las importar&aacute;s, las recortar&aacute;s y revelar&aacute;s, elegir&aacute;s tus mejores 6, crear&aacute;s una hoja de contactos de 6 y exportar&aacute;s tus 6 finales como JPEG de alta resoluci&oacute;n.")
-        + placeholder("IMAGEN DE ENCABEZADO &bull; 21:9 &bull; PON EL ARTE AQU&Iacute;"))
+        + framed(HEADER,"Una estudiante de Pioneer Valley editando una foto de una ciudad en el m&oacute;dulo Revelar de Lightroom Classic en una iMac en el laboratorio creativo, una c&aacute;mara Canon EOS en el escritorio, con otros estudiantes editando detr&aacute;s de ella"))
     es+=downloads_block(True)
     es+=import_resource(True)
     es+=card("LA GRAN IDEA / EDITAR IMPORTA","Editar Es Donde una Foto Queda Terminada",
