@@ -104,18 +104,34 @@ def downloads_block(es):
       + '</div>'
       + folder_note(es, AREA) + '</div>')
 
-def import_resource(es):
-    # Import lives on the Overview (students already learned import in an earlier module). The
-    # import guide is a click-to-open PDF; the choose-your-photos + import note is merged in here.
+def _res_row(name, body, thumb):
+    # One resource inside the shared purple Module Resources box: sub-heading + description on the
+    # left, its compact click-to-open thumbnail on the right (drops below when the page is narrow).
+    return ('<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 30px;">'
+      + f'<div style="flex:1 1 320px;min-width:0;"><div style="margin-bottom:8px;"><span style="font-family:Arial,sans-serif;font-size:14.5pt;color:#c4b5fd;letter-spacing:0.01em;"><strong>{name}</strong></span></div>{body}</div>'
+      + f'<div style="flex:0 1 360px;">{thumb}</div>'
+      + '</div>')
+_RES_DIV='<div style="height:1px;background:rgba(139,92,246,0.22);margin:26px 0;"></div>'
+def resources_group(es):
+    # ONE purple section, catch-all title "Module Resources", holding BOTH module guides (import
+    # guide + Develop Basics deck), each with its own description + thumbnail (Chris, 2026-09-14).
+    title="Recursos del M&oacute;dulo" if es else "Module Resources"
     if es:
-        body=(para("Primero elige las fotos que quieres editar: im&aacute;genes que <strong>ya capturaste</strong>, o un conjunto <strong>nuevo</strong> que tomes para este proyecto. Luego ll&eacute;valas a Lightroom Classic.")
+        imp_name="Importar a Lightroom Classic"; deck_name="Presentaci&oacute;n de Conceptos de Revelado"
+        imp_body=(para("Primero elige las fotos que quieres editar: im&aacute;genes que <strong>ya capturaste</strong>, o un conjunto <strong>nuevo</strong> que tomes para este proyecto. Luego ll&eacute;valas a Lightroom Classic.")
           + para("Ya aprendiste a importar en un m&oacute;dulo anterior, as&iacute; que si tus fotos ya est&aacute;n en Lightroom, sigue adelante. &iquest;Necesitas un repaso? Abre la gu&iacute;a de importaci&oacute;n. Se abre como PDF en una pesta&ntilde;a nueva.")
           + note("Empieza con m&aacute;s de 6 fotos para escoger. Vas a reducir a tus mejores 6."))
-        return resources_card("Importar a Lightroom Classic", body, True, floatimg=import_deck(True))
-    body=(para("First, choose the photos you want to edit: images you <strong>already captured</strong>, or a <strong>new</strong> set you take for this project. Then bring them into Lightroom Classic.")
+        deck_body=para("Esta es tu gu&iacute;a principal para todo el m&oacute;dulo. Abre la presentaci&oacute;n para ver cada herramienta de Revelar paso a paso: el espacio de trabajo, recortar y enderezar, el perfil de c&aacute;mara, el balance de blancos, la exposici&oacute;n y el contraste, las luces y sombras, y los controles de presencia. Se abre como PDF en una pesta&ntilde;a nueva, para verla en pantalla completa y tenerla abierta mientras editas.")
+    else:
+        imp_name="Importing Into Lightroom Classic"; deck_name="Develop Basics Slide Deck"
+        imp_body=(para("First, choose the photos you want to edit: images you <strong>already captured</strong>, or a <strong>new</strong> set you take for this project. Then bring them into Lightroom Classic.")
       + para("You already learned importing in an earlier module, so if your photos are already in Lightroom, go ahead. Need a refresher? Open the import guide. It opens as a PDF in a new tab.")
       + note("Start with more than 6 photos to choose from. You will cull down to your best 6."))
-    return resources_card("Importing Into Lightroom Classic", body, False, floatimg=import_deck(False))
+        deck_body=para("This is your main guide for the whole module. Open the slide deck to see every Develop tool step by step: the workspace, crop and straighten, camera profile, white balance, exposure and contrast, highlights and shadows, and the presence sliders. It opens as a PDF in a new tab, so you can read it full screen and keep it open while you edit.")
+    return (PURPLE_BOX + section_header(RESICON, title, "#8b5cf6", "#c4b5fd")
+      + _res_row(imp_name, imp_body, import_deck(es))
+      + _RES_DIV
+      + _res_row(deck_name, deck_body, deck(es)) + '</div>')
 
 # ---- nav / dots ----
 DOTS_TITLES=[("M","Overview"),("1","Step 01"),("2","Step 02")]
@@ -145,10 +161,7 @@ def overview():
         + para("You can edit photos you have <strong>already captured</strong>, or take <strong>new photos</strong> for this project. Either way, you will import them, crop and develop them, cull down to your best 6, build a 6-Up contact sheet, and export your 6 finals as high-resolution JPEGs.")
         + framed(HEADER,"A Pioneer Valley student editing a cityscape photo in the Lightroom Classic Develop module on an iMac in the creative lab, a Canon EOS camera on the desk, with other students editing behind her"))
     en+=downloads_block(False)
-    en+=import_resource(False)
-    en+=resources_card("Develop Basics Slide Deck",
-        para("This is your main guide for the whole module. Open the slide deck to see every Develop tool step by step: the workspace, crop and straighten, camera profile, white balance, exposure and contrast, highlights and shadows, and the presence sliders. It opens as a PDF in a new tab, so you can read it full screen and keep it open while you edit."),
-        False, floatimg=deck(False))
+    en+=resources_group(False)
     en+=card("THE BIG IDEA / EDITING MATTERS","Editing Is Where a Photo Becomes Finished",
         para("A great photo is made twice: once when you capture it, and again when you edit it. In the Develop module you correct color, set the right brightness, recover detail, and crop for a stronger composition. Small, careful edits turn a good frame into a finished image.")
         + bullets([
@@ -206,10 +219,7 @@ def overview():
         + para("Puedes editar fotos que <strong>ya capturaste</strong>, o tomar <strong>fotos nuevas</strong> para este proyecto. En ambos casos, las importar&aacute;s, las recortar&aacute;s y revelar&aacute;s, elegir&aacute;s tus mejores 6, crear&aacute;s una hoja de contactos de 6 y exportar&aacute;s tus 6 finales como JPEG de alta resoluci&oacute;n.")
         + framed(HEADER,"Una estudiante de Pioneer Valley editando una foto de una ciudad en el m&oacute;dulo Revelar de Lightroom Classic en una iMac en el laboratorio creativo, una c&aacute;mara Canon EOS en el escritorio, con otros estudiantes editando detr&aacute;s de ella"))
     es+=downloads_block(True)
-    es+=import_resource(True)
-    es+=resources_card("Presentaci&oacute;n de Conceptos de Revelado",
-        para("Esta es tu gu&iacute;a principal para todo el m&oacute;dulo. Abre la presentaci&oacute;n para ver cada herramienta de Revelar paso a paso: el espacio de trabajo, recortar y enderezar, el perfil de c&aacute;mara, el balance de blancos, la exposici&oacute;n y el contraste, las luces y sombras, y los controles de presencia. Se abre como PDF en una pesta&ntilde;a nueva, para verla en pantalla completa y tenerla abierta mientras editas."),
-        True, floatimg=deck(True))
+    es+=resources_group(True)
     es+=card("LA GRAN IDEA / EDITAR IMPORTA","Editar Es Donde una Foto Queda Terminada",
         para("Una gran foto se hace dos veces: una cuando la capturas y otra cuando la editas. En el m&oacute;dulo Revelar corriges el color, ajustas el brillo, recuperas detalle y recortas para una composici&oacute;n m&aacute;s fuerte. Ediciones peque&ntilde;as y cuidadas convierten una buena toma en una imagen terminada.")
         + bullets([
