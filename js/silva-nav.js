@@ -352,6 +352,7 @@
     next.innerHTML = nextLabel;
     pager.appendChild(next);
 
+    pager.appendChild(makeBuildBtn());
     pager.appendChild(makeUrlBtn());
     pager.appendChild(makeCopyBtn());
     return pager;
@@ -389,6 +390,18 @@
       }).catch(function () { alert('Copy failed. Copy the address bar manually.'); });
     });
     return b;
+  }
+
+  // BUILD: quick jump to Build Resources in the catalog. Same accent pill as COPY URL /
+  // COPY HTML, placed just left of COPY URL. Teacher-only, like the copy pills: it is
+  // JS-injected, so it never lands in the HTML pasted into Canvas.
+  function makeBuildBtn() {
+    var a = document.createElement('a');
+    a.className = 'pg-copy pg-build';
+    a.textContent = 'BUILD';
+    a.href = 'https://www.creativesilva.com/curriculum.html#build-resources';
+    a.title = 'Go to Build Resources';
+    return a;
   }
 
   function injectBurger(navInner, nav) {
