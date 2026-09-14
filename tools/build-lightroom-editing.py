@@ -44,6 +44,20 @@ def float_ph(label):
     # column (where the real float_right image will go). Swap to float_right(src,alt,cap) later.
     return '<!--FLOAT-->' + placeholder(label, minh=220) + '<!--/FLOAT-->'
 
+CROP_ASPECT=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-crop-aspect-float-v1.png"
+def crop_aspect_float(es):
+    # Portrait aspect-ratio reference (the Crop aspect menu). It is a TALL portrait, so it is capped
+    # narrower (~300px) than a landscape content float and passed via floatimg (the compact column),
+    # so it stays readable without dominating the row. Not an AI photo, so not in the image catalog.
+    alt=("El men&uacute; de proporci&oacute;n de Recorte en Lightroom Classic, con tama&ntilde;os est&aacute;ndar como 1x1, 4x5/8x10, 5x7 y 2x3/4x6" if es
+         else "The Lightroom Classic Crop aspect ratio menu, with standard sizes like 1x1, 4x5/8x10, 5x7, and 2x3/4x6")
+    cap=("El men&uacute; de proporciones de Recorte." if es else "The Crop aspect ratio menu.")
+    return ('<div style="max-width:300px;margin:0 auto;">'
+      '<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;">'
+      f'<img src="{CROP_ASPECT}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
+      f'<div style="font-size:10.5pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div>'
+      '</div>')
+
 def deck(es):
     # Develop Basics slide deck: click-to-open PDF (opens in a new tab), per language.
     pdf = DECK_PDF_ES if es else DECK_PDF_EN
@@ -181,8 +195,7 @@ def step01():
         para("This is your main guide for the whole module. Open the slide deck to see every Develop tool step by step: the workspace, crop and straighten, camera profile, white balance, exposure and contrast, highlights and shadows, and the presence sliders. It opens as a PDF in a new tab, so you can read it full screen and keep it open while you edit."),
         False, floatimg=deck(False))
     en+=card("CROP / THE RULE","Crop to a Real Size, Never a Made-Up One",
-        float_ph("FLOAT IMAGE &bull; CROP OVERLAY WITH ASPECT RATIO &bull; DROP ART HERE")
-        + para("Cropping is the biggest focus of this module. A good crop tightens your composition and fixes a tilted horizon. But you cannot just drag the crop box to any random shape. You must crop to a <strong>real size</strong>.")
+        para("Cropping is the biggest focus of this module. A good crop tightens your composition and fixes a tilted horizon. But you cannot just drag the crop box to any random shape. You must crop to a <strong>real size</strong>.")
         + para("<strong>You have two choices when you crop:</strong>")
         + bullets([
             ("Keep the original ratio:","leave the crop set to Original so the shape matches your camera. This is always a safe choice."),
@@ -195,7 +208,8 @@ def step01():
             ("Drag the handles:","frame your subject. Press O to cycle guide overlays like Rule of Thirds."),
             ("Straighten if needed:","drag the Angle slider to level a tilted horizon."),
             ("Press Return to confirm:","press R again any time to go back and adjust."),
-        ]))
+        ]),
+        floatimg=crop_aspect_float(False))
     en+=card("DEVELOP / THE WORKFLOW","Develop Your Photo, Step by Step",
         para("After you crop, develop your photo in the Basic panel. Work in this order for the best results. The slide deck shows each step in detail.")
         + steps([
@@ -213,8 +227,7 @@ def step01():
         para("Esta es tu gu&iacute;a principal para todo el m&oacute;dulo. Abre la presentaci&oacute;n para ver cada herramienta de Revelar paso a paso: el espacio de trabajo, recortar y enderezar, el perfil de c&aacute;mara, el balance de blancos, la exposici&oacute;n y el contraste, las luces y sombras, y los controles de presencia. Se abre como PDF en una pesta&ntilde;a nueva, para verla en pantalla completa y tenerla abierta mientras editas."),
         True, floatimg=deck(True))
     es+=card("RECORTE / LA REGLA","Recorta a un Tama&ntilde;o Real, Nunca a Uno Inventado",
-        float_ph("IMAGEN FLOTANTE &bull; RECORTE CON PROPORCI&Oacute;N &bull; PON EL ARTE AQU&Iacute;")
-        + para("El recorte es el enfoque m&aacute;s grande de este m&oacute;dulo. Un buen recorte ajusta tu composici&oacute;n y endereza un horizonte torcido. Pero no puedes arrastrar el cuadro de recorte a cualquier forma al azar. Debes recortar a un <strong>tama&ntilde;o real</strong>.")
+        para("El recorte es el enfoque m&aacute;s grande de este m&oacute;dulo. Un buen recorte ajusta tu composici&oacute;n y endereza un horizonte torcido. Pero no puedes arrastrar el cuadro de recorte a cualquier forma al azar. Debes recortar a un <strong>tama&ntilde;o real</strong>.")
         + para("<strong>Tienes dos opciones al recortar:</strong>")
         + bullets([
             ("Mant&eacute;n la proporci&oacute;n original:","deja el recorte en Original para que la forma coincida con tu c&aacute;mara. Siempre es una opci&oacute;n segura."),
@@ -227,7 +240,8 @@ def step01():
             ("Arrastra las esquinas:","encuadra tu sujeto. Presiona O para cambiar las gu&iacute;as como la Regla de los Tercios."),
             ("Endereza si hace falta:","arrastra el control de &Aacute;ngulo para nivelar un horizonte torcido."),
             ("Presiona Return para confirmar:","presiona R otra vez cuando quieras para regresar y ajustar."),
-        ]))
+        ]),
+        floatimg=crop_aspect_float(True))
     es+=card("REVELAR / EL FLUJO DE TRABAJO","Revela Tu Foto, Paso a Paso",
         para("Despu&eacute;s de recortar, revela tu foto en el panel B&aacute;sico. Trabaja en este orden para el mejor resultado. La presentaci&oacute;n muestra cada paso en detalle.")
         + steps([
