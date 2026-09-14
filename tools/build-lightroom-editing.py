@@ -20,8 +20,7 @@ AREA="Photography Folder"
 # Develop Basics slide deck (this module's deck): EN + ES click-to-open PDFs + cover thumbnails.
 DECK_PDF_EN=f"{SITE}/assets/course-documents/Photo1-LRC-Develop-Basics-Slides-EN-v2.pdf"
 DECK_PDF_ES=f"{SITE}/assets/course-documents/Photo1-LRC-Develop-Basics-Slides-ES-v1.pdf"
-DECK_COVER_EN=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-cover-en-v1.jpg"
-DECK_COVER_ES=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-cover-es-v1.jpg"
+DECK_THUMB=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-slidedeck-thumb-v1.jpg"
 # Overview 21:9 hero
 HEADER=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-header-v1.jpg"
 # Reflection step float (AI content photo: a student typing the reflection) -> standard 44% float
@@ -72,11 +71,11 @@ def star_float(es):
 
 def deck(es):
     # Develop Basics slide deck: click-to-open PDF (opens in a new tab), per language.
+    # One designed play-button cover thumbnail (DECK_THUMB) is used for both languages.
     pdf = DECK_PDF_ES if es else DECK_PDF_EN
-    cover = DECK_COVER_ES if es else DECK_COVER_EN
     cap = ("Haz clic para abrir la presentaci&oacute;n. Se abre como PDF en una pesta&ntilde;a nueva, donde la ves en pantalla completa y la descargas." if es
            else "Click to open the slide deck. It opens as a PDF in a new tab, where you can read it full screen and download it.")
-    return slide_deck_thumb(pdf, es, thumb=cover, cap=cap)
+    return slide_deck_thumb(pdf, es, thumb=DECK_THUMB, cap=cap)
 
 def import_deck(es):
     cap = ("Haz clic para abrir la gu&iacute;a de importaci&oacute;n (PDF en una pesta&ntilde;a nueva)." if es
