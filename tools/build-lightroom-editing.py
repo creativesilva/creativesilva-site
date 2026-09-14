@@ -4,9 +4,13 @@
 # best 6 with 5-star ratings, build a PVHS 6-Up contact sheet, and export 6 high-resolution JPEGs.
 # Students may edit photos they already captured OR photograph new ones for this project.
 # Major focus: CROPPING (keep the original ratio or a real store frame size, never a made-up size)
-# and editing in Lightroom Classic. Built on the shared silva_framework. Overview + 4 steps,
+# and editing in Lightroom Classic. Built on the shared silva_framework. Overview + 3 steps,
 # bilingual EN/ES, 5th-grade. HEADER + all float images are PLACEHOLDERS (Chris drops art in later).
 # The Develop Basics slide deck is a click-to-open PDF (opens in a new tab), EN + ES.
+# Import is NOT its own step (students already learned import): the import guide lives on the
+# Overview. Contact-sheet presets are a one-time install (introduced in Image Series), so this
+# module does NOT re-offer the template download or an install card; it references the installed
+# preset (see overview-holds-resources memory + SILVA_ANGULAR_FRAMEWORK.md).
 import os, re
 from silva_framework import *
 
@@ -18,20 +22,19 @@ DECK_PDF_EN=f"{SITE}/assets/course-documents/Photo1-LRC-Develop-Basics-Slides-EN
 DECK_PDF_ES=f"{SITE}/assets/course-documents/Photo1-LRC-Develop-Basics-Slides-ES-v1.pdf"
 DECK_COVER_EN=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-cover-en-v1.jpg"
 DECK_COVER_ES=f"{SITE}/assets/images/photo1/lrc-develop/develop-basics-cover-es-v1.jpg"
-# Existing Lightroom import deck (reused for the Import step; English guide).
+# Existing Lightroom import deck (reused on the Overview; English guide).
 IMPORT_PDF=f"{SITE}/assets/course-documents/Lightroom-Import-Guide.pdf"
 IMPORT_COVER=f"{SITE}/assets/images/photo1/image-series/importing-photos-slidedeck-thumb-v1.jpg"
 # Files to keep
 REFLECT_EN=f"{SITE}/assets/course-documents/Lightroom-Editing-Reflection-EN.docx"
 REFLECT_ES=f"{SITE}/assets/course-documents/Lightroom-Editing-Reflection-ES.docx"
-CONTACT_ZIP=f"{SITE}/assets/PVHS_Contact_Sheet_Presets.zip"
-INSTALL_VIDEO="https://vimeo.com/1164128764/e1842e523e?share=copy&amp;fl=sv&amp;fe=ci"
+# Photography Course Resources page (where the contact-sheet presets live for anyone who needs them again)
+COURSE_RESOURCES=f"{SITE}/curriculum/shared/photo1a-course-resources.html"
 
 OVER="photo1-lightroom-editing-overview.html"
-S1="photo1-lightroom-editing-step01-import.html"
-S2="photo1-lightroom-editing-step02-edit-crop.html"
-S3="photo1-lightroom-editing-step03-cull-export.html"
-S4="photo1-lightroom-editing-step04-reflection.html"
+S1="photo1-lightroom-editing-step01-edit-crop.html"
+S2="photo1-lightroom-editing-step02-cull-export.html"
+S3="photo1-lightroom-editing-step03-reflection.html"
 
 # ---- module-local helpers ----
 def float_ph(label):
@@ -53,41 +56,37 @@ def import_deck(es):
     return slide_deck_thumb(IMPORT_PDF, es, thumb=IMPORT_COVER, cap=cap)
 
 def downloads_block(es):
+    # Files to keep for this module: just the reflection document. The contact-sheet presets are a
+    # ONE-TIME install introduced in Image Series, so they are NOT re-offered here.
     heading="Descarga Tus Archivos" if es else "Download Your Files"
-    lead=("Descarga aqu&iacute; todo lo que necesitas para este m&oacute;dulo. Consigue tus archivos antes de empezar." if es
-          else "Download everything you need for this module here. Get your files before you start.")
+    lead=("Descarga el documento de reflexi&oacute;n de este m&oacute;dulo. Cons&iacute;guelo antes de empezar." if es
+          else "Download this module&rsquo;s reflection document. Get it before you start.")
     reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
-    cslabel=("Plantillas de Hoja de Contactos (12 y 6, ZIP)" if es else "Contact Sheet Templates (12-Up &amp; 6-Up, ZIP)")
     ref=REFLECT_ES if es else REFLECT_EN
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
       + para(lead)
       + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">'
       + dl_link(ref,reflabel,row=True)
-      + dl_link(CONTACT_ZIP,cslabel,row=True)
       + '</div>'
       + folder_note(es, AREA) + '</div>')
 
-def contact_install(es):
-    alt=("Miniatura del video: instalar los ajustes de hoja de contactos en Lightroom Classic" if es
-         else "Video thumbnail: installing the contact sheet presets in Lightroom Classic")
-    tcap=("Toca para ver el video de instalaci&oacute;n." if es else "Tap to watch the install video.")
-    thumb=purple_thumb(INSTALL_VIDEO, IMPORT_COVER, alt, tcap)  # placeholder thumb; swap to a real video thumb later
+def import_resource(es):
+    # Import lives on the Overview (students already learned import in an earlier module). The
+    # import guide is a click-to-open PDF; the choose-your-photos + import note is merged in here.
     if es:
-        heading="Instala Tus Ajustes de Hoja de Contactos"
-        body=(para("Usas un ajuste (preset) de Lightroom Classic para armar tu hoja de contactos de 6. Lo instalas <strong>una sola vez</strong> y queda listo para siempre.")
-          + para('<a href="'+INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Mira el video de instalaci&oacute;n</strong></a>, luego coloca los ajustes en Lightroom Classic &rarr; m&oacute;dulo Imprimir.')
-          + para("Las plantillas de hoja de contactos est&aacute;n en la secci&oacute;n de Descargas en la p&aacute;gina de Resumen de este m&oacute;dulo."))
-    else:
-        heading="Install Your Contact Sheet Presets"
-        body=(para("You use a Lightroom Classic preset to build your 6-Up contact sheet. Install it <strong>one time</strong> and it is ready every time after that.")
-          + para('<a href="'+INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>, then drop the presets into Lightroom Classic &rarr; Print module.')
-          + para("The contact sheet templates are in the Downloads section on this module&rsquo;s Overview page."))
-    return resources_card(heading, body, es, floatimg=thumb)
+        body=(para("Primero elige las fotos que quieres editar: im&aacute;genes que <strong>ya capturaste</strong>, o un conjunto <strong>nuevo</strong> que tomes para este proyecto. Luego ll&eacute;valas a Lightroom Classic.")
+          + para("Ya aprendiste a importar en un m&oacute;dulo anterior, as&iacute; que si tus fotos ya est&aacute;n en Lightroom, sigue adelante. &iquest;Necesitas un repaso? Abre la gu&iacute;a de importaci&oacute;n. Se abre como PDF en una pesta&ntilde;a nueva.")
+          + note("Empieza con m&aacute;s de 6 fotos para escoger. Vas a reducir a tus mejores 6."))
+        return resources_card("Importar a Lightroom Classic", body, True, floatimg=import_deck(True))
+    body=(para("First, choose the photos you want to edit: images you <strong>already captured</strong>, or a <strong>new</strong> set you take for this project. Then bring them into Lightroom Classic.")
+      + para("You already learned importing in an earlier module, so if your photos are already in Lightroom, go ahead. Need a refresher? Open the import guide. It opens as a PDF in a new tab.")
+      + note("Start with more than 6 photos to choose from. You will cull down to your best 6."))
+    return resources_card("Importing Into Lightroom Classic", body, False, floatimg=import_deck(False))
 
 # ---- nav / dots ----
-DOTS_TITLES=[("M","Overview"),("1","Step 01"),("2","Step 02"),("3","Step 03"),("4","Step 04")]
-HREFS=[OVER,S1,S2,S3,S4]
+DOTS_TITLES=[("M","Overview"),("1","Step 01"),("2","Step 02"),("3","Step 03")]
+HREFS=[OVER,S1,S2,S3]
 def dots_for(active_idx):
     r=""
     for i,(lab,title) in enumerate(DOTS_TITLES):
@@ -113,6 +112,7 @@ def overview():
         + para("You can edit photos you have <strong>already captured</strong>, or take <strong>new photos</strong> for this project. Either way, you will import them, crop and develop them, cull down to your best 6, build a 6-Up contact sheet, and export your 6 finals as high-resolution JPEGs.")
         + placeholder("HEADER IMAGE &bull; 21:9 &bull; DROP ART HERE"))
     en+=downloads_block(False)
+    en+=import_resource(False)
     en+=card("THE BIG IDEA / EDITING MATTERS","Editing Is Where a Photo Becomes Finished",
         para("A great photo is made twice: once when you capture it, and again when you edit it. In the Develop module you correct color, set the right brightness, recover detail, and crop for a stronger composition. Small, careful edits turn a good frame into a finished image.")
         + bullets([
@@ -120,9 +120,8 @@ def overview():
             ("Develop the tones:","set your white balance, exposure, highlights, shadows, and presence."),
             ("Keep it natural:","subtle edits look professional; maxed-out sliders do not."),
         ]))
-    en+=card("HOW IT WORKS / YOUR PLAN","Your Four Steps",
+    en+=card("HOW IT WORKS / YOUR PLAN","Your Three Steps",
         steps([
-            ("Import:","bring your photos into Lightroom Classic. Use photos you already captured, or take new ones for this project."),
             ("Edit &amp; Crop:","crop to a real size and develop each photo in the Develop module. This is the main focus of the module."),
             ("Cull, Contact Sheet &amp; Export:","rate and cull to your best 6, build a 6-Up contact sheet, and export your 6 finals as high-resolution JPEGs."),
             ("Reflection:","tell the story of your edits and your crop choices."),
@@ -144,6 +143,7 @@ def overview():
         + para("Puedes editar fotos que <strong>ya capturaste</strong>, o tomar <strong>fotos nuevas</strong> para este proyecto. En ambos casos, las importar&aacute;s, las recortar&aacute;s y revelar&aacute;s, elegir&aacute;s tus mejores 6, crear&aacute;s una hoja de contactos de 6 y exportar&aacute;s tus 6 finales como JPEG de alta resoluci&oacute;n.")
         + placeholder("IMAGEN DE ENCABEZADO &bull; 21:9 &bull; PON EL ARTE AQU&Iacute;"))
     es+=downloads_block(True)
+    es+=import_resource(True)
     es+=card("LA GRAN IDEA / EDITAR IMPORTA","Editar Es Donde una Foto Queda Terminada",
         para("Una gran foto se hace dos veces: una cuando la capturas y otra cuando la editas. En el m&oacute;dulo Revelar corriges el color, ajustas el brillo, recuperas detalle y recortas para una composici&oacute;n m&aacute;s fuerte. Ediciones peque&ntilde;as y cuidadas convierten una buena toma en una imagen terminada.")
         + bullets([
@@ -151,9 +151,8 @@ def overview():
             ("Revela los tonos:","ajusta tu balance de blancos, exposici&oacute;n, luces, sombras y presencia."),
             ("Mant&eacute;nlo natural:","las ediciones sutiles se ven profesionales; los controles al m&aacute;ximo no."),
         ]))
-    es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Cuatro Pasos",
+    es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Tres Pasos",
         steps([
-            ("Importar:","lleva tus fotos a Lightroom Classic. Usa fotos que ya capturaste, o toma nuevas para este proyecto."),
             ("Editar y Recortar:","recorta a un tama&ntilde;o real y revela cada foto en el m&oacute;dulo Revelar. Este es el enfoque principal del m&oacute;dulo."),
             ("Selecciona, Hoja de Contactos y Exporta:","califica y elige tus mejores 6, crea una hoja de contactos de 6 y exporta tus 6 finales como JPEG de alta resoluci&oacute;n."),
             ("Reflexi&oacute;n:","cuenta la historia de tus ediciones y tus decisiones de recorte."),
@@ -173,55 +172,9 @@ def overview():
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
     return wrap_page("Lightroom Editing | Photography 1A | PVHS", nav("Overview",dots_for(0),stepnav), top_wrap(en,es), bottom)
 
-# ================= STEP 01: IMPORT =================
+# ================= STEP 01: EDIT & CROP =================
 def step01():
-    en=banner("Lightroom Editing &bull; Step 1","Import Your Photos","Choose photos to edit, then import them into Lightroom Classic.","#espanol","Clic para Espa&ntilde;ol")
-    en+=card("CHOOSE / PICK YOUR PHOTOS","Edit New or Existing Photos",
-        para("First, choose the photos you want to edit. You have two options, and both are fine for this project:")
-        + bullets([
-            ("Edit photos you already captured:","pick a set of your own photos from earlier this year that are worth a strong edit."),
-            ("Or take new photos:","photograph a new set for this project if you would rather start fresh."),
-        ])
-        + note("Pick a set you are excited to edit. You will cull down to your best 6, so start with more than 6 to choose from."))
-    en+=card("IMPORT / BRING THEM IN","Import Into Lightroom Classic",
-        float_ph("FLOAT IMAGE &bull; STUDENT IMPORTING IN LIGHTROOM &bull; DROP ART HERE")
-        + para("Now bring your photos into Lightroom Classic. If your photos are already imported from another project, you can skip ahead. If not, use the import guide to bring them in.")
-        + bullets([
-            ("Open Lightroom Classic:","start the app on your lab computer."),
-            ("Import your photos:","point Lightroom to your OneDrive project folder and import your set."),
-            ("Check they are in:","make sure your photos appear in the Library grid before you move on."),
-        ]))
-    en+=resources_card("Importing Into Lightroom Classic",
-        para("New to importing, or need a refresher? Open the import guide. It opens as a PDF in a new tab, so you can read it full screen and download it if you want."),
-        False, floatimg=import_deck(False))
-
-    es=banner("Edici&oacute;n en Lightroom &bull; Paso 1","Importa Tus Fotos","Elige fotos para editar, luego imp&oacute;rtalas a Lightroom Classic.","#top","Back to English")
-    es+=card("ELIGE / ESCOGE TUS FOTOS","Edita Fotos Nuevas o Existentes",
-        para("Primero, elige las fotos que quieres editar. Tienes dos opciones, y ambas sirven para este proyecto:")
-        + bullets([
-            ("Edita fotos que ya capturaste:","escoge un conjunto de tus propias fotos de antes este a&ntilde;o que valgan una buena edici&oacute;n."),
-            ("O toma fotos nuevas:","fotograf&iacute;a un conjunto nuevo para este proyecto si prefieres empezar de cero."),
-        ])
-        + note("Elige un conjunto que te emocione editar. Vas a reducir a tus mejores 6, as&iacute; que empieza con m&aacute;s de 6 para escoger."))
-    es+=card("IMPORTA / LL&Eacute;VALAS ADENTRO","Importa a Lightroom Classic",
-        float_ph("IMAGEN FLOTANTE &bull; ESTUDIANTE IMPORTANDO EN LIGHTROOM &bull; PON EL ARTE AQU&Iacute;")
-        + para("Ahora lleva tus fotos a Lightroom Classic. Si tus fotos ya est&aacute;n importadas de otro proyecto, puedes seguir adelante. Si no, usa la gu&iacute;a de importaci&oacute;n para llevarlas.")
-        + bullets([
-            ("Abre Lightroom Classic:","inicia la aplicaci&oacute;n en la computadora del laboratorio."),
-            ("Importa tus fotos:","apunta Lightroom a tu carpeta del proyecto en OneDrive e importa tu conjunto."),
-            ("Revisa que est&eacute;n:","aseg&uacute;rate de que tus fotos aparezcan en la cuadr&iacute;cula de la Biblioteca antes de continuar."),
-        ]))
-    es+=resources_card("Importando a Lightroom Classic",
-        para("&iquest;Eres nuevo importando o necesitas un repaso? Abre la gu&iacute;a de importaci&oacute;n. Se abre como PDF en una pesta&ntilde;a nueva, para verla en pantalla completa y descargarla si quieres."),
-        True, floatimg=import_deck(True))
-
-    stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
-    return wrap_page("Step 1: Import | Lightroom Editing | Photography 1A | PVHS", nav("Step 01",dots_for(1),stepnav), top_wrap(en,es), bottom)
-
-# ================= STEP 02: EDIT & CROP =================
-def step02():
-    en=banner("Lightroom Editing &bull; Step 2","Edit &amp; Crop","Crop to a real size and develop each photo in the Develop module.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Lightroom Editing &bull; Step 1","Edit &amp; Crop","Crop to a real size and develop each photo in the Develop module.","#espanol","Clic para Espa&ntilde;ol")
     en+=resources_card("Develop Basics Slide Deck",
         para("This is your main guide for the whole module. Open the slide deck to see every Develop tool step by step: the workspace, crop and straighten, camera profile, white balance, exposure and contrast, highlights and shadows, and the presence sliders. It opens as a PDF in a new tab, so you can read it full screen and keep it open while you edit."),
         False, floatimg=deck(False))
@@ -253,7 +206,7 @@ def step02():
         ])
         + note("Editing is non-destructive. Your original file is never changed, so you can always press Reset and start over."))
 
-    es=banner("Edici&oacute;n en Lightroom &bull; Paso 2","Edita y Recorta","Recorta a un tama&ntilde;o real y revela cada foto en el m&oacute;dulo Revelar.","#top","Back to English")
+    es=banner("Edici&oacute;n en Lightroom &bull; Paso 1","Edita y Recorta","Recorta a un tama&ntilde;o real y revela cada foto en el m&oacute;dulo Revelar.","#top","Back to English")
     es+=resources_card("Presentaci&oacute;n de Conceptos de Revelado",
         para("Esta es tu gu&iacute;a principal para todo el m&oacute;dulo. Abre la presentaci&oacute;n para ver cada herramienta de Revelar paso a paso: el espacio de trabajo, recortar y enderezar, el perfil de c&aacute;mara, el balance de blancos, la exposici&oacute;n y el contraste, las luces y sombras, y los controles de presencia. Se abre como PDF en una pesta&ntilde;a nueva, para verla en pantalla completa y tenerla abierta mientras editas."),
         True, floatimg=deck(True))
@@ -285,13 +238,13 @@ def step02():
         ])
         + note("La edici&oacute;n no es destructiva. Tu archivo original nunca cambia, as&iacute; que siempre puedes presionar Restablecer y empezar de nuevo."))
 
-    stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
-    return wrap_page("Step 2: Edit and Crop | Lightroom Editing | Photography 1A | PVHS", nav("Step 02",dots_for(2),stepnav), top_wrap(en,es), bottom)
+    stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
+    return wrap_page("Step 1: Edit and Crop | Lightroom Editing | Photography 1A | PVHS", nav("Step 01",dots_for(1),stepnav), top_wrap(en,es), bottom)
 
-# ================= STEP 03: CULL, CONTACT SHEET & EXPORT =================
-def step03():
-    en=banner("Lightroom Editing &bull; Step 3","Cull, Contact Sheet &amp; Export","Rate and cull to 6, build a 6-Up contact sheet, and export your finals.","#espanol","Clic para Espa&ntilde;ol")
+# ================= STEP 02: CULL, CONTACT SHEET & EXPORT =================
+def step02():
+    en=banner("Lightroom Editing &bull; Step 2","Cull, Contact Sheet &amp; Export","Rate and cull to 6, build a 6-Up contact sheet, and export your finals.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("1 contact sheet:","your 6-Up contact sheet (high-resolution JPG) showing your best 6 edited images."),
          ("6 final images:","your 6 edited photos, each exported as a high-resolution JPG."),
@@ -306,16 +259,16 @@ def step03():
         ])
         + note("Press 0 to remove a rating if you change your mind. You want exactly 6 for this project."))
     en+=card("CONTACT SHEET / SHOW YOUR SIX","Build Your 6-Up Contact Sheet",
-        para("A contact sheet is one page that shows your photos as thumbnails. Build a 6-Up contact sheet of your best 6 using the PVHS 6-Up preset in the Print module, then save it as a high-resolution JPG.")
+        para("A contact sheet is one page that shows your photos as thumbnails. Build a 6-Up contact sheet of your best 6 using your PVHS 6-Up preset in the Print module, then save it as a high-resolution JPG.")
         + steps([
             ("Select your 6:","in the Library, select your 6 edited images."),
-            ("Open the Print module:","choose the PVHS 6-Up contact sheet template."),
+            ("Open the Print module:","choose your PVHS 6-Up contact sheet preset."),
             ("Print to file as JPG:","the preset saves your page as a high-resolution JPG. This is one of your 7 files."),
         ])
+        + note("You installed the contact sheet presets earlier this year, so they are ready in your Print module. If you ever need them again, they are on the Photography Course Resources page.")
         + note("Contact sheets are always saved as a high-resolution JPG, never a PDF. The preset already sets this for you."))
-    en+=contact_install(False)
     en+=card("EXPORT / DELIVER YOUR FINALS","Export Your 6 Finals as High-Resolution JPEGs",
-        para("Last, export your 6 edited images one by one as high-resolution JPEGs. These are your finished photos.")
+        para("Last, export your 6 edited images as high-resolution JPEGs. These are your finished photos.")
         + steps([
             ("Select your 6:","select your best 6 edited images in the Library."),
             ("Open Export:","go to File &rarr; Export."),
@@ -324,7 +277,7 @@ def step03():
         ])
         + note("Turn in all 7 files here: your 6-Up contact sheet plus your 6 exported high-resolution JPGs."))
 
-    es=banner("Edici&oacute;n en Lightroom &bull; Paso 3","Selecciona, Hoja de Contactos y Exporta","Califica y elige 6, crea una hoja de contactos de 6 y exporta tus finales.","#top","Back to English")
+    es=banner("Edici&oacute;n en Lightroom &bull; Paso 2","Selecciona, Hoja de Contactos y Exporta","Califica y elige 6, crea una hoja de contactos de 6 y exporta tus finales.","#top","Back to English")
     es+=deliverables_box(True,
         [("1 hoja de contactos:","tu hoja de contactos de 6 (JPG de alta resoluci&oacute;n) que muestra tus mejores 6 im&aacute;genes editadas."),
          ("6 im&aacute;genes finales:","tus 6 fotos editadas, cada una exportada como JPG de alta resoluci&oacute;n."),
@@ -339,16 +292,16 @@ def step03():
         ])
         + note("Presiona 0 para quitar una calificaci&oacute;n si cambias de opini&oacute;n. Necesitas exactamente 6 para este proyecto."))
     es+=card("HOJA DE CONTACTOS / MUESTRA TUS SEIS","Crea Tu Hoja de Contactos de 6",
-        para("Una hoja de contactos es una p&aacute;gina que muestra tus fotos como miniaturas. Crea una hoja de contactos de 6 con tus mejores 6 usando el ajuste PVHS de 6 en el m&oacute;dulo Imprimir, y gu&aacute;rdala como JPG de alta resoluci&oacute;n.")
+        para("Una hoja de contactos es una p&aacute;gina que muestra tus fotos como miniaturas. Crea una hoja de contactos de 6 con tus mejores 6 usando tu ajuste PVHS de 6 en el m&oacute;dulo Imprimir, y gu&aacute;rdala como JPG de alta resoluci&oacute;n.")
         + steps([
             ("Selecciona tus 6:","en la Biblioteca, selecciona tus 6 im&aacute;genes editadas."),
-            ("Abre el m&oacute;dulo Imprimir:","elige la plantilla PVHS de hoja de contactos de 6."),
+            ("Abre el m&oacute;dulo Imprimir:","elige tu ajuste PVHS de hoja de contactos de 6."),
             ("Imprime a archivo como JPG:","el ajuste guarda tu p&aacute;gina como JPG de alta resoluci&oacute;n. Este es uno de tus 7 archivos."),
         ])
+        + note("Instalaste los ajustes de hoja de contactos antes este a&ntilde;o, as&iacute; que ya est&aacute;n listos en tu m&oacute;dulo Imprimir. Si alguna vez los necesitas de nuevo, est&aacute;n en la p&aacute;gina de Recursos del Curso de Fotograf&iacute;a.")
         + note("Las hojas de contactos siempre se guardan como JPG de alta resoluci&oacute;n, nunca como PDF. El ajuste ya lo hace por ti."))
-    es+=contact_install(True)
     es+=card("EXPORTA / ENTREGA TUS FINALES","Exporta Tus 6 Finales como JPEG de Alta Resoluci&oacute;n",
-        para("Por &uacute;ltimo, exporta tus 6 im&aacute;genes editadas una por una como JPEG de alta resoluci&oacute;n. Estas son tus fotos terminadas.")
+        para("Por &uacute;ltimo, exporta tus 6 im&aacute;genes editadas como JPEG de alta resoluci&oacute;n. Estas son tus fotos terminadas.")
         + steps([
             ("Selecciona tus 6:","selecciona tus mejores 6 im&aacute;genes editadas en la Biblioteca."),
             ("Abre Exportar:","ve a Archivo &rarr; Exportar."),
@@ -357,16 +310,16 @@ def step03():
         ])
         + note("Entrega los 7 archivos aqu&iacute;: tu hoja de contactos de 6 m&aacute;s tus 6 JPG de alta resoluci&oacute;n exportados."))
 
-    stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a><a href="{S4}" class="silva-step-btn">Step 04 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><a href="{S4}" class="silva-bottom-btn">Step 04 &#8594;</a></div>'
-    return wrap_page("Step 3: Cull, Contact Sheet and Export | Lightroom Editing | Photography 1A | PVHS", nav("Step 03",dots_for(3),stepnav), top_wrap(en,es), bottom)
+    stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
+    return wrap_page("Step 2: Cull, Contact Sheet and Export | Lightroom Editing | Photography 1A | PVHS", nav("Step 02",dots_for(2),stepnav), top_wrap(en,es), bottom)
 
-# ================= STEP 04: REFLECTION =================
-def step04():
-    en=banner("Lightroom Editing &bull; Step 4","Reflection","Tell the story of your edits and your crop choices.","#espanol","Clic para Espa&ntilde;ol")
+# ================= STEP 03: REFLECTION =================
+def step03():
+    en=banner("Lightroom Editing &bull; Step 3","Reflection","Tell the story of your edits and your crop choices.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
-    en+=card("STEP 04 / REFLECT","Complete and Upload the Reflection",
+    en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
         float_ph("FLOAT IMAGE &bull; STUDENT TYPING THE REFLECTION &bull; DROP ART HERE")
         + para("Finish with a short reflection. It asks where your photos came from, how you cropped, what Develop edits you made, and how you culled to your best 6.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
@@ -377,10 +330,10 @@ def step04():
         ])
         + note("Answer honestly, in your own words."))
 
-    es=banner("Edici&oacute;n en Lightroom &bull; Paso 4","Reflexi&oacute;n","Cuenta la historia de tus ediciones y tus decisiones de recorte.","#top","Back to English")
+    es=banner("Edici&oacute;n en Lightroom &bull; Paso 3","Reflexi&oacute;n","Cuenta la historia de tus ediciones y tus decisiones de recorte.","#top","Back to English")
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
-    es+=card("PASO 04 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
+    es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         float_ph("IMAGEN FLOTANTE &bull; ESTUDIANTE ESCRIBIENDO LA REFLEXI&Oacute;N &bull; PON EL ARTE AQU&Iacute;")
         + para("Termina con una reflexi&oacute;n corta. Te pregunta de d&oacute;nde salieron tus fotos, c&oacute;mo recortaste, qu&eacute; ediciones del m&oacute;dulo Revelar hiciste y c&oacute;mo elegiste tus mejores 6.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
@@ -391,11 +344,11 @@ def step04():
         ])
         + note("Contesta con honestidad, en tus propias palabras."))
 
-    stepnav=f'<a href="{S3}" class="silva-step-btn">&#8592; Step 03</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{S3}" class="silva-bottom-btn">&#8592; Step 03</a><span></span></div>'
-    return wrap_page("Step 4: Reflection | Lightroom Editing | Photography 1A | PVHS", nav("Step 04",dots_for(4),stepnav), top_wrap(en,es), bottom)
+    stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'
+    return wrap_page("Step 3: Reflection | Lightroom Editing | Photography 1A | PVHS", nav("Step 03",dots_for(3),stepnav), top_wrap(en,es), bottom)
 
-for fname,gen in [(OVER,overview),(S1,step01),(S2,step02),(S3,step03),(S4,step04)]:
+for fname,gen in [(OVER,overview),(S1,step01),(S2,step02),(S3,step03)]:
     html=ent(gen())
     ban_check(html, fname)
     open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
