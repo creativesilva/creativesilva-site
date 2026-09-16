@@ -805,14 +805,56 @@
     .pg-btn.flash { background: rgba(0,184,184,0.30); }
     .course-pages-acc .module-row-name { color: #80e0e0; }
 
+    /* Sticky catalog header: title (left) + search (right) + the CATALOG bar, all pinned
+       at the top with a dark-teal blur so content scrolls under it. */
+    .catalog-sticky {
+      position: sticky; top: 0; z-index: 500; margin: 0 0 22px; padding-top: 8px;
+      background: linear-gradient(180deg, rgba(5, 11, 11, 0.94) 0%, rgba(0, 40, 40, 0.88) 100%);
+      backdrop-filter: blur(14px) saturate(1.15);
+      -webkit-backdrop-filter: blur(14px) saturate(1.15);
+    }
+    .catalog-titlebar { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding: 4px 2px 12px; }
+    .catalog-titlebar .page-title {
+      margin: 0; text-align: left; flex: 0 1 auto;
+      font-size: clamp(1.5rem, 3.4vw, 2.4rem); line-height: 1.05;
+    }
+    .catalog-search { position: relative; flex: 1 1 300px; max-width: 560px; margin-left: auto; }
+    .catalog-search-input {
+      width: 100%; box-sizing: border-box; background: rgba(0, 0, 0, 0.38);
+      border: 1px solid rgba(0, 184, 184, 0.4); border-top: 2px solid #00b8b8;
+      color: #eaf7f7; font-family: var(--font-body); font-size: 0.95rem; padding: 11px 40px 11px 14px;
+    }
+    .catalog-search-input::placeholder { color: rgba(234, 247, 247, 0.5); }
+    .catalog-search-input:focus { outline: none; border-color: #00b8b8; background: rgba(0, 0, 0, 0.55); }
+    .catalog-search-panel {
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 620;
+      max-height: 62vh; overflow-y: auto; background: #06201f;
+      border: 1px solid rgba(0, 184, 184, 0.4); border-top: 3px solid #00b8b8;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.62);
+    }
+    .csr-item { display: flex; align-items: center; gap: 11px; padding: 10px 14px; cursor: pointer; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+    .csr-item:last-child { border-bottom: 0; }
+    .csr-item:hover, .csr-item.active { background: rgba(0, 184, 184, 0.16); }
+    .csr-kind {
+      font-family: var(--font-head); font-size: 0.54rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #00201f; background: #00b8b8; padding: 3px 6px;
+      flex-shrink: 0; min-width: 62px; box-sizing: border-box; text-align: center;
+    }
+    .csr-label { color: #eaf7f7; font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .csr-ctx { color: rgba(234, 247, 247, 0.48); font-size: 0.74rem; margin-left: auto; padding-left: 12px; white-space: nowrap; flex-shrink: 0; }
+    .csr-empty { padding: 15px 14px; color: rgba(234, 247, 247, 0.55); font-size: 0.85rem; font-style: italic; }
+    @keyframes searchFlash { 0%, 100% { box-shadow: 0 0 0 0 rgba(0, 184, 184, 0); } 22% { box-shadow: 0 0 0 3px rgba(0, 184, 184, 0.9); } }
+    .search-flash { animation: searchFlash 1.7s ease; }
+    @media (max-width: 640px) {
+      .catalog-titlebar { gap: 10px; padding-bottom: 10px; }
+      .catalog-search { flex-basis: 100%; margin-left: 0; max-width: none; }
+    }
+
     /* Full-width quick-menu bar spanning above the course grid (ties the catalog
        into the site's dark-teal nav). Each course opens its module list. */
     .cat-bar {
-      position: sticky; top: 0; z-index: 500;
-      margin: 0 0 22px; border: 1px solid rgba(0, 184, 184, 0.30); border-top: 2px solid #00b8b8;
-      background: linear-gradient(135deg, rgba(0, 42, 42, 0.90) 0%, rgba(0, 96, 96, 0.78) 100%);
-      backdrop-filter: blur(14px) saturate(1.15);
-      -webkit-backdrop-filter: blur(14px) saturate(1.15);
+      margin: 0; border: 1px solid rgba(0, 184, 184, 0.30); border-top: 2px solid #00b8b8;
+      background: linear-gradient(135deg, rgba(0, 56, 56, 0.55) 0%, rgba(0, 116, 116, 0.30) 100%);
     }
     .cat-bar-inner { display: flex; align-items: stretch; flex-wrap: wrap; }
     .cat-bar-label {
@@ -960,13 +1002,20 @@
   <main>
     <section class="container">
 
-      <h1 class="page-title">Curriculum Catalog</h1>
+      <div class="catalog-sticky">
+        <div class="catalog-titlebar">
+          <h1 class="page-title">Curriculum Catalog</h1>
+          <div class="catalog-search">
+            <input type="search" id="catalog-search-input" class="catalog-search-input" placeholder="Search modules, images, resources&hellip;" autocomplete="off" spellcheck="false" aria-label="Search the catalog" />
+            <div class="catalog-search-panel" id="catalog-search-panel" role="listbox" hidden></div>
+          </div>
+        </div>
+        <nav class="cat-bar" id="cat-bar" aria-label="Quick catalog menu"></nav>
+      </div>
 
       <div class="staging-banner" id="staging-banner" role="status">
         Staging Mode Active: Draft &amp; Staged Modules Visible
       </div>
-
-      <nav class="cat-bar" id="cat-bar" aria-label="Quick catalog menu"></nav>
 
       <div class="course-grid" id="course-grid">
         <details class="course-acc" id="build-resources">
@@ -2682,6 +2731,179 @@
         if (e.key === 'Escape') closeLightbox();
         else if (e.key === 'ArrowLeft') step(-1);
         else if (e.key === 'ArrowRight') step(1);
+      });
+    })();
+  </script>
+
+  <!-- Catalog search: fuzzy (typo-tolerant) find across modules, images/assets, resources,
+       cast sheets, courses, and prompts. Index is built lazily on first use, so it captures
+       everything the render scripts and image injector added. -->
+  <script>
+    (function () {
+      var input = document.getElementById('catalog-search-input');
+      var panel = document.getElementById('catalog-search-panel');
+      if (!input || !panel) return;
+      var grid = document.getElementById('course-grid');
+
+      function normalize(s) { return (s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').replace(/\s+/g, ' ').trim(); }
+      function labelOf(el) {
+        if (el.classList && el.classList.contains('logo-name')) {
+          var c = el.cloneNode(true);
+          c.querySelectorAll('.logo-fmt').forEach(function (f) { f.remove(); });
+          return c.textContent.replace(/\s+/g, ' ').trim();
+        }
+        return el.textContent.replace(/\s+/g, ' ').trim();
+      }
+      function contextOf(el) {
+        if (el.closest('#teacher-resources')) return 'Teacher Resources';
+        if (el.closest('#build-resources')) return 'Build Resources';
+        var acc = el.closest('.course-acc');
+        var t = acc && acc.querySelector('.course-title');
+        if (t && !t.contains(el)) return t.textContent.replace(/\s+/g, ' ').trim();
+        return '';
+      }
+      // Levenshtein edit distance (short strings, so the simple DP is fine).
+      function lev(a, b) {
+        var m = a.length, n = b.length; if (!m) return n; if (!n) return m;
+        var prev = [], cur = [], i, j;
+        for (j = 0; j <= n; j++) prev[j] = j;
+        for (i = 1; i <= m; i++) {
+          cur[0] = i;
+          for (j = 1; j <= n; j++) {
+            var cost = a.charCodeAt(i - 1) === b.charCodeAt(j - 1) ? 0 : 1;
+            cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+          }
+          for (j = 0; j <= n; j++) prev[j] = cur[j];
+        }
+        return prev[n];
+      }
+      // Score a query (normalized) against a target (normalized). Higher = better; 0 = no match.
+      function score(q, t) {
+        if (!q) return 0;
+        if (t === q) return 1000;
+        var best = 0;
+        var pos = t.indexOf(q);
+        if (pos >= 0) best = Math.max(best, 600 - pos);
+        var qt = q.split(' ').filter(Boolean), tt = t.split(' ').filter(Boolean);
+        var matched = 0, boost = 0;
+        qt.forEach(function (qtok) {
+          if (t.indexOf(qtok) >= 0) { matched++; return; }
+          var bestLev = 99;
+          tt.forEach(function (w) { var d = lev(qtok, w); if (d < bestLev) bestLev = d; });
+          var tol = qtok.length <= 4 ? 1 : 2;   // typo tolerance grows with word length
+          if (bestLev <= tol) { matched++; boost += (tol - bestLev + 1) * 25; }
+        });
+        if (qt.length) {
+          if (matched === qt.length) best = Math.max(best, 300 + matched * 20 + boost);
+          else if (matched > 0) best = Math.max(best, 120 * matched / qt.length + boost);
+        }
+        if (best < 150) { // subsequence (chars in order), spaces removed
+          var qc = q.replace(/ /g, ''), tc = t.replace(/ /g, ''), k = 0;
+          for (var x = 0; x < tc.length && k < qc.length; x++) if (tc[x] === qc[k]) k++;
+          if (k === qc.length) best = Math.max(best, 140);
+        }
+        return best;
+      }
+
+      var index = null;
+      function buildIndex() {
+        var items = [], seen = {};
+        function collect(sel, kind, kindFn) {
+          grid.querySelectorAll(sel).forEach(function (el) {
+            var label = labelOf(el); if (!label) return;
+            var k = kindFn ? kindFn(el) : kind;
+            var key = k + '|' + normalize(label);
+            if (seen[key]) return; seen[key] = 1;
+            items.push({ el: el, kind: k, label: label, norm: normalize(label), ctx: contextOf(el) });
+          });
+        }
+        collect('.course-title', 'Course');
+        collect('.module-row-name', 'Module');
+        collect('.cast-list .page-name', 'Cast');
+        collect('.logo-name', 'Image');
+        collect('.course-doc-name', 'Resource');
+        var promptsAcc = null;
+        document.querySelectorAll('summary .cat-name').forEach(function (s) { if (s.textContent.trim() === 'Prompts') promptsAcc = s.closest('details'); });
+        if (promptsAcc) promptsAcc.querySelectorAll('.cat-body > div > div > div:first-child').forEach(function (el) {
+          var label = el.textContent.replace(/\s+/g, ' ').trim(); if (!label) return;
+          var key = 'Prompt|' + normalize(label); if (seen[key]) return; seen[key] = 1;
+          items.push({ el: el, kind: 'Prompt', label: label, norm: normalize(label), ctx: 'Build Resources' });
+        });
+        return items;
+      }
+
+      function openAncestors(el) { var p = el; while (p) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; } }
+      function hidePanel() { panel.hidden = true; panel.innerHTML = ''; active = -1; }
+      function reveal(it) {
+        var el = it.el;
+        var cc = document.getElementById('char-content');
+        if (cc && cc.hasAttribute('hidden') && cc.contains(el)) {
+          // gated (password 1980) content: open Build Resources and send them to the gate to unlock
+          openAncestors(document.getElementById('char-gate'));
+          hidePanel();
+          var gate = document.getElementById('char-gate');
+          if (gate) gate.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          var pin = document.getElementById('char-pin'); if (pin) setTimeout(function () { pin.focus(); }, 320);
+          return;
+        }
+        openAncestors(el);
+        hidePanel();
+        setTimeout(function () {
+          var target = el.closest('.logo-card, .course-doc, .page-row') || el;
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          target.classList.add('search-flash');
+          setTimeout(function () { target.classList.remove('search-flash'); }, 1750);
+        }, 80);
+      }
+
+      var results = [], active = -1;
+      function runSearch() {
+        var q = normalize(input.value);
+        if (!q) { hidePanel(); return; }
+        if (!index) index = buildIndex();
+        var scored = [];
+        for (var i = 0; i < index.length; i++) {
+          var sc = score(q, index[i].norm);
+          if (sc >= 80) scored.push({ it: index[i], sc: sc });
+        }
+        scored.sort(function (a, b) { return b.sc - a.sc || a.it.label.length - b.it.label.length; });
+        results = scored.slice(0, 14).map(function (r) { return r.it; });
+        render();
+      }
+      function render() {
+        if (!results.length) { panel.innerHTML = '<div class="csr-empty">No matches. Try fewer letters.</div>'; panel.hidden = false; return; }
+        panel.innerHTML = results.map(function (it, i) {
+          var ctx = it.ctx ? '<span class="csr-ctx">' + it.ctx + '</span>' : '';
+          return '<div class="csr-item" role="option" data-i="' + i + '">'
+            + '<span class="csr-kind">' + it.kind + '</span>'
+            + '<span class="csr-label">' + it.label.replace(/</g, '&lt;') + '</span>' + ctx + '</div>';
+        }).join('');
+        panel.hidden = false; active = -1;
+      }
+      function setActive(n) {
+        var items = panel.querySelectorAll('.csr-item'); if (!items.length) return;
+        active = (n + items.length) % items.length;
+        items.forEach(function (el, i) { el.classList.toggle('active', i === active); });
+        items[active].scrollIntoView({ block: 'nearest' });
+      }
+
+      var t = null;
+      input.addEventListener('input', function () { clearTimeout(t); t = setTimeout(runSearch, 120); });
+      input.addEventListener('focus', function () { if (input.value.trim()) runSearch(); });
+      input.addEventListener('keydown', function (e) {
+        if (panel.hidden) return;
+        if (e.key === 'ArrowDown') { e.preventDefault(); setActive(active + 1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(active - 1); }
+        else if (e.key === 'Enter') { e.preventDefault(); if (results.length) reveal(results[active >= 0 ? active : 0]); }
+        else if (e.key === 'Escape') { hidePanel(); input.blur(); }
+      });
+      panel.addEventListener('click', function (e) {
+        var row = e.target.closest('.csr-item'); if (!row) return;
+        var i = parseInt(row.getAttribute('data-i'), 10);
+        if (results[i]) reveal(results[i]);
+      });
+      document.addEventListener('click', function (e) {
+        if (!panel.hidden && !e.target.closest('.catalog-search')) hidePanel();
       });
     })();
   </script>
