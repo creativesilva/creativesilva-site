@@ -39,8 +39,9 @@
       filter: none;
     }
     body::after { background: rgba(0, 0, 0, 0.34); }
-    /* The site's portfolio nav does not stay pinned on the catalog page. */
-    .site-header { position: static; }
+    /* Drop the portfolio site nav on the catalog page entirely; the teal CS logo in the
+       CATALOG bar is the way back to creativesilva.com. */
+    .site-header { display: none; }
 
     /* ── Curriculum-specific styles ── */
 
@@ -876,6 +877,8 @@
       font-family: var(--font-head, 'Oswald', sans-serif); font-weight: 700; letter-spacing: 0.18em;
       text-transform: uppercase; font-size: 0.78rem;
     }
+    .cat-bar-logo-link { display: flex; align-items: center; transition: opacity 0.15s ease; }
+    .cat-bar-logo-link:hover { opacity: 0.78; }
     .cat-bar-logo { height: 30px; width: auto; display: block; }
     .cat-bar-items { display: flex; align-items: stretch; flex-wrap: wrap; flex: 1 1 auto; }
     .cat-bar-item, .cbc-trigger {
@@ -2369,8 +2372,8 @@
 
       var label = document.createElement('span');
       label.className = 'cat-bar-label';
-      label.setAttribute('aria-label', 'Chris Silva');
-      label.innerHTML = '<img class="cat-bar-logo" src="/logos/CS_Logo_Only_Teal.svg" alt="Chris Silva" />';
+      label.setAttribute('aria-label', 'Back to creativesilva.com');
+      label.innerHTML = '<a class="cat-bar-logo-link" href="index.html" aria-label="Back to creativesilva.com"><img class="cat-bar-logo" src="/logos/CS_Logo_Only_Teal.svg" alt="Chris Silva" /></a>';
       inner.appendChild(label);
 
       var items = document.createElement('div');
@@ -2947,6 +2950,11 @@
       document.addEventListener('click', function (e) {
         if (!panel.hidden && !e.target.closest('.catalog-search')) hidePanel();
       });
+      // Deep link: /curriculum.html?q=term (from a module page's catalog-bar search) runs on load.
+      try {
+        var q0 = new URLSearchParams(location.search).get('q');
+        if (q0) { input.value = q0; setTimeout(function () { input.focus(); runSearch(); }, 120); }
+      } catch (e) {}
     })();
   </script>
 

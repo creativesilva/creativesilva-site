@@ -522,6 +522,89 @@
     });
   }
 
+  // ===== Stacked "parent" catalog bar on module pages (teacher-only, outside #top). =====
+  // Mirrors the catalog home's CATALOG bar: CS logo + course dropdowns + Build Resources +
+  // a search box. It is inserted as the first row of the sticky .silva-nav, so it stacks
+  // above the breadcrumb/pager and both stay pinned. Search jumps to the catalog and runs
+  // there (a module page has no catalog index to search).
+  function buildCatBar() {
+    var bar = document.createElement('div');
+    bar.className = 'silva-catbar';
+    var inner = document.createElement('div');
+    inner.className = 'silva-catbar-inner';
+
+    var logo = document.createElement('a');
+    logo.className = 'silva-catbar-logo';
+    logo.href = '/curriculum.html';
+    logo.setAttribute('aria-label', 'Curriculum Catalog');
+    logo.innerHTML = '<img src="/logos/CS_Logo_Only_Teal.svg" alt="Chris Silva" />';
+    inner.appendChild(logo);
+
+    var items = document.createElement('div');
+    items.className = 'silva-catbar-items';
+    function closeAll() {
+      var open = items.querySelectorAll('.silva-cbc.open');
+      for (var i = 0; i < open.length; i++) { open[i].classList.remove('open'); }
+    }
+    MENU.forEach(function (group) {
+      if (!group.modules || !group.modules.length) { return; }
+      var wrap = document.createElement('div');
+      wrap.className = 'silva-cbc';
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'silva-cbc-trigger';
+      btn.setAttribute('aria-haspopup', 'true');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.innerHTML = group.course + ' <span class="silva-cbc-caret">&#9662;</span>';
+      var menu = document.createElement('div');
+      menu.className = 'silva-cbc-menu';
+      group.modules.forEach(function (m) {
+        var a = document.createElement('a');
+        a.href = m.url;
+        a.className = 'silva-cbc-mod';
+        a.textContent = m.name;
+        menu.appendChild(a);
+      });
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var willOpen = !wrap.classList.contains('open');
+        closeAll();
+        if (willOpen) { wrap.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+        else { btn.setAttribute('aria-expanded', 'false'); }
+      });
+      wrap.appendChild(btn);
+      wrap.appendChild(menu);
+      items.appendChild(wrap);
+    });
+
+    var build = document.createElement('a');
+    build.className = 'silva-catbar-build';
+    build.href = '/curriculum.html#build-resources';
+    build.textContent = 'Build Resources';
+    items.appendChild(build);
+    inner.appendChild(items);
+
+    var form = document.createElement('form');
+    form.className = 'silva-catbar-search';
+    form.setAttribute('role', 'search');
+    var sInput = document.createElement('input');
+    sInput.type = 'search';
+    sInput.placeholder = 'Search catalog…';
+    sInput.setAttribute('aria-label', 'Search the catalog');
+    sInput.autocomplete = 'off';
+    form.appendChild(sInput);
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var q = sInput.value.trim();
+      if (q) { location.href = '/curriculum.html?q=' + encodeURIComponent(q); }
+    });
+    inner.appendChild(form);
+
+    bar.appendChild(inner);
+    document.addEventListener('click', function (e) { if (!bar.contains(e.target)) { closeAll(); } });
+    return bar;
+  }
+
   function init() {
     var nav = document.querySelector('.silva-nav');
     var navInner = document.querySelector('.silva-nav-inner');
@@ -555,6 +638,8 @@
 
     injectBurger(navInner, nav);
     injectCatalogMenu();
+    // Stacked catalog bar (parent nav) above the breadcrumb/pager row, inside the sticky nav.
+    nav.insertBefore(buildCatBar(), nav.firstChild);
   }
 
   if (document.readyState === 'loading') {
