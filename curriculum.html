@@ -850,6 +850,19 @@
       .catalog-search { flex-basis: 100%; margin-left: 0; max-width: none; }
     }
 
+    /* Frameworks list (Build Resources): living docs that link to their source files. */
+    .frameworks-note { color: var(--text-dim); font-size: 0.82rem; line-height: 1.6; margin: 0 0 12px; }
+    .frameworks-list { display: flex; flex-direction: column; gap: 10px; }
+    .framework-row {
+      border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(255, 255, 255, 0.02);
+      padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+    }
+    .framework-meta { flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .framework-name { font-weight: 600; color: var(--text); }
+    .framework-desc { color: var(--text-dim); font-size: 0.8rem; line-height: 1.5; }
+    .framework-file { color: var(--text-faint); font-size: 0.62rem; font-family: var(--font-head); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 3px; }
+    .framework-actions { display: flex; gap: 8px; flex-wrap: wrap; flex-shrink: 0; }
+
     /* Full-width quick-menu bar spanning above the course grid (ties the catalog
        into the site's dark-teal nav). Each course opens its module list. */
     .cat-bar {
@@ -1257,12 +1270,10 @@
             </details>
 
             <details class="cat-acc">
-              <summary class="cat-head"><span class="cat-name">Markdown Files</span><span class="cat-chevron"></span></summary>
+              <summary class="cat-head"><span class="cat-name">Frameworks</span><span class="cat-chevron"></span></summary>
               <div class="cat-body">
-                <div class="module-list">
-                  <a href="/SILVA_ANGULAR_FRAMEWORK.md" download class="module-row featured"><span class="module-row-name">SILVA_ANGULAR_FRAMEWORK.md</span><span class="resource-dl-badge">&#11015; Download</span></a>
-                  <a href="/CANVAS_BUILD_FRAMEWORK.md" download class="module-row featured"><span class="module-row-name">CANVAS_BUILD_FRAMEWORK.md</span><span class="resource-dl-badge">&#11015; Download</span></a>
-                </div>
+                <p class="frameworks-note">Living framework docs. Each links to its source file, so any edit you push updates the hosted, viewable, and downloadable copy instantly: one running framework, always current.</p>
+                <div class="frameworks-list" id="frameworks-list"></div>
               </div>
             </details>
               </div>
@@ -2735,9 +2746,37 @@
     })();
   </script>
 
+  <!-- Frameworks (Build Resources): data-driven so adding one is a single array line. Each row
+       links to the LIVE source file at the repo root, so editing + pushing the framework updates
+       the hosted View / Copy / Download instantly. Rendered at load so search indexes it too. -->
+  <script>
+    (function () {
+      var FRAMEWORKS = [
+        { file: 'SILVA_ANGULAR_FRAMEWORK.md', name: 'Silva Angular Framework', desc: 'The locked dark-mode angular house style: gradient frames, section colors, card + button patterns for every current build.' },
+        { file: 'CANVAS_BUILD_FRAMEWORK.md', name: 'Canvas Build Framework', desc: 'The full module build system: intake questionnaire, section templates, the 6-vocab grid, pre-delivery checklist, git workflow.' },
+        { file: 'CLAUDE.md', name: 'Project Rules &amp; Standards', desc: 'The hard rules: 5th-grade bilingual copy, creativesilva.com asset hosting, deliverables callout, the four-color accent system.' }
+      ];
+      var host = document.getElementById('frameworks-list');
+      if (!host) return;
+      host.innerHTML = FRAMEWORKS.map(function (f) {
+        var url = '/' + f.file;
+        return '<div class="framework-row">'
+          + '<div class="framework-meta">'
+          + '<span class="framework-name">' + f.name + '</span>'
+          + '<span class="framework-desc">' + f.desc + '</span>'
+          + '<span class="framework-file">' + f.file + '</span></div>'
+          + '<div class="framework-actions">'
+          + '<a class="pg-btn pg-view" href="' + url + '" target="_blank" rel="noopener">View</a>'
+          + '<button type="button" class="pg-btn" onclick="silvaCopyPrompt(\'' + url + '\', this)">Copy</button>'
+          + '<a class="pg-btn" href="' + url + '" download>Download</a>'
+          + '</div></div>';
+      }).join('');
+    })();
+  </script>
+
   <!-- Catalog search: fuzzy (typo-tolerant) find across modules, images/assets, resources,
-       cast sheets, courses, and prompts. Index is built lazily on first use, so it captures
-       everything the render scripts and image injector added. -->
+       cast sheets, courses, frameworks, and prompts. Index is built lazily on first use, so it
+       captures everything the render scripts and image injector added. -->
   <script>
     (function () {
       var input = document.getElementById('catalog-search-input');
@@ -2822,6 +2861,7 @@
         collect('.cast-list .page-name', 'Cast');
         collect('.logo-name', 'Image');
         collect('.course-doc-name', 'Resource');
+        collect('.framework-name', 'Framework');
         var promptsAcc = null;
         document.querySelectorAll('summary .cat-name').forEach(function (s) { if (s.textContent.trim() === 'Prompts') promptsAcc = s.closest('details'); });
         if (promptsAcc) promptsAcc.querySelectorAll('.cat-body > div > div > div:first-child').forEach(function (el) {
