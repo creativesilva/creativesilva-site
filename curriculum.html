@@ -24,6 +24,24 @@
       --accent-neutral: #5f8fbf;  /* Build Resources */
     }
 
+    /* ── Catalog page theme: dark-teal PV angular background (THIS PAGE ONLY, background only).
+       Overrides the portfolio cityscape (css/style.css body::before/::after). Does NOT touch any
+       section, accordion, card, or menu styling. The creativesilva.com site header is also NOT
+       pinned here; the CATALOG bar (.cat-bar) is the one that stays (see below). ── */
+    body::before {
+      background-image:
+        linear-gradient(180deg, rgba(8, 8, 8, 0.97) 0%, rgba(0, 56, 56, 0.90) 48%, rgba(8, 8, 8, 0.98) 100%),
+        url("https://www.creativesilva.com/assets/PV_Panther_Watermark.png");
+      background-size: cover, min(72vw, 600px);
+      background-position: center center, center 42%;
+      background-repeat: no-repeat, no-repeat;
+      background-color: #050b0b;
+      filter: none;
+    }
+    body::after { background: rgba(0, 0, 0, 0.34); }
+    /* The site's portfolio nav does not stay pinned on the catalog page. */
+    .site-header { position: static; }
+
     /* ── Curriculum-specific styles ── */
 
     .curriculum-intro {
@@ -478,7 +496,7 @@
     .cat-body .logo-fmt { display: block; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-top: 2px; }
     .cat-body .logo-dl { flex-shrink: 0; font-family: var(--font-head); font-size: 0.56rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); text-decoration: none; border: 1px solid rgba(255,255,255,0.16); padding: 6px 10px; }
     .cat-body .logo-dl:hover { color: var(--text); border-color: rgba(255,255,255,0.4); }
-    .cat-body .logo-actions { display: flex; gap: 6px; flex: 0 0 auto; align-items: center; margin-left: auto; }
+    .cat-body .logo-actions { display: flex; flex-wrap: wrap; gap: 6px; flex: 1 1 100%; align-items: center; justify-content: center; }
     .cat-body .logo-copy { font-family: var(--font-head); font-size: 0.56rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); background: none; cursor: pointer; border: 1px solid rgba(255,140,60,0.5); padding: 6px 10px; }
     .cat-body .logo-copy:hover { color: var(--text); border-color: #FF6B1A; }
     .cat-body .logo-copy.copied { color: #fff; border-color: #FF6B1A; background: rgba(255,107,26,0.2); }
@@ -790,8 +808,11 @@
     /* Full-width quick-menu bar spanning above the course grid (ties the catalog
        into the site's dark-teal nav). Each course opens its module list. */
     .cat-bar {
+      position: sticky; top: 0; z-index: 500;
       margin: 0 0 22px; border: 1px solid rgba(0, 184, 184, 0.30); border-top: 2px solid #00b8b8;
-       background: linear-gradient(135deg, rgba(0, 56, 56, 0.55) 0%, rgba(0, 116, 116, 0.28) 100%);
+      background: linear-gradient(135deg, rgba(0, 42, 42, 0.90) 0%, rgba(0, 96, 96, 0.78) 100%);
+      backdrop-filter: blur(14px) saturate(1.15);
+      -webkit-backdrop-filter: blur(14px) saturate(1.15);
     }
     .cat-bar-inner { display: flex; align-items: stretch; flex-wrap: wrap; }
     .cat-bar-label {
@@ -2522,6 +2543,23 @@
         } catch (e) { done(false); }
       }
       window.castCopyImage = copyLogoImage; // reused by the Cast per-sheet "Copy Image" buttons
+      // Always copy the CANONICAL public link (https://www.creativesilva.com/assets/...), never a
+      // localhost/preview URL, so a copied link works everywhere (Canvas, chat, ChatGPT).
+      function publicUrl(href) {
+        try { return 'https://www.creativesilva.com' + new URL(href, location.origin).pathname; }
+        catch (e) { return href; }
+      }
+      function copyUrlAction(btn, href, label) {
+        var url = publicUrl(href);
+        var restore = function (msg, ok) {
+          btn.textContent = msg; if (ok) { btn.classList.add('copied'); }
+          setTimeout(function () { btn.textContent = label; btn.classList.remove('copied'); }, ok ? 1600 : 2200);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(function () { restore('Copied!', true); }).catch(function () { window.prompt('Copy this image URL:', url); });
+        } else { window.prompt('Copy this image URL:', url); }
+      }
+      window.silvaCopyImageUrl = copyUrlAction;
       document.querySelectorAll('.logo-card').forEach(function (card) {
         var dl = card.querySelector('.logo-dl');
         if (!dl) return;
@@ -2534,9 +2572,15 @@
         copy.setAttribute('data-label', 'Copy');
         copy.setAttribute('aria-label', 'Copy image to clipboard');
         copy.addEventListener('click', function () { copyLogoImage(url, copy); });
+        var copyUrl = document.createElement('button');
+        copyUrl.type = 'button'; copyUrl.className = 'logo-copy logo-copyurl'; copyUrl.textContent = 'Copy URL';
+        copyUrl.setAttribute('data-label', 'Copy URL');
+        copyUrl.setAttribute('aria-label', 'Copy image URL to clipboard');
+        copyUrl.addEventListener('click', function () { copyUrlAction(copyUrl, url, 'Copy URL'); });
         dl.parentNode.insertBefore(actions, dl);
         if (view) actions.appendChild(view);
         actions.appendChild(copy);
+        actions.appendChild(copyUrl);
         actions.appendChild(dl);
       });
 
@@ -2550,6 +2594,7 @@
         + '<div class="cs-lightbox-actions">'
         + '<button type="button" class="cs-lightbox-nav cs-lightbox-prev" aria-label="Previous">&#8249;</button>'
         + '<button type="button" class="cs-lightbox-copy">Copy</button>'
+        + '<button type="button" class="cs-lightbox-copy cs-lightbox-copyurl">Copy URL</button>'
         + '<a class="cs-lightbox-dl" download>Download</a>'
         + '<button type="button" class="cs-lightbox-nav cs-lightbox-next" aria-label="Next">&#8250;</button>'
         + '</div></div>';
@@ -2557,6 +2602,7 @@
       var lbImg = lb.querySelector('img');
       var lbCap = lb.querySelector('.cs-lightbox-cap');
       var lbCopy = lb.querySelector('.cs-lightbox-copy');
+      var lbCopyUrl = lb.querySelector('.cs-lightbox-copyurl');
       var lbDl = lb.querySelector('.cs-lightbox-dl');
       var lbPrev = lb.querySelector('.cs-lightbox-prev');
       var lbNext = lb.querySelector('.cs-lightbox-next');
@@ -2610,6 +2656,7 @@
         lbCap.textContent = s.caption || '';
         lbDl.setAttribute('href', s.full);
         lbCopy.textContent = 'Copy'; lbCopy.classList.remove('copied');
+        lbCopyUrl.textContent = 'Copy URL'; lbCopyUrl.classList.remove('copied');
       }
       function openLightbox(i) { current = i; render(); lb.classList.add('open'); }
       function closeLightbox() { lb.classList.remove('open'); lbImg.src = ''; }
@@ -2623,6 +2670,9 @@
       lbNext.addEventListener('click', function () { step(1); });
       lbCopy.addEventListener('click', function () {
         var s = slides[current]; if (s) copyLogoImage(s.full, lbCopy);
+      });
+      lbCopyUrl.addEventListener('click', function () {
+        var s = slides[current]; if (s) copyUrlAction(lbCopyUrl, s.full, 'Copy URL');
       });
       lb.addEventListener('click', function (e) {
         if (e.target === lb || e.target.closest('.cs-lightbox-close')) closeLightbox();
