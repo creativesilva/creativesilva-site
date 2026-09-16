@@ -88,6 +88,28 @@ def nav(current,dots,stepnav):
             f'      <div class="silva-step-nav">{stepnav}</div>')
 
 # ---------------- OVERVIEW ----------------
+# DRAFT standards mapping for Chris to review. CDE Arts, Entertainment & Design Career Cluster ->
+# Design, Visual & Media Arts Pathway -> Studio Arts (SA) focus area. Verify/adjust the codes and
+# add Career Ready (1.0-12.0) as desired.
+SP_STANDARDS=[
+  {"code":"SA.17.1","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Art &amp; Design Fundamentals","es_title":"Fundamentos de Arte y Dise&ntilde;o",
+   "en_desc":"You use the elements of art, light, angle, and composition to plan a strong photo on purpose.",
+   "es_desc":"Usas los elementos del arte, la luz, el &aacute;ngulo y la composici&oacute;n para planear una buena foto a prop&oacute;sito."},
+  {"code":"SA.17.2","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Visual Communication","es_title":"Comunicaci&oacute;n Visual",
+   "en_desc":"You tell a real story about who you are in one clear image.",
+   "es_desc":"Cuentas una historia real sobre qui&eacute;n eres en una sola imagen clara."},
+  {"code":"SA.17.5","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Equipment &amp; Image Production","es_title":"Equipo y Producci&oacute;n de Imagen",
+   "en_desc":"You set up and use your camera or iPad, the self-timer, and a steady prop to make a clean photo.",
+   "es_desc":"Preparas y usas tu c&aacute;mara o iPad, el temporizador y un apoyo firme para hacer una foto limpia."},
+  {"code":"SA.17.9","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Critique","es_title":"Cr&iacute;tica",
+   "en_desc":"You look back at your work and explain what worked and what you would improve.",
+   "es_desc":"Revisas tu trabajo y explicas qu&eacute; funcion&oacute; y qu&eacute; mejorar&iacute;as."},
+]
+
 def overview():
     en=banner("Photography 1A &bull; Self-Portrait","Self-Portrait","One creative self-portrait. Your phone. Your vision.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Make One Creative Self-Portrait",
@@ -96,6 +118,7 @@ def overview():
         + para("This is not a school-ID photo or a plain profile picture. Be creative and make it yours: use light, angle, setting, props, or an idea that says something about you. One rule: I still have to be able to recognize you. If you use objects to hide part of your face, leave enough that I can tell it is you.")
         + pills(["Cellphone or iPad","Self-Timer","One Final JPG","Creative &amp; Recognizable"])
         + note_orange(FRESH_EN))
+    en+=standards_box(False, SP_STANDARDS)
     en+=downloads_block(False)
     en+=card("","Find Your Self-Timer",
         para("You are the photographer and the subject, so use your camera&rsquo;s self-timer to give yourself time to get into your pose.")
@@ -138,6 +161,7 @@ def overview():
         + para("Esto no es una foto de credencial escolar ni una foto de perfil simple. S&eacute; creativo y h&aacute;zlo tuyo: usa la luz, el &aacute;ngulo, el lugar, objetos o una idea que diga algo de ti. Una regla: yo todav&iacute;a tengo que poder reconocerte. Si usas objetos para tapar parte de tu cara, deja lo suficiente para que yo pueda saber que eres t&uacute;.")
         + pills(["Tel&eacute;fono o iPad","Temporizador","Un JPG final","Creativo y Reconocible"])
         + note_orange(FRESH_ES))
+    es+=standards_box(True, SP_STANDARDS)
     es+=downloads_block(True)
     es+=card("","Encuentra Tu Temporizador",
         para("T&uacute; eres el fot&oacute;grafo y el sujeto, as&iacute; que usa el temporizador de tu c&aacute;mara para tener tiempo de ponerte en tu pose.")

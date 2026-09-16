@@ -58,6 +58,7 @@ RESICON=f"{SITE}/assets/Icons/assignment/resources-v1.png"
 PURPLE_BOX='<div style="background:linear-gradient(180deg,rgba(139,92,246,0.10) 0%,rgba(139,92,246,0.03) 100%);border:1px solid rgba(139,92,246,0.28);border-left:6px solid #8b5cf6;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
 DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"
 DELIVER_ICON=f"{SITE}/assets/Icons/assignment/deliverables-v4.png"
+STANDARDS_ICON=f"{SITE}/assets/Icons/assignment/standards-v1.svg"
 
 def section_header(icon,title,accent,light):
     # COMBINED section header (LOCKED 2026-09-10): one dark rectangle holding the section icon
@@ -228,6 +229,36 @@ def deliverables_box(es,items):
       + section_header(DELIVER_ICON, title, "#f5b301", "#ffd166")
       + f'<div style="font-size:13pt;color:#ffffff;margin-bottom:10px;line-height:1.5;">{lead}</div>'
       + f'{lis}</div>')
+
+def standards_box(es, aligns):
+    # GREEN CTE-standards alignment. A collapsible bar (native <details>, like vocab_grid) that
+    # expands to the CDE Model Curriculum Standards this module builds. Green #26de78 + the award
+    # icon. Works on the linked/standalone module view; Canvas's paste sanitizer strips <details>,
+    # same caveat as vocab. `aligns` = list of dicts: code, en_title/es_title, en_desc/es_desc,
+    # en_tier/es_tier (optional). Green is the 5th accent (teal/orange/purple/gold/green-standards).
+    title = "EST&Aacute;NDARES CTE" if es else "CTE STANDARDS"
+    lead  = ("Lo que construyes en este m&oacute;dulo. Toca para ver los est&aacute;ndares que cumple." if es
+             else "What this module builds. Tap to see the standards it meets.")
+    rows=""
+    for a in aligns:
+        t=a.get("es_title") if es else a.get("en_title")
+        d=a.get("es_desc") if es else a.get("en_desc")
+        tier=(a.get("es_tier") if es else a.get("en_tier")) or ""
+        tiertag=(f'<span style="font-size:9pt;letter-spacing:0.1em;text-transform:uppercase;color:#7bf0a8;">{tier}</span>' if tier else "")
+        rows+=('<div style="margin-bottom:12px;line-height:1.5;">'
+          '<div style="display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;">'
+          f'<span style="display:inline-block;background:#26de78;color:#04160c;font-size:9.5pt;font-weight:bold;letter-spacing:0.04em;padding:2px 8px;white-space:nowrap;">{a["code"]}</span>'
+          f'<span style="font-size:12.5pt;color:#ffffff;"><strong>{t}</strong></span>{tiertag}</div>'
+          f'<div style="font-size:11pt;color:rgba(255,255,255,0.82);margin-top:3px;">{d}</div></div>')
+    return ('<details class="silva-standards" style="background:linear-gradient(180deg,rgba(38,222,120,0.12) 0%,rgba(38,222,120,0.03) 100%);border:1px solid rgba(38,222,120,0.35);border-left:6px solid #26de78;margin-bottom:24px;overflow:hidden;">'
+      '<summary style="padding:15px 20px;cursor:pointer;display:flex;align-items:center;gap:14px;">'
+      f'<img src="{STANDARDS_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;" />'
+      '<span style="flex:1 1 auto;min-width:0;">'
+      f'<span style="display:block;font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#7bf0a8;margin-bottom:3px;"><strong>{title}</strong></span>'
+      f'<span style="display:block;font-size:12.5pt;color:rgba(255,255,255,0.92);">{lead}</span></span>'
+      '<span class="std-caret" style="color:#26de78;font-size:15pt;flex:0 0 auto;transition:transform 0.15s ease;">&#9662;</span>'
+      '</summary>'
+      f'<div style="padding:8px 22px 22px;">{rows}</div></details>')
 
 def top_wrap(en,es):
     return ('<div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;'

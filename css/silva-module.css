@@ -86,6 +86,12 @@ body {
   .silva-catbar-search { flex-basis: 100%; }
 }
 
+/* CTE Standards alignment box (green collapsible, mimics the vocab reveal): hide the native
+   disclosure marker and rotate the caret when open. */
+.silva-standards > summary { list-style: none; }
+.silva-standards > summary::-webkit-details-marker { display: none; }
+.silva-standards[open] .std-caret { transform: rotate(180deg); }
+
 /* ── Breadcrumb ── */
 
 /* Breadcrumb styled like a Curriculum Catalog "featured" row: a teal opaque
