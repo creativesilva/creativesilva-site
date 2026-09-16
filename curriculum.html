@@ -303,6 +303,8 @@
       background: color-mix(in srgb, var(--course-accent, #007474) 8%, transparent);
       transition: border-color 0.15s ease, background 0.15s ease;
     }
+    /* Teacher Resources: every action pill the same width as the widest, for a uniform column. */
+    #teacher-resources .course-doc-dl { min-width: 82px; box-sizing: border-box; text-align: center; }
     .course-doc:hover .course-doc-dl {
       border-color: color-mix(in srgb, var(--course-accent, #007474) 75%, transparent);
       background: color-mix(in srgb, var(--course-accent, #007474) 16%, transparent);
@@ -1204,16 +1206,6 @@
             </details>
 
             <details class="cat-acc">
-              <summary class="cat-head"><span class="cat-name">Email Signature</span><span class="cat-chevron"></span></summary>
-              <div class="cat-body">
-                <div class="module-list">
-                  <a href="/assets/email-signature.html" download class="module-row featured"><span class="module-row-name">Mac Mail Signature (HTML)</span><span class="resource-dl-badge">&#11015; Download</span></a>
-                </div>
-                <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.6;margin:12px 0 0;">Install: open the file in Safari, press <strong>Cmd+A</strong> then <strong>Cmd+C</strong>, then paste (<strong>Cmd+V</strong>) into <strong>Mail &rsaquo; Settings &rsaquo; Signatures</strong>. Images load from creativesilva.com, and it auto-switches for light/dark mode.</p>
-              </div>
-            </details>
-
-            <details class="cat-acc">
               <summary class="cat-head"><span class="cat-name">Markdown Files</span><span class="cat-chevron"></span></summary>
               <div class="cat-body">
                 <div class="module-list">
@@ -1736,6 +1728,8 @@
       rosters: {
         local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/Class%20Roster%209-15-26.pdf", label: "Class Roster 9-15-26" }],
       },
+      // Email signature (moved here from Build Resources 2026-09-15): downloadable HTML, no description.
+      files: [{ url: "assets/email-signature.html", label: "Mac Mail Signature (HTML)" }],
     };
     // Slide decks (staff-facing masters), grouped per course. Each deck keeps BOTH the editable
     // PPTX original and the PDF; a null means that file is not placed yet (shows as "pending").
@@ -1979,7 +1973,8 @@
       const locals = (t.local  || []).map(l => localRow(l.path, l.label)).join("");
       const rlocal = (t.rosters && t.rosters.local) ? t.rosters.local.map(l => localRow(l.path, l.label)).join("") : "";
       const rdocs  = (t.rosters && t.rosters.docs)  ? t.rosters.docs.map(d => docRow(d.url, d.label)).join("") : "";
-      const inner  = `${links}${rlocal}${rdocs}${vids}${cams}${locals}`;
+      const files  = (t.files || []).map(f => docRow(f.url, f.label)).join("");
+      const inner  = `${links}${rlocal}${rdocs}${vids}${cams}${locals}${files}`;
       if (!inner) return "";
       return `
         <details class="course-acc" id="teacher-resources" style="--course-accent:#FF6B1A">
