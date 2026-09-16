@@ -54,7 +54,7 @@ def card(path, module_title, page, role, alt, page_url):
       f'<img src="{path}" alt="{alt}" /></div>'
       f'<div class="logo-meta"><span class="logo-name">{name} '
       f'<span class="logo-fmt">{role} &middot; {ext}</span></span>'
-      f'<a class="logo-view" href="{page_url}">View Page</a>'
+      f'<a class="logo-view" href="{path}" target="_blank" rel="noopener">View</a>'
       f'<a class="logo-dl" href="{path}" download>Download</a></div></div>')
 
 def collect():

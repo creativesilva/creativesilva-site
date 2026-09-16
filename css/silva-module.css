@@ -80,13 +80,13 @@ body {
   display: none; position: absolute; top: 100%; left: 0; margin-top: 9px;
   min-width: 280px; max-height: 78vh; overflow-y: auto;
   background: #06201f; border: 1px solid rgba(0, 184, 184, 0.35); border-top: 3px solid #00b8b8;
-  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.55); border-radius: 5px; padding: 6px; z-index: 10000;
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.55);  padding: 6px; z-index: 10000;
 }
 .silva-catmenu.open .silva-catmenu-panel { display: block; }
 .silva-catmenu-course {
   display: block; width: 100%; box-sizing: border-box; text-align: left; background: none; border: 0;
   color: #eaf7f7; font-family: inherit; font-size: 0.92rem; font-weight: 700; letter-spacing: 0.03em;
-  text-transform: uppercase; padding: 11px 13px; cursor: pointer; border-radius: 3px;
+  text-transform: uppercase; padding: 11px 13px; cursor: pointer; 
 }
 .silva-catmenu-course:hover { background: rgba(0, 184, 184, 0.14); }
 .silva-catmenu-panel .cm-caret {
@@ -99,19 +99,19 @@ body {
 .silva-catmenu-panel .silva-catmenu-module {
   display: block; color: rgba(255, 255, 255, 0.82); text-decoration: none;
   font-size: 0.88rem; font-weight: 500; letter-spacing: 0.03em; text-transform: uppercase;
-  padding: 9px 13px 9px 35px; border-radius: 3px;
+  padding: 9px 13px 9px 35px; 
 }
 .silva-catmenu-panel .silva-catmenu-module:hover { background: rgba(0, 184, 184, 0.18); color: #fff; }
 .silva-catmenu-panel .silva-catmenu-full {
   display: block; box-sizing: border-box; color: #eaf7f7; text-decoration: none;
   font-size: 0.92rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; padding: 11px 13px;
-  border-radius: 3px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); margin-bottom: 4px;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.12); margin-bottom: 4px;
 }
 .silva-catmenu-panel .silva-catmenu-full:hover { background: rgba(0, 184, 184, 0.14); color: #fff; }
 .silva-catmenu-panel .silva-catmenu-leave {
   display: block; box-sizing: border-box; color: #eaf7f7; text-decoration: none;
   font-size: 0.92rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; padding: 11px 13px;
-  border-radius: 3px; border-top: 1px solid rgba(255, 255, 255, 0.12); margin-top: 4px;
+   border-top: 1px solid rgba(255, 255, 255, 0.12); margin-top: 4px;
 }
 .silva-catmenu-panel .silva-catmenu-leave:hover { background: rgba(0, 184, 184, 0.14); color: #fff; }
 /* Open full catalog + Build Resources are a grouped pair; one faint divider then courses. */
@@ -151,7 +151,7 @@ body {
 .sdot {
   width: 22px;
   height: 22px;
-  border-radius: 50%;
+  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -169,7 +169,7 @@ body {
 
 /* Module overview dot — square shape */
 .sdot-module {
-  border-radius: 5px;
+  
   font-size: 8px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -209,7 +209,7 @@ body {
   align-items: center;
   height: 28px;
   padding: 0 11px;
-  border-radius: 5px;
+  
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.11);
   color: rgba(255, 255, 255, 0.68);
@@ -255,7 +255,7 @@ body {
   background: var(--course-accent);
   color: #fff;
   border: none;
-  border-radius: 5px;
+  
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -279,7 +279,7 @@ body {
   background: transparent;
   color: var(--course-accent);
   border: 1.5px solid var(--course-accent);
-  border-radius: 5px;
+  
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -305,7 +305,7 @@ body {
   justify-content: center;
   width: 28px;
   height: 28px;
-  border-radius: 5px;
+  
   border: 1.5px solid rgba(255, 255, 255, 0.15);
   color: rgba(255, 255, 255, 0.45);
   text-decoration: none;
@@ -343,7 +343,7 @@ body {
   height: 36px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.10);
-  border-radius: 7px;
+  
   cursor: pointer;
   flex-shrink: 0;
   padding: 0;
@@ -359,7 +359,7 @@ body {
   width: 16px;
   height: 2px;
   background: rgba(255, 255, 255, 0.75);
-  border-radius: 1px;
+  
   transition: transform 0.18s ease, opacity 0.18s ease;
 }
 .silva-nav.menu-open .silva-burger span:nth-child(1) {
@@ -475,7 +475,7 @@ body {
   /* 3. Pull back #top's own inline padding (28px each side → 14px) */
   #top {
     padding: 14px 14px 24px !important;
-    border-radius: 16px !important;
+    
   }
 
   /* 4. Title card: shrink the PV logo; hide the empty balancing spacer div */
@@ -513,8 +513,8 @@ body {
    Subtitle (18pt bold): font-size:18pt;font-weight:bold — wrapped in <strong>
    Body (14pt):        font-size:14pt  (no bold)
    Small label (12pt): font-size:12pt  (no bold)
-   Float-right image:  float:right;width:36%;min-width:216px;height:auto;border-radius:12px;border:1px solid rgba(255,255,255,0.12);margin:0 0 16px 20px;
-   Full-width image:   width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,0.12);display:block;
+   Float-right image:  float:right;width:36%;min-width:216px;height:auto;border:1px solid rgba(255,255,255,0.12);margin:0 0 16px 20px;
+   Full-width image:   width:100%;height:auto;border:1px solid rgba(255,255,255,0.12);display:block;
    ═══════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════════
@@ -536,7 +536,7 @@ body {
   align-items: center;
   height: 36px;
   padding: 0 16px;
-  border-radius: 7px;
+  
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.10);
   color: rgba(255, 255, 255, 0.60);
@@ -611,11 +611,11 @@ body #top *[style*="overflow-x:auto"] {
 }
 .silva-scroll::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.04);
-  border-radius: 5px;
+  
 }
 .silva-scroll::-webkit-scrollbar-thumb {
   background: #5f8fbf;
-  border-radius: 5px;
+  
   border: 2px solid transparent;
   background-clip: padding-box;
 }

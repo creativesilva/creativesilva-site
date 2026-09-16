@@ -73,7 +73,7 @@ def scrollbox(n, inner):
     hint=(f'Scroll inside the box to see all {n} steps' if STEPLBL=="STEP"
           else f'Despl&aacute;zate en el cuadro para ver los {n} pasos')
     return (f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
-      '<div class="silva-scroll" style="max-height:460px;overflow-y:auto;padding:14px 16px 20px;border:1px solid rgba(0,184,184,0.22);border-radius:14px;'
+      '<div class="silva-scroll" style="max-height:460px;overflow-y:auto;padding:14px 16px 20px;border:1px solid rgba(0,184,184,0.22);'
       'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.16) 100%);">'
       f'{inner}</div>')
 
