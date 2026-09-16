@@ -1729,6 +1729,12 @@
       links: [{ url: "https://creativesilva.github.io/pvhs_tools/index.html", label: "PVHS Tools App" }],
       camera: { label: "Camera Check Out", form: "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform", qr: "assets/qr/camera-checkout-qr.png", download: "PVHS-Camera-Checkout-QR.png" },
       local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" }],
+      // Class Rosters (after PVHS Tools App): the roster PDF is a LOCAL-file link (student data,
+      // never published); the seating chart template is a hosted zip Chris can re-download as a backup.
+      rosters: {
+        local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/Class%20Roster%209-15-26.pdf", label: "Class Roster 9-15-26" }],
+        docs:  [{ url: "assets/course-documents/PVHS-Seating-Chart-Template.zip", label: "Seating Chart Template (Photoshop)" }],
+      },
     };
     // Slide decks (staff-facing masters), grouped per course. Each deck keeps BOTH the editable
     // PPTX original and the PDF; a null means that file is not placed yet (shows as "pending").
@@ -1806,6 +1812,13 @@
         + `<span class="course-doc-ico">APP</span>`
         + `<span class="course-doc-name">${label}</span>`
         + `<span class="course-doc-dl">Open</span></a>`;
+    }
+    function docRow(url, label) {
+      // A hosted file to download (zip/pdf/psd), e.g. a template backup kept on the site.
+      return `<a class="course-doc" href="${url}" download>`
+        + `<span class="course-doc-ico">FILE</span>`
+        + `<span class="course-doc-name">${label}</span>`
+        + `<span class="course-doc-dl">Download</span></a>`;
     }
     function openStepsModal(btn) {
       const row = btn.closest('.course-doc');
@@ -1963,7 +1976,9 @@
       const links  = (t.links  || []).map(l => linkRow(l.url, l.label)).join("");
       const cams   = t.camera ? cameraRow(t.camera) : "";
       const locals = (t.local  || []).map(l => localRow(l.path, l.label)).join("");
-      const inner  = `${links}${vids}${cams}${locals}`;
+      const rlocal = (t.rosters && t.rosters.local) ? t.rosters.local.map(l => localRow(l.path, l.label)).join("") : "";
+      const rdocs  = (t.rosters && t.rosters.docs)  ? t.rosters.docs.map(d => docRow(d.url, d.label)).join("") : "";
+      const inner  = `${links}${rlocal}${rdocs}${vids}${cams}${locals}`;
       if (!inner) return "";
       return `
         <details class="course-acc" id="teacher-resources" style="--course-accent:#FF6B1A">
