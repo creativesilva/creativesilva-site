@@ -314,7 +314,13 @@
       color: #ffffff; background: var(--course-accent, #007474); padding: 3px 7px; flex-shrink: 0;
     }
     .course-doc-name { flex: 1; min-width: 0; color: var(--text); font-size: 0.9rem; }
-    .course-doc-sub { display: block; font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0; text-transform: none; margin-top: 2px; }
+    /* Name + description inline by default (wide screens have the room); stack only when narrow. */
+    .course-doc-sub { font-size: 0.8rem; color: var(--text-dim); letter-spacing: 0; text-transform: none; }
+    .course-doc-sub::before { content: "\00B7"; margin: 0 9px; color: var(--text-faint); }
+    @media (max-width: 640px) {
+      .course-doc-sub { display: block; margin-top: 2px; font-size: 0.72rem; }
+      .course-doc-sub::before { content: none; }
+    }
     .tr-linkgroup { font-family: var(--font-head); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); padding: 10px 2px 5px; }
     .tr-linkgroup:first-child { padding-top: 2px; }
     .course-doc-dl {
