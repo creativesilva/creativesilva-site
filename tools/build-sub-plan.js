@@ -14,6 +14,8 @@ const TEAL = '007474', GRAY = '8A8A8A', WHITE = 'FFFFFF', INK = '1A1A1A';
 const CONTENT_W = 10800;
 const root = path.join(__dirname, '..');
 const logo = fs.readFileSync(path.join(root, 'assets/PV_Square_Logo.png'));
+// Chris's full email-signature block + handwritten signature, flattened to one image (his own asset).
+const sig = fs.readFileSync(path.join(root, 'assets/course-documents/silva-signature-block-v1.png'));
 
 function headerLogo() {
   return new ImageRun({
@@ -39,7 +41,7 @@ function sectionBar(text) {
     })] })],
   });
 }
-function gap(after) { return new Paragraph({ spacing: { after }, children: [new TextRun('')] }); }
+function gap(after) { return new Paragraph({ spacing: { after }, children: [new TextRun({ text: '', size: 2 })] }); }
 function para(text, o = {}) {
   return new Paragraph({ spacing: { before: o.before || 0, after: o.after == null ? 120 : o.after },
     children: [new TextRun({ text, size: o.size || 22, font: 'Arial', color: o.color || INK, bold: o.bold, italics: o.italics })] });
@@ -73,37 +75,36 @@ const children = [
   para('This plan covers Periods 1, 2, and 4. There is no class Period 3 (prep).', { after: 160 }),
 
   sectionBar('Today’s Classes'),
-  gap(80),
   ...classBlock('Period 1  ·  8:30–9:20 AM  ·  Photography 1  ·  Room 322',
     'First-year photo students. They are finalizing their edits in Lightroom and turning in Module 05: Lightroom Editing on Canvas.'),
   ...classBlock('Period 2  ·  9:30–10:20 AM  ·  Digital Arts 1  ·  Room 331',
     'Students are working on Module 05: Live Stream Graphic on Canvas.'),
   ...classBlock('Period 4  ·  11:35 AM–12:25 PM  ·  Photography 2  ·  Room 322',
     'Students are working on Module 04: Build Your Own Preset on Canvas.'),
-  gap(120),
 
   sectionBar('Classroom Rules'),
-  gap(80),
   labeled('Phones in the wall pockets.  ', 'Students put their phones in the wall pockets at the start of class and leave them there for the whole period.'),
   labeled('No camera check-outs.  ', 'Do not let students check out any cameras today.'),
   labeled('No photo walks.  ', 'Students stay in the classroom. No going outside or around campus to take photos today.'),
   labeled('Stay on the Canvas module.  ', 'Everything students need is in Canvas. They should be working on their module the entire period.'),
-  gap(120),
 
   sectionBar('Attendance'),
-  gap(80),
   para('A printed seating chart for each class is on my desk. Please mark any absent or tardy students on it. If you have Aeries substitute access, you may enter attendance there instead.', { after: 160 }),
 
   sectionBar('If You Need Help'),
-  gap(80),
-  para('For anything urgent, call the main office. A neighboring teacher can also help if something comes up.', { after: 200 }),
-
-  para('Thank you so much!  —  Mr. Silva', { bold: true, color: TEAL }),
+  new Paragraph({ spacing: { after: 60 }, children: [
+    new TextRun({ text: 'For anything urgent, call the main office. A neighboring teacher can also help if something comes up.  ', size: 22, font: 'Arial', color: INK }),
+    new TextRun({ text: 'Thank you so much!', bold: true, color: TEAL, size: 22, font: 'Arial' }),
+  ] }),
+  new Paragraph({ spacing: { before: 20 }, children: [new ImageRun({
+    type: 'png', data: sig, transformation: { width: 341, height: 249 },
+    altText: { title: 'Chris Silva', description: 'Chris Silva signature block', name: 'signature' },
+  })] }),
 ];
 
 const doc = new Document({
   styles: { default: { document: { run: { font: 'Arial', size: 22, color: INK } } } },
-  sections: [{ properties: { page: { size: { width: 12240, height: 15840 }, margin: { top: 900, right: 720, bottom: 900, left: 720 } } }, children }],
+  sections: [{ properties: { page: { size: { width: 12240, height: 15840 }, margin: { top: 900, right: 720, bottom: 720, left: 720 } } }, children }],
 });
 Packer.toBuffer(doc).then((buf) => {
   const out = path.join(root, 'assets/course-documents', 'PVHS-Substitute-Plan-2026-09-16.docx');
