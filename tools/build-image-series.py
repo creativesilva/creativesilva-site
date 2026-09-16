@@ -235,8 +235,8 @@ def framed_purple(src,alt,cap=""):
 
 def export_box(es):
     heading="Exporta Tus 6 JPGs Editados" if es else "Export Your 6 Edited JPGs"
-    intro=(para("Despu&eacute;s de tu hoja de contactos, sal del m&oacute;dulo Print y exporta tus 6 fotos editadas como JPG de alta resoluci&oacute;n. Sigue estos pasos en Lightroom Classic (Mac).") if es
-           else para("After your contact sheet, leave the Print module and export your 6 edited photos as high-resolution JPGs. Follow these steps in Lightroom Classic (Mac)."))
+    intro=(para("Despu&eacute;s de tu hoja de contactos, sal del m&oacute;dulo Print y exporta tus 6 fotos editadas como JPG de alta resoluci&oacute;n. Sigue estos pasos en Lightroom Classic.") if es
+           else para("After your contact sheet, leave the Print module and export your 6 edited photos as high-resolution JPGs. Follow these steps in Lightroom Classic."))
     if es:
         seq=[
           ("Sal del m&oacute;dulo Print.","Haz clic en <strong>Develop (Revelar)</strong> arriba para ver el Filmstrip y su filtro.",None,None),
