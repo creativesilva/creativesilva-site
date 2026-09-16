@@ -237,8 +237,8 @@ def standards_box(es, aligns):
     # same caveat as vocab. `aligns` = list of dicts: code, en_title/es_title, en_desc/es_desc,
     # en_tier/es_tier (optional). Green is the 5th accent (teal/orange/purple/gold/green-standards).
     title = "EST&Aacute;NDARES CTE" if es else "CTE STANDARDS"
-    lead  = ("Lo que construyes en este m&oacute;dulo. Toca para ver los est&aacute;ndares que cumple." if es
-             else "What this module builds. Tap to see the standards it meets.")
+    lead  = ("Toca para ver los est&aacute;ndares que construyes en este m&oacute;dulo." if es
+             else "Tap to see the standards this module builds.")
     rows=""
     for a in aligns:
         t=a.get("es_title") if es else a.get("en_title")
@@ -250,13 +250,14 @@ def standards_box(es, aligns):
           f'<span style="display:inline-block;background:#26de78;color:#04160c;font-size:9.5pt;font-weight:bold;letter-spacing:0.04em;padding:2px 8px;white-space:nowrap;">{a["code"]}</span>'
           f'<span style="font-size:12.5pt;color:#ffffff;"><strong>{t}</strong></span>{tiertag}</div>'
           f'<div style="font-size:11pt;color:rgba(255,255,255,0.82);margin-top:3px;">{d}</div></div>')
+    # Summary is NOT display:flex, so the browser renders its OWN disclosure triangle on the LEFT,
+    # pointing right when closed and rotating down when open, exactly like the vocab words. The
+    # triangle inherits the summary's green color. Icon + label sit inline after it.
     return ('<details class="silva-standards" style="background:linear-gradient(180deg,rgba(38,222,120,0.12) 0%,rgba(38,222,120,0.03) 100%);border:1px solid rgba(38,222,120,0.35);border-left:6px solid #26de78;margin-bottom:24px;overflow:hidden;">'
-      '<summary style="padding:15px 20px;cursor:pointer;display:flex;align-items:center;gap:14px;">'
-      '<span class="std-caret" style="color:#26de78;font-size:14pt;line-height:1;flex:0 0 auto;transition:transform 0.15s ease;">&#9654;</span>'
-      f'<img src="{STANDARDS_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;" />'
-      '<span style="flex:1 1 auto;min-width:0;">'
-      f'<span style="display:block;font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#7bf0a8;margin-bottom:3px;"><strong>{title}</strong></span>'
-      f'<span style="display:block;font-size:12.5pt;color:rgba(255,255,255,0.92);">{lead}</span></span>'
+      '<summary style="padding:16px 20px;cursor:pointer;color:#26de78;line-height:1.35;">'
+      f'<img src="{STANDARDS_ICON}" alt="" style="width:34px;height:34px;vertical-align:middle;margin:0 12px 0 6px;display:inline-block;" />'
+      f'<span style="vertical-align:middle;font-size:10pt;letter-spacing:0.16em;text-transform:uppercase;color:#7bf0a8;"><strong>{title}</strong></span>'
+      f'<span style="vertical-align:middle;font-size:12.5pt;color:rgba(255,255,255,0.92);"> &nbsp;&nbsp;{lead}</span>'
       '</summary>'
       f'<div style="padding:8px 22px 22px;">{rows}</div></details>')
 
