@@ -217,6 +217,59 @@ def purple_thumb(href,src,alt,cap):
       f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></a>'
       f'<div style="font-size:10.5pt;color:#c4b5fd;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div>')
 
+# --- Export Your 6 JPGs (Step 02): PURPLE, vertically-scrolling Lightroom Classic export how-to. ---
+# Purple = Resources accent (Chris asked for purple). Steps live in a contained .silva-scroll panel
+# with screen captures so the page stays compact. Mac-only, bilingual, 5th-grade.
+EXP=f"{SITE}/assets/images/photo1/image-series"
+EXP_FILTER=f"{EXP}/lrc-export-01-filter-rated-v1.png"
+EXP_FILE=f"{EXP}/lrc-export-02-file-export-v1.png"
+EXP_SPECIFIC=f"{EXP}/lrc-export-03-specific-folder-v1.png"
+EXP_FOLDER=f"{EXP}/lrc-export-04-choose-folder-v1.png"
+EXP_BUTTON=f"{EXP}/lrc-export-05-export-button-v1.png"
+
+def framed_purple(src,alt,cap=""):
+    # Purple-framed inline screen capture for the export how-to (kept modest width so it stays legible).
+    capdiv=(f'<div style="font-size:10.5pt;color:#c4b5fd;margin:6px 0 4px;line-height:1.4;">{cap}</div>' if cap else '')
+    return (f'<div style="background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;margin:8px 0 4px;max-width:640px;">'
+      f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>{capdiv}')
+
+def export_box(es):
+    heading="Exporta Tus 6 JPGs Editados" if es else "Export Your 6 Edited JPGs"
+    intro=(para("Despu&eacute;s de tu hoja de contactos, sal del m&oacute;dulo Print y exporta tus 6 fotos editadas como JPG de alta resoluci&oacute;n. Sigue estos pasos en Lightroom Classic (Mac).") if es
+           else para("After your contact sheet, leave the Print module and export your 6 edited photos as high-resolution JPGs. Follow these steps in Lightroom Classic (Mac)."))
+    if es:
+        seq=[
+          ("Sal del m&oacute;dulo Print.","Haz clic en <strong>Develop (Revelar)</strong> arriba para ver el Filmstrip y su filtro.",None,None),
+          ("Filtra el Filmstrip.","En el lado derecho del Filmstrip, abre el men&uacute; <strong>Filter</strong> y elige <strong>Rated</strong>. Ahora solo se ven tus fotos con estrellas.",EXP_FILTER,"El men&uacute; Filter del Filmstrip puesto en Rated"),
+          ("Selecciona las 6.","Presiona <strong>Cmd + A</strong> para seleccionar todas las fotos del Filmstrip.",None,None),
+          ("Abre Export.","Ve a <strong>File &rsaquo; Export</strong> (Archivo &rsaquo; Exportar), o presiona <strong>Shift + Cmd + E</strong>.",EXP_FILE,"El men&uacute; File con Export"),
+          ("Pon Export To: Specific folder.","Arriba en la ventana de Export, pon <strong>Export To</strong> en <strong>Specific folder</strong> (carpeta espec&iacute;fica).",EXP_SPECIFIC,"Export To puesto en Specific folder"),
+          ("Elige la carpeta de tu proyecto.","Haz clic en <strong>Choose</strong> y ve a <strong>OneDrive &rsaquo; Photography &rsaquo; la carpeta de tu proyecto</strong>, luego haz clic en <strong>Choose</strong>.",EXP_FOLDER,"Navegar a OneDrive &rsaquo; Photography &rsaquo; la carpeta del proyecto"),
+          ("Haz clic en Export.","Presiona el bot&oacute;n azul <strong>Export</strong>. Obtendr&aacute;s 6 JPG de alta resoluci&oacute;n en tu carpeta.",EXP_BUTTON,"El bot&oacute;n azul Export"),
+        ]
+        closing=note("Entrega estos 6 JPG junto con tu hoja de contactos de 6 im&aacute;genes.")
+    else:
+        seq=[
+          ("Leave the Print module.","Click <strong>Develop</strong> at the top so you can see the Filmstrip and its filter.",None,None),
+          ("Filter the Filmstrip.","On the right side of the Filmstrip, open the <strong>Filter</strong> menu and choose <strong>Rated</strong>. Now only your starred photos show.",EXP_FILTER,"The Filmstrip Filter menu set to Rated in Lightroom Classic"),
+          ("Select all 6.","Press <strong>Cmd + A</strong> to select every photo in the Filmstrip.",None,None),
+          ("Open Export.","Go to <strong>File &rsaquo; Export</strong>, or press <strong>Shift + Cmd + E</strong>.",EXP_FILE,"The File menu with Export in Lightroom Classic"),
+          ("Set Export To: Specific folder.","At the top of the Export box, set <strong>Export To</strong> to <strong>Specific folder</strong>.",EXP_SPECIFIC,"Export To set to Specific folder"),
+          ("Choose your project folder.","Click <strong>Choose</strong> and go to <strong>OneDrive &rsaquo; Photography &rsaquo; your project folder</strong>, then click <strong>Choose</strong>.",EXP_FOLDER,"Navigating to OneDrive, Photography, the project folder"),
+          ("Click Export.","Press the blue <strong>Export</strong> button. You now have 6 high-resolution JPGs in your folder.",EXP_BUTTON,"The blue Export button"),
+        ]
+        closing=note("Turn these 6 JPGs in along with your 6-image contact sheet.")
+    body=""
+    for i,(b,rest,cs,ca) in enumerate(seq,1):
+        body+=('<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:6px;">'
+          f'<span style="flex:0 0 auto;width:26px;height:26px;background:#8b5cf6;color:#ffffff;font-size:12pt;line-height:26px;text-align:center;"><strong>{i}</strong></span>'
+          f'<span style="font-size:13.5pt;color:rgba(255,255,255,0.88);line-height:1.5;"><strong>{b}</strong> {rest}</span></div>')
+        if cs:
+            body+=f'<div style="margin:2px 0 16px 38px;">{framed_purple(cs,ca)}</div>'
+    panel=('<div class="silva-scroll" style="max-height:560px;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid rgba(139,92,246,0.30);background:rgba(139,92,246,0.04);padding:16px 18px 8px;margin-top:6px;">'
+      + body + closing + '</div>')
+    return _lay(PURPLE_BOX, section_header(RESICON, heading, "#8b5cf6", "#c4b5fd"), intro + panel, "")
+
 DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"
 
 def dl_link(url,label,download=True,row=False):
@@ -512,7 +565,8 @@ def step01():
 def step02():
     en=banner("Image Series Photo Walk &bull; Step 2","Cull &amp; Edit","Select your best 6, do a light edit, and turn in a 6-image contact sheet.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
-        [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG), showing your 6 edited selections, uploaded to this Canvas assignment.")])
+        [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG), showing your 6 edited selections."),
+         ("6 JPGs:","your 6 edited photos, exported as high-resolution JPGs (see the export steps below). Upload all of this to this Canvas assignment.")])
     en+=card("CULL / KEEP THE STRONG ONES","Cull to Your Best 6",
         para("Culling means looking through your photos and keeping only the strongest. Select the 6 images that best show your series. Drop the blurry, the too-dark, and the repeats.")
         + bullets([
@@ -537,10 +591,12 @@ def step02():
             ("Use the 6-Up layout:","in the Print module, choose the 6-Up contact sheet."),
             ("Save the page:","export the contact sheet as a high-resolution JPG to turn in."),
         ]))
+    en+=export_box(False)
 
     es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 2","Selecciona y Edita","Elige tus mejores 6, haz una edici&oacute;n ligera y entrega una hoja de contactos de 6.","#top","Back to English")
     es+=deliverables_box(True,
-        [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tus 6 elegidas editadas, subida a esta tarea de Canvas.")])
+        [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tus 6 elegidas editadas."),
+         ("6 JPGs:","tus 6 fotos editadas, exportadas como JPG de alta resoluci&oacute;n (mira los pasos de exportaci&oacute;n abajo). Sube todo esto a esta tarea de Canvas.")])
     es+=card("SELECCIONA / QU&Eacute;DATE CON LAS FUERTES","Selecciona (Cull) Tus Mejores 6",
         para("Seleccionar (cull) significa revisar tus fotos y quedarte solo con las m&aacute;s fuertes. Elige las 6 im&aacute;genes que mejor muestran tu serie. Descarta las borrosas, las muy oscuras y las repetidas.")
         + bullets([
@@ -565,6 +621,7 @@ def step02():
             ("Usa el dise&ntilde;o de 6:","en el m&oacute;dulo Imprimir, elige la hoja de contactos de 6."),
             ("Guarda la p&aacute;gina:","exporta la hoja de contactos como JPG de alta resoluci&oacute;n para entregar."),
         ]))
+    es+=export_box(True)
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
