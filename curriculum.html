@@ -1679,26 +1679,25 @@
     // Teacher Resources: operational teacher tools, consolidated into ONE card
     // (kept off the course cards and All Courses, which are for Canvas-pasteable content).
     const TEACHER_RESOURCES = {
-      videos: [
+      // Top-level tools (PVHS Tools App is first).
+      app: { url: "https://creativesilva.github.io/pvhs_tools/index.html", label: "PVHS Tools App" },
+      camera: { label: "Camera Check Out", form: "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform", qr: "assets/qr/camera-checkout-qr.png", download: "PVHS-Camera-Checkout-QR.png" },
+      dashboard: { path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" },
+      // Vimeo (expandable): the grade-passback tutorial + the student-work showcases.
+      vimeo: [
         { url: "https://vimeo.com/1157058491/eafe248754?share=copy&amp;fl=cl&amp;fe=ci", label: "Aeries + Canvas Grade Passback", instructions: GRADE_PASSBACK_STEPS },
         { url: "https://vimeo.com/showcase/10188771?share=copy&amp;fl=sm&amp;fe=fs", label: "Digital Arts Showcase" },
         { url: "https://vimeo.com/showcase/11854006?fl=so&amp;fe=fs", label: "Photography Showcase" },
       ],
-      links: [{ url: "https://creativesilva.github.io/pvhs_tools/index.html", label: "PVHS Tools App" }],
-      camera: { label: "Camera Check Out", form: "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform", qr: "assets/qr/camera-checkout-qr.png", download: "PVHS-Camera-Checkout-QR.png" },
-      local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" }],
-      // Class Rosters (after PVHS Tools App): the roster PDF is a LOCAL-file link (student data,
-      // never published). NOTE: the seating chart template was REMOVED 2026-09-15 because the PSD
-      // supplied was a POPULATED chart (student names/photos/SSA flags), not a blank template. Do
-      // not host any seating chart here until a confirmed BLANK template is provided.
-      rosters: {
-        local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/Class%20Roster%209-15-26.pdf", label: "Class Roster 9-15-26" }],
+      // Documents (expandable): roster (LOCAL-file link, student data, never published), sub plan, signature.
+      // NOTE: no seating chart is hosted here. The PSD supplied 2026-09-15 was a POPULATED chart
+      // (student names/photos/SSA flags), not a blank template; never host one until a BLANK template exists.
+      documents: {
+        roster: { path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/Class%20Roster%209-15-26.pdf", label: "Class Roster 9-15-26" },
+        // Sub plan is schedule + instructions only, no student data. View = hosted PDF (browser viewer has its own download).
+        subplan: { docx: "assets/course-documents/PVHS-Substitute-Plan-2026-09-16.docx", pdf: "assets/course-documents/PVHS-Substitute-Plan-2026-09-16.pdf", label: "Substitute Plan (Sept 16)" },
+        signature: { url: "assets/email-signature.html", label: "Mac Mail Signature" },
       },
-      // Downloadable teacher files (Class Tools). Sub plan is schedule + instructions only, no student data.
-      files: [
-        { url: "assets/course-documents/PVHS-Substitute-Plan-2026-09-16.docx", label: "Substitute Plan (Sept 16)" },
-        { url: "assets/email-signature.html", label: "Mac Mail Signature (HTML)" },
-      ],
     };
     // Slide decks (staff-facing masters), grouped per course. Each deck keeps BOTH the editable
     // PPTX original and the PDF; a null means that file is not placed yet (shows as "pending").
@@ -1853,6 +1852,52 @@
       }
       return false;
     }
+    // Flash a short confirmation on the clicked action pill, then restore its label.
+    function pillFlash(el, msg, hold) {
+      const prev = el.textContent;
+      el.textContent = msg;
+      setTimeout(() => { el.textContent = prev; }, hold || 1700);
+    }
+    // Copy a link's URL (read from data-url so &amp; entities decode correctly) to the clipboard.
+    function silvaCopyURL(e, el) {
+      e.preventDefault();
+      const url = el.getAttribute("data-url");
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => pillFlash(el, "Copied")).catch(() => window.prompt("Copy this URL:", url));
+      } else { window.prompt("Copy this URL:", url); }
+      return false;
+    }
+    // Copy just the path of a local file:// resource (roster). Same behavior as openLocal's copy path.
+    function copyLocalPath(e, el) {
+      e.preventDefault();
+      const path = el.getAttribute("data-local");
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(path).then(() => pillFlash(el, "Copied")).catch(() => window.prompt("Copy this path, then paste into a new browser tab:", path));
+      } else { window.prompt("Copy this path, then paste into a new browser tab:", path); }
+      return false;
+    }
+    // Print a local file: opens it in a new tab (works when the catalog is opened locally; on the
+    // live https site file:// is blocked, so copy the path with a hint to open it locally to print).
+    function printLocal(e, el) {
+      const path = el.getAttribute("data-local");
+      if (location.protocol === "file:") { window.open(path, "_blank"); e.preventDefault(); return false; }
+      e.preventDefault();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(path).then(() => pillFlash(el, "Path copied • open locally to print", 2400)).catch(() => window.prompt("Open this locally to print:", path));
+      } else { window.prompt("Open this locally to print:", path); }
+      return false;
+    }
+    // Fetch a hosted HTML file's raw source and copy it to the clipboard (paste into Mail signature).
+    function silvaCopyHTMLFile(e, el) {
+      e.preventDefault();
+      const url = el.getAttribute("data-url");
+      fetch(url, { cache: "no-store" })
+        .then(r => { if (!r.ok) throw new Error("fetch " + r.status); return r.text(); })
+        .then(txt => navigator.clipboard.writeText(txt))
+        .then(() => pillFlash(el, "Copied"))
+        .catch(() => pillFlash(el, "Failed"));
+      return false;
+    }
     function formRow(url, label) {
       return `<a class="course-doc" href="${url}" target="_blank" rel="noopener">`
         + `<span class="course-doc-ico">FORM</span>`
@@ -1867,17 +1912,84 @@
         + `<span class="course-doc-name">${label}</span>`
         + `<span class="course-doc-dl">View QR</span></a>`;
     }
-    // Consolidated camera row: form + view QR + download QR, all on one line.
+    // Consolidated camera row: Open (form) + View (QR modal, which has its own Download) + Copy URL.
     function cameraRow(c) {
       const dl = (c.download || "qr-code.png").replace(/"/g, "&quot;");
       return `<div class="course-doc">`
         + `<span class="course-doc-ico">CAM</span>`
         + `<span class="course-doc-name">${c.label}</span>`
         + `<span class="course-doc-actions">`
-        + `<a class="course-doc-dl" href="${c.form}" target="_blank" rel="noopener">Open Form</a>`
-        + `<a class="course-doc-dl" href="${c.qr}" data-qr="${c.qr}" data-dl="${dl}" onclick="return openQR(event, this)">View QR</a>`
-        + `<a class="course-doc-dl" href="${c.qr}" download="${dl}">Download</a>`
+        + `<a class="course-doc-dl" href="${c.form}" target="_blank" rel="noopener">Open</a>`
+        + `<a class="course-doc-dl" href="${c.qr}" data-qr="${c.qr}" data-dl="${dl}" onclick="return openQR(event, this)">View</a>`
+        + `<a class="course-doc-dl" href="${c.form}" data-url="${c.form}" onclick="return silvaCopyURL(event, this)">Copy URL</a>`
         + `</span></div>`;
+    }
+    // ── Teacher Resources rows (Class Tools) ──
+    // App link: Copy URL + Open.
+    function appRow(url, label) {
+      return `<div class="course-doc">`
+        + `<span class="course-doc-ico">APP</span>`
+        + `<span class="course-doc-name">${label}</span>`
+        + `<span class="course-doc-actions">`
+        + `<a class="course-doc-dl" href="${url}" data-url="${url}" onclick="return silvaCopyURL(event, this)">Copy URL</a>`
+        + `<a class="course-doc-dl" href="${url}" target="_blank" rel="noopener">Open</a>`
+        + `</span></div>`;
+    }
+    // Vimeo row: a showcase (Copy URL + Open) or, when it carries steps, a tutorial (Open + Read + Copy URL).
+    function vimeoRow(v) {
+      const copy = `<a class="course-doc-dl" href="${v.url}" data-url="${v.url}" onclick="return silvaCopyURL(event, this)">Copy URL</a>`;
+      const open = `<a class="course-doc-dl" href="${v.url}" target="_blank" rel="noopener">Open</a>`;
+      if (v.instructions) {
+        return `<div class="course-doc">`
+          + `<span class="course-doc-ico">VIDEO</span>`
+          + `<span class="course-doc-name">${v.label}</span>`
+          + `<span class="course-doc-actions">${open}`
+          + `<span class="course-doc-dl" role="button" tabindex="0" style="cursor:pointer;" onclick="openStepsModal(this)">Read</span>`
+          + `${copy}</span></div>`
+          + `<div class="gp-steps" hidden>${v.instructions}</div>`;
+      }
+      return `<div class="course-doc">`
+        + `<span class="course-doc-ico">VIDEO</span>`
+        + `<span class="course-doc-name">${v.label}</span>`
+        + `<span class="course-doc-actions">${copy}${open}</span></div>`;
+    }
+    // Local roster (student data, never published): Print (opens the PDF locally to print) + Copy Path.
+    function rosterRow(path, label) {
+      const safe = path.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+      return `<div class="course-doc">`
+        + `<span class="course-doc-ico">LOCAL</span>`
+        + `<span class="course-doc-name">${label}</span>`
+        + `<span class="course-doc-actions">`
+        + `<a class="course-doc-dl" href="${safe}" data-local="${safe}" onclick="return printLocal(event, this)">Print</a>`
+        + `<a class="course-doc-dl" href="${safe}" data-local="${safe}" onclick="return copyLocalPath(event, this)">Copy Path</a>`
+        + `</span></div>`;
+    }
+    // Word doc: Open Word (the .docx) + View (the hosted PDF; the browser viewer has its own download).
+    function wordDocRow(docx, pdf, label) {
+      return `<div class="course-doc">`
+        + `<span class="course-doc-ico">DOC</span>`
+        + `<span class="course-doc-name">${label}</span>`
+        + `<span class="course-doc-actions">`
+        + `<a class="course-doc-dl" href="${docx}" download>Open Word</a>`
+        + `<a class="course-doc-dl" href="${pdf}" target="_blank" rel="noopener">View</a>`
+        + `</span></div>`;
+    }
+    // Email signature: Download (the .html) + Copy HTML (raw source to the clipboard, to paste into Mail).
+    function signatureRow(url, label) {
+      return `<div class="course-doc">`
+        + `<span class="course-doc-ico">HTML</span>`
+        + `<span class="course-doc-name">${label}</span>`
+        + `<span class="course-doc-actions">`
+        + `<a class="course-doc-dl" href="${url}" download>Download</a>`
+        + `<a class="course-doc-dl" href="${url}" data-url="${url}" onclick="return silvaCopyHTMLFile(event, this)">Copy HTML</a>`
+        + `</span></div>`;
+    }
+    // Nested expandable sub-section (reuses the slide-decks accordion chrome).
+    function subAcc(title, meta, rows) {
+      return `<details class="slide-decks-acc">`
+        + `<summary class="slide-decks-sum"><span class="slide-decks-title">${title}</span>`
+        + `<span class="slide-decks-meta">${meta}</span></summary>`
+        + `<div class="slide-decks-body">${rows}</div></details>`;
     }
     function openQR(e, el) {
       e.preventDefault();
@@ -1934,16 +2046,25 @@
     }
 
     // One consolidated Teacher Resources card (operational tools), built from TEACHER_RESOURCES.
+    // Layout: top-level tools (PVHS Tools App, Camera, Dashboard), then two expandable sub-sections:
+    // Vimeo (grade-passback tutorial + showcases) and Documents (roster, sub plan, signature).
     function buildTeacherResources() {
       const t = TEACHER_RESOURCES;
-      const vids   = (t.videos || []).map(v => videoRow(v.url, v.label, v.instructions)).join("");
-      const links  = (t.links  || []).map(l => linkRow(l.url, l.label)).join("");
-      const cams   = t.camera ? cameraRow(t.camera) : "";
-      const locals = (t.local  || []).map(l => localRow(l.path, l.label)).join("");
-      const rlocal = (t.rosters && t.rosters.local) ? t.rosters.local.map(l => localRow(l.path, l.label)).join("") : "";
-      const rdocs  = (t.rosters && t.rosters.docs)  ? t.rosters.docs.map(d => docRow(d.url, d.label)).join("") : "";
-      const files  = (t.files || []).map(f => docRow(f.url, f.label)).join("");
-      const inner  = `${links}${rlocal}${rdocs}${vids}${cams}${locals}${files}`;
+      const app   = t.app ? appRow(t.app.url, t.app.label) : "";
+      const cams  = t.camera ? cameraRow(t.camera) : "";
+      const dash  = t.dashboard ? localRow(t.dashboard.path, t.dashboard.label) : "";
+      // Vimeo sub-section
+      const vims  = (t.vimeo || []).map(vimeoRow).join("");
+      const nV    = (t.vimeo || []).length;
+      const vimeo = vims ? subAcc("Vimeo", `${nV} video${nV === 1 ? "" : "s"}`, vims) : "";
+      // Documents sub-section
+      const d = t.documents || {};
+      const docRows = (d.roster ? rosterRow(d.roster.path, d.roster.label) : "")
+        + (d.subplan ? wordDocRow(d.subplan.docx, d.subplan.pdf, d.subplan.label) : "")
+        + (d.signature ? signatureRow(d.signature.url, d.signature.label) : "");
+      const nD = [d.roster, d.subplan, d.signature].filter(Boolean).length;
+      const docs = docRows ? subAcc("Documents", `${nD} file${nD === 1 ? "" : "s"}`, docRows) : "";
+      const inner = `${app}${cams}${dash}${vimeo}${docs}`;
       if (!inner) return "";
       return `
         <details class="course-acc" id="teacher-resources" style="--course-accent:#FF6B1A">
