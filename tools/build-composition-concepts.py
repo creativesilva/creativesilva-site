@@ -192,6 +192,7 @@ def overview():
 # ---------------- STEP 01 ----------------
 def step01():
     en=banner("Photography 1A &bull; Composition Concepts","Composition Concepts","Capture your 3 concepts.","#espanol","Clic para Espa&ntilde;ol")
+    en+=capture_format("jpg")
     en+=deliverables_box(False,
         [("Your 3 final photos (JPG),","uploaded to this Canvas assignment.")])
     en+=card("STEP 01 / CAPTURE &amp; CULL","Capture Your 3 Concepts",
@@ -207,6 +208,7 @@ def step01():
         para("Upload your 3 final photos to Canvas. A photo straight from your phone or iPad (JPG) is perfect. Then go to Step 02 for the reflection."))
 
     es=banner("Fotograf&iacute;a 1A &bull; Conceptos de Composici&oacute;n","Conceptos de Composici&oacute;n","Captura tus 3 conceptos.","#top","Back to English")
+    es+=capture_format("jpg", True)
     es+=deliverables_box(True,
         [("Tus 3 fotos finales (JPG),","subidas a esta tarea de Canvas.")])
     es+=card("PASO 01 / CAPTURA Y SELECCI&Oacute;N","Captura Tus 3 Conceptos",

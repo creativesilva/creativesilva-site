@@ -59,6 +59,7 @@ PURPLE_BOX='<div style="background:linear-gradient(180deg,rgba(139,92,246,0.10) 
 DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"
 DELIVER_ICON=f"{SITE}/assets/Icons/assignment/deliverables-v4.png"
 STANDARDS_ICON=f"{SITE}/assets/Icons/assignment/standards-v1.svg"
+CAPFMT_ICON={"jpg":f"{SITE}/assets/Icons/assignment/jpg-v1.svg","raw":f"{SITE}/assets/Icons/assignment/raw-v1.svg"}
 
 def section_header(icon,title,accent,light):
     # COMBINED section header (LOCKED 2026-09-10): one dark rectangle holding the section icon
@@ -68,6 +69,16 @@ def section_header(icon,title,accent,light):
       f'<img src="{icon}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
       f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:{light};letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>'
       f'<div style="height:2px;background:{accent};width:60px;margin-bottom:18px;"></div>')
+
+def capture_format(fmt, es=False):
+    # Capture-format classifier: the JPG or RAW badge + "Image Capture" label, so students know which
+    # format to capture in for this assignment. Section-header-style chip, goes right after the banner
+    # on the capture step. Red left-border (#E62429) matches the badge; the icon is a wide format badge.
+    icon=CAPFMT_ICON[fmt]
+    label="Captura de Imagen" if es else "Image Capture"
+    return ('<div style="display:inline-flex;align-items:center;gap:13px;background:rgba(0,0,0,0.40);border-left:5px solid #E62429;padding:8px 18px 8px 12px;margin-bottom:20px;max-width:100%;box-sizing:border-box;">'
+      f'<img src="{icon}" alt="{fmt.upper()} image-capture format" style="height:40px;width:auto;display:block;flex:0 0 auto;" />'
+      f'<span style="font-family:Arial,sans-serif;font-size:11pt;letter-spacing:0.14em;text-transform:uppercase;color:#ffffff;line-height:1.2;"><strong>{label}</strong></span></div>')
 
 FLOAT_RE=re.compile(r'<!--FLOAT-->(.*?)<!--/FLOAT-->', re.S)
 def _hoist(inner):

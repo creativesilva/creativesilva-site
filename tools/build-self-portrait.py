@@ -205,6 +205,7 @@ def overview():
 # ---------------- STEP 01 ----------------
 def step01():
     en=banner("Photography 1A &bull; Self-Portrait &bull; Step 01","Capture &amp; Submit","Set up, capture, cull, and turn in your JPG.","#espanol","Clic para Espa&ntilde;ol")
+    en+=capture_format("jpg")
     en+=deliverables_box(False,
         [("1 JPG:","One final, polished, creative self-portrait, saved as a JPG.")])
     en+=card("","Capture, Cull, and Submit Your Self-Portrait",
@@ -216,6 +217,7 @@ def step01():
         + note_orange(FRESH_EN))
 
     es=banner("Fotograf&iacute;a 1A &bull; Autorretrato &bull; Paso 01","Captura y Entrega","Prepara, captura, selecciona y entrega tu JPG.","#top","Back to English")
+    es+=capture_format("jpg", True)
     es+=deliverables_box(True,
         [("1 JPG:","Un autorretrato final, pulido y creativo, guardado como JPG.")])
     es+=card("","Captura, Selecciona y Entrega Tu Autorretrato",

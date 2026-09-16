@@ -121,6 +121,7 @@ def overview():
 # ---------------- STEP 01 ----------------
 def step01():
     en=banner("Leading Lines &bull; Step 1","Capture, Cull &amp; Submit","Take your leading lines, then select your best six.","#espanol","Clic para Espa&ntilde;ol")
+    en+=capture_format("jpg")
     en+=deliverables_box(False,
         [("6 JPGs:","your best 3 leading-line photos and your partner&rsquo;s best 3, uploaded to this Canvas assignment.")])
     en+=card("CAPTURE / ON THE WALK","Take Your Leading Lines",
@@ -147,6 +148,7 @@ def step01():
         ]))
 
     es=banner("L&iacute;neas Gu&iacute;a &bull; Paso 1","Captura, Selecciona y Entrega","Toma tus l&iacute;neas gu&iacute;a y luego elige tus mejores seis.","#top","Back to English")
+    es+=capture_format("jpg", True)
     es+=deliverables_box(True,
         [("6 JPG:","tus mejores 3 fotos de l&iacute;neas gu&iacute;a y las mejores 3 de tu compa&ntilde;ero, subidas a esta tarea de Canvas.")])
     es+=card("CAPTURA / EN LA CAMINATA","Toma Tus L&iacute;neas Gu&iacute;a",
