@@ -314,6 +314,9 @@
       color: #ffffff; background: var(--course-accent, #007474); padding: 3px 7px; flex-shrink: 0;
     }
     .course-doc-name { flex: 1; min-width: 0; color: var(--text); font-size: 0.9rem; }
+    .course-doc-sub { display: block; font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0; text-transform: none; margin-top: 2px; }
+    .tr-linkgroup { font-family: var(--font-head); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); padding: 10px 2px 5px; }
+    .tr-linkgroup:first-child { padding-top: 2px; }
     .course-doc-dl {
       font-family: var(--font-head); font-size: 0.58rem; font-weight: 600; letter-spacing: 0.2em;
       text-transform: uppercase; color: var(--course-accent, #007474);
@@ -1790,6 +1793,15 @@
         subplan: { docx: "assets/course-documents/PVHS-Substitute-Plan-2026-09-16.docx", pdf: "assets/course-documents/PVHS-Substitute-Plan-2026-09-16.pdf", label: "Substitute Plan (Sept 16)" },
         signature: { url: "assets/email-signature.html", label: "Mac Mail Signature" },
       },
+      // Links (expandable): external sites grouped into Resources + Vendors. Visit opens a new tab.
+      links: {
+        resources: [
+          { url: "https://ctecoding.com/app", label: "ctecoding.com", desc: "Certification tracking" },
+        ],
+        vendors: [
+          { url: "https://www.propanels.com", label: "propanels.com", desc: "Portable display panels" },
+        ],
+      },
     };
     // Slide decks (staff-facing masters), grouped per course. Each deck keeps BOTH the editable
     // PPTX original and the PDF; a null means that file is not placed yet (shows as "pending").
@@ -2076,6 +2088,16 @@
         + `<a class="course-doc-dl" href="${url}" data-url="${url}" onclick="return silvaCopyHTMLFile(event, this)">Copy HTML</a>`
         + `</span></div>`;
     }
+    // External-site link row: name + short description + Visit (opens in a new tab).
+    function linkExtRow(l) {
+      const sub = l.desc ? `<span class="course-doc-sub">${l.desc}</span>` : "";
+      return `<div class="course-doc">`
+        + `<span class="course-doc-ico">LINK</span>`
+        + `<span class="course-doc-name">${l.label}${sub}</span>`
+        + `<span class="course-doc-actions">`
+        + `<a class="course-doc-dl" href="${l.url}" target="_blank" rel="noopener">Visit</a>`
+        + `</span></div>`;
+    }
     // Nested expandable sub-section (reuses the slide-decks accordion chrome).
     function subAcc(title, meta, rows) {
       return `<details class="slide-decks-acc">`
@@ -2156,7 +2178,15 @@
         + (d.signature ? signatureRow(d.signature.url, d.signature.label) : "");
       const nD = [d.roster, d.subplan, d.signature].filter(Boolean).length;
       const docs = docRows ? subAcc("Documents", `${nD} file${nD === 1 ? "" : "s"}`, docRows) : "";
-      const inner = `${app}${cams}${dash}${vimeo}${docs}`;
+      // Links sub-section: external sites grouped Resources + Vendors, each a Visit button.
+      const lk = t.links || {};
+      const linkGroup = (title, arr) => (arr && arr.length)
+        ? `<div class="tr-linkgroup">${title}</div>` + arr.map(linkExtRow).join("")
+        : "";
+      const linksInner = linkGroup("Resources", lk.resources) + linkGroup("Vendors", lk.vendors);
+      const nL = (lk.resources || []).length + (lk.vendors || []).length;
+      const links = linksInner ? subAcc("Links", `${nL} link${nL === 1 ? "" : "s"}`, linksInner) : "";
+      const inner = `${app}${cams}${dash}${vimeo}${docs}${links}`;
       if (!inner) return "";
       return `
         <details class="course-acc" id="teacher-resources" style="--course-accent:#FF6B1A">
