@@ -876,6 +876,7 @@
       font-family: var(--font-head, 'Oswald', sans-serif); font-weight: 700; letter-spacing: 0.18em;
       text-transform: uppercase; font-size: 0.78rem;
     }
+    .cat-bar-logo { height: 30px; width: auto; display: block; }
     .cat-bar-items { display: flex; align-items: stretch; flex-wrap: wrap; flex: 1 1 auto; }
     .cat-bar-item, .cbc-trigger {
       display: flex; align-items: center; gap: 7px; padding: 13px 18px; white-space: nowrap;
@@ -2368,7 +2369,8 @@
 
       var label = document.createElement('span');
       label.className = 'cat-bar-label';
-      label.textContent = 'Catalog';
+      label.setAttribute('aria-label', 'Chris Silva');
+      label.innerHTML = '<img class="cat-bar-logo" src="/logos/CS_Logo_Only_Teal.svg" alt="Chris Silva" />';
       inner.appendChild(label);
 
       var items = document.createElement('div');
