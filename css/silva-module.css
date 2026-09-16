@@ -90,7 +90,8 @@ body {
    disclosure marker and rotate the caret when open. */
 .silva-standards > summary { list-style: none; }
 .silva-standards > summary::-webkit-details-marker { display: none; }
-.silva-standards[open] .std-caret { transform: rotate(180deg); }
+/* Left triangle: points right (>) when closed, rotates down when open, like the vocab words. */
+.silva-standards[open] .std-caret { transform: rotate(90deg); }
 
 /* ── Breadcrumb ── */
 

@@ -252,11 +252,11 @@ def standards_box(es, aligns):
           f'<div style="font-size:11pt;color:rgba(255,255,255,0.82);margin-top:3px;">{d}</div></div>')
     return ('<details class="silva-standards" style="background:linear-gradient(180deg,rgba(38,222,120,0.12) 0%,rgba(38,222,120,0.03) 100%);border:1px solid rgba(38,222,120,0.35);border-left:6px solid #26de78;margin-bottom:24px;overflow:hidden;">'
       '<summary style="padding:15px 20px;cursor:pointer;display:flex;align-items:center;gap:14px;">'
+      '<span class="std-caret" style="color:#26de78;font-size:14pt;line-height:1;flex:0 0 auto;transition:transform 0.15s ease;">&#9654;</span>'
       f'<img src="{STANDARDS_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;" />'
       '<span style="flex:1 1 auto;min-width:0;">'
       f'<span style="display:block;font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#7bf0a8;margin-bottom:3px;"><strong>{title}</strong></span>'
       f'<span style="display:block;font-size:12.5pt;color:rgba(255,255,255,0.92);">{lead}</span></span>'
-      '<span class="std-caret" style="color:#26de78;font-size:15pt;flex:0 0 auto;transition:transform 0.15s ease;">&#9662;</span>'
       '</summary>'
       f'<div style="padding:8px 22px 22px;">{rows}</div></details>')
 
