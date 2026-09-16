@@ -1843,13 +1843,13 @@
         return `<a class="course-doc" href="${url}" target="_blank" rel="noopener">`
           + `<span class="course-doc-ico">VIDEO</span>`
           + `<span class="course-doc-name">${label}</span>`
-          + `<span class="course-doc-dl">Watch</span></a>`;
+          + `<span class="course-doc-dl">Open</span></a>`;
       }
-      // Video row with two inline actions: Watch (opens the video) and Read (opens a full-screen modal).
+      // Video row with two inline actions: Open (opens the video) and Read (opens a full-screen modal).
       return `<div class="course-doc">`
         + `<span class="course-doc-ico">VIDEO</span>`
         + `<span class="course-doc-name">${label}</span>`
-        + `<a class="course-doc-dl" href="${url}" target="_blank" rel="noopener">&#9654; Watch</a>`
+        + `<a class="course-doc-dl" href="${url}" target="_blank" rel="noopener">Open</a>`
         + `<span class="course-doc-dl" role="button" tabindex="0" style="cursor:pointer;" onclick="openStepsModal(this)">Read</span>`
         + `</div>`
         + `<div class="gp-steps" hidden>${instructions}</div>`;
