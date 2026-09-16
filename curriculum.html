@@ -1730,10 +1730,11 @@
       camera: { label: "Camera Check Out", form: "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform", qr: "assets/qr/camera-checkout-qr.png", download: "PVHS-Camera-Checkout-QR.png" },
       local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" }],
       // Class Rosters (after PVHS Tools App): the roster PDF is a LOCAL-file link (student data,
-      // never published); the seating chart template is a hosted zip Chris can re-download as a backup.
+      // never published). NOTE: the seating chart template was REMOVED 2026-09-15 because the PSD
+      // supplied was a POPULATED chart (student names/photos/SSA flags), not a blank template. Do
+      // not host any seating chart here until a confirmed BLANK template is provided.
       rosters: {
         local: [{ path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/Class%20Roster%209-15-26.pdf", label: "Class Roster 9-15-26" }],
-        docs:  [{ url: "assets/course-documents/PVHS-Seating-Chart-Template.zip", label: "Seating Chart Template (Photoshop)" }],
       },
     };
     // Slide decks (staff-facing masters), grouped per course. Each deck keeps BOTH the editable
