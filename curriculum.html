@@ -1963,7 +1963,7 @@
       const links  = (t.links  || []).map(l => linkRow(l.url, l.label)).join("");
       const cams   = t.camera ? cameraRow(t.camera) : "";
       const locals = (t.local  || []).map(l => localRow(l.path, l.label)).join("");
-      const inner  = `${vids}${links}${cams}${locals}`;
+      const inner  = `${links}${vids}${cams}${locals}`;
       if (!inner) return "";
       return `
         <details class="course-acc" id="teacher-resources" style="--course-accent:#FF6B1A">
