@@ -265,10 +265,12 @@ def export_box(es):
           f'<span style="flex:0 0 auto;width:26px;height:26px;background:#8b5cf6;color:#ffffff;font-size:12pt;line-height:26px;text-align:center;"><strong>{i}</strong></span>'
           f'<span style="font-size:13.5pt;color:rgba(255,255,255,0.88);line-height:1.5;"><strong>{b}</strong> {rest}</span></div>')
         if cs:
-            body+=f'<div style="margin:2px 0 16px 38px;">{framed_purple(cs,ca)}</div>'
-    panel=('<div class="silva-scroll" style="max-height:560px;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid rgba(139,92,246,0.30);background:rgba(139,92,246,0.04);padding:16px 18px 8px;margin-top:6px;">'
+            body+=f'<div style="margin:2px 0 16px;">{framed_purple(cs,ca)}</div>'
+    # Scroll panel rides in the RIGHT column (~half width) like a float-right image, top-aligned
+    # with the section header, via the FLOAT hoist. Text (header + intro) sits on the left.
+    panel=('<div class="silva-scroll" style="max-height:620px;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid rgba(139,92,246,0.30);background:rgba(139,92,246,0.04);padding:16px 18px 8px;">'
       + body + closing + '</div>')
-    return _lay(PURPLE_BOX, section_header(RESICON, heading, "#8b5cf6", "#c4b5fd"), intro + panel, "")
+    return _lay(PURPLE_BOX, section_header(RESICON, heading, "#8b5cf6", "#c4b5fd"), intro + '<!--FLOAT-->' + panel + '<!--/FLOAT-->', "")
 
 DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"
 
