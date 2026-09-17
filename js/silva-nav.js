@@ -540,9 +540,14 @@
     var oldInner = nav.querySelector('.silva-nav-inner');
     if (oldInner) { oldInner.parentNode.removeChild(oldInner); }
 
-    // Build the one header, same as the catalog home: title row, then catalog row.
-    nav.insertBefore(buildCatalogRow(), nav.firstChild);
-    nav.insertBefore(buildTitlebar(), nav.firstChild);
+    // Build the one header, same as the catalog home: a centered max-width column
+    // (.silva-uni-inner, mirrors .catalog-sticky-inner) holding the title row then the
+    // catalog row, so every shared element lands in the exact same place on both pages.
+    var inner = document.createElement('div');
+    inner.className = 'silva-uni-inner';
+    inner.appendChild(buildTitlebar());
+    inner.appendChild(buildCatalogRow());
+    nav.insertBefore(inner, nav.firstChild);
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {

@@ -7,6 +7,7 @@
 
 :root {
   --course-accent: #007474;
+  --max-width: 1200px;   /* header content column, matches curriculum.html --max-width */
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,53 +42,52 @@ body {
   gap: 10px;
 }
 
-/* ── Unified header (built by silva-nav.js): the SAME two-row header as the
-   Curriculum Catalog home, so there is one header sitewide. Row 1 = title +
-   Calendar + search; Row 2 = CS logo + Catalog dropdown + Build Resources + the
-   module pager. Teacher-only (inside .silva-nav, outside #top, never pasted). ── */
-.silva-uni-titlebar {
-  display: flex; align-items: center; gap: 22px; flex-wrap: wrap; padding: 13px 28px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
+/* ── Unified header (built by silva-nav.js): pixel-identical to the Curriculum
+   Catalog home header, so NOTHING shifts when you move between pages. Every metric
+   here MUST match curriculum.html's .catalog-titlebar / .cat-bar / .cbc-* values.
+   .silva-nav is the full-width glass bar; .silva-uni-inner is the centered column
+   (mirrors .catalog-sticky-inner). Teacher-only (outside #top, never pasted). ── */
+.silva-uni-inner { max-width: var(--max-width, 1200px); margin: 0 auto; padding: 0 32px; }
+.silva-uni-titlebar { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; padding: 16px 0 15px; }
 .silva-uni-title {
   margin: 0; flex: 0 1 auto; text-decoration: none;
-  font-family: 'Oswald', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
-  font-size: clamp(1.25rem, 2.4vw, 1.9rem); line-height: 1; color: #ffffff; transition: color 0.15s ease;
+  font-family: 'Oswald', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.005em;
+  font-size: clamp(1.45rem, 2.9vw, 2.05rem); line-height: 1; color: #ffffff; transition: color 0.15s ease;
 }
 .silva-uni-title:hover { color: #9df0f0; }
 .silva-uni-cal {
-  margin-left: auto; flex: 0 0 auto; height: 42px; box-sizing: border-box;
-  display: inline-flex; align-items: center; padding: 0 20px;
+  margin-left: auto; flex: 0 0 auto; height: 46px; box-sizing: border-box;
+  display: inline-flex; align-items: center; padding: 0 22px;
   font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-  font-size: 0.74rem; color: #fff; text-decoration: none; white-space: nowrap;
+  font-size: 0.78rem; color: #fff; text-decoration: none; white-space: nowrap;
   background: #007474; border: 1px solid #00b8b8; transition: filter 0.15s ease;
 }
 .silva-uni-cal:hover { filter: brightness(1.18); }
-.silva-uni-search { position: relative; flex: 1 1 260px; max-width: 460px; display: flex; }
+.silva-uni-search { position: relative; flex: 1 1 280px; max-width: 480px; display: flex; }
 .silva-uni-search-input {
-  width: 100%; box-sizing: border-box; height: 42px;
+  width: 100%; box-sizing: border-box; height: 46px;
   background-color: rgba(0, 0, 0, 0.30);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360d8d8' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cline x1='15.5' y1='15.5' x2='21' y2='21'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: 14px center; background-size: 16px 16px;
+  background-repeat: no-repeat; background-position: 15px center; background-size: 16px 16px;
   border: 1px solid rgba(0, 184, 184, 0.30); border-top: 2px solid #00b8b8;
-  color: #eaf7f7; font-family: inherit; font-size: 0.9rem; padding: 0 14px 0 40px;
+  color: #eaf7f7; font-family: inherit; font-size: 0.92rem; padding: 0 16px 0 42px;
   transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 .silva-uni-search-input::placeholder { color: rgba(234, 247, 247, 0.5); }
 .silva-uni-search-input:focus { outline: none; border-color: #00b8b8; background-color: rgba(0, 0, 0, 0.5); }
 
 .silva-uni-bar {
-  display: flex; align-items: stretch; flex-wrap: wrap; min-height: 50px; padding: 0 28px;
-  background: rgba(0, 0, 0, 0.16); border-top: 1px solid rgba(0, 184, 184, 0.20);
+  display: flex; align-items: stretch; flex-wrap: wrap; min-height: 50px;
+  background: rgba(0, 0, 0, 0.18); border-top: 1px solid rgba(0, 184, 184, 0.24);
 }
-.silva-uni-logo { display: flex; align-items: center; padding: 0 18px 0 0; margin-right: 4px; border-right: 1px solid rgba(255, 255, 255, 0.08); }
-.silva-uni-logo img { height: 28px; width: auto; display: block; }
+.silva-uni-logo { display: flex; align-items: center; padding: 0 20px 0 0; margin-right: 4px; border-right: 1px solid rgba(255, 255, 255, 0.08); }
+.silva-uni-logo img { height: 29px; width: auto; display: block; }
 .silva-uni-cat { position: relative; display: flex; align-items: center; }
 .silva-uni-cattrigger {
   align-self: center; display: flex; align-items: center; gap: 9px; min-height: 34px; padding: 0 15px;
-  margin: 8px 0 8px 4px; white-space: nowrap;
+  margin: 7px 0 7px 4px; white-space: nowrap;
   font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
-  font-size: 0.74rem; color: rgba(234, 247, 247, 0.85); cursor: pointer;
+  font-size: 0.75rem; color: rgba(234, 247, 247, 0.85); cursor: pointer;
   background: rgba(0, 0, 0, 0.26); border: 1px solid rgba(0, 184, 184, 0.42);
   transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
@@ -118,19 +118,21 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.12); margin-bottom: 5px; padding-bottom: 12px;
 }
 .silva-uni-build {
-  display: flex; align-items: center; padding: 0 18px; margin-left: 4px; white-space: nowrap;
+  display: flex; align-items: center; padding: 0 19px; margin-left: 4px; white-space: nowrap;
   font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
-  font-size: 0.74rem; color: #ffb27a; text-decoration: none; border-left: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.75rem; color: #ffb27a; text-decoration: none; border-left: 1px solid rgba(255, 255, 255, 0.08);
   transition: background 0.15s ease, color 0.15s ease;
 }
 .silva-uni-build:hover { background: rgba(255, 157, 77, 0.14); color: #fff; }
 .silva-uni-bar .silva-pager.pg-top { margin-left: auto; align-self: center; }
 @media (max-width: 760px) {
-  .silva-uni-titlebar { padding: 12px 16px 10px; gap: 12px; }
-  .silva-uni-bar { padding: 0 16px; }
+  .silva-uni-build { margin-left: auto; border-left: 0; }
+}
+@media (max-width: 640px) {
+  .silva-uni-inner { padding: 0 16px; }
+  .silva-uni-titlebar { gap: 10px; padding-bottom: 10px; }
   .silva-uni-cal { margin-left: 0; }
   .silva-uni-search { flex-basis: 100%; max-width: none; }
-  .silva-uni-build { margin-left: auto; border-left: 0; }
 }
 
 /* CTE Standards alignment box uses the browser's native disclosure triangle on the left,
