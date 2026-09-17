@@ -985,6 +985,60 @@
       .cs-lightbox-close { top: -10px; right: -10px; width: 34px; height: 34px; line-height: 34px; font-size: 19px; }
       .cs-lightbox-nav { width: 36px; height: 36px; font-size: 22px; }
     }
+
+    /* ── Prompt Studio (integrated, in the Prompts accordion) ── */
+    .ps2-intro { color: var(--text-dim); font-size: 0.85rem; line-height: 1.6; margin: 0 0 14px; }
+    .ps2-list { display: flex; flex-direction: column; gap: 10px; }
+    .ps2-prompt { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.02); }
+    .ps2-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 14px 16px; }
+    .ps2-title { flex: 1 1 0; min-width: 0; font-weight: 600; }
+    .ps2-sub { font-weight: 400; color: var(--text-dim); }
+    .ps2-actions { display: flex; gap: 8px; flex-wrap: wrap; flex-shrink: 0; }
+    .ps2-customize { background: #007474; border-color: #00b8b8; color: #fff; }
+    .ps2-customize:hover { filter: brightness(1.15); }
+    .ps2-customize.on { background: rgba(0,184,184,0.16); color: #eaf7f7; }
+    .ps2-copytext { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.18); border-top-color: rgba(255,255,255,0.28); color: #eaf7f7; }
+    .ps2-copytext:hover { border-color: rgba(0,184,184,0.5); }
+
+    .ps2-reveal { border-top: 1px solid rgba(0,184,184,0.22); background: rgba(0,0,0,0.22); padding: 18px 16px 20px; }
+    .ps2-group { margin-bottom: 18px; }
+    .ps2-gtitle { font-family: var(--font-head,'Oswald',sans-serif); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #00b8b8; margin-bottom: 11px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .ps2-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 13px 16px; }
+    .ps2-field { display: flex; flex-direction: column; gap: 5px; }
+    .ps2-field label { font-family: var(--font-head,'Oswald',sans-serif); font-size: 0.6rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+    .ps2-field label .val { float: right; color: #00b8b8; font-weight: 600; }
+    .ps2-field select { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,184,184,0.28); border-top: 2px solid #00b8b8; color: #eaf7f7; font-family: inherit; font-size: 0.85rem; padding: 8px 10px; -webkit-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360d8d8' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 9px center; background-size: 14px; }
+    .ps2-field select:focus { outline: none; border-color: #00b8b8; }
+    .ps2-field input[type="range"] { width: 100%; accent-color: #00b8b8; }
+    .ps2-context { width: 100%; box-sizing: border-box; min-height: 78px; resize: vertical; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,184,184,0.28); border-top: 2px solid #00b8b8; color: #eaf7f7; font-family: inherit; font-size: 0.88rem; line-height: 1.5; padding: 10px 12px; }
+    .ps2-context:focus { outline: none; border-color: #00b8b8; }
+    .ps2-context::placeholder { color: rgba(234,247,247,0.42); }
+    .ps2-refgroup { margin-bottom: 12px; }
+    .ps2-reflabel { font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(234,247,247,0.55); margin-bottom: 7px; }
+    .ps2-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    .ps2-chip { font-family: inherit; font-size: 0.74rem; letter-spacing: 0.02em; color: #eaf7f7; cursor: pointer; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14); padding: 6px 12px; white-space: nowrap; transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease; }
+    .ps2-chip:hover { border-color: rgba(0,184,184,0.5); }
+    .ps2-chip.on { background: rgba(0,184,184,0.18); border-color: #00b8b8; color: #fff; }
+    .ps2-chip.on::before { content: "\2713  "; color: #00b8b8; }
+    .ps2-preview { background: rgba(0,0,0,0.42); border: 1px solid rgba(255,255,255,0.10); border-left: 3px solid #00b8b8; padding: 13px 14px; font-size: 0.82rem; line-height: 1.6; color: #eaf7f7; white-space: pre-wrap; max-height: 260px; overflow-y: auto; margin-bottom: 13px; }
+    .ps2-revealacts { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .ps2-copyprompt { background: #007474; border-color: #00b8b8; color: #fff; }
+    .ps2-copyprompt:hover { filter: brightness(1.15); }
+    .ps2-copyprompt.copied { background: #1db869 !important; border-color: #1db869 !important; }
+    .ps2-hint { color: var(--text-dim); font-size: 0.74rem; }
+    .ps2-filespop { margin-top: 16px; border: 1px solid rgba(0,184,184,0.3); border-top: 2px solid #00b8b8; background: rgba(6,26,25,0.6); padding: 14px 15px; }
+    .ps2-filespop-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+    .ps2-filespop-title { font-family: var(--font-head,'Oswald',sans-serif); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #7fe9e9; }
+    .ps2-files { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 11px; }
+    .ps2-file { border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); display: flex; flex-direction: column; }
+    .ps2-file-thumb { height: 84px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(0,184,184,0.05); }
+    .ps2-file-thumb img { max-width: 92%; max-height: 78%; object-fit: contain; }
+    .ps2-file-meta { padding: 8px 9px; display: flex; flex-direction: column; gap: 6px; }
+    .ps2-file-name { font-size: 0.62rem; color: rgba(234,247,247,0.7); word-break: break-all; line-height: 1.35; }
+    .ps2-file-acts { display: flex; gap: 6px; }
+    .ps2-file-acts .pg-btn { font-size: 0.58rem; padding: 5px 8px; flex: 1 1 auto; text-align: center; justify-content: center; }
+    .ps2-filespop-empty { color: var(--text-dim); font-size: 0.82rem; font-style: italic; }
   </style>
 </head>
 <body>
@@ -1121,36 +1175,51 @@
                   </details>
                   <details class="cat-acc">
                     <summary class="cat-head"><span class="cat-name">Prompts</span><span class="cat-chevron"></span></summary>
-                    <div class="cat-body"><div style="display:flex;flex-direction:column;gap:10px;">
-                    <div style="border:1px solid var(--line,rgba(255,255,255,0.12));padding:14px 16px;background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;">
-                      <div style="flex:1 1 0;min-width:0;font-weight:600;">Classroom Environment Master Prompt <span style="font-weight:400;color:var(--text-dim);">(PV lab scene, any angle)</span></div>
-                      <div style="display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0;">
-                        <button type="button" class="pg-btn" onclick="silvaCopyPrompt('/assets/prompts/Classroom-Environment-Master-Prompt-v3.txt', this)">Copy Full Text</button>
-                        <a class="pg-btn pg-view" href="/assets/prompts/Classroom-Environment-Master-Prompt-v3.txt" download>Download</a>
+                    <div class="cat-body">
+                    <p class="ps2-intro">Copy a prompt as written, or <strong>Customize</strong> it: set the camera and lighting, add your own context, pick the reference files it should call out by name, then copy the rebuilt prompt and grab the files it lists.</p>
+                    <div class="ps2-list">
+                      <div class="ps2-prompt" data-file="/assets/prompts/Classroom-Environment-Master-Prompt-v3.txt">
+                        <div class="ps2-row">
+                          <div class="ps2-title">Classroom Environment Master Prompt <span class="ps2-sub">(PV lab scene, any angle)</span></div>
+                          <div class="ps2-actions">
+                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
+                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Classroom-Environment-Master-Prompt-v3.txt', this)">Copy Text</button>
+                          </div>
+                        </div>
+                        <div class="ps2-reveal" hidden></div>
+                      </div>
+                      <div class="ps2-prompt" data-file="/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt">
+                        <div class="ps2-row">
+                          <div class="ps2-title">Fresh Full-Image Rebuild Protocol <span class="ps2-sub">(force a full rebuild)</span></div>
+                          <div class="ps2-actions">
+                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
+                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt', this)">Copy Text</button>
+                          </div>
+                        </div>
+                        <div class="ps2-reveal" hidden></div>
+                      </div>
+                      <div class="ps2-prompt" data-file="/assets/prompts/Two-Pass-Character-Rebuild.md">
+                        <div class="ps2-row">
+                          <div class="ps2-title">Two-Pass Character Rebuild <span class="ps2-sub">(ultra-high-res upper + lower passes to merge in Photoshop)</span></div>
+                          <div class="ps2-actions">
+                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
+                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Two-Pass-Character-Rebuild.md', this)">Copy Text</button>
+                          </div>
+                        </div>
+                        <div class="ps2-reveal" hidden></div>
+                      </div>
+                      <div class="ps2-prompt" data-file="/assets/prompts/Blank-Artboard-Reset.txt">
+                        <div class="ps2-row">
+                          <div class="ps2-title">Blank Artboard Reset <span class="ps2-sub">(clear the canvas memory)</span></div>
+                          <div class="ps2-actions">
+                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
+                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Blank-Artboard-Reset.txt', this)">Copy Text</button>
+                          </div>
+                        </div>
+                        <div class="ps2-reveal" hidden></div>
                       </div>
                     </div>
-                    <div style="border:1px solid var(--line,rgba(255,255,255,0.12));padding:14px 16px;background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;">
-                      <div style="flex:1 1 0;min-width:0;font-weight:600;">Fresh Full-Image Rebuild Protocol <span style="font-weight:400;color:var(--text-dim);">(force a full rebuild)</span></div>
-                      <div style="display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0;">
-                        <button type="button" class="pg-btn" onclick="silvaCopyPrompt('/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt', this)">Copy Full Text</button>
-                        <a class="pg-btn pg-view" href="/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt" download>Download</a>
-                      </div>
                     </div>
-                    <div style="border:1px solid var(--line,rgba(255,255,255,0.12));padding:14px 16px;background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;">
-                      <div style="flex:1 1 0;min-width:0;font-weight:600;">Two-Pass Character Rebuild <span style="font-weight:400;color:var(--text-dim);">(ultra-high-res upper + lower passes to merge in Photoshop)</span></div>
-                      <div style="display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0;">
-                        <button type="button" class="pg-btn" onclick="silvaCopyPrompt('/assets/prompts/Two-Pass-Character-Rebuild.md', this)">Copy Full Text</button>
-                        <a class="pg-btn pg-view" href="/assets/prompts/Two-Pass-Character-Rebuild.md" download>Download</a>
-                      </div>
-                    </div>
-                    <div style="border:1px solid var(--line,rgba(255,255,255,0.12));padding:14px 16px;background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;">
-                      <div style="flex:1 1 0;min-width:0;font-weight:600;">Blank Artboard Reset <span style="font-weight:400;color:var(--text-dim);">(clear the canvas memory)</span></div>
-                      <div style="display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0;">
-                        <button type="button" class="pg-btn" onclick="silvaCopyPrompt('/assets/prompts/Blank-Artboard-Reset.txt', this)">Copy Full Text</button>
-                        <a class="pg-btn pg-view" href="/assets/prompts/Blank-Artboard-Reset.txt" download>Download</a>
-                      </div>
-                    </div>
-                    </div></div>
                   </details>
                     </div>
                   </details>
@@ -3014,6 +3083,202 @@
         if (q0) { input.value = q0; setTimeout(function () { input.focus(); runSearch(); }, 120); }
       } catch (e) {}
     })();
+  </script>
+
+  <!-- ── Prompt Studio (integrated customize flow for the Prompts accordion) ── -->
+  <script>
+  (function () {
+    var list = document.querySelector('.ps2-list');
+    if (!list) return;
+    var IMG = 'https://www.creativesilva.com/assets/images/characters/';
+
+    // Hosted reference library (real files on creativesilva.com).
+    var REFS = {
+      'Characters': [
+        { label: 'Renee', file: 'renee-character-sheet-v2.jpg' },
+        { label: 'Mr. Silva', file: 'mr-silva-character-sheet-v2.jpg' },
+        { label: 'Patricia', file: 'patricia-character-sheet-v6.jpg' },
+        { label: 'Anthony', file: 'anthony-character-sheet-v2.jpg' },
+        { label: 'Ricardo', file: 'ricardo-character-sheet-v3.jpg' }
+      ],
+      'Items': [
+        { label: 'Classroom camera kit', file: 'items/classroom-camera-kit-v1.jpg' },
+        { label: 'Canon R5', file: 'items/canon-eos-r5-pro-v1.png' },
+        { label: 'Canon R50', file: 'items/canon-eos-r50-v1.png' },
+        { label: '70-200 lens', file: 'items/canon-70-200-lens-v1.png' },
+        { label: 'Sketchbook', file: 'items/sketchbook-v1.png' },
+        { label: 'MacBook Pro', file: 'items/macbook-pro-v1.png' },
+        { label: 'iPad Pro + Pencil', file: 'items/ipad-pro-apple-pencil-v1.jpg' }
+      ],
+      'Scenes': [
+        { label: 'PV classroom', file: 'campus/pv-classroom-inspiration-v1.jpg' },
+        { label: 'Campus front', file: 'campus/pv-campus-front-v1.jpg' },
+        { label: 'Academy lobby (Photo)', file: 'campus/pv-lobby-photography-v1.jpg' },
+        { label: 'Academy lobby (Digital Arts)', file: 'campus/pv-lobby-digital-arts-v1.jpg' }
+      ]
+    };
+    // Sample control set (Chris will refine which dropdowns and options per prompt).
+    var VARS = [
+      { key: 'camera_height', label: 'Camera height', type: 'select', options: ['ground level', 'low', 'eye level', 'high', 'overhead'], def: 'eye level' },
+      { key: 'angle', label: 'Angle', type: 'select', options: ['eye-level', 'low', 'high', 'overhead', 'dutch'], def: 'eye-level' },
+      { key: 'pitch', label: 'Pitch', type: 'range', min: -90, max: 90, step: 5, def: 0, unit: '°' },
+      { key: 'yaw', label: 'Yaw', type: 'range', min: -180, max: 180, step: 5, def: 0, unit: '°' },
+      { key: 'lens', label: 'Lens', type: 'select', options: ['24mm wide', '35mm', '50mm', '85mm portrait'], def: '35mm' },
+      { key: 'framing', label: 'Framing', type: 'select', options: ['close', 'medium', 'wide'], def: 'medium' },
+      { key: 'lighting', label: 'Lighting', type: 'select', options: ['soft window light', 'golden hour', 'overcast', 'studio key + fill', 'dramatic rim light'], def: 'soft window light' }
+    ];
+
+    function el(t, c, h) { var e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
+    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    function baseName(f) { return f.split('/').pop(); }
+    function copy(text, btn, done) {
+      function ok() { if (btn) { var o = btn.textContent; btn.classList.add('copied'); btn.textContent = '✓ Copied'; setTimeout(function () { btn.classList.remove('copied'); btn.textContent = o; }, 1900); } if (done) done(); }
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(ok, function () { legacy(text); ok(); }); }
+      else { legacy(text); ok(); }
+    }
+    function legacy(text) { var a = document.createElement('textarea'); a.value = text; a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); } catch (e) {} document.body.removeChild(a); }
+
+    var cache = {};
+    function fetchPrompt(path) {
+      if (cache[path] != null) return Promise.resolve(cache[path]);
+      return fetch(path).then(function (r) { return r.text(); }).then(function (t) { cache[path] = t; return t; });
+    }
+
+    function buildReveal(promptEl) {
+      var reveal = promptEl.querySelector('.ps2-reveal');
+      if (reveal.dataset.built) return reveal;
+      reveal.dataset.built = '1';
+      var path = promptEl.getAttribute('data-file');
+      var storeKey = 'ps2:' + path;
+      var state = { values: {}, context: '', refs: {} };
+      VARS.forEach(function (v) { state.values[v.key] = v.def; });
+      try { var saved = JSON.parse(localStorage.getItem(storeKey) || '{}');
+        if (saved.values) VARS.forEach(function (v) { if (saved.values[v.key] != null) state.values[v.key] = saved.values[v.key]; });
+        if (saved.context) state.context = saved.context;
+        if (saved.refs) state.refs = saved.refs;
+      } catch (e) {}
+
+      // Camera + lighting controls
+      var g1 = el('div', 'ps2-group'); g1.appendChild(el('div', 'ps2-gtitle', 'Camera &amp; lighting'));
+      var fields = el('div', 'ps2-fields');
+      VARS.forEach(function (v) { fields.appendChild(buildField(v, state, refresh)); });
+      g1.appendChild(fields); reveal.appendChild(g1);
+
+      // Context
+      var g2 = el('div', 'ps2-group'); g2.appendChild(el('div', 'ps2-gtitle', 'Context'));
+      var ta = el('textarea', 'ps2-context'); ta.placeholder = 'Add anything unique to this generation. Example: Renee is done taking notes in her photo journal and stands facing Mr. Silva, handing it to him over the desk between them.';
+      ta.value = state.context;
+      ta.addEventListener('input', function () { state.context = ta.value; refresh(); });
+      g2.appendChild(ta); reveal.appendChild(g2);
+
+      // References
+      var g3 = el('div', 'ps2-group'); g3.appendChild(el('div', 'ps2-gtitle', 'Reference files'));
+      Object.keys(REFS).forEach(function (group) {
+        var rg = el('div', 'ps2-refgroup'); rg.appendChild(el('div', 'ps2-reflabel', esc(group)));
+        var chips = el('div', 'ps2-chips');
+        REFS[group].forEach(function (r) {
+          var chip = el('button', 'ps2-chip', esc(r.label)); chip.type = 'button';
+          if (state.refs[r.file]) chip.classList.add('on');
+          chip.addEventListener('click', function () {
+            if (chip.classList.toggle('on')) state.refs[r.file] = r.label; else delete state.refs[r.file];
+            refresh();
+          });
+          chips.appendChild(chip);
+        });
+        rg.appendChild(chips); g3.appendChild(rg);
+      });
+      reveal.appendChild(g3);
+
+      // Preview
+      reveal.appendChild(el('div', 'ps2-gtitle', 'Your prompt'));
+      var pre = el('div', 'ps2-preview', 'Loading base prompt&hellip;');
+      reveal.appendChild(pre);
+
+      // Actions
+      var acts = el('div', 'ps2-revealacts');
+      var copyBtn = el('button', 'pg-btn ps2-copyprompt', 'Copy Prompt'); copyBtn.type = 'button';
+      var hint = el('span', 'ps2-hint', 'Copies the rebuilt prompt, then lists the files to grab.');
+      acts.appendChild(copyBtn); acts.appendChild(hint);
+      reveal.appendChild(acts);
+
+      var pop = el('div', 'ps2-filespop'); pop.hidden = true; reveal.appendChild(pop);
+
+      var baseText = '';
+      fetchPrompt(path).then(function (t) { baseText = t; refresh(); }).catch(function () { baseText = '[Could not load the base prompt file.]'; refresh(); });
+
+      function compose() {
+        var v = state.values, lines = [];
+        lines.push('Camera and framing: ' + v.camera_height + ' height, ' + v.angle + ' angle, pitch ' + v.pitch + '°, yaw ' + v.yaw + '°, ' + v.lens + ', ' + v.framing + ' framing.');
+        lines.push('Lighting: ' + v.lighting + '.');
+        if (state.context.trim()) lines.push('Context: ' + state.context.trim());
+        var files = Object.keys(state.refs).map(baseName);
+        if (files.length) lines.push('Reference files (use these exactly, by name): ' + files.join(', '));
+        return baseText + '\n\n=== CUSTOMIZATION ===\n' + lines.join('\n');
+      }
+      function refresh() {
+        pre.textContent = compose();
+        try { localStorage.setItem(storeKey, JSON.stringify({ values: state.values, context: state.context, refs: state.refs })); } catch (e) {}
+      }
+      copyBtn.addEventListener('click', function () { copy(compose(), copyBtn, function () { showFiles(pop, state.refs); }); });
+      return reveal;
+    }
+
+    function buildField(v, state, refresh) {
+      var w = el('div', 'ps2-field');
+      var lab = el('label', null, esc(v.label));
+      if (v.type === 'range') { var val = el('span', 'val', state.values[v.key] + (v.unit || '')); lab.appendChild(val); w._val = val; }
+      w.appendChild(lab);
+      var input;
+      if (v.type === 'select') {
+        input = el('select');
+        v.options.forEach(function (o) { var op = el('option', null, esc(o)); op.value = o; if (o === state.values[v.key]) op.selected = true; input.appendChild(op); });
+        input.addEventListener('change', function () { state.values[v.key] = input.value; refresh(); });
+      } else {
+        input = el('input'); input.type = 'range'; input.min = v.min; input.max = v.max; input.step = v.step || 1; input.value = state.values[v.key];
+        input.addEventListener('input', function () { state.values[v.key] = input.value; if (w._val) w._val.textContent = input.value + (v.unit || ''); refresh(); });
+      }
+      w.appendChild(input);
+      return w;
+    }
+
+    function showFiles(pop, refs) {
+      pop.hidden = false;
+      pop.innerHTML = '';
+      var head = el('div', 'ps2-filespop-head');
+      head.appendChild(el('div', 'ps2-filespop-title', 'Grab these files for the generation'));
+      var keys = Object.keys(refs);
+      if (keys.length) {
+        var urls = keys.map(function (f) { return IMG + f; });
+        var all = el('button', 'pg-btn', 'Copy all URLs'); all.type = 'button';
+        all.addEventListener('click', function () { copy(urls.join('\n'), all); });
+        head.appendChild(all);
+      }
+      pop.appendChild(head);
+      if (!keys.length) { pop.appendChild(el('div', 'ps2-filespop-empty', 'No reference files selected. Pick characters, items, or scenes above and they will be listed here to grab.')); return; }
+      var grid = el('div', 'ps2-files');
+      keys.forEach(function (f) {
+        var url = IMG + f, name = baseName(f);
+        var cell = el('div', 'ps2-file');
+        var thumb = el('div', 'ps2-file-thumb'); var im = el('img'); im.src = url; im.alt = refs[f]; im.loading = 'lazy'; thumb.appendChild(im); cell.appendChild(thumb);
+        var meta = el('div', 'ps2-file-meta'); meta.appendChild(el('div', 'ps2-file-name', esc(name)));
+        var fa = el('div', 'ps2-file-acts');
+        var cu = el('button', 'pg-btn', 'Copy URL'); cu.type = 'button'; cu.addEventListener('click', function () { copy(url, cu); });
+        var dl = el('a', 'pg-btn pg-view', 'Get'); dl.href = url; dl.setAttribute('download', ''); dl.target = '_blank'; dl.rel = 'noopener';
+        fa.appendChild(cu); fa.appendChild(dl); meta.appendChild(fa); cell.appendChild(meta);
+        grid.appendChild(cell);
+      });
+      pop.appendChild(grid);
+    }
+
+    list.querySelectorAll('.ps2-prompt').forEach(function (p) {
+      var btn = p.querySelector('.ps2-customize');
+      btn.addEventListener('click', function () {
+        var reveal = buildReveal(p);
+        if (reveal.hasAttribute('hidden')) { reveal.removeAttribute('hidden'); btn.classList.add('on'); btn.textContent = 'Close'; }
+        else { reveal.setAttribute('hidden', ''); btn.classList.remove('on'); btn.textContent = 'Customize Prompt'; }
+      });
+    });
+  })();
   </script>
 
 </body>
