@@ -1083,6 +1083,9 @@
 
     /* ── Prompt Studio (integrated, in the Prompts accordion) ── */
     .ps2-intro { color: var(--text-dim); font-size: 0.85rem; line-height: 1.6; margin: 0 0 14px; }
+    .ps2-titlebar { display: flex; align-items: center; gap: 14px; background: rgba(0,0,0,0.40); border-left: 5px solid #00b8b8; padding: 10px 18px 10px 13px; margin: 0 0 15px; }
+    .ps2-tb-icon { width: 44px; height: 44px; object-fit: contain; flex: 0 0 auto; }
+    .ps2-tb-title { font-family: var(--font-head,'Oswald',sans-serif); font-size: 1.02rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #eafdfd; line-height: 1.1; }
     .ps2-list { display: flex; flex-direction: column; gap: 10px; }
     .ps2-prompt { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.02); }
     .ps2-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 14px 16px; }
@@ -1106,9 +1109,10 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360d8d8' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 9px center; background-size: 14px; }
     .ps2-field select:focus { outline: none; border-color: #00b8b8; }
     .ps2-field input[type="range"] { width: 100%; accent-color: #00b8b8; }
-    .ps2-context { width: 100%; box-sizing: border-box; min-height: 78px; resize: vertical; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,184,184,0.28); border-top: 2px solid #00b8b8; color: #eaf7f7; font-family: inherit; font-size: 0.88rem; line-height: 1.5; padding: 10px 12px; }
-    .ps2-context:focus { outline: none; border-color: #00b8b8; }
-    .ps2-context::placeholder { color: rgba(234,247,247,0.42); }
+    .ps2-context { width: 100%; box-sizing: border-box; min-height: 60px; resize: vertical; background: #e8f6f5; border: 1px solid rgba(0,116,116,0.30); border-top: 2px solid #00b8b8; border-radius: 0; color: #0b2e2c; font-family: inherit; font-size: 0.88rem; line-height: 1.5; padding: 10px 12px; }
+    .ps2-context:focus { outline: none; border-color: #00b8b8; box-shadow: 0 0 0 2px rgba(0,184,184,0.22); }
+    .ps2-context::placeholder { color: rgba(11,46,44,0.42); }
+    .ps2-field--wide { grid-column: 1 / -1; }
     .ps2-refgroup { margin-bottom: 12px; }
     .ps2-reflabel { font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(234,247,247,0.55); margin-bottom: 7px; }
     .ps2-slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; }
@@ -1288,8 +1292,9 @@
                     </div></div>
                   </details>
                   <details class="cat-acc">
-                    <summary class="cat-head"><span class="cat-name">Prompts</span><span class="cat-chevron"></span></summary>
+                    <summary class="cat-head"><span class="cat-name">Prompt Studio</span><span class="cat-chevron"></span></summary>
                     <div class="cat-body">
+                    <div class="ps2-titlebar"><img class="ps2-tb-icon" src="https://www.creativesilva.com/assets/Icons/assignment/design-v1.png" alt="" /><span class="ps2-tb-title">Prompt Studio</span></div>
                     <p class="ps2-intro">Copy a prompt as written, or <strong>Customize</strong> it: set the camera and lighting, add your own context, pick the reference files it should call out by name, then copy the rebuilt prompt and grab the files it lists.</p>
                     <div class="ps2-list">
                       <div class="ps2-prompt" data-file="/assets/prompts/Classroom-Environment-Master-Prompt-v3.txt">
@@ -3350,7 +3355,7 @@
           var w=el('div','ps2-field'); w.appendChild(el('label',null,esc(name)));
           var opts=optsFor(name), input;
           if(opts){ input=el('select'); var b=el('option',null,'-'); b.value=''; input.appendChild(b); opts.forEach(function(o){var op=el('option',null,esc(o)); op.value=o; input.appendChild(op);}); input.addEventListener('change',function(){state.fields[name]=input.value; refresh();}); }
-          else { input=el('input'); input.type='text'; input.placeholder='type here'; input.addEventListener('input',function(){state.fields[name]=input.value; refresh();}); }
+          else { w.classList.add('ps2-field--wide'); input=el('textarea','ps2-context'); input.rows=2; input.placeholder='type here'; input.addEventListener('input',function(){state.fields[name]=input.value; refresh();}); }
           w.appendChild(input); grid.appendChild(w);
         });
         fieldsGroup.appendChild(grid);
