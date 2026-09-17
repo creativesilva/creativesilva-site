@@ -282,10 +282,11 @@ def standards_box(es, aligns):
     # pointing right when closed and rotating down when open, exactly like the vocab words. The
     # triangle inherits the summary's green color. Icon + label sit inline after it.
     return ('<details class="silva-standards" style="background:linear-gradient(180deg,rgba(38,222,120,0.12) 0%,rgba(38,222,120,0.03) 100%);border:1px solid rgba(38,222,120,0.35);border-left:6px solid #26de78;margin-bottom:24px;overflow:hidden;">'
-      '<summary style="padding:16px 20px;cursor:pointer;color:#26de78;line-height:1.35;">'
-      f'<img src="{STANDARDS_ICON}" alt="" style="width:34px;height:34px;vertical-align:middle;margin:0 12px 0 6px;display:inline-block;" />'
-      f'<span style="vertical-align:middle;font-size:10pt;letter-spacing:0.16em;text-transform:uppercase;color:#7bf0a8;"><strong>{title}</strong></span>'
-      f'<span style="vertical-align:middle;font-size:12.5pt;color:rgba(255,255,255,0.92);"> &nbsp;&nbsp;{lead}</span>'
+      '<summary style="padding:14px 18px;cursor:pointer;color:#26de78;line-height:1.2;">'
+      '<span style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);border-left:5px solid #26de78;padding:9px 18px 9px 12px;max-width:100%;box-sizing:border-box;vertical-align:middle;">'
+      f'<img src="{STANDARDS_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
+      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#7bf0a8;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></span>'
+      f'<span style="vertical-align:middle;font-size:12.5pt;color:rgba(255,255,255,0.92);margin-left:14px;">{lead}</span>'
       '</summary>'
       f'<div style="padding:8px 22px 22px;">{rows}</div></details>')
 
