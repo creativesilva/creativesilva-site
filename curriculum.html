@@ -3375,8 +3375,13 @@
       if(reveal.dataset.built) return reveal;
       reveal.dataset.built='1';
       var path=promptEl.getAttribute('data-file');
-      var state={ fields:{}, chars:['','','',''], items:['','','',''], scene:'' };
+      var BACKDROP=/two-pass/i.test(path);  // Two-Pass rebuild: Location becomes a studio-backdrop choice.
+      var state={ fields:{}, chars:['','','',''], items:['','','',''], scene:'', backdrop:(BACKDROP?'transparent':'') };
       var baseText='';
+      var BACKDROP_TEXT={
+        transparent:'BACKGROUND: Light the subject with soft, flattering professional studio lighting and a clear catch light in the eyes on a seamless pure-white studio setup, then remove the background completely. Output the final image as a PNG with a fully transparent background: a clean alpha cutout around the subject, with no white edge fringe or halo.',
+        white:'BACKGROUND: Place the subject on a seamless, pure-white studio backdrop with no shadows on the background. Light the subject with soft, flattering professional studio lighting and a clear catch light in the eyes. Keep the white background in the final image.'
+      };
 
       var fieldsGroup=el('div','ps2-group'); reveal.appendChild(fieldsGroup);
 
@@ -3384,7 +3389,7 @@
       refGroup.appendChild(el('div','ps2-gtitle','Reference files'));
       refGroup.appendChild(slotGroup('Characters (up to 4)', state.chars, CHARACTERS, false));
       refGroup.appendChild(slotGroup('Items (up to 4)', state.items, ITEMS, false));
-      refGroup.appendChild(slotGroup('Location', null, SCENES, true));
+      refGroup.appendChild(BACKDROP ? backdropSlot() : slotGroup('Location', null, SCENES, true));
       reveal.appendChild(refGroup);
 
       reveal.appendChild(el('div','ps2-gtitle','Your prompt'));
@@ -3404,6 +3409,13 @@
           row.appendChild(dd);
         })(i); }
         g.appendChild(row); return g;
+      }
+
+      function backdropSlot(){
+        var g=el('div','ps2-refgroup'); g.appendChild(el('div','ps2-reflabel','Background'));
+        var row=el('div','ps2-slots');
+        var dd=makeDD([{label:'Transparent background (PNG)',value:'transparent'},{label:'White studio backdrop',value:'white'}], function(v){ state.backdrop=v; refresh(); }, 'ps2-slotdd');
+        row.appendChild(dd); g.appendChild(row); return g;
       }
 
       function buildFields(){
@@ -3444,14 +3456,19 @@
         for(name in state.fields){ var v=state.fields[name]; if(v) out=out.split('['+name+'] =').join('['+name+'] = '+v); }
         var chars=state.chars.filter(Boolean).map(baseName);
         var items=state.items.filter(Boolean).map(baseName);
+        var extra='';
+        if(BACKDROP && state.backdrop && BACKDROP_TEXT[state.backdrop]){ extra += BACKDROP_TEXT[state.backdrop]+'\n\n'; }
         if(chars.length || items.length || state.scene){
           var block='ATTACHED REFERENCE FILES (match these exactly, by file name):\n';
           if(chars.length) block+='- Characters: '+chars.join(', ')+'\n';
           if(items.length) block+='- Items: '+items.join(', ')+'\n';
           if(state.scene) block+='- Scene reference: '+baseName(state.scene)+'\n';
           block+='\n';
-          if(out.indexOf('REFERENCE USE')>=0) out=out.replace('REFERENCE USE', block+'REFERENCE USE');
-          else out=out+'\n\n'+block;
+          extra += block;
+        }
+        if(extra){
+          if(out.indexOf('REFERENCE USE')>=0) out=out.replace('REFERENCE USE', extra+'REFERENCE USE');
+          else out=out+'\n\n'+extra;
         }
         return out;
       }
