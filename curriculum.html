@@ -1940,7 +1940,7 @@
     const TEACHER_RESOURCES = {
       // Top-level tools (PVHS Tools App is first).
       app: { url: "https://creativesilva.github.io/pvhs_tools/index.html", label: "PVHS Tools App" },
-      camera: { label: "Camera Check Out", form: "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform", qr: "assets/qr/camera-checkout-qr.png", download: "PVHS-Camera-Checkout-QR.png" },
+      // Camera Check Out moved to the Calendar page (a "View QR Code" header button opens the QR popup there).
       dashboard: { path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" },
       // Vimeo (expandable): the grade-passback tutorial + the student-work showcases.
       vimeo: [
@@ -2333,7 +2333,6 @@
     function buildTeacherResources() {
       const t = TEACHER_RESOURCES;
       const app   = t.app ? appRow(t.app.url, t.app.label) : "";
-      const cams  = t.camera ? cameraRow(t.camera) : "";
       const dash  = t.dashboard ? localRow(t.dashboard.path, t.dashboard.label) : "";
       // Vimeo sub-section
       const vims  = (t.vimeo || []).map(vimeoRow).join("");
@@ -2355,7 +2354,7 @@
       const linksInner = linkGroup("Resources", lk.resources) + linkGroup("Vendors", lk.vendors);
       const nL = (lk.resources || []).length + (lk.vendors || []).length;
       const links = linksInner ? subAcc("Links", `${nL} link${nL === 1 ? "" : "s"}`, linksInner) : "";
-      const inner = `${app}${cams}${dash}${vimeo}${docs}${links}`;
+      const inner = `${app}${dash}${vimeo}${docs}${links}`;
       if (!inner) return "";
       return `
         <details class="course-acc" id="teacher-resources" style="--course-accent:#FF6B1A">
@@ -2999,6 +2998,18 @@
       var panel = document.getElementById('catalog-search-panel');
       if (!input || !panel) return;
       var grid = document.getElementById('course-grid');
+
+      // Stop macOS/Safari (and other password managers) from offering the saved
+      // creativesilva.com login on this SEARCH box. A readonly field is not an autofill
+      // target, so the field starts readonly and only becomes editable when Chris actually
+      // interacts with it; it returns to readonly whenever it is left empty. Search is
+      // unaffected: typing/paste/deep-link all still work.
+      input.setAttribute('readonly', 'readonly');
+      var dropReadonly = function () { input.removeAttribute('readonly'); };
+      input.addEventListener('pointerdown', dropReadonly);
+      input.addEventListener('touchstart', dropReadonly, { passive: true });
+      input.addEventListener('focus', dropReadonly);
+      input.addEventListener('blur', function () { if (!input.value) input.setAttribute('readonly', 'readonly'); });
 
       function normalize(s) { return (s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').replace(/\s+/g, ' ').trim(); }
       function labelOf(el) {

@@ -10,8 +10,8 @@
 <style>:root { --course-accent: #007474; }</style>
 <link rel="stylesheet" href="/css/silva-module.css" />
 <style>
-  /* Teacher-facing calendar. Uses the shared unified header (built by silva-nav.js);
-     the body is a title, the embedded Google Calendar, then the scannable QR below it. */
+  /* Teacher-facing calendar. Uses the shared unified header (built by silva-nav.js). A
+     "View QR Code" button in the header opens the Camera Check Out popup. */
   .cal-title {
     font-family: 'Oswald', Arial, sans-serif; font-weight: 700; text-transform: uppercase;
     letter-spacing: 0.03em; font-size: clamp(1.6rem, 3.4vw, 2.5rem); line-height: 1.05;
@@ -20,17 +20,42 @@
   .cal-title-rule { width: 80px; height: 3px; background: #00b8b8; margin: 0 auto 24px; }
   .cal-frame { background: linear-gradient(135deg, #00b8b8 0%, rgba(0, 184, 184, 0.10) 100%); padding: 2px; }
   .cal-frame iframe { display: block; width: 100%; height: 760px; border: 0; background: #ffffff; }
-  /* QR, moved below the calendar, doubled in size, centered. */
-  .cal-qr-wrap { display: flex; justify-content: center; margin: 30px 0 12px; }
-  .cal-qr { display: inline-flex; align-items: center; gap: 22px; background: rgba(0, 184, 184, 0.06); border: 1px solid rgba(0, 184, 184, 0.28); border-left: 4px solid #00b8b8; padding: 18px 26px 18px 20px; }
-  .cal-qr-tile { background: #ffffff; padding: 12px; border: 2px solid #00b8b8; flex: 0 0 auto; }
-  .cal-qr-tile img { display: block; width: 208px; height: 208px; }
-  .cal-qr-label { font-family: 'Oswald', Arial, sans-serif; font-size: 1rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #7fe9e9; line-height: 1.5; }
-  @media (max-width: 640px) {
-    .cal-frame iframe { height: 560px; }
-    .cal-qr { flex-direction: column; gap: 14px; text-align: center; }
-    .cal-qr-tile img { width: 176px; height: 176px; }
+
+  /* "View QR Code" button, injected into the header (row 2), pushed to the right. */
+  .silva-uni-qrbtn {
+    margin-left: auto; align-self: center; height: 34px; box-sizing: border-box;
+    display: inline-flex; align-items: center; padding: 0 17px; cursor: pointer;
+    font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
+    font-size: 0.72rem; color: #fff; white-space: nowrap;
+    background: #007474; border: 1px solid #00b8b8; transition: filter 0.15s ease;
   }
+  .silva-uni-qrbtn:hover { filter: brightness(1.18); }
+
+  /* Camera Check Out QR popup */
+  #qr-modal { display: none; position: fixed; inset: 0; z-index: 1000; align-items: center; justify-content: center; padding: 24px; }
+  #qr-modal.open { display: flex; }
+  .qr-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.74); }
+  .qr-card {
+    position: relative; z-index: 1; width: min(92vw, 400px); background: #0d1414;
+    border: 1px solid rgba(255, 255, 255, 0.12); border-top: 3px solid #00b8b8;
+    padding: 26px 26px 24px; text-align: center;
+  }
+  .qr-close { position: absolute; top: 8px; right: 10px; background: none; border: 0; color: rgba(234, 247, 247, 0.55); font-size: 1.6rem; line-height: 1; cursor: pointer; padding: 4px 8px; }
+  .qr-close:hover { color: #ffffff; }
+  .qr-title { font-family: 'Oswald', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #ffffff; margin-bottom: 16px; }
+  .qr-imgwrap { background: #ffffff; padding: 13px; display: inline-block; border: 2px solid #00b8b8; }
+  .qr-img { display: block; width: min(74vw, 300px); height: auto; image-rendering: pixelated; }
+  .qr-hint { color: rgba(234, 247, 247, 0.7); font-size: 0.82rem; line-height: 1.5; margin: 16px 0 18px; }
+  .qr-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .qr-btn {
+    display: inline-flex; align-items: center; justify-content: center; text-decoration: none; cursor: pointer;
+    font-family: 'Oswald', Arial, sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #ffffff; padding: 10px 20px; background: #007474; border: 1px solid #00b8b8; transition: filter 0.15s ease;
+  }
+  .qr-btn:hover { filter: brightness(1.18); }
+  .qr-btn.copied { background: #26de78; border-color: #26de78; color: #04160c; }
+
+  @media (max-width: 640px) { .cal-frame iframe { height: 560px; } }
 </style>
 </head>
 <body>
@@ -41,13 +66,57 @@
   <div class="cal-frame">
     <iframe title="Camera Checkouts calendar" src="https://calendar.google.com/calendar/embed?src=c_0aa19ce0d075f9150d5610114ee936928de02b4082b0f2cbadd81c2a38d32aaf%40group.calendar.google.com&ctz=America%2FLos_Angeles&mode=MONTH&showTitle=0&showPrint=0&showTz=0&showCalendars=0" loading="lazy" scrolling="no"></iframe>
   </div>
-  <div class="cal-qr-wrap">
-    <div class="cal-qr">
-      <div class="cal-qr-tile"><img src="/assets/camera-checkout-qr-v1.png" alt="QR code to open the camera checkout" /></div>
-      <div class="cal-qr-label">Scan to<br>check out</div>
+</div>
+
+<div id="qr-modal">
+  <div class="qr-backdrop"></div>
+  <div class="qr-card" role="dialog" aria-modal="true" aria-label="Camera Check Out QR code">
+    <button class="qr-close" type="button" aria-label="Close">&times;</button>
+    <div class="qr-title">Camera Check Out</div>
+    <div class="qr-imgwrap"><img class="qr-img" src="/assets/camera-checkout-qr-v1.png" alt="Camera checkout QR code" /></div>
+    <div class="qr-hint">Point a phone camera at the code to open the form.</div>
+    <div class="qr-actions">
+      <button class="qr-btn qr-copy" type="button">Copy URL</button>
+      <a class="qr-btn qr-view" href="https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform" target="_blank" rel="noopener">View Form</a>
     </div>
   </div>
 </div>
+
 <script src="/js/silva-nav.js"></script>
+<script>
+  (function () {
+    var FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform";
+    var modal = document.getElementById('qr-modal');
+    function openModal() { modal.classList.add('open'); document.addEventListener('keydown', onEsc); }
+    function closeModal() { modal.classList.remove('open'); document.removeEventListener('keydown', onEsc); }
+    function onEsc(e) { if (e.key === 'Escape') closeModal(); }
+    modal.querySelector('.qr-close').addEventListener('click', closeModal);
+    modal.querySelector('.qr-backdrop').addEventListener('click', closeModal);
+    var copyBtn = modal.querySelector('.qr-copy');
+    copyBtn.addEventListener('click', function () {
+      navigator.clipboard.writeText(FORM_URL).then(function () {
+        copyBtn.textContent = '✓ Copied'; copyBtn.classList.add('copied');
+        setTimeout(function () { copyBtn.textContent = 'Copy URL'; copyBtn.classList.remove('copied'); }, 2000);
+      }).catch(function () { window.prompt('Copy the camera checkout form URL:', FORM_URL); });
+    });
+
+    // Add a "View QR Code" button to the header (row 2), once silva-nav.js has built it.
+    function injectBtn() {
+      var bar = document.querySelector('.silva-uni-bar');
+      if (!bar) { return false; }
+      if (bar.querySelector('.silva-uni-qrbtn')) { return true; }
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'silva-uni-qrbtn';
+      btn.textContent = 'View QR Code';
+      btn.addEventListener('click', openModal);
+      bar.appendChild(btn);
+      return true;
+    }
+    function tryInject(n) { if (injectBtn() || n <= 0) { return; } setTimeout(function () { tryInject(n - 1); }, 40); }
+    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', function () { tryInject(50); }); }
+    else { tryInject(50); }
+  })();
+</script>
 </body>
 </html>
