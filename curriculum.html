@@ -217,16 +217,16 @@
       margin-bottom: 24px;
     }
 
-    /* ── Course accordion ── */
+    /* ── Course accordion (module Angular Framework look) ── */
     .course-acc {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(180deg, rgba(0, 116, 116, 0.10) 0%, rgba(0, 116, 116, 0.03) 100%);
+      border: 1px solid rgba(0, 184, 184, 0.22);
       position: relative;
       transition: border-color 0.2s ease;
     }
     .course-acc:hover,
     .course-acc[open] {
-      border-color: rgba(255, 255, 255, 0.16);
+      border-color: rgba(0, 184, 184, 0.45);
     }
 
     summary.course-acc-head {
@@ -241,11 +241,25 @@
     summary.course-acc-head::-webkit-details-marker { display: none; }
     summary.course-acc-head:hover { background: rgba(255, 255, 255, 0.02); }
 
-    .course-acc-headtext { flex: 1; min-width: 0; }
-    .course-acc-head .course-code { margin-bottom: 5px; }
+    /* Course title as a module section-header chip: dark rectangle + teal check
+       icon + teal title, matching the modules' "The Challenge" header. */
+    .course-acc-headtext {
+      flex: 0 1 auto; min-width: 0; max-width: 100%; margin-right: auto;
+      display: grid; grid-template-columns: 40px auto; column-gap: 13px; align-items: center;
+      background: rgba(0, 0, 0, 0.40); border-left: 4px solid #00b8b8;
+      padding: 9px 20px 9px 13px; box-sizing: border-box;
+    }
+    .course-acc-headtext::before {
+      content: ""; grid-column: 1; grid-row: 1 / 3; align-self: center;
+      width: 40px; height: 40px;
+      background: url("/assets/Icons/assignment/step-check-teal-v2.png") center / contain no-repeat;
+    }
+    .course-acc-head .course-code { grid-column: 2; grid-row: 1; margin-bottom: 2px; }
     .course-acc-head .course-title {
+      grid-column: 2; grid-row: 2;
       margin-bottom: 0;
       font-size: 1.25rem;
+      color: #80e0e0;
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -442,9 +456,10 @@
     summary.cat-head {
       display: flex; align-items: center; gap: 12px;
       padding: 14px 18px; cursor: pointer; list-style: none; user-select: none;
+      background: rgba(0,0,0,0.30);
     }
     summary.cat-head::-webkit-details-marker { display: none; }
-    summary.cat-head:hover { background: rgba(0,184,184,0.06); }
+    summary.cat-head:hover { background: rgba(0,184,184,0.12); }
     .cat-name {
       flex: 1; font-family: var(--font-head); font-size: 0.8rem; font-weight: 600;
       letter-spacing: 0.14em; text-transform: uppercase; color: #80e0e0;
