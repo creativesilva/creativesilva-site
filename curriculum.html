@@ -223,6 +223,9 @@
       border: 1px solid rgba(0, 184, 184, 0.22);
       position: relative;
       transition: border-color 0.2s ease;
+      /* When a nav link jumps here (e.g. Build Resources), leave room for the sticky
+         header so the section title lands below it and stays readable. */
+      scroll-margin-top: 150px;
     }
     .course-acc:hover,
     .course-acc[open] {
@@ -912,6 +915,7 @@
       .catalog-titlebar { gap: 10px; padding-bottom: 10px; }
       .cal-btn { margin-left: 0; }
       .catalog-search { flex-basis: 100%; margin-left: 0; max-width: none; }
+      .course-acc { scroll-margin-top: 178px; }   /* header wraps taller on phones */
     }
 
     /* Frameworks list (Build Resources): living docs that link to their source files. */
