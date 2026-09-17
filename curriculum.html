@@ -900,6 +900,28 @@
     /* Rolling class-period countdown (live from the pvhs_tools schedule), top-right by search. */
     .header-clock { flex: 0 0 auto; width: 158px; height: 48px; border: 0; background: transparent; display: block; }
     @media (max-width: 900px) { .header-clock { display: none; } }
+    /* Search Catalog button (opens the search shadow-box) with a magnifier glyph. */
+    .cat-search-btn { cursor: pointer; }
+    .cat-search-btn::before {
+      content: ""; width: 15px; height: 15px; margin-right: 9px; flex: 0 0 auto;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cline x1='15.5' y1='15.5' x2='21' y2='21'/%3E%3C/svg%3E") no-repeat center / contain;
+    }
+    /* Search shadow-box (modal) */
+    #search-modal { display: none; position: fixed; inset: 0; z-index: 1200; }
+    #search-modal.open { display: block; }
+    .sm-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+    .sm-card {
+      position: relative; z-index: 1; width: min(94vw, 640px); margin: 9vh auto 0;
+      background: linear-gradient(180deg, rgba(5, 16, 16, 0.98) 0%, rgba(4, 26, 25, 0.98) 100%);
+      border: 1px solid rgba(0, 184, 184, 0.40); border-top: 3px solid #00b8b8;
+      box-shadow: 0 26px 74px rgba(0, 0, 0, 0.7); padding: 20px 20px 16px;
+    }
+    .sm-close { position: absolute; top: 6px; right: 12px; background: none; border: 0; color: rgba(234, 247, 247, 0.6); font-size: 1.7rem; line-height: 1; cursor: pointer; padding: 4px 8px; }
+    .sm-close:hover { color: #ffffff; }
+    .sm-field { margin: 4px 0 12px; }
+    #search-modal .catalog-search-input { max-width: none; }
+    #search-modal .catalog-search-panel { position: static; max-height: 58vh; overflow-y: auto; box-shadow: none; }
+    @media (max-width: 640px) { .sm-card { margin-top: 4vh; padding: 18px 14px 12px; } }
     .catalog-search-panel {
       position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 620;
       max-height: 62vh; overflow-y: auto; background: #06201f;
@@ -1183,11 +1205,20 @@
         <div class="catalog-titlebar">
           <h1 class="page-title">Curriculum Catalog</h1>
           <a class="cal-btn" href="/calendar.html">Calendar</a>
-          <div class="catalog-search">
-            <input type="search" id="catalog-search-input" class="catalog-search-input" placeholder="Search modules, images, resources&hellip;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-1p-ignore data-lpignore="true" data-form-type="other" aria-label="Search the catalog" />
-            <div class="catalog-search-panel" id="catalog-search-panel" role="listbox" hidden></div>
-          </div>
+          <button type="button" class="cal-btn cat-search-btn" id="cat-search-btn" aria-haspopup="dialog">Search Catalog</button>
           <iframe class="header-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
+        </div>
+
+        <!-- Search opens in a shadow-box so the header stays compact (no inline search field). -->
+        <div id="search-modal" aria-hidden="true">
+          <div class="sm-backdrop"></div>
+          <div class="sm-card" role="dialog" aria-modal="true" aria-label="Search the catalog">
+            <button type="button" class="sm-close" id="sm-close" aria-label="Close search">&times;</button>
+            <div class="sm-field">
+              <input type="search" id="catalog-search-input" class="catalog-search-input" placeholder="Search modules, images, resources&hellip;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-1p-ignore data-lpignore="true" data-form-type="other" aria-label="Search the catalog" />
+            </div>
+            <div class="catalog-search-panel" id="catalog-search-panel" role="listbox"></div>
+          </div>
         </div>
         <nav class="cat-bar" id="cat-bar" aria-label="Quick catalog menu"></nav>
       </div>
@@ -3017,6 +3048,27 @@
       input.addEventListener('focus', dropReadonly);
       input.addEventListener('blur', function () { if (!input.value) input.setAttribute('readonly', 'readonly'); });
 
+      // Search shadow-box: the header holds only a "Search Catalog" button; the field + results
+      // live in this modal so the header stays compact.
+      var modal = document.getElementById('search-modal');
+      var openBtn = document.getElementById('cat-search-btn');
+      function openModal() {
+        if (!modal) return;
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        setTimeout(function () { input.focus(); if (input.value.trim()) runSearch(); }, 40);
+      }
+      function closeModal() {
+        if (!modal) return;
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+      if (openBtn) openBtn.addEventListener('click', openModal);
+      var smClose = document.getElementById('sm-close');
+      if (smClose) smClose.addEventListener('click', closeModal);
+      if (modal) { var bd = modal.querySelector('.sm-backdrop'); if (bd) bd.addEventListener('click', closeModal); }
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal && modal.classList.contains('open')) closeModal(); });
+
       function normalize(s) { return (s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').replace(/\s+/g, ' ').trim(); }
       function labelOf(el) {
         if (el.classList && el.classList.contains('logo-name')) {
@@ -3109,6 +3161,7 @@
       function hidePanel() { panel.hidden = true; panel.innerHTML = ''; active = -1; }
       function reveal(it) {
         var el = it.el;
+        closeModal();   // close the search shadow-box, then reveal the result on the page
         var cc = document.getElementById('char-content');
         if (cc && cc.hasAttribute('hidden') && cc.contains(el)) {
           // gated (password 1980) content: open Build Resources and send them to the gate to unlock
@@ -3175,13 +3228,13 @@
         var i = parseInt(row.getAttribute('data-i'), 10);
         if (results[i]) reveal(results[i]);
       });
-      document.addEventListener('click', function (e) {
-        if (!panel.hidden && !e.target.closest('.catalog-search')) hidePanel();
-      });
-      // Deep link: /curriculum.html?q=term (from a module page's catalog-bar search) runs on load.
+      // Deep link: ?q=term (typed on a module page) or ?search=1 (Search Catalog button on a
+      // module/calendar page) opens the search shadow-box on load.
       try {
-        var q0 = new URLSearchParams(location.search).get('q');
-        if (q0) { input.value = q0; setTimeout(function () { input.focus(); runSearch(); }, 120); }
+        var params = new URLSearchParams(location.search);
+        var q0 = params.get('q');
+        if (q0) { openModal(); input.value = q0; setTimeout(function () { input.focus(); runSearch(); }, 140); }
+        else if (params.get('search') === '1') { openModal(); }
       } catch (e) {}
     })();
   </script>

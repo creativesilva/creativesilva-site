@@ -434,25 +434,13 @@
     cal.textContent = 'Calendar';
     bar.appendChild(cal);
 
-    var form = document.createElement('form');
-    form.className = 'silva-uni-search';
-    form.setAttribute('role', 'search');
-    var input = document.createElement('input');
-    input.type = 'search';
-    input.className = 'silva-uni-search-input';
-    input.placeholder = 'Search modules, images, resources…';
-    input.setAttribute('aria-label', 'Search the catalog');
-    input.autocomplete = 'off';
-    input.setAttribute('data-1p-ignore', '');
-    input.setAttribute('data-lpignore', 'true');
-    input.setAttribute('data-form-type', 'other');
-    form.appendChild(input);
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var q = input.value.trim();
-      location.href = q ? '/curriculum.html?q=' + encodeURIComponent(q) : '/curriculum.html';
-    });
-    bar.appendChild(form);
+    // Search Catalog button: module/calendar pages have no catalog index, so it opens the
+    // catalog home with its search shadow-box already open (?search=1).
+    var searchBtn = document.createElement('a');
+    searchBtn.className = 'silva-uni-searchbtn';
+    searchBtn.href = '/curriculum.html?search=1';
+    searchBtn.textContent = 'Search Catalog';
+    bar.appendChild(searchBtn);
 
     // Rolling class-period countdown (live from the pvhs_tools schedule), top-right by search.
     var clock = document.createElement('iframe');
