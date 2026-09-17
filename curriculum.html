@@ -1110,10 +1110,11 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360d8d8' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 9px center; background-size: 14px; }
     .ps2-field select:focus { outline: none; border-color: #00b8b8; }
     .ps2-field input[type="range"] { width: 100%; accent-color: #00b8b8; }
-    .ps2-context { width: 100%; box-sizing: border-box; min-height: 60px; resize: vertical; background: #bfe0db; border: 1px solid rgba(0,116,116,0.34); border-top: 2px solid #00b8b8; border-radius: 0; color: #0b2e2c; font-family: inherit; font-size: 0.88rem; line-height: 1.5; padding: 10px 12px; }
+    .ps2-context { width: 100%; box-sizing: border-box; min-height: 60px; resize: vertical; overflow-x: hidden; overflow-y: auto; background: #bfe0db; border: 1px solid rgba(0,116,116,0.34); border-top: 2px solid #00b8b8; border-radius: 0; color: #0b2e2c; font-family: inherit; font-size: 0.88rem; line-height: 1.5; padding: 10px 12px; }
     .ps2-context:focus { outline: none; border-color: #00b8b8; box-shadow: 0 0 0 2px rgba(0,184,184,0.22); }
     .ps2-context::placeholder { color: rgba(11,46,44,0.42); }
-    .ps2-field--wide { grid-column: span 2; }
+    .ps2-fields--text { grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
+    .ps2-fields + .ps2-fields { margin-top: 13px; }
     .ps2-refgroup { margin-bottom: 12px; }
     .ps2-reflabel { font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(234,247,247,0.55); margin-bottom: 7px; }
     .ps2-slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; }
@@ -3408,19 +3409,25 @@
       function buildFields(){
         fieldsGroup.innerHTML='';
         fieldsGroup.appendChild(el('div','ps2-gtitle','Scene overrides'));
-        var grid=el('div','ps2-fields');
         var re=/^\[([^\]]+)\]\s*=/gm, m, names=[];
         while((m=re.exec(baseText))!==null){ names.push(m[1]); }
         if(!names.length){ fieldsGroup.appendChild(el('div','ps2-hint','This prompt has no fill-in fields. Pick reference files below and copy.')); return; }
-        names.forEach(function(name){
+        function fieldEl(name){
           if(state.fields[name]===undefined) state.fields[name]='';
           var w=el('div','ps2-field'); w.appendChild(el('label',null,esc(name)));
           var opts=optsFor(name), input;
           if(opts){ var dopts=[{label:'-',value:''}].concat(opts.map(function(o){return {label:o,value:o};})); input=makeDD(dopts, function(v){ state.fields[name]=v; refresh(); }); }
-          else { w.classList.add('ps2-field--wide'); input=el('textarea','ps2-context'); input.rows=2; input.placeholder='type here'; input.addEventListener('input',function(){state.fields[name]=input.value; refresh();}); }
-          w.appendChild(input); grid.appendChild(w);
-        });
-        fieldsGroup.appendChild(grid);
+          else { input=el('textarea','ps2-context'); input.rows=2; input.placeholder='type here'; input.addEventListener('input',function(){ state.fields[name]=input.value; input.style.height='auto'; input.style.height=input.scrollHeight+'px'; refresh(); }); }
+          w.appendChild(input); return w;
+        }
+        // Group by input type so the panel reads cleanly (Chris): the free-text fields first (up to 4),
+        // then all the dropdowns, then the remaining free-text (furniture / special changes).
+        var textNames=names.filter(function(n){ return !optsFor(n); });
+        var dropNames=names.filter(function(n){ return optsFor(n); });
+        function addGrid(cls, list){ if(!list.length) return; var g=el('div','ps2-fields'+(cls?' '+cls:'')); list.forEach(function(n){ g.appendChild(fieldEl(n)); }); fieldsGroup.appendChild(g); }
+        addGrid('ps2-fields--text', textNames.slice(0,4));
+        addGrid('', dropNames);
+        addGrid('ps2-fields--text', textNames.slice(4));
       }
 
       function selectedRefs(){
