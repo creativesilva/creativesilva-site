@@ -59,7 +59,7 @@ PURPLE_BOX='<div style="background:linear-gradient(180deg,rgba(139,92,246,0.10) 
 DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"
 DELIVER_ICON=f"{SITE}/assets/Icons/assignment/deliverables-v4.png"
 STANDARDS_ICON=f"{SITE}/assets/Icons/assignment/standards-v1.svg"
-CAPFMT_ICON={"jpg":f"{SITE}/assets/Icons/assignment/jpg-v2.svg","raw":f"{SITE}/assets/Icons/assignment/raw-v1.svg"}  # jpg-v2 = transparent interior
+CAPFMT_ICON={"jpg":f"{SITE}/assets/Icons/assignment/jpg-v2.svg","raw":f"{SITE}/assets/Icons/assignment/raw-v2.png"}  # v2 = transparent interior
 CAMSET_ICON=f"{SITE}/assets/Icons/assignment/camera-settings-v1.svg"  # red aperture = camera-settings family marker
 
 def section_header(icon,title,accent,light):
@@ -89,7 +89,7 @@ def capture_note(fmt, text, es=False):
     label="Captura de Imagen" if es else "Image Capture"
     # Inline format badge: put a {fmt} token in `text` where the JPG/RAW badge should sit.
     badge=(f'<img src="{CAPFMT_ICON[fmt]}" alt="{fmt.upper()}" '
-      'style="height:1.7em;width:auto;vertical-align:middle;margin:0 3px;display:inline-block;" />')
+      'style="height:1.87em;width:auto;vertical-align:middle;margin:0 3px;display:inline-block;" />')
     body=text.replace("{fmt}", badge)
     return ('<div style="display:flex;align-items:center;gap:13px;background:rgba(230,36,41,0.10);'
       'border:1px solid rgba(230,36,41,0.34);border-left:4px solid #E62429;padding:10px 14px;margin:12px 0;">'

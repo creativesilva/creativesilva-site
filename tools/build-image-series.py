@@ -474,6 +474,60 @@ def overview():
     return wrap_page("Image Series Photo Walk | Photography 1A | PVHS", nav("Overview",dots_for(0),stepnav), top_wrap(en,es), bottom)
 
 # ---------------- STEP 01 ----------------
+CAMSET_ICON=f"{SITE}/assets/Icons/assignment/camera-settings-v1.svg"
+RAW_BADGE=f"{SITE}/assets/Icons/assignment/raw-v2.png"
+
+def capture_panel():
+    # Camera settings screen mimic (inline styles, Canvas-safe). Values from Chris's PSD:
+    # shutter 1/500 (the one students adjust), aperture F6.3, ISO 100, RAW, light meter balanced.
+    red="#f90101"
+    def box(label, inner, flex="1 1 0", minw="120px", tag=""):
+        return (f'<div style="background:rgba(0,0,0,0.55);border:2px solid {red};padding:12px 14px 13px;box-sizing:border-box;flex:{flex};min-width:{minw};position:relative;">'
+          f'{tag}<div style="font-family:Arial,sans-serif;font-size:9.5pt;letter-spacing:0.14em;text-transform:uppercase;color:{red};margin-bottom:7px;"><strong>{label}</strong></div>{inner}</div>')
+    def val(v, sub=""):
+        s=(f'<div style="font-family:Arial,sans-serif;font-size:10.5pt;color:#ffb0b0;margin-top:5px;line-height:1.2;">{sub}</div>' if sub else "")
+        return f'<div style="font-family:Arial,sans-serif;font-size:23pt;color:#ffffff;line-height:1;"><strong>{v}</strong></div>{s}'
+    ticks=""
+    labels=["-3","","-2","","-1","","0","","+1","","+2","","+3"]
+    for t in labels:
+        h="16px" if t else "9px"; col="#ffffff" if t else "rgba(255,255,255,0.35)"
+        ticks+=f'<div style="width:2px;height:{h};background:{col};"></div>'
+    numrow=""
+    for t in ["-3","-2","-1","0","+1","+2","+3"]:
+        numrow+=f'<div style="font-family:Arial,sans-serif;font-size:9pt;color:rgba(255,255,255,0.6);"><strong>{t}</strong></div>'
+    meter=('<div style="display:flex;align-items:flex-end;justify-content:space-between;height:20px;margin:2px 0 4px;">'+ticks+'</div>'
+      '<div style="display:flex;justify-content:space-between;margin-bottom:6px;">'+numrow+'</div>'
+      '<div style="position:relative;height:22px;">'
+      '<div style="position:absolute;left:50%;top:0;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid #26de78;"></div>'
+      '<div style="position:absolute;left:0;right:0;top:13px;text-align:center;font-family:Arial,sans-serif;font-size:9pt;letter-spacing:0.12em;text-transform:uppercase;color:#26de78;"><strong>Balanced (outdoors)</strong></div></div>')
+    tag=f'<div style="position:absolute;top:-11px;right:10px;background:{red};color:#ffffff;font-family:Arial,sans-serif;font-size:8pt;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px;"><strong>Change this</strong></div>'
+    raw=f'<img src="{RAW_BADGE}" alt="RAW image-capture format" style="height:34px;width:auto;display:block;margin-top:3px;" />'
+    row1=('<div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px;">'
+      + box("Shutter Speed", val("1/500","adjust to balance the light meter"), tag=tag)
+      + box("Aperture", val("F6.3")) + box("ISO", val("100")) + '</div>')
+    row2=('<div style="display:flex;flex-wrap:wrap;gap:12px;">'
+      + box("Light Meter", meter, flex="2 1 0", minw="230px")
+      + box("Image Quality", raw, flex="1 1 0", minw="150px") + '</div>')
+    return ('<div style="background:linear-gradient(180deg,#0c1010 0%,#050707 100%);border:1px solid rgba(249,1,1,0.35);padding:16px;box-sizing:border-box;margin:4px 0 2px;">'
+      + row1 + row2 + '</div>')
+
+def camera_settings_section(es):
+    red="#f90101"
+    if es:
+        title="Ajustes de C&aacute;mara"; lead="Usa estos ajustes para esta caminata. El &uacute;nico ajuste que cambias es la velocidad del obturador, para equilibrar el expos&iacute;metro."
+        note_t="Solo cambia el obturador. Si afuera est&aacute; muy brillante, sube la velocidad del obturador. Si est&aacute; muy oscuro, b&aacute;jala, hasta que el expos&iacute;metro quede equilibrado. Adentro, con estos ajustes, el expos&iacute;metro marcar&aacute; subexpuesto y la imagen se ver&aacute; negra: eso es normal. Afuera quedar&aacute; mucho m&aacute;s cerca."
+    else:
+        title="Camera Settings"; lead="Use these settings for this photo walk. The only setting you change is the shutter speed, to balance the light meter."
+        note_t="Change only the shutter. If it is too bright outside, raise the shutter speed. If it is too dark, lower it, until the light meter is balanced. Indoors, with these settings, the light meter will read underexposed and the image will look black: that is expected. Outside it will be much closer."
+    hdr=(f'<div style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);border-left:5px solid {red};padding:9px 18px 9px 12px;margin-bottom:12px;max-width:100%;box-sizing:border-box;">'
+      f'<img src="{CAMSET_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
+      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#ff8f8f;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>'
+      f'<div style="height:2px;background:{red};width:60px;margin-bottom:18px;"></div>')
+    note_box=f'<div style="background:rgba(249,1,1,0.10);border:1px solid rgba(249,1,1,0.30);border-left:4px solid {red};padding:11px 14px;margin:14px 0 0;font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.55;">{note_t}</div>'
+    return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      + hdr + f'<div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{lead}</span></div>'
+      + capture_panel() + note_box + '</div>')
+
 def step01():
     en=banner("Image Series Photo Walk &bull; Step 1","Capture &amp; Import","Set RAW, capture your series, offload to OneDrive, and import.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
@@ -488,6 +542,7 @@ def step01():
             ("Save:","press the SET button to save, then tap the shutter halfway to close the menu."),
         ])
         + note("If you are not sure, ask Mr. Silva to check your setting before you start."))
+    en+=camera_settings_section(False)
     en+=card("CAPTURE / ON THE WALK","Capture Your Cohesive Series",
         float_right(CAPTURE_FLOAT,"A Pioneer Valley student kneeling to photograph a bee on a pink flower with a Canon EOS R5 on campus in golden light","Capturing a cohesive series on campus.")
         + para("Now go capture your series with the camera kit. Pick one idea and repeat it so the photos feel like a family. Take at least 12 images so you have strong ones to choose from.")
@@ -530,6 +585,7 @@ def step01():
             ("Guarda:","presiona el bot&oacute;n SET para guardar, luego toca el disparador a la mitad para cerrar el men&uacute;."),
         ])
         + note("Si no est&aacute;s seguro, pide al Sr. Silva que revise tu ajuste antes de empezar."))
+    es+=camera_settings_section(True)
     es+=card("CAPTURA / EN LA CAMINATA","Captura Tu Serie Cohesiva",
         float_right(CAPTURE_FLOAT,"Una estudiante de Pioneer Valley arrodillada fotografiando una abeja en una flor rosa con una Canon EOS R5 en el campus con luz dorada","Capturando una serie cohesiva en el campus.")
         + para("Ahora ve a capturar tu serie con el kit de c&aacute;mara. Elige una idea y rep&iacute;tela para que las fotos se sientan como una familia. Toma al menos 12 im&aacute;genes para tener buenas opciones.")
