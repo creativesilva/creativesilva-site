@@ -426,7 +426,9 @@ body {
 
 .silva-page {
   width: 100%;
-  padding: 24px 28px 60px;
+  /* Extra top padding gives a clear margin below the sticky nav so the banner
+     is not chopped right under the navigation buttons. */
+  padding: 44px 28px 60px;
 }
 
 /* ═══════════════════════════════════════════

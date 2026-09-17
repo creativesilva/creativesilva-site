@@ -509,11 +509,8 @@
     cat.appendChild(menu);
     bar.appendChild(cat);
 
-    var build = document.createElement('a');
-    build.className = 'silva-uni-build';
-    build.href = '/curriculum.html#build-resources';
-    build.textContent = 'Build Resources';
-    bar.appendChild(build);
+    // (Build Resources is intentionally NOT shown on module/calendar pages: it lives on the
+    // catalog home. Dropping it here keeps row 2 to one line: CS logo + Catalog + the pager.)
 
     // The module pager (Prev/Next + page numbers + BUILD / COPY URL / COPY HTML) is
     // the internal module navigation: it only exists on a loaded module page.
