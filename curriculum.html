@@ -1953,6 +1953,9 @@
       // (student names/photos/SSA flags), not a blank template; never host one until a BLANK template exists.
       documents: {
         roster: { path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/Class%20Roster%209-15-26.pdf", label: "Class Roster 9-15-26" },
+        // Substitute AERIES logins (usernames + passwords, extremely confidential): LOCAL-file
+        // link only, never hosted. Lives outside the repo in 01_TEACHING/SMJUHSD_Documents.
+        subaeries: { path: "file:///Users/riva/RIVA_CODE/01_TEACHING/SMJUHSD_Documents/AERIES%202026%20Fall%20Substitute%20Teacher%20Account%20Info.pdf", label: "Substitute AERIES Logins" },
         // Sub plan is schedule + instructions only, no student data. View = hosted PDF (browser viewer has its own download).
         subplan: { docx: "assets/course-documents/PVHS-Substitute-Plan-2026-09-16.docx", pdf: "assets/course-documents/PVHS-Substitute-Plan-2026-09-16.pdf", label: "Substitute Plan (Sept 16)" },
         signature: { url: "assets/email-signature.html", label: "Mac Mail Signature" },
@@ -2145,15 +2148,15 @@
       } else { window.prompt("Copy this path, then paste into a new browser tab:", path); }
       return false;
     }
-    // Print a local file: opens it in a new tab (works when the catalog is opened locally; on the
-    // live https site file:// is blocked, so copy the path with a hint to open it locally to print).
-    function printLocal(e, el) {
+    // View a local file: opens it in a new tab (works when the catalog is opened locally; on the
+    // live https site file:// is blocked, so copy the path with a hint to open it locally to view).
+    function viewLocal(e, el) {
       const path = el.getAttribute("data-local");
       if (location.protocol === "file:") { window.open(path, "_blank"); e.preventDefault(); return false; }
       e.preventDefault();
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(path).then(() => pillFlash(el, "Path copied • open locally to print", 2400)).catch(() => window.prompt("Open this locally to print:", path));
-      } else { window.prompt("Open this locally to print:", path); }
+        navigator.clipboard.writeText(path).then(() => pillFlash(el, "Path copied • open locally to view", 2400)).catch(() => window.prompt("Open this locally to view:", path));
+      } else { window.prompt("Open this locally to view:", path); }
       return false;
     }
     // Fetch a hosted HTML file's raw source and copy it to the clipboard (paste into Mail signature).
@@ -2222,14 +2225,14 @@
         + `<span class="course-doc-name">${v.label}</span>`
         + `<span class="course-doc-actions">${copy}${open}</span></div>`;
     }
-    // Local roster (student data, never published): Print (opens the PDF locally to print) + Copy Path.
+    // Local file (student data / confidential, never published): View (opens it locally) + Copy Path.
     function rosterRow(path, label) {
       const safe = path.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
       return `<div class="course-doc">`
         + `<span class="course-doc-ico">LOCAL</span>`
         + `<span class="course-doc-name">${label}</span>`
         + `<span class="course-doc-actions">`
-        + `<a class="course-doc-dl" href="${safe}" data-local="${safe}" onclick="return printLocal(event, this)">Print</a>`
+        + `<a class="course-doc-dl" href="${safe}" data-local="${safe}" onclick="return viewLocal(event, this)">View</a>`
         + `<a class="course-doc-dl" href="${safe}" data-local="${safe}" onclick="return copyLocalPath(event, this)">Copy Path</a>`
         + `</span></div>`;
     }
@@ -2339,9 +2342,10 @@
       // Documents sub-section
       const d = t.documents || {};
       const docRows = (d.roster ? rosterRow(d.roster.path, d.roster.label) : "")
+        + (d.subaeries ? rosterRow(d.subaeries.path, d.subaeries.label) : "")
         + (d.subplan ? wordDocRow(d.subplan.docx, d.subplan.pdf, d.subplan.label) : "")
         + (d.signature ? signatureRow(d.signature.url, d.signature.label) : "");
-      const nD = [d.roster, d.subplan, d.signature].filter(Boolean).length;
+      const nD = [d.roster, d.subaeries, d.subplan, d.signature].filter(Boolean).length;
       const docs = docRows ? subAcc("Documents", `${nD} file${nD === 1 ? "" : "s"}`, docRows) : "";
       // Links sub-section: external sites grouped Resources + Vendors, each a Visit button.
       const lk = t.links || {};
