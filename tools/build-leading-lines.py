@@ -126,7 +126,7 @@ def step01():
     en+=card("CAPTURE / ON THE WALK","Take Your Leading Lines",
         float_right(FLOAT,"A student kneeling to photograph down a long covered walkway whose columns lead the eye to a vanishing point, while a partner watches","Hunting leading lines on the walk.")
         + para("Pair up and share one class camera, two students per camera. Then walk campus and hunt for leading lines.")
-        + capture_note("jpg","Set your camera to JPG for this assignment.")
+        + capture_note("jpg","Set your camera to {fmt} for this assignment.")
         + bullets([
             ("Take 3 examples:","each of you takes 3 different examples of leading lines."),
             ("Make each different:","a different line and a different spot each time."),
@@ -153,7 +153,7 @@ def step01():
     es+=card("CAPTURA / EN LA CAMINATA","Toma Tus L&iacute;neas Gu&iacute;a",
         float_right(FLOAT,"Un estudiante arrodillado fotografiando por un pasillo largo cuyas columnas gu&iacute;an la mirada hacia un punto de fuga, mientras un compa&ntilde;ero observa","Buscando l&iacute;neas gu&iacute;a en la caminata.")
         + para("Formen pareja y compartan una c&aacute;mara de la clase, dos estudiantes por c&aacute;mara. Luego caminen por la escuela y busquen l&iacute;neas gu&iacute;a.")
-        + capture_note("jpg","Pon tu c&aacute;mara en JPG para esta tarea.", True)
+        + capture_note("jpg","Pon tu c&aacute;mara en {fmt} para esta tarea.", True)
         + bullets([
             ("Toma 3 ejemplos:","cada uno toma 3 ejemplos diferentes de l&iacute;neas gu&iacute;a."),
             ("Haz cada uno distinto:","una l&iacute;nea distinta y un lugar distinto cada vez."),

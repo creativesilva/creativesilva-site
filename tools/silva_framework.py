@@ -59,7 +59,7 @@ PURPLE_BOX='<div style="background:linear-gradient(180deg,rgba(139,92,246,0.10) 
 DL_ICON=f"{SITE}/assets/Icons/assignment/downloads-v1.png"
 DELIVER_ICON=f"{SITE}/assets/Icons/assignment/deliverables-v4.png"
 STANDARDS_ICON=f"{SITE}/assets/Icons/assignment/standards-v1.svg"
-CAPFMT_ICON={"jpg":f"{SITE}/assets/Icons/assignment/jpg-v1.svg","raw":f"{SITE}/assets/Icons/assignment/raw-v1.svg"}
+CAPFMT_ICON={"jpg":f"{SITE}/assets/Icons/assignment/jpg-v2.svg","raw":f"{SITE}/assets/Icons/assignment/raw-v1.svg"}  # jpg-v2 = transparent interior
 CAMSET_ICON=f"{SITE}/assets/Icons/assignment/camera-settings-v1.svg"  # red aperture = camera-settings family marker
 
 def section_header(icon,title,accent,light):
@@ -87,11 +87,15 @@ def capture_note(fmt, text, es=False):
     # that talks about capturing (not a standalone chip at the top). Use it for a single setting like
     # "capture in JPG"; when a module needs many camera settings, break them into their own section.
     label="Captura de Imagen" if es else "Image Capture"
+    # Inline format badge: put a {fmt} token in `text` where the JPG/RAW badge should sit.
+    badge=(f'<img src="{CAPFMT_ICON[fmt]}" alt="{fmt.upper()}" '
+      'style="height:1.7em;width:auto;vertical-align:middle;margin:0 3px;display:inline-block;" />')
+    body=text.replace("{fmt}", badge)
     return ('<div style="display:flex;align-items:center;gap:13px;background:rgba(230,36,41,0.10);'
       'border:1px solid rgba(230,36,41,0.34);border-left:4px solid #E62429;padding:10px 14px;margin:12px 0;">'
       f'<img src="{CAMSET_ICON}" alt="Camera settings" style="height:34px;width:34px;display:block;flex:0 0 auto;" />'
-      f'<span style="font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.45;">'
-      f'<strong style="letter-spacing:0.05em;text-transform:uppercase;">{label}:</strong> {text}</span></div>')
+      f'<span style="font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.5;">'
+      f'<strong style="letter-spacing:0.05em;text-transform:uppercase;">{label}:</strong> {body}</span></div>')
 
 FLOAT_RE=re.compile(r'<!--FLOAT-->(.*?)<!--/FLOAT-->', re.S)
 def _hoist(inner):
