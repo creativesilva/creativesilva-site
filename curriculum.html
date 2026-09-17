@@ -1035,6 +1035,10 @@
     .ps2-context::placeholder { color: rgba(234,247,247,0.42); }
     .ps2-refgroup { margin-bottom: 12px; }
     .ps2-reflabel { font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(234,247,247,0.55); margin-bottom: 7px; }
+    .ps2-slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; }
+    .ps2-slot { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,184,184,0.28); border-top: 2px solid #00b8b8; color: #eaf7f7; font-family: inherit; font-size: 0.85rem; padding: 8px 30px 8px 10px; -webkit-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360d8d8' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 9px center; background-size: 14px; }
+    .ps2-slot:focus { outline: none; border-color: #00b8b8; }
     .ps2-chips { display: flex; flex-wrap: wrap; gap: 7px; }
     .ps2-chip { font-family: inherit; font-size: 0.74rem; letter-spacing: 0.02em; color: #eaf7f7; cursor: pointer; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14); padding: 6px 12px; white-space: nowrap; transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease; }
     .ps2-chip:hover { border-color: rgba(0,184,184,0.5); }
@@ -3112,190 +3116,171 @@
     if (!list) return;
     var IMG = 'https://www.creativesilva.com/assets/images/characters/';
 
-    // Hosted reference library (real files on creativesilva.com).
-    var REFS = {
-      'Characters': [
-        { label: 'Renee', file: 'renee-character-sheet-v2.jpg' },
-        { label: 'Mr. Silva', file: 'mr-silva-character-sheet-v2.jpg' },
-        { label: 'Patricia', file: 'patricia-character-sheet-v6.jpg' },
-        { label: 'Anthony', file: 'anthony-character-sheet-v2.jpg' },
-        { label: 'Ricardo', file: 'ricardo-character-sheet-v3.jpg' }
-      ],
-      'Items': [
-        { label: 'Classroom camera kit', file: 'items/classroom-camera-kit-v1.jpg' },
-        { label: 'Canon R5', file: 'items/canon-eos-r5-pro-v1.png' },
-        { label: 'Canon R50', file: 'items/canon-eos-r50-v1.png' },
-        { label: '70-200 lens', file: 'items/canon-70-200-lens-v1.png' },
-        { label: 'Sketchbook', file: 'items/sketchbook-v1.png' },
-        { label: 'MacBook Pro', file: 'items/macbook-pro-v1.png' },
-        { label: 'iPad Pro + Pencil', file: 'items/ipad-pro-apple-pencil-v1.jpg' }
-      ],
-      'Scenes': [
-        { label: 'PV classroom', file: 'campus/pv-classroom-inspiration-v1.jpg' },
-        { label: 'Campus front', file: 'campus/pv-campus-front-v1.jpg' },
-        { label: 'Academy lobby (Photo)', file: 'campus/pv-lobby-photography-v1.jpg' },
-        { label: 'Academy lobby (Digital Arts)', file: 'campus/pv-lobby-digital-arts-v1.jpg' }
-      ]
-    };
-    // Sample control set (Chris will refine which dropdowns and options per prompt).
-    var VARS = [
-      { key: 'camera_height', label: 'Camera height', type: 'select', options: ['ground level', 'low', 'eye level', 'high', 'overhead'], def: 'eye level' },
-      { key: 'angle', label: 'Angle', type: 'select', options: ['eye-level', 'low', 'high', 'overhead', 'dutch'], def: 'eye-level' },
-      { key: 'pitch', label: 'Pitch', type: 'range', min: -90, max: 90, step: 5, def: 0, unit: '°' },
-      { key: 'yaw', label: 'Yaw', type: 'range', min: -180, max: 180, step: 5, def: 0, unit: '°' },
-      { key: 'lens', label: 'Lens', type: 'select', options: ['24mm wide', '35mm', '50mm', '85mm portrait'], def: '35mm' },
-      { key: 'framing', label: 'Framing', type: 'select', options: ['close', 'medium', 'wide'], def: 'medium' },
-      { key: 'lighting', label: 'Lighting', type: 'select', options: ['soft window light', 'golden hour', 'overcast', 'studio key + fill', 'dramatic rim light'], def: 'soft window light' }
+    // Hosted reference library. label = dropdown text, file = path under IMG.
+    var CHARACTERS = [
+      { label: 'Renee (character sheet)', file: 'renee-character-sheet-v2.jpg' },
+      { label: 'Renee (capri pants)', file: 'renee-capri-pants-v2.jpg' },
+      { label: 'Mr. Silva (character sheet)', file: 'mr-silva-character-sheet-v2.jpg' },
+      { label: 'Patricia (character sheet)', file: 'patricia-character-sheet-v6.jpg' },
+      { label: 'Patricia (cropped hoodie)', file: 'patricia-cropped-hoodie-v3.jpg' },
+      { label: 'Anthony (character sheet)', file: 'anthony-character-sheet-v2.jpg' },
+      { label: 'Ricardo (character sheet)', file: 'ricardo-character-sheet-v3.jpg' }
+    ];
+    var ITEMS = [
+      { label: 'Classroom camera kit', file: 'items/classroom-camera-kit-v1.jpg' },
+      { label: 'Canon R5', file: 'items/canon-eos-r5-pro-v1.png' },
+      { label: 'Canon R50', file: 'items/canon-eos-r50-v1.png' },
+      { label: 'Canon R5 II', file: 'items/canon-r5-ii-telephoto-v1.png' },
+      { label: '70-200 lens', file: 'items/canon-70-200-lens-v1.png' },
+      { label: 'Camera bag', file: 'items/canon-camera-bag-v2.png' },
+      { label: 'Sketchbook', file: 'items/sketchbook-v1.png' },
+      { label: 'MacBook Pro', file: 'items/macbook-pro-v1.png' },
+      { label: 'iMac 27', file: 'items/imac-27-mockup-v2.png' },
+      { label: 'iPad Pro + Pencil', file: 'items/ipad-pro-apple-pencil-v1.jpg' },
+      { label: 'iPhone', file: 'items/iphone-mockup-v3.png' },
+      { label: 'Pantone swatch book', file: 'items/pantone-swatch-book-v1.png' }
+    ];
+    var SCENES = [
+      { label: 'PV classroom', file: 'campus/pv-classroom-inspiration-v1.jpg' },
+      { label: 'Campus front', file: 'campus/pv-campus-front-v1.jpg' },
+      { label: 'Academy lobby (Photo)', file: 'campus/pv-lobby-photography-v1.jpg' },
+      { label: 'Academy lobby (Digital Arts)', file: 'campus/pv-lobby-digital-arts-v1.jpg' }
+    ];
+    // Fields whose name matches these get a dropdown; every other field gets a text input.
+    var FIELD_OPTS = [
+      { re: /height/i, opts: ['ground level','low','eye level','standing eye level','slightly elevated','high','overhead'] },
+      { re: /yaw|direction/i, opts: ['facing the front wall','facing the rear wall','facing the window wall','facing the solid wall','three-quarter left','three-quarter right','profile left','profile right'] },
+      { re: /pitch|tilt/i, opts: ['level','slightly down','angled down','slightly up','angled up'] },
+      { re: /framing/i, opts: ['tight close-up','medium close-up','medium','medium wide','wide environmental'] },
+      { re: /lens|focal/i, opts: ['24mm wide','35mm','50mm','85mm portrait','70-200mm telephoto'] },
+      { re: /aperture|depth/i, opts: ['f/1.8 shallow','f/2.8','f/4','f/5.6','f/8','f/11 deep'] },
+      { re: /aspect/i, opts: ['1:1','3:2','4:5','16:9'] },
+      { re: /lighting|time of day/i, opts: ['bright daylight','golden hour','overcast','warm interior evening','studio key + fill'] }
     ];
 
-    function el(t, c, h) { var e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
-    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-    function baseName(f) { return f.split('/').pop(); }
-    function copy(text, btn, done) {
-      function ok() { if (btn) { var o = btn.textContent; btn.classList.add('copied'); btn.textContent = '✓ Copied'; setTimeout(function () { btn.classList.remove('copied'); btn.textContent = o; }, 1900); } if (done) done(); }
-      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(ok, function () { legacy(text); ok(); }); }
-      else { legacy(text); ok(); }
+    function el(t,c,h){ var e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e; }
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function baseName(f){ return f.split('/').pop(); }
+    function legacy(text){ var a=document.createElement('textarea'); a.value=text; a.style.position='fixed'; a.style.opacity='0'; document.body.appendChild(a); a.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(a); }
+    function copy(text, btn, done){
+      function ok(){ if(btn){var o=btn.textContent; btn.classList.add('copied'); btn.textContent='✓ Copied'; setTimeout(function(){btn.classList.remove('copied'); btn.textContent=o;},1900);} if(done)done(); }
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(ok,function(){legacy(text);ok();}); } else { legacy(text); ok(); }
     }
-    function legacy(text) { var a = document.createElement('textarea'); a.value = text; a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); } catch (e) {} document.body.removeChild(a); }
+    var cache={};
+    function fetchPrompt(path){ if(cache[path]!=null)return Promise.resolve(cache[path]); return fetch(path).then(function(r){return r.text();}).then(function(t){cache[path]=t;return t;}); }
+    function optsFor(name){ var o=null; FIELD_OPTS.forEach(function(f){ if(f.re.test(name)) o=f.opts; }); return o; }
 
-    var cache = {};
-    function fetchPrompt(path) {
-      if (cache[path] != null) return Promise.resolve(cache[path]);
-      return fetch(path).then(function (r) { return r.text(); }).then(function (t) { cache[path] = t; return t; });
-    }
+    function buildReveal(promptEl){
+      var reveal=promptEl.querySelector('.ps2-reveal');
+      if(reveal.dataset.built) return reveal;
+      reveal.dataset.built='1';
+      var path=promptEl.getAttribute('data-file');
+      var state={ fields:{}, chars:['','','',''], items:['','','',''], scene:'' };
+      var baseText='';
 
-    function buildReveal(promptEl) {
-      var reveal = promptEl.querySelector('.ps2-reveal');
-      if (reveal.dataset.built) return reveal;
-      reveal.dataset.built = '1';
-      var path = promptEl.getAttribute('data-file');
-      var storeKey = 'ps2:' + path;
-      var state = { values: {}, context: '', refs: {} };
-      VARS.forEach(function (v) { state.values[v.key] = v.def; });
-      try { var saved = JSON.parse(localStorage.getItem(storeKey) || '{}');
-        if (saved.values) VARS.forEach(function (v) { if (saved.values[v.key] != null) state.values[v.key] = saved.values[v.key]; });
-        if (saved.context) state.context = saved.context;
-        if (saved.refs) state.refs = saved.refs;
-      } catch (e) {}
+      var fieldsGroup=el('div','ps2-group'); reveal.appendChild(fieldsGroup);
 
-      // Camera + lighting controls
-      var g1 = el('div', 'ps2-group'); g1.appendChild(el('div', 'ps2-gtitle', 'Camera &amp; lighting'));
-      var fields = el('div', 'ps2-fields');
-      VARS.forEach(function (v) { fields.appendChild(buildField(v, state, refresh)); });
-      g1.appendChild(fields); reveal.appendChild(g1);
+      var refGroup=el('div','ps2-group');
+      refGroup.appendChild(el('div','ps2-gtitle','Reference files'));
+      refGroup.appendChild(slotGroup('Characters (up to 4)', state.chars, CHARACTERS, false));
+      refGroup.appendChild(slotGroup('Items (up to 4)', state.items, ITEMS, false));
+      refGroup.appendChild(slotGroup('Location', null, SCENES, true));
+      reveal.appendChild(refGroup);
 
-      // Context
-      var g2 = el('div', 'ps2-group'); g2.appendChild(el('div', 'ps2-gtitle', 'Context'));
-      var ta = el('textarea', 'ps2-context'); ta.placeholder = 'Add anything unique to this generation. Example: Renee is done taking notes in her photo journal and stands facing Mr. Silva, handing it to him over the desk between them.';
-      ta.value = state.context;
-      ta.addEventListener('input', function () { state.context = ta.value; refresh(); });
-      g2.appendChild(ta); reveal.appendChild(g2);
-
-      // References
-      var g3 = el('div', 'ps2-group'); g3.appendChild(el('div', 'ps2-gtitle', 'Reference files'));
-      Object.keys(REFS).forEach(function (group) {
-        var rg = el('div', 'ps2-refgroup'); rg.appendChild(el('div', 'ps2-reflabel', esc(group)));
-        var chips = el('div', 'ps2-chips');
-        REFS[group].forEach(function (r) {
-          var chip = el('button', 'ps2-chip', esc(r.label)); chip.type = 'button';
-          if (state.refs[r.file]) chip.classList.add('on');
-          chip.addEventListener('click', function () {
-            if (chip.classList.toggle('on')) state.refs[r.file] = r.label; else delete state.refs[r.file];
-            refresh();
-          });
-          chips.appendChild(chip);
-        });
-        rg.appendChild(chips); g3.appendChild(rg);
-      });
-      reveal.appendChild(g3);
-
-      // Preview
-      reveal.appendChild(el('div', 'ps2-gtitle', 'Your prompt'));
-      var pre = el('div', 'ps2-preview', 'Loading base prompt&hellip;');
-      reveal.appendChild(pre);
-
-      // Actions
-      var acts = el('div', 'ps2-revealacts');
-      var copyBtn = el('button', 'pg-btn ps2-copyprompt', 'Copy Prompt'); copyBtn.type = 'button';
-      var hint = el('span', 'ps2-hint', 'Copies the rebuilt prompt, then lists the files to grab.');
-      acts.appendChild(copyBtn); acts.appendChild(hint);
+      reveal.appendChild(el('div','ps2-gtitle','Your prompt'));
+      var pre=el('div','ps2-preview','Loading base prompt…'); reveal.appendChild(pre);
+      var acts=el('div','ps2-revealacts');
+      var copyBtn=el('button','pg-btn ps2-copyprompt','Copy Prompt'); copyBtn.type='button';
+      acts.appendChild(copyBtn); acts.appendChild(el('span','ps2-hint','Copies the filled prompt, then lists the files to grab.'));
       reveal.appendChild(acts);
+      var pop=el('div','ps2-filespop'); pop.hidden=true; reveal.appendChild(pop);
 
-      var pop = el('div', 'ps2-filespop'); pop.hidden = true; reveal.appendChild(pop);
-
-      var baseText = '';
-      fetchPrompt(path).then(function (t) { baseText = t; refresh(); }).catch(function () { baseText = '[Could not load the base prompt file.]'; refresh(); });
-
-      function compose() {
-        var v = state.values, lines = [];
-        lines.push('Camera and framing: ' + v.camera_height + ' height, ' + v.angle + ' angle, pitch ' + v.pitch + '°, yaw ' + v.yaw + '°, ' + v.lens + ', ' + v.framing + ' framing.');
-        lines.push('Lighting: ' + v.lighting + '.');
-        if (state.context.trim()) lines.push('Context: ' + state.context.trim());
-        var files = Object.keys(state.refs).map(baseName);
-        if (files.length) lines.push('Reference files (use these exactly, by name): ' + files.join(', '));
-        return baseText + '\n\n=== CUSTOMIZATION ===\n' + lines.join('\n');
+      function slotGroup(title, arr, options, single){
+        var g=el('div','ps2-refgroup'); g.appendChild(el('div','ps2-reflabel', esc(title)));
+        var row=el('div','ps2-slots'); var n=single?1:4;
+        for(var i=0;i<n;i++){ (function(idx){
+          var sel=el('select','ps2-slot');
+          var blank=el('option',null,'-'); blank.value=''; sel.appendChild(blank);
+          options.forEach(function(o){ var op=el('option',null,esc(o.label)); op.value=o.file; sel.appendChild(op); });
+          sel.addEventListener('change', function(){ if(single){ state.scene=sel.value; } else { arr[idx]=sel.value; } refresh(); });
+          row.appendChild(sel);
+        })(i); }
+        g.appendChild(row); return g;
       }
-      function refresh() {
-        pre.textContent = compose();
-        try { localStorage.setItem(storeKey, JSON.stringify({ values: state.values, context: state.context, refs: state.refs })); } catch (e) {}
+
+      function buildFields(){
+        fieldsGroup.innerHTML='';
+        fieldsGroup.appendChild(el('div','ps2-gtitle','Scene overrides'));
+        var grid=el('div','ps2-fields');
+        var re=/^\[([^\]]+)\]\s*=/gm, m, names=[];
+        while((m=re.exec(baseText))!==null){ names.push(m[1]); }
+        if(!names.length){ fieldsGroup.appendChild(el('div','ps2-hint','This prompt has no fill-in fields. Pick reference files below and copy.')); return; }
+        names.forEach(function(name){
+          if(state.fields[name]===undefined) state.fields[name]='';
+          var w=el('div','ps2-field'); w.appendChild(el('label',null,esc(name)));
+          var opts=optsFor(name), input;
+          if(opts){ input=el('select'); var b=el('option',null,'-'); b.value=''; input.appendChild(b); opts.forEach(function(o){var op=el('option',null,esc(o)); op.value=o; input.appendChild(op);}); input.addEventListener('change',function(){state.fields[name]=input.value; refresh();}); }
+          else { input=el('input'); input.type='text'; input.placeholder='type here'; input.addEventListener('input',function(){state.fields[name]=input.value; refresh();}); }
+          w.appendChild(input); grid.appendChild(w);
+        });
+        fieldsGroup.appendChild(grid);
       }
-      copyBtn.addEventListener('click', function () { copy(compose(), copyBtn, function () { showFiles(pop, state.refs); }); });
+
+      function selectedRefs(){
+        var out=[], seen={};
+        function add(file,arr){ if(!file||seen[file])return; seen[file]=1; var o=arr.filter(function(x){return x.file===file;})[0]; if(o)out.push(o); }
+        state.chars.forEach(function(f){add(f,CHARACTERS);});
+        state.items.forEach(function(f){add(f,ITEMS);});
+        add(state.scene,SCENES);
+        return out;
+      }
+
+      function compose(){
+        var out=baseText, name;
+        for(name in state.fields){ var v=state.fields[name]; if(v) out=out.split('['+name+'] =').join('['+name+'] = '+v); }
+        var chars=state.chars.filter(Boolean).map(baseName);
+        var items=state.items.filter(Boolean).map(baseName);
+        if(chars.length || items.length || state.scene){
+          var block='ATTACHED REFERENCE FILES (match these exactly, by file name):\n';
+          if(chars.length) block+='- Characters: '+chars.join(', ')+'\n';
+          if(items.length) block+='- Items: '+items.join(', ')+'\n';
+          if(state.scene) block+='- Scene reference: '+baseName(state.scene)+'\n';
+          block+='\n';
+          if(out.indexOf('REFERENCE USE')>=0) out=out.replace('REFERENCE USE', block+'REFERENCE USE');
+          else out=out+'\n\n'+block;
+        }
+        return out;
+      }
+      function refresh(){ pre.textContent=compose(); }
+      copyBtn.addEventListener('click', function(){ copy(compose(), copyBtn, function(){ showFiles(pop, selectedRefs()); }); });
+      fetchPrompt(path).then(function(t){ baseText=t; buildFields(); refresh(); }).catch(function(){ baseText='[Could not load the base prompt file.]'; refresh(); });
       return reveal;
     }
 
-    function buildField(v, state, refresh) {
-      var w = el('div', 'ps2-field');
-      var lab = el('label', null, esc(v.label));
-      if (v.type === 'range') { var val = el('span', 'val', state.values[v.key] + (v.unit || '')); lab.appendChild(val); w._val = val; }
-      w.appendChild(lab);
-      var input;
-      if (v.type === 'select') {
-        input = el('select');
-        v.options.forEach(function (o) { var op = el('option', null, esc(o)); op.value = o; if (o === state.values[v.key]) op.selected = true; input.appendChild(op); });
-        input.addEventListener('change', function () { state.values[v.key] = input.value; refresh(); });
-      } else {
-        input = el('input'); input.type = 'range'; input.min = v.min; input.max = v.max; input.step = v.step || 1; input.value = state.values[v.key];
-        input.addEventListener('input', function () { state.values[v.key] = input.value; if (w._val) w._val.textContent = input.value + (v.unit || ''); refresh(); });
-      }
-      w.appendChild(input);
-      return w;
-    }
-
-    function showFiles(pop, refs) {
-      pop.hidden = false;
-      pop.innerHTML = '';
-      var head = el('div', 'ps2-filespop-head');
-      head.appendChild(el('div', 'ps2-filespop-title', 'Grab these files for the generation'));
-      var keys = Object.keys(refs);
-      if (keys.length) {
-        var urls = keys.map(function (f) { return IMG + f; });
-        var all = el('button', 'pg-btn', 'Copy all URLs'); all.type = 'button';
-        all.addEventListener('click', function () { copy(urls.join('\n'), all); });
-        head.appendChild(all);
-      }
+    function showFiles(pop, refs){
+      var IMG='https://www.creativesilva.com/assets/images/characters/';
+      pop.hidden=false; pop.innerHTML='';
+      var head=el('div','ps2-filespop-head'); head.appendChild(el('div','ps2-filespop-title','Grab these files for the generation'));
+      if(refs.length){ var urls=refs.map(function(r){return IMG+r.file;});
+        var all=el('button','pg-btn','Copy all URLs'); all.type='button'; all.addEventListener('click',function(){copy(urls.join('\n'),all);}); head.appendChild(all); }
       pop.appendChild(head);
-      if (!keys.length) { pop.appendChild(el('div', 'ps2-filespop-empty', 'No reference files selected. Pick characters, items, or scenes above and they will be listed here to grab.')); return; }
-      var grid = el('div', 'ps2-files');
-      keys.forEach(function (f) {
-        var url = IMG + f, name = baseName(f);
-        var cell = el('div', 'ps2-file');
-        var thumb = el('div', 'ps2-file-thumb'); var im = el('img'); im.src = url; im.alt = refs[f]; im.loading = 'lazy'; thumb.appendChild(im); cell.appendChild(thumb);
-        var meta = el('div', 'ps2-file-meta'); meta.appendChild(el('div', 'ps2-file-name', esc(name)));
-        var fa = el('div', 'ps2-file-acts');
-        var cu = el('button', 'pg-btn', 'Copy URL'); cu.type = 'button'; cu.addEventListener('click', function () { copy(url, cu); });
-        var dl = el('a', 'pg-btn pg-view', 'Get'); dl.href = url; dl.setAttribute('download', ''); dl.target = '_blank'; dl.rel = 'noopener';
-        fa.appendChild(cu); fa.appendChild(dl); meta.appendChild(fa); cell.appendChild(meta);
-        grid.appendChild(cell);
-      });
+      if(!refs.length){ pop.appendChild(el('div','ps2-filespop-empty','No reference files selected. Pick characters, items, or a location above.')); return; }
+      var grid=el('div','ps2-files');
+      refs.forEach(function(r){ var url=IMG+r.file, name=baseName(r.file);
+        var cell=el('div','ps2-file'); var thumb=el('div','ps2-file-thumb'); var im=el('img'); im.src=url; im.alt=r.label; im.loading='lazy'; thumb.appendChild(im); cell.appendChild(thumb);
+        var meta=el('div','ps2-file-meta'); meta.appendChild(el('div','ps2-file-name', esc(name)));
+        var fa=el('div','ps2-file-acts'); var cu=el('button','pg-btn','Copy URL'); cu.type='button'; cu.addEventListener('click',function(){copy(url,cu);});
+        var dl=el('a','pg-btn pg-view','Get'); dl.href=url; dl.setAttribute('download',''); dl.target='_blank'; dl.rel='noopener';
+        fa.appendChild(cu); fa.appendChild(dl); meta.appendChild(fa); cell.appendChild(meta); grid.appendChild(cell); });
       pop.appendChild(grid);
     }
 
-    list.querySelectorAll('.ps2-prompt').forEach(function (p) {
-      var btn = p.querySelector('.ps2-customize');
-      btn.addEventListener('click', function () {
-        var reveal = buildReveal(p);
-        if (reveal.hasAttribute('hidden')) { reveal.removeAttribute('hidden'); btn.classList.add('on'); btn.textContent = 'Close'; }
-        else { reveal.setAttribute('hidden', ''); btn.classList.remove('on'); btn.textContent = 'Customize Prompt'; }
+    list.querySelectorAll('.ps2-prompt').forEach(function(p){
+      var btn=p.querySelector('.ps2-customize');
+      btn.addEventListener('click', function(){
+        var reveal=buildReveal(p);
+        if(reveal.hasAttribute('hidden')){ reveal.removeAttribute('hidden'); btn.classList.add('on'); btn.textContent='Close'; }
+        else { reveal.setAttribute('hidden',''); btn.classList.remove('on'); btn.textContent='Customize Prompt'; }
       });
     });
   })();
