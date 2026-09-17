@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Prompt Studio | Chris Silva</title>
+<meta name="description" content="Teacher tool: copy a base image prompt as-is, or customize camera and lighting and copy the rebuilt prompt with your hosted reference images." />
+<link rel="icon" href="/logos/CS_Logo_Only_Teal.svg" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap');
+
+  :root {
+    --bg: #060d0d;
+    --teal: #00b8b8;
+    --teal-deep: #007474;
+    --orange: #ffb27a;
+    --text: #eaf7f7;
+    --text-dim: rgba(234, 247, 247, 0.62);
+    --line: rgba(255, 255, 255, 0.08);
+    --panel: rgba(255, 255, 255, 0.03);
+    --head: 'Oswald', 'Arial Narrow', sans-serif;
+    --body: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background:
+      linear-gradient(180deg, rgba(5, 12, 12, 0.96) 0%, rgba(2, 26, 26, 0.86) 50%, rgba(5, 12, 12, 0.97) 100%),
+      radial-gradient(120% 80% at 50% -10%, rgba(0, 116, 116, 0.20) 0%, rgba(0, 0, 0, 0) 60%);
+    background-color: var(--bg);
+    background-attachment: fixed;
+    min-height: 100vh;
+    font-family: var(--body);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Sticky glass header (matches the catalog/nav design system) ── */
+  .ps-header {
+    position: sticky; top: 0; z-index: 50;
+    background: linear-gradient(180deg, rgba(4, 13, 13, 0.86) 0%, rgba(3, 23, 23, 0.72) 100%);
+    backdrop-filter: blur(18px) saturate(1.35);
+    -webkit-backdrop-filter: blur(18px) saturate(1.35);
+    border-top: 3px solid var(--teal);
+    border-bottom: 1px solid rgba(0, 184, 184, 0.22);
+  }
+  .ps-header-inner {
+    max-width: 1160px; margin: 0 auto; padding: 0 24px;
+    display: flex; align-items: center; gap: 16px; min-height: 62px; flex-wrap: wrap;
+  }
+  .ps-logo { display: flex; align-items: center; gap: 14px; padding-right: 18px; border-right: 1px solid var(--line); }
+  .ps-logo img { height: 30px; width: auto; display: block; }
+  .ps-title {
+    font-family: var(--head); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em;
+    font-size: 1.02rem; color: #fff; line-height: 1;
+  }
+  .ps-title .sub { display: block; font-size: 0.58rem; letter-spacing: 0.24em; color: var(--teal); margin-top: 4px; font-weight: 600; }
+  .ps-back {
+    margin-left: auto; font-family: var(--head); font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.10em; font-size: 0.72rem; color: var(--text-dim); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 7px; padding: 8px 4px; transition: color 0.15s ease;
+  }
+  .ps-back:hover { color: var(--teal); }
+  .ps-back .arw { font-size: 0.9em; }
+
+  /* ── Page body ── */
+  .ps-wrap { max-width: 1160px; margin: 0 auto; padding: 34px 24px 80px; }
+  .ps-lede { max-width: 720px; margin: 0 0 30px; }
+  .ps-lede h1 {
+    font-family: var(--head); font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;
+    font-size: clamp(1.5rem, 3vw, 2.1rem); line-height: 1.05; color: #fff; margin-bottom: 12px;
+  }
+  .ps-lede p { color: var(--text-dim); font-size: 0.98rem; line-height: 1.65; }
+  .ps-shell-note {
+    display: inline-flex; align-items: center; gap: 9px; margin-bottom: 26px;
+    background: rgba(255, 178, 122, 0.10); border: 1px solid rgba(255, 178, 122, 0.30); border-left: 4px solid var(--orange);
+    padding: 9px 15px; font-size: 0.82rem; color: #ffd9bd; line-height: 1.4;
+  }
+  .ps-shell-note b { color: #fff; font-weight: 600; }
+
+  .ps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; }
+
+  /* ── Prompt card ── */
+  .ps-card {
+    background: var(--panel); border: 1px solid var(--line); border-top: 2px solid var(--teal);
+    padding: 20px 20px 18px; display: flex; flex-direction: column; gap: 13px;
+  }
+  .ps-card-eyebrow { font-family: var(--head); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); }
+  .ps-card h2 { font-family: var(--head); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; font-size: 1.14rem; color: #fff; line-height: 1.1; }
+  .ps-card p.desc { color: var(--text-dim); font-size: 0.86rem; line-height: 1.55; }
+  .ps-card .preview {
+    background: rgba(0, 0, 0, 0.32); border: 1px solid var(--line); border-left: 3px solid rgba(0, 184, 184, 0.4);
+    padding: 12px 14px; font-size: 0.8rem; line-height: 1.55; color: rgba(234, 247, 247, 0.78);
+    max-height: 118px; overflow: hidden; position: relative;
+  }
+  .ps-card .preview::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 34px;
+    background: linear-gradient(180deg, rgba(6, 13, 13, 0) 0%, rgba(6, 13, 13, 0.9) 100%);
+  }
+  .ps-card-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 3px; }
+
+  /* ── Buttons ── */
+  .btn {
+    font-family: var(--head); font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; font-size: 0.72rem;
+    padding: 11px 18px; cursor: pointer; border: 1px solid transparent; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: filter 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+  .btn-primary { background: var(--teal-deep); border-color: var(--teal); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.18); }
+  .btn-ghost { background: rgba(0, 184, 184, 0.08); border-color: rgba(0, 184, 184, 0.35); color: var(--text); }
+  .btn-ghost:hover { background: rgba(0, 184, 184, 0.16); border-color: var(--teal); }
+  .btn-orange { background: rgba(255, 178, 122, 0.10); border-color: rgba(255, 178, 122, 0.4); color: var(--orange); }
+  .btn-orange:hover { background: rgba(255, 178, 122, 0.2); color: #fff; }
+  .btn.copied { background: #1db869 !important; border-color: #1db869 !important; color: #fff !important; }
+  .btn-sm { font-size: 0.62rem; padding: 7px 11px; letter-spacing: 0.08em; }
+
+  /* ── Modal (shadow box) ── */
+  .ps-overlay {
+    position: fixed; inset: 0; z-index: 200; display: none; align-items: flex-start; justify-content: center;
+    background: rgba(0, 0, 0, 0.66); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    padding: 40px 18px; overflow-y: auto;
+  }
+  .ps-overlay.open { display: flex; }
+  .ps-modal {
+    width: 100%; max-width: 760px; background: rgba(8, 20, 20, 0.98);
+    border: 1px solid rgba(0, 184, 184, 0.3); border-top: 3px solid var(--teal);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  }
+  .ps-modal-head {
+    display: flex; align-items: center; gap: 12px; padding: 18px 22px; border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: rgba(8, 20, 20, 0.98); z-index: 2;
+  }
+  .ps-modal-head .m-eyebrow { font-family: var(--head); font-size: 0.58rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); }
+  .ps-modal-head h3 { font-family: var(--head); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; font-size: 1.16rem; color: #fff; line-height: 1.1; }
+  .ps-close {
+    margin-left: auto; background: none; border: 1px solid var(--line); color: var(--text-dim);
+    width: 34px; height: 34px; cursor: pointer; font-size: 1.1rem; line-height: 1; display: flex; align-items: center; justify-content: center;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .ps-close:hover { color: #fff; border-color: var(--teal); }
+  .ps-modal-body { padding: 20px 22px 24px; }
+
+  .ps-group { margin-bottom: 22px; }
+  .ps-group-title { font-family: var(--head); font-size: 0.64rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal); margin-bottom: 12px; padding-bottom: 7px; border-bottom: 1px solid var(--line); }
+  .ps-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px 18px; }
+  .ps-field { display: flex; flex-direction: column; gap: 6px; }
+  .ps-field label { font-family: var(--head); font-size: 0.66rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+  .ps-field label .val { color: var(--teal); float: right; font-weight: 600; }
+  .ps-field select, .ps-field input[type="text"] {
+    width: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(0, 184, 184, 0.28); border-top: 2px solid var(--teal);
+    color: var(--text); font-family: var(--body); font-size: 0.9rem; padding: 9px 11px; -webkit-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360d8d8' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center; background-size: 15px;
+  }
+  .ps-field input[type="text"] { background-image: none; }
+  .ps-field select:focus, .ps-field input:focus { outline: none; border-color: var(--teal); }
+  .ps-field input[type="range"] { width: 100%; accent-color: var(--teal); }
+
+  .ps-out-title { font-family: var(--head); font-size: 0.64rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal); margin: 4px 0 10px; }
+  .ps-result {
+    background: rgba(0, 0, 0, 0.4); border: 1px solid var(--line); border-left: 3px solid var(--teal);
+    padding: 15px 16px; font-size: 0.9rem; line-height: 1.62; color: var(--text); white-space: pre-wrap; margin-bottom: 14px;
+  }
+  .ps-result .tok { color: #7fe9e9; }
+  .ps-result-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 26px; }
+
+  .ps-refs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 8px; }
+  .ps-ref {
+    background: rgba(0, 0, 0, 0.3); border: 1px solid var(--line); display: flex; flex-direction: column;
+  }
+  .ps-ref-thumb { height: 92px; background: rgba(0, 184, 184, 0.06); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .ps-ref-thumb img { max-width: 82%; max-height: 78%; object-fit: contain; display: block; }
+  .ps-ref-meta { padding: 8px 10px; display: flex; flex-direction: column; gap: 7px; }
+  .ps-ref-label { font-size: 0.72rem; color: var(--text-dim); line-height: 1.3; }
+  .ps-ref .btn { justify-content: center; }
+  .ps-refs-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 6px 0 12px; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 30px; transform: translateX(-50%) translateY(20px);
+    background: #1db869; color: #fff; font-family: var(--head); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    font-size: 0.74rem; padding: 12px 22px; opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease; z-index: 400;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 640px) {
+    .ps-header-inner { min-height: 56px; }
+    .ps-logo { padding-right: 12px; }
+    .ps-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="ps-header">
+  <div class="ps-header-inner">
+    <a class="ps-logo" href="/curriculum.html" aria-label="Back to Curriculum Catalog">
+      <img src="/logos/CS_Logo_Only_Teal.svg" alt="Chris Silva" />
+    </a>
+    <div class="ps-title">Prompt Studio<span class="sub">Image Prompt Builder</span></div>
+    <a class="ps-back" href="/curriculum.html"><span class="arw">&larr;</span> Back to Catalog</a>
+  </div>
+</header>
+
+<div class="ps-wrap">
+  <div class="ps-lede">
+    <h1>Build a prompt in seconds</h1>
+    <p>Copy a base prompt exactly as written, or open it and set only what changes: camera placement and lighting. The tool rebuilds the prompt with your settings and hands you the matching reference images you already host.</p>
+  </div>
+
+  <div class="ps-shell-note">
+    <b>Preview shell.</b> Sample prompt and placeholder controls, nothing here is locked in. React to the interface and we swap in your real prompt, options, and reference images.
+  </div>
+
+  <div class="ps-grid" id="ps-grid"></div>
+</div>
+
+<!-- Shadow box -->
+<div class="ps-overlay" id="ps-overlay" role="dialog" aria-modal="true" aria-labelledby="ps-modal-title">
+  <div class="ps-modal" id="ps-modal">
+    <div class="ps-modal-head">
+      <div>
+        <div class="m-eyebrow">Request customization</div>
+        <h3 id="ps-modal-title">Customize this prompt</h3>
+      </div>
+      <button class="ps-close" id="ps-close" aria-label="Close">&times;</button>
+    </div>
+    <div class="ps-modal-body" id="ps-modal-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="ps-toast">Copied</div>
+
+<script>
+(function () {
+  // ── Sample reference library (real hosted assets used as placeholders) ──
+  var REFERENCES = {
+    'ref-cs':      { url: 'https://www.creativesilva.com/logos/CS_Logo_Vector.svg',        label: 'Sample reference: brand mark' },
+    'ref-pv':      { url: 'https://www.creativesilva.com/assets/PV_Logo_Full.png',          label: 'Sample reference: campus crest' },
+    'ref-square':  { url: 'https://www.creativesilva.com/assets/PV_Square_Logo.png',        label: 'Sample reference: square logo' },
+    'ref-teal':    { url: 'https://www.creativesilva.com/logos/CS_Logo_Vector_TealWhite.svg',label: 'Sample reference: teal lockup' }
+  };
+
+  // ── Sample prompt definitions (placeholder content) ──
+  var PROMPTS = [
+    {
+      id: 'campus-character-scene',
+      eyebrow: 'Sample prompt',
+      title: 'Campus Character Scene',
+      desc: 'The recurring cast on the Pioneer Valley campus. Only camera placement and lighting change.',
+      constants: {
+        scene_constant: 'the two lead characters standing together on the Pioneer Valley High School campus quad, same wardrobe and props as the established series',
+        style_constant: 'photoreal, cinematic color grade, sharp focus on the characters, consistent with the established series look'
+      },
+      template: 'A cinematic photograph of {{scene_constant}}. Camera at {{camera_height}}, {{angle}} angle, pitch {{pitch}} degrees, yaw {{yaw}} degrees, {{lens}}. Framing: {{framing}}. Lighting: {{lighting}}, {{mood}}. Aspect ratio {{aspect}}. {{style_constant}}',
+      variables: [
+        { key: 'camera_height', label: 'Camera height', type: 'select', options: ['ground level', 'low', 'eye level', 'high', 'overhead'], def: 'eye level' },
+        { key: 'angle', label: 'Angle', type: 'select', options: ['eye-level', 'low', 'high', 'overhead', 'dutch'], def: 'eye-level' },
+        { key: 'pitch', label: 'Pitch', type: 'range', min: -90, max: 90, step: 5, def: 0, unit: '°' },
+        { key: 'yaw', label: 'Yaw', type: 'range', min: -180, max: 180, step: 5, def: 0, unit: '°' },
+        { key: 'lens', label: 'Lens', type: 'select', options: ['24mm wide', '35mm', '50mm', '85mm portrait'], def: '35mm' },
+        { key: 'framing', label: 'Framing', type: 'select', options: ['close', 'medium', 'wide'], def: 'medium' },
+        { key: 'lighting', label: 'Lighting', type: 'select', options: ['soft window light', 'golden hour', 'overcast', 'studio key + fill', 'dramatic rim light'], def: 'golden hour' },
+        { key: 'mood', label: 'Mood', type: 'select', options: ['warm and bright', 'moody and cool', 'neutral documentary'], def: 'warm and bright' },
+        { key: 'aspect', label: 'Aspect ratio', type: 'select', options: ['1:1', '3:2', '4:5', '16:9'], def: '3:2' }
+      ],
+      coreReferences: ['ref-cs', 'ref-pv', 'ref-square']
+    },
+    {
+      id: 'studio-portrait',
+      eyebrow: 'Sample prompt',
+      title: 'Studio Portrait',
+      desc: 'A controlled studio setup for the same character. Vary the light and the lens.',
+      constants: {
+        scene_constant: 'the lead character in a clean studio, same wardrobe and styling as the established series',
+        style_constant: 'photoreal, seamless backdrop, catchlights in the eyes, consistent with the established series look'
+      },
+      template: 'A studio portrait of {{scene_constant}}. {{lens}}, {{angle}} angle, pitch {{pitch}} degrees. Lighting: {{lighting}}, {{mood}}. Backdrop {{backdrop}}. Aspect ratio {{aspect}}. {{style_constant}}',
+      variables: [
+        { key: 'lens', label: 'Lens', type: 'select', options: ['50mm', '85mm portrait', '105mm'], def: '85mm portrait' },
+        { key: 'angle', label: 'Angle', type: 'select', options: ['eye-level', 'low', 'high'], def: 'eye-level' },
+        { key: 'pitch', label: 'Pitch', type: 'range', min: -45, max: 45, step: 5, def: 0, unit: '°' },
+        { key: 'lighting', label: 'Lighting', type: 'select', options: ['soft key + fill', 'single softbox', 'dramatic rim light', 'high key'], def: 'soft key + fill' },
+        { key: 'mood', label: 'Mood', type: 'select', options: ['warm', 'cool', 'neutral'], def: 'warm' },
+        { key: 'backdrop', label: 'Backdrop', type: 'select', options: ['charcoal', 'teal', 'white', 'warm gray'], def: 'charcoal' },
+        { key: 'aspect', label: 'Aspect ratio', type: 'select', options: ['1:1', '4:5', '3:2'], def: '4:5' }
+      ],
+      coreReferences: ['ref-teal', 'ref-cs']
+    }
+  ];
+
+  // ── Helpers ──
+  function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function storeKey(id) { return 'promptstudio:' + id; }
+
+  function loadValues(p) {
+    var v = {};
+    p.variables.forEach(function (f) { v[f.key] = f.def; });
+    try {
+      var saved = JSON.parse(localStorage.getItem(storeKey(p.id)) || '{}');
+      p.variables.forEach(function (f) { if (saved[f.key] != null) v[f.key] = saved[f.key]; });
+    } catch (e) {}
+    return v;
+  }
+  function saveValues(p, v) { try { localStorage.setItem(storeKey(p.id), JSON.stringify(v)); } catch (e) {} }
+
+  function fill(template, constants, values) {
+    var all = {}; var k;
+    for (k in constants) all[k] = constants[k];
+    for (k in values) all[k] = values[k];
+    return template.replace(/\{\{(\w+)\}\}/g, function (_, key) { return all[key] != null ? all[key] : '{{' + key + '}}'; });
+  }
+  function fillHTML(template, constants, values) {
+    var all = {}; var k;
+    for (k in constants) all[k] = constants[k];
+    for (k in values) all[k] = values[k];
+    return esc(template).replace(/\{\{(\w+)\}\}/g, function (_, key) {
+      var isVar = values[key] != null;
+      var val = all[key] != null ? esc(all[key]) : '{{' + key + '}}';
+      return isVar ? '<span class="tok">' + val + '</span>' : val;
+    });
+  }
+
+  var toastTimer;
+  function toast(msg) {
+    var t = document.getElementById('ps-toast');
+    t.textContent = msg || 'Copied';
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove('show'); }, 1600);
+  }
+  function copyText(text, btn, label) {
+    function done() {
+      toast(label || 'Copied');
+      if (btn) { var o = btn.textContent; btn.classList.add('copied'); btn.textContent = '✓ Copied'; setTimeout(function () { btn.classList.remove('copied'); btn.textContent = o; }, 1800); }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { legacyCopy(text); done(); });
+    } else { legacyCopy(text); done(); }
+  }
+  function legacyCopy(text) {
+    var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (e) {} document.body.removeChild(ta);
+  }
+
+  // ── Render cards ──
+  var grid = document.getElementById('ps-grid');
+  PROMPTS.forEach(function (p) {
+    var card = el('div', 'ps-card');
+    card.appendChild(el('div', 'ps-card-eyebrow', esc(p.eyebrow)));
+    card.appendChild(el('h2', null, esc(p.title)));
+    card.appendChild(el('p', 'desc', esc(p.desc)));
+    var prev = el('div', 'preview', fillHTML(p.template, p.constants, defaults(p)));
+    card.appendChild(prev);
+    var acts = el('div', 'ps-card-actions');
+    var bCustom = el('button', 'btn btn-primary', 'Customize');
+    bCustom.addEventListener('click', function () { openModal(p); });
+    var bCopy = el('button', 'btn btn-ghost', 'Copy original');
+    bCopy.addEventListener('click', function () { copyText(fill(p.template, p.constants, defaults(p)), bCopy, 'Original copied'); });
+    acts.appendChild(bCustom); acts.appendChild(bCopy);
+    card.appendChild(acts);
+    grid.appendChild(card);
+  });
+  function defaults(p) { var v = {}; p.variables.forEach(function (f) { v[f.key] = f.def; }); return v; }
+
+  // ── Modal ──
+  var overlay = document.getElementById('ps-overlay');
+  var body = document.getElementById('ps-modal-body');
+  var titleEl = document.getElementById('ps-modal-title');
+
+  function openModal(p) {
+    titleEl.textContent = p.title;
+    body.innerHTML = '';
+    var values = loadValues(p);
+
+    // Group by simple headings
+    var groups = [
+      { title: 'Camera', keys: ['camera_height', 'angle', 'pitch', 'yaw', 'roll', 'lens'] },
+      { title: 'Framing & lighting', keys: ['framing', 'lighting', 'mood', 'backdrop'] },
+      { title: 'Output', keys: ['aspect'] }
+    ];
+    var used = {};
+    groups.forEach(function (g) {
+      var fields = p.variables.filter(function (f) { return g.keys.indexOf(f.key) >= 0; });
+      if (!fields.length) return;
+      var gEl = el('div', 'ps-group');
+      gEl.appendChild(el('div', 'ps-group-title', g.title));
+      var fWrap = el('div', 'ps-fields');
+      fields.forEach(function (f) { used[f.key] = 1; fWrap.appendChild(buildField(p, f, values)); });
+      gEl.appendChild(fWrap);
+      body.appendChild(gEl);
+    });
+    // Any variable not in a named group
+    var rest = p.variables.filter(function (f) { return !used[f.key]; });
+    if (rest.length) {
+      var gEl2 = el('div', 'ps-group');
+      gEl2.appendChild(el('div', 'ps-group-title', 'Other'));
+      var fWrap2 = el('div', 'ps-fields');
+      rest.forEach(function (f) { fWrap2.appendChild(buildField(p, f, values)); });
+      gEl2.appendChild(fWrap2); body.appendChild(gEl2);
+    }
+
+    // Output preview
+    body.appendChild(el('div', 'ps-out-title', 'Your prompt'));
+    var result = el('div', 'ps-result');
+    result.id = 'ps-result';
+    body.appendChild(result);
+
+    var rActs = el('div', 'ps-result-actions');
+    var bCopyP = el('button', 'btn btn-primary', 'Copy prompt');
+    bCopyP.addEventListener('click', function () { copyText(fill(p.template, p.constants, values), bCopyP, 'Prompt copied'); });
+    var bCopyOrig = el('button', 'btn btn-ghost', 'Copy original (unmodified)');
+    bCopyOrig.addEventListener('click', function () { copyText(fill(p.template, p.constants, defaults(p)), bCopyOrig, 'Original copied'); });
+    var bGpt = el('a', 'btn btn-orange', 'Open image generator &nearr;');
+    bGpt.href = 'https://chatgpt.com/'; bGpt.target = '_blank'; bGpt.rel = 'noopener';
+    rActs.appendChild(bCopyP); rActs.appendChild(bCopyOrig); rActs.appendChild(bGpt);
+    body.appendChild(rActs);
+
+    // Reference images
+    body.appendChild(buildRefs(p));
+
+    function refresh() { document.getElementById('ps-result').innerHTML = fillHTML(p.template, p.constants, values); }
+    refresh();
+    body._refresh = refresh;
+    body._values = values;
+    body._prompt = p;
+
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function buildField(p, f, values) {
+    var wrap = el('div', 'ps-field');
+    var lab = el('label', null, esc(f.label));
+    if (f.type === 'range') { var val = el('span', 'val', values[f.key] + (f.unit || '')); lab.appendChild(val); wrap._val = val; }
+    wrap.appendChild(lab);
+    var input;
+    if (f.type === 'select') {
+      input = el('select');
+      f.options.forEach(function (o) { var opt = el('option', null, esc(o)); opt.value = o; if (o === values[f.key]) opt.selected = true; input.appendChild(opt); });
+      input.addEventListener('change', function () { values[f.key] = input.value; commit(p, values); });
+    } else if (f.type === 'range') {
+      input = el('input'); input.type = 'range'; input.min = f.min; input.max = f.max; input.step = f.step || 1; input.value = values[f.key];
+      input.addEventListener('input', function () { values[f.key] = input.value; if (wrap._val) wrap._val.textContent = input.value + (f.unit || ''); commit(p, values); });
+    } else {
+      input = el('input'); input.type = 'text'; input.value = values[f.key] || '';
+      input.addEventListener('input', function () { values[f.key] = input.value; commit(p, values); });
+    }
+    wrap.appendChild(input);
+    return wrap;
+  }
+  function commit(p, values) { if (body._refresh) body._refresh(); saveValues(p, values); }
+
+  function buildRefs(p) {
+    var wrap = el('div');
+    var head = el('div', 'ps-refs-head');
+    head.appendChild(el('div', 'ps-out-title', 'Reference images'));
+    var urls = p.coreReferences.map(function (id) { return REFERENCES[id] ? REFERENCES[id].url : null; }).filter(Boolean);
+    var bAll = el('button', 'btn btn-ghost btn-sm', 'Copy all URLs');
+    bAll.addEventListener('click', function () { copyText(urls.join('\n'), bAll, 'All URLs copied'); });
+    head.appendChild(bAll);
+    wrap.appendChild(head);
+    var grid = el('div', 'ps-refs');
+    p.coreReferences.forEach(function (id) {
+      var r = REFERENCES[id]; if (!r) return;
+      var cell = el('div', 'ps-ref');
+      var thumb = el('div', 'ps-ref-thumb');
+      var img = el('img'); img.src = r.url; img.alt = r.label; img.loading = 'lazy';
+      thumb.appendChild(img); cell.appendChild(thumb);
+      var meta = el('div', 'ps-ref-meta');
+      meta.appendChild(el('div', 'ps-ref-label', esc(r.label)));
+      var bU = el('button', 'btn btn-ghost btn-sm', 'Copy URL');
+      bU.addEventListener('click', function () { copyText(r.url, bU, 'URL copied'); });
+      meta.appendChild(bU); cell.appendChild(meta);
+      grid.appendChild(cell);
+    });
+    wrap.appendChild(grid);
+    return wrap;
+  }
+
+  function closeModal() { overlay.classList.remove('open'); document.body.style.overflow = ''; }
+  document.getElementById('ps-close').addEventListener('click', closeModal);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal(); });
+})();
+</script>
+</body>
+</html>
