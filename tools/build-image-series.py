@@ -500,38 +500,55 @@ CAMSET_ICON=f"{SITE}/assets/Icons/assignment/camera-settings-v1.svg"
 RAW_BADGE=f"{SITE}/assets/Icons/assignment/raw-v2.png"
 
 def capture_panel():
-    # Camera settings screen mimic (inline styles, Canvas-safe). Values from Chris's PSD:
-    # shutter 1/500 (the one students adjust), aperture F6.3, ISO 100, RAW, light meter balanced.
+    # Camera-settings screen mimic. Canvas-safe: a fixed 3-column table. The box border/fill lives
+    # on each <td> so table row-equalization makes the boxes equal height; border-spacing gives an
+    # even 14px margin around every box; Light Meter (colspan 2) right edge aligns with Aperture and
+    # Image Quality aligns under ISO. Values from Chris's PSD: shutter 1/500 (the one students
+    # adjust), aperture F6.3, ISO 100, RAW, light meter balanced.
     red="#f90101"
-    def box(label, inner, flex="1 1 0", minw="120px", tag=""):
-        return (f'<div style="background:rgba(0,0,0,0.55);border:2px solid {red};padding:12px 14px 13px;box-sizing:border-box;flex:{flex};min-width:{minw};position:relative;">'
-          f'{tag}<div style="font-family:Arial,sans-serif;font-size:9.5pt;letter-spacing:0.14em;text-transform:uppercase;color:{red};margin-bottom:7px;"><strong>{label}</strong></div>{inner}</div>')
-    def val(v, sub=""):
-        s=(f'<div style="font-family:Arial,sans-serif;font-size:10.5pt;color:#ffb0b0;margin-top:5px;line-height:1.2;">{sub}</div>' if sub else "")
-        return f'<div style="font-family:Arial,sans-serif;font-size:23pt;color:#ffffff;line-height:1;"><strong>{v}</strong></div>{s}'
-    ticks=""
-    labels=["-3","","-2","","-1","","0","","+1","","+2","","+3"]
-    for t in labels:
-        h="16px" if t else "9px"; col="#ffffff" if t else "rgba(255,255,255,0.35)"
-        ticks+=f'<div style="width:2px;height:{h};background:{col};"></div>'
-    numrow=""
-    for t in ["-3","-2","-1","0","+1","+2","+3"]:
-        numrow+=f'<div style="font-family:Arial,sans-serif;font-size:9pt;color:rgba(255,255,255,0.6);"><strong>{t}</strong></div>'
-    meter=('<div style="display:flex;align-items:flex-end;justify-content:space-between;height:20px;margin:2px 0 4px;">'+ticks+'</div>'
-      '<div style="display:flex;justify-content:space-between;margin-bottom:6px;">'+numrow+'</div>'
-      '<div style="position:relative;height:22px;">'
-      '<div style="position:absolute;left:50%;top:0;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid #26de78;"></div>'
-      '<div style="position:absolute;left:0;right:0;top:13px;text-align:center;font-family:Arial,sans-serif;font-size:9pt;letter-spacing:0.12em;text-transform:uppercase;color:#26de78;"><strong>Balanced (outdoors)</strong></div></div>')
-    tag=f'<div style="position:absolute;top:-11px;right:10px;background:{red};color:#ffffff;font-family:Arial,sans-serif;font-size:8pt;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px;"><strong>Change this</strong></div>'
-    raw=f'<img src="{RAW_BADGE}" alt="RAW image-capture format" style="height:34px;width:auto;display:block;margin-top:3px;" />'
-    row1=('<div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px;">'
-      + box("Shutter Speed", val("1/500","adjust to balance the light meter"), tag=tag)
-      + box("Aperture", val("F6.3")) + box("ISO", val("100")) + '</div>')
-    row2=('<div style="display:flex;flex-wrap:wrap;gap:12px;">'
-      + box("Light Meter", meter, flex="2 1 0", minw="230px")
-      + box("Image Quality", raw, flex="1 1 0", minw="150px") + '</div>')
-    return ('<div style="background:linear-gradient(180deg,#0c1010 0%,#050707 100%);border:1px solid rgba(249,1,1,0.35);padding:16px;box-sizing:border-box;margin:4px 0 2px;max-width:520px;">'
-      + row1 + row2 + '</div>')
+    boxtd=(f'border:2px solid {red};background:rgba(0,0,0,0.55);box-sizing:border-box;'
+           'text-align:center;vertical-align:top;padding:14px 12px 16px;')
+    def label(t):
+        return (f'<div style="font-family:Arial,sans-serif;font-size:9.5pt;letter-spacing:0.14em;'
+                f'text-transform:uppercase;color:{red};line-height:1.25;"><strong>{t}</strong></div>')
+    def val(v):
+        return (f'<div style="font-family:Arial,sans-serif;font-size:24pt;color:#ffffff;line-height:1.05;'
+                f'margin-top:9px;"><strong>{v}</strong></div>')
+    # Shutter box: centered "Change this" banner straddling the top edge, then the sub line.
+    tag=(f'<div style="position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:{red};'
+         'color:#ffffff;font-family:Arial,sans-serif;font-size:8pt;letter-spacing:0.1em;text-transform:uppercase;'
+         'padding:3px 10px;white-space:nowrap;"><strong>Change this</strong></div>')
+    sub=('<div style="font-family:Arial,sans-serif;font-size:10.5pt;color:#ffb0b0;margin-top:8px;'
+         'line-height:1.3;">adjust to balance the light meter</div>')
+    shutter=f'{tag}{label("Shutter")}{val("1/500")}{sub}'
+    # Light meter: 13 equal columns for BOTH ticks and numbers, so each number centers exactly
+    # under its tall line. Even indices are the tall (labelled) lines.
+    labels13=["-3","","-2","","-1","","0","","+1","","+2","","+3"]
+    tickcols=""; numcols=""
+    for i in range(13):
+        tall=(i%2==0); h="17px" if tall else "9px"; c="#ffffff" if tall else "rgba(255,255,255,0.35)"
+        tickcols+=(f'<div style="flex:1;text-align:center;"><span style="display:inline-block;width:2px;'
+                   f'height:{h};background:{c};"></span></div>')
+        n=labels13[i]; inner=(f'<strong>{n}</strong>' if n else '&nbsp;')
+        numcols+=(f'<div style="flex:1;text-align:center;font-family:Arial,sans-serif;font-size:9pt;'
+                  f'color:rgba(255,255,255,0.65);">{inner}</div>')
+    meter=(f'{label("Light Meter")}'
+      f'<div style="display:flex;align-items:flex-end;height:19px;margin-top:11px;">{tickcols}</div>'
+      f'<div style="display:flex;margin-top:5px;">{numcols}</div>'
+      '<div style="text-align:center;margin-top:9px;"><span style="display:inline-block;width:0;height:0;'
+      'border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:11px solid #26de78;"></span></div>'
+      '<div style="text-align:center;margin-top:6px;font-family:Arial,sans-serif;font-size:9pt;'
+      'letter-spacing:0.12em;text-transform:uppercase;color:#26de78;"><strong>Balanced (outdoors)</strong></div>')
+    # Image Quality: RAW badge at 2x, centered.
+    raw=(f'{label("Image Quality")}'
+         f'<img src="{RAW_BADGE}" alt="RAW image-capture format" style="height:68px;width:auto;display:block;margin:18px auto 0;" />')
+    return (f'<div style="background:linear-gradient(180deg,#0c1010 0%,#050707 100%);border:1px solid rgba(249,1,1,0.35);'
+      'padding:0;box-sizing:border-box;max-width:520px;margin:0 auto;">'
+      '<table style="width:100%;border-collapse:separate;border-spacing:14px;table-layout:fixed;"><tbody>'
+      f'<tr><td style="{boxtd}position:relative;">{shutter}</td><td style="{boxtd}">{label("Aperture")}{val("F6.3")}</td>'
+      f'<td style="{boxtd}">{label("ISO")}{val("100")}</td></tr>'
+      f'<tr><td colspan="2" style="{boxtd}">{meter}</td><td style="{boxtd}">{raw}</td></tr>'
+      '</tbody></table></div>')
 
 def camera_settings_section(es):
     red="#f90101"
@@ -545,10 +562,15 @@ def camera_settings_section(es):
       f'<img src="{CAMSET_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
       f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#ff8f8f;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>'
       f'<div style="height:2px;background:{red};width:60px;margin-bottom:18px;"></div>')
+    lead_html=f'<div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{lead}</span></div>'
     note_box=f'<div style="background:rgba(249,1,1,0.10);border:1px solid rgba(249,1,1,0.30);border-left:4px solid {red};padding:11px 14px;margin:14px 0 0;font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.55;">{note_t}</div>'
+    # The whole panel floats to the right (its own column), top-aligned with the title bar; the
+    # teaching text (title, lead, note) flows on the left. Wraps below the text when narrow.
     return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      + hdr + f'<div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{lead}</span></div>'
-      + capture_panel() + note_box + '</div>')
+      '<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:18px 30px;">'
+      f'<div style="flex:1 1 300px;min-width:0;">{hdr}{lead_html}{note_box}</div>'
+      f'<div style="flex:1 1 380px;min-width:300px;">{capture_panel()}</div>'
+      '</div></div>')
 
 def step01():
     en=banner("Image Series Photo Walk &bull; Step 1","Capture &amp; Import","Set RAW, capture your series, offload to OneDrive, and import.","#espanol","Clic para Espa&ntilde;ol")

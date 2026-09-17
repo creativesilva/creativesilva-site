@@ -418,10 +418,14 @@
     var bar = document.createElement('div');
     bar.className = 'silva-uni-titlebar';
 
+    // The title reflects the loaded page: the module/step title (first segment of the page
+    // <title>), linked back to that module's overview. Falls back to the catalog name.
     var title = document.createElement('a');
     title.className = 'silva-uni-title';
-    title.href = '/curriculum.html';
-    title.textContent = 'Curriculum Catalog';
+    var at = locate();
+    title.href = at ? ('/' + MODULES[at.g][0].replace(/^\//, '')) : '/curriculum.html';
+    var docTitle = (document.title || '').split('|')[0].trim();
+    title.textContent = docTitle || 'Curriculum Catalog';
     bar.appendChild(title);
 
     var cal = document.createElement('a');
