@@ -404,248 +404,142 @@
     return a;
   }
 
-  function injectBurger(navInner, nav) {
-    var burger = document.createElement('button');
-    burger.type = 'button';
-    burger.className = 'silva-burger';
-    burger.setAttribute('aria-label', 'Toggle navigation menu');
-    burger.setAttribute('aria-expanded', 'false');
-    burger.innerHTML = '<span></span><span></span><span></span>';
+  // ===== Unified header on module pages (teacher-only, outside #top). =====
+  // The SAME two-row header the catalog home shows, so there is ONE header sitewide:
+  //   Row 1 (titlebar): CURRICULUM CATALOG title + CALENDAR + search.
+  //   Row 2 (catbar):   CS logo + CATALOG dropdown + BUILD RESOURCES + the module
+  //                     pager (Prev/Next + page numbers + BUILD / COPY URL / COPY HTML).
+  // The pager and copy pills are the "internal module navigation": they only appear
+  // here, on a loaded module page, never on the catalog home. Search jumps to the
+  // catalog and runs there (a module page has no catalog index to search).
 
-    burger.addEventListener('click', function () {
-      var open = nav.classList.toggle('menu-open');
-      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-
-    // Close menu when any link inside the open nav is clicked
-    navInner.addEventListener('click', function (e) {
-      var target = e.target;
-      while (target && target !== navInner) {
-        if (target.tagName === 'A' && nav.classList.contains('menu-open')) {
-          nav.classList.remove('menu-open');
-          burger.setAttribute('aria-expanded', 'false');
-          break;
-        }
-        target = target.parentNode;
-      }
-    });
-
-    navInner.appendChild(burger);
-  }
-
-  // Turn the top-left "Curriculum Catalog" breadcrumb into a click dropdown:
-  // Catalog -> course list -> (click a course) its modules -> (click a module) its overview.
-  // Accordion style so it works the same on iPad (touch) and desktop (mouse).
-  function injectCatalogMenu() {
-    var crumb = document.querySelector('.silva-breadcrumb a[href$="curriculum.html"]');
-    if (!crumb || crumb.getAttribute('data-catmenu') === '1') { return; }
-    crumb.setAttribute('data-catmenu', '1');
-
-    var wrap = document.createElement('span');
-    wrap.className = 'silva-catmenu';
-    crumb.parentNode.insertBefore(wrap, crumb);
-    wrap.appendChild(crumb);
-    crumb.classList.add('silva-catmenu-trigger');
-    crumb.textContent = 'Catalog';   // teacher-facing; no need for "Curriculum", no down-caret
-
-    var panel = document.createElement('div');
-    panel.className = 'silva-catmenu-panel';
-    panel.setAttribute('role', 'menu');
-
-    var full = document.createElement('a');
-    full.href = '/curriculum.html';
-    full.className = 'silva-catmenu-full';
-    full.innerHTML = '<span class="cm-caret">&#9656;</span>Open full catalog';
-    panel.appendChild(full);   // first item, before the courses
-
-    // Build Resources: the teacher build/design tools, right below the full catalog.
-    var build = document.createElement('a');
-    build.href = '/curriculum.html#build-resources';
-    build.className = 'silva-catmenu-full silva-catmenu-build';
-    build.innerHTML = '<span class="cm-caret">&#9656;</span>Build Resources';
-    panel.appendChild(build);
-
-    // Faint divider, then the courses.
-    var div = document.createElement('div');
-    div.className = 'silva-catmenu-div';
-    panel.appendChild(div);
-
-    MENU.forEach(function (c) {
-      var course = document.createElement('button');
-      course.type = 'button';
-      course.className = 'silva-catmenu-course';
-      course.innerHTML = '<span class="cm-caret">&#9656;</span>' + c.course;
-      var sub = document.createElement('div');
-      sub.className = 'silva-catmenu-modules';
-      c.modules.forEach(function (mod) {
-        var a = document.createElement('a');
-        a.href = mod.url;
-        a.className = 'silva-catmenu-module';
-        a.textContent = mod.name;
-        sub.appendChild(a);
-      });
-      course.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var willOpen = !course.classList.contains('open');
-        panel.querySelectorAll('.silva-catmenu-course.open').forEach(function (o) { o.classList.remove('open'); });
-        panel.querySelectorAll('.silva-catmenu-modules.open').forEach(function (o) { o.classList.remove('open'); });
-        if (willOpen) { course.classList.add('open'); sub.classList.add('open'); }
-      });
-      panel.appendChild(course);
-      panel.appendChild(sub);
-    });
-
-    // Leave the catalog for the portfolio site (last item, below the courses)
-    var leave = document.createElement('a');
-    leave.href = '/';
-    leave.className = 'silva-catmenu-leave';
-    leave.innerHTML = '<span class="cm-caret">&#9656;</span>creativesilva.com';
-    panel.appendChild(leave);
-
-    wrap.appendChild(panel);
-
-    // .silva-breadcrumb has overflow:hidden (for truncation); lift it only while open
-    var bc = crumb.closest('.silva-breadcrumb');
-    function setOpen(open) {
-      wrap.classList.toggle('open', open);
-      if (bc) { bc.classList.toggle('catmenu-open', open); }
-    }
-    crumb.addEventListener('click', function (e) {
-      e.preventDefault();
-      setOpen(!wrap.classList.contains('open'));
-    });
-    document.addEventListener('click', function (e) {
-      if (!wrap.contains(e.target)) { setOpen(false); }
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') { setOpen(false); }
-    });
-  }
-
-  // ===== Stacked "parent" catalog bar on module pages (teacher-only, outside #top). =====
-  // Mirrors the catalog home's CATALOG bar: CS logo + course dropdowns + Build Resources +
-  // a search box. It is inserted as the first row of the sticky .silva-nav, so it stacks
-  // above the breadcrumb/pager and both stay pinned. Search jumps to the catalog and runs
-  // there (a module page has no catalog index to search).
-  function buildCatBar() {
+  // Row 1: big title (links back to the catalog), Calendar button, catalog search.
+  function buildTitlebar() {
     var bar = document.createElement('div');
-    bar.className = 'silva-catbar';
-    var inner = document.createElement('div');
-    inner.className = 'silva-catbar-inner';
+    bar.className = 'silva-uni-titlebar';
+
+    var title = document.createElement('a');
+    title.className = 'silva-uni-title';
+    title.href = '/curriculum.html';
+    title.textContent = 'Curriculum Catalog';
+    bar.appendChild(title);
+
+    var cal = document.createElement('a');
+    cal.className = 'silva-uni-cal';
+    cal.href = '/calendar.html';
+    cal.textContent = 'Calendar';
+    bar.appendChild(cal);
+
+    var form = document.createElement('form');
+    form.className = 'silva-uni-search';
+    form.setAttribute('role', 'search');
+    var input = document.createElement('input');
+    input.type = 'search';
+    input.className = 'silva-uni-search-input';
+    input.placeholder = 'Search modules, images, resources…';
+    input.setAttribute('aria-label', 'Search the catalog');
+    input.autocomplete = 'off';
+    input.setAttribute('data-1p-ignore', '');
+    input.setAttribute('data-lpignore', 'true');
+    input.setAttribute('data-form-type', 'other');
+    form.appendChild(input);
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var q = input.value.trim();
+      location.href = q ? '/curriculum.html?q=' + encodeURIComponent(q) : '/curriculum.html';
+    });
+    bar.appendChild(form);
+    return bar;
+  }
+
+  // Row 2: CS logo + one "Catalog" dropdown (all courses -> modules) + Build Resources,
+  // then the module pager pushed to the right (module pages only).
+  function buildCatalogRow() {
+    var bar = document.createElement('div');
+    bar.className = 'silva-uni-bar';
 
     var logo = document.createElement('a');
-    logo.className = 'silva-catbar-logo';
-    logo.href = '/curriculum.html';
-    logo.setAttribute('aria-label', 'Curriculum Catalog');
+    logo.className = 'silva-uni-logo';
+    logo.href = '/index.html';
+    logo.setAttribute('aria-label', 'creativesilva.com');
     logo.innerHTML = '<img src="/logos/CS_Logo_Only_Teal.svg" alt="Chris Silva" />';
-    inner.appendChild(logo);
+    bar.appendChild(logo);
 
-    var items = document.createElement('div');
-    items.className = 'silva-catbar-items';
-    function closeAll() {
-      var open = items.querySelectorAll('.silva-cbc.open');
-      for (var i = 0; i < open.length; i++) { open[i].classList.remove('open'); }
-    }
+    var cat = document.createElement('div');
+    cat.className = 'silva-uni-cat';
+    var trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'silva-uni-cattrigger';
+    trigger.setAttribute('aria-haspopup', 'true');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.innerHTML = 'Catalog <span class="silva-uni-caret">&#9662;</span>';
+    var menu = document.createElement('div');
+    menu.className = 'silva-uni-catmenu';
     MENU.forEach(function (group) {
       if (!group.modules || !group.modules.length) { return; }
-      var wrap = document.createElement('div');
-      wrap.className = 'silva-cbc';
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'silva-cbc-trigger';
-      btn.setAttribute('aria-haspopup', 'true');
-      btn.setAttribute('aria-expanded', 'false');
-      btn.innerHTML = group.course + ' <span class="silva-cbc-caret">&#9662;</span>';
-      var menu = document.createElement('div');
-      menu.className = 'silva-cbc-menu';
+      var hd = document.createElement('div');
+      hd.className = 'silva-uni-cathd';
+      hd.textContent = group.course;
+      menu.appendChild(hd);
       group.modules.forEach(function (m, mi) {
         var a = document.createElement('a');
         a.href = m.url;
-        a.className = 'silva-cbc-mod';
+        a.className = 'silva-uni-catmod';
         a.textContent = String(mi + 1).padStart(2, '0') + ' ' + m.name;
         menu.appendChild(a);
       });
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var willOpen = !wrap.classList.contains('open');
-        closeAll();
-        if (willOpen) { wrap.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
-        else { btn.setAttribute('aria-expanded', 'false'); }
-      });
-      wrap.appendChild(btn);
-      wrap.appendChild(menu);
-      items.appendChild(wrap);
     });
-
-    var cal = document.createElement('a');
-    cal.className = 'silva-catbar-cal';
-    cal.href = '/calendar.html';
-    cal.textContent = 'Calendar';
-    items.appendChild(cal);
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var willOpen = !cat.classList.contains('open');
+      cat.classList.toggle('open', willOpen);
+      trigger.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    });
+    cat.appendChild(trigger);
+    cat.appendChild(menu);
+    bar.appendChild(cat);
 
     var build = document.createElement('a');
-    build.className = 'silva-catbar-build';
+    build.className = 'silva-uni-build';
     build.href = '/curriculum.html#build-resources';
     build.textContent = 'Build Resources';
-    items.appendChild(build);
-    inner.appendChild(items);
+    bar.appendChild(build);
 
-    var form = document.createElement('form');
-    form.className = 'silva-catbar-search';
-    form.setAttribute('role', 'search');
-    var sInput = document.createElement('input');
-    sInput.type = 'search';
-    sInput.placeholder = 'Search catalog…';
-    sInput.setAttribute('aria-label', 'Search the catalog');
-    sInput.autocomplete = 'off';
-    form.appendChild(sInput);
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var q = sInput.value.trim();
-      if (q) { location.href = '/curriculum.html?q=' + encodeURIComponent(q); }
+    // The module pager (Prev/Next + page numbers + BUILD / COPY URL / COPY HTML) is
+    // the internal module navigation: it only exists on a loaded module page.
+    var pager = buildPager();
+    if (pager) { pager.classList.add('pg-top'); bar.appendChild(pager); }
+
+    document.addEventListener('click', function (e) {
+      if (!cat.contains(e.target)) { cat.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
     });
-    inner.appendChild(form);
-
-    bar.appendChild(inner);
-    document.addEventListener('click', function (e) { if (!bar.contains(e.target)) { closeAll(); } });
     return bar;
   }
 
   function init() {
     var nav = document.querySelector('.silva-nav');
-    var navInner = document.querySelector('.silva-nav-inner');
+    if (!nav) { return; }
 
-    // Bottom pager (centered): carries its own COPY URL + COPY HTML at the right.
+    // Bottom pager (centered) for narrow screens, appended to the page body.
     var host = document.querySelector('.silva-page');
     var bottom = buildPager();
     if (host && bottom) { bottom.classList.add('pg-bottom'); host.appendChild(bottom); }
 
-    if (!nav || !navInner) { return; }
+    // Retire the legacy breadcrumb row: the unified header (Catalog dropdown + pager)
+    // replaces the breadcrumb + dots + step-nav + copy/download buttons entirely.
+    var oldInner = nav.querySelector('.silva-nav-inner');
+    if (oldInner) { oldInner.parentNode.removeChild(oldInner); }
 
-    // Top pager: same pill, sits in the nav bar. Since the pager carries its own
-    // prev/next + page numbers + COPY buttons, drop the old toolbar buttons (Copy,
-    // Download) and the now-redundant dot nav + step-nav + divider (the pager fully
-    // replaces the M/1/2/3 circle dots; the bottom pager covers mobile).
-    var top = buildPager();
-    if (top) {
-      var dl = navInner.querySelector('.silva-download-btn');
-      if (dl) { dl.parentNode.removeChild(dl); }
-      var cbs = navInner.querySelectorAll('.silva-copy-btn');
-      for (var ci = 0; ci < cbs.length; ci++) { cbs[ci].parentNode.removeChild(cbs[ci]); }
-      var sd = navInner.querySelector('.silva-dots');
-      if (sd) { sd.style.display = 'none'; }
-      var sn = navInner.querySelector('.silva-step-nav');
-      if (sn) { sn.style.display = 'none'; }
-      var nd = navInner.querySelector('.silva-nav-div');
-      if (nd) { nd.style.display = 'none'; }
-      top.classList.add('pg-top');
-      navInner.appendChild(top);
-    }
+    // Build the one header, same as the catalog home: title row, then catalog row.
+    nav.insertBefore(buildCatalogRow(), nav.firstChild);
+    nav.insertBefore(buildTitlebar(), nav.firstChild);
 
-    injectBurger(navInner, nav);
-    injectCatalogMenu();
-    // Stacked catalog bar (parent nav) above the breadcrumb/pager row, inside the sticky nav.
-    nav.insertBefore(buildCatBar(), nav.firstChild);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        var open = nav.querySelectorAll('.silva-uni-cat.open');
+        for (var i = 0; i < open.length; i++) { open[i].classList.remove('open'); }
+      }
+    });
   }
 
   if (document.readyState === 'loading') {
