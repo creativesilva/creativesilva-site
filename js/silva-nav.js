@@ -352,7 +352,6 @@
     next.innerHTML = nextLabel;
     pager.appendChild(next);
 
-    pager.appendChild(makeBuildBtn());
     pager.appendChild(makeUrlBtn());
     pager.appendChild(makeCopyBtn());
     return pager;
@@ -483,6 +482,16 @@
     catMain.className = 'silva-uni-catmod silva-uni-catmain';
     catMain.innerHTML = '&#8592;&nbsp; Main Catalog';
     menu.appendChild(catMain);
+    var catTeacher = document.createElement('a');
+    catTeacher.href = 'https://www.creativesilva.com/curriculum.html#teacher-resources';
+    catTeacher.className = 'silva-uni-catmod silva-uni-catteacher';
+    catTeacher.textContent = 'Teacher Resources';
+    menu.appendChild(catTeacher);
+    var catBuildR = document.createElement('a');
+    catBuildR.href = 'https://www.creativesilva.com/curriculum.html#build-resources';
+    catBuildR.className = 'silva-uni-catmod silva-uni-catsub';
+    catBuildR.textContent = 'Build Resources';
+    menu.appendChild(catBuildR);
     MENU.forEach(function (group) {
       if (!group.modules || !group.modules.length) { return; }
       var hd = document.createElement('div');

@@ -1018,6 +1018,7 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.12); margin-bottom: 5px; padding-bottom: 12px;
     }
     .cbc-mod.cbc-main:hover { background: rgba(0, 184, 184, 0.16); color: #fff; }
+    .cbc-mod.cbc-sub { padding-left: 34px; }
     /* Course grouping labels inside the unified Catalog menu. */
     .cbc-course-hd {
       font-family: var(--font-head, 'Oswald', sans-serif); font-size: 0.6rem; font-weight: 700;
@@ -2651,6 +2652,18 @@
       catMain.className = 'cbc-mod cbc-main';
       catMain.innerHTML = '&#8592;&nbsp; Main Catalog';
       catMenu.appendChild(catMain);
+      var catTeacher = document.createElement('a');
+      catTeacher.href = '#teacher-resources';
+      catTeacher.className = 'cbc-mod cbc-teacher';
+      catTeacher.textContent = 'Teacher Resources';
+      catTeacher.addEventListener('click', function () { var d = document.getElementById('teacher-resources'); if (d) { d.open = true; } });
+      catMenu.appendChild(catTeacher);
+      var catBuildR = document.createElement('a');
+      catBuildR.href = '#build-resources';
+      catBuildR.className = 'cbc-mod cbc-sub';
+      catBuildR.textContent = 'Build Resources';
+      catBuildR.addEventListener('click', function () { var d = document.getElementById('build-resources'); if (d) { d.open = true; } });
+      catMenu.appendChild(catBuildR);
       ['da1a', 'photo1a', 'photo2a'].forEach(function (cid) {
         var course = COURSES.find(function (c) { return c.id === cid; });
         var mods = MODULES.filter(function (m) {
@@ -2679,13 +2692,6 @@
       catWrap.appendChild(catBtn);
       catWrap.appendChild(catMenu);
       items.appendChild(catWrap);
-
-      var build = document.createElement('a');
-      build.className = 'cat-bar-item cat-bar-build';
-      build.href = '#build-resources';
-      build.textContent = 'Build Resources';
-      build.addEventListener('click', function () { var d = document.getElementById('build-resources'); if (d) { d.open = true; } });
-      items.appendChild(build);
 
       inner.appendChild(items);
       bar.appendChild(inner);
