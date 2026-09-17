@@ -50,9 +50,9 @@ body {
 .silva-uni-inner { max-width: var(--max-width, 1200px); margin: 0 auto; padding: 0 32px; }
 .silva-uni-titlebar { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; padding: 16px 0 15px; }
 .silva-uni-title {
-  margin: 0; flex: 0 1 auto; text-decoration: none;
+  margin: 0; flex: 0 1 auto; min-width: 0; text-decoration: none;
   font-family: 'Oswald', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.005em;
-  font-size: clamp(1.45rem, 2.9vw, 2.05rem); line-height: 1; color: #ffffff; transition: color 0.15s ease;
+  font-size: clamp(1.45rem, 2.9vw, 2.05rem); line-height: 1.05; color: #ffffff; transition: color 0.15s ease;
 }
 .silva-uni-title:hover { color: #9df0f0; }
 .silva-uni-cal {

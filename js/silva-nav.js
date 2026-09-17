@@ -439,7 +439,8 @@
     var searchBtn = document.createElement('a');
     searchBtn.className = 'silva-uni-searchbtn';
     searchBtn.href = '/curriculum.html?search=1';
-    searchBtn.textContent = 'Search Catalog';
+    searchBtn.textContent = 'Search';
+    searchBtn.setAttribute('aria-label', 'Search the catalog');
     bar.appendChild(searchBtn);
 
     // Rolling class-period countdown (live from the pvhs_tools schedule), top-right by search.
