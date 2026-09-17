@@ -558,11 +558,11 @@
       btn.innerHTML = group.course + ' <span class="silva-cbc-caret">&#9662;</span>';
       var menu = document.createElement('div');
       menu.className = 'silva-cbc-menu';
-      group.modules.forEach(function (m) {
+      group.modules.forEach(function (m, mi) {
         var a = document.createElement('a');
         a.href = m.url;
         a.className = 'silva-cbc-mod';
-        a.textContent = m.name;
+        a.textContent = String(mi + 1).padStart(2, '0') + ' ' + m.name;
         menu.appendChild(a);
       });
       btn.addEventListener('click', function (e) {

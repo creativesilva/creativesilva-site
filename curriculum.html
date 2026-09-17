@@ -976,7 +976,7 @@
       <img src="https://www.creativesilva.com/assets/PV_Logo_Full.png" alt="PVHS" />
       <h2>Curriculum Catalog</h2>
       <p>Private access only.<br>Enter your code to continue.</p>
-      <input type="password" id="pin-input" inputmode="numeric" autocomplete="off" placeholder="••••••" maxlength="10" />
+      <input type="text" id="pin-input" inputmode="numeric" autocomplete="off" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="••••••" maxlength="10" style="-webkit-text-security:disc;" />
       <button onclick="silvaCheckPin()">Continue</button>
       <div class="pin-error" id="pin-error"></div>
     </div>
@@ -1032,7 +1032,7 @@
         <div class="catalog-titlebar">
           <h1 class="page-title">Curriculum Catalog</h1>
           <div class="catalog-search">
-            <input type="search" id="catalog-search-input" class="catalog-search-input" placeholder="Search modules, images, resources&hellip;" autocomplete="off" spellcheck="false" aria-label="Search the catalog" />
+            <input type="search" id="catalog-search-input" class="catalog-search-input" placeholder="Search modules, images, resources&hellip;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-1p-ignore data-lpignore="true" data-form-type="other" aria-label="Search the catalog" />
             <div class="catalog-search-panel" id="catalog-search-panel" role="listbox" hidden></div>
           </div>
         </div>
@@ -1061,7 +1061,7 @@
                 <div class="char-gate" id="char-gate">
                   <p class="char-gate-label">Password required</p>
                   <div class="char-gate-row">
-                    <input type="password" id="char-pin" inputmode="numeric" autocomplete="off" placeholder="Enter password" />
+                    <input type="text" id="char-pin" inputmode="numeric" autocomplete="off" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="Enter password" style="-webkit-text-security:disc;" />
                     <button type="button" id="char-pin-btn">Unlock</button>
                   </div>
                   <p class="char-gate-err" id="char-pin-err">Incorrect password.</p>
@@ -2445,7 +2445,7 @@
           var a = document.createElement('a');
           a.href = '/' + m.url.replace(/^\//, '');
           a.className = 'cbc-mod';
-          a.textContent = m.name.replace(/^Module\s*\d+:\s*/i, '');
+          a.textContent = m.name.replace(/^Module\s*(\d+):\s*/i, '$1 ');
           menu.appendChild(a);
         });
         btn.addEventListener('click', function (e) {
