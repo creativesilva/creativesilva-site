@@ -530,7 +530,7 @@ def capture_panel():
     row2=('<div style="display:flex;flex-wrap:wrap;gap:12px;">'
       + box("Light Meter", meter, flex="2 1 0", minw="230px")
       + box("Image Quality", raw, flex="1 1 0", minw="150px") + '</div>')
-    return ('<div style="background:linear-gradient(180deg,#0c1010 0%,#050707 100%);border:1px solid rgba(249,1,1,0.35);padding:16px;box-sizing:border-box;margin:4px 0 2px;">'
+    return ('<div style="background:linear-gradient(180deg,#0c1010 0%,#050707 100%);border:1px solid rgba(249,1,1,0.35);padding:16px;box-sizing:border-box;margin:4px 0 2px;max-width:520px;">'
       + row1 + row2 + '</div>')
 
 def camera_settings_section(es):
