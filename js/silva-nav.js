@@ -479,6 +479,12 @@
     trigger.innerHTML = 'Catalog <span class="silva-uni-caret">&#9662;</span>';
     var menu = document.createElement('div');
     menu.className = 'silva-uni-catmenu';
+    // First item: a "Main Catalog" back-link to the master catalog (return point from any page).
+    var catMain = document.createElement('a');
+    catMain.href = '/curriculum.html';
+    catMain.className = 'silva-uni-catmod silva-uni-catmain';
+    catMain.innerHTML = '&#8592;&nbsp; Main Catalog';
+    menu.appendChild(catMain);
     MENU.forEach(function (group) {
       if (!group.modules || !group.modules.length) { return; }
       var hd = document.createElement('div');

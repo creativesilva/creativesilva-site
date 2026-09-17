@@ -847,14 +847,20 @@
        (title / CS logo) and right edges (search / Build) align to the
        page content column. Backdrop blur ghosts content underneath.
        ───────────────────────────────────────────────────────────── */
+    /* Full-width sticky header, flush to the top of the page (matches the module .silva-nav):
+       a teal top rule, then the glass bar. Its inner content is centered to the page column. */
     .catalog-sticky {
-      position: sticky; top: 0; z-index: 500; margin: 0 0 28px;
+      position: sticky; top: 0; z-index: 500; margin: 0;
       background: linear-gradient(180deg, rgba(4, 13, 13, 0.88) 0%, rgba(3, 23, 23, 0.74) 100%);
       backdrop-filter: blur(20px) saturate(1.4);
       -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border-top: 3px solid #00b8b8;
       border-bottom: 1px solid rgba(0, 184, 184, 0.22);
       box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.72);
     }
+    .catalog-sticky-inner { max-width: var(--max-width, 1200px); margin: 0 auto; padding: 0 32px; }
+    /* The header now sits above .container, so drop the big top padding it used to need. */
+    main > .container { padding-top: 26px; }
     .catalog-titlebar { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; padding: 16px 0 15px; }
     .catalog-titlebar .page-title {
       margin: 0; text-align: left; flex: 0 1 auto;
@@ -900,6 +906,7 @@
     @keyframes searchFlash { 0%, 100% { box-shadow: 0 0 0 0 rgba(0, 184, 184, 0); } 22% { box-shadow: 0 0 0 3px rgba(0, 184, 184, 0.9); } }
     .search-flash { animation: searchFlash 1.7s ease; }
     @media (max-width: 640px) {
+      .catalog-sticky-inner { padding: 0 16px; }
       .catalog-titlebar { gap: 10px; padding-bottom: 10px; }
       .cal-btn { margin-left: 0; }
       .catalog-search { flex-basis: 100%; margin-left: 0; max-width: none; }
@@ -968,6 +975,12 @@
     .cbc-trigger-catalog:hover { background: rgba(0, 184, 184, 0.14); border-color: rgba(0, 184, 184, 0.72); }
     .cat-bar-course.open .cbc-trigger-catalog { background: rgba(0, 184, 184, 0.18); border-color: #00b8b8; box-shadow: none; }
     .cbc-menu-catalog { min-width: 264px; max-height: 74vh; overflow-y: auto; }
+    /* "Main Catalog" back-link: the first item, set off from the course groups by a divider. */
+    .cbc-mod.cbc-main {
+      color: #eaf7f7; font-weight: 700; letter-spacing: 0.09em;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12); margin-bottom: 5px; padding-bottom: 12px;
+    }
+    .cbc-mod.cbc-main:hover { background: rgba(0, 184, 184, 0.16); color: #fff; }
     /* Course grouping labels inside the unified Catalog menu. */
     .cbc-course-hd {
       font-family: var(--font-head, 'Oswald', sans-serif); font-size: 0.6rem; font-weight: 700;
@@ -1148,9 +1161,10 @@
   </header>
 
   <main>
-    <section class="container">
-
-      <div class="catalog-sticky">
+    <!-- Unified header: full-width and flush to the top of the page, exactly like the
+         module-page .silva-nav. Lives OUTSIDE .container so nothing sits above it. -->
+    <div class="catalog-sticky">
+      <div class="catalog-sticky-inner">
         <div class="catalog-titlebar">
           <h1 class="page-title">Curriculum Catalog</h1>
           <a class="cal-btn" href="/calendar.html">Calendar</a>
@@ -1161,6 +1175,9 @@
         </div>
         <nav class="cat-bar" id="cat-bar" aria-label="Quick catalog menu"></nav>
       </div>
+    </div>
+
+    <section class="container">
 
       <div class="staging-banner" id="staging-banner" role="status">
         Staging Mode Active: Draft &amp; Staged Modules Visible
@@ -2576,6 +2593,12 @@
       catBtn.innerHTML = 'Catalog <span class="cbc-caret">&#9662;</span>';
       var catMenu = document.createElement('div');
       catMenu.className = 'cbc-menu cbc-menu-catalog';
+      // First item: a "Main Catalog" back-link to this master page (a return point from anywhere).
+      var catMain = document.createElement('a');
+      catMain.href = '/curriculum.html';
+      catMain.className = 'cbc-mod cbc-main';
+      catMain.innerHTML = '&#8592;&nbsp; Main Catalog';
+      catMenu.appendChild(catMain);
       ['da1a', 'photo1a', 'photo2a'].forEach(function (cid) {
         var course = COURSES.find(function (c) { return c.id === cid; });
         var mods = MODULES.filter(function (m) {

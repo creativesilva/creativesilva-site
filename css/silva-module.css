@@ -112,6 +112,11 @@ body {
 }
 .silva-uni-cathd + .silva-uni-catmod { border-top: 1px solid rgba(0, 184, 184, 0.14); }
 .silva-uni-catmod:hover { background: rgba(0, 184, 184, 0.16); color: #fff; }
+/* "Main Catalog" back-link: the first menu item, set off from the courses by a divider. */
+.silva-uni-catmain {
+  color: #eaf7f7; font-weight: 700; letter-spacing: 0.09em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12); margin-bottom: 5px; padding-bottom: 12px;
+}
 .silva-uni-build {
   display: flex; align-items: center; padding: 0 18px; margin-left: 4px; white-space: nowrap;
   font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
