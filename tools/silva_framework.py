@@ -43,6 +43,79 @@ def banner(label,title,subtitle,es_href,es_label,hicon=""):
 HICON_PHOTO_WALK=f"{SITE}/assets/Icons/assignment/photo-walk-white-v1.png"
 HICON_YOUR_DEVICE=f"{SITE}/assets/Icons/assignment/your-device-white-v1.png"
 
+# Camera-settings panel (red camera-kit modules): the on-screen settings mimic + its teaching
+# section. quality="RAW" or "JPG" swaps only the Image Quality badge. Canvas-safe fixed 3-col table:
+# the box border/fill lives on each <td> so row-equalization makes the boxes equal height, and
+# border-spacing gives an even margin around every box. Values from Chris's PSD: shutter 1/500 (the
+# one students adjust), aperture F6.3, ISO 100, light meter balanced.
+CAMSET_ICON=f"{SITE}/assets/Icons/assignment/camera-settings-v1.svg"
+RAW_BADGE=f"{SITE}/assets/Icons/assignment/raw-v2.png"
+JPG_BADGE=f"{SITE}/assets/Icons/assignment/jpg-v2.svg"
+
+def capture_panel(quality="RAW"):
+    red="#f90101"
+    boxtd=(f'border:2px solid {red};background:rgba(0,0,0,0.55);box-sizing:border-box;'
+           'text-align:center;vertical-align:top;padding:14px 12px 16px;')
+    def label(t):
+        return (f'<div style="font-family:Arial,sans-serif;font-size:9.5pt;letter-spacing:0.14em;'
+                f'text-transform:uppercase;color:{red};line-height:1.25;"><strong>{t}</strong></div>')
+    def val(v):
+        return (f'<div style="font-family:Arial,sans-serif;font-size:24pt;color:#ffffff;line-height:1.05;'
+                f'margin-top:9px;"><strong>{v}</strong></div>')
+    tag=(f'<div style="position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:{red};'
+         'color:#ffffff;font-family:Arial,sans-serif;font-size:8pt;letter-spacing:0.1em;text-transform:uppercase;'
+         'padding:3px 10px;white-space:nowrap;"><strong>Change this</strong></div>')
+    sub=('<div style="font-family:Arial,sans-serif;font-size:10.5pt;color:#ffb0b0;margin-top:8px;'
+         'line-height:1.3;">adjust to balance the light meter</div>')
+    shutter=f'{tag}{label("Shutter")}{val("1/500")}{sub}'
+    labels13=["-3","","-2","","-1","","0","","+1","","+2","","+3"]
+    tickcols=""; numcols=""
+    for i in range(13):
+        tall=(i%2==0); h="17px" if tall else "9px"; c="#ffffff" if tall else "rgba(255,255,255,0.35)"
+        tickcols+=(f'<div style="flex:1;text-align:center;"><span style="display:inline-block;width:2px;'
+                   f'height:{h};background:{c};"></span></div>')
+        n=labels13[i]; inner=(f'<strong>{n}</strong>' if n else '&nbsp;')
+        numcols+=(f'<div style="flex:1;text-align:center;font-family:Arial,sans-serif;font-size:9pt;'
+                  f'color:rgba(255,255,255,0.65);">{inner}</div>')
+    meter=(f'{label("Light Meter")}'
+      f'<div style="display:flex;align-items:flex-end;height:19px;margin-top:11px;">{tickcols}</div>'
+      f'<div style="display:flex;margin-top:5px;">{numcols}</div>'
+      '<div style="text-align:center;margin-top:9px;"><span style="display:inline-block;width:0;height:0;'
+      'border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:11px solid #26de78;"></span></div>'
+      '<div style="text-align:center;margin-top:6px;font-family:Arial,sans-serif;font-size:9pt;'
+      'letter-spacing:0.12em;text-transform:uppercase;color:#26de78;"><strong>Balanced (outdoors)</strong></div>')
+    badge=RAW_BADGE if quality=="RAW" else JPG_BADGE
+    qalt="RAW image-capture format" if quality=="RAW" else "JPG image-capture format"
+    iq=(f'{label("Image Quality")}'
+        f'<img src="{badge}" alt="{qalt}" style="height:68px;width:auto;display:block;margin:18px auto 0;" />')
+    return (f'<div style="background:linear-gradient(180deg,#0c1010 0%,#050707 100%);border:1px solid rgba(249,1,1,0.35);'
+      'padding:0;box-sizing:border-box;max-width:520px;margin:0 auto;">'
+      '<table style="width:100%;border-collapse:separate;border-spacing:14px;table-layout:fixed;"><tbody>'
+      f'<tr><td style="{boxtd}position:relative;">{shutter}</td><td style="{boxtd}">{label("Aperture")}{val("F6.3")}</td>'
+      f'<td style="{boxtd}">{label("ISO")}{val("100")}</td></tr>'
+      f'<tr><td colspan="2" style="{boxtd}">{meter}</td><td style="{boxtd}">{iq}</td></tr>'
+      '</tbody></table></div>')
+
+def camera_settings_section(es, quality="RAW"):
+    red="#f90101"
+    if es:
+        title="Ajustes de C&aacute;mara"; lead="Usa estos ajustes para esta caminata. El &uacute;nico ajuste que cambias es la velocidad del obturador, para equilibrar el expos&iacute;metro."
+        note_t="Solo cambia el obturador. Si afuera est&aacute; muy brillante, sube la velocidad del obturador. Si est&aacute; muy oscuro, b&aacute;jala, hasta que el expos&iacute;metro quede equilibrado. Adentro, con estos ajustes, el expos&iacute;metro marcar&aacute; subexpuesto y la imagen se ver&aacute; negra: eso es normal. Afuera quedar&aacute; mucho m&aacute;s cerca."
+    else:
+        title="Camera Settings"; lead="Use these settings for this photo walk. The only setting you change is the shutter speed, to balance the light meter."
+        note_t="Change only the shutter. If it is too bright outside, raise the shutter speed. If it is too dark, lower it, until the light meter is balanced. Indoors, with these settings, the light meter will read underexposed and the image will look black: that is expected. Outside it will be much closer."
+    hdr=(f'<div style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);border-left:5px solid {red};padding:9px 18px 9px 12px;margin-bottom:12px;max-width:100%;box-sizing:border-box;">'
+      f'<img src="{CAMSET_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
+      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#ff8f8f;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>'
+      f'<div style="height:2px;background:{red};width:60px;margin-bottom:18px;"></div>')
+    lead_html=f'<div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{lead}</span></div>'
+    note_box=f'<div style="background:rgba(249,1,1,0.10);border:1px solid rgba(249,1,1,0.30);border-left:4px solid {red};padding:11px 14px;margin:14px 0 0;font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.55;">{note_t}</div>'
+    return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      '<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:18px 30px;">'
+      f'<div style="flex:1 1 300px;min-width:0;">{hdr}{lead_html}{note_box}</div>'
+      f'<div style="flex:1 1 380px;min-width:300px;">{capture_panel(quality)}</div>'
+      '</div></div>')
+
 SLIDE_PLACEHOLDER=f"{SITE}/assets/images/shared/slide-deck-placeholder-v1.jpg"
 def slide_deck_thumb(pdf_url, es, thumb=None, cap=None):
     # Click-to-open PDF slide deck: a purple cover thumbnail linking to the hosted PDF, which opens

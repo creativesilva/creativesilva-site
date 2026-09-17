@@ -144,6 +144,7 @@ def step01():
     en=banner("Leading Lines &bull; Step 1","Capture, Cull &amp; Submit","Take your leading lines, then select your best six.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("6 JPGs:","your best 3 leading-line photos and your partner&rsquo;s best 3, uploaded to this Canvas assignment.")])
+    en+=camera_settings_section(False,"JPG")
     en+=card("CAPTURE / ON THE WALK","Take Your Leading Lines",
         float_right(FLOAT,"A student kneeling to photograph down a long covered walkway whose columns lead the eye to a vanishing point, while a partner watches","Hunting leading lines on the walk.")
         + para("Pair up and share one class camera, two students per camera. Then walk campus and hunt for leading lines.")
@@ -171,6 +172,7 @@ def step01():
     es=banner("L&iacute;neas Gu&iacute;a &bull; Paso 1","Captura, Selecciona y Entrega","Toma tus l&iacute;neas gu&iacute;a y luego elige tus mejores seis.","#top","Back to English")
     es+=deliverables_box(True,
         [("6 JPG:","tus mejores 3 fotos de l&iacute;neas gu&iacute;a y las mejores 3 de tu compa&ntilde;ero, subidas a esta tarea de Canvas.")])
+    es+=camera_settings_section(True,"JPG")
     es+=card("CAPTURA / EN LA CAMINATA","Toma Tus L&iacute;neas Gu&iacute;a",
         float_right(FLOAT,"Un estudiante arrodillado fotografiando por un pasillo largo cuyas columnas gu&iacute;an la mirada hacia un punto de fuga, mientras un compa&ntilde;ero observa","Buscando l&iacute;neas gu&iacute;a en la caminata.")
         + para("Formen pareja y compartan una c&aacute;mara de la clase, dos estudiantes por c&aacute;mara. Luego caminen por la escuela y busquen l&iacute;neas gu&iacute;a.")
