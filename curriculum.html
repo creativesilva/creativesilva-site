@@ -841,6 +841,8 @@
     .page-name:hover { color: #fff; text-decoration: underline; }
     .page-sub { color: var(--text-dim); font-weight: 400; }
     .cast-list .module-acc:first-child { margin-top: 0; }
+    .cast-group-acc { background: rgba(0,184,184,0.09); border-left-color: rgba(0,184,184,0.38); }
+    .cast-char-acc > .module-acc-body > .cast-group-acc:first-child { margin-top: 0; }
     .page-acts { display: flex; gap: 6px; flex-wrap: wrap; }
     .pg-btn { font-family: inherit; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #eaf7f7; text-decoration: none; cursor: pointer; background: rgba(0,184,184,0.10); border: 1px solid rgba(0,184,184,0.30); border-top: 2px solid #00b8b8; padding: 6px 12px;  white-space: nowrap; }
     .pg-btn:hover { border-color: rgba(0,184,184,0.6); background: rgba(0,184,184,0.16); }
@@ -1269,36 +1271,6 @@
                   <details class="cat-acc" open>
                     <summary class="cat-head"><span class="cat-name">Cast &amp; Campus</span><span class="cat-chevron"></span></summary>
                     <div class="cat-body">
-                      <div id="cast-list" class="cast-list"></div>
-                  <details class="cat-acc">
-                    <summary class="cat-head"><span class="cat-name">Items</span><span class="cat-chevron"></span></summary>
-                    <div class="cat-body"><div class="logo-grid">
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-eos-r50-v1.png" alt="Canon EOS R50 camera" /></div><div class="logo-meta"><span class="logo-name">Canon EOS R50 <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-eos-r50-v1.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-eos-r5-pro-v1.png" alt="Canon EOS R5 pro camera" /></div><div class="logo-meta"><span class="logo-name">Canon EOS R5 Pro <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-eos-r5-pro-v1.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-camera-bag-v2.png" alt="Canon camera bag" /></div><div class="logo-meta"><span class="logo-name">Canon Camera Bag <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-camera-bag-v2.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/iphone-mockup-v3.png" alt="Teal iPhone mockup with a blank screen" /></div><div class="logo-meta"><span class="logo-name">iPhone Mockup <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/iphone-mockup-v3.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/imac-27-mockup-v2.png" alt="iMac 27 inch mockup with a blank screen" /></div><div class="logo-meta"><span class="logo-name">iMac 27&Prime; Mockup <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/imac-27-mockup-v2.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/macbook-pro-v1.png" alt="MacBook Pro laptop, space gray" /></div><div class="logo-meta"><span class="logo-name">MacBook Pro <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/macbook-pro-v1.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/ipad-pro-apple-pencil-v1.jpg" alt="iPad Pro with Apple Pencil, drawing" /></div><div class="logo-meta"><span class="logo-name">iPad Pro + Apple Pencil <span class="logo-fmt">Item &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/items/ipad-pro-apple-pencil-v1.jpg" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-70-200-lens-v1.png" alt="Canon camera with 70-200 telephoto zoom lens" /></div><div class="logo-meta"><span class="logo-name">Canon 70-200 Lens <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-70-200-lens-v1.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-r5-ii-telephoto-v1.png" alt="Canon EOS R5 Mark II with a black telephoto zoom lens" /></div><div class="logo-meta"><span class="logo-name">Canon R5 II Telephoto <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-r5-ii-telephoto-v1.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-r5-ii-white-telephoto-v1.png" alt="Canon EOS R5 Mark II with a white telephoto zoom lens" /></div><div class="logo-meta"><span class="logo-name">Canon R5 II White Telephoto <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-r5-ii-white-telephoto-v1.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/classroom-camera-kit-v1.jpg" alt="The classroom Canon EOS R50 kit: camera body, two lenses, battery charger, and strap" /></div><div class="logo-meta"><span class="logo-name">Classroom Camera Kit <span class="logo-fmt">Item &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/items/classroom-camera-kit-v1.jpg" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/pantone-swatch-book-v1.png" alt="Pantone Formula Guide swatch book, fanned open" /></div><div class="logo-meta"><span class="logo-name">Pantone Swatch Book <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/pantone-swatch-book-v1.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/sketchbook-v1.png" alt="Kraft cover sketchbook" /></div><div class="logo-meta"><span class="logo-name">Sketchbook <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/sketchbook-v1.png" download>Download</a></div></div>
-                    </div></div>
-                  </details>
-                  <details class="cat-acc">
-                    <summary class="cat-head"><span class="cat-name">Campus</span><span class="cat-chevron"></span></summary>
-                    <div class="cat-body"><div class="logo-grid">
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/PV%20LOGO%20NEW.png" alt="PV monogram with panther, primary" /></div><div class="logo-meta"><span class="logo-name">PV with Panther <span class="logo-fmt">Primary &middot; PNG</span></span><a class="logo-dl" href="/assets/PV%20LOGO%20NEW.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Monogram.png" alt="PV monogram without panther" /></div><div class="logo-meta"><span class="logo-name">PV without Panther <span class="logo-fmt">Monogram &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Monogram.png" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-campus-front-v1.jpg" alt="PV Academy of Arts campus front" /></div><div class="logo-meta"><span class="logo-name">Academy of Arts Campus Front <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-campus-front-v1.jpg" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-classroom-inspiration-v1.jpg" alt="PV classroom inspiration" /></div><div class="logo-meta"><span class="logo-name">Classroom Inspiration <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-classroom-inspiration-v1.jpg" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-lobby-photography-v1.jpg" alt="PV Academy of Arts building lobby interior, Photography" /></div><div class="logo-meta"><span class="logo-name">Academy Lobby (Photography) <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-lobby-photography-v1.jpg" download>Download</a></div></div>
-                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-lobby-digital-arts-v1.jpg" alt="PV Academy of Arts building lobby interior, Digital Arts" /></div><div class="logo-meta"><span class="logo-name">Academy Lobby (Digital Arts) <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-lobby-digital-arts-v1.jpg" download>Download</a></div></div>
-                    </div></div>
-                  </details>
                   <details class="cat-acc">
                     <summary class="cat-head"><span class="cat-name">Prompt Studio</span><span class="cat-chevron"></span></summary>
                     <div class="cat-body">
@@ -1346,6 +1318,36 @@
                       </div>
                     </div>
                     </div>
+                  </details>
+                      <div id="cast-list" class="cast-list"></div>
+                  <details class="cat-acc">
+                    <summary class="cat-head"><span class="cat-name">Items</span><span class="cat-chevron"></span></summary>
+                    <div class="cat-body"><div class="logo-grid">
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-eos-r50-v1.png" alt="Canon EOS R50 camera" /></div><div class="logo-meta"><span class="logo-name">Canon EOS R50 <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-eos-r50-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-eos-r5-pro-v1.png" alt="Canon EOS R5 pro camera" /></div><div class="logo-meta"><span class="logo-name">Canon EOS R5 Pro <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-eos-r5-pro-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-camera-bag-v2.png" alt="Canon camera bag" /></div><div class="logo-meta"><span class="logo-name">Canon Camera Bag <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-camera-bag-v2.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/iphone-mockup-v3.png" alt="Teal iPhone mockup with a blank screen" /></div><div class="logo-meta"><span class="logo-name">iPhone Mockup <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/iphone-mockup-v3.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/imac-27-mockup-v2.png" alt="iMac 27 inch mockup with a blank screen" /></div><div class="logo-meta"><span class="logo-name">iMac 27&Prime; Mockup <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/imac-27-mockup-v2.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/macbook-pro-v1.png" alt="MacBook Pro laptop, space gray" /></div><div class="logo-meta"><span class="logo-name">MacBook Pro <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/macbook-pro-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/ipad-pro-apple-pencil-v1.jpg" alt="iPad Pro with Apple Pencil, drawing" /></div><div class="logo-meta"><span class="logo-name">iPad Pro + Apple Pencil <span class="logo-fmt">Item &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/items/ipad-pro-apple-pencil-v1.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-70-200-lens-v1.png" alt="Canon camera with 70-200 telephoto zoom lens" /></div><div class="logo-meta"><span class="logo-name">Canon 70-200 Lens <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-70-200-lens-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-r5-ii-telephoto-v1.png" alt="Canon EOS R5 Mark II with a black telephoto zoom lens" /></div><div class="logo-meta"><span class="logo-name">Canon R5 II Telephoto <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-r5-ii-telephoto-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-r5-ii-white-telephoto-v1.png" alt="Canon EOS R5 Mark II with a white telephoto zoom lens" /></div><div class="logo-meta"><span class="logo-name">Canon R5 II White Telephoto <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-r5-ii-white-telephoto-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/classroom-camera-kit-v1.jpg" alt="The classroom Canon EOS R50 kit: camera body, two lenses, battery charger, and strap" /></div><div class="logo-meta"><span class="logo-name">Classroom Camera Kit <span class="logo-fmt">Item &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/items/classroom-camera-kit-v1.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/pantone-swatch-book-v1.png" alt="Pantone Formula Guide swatch book, fanned open" /></div><div class="logo-meta"><span class="logo-name">Pantone Swatch Book <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/pantone-swatch-book-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/sketchbook-v1.png" alt="Kraft cover sketchbook" /></div><div class="logo-meta"><span class="logo-name">Sketchbook <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/sketchbook-v1.png" download>Download</a></div></div>
+                    </div></div>
+                  </details>
+                  <details class="cat-acc">
+                    <summary class="cat-head"><span class="cat-name">Campus</span><span class="cat-chevron"></span></summary>
+                    <div class="cat-body"><div class="logo-grid">
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/PV%20LOGO%20NEW.png" alt="PV monogram with panther, primary" /></div><div class="logo-meta"><span class="logo-name">PV with Panther <span class="logo-fmt">Primary &middot; PNG</span></span><a class="logo-dl" href="/assets/PV%20LOGO%20NEW.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Monogram.png" alt="PV monogram without panther" /></div><div class="logo-meta"><span class="logo-name">PV without Panther <span class="logo-fmt">Monogram &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Monogram.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-campus-front-v1.jpg" alt="PV Academy of Arts campus front" /></div><div class="logo-meta"><span class="logo-name">Academy of Arts Campus Front <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-campus-front-v1.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-classroom-inspiration-v1.jpg" alt="PV classroom inspiration" /></div><div class="logo-meta"><span class="logo-name">Classroom Inspiration <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-classroom-inspiration-v1.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-lobby-photography-v1.jpg" alt="PV Academy of Arts building lobby interior, Photography" /></div><div class="logo-meta"><span class="logo-name">Academy Lobby (Photography) <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-lobby-photography-v1.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-lobby-digital-arts-v1.jpg" alt="PV Academy of Arts building lobby interior, Digital Arts" /></div><div class="logo-meta"><span class="logo-name">Academy Lobby (Digital Arts) <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-lobby-digital-arts-v1.jpg" download>Download</a></div></div>
+                    </div></div>
                   </details>
                     </div>
                   </details>
@@ -2773,19 +2775,21 @@
         { name: "Ricardo", sheets: [
           { outfit: "Gray Bomber Jacket", file: "ricardo-character-sheet-v3.jpg" }
         ] },
-        { name: "Patricia", title: "Patricia Raglan T-Shirt", sheets: [
-          { outfit: "Character Sheet", file: "patricia-character-sheet-v6.jpg" }
-        ] },
-        { name: "Patricia", title: "Patricia Cropped Hoodie", sheets: [
-          { outfit: "Character Sheet", file: "patricia-cropped-hoodie-v3.jpg" },
-          { outfit: "Full Body Front", file: "patricia-cropped-hoodie-full-front-v2.png" },
-          { outfit: "Full Body Angle", file: "patricia-cropped-hoodie-full-angle-v2.png" },
-          { outfit: "Full Body Back", file: "patricia-cropped-hoodie-full-back-v2.png" },
-          { outfit: "Front Portrait", file: "patricia-portrait-front-v1.jpg" },
-          { outfit: "Side Profile", file: "patricia-portrait-side-v1.jpg" },
-          { outfit: "Smiling Portrait", file: "patricia-portrait-smile-v1.jpg" },
-          { outfit: "Vomero 5 Shoes", file: "patricia-vomero-5-v1.png" },
-          { outfit: "Bust Closeup", file: "patricia-cropped-hoodie-closeup-v2.png" }
+        { name: "Patricia", groups: [
+          { name: "Raglan T-Shirt", sheets: [
+            { outfit: "Character Sheet", file: "patricia-character-sheet-v6.jpg" }
+          ] },
+          { name: "Cropped Hoodie", sheets: [
+            { outfit: "Character Sheet", file: "patricia-cropped-hoodie-v3.jpg" },
+            { outfit: "Full Body Front", file: "patricia-cropped-hoodie-full-front-v2.png" },
+            { outfit: "Full Body Angle", file: "patricia-cropped-hoodie-full-angle-v2.png" },
+            { outfit: "Full Body Back", file: "patricia-cropped-hoodie-full-back-v2.png" },
+            { outfit: "Front Portrait", file: "patricia-portrait-front-v1.jpg" },
+            { outfit: "Side Profile", file: "patricia-portrait-side-v1.jpg" },
+            { outfit: "Smiling Portrait", file: "patricia-portrait-smile-v1.jpg" },
+            { outfit: "Vomero 5 Shoes", file: "patricia-vomero-5-v1.png" },
+            { outfit: "Bust Closeup", file: "patricia-cropped-hoodie-closeup-v2.png" }
+          ] }
         ] },
         { name: "Anthony", sheets: [
           { outfit: "Teal Varsity Jacket", file: "anthony-character-sheet-v2.jpg" }
@@ -2809,14 +2813,29 @@
           + '<a class="pg-btn pg-view" href="' + url + '" data-full="' + url + '" data-caption="' + cap + '">View Image</a>'
           + "</span></div>";
       }
-      function charAcc(ch) {
-        var rows = ch.sheets.map(function (s, i) { return sheetRow(ch.name, s, i); }).join("");
-        var n = ch.sheets.length;
-        return '<details class="module-acc cast-char-acc">'
-          + '<summary class="module-acc-head"><span class="module-row-name">' + (ch.title || ch.name) + "</span>"
+      function groupAcc(charName, g) {
+        var rows = g.sheets.map(function (s, i) { return sheetRow(charName + " " + g.name, s, i); }).join("");
+        var n = g.sheets.length;
+        return '<details class="module-acc cast-group-acc">'
+          + '<summary class="module-acc-head"><span class="module-row-name">' + g.name + "</span>"
           + '<span class="module-page-count">' + n + " sheet" + (n === 1 ? "" : "s") + "</span>"
           + '<span class="macc-chev"></span></summary>'
           + '<div class="module-acc-body">' + rows + "</div></details>";
+      }
+      function charAcc(ch) {
+        var inner, count, noun;
+        if (ch.groups) {
+          inner = ch.groups.map(function (g) { return groupAcc(ch.name, g); }).join("");
+          count = ch.groups.length; noun = "outfit";
+        } else {
+          inner = ch.sheets.map(function (s, i) { return sheetRow(ch.name, s, i); }).join("");
+          count = ch.sheets.length; noun = "sheet";
+        }
+        return '<details class="module-acc cast-char-acc">'
+          + '<summary class="module-acc-head"><span class="module-row-name">' + (ch.title || ch.name) + "</span>"
+          + '<span class="module-page-count">' + count + " " + noun + (count === 1 ? "" : "s") + "</span>"
+          + '<span class="macc-chev"></span></summary>'
+          + '<div class="module-acc-body">' + inner + "</div></details>";
       }
       var host = document.getElementById("cast-list");
       if (host) { host.innerHTML = CAST.map(charAcc).join(""); }
