@@ -112,12 +112,32 @@ ES_RULES=[
 ]
 
 # ---------------- OVERVIEW ----------------
+PC_STANDARDS=[
+  {"code":"SA.17.1","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Art &amp; Design Fundamentals","es_title":"Fundamentos de Arte y Dise&ntilde;o",
+   "en_desc":"You use the elements of art and composition to plan a strong photo on purpose.",
+   "es_desc":"Usas los elementos del arte y la composici&oacute;n para planear una buena foto a prop&oacute;sito."},
+  {"code":"SA.17.2","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Visual Communication","es_title":"Comunicaci&oacute;n Visual",
+   "en_desc":"You use each composition to show one clear idea in your photo.",
+   "es_desc":"Usas cada composici&oacute;n para mostrar una idea clara en tu foto."},
+  {"code":"SA.17.3","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Perspective &amp; Dimension","es_title":"Perspectiva y Dimensi&oacute;n",
+   "en_desc":"You use angle, depth, and space to give your photos dimension.",
+   "es_desc":"Usas el &aacute;ngulo, la profundidad y el espacio para dar dimensi&oacute;n a tus fotos."},
+  {"code":"SA.17.5","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Equipment &amp; Image Production","es_title":"Equipo y Producci&oacute;n de Imagen",
+   "en_desc":"You handle and operate a shared class camera the right way.",
+   "es_desc":"Manejas y usas una c&aacute;mara compartida de la clase de la manera correcta."},
+]
+
 def overview():
     en=banner("Photography 2A &bull; Composition Photo Walk","Composition Photo Walk","Six rules. One photo walk. One photo at Chick-fil-A.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","The Photo Walk",
         para("You will take a photo walk on campus and capture the 6 composition rules. All images are captured in Manual Mode and in RAW, indoor or outdoor. Capture one strong image for each concept.")
         + framed(HERO,"Composition Photo Walk")
         + pills(["Manual Mode","RAW Format","On Campus","One image per rule"]))
+    en+=standards_box(False, PC_STANDARDS)
     en+=downloads_block(False)
     en+=card("","The Challenge",
         float_right(CHICKFILA,"Chick-fil-A prize","")
@@ -139,6 +159,7 @@ def overview():
         para("Vas a hacer una caminata fotogr&aacute;fica en el campus y capturar las 6 reglas de composici&oacute;n. Todas las im&aacute;genes se toman en Modo Manual y en formato RAW, dentro o fuera del sal&oacute;n. Captura una imagen fuerte para cada concepto.")
         + framed(HERO,"Caminata de Composici&oacute;n")
         + pills(["Modo Manual","Formato RAW","En el Campus","Una imagen por regla"]))
+    es+=standards_box(True, PC_STANDARDS)
     es+=downloads_block(True)
     es+=card("","El Reto",
         float_right(CHICKFILA,"Chick-fil-A prize","")

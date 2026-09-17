@@ -7,6 +7,7 @@
 # Step 01 embeds the existing scrollable "Lightroom Import" slide deck (12 slides + PDF).
 # HEADER is a PLACEHOLDER (Chris drops art in later).
 import os, re
+from silva_framework import standards_box  # green CTE standards box (self-contained builder reuses just this)
 SITE="https://www.creativesilva.com"
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 HEADER=f"{SITE}/assets/images/photo1/image-series/header-v1.png"   # overview header art
@@ -408,12 +409,32 @@ def dots_for(active_idx):
     return r
 
 # ---------------- OVERVIEW ----------------
+IS_STANDARDS=[
+  {"code":"SA.17.1","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Art &amp; Design Fundamentals","es_title":"Fundamentos de Arte y Dise&ntilde;o",
+   "en_desc":"You plan a cohesive series using composition and the elements of art.",
+   "es_desc":"Planeas una serie cohesiva usando la composici&oacute;n y los elementos del arte."},
+  {"code":"SA.17.2","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Visual Communication","es_title":"Comunicaci&oacute;n Visual",
+   "en_desc":"You make a group of photos that clearly work together to tell one idea.",
+   "es_desc":"Haces un grupo de fotos que claramente funcionan juntas para contar una idea."},
+  {"code":"SA.17.5","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Equipment &amp; Image Production","es_title":"Equipo y Producci&oacute;n de Imagen",
+   "en_desc":"You set the camera to RAW and use the class camera kit with a real workflow.",
+   "es_desc":"Pones la c&aacute;mara en RAW y usas el kit de c&aacute;mara de la clase con un flujo de trabajo real."},
+  {"code":"SA.17.8","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Documentation of Finished Work","es_title":"Documentaci&oacute;n del Trabajo Terminado",
+   "en_desc":"You build a contact sheet that presents your finished images clearly.",
+   "es_desc":"Creas una hoja de contactos que presenta tus im&aacute;genes terminadas con claridad."},
+]
+
 def overview():
     en=banner("Photography 1A &bull; Module 04","Image Series Photo Walk","Capture a cohesive series with the camera kit, offload, import, and edit.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Capture a Series That Belongs Together",
         para("On this photo walk you use a classroom camera kit to capture a cohesive series: a group of photos that feel linked, like a family of images. Your series can be circles, shapes, colors, textures, reflections, or your own idea. What matters is that the photos clearly go together.")
         + para("You capture in RAW, offload your photos to OneDrive, and import them into Lightroom Classic. You build your first contact sheet, then cull to your best 6, do a light edit, and turn in a final contact sheet.")
         + framed(HEADER,"Image Series Photo Walk header: a row of linked photos that form one cohesive series"))
+    en+=standards_box(False, IS_STANDARDS)
     en+=downloads_block(False)
     en+=card("THE CONCEPT / WHAT MAKES A SERIES","A Family of Images",
         para("A series is more than a pile of photos. The images share something: the same subject, the same shapes, the same colors, or the same feeling. When someone looks at all of them together, they can tell the photos belong to each other.")
@@ -444,6 +465,7 @@ def overview():
         para("En esta caminata fotogr&aacute;fica usas un kit de c&aacute;mara de la clase para capturar una serie cohesiva: un grupo de fotos que se sienten unidas, como una familia de im&aacute;genes. Tu serie puede ser de c&iacute;rculos, formas, colores, texturas, reflejos o tu propia idea. Lo importante es que las fotos claramente van juntas.")
         + para("Capturas en RAW, descargas tus fotos a OneDrive y las importas a Lightroom Classic. Creas tu primera hoja de contactos, luego eliges tus mejores 6, haces una edici&oacute;n ligera y entregas una hoja de contactos final.")
         + framed(HEADER,"Encabezado de la Caminata de Serie de Im&aacute;genes: una fila de fotos unidas que forman una serie cohesiva"))
+    es+=standards_box(True, IS_STANDARDS)
     es+=downloads_block(True)
     es+=card("EL CONCEPTO / QU&Eacute; HACE UNA SERIE","Una Familia de Im&aacute;genes",
         para("Una serie es m&aacute;s que un mont&oacute;n de fotos. Las im&aacute;genes comparten algo: el mismo tema, las mismas formas, los mismos colores o la misma sensaci&oacute;n. Cuando alguien las ve todas juntas, puede notar que las fotos van una con otra.")

@@ -91,11 +91,27 @@ VOCAB_ES=[
 ]
 
 # ---------------- OVERVIEW ----------------
+SC_STANDARDS=[
+  {"code":"DGA.17.1","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Art &amp; Design Fundamentals","es_title":"Fundamentos de Arte y Dise&ntilde;o",
+   "en_desc":"You use art and design principles to make an original cover.",
+   "es_desc":"Usas los principios del arte y el dise&ntilde;o para crear una portada original."},
+  {"code":"DGA.17.3","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Visual Communication","es_title":"Comunicaci&oacute;n Visual",
+   "en_desc":"You use images and design to show who you are.",
+   "es_desc":"Usas im&aacute;genes y dise&ntilde;o para mostrar qui&eacute;n eres."},
+  {"code":"DGA.17.4","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Typography &amp; Visual Messaging","es_title":"Tipograf&iacute;a y Mensaje Visual",
+   "en_desc":"You use type to set the tone and organize your cover.",
+   "es_desc":"Usas la tipograf&iacute;a para dar el tono y organizar tu portada."},
+]
+
 def overview():
     en=banner("Digital Arts 1A &bull; Sketchbook Cover Art","Sketchbook Cover Art","Design a cover worth showing off.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Make Your Sketchbook Your Own",
         para("Time to make your sketchbook yours. You will decorate and personalize the manila cover of your 8.5 by 11 inch sketchbook and turn it into art you are proud of. This is a friendly class competition: the best cover wins a prize. You have one week, and you may take your sketchbook home to keep working on it.")
         + framed(HEADER_IMG,"Sketchbook Cover"))
+    en+=standards_box(False, SC_STANDARDS)
     en+=downloads_block(False)
     en+=card("THE PRIZE / KEY DATES","Rules and Dates",
         float_right(CHICKFILA,"Chick-fil-A prize","The prize for the best cover.")
@@ -129,6 +145,7 @@ def overview():
     es+=type_card("overview","El Resumen del M&oacute;dulo","Haz Tuyo Tu Cuaderno",
         para("Es hora de hacer tuyo tu cuaderno. Vas a decorar y personalizar la portada de manila de tu cuaderno de 8.5 por 11 pulgadas y convertirla en arte del que te sientas orgulloso. Esta es una competencia amistosa de la clase: la mejor portada gana un premio. Tienes una semana, y puedes llevar tu cuaderno a casa para seguir trabajando.")
         + framed(HEADER_IMG,"Portada del Cuaderno"))
+    es+=standards_box(True, SC_STANDARDS)
     es+=downloads_block(True)
     es+=card("EL PREMIO / FECHAS CLAVE","Reglas y Fechas",
         float_right(CHICKFILA,"Premio de Chick-fil-A","El premio para la mejor portada.")

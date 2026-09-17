@@ -154,12 +154,32 @@ def nav(current,dots,stepnav):
             f'      <div class="silva-step-nav">{stepnav}</div>')
 
 # ================= OVERVIEW =================
+LE_STANDARDS=[
+  {"code":"SA.17.5","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Equipment &amp; Image Production","es_title":"Equipo y Producci&oacute;n de Imagen",
+   "en_desc":"You use a professional editing workflow to import and manage your images.",
+   "es_desc":"Usas un flujo de trabajo profesional para importar y organizar tus im&aacute;genes."},
+  {"code":"SA.17.7","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Image Manipulation","es_title":"Manipulaci&oacute;n de Imagen",
+   "en_desc":"You adjust color, exposure, and tone to refine your images.",
+   "es_desc":"Ajustas el color, la exposici&oacute;n y el tono para mejorar tus im&aacute;genes."},
+  {"code":"SA.17.8","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Documentation of Finished Work","es_title":"Documentaci&oacute;n del Trabajo Terminado",
+   "en_desc":"You export and present your finished images the right way.",
+   "es_desc":"Exportas y presentas tus im&aacute;genes terminadas de la manera correcta."},
+  {"code":"SA.17.9","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Critique","es_title":"Cr&iacute;tica",
+   "en_desc":"You cull and choose your strongest images and explain your choices.",
+   "es_desc":"Seleccionas y eliges tus im&aacute;genes m&aacute;s fuertes y explicas tus decisiones."},
+]
+
 def overview():
     en=banner("Photography 1A &bull; Module 05","Lightroom Editing","Import, crop and develop in Lightroom Classic, cull your best 6, and export finals.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("edit","The Module Overview","Go Deeper Into Real Editing",
         para("This week you take a deeper dive into real editing in Lightroom Classic. You will work in the Develop module: the place where you crop, fix color, and bring your photos to life. Editing is non-destructive, which means your original photo file is never changed.")
         + para("You can edit photos you have <strong>already captured</strong>, or take <strong>new photos</strong> for this project. Either way, you will import them, crop and develop them, cull down to your best 6, build a 6-Up contact sheet, and export your 6 finals as high-resolution JPEGs.")
         + framed(HEADER,"A Pioneer Valley student editing a cityscape photo in the Lightroom Classic Develop module on an iMac in the creative lab, a Canon EOS camera on the desk, with other students editing behind her"))
+    en+=standards_box(False, LE_STANDARDS)
     en+=downloads_block(False)
     en+=resources_group(False)
     en+=card("THE BIG IDEA / EDITING MATTERS","Editing Is Where a Photo Becomes Finished",
@@ -218,6 +238,7 @@ def overview():
         para("Esta semana profundizas en la edici&oacute;n real en Lightroom Classic. Trabajar&aacute;s en el m&oacute;dulo Revelar: el lugar donde recortas, corriges el color y das vida a tus fotos. La edici&oacute;n no es destructiva, lo que significa que tu archivo de foto original nunca cambia.")
         + para("Puedes editar fotos que <strong>ya capturaste</strong>, o tomar <strong>fotos nuevas</strong> para este proyecto. En ambos casos, las importar&aacute;s, las recortar&aacute;s y revelar&aacute;s, elegir&aacute;s tus mejores 6, crear&aacute;s una hoja de contactos de 6 y exportar&aacute;s tus 6 finales como JPEG de alta resoluci&oacute;n.")
         + framed(HEADER,"Una estudiante de Pioneer Valley editando una foto de una ciudad en el m&oacute;dulo Revelar de Lightroom Classic en una iMac en el laboratorio creativo, una c&aacute;mara Canon EOS en el escritorio, con otros estudiantes editando detr&aacute;s de ella"))
+    es+=standards_box(True, LE_STANDARDS)
     es+=downloads_block(True)
     es+=resources_group(True)
     es+=card("LA GRAN IDEA / EDITAR IMPORTA","Editar Es Donde una Foto Queda Terminada",

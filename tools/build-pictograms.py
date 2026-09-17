@@ -70,11 +70,27 @@ def nav(current,dots,stepnav):
             f'      <div class="silva-step-nav">{stepnav}</div>')
 
 # ---------------- OVERVIEW ----------------
+PG_STANDARDS=[
+  {"code":"DGA.17.1","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Art &amp; Design Fundamentals","es_title":"Fundamentos de Arte y Dise&ntilde;o",
+   "en_desc":"You use art and design principles to make clean, clear symbols.",
+   "es_desc":"Usas los principios del arte y el dise&ntilde;o para crear s&iacute;mbolos limpios y claros."},
+  {"code":"DGA.17.3","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Visual Communication","es_title":"Comunicaci&oacute;n Visual",
+   "en_desc":"You use a simple picture to explain an idea with no words.",
+   "es_desc":"Usas una imagen simple para explicar una idea sin palabras."},
+  {"code":"DGA.17.5","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Print &amp; Vector Design","es_title":"Dise&ntilde;o Vectorial",
+   "en_desc":"You use vector design software to build your pictogram.",
+   "es_desc":"Usas software de dise&ntilde;o vectorial para crear tu pictograma."},
+]
+
 def overview():
     en=banner("Digital Arts 1A &bull; Pictograms","Pictograms","Simple pictures that speak with no words.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","What Is a Pictogram?",
         para("A pictogram is a simple picture that stands for an idea, an object, or an action. The best part is that you understand it without reading a single word. You just look at it and know what it means.")
         + framed(HERO,"Pictograms"))
+    en+=standards_box(False, PG_STANDARDS)
     en+=card("","Pictograms You Already Know",
         para("You already know a lot of them: a stop sign, a warning sign, a flammable symbol, or a restroom sign. They all use simple, clear shapes. That is the rule: if you can look at it and understand it with no words, it works.")
         + examples([(f"{IMG}/restroom-sign.jpg","Restroom"),(f"{IMG}/stop-sign.jpg","Stop Sign"),(f"{IMG}/flammable.png","Flammable")])
@@ -105,6 +121,7 @@ def overview():
     es+=type_card("overview","El Resumen del M&oacute;dulo","&iquest;Qu&eacute; Es Un Pictograma?",
         para("Un pictograma es un dibujo simple que representa una idea, un objeto o una acci&oacute;n. Lo mejor es que lo entiendes sin leer ni una palabra. Solo lo miras y sabes qu&eacute; significa.")
         + framed(HERO,"Pictogramas"))
+    es+=standards_box(True, PG_STANDARDS)
     es+=card("","Pictogramas Que Ya Conoces",
         para("Ya conoces muchos: un letrero de alto, un letrero de advertencia, un s&iacute;mbolo de inflamable o un letrero de ba&ntilde;o. Todos usan formas simples y claras. Esa es la regla: si lo puedes ver y entender sin palabras, funciona.")
         + examples([(f"{IMG}/restroom-sign.jpg","Ba&ntilde;o"),(f"{IMG}/stop-sign.jpg","Alto"),(f"{IMG}/flammable.png","Inflamable")])

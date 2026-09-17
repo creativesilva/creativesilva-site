@@ -66,12 +66,28 @@ def dots_for(active_idx):
     return r
 
 # ---------------- OVERVIEW ----------------
+PR_STANDARDS=[
+  {"code":"SA.17.7","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Image Manipulation","es_title":"Manipulaci&oacute;n de Imagen",
+   "en_desc":"You alter color, tone, and look to build your own editing preset.",
+   "es_desc":"Alteras el color, el tono y el aspecto para crear tu propio preajuste de edici&oacute;n."},
+  {"code":"SA.17.6","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Artistic Techniques","es_title":"T&eacute;cnicas Art&iacute;sticas",
+   "en_desc":"You experiment with editing techniques to create a repeatable style.",
+   "es_desc":"Experimentas con t&eacute;cnicas de edici&oacute;n para crear un estilo repetible."},
+  {"code":"SA.17.5","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Equipment &amp; Image Production","es_title":"Equipo y Producci&oacute;n de Imagen",
+   "en_desc":"You use professional editing software and a real workflow.",
+   "es_desc":"Usas software de edici&oacute;n profesional y un flujo de trabajo real."},
+]
+
 def overview():
     en=banner("Photography 2A &bull; Module 04","Build Your Own Preset","Capture a series, edit one photo, and save your look as a preset.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Make a Look, Then Save It",
         para("In this project you pick a subject you love and capture a whole series of it: natural light portraits, close-ups of flowers, buildings on campus, or your own idea. You capture at least 12 images that go together, edit the first one until it looks the way you want, and then save those edits as a preset. A preset is your look, saved once, ready to drop on every photo in the series.")
         + para("Then you sync your preset across the series so all your photos share the same feel, select your best 6, and turn them in.")
         + framed(HEADER,"A Lightroom Classic edit of a natural light portrait, with the Develop panel sliders open on the right"))
+    en+=standards_box(False, PR_STANDARDS)
     en+=downloads_block(False)
     en+=card("THE CONCEPT / WHAT IS A PRESET","One Look, Every Photo",
         para("A preset saves all your Develop settings in one click: white balance, exposure, contrast, color, and more. Once you save it, you can add that same look to one photo or a hundred photos at the same time.")
@@ -104,6 +120,7 @@ def overview():
         para("En este proyecto eliges un tema que te encante y capturas toda una serie: retratos con luz natural, primeros planos de flores, edificios de la escuela o tu propia idea. Capturas al menos 12 im&aacute;genes que van juntas, editas la primera hasta que se vea como quieres, y luego guardas esos ajustes como un preset. Un preset es tu estilo, guardado una vez, listo para poner en cada foto de la serie.")
         + para("Despu&eacute;s sincronizas tu preset en toda la serie para que todas tus fotos tengan la misma sensaci&oacute;n, eliges tus mejores 6 y las entregas.")
         + framed(HEADER,"Una edici&oacute;n en Lightroom Classic de un retrato con luz natural, con los controles del panel Revelar abiertos a la derecha"))
+    es+=standards_box(True, PR_STANDARDS)
     es+=downloads_block(True)
     es+=card("EL CONCEPTO / QU&Eacute; ES UN PRESET","Un Estilo, Todas las Fotos",
         para("Un preset guarda todos tus ajustes de Revelar con un clic: balance de blancos, exposici&oacute;n, contraste, color y m&aacute;s. Una vez que lo guardas, puedes poner ese mismo estilo en una foto o en cien fotos al mismo tiempo.")

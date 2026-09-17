@@ -52,11 +52,31 @@ def nav(current,dots,stepnav):
             f'      <div class="silva-step-nav">{stepnav}</div>')
 
 # ---------------- OVERVIEW ----------------
+LL_STANDARDS=[
+  {"code":"SA.17.1","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Art &amp; Design Fundamentals","es_title":"Fundamentos de Arte y Dise&ntilde;o",
+   "en_desc":"You use line and composition to lead the eye through your photo on purpose.",
+   "es_desc":"Usas la l&iacute;nea y la composici&oacute;n para guiar la mirada por tu foto a prop&oacute;sito."},
+  {"code":"SA.17.2","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Visual Communication","es_title":"Comunicaci&oacute;n Visual",
+   "en_desc":"You use leading lines to tell a clear visual story.",
+   "es_desc":"Usas las l&iacute;neas gu&iacute;a para contar una historia visual clara."},
+  {"code":"SA.17.3","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Perspective &amp; Dimension","es_title":"Perspectiva y Dimensi&oacute;n",
+   "en_desc":"You use lines and space to add depth to your photos.",
+   "es_desc":"Usas las l&iacute;neas y el espacio para dar profundidad a tus fotos."},
+  {"code":"SA.17.5","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Equipment &amp; Image Production","es_title":"Equipo y Producci&oacute;n de Imagen",
+   "en_desc":"You handle and operate a shared class camera the right way.",
+   "es_desc":"Manejas y usas una c&aacute;mara compartida de la clase de la manera correcta."},
+]
+
 def overview():
     en=banner("Photography 1A &bull; Leading Lines","Leading Lines Photo Walk","Pair up, take leading-line photos, and cull your best six.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Leading Lines on the Walk",
         para("On this photo walk you and a partner hunt for leading lines: lines that pull your eye through a photo toward the subject. You share one class camera, two students per camera. Each of you takes 3 different examples of leading lines. Then you swap photos, cull your best, and turn in 6 photos in all.")
         + framed(HEADER,"Two Pioneer Valley students on a photo walk, one holding a Canon camera, outside the Academy of Arts building"))
+    en+=standards_box(False, LL_STANDARDS)
     en+=downloads_block(False)
     en+=card("THE CONCEPT / WHAT TO LOOK FOR","How Leading Lines Work",
         para("A leading line is any line that guides your eye through the photo. It can be a road, a fence, a hallway, a row of lockers, a shadow, or a crack in the sidewalk. Strong leading lines often run from the front of the photo toward the subject in the back.")
@@ -87,6 +107,7 @@ def overview():
     es+=type_card("overview","El Resumen del M&oacute;dulo","L&iacute;neas Gu&iacute;a en la Caminata",
         para("En esta caminata fotogr&aacute;fica t&uacute; y un compa&ntilde;ero buscan l&iacute;neas gu&iacute;a: l&iacute;neas que llevan tu mirada a trav&eacute;s de la foto hacia el sujeto. Comparten una c&aacute;mara de la clase, dos estudiantes por c&aacute;mara. Cada uno toma 3 ejemplos diferentes de l&iacute;neas gu&iacute;a. Luego intercambian fotos, seleccionan sus mejores y entregan 6 fotos en total.")
         + framed(HEADER,"Dos estudiantes de Pioneer Valley en una caminata fotogr&aacute;fica, uno con una c&aacute;mara Canon, afuera del edificio Academy of Arts"))
+    es+=standards_box(True, LL_STANDARDS)
     es+=downloads_block(True)
     es+=card("EL CONCEPTO / QU&Eacute; BUSCAR","C&oacute;mo Funcionan las L&iacute;neas Gu&iacute;a",
         para("Una l&iacute;nea gu&iacute;a es cualquier l&iacute;nea que lleva tu mirada a trav&eacute;s de la foto. Puede ser un camino, una reja, un pasillo, una fila de casilleros, una sombra o una grieta en la acera. Las l&iacute;neas gu&iacute;a fuertes suelen ir desde el frente de la foto hacia el sujeto al fondo.")

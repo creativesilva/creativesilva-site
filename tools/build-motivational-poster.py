@@ -165,6 +165,25 @@ VOCAB_ES=[
 ]
 
 # ---------------- OVERVIEW ----------------
+MP_STANDARDS=[
+  {"code":"DGA.17.1","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Art &amp; Design Fundamentals","es_title":"Fundamentos de Arte y Dise&ntilde;o",
+   "en_desc":"You apply design principles to build a strong poster.",
+   "es_desc":"Aplicas los principios del dise&ntilde;o para crear un afiche fuerte."},
+  {"code":"DGA.17.3","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Visual Communication","es_title":"Comunicaci&oacute;n Visual",
+   "en_desc":"You use a persuasive image and message to inspire the viewer.",
+   "es_desc":"Usas una imagen y un mensaje persuasivos para inspirar al espectador."},
+  {"code":"DGA.17.4","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Typography &amp; Visual Messaging","es_title":"Tipograf&iacute;a y Mensaje Visual",
+   "en_desc":"You use type hierarchy and legibility to deliver your message.",
+   "es_desc":"Usas la jerarqu&iacute;a y la legibilidad del texto para entregar tu mensaje."},
+  {"code":"DGA.17.5","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Print Design","es_title":"Dise&ntilde;o para Impresi&oacute;n",
+   "en_desc":"You use layout software to create a print poster.",
+   "es_desc":"Usas software de maquetaci&oacute;n para crear un afiche impreso."},
+]
+
 def overview():
     en=banner("Digital Arts 1A &bull; Photoshop","Motivational Poster","Design a poster that hypes up someone who inspires you.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","What You Will Make",
@@ -173,6 +192,7 @@ def overview():
         + note("Keep it school-appropriate. Your subject and everything on the poster must meet school standards: no drugs, alcohol, tobacco, weapons, violence, profanity, or other inappropriate content or characters. If you are unsure whether a choice is appropriate, ask Mr. Silva before you begin.")
         + note("Your quote must be a real quote your subject actually said. For a fictional character, use a real line from their movie, show, game, or comic. Choose a font (typeface) for the words that fits the mood and style of your poster. Your font choice is important: write down the exact name of the font you use, because you will be asked to list it in your reflection document.")
         + ec_note("EXTRA CREDIT","Add a logo or symbol connected to your subject (a team logo, a band logo, an emblem) behind them, with a glow or outline. This part is optional."))
+    en+=standards_box(False, MP_STANDARDS)
     en+=downloads_block(False)
     en+=card("QUICK SPECS","Set It Up Right",
         bullets([
@@ -201,6 +221,7 @@ def overview():
         + note("Mant&eacute;nlo apropiado para la escuela. Tu sujeto y todo lo que est&eacute; en el p&oacute;ster debe cumplir con las normas escolares: nada de drogas, alcohol, tabaco, armas, violencia, groser&iacute;as ni otro contenido o personajes inapropiados. Si no est&aacute;s seguro de si una opci&oacute;n es apropiada, preg&uacute;ntale al Sr. Silva antes de empezar.")
         + note("Tu frase debe ser una frase real que tu sujeto haya dicho. Para un personaje de ficci&oacute;n, usa una l&iacute;nea real de su pel&iacute;cula, serie, videojuego o c&oacute;mic. Elige un tipo de letra para las palabras que quede con el estilo y el ambiente de tu p&oacute;ster. Tu elecci&oacute;n de fuente es importante: anota el nombre exacto de la fuente que uses, porque te pedir&aacute;n que la escribas en tu documento de reflexi&oacute;n.")
         + ec_note("CR&Eacute;DITO EXTRA","Agrega un logo o s&iacute;mbolo relacionado con tu sujeto (un logo de equipo, un logo de banda, un emblema) detr&aacute;s de &eacute;l, con un resplandor o contorno. Esta parte es opcional."))
+    es+=standards_box(True, MP_STANDARDS)
     es+=downloads_block(True)
     es+=card("DATOS R&Aacute;PIDOS","Config&uacute;ralo Bien",
         bullets([

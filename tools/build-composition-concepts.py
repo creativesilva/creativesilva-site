@@ -157,12 +157,32 @@ def nav(current,dots,stepnav):
             f'      <div class="silva-step-nav">{stepnav}</div>')
 
 # ---------------- OVERVIEW ----------------
+CC_STANDARDS=[
+  {"code":"SA.17.1","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Art &amp; Design Fundamentals","es_title":"Fundamentos de Arte y Dise&ntilde;o",
+   "en_desc":"You use the elements of art and composition, like line, balance, and framing, to plan a strong photo on purpose.",
+   "es_desc":"Usas los elementos del arte y la composici&oacute;n, como la l&iacute;nea, el equilibrio y el encuadre, para planear una buena foto a prop&oacute;sito."},
+  {"code":"SA.17.2","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Visual Communication","es_title":"Comunicaci&oacute;n Visual",
+   "en_desc":"You use each composition to show one clear idea in your photo.",
+   "es_desc":"Usas cada composici&oacute;n para mostrar una idea clara en tu foto."},
+  {"code":"SA.17.3","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Perspective &amp; Dimension","es_title":"Perspectiva y Dimensi&oacute;n",
+   "en_desc":"You use angle, depth, and space to give your photos dimension.",
+   "es_desc":"Usas el &aacute;ngulo, la profundidad y el espacio para dar dimensi&oacute;n a tus fotos."},
+  {"code":"SA.17.5","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Equipment &amp; Image Production","es_title":"Equipo y Producci&oacute;n de Imagen",
+   "en_desc":"You handle and operate a shared class camera the right way.",
+   "es_desc":"Manejas y usas una c&aacute;mara compartida de la clase de la manera correcta."},
+]
+
 def overview():
     en=banner("Photography 1A &bull; Composition Concepts","Composition Concepts","20 ways to frame a photo. Pick 3.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Composition Concepts",
         para("Composition is how you arrange what is in your photo. In this project you watch a short video that shows 20 composition concepts, pick your 3 favorites, and take one photo for each. This is not about camera settings: it is all about how you frame the photo. You use your own phone or a school iPad, so everyone has a fair and equal way to take part.")
         + framed(HEADER,"Composition Concepts")
         + note_orange(FRESH_EN))
+    en+=standards_box(False, CC_STANDARDS)
     en+=downloads_block(False)
     en+=card("WATCH, THEN PICK 3","The 20 Composition Concepts",
         video_float(False)
@@ -176,6 +196,7 @@ def overview():
         para("La composici&oacute;n es c&oacute;mo acomodas lo que aparece en tu foto. En este proyecto ves un video corto que muestra 20 conceptos de composici&oacute;n, eliges tus 3 favoritos y tomas una foto para cada uno. Esto no se trata de los ajustes de la c&aacute;mara: se trata de c&oacute;mo encuadras la foto. Usas tu propio tel&eacute;fono o un iPad de la escuela, para que todos tengan una forma justa e igual de participar.")
         + framed(HEADER,"Conceptos de Composici&oacute;n")
         + note_orange(FRESH_ES))
+    es+=standards_box(True, CC_STANDARDS)
     es+=downloads_block(True)
     es+=card("MIRA, LUEGO ELIGE 3","Los 20 Conceptos de Composici&oacute;n",
         video_float(True)

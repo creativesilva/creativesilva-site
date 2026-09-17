@@ -108,11 +108,27 @@ def nav(current,dots,stepnav):
             f'      <div class="silva-step-nav">{stepnav}</div>')
 
 # ---------------- OVERVIEW ----------------
+CT_STANDARDS=[
+  {"code":"DGA.17.1","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Art &amp; Design Fundamentals","es_title":"Fundamentos de Arte y Dise&ntilde;o",
+   "en_desc":"You apply color theory, like color modes, contrast, and harmony, to your designs.",
+   "es_desc":"Aplicas la teor&iacute;a del color, como los modos de color, el contraste y la armon&iacute;a, a tus dise&ntilde;os."},
+  {"code":"DGA.17.3","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Visual Communication","es_title":"Comunicaci&oacute;n Visual",
+   "en_desc":"You use color to communicate mood and meaning.",
+   "es_desc":"Usas el color para comunicar &aacute;nimo y significado."},
+  {"code":"DGA.18.3","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Storytelling Through Design","es_title":"Narrativa a Trav&eacute;s del Dise&ntilde;o",
+   "en_desc":"You use design elements to carry an idea and stir emotion.",
+   "es_desc":"Usas elementos de dise&ntilde;o para transmitir una idea y despertar emoci&oacute;n."},
+]
+
 def overview():
     en=banner("Digital Arts 1A &bull; Color Theory","Color Theory","How color builds a brand.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Color Theory: The Look of a Brand",
         para("Color theory is how colors work together and how they make people feel. Big brands pick a small set of colors and use them everywhere: the logo, the store, the packaging, even the staff shirts. When the colors match at every step, the brand feels strong and easy to remember. Today we learn the basics, then you study a real brand.")
         + framed(HERO,"Color Theory"))
+    en+=standards_box(False, CT_STANDARDS)
     en+=downloads_block(False)
     en+=slides_section(False)
     en+=card("","Example: Starbucks",
@@ -124,6 +140,7 @@ def overview():
     es+=type_card("overview","El Resumen del M&oacute;dulo","Teor&iacute;a del Color: El Aspecto de una Marca",
         para("La teor&iacute;a del color es c&oacute;mo los colores funcionan juntos y c&oacute;mo hacen sentir a la gente. Las marcas grandes eligen un grupo peque&ntilde;o de colores y los usan en todo: el logo, la tienda, el empaque y hasta las camisas del personal. Cuando los colores combinan en cada paso, la marca se siente fuerte y f&aacute;cil de recordar. Hoy aprendemos lo b&aacute;sico, y luego estudias una marca real.")
         + framed(HERO,"Teor&iacute;a del Color"))
+    es+=standards_box(True, CT_STANDARDS)
     es+=downloads_block(True)
     es+=slides_section(True)
     es+=card("","Ejemplo: Starbucks",

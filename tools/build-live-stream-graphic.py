@@ -88,6 +88,21 @@ def dots_for(active_idx):
     return r
 
 # ---------------- OVERVIEW ----------------
+LSG_STANDARDS=[
+  {"code":"DGA.17.1","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Art &amp; Design Fundamentals","es_title":"Fundamentos de Arte y Dise&ntilde;o",
+   "en_desc":"You apply design principles to build clean stream graphics.",
+   "es_desc":"Aplicas los principios del dise&ntilde;o para crear gr&aacute;ficos de transmisi&oacute;n limpios."},
+  {"code":"DGA.17.3","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"Visual Communication","es_title":"Comunicaci&oacute;n Visual",
+   "en_desc":"You design graphics that communicate clearly to a live audience.",
+   "es_desc":"Dise&ntilde;as gr&aacute;ficos que comunican con claridad a una audiencia en vivo."},
+  {"code":"DGA.17.6","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
+   "en_title":"UX &amp; UI Design","es_title":"Dise&ntilde;o UX y UI",
+   "en_desc":"You design on-screen elements and layout for a good viewer experience.",
+   "es_desc":"Dise&ntilde;as elementos en pantalla y la disposici&oacute;n para una buena experiencia del espectador."},
+]
+
 def overview():
     en=banner("Digital Arts 1A &bull; Module 05 &bull; Photoshop: Lesson 01","Live Stream Graphic","Learn Photoshop, then design your own YouTube thumbnail.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Build a Graphic, Then Design Your Own Thumbnail",
@@ -95,6 +110,7 @@ def overview():
         + para("In this project you learn Adobe Photoshop, then use it to make something of your own. First, in Step 1, you follow clear steps to build a live stream promo graphic, so everyone learns the same tools. Then, in Steps 2 to 4, you find YouTube thumbnail inspiration, design your own thumbnail, and reflect on it.")
         + para("In the warm-up you will make a new Photoshop file, add a photo, add colored bars, add words, blend colors, use Generative Fill, and export. Those are the same skills you will reuse to make your own thumbnail.")
         + note("Step 1 is a follow-along how-to. Steps 2 to 4 are your own YouTube thumbnail: inspiration, design, and reflection."))
+    en+=standards_box(False, LSG_STANDARDS)
     en+=downloads_block(False)
     en+=card("SKILLS / WHAT YOU WILL LEARN","New Photoshop Skills",
         para("This project teaches you the basics you will use in every Photoshop project after this one, starting with your own thumbnail:")
@@ -123,6 +139,7 @@ def overview():
         + para("En este proyecto aprendes Adobe Photoshop y luego lo usas para crear algo tuyo. Primero, en el Paso 1, sigues pasos claros para crear un gr&aacute;fico promocional de live stream, para que todos aprendan las mismas herramientas. Luego, en los Pasos 2 al 4, buscas inspiraci&oacute;n de miniaturas de YouTube, dise&ntilde;as tu propia miniatura y reflexionas sobre ella.")
         + para("En el calentamiento vas a crear un archivo nuevo de Photoshop, agregar una foto, agregar barras de color, agregar palabras, mezclar colores, usar Relleno Generativo y exportar. Esas son las mismas habilidades que vas a reusar para crear tu propia miniatura.")
         + note("El Paso 1 es un instructivo para seguir. Los Pasos 2 al 4 son tu propia miniatura de YouTube: inspiraci&oacute;n, dise&ntilde;o y reflexi&oacute;n."))
+    es+=standards_box(True, LSG_STANDARDS)
     es+=downloads_block(True)
     es+=card("HABILIDADES / LO QUE APRENDER&Aacute;S","Nuevas Habilidades de Photoshop",
         para("Este proyecto te ense&ntilde;a lo b&aacute;sico que usar&aacute;s en cada proyecto de Photoshop despu&eacute;s de este, empezando con tu propia miniatura:")

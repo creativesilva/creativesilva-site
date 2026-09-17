@@ -131,12 +131,32 @@ def nav(current,dots,stepnav):
             f'      <div class="silva-step-nav">{stepnav}</div>')
 
 # ---------------- OVERVIEW ----------------
+OCF_STANDARDS=[
+  {"code":"SA.17.5","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Equipment &amp; Image Production","es_title":"Equipo y Producci&oacute;n de Imagen",
+   "en_desc":"You set up and operate off-camera flash and light gear safely and correctly.",
+   "es_desc":"Preparas y operas el flash fuera de c&aacute;mara y el equipo de luz con seguridad y correctamente."},
+  {"code":"SA.17.1","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Art &amp; Design Fundamentals","es_title":"Fundamentos de Arte y Dise&ntilde;o",
+   "en_desc":"You use light, contrast, and value to shape a strong image.",
+   "es_desc":"Usas la luz, el contraste y el valor para dar fuerza a una imagen."},
+  {"code":"SA.17.4","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Posing &amp; Expression","es_title":"Pose y Expresi&oacute;n",
+   "en_desc":"You pose and light a subject to capture expression.",
+   "es_desc":"Posicionas e iluminas a un sujeto para capturar su expresi&oacute;n."},
+  {"code":"SA.17.6","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Artistic Techniques","es_title":"T&eacute;cnicas Art&iacute;sticas",
+   "en_desc":"You apply lighting techniques to refine your photos.",
+   "es_desc":"Aplicas t&eacute;cnicas de iluminaci&oacute;n para mejorar tus fotos."},
+]
+
 def overview():
     en=banner("Photography 2A &bull; Off-Camera Flash","Off-Camera Flash","Light your subject. Balance the sky.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Outdoor Portraits with Off-Camera Flash",
         para("In this project you will light an outdoor portrait with off-camera flash (OCF). We will do this as a class. Mr. Silva will teach you how to place a flash off to the side, dial in your settings, and balance your subject with the background. We have several Canon Speedlites and a more powerful Godox portable light. Four or five flashes will be in rotation, so everyone gets hands-on practice.")
         + framed(HEADER,"Students lighting an outdoor portrait with off-camera flash at the PV Academy of Arts")
         + pills(["Off-Camera Flash","Outdoor Portraits","Class Photo Walk","Manual Settings"]))
+    en+=standards_box(False, OCF_STANDARDS)
     en+=downloads_block(False)
     en+=card("","Set Up OneDrive and Your Folders",
         para("First, make sure OneDrive is running, then build your folder structure. Scroll through the steps.")
@@ -186,6 +206,7 @@ def overview():
         para("En este proyecto vas a iluminar un retrato al aire libre con flash fuera de c&aacute;mara (OCF). Lo haremos como clase. El Sr. Silva ense&ntilde;a c&oacute;mo colocar un flash hacia un lado, ajustar tus configuraciones y equilibrar a tu sujeto con el fondo. Tenemos varios Canon Speedlite y una luz Godox port&aacute;til m&aacute;s potente. Habr&aacute; cuatro o cinco flashes en rotaci&oacute;n para que todos practiquen.")
         + framed(HEADER,"Estudiantes iluminando un retrato al aire libre con flash fuera de c&aacute;mara en la PV Academy of Arts")
         + pills(["Flash Fuera de C&aacute;mara","Retratos al Aire Libre","Caminata de Clase","Modo Manual"]))
+    es+=standards_box(True, OCF_STANDARDS)
     es+=downloads_block(True)
     es+=card("","Configura OneDrive y Tus Carpetas",
         para("Primero, aseg&uacute;rate de que OneDrive est&eacute; activo y crea tu estructura de carpetas. Desliza para ver los pasos.")
