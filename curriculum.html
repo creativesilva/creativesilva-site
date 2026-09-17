@@ -29,17 +29,20 @@
        section, accordion, card, or menu styling. The creativesilva.com site header is also NOT
        pinned here; the CATALOG bar (.cat-bar) is the one that stays (see below). ── */
     body::before {
-      background-image:
-        linear-gradient(180deg, rgba(5, 12, 12, 0.94) 0%, rgba(2, 30, 30, 0.73) 44%, rgba(5, 12, 12, 0.96) 100%),
-        url("/logos/CS_Logo_Vector_TealWhite.svg");
-      background-size: cover, min(76vw, 720px);
-      background-position: center center, center 39%;
-      background-repeat: no-repeat, no-repeat;
-      background-color: #050d0d;
+      background-image: url("/logos/CS_Logo_Vector_TealWhite.svg");
+      background-size: min(72vw, 680px);
+      background-position: center 40%;
+      background-repeat: no-repeat;
+      background-color: #060f0f;
       filter: none;
-      opacity: 1;
     }
-    body::after { background: rgba(0, 0, 0, 0.22); }
+    /* Flat teal/white CS watermark, no gradient. A single UNIFORM dark veil (no
+       gradient, so nothing halos the logo) sits behind page content and tones the
+       watermark down to roughly 60%. */
+    body::after { background: rgba(6, 14, 14, 0.42); }
+    @media (max-width: 900px) {
+      body::before { background-size: min(86vw, 440px); background-position: center 36%; }
+    }
     /* Drop the portfolio site nav on the catalog page entirely; the teal CS logo in the
        CATALOG bar is the way back to creativesilva.com. */
     .site-header { display: none; }
