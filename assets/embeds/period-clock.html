@@ -23,9 +23,8 @@
   html, body { background: transparent; }
   body { font-family: 'Oswald', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
   .clock {
-    display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
-    height: 100vh; padding: 2px 2px 2px 10px; text-decoration: none; text-align: right;
-    border-left: 1px solid rgba(255, 255, 255, 0.10);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 100vh; padding: 2px; text-decoration: none; text-align: center;
   }
   .desc {
     font-size: 9.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
@@ -45,7 +44,7 @@
 </style>
 </head>
 <body>
-  <a class="clock" href="https://creativesilva.github.io/pvhs_tools/countdown.html?mode=popout" target="_blank" rel="noopener" title="Open the countdown clock">
+  <a class="clock" id="clockLink" href="https://creativesilva.github.io/pvhs_tools/countdown.html?mode=popout" target="_blank" rel="noopener" title="Pop out the countdown clock">
     <span class="desc" id="desc">Loading&hellip;</span>
     <span class="digits normal" id="digits">--:--</span>
   </a>
@@ -94,7 +93,9 @@
             var state = 'normal';
             if (isLastFive || isLastFivePassing) state = 'warning';
             else if (isFirstTen || isLastTen) state = 'caution';
-            show(blocks[i].l + blockTimeSpan(blocks[i]), formatTime(rem), state);
+            // Drop "PERIOD" to save space: "4TH PERIOD" -> "4TH", so it reads "4TH ENDS 12:25".
+            var lbl = blocks[i].l.replace(/\s*PERIOD\b/i, '');
+            show(lbl + blockTimeSpan(blocks[i]), formatTime(rem), state);
             return;
           }
         }
@@ -103,6 +104,17 @@
 
       tick();
       setInterval(tick, 1000);
+
+      // Click the clock: pop it out as a small floating window directly in popout mode.
+      // If the popup is blocked, the anchor's target="_blank" opens it in a new tab instead.
+      var link = document.getElementById('clockLink');
+      if (link) {
+        link.addEventListener('click', function (e) {
+          var win = window.open(link.href, 'pvhsCountdown',
+            'width=430,height=800,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
+          if (win) { e.preventDefault(); try { win.focus(); } catch (_) {} }
+        });
+      }
     })();
   </script>
 </body>
