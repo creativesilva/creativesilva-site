@@ -8,26 +8,8 @@
   <link rel="apple-touch-icon" href="https://www.creativesilva.com/logos/CS_Logo_Only.svg" />
   <style>
     :root { --course-accent: #007474; }
-    /* Auto-scrolling logo marquee (companies Mr. Silva has worked with).
-       Works on the linked/standalone page; pauses on hover; stops for reduced motion. */
-    .silva-logos {
-      overflow: hidden; position: relative; padding: 8px 0;
-      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
-              mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
-    }
-    .silva-logos-track {
-      display: flex; align-items: center; gap: 62px; width: max-content;
-      animation: silva-logoscroll 46s linear infinite; will-change: transform;
-    }
-    .silva-logos:hover .silva-logos-track { animation-play-state: paused; }
-    .silva-logos-track img { height: 52px; width: auto; display: block; opacity: 0.86; transition: opacity 0.2s ease; }
-    .silva-logos-track img:hover { opacity: 1; }
-    @keyframes silva-logoscroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-    @media (max-width: 640px) { .silva-logos-track { gap: 42px; } .silva-logos-track img { height: 42px; } }
-    @media (prefers-reduced-motion: reduce) {
-      .silva-logos { -webkit-mask-image: none; mask-image: none; }
-      .silva-logos-track { animation: none; flex-wrap: wrap; justify-content: center; gap: 30px 54px; width: auto; }
-    }
+    /* Company logos use a manual horizontal scroller built with INLINE styles so it
+       survives a Canvas paste (Canvas strips this stylesheet). No animation. */
   </style>
   <link rel="stylesheet" href="/css/silva-module.css" />
 </head>
@@ -123,29 +105,19 @@
 
       <!-- Clients & Brands logo marquee -->
       <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;padding:26px 30px 22px;overflow:hidden;position:relative;margin-bottom:24px;">
-        <div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #00b8b8;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#80e0e0;text-transform:uppercase;margin-bottom:14px;"><strong>CLIENTS &amp; BRANDS</strong></div><div style="margin-bottom:16px;"><span style="font-size:20pt;color:#ffffff;"><strong>Brands I&rsquo;ve Worked With</strong></span></div><div style="height:2px;background:#00b8b8;width:60px;margin-bottom:20px;"></div>
-        <div class="silva-logos" aria-label="Logos of companies Mr. Silva has worked with">
-          <div class="silva-logos-track">
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/red-bull-v1.png" alt="Red Bull" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/monster-energy-v1.png" alt="Monster Energy" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/central-coast-yamaha-v1.png" alt="Central Coast Yamaha" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/j-carroll-v1.png" alt="J. Carroll Screen Printing and Embroidery" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/arosha-inc-v1.png" alt="Arosha Inc." />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/signs-of-success-v1.png" alt="Signs of Success" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/tempt-media-v1.png" alt="Tempt Media" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/shepard-eye-center-v1.png" alt="Shepard Eye Center" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/american-star-tours-v1.png" alt="American Star Tours" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/certified-freight-logistics-v1.png" alt="Certified Freight Logistics" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/red-bull-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/monster-energy-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/central-coast-yamaha-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/j-carroll-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/arosha-inc-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/signs-of-success-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/tempt-media-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/shepard-eye-center-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/american-star-tours-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/certified-freight-logistics-v1.png" alt="" aria-hidden="true" />
+        <div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #00b8b8;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#80e0e0;text-transform:uppercase;margin-bottom:14px;"><strong>CLIENTS &amp; BRANDS</strong></div><div style="margin-bottom:6px;"><span style="font-size:20pt;color:#ffffff;"><strong>Brands I&rsquo;ve Worked With</strong></span></div><div style="font-size:10pt;color:rgba(255,255,255,0.55);margin-bottom:16px;">Drag or scroll sideways to see them all.</div><div style="height:2px;background:#00b8b8;width:60px;margin-bottom:20px;"></div>
+        <div class="silva-scroll" style="overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding-bottom:12px;">
+          <div style="display:inline-flex;align-items:center;gap:48px;padding:6px 2px;width:max-content;">
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/red-bull-v1.png" alt="Red Bull" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/monster-energy-v1.png" alt="Monster Energy" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/central-coast-yamaha-v1.png" alt="Central Coast Yamaha" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/j-carroll-v1.png" alt="J. Carroll Screen Printing and Embroidery" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/arosha-inc-v1.png" alt="Arosha Inc." style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/signs-of-success-v1.png" alt="Signs of Success" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/tempt-media-v1.png" alt="Tempt Media" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/shepard-eye-center-v1.png" alt="Shepard Eye Center" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/american-star-tours-v1.png" alt="American Star Tours" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/certified-freight-logistics-v1.png" alt="Certified Freight Logistics" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
           </div>
         </div>
       </div>
@@ -293,29 +265,19 @@
 
       <!-- Clientes y Marcas ES -->
       <div style="background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);border:1px solid rgba(0,184,184,0.22);border-left:6px solid #00b8b8;padding:26px 30px 22px;overflow:hidden;position:relative;margin-bottom:24px;">
-        <div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #00b8b8;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#80e0e0;text-transform:uppercase;margin-bottom:14px;"><strong>CLIENTES Y MARCAS</strong></div><div style="margin-bottom:16px;"><span style="font-size:20pt;color:#ffffff;"><strong>Marcas con las que he trabajado</strong></span></div><div style="height:2px;background:#00b8b8;width:60px;margin-bottom:20px;"></div>
-        <div class="silva-logos" aria-label="Logotipos de empresas con las que el Sr. Silva ha trabajado">
-          <div class="silva-logos-track">
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/red-bull-v1.png" alt="Red Bull" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/monster-energy-v1.png" alt="Monster Energy" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/central-coast-yamaha-v1.png" alt="Central Coast Yamaha" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/j-carroll-v1.png" alt="J. Carroll Screen Printing and Embroidery" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/arosha-inc-v1.png" alt="Arosha Inc." />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/signs-of-success-v1.png" alt="Signs of Success" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/tempt-media-v1.png" alt="Tempt Media" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/shepard-eye-center-v1.png" alt="Shepard Eye Center" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/american-star-tours-v1.png" alt="American Star Tours" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/certified-freight-logistics-v1.png" alt="Certified Freight Logistics" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/red-bull-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/monster-energy-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/central-coast-yamaha-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/j-carroll-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/arosha-inc-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/signs-of-success-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/tempt-media-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/shepard-eye-center-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/american-star-tours-v1.png" alt="" aria-hidden="true" />
-            <img src="https://www.creativesilva.com/assets/images/about/company-logos/certified-freight-logistics-v1.png" alt="" aria-hidden="true" />
+        <div style="display:inline-block;background:rgba(0,0,0,0.40);border-left:3px solid #00b8b8;padding:5px 12px 5px 10px;font-family:Arial,sans-serif;font-size:10pt;letter-spacing:0.22em;color:#80e0e0;text-transform:uppercase;margin-bottom:14px;"><strong>CLIENTES Y MARCAS</strong></div><div style="margin-bottom:6px;"><span style="font-size:20pt;color:#ffffff;"><strong>Marcas con las que he trabajado</strong></span></div><div style="font-size:10pt;color:rgba(255,255,255,0.55);margin-bottom:16px;">Desliza de lado para verlas todas.</div><div style="height:2px;background:#00b8b8;width:60px;margin-bottom:20px;"></div>
+        <div class="silva-scroll" style="overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding-bottom:12px;">
+          <div style="display:inline-flex;align-items:center;gap:48px;padding:6px 2px;width:max-content;">
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/red-bull-v1.png" alt="Red Bull" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/monster-energy-v1.png" alt="Monster Energy" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/central-coast-yamaha-v1.png" alt="Central Coast Yamaha" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/j-carroll-v1.png" alt="J. Carroll Screen Printing and Embroidery" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/arosha-inc-v1.png" alt="Arosha Inc." style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/signs-of-success-v1.png" alt="Signs of Success" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/tempt-media-v1.png" alt="Tempt Media" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/shepard-eye-center-v1.png" alt="Shepard Eye Center" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/american-star-tours-v1.png" alt="American Star Tours" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
+            <img src="https://www.creativesilva.com/assets/images/about/company-logos/certified-freight-logistics-v1.png" alt="Certified Freight Logistics" style="height:56px;width:auto;display:block;flex:0 0 auto;" />
           </div>
         </div>
       </div>
