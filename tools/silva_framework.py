@@ -21,15 +21,22 @@ def ent(s):
 def banner(label,title,subtitle,es_href,es_label,hicon=""):
     # hicon: optional WHITE module-type icon shown on the RIGHT, left of the language toggle.
     # Used on photo-walk modules (white photo-walk icon) and own-device modules (white your-device).
-    hicon_img=(f'<img src="{hicon}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />' if hicon else '')
+    # Canvas-safe responsive: a flex-wrap row (no CSS grid / @media, which Canvas strips), so on a
+    # narrow view the pieces reflow onto their own centered lines instead of overlapping. The title
+    # uses clamp() so it shrinks on small widths. The language toggle matches the site's glass style.
+    hicon_img=(f'<img src="{hicon}" alt="" style="width:40px;height:40px;display:block;flex:0 0 auto;" />' if hicon else '')
+    es_btn=(f'<a href="{es_href}" style="display:inline-flex;align-items:center;background:rgba(0,0,0,0.40);'
+      'border:1px solid #00b8b8;color:#a9f2f2;text-decoration:none;padding:8px 16px;font-family:Arial,sans-serif;'
+      'font-size:10pt;letter-spacing:0.09em;text-transform:uppercase;white-space:nowrap;">'
+      f'<strong>{es_label}</strong></a>')
     return ('<div style="background:linear-gradient(135deg,#000000 0%,#003838 40%,#007474 100%);padding:20px 28px 22px;margin:-28px -28px 24px -28px;">'
-      '<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">'
-      f'<div style="justify-self:start;"><img src="{SITE}/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:min(90px,15vw);height:auto;display:block;" /></div>'
-      '<div style="justify-self:center;text-align:center;">'
+      '<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 18px;">'
+      f'<img src="{SITE}/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:clamp(54px,12vw,84px);height:auto;display:block;flex:0 0 auto;" />'
+      '<div style="flex:1 1 240px;min-width:200px;text-align:center;">'
       f'<div style="margin-bottom:6px;"><span style="font-size:13pt;color:#80e0e0;"><strong>{label}</strong></span></div>'
-      f'<div style="color:#ffffff;font-size:23pt;line-height:1.1;"><strong>{title}</strong></div>'
-      f'<div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:13pt;font-style:italic;"><strong>{subtitle}</strong></span></div></div>'
-      f'<div style="justify-self:end;display:flex;align-items:center;gap:14px;">{hicon_img}<a href="{es_href}" style="background:rgba(255,255,255,0.92);color:#003838;text-decoration:none;padding:7px 16px;display:inline-block;font-size:11pt;white-space:nowrap;border-top:2px solid #00b8b8;"><strong>{es_label}</strong></a></div>'
+      f'<div style="color:#ffffff;font-size:clamp(17pt,4.5vw,23pt);line-height:1.1;"><strong>{title}</strong></div>'
+      f'<div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span style="font-size:12.5pt;font-style:italic;"><strong>{subtitle}</strong></span></div></div>'
+      f'<div style="flex:0 0 auto;display:flex;align-items:center;gap:12px;">{hicon_img}{es_btn}</div>'
       '</div></div>')
 
 # White header-crown icons (module-type identity in the banner). Rendered from the SVG masters.
