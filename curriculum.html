@@ -950,12 +950,13 @@
       transition: background 0.12s ease, color 0.12s ease;
     }
     .cbc-mod:hover { background: rgba(0, 184, 184, 0.16); color: #fff; }
-    .cat-bar-item.cat-bar-build { color: #ffb27a; margin-left: auto; border-left: 1px solid rgba(255, 255, 255, 0.08); }
+    .cat-bar-item.cat-bar-cal { margin-left: auto; border-left: 1px solid rgba(255, 255, 255, 0.08); }
+    .cat-bar-item.cat-bar-build { color: #ffb27a; border-left: 1px solid rgba(255, 255, 255, 0.08); }
     .cat-bar-item.cat-bar-build:hover { background: rgba(255, 157, 77, 0.14); color: #fff; }
     @media (max-width: 640px) {
       .cat-bar-label { width: auto; padding: 0 16px 0 0; }
       .cat-bar-item, .cbc-trigger { padding: 12px 14px; font-size: 0.72rem; }
-      .cat-bar-item.cat-bar-build { margin-left: 0; }
+      .cat-bar-item.cat-bar-cal, .cat-bar-item.cat-bar-build { margin-left: 0; }
     }
 
     /* Image lightbox (teacher-facing catalog only) */
@@ -2571,6 +2572,12 @@
         wrap.appendChild(menu);
         items.appendChild(wrap);
       });
+
+      var cal = document.createElement('a');
+      cal.className = 'cat-bar-item cat-bar-cal';
+      cal.href = '/calendar.html';
+      cal.textContent = 'Calendar';
+      items.appendChild(cal);
 
       var build = document.createElement('a');
       build.className = 'cat-bar-item cat-bar-build';

@@ -577,6 +577,12 @@
       items.appendChild(wrap);
     });
 
+    var cal = document.createElement('a');
+    cal.className = 'silva-catbar-cal';
+    cal.href = '/calendar.html';
+    cal.textContent = 'Calendar';
+    items.appendChild(cal);
+
     var build = document.createElement('a');
     build.className = 'silva-catbar-build';
     build.href = '/curriculum.html#build-resources';

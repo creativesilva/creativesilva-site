@@ -72,8 +72,15 @@ body {
   transition: background 0.12s ease, color 0.12s ease;
 }
 .silva-cbc-mod:hover { background: rgba(0, 184, 184, 0.16); color: #fff; }
-.silva-catbar-build {
+.silva-catbar-cal {
   display: flex; align-items: center; padding: 0 18px; white-space: nowrap; margin-left: auto;
+  font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
+  font-size: 0.72rem; color: rgba(234, 247, 247, 0.80); text-decoration: none; border-left: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.silva-catbar-cal:hover { background: rgba(0, 184, 184, 0.12); color: #fff; }
+.silva-catbar-build {
+  display: flex; align-items: center; padding: 0 18px; white-space: nowrap;
   font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
   font-size: 0.72rem; color: #ffb27a; text-decoration: none; border-left: 1px solid rgba(255, 255, 255, 0.08);
   transition: background 0.15s ease, color 0.15s ease;
@@ -87,7 +94,7 @@ body {
 .silva-catbar-search input::placeholder { color: rgba(234, 247, 247, 0.5); }
 .silva-catbar-search input:focus { outline: none; border-color: #00b8b8; background: rgba(0, 0, 0, 0.5); }
 @media (max-width: 700px) {
-  .silva-catbar-build { margin-left: 0; }
+  .silva-catbar-cal { margin-left: 0; }
   .silva-catbar-search { flex-basis: 100%; border-left: 0; padding-left: 0; }
 }
 

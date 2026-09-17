@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Camera Checkouts | Chris Silva</title>
+<meta name="description" content="Camera checkout calendar for Pioneer Valley photography: which camera kit is out, with whom, and when." />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="/logos/CS_Logo_Only_Teal.svg" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap');
+  :root {
+    --bg: #060d0d; --teal: #00b8b8; --teal-deep: #007474; --text: #eaf7f7;
+    --text-dim: rgba(234, 247, 247, 0.62); --line: rgba(255, 255, 255, 0.08);
+    --head: 'Oswald', 'Arial Narrow', sans-serif;
+    --body: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background:
+      linear-gradient(180deg, rgba(5, 12, 12, 0.96) 0%, rgba(2, 26, 26, 0.86) 50%, rgba(5, 12, 12, 0.97) 100%),
+      radial-gradient(120% 80% at 50% -10%, rgba(0, 116, 116, 0.20) 0%, rgba(0, 0, 0, 0) 60%);
+    background-color: var(--bg); background-attachment: fixed; min-height: 100vh;
+    font-family: var(--body); color: var(--text); -webkit-font-smoothing: antialiased;
+  }
+  .cal-header {
+    position: sticky; top: 0; z-index: 50;
+    background: linear-gradient(180deg, rgba(4, 13, 13, 0.86) 0%, rgba(3, 23, 23, 0.72) 100%);
+    backdrop-filter: blur(18px) saturate(1.35); -webkit-backdrop-filter: blur(18px) saturate(1.35);
+    border-top: 3px solid var(--teal); border-bottom: 1px solid rgba(0, 184, 184, 0.22);
+  }
+  .cal-header-inner { max-width: 1160px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 16px; min-height: 62px; flex-wrap: wrap; }
+  .cal-logo { display: flex; align-items: center; padding-right: 18px; border-right: 1px solid var(--line); }
+  .cal-logo img { height: 30px; width: auto; display: block; }
+  .cal-title { font-family: var(--head); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; font-size: 1.02rem; color: #fff; line-height: 1; }
+  .cal-title .sub { display: block; font-size: 0.58rem; letter-spacing: 0.24em; color: var(--teal); margin-top: 4px; font-weight: 600; }
+  .cal-back { margin-left: auto; font-family: var(--head); font-weight: 600; text-transform: uppercase; letter-spacing: 0.10em; font-size: 0.72rem; color: var(--text-dim); text-decoration: none; display: inline-flex; align-items: center; gap: 7px; padding: 8px 4px; transition: color 0.15s ease; }
+  .cal-back:hover { color: var(--teal); }
+  .cal-wrap { max-width: 1160px; margin: 0 auto; padding: 30px 24px 70px; }
+  .cal-top { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 18px 36px; margin: 0 0 26px; }
+  .cal-lede { flex: 1 1 360px; min-width: 0; margin: 0; }
+  .cal-qr { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 9px; }
+  .cal-qr-tile { background: #ffffff; padding: 11px; background-clip: padding-box; border: 2px solid var(--teal); }
+  .cal-qr-tile img { display: block; width: 148px; height: 148px; }
+  .cal-qr-label { font-family: var(--head); font-size: 0.64rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--teal); text-align: center; line-height: 1.3; }
+  .cal-lede h1 { font-family: var(--head); font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(1.5rem, 3vw, 2.1rem); line-height: 1.05; color: #fff; margin-bottom: 12px; }
+  .cal-lede p { color: var(--text-dim); font-size: 0.98rem; line-height: 1.65; }
+  /* Teal-framed embed, matching the module framed-image look. */
+  .cal-frame { background: linear-gradient(135deg, #00b8b8 0%, rgba(0, 184, 184, 0.10) 100%); padding: 2px; }
+  .cal-frame iframe { display: block; width: 100%; height: 760px; border: 0; background: #ffffff; }
+  @media (max-width: 640px) { .cal-frame iframe { height: 560px; } }
+</style>
+</head>
+<body>
+
+<header class="cal-header">
+  <div class="cal-header-inner">
+    <a class="cal-logo" href="/curriculum.html" aria-label="Back to Curriculum Catalog"><img src="/logos/CS_Logo_Only_Teal.svg" alt="Chris Silva" /></a>
+    <div class="cal-title">Camera Checkouts<span class="sub">Checkout Calendar</span></div>
+    <a class="cal-back" href="/curriculum.html"><span>&larr;</span> Back to Catalog</a>
+  </div>
+</header>
+
+<div class="cal-wrap">
+  <div class="cal-top">
+    <div class="cal-lede">
+      <h1>Camera Checkout Calendar</h1>
+      <p>See which camera kit is checked out, with whom, and when. Times are Pacific (Los Angeles). Students appear here by name as part of the signed camera checkout agreement.</p>
+    </div>
+    <div class="cal-qr">
+      <div class="cal-qr-tile"><img src="/assets/camera-checkout-qr-v1.png" alt="QR code to open the camera checkout" /></div>
+      <div class="cal-qr-label">Scan to<br>check out</div>
+    </div>
+  </div>
+  <div class="cal-frame">
+    <iframe title="Camera Checkouts calendar" src="https://calendar.google.com/calendar/embed?src=c_0aa19ce0d075f9150d5610114ee936928de02b4082b0f2cbadd81c2a38d32aaf%40group.calendar.google.com&ctz=America%2FLos_Angeles&mode=MONTH&showTitle=0&showPrint=0&showTz=0&showCalendars=0" loading="lazy" scrolling="no"></iframe>
+  </div>
+</div>
+
+</body>
+</html>
