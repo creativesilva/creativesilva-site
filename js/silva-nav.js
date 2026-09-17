@@ -453,6 +453,15 @@
       location.href = q ? '/curriculum.html?q=' + encodeURIComponent(q) : '/curriculum.html';
     });
     bar.appendChild(form);
+
+    // Rolling class-period countdown (live from the pvhs_tools schedule), top-right by search.
+    var clock = document.createElement('iframe');
+    clock.className = 'silva-uni-clock';
+    clock.src = '/assets/embeds/period-clock.html';
+    clock.title = 'Class period countdown';
+    clock.setAttribute('scrolling', 'no');
+    clock.setAttribute('loading', 'lazy');
+    bar.appendChild(clock);
     return bar;
   }
 

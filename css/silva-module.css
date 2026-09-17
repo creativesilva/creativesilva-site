@@ -75,6 +75,8 @@ body {
 }
 .silva-uni-search-input::placeholder { color: rgba(234, 247, 247, 0.5); }
 .silva-uni-search-input:focus { outline: none; border-color: #00b8b8; background-color: rgba(0, 0, 0, 0.5); }
+.silva-uni-clock { flex: 0 0 auto; width: 196px; height: 48px; border: 0; background: transparent; display: block; }
+@media (max-width: 900px) { .silva-uni-clock { display: none; } }
 
 .silva-uni-bar {
   display: flex; align-items: stretch; flex-wrap: wrap; min-height: 50px;
