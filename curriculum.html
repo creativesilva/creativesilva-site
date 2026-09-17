@@ -955,9 +955,9 @@
     .cat-bar-course.open .cbc-caret { transform: rotate(180deg); opacity: 1; }
     .cbc-menu {
       display: none; position: absolute; top: calc(100% + 1px); left: 0; min-width: 246px; z-index: 600;
-      background: rgba(6, 26, 25, 0.98); border: 1px solid rgba(0, 184, 184, 0.32); border-top: 2px solid #00b8b8;
+      background: rgba(6, 26, 25, 0.85); border: 1px solid rgba(0, 184, 184, 0.32); border-top: 2px solid #00b8b8;
       box-shadow: 0 18px 48px rgba(0, 0, 0, 0.6); padding: 6px;
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(16px) saturate(1.2); -webkit-backdrop-filter: blur(16px) saturate(1.2);
     }
     .cat-bar-course.open .cbc-menu { display: block; }
     .cbc-mod {
@@ -1426,16 +1426,6 @@
                       </div>
                         </div>
                       </details>
-                </div>
-              </div>
-            </details>
-
-            <details class="cat-acc">
-              <summary class="cat-head"><span class="cat-name">Videos</span><span class="cat-chevron"></span></summary>
-              <div class="cat-body">
-                <p class="cat-subgroup">Canvas &amp; Aeries Setup</p>
-                <div style="max-width:680px;">
-                  <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1157058491?h=eafe248754&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" loading="lazy" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Canvas - Aeries Setup"></iframe></div>
                 </div>
               </div>
             </details>
@@ -2155,8 +2145,8 @@
       if (location.protocol === "file:") { window.open(path, "_blank"); e.preventDefault(); return false; }
       e.preventDefault();
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(path).then(() => pillFlash(el, "Path copied • open locally to view", 2400)).catch(() => window.prompt("Open this locally to view:", path));
-      } else { window.prompt("Open this locally to view:", path); }
+        navigator.clipboard.writeText(path).then(() => pillFlash(el, "Path copied • paste into a new browser tab to open", 2600)).catch(() => window.prompt("Copy this path, paste it into a new browser tab to open:", path));
+      } else { window.prompt("Copy this path, paste it into a new browser tab to open:", path); }
       return false;
     }
     // Fetch a hosted HTML file's raw source and copy it to the clipboard (paste into Mail signature).
@@ -2225,7 +2215,8 @@
         + `<span class="course-doc-name">${v.label}</span>`
         + `<span class="course-doc-actions">${copy}${open}</span></div>`;
     }
-    // Local file (student data / confidential, never published): View (opens it locally) + Copy Path.
+    // Local file (student data / confidential, never published): one View button that opens it
+    // locally, or on the live https site copies the path with a hint to paste into a new tab.
     function rosterRow(path, label) {
       const safe = path.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
       return `<div class="course-doc">`
@@ -2233,7 +2224,6 @@
         + `<span class="course-doc-name">${label}</span>`
         + `<span class="course-doc-actions">`
         + `<a class="course-doc-dl" href="${safe}" data-local="${safe}" onclick="return viewLocal(event, this)">View</a>`
-        + `<a class="course-doc-dl" href="${safe}" data-local="${safe}" onclick="return copyLocalPath(event, this)">Copy Path</a>`
         + `</span></div>`;
     }
     // Word doc: Open Word (the .docx) + View (the hosted PDF; the browser viewer has its own download).
