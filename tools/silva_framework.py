@@ -80,6 +80,19 @@ def capture_format(fmt, es=False):
       f'<img src="{icon}" alt="{fmt.upper()} image-capture format" style="height:40px;width:auto;display:block;flex:0 0 auto;" />'
       f'<span style="font-family:Arial,sans-serif;font-size:11pt;letter-spacing:0.14em;text-transform:uppercase;color:#ffffff;line-height:1.2;"><strong>{label}</strong></span></div>')
 
+def capture_note(fmt, text, es=False):
+    # RED camera-settings callout, highlighted like note() but RED (red = camera settings, LOCKED
+    # 2026-09-16). Carries the JPG/RAW capture-format icon inline and lives INSIDE the content section
+    # that talks about capturing (not a standalone chip at the top). Use it for a single setting like
+    # "capture in JPG"; when a module needs many camera settings, break them into their own section.
+    icon=CAPFMT_ICON[fmt]
+    label="Captura de Imagen" if es else "Image Capture"
+    return ('<div style="display:flex;align-items:center;gap:13px;background:rgba(230,36,41,0.10);'
+      'border:1px solid rgba(230,36,41,0.34);border-left:4px solid #E62429;padding:10px 14px;margin:12px 0;">'
+      f'<img src="{icon}" alt="{fmt.upper()} image-capture format" style="height:32px;width:auto;display:block;flex:0 0 auto;" />'
+      f'<span style="font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.45;">'
+      f'<strong style="letter-spacing:0.05em;text-transform:uppercase;">{label}:</strong> {text}</span></div>')
+
 FLOAT_RE=re.compile(r'<!--FLOAT-->(.*?)<!--/FLOAT-->', re.S)
 def _hoist(inner):
     # pull any FLOAT-marked block out of inner so the card can place it in the thumbnail column
