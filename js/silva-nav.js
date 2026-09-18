@@ -40,7 +40,8 @@
       { name: 'Composition Concepts',     url: '/curriculum/shared/photo1-composition-concepts-overview.html' },
       { name: 'Leading Lines Photo Walk', url: '/curriculum/shared/photo1-leading-lines-overview.html' },
       { name: 'Image Series Photo Walk',  url: '/curriculum/shared/photo1-image-series-overview.html' },
-      { name: 'Lightroom Editing',        url: '/curriculum/shared/photo1-lightroom-editing-overview.html' }
+      { name: 'Lightroom Editing',        url: '/curriculum/shared/photo1-lightroom-editing-overview.html' },
+      { name: 'Tiny Things',              url: '/curriculum/shared/photo1-tiny-things-overview.html' }
     ]},
     { course: 'Photography 2A', modules: [
       { name: 'Composition Photo Walk', url: '/curriculum/shared/photo2-composition-overview.html' },

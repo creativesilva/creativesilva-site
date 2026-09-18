@@ -308,6 +308,16 @@ const DOCS = [
     '¿Cómo elegiste (cull) tus mejores 6 usando la calificación de 5 estrellas, y por qué guardaste esas y no las demás?',
     '¿De qué estás más orgulloso en tus 6 finales, y qué harías diferente la próxima vez?',
   ]},
+  { ...EN, outfile: 'Tiny-Things-Reflection-EN.docx', title: 'Tiny Things: Reflection', subtitle: PVHS_EN('Photography 1A'), questions: [
+    'Which tiny thing was your favorite to photograph, and why?',
+    'What is something small you usually walk past that you really noticed this weekend?',
+    'What would be a cool photo challenge to try next weekend with your own device? Pitch your idea.',
+  ]},
+  { ...ES, outfile: 'Tiny-Things-Reflection-ES.docx', title: 'Cosas Pequeñas: Reflexión', subtitle: PVHS_ES('Fotografía 1A'), questions: [
+    '¿Cuál cosa pequeña fue tu favorita para fotografiar, y por qué?',
+    '¿Qué es algo pequeño que normalmente pasas por alto y que de verdad notaste este fin de semana?',
+    '¿Qué sería un reto de fotos genial para probar el próximo fin de semana con tu propio dispositivo? Propon tu idea.',
+  ]},
 ];
 
 (async () => { for (const d of DOCS) await buildDoc(d); })();
