@@ -56,7 +56,7 @@ body {
 }
 .silva-uni-title:hover { color: #9df0f0; }
 .silva-uni-cal {
-  margin-left: 0; flex: 0 0 auto; height: 46px; box-sizing: border-box;
+  margin-left: 0; flex: 0 0 auto; height: 32px; box-sizing: border-box;
   display: inline-flex; align-items: center; padding: 0 22px;
   font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
   font-size: 0.78rem; color: #fff; text-decoration: none; white-space: nowrap;
@@ -64,7 +64,7 @@ body {
 }
 .silva-uni-cal:hover { filter: brightness(1.18); }
 .silva-uni-searchbtn {
-  flex: 0 0 auto; height: 46px; box-sizing: border-box;
+  flex: 0 0 auto; height: 32px; box-sizing: border-box;
   display: inline-flex; align-items: center; padding: 0 20px;
   font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
   font-size: 0.78rem; color: #fff; text-decoration: none; white-space: nowrap;
@@ -77,7 +77,7 @@ body {
 .silva-uni-searchbtn:hover { filter: brightness(1.18); }
 .silva-uni-search { position: relative; flex: 1 1 280px; max-width: 480px; display: flex; }
 .silva-uni-search-input {
-  width: 100%; box-sizing: border-box; height: 46px;
+  width: 100%; box-sizing: border-box; height: 32px;
   background-color: rgba(0, 0, 0, 0.30);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360d8d8' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cline x1='15.5' y1='15.5' x2='21' y2='21'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: 15px center; background-size: 16px 16px;
@@ -98,7 +98,7 @@ body {
 .silva-uni-logo img { height: 29px; width: auto; display: block; }
 .silva-uni-cat { position: relative; display: flex; align-items: center; }
 .silva-uni-cattrigger {
-  align-self: center; display: flex; align-items: center; gap: 9px; min-height: 46px; padding: 0 15px;
+  align-self: center; display: flex; align-items: center; gap: 9px; min-height: 32px; padding: 0 15px;
   margin: 7px 0 7px 4px; white-space: nowrap;
   font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
   font-size: 0.75rem; color: rgba(234, 247, 247, 0.85); cursor: pointer;
