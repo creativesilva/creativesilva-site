@@ -1271,12 +1271,22 @@
                     <div class="cat-body">
                     <div class="ps2-titlebar"><img class="ps2-tb-icon" src="https://www.creativesilva.com/assets/Icons/assignment/design-v1.png" alt="" /><span class="ps2-tb-title">Prompt Studio</span></div>
                     <div class="ps2-list">
-                      <div class="ps2-prompt" data-file="/assets/prompts/Classroom-Environment-Master-Prompt-v3.txt">
+                      <div class="ps2-prompt" data-file="/assets/prompts/Classroom-Environment-Master-Prompt-v4.md">
                         <div class="ps2-row">
                           <div class="ps2-title">Classroom Environment Master Prompt <span class="ps2-sub">(PV lab scene, any angle)</span></div>
                           <div class="ps2-actions">
                             <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
-                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Classroom-Environment-Master-Prompt-v3.txt', this)">Copy Text</button>
+                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Classroom-Environment-Master-Prompt-v4.md', this)">Copy Text</button>
+                          </div>
+                        </div>
+                        <div class="ps2-reveal" hidden></div>
+                      </div>
+                      <div class="ps2-prompt" data-file="/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md">
+                        <div class="ps2-row">
+                          <div class="ps2-title">Campus Exterior Master Prompt <span class="ps2-sub">(PV Academy of Arts, any exterior)</span></div>
+                          <div class="ps2-actions">
+                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
+                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md', this)">Copy Text</button>
                           </div>
                         </div>
                         <div class="ps2-reveal" hidden></div>
@@ -3312,6 +3322,7 @@
     ];
     // Fields whose name matches these get a dropdown; every other field gets a text input.
     var FIELD_OPTS = [
+      { re: /exterior location/i, opts: ['main front entrance plaza','front drop-off zone','entry courtyard','side exterior walkway','outdoor gathering space','landscaped courtyard','exterior terrace or balcony view','building corner perspective','outdoor circulation corridor'] },
       { re: /height/i, opts: ['ground level','low','eye level','standing eye level','slightly elevated','high','overhead'] },
       { re: /yaw|direction/i, opts: ['facing the front wall','facing the rear wall','facing the window wall','facing the solid wall','three-quarter left','three-quarter right','profile left','profile right'] },
       { re: /pitch|tilt/i, opts: ['level','slightly down','angled down','slightly up','angled up'] },
@@ -3428,8 +3439,8 @@
       function buildFields(){
         fieldsGroup.innerHTML='';
         fieldsGroup.appendChild(el('div','ps2-gtitle','Scene overrides'));
-        var re=/^\[([^\]]+)\]\s*=/gm, m, names=[];
-        while((m=re.exec(baseText))!==null){ names.push(m[1]); }
+        var re=/^\s*(?:[-*]\s+)?(?:\*\*)?\[([^\]]+)\]\s*=/gm, m, names=[];
+        while((m=re.exec(baseText))!==null){ names.push(m[1].trim()); }
         if(!names.length){ fieldsGroup.appendChild(el('div','ps2-hint','This prompt has no fill-in fields. Pick reference files below and copy.')); return; }
         function fieldEl(name){
           if(state.fields[name]===undefined) state.fields[name]='';
@@ -3445,10 +3456,13 @@
         // then all the dropdowns, then the remaining free-text (furniture / special changes).
         var textNames=names.filter(function(n){ return !optsFor(n); });
         var dropNames=names.filter(function(n){ return optsFor(n); });
+        var trailRe=/special changes|furniture/i;
+        var leadText=textNames.filter(function(n){ return !trailRe.test(n); });
+        var trailText=textNames.filter(function(n){ return trailRe.test(n); });
         function addGrid(cls, list){ if(!list.length) return; var g=el('div','ps2-fields'+(cls?' '+cls:'')); list.forEach(function(n){ g.appendChild(fieldEl(n)); }); fieldsGroup.appendChild(g); }
-        addGrid('ps2-fields--text', textNames.slice(0,4));
+        addGrid('ps2-fields--text', leadText);
         addGrid('', dropNames);
-        addGrid('ps2-fields--text', textNames.slice(4));
+        addGrid('ps2-fields--text', trailText);
       }
 
       function selectedRefs(){
