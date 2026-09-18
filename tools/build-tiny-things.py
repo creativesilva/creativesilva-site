@@ -139,7 +139,7 @@ def step01():
         [("Your 6 photos (JPG),","all 6 tiny-thing captures, uploaded to this Canvas assignment.")])
     en+=own_device_capture(False)
     en+=card("STEP 01 / CAPTURE","Photograph 6 Tiny Things",
-        float_right(STEP1_FLOAT,"A student crouching low to photograph a small object up close with a phone","")
+        float_right(STEP1_FLOAT,"Extreme close-up of a grasshopper on red ground at a low bug&rsquo;s-eye angle","Captured by Ari, age 7, on an iPhone 14 Pro. 9/17/2026. No AI.")
         + para("Head outside or around the room and hunt for tiny things. Find 6 different small things we usually overlook and take a photo of each one. Move around and change your height for every photo: some down low like a bug, some up high, some at eye level.")
         + note_orange(FRESH_EN)
         + bullets([
@@ -156,7 +156,7 @@ def step01():
         [("Tus 6 fotos (JPG),","las 6 capturas de cosas pequeñas, subidas a esta tarea de Canvas.")])
     es+=own_device_capture(True)
     es+=card("PASO 01 / CAPTURA","Fotograf&iacute;a 6 Cosas Peque&ntilde;as",
-        float_right(STEP1_FLOAT,"Un estudiante agach&aacute;ndose para fotografiar de cerca un objeto peque&ntilde;o con un tel&eacute;fono","")
+        float_right(STEP1_FLOAT,"Primer plano extremo de un saltamontes en el suelo rojo, a un &aacute;ngulo bajo de insecto","Capturada por Ari, de 7 a&ntilde;os, con un iPhone 14 Pro. 17/9/2026. Sin IA.")
         + para("Sal afuera o camina por el salón y busca cosas pequeñas. Encuentra 6 cosas pequeñas diferentes que normalmente pasamos por alto y toma una foto de cada una. Muévete y cambia tu altura en cada foto: algunas muy abajo como un insecto, algunas arriba, algunas al nivel de los ojos.")
         + note_orange(FRESH_ES)
         + bullets([
