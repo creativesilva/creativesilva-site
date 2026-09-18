@@ -98,7 +98,7 @@ body {
 .silva-uni-logo img { height: 29px; width: auto; display: block; }
 .silva-uni-cat { position: relative; display: flex; align-items: center; }
 .silva-uni-cattrigger {
-  align-self: center; display: flex; align-items: center; gap: 9px; min-height: 34px; padding: 0 15px;
+  align-self: center; display: flex; align-items: center; gap: 9px; min-height: 46px; padding: 0 15px;
   margin: 7px 0 7px 4px; white-space: nowrap;
   font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
   font-size: 0.75rem; color: rgba(234, 247, 247, 0.85); cursor: pointer;
