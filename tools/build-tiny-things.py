@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-# Photography 1A - Module 06: Tiny Things.
+# Tiny Things (Photography 1A Module 06 AND Photography 2A Module 05) - identical module, two courses.
 # A weekend challenge: see the world from a bug's-eye view. Students find and photograph 6 tiny
 # things we normally overlook (high, low, or eye level) on their OWN DEVICE (phone or iPad), upload
 # all 6 (Step 1), then write a short reflection (Step 2). Own-device, so the banner wears the white
 # your-device crown and the overview + capture step carry the orange fresh-photos note.
 # Overview + 2 steps, bilingual EN/ES, 5th-grade. Uses the shared silva_framework chrome.
+# The ONLY per-course differences: overview eyebrow course name, page-title course, page slugs, and
+# the reflection doc (course-correct subtitle). Everything else is shared, so the two stay in sync.
 import os
 from silva_framework import *
 import silva_framework as _sf
@@ -17,16 +19,27 @@ IMG=f"{SITE}/assets/images/photo1/tiny-things"
 HEADER=f"{IMG}/tiny-things-header-v1.jpg"
 STEP1_FLOAT=f"{IMG}/tiny-things-step01-float-v1.jpg"
 REFLECT_FLOAT=f"{IMG}/tiny-things-reflection-float-v1.jpg"
-REFLECT_EN=f"{SITE}/assets/course-documents/Tiny-Things-Reflection-EN.docx"
-REFLECT_ES=f"{SITE}/assets/course-documents/Tiny-Things-Reflection-ES.docx"
+DOCS=f"{SITE}/assets/course-documents"
 AREA="Photography Folder"
+
+# Per-course config. Content is identical; only these fields change.
+COURSES=[
+  {"cn_en":"Photography 1A","cn_es":"Fotograf&iacute;a 1A",
+   "over":"photo1-tiny-things-overview.html",
+   "s1":"photo1-tiny-things-step01-capture.html",
+   "s2":"photo1-tiny-things-step02-reflection.html",
+   "refl_en":f"{DOCS}/Tiny-Things-Reflection-EN.docx",
+   "refl_es":f"{DOCS}/Tiny-Things-Reflection-ES.docx"},
+  {"cn_en":"Photography 2A","cn_es":"Fotograf&iacute;a 2A",
+   "over":"photo2-tiny-things-overview.html",
+   "s1":"photo2-tiny-things-step01-capture.html",
+   "s2":"photo2-tiny-things-step02-reflection.html",
+   "refl_en":f"{DOCS}/Tiny-Things-Photo2-Reflection-EN.docx",
+   "refl_es":f"{DOCS}/Tiny-Things-Photo2-Reflection-ES.docx"},
+]
 
 FRESH_EN="Fresh photos only. Do not use pictures already in your camera roll from before this class. Every photo must be planned and taken on purpose for this project. Be honest and turn in your own new work."
 FRESH_ES="Solo fotos nuevas. No uses fotos que ya tenías en tu galería de antes de esta clase. Cada foto debe ser planeada y tomada a propósito para este proyecto. Sé honesto y entrega tu propio trabajo nuevo."
-
-OVER="photo1-tiny-things-overview.html"
-S1="photo1-tiny-things-step01-capture.html"
-S2="photo1-tiny-things-step02-reflection.html"
 
 # CTE Studio Arts standards (draft, pending validation with the others).
 TT_STANDARDS=[
@@ -48,13 +61,13 @@ TT_STANDARDS=[
    "es_desc":"Revisas tus seis fotos y compartes una idea para el próximo reto del fin de semana."},
 ]
 
-def downloads_block(es):
+def downloads_block(es, C):
     # Orange Downloads section (Overview only). Tiny Things holds the reflection doc.
     heading="Descarga Tus Archivos" if es else "Download Your Files"
     lead=("Descarga aquí todo lo que necesitas para este módulo. Consigue tus archivos antes de empezar." if es
           else "Download everything you need for this module here. Get your files before you start.")
     reflabel="Documento de Reflexión (Word)" if es else "Reflection Document (Word)"
-    ref=REFLECT_ES if es else REFLECT_EN
+    ref=C["refl_es"] if es else C["refl_en"]
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
       + para(lead)
@@ -63,11 +76,11 @@ def downloads_block(es):
       + '</div>'
       + folder_note(es, AREA) + '</div>')
 
-def nav(current,dots,stepnav):
+def nav(current,dots,stepnav,C):
     return ('      <div class="silva-breadcrumb">\n'
             '        <a href="/curriculum.html">Curriculum Catalog</a>\n'
             '        <span class="bc-sep">&rsaquo;</span>\n'
-            f'        <a href="{OVER}" class="bc-hide-sm">Tiny Things</a>\n'
+            f'        <a href="{C["over"]}" class="bc-hide-sm">Tiny Things</a>\n'
             '        <span class="bc-sep bc-hide-sm">&rsaquo;</span>\n'
             f'        <span class="bc-current">{current}</span>\n'
             '      </div>\n'
@@ -76,15 +89,16 @@ def nav(current,dots,stepnav):
             f'      <div class="silva-step-nav">{stepnav}</div>')
 
 # ---------------- OVERVIEW ----------------
-def overview():
-    en=banner("Photography 1A &bull; Tiny Things","Tiny Things","A weekend challenge: see the world from a bug&rsquo;s eye view.","#espanol","Clic para Espa&ntilde;ol")
+def overview(C):
+    OVER,S1,S2=C["over"],C["s1"],C["s2"]
+    en=banner(f'{C["cn_en"]} &bull; Tiny Things',"Tiny Things","A weekend challenge: see the world from a bug&rsquo;s eye view.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Tiny Things",
         para("This weekend, slow down and look closer. Your challenge is to see the world the way a bug sees it: from down low, up high, or right at eye level with something small. Find 6 tiny things we normally walk right past and photograph them so they finally get noticed. You use your own phone or a school iPad, so everyone has a fair and equal way to take part.")
         + framed(HEADER,"Tiny Things")
         + para("Think about the small stuff: a crack in the sidewalk, a bug on a leaf, a screw in a door hinge, a drop of water, a crumb, a key, or the tip of a shoelace. Get close, change your angle, and make the ordinary look amazing.")
         + note_orange(FRESH_EN))
     en+=standards_box(False, TT_STANDARDS)
-    en+=downloads_block(False)
+    en+=downloads_block(False, C)
     en+=card("HOW TO FIND THEM","Tips for Tiny Things",
         para("The best tiny-thing photos come from getting low and getting close. Move your whole body, not just your arm, and try a few angles before you tap.")
         + bullets([
@@ -102,14 +116,14 @@ def overview():
          ("Worm&rsquo;s-Eye View","A very low angle that looks up at your subject, as if you were down on the ground like a worm or a bug. It is the opposite of a bird&rsquo;s-eye view."),
          ("Depth of Field","How much of your photo is in sharp focus. In a close-up, often only the tiny subject is sharp and the background goes soft and blurry.")])
 
-    es=banner("Fotograf&iacute;a 1A &bull; Cosas Peque&ntilde;as","Cosas Peque&ntilde;as","Un reto de fin de semana: ve el mundo como lo ve un insecto.","#top","Back to English")
+    es=banner(f'{C["cn_es"]} &bull; Cosas Peque&ntilde;as',"Cosas Peque&ntilde;as","Un reto de fin de semana: ve el mundo como lo ve un insecto.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Cosas Peque&ntilde;as",
         para("Este fin de semana, ve más despacio y mira de cerca. Tu reto es ver el mundo como lo ve un insecto: desde muy abajo, desde arriba o justo al nivel de los ojos de algo pequeño. Encuentra 6 cosas pequeñas que normalmente pasamos por alto y fotografíalas para que por fin se noten. Usas tu propio teléfono o un iPad de la escuela, para que todos tengan una forma justa e igual de participar.")
         + framed(HEADER,"Cosas Peque&ntilde;as")
         + para("Piensa en las cosas pequeñas: una grieta en la banqueta, un insecto en una hoja, un tornillo en una bisagra, una gota de agua, una miga, una llave o la punta de una agujeta. Acércate, cambia tu ángulo y haz que lo común se vea increíble.")
         + note_orange(FRESH_ES))
     es+=standards_box(True, TT_STANDARDS)
-    es+=downloads_block(True)
+    es+=downloads_block(True, C)
     es+=card("C&Oacute;MO ENCONTRARLAS","Consejos Para Cosas Peque&ntilde;as",
         para("Las mejores fotos de cosas pequeñas salen de ponerte abajo y acercarte. Mueve todo tu cuerpo, no solo el brazo, y prueba varios ángulos antes de tomar la foto.")
         + bullets([
@@ -130,10 +144,11 @@ def overview():
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
-    return wrap_page("Tiny Things | Photography 1A | PVHS", nav("Overview",dots,stepnav), top_wrap(en,es), bottom)
+    return wrap_page(f'Tiny Things | {C["cn_en"]} | PVHS', nav("Overview",dots,stepnav,C), top_wrap(en,es), bottom)
 
 # ---------------- STEP 01 ----------------
-def step01():
+def step01(C):
+    OVER,S1,S2=C["over"],C["s1"],C["s2"]
     en=banner("Tiny Things &bull; Step 1","Capture &amp; Submit","Photograph your 6 tiny things.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("Your 6 photos (JPG),","all 6 tiny-thing captures, uploaded to this Canvas assignment.")])
@@ -171,10 +186,11 @@ def step01():
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
-    return wrap_page("Tiny Things: Capture | Photography 1A | PVHS", nav("Step 01",dots,stepnav), top_wrap(en,es), bottom)
+    return wrap_page(f'Tiny Things: Capture | {C["cn_en"]} | PVHS', nav("Step 01",dots,stepnav,C), top_wrap(en,es), bottom)
 
 # ---------------- STEP 02 ----------------
-def step02():
+def step02(C):
+    OVER,S1,S2=C["over"],C["s1"],C["s2"]
     en=banner("Tiny Things &bull; Step 2","Reflection","Reflect and pitch next week&rsquo;s challenge.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
@@ -196,10 +212,11 @@ def step02():
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><span></span></div>'
-    return wrap_page("Tiny Things: Reflection | Photography 1A | PVHS", nav("Step 02",dots,stepnav), top_wrap(en,es), bottom)
+    return wrap_page(f'Tiny Things: Reflection | {C["cn_en"]} | PVHS', nav("Step 02",dots,stepnav,C), top_wrap(en,es), bottom)
 
-for fname,gen in [(OVER,overview),(S1,step01),(S2,step02)]:
-    html=ent(gen())
-    ban_check(html, fname)
-    open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
-    print("wrote", fname, len(html), "bytes")
+for C in COURSES:
+    for fname,gen in [(C["over"],overview),(C["s1"],step01),(C["s2"],step02)]:
+        html=ent(gen(C))
+        ban_check(html, fname)
+        open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
+        print("wrote", fname, len(html), "bytes")

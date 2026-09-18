@@ -47,7 +47,8 @@
       { name: 'Composition Photo Walk', url: '/curriculum/shared/photo2-composition-overview.html' },
       { name: 'Off-Camera Flash',       url: '/curriculum/shared/photo2-ocf-overview.html' },
       { name: 'Studio Session',         url: '/curriculum/shared/photo2-studio-session-overview.html' },
-      { name: 'Build Your Own Preset',  url: '/curriculum/shared/photo2-preset-overview.html' }
+      { name: 'Build Your Own Preset',  url: '/curriculum/shared/photo2-preset-overview.html' },
+      { name: 'Tiny Things',            url: '/curriculum/shared/photo2-tiny-things-overview.html' }
     ]}
   ];
 
@@ -233,7 +234,10 @@
      '/curriculum/shared/photo2-preset-step01-photowalk.html',
      '/curriculum/shared/photo2-preset-step02-edit-preset.html',
      '/curriculum/shared/photo2-preset-step03-deliver.html',
-     '/curriculum/shared/photo2-preset-step04-reflection.html']
+     '/curriculum/shared/photo2-preset-step04-reflection.html'],
+    ['/curriculum/shared/photo2-tiny-things-overview.html',
+     '/curriculum/shared/photo2-tiny-things-step01-capture.html',
+     '/curriculum/shared/photo2-tiny-things-step02-reflection.html']
   ];
 
   var SEQUENCE = [];
@@ -271,7 +275,7 @@
     return -1;
   }
   var ACTIVE_FIRST = groupIndexOf('/curriculum/digarts1/digarts1a-home.html');
-  var ACTIVE_LAST = groupIndexOf('/curriculum/shared/photo2-preset-step04-reflection.html');
+  var ACTIVE_LAST = groupIndexOf('/curriculum/shared/photo2-tiny-things-step02-reflection.html');
   function inActive(g) { return ACTIVE_FIRST !== -1 && g >= ACTIVE_FIRST && g <= ACTIVE_LAST; }
 
   // Amazon-style page window: show all when small, else first/last plus a
