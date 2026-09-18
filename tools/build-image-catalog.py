@@ -17,7 +17,7 @@ COURSE_ORDER=["da1a","photo1a","photo2a"]
 
 TEAL=r'linear-gradient\(135deg,#00b8b8 0%,rgba\(0,184,184,0\.08\)'
 HERO_RE=re.compile(TEAL+r'[^>]*"><img src="https://www\.creativesilva\.com(/assets/images/[^"]+)"(?:[^>]*alt="([^"]*)")?')
-FLOAT_RE=re.compile(r'flex:1 1 44%;min-width:300px;"><div style="[^"]*"><img src="https://www\.creativesilva\.com(/assets/images/[^"]+)"(?:[^>]*alt="([^"]*)")?')
+FLOAT_RE=re.compile(r'class="silva-cfloat"[^>]*><div style="[^"]*"><img src="https://www\.creativesilva\.com(/assets/images/[^"]+)"(?:[^>]*alt="([^"]*)")?')
 
 def modules_from_catalog():
     src=open(CAT,encoding="utf-8").read()
