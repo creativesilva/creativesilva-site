@@ -457,14 +457,17 @@ body {
   margin: 0 0 16px 30px;
 }
 @media (max-width: 640px) {
-  /* !important so it overrides the inline float on the .silva-cfloat div (the div carries inline
-     float styles as a stale-stylesheet fallback). */
+  /* Drop the content photo to full width AND move it BELOW the text (never above): the float div
+     sits first in source for the desktop wrap, so on narrow we flex-column the card and order the
+     image last. !important beats the inline float fallback on the .silva-cfloat div. */
+  .silva-floatcard { display: flex; flex-direction: column; }
   .silva-cfloat {
     float: none !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: none !important;
-    margin: 0 0 16px 0 !important;
+    margin: 18px 0 2px !important;
+    order: 1;
   }
 }
 

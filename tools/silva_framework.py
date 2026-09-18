@@ -225,8 +225,12 @@ def _lay(box_open, chip, inner, floatimg):
     if hf:
         # Inline float too, not class-only: a class-only float collapses to a full-width block if the
         # stylesheet is stale or has not loaded yet. The silva-module.css media query uses !important
-        # to drop it to full width on narrow screens (that beats these inline values).
-        return (box_open
+        # to drop it to full width on narrow screens (that beats these inline values). The card is
+        # tagged .silva-floatcard so that same media query can flex-column it and `order` the image
+        # BELOW the text on narrow screens (the float div sits first in source for the desktop wrap,
+        # so without this it would stack ABOVE the text when the float is dropped).
+        card_open = box_open.replace('<div style=', '<div class="silva-floatcard" style=', 1)
+        return (card_open
           + f'<div class="silva-cfloat" style="float:right;width:44%;min-width:280px;max-width:520px;margin:0 0 16px 30px;">{hf}</div>'
           + chip + inner + '</div>')
     if floatimg:
