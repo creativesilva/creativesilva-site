@@ -634,14 +634,19 @@ body {
     font-size: 18pt !important;
   }
 
-  /* 5. Bio photo: remove float so it goes full-width above the text */
+  /* 5. Legacy content-photo floats (raw float:right on an <img>): drop full width AND move BELOW
+     the text, never above. The float img sits first in its card, so we flex-column the card and
+     order the image last. New framework floats use .silva-cfloat/.silva-floatcard (handled above)
+     and are untouched here (their img has no inline float:right). */
+  #top div:has(> img[style*="float:right"]) { display: flex; flex-direction: column; }
   #top img[style*="float:right"] {
     float: none !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
-    margin: 0 0 16px 0 !important;
+    margin: 18px 0 2px !important;
     display: block !important;
+    order: 1;
   }
 
   /* 6. Multi-column grids → single column */
