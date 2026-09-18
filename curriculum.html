@@ -1133,6 +1133,8 @@
     .ps2-preview { background: rgba(0,0,0,0.42); border: 1px solid rgba(255,255,255,0.10); border-left: 3px solid #00b8b8; padding: 13px 14px; font-size: 0.82rem; line-height: 1.6; color: #eaf7f7; white-space: pre-wrap; max-height: 260px; overflow-y: auto; margin-bottom: 13px; }
     .ps2-revealacts { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
     .ps2-copyprompt { background: #007474; border-color: #00b8b8; color: #fff; }
+    .ps2-reset { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.18); border-top-color: rgba(255,255,255,0.28); color: #eaf7f7; }
+    .ps2-reset:hover { border-color: rgba(255,107,26,0.55); color: #ffd0b0; }
     .ps2-copyprompt:hover { filter: brightness(1.15); }
     .ps2-copyprompt.copied { background: #1db869 !important; border-color: #1db869 !important; }
     .ps2-hint { color: var(--text-dim); font-size: 0.74rem; }
@@ -3336,12 +3338,14 @@
     function closeAllDD(){ if(openDD){ openDD.classList.remove('open'); var m=openDD.querySelector('.ps2-dd-menu'); if(m) m.hidden=true; openDD=null; } }
     document.addEventListener('click', function(e){ if(!e.target.closest('.ps2-dd')) closeAllDD(); });
     document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeAllDD(); });
-    function makeDD(opts, onChange, extraCls){
+    function makeDD(opts, onChange, extraCls, initial){
       var dd=el('div','ps2-dd'+(extraCls?' '+extraCls:''));
-      var val=el('div','ps2-dd-val'); val.textContent=opts[0].label; dd.appendChild(val);
+      var startIdx=0;
+      if(initial!=null){ for(var si=0; si<opts.length; si++){ if(opts[si].value===initial){ startIdx=si; break; } } }
+      var val=el('div','ps2-dd-val'); val.textContent=opts[startIdx].label; dd.appendChild(val);
       var menu=el('div','ps2-dd-menu'); menu.hidden=true; dd.appendChild(menu);
       opts.forEach(function(o,i){
-        var op=el('div','ps2-dd-opt'); op.textContent=o.label; if(i===0) op.classList.add('sel');
+        var op=el('div','ps2-dd-opt'); op.textContent=o.label; if(i===startIdx) op.classList.add('sel');
         op.addEventListener('click', function(e){ e.stopPropagation();
           Array.prototype.forEach.call(menu.children,function(x){x.classList.remove('sel');}); op.classList.add('sel');
           val.textContent=o.label; closeAllDD(); onChange(o.value);
@@ -3373,6 +3377,10 @@
       var path=promptEl.getAttribute('data-file');
       var BACKDROP=/two-pass/i.test(path);  // Two-Pass rebuild: Location becomes a studio-backdrop choice.
       var state={ fields:{}, chars:['','','',''], items:['','','',''], scene:'', backdrop:(BACKDROP?'transparent':'') };
+      // Auto-save: remember this prompt's entries in the browser so a reload / later visit restores them.
+      var KEY='ps2state:'+path;
+      try{ var _sv=JSON.parse(localStorage.getItem(KEY)||'null'); if(_sv&&typeof _sv==='object'){ if(_sv.fields) state.fields=_sv.fields; if(Array.isArray(_sv.chars)) state.chars=_sv.chars.concat(['','','','']).slice(0,4); if(Array.isArray(_sv.items)) state.items=_sv.items.concat(['','','','']).slice(0,4); if(typeof _sv.scene==='string') state.scene=_sv.scene; if(_sv.backdrop) state.backdrop=_sv.backdrop; } }catch(e){}
+      function save(){ try{ localStorage.setItem(KEY, JSON.stringify({fields:state.fields,chars:state.chars,items:state.items,scene:state.scene,backdrop:state.backdrop})); }catch(e){} }
       var baseText='';
       var BACKDROP_TEXT={
         transparent:'BACKGROUND: Light the subject with soft, flattering professional studio lighting and a clear catch light in the eyes on a seamless pure-white studio setup, then remove the background completely. Output the final image as a PNG with a fully transparent background: a clean alpha cutout around the subject, with no white edge fringe or halo.',
@@ -3392,7 +3400,9 @@
       var pre=el('div','ps2-preview','Loading base prompt…'); reveal.appendChild(pre);
       var acts=el('div','ps2-revealacts');
       var copyBtn=el('button','pg-btn ps2-copyprompt','Copy Prompt'); copyBtn.type='button';
-      acts.appendChild(copyBtn); acts.appendChild(el('span','ps2-hint','Copies the filled prompt, then lists the files to grab.'));
+      var resetBtn=el('button','pg-btn ps2-reset','Reset'); resetBtn.type='button';
+      resetBtn.addEventListener('click', function(){ if(!confirm('Clear all your entries for this prompt? This cannot be undone.')) return; try{ localStorage.removeItem(KEY); }catch(e){} reveal.innerHTML=''; reveal.dataset.built=''; buildReveal(promptEl); });
+      acts.appendChild(copyBtn); acts.appendChild(resetBtn); acts.appendChild(el('span','ps2-hint','Copies the filled prompt, then lists the files to grab. Your entries save automatically.'));
       reveal.appendChild(acts);
       var pop=el('div','ps2-filespop'); pop.hidden=true; reveal.appendChild(pop);
 
@@ -3401,7 +3411,8 @@
         var row=el('div','ps2-slots'); var n=single?1:4;
         var dopts=[{label:'-',value:''}].concat(options.map(function(o){return {label:o.label,value:o.file};}));
         for(var i=0;i<n;i++){ (function(idx){
-          var dd=makeDD(dopts, function(v){ if(single){ state.scene=v; } else { arr[idx]=v; } refresh(); }, 'ps2-slotdd');
+          var initv = single ? state.scene : arr[idx];
+          var dd=makeDD(dopts, function(v){ if(single){ state.scene=v; } else { arr[idx]=v; } refresh(); }, 'ps2-slotdd', initv);
           row.appendChild(dd);
         })(i); }
         g.appendChild(row); return g;
@@ -3410,7 +3421,7 @@
       function backdropSlot(){
         var g=el('div','ps2-refgroup'); g.appendChild(el('div','ps2-reflabel','Background'));
         var row=el('div','ps2-slots');
-        var dd=makeDD([{label:'Transparent background (PNG)',value:'transparent'},{label:'White studio backdrop',value:'white'}], function(v){ state.backdrop=v; refresh(); }, 'ps2-slotdd');
+        var dd=makeDD([{label:'Transparent background (PNG)',value:'transparent'},{label:'White studio backdrop',value:'white'}], function(v){ state.backdrop=v; refresh(); }, 'ps2-slotdd', state.backdrop);
         row.appendChild(dd); g.appendChild(row); return g;
       }
 
@@ -3424,8 +3435,10 @@
           if(state.fields[name]===undefined) state.fields[name]='';
           var w=el('div','ps2-field'); w.appendChild(el('label',null,esc(name)));
           var opts=optsFor(name), input;
-          if(opts){ var dopts=[{label:'-',value:''}].concat(opts.map(function(o){return {label:o,value:o};})); input=makeDD(dopts, function(v){ state.fields[name]=v; refresh(); }); }
-          else { input=el('textarea','ps2-context'); input.rows=2; input.placeholder='type here'; input.addEventListener('input',function(){ state.fields[name]=input.value; input.style.height='auto'; input.style.height=input.scrollHeight+'px'; refresh(); }); }
+          if(opts){ var dopts=[{label:'-',value:''}].concat(opts.map(function(o){return {label:o,value:o};})); input=makeDD(dopts, function(v){ state.fields[name]=v; refresh(); }, null, state.fields[name]); }
+          else { input=el('textarea','ps2-context'); input.rows=2; input.placeholder='type here';
+            if(state.fields[name]){ input.value=state.fields[name]; setTimeout(function(){ input.style.height='auto'; input.style.height=input.scrollHeight+'px'; },0); }
+            input.addEventListener('input',function(){ state.fields[name]=input.value; input.style.height='auto'; input.style.height=input.scrollHeight+'px'; refresh(); }); }
           w.appendChild(input); return w;
         }
         // Group by input type so the panel reads cleanly (Chris): the free-text fields first (up to 4),
@@ -3468,7 +3481,7 @@
         }
         return out;
       }
-      function refresh(){ pre.textContent=compose(); }
+      function refresh(){ pre.textContent=compose(); save(); }
       copyBtn.addEventListener('click', function(){ copy(compose(), copyBtn, function(){ showFiles(pop, selectedRefs()); }); });
       fetchPrompt(path).then(function(t){ baseText=t; buildFields(); refresh(); }).catch(function(){ baseText='[Could not load the base prompt file.]'; refresh(); });
       return reveal;
