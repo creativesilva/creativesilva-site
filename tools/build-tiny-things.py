@@ -134,10 +134,10 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Photography 1A &bull; Tiny Things","Tiny Things","Photograph your 6 tiny things.","#espanol","Clic para Espa&ntilde;ol")
-    en+=capture_format("jpg")
+    en=banner("Tiny Things &bull; Step 1","Capture &amp; Submit","Photograph your 6 tiny things.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("Your 6 photos (JPG),","all 6 tiny-thing captures, uploaded to this Canvas assignment.")])
+    en+=own_device_capture(False)
     en+=card("STEP 01 / CAPTURE","Photograph 6 Tiny Things",
         float_right(STEP1_FLOAT,"A student crouching low to photograph a small object up close with a phone","")
         + para("Head outside or around the room and hunt for tiny things. Find 6 different small things we usually overlook and take a photo of each one. Move around and change your height for every photo: some down low like a bug, some up high, some at eye level.")
@@ -151,10 +151,10 @@ def step01():
     en+=card("TURN IT IN","Upload Your 6 Photos",
         para("Upload all 6 photos to Canvas. A photo straight from your phone or iPad (JPG) is perfect. Then go to Step 02 for the reflection."))
 
-    es=banner("Fotograf&iacute;a 1A &bull; Cosas Peque&ntilde;as","Cosas Peque&ntilde;as","Fotograf&iacute;a tus 6 cosas peque&ntilde;as.","#top","Back to English")
-    es+=capture_format("jpg", True)
+    es=banner("Cosas Peque&ntilde;as &bull; Paso 1","Captura y Entrega","Fotograf&iacute;a tus 6 cosas peque&ntilde;as.","#top","Back to English")
     es+=deliverables_box(True,
         [("Tus 6 fotos (JPG),","las 6 capturas de cosas pequeñas, subidas a esta tarea de Canvas.")])
+    es+=own_device_capture(True)
     es+=card("PASO 01 / CAPTURA","Fotograf&iacute;a 6 Cosas Peque&ntilde;as",
         float_right(STEP1_FLOAT,"Un estudiante agach&aacute;ndose para fotografiar de cerca un objeto peque&ntilde;o con un tel&eacute;fono","")
         + para("Sal afuera o camina por el salón y busca cosas pequeñas. Encuentra 6 cosas pequeñas diferentes que normalmente pasamos por alto y toma una foto de cada una. Muévete y cambia tu altura en cada foto: algunas muy abajo como un insecto, algunas arriba, algunas al nivel de los ojos.")
@@ -175,7 +175,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Photography 1A &bull; Tiny Things","Tiny Things","Reflect and pitch next week&rsquo;s challenge.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Tiny Things &bull; Step 2","Reflection","Reflect and pitch next week&rsquo;s challenge.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
     en+=card("STEP 02 / REFLECTION","Reflect on Your Tiny Things",
@@ -184,7 +184,7 @@ def step02():
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + para("Type your answers in the document, save it, and upload it to Canvas with your 6 photos."))
 
-    es=banner("Fotograf&iacute;a 1A &bull; Cosas Peque&ntilde;as","Cosas Peque&ntilde;as","Reflexiona y propon el reto de la pr&oacute;xima semana.","#top","Back to English")
+    es=banner("Cosas Peque&ntilde;as &bull; Paso 2","Reflexi&oacute;n","Reflexiona y propon el reto de la pr&oacute;xima semana.","#top","Back to English")
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word de reflexión completo (.docx), subido a Canvas.")])
     es+=card("PASO 02 / REFLEXI&Oacute;N","Reflexiona Sobre Tus Cosas Peque&ntilde;as",

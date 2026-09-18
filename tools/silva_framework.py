@@ -116,6 +116,30 @@ def camera_settings_section(es, quality="RAW"):
       f'<div style="flex:1 1 380px;min-width:300px;">{capture_panel(quality)}</div>'
       '</div></div>')
 
+def own_device_capture(es):
+    # OWN-DEVICE capture guidance, styled like the Camera Settings section (red aperture icon +
+    # "Camera Settings" title + the red underline) but full-width and NOT expandable: just the
+    # verbiage and the JPG badge. Own-device modules (phone / iPad) have no camera kit to dial in,
+    # so this replaces the capture_format chip + the camera-kit settings panel: highest quality, JPG.
+    red="#f90101"
+    if es:
+        title="Ajustes de C&aacute;mara"
+        body=("Usa tu propio tel&eacute;fono o un iPad. Pon la c&aacute;mara en la mejor calidad de foto y captura en {jpg} "
+              "si tu dispositivo lo permite. No necesitas ninguna app especial: la c&aacute;mara normal est&aacute; bien.")
+    else:
+        title="Camera Settings"
+        body=("Use your own phone or an iPad. Set the camera to its highest photo quality and capture in {jpg} "
+              "if your device lets you. You do not need a special app: the normal camera is fine.")
+    badge=(f'<img src="{CAPFMT_ICON["jpg"]}" alt="JPG" style="height:1.9em;width:auto;vertical-align:middle;margin:0 4px;display:inline-block;" />')
+    body=body.replace("{jpg}", badge)
+    hdr=(f'<div style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);border-left:5px solid {red};padding:9px 18px 9px 12px;margin-bottom:12px;max-width:100%;box-sizing:border-box;">'
+      f'<img src="{CAMSET_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
+      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#ff8f8f;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>'
+      f'<div style="height:2px;background:{red};width:60px;margin-bottom:18px;"></div>')
+    body_html=f'<div style="line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.90);">{body}</span></div>'
+    return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      f'{hdr}{body_html}</div>')
+
 SLIDE_PLACEHOLDER=f"{SITE}/assets/images/shared/slide-deck-placeholder-v1.jpg"
 def slide_deck_thumb(pdf_url, es, thumb=None, cap=None):
     # Click-to-open PDF slide deck: a purple cover thumbnail linking to the hosted PDF, which opens
@@ -194,8 +218,11 @@ def _lay(box_open, chip, inner, floatimg):
     #    two-column flex row, which drops below the text when the page gets narrow (flex-wrap).
     hf, inner = _hoist(inner)
     if hf:
+        # Inline float too, not class-only: a class-only float collapses to a full-width block if the
+        # stylesheet is stale or has not loaded yet. The silva-module.css media query uses !important
+        # to drop it to full width on narrow screens (that beats these inline values).
         return (box_open
-          + f'<div class="silva-cfloat">{hf}</div>'
+          + f'<div class="silva-cfloat" style="float:right;width:44%;min-width:280px;max-width:520px;margin:0 0 16px 30px;">{hf}</div>'
           + chip + inner + '</div>')
     if floatimg:
         return (box_open

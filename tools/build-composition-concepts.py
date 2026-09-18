@@ -212,7 +212,7 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Photography 1A &bull; Composition Concepts","Composition Concepts","Capture your 3 concepts.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Composition Concepts &bull; Step 1","Capture &amp; Submit","Capture your 3 concepts.","#espanol","Clic para Espa&ntilde;ol")
     en+=capture_format("jpg")
     en+=deliverables_box(False,
         [("Your 3 final photos (JPG),","uploaded to this Canvas assignment.")])
@@ -228,7 +228,7 @@ def step01():
     en+=card("TURN IT IN","Upload Your 3 Photos",
         para("Upload your 3 final photos to Canvas. A photo straight from your phone or iPad (JPG) is perfect. Then go to Step 02 for the reflection."))
 
-    es=banner("Fotograf&iacute;a 1A &bull; Conceptos de Composici&oacute;n","Conceptos de Composici&oacute;n","Captura tus 3 conceptos.","#top","Back to English")
+    es=banner("Conceptos de Composici&oacute;n &bull; Paso 1","Captura y Entrega","Captura tus 3 conceptos.","#top","Back to English")
     es+=capture_format("jpg", True)
     es+=deliverables_box(True,
         [("Tus 3 fotos finales (JPG),","subidas a esta tarea de Canvas.")])
@@ -251,7 +251,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Photography 1A &bull; Composition Concepts","Composition Concepts","Reflect on your work.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Composition Concepts &bull; Step 2","Reflection","Reflect on your work.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("3 photos:","one for each concept, all different (from Step 01)."),
          ("1 reflection:","the completed Word document (.docx).")])
@@ -261,7 +261,7 @@ def step02():
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + para("Type your answers in the document, save it, and upload it to Canvas with your 3 photos."))
 
-    es=banner("Fotograf&iacute;a 1A &bull; Conceptos de Composici&oacute;n","Conceptos de Composici&oacute;n","Reflexiona sobre tu trabajo.","#top","Back to English")
+    es=banner("Conceptos de Composici&oacute;n &bull; Paso 2","Reflexi&oacute;n","Reflexiona sobre tu trabajo.","#top","Back to English")
     es+=deliverables_box(True,
         [("3 fotos:","una para cada concepto, todas diferentes (del Paso 01)."),
          ("1 reflexi&oacute;n:","el documento de Word completo (.docx).")])

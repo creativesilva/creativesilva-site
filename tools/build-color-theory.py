@@ -155,7 +155,7 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Digital Arts 1A &bull; Color Theory","Color Theory","Homework: study a real brand.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Color Theory &bull; Step 1","Brand Color Analysis","Homework: study a real brand.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("Your finished Brand Color Analysis worksheet","with your example images added (Word document, .docx), uploaded to this Canvas assignment.")])
     en+=card("","Brand Color Analysis",
@@ -178,7 +178,7 @@ def step01():
         para("Finish the worksheet, add your example images, and upload it to Canvas. Next class we share our brands and talk about what makes each color theme work.")
         + note("Looking for the worksheet? It is on this module&rsquo;s Overview page, marked M at the top, not here. Open it to download the Word document."))
 
-    es=banner("Arte Digital 1A &bull; Teor&iacute;a del Color","Teor&iacute;a del Color","Tarea: estudia una marca real.","#top","Back to English")
+    es=banner("Teor&iacute;a del Color &bull; Paso 1","An&aacute;lisis de Color de Marca","Tarea: estudia una marca real.","#top","Back to English")
     es+=deliverables_box(True,
         [("Tu hoja de trabajo de An&aacute;lisis de Color de Marca terminada","con tus im&aacute;genes de ejemplo agregadas (documento de Word, .docx), subida a esta tarea de Canvas.")])
     es+=card("","An&aacute;lisis de Color de una Marca",

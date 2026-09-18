@@ -182,7 +182,7 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Digital Arts 1A &bull; Sketchbook Cover Art","Sketchbook Cover Art","Design your covers, then turn in two photos.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Sketchbook Cover Art &bull; Step 1","Design Your Cover","Design your covers, then turn in two photos.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("2 images:","a photo of your front cover and a photo of your back cover (2 JPGs), uploaded to this Canvas assignment.")])
     en+=card("STEP 01 / DESIGN &amp; CREATE","Design Your Cover",
@@ -212,7 +212,7 @@ def step01():
         ])
         + note("This is Step 1 and it is graded on its own. The reflection is turned in separately on Step 2."))
 
-    es=banner("Arte Digital 1A &bull; Arte de la Portada","Arte de la Portada","Dise&ntilde;a tus portadas y entrega dos fotos.","#top","Back to English")
+    es=banner("Arte de la Portada &bull; Paso 1","Dise&ntilde;a Tu Portada","Dise&ntilde;a tus portadas y entrega dos fotos.","#top","Back to English")
     es+=deliverables_box(True,
         [("2 im&aacute;genes:","una foto de tu portada del frente y una de tu portada del reverso (2 JPG), subidas a esta tarea de Canvas.")])
     es+=card("PASO 01 / DISE&Ntilde;A Y CREA","Dise&ntilde;a Tu Portada",
@@ -249,7 +249,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Digital Arts 1A &bull; Sketchbook Cover Art","Sketchbook Cover Art","Complete and upload your reflection.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Sketchbook Cover Art &bull; Step 2","Submit &amp; Reflect","Complete and upload your reflection.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=card("REFLECT / STEP 02","Complete and Upload the Reflection",
@@ -259,7 +259,7 @@ def step02():
         + para("Type your answers, save the document, and upload it to this Canvas assignment.")
         + note("Your 2 cover images were turned in on Step 1. Be honest and turn in your own work."))
 
-    es=banner("Arte Digital 1A &bull; Arte de la Portada","Arte de la Portada","Completa y sube tu reflexi&oacute;n.","#top","Back to English")
+    es=banner("Arte de la Portada &bull; Paso 2","Entrega y Reflexiona","Completa y sube tu reflexi&oacute;n.","#top","Back to English")
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completo, subido a esta tarea de Canvas.")])
     es+=card("REFLEXIONA / PASO 02","Completa y Sube la Reflexi&oacute;n",
