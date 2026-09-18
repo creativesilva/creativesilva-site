@@ -462,6 +462,7 @@ body {
   .silva-cfloat {
     float: none !important;
     width: 100% !important;
+    min-width: 0 !important;
     max-width: none !important;
     margin: 0 0 16px 0 !important;
   }
