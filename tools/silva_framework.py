@@ -7,9 +7,22 @@
 # Builders do `from silva_framework import *`, keep their own module constants, content
 # functions, downloads_block (their files), nav breadcrumb, dots, and the build/ban-guard loop.
 # See SILVA_ANGULAR_FRAMEWORK.md section 3.5.
-import re
+import re, os, hashlib
 
 SITE="https://www.creativesilva.com"
+
+def _asset_ver(relpath):
+    # Content hash of a local asset, appended as ?v=<hash> to its <link>/<script> so that a changed
+    # stylesheet or script busts the browser cache. Without this, a browser holding an old
+    # silva-module.css misses the responsive rules and (e.g.) stacks a float image ABOVE the text on
+    # narrow instead of below. The hash changes only when the file changes, so it self-versions.
+    try:
+        p=os.path.join(os.path.dirname(__file__),"..",relpath)
+        return hashlib.md5(open(p,"rb").read()).hexdigest()[:8]
+    except Exception:
+        return "1"
+CSS_VER=_asset_ver("css/silva-module.css")
+NAV_VER=_asset_ver("js/silva-nav.js")
 
 def ent(s):
     m={"á":"&aacute;","é":"&eacute;","í":"&iacute;","ó":"&oacute;","ú":"&uacute;",
@@ -438,7 +451,7 @@ def wrap_page(title,nav_inner,top_html,bottom):
   <title>{title}</title>
   <link rel="icon" type="image/svg+xml" href="https://www.creativesilva.com/logos/CS_Logo_Only.svg" />
   <style>:root {{ --course-accent: #007474; }}</style>
-  <link rel="stylesheet" href="/css/silva-module.css" />
+  <link rel="stylesheet" href="/css/silva-module.css?v={CSS_VER}" />
 </head>
 <body>
   <nav class="silva-nav" aria-label="Module navigation">
@@ -461,7 +474,7 @@ def wrap_page(title,nav_inner,top_html,bottom):
     function silvaDownloadHTML() {{ var el=document.getElementById('top'); var blob=new Blob([el.outerHTML],{{type:'text/html'}}); var url=URL.createObjectURL(blob); var a=document.createElement('a'); a.href=url; a.download=location.pathname.split('/').pop().replace('.html','')+'-canvas.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }}
     function silvaCopyURL() {{ navigator.clipboard.writeText(location.href).then(function(){{var b=document.querySelector('.silva-url-btn');b.textContent='\\u2713 Copied!';b.classList.add('copied');setTimeout(function(){{b.innerHTML='&#128203; Copy URL';b.classList.remove('copied');}},2500);}}).catch(function(){{alert('Copy failed. Copy the address bar manually.');}}); }}
   </script>
-  <script src="/js/silva-nav.js"></script>
+  <script src="/js/silva-nav.js?v={NAV_VER}"></script>
 </body>
 </html>
 '''

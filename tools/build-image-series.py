@@ -7,7 +7,7 @@
 # Step 01 embeds the existing scrollable "Lightroom Import" slide deck (12 slides + PDF).
 # HEADER is a PLACEHOLDER (Chris drops art in later).
 import os, re
-from silva_framework import standards_box, banner as _sfbanner  # green CTE standards box + shared glass banner
+from silva_framework import standards_box, banner as _sfbanner, CSS_VER, NAV_VER  # green CTE standards box + shared glass banner + cache-bust vers
 SITE="https://www.creativesilva.com"
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 HEADER=f"{SITE}/assets/images/photo1/image-series/header-v1.png"   # overview header art
@@ -370,7 +370,7 @@ def wrap_page(title,nav_inner,top_html,bottom):
   <title>{title}</title>
   <link rel="icon" type="image/svg+xml" href="https://www.creativesilva.com/logos/CS_Logo_Only.svg" />
   <style>:root {{ --course-accent: #007474; }}</style>
-  <link rel="stylesheet" href="/css/silva-module.css" />
+  <link rel="stylesheet" href="/css/silva-module.css?v={CSS_VER}" />
 </head>
 <body>
   <nav class="silva-nav" aria-label="Module navigation">
@@ -393,7 +393,7 @@ def wrap_page(title,nav_inner,top_html,bottom):
     function silvaDownloadHTML() {{ var el=document.getElementById('top'); var blob=new Blob([el.outerHTML],{{type:'text/html'}}); var url=URL.createObjectURL(blob); var a=document.createElement('a'); a.href=url; a.download=location.pathname.split('/').pop().replace('.html','')+'-canvas.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }}
     function silvaCopyURL() {{ navigator.clipboard.writeText(location.href).then(function(){{var b=document.querySelector('.silva-url-btn');b.textContent='\\u2713 Copied!';b.classList.add('copied');setTimeout(function(){{b.innerHTML='&#128203; Copy URL';b.classList.remove('copied');}},2500);}}).catch(function(){{alert('Copy failed. Copy the address bar manually.');}}); }}
   </script>
-  <script src="/js/silva-nav.js"></script>
+  <script src="/js/silva-nav.js?v={NAV_VER}"></script>
 </body>
 </html>
 '''

@@ -6,7 +6,7 @@
   <title>Sketchbook Cover Art: Design & Submit | Digital Arts 1A | PVHS</title>
   <link rel="icon" type="image/svg+xml" href="https://www.creativesilva.com/logos/CS_Logo_Only.svg" />
   <style>:root { --course-accent: #007474; }</style>
-  <link rel="stylesheet" href="/css/silva-module.css" />
+  <link rel="stylesheet" href="/css/silva-module.css?v=1d2e4dfc" />
 </head>
 <body>
   <nav class="silva-nav" aria-label="Module navigation">
@@ -38,6 +38,6 @@
     function silvaDownloadHTML() { var el=document.getElementById('top'); var blob=new Blob([el.outerHTML],{type:'text/html'}); var url=URL.createObjectURL(blob); var a=document.createElement('a'); a.href=url; a.download=location.pathname.split('/').pop().replace('.html','')+'-canvas.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }
     function silvaCopyURL() { navigator.clipboard.writeText(location.href).then(function(){var b=document.querySelector('.silva-url-btn');b.textContent='\u2713 Copied!';b.classList.add('copied');setTimeout(function(){b.innerHTML='&#128203; Copy URL';b.classList.remove('copied');},2500);}).catch(function(){alert('Copy failed. Copy the address bar manually.');}); }
   </script>
-  <script src="/js/silva-nav.js"></script>
+  <script src="/js/silva-nav.js?v=eeab371c"></script>
 </body>
 </html>
