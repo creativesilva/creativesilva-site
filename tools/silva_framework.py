@@ -184,24 +184,24 @@ def _hoist(inner):
     return floats, FLOAT_RE.sub("", inner)
 
 def _lay(box_open, chip, inner, floatimg):
-    # Card body layout. With a float image/thumbnail: a wrapping flex row of [text column: chip +
-    # body] and [thumbnail column]. align-items:flex-start top-aligns the thumbnail with the title
-    # chip; flex-wrap drops the thumbnail BELOW the text when the page is too narrow (never above).
-    # Canvas preserves display:flex, so this survives paste. Without a float: chip then body.
+    # Card body layout.
+    #  - A CONTENT photo (float_right, hoisted) becomes a TRUE right-floated block at ~half card
+    #    width: the title chip and body text wrap beside it AND then fill the full width once past
+    #    the image bottom (magazine wrap), instead of being trapped in a narrow left column.
+    #    `.silva-cfloat` (silva-module.css) drops it to full width under 640px. Bordered callouts
+    #    (note/note_orange) carry overflow:hidden so they form a BFC and never slide under the float.
+    #  - A resource THUMBNAIL (floatimg: slide deck cover / install video) keeps the compact
+    #    two-column flex row, which drops below the text when the page gets narrow (flex-wrap).
     hf, inner = _hoist(inner)
-    thumb = floatimg + hf
-    if thumb:
-        # A generated CONTENT photo (float_right, hoisted) is showcased at ~half the card width;
-        # a resource THUMBNAIL (floatimg: slide deck / video) stays compact. Both drop below the
-        # text when the page gets too narrow (flex-wrap).
-        if hf:
-            textcol='flex:1 1 44%;min-width:0;'; imgcol='flex:1 1 44%;min-width:300px;'
-        else:
-            textcol='flex:1 1 320px;min-width:0;'; imgcol='flex:0 1 360px;'
+    if hf:
+        return (box_open
+          + f'<div class="silva-cfloat">{hf}</div>'
+          + chip + inner + '</div>')
+    if floatimg:
         return (box_open
           + '<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 30px;">'
-          + f'<div style="{textcol}">{chip}{inner}</div>'
-          + f'<div style="{imgcol}">{thumb}</div>'
+          + f'<div style="flex:1 1 320px;min-width:0;">{chip}{inner}</div>'
+          + f'<div style="flex:0 1 360px;">{floatimg}</div>'
           + '</div></div>')
     return box_open + chip + inner + '</div>'
 
@@ -260,11 +260,13 @@ def steps(items, accent="#00b8b8"):
 
 def note_orange(t):
     # ORANGE alert box. Reserve for the own-device fresh-photos integrity notice.
-    return (f'<div style="background:rgba(255,107,26,0.10);border:1px solid rgba(255,107,26,0.30);border-left:4px solid #FF6B1A;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
+    # overflow:hidden = its own BFC, so it never slides under a right-floated content photo.
+    return (f'<div style="background:rgba(255,107,26,0.10);border:1px solid rgba(255,107,26,0.30);border-left:4px solid #FF6B1A;padding:11px 14px;margin:8px 0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
 
 def note(t):
     # TEAL note: a callout INSIDE a teal content card, so it matches the section color (cohesion).
-    return (f'<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.30);border-left:4px solid #00b8b8;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
+    # overflow:hidden = its own BFC, so it never slides under a right-floated content photo.
+    return (f'<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.30);border-left:4px solid #00b8b8;padding:11px 14px;margin:8px 0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
 
 def framed(src,alt):
     return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;">'
@@ -361,11 +363,18 @@ def standards_box(es, aligns):
     # Summary is NOT display:flex, so the browser renders its OWN disclosure triangle on the LEFT,
     # pointing right when closed and rotating down when open, exactly like the vocab words. The
     # triangle inherits the summary's green color. Icon + label sit inline after it.
+    # The title box is wrapped in an inline-flex COLUMN so the short accent rule sits directly
+    # under it (identical to section_header, which every other section title box uses). The lead
+    # ("Tap to see...") stays inline to the right. The <details>/<summary> disclosure behavior is
+    # unchanged: the browser still draws its own triangle on the left of the summary.
     return ('<details class="silva-standards" style="background:linear-gradient(180deg,rgba(38,222,120,0.12) 0%,rgba(38,222,120,0.03) 100%);border:1px solid rgba(38,222,120,0.35);border-left:6px solid #26de78;margin-bottom:24px;overflow:hidden;">'
       '<summary style="padding:14px 18px;cursor:pointer;color:#26de78;line-height:1.2;">'
-      '<span style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);border-left:5px solid #26de78;padding:9px 18px 9px 12px;max-width:100%;box-sizing:border-box;vertical-align:middle;">'
+      '<span style="display:inline-flex;flex-direction:column;align-items:flex-start;vertical-align:middle;">'
+      '<span style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);border-left:5px solid #26de78;padding:9px 18px 9px 12px;max-width:100%;box-sizing:border-box;">'
       f'<img src="{STANDARDS_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
       f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#7bf0a8;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></span>'
+      '<span style="display:block;height:2px;background:#26de78;width:60px;margin-top:12px;"></span>'
+      '</span>'
       f'<span style="vertical-align:middle;font-size:12.5pt;color:rgba(255,255,255,0.92);margin-left:14px;">{lead}</span>'
       '</summary>'
       f'<div style="padding:8px 22px 22px;">{rows}</div></details>')

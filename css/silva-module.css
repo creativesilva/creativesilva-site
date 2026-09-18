@@ -445,6 +445,26 @@ body {
   padding: 44px 28px 60px;
 }
 
+/* Content photo float (framework _lay content-photo path). A right-floated ~half-width
+   image: body text wraps beside it and then fills the FULL card width once past the image
+   bottom (magazine wrap). Bordered callouts carry overflow:hidden (own BFC) so they never
+   slide under it. Drops to full width, stacked above the text, on phones. */
+.silva-cfloat {
+  float: right;
+  width: 44%;
+  min-width: 280px;
+  max-width: 520px;
+  margin: 0 0 16px 30px;
+}
+@media (max-width: 640px) {
+  .silva-cfloat {
+    float: none;
+    width: 100%;
+    max-width: none;
+    margin: 0 0 16px 0;
+  }
+}
+
 /* ═══════════════════════════════════════════
    HAMBURGER BUTTON
    Hidden on desktop, visible on mobile.

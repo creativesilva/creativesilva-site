@@ -55,18 +55,19 @@ def _lay(box_open, chip, inner, floatimg):
     # chip; flex-wrap drops the thumbnail BELOW the text when the page gets too narrow (never above).
     # Canvas preserves display:flex, so this survives paste. Without a float: chip then body.
     hf, inner = _hoist(inner)
-    thumb = floatimg + hf
-    if thumb:
-        # Generated CONTENT photo (float_right) is showcased ~half the card width; resource
-        # THUMBNAIL (floatimg: slide deck / video) stays compact. Both drop below when narrow.
-        if hf:
-            textcol='flex:1 1 44%;min-width:0;'; imgcol='flex:1 1 44%;min-width:300px;'
-        else:
-            textcol='flex:1 1 320px;min-width:0;'; imgcol='flex:0 1 360px;'
+    if hf:
+        # CONTENT photo: TRUE right float at ~half width; text wraps beside it and then fills the
+        # full card width once past the image bottom (.silva-cfloat, silva-module.css; drops to
+        # full width under 640px). Matches the shared framework _lay.
+        return (box_open
+          + f'<div class="silva-cfloat">{hf}</div>'
+          + chip + inner + '</div>')
+    if floatimg:
+        # resource THUMBNAIL (slide deck / video): compact two-column flex, drops below when narrow.
         return (box_open
           + '<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 30px;">'
-          + f'<div style="{textcol}">{chip}{inner}</div>'
-          + f'<div style="{imgcol}">{thumb}</div>'
+          + f'<div style="flex:1 1 320px;min-width:0;">{chip}{inner}</div>'
+          + f'<div style="flex:0 1 360px;">{floatimg}</div>'
           + '</div></div>')
     return box_open + chip + inner + '</div>'
 
@@ -176,12 +177,14 @@ def steps(items, accent="#00b8b8"):
     return f'<div style="margin:4px 0 6px;">{r}</div>'
 
 def note_orange(t):
-    return (f'<div style="background:rgba(255,107,26,0.10);border:1px solid rgba(255,107,26,0.30);border-left:4px solid #FF6B1A;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
+    # overflow:hidden = its own BFC, so it never slides under a right-floated content photo.
+    return (f'<div style="background:rgba(255,107,26,0.10);border:1px solid rgba(255,107,26,0.30);border-left:4px solid #FF6B1A;padding:11px 14px;margin:8px 0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
 
 def note(t):
     # TEAL note: a callout that lives INSIDE a teal content card, so it matches the section
     # color (cohesion). Use note_orange only for the own-device fresh-photos integrity notice.
-    return (f'<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.30);border-left:4px solid #00b8b8;padding:11px 14px;margin:8px 0;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
+    # overflow:hidden = its own BFC, so it never slides under a right-floated content photo.
+    return (f'<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.30);border-left:4px solid #00b8b8;padding:11px 14px;margin:8px 0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
 
 def framed(src,alt):
     return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;">'
