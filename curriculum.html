@@ -1018,7 +1018,6 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.12); margin-bottom: 5px; padding-bottom: 12px;
     }
     .cbc-mod.cbc-main:hover { background: rgba(0, 184, 184, 0.16); color: #fff; }
-    .cbc-mod.cbc-sub { padding-left: 34px; }
     /* Course grouping labels inside the unified Catalog menu. */
     .cbc-course-hd {
       font-family: var(--font-head, 'Oswald', sans-serif); font-size: 0.6rem; font-weight: 700;
@@ -1026,13 +1025,10 @@
     }
     .cbc-course-hd + .cbc-mod { border-top: 1px solid rgba(0, 184, 184, 0.14); }
     .cbc-course-hd:not(:first-child) { margin-top: 6px; padding-top: 11px; border-top: 1px solid rgba(255, 255, 255, 0.06); }
-    .cat-bar-item.cat-bar-build { margin-left: 4px; color: #ffb27a; border-left: 1px solid rgba(255, 255, 255, 0.08); }
-    .cat-bar-item.cat-bar-build:hover { background: rgba(255, 157, 77, 0.14); color: #fff; }
     @media (max-width: 640px) {
       .cat-bar-label { width: auto; padding: 0 16px 0 0; }
       .cat-bar-item, .cbc-trigger { padding: 12px 14px; font-size: 0.72rem; }
       .cbc-trigger-catalog { padding: 0 14px; margin: 7px 0 7px 4px; }
-      .cat-bar-item.cat-bar-build { margin-left: 0; }
     }
 
     /* Image lightbox (teacher-facing catalog only) */
@@ -2661,7 +2657,7 @@
       catMenu.appendChild(catTeacher);
       var catBuildR = document.createElement('a');
       catBuildR.href = '#build-resources';
-      catBuildR.className = 'cbc-mod cbc-sub';
+      catBuildR.className = 'cbc-mod';
       catBuildR.textContent = 'Build Resources';
       catBuildR.addEventListener('click', function () { var d = document.getElementById('build-resources'); if (d) { d.open = true; } });
       catMenu.appendChild(catBuildR);

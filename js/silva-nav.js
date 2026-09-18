@@ -31,7 +31,7 @@
     { course: 'Digital Arts 1A', modules: [
       { name: 'Pictograms',          url: '/curriculum/shared/digarts1-pictograms-overview.html' },
       { name: 'Color Theory',        url: '/curriculum/shared/digarts1-color-theory-overview.html' },
-      { name: 'Sketchbook Cover',    url: '/curriculum/shared/digarts1-sketchbook-cover-overview.html' },
+      { name: 'Sketchbook Cover Art', url: '/curriculum/shared/digarts1-sketchbook-cover-overview.html' },
       { name: 'Motivational Poster', url: '/curriculum/shared/digarts1-motivational-poster-overview.html' },
       { name: 'Live Stream Graphic',  url: '/curriculum/shared/digarts1-live-stream-graphic-overview.html' }
     ]},
@@ -489,7 +489,7 @@
     menu.appendChild(catTeacher);
     var catBuildR = document.createElement('a');
     catBuildR.href = 'https://www.creativesilva.com/curriculum.html#build-resources';
-    catBuildR.className = 'silva-uni-catmod silva-uni-catsub';
+    catBuildR.className = 'silva-uni-catmod';
     catBuildR.textContent = 'Build Resources';
     menu.appendChild(catBuildR);
     MENU.forEach(function (group) {

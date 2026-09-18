@@ -127,7 +127,6 @@ body {
 }
 .silva-uni-cathd + .silva-uni-catmod { border-top: 1px solid rgba(0, 184, 184, 0.14); }
 .silva-uni-catmod:hover { background: rgba(0, 184, 184, 0.16); color: #fff; }
-.silva-uni-catmod.silva-uni-catsub { padding-left: 34px; }
 /* "Main Catalog" back-link: the first menu item, set off from the courses by a divider. */
 .silva-uni-catmain {
   color: #eaf7f7; font-weight: 700; letter-spacing: 0.09em;
