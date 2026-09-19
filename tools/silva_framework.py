@@ -122,7 +122,7 @@ def camera_settings_section(es, quality="RAW"):
     else:
         title="Camera Settings"; lead="Use these settings for this photo walk. The only setting you change is the shutter speed, to balance the light meter."
         note_t="Change only the shutter. If it is too bright outside, raise the shutter speed. If it is too dark, lower it, until the light meter is balanced. Indoors, with these settings, the light meter will read underexposed and the image will look black: that is expected. Outside it will be much closer."
-    hdr=(f'<div style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);border-left:5px solid {red};padding:9px 18px 9px 12px;margin-bottom:12px;max-width:100%;box-sizing:border-box;">'
+    hdr=(f'<div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);border-left:5px solid {red};padding:9px 18px 9px 12px;margin-bottom:12px;box-sizing:border-box;">'
       f'<img src="{CAMSET_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
       f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#ff8f8f;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>'
       f'<div style="height:2px;background:{red};width:60px;margin-bottom:18px;"></div>')
@@ -150,7 +150,7 @@ def own_device_capture(es):
               "if your device lets you. You do not need a special app: the normal camera is fine.")
     badge=(f'<img src="{CAPFMT_ICON["jpg"]}" alt="JPG" style="height:1.9em;width:auto;vertical-align:middle;margin:0 4px;display:inline-block;" />')
     body=body.replace("{jpg}", badge)
-    hdr=(f'<div style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);border-left:5px solid {red};padding:9px 18px 9px 12px;margin-bottom:12px;max-width:100%;box-sizing:border-box;">'
+    hdr=(f'<div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);border-left:5px solid {red};padding:9px 18px 9px 12px;margin-bottom:12px;box-sizing:border-box;">'
       f'<img src="{CAMSET_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
       f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#ff8f8f;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>'
       f'<div style="height:2px;background:{red};width:60px;margin-bottom:18px;"></div>')
@@ -187,8 +187,10 @@ CAMSET_ICON=f"{SITE}/assets/Icons/assignment/camera-settings-v1.svg"  # red aper
 def section_header(icon,title,accent,light):
     # COMBINED section header (LOCKED 2026-09-10): one dark rectangle holding the section icon
     # + one big color-coded title, then the short accent rule under it.
-    return ('<div style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);'
-      f'border-left:5px solid {accent};padding:9px 18px 9px 12px;margin-bottom:12px;max-width:100%;box-sizing:border-box;">'
+    # Full-width title bar: icon + title stay LEFT, the bar spans the card and its dark fill
+    # gradients out to transparent on the right (Chris, 2026-09-18). Short accent rule under it.
+    return ('<div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);'
+      f'border-left:5px solid {accent};padding:9px 18px 9px 12px;margin-bottom:12px;box-sizing:border-box;">'
       f'<img src="{icon}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
       f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:{light};letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>'
       f'<div style="height:2px;background:{accent};width:60px;margin-bottom:18px;"></div>')
@@ -242,7 +244,7 @@ def _lay(box_open, chip, inner, floatimg):
         # width) it sits right below the title bar in source order, so it never stacks above the
         # title. Inline float is the stale-stylesheet fallback; the media query !important wins.
         return (box_open + chip
-          + f'<div class="silva-cfloat" style="float:right;width:44%;min-width:280px;max-width:520px;margin:0 0 16px 30px;">{hf}</div>'
+          + f'<div class="silva-cfloat" style="float:right;width:44%;min-width:280px;max-width:520px;margin:12px 0 16px 30px;">{hf}</div>'
           + inner + '</div>')
     if floatimg:
         return (box_open
