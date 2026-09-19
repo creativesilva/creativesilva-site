@@ -409,21 +409,22 @@ def standards_box(es, aligns):
           f'<span style="display:inline-block;background:#26de78;color:#04160c;font-size:9.5pt;font-weight:bold;letter-spacing:0.04em;padding:2px 8px;white-space:nowrap;">{a["code"]}</span>'
           f'<span style="font-size:12.5pt;color:#ffffff;"><strong>{t}</strong></span>{tiertag}</div>'
           f'<div style="font-size:11pt;color:rgba(255,255,255,0.82);margin-top:3px;">{d}</div></div>')
-    # Full-width title bar (Chris, 2026-09-19): the SUMMARY itself is the bar, so its dark fill
-    # gradients out to transparent on the right exactly like section_header, spanning the whole
-    # component instead of a compact box. Icon + title stay left (over the dark zone), the short
-    # accent rule sits under them, and the "Tap to see..." lead rides to the right in the faded
-    # zone. Summary is NOT display:flex, so the browser still draws its OWN green disclosure
-    # triangle on the LEFT (pointing right when closed, rotating down when open); no CSS needed,
-    # which keeps this a pure inline change. Canvas strips <details>, same caveat as vocab.
+    # Full-width title bar (Chris, 2026-09-19): KEEP the compact internal title block (dark box +
+    # icon + title, with the 60px accent rule under it) and span a gradient across the WHOLE summary
+    # behind it, like the other section bars. The dark title box sits on the left over the darkest
+    # part of the gradient so it stays distinct; the gradient fades to transparent on the right; and
+    # the "Tap to see..." lead rides over that faded zone. Summary is NOT display:flex, so the
+    # browser still draws its OWN green disclosure triangle on the LEFT. Pure inline, no CSS.
     return ('<details class="silva-standards" style="background:linear-gradient(180deg,rgba(38,222,120,0.12) 0%,rgba(38,222,120,0.03) 100%);border:1px solid rgba(38,222,120,0.35);border-left:6px solid #26de78;margin-bottom:24px;overflow:hidden;">'
-      '<summary style="cursor:pointer;color:#26de78;line-height:1.2;padding:11px 18px 13px 14px;'
+      '<summary style="padding:14px 18px;cursor:pointer;color:#26de78;line-height:1.2;'
       'background:linear-gradient(90deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);box-sizing:border-box;">'
-      '<span style="display:inline-flex;align-items:center;gap:12px;vertical-align:middle;">'
+      '<span style="display:inline-flex;flex-direction:column;align-items:flex-start;vertical-align:middle;">'
+      '<span style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);border-left:5px solid #26de78;padding:9px 18px 9px 12px;max-width:100%;box-sizing:border-box;">'
       f'<img src="{STANDARDS_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
       f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#7bf0a8;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></span>'
-      f'<span style="vertical-align:middle;font-size:12.5pt;color:rgba(255,255,255,0.92);margin-left:14px;">{lead}</span>'
       '<span style="display:block;height:2px;background:#26de78;width:60px;margin-top:12px;"></span>'
+      '</span>'
+      f'<span style="vertical-align:middle;font-size:12.5pt;color:rgba(255,255,255,0.92);margin-left:14px;">{lead}</span>'
       '</summary>'
       f'<div style="padding:8px 22px 22px;">{rows}</div></details>')
 
