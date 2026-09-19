@@ -423,12 +423,15 @@ def standards_box(es, aligns):
       f'<span style="flex:0 0 auto;font-family:Arial,sans-serif;font-size:17pt;color:#7bf0a8;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span>'
       f'<span style="font-size:12.5pt;color:rgba(255,255,255,0.92);margin-left:6px;">{lead}</span>'
       '</div>')
+    # Summary padding-left/right = 30px so the bar's left edge lands at (details border 6px + 30px) =
+    # 36px, exactly matching a section_header inside a 30px-padded box (Download Your Files). Without
+    # this the CTE bar sat 12px too far left of the other title blocks (Chris, 2026-09-20).
     return ('<details class="silva-standards" style="background:linear-gradient(180deg,rgba(38,222,120,0.12) 0%,rgba(38,222,120,0.03) 100%);border:1px solid rgba(38,222,120,0.35);border-left:6px solid #26de78;margin-bottom:24px;overflow:hidden;">'
-      '<summary style="display:block;padding:14px 18px;cursor:pointer;">'
+      '<summary style="display:block;padding:14px 30px;cursor:pointer;">'
       + bar +
       '<div style="height:2px;background:#26de78;width:60px;margin-top:12px;"></div>'
       '</summary>'
-      f'<div style="padding:8px 22px 22px;">{rows}</div></details>')
+      f'<div style="padding:8px 30px 22px;">{rows}</div></details>')
 
 def lang_accordion(es):
     # Spanish tucked into a collapsed <details> so the page reads at a normal length for students who
