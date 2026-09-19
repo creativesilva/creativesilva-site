@@ -3312,6 +3312,9 @@
       { label: 'Mr. Silva (character sheet)', file: 'mr-silva-character-sheet-v2.jpg' },
       { label: 'Patricia (character sheet)', file: 'patricia-character-sheet-v6.jpg' },
       { label: 'Patricia (cropped hoodie)', file: 'patricia-cropped-hoodie-v3.jpg' },
+      { label: 'Patricia (full body: front)', file: 'patricia-cropped-hoodie-full-front-v2.png' },
+      { label: 'Patricia (full body: 3/4 front)', file: 'patricia-cropped-hoodie-full-angle-v2.png' },
+      { label: 'Patricia (full body: 3/4 rear)', file: 'patricia-cropped-hoodie-full-back-v2.png' },
       { label: 'Anthony (character sheet)', file: 'anthony-character-sheet-v2.jpg' },
       { label: 'Ricardo (character sheet)', file: 'ricardo-character-sheet-v3.jpg' }
     ];
@@ -3430,9 +3433,9 @@
       var refGroup=el('div','ps2-group');
       refGroup.appendChild(el('div','ps2-gtitle','Reference files'));
       if(OUTFIT){
-        refGroup.appendChild(slotGroup('Character sheet + headshots (up to 4)', state.chars, CHARACTERS, false));
+        refGroup.appendChild(slotGroup('Character sheet + full-body views (up to 4)', state.chars, CHARACTERS, false));
         refGroup.appendChild(backdropSlot());
-        refGroup.appendChild(el('div','ps2-hint','Attach your new-outfit reference images straight into the generator (the prompt calls them Image E to I). Body proportions always come from the character sheet, never from the outfit photos.'));
+        refGroup.appendChild(el('div','ps2-hint','Pick the character sheet or a single full-body view here (Image A). Attach your headshots (Image B to D) and new-outfit images (Image E to I) straight into the generator. Body proportions always come from the character sheet or full-body view, never from the outfit photos.'));
       } else {
         refGroup.appendChild(slotGroup('Characters (up to 4)', state.chars, CHARACTERS, false));
         refGroup.appendChild(slotGroup('Items (up to 4)', state.items, ITEMS, false));
