@@ -56,15 +56,12 @@ def _lay(box_open, chip, inner, floatimg):
     # Canvas preserves display:flex, so this survives paste. Without a float: chip then body.
     hf, inner = _hoist(inner)
     if hf:
-        # CONTENT photo: TRUE right float at ~half width; text wraps beside it and then fills the
-        # full card width once past the image bottom. Inline float (not class-only) so it never
-        # collapses to full width if the stylesheet is stale; silva-module.css drops it to full
-        # width under 640px via !important, and flex-orders it BELOW the text on narrow via the
-        # .silva-floatcard tag. Matches the shared framework _lay.
-        card_open = box_open.replace('<div style=', '<div class="silva-floatcard" style=', 1)
-        return (card_open
+        # CONTENT photo: float placed AFTER the chip so its top aligns with the title bar's BOTTOM
+        # edge (desktop floats right below the title, text wraps + fills under; narrow drops to full
+        # width right below the title in source order). Matches the shared framework _lay.
+        return (box_open + chip
           + f'<div class="silva-cfloat" style="float:right;width:44%;min-width:280px;max-width:520px;margin:0 0 16px 30px;">{hf}</div>'
-          + chip + inner + '</div>')
+          + inner + '</div>')
     if floatimg:
         # resource THUMBNAIL (slide deck / video): compact two-column flex, drops below when narrow.
         return (box_open

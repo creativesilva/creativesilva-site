@@ -236,16 +236,14 @@ def _lay(box_open, chip, inner, floatimg):
     #    two-column flex row, which drops below the text when the page gets narrow (flex-wrap).
     hf, inner = _hoist(inner)
     if hf:
-        # Inline float too, not class-only: a class-only float collapses to a full-width block if the
-        # stylesheet is stale or has not loaded yet. The silva-module.css media query uses !important
-        # to drop it to full width on narrow screens (that beats these inline values). The card is
-        # tagged .silva-floatcard so that same media query can flex-column it and `order` the image
-        # BELOW the text on narrow screens (the float div sits first in source for the desktop wrap,
-        # so without this it would stack ABOVE the text when the float is dropped).
-        card_open = box_open.replace('<div style=', '<div class="silva-floatcard" style=', 1)
-        return (card_open
+        # Float placed AFTER the chip so its top aligns with the title bar's BOTTOM edge (Chris,
+        # 2026-09-18): on desktop it floats right starting just below the title (text wraps to its
+        # left and fills under it), and on narrow (silva-module.css drops it to float:none full
+        # width) it sits right below the title bar in source order, so it never stacks above the
+        # title. Inline float is the stale-stylesheet fallback; the media query !important wins.
+        return (box_open + chip
           + f'<div class="silva-cfloat" style="float:right;width:44%;min-width:280px;max-width:520px;margin:0 0 16px 30px;">{hf}</div>'
-          + chip + inner + '</div>')
+          + inner + '</div>')
     if floatimg:
         return (box_open
           + '<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 30px;">'
