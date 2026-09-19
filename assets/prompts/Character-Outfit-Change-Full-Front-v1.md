@@ -1,9 +1,9 @@
 # Prompt 1 — Full Front / Neutral
 
-Create a **completely new full-body studio character-sheet image** of **[CHARACTER NAME]** in an **8:21 vertical portrait format** (portrait interpretation of 21:8). This is a **full rebuild from scratch** based on the uploaded references.
+Create a **completely new single full-body studio image (one clean full-body view, not a multi-panel character sheet)** of **[CHARACTER NAME]** in an **8:21 vertical portrait format** (portrait interpretation of 21:8). This is a **full rebuild from scratch** based on the uploaded references.
 
 ## Reference roles
-- **Image A:** current approved full-body character sheet — use this as the **primary source of truth** for body proportions, stance logic, limb length, silhouette, and overall character design.
+- **Image A:** current approved full-body view for this pose (a single full-body view is ideal; the character sheet works too) — use this as the **primary source of truth** for body proportions, stance logic, limb length, silhouette, and overall character design.
 - **Image B / C / D:** headshot references — use these as the **primary identity references** for the face, skin tone, facial structure, eyes, hair, expression quality, and likeness.
 - **Image E / F / G / H / I:** outfit references — use these **only for outfit design, garment styling, fabric behavior, layering, construction, and fit direction**. **Do not borrow body proportions from the outfit references.**
 

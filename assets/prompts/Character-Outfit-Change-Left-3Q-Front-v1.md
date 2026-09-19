@@ -1,9 +1,9 @@
 # Prompt 2 — Left 3/4 Front / Face to Camera / Pleasant Smile
 
-Create a **completely new full-body studio character-sheet image** of **[CHARACTER NAME]** in an **8:21 vertical portrait format** (portrait interpretation of 21:8). This is a **full rebuild from scratch** using the uploaded references.
+Create a **completely new single full-body studio image (one clean full-body view, not a multi-panel character sheet)** of **[CHARACTER NAME]** in an **8:21 vertical portrait format** (portrait interpretation of 21:8). This is a **full rebuild from scratch** using the uploaded references.
 
 ## Reference roles
-- **Image A:** current approved full-body character sheet — this is the **primary body-proportion reference** and must be followed exactly.
+- **Image A:** current approved full-body view for this pose (a single full-body view is ideal; the character sheet works too) — this is the **primary body-proportion reference** and must be followed exactly.
 - **Image B / C / D:** headshot references — these are the **primary face/identity references**.
 - **Image E / F / G / H / I:** outfit references — these are for **outfit design and garment styling only**, not for body shape.
 
