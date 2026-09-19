@@ -441,17 +441,6 @@
     cal.textContent = 'Calendar';
     bar.appendChild(cal);
 
-    // Google Voice: opens the teacher's GV messages in a new tab to text students about camera
-    // reservations. Voice cannot be iframed (X-Frame-Options SAMEORIGIN), so it is a button, not an
-    // embed. Teacher-only (this header is outside #top, never pasted into Canvas).
-    var voice = document.createElement('a');
-    voice.className = 'silva-uni-cal silva-uni-voice';
-    voice.href = 'https://voice.google.com/u/0/messages';
-    voice.target = '_blank';
-    voice.rel = 'noopener';
-    voice.textContent = 'Voice';
-    bar.appendChild(voice);
-
     // Search Catalog button: module/calendar pages have no catalog index, so it opens the
     // catalog home with its search shadow-box already open (?search=1).
     var searchBtn = document.createElement('a');

@@ -31,6 +31,17 @@
   }
   .silva-uni-qrbtn:hover { filter: brightness(1.18); }
 
+  /* "Voice" button, injected into the header (row 2) right beside the QR button. Opens Google
+     Voice in a compact floating pop-out window (GV cannot be iframed). */
+  .silva-uni-voicebtn {
+    margin-left: 10px; align-self: center; height: 32px; box-sizing: border-box;
+    display: inline-flex; align-items: center; padding: 0 17px; cursor: pointer;
+    font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
+    font-size: 0.72rem; color: #fff; white-space: nowrap;
+    background: #007474; border: 1px solid #00b8b8; transition: filter 0.15s ease;
+  }
+  .silva-uni-voicebtn:hover { filter: brightness(1.18); }
+
   /* Camera Check Out QR popup */
   #qr-modal { display: none; position: fixed; inset: 0; z-index: 1000; align-items: center; justify-content: center; padding: 24px; }
   #qr-modal.open { display: flex; }
@@ -82,7 +93,7 @@
   </div>
 </div>
 
-<script src="/js/silva-nav.js?v=23b65642"></script>
+<script src="/js/silva-nav.js?v=eeab371c"></script>
 <script>
   (function () {
     var FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform";
@@ -90,6 +101,22 @@
     function openModal() { modal.classList.add('open'); document.addEventListener('keydown', onEsc); }
     function closeModal() { modal.classList.remove('open'); document.removeEventListener('keydown', onEsc); }
     function onEsc(e) { if (e.key === 'Escape') closeModal(); }
+
+    // Open Google Voice as a compact floating pop-out window (not a new tab). Reusing the window
+    // name focuses the same pop-out on repeat clicks instead of spawning new ones.
+    function openVoice() {
+      var w = 480, h = 780;
+      var baseLeft = (window.screenLeft != null ? window.screenLeft : window.screenX) || 0;
+      var baseTop = (window.screenTop != null ? window.screenTop : window.screenY) || 0;
+      var vw = window.innerWidth || document.documentElement.clientWidth || screen.width;
+      var vh = window.innerHeight || document.documentElement.clientHeight || screen.height;
+      var left = Math.round(baseLeft + Math.max(0, (vw - w) / 2));
+      var top = Math.round(baseTop + Math.max(0, (vh - h) / 2));
+      var features = 'popup=yes,width=' + w + ',height=' + h + ',left=' + left + ',top=' + top +
+                     ',menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes';
+      var win = window.open('https://voice.google.com/u/0/messages', 'gvoice_popout', features);
+      if (win) { win.focus(); }
+    }
     modal.querySelector('.qr-close').addEventListener('click', closeModal);
     modal.querySelector('.qr-backdrop').addEventListener('click', closeModal);
     var copyBtn = modal.querySelector('.qr-copy');
@@ -111,6 +138,12 @@
       btn.textContent = 'View QR Code';
       btn.addEventListener('click', openModal);
       bar.appendChild(btn);
+      var voice = document.createElement('button');
+      voice.type = 'button';
+      voice.className = 'silva-uni-voicebtn';
+      voice.textContent = 'Voice';
+      voice.addEventListener('click', openVoice);
+      bar.appendChild(voice);
       return true;
     }
     function tryInject(n) { if (injectBtn() || n <= 0) { return; } setTimeout(function () { tryInject(n - 1); }, 40); }
