@@ -427,13 +427,37 @@ def standards_box(es, aligns):
       '</summary>'
       f'<div style="padding:8px 22px 22px;">{rows}</div></details>')
 
+def lang_accordion(es):
+    # Spanish tucked into a collapsed <details> so the page reads at a normal length for students who
+    # do not need it (Chris, 2026-09-19). Default closed: only a full-width teal "Ver esta tarea en
+    # espanol" strip shows; tapping it opens the entire Spanish assignment we already built. The
+    # English banner's language toggle still targets #espanol (this <details>), so it scrolls here and
+    # the student taps the strip to open. This shrinks the pasted #top block, so Canvas's submit
+    # button sits far closer: students no longer scroll through the whole Spanish copy to turn work in.
+    # Canvas keeps <details> intact (confirmed by Chris 2026-09-19). Pure inline styles, no CSS.
+    title = "Ver esta tarea en espa&ntilde;ol"
+    hint  = "Toca para abrir la versi&oacute;n en espa&ntilde;ol de esta tarea."
+    return ('<details id="espanol" class="silva-langbar" style="margin:14px 0 0;'
+      'border:1px solid rgba(0,184,184,0.45);border-left:6px solid #00b8b8;'
+      'background:linear-gradient(180deg,rgba(0,116,116,0.16) 0%,rgba(0,116,116,0.05) 100%);overflow:hidden;">'
+      '<summary style="cursor:pointer;color:#00b8b8;line-height:1.25;padding:16px 20px;box-sizing:border-box;'
+      'background:linear-gradient(90deg,rgba(0,0,0,0.48) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);">'
+      '<span style="display:inline-flex;align-items:center;gap:13px;vertical-align:middle;">'
+      '<span style="display:inline-flex;align-items:center;background:#00b8b8;color:#04201f;font-family:Arial,sans-serif;'
+      'font-size:10.5pt;font-weight:bold;letter-spacing:0.12em;padding:4px 11px;white-space:nowrap;">ESPA&Ntilde;OL</span>'
+      f'<span style="font-family:Arial,sans-serif;font-size:15.5pt;color:#ffffff;"><strong>{title}</strong></span></span>'
+      f'<span style="display:block;font-size:11pt;color:rgba(255,255,255,0.72);margin-top:7px;">{hint}</span>'
+      '</summary>'
+      '<div style="border-top:2px solid rgba(0,184,184,0.22);"><div style="padding:28px 28px 40px;">'+es+'</div></div>'
+      '</details>')
+
 def top_wrap(en,es):
     return ('<div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;'
       "background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%),"
       f"url('{SITE}/assets/PV_Panther_Watermark.png');"
       'background-position:center center,center center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed;overflow:hidden;">'
       '<div style="padding:28px 28px 40px;">'+en+'</div>'
-      '<div id="espanol" style="border-top:2px solid rgba(255,255,255,0.10);"><div style="padding:28px 28px 40px;">'+es+'</div></div>'
+      + lang_accordion(es) +
       '</div>')
 
 def dot(href,label,title,active,module=False):
