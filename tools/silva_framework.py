@@ -413,14 +413,17 @@ def standards_box(es, aligns):
     # icon + title, with the 60px accent rule under it) and span a gradient across the WHOLE summary
     # behind it, like the other section bars. The dark title box sits on the left over the darkest
     # part of the gradient so it stays distinct; the gradient fades to transparent on the right; and
-    # the "Tap to see..." lead rides over that faded zone. Summary is NOT display:flex, so the
-    # browser still draws its OWN green disclosure triangle on the LEFT. Pure inline, no CSS.
+    # the "Tap to see..." lead rides over that faded zone. The disclosure arrow is a CUSTOM green
+    # triangle placed BETWEEN the icon and the title (Chris, 2026-09-20). The summary is display:block
+    # so the browser's own left-side marker is suppressed inline (no CSS, Canvas-safe). The arrow is
+    # static (no rotate: Canvas allows no CSS/JS), but the <details> still toggles natively on tap.
     return ('<details class="silva-standards" style="background:linear-gradient(180deg,rgba(38,222,120,0.12) 0%,rgba(38,222,120,0.03) 100%);border:1px solid rgba(38,222,120,0.35);border-left:6px solid #26de78;margin-bottom:24px;overflow:hidden;">'
-      '<summary style="padding:14px 18px;cursor:pointer;color:#26de78;line-height:1.2;'
+      '<summary style="display:block;padding:14px 18px;cursor:pointer;color:#26de78;line-height:1.2;'
       'background:linear-gradient(90deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);box-sizing:border-box;">'
       '<span style="display:inline-flex;flex-direction:column;align-items:flex-start;vertical-align:middle;">'
       '<span style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);border-left:5px solid #26de78;padding:9px 18px 9px 12px;max-width:100%;box-sizing:border-box;">'
       f'<img src="{STANDARDS_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
+      '<span style="flex:0 0 auto;color:#26de78;font-size:15pt;line-height:1;">&#9656;</span>'
       f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#7bf0a8;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></span>'
       '<span style="display:block;height:2px;background:#26de78;width:60px;margin-top:12px;"></span>'
       '</span>'
