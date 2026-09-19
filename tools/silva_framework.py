@@ -409,25 +409,24 @@ def standards_box(es, aligns):
           f'<span style="display:inline-block;background:#26de78;color:#04160c;font-size:9.5pt;font-weight:bold;letter-spacing:0.04em;padding:2px 8px;white-space:nowrap;">{a["code"]}</span>'
           f'<span style="font-size:12.5pt;color:#ffffff;"><strong>{t}</strong></span>{tiertag}</div>'
           f'<div style="font-size:11pt;color:rgba(255,255,255,0.82);margin-top:3px;">{d}</div></div>')
-    # Full-width title bar (Chris, 2026-09-19): KEEP the compact internal title block (dark box +
-    # icon + title, with the 60px accent rule under it) and span a gradient across the WHOLE summary
-    # behind it, like the other section bars. The dark title box sits on the left over the darkest
-    # part of the gradient so it stays distinct; the gradient fades to transparent on the right; and
-    # the "Tap to see..." lead rides over that faded zone. The disclosure arrow is a CUSTOM green
-    # triangle placed BETWEEN the icon and the title (Chris, 2026-09-20). The summary is display:block
-    # so the browser's own left-side marker is suppressed inline (no CSS, Canvas-safe). The arrow is
-    # static (no rotate: Canvas allows no CSS/JS), but the <details> still toggles natively on tap.
-    return ('<details class="silva-standards" style="background:linear-gradient(180deg,rgba(38,222,120,0.12) 0%,rgba(38,222,120,0.03) 100%);border:1px solid rgba(38,222,120,0.35);border-left:6px solid #26de78;margin-bottom:24px;overflow:hidden;">'
-      '<summary style="display:block;padding:14px 18px;cursor:pointer;color:#26de78;line-height:1.2;'
-      'background:linear-gradient(90deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);box-sizing:border-box;">'
-      '<span style="display:inline-flex;flex-direction:column;align-items:flex-start;vertical-align:middle;">'
-      '<span style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);border-left:5px solid #26de78;padding:9px 18px 9px 12px;max-width:100%;box-sizing:border-box;">'
+    # Title bar IDENTICAL to section_header / Download Your Files (Chris, 2026-09-20): one compact
+    # full-width gradient bar (same 90deg gradient, same size, same translucency, NO extra opaque box
+    # layered on top), icon + custom green arrow + title on the left, the "Tap to see..." lead riding
+    # after the title over the faded gradient, then the 60px accent rule under it. Wrapped in
+    # <details> to stay collapsible; display:block on the summary suppresses the native left marker
+    # inline (no CSS, Canvas-safe). The arrow is static (Canvas allows no CSS/JS); tap still toggles.
+    bar = ('<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;'
+      'background:linear-gradient(90deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);'
+      'border-left:5px solid #26de78;padding:9px 18px 9px 12px;box-sizing:border-box;">'
       f'<img src="{STANDARDS_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
       '<span style="flex:0 0 auto;color:#26de78;font-size:15pt;line-height:1;">&#9656;</span>'
-      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#7bf0a8;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></span>'
-      '<span style="display:block;height:2px;background:#26de78;width:60px;margin-top:12px;"></span>'
-      '</span>'
-      f'<span style="vertical-align:middle;font-size:12.5pt;color:rgba(255,255,255,0.92);margin-left:14px;">{lead}</span>'
+      f'<span style="flex:0 0 auto;font-family:Arial,sans-serif;font-size:17pt;color:#7bf0a8;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span>'
+      f'<span style="font-size:12.5pt;color:rgba(255,255,255,0.92);margin-left:6px;">{lead}</span>'
+      '</div>')
+    return ('<details class="silva-standards" style="background:linear-gradient(180deg,rgba(38,222,120,0.12) 0%,rgba(38,222,120,0.03) 100%);border:1px solid rgba(38,222,120,0.35);border-left:6px solid #26de78;margin-bottom:24px;overflow:hidden;">'
+      '<summary style="display:block;padding:14px 18px;cursor:pointer;">'
+      + bar +
+      '<div style="height:2px;background:#26de78;width:60px;margin-top:12px;"></div>'
       '</summary>'
       f'<div style="padding:8px 22px 22px;">{rows}</div></details>')
 
