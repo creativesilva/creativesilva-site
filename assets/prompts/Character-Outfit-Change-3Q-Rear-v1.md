@@ -1,6 +1,6 @@
 # Prompt 3 — 3/4 Rear / Side Profile Face
 
-Create a **completely new full-body studio character-sheet image** of **[CHARACTER NAME]** in an **8:21 vertical portrait format**. This is a **full rebuild from scratch** using the uploaded references.
+Create a **completely new full-body studio character-sheet image** of **[CHARACTER NAME]** in an **8:21 vertical portrait format** (portrait interpretation of 21:8). This is a **full rebuild from scratch** using the uploaded references.
 
 ## Reference roles
 - **Image A:** current approved full-body character sheet — use this as the **primary reference for body proportions, anatomy, and silhouette**.
