@@ -50,7 +50,7 @@ def banner(label,title,subtitle,es_href,es_label,hicon=""):
       f'<strong>{es_label}</strong></a>')
     hicon_img=(f'<img src="{hicon}" alt="" style="width:40px;height:40px;display:block;" />' if hicon else '')
     controls=f'<div style="display:inline-flex;flex-direction:column;align-items:center;gap:9px;">{hicon_img}{es_btn}</div>'
-    return (f'<div style="background-color:#04191a;background-image:linear-gradient(90deg,rgba(3,18,20,0.95) 0%,rgba(0,66,68,0.5) 50%,rgba(3,18,20,0.95) 100%),url(\'{SITE}/assets/PV_Panther_Watermark.png\');background-repeat:no-repeat,no-repeat;background-position:center center,center right;background-size:cover,auto 175%;border-top:2px solid #00b8b8;border-bottom:2px solid #00b8b8;padding:22px 28px 24px;margin:-28px -28px 24px -28px;">'
+    return ('<div style="background-color:#04191a;background-image:linear-gradient(90deg,rgba(3,18,20,0.95) 0%,rgba(0,66,68,0.5) 50%,rgba(3,18,20,0.95) 100%);border-top:2px solid #00b8b8;border-bottom:2px solid #00b8b8;border-left:7px solid #00b8b8;padding:22px 28px 24px;margin:-28px -28px 24px -28px;">'
       '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;">'
       '<div style="flex:1 1 120px;display:flex;justify-content:flex-start;align-items:center;">'
       f'<img src="{SITE}/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School Logo" style="width:clamp(54px,11vw,84px);height:auto;display:block;" /></div>'
