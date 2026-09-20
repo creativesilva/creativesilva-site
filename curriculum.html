@@ -1163,7 +1163,7 @@
   <!-- PIN gate: hidden immediately if session is already authenticated -->
   <div id="pin-gate">
     <div class="pin-card">
-      <img src="https://www.creativesilva.com/assets/PV_Logo_Full.png" alt="PVHS" />
+      <img src="https://www.creativesilva.com/assets/PV%20LOGO%20NEW.png" alt="PVHS" />
       <h2>Curriculum Catalog</h2>
       <p>Private access only.<br>Enter your code to continue.</p>
       <input type="text" id="pin-input" inputmode="numeric" autocomplete="off" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="••••••" maxlength="10" style="-webkit-text-security:disc;" />
@@ -1441,16 +1441,16 @@
                       <p class="cat-subgroup">Pioneer Valley HS</p>
                       <div class="logo-grid">
                         <div class="logo-card"><div class="logo-tile"><img src="/assets/PV%20LOGO%20NEW.png" alt="PV monogram with panther, primary" /></div><div class="logo-meta"><span class="logo-name">PV with Panther <span class="logo-fmt">Primary &middot; PNG</span></span><a class="logo-dl" href="/assets/PV%20LOGO%20NEW.png" download>Download</a></div></div>
-                        <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Logo_Full.png" alt="PV monogram with panther, alternate" /></div><div class="logo-meta"><span class="logo-name">PV with Panther <span class="logo-fmt">Alternate &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Logo_Full.png" download>Download</a></div></div>
                         <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Panther_Watermark.png" alt="PV panther watermark" /></div><div class="logo-meta"><span class="logo-name">PV Panther <span class="logo-fmt">Watermark &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Panther_Watermark.png" download>Download</a></div></div>
-                        <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_LOGO_BACKGROUND.png" alt="PV panther on square background" /></div><div class="logo-meta"><span class="logo-name">PV Panther <span class="logo-fmt">Square &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_LOGO_BACKGROUND.png" download>Download</a></div></div>
                         <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Monogram.png" alt="PV monogram without panther" /></div><div class="logo-meta"><span class="logo-name">PV without Panther <span class="logo-fmt">Monogram &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Monogram.png" download>Download</a></div></div>
                         <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Square_Logo.png" alt="PV panther square logo" /></div><div class="logo-meta"><span class="logo-name">PV Panther <span class="logo-fmt">Square &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Square_Logo.png" download>Download</a></div></div>
                         <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/Icon_PV_LOGO.svg" alt="PV panther icon, vector" /></div><div class="logo-meta"><span class="logo-name">PV Panther <span class="logo-fmt">Icon &middot; SVG</span></span><a class="logo-dl" href="/assets/Icons/Icon_PV_LOGO.svg" download>Download</a></div></div>
                       </div>
-                      <p class="cat-subgroup">Programs</p>
+                      <p class="cat-subgroup">Course Titles</p>
                       <div class="logo-grid">
-                        <div class="logo-card"><div class="logo-tile"><img src="/assets/mrc/MRC_Logo.png" alt="Mark Richardson Center logo" /></div><div class="logo-meta"><span class="logo-name">Mark Richardson Center <span class="logo-fmt">MRC &middot; PNG</span></span><a class="logo-dl" href="/assets/mrc/MRC_Logo.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile" style="background:#0b2a2a;"><img src="/assets/titles/digital-arts-1a-title-v1.png" alt="Digital Arts 1A title graphic" /></div><div class="logo-meta"><span class="logo-name">Digital Arts 1A <span class="logo-fmt">Title &middot; PNG</span></span><a class="logo-dl" href="/assets/titles/digital-arts-1a-title-v1.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile" style="background:#0b2a2a;"><img src="/assets/titles/photography-1a-title-v1.png" alt="Photography 1A title graphic" /></div><div class="logo-meta"><span class="logo-name">Photography 1A <span class="logo-fmt">Title &middot; PNG</span></span><a class="logo-dl" href="/assets/titles/photography-1a-title-v1.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile" style="background:#0b2a2a;"><img src="/assets/titles/photography-2a-title-v1.png" alt="Photography 2A title graphic" /></div><div class="logo-meta"><span class="logo-name">Photography 2A <span class="logo-fmt">Title &middot; PNG</span></span><a class="logo-dl" href="/assets/titles/photography-2a-title-v1.png" download>Download</a></div></div>
                       </div>
                       <p class="cat-subgroup">Personal</p>
                       <div class="logo-grid">
@@ -2640,6 +2640,13 @@
         // Mrs. Garcia staff portal: first item. Opens her password-gated external page (no back-nav here).
         const garciaPortal = `<div class="course-docs"><div class="course-docs-label">Staff Portal</div>`
           + `<div class="module-list"><a class="module-row featured" href="/curriculum/garcia/index.html" target="_blank" rel="noopener"><span class="module-row-name">Mrs. Garcia &middot; Photography 1A</span><span class="module-page-count">Private</span></a></div></div>`;
+        // Legacy graphics: retired logos kept for reference only. Never use in new builds.
+        const legacyGraphics = `<div class="course-docs"><div class="course-docs-label">Graphics &middot; Legacy (do not use in builds)</div>`
+          + `<div class="logo-grid">`
+          + `<div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Logo_Full.png" alt="PV with panther, legacy full logo" /></div><div class="logo-meta"><span class="logo-name">PV Logo Full <span class="logo-fmt">Legacy &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Logo_Full.png" download>Download</a></div></div>`
+          + `<div class="logo-card"><div class="logo-tile"><img src="/assets/PV_LOGO_BACKGROUND.png" alt="PV panther on square background, legacy" /></div><div class="logo-meta"><span class="logo-name">PV Logo Background <span class="logo-fmt">Legacy &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_LOGO_BACKGROUND.png" download>Download</a></div></div>`
+          + `<div class="logo-card"><div class="logo-tile"><img src="/assets/mrc/MRC_Logo.png" alt="Mark Richardson Center logo, legacy" /></div><div class="logo-meta"><span class="logo-name">Mark Richardson Center <span class="logo-fmt">Legacy &middot; PNG</span></span><a class="logo-dl" href="/assets/mrc/MRC_Logo.png" download>Download</a></div></div>`
+          + `</div></div>`;
         let body = garciaPortal + inactive.map(buildCourseCard).join("");
         if (inactiveMods.length) {
           const rows = inactiveMods.map(m =>
@@ -2647,6 +2654,7 @@
           body += `<div class="course-docs"><div class="course-docs-label">Seasonal / Inactive Pages</div>`
             + `<div class="module-list">${rows}</div></div>`;
         }
+        body += legacyGraphics;
         grid.insertAdjacentHTML("beforeend",
           `<details class="nonactive-group"><summary>Non Active <span style="opacity:0.55;">(${inactive.length + inactiveMods.length + 1})</span></summary>`
           + `<div class="nonactive-body">${body}</div></details>`);
