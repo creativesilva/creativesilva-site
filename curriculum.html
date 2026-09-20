@@ -257,6 +257,9 @@
       width: 40px; height: 40px;
       background: url("/assets/Icons/assignment/step-check-teal-v2.png") center / contain no-repeat;
     }
+    /* Per-subject course-section icons (teal #80e0e0): photography = camera, digital arts = design. */
+    .course-photo .course-acc-headtext::before { background-image: url("/assets/Icons/assignment/camera-kit-teal-v1.png"); }
+    .course-da .course-acc-headtext::before { background-image: url("/assets/Icons/assignment/design-teal-v1.png"); }
     .course-acc-head .course-code { grid-column: 2; grid-row: 1; margin-bottom: 2px; }
     .course-acc-head .course-title {
       grid-column: 2; grid-row: 2;
@@ -1516,6 +1519,11 @@
                         <div class="logo-card"><div class="logo-tile" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/edit-teal-v1.png" alt="Cull and edit icon, teal" /></div><div class="logo-meta"><span class="logo-name">Cull &amp; Edit <span class="logo-fmt">Module Icon &middot; Teal &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/edit-teal-v1.png" download>Download</a></div></div>
                         <div class="logo-card"><div class="logo-tile" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/reflection-teal-v1.png" alt="Reflection icon, teal" /></div><div class="logo-meta"><span class="logo-name">Reflection <span class="logo-fmt">Module Icon &middot; Teal &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/reflection-teal-v1.png" download>Download</a></div></div>
                         <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/deliverables-v1.png" alt="Deliverables turn-in icon, orange" /></div><div class="logo-meta"><span class="logo-name">Deliverables <span class="logo-fmt">Module Icon &middot; Orange &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/deliverables-v1.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/camera-kit-teal-v1.png" alt="Camera icon, teal" /></div><div class="logo-meta"><span class="logo-name">Camera <span class="logo-fmt">Module Icon &middot; Teal &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/camera-kit-teal-v1.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/design-teal-v1.png" alt="Design and create icon, teal" /></div><div class="logo-meta"><span class="logo-name">Design &amp; Create <span class="logo-fmt">Module Icon &middot; Teal &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/design-teal-v1.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/standards-v1.svg" alt="CTE standards icon, green" /></div><div class="logo-meta"><span class="logo-name">CTE Standards <span class="logo-fmt">Module Icon &middot; Green &middot; SVG</span></span><a class="logo-dl" href="/assets/Icons/assignment/standards-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/photo-walk-white-v1.png" alt="In-class photo walk icon, white" /></div><div class="logo-meta"><span class="logo-name">In-Class Photo Walk <span class="logo-fmt">Module Icon &middot; White &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/photo-walk-white-v1.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/your-device-white-v1.png" alt="Your own device icon, white" /></div><div class="logo-meta"><span class="logo-name">Your Own Device <span class="logo-fmt">Module Icon &middot; White &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/your-device-white-v1.png" download>Download</a></div></div>
                       </div>
                         </div>
                       </details>
@@ -2554,6 +2562,8 @@
     }
 
     function buildCourseCard(course) {
+      // Subject class drives the section icon (photography = teal camera, digital arts = teal design).
+      const subjCls = /photo/i.test(course.id) ? " course-photo" : (/da/i.test(course.id) ? " course-da" : "");
       const all = visibleModules(course.id);
       const announcements = all.filter(m => m.type === "announcement");
       const coursePages = all.filter(m => !isModuleEntry(m) && m.type !== "announcement");
@@ -2591,7 +2601,7 @@
         : `<span class="course-acc-count empty">Coming soon</span>`;
 
       return `
-        <details class="course-acc${course.archived ? " archived" : ""}" id="${course.id}" style="--course-accent:${course.accent}">
+        <details class="course-acc${course.archived ? " archived" : ""}${subjCls}" id="${course.id}" style="--course-accent:${course.accent}">
           <summary class="course-acc-head">
             <span class="course-card-accent" style="background:${course.accent}"></span>
             <span class="course-acc-headtext">
