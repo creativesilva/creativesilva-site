@@ -7,7 +7,7 @@
 # Step 01 embeds the existing scrollable "Lightroom Import" slide deck (12 slides + PDF).
 # HEADER is a PLACEHOLDER (Chris drops art in later).
 import os, re
-from silva_framework import standards_box, banner as _sfbanner, CSS_VER, NAV_VER  # green CTE standards box + shared glass banner + cache-bust vers
+from silva_framework import standards_box, banner as _sfbanner, section_header as _sfsection_header, lang_accordion, CSS_VER, NAV_VER  # green CTE standards box + shared glass banner + full-width gradient section header + Spanish accordion + cache-bust vers
 SITE="https://www.creativesilva.com"
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 HEADER=f"{SITE}/assets/images/photo1/image-series/header-v1.png"   # overview header art
@@ -127,15 +127,11 @@ def contact_install_card(es):
           + para("The contact sheet templates are in the Downloads section on this module&rsquo;s Overview page."))
     return resources_card(heading, body, es, floatimg=thumb)
 
+# section_header: use the shared full-width gradient version (imported from silva_framework as
+# _sfsection_header below), so this fork's section titles match every other module. The old local
+# compact-box copy was stale (Chris rollout 2026-09-20).
 def section_header(icon,title,accent,light):
-    # COMBINED section header (LOCKED 2026-09-10): one dark rectangle holding the section icon
-    # + one big color-coded title, then the short accent rule under it. Replaces the old
-    # small-eyebrow + separate-heading pair.
-    return ('<div style="display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,0.40);'
-      f'border-left:5px solid {accent};padding:9px 18px 9px 12px;margin-bottom:12px;max-width:100%;box-sizing:border-box;">'
-      f'<img src="{icon}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
-      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:{light};letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>'
-      f'<div style="height:2px;background:{accent};width:60px;margin-bottom:18px;"></div>')
+    return _sfsection_header(icon,title,accent,light)
 
 def downloads_block(es):
     # CANONICAL orange downloads section, right after the intro/header card. This module
@@ -333,12 +329,14 @@ def deliverables_box(es,items):
       + f'{lis}</div>')
 
 def top_wrap(en,es):
+    # Spanish now tucked into the shared collapsible language accordion (lang_accordion), matching
+    # every other module (Chris rollout 2026-09-20).
     return ('<div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;'
       "background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%),"
       f"url('{SITE}/assets/PV_Panther_Watermark.png');"
       'background-position:center center,center center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed;overflow:hidden;">'
       '<div style="padding:28px 28px 40px;">'+en+'</div>'
-      '<div id="espanol" style="border-top:2px solid rgba(255,255,255,0.10);"><div style="padding:28px 28px 40px;">'+es+'</div></div>'
+      + lang_accordion(es) +
       '</div>')
 
 def dot(href,label,title,active,module=False):
@@ -389,6 +387,20 @@ def wrap_page(title,nav_inner,top_html,bottom):
     function silvaCopyHTML() {{ var el=document.getElementById('top'); navigator.clipboard.writeText(el.outerHTML).then(function(){{var b=document.querySelector('.silva-copy-btn');b.textContent='\\u2713 Copied!';b.classList.add('copied');setTimeout(function(){{b.innerHTML='&#128203; Copy Canvas HTML';b.classList.remove('copied');}},2500);}}).catch(function(){{alert('Copy failed. Select the source manually.');}}); }}
     function silvaDownloadHTML() {{ var el=document.getElementById('top'); var blob=new Blob([el.outerHTML],{{type:'text/html'}}); var url=URL.createObjectURL(blob); var a=document.createElement('a'); a.href=url; a.download=location.pathname.split('/').pop().replace('.html','')+'-canvas.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }}
     function silvaCopyURL() {{ navigator.clipboard.writeText(location.href).then(function(){{var b=document.querySelector('.silva-url-btn');b.textContent='\\u2713 Copied!';b.classList.add('copied');setTimeout(function(){{b.innerHTML='&#128203; Copy URL';b.classList.remove('copied');}},2500);}}).catch(function(){{alert('Copy failed. Copy the address bar manually.');}}); }}
+    /* Language toggle (Chris, 2026-09-20): "Espanol" opens the Spanish accordion + smooth-scrolls to
+       it; "English" closes it + scrolls to top. Outside #top, so not pasted into Canvas (there the
+       browser auto-opens the accordion on the fragment jump; closing is the strip's native tap). */
+    (function(){{
+      var lang=document.querySelector('details.silva-langbar');
+      if(!lang){{return;}}
+      lang.addEventListener('toggle',function(){{
+        if(lang.open){{requestAnimationFrame(function(){{lang.scrollIntoView({{behavior:'smooth',block:'start'}});}});}}
+        else{{requestAnimationFrame(function(){{window.scrollTo({{top:0,behavior:'smooth'}});}});}}
+      }});
+      function bind(sel,op){{var ls=document.querySelectorAll(sel);for(var i=0;i<ls.length;i++){{ls[i].addEventListener('click',function(e){{e.preventDefault();lang.open=op;}});}}}}
+      bind('#top a[href="#espanol"]',true);
+      bind('#top a[href="#top"]',false);
+    }})();
   </script>
   <script src="/js/silva-nav.js?v={NAV_VER}"></script>
 </body>
