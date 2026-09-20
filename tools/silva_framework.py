@@ -436,14 +436,19 @@ def standards_box(es, aligns):
 def lang_accordion(es):
     # Spanish tucked into a collapsed <details> so the page reads at a normal length for students who
     # do not need it (Chris, 2026-09-19). Default closed: only a full-width teal "Ver esta tarea en
-    # espanol" strip shows; tapping it opens the entire Spanish assignment we already built. The
-    # English banner's language toggle still targets #espanol (this <details>), so it scrolls here and
-    # the student taps the strip to open. This shrinks the pasted #top block, so Canvas's submit
-    # button sits far closer: students no longer scroll through the whole Spanish copy to turn work in.
-    # Canvas keeps <details> intact (confirmed by Chris 2026-09-19). Pure inline styles, no CSS.
+    # espanol" strip shows; tapping it opens the entire Spanish assignment we already built. This
+    # shrinks the pasted #top block, so Canvas's submit button sits far closer: students no longer
+    # scroll through the whole Spanish copy to turn work in. Canvas keeps <details> intact (Chris
+    # 2026-09-19). Pure inline styles, no CSS.
+    #   Language toggle (Chris, 2026-09-20): the English banner's "Espanol" button targets #espanol,
+    #   which now sits on the content div INSIDE the <details>. On the live page a small inline script
+    #   (wrap_page) opens the accordion + smooth-scrolls to it, and the "English" button closes it +
+    #   scrolls to top. In Canvas (script stripped) the browser still AUTO-OPENS a <details> when you
+    #   jump to a fragment inside it, so Espanol opens it there too; "English" just scrolls up (no
+    #   native close). scroll-margin-top clears the sticky nav.
     title = "Ver esta tarea en espa&ntilde;ol"
     hint  = "Toca para abrir la versi&oacute;n en espa&ntilde;ol de esta tarea."
-    return ('<details id="espanol" class="silva-langbar" style="margin:14px 0 0;'
+    return ('<details class="silva-langbar" style="margin:14px 0 0;scroll-margin-top:96px;'
       'border:1px solid rgba(0,184,184,0.45);border-left:6px solid #00b8b8;'
       'background:linear-gradient(180deg,rgba(0,116,116,0.16) 0%,rgba(0,116,116,0.05) 100%);overflow:hidden;">'
       '<summary style="cursor:pointer;color:#00b8b8;line-height:1.25;padding:16px 20px;box-sizing:border-box;'
@@ -454,7 +459,7 @@ def lang_accordion(es):
       f'<span style="font-family:Arial,sans-serif;font-size:15.5pt;color:#ffffff;"><strong>{title}</strong></span></span>'
       f'<span style="display:block;font-size:11pt;color:rgba(255,255,255,0.72);margin-top:7px;">{hint}</span>'
       '</summary>'
-      '<div style="border-top:2px solid rgba(0,184,184,0.22);"><div style="padding:28px 28px 40px;">'+es+'</div></div>'
+      '<div id="espanol" style="border-top:2px solid rgba(0,184,184,0.22);scroll-margin-top:96px;"><div style="padding:28px 28px 40px;">'+es+'</div></div>'
       '</details>')
 
 def top_wrap(en,es):
@@ -502,6 +507,16 @@ def wrap_page(title,nav_inner,top_html,bottom):
     function silvaCopyHTML() {{ var el=document.getElementById('top'); navigator.clipboard.writeText(el.outerHTML).then(function(){{var b=document.querySelector('.silva-copy-btn');b.textContent='\\u2713 Copied!';b.classList.add('copied');setTimeout(function(){{b.innerHTML='&#128203; Copy Canvas HTML';b.classList.remove('copied');}},2500);}}).catch(function(){{alert('Copy failed. Select the source manually.');}}); }}
     function silvaDownloadHTML() {{ var el=document.getElementById('top'); var blob=new Blob([el.outerHTML],{{type:'text/html'}}); var url=URL.createObjectURL(blob); var a=document.createElement('a'); a.href=url; a.download=location.pathname.split('/').pop().replace('.html','')+'-canvas.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }}
     function silvaCopyURL() {{ navigator.clipboard.writeText(location.href).then(function(){{var b=document.querySelector('.silva-url-btn');b.textContent='\\u2713 Copied!';b.classList.add('copied');setTimeout(function(){{b.innerHTML='&#128203; Copy URL';b.classList.remove('copied');}},2500);}}).catch(function(){{alert('Copy failed. Copy the address bar manually.');}}); }}
+    /* Language toggle (Chris, 2026-09-20): "Espanol" opens the Spanish accordion + smooth-scrolls
+       to it; "English" closes it + scrolls to top. Lives outside #top, so it is NOT pasted into
+       Canvas (there the browser still auto-opens the accordion when you jump to #espanol inside it). */
+    (function(){{
+      var lang=document.querySelector('details.silva-langbar');
+      if(!lang){{return;}}
+      function bind(sel,fn){{var ls=document.querySelectorAll(sel);for(var i=0;i<ls.length;i++){{ls[i].addEventListener('click',fn);}}}}
+      bind('#top a[href="#espanol"]',function(e){{e.preventDefault();lang.open=true;requestAnimationFrame(function(){{lang.scrollIntoView({{behavior:'smooth',block:'start'}});}});}});
+      bind('#top a[href="#top"]',function(e){{e.preventDefault();lang.open=false;requestAnimationFrame(function(){{window.scrollTo({{top:0,behavior:'smooth'}});}});}});
+    }})();
   </script>
   <script src="/js/silva-nav.js?v={NAV_VER}"></script>
 </body>
