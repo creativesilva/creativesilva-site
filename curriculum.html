@@ -2699,6 +2699,12 @@
       catBuildR.textContent = 'Build Resources';
       catBuildR.addEventListener('click', function () { var d = document.getElementById('build-resources'); if (d) { d.open = true; } });
       catMenu.appendChild(catBuildR);
+      var catAll = document.createElement('a');
+      catAll.href = '#universal';
+      catAll.className = 'cbc-mod';
+      catAll.textContent = 'All Courses';
+      catAll.addEventListener('click', function () { var d = document.getElementById('universal'); if (d) { d.open = true; } });
+      catMenu.appendChild(catAll);
       ['da1a', 'photo1a', 'photo2a'].forEach(function (cid) {
         var course = COURSES.find(function (c) { return c.id === cid; });
         var mods = MODULES.filter(function (m) {
