@@ -3368,16 +3368,56 @@
       { label: 'Academy lobby (Digital Arts)', file: 'campus/pv-lobby-digital-arts-v1.jpg' }
     ];
     // Fields whose name matches these get a dropdown; every other field gets a text input.
-    var FIELD_OPTS = [
-      { re: /exterior location/i, opts: ['main front entrance plaza','front drop-off zone','entry courtyard','side exterior walkway','outdoor gathering space','landscaped courtyard','exterior terrace or balcony view','building corner perspective','outdoor circulation corridor'] },
-      { re: /height/i, opts: ['ground level','low','eye level','standing eye level','slightly elevated','high','overhead'] },
-      { re: /yaw|direction/i, opts: ['facing the front wall','facing the rear wall','facing the window wall','facing the solid wall','three-quarter left','three-quarter right','profile left','profile right'] },
-      { re: /pitch|tilt/i, opts: ['level','slightly down','angled down','slightly up','angled up'] },
-      { re: /lens|focal/i, opts: ['24mm wide','35mm','50mm','85mm portrait','70-200mm telephoto'] },
-      { re: /aperture|depth/i, opts: ['f/1.8 shallow','f/5.6 normal','f/11 deep'] },
-      { re: /aspect/i, opts: ['1:1 square','4:3 landscape','3:4 portrait','16:9 landscape','9:16 portrait','21:9 landscape'] },
-      { re: /lighting|time of day/i, opts: ['bright daylight','golden hour','overcast','warm interior evening','studio key + fill'] }
-    ];
+    // Dropdown options. Camera direction, lighting, height, and the in-room position fields are
+    // SPACE-SPECIFIC, so they are keyed by prompt context (classroom / exterior / lobby) and grounded
+    // in the approved reference images. Generic optics (pitch, lens, aperture, aspect) are shared.
+    var OPT = {
+      pitch:    ['level','slightly down','angled down','slightly up','angled up'],
+      lens:     ['24mm wide','35mm','50mm','85mm portrait','70-200mm telephoto'],
+      aperture: ['f/1.8 shallow','f/5.6 normal','f/11 deep'],
+      aspect:   ['1:1 square','4:3 landscape','3:4 portrait','16:9 landscape','9:16 portrait','21:9 landscape'],
+      exteriorLocation: ['main front entrance plaza','front drop-off zone','entry courtyard','side exterior walkway','outdoor gathering space','landscaped courtyard','exterior terrace or balcony view','building corner perspective','outdoor circulation corridor']
+    };
+    var CTX_OPTS = {
+      classroom: {
+        height:   ['ground level','low','eye level','standing eye level','slightly elevated','high','overhead'],
+        yaw:      ['facing the front wall','facing the rear wall','facing the window wall','facing the solid wall','three-quarter left','three-quarter right','profile left','profile right'],
+        lighting: ['bright daylight','golden hour','overcast','warm interior evening','studio key + fill']
+      },
+      exterior: {
+        height:   ['ground level','low (upward, prestige)','eye level','standing eye level','slightly elevated','elevated / drone'],
+        yaw:      ['toward the main entrance','toward the PV logo wall','along the building facade','toward the entry plaza','toward the sculpture feature','toward the landscaping','three-quarter left','three-quarter right','profile left','profile right'],
+        lighting: ['bright daylight','golden hour','clear blue sky, midday','long-shadow late afternoon','overcast','dusk with teal accent lighting']
+      },
+      lobby: {
+        height:     ['ground level','low','eye level','standing eye level','slightly elevated','mezzanine level','high / overhead'],
+        yaw:        ['toward the glass entrance wall','toward the staircase','toward the mezzanine','toward the PV logo wall','across the atrium','toward the lounge area','three-quarter left','three-quarter right','profile left','profile right'],
+        lighting:   ['bright daylight through the glass','golden hour through the glazing','soft overcast daylight','warm interior evening','teal accent glow after hours'],
+        subjectLoc: ['near the main entrance','at the base of the staircase','on the staircase','on the mezzanine landing','in the lounge seating area','by the glass window wall','beside a planter','center of the atrium','in front of the PV logo wall','near the reception desk'],
+        cameraPos:  ['near the main entrance looking in','across the atrium','at the base of the staircase','from the mezzanine looking down','beside the lounge area','by the glass window wall','from under the mezzanine','center of the atrium']
+      }
+    };
+    function ctxFor(dataFile){
+      dataFile = dataFile || '';
+      if(/Campus-Lobby|Lobby/i.test(dataFile)) return 'lobby';
+      if(/Campus-Exterior|Exterior/i.test(dataFile)) return 'exterior';
+      return 'classroom';
+    }
+    function fieldOptsFor(ctx){
+      var c = CTX_OPTS[ctx] || CTX_OPTS.classroom;
+      return [
+        { re: /exterior location/i,            opts: OPT.exteriorLocation },
+        { re: /subject location within room/i, opts: c.subjectLoc },
+        { re: /position within room/i,         opts: c.cameraPos },
+        { re: /height/i,                       opts: c.height },
+        { re: /yaw|direction/i,                opts: c.yaw },
+        { re: /pitch|tilt/i,                   opts: OPT.pitch },
+        { re: /lens|focal/i,                   opts: OPT.lens },
+        { re: /aperture|depth/i,               opts: OPT.aperture },
+        { re: /aspect/i,                       opts: OPT.aspect },
+        { re: /lighting|time of day/i,         opts: c.lighting }
+      ];
+    }
 
     function el(t,c,h){ var e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e; }
     function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -3389,7 +3429,7 @@
     }
     var cache={};
     function fetchPrompt(path){ if(cache[path]!=null)return Promise.resolve(cache[path]); return fetch(path).then(function(r){return r.text();}).then(function(t){cache[path]=t;return t;}); }
-    function optsFor(name){ var o=null; FIELD_OPTS.forEach(function(f){ if(f.re.test(name)) o=f.opts; }); return o; }
+    function optsFor(name, ctx){ var o=null; fieldOptsFor(ctx).forEach(function(f){ if(f.opts && f.re.test(name)) o=f.opts; }); return o; }
 
     // Custom angular dropdown (native <select> menu opened misaligned + rounded). Only one open at a time.
     var openDD=null;
@@ -3504,6 +3544,7 @@
       function buildFields(){
         fieldsGroup.innerHTML='';
         if(OUTFIT){ buildOutfitFields(); return; }
+        var PCTX=ctxFor(dataFile);   // classroom / exterior / lobby: picks space-appropriate dropdowns
         fieldsGroup.appendChild(el('div','ps2-gtitle','Scene overrides'));
         var re=/^\s*(?:[-*]\s+)?(?:\*\*)?\[([^\]]+)\]\s*=/gm, m, names=[];
         while((m=re.exec(baseText))!==null){ names.push(m[1].trim()); }
@@ -3511,7 +3552,7 @@
         function fieldEl(name){
           if(state.fields[name]===undefined) state.fields[name]='';
           var w=el('div','ps2-field'); w.appendChild(el('label',null,esc(name)));
-          var opts=optsFor(name), input;
+          var opts=optsFor(name, PCTX), input;
           if(opts){ var dopts=[{label:'-',value:''}].concat(opts.map(function(o){return {label:o,value:o};})); input=makeDD(dopts, function(v){ state.fields[name]=v; refresh(); }, null, state.fields[name]); }
           else { input=el('textarea','ps2-context'); input.rows=2; input.placeholder='type here';
             if(state.fields[name]){ input.value=state.fields[name]; setTimeout(function(){ input.style.height='auto'; input.style.height=input.scrollHeight+'px'; },0); }
@@ -3520,8 +3561,8 @@
         }
         // Group by input type so the panel reads cleanly (Chris): the free-text fields first (up to 4),
         // then all the dropdowns, then the remaining free-text (furniture / special changes).
-        var textNames=names.filter(function(n){ return !optsFor(n); });
-        var dropNames=names.filter(function(n){ return optsFor(n); });
+        var textNames=names.filter(function(n){ return !optsFor(n, PCTX); });
+        var dropNames=names.filter(function(n){ return optsFor(n, PCTX); });
         var trailRe=/special changes|furniture/i;
         var leadText=textNames.filter(function(n){ return !trailRe.test(n); });
         var trailText=textNames.filter(function(n){ return trailRe.test(n); });
