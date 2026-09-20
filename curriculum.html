@@ -2626,8 +2626,11 @@
       grid.insertAdjacentHTML("beforeend", buildTeacherResources());
       // Non Active: inactive course cards, plus any inactive standalone pages (e.g. seasonal announcements).
       const inactiveMods = MODULES.filter(m => m.inactive && m.status === "published");
-      if (inactive.length || inactiveMods.length) {
-        let body = inactive.map(buildCourseCard).join("");
+      {
+        // Mrs. Garcia staff portal: first item. Opens her password-gated external page (no back-nav here).
+        const garciaPortal = `<div class="course-docs"><div class="course-docs-label">Staff Portal</div>`
+          + `<div class="module-list"><a class="module-row featured" href="/curriculum/garcia/index.html" target="_blank" rel="noopener"><span class="module-row-name">Mrs. Garcia &middot; Photography 1A</span><span class="module-page-count">Private</span></a></div></div>`;
+        let body = garciaPortal + inactive.map(buildCourseCard).join("");
         if (inactiveMods.length) {
           const rows = inactiveMods.map(m =>
             `<a class="module-row featured" href="${m.url}"><span class="module-row-name">${m.name}</span><span class="module-page-count">${m.pages}p</span></a>`).join("");
@@ -2635,7 +2638,7 @@
             + `<div class="module-list">${rows}</div></div>`;
         }
         grid.insertAdjacentHTML("beforeend",
-          `<details class="nonactive-group"><summary>Non Active <span style="opacity:0.55;">(${inactive.length + inactiveMods.length})</span></summary>`
+          `<details class="nonactive-group"><summary>Non Active <span style="opacity:0.55;">(${inactive.length + inactiveMods.length + 1})</span></summary>`
           + `<div class="nonactive-body">${body}</div></details>`);
       }
       if (archived.length) {
@@ -2732,6 +2735,8 @@
       });
       catWrap.appendChild(catBtn);
       catWrap.appendChild(catMenu);
+      // Clicking any item in the dropdown retracts (closes) it.
+      catMenu.addEventListener('click', function (e) { if (e.target.closest('a')) closeAll(); });
       items.appendChild(catWrap);
 
       inner.appendChild(items);
