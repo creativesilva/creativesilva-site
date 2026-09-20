@@ -39,13 +39,12 @@ def banner(label,title,subtitle,es_href,es_label,hicon=""):
     # link direction so it stays small and the header stays balanced) with the white module icon
     # stacked ABOVE it. hicon: optional WHITE module-type icon (photo-walk / your-device / etc.).
     # Canvas-safe (inline flex, no CSS grid / @media). Title clamps down; the row wraps when narrow.
+    # Both banners keep a language toggle (Chris, 2026-09-20): EN banner "Espanol" (opens the Spanish
+    # accordion via #espanol / fragment auto-open), ES banner "English" (href #top: on the live page
+    # the wrap_page script closes the accordion + scrolls to top; in Canvas it scrolls to top, and the
+    # accordion strip at the BOTTOM of the open Spanish is the reliable native close).
     es_label = "Espa&ntilde;ol" if es_href == "#espanol" else "English"
-    # "Espanol" targets #espanol (inside the Spanish <details>) so jumping there auto-opens it. The
-    # "English" button targets #silva-en (inside a hidden dummy <details> in the SAME exclusive
-    # accordion group), so jumping there auto-opens the dummy and thereby COLLAPSES the Spanish, with
-    # no JS. That is what makes "English" close the Spanish in Canvas (Chris, 2026-09-20).
-    toggle_href = es_href if es_href == "#espanol" else "#silva-en"
-    es_btn=(f'<a href="{toggle_href}" style="display:inline-flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.40);'
+    es_btn=(f'<a href="{es_href}" style="display:inline-flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.40);'
       'border:1px solid #00b8b8;color:#a9f2f2;text-decoration:none;padding:8px 18px;font-family:Arial,sans-serif;'
       'font-size:10pt;letter-spacing:0.09em;text-transform:uppercase;white-space:nowrap;">'
       f'<strong>{es_label}</strong></a>')
@@ -440,48 +439,47 @@ def standards_box(es, aligns):
 
 def lang_accordion(es):
     # Spanish tucked into a collapsed <details> so the page reads at a normal length for students who
-    # do not need it (Chris, 2026-09-19). Default closed: only a full-width teal "Ver esta tarea en
-    # espanol" strip shows; tapping it opens the entire Spanish assignment we already built. This
-    # shrinks the pasted #top block, so Canvas's submit button sits far closer: students no longer
-    # scroll through the whole Spanish copy to turn work in. Canvas keeps <details> intact (Chris
-    # 2026-09-19). Pure inline styles, no CSS.
-    #   Language toggle (Chris, 2026-09-20): the English banner's "Espanol" button targets #espanol,
-    #   which now sits on the content div INSIDE the <details>. On the live page a small inline script
-    #   (wrap_page) opens the accordion + smooth-scrolls to it, and the "English" button closes it +
-    #   scrolls to top. In Canvas (script stripped) the browser still AUTO-OPENS a <details> when you
-    #   jump to a fragment inside it, so Espanol opens it there too; "English" just scrolls up (no
-    #   native close). scroll-margin-top clears the sticky nav.
+    # do not need it (Chris, 2026-09-19). Default closed: only the teal language STRIP shows; opening
+    # reveals the whole Spanish assignment. This shrinks the pasted #top block, so Canvas's submit
+    # button sits far closer. Canvas keeps <details> intact (Chris 2026-09-19).
+    #   The strip is the <summary> and carries an ESPANOL chip + arrow + title on the left and an
+    #   ENGLISH button on the right. The <details> uses flex column-reverse, so the strip sits at the
+    #   BOTTOM of the OPEN Spanish (and right after the English content when collapsed). Tapping the
+    #   strip toggles: collapsed -> opens; open -> collapses back to English. Because the close is a
+    #   native <summary> tap, it works in Canvas with NO JS (Chris, 2026-09-20). The EN banner
+    #   "Espanol" button also opens it via #espanol (fragment auto-open in Canvas), and the ES banner
+    #   "English" button (#top) closes it on the live page. The wrap_page script adds smooth scroll:
+    #   open -> scroll to the Spanish; close -> scroll to the top. scroll-margin-top clears the nav.
     title = "Ver esta tarea en espa&ntilde;ol"
     hint  = "Toca para abrir la versi&oacute;n en espa&ntilde;ol de esta tarea."
-    return ('<details class="silva-langbar" name="silva-lang" style="margin:14px 0 0;scroll-margin-top:96px;'
+    chip  = ('<span style="display:inline-flex;align-items:center;background:#00b8b8;color:#04201f;font-family:Arial,sans-serif;'
+      'font-size:10.5pt;font-weight:bold;letter-spacing:0.12em;padding:4px 11px;white-space:nowrap;">ESPA&Ntilde;OL</span>')
+    arrow = '<span style="flex:0 0 auto;color:#00b8b8;font-size:14pt;line-height:1;">&#9656;</span>'
+    en_btn = ('<span style="display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;margin-left:auto;'
+      'background:rgba(0,0,0,0.40);border:1px solid #00b8b8;color:#a9f2f2;padding:8px 18px;font-family:Arial,sans-serif;'
+      'font-size:10pt;letter-spacing:0.09em;text-transform:uppercase;white-space:nowrap;"><strong>English</strong></span>')
+    return ('<details class="silva-langbar" style="margin:14px 0 0;scroll-margin-top:96px;display:flex;flex-direction:column-reverse;'
       'border:1px solid rgba(0,184,184,0.45);border-left:6px solid #00b8b8;'
       'background:linear-gradient(180deg,rgba(0,116,116,0.16) 0%,rgba(0,116,116,0.05) 100%);overflow:hidden;">'
-      '<summary style="cursor:pointer;color:#00b8b8;line-height:1.25;padding:16px 20px;box-sizing:border-box;'
+      '<summary style="cursor:pointer;color:#00b8b8;line-height:1.25;padding:16px 20px;box-sizing:border-box;list-style:none;'
+      'display:flex;align-items:center;gap:14px;flex-wrap:wrap;'
       'background:linear-gradient(90deg,rgba(0,0,0,0.48) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);">'
-      '<span style="display:inline-flex;align-items:center;gap:13px;vertical-align:middle;">'
-      '<span style="display:inline-flex;align-items:center;background:#00b8b8;color:#04201f;font-family:Arial,sans-serif;'
-      'font-size:10.5pt;font-weight:bold;letter-spacing:0.12em;padding:4px 11px;white-space:nowrap;">ESPA&Ntilde;OL</span>'
+      '<span style="flex:1 1 260px;min-width:0;">'
+      '<span style="display:inline-flex;align-items:center;gap:12px;vertical-align:middle;flex-wrap:wrap;">'
+      + chip + arrow +
       f'<span style="font-family:Arial,sans-serif;font-size:15.5pt;color:#ffffff;"><strong>{title}</strong></span></span>'
       f'<span style="display:block;font-size:11pt;color:rgba(255,255,255,0.72);margin-top:7px;">{hint}</span>'
+      '</span>'
+      + en_btn +
       '</summary>'
-      '<div id="espanol" style="border-top:2px solid rgba(0,184,184,0.22);scroll-margin-top:96px;"><div style="padding:28px 28px 40px;">'+es+'</div></div>'
+      '<div id="espanol" style="scroll-margin-top:96px;"><div style="padding:28px 28px 40px;">'+es+'</div></div>'
       '</details>')
 
 def top_wrap(en,es):
-    # Hidden dummy <details> in the SAME exclusive-accordion group ("silva-lang") as the Spanish
-    # accordion. Jumping to #silva-en (the "English" toggle target) auto-opens this dummy, which
-    # COLLAPSES the Spanish accordion (exclusive group), with no JS, so "English" closes the Spanish
-    # even in Canvas (Chris, 2026-09-20). It sits at the very top of #top, so the same jump scrolls to
-    # the top. Invisible (height 0). If a browser or Canvas drops the name attribute, the worst case is
-    # simply that Spanish stays open (no regression); on the live page the wrap_page script closes it.
-    en_state = ('<details name="silva-lang" style="height:0;overflow:hidden;margin:0;border:0;padding:0;">'
-      '<summary style="display:block;height:0;overflow:hidden;list-style:none;"></summary>'
-      '<span id="silva-en" style="scroll-margin-top:96px;"></span></details>')
     return ('<div id="top" style="width:100%;margin:0 auto;font-family:Arial,sans-serif;color:#ffffff;background-color:#080808;'
       "background-image:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%),"
       f"url('{SITE}/assets/PV_Panther_Watermark.png');"
       'background-position:center center,center center;background-repeat:no-repeat,no-repeat;background-attachment:fixed,fixed;overflow:hidden;">'
-      + en_state +
       '<div style="padding:28px 28px 40px;">'+en+'</div>'
       + lang_accordion(es) +
       '</div>')
@@ -528,9 +526,13 @@ def wrap_page(title,nav_inner,top_html,bottom):
     (function(){{
       var lang=document.querySelector('details.silva-langbar');
       if(!lang){{return;}}
-      function bind(sel,fn){{var ls=document.querySelectorAll(sel);for(var i=0;i<ls.length;i++){{ls[i].addEventListener('click',fn);}}}}
-      bind('#top a[href="#espanol"]',function(e){{e.preventDefault();lang.open=true;requestAnimationFrame(function(){{lang.scrollIntoView({{behavior:'smooth',block:'start'}});}});}});
-      bind('#top a[href="#silva-en"]',function(e){{e.preventDefault();lang.open=false;requestAnimationFrame(function(){{window.scrollTo({{top:0,behavior:'smooth'}});}});}});
+      lang.addEventListener('toggle',function(){{
+        if(lang.open){{requestAnimationFrame(function(){{lang.scrollIntoView({{behavior:'smooth',block:'start'}});}});}}
+        else{{requestAnimationFrame(function(){{window.scrollTo({{top:0,behavior:'smooth'}});}});}}
+      }});
+      function bind(sel,op){{var ls=document.querySelectorAll(sel);for(var i=0;i<ls.length;i++){{ls[i].addEventListener('click',function(e){{e.preventDefault();lang.open=op;}});}}}}
+      bind('#top a[href="#espanol"]',true);
+      bind('#top a[href="#top"]',false);
     }})();
   </script>
   <script src="/js/silva-nav.js?v={NAV_VER}"></script>
