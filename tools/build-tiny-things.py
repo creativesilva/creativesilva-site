@@ -107,14 +107,14 @@ def overview(C):
             ("Use macro or close-up mode:","many phones switch to a close-up or macro mode when you move in near a subject. Tap the screen to lock focus on the detail."),
             ("Look where no one looks:","corners, cracks, undersides, and the ground are full of overlooked tiny things."),
         ]))
-    en+=vocab_grid("On the Quiz",
+    en+=resources_card("Key Words", vocab_grid("On the Quiz",
         "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
         [("Macro","An extreme close-up photo that makes a tiny thing look big and shows detail your eyes usually miss, like the fuzz on a bee or the bumps on a strawberry."),
          ("Close-Up","A photo taken very near your subject so the small thing fills most of the frame. Getting close is the easiest way to make a tiny thing feel important."),
          ("Perspective","The spot and angle you photograph from. Change your perspective, like kneeling down low, and an ordinary object can look huge."),
          ("Point of View (POV)","Where your camera &lsquo;stands&rsquo; when you take the photo. A low point of view, like a bug on the ground, makes small things feel powerful."),
          ("Worm&rsquo;s-Eye View","A very low angle that looks up at your subject, as if you were down on the ground like a worm or a bug. It is the opposite of a bird&rsquo;s-eye view."),
-         ("Depth of Field","How much of your photo is in sharp focus. In a close-up, often only the tiny subject is sharp and the background goes soft and blurry.")])
+         ("Depth of Field","How much of your photo is in sharp focus. In a close-up, often only the tiny subject is sharp and the background goes soft and blurry.")]), False)
 
     es=banner(f'{C["cn_es"]}',f'M&oacute;dulo {C["mod"]}: Cosas Peque&ntilde;as',"Un reto de fin de semana: ve el mundo como lo ve un insecto.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Cosas Peque&ntilde;as",
@@ -132,14 +132,14 @@ def overview(C):
             ("Usa el modo macro o primer plano:","muchos teléfonos cambian a modo primer plano o macro cuando te acercas a un objeto. Toca la pantalla para fijar el enfoque en el detalle."),
             ("Mira donde nadie mira:","las esquinas, las grietas, la parte de abajo y el suelo están llenos de cosas pequeñas que pasamos por alto."),
         ]))
-    es+=vocab_grid("En el Examen",
+    es+=resources_card("Palabras Clave", vocab_grid("En el Examen",
         "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el de mitad de semestre y el del final. Apr&eacute;ndelas ahora, no la noche anterior.",
         [("Macro","Una foto de primer plano extremo que hace que una cosa pequeña se vea grande y muestra detalles que tus ojos normalmente no ven, como el pelito de una abeja o los bultitos de una fresa."),
          ("Primer Plano","Una foto tomada muy cerca de tu tema para que la cosa pequeña llene casi todo el encuadre. Acercarte es la forma más fácil de hacer que una cosa pequeña se sienta importante."),
          ("Perspectiva","El lugar y el ángulo desde donde fotografías. Cambia tu perspectiva, como arrodillarte muy abajo, y un objeto común puede verse enorme."),
          ("Punto de Vista (POV)","Desde d&oacute;nde &lsquo;mira&rsquo; tu c&aacute;mara cuando tomas la foto. Un punto de vista bajo, como un insecto en el suelo, hace que las cosas pequeñas se sientan poderosas."),
          ("Vista de Gusano","Un ángulo muy bajo que mira hacia arriba a tu tema, como si estuvieras en el suelo como un gusano o un insecto. Es lo contrario de la vista de pájaro."),
-         ("Profundidad de Campo","Cuánto de tu foto está en foco nítido. En un primer plano, muchas veces solo la cosa pequeña está nítida y el fondo se ve suave y borroso.")])
+         ("Profundidad de Campo","Cuánto de tu foto está en foco nítido. En un primer plano, muchas veces solo la cosa pequeña está nítida y el fondo se ve suave y borroso.")]), True)
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
