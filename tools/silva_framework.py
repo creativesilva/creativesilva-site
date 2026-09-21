@@ -185,7 +185,7 @@ DELIVER_ICON=f"{SITE}/assets/Icons/assignment/deliverables-v4.png"
 STANDARDS_ICON=f"{SITE}/assets/Icons/assignment/standards-v1.svg"
 CAPFMT_ICON={"jpg":f"{SITE}/assets/Icons/assignment/jpg-v2.svg","raw":f"{SITE}/assets/Icons/assignment/raw-v2.png"}  # v2 = transparent interior
 CAMSET_ICON=f"{SITE}/assets/Icons/assignment/camera-settings-v1.svg"  # red aperture = camera-settings family marker
-NEXT_ICON=f"{SITE}/assets/Icons/assignment/next-teal-v1.png"  # teal skip-forward glyph = "Up Next" segue marker
+NEXT_ICON=f"{SITE}/assets/Icons/assignment/next-teal-v2.png"  # teal skip-forward glyph (transparent) = "Up Next" segue marker
 
 def section_header(icon,title,accent,light):
     # COMBINED section header (LOCKED 2026-09-10): one dark rectangle holding the section icon
