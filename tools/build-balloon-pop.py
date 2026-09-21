@@ -9,9 +9,9 @@
 import os
 from silva_framework import *
 import silva_framework as _sf
-def banner(label,title,subtitle,es_href,es_label):
+def banner(label,title,subtitle,es_href,es_label,hicon=HICON_PHOTO_WALK):
     # Camera-kit outdoor capture: crown the banner with the white photo-walk icon.
-    return _sf.banner(label,title,subtitle,es_href,es_label,HICON_PHOTO_WALK)
+    return _sf.banner(label,title,subtitle,es_href,es_label,hicon)
 
 ROOT=os.path.join(os.path.dirname(__file__),"..")
 IMG=f"{SITE}/assets/images/photo1/balloon-pop"
@@ -247,7 +247,7 @@ def step01(C):
 def step02(C):
     OVER,S1,S2=C["over"],C["s1"],C["s2"]
     NX=nxt_mod(C)
-    en=banner(f'Module {C["mod"]} &bull; Step 02',"Reflection","What worked, what didn&rsquo;t, and what&rsquo;s next.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner(f'Module {C["mod"]} &bull; Step 02',"Reflection","What worked, what didn&rsquo;t, and what&rsquo;s next.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("STEP 02 / REFLECTION","Reflect on the Balloon Pop",
         float_right(REFLECT_FLOAT,"A Pioneer Valley student typing the Balloon Pop reflection in the Word document on an iMac in the creative lab, a Canon camera on the desk","")
         + para("Finish with a short and simple reflection. Tell what worked, what did not work, and what you would do better next time. Then share any feedback or an idea for another outdoor photography activity we could try as a class.")
@@ -257,7 +257,7 @@ def step02(C):
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
     en+=next_up(f"UP NEXT &middot; MODULE {NX} - Aperture","That wraps up shutter speed. Next module we switch to aperture: the f-number that controls how much of your photo is in focus, from a soft, blurry background to sharp from front to back.")
 
-    es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 02',"Reflexi&oacute;n","Qu&eacute; funcion&oacute;, qu&eacute; no, y qu&eacute; sigue.","#top","Back to English")
+    es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 02',"Reflexi&oacute;n","Qu&eacute; funcion&oacute;, qu&eacute; no, y qu&eacute; sigue.","#top","Back to English", HICON_REFLECT)
     es+=card("PASO 02 / REFLEXI&Oacute;N","Reflexiona Sobre el Globo de Agua",
         float_right(REFLECT_FLOAT,"Un estudiante de Pioneer Valley escribiendo la reflexi&oacute;n del Globo de Agua en el documento de Word en una iMac del laboratorio, con una c&aacute;mara Canon en el escritorio","")
         + para("Termina con una reflexi&oacute;n corta y simple. Di qu&eacute; funcion&oacute;, qu&eacute; no funcion&oacute; y qu&eacute; har&iacute;as mejor la pr&oacute;xima vez. Luego comparte cualquier idea o comentario para otra actividad de fotograf&iacute;a al aire libre que podamos probar como clase.")

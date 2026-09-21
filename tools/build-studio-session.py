@@ -247,7 +247,7 @@ def step02():
 
 # ---------------- STEP 03 ----------------
 def step03():
-    en=banner("Module 03 &bull; Step 03","Turn In Your Reflection","Reflect on the process, your role, and your edits.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 03 &bull; Step 03","Turn In Your Reflection","Reflect on the process, your role, and your edits.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
         para("Finish the project with a short reflection. It asks about your group and roles, the whole studio process, what you enjoyed and found hardest, and how you made your editing choices.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
@@ -261,7 +261,7 @@ def step03():
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
 
     en+=next_up("UP NEXT &middot; MODULE 04 - Build Your Own Preset","Next module: capture a series, edit one photo, and save your look as a preset.")
-    es=banner("M&oacute;dulo 03 &bull; Paso 03","Entrega Tu Reflexi&oacute;n","Reflexiona sobre el proceso, tu rol y tus ediciones.","#top","Back to English")
+    es=banner("M&oacute;dulo 03 &bull; Paso 03","Entrega Tu Reflexi&oacute;n","Reflexiona sobre el proceso, tu rol y tus ediciones.","#top","Back to English", HICON_REFLECT)
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         para("Termina el proyecto con una reflexi&oacute;n corta. Pregunta sobre tu grupo y los roles, todo el proceso del estudio, qu&eacute; disfrutaste y qu&eacute; fue lo m&aacute;s dif&iacute;cil, y c&oacute;mo tomaste tus decisiones de edici&oacute;n.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")

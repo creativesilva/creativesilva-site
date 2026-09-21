@@ -37,6 +37,7 @@ def ent(s):
     return "".join(m.get(c, c if ord(c)<128 else "&#x{:X};".format(ord(c))) for c in s)
 
 HICON_PHOTO_WALK=f"{SITE}/assets/Icons/assignment/photo-walk-white-v1.png"
+HICON_REFLECT=f"{SITE}/assets/Icons/assignment/reflection-white-v4.png"
 def banner(label,title,subtitle,es_href,es_label,hicon=HICON_PHOTO_WALK):
     # Image Series is a photo walk: use the shared glass banner (flex-wrap, Canvas-safe) with the
     # white photo-walk crown icon, so it matches every other module.
@@ -737,7 +738,7 @@ def step02():
 
 # ---------------- STEP 03 ----------------
 def step03():
-    en=banner("Module 04 &bull; Step 03","Reflection","Tell the story of your series.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 04 &bull; Step 03","Reflection","Tell the story of your series.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
         float_right(REFLECT_FLOAT,"A Pioneer Valley student typing her Image Series reflection in the Word document on an iMac in the lab","Type your answers right in the reflection document.")
         + para("Finish with a short reflection. It asks about the series you chose, how you offloaded and imported your photos, the 6 you kept, and the edits you made.")
@@ -752,7 +753,7 @@ def step03():
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
 
     en+=next_up("UP NEXT &middot; MODULE 05 - Lightroom Editing","Next module: import, crop, and develop your photos in Lightroom Classic.")
-    es=banner("M&oacute;dulo 04 &bull; Paso 03","Reflexi&oacute;n","Cuenta la historia de tu serie.","#top","Back to English")
+    es=banner("M&oacute;dulo 04 &bull; Paso 03","Reflexi&oacute;n","Cuenta la historia de tu serie.","#top","Back to English", HICON_REFLECT)
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         float_right(REFLECT_FLOAT,"Una estudiante de Pioneer Valley escribiendo su reflexi&oacute;n de la Serie de Im&aacute;genes en el documento de Word en una iMac en el laboratorio","Escribe tus respuestas directamente en el documento de reflexi&oacute;n.")
         + para("Termina con una reflexi&oacute;n corta. Te pregunta sobre la serie que elegiste, c&oacute;mo descargaste e importaste tus fotos, las 6 que guardaste y las ediciones que hiciste.")

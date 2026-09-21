@@ -272,7 +272,7 @@ def step03():
 
 # ---------------- STEP 04 : reflection ----------------
 def step04():
-    en=banner("Module 05 &bull; Step 04","Turn In Your Reflection","Reflect on the thumbnail you made.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 05 &bull; Step 04","Turn In Your Reflection","Reflect on the thumbnail you made.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("STEP 04 / REFLECT","Complete and Upload the Reflection",
         para("Finish with a short reflection about the YouTube thumbnail you designed. It asks what your thumbnail is for, what inspired you, how you made it, and what you are proud of.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your &lsquo;"+FOLDER+"&rsquo; folder.")
@@ -286,7 +286,7 @@ def step04():
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
 
     en+=next_up("UP NEXT &middot; MODULE 06 - Elements of Art, Character Design","Next module: meet the first Elements of Art and design an original character from lines and shapes.")
-    es=banner("M&oacute;dulo 05 &bull; Paso 04","Entrega Tu Reflexi&oacute;n","Reflexiona sobre la miniatura que creaste.","#top","Back to English")
+    es=banner("M&oacute;dulo 05 &bull; Paso 04","Entrega Tu Reflexi&oacute;n","Reflexiona sobre la miniatura que creaste.","#top","Back to English", HICON_REFLECT)
     es+=card("PASO 04 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         para("Termina con una reflexi&oacute;n corta sobre la miniatura de YouTube que dise&ntilde;aste. Te pregunta para qu&eacute; es tu miniatura, qu&eacute; te inspir&oacute;, c&oacute;mo la hiciste y de qu&eacute; est&aacute;s orgulloso.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta &lsquo;"+FOLDER+"&rsquo;.")

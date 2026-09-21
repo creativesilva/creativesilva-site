@@ -253,7 +253,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Module 03 &bull; Step 02","Submit &amp; Reflect","Complete and upload your reflection.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 03 &bull; Step 02","Submit &amp; Reflect","Complete and upload your reflection.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("REFLECT / STEP 02","Complete and Upload the Reflection",
         float_right(REFLECT_TYPING,"A student typing the reflection on a computer","Type your answers right in the document.")
         + para("Finish with a short reflection. It asks about your 3 words, your Cooper Black word, and the 2 Adobe Fonts typefaces you chose, plus how you can test a font on Adobe Fonts.")
@@ -264,7 +264,7 @@ def step02():
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
 
     en+=next_up("UP NEXT &middot; MODULE 04 - Motivational Poster","Next module: design a poster in Photoshop that hypes up someone who inspires you.")
-    es=banner("M&oacute;dulo 03 &bull; Paso 02","Entrega y Reflexiona","Completa y sube tu reflexi&oacute;n.","#top","Back to English")
+    es=banner("M&oacute;dulo 03 &bull; Paso 02","Entrega y Reflexiona","Completa y sube tu reflexi&oacute;n.","#top","Back to English", HICON_REFLECT)
     es+=card("REFLEXIONA / PASO 02","Completa y Sube la Reflexi&oacute;n",
         float_right(REFLECT_TYPING,"Un estudiante escribiendo la reflexi&oacute;n en la computadora","Escribe tus respuestas en el documento.")
         + para("Termina con una reflexi&oacute;n corta. Pregunta sobre tus 3 palabras, tu palabra en Cooper Black y los 2 tipos de letra de Adobe Fonts que elegiste, y c&oacute;mo puedes probar una fuente en Adobe Fonts.")

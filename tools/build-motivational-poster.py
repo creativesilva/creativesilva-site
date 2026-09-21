@@ -466,7 +466,7 @@ def step02():
 def step03():
     global STEPLBL
     STEPLBL="STEP"
-    en=banner("Module 04 &bull; Step 03","Turn In Your Reflection","Reflect on your whole design process.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 04 &bull; Step 03","Turn In Your Reflection","Reflect on your whole design process.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
         float_right(REFLECT_FLOAT,"A student filling out the Motivational Poster reflection document on a lab computer","Finish the project with your reflection.")
         + para("Finish the project with a reflection. It covers your whole process: who you chose and why, the exact name of the font you used, how you built the print poster AND the mobile wallpaper, the hardest part, and what you are most proud of.")
@@ -482,7 +482,7 @@ def step03():
 
     STEPLBL="PASO"
     en+=next_up("UP NEXT &middot; MODULE 05 - Live Stream Graphic","Next module: learn Photoshop and design your own YouTube thumbnail.")
-    es=banner("M&oacute;dulo 04 &bull; Paso 03","Entrega Tu Reflexi&oacute;n","Reflexiona sobre todo tu proceso de dise&ntilde;o.","#top","Back to English")
+    es=banner("M&oacute;dulo 04 &bull; Paso 03","Entrega Tu Reflexi&oacute;n","Reflexiona sobre todo tu proceso de dise&ntilde;o.","#top","Back to English", HICON_REFLECT)
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         float_right(REFLECT_FLOAT,"Una estudiante completando el documento de reflexi&oacute;n del p&oacute;ster motivacional en una computadora del laboratorio","Termina el proyecto con tu reflexi&oacute;n.")
         + para("Termina el proyecto con una reflexi&oacute;n. Cubre todo tu proceso: a qui&eacute;n elegiste y por qu&eacute;, el nombre exacto de la fuente que usaste, c&oacute;mo hiciste el p&oacute;ster para imprimir Y el fondo de pantalla del tel&eacute;fono, la parte m&aacute;s dif&iacute;cil y de qu&eacute; est&aacute;s m&aacute;s orgulloso.")

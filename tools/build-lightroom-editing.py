@@ -372,7 +372,7 @@ def cull_export():
 
 # ================= STEP 02: REFLECTION =================
 def reflection():
-    en=banner("Module 05 &bull; Step 02","Reflection","Tell the story of your edits and your crop choices.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 05 &bull; Step 02","Reflection","Tell the story of your edits and your crop choices.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=card("STEP 02 / REFLECT","Complete and Upload the Reflection",
@@ -387,7 +387,7 @@ def reflection():
         + note("Answer honestly, in your own words."))
 
     en+=next_up("UP NEXT &middot; MODULE 06 - Tiny Things","Next module: a weekend challenge, photograph 6 tiny things from a bug&rsquo;s-eye view.")
-    es=banner("M&oacute;dulo 05 &bull; Paso 02","Reflexi&oacute;n","Cuenta la historia de tus ediciones y tus decisiones de recorte.","#top","Back to English")
+    es=banner("M&oacute;dulo 05 &bull; Paso 02","Reflexi&oacute;n","Cuenta la historia de tus ediciones y tus decisiones de recorte.","#top","Back to English", HICON_REFLECT)
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
     es+=card("PASO 02 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",

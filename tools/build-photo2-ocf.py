@@ -10,9 +10,9 @@ import os
 from silva_framework import *
 import silva_framework as _sf
 
-def banner(label,title,subtitle,es_href,es_label):
+def banner(label,title,subtitle,es_href,es_label,hicon=HICON_PHOTO_WALK):
     # OCF capture happens on a whole-class photo walk: crown every page with the white photo-walk icon.
-    return _sf.banner(label,title,subtitle,es_href,es_label,HICON_PHOTO_WALK)
+    return _sf.banner(label,title,subtitle,es_href,es_label,hicon)
 
 ROOT=os.path.join(os.path.dirname(__file__),"..")
 IMG=f"{SITE}/assets/images/photo2/ocf"
@@ -352,7 +352,7 @@ def step02():
 
 # ---------------- STEP 03 ----------------
 def step03():
-    en=banner("Module 02 &bull; Step 03","Reflection","Your own experience, in writing.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 02 &bull; Step 03","Reflection","Your own experience, in writing.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("","Reflect on Your Off-Camera Flash Experience",
         float_right(S3_FLOAT,"A Pioneer Valley student typing the Off-Camera Flash reflection on a lab computer","")
         + para("This reflection is about your own experience, not your partner&rsquo;s. Answer honestly.")
@@ -362,7 +362,7 @@ def step03():
         [("1 reflection (.docx):","your reflection document with all 4 questions answered, uploaded to this Canvas assignment.")])
 
     en+=next_up("UP NEXT &middot; MODULE 03 - Studio Session","Next module: photograph the Panther of the Quarter honorees in the studio.")
-    es=banner("M&oacute;dulo 02 &bull; Paso 03","Reflexi&oacute;n","Tu propia experiencia, por escrito.","#top","Back to English")
+    es=banner("M&oacute;dulo 02 &bull; Paso 03","Reflexi&oacute;n","Tu propia experiencia, por escrito.","#top","Back to English", HICON_REFLECT)
     es+=card("","Reflexiona Sobre Tu Experiencia con el Flash",
         float_right(S3_FLOAT,"Un estudiante de Pioneer Valley escribiendo la reflexi&oacute;n de flash fuera de c&aacute;mara en una computadora del laboratorio","")
         + para("Esta reflexi&oacute;n es sobre tu propia experiencia, no la de tu compa&ntilde;ero. Responde con honestidad.")

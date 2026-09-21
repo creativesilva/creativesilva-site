@@ -10,9 +10,9 @@ import os
 from silva_framework import *
 import silva_framework as _sf
 
-def banner(label,title,subtitle,es_href,es_label):
+def banner(label,title,subtitle,es_href,es_label,hicon=HICON_YOUR_DEVICE):
     # Self-Portrait is an own-device module: crown the banner with the white your-device icon.
-    return _sf.banner(label,title,subtitle,es_href,es_label,HICON_YOUR_DEVICE)
+    return _sf.banner(label,title,subtitle,es_href,es_label,hicon)
 
 ROOT=os.path.join(os.path.dirname(__file__),"..")
 IMG=f"{SITE}/assets/images/photo1/self-portrait"
@@ -239,7 +239,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Module 01 &bull; Step 02","Reflection","Look back. What worked, what to improve.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 01 &bull; Step 02","Reflection","Look back. What worked, what to improve.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("","Reflection",
         float_img(REFLECT_FLOAT,"Anthony typing his reflection in Word")
         + para("Take a few minutes to reflect on your self-portrait: the idea behind it, how well you think you pulled it off, and what you would do better next time.")
@@ -254,7 +254,7 @@ def step02():
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
     en+=next_up("UP NEXT &middot; MODULE 02 - Composition Concepts","Next module: learn the composition rules, like the rule of thirds and leading lines, that make any photo feel balanced and intentional.")
 
-    es=banner("M&oacute;dulo 01 &bull; Paso 02","Reflexi&oacute;n","Mira atr&aacute;s. Qu&eacute; funcion&oacute;, qu&eacute; mejorar.","#top","Back to English")
+    es=banner("M&oacute;dulo 01 &bull; Paso 02","Reflexi&oacute;n","Mira atr&aacute;s. Qu&eacute; funcion&oacute;, qu&eacute; mejorar.","#top","Back to English", HICON_REFLECT)
     es+=card("","Reflexi&oacute;n",
         float_img(REFLECT_FLOAT,"Anthony escribiendo su reflexi&oacute;n en Word")
         + para("T&oacute;mate unos minutos para reflexionar sobre tu autorretrato: la idea detr&aacute;s de &eacute;l, qu&eacute; tan bien crees que lo lograste y qu&eacute; har&iacute;as mejor la pr&oacute;xima vez.")

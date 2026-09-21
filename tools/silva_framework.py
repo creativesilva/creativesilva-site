@@ -64,6 +64,8 @@ def banner(label,title,subtitle,es_href,es_label,hicon=""):
 # White header-crown icons (module-type identity in the banner). Rendered from the SVG masters.
 HICON_PHOTO_WALK=f"{SITE}/assets/Icons/assignment/photo-walk-white-v1.png"
 HICON_YOUR_DEVICE=f"{SITE}/assets/Icons/assignment/your-device-white-v1.png"
+HICON_SKETCH=f"{SITE}/assets/Icons/assignment/sketch-white-v2.png"
+HICON_REFLECT=f"{SITE}/assets/Icons/assignment/reflection-white-v4.png"
 
 # Camera-settings panel (red camera-kit modules): the on-screen settings mimic + its teaching
 # section. quality="RAW" or "JPG" swaps only the Image Quality badge. Canvas-safe fixed 3-col table:

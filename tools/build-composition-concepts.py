@@ -10,9 +10,9 @@
 import os
 from silva_framework import *
 import silva_framework as _sf
-def banner(label,title,subtitle,es_href,es_label):
+def banner(label,title,subtitle,es_href,es_label,hicon=HICON_YOUR_DEVICE):
     # Composition Concepts is an own-device module: crown the banner with the white your-device icon.
-    return _sf.banner(label,title,subtitle,es_href,es_label,HICON_YOUR_DEVICE)
+    return _sf.banner(label,title,subtitle,es_href,es_label,hicon)
 
 ROOT=os.path.join(os.path.dirname(__file__),"..")
 IMG=f"{SITE}/assets/images/photo1/composition-concepts"
@@ -255,7 +255,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Module 02 &bull; Step 02","Reflection","Reflect on your work.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 02 &bull; Step 02","Reflection","Reflect on your work.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("STEP 02 / REFLECTION","Reflect on Your 3 Photos",
         float_right(REFLECT_FLOAT,"A student typing the Composition Concepts reflection on a lab computer","")
         + para("Finish the project with a short reflection. Name the 3 concepts you chose, then tell which one was the hardest, which was your favorite, and what you learned about composition.")
@@ -266,7 +266,7 @@ def step02():
          ("1 reflection:","the completed Word document (.docx).")])
 
     en+=next_up("UP NEXT &middot; MODULE 03 - Leading Lines Photo Walk","Next module: pair up for a photo walk and use leading lines to pull the eye through your photos.")
-    es=banner("M&oacute;dulo 02 &bull; Paso 02","Reflexi&oacute;n","Reflexiona sobre tu trabajo.","#top","Back to English")
+    es=banner("M&oacute;dulo 02 &bull; Paso 02","Reflexi&oacute;n","Reflexiona sobre tu trabajo.","#top","Back to English", HICON_REFLECT)
     es+=card("PASO 02 / REFLEXI&Oacute;N","Reflexiona Sobre Tus 3 Fotos",
         float_right(REFLECT_FLOAT,"Una estudiante escribiendo la reflexi&oacute;n de Conceptos de Composici&oacute;n en una computadora del laboratorio","")
         + para("Termina el proyecto con una reflexi&oacute;n corta. Nombra los 3 conceptos que elegiste, luego di cu&aacute;l fue el m&aacute;s dif&iacute;cil, cu&aacute;l fue tu favorito y qu&eacute; aprendiste sobre la composici&oacute;n.")

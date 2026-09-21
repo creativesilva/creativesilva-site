@@ -204,7 +204,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Module 01 &bull; Step 02","Sketch &amp; Reflect","Reimagine 3 pictograms in your sketchbook.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 01 &bull; Step 02","Sketch &amp; Reflect","Reimagine 3 pictograms in your sketchbook.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("","Redraw 3 Pictograms Your Own Way",
         float_right(SKETCH_FLOAT,"Student sketching a pictogram in a sketchbook","Reimagine each one in your own sketchbook.")
         + para("Pick 3 pictograms from the ones you saved. Make each one your own. Do not copy them exactly. Rethink each idea and draw a fresh version. Pick 3 that are different from each other, like a stop sign, a no-smoking sign, and a biohazard sign.")
@@ -226,7 +226,7 @@ def step02():
         [("Sketch photos (JPG):","clear pictures of your 3 finished sketches and your handwritten reflection, taken with your school iPad. If they are all on one page, turn in one picture. If they are on several pages, turn in a picture of each page.")])
 
     en+=next_up("UP NEXT &middot; MODULE 02 - Color Theory","Next module: how color builds a brand and sets a mood.")
-    es=banner("M&oacute;dulo 01 &bull; Paso 02","Dibuja y Reflexiona","Reimagina 3 pictogramas en tu cuaderno.","#top","Back to English")
+    es=banner("M&oacute;dulo 01 &bull; Paso 02","Dibuja y Reflexiona","Reimagina 3 pictogramas en tu cuaderno.","#top","Back to English", HICON_REFLECT)
     es+=card("","Redibuja 3 Pictogramas a Tu Manera",
         float_right(SKETCH_FLOAT,"Estudiante dibujando un pictograma en su cuaderno","Reimagina cada uno en tu propio cuaderno.")
         + para("Elige 3 pictogramas de los que guardaste. Haz cada uno tuyo. No los copies igual. Repiensa cada idea y dibuja una versi&oacute;n nueva. Elige 3 que sean diferentes entre s&iacute;, como un letrero de alto, uno de no fumar y uno de riesgo biol&oacute;gico.")

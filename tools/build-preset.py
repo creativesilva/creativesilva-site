@@ -344,7 +344,7 @@ def step03():
 
 # ---------------- STEP 04 ----------------
 def step04():
-    en=banner("Module 04 &bull; Step 04","Reflection","Tell the story of your series and your preset.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
+    en=banner("Module 04 &bull; Step 04","Reflection","Tell the story of your series and your preset.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("STEP 04 / REFLECT","Complete and Upload the Reflection",
         para("Finish with a short reflection. It asks about the series you chose, the look you built, how your preset worked across your photos, and what you would do differently next time.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
@@ -358,7 +358,7 @@ def step04():
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
 
     en+=next_up("UP NEXT &middot; MODULE 05 - Tiny Things","Next module: a weekend challenge, photograph 6 tiny things from a bug&rsquo;s-eye view.")
-    es=banner("M&oacute;dulo 04 &bull; Paso 04","Reflexi&oacute;n","Cuenta la historia de tu serie y tu preset.","#top","Back to English", HICON_PHOTO_WALK)
+    es=banner("M&oacute;dulo 04 &bull; Paso 04","Reflexi&oacute;n","Cuenta la historia de tu serie y tu preset.","#top","Back to English", HICON_REFLECT)
     es+=card("PASO 04 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         para("Termina con una reflexi&oacute;n corta. Te pregunta sobre la serie que elegiste, el estilo que creaste, c&oacute;mo funcion&oacute; tu preset en tus fotos y qu&eacute; har&iacute;as diferente la pr&oacute;xima vez.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")

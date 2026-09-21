@@ -10,9 +10,9 @@
 import os
 from silva_framework import *
 import silva_framework as _sf
-def banner(label,title,subtitle,es_href,es_label):
+def banner(label,title,subtitle,es_href,es_label,hicon=HICON_YOUR_DEVICE):
     # Own-device module: crown the banner with the white your-device icon.
-    return _sf.banner(label,title,subtitle,es_href,es_label,HICON_YOUR_DEVICE)
+    return _sf.banner(label,title,subtitle,es_href,es_label,hicon)
 
 ROOT=os.path.join(os.path.dirname(__file__),"..")
 IMG=f"{SITE}/assets/images/photo1/tiny-things"
@@ -195,7 +195,7 @@ def step01(C):
 # ---------------- STEP 02 ----------------
 def step02(C):
     OVER,S1,S2=C["over"],C["s1"],C["s2"]
-    en=banner(f'Module {C["mod"]} &bull; Step 02',"Reflection","Reflect and pitch next week&rsquo;s challenge.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner(f'Module {C["mod"]} &bull; Step 02',"Reflection","Reflect and pitch next week&rsquo;s challenge.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("STEP 02 / REFLECTION","Reflect on Your Tiny Things",
         float_right(REFLECT_FLOAT,"A student typing a short reflection on a lab computer","")
         + para("Finish with a short reflection. Tell which tiny thing was your favorite and why, name something small you usually overlook that you noticed this weekend, and pitch one idea for a fun photo challenge to try next weekend with your own device.")
@@ -205,7 +205,7 @@ def step02(C):
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
     en+=next_up("MODULE COMPLETE - Great Work","You&rsquo;ve wrapped up Tiny Things. Keep looking for the small details around you: noticing them is what makes a strong photographer.")
 
-    es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 02',"Reflexi&oacute;n","Reflexiona y propon el reto de la pr&oacute;xima semana.","#top","Back to English")
+    es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 02',"Reflexi&oacute;n","Reflexiona y propon el reto de la pr&oacute;xima semana.","#top","Back to English", HICON_REFLECT)
     es+=card("PASO 02 / REFLEXI&Oacute;N","Reflexiona Sobre Tus Cosas Peque&ntilde;as",
         float_right(REFLECT_FLOAT,"Una estudiante escribiendo una reflexi&oacute;n corta en una computadora del laboratorio","")
         + para("Termina con una reflexión corta. Di cuál cosa pequeña fue tu favorita y por qué, nombra algo pequeño que normalmente pasas por alto y que notaste este fin de semana, y propon una idea para un reto de fotos divertido para probar el próximo fin de semana con tu propio dispositivo.")

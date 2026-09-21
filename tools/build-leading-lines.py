@@ -6,9 +6,9 @@
 import os, re
 from silva_framework import *
 import silva_framework as _sf
-def banner(label,title,subtitle,es_href,es_label):
+def banner(label,title,subtitle,es_href,es_label,hicon=HICON_PHOTO_WALK):
     # Leading Lines is a photo walk: crown the banner with the white photo-walk icon.
-    return _sf.banner(label,title,subtitle,es_href,es_label,HICON_PHOTO_WALK)
+    return _sf.banner(label,title,subtitle,es_href,es_label,hicon)
 
 ROOT=os.path.join(os.path.dirname(__file__),"..")
 IMG=f"{SITE}/assets/images/photo1/leading-lines"
@@ -208,7 +208,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Module 03 &bull; Step 02","Turn In Your Reflection","Reflect on the walk, your partner, and your photos.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 03 &bull; Step 02","Turn In Your Reflection","Reflect on the walk, your partner, and your photos.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("STEP 02 / REFLECT","Complete and Upload the Reflection",
         float_right(REFLECT_FLOAT,"A Pioneer Valley student typing his Leading Lines reflection in the Word document on an iMac in the lab, a Canon camera on the desk","Type your answers right in the reflection document.")
         + para("Finish with a short reflection. It asks you to name your partner, explain what leading lines are, tell how you culled, and select your favorite photo.")
@@ -224,7 +224,7 @@ def step02():
         [("1 reflection:","your completed reflection Word document (.docx), with your partner named, uploaded to this Canvas assignment.")])
 
     en+=next_up("UP NEXT &middot; MODULE 04 - Image Series Photo Walk","Next module: capture a cohesive series with the camera kit, then import and edit it.")
-    es=banner("M&oacute;dulo 03 &bull; Paso 02","Entrega Tu Reflexi&oacute;n","Reflexiona sobre la caminata, tu compa&ntilde;ero y tus fotos.","#top","Back to English")
+    es=banner("M&oacute;dulo 03 &bull; Paso 02","Entrega Tu Reflexi&oacute;n","Reflexiona sobre la caminata, tu compa&ntilde;ero y tus fotos.","#top","Back to English", HICON_REFLECT)
     es+=card("PASO 02 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         float_right(REFLECT_FLOAT,"Un estudiante de Pioneer Valley escribiendo su reflexi&oacute;n de L&iacute;neas Gu&iacute;a en el documento de Word en una iMac en el laboratorio, con una c&aacute;mara Canon sobre el escritorio","Escribe tus respuestas directamente en el documento de reflexi&oacute;n.")
         + para("Termina con una reflexi&oacute;n corta. Te pide el nombre de tu compa&ntilde;ero, explicar qu&eacute; son las l&iacute;neas gu&iacute;a, contar c&oacute;mo seleccionaste (cull) y elegir tu foto favorita.")

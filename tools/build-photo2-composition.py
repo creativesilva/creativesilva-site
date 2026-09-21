@@ -11,9 +11,9 @@ import os
 from silva_framework import *
 import silva_framework as _sf
 
-def banner(label,title,subtitle,es_href,es_label):
+def banner(label,title,subtitle,es_href,es_label,hicon=HICON_PHOTO_WALK):
     # Composition is an in-class photo walk: crown the banner with the white photo-walk icon.
-    return _sf.banner(label,title,subtitle,es_href,es_label,HICON_PHOTO_WALK)
+    return _sf.banner(label,title,subtitle,es_href,es_label,hicon)
 
 ROOT=os.path.join(os.path.dirname(__file__),"..")
 IMG=f"{SITE}/assets/images/photo2/composition"
@@ -275,7 +275,7 @@ def step02():
 
 # ---------------- STEP 03 ----------------
 def step03():
-    en=banner("Module 01 &bull; Step 03","Reflection","Look back. What worked, what was hard.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 01 &bull; Step 03","Reflection","Look back. What worked, what was hard.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("","Reflection",
         para("Take a few minutes to reflect on your process: what worked, what was hard, and which concept you are most proud of.")
         + para("Download the reflection document, complete it, and turn it in.")
@@ -284,7 +284,7 @@ def step03():
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
 
     en+=next_up("UP NEXT &middot; MODULE 02 - Off-Camera Flash","Next module: light your subject with off-camera flash and balance the sky.")
-    es=banner("M&oacute;dulo 01 &bull; Paso 03","Reflexi&oacute;n","Mira atr&aacute;s. Qu&eacute; funcion&oacute;, qu&eacute; fue dif&iacute;cil.","#top","Back to English")
+    es=banner("M&oacute;dulo 01 &bull; Paso 03","Reflexi&oacute;n","Mira atr&aacute;s. Qu&eacute; funcion&oacute;, qu&eacute; fue dif&iacute;cil.","#top","Back to English", HICON_REFLECT)
     es+=card("","Reflexi&oacute;n",
         para("T&oacute;mate unos minutos para reflexionar sobre tu proceso: qu&eacute; funcion&oacute;, qu&eacute; fue dif&iacute;cil y de cu&aacute;l concepto est&aacute;s m&aacute;s orgulloso.")
         + para("Descarga el documento de reflexi&oacute;n, compl&eacute;talo y entr&eacute;galo.")
