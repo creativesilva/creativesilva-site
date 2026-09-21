@@ -186,7 +186,7 @@ def slide_deck_thumb(pdf_url, es, thumb=None, cap=None):
                   else "Click to open the slide deck. It opens as a PDF in a new tab, where you can read it full screen and download it.")
     return purple_thumb(pdf_url, thumb, alt, cap)
 
-CONTENT_ICON=f"{SITE}/assets/Icons/assignment/step-check-teal-v2.png"
+CONTENT_ICON=f"{SITE}/assets/Icons/assignment/step-check-teal-v3.png"
 TYPE_ICON={"overview":f"{SITE}/assets/Icons/assignment/overview-teal-v1.png",
   "photo-walk":f"{SITE}/assets/Icons/assignment/photo-walk-teal-v1.png",
   "edit":f"{SITE}/assets/Icons/assignment/edit-teal-v1.png",

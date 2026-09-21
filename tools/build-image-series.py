@@ -42,7 +42,7 @@ def banner(label,title,subtitle,es_href,es_label,hicon=HICON_PHOTO_WALK):
     # white photo-walk crown icon, so it matches every other module.
     return _sfbanner(label,title,subtitle,es_href,es_label,hicon)
 
-CONTENT_ICON=f"{SITE}/assets/Icons/assignment/step-check-teal-v2.png"
+CONTENT_ICON=f"{SITE}/assets/Icons/assignment/step-check-teal-v3.png"
 TYPE_ICON={"overview":f"{SITE}/assets/Icons/assignment/overview-teal-v1.png",
   "photo-walk":f"{SITE}/assets/Icons/assignment/photo-walk-teal-v1.png",
   "edit":f"{SITE}/assets/Icons/assignment/edit-teal-v1.png",
