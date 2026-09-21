@@ -151,7 +151,7 @@ OCF_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Photography 2A &bull; Off-Camera Flash","Off-Camera Flash","Light your subject. Balance the sky.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Photography 2A","Module 02: Off-Camera Flash","Light your subject. Balance the sky.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Outdoor Portraits with Off-Camera Flash",
         para("In this project you will light an outdoor portrait with off-camera flash (OCF). We will do this as a class. Mr. Silva will teach you how to place a flash off to the side, dial in your settings, and balance your subject with the background. We have several Canon Speedlites and a more powerful Godox portable light. Four or five flashes will be in rotation, so everyone gets hands-on practice.")
         + framed(HEADER,"Students lighting an outdoor portrait with off-camera flash at the PV Academy of Arts")
@@ -201,7 +201,8 @@ def overview():
            ("Manual Flash","You set the exact flash power yourself and keep it the same for every photo, so your light stays consistent."),
            ("Overpowering the Sun","Raising your flash power so your subject is bright and stands out against a darker, richer background.")]), False)
 
-    es=banner("Fotograf&iacute;a 2A &bull; Flash Fuera de C&aacute;mara","Flash Fuera de C&aacute;mara","Ilumina a tu sujeto. Equilibra el cielo.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 01 - Find Inspiration","Gather one-strobe inspiration.")
+    es=banner("Fotograf&iacute;a 2A","M&oacute;dulo 02: Flash Fuera de C&aacute;mara","Ilumina a tu sujeto. Equilibra el cielo.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Retratos al Aire Libre con Flash Fuera de C&aacute;mara",
         para("En este proyecto vas a iluminar un retrato al aire libre con flash fuera de c&aacute;mara (OCF). Lo haremos como clase. El Sr. Silva ense&ntilde;a c&oacute;mo colocar un flash hacia un lado, ajustar tus configuraciones y equilibrar a tu sujeto con el fondo. Tenemos varios Canon Speedlite y una luz Godox port&aacute;til m&aacute;s potente. Habr&aacute; cuatro o cinco flashes en rotaci&oacute;n para que todos practiquen.")
         + framed(HEADER,"Estudiantes iluminando un retrato al aire libre con flash fuera de c&aacute;mara en la PV Academy of Arts")
@@ -251,6 +252,7 @@ def overview():
            ("Flash Manual","T&uacute; fijas la potencia exacta del flash y la mantienes igual en cada foto, para que tu luz sea consistente."),
            ("Dominar el Sol","Subir la potencia del flash para que tu sujeto se vea brillante y resalte contra un fondo m&aacute;s oscuro y rico.")]), True)
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 01 - Busca Inspiraci&oacute;n","Junta inspiraci&oacute;n de un flash.")
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
@@ -258,7 +260,7 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Photography 2A &bull; Off-Camera Flash &bull; Step 01","Find Inspiration","Gather one-strobe inspiration.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 02 &bull; Step 01","Find Inspiration","Gather one-strobe inspiration.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("","Find Off-Camera Flash Inspiration",
         float_right(S1_FLOAT,"A Pioneer Valley student researching off-camera flash examples on a lab computer","")
         + para("Before we go out, gather inspiration. Look at how other photographers use off-camera flash outdoors. Save your examples into the &lsquo;Inspiration Images&rsquo; folder you set up on this module&rsquo;s Overview page (marked M at the top).")
@@ -276,7 +278,8 @@ def step01():
     en+=deliverables_box(False,
         [("1 screen capture (PNG):","your &lsquo;Inspiration Images&rsquo; folder with your saved inspiration images inside, uploaded to this Canvas assignment.")])
 
-    es=banner("Fotograf&iacute;a 2A &bull; Flash Fuera de C&aacute;mara &bull; Paso 01","Busca Inspiraci&oacute;n","Junta inspiraci&oacute;n de un flash.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 02 - Photo Walk","Capture, contact sheet, edit 3.")
+    es=banner("M&oacute;dulo 02 &bull; Paso 01","Busca Inspiraci&oacute;n","Junta inspiraci&oacute;n de un flash.","#top","Back to English")
     es+=card("","Busca Inspiraci&oacute;n de Flash Fuera de C&aacute;mara",
         float_right(S1_FLOAT,"Un estudiante de Pioneer Valley investigando ejemplos de flash fuera de c&aacute;mara en una computadora del laboratorio","")
         + para("Antes de salir, junta inspiraci&oacute;n. Mira c&oacute;mo otros fot&oacute;grafos usan el flash fuera de c&aacute;mara al aire libre. Guarda tus ejemplos en la carpeta &lsquo;Inspiration Images&rsquo; que preparaste en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
@@ -294,6 +297,7 @@ def step01():
     es+=deliverables_box(True,
         [("1 captura de pantalla (PNG):","tu carpeta &lsquo;Inspiration Images&rsquo; con tus im&aacute;genes de inspiraci&oacute;n guardadas adentro, subida a esta tarea de Canvas.")])
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Caminata","Captura, hoja de contactos, edita 3.")
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
@@ -301,7 +305,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Photography 2A &bull; Off-Camera Flash &bull; Step 02","Photo Walk","Capture, contact sheet, edit 3.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 02 &bull; Step 02","Photo Walk","Capture, contact sheet, edit 3.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("","Capture Outdoor Portraits with Off-Camera Flash",
         float_right(S2_FLOAT,"A Pioneer Valley student portrait made with off-camera flash at golden hour","")
         + para("We will do this photo walk as a class. Mr. Silva will facilitate and teach as we go. You will pair up. Each of you takes a turn as the photographer and a turn as the subject, capturing portraits with off-camera flash.")
@@ -320,7 +324,8 @@ def step02():
          ("3 edited portraits (JPG):","your 3 polished, edited portraits that clearly use off-camera flash, uploaded to this Canvas assignment.")])
     en+=teal_info("Use your Lightroom contact sheet presets (the saved settings that build the contact sheet for you) to make your contact sheet.")
 
-    es=banner("Fotograf&iacute;a 2A &bull; Flash Fuera de C&aacute;mara &bull; Paso 02","Caminata","Captura, hoja de contactos, edita 3.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 03 - Reflection","Your own experience, in writing.")
+    es=banner("M&oacute;dulo 02 &bull; Paso 02","Caminata","Captura, hoja de contactos, edita 3.","#top","Back to English")
     es+=card("","Captura Retratos al Aire Libre con Flash Fuera de C&aacute;mara",
         float_right(S2_FLOAT,"Un retrato de una estudiante de Pioneer Valley hecho con flash fuera de c&aacute;mara en la hora dorada","")
         + para("Haremos esta caminata como clase. El Sr. Silva la gu&iacute;a y ense&ntilde;a mientras avanzamos. Vas a formar pareja. Cada uno toma un turno como fot&oacute;grafo y un turno como sujeto, capturando retratos con flash fuera de c&aacute;mara.")
@@ -339,6 +344,7 @@ def step02():
          ("3 retratos editados (JPG):","tus 3 retratos pulidos y editados que usen claramente el flash fuera de c&aacute;mara, subidos a esta tarea de Canvas.")])
     es+=teal_info("Usa tus configuraciones de hoja de contactos de Lightroom (los ajustes guardados que arman la hoja de contactos por ti) para crear tu hoja de contactos.")
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Reflexi&oacute;n","Tu propia experiencia, por escrito.")
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
@@ -346,7 +352,7 @@ def step02():
 
 # ---------------- STEP 03 ----------------
 def step03():
-    en=banner("Photography 2A &bull; Off-Camera Flash &bull; Step 03","Reflection","Your own experience, in writing.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 02 &bull; Step 03","Reflection","Your own experience, in writing.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("","Reflect on Your Off-Camera Flash Experience",
         float_right(S3_FLOAT,"A Pioneer Valley student typing the Off-Camera Flash reflection on a lab computer","")
         + para("This reflection is about your own experience, not your partner&rsquo;s. Answer honestly.")
@@ -355,7 +361,8 @@ def step03():
     en+=deliverables_box(False,
         [("1 reflection (.docx):","your reflection document with all 4 questions answered, uploaded to this Canvas assignment.")])
 
-    es=banner("Fotograf&iacute;a 2A &bull; Flash Fuera de C&aacute;mara &bull; Paso 03","Reflexi&oacute;n","Tu propia experiencia, por escrito.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; MODULE 03 - Studio Session","Next module: photograph the Panther of the Quarter honorees in the studio.")
+    es=banner("M&oacute;dulo 02 &bull; Paso 03","Reflexi&oacute;n","Tu propia experiencia, por escrito.","#top","Back to English")
     es+=card("","Reflexiona Sobre Tu Experiencia con el Flash",
         float_right(S3_FLOAT,"Un estudiante de Pioneer Valley escribiendo la reflexi&oacute;n de flash fuera de c&aacute;mara en una computadora del laboratorio","")
         + para("Esta reflexi&oacute;n es sobre tu propia experiencia, no la de tu compa&ntilde;ero. Responde con honestidad.")
@@ -364,6 +371,7 @@ def step03():
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n (.docx):","tu documento de reflexi&oacute;n con las 4 preguntas respondidas, subido a esta tarea de Canvas.")])
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; M&Oacute;DULO 03 - Sesi&oacute;n de Estudio","Pr&oacute;ximo m&oacute;dulo: fotograf&iacute;a a los honorados Pantera del Trimestre en el estudio.")
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot("",'3',"Step 03",True)
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'

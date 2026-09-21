@@ -132,7 +132,7 @@ PC_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Photography 2A &bull; Composition Photo Walk","Composition Photo Walk","Six rules. One photo walk. One photo at Chick-fil-A.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Photography 2A","Module 01: Composition Photo Walk","Six rules. One photo walk. One photo at Chick-fil-A.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","The Photo Walk",
         para("You will take a photo walk on campus and capture the 6 composition rules. All images are captured in Manual Mode and in RAW, indoor or outdoor. Capture one strong image for each concept.")
         + framed(HERO,"Composition Photo Walk")
@@ -154,7 +154,8 @@ def overview():
            ("Export","Saving your finished edit as a new JPG, separate from the RAW, so it is ready to turn in."),
            ("Naming Convention","A clear, steady way to name your files so they stay organized. Here, you name each by its concept.")]), False)
 
-    es=banner("Fotograf&iacute;a 2A &bull; Caminata de Composici&oacute;n","Caminata de Composici&oacute;n","Seis reglas. Una caminata. Una oportunidad de ganar Chick-fil-A.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 01 - Photo Walk &amp; Contact Sheet","Capture the six. Prove your whole take.")
+    es=banner("Fotograf&iacute;a 2A","M&oacute;dulo 01: Caminata de Composici&oacute;n","Seis reglas. Una caminata. Una oportunidad de ganar Chick-fil-A.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","La Caminata Fotogr&aacute;fica",
         para("Vas a hacer una caminata fotogr&aacute;fica en el campus y capturar las 6 reglas de composici&oacute;n. Todas las im&aacute;genes se toman en Modo Manual y en formato RAW, dentro o fuera del sal&oacute;n. Captura una imagen fuerte para cada concepto.")
         + framed(HERO,"Caminata de Composici&oacute;n")
@@ -176,6 +177,7 @@ def overview():
            ("Exportar","Guardar tu edici&oacute;n final como un JPG nuevo, aparte del RAW, listo para entregar."),
            ("Convenci&oacute;n de Nombres","Una forma clara y constante de nombrar tus archivos. Aqu&iacute;, nombras cada uno por su concepto.")]), True)
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 01 - Caminata y Hoja de Contactos","Captura las seis. Prueba toda tu toma.")
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
@@ -183,7 +185,7 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Photography 2A &bull; Composition Photo Walk &bull; Step 01","Photo Walk &amp; Contact Sheet","Capture the six. Prove your whole take.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 01 &bull; Step 01","Photo Walk &amp; Contact Sheet","Capture the six. Prove your whole take.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("","The Photo Walk &amp; Contact Sheet",
         float_right(S1_FLOAT,"On the photo walk","")
         + para("Work with a partner and take turns as photographer and assistant. All images are captured in Manual Mode and in RAW, on campus, indoor or outdoor.")
@@ -194,7 +196,8 @@ def step01():
     en+=deliverables_box(False,
         [("Contact sheet(s), high-resolution JPG:","your 12-Up contact sheet(s) showing your entire take: all the images you and your partner captured.")])
 
-    es=banner("Fotograf&iacute;a 2A &bull; Caminata de Composici&oacute;n &bull; Paso 01","Caminata y Hoja de Contactos","Captura las seis. Prueba toda tu toma.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 02 - Cull, Edit &amp; Export","Your six best. Your ticket to win.")
+    es=banner("M&oacute;dulo 01 &bull; Paso 01","Caminata y Hoja de Contactos","Captura las seis. Prueba toda tu toma.","#top","Back to English")
     es+=card("","La Caminata y la Hoja de Contactos",
         float_right(S1_FLOAT,"On the photo walk","")
         + para("Trabaja con un compa&ntilde;ero y t&uacute;rnense como fot&oacute;grafo y asistente. Todas las im&aacute;genes se toman en Modo Manual y en RAW, en el campus, dentro o fuera.")
@@ -205,6 +208,7 @@ def step01():
     es+=deliverables_box(True,
         [("Hoja(s) de contactos, JPG de alta resoluci&oacute;n:","tu hoja o hojas de contactos 12-Up que muestren toda tu toma: todas las im&aacute;genes que t&uacute; y tu compa&ntilde;ero capturaron.")])
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Selecciona, Edita y Exporta","Tus seis mejores. Tu boleto para ganar.")
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
@@ -212,7 +216,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Photography 2A &bull; Composition Photo Walk &bull; Step 02","Cull, Edit &amp; Export","Your six best. Your ticket to win.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 01 &bull; Step 02","Cull, Edit &amp; Export","Your six best. Your ticket to win.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("","Cull, Edit, Rename &amp; Export Your Best 6",
         float_right(S2_FLOAT,"Renee editing her photos in Lightroom","")
         + para("From your whole take, build your final six: one image for each of the 6 composition rules. This part is about judgment and craft, choosing your strongest frame for each rule and editing it so it truly stands out.")
@@ -237,7 +241,8 @@ def step02():
     en+=deliverables_box(False,
         [("7 files:","one 6-Up contact sheet of your final 6, plus the 6 individual JPGs, each named by its rule.")])
 
-    es=banner("Fotograf&iacute;a 2A &bull; Caminata de Composici&oacute;n &bull; Paso 02","Selecciona, Edita y Exporta","Tus seis mejores. Tu boleto para ganar.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 03 - Reflection","Look back. What worked, what was hard.")
+    es=banner("M&oacute;dulo 01 &bull; Paso 02","Selecciona, Edita y Exporta","Tus seis mejores. Tu boleto para ganar.","#top","Back to English")
     es+=card("","Selecciona, Edita, Renombra y Exporta tus 6 Mejores",
         float_right(S2_FLOAT,"Renee editando sus fotos en Lightroom","")
         + para("De toda tu toma, arma tus seis finales: una imagen para cada una de las 6 reglas de composici&oacute;n. Esta parte se trata de criterio y oficio: elegir tu mejor toma para cada regla y editarla para que realmente destaque.")
@@ -262,6 +267,7 @@ def step02():
     es+=deliverables_box(True,
         [("7 archivos:","una hoja de contactos 6-Up de tus 6 finales, m&aacute;s los 6 JPG individuales, cada uno con el nombre de su regla.")])
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Reflexi&oacute;n","Mira atr&aacute;s. Qu&eacute; funcion&oacute;, qu&eacute; fue dif&iacute;cil.")
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
@@ -269,7 +275,7 @@ def step02():
 
 # ---------------- STEP 03 ----------------
 def step03():
-    en=banner("Photography 2A &bull; Composition Photo Walk &bull; Step 03","Reflection","Look back. What worked, what was hard.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 01 &bull; Step 03","Reflection","Look back. What worked, what was hard.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("","Reflection",
         para("Take a few minutes to reflect on your process: what worked, what was hard, and which concept you are most proud of.")
         + para("Download the reflection document, complete it, and turn it in.")
@@ -277,7 +283,8 @@ def step03():
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
 
-    es=banner("Fotograf&iacute;a 2A &bull; Caminata de Composici&oacute;n &bull; Paso 03","Reflexi&oacute;n","Mira atr&aacute;s. Qu&eacute; funcion&oacute;, qu&eacute; fue dif&iacute;cil.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; MODULE 02 - Off-Camera Flash","Next module: light your subject with off-camera flash and balance the sky.")
+    es=banner("M&oacute;dulo 01 &bull; Paso 03","Reflexi&oacute;n","Mira atr&aacute;s. Qu&eacute; funcion&oacute;, qu&eacute; fue dif&iacute;cil.","#top","Back to English")
     es+=card("","Reflexi&oacute;n",
         para("T&oacute;mate unos minutos para reflexionar sobre tu proceso: qu&eacute; funcion&oacute;, qu&eacute; fue dif&iacute;cil y de cu&aacute;l concepto est&aacute;s m&aacute;s orgulloso.")
         + para("Descarga el documento de reflexi&oacute;n, compl&eacute;talo y entr&eacute;galo.")
@@ -285,6 +292,7 @@ def step03():
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word de la reflexi&oacute;n (.docx), subido a Canvas.")])
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; M&Oacute;DULO 02 - Flash Fuera de C&aacute;mara","Pr&oacute;ximo m&oacute;dulo: ilumina a tu sujeto con flash fuera de c&aacute;mara y equilibra el cielo.")
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot("",'3',"Step 03",True)
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'

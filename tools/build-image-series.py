@@ -7,7 +7,7 @@
 # Step 01 embeds the existing scrollable "Lightroom Import" slide deck (12 slides + PDF).
 # HEADER is a PLACEHOLDER (Chris drops art in later).
 import os, re
-from silva_framework import standards_box, banner as _sfbanner, section_header as _sfsection_header, lang_accordion, CSS_VER, NAV_VER  # green CTE standards box + shared glass banner + full-width gradient section header + Spanish accordion + cache-bust vers
+from silva_framework import standards_box, banner as _sfbanner, section_header as _sfsection_header, lang_accordion, next_up, CSS_VER, NAV_VER  # green CTE standards box + shared glass banner + full-width gradient section header + Spanish accordion + cache-bust vers
 SITE="https://www.creativesilva.com"
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 HEADER=f"{SITE}/assets/images/photo1/image-series/header-v1.png"   # overview header art
@@ -436,7 +436,7 @@ IS_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Photography 1A &bull; Module 04","Image Series Photo Walk","Capture a cohesive series with the camera kit, offload, import, and edit.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Photography 1A","Module 04: Image Series Photo Walk","Capture a cohesive series with the camera kit, offload, import, and edit.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Capture a Series That Belongs Together",
         para("On this photo walk you use a classroom camera kit to capture a cohesive series: a group of photos that feel linked, like a family of images. Your series can be circles, shapes, colors, textures, reflections, or your own idea. What matters is that the photos clearly go together.")
         + para("You capture in RAW, offload your photos to OneDrive, and import them into Lightroom Classic. You build your first contact sheet, then cull to your best 6, do a light edit, and turn in a final contact sheet.")
@@ -467,7 +467,8 @@ def overview():
            ("Contact Sheet","One page that shows all your photos as small thumbnails."),
            ("White Balance","The setting that makes colors look warm, cool, or true to life.")]))
 
-    es=banner("Fotograf&iacute;a 1A &bull; M&oacute;dulo 04","Caminata de Serie de Im&aacute;genes","Captura una serie cohesiva con el kit de c&aacute;mara, desc&aacute;rgala, imp&oacute;rtala y edita.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 01 - Capture &amp; Import","Set RAW, capture your series, offload to OneDrive, and import.")
+    es=banner("Fotograf&iacute;a 1A","M&oacute;dulo 04: Caminata de Serie de Im&aacute;genes","Captura una serie cohesiva con el kit de c&aacute;mara, desc&aacute;rgala, imp&oacute;rtala y edita.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Captura una Serie Que Va Junta",
         para("En esta caminata fotogr&aacute;fica usas un kit de c&aacute;mara de la clase para capturar una serie cohesiva: un grupo de fotos que se sienten unidas, como una familia de im&aacute;genes. Tu serie puede ser de c&iacute;rculos, formas, colores, texturas, reflejos o tu propia idea. Lo importante es que las fotos claramente van juntas.")
         + para("Capturas en RAW, descargas tus fotos a OneDrive y las importas a Lightroom Classic. Creas tu primera hoja de contactos, luego eliges tus mejores 6, haces una edici&oacute;n ligera y entregas una hoja de contactos final.")
@@ -576,7 +577,7 @@ def camera_settings_section(es):
       + '</div>')
 
 def step01():
-    en=banner("Image Series Photo Walk &bull; Step 1","Capture &amp; Import","Set RAW, capture your series, offload to OneDrive, and import.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 04 &bull; Step 01","Capture &amp; Import","Set RAW, capture your series, offload to OneDrive, and import.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("CAMERA SETUP / SET TO RAW","Set Your Camera to RAW First",
         para("This project must be captured in RAW, not JPG. RAW keeps the most detail so your edits look clean. Set your Canon EOS R50 to RAW before you take any photos.")
         + steps([
@@ -619,7 +620,8 @@ def step01():
     en+=deliverables_box(False,
         [("1 contact sheet:","your 12-image contact sheet (high-resolution JPG), showing your imported series, uploaded to this Canvas assignment.")])
 
-    es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 1","Captura e Importa","Pon RAW, captura tu serie, desc&aacute;rgala a OneDrive e imp&oacute;rtala.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 02 - Cull &amp; Edit","Select your best 6, do a light edit, and turn in a 6-image contact sheet.")
+    es=banner("M&oacute;dulo 04 &bull; Paso 01","Captura e Importa","Pon RAW, captura tu serie, desc&aacute;rgala a OneDrive e imp&oacute;rtala.","#top","Back to English")
     es+=card("AJUSTE DE C&Aacute;MARA / PON RAW","Primero Pon Tu C&aacute;mara en RAW",
         para("Este proyecto debe capturarse en RAW, no en JPG. RAW guarda el mayor detalle para que tus ediciones se vean limpias. Pon tu Canon EOS R50 en RAW antes de tomar cualquier foto.")
         + steps([
@@ -668,7 +670,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Image Series Photo Walk &bull; Step 2","Cull &amp; Edit","Select your best 6, do a light edit, and turn in a 6-image contact sheet.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 04 &bull; Step 02","Cull &amp; Edit","Select your best 6, do a light edit, and turn in a 6-image contact sheet.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("CULL / KEEP THE STRONG ONES","Cull to Your Best 6",
         para("Culling means looking through your photos and keeping only the strongest. Select the 6 images that best show your series. Drop the blurry, the too-dark, and the repeats.")
         + bullets([
@@ -698,7 +700,8 @@ def step02():
          ("6 JPGs:","your 6 edited photos, exported as high-resolution JPGs (see the export steps below). Upload all of this to this Canvas assignment.")])
     en+=export_box(False)
 
-    es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 2","Selecciona y Edita","Elige tus mejores 6, haz una edici&oacute;n ligera y entrega una hoja de contactos de 6.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 03 - Reflection","Tell the story of your series.")
+    es=banner("M&oacute;dulo 04 &bull; Paso 02","Selecciona y Edita","Elige tus mejores 6, haz una edici&oacute;n ligera y entrega una hoja de contactos de 6.","#top","Back to English")
     es+=card("SELECCIONA / QU&Eacute;DATE CON LAS FUERTES","Selecciona (Cull) Tus Mejores 6",
         para("Seleccionar (cull) significa revisar tus fotos y quedarte solo con las m&aacute;s fuertes. Elige las 6 im&aacute;genes que mejor muestran tu serie. Descarta las borrosas, las muy oscuras y las repetidas.")
         + bullets([
@@ -734,7 +737,7 @@ def step02():
 
 # ---------------- STEP 03 ----------------
 def step03():
-    en=banner("Image Series Photo Walk &bull; Step 3","Reflection","Tell the story of your series.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 04 &bull; Step 03","Reflection","Tell the story of your series.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
         float_right(REFLECT_FLOAT,"A Pioneer Valley student typing her Image Series reflection in the Word document on an iMac in the lab","Type your answers right in the reflection document.")
         + para("Finish with a short reflection. It asks about the series you chose, how you offloaded and imported your photos, the 6 you kept, and the edits you made.")
@@ -748,7 +751,8 @@ def step03():
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
 
-    es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 3","Reflexi&oacute;n","Cuenta la historia de tu serie.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; MODULE 05 - Lightroom Editing","Next module: import, crop, and develop your photos in Lightroom Classic.")
+    es=banner("M&oacute;dulo 04 &bull; Paso 03","Reflexi&oacute;n","Cuenta la historia de tu serie.","#top","Back to English")
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         float_right(REFLECT_FLOAT,"Una estudiante de Pioneer Valley escribiendo su reflexi&oacute;n de la Serie de Im&aacute;genes en el documento de Word en una iMac en el laboratorio","Escribe tus respuestas directamente en el documento de reflexi&oacute;n.")
         + para("Termina con una reflexi&oacute;n corta. Te pregunta sobre la serie que elegiste, c&oacute;mo descargaste e importaste tus fotos, las 6 que guardaste y las ediciones que hiciste.")

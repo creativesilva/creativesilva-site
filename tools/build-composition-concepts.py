@@ -177,7 +177,7 @@ CC_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Photography 1A &bull; Composition Concepts","Composition Concepts","20 ways to frame a photo. Pick 3.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Photography 1A","Module 02: Composition Concepts","20 ways to frame a photo. Pick 3.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Composition Concepts",
         para("Composition is how you arrange what is in your photo. In this project you watch a short video that shows 20 composition concepts, pick your 3 favorites, and take one photo for each. This is not about camera settings: it is all about how you frame the photo. You use your own phone or a school iPad, so everyone has a fair and equal way to take part.")
         + framed(HEADER,"Composition Concepts")
@@ -191,7 +191,8 @@ def overview():
         + '<div style="clear:both;"></div>'
         + concepts_grid(False))
 
-    es=banner("Fotograf&iacute;a 1A &bull; Conceptos de Composici&oacute;n","Conceptos de Composici&oacute;n","20 formas de encuadrar una foto. Elige 3.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 01 - Capture &amp; Submit","Capture your 3 concepts.")
+    es=banner("Fotograf&iacute;a 1A","M&oacute;dulo 02: Conceptos de Composici&oacute;n","20 formas de encuadrar una foto. Elige 3.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Conceptos de Composici&oacute;n",
         para("La composici&oacute;n es c&oacute;mo acomodas lo que aparece en tu foto. En este proyecto ves un video corto que muestra 20 conceptos de composici&oacute;n, eliges tus 3 favoritos y tomas una foto para cada uno. Esto no se trata de los ajustes de la c&aacute;mara: se trata de c&oacute;mo encuadras la foto. Usas tu propio tel&eacute;fono o un iPad de la escuela, para que todos tengan una forma justa e igual de participar.")
         + framed(HEADER,"Conceptos de Composici&oacute;n")
@@ -205,6 +206,7 @@ def overview():
         + '<div style="clear:both;"></div>'
         + concepts_grid(True))
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 01 - Captura y Entrega","Captura tus 3 conceptos.")
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
@@ -212,7 +214,7 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Composition Concepts &bull; Step 1","Capture &amp; Submit","Capture your 3 concepts.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 02 &bull; Step 01","Capture &amp; Submit","Capture your 3 concepts.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("STEP 01 / CAPTURE &amp; CULL","Capture Your 3 Concepts",
         float_right(STEP1_FLOAT,"A student reviewing her photos on a phone","")
         + para("Go take photos for each of your 3 chosen concepts with your own phone or a school iPad. Take a few tries for each one, then select your single best photo for each concept. You end with 3 photos, one for each concept, and all 3 are different.")
@@ -228,7 +230,8 @@ def step01():
     en+=card("TURN IT IN","Upload Your 3 Photos",
         para("Upload your 3 final photos to Canvas. A photo straight from your phone or iPad (JPG) is perfect. Then go to Step 02 for the reflection."))
 
-    es=banner("Conceptos de Composici&oacute;n &bull; Paso 1","Captura y Entrega","Captura tus 3 conceptos.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 02 - Reflection","Reflect on your work.")
+    es=banner("M&oacute;dulo 02 &bull; Paso 01","Captura y Entrega","Captura tus 3 conceptos.","#top","Back to English")
     es+=card("PASO 01 / CAPTURA Y SELECCI&Oacute;N","Captura Tus 3 Conceptos",
         float_right(STEP1_FLOAT,"Una estudiante revisando sus fotos en un tel&eacute;fono","")
         + para("Ve a tomar fotos para cada uno de tus 3 conceptos elegidos con tu propio tel&eacute;fono o un iPad de la escuela. Haz varios intentos de cada uno y luego elige tu mejor foto para cada concepto. Terminas con 3 fotos, una por cada concepto, y las 3 son diferentes.")
@@ -244,6 +247,7 @@ def step01():
     es+=card("ENTR&Eacute;GALO","Sube Tus 3 Fotos",
         para("Sube tus 3 fotos finales a Canvas. Una foto directa de tu tel&eacute;fono o iPad (JPG) es perfecta. Luego ve al Paso 02 para la reflexi&oacute;n."))
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Reflexi&oacute;n","Reflexiona sobre tu trabajo.")
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
@@ -251,7 +255,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Composition Concepts &bull; Step 2","Reflection","Reflect on your work.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 02 &bull; Step 02","Reflection","Reflect on your work.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("STEP 02 / REFLECTION","Reflect on Your 3 Photos",
         float_right(REFLECT_FLOAT,"A student typing the Composition Concepts reflection on a lab computer","")
         + para("Finish the project with a short reflection. Name the 3 concepts you chose, then tell which one was the hardest, which was your favorite, and what you learned about composition.")
@@ -261,7 +265,8 @@ def step02():
         [("3 photos:","one for each concept, all different (from Step 01)."),
          ("1 reflection:","the completed Word document (.docx).")])
 
-    es=banner("Conceptos de Composici&oacute;n &bull; Paso 2","Reflexi&oacute;n","Reflexiona sobre tu trabajo.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; MODULE 03 - Leading Lines Photo Walk","Next module: pair up for a photo walk and use leading lines to pull the eye through your photos.")
+    es=banner("M&oacute;dulo 02 &bull; Paso 02","Reflexi&oacute;n","Reflexiona sobre tu trabajo.","#top","Back to English")
     es+=card("PASO 02 / REFLEXI&Oacute;N","Reflexiona Sobre Tus 3 Fotos",
         float_right(REFLECT_FLOAT,"Una estudiante escribiendo la reflexi&oacute;n de Conceptos de Composici&oacute;n en una computadora del laboratorio","")
         + para("Termina el proyecto con una reflexi&oacute;n corta. Nombra los 3 conceptos que elegiste, luego di cu&aacute;l fue el m&aacute;s dif&iacute;cil, cu&aacute;l fue tu favorito y qu&eacute; aprendiste sobre la composici&oacute;n.")
@@ -271,6 +276,7 @@ def step02():
         [("3 fotos:","una para cada concepto, todas diferentes (del Paso 01)."),
          ("1 reflexi&oacute;n:","el documento de Word completo (.docx).")])
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; M&Oacute;DULO 03 - Caminata de L&iacute;neas Gu&iacute;a","Pr&oacute;ximo m&oacute;dulo: trabaja en pareja en una caminata y usa l&iacute;neas gu&iacute;a para llevar la mirada por tus fotos.")
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><span></span></div>'
