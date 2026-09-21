@@ -14,6 +14,7 @@ ROOT=os.path.join(os.path.dirname(__file__),"..")
 IMG=f"{SITE}/assets/images/digarts1/elements-of-art"
 HEADER=f"{IMG}/elements-of-art-header-v1.jpg"
 STEP1_FLOAT=f"{IMG}/elements-of-art-step01-float-v1.jpg"
+REFLECT_FLOAT=f"{IMG}/elements-of-art-reflection-float-v1.jpg"
 DOCS=f"{SITE}/assets/course-documents"
 REFL_EN=f"{DOCS}/Elements-of-Art-Reflection-EN.docx"
 REFL_ES=f"{DOCS}/Elements-of-Art-Reflection-ES.docx"
@@ -206,7 +207,8 @@ def step01():
 def step02():
     en=banner(f"Module {MOD} &bull; Step 02","Reflection","What comes next for your character?","#espanol","Clic para Espa&ntilde;ol")
     en+=card("STEP 02 / REFLECTION","Reflect on Your Character",
-        para("Your character is built from line and shape. Now look ahead. In a short reflection, think about what you would add next to bring it to life: what would you add, what colors would fit and where, how you could use Form to make it look 3D instead of flat, and what textures are missing.")
+        float_right(REFLECT_FLOAT,"A Pioneer Valley student typing the Character Design reflection in the Word document on an iMac in the creative lab, a decorated sketchbook on the desk","")
+        + para("Your character is built from line and shape. Now look ahead. In a short reflection, think about what you would add next to bring it to life: what would you add, what colors would fit and where, how you could use Form to make it look 3D instead of flat, and what textures are missing.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + para("Type your answers in the document, save it, and upload it to this Canvas assignment."))
     en+=deliverables_box(False,
@@ -215,7 +217,8 @@ def step02():
 
     es=banner(f"M&oacute;dulo {MOD} &bull; Paso 02","Reflexi&oacute;n","&iquest;Qu&eacute; sigue para tu personaje?","#top","Back to English")
     es+=card("PASO 02 / REFLEXI&Oacute;N","Reflexiona Sobre Tu Personaje",
-        para("Tu personaje est&aacute; hecho de l&iacute;nea y forma. Ahora mira hacia adelante. En una reflexi&oacute;n corta, piensa qu&eacute; le agregar&iacute;as para darle vida: qu&eacute; agregar&iacute;as, qu&eacute; colores le quedar&iacute;an y d&oacute;nde, c&oacute;mo podr&iacute;as usar la Forma para que se vea en 3D y no plano, y qu&eacute; texturas le faltan.")
+        float_right(REFLECT_FLOAT,"Un estudiante de Pioneer Valley escribiendo la reflexi&oacute;n de Dise&ntilde;o de Personaje en el documento de Word en una iMac del laboratorio, con un cuaderno decorado en el escritorio","")
+        + para("Tu personaje est&aacute; hecho de l&iacute;nea y forma. Ahora mira hacia adelante. En una reflexi&oacute;n corta, piensa qu&eacute; le agregar&iacute;as para darle vida: qu&eacute; agregar&iacute;as, qu&eacute; colores le quedar&iacute;an y d&oacute;nde, c&oacute;mo podr&iacute;as usar la Forma para que se vea en 3D y no plano, y qu&eacute; texturas le faltan.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
         + para("Escribe tus respuestas en el documento, gu&aacute;rdalo y s&uacute;belo a esta tarea de Canvas."))
     es+=deliverables_box(True,
