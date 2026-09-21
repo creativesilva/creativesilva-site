@@ -3,126 +3,87 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mrs. Garcia &middot; Photography 1A</title>
+  <title>Photography 1A | Mrs. Garcia | PVHS</title>
   <meta name="robots" content="noindex, nofollow" />
-  <link rel="icon" type="image/png" href="https://www.creativesilva.com/assets/PV_Square_Logo.png" />
-  <meta name="description" content="Private shared Photography 1A resources for Mrs. Garcia." />
+  <link rel="icon" type="image/svg+xml" href="https://www.creativesilva.com/assets/garcia/lg-logo-mrs-garcia-v1.svg" />
+  <meta name="description" content="Private shared Photography 1A modules for Mrs. Garcia." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/silva-module.css?v=d132cef2" />
   <style>
     :root {
-      --bg:        #060f0f;
-      --panel:     #0b1414;
-      --teal:      #00b8b8;
-      --teal-soft: #80e0e0;
-      --text:      rgba(255,255,255,0.92);
-      --text-dim:  rgba(255,255,255,0.62);
-      --text-faint:rgba(255,255,255,0.42);
-      --font-head: 'Oswald', Arial, sans-serif;
-      --font-body: Arial, Helvetica, sans-serif;
+      --text: #ffffff; --text-dim: #aaaaaa; --text-faint: #777777; --accent: #cc0000;
+      --font-head: "Oswald", "Bebas Neue", "Helvetica Neue", Arial, sans-serif;
+      --font-body: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
     }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
-    body {
-      font-family: var(--font-body);
-      color: var(--text);
-      background:
-        radial-gradient(120% 90% at 50% -10%, rgba(0,116,116,0.22) 0%, rgba(0,116,116,0) 55%),
-        linear-gradient(180deg, #071313 0%, var(--bg) 60%);
-      background-attachment: scroll;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
+    body { background: #080808; }
 
-    /* ── PIN gate ── */
-    #pin-gate {
-      position: fixed; inset: 0; z-index: 9999;
-      display: flex; align-items: center; justify-content: center; padding: 24px;
-      background: radial-gradient(120% 90% at 50% 0%, rgba(0,116,116,0.18) 0%, rgba(6,15,15,0.98) 55%), #060f0f;
-    }
-    #pin-gate.hidden { display: none; }
-    .pin-card {
-      width: min(420px, 94vw); text-align: center;
-      background: var(--panel);
-      border: 1px solid rgba(0,184,184,0.30); border-top: 3px solid var(--teal);
-      padding: 34px 30px 30px; box-shadow: 0 24px 70px rgba(0,0,0,0.6);
-    }
-    .pin-card img { height: 64px; width: auto; display: block; margin: 0 auto 16px; }
-    .pin-card h2 {
-      font-family: var(--font-head); font-weight: 700; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--teal-soft); font-size: 1.15rem; margin: 0 0 6px;
-    }
-    .pin-card p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px; }
-    .pin-card input {
-      width: 100%; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.16);
-      color: var(--text); font-size: 1.1rem; text-align: center; letter-spacing: 0.4em;
-      padding: 12px; margin-bottom: 14px;
-    }
-    .pin-card button {
-      width: 100%; cursor: pointer; font-family: var(--font-head); font-weight: 600;
-      letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.8rem;
-      color: #04201f; background: var(--teal); border: 0; padding: 13px;
-    }
-    .pin-card button:hover { filter: brightness(1.12); }
-    .pin-error { color: #ff8a8a; font-size: 0.8rem; margin-top: 12px; min-height: 1em; }
-
-    /* ── Page chrome ── */
-    .wrap { max-width: 1040px; margin: 0 auto; padding: 40px 22px 80px; }
-    .masthead { text-align: center; margin-bottom: 40px; }
-    .masthead img { height: 84px; width: auto; display: block; margin: 0 auto 18px; }
-    .masthead .eyebrow {
-      font-family: var(--font-head); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.26em;
-      text-transform: uppercase; color: var(--teal); margin-bottom: 10px;
-    }
-    .masthead h1 {
-      font-family: var(--font-head); font-weight: 700; letter-spacing: 0.02em;
-      font-size: clamp(2rem, 6vw, 3rem); margin: 0 0 8px; color: #fff; text-transform: uppercase;
-    }
-    .masthead .sub { color: var(--text-dim); font-size: 1rem; letter-spacing: 0.02em; }
-
-    .welcome {
-      background: linear-gradient(180deg, rgba(0,116,116,0.10) 0%, rgba(0,116,116,0.03) 100%);
-      border: 1px solid rgba(0,184,184,0.22); border-left: 6px solid var(--teal);
-      padding: 22px 26px; margin-bottom: 34px; line-height: 1.7; color: var(--text);
-    }
-    .welcome strong { color: var(--teal-soft); }
-
-    .sec-head {
-      display: flex; align-items: center; gap: 12px;
-      background: linear-gradient(90deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.28) 45%, rgba(0,0,0,0) 100%);
-      border-left: 5px solid var(--teal); padding: 10px 18px 10px 13px; margin-bottom: 6px;
-    }
-    .sec-head img { width: 42px; height: 42px; display: block; flex: 0 0 auto; }
-    .sec-head span {
-      font-family: var(--font-head); font-size: 1.2rem; letter-spacing: 0.04em;
-      text-transform: uppercase; color: var(--teal-soft); font-weight: 600;
-    }
-    .sec-rule { height: 2px; width: 60px; background: var(--teal); margin: 0 0 22px 13px; }
-
-    .mod-search {
-      width: 100%; max-width: 420px; margin: 0 0 20px; display: block;
+    /* Centered catalog column under the shared header. */
+    .gcat { max-width: 1200px; margin: 0 auto; }
+    .gcat-search {
+      width: 100%; max-width: 440px; display: block; margin: 0 0 20px;
       background: rgba(0,0,0,0.35); border: 1px solid rgba(0,184,184,0.30);
       color: var(--text); font-family: var(--font-body); font-size: 0.95rem; padding: 11px 14px;
     }
-    .mod-search::placeholder { color: var(--text-faint); }
-    .mod-search:focus { outline: none; border-color: var(--teal); }
-    .mod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-    .mod-card {
-      display: block; text-decoration: none; color: var(--text);
-      background: var(--panel); border: 2px solid rgba(0,184,184,0.35);
-      padding: 20px 22px; transition: border-color 0.15s ease, transform 0.15s ease;
-    }
-    .mod-card:hover { border-color: var(--teal); transform: translateY(-2px); }
-    .mod-card .mc-name { font-family: var(--font-head); font-size: 1.05rem; letter-spacing: 0.02em; color: #fff; margin-bottom: 6px; }
-    .mod-card .mc-meta { font-size: 0.82rem; color: var(--text-faint); letter-spacing: 0.04em; text-transform: uppercase; }
-    .mod-card .mc-go { display: inline-block; margin-top: 14px; font-family: var(--font-head); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal-soft); }
+    .gcat-search::placeholder { color: var(--text-faint); }
+    .gcat-search:focus { outline: none; border-color: #00b8b8; }
 
-    .empty {
-      background: var(--panel); border: 1px dashed rgba(0,184,184,0.30);
-      padding: 34px 26px; text-align: center; color: var(--text-dim); line-height: 1.7;
-    }
-    .footnote { margin-top: 46px; text-align: center; color: var(--text-faint); font-size: 0.78rem; letter-spacing: 0.04em; }
+    /* ── Course accordion (ported from the main catalog so it matches exactly) ── */
+    .course-code { font-family: var(--font-head); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px; }
+    .course-title { font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); margin: 0 0 12px; line-height: 1.1; }
+    .course-card-accent { position: absolute; top: 0; left: 0; width: 6px; height: 100%; }
+    .course-acc { background: linear-gradient(180deg, rgba(0,116,116,0.10) 0%, rgba(0,116,116,0.03) 100%); border: 1px solid rgba(0,184,184,0.22); position: relative; transition: border-color 0.2s ease; }
+    .course-acc:hover, .course-acc[open] { border-color: rgba(0,184,184,0.45); }
+    summary.course-acc-head { display: flex; align-items: center; gap: 18px; padding: 22px 28px 22px 32px; cursor: pointer; list-style: none; user-select: none; }
+    summary.course-acc-head::-webkit-details-marker { display: none; }
+    summary.course-acc-head:hover { background: rgba(255,255,255,0.02); }
+    .course-acc-headtext { flex: 0 1 auto; min-width: 0; max-width: 100%; margin-right: auto; display: grid; grid-template-columns: 40px auto; column-gap: 13px; align-items: center; background: rgba(0,0,0,0.40); border-left: 4px solid #00b8b8; padding: 9px 20px 9px 13px; box-sizing: border-box; }
+    .course-acc-headtext::before { content: ""; grid-column: 1; grid-row: 1 / 3; align-self: center; width: 40px; height: 40px; background: url("/assets/Icons/assignment/camera-kit-teal-v1.png") center / contain no-repeat; }
+    .course-acc-head .course-code { grid-column: 2; grid-row: 1; margin-bottom: 2px; }
+    .course-acc-head .course-title { grid-column: 2; grid-row: 2; margin-bottom: 0; font-size: 1.25rem; color: #80e0e0; overflow: hidden; text-overflow: ellipsis; }
+    .course-acc-meta { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+    .course-acc-count { font-family: var(--font-head); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; }
+    .course-acc-count .live { color: #5fcc8a; }
+    .course-acc-chevron { width: 9px; height: 9px; border-right: 2px solid var(--text-dim); border-bottom: 2px solid var(--text-dim); transform: rotate(-45deg); transition: transform 0.2s ease; flex-shrink: 0; margin-right: 2px; }
+    .course-acc[open] .course-acc-chevron { transform: rotate(45deg); }
+    .course-acc-body { padding: 4px 32px 28px 32px; animation: accOpen 0.22s ease; }
+    @keyframes accOpen { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+    .module-list { display: flex; flex-direction: column; gap: 8px; margin: 0; }
+    .module-acc { border: 1px solid rgba(0,184,184,0.16); border-left: 3px solid rgba(0,184,184,0.5); background: rgba(0,116,116,0.06); }
+    .module-acc > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 14px; }
+    .module-acc > summary::-webkit-details-marker { display: none; }
+    .module-acc > summary:hover { background: rgba(0,184,184,0.07); }
+    .module-acc .macc-chev { flex: 0 0 auto; width: 8px; height: 8px; border-right: 2px solid rgba(0,184,184,0.7); border-bottom: 2px solid rgba(0,184,184,0.7); transform: rotate(-45deg); transition: transform 0.15s ease; }
+    .module-acc[open] > summary .macc-chev { transform: rotate(45deg); }
+    .module-acc-body { padding: 2px 10px 8px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .module-row-name { font-family: var(--font-head); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; flex: 1 1 auto; min-width: 0; color: var(--text); }
+    .module-status { font-family: var(--font-head); font-size: 0.58rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; padding: 3px 9px; border: 1px solid; flex-shrink: 0; }
+    .module-status.published { color: #5fcc8a; border-color: rgba(95,204,138,0.35); background: rgba(95,204,138,0.07); }
+    .module-page-count { font-size: 0.72rem; color: var(--text-faint); flex-shrink: 0; }
+    .page-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 6px; border-bottom: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; }
+    .page-row:last-child { border-bottom: none; }
+    .page-name { font-size: 0.82rem; color: rgba(255,255,255,0.86); letter-spacing: 0.02em; text-decoration: none; cursor: pointer; }
+    .page-name:hover { color: #fff; text-decoration: underline; }
+    .page-sub { color: var(--text-dim); font-weight: 400; }
+    .page-acts { display: flex; gap: 6px; flex-wrap: wrap; }
+    .pg-btn { font-family: var(--font-head); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #eaf7f7; text-decoration: none; cursor: pointer; background: rgba(0,184,184,0.10); border: 1px solid rgba(0,184,184,0.30); border-top: 2px solid #00b8b8; padding: 6px 12px; white-space: nowrap; }
+    .pg-btn:hover { border-color: rgba(0,184,184,0.6); background: rgba(0,184,184,0.16); }
+    .pg-btn.pg-view { background: rgba(255,107,26,0.10); border-color: rgba(255,107,26,0.32); border-top-color: #FF6B1A; }
+    .pg-btn.pg-view:hover { border-color: rgba(255,107,26,0.6); background: rgba(255,107,26,0.16); }
+    .empty { background: #0b1414; border: 1px dashed rgba(0,184,184,0.30); padding: 30px 26px; text-align: center; color: var(--text-dim); line-height: 1.6; }
+
+    /* ── PIN gate ── */
+    #pin-gate { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 24px; background: radial-gradient(120% 90% at 50% 0%, rgba(0,116,116,0.18) 0%, rgba(6,15,15,0.98) 55%), #060f0f; }
+    #pin-gate.hidden { display: none; }
+    .pin-card { width: min(420px, 94vw); text-align: center; background: #0b1414; border: 1px solid rgba(0,184,184,0.30); border-top: 3px solid #00b8b8; padding: 34px 30px 30px; box-shadow: 0 24px 70px rgba(0,0,0,0.6); }
+    .pin-card img { height: 66px; width: auto; display: block; margin: 0 auto 16px; }
+    .pin-card h2 { font-family: var(--font-head); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #80e0e0; font-size: 1.15rem; margin: 0 0 6px; }
+    .pin-card p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px; }
+    .pin-card input { width: 100%; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.16); color: var(--text); font-size: 1.1rem; text-align: center; letter-spacing: 0.4em; padding: 12px; margin-bottom: 14px; }
+    .pin-card button { width: 100%; cursor: pointer; font-family: var(--font-head); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.8rem; color: #04201f; background: #00b8b8; border: 0; padding: 13px; }
+    .pin-card button:hover { filter: brightness(1.12); }
+    .pin-error { color: #ff8a8a; font-size: 0.8rem; margin-top: 12px; min-height: 1em; }
   </style>
 </head>
 <body>
@@ -130,7 +91,7 @@
   <!-- PIN gate: hidden immediately if this session is already authenticated -->
   <div id="pin-gate">
     <div class="pin-card">
-      <img src="https://www.creativesilva.com/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School" />
+      <img src="https://www.creativesilva.com/assets/garcia/lg-logo-mrs-garcia-v1.svg" alt="Mrs. Garcia" />
       <h2>Photography 1A</h2>
       <p>Private access for Mrs. Garcia.<br />Enter your code to continue.</p>
       <input type="text" id="pin-input" inputmode="numeric" autocomplete="off" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="&bull;&bull;&bull;&bull;" maxlength="10" style="-webkit-text-security:disc;" />
@@ -139,91 +100,115 @@
     </div>
   </div>
   <script>
-    // Run synchronously before content shows so nothing flashes.
-    if (sessionStorage.getItem('garcia-auth') === 'ok') {
-      document.getElementById('pin-gate').classList.add('hidden');
-    }
+    if (sessionStorage.getItem('garcia-auth') === 'ok') { document.getElementById('pin-gate').classList.add('hidden'); }
     document.addEventListener('DOMContentLoaded', function () {
       var input = document.getElementById('pin-input');
-      if (input) {
-        input.focus();
-        input.addEventListener('keydown', function (e) { if (e.key === 'Enter') garciaCheckPin(); });
-      }
+      if (input) { input.focus(); input.addEventListener('keydown', function (e) { if (e.key === 'Enter') garciaCheckPin(); }); }
     });
     function garciaCheckPin() {
       var val = document.getElementById('pin-input').value.trim();
-      if (val === '7070') {
-        sessionStorage.setItem('garcia-auth', 'ok');
-        document.getElementById('pin-gate').classList.add('hidden');
-      } else {
-        document.getElementById('pin-error').textContent = 'Incorrect code. Try again.';
-        document.getElementById('pin-input').value = '';
-        document.getElementById('pin-input').focus();
-      }
+      if (val === '7070') { sessionStorage.setItem('garcia-auth', 'ok'); document.getElementById('pin-gate').classList.add('hidden'); }
+      else { document.getElementById('pin-error').textContent = 'Incorrect code. Try again.'; document.getElementById('pin-input').value = ''; document.getElementById('pin-input').focus(); }
     }
   </script>
 
-  <div class="wrap">
-    <div class="masthead">
-      <img src="https://www.creativesilva.com/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School" />
-      <div class="eyebrow">Pioneer Valley High School</div>
-      <h1>Mrs. Garcia</h1>
-      <div class="sub">Photography 1A &middot; Shared Resources</div>
+  <!-- Shared teacher header (title + Calendar + Search + countdown + LG logo + Catalog), injected by garcia-nav.js -->
+  <nav class="silva-nav" aria-label="Photography 1A navigation"><div class="silva-nav-inner"></div></nav>
+
+  <div class="silva-page">
+    <div class="gcat">
+      <input id="gcat-search" class="gcat-search" type="search" placeholder="Search modules&hellip;" aria-label="Search modules" autocomplete="off" />
+
+      <details class="course-acc" id="photo1a" open style="--course-accent:#007474;">
+        <summary class="course-acc-head">
+          <span class="course-card-accent" style="background:#007474;"></span>
+          <span class="course-acc-headtext">
+            <p class="course-code">PH 1A</p>
+            <h2 class="course-title">Photography 1A</h2>
+          </span>
+          <span class="course-acc-meta">
+            <span class="course-acc-count" id="gcat-count">1 module &middot; <span class="live">1 live</span></span>
+            <span class="course-acc-chevron"></span>
+          </span>
+        </summary>
+        <div class="course-acc-body">
+          <div class="module-list" id="gcat-modules">
+            <details class="module-acc">
+              <summary><span class="module-row-name">Module 01: Tiny Things</span><span class="module-page-count">3p</span><span class="module-status published">Live</span><span class="macc-chev"></span></summary>
+              <div class="module-acc-body">
+                <div class="page-row">
+                  <a class="page-name" href="tiny-things-overview.html"><strong>Overview</strong></a>
+                  <span class="page-acts">
+                    <button type="button" class="pg-btn" onclick="garciaCopyPage('tiny-things-overview.html', this)">Copy HTML</button>
+                    <button type="button" class="pg-btn" onclick="garciaDownloadPage('tiny-things-overview.html', this)">Download</button>
+                    <a class="pg-btn pg-view" href="tiny-things-overview.html">View Page</a>
+                  </span>
+                </div>
+                <div class="page-row">
+                  <a class="page-name" href="tiny-things-step01-capture.html">Step 01 <span class="page-sub">&middot; Capture</span></a>
+                  <span class="page-acts">
+                    <button type="button" class="pg-btn" onclick="garciaCopyPage('tiny-things-step01-capture.html', this)">Copy HTML</button>
+                    <button type="button" class="pg-btn" onclick="garciaDownloadPage('tiny-things-step01-capture.html', this)">Download</button>
+                    <a class="pg-btn pg-view" href="tiny-things-step01-capture.html">View Page</a>
+                  </span>
+                </div>
+                <div class="page-row">
+                  <a class="page-name" href="tiny-things-step02-reflection.html">Step 02 <span class="page-sub">&middot; Reflection</span></a>
+                  <span class="page-acts">
+                    <button type="button" class="pg-btn" onclick="garciaCopyPage('tiny-things-step02-reflection.html', this)">Copy HTML</button>
+                    <button type="button" class="pg-btn" onclick="garciaDownloadPage('tiny-things-step02-reflection.html', this)">Download</button>
+                    <a class="pg-btn pg-view" href="tiny-things-step02-reflection.html">View Page</a>
+                  </span>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </details>
     </div>
-
-    <div class="welcome">
-      Welcome, Mrs. Garcia. This is your private space for <strong>Photography 1A</strong> modules.
-      Open a module below to view it, then copy the Canvas HTML from that page straight into your own Canvas course.
-      New modules will show up here as they are shared with you.
-    </div>
-
-    <div class="sec-head">
-      <img src="https://www.creativesilva.com/assets/Icons/assignment/camera-kit-teal-v1.png" alt="" onerror="this.style.display='none'" />
-      <span>Photography 1A Modules</span>
-    </div>
-    <div class="sec-rule"></div>
-
-    <input id="mod-search" class="mod-search" type="search" placeholder="Search modules&hellip;" aria-label="Search modules" autocomplete="off" />
-    <div id="mod-grid" class="mod-grid"></div>
-
-    <div class="footnote">Private shared resources &middot; Photography 1A</div>
   </div>
 
   <script>
-    // Mrs. Garcia's shared modules. Each copy is hosted here under /curriculum/garcia/ and must NOT
-    // link back to the main catalog. Add an entry (and host the copied page) when a module is shared.
-    var GARCIA_MODULES = [
-      { name: "Tiny Things", meta: "Overview + 2 steps", url: "tiny-things-overview.html" }
-    ];
-    (function renderGarciaModules() {
-      var grid = document.getElementById('mod-grid');
-      var box = document.getElementById('mod-search');
-      if (!grid) return;
-      function card(m) {
-        return '<a class="mod-card" href="' + m.url + '">'
-          + '<div class="mc-name">' + m.name + '</div>'
-          + (m.meta ? '<div class="mc-meta">' + m.meta + '</div>' : '')
-          + '<span class="mc-go">Open &rarr;</span></a>';
-      }
-      function render(q) {
+    // Copy / download a page's Canvas HTML (the #top block), same as the main catalog's page rows.
+    function garciaFetchTop(url) {
+      return fetch(url).then(function (r) { return r.text(); }).then(function (html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var top = doc.getElementById('top');
+        if (!top) { throw new Error('no #top'); }
+        return top.outerHTML;
+      });
+    }
+    function garciaFlash(btn, msg) { var o = btn.textContent; btn.textContent = msg; setTimeout(function () { btn.textContent = o; }, 2200); }
+    function garciaCopyPage(url, btn) {
+      garciaFetchTop(url).then(function (h) { return navigator.clipboard.writeText(h); })
+        .then(function () { garciaFlash(btn, '✓ Copied'); })
+        .catch(function () { garciaFlash(btn, 'Failed'); });
+    }
+    function garciaDownloadPage(url, btn) {
+      garciaFetchTop(url).then(function (h) {
+        var blob = new Blob([h], { type: 'text/html' });
+        var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+        a.download = url.split('/').pop().replace('.html', '') + '-canvas.html';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(a.href);
+      }).catch(function () { garciaFlash(btn, 'Failed'); });
+    }
+    // Scoped search: filter her module accordions (and their page rows) by text.
+    (function () {
+      var box = document.getElementById('gcat-search');
+      if (!box) return;
+      var mods = Array.from(document.querySelectorAll('#gcat-modules .module-acc'));
+      function run(q) {
         q = (q || '').trim().toLowerCase();
-        if (!GARCIA_MODULES.length) {
-          grid.innerHTML = '<div class="empty">No modules have been shared yet.<br />Check back soon: new Photography 1A modules will appear here.</div>';
-          return;
-        }
-        var hits = GARCIA_MODULES.filter(function (m) { return !q || (m.name + ' ' + (m.meta || '')).toLowerCase().indexOf(q) >= 0; });
-        grid.innerHTML = hits.length ? hits.map(card).join('')
-          : '<div class="empty">No modules match your search.</div>';
+        mods.forEach(function (m) {
+          var hit = !q || m.textContent.toLowerCase().indexOf(q) >= 0;
+          m.style.display = hit ? '' : 'none';
+          if (q && hit) { m.open = true; }
+        });
       }
-      render('');
-      if (box) {
-        if (!GARCIA_MODULES.length) { box.style.display = 'none'; }
-        box.addEventListener('input', function () { render(box.value); });
-        // Arrived via the header Search button (?search=1): focus the box.
-        try { if (/[?&]search=1(&|$)/.test(location.search)) { box.focus(); } } catch (e) {}
-      }
+      box.addEventListener('input', function () { run(box.value); });
+      try { if (/[?&]search=1(&|$)/.test(location.search)) { box.focus(); } } catch (e) {}
     })();
   </script>
-
+  <script src="/js/garcia-nav.js?v=2"></script>
 </body>
 </html>
