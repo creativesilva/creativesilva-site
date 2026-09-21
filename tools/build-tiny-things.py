@@ -115,7 +115,7 @@ def overview(C):
          ("Point of View (POV)","Where your camera &lsquo;stands&rsquo; when you take the photo. A low point of view, like a bug on the ground, makes small things feel powerful."),
          ("Worm&rsquo;s-Eye View","A very low angle that looks up at your subject, as if you were down on the ground like a worm or a bug. It is the opposite of a bird&rsquo;s-eye view."),
          ("Depth of Field","How much of your photo is in sharp focus. In a close-up, often only the tiny subject is sharp and the background goes soft and blurry.")]), False)
-    en+=next_up("Up Next &middot; Step 01","Capture &amp; Submit","Grab your phone or an iPad. Next you&rsquo;ll head out and photograph your 6 tiny things.")
+    en+=next_up("UP NEXT &middot; STEP 01 - Capture &amp; Submit","Grab your phone or an iPad. Next you&rsquo;ll head out and photograph your 6 tiny things.")
 
     es=banner(f'{C["cn_es"]}',f'M&oacute;dulo {C["mod"]}: Cosas Peque&ntilde;as',"Un reto de fin de semana: ve el mundo como lo ve un insecto.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Cosas Peque&ntilde;as",
@@ -141,7 +141,7 @@ def overview(C):
          ("Punto de Vista (POV)","Desde d&oacute;nde &lsquo;mira&rsquo; tu c&aacute;mara cuando tomas la foto. Un punto de vista bajo, como un insecto en el suelo, hace que las cosas pequeñas se sientan poderosas."),
          ("Vista de Gusano","Un ángulo muy bajo que mira hacia arriba a tu tema, como si estuvieras en el suelo como un gusano o un insecto. Es lo contrario de la vista de pájaro."),
          ("Profundidad de Campo","Cuánto de tu foto está en foco nítido. En un primer plano, muchas veces solo la cosa pequeña está nítida y el fondo se ve suave y borroso.")]), True)
-    es+=next_up("A Continuaci&oacute;n &middot; Paso 01","Captura y Entrega","Toma tu tel&eacute;fono o un iPad. Ahora vas a salir y fotografiar tus 6 cosas peque&ntilde;as.")
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 01 - Captura y Entrega","Toma tu tel&eacute;fono o un iPad. Ahora vas a salir y fotografiar tus 6 cosas peque&ntilde;as.")
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
@@ -167,7 +167,7 @@ def step01(C):
         [("Your 6 photos (JPG),","all 6 tiny-thing captures, uploaded to this Canvas assignment.")])
     en+=card("TURN IT IN","Upload Your 6 Photos",
         para("Upload all 6 photos to Canvas. A photo straight from your phone or iPad (JPG) is perfect. Then go to Step 02 for the reflection."))
-    en+=next_up("Up Next &middot; Step 02","Reflection","With your 6 photos turned in, you&rsquo;ll write a short reflection and pitch next weekend&rsquo;s challenge.")
+    en+=next_up("UP NEXT &middot; STEP 02 - Reflection","With your 6 photos turned in, you&rsquo;ll write a short reflection and pitch next weekend&rsquo;s challenge.")
 
     es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 01',"Captura y Entrega","Fotograf&iacute;a tus 6 cosas peque&ntilde;as.","#top","Back to English")
     es+=card("PASO 01 / CAPTURA","Fotograf&iacute;a 6 Cosas Peque&ntilde;as",
@@ -185,7 +185,7 @@ def step01(C):
         [("Tus 6 fotos (JPG),","las 6 capturas de cosas pequeñas, subidas a esta tarea de Canvas.")])
     es+=card("ENTR&Eacute;GALO","Sube Tus 6 Fotos",
         para("Sube las 6 fotos a Canvas. Una foto directa de tu teléfono o iPad (JPG) es perfecta. Luego ve al Paso 02 para la reflexión."))
-    es+=next_up("A Continuaci&oacute;n &middot; Paso 02","Reflexi&oacute;n","Con tus 6 fotos entregadas, vas a escribir una reflexi&oacute;n corta y proponer el reto del pr&oacute;ximo fin de semana.")
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Reflexi&oacute;n","Con tus 6 fotos entregadas, vas a escribir una reflexi&oacute;n corta y proponer el reto del pr&oacute;ximo fin de semana.")
 
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
@@ -203,7 +203,7 @@ def step02(C):
         + para("Type your answers in the document, save it, and upload it to Canvas with your 6 photos."))
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
-    en+=next_up("You Finished the Module","Great work.","You&rsquo;ve wrapped up Tiny Things. Keep looking for the small details around you: noticing them is what makes a strong photographer.")
+    en+=next_up("MODULE COMPLETE - Great Work","You&rsquo;ve wrapped up Tiny Things. Keep looking for the small details around you: noticing them is what makes a strong photographer.")
 
     es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 02',"Reflexi&oacute;n","Reflexiona y propon el reto de la pr&oacute;xima semana.","#top","Back to English")
     es+=card("PASO 02 / REFLEXI&Oacute;N","Reflexiona Sobre Tus Cosas Peque&ntilde;as",
@@ -213,7 +213,7 @@ def step02(C):
         + para("Escribe tus respuestas en el documento, gu&aacute;rdalo y súbelo a Canvas con tus 6 fotos."))
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word de reflexión completo (.docx), subido a Canvas.")])
-    es+=next_up("Terminaste el M&oacute;dulo","Buen trabajo.","Completaste Cosas Peque&ntilde;as. Sigue buscando los peque&ntilde;os detalles a tu alrededor: notarlos es lo que hace a un buen fot&oacute;grafo.")
+    es+=next_up("M&Oacute;DULO COMPLETO - Buen Trabajo","Completaste Cosas Peque&ntilde;as. Sigue buscando los peque&ntilde;os detalles a tu alrededor: notarlos es lo que hace a un buen fot&oacute;grafo.")
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a>'

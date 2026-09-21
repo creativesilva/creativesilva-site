@@ -185,6 +185,7 @@ DELIVER_ICON=f"{SITE}/assets/Icons/assignment/deliverables-v4.png"
 STANDARDS_ICON=f"{SITE}/assets/Icons/assignment/standards-v1.svg"
 CAPFMT_ICON={"jpg":f"{SITE}/assets/Icons/assignment/jpg-v2.svg","raw":f"{SITE}/assets/Icons/assignment/raw-v2.png"}  # v2 = transparent interior
 CAMSET_ICON=f"{SITE}/assets/Icons/assignment/camera-settings-v1.svg"  # red aperture = camera-settings family marker
+NEXT_ICON=f"{SITE}/assets/Icons/assignment/next-teal-v1.png"  # teal skip-forward glyph = "Up Next" segue marker
 
 def section_header(icon,title,accent,light):
     # COMBINED section header (LOCKED 2026-09-10): one dark rectangle holding the section icon
@@ -322,15 +323,15 @@ def framed(src,alt):
     return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;">'
       f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>')
 
-def next_up(eyebrow, title, blurb):
-    # "Coming up next" foreshadow segue that caps the bottom of #top: non-last pages point to the
-    # next step; a module's LAST page foreshadows the next module (a brief glimpse of what is ahead).
-    return ('<div style="background:linear-gradient(90deg,rgba(0,116,116,0.20) 0%,rgba(0,116,116,0.05) 55%,rgba(0,116,116,0) 100%);border:1px solid rgba(0,184,184,0.30);border-left:6px solid #00b8b8;padding:20px 24px;margin-top:26px;overflow:hidden;">'
-      '<div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">'
-      f'<span style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#80e0e0;"><strong>{eyebrow}</strong></span>'
-      '<span style="color:#00b8b8;font-size:13pt;line-height:1;">&rarr;</span>'
-      f'<span style="font-size:15pt;color:#ffffff;"><strong>{title}</strong></span></div>'
-      f'<div style="font-size:12.5pt;line-height:1.6;color:rgba(255,255,255,0.85);margin-top:7px;">{blurb}</div></div>')
+def next_up(title, blurb):
+    # "Up Next" foreshadow segue that caps the bottom of #top. A proper teal titled panel: a
+    # section-header-style title bar carrying the NEXT icon + the full title (e.g. "UP NEXT
+    # &middot; STEP 01 - Capture &amp; Submit"), then a one-line glimpse of what is ahead. No arrow
+    # glyph (Chris, 2026-09-20). Non-last pages point to the next step; a module's LAST page
+    # foreshadows the next module, or reads "MODULE COMPLETE" when nothing follows.
+    return ('<div style="background:linear-gradient(180deg,rgba(0,116,116,0.14) 0%,rgba(0,116,116,0.04) 100%);border:1px solid rgba(0,184,184,0.28);border-left:6px solid #00b8b8;padding:22px 26px 24px;margin-top:30px;overflow:hidden;">'
+      + section_header(NEXT_ICON, title, "#00b8b8", "#80e0e0")
+      + f'<div style="font-size:12.5pt;line-height:1.6;color:rgba(255,255,255,0.85);">{blurb}</div></div>')
 
 def float_right(src,alt,cap=""):
     # Teal-framed content photo. FLOAT-marked so a card hoists it into the thumbnail column

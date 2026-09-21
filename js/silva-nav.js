@@ -41,14 +41,16 @@
       { name: 'Leading Lines Photo Walk', url: '/curriculum/shared/photo1-leading-lines-overview.html' },
       { name: 'Image Series Photo Walk',  url: '/curriculum/shared/photo1-image-series-overview.html' },
       { name: 'Lightroom Editing',        url: '/curriculum/shared/photo1-lightroom-editing-overview.html' },
-      { name: 'Tiny Things',              url: '/curriculum/shared/photo1-tiny-things-overview.html' }
+      { name: 'Tiny Things',              url: '/curriculum/shared/photo1-tiny-things-overview.html' },
+      { name: 'Balloon Pop',              url: '/curriculum/shared/photo1-balloon-pop-overview.html' }
     ]},
     { course: 'Photography 2A', modules: [
       { name: 'Composition Photo Walk', url: '/curriculum/shared/photo2-composition-overview.html' },
       { name: 'Off-Camera Flash',       url: '/curriculum/shared/photo2-ocf-overview.html' },
       { name: 'Studio Session',         url: '/curriculum/shared/photo2-studio-session-overview.html' },
       { name: 'Build Your Own Preset',  url: '/curriculum/shared/photo2-preset-overview.html' },
-      { name: 'Tiny Things',            url: '/curriculum/shared/photo2-tiny-things-overview.html' }
+      { name: 'Tiny Things',            url: '/curriculum/shared/photo2-tiny-things-overview.html' },
+      { name: 'Balloon Pop',            url: '/curriculum/shared/photo2-balloon-pop-overview.html' }
     ]}
   ];
 
@@ -215,6 +217,9 @@
     ['/curriculum/shared/photo1-tiny-things-overview.html',
      '/curriculum/shared/photo1-tiny-things-step01-capture.html',
      '/curriculum/shared/photo1-tiny-things-step02-reflection.html'],
+    ['/curriculum/shared/photo1-balloon-pop-overview.html',
+     '/curriculum/shared/photo1-balloon-pop-step01-capture.html',
+     '/curriculum/shared/photo1-balloon-pop-step02-reflection.html'],
     ['/curriculum/photo2/photo2a-home.html',
      '/curriculum/photo2/photo2a-course-overview.html',
      '/curriculum/photo2/photo2a-syllabus.html'],
@@ -237,7 +242,10 @@
      '/curriculum/shared/photo2-preset-step04-reflection.html'],
     ['/curriculum/shared/photo2-tiny-things-overview.html',
      '/curriculum/shared/photo2-tiny-things-step01-capture.html',
-     '/curriculum/shared/photo2-tiny-things-step02-reflection.html']
+     '/curriculum/shared/photo2-tiny-things-step02-reflection.html'],
+    ['/curriculum/shared/photo2-balloon-pop-overview.html',
+     '/curriculum/shared/photo2-balloon-pop-step01-capture.html',
+     '/curriculum/shared/photo2-balloon-pop-step02-reflection.html']
   ];
 
   var SEQUENCE = [];
@@ -275,7 +283,7 @@
     return -1;
   }
   var ACTIVE_FIRST = groupIndexOf('/curriculum/digarts1/digarts1a-home.html');
-  var ACTIVE_LAST = groupIndexOf('/curriculum/shared/photo2-tiny-things-step02-reflection.html');
+  var ACTIVE_LAST = groupIndexOf('/curriculum/shared/photo2-balloon-pop-step02-reflection.html');
   function inActive(g) { return ACTIVE_FIRST !== -1 && g >= ACTIVE_FIRST && g <= ACTIVE_LAST; }
 
   // Amazon-style page window: show all when small, else first/last plus a
