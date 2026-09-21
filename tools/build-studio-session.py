@@ -138,8 +138,6 @@ def overview():
 # ---------------- STEP 01 ----------------
 def step01():
     en=banner("Studio Session &bull; Step 1","Capture and Import","Photograph in the studio, then import your take.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 contact sheet:","a contact sheet of your entire take (high-resolution JPG), uploaded to this Canvas assignment.")])
     en+=card("BEFORE YOU START / ONEDRIVE","Set Up Your Folders",
         para("Do this first so your files stay safe in the cloud.")
         + steps([
@@ -154,6 +152,8 @@ def step01():
             ("Art Director:","greet the honoree, learn their name and favored side, pose them, and keep them relaxed. Check posture and hair before each frame."),
             ("Lighting Assistant:","set the height and angle of the Westcott Eyelighter reflector so the light is even and flattering."),
         ]))
+    en+=deliverables_box(False,
+        [("1 contact sheet:","a contact sheet of your entire take (high-resolution JPG), uploaded to this Canvas assignment.")])
     en+=card("IMPORT / LIGHTROOM CLASSIC","Import and Contact Sheet",
         steps([
             ("Import Your Take","Open <strong>Lightroom Classic</strong>. Click <strong>Import</strong>, point to your <strong>Raw</strong> folder, select all your group&rsquo;s images, and import them."),
@@ -162,8 +162,6 @@ def step01():
         ]))
 
     es=banner("Sesi&oacute;n de Estudio &bull; Paso 1","Captura e Importa","Fotograf&iacute;a en el estudio, luego importa tu toma.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 hoja de contactos:","una hoja de contactos de toda tu toma (JPG de alta resoluci&oacute;n), subida a esta tarea de Canvas.")])
     es+=card("ANTES DE EMPEZAR / ONEDRIVE","Crea Tus Carpetas",
         para("Haz esto primero para que tus archivos queden seguros en la nube.")
         + steps([
@@ -178,6 +176,8 @@ def step01():
             ("Director de Arte:","saluda al honorado, aprende su nombre y su lado preferido, p&oacute;salo y mantenlo relajado. Revisa la postura y el cabello antes de cada toma."),
             ("Asistente de Iluminaci&oacute;n:","ajusta la altura y el &aacute;ngulo del reflector Westcott Eyelighter para que la luz sea pareja y favorecedora."),
         ]))
+    es+=deliverables_box(True,
+        [("1 hoja de contactos:","una hoja de contactos de toda tu toma (JPG de alta resoluci&oacute;n), subida a esta tarea de Canvas.")])
     es+=card("IMPORTA / LIGHTROOM CLASSIC","Importa y Hoja de Contactos",
         steps([
             ("Importa Tu Toma","Abre <strong>Lightroom Classic</strong>. Haz clic en <strong>Importar</strong>, apunta a tu carpeta <strong>Raw</strong>, selecciona todas las im&aacute;genes de tu grupo e imp&oacute;rtalas."),
@@ -193,10 +193,6 @@ def step01():
 # ---------------- STEP 02 ----------------
 def step02():
     en=banner("Studio Session &bull; Step 2","Cull and Edit","Make four finals: two crops, in color and black and white.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 contact sheet:","a contact sheet of your four final images, exported as a high-resolution JPG."),
-         ("4 images:","your four finals as high-resolution JPGs: <strong>waist_up_color</strong>, <strong>headshot_color</strong>, <strong>waist_up_bw</strong>, and <strong>headshot_bw</strong>."),
-         ("More than one honoree?","if your group photographed more than one honoree, upload a contact sheet plus four images for each. The minimum to complete this step is one honoree (contact sheet + 4 images).")])
     en+=card("EDIT / LIGHTROOM CLASSIC","Cull, Edit, and Make 4 Finals",
         float_right(EDIT_EXAMPLE,"A raw studio portrait on the left next to the edited, retouched final on the right","Your editing goal: raw frame on the left, finished portrait on the right.")
         + para("Now you will edit in Lightroom Classic. For each honoree you will finish <strong>four</strong> images: two crops in color, and those same two crops in black and white. You know Lightroom a bit already; the new part here is duplicating a photo and converting the copy to black and white the right way. Work through the steps in order.")
@@ -212,12 +208,12 @@ def step02():
         ]))
     en+=card("CONTACT SHEET / SHOW YOUR FOUR","Build a Contact Sheet of Your 4 Finals",
         para("After your four images are done, build a <strong>contact sheet</strong> of them using your contact sheet preset (it is also on the Photography 2A course overview if you need it), and export it as a high-resolution JPG. This puts all four finals on one sheet."))
+    en+=deliverables_box(False,
+        [("1 contact sheet:","a contact sheet of your four final images, exported as a high-resolution JPG."),
+         ("4 images:","your four finals as high-resolution JPGs: <strong>waist_up_color</strong>, <strong>headshot_color</strong>, <strong>waist_up_bw</strong>, and <strong>headshot_bw</strong>."),
+         ("More than one honoree?","if your group photographed more than one honoree, upload a contact sheet plus four images for each. The minimum to complete this step is one honoree (contact sheet + 4 images).")])
 
     es=banner("Sesi&oacute;n de Estudio &bull; Paso 2","Selecciona y Edita","Haz cuatro finales: dos recortes, en color y en blanco y negro.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 hoja de contactos:","una hoja de contactos de tus cuatro im&aacute;genes finales, exportada como JPG de alta resoluci&oacute;n."),
-         ("4 im&aacute;genes:","tus cuatro finales como JPG de alta resoluci&oacute;n: <strong>waist_up_color</strong>, <strong>headshot_color</strong>, <strong>waist_up_bw</strong> y <strong>headshot_bw</strong>."),
-         ("&iquest;M&aacute;s de un honorado?","si tu grupo fotografi&oacute; a m&aacute;s de un honorado, sube una hoja de contactos m&aacute;s cuatro im&aacute;genes por cada uno. El m&iacute;nimo para completar este paso es un honorado (hoja de contactos + 4 im&aacute;genes).")])
     es+=card("EDITA / LIGHTROOM CLASSIC","Selecciona, Edita y Haz 4 Finales",
         float_right(EDIT_EXAMPLE,"Un retrato de estudio sin editar a la izquierda junto al final editado y retocado a la derecha","Tu meta de edici&oacute;n: la toma sin editar a la izquierda, el retrato terminado a la derecha.")
         + para("Ahora editar&aacute;s en Lightroom Classic. Para cada honorado terminar&aacute;s <strong>cuatro</strong> im&aacute;genes: dos recortes en color y esos mismos dos recortes en blanco y negro. Ya conoces Lightroom un poco; lo nuevo aqu&iacute; es duplicar una foto y convertir la copia a blanco y negro de la forma correcta. Ve paso a paso, en orden.")
@@ -233,6 +229,10 @@ def step02():
         ]))
     es+=card("HOJA DE CONTACTOS / MUESTRA TUS CUATRO","Arma una Hoja de Contactos de Tus 4 Finales",
         para("Cuando tus cuatro im&aacute;genes est&eacute;n listas, arma una <strong>hoja de contactos</strong> de ellas con tu preset de hoja de contactos (tambi&eacute;n est&aacute; en el resumen del curso de Fotograf&iacute;a 2A si lo necesitas), y exp&oacute;rtala como JPG de alta resoluci&oacute;n. As&iacute; quedan las cuatro finales en una sola hoja."))
+    es+=deliverables_box(True,
+        [("1 hoja de contactos:","una hoja de contactos de tus cuatro im&aacute;genes finales, exportada como JPG de alta resoluci&oacute;n."),
+         ("4 im&aacute;genes:","tus cuatro finales como JPG de alta resoluci&oacute;n: <strong>waist_up_color</strong>, <strong>headshot_color</strong>, <strong>waist_up_bw</strong> y <strong>headshot_bw</strong>."),
+         ("&iquest;M&aacute;s de un honorado?","si tu grupo fotografi&oacute; a m&aacute;s de un honorado, sube una hoja de contactos m&aacute;s cuatro im&aacute;genes por cada uno. El m&iacute;nimo para completar este paso es un honorado (hoja de contactos + 4 im&aacute;genes).")])
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
@@ -242,8 +242,6 @@ def step02():
 # ---------------- STEP 03 ----------------
 def step03():
     en=banner("Studio Session &bull; Step 3","Turn In Your Reflection","Reflect on the process, your role, and your edits.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
         para("Finish the project with a short reflection. It asks about your group and roles, the whole studio process, what you enjoyed and found hardest, and how you made your editing choices.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
@@ -253,10 +251,10 @@ def step03():
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
         ])
         + note("Answer honestly, in your own words."))
+    en+=deliverables_box(False,
+        [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
 
     es=banner("Sesi&oacute;n de Estudio &bull; Paso 3","Entrega Tu Reflexi&oacute;n","Reflexiona sobre el proceso, tu rol y tus ediciones.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completo, subido a esta tarea de Canvas.")])
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         para("Termina el proyecto con una reflexi&oacute;n corta. Pregunta sobre tu grupo y los roles, todo el proceso del estudio, qu&eacute; disfrutaste y qu&eacute; fue lo m&aacute;s dif&iacute;cil, y c&oacute;mo tomaste tus decisiones de edici&oacute;n.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
@@ -266,6 +264,8 @@ def step03():
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
         ])
         + note("Contesta con honestidad, en tus propias palabras."))
+    es+=deliverables_box(True,
+        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completo, subido a esta tarea de Canvas.")])
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot("",'3',"Step 03",True)
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'

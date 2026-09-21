@@ -213,9 +213,6 @@ def overview():
 # ---------------- STEP 01 ----------------
 def step01():
     en=banner("Composition Concepts &bull; Step 1","Capture &amp; Submit","Capture your 3 concepts.","#espanol","Clic para Espa&ntilde;ol")
-    en+=capture_format("jpg")
-    en+=deliverables_box(False,
-        [("Your 3 final photos (JPG),","uploaded to this Canvas assignment.")])
     en+=card("STEP 01 / CAPTURE &amp; CULL","Capture Your 3 Concepts",
         float_right(STEP1_FLOAT,"A student reviewing her photos on a phone","")
         + para("Go take photos for each of your 3 chosen concepts with your own phone or a school iPad. Take a few tries for each one, then select your single best photo for each concept. You end with 3 photos, one for each concept, and all 3 are different.")
@@ -225,13 +222,13 @@ def step01():
             ("One per concept:","your 3 final photos must each show a different concept."),
             ("Keep it simple:","no editing, no file renaming, and no contact sheet. The photo straight from your device is fine."),
         ]))
+    en+=capture_format("jpg")
+    en+=deliverables_box(False,
+        [("Your 3 final photos (JPG),","uploaded to this Canvas assignment.")])
     en+=card("TURN IT IN","Upload Your 3 Photos",
         para("Upload your 3 final photos to Canvas. A photo straight from your phone or iPad (JPG) is perfect. Then go to Step 02 for the reflection."))
 
     es=banner("Conceptos de Composici&oacute;n &bull; Paso 1","Captura y Entrega","Captura tus 3 conceptos.","#top","Back to English")
-    es+=capture_format("jpg", True)
-    es+=deliverables_box(True,
-        [("Tus 3 fotos finales (JPG),","subidas a esta tarea de Canvas.")])
     es+=card("PASO 01 / CAPTURA Y SELECCI&Oacute;N","Captura Tus 3 Conceptos",
         float_right(STEP1_FLOAT,"Una estudiante revisando sus fotos en un tel&eacute;fono","")
         + para("Ve a tomar fotos para cada uno de tus 3 conceptos elegidos con tu propio tel&eacute;fono o un iPad de la escuela. Haz varios intentos de cada uno y luego elige tu mejor foto para cada concepto. Terminas con 3 fotos, una por cada concepto, y las 3 son diferentes.")
@@ -241,6 +238,9 @@ def step01():
             ("Una por concepto:","tus 3 fotos finales deben mostrar cada una un concepto diferente."),
             ("M&aacute;ntenlo simple:","sin edici&oacute;n, sin renombrar archivos y sin hoja de contactos. La foto directa de tu dispositivo est&aacute; bien."),
         ]))
+    es+=capture_format("jpg", True)
+    es+=deliverables_box(True,
+        [("Tus 3 fotos finales (JPG),","subidas a esta tarea de Canvas.")])
     es+=card("ENTR&Eacute;GALO","Sube Tus 3 Fotos",
         para("Sube tus 3 fotos finales a Canvas. Una foto directa de tu tel&eacute;fono o iPad (JPG) es perfecta. Luego ve al Paso 02 para la reflexi&oacute;n."))
 
@@ -252,24 +252,24 @@ def step01():
 # ---------------- STEP 02 ----------------
 def step02():
     en=banner("Composition Concepts &bull; Step 2","Reflection","Reflect on your work.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("3 photos:","one for each concept, all different (from Step 01)."),
-         ("1 reflection:","the completed Word document (.docx).")])
     en+=card("STEP 02 / REFLECTION","Reflect on Your 3 Photos",
         float_right(REFLECT_FLOAT,"A student typing the Composition Concepts reflection on a lab computer","")
         + para("Finish the project with a short reflection. Name the 3 concepts you chose, then tell which one was the hardest, which was your favorite, and what you learned about composition.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + para("Type your answers in the document, save it, and upload it to Canvas with your 3 photos."))
+    en+=deliverables_box(False,
+        [("3 photos:","one for each concept, all different (from Step 01)."),
+         ("1 reflection:","the completed Word document (.docx).")])
 
     es=banner("Conceptos de Composici&oacute;n &bull; Paso 2","Reflexi&oacute;n","Reflexiona sobre tu trabajo.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("3 fotos:","una para cada concepto, todas diferentes (del Paso 01)."),
-         ("1 reflexi&oacute;n:","el documento de Word completo (.docx).")])
     es+=card("PASO 02 / REFLEXI&Oacute;N","Reflexiona Sobre Tus 3 Fotos",
         float_right(REFLECT_FLOAT,"Una estudiante escribiendo la reflexi&oacute;n de Conceptos de Composici&oacute;n en una computadora del laboratorio","")
         + para("Termina el proyecto con una reflexi&oacute;n corta. Nombra los 3 conceptos que elegiste, luego di cu&aacute;l fue el m&aacute;s dif&iacute;cil, cu&aacute;l fue tu favorito y qu&eacute; aprendiste sobre la composici&oacute;n.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
         + para("Escribe tus respuestas en el documento, gu&aacute;rdalo y s&uacute;belo a Canvas con tus 3 fotos."))
+    es+=deliverables_box(True,
+        [("3 fotos:","una para cada concepto, todas diferentes (del Paso 01)."),
+         ("1 reflexi&oacute;n:","el documento de Word completo (.docx).")])
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a>'

@@ -156,8 +156,6 @@ def overview():
 # ---------------- STEP 01 ----------------
 def step01():
     en=banner("Pictograms &bull; Step 1","Find &amp; Save","Build your pictogram folder in OneDrive.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 screen capture (PNG):","your &lsquo;pictogram&rsquo; folder open, showing the 6 to 10 pictograms you saved, uploaded to this Canvas assignment.")])
     en+=card("","Make Your Folder and Collect 6 to 10 Pictograms",
         float_right(FIND_FLOAT,"Student searching Google Images for pictograms to save","Search, then save the ones you like into your folder.")
         + para("In this step you will make a new folder and fill it with real pictogram examples.")
@@ -173,10 +171,10 @@ def step01():
           ("Make the Folder",["Open your Digital Arts folder in OneDrive.","Create a new folder inside it.","Name it &lsquo;pictogram&rsquo;."]),
           ("Take the Screen Capture (F15)",["Open your &lsquo;pictogram&rsquo; folder so the images show.","Press F15 on your keyboard to take the screen capture.","The screen capture must show the folder with your 6 to 10 images inside.","F15 saves the screen capture as a PNG file on your Desktop. These are temporary files: once you turn yours in, you can move them to the Trash."]),
         ]))
+    en+=deliverables_box(False,
+        [("1 screen capture (PNG):","your &lsquo;pictogram&rsquo; folder open, showing the 6 to 10 pictograms you saved, uploaded to this Canvas assignment.")])
 
     es=banner("Pictogramas &bull; Paso 1","Buscar y Guardar","Crea tu carpeta de pictogramas en OneDrive.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 captura de pantalla (PNG):","tu carpeta &lsquo;pictogram&rsquo; abierta, mostrando los 6 a 10 pictogramas que guardaste, subida a esta tarea de Canvas.")])
     es+=card("","Crea Tu Carpeta y Junta 6 a 10 Pictogramas",
         float_right(FIND_FLOAT,"Estudiante buscando pictogramas en Google Im&aacute;genes para guardar","Busca y guarda los que te gusten en tu carpeta.")
         + para("En este paso vas a crear una carpeta nueva y llenarla con ejemplos reales de pictogramas.")
@@ -192,6 +190,8 @@ def step01():
           ("Crea la Carpeta",["Abre tu carpeta de Arte Digital en OneDrive.","Crea una carpeta nueva adentro.","N&oacute;mbrala &lsquo;pictogram&rsquo;."]),
           ("Toma la Captura (F15)",["Abre tu carpeta &lsquo;pictogram&rsquo; para ver las im&aacute;genes.","Presiona F15 en el teclado para tomar la captura de pantalla.","La captura debe mostrar la carpeta con tus 6 a 10 im&aacute;genes adentro.","F15 guarda la captura de pantalla como un archivo PNG en tu Escritorio. Son archivos temporales: una vez que entregues la tuya, puedes moverlos a la Papelera."]),
         ]))
+    es+=deliverables_box(True,
+        [("1 captura de pantalla (PNG):","tu carpeta &lsquo;pictogram&rsquo; abierta, mostrando los 6 a 10 pictogramas que guardaste, subida a esta tarea de Canvas.")])
 
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
@@ -201,8 +201,6 @@ def step01():
 # ---------------- STEP 02 ----------------
 def step02():
     en=banner("Pictograms &bull; Step 2","Sketch &amp; Reflect","Reimagine 3 pictograms in your sketchbook.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("Sketch photos (JPG):","clear pictures of your 3 finished sketches and your handwritten reflection, taken with your school iPad. If they are all on one page, turn in one picture. If they are on several pages, turn in a picture of each page.")])
     en+=card("","Redraw 3 Pictograms Your Own Way",
         float_right(SKETCH_FLOAT,"Student sketching a pictogram in a sketchbook","Reimagine each one in your own sketchbook.")
         + para("Pick 3 pictograms from the ones you saved. Make each one your own. Do not copy them exactly. Rethink each idea and draw a fresh version. Pick 3 that are different from each other, like a stop sign, a no-smoking sign, and a biohazard sign.")
@@ -220,10 +218,10 @@ def step02():
           ("Before You Draw",["Write your name and period in the top right of your sketchbook cover.","Have your markers or colored pencils ready.","Pick 3 different pictograms from your folder."]),
           ("Write Your Reflection (By Hand)",["When your 3 sketches are done, write a short paragraph by hand in your sketchbook.","Tell me which of your 3 sketches is your favorite and why.","Explain why it reads clearly with no words.","Tell me what was hard, and what you would do differently next time."]),
         ]))
+    en+=deliverables_box(False,
+        [("Sketch photos (JPG):","clear pictures of your 3 finished sketches and your handwritten reflection, taken with your school iPad. If they are all on one page, turn in one picture. If they are on several pages, turn in a picture of each page.")])
 
     es=banner("Pictogramas &bull; Paso 2","Dibuja y Reflexiona","Reimagina 3 pictogramas en tu cuaderno.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("Fotos de dibujos (JPG):","fotos claras de tus 3 dibujos terminados y tu reflexi&oacute;n escrita a mano, tomadas con tu iPad de la escuela. Si est&aacute;n todos en una p&aacute;gina, entrega una foto. Si est&aacute;n en varias p&aacute;ginas, entrega una foto de cada p&aacute;gina.")])
     es+=card("","Redibuja 3 Pictogramas a Tu Manera",
         float_right(SKETCH_FLOAT,"Estudiante dibujando un pictograma en su cuaderno","Reimagina cada uno en tu propio cuaderno.")
         + para("Elige 3 pictogramas de los que guardaste. Haz cada uno tuyo. No los copies igual. Repiensa cada idea y dibuja una versi&oacute;n nueva. Elige 3 que sean diferentes entre s&iacute;, como un letrero de alto, uno de no fumar y uno de riesgo biol&oacute;gico.")
@@ -241,6 +239,8 @@ def step02():
           ("Antes de Dibujar",["Escribe tu nombre y periodo arriba a la derecha en la portada de tu cuaderno de dibujo.","Ten listos tus marcadores o l&aacute;pices de colores.","Elige 3 pictogramas diferentes de tu carpeta."]),
           ("Escribe Tu Reflexi&oacute;n (a Mano)",["Cuando termines tus 3 dibujos, escribe un p&aacute;rrafo corto a mano en tu cuaderno.","Dime cu&aacute;l de tus 3 dibujos es tu favorito y por qu&eacute;.","Explica por qu&eacute; se entiende claro sin palabras.","Dime qu&eacute; fue lo dif&iacute;cil y qu&eacute; har&iacute;as diferente la pr&oacute;xima vez."]),
         ]))
+    es+=deliverables_box(True,
+        [("Fotos de dibujos (JPG):","fotos claras de tus 3 dibujos terminados y tu reflexi&oacute;n escrita a mano, tomadas con tu iPad de la escuela. Si est&aacute;n todos en una p&aacute;gina, entrega una foto. Si est&aacute;n en varias p&aacute;ginas, entrega una foto de cada p&aacute;gina.")])
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a>'

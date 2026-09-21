@@ -17,6 +17,7 @@ ROOT=os.path.join(os.path.dirname(__file__),"..")
 IMG=f"{SITE}/assets/images/photo1/balloon-pop"
 HEADER=f"{IMG}/balloon-pop-header-v1.jpg"
 STEP1_FLOAT=f"{IMG}/balloon-pop-step01-float-v1.jpg"
+REFLECT_FLOAT=f"{IMG}/balloon-pop-reflection-float-v1.jpg"
 BTN=f"{IMG}/balloon-pop-drive-button-v1.jpg"
 DOCS=f"{SITE}/assets/course-documents"
 AREA="Photography Folder"
@@ -248,7 +249,8 @@ def step02(C):
     NX=nxt_mod(C)
     en=banner(f'Module {C["mod"]} &bull; Step 02',"Reflection","What worked, what didn&rsquo;t, and what&rsquo;s next.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("STEP 02 / REFLECTION","Reflect on the Balloon Pop",
-        para("Finish with a short and simple reflection. Tell what worked, what did not work, and what you would do better next time. Then share any feedback or an idea for another outdoor photography activity we could try as a class.")
+        float_right(REFLECT_FLOAT,"A Pioneer Valley student typing the Balloon Pop reflection in the Word document on an iMac in the creative lab, a Canon camera on the desk","")
+        + para("Finish with a short and simple reflection. Tell what worked, what did not work, and what you would do better next time. Then share any feedback or an idea for another outdoor photography activity we could try as a class.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + para("Type your answers in the document, save it, and upload it to Canvas."))
     en+=deliverables_box(False,
@@ -257,7 +259,8 @@ def step02(C):
 
     es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 02',"Reflexi&oacute;n","Qu&eacute; funcion&oacute;, qu&eacute; no, y qu&eacute; sigue.","#top","Back to English")
     es+=card("PASO 02 / REFLEXI&Oacute;N","Reflexiona Sobre el Globo de Agua",
-        para("Termina con una reflexi&oacute;n corta y simple. Di qu&eacute; funcion&oacute;, qu&eacute; no funcion&oacute; y qu&eacute; har&iacute;as mejor la pr&oacute;xima vez. Luego comparte cualquier idea o comentario para otra actividad de fotograf&iacute;a al aire libre que podamos probar como clase.")
+        float_right(REFLECT_FLOAT,"Un estudiante de Pioneer Valley escribiendo la reflexi&oacute;n del Globo de Agua en el documento de Word en una iMac del laboratorio, con una c&aacute;mara Canon en el escritorio","")
+        + para("Termina con una reflexi&oacute;n corta y simple. Di qu&eacute; funcion&oacute;, qu&eacute; no funcion&oacute; y qu&eacute; har&iacute;as mejor la pr&oacute;xima vez. Luego comparte cualquier idea o comentario para otra actividad de fotograf&iacute;a al aire libre que podamos probar como clase.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y consíguelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
         + para("Escribe tus respuestas en el documento, gu&aacute;rdalo y s&uacute;belo a Canvas."))
     es+=deliverables_box(True,

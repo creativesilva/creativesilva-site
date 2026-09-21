@@ -259,8 +259,6 @@ def overview():
 # ---------------- STEP 01 ----------------
 def step01():
     en=banner("Photography 2A &bull; Off-Camera Flash &bull; Step 01","Find Inspiration","Gather one-strobe inspiration.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 screen capture (PNG):","your &lsquo;Inspiration Images&rsquo; folder with your saved inspiration images inside, uploaded to this Canvas assignment.")])
     en+=card("","Find Off-Camera Flash Inspiration",
         float_right(S1_FLOAT,"A Pioneer Valley student researching off-camera flash examples on a lab computer","")
         + para("Before we go out, gather inspiration. Look at how other photographers use off-camera flash outdoors. Save your examples into the &lsquo;Inspiration Images&rsquo; folder you set up on this module&rsquo;s Overview page (marked M at the top).")
@@ -275,10 +273,10 @@ def step01():
           ("Where to Save",["Open your &lsquo;Off Camera Flash&rsquo; folder in OneDrive.","Go into the &lsquo;Inspiration Images&rsquo; folder you made on this module&rsquo;s Overview page (marked M at the top).","This is where your saved examples go."]),
           ("Take the Screen Capture (F15)",["Open your &lsquo;Inspiration Images&rsquo; folder so the images show.","Press F15 on your keyboard to take the screen capture.","The screen capture must show the folder with your inspiration images inside.","F15 saves the screen capture as a PNG on your Desktop. These are temporary files: after you turn yours in, you can move them to the Trash."]),
         ]))
+    en+=deliverables_box(False,
+        [("1 screen capture (PNG):","your &lsquo;Inspiration Images&rsquo; folder with your saved inspiration images inside, uploaded to this Canvas assignment.")])
 
     es=banner("Fotograf&iacute;a 2A &bull; Flash Fuera de C&aacute;mara &bull; Paso 01","Busca Inspiraci&oacute;n","Junta inspiraci&oacute;n de un flash.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 captura de pantalla (PNG):","tu carpeta &lsquo;Inspiration Images&rsquo; con tus im&aacute;genes de inspiraci&oacute;n guardadas adentro, subida a esta tarea de Canvas.")])
     es+=card("","Busca Inspiraci&oacute;n de Flash Fuera de C&aacute;mara",
         float_right(S1_FLOAT,"Un estudiante de Pioneer Valley investigando ejemplos de flash fuera de c&aacute;mara en una computadora del laboratorio","")
         + para("Antes de salir, junta inspiraci&oacute;n. Mira c&oacute;mo otros fot&oacute;grafos usan el flash fuera de c&aacute;mara al aire libre. Guarda tus ejemplos en la carpeta &lsquo;Inspiration Images&rsquo; que preparaste en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
@@ -293,6 +291,8 @@ def step01():
           ("D&oacute;nde Guardar",["Abre tu carpeta &lsquo;Off Camera Flash&rsquo; en OneDrive.","Entra a la carpeta &lsquo;Inspiration Images&rsquo; que creaste en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).","Ah&iacute; van tus ejemplos guardados."]),
           ("Toma la Captura (F15)",["Abre tu carpeta &lsquo;Inspiration Images&rsquo; para ver las im&aacute;genes.","Presiona F15 en el teclado para tomar la captura de pantalla.","La captura debe mostrar la carpeta con tus im&aacute;genes de inspiraci&oacute;n adentro.","F15 guarda la captura como un PNG en tu Escritorio. Son archivos temporales: despu&eacute;s de entregar, puedes moverlos a la Papelera."]),
         ]))
+    es+=deliverables_box(True,
+        [("1 captura de pantalla (PNG):","tu carpeta &lsquo;Inspiration Images&rsquo; con tus im&aacute;genes de inspiraci&oacute;n guardadas adentro, subida a esta tarea de Canvas.")])
 
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
@@ -302,9 +302,6 @@ def step01():
 # ---------------- STEP 02 ----------------
 def step02():
     en=banner("Photography 2A &bull; Off-Camera Flash &bull; Step 02","Photo Walk","Capture, contact sheet, edit 3.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 contact sheet (high-resolution JPG):","your 12-Up contact sheet (or sheets), uploaded to this Canvas assignment."),
-         ("3 edited portraits (JPG):","your 3 polished, edited portraits that clearly use off-camera flash, uploaded to this Canvas assignment.")])
     en+=card("","Capture Outdoor Portraits with Off-Camera Flash",
         float_right(S2_FLOAT,"A Pioneer Valley student portrait made with off-camera flash at golden hour","")
         + para("We will do this photo walk as a class. Mr. Silva will facilitate and teach as we go. You will pair up. Each of you takes a turn as the photographer and a turn as the subject, capturing portraits with off-camera flash.")
@@ -318,12 +315,12 @@ def step02():
         ])
         + teal_callout("The Rule","Off-camera flash must be clearly visible in your 3 final portraits.")
         + note("The contact sheet preset is on this module&rsquo;s Overview page (marked M at the top)."))
+    en+=deliverables_box(False,
+        [("1 contact sheet (high-resolution JPG):","your 12-Up contact sheet (or sheets), uploaded to this Canvas assignment."),
+         ("3 edited portraits (JPG):","your 3 polished, edited portraits that clearly use off-camera flash, uploaded to this Canvas assignment.")])
     en+=teal_info("Use your Lightroom contact sheet presets (the saved settings that build the contact sheet for you) to make your contact sheet.")
 
     es=banner("Fotograf&iacute;a 2A &bull; Flash Fuera de C&aacute;mara &bull; Paso 02","Caminata","Captura, hoja de contactos, edita 3.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 hoja de contactos (JPG de alta resoluci&oacute;n):","tu hoja de contactos 12-Up (o varias hojas), subida a esta tarea de Canvas."),
-         ("3 retratos editados (JPG):","tus 3 retratos pulidos y editados que usen claramente el flash fuera de c&aacute;mara, subidos a esta tarea de Canvas.")])
     es+=card("","Captura Retratos al Aire Libre con Flash Fuera de C&aacute;mara",
         float_right(S2_FLOAT,"Un retrato de una estudiante de Pioneer Valley hecho con flash fuera de c&aacute;mara en la hora dorada","")
         + para("Haremos esta caminata como clase. El Sr. Silva la gu&iacute;a y ense&ntilde;a mientras avanzamos. Vas a formar pareja. Cada uno toma un turno como fot&oacute;grafo y un turno como sujeto, capturando retratos con flash fuera de c&aacute;mara.")
@@ -337,6 +334,9 @@ def step02():
         ])
         + teal_callout("La Regla","El flash fuera de c&aacute;mara debe verse claramente en tus 3 retratos finales.")
         + note("El ajuste de la hoja de contactos est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."))
+    es+=deliverables_box(True,
+        [("1 hoja de contactos (JPG de alta resoluci&oacute;n):","tu hoja de contactos 12-Up (o varias hojas), subida a esta tarea de Canvas."),
+         ("3 retratos editados (JPG):","tus 3 retratos pulidos y editados que usen claramente el flash fuera de c&aacute;mara, subidos a esta tarea de Canvas.")])
     es+=teal_info("Usa tus configuraciones de hoja de contactos de Lightroom (los ajustes guardados que arman la hoja de contactos por ti) para crear tu hoja de contactos.")
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)+dot(S3,'3',"Step 03",False)
@@ -347,22 +347,22 @@ def step02():
 # ---------------- STEP 03 ----------------
 def step03():
     en=banner("Photography 2A &bull; Off-Camera Flash &bull; Step 03","Reflection","Your own experience, in writing.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 reflection (.docx):","your reflection document with all 4 questions answered, uploaded to this Canvas assignment.")])
     en+=card("","Reflect on Your Off-Camera Flash Experience",
         float_right(S3_FLOAT,"A Pioneer Valley student typing the Off-Camera Flash reflection on a lab computer","")
         + para("This reflection is about your own experience, not your partner&rsquo;s. Answer honestly.")
         + para("Download the reflection document, answer all 4 questions, and turn it in.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder."))
+    en+=deliverables_box(False,
+        [("1 reflection (.docx):","your reflection document with all 4 questions answered, uploaded to this Canvas assignment.")])
 
     es=banner("Fotograf&iacute;a 2A &bull; Flash Fuera de C&aacute;mara &bull; Paso 03","Reflexi&oacute;n","Tu propia experiencia, por escrito.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 reflexi&oacute;n (.docx):","tu documento de reflexi&oacute;n con las 4 preguntas respondidas, subido a esta tarea de Canvas.")])
     es+=card("","Reflexiona Sobre Tu Experiencia con el Flash",
         float_right(S3_FLOAT,"Un estudiante de Pioneer Valley escribiendo la reflexi&oacute;n de flash fuera de c&aacute;mara en una computadora del laboratorio","")
         + para("Esta reflexi&oacute;n es sobre tu propia experiencia, no la de tu compa&ntilde;ero. Responde con honestidad.")
         + para("Descarga el documento de reflexi&oacute;n, responde las 4 preguntas y entr&eacute;galo.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto."))
+    es+=deliverables_box(True,
+        [("1 reflexi&oacute;n (.docx):","tu documento de reflexi&oacute;n con las 4 preguntas respondidas, subido a esta tarea de Canvas.")])
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot("",'3',"Step 03",True)
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'

@@ -184,8 +184,6 @@ def overview():
 # ---------------- STEP 01 ----------------
 def step01():
     en=banner("Photography 2A &bull; Composition Photo Walk &bull; Step 01","Photo Walk &amp; Contact Sheet","Capture the six. Prove your whole take.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("Contact sheet(s), high-resolution JPG:","your 12-Up contact sheet(s) showing your entire take: all the images you and your partner captured.")])
     en+=card("","The Photo Walk &amp; Contact Sheet",
         float_right(S1_FLOAT,"On the photo walk","")
         + para("Work with a partner and take turns as photographer and assistant. All images are captured in Manual Mode and in RAW, on campus, indoor or outdoor.")
@@ -193,10 +191,10 @@ def step01():
         + para("When the walk is done, import all of your RAW files into Lightroom and back them up.")
         + para("Then build a 12-Up contact sheet that shows your ENTIRE take: every image you and your partner captured together. Export it as a high-resolution JPG. If you have more than 12 images, turn in more than one sheet so every photo is shown.")
         + note("The contact sheet preset is on this module&rsquo;s Overview page (marked M at the top)."))
+    en+=deliverables_box(False,
+        [("Contact sheet(s), high-resolution JPG:","your 12-Up contact sheet(s) showing your entire take: all the images you and your partner captured.")])
 
     es=banner("Fotograf&iacute;a 2A &bull; Caminata de Composici&oacute;n &bull; Paso 01","Caminata y Hoja de Contactos","Captura las seis. Prueba toda tu toma.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("Hoja(s) de contactos, JPG de alta resoluci&oacute;n:","tu hoja o hojas de contactos 12-Up que muestren toda tu toma: todas las im&aacute;genes que t&uacute; y tu compa&ntilde;ero capturaron.")])
     es+=card("","La Caminata y la Hoja de Contactos",
         float_right(S1_FLOAT,"On the photo walk","")
         + para("Trabaja con un compa&ntilde;ero y t&uacute;rnense como fot&oacute;grafo y asistente. Todas las im&aacute;genes se toman en Modo Manual y en RAW, en el campus, dentro o fuera.")
@@ -204,6 +202,8 @@ def step01():
         + para("Al terminar la caminata, importa todos tus archivos RAW a Lightroom y haz una copia de seguridad.")
         + para("Luego arma una hoja de contactos 12-Up que muestre TODA tu toma: cada imagen que t&uacute; y tu compa&ntilde;ero capturaron juntos. Exp&oacute;rtala como JPG de alta resoluci&oacute;n. Si tienes m&aacute;s de 12 im&aacute;genes, entrega m&aacute;s de una hoja para que se vean todas.")
         + note("El ajuste de la hoja de contactos est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."))
+    es+=deliverables_box(True,
+        [("Hoja(s) de contactos, JPG de alta resoluci&oacute;n:","tu hoja o hojas de contactos 12-Up que muestren toda tu toma: todas las im&aacute;genes que t&uacute; y tu compa&ntilde;ero capturaron.")])
 
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
@@ -213,8 +213,6 @@ def step01():
 # ---------------- STEP 02 ----------------
 def step02():
     en=banner("Photography 2A &bull; Composition Photo Walk &bull; Step 02","Cull, Edit &amp; Export","Your six best. Your ticket to win.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("7 files:","one 6-Up contact sheet of your final 6, plus the 6 individual JPGs, each named by its rule.")])
     en+=card("","Cull, Edit, Rename &amp; Export Your Best 6",
         float_right(S2_FLOAT,"Renee editing her photos in Lightroom","")
         + para("From your whole take, build your final six: one image for each of the 6 composition rules. This part is about judgment and craft, choosing your strongest frame for each rule and editing it so it truly stands out.")
@@ -236,10 +234,10 @@ def step02():
           ])
         + para("Rename each file with the name of the composition rule it shows (for example: rule-of-thirds.jpg). Export all six as JPGs. Then build a 6-Up contact sheet of your final six with the 6-Up preset.")
         + note("The contact sheet preset is on this module&rsquo;s Overview page (marked M at the top)."))
+    en+=deliverables_box(False,
+        [("7 files:","one 6-Up contact sheet of your final 6, plus the 6 individual JPGs, each named by its rule.")])
 
     es=banner("Fotograf&iacute;a 2A &bull; Caminata de Composici&oacute;n &bull; Paso 02","Selecciona, Edita y Exporta","Tus seis mejores. Tu boleto para ganar.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("7 archivos:","una hoja de contactos 6-Up de tus 6 finales, m&aacute;s los 6 JPG individuales, cada uno con el nombre de su regla.")])
     es+=card("","Selecciona, Edita, Renombra y Exporta tus 6 Mejores",
         float_right(S2_FLOAT,"Renee editando sus fotos en Lightroom","")
         + para("De toda tu toma, arma tus seis finales: una imagen para cada una de las 6 reglas de composici&oacute;n. Esta parte se trata de criterio y oficio: elegir tu mejor toma para cada regla y editarla para que realmente destaque.")
@@ -261,6 +259,8 @@ def step02():
           ])
         + para("Renombra cada archivo con el nombre de la regla que muestra (por ejemplo: regla-de-los-tercios.jpg). Exporta las seis como JPG. Luego arma una hoja de contactos 6-Up de tus seis finales con el ajuste 6-Up.")
         + note("El ajuste de la hoja de contactos est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."))
+    es+=deliverables_box(True,
+        [("7 archivos:","una hoja de contactos 6-Up de tus 6 finales, m&aacute;s los 6 JPG individuales, cada uno con el nombre de su regla.")])
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
@@ -270,20 +270,20 @@ def step02():
 # ---------------- STEP 03 ----------------
 def step03():
     en=banner("Photography 2A &bull; Composition Photo Walk &bull; Step 03","Reflection","Look back. What worked, what was hard.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
     en+=card("","Reflection",
         para("Take a few minutes to reflect on your process: what worked, what was hard, and which concept you are most proud of.")
         + para("Download the reflection document, complete it, and turn it in.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder."))
+    en+=deliverables_box(False,
+        [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
 
     es=banner("Fotograf&iacute;a 2A &bull; Caminata de Composici&oacute;n &bull; Paso 03","Reflexi&oacute;n","Mira atr&aacute;s. Qu&eacute; funcion&oacute;, qu&eacute; fue dif&iacute;cil.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 reflexi&oacute;n:","tu documento de Word de la reflexi&oacute;n (.docx), subido a Canvas.")])
     es+=card("","Reflexi&oacute;n",
         para("T&oacute;mate unos minutos para reflexionar sobre tu proceso: qu&eacute; funcion&oacute;, qu&eacute; fue dif&iacute;cil y de cu&aacute;l concepto est&aacute;s m&aacute;s orgulloso.")
         + para("Descarga el documento de reflexi&oacute;n, compl&eacute;talo y entr&eacute;galo.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto."))
+    es+=deliverables_box(True,
+        [("1 reflexi&oacute;n:","tu documento de Word de la reflexi&oacute;n (.docx), subido a Canvas.")])
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot("",'3',"Step 03",True)
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'

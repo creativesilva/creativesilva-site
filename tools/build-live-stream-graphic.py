@@ -193,8 +193,6 @@ def step01():
 # ---------------- STEP 02 : YouTube thumbnail inspiration ----------------
 def step02():
     en=banner("Live Stream Graphic &bull; Photoshop: Lesson 01 &bull; Step 2","Find Your Inspiration","Pick one channel you love and study its thumbnails.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("Inspiration (PNG):","one or more screen captures of thumbnails from the channel you chose, saved as PNG in your &lsquo;"+FOLDER+"&rsquo; folder and uploaded to this Canvas assignment.")])
     en+=card("STEP 02 / INSPIRATION","Study One Channel You Love on YouTube",
         float_right(YT_IMG,"A YouTube channel page open in a browser, showing a row of the channel&rsquo;s video thumbnails that share the same bold-text, big-face design language","One channel you chose. See how its thumbnails share a design language.")
         + para("Before you design your own, look at what already works. A thumbnail is the small preview image on a YouTube video, the one that makes you want to click. Pick ONE specific channel you like and study ITS thumbnails, not random search results.")
@@ -207,10 +205,10 @@ def step02():
             ("","Upload one or several of them to this Canvas assignment."),
         ])
         + note("What makes a thumbnail work? A big, clear subject; a few bold words; strong colors; and it still reads when it is small. Look for those in your channel&rsquo;s thumbnails."))
+    en+=deliverables_box(False,
+        [("Inspiration (PNG):","one or more screen captures of thumbnails from the channel you chose, saved as PNG in your &lsquo;"+FOLDER+"&rsquo; folder and uploaded to this Canvas assignment.")])
 
     es=banner("Gr&aacute;fico de Live Stream &bull; Photoshop: Lecci&oacute;n 01 &bull; Paso 2","Busca Tu Inspiraci&oacute;n","Elige un canal que te encante y estudia sus miniaturas.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("Inspiraci&oacute;n (PNG):","una o varias capturas de pantalla de miniaturas del canal que elegiste, guardadas en formato PNG en tu carpeta &lsquo;"+FOLDER+"&rsquo; y subidas a esta tarea de Canvas.")])
     es+=card("PASO 02 / INSPIRACI&Oacute;N","Estudia Un Canal Que Te Encante en YouTube",
         float_right(YT_IMG,"La p&aacute;gina de un canal de YouTube abierta en un navegador, mostrando una fila de las miniaturas del canal que comparten el mismo lenguaje de dise&ntilde;o de texto en negrita y caras grandes","Un canal que elegiste. Mira c&oacute;mo sus miniaturas comparten un lenguaje de dise&ntilde;o.")
         + para("Antes de dise&ntilde;ar la tuya, mira lo que ya funciona. Una miniatura es la imagen peque&ntilde;a de vista previa de un video de YouTube, la que te dan ganas de hacer clic. Elige UN canal espec&iacute;fico que te guste y estudia SUS miniaturas, no resultados de b&uacute;squeda al azar.")
@@ -223,6 +221,8 @@ def step02():
             ("","Sube una o varias a esta tarea de Canvas."),
         ])
         + note("&iquest;Qu&eacute; hace buena a una miniatura? Un sujeto grande y claro; pocas palabras en negrita; colores fuertes; y que a&uacute;n se entienda cuando es peque&ntilde;a. Busca eso en las miniaturas de tu canal."))
+    es+=deliverables_box(True,
+        [("Inspiraci&oacute;n (PNG):","una o varias capturas de pantalla de miniaturas del canal que elegiste, guardadas en formato PNG en tu carpeta &lsquo;"+FOLDER+"&rsquo; y subidas a esta tarea de Canvas.")])
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
@@ -231,8 +231,6 @@ def step02():
 # ---------------- STEP 03 : design your own thumbnail ----------------
 def step03():
     en=banner("Live Stream Graphic &bull; Photoshop: Lesson 01 &bull; Step 3","Design Your Own Thumbnail","Make your own YouTube thumbnail in Photoshop.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 thumbnail (JPG):","your finished, polished YouTube thumbnail, exported as a JPG and uploaded to this Canvas assignment.")])
     en+=card("STEP 03 / DESIGN","Design Your Thumbnail",
         float_right(DESIGN_FLOAT,"A Pioneer Valley student in the design lab making his own YouTube thumbnail in Photoshop, a bold &lsquo;5 Ways to Score Like a Pro&rsquo; basketball design on the iMac screen","Design your own thumbnail in Photoshop, bold and easy to read.")
         + para("Now make your own. Use the Photoshop skills from your Step 1 warm-up and the ideas you gathered in Step 2.")
@@ -245,10 +243,10 @@ def step03():
             ("","Export it as a JPG: choose File &gt; Export &gt; Export As, and set the format to JPG."),
         ])
         + note("Test it small. Shrink your thumbnail down. Can you still read the words and tell what the video is about? If yes, you nailed it."))
+    en+=deliverables_box(False,
+        [("1 thumbnail (JPG):","your finished, polished YouTube thumbnail, exported as a JPG and uploaded to this Canvas assignment.")])
 
     es=banner("Gr&aacute;fico de Live Stream &bull; Photoshop: Lecci&oacute;n 01 &bull; Paso 3","Dise&ntilde;a Tu Propia Miniatura","Crea tu propia miniatura de YouTube en Photoshop.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 miniatura (JPG):","tu miniatura de YouTube terminada y pulida, exportada como JPG y subida a esta tarea de Canvas.")])
     es+=card("PASO 03 / DISE&Ntilde;O","Dise&ntilde;a Tu Miniatura",
         float_right(DESIGN_FLOAT,"Un estudiante de Pioneer Valley en el laboratorio creando su propia miniatura de YouTube en Photoshop, un dise&ntilde;o de baloncesto en negrita &lsquo;5 Ways to Score Like a Pro&rsquo; en la pantalla de la iMac","Dise&ntilde;a tu propia miniatura en Photoshop, en negrita y f&aacute;cil de leer.")
         + para("Ahora crea la tuya. Usa las habilidades de Photoshop de tu calentamiento del Paso 1 y las ideas que juntaste en el Paso 2.")
@@ -261,6 +259,8 @@ def step03():
             ("","Exp&oacute;rtala como JPG: elige Archivo &gt; Exportar &gt; Exportar Como y pon el formato en JPG."),
         ])
         + note("Pru&eacute;bala peque&ntilde;a. Reduce tu miniatura. &iquest;Todav&iacute;a puedes leer las palabras y saber de qu&eacute; trata el video? Si s&iacute;, lo lograste."))
+    es+=deliverables_box(True,
+        [("1 miniatura (JPG):","tu miniatura de YouTube terminada y pulida, exportada como JPG y subida a esta tarea de Canvas.")])
 
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a><a href="{S4}" class="silva-step-btn">Step 04 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><a href="{S4}" class="silva-bottom-btn">Step 04 &#8594;</a></div>'
@@ -269,8 +269,6 @@ def step03():
 # ---------------- STEP 04 : reflection ----------------
 def step04():
     en=banner("Live Stream Graphic &bull; Photoshop: Lesson 01 &bull; Step 4","Turn In Your Reflection","Reflect on the thumbnail you made.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=card("STEP 04 / REFLECT","Complete and Upload the Reflection",
         para("Finish with a short reflection about the YouTube thumbnail you designed. It asks what your thumbnail is for, what inspired you, how you made it, and what you are proud of.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your &lsquo;"+FOLDER+"&rsquo; folder.")
@@ -280,10 +278,10 @@ def step04():
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
         ])
         + note("Answer honestly, in your own words, about your own thumbnail."))
+    en+=deliverables_box(False,
+        [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
 
     es=banner("Gr&aacute;fico de Live Stream &bull; Photoshop: Lecci&oacute;n 01 &bull; Paso 4","Entrega Tu Reflexi&oacute;n","Reflexiona sobre la miniatura que creaste.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n, subido a esta tarea de Canvas.")])
     es+=card("PASO 04 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         para("Termina con una reflexi&oacute;n corta sobre la miniatura de YouTube que dise&ntilde;aste. Te pregunta para qu&eacute; es tu miniatura, qu&eacute; te inspir&oacute;, c&oacute;mo la hiciste y de qu&eacute; est&aacute;s orgulloso.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta &lsquo;"+FOLDER+"&rsquo;.")
@@ -293,6 +291,8 @@ def step04():
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
         ])
         + note("Contesta con honestidad, en tus propias palabras, sobre tu propia miniatura."))
+    es+=deliverables_box(True,
+        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n, subido a esta tarea de Canvas.")])
 
     stepnav=f'<a href="{S3}" class="silva-step-btn">&#8592; Step 03</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S3}" class="silva-bottom-btn">&#8592; Step 03</a><span></span></div>'

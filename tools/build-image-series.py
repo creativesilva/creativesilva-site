@@ -577,8 +577,6 @@ def camera_settings_section(es):
 
 def step01():
     en=banner("Image Series Photo Walk &bull; Step 1","Capture &amp; Import","Set RAW, capture your series, offload to OneDrive, and import.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 contact sheet:","your 12-image contact sheet (high-resolution JPG), showing your imported series, uploaded to this Canvas assignment.")])
     en+=card("CAMERA SETUP / SET TO RAW","Set Your Camera to RAW First",
         para("This project must be captured in RAW, not JPG. RAW keeps the most detail so your edits look clean. Set your Canon EOS R50 to RAW before you take any photos.")
         + steps([
@@ -618,10 +616,10 @@ def step01():
             ("Use the 12-Up layout:","in the Print module, choose the 12-Up contact sheet."),
             ("Save the page:","export the contact sheet as a high-resolution JPG to turn in."),
         ]))
+    en+=deliverables_box(False,
+        [("1 contact sheet:","your 12-image contact sheet (high-resolution JPG), showing your imported series, uploaded to this Canvas assignment.")])
 
     es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 1","Captura e Importa","Pon RAW, captura tu serie, desc&aacute;rgala a OneDrive e imp&oacute;rtala.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 hoja de contactos:","tu hoja de contactos de 12 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tu serie importada, subida a esta tarea de Canvas.")])
     es+=card("AJUSTE DE C&Aacute;MARA / PON RAW","Primero Pon Tu C&aacute;mara en RAW",
         para("Este proyecto debe capturarse en RAW, no en JPG. RAW guarda el mayor detalle para que tus ediciones se vean limpias. Pon tu Canon EOS R50 en RAW antes de tomar cualquier foto.")
         + steps([
@@ -654,6 +652,8 @@ def step01():
         para("Ahora importa tu serie a Lightroom Classic. Abre la presentaci&oacute;n para ver cada paso. Se abre como PDF en una pesta&ntilde;a nueva, para que la veas en pantalla completa y la descargues si quieres."),
         True, floatimg=slide_deck(True))
     es+=contact_install_card(True)
+    es+=deliverables_box(True,
+        [("1 hoja de contactos:","tu hoja de contactos de 12 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tu serie importada, subida a esta tarea de Canvas.")])
     es+=card("HOJA DE CONTACTOS / MUESTRA TU SERIE","Crea Tu Hoja de Contactos de 12 Im&aacute;genes",
         para("Una hoja de contactos es una p&aacute;gina que muestra todas tus fotos como miniaturas. Crea la tuya con el dise&ntilde;o de hoja de contactos de 12 en el m&oacute;dulo Imprimir de Lightroom Classic, y gu&aacute;rdala como JPG de alta resoluci&oacute;n. La plantilla est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
         + bullets([
@@ -669,9 +669,6 @@ def step01():
 # ---------------- STEP 02 ----------------
 def step02():
     en=banner("Image Series Photo Walk &bull; Step 2","Cull &amp; Edit","Select your best 6, do a light edit, and turn in a 6-image contact sheet.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG), showing your 6 edited selections."),
-         ("6 JPGs:","your 6 edited photos, exported as high-resolution JPGs (see the export steps below). Upload all of this to this Canvas assignment.")])
     en+=card("CULL / KEEP THE STRONG ONES","Cull to Your Best 6",
         para("Culling means looking through your photos and keeping only the strongest. Select the 6 images that best show your series. Drop the blurry, the too-dark, and the repeats.")
         + bullets([
@@ -696,12 +693,12 @@ def step02():
             ("Use the 6-Up layout:","in the Print module, choose the 6-Up contact sheet."),
             ("Save the page:","export the contact sheet as a high-resolution JPG to turn in."),
         ]))
+    en+=deliverables_box(False,
+        [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG), showing your 6 edited selections."),
+         ("6 JPGs:","your 6 edited photos, exported as high-resolution JPGs (see the export steps below). Upload all of this to this Canvas assignment.")])
     en+=export_box(False)
 
     es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 2","Selecciona y Edita","Elige tus mejores 6, haz una edici&oacute;n ligera y entrega una hoja de contactos de 6.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tus 6 elegidas editadas."),
-         ("6 JPGs:","tus 6 fotos editadas, exportadas como JPG de alta resoluci&oacute;n (mira los pasos de exportaci&oacute;n abajo). Sube todo esto a esta tarea de Canvas.")])
     es+=card("SELECCIONA / QU&Eacute;DATE CON LAS FUERTES","Selecciona (Cull) Tus Mejores 6",
         para("Seleccionar (cull) significa revisar tus fotos y quedarte solo con las m&aacute;s fuertes. Elige las 6 im&aacute;genes que mejor muestran tu serie. Descarta las borrosas, las muy oscuras y las repetidas.")
         + bullets([
@@ -719,6 +716,9 @@ def step02():
             ("Temperatura de color (Balance de Blancos):","cali&eacute;ntala o enfr&iacute;ala para que los colores se vean reales y combinen en tu serie."),
         ])
         + note("Mant&eacute;n tus ediciones consistentes en las 6 para que la serie siga sinti&eacute;ndose como una familia de im&aacute;genes."))
+    es+=deliverables_box(True,
+        [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tus 6 elegidas editadas."),
+         ("6 JPGs:","tus 6 fotos editadas, exportadas como JPG de alta resoluci&oacute;n (mira los pasos de exportaci&oacute;n abajo). Sube todo esto a esta tarea de Canvas.")])
     es+=card("HOJA DE CONTACTOS / TUS MEJORES SEIS","Crea Tu Hoja de Contactos de 6 Im&aacute;genes",
         para("Ahora crea una hoja de contactos de 6 im&aacute;genes con tus elegidas editadas. Usa el dise&ntilde;o de hoja de contactos de 6 en el m&oacute;dulo Imprimir, y gu&aacute;rdala como JPG de alta resoluci&oacute;n. La plantilla est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
         + bullets([
@@ -735,8 +735,6 @@ def step02():
 # ---------------- STEP 03 ----------------
 def step03():
     en=banner("Image Series Photo Walk &bull; Step 3","Reflection","Tell the story of your series.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
         float_right(REFLECT_FLOAT,"A Pioneer Valley student typing her Image Series reflection in the Word document on an iMac in the lab","Type your answers right in the reflection document.")
         + para("Finish with a short reflection. It asks about the series you chose, how you offloaded and imported your photos, the 6 you kept, and the edits you made.")
@@ -747,10 +745,10 @@ def step03():
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
         ])
         + note("Answer honestly, in your own words."))
+    en+=deliverables_box(False,
+        [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
 
     es=banner("Caminata de Serie de Im&aacute;genes &bull; Paso 3","Reflexi&oacute;n","Cuenta la historia de tu serie.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         float_right(REFLECT_FLOAT,"Una estudiante de Pioneer Valley escribiendo su reflexi&oacute;n de la Serie de Im&aacute;genes en el documento de Word en una iMac en el laboratorio","Escribe tus respuestas directamente en el documento de reflexi&oacute;n.")
         + para("Termina con una reflexi&oacute;n corta. Te pregunta sobre la serie que elegiste, c&oacute;mo descargaste e importaste tus fotos, las 6 que guardaste y las ediciones que hiciste.")
@@ -761,6 +759,8 @@ def step03():
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
         ])
         + note("Contesta con honestidad, en tus propias palabras."))
+    es+=deliverables_box(True,
+        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
 
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'

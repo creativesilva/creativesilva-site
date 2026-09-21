@@ -155,8 +155,6 @@ def overview():
 # ---------------- STEP 01 ----------------
 def step01():
     en=banner("Build Your Own Preset &bull; Step 1","Photo Walk: Capture &amp; Cull","Pick a series, capture 12 or more, then turn in a contact sheet.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 contact sheet:","your 12-image contact sheet (high-resolution JPG), showing your culled series, uploaded to this Canvas assignment.")])
     en+=card("CHOOSE / YOUR SERIES","Pick One Subject and One Light",
         para("A series is a group of photos that belong together. To make that happen, pick one subject and one kind of light, then stick with it. When your photos already match, your preset will make them match even more.")
         + bullets([
@@ -185,10 +183,10 @@ def step01():
             ("Use the 12-Up layout:","in the Print module, choose the 12-Up contact sheet."),
             ("Save the page:","export the contact sheet as a high-resolution JPG to turn in."),
         ]))
+    en+=deliverables_box(False,
+        [("1 contact sheet:","your 12-image contact sheet (high-resolution JPG), showing your culled series, uploaded to this Canvas assignment.")])
 
     es=banner("Crea Tu Propio Preset &bull; Paso 1","Caminata: Captura y Selecci&oacute;n","Elige una serie, captura 12 o m&aacute;s y entrega una hoja de contactos.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 hoja de contactos:","tu hoja de contactos de 12 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tu serie seleccionada, subida a esta tarea de Canvas.")])
     es+=card("ELIGE / TU SERIE","Elige un Tema y una Luz",
         para("Una serie es un grupo de fotos que van juntas. Para lograrlo, elige un tema y un tipo de luz, y qu&eacute;date con eso. Cuando tus fotos ya combinan, tu preset las har&aacute; combinar a&uacute;n m&aacute;s.")
         + bullets([
@@ -210,6 +208,8 @@ def step01():
             ("Importa:","lleva toda la serie a Lightroom Classic."),
             ("Selecciona:","qu&eacute;date con al menos 12 im&aacute;genes fuertes que van juntas como serie."),
         ]))
+    es+=deliverables_box(True,
+        [("1 hoja de contactos:","tu hoja de contactos de 12 im&aacute;genes (JPG de alta resoluci&oacute;n), que muestra tu serie seleccionada, subida a esta tarea de Canvas.")])
     es+=card("HOJA DE CONTACTOS / MUESTRA TU SERIE","Crea Tu Hoja de Contactos de 12 Im&aacute;genes",
         para("Una hoja de contactos es una p&aacute;gina que muestra todas tus fotos como miniaturas. Crea la tuya con el dise&ntilde;o de hoja de contactos de 12 en el m&oacute;dulo Imprimir de Lightroom Classic, y gu&aacute;rdala como JPG de alta resoluci&oacute;n.")
         + bullets([
@@ -225,8 +225,6 @@ def step01():
 # ---------------- STEP 02 ----------------
 def step02():
     en=banner("Build Your Own Preset &bull; Step 2","Edit &amp; Create Your Preset","Edit your first image, then save your look as a preset.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 preset file:","your exported Lightroom preset (the .xmp file), uploaded to this Canvas assignment.")])
     en+=resources_card("Presets in Lightroom Classic",
         para("Start here. This slide deck walks you through what a preset is, how to edit your look, and how to save it. Open it to see every step: it opens as a PDF in a new tab, so you can read it full screen and download it."),
         False, floatimg=slide_deck(False))
@@ -239,6 +237,8 @@ def step02():
             ("Color with HSL:","use the HSL panel to make each color pop or calm down."),
         ])
         + note("Make real changes. Your preset is only as good as the look you build here."))
+    en+=deliverables_box(False,
+        [("1 preset file:","your exported Lightroom preset (the .xmp file), uploaded to this Canvas assignment.")])
     en+=card("CREATE / SAVE YOUR PRESET","Save Your Look as a Preset",
         para("Now save those settings as your own preset so you can add them to any photo with one click.")
         + steps([
@@ -250,8 +250,6 @@ def step02():
         ]))
 
     es=banner("Crea Tu Propio Preset &bull; Paso 2","Edita y Crea Tu Preset","Edita tu primera imagen y guarda tu estilo como preset.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 archivo de preset:","tu preset de Lightroom exportado (el archivo .xmp), subido a esta tarea de Canvas.")])
     es+=resources_card("Presets en Lightroom Classic",
         para("Empieza aqu&iacute;. Estas diapositivas te explican qu&eacute; es un preset, c&oacute;mo editar tu estilo y c&oacute;mo guardarlo. &Aacute;brela para ver cada paso: se abre como PDF en una pesta&ntilde;a nueva, para que la veas en pantalla completa y la descargues."),
         True, floatimg=slide_deck(True))
@@ -264,6 +262,8 @@ def step02():
             ("Color con HSL:","usa el panel HSL para hacer que cada color resalte o se calme."),
         ])
         + note("Haz cambios de verdad. Tu preset ser&aacute; tan bueno como el estilo que crees aqu&iacute;."))
+    es+=deliverables_box(True,
+        [("1 archivo de preset:","tu preset de Lightroom exportado (el archivo .xmp), subido a esta tarea de Canvas.")])
     es+=card("CREA / GUARDA TU PRESET","Guarda Tu Estilo como Preset",
         para("Ahora guarda esos ajustes como tu propio preset para poder ponerlos en cualquier foto con un clic.")
         + steps([
@@ -281,9 +281,6 @@ def step02():
 # ---------------- STEP 03 ----------------
 def step03():
     en=banner("Build Your Own Preset &bull; Step 3","Deliver Your Series","Sync your preset, fine-tune, and turn in your best six.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG)."),
-         ("6 high-resolution images:","your 6 best photos, exported as high-resolution JPGs, uploaded to this Canvas assignment.")])
     en+=card("APPLY / SYNC YOUR PRESET","Put Your Look on the Whole Series",
         para("This is where your preset saves you time. Add your look to every photo in your series at once.")
         + steps([
@@ -306,11 +303,11 @@ def step03():
             ("Export high-resolution:","export the 6 as high-quality JPGs."),
             ("Make the 6-Up contact sheet:","use the 6-Up layout in the Print module, then save it as a high-resolution JPG."),
         ]))
+    en+=deliverables_box(False,
+        [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG)."),
+         ("6 high-resolution images:","your 6 best photos, exported as high-resolution JPGs, uploaded to this Canvas assignment.")])
 
     es=banner("Crea Tu Propio Preset &bull; Paso 3","Entrega Tu Serie","Sincroniza tu preset, haz ajustes y entrega tus mejores seis.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG de alta resoluci&oacute;n)."),
-         ("6 im&aacute;genes en alta resoluci&oacute;n:","tus 6 mejores fotos, exportadas como JPG de alta resoluci&oacute;n, subidas a esta tarea de Canvas.")])
     es+=card("APLICA / SINCRONIZA TU PRESET","Pon Tu Estilo en Toda la Serie",
         para("Aqu&iacute; es donde tu preset te ahorra tiempo. Pon tu estilo en cada foto de tu serie de una vez.")
         + steps([
@@ -326,6 +323,9 @@ def step03():
             ("Ajusta si hace falta:","mueve un poco la Exposici&oacute;n o el Balance de Blancos en cualquier foto que se vea mal."),
             ("Mant&eacute;n el estilo:","solo arreglos peque&ntilde;os, para que la serie siga sinti&eacute;ndose como un grupo."),
         ]))
+    es+=deliverables_box(True,
+        [("1 hoja de contactos:","tu hoja de contactos de 6 im&aacute;genes (JPG de alta resoluci&oacute;n)."),
+         ("6 im&aacute;genes en alta resoluci&oacute;n:","tus 6 mejores fotos, exportadas como JPG de alta resoluci&oacute;n, subidas a esta tarea de Canvas.")])
     es+=card("ENTREGA / TUS MEJORES SEIS","Exporta y Crea Tu Hoja de Contactos Final",
         para("Ahora elige tus 6 im&aacute;genes m&aacute;s fuertes. Exp&oacute;rtalas en alta resoluci&oacute;n y crea una hoja de contactos de 6 im&aacute;genes con el dise&ntilde;o de hoja de contactos de 6 en el m&oacute;dulo Imprimir.")
         + bullets([
@@ -341,8 +341,6 @@ def step03():
 # ---------------- STEP 04 ----------------
 def step04():
     en=banner("Build Your Own Preset &bull; Step 4","Reflection","Tell the story of your series and your preset.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=card("STEP 04 / REFLECT","Complete and Upload the Reflection",
         para("Finish with a short reflection. It asks about the series you chose, the look you built, how your preset worked across your photos, and what you would do differently next time.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
@@ -352,10 +350,10 @@ def step04():
             ("Save and upload:","save the document and upload it to this Canvas assignment."),
         ])
         + note("Answer honestly, in your own words."))
+    en+=deliverables_box(False,
+        [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
 
     es=banner("Crea Tu Propio Preset &bull; Paso 4","Reflexi&oacute;n","Cuenta la historia de tu serie y tu preset.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
     es+=card("PASO 04 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         para("Termina con una reflexi&oacute;n corta. Te pregunta sobre la serie que elegiste, el estilo que creaste, c&oacute;mo funcion&oacute; tu preset en tus fotos y qu&eacute; har&iacute;as diferente la pr&oacute;xima vez.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
@@ -365,6 +363,8 @@ def step04():
             ("Guarda y sube:","guarda el documento y s&uacute;belo a esta tarea de Canvas."),
         ])
         + note("Contesta con honestidad, en tus propias palabras."))
+    es+=deliverables_box(True,
+        [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
 
     stepnav=f'<a href="{S3}" class="silva-step-btn">&#8592; Step 03</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S3}" class="silva-bottom-btn">&#8592; Step 03</a><span></span></div>'
