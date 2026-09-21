@@ -86,7 +86,7 @@ PG_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Digital Arts 1A &bull; Pictograms","Pictograms","Simple pictures that speak with no words.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Digital Arts 1A","Module 01: Pictograms","Simple pictures that speak with no words.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","What Is a Pictogram?",
         para("A pictogram is a simple picture that stands for an idea, an object, or an action. The best part is that you understand it without reading a single word. You just look at it and know what it means.")
         + framed(HERO,"Pictograms"))
@@ -117,7 +117,8 @@ def overview():
            ("Negative Space","The empty space around and inside a shape. Good pictograms use it on purpose so the picture stays clean and easy to read."),
            ("Reimagine","To rethink an idea and make your own new version, not a copy of what you found. You keep the meaning but change the look.")]), False)
 
-    es=banner("Arte Digital 1A &bull; Pictogramas","Pictogramas","Dibujos simples que hablan sin palabras.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 01 - Find &amp; Save","Build your pictogram folder in OneDrive.")
+    es=banner("Arte Digital 1A","M&oacute;dulo 01: Pictogramas","Dibujos simples que hablan sin palabras.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","&iquest;Qu&eacute; Es Un Pictograma?",
         para("Un pictograma es un dibujo simple que representa una idea, un objeto o una acci&oacute;n. Lo mejor es que lo entiendes sin leer ni una palabra. Solo lo miras y sabes qu&eacute; significa.")
         + framed(HERO,"Pictogramas"))
@@ -148,6 +149,7 @@ def overview():
            ("Espacio Negativo","El espacio vac&iacute;o alrededor y dentro de una forma. Los buenos pictogramas lo usan a prop&oacute;sito para que el dibujo se vea limpio y f&aacute;cil de leer."),
            ("Reimaginar","Repensar una idea y hacer tu propia versi&oacute;n nueva, no una copia de lo que encontraste. Guardas el significado pero cambias el aspecto.")]), True)
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 01 - Buscar y Guardar","Crea tu carpeta de pictogramas en OneDrive.")
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
@@ -155,7 +157,7 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Pictograms &bull; Step 1","Find &amp; Save","Build your pictogram folder in OneDrive.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 01 &bull; Step 01","Find &amp; Save","Build your pictogram folder in OneDrive.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("","Make Your Folder and Collect 6 to 10 Pictograms",
         float_right(FIND_FLOAT,"Student searching Google Images for pictograms to save","Search, then save the ones you like into your folder.")
         + para("In this step you will make a new folder and fill it with real pictogram examples.")
@@ -174,7 +176,8 @@ def step01():
     en+=deliverables_box(False,
         [("1 screen capture (PNG):","your &lsquo;pictogram&rsquo; folder open, showing the 6 to 10 pictograms you saved, uploaded to this Canvas assignment.")])
 
-    es=banner("Pictogramas &bull; Paso 1","Buscar y Guardar","Crea tu carpeta de pictogramas en OneDrive.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 02 - Sketch &amp; Reflect","Reimagine 3 pictograms in your sketchbook.")
+    es=banner("M&oacute;dulo 01 &bull; Paso 01","Buscar y Guardar","Crea tu carpeta de pictogramas en OneDrive.","#top","Back to English")
     es+=card("","Crea Tu Carpeta y Junta 6 a 10 Pictogramas",
         float_right(FIND_FLOAT,"Estudiante buscando pictogramas en Google Im&aacute;genes para guardar","Busca y guarda los que te gusten en tu carpeta.")
         + para("En este paso vas a crear una carpeta nueva y llenarla con ejemplos reales de pictogramas.")
@@ -193,6 +196,7 @@ def step01():
     es+=deliverables_box(True,
         [("1 captura de pantalla (PNG):","tu carpeta &lsquo;pictogram&rsquo; abierta, mostrando los 6 a 10 pictogramas que guardaste, subida a esta tarea de Canvas.")])
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Dibuja y Reflexiona","Reimagina 3 pictogramas en tu cuaderno.")
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
@@ -200,7 +204,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Pictograms &bull; Step 2","Sketch &amp; Reflect","Reimagine 3 pictograms in your sketchbook.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 01 &bull; Step 02","Sketch &amp; Reflect","Reimagine 3 pictograms in your sketchbook.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("","Redraw 3 Pictograms Your Own Way",
         float_right(SKETCH_FLOAT,"Student sketching a pictogram in a sketchbook","Reimagine each one in your own sketchbook.")
         + para("Pick 3 pictograms from the ones you saved. Make each one your own. Do not copy them exactly. Rethink each idea and draw a fresh version. Pick 3 that are different from each other, like a stop sign, a no-smoking sign, and a biohazard sign.")
@@ -221,7 +225,8 @@ def step02():
     en+=deliverables_box(False,
         [("Sketch photos (JPG):","clear pictures of your 3 finished sketches and your handwritten reflection, taken with your school iPad. If they are all on one page, turn in one picture. If they are on several pages, turn in a picture of each page.")])
 
-    es=banner("Pictogramas &bull; Paso 2","Dibuja y Reflexiona","Reimagina 3 pictogramas en tu cuaderno.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; MODULE 02 - Color Theory","Next module: how color builds a brand and sets a mood.")
+    es=banner("M&oacute;dulo 01 &bull; Paso 02","Dibuja y Reflexiona","Reimagina 3 pictogramas en tu cuaderno.","#top","Back to English")
     es+=card("","Redibuja 3 Pictogramas a Tu Manera",
         float_right(SKETCH_FLOAT,"Estudiante dibujando un pictograma en su cuaderno","Reimagina cada uno en tu propio cuaderno.")
         + para("Elige 3 pictogramas de los que guardaste. Haz cada uno tuyo. No los copies igual. Repiensa cada idea y dibuja una versi&oacute;n nueva. Elige 3 que sean diferentes entre s&iacute;, como un letrero de alto, uno de no fumar y uno de riesgo biol&oacute;gico.")
@@ -242,6 +247,7 @@ def step02():
     es+=deliverables_box(True,
         [("Fotos de dibujos (JPG):","fotos claras de tus 3 dibujos terminados y tu reflexi&oacute;n escrita a mano, tomadas con tu iPad de la escuela. Si est&aacute;n todos en una p&aacute;gina, entrega una foto. Si est&aacute;n en varias p&aacute;ginas, entrega una foto de cada p&aacute;gina.")])
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; M&Oacute;DULO 02 - Teor&iacute;a del Color","Pr&oacute;ximo m&oacute;dulo: c&oacute;mo el color crea una marca y da un tono.")
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><span></span></div>'

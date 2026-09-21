@@ -185,7 +185,7 @@ MP_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Digital Arts 1A &bull; Photoshop","Motivational Poster","Design a poster that hypes up someone who inspires you.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Digital Arts 1A","Module 04: Motivational Poster","Design a poster that hypes up someone who inspires you.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","What You Will Make",
         para("You will design a motivational poster of someone who inspires you, in Photoshop. Your subject can be a real person or a fictional character: an athlete, a musician, a leader, a superhero, anyone who motivates you. You will cut your subject out of their background, add a bold motion-blurred background behind them, and finish with a real quote they actually said, their name, and colors that all work together. The goal is a clean, hype-worthy poster you would be proud to print and hang up.")
         + framed(EXAMPLE,"Example motivational poster")
@@ -214,7 +214,8 @@ def overview():
             (TUT_MASK,"Get to Know Layer Masks","Use layer masks to hide and show parts of a layer without erasing anything.",URL_MASK,"Watch: Layer Masks &rarr;"),
         ]), False)
 
-    es=banner("Arte Digital 1A &bull; Photoshop","P&oacute;ster Motivacional","Dise&ntilde;a un p&oacute;ster que anime a alguien que te inspira.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 01 - Build the Poster","Set up OneDrive, open Photoshop, then build.")
+    es=banner("Arte Digital 1A","M&oacute;dulo 04: P&oacute;ster Motivacional","Dise&ntilde;a un p&oacute;ster que anime a alguien que te inspira.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Lo Que Vas a Crear",
         para("Vas a dise&ntilde;ar un p&oacute;ster motivacional de alguien que te inspira, en Photoshop. Tu sujeto puede ser una persona real o un personaje de ficci&oacute;n: un atleta, un m&uacute;sico, un l&iacute;der, un superh&eacute;roe, cualquiera que te motive. Vas a recortar a tu sujeto de su fondo, agregar un fondo con desenfoque de movimiento detr&aacute;s, y terminar con una frase real que haya dicho, su nombre y colores que combinen. La meta es un p&oacute;ster limpio y llamativo que te sientas orgulloso de imprimir y colgar.")
         + framed(EXAMPLE,"Ejemplo de p&oacute;ster motivacional")
@@ -243,6 +244,7 @@ def overview():
             (TUT_MASK,"Conoce las M&aacute;scaras de Capa","Usa m&aacute;scaras de capa para ocultar y mostrar partes de una capa sin borrar nada.",URL_MASK,"Ver: M&aacute;scaras de Capa &rarr;"),
         ]), True)
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 01 - Construye el P&oacute;ster","Configura OneDrive, abre Photoshop y construye.")
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
@@ -252,7 +254,7 @@ def overview():
 def step01():
     global STEPLBL
     STEPLBL="STEP"
-    en=banner("Motivational Poster &bull; Step 1","Build the Poster","Set up OneDrive, open Photoshop, then build.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 04 &bull; Step 01","Build the Poster","Set up OneDrive, open Photoshop, then build.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("BEFORE YOU START / ONEDRIVE","Check OneDrive and Make Your Folder",
         para("Do this first, every time. It keeps your work saving to the cloud so you never lose it.")
         + stepblock(1,"Check OneDrive Is Syncing","Look at the menu bar in the top-right corner of the screen, next to the date and time. Find the OneDrive cloud icon. A steady gray or blue cloud means it is syncing. If the cloud has a red X or a warning sign, click it and sign in with your school account to clear the error before you go on.")
@@ -313,7 +315,8 @@ def step01():
         [("1 poster:","your final poster, saved as a JPG, uploaded to this Canvas assignment.")])
 
     STEPLBL="PASO"
-    es=banner("P&oacute;ster Motivacional &bull; Paso 1","Construye el P&oacute;ster","Configura OneDrive, abre Photoshop y construye.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 02 - Make the Mobile Version","Remake your poster to fit a phone screen.")
+    es=banner("M&oacute;dulo 04 &bull; Paso 01","Construye el P&oacute;ster","Configura OneDrive, abre Photoshop y construye.","#top","Back to English")
     es+=card("ANTES DE EMPEZAR / ONEDRIVE","Revisa OneDrive y Crea Tu Carpeta",
         para("Haz esto primero, cada vez. Mantiene tu trabajo guard&aacute;ndose en la nube para que nunca lo pierdas.")
         + stepblock(1,"Revisa que OneDrive Est&eacute; Sincronizando","Mira la barra de men&uacute;s en la esquina superior derecha de la pantalla, junto a la fecha y la hora. Busca el &iacute;cono de nube de OneDrive. Una nube gris o azul fija significa que est&aacute; sincronizando. Si la nube tiene una X roja o un signo de advertencia, haz clic en ella e inicia sesi&oacute;n con tu cuenta escolar para quitar el error antes de seguir.")
@@ -373,6 +376,7 @@ def step01():
           + framed(SAVE_JPEG,"El cuadro JPEG Options con la calidad en M&aacute;xima",maxw="360px"))
         + note("Tu p&oacute;ster debe ser tu propio trabajo original. S&eacute; honesto y entrega tu propio dise&ntilde;o."))
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Haz la Versi&oacute;n M&oacute;vil","Rehaz tu p&oacute;ster para que quepa en la pantalla de un tel&eacute;fono.")
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
@@ -382,7 +386,7 @@ def step01():
 def step02():
     global STEPLBL
     STEPLBL="STEP"
-    en=banner("Motivational Poster &bull; Step 2","Make the Mobile Version","Remake your poster to fit a phone screen.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 04 &bull; Step 02","Make the Mobile Version","Remake your poster to fit a phone screen.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("BEFORE YOU START / ONEDRIVE","Same Folder, New Size",
         float_right(WP_FLOAT,"A student in the design lab holding her phone with the finished wallpaper, the same design open in Photoshop behind her","Your design, sized for a phone screen.")
         + para("You already made the print poster. Now make a second version, sized for a phone screen.")
@@ -417,7 +421,8 @@ def step02():
         + note("This is your own second version. Be honest and turn in your own design."))
 
     STEPLBL="PASO"
-    es=banner("P&oacute;ster Motivacional &bull; Paso 2","Haz la Versi&oacute;n M&oacute;vil","Rehaz tu p&oacute;ster para que quepa en la pantalla de un tel&eacute;fono.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 03 - Turn In Your Reflection","Reflect on your whole design process.")
+    es=banner("M&oacute;dulo 04 &bull; Paso 02","Haz la Versi&oacute;n M&oacute;vil","Rehaz tu p&oacute;ster para que quepa en la pantalla de un tel&eacute;fono.","#top","Back to English")
     es+=card("ANTES DE EMPEZAR / ONEDRIVE","Misma Carpeta, Nuevo Tama&ntilde;o",
         float_right(WP_FLOAT,"Una estudiante en el laboratorio de dise&ntilde;o sostiene su tel&eacute;fono con el fondo de pantalla terminado, con el mismo dise&ntilde;o abierto en Photoshop detr&aacute;s","Tu dise&ntilde;o, hecho para la pantalla del tel&eacute;fono.")
         + para("Ya hiciste el p&oacute;ster para imprimir. Ahora haz una segunda versi&oacute;n, del tama&ntilde;o de una pantalla de tel&eacute;fono.")
@@ -451,6 +456,7 @@ def step02():
         stepblock(11,"Guarda una Copia como JPG","Guarda tu JPG igual que en el Paso 1: ve a <strong>Archivo &gt; Guardar una Copia</strong>, haz clic en la <strong>flecha</strong> junto a <strong>Where (D&oacute;nde)</strong> para abrir el explorador completo, abre tu carpeta <strong>Motivational Poster</strong>, pon el <strong>Format (Formato)</strong> en <strong>JPEG</strong> y haz clic en <strong>Save (Guardar)</strong>. En el cuadro <strong>JPEG Options</strong>, pon la calidad en <strong>Maximum (M&aacute;xima)</strong> y haz clic en <strong>OK</strong>. Ese JPG es lo que entregas.")
         + note("Esta es tu propia segunda versi&oacute;n. S&eacute; honesto y entrega tu propio dise&ntilde;o."))
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Entrega Tu Reflexi&oacute;n","Reflexiona sobre todo tu proceso de dise&ntilde;o.")
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)+dot(S3,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
@@ -460,7 +466,7 @@ def step02():
 def step03():
     global STEPLBL
     STEPLBL="STEP"
-    en=banner("Motivational Poster &bull; Step 3","Turn In Your Reflection","Reflect on your whole design process.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 04 &bull; Step 03","Turn In Your Reflection","Reflect on your whole design process.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
         float_right(REFLECT_FLOAT,"A student filling out the Motivational Poster reflection document on a lab computer","Finish the project with your reflection.")
         + para("Finish the project with a reflection. It covers your whole process: who you chose and why, the exact name of the font you used, how you built the print poster AND the mobile wallpaper, the hardest part, and what you are most proud of.")
@@ -475,7 +481,8 @@ def step03():
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
 
     STEPLBL="PASO"
-    es=banner("P&oacute;ster Motivacional &bull; Paso 3","Entrega Tu Reflexi&oacute;n","Reflexiona sobre todo tu proceso de dise&ntilde;o.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; MODULE 05 - Live Stream Graphic","Next module: learn Photoshop and design your own YouTube thumbnail.")
+    es=banner("M&oacute;dulo 04 &bull; Paso 03","Entrega Tu Reflexi&oacute;n","Reflexiona sobre todo tu proceso de dise&ntilde;o.","#top","Back to English")
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         float_right(REFLECT_FLOAT,"Una estudiante completando el documento de reflexi&oacute;n del p&oacute;ster motivacional en una computadora del laboratorio","Termina el proyecto con tu reflexi&oacute;n.")
         + para("Termina el proyecto con una reflexi&oacute;n. Cubre todo tu proceso: a qui&eacute;n elegiste y por qu&eacute;, el nombre exacto de la fuente que usaste, c&oacute;mo hiciste el p&oacute;ster para imprimir Y el fondo de pantalla del tel&eacute;fono, la parte m&aacute;s dif&iacute;cil y de qu&eacute; est&aacute;s m&aacute;s orgulloso.")
@@ -489,6 +496,7 @@ def step03():
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completo, subido a esta tarea de Canvas.")])
 
+    es+=next_up("A CONTINUACI&Oacute;N &middot; M&Oacute;DULO 05 - Gr&aacute;fico de Live Stream","Pr&oacute;ximo m&oacute;dulo: aprende Photoshop y dise&ntilde;a tu propia miniatura de YouTube.")
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)+dot("",'3',"Step 03",True)
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'
