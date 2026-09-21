@@ -1166,7 +1166,7 @@
       <img src="https://www.creativesilva.com/assets/PV%20LOGO%20NEW.png" alt="PVHS" />
       <h2>Curriculum Catalog</h2>
       <p>Private access only.<br>Enter your code to continue.</p>
-      <input type="text" id="pin-input" inputmode="numeric" autocomplete="off" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="••••••" maxlength="10" style="-webkit-text-security:disc;" />
+      <input type="text" id="pin-input" inputmode="numeric" autocomplete="off" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="••••••" maxlength="10" />
       <button onclick="silvaCheckPin()">Continue</button>
       <div class="pin-error" id="pin-error"></div>
     </div>
@@ -1179,21 +1179,37 @@
     document.addEventListener('DOMContentLoaded', function () {
       var input = document.getElementById('pin-input');
       if (input) {
+        silvaMaskPin(input);
         input.focus();
         input.addEventListener('keydown', function (e) {
           if (e.key === 'Enter') silvaCheckPin();
         });
       }
     });
+    // Mask a code field as dots WITHOUT type=password or -webkit-text-security, so Safari/Keychain
+    // never sees a saveable password and never shows the "Save Password?" prompt. The real value
+    // lives in input.dataset.real; the visible value is only bullets.
+    function silvaMaskPin(input) {
+      input.dataset.real = '';
+      input.addEventListener('input', function () {
+        var shown = input.value;
+        var real = input.dataset.real || '';
+        var typed = shown.replace(/•/g, '');   // any non-bullet chars are freshly typed
+        if (typed) { real = (real + typed).slice(0, 10); }
+        else { real = real.slice(0, shown.length); } // deletion: shrink to remaining bullet count
+        input.dataset.real = real;
+        input.value = '•'.repeat(real.length);
+      });
+    }
     function silvaCheckPin() {
-      var val = document.getElementById('pin-input').value.trim();
+      var el = document.getElementById('pin-input');
+      var val = (el.dataset.real || '').trim();
       if (val === '322331') {
         sessionStorage.setItem('silva-auth', 'ok');
         document.getElementById('pin-gate').classList.add('hidden');
       } else {
         document.getElementById('pin-error').textContent = 'Incorrect code. Try again.';
-        document.getElementById('pin-input').value = '';
-        document.getElementById('pin-input').focus();
+        el.value = ''; el.dataset.real = ''; el.focus();
       }
     }
   </script>
@@ -1266,7 +1282,7 @@
                 <div class="char-gate" id="char-gate">
                   <p class="char-gate-label">Password required</p>
                   <div class="char-gate-row">
-                    <input type="text" id="char-pin" inputmode="numeric" autocomplete="off" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="Enter password" style="-webkit-text-security:disc;" />
+                    <input type="text" id="char-pin" inputmode="numeric" autocomplete="off" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="Enter password" />
                     <button type="button" id="char-pin-btn">Unlock</button>
                   </div>
                   <p class="char-gate-err" id="char-pin-err">Incorrect password.</p>
@@ -2822,16 +2838,17 @@
       var btn = document.getElementById('char-pin-btn');
       var err = document.getElementById('char-pin-err');
       if (!gate || !content) return;
+      if (input && typeof silvaMaskPin === 'function') silvaMaskPin(input);
       function unlock() { gate.classList.add('hidden'); content.hidden = false; }
       if (sessionStorage.getItem(CHAR_KEY) === 'ok') { unlock(); }
       function tryPin() {
-        if (input.value.trim() === '1980') {
+        if ((input.dataset.real || '').trim() === '1980') {
           sessionStorage.setItem(CHAR_KEY, 'ok');
           err.classList.remove('show');
           unlock();
         } else {
           err.classList.add('show');
-          input.value = '';
+          input.value = ''; input.dataset.real = '';
           input.focus();
         }
       }
