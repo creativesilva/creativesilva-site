@@ -66,28 +66,30 @@ BP_STANDARDS=[
 # + High-Speed Continuous how-to and the drive-button close-up, which live OUTSIDE the locked graphic.
 def high_speed_section(es):
     red="#f90101"
+    # Steps verified against Canon's official EOS R50 manual (Selecting the Drive Mode):
+    # press the right key (drive/self-timer), turn the Main Dial to pick the mode.
     if es:
         title="Modo de Disparo"
-        intro=("Pon la c&aacute;mara en modo Manual (M). Luego pon el modo de disparo en Alta Velocidad Continua "
-               "para que tome muchas fotos por segundo mientras mantienes el bot&oacute;n presionado. As&iacute; "
+        intro=("Pon la c&aacute;mara en modo Manual (M). Luego pon el modo de disparo en Alta Velocidad Continua + "
+               "para que tome muchas fotos por segundo mientras mantienes el obturador presionado. As&iacute; "
                "atrapas la fracci&oacute;n de segundo en que revienta el globo.")
         hs_steps=[
-            ("Presiona el bot&oacute;n de disparo","en el lado derecho del disco trasero (marcado en rojo)."),
-            ("Elige Alta Velocidad Continua","el &iacute;cono de cuadros apilados."),
-            ("Mant&eacute;n presionado el disparador","mientras tu pareja revienta el globo, para capturar una r&aacute;faga r&aacute;pida."),
+            ("Presiona la tecla derecha","el lado derecho del pad direccional atr&aacute;s, marcada con el &iacute;cono de disparo y temporizador (marcada en rojo)."),
+            ("Gira el Dial Principal","para elegir Alta Velocidad Continua + (el &iacute;cono de cuadros apilados con un signo m&aacute;s)."),
+            ("Mant&eacute;n presionado el obturador","hasta el fondo mientras tu pareja revienta el globo, para capturar una r&aacute;faga r&aacute;pida."),
         ]
-        btn_alt="Primer plano del bot&oacute;n de disparo en el disco trasero de la c&aacute;mara, marcado en rojo"
+        btn_alt="Primer plano de la tecla derecha del pad direccional atr&aacute;s de la c&aacute;mara, marcada en rojo"
     else:
         title="Drive Mode"
-        intro=("Set your camera to Manual (M). Then set the drive mode to High-Speed Continuous so it takes many "
-               "photos per second while you hold the button down. That is how you catch the split second the "
-               "balloon bursts.")
+        intro=("Set your camera to Manual (M). Then set the drive mode to High-Speed Continuous + so it takes many "
+               "photos per second while you hold the shutter button down. That is how you catch the split second "
+               "the balloon bursts.")
         hs_steps=[
-            ("Press the drive button","on the right side of the back dial (circled in red)."),
-            ("Choose High-Speed Continuous","the stacked-frames icon."),
-            ("Hold the shutter button down","as your partner pops the balloon, to capture a fast burst."),
+            ("Press the right key","the right side of the directional pad on the back, marked with the drive and self-timer icon (circled in red)."),
+            ("Turn the Main Dial","to select High-Speed Continuous + (the stacked-frames icon with a plus)."),
+            ("Press and hold the shutter button","all the way down as your partner pops the balloon, to capture a fast burst."),
         ]
-        btn_alt="Close-up of the camera&rsquo;s drive button on the back dial, circled in red"
+        btn_alt="Close-up of the right key on the camera&rsquo;s directional pad, circled in red"
     steps_html=""
     for n,(b,rest) in enumerate(hs_steps,1):
         steps_html+=(f'<div style="display:flex;gap:12px;align-items:flex-start;margin-top:10px;">'

@@ -140,16 +140,15 @@ def camera_settings_section(es, quality="RAW", shutter="1/500", aperture="F6.3",
         title="Camera Settings"
         lead=f"Use these settings for {activity or 'this photo walk'}. The only setting you change is the {fl_en}, to balance the light meter."
         note_t=note or "Change only the shutter. If it is too bright outside, raise the shutter speed. If it is too dark, lower it, until the light meter is balanced. Indoors, with these settings, the light meter will read underexposed and the image will look black: that is expected. Outside it will be much closer."
-    hdr=(f'<div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);border-left:5px solid {red};padding:9px 18px 9px 12px;margin-bottom:12px;box-sizing:border-box;">'
-      f'<img src="{CAMSET_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
-      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#ff8f8f;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>')
     lead_html=f'<div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{lead}</span></div>'
-    note_box=f'<div style="background:rgba(249,1,1,0.10);border:1px solid rgba(249,1,1,0.30);border-left:4px solid {red};padding:11px 14px;margin:14px 0 0;font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.55;">{note_t}</div>'
+    note_box=f'<div style="background:rgba(249,1,1,0.10);border:1px solid rgba(249,1,1,0.30);border-left:4px solid {red};padding:11px 14px;margin:0;font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.55;">{note_t}</div>'
+    # Full-width title block (spans the page, gradient fade) like every other section header; the grid
+    # floats right with its top tucked under the title block, and the teaching text wraps on the left.
     return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      '<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:18px 30px;">'
-      f'<div style="flex:1 1 300px;min-width:0;">{hdr}{lead_html}{note_box}</div>'
-      f'<div style="flex:1 1 380px;min-width:300px;">{capture_panel(quality, shutter, aperture, iso, change_field)}</div>'
-      '</div></div>')
+      + section_header(CAMSET_ICON, title, "#f90101", "#ff8f8f")
+      + f'<div class="silva-cfloat" style="width:50%;min-width:400px;margin:2px 0 16px 30px;">{capture_panel(quality, shutter, aperture, iso, change_field)}</div>'
+      + lead_html + note_box
+      + '</div>')
 
 def own_device_capture(es):
     # OWN-DEVICE capture guidance, styled like the Camera Settings section (red aperture icon +
