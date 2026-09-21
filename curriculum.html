@@ -2650,12 +2650,12 @@
       const inactiveMods = MODULES.filter(m => m.inactive && m.status === "published");
       {
         // Legacy graphics: retired logos kept for reference only. Never use in new builds.
-        const legacyGraphics = `<div class="course-docs"><div class="course-docs-label">Graphics &middot; Legacy (do not use in builds)</div>`
+        const legacyGraphics = `<details class="cat-acc"><summary class="cat-head"><span class="cat-name">Graphics &middot; Legacy (do not use in builds)</span><span class="cat-chevron"></span></summary><div class="cat-body">`
           + `<div class="logo-grid">`
           + `<div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Logo_Full.png" alt="PV with panther, legacy full logo" /></div><div class="logo-meta"><span class="logo-name">PV Logo Full <span class="logo-fmt">Legacy &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Logo_Full.png" download>Download</a></div></div>`
           + `<div class="logo-card"><div class="logo-tile"><img src="/assets/PV_LOGO_BACKGROUND.png" alt="PV panther on square background, legacy" /></div><div class="logo-meta"><span class="logo-name">PV Logo Background <span class="logo-fmt">Legacy &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_LOGO_BACKGROUND.png" download>Download</a></div></div>`
           + `<div class="logo-card"><div class="logo-tile"><img src="/assets/mrc/MRC_Logo.png" alt="Mark Richardson Center logo, legacy" /></div><div class="logo-meta"><span class="logo-name">Mark Richardson Center <span class="logo-fmt">Legacy &middot; PNG</span></span><a class="logo-dl" href="/assets/mrc/MRC_Logo.png" download>Download</a></div></div>`
-          + `</div></div>`;
+          + `</div></div></details>`;
         let body = inactive.map(buildCourseCard).join("");
         if (inactiveMods.length) {
           const rows = inactiveMods.map(m =>
