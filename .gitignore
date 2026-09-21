@@ -13,3 +13,6 @@ images_original/
 curriculum/Spring Final/
 assets/_incoming/*
 !assets/_incoming/README.md
+
+# Outgoing: internal deliverables Claude saves for Chris to grab (local-only)
+_outgoing/

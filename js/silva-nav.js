@@ -500,6 +500,11 @@
     catBuildR.className = 'silva-uni-catmod';
     catBuildR.textContent = 'Build Resources';
     menu.appendChild(catBuildR);
+    var catAll = document.createElement('a');
+    catAll.href = 'https://www.creativesilva.com/curriculum.html#universal';
+    catAll.className = 'silva-uni-catmod';
+    catAll.textContent = 'All Courses';
+    menu.appendChild(catAll);
     MENU.forEach(function (group) {
       if (!group.modules || !group.modules.length) { return; }
       var hd = document.createElement('div');
@@ -522,6 +527,8 @@
     });
     cat.appendChild(trigger);
     cat.appendChild(menu);
+    // Clicking any item in the dropdown retracts (closes) it.
+    menu.addEventListener('click', function (e) { if (e.target.closest('a')) { cat.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); } });
     bar.appendChild(cat);
 
     // (Build Resources is intentionally NOT shown on module/calendar pages: it lives on the
