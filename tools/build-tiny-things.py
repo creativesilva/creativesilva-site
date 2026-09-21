@@ -24,13 +24,13 @@ AREA="Photography Folder"
 
 # Per-course config. Content is identical; only these fields change.
 COURSES=[
-  {"cn_en":"Photography 1A","cn_es":"Fotograf&iacute;a 1A",
+  {"cn_en":"Photography 1A","cn_es":"Fotograf&iacute;a 1A","mod":"06",
    "over":"photo1-tiny-things-overview.html",
    "s1":"photo1-tiny-things-step01-capture.html",
    "s2":"photo1-tiny-things-step02-reflection.html",
    "refl_en":f"{DOCS}/Tiny-Things-Reflection-EN.docx",
    "refl_es":f"{DOCS}/Tiny-Things-Reflection-ES.docx"},
-  {"cn_en":"Photography 2A","cn_es":"Fotograf&iacute;a 2A",
+  {"cn_en":"Photography 2A","cn_es":"Fotograf&iacute;a 2A","mod":"05",
    "over":"photo2-tiny-things-overview.html",
    "s1":"photo2-tiny-things-step01-capture.html",
    "s2":"photo2-tiny-things-step02-reflection.html",
@@ -91,7 +91,7 @@ def nav(current,dots,stepnav,C):
 # ---------------- OVERVIEW ----------------
 def overview(C):
     OVER,S1,S2=C["over"],C["s1"],C["s2"]
-    en=banner(f'{C["cn_en"]} &bull; Tiny Things',"Tiny Things","A weekend challenge: see the world from a bug&rsquo;s eye view.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner(f'{C["cn_en"]}',f'Module {C["mod"]}: Tiny Things',"A weekend challenge: see the world from a bug&rsquo;s eye view.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Tiny Things",
         para("This weekend, slow down and look closer. Your challenge is to see the world the way a bug sees it: from down low, up high, or right at eye level with something small. Find 6 tiny things we normally walk right past and photograph them so they finally get noticed. You use your own phone or a school iPad, so everyone has a fair and equal way to take part.")
         + framed(HEADER,"Tiny Things")
@@ -116,7 +116,7 @@ def overview(C):
          ("Worm&rsquo;s-Eye View","A very low angle that looks up at your subject, as if you were down on the ground like a worm or a bug. It is the opposite of a bird&rsquo;s-eye view."),
          ("Depth of Field","How much of your photo is in sharp focus. In a close-up, often only the tiny subject is sharp and the background goes soft and blurry.")])
 
-    es=banner(f'{C["cn_es"]} &bull; Cosas Peque&ntilde;as',"Cosas Peque&ntilde;as","Un reto de fin de semana: ve el mundo como lo ve un insecto.","#top","Back to English")
+    es=banner(f'{C["cn_es"]}',f'M&oacute;dulo {C["mod"]}: Cosas Peque&ntilde;as',"Un reto de fin de semana: ve el mundo como lo ve un insecto.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Cosas Peque&ntilde;as",
         para("Este fin de semana, ve más despacio y mira de cerca. Tu reto es ver el mundo como lo ve un insecto: desde muy abajo, desde arriba o justo al nivel de los ojos de algo pequeño. Encuentra 6 cosas pequeñas que normalmente pasamos por alto y fotografíalas para que por fin se noten. Usas tu propio teléfono o un iPad de la escuela, para que todos tengan una forma justa e igual de participar.")
         + framed(HEADER,"Cosas Peque&ntilde;as")
@@ -149,7 +149,7 @@ def overview(C):
 # ---------------- STEP 01 ----------------
 def step01(C):
     OVER,S1,S2=C["over"],C["s1"],C["s2"]
-    en=banner("Tiny Things &bull; Step 1","Capture &amp; Submit","Photograph your 6 tiny things.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner(f'Module {C["mod"]} &bull; Step 01',"Capture &amp; Submit","Photograph your 6 tiny things.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("Your 6 photos (JPG),","all 6 tiny-thing captures, uploaded to this Canvas assignment.")])
     en+=own_device_capture(False)
@@ -166,7 +166,7 @@ def step01(C):
     en+=card("TURN IT IN","Upload Your 6 Photos",
         para("Upload all 6 photos to Canvas. A photo straight from your phone or iPad (JPG) is perfect. Then go to Step 02 for the reflection."))
 
-    es=banner("Cosas Peque&ntilde;as &bull; Paso 1","Captura y Entrega","Fotograf&iacute;a tus 6 cosas peque&ntilde;as.","#top","Back to English")
+    es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 01',"Captura y Entrega","Fotograf&iacute;a tus 6 cosas peque&ntilde;as.","#top","Back to English")
     es+=deliverables_box(True,
         [("Tus 6 fotos (JPG),","las 6 capturas de cosas pequeñas, subidas a esta tarea de Canvas.")])
     es+=own_device_capture(True)
@@ -191,7 +191,7 @@ def step01(C):
 # ---------------- STEP 02 ----------------
 def step02(C):
     OVER,S1,S2=C["over"],C["s1"],C["s2"]
-    en=banner("Tiny Things &bull; Step 2","Reflection","Reflect and pitch next week&rsquo;s challenge.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner(f'Module {C["mod"]} &bull; Step 02',"Reflection","Reflect and pitch next week&rsquo;s challenge.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
     en+=card("STEP 02 / REFLECTION","Reflect on Your Tiny Things",
@@ -200,7 +200,7 @@ def step02(C):
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + para("Type your answers in the document, save it, and upload it to Canvas with your 6 photos."))
 
-    es=banner("Cosas Peque&ntilde;as &bull; Paso 2","Reflexi&oacute;n","Reflexiona y propon el reto de la pr&oacute;xima semana.","#top","Back to English")
+    es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 02',"Reflexi&oacute;n","Reflexiona y propon el reto de la pr&oacute;xima semana.","#top","Back to English")
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word de reflexión completo (.docx), subido a Canvas.")])
     es+=card("PASO 02 / REFLEXI&Oacute;N","Reflexiona Sobre Tus Cosas Peque&ntilde;as",
