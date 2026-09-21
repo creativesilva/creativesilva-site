@@ -325,6 +325,16 @@ def framed(src,alt):
     return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;">'
       f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>')
 
+def next_up(eyebrow, title, blurb):
+    # "Coming up next" foreshadow segue that caps the bottom of #top: non-last pages point to the
+    # next step; a module's LAST page foreshadows the next module (a brief glimpse of what is ahead).
+    return ('<div style="background:linear-gradient(90deg,rgba(0,116,116,0.20) 0%,rgba(0,116,116,0.05) 55%,rgba(0,116,116,0) 100%);border:1px solid rgba(0,184,184,0.30);border-left:6px solid #00b8b8;padding:20px 24px;margin-top:26px;overflow:hidden;">'
+      '<div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">'
+      f'<span style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#80e0e0;"><strong>{eyebrow}</strong></span>'
+      '<span style="color:#00b8b8;font-size:13pt;line-height:1;">&rarr;</span>'
+      f'<span style="font-size:15pt;color:#ffffff;"><strong>{title}</strong></span></div>'
+      f'<div style="font-size:12.5pt;line-height:1.6;color:rgba(255,255,255,0.85);margin-top:7px;">{blurb}</div></div>')
+
 def float_right(src,alt,cap=""):
     # Teal-framed content photo. FLOAT-marked so a card hoists it into the thumbnail column
     # (top-aligned with the title chip, drops below when narrow). Caption is optional: with an

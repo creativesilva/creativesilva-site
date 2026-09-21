@@ -111,7 +111,7 @@ SP_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Photography 1A &bull; Self-Portrait","Self-Portrait","One creative self-portrait. Your phone. Your vision.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Photography 1A","Module 01: Self-Portrait","One creative self-portrait. Your phone. Your vision.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Make One Creative Self-Portrait",
         para("A self-portrait is a photo you take of yourself, on purpose, to show something about who you are. For this assignment you will use a cellphone or a school-provided iPad. You will make one polished, creative self-portrait.")
         + framed(HERO,"Self-Portrait")
@@ -153,8 +153,9 @@ def overview():
            ("Cull","Looking through all the photos you took and keeping only your strongest one. You drop the weak or blurry photos and select the single best image to turn in."),
            ("JPG","A common image file type that almost any computer or app can open. Your final photo must be a JPG so it opens easily and looks the way you edited it."),
            ("HEIF / HEIC","A newer photo format some phones use to save space. Many computers cannot open it, so you must change it to a JPG before you turn it in.")]), False)
+    en+=next_up("Up Next &middot; Step 01","Capture &amp; Submit","You&rsquo;ve got the plan and your self-timer tricks. Next you&rsquo;ll set up, capture, cull to your single best photo, and turn it in as a JPG.")
 
-    es=banner("Fotograf&iacute;a 1A &bull; Autorretrato","Autorretrato","Un autorretrato creativo. Tu tel&eacute;fono. Tu visi&oacute;n.","#top","Back to English")
+    es=banner("Fotograf&iacute;a 1A","M&oacute;dulo 01: Autorretrato","Un autorretrato creativo. Tu tel&eacute;fono. Tu visi&oacute;n.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Crea Un Autorretrato Creativo",
         para("Un autorretrato es una foto que te tomas a ti mismo, a prop&oacute;sito, para mostrar algo de qui&eacute;n eres. Para esta tarea vas a usar un tel&eacute;fono celular o un iPad de la escuela. Vas a crear un autorretrato pulido y creativo.")
         + framed(HERO,"Self-Portrait")
@@ -196,6 +197,7 @@ def overview():
            ("Seleccionar","Revisar todas las tomas que hiciste y quedarte solo con la m&aacute;s fuerte. Quitas las fotos d&eacute;biles o borrosas y eliges la mejor imagen para entregar."),
            ("JPG","Un tipo de archivo de imagen com&uacute;n que casi cualquier computadora o app puede abrir. Tu foto final debe ser un JPG para que se abra f&aacute;cil y se vea como la editaste."),
            ("HEIF / HEIC","Un formato de foto m&aacute;s nuevo que algunos tel&eacute;fonos usan para ahorrar espacio. Muchas computadoras no pueden abrirlo, as&iacute; que debes cambiarlo a JPG antes de entregar.")]), True)
+    es+=next_up("A Continuaci&oacute;n &middot; Paso 01","Captura y Entrega","Ya tienes el plan y los trucos del temporizador. Ahora vas a preparar, capturar, seleccionar tu mejor foto y entregarla como JPG.")
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
@@ -204,10 +206,7 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Photography 1A &bull; Self-Portrait &bull; Step 01","Capture &amp; Submit","Set up, capture, cull, and turn in your JPG.","#espanol","Clic para Espa&ntilde;ol")
-    en+=capture_format("jpg")
-    en+=deliverables_box(False,
-        [("1 JPG:","One final, polished, creative self-portrait, saved as a JPG.")])
+    en=banner("Module 01 &bull; Step 01","Capture &amp; Submit","Set up, capture, cull, and turn in your JPG.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("","Capture, Cull, and Submit Your Self-Portrait",
         float_img(CAP_FLOAT,"Self-Portrait")
         + para("Pick your idea and set up your photo. Frame yourself, set your self-timer, and prop your phone steady (see the overview). Take several photos and adjust your pose, your angle, and the light between tries.")
@@ -215,11 +214,12 @@ def step01():
         + para("Polish it (optional): if your phone has editing tools, adjust exposure, brightness, and color to make your image look its best. Keep it clean and natural.")
         + para("Save it as a JPG: your final image must be a JPG. If your phone saves photos as HEIF or HEIC, email the photo to your school computer, open it, and save or export it as a JPG. Not sure how? Ask me in class and I will help.")
         + note_orange(FRESH_EN))
+    en+=capture_format("jpg")
+    en+=deliverables_box(False,
+        [("1 JPG:","One final, polished, creative self-portrait, saved as a JPG.")])
+    en+=next_up("Up Next &middot; Step 02","Reflection","With your self-portrait turned in, you&rsquo;ll look back at what worked and what you&rsquo;d improve next time.")
 
-    es=banner("Fotograf&iacute;a 1A &bull; Autorretrato &bull; Paso 01","Captura y Entrega","Prepara, captura, selecciona y entrega tu JPG.","#top","Back to English")
-    es+=capture_format("jpg", True)
-    es+=deliverables_box(True,
-        [("1 JPG:","Un autorretrato final, pulido y creativo, guardado como JPG.")])
+    es=banner("M&oacute;dulo 01 &bull; Paso 01","Captura y Entrega","Prepara, captura, selecciona y entrega tu JPG.","#top","Back to English")
     es+=card("","Captura, Selecciona y Entrega Tu Autorretrato",
         float_img(CAP_FLOAT,"Autorretrato")
         + para("Elige tu idea y prepara tu toma. Enc&uacute;adrate, pon tu temporizador y apoya tu tel&eacute;fono firme (mira el resumen). Toma varias fotos y ajusta tu pose, tu &aacute;ngulo y la luz entre cada intento.")
@@ -227,6 +227,10 @@ def step01():
         + para("Pule tu imagen (opcional): si tu tel&eacute;fono tiene herramientas de edici&oacute;n, ajusta la exposici&oacute;n, el brillo y el color para que tu imagen se vea lo mejor posible. Mant&eacute;nla limpia y natural.")
         + para("Gu&aacute;rdala como JPG: tu imagen final debe ser un JPG. Si tu tel&eacute;fono guarda las fotos como HEIF o HEIC, env&iacute;a la foto por correo a tu computadora de la escuela, &aacute;brela y gu&aacute;rdala o exp&oacute;rtala como JPG. &iquest;No sabes c&oacute;mo? Pregunta en clase y te ayudo.")
         + note_orange(FRESH_ES))
+    es+=capture_format("jpg", True)
+    es+=deliverables_box(True,
+        [("1 JPG:","Un autorretrato final, pulido y creativo, guardado como JPG.")])
+    es+=next_up("A Continuaci&oacute;n &middot; Paso 02","Reflexi&oacute;n","Con tu autorretrato entregado, vas a mirar atr&aacute;s: qu&eacute; funcion&oacute; y qu&eacute; mejorar&iacute;as la pr&oacute;xima vez.")
 
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
@@ -235,9 +239,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Photography 1A &bull; Self-Portrait &bull; Step 02","Reflection","Look back. What worked, what to improve.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
+    en=banner("Module 01 &bull; Step 02","Reflection","Look back. What worked, what to improve.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("","Reflection",
         float_img(REFLECT_FLOAT,"Anthony typing his reflection in Word")
         + para("Take a few minutes to reflect on your self-portrait: the idea behind it, how well you think you pulled it off, and what you would do better next time.")
@@ -248,10 +250,11 @@ def step02():
         ])
         + para("You will come back to this assignment later in the year, once you have more photography skills, and make an even stronger self-portrait. This reflection is your starting point.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder."))
+    en+=deliverables_box(False,
+        [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
+    en+=next_up("Up Next &middot; Module 02","Composition Concepts","Next module: learn the composition rules, like the rule of thirds and leading lines, that make any photo feel balanced and intentional.")
 
-    es=banner("Fotograf&iacute;a 1A &bull; Autorretrato &bull; Paso 02","Reflexi&oacute;n","Mira atr&aacute;s. Qu&eacute; funcion&oacute;, qu&eacute; mejorar.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 reflexi&oacute;n:","tu documento de Word de la reflexi&oacute;n (.docx), subido a Canvas.")])
+    es=banner("M&oacute;dulo 01 &bull; Paso 02","Reflexi&oacute;n","Mira atr&aacute;s. Qu&eacute; funcion&oacute;, qu&eacute; mejorar.","#top","Back to English")
     es+=card("","Reflexi&oacute;n",
         float_img(REFLECT_FLOAT,"Anthony escribiendo su reflexi&oacute;n en Word")
         + para("T&oacute;mate unos minutos para reflexionar sobre tu autorretrato: la idea detr&aacute;s de &eacute;l, qu&eacute; tan bien crees que lo lograste y qu&eacute; har&iacute;as mejor la pr&oacute;xima vez.")
@@ -262,6 +265,9 @@ def step02():
         ])
         + para("M&aacute;s adelante en el a&ntilde;o vas a volver a esta tarea, ya con m&aacute;s habilidades de fotograf&iacute;a, y crear&aacute;s un autorretrato a&uacute;n m&aacute;s fuerte. Esta reflexi&oacute;n es tu punto de partida.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto."))
+    es+=deliverables_box(True,
+        [("1 reflexi&oacute;n:","tu documento de Word de la reflexi&oacute;n (.docx), subido a Canvas.")])
+    es+=next_up("A Continuaci&oacute;n &middot; M&oacute;dulo 02","Conceptos de Composici&oacute;n","Pr&oacute;ximo m&oacute;dulo: aprende las reglas de composici&oacute;n, como la regla de los tercios y las l&iacute;neas gu&iacute;a, que hacen que cualquier foto se sienta equilibrada e intencional.")
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a>'
