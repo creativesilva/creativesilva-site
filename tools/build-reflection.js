@@ -329,6 +329,32 @@ const DOCS = [
     '¿Qué es algo pequeño que normalmente pasas por alto y que de verdad notaste este fin de semana?',
     '¿Qué sería un reto de fotos genial para probar el próximo fin de semana con tu propio dispositivo? Propon tu idea.',
   ]},
+  // Balloon Pop (Photography 1A) -- simple: worked / did not work / do better / idea for another outdoor activity.
+  { ...EN, outfile: 'Balloon-Pop-Reflection-EN.docx', title: 'Balloon Pop: Reflection', subtitle: PVHS_EN('Photography 1A'), questions: [
+    'What worked well during the balloon pop?',
+    'What did not work, or what was hard?',
+    'What would you do better next time?',
+    'Share any feedback or an idea for another outdoor photography activity we could try as a class.',
+  ]},
+  { ...ES, outfile: 'Balloon-Pop-Reflection-ES.docx', title: 'Globo de Agua: Reflexión', subtitle: PVHS_ES('Fotografía 1A'), questions: [
+    '¿Qué funcionó bien durante el globo de agua?',
+    '¿Qué no funcionó, o qué fue difícil?',
+    '¿Qué harías mejor la próxima vez?',
+    'Comparte cualquier comentario o una idea para otra actividad de fotografía al aire libre que podamos probar como clase.',
+  ]},
+  // Photo 2A clone of Balloon Pop: identical questions, course-correct subtitle.
+  { ...EN, outfile: 'Balloon-Pop-Photo2-Reflection-EN.docx', title: 'Balloon Pop: Reflection', subtitle: PVHS_EN('Photography 2A'), questions: [
+    'What worked well during the balloon pop?',
+    'What did not work, or what was hard?',
+    'What would you do better next time?',
+    'Share any feedback or an idea for another outdoor photography activity we could try as a class.',
+  ]},
+  { ...ES, outfile: 'Balloon-Pop-Photo2-Reflection-ES.docx', title: 'Globo de Agua: Reflexión', subtitle: PVHS_ES('Fotografía 2A'), questions: [
+    '¿Qué funcionó bien durante el globo de agua?',
+    '¿Qué no funcionó, o qué fue difícil?',
+    '¿Qué harías mejor la próxima vez?',
+    'Comparte cualquier comentario o una idea para otra actividad de fotografía al aire libre que podamos probar como clase.',
+  ]},
 ];
 
 (async () => { for (const d of DOCS) await buildDoc(d); })();

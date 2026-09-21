@@ -74,7 +74,10 @@ CAMSET_ICON=f"{SITE}/assets/Icons/assignment/camera-settings-v1.svg"
 RAW_BADGE=f"{SITE}/assets/Icons/assignment/raw-v2.png"
 JPG_BADGE=f"{SITE}/assets/Icons/assignment/jpg-v2.svg"
 
-def capture_panel(quality="RAW"):
+def capture_panel(quality="RAW", shutter="1/500", aperture="F6.3", iso="100", change_field="shutter"):
+    # LOCKED graphic template. Only the three values (shutter/aperture/iso) and which cell wears the
+    # "CHANGE THIS" tag + "adjust to balance the light meter" sub (change_field) vary per module.
+    # Layout, cells (Shutter / Aperture / ISO / Light Meter / Image Quality) and styling are fixed.
     red="#f90101"
     boxtd=(f'border:2px solid {red};background:rgba(0,0,0,0.55);box-sizing:border-box;'
            'text-align:center;vertical-align:top;padding:14px 12px 16px;')
@@ -89,7 +92,12 @@ def capture_panel(quality="RAW"):
          'padding:3px 10px;white-space:nowrap;"><strong>Change this</strong></div>')
     sub=('<div style="font-family:Arial,sans-serif;font-size:10.5pt;color:#ffb0b0;margin-top:8px;'
          'line-height:1.3;">adjust to balance the light meter</div>')
-    shutter=f'{tag}{label("Shutter")}{val("1/500")}{sub}'
+    _F=[("shutter","Shutter",shutter),("aperture","Aperture",aperture),("iso","ISO",iso)]
+    def _cell(key,lbl,v):
+        ch=(key==change_field); rel="position:relative;" if ch else ""
+        inner=(tag if ch else "")+label(lbl)+val(v)+(sub if ch else "")
+        return f'<td style="{boxtd}{rel}">{inner}</td>'
+    _row1="".join(_cell(k,l,v) for k,l,v in _F)
     labels13=["-3","","-2","","-1","","0","","+1","","+2","","+3"]
     tickcols=""; numcols=""
     for i in range(13):
@@ -113,19 +121,25 @@ def capture_panel(quality="RAW"):
     return (f'<div style="background:linear-gradient(180deg,#0c1010 0%,#050707 100%);border:1px solid rgba(249,1,1,0.35);'
       'padding:0;box-sizing:border-box;max-width:520px;margin:0 auto;">'
       '<table style="width:100%;border-collapse:separate;border-spacing:14px;table-layout:fixed;"><tbody>'
-      f'<tr><td style="{boxtd}position:relative;">{shutter}</td><td style="{boxtd}">{label("Aperture")}{val("F6.3")}</td>'
-      f'<td style="{boxtd}">{label("ISO")}{val("100")}</td></tr>'
+      f'<tr>{_row1}</tr>'
       f'<tr><td colspan="2" style="{boxtd}">{meter}</td><td style="{boxtd}">{iq}</td></tr>'
       '</tbody></table></div>')
 
-def camera_settings_section(es, quality="RAW"):
+def camera_settings_section(es, quality="RAW", shutter="1/500", aperture="F6.3", iso="100", change_field="shutter", activity=None, note=None):
+    # LOCKED template. Per module, only the three values + change_field + quality + the activity noun
+    # (and an optional note override) vary. Defaults reproduce the original photo-walk section byte for
+    # byte, so existing modules are unchanged.
     red="#f90101"
+    FL={"shutter":("shutter speed","la velocidad del obturador"),"aperture":("aperture","la apertura"),"iso":("ISO","el ISO")}
+    fl_en,fl_es=FL.get(change_field,FL["shutter"])
     if es:
-        title="Ajustes de C&aacute;mara"; lead="Usa estos ajustes para esta caminata. El &uacute;nico ajuste que cambias es la velocidad del obturador, para equilibrar el expos&iacute;metro."
-        note_t="Solo cambia el obturador. Si afuera est&aacute; muy brillante, sube la velocidad del obturador. Si est&aacute; muy oscuro, b&aacute;jala, hasta que el expos&iacute;metro quede equilibrado. Adentro, con estos ajustes, el expos&iacute;metro marcar&aacute; subexpuesto y la imagen se ver&aacute; negra: eso es normal. Afuera quedar&aacute; mucho m&aacute;s cerca."
+        title="Ajustes de C&aacute;mara"
+        lead=f"Usa estos ajustes para {activity or 'esta caminata'}. El &uacute;nico ajuste que cambias es {fl_es}, para equilibrar el expos&iacute;metro."
+        note_t=note or "Solo cambia el obturador. Si afuera est&aacute; muy brillante, sube la velocidad del obturador. Si est&aacute; muy oscuro, b&aacute;jala, hasta que el expos&iacute;metro quede equilibrado. Adentro, con estos ajustes, el expos&iacute;metro marcar&aacute; subexpuesto y la imagen se ver&aacute; negra: eso es normal. Afuera quedar&aacute; mucho m&aacute;s cerca."
     else:
-        title="Camera Settings"; lead="Use these settings for this photo walk. The only setting you change is the shutter speed, to balance the light meter."
-        note_t="Change only the shutter. If it is too bright outside, raise the shutter speed. If it is too dark, lower it, until the light meter is balanced. Indoors, with these settings, the light meter will read underexposed and the image will look black: that is expected. Outside it will be much closer."
+        title="Camera Settings"
+        lead=f"Use these settings for {activity or 'this photo walk'}. The only setting you change is the {fl_en}, to balance the light meter."
+        note_t=note or "Change only the shutter. If it is too bright outside, raise the shutter speed. If it is too dark, lower it, until the light meter is balanced. Indoors, with these settings, the light meter will read underexposed and the image will look black: that is expected. Outside it will be much closer."
     hdr=(f'<div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);border-left:5px solid {red};padding:9px 18px 9px 12px;margin-bottom:12px;box-sizing:border-box;">'
       f'<img src="{CAMSET_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
       f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#ff8f8f;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>')
@@ -134,7 +148,7 @@ def camera_settings_section(es, quality="RAW"):
     return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       '<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:18px 30px;">'
       f'<div style="flex:1 1 300px;min-width:0;">{hdr}{lead_html}{note_box}</div>'
-      f'<div style="flex:1 1 380px;min-width:300px;">{capture_panel(quality)}</div>'
+      f'<div style="flex:1 1 380px;min-width:300px;">{capture_panel(quality, shutter, aperture, iso, change_field)}</div>'
       '</div></div>')
 
 def own_device_capture(es):

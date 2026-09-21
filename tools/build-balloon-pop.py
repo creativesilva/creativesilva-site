@@ -26,15 +26,16 @@ COURSES=[
   {"cn_en":"Photography 1A","cn_es":"Fotograf&iacute;a 1A","mod":"07",
    "over":"photo1-balloon-pop-overview.html",
    "s1":"photo1-balloon-pop-step01-capture.html",
-   "s2":"photo1-balloon-pop-step02-reflection.html"},
+   "s2":"photo1-balloon-pop-step02-reflection.html",
+   "refl_en":f"{DOCS}/Balloon-Pop-Reflection-EN.docx",
+   "refl_es":f"{DOCS}/Balloon-Pop-Reflection-ES.docx"},
   {"cn_en":"Photography 2A","cn_es":"Fotograf&iacute;a 2A","mod":"06",
    "over":"photo2-balloon-pop-overview.html",
    "s1":"photo2-balloon-pop-step01-capture.html",
-   "s2":"photo2-balloon-pop-step02-reflection.html"},
+   "s2":"photo2-balloon-pop-step02-reflection.html",
+   "refl_en":f"{DOCS}/Balloon-Pop-Photo2-Reflection-EN.docx",
+   "refl_es":f"{DOCS}/Balloon-Pop-Photo2-Reflection-ES.docx"},
 ]
-# Shared placeholder reflection docs (Chris posts the finals; same filenames = no rewiring).
-REFL_EN=f"{DOCS}/Balloon-Pop-Reflection-EN.docx"
-REFL_ES=f"{DOCS}/Balloon-Pop-Reflection-ES.docx"
 
 def nxt_mod(C):
     return f"{int(C['mod'])+1:02d}"
@@ -59,42 +60,17 @@ BP_STANDARDS=[
    "es_desc":"Trabajas en pareja, compartes tus mejores tomas y reflexionas sobre qu&eacute; funcion&oacute; y qu&eacute; probar despu&eacute;s."},
 ]
 
-# ---------------- CAMERA SETTINGS (bespoke, red) ----------------
-def camera_settings(es):
-    # Balloon Pop uses a FIXED freeze-motion recipe (nothing to "balance"), so this is a
-    # Balloon-Pop-specific take on the shared camera-settings look: same red cells, but a 6-card
-    # grid (Mode, Shutter, Aperture, ISO, Drive, Image Quality) plus a High-Speed Continuous
-    # how-to with the drive-button close-up. Values: Manual, 1/1600, F8.0, ISO 800, JPG.
+# ---------------- DRIVE MODE: HIGH-SPEED CONTINUOUS (separate red section) ----------------
+# The camera-settings GRAPHIC is the LOCKED framework template (camera_settings_section): only the
+# three values + the "CHANGE THIS" position change. This separate red section carries the manual-mode
+# + High-Speed Continuous how-to and the drive-button close-up, which live OUTSIDE the locked graphic.
+def high_speed_section(es):
     red="#f90101"
-    boxtd=(f'border:2px solid {red};background:rgba(0,0,0,0.55);box-sizing:border-box;'
-           'text-align:center;vertical-align:top;padding:14px 12px 16px;')
-    def label(t):
-        return (f'<div style="font-family:Arial,sans-serif;font-size:9.5pt;letter-spacing:0.14em;'
-                f'text-transform:uppercase;color:{red};line-height:1.25;"><strong>{t}</strong></div>')
-    def val(v):
-        return (f'<div style="font-family:Arial,sans-serif;font-size:24pt;color:#ffffff;line-height:1.05;'
-                f'margin-top:9px;"><strong>{v}</strong></div>')
-    def valtext(v):
-        return (f'<div style="font-family:Arial,sans-serif;font-size:14.5pt;color:#ffffff;line-height:1.15;'
-                f'margin-top:10px;"><strong>{v}</strong></div>')
-    def sub(s):
-        return (f'<div style="font-family:Arial,sans-serif;font-size:10pt;color:#ffb0b0;margin-top:8px;'
-                f'line-height:1.3;">{s}</div>')
     if es:
-        title="Ajustes de C&aacute;mara"
-        lead=("Configura la c&aacute;mara a mano para que no cambie sola. Estos ajustes est&aacute;n hechos para "
-              "congelar el agua en el aire, as&iacute; que ponlos antes de salir y no los cambies.")
-        note_t=("El modo Manual (M) fija todos tus ajustes. El obturador r&aacute;pido de 1/1600 es lo que "
-                "congela el estallido en una esfera. F8.0 mantiene toda la esfera n&iacute;tida, y el ISO 800 "
-                "deja la foto con suficiente luz a esa velocidad. Guarda tus archivos como JPG.")
-        c_mode=("Modo","M","Manual"); c_sh=("Obturador","1/1600","congela el estallido")
-        c_ap=("Apertura","F8.0",""); c_iso=("ISO","800","")
-        c_dr_l="Disparo"; c_dr_v="Alta Velocidad<br>Continua"
-        c_iq="Calidad de Imagen"
-        hs_title="Pon Alta Velocidad Continua"
-        hs_lead=("Tu c&aacute;mara puede tomar una foto a la vez o una r&aacute;faga r&aacute;pida. Ponla en Alta "
-                 "Velocidad Continua para que tome muchas fotos por segundo mientras mantienes el bot&oacute;n "
-                 "presionado. As&iacute; atrapas la fracci&oacute;n de segundo en que revienta el globo.")
+        title="Modo de Disparo"
+        intro=("Pon la c&aacute;mara en modo Manual (M). Luego pon el modo de disparo en Alta Velocidad Continua "
+               "para que tome muchas fotos por segundo mientras mantienes el bot&oacute;n presionado. As&iacute; "
+               "atrapas la fracci&oacute;n de segundo en que revienta el globo.")
         hs_steps=[
             ("Presiona el bot&oacute;n de disparo","en el lado derecho del disco trasero (marcado en rojo)."),
             ("Elige Alta Velocidad Continua","el &iacute;cono de cuadros apilados."),
@@ -102,78 +78,40 @@ def camera_settings(es):
         ]
         btn_alt="Primer plano del bot&oacute;n de disparo en el disco trasero de la c&aacute;mara, marcado en rojo"
     else:
-        title="Camera Settings"
-        lead=("Set the camera by hand so it cannot change on you. These settings are built to freeze the "
-              "water in mid-air, so dial them in before you go outside and leave them there.")
-        note_t=("Manual mode (M) locks all of your settings. The fast 1/1600 shutter is what freezes the burst "
-                "into a globe. F8.0 keeps the whole globe sharp, and ISO 800 keeps your photo bright enough at "
-                "that speed. Save your files as JPG.")
-        c_mode=("Mode","M","Manual"); c_sh=("Shutter","1/1600","freezes the burst")
-        c_ap=("Aperture","F8.0",""); c_iso=("ISO","800","")
-        c_dr_l="Drive"; c_dr_v="High-Speed<br>Continuous"
-        c_iq="Image Quality"
-        hs_title="Set High-Speed Continuous"
-        hs_lead=("Your camera can take one photo at a time or a fast burst. Set it to High-Speed Continuous so "
-                 "it takes many photos per second while you hold the button down. That is how you catch the "
-                 "split second the balloon bursts.")
+        title="Drive Mode"
+        intro=("Set your camera to Manual (M). Then set the drive mode to High-Speed Continuous so it takes many "
+               "photos per second while you hold the button down. That is how you catch the split second the "
+               "balloon bursts.")
         hs_steps=[
             ("Press the drive button","on the right side of the back dial (circled in red)."),
             ("Choose High-Speed Continuous","the stacked-frames icon."),
             ("Hold the shutter button down","as your partner pops the balloon, to capture a fast burst."),
         ]
         btn_alt="Close-up of the camera&rsquo;s drive button on the back dial, circled in red"
-    # icon + title bar (red)
-    hdr=(f'<div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);border-left:5px solid {red};padding:9px 18px 9px 12px;margin-bottom:12px;box-sizing:border-box;">'
-      f'<img src="{CAMSET_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
-      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#ff8f8f;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>')
-    lead_html=f'<div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{lead}</span></div>'
-    note_box=f'<div style="background:rgba(249,1,1,0.10);border:1px solid rgba(249,1,1,0.30);border-left:4px solid {red};padding:11px 14px;margin:0;font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.55;">{note_t}</div>'
-    # cells
-    cell_mode=f'{label(c_mode[0])}{val(c_mode[1])}{sub(c_mode[2])}'
-    cell_sh=f'{label(c_sh[0])}{val(c_sh[1])}{sub(c_sh[2])}'
-    cell_ap=f'{label(c_ap[0])}{val(c_ap[1])}'
-    cell_iso=f'{label(c_iso[0])}{val(c_iso[1])}'
-    cell_dr=f'{label(c_dr_l)}{valtext(c_dr_v)}'
-    iq=(f'{label(c_iq)}'
-        f'<img src="{JPG_BADGE}" alt="JPG image-capture format" style="height:56px;width:auto;display:block;margin:16px auto 0;" />')
-    grid=(f'<div style="background:linear-gradient(180deg,#0c1010 0%,#050707 100%);border:1px solid rgba(249,1,1,0.35);'
-      'padding:0;box-sizing:border-box;max-width:520px;margin:0 auto;">'
-      '<table style="width:100%;border-collapse:separate;border-spacing:14px;table-layout:fixed;"><tbody>'
-      f'<tr><td style="{boxtd}">{cell_mode}</td><td style="{boxtd}">{cell_sh}</td><td style="{boxtd}">{cell_ap}</td></tr>'
-      f'<tr><td style="{boxtd}">{cell_iso}</td><td style="{boxtd}">{cell_dr}</td><td style="{boxtd}">{iq}</td></tr>'
-      '</tbody></table></div>')
-    # High-Speed Continuous how-to (full width, drive-button close-up floated right)
     steps_html=""
     for n,(b,rest) in enumerate(hs_steps,1):
         steps_html+=(f'<div style="display:flex;gap:12px;align-items:flex-start;margin-top:10px;">'
           f'<span style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:{red};color:#fff;'
           f'font-family:Arial,sans-serif;font-size:12pt;line-height:26px;text-align:center;"><strong>{n}</strong></span>'
           f'<span style="font-size:12.5pt;color:rgba(255,255,255,0.90);line-height:1.5;"><strong>{b}</strong> {rest}</span></div>')
-    hs_headline=(f'<div style="font-family:Arial,sans-serif;font-size:9.5pt;letter-spacing:0.14em;text-transform:uppercase;'
-      f'color:{red};margin-bottom:4px;"><strong>{hs_title}</strong></div>')
     hs_img=(f'<div style="flex:0 0 auto;width:200px;max-width:42%;"><div style="border:2px solid {red};background:#000;">'
       f'<img src="{BTN}" alt="{btn_alt}" style="display:block;width:100%;height:auto;" /></div></div>')
-    hs_block=('<div style="border-top:1px solid rgba(249,1,1,0.30);margin-top:22px;padding-top:20px;">'
-      + hs_headline
-      + '<div style="display:flex;flex-wrap:wrap-reverse;gap:18px 26px;align-items:flex-start;">'
-      + f'<div style="flex:1 1 320px;min-width:0;"><div style="font-size:13pt;color:rgba(255,255,255,0.88);line-height:1.6;margin-bottom:4px;">{hs_lead}</div>{steps_html}</div>'
+    body=('<div style="display:flex;flex-wrap:wrap-reverse;gap:18px 26px;align-items:flex-start;">'
+      + f'<div style="flex:1 1 320px;min-width:0;"><div style="font-size:13pt;color:rgba(255,255,255,0.88);line-height:1.6;margin-bottom:4px;">{intro}</div>{steps_html}</div>'
       + hs_img
-      + '</div></div>')
+      + '</div>')
     return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      '<div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:18px 30px;">'
-      f'<div style="flex:1 1 300px;min-width:0;">{hdr}{lead_html}{note_box}</div>'
-      f'<div style="flex:1 1 380px;min-width:300px;">{grid}</div>'
-      '</div>'
-      + hs_block
+      + section_header(CAMSET_ICON, title, "#f90101", "#ff8f8f")
+      + body
       + '</div>')
 
-def downloads_block(es):
-    # Orange Downloads section (Overview only). Balloon Pop holds the reflection doc (placeholder).
+def downloads_block(es, C):
+    # Orange Downloads section (Overview only). Balloon Pop holds the reflection doc (per course).
     heading="Descarga Tus Archivos" if es else "Download Your Files"
     lead=("Descarga aqu&iacute; todo lo que necesitas para este m&oacute;dulo. Consigue tus archivos antes de empezar." if es
           else "Download everything you need for this module here. Get your files before you start.")
     reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
-    ref=REFL_ES if es else REFL_EN
+    ref=C["refl_es"] if es else C["refl_en"]
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
       + para(lead)
@@ -203,7 +141,7 @@ def overview(C):
         + framed(HEADER,"Two Pioneer Valley students outside by the panther statue: one aims a camera while the other pops a water balloon, the water frozen in mid-air as a clear globe")
         + para("You will use a school camera kit with the 18-45mm lens, set the camera by hand, and take a fast burst of photos as the balloon pops. Then you and your partner share your best frames, do a light crop, and each turn in your favorite 1 to 3 images."))
     en+=standards_box(False, BP_STANDARDS)
-    en+=downloads_block(False)
+    en+=downloads_block(False, C)
     en+=card("HOW TO NAIL IT","Tips for a Clean Freeze",
         para("A great freeze comes from being ready before the pop and getting close. Set up, focus, and start your burst a moment early so you never miss the globe.")
         + bullets([
@@ -229,7 +167,7 @@ def overview(C):
         + framed(HEADER,"Dos estudiantes de Pioneer Valley afuera junto a la estatua de la pantera: uno apunta una c&aacute;mara mientras la otra revienta un globo de agua, con el agua congelada en el aire como una esfera")
         + para("Vas a usar un kit de c&aacute;mara de la escuela con el lente 18-45mm, configurar la c&aacute;mara a mano y tomar una r&aacute;faga r&aacute;pida de fotos cuando el globo revienta. Luego t&uacute; y tu pareja comparten sus mejores tomas, hacen un recorte ligero y cada uno entrega sus 1 a 3 im&aacute;genes favoritas."))
     es+=standards_box(True, BP_STANDARDS)
-    es+=downloads_block(True)
+    es+=downloads_block(True, C)
     es+=card("C&Oacute;MO LOGRARLO","Consejos Para un Buen Congelado",
         para("Un buen congelado sale de estar listo antes del estallido y de acercarte. Prep&aacute;rate, enfoca y empieza tu r&aacute;faga un momento antes para nunca perder la esfera.")
         + bullets([
@@ -269,7 +207,8 @@ def step01(C):
             ("Share your best:","give your partner your best frames, and use theirs too."),
         ])
         + note("Water and cameras do not mix. Keep the camera back from the splash zone and dry your hands before you touch the gear."))
-    en+=camera_settings(False)
+    en+=camera_settings_section(False, quality="JPG", shutter="1/1600", aperture="F8.0", iso="800", change_field="shutter", activity="Balloon Pop")
+    en+=high_speed_section(False)
     en+=deliverables_box(False,
         [("1 to 3 favorite images (JPG),","your best frozen-globe photos, lightly cropped and uploaded to this Canvas assignment.")])
     en+=card("CROP &amp; SUBMIT","A Light Crop, Then Turn It In",
@@ -289,7 +228,8 @@ def step01(C):
             ("Comparte lo mejor:","dale a tu pareja tus mejores tomas y usa las de ella tambi&eacute;n."),
         ])
         + note("El agua y las c&aacute;maras no se llevan bien. Mant&eacute;n la c&aacute;mara lejos de la zona de salpicaduras y s&eacute;cate las manos antes de tocar el equipo."))
-    es+=camera_settings(True)
+    es+=camera_settings_section(True, quality="JPG", shutter="1/1600", aperture="F8.0", iso="800", change_field="shutter", activity="el Globo de Agua")
+    es+=high_speed_section(True)
     es+=deliverables_box(True,
         [("1 a 3 im&aacute;genes favoritas (JPG),","tus mejores fotos de la esfera congelada, con un recorte ligero y subidas a esta tarea de Canvas.")])
     es+=card("RECORTA Y ENTREGA","Un Recorte Ligero, Luego Entrega",
