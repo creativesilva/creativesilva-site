@@ -329,17 +329,6 @@ const DOCS = [
     '¿Qué es algo pequeño que normalmente pasas por alto y que de verdad notaste este fin de semana?',
     '¿Qué sería un reto de fotos genial para probar el próximo fin de semana con tu propio dispositivo? Propon tu idea.',
   ]},
-  // Mrs. Garcia's Tiny Things (Photography 1A): identical questions, HER name in the header.
-  { ...EN, outfile: 'Tiny-Things-Garcia-Reflection-EN.docx', title: 'Tiny Things: Reflection', subtitle: 'Photography 1A · Pioneer Valley High School · Mrs. Garcia', questions: [
-    'Which tiny thing was your favorite to photograph, and why?',
-    'What is something small you usually walk past that you really noticed this weekend?',
-    'What would be a cool photo challenge to try next weekend with your own device? Pitch your idea.',
-  ]},
-  { ...ES, outfile: 'Tiny-Things-Garcia-Reflection-ES.docx', title: 'Cosas Pequeñas: Reflexión', subtitle: 'Fotografía 1A · Pioneer Valley High School · Sra. Garcia', questions: [
-    '¿Cuál cosa pequeña fue tu favorita para fotografiar, y por qué?',
-    '¿Qué es algo pequeño que normalmente pasas por alto y que de verdad notaste este fin de semana?',
-    '¿Qué sería un reto de fotos genial para probar el próximo fin de semana con tu propio dispositivo? Propon tu idea.',
-  ]},
 ];
 
 (async () => { for (const d of DOCS) await buildDoc(d); })();

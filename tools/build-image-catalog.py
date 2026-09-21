@@ -15,6 +15,15 @@ SHARED=os.path.join(ROOT,"curriculum/shared")
 COURSE_NAME={"da1a":"Digital Arts 1A","photo1a":"Photography 1A","photo2a":"Photography 2A"}
 COURSE_ORDER=["da1a","photo1a","photo2a"]
 
+# Extra images kept in the library that are NOT used on any live page (shown for reference only).
+# Each: (path, module_title, page, role, alt).
+EXTRAS={
+  "photo1a":[
+    ("/assets/images/photo1/tiny-things/garcia-tiny-things-header-v1.jpg","Tiny Things","Overview","Alt Header","Tiny Things alternate overview header"),
+    ("/assets/images/photo1/tiny-things/garcia-tiny-things-reflection-float-v1.jpg","Tiny Things","Step 02 &middot; Reflection","Alt Float","Tiny Things alternate reflection float"),
+  ],
+}
+
 TEAL=r'linear-gradient\(135deg,#00b8b8 0%,rgba\(0,184,184,0\.08\)'
 HERO_RE=re.compile(TEAL+r'[^>]*"><img src="https://www\.creativesilva\.com(/assets/images/[^"]+)"(?:[^>]*alt="([^"]*)")?')
 FLOAT_RE=re.compile(r'class="silva-cfloat"[^>]*><div style="[^"]*"><img src="https://www\.creativesilva\.com(/assets/images/[^"]+)"(?:[^>]*alt="([^"]*)")?')
@@ -54,7 +63,6 @@ def card(path, module_title, page, role, alt, page_url):
       f'<img src="{path}" alt="{alt}" /></div>'
       f'<div class="logo-meta"><span class="logo-name">{name} '
       f'<span class="logo-fmt">{role} &middot; {ext}</span></span>'
-      f'<a class="logo-view" href="{path}" target="_blank" rel="noopener">View</a>'
       f'<a class="logo-dl" href="{path}" download>Download</a></div></div>')
 
 def collect():
@@ -78,6 +86,11 @@ def collect():
             for m in FLOAT_RE.finditer(h):
                 if m.group(1) in seen: continue
                 seen.add(m.group(1)); bycourse[course].append(card(m.group(1),title,page_label(fn),"Float",m.group(2),"/"+sp))
+    # Kept-but-not-live extras (reference only), appended after the scanned images.
+    for course, items in EXTRAS.items():
+        for path, title, page, role, alt in items:
+            if path in seen: continue
+            seen.add(path); bycourse[course].append(card(path, title, page, role, alt, path))
     return bycourse
 
 def render(bycourse):
