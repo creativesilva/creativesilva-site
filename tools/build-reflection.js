@@ -355,6 +355,19 @@ const DOCS = [
     '¿Qué harías mejor la próxima vez?',
     'Comparte cualquier comentario o una idea para otra actividad de fotografía al aire libre que podamos probar como clase.',
   ]},
+  // Elements of Art: Character Design (Digital Arts 1A) -- looking ahead to Form and Color.
+  { ...EN, outfile: 'Elements-of-Art-Reflection-EN.docx', title: 'Character Design: Reflection', subtitle: PVHS_EN('Digital Arts 1A'), questions: [
+    'What will you add to your character next to make it stronger?',
+    'What colors would you add, and where? Why those colors? (Color)',
+    'How could you add Form so your character looks 3D instead of flat? (Form)',
+    'What textures are missing, and where would you add them? (Texture)',
+  ]},
+  { ...ES, outfile: 'Elements-of-Art-Reflection-ES.docx', title: 'Diseño de Personaje: Reflexión', subtitle: PVHS_ES('Arte Digital 1A'), questions: [
+    '¿Qué le agregarías a tu personaje para hacerlo más fuerte?',
+    '¿Qué colores le agregarías y dónde? ¿Por qué esos colores? (Color)',
+    '¿Cómo podrías agregar Forma para que tu personaje se vea en 3D y no plano? (Forma)',
+    '¿Qué texturas le faltan y dónde las agregarías? (Textura)',
+  ]},
 ];
 
 (async () => { for (const d of DOCS) await buildDoc(d); })();
