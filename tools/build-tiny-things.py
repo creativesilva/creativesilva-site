@@ -115,6 +115,7 @@ def overview(C):
          ("Point of View (POV)","Where your camera &lsquo;stands&rsquo; when you take the photo. A low point of view, like a bug on the ground, makes small things feel powerful."),
          ("Worm&rsquo;s-Eye View","A very low angle that looks up at your subject, as if you were down on the ground like a worm or a bug. It is the opposite of a bird&rsquo;s-eye view."),
          ("Depth of Field","How much of your photo is in sharp focus. In a close-up, often only the tiny subject is sharp and the background goes soft and blurry.")]), False)
+    en+=next_up("Up Next &middot; Step 01","Capture &amp; Submit","Grab your phone or an iPad. Next you&rsquo;ll head out and photograph your 6 tiny things.")
 
     es=banner(f'{C["cn_es"]}',f'M&oacute;dulo {C["mod"]}: Cosas Peque&ntilde;as',"Un reto de fin de semana: ve el mundo como lo ve un insecto.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Cosas Peque&ntilde;as",
@@ -140,6 +141,7 @@ def overview(C):
          ("Punto de Vista (POV)","Desde d&oacute;nde &lsquo;mira&rsquo; tu c&aacute;mara cuando tomas la foto. Un punto de vista bajo, como un insecto en el suelo, hace que las cosas pequeñas se sientan poderosas."),
          ("Vista de Gusano","Un ángulo muy bajo que mira hacia arriba a tu tema, como si estuvieras en el suelo como un gusano o un insecto. Es lo contrario de la vista de pájaro."),
          ("Profundidad de Campo","Cuánto de tu foto está en foco nítido. En un primer plano, muchas veces solo la cosa pequeña está nítida y el fondo se ve suave y borroso.")]), True)
+    es+=next_up("A Continuaci&oacute;n &middot; Paso 01","Captura y Entrega","Toma tu tel&eacute;fono o un iPad. Ahora vas a salir y fotografiar tus 6 cosas peque&ntilde;as.")
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
@@ -150,9 +152,6 @@ def overview(C):
 def step01(C):
     OVER,S1,S2=C["over"],C["s1"],C["s2"]
     en=banner(f'Module {C["mod"]} &bull; Step 01',"Capture &amp; Submit","Photograph your 6 tiny things.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("Your 6 photos (JPG),","all 6 tiny-thing captures, uploaded to this Canvas assignment.")])
-    en+=own_device_capture(False)
     en+=card("STEP 01 / CAPTURE","Photograph 6 Tiny Things",
         float_right(STEP1_FLOAT,"Extreme close-up of a grasshopper on red ground at a low bug&rsquo;s-eye angle","Captured by Ari Silva on an iPhone 14 Pro. 9/17/2026. No AI was used to create this image.")
         + para("Head outside or around the room and hunt for tiny things. Find 6 different small things we usually overlook and take a photo of each one. Move around and change your height for every photo: some down low like a bug, some up high, some at eye level.")
@@ -163,13 +162,14 @@ def step01(C):
             ("Get close and sharp:","fill the frame, use close-up or macro mode, and tap to focus so the detail is crisp."),
             ("Keep it simple:","no editing and no renaming. The photo straight from your device is fine."),
         ]))
+    en+=own_device_capture(False)
+    en+=deliverables_box(False,
+        [("Your 6 photos (JPG),","all 6 tiny-thing captures, uploaded to this Canvas assignment.")])
     en+=card("TURN IT IN","Upload Your 6 Photos",
         para("Upload all 6 photos to Canvas. A photo straight from your phone or iPad (JPG) is perfect. Then go to Step 02 for the reflection."))
+    en+=next_up("Up Next &middot; Step 02","Reflection","With your 6 photos turned in, you&rsquo;ll write a short reflection and pitch next weekend&rsquo;s challenge.")
 
     es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 01',"Captura y Entrega","Fotograf&iacute;a tus 6 cosas peque&ntilde;as.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("Tus 6 fotos (JPG),","las 6 capturas de cosas pequeñas, subidas a esta tarea de Canvas.")])
-    es+=own_device_capture(True)
     es+=card("PASO 01 / CAPTURA","Fotograf&iacute;a 6 Cosas Peque&ntilde;as",
         float_right(STEP1_FLOAT,"Primer plano extremo de un saltamontes en el suelo rojo, a un &aacute;ngulo bajo de insecto","Capturada por Ari Silva con un iPhone 14 Pro. 17/9/2026. No se us&oacute; IA para crear esta imagen.")
         + para("Sal afuera o camina por el salón y busca cosas pequeñas. Encuentra 6 cosas pequeñas diferentes que normalmente pasamos por alto y toma una foto de cada una. Muévete y cambia tu altura en cada foto: algunas muy abajo como un insecto, algunas arriba, algunas al nivel de los ojos.")
@@ -180,8 +180,12 @@ def step01(C):
             ("Acércate y que salga nítida:","llena el encuadre, usa el modo primer plano o macro y toca para enfocar para que el detalle salga claro."),
             ("Mántenlo simple:","sin edición y sin renombrar. La foto directa de tu dispositivo está bien."),
         ]))
+    es+=own_device_capture(True)
+    es+=deliverables_box(True,
+        [("Tus 6 fotos (JPG),","las 6 capturas de cosas pequeñas, subidas a esta tarea de Canvas.")])
     es+=card("ENTR&Eacute;GALO","Sube Tus 6 Fotos",
         para("Sube las 6 fotos a Canvas. Una foto directa de tu teléfono o iPad (JPG) es perfecta. Luego ve al Paso 02 para la reflexión."))
+    es+=next_up("A Continuaci&oacute;n &middot; Paso 02","Reflexi&oacute;n","Con tus 6 fotos entregadas, vas a escribir una reflexi&oacute;n corta y proponer el reto del pr&oacute;ximo fin de semana.")
 
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
@@ -192,22 +196,24 @@ def step01(C):
 def step02(C):
     OVER,S1,S2=C["over"],C["s1"],C["s2"]
     en=banner(f'Module {C["mod"]} &bull; Step 02',"Reflection","Reflect and pitch next week&rsquo;s challenge.","#espanol","Clic para Espa&ntilde;ol")
-    en+=deliverables_box(False,
-        [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
     en+=card("STEP 02 / REFLECTION","Reflect on Your Tiny Things",
         float_right(REFLECT_FLOAT,"A student typing a short reflection on a lab computer","")
         + para("Finish with a short reflection. Tell which tiny thing was your favorite and why, name something small you usually overlook that you noticed this weekend, and pitch one idea for a fun photo challenge to try next weekend with your own device.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + para("Type your answers in the document, save it, and upload it to Canvas with your 6 photos."))
+    en+=deliverables_box(False,
+        [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
+    en+=next_up("You Finished the Module","Great work.","You&rsquo;ve wrapped up Tiny Things. Keep looking for the small details around you: noticing them is what makes a strong photographer.")
 
     es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 02',"Reflexi&oacute;n","Reflexiona y propon el reto de la pr&oacute;xima semana.","#top","Back to English")
-    es+=deliverables_box(True,
-        [("1 reflexi&oacute;n:","tu documento de Word de reflexión completo (.docx), subido a Canvas.")])
     es+=card("PASO 02 / REFLEXI&Oacute;N","Reflexiona Sobre Tus Cosas Peque&ntilde;as",
         float_right(REFLECT_FLOAT,"Una estudiante escribiendo una reflexi&oacute;n corta en una computadora del laboratorio","")
         + para("Termina con una reflexión corta. Di cuál cosa pequeña fue tu favorita y por qué, nombra algo pequeño que normalmente pasas por alto y que notaste este fin de semana, y propon una idea para un reto de fotos divertido para probar el próximo fin de semana con tu propio dispositivo.")
         + note("El documento de reflexión está en la página de Resumen de este módulo, la primera página de este módulo. Si aún no lo has descargado, regresa y consíguelo. Antes de abrirlo, muévelo de tu carpeta de Descargas a tu carpeta del proyecto.")
         + para("Escribe tus respuestas en el documento, gu&aacute;rdalo y súbelo a Canvas con tus 6 fotos."))
+    es+=deliverables_box(True,
+        [("1 reflexi&oacute;n:","tu documento de Word de reflexión completo (.docx), subido a Canvas.")])
+    es+=next_up("Terminaste el M&oacute;dulo","Buen trabajo.","Completaste Cosas Peque&ntilde;as. Sigue buscando los peque&ntilde;os detalles a tu alrededor: notarlos es lo que hace a un buen fot&oacute;grafo.")
 
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a>'

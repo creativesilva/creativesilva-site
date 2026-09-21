@@ -128,8 +128,7 @@ def camera_settings_section(es, quality="RAW"):
         note_t="Change only the shutter. If it is too bright outside, raise the shutter speed. If it is too dark, lower it, until the light meter is balanced. Indoors, with these settings, the light meter will read underexposed and the image will look black: that is expected. Outside it will be much closer."
     hdr=(f'<div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);border-left:5px solid {red};padding:9px 18px 9px 12px;margin-bottom:12px;box-sizing:border-box;">'
       f'<img src="{CAMSET_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
-      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#ff8f8f;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>'
-      f'<div style="height:2px;background:{red};width:60px;margin-bottom:18px;"></div>')
+      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#ff8f8f;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>')
     lead_html=f'<div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{lead}</span></div>'
     note_box=f'<div style="background:rgba(249,1,1,0.10);border:1px solid rgba(249,1,1,0.30);border-left:4px solid {red};padding:11px 14px;margin:14px 0 0;font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.55;">{note_t}</div>'
     return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
@@ -156,8 +155,7 @@ def own_device_capture(es):
     body=body.replace("{jpg}", badge)
     hdr=(f'<div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);border-left:5px solid {red};padding:9px 18px 9px 12px;margin-bottom:12px;box-sizing:border-box;">'
       f'<img src="{CAMSET_ICON}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
-      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#ff8f8f;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>'
-      f'<div style="height:2px;background:{red};width:60px;margin-bottom:18px;"></div>')
+      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:#ff8f8f;letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>')
     body_html=f'<div style="line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.90);">{body}</span></div>'
     return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       f'{hdr}{body_html}</div>')
@@ -196,8 +194,7 @@ def section_header(icon,title,accent,light):
     return ('<div style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%);'
       f'border-left:5px solid {accent};padding:9px 18px 9px 12px;margin-bottom:12px;box-sizing:border-box;">'
       f'<img src="{icon}" alt="" style="width:44px;height:44px;display:block;flex:0 0 auto;" />'
-      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:{light};letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>'
-      f'<div style="height:2px;background:{accent};width:60px;margin-bottom:18px;"></div>')
+      f'<span style="font-family:Arial,sans-serif;font-size:17pt;color:{light};letter-spacing:0.01em;line-height:1.15;"><strong>{title}</strong></span></div>')
 
 def capture_format(fmt, es=False):
     # Capture-format classifier: the JPG or RAW badge + "Image Capture" label, so students know which
@@ -443,7 +440,6 @@ def standards_box(es, aligns):
     return ('<details class="silva-standards" style="background:linear-gradient(180deg,rgba(38,222,120,0.12) 0%,rgba(38,222,120,0.03) 100%);border:1px solid rgba(38,222,120,0.35);border-left:6px solid #26de78;margin-bottom:24px;overflow:hidden;">'
       '<summary style="display:block;padding:14px 30px;cursor:pointer;">'
       + bar +
-      '<div style="height:2px;background:#26de78;width:60px;margin-top:12px;"></div>'
       '</summary>'
       f'<div style="padding:8px 30px 22px;">{rows}</div></details>')
 
