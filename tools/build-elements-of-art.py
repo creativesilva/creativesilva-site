@@ -92,7 +92,7 @@ def nav(current, dots, stepnav):
 
 # ---------------- OVERVIEW ----------------
 def overview():
-    en=banner("Digital Arts 1A",f"Module {MOD}: Elements of Art: Character Design","Meet the first two Elements of Art: Line and Shape.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Digital Arts 1A",f"Module {MOD}: Elements of Art, Character Design","Meet the first two Elements of Art: Line and Shape.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Design a Character from Line &amp; Shape",
         para("Welcome to the Elements of Art. Artists build every drawing from 7 simple building blocks called the Elements of Art. In this module you meet the first two: <strong>Line</strong> and <strong>Shape</strong>. Your job is to design your very own original character using only lines and shapes, in black and white. No color, no texture, no shading yet: just line and shape. The rest come later.")
         + framed(HEADER,"A Pioneer Valley student in the Academy of Arts lab sketching an original character in a sketchbook, with a screen showing the 7 Elements of Art")
@@ -121,7 +121,7 @@ def overview():
         VOCAB_EN), False)
     en+=next_up("UP NEXT &middot; STEP 01 - Draw Your Character","Grab your sketchbook and a pencil. Next you&rsquo;ll sketch, finalize, and name your original character.")
 
-    es=banner("Arte Digital 1A",f"M&oacute;dulo {MOD}: Elementos del Arte: Dise&ntilde;o de Personaje","Conoce los primeros dos Elementos del Arte: la L&iacute;nea y la Forma.","#top","Back to English")
+    es=banner("Arte Digital 1A",f"M&oacute;dulo {MOD}: Elementos del Arte, Dise&ntilde;o de Personaje","Conoce los primeros dos Elementos del Arte: la L&iacute;nea y la Forma.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Dise&ntilde;a un Personaje con L&iacute;nea y Forma",
         para("Bienvenido a los Elementos del Arte. Los artistas construyen todo dibujo a partir de 7 piezas b&aacute;sicas llamadas los Elementos del Arte. En este m&oacute;dulo conoces los primeros dos: la <strong>L&iacute;nea</strong> y la <strong>Forma</strong>. Tu trabajo es dise&ntilde;ar tu propio personaje original usando solo l&iacute;neas y formas, en blanco y negro. Nada de color, textura ni sombras todav&iacute;a: solo l&iacute;nea y forma. Lo dem&aacute;s viene despu&eacute;s.")
         + framed(HEADER,"Un estudiante de Pioneer Valley en el laboratorio de la Academia de Artes dibujando un personaje original en un cuaderno, con una pantalla que muestra los 7 Elementos del Arte")
@@ -153,7 +153,7 @@ def overview():
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
-    return wrap_page("Elements of Art: Character Design | Digital Arts 1A | PVHS", nav("Overview",dots,stepnav), top_wrap(en,es), bottom)
+    return wrap_page("Elements of Art, Character Design | Digital Arts 1A | PVHS", nav("Overview",dots,stepnav), top_wrap(en,es), bottom)
 
 # ---------------- STEP 01 ----------------
 def step01():
