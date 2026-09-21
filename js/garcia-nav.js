@@ -182,7 +182,7 @@
     logo.className = 'silva-uni-logo';
     logo.href = HOME;
     logo.setAttribute('aria-label', 'Mrs. Garcia, Photography 1A');
-    logo.innerHTML = '<img src="/logos/CS_Logo_Only_Teal.svg" alt="Mrs. Garcia" />';
+    logo.innerHTML = '<img src="/assets/garcia/lg-logo-mrs-garcia-v1.svg" alt="Mrs. Garcia" />';
     bar.appendChild(logo);
 
     var cat = document.createElement('div');
