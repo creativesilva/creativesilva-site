@@ -64,15 +64,17 @@ BP_STANDARDS=[
 # The camera-settings GRAPHIC is the LOCKED framework template (camera_settings_section): only the
 # three values + the "CHANGE THIS" position change. This separate red section carries the manual-mode
 # + High-Speed Continuous how-to and the drive-button close-up, which live OUTSIDE the locked graphic.
-def high_speed_section(es):
+def drive_mode_block(es):
+    # Returned as the `extra` slot of camera_settings_section, so the drive-mode content lives INSIDE
+    # the one Camera Settings box (no separate title block): a small red sub-label + the steps + the
+    # drive-button close-up. Steps verified against Canon's official EOS R50 manual (right key ->
+    # Main Dial -> High-Speed Continuous +).
     red="#f90101"
-    # Steps verified against Canon's official EOS R50 manual (Selecting the Drive Mode):
-    # press the right key (drive/self-timer), turn the Main Dial to pick the mode.
     if es:
-        title="Modo de Disparo"
-        intro=("Pon la c&aacute;mara en modo Manual (M). Luego pon el modo de disparo en Alta Velocidad Continua + "
-               "para que tome muchas fotos por segundo mientras mantienes el obturador presionado. As&iacute; "
-               "atrapas la fracci&oacute;n de segundo en que revienta el globo.")
+        sub="Modo de Disparo &middot; Alta Velocidad Continua +"
+        intro=("Pon la c&aacute;mara en modo Manual (M) para que mantenga estos ajustes. Luego pon el modo de "
+               "disparo en Alta Velocidad Continua + para que tome muchas fotos por segundo mientras mantienes el "
+               "obturador presionado. As&iacute; atrapas la fracci&oacute;n de segundo en que revienta el globo.")
         hs_steps=[
             ("Presiona la tecla derecha","el lado derecho del pad direccional atr&aacute;s, marcada con el &iacute;cono de disparo y temporizador (marcada en rojo)."),
             ("Gira el Dial Principal","para elegir Alta Velocidad Continua + (el &iacute;cono de cuadros apilados con un signo m&aacute;s)."),
@@ -80,10 +82,10 @@ def high_speed_section(es):
         ]
         btn_alt="Primer plano de la tecla derecha del pad direccional atr&aacute;s de la c&aacute;mara, marcada en rojo"
     else:
-        title="Drive Mode"
-        intro=("Set your camera to Manual (M). Then set the drive mode to High-Speed Continuous + so it takes many "
-               "photos per second while you hold the shutter button down. That is how you catch the split second "
-               "the balloon bursts.")
+        sub="Drive Mode &middot; High-Speed Continuous +"
+        intro=("Set your camera to Manual (M) so it holds these settings. Then set the drive mode to High-Speed "
+               "Continuous + so it takes many photos per second while you hold the shutter button down. That is how "
+               "you catch the split second the balloon bursts.")
         hs_steps=[
             ("Press the right key","the right side of the directional pad on the back, marked with the drive and self-timer icon (circled in red)."),
             ("Turn the Main Dial","to select High-Speed Continuous + (the stacked-frames icon with a plus)."),
@@ -98,13 +100,11 @@ def high_speed_section(es):
           f'<span style="font-size:12.5pt;color:rgba(255,255,255,0.90);line-height:1.5;"><strong>{b}</strong> {rest}</span></div>')
     hs_img=(f'<div style="flex:0 0 auto;width:200px;max-width:42%;"><div style="border:2px solid {red};background:#000;">'
       f'<img src="{BTN}" alt="{btn_alt}" style="display:block;width:100%;height:auto;" /></div></div>')
-    body=('<div style="display:flex;flex-wrap:wrap-reverse;gap:18px 26px;align-items:flex-start;">'
+    sublabel=(f'<div style="font-family:Arial,sans-serif;font-size:9.5pt;letter-spacing:0.14em;text-transform:uppercase;color:{red};margin-bottom:8px;"><strong>{sub}</strong></div>')
+    return (sublabel
+      + '<div style="display:flex;flex-wrap:wrap-reverse;gap:18px 26px;align-items:flex-start;">'
       + f'<div style="flex:1 1 320px;min-width:0;"><div style="font-size:13pt;color:rgba(255,255,255,0.88);line-height:1.6;margin-bottom:4px;">{intro}</div>{steps_html}</div>'
       + hs_img
-      + '</div>')
-    return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      + section_header(CAMSET_ICON, title, "#f90101", "#ff8f8f")
-      + body
       + '</div>')
 
 def downloads_block(es, C):
@@ -209,8 +209,7 @@ def step01(C):
             ("Share your best:","give your partner your best frames, and use theirs too."),
         ])
         + note("Water and cameras do not mix. Keep the camera back from the splash zone and dry your hands before you touch the gear."))
-    en+=camera_settings_section(False, quality="JPG", shutter="1/1600", aperture="F8.0", iso="800", change_field="shutter", activity="Balloon Pop")
-    en+=high_speed_section(False)
+    en+=camera_settings_section(False, quality="JPG", shutter="1/1600", aperture="F8.0", iso="800", change_field="shutter", activity="Balloon Pop", extra=drive_mode_block(False))
     en+=deliverables_box(False,
         [("1 to 3 favorite images (JPG),","your best frozen-globe photos, lightly cropped and uploaded to this Canvas assignment.")])
     en+=card("CROP &amp; SUBMIT","A Light Crop, Then Turn It In",
@@ -230,8 +229,7 @@ def step01(C):
             ("Comparte lo mejor:","dale a tu pareja tus mejores tomas y usa las de ella tambi&eacute;n."),
         ])
         + note("El agua y las c&aacute;maras no se llevan bien. Mant&eacute;n la c&aacute;mara lejos de la zona de salpicaduras y s&eacute;cate las manos antes de tocar el equipo."))
-    es+=camera_settings_section(True, quality="JPG", shutter="1/1600", aperture="F8.0", iso="800", change_field="shutter", activity="el Globo de Agua")
-    es+=high_speed_section(True)
+    es+=camera_settings_section(True, quality="JPG", shutter="1/1600", aperture="F8.0", iso="800", change_field="shutter", activity="el Globo de Agua", extra=drive_mode_block(True))
     es+=deliverables_box(True,
         [("1 a 3 im&aacute;genes favoritas (JPG),","tus mejores fotos de la esfera congelada, con un recorte ligero y subidas a esta tarea de Canvas.")])
     es+=card("RECORTA Y ENTREGA","Un Recorte Ligero, Luego Entrega",

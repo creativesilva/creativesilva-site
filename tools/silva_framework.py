@@ -125,7 +125,7 @@ def capture_panel(quality="RAW", shutter="1/500", aperture="F6.3", iso="100", ch
       f'<tr><td colspan="2" style="{boxtd}">{meter}</td><td style="{boxtd}">{iq}</td></tr>'
       '</tbody></table></div>')
 
-def camera_settings_section(es, quality="RAW", shutter="1/500", aperture="F6.3", iso="100", change_field="shutter", activity=None, note=None):
+def camera_settings_section(es, quality="RAW", shutter="1/500", aperture="F6.3", iso="100", change_field="shutter", activity=None, note=None, extra=""):
     # LOCKED template. Per module, only the three values + change_field + quality + the activity noun
     # (and an optional note override) vary. Defaults reproduce the original photo-walk section byte for
     # byte, so existing modules are unchanged.
@@ -148,6 +148,7 @@ def camera_settings_section(es, quality="RAW", shutter="1/500", aperture="F6.3",
       + section_header(CAMSET_ICON, title, "#f90101", "#ff8f8f")
       + f'<div class="silva-cfloat" style="width:50%;min-width:400px;margin:2px 0 16px 30px;">{capture_panel(quality, shutter, aperture, iso, change_field)}</div>'
       + lead_html + note_box
+      + (f'<div style="clear:both;border-top:1px solid rgba(249,1,1,0.22);margin-top:22px;padding-top:20px;">{extra}</div>' if extra else '')
       + '</div>')
 
 def own_device_capture(es):
