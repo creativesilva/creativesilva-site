@@ -3418,7 +3418,7 @@
       { label: 'iPhone', file: 'items/iphone-mockup-v3.png' },
       { label: 'Pantone swatch book', file: 'items/pantone-swatch-book-v1.png' },
       { label: 'Vomero 5 shoes (Patricia)', file: 'patricia-vomero-5-v1.png' },
-      { label: 'PV cheer outfit', file: 'items/pv-cheer-outfit-v1.jpg' },
+      { label: 'PV cheer outfit (female)', file: 'items/pv-cheer-outfit-v1.jpg' },
       { label: 'PV quarter zip (male)', file: 'items/quarter-zip-male-v1.jpg' }
     ];
     var SCENES = [
@@ -3564,8 +3564,9 @@
       refGroup.appendChild(el('div','ps2-gtitle','Reference files'));
       if(OUTFIT){
         refGroup.appendChild(slotGroup('Character sheet + full-body views (up to 4)', state.chars, CHARACTERS, false));
+        refGroup.appendChild(slotGroup('Outfit, apparel & items to attach (up to 4)', state.items, ITEMS, false));
         refGroup.appendChild(backdropSlot());
-        refGroup.appendChild(el('div','ps2-hint','Pick the character sheet or a single full-body view here (Image A). Attach your headshots (Image B to D) and new-outfit images (Image E to I) straight into the generator. Body proportions always come from the character sheet or full-body view, never from the outfit photos.'));
+        refGroup.appendChild(el('div','ps2-hint','Image A is the character sheet or full-body view. Add any outfit, apparel, or item references (cheer outfit, quarter zip, camera, bag, etc.) from the dropdown to bake their file names into the prompt, or attach extra outfit/headshot images straight into the generator. Body proportions always come from the character sheet, never from the outfit or product photos.'));
       } else {
         refGroup.appendChild(slotGroup('Characters (up to 4)', state.chars, CHARACTERS, false));
         refGroup.appendChild(slotGroup('Items (up to 4)', state.items, ITEMS, false));
@@ -3673,7 +3674,14 @@
         var cu=(state.custom||'').trim();
         if(cu) parts.push('CUSTOM ADJUSTMENTS (apply exactly, without changing body proportions): '+cu);
         var chars=state.chars.filter(Boolean).map(baseName);
-        if(chars.length) parts.push('ATTACHED REFERENCE FILES (match these exactly, by file name):\n- Character sheet + identity: '+chars.join(', ')+'\n- Outfit reference images: attached separately in the generator.');
+        var items=state.items.filter(Boolean).map(baseName);
+        if(chars.length || items.length){
+          var block='ATTACHED REFERENCE FILES (match these exactly, by file name):';
+          if(chars.length) block+='\n- Character sheet + identity: '+chars.join(', ');
+          if(items.length) block+='\n- Outfit / apparel / items: '+items.join(', ')+' (wardrobe and props only, never body proportions)';
+          block+='\n- Any extra headshots or outfit images: attached separately in the generator.';
+          parts.push(block);
+        }
         return parts.join('\n\n').replace(/\n{3,}/g,'\n\n').trim();
       }
       function compose(){
