@@ -49,12 +49,13 @@ def downloads_block(es):
       + folder_note(es, AREA) + '</div>')
 
 def video_float(es):
-    # Clickable, TEAL-framed video cover that floats right inside the teal content card (cohesion:
-    # a content-card accent stays teal). Real CSS float so the full-width concept grid can sit below
-    # it after a clear, matching the legacy layout. No caption in the source, so none added.
+    # Clickable, PURPLE-framed video cover that floats right inside the purple resources card
+    # (cohesion: every element inside the Resources section inherits its purple accent). Real CSS
+    # float so the full-width concept grid can sit below it after a clear, matching the legacy
+    # layout. No caption in the source, so none added.
     alt="Haz Clic para Ver en Vimeo" if es else "Click to Watch on Vimeo"
     return (f'<a href="{VIMEO}" target="_blank" rel="noopener" style="text-decoration:none;display:block;float:right;width:28%;min-width:200px;margin:0 0 14px 22px;line-height:0;">'
-      '<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;line-height:0;">'
+      '<div style="background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;line-height:0;">'
       f'<img src="{VIDEO_THUMB}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div></a>')
 
 # The 20 composition concepts, in video order.
@@ -133,14 +134,14 @@ def concepts_grid(es):
         title = es_name if es else en_name
         sub   = en_name if es else es_name
         desc  = es_desc if es else en_desc
-        items+=('<details style="flex:1 1 45%;min-width:260px;background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;">'
-          '<summary style="background:linear-gradient(135deg,#094043 0,#094043 30px,#041d1c 30px,#041d1c 100%);padding:12px 14px;cursor:pointer;">'
-          f'<span style="font-size:12pt;color:#5eead4;"><strong>{n:02d}</strong></span> '
+        items+=('<details style="flex:1 1 45%;min-width:260px;background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;">'
+          '<summary style="background:linear-gradient(135deg,#241d3a 0,#241d3a 30px,#140f24 30px,#140f24 100%);padding:12px 14px;cursor:pointer;">'
+          f'<span style="font-size:12pt;color:#c4b5fd;"><strong>{n:02d}</strong></span> '
           f'<span style="font-size:12.5pt;color:#ffffff;"><strong>{title}</strong></span> '
-          f'<span style="font-size:10.5pt;color:#80e0e0;"><strong>{tc}</strong></span>'
+          f'<span style="font-size:10.5pt;color:#c4b5fd;"><strong>{tc}</strong></span>'
           f'<div style="font-size:10pt;color:rgba(255,255,255,0.6);margin-top:2px;">{sub}</div></summary>'
           f'<div style="padding:12px 14px 6px;font-size:11pt;line-height:1.55;color:rgba(255,255,255,0.85);">{desc}<div style="margin-top:8px;">'
-          f'<a href="{VIMEO}#t={sec}s" target="_blank" rel="noopener" style="color:#5eead4;font-size:10.5pt;text-decoration:none;"><strong>{watch_word}{tc} &#8594;</strong></a>'
+          f'<a href="{VIMEO}#t={sec}s" target="_blank" rel="noopener" style="color:#c4b5fd;font-size:10.5pt;text-decoration:none;"><strong>{watch_word}{tc} &#8594;</strong></a>'
           '</div></div></details>')
     return f'<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;">{items}</div>'
 
@@ -184,12 +185,12 @@ def overview():
         + note_orange(FRESH_EN))
     en+=standards_box(False, CC_STANDARDS)
     en+=downloads_block(False)
-    en+=card("WATCH, THEN PICK 3","The 20 Composition Concepts",
+    en+=resources_card("The 20 Composition Concepts",
         video_float(False)
         + para("Watch the whole video first: it walks through all 20 concepts in about 20 minutes. Click the image to watch it on Vimeo. Then pick any 3 of the 20 below. Tap a concept to open a short description, and use its time code to jump to that moment in the video and watch it in action. You will take one photo for each concept you choose.")
-        + '<div style="margin-top:12px;">' + dl_link(VIMEO,"Watch on Vimeo",download=False) + '</div>'
+        + '<div style="margin-top:12px;">' + reslink(VIMEO,"Watch on Vimeo") + '</div>'
         + '<div style="clear:both;"></div>'
-        + concepts_grid(False))
+        + concepts_grid(False), False)
 
     en+=next_up("UP NEXT &middot; STEP 01 - Capture &amp; Submit","Capture your 3 concepts.")
     es=banner("Fotograf&iacute;a 1A","M&oacute;dulo 02: Conceptos de Composici&oacute;n","20 formas de encuadrar una foto. Elige 3.","#top","Back to English")
@@ -199,12 +200,12 @@ def overview():
         + note_orange(FRESH_ES))
     es+=standards_box(True, CC_STANDARDS)
     es+=downloads_block(True)
-    es+=card("MIRA, LUEGO ELIGE 3","Los 20 Conceptos de Composici&oacute;n",
+    es+=resources_card("Los 20 Conceptos de Composici&oacute;n",
         video_float(True)
         + para("Mira todo el video primero: muestra los 20 conceptos en unos 20 minutos. Haz clic en la imagen para verlo en Vimeo. Luego elige 3 de los 20 de abajo. Toca un concepto para abrir una descripci&oacute;n corta, y usa su tiempo para saltar a ese momento del video y verlo en acci&oacute;n. Tomar&aacute;s una foto para cada concepto que elijas.")
-        + '<div style="margin-top:12px;">' + dl_link(VIMEO,"Ver en Vimeo",download=False) + '</div>'
+        + '<div style="margin-top:12px;">' + reslink(VIMEO,"Ver en Vimeo") + '</div>'
         + '<div style="clear:both;"></div>'
-        + concepts_grid(True))
+        + concepts_grid(True), True)
 
     es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 01 - Captura y Entrega","Captura tus 3 conceptos.")
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)

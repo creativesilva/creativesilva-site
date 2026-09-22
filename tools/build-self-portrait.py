@@ -214,7 +214,7 @@ def step01():
         + para("Polish it (optional): if your phone has editing tools, adjust exposure, brightness, and color to make your image look its best. Keep it clean and natural.")
         + para("Save it as a JPG: your final image must be a JPG. If your phone saves photos as HEIF or HEIC, email the photo to your school computer, open it, and save or export it as a JPG. Not sure how? Ask me in class and I will help.")
         + note_orange(FRESH_EN))
-    en+=capture_format("jpg")
+    en+=own_device_capture(False)
     en+=deliverables_box(False,
         [("1 JPG:","One final, polished, creative self-portrait, saved as a JPG.")])
     en+=next_up("UP NEXT &middot; STEP 02 - Reflection","With your self-portrait turned in, you&rsquo;ll look back at what worked and what you&rsquo;d improve next time.")
@@ -227,7 +227,7 @@ def step01():
         + para("Pule tu imagen (opcional): si tu tel&eacute;fono tiene herramientas de edici&oacute;n, ajusta la exposici&oacute;n, el brillo y el color para que tu imagen se vea lo mejor posible. Mant&eacute;nla limpia y natural.")
         + para("Gu&aacute;rdala como JPG: tu imagen final debe ser un JPG. Si tu tel&eacute;fono guarda las fotos como HEIF o HEIC, env&iacute;a la foto por correo a tu computadora de la escuela, &aacute;brela y gu&aacute;rdala o exp&oacute;rtala como JPG. &iquest;No sabes c&oacute;mo? Pregunta en clase y te ayudo.")
         + note_orange(FRESH_ES))
-    es+=capture_format("jpg", True)
+    es+=own_device_capture(True)
     es+=deliverables_box(True,
         [("1 JPG:","Un autorretrato final, pulido y creativo, guardado como JPG.")])
     es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Reflexi&oacute;n","Con tu autorretrato entregado, vas a mirar atr&aacute;s: qu&eacute; funcion&oacute; y qu&eacute; mejorar&iacute;as la pr&oacute;xima vez.")
