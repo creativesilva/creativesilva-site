@@ -86,7 +86,7 @@ PG_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Digital Arts 1A","Module 01: Pictograms","Simple pictures that speak with no words.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Digital Arts 1A","Module 01: Pictograms","Simple pictures that speak with no words.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=type_card("overview","The Module Overview","What Is a Pictogram?",
         para("A pictogram is a simple picture that stands for an idea, an object, or an action. The best part is that you understand it without reading a single word. You just look at it and know what it means.")
         + framed(HERO,"Pictograms"))
@@ -118,7 +118,7 @@ def overview():
            ("Reimagine","To rethink an idea and make your own new version, not a copy of what you found. You keep the meaning but change the look.")]), False)
 
     en+=next_up("UP NEXT &middot; STEP 01 - Find &amp; Save","Build your pictogram folder in OneDrive.")
-    es=banner("Arte Digital 1A","M&oacute;dulo 01: Pictogramas","Dibujos simples que hablan sin palabras.","#top","Back to English")
+    es=banner("Arte Digital 1A","M&oacute;dulo 01: Pictogramas","Dibujos simples que hablan sin palabras.","#top","Back to English", HICON_DESIGN)
     es+=type_card("overview","El Resumen del M&oacute;dulo","&iquest;Qu&eacute; Es Un Pictograma?",
         para("Un pictograma es un dibujo simple que representa una idea, un objeto o una acci&oacute;n. Lo mejor es que lo entiendes sin leer ni una palabra. Solo lo miras y sabes qu&eacute; significa.")
         + framed(HERO,"Pictogramas"))
@@ -157,7 +157,7 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Module 01 &bull; Step 01","Find &amp; Save","Build your pictogram folder in OneDrive.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 01 &bull; Step 01","Find &amp; Save","Build your pictogram folder in OneDrive.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=card("","Make Your Folder and Collect 6 to 10 Pictograms",
         float_right(FIND_FLOAT,"Student searching Google Images for pictograms to save","Search, then save the ones you like into your folder.")
         + para("In this step you will make a new folder and fill it with real pictogram examples.")
@@ -177,7 +177,7 @@ def step01():
         [("1 screen capture (PNG):","your &lsquo;pictogram&rsquo; folder open, showing the 6 to 10 pictograms you saved, uploaded to this Canvas assignment.")])
 
     en+=next_up("UP NEXT &middot; STEP 02 - Sketch &amp; Reflect","Reimagine 3 pictograms in your sketchbook.")
-    es=banner("M&oacute;dulo 01 &bull; Paso 01","Buscar y Guardar","Crea tu carpeta de pictogramas en OneDrive.","#top","Back to English")
+    es=banner("M&oacute;dulo 01 &bull; Paso 01","Buscar y Guardar","Crea tu carpeta de pictogramas en OneDrive.","#top","Back to English", HICON_DESIGN)
     es+=card("","Crea Tu Carpeta y Junta 6 a 10 Pictogramas",
         float_right(FIND_FLOAT,"Estudiante buscando pictogramas en Google Im&aacute;genes para guardar","Busca y guarda los que te gusten en tu carpeta.")
         + para("En este paso vas a crear una carpeta nueva y llenarla con ejemplos reales de pictogramas.")

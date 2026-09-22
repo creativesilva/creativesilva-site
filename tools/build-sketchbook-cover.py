@@ -107,7 +107,7 @@ SC_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Digital Arts 1A","Module 03: Sketchbook Cover Art","Design a cover worth showing off.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Digital Arts 1A","Module 03: Sketchbook Cover Art","Design a cover worth showing off.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=type_card("overview","The Module Overview","Make Your Sketchbook Your Own",
         para("Time to make your sketchbook yours. You will decorate and personalize the manila cover of your 8.5 by 11 inch sketchbook and turn it into art you are proud of. This is a friendly class competition: the best cover wins a prize. You have one week, and you may take your sketchbook home to keep working on it.")
         + framed(HEADER_IMG,"Sketchbook Cover"))
@@ -142,7 +142,7 @@ def overview():
         + adobe_link("Adobe Fonts (fonts.adobe.com)"), False)
 
     en+=next_up("UP NEXT &middot; STEP 01 - Design Your Cover","Design your covers, then turn in two photos.")
-    es=banner("Arte Digital 1A","M&oacute;dulo 03: Arte de la Portada","Dise&ntilde;a una portada digna de presumir.","#top","Back to English")
+    es=banner("Arte Digital 1A","M&oacute;dulo 03: Arte de la Portada","Dise&ntilde;a una portada digna de presumir.","#top","Back to English", HICON_DESIGN)
     es+=type_card("overview","El Resumen del M&oacute;dulo","Haz Tuyo Tu Cuaderno",
         para("Es hora de hacer tuyo tu cuaderno. Vas a decorar y personalizar la portada de manila de tu cuaderno de 8.5 por 11 pulgadas y convertirla en arte del que te sientas orgulloso. Esta es una competencia amistosa de la clase: la mejor portada gana un premio. Tienes una semana, y puedes llevar tu cuaderno a casa para seguir trabajando.")
         + framed(HEADER_IMG,"Portada del Cuaderno"))
@@ -184,7 +184,7 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Module 03 &bull; Step 01","Design Your Cover","Design your covers, then turn in two photos.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 03 &bull; Step 01","Design Your Cover","Design your covers, then turn in two photos.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=card("STEP 01 / DESIGN &amp; CREATE","Design Your Cover",
         cooper_float("One of your 3 words must be drawn in Cooper Black. Use this alphabet as your guide. Tap the image to open it full size.")
         + para("Now design your cover. Plan where your name, period, and 3 words will go, then decorate the front and the back. Take your time and make it yours. You can work in class and take your sketchbook home for more.")
@@ -215,7 +215,7 @@ def step01():
         + note("This is Step 1 and it is graded on its own. The reflection is turned in separately on Step 2."))
 
     en+=next_up("UP NEXT &middot; STEP 02 - Submit &amp; Reflect","Complete and upload your reflection.")
-    es=banner("M&oacute;dulo 03 &bull; Paso 01","Dise&ntilde;a Tu Portada","Dise&ntilde;a tus portadas y entrega dos fotos.","#top","Back to English")
+    es=banner("M&oacute;dulo 03 &bull; Paso 01","Dise&ntilde;a Tu Portada","Dise&ntilde;a tus portadas y entrega dos fotos.","#top","Back to English", HICON_DESIGN)
     es+=card("PASO 01 / DISE&Ntilde;A Y CREA","Dise&ntilde;a Tu Portada",
         cooper_float("Una de tus 3 palabras debe estar dibujada en Cooper Black. Usa este alfabeto como gu&iacute;a. Toca la imagen para abrirla en tama&ntilde;o completo.")
         + para("Ahora dise&ntilde;a tu portada. Planea d&oacute;nde ir&aacute;n tu nombre, tu periodo y tus 3 palabras, y luego decora el frente y el reverso. T&oacute;mate tu tiempo y hazla tuya. Puedes trabajar en clase y llevar tu cuaderno a casa para m&aacute;s.")

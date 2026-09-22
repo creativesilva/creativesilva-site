@@ -66,6 +66,7 @@ HICON_PHOTO_WALK=f"{SITE}/assets/Icons/assignment/photo-walk-white-v1.png"
 HICON_YOUR_DEVICE=f"{SITE}/assets/Icons/assignment/your-device-white-v1.png"
 HICON_SKETCH=f"{SITE}/assets/Icons/assignment/sketch-white-v2.png"
 HICON_REFLECT=f"{SITE}/assets/Icons/assignment/reflection-white-v4.png"
+HICON_DESIGN=f"{SITE}/assets/Icons/assignment/design-white-v1.png"
 
 # Camera-settings panel (red camera-kit modules): the on-screen settings mimic + its teaching
 # section. quality="RAW" or "JPG" swaps only the Image Quality badge. Canvas-safe fixed 3-col table:

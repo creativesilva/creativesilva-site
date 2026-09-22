@@ -185,7 +185,7 @@ MP_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Digital Arts 1A","Module 04: Motivational Poster","Design a poster that hypes up someone who inspires you.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Digital Arts 1A","Module 04: Motivational Poster","Design a poster that hypes up someone who inspires you.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=type_card("overview","The Module Overview","What You Will Make",
         para("You will design a motivational poster of someone who inspires you, in Photoshop. Your subject can be a real person or a fictional character: an athlete, a musician, a leader, a superhero, anyone who motivates you. You will cut your subject out of their background, add a bold motion-blurred background behind them, and finish with a real quote they actually said, their name, and colors that all work together. The goal is a clean, hype-worthy poster you would be proud to print and hang up.")
         + framed(EXAMPLE,"Example motivational poster")
@@ -215,7 +215,7 @@ def overview():
         ]), False)
 
     en+=next_up("UP NEXT &middot; STEP 01 - Build the Poster","Set up OneDrive, open Photoshop, then build.")
-    es=banner("Arte Digital 1A","M&oacute;dulo 04: P&oacute;ster Motivacional","Dise&ntilde;a un p&oacute;ster que anime a alguien que te inspira.","#top","Back to English")
+    es=banner("Arte Digital 1A","M&oacute;dulo 04: P&oacute;ster Motivacional","Dise&ntilde;a un p&oacute;ster que anime a alguien que te inspira.","#top","Back to English", HICON_DESIGN)
     es+=type_card("overview","El Resumen del M&oacute;dulo","Lo Que Vas a Crear",
         para("Vas a dise&ntilde;ar un p&oacute;ster motivacional de alguien que te inspira, en Photoshop. Tu sujeto puede ser una persona real o un personaje de ficci&oacute;n: un atleta, un m&uacute;sico, un l&iacute;der, un superh&eacute;roe, cualquiera que te motive. Vas a recortar a tu sujeto de su fondo, agregar un fondo con desenfoque de movimiento detr&aacute;s, y terminar con una frase real que haya dicho, su nombre y colores que combinen. La meta es un p&oacute;ster limpio y llamativo que te sientas orgulloso de imprimir y colgar.")
         + framed(EXAMPLE,"Ejemplo de p&oacute;ster motivacional")
@@ -254,7 +254,7 @@ def overview():
 def step01():
     global STEPLBL
     STEPLBL="STEP"
-    en=banner("Module 04 &bull; Step 01","Build the Poster","Set up OneDrive, open Photoshop, then build.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 04 &bull; Step 01","Build the Poster","Set up OneDrive, open Photoshop, then build.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=card("BEFORE YOU START / ONEDRIVE","Check OneDrive and Make Your Folder",
         para("Do this first, every time. It keeps your work saving to the cloud so you never lose it.")
         + stepblock(1,"Check OneDrive Is Syncing","Look at the menu bar in the top-right corner of the screen, next to the date and time. Find the OneDrive cloud icon. A steady gray or blue cloud means it is syncing. If the cloud has a red X or a warning sign, click it and sign in with your school account to clear the error before you go on.")
@@ -316,7 +316,7 @@ def step01():
 
     STEPLBL="PASO"
     en+=next_up("UP NEXT &middot; STEP 02 - Make the Mobile Version","Remake your poster to fit a phone screen.")
-    es=banner("M&oacute;dulo 04 &bull; Paso 01","Construye el P&oacute;ster","Configura OneDrive, abre Photoshop y construye.","#top","Back to English")
+    es=banner("M&oacute;dulo 04 &bull; Paso 01","Construye el P&oacute;ster","Configura OneDrive, abre Photoshop y construye.","#top","Back to English", HICON_DESIGN)
     es+=card("ANTES DE EMPEZAR / ONEDRIVE","Revisa OneDrive y Crea Tu Carpeta",
         para("Haz esto primero, cada vez. Mantiene tu trabajo guard&aacute;ndose en la nube para que nunca lo pierdas.")
         + stepblock(1,"Revisa que OneDrive Est&eacute; Sincronizando","Mira la barra de men&uacute;s en la esquina superior derecha de la pantalla, junto a la fecha y la hora. Busca el &iacute;cono de nube de OneDrive. Una nube gris o azul fija significa que est&aacute; sincronizando. Si la nube tiene una X roja o un signo de advertencia, haz clic en ella e inicia sesi&oacute;n con tu cuenta escolar para quitar el error antes de seguir.")
@@ -386,7 +386,7 @@ def step01():
 def step02():
     global STEPLBL
     STEPLBL="STEP"
-    en=banner("Module 04 &bull; Step 02","Make the Mobile Version","Remake your poster to fit a phone screen.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 04 &bull; Step 02","Make the Mobile Version","Remake your poster to fit a phone screen.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=card("BEFORE YOU START / ONEDRIVE","Same Folder, New Size",
         float_right(WP_FLOAT,"A student in the design lab holding her phone with the finished wallpaper, the same design open in Photoshop behind her","Your design, sized for a phone screen.")
         + para("You already made the print poster. Now make a second version, sized for a phone screen.")
@@ -422,7 +422,7 @@ def step02():
 
     STEPLBL="PASO"
     en+=next_up("UP NEXT &middot; STEP 03 - Turn In Your Reflection","Reflect on your whole design process.")
-    es=banner("M&oacute;dulo 04 &bull; Paso 02","Haz la Versi&oacute;n M&oacute;vil","Rehaz tu p&oacute;ster para que quepa en la pantalla de un tel&eacute;fono.","#top","Back to English")
+    es=banner("M&oacute;dulo 04 &bull; Paso 02","Haz la Versi&oacute;n M&oacute;vil","Rehaz tu p&oacute;ster para que quepa en la pantalla de un tel&eacute;fono.","#top","Back to English", HICON_DESIGN)
     es+=card("ANTES DE EMPEZAR / ONEDRIVE","Misma Carpeta, Nuevo Tama&ntilde;o",
         float_right(WP_FLOAT,"Una estudiante en el laboratorio de dise&ntilde;o sostiene su tel&eacute;fono con el fondo de pantalla terminado, con el mismo dise&ntilde;o abierto en Photoshop detr&aacute;s","Tu dise&ntilde;o, hecho para la pantalla del tel&eacute;fono.")
         + para("Ya hiciste el p&oacute;ster para imprimir. Ahora haz una segunda versi&oacute;n, del tama&ntilde;o de una pantalla de tel&eacute;fono.")

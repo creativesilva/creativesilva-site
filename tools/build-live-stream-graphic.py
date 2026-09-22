@@ -104,7 +104,7 @@ LSG_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Digital Arts 1A","Module 05: Live Stream Graphic","Learn Photoshop, then design your own YouTube thumbnail.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Digital Arts 1A","Module 05: Live Stream Graphic","Learn Photoshop, then design your own YouTube thumbnail.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=type_card("overview","The Module Overview","Build a Graphic, Then Design Your Own Thumbnail",
         float_right(END_IMG,"Finished History 301 Live Stream graphic: an arch photo with an orange bar on the left, a blue bar on the right, a green wash, and the words HISTORY 301 and LIVE STREAM in white","The live stream graphic you build in Step 1 (your warm-up).")
         + para("In this project you learn Adobe Photoshop, then use it to make something of your own. First, in Step 1, you follow clear steps to build a live stream promo graphic, so everyone learns the same tools. Then, in Steps 2 to 4, you find YouTube thumbnail inspiration, design your own thumbnail, and reflect on it.")
@@ -134,7 +134,7 @@ def overview():
            ("Thumbnail","The small preview image on a YouTube video. A good one grabs attention and reads clearly even when it is small.")]), False)
 
     en+=next_up("UP NEXT &middot; STEP 01 - Build It in Photoshop","Follow the steps to build your warm-up graphic.")
-    es=banner("Arte Digital 1A","M&oacute;dulo 05: Gr&aacute;fico de Live Stream","Aprende Photoshop y luego dise&ntilde;a tu propia miniatura de YouTube.","#top","Back to English")
+    es=banner("Arte Digital 1A","M&oacute;dulo 05: Gr&aacute;fico de Live Stream","Aprende Photoshop y luego dise&ntilde;a tu propia miniatura de YouTube.","#top","Back to English", HICON_DESIGN)
     es+=type_card("overview","El Resumen del M&oacute;dulo","Crea un Gr&aacute;fico y Luego Dise&ntilde;a Tu Propia Miniatura",
         float_right(END_IMG,"Gr&aacute;fico terminado de History 301 Live Stream: una foto de un arco con una barra naranja a la izquierda, una barra azul a la derecha, un ba&ntilde;o verde y las palabras HISTORY 301 y LIVE STREAM en blanco","El gr&aacute;fico de live stream que creas en el Paso 1 (tu calentamiento).")
         + para("En este proyecto aprendes Adobe Photoshop y luego lo usas para crear algo tuyo. Primero, en el Paso 1, sigues pasos claros para crear un gr&aacute;fico promocional de live stream, para que todos aprendan las mismas herramientas. Luego, en los Pasos 2 al 4, buscas inspiraci&oacute;n de miniaturas de YouTube, dise&ntilde;as tu propia miniatura y reflexionas sobre ella.")
@@ -169,7 +169,7 @@ def overview():
 
 # ---------------- STEP 01 : warm-up build ----------------
 def step01():
-    en=banner("Module 05 &bull; Step 01","Build It in Photoshop","Follow the steps to build your warm-up graphic.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 05 &bull; Step 01","Build It in Photoshop","Follow the steps to build your warm-up graphic.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=deliverables_box(False,
         [("1 image (JPG):","your finished Live Stream graphic (01Working.jpg), uploaded to this Canvas assignment.")])
     en+=resources_card("Lesson Slides",
@@ -179,7 +179,7 @@ def step01():
         False, floatimg=slide_deck(False))
 
     en+=next_up("UP NEXT &middot; STEP 02 - Find Your Inspiration","Pick one channel you love and study its thumbnails.")
-    es=banner("M&oacute;dulo 05 &bull; Paso 01","Cr&eacute;alo en Photoshop","Sigue los pasos para crear tu gr&aacute;fico de calentamiento.","#top","Back to English")
+    es=banner("M&oacute;dulo 05 &bull; Paso 01","Cr&eacute;alo en Photoshop","Sigue los pasos para crear tu gr&aacute;fico de calentamiento.","#top","Back to English", HICON_DESIGN)
     es+=deliverables_box(True,
         [("1 imagen (JPG):","tu gr&aacute;fico de Live Stream terminado (01Working.jpg), subido a esta tarea de Canvas.")])
     es+=resources_card("Diapositivas de la Lecci&oacute;n",
@@ -194,7 +194,7 @@ def step01():
 
 # ---------------- STEP 02 : YouTube thumbnail inspiration ----------------
 def step02():
-    en=banner("Module 05 &bull; Step 02","Find Your Inspiration","Pick one channel you love and study its thumbnails.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 05 &bull; Step 02","Find Your Inspiration","Pick one channel you love and study its thumbnails.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=card("STEP 02 / INSPIRATION","Study One Channel You Love on YouTube",
         float_right(YT_IMG,"A YouTube channel page open in a browser, showing a row of the channel&rsquo;s video thumbnails that share the same bold-text, big-face design language","One channel you chose. See how its thumbnails share a design language.")
         + para("Before you design your own, look at what already works. A thumbnail is the small preview image on a YouTube video, the one that makes you want to click. Pick ONE specific channel you like and study ITS thumbnails, not random search results.")
@@ -211,7 +211,7 @@ def step02():
         [("Inspiration (PNG):","one or more screen captures of thumbnails from the channel you chose, saved as PNG in your &lsquo;"+FOLDER+"&rsquo; folder and uploaded to this Canvas assignment.")])
 
     en+=next_up("UP NEXT &middot; STEP 03 - Design Your Own Thumbnail","Make your own YouTube thumbnail in Photoshop.")
-    es=banner("M&oacute;dulo 05 &bull; Paso 02","Busca Tu Inspiraci&oacute;n","Elige un canal que te encante y estudia sus miniaturas.","#top","Back to English")
+    es=banner("M&oacute;dulo 05 &bull; Paso 02","Busca Tu Inspiraci&oacute;n","Elige un canal que te encante y estudia sus miniaturas.","#top","Back to English", HICON_DESIGN)
     es+=card("PASO 02 / INSPIRACI&Oacute;N","Estudia Un Canal Que Te Encante en YouTube",
         float_right(YT_IMG,"La p&aacute;gina de un canal de YouTube abierta en un navegador, mostrando una fila de las miniaturas del canal que comparten el mismo lenguaje de dise&ntilde;o de texto en negrita y caras grandes","Un canal que elegiste. Mira c&oacute;mo sus miniaturas comparten un lenguaje de dise&ntilde;o.")
         + para("Antes de dise&ntilde;ar la tuya, mira lo que ya funciona. Una miniatura es la imagen peque&ntilde;a de vista previa de un video de YouTube, la que te dan ganas de hacer clic. Elige UN canal espec&iacute;fico que te guste y estudia SUS miniaturas, no resultados de b&uacute;squeda al azar.")
@@ -233,7 +233,7 @@ def step02():
 
 # ---------------- STEP 03 : design your own thumbnail ----------------
 def step03():
-    en=banner("Module 05 &bull; Step 03","Design Your Own Thumbnail","Make your own YouTube thumbnail in Photoshop.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 05 &bull; Step 03","Design Your Own Thumbnail","Make your own YouTube thumbnail in Photoshop.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=card("STEP 03 / DESIGN","Design Your Thumbnail",
         float_right(DESIGN_FLOAT,"A Pioneer Valley student in the design lab making his own YouTube thumbnail in Photoshop, a bold &lsquo;5 Ways to Score Like a Pro&rsquo; basketball design on the iMac screen","Design your own thumbnail in Photoshop, bold and easy to read.")
         + para("Now make your own. Use the Photoshop skills from your Step 1 warm-up and the ideas you gathered in Step 2.")
@@ -250,7 +250,7 @@ def step03():
         [("1 thumbnail (JPG):","your finished, polished YouTube thumbnail, exported as a JPG and uploaded to this Canvas assignment.")])
 
     en+=next_up("UP NEXT &middot; STEP 04 - Turn In Your Reflection","Reflect on the thumbnail you made.")
-    es=banner("M&oacute;dulo 05 &bull; Paso 03","Dise&ntilde;a Tu Propia Miniatura","Crea tu propia miniatura de YouTube en Photoshop.","#top","Back to English")
+    es=banner("M&oacute;dulo 05 &bull; Paso 03","Dise&ntilde;a Tu Propia Miniatura","Crea tu propia miniatura de YouTube en Photoshop.","#top","Back to English", HICON_DESIGN)
     es+=card("PASO 03 / DISE&Ntilde;O","Dise&ntilde;a Tu Miniatura",
         float_right(DESIGN_FLOAT,"Un estudiante de Pioneer Valley en el laboratorio creando su propia miniatura de YouTube en Photoshop, un dise&ntilde;o de baloncesto en negrita &lsquo;5 Ways to Score Like a Pro&rsquo; en la pantalla de la iMac","Dise&ntilde;a tu propia miniatura en Photoshop, en negrita y f&aacute;cil de leer.")
         + para("Ahora crea la tuya. Usa las habilidades de Photoshop de tu calentamiento del Paso 1 y las ideas que juntaste en el Paso 2.")
