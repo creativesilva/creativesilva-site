@@ -51,16 +51,18 @@ def slides_section(es):
     heading="Las Diapositivas de Hoy" if es else "Today&rsquo;s Slides"
     body=("Vemos estas diapositivas juntos en clase. Las 12 diapositivas est&aacute;n abajo." if es
           else "We go through these slides together in class. All 12 slides are below.")
-    hint="Desliza por las 12 diapositivas &darr;" if es else "Scroll through all 12 slides &darr;"
+    hint="Desliza de lado para ver las 12 diapositivas &rarr;" if es else "Slide sideways to see all 12 slides &rarr;"
     altf=(lambda n: f"Diapositiva {n}") if es else (lambda n: f"Color Theory slide {n}")
+    # Slides scroll HORIZONTALLY (Chris, 2026-09-22): each slide is an inline-block ~82% wide so one
+    # shows with a peek of the next, signalling you can slide. white-space:nowrap keeps them in a row.
     frames=""
     for n in range(1,13):
         src=f"{IMG}/{folder}/color-theory-{prefix}-slide-{n:02d}-v2.jpg"
-        mb="0" if n==12 else "12px"
-        frames+=(f'<div style="background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;margin:0 0 {mb};">'
+        mr="0" if n==12 else "12px"
+        frames+=(f'<div style="display:inline-block;vertical-align:top;white-space:normal;width:min(82%,620px);margin:0 {mr} 0 0;background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;">'
           f'<img src="{src}" alt="{altf(n)}" style="display:block;width:100%;height:auto;" /></div>')
-    hintline=f'<div style="font-size:11pt;color:#c4b5fd;letter-spacing:0.04em;margin:0 0 10px;"><strong>{hint}</strong></div>'
-    panel=('<div class="silva-scroll" style="max-height:520px;overflow-y:auto;-webkit-overflow-scrolling:touch;'
+    hintline=f'<div style="font-size:10pt;font-style:italic;color:#c4b5fd;letter-spacing:0.03em;margin:0 0 10px;">{hint}</div>'
+    panel=('<div class="silva-scroll" style="overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;white-space:nowrap;'
       'border:1px solid rgba(139,92,246,0.28);background:rgba(0,0,0,0.22);padding:12px;box-sizing:border-box;">'
       + frames + '</div>')
     return resources_card(heading, para(body) + hintline + panel, es)

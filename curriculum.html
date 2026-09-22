@@ -318,7 +318,7 @@
     .course-acc-body .module-list { margin-bottom: 0; }
 
     /* ── Course Documents block ── */
-    .course-docs { margin-bottom: 18px; }
+    .course-docs { margin-top: 16px; margin-bottom: 18px; }
     /* Per-course Course Documents section inherits the COURSE color; label is a light course tint. */
     .course-docs--doc .course-docs-label { color: color-mix(in srgb, var(--course-accent, #00b8b8) 58%, #ffffff); }
     .course-docs-label {
@@ -1498,8 +1498,8 @@
                       </div>
                       <p class="cat-subgroup">Personal</p>
                       <div class="logo-grid">
-                        <div class="logo-card"><div class="logo-tile"><img src="/logos/CS_Logo_Only.svg" alt="Chris Silva logo, icon only" /></div><div class="logo-meta"><span class="logo-name">CS Logo <span class="logo-fmt">Icon &middot; SVG</span></span><a class="logo-dl" href="/logos/CS_Logo_Only.svg" download>Download</a></div></div>
-                        <div class="logo-card"><div class="logo-tile"><img src="/logos/CS_Logo_Vector.svg" alt="Chris Silva logo, full vector" /></div><div class="logo-meta"><span class="logo-name">CS Logo <span class="logo-fmt">Full &middot; SVG</span></span><a class="logo-dl" href="/logos/CS_Logo_Vector.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/logos/CS_Logo_Only_Teal.svg" alt="Chris Silva CS monogram" /></div><div class="logo-meta"><span class="logo-name">CS Logo &middot; Mark <span class="logo-fmt">Monogram &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/logos/CS_Logo_Only_Teal.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#00b8b8" data-src="/logos/CS_Logo_Only_Teal.svg" title="Teal + White" aria-label="Teal and White"></button><button type="button" class="swatch-dot" style="background:#cc0000" data-src="/logos/CS_Logo_Only.svg" title="Brand" aria-label="Brand colors"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/logos/CS_Logo_Vector_TealWhite.svg" alt="Chris Silva CS logo with wordmark" /></div><div class="logo-meta"><span class="logo-name">CS Logo &middot; Wordmark <span class="logo-fmt">Full &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/logos/CS_Logo_Vector_TealWhite.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#00b8b8" data-src="/logos/CS_Logo_Vector_TealWhite.svg" title="Teal + White" aria-label="Teal and White"></button><button type="button" class="swatch-dot" style="background:#cc0000" data-src="/logos/CS_Logo_Vector.svg" title="Brand" aria-label="Brand colors"></button><button type="button" class="swatch-dot" style="background:#5eead4" data-src="/logos/CS_Logo_Glossy_Teal_v1.png" title="Glossy Teal" aria-label="Glossy Teal"></button></div></div></div>
                       </div>
                       <p class="cat-subgroup">Student Brands</p>
                       <div class="logo-grid">
@@ -2102,6 +2102,8 @@
       // (student names/photos/SSA flags), not a blank template; never host one until a BLANK template exists.
       documents: {
         roster: { path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/Class%20Roster%209-15-26.pdf", label: "Class Roster 9-15-26" },
+        // Seating chart has student photos = PII: LOCAL-file link only, never hosted. Opens the PSD in Photoshop when the catalog is opened locally.
+        seatingchart: { path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/9-22-26_Seating_Chart_Template_322-331.psd", label: "Seating Chart Template (322-331, PSD)" },
         // Substitute AERIES logins (usernames + passwords, extremely confidential): LOCAL-file
         // link only, never hosted. Lives outside the repo in 01_TEACHING/SMJUHSD_Documents.
         subaeries: { path: "file:///Users/riva/RIVA_CODE/01_TEACHING/SMJUHSD_Documents/AERIES%202026%20Fall%20Substitute%20Teacher%20Account%20Info.pdf", label: "Substitute AERIES Logins" },
@@ -2506,10 +2508,11 @@
       // Documents sub-section
       const d = t.documents || {};
       const docRows = (d.roster ? rosterRow(d.roster.path, d.roster.label) : "")
+        + (d.seatingchart ? rosterRow(d.seatingchart.path, d.seatingchart.label) : "")
         + (d.subaeries ? rosterRow(d.subaeries.path, d.subaeries.label) : "")
         + (d.subplan ? wordDocRow(d.subplan.docx, d.subplan.pdf, d.subplan.label) : "")
         + (d.signature ? signatureRow(d.signature.url, d.signature.label) : "");
-      const nD = [d.roster, d.subaeries, d.subplan, d.signature].filter(Boolean).length;
+      const nD = [d.roster, d.seatingchart, d.subaeries, d.subplan, d.signature].filter(Boolean).length;
       const docs = docRows ? subAcc("Documents", `${nD} file${nD === 1 ? "" : "s"}`, docRows) : "";
       // Links sub-section: external sites grouped Resources + Vendors, each a Visit button.
       const lk = t.links || {};
@@ -2686,9 +2689,9 @@
             </span>
           </summary>
           <div class="course-acc-body">
-            ${slideDecksBlock(course)}
             ${(coursePages.length + announcements.length + modules.length) ? `<div class="module-list">${moduleRows}</div>` : empty}
             ${docsBlock(course)}
+            ${slideDecksBlock(course)}
             ${hint}
           </div>
         </details>
