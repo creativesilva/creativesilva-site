@@ -2111,8 +2111,12 @@
         subplan: { docx: "assets/course-documents/PVHS-Substitute-Plan-2026-09-16.docx", pdf: "assets/course-documents/PVHS-Substitute-Plan-2026-09-16.pdf", label: "Substitute Plan (Sept 16)" },
         signature: { url: "assets/email-signature.html", label: "Mac Mail Signature" },
       },
-      // Links (expandable): external sites grouped into Resources + Vendors. Visit opens a new tab.
+      // Links (expandable): forms (Open + View QR + Copy URL, like the camera form), then external
+      // sites grouped into Resources + Vendors. Visit opens a new tab.
       links: {
+        forms: [
+          { url: "https://forms.gle/pvnBBbdLahqmQQuA9", qr: "assets/lightwriterz-attendance-qr-v1.png", label: "LightWriterz Attendance Log", download: "LightWriterz-Attendance-QR.png" },
+        ],
         resources: [
           { url: "https://ctecoding.com/app", label: "ctecoding.com", desc: "Certification tracking" },
           { url: "https://www.cde.ca.gov/ci/ct/sf/ctemcsupdate.asp", label: "cde.ca.gov", desc: "CTE model curriculum standards" },
@@ -2362,6 +2366,19 @@
         + `<a class="course-doc-dl" href="${c.form}" data-url="${c.form}" onclick="return silvaCopyURL(event, this)">Copy URL</a>`
         + `</span></div>`;
     }
+    // Form + QR row (Teacher Resources > Links): Open (form) + View QR (modal, has its own Download)
+    // + Copy URL, same treatment as the camera check-out form.
+    function formQrRow(f) {
+      const dl = (f.download || "qr-code.png").replace(/"/g, "&quot;");
+      return `<div class="course-doc">`
+        + `<span class="course-doc-ico">FORM</span>`
+        + `<span class="course-doc-name">${f.label}</span>`
+        + `<span class="course-doc-actions">`
+        + `<a class="course-doc-dl" href="${f.url}" target="_blank" rel="noopener">Open</a>`
+        + `<a class="course-doc-dl" href="${f.qr}" data-qr="${f.qr}" data-dl="${dl}" onclick="return openQR(event, this)">View QR</a>`
+        + `<a class="course-doc-dl" href="${f.url}" data-url="${f.url}" onclick="return silvaCopyURL(event, this)">Copy URL</a>`
+        + `</span></div>`;
+    }
     // ── Teacher Resources rows (Class Tools) ──
     // App link: Copy URL + Open.
     function appRow(url, label) {
@@ -2519,8 +2536,9 @@
       const linkGroup = (title, arr) => (arr && arr.length)
         ? `<div class="tr-linkgroup">${title}</div>` + arr.map(linkExtRow).join("")
         : "";
-      const linksInner = linkGroup("Resources", lk.resources) + linkGroup("Vendors", lk.vendors);
-      const nL = (lk.resources || []).length + (lk.vendors || []).length;
+      const formRows = (lk.forms && lk.forms.length) ? `<div class="tr-linkgroup">Forms</div>` + lk.forms.map(formQrRow).join("") : "";
+      const linksInner = formRows + linkGroup("Resources", lk.resources) + linkGroup("Vendors", lk.vendors);
+      const nL = (lk.forms || []).length + (lk.resources || []).length + (lk.vendors || []).length;
       const links = linksInner ? subAcc("Links", `${nL} link${nL === 1 ? "" : "s"}`, linksInner) : "";
       const inner = `${app}${dash}${vimeo}${docs}${links}`;
       if (!inner) return "";
