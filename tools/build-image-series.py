@@ -33,7 +33,7 @@ def ent(s):
     m={"á":"&aacute;","é":"&eacute;","í":"&iacute;","ó":"&oacute;","ú":"&uacute;",
        "Á":"&Aacute;","É":"&Eacute;","Í":"&Iacute;","Ó":"&Oacute;","Ú":"&Uacute;",
        "ñ":"&ntilde;","Ñ":"&Ntilde;","ü":"&uuml;","¿":"&iquest;","¡":"&iexcl;",
-       "“":"&ldquo;","”":"&rdquo;","‘":"&lsquo;","’":"&rsquo;","–":"&ndash;","•":"&bull;","×":"&times;"}
+       "“":"&ldquo;","”":"&rdquo;","‘":"&lsquo;","’":"&rsquo;","–":"-","•":"&bull;","×":"&times;"}
     return "".join(m.get(c, c if ord(c)<128 else "&#x{:X};".format(ord(c))) for c in s)
 
 HICON_PHOTO_WALK=f"{SITE}/assets/Icons/assignment/photo-walk-white-v1.png"
@@ -585,7 +585,7 @@ def step01():
             ("Press MENU:","press the MENU button on the back of the camera."),
             ("Open the Shooting menu, page 1:","go to the red Shooting tab (the camera icon), open page 1, and choose Image quality."),
             ("Set RAW:","turn the Main dial to set the top row to RAW."),
-            ("Turn JPEG off:","use the left and right keys to set the JPEG row to the dash (&ndash;), so the camera saves RAW only, no JPG."),
+            ("Turn JPEG off:","use the left and right keys to set the JPEG row to the dash (-), so the camera saves RAW only, no JPG."),
             ("Save:","press the SET button to save, then tap the shutter halfway to close the menu."),
         ])
         + note("If you are not sure, ask Mr. Silva to check your setting before you start."))
@@ -629,7 +629,7 @@ def step01():
             ("Presiona MENU:","presiona el bot&oacute;n MENU en la parte de atr&aacute;s de la c&aacute;mara."),
             ("Abre el men&uacute; de Toma de fotograf&iacute;as, p&aacute;gina 1:","ve a la pesta&ntilde;a roja de Toma de fotograf&iacute;as (el &iacute;cono de c&aacute;mara), abre la p&aacute;gina 1 y elige Calidad de imagen."),
             ("Pon RAW:","gira el dial principal para poner la fila de arriba en RAW."),
-            ("Apaga el JPEG:","usa las teclas izquierda y derecha para poner la fila de JPEG en el gui&oacute;n (&ndash;), para que la c&aacute;mara guarde solo RAW, sin JPG."),
+            ("Apaga el JPEG:","usa las teclas izquierda y derecha para poner la fila de JPEG en el gui&oacute;n (-), para que la c&aacute;mara guarde solo RAW, sin JPG."),
             ("Guarda:","presiona el bot&oacute;n SET para guardar, luego toca el disparador a la mitad para cerrar el men&uacute;."),
         ])
         + note("Si no est&aacute;s seguro, pide al Sr. Silva que revise tu ajuste antes de empezar."))
