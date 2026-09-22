@@ -2304,11 +2304,25 @@
       return false;
     }
     // Fetch a hosted HTML file's raw source and copy it to the clipboard (paste into Mail signature).
+    // The fetch is pre-warmed by silvaPrefetchHTMLFile() as soon as the row is built, so by the time
+    // someone clicks, writeText() runs synchronously off a cached string instead of after an awaited
+    // fetch - Safari requires clipboard writes to happen inside the same user-gesture call stack, and
+    // an awaited fetch beforehand loses that, which is why the button was flashing "Failed" in Safari.
+    const silvaHTMLCache = {};
+    function silvaPrefetchHTMLFile(url) {
+      if (url in silvaHTMLCache) return;
+      fetch(url, { cache: "no-store" })
+        .then(r => { if (!r.ok) throw new Error("fetch " + r.status); return r.text(); })
+        .then(txt => { silvaHTMLCache[url] = txt; })
+        .catch(() => {});
+    }
     function silvaCopyHTMLFile(e, el) {
       e.preventDefault();
       const url = el.getAttribute("data-url");
-      fetch(url, { cache: "no-store" })
-        .then(r => { if (!r.ok) throw new Error("fetch " + r.status); return r.text(); })
+      const cached = silvaHTMLCache[url];
+      const withText = cached != null ? Promise.resolve(cached)
+        : fetch(url, { cache: "no-store" }).then(r => { if (!r.ok) throw new Error("fetch " + r.status); return r.text(); });
+      withText
         .then(txt => navigator.clipboard.writeText(txt))
         .then(() => pillFlash(el, "Copied"))
         .catch(() => pillFlash(el, "Failed"));
@@ -2392,6 +2406,7 @@
     }
     // Email signature: Download (the .html) + Copy HTML (raw source to the clipboard, to paste into Mail).
     function signatureRow(url, label) {
+      silvaPrefetchHTMLFile(url);
       return `<div class="course-doc">`
         + `<span class="course-doc-ico">HTML</span>`
         + `<span class="course-doc-name">${label}</span>`
