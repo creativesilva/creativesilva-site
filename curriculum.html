@@ -368,6 +368,11 @@
       background: color-mix(in srgb, var(--course-accent, #007474) 8%, transparent);
       transition: border-color 0.15s ease, background 0.15s ease;
     }
+    /* LWZ Incoming upload row: paperclip icon, drag-over highlight, busy state. */
+    .lwz-clip { width: 13px; height: 13px; margin-right: 5px; vertical-align: -2px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .lwz-row { transition: background 0.15s ease, outline-color 0.15s ease; outline: 2px dashed transparent; outline-offset: -2px; }
+    .lwz-row.lwz-drop { outline-color: var(--course-accent, #FF6B1A); background: color-mix(in srgb, var(--course-accent, #FF6B1A) 12%, transparent); }
+    .lwz-row.lwz-busy .lwz-status { color: var(--course-accent, #FF6B1A); }
     /* Teacher Resources: every action pill the same width as the widest, for a uniform column. */
     #teacher-resources .course-doc-dl { min-width: 82px; box-sizing: border-box; text-align: center; }
     #teacher-resources .course-doc-ico { min-width: 46px; box-sizing: border-box; text-align: center; }
@@ -1316,7 +1321,7 @@
                   <details class="cat-acc" open>
                     <summary class="cat-head"><span class="cat-name">Prompt Studio</span><span class="cat-chevron"></span></summary>
                     <div class="cat-body">
-                    <div class="ps2-titlebar"><img class="ps2-tb-icon" src="https://www.creativesilva.com/assets/Icons/assignment/design-v1.png" alt="" /><span class="ps2-tb-title">Prompt Studio</span></div>
+                    <div class="ps2-titlebar"><img class="ps2-tb-icon" src="https://www.creativesilva.com/assets/Icons/assignment/design-teal-v1.png" alt="" /><span class="ps2-tb-title">Prompt Studio</span></div>
                     <div class="ps2-list">
                       <div class="ps2-prompt" data-file="/assets/prompts/Classroom-Environment-Master-Prompt-v4.md">
                         <div class="ps2-row">
@@ -2092,6 +2097,14 @@
       app: { url: "https://creativesilva.github.io/pvhs_tools/index.html", label: "PVHS Tools App" },
       // Camera Check Out moved to the Calendar page (a "View QR Code" header button opens the QR popup there).
       dashboard: { path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" },
+      // LWZ Incoming: paperclip uploads straight into the LWZ_incoming Google Drive folder via the
+      // Apps Script web app in tools/apps-script/lwz-incoming.gs (endpoint = its /exec URL; key must match).
+      lwzIncoming: {
+        label: "LWZ Incoming",
+        folder: "https://drive.google.com/drive/folders/1p3IYB6lNez4Byv8yzMs3AsgBV7HzNPOV",
+        endpoint: "",
+        key: "lwz-7a538caa4e2f",
+      },
       // Vimeo (expandable): the grade-passback tutorial + the student-work showcases.
       vimeo: [
         { url: "https://vimeo.com/1157058491/eafe248754?share=copy&amp;fl=cl&amp;fe=ci", label: "Aeries + Canvas Grade Passback", instructions: GRADE_PASSBACK_STEPS },
@@ -2512,6 +2525,77 @@
         + `<div class="slide-decks-body">${tools}${decks}</div></details>`;
     }
 
+    // LWZ Incoming row: Attach (paperclip, or drag images onto the row) uploads to Google Drive
+    // without opening Drive; Open goes to the folder. Status shows inline under the name.
+    const CLIP_SVG = `<svg class="lwz-clip" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>`;
+    function lwzRow(c) {
+      return `<div class="course-doc lwz-row" data-endpoint="${c.endpoint}" data-key="${c.key}">`
+        + `<span class="course-doc-ico">DRIVE</span>`
+        + `<span class="course-doc-name">${c.label}<span class="course-doc-sub lwz-status">Drop images here or Attach</span></span>`
+        + `<span class="course-doc-actions">`
+        + `<span class="course-doc-dl${c.endpoint ? "" : " pending"}" role="button" tabindex="0" style="cursor:pointer;" onclick="lwzPick(this)">${CLIP_SVG}Attach</span>`
+        + `<a class="course-doc-dl" href="${c.folder}" target="_blank" rel="noopener">Open</a>`
+        + `</span>`
+        + `<input type="file" class="lwz-input" accept="image/*" multiple hidden onchange="lwzUpload(this.closest('.lwz-row'), this.files); this.value='';">`
+        + `</div>`;
+    }
+    window.lwzPick = function (btn) {
+      const row = btn.closest(".lwz-row");
+      if (!row.dataset.endpoint) { row.querySelector(".lwz-status").textContent = "Setup needed: add the Apps Script URL"; return; }
+      row.querySelector(".lwz-input").click();
+    };
+    function lwzToBase64(file) {
+      return new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = () => res(String(r.result).split(",")[1]);
+        r.onerror = rej;
+        r.readAsDataURL(file);
+      });
+    }
+    window.lwzUpload = async function (row, fileList) {
+      const status = row.querySelector(".lwz-status");
+      const files = Array.from(fileList || []).filter(f => f.type.startsWith("image/"));
+      if (!row.dataset.endpoint) { status.textContent = "Setup needed: add the Apps Script URL"; return; }
+      if (!files.length) { status.textContent = "Images only"; return; }
+      row.classList.add("lwz-busy");
+      let ok = 0, failed = 0;
+      for (let i = 0; i < files.length; i++) {
+        status.textContent = `Uploading ${i + 1} of ${files.length}: ${files[i].name}`;
+        try {
+          const data = await lwzToBase64(files[i]);
+          const res = await fetch(row.dataset.endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ key: row.dataset.key, name: files[i].name, type: files[i].type, data }),
+          });
+          const out = await res.json();
+          if (out.ok) ok++; else { failed++; console.warn("LWZ upload:", out.error); }
+        } catch (e) { failed++; console.warn("LWZ upload:", e); }
+      }
+      row.classList.remove("lwz-busy");
+      status.textContent = failed
+        ? `${ok} added, ${failed} failed`
+        : `\u2713 ${ok} image${ok === 1 ? "" : "s"} added to LWZ_incoming`;
+    };
+    // Drag and drop onto the row (delegated, so it survives re-renders).
+    ["dragenter", "dragover"].forEach(ev => document.addEventListener(ev, e => {
+      const row = e.target.closest && e.target.closest(".lwz-row");
+      if (!row) return;
+      e.preventDefault();
+      row.classList.add("lwz-drop");
+    }));
+    document.addEventListener("dragleave", e => {
+      const row = e.target.closest && e.target.closest(".lwz-row");
+      if (row && !row.contains(e.relatedTarget)) row.classList.remove("lwz-drop");
+    });
+    document.addEventListener("drop", e => {
+      const row = e.target.closest && e.target.closest(".lwz-row");
+      if (!row) return;
+      e.preventDefault();
+      row.classList.remove("lwz-drop");
+      lwzUpload(row, e.dataTransfer.files);
+    });
+
     // One consolidated Teacher Resources card (operational tools), built from TEACHER_RESOURCES.
     // Layout: top-level tools (PVHS Tools App, Camera, Dashboard), then two expandable sub-sections:
     // Vimeo (grade-passback tutorial + showcases) and Documents (roster, sub plan, signature).
@@ -2541,7 +2625,8 @@
       const linksInner = formRows + linkGroup("Resources", lk.resources) + linkGroup("Vendors", lk.vendors);
       const nL = (lk.forms || []).length + (lk.resources || []).length + (lk.vendors || []).length;
       const links = linksInner ? subAcc("Links", `${nL} link${nL === 1 ? "" : "s"}`, linksInner) : "";
-      const inner = `${app}${dash}${vimeo}${docs}${links}`;
+      const lwz   = t.lwzIncoming ? lwzRow(t.lwzIncoming) : "";
+      const inner = `${app}${dash}${lwz}${vimeo}${docs}${links}`;
       if (!inner) return "";
       return `
         <details class="course-acc" id="teacher-resources" style="--course-accent:#FF6B1A">

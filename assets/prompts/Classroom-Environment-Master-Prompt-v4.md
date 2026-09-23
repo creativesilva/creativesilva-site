@@ -104,7 +104,7 @@ All desks must belong to a logical architectural grid.
 
 ---
 
-## CHAIRS — IDENTITY LOCK
+## CHAIRS: IDENTITY LOCK
 
 Chairs are a critical identity feature and must remain consistent.
 
