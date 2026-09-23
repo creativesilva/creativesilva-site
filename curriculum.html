@@ -2097,13 +2097,22 @@
       app: { url: "https://creativesilva.github.io/pvhs_tools/index.html", label: "PVHS Tools App" },
       // Camera Check Out moved to the Calendar page (a "View QR Code" header button opens the QR popup there).
       dashboard: { path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" },
-      // LWZ Incoming: paperclip uploads straight into the LWZ_incoming Google Drive folder via the
-      // Apps Script web app in tools/apps-script/lwz-incoming.gs (endpoint = its /exec URL; key must match).
+      // Drive Incoming: the paperclip uploads files straight into a Google Drive folder via ONE
+      // Apps Script web app (tools/apps-script/incoming.gs). endpoint = its /exec URL (SAME for both
+      // rows); target routes to the right folder; key must match the script. Accepts any file type.
       lwzIncoming: {
         label: "LWZ Incoming",
+        target: "lwz",
         folder: "https://drive.google.com/drive/folders/1p3IYB6lNez4Byv8yzMs3AsgBV7HzNPOV",
         endpoint: "",
         key: "lwz-7a538caa4e2f",
+      },
+      curriculumIncoming: {
+        label: "Curriculum Incoming",
+        target: "curriculum",
+        folder: "",
+        endpoint: "",
+        key: "cur-2f9b1e7c4a6d",
       },
       // Vimeo (expandable): the grade-passback tutorial + the student-work showcases.
       vimeo: [
@@ -2529,14 +2538,15 @@
     // without opening Drive; Open goes to the folder. Status shows inline under the name.
     const CLIP_SVG = `<svg class="lwz-clip" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>`;
     function lwzRow(c) {
-      return `<div class="course-doc lwz-row" data-endpoint="${c.endpoint}" data-key="${c.key}">`
+      const openBtn = c.folder ? `<a class="course-doc-dl" href="${c.folder}" target="_blank" rel="noopener">Open</a>` : "";
+      return `<div class="course-doc lwz-row" data-endpoint="${c.endpoint}" data-key="${c.key}" data-target="${c.target || ""}">`
         + `<span class="course-doc-ico">DRIVE</span>`
-        + `<span class="course-doc-name">${c.label}<span class="course-doc-sub lwz-status">Drop images here or Attach</span></span>`
+        + `<span class="course-doc-name">${c.label}<span class="course-doc-sub lwz-status">Drop files here or Attach</span></span>`
         + `<span class="course-doc-actions">`
         + `<span class="course-doc-dl${c.endpoint ? "" : " pending"}" role="button" tabindex="0" style="cursor:pointer;" onclick="lwzPick(this)">${CLIP_SVG}Attach</span>`
-        + `<a class="course-doc-dl" href="${c.folder}" target="_blank" rel="noopener">Open</a>`
+        + openBtn
         + `</span>`
-        + `<input type="file" class="lwz-input" accept="image/*" multiple hidden onchange="lwzUpload(this.closest('.lwz-row'), this.files); this.value='';">`
+        + `<input type="file" class="lwz-input" multiple hidden onchange="lwzUpload(this.closest('.lwz-row'), this.files); this.value='';">`
         + `</div>`;
     }
     window.lwzPick = function (btn) {
@@ -2554,9 +2564,9 @@
     }
     window.lwzUpload = async function (row, fileList) {
       const status = row.querySelector(".lwz-status");
-      const files = Array.from(fileList || []).filter(f => f.type.startsWith("image/"));
+      const files = Array.from(fileList || []);
       if (!row.dataset.endpoint) { status.textContent = "Setup needed: add the Apps Script URL"; return; }
-      if (!files.length) { status.textContent = "Images only"; return; }
+      if (!files.length) { status.textContent = "No files"; return; }
       row.classList.add("lwz-busy");
       let ok = 0, failed = 0;
       for (let i = 0; i < files.length; i++) {
@@ -2566,16 +2576,16 @@
           const res = await fetch(row.dataset.endpoint, {
             method: "POST",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ key: row.dataset.key, name: files[i].name, type: files[i].type, data }),
+            body: JSON.stringify({ target: row.dataset.target, key: row.dataset.key, name: files[i].name, type: files[i].type || "application/octet-stream", data }),
           });
           const out = await res.json();
-          if (out.ok) ok++; else { failed++; console.warn("LWZ upload:", out.error); }
-        } catch (e) { failed++; console.warn("LWZ upload:", e); }
+          if (out.ok) ok++; else { failed++; console.warn("Drive upload:", out.error); }
+        } catch (e) { failed++; console.warn("Drive upload:", e); }
       }
       row.classList.remove("lwz-busy");
       status.textContent = failed
-        ? `${ok} added, ${failed} failed`
-        : `\u2713 ${ok} image${ok === 1 ? "" : "s"} added to LWZ_incoming`;
+        ? `${ok} uploaded, ${failed} failed`
+        : `\u2713 ${ok} file${ok === 1 ? "" : "s"} uploaded`;
     };
     // Drag and drop onto the row (delegated, so it survives re-renders).
     ["dragenter", "dragover"].forEach(ev => document.addEventListener(ev, e => {
@@ -2626,7 +2636,8 @@
       const nL = (lk.forms || []).length + (lk.resources || []).length + (lk.vendors || []).length;
       const links = linksInner ? subAcc("Links", `${nL} link${nL === 1 ? "" : "s"}`, linksInner) : "";
       const lwz   = t.lwzIncoming ? lwzRow(t.lwzIncoming) : "";
-      const inner = `${app}${dash}${lwz}${vimeo}${docs}${links}`;
+      const cur   = t.curriculumIncoming ? lwzRow(t.curriculumIncoming) : "";
+      const inner = `${app}${dash}${lwz}${cur}${vimeo}${docs}${links}`;
       if (!inner) return "";
       return `
         <details class="course-acc" id="teacher-resources" style="--course-accent:#FF6B1A">
