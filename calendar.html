@@ -21,6 +21,19 @@
   .cal-frame { background: linear-gradient(135deg, #00b8b8 0%, rgba(0, 184, 184, 0.10) 100%); padding: 2px; }
   .cal-frame iframe { display: block; width: 100%; height: 760px; border: 0; background: #ffffff; }
 
+  /* Reliable escape hatch: opens the calendar top-level, where Safari's third-party
+     iframe blocking (Prevent cross-site tracking / content blockers) does not apply. */
+  .cal-open-row { text-align: center; margin: 0 0 16px; }
+  .cal-open {
+    display: inline-flex; align-items: center; gap: 8px; cursor: pointer; text-decoration: none;
+    font-family: 'Oswald', Arial, sans-serif; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    font-size: 0.8rem; color: #ffffff; padding: 11px 22px; background: #007474; border: 1px solid #00b8b8;
+    transition: filter 0.15s ease;
+  }
+  .cal-open:hover { filter: brightness(1.18); }
+  .cal-fallback { text-align: center; margin: 13px 0 0; font-size: 0.82rem; color: rgba(234, 247, 247, 0.6); }
+  .cal-fallback a { color: #00b8b8; }
+
   /* "View QR Code" button, injected into the header (row 2), pushed to the right. */
   .silva-uni-qrbtn {
     margin-left: auto; align-self: center; height: 32px; box-sizing: border-box;
@@ -74,9 +87,13 @@
 <div class="silva-page">
   <h1 class="cal-title">Camera Check Out Tracker</h1>
   <div class="cal-title-rule"></div>
-  <div class="cal-frame">
-    <iframe title="Camera Checkouts calendar" src="https://calendar.google.com/calendar/embed?src=c_0aa19ce0d075f9150d5610114ee936928de02b4082b0f2cbadd81c2a38d32aaf%40group.calendar.google.com&ctz=America%2FLos_Angeles&mode=MONTH&showTitle=0&showPrint=0&showTz=0&showCalendars=0" loading="lazy" scrolling="no"></iframe>
+  <div class="cal-open-row">
+    <a class="cal-open" href="https://calendar.google.com/calendar/embed?src=c_0aa19ce0d075f9150d5610114ee936928de02b4082b0f2cbadd81c2a38d32aaf%40group.calendar.google.com&ctz=America%2FLos_Angeles&mode=MONTH&showTitle=0&showPrint=0&showTz=0&showCalendars=0" target="_blank" rel="noopener">Open Full Calendar &#8599;</a>
   </div>
+  <div class="cal-frame">
+    <iframe title="Camera Checkouts calendar" src="https://calendar.google.com/calendar/embed?src=c_0aa19ce0d075f9150d5610114ee936928de02b4082b0f2cbadd81c2a38d32aaf%40group.calendar.google.com&ctz=America%2FLos_Angeles&mode=MONTH&showTitle=0&showPrint=0&showTz=0&showCalendars=0" scrolling="no"></iframe>
+  </div>
+  <p class="cal-fallback">Calendar not showing above? <a href="https://calendar.google.com/calendar/embed?src=c_0aa19ce0d075f9150d5610114ee936928de02b4082b0f2cbadd81c2a38d32aaf%40group.calendar.google.com&ctz=America%2FLos_Angeles&mode=MONTH&showTitle=0&showPrint=0&showTz=0&showCalendars=0" target="_blank" rel="noopener">Open it in a new tab</a>. This can happen in Safari when cross-site tracking prevention or a content blocker blocks the embedded view.</p>
 </div>
 
 <div id="qr-modal">
