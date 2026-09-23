@@ -2100,19 +2100,19 @@
       // Drive Incoming: the paperclip uploads files straight into a Google Drive folder via ONE
       // Apps Script web app (tools/apps-script/incoming.gs). endpoint = its /exec URL (SAME for both
       // rows); target routes to the right folder; key must match the script. Accepts any file type.
+      creativesilvaIncoming: {
+        label: "Creative Silva Incoming",
+        target: "creativesilva",
+        folder: "",
+        endpoint: "",
+        key: "cs-9d4f1a6b3e28",
+      },
       lwzIncoming: {
         label: "LWZ Incoming",
-        target: "lwz",
+        target: "lightwriterz",
         folder: "https://drive.google.com/drive/folders/1p3IYB6lNez4Byv8yzMs3AsgBV7HzNPOV",
         endpoint: "",
         key: "lwz-7a538caa4e2f",
-      },
-      curriculumIncoming: {
-        label: "Curriculum Incoming",
-        target: "curriculum",
-        folder: "",
-        endpoint: "",
-        key: "cur-2f9b1e7c4a6d",
       },
       // Vimeo (expandable): the grade-passback tutorial + the student-work showcases.
       vimeo: [
@@ -2635,9 +2635,9 @@
       const linksInner = formRows + linkGroup("Resources", lk.resources) + linkGroup("Vendors", lk.vendors);
       const nL = (lk.forms || []).length + (lk.resources || []).length + (lk.vendors || []).length;
       const links = linksInner ? subAcc("Links", `${nL} link${nL === 1 ? "" : "s"}`, linksInner) : "";
+      const cs    = t.creativesilvaIncoming ? lwzRow(t.creativesilvaIncoming) : "";
       const lwz   = t.lwzIncoming ? lwzRow(t.lwzIncoming) : "";
-      const cur   = t.curriculumIncoming ? lwzRow(t.curriculumIncoming) : "";
-      const inner = `${app}${dash}${lwz}${cur}${vimeo}${docs}${links}`;
+      const inner = `${app}${dash}${cs}${lwz}${vimeo}${docs}${links}`;
       if (!inner) return "";
       return `
         <details class="course-acc" id="teacher-resources" style="--course-accent:#FF6B1A">
