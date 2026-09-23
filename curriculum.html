@@ -2097,9 +2097,11 @@
       app: { url: "https://creativesilva.github.io/pvhs_tools/index.html", label: "PVHS Tools App" },
       // Camera Check Out moved to the Calendar page (a "View QR Code" header button opens the QR popup there).
       dashboard: { path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/2026-2027_Fall/exports/PVHS_Dashboard_latest.html", label: "Enrolled Student Dashboard" },
-      // Drive Incoming: the paperclip uploads files straight into a Google Drive folder via ONE
-      // Apps Script web app (tools/apps-script/incoming.gs). endpoint = its /exec URL (SAME for both
-      // rows); target routes to the right folder; key must match the script. Accepts any file type.
+      // Drive Incoming: the paperclip uploads files straight into a Google Drive folder. The two rows use
+      // TWO SEPARATE Apps Script web apps so Creative Silva and Light Writerz never cross:
+      //   Creative Silva: tools/apps-script/creativesilva-incoming.gs (this repo)
+      //   Light Writerz:  the lightwriterz-site repo, tools/apps-script/lwz-incoming.gs
+      // endpoint = that row's own script /exec URL; key must match its script. Accepts any file type.
       creativesilvaIncoming: {
         label: "Creative Silva Incoming",
         target: "creativesilva",
