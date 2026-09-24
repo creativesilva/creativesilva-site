@@ -96,6 +96,8 @@
     /* Back-to-Catalog button: teal glass so it reads as the primary "return" action. */
     .cal-btn.br-back { background: rgba(0, 184, 184, 0.14); }
     .cal-btn.br-imagegen { background: rgba(0, 184, 184, 0.22); border-color: rgba(0, 184, 184, 0.55); }
+    /* Try Beta: dashed teal outline so it reads as the new/experimental door without competing with the solid actions. */
+    .cal-btn.br-beta { background: rgba(0, 184, 184, 0.08); border-style: dashed; border-color: rgba(0, 184, 184, 0.6); }
     .header-clock { flex: 0 0 auto; width: 158px; height: 48px; border: 0; background: transparent; display: block; }
     @media (max-width: 900px) { .header-clock { display: none; } }
     @media (max-width: 640px) {
@@ -509,6 +511,7 @@
           <a class="cal-btn br-back" href="/curriculum.html">&#8249;&nbsp; Catalog</a>
           <a class="cal-btn" href="/calendar.html">Calendar</a>
           <a class="cal-btn br-imagegen" href="https://chatgpt.com/g/g-p-6a455e17c5248191b8c24ad354aba9ae-imagegen-pv/project" target="imagegen-pv" rel="noopener" onclick="window.open(this.href,'imagegen-pv','popup=yes,width=1320,height=980');return false;">Image Gen</a>
+          <a class="cal-btn br-beta" href="/build-resources-beta.html">Try Beta</a>
           <iframe class="header-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
         </div>
       </div>

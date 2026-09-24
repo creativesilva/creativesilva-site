@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Image Prompt Builder (Beta) | Chris Silva</title>
+  <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only_Teal.svg" />
+  <link rel="apple-touch-icon" href="/logos/CS_AppIcon_Teal_180.png" />
+  <meta name="description" content="Beta image prompt builder for PVHS: cleaner layout, larger reference images, a persistent review panel, and an attachment checklist." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+  /*
+    build-resources-beta.html  (BETA, standalone)
+    ----------------------------------------------
+    A separate, experimental image prompt builder. It does NOT touch the current builder
+    (build-resources.html). Isolation, per the audit:
+      - own page, own inline CSS (pvb-* only), own inline JS
+      - storage namespaced under pvBeta.v1.*  (never reads or writes ps2* keys)
+      - reference manifest copied from build-resources.html @ 17d36b8 (read-only reuse of the images)
+      - reuses the PIN gate flag (sessionStorage silva-auth) READ-ONLY: no code, no gate write.
+        Direct entry when locked shows a link to the current builder to unlock first.
+    The composed-prompt output matches the current builder's contract exactly (verified by hash),
+    plus the beta improvements (persistent review panel, attachment checklist, copy-prompt-again,
+    reusable setups, clearer labels, draft recovery).
+  */
+  :root{
+    --pvb-bg:#0a1113; --pvb-bg2:#0e191b;
+    --pvb-panel:rgba(255,255,255,0.035); --pvb-panel-2:rgba(255,255,255,0.055);
+    --pvb-panel-hi:rgba(0,184,184,0.10);
+    --pvb-teal:#00b8b8; --pvb-teal-deep:#007474;
+    --pvb-text:#eaf3f3; --pvb-muted:rgba(233,243,243,0.52); --pvb-faint:rgba(233,243,243,0.32);
+    --pvb-line:rgba(255,255,255,0.08); --pvb-line-soft:rgba(255,255,255,0.05);
+    --pvb-gold:#f5b301;
+    --pvb-radius:14px;
+    --pvb-font:'Oswald',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1100px 620px at 78% -8%, rgba(0,184,184,0.10), transparent 60%),
+      radial-gradient(900px 520px at 8% 110%, rgba(0,116,116,0.10), transparent 55%),
+      linear-gradient(180deg,var(--pvb-bg2) 0%, var(--pvb-bg) 46%);
+    background-attachment:fixed;
+    color:var(--pvb-text); font-family:var(--pvb-font); font-weight:400;
+    -webkit-font-smoothing:antialiased; min-height:100vh; line-height:1.5;
+  }
+
+  /* ── locked screen (read-only gate reuse) ── */
+  #pvb-gate{position:fixed; inset:0; z-index:9999; background:#050a0a;
+    display:flex; align-items:center; justify-content:center; padding:24px;}
+  #pvb-gate.pvb-hidden{display:none;}
+  .pvb-gate-card{width:100%; max-width:420px; background:#0c1414;
+    border-top:3px solid var(--pvb-teal-deep); border-radius:var(--pvb-radius);
+    padding:40px 34px 34px; text-align:center;}
+  .pvb-gate-card img{width:74px; height:auto; margin-bottom:18px; opacity:.9;}
+  .pvb-gate-card h2{font-size:.98rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#5eead4; margin:0 0 10px;}
+  .pvb-gate-card p{font-size:.9rem; color:var(--pvb-muted); margin:0 0 24px; line-height:1.65;}
+  .pvb-gate-card a.pvb-unlock{display:inline-block; background:var(--pvb-teal-deep); color:#fff; text-decoration:none;
+    font-size:.78rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; padding:13px 22px; border-radius:9px;}
+  .pvb-gate-card a.pvb-unlock:hover{filter:brightness(1.15);}
+
+  /* ── header ── */
+  .pvb-header{position:sticky; top:0; z-index:600;
+    background:linear-gradient(180deg, rgba(6,16,16,.92), rgba(6,20,20,.7));
+    backdrop-filter:blur(18px) saturate(1.3); -webkit-backdrop-filter:blur(18px) saturate(1.3);
+    border-top:3px solid var(--pvb-teal); border-bottom:1px solid rgba(0,184,184,.2);}
+  .pvb-header-in{max-width:1320px; margin:0 auto; padding:12px 26px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+  .pvb-brand{display:flex; align-items:baseline; gap:11px; margin-right:auto;}
+  .pvb-brand h1{font-size:1.12rem; font-weight:700; letter-spacing:.02em; margin:0; color:#fff;}
+  .pvb-badge{font-size:.62rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
+    color:#04110f; background:var(--pvb-teal); padding:3px 8px; border-radius:6px;}
+  .pvb-hbtn{font-family:var(--pvb-font); font-size:.72rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+    color:#eafafa; text-decoration:none; background:rgba(255,255,255,.06); border:1px solid var(--pvb-line);
+    padding:9px 13px; border-radius:9px; cursor:pointer; transition:filter .15s, background .15s;}
+  .pvb-hbtn:hover{background:rgba(255,255,255,.1);}
+  .pvb-hbtn.pvb-back{background:rgba(0,184,184,.14); border-color:rgba(0,184,184,.4);}
+  .pvb-hbtn.pvb-gen{background:rgba(0,184,184,.22); border-color:rgba(0,184,184,.55);}
+
+  /* ── layout ── */
+  .pvb-wrap{max-width:1320px; margin:0 auto; padding:22px 26px 90px;}
+  .pvb-intro{color:var(--pvb-muted); font-size:.92rem; max-width:760px; margin:2px 0 18px;}
+  .pvb-grid{display:grid; grid-template-columns:minmax(0,1fr) 452px; gap:22px; align-items:start;}
+  @media (max-width:980px){ .pvb-grid{grid-template-columns:1fr;} }
+
+  /* ── prompt selector ── */
+  .pvb-pills{display:flex; gap:9px; overflow-x:auto; padding:2px 2px 10px; scrollbar-width:thin;}
+  .pvb-pill{flex:0 0 auto; text-align:left; cursor:pointer; font-family:var(--pvb-font);
+    background:var(--pvb-panel); border:1px solid var(--pvb-line-soft); border-radius:11px;
+    padding:10px 14px; min-width:150px; color:var(--pvb-text); transition:background .15s, border-color .15s, transform .05s;}
+  .pvb-pill:hover{background:var(--pvb-panel-2);}
+  .pvb-pill.active{background:var(--pvb-panel-hi); border-color:rgba(0,184,184,.55);}
+  .pvb-pill .t{display:block; font-weight:600; font-size:.92rem;}
+  .pvb-pill .s{display:block; font-size:.72rem; color:var(--pvb-faint); margin-top:2px;}
+  .pvb-pill.active .s{color:rgba(0,184,184,.85);}
+
+  .pvb-card{background:var(--pvb-panel); border-radius:var(--pvb-radius); padding:18px 18px 20px; margin-top:16px;}
+  .pvb-editor-head{display:flex; align-items:center; gap:10px; margin:2px 0 4px;}
+  .pvb-editor-head h2{font-size:1.05rem; font-weight:700; margin:0; color:#fff;}
+  .pvb-editor-head .sub{font-size:.82rem; color:var(--pvb-muted);}
+  .pvb-mode{margin-left:auto; font-size:.62rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    color:#bff0f0; background:rgba(0,184,184,.16); padding:4px 9px; border-radius:6px;}
+  .pvb-gtitle{font-size:.68rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--pvb-teal); margin:20px 0 10px;}
+  .pvb-note{font-size:.82rem; color:var(--pvb-muted); background:rgba(0,184,184,.06);
+    border-left:3px solid var(--pvb-teal-deep); border-radius:0 8px 8px 0; padding:9px 12px; margin:10px 0;}
+
+  /* ── fields ── */
+  .pvb-fields{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  @media (max-width:560px){ .pvb-fields{grid-template-columns:1fr;} }
+  .pvb-field{display:flex; flex-direction:column; gap:5px;}
+  .pvb-field.full{grid-column:1 / -1;}
+  .pvb-field label{font-size:.74rem; font-weight:600; letter-spacing:.02em; color:#cfeaea;}
+  .pvb-field textarea, .pvb-field select{width:100%; font-family:var(--pvb-font); font-size:.9rem; color:var(--pvb-text);
+    background:rgba(0,0,0,.28); border:1px solid var(--pvb-line); border-radius:9px; padding:9px 11px; outline:none; resize:vertical;}
+  .pvb-field textarea{min-height:42px;}
+  .pvb-field select{appearance:none; -webkit-appearance:none; cursor:pointer;
+    background-image:linear-gradient(45deg,transparent 50%,var(--pvb-muted) 50%),linear-gradient(135deg,var(--pvb-muted) 50%,transparent 50%);
+    background-position:calc(100% - 18px) 55%, calc(100% - 13px) 55%; background-size:5px 5px,5px 5px; background-repeat:no-repeat; padding-right:34px;}
+  .pvb-field textarea:focus, .pvb-field select:focus{border-color:var(--pvb-teal);}
+  .pvb-field select option{background:#0c1414; color:var(--pvb-text);}
+
+  /* ── reference pickers (larger thumbnails, fewer borders) ── */
+  .pvb-acc{background:rgba(0,0,0,.2); border-radius:11px; margin-bottom:10px; overflow:hidden;}
+  .pvb-acc-head{width:100%; display:flex; align-items:center; gap:10px; cursor:pointer; font-family:var(--pvb-font);
+    background:transparent; border:0; color:var(--pvb-text); padding:12px 14px; text-align:left;}
+  .pvb-acc-head .lab{font-weight:600; font-size:.92rem;}
+  .pvb-acc-head .cnt{font-size:.7rem; color:var(--pvb-faint); letter-spacing:.04em;}
+  .pvb-acc-head .cnt.has{color:var(--pvb-teal);}
+  .pvb-acc-head .chev{margin-left:auto; width:9px; height:9px; border-right:2px solid var(--pvb-muted);
+    border-bottom:2px solid var(--pvb-muted); transform:rotate(45deg); transition:transform .18s;}
+  .pvb-acc.open .pvb-acc-head .chev{transform:rotate(-135deg);}
+  .pvb-acc-body{display:none; padding:4px 14px 14px;}
+  .pvb-acc.open .pvb-acc-body{display:block;}
+  .pvb-refgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); gap:12px;}
+  .pvb-refcard{cursor:pointer; border-radius:10px; overflow:hidden; background:rgba(255,255,255,.03);
+    outline:2px solid transparent; transition:outline-color .12s, transform .05s;}
+  .pvb-refcard:hover{transform:translateY(-1px);}
+  .pvb-refcard.sel{outline-color:var(--pvb-teal);}
+  .pvb-refcard .thumb{position:relative; width:100%; aspect-ratio:1/1; background:#0b1212;}
+  .pvb-refcard .thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .pvb-refcard.sel .thumb::after{content:'\2713'; position:absolute; top:6px; right:6px; width:22px; height:22px;
+    display:flex; align-items:center; justify-content:center; background:var(--pvb-teal); color:#04110f;
+    font-weight:700; font-size:.8rem; border-radius:50%;}
+  .pvb-refcard .nm{font-size:.74rem; color:#dbeeee; padding:7px 8px 8px; line-height:1.25;}
+
+  /* ── setups ── */
+  .pvb-setups{display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
+  .pvb-chip{display:inline-flex; align-items:center; gap:7px; font-size:.78rem; color:#eafafa;
+    background:rgba(255,255,255,.06); border:1px solid var(--pvb-line); border-radius:20px; padding:6px 8px 6px 13px;}
+  .pvb-chip button{background:transparent; border:0; color:var(--pvb-muted); cursor:pointer; font-size:1rem; line-height:1; padding:0 2px;}
+  .pvb-chip button:hover{color:#ff9a9a;}
+  .pvb-chip .load{color:#eafafa; cursor:pointer;}
+  .pvb-smallbtn{font-family:var(--pvb-font); font-size:.72rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:#bff0f0; background:rgba(0,184,184,.14); border:1px dashed rgba(0,184,184,.5); border-radius:20px; padding:6px 13px; cursor:pointer;}
+  .pvb-smallbtn:hover{background:rgba(0,184,184,.22);}
+
+  /* ── persistent review panel ── */
+  .pvb-review{position:sticky; top:82px; background:var(--pvb-panel-2); border-radius:var(--pvb-radius); padding:16px 16px 18px;}
+  .pvb-review h3{font-size:.68rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--pvb-teal); margin:2px 0 10px;}
+  .pvb-preview{background:#060d0d; border-radius:10px; padding:12px 13px; max-height:300px; overflow:auto;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.76rem; line-height:1.5; color:#d7e7e7; white-space:pre-wrap;}
+  .pvb-acts{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 4px;}
+  .pvb-btn{flex:1 1 auto; font-family:var(--pvb-font); font-size:.74rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:#04110f; background:var(--pvb-teal); border:0; border-radius:9px; padding:11px 12px; cursor:pointer; transition:filter .15s;}
+  .pvb-btn:hover{filter:brightness(1.1);}
+  .pvb-btn.ghost{color:#eafafa; background:rgba(255,255,255,.07);}
+  .pvb-btn.copied{background:#3fa863; color:#04110f;}
+  .pvb-saved{font-size:.7rem; color:var(--pvb-faint); margin-top:8px; letter-spacing:.03em;}
+  .pvb-saved b{color:#7fe0c8; font-weight:600;}
+
+  .pvb-check{margin-top:16px;}
+  .pvb-check-h{display:flex; align-items:center; gap:8px; margin-bottom:6px;}
+  .pvb-check-h .t{font-size:.68rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--pvb-gold);}
+  .pvb-check-note{font-size:.76rem; color:var(--pvb-muted); line-height:1.55; margin:0 0 12px;
+    background:rgba(245,179,1,.08); border-left:3px solid rgba(245,179,1,.5); border-radius:0 8px 8px 0; padding:8px 11px;}
+  .pvb-check-empty{font-size:.82rem; color:var(--pvb-faint); padding:8px 0;}
+  .pvb-checkrow{display:flex; gap:11px; align-items:center; padding:9px; border-radius:10px; background:rgba(255,255,255,.03); margin-bottom:8px;}
+  .pvb-checkrow .th{flex:0 0 56px; width:56px; height:56px; border-radius:8px; overflow:hidden; background:#0b1212;}
+  .pvb-checkrow .th img{width:100%; height:100%; object-fit:cover; display:block;}
+  .pvb-checkrow .meta{flex:1 1 auto; min-width:0;}
+  .pvb-checkrow .role{font-size:.62rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--pvb-teal);}
+  .pvb-checkrow .fn{font-size:.78rem; color:#dbeeee; word-break:break-all; line-height:1.3;}
+  .pvb-checkrow .cimg{flex:0 0 auto; font-family:var(--pvb-font); font-size:.66rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    color:#bff0f0; background:rgba(0,184,184,.16); border:1px solid rgba(0,184,184,.4); border-radius:8px; padding:8px 9px; cursor:pointer;}
+  .pvb-checkrow .cimg:hover{background:rgba(0,184,184,.26);}
+  .pvb-checkrow .cimg.copied{background:#3fa863; color:#04110f; border-color:#3fa863;}
+  </style>
+</head>
+<body>
+
+  <!-- Locked screen: shown only when the shared gate flag is absent. No PIN input, no code. -->
+  <div id="pvb-gate" class="pvb-hidden">
+    <div class="pvb-gate-card">
+      <img src="/logos/CS_Logo_Only_Teal.svg" alt="Creative Silva" />
+      <h2>Locked</h2>
+      <p>This beta uses the same session unlock as Build Resources. Open the current builder once to unlock, then come back here.</p>
+      <a class="pvb-unlock" href="/build-resources.html">Open Build Resources to unlock</a>
+    </div>
+  </div>
+
+  <header class="pvb-header">
+    <div class="pvb-header-in">
+      <div class="pvb-brand">
+        <h1>Image Prompt Builder</h1>
+        <span class="pvb-badge">Beta</span>
+      </div>
+      <a class="pvb-hbtn pvb-back" href="/build-resources.html">&#8249;&nbsp; Back to Current Builder</a>
+      <a class="pvb-hbtn pvb-gen" href="https://chatgpt.com/g/g-p-6a455e17c5248191b8c24ad354aba9ae-imagegen-pv/project" target="imagegen-pv" rel="noopener" onclick="window.open(this.href,'imagegen-pv','popup=yes,width=1320,height=980');return false;">Open Image Gen</a>
+    </div>
+  </header>
+
+  <main class="pvb-wrap" id="pvb-app" style="display:none;">
+    <p class="pvb-intro">Pick a prompt, fill what you need, and choose your reference images. The prompt on the right stays live the whole time. When you copy an image, the prompt text is replaced on your clipboard, so use <b>Copy prompt again</b> before you paste into ChatGPT.</p>
+
+    <div class="pvb-pills" id="pvb-pills" role="tablist" aria-label="Prompt type"></div>
+
+    <div class="pvb-grid">
+      <section>
+        <div class="pvb-card">
+          <div class="pvb-editor-head">
+            <h2 id="pvb-title">Loading</h2>
+            <span class="sub" id="pvb-sub"></span>
+            <span class="pvb-mode" id="pvb-mode"></span>
+          </div>
+          <div id="pvb-fields"></div>
+          <div id="pvb-refs"></div>
+        </div>
+
+        <div class="pvb-card">
+          <div class="pvb-gtitle">Reusable setups</div>
+          <p class="pvb-intro" style="margin:0 0 12px;">Save the current prompt and its choices so you can load the same setup again later. Saved on this computer.</p>
+          <div class="pvb-setups" id="pvb-setups"></div>
+        </div>
+      </section>
+
+      <aside>
+        <div class="pvb-review">
+          <h3>Your prompt</h3>
+          <div class="pvb-preview" id="pvb-preview">Loading base prompt&#8230;</div>
+          <div class="pvb-acts">
+            <button class="pvb-btn" id="pvb-copy">Copy prompt</button>
+            <button class="pvb-btn ghost" id="pvb-copy2">Copy prompt again</button>
+            <button class="pvb-btn ghost" id="pvb-reset" title="Clear your entries for this prompt">Reset</button>
+          </div>
+          <div class="pvb-saved" id="pvb-saved">Draft saves automatically.</div>
+
+          <div class="pvb-check">
+            <div class="pvb-check-h"><span class="t">Attach in ChatGPT &middot; checklist</span></div>
+            <p class="pvb-check-note">Attach these files in the generator. <b>Copy image</b> copies the picture but not its file name, so match each one by the role and order shown here. Attaching the real files keeps their names.</p>
+            <div id="pvb-checklist"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+  (function(){
+    // ---- gate: read-only reuse of the shared unlock flag ----
+    var gate=document.getElementById('pvb-gate'), app=document.getElementById('pvb-app');
+    function unlocked(){ try{ return sessionStorage.getItem('silva-auth')==='ok'; }catch(e){ return false; } }
+    if(unlocked()){ gate.classList.add('pvb-hidden'); app.style.display='block'; }
+    else { gate.classList.remove('pvb-hidden'); app.style.display='none'; return; }
+
+    var IMG='https://www.creativesilva.com/assets/images/characters/';
+
+    // ---- reference manifest (copied from build-resources.html @ 17d36b8; read-only reuse) ----
+    var CHARACTERS=[
+      {label:'Renee (character sheet)',file:'renee-character-sheet-v2.jpg'},
+      {label:'Renee (capri pants)',file:'renee-capri-pants-v2.jpg'},
+      {label:'Mr. Silva (character sheet)',file:'mr-silva-character-sheet-v2.jpg'},
+      {label:'Patricia (character sheet)',file:'patricia-character-sheet-v6.jpg'},
+      {label:'Patricia (cropped hoodie)',file:'patricia-cropped-hoodie-v3.jpg'},
+      {label:'Patricia (full body: front)',file:'patricia-cropped-hoodie-full-front-v2.png'},
+      {label:'Patricia (full body: 3/4 front)',file:'patricia-cropped-hoodie-full-angle-v2.png'},
+      {label:'Patricia (full body: 3/4 rear)',file:'patricia-cropped-hoodie-full-back-v2.png'},
+      {label:'Patricia (front portrait)',file:'patricia-portrait-front-v1.jpg'},
+      {label:'Patricia (side profile)',file:'patricia-portrait-side-v1.jpg'},
+      {label:'Patricia (smiling portrait)',file:'patricia-portrait-smile-v1.jpg'},
+      {label:'Patricia (bust closeup)',file:'patricia-cropped-hoodie-closeup-v2.png'},
+      {label:'Anthony (character sheet)',file:'anthony-character-sheet-v2.jpg'},
+      {label:'Anthony (zip-up long sleeve)',file:'anthony-zip-up-long-sleeve-v1.jpg'},
+      {label:'Ricardo (character sheet)',file:'ricardo-character-sheet-v3.jpg'}
+    ];
+    var ITEMS=[
+      {label:'Classroom camera kit',file:'items/classroom-camera-kit-v1.jpg'},
+      {label:'Canon R5',file:'items/canon-eos-r5-pro-v1.png'},
+      {label:'Canon R50',file:'items/canon-eos-r50-v1.png'},
+      {label:'Canon R5 II (black telephoto)',file:'items/canon-r5-ii-telephoto-v1.png'},
+      {label:'Canon R5 II (white telephoto)',file:'items/canon-r5-ii-white-telephoto-v1.png'},
+      {label:'70-200 lens',file:'items/canon-70-200-lens-v1.png'},
+      {label:'Camera bag',file:'items/canon-camera-bag-v2.png'},
+      {label:'Sketchbook',file:'items/sketchbook-v1.png'},
+      {label:'MacBook Pro',file:'items/macbook-pro-v1.png'},
+      {label:'iMac 27',file:'items/imac-27-mockup-v2.png'},
+      {label:'iPad Pro + Pencil',file:'items/ipad-pro-apple-pencil-v1.jpg'},
+      {label:'Student iPad + keyboard',file:'items/student-ipad-keyboard-v1.png'},
+      {label:'iPhone',file:'items/iphone-mockup-v3.png'},
+      {label:'Pantone swatch book',file:'items/pantone-swatch-book-v1.png'},
+      {label:'Vomero 5 shoes (Patricia)',file:'patricia-vomero-5-v1.png'},
+      {label:'PV cheer outfit (female)',file:'items/pv-cheer-outfit-v1.jpg'},
+      {label:'PV quarter zip (male)',file:'items/quarter-zip-male-v1.jpg'},
+      {label:'Jordan 11 shoes (Anthony)',file:'items/anthony-jordan-11-teal-v1.png'},
+      {label:'Canon logo',file:'items/canon-logo-white-v1.png'}
+    ];
+    var SCENES=[
+      {label:'PV classroom',file:'campus/pv-classroom-inspiration-v1.jpg'},
+      {label:'Campus front',file:'campus/pv-campus-front-v1.jpg'},
+      {label:'Academy lobby (Photo)',file:'campus/pv-lobby-photography-v1.jpg'},
+      {label:'Academy lobby (Digital Arts)',file:'campus/pv-lobby-digital-arts-v1.jpg'},
+      {label:'Sports complex plaza (rear)',file:'campus/pv-sports-complex-back-v2.jpg'}
+    ];
+    var OPT={
+      pitch:['level','slightly down','angled down','slightly up','angled up'],
+      lens:['24mm wide','35mm','50mm','85mm portrait','70-200mm telephoto'],
+      aperture:['f/1.8 shallow','f/5.6 normal','f/11 deep'],
+      aspect:['1:1 square','4:3 landscape','3:4 portrait','16:9 landscape','9:16 portrait','21:9 landscape'],
+      exteriorLocation:['main front entrance plaza','front drop-off zone','entry courtyard','side exterior walkway','outdoor gathering space','landscaped courtyard','exterior terrace or balcony view','building corner perspective','outdoor circulation corridor','plaza behind the sports complex','sports complex grandstand plaza']
+    };
+    var CTX_OPTS={
+      classroom:{height:['ground level','low','eye level','standing eye level','slightly elevated','high','overhead'],
+        yaw:['facing the front wall','facing the rear wall','facing the window wall','facing the solid wall','three-quarter left','three-quarter right','profile left','profile right'],
+        lighting:['bright daylight','golden hour','overcast','warm interior evening','studio key + fill']},
+      exterior:{height:['ground level','low (upward, prestige)','eye level','standing eye level','slightly elevated','elevated / drone'],
+        yaw:['toward the main entrance','toward the PV logo wall','along the building facade','toward the entry plaza','toward the sculpture feature','toward the landscaping','three-quarter left','three-quarter right','profile left','profile right'],
+        lighting:['bright daylight','golden hour','clear blue sky, midday','long-shadow late afternoon','overcast','dusk with teal accent lighting']},
+      lobby:{height:['ground level','low','eye level','standing eye level','slightly elevated','mezzanine level','high / overhead'],
+        yaw:['toward the glass entrance wall','toward the staircase','toward the mezzanine','toward the PV logo wall','across the atrium','toward the lounge area','three-quarter left','three-quarter right','profile left','profile right'],
+        lighting:['bright daylight through the glass','golden hour through the glazing','soft overcast daylight','warm interior evening','teal accent glow after hours'],
+        subjectLoc:['near the main entrance','at the base of the staircase','on the staircase','on the mezzanine landing','in the lounge seating area','by the glass window wall','beside a planter','center of the atrium','in front of the PV logo wall','near the reception desk'],
+        cameraPos:['near the main entrance looking in','across the atrium','at the base of the staircase','from the mezzanine looking down','beside the lounge area','by the glass window wall','from under the mezzanine','center of the atrium']}
+    };
+    function ctxFor(f){ f=f||''; if(/Campus-Lobby|Lobby/i.test(f))return 'lobby'; if(/Campus-Exterior|Exterior/i.test(f))return 'exterior'; return 'classroom'; }
+    function fieldOptsFor(ctx){ var c=CTX_OPTS[ctx]||CTX_OPTS.classroom; return [
+      {re:/exterior location/i,opts:OPT.exteriorLocation},
+      {re:/subject location within room/i,opts:c.subjectLoc},
+      {re:/position within room/i,opts:c.cameraPos},
+      {re:/height/i,opts:c.height},
+      {re:/yaw|direction/i,opts:c.yaw},
+      {re:/pitch|tilt/i,opts:OPT.pitch},
+      {re:/lens|focal/i,opts:OPT.lens},
+      {re:/aperture|depth/i,opts:OPT.aperture},
+      {re:/aspect/i,opts:OPT.aspect},
+      {re:/lighting|time of day/i,opts:c.lighting}
+    ]; }
+    function optsFor(name,ctx){ var o=null; fieldOptsFor(ctx).forEach(function(f){ if(f.opts&&f.re.test(name))o=f.opts; }); return o; }
+
+    // ---- emitted text constants (verbatim) ----
+    var BACKDROP_TEXT={
+      transparent:'BACKGROUND: Light the subject with soft, flattering professional studio lighting and a clear catch light in the eyes on a seamless pure-white studio setup, then remove the background completely. Output the final image as a PNG with a fully transparent background: a clean alpha cutout around the subject, with no white edge fringe or halo.',
+      white:'BACKGROUND: Place the subject on a seamless, pure-white studio backdrop with no shadows on the background. Light the subject with soft, flattering professional studio lighting and a clear catch light in the eyes. Keep the white background in the final image.'
+    };
+    var OUTFIT_BG={
+      white:'FINAL BACKGROUND: keep a seamless, pure-white studio backdrop with soft, flattering professional studio lighting, a clear catch light in the eyes, and no shadows cast on the background.',
+      transparent:'FINAL BACKGROUND OVERRIDE: ignore any white-background instruction above. Keep the soft, flattering professional studio lighting and the catch light in the eyes, but remove the background completely and deliver the final image as a PNG with a fully transparent background: a clean alpha cutout around the character, with no white edge fringe or halo.'
+    };
+    var REALISM_LOCK='MAXIMUM REALISM + PROPORTION LOCK: The result must look like a real photograph from a professional full-frame mirrorless camera. Real skin with natural pores and texture, real fabric weave and stitching, natural light falloff, and believable weight and contact. Do not produce an illustrated, painterly, 3D, CGI, plastic, or over-smoothed look. Lock the body proportions, height, silhouette, and physique to the approved character sheet (Image A) exactly. The new outfit adapts to this established body: never resize, slim, normalize, exaggerate, or reshape the character to fit the clothing, and never borrow body proportions from the outfit or product reference images.';
+
+    // ---- prompt catalog ----
+    var PROMPTS=[
+      {title:'Classroom Environment',sub:'PV lab scene, any angle',mode:'Environment',file:'/assets/prompts/Classroom-Environment-Master-Prompt-v4.md'},
+      {title:'Campus Exterior',sub:'PV Academy, any exterior',mode:'Environment',file:'/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md'},
+      {title:'Lobby Environment',sub:'PV Academy lobby',mode:'Environment',file:'/assets/prompts/PV-Campus-Lobby-Master-Prompt-v1.md'},
+      {title:'Fresh Full-Image Rebuild',sub:'force a full rebuild',mode:'Fresh rebuild',file:'/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt'},
+      {title:'Two-Pass Character Rebuild',sub:'upper + lower passes',mode:'Fresh rebuild',file:'/assets/prompts/Two-Pass-Character-Rebuild.md'},
+      {title:'Character Outfit Change',sub:'re-dress a character sheet',mode:'Outfit rebuild',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md',
+        views:[{label:'Full front / neutral stance',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md'},
+               {label:'Left 3/4 front / face to camera / smile',file:'/assets/prompts/Character-Outfit-Change-Left-3Q-Front-v1.md'},
+               {label:'3/4 rear / side-profile face',file:'/assets/prompts/Character-Outfit-Change-3Q-Rear-v1.md'}]},
+      {title:'Blank Artboard Reset',sub:'clear the canvas memory',mode:'Reset',file:'/assets/prompts/Blank-Artboard-Reset.txt'}
+    ];
+
+    // ---- helpers ----
+    function el(t,c,h){ var e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e; }
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function baseName(f){ return f.split('/').pop(); }
+    var cache={};
+    function fetchPrompt(p){ if(cache[p]!=null)return Promise.resolve(cache[p]); return fetch(p).then(function(r){return r.text();}).then(function(t){cache[p]=t;return t;}); }
+    function legacyCopy(text){ var a=document.createElement('textarea'); a.value=text; a.style.position='fixed'; a.style.opacity='0'; document.body.appendChild(a); a.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(a); }
+    function copyText(text,btn,label){ function ok(){ if(btn){ var o=label||btn.textContent; btn.classList.add('copied'); var was=btn.textContent; btn.textContent='✓ Copied'; setTimeout(function(){btn.classList.remove('copied'); btn.textContent=was;},1600);} }
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(ok,function(){legacyCopy(text);ok();}); } else { legacyCopy(text); ok(); } }
+    function copyImage(url,btn){ var orig=btn.textContent; function done(t){ btn.textContent=t; if(t==='✓ Copied')btn.classList.add('copied'); setTimeout(function(){btn.textContent=orig; btn.classList.remove('copied');},1700); }
+      if(!(navigator.clipboard&&window.ClipboardItem)){ done('No copy'); return; }
+      var png=fetch(url).then(function(r){return r.blob();}).then(function(b){ if(b.type==='image/png')return b;
+        return new Promise(function(res,rej){ var im=new Image(); im.crossOrigin='anonymous'; im.onload=function(){ var c=document.createElement('canvas'); c.width=im.naturalWidth; c.height=im.naturalHeight; c.getContext('2d').drawImage(im,0,0); c.toBlob(function(pb){ pb?res(pb):rej(0); },'image/png'); }; im.onerror=rej; im.src=url; }); });
+      btn.textContent='…'; navigator.clipboard.write([new ClipboardItem({'image/png':png})]).then(function(){done('✓ Copied');},function(){done('Failed');}); }
+
+    // ---- storage (namespaced) ----
+    var NS='pvBeta.v1.';
+    function loadState(key,def){ try{ var s=JSON.parse(localStorage.getItem(NS+'state:'+key)||'null'); return (s&&typeof s==='object')?s:def; }catch(e){ return def; } }
+    function saveState(key,st){ try{ localStorage.setItem(NS+'state:'+key, JSON.stringify(st)); }catch(e){} }
+    function loadSetups(){ try{ var s=JSON.parse(localStorage.getItem(NS+'setups')||'[]'); return Array.isArray(s)?s:[]; }catch(e){ return []; } }
+    function saveSetups(arr){ try{ localStorage.setItem(NS+'setups', JSON.stringify(arr)); }catch(e){} }
+
+    // ---- DOM refs ----
+    var pillsEl=document.getElementById('pvb-pills'),
+        titleEl=document.getElementById('pvb-title'), subEl=document.getElementById('pvb-sub'), modeEl=document.getElementById('pvb-mode'),
+        fieldsEl=document.getElementById('pvb-fields'), refsEl=document.getElementById('pvb-refs'),
+        preEl=document.getElementById('pvb-preview'), savedEl=document.getElementById('pvb-saved'),
+        checklistEl=document.getElementById('pvb-checklist'), setupsEl=document.getElementById('pvb-setups'),
+        copyB=document.getElementById('pvb-copy'), copy2B=document.getElementById('pvb-copy2'), resetB=document.getElementById('pvb-reset');
+
+    // ---- active build ----
+    var activeIdx=0, cfg=null, state=null, baseText='', OUTFIT=false, TWOPASS=false, BACKDROP=false, KEY='', DEFAULT_BACKDROP='', DEFAULT_VIEW='';
+
+    function freshState(){ return {fields:{},chars:['','','',''],items:['','','',''],scene:'',backdrop:(TWOPASS?'transparent':(OUTFIT?'white':'')),view:(OUTFIT?cfg.views[0].file:''),custom:''}; }
+
+    function compose(){
+      if(OUTFIT) return composeOutfit();
+      var out=baseText,name;
+      for(name in state.fields){ var v=state.fields[name]; if(v) out=out.split('['+name+'] =').join('['+name+'] = '+v); }
+      var chars=state.chars.filter(Boolean).map(baseName), items=state.items.filter(Boolean).map(baseName), extra='';
+      if(BACKDROP && state.backdrop && BACKDROP_TEXT[state.backdrop]) extra+=BACKDROP_TEXT[state.backdrop]+'\n\n';
+      if(chars.length||items.length||state.scene){
+        var b='ATTACHED REFERENCE FILES (match these exactly, by file name):\n';
+        if(chars.length) b+='- Characters: '+chars.join(', ')+'\n';
+        if(items.length) b+='- Items: '+items.join(', ')+'\n';
+        if(state.scene) b+='- Scene reference: '+baseName(state.scene)+'\n';
+        b+='\n'; extra+=b;
+      }
+      if(extra){ if(out.indexOf('REFERENCE USE')>=0) out=out.replace('REFERENCE USE',extra+'REFERENCE USE'); else out=out+'\n\n'+extra; }
+      return out;
+    }
+    function composeOutfit(){
+      var out=(baseText||'').trim();
+      var cf=(state.chars||[]).filter(Boolean)[0], nm='';
+      if(cf){ var co=CHARACTERS.filter(function(x){return x.file===cf;})[0]; nm=((co&&co.label)?co.label:baseName(cf)).split('(')[0].trim(); }
+      out=out.split('[CHARACTER NAME]').join(nm||'the character');
+      var parts=[out], bg=OUTFIT_BG[state.backdrop]; if(bg)parts.push(bg); parts.push(REALISM_LOCK);
+      var cu=(state.custom||'').trim(); if(cu)parts.push('CUSTOM ADJUSTMENTS (apply exactly, without changing body proportions): '+cu);
+      var chars=state.chars.filter(Boolean).map(baseName), items=state.items.filter(Boolean).map(baseName);
+      if(chars.length||items.length){ var b='ATTACHED REFERENCE FILES (match these exactly, by file name):';
+        if(chars.length) b+='\n- Character sheet + identity: '+chars.join(', ');
+        if(items.length) b+='\n- Outfit / apparel / items: '+items.join(', ')+' (wardrobe and props only, never body proportions)';
+        b+='\n- Any extra headshots or outfit images: attached separately in the generator.'; parts.push(b); }
+      return parts.join('\n\n').replace(/\n{3,}/g,'\n\n').trim();
+    }
+
+    function selectedRefs(){
+      var out=[],seen={};
+      function add(f,arr,role){ if(!f||seen[f])return; seen[f]=1; var o=arr.filter(function(x){return x.file===f;})[0]; if(o)out.push({label:o.label,file:o.file,role:role}); }
+      state.chars.forEach(function(f){add(f,CHARACTERS,OUTFIT?'Character sheet / identity':'Character');});
+      state.items.forEach(function(f){add(f,ITEMS,OUTFIT?'Outfit / apparel / item':'Item');});
+      add(state.scene,SCENES,'Scene / environment');
+      return out;
+    }
+
+    function render(){
+      preEl.textContent=compose();
+      saveState(KEY,state);
+      // checklist
+      checklistEl.innerHTML='';
+      var refs=selectedRefs();
+      if(!refs.length){ checklistEl.appendChild(el('div','pvb-check-empty','No reference files chosen yet. Pick characters, items, or a location.')); }
+      else refs.forEach(function(r){
+        var row=el('div','pvb-checkrow');
+        var th=el('div','th'); var im=el('img'); im.src=IMG+r.file; im.alt=r.label; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
+        var meta=el('div','meta'); meta.appendChild(el('div','role',esc(r.role))); meta.appendChild(el('div','fn',esc(baseName(r.file)))); row.appendChild(meta);
+        var cb=el('button','cimg','Copy image'); cb.type='button'; cb.addEventListener('click',function(){ copyImage(IMG+r.file,cb); }); row.appendChild(cb);
+        checklistEl.appendChild(row);
+      });
+      var when=new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+      savedEl.innerHTML='Draft saved <b>'+when+'</b>. It restores when you come back.';
+    }
+
+    // ---- reference accordion (larger thumbnails) ----
+    function refAccordion(title, arr, options, single){
+      var maxN=single?1:4, wrap=el('div','pvb-acc');
+      var head=el('button','pvb-acc-head'); head.type='button';
+      head.appendChild(el('span','lab',esc(title)));
+      var cnt=el('span','cnt'); head.appendChild(cnt);
+      head.appendChild(el('span','chev'));
+      var body=el('div','pvb-acc-body'); var grid=el('div','pvb-refgrid'); body.appendChild(grid);
+      function isSel(f){ return single?(state.scene===f):(arr.indexOf(f)>=0); }
+      function nSel(){ return single?(state.scene?1:0):arr.filter(Boolean).length; }
+      function updCnt(){ var n=nSel(); cnt.textContent=n?(single?'1 selected':(n+' of '+maxN)):'none'; cnt.classList.toggle('has',n>0); }
+      function toggle(f){ if(single){ state.scene=(state.scene===f)?'':f; } else { var i=arr.indexOf(f); if(i>=0){arr[i]='';} else { var s=arr.indexOf(''); if(s<0)return; arr[s]=f; } } cards(); updCnt(); render(); }
+      function cards(){ grid.innerHTML=''; options.forEach(function(o){ var c=el('div','pvb-refcard'+(isSel(o.file)?' sel':''));
+        var t=el('div','thumb'); var im=el('img'); im.src=IMG+o.file; im.alt=o.label; im.loading='lazy'; t.appendChild(im); c.appendChild(t);
+        c.appendChild(el('div','nm',esc(o.label))); c.addEventListener('click',function(){toggle(o.file);}); grid.appendChild(c); }); }
+      head.addEventListener('click',function(){ var open=!wrap.classList.contains('open'); wrap.classList.toggle('open',open); });
+      cards(); updCnt(); if(nSel()>0) wrap.classList.add('open');
+      wrap.appendChild(head); wrap.appendChild(body); return wrap;
+    }
+    function backdropSlot(){
+      var f=el('div','pvb-field full'); f.appendChild(el('label',null,'Background'));
+      var sel=document.createElement('select');
+      [['transparent','Transparent background (PNG)'],['white','White studio backdrop']].forEach(function(o){ var op=document.createElement('option'); op.value=o[0]; op.textContent=o[1]; if(state.backdrop===o[0])op.selected=true; sel.appendChild(op); });
+      sel.addEventListener('change',function(){ state.backdrop=sel.value; render(); });
+      f.appendChild(sel); return f;
+    }
+
+    // ---- fields ----
+    function buildFields(){
+      fieldsEl.innerHTML='';
+      if(OUTFIT){ buildOutfitFields(); return; }
+      var ctx=ctxFor(cfg.file);
+      fieldsEl.appendChild(el('div','pvb-gtitle','Scene overrides'));
+      var re=/^\s*(?:[-*]\s+)?(?:\*\*)?\[([^\]]+)\]\s*=/gm,m,names=[];
+      while((m=re.exec(baseText))!==null) names.push(m[1].trim());
+      if(!names.length){
+        var hasTokens=/\[[^\]]+\]/.test(baseText);
+        fieldsEl.appendChild(el('div','pvb-note', hasTokens
+          ? 'This prompt has placeholders in [BRACKETS] that you fill in ChatGPT after pasting. Pick your reference files below and copy.'
+          : 'This prompt has no fill-in fields. Pick your reference files below and copy.'));
+        return;
+      }
+      function fieldEl(name){ if(state.fields[name]===undefined) state.fields[name]='';
+        var opts=optsFor(name,ctx), w=el('div','pvb-field'+(opts?'':' full')); w.appendChild(el('label',null,esc(name)));
+        var input;
+        if(opts){ input=document.createElement('select'); var d=document.createElement('option'); d.value=''; d.textContent='-'; input.appendChild(d);
+          opts.forEach(function(o){ var op=document.createElement('option'); op.value=o; op.textContent=o; if(state.fields[name]===o)op.selected=true; input.appendChild(op); });
+          input.addEventListener('change',function(){ state.fields[name]=input.value; render(); });
+        } else { input=document.createElement('textarea'); input.rows=2; input.placeholder='type here'; input.value=state.fields[name]||'';
+          input.addEventListener('input',function(){ state.fields[name]=input.value; input.style.height='auto'; input.style.height=input.scrollHeight+'px'; render(); }); }
+        w.appendChild(input); return w;
+      }
+      var textNames=names.filter(function(n){return !optsFor(n,ctx);}), dropNames=names.filter(function(n){return optsFor(n,ctx);});
+      var trailRe=/special changes|furniture/i;
+      var lead=textNames.filter(function(n){return !trailRe.test(n);}), trail=textNames.filter(function(n){return trailRe.test(n);});
+      function grid(list){ if(!list.length)return; var g=el('div','pvb-fields'); list.forEach(function(n){ g.appendChild(fieldEl(n)); }); fieldsEl.appendChild(g); }
+      grid(lead); grid(dropNames); grid(trail);
+    }
+    function buildOutfitFields(){
+      fieldsEl.appendChild(el('div','pvb-gtitle','Outfit change'));
+      var g=el('div','pvb-fields');
+      var vf=el('div','pvb-field full'); vf.appendChild(el('label',null,'Pose / view'));
+      var sel=document.createElement('select');
+      cfg.views.forEach(function(v){ var op=document.createElement('option'); op.value=v.file; op.textContent=v.label; if(state.view===v.file)op.selected=true; sel.appendChild(op); });
+      sel.addEventListener('change',function(){ state.view=sel.value; saveState(KEY,state); fetchPrompt(sel.value).then(function(t){ baseText=t; render(); }); });
+      vf.appendChild(sel); g.appendChild(vf);
+      var cf=el('div','pvb-field full'); cf.appendChild(el('label',null,'Custom details (new outfit or output note)'));
+      var ta=document.createElement('textarea'); ta.rows=3; ta.placeholder='Optional: colors, materials, footwear, accessories, mood, framing. Body proportions stay locked to the character sheet.'; ta.value=state.custom||'';
+      ta.addEventListener('input',function(){ state.custom=ta.value; ta.style.height='auto'; ta.style.height=ta.scrollHeight+'px'; render(); });
+      cf.appendChild(ta); g.appendChild(cf);
+      fieldsEl.appendChild(g);
+      fieldsEl.appendChild(el('div','pvb-note','The character name is taken from the character sheet you choose below, so there is no name to type. Body proportions always come from the character sheet, never the outfit or product images.'));
+    }
+
+    function buildRefs(){
+      refsEl.innerHTML='';
+      refsEl.appendChild(el('div','pvb-gtitle','Reference files'));
+      if(OUTFIT){
+        refsEl.appendChild(refAccordion('Characters', state.chars, CHARACTERS, false));
+        refsEl.appendChild(refAccordion('Outfit, apparel & items', state.items, ITEMS, false));
+        refsEl.appendChild(backdropSlot());
+      } else {
+        refsEl.appendChild(refAccordion('Characters', state.chars, CHARACTERS, false));
+        refsEl.appendChild(refAccordion('Items', state.items, ITEMS, false));
+        if(BACKDROP) refsEl.appendChild(backdropSlot());
+        else refsEl.appendChild(refAccordion('Location', null, SCENES, true));
+      }
+    }
+
+    // ---- reusable setups ----
+    function renderSetups(){
+      setupsEl.innerHTML='';
+      var add=el('button','pvb-smallbtn','+ Save current setup'); add.type='button';
+      add.addEventListener('click',function(){ var name=prompt('Name this setup (for example: Anthony editing, golden hour):'); if(!name)return; name=name.trim().slice(0,48); if(!name)return;
+        var arr=loadSetups(); arr.push({name:name, idx:activeIdx, state:JSON.parse(JSON.stringify(state))}); saveSetups(arr); renderSetups(); });
+      setupsEl.appendChild(add);
+      loadSetups().forEach(function(s,i){ var chip=el('span','pvb-chip');
+        var load=el('span','load',esc(s.name)); load.title='Load this setup'; load.addEventListener('click',function(){ applySetup(s); });
+        var del=el('button',null,'×'); del.type='button'; del.title='Delete'; del.addEventListener('click',function(e){ e.stopPropagation(); var arr=loadSetups(); arr.splice(i,1); saveSetups(arr); renderSetups(); });
+        chip.appendChild(load); chip.appendChild(del); setupsEl.appendChild(chip); });
+    }
+    function applySetup(s){
+      selectPrompt(s.idx, JSON.parse(JSON.stringify(s.state)));
+    }
+
+    // ---- select prompt ----
+    function selectPrompt(idx, overrideState){
+      activeIdx=idx; cfg=PROMPTS[idx];
+      Array.prototype.forEach.call(pillsEl.children,function(p,i){ p.classList.toggle('active',i===idx); p.setAttribute('aria-selected',i===idx?'true':'false'); });
+      OUTFIT=!!(cfg.views&&cfg.views.length); TWOPASS=/two-pass/i.test(cfg.file||''); BACKDROP=TWOPASS||OUTFIT;
+      KEY=OUTFIT?'outfit-change':cfg.file;
+      titleEl.textContent=cfg.title; subEl.textContent=cfg.sub?('('+cfg.sub+')'):''; modeEl.textContent=cfg.mode||'';
+      var def=freshState();
+      if(overrideState){ state=Object.assign(freshState(), overrideState); state.chars=(state.chars||[]).concat(['','','','']).slice(0,4); state.items=(state.items||[]).concat(['','','','']).slice(0,4); saveState(KEY,state); }
+      else { var sv=loadState(KEY,null); state = sv?Object.assign(def,sv):def; state.chars=(state.chars||[]).concat(['','','','']).slice(0,4); state.items=(state.items||[]).concat(['','','','']).slice(0,4); }
+      DEFAULT_BACKDROP=def.backdrop; DEFAULT_VIEW=def.view;
+      try{ localStorage.setItem(NS+'last', String(idx)); }catch(e){}
+      var path=OUTFIT?(state.view||cfg.views[0].file):cfg.file;
+      preEl.textContent='Loading base prompt…';
+      fetchPrompt(path).then(function(t){ baseText=t; buildFields(); buildRefs(); render(); })
+        .catch(function(){ baseText='[Could not load the base prompt file.]'; buildFields(); buildRefs(); render(); });
+    }
+
+    // ---- wire header actions ----
+    copyB.addEventListener('click',function(){ copyText(compose(), copyB); });
+    copy2B.addEventListener('click',function(){ copyText(compose(), copy2B); });
+    resetB.addEventListener('click',function(){ if(!confirm('Clear your entries for this prompt? This cannot be undone.'))return; try{ localStorage.removeItem(NS+'state:'+KEY); }catch(e){} selectPrompt(activeIdx); });
+
+    // ---- build pills ----
+    PROMPTS.forEach(function(p,i){ var b=el('button','pvb-pill'); b.type='button'; b.setAttribute('role','tab');
+      b.appendChild(el('span','t',esc(p.title))); if(p.sub)b.appendChild(el('span','s',esc(p.sub)));
+      b.addEventListener('click',function(){ selectPrompt(i); }); pillsEl.appendChild(b); });
+
+    renderSetups();
+    var start=0; try{ var l=parseInt(localStorage.getItem(NS+'last'),10); if(!isNaN(l)&&l>=0&&l<PROMPTS.length)start=l; }catch(e){}
+    selectPrompt(start);
+  })();
+  </script>
+</body>
+</html>
