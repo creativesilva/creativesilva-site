@@ -349,6 +349,58 @@
     .ps2-file-acts .pg-btn { font-size: 0.58rem; padding: 5px 8px; flex: 1 1 auto; text-align: center; justify-content: center; }
     .ps2-filespop-empty { color: var(--text-dim); font-size: 0.82rem; font-style: italic; }
 
+    /* ===== CS Incoming upload row (moved from curriculum.html) ===== */
+    .course-doc {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      padding: 11px 14px; margin-bottom: 6px; text-decoration: none;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-left: 3px solid var(--course-accent, #007474);
+      backdrop-filter: blur(10px) saturate(1.1);
+      -webkit-backdrop-filter: blur(10px) saturate(1.1);
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .course-doc-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto; }
+    .course-doc-actions .course-doc-dl:hover {
+      border-color: color-mix(in srgb, var(--course-accent, #007474) 90%, transparent);
+      background: color-mix(in srgb, var(--course-accent, #007474) 22%, transparent);
+    }
+    .course-doc:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.22);
+      border-left-color: var(--course-accent, #007474);
+    }
+    .course-doc-ico {
+      font-family: var(--font-head); font-size: 0.52rem; font-weight: 700; letter-spacing: 0.08em;
+      color: #ffffff; background: var(--course-accent, #007474); padding: 3px 7px; flex-shrink: 0;
+    }
+    .course-doc-name { flex: 1; min-width: 0; color: var(--text); font-size: 0.9rem; }
+    /* Name + description inline by default (wide screens have the room); stack only when narrow. */
+    .course-doc-sub { font-size: 0.8rem; color: var(--text-dim); letter-spacing: 0; text-transform: none; }
+    .course-doc-sub::before { content: "\00B7"; margin: 0 9px; color: var(--text-faint); }
+    @media (max-width: 640px) {
+      .course-doc-sub { display: block; margin-top: 2px; font-size: 0.72rem; }
+      .course-doc-sub::before { content: none; }
+    }
+    .tr-linkgroup { font-family: var(--font-head); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); padding: 10px 2px 5px; }
+    .tr-linkgroup:first-child { padding-top: 2px; }
+    .course-doc-dl {
+      font-family: var(--font-head); font-size: 0.58rem; font-weight: 600; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--course-accent, #007474);
+      padding: 3px 9px; flex-shrink: 0;
+      border: 1px solid color-mix(in srgb, var(--course-accent, #007474) 45%, transparent);
+      background: color-mix(in srgb, var(--course-accent, #007474) 8%, transparent);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    /* LWZ Incoming upload row: paperclip icon, drag-over highlight, busy state. */
+    .lwz-clip { width: 13px; height: 13px; margin-right: 5px; vertical-align: -2px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .lwz-row { transition: background 0.15s ease, outline-color 0.15s ease; outline: 2px dashed transparent; outline-offset: -2px; }
+    .lwz-row.lwz-drop { outline-color: var(--course-accent, #FF6B1A); background: color-mix(in srgb, var(--course-accent, #FF6B1A) 12%, transparent); }
+    .lwz-row.lwz-busy .lwz-status { color: var(--course-accent, #FF6B1A); }
+    /* Teacher Resources: every action pill the same width as the widest, for a uniform column. */
+    #teacher-resources .course-doc-dl { min-width: 82px; box-sizing: border-box; text-align: center; }
+    #teacher-resources .course-doc-ico { min-width: 46px; box-sizing: border-box; text-align: center; }
+
     /* ── Page content wrap (Task 2 fills this with the moved Build Resources sections) ── */
     .br-main { max-width: var(--max-width, 1200px); margin: 0 auto; padding: 26px 32px 90px; box-sizing: border-box; }
     @media (max-width: 640px) { .br-main { padding: 20px 16px 60px; } }
@@ -421,6 +473,9 @@
     </div>
 
     <div class="br-main">
+      <section style="margin-bottom:24px;">
+        <div id="cs-incoming-mount"></div>
+      </section>
             <details class="cat-acc" open>
               <summary class="cat-head"><span class="cat-name">Image Generation Tools</span><span class="cat-chevron"></span></summary>
               <div class="cat-body">
@@ -1468,6 +1523,84 @@
       });
     });
   })();
+  </script>
+  <script>
+  /* ===== CS Incoming Drive uploader (moved from curriculum.html) ===== */
+    const CLIP_SVG = `<svg class="lwz-clip" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>`;
+    function lwzRow(c) {
+      const openBtn = c.folder ? `<a class="course-doc-dl" href="${c.folder}" target="_blank" rel="noopener">Open</a>` : "";
+      return `<div class="course-doc lwz-row" data-endpoint="${c.endpoint}" data-key="${c.key}" data-target="${c.target || ""}">`
+        + `<span class="course-doc-ico">DRIVE</span>`
+        + `<span class="course-doc-name">${c.label}<span class="course-doc-sub lwz-status">Drop files here or Attach</span></span>`
+        + `<span class="course-doc-actions">`
+        + `<span class="course-doc-dl${c.endpoint ? "" : " pending"}" role="button" tabindex="0" style="cursor:pointer;" onclick="lwzPick(this)">${CLIP_SVG}Attach</span>`
+        + openBtn
+        + `</span>`
+        + `<input type="file" class="lwz-input" multiple hidden onchange="lwzUpload(this.closest('.lwz-row'), this.files); this.value='';">`
+        + `</div>`;
+    }
+    window.lwzPick = function (btn) {
+      const row = btn.closest(".lwz-row");
+      if (!row.dataset.endpoint) { row.querySelector(".lwz-status").textContent = "Setup needed: add the Apps Script URL"; return; }
+      row.querySelector(".lwz-input").click();
+    };
+    function lwzToBase64(file) {
+      return new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = () => res(String(r.result).split(",")[1]);
+        r.onerror = rej;
+        r.readAsDataURL(file);
+      });
+    }
+    window.lwzUpload = async function (row, fileList) {
+      const status = row.querySelector(".lwz-status");
+      const files = Array.from(fileList || []);
+      if (!row.dataset.endpoint) { status.textContent = "Setup needed: add the Apps Script URL"; return; }
+      if (!files.length) { status.textContent = "No files"; return; }
+      row.classList.add("lwz-busy");
+      let ok = 0, failed = 0;
+      for (let i = 0; i < files.length; i++) {
+        status.textContent = `Uploading ${i + 1} of ${files.length}: ${files[i].name}`;
+        try {
+          const data = await lwzToBase64(files[i]);
+          const res = await fetch(row.dataset.endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ target: row.dataset.target, key: row.dataset.key, name: files[i].name, type: files[i].type || "application/octet-stream", data }),
+          });
+          const out = await res.json();
+          if (out.ok) ok++; else { failed++; console.warn("Drive upload:", out.error); }
+        } catch (e) { failed++; console.warn("Drive upload:", e); }
+      }
+      row.classList.remove("lwz-busy");
+      status.textContent = failed
+        ? `${ok} uploaded, ${failed} failed`
+        : `\u2713 ${ok} file${ok === 1 ? "" : "s"} uploaded`;
+    };
+    // Drag and drop onto the row (delegated, so it survives re-renders).
+    ["dragenter", "dragover"].forEach(ev => document.addEventListener(ev, e => {
+      const row = e.target.closest && e.target.closest(".lwz-row");
+      if (!row) return;
+      e.preventDefault();
+      row.classList.add("lwz-drop");
+    }));
+    document.addEventListener("dragleave", e => {
+      const row = e.target.closest && e.target.closest(".lwz-row");
+      if (row && !row.contains(e.relatedTarget)) row.classList.remove("lwz-drop");
+    });
+    document.addEventListener("drop", e => {
+      const row = e.target.closest && e.target.closest(".lwz-row");
+      if (!row) return;
+      e.preventDefault();
+      row.classList.remove("lwz-drop");
+      lwzUpload(row, e.dataTransfer.files);
+    });
+  document.getElementById('cs-incoming-mount').innerHTML = lwzRow({
+    label: 'CS Incoming', target: 'creativesilva',
+    folder: 'https://drive.google.com/drive/folders/1Tl7H8-oLsxF7TQUMXA097ftozc1OO-0c',
+    endpoint: 'https://script.google.com/macros/s/AKfycbxVMKQvcZFgOrLgXJQbX5C6qRKuFBKyYUwRd3vR21WXSci4H0dltBFJtpQ0CEjhpv8L/exec',
+    key: 'cs-9d4f1a6b3e28'
+  });
   </script>
 </body>
 </html>
