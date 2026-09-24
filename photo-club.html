@@ -28,6 +28,8 @@
 
   <style>
     /* Photo Club / Lightwriterz: simple centered informational page (red brand theme) */
+    .pc-titlerow { display: flex; align-items: center; justify-content: center; gap: 0.34em; }
+    .pc-titlelogo { height: 1.12em; width: auto; display: block; flex: 0 0 auto; margin-top: -0.08em; }
     .pc-wrap { max-width: 940px; margin: 0 auto; }
     .pc-intro { max-width: 720px; margin: 0 auto 40px; text-align: center; }
     .pc-label { font-family: 'Oswald', sans-serif; letter-spacing: 0.3em; text-transform: uppercase; font-size: 0.82rem; color: #be202e; margin: 0 0 12px; }
@@ -63,7 +65,10 @@
   <main>
     <section class="container">
 
-      <h1 class="page-title">Photo Club</h1>
+      <h1 class="page-title pc-titlerow">
+        <img class="pc-titlelogo" src="logos/LightWriterz_Mark_White_v1.png" alt="Lightwriterz" />
+        <span>Photo Club</span>
+      </h1>
 
       <div class="pc-wrap">
         <div class="pc-intro">
