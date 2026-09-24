@@ -73,16 +73,16 @@ def aperture_settings_section(es, quality="JPG"):
     red="#f90101"
     if es:
         title="Ajustes de C&aacute;mara"
-        lead=("Trabaja en modo Manual (M). Tu ISO se queda en 100 todo el tiempo. Tu apertura es tu elecci&oacute;n creativa: "
-              "empieza en f/8, luego f/4 y luego f/2. Cada vez que cambies la apertura, ajusta el obturador para equilibrar el expos&iacute;metro.")
-        note_t=("Empieza en f/8 y hazla un paso m&aacute;s brillante: apunta a <strong>+1</strong> en el expos&iacute;metro (se ve mejor con luz suave de sombra). "
-                "Luego pon f/4 y equilibra con el obturador. Luego f/2 y equilibra otra vez. Solo mueves dos cosas: la apertura (tu elecci&oacute;n) y el obturador (para equilibrar).")
+        lead=("Trabaja en modo Manual (M). Mant&eacute;n tu ISO en 100 todo el tiempo. Debes capturar un buen retrato en las TRES aperturas: f/8, f/4 y f/2. "
+              "Puedes empezar en f/8 o en f/2, pero pasa por las tres en orden. Cada vez que cambies la apertura, ajusta el obturador para equilibrar el expos&iacute;metro.")
+        note_t=("No es elegir una sola apertura: capturas las tres, en orden. Cuando est&eacute;s en f/8, hazla un paso m&aacute;s brillante (apunta a <strong>+1</strong> en el expos&iacute;metro). "
+                "En f/4 y f/2, equilibra el expos&iacute;metro. Solo se mueven dos ajustes: la apertura (en orden) y el obturador (para equilibrar). El ISO se queda en 100.")
     else:
         title="Camera Settings"
-        lead=("Work in Manual mode (M). Your ISO stays at 100 the whole time. Your aperture is your creative choice: "
-              "start at f/8, then f/4, then f/2. Every time you change the aperture, adjust the shutter to balance the light meter.")
-        note_t=("Start at f/8 and make it one stop bright: aim for <strong>+1</strong> on the light meter (it looks best in soft, shaded light). "
-                "Then set f/4 and balance with the shutter. Then f/2 and balance again. You only move two things: the aperture (your choice) and the shutter (to balance).")
+        lead=("Work in Manual mode (M). Keep your ISO at 100 the whole time. You must capture a good portrait at ALL three apertures: f/8, f/4, and f/2. "
+              "You can start at f/8 or at f/2, but go through all three in order. Every time you change the aperture, adjust the shutter to balance the light meter.")
+        note_t=("This is not a free choice of one aperture: you capture all three, in order. When you are at f/8, make it one stop bright (aim for <strong>+1</strong> on the light meter). "
+                "At f/4 and f/2, balance the meter. Only two settings move: the aperture (in order) and the shutter (to balance). ISO stays at 100.")
     lead_html=f'<div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{lead}</span></div>'
     note_box=(f'<div style="background:rgba(249,1,1,0.10);border:1px solid rgba(249,1,1,0.30);border-left:4px solid {red};padding:11px 14px;margin:0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.55;">{note_t}</div>')
     return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
@@ -93,16 +93,15 @@ def aperture_settings_section(es, quality="JPG"):
 # ---- downloads (Overview) ----
 def downloads_block(es):
     heading="Descarga Tus Archivos" if es else "Download Your Files"
-    lead=("Descarga aqu&iacute; todo lo que necesitas para este m&oacute;dulo. Consigue tus archivos antes de empezar." if es
-          else "Download everything you need for this module here. Get your files before you start.")
+    lead=("Descarga el documento de reflexi&oacute;n de este m&oacute;dulo. Tus ajustes de hoja de contactos ya est&aacute;n instalados en Lightroom; si alguna vez los necesitas otra vez, est&aacute;n en la p&aacute;gina de Resumen del curso." if es
+          else "Download this module&rsquo;s reflection document. Your contact sheet presets are already installed in Lightroom; if you ever need them again, they are on the Course Overview page.")
     reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
-    cslabel=("Plantillas de Hoja de Contactos (12 y 6, ZIP)" if es else "Contact Sheet Templates (12-Up &amp; 6-Up, ZIP)")
     ref=REFLECT_ES if es else REFLECT_EN
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
       + para(lead)
       + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">'
-      + dl_link(ref,reflabel,row=True) + dl_link(CONTACT_ZIP,cslabel,row=True)
+      + dl_link(ref,reflabel,row=True)
       + '</div>'
       + folder_note(es, AREA) + '</div>')
 
@@ -214,9 +213,6 @@ def overview():
 # ================= STEP 01 =================
 def step01():
     en=banner("Module 08 &bull; Step 01","Capture &amp; Contact Sheet","Capture your partner at f/8, f/4, and f/2, then build a 12-Up contact sheet.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
-    en+=deliverables_box(False,
-        [("1 contact sheet:","a 12-Up contact sheet of your entire take, turned in as a high-resolution JPG.")])
-    en+=capture_format("jpg", False)
     en+=type_card("photo-walk","Step 01 &middot; On the Photo Walk","Take Turns: Photographer and Talent",
         para("Head out with your partner and the camera kit. One of you is the <strong>photographer</strong> and the other is the <strong>talent</strong>. Photograph your full set, then trade roles so you both get portraits and you both practice the camera.")
         + (float_right(S1_FLOAT,"A Pioneer Valley student photographing a partner in open shade with the Canon R50 held in portrait orientation","Camera on its side, one elbow up: that is portrait orientation.") if HAVE_IMAGES else float_ph("FLOAT-RIGHT PLACEHOLDER &middot; Step 1 capture photo. Swap in when ready."))
@@ -226,9 +222,11 @@ def step01():
             ("Open shade:","move out of the harsh sun into soft, even shade."),
             ("Step off the wall:","have your partner take a few steps forward from the background for depth and separation."),
         ]))
+    en+=deliverables_box(False,
+        [("1 contact sheet:","a 12-Up contact sheet of your entire take, turned in as a high-resolution JPG.")])
     en+=aperture_settings_section(False, "JPG")
-    en+=card("YOUR THREE APERTURES / SET THE CAMERA","f/8, then f/4, then f/2",
-        para("Keep ISO at 100 the whole time. Capture a good portrait at each aperture, and balance the light with your shutter each time.")
+    en+=card("YOUR THREE APERTURES / SET THE CAMERA","f/8, f/4, and f/2, in order",
+        para("You must capture a good portrait at all three apertures, in order. You can start at f/8 or at f/2, then work through all three. Keep ISO at 100 and balance the light with your shutter at each one.")
         + steps([
             ("Set Manual mode:","turn the Mode dial to <strong>M</strong>."),
             ("Set ISO 100:","press the <strong>ISO button</strong>, then turn the dial to 100."),
@@ -250,9 +248,6 @@ def step01():
     en+=next_up("UP NEXT &middot; STEP 02 - Cull &amp; Submit","Pick your best three (one per f-stop), crop, and turn in a 6-Up plus the three final JPGs.")
 
     es=banner("M&oacute;dulo 08 &bull; Paso 01","Captura y Hoja de Contactos","Captura a tu compa&ntilde;ero en f/8, f/4 y f/2, y arma una hoja de contactos de 12.","#top","Back to English", HICON_PHOTO_WALK)
-    es+=deliverables_box(True,
-        [("1 hoja de contactos:","una hoja de contactos de 12 im&aacute;genes de todo tu trabajo, entregada como un JPG de alta resoluci&oacute;n.")])
-    es+=capture_format("jpg", True)
     es+=type_card("photo-walk","Paso 01 &middot; En la Caminata","Tomen Turnos: Fot&oacute;grafo y Modelo",
         para("Salgan con tu compa&ntilde;ero y el kit de c&aacute;mara. Uno es el <strong>fot&oacute;grafo</strong> y el otro es el <strong>modelo</strong>. Captura tu serie completa, luego cambien de rol para que ambos tengan retratos y ambos practiquen la c&aacute;mara.")
         + (float_right(S1_FLOAT,"Un estudiante de Pioneer Valley fotografiando a su compa&ntilde;ero en sombra abierta con la Canon R50 en orientaci&oacute;n vertical","C&aacute;mara de lado, un codo arriba: eso es orientaci&oacute;n de retrato.") if HAVE_IMAGES else float_ph("PLACEHOLDER FLOTANTE &middot; foto del Paso 1"))
@@ -262,9 +257,11 @@ def step01():
             ("Sombra abierta:","sal del sol fuerte a una sombra suave y pareja."),
             ("Sep&aacute;rate de la pared:","que tu compa&ntilde;ero d&eacute; unos pasos hacia adelante para crear profundidad y separaci&oacute;n."),
         ]))
+    es+=deliverables_box(True,
+        [("1 hoja de contactos:","una hoja de contactos de 12 im&aacute;genes de todo tu trabajo, entregada como un JPG de alta resoluci&oacute;n.")])
     es+=aperture_settings_section(True, "JPG")
-    es+=card("TUS TRES APERTURAS / AJUSTA LA C&Aacute;MARA","f/8, luego f/4, luego f/2",
-        para("Mant&eacute;n el ISO en 100 todo el tiempo. Captura un buen retrato en cada apertura y equilibra la luz con tu obturador cada vez.")
+    es+=card("TUS TRES APERTURAS / AJUSTA LA C&Aacute;MARA","f/8, f/4 y f/2, en orden",
+        para("Debes capturar un buen retrato en las tres aperturas, en orden. Puedes empezar en f/8 o en f/2, luego pasa por las tres. Mant&eacute;n el ISO en 100 y equilibra la luz con tu obturador en cada una.")
         + steps([
             ("Pon el modo Manual:","gira el dial de modo a <strong>M</strong>."),
             ("Pon ISO 100:","presiona el <strong>bot&oacute;n ISO</strong>, luego gira el dial a 100."),
@@ -292,10 +289,6 @@ def step01():
 # ================= STEP 02 =================
 def step02():
     en=banner("Module 08 &bull; Step 02","Cull &amp; Submit","Pick your best three (one per f-stop), crop, and turn in a 6-Up plus three final JPGs.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
-    en+=deliverables_box(False,
-        [("1 contact sheet:","a 6-Up contact sheet with your three final images loaded, as a high-resolution JPG."),
-         ("3 final photos:","your three polished portraits exported individually as high-resolution JPGs."),
-         ("4 files total:","the 6-Up contact sheet plus the three final JPGs.")])
     en+=type_card("edit","Step 02 &middot; Cull","Choose Your Three Best",
         para("Look through your take and choose your three strongest portraits: <strong>one at f/8, one at f/4, and one at f/2</strong>. Keeping one at each f-stop shows the range of the aperture and sets up your reflection.")
         + (float_right(S2_FLOAT,"A Pioneer Valley student culling portraits in Lightroom Classic on an iMac in the lab","Compare your f/8, f/4, and f/2 portraits and keep the best of each.") if HAVE_IMAGES else float_ph("FLOAT-RIGHT PLACEHOLDER &middot; Step 2 cull/edit photo. Swap in when ready."))
@@ -305,6 +298,10 @@ def step02():
             ("Good exposure:","keep the ones that are balanced and flattering."),
         ])
         + note("Call these your final selections, not &ldquo;picks.&rdquo; Choose on purpose."))
+    en+=deliverables_box(False,
+        [("1 contact sheet:","a 6-Up contact sheet with your three final images loaded, as a high-resolution JPG."),
+         ("3 final photos:","your three polished portraits exported individually as high-resolution JPGs."),
+         ("4 files total:","the 6-Up contact sheet plus the three final JPGs.")])
     en+=card("LIGHT EDIT / CROP ONLY","Get It Right in Camera, Then Crop",
         para("This is a JPG capture, so you got your exposure right in the camera. The only edit you need is a <strong>crop</strong>: tidy the framing so it reads as a clean portrait.")
         + bullets([
@@ -322,10 +319,6 @@ def step02():
     en+=next_up("UP NEXT &middot; STEP 03 - Reflection","Tell what you learned about balancing your exposure and which f-stop you liked best.")
 
     es=banner("M&oacute;dulo 08 &bull; Paso 02","Selecciona y Entrega","Elige tus tres mejores (una por n&uacute;mero f), recorta y entrega una hoja de 6 m&aacute;s tres JPG finales.","#top","Back to English", HICON_PHOTO_WALK)
-    es+=deliverables_box(True,
-        [("1 hoja de contactos:","una hoja de contactos de 6 con tus tres im&aacute;genes finales cargadas, como un JPG de alta resoluci&oacute;n."),
-         ("3 fotos finales:","tus tres retratos pulidos exportados por separado como JPG de alta resoluci&oacute;n."),
-         ("4 archivos en total:","la hoja de contactos de 6 m&aacute;s las tres im&aacute;genes finales en JPG.")])
     es+=type_card("edit","Paso 02 &middot; Selecciona","Elige Tus Tres Mejores",
         para("Revisa tu trabajo y elige tus tres retratos m&aacute;s fuertes: <strong>uno en f/8, uno en f/4 y uno en f/2</strong>. Guardar uno en cada n&uacute;mero f muestra el rango de la apertura y prepara tu reflexi&oacute;n.")
         + (float_right(S2_FLOAT,"Un estudiante de Pioneer Valley seleccionando retratos en Lightroom Classic en una iMac en el laboratorio","Compara tus retratos de f/8, f/4 y f/2 y guarda el mejor de cada uno.") if HAVE_IMAGES else float_ph("PLACEHOLDER FLOTANTE &middot; foto del Paso 2"))
@@ -335,6 +328,10 @@ def step02():
             ("Buena exposici&oacute;n:","guarda las que est&eacute;n equilibradas y favorecedoras."),
         ])
         + note("Llama a estas tus selecciones finales. Elige a prop&oacute;sito."))
+    es+=deliverables_box(True,
+        [("1 hoja de contactos:","una hoja de contactos de 6 con tus tres im&aacute;genes finales cargadas, como un JPG de alta resoluci&oacute;n."),
+         ("3 fotos finales:","tus tres retratos pulidos exportados por separado como JPG de alta resoluci&oacute;n."),
+         ("4 archivos en total:","la hoja de contactos de 6 m&aacute;s las tres im&aacute;genes finales en JPG.")])
     es+=card("EDICI&Oacute;N LIGERA / SOLO RECORTE","Deja Bien la C&aacute;mara, Luego Recorta",
         para("Esta es una captura en JPG, as&iacute; que dejaste bien tu exposici&oacute;n en la c&aacute;mara. La &uacute;nica edici&oacute;n que necesitas es un <strong>recorte</strong>: ordena el encuadre para que se vea como un retrato limpio.")
         + bullets([
