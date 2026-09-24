@@ -21,6 +21,8 @@ HAVE_IMAGES=False
 CONTACT_ZIP=f"{SITE}/assets/PVHS_Contact_Sheet_Presets.zip"
 REFLECT_EN=f"{SITE}/assets/course-documents/Aperture-Portrait-Photo2-Reflection-EN.docx"
 REFLECT_ES=f"{SITE}/assets/course-documents/Aperture-Portrait-Photo2-Reflection-ES.docx"
+EXPOSURE_FULL=f"{SITE}/assets/images/shared/exposure-basics-v1.jpg"     # exposure-basics poster (click to open full)
+EXPOSURE_THUMB=f"{SITE}/assets/images/shared/exposure-basics-thumb-v1.jpg"
 PRESET_MODULE="photo2-preset-overview.html"   # Module 04: Build Your Own Preset (the preset started earlier)
 
 OVER="photo2-aperture-portrait-overview.html"
@@ -80,6 +82,20 @@ def aperture_settings_section(es):
       + section_header(CAMSET_ICON, title, "#f90101", "#ff8f8f")
       + f'<div class="silva-cfloat" style="float:right;width:50%;min-width:400px;margin:2px 0 16px 30px;">{capture_panel("RAW", "1/500", "F8", "100", "shutter")}</div>'
       + lead_html + note_box + '</div>')
+
+def exposure_poster(es):
+    # Purple RESOURCE: clickable Exposure Basics poster thumbnail; opens the full image in a new tab.
+    if es:
+        heading="P&oacute;ster de Conceptos de Exposici&oacute;n"
+        body=para("Este p&oacute;ster repasa lo b&aacute;sico de la exposici&oacute;n: la apertura, la velocidad del obturador y el ISO, y c&oacute;mo cada n&uacute;mero cambia la luz, el movimiento, la profundidad de campo y el grano. &Uacute;salo como referencia mientras equilibras tu exposici&oacute;n.")
+        alt="P&oacute;ster de Conceptos de Exposici&oacute;n: apertura, velocidad del obturador e ISO"
+        cap="Toca para abrirlo en grande en una pesta&ntilde;a nueva."
+    else:
+        heading="Exposure Basics Poster"
+        body=para("This poster covers the basics of exposure: aperture, shutter speed, and ISO, and how each number changes light, motion, depth of field, and grain. Use it as a reference while you balance your exposure.")
+        alt="Exposure Basics poster: aperture, shutter speed, and ISO"
+        cap="Tap to open it full size in a new tab."
+    return resources_card(heading, body, es, floatimg=purple_thumb(EXPOSURE_FULL, EXPOSURE_THUMB, alt, cap))
 
 def downloads_block(es):
     heading="Descarga Tus Archivos" if es else "Download Your Files"
@@ -226,6 +242,7 @@ def step01():
     en+=deliverables_box(False,
         [("1 contact sheet:","a 12-Up contact sheet of your entire take, turned in as a high-resolution JPG.")])
     en+=aperture_settings_section(False)
+    en+=exposure_poster(False)
     en+=card("YOUR THREE APERTURES / SET THE CAMERA","f/8, f/4, and f/2, in order",
         para("You must capture a good portrait at all three apertures, in order, in RAW. You can start at f/8 or at f/2, then work through all three. Keep ISO at 100 and balance the light with your shutter at each one.")
         + steps([
@@ -260,6 +277,7 @@ def step01():
     es+=deliverables_box(True,
         [("1 hoja de contactos:","una hoja de contactos de 12 im&aacute;genes de todo tu trabajo, entregada como un JPG de alta resoluci&oacute;n.")])
     es+=aperture_settings_section(True)
+    es+=exposure_poster(True)
     es+=card("TUS TRES APERTURAS / AJUSTA LA C&Aacute;MARA","f/8, f/4 y f/2, en orden",
         para("Debes capturar un buen retrato en las tres aperturas, en orden, en RAW. Puedes empezar en f/8 o en f/2, luego pasa por las tres. Mant&eacute;n el ISO en 100 y equilibra la luz con tu obturador en cada una.")
         + steps([
