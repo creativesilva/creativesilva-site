@@ -301,6 +301,7 @@
     .ps2-editorhost { border: 1px solid rgba(0,184,184,0.28); border-top: 3px solid #00b8b8; background: rgba(255,255,255,0.02); }
     .ps2-editor-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 16px; background: rgba(0,0,0,0.30); border-bottom: 1px solid rgba(0,184,184,0.18); }
     .ps2-editor-titles { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .ps2-editor-acts { display: flex; gap: 8px; flex-wrap: wrap; flex: 0 0 auto; }
     .ps2-editor-title { font-family: var(--font-head,'Oswald',sans-serif); font-size: 1.02rem; font-weight: 600; letter-spacing: 0.02em; color: #eafdfd; }
     .ps2-editor-sub { font-size: 0.76rem; color: var(--text-dim); }
     .ps2-editorhost .ps2-reveal { border-top: 0; }
@@ -531,7 +532,11 @@
                       <div class="ps2-editorhost">
                         <div class="ps2-editor-head">
                           <div class="ps2-editor-titles"><span class="ps2-editor-title" id="ps2-editor-title"></span><span class="ps2-editor-sub" id="ps2-editor-sub"></span></div>
-                          <button type="button" class="pg-btn ps2-copytext" id="ps2-copybase">Copy blank template</button>
+                          <div class="ps2-editor-acts">
+                            <button type="button" class="pg-btn ps2-copytext" id="ps2-copybase">Copy Blank Template</button>
+                            <button type="button" class="pg-btn ps2-copyprompt" id="ps2-copycustom" hidden>Copy Custom Prompt</button>
+                            <button type="button" class="pg-btn ps2-reset" id="ps2-resettop" hidden>Reset</button>
+                          </div>
                         </div>
                         <div class="ps2-reveal" id="ps2-reveal"></div>
                       </div>
@@ -1285,6 +1290,7 @@
       var state={ fields:{}, chars:['','','',''], items:['','','',''], scene:'',
                   backdrop:(TWOPASS?'transparent':(OUTFIT?'white':'')),
                   view:(OUTFIT?VIEWS[0].file:''), charname:'', custom:'' };
+      var DEFAULT_BACKDROP=state.backdrop, DEFAULT_VIEW=state.view;
       // Auto-save: remember this prompt's entries in the browser so a reload / later visit restores them.
       var KEY='ps2state:'+(OUTFIT?'outfit-change':dataFile);
       try{ var _sv=JSON.parse(localStorage.getItem(KEY)||'null'); if(_sv&&typeof _sv==='object'){ if(_sv.fields) state.fields=_sv.fields; if(Array.isArray(_sv.chars)) state.chars=_sv.chars.concat(['','','','']).slice(0,4); if(Array.isArray(_sv.items)) state.items=_sv.items.concat(['','','','']).slice(0,4); if(typeof _sv.scene==='string') state.scene=_sv.scene; if(_sv.backdrop) state.backdrop=_sv.backdrop; if(OUTFIT && _sv.view) state.view=_sv.view; if(typeof _sv.charname==='string') state.charname=_sv.charname; if(typeof _sv.custom==='string') state.custom=_sv.custom; } }catch(e){}
@@ -1321,11 +1327,25 @@
       reveal.appendChild(el('div','ps2-gtitle','Your prompt'));
       var pre=el('div','ps2-preview','Loading base prompt…'); reveal.appendChild(pre);
       var acts=el('div','ps2-revealacts');
-      var copyBtn=el('button','pg-btn ps2-copyprompt','Copy Prompt'); copyBtn.type='button';
-      var resetBtn=el('button','pg-btn ps2-reset','Reset'); resetBtn.type='button';
-      resetBtn.addEventListener('click', function(){ if(!confirm('Clear all your entries for this prompt? This cannot be undone.')) return; try{ localStorage.removeItem(KEY); }catch(e){} buildReveal(cfg, reveal); });
-      acts.appendChild(copyBtn); acts.appendChild(resetBtn); acts.appendChild(el('span','ps2-hint','Copies the filled prompt, then lists the files to grab. Your entries save automatically.'));
+      acts.appendChild(el('span','ps2-hint','Fill the fields and pick your reference files above, then use Copy Custom Prompt at the top. Your entries save automatically.'));
       reveal.appendChild(acts);
+      // Header actions: Copy Blank Template (pristine) <-> Copy Custom Prompt + Reset (once customized).
+      var copyBaseB=document.getElementById('ps2-copybase');
+      var copyCustomB=document.getElementById('ps2-copycustom');
+      var resetB=document.getElementById('ps2-resettop');
+      function isDirty(){
+        if(state.chars.filter(Boolean).length || state.items.filter(Boolean).length) return true;
+        if(OUTFIT){ if((state.custom||'').trim()) return true; if(state.view!==DEFAULT_VIEW) return true; if(state.backdrop!==DEFAULT_BACKDROP) return true; return false; }
+        if(state.scene) return true;
+        for(var fk in state.fields){ if((state.fields[fk]||'').trim()) return true; }
+        if(BACKDROP && state.backdrop!==DEFAULT_BACKDROP) return true;
+        return false;
+      }
+      function updateActs(){ var d=isDirty(); if(copyBaseB) copyBaseB.hidden=d; if(copyCustomB) copyCustomB.hidden=!d; if(resetB) resetB.hidden=!d; }
+      if(copyBaseB) copyBaseB.onclick=function(){ copy(baseText, copyBaseB); };
+      if(copyCustomB) copyCustomB.onclick=function(){ copy(compose(), copyCustomB, function(){ showFiles(pop, selectedRefs()); }); };
+      if(resetB) resetB.onclick=function(){ if(!confirm('Clear all your entries for this prompt? This cannot be undone.')) return; try{ localStorage.removeItem(KEY); }catch(e){} buildReveal(cfg, reveal); };
+      updateActs();
       var pop=el('div','ps2-filespop'); pop.hidden=true; reveal.appendChild(pop);
 
       // Expandable teal picker bar (like the gallery Items/Campus accordions): tap to open a
@@ -1473,8 +1493,7 @@
         }
         return out;
       }
-      function refresh(){ pre.textContent=compose(); save(); }
-      copyBtn.addEventListener('click', function(){ copy(compose(), copyBtn, function(){ showFiles(pop, selectedRefs()); }); });
+      function refresh(){ pre.textContent=compose(); save(); updateActs(); }
       fetchPrompt(path).then(function(t){ baseText=t; buildFields(); refresh(); }).catch(function(){ baseText='[Could not load the base prompt file.]'; refresh(); });
       return reveal;
     }
@@ -1527,7 +1546,7 @@
       pill.addEventListener('click', function(){ selectPrompt(i); });
       pills.push(pill); selectbar.appendChild(pill);
     });
-    copyBaseBtn.addEventListener('click', function(){ if(!activeCfg) return; fetchPrompt(activeCfg.file).then(function(t){ copy(t, copyBaseBtn); }); });
+    // The three header buttons (Copy Blank Template / Copy Custom Prompt / Reset) are wired per prompt inside buildReveal.
     var start=0; try{ var l=parseInt(localStorage.getItem('ps2-last'),10); if(!isNaN(l) && l>=0 && l<PROMPTS.length) start=l; }catch(e){}
     selectPrompt(start);
   })();
