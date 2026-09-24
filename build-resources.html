@@ -95,6 +95,7 @@
     .cal-btn:hover { filter: brightness(1.18); }
     /* Back-to-Catalog button: teal glass so it reads as the primary "return" action. */
     .cal-btn.br-back { background: rgba(0, 184, 184, 0.14); }
+    .cal-btn.br-imagegen { background: rgba(0, 184, 184, 0.22); border-color: rgba(0, 184, 184, 0.55); }
     .header-clock { flex: 0 0 auto; width: 158px; height: 48px; border: 0; background: transparent; display: block; }
     @media (max-width: 900px) { .header-clock { display: none; } }
     @media (max-width: 640px) {
@@ -506,6 +507,7 @@
           <h1 class="page-title">Build Resources</h1>
           <a class="cal-btn br-back" href="/curriculum.html">&#8249;&nbsp; Catalog</a>
           <a class="cal-btn" href="/calendar.html">Calendar</a>
+          <a class="cal-btn br-imagegen" href="https://chatgpt.com/g/g-p-6a455e17c5248191b8c24ad354aba9ae-imagegen-pv/project" target="imagegen-pv" rel="noopener" onclick="window.open(this.href,'imagegen-pv','popup=yes,width=1320,height=980');return false;">Image Gen</a>
           <iframe class="header-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
         </div>
       </div>
@@ -1408,11 +1410,8 @@
         var vg=el('div','ps2-field'); vg.appendChild(el('label',null,'Pose / view'));
         var vopts=VIEWS.map(function(v){return {label:v.label,value:v.file};});
         vg.appendChild(makeDD(vopts, function(v){ state.view=v; path=v; save(); loadView(v); }, null, state.view));
-        var ng=el('div','ps2-field'); ng.appendChild(el('label',null,'Character name'));
-        var nin=el('input','ps2-line'); nin.type='text'; nin.placeholder='e.g. Patricia'; nin.value=state.charname||'';
-        nin.addEventListener('input',function(){ state.charname=nin.value; refresh(); });
-        ng.appendChild(nin);
-        var top=el('div','ps2-fields ps2-fields--text'); top.appendChild(vg); top.appendChild(ng); fieldsGroup.appendChild(top);
+        var top=el('div','ps2-fields ps2-fields--text'); top.appendChild(vg); fieldsGroup.appendChild(top);
+        fieldsGroup.appendChild(el('div','ps2-hint','The character name is taken from the character sheet you choose under Characters below, so there is no name to type.'));
         var cg=el('div','ps2-field'); cg.appendChild(el('label',null,'Custom details (new outfit or image output)'));
         var cin=el('textarea','ps2-context'); cin.rows=3; cin.placeholder='Optional: colors, materials, footwear, accessories, mood, framing, or any output note. Body proportions stay locked to the character sheet.';
         if(state.custom){ cin.value=state.custom; setTimeout(function(){ cin.style.height='auto'; cin.style.height=cin.scrollHeight+'px'; },0); }
@@ -1432,8 +1431,10 @@
 
       function composeOutfit(){
         var out=(baseText||'').trim();
-        var nm=(state.charname||'').trim();
-        if(nm) out=out.split('[CHARACTER NAME]').join(nm);
+        // Name comes from the chosen character sheet (first Characters pick), not a typed field.
+        var cf=(state.chars||[]).filter(Boolean)[0], nm='';
+        if(cf){ var co=CHARACTERS.filter(function(x){return x.file===cf;})[0]; nm=((co&&co.label)?co.label:baseName(cf)).split('(')[0].trim(); }
+        out=out.split('[CHARACTER NAME]').join(nm||'the character');
         var parts=[out];
         var bg=OUTFIT_BG[state.backdrop]; if(bg) parts.push(bg);
         parts.push(REALISM_LOCK);
