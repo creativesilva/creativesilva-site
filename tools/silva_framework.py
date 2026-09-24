@@ -524,6 +524,7 @@ def wrap_page(title,nav_inner,top_html,bottom):
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <link rel="icon" type="image/svg+xml" href="https://www.creativesilva.com/logos/CS_Logo_Only.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.creativesilva.com/logos/CS_AppIcon_Teal_180.png" />
   <style>:root {{ --course-accent: #007474; }}</style>
   <link rel="stylesheet" href="/css/silva-module.css?v={CSS_VER}" />
 </head>

@@ -460,7 +460,7 @@ PAGE = f'''<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Digital Arts Final Exam: Study Guide</title>
   <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only.svg" />
-  <link rel="apple-touch-icon" href="/logos/CS_Logo_Only.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/logos/CS_AppIcon_Teal_180.png" />
   <style>:root {{ --course-accent: #007474; }}</style>
   <link rel="stylesheet" href="/css/silva-module.css" />
 </head>
