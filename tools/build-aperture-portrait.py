@@ -13,11 +13,12 @@ AREA="Photography Folder"
 
 # --- images (PLACEHOLDERS until Chris supplies real art) ---
 IMGDIR=f"{SITE}/assets/images/photo1/aperture-portrait"
-HEADER=f"{IMGDIR}/header-v1.png"            # overview hero (placeholder for now)
+HEADER=f"{IMGDIR}/header-v1.jpg"            # overview hero (LIVE)
 S1_FLOAT=f"{IMGDIR}/capture-float-v1.jpg"   # step 1 capture image (placeholder)
 S2_FLOAT=f"{IMGDIR}/cull-float-v1.jpg"      # step 2 cull/submit image (placeholder)
 S3_FLOAT=f"{IMGDIR}/reflection-float-v1.jpg"# step 3 reflection image (placeholder)
-HAVE_IMAGES=False   # flip to True once real art is dropped in; then floats/header render instead of placeholders
+HAVE_HEADER=True    # header art is placed; the overview hero renders
+HAVE_IMAGES=False   # flip to True once real STEP art is dropped in; then floats render instead of placeholders
 
 # --- downloadable files ---
 CONTACT_ZIP=f"{SITE}/assets/PVHS_Contact_Sheet_Presets.zip"   # 12-Up + 6-Up presets (installed earlier in Image Series)
@@ -147,7 +148,7 @@ def overview():
     en+=type_card("overview","The Module Overview","One Partner, Three Apertures",
         para("This is a partner photo walk about <strong>aperture</strong>. You and a partner take turns: one of you is the <strong>photographer</strong> and the other is the <strong>subject</strong> (the person being photographed). Then you switch, so each of you photographs and each of you gets photographed.")
         + para("You work in Manual mode with the Canon R50 and the RF 50mm f/1.8 lens. ISO stays at 100. You capture the same portrait at three apertures: <strong>f/8</strong>, then <strong>f/4</strong>, then <strong>f/2</strong>, adjusting the shutter each time to balance the light. Then you build a contact sheet, pick your best three, and reflect.")
-        + (framed(HEADER,"Aperture Portrait module header") if HAVE_IMAGES else hero_ph("HEADER IMAGE PLACEHOLDER &middot; Aperture Portrait overview hero (16:9). Swap in when ready.")))
+        + (framed(HEADER,"Aperture Portrait module header") if HAVE_HEADER else hero_ph("HEADER IMAGE PLACEHOLDER &middot; Aperture Portrait overview hero (16:9). Swap in when ready.")))
     en+=standards_box(False, APERTURE_STANDARDS)
     en+=downloads_block(False)
     en+=card("THE CONCEPT / WHAT APERTURE DOES","Aperture and Depth of Field",
@@ -187,7 +188,7 @@ def overview():
     es+=type_card("overview","El Resumen del M&oacute;dulo","Una Pareja, Tres Aperturas",
         para("Esta es una caminata fotogr&aacute;fica en pareja sobre la <strong>apertura</strong>. T&uacute; y tu compa&ntilde;ero se turnan: uno es el <strong>fot&oacute;grafo</strong> y el otro es el <strong>sujeto</strong> (la persona fotografiada). Luego cambian, para que cada uno fotograf&iacute;e y cada uno sea fotografiado.")
         + para("Trabajas en modo Manual con la Canon R50 y el lente RF 50mm f/1.8. El ISO se queda en 100. Capturas el mismo retrato en tres aperturas: <strong>f/8</strong>, luego <strong>f/4</strong>, luego <strong>f/2</strong>, ajustando el obturador cada vez para equilibrar la luz. Despu&eacute;s armas una hoja de contactos, eliges tus tres mejores y reflexionas.")
-        + (framed(HEADER,"Encabezado del m&oacute;dulo Retrato de Apertura") if HAVE_IMAGES else hero_ph("IMAGEN DE ENCABEZADO (PLACEHOLDER) &middot; se cambia despu&eacute;s")))
+        + (framed(HEADER,"Encabezado del m&oacute;dulo Retrato de Apertura") if HAVE_HEADER else hero_ph("IMAGEN DE ENCABEZADO (PLACEHOLDER) &middot; se cambia despu&eacute;s")))
     es+=standards_box(True, APERTURE_STANDARDS)
     es+=downloads_block(True)
     es+=card("EL CONCEPTO / QU&Eacute; HACE LA APERTURA","Apertura y Profundidad de Campo",
