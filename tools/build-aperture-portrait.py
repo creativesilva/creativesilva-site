@@ -3,9 +3,9 @@
 # Explore APERTURE by capturing a partner portrait at f/8, f/4, and f/2. Manual mode,
 # ISO 100 constant, adjust the shutter to balance the light meter. JPG capture, crop-only edit.
 # Overview + 3 steps (Capture & Contact Sheet, Cull & Submit, Reflection), bilingual EN/ES, 5th-grade.
-# Dark teal angular framework via silva_framework. Images are per-slot (HAVE_* flags): HEADER +
-# Step 3 reflection float are LIVE; Step 1/2 floats await art and render NOTHING until placed (no
-# placeholder box, per Chris 2026-09-24). Camera-kit module: NO fresh-photos honesty note.
+# Dark teal angular framework via silva_framework. Pages: Step 01 Overview (read + download) +
+# Steps 02-04. Images are per-slot (HAVE_* flags): header, capture and reflection floats are LIVE;
+# the cull float awaits art and renders NOTHING until placed. Camera-kit module: NO fresh-photos note.
 import os, re
 from silva_framework import *   # shared angular chrome: banner, cards, sections, vocab, deliverables, etc.
 
@@ -15,13 +15,13 @@ AREA="Photography Folder"
 # --- images (per-slot: header + reflection LIVE; step 1/2 floats await art, render nothing) ---
 IMGDIR=f"{SITE}/assets/images/photo1/aperture-portrait"
 HEADER=f"{IMGDIR}/header-v1.jpg"            # overview hero (LIVE)
-S1_FLOAT=f"{IMGDIR}/capture-float-v1.jpg"   # step 1 capture image (placeholder)
+S1_FLOAT=f"{IMGDIR}/capture-float-v1.jpg"   # step 2 capture image (LIVE)
 S2_FLOAT=f"{IMGDIR}/cull-float-v1.jpg"      # step 2 cull/submit image (placeholder)
 S3_FLOAT=f"{IMGDIR}/reflection-float-v1.jpg"# step 3 reflection image (LIVE)
 HAVE_HEADER=True       # header art placed; overview hero renders
-HAVE_S1_FLOAT=False    # step 1 capture float (awaiting photo)
-HAVE_S2_FLOAT=False    # step 2 cull float (awaiting photo)
-HAVE_S3_FLOAT=True     # step 3 reflection float (placed)
+HAVE_S1_FLOAT=True     # capture float, Step 02 page (placed)
+HAVE_S2_FLOAT=False    # cull float, Step 03 page (awaiting photo)
+HAVE_S3_FLOAT=True     # reflection float, Step 04 page (placed)
 
 # --- downloadable files ---
 CONTACT_ZIP=f"{SITE}/assets/PVHS_Contact_Sheet_Presets.zip"   # 12-Up + 6-Up presets (installed earlier in Image Series)
@@ -66,12 +66,12 @@ def nav(current,dots,stepnav):
             f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
             f'      <div class="silva-step-nav">{stepnav}</div>')
 
-DOTS_TITLES=[("M","Overview"),("1","Step 01"),("2","Step 02"),("3","Step 03")]
+DOTS_TITLES=[("1","Step 01"),("2","Step 02"),("3","Step 03"),("4","Step 04")]
 def dots_for(active_idx):
     hrefs=[OVER,S1,S2,S3]
     r=""
     for i,(lab,title) in enumerate(DOTS_TITLES):
-        r+=dot("" if i==active_idx else hrefs[i], lab, title, i==active_idx, module=(i==0 and active_idx!=0))
+        r+=dot("" if i==active_idx else hrefs[i], lab, title, i==active_idx, module=False)
     return r
 
 # ---- custom camera-settings section (aperture is the creative variable; shutter balances) ----
@@ -147,8 +147,8 @@ APERTURE_STANDARDS=[
 
 # ================= OVERVIEW =================
 def overview():
-    en=banner("Photography 1A","Module 08: Aperture Portrait","Explore aperture on a partner photo walk: capture a portrait at f/8, f/4, and f/2.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
-    en+=type_card("overview","The Module Overview","One Partner, Three Apertures",
+    en=banner("Module 08 &bull; Step 01","Aperture Portrait: Start Here","Read this page and download your files, then go to Step 02 to capture. This is a partner photo walk about aperture.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
+    en+=type_card("overview","Step 01 &middot; Read &amp; Download","One Partner, Three Apertures",
         para("This is a partner photo walk about <strong>aperture</strong>. You and a partner take turns: one of you is the <strong>photographer</strong> and the other is the <strong>subject</strong> (the person being photographed). Then you switch, so each of you photographs and each of you gets photographed.")
         + para("You work in Manual mode with the Canon R50 and the RF 50mm f/1.8 lens. ISO stays at 100. You capture the same portrait at three apertures: <strong>f/8</strong>, then <strong>f/4</strong>, then <strong>f/2</strong>, adjusting the shutter each time to balance the light. Then you build a contact sheet, pick your best three, and reflect.")
         + (framed(HEADER,"Aperture Portrait module header") if HAVE_HEADER else hero_ph("HEADER IMAGE PLACEHOLDER &middot; Aperture Portrait overview hero (16:9). Swap in when ready.")))
@@ -169,11 +169,12 @@ def overview():
             ("Step off the wall:","do not stand your partner right against a wall. Have them take a few steps forward. This is not a stiff ID photo, it is a portrait, so build some depth and separate them from the background."),
             ("Fill the frame:","waist up or closer, with the eyes near the top third."),
         ]))
-    en+=card("HOW IT WORKS / YOUR PLAN","Your Three Steps",
-        steps([
-            ("Capture &amp; Contact Sheet:","in Manual mode, capture your partner at f/8, f/4, and f/2 (then switch roles). Build and turn in a 12-Up contact sheet of your whole take."),
-            ("Cull &amp; Submit:","pick your best three, one at each f-stop, crop them, and turn in a 6-Up contact sheet plus the three final JPGs."),
-            ("Reflection:","tell what you learned about balancing your exposure."),
+    en+=card("HOW IT WORKS / YOUR PLAN","Your Next Three Steps",
+        para("You are on Step 01 now: read this page and download your files below. Here are the three steps that follow.")
+        + bullets([
+            ("Step 02 &middot; Capture &amp; Contact Sheet:","in Manual mode, capture your partner at f/8, f/4, and f/2 (then switch roles). Build and turn in a 12-Up contact sheet of your whole take."),
+            ("Step 03 &middot; Cull &amp; Submit:","pick your best three, one at each f-stop, crop them, and turn in a 6-Up contact sheet plus the three final JPGs."),
+            ("Step 04 &middot; Reflection:","tell what you learned about balancing your exposure."),
         ])
         + note("This is a JPG capture. Get your exposure right in the camera so it looks good straight out of the camera. The only edit you need is a crop."))
     en+=resources_card("Key Words",
@@ -185,10 +186,10 @@ def overview():
            ("Exposure","How bright or dark the photo is. You balance it with your settings."),
            ("Light Meter","The scale in the camera that shows if your photo is too dark, too bright, or balanced."),
            ("Portrait Orientation","Holding the camera tall (on its side) so the photo is taller than it is wide.")]))
-    en+=next_up("UP NEXT &middot; STEP 01 - Capture &amp; Contact Sheet","Set Manual mode, capture at f/8, f/4, and f/2, then build your 12-Up contact sheet.")
+    en+=next_up("UP NEXT &middot; STEP 02 - Capture &amp; Contact Sheet","Set Manual mode, capture at f/8, f/4, and f/2, then build your 12-Up contact sheet.")
 
-    es=banner("Fotograf&iacute;a 1A","M&oacute;dulo 08: Retrato de Apertura","Explora la apertura en una caminata en pareja: captura un retrato en f/8, f/4 y f/2.","#top","Back to English", HICON_PHOTO_WALK)
-    es+=type_card("overview","El Resumen del M&oacute;dulo","Una Pareja, Tres Aperturas",
+    es=banner("M&oacute;dulo 08 &bull; Paso 01","Retrato de Apertura: Empieza Aqu&iacute;","Lee esta p&aacute;gina y descarga tus archivos, luego ve al Paso 02 para capturar. Esta es una caminata en pareja sobre la apertura.","#top","Back to English", HICON_PHOTO_WALK)
+    es+=type_card("overview","Paso 01 &middot; Lee y Descarga","Una Pareja, Tres Aperturas",
         para("Esta es una caminata fotogr&aacute;fica en pareja sobre la <strong>apertura</strong>. T&uacute; y tu compa&ntilde;ero se turnan: uno es el <strong>fot&oacute;grafo</strong> y el otro es el <strong>sujeto</strong> (la persona fotografiada). Luego cambian, para que cada uno fotograf&iacute;e y cada uno sea fotografiado.")
         + para("Trabajas en modo Manual con la Canon R50 y el lente RF 50mm f/1.8. El ISO se queda en 100. Capturas el mismo retrato en tres aperturas: <strong>f/8</strong>, luego <strong>f/4</strong>, luego <strong>f/2</strong>, ajustando el obturador cada vez para equilibrar la luz. Despu&eacute;s armas una hoja de contactos, eliges tus tres mejores y reflexionas.")
         + (framed(HEADER,"Encabezado del m&oacute;dulo Retrato de Apertura") if HAVE_HEADER else hero_ph("IMAGEN DE ENCABEZADO (PLACEHOLDER) &middot; se cambia despu&eacute;s")))
@@ -209,11 +210,12 @@ def overview():
             ("Sep&aacute;rate de la pared:","no pongas a tu compa&ntilde;ero pegado a una pared. Que d&eacute; unos pasos hacia adelante. Esto no es una foto de identificaci&oacute;n r&iacute;gida, es un retrato, as&iacute; que crea profundidad y sep&aacute;ralo del fondo."),
             ("Llena el cuadro:","de la cintura para arriba o m&aacute;s cerca, con los ojos cerca del tercio superior."),
         ]))
-    es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Tres Pasos",
-        steps([
-            ("Captura y Hoja de Contactos:","en modo Manual, captura a tu compa&ntilde;ero en f/8, f/4 y f/2 (luego cambien de rol). Arma y entrega una hoja de contactos de 12 im&aacute;genes de todo tu trabajo."),
-            ("Selecciona y Entrega:","elige tus tres mejores, una en cada n&uacute;mero f, rec&oacute;rtalas y entrega una hoja de contactos de 6 im&aacute;genes m&aacute;s las tres im&aacute;genes finales en JPG."),
-            ("Reflexi&oacute;n:","cuenta qu&eacute; aprendiste sobre equilibrar tu exposici&oacute;n."),
+    es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Siguientes Tres Pasos",
+        para("Est&aacute;s en el Paso 01: lee esta p&aacute;gina y descarga tus archivos abajo. Estos son los tres pasos que siguen.")
+        + bullets([
+            ("Paso 02 &middot; Captura y Hoja de Contactos:","en modo Manual, captura a tu compa&ntilde;ero en f/8, f/4 y f/2 (luego cambien de rol). Arma y entrega una hoja de contactos de 12 im&aacute;genes de todo tu trabajo."),
+            ("Paso 03 &middot; Selecciona y Entrega:","elige tus tres mejores, una en cada n&uacute;mero f, rec&oacute;rtalas y entrega una hoja de contactos de 6 im&aacute;genes m&aacute;s las tres im&aacute;genes finales en JPG."),
+            ("Paso 04 &middot; Reflexi&oacute;n:","cuenta qu&eacute; aprendiste sobre equilibrar tu exposici&oacute;n."),
         ])
         + note("Esta es una captura en JPG. Deja bien tu exposici&oacute;n en la c&aacute;mara para que se vea bien tal como sale. La &uacute;nica edici&oacute;n que necesitas es un recorte."))
     es+=resources_card("Palabras Clave",
@@ -225,16 +227,16 @@ def overview():
            ("Exposure (Exposici&oacute;n)","Qu&eacute; tan brillante u oscura es la foto. La equilibras con tus ajustes."),
            ("Light Meter (Expos&iacute;metro)","La escala en la c&aacute;mara que muestra si tu foto est&aacute; muy oscura, muy brillante o equilibrada."),
            ("Portrait Orientation (Orientaci&oacute;n de Retrato)","Sostener la c&aacute;mara vertical (de lado) para que la foto sea m&aacute;s alta que ancha.")]), True)
-    es+=next_up("SIGUIENTE &middot; PASO 01 - Captura y Hoja de Contactos","Pon el modo Manual, captura en f/8, f/4 y f/2, y arma tu hoja de contactos de 12.")
+    es+=next_up("SIGUIENTE &middot; PASO 02 - Captura y Hoja de Contactos","Pon el modo Manual, captura en f/8, f/4 y f/2, y arma tu hoja de contactos de 12.")
 
-    stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
-    return wrap_page("Aperture Portrait | Photography 1A | PVHS", nav("Overview",dots_for(0),stepnav), top_wrap(en,es), bottom)
+    stepnav=f'<a href="{S1}" class="silva-step-btn">Step 02 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Next: Step 02 &#8594;</a></div>'
+    return wrap_page("Aperture Portrait | Photography 1A | PVHS", nav("Step 01",dots_for(0),stepnav), top_wrap(en,es), bottom)
 
-# ================= STEP 01 =================
+# ================= STEP 02 =================
 def step01():
-    en=banner("Module 08 &bull; Step 01","Capture &amp; Contact Sheet","Capture your partner at f/8, f/4, and f/2, then build a 12-Up contact sheet.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
-    en+=type_card("photo-walk","Step 01 &middot; On the Photo Walk","Take Turns: Photographer and Subject",
+    en=banner("Module 08 &bull; Step 02","Capture &amp; Contact Sheet","Capture your partner at f/8, f/4, and f/2, then build a 12-Up contact sheet.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
+    en+=type_card("photo-walk","Step 02 &middot; On the Photo Walk","Take Turns: Photographer and Subject",
         para("Head out with your partner and the camera kit. One of you is the <strong>photographer</strong> and the other is the <strong>subject</strong>. Photograph your full set, then trade roles so you both get portraits and you both practice the camera.")
         + (float_right(S1_FLOAT,"A Pioneer Valley student photographing a partner in open shade with the Canon R50 held in portrait orientation","Camera on its side, one elbow up: that is portrait orientation.") if HAVE_S1_FLOAT else "")
         + bullets([
@@ -267,10 +269,10 @@ def step01():
             ("Print to JPG:","use Print to File so it saves as a high-resolution JPG, then upload it here."),
         ])
         + note("Contact sheets are always turned in as a high-resolution JPG."))
-    en+=next_up("UP NEXT &middot; STEP 02 - Cull &amp; Submit","Pick your best three (one per f-stop), crop, and turn in a 6-Up plus the three final JPGs.")
+    en+=next_up("UP NEXT &middot; STEP 03 - Cull &amp; Submit","Pick your best three (one per f-stop), crop, and turn in a 6-Up plus the three final JPGs.")
 
-    es=banner("M&oacute;dulo 08 &bull; Paso 01","Captura y Hoja de Contactos","Captura a tu compa&ntilde;ero en f/8, f/4 y f/2, y arma una hoja de contactos de 12.","#top","Back to English", HICON_PHOTO_WALK)
-    es+=type_card("photo-walk","Paso 01 &middot; En la Caminata","Tomen Turnos: Fot&oacute;grafo y Sujeto",
+    es=banner("M&oacute;dulo 08 &bull; Paso 02","Captura y Hoja de Contactos","Captura a tu compa&ntilde;ero en f/8, f/4 y f/2, y arma una hoja de contactos de 12.","#top","Back to English", HICON_PHOTO_WALK)
+    es+=type_card("photo-walk","Paso 02 &middot; En la Caminata","Tomen Turnos: Fot&oacute;grafo y Sujeto",
         para("Salgan con tu compa&ntilde;ero y el kit de c&aacute;mara. Uno es el <strong>fot&oacute;grafo</strong> y el otro es el <strong>sujeto</strong>. Captura tu serie completa, luego cambien de rol para que ambos tengan retratos y ambos practiquen la c&aacute;mara.")
         + (float_right(S1_FLOAT,"Un estudiante de Pioneer Valley fotografiando a su compa&ntilde;ero en sombra abierta con la Canon R50 en orientaci&oacute;n vertical","C&aacute;mara de lado, un codo arriba: eso es orientaci&oacute;n de retrato.") if HAVE_S1_FLOAT else "")
         + bullets([
@@ -303,16 +305,16 @@ def step01():
             ("Imprime a JPG:","usa Print to File para que se guarde como un JPG de alta resoluci&oacute;n, luego s&uacute;belo aqu&iacute;."),
         ])
         + note("Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n."))
-    es+=next_up("SIGUIENTE &middot; PASO 02 - Selecciona y Entrega","Elige tus tres mejores (una por n&uacute;mero f), recorta y entrega una hoja de 6 m&aacute;s las tres im&aacute;genes finales.")
+    es+=next_up("SIGUIENTE &middot; PASO 03 - Selecciona y Entrega","Elige tus tres mejores (una por n&uacute;mero f), recorta y entrega una hoja de 6 m&aacute;s las tres im&aacute;genes finales.")
 
-    stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a> <a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
-    return wrap_page("Step 1: Capture and Contact Sheet | Aperture Portrait | Photography 1A | PVHS", nav("Step 01",dots_for(1),stepnav), top_wrap(en,es), bottom)
+    stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a> <a href="{S2}" class="silva-step-btn">Step 03 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S2}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
+    return wrap_page("Step 2: Capture and Contact Sheet | Aperture Portrait | Photography 1A | PVHS", nav("Step 02",dots_for(1),stepnav), top_wrap(en,es), bottom)
 
-# ================= STEP 02 =================
+# ================= STEP 03 =================
 def step02():
-    en=banner("Module 08 &bull; Step 02","Cull &amp; Submit","Pick your best three (one per f-stop), crop, and turn in a 6-Up plus three final JPGs.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
-    en+=type_card("edit","Step 02 &middot; Cull","Choose Your Three Best",
+    en=banner("Module 08 &bull; Step 03","Cull &amp; Submit","Pick your best three (one per f-stop), crop, and turn in a 6-Up plus three final JPGs.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
+    en+=type_card("edit","Step 03 &middot; Cull","Choose Your Three Best",
         para("Look through your take and choose your three strongest portraits: <strong>one at f/8, one at f/4, and one at f/2</strong>. Keeping one at each f-stop shows the range of the aperture and sets up your reflection.")
         + (float_right(S2_FLOAT,"A Pioneer Valley student culling portraits in Lightroom Classic on an iMac in the lab","Compare your f/8, f/4, and f/2 portraits and keep the best of each.") if HAVE_S2_FLOAT else "")
         + bullets([
@@ -339,10 +341,10 @@ def step02():
             ("Upload 4 files:","turn in the 6-Up contact sheet plus the three final JPGs."),
         ])
         + note("Contact sheets are always turned in as a high-resolution JPG."))
-    en+=next_up("UP NEXT &middot; STEP 03 - Reflection","Tell what you learned about balancing your exposure and which f-stop you liked best.")
+    en+=next_up("UP NEXT &middot; STEP 04 - Reflection","Tell what you learned about balancing your exposure and which f-stop you liked best.")
 
-    es=banner("M&oacute;dulo 08 &bull; Paso 02","Selecciona y Entrega","Elige tus tres mejores (una por n&uacute;mero f), recorta y entrega una hoja de 6 m&aacute;s tres JPG finales.","#top","Back to English", HICON_PHOTO_WALK)
-    es+=type_card("edit","Paso 02 &middot; Selecciona","Elige Tus Tres Mejores",
+    es=banner("M&oacute;dulo 08 &bull; Paso 03","Selecciona y Entrega","Elige tus tres mejores (una por n&uacute;mero f), recorta y entrega una hoja de 6 m&aacute;s tres JPG finales.","#top","Back to English", HICON_PHOTO_WALK)
+    es+=type_card("edit","Paso 03 &middot; Selecciona","Elige Tus Tres Mejores",
         para("Revisa tu trabajo y elige tus tres retratos m&aacute;s fuertes: <strong>uno en f/8, uno en f/4 y uno en f/2</strong>. Guardar uno en cada n&uacute;mero f muestra el rango de la apertura y prepara tu reflexi&oacute;n.")
         + (float_right(S2_FLOAT,"Un estudiante de Pioneer Valley seleccionando retratos en Lightroom Classic en una iMac en el laboratorio","Compara tus retratos de f/8, f/4 y f/2 y guarda el mejor de cada uno.") if HAVE_S2_FLOAT else "")
         + bullets([
@@ -369,19 +371,19 @@ def step02():
             ("Sube 4 archivos:","entrega la hoja de contactos de 6 m&aacute;s los tres JPG finales."),
         ])
         + note("Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n."))
-    es+=next_up("SIGUIENTE &middot; PASO 03 - Reflexi&oacute;n","Cuenta qu&eacute; aprendiste sobre equilibrar tu exposici&oacute;n y qu&eacute; n&uacute;mero f te gust&oacute; m&aacute;s.")
+    es+=next_up("SIGUIENTE &middot; PASO 04 - Reflexi&oacute;n","Cuenta qu&eacute; aprendiste sobre equilibrar tu exposici&oacute;n y qu&eacute; n&uacute;mero f te gust&oacute; m&aacute;s.")
 
-    stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a> <a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
-    return wrap_page("Step 2: Cull and Submit | Aperture Portrait | Photography 1A | PVHS", nav("Step 02",dots_for(2),stepnav), top_wrap(en,es), bottom)
+    stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 02</a> <a href="{S3}" class="silva-step-btn">Step 04 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 02</a><a href="{S3}" class="silva-bottom-btn">Step 04 &#8594;</a></div>'
+    return wrap_page("Step 3: Cull and Submit | Aperture Portrait | Photography 1A | PVHS", nav("Step 03",dots_for(2),stepnav), top_wrap(en,es), bottom)
 
-# ================= STEP 03 =================
+# ================= STEP 04 =================
 def step03():
-    en=banner("Module 08 &bull; Step 03","Reflection","Tell what you learned about balancing your exposure.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
-    en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
+    en=banner("Module 08 &bull; Step 04","Reflection","Tell what you learned about balancing your exposure.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
+    en+=card("STEP 04 / REFLECT","Complete and Upload the Reflection",
         (float_right(S3_FLOAT,"A Pioneer Valley student typing the Aperture Portrait reflection in the Word document on an iMac in the lab","Type your answers right in the reflection document.") if HAVE_S3_FLOAT else "")
         + para("Finish with a short reflection. It asks how you balanced your exposure, what was hardest about it, and which aperture you liked best.")
-        + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
+        + note("The reflection document is on Step 01 (the Overview), the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + bullets([
             ("Balancing your exposure:","tell how you used the shutter to balance the light meter at each f-stop."),
             ("The hardest part:","what was the hardest part of balancing your exposure?"),
@@ -392,11 +394,11 @@ def step03():
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=next_up("MODULE COMPLETE","Great work. You explored aperture, directed a partner, and balanced your own exposure.")
 
-    es=banner("M&oacute;dulo 08 &bull; Paso 03","Reflexi&oacute;n","Cuenta qu&eacute; aprendiste sobre equilibrar tu exposici&oacute;n.","#top","Back to English", HICON_REFLECT)
-    es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
+    es=banner("M&oacute;dulo 08 &bull; Paso 04","Reflexi&oacute;n","Cuenta qu&eacute; aprendiste sobre equilibrar tu exposici&oacute;n.","#top","Back to English", HICON_REFLECT)
+    es+=card("PASO 04 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         (float_right(S3_FLOAT,"Un estudiante de Pioneer Valley escribiendo la reflexi&oacute;n de Retrato de Apertura en el documento de Word en una iMac en el laboratorio","Escribe tus respuestas directamente en el documento de reflexi&oacute;n.") if HAVE_S3_FLOAT else "")
         + para("Termina con una reflexi&oacute;n corta. Te pregunta c&oacute;mo equilibraste tu exposici&oacute;n, qu&eacute; fue lo m&aacute;s dif&iacute;cil y qu&eacute; apertura te gust&oacute; m&aacute;s.")
-        + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
+        + note("El documento de reflexi&oacute;n est&aacute; en el Paso 01 (el Resumen), la primera pen la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;ginaaacute;gina. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
         + bullets([
             ("Equilibrar tu exposici&oacute;n:","cuenta c&oacute;mo usaste el obturador para equilibrar el expos&iacute;metro en cada n&uacute;mero f."),
             ("Lo m&aacute;s dif&iacute;cil:","&iquest;qu&eacute; fue lo m&aacute;s dif&iacute;cil de equilibrar tu exposici&oacute;n?"),
@@ -407,9 +409,9 @@ def step03():
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
     es+=next_up("M&Oacute;DULO COMPLETO","Buen trabajo. Exploraste la apertura, dirigiste a un compa&ntilde;ero y equilibraste tu propia exposici&oacute;n.")
 
-    stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'
-    return wrap_page("Step 3: Reflection | Aperture Portrait | Photography 1A | PVHS", nav("Step 03",dots_for(3),stepnav), top_wrap(en,es), bottom)
+    stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 03</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 03</a><span></span></div>'
+    return wrap_page("Step 4: Reflection | Aperture Portrait | Photography 1A | PVHS", nav("Step 04",dots_for(3),stepnav), top_wrap(en,es), bottom)
 
 # ================= BUILD =================
 for fname,gen in [(OVER,overview),(S1,step01),(S2,step02),(S3,step03)]:
