@@ -284,6 +284,45 @@
     .ps2-copytext { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.18); border-top-color: rgba(255,255,255,0.28); color: #eaf7f7; }
     .ps2-copytext:hover { border-color: rgba(0,184,184,0.5); }
 
+    /* Horizontal prompt selector (pills scroll sideways; the chosen one loads the editor below) */
+    .ps2-selectbar { display: flex; gap: 8px; overflow-x: auto; padding: 3px 2px 13px; margin: 0 0 15px; border-bottom: 1px solid rgba(0,184,184,0.18); scrollbar-width: thin; scrollbar-color: rgba(0,184,184,0.5) transparent; -webkit-overflow-scrolling: touch; }
+    .ps2-selectbar::-webkit-scrollbar { height: 7px; }
+    .ps2-selectbar::-webkit-scrollbar-thumb { background: rgba(0,184,184,0.45); }
+    .ps2-selectbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); }
+    .ps2-pill { flex: 0 0 auto; display: flex; flex-direction: column; gap: 2px; text-align: left; cursor: pointer; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-top: 2px solid rgba(255,255,255,0.14); color: #cfeaea; font-family: inherit; padding: 9px 15px; min-width: 158px; transition: background .12s, border-color .12s, color .12s; }
+    .ps2-pill:hover { border-color: rgba(0,184,184,0.55); color: #eafdfd; }
+    .ps2-pill.active { background: rgba(0,184,184,0.17); border-color: #00b8b8; border-top-color: #00b8b8; color: #fff; }
+    .ps2-pill-title { font-family: var(--font-head,'Oswald',sans-serif); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.03em; white-space: nowrap; }
+    .ps2-pill-sub { font-size: 0.67rem; color: var(--text-dim); white-space: nowrap; }
+    .ps2-pill.active .ps2-pill-sub { color: #9fdede; }
+
+    /* Always-open editor host (the selector dictates which prompt is loaded here) */
+    .ps2-editorhost { border: 1px solid rgba(0,184,184,0.28); border-top: 3px solid #00b8b8; background: rgba(255,255,255,0.02); }
+    .ps2-editor-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 16px; background: rgba(0,0,0,0.30); border-bottom: 1px solid rgba(0,184,184,0.18); }
+    .ps2-editor-titles { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .ps2-editor-title { font-family: var(--font-head,'Oswald',sans-serif); font-size: 1.02rem; font-weight: 600; letter-spacing: 0.02em; color: #eafdfd; }
+    .ps2-editor-sub { font-size: 0.76rem; color: var(--text-dim); }
+    .ps2-editorhost .ps2-reveal { border-top: 0; }
+
+    /* Reference picker as expandable teal bars (Characters / Items / Location) */
+    .ps2-refacc { border: 1px solid rgba(0,184,184,0.26); border-left: 4px solid #00b8b8; background: rgba(0,184,184,0.045); margin-bottom: 9px; }
+    .ps2-refacc-head { width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 10px; cursor: pointer; background: transparent; border: 0; color: #eafdfd; font-family: inherit; text-align: left; padding: 11px 14px; }
+    .ps2-refacc-title { font-family: var(--font-head,'Oswald',sans-serif); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #7fe9e9; }
+    .ps2-refacc-count { font-size: 0.7rem; color: var(--text-dim); }
+    .ps2-refacc-count.has { color: #00d2d2; font-weight: 600; }
+    .ps2-refacc-chev { margin-left: auto; width: 9px; height: 9px; border-right: 2px solid #60d8d8; border-bottom: 2px solid #60d8d8; transform: rotate(45deg); transition: transform .15s ease; }
+    .ps2-refacc.open .ps2-refacc-chev { transform: rotate(-135deg); }
+    .ps2-refacc-body { padding: 2px 12px 12px; }
+    .ps2-refgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(94px, 1fr)); gap: 8px; }
+    .ps2-refcard { position: relative; cursor: pointer; border: 1px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.30); display: flex; flex-direction: column; transition: border-color .12s, background .12s; }
+    .ps2-refcard:hover { border-color: rgba(0,184,184,0.55); }
+    .ps2-refcard.sel { border-color: #00b8b8; background: rgba(0,184,184,0.15); }
+    .ps2-refcard.sel::after { content: "\2713"; position: absolute; top: 2px; right: 5px; color: #00e0e0; font-size: 0.82rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.7); }
+    .ps2-refcard-thumb { height: 60px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #0b2a2a; }
+    .ps2-refcard-thumb img { max-width: 90%; max-height: 84%; object-fit: contain; }
+    .ps2-refcard-name { font-size: 0.65rem; line-height: 1.25; color: #cfeaea; padding: 5px 6px; text-align: center; }
+    .ps2-refcard.sel .ps2-refcard-name { color: #eafdfd; }
+
     .ps2-reveal { border-top: 1px solid rgba(0,184,184,0.22); background: rgba(0,0,0,0.22); padding: 18px 16px 20px; }
     .ps2-group { margin-bottom: 18px; }
     .ps2-gtitle { font-family: var(--font-head,'Oswald',sans-serif); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #00b8b8; margin-bottom: 11px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.08); }
@@ -485,75 +524,14 @@
                     <div class="cat-body">
                     <div class="ps2-titlebar"><img class="ps2-tb-icon" src="https://www.creativesilva.com/assets/Icons/assignment/design-teal-v1.png" alt="" /><span class="ps2-tb-title">Prompt Studio</span></div>
                     <div class="ps2-list">
-                      <div class="ps2-prompt" data-file="/assets/prompts/Classroom-Environment-Master-Prompt-v4.md">
-                        <div class="ps2-row">
-                          <div class="ps2-title">Classroom Environment Master Prompt <span class="ps2-sub">(PV lab scene, any angle)</span></div>
-                          <div class="ps2-actions">
-                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
-                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Classroom-Environment-Master-Prompt-v4.md', this)">Copy Text</button>
-                          </div>
+                      <p class="ps2-intro">Pick a prompt below to load it into the editor. Fill the fields, choose your reference files, then copy your finished prompt. Everything you type saves automatically.</p>
+                      <div class="ps2-selectbar" id="ps2-selectbar" role="tablist" aria-label="Choose a prompt"></div>
+                      <div class="ps2-editorhost">
+                        <div class="ps2-editor-head">
+                          <div class="ps2-editor-titles"><span class="ps2-editor-title" id="ps2-editor-title"></span><span class="ps2-editor-sub" id="ps2-editor-sub"></span></div>
+                          <button type="button" class="pg-btn ps2-copytext" id="ps2-copybase">Copy blank template</button>
                         </div>
-                        <div class="ps2-reveal" hidden></div>
-                      </div>
-                      <div class="ps2-prompt" data-file="/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md">
-                        <div class="ps2-row">
-                          <div class="ps2-title">Campus Exterior Master Prompt <span class="ps2-sub">(PV Academy of Arts, any exterior)</span></div>
-                          <div class="ps2-actions">
-                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
-                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md', this)">Copy Text</button>
-                          </div>
-                        </div>
-                        <div class="ps2-reveal" hidden></div>
-                      </div>
-                      <div class="ps2-prompt" data-file="/assets/prompts/PV-Campus-Lobby-Master-Prompt-v1.md">
-                        <div class="ps2-row">
-                          <div class="ps2-title">Lobby Environment Master Prompt <span class="ps2-sub">(PV Academy of Arts lobby, any angle)</span></div>
-                          <div class="ps2-actions">
-                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
-                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/PV-Campus-Lobby-Master-Prompt-v1.md', this)">Copy Text</button>
-                          </div>
-                        </div>
-                        <div class="ps2-reveal" hidden></div>
-                      </div>
-                      <div class="ps2-prompt" data-file="/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt">
-                        <div class="ps2-row">
-                          <div class="ps2-title">Fresh Full-Image Rebuild Protocol <span class="ps2-sub">(force a full rebuild)</span></div>
-                          <div class="ps2-actions">
-                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
-                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt', this)">Copy Text</button>
-                          </div>
-                        </div>
-                        <div class="ps2-reveal" hidden></div>
-                      </div>
-                      <div class="ps2-prompt" data-file="/assets/prompts/Two-Pass-Character-Rebuild.md">
-                        <div class="ps2-row">
-                          <div class="ps2-title">Two-Pass Character Rebuild <span class="ps2-sub">(ultra-high-res upper + lower passes to merge in Photoshop)</span></div>
-                          <div class="ps2-actions">
-                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
-                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Two-Pass-Character-Rebuild.md', this)">Copy Text</button>
-                          </div>
-                        </div>
-                        <div class="ps2-reveal" hidden></div>
-                      </div>
-                      <div class="ps2-prompt" data-file="/assets/prompts/Character-Outfit-Change-Full-Front-v1.md" data-views='[{"label":"Full front / neutral stance","file":"/assets/prompts/Character-Outfit-Change-Full-Front-v1.md"},{"label":"Left 3/4 front / face to camera / smile","file":"/assets/prompts/Character-Outfit-Change-Left-3Q-Front-v1.md"},{"label":"3/4 rear / side-profile face","file":"/assets/prompts/Character-Outfit-Change-3Q-Rear-v1.md"}]'>
-                        <div class="ps2-row">
-                          <div class="ps2-title">Character Outfit Change <span class="ps2-sub">(re-dress a character sheet, one full-body view at a time)</span></div>
-                          <div class="ps2-actions">
-                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
-                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Character-Outfit-Change-Full-Front-v1.md', this)">Copy Text</button>
-                          </div>
-                        </div>
-                        <div class="ps2-reveal" hidden></div>
-                      </div>
-                      <div class="ps2-prompt" data-file="/assets/prompts/Blank-Artboard-Reset.txt">
-                        <div class="ps2-row">
-                          <div class="ps2-title">Blank Artboard Reset <span class="ps2-sub">(clear the canvas memory)</span></div>
-                          <div class="ps2-actions">
-                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
-                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Blank-Artboard-Reset.txt', this)">Copy Text</button>
-                          </div>
-                        </div>
-                        <div class="ps2-reveal" hidden></div>
+                        <div class="ps2-reveal" id="ps2-reveal"></div>
                       </div>
                     </div>
                     </div>
@@ -1295,12 +1273,10 @@
       navigator.clipboard.write([new ClipboardItem({'image/png': pngBlob})]).then(function(){done('✓ Copied');}, function(){ done('Copy failed'); });
     }
 
-    function buildReveal(promptEl){
-      var reveal=promptEl.querySelector('.ps2-reveal');
-      if(reveal.dataset.built) return reveal;
-      reveal.dataset.built='1';
-      var dataFile=promptEl.getAttribute('data-file');
-      var VIEWS=null; try{ VIEWS=JSON.parse(promptEl.getAttribute('data-views')||'null'); }catch(e){}
+    function buildReveal(cfg, reveal){
+      reveal.innerHTML=''; reveal.dataset.built='1';
+      var dataFile=cfg.file;
+      var VIEWS=(cfg.views && cfg.views.length)?cfg.views:null;
       var OUTFIT=!!(VIEWS && VIEWS.length);   // Character Outfit Change: a view selector swaps among 3 base prompts.
       var TWOPASS=/two-pass/i.test(dataFile||'');
       var BACKDROP=TWOPASS||OUTFIT;           // both offer a white-vs-transparent Background choice.
@@ -1329,14 +1305,14 @@
       var refGroup=el('div','ps2-group');
       refGroup.appendChild(el('div','ps2-gtitle','Reference files'));
       if(OUTFIT){
-        refGroup.appendChild(slotGroup('Character sheet + full-body views (up to 4)', state.chars, CHARACTERS, false));
-        refGroup.appendChild(slotGroup('Outfit, apparel & items to attach (up to 4)', state.items, ITEMS, false));
+        refGroup.appendChild(refAccordion('Characters', state.chars, CHARACTERS, false));
+        refGroup.appendChild(refAccordion('Outfit, apparel & items', state.items, ITEMS, false));
         refGroup.appendChild(backdropSlot());
-        refGroup.appendChild(el('div','ps2-hint','Image A is the character sheet or full-body view. Add any outfit, apparel, or item references (cheer outfit, quarter zip, camera, bag, etc.) from the dropdown to bake their file names into the prompt, or attach extra outfit/headshot images straight into the generator. Body proportions always come from the character sheet, never from the outfit or product photos.'));
+        refGroup.appendChild(el('div','ps2-hint','Image A is the character sheet or full-body view. Add any outfit, apparel, or item references (cheer outfit, quarter zip, camera, bag, etc.) to bake their file names into the prompt, or attach extra outfit/headshot images straight into the generator. Body proportions always come from the character sheet, never from the outfit or product photos.'));
       } else {
-        refGroup.appendChild(slotGroup('Characters (up to 4)', state.chars, CHARACTERS, false));
-        refGroup.appendChild(slotGroup('Items (up to 4)', state.items, ITEMS, false));
-        refGroup.appendChild(BACKDROP ? backdropSlot() : slotGroup('Location', null, SCENES, true));
+        refGroup.appendChild(refAccordion('Characters', state.chars, CHARACTERS, false));
+        refGroup.appendChild(refAccordion('Items', state.items, ITEMS, false));
+        refGroup.appendChild(BACKDROP ? backdropSlot() : refAccordion('Location', null, SCENES, true));
       }
       reveal.appendChild(refGroup);
 
@@ -1345,21 +1321,45 @@
       var acts=el('div','ps2-revealacts');
       var copyBtn=el('button','pg-btn ps2-copyprompt','Copy Prompt'); copyBtn.type='button';
       var resetBtn=el('button','pg-btn ps2-reset','Reset'); resetBtn.type='button';
-      resetBtn.addEventListener('click', function(){ if(!confirm('Clear all your entries for this prompt? This cannot be undone.')) return; try{ localStorage.removeItem(KEY); }catch(e){} reveal.innerHTML=''; reveal.dataset.built=''; buildReveal(promptEl); });
+      resetBtn.addEventListener('click', function(){ if(!confirm('Clear all your entries for this prompt? This cannot be undone.')) return; try{ localStorage.removeItem(KEY); }catch(e){} buildReveal(cfg, reveal); });
       acts.appendChild(copyBtn); acts.appendChild(resetBtn); acts.appendChild(el('span','ps2-hint','Copies the filled prompt, then lists the files to grab. Your entries save automatically.'));
       reveal.appendChild(acts);
       var pop=el('div','ps2-filespop'); pop.hidden=true; reveal.appendChild(pop);
 
-      function slotGroup(title, arr, options, single){
-        var g=el('div','ps2-refgroup'); g.appendChild(el('div','ps2-reflabel', esc(title)));
-        var row=el('div','ps2-slots'); var n=single?1:4;
-        var dopts=[{label:'None',value:''}].concat(options.map(function(o){return {label:o.label,value:o.file,img:IMG+o.file};}));
-        for(var i=0;i<n;i++){ (function(idx){
-          var initv = single ? state.scene : arr[idx];
-          var dd=makeDD(dopts, function(v){ if(single){ state.scene=v; } else { arr[idx]=v; } refresh(); }, 'ps2-slotdd', initv);
-          row.appendChild(dd);
-        })(i); }
-        g.appendChild(row); return g;
+      // Expandable teal picker bar (like the gallery Items/Campus accordions): tap to open a
+      // thumbnail grid, tap thumbnails to select (up to 4 for chars/items, 1 for location).
+      function refAccordion(title, arr, options, single){
+        var maxN=single?1:4;
+        var wrap=el('div','ps2-refacc');
+        var head=el('button','ps2-refacc-head'); head.type='button';
+        head.appendChild(el('span','ps2-refacc-title', esc(title)));
+        var countSpan=el('span','ps2-refacc-count'); head.appendChild(countSpan);
+        head.appendChild(el('span','ps2-refacc-chev'));
+        var body=el('div','ps2-refacc-body'); body.hidden=true;
+        var grid=el('div','ps2-refgrid'); body.appendChild(grid);
+        function isSel(f){ return single ? (state.scene===f) : (arr.indexOf(f)>=0); }
+        function nSel(){ return single ? (state.scene?1:0) : arr.filter(Boolean).length; }
+        function updCount(){ var n=nSel(); countSpan.textContent = n ? (single?'1 selected':(n+' of '+maxN)) : 'none'; countSpan.classList.toggle('has', n>0); }
+        function toggle(f){
+          if(single){ state.scene=(state.scene===f)?'':f; }
+          else { var i=arr.indexOf(f); if(i>=0){ arr[i]=''; } else { var s=arr.indexOf(''); if(s<0) return; arr[s]=f; } }
+          renderCards(); updCount(); refresh();
+        }
+        function renderCards(){
+          grid.innerHTML='';
+          options.forEach(function(o){
+            var c=el('div','ps2-refcard'+(isSel(o.file)?' sel':''));
+            var t=el('div','ps2-refcard-thumb'); var im=el('img'); im.src=IMG+o.file; im.alt=o.label; im.loading='lazy'; t.appendChild(im); c.appendChild(t);
+            c.appendChild(el('div','ps2-refcard-name', esc(o.label)));
+            c.addEventListener('click', function(){ toggle(o.file); });
+            grid.appendChild(c);
+          });
+        }
+        head.addEventListener('click', function(){ var willOpen=body.hidden; body.hidden=!willOpen; wrap.classList.toggle('open', willOpen); });
+        renderCards(); updCount();
+        if(nSel()>0){ body.hidden=false; wrap.classList.add('open'); }
+        wrap.appendChild(head); wrap.appendChild(body);
+        return wrap;
       }
 
       function backdropSlot(){
@@ -1493,21 +1493,42 @@
       pop.appendChild(grid);
     }
 
-    list.querySelectorAll('.ps2-prompt').forEach(function(p){
-      var btn=p.querySelector('.ps2-customize');
-      btn.addEventListener('click', function(){
-        var reveal=buildReveal(p);
-        if(reveal.hasAttribute('hidden')){
-          list.querySelectorAll('.ps2-prompt').forEach(function(other){
-            if(other===p) return;
-            var orv=other.querySelector('.ps2-reveal');
-            if(orv && !orv.hasAttribute('hidden')){ orv.setAttribute('hidden',''); var ob=other.querySelector('.ps2-customize'); ob.classList.remove('on'); ob.textContent='Customize Prompt'; }
-          });
-          reveal.removeAttribute('hidden'); btn.classList.add('on'); btn.textContent='Close';
-        }
-        else { reveal.setAttribute('hidden',''); btn.classList.remove('on'); btn.textContent='Customize Prompt'; }
-      });
+    // Prompt catalog. The horizontal selector picks one; it loads into the always-open editor below.
+    var PROMPTS=[
+      {title:'Classroom Environment', sub:'PV lab scene, any angle', file:'/assets/prompts/Classroom-Environment-Master-Prompt-v4.md'},
+      {title:'Campus Exterior', sub:'PV Academy of Arts, any exterior', file:'/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md'},
+      {title:'Lobby Environment', sub:'PV Academy of Arts lobby', file:'/assets/prompts/PV-Campus-Lobby-Master-Prompt-v1.md'},
+      {title:'Fresh Full-Image Rebuild', sub:'force a full rebuild', file:'/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt'},
+      {title:'Two-Pass Character Rebuild', sub:'upper + lower passes to merge', file:'/assets/prompts/Two-Pass-Character-Rebuild.md'},
+      {title:'Character Outfit Change', sub:'re-dress a character sheet', file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md', views:[{label:'Full front / neutral stance',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md'},{label:'Left 3/4 front / face to camera / smile',file:'/assets/prompts/Character-Outfit-Change-Left-3Q-Front-v1.md'},{label:'3/4 rear / side-profile face',file:'/assets/prompts/Character-Outfit-Change-3Q-Rear-v1.md'}]},
+      {title:'Blank Artboard Reset', sub:'clear the canvas memory', file:'/assets/prompts/Blank-Artboard-Reset.txt'}
+    ];
+    var selectbar=document.getElementById('ps2-selectbar');
+    var editorReveal=document.getElementById('ps2-reveal');
+    var titleEl=document.getElementById('ps2-editor-title');
+    var subEl=document.getElementById('ps2-editor-sub');
+    var copyBaseBtn=document.getElementById('ps2-copybase');
+    var pills=[], activeCfg=null;
+    function selectPrompt(idx){
+      PROMPTS.forEach(function(pp,i){ pills[i].classList.toggle('active', i===idx); pills[i].setAttribute('aria-selected', i===idx?'true':'false'); });
+      activeCfg=PROMPTS[idx];
+      titleEl.textContent=activeCfg.title;
+      subEl.textContent=activeCfg.sub?('('+activeCfg.sub+')'):'';
+      closeAllDD();
+      buildReveal(activeCfg, editorReveal);
+      try{ localStorage.setItem('ps2-last', String(idx)); }catch(e){}
+      if(pills[idx].scrollIntoView) pills[idx].scrollIntoView({inline:'nearest', block:'nearest'});
+    }
+    PROMPTS.forEach(function(p,i){
+      var pill=el('button','ps2-pill'); pill.type='button'; pill.setAttribute('role','tab');
+      pill.appendChild(el('span','ps2-pill-title', esc(p.title)));
+      if(p.sub) pill.appendChild(el('span','ps2-pill-sub', esc(p.sub)));
+      pill.addEventListener('click', function(){ selectPrompt(i); });
+      pills.push(pill); selectbar.appendChild(pill);
     });
+    copyBaseBtn.addEventListener('click', function(){ if(!activeCfg) return; fetchPrompt(activeCfg.file).then(function(t){ copy(t, copyBaseBtn); }); });
+    var start=0; try{ var l=parseInt(localStorage.getItem('ps2-last'),10); if(!isNaN(l) && l>=0 && l<PROMPTS.length) start=l; }catch(e){}
+    selectPrompt(start);
   })();
   </script>
   <script>
