@@ -15,7 +15,7 @@ AREA="Photography Folder"
 # --- images (per-slot: header + reflection LIVE; step 1/2 floats await art, render nothing) ---
 IMGDIR=f"{SITE}/assets/images/photo1/aperture-portrait"
 HEADER=f"{IMGDIR}/header-v1.jpg"            # overview hero (LIVE)
-S1_FLOAT=f"{IMGDIR}/capture-float-v1.jpg"   # step 2 capture image (LIVE)
+S1_FLOAT=f"{IMGDIR}/capture-float-v2.jpg"   # step 2 capture image (LIVE)
 S2_FLOAT=f"{IMGDIR}/cull-float-v1.jpg"      # step 2 cull/submit image (placeholder)
 S3_FLOAT=f"{IMGDIR}/reflection-float-v1.jpg"# step 3 reflection image (LIVE)
 HAVE_HEADER=True       # header art placed; overview hero renders

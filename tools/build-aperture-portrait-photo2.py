@@ -14,7 +14,7 @@ AREA="Photography Folder"
 
 IMGDIR=f"{SITE}/assets/images/photo2/aperture-portrait"
 HEADER=f"{IMGDIR}/header-v1.jpg"
-S1_FLOAT=f"{IMGDIR}/capture-float-v1.jpg"
+S1_FLOAT=f"{IMGDIR}/capture-float-v2.jpg"
 S2_FLOAT=f"{IMGDIR}/edit-float-v1.jpg"
 S3_FLOAT=f"{IMGDIR}/reflection-float-v1.jpg"
 HAVE_HEADER=True       # header art placed; overview hero renders
