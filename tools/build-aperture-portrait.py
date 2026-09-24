@@ -145,7 +145,7 @@ APERTURE_STANDARDS=[
 def overview():
     en=banner("Photography 1A","Module 08: Aperture Portrait","Explore aperture on a partner photo walk: capture a portrait at f/8, f/4, and f/2.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
     en+=type_card("overview","The Module Overview","One Partner, Three Apertures",
-        para("This is a partner photo walk about <strong>aperture</strong>. You and a partner take turns: one of you is the <strong>photographer</strong> and the other is the <strong>talent</strong> (the person being photographed). Then you switch, so each of you photographs and each of you gets photographed.")
+        para("This is a partner photo walk about <strong>aperture</strong>. You and a partner take turns: one of you is the <strong>photographer</strong> and the other is the <strong>subject</strong> (the person being photographed). Then you switch, so each of you photographs and each of you gets photographed.")
         + para("You work in Manual mode with the Canon R50 and the RF 50mm f/1.8 lens. ISO stays at 100. You capture the same portrait at three apertures: <strong>f/8</strong>, then <strong>f/4</strong>, then <strong>f/2</strong>, adjusting the shutter each time to balance the light. Then you build a contact sheet, pick your best three, and reflect.")
         + (framed(HEADER,"Aperture Portrait module header") if HAVE_IMAGES else hero_ph("HEADER IMAGE PLACEHOLDER &middot; Aperture Portrait overview hero (16:9). Swap in when ready.")))
     en+=standards_box(False, APERTURE_STANDARDS)
@@ -185,7 +185,7 @@ def overview():
 
     es=banner("Fotograf&iacute;a 1A","M&oacute;dulo 08: Retrato de Apertura","Explora la apertura en una caminata en pareja: captura un retrato en f/8, f/4 y f/2.","#top","Back to English", HICON_PHOTO_WALK)
     es+=type_card("overview","El Resumen del M&oacute;dulo","Una Pareja, Tres Aperturas",
-        para("Esta es una caminata fotogr&aacute;fica en pareja sobre la <strong>apertura</strong>. T&uacute; y tu compa&ntilde;ero se turnan: uno es el <strong>fot&oacute;grafo</strong> y el otro es el <strong>modelo</strong> (la persona fotografiada). Luego cambian, para que cada uno fotograf&iacute;e y cada uno sea fotografiado.")
+        para("Esta es una caminata fotogr&aacute;fica en pareja sobre la <strong>apertura</strong>. T&uacute; y tu compa&ntilde;ero se turnan: uno es el <strong>fot&oacute;grafo</strong> y el otro es el <strong>sujeto</strong> (la persona fotografiada). Luego cambian, para que cada uno fotograf&iacute;e y cada uno sea fotografiado.")
         + para("Trabajas en modo Manual con la Canon R50 y el lente RF 50mm f/1.8. El ISO se queda en 100. Capturas el mismo retrato en tres aperturas: <strong>f/8</strong>, luego <strong>f/4</strong>, luego <strong>f/2</strong>, ajustando el obturador cada vez para equilibrar la luz. Despu&eacute;s armas una hoja de contactos, eliges tus tres mejores y reflexionas.")
         + (framed(HEADER,"Encabezado del m&oacute;dulo Retrato de Apertura") if HAVE_IMAGES else hero_ph("IMAGEN DE ENCABEZADO (PLACEHOLDER) &middot; se cambia despu&eacute;s")))
     es+=standards_box(True, APERTURE_STANDARDS)
@@ -230,8 +230,8 @@ def overview():
 # ================= STEP 01 =================
 def step01():
     en=banner("Module 08 &bull; Step 01","Capture &amp; Contact Sheet","Capture your partner at f/8, f/4, and f/2, then build a 12-Up contact sheet.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
-    en+=type_card("photo-walk","Step 01 &middot; On the Photo Walk","Take Turns: Photographer and Talent",
-        para("Head out with your partner and the camera kit. One of you is the <strong>photographer</strong> and the other is the <strong>talent</strong>. Photograph your full set, then trade roles so you both get portraits and you both practice the camera.")
+    en+=type_card("photo-walk","Step 01 &middot; On the Photo Walk","Take Turns: Photographer and Subject",
+        para("Head out with your partner and the camera kit. One of you is the <strong>photographer</strong> and the other is the <strong>subject</strong>. Photograph your full set, then trade roles so you both get portraits and you both practice the camera.")
         + (float_right(S1_FLOAT,"A Pioneer Valley student photographing a partner in open shade with the Canon R50 held in portrait orientation","Camera on its side, one elbow up: that is portrait orientation.") if HAVE_IMAGES else float_ph("FLOAT-RIGHT PLACEHOLDER &middot; Step 1 capture photo. Swap in when ready."))
         + bullets([
             ("Hold it tall:","turn the camera on its side with one elbow up in the air. This gives you portrait (tall) orientation. Do not leave it wide."),
@@ -266,8 +266,8 @@ def step01():
     en+=next_up("UP NEXT &middot; STEP 02 - Cull &amp; Submit","Pick your best three (one per f-stop), crop, and turn in a 6-Up plus the three final JPGs.")
 
     es=banner("M&oacute;dulo 08 &bull; Paso 01","Captura y Hoja de Contactos","Captura a tu compa&ntilde;ero en f/8, f/4 y f/2, y arma una hoja de contactos de 12.","#top","Back to English", HICON_PHOTO_WALK)
-    es+=type_card("photo-walk","Paso 01 &middot; En la Caminata","Tomen Turnos: Fot&oacute;grafo y Modelo",
-        para("Salgan con tu compa&ntilde;ero y el kit de c&aacute;mara. Uno es el <strong>fot&oacute;grafo</strong> y el otro es el <strong>modelo</strong>. Captura tu serie completa, luego cambien de rol para que ambos tengan retratos y ambos practiquen la c&aacute;mara.")
+    es+=type_card("photo-walk","Paso 01 &middot; En la Caminata","Tomen Turnos: Fot&oacute;grafo y Sujeto",
+        para("Salgan con tu compa&ntilde;ero y el kit de c&aacute;mara. Uno es el <strong>fot&oacute;grafo</strong> y el otro es el <strong>sujeto</strong>. Captura tu serie completa, luego cambien de rol para que ambos tengan retratos y ambos practiquen la c&aacute;mara.")
         + (float_right(S1_FLOAT,"Un estudiante de Pioneer Valley fotografiando a su compa&ntilde;ero en sombra abierta con la Canon R50 en orientaci&oacute;n vertical","C&aacute;mara de lado, un codo arriba: eso es orientaci&oacute;n de retrato.") if HAVE_IMAGES else float_ph("PLACEHOLDER FLOTANTE &middot; foto del Paso 1"))
         + bullets([
             ("Sost&eacute;nla vertical:","voltea la c&aacute;mara de lado con un codo arriba. Esto te da orientaci&oacute;n vertical (de retrato). No la dejes horizontal."),
