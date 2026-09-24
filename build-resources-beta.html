@@ -184,6 +184,13 @@
   /* ── persistent review panel ── */
   .pvb-review{background:var(--pvb-panel-2); border:1px solid var(--pvb-line); border-top:4px solid var(--pvb-teal); padding:16px 16px 18px;}
   .pvb-review h3{font-size:.68rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--pvb-teal-lt); margin:2px 0 10px;}
+  .pvb-modebar{display:flex; align-items:center; gap:10px; margin-bottom:7px; flex-wrap:wrap;}
+  .pvb-modelabel{font-size:.62rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--pvb-teal-lt);}
+  .pvb-modeseg{display:inline-flex; border:1px solid var(--pvb-line);}
+  .pvb-modebtn{font-family:var(--pvb-font); font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--pvb-muted); background:transparent; border:0; padding:7px 13px; cursor:pointer; transition:background .12s;}
+  .pvb-modebtn:hover{background:rgba(0,184,184,.12);}
+  .pvb-modebtn.active{background:var(--pvb-teal); color:#04110f;}
+  .pvb-modehint{font-size:.72rem; color:var(--pvb-faint); margin:0 0 12px; line-height:1.5;}
   .pvb-preview{background:#04100f; border:1px solid var(--pvb-line-soft); border-left:3px solid var(--pvb-teal); padding:12px 13px; max-height:300px; overflow:auto;
     font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.76rem; line-height:1.5; color:#d7f2f2; white-space:pre-wrap;}
   .pvb-acts{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 4px;}
@@ -264,6 +271,14 @@
 
       <aside>
         <div class="pvb-review">
+          <div class="pvb-modebar">
+            <span class="pvb-modelabel">Prompt mode</span>
+            <div class="pvb-modeseg">
+              <button type="button" class="pvb-modebtn" data-mode="project">PV Project</button>
+              <button type="button" class="pvb-modebtn" data-mode="full">Full template</button>
+            </div>
+          </div>
+          <p class="pvb-modehint" id="pvb-modehint"></p>
           <h3>Your prompt</h3>
           <div class="pvb-preview" id="pvb-preview">Loading base prompt&#8230;</div>
           <div class="pvb-acts">
@@ -396,16 +411,16 @@
 
     // ---- prompt catalog ----
     var PROMPTS=[
-      {title:'Classroom Environment',sub:'PV lab scene, any angle',mode:'Environment',file:'/assets/prompts/Classroom-Environment-Master-Prompt-v4.md'},
-      {title:'Campus Exterior',sub:'PV Academy, any exterior',mode:'Environment',file:'/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md'},
-      {title:'Lobby Environment',sub:'PV Academy lobby',mode:'Environment',file:'/assets/prompts/PV-Campus-Lobby-Master-Prompt-v1.md'},
-      {title:'Fresh Full-Image Rebuild',sub:'force a full rebuild',mode:'Fresh rebuild',file:'/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt'},
-      {title:'Two-Pass Character Rebuild',sub:'upper + lower passes',mode:'Fresh rebuild',file:'/assets/prompts/Two-Pass-Character-Rebuild.md'},
-      {title:'Character Outfit Change',sub:'re-dress a character sheet',mode:'Outfit rebuild',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md',
+      {title:'Classroom Environment',sub:'PV lab scene, any angle',mode:'Environment',ptype:'environment',canon:'PV Classroom Environment canon',file:'/assets/prompts/Classroom-Environment-Master-Prompt-v4.md'},
+      {title:'Campus Exterior',sub:'PV Academy, any exterior',mode:'Environment',ptype:'environment',canon:'PV Campus Exterior canon',file:'/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md'},
+      {title:'Lobby Environment',sub:'PV Academy lobby',mode:'Environment',ptype:'environment',canon:'PV Academy Lobby canon',file:'/assets/prompts/PV-Campus-Lobby-Master-Prompt-v1.md'},
+      {title:'Fresh Full-Image Rebuild',sub:'force a full rebuild',mode:'Fresh rebuild',ptype:'protocol',file:'/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt'},
+      {title:'Two-Pass Character Rebuild',sub:'upper + lower passes',mode:'Fresh rebuild',ptype:'protocol',file:'/assets/prompts/Two-Pass-Character-Rebuild.md'},
+      {title:'Character Outfit Change',sub:'re-dress a character sheet',mode:'Outfit rebuild',ptype:'outfit',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md',
         views:[{label:'Full front / neutral stance',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md'},
                {label:'Left 3/4 front / face to camera / smile',file:'/assets/prompts/Character-Outfit-Change-Left-3Q-Front-v1.md'},
                {label:'3/4 rear / side-profile face',file:'/assets/prompts/Character-Outfit-Change-3Q-Rear-v1.md'}]},
-      {title:'Blank Artboard Reset',sub:'clear the canvas memory',mode:'Reset',file:'/assets/prompts/Blank-Artboard-Reset.txt'}
+      {title:'Blank Artboard Reset',sub:'clear the canvas memory',mode:'Reset',ptype:'protocol',file:'/assets/prompts/Blank-Artboard-Reset.txt'}
     ];
 
     // ---- helpers ----
@@ -445,12 +460,20 @@
     if(lbEl){ lbEl.addEventListener('click', closeLightbox); document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !lbEl.hidden) closeLightbox(); }); }
 
     // ---- active build ----
-    var activeIdx=0, cfg=null, state=null, baseText='', OUTFIT=false, TWOPASS=false, BACKDROP=false, KEY='', DEFAULT_BACKDROP='', DEFAULT_VIEW='';
+    var activeIdx=0, cfg=null, state=null, baseText='', OUTFIT=false, TWOPASS=false, BACKDROP=false, KEY='', DEFAULT_BACKDROP='', DEFAULT_VIEW='', fieldNames=[];
+    var MODE='project'; try{ var _m=localStorage.getItem(NS+'mode'); if(_m==='full'||_m==='project') MODE=_m; }catch(e){}
 
     function freshState(){ return {fields:{},chars:['','','',''],items:['','','',''],scene:'',backdrop:(TWOPASS?'transparent':(OUTFIT?'white':'')),view:(OUTFIT?cfg.views[0].file:''),custom:''}; }
 
+    // MODE 'full' = the whole template (byte-identical to the current builder). MODE 'project' = send
+    // overrides + references and let the ChatGPT project supply the saved canon. Protocols (Fresh /
+    // Two-Pass / Blank) are the instruction itself, so they are sent whole in both modes.
     function compose(){
-      if(OUTFIT) return composeOutfit();
+      if(OUTFIT) return (MODE==='full') ? composeOutfitFull() : composeOutfitProject();
+      if(MODE==='project' && cfg.ptype==='environment') return composeEnvProject();
+      return composeEnvFull();
+    }
+    function composeEnvFull(){
       var out=baseText,name;
       for(name in state.fields){ var v=state.fields[name]; if(v) out=out.split('['+name+'] =').join('['+name+'] = '+v); }
       var chars=state.chars.filter(Boolean).map(baseName), items=state.items.filter(Boolean).map(baseName), extra='';
@@ -465,18 +488,49 @@
       if(extra){ if(out.indexOf('REFERENCE USE')>=0) out=out.replace('REFERENCE USE',extra+'REFERENCE USE'); else out=out+'\n\n'+extra; }
       return out;
     }
-    function composeOutfit(){
-      var out=(baseText||'').trim();
-      var cf=(state.chars||[]).filter(Boolean)[0], nm='';
-      if(cf){ var co=CHARACTERS.filter(function(x){return x.file===cf;})[0]; nm=((co&&co.label)?co.label:baseName(cf)).split('(')[0].trim(); }
-      out=out.split('[CHARACTER NAME]').join(nm||'the character');
+    function composeEnvProject(){
+      var lines=[];
+      lines.push('# '+cfg.title.toUpperCase()+': PV PROJECT MODE');
+      lines.push('Apply the '+(cfg.canon||'saved scene canon')+' already in this project (reference hierarchy, architecture, geometry, materials, lighting, character-fidelity lock, and realism / quality rules). Do not restate the canon; apply the scene overrides below on top of it.');
+      lines.push('');
+      lines.push('### SCENE OVERRIDES');
+      var any=false, order=(fieldNames&&fieldNames.length)?fieldNames:Object.keys(state.fields);
+      order.forEach(function(n){ var v=state.fields[n]; if(v){ any=true; lines.push('- **['+n+'] = '+v+'**'); } });
+      if(!any) lines.push('- (none; use the canon defaults)');
+      var out=lines.join('\n');
+      var chars=state.chars.filter(Boolean).map(baseName), items=state.items.filter(Boolean).map(baseName);
+      if(chars.length||items.length||state.scene){
+        var rb='ATTACHED REFERENCE FILES (match these exactly, by file name):';
+        if(chars.length) rb+='\n- Characters: '+chars.join(', ');
+        if(items.length) rb+='\n- Items: '+items.join(', ');
+        if(state.scene) rb+='\n- Scene reference: '+baseName(state.scene);
+        out+='\n\n'+rb;
+      }
+      return out.trim();
+    }
+    function outfitName(){ var cf=(state.chars||[]).filter(Boolean)[0]; if(!cf)return 'the character'; var co=CHARACTERS.filter(function(x){return x.file===cf;})[0]; return ((co&&co.label)?co.label:baseName(cf)).split('(')[0].trim()||'the character'; }
+    function outfitRefBlock(){
+      var chars=state.chars.filter(Boolean).map(baseName), items=state.items.filter(Boolean).map(baseName);
+      if(!(chars.length||items.length)) return '';
+      var b='ATTACHED REFERENCE FILES (match these exactly, by file name):';
+      if(chars.length) b+='\n- Character sheet + identity: '+chars.join(', ');
+      if(items.length) b+='\n- Outfit / apparel / items: '+items.join(', ')+' (wardrobe and props only, never body proportions)';
+      b+='\n- Any extra headshots or outfit images: attached separately in the generator.';
+      return b;
+    }
+    function composeOutfitFull(){
+      var out=(baseText||'').trim().split('[CHARACTER NAME]').join(outfitName());
       var parts=[out], bg=OUTFIT_BG[state.backdrop]; if(bg)parts.push(bg); parts.push(REALISM_LOCK);
       var cu=(state.custom||'').trim(); if(cu)parts.push('CUSTOM ADJUSTMENTS (apply exactly, without changing body proportions): '+cu);
-      var chars=state.chars.filter(Boolean).map(baseName), items=state.items.filter(Boolean).map(baseName);
-      if(chars.length||items.length){ var b='ATTACHED REFERENCE FILES (match these exactly, by file name):';
-        if(chars.length) b+='\n- Character sheet + identity: '+chars.join(', ');
-        if(items.length) b+='\n- Outfit / apparel / items: '+items.join(', ')+' (wardrobe and props only, never body proportions)';
-        b+='\n- Any extra headshots or outfit images: attached separately in the generator.'; parts.push(b); }
+      var rb=outfitRefBlock(); if(rb)parts.push(rb);
+      return parts.join('\n\n').replace(/\n{3,}/g,'\n\n').trim();
+    }
+    function composeOutfitProject(){
+      var out=(baseText||'').trim().split('[CHARACTER NAME]').join(outfitName());
+      var parts=[out], bg=OUTFIT_BG[state.backdrop]; if(bg)parts.push(bg);
+      parts.push('PROPORTION LOCK: apply the project realism and proportion-lock rules. Lock body proportions, height, and silhouette to the character sheet (Image A). The outfit adapts to that body and is never reshaped. Never borrow proportions from the outfit or product images.');
+      var cu=(state.custom||'').trim(); if(cu)parts.push('CUSTOM ADJUSTMENTS (apply exactly, without changing body proportions): '+cu);
+      var rb=outfitRefBlock(); if(rb)parts.push(rb);
       return parts.join('\n\n').replace(/\n{3,}/g,'\n\n').trim();
     }
 
@@ -538,12 +592,13 @@
 
     // ---- fields ----
     function buildFields(){
-      fieldsEl.innerHTML='';
+      fieldsEl.innerHTML=''; fieldNames=[];
       if(OUTFIT){ buildOutfitFields(); return; }
       var ctx=ctxFor(cfg.file);
       fieldsEl.appendChild(el('div','pvb-gtitle','Scene overrides'));
       var re=/^\s*(?:[-*]\s+)?(?:\*\*)?\[([^\]]+)\]\s*=/gm,m,names=[];
       while((m=re.exec(baseText))!==null) names.push(m[1].trim());
+      fieldNames=names.slice();
       if(!names.length){
         var hasTokens=/\[[^\]]+\]/.test(baseText);
         fieldsEl.appendChild(el('div','pvb-note', hasTokens
@@ -641,6 +696,17 @@
     PROMPTS.forEach(function(p,i){ var b=el('button','pvb-pill'); b.type='button'; b.setAttribute('role','tab');
       b.appendChild(el('span','t',esc(p.title))); if(p.sub)b.appendChild(el('span','s',esc(p.sub)));
       b.addEventListener('click',function(){ selectPrompt(i); }); pillsEl.appendChild(b); });
+
+    // ---- prompt mode toggle (PV Project vs Full template) ----
+    var modeBtns=[].slice.call(document.querySelectorAll('.pvb-modebtn')), modeHint=document.getElementById('pvb-modehint');
+    function updateModeUI(){
+      modeBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-mode')===MODE); });
+      if(modeHint) modeHint.textContent = (MODE==='project')
+        ? 'PV Project sends your scene overrides and reference list and lets your ChatGPT project supply the saved canon, so the prompt is short and free of repetition. Protocols (Fresh, Two-Pass, Blank) are still sent in full.'
+        : 'Full template sends the entire prompt with all of the canon baked in, for use outside your ChatGPT project.';
+    }
+    modeBtns.forEach(function(b){ b.addEventListener('click', function(){ MODE=b.getAttribute('data-mode'); try{localStorage.setItem(NS+'mode',MODE);}catch(e){} updateModeUI(); render(); }); });
+    updateModeUI();
 
     renderSetups();
     var start=0; try{ var l=parseInt(localStorage.getItem(NS+'last'),10); if(!isNaN(l)&&l>=0&&l<PROMPTS.length)start=l; }catch(e){}
