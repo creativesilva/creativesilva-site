@@ -116,7 +116,7 @@
     border-left:3px solid var(--pvb-teal); padding:9px 12px; margin:10px 0;}
 
   /* ── fields ── */
-  .pvb-fields{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .pvb-fields{display:grid; grid-template-columns:1fr; gap:12px;}
   @media (max-width:560px){ .pvb-fields{grid-template-columns:1fr;} }
   .pvb-field{display:flex; flex-direction:column; gap:5px;}
   .pvb-field.full{grid-column:1 / -1;}
@@ -149,11 +149,26 @@
   .pvb-refcard:hover{transform:translateY(-1px);}
   .pvb-refcard.sel{outline-color:var(--pvb-teal);}
   .pvb-refcard .thumb{position:relative; width:100%; aspect-ratio:1/1; background:#0b1212;}
-  .pvb-refcard .thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .pvb-refcard .thumb img{width:100%; height:100%; object-fit:contain; display:block;}
+  .pvb-refcard .zoom{position:absolute; top:0; left:0; width:28px; height:28px; display:flex; align-items:center; justify-content:center;
+    background:rgba(3,16,15,.8); color:var(--pvb-teal-lt); border:0; padding:0; line-height:0; cursor:pointer;}
+  .pvb-refcard .zoom svg{width:15px; height:15px;}
+  .pvb-refcard .zoom:hover{background:var(--pvb-teal); color:#04110f;}
   .pvb-refcard.sel .thumb::after{content:'\2713'; position:absolute; top:6px; right:6px; width:22px; height:22px;
     display:flex; align-items:center; justify-content:center; background:var(--pvb-teal); color:#04110f;
     font-weight:700; font-size:.8rem; border-radius:50%;}
   .pvb-refcard .nm{font-size:.74rem; color:#dbeeee; padding:7px 8px 8px; line-height:1.25;}
+
+  /* ── click-to-enlarge lightbox ── */
+  .pvb-lightbox{position:fixed; inset:0; z-index:9998; background:rgba(2,10,10,.94);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:44px 24px;}
+  .pvb-lightbox[hidden]{display:none;}
+  .pvb-lb-img{max-width:92vw; max-height:80vh; object-fit:contain; background:#000; border:1px solid var(--pvb-line); border-top:3px solid var(--pvb-teal);}
+  .pvb-lb-cap{margin-top:14px; font-family:var(--pvb-font); color:var(--pvb-text); font-size:.98rem; letter-spacing:.02em; text-align:center;}
+  .pvb-lb-cap .role{display:block; margin-top:4px; color:var(--pvb-teal-lt); text-transform:uppercase; letter-spacing:.1em; font-size:.7rem; font-weight:700;}
+  .pvb-lb-close{position:absolute; top:18px; right:22px; width:42px; height:42px; background:var(--pvb-teal); color:#04110f; border:0; font-size:1.6rem; line-height:1; cursor:pointer; font-family:var(--pvb-font);}
+  .pvb-lb-close:hover{filter:brightness(1.12);}
+  .pvb-lb-hint{position:absolute; bottom:18px; left:0; right:0; text-align:center; color:var(--pvb-faint); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;}
 
   /* ── setups ── */
   .pvb-setups{display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
@@ -167,7 +182,7 @@
   .pvb-smallbtn:hover{filter:brightness(1.12);}
 
   /* ── persistent review panel ── */
-  .pvb-review{position:sticky; top:82px; background:var(--pvb-panel-2); border:1px solid var(--pvb-line); border-top:4px solid var(--pvb-teal); padding:16px 16px 18px;}
+  .pvb-review{background:var(--pvb-panel-2); border:1px solid var(--pvb-line); border-top:4px solid var(--pvb-teal); padding:16px 16px 18px;}
   .pvb-review h3{font-size:.68rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--pvb-teal-lt); margin:2px 0 10px;}
   .pvb-preview{background:#04100f; border:1px solid var(--pvb-line-soft); border-left:3px solid var(--pvb-teal); padding:12px 13px; max-height:300px; overflow:auto;
     font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.76rem; line-height:1.5; color:#d7f2f2; white-space:pre-wrap;}
@@ -188,7 +203,7 @@
   .pvb-check-empty{font-size:.82rem; color:var(--pvb-faint); padding:8px 0;}
   .pvb-checkrow{display:flex; gap:11px; align-items:center; padding:9px; background:rgba(0,184,184,.05); border-left:2px solid var(--pvb-gold); margin-bottom:8px;}
   .pvb-checkrow .th{flex:0 0 56px; width:56px; height:56px; overflow:hidden; background:#041413;}
-  .pvb-checkrow .th img{width:100%; height:100%; object-fit:cover; display:block;}
+  .pvb-checkrow .th img{width:100%; height:100%; object-fit:contain; display:block;}
   .pvb-checkrow .meta{flex:1 1 auto; min-width:0;}
   .pvb-checkrow .role{font-size:.62rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--pvb-teal-lt);}
   .pvb-checkrow .fn{font-size:.78rem; color:#dbeeee; word-break:break-all; line-height:1.3;}
@@ -237,7 +252,6 @@
             <span class="sub" id="pvb-sub"></span>
             <span class="pvb-mode" id="pvb-mode"></span>
           </div>
-          <div id="pvb-fields"></div>
           <div id="pvb-refs"></div>
         </div>
 
@@ -259,6 +273,8 @@
           </div>
           <div class="pvb-saved" id="pvb-saved">Draft saves automatically.</div>
 
+          <div id="pvb-fields"></div>
+
           <div class="pvb-check">
             <div class="pvb-check-h"><span class="t">Attach in ChatGPT &middot; checklist</span></div>
             <p class="pvb-check-note">Attach these files in the generator. <b>Copy image</b> copies the picture but not its file name, so match each one by the role and order shown here. Attaching the real files keeps their names.</p>
@@ -266,6 +282,13 @@
           </div>
         </div>
       </aside>
+    </div>
+
+    <div id="pvb-lightbox" class="pvb-lightbox" hidden>
+      <button class="pvb-lb-close" id="pvb-lb-close" type="button" aria-label="Close">&times;</button>
+      <img class="pvb-lb-img" id="pvb-lb-img" src="" alt="" />
+      <div class="pvb-lb-cap" id="pvb-lb-cap"></div>
+      <div class="pvb-lb-hint">Click anywhere to close</div>
     </div>
   </main>
 
@@ -415,6 +438,12 @@
         checklistEl=document.getElementById('pvb-checklist'), setupsEl=document.getElementById('pvb-setups'),
         copyB=document.getElementById('pvb-copy'), copy2B=document.getElementById('pvb-copy2'), resetB=document.getElementById('pvb-reset');
 
+    // ---- click-to-enlarge lightbox ----
+    var lbEl=document.getElementById('pvb-lightbox'), lbImg=document.getElementById('pvb-lb-img'), lbCap=document.getElementById('pvb-lb-cap');
+    function openLightbox(file,label){ if(!lbEl)return; lbImg.src=IMG+file; lbCap.innerHTML=esc(label)+'<span class="role">'+esc(baseName(file))+'</span>'; lbEl.hidden=false; }
+    function closeLightbox(){ if(!lbEl)return; lbEl.hidden=true; lbImg.src=''; }
+    if(lbEl){ lbEl.addEventListener('click', closeLightbox); document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !lbEl.hidden) closeLightbox(); }); }
+
     // ---- active build ----
     var activeIdx=0, cfg=null, state=null, baseText='', OUTFIT=false, TWOPASS=false, BACKDROP=false, KEY='', DEFAULT_BACKDROP='', DEFAULT_VIEW='';
 
@@ -491,7 +520,9 @@
       function updCnt(){ var n=nSel(); cnt.textContent=n?(single?'1 selected':(n+' of '+maxN)):'none'; cnt.classList.toggle('has',n>0); }
       function toggle(f){ if(single){ state.scene=(state.scene===f)?'':f; } else { var i=arr.indexOf(f); if(i>=0){arr[i]='';} else { var s=arr.indexOf(''); if(s<0)return; arr[s]=f; } } cards(); updCnt(); render(); }
       function cards(){ grid.innerHTML=''; options.forEach(function(o){ var c=el('div','pvb-refcard'+(isSel(o.file)?' sel':''));
-        var t=el('div','thumb'); var im=el('img'); im.src=IMG+o.file; im.alt=o.label; im.loading='lazy'; t.appendChild(im); c.appendChild(t);
+        var t=el('div','thumb'); var im=el('img'); im.src=IMG+o.file; im.alt=o.label; im.loading='lazy'; t.appendChild(im);
+        var z=el('button','zoom'); z.type='button'; z.title='View larger'; z.setAttribute('aria-label','View larger'); z.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line></svg>'; z.addEventListener('click',function(e){ e.stopPropagation(); openLightbox(o.file,o.label); }); t.appendChild(z);
+        c.appendChild(t);
         c.appendChild(el('div','nm',esc(o.label))); c.addEventListener('click',function(){toggle(o.file);}); grid.appendChild(c); }); }
       head.addEventListener('click',function(){ var open=!wrap.classList.contains('open'); wrap.classList.toggle('open',open); });
       cards(); updCnt(); if(nSel()>0) wrap.classList.add('open');
