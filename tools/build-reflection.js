@@ -368,6 +368,32 @@ const DOCS = [
     '¿Cómo podrías agregar Forma para que tu personaje se vea en 3D y no plano? (Forma)',
     '¿Qué texturas le faltan y dónde las agregarías? (Textura)',
   ]},
+  // Aperture Portrait (Photography 1A) -- balancing exposure across f/8, f/4, f/2; JPG capture.
+  { ...EN, outfile: 'Aperture-Portrait-Reflection-EN.docx', title: 'Aperture Portrait: Reflection', subtitle: PVHS_EN('Photography 1A'), questions: [
+    'How did you balance your exposure at each f-stop? Tell how you used the shutter to move the light meter to balanced.',
+    'What was the hardest part of balancing your exposure, and how did you work through it?',
+    'What did you notice about the background as you opened up from f/8 to f/2? Where did your subject separate from the background the most?',
+    'Which aperture did you like best, f/8, f/4, or f/2, and why?',
+  ]},
+  { ...ES, outfile: 'Aperture-Portrait-Reflection-ES.docx', title: 'Retrato de Apertura: Reflexión', subtitle: PVHS_ES('Fotografía 1A'), questions: [
+    '¿Cómo equilibraste tu exposición en cada número f? Cuenta cómo usaste el obturador para mover el exposímetro a equilibrado.',
+    '¿Cuál fue la parte más difícil de equilibrar tu exposición, y cómo la resolviste?',
+    '¿Qué notaste en el fondo al abrir de f/8 a f/2? ¿Dónde se separó más tu sujeto del fondo?',
+    '¿Cuál apertura te gustó más, f/8, f/4 o f/2, y por qué?',
+  ]},
+  // Aperture Portrait (Photography 2A) -- RAW + running/refining your preset from Module 04.
+  { ...EN, outfile: 'Aperture-Portrait-Photo2-Reflection-EN.docx', title: 'Aperture Portrait: Reflection', subtitle: PVHS_EN('Photography 2A'), questions: [
+    'Did the preset you built earlier work for this session? Answer yes or no.',
+    'If it did not work, why not? Was the lighting scenario too different from where you first built it?',
+    'What did you change or refine in your preset for these portraits, or did you start a new one? What is better now?',
+    'How did you balance your exposure at each f-stop, and which aperture did you like best, f/8, f/4, or f/2? Why?',
+  ]},
+  { ...ES, outfile: 'Aperture-Portrait-Photo2-Reflection-ES.docx', title: 'Retrato de Apertura: Reflexión', subtitle: PVHS_ES('Fotografía 2A'), questions: [
+    '¿El preset que construiste antes funcionó para esta sesión? Responde sí o no.',
+    'Si no funcionó, ¿por qué? ¿La luz era muy diferente de donde lo construiste al principio?',
+    '¿Qué cambiaste o refinaste en tu preset para estos retratos, o empezaste uno nuevo? ¿Qué está mejor ahora?',
+    '¿Cómo equilibraste tu exposición en cada número f, y cuál apertura te gustó más, f/8, f/4 o f/2? ¿Por qué?',
+  ]},
 ];
 
 (async () => { for (const d of DOCS) await buildDoc(d); })();
