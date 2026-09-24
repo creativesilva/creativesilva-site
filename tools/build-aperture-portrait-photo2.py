@@ -4,7 +4,8 @@
 # students capture in RAW and do an EXTENSIVE edit: they run and refine the preset they built in
 # Module 04 (Build Your Own Preset), or start a new one. A preset is not dialed in until it has been
 # run across many sessions, so this is part of that refining. Overview + 3 steps, bilingual, 5th-grade.
-# HEADER + step float images are PLACEHOLDERS. Camera-kit module: NO fresh-photos honesty note.
+# Images are per-slot (HAVE_* flags): HEADER + Step 3 reflection float are LIVE; Step 1/2 floats
+# await art and render NOTHING until placed (no placeholder box). Camera-kit: NO fresh-photos note.
 import os, re
 from silva_framework import *
 
@@ -235,7 +236,7 @@ def step01():
     en=banner("Module 07 &bull; Step 01","Capture &amp; Contact Sheet","Capture your partner in RAW at f/8, f/4, and f/2, then build a 12-Up contact sheet.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
     en+=type_card("photo-walk","Step 01 &middot; On the Photo Walk","Take Turns: Photographer and Subject",
         para("Head out with your partner and the camera kit. One of you is the <strong>photographer</strong> and the other is the <strong>subject</strong>. Photograph your full set, then trade roles so you both get portraits and you both practice the camera.")
-        + (float_right(S1_FLOAT,"A Pioneer Valley student photographing a partner in open shade with the Canon R50 held in portrait orientation","Camera on its side, one elbow up: that is portrait orientation.") if HAVE_S1_FLOAT else float_ph("FLOAT-RIGHT PLACEHOLDER &middot; Step 1 capture photo. Swap in when ready."))
+        + (float_right(S1_FLOAT,"A Pioneer Valley student photographing a partner in open shade with the Canon R50 held in portrait orientation","Camera on its side, one elbow up: that is portrait orientation.") if HAVE_S1_FLOAT else "")
         + bullets([
             ("Hold it tall:","turn the camera on its side with one elbow up in the air for portrait (tall) orientation. Do not leave it wide."),
             ("Frame waist up or closer:","fill the frame with your partner, eyes near the top third."),
@@ -270,7 +271,7 @@ def step01():
     es=banner("M&oacute;dulo 07 &bull; Paso 01","Captura y Hoja de Contactos","Captura a tu compa&ntilde;ero en RAW en f/8, f/4 y f/2, y arma una hoja de contactos de 12.","#top","Back to English", HICON_PHOTO_WALK)
     es+=type_card("photo-walk","Paso 01 &middot; En la Caminata","Tomen Turnos: Fot&oacute;grafo y Sujeto",
         para("Salgan con tu compa&ntilde;ero y el kit de c&aacute;mara. Uno es el <strong>fot&oacute;grafo</strong> y el otro es el <strong>sujeto</strong>. Captura tu serie completa, luego cambien de rol.")
-        + (float_right(S1_FLOAT,"Un estudiante de Pioneer Valley fotografiando a su compa&ntilde;ero en sombra abierta con la Canon R50 en orientaci&oacute;n vertical","C&aacute;mara de lado, un codo arriba: eso es orientaci&oacute;n de retrato.") if HAVE_S1_FLOAT else float_ph("PLACEHOLDER FLOTANTE &middot; foto del Paso 1"))
+        + (float_right(S1_FLOAT,"Un estudiante de Pioneer Valley fotografiando a su compa&ntilde;ero en sombra abierta con la Canon R50 en orientaci&oacute;n vertical","C&aacute;mara de lado, un codo arriba: eso es orientaci&oacute;n de retrato.") if HAVE_S1_FLOAT else "")
         + bullets([
             ("Sost&eacute;nla vertical:","voltea la c&aacute;mara de lado con un codo arriba para orientaci&oacute;n vertical. No la dejes horizontal."),
             ("Encuadra de la cintura para arriba:","llena el cuadro con tu compa&ntilde;ero, los ojos cerca del tercio superior."),
@@ -311,7 +312,7 @@ def step02():
     en=banner("Module 07 &bull; Step 02","Cull, Edit &amp; Submit","Pick your best three, run and refine your preset, and turn in a 6-Up plus three polished portraits.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
     en+=type_card("edit","Step 02 &middot; Cull","Choose Your Three Best",
         para("Look through your take and choose your three strongest portraits: <strong>one at f/8, one at f/4, and one at f/2</strong>. Keeping one at each f-stop shows the range of the aperture and sets up your reflection.")
-        + (float_right(S2_FLOAT,"A Pioneer Valley student editing a RAW portrait in Lightroom Classic on an iMac in the lab","Run your preset, then fine-tune it for these portraits.") if HAVE_S2_FLOAT else float_ph("FLOAT-RIGHT PLACEHOLDER &middot; Step 2 edit photo. Swap in when ready."))
+        + (float_right(S2_FLOAT,"A Pioneer Valley student editing a RAW portrait in Lightroom Classic on an iMac in the lab","Run your preset, then fine-tune it for these portraits.") if HAVE_S2_FLOAT else "")
         + bullets([
             ("One per f-stop:","your best f/8, your best f/4, and your best f/2."),
             ("Sharp eyes:","the eyes should be in focus. Skip any selections that are soft."),
@@ -345,7 +346,7 @@ def step02():
     es=banner("M&oacute;dulo 07 &bull; Paso 02","Selecciona, Edita y Entrega","Elige tus tres mejores, corre y refina tu preset, y entrega una hoja de 6 m&aacute;s tres retratos pulidos.","#top","Back to English", HICON_PHOTO_WALK)
     es+=type_card("edit","Paso 02 &middot; Selecciona","Elige Tus Tres Mejores",
         para("Revisa tu trabajo y elige tus tres retratos m&aacute;s fuertes: <strong>uno en f/8, uno en f/4 y uno en f/2</strong>. Guardar uno en cada n&uacute;mero f muestra el rango de la apertura y prepara tu reflexi&oacute;n.")
-        + (float_right(S2_FLOAT,"Un estudiante de Pioneer Valley editando un retrato RAW en Lightroom Classic en una iMac en el laboratorio","Corre tu preset, luego aj&uacute;stalo para estos retratos.") if HAVE_S2_FLOAT else float_ph("PLACEHOLDER FLOTANTE &middot; foto del Paso 2"))
+        + (float_right(S2_FLOAT,"Un estudiante de Pioneer Valley editando un retrato RAW en Lightroom Classic en una iMac en el laboratorio","Corre tu preset, luego aj&uacute;stalo para estos retratos.") if HAVE_S2_FLOAT else "")
         + bullets([
             ("Uno por n&uacute;mero f:","tu mejor f/8, tu mejor f/4 y tu mejor f/2."),
             ("Ojos n&iacute;tidos:","los ojos deben estar enfocados. Descarta las borrosas."),
@@ -384,7 +385,7 @@ def step02():
 def step03():
     en=banner("Module 07 &bull; Step 03","Reflection","Tell whether your preset held up this session and what you changed.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("STEP 03 / REFLECT","Complete and Upload the Reflection",
-        (float_right(S3_FLOAT,"A Pioneer Valley student typing the Aperture Portrait reflection in the Word document on an iMac in the lab","Type your answers right in the reflection document.") if HAVE_S3_FLOAT else float_ph("FLOAT-RIGHT PLACEHOLDER &middot; Step 3 reflection photo. Swap in when ready."))
+        (float_right(S3_FLOAT,"A Pioneer Valley student typing the Aperture Portrait reflection in the Word document on an iMac in the lab","Type your answers right in the reflection document.") if HAVE_S3_FLOAT else "")
         + para("Finish with a short reflection about your preset and this session.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + bullets([
@@ -400,7 +401,7 @@ def step03():
 
     es=banner("M&oacute;dulo 07 &bull; Paso 03","Reflexi&oacute;n","Cuenta si tu preset funcion&oacute; esta sesi&oacute;n y qu&eacute; cambiaste.","#top","Back to English", HICON_REFLECT)
     es+=card("PASO 03 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
-        (float_right(S3_FLOAT,"Un estudiante de Pioneer Valley escribiendo la reflexi&oacute;n de Retrato de Apertura en el documento de Word en una iMac en el laboratorio","Escribe tus respuestas directamente en el documento de reflexi&oacute;n.") if HAVE_S3_FLOAT else float_ph("PLACEHOLDER FLOTANTE &middot; foto del Paso 3"))
+        (float_right(S3_FLOAT,"Un estudiante de Pioneer Valley escribiendo la reflexi&oacute;n de Retrato de Apertura en el documento de Word en una iMac en el laboratorio","Escribe tus respuestas directamente en el documento de reflexi&oacute;n.") if HAVE_S3_FLOAT else "")
         + para("Termina con una reflexi&oacute;n corta sobre tu preset y esta sesi&oacute;n.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
         + bullets([
