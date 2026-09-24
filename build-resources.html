@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Build Resources | Chris Silva</title>
+  <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only.svg" />
+  <link rel="apple-touch-icon" href="/logos/CS_Logo_Only.svg" />
+  <meta name="description" content="Build & Design resources for PVHS: image generation, cast & campus, templates, graphics, and the prompt studio." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=20260524b" />
+  <style>
+    /* Build Resources: its own secondary page. Shares the catalog's chrome (same header, theme,
+       gate) so moving between them feels seamless. Theme/header/gate CSS below is copied from
+       curriculum.html so this page is self-contained; keep the two in sync if the header changes. */
+    :root {
+      --accent-purple:  #6b6ef5;
+      --accent-blue:    #3b82f6;
+      --accent-teal:    #007474;
+      --accent-red:     #cc0000;
+      --accent-green:   #3fa863;
+      --accent-neutral: #5f8fbf;
+    }
+    /* Dark-teal PV angular background (matches the catalog; overrides the portfolio cityscape). */
+    body::before {
+      background-image: url("/logos/CS_Logo_Glossy_Teal_v1.png");
+      background-size: min(74vw, 700px);
+      background-position: center 40%;
+      background-repeat: no-repeat;
+      background-color: #060f0f;
+      filter: none;
+    }
+    body::after { background: rgba(6, 14, 14, 0.84); }
+    @media (max-width: 900px) {
+      body::before { background-size: min(88vw, 460px); background-position: center 36%; }
+    }
+    .site-header { display: none; }
+
+    /* ── PIN gate (shared session: silva-auth, so an already-unlocked catalog carries over) ── */
+    #pin-gate {
+      position: fixed; inset: 0; z-index: 9999; background: #060606;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-body, Arial, sans-serif);
+    }
+    #pin-gate.hidden { display: none; }
+    .pin-card {
+      width: 100%; max-width: 360px; background: #0e0e0e;
+      border: 1px solid rgba(255,255,255,0.08); border-top: 3px solid #007474;
+      padding: 40px 36px 36px; text-align: center;
+    }
+    .pin-card img { width: 80px; height: auto; margin-bottom: 20px; opacity: 0.85; }
+    .pin-card h2 { font-size: 1rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #5eead4; margin: 0 0 6px; }
+    .pin-card p { font-size: 0.82rem; color: rgba(255,255,255,0.38); margin: 0 0 28px; line-height: 1.6; }
+    .pin-card input {
+      width: 100%; box-sizing: border-box; background: #1a1a1a;
+      border: 1.5px solid rgba(255,255,255,0.10); color: #fff; font-size: 1.4rem;
+      letter-spacing: 0.3em; text-align: center; padding: 12px 16px; outline: none;
+      transition: border-color 0.2s; margin-bottom: 14px;
+    }
+    .pin-card input:focus { border-color: #007474; }
+    .pin-card button {
+      width: 100%; background: #007474; color: #fff; border: none; font-size: 0.78rem;
+      font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; padding: 13px;
+      cursor: pointer; transition: filter 0.15s;
+    }
+    .pin-card button:hover { filter: brightness(1.15); }
+    .pin-error { font-size: 0.78rem; color: #f87171; margin-top: 12px; min-height: 18px; letter-spacing: 0.05em; }
+
+    /* ── Sticky header (identical to the catalog) ── */
+    .catalog-sticky {
+      position: sticky; top: 0; z-index: 500; margin: 0;
+      background: linear-gradient(180deg, rgba(4, 13, 13, 0.88) 0%, rgba(3, 23, 23, 0.74) 100%);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border-top: 3px solid #00b8b8;
+      border-bottom: 1px solid rgba(0, 184, 184, 0.22);
+      box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.72);
+    }
+    .catalog-sticky-inner { max-width: var(--max-width, 1200px); margin: 0 auto; padding: 0 32px; }
+    .catalog-titlebar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 16px 0 15px; }
+    .catalog-titlebar .page-title {
+      margin: 0 auto 0 0; text-align: left; flex: 0 1 auto;
+      font-size: clamp(1.45rem, 2.9vw, 2.05rem); line-height: 1.0; letter-spacing: 0.005em;
+    }
+    .cal-btn {
+      margin-left: 0; flex: 0 0 auto; height: 32px; box-sizing: border-box;
+      display: inline-flex; align-items: center; padding: 0 22px;
+      font-family: var(--font-head, 'Oswald', sans-serif); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      font-size: 0.78rem; color: #fff; text-decoration: none; white-space: nowrap;
+      background: #007474; border: 1px solid #00b8b8; transition: filter 0.15s ease;
+    }
+    .cal-btn:hover { filter: brightness(1.18); }
+    /* Back-to-Catalog button: teal glass so it reads as the primary "return" action. */
+    .cal-btn.br-back { background: rgba(0, 184, 184, 0.14); }
+    .header-clock { flex: 0 0 auto; width: 158px; height: 48px; border: 0; background: transparent; display: block; }
+    @media (max-width: 900px) { .header-clock { display: none; } }
+    @media (max-width: 640px) {
+      .catalog-sticky-inner { padding: 0 16px; }
+      .catalog-titlebar { gap: 10px; padding-bottom: 10px; }
+    }
+
+
+    /* ===== moved from curriculum.html (Build Resources content styles) ===== */
+    .cat-acc {
+      border: 1px solid rgba(0,184,184,0.20);
+      border-left: 5px solid rgba(0,184,184,0.65);
+      background: linear-gradient(180deg, rgba(0,116,116,0.09) 0%, rgba(0,116,116,0.02) 100%);
+      backdrop-filter: blur(10px) saturate(1.1);
+      -webkit-backdrop-filter: blur(10px) saturate(1.1);
+      margin-bottom: 8px;
+    }
+    .cat-acc:last-child { margin-bottom: 0; }
+    summary.cat-head {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px; cursor: pointer; list-style: none; user-select: none;
+      background: rgba(0,0,0,0.30);
+    }
+    summary.cat-head::-webkit-details-marker { display: none; }
+    summary.cat-head:hover { background: rgba(0,184,184,0.12); }
+    .cat-name {
+      flex: 1; font-family: var(--font-head); font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase; color: #80e0e0;
+    }
+    .cat-chevron {
+      width: 8px; height: 8px; border-right: 2px solid rgba(0,184,184,0.7);
+      border-bottom: 2px solid rgba(0,184,184,0.7); transform: rotate(-45deg);
+      transition: transform 0.2s ease; flex-shrink: 0;
+    }
+    .cat-acc[open] > summary.cat-head > .cat-chevron { transform: rotate(45deg); }
+    .cat-body { padding: 4px 18px 18px; }
+    /* Nested sub-accordions (Image Generation Tools, Graphics) */
+    .cat-body .cat-acc { background: rgba(0,116,116,0.05); border-left-color: rgba(0,184,184,0.45); margin-bottom: 6px; }
+    .cat-body .cat-acc > summary.cat-head { padding: 11px 14px; }
+    .cat-body .cat-acc .cat-name { font-size: 0.66rem; color: var(--text-dim); }
+    .cat-body .cat-acc .cat-body { padding: 2px 14px 14px; }
+    .cat-empty {
+      font-size: 0.8rem; color: var(--text-faint); font-style: italic;
+      padding: 8px 0; line-height: 1.5;
+    }
+    .cat-subgroup {
+      font-family: var(--font-head); font-size: 0.6rem; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint);
+      margin: 16px 0 10px;
+    }
+    .cat-subgroup:first-child { margin-top: 6px; }
+    .icon-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 10px;
+    }
+    .icon-cell {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      text-decoration: none; color: var(--text-dim);
+      border: 1px solid rgba(255,255,255,0.06); padding: 12px 8px;
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+    .icon-cell:hover { border-color: rgba(255,255,255,0.22); color: var(--text); }
+    .icon-thumb {
+      width: 100%; height: 62px; display: flex; align-items: center; justify-content: center;
+      background: #f4f4f4; padding: 10px;
+    }
+    .icon-thumb img { max-width: 100%; max-height: 100%; display: block; }
+    .icon-thumb img[src$=".svg"] { width: 100%; height: 100%; object-fit: contain; }
+
+    /* Nike-style color-swatch icon cards: one icon glyph, colored dots below to
+       switch the color (swaps the shown image + the download link). */
+    .swatch-dots { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
+    .swatch-dot {
+      width: 18px; height: 18px; border-radius: 50%; padding: 0; cursor: pointer;
+      border: 2px solid rgba(255, 255, 255, 0.22);
+      transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+    }
+    .swatch-dot:hover { transform: scale(1.18); }
+    .swatch-dot.active { border-color: #ffffff; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.28); }
+    .icon-cap { font-size: 0.58rem; letter-spacing: 0.03em; text-align: center; word-break: break-word; line-height: 1.3; }
+    .cat-body .logo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+    .cat-body .logo-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); overflow: hidden; }
+    .cat-body .logo-tile {
+      background: #f4f4f4; height: 120px; display: flex; align-items: center; justify-content: center;
+      padding: 18px; text-align: center; color: #888; font-family: var(--font-head);
+      font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.6;
+    }
+    .cat-body .logo-tile img { max-width: 100%; max-height: 100%; display: block; }
+    .cat-body .logo-tile { position: relative; cursor: zoom-in; }
+    .cat-body .logo-tile::after {
+      content: ""; position: absolute; top: 8px; right: 8px; width: 22px; height: 22px;
+       background: rgba(0,0,0,0.55) no-repeat center/12px 12px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cline x1='15.5' y1='15.5' x2='21' y2='21'/%3E%3C/svg%3E");
+      opacity: 0; transition: opacity .15s ease; pointer-events: none;
+    }
+    .cat-body .logo-tile:hover::after { opacity: 1; }
+    .cat-body .logo-card.pending { border-style: dashed; }
+    .cat-body .logo-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; text-align: center; gap: 8px 10px; padding: 10px 12px; }
+    .cat-body .logo-name { font-family: var(--font-head); font-size: 0.72rem; font-weight: 600; color: var(--text); letter-spacing: 0.03em; flex: 1 1 100%; min-width: 0; overflow-wrap: anywhere; }
+    .cat-body .logo-fmt { display: block; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-top: 2px; }
+    .cat-body .logo-dl { flex-shrink: 0; font-family: var(--font-head); font-size: 0.56rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); text-decoration: none; border: 1px solid rgba(255,255,255,0.16); padding: 6px 10px; }
+    .cat-body .logo-dl:hover { color: var(--text); border-color: rgba(255,255,255,0.4); }
+    .cat-body .logo-actions { display: flex; flex-wrap: wrap; gap: 6px; flex: 1 1 100%; align-items: center; justify-content: center; }
+    .cat-body .logo-copy { font-family: var(--font-head); font-size: 0.56rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); background: none; cursor: pointer; border: 1px solid rgba(255,140,60,0.5); padding: 6px 10px; }
+    .cat-body .logo-copy:hover { color: var(--text); border-color: #FF6B1A; }
+    .cat-body .logo-copy.copied { color: #fff; border-color: #FF6B1A; background: rgba(255,107,26,0.2); }
+    .cat-body .logo-view { flex-shrink: 0; font-family: var(--font-head); font-size: 0.56rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); text-decoration: none; border: 1px solid rgba(0,184,184,0.5); padding: 6px 10px; }
+    .cat-body .logo-view:hover { color: var(--text); border-color: #00b8b8; }
+    .cat-body .hex-btn { flex: 0 0 auto; margin-left: auto; font-family: var(--font-mono, ui-monospace, Menlo, monospace); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; cursor: pointer; border: 1px solid currentColor;  padding: 6px 10px; line-height: 1; }
+    .cat-body .hex-btn:hover { filter: brightness(1.06); }
+    .cat-body .hex-btn.copied { color: #0a0a0a !important; background: #fff !important; }
+    .char-gate { padding: 8px 0 4px; }
+    .char-gate.hidden { display: none; }
+    .char-gate-label { font-family: var(--font-head); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
+    .char-gate-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .char-gate-row input { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.16); color: var(--text); padding: 9px 12px; font-family: var(--font-body); font-size: 0.9rem; width: 180px; }
+    .char-gate-row button { font-family: var(--font-head); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text); background: rgba(95,143,191,0.2); border: 1px solid rgba(95,143,191,0.5); padding: 9px 16px; cursor: pointer; }
+    .char-gate-row button:hover { background: rgba(95,143,191,0.35); }
+    .char-gate-err { display: none; color: var(--accent); font-size: 0.72rem; margin-top: 8px; }
+    .char-gate-err.show { display: block; }
+    .cast-list .module-acc:first-child { margin-top: 0; }
+    .cast-group-acc { background: rgba(0,184,184,0.09); border-left-color: rgba(0,184,184,0.38); }
+    .cast-char-acc > .module-acc-body > .cast-group-acc:first-child { margin-top: 0; }
+    .page-acts { display: flex; gap: 6px; flex-wrap: wrap; }
+    .pg-btn { font-family: inherit; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #eaf7f7; text-decoration: none; cursor: pointer; background: rgba(0,184,184,0.10); border: 1px solid rgba(0,184,184,0.30); border-top: 2px solid #00b8b8; padding: 6px 12px;  white-space: nowrap; }
+    .pg-btn:hover { border-color: rgba(0,184,184,0.6); background: rgba(0,184,184,0.16); }
+    .pg-btn.pg-view { background: rgba(255,107,26,0.10); border-color: rgba(255,107,26,0.32); border-top-color: #FF6B1A; }
+    .pg-btn.pg-view:hover { border-color: rgba(255,107,26,0.6); background: rgba(255,107,26,0.16); }
+    .pg-btn.flash { background: rgba(0,184,184,0.30); }
+    .cs-lightbox {
+      position: fixed; inset: 0; z-index: 4000; display: none;
+      align-items: center; justify-content: center; padding: 4vh 4vw;
+      background: rgba(6, 10, 12, 0.9); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+    }
+    .cs-lightbox.open { display: flex; }
+    .cs-lightbox-stage {
+      position: relative; max-width: 92vw; max-height: 92vh; display: flex; flex-direction: column;
+      align-items: center; gap: 14px;
+    }
+    .cs-lightbox-imgwrap {
+      background: #f4f4f4;  padding: 22px; display: flex; align-items: center; justify-content: center;
+      max-width: 92vw; max-height: 74vh; box-shadow: 0 24px 70px rgba(0,0,0,0.6);
+    }
+    .cs-lightbox-imgwrap img { max-width: calc(92vw - 44px); max-height: calc(74vh - 44px); display: block; }
+    .cs-lightbox-cap {
+      font-family: var(--font-head); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: rgba(255,255,255,0.85); text-align: center;
+    }
+    .cs-lightbox-close {
+      position: absolute; top: -14px; right: -14px; width: 40px; height: 40px; 
+      border: none; background: #fff; color: #111; font-size: 22px; line-height: 40px; text-align: center;
+      cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.5); z-index: 2;
+    }
+    .cs-lightbox-close:hover { background: #007474; color: #fff; }
+    /* Prev / next arrows flanking the Copy + Download buttons */
+    .cs-lightbox-nav {
+      width: 40px; height: 40px;  border: none; background: rgba(255,255,255,0.12);
+      color: #fff; font-size: 24px; line-height: 1; cursor: pointer; flex: none;
+      display: flex; align-items: center; justify-content: center; padding: 0 0 3px;
+    }
+    .cs-lightbox-nav:hover { background: #007474; }
+    /* Copy + Download in the expanded view */
+    .cs-lightbox-actions { display: flex; gap: 10px; align-items: center; }
+    .cs-lightbox-copy, .cs-lightbox-dl {
+      font-family: var(--font-head); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+      color: #fff; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3); padding: 9px 16px;
+      cursor: pointer; text-decoration: none; 
+    }
+    .cs-lightbox-copy:hover, .cs-lightbox-dl:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.55); }
+    .cs-lightbox-copy.copied { background: #007474; border-color: #007474; }
+    @media (max-width: 600px) {
+      .cs-lightbox-close { top: -10px; right: -10px; width: 34px; height: 34px; line-height: 34px; font-size: 19px; }
+      .cs-lightbox-nav { width: 36px; height: 36px; font-size: 22px; }
+    }
+    .ps2-intro { color: var(--text-dim); font-size: 0.85rem; line-height: 1.6; margin: 0 0 14px; }
+    .ps2-titlebar { display: flex; align-items: center; gap: 14px; background: rgba(0,0,0,0.40); border-left: 5px solid #00b8b8; padding: 10px 18px 10px 13px; margin: 0 0 15px; }
+    .ps2-tb-icon { width: 44px; height: 44px; object-fit: contain; flex: 0 0 auto; }
+    .ps2-tb-title { font-family: var(--font-head,'Oswald',sans-serif); font-size: 1.02rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #eafdfd; line-height: 1.1; }
+    .ps2-list { display: flex; flex-direction: column; gap: 10px; }
+    .ps2-prompt { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.02); }
+    .ps2-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 14px 16px; }
+    .ps2-title { flex: 1 1 0; min-width: 0; font-weight: 600; }
+    .ps2-sub { font-weight: 400; color: var(--text-dim); }
+    .ps2-actions { display: flex; gap: 8px; flex-wrap: wrap; flex-shrink: 0; }
+    .ps2-customize { background: #007474; border-color: #00b8b8; color: #fff; }
+    .ps2-customize:hover { filter: brightness(1.15); }
+    .ps2-customize.on { background: rgba(0,184,184,0.16); color: #eaf7f7; }
+    .ps2-copytext { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.18); border-top-color: rgba(255,255,255,0.28); color: #eaf7f7; }
+    .ps2-copytext:hover { border-color: rgba(0,184,184,0.5); }
+
+    .ps2-reveal { border-top: 1px solid rgba(0,184,184,0.22); background: rgba(0,0,0,0.22); padding: 18px 16px 20px; }
+    .ps2-group { margin-bottom: 18px; }
+    .ps2-gtitle { font-family: var(--font-head,'Oswald',sans-serif); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #00b8b8; margin-bottom: 11px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .ps2-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 13px 16px; }
+    .ps2-field { display: flex; flex-direction: column; gap: 5px; }
+    .ps2-field label { font-family: var(--font-head,'Oswald',sans-serif); font-size: 0.6rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+    .ps2-field label .val { float: right; color: #00b8b8; font-weight: 600; }
+    .ps2-field select { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,184,184,0.28); border-top: 2px solid #00b8b8; color: #eaf7f7; font-family: inherit; font-size: 0.85rem; padding: 8px 10px; -webkit-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360d8d8' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 9px center; background-size: 14px; }
+    .ps2-field select:focus { outline: none; border-color: #00b8b8; }
+    .ps2-field input[type="range"] { width: 100%; accent-color: #00b8b8; }
+    .ps2-context { width: 100%; box-sizing: border-box; min-height: 60px; resize: vertical; overflow-x: hidden; overflow-y: auto; background: #bfe0db; border: 1px solid rgba(0,116,116,0.34); border-top: 2px solid #00b8b8; border-radius: 0; color: #0b2e2c; font-family: inherit; font-size: 0.88rem; line-height: 1.5; padding: 10px 12px; }
+    .ps2-context:focus { outline: none; border-color: #00b8b8; box-shadow: 0 0 0 2px rgba(0,184,184,0.22); }
+    .ps2-context::placeholder { color: rgba(11,46,44,0.42); }
+    .ps2-line { width: 100%; box-sizing: border-box; background: #bfe0db; border: 1px solid rgba(0,116,116,0.34); border-top: 2px solid #00b8b8; border-radius: 0; color: #0b2e2c; font-family: inherit; font-size: 0.88rem; line-height: 1.5; padding: 9px 12px; }
+    .ps2-line:focus { outline: none; border-color: #00b8b8; box-shadow: 0 0 0 2px rgba(0,184,184,0.22); }
+    .ps2-line::placeholder { color: rgba(11,46,44,0.42); }
+    .ps2-fields--text { grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
+    .ps2-fields + .ps2-fields { margin-top: 13px; }
+    .ps2-refgroup { margin-bottom: 12px; }
+    .ps2-reflabel { font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(234,247,247,0.55); margin-bottom: 7px; }
+    .ps2-slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; }
+    .ps2-slot { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,184,184,0.28); border-top: 2px solid #00b8b8; color: #eaf7f7; font-family: inherit; font-size: 0.85rem; padding: 8px 30px 8px 10px; -webkit-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360d8d8' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 9px center; background-size: 14px; }
+    .ps2-slot:focus { outline: none; border-color: #00b8b8; }
+    .ps2-dd { position: relative; width: 100%; box-sizing: border-box; }
+    .ps2-dd-val { box-sizing: border-box; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,184,184,0.28); border-top: 2px solid #00b8b8; color: #eaf7f7; font-family: inherit; font-size: 0.85rem; padding: 8px 30px 8px 10px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360d8d8' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 9px center; background-size: 14px; }
+    .ps2-dd.open .ps2-dd-val { border-color: #00b8b8; }
+    .ps2-dd-menu { position: absolute; top: calc(100% + 2px); left: 0; right: 0; z-index: 60; background: #062221; border: 1px solid rgba(0,184,184,0.5); border-top: 2px solid #00b8b8; max-height: 240px; overflow-y: auto; box-shadow: 0 14px 30px rgba(0,0,0,0.55); }
+    .ps2-dd-opt { padding: 8px 12px; font-size: 0.85rem; color: #d6efee; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ps2-dd-opt:hover { background: rgba(0,184,184,0.18); color: #fff; }
+    .ps2-dd-opt.sel { background: rgba(0,184,184,0.12); color: #7fe9e9; }
+    .ps2-dd-thumb { width: 40px; height: 40px; flex: 0 0 auto; object-fit: contain; background: #0b2a2a; border: 1px solid rgba(0,184,184,0.28); }
+    .ps2-dd-thumb--ph { border-style: dashed; border-color: rgba(0,184,184,0.20); background: rgba(0,0,0,0.30); }
+    .ps2-dd-optlabel { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ps2-dd--rich .ps2-dd-val { display: flex; align-items: center; gap: 9px; min-height: 48px; padding-top: 4px; padding-bottom: 4px; }
+    .ps2-dd--rich .ps2-dd-opt { display: flex; align-items: center; gap: 9px; padding: 5px 12px; }
+    .ps2-dd--rich .ps2-dd-menu { min-width: 100%; width: max-content; max-width: 360px; }
+    .ps2-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    .ps2-chip { font-family: inherit; font-size: 0.74rem; letter-spacing: 0.02em; color: #eaf7f7; cursor: pointer; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14); padding: 6px 12px; white-space: nowrap; transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease; }
+    .ps2-chip:hover { border-color: rgba(0,184,184,0.5); }
+    .ps2-chip.on { background: rgba(0,184,184,0.18); border-color: #00b8b8; color: #fff; }
+    .ps2-chip.on::before { content: "\2713  "; color: #00b8b8; }
+    .ps2-preview { background: rgba(0,0,0,0.42); border: 1px solid rgba(255,255,255,0.10); border-left: 3px solid #00b8b8; padding: 13px 14px; font-size: 0.82rem; line-height: 1.6; color: #eaf7f7; white-space: pre-wrap; max-height: 260px; overflow-y: auto; margin-bottom: 13px; }
+    .ps2-revealacts { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .ps2-copyprompt { background: #007474; border-color: #00b8b8; color: #fff; }
+    .ps2-reset { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.18); border-top-color: rgba(255,255,255,0.28); color: #eaf7f7; }
+    .ps2-reset:hover { border-color: rgba(255,107,26,0.55); color: #ffd0b0; }
+    .ps2-copyprompt:hover { filter: brightness(1.15); }
+    .ps2-copyprompt.copied { background: #1db869 !important; border-color: #1db869 !important; }
+    .ps2-hint { color: var(--text-dim); font-size: 0.74rem; }
+    .ps2-filespop { margin-top: 16px; border: 1px solid rgba(0,184,184,0.3); border-top: 2px solid #00b8b8; background: rgba(6,26,25,0.6); padding: 14px 15px; }
+    .ps2-filespop-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+    .ps2-filespop-title { font-family: var(--font-head,'Oswald',sans-serif); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #7fe9e9; }
+    .ps2-files { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 11px; }
+    .ps2-file { border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); display: flex; flex-direction: column; }
+    .ps2-file-thumb { height: 84px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(0,184,184,0.05); }
+    .ps2-file-thumb img { max-width: 92%; max-height: 78%; object-fit: contain; }
+    .ps2-file-meta { padding: 8px 9px; display: flex; flex-direction: column; gap: 6px; }
+    .ps2-file-name { font-size: 0.62rem; color: rgba(234,247,247,0.7); word-break: break-all; line-height: 1.35; }
+    .ps2-file-acts { display: flex; gap: 6px; }
+    .ps2-file-acts .pg-btn { font-size: 0.58rem; padding: 5px 8px; flex: 1 1 auto; text-align: center; justify-content: center; }
+    .ps2-filespop-empty { color: var(--text-dim); font-size: 0.82rem; font-style: italic; }
+
+    /* ── Page content wrap (Task 2 fills this with the moved Build Resources sections) ── */
+    .br-main { max-width: var(--max-width, 1200px); margin: 0 auto; padding: 26px 32px 90px; box-sizing: border-box; }
+    @media (max-width: 640px) { .br-main { padding: 20px 16px 60px; } }
+    .br-shell-note {
+      border: 2px dashed rgba(0, 184, 184, 0.45); background: rgba(0, 184, 184, 0.06);
+      color: #80e0e0; text-align: center; padding: 40px 18px; font-size: 0.95rem; letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PIN gate: hidden immediately if the session is already authenticated (shared with the catalog). -->
+  <div id="pin-gate">
+    <div class="pin-card">
+      <img src="https://www.creativesilva.com/assets/PV%20LOGO%20NEW.png" alt="PVHS" />
+      <h2>Build Resources</h2>
+      <p>Private access only.<br>Enter your code to continue.</p>
+      <input type="text" id="pin-input" inputmode="numeric" autocomplete="off" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;" maxlength="10" />
+      <button onclick="silvaCheckPin()">Continue</button>
+      <div class="pin-error" id="pin-error"></div>
+    </div>
+  </div>
+  <script>
+    if (sessionStorage.getItem('silva-auth') === 'ok') {
+      document.getElementById('pin-gate').classList.add('hidden');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      var input = document.getElementById('pin-input');
+      if (input) {
+        silvaMaskPin(input);
+        input.focus();
+        input.addEventListener('keydown', function (e) { if (e.key === 'Enter') silvaCheckPin(); });
+      }
+    });
+    function silvaMaskPin(input) {
+      input.dataset.real = '';
+      input.addEventListener('input', function () {
+        var shown = input.value;
+        var real = input.dataset.real || '';
+        var typed = shown.replace(/•/g, '');
+        if (typed) { real = (real + typed).slice(0, 10); }
+        else { real = real.slice(0, shown.length); }
+        input.dataset.real = real;
+        input.value = '•'.repeat(real.length);
+      });
+    }
+    function silvaCheckPin() {
+      var el = document.getElementById('pin-input');
+      var val = (el.dataset.real || '').trim();
+      if (val === '322331') {
+        sessionStorage.setItem('silva-auth', 'ok');
+        document.getElementById('pin-gate').classList.add('hidden');
+      } else {
+        document.getElementById('pin-error').textContent = 'Incorrect code. Try again.';
+        el.value = ''; el.dataset.real = ''; el.focus();
+      }
+    }
+  </script>
+
+  <main>
+    <div class="catalog-sticky">
+      <div class="catalog-sticky-inner">
+        <div class="catalog-titlebar">
+          <h1 class="page-title">Build Resources</h1>
+          <a class="cal-btn br-back" href="/curriculum.html">&#8249;&nbsp; Catalog</a>
+          <a class="cal-btn" href="/calendar.html">Calendar</a>
+          <iframe class="header-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <div class="br-main">
+            <details class="cat-acc" open>
+              <summary class="cat-head"><span class="cat-name">Image Generation Tools</span><span class="cat-chevron"></span></summary>
+              <div class="cat-body">
+                <div class="char-content" id="char-content">
+                  <details class="cat-acc" open>
+                    <summary class="cat-head"><span class="cat-name">Prompt Studio</span><span class="cat-chevron"></span></summary>
+                    <div class="cat-body">
+                    <div class="ps2-titlebar"><img class="ps2-tb-icon" src="https://www.creativesilva.com/assets/Icons/assignment/design-teal-v1.png" alt="" /><span class="ps2-tb-title">Prompt Studio</span></div>
+                    <div class="ps2-list">
+                      <div class="ps2-prompt" data-file="/assets/prompts/Classroom-Environment-Master-Prompt-v4.md">
+                        <div class="ps2-row">
+                          <div class="ps2-title">Classroom Environment Master Prompt <span class="ps2-sub">(PV lab scene, any angle)</span></div>
+                          <div class="ps2-actions">
+                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
+                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Classroom-Environment-Master-Prompt-v4.md', this)">Copy Text</button>
+                          </div>
+                        </div>
+                        <div class="ps2-reveal" hidden></div>
+                      </div>
+                      <div class="ps2-prompt" data-file="/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md">
+                        <div class="ps2-row">
+                          <div class="ps2-title">Campus Exterior Master Prompt <span class="ps2-sub">(PV Academy of Arts, any exterior)</span></div>
+                          <div class="ps2-actions">
+                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
+                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md', this)">Copy Text</button>
+                          </div>
+                        </div>
+                        <div class="ps2-reveal" hidden></div>
+                      </div>
+                      <div class="ps2-prompt" data-file="/assets/prompts/PV-Campus-Lobby-Master-Prompt-v1.md">
+                        <div class="ps2-row">
+                          <div class="ps2-title">Lobby Environment Master Prompt <span class="ps2-sub">(PV Academy of Arts lobby, any angle)</span></div>
+                          <div class="ps2-actions">
+                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
+                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/PV-Campus-Lobby-Master-Prompt-v1.md', this)">Copy Text</button>
+                          </div>
+                        </div>
+                        <div class="ps2-reveal" hidden></div>
+                      </div>
+                      <div class="ps2-prompt" data-file="/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt">
+                        <div class="ps2-row">
+                          <div class="ps2-title">Fresh Full-Image Rebuild Protocol <span class="ps2-sub">(force a full rebuild)</span></div>
+                          <div class="ps2-actions">
+                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
+                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt', this)">Copy Text</button>
+                          </div>
+                        </div>
+                        <div class="ps2-reveal" hidden></div>
+                      </div>
+                      <div class="ps2-prompt" data-file="/assets/prompts/Two-Pass-Character-Rebuild.md">
+                        <div class="ps2-row">
+                          <div class="ps2-title">Two-Pass Character Rebuild <span class="ps2-sub">(ultra-high-res upper + lower passes to merge in Photoshop)</span></div>
+                          <div class="ps2-actions">
+                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
+                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Two-Pass-Character-Rebuild.md', this)">Copy Text</button>
+                          </div>
+                        </div>
+                        <div class="ps2-reveal" hidden></div>
+                      </div>
+                      <div class="ps2-prompt" data-file="/assets/prompts/Character-Outfit-Change-Full-Front-v1.md" data-views='[{"label":"Full front / neutral stance","file":"/assets/prompts/Character-Outfit-Change-Full-Front-v1.md"},{"label":"Left 3/4 front / face to camera / smile","file":"/assets/prompts/Character-Outfit-Change-Left-3Q-Front-v1.md"},{"label":"3/4 rear / side-profile face","file":"/assets/prompts/Character-Outfit-Change-3Q-Rear-v1.md"}]'>
+                        <div class="ps2-row">
+                          <div class="ps2-title">Character Outfit Change <span class="ps2-sub">(re-dress a character sheet, one full-body view at a time)</span></div>
+                          <div class="ps2-actions">
+                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
+                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Character-Outfit-Change-Full-Front-v1.md', this)">Copy Text</button>
+                          </div>
+                        </div>
+                        <div class="ps2-reveal" hidden></div>
+                      </div>
+                      <div class="ps2-prompt" data-file="/assets/prompts/Blank-Artboard-Reset.txt">
+                        <div class="ps2-row">
+                          <div class="ps2-title">Blank Artboard Reset <span class="ps2-sub">(clear the canvas memory)</span></div>
+                          <div class="ps2-actions">
+                            <button type="button" class="pg-btn ps2-customize">Customize Prompt</button>
+                            <button type="button" class="pg-btn ps2-copytext" onclick="silvaCopyPrompt('/assets/prompts/Blank-Artboard-Reset.txt', this)">Copy Text</button>
+                          </div>
+                        </div>
+                        <div class="ps2-reveal" hidden></div>
+                      </div>
+                    </div>
+                    </div>
+                  </details>
+                  <details class="cat-acc" open>
+                    <summary class="cat-head"><span class="cat-name">Cast &amp; Campus</span><span class="cat-chevron"></span></summary>
+                    <div class="cat-body">
+                      <div id="cast-list" class="cast-list"></div>
+                  <details class="cat-acc">
+                    <summary class="cat-head"><span class="cat-name">Items</span><span class="cat-chevron"></span></summary>
+                    <div class="cat-body"><div class="logo-grid">
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-eos-r50-v1.png" alt="Canon EOS R50 camera" /></div><div class="logo-meta"><span class="logo-name">Canon EOS R50 <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-eos-r50-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-eos-r5-pro-v1.png" alt="Canon EOS R5 pro camera" /></div><div class="logo-meta"><span class="logo-name">Canon EOS R5 Pro <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-eos-r5-pro-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-camera-bag-v2.png" alt="Canon camera bag" /></div><div class="logo-meta"><span class="logo-name">Canon Camera Bag <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-camera-bag-v2.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/iphone-mockup-v3.png" alt="Teal iPhone mockup with a blank screen" /></div><div class="logo-meta"><span class="logo-name">iPhone Mockup <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/iphone-mockup-v3.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/imac-27-mockup-v2.png" alt="iMac 27 inch mockup with a blank screen" /></div><div class="logo-meta"><span class="logo-name">iMac 27&Prime; Mockup <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/imac-27-mockup-v2.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/macbook-pro-v1.png" alt="MacBook Pro laptop, space gray" /></div><div class="logo-meta"><span class="logo-name">MacBook Pro <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/macbook-pro-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/ipad-pro-apple-pencil-v1.jpg" alt="iPad Pro with Apple Pencil, drawing" /></div><div class="logo-meta"><span class="logo-name">iPad Pro + Apple Pencil <span class="logo-fmt">Item &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/items/ipad-pro-apple-pencil-v1.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/student-ipad-keyboard-v1.png" alt="Student iPad in a keyboard folio case with a stylus" /></div><div class="logo-meta"><span class="logo-name">Student iPad + Keyboard <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/student-ipad-keyboard-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-70-200-lens-v1.png" alt="Canon camera with 70-200 telephoto zoom lens" /></div><div class="logo-meta"><span class="logo-name">Canon 70-200 Lens <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-70-200-lens-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-r5-ii-telephoto-v1.png" alt="Canon EOS R5 Mark II with a black telephoto zoom lens" /></div><div class="logo-meta"><span class="logo-name">Canon R5 II Telephoto <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-r5-ii-telephoto-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/canon-r5-ii-white-telephoto-v1.png" alt="Canon EOS R5 Mark II with a white telephoto zoom lens" /></div><div class="logo-meta"><span class="logo-name">Canon R5 II White Telephoto <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/canon-r5-ii-white-telephoto-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/classroom-camera-kit-v1.jpg" alt="The classroom Canon EOS R50 kit: camera body, two lenses, battery charger, and strap" /></div><div class="logo-meta"><span class="logo-name">Classroom Camera Kit <span class="logo-fmt">Item &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/items/classroom-camera-kit-v1.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/pantone-swatch-book-v1.png" alt="Pantone Formula Guide swatch book, fanned open" /></div><div class="logo-meta"><span class="logo-name">Pantone Swatch Book <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/pantone-swatch-book-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/sketchbook-v1.png" alt="Kraft cover sketchbook" /></div><div class="logo-meta"><span class="logo-name">Sketchbook <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/sketchbook-v1.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/pv-cheer-outfit-v1.jpg" alt="PV Panthers cheer outfit: dress front, side, and back views, pom-poms, and shoes" /></div><div class="logo-meta"><span class="logo-name">PV Cheer Outfit <span class="logo-fmt">Item &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/items/pv-cheer-outfit-v1.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/quarter-zip-male-v1.jpg" alt="PV men's quarter-zip jacket, black and teal: front, side, and back views" /></div><div class="logo-meta"><span class="logo-name">PV Quarter Zip (Male) <span class="logo-fmt">Item &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/items/quarter-zip-male-v1.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/items/anthony-jordan-11-teal-v1.png" alt="Anthony&rsquo;s teal Air Jordan 11 shoes" /></div><div class="logo-meta"><span class="logo-name">Jordan 11 Shoes (Anthony) <span class="logo-fmt">Item &middot; PNG</span></span><a class="logo-dl" href="/assets/images/characters/items/anthony-jordan-11-teal-v1.png" download>Download</a></div></div>
+                    </div></div>
+                  </details>
+                  <details class="cat-acc">
+                    <summary class="cat-head"><span class="cat-name">Campus</span><span class="cat-chevron"></span></summary>
+                    <div class="cat-body"><div class="logo-grid">
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/PV%20LOGO%20NEW.png" alt="PV monogram with panther, primary" /></div><div class="logo-meta"><span class="logo-name">PV with Panther <span class="logo-fmt">Primary &middot; PNG</span></span><a class="logo-dl" href="/assets/PV%20LOGO%20NEW.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Monogram.png" alt="PV monogram without panther" /></div><div class="logo-meta"><span class="logo-name">PV without Panther <span class="logo-fmt">Monogram &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Monogram.png" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-campus-front-v1.jpg" alt="PV Academy of Arts campus front" /></div><div class="logo-meta"><span class="logo-name">Academy of Arts Campus Front <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-campus-front-v1.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-classroom-inspiration-v1.jpg" alt="PV classroom inspiration" /></div><div class="logo-meta"><span class="logo-name">Classroom Inspiration <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-classroom-inspiration-v1.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-lobby-photography-v1.jpg" alt="PV Academy of Arts building lobby interior, Photography" /></div><div class="logo-meta"><span class="logo-name">Academy Lobby (Photography) <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-lobby-photography-v1.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-lobby-digital-arts-v1.jpg" alt="PV Academy of Arts building lobby interior, Digital Arts" /></div><div class="logo-meta"><span class="logo-name">Academy Lobby (Digital Arts) <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-lobby-digital-arts-v1.jpg" download>Download</a></div></div>
+                    <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-sports-complex-back-v2.jpg" alt="PV Academy of Arts plaza behind the sports complex with the panther statue" /></div><div class="logo-meta"><span class="logo-name">Sports Complex Plaza (Rear) <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-sports-complex-back-v2.jpg" download>Download</a></div></div>
+                    </div></div>
+                  </details>
+                    </div>
+                  </details>
+                  <details class="cat-acc">
+                    <summary class="cat-head"><span class="cat-name">Live Image Catalog</span><span class="cat-chevron"></span></summary>
+                    <div class="cat-body">
+                      <!-- LIVE_IMAGE_CATALOG_START -->
+                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Digital Arts 1A (17)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid"><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/pictograms/pictograms-hero-v2.png" alt="Pictograms" /></div><div class="logo-meta"><span class="logo-name">Pictograms &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/pictograms/pictograms-hero-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/pictograms/pictograms-step01-float-v2.png" alt="Student searching Google Images for pictograms to save" /></div><div class="logo-meta"><span class="logo-name">Pictograms &rsaquo; Step 01 &middot; Find Save <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/pictograms/pictograms-step01-float-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/pictograms/pictograms-sketch-float-v1.png" alt="Student sketching a pictogram in a sketchbook" /></div><div class="logo-meta"><span class="logo-name">Pictograms &rsaquo; Step 02 &middot; Sketch Reflect <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/pictograms/pictograms-sketch-float-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/color-theory/color-theory-header-v1.png" alt="Color Theory" /></div><div class="logo-meta"><span class="logo-name">Color Theory &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/color-theory/color-theory-header-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/color-theory/color-wheel.png" alt="Color wheel with primary, secondary, and tertiary colors" /></div><div class="logo-meta"><span class="logo-name">Color Theory &rsaquo; Step 01 &middot; Analysis <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/color-theory/color-wheel.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/sketchbook-cover/sketchbook-cover-header-v2.jpg" alt="Sketchbook Cover" /></div><div class="logo-meta"><span class="logo-name">Sketchbook Cover Art &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/sketchbook-cover/sketchbook-cover-header-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/sketchbook-cover/chick-fil-a-prize.jpg" alt="Chick-fil-A prize" /></div><div class="logo-meta"><span class="logo-name">Sketchbook Cover Art &rsaquo; Overview <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/sketchbook-cover/chick-fil-a-prize.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/sketchbook-cover/reflection-typing-v3.jpg" alt="A student typing the reflection on a computer" /></div><div class="logo-meta"><span class="logo-name">Sketchbook Cover Art &rsaquo; Step 02 &middot; Submit Reflect <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/sketchbook-cover/reflection-typing-v3.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/motivational-poster/motivational-poster-header-v2.png" alt="Example motivational poster" /></div><div class="logo-meta"><span class="logo-name">Motivational Poster &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/motivational-poster/motivational-poster-header-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/motivational-poster/wallpaper-float.jpg" alt="A student in the design lab holding her phone with the finished wallpaper, the same design open in Photoshop behind her" /></div><div class="logo-meta"><span class="logo-name">Motivational Poster &rsaquo; Step 02 <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/motivational-poster/wallpaper-float.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/motivational-poster/reflection-float-v1.jpg" alt="A student filling out the Motivational Poster reflection document on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Motivational Poster &rsaquo; Step 03 <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/motivational-poster/reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/live-stream-graphic/live-stream-end-example-v1.jpg" alt="Finished History 301 Live Stream graphic: an arch photo with an orange bar on the left, a blue bar on the right, a green wash, and the words HISTORY 301 and LIVE STREAM in white" /></div><div class="logo-meta"><span class="logo-name">Live Stream Graphic &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/live-stream-graphic/live-stream-end-example-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/live-stream-graphic/live-stream-youtube-channel-v1.jpg" alt="A YouTube channel page open in a browser, showing a row of the channel&rsquo;s video thumbnails that share the same bold-text, big-face design language" /></div><div class="logo-meta"><span class="logo-name">Live Stream Graphic &rsaquo; Step 02 &middot; Inspiration <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/live-stream-graphic/live-stream-youtube-channel-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/live-stream-graphic/live-stream-design-float-v1.jpg" alt="A Pioneer Valley student in the design lab making his own YouTube thumbnail in Photoshop, a bold &lsquo;5 Ways to Score Like a Pro&rsquo; basketball design on the iMac screen" /></div><div class="logo-meta"><span class="logo-name">Live Stream Graphic &rsaquo; Step 03 &middot; Design <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/live-stream-graphic/live-stream-design-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/elements-of-art/elements-of-art-header-v1.jpg" alt="A Pioneer Valley student in the Academy of Arts lab sketching an original character in a sketchbook, with a screen showing the 7 Elements of Art" /></div><div class="logo-meta"><span class="logo-name">Elements of Art, Character Design &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/elements-of-art/elements-of-art-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/elements-of-art/elements-of-art-step01-float-v1.jpg" alt="A student photographing a finished sketchbook character named Blobby with an iPad" /></div><div class="logo-meta"><span class="logo-name">Elements of Art, Character Design &rsaquo; Step 01 &middot; Draw <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/elements-of-art/elements-of-art-step01-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/elements-of-art/elements-of-art-reflection-float-v1.jpg" alt="A Pioneer Valley student typing the Character Design reflection in the Word document on an iMac in the creative lab, a decorated sketchbook on the desk" /></div><div class="logo-meta"><span class="logo-name">Elements of Art, Character Design &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/elements-of-art/elements-of-art-reflection-float-v1.jpg" download>Download</a></div></div></div></div></details>
+                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Photography 1A (24)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid"><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/self-portrait/self-portrait-hero-v1.png" alt="Self-Portrait" /></div><div class="logo-meta"><span class="logo-name">Self-Portrait &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/self-portrait/self-portrait-hero-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/self-portrait/self-portrait-float-v1.png" alt="Self-Portrait" /></div><div class="logo-meta"><span class="logo-name">Self-Portrait &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/self-portrait/self-portrait-float-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/self-portrait/self-portrait-reflection-float-v1.png" alt="Anthony typing his reflection in Word" /></div><div class="logo-meta"><span class="logo-name">Self-Portrait &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/self-portrait/self-portrait-reflection-float-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/composition-concepts/composition-concepts-header-v1.png" alt="Composition Concepts" /></div><div class="logo-meta"><span class="logo-name">Composition Concepts &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/composition-concepts/composition-concepts-header-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/composition-concepts/composition-concepts-step01-float-v1.png" alt="A student reviewing her photos on a phone" /></div><div class="logo-meta"><span class="logo-name">Composition Concepts &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/composition-concepts/composition-concepts-step01-float-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/composition-concepts/reflection-float-v1.jpg" alt="A student typing the Composition Concepts reflection on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Composition Concepts &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/composition-concepts/reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/leading-lines/leading-lines-header-v1.jpg" alt="Two Pioneer Valley students on a photo walk, one holding a Canon camera, outside the Academy of Arts building" /></div><div class="logo-meta"><span class="logo-name">Leading Lines Photo Walk &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/leading-lines/leading-lines-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/leading-lines/leading-lines-step01-float-v1.jpg" alt="A student kneeling to photograph down a long covered walkway whose columns lead the eye to a vanishing point, while a partner watches" /></div><div class="logo-meta"><span class="logo-name">Leading Lines Photo Walk &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/leading-lines/leading-lines-step01-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/leading-lines/reflection-float-v1.jpg" alt="A Pioneer Valley student typing his Leading Lines reflection in the Word document on an iMac in the lab, a Canon camera on the desk" /></div><div class="logo-meta"><span class="logo-name">Leading Lines Photo Walk &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/leading-lines/reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/image-series/header-v1.png" alt="Image Series Photo Walk header: a row of linked photos that form one cohesive series" /></div><div class="logo-meta"><span class="logo-name">Image Series Photo Walk &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/image-series/header-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/image-series/capture-float-v1.jpg" alt="A Pioneer Valley student kneeling to photograph a bee on a pink flower with a Canon EOS R5 on campus in golden light" /></div><div class="logo-meta"><span class="logo-name">Image Series Photo Walk &rsaquo; Step 01 &middot; Capture Import <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/image-series/capture-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/image-series/edit-float-v1.jpg" alt="A Pioneer Valley student editing her photos on an iMac in the lab, with her Canon EOS R5 on the desk" /></div><div class="logo-meta"><span class="logo-name">Image Series Photo Walk &rsaquo; Step 02 &middot; Cull Edit <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/image-series/edit-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/image-series/reflection-float-v1.jpg" alt="A Pioneer Valley student typing her Image Series reflection in the Word document on an iMac in the lab" /></div><div class="logo-meta"><span class="logo-name">Image Series Photo Walk &rsaquo; Step 03 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/image-series/reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/lrc-develop/develop-basics-header-v1.jpg" alt="A Pioneer Valley student editing a cityscape photo in the Lightroom Classic Develop module on an iMac in the creative lab, a Canon EOS camera on the desk, with other students editing behind her" /></div><div class="logo-meta"><span class="logo-name">Lightroom Editing &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/lrc-develop/develop-basics-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/lrc-develop/develop-basics-star-rating-float-v2.jpg" alt="The Lightroom Classic Library view filtered to 5-star photos, with the Filter Bar set to Attribute" /></div><div class="logo-meta"><span class="logo-name">Lightroom Editing &rsaquo; Step 01 &middot; Cull Export <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/lrc-develop/develop-basics-star-rating-float-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/lrc-develop/develop-basics-reflection-float-v2.jpg" alt="A Pioneer Valley student typing the Lightroom Editing reflection in the Word document on an iMac in the creative lab, with other students editing behind her" /></div><div class="logo-meta"><span class="logo-name">Lightroom Editing &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/lrc-develop/develop-basics-reflection-float-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/tiny-things-header-v1.jpg" alt="Tiny Things" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/tiny-things-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/tiny-things-step01-float-v1.jpg" alt="Extreme close-up of a grasshopper on red ground at a low bug&rsquo;s-eye angle" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/tiny-things-step01-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/tiny-things-reflection-float-v1.jpg" alt="A student typing a short reflection on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/tiny-things-reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/balloon-pop/balloon-pop-header-v1.jpg" alt="Two Pioneer Valley students outside by the panther statue: one aims a camera while the other pops a water balloon, the water frozen in mid-air as a clear globe" /></div><div class="logo-meta"><span class="logo-name">Balloon Pop &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/balloon-pop/balloon-pop-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/balloon-pop/balloon-pop-step01-float-v1.jpg" alt="Close-up of a water balloon at the instant it pops: the water holds a round globe shape in mid-air as a pin breaks the balloon" /></div><div class="logo-meta"><span class="logo-name">Balloon Pop &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/balloon-pop/balloon-pop-step01-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/balloon-pop/balloon-pop-reflection-float-v1.jpg" alt="A Pioneer Valley student typing the Balloon Pop reflection in the Word document on an iMac in the creative lab, a Canon camera on the desk" /></div><div class="logo-meta"><span class="logo-name">Balloon Pop &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/balloon-pop/balloon-pop-reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/garcia-tiny-things-header-v1.jpg" alt="Tiny Things alternate overview header" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Overview <span class="logo-fmt">Alt Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/garcia-tiny-things-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/garcia-tiny-things-reflection-float-v1.jpg" alt="Tiny Things alternate reflection float" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Alt Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/garcia-tiny-things-reflection-float-v1.jpg" download>Download</a></div></div></div></div></details>
+                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Photography 2A (12)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid"><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/composition/photowalk-hero.png" alt="Composition Photo Walk" /></div><div class="logo-meta"><span class="logo-name">Composition Photo Walk &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/composition/photowalk-hero.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/composition/chick-fil-a-prize.jpg" alt="Chick-fil-A prize" /></div><div class="logo-meta"><span class="logo-name">Composition Photo Walk &rsaquo; Overview <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/composition/chick-fil-a-prize.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/composition/photowalk-step-float.png" alt="On the photo walk" /></div><div class="logo-meta"><span class="logo-name">Composition Photo Walk &rsaquo; Step 01 &middot; Photowalk <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/composition/photowalk-step-float.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/composition/photowalk-step2-float-v2.png" alt="Renee editing her photos in Lightroom" /></div><div class="logo-meta"><span class="logo-name">Composition Photo Walk &rsaquo; Step 02 &middot; Cull Export <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/composition/photowalk-step2-float-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/ocf/ocf-header-v4.png" alt="Students lighting an outdoor portrait with off-camera flash at the PV Academy of Arts" /></div><div class="logo-meta"><span class="logo-name">Off-Camera Flash &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/ocf/ocf-header-v4.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/ocf/ocf-step01-float.png" alt="A Pioneer Valley student researching off-camera flash examples on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Off-Camera Flash &rsaquo; Step 01 &middot; Inspiration <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/ocf/ocf-step01-float.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/ocf/ocf-step02-float.png" alt="A Pioneer Valley student portrait made with off-camera flash at golden hour" /></div><div class="logo-meta"><span class="logo-name">Off-Camera Flash &rsaquo; Step 02 &middot; Photowalk <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/ocf/ocf-step02-float.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/ocf/ocf-step03-float.png" alt="A Pioneer Valley student typing the Off-Camera Flash reflection on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Off-Camera Flash &rsaquo; Step 03 &middot; Reflection <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/ocf/ocf-step03-float.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/studio-session/studio-header-v4.jpg" alt="The three-person studio crew at work, labeled Art Director, Photographer, and Lighting Assistant, with the Talent posing on the backdrop" /></div><div class="logo-meta"><span class="logo-name">Studio Session &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/studio-session/studio-header-v4.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/studio-session/studio-header.jpg" alt="A raw studio portrait on the left next to the edited, retouched final on the right" /></div><div class="logo-meta"><span class="logo-name">Studio Session &rsaquo; Step 02 &middot; Cull Edit <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/studio-session/studio-header.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/build-your-own-preset/overview-hero-v1.jpg" alt="A Lightroom Classic edit of a natural light portrait, with the Develop panel sliders open on the right" /></div><div class="logo-meta"><span class="logo-name">Build Your Own Preset &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/build-your-own-preset/overview-hero-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/build-your-own-preset/capture-float-v1.jpg" alt="A Pioneer Valley student kneeling to photograph a pink flower with a bee, using a Canon camera in golden light in front of the PV campus" /></div><div class="logo-meta"><span class="logo-name">Build Your Own Preset &rsaquo; Step 01 &middot; Photowalk <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/build-your-own-preset/capture-float-v1.jpg" download>Download</a></div></div></div></div></details>
+                      <!-- LIVE_IMAGE_CATALOG_END -->
+                    </div>
+                  </details>
+                <details class="cat-acc">
+                  <summary class="cat-head"><span class="cat-name">PNG Templates</span><span class="cat-chevron"></span></summary>
+                  <div class="cat-body">
+                    <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Digital Arts 1A (2)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid">
+                      <div class="logo-card"><div class="logo-tile"><img src="/assets/templates/png/thumbs/renee-reflection-da-v1-thumb.jpg" alt="Renee Reflection mockup template for Digital Arts, preview" /></div><div class="logo-meta"><span class="logo-name">Renee Reflection Template <span class="logo-fmt">Digital Arts &middot; PNG</span></span><a class="logo-dl" href="/assets/templates/png/renee-reflection-da-v1.png" download>Download</a></div></div>
+                      <div class="logo-card"><div class="logo-tile"><img src="/assets/templates/png/thumbs/patricia-reflection-photo-v1-thumb.jpg" alt="Patricia Reflection mockup template for Photography, preview" /></div><div class="logo-meta"><span class="logo-name">Patricia Reflection Template <span class="logo-fmt">Photography &middot; PNG</span></span><a class="logo-dl" href="/assets/templates/png/patricia-reflection-photo-v1.png" download>Download</a></div></div>
+                    </div></div></details>
+                    <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Photography 1A (5)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid">
+                      <div class="logo-card"><div class="logo-tile"><img src="/assets/templates/png/thumbs/renee-reflection-photo-v1-thumb.jpg" alt="Renee Reflection mockup template for Photography, preview" /></div><div class="logo-meta"><span class="logo-name">Renee Reflection Template <span class="logo-fmt">Photography &middot; PNG</span></span><a class="logo-dl" href="/assets/templates/png/renee-reflection-photo-v1.png" download>Download</a></div></div>
+                      <div class="logo-card"><div class="logo-tile"><img src="/assets/templates/png/thumbs/patricia-reflection-photo-v1-thumb.jpg" alt="Patricia Reflection mockup template for Photography, preview" /></div><div class="logo-meta"><span class="logo-name">Patricia Reflection Template <span class="logo-fmt">Photography &middot; PNG</span></span><a class="logo-dl" href="/assets/templates/png/patricia-reflection-photo-v1.png" download>Download</a></div></div>
+                      <div class="logo-card"><div class="logo-tile"><img src="/assets/templates/png/thumbs/ricardo-reflection-v1-thumb.jpg" alt="Ricardo Reflection mockup template for Photography, preview" /></div><div class="logo-meta"><span class="logo-name">Ricardo Reflection Template <span class="logo-fmt">Photography &middot; PNG</span></span><a class="logo-dl" href="/assets/templates/png/ricardo-reflection-v1.png" download>Download</a></div></div>
+                      <div class="logo-card"><div class="logo-tile"><img src="/assets/templates/png/thumbs/renee-header-editing-v1-thumb.jpg" alt="Renee Header Editing mockup template, preview" /></div><div class="logo-meta"><span class="logo-name">Renee Header Editing Template <span class="logo-fmt">Photography &middot; PNG</span></span><a class="logo-dl" href="/assets/templates/png/renee-header-editing-v1.png" download>Download</a></div></div>
+                      <div class="logo-card"><div class="logo-tile"><img src="/assets/templates/psd/thumbs/patricia-editing-photo-thumb.jpg" alt="Patricia Editing template for Photography, preview" /></div><div class="logo-meta"><span class="logo-name">Patricia Editing Template <span class="logo-fmt">Photography &middot; JPG (ZIP)</span></span><a class="logo-dl" href="/assets/templates/psd/editing-template-patricia-photo.zip" download>Download</a></div></div>
+                    </div></div></details>
+                    <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Photography 2A (5)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid">
+                      <div class="logo-card"><div class="logo-tile"><img src="/assets/templates/png/thumbs/renee-reflection-photo-v1-thumb.jpg" alt="Renee Reflection mockup template for Photography, preview" /></div><div class="logo-meta"><span class="logo-name">Renee Reflection Template <span class="logo-fmt">Photography &middot; PNG</span></span><a class="logo-dl" href="/assets/templates/png/renee-reflection-photo-v1.png" download>Download</a></div></div>
+                      <div class="logo-card"><div class="logo-tile"><img src="/assets/templates/png/thumbs/patricia-reflection-photo-v1-thumb.jpg" alt="Patricia Reflection mockup template for Photography, preview" /></div><div class="logo-meta"><span class="logo-name">Patricia Reflection Template <span class="logo-fmt">Photography &middot; PNG</span></span><a class="logo-dl" href="/assets/templates/png/patricia-reflection-photo-v1.png" download>Download</a></div></div>
+                      <div class="logo-card"><div class="logo-tile"><img src="/assets/templates/png/thumbs/ricardo-reflection-v1-thumb.jpg" alt="Ricardo Reflection mockup template for Photography, preview" /></div><div class="logo-meta"><span class="logo-name">Ricardo Reflection Template <span class="logo-fmt">Photography &middot; PNG</span></span><a class="logo-dl" href="/assets/templates/png/ricardo-reflection-v1.png" download>Download</a></div></div>
+                      <div class="logo-card"><div class="logo-tile"><img src="/assets/templates/png/thumbs/renee-header-editing-v1-thumb.jpg" alt="Renee Header Editing mockup template, preview" /></div><div class="logo-meta"><span class="logo-name">Renee Header Editing Template <span class="logo-fmt">Photography &middot; PNG</span></span><a class="logo-dl" href="/assets/templates/png/renee-header-editing-v1.png" download>Download</a></div></div>
+                      <div class="logo-card"><div class="logo-tile"><img src="/assets/templates/psd/thumbs/patricia-editing-photo-thumb.jpg" alt="Patricia Editing template for Photography, preview" /></div><div class="logo-meta"><span class="logo-name">Patricia Editing Template <span class="logo-fmt">Photography &middot; JPG (ZIP)</span></span><a class="logo-dl" href="/assets/templates/psd/editing-template-patricia-photo.zip" download>Download</a></div></div>
+                    </div></div></details>
+                  </div>
+                </details>
+                  <details class="cat-acc" open>
+                    <summary class="cat-head"><span class="cat-name">Graphics</span><span class="cat-chevron"></span></summary>
+                    <div class="cat-body">
+                      <details class="cat-acc">
+                        <summary class="cat-head"><span class="cat-name">Color Palette</span><span class="cat-chevron"></span></summary>
+                        <div class="cat-body">
+                          <p style="font-size:0.78rem;color:var(--text-dim);margin:0 0 10px;">Click a hex button to copy the code (without the #).</p>
+                          <div class="logo-grid">
+                            <div class="logo-card"><div class="logo-tile" style="background:#007474;"></div><div class="logo-meta"><span class="logo-name">Teal <span class="logo-fmt">Content</span></span><button type="button" class="hex-btn" style="color:#007474;background:#ffffff;" onclick="silvaCopyHex('#007474', this)">#007474</button></div></div>
+                            <div class="logo-card"><div class="logo-tile" style="background:#80e0e0;"></div><div class="logo-meta"><span class="logo-name">Light Teal <span class="logo-fmt">Accent</span></span><button type="button" class="hex-btn" style="color:#80e0e0;background:#0f2e2e;" onclick="silvaCopyHex('#80e0e0', this)">#80e0e0</button></div></div>
+                            <div class="logo-card"><div class="logo-tile" style="background:#FF6B1A;"></div><div class="logo-meta"><span class="logo-name">Orange <span class="logo-fmt">Downloads</span></span><button type="button" class="hex-btn" style="color:#FF6B1A;background:#ffffff;" onclick="silvaCopyHex('#FF6B1A', this)">#FF6B1A</button></div></div>
+                            <div class="logo-card"><div class="logo-tile" style="background:#8b5cf6;"></div><div class="logo-meta"><span class="logo-name">Purple <span class="logo-fmt">Resources</span></span><button type="button" class="hex-btn" style="color:#8b5cf6;background:#ffffff;" onclick="silvaCopyHex('#8b5cf6', this)">#8b5cf6</button></div></div>
+                            <div class="logo-card"><div class="logo-tile" style="background:#f5b301;"></div><div class="logo-meta"><span class="logo-name">Gold <span class="logo-fmt">Deliverables</span></span><button type="button" class="hex-btn" style="color:#f5b301;background:#2a2000;" onclick="silvaCopyHex('#f5b301', this)">#f5b301</button></div></div>
+                          </div>
+                        </div>
+                      </details>
+                      <details class="cat-acc">
+                        <summary class="cat-head"><span class="cat-name">Logos</span><span class="cat-chevron"></span></summary>
+                        <div class="cat-body">
+                      <p class="cat-subgroup">Pioneer Valley HS</p>
+                      <div class="logo-grid">
+                        <div class="logo-card"><div class="logo-tile"><img src="/assets/PV%20LOGO%20NEW.png" alt="PV monogram with panther, primary" /></div><div class="logo-meta"><span class="logo-name">PV with Panther <span class="logo-fmt">Primary &middot; PNG</span></span><a class="logo-dl" href="/assets/PV%20LOGO%20NEW.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Panther_Watermark.png" alt="PV panther watermark" /></div><div class="logo-meta"><span class="logo-name">PV Panther <span class="logo-fmt">Watermark &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Panther_Watermark.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Monogram.png" alt="PV monogram without panther" /></div><div class="logo-meta"><span class="logo-name">PV without Panther <span class="logo-fmt">Monogram &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Monogram.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile"><img src="/assets/PV_Square_Logo.png" alt="PV panther square logo" /></div><div class="logo-meta"><span class="logo-name">PV Panther <span class="logo-fmt">Square &middot; PNG</span></span><a class="logo-dl" href="/assets/PV_Square_Logo.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/Icon_PV_LOGO.svg" alt="PV panther icon, vector" /></div><div class="logo-meta"><span class="logo-name">PV Panther <span class="logo-fmt">Icon &middot; SVG</span></span><a class="logo-dl" href="/assets/Icons/Icon_PV_LOGO.svg" download>Download</a></div></div>
+                      </div>
+                      <p class="cat-subgroup">Course Titles</p>
+                      <div class="logo-grid">
+                        <div class="logo-card"><div class="logo-tile" style="background:#0b2a2a;"><img src="/assets/titles/digital-arts-1a-title-v1.png" alt="Digital Arts 1A title graphic" /></div><div class="logo-meta"><span class="logo-name">Digital Arts 1A <span class="logo-fmt">Title &middot; PNG</span></span><a class="logo-dl" href="/assets/titles/digital-arts-1a-title-v1.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile" style="background:#0b2a2a;"><img src="/assets/titles/photography-1a-title-v1.png" alt="Photography 1A title graphic" /></div><div class="logo-meta"><span class="logo-name">Photography 1A <span class="logo-fmt">Title &middot; PNG</span></span><a class="logo-dl" href="/assets/titles/photography-1a-title-v1.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile" style="background:#0b2a2a;"><img src="/assets/titles/photography-2a-title-v1.png" alt="Photography 2A title graphic" /></div><div class="logo-meta"><span class="logo-name">Photography 2A <span class="logo-fmt">Title &middot; PNG</span></span><a class="logo-dl" href="/assets/titles/photography-2a-title-v1.png" download>Download</a></div></div>
+                      </div>
+                      <p class="cat-subgroup">Personal</p>
+                      <div class="logo-grid">
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/logos/CS_Logo_Only_Teal.svg" alt="Chris Silva CS monogram" /></div><div class="logo-meta"><span class="logo-name">CS Logo &middot; Mark <span class="logo-fmt">Monogram &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/logos/CS_Logo_Only_Teal.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#00b8b8" data-src="/logos/CS_Logo_Only_Teal.svg" title="Teal + White" aria-label="Teal and White"></button><button type="button" class="swatch-dot" style="background:#cc0000" data-src="/logos/CS_Logo_Only.svg" title="Brand" aria-label="Brand colors"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/logos/CS_Logo_Vector_TealWhite.svg" alt="Chris Silva CS logo with wordmark" /></div><div class="logo-meta"><span class="logo-name">CS Logo &middot; Wordmark <span class="logo-fmt">Full &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/logos/CS_Logo_Vector_TealWhite.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#00b8b8" data-src="/logos/CS_Logo_Vector_TealWhite.svg" title="Teal + White" aria-label="Teal and White"></button><button type="button" class="swatch-dot" style="background:#cc0000" data-src="/logos/CS_Logo_Vector.svg" title="Brand" aria-label="Brand colors"></button><button type="button" class="swatch-dot" style="background:#5eead4" data-src="/logos/CS_Logo_Glossy_Teal_v1.png" title="Glossy Teal" aria-label="Glossy Teal"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#808080;"><img class="swatch-img" src="/logos/LightWriterz_Teal_v1.png" alt="Light Writerz badge logo" /></div><div class="logo-meta"><span class="logo-name">Light Writerz <span class="logo-fmt">Badge &middot; PNG (transparent)</span></span><a class="logo-dl swatch-dl" href="/logos/LightWriterz_Teal_v1.png" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#007474" data-src="/logos/LightWriterz_Teal_v1.png" title="Teal" aria-label="Teal"></button><button type="button" class="swatch-dot" style="background:#ffffff" data-src="/logos/LightWriterz_White_v1.png" title="White" aria-label="White"></button><button type="button" class="swatch-dot" style="background:#000000" data-src="/logos/LightWriterz_Black_v1.png" title="Black" aria-label="Black"></button></div></div></div>
+                      </div>
+                      <p class="cat-subgroup">Student Brands</p>
+                      <div class="logo-grid">
+                        <div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/sauce-baby/sauce-baby-logo.png" alt="Sauce Baby logo" /></div><div class="logo-meta"><span class="logo-name">Sauce Baby <span class="logo-fmt">PNG</span></span><a class="logo-dl" href="/assets/images/photo1/sauce-baby/sauce-baby-logo.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile"><img src="/curriculum/digarts1/Jimenez%20Logo.jpg" alt="Jimenez Mobile Detailing logo" /></div><div class="logo-meta"><span class="logo-name">Jimenez Mobile Detailing <span class="logo-fmt">JPG</span></span><a class="logo-dl" href="/curriculum/digarts1/Jimenez%20Logo.jpg" download>Download</a></div></div>
+                      </div>
+                    </div>
+                  </details>
+                      <details class="cat-acc">
+                        <summary class="cat-head"><span class="cat-name">Icons</span><span class="cat-chevron"></span></summary>
+                        <div class="cat-body">
+                      <p class="cat-subgroup">Navigation: Teal</p>
+                      <div class="icon-grid">
+                        <a class="icon-cell" href="/assets/Icons/Icons-Teal/Course_Overview_Icon.png" download title="Course_Overview_Icon"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/Course_Overview_Icon.png" alt="Course_Overview_Icon" /></span><span class="icon-cap">Course_Overview_Icon</span></a>
+                        <a class="icon-cell" href="/assets/Icons/Icons-Teal/About_Your_Teacher.png" download title="About_Your_Teacher"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/About_Your_Teacher.png" alt="About_Your_Teacher" /></span><span class="icon-cap">About_Your_Teacher</span></a>
+                        <a class="icon-cell" href="/assets/Icons/Icons-Teal/Learning_Modules.png" download title="Learning_Modules"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/Learning_Modules.png" alt="Learning_Modules" /></span><span class="icon-cap">Learning_Modules</span></a>
+                        <a class="icon-cell" href="/assets/Icons/Icons-Teal/Course_Resources.png" download title="Course_Resources"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/Course_Resources.png" alt="Course_Resources" /></span><span class="icon-cap">Course_Resources</span></a>
+                        <a class="icon-cell" href="/assets/Icons/Icons-Teal/Tech_Essentials_v2.png" download title="Tech_Essentials"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/Tech_Essentials_v2.png" alt="Tech_Essentials" /></span><span class="icon-cap">Tech_Essentials</span></a>
+                      </div>
+                      <p class="cat-subgroup">Navigation: White</p>
+                      <div class="icon-grid">
+                        <a class="icon-cell" href="/assets/Icons/Icons-White/Course_Overview_Icon.png" download title="Course_Overview_Icon"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/Icons-White/Course_Overview_Icon.png" alt="Course_Overview_Icon" /></span><span class="icon-cap">Course_Overview_Icon</span></a>
+                        <a class="icon-cell" href="/assets/Icons/Icons-White/About_Your_Teacher.png" download title="About_Your_Teacher"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/Icons-White/About_Your_Teacher.png" alt="About_Your_Teacher" /></span><span class="icon-cap">About_Your_Teacher</span></a>
+                        <a class="icon-cell" href="/assets/Icons/Icons-White/Learning_Modules.png" download title="Learning_Modules"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/Icons-White/Learning_Modules.png" alt="Learning_Modules" /></span><span class="icon-cap">Learning_Modules</span></a>
+                        <a class="icon-cell" href="/assets/Icons/Icons-White/Course_Resources.png" download title="Course_Resources"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/Icons-White/Course_Resources.png" alt="Course_Resources" /></span><span class="icon-cap">Course_Resources</span></a>
+                        <a class="icon-cell" href="/assets/Icons/Icons-White/Tech_Essentials_v2.png" download title="Tech_Essentials"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/Icons-White/Tech_Essentials_v2.png" alt="Tech_Essentials" /></span><span class="icon-cap">Tech_Essentials</span></a>
+                      </div>
+                      <p class="cat-subgroup">Utility</p>
+                      <div class="icon-grid">
+                        <a class="icon-cell" href="/assets/Icons/book.png" download title="book"><span class="icon-thumb"><img src="/assets/Icons/book.png" alt="book" /></span><span class="icon-cap">book</span></a>
+                        <a class="icon-cell" href="/assets/Icons/bookmark.png" download title="bookmark"><span class="icon-thumb"><img src="/assets/Icons/bookmark.png" alt="bookmark" /></span><span class="icon-cap">bookmark</span></a>
+                        <a class="icon-cell" href="/assets/Icons/flag.png" download title="flag"><span class="icon-thumb"><img src="/assets/Icons/flag.png" alt="flag" /></span><span class="icon-cap">flag</span></a>
+                        <a class="icon-cell" href="/assets/Icons/gear.png" download title="gear"><span class="icon-thumb"><img src="/assets/Icons/gear.png" alt="gear" /></span><span class="icon-cap">gear</span></a>
+                        <a class="icon-cell" href="/assets/Icons/paper.png" download title="paper"><span class="icon-thumb"><img src="/assets/Icons/paper.png" alt="paper" /></span><span class="icon-cap">paper</span></a>
+                        <a class="icon-cell" href="/assets/Icons/book.svg" download title="book (SVG)"><span class="icon-thumb"><img src="/assets/Icons/book.svg" alt="book, vector" /></span><span class="icon-cap">book (SVG)</span></a>
+                        <a class="icon-cell" href="/assets/Icons/bookmark.svg" download title="bookmark (SVG)"><span class="icon-thumb"><img src="/assets/Icons/bookmark.svg" alt="bookmark, vector" /></span><span class="icon-cap">bookmark (SVG)</span></a>
+                        <a class="icon-cell" href="/assets/Icons/flag.svg" download title="flag (SVG)"><span class="icon-thumb"><img src="/assets/Icons/flag.svg" alt="flag, vector" /></span><span class="icon-cap">flag (SVG)</span></a>
+                        <a class="icon-cell" href="/assets/Icons/gear.svg" download title="gear (SVG)"><span class="icon-thumb"><img src="/assets/Icons/gear.svg" alt="gear, vector" /></span><span class="icon-cap">gear (SVG)</span></a>
+                        <a class="icon-cell" href="/assets/Icons/paper.svg" download title="paper (SVG)"><span class="icon-thumb"><img src="/assets/Icons/paper.svg" alt="paper, vector" /></span><span class="icon-cap">paper (SVG)</span></a>
+                        <a class="icon-cell" href="/assets/Icons/lightbulb-orange.svg" download title="lightbulb-orange"><span class="icon-thumb"><img src="/assets/Icons/lightbulb-orange.svg" alt="lightbulb-orange" /></span><span class="icon-cap">lightbulb-orange</span></a>
+                      </div>
+
+                      <p class="cat-subgroup">Contact &amp; Brand (SVG)</p>
+                      <div class="icon-grid">
+                        <a class="icon-cell" href="/assets/Icons/Icon_Address.svg" download title="Address"><span class="icon-thumb"><img src="/assets/Icons/Icon_Address.svg" alt="Address icon" /></span><span class="icon-cap">Address</span></a>
+                        <a class="icon-cell" href="/assets/Icons/Icon_Phone.svg" download title="Phone"><span class="icon-thumb"><img src="/assets/Icons/Icon_Phone.svg" alt="Phone icon" /></span><span class="icon-cap">Phone</span></a>
+                        <a class="icon-cell" href="/assets/Icons/Icon_website.svg" download title="Website"><span class="icon-thumb"><img src="/assets/Icons/Icon_website.svg" alt="Website icon" /></span><span class="icon-cap">Website</span></a>
+                        <a class="icon-cell" href="/assets/Icons/Icon_Instagram.svg" download title="Instagram"><span class="icon-thumb"><img src="/assets/Icons/Icon_Instagram.svg" alt="Instagram icon" /></span><span class="icon-cap">Instagram</span></a>
+                        <a class="icon-cell" href="/assets/Icons/Icon_PV_App.svg" download title="PV App"><span class="icon-thumb"><img src="/assets/Icons/Icon_PV_App.svg" alt="PV App icon" /></span><span class="icon-cap">PV App</span></a>
+                        <a class="icon-cell" href="/assets/Icons/Icon_PV_LOGO.svg" download title="PV Logo"><span class="icon-thumb"><img src="/assets/Icons/Icon_PV_LOGO.svg" alt="PV Logo icon" /></span><span class="icon-cap">PV Logo</span></a>
+                      </div>
+                      <p class="cat-subgroup">Module Icons</p>
+                      <div class="logo-grid">
+                        <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/icon-template-preview-v1.png" alt="Icon template: the base double-ring circle and glyph used to build module icons" /></div><div class="logo-meta"><span class="logo-name">Icon Template <span class="logo-fmt">Vector Master &middot; AI (Illustrator)</span></span><a class="logo-dl" href="/assets/Icons/assignment/icon-template.ai" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile" style="background:#ffffff;"><img src="/assets/Icons/assignment/icon-template-preview-v1.png" alt="Master Illustrator file holding the full set of module icons" /></div><div class="logo-meta"><span class="logo-name">Master Icons (Full Set) <span class="logo-fmt">Vector Master &middot; AI (Illustrator)</span></span><a class="logo-dl" href="/assets/Icons/Master%20Icons.ai" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/overview-teal-v1.svg" alt="Module Overview module icon" /></div><div class="logo-meta"><span class="logo-name">Module Overview <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/overview-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/overview-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/overview-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/overview-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/overview-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/content-teal-v1.svg" alt="Content module icon" /></div><div class="logo-meta"><span class="logo-name">Content <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/content-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/content-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/content-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/content-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/content-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/step-check-teal-v1.svg" alt="Step Check module icon" /></div><div class="logo-meta"><span class="logo-name">Step Check <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/step-check-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/step-check-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/step-check-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/step-check-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/step-check-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/next-teal-v1.svg" alt="Up Next module icon" /></div><div class="logo-meta"><span class="logo-name">Up Next <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/next-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/next-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/next-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/next-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/next-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/downloads-orange-v1.svg" alt="Downloads module icon" /></div><div class="logo-meta"><span class="logo-name">Downloads <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/downloads-orange-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot" style="background:#80e0e0" data-src="/assets/Icons/assignment/downloads-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot active" style="background:#ff6b1a" data-src="/assets/Icons/assignment/downloads-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/downloads-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/downloads-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/deliverables-gold-v1.svg" alt="Deliverables module icon" /></div><div class="logo-meta"><span class="logo-name">Deliverables <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/deliverables-gold-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot" style="background:#80e0e0" data-src="/assets/Icons/assignment/deliverables-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/deliverables-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/deliverables-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot active" style="background:#f5b301" data-src="/assets/Icons/assignment/deliverables-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/resources-purple-v1.svg" alt="Resources module icon" /></div><div class="logo-meta"><span class="logo-name">Resources <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/resources-purple-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot" style="background:#80e0e0" data-src="/assets/Icons/assignment/resources-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/resources-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot active" style="background:#8b5cf6" data-src="/assets/Icons/assignment/resources-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/resources-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/camera-kit-teal-v1.svg" alt="Camera module icon" /></div><div class="logo-meta"><span class="logo-name">Camera <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/camera-kit-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/camera-kit-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/camera-kit-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/camera-kit-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/camera-kit-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/camera-settings-v1.svg" alt="Camera Settings module icon" /></div><div class="logo-meta"><span class="logo-name">Camera Settings <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/camera-settings-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#f90101" data-src="/assets/Icons/assignment/camera-settings-v1.svg" title="Red" aria-label="Red"></button><button type="button" class="swatch-dot" style="background:#80e0e0" data-src="/assets/Icons/assignment/camera-settings-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/camera-settings-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/camera-settings-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/camera-settings-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/design-teal-v1.svg" alt="Design &amp; Create module icon" /></div><div class="logo-meta"><span class="logo-name">Design &amp; Create <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/design-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/design-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/design-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/design-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/design-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/sketch-teal-v1.svg" alt="Sketch by Hand module icon" /></div><div class="logo-meta"><span class="logo-name">Sketch by Hand <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/sketch-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/sketch-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/sketch-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/sketch-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/sketch-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/edit-teal-v1.svg" alt="Cull &amp; Edit module icon" /></div><div class="logo-meta"><span class="logo-name">Cull &amp; Edit <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/edit-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/edit-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/edit-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/edit-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/edit-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/research-teal-v1.svg" alt="Find &amp; Collect module icon" /></div><div class="logo-meta"><span class="logo-name">Find &amp; Collect <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/research-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/research-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/research-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/research-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/research-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/worksheet-teal-v1.svg" alt="Worksheet module icon" /></div><div class="logo-meta"><span class="logo-name">Worksheet <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/worksheet-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/worksheet-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/worksheet-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/worksheet-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/worksheet-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/reflection-teal-v1.svg" alt="Reflection module icon" /></div><div class="logo-meta"><span class="logo-name">Reflection <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/reflection-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/reflection-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/reflection-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/reflection-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/reflection-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/photo-walk-teal-v1.svg" alt="In-Class Photo Walk module icon" /></div><div class="logo-meta"><span class="logo-name">In-Class Photo Walk <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/photo-walk-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/photo-walk-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/photo-walk-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/photo-walk-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/photo-walk-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/your-device-teal-v1.svg" alt="Your Own Device module icon" /></div><div class="logo-meta"><span class="logo-name">Your Own Device <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/your-device-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/your-device-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/your-device-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/your-device-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/your-device-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                        <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/jpg-v2.svg" alt="JPG image-capture format icon, transparent" /></div><div class="logo-meta"><span class="logo-name">JPG (Image Capture) <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl" href="/assets/Icons/assignment/jpg-v2.svg" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/raw-v2.png" alt="RAW image-capture format icon, transparent" /></div><div class="logo-meta"><span class="logo-name">RAW (Image Capture) <span class="logo-fmt">Module Icon &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/raw-v2.png" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/standards-teal-v1.svg" alt="CTE Standards module icon" /></div><div class="logo-meta"><span class="logo-name">CTE Standards <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/standards-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/standards-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/standards-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/standards-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/standards-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
+                      
+                      </div>
+                        </div>
+                      </details>
+                </div>
+              </div>
+            </details>
+
+            <details class="cat-acc" open>
+              <summary class="cat-head"><span class="cat-name">Frameworks</span><span class="cat-chevron"></span></summary>
+              <div class="cat-body">
+                <p class="frameworks-note">Living framework docs. Each links to its source file, so any edit you push updates the hosted, viewable, and downloadable copy instantly: one running framework, always current.</p>
+                <div class="frameworks-list" id="frameworks-list"></div>
+              </div>
+            </details>
+              </div>
+            </details>
+    </div>
+  </main>
+
+  <script>
+  /* ===== shared helpers + 1980 image-gen sub-gate, moved from curriculum.html ===== */
+    async function silvaFetchTop(url) {
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error("fetch " + res.status);
+      const doc = new DOMParser().parseFromString(await res.text(), "text/html");
+      const top = doc.getElementById("top");
+      return top ? top.outerHTML : null;
+    }
+    function pgFlash(btn, msg) {
+      const orig = btn.getAttribute("data-label") || btn.textContent;
+      btn.setAttribute("data-label", orig);
+      btn.textContent = msg;
+      btn.classList.add("flash");
+      setTimeout(() => { btn.textContent = orig; btn.classList.remove("flash"); }, 1800);
+    }
+    window.silvaCopyPage = async function (url, btn) {
+      try {
+        const code = await silvaFetchTop(url);
+        if (!code) { pgFlash(btn, "No #top"); return; }
+        await navigator.clipboard.writeText(code);
+        pgFlash(btn, "✓ Copied");
+      } catch (e) { pgFlash(btn, "Failed"); }
+    };
+    window.silvaDownloadPage = async function (url, btn) {
+      try {
+        const code = await silvaFetchTop(url);
+        if (!code) { pgFlash(btn, "No #top"); return; }
+        const blob = new Blob([code], { type: "text/html" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = url.split("/").pop().replace(".html", "") + "-canvas.html";
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+        pgFlash(btn, "✓ Saved");
+      } catch (e) { pgFlash(btn, "Failed"); }
+    };
+    // Copy the FULL text of a hosted .txt prompt to the clipboard (paste into ChatGPT).
+    window.silvaCopyHex = function (hex, btn) {
+      const val = String(hex).replace(/^#/, "");   // copy the bare number, e.g. 007474
+      navigator.clipboard.writeText(val).then(() => {
+        const o = btn.textContent; btn.textContent = "✓ Copied"; btn.classList.add("copied");
+        setTimeout(() => { btn.textContent = o; btn.classList.remove("copied"); }, 1400);
+      }).catch(() => {});
+    };
+    window.silvaCopyPrompt = async function (url, btn) {
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) { pgFlash(btn, "Failed"); return; }
+        const text = await res.text();
+        await navigator.clipboard.writeText(text);
+        pgFlash(btn, "✓ Copied");
+      } catch (e) { pgFlash(btn, "Failed"); }
+    };
+    // ── Characters category password gate (password: 1980) ─────────────────
+    (function () {
+      var CHAR_KEY = 'silva-char-auth';
+      var gate = document.getElementById('char-gate');
+      var content = document.getElementById('char-content');
+      var input = document.getElementById('char-pin');
+      var btn = document.getElementById('char-pin-btn');
+      var err = document.getElementById('char-pin-err');
+      if (!gate || !content) return;
+      if (input && typeof silvaMaskPin === 'function') silvaMaskPin(input);
+      function unlock() { gate.classList.add('hidden'); content.hidden = false; }
+      if (sessionStorage.getItem(CHAR_KEY) === 'ok') { unlock(); }
+      function tryPin() {
+        if ((input.dataset.real || '').trim() === '1980') {
+          sessionStorage.setItem(CHAR_KEY, 'ok');
+          err.classList.remove('show');
+          unlock();
+        } else {
+          err.classList.add('show');
+          input.value = ''; input.dataset.real = '';
+          input.focus();
+        }
+      }
+      if (btn) btn.addEventListener('click', tryPin);
+      if (input) input.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryPin(); });
+    })();
+  </script>
+  <script>
+    (function () {
+      var CHARBASE = "/assets/images/characters/";
+      var CAST = [
+        { name: "Renee", sheets: [
+          { outfit: "Flare-Legged Jeans", file: "renee-character-sheet-v2.jpg" },
+          { outfit: "Capri Pants", file: "renee-capri-pants-v2.jpg" }
+        ] },
+        { name: "Ricardo", sheets: [
+          { outfit: "Gray Bomber Jacket", file: "ricardo-character-sheet-v3.jpg" }
+        ] },
+        { name: "Patricia", groups: [
+          { name: "Raglan T-Shirt", sheets: [
+            { outfit: "Character Sheet", file: "patricia-character-sheet-v6.jpg" }
+          ] },
+          { name: "Cropped Hoodie", sheets: [
+            { outfit: "Character Sheet", file: "patricia-cropped-hoodie-v3.jpg" },
+            { outfit: "Full Body Front", file: "patricia-cropped-hoodie-full-front-v2.png" },
+            { outfit: "Full Body Angle", file: "patricia-cropped-hoodie-full-angle-v2.png" },
+            { outfit: "Full Body Back", file: "patricia-cropped-hoodie-full-back-v2.png" },
+            { outfit: "Front Portrait", file: "patricia-portrait-front-v1.jpg" },
+            { outfit: "Side Profile", file: "patricia-portrait-side-v1.jpg" },
+            { outfit: "Smiling Portrait", file: "patricia-portrait-smile-v1.jpg" },
+            { outfit: "Vomero 5 Shoes", file: "patricia-vomero-5-v1.png" },
+            { outfit: "Bust Closeup", file: "patricia-cropped-hoodie-closeup-v2.png" }
+          ] }
+        ] },
+        { name: "Anthony", sheets: [
+          { outfit: "Teal Varsity Jacket", file: "anthony-character-sheet-v2.jpg" },
+          { outfit: "Zip-Up Long Sleeve", file: "anthony-zip-up-long-sleeve-v1.jpg" }
+        ] },
+        { name: "Mr. Silva", sheets: [
+          { outfit: "Teal Button-Up Shirt", file: "mr-silva-character-sheet-v2.jpg" }
+        ] }
+      ];
+      function pad2(n) { return n < 10 ? "0" + n : "" + n; }
+      function sheetRow(name, s, i) {
+        var url = CHARBASE + s.file;
+        var cap = name + " " + pad2(i + 1) + " &middot; " + s.outfit;
+        var label = name + " " + pad2(i + 1) + ' <span class="page-sub">&middot; ' + s.outfit + "</span>";
+        // page-name + "View Image" both open the shadowbox lightbox (wired in the Logos IIFE,
+        // which builds the slide set from .cast-list .page-row); href stays as a fallback.
+        return '<div class="page-row">'
+          + '<a class="page-name" href="' + url + '">' + label + "</a>"
+          + '<span class="page-acts">'
+          + '<button type="button" class="pg-btn" onclick="castCopyImage(\'' + url + '\', this)">Copy Image</button>'
+          + '<a class="pg-btn" href="' + url + '" download>Download</a>'
+          + '<a class="pg-btn pg-view" href="' + url + '" data-full="' + url + '" data-caption="' + cap + '">View Image</a>'
+          + "</span></div>";
+      }
+      function groupAcc(charName, g) {
+        var rows = g.sheets.map(function (s, i) { return sheetRow(charName + " " + g.name, s, i); }).join("");
+        var n = g.sheets.length;
+        return '<details class="module-acc cast-group-acc">'
+          + '<summary class="module-acc-head"><span class="module-row-name">' + g.name + "</span>"
+          + '<span class="module-page-count">' + n + " sheet" + (n === 1 ? "" : "s") + "</span>"
+          + '<span class="macc-chev"></span></summary>'
+          + '<div class="module-acc-body">' + rows + "</div></details>";
+      }
+      function charAcc(ch) {
+        var inner, count, noun;
+        if (ch.groups) {
+          inner = ch.groups.map(function (g) { return groupAcc(ch.name, g); }).join("");
+          count = ch.groups.length; noun = "outfit";
+        } else {
+          inner = ch.sheets.map(function (s, i) { return sheetRow(ch.name, s, i); }).join("");
+          count = ch.sheets.length; noun = "sheet";
+        }
+        return '<details class="module-acc cast-char-acc">'
+          + '<summary class="module-acc-head"><span class="module-row-name">' + (ch.title || ch.name) + "</span>"
+          + '<span class="module-page-count">' + count + " " + noun + (count === 1 ? "" : "s") + "</span>"
+          + '<span class="macc-chev"></span></summary>'
+          + '<div class="module-acc-body">' + inner + "</div></details>";
+      }
+      var host = document.getElementById("cast-list");
+      if (host) { host.innerHTML = CAST.map(charAcc).join(""); }
+    })();
+  </script>
+  <script>
+    (function () {
+      // Copy the image to the clipboard as PNG. clipboard.write is called SYNCHRONOUSLY
+      // in the click and handed a PROMISE that resolves to the PNG blob, so Safari keeps
+      // the user gesture through the async fetch/rasterize (awaiting first loses it and the
+      // write throws with no "Copied"). Chrome supports the promise form too.
+      function copyLogoImage(url, btn) {
+        var original = btn.getAttribute('data-label') || btn.textContent || 'Copy';
+        btn.setAttribute('data-label', original);
+        function done(ok) {
+          btn.textContent = ok ? 'Copied!' : 'Copy failed';
+          if (ok) { btn.classList.add('copied'); }
+          setTimeout(function () { btn.textContent = original; btn.classList.remove('copied'); }, ok ? 1600 : 2200);
+        }
+        var pngPromise = (async function () {
+          var resp = await fetch(url);
+          var blob = await resp.blob();
+          if (blob.type === 'image/png') { return blob; }
+          // rasterize non-PNG (JPG, SVG) to PNG via canvas
+          var objUrl = URL.createObjectURL(blob);
+          try {
+            var img = new Image();
+            await new Promise(function (res, rej) { img.onload = res; img.onerror = rej; img.src = objUrl; });
+            var w = img.naturalWidth || 1024, h = img.naturalHeight || 1024;
+            var cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+            cv.getContext('2d').drawImage(img, 0, 0, w, h);
+            return await new Promise(function (r) { cv.toBlob(r, 'image/png'); });
+          } finally { URL.revokeObjectURL(objUrl); }
+        })();
+        if (!(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write)) { done(false); return; }
+        try {
+          navigator.clipboard.write([new ClipboardItem({ 'image/png': pngPromise })])
+            .then(function () { done(true); })
+            .catch(function () {
+              // Fallback for engines that reject a promise-valued ClipboardItem: resolve then write.
+              pngPromise
+                .then(function (b) { return navigator.clipboard.write([new ClipboardItem({ 'image/png': b })]); })
+                .then(function () { done(true); })
+                .catch(function () { done(false); });
+            });
+        } catch (e) { done(false); }
+      }
+      window.castCopyImage = copyLogoImage; // reused by the Cast per-sheet "Copy Image" buttons
+      // Always copy the CANONICAL public link (https://www.creativesilva.com/assets/...), never a
+      // localhost/preview URL, so a copied link works everywhere (Canvas, chat, ChatGPT).
+      function publicUrl(href) {
+        try { return 'https://www.creativesilva.com' + new URL(href, location.origin).pathname; }
+        catch (e) { return href; }
+      }
+      function copyUrlAction(btn, href, label) {
+        var url = publicUrl(href);
+        var restore = function (msg, ok) {
+          btn.textContent = msg; if (ok) { btn.classList.add('copied'); }
+          setTimeout(function () { btn.textContent = label; btn.classList.remove('copied'); }, ok ? 1600 : 2200);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(function () { restore('Copied!', true); }).catch(function () { window.prompt('Copy this image URL:', url); });
+        } else { window.prompt('Copy this image URL:', url); }
+      }
+      window.silvaCopyImageUrl = copyUrlAction;
+      document.querySelectorAll('.logo-card').forEach(function (card) {
+        var dl = card.querySelector('.logo-dl');
+        if (!dl) return;
+        var url = dl.getAttribute('href');
+        var view = card.querySelector('.logo-view');
+        var actions = document.createElement('span');
+        actions.className = 'logo-actions';
+        var copy = document.createElement('button');
+        copy.type = 'button'; copy.className = 'logo-copy'; copy.textContent = 'Copy';
+        copy.setAttribute('data-label', 'Copy');
+        copy.setAttribute('aria-label', 'Copy image to clipboard');
+        copy.addEventListener('click', function () { copyLogoImage(dl.getAttribute('href'), copy); });
+        var copyUrl = document.createElement('button');
+        copyUrl.type = 'button'; copyUrl.className = 'logo-copy logo-copyurl'; copyUrl.textContent = 'Copy URL';
+        copyUrl.setAttribute('data-label', 'Copy URL');
+        copyUrl.setAttribute('aria-label', 'Copy image URL to clipboard');
+        copyUrl.addEventListener('click', function () { copyUrlAction(copyUrl, dl.getAttribute('href'), 'Copy URL'); });
+        dl.parentNode.insertBefore(actions, dl);
+        if (view) actions.appendChild(view);
+        actions.appendChild(copy);
+        actions.appendChild(copyUrl);
+        actions.appendChild(dl);
+      });
+
+      /* Click-to-enlarge lightbox with prev/next + copy/download */
+      var lb = document.createElement('div');
+      lb.className = 'cs-lightbox'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true');
+      lb.innerHTML = '<div class="cs-lightbox-stage">'
+        + '<button type="button" class="cs-lightbox-close" aria-label="Close">&times;</button>'
+        + '<div class="cs-lightbox-imgwrap"><img alt=""></div>'
+        + '<div class="cs-lightbox-cap"></div>'
+        + '<div class="cs-lightbox-actions">'
+        + '<button type="button" class="cs-lightbox-nav cs-lightbox-prev" aria-label="Previous">&#8249;</button>'
+        + '<button type="button" class="cs-lightbox-copy">Copy</button>'
+        + '<button type="button" class="cs-lightbox-copy cs-lightbox-copyurl">Copy URL</button>'
+        + '<a class="cs-lightbox-dl" download>Download</a>'
+        + '<button type="button" class="cs-lightbox-nav cs-lightbox-next" aria-label="Next">&#8250;</button>'
+        + '</div></div>';
+      document.body.appendChild(lb);
+      var lbImg = lb.querySelector('img');
+      var lbCap = lb.querySelector('.cs-lightbox-cap');
+      var lbCopy = lb.querySelector('.cs-lightbox-copy');
+      var lbCopyUrl = lb.querySelector('.cs-lightbox-copyurl');
+      var lbDl = lb.querySelector('.cs-lightbox-dl');
+      var lbPrev = lb.querySelector('.cs-lightbox-prev');
+      var lbNext = lb.querySelector('.cs-lightbox-next');
+
+      // Ordered set of every clickable image in the catalog, in DOM order.
+      var slides = [];
+      // Cast outfit sheets first (they sit before the logo-card grids): both the row name
+      // and its "View Image" button open the same shadowbox, one slide per sheet.
+      document.querySelectorAll('.cast-list .page-row').forEach(function (row) {
+        var viewEl = row.querySelector('.pg-view');
+        var full = viewEl && viewEl.getAttribute('data-full');
+        if (!full) return;
+        var caption = viewEl.getAttribute('data-caption') || '';
+        var idx = slides.length;
+        slides.push({ full: full, caption: caption, alt: caption });
+        var open = function (e) { if (e) { e.preventDefault(); } openLightbox(idx); };
+        viewEl.addEventListener('click', open);
+        var nameEl = row.querySelector('.page-name');
+        if (nameEl) { nameEl.addEventListener('click', open); nameEl.style.cursor = 'zoom-in'; }
+      });
+      // Dedupe by asset URL: a template shown in more than one course accordion gets ONE
+      // carousel slide, but every thumbnail still opens the correct image.
+      var byUrl = {};
+      document.querySelectorAll('.logo-card .logo-tile').forEach(function (tile) {
+        var img = tile.querySelector('img');
+        if (!img) return;
+        var card = tile.closest('.logo-card');
+        var dl = card && card.querySelector('.logo-dl');
+        var nameEl = card && card.querySelector('.logo-name');
+        var full = (dl && dl.getAttribute('href')) || img.getAttribute('src');
+        var idx;
+        if (byUrl[full] !== undefined) {
+          idx = byUrl[full];
+        } else {
+          idx = slides.length;
+          slides.push({ full: full, caption: nameEl ? nameEl.textContent.replace(/\s+/g, ' ').trim() : (img.getAttribute('alt') || ''), alt: img.getAttribute('alt') || '' });
+          byUrl[full] = idx;
+        }
+        tile.addEventListener('click', function () { openLightbox(idx); });
+      });
+
+      var current = -1;
+      var multi = slides.length > 1;
+      lbPrev.style.display = multi ? '' : 'none';
+      lbNext.style.display = multi ? '' : 'none';
+
+      function render() {
+        var s = slides[current];
+        if (!s) return;
+        lbImg.src = s.full; lbImg.alt = s.alt || s.caption || '';
+        lbCap.textContent = s.caption || '';
+        lbDl.setAttribute('href', s.full);
+        lbCopy.textContent = 'Copy'; lbCopy.classList.remove('copied');
+        lbCopyUrl.textContent = 'Copy URL'; lbCopyUrl.classList.remove('copied');
+      }
+      function openLightbox(i) { current = i; render(); lb.classList.add('open'); }
+      function closeLightbox() { lb.classList.remove('open'); lbImg.src = ''; }
+      function step(delta) {
+        if (!slides.length) return;
+        current = (current + delta + slides.length) % slides.length;
+        render();
+      }
+
+      lbPrev.addEventListener('click', function () { step(-1); });
+      lbNext.addEventListener('click', function () { step(1); });
+      lbCopy.addEventListener('click', function () {
+        var s = slides[current]; if (s) copyLogoImage(s.full, lbCopy);
+      });
+      lbCopyUrl.addEventListener('click', function () {
+        var s = slides[current]; if (s) copyUrlAction(lbCopyUrl, s.full, 'Copy URL');
+      });
+      lb.addEventListener('click', function (e) {
+        if (e.target === lb || e.target.closest('.cs-lightbox-close')) closeLightbox();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (!lb.classList.contains('open')) return;
+        if (e.key === 'Escape') closeLightbox();
+        else if (e.key === 'ArrowLeft') step(-1);
+        else if (e.key === 'ArrowRight') step(1);
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      var FRAMEWORKS = [
+        { file: 'SILVA_ANGULAR_FRAMEWORK.md', name: 'Silva Angular Framework', desc: 'The locked dark-mode angular house style: gradient frames, section colors, card + button patterns for every current build.' },
+        { file: 'CANVAS_BUILD_FRAMEWORK.md', name: 'Canvas Build Framework', desc: 'The full module build system: intake questionnaire, section templates, the 6-vocab grid, pre-delivery checklist, git workflow.' },
+        { file: 'CLAUDE.md', name: 'Project Rules &amp; Standards', desc: 'The hard rules: 5th-grade bilingual copy, creativesilva.com asset hosting, deliverables callout, the four-color accent system.' }
+      ];
+      var host = document.getElementById('frameworks-list');
+      if (!host) return;
+      host.innerHTML = FRAMEWORKS.map(function (f) {
+        var url = '/' + f.file;
+        return '<div class="framework-row">'
+          + '<div class="framework-meta">'
+          + '<span class="framework-name">' + f.name + '</span>'
+          + '<span class="framework-desc">' + f.desc + '</span>'
+          + '<span class="framework-file">' + f.file + '</span></div>'
+          + '<div class="framework-actions">'
+          + '<a class="pg-btn pg-view" href="' + url + '" target="_blank" rel="noopener">View</a>'
+          + '<button type="button" class="pg-btn" onclick="silvaCopyPrompt(\'' + url + '\', this)">Copy</button>'
+          + '<a class="pg-btn" href="' + url + '" download>Download</a>'
+          + '</div></div>';
+      }).join('');
+    })();
+  </script>
+  <script>
+  (function () {
+    var list = document.querySelector('.ps2-list');
+    if (!list) return;
+    var IMG = 'https://www.creativesilva.com/assets/images/characters/';
+
+    // Hosted reference library. label = dropdown text, file = path under IMG.
+    var CHARACTERS = [
+      { label: 'Renee (character sheet)', file: 'renee-character-sheet-v2.jpg' },
+      { label: 'Renee (capri pants)', file: 'renee-capri-pants-v2.jpg' },
+      { label: 'Mr. Silva (character sheet)', file: 'mr-silva-character-sheet-v2.jpg' },
+      { label: 'Patricia (character sheet)', file: 'patricia-character-sheet-v6.jpg' },
+      { label: 'Patricia (cropped hoodie)', file: 'patricia-cropped-hoodie-v3.jpg' },
+      { label: 'Patricia (full body: front)', file: 'patricia-cropped-hoodie-full-front-v2.png' },
+      { label: 'Patricia (full body: 3/4 front)', file: 'patricia-cropped-hoodie-full-angle-v2.png' },
+      { label: 'Patricia (full body: 3/4 rear)', file: 'patricia-cropped-hoodie-full-back-v2.png' },
+      { label: 'Patricia (front portrait)', file: 'patricia-portrait-front-v1.jpg' },
+      { label: 'Patricia (side profile)', file: 'patricia-portrait-side-v1.jpg' },
+      { label: 'Patricia (smiling portrait)', file: 'patricia-portrait-smile-v1.jpg' },
+      { label: 'Patricia (bust closeup)', file: 'patricia-cropped-hoodie-closeup-v2.png' },
+      { label: 'Anthony (character sheet)', file: 'anthony-character-sheet-v2.jpg' },
+      { label: 'Anthony (zip-up long sleeve)', file: 'anthony-zip-up-long-sleeve-v1.jpg' },
+      { label: 'Ricardo (character sheet)', file: 'ricardo-character-sheet-v3.jpg' }
+    ];
+    var ITEMS = [
+      { label: 'Classroom camera kit', file: 'items/classroom-camera-kit-v1.jpg' },
+      { label: 'Canon R5', file: 'items/canon-eos-r5-pro-v1.png' },
+      { label: 'Canon R50', file: 'items/canon-eos-r50-v1.png' },
+      { label: 'Canon R5 II (black telephoto)', file: 'items/canon-r5-ii-telephoto-v1.png' },
+      { label: 'Canon R5 II (white telephoto)', file: 'items/canon-r5-ii-white-telephoto-v1.png' },
+      { label: '70-200 lens', file: 'items/canon-70-200-lens-v1.png' },
+      { label: 'Camera bag', file: 'items/canon-camera-bag-v2.png' },
+      { label: 'Sketchbook', file: 'items/sketchbook-v1.png' },
+      { label: 'MacBook Pro', file: 'items/macbook-pro-v1.png' },
+      { label: 'iMac 27', file: 'items/imac-27-mockup-v2.png' },
+      { label: 'iPad Pro + Pencil', file: 'items/ipad-pro-apple-pencil-v1.jpg' },
+      { label: 'Student iPad + keyboard', file: 'items/student-ipad-keyboard-v1.png' },
+      { label: 'iPhone', file: 'items/iphone-mockup-v3.png' },
+      { label: 'Pantone swatch book', file: 'items/pantone-swatch-book-v1.png' },
+      { label: 'Vomero 5 shoes (Patricia)', file: 'patricia-vomero-5-v1.png' },
+      { label: 'PV cheer outfit (female)', file: 'items/pv-cheer-outfit-v1.jpg' },
+      { label: 'PV quarter zip (male)', file: 'items/quarter-zip-male-v1.jpg' },
+      { label: 'Jordan 11 shoes (Anthony)', file: 'items/anthony-jordan-11-teal-v1.png' }
+    ];
+    var SCENES = [
+      { label: 'PV classroom', file: 'campus/pv-classroom-inspiration-v1.jpg' },
+      { label: 'Campus front', file: 'campus/pv-campus-front-v1.jpg' },
+      { label: 'Academy lobby (Photo)', file: 'campus/pv-lobby-photography-v1.jpg' },
+      { label: 'Academy lobby (Digital Arts)', file: 'campus/pv-lobby-digital-arts-v1.jpg' },
+      { label: 'Sports complex plaza (rear)', file: 'campus/pv-sports-complex-back-v2.jpg' }
+    ];
+    // Fields whose name matches these get a dropdown; every other field gets a text input.
+    // Dropdown options. Camera direction, lighting, height, and the in-room position fields are
+    // SPACE-SPECIFIC, so they are keyed by prompt context (classroom / exterior / lobby) and grounded
+    // in the approved reference images. Generic optics (pitch, lens, aperture, aspect) are shared.
+    var OPT = {
+      pitch:    ['level','slightly down','angled down','slightly up','angled up'],
+      lens:     ['24mm wide','35mm','50mm','85mm portrait','70-200mm telephoto'],
+      aperture: ['f/1.8 shallow','f/5.6 normal','f/11 deep'],
+      aspect:   ['1:1 square','4:3 landscape','3:4 portrait','16:9 landscape','9:16 portrait','21:9 landscape'],
+      exteriorLocation: ['main front entrance plaza','front drop-off zone','entry courtyard','side exterior walkway','outdoor gathering space','landscaped courtyard','exterior terrace or balcony view','building corner perspective','outdoor circulation corridor','plaza behind the sports complex','sports complex grandstand plaza']
+    };
+    var CTX_OPTS = {
+      classroom: {
+        height:   ['ground level','low','eye level','standing eye level','slightly elevated','high','overhead'],
+        yaw:      ['facing the front wall','facing the rear wall','facing the window wall','facing the solid wall','three-quarter left','three-quarter right','profile left','profile right'],
+        lighting: ['bright daylight','golden hour','overcast','warm interior evening','studio key + fill']
+      },
+      exterior: {
+        height:   ['ground level','low (upward, prestige)','eye level','standing eye level','slightly elevated','elevated / drone'],
+        yaw:      ['toward the main entrance','toward the PV logo wall','along the building facade','toward the entry plaza','toward the sculpture feature','toward the landscaping','three-quarter left','three-quarter right','profile left','profile right'],
+        lighting: ['bright daylight','golden hour','clear blue sky, midday','long-shadow late afternoon','overcast','dusk with teal accent lighting']
+      },
+      lobby: {
+        height:     ['ground level','low','eye level','standing eye level','slightly elevated','mezzanine level','high / overhead'],
+        yaw:        ['toward the glass entrance wall','toward the staircase','toward the mezzanine','toward the PV logo wall','across the atrium','toward the lounge area','three-quarter left','three-quarter right','profile left','profile right'],
+        lighting:   ['bright daylight through the glass','golden hour through the glazing','soft overcast daylight','warm interior evening','teal accent glow after hours'],
+        subjectLoc: ['near the main entrance','at the base of the staircase','on the staircase','on the mezzanine landing','in the lounge seating area','by the glass window wall','beside a planter','center of the atrium','in front of the PV logo wall','near the reception desk'],
+        cameraPos:  ['near the main entrance looking in','across the atrium','at the base of the staircase','from the mezzanine looking down','beside the lounge area','by the glass window wall','from under the mezzanine','center of the atrium']
+      }
+    };
+    function ctxFor(dataFile){
+      dataFile = dataFile || '';
+      if(/Campus-Lobby|Lobby/i.test(dataFile)) return 'lobby';
+      if(/Campus-Exterior|Exterior/i.test(dataFile)) return 'exterior';
+      return 'classroom';
+    }
+    function fieldOptsFor(ctx){
+      var c = CTX_OPTS[ctx] || CTX_OPTS.classroom;
+      return [
+        { re: /exterior location/i,            opts: OPT.exteriorLocation },
+        { re: /subject location within room/i, opts: c.subjectLoc },
+        { re: /position within room/i,         opts: c.cameraPos },
+        { re: /height/i,                       opts: c.height },
+        { re: /yaw|direction/i,                opts: c.yaw },
+        { re: /pitch|tilt/i,                   opts: OPT.pitch },
+        { re: /lens|focal/i,                   opts: OPT.lens },
+        { re: /aperture|depth/i,               opts: OPT.aperture },
+        { re: /aspect/i,                       opts: OPT.aspect },
+        { re: /lighting|time of day/i,         opts: c.lighting }
+      ];
+    }
+
+    function el(t,c,h){ var e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e; }
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function baseName(f){ return f.split('/').pop(); }
+    function legacy(text){ var a=document.createElement('textarea'); a.value=text; a.style.position='fixed'; a.style.opacity='0'; document.body.appendChild(a); a.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(a); }
+    function copy(text, btn, done){
+      function ok(){ if(btn){var o=btn.textContent; btn.classList.add('copied'); btn.textContent='✓ Copied'; setTimeout(function(){btn.classList.remove('copied'); btn.textContent=o;},1900);} if(done)done(); }
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(ok,function(){legacy(text);ok();}); } else { legacy(text); ok(); }
+    }
+    var cache={};
+    function fetchPrompt(path){ if(cache[path]!=null)return Promise.resolve(cache[path]); return fetch(path).then(function(r){return r.text();}).then(function(t){cache[path]=t;return t;}); }
+    function optsFor(name, ctx){ var o=null; fieldOptsFor(ctx).forEach(function(f){ if(f.opts && f.re.test(name)) o=f.opts; }); return o; }
+
+    // Custom angular dropdown (native <select> menu opened misaligned + rounded). Only one open at a time.
+    var openDD=null;
+    function closeAllDD(){ if(openDD){ openDD.classList.remove('open'); var m=openDD.querySelector('.ps2-dd-menu'); if(m) m.hidden=true; openDD=null; } }
+    document.addEventListener('click', function(e){ if(!e.target.closest('.ps2-dd')) closeAllDD(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeAllDD(); });
+    // Options may carry an `img` (thumbnail URL); when any do, the dropdown renders thumbnail + name.
+    function ddThumb(o){ return o.img ? '<img class="ps2-dd-thumb" src="'+esc(o.img)+'" alt="" loading="lazy" />' : '<span class="ps2-dd-thumb ps2-dd-thumb--ph"></span>'; }
+    function ddOptHTML(o){ return ddThumb(o)+'<span class="ps2-dd-optlabel">'+esc(o.label)+'</span>'; }
+    function makeDD(opts, onChange, extraCls, initial){
+      var rich=opts.some(function(o){return !!o.img;});
+      var dd=el('div','ps2-dd'+(rich?' ps2-dd--rich':'')+(extraCls?' '+extraCls:''));
+      var startIdx=0;
+      if(initial!=null){ for(var si=0; si<opts.length; si++){ if(opts[si].value===initial){ startIdx=si; break; } } }
+      var val=el('div','ps2-dd-val'); dd.appendChild(val);
+      function setVal(o){ if(rich){ val.innerHTML=ddOptHTML(o); } else { val.textContent=o.label; } }
+      setVal(opts[startIdx]);
+      var menu=el('div','ps2-dd-menu'); menu.hidden=true; dd.appendChild(menu);
+      opts.forEach(function(o,i){
+        var op=el('div','ps2-dd-opt'); if(rich){ op.innerHTML=ddOptHTML(o); } else { op.textContent=o.label; } if(i===startIdx) op.classList.add('sel');
+        op.addEventListener('click', function(e){ e.stopPropagation();
+          Array.prototype.forEach.call(menu.children,function(x){x.classList.remove('sel');}); op.classList.add('sel');
+          setVal(o); closeAllDD(); onChange(o.value);
+        });
+        menu.appendChild(op);
+      });
+      val.addEventListener('click', function(e){ e.stopPropagation(); var wasOpen=(openDD===dd); closeAllDD(); if(!wasOpen){ dd.classList.add('open'); menu.hidden=false; openDD=dd; } });
+      return dd;
+    }
+
+    // Copy the actual image to the clipboard (Chris pastes it straight into the AI generator).
+    function copyImage(url, btn){
+      var orig=btn.textContent;
+      function done(t){ btn.textContent=t; setTimeout(function(){btn.textContent=orig;},1900); }
+      if(!(navigator.clipboard && window.ClipboardItem)){ done('Not supported'); return; }
+      var pngBlob = fetch(url).then(function(r){return r.blob();}).then(function(b){
+        if(b.type==='image/png') return b;
+        return new Promise(function(resolve,reject){
+          var img=new Image(); img.onload=function(){ var c=document.createElement('canvas'); c.width=img.naturalWidth; c.height=img.naturalHeight; c.getContext('2d').drawImage(img,0,0); c.toBlob(function(pb){ pb?resolve(pb):reject(new Error('blob')); },'image/png'); }; img.onerror=reject; img.src=URL.createObjectURL(b); });
+      });
+      btn.textContent='Copying…';
+      navigator.clipboard.write([new ClipboardItem({'image/png': pngBlob})]).then(function(){done('✓ Copied');}, function(){ done('Copy failed'); });
+    }
+
+    function buildReveal(promptEl){
+      var reveal=promptEl.querySelector('.ps2-reveal');
+      if(reveal.dataset.built) return reveal;
+      reveal.dataset.built='1';
+      var dataFile=promptEl.getAttribute('data-file');
+      var VIEWS=null; try{ VIEWS=JSON.parse(promptEl.getAttribute('data-views')||'null'); }catch(e){}
+      var OUTFIT=!!(VIEWS && VIEWS.length);   // Character Outfit Change: a view selector swaps among 3 base prompts.
+      var TWOPASS=/two-pass/i.test(dataFile||'');
+      var BACKDROP=TWOPASS||OUTFIT;           // both offer a white-vs-transparent Background choice.
+      var state={ fields:{}, chars:['','','',''], items:['','','',''], scene:'',
+                  backdrop:(TWOPASS?'transparent':(OUTFIT?'white':'')),
+                  view:(OUTFIT?VIEWS[0].file:''), charname:'', custom:'' };
+      // Auto-save: remember this prompt's entries in the browser so a reload / later visit restores them.
+      var KEY='ps2state:'+(OUTFIT?'outfit-change':dataFile);
+      try{ var _sv=JSON.parse(localStorage.getItem(KEY)||'null'); if(_sv&&typeof _sv==='object'){ if(_sv.fields) state.fields=_sv.fields; if(Array.isArray(_sv.chars)) state.chars=_sv.chars.concat(['','','','']).slice(0,4); if(Array.isArray(_sv.items)) state.items=_sv.items.concat(['','','','']).slice(0,4); if(typeof _sv.scene==='string') state.scene=_sv.scene; if(_sv.backdrop) state.backdrop=_sv.backdrop; if(OUTFIT && _sv.view) state.view=_sv.view; if(typeof _sv.charname==='string') state.charname=_sv.charname; if(typeof _sv.custom==='string') state.custom=_sv.custom; } }catch(e){}
+      var path=OUTFIT?state.view:dataFile;
+      function save(){ try{ localStorage.setItem(KEY, JSON.stringify({fields:state.fields,chars:state.chars,items:state.items,scene:state.scene,backdrop:state.backdrop,view:state.view,charname:state.charname,custom:state.custom})); }catch(e){} }
+      var baseText='';
+      var BACKDROP_TEXT={
+        transparent:'BACKGROUND: Light the subject with soft, flattering professional studio lighting and a clear catch light in the eyes on a seamless pure-white studio setup, then remove the background completely. Output the final image as a PNG with a fully transparent background: a clean alpha cutout around the subject, with no white edge fringe or halo.',
+        white:'BACKGROUND: Place the subject on a seamless, pure-white studio backdrop with no shadows on the background. Light the subject with soft, flattering professional studio lighting and a clear catch light in the eyes. Keep the white background in the final image.'
+      };
+      // Character Outfit Change: background override + a realism/proportion lock appended to every view.
+      var OUTFIT_BG={
+        white:'FINAL BACKGROUND: keep a seamless, pure-white studio backdrop with soft, flattering professional studio lighting, a clear catch light in the eyes, and no shadows cast on the background.',
+        transparent:'FINAL BACKGROUND OVERRIDE: ignore any white-background instruction above. Keep the soft, flattering professional studio lighting and the catch light in the eyes, but remove the background completely and deliver the final image as a PNG with a fully transparent background: a clean alpha cutout around the character, with no white edge fringe or halo.'
+      };
+      var REALISM_LOCK='MAXIMUM REALISM + PROPORTION LOCK: The result must look like a real photograph from a professional full-frame mirrorless camera. Real skin with natural pores and texture, real fabric weave and stitching, natural light falloff, and believable weight and contact. Do not produce an illustrated, painterly, 3D, CGI, plastic, or over-smoothed look. Lock the body proportions, height, silhouette, and physique to the approved character sheet (Image A) exactly. The new outfit adapts to this established body: never resize, slim, normalize, exaggerate, or reshape the character to fit the clothing, and never borrow body proportions from the outfit or product reference images.';
+
+      var fieldsGroup=el('div','ps2-group'); reveal.appendChild(fieldsGroup);
+
+      var refGroup=el('div','ps2-group');
+      refGroup.appendChild(el('div','ps2-gtitle','Reference files'));
+      if(OUTFIT){
+        refGroup.appendChild(slotGroup('Character sheet + full-body views (up to 4)', state.chars, CHARACTERS, false));
+        refGroup.appendChild(slotGroup('Outfit, apparel & items to attach (up to 4)', state.items, ITEMS, false));
+        refGroup.appendChild(backdropSlot());
+        refGroup.appendChild(el('div','ps2-hint','Image A is the character sheet or full-body view. Add any outfit, apparel, or item references (cheer outfit, quarter zip, camera, bag, etc.) from the dropdown to bake their file names into the prompt, or attach extra outfit/headshot images straight into the generator. Body proportions always come from the character sheet, never from the outfit or product photos.'));
+      } else {
+        refGroup.appendChild(slotGroup('Characters (up to 4)', state.chars, CHARACTERS, false));
+        refGroup.appendChild(slotGroup('Items (up to 4)', state.items, ITEMS, false));
+        refGroup.appendChild(BACKDROP ? backdropSlot() : slotGroup('Location', null, SCENES, true));
+      }
+      reveal.appendChild(refGroup);
+
+      reveal.appendChild(el('div','ps2-gtitle','Your prompt'));
+      var pre=el('div','ps2-preview','Loading base prompt…'); reveal.appendChild(pre);
+      var acts=el('div','ps2-revealacts');
+      var copyBtn=el('button','pg-btn ps2-copyprompt','Copy Prompt'); copyBtn.type='button';
+      var resetBtn=el('button','pg-btn ps2-reset','Reset'); resetBtn.type='button';
+      resetBtn.addEventListener('click', function(){ if(!confirm('Clear all your entries for this prompt? This cannot be undone.')) return; try{ localStorage.removeItem(KEY); }catch(e){} reveal.innerHTML=''; reveal.dataset.built=''; buildReveal(promptEl); });
+      acts.appendChild(copyBtn); acts.appendChild(resetBtn); acts.appendChild(el('span','ps2-hint','Copies the filled prompt, then lists the files to grab. Your entries save automatically.'));
+      reveal.appendChild(acts);
+      var pop=el('div','ps2-filespop'); pop.hidden=true; reveal.appendChild(pop);
+
+      function slotGroup(title, arr, options, single){
+        var g=el('div','ps2-refgroup'); g.appendChild(el('div','ps2-reflabel', esc(title)));
+        var row=el('div','ps2-slots'); var n=single?1:4;
+        var dopts=[{label:'None',value:''}].concat(options.map(function(o){return {label:o.label,value:o.file,img:IMG+o.file};}));
+        for(var i=0;i<n;i++){ (function(idx){
+          var initv = single ? state.scene : arr[idx];
+          var dd=makeDD(dopts, function(v){ if(single){ state.scene=v; } else { arr[idx]=v; } refresh(); }, 'ps2-slotdd', initv);
+          row.appendChild(dd);
+        })(i); }
+        g.appendChild(row); return g;
+      }
+
+      function backdropSlot(){
+        var g=el('div','ps2-refgroup'); g.appendChild(el('div','ps2-reflabel','Background'));
+        var row=el('div','ps2-slots');
+        var dd=makeDD([{label:'Transparent background (PNG)',value:'transparent'},{label:'White studio backdrop',value:'white'}], function(v){ state.backdrop=v; refresh(); }, 'ps2-slotdd', state.backdrop);
+        row.appendChild(dd); g.appendChild(row); return g;
+      }
+
+      function buildFields(){
+        fieldsGroup.innerHTML='';
+        if(OUTFIT){ buildOutfitFields(); return; }
+        var PCTX=ctxFor(dataFile);   // classroom / exterior / lobby: picks space-appropriate dropdowns
+        fieldsGroup.appendChild(el('div','ps2-gtitle','Scene overrides'));
+        var re=/^\s*(?:[-*]\s+)?(?:\*\*)?\[([^\]]+)\]\s*=/gm, m, names=[];
+        while((m=re.exec(baseText))!==null){ names.push(m[1].trim()); }
+        if(!names.length){ fieldsGroup.appendChild(el('div','ps2-hint','This prompt has no fill-in fields. Pick reference files below and copy.')); return; }
+        function fieldEl(name){
+          if(state.fields[name]===undefined) state.fields[name]='';
+          var w=el('div','ps2-field'); w.appendChild(el('label',null,esc(name)));
+          var opts=optsFor(name, PCTX), input;
+          if(opts){ var dopts=[{label:'-',value:''}].concat(opts.map(function(o){return {label:o,value:o};})); input=makeDD(dopts, function(v){ state.fields[name]=v; refresh(); }, null, state.fields[name]); }
+          else { input=el('textarea','ps2-context'); input.rows=2; input.placeholder='type here';
+            if(state.fields[name]){ input.value=state.fields[name]; setTimeout(function(){ input.style.height='auto'; input.style.height=input.scrollHeight+'px'; },0); }
+            input.addEventListener('input',function(){ state.fields[name]=input.value; input.style.height='auto'; input.style.height=input.scrollHeight+'px'; refresh(); }); }
+          w.appendChild(input); return w;
+        }
+        // Group by input type so the panel reads cleanly (Chris): the free-text fields first (up to 4),
+        // then all the dropdowns, then the remaining free-text (furniture / special changes).
+        var textNames=names.filter(function(n){ return !optsFor(n, PCTX); });
+        var dropNames=names.filter(function(n){ return optsFor(n, PCTX); });
+        var trailRe=/special changes|furniture/i;
+        var leadText=textNames.filter(function(n){ return !trailRe.test(n); });
+        var trailText=textNames.filter(function(n){ return trailRe.test(n); });
+        function addGrid(cls, list){ if(!list.length) return; var g=el('div','ps2-fields'+(cls?' '+cls:'')); list.forEach(function(n){ g.appendChild(fieldEl(n)); }); fieldsGroup.appendChild(g); }
+        addGrid('ps2-fields--text', leadText);
+        addGrid('', dropNames);
+        addGrid('ps2-fields--text', trailText);
+      }
+
+      // Character Outfit Change controls: pick the full-body VIEW (swaps the base prompt), name the
+      // character (fills [CHARACTER NAME]), and add free-text outfit/output notes.
+      function loadView(file){ fetchPrompt(file).then(function(t){ baseText=t; refresh(); }).catch(function(){ baseText='[Could not load this view.]'; refresh(); }); }
+      function buildOutfitFields(){
+        fieldsGroup.appendChild(el('div','ps2-gtitle','Outfit change'));
+        var vg=el('div','ps2-field'); vg.appendChild(el('label',null,'Pose / view'));
+        var vopts=VIEWS.map(function(v){return {label:v.label,value:v.file};});
+        vg.appendChild(makeDD(vopts, function(v){ state.view=v; path=v; save(); loadView(v); }, null, state.view));
+        var ng=el('div','ps2-field'); ng.appendChild(el('label',null,'Character name'));
+        var nin=el('input','ps2-line'); nin.type='text'; nin.placeholder='e.g. Patricia'; nin.value=state.charname||'';
+        nin.addEventListener('input',function(){ state.charname=nin.value; refresh(); });
+        ng.appendChild(nin);
+        var top=el('div','ps2-fields ps2-fields--text'); top.appendChild(vg); top.appendChild(ng); fieldsGroup.appendChild(top);
+        var cg=el('div','ps2-field'); cg.appendChild(el('label',null,'Custom details (new outfit or image output)'));
+        var cin=el('textarea','ps2-context'); cin.rows=3; cin.placeholder='Optional: colors, materials, footwear, accessories, mood, framing, or any output note. Body proportions stay locked to the character sheet.';
+        if(state.custom){ cin.value=state.custom; setTimeout(function(){ cin.style.height='auto'; cin.style.height=cin.scrollHeight+'px'; },0); }
+        cin.addEventListener('input',function(){ state.custom=cin.value; cin.style.height='auto'; cin.style.height=cin.scrollHeight+'px'; refresh(); });
+        cg.appendChild(cin);
+        var bot=el('div','ps2-fields ps2-fields--text'); bot.appendChild(cg); fieldsGroup.appendChild(bot);
+      }
+
+      function selectedRefs(){
+        var out=[], seen={};
+        function add(file,arr){ if(!file||seen[file])return; seen[file]=1; var o=arr.filter(function(x){return x.file===file;})[0]; if(o)out.push(o); }
+        state.chars.forEach(function(f){add(f,CHARACTERS);});
+        state.items.forEach(function(f){add(f,ITEMS);});
+        add(state.scene,SCENES);
+        return out;
+      }
+
+      function composeOutfit(){
+        var out=(baseText||'').trim();
+        var nm=(state.charname||'').trim();
+        if(nm) out=out.split('[CHARACTER NAME]').join(nm);
+        var parts=[out];
+        var bg=OUTFIT_BG[state.backdrop]; if(bg) parts.push(bg);
+        parts.push(REALISM_LOCK);
+        var cu=(state.custom||'').trim();
+        if(cu) parts.push('CUSTOM ADJUSTMENTS (apply exactly, without changing body proportions): '+cu);
+        var chars=state.chars.filter(Boolean).map(baseName);
+        var items=state.items.filter(Boolean).map(baseName);
+        if(chars.length || items.length){
+          var block='ATTACHED REFERENCE FILES (match these exactly, by file name):';
+          if(chars.length) block+='\n- Character sheet + identity: '+chars.join(', ');
+          if(items.length) block+='\n- Outfit / apparel / items: '+items.join(', ')+' (wardrobe and props only, never body proportions)';
+          block+='\n- Any extra headshots or outfit images: attached separately in the generator.';
+          parts.push(block);
+        }
+        return parts.join('\n\n').replace(/\n{3,}/g,'\n\n').trim();
+      }
+      function compose(){
+        if(OUTFIT) return composeOutfit();
+        var out=baseText, name;
+        for(name in state.fields){ var v=state.fields[name]; if(v) out=out.split('['+name+'] =').join('['+name+'] = '+v); }
+        var chars=state.chars.filter(Boolean).map(baseName);
+        var items=state.items.filter(Boolean).map(baseName);
+        var extra='';
+        if(BACKDROP && state.backdrop && BACKDROP_TEXT[state.backdrop]){ extra += BACKDROP_TEXT[state.backdrop]+'\n\n'; }
+        if(chars.length || items.length || state.scene){
+          var block='ATTACHED REFERENCE FILES (match these exactly, by file name):\n';
+          if(chars.length) block+='- Characters: '+chars.join(', ')+'\n';
+          if(items.length) block+='- Items: '+items.join(', ')+'\n';
+          if(state.scene) block+='- Scene reference: '+baseName(state.scene)+'\n';
+          block+='\n';
+          extra += block;
+        }
+        if(extra){
+          if(out.indexOf('REFERENCE USE')>=0) out=out.replace('REFERENCE USE', extra+'REFERENCE USE');
+          else out=out+'\n\n'+extra;
+        }
+        return out;
+      }
+      function refresh(){ pre.textContent=compose(); save(); }
+      copyBtn.addEventListener('click', function(){ copy(compose(), copyBtn, function(){ showFiles(pop, selectedRefs()); }); });
+      fetchPrompt(path).then(function(t){ baseText=t; buildFields(); refresh(); }).catch(function(){ baseText='[Could not load the base prompt file.]'; refresh(); });
+      return reveal;
+    }
+
+    function showFiles(pop, refs){
+      var IMG='https://www.creativesilva.com/assets/images/characters/';
+      pop.hidden=false; pop.innerHTML='';
+      var head=el('div','ps2-filespop-head'); head.appendChild(el('div','ps2-filespop-title','Grab these files for the generation'));
+      pop.appendChild(head);
+      if(!refs.length){ pop.appendChild(el('div','ps2-filespop-empty','No reference files selected. Pick characters, items, or a location above.')); return; }
+      var grid=el('div','ps2-files');
+      refs.forEach(function(r){ var url=IMG+r.file, name=baseName(r.file);
+        var cell=el('div','ps2-file'); var thumb=el('div','ps2-file-thumb'); var im=el('img'); im.src=url; im.alt=r.label; im.loading='lazy'; im.crossOrigin='anonymous'; thumb.appendChild(im); cell.appendChild(thumb);
+        var meta=el('div','ps2-file-meta'); meta.appendChild(el('div','ps2-file-name', esc(name)));
+        var fa=el('div','ps2-file-acts'); var cb=el('button','pg-btn','Copy'); cb.type='button'; cb.addEventListener('click',function(){copyImage(url, cb);});
+        fa.appendChild(cb); meta.appendChild(fa); cell.appendChild(meta); grid.appendChild(cell); });
+      pop.appendChild(grid);
+    }
+
+    list.querySelectorAll('.ps2-prompt').forEach(function(p){
+      var btn=p.querySelector('.ps2-customize');
+      btn.addEventListener('click', function(){
+        var reveal=buildReveal(p);
+        if(reveal.hasAttribute('hidden')){
+          list.querySelectorAll('.ps2-prompt').forEach(function(other){
+            if(other===p) return;
+            var orv=other.querySelector('.ps2-reveal');
+            if(orv && !orv.hasAttribute('hidden')){ orv.setAttribute('hidden',''); var ob=other.querySelector('.ps2-customize'); ob.classList.remove('on'); ob.textContent='Customize Prompt'; }
+          });
+          reveal.removeAttribute('hidden'); btn.classList.add('on'); btn.textContent='Close';
+        }
+        else { reveal.setAttribute('hidden',''); btn.classList.remove('on'); btn.textContent='Customize Prompt'; }
+      });
+    });
+  })();
+  </script>
+  <script>
+  /* Color-swatch icon cards: click a dot to swap the shown icon + its download link. */
+  (function () {
+    document.addEventListener("click", function (e) {
+      var dot = e.target.closest(".swatch-dot");
+      if (!dot) return;
+      var card = dot.closest(".icon-swatch");
+      if (!card) return;
+      var src = dot.getAttribute("data-src");
+      var img = card.querySelector(".swatch-img");
+      var dl = card.querySelector(".swatch-dl");
+      if (img) img.src = src;
+      if (dl) dl.setAttribute("href", src);
+      card.querySelectorAll(".swatch-dot").forEach(function (d) {
+        d.classList.toggle("active", d === dot);
+      });
+    });
+  })();
+  </script>
+</body>
+</html>
