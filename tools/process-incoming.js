@@ -72,14 +72,19 @@ function versionedName(destDir, baseSlug, ext){
 }
 
 function optimize(srcAbs, destAbs, keepPng){
-  const srcPng = /\.png$/i.test(srcAbs);
-  if (keepPng && srcPng){
-    // keep transparency; cap the long edge at 1600
-    execFileSync('sips', ['-Z','1600', srcAbs, '--out', destAbs]);
-  } else {
-    // photographic -> normalized jpeg, long edge <= 1600
-    execFileSync('sips', ['-s','format','jpeg','-Z','1600', '-s','formatOptions','82', srcAbs, '--out', destAbs]);
-  }
+  const os = require('os');
+  // Copy to a local temp first. Reading all bytes forces a Google Drive online-only (placeholder)
+  // file to fully download before sips touches it, so sips never fails with "cannot extract image".
+  const tmp = path.join(os.tmpdir(), 'cs-intake-' + Date.now() + '-' + destAbs.split('/').pop());
+  fs.copyFileSync(srcAbs, tmp);
+  try {
+    const srcPng = /\.png$/i.test(srcAbs);
+    if (keepPng && srcPng){
+      execFileSync('sips', ['-Z','1600', tmp, '--out', destAbs]);            // keep transparency
+    } else {
+      execFileSync('sips', ['-s','format','jpeg','-Z','1600', '-s','formatOptions','82', tmp, '--out', destAbs]); // -> jpeg
+    }
+  } finally { try { fs.unlinkSync(tmp); } catch(e){} }
 }
 
 // insert a reference entry as the FIRST element of the named array in each builder (no trailing-comma hazard)
@@ -160,7 +165,7 @@ function processAuto(push){
     if (!r){ console.log('SKIP (bad route tag): ' + f); continue; }
     let res = null;
     try { res = processOne(abs, r.dest, r.name, r.desc); }
-    catch (e){ console.error('ERROR ' + f + ': ' + (e.message||e)); continue; }
+    catch (e){ console.log('RETRY later (' + String(e.message||e).split('\n')[0] + '): ' + f); continue; }
     if (res){ // placed: move the original out of the intake folder so it is not reprocessed
       try { fs.renameSync(abs, path.join(PROCESSED, f)); } catch (e){ /* leave it; still placed */ }
       done.push(res);
