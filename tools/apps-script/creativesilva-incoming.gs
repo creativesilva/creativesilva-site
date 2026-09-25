@@ -36,11 +36,20 @@ function doPost(e) {
     const stamp = Utilities.formatDate(new Date(), "America/Los_Angeles", "yyyy-MM-dd");
     const safe = function (v, n) { return String(v || "").replace(/[^\w.\- ]+/g, "_").trim().slice(0, n); };
     const clean = safe(d.name || "file", 120);
-    // Optional credit fields (student page): 2026-09-23_STUDENT_Jane-Doe_Orbit_IMG_1234.jpg
-    const parts = [stamp, t.prefix, safe(d.student, 40).replace(/ +/g, "-"), safe(d.title, 40).replace(/ +/g, "-"), clean].filter(String);
-    const blob = Utilities.newBlob(bytes, d.type || "application/octet-stream", parts.join("_"));
+    // Intake routing (catalog "Send to" tags): bake a route prefix into the name so the local
+    // process-incoming.js watcher knows exactly where each image goes. Untagged uploads keep the
+    // old naming and are never auto-published.
+    const dslug = function (v) { return String(v || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); };
+    var finalName;
+    if (d.dest) {
+      finalName = ["route", dslug(d.dest), dslug(d.character) || "none", dslug(d.label) || "untitled", stamp, clean].join("__");
+    } else {
+      // Optional credit fields (student page): 2026-09-23_STUDENT_Jane-Doe_Orbit_IMG_1234.jpg
+      finalName = [stamp, t.prefix, safe(d.student, 40).replace(/ +/g, "-"), safe(d.title, 40).replace(/ +/g, "-"), clean].filter(String).join("_");
+    }
+    const blob = Utilities.newBlob(bytes, d.type || "application/octet-stream", finalName);
     const file = folderFor(t).createFile(blob);
-    const note = [d.student && "Student: " + d.student, d.title && "Title: " + d.title, d.category && "Collection: " + d.category, d.message && "Note: " + d.message].filter(Boolean).join("\n");
+    const note = [d.dest && "Send to: " + d.dest, d.character && "Character: " + d.character, d.label && "Label: " + d.label, d.student && "Student: " + d.student, d.title && "Title: " + d.title, d.category && "Collection: " + d.category, d.message && "Note: " + d.message].filter(Boolean).join("\n");
     if (note) file.setDescription(note);
     return out({ ok: true, id: file.getId(), name: file.getName() });
   } catch (err) {

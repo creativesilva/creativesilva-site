@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  CS Incoming intake watcher (macOS launchd agent).
+  Polls the synced CS Incoming Drive folder every 60s and runs the intake processor,
+  which publishes only route__ tagged image uploads (hard PII gate; untagged files ignored).
+  Install:
+    cp tools/launchd/com.creativesilva.intake-watcher.plist ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/com.creativesilva.intake-watcher.plist
+  Stop:
+    launchctl unload ~/Library/LaunchAgents/com.creativesilva.intake-watcher.plist
+  Log: ~/Library/Logs/cs-intake-watcher.log
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.creativesilva.intake-watcher</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/riva/.nvm/versions/node/v24.14.1/bin/node</string>
+    <string>/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site/tools/process-incoming.js</string>
+    <string>--auto</string>
+    <string>--push</string>
+  </array>
+  <key>WorkingDirectory</key><string>/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/Users/riva/.nvm/versions/node/v24.14.1/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/homebrew/bin</string>
+    <key>HOME</key><string>/Users/riva</string>
+  </dict>
+  <key>StartInterval</key><integer>60</integer>
+  <key>RunAtLoad</key><true/>
+  <key>ThrottleInterval</key><integer>30</integer>
+  <key>ProcessType</key><string>Background</string>
+  <key>StandardOutPath</key><string>/Users/riva/Library/Logs/cs-intake-watcher.log</string>
+  <key>StandardErrorPath</key><string>/Users/riva/Library/Logs/cs-intake-watcher.log</string>
+</dict>
+</plist>

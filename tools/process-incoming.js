@@ -151,7 +151,7 @@ function processAuto(push){
   if (!fs.existsSync(DRIVE)){ console.error('Drive folder not found: ' + DRIVE); process.exit(1); }
   fs.mkdirSync(PROCESSED, { recursive: true });
   const files = fs.readdirSync(DRIVE).filter(f => f.startsWith('route__'));
-  if (!files.length){ console.log('auto: no route__ tagged files to process.'); return; }
+  if (!files.length){ return; } // silent when idle (this runs on a 60s poll)
   const done = [];
   for (const f of files){
     const abs = path.join(DRIVE, f);
