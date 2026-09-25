@@ -221,6 +221,10 @@
   .pvb-otherbox{margin-top:6px; width:100%; box-sizing:border-box; background:rgba(0,0,0,.28); border:1px solid var(--pvb-line); color:#eafeff; font-family:var(--pvb-font); font-size:.9rem; padding:9px 11px;}
   .pvb-check-toggle{display:flex; align-items:flex-start; gap:9px; font-size:.9rem; color:#dbeeee; cursor:pointer; line-height:1.4;}
   .pvb-check-toggle input{margin-top:2px; accent-color:var(--pvb-teal); width:16px; height:16px; flex:0 0 auto;}
+  .pvb-drop{border:1px dashed var(--pvb-line); background:rgba(0,184,184,.05); padding:18px 14px; text-align:center; cursor:pointer; transition:background .12s,border-color .12s;}
+  .pvb-drop:hover,.pvb-drop.over{border-color:var(--pvb-teal); background:rgba(0,184,184,.14);}
+  .pvb-drop-hint{font-size:.82rem; color:var(--pvb-muted); line-height:1.5; pointer-events:none;}
+  .pvb-drop-list{margin-top:10px;}
   .pvb-checkrow{display:flex; gap:11px; align-items:center; padding:9px; background:rgba(0,184,184,.05); border-left:2px solid var(--pvb-gold); margin-bottom:8px;}
   .pvb-checkrow .th{flex:0 0 56px; width:56px; height:56px; overflow:hidden; background:#041413;}
   .pvb-checkrow .th img{width:100%; height:100%; object-fit:contain; display:block;}
@@ -504,9 +508,17 @@
     function openLightbox(file,label){ if(!lbEl)return; lbImg.src=IMG+file; lbCap.innerHTML=esc(label)+'<span class="role">'+esc(baseName(file))+'</span>'; lbEl.hidden=false; }
     function closeLightbox(){ if(!lbEl)return; lbEl.hidden=true; lbImg.src=''; }
     if(lbEl){ lbEl.addEventListener('click', closeLightbox); document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !lbEl.hidden) closeLightbox(); }); }
+    // paste images straight into the X2 drop-zone (only when it is on screen)
+    document.addEventListener('paste', function(e){
+      if(!document.querySelector('.pvb-drop')) return;
+      var items=(e.clipboardData&&e.clipboardData.items)||[];
+      var files=[].slice.call(items).filter(function(it){return it.type&&it.type.indexOf('image')===0;}).map(function(it){return it.getAsFile();}).filter(Boolean);
+      if(files.length){ e.preventDefault(); addX2Files(files); }
+    });
 
     // ---- active build ----
     var activeIdx=0, cfg=null, state=null, baseText='', OUTFIT=false, TWOPASS=false, BACKDROP=false, KEY='', DEFAULT_BACKDROP='', DEFAULT_VIEW='', fieldNames=[];
+    var x2imgs=[]; // X2 drop-zone images, in-memory only (never persisted), cleared on prompt switch/reset
     var MODE='project'; try{ var _m=localStorage.getItem(NS+'mode'); if(_m==='full'||_m==='project') MODE=_m; }catch(e){}
 
     function freshState(){ return {fields:{},chars:['','','',''],items:['','','',''],scene:'',backdrop:(TWOPASS?'transparent':(OUTFIT?'white':'')),view:(OUTFIT?cfg.views[0].file:''),custom:''}; }
@@ -620,7 +632,7 @@
       updateModeUI();
       // checklist
       checklistEl.innerHTML='';
-      var refs=selectedRefs(), step=1;
+      var step=1;
       // Step 1: the prompt text itself
       (function(){
         var row=el('div','pvb-checkrow');
@@ -630,16 +642,19 @@
         var cb=el('button','cimg','Copy prompt'); cb.type='button'; cb.addEventListener('click',function(){ copyText(compose(), cb); }); row.appendChild(cb);
         checklistEl.appendChild(row);
       })();
-      // Steps 2+: each reference image to attach
-      refs.forEach(function(r){
+      // Steps 2+: images to attach. X2 uses your dropped images; other prompts use catalog references.
+      var attach = cfg.delta
+        ? x2imgs.map(function(im,i){ return {url:im.url, name:im.name, role:(i===0?'Image 1 (master)':'Image 2 (support)')}; })
+        : selectedRefs().map(function(r){ return {url:IMG+r.file, name:baseName(r.file), role:r.role}; });
+      attach.forEach(function(a){
         var row=el('div','pvb-checkrow');
         row.appendChild(el('div','pvb-stepnum',String(step++)));
-        var th=el('div','th'); var im=el('img'); im.src=IMG+r.file; im.alt=r.label; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
-        var meta=el('div','meta'); meta.appendChild(el('div','role',esc(r.role))); meta.appendChild(el('div','fn',esc(baseName(r.file)))); row.appendChild(meta);
-        var cb=el('button','cimg','Copy image'); cb.type='button'; cb.addEventListener('click',function(){ copyImage(IMG+r.file,cb); }); row.appendChild(cb);
+        var th=el('div','th'); var im=el('img'); im.src=a.url; im.alt=a.role; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
+        var meta=el('div','meta'); meta.appendChild(el('div','role',esc(a.role))); meta.appendChild(el('div','fn',esc(a.name))); row.appendChild(meta);
+        var cb=el('button','cimg','Copy image'); cb.type='button'; cb.addEventListener('click',function(){ copyImage(a.url,cb); }); row.appendChild(cb);
         checklistEl.appendChild(row);
       });
-      if(!refs.length){ checklistEl.appendChild(el('div','pvb-check-empty','Add characters, items, or a location above and they appear here as steps 2, 3, and so on.')); }
+      if(!attach.length){ checklistEl.appendChild(el('div','pvb-check-empty', cfg.delta?'Drop your master (and optional support headshot) on the left; they show up here to copy in order.':'Add characters, items, or a location above and they appear here as steps 2, 3, and so on.')); }
       var when=new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
       savedEl.innerHTML='Draft saved <b>'+when+'</b>. It restores when you come back.';
     }
@@ -760,6 +775,7 @@
 
     function buildRefs(){
       refsEl.innerHTML='';
+      if(cfg.delta){ renderX2drop(refsEl); return; }
       refsEl.appendChild(el('div','pvb-gtitle','Reference files'));
       if(OUTFIT){
         refsEl.appendChild(refAccordion('Characters', state.chars, CHARACTERS, false));
@@ -771,6 +787,47 @@
         if(BACKDROP) refsEl.appendChild(backdropSlot());
         else refsEl.appendChild(refAccordion('Location', null, SCENES, true));
       }
+    }
+
+    // ---- X2 local drop-zone (in-browser only; hand images back to a new GPT window) ----
+    function afterX2change(){
+      if(x2imgs.length>=2) state.fields['SUPPORT']='yes';
+      else if(x2imgs.length===1) state.fields['SUPPORT']='no';
+      buildFields(); buildRefs(); render();
+    }
+    function addX2Files(files){
+      [].slice.call(files||[]).forEach(function(f){
+        if(!/^image\//.test(f.type)) return;
+        if(x2imgs.length>=2) return;
+        var r=new FileReader();
+        r.onload=function(){ if(x2imgs.length>=2) return; x2imgs.push({name:f.name||('pasted-'+Date.now()+'.png'), url:r.result}); afterX2change(); };
+        r.readAsDataURL(f);
+      });
+    }
+    function renderX2drop(wrap){
+      wrap.appendChild(el('div','pvb-gtitle','Your images'));
+      var dz=el('div','pvb-drop');
+      dz.innerHTML='<div class="pvb-drop-hint">Drop or paste your images here, or click to choose.<br>First image = Image 1 (master). Second image = Image 2 (support headshot).</div>';
+      var fi=document.createElement('input'); fi.type='file'; fi.accept='image/*'; fi.multiple=true; fi.style.display='none';
+      dz.appendChild(fi);
+      dz.addEventListener('click',function(){ fi.click(); });
+      fi.addEventListener('change',function(){ addX2Files(fi.files); fi.value=''; });
+      dz.addEventListener('dragover',function(e){ e.preventDefault(); dz.classList.add('over'); });
+      dz.addEventListener('dragleave',function(){ dz.classList.remove('over'); });
+      dz.addEventListener('drop',function(e){ e.preventDefault(); dz.classList.remove('over'); addX2Files(e.dataTransfer.files); });
+      wrap.appendChild(dz);
+      var list=el('div','pvb-drop-list');
+      x2imgs.forEach(function(im,i){
+        var row=el('div','pvb-checkrow');
+        var th=el('div','th'); var img=document.createElement('img'); img.src=im.url; img.alt=im.name; th.appendChild(img); row.appendChild(th);
+        var meta=el('div','meta'); meta.appendChild(el('div','role', i===0?'Image 1 (master)':'Image 2 (support)')); meta.appendChild(el('div','fn',esc(im.name))); row.appendChild(meta);
+        var cbtn=el('button','cimg','Copy'); cbtn.type='button'; cbtn.addEventListener('click',function(){ copyImage(im.url,cbtn); }); row.appendChild(cbtn);
+        var dbtn=el('button','cimg','Save'); dbtn.type='button'; dbtn.addEventListener('click',function(){ downloadImg(im.url,im.name,dbtn); }); row.appendChild(dbtn);
+        var rm=el('button','cimg','×'); rm.type='button'; rm.title='Remove'; rm.addEventListener('click',function(){ x2imgs.splice(i,1); afterX2change(); }); row.appendChild(rm);
+        list.appendChild(row);
+      });
+      wrap.appendChild(list);
+      if(!x2imgs.length) wrap.appendChild(el('div','pvb-note','Nothing added yet. These stay on this computer only and clear when you reset or reload.'));
     }
 
     // ---- reusable setups ----
@@ -791,7 +848,7 @@
 
     // ---- select prompt ----
     function selectPrompt(idx, overrideState){
-      activeIdx=idx; cfg=PROMPTS[idx];
+      activeIdx=idx; cfg=PROMPTS[idx]; x2imgs=[];
       Array.prototype.forEach.call(pillsEl.children,function(p,i){ p.classList.toggle('active',i===idx); p.setAttribute('aria-selected',i===idx?'true':'false'); });
       OUTFIT=!!(cfg.views&&cfg.views.length); TWOPASS=/two-pass/i.test(cfg.file||''); BACKDROP=TWOPASS||OUTFIT;
       KEY=OUTFIT?'outfit-change':cfg.file;
