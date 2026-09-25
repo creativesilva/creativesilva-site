@@ -1,4 +1,4 @@
-BLANK ARTBOARD RESET
+RESET ARTBOARD
 
 Reset the image-generation state for the next request.
 

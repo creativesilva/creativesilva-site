@@ -100,13 +100,13 @@
     padding:10px 14px; min-width:150px; color:var(--pvb-text); transition:background .15s, border-color .15s;}
   .pvb-pill:hover{background:var(--pvb-panel-2);}
   .pvb-pill.active{background:var(--pvb-panel-hi); border-color:var(--pvb-teal); border-top:2px solid var(--pvb-teal);}
-  .pvb-pill .t{display:block; font-weight:600; font-size:.92rem;}
+  .pvb-pill .t{display:block; font-weight:600; font-size:.92rem; text-transform:uppercase; letter-spacing:.04em;}
   .pvb-pill .s{display:block; font-size:.72rem; color:var(--pvb-faint); margin-top:2px;}
   .pvb-pill.active .s{color:rgba(0,184,184,.85);}
 
   .pvb-card{background:var(--pvb-panel); border:1px solid var(--pvb-line); border-top:3px solid var(--pvb-teal); padding:18px 18px 20px; margin-top:16px;}
-  .pvb-editor-head{display:flex; align-items:center; gap:10px; margin:2px 0 4px;}
-  .pvb-editor-head h2{font-size:1.05rem; font-weight:700; margin:0; color:#fff;}
+  .pvb-editor-head{display:flex; align-items:center; gap:10px; margin:2px 0 4px; flex-wrap:wrap;}
+  .pvb-editor-head h2{font-size:1.05rem; font-weight:700; margin:0; color:#fff; text-transform:uppercase; letter-spacing:.02em;}
   .pvb-editor-head .sub{font-size:.82rem; color:var(--pvb-muted);}
   .pvb-mode{margin-left:auto; font-size:.62rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
     color:#04110f; background:var(--pvb-teal); padding:4px 10px;}
@@ -114,6 +114,11 @@
     color:var(--pvb-teal-lt); margin:20px 0 10px; padding-left:9px; border-left:3px solid var(--pvb-teal);}
   .pvb-note{font-size:.82rem; color:var(--pvb-muted); background:rgba(0,184,184,.08);
     border-left:3px solid var(--pvb-teal); padding:9px 12px; margin:10px 0;}
+  .pvb-guide{background:rgba(0,184,184,.08); border:1px solid var(--pvb-line); border-left:3px solid var(--pvb-teal); padding:11px 13px; margin:10px 0 4px;}
+  .pvb-guide-h{font-size:.66rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--pvb-teal-lt); margin-bottom:6px;}
+  .pvb-guide-b{font-size:.82rem; color:var(--pvb-muted); line-height:1.55;}
+  .pvb-guide-b b{color:#eafeff; font-weight:700;}
+  .pvb-smallbtn.copied{background:#3fa863; color:#04110f;}
 
   /* ── fields ── */
   .pvb-fields{display:grid; grid-template-columns:1fr; gap:12px;}
@@ -262,6 +267,11 @@
             <h2 id="pvb-title">Loading</h2>
             <span class="sub" id="pvb-sub"></span>
             <span class="pvb-mode" id="pvb-mode"></span>
+            <button type="button" class="pvb-smallbtn" id="pvb-copytop" title="Copy the prompt to your clipboard">Copy prompt</button>
+          </div>
+          <div class="pvb-guide" id="pvb-guide" hidden>
+            <div class="pvb-guide-h">How to use this prompt</div>
+            <div class="pvb-guide-b" id="pvb-guide-body"></div>
           </div>
           <div id="pvb-refs"></div>
         </div>
@@ -287,7 +297,7 @@
           <div class="pvb-preview" id="pvb-preview">Loading base prompt&#8230;</div>
           <div class="pvb-acts">
             <button class="pvb-btn" id="pvb-copy">Copy prompt</button>
-            <button class="pvb-btn ghost" id="pvb-copy2">Copy prompt again</button>
+            <button class="pvb-btn ghost" id="pvb-copy2" title="Re-copy the prompt. Copying a reference image replaces your clipboard, so click this right before you paste into ChatGPT.">Copy prompt again</button>
             <button class="pvb-btn ghost" id="pvb-reset" title="Clear your entries for this prompt">Reset</button>
           </div>
           <div class="pvb-saved" id="pvb-saved">Draft saves automatically.</div>
@@ -428,12 +438,12 @@
       {title:'Campus Exterior',sub:'PV Academy, any exterior',mode:'Environment',ptype:'environment',canon:'PV Campus Exterior canon',file:'/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md'},
       {title:'Lobby Environment',sub:'PV Academy lobby',mode:'Environment',ptype:'environment',canon:'PV Academy Lobby canon',file:'/assets/prompts/PV-Campus-Lobby-Master-Prompt-v1.md'},
       {title:'Fresh Full-Image Rebuild',sub:'force a full rebuild',mode:'Fresh rebuild',ptype:'protocol',file:'/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt'},
-      {title:'X2 Exact Rebuild',sub:'1 image into 2 aligned upscales',mode:'Fresh rebuild',ptype:'protocol',file:'/assets/prompts/X2-Exact-Rebuild.md'},
+      {title:'X2 Exact Rebuild',sub:'1 image into 2 aligned upscales',mode:'Fresh rebuild',ptype:'protocol',file:'/assets/prompts/X2-Exact-Rebuild.md',guide:'<b>What it does:</b> turns one approved character image into two separate, same-scale files (an upper pass and a lower pass) that line up perfectly in Photoshop.<br><b>Before you run it, upload:</b> 1) the approved full-body character image, and 2) the approved headshot if you have one. The prompt on the right is ready to paste as-is.'},
       {title:'Character Outfit Change',sub:'re-dress a character sheet',mode:'Outfit rebuild',ptype:'outfit',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md',
         views:[{label:'Full front / neutral stance',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md'},
                {label:'Left 3/4 front / face to camera / smile',file:'/assets/prompts/Character-Outfit-Change-Left-3Q-Front-v1.md'},
                {label:'3/4 rear / side-profile face',file:'/assets/prompts/Character-Outfit-Change-3Q-Rear-v1.md'}]},
-      {title:'Blank Artboard Reset',sub:'clear the canvas memory',mode:'Reset',ptype:'protocol',file:'/assets/prompts/Blank-Artboard-Reset.txt'}
+      {title:'Reset Artboard',sub:'clear the canvas memory',mode:'Reset',ptype:'protocol',file:'/assets/prompts/Blank-Artboard-Reset.txt'}
     ];
 
     // ---- helpers ----
@@ -478,7 +488,8 @@
         fieldsEl=document.getElementById('pvb-fields'), refsEl=document.getElementById('pvb-refs'),
         preEl=document.getElementById('pvb-preview'), savedEl=document.getElementById('pvb-saved'),
         checklistEl=document.getElementById('pvb-checklist'), setupsEl=document.getElementById('pvb-setups'),
-        copyB=document.getElementById('pvb-copy'), copy2B=document.getElementById('pvb-copy2'), resetB=document.getElementById('pvb-reset');
+        copyB=document.getElementById('pvb-copy'), copy2B=document.getElementById('pvb-copy2'), resetB=document.getElementById('pvb-reset'),
+        copyTopB=document.getElementById('pvb-copytop'), guideEl=document.getElementById('pvb-guide'), guideBodyEl=document.getElementById('pvb-guide-body');
 
     // ---- click-to-enlarge lightbox ----
     var lbEl=document.getElementById('pvb-lightbox'), lbImg=document.getElementById('pvb-lb-img'), lbCap=document.getElementById('pvb-lb-cap');
@@ -715,6 +726,7 @@
       OUTFIT=!!(cfg.views&&cfg.views.length); TWOPASS=/two-pass/i.test(cfg.file||''); BACKDROP=TWOPASS||OUTFIT;
       KEY=OUTFIT?'outfit-change':cfg.file;
       titleEl.textContent=cfg.title; subEl.textContent=cfg.sub?('('+cfg.sub+')'):''; modeEl.textContent=cfg.mode||'';
+      if(guideEl){ if(cfg.guide){ guideBodyEl.innerHTML=cfg.guide; guideEl.hidden=false; } else { guideBodyEl.innerHTML=''; guideEl.hidden=true; } }
       var def=freshState();
       if(overrideState){ state=Object.assign(freshState(), overrideState); state.chars=(state.chars||[]).concat(['','','','']).slice(0,4); state.items=(state.items||[]).concat(['','','','']).slice(0,4); saveState(KEY,state); }
       else { var sv=loadState(KEY,null); state = sv?Object.assign(def,sv):def; state.chars=(state.chars||[]).concat(['','','','']).slice(0,4); state.items=(state.items||[]).concat(['','','','']).slice(0,4); }
@@ -729,6 +741,7 @@
     // ---- wire header actions ----
     copyB.addEventListener('click',function(){ copyText(compose(), copyB); });
     copy2B.addEventListener('click',function(){ copyText(compose(), copy2B); });
+    if(copyTopB) copyTopB.addEventListener('click',function(){ copyText(compose(), copyTopB); });
     resetB.addEventListener('click',function(){ if(!confirm('Clear your entries for this prompt? This cannot be undone.'))return; try{ localStorage.removeItem(NS+'state:'+KEY); }catch(e){} selectPrompt(activeIdx); });
 
     // ---- build pills ----
