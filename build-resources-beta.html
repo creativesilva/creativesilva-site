@@ -418,7 +418,7 @@
       {title:'Campus Exterior',sub:'PV Academy, any exterior',mode:'Environment',ptype:'environment',canon:'PV Campus Exterior canon',file:'/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md'},
       {title:'Lobby Environment',sub:'PV Academy lobby',mode:'Environment',ptype:'environment',canon:'PV Academy Lobby canon',file:'/assets/prompts/PV-Campus-Lobby-Master-Prompt-v1.md'},
       {title:'Fresh Full-Image Rebuild',sub:'force a full rebuild',mode:'Fresh rebuild',ptype:'protocol',file:'/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt'},
-      {title:'Two-Pass Character Rebuild',sub:'upper + lower passes',mode:'Fresh rebuild',ptype:'protocol',file:'/assets/prompts/Two-Pass-Character-Rebuild.md'},
+      {title:'X2 Exact Rebuild',sub:'1 image into 2 aligned upscales',mode:'Fresh rebuild',ptype:'protocol',file:'/assets/prompts/X2-Exact-Rebuild.md'},
       {title:'Character Outfit Change',sub:'re-dress a character sheet',mode:'Outfit rebuild',ptype:'outfit',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md',
         views:[{label:'Full front / neutral stance',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md'},
                {label:'Left 3/4 front / face to camera / smile',file:'/assets/prompts/Character-Outfit-Change-Left-3Q-Front-v1.md'},
@@ -431,7 +431,7 @@
     function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
     function baseName(f){ return f.split('/').pop(); }
     var cache={};
-    function fetchPrompt(p){ if(cache[p]!=null)return Promise.resolve(cache[p]); return fetch(p).then(function(r){return r.text();}).then(function(t){cache[p]=t;return t;}); }
+    function fetchPrompt(p){ if(cache[p]!=null)return Promise.resolve(cache[p]); return fetch(p,{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){cache[p]=t;return t;}); }
     function legacyCopy(text){ var a=document.createElement('textarea'); a.value=text; a.style.position='fixed'; a.style.opacity='0'; document.body.appendChild(a); a.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(a); }
     function copyText(text,btn,label){ function ok(){ if(btn){ var o=label||btn.textContent; btn.classList.add('copied'); var was=btn.textContent; btn.textContent='✓ Copied'; setTimeout(function(){btn.classList.remove('copied'); btn.textContent=was;},1600);} }
       if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(ok,function(){legacyCopy(text);ok();}); } else { legacyCopy(text); ok(); } }
