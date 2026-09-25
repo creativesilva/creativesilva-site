@@ -189,6 +189,8 @@
   .pvb-smallbtn{font-family:var(--pvb-font); font-size:.72rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
     color:#04110f; background:var(--pvb-teal); border:0; padding:8px 14px; cursor:pointer;}
   .pvb-smallbtn:hover{filter:brightness(1.12);}
+  .pvb-smallbtn.ghost{background:rgba(0,184,184,.14); color:#eafeff; border:1px solid var(--pvb-line);}
+  .pvb-headacts{margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
 
   /* ── persistent review panel ── */
   .pvb-review{background:var(--pvb-panel-2); border:1px solid var(--pvb-line); border-top:4px solid var(--pvb-teal); padding:16px 16px 18px;}
@@ -256,7 +258,7 @@
   </header>
 
   <main class="pvb-wrap" id="pvb-app" style="display:none;">
-    <p class="pvb-intro">Pick a prompt, fill what you need, and choose your reference images. The prompt on the right stays live the whole time. When you copy an image, the prompt text is replaced on your clipboard, so use <b>Copy prompt again</b> before you paste into ChatGPT.</p>
+    <p class="pvb-intro">Pick a prompt, fill what you need, and choose your reference images. The prompt on the right stays live the whole time. Attach your reference images in ChatGPT first, then click <b>Copy prompt</b> last and paste it in. (Copying an image replaces whatever is on your clipboard, so copy the prompt as your final step.)</p>
 
     <div class="pvb-pills" id="pvb-pills" role="tablist" aria-label="Prompt type"></div>
 
@@ -266,8 +268,10 @@
           <div class="pvb-editor-head">
             <h2 id="pvb-title">Loading</h2>
             <span class="sub" id="pvb-sub"></span>
-            <span class="pvb-mode" id="pvb-mode"></span>
-            <button type="button" class="pvb-smallbtn" id="pvb-copytop" title="Copy the prompt to your clipboard">Copy prompt</button>
+            <div class="pvb-headacts">
+              <button type="button" class="pvb-smallbtn" id="pvb-copytop" title="Copy the prompt to your clipboard">Copy prompt</button>
+              <button type="button" class="pvb-smallbtn ghost" id="pvb-resettop" title="Clear your entries for this prompt">Reset</button>
+            </div>
           </div>
           <div class="pvb-guide" id="pvb-guide" hidden>
             <div class="pvb-guide-h">How to use this prompt</div>
@@ -297,7 +301,6 @@
           <div class="pvb-preview" id="pvb-preview">Loading base prompt&#8230;</div>
           <div class="pvb-acts">
             <button class="pvb-btn" id="pvb-copy">Copy prompt</button>
-            <button class="pvb-btn ghost" id="pvb-copy2" title="Re-copy the prompt. Copying a reference image replaces your clipboard, so click this right before you paste into ChatGPT.">Copy prompt again</button>
             <button class="pvb-btn ghost" id="pvb-reset" title="Clear your entries for this prompt">Reset</button>
           </div>
           <div class="pvb-saved" id="pvb-saved">Draft saves automatically.</div>
@@ -484,11 +487,11 @@
 
     // ---- DOM refs ----
     var pillsEl=document.getElementById('pvb-pills'),
-        titleEl=document.getElementById('pvb-title'), subEl=document.getElementById('pvb-sub'), modeEl=document.getElementById('pvb-mode'),
+        titleEl=document.getElementById('pvb-title'), subEl=document.getElementById('pvb-sub'),
         fieldsEl=document.getElementById('pvb-fields'), refsEl=document.getElementById('pvb-refs'),
         preEl=document.getElementById('pvb-preview'), savedEl=document.getElementById('pvb-saved'),
         checklistEl=document.getElementById('pvb-checklist'), setupsEl=document.getElementById('pvb-setups'),
-        copyB=document.getElementById('pvb-copy'), copy2B=document.getElementById('pvb-copy2'), resetB=document.getElementById('pvb-reset'),
+        copyB=document.getElementById('pvb-copy'), resetB=document.getElementById('pvb-reset'),
         copyTopB=document.getElementById('pvb-copytop'), guideEl=document.getElementById('pvb-guide'), guideBodyEl=document.getElementById('pvb-guide-body');
 
     // ---- click-to-enlarge lightbox ----
@@ -591,6 +594,7 @@
     function render(){
       preEl.textContent=compose();
       saveState(KEY,state);
+      updateModeUI();
       // checklist
       checklistEl.innerHTML='';
       var refs=selectedRefs();
@@ -725,7 +729,7 @@
       Array.prototype.forEach.call(pillsEl.children,function(p,i){ p.classList.toggle('active',i===idx); p.setAttribute('aria-selected',i===idx?'true':'false'); });
       OUTFIT=!!(cfg.views&&cfg.views.length); TWOPASS=/two-pass/i.test(cfg.file||''); BACKDROP=TWOPASS||OUTFIT;
       KEY=OUTFIT?'outfit-change':cfg.file;
-      titleEl.textContent=cfg.title; subEl.textContent=cfg.sub?('('+cfg.sub+')'):''; modeEl.textContent=cfg.mode||'';
+      titleEl.textContent=cfg.title; subEl.textContent=cfg.sub?('('+cfg.sub+')'):'';
       if(guideEl){ if(cfg.guide){ guideBodyEl.innerHTML=cfg.guide; guideEl.hidden=false; } else { guideBodyEl.innerHTML=''; guideEl.hidden=true; } }
       var def=freshState();
       if(overrideState){ state=Object.assign(freshState(), overrideState); state.chars=(state.chars||[]).concat(['','','','']).slice(0,4); state.items=(state.items||[]).concat(['','','','']).slice(0,4); saveState(KEY,state); }
@@ -740,9 +744,10 @@
 
     // ---- wire header actions ----
     copyB.addEventListener('click',function(){ copyText(compose(), copyB); });
-    copy2B.addEventListener('click',function(){ copyText(compose(), copy2B); });
     if(copyTopB) copyTopB.addEventListener('click',function(){ copyText(compose(), copyTopB); });
-    resetB.addEventListener('click',function(){ if(!confirm('Clear your entries for this prompt? This cannot be undone.'))return; try{ localStorage.removeItem(NS+'state:'+KEY); }catch(e){} selectPrompt(activeIdx); });
+    function doReset(){ if(!confirm('Clear your entries for this prompt? This cannot be undone.'))return; try{ localStorage.removeItem(NS+'state:'+KEY); }catch(e){} selectPrompt(activeIdx); }
+    resetB.addEventListener('click',doReset);
+    var resetTopB=document.getElementById('pvb-resettop'); if(resetTopB) resetTopB.addEventListener('click',doReset);
 
     // ---- build pills ----
     PROMPTS.forEach(function(p,i){ var b=el('button','pvb-pill'); b.type='button'; b.setAttribute('role','tab');
@@ -752,10 +757,15 @@
     // ---- prompt mode toggle (PV Project vs Full template) ----
     var modeBtns=[].slice.call(document.querySelectorAll('.pvb-modebtn')), modeHint=document.getElementById('pvb-modehint');
     function updateModeUI(){
+      var isProtocol = cfg && cfg.ptype==='protocol';
+      var modebar=document.querySelector('.pvb-modebar');
+      if(modebar) modebar.style.display = isProtocol ? 'none' : '';
       modeBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-mode')===MODE); });
-      if(modeHint) modeHint.textContent = (MODE==='project')
-        ? 'PV Project sends your scene overrides and reference list and lets your ChatGPT project supply the saved canon, so the prompt is short and free of repetition. Protocols (Fresh, Two-Pass, Blank) are still sent in full.'
-        : 'Full template sends the entire prompt with all of the canon baked in, for use outside your ChatGPT project.';
+      if(modeHint){
+        if(isProtocol) modeHint.textContent = 'This one is a full instruction on its own, so it is sent the same way every time. The PV Project and Full Template modes only change the Classroom, Campus, Lobby, and Outfit prompts.';
+        else if(MODE==='project') modeHint.textContent = 'PV Project sends a short prompt: only your scene changes and the reference list. Your ChatGPT project fills in the saved canon. Use this inside that project.';
+        else modeHint.textContent = 'Full Template sends the entire prompt with all of the canon baked in. It is longer, but it works outside your ChatGPT project.';
+      }
     }
     modeBtns.forEach(function(b){ b.addEventListener('click', function(){ MODE=b.getAttribute('data-mode'); try{localStorage.setItem(NS+'mode',MODE);}catch(e){} updateModeUI(); render(); }); });
     updateModeUI();
