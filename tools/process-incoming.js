@@ -32,6 +32,12 @@ const { execFileSync } = require('child_process');
 const REPO = path.resolve(__dirname, '..');
 const IMG_ROOT = 'assets/images/characters/';
 const BUILDERS = ['build-resources.html', 'build-resources-beta.html'];
+// Synced CS Incoming Drive folder (auto mode scans this for route__ tagged uploads).
+const DRIVE = process.env.CS_INCOMING_DIR ||
+  '/Users/riva/Library/CloudStorage/GoogleDrive-creativesilva1@gmail.com/My Drive/creativesilva_incoming';
+const PROCESSED = path.join(DRIVE, '_processed'); // originals move here after a successful place
+// git paths the processor is allowed to stage (never `-A`, so gitignored PII in _incoming can never ride along)
+const GIT_PATHS = ['assets/images/characters', 'logos', 'assets/Icons', 'build-resources.html', 'build-resources-beta.html'];
 
 // destination -> where the file lands + which array it wires into + file-path prefix used in the array
 const DESTS = {
@@ -123,16 +129,63 @@ function processOne(fileAbs, dest, name, desc){
   return { outName, destDir: D.dir, label, filePath, array: D.array };
 }
 
+// parse a route-tagged upload name: route__<dest>__<name>__<desc>__<stamp>__<original>.<ext>
+function parseRoute(base){
+  const parts = base.split('__');
+  if (parts[0] !== 'route' || parts.length < 4) return null;
+  return { dest: parts[1], name: (parts[2]||'').replace(/-/g,' ').trim(), desc: (parts[3]||'').replace(/-/g,' ').trim() };
+}
+
+function gitPublish(summary){
+  try {
+    execFileSync('git', ['add', ...GIT_PATHS], { cwd: REPO });
+    const staged = execFileSync('git', ['diff', '--cached', '--name-only'], { cwd: REPO }).toString().trim();
+    if (!staged){ console.log('  (nothing staged to publish)'); return; }
+    execFileSync('git', ['commit', '-m', summary + '\n\nCo-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>'], { cwd: REPO });
+    execFileSync('git', ['push', 'origin', 'main'], { cwd: REPO });
+    console.log('  PUSHED: ' + summary);
+  } catch (e){ console.error('  git publish failed: ' + (e.message||e)); }
+}
+
+function processAuto(push){
+  if (!fs.existsSync(DRIVE)){ console.error('Drive folder not found: ' + DRIVE); process.exit(1); }
+  fs.mkdirSync(PROCESSED, { recursive: true });
+  const files = fs.readdirSync(DRIVE).filter(f => f.startsWith('route__'));
+  if (!files.length){ console.log('auto: no route__ tagged files to process.'); return; }
+  const done = [];
+  for (const f of files){
+    const abs = path.join(DRIVE, f);
+    if (!fs.statSync(abs).isFile()) continue;
+    const r = parseRoute(f);
+    if (!r){ console.log('SKIP (bad route tag): ' + f); continue; }
+    let res = null;
+    try { res = processOne(abs, r.dest, r.name, r.desc); }
+    catch (e){ console.error('ERROR ' + f + ': ' + (e.message||e)); continue; }
+    if (res){ // placed: move the original out of the intake folder so it is not reprocessed
+      try { fs.renameSync(abs, path.join(PROCESSED, f)); } catch (e){ /* leave it; still placed */ }
+      done.push(res);
+    }
+  }
+  if (done.length && push){
+    const labels = done.map(d => d.label).join(', ');
+    gitPublish('Intake: add ' + done.length + ' reference image' + (done.length>1?'s':'') + ' (' + labels + ')');
+  } else if (done.length){
+    console.log('auto: placed ' + done.length + ' file(s); run with --push to publish, or `git` them yourself.');
+  }
+}
+
 function main(){
   const a = args();
+  if (a.auto){ processAuto(!!a.push); return; }
   if (a.file){
     const fileAbs = path.resolve(a.file);
     if (!fs.existsSync(fileAbs)){ console.error('file not found: '+fileAbs); process.exit(1); }
     if (!a.dest){ console.error('need --dest'); process.exit(1); }
-    processOne(fileAbs, a.dest, a.name, a.desc);
+    const res = processOne(fileAbs, a.dest, a.name, a.desc);
+    if (res && a.push) gitPublish('Intake: add ' + res.label);
     return;
   }
-  console.log('Manual usage: --file <path> --dest character --name renee --desc "short hair: front"');
-  console.log('Auto mode (--auto) is wired for the launchd watcher and reads route__ tagged files.');
+  console.log('Manual: --file <path> --dest character --name renee --desc "short hair: front" [--push]');
+  console.log('Auto:   --auto [--push]   (scans ' + DRIVE + ' for route__ tagged files)');
 }
 main();
