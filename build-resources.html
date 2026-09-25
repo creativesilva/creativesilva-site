@@ -1205,7 +1205,8 @@
       lens:     ['24mm wide','35mm','50mm','85mm portrait','70-200mm telephoto'],
       aperture: ['f/1.8 shallow','f/5.6 normal','f/11 deep'],
       aspect:   ['1:1 square','4:3 landscape','3:4 portrait','16:9 landscape','9:16 portrait','21:9 landscape'],
-      exteriorLocation: ['main front entrance plaza','front drop-off zone','entry courtyard','side exterior walkway','outdoor gathering space','landscaped courtyard','exterior terrace or balcony view','building corner perspective','outdoor circulation corridor','plaza behind the sports complex','sports complex grandstand plaza']
+      exteriorLocation: ['main front entrance plaza','front drop-off zone','entry courtyard','side exterior walkway','outdoor gathering space','landscaped courtyard','exterior terrace or balcony view','building corner perspective','outdoor circulation corridor','plaza behind the sports complex','sports complex grandstand plaza'],
+      subjectFacing: ['straight on','three-quarter left','three-quarter right','profile left','profile right','from behind']
     };
     var CTX_OPTS = {
       classroom: {
@@ -1236,6 +1237,7 @@
       var c = CTX_OPTS[ctx] || CTX_OPTS.classroom;
       return [
         { re: /exterior location/i,            opts: OPT.exteriorLocation },
+        { re: /subject facing/i,               opts: OPT.subjectFacing },
         { re: /subject location within room/i, opts: c.subjectLoc },
         { re: /position within room/i,         opts: c.cameraPos },
         { re: /height/i,                       opts: c.height },
