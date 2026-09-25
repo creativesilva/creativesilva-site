@@ -3,17 +3,30 @@
 # Scans every LIVE module's pages for the AI-generated HEADER (the hero on each overview) and the
 # FLOAT-RIGHT content photos (images hoisted into the flex:1 1 44% column), labels each with its
 # module + page/step, and writes them as character-sheet-style cards (Download / Copy / lightbox)
-# between the LIVE_IMAGE_CATALOG markers in curriculum.html, grouped by course, in module order.
-# Module order + membership come from curriculum.html's own MODULES array, so this AUTO-UPDATES:
-# add a module there + build its pages, then re-run this. Excludes tutorial screen captures, example
-# photos, slide panels, and resource thumbnails (they do not use the float column / overview hero).
+# between the LIVE_IMAGE_CATALOG markers, grouped by course, in module order. A leading
+# "Course Home & Overview" group carries the course-level hero art (home + overview heroes).
+# Module order + membership come from curriculum.html's MODULES array (SRC), so this AUTO-UPDATES:
+# add a module there + build its pages, then re-run this. The rendered block is written into
+# build-resources.html (TARGET), where the catalog now lives. Excludes tutorial screen captures,
+# example photos, slide panels, and resource thumbnails (they do not use the float column / hero).
 import os, re, html as _html
 
 ROOT=os.path.join(os.path.dirname(__file__),"..")
-CAT=os.path.join(ROOT,"curriculum.html")
+SRC=os.path.join(ROOT,"curriculum.html")            # source of the MODULES array (order + membership)
+TARGET=os.path.join(ROOT,"build-resources.html")    # file that holds the catalog block + markers
 SHARED=os.path.join(ROOT,"curriculum/shared")
 COURSE_NAME={"da1a":"Digital Arts 1A","photo1a":"Photography 1A","photo2a":"Photography 2A"}
 COURSE_ORDER=["da1a","photo1a","photo2a"]
+
+# Course-level hero art (not on module pages, so scanned separately). (course, page label, path, alt).
+COURSE_HEROES=[
+  ("da1a","Course Home","/assets/images/digarts1/digarts1a-home-hero-v2.png","Digital Arts 1A course home hero"),
+  ("da1a","Course Overview","/assets/images/digarts1/course-overview/digarts1a-overview-hero-v1.jpg","Digital Arts 1A course overview hero"),
+  ("photo1a","Course Home","/assets/images/photo1/photo1a-home-hero-v2.png","Photography 1A course home hero"),
+  ("photo1a","Course Overview","/assets/images/photo1/course-overview/photo1a-overview-hero-v1.png","Photography 1A course overview hero"),
+  ("photo2a","Course Home","/assets/images/photo2/photo2a-home-hero-v2.png","Photography 2A course home hero"),
+  ("photo2a","Course Overview","/assets/images/photo2/course-overview/photo2a-overview-hero-v1.png","Photography 2A course overview hero"),
+]
 
 # Extra images kept in the library that are NOT used on any live page (shown for reference only).
 # Each: (path, module_title, page, role, alt).
@@ -29,7 +42,7 @@ HERO_RE=re.compile(TEAL+r'[^>]*"><img src="https://www\.creativesilva\.com(/asse
 FLOAT_RE=re.compile(r'class="silva-cfloat"[^>]*><div style="[^"]*"><img src="https://www\.creativesilva\.com(/assets/images/[^"]+)"(?:[^>]*alt="([^"]*)")?')
 
 def modules_from_catalog():
-    src=open(CAT,encoding="utf-8").read()
+    src=open(SRC,encoding="utf-8").read()
     block=src[src.index("const MODULES = ["):src.index("const COURSES = [")]
     mods=[]
     for m in re.finditer(r'\{[^{}]*\}', block):
@@ -104,15 +117,21 @@ def render(bycourse):
           '<div class="cat-body"><div class="logo-grid">'+"".join(cards)+'</div></div></details>')
     return "\n                      ".join(out)
 
+def render_course_heroes():
+    cards=[card(path,COURSE_NAME[c],page,"Hero",alt,path) for c,page,path,alt in COURSE_HEROES]
+    return ('<details class="cat-acc"><summary class="cat-head">'
+      f'<span class="cat-name">Course Home &amp; Overview ({len(cards)})</span><span class="cat-chevron"></span></summary>'
+      '<div class="cat-body"><div class="logo-grid">'+"".join(cards)+'</div></div></details>')
+
 def main():
     bycourse=collect()
-    inner=render(bycourse)
-    src=open(CAT,encoding="utf-8").read()
+    inner=render_course_heroes()+"\n                      "+render(bycourse)
+    src=open(TARGET,encoding="utf-8").read()
     new=re.sub(r'(<!-- LIVE_IMAGE_CATALOG_START -->).*?(<!-- LIVE_IMAGE_CATALOG_END -->)',
                lambda m: m.group(1)+"\n                      "+inner+"\n                      "+m.group(2), src, flags=re.S)
-    assert new!=src, "markers not found in curriculum.html"
-    open(CAT,"w",encoding="utf-8").write(new)
-    total=sum(len(v) for v in bycourse.values())
-    print(f"Live Image Catalog: {total} images "+", ".join(f"{COURSE_NAME[c]}={len(bycourse[c])}" for c in COURSE_ORDER))
+    assert new!=src, "markers not found in build-resources.html"
+    open(TARGET,"w",encoding="utf-8").write(new)
+    total=sum(len(v) for v in bycourse.values())+len(COURSE_HEROES)
+    print(f"Live Image Catalog: {total} images (Course Heroes={len(COURSE_HEROES)}, "+", ".join(f"{COURSE_NAME[c]}={len(bycourse[c])}" for c in COURSE_ORDER)+")")
 
 main()
