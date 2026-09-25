@@ -491,25 +491,32 @@
       if(extra){ if(out.indexOf('REFERENCE USE')>=0) out=out.replace('REFERENCE USE',extra+'REFERENCE USE'); else out=out+'\n\n'+extra; }
       return out;
     }
+    function labelFor(file, arr){ var o=arr.filter(function(x){return x.file===file;})[0]; return o?o.label:baseName(file); }
+    // PV Project mode, aligned to the project's Prompt Compiler: short, sectioned, role-labeled.
+    // People come from the ATTACHED SHEET (the authority); the project supplies only room + brand canon.
     function composeEnvProject(){
-      var lines=[];
-      lines.push('# '+cfg.title.toUpperCase()+': PV PROJECT MODE');
-      lines.push('Apply the '+(cfg.canon||'saved scene canon')+' already in this project (reference hierarchy, architecture, geometry, materials, lighting, character-fidelity lock, and realism / quality rules). Do not restate the canon; apply the scene overrides below on top of it.');
-      lines.push('');
-      lines.push('### SCENE OVERRIDES');
-      var any=false, order=(fieldNames&&fieldNames.length)?fieldNames:Object.keys(state.fields);
-      order.forEach(function(n){ var v=state.fields[n]; if(v){ any=true; lines.push('- **['+n+'] = '+v+'**'); } });
-      if(!any) lines.push('- (none; use the canon defaults)');
-      var out=lines.join('\n');
-      var chars=state.chars.filter(Boolean).map(baseName), items=state.items.filter(Boolean).map(baseName);
-      if(chars.length||items.length||state.scene){
-        var rb='ATTACHED REFERENCE FILES (match these exactly, by file name):';
-        if(chars.length) rb+='\n- Characters: '+chars.join(', ');
-        if(items.length) rb+='\n- Items: '+items.join(', ');
-        if(state.scene) rb+='\n- Scene reference: '+baseName(state.scene);
-        out+='\n\n'+rb;
-      }
-      return out.trim();
+      var canon=cfg.canon||'saved scene canon';
+      var goal=(state.fields['SUBJECT / ACTION']||'').trim();
+      var sceneName=cfg.title.replace(/\s*Environment$/i,'');
+      var L=[];
+      L.push('MODE: fresh generation from scratch (a new photo, not an edit of a past image).');
+      L.push('GOAL: '+(goal||('a photo inside the PV '+sceneName+'.')));
+      var refs=[];
+      state.chars.filter(Boolean).forEach(function(f){ var nm=labelFor(f,CHARACTERS).split('(')[0].trim(); refs.push('- '+nm+' = character sheet for this person. Use it for identity AND body (face, hair, skin, proportions, silhouette). Follow the attached sheet exactly; it is the authority.'); });
+      state.items.filter(Boolean).forEach(function(f){ refs.push('- '+labelFor(f,ITEMS)+' = this object only (its design and materials), not the people or the room.'); });
+      if(state.scene){ refs.push('- '+labelFor(state.scene,SCENES)+' = environment only (layout, materials, mood), not the people.'); }
+      if(refs.length){ L.push(''); L.push('LIVE REFERENCES (use each only for its job):'); refs.forEach(function(r){L.push(r);}); }
+      L.push('');
+      L.push('CANON: use the '+canon+' and the PV brand rules already in this project. Do not restate them.');
+      var ov=[];
+      (fieldNames&&fieldNames.length?fieldNames:Object.keys(state.fields)).forEach(function(n){ if(n==='SUBJECT / ACTION')return; var v=state.fields[n]; if(v)ov.push('- '+n+': '+v); });
+      if(ov.length){ L.push(''); L.push('OVERRIDES (change only these; leave everything else to the canon):'); ov.forEach(function(o){L.push(o);}); }
+      L.push('');
+      L.push('TEXT: no visible words or signs unless asked.');
+      var files=[].concat(state.chars.filter(Boolean),state.items.filter(Boolean)); if(state.scene)files.push(state.scene);
+      files=files.map(baseName);
+      if(files.length){ L.push(''); L.push('FILES TO ATTACH: '+files.join(', ')); }
+      return L.join('\n').replace(/\n{3,}/g,'\n\n').trim();
     }
     function outfitName(){ var cf=(state.chars||[]).filter(Boolean)[0]; if(!cf)return 'the character'; var co=CHARACTERS.filter(function(x){return x.file===cf;})[0]; return ((co&&co.label)?co.label:baseName(cf)).split('(')[0].trim()||'the character'; }
     function outfitRefBlock(){
@@ -531,7 +538,7 @@
     function composeOutfitProject(){
       var out=(baseText||'').trim().split('[CHARACTER NAME]').join(outfitName());
       var parts=[out], bg=OUTFIT_BG[state.backdrop]; if(bg)parts.push(bg);
-      parts.push('PROPORTION LOCK: apply the project realism and proportion-lock rules. Lock body proportions, height, and silhouette to the character sheet (Image A). The outfit adapts to that body and is never reshaped. Never borrow proportions from the outfit or product images.');
+      parts.push('BODY: keep body proportions, height, and silhouette exactly as the attached character sheet (it is the authority). The outfit adapts to that body and is never reshaped. Never borrow body shape from the outfit or product images.');
       var cu=(state.custom||'').trim(); if(cu)parts.push('CUSTOM ADJUSTMENTS (apply exactly, without changing body proportions): '+cu);
       var rb=outfitRefBlock(); if(rb)parts.push(rb);
       return parts.join('\n\n').replace(/\n{3,}/g,'\n\n').trim();
