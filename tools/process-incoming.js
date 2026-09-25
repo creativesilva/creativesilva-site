@@ -88,24 +88,55 @@ function optimize(srcAbs, destAbs, keepPng){
 }
 
 // insert a reference entry as the FIRST element of the named array in each builder (no trailing-comma hazard)
+// GROUPING RULE: keep every entry for one character together. A new image is inserted right after
+// that character's last existing entry (grouped), never at the top. New characters append at the end.
+function groupKey(label){ return String(label||'').split('(')[0].trim().toLowerCase(); }
 function wireArray(arrayName, label, filePath){
   let touched = [];
+  const key = groupKey(label);
   for (const f of BUILDERS){
     const abs = path.join(REPO, f);
     let src = fs.readFileSync(abs, 'utf8');
     const decl = src.match(new RegExp('var\\s+' + arrayName + '\\s*=\\s*\\['));
     if (!decl) { console.warn(`  (no ${arrayName} in ${f})`); continue; }
     if (src.indexOf(`file: '${filePath}'`) >= 0 || src.indexOf(`file:'${filePath}'`) >= 0){ console.warn(`  (${filePath} already in ${f})`); continue; }
-    const at = decl.index + decl[0].length;
-    // match each file's brace style: spaced in build-resources.html, compact in the beta
+    const start = decl.index + decl[0].length, end = src.indexOf('];', start);
+    if (end < 0) continue;
     const spaced = /build-resources\.html$/.test(f) && !/beta/.test(f);
-    const entry = spaced ? `\n      { label: '${label}', file: '${filePath}' },`
-                         : `\n      {label:'${label}',file:'${filePath}'},`;
-    src = src.slice(0, at) + entry + src.slice(at);
+    const obj = spaced ? `{ label: '${label}', file: '${filePath}' }` : `{label:'${label}',file:'${filePath}'}`;
+    const seg = src.slice(start, end);
+    const objRe = /\{[^}]*label:\s*'([^']*)'[^}]*\}/g; let mm, groupEnd = -1, lastEnd = -1;
+    while ((mm = objRe.exec(seg)) !== null){ const e = start + mm.index + mm[0].length; lastEnd = e; if (groupKey(mm[1]) === key) groupEnd = e; }
+    const at = (groupEnd >= 0) ? groupEnd : lastEnd;
+    if (at < 0){ src = src.slice(0, start) + '\n      ' + obj + '\n    ' + src.slice(start); }
+    else { src = src.slice(0, at) + ',\n      ' + obj + src.slice(at); }
     fs.writeFileSync(abs, src);
     touched.push(f);
   }
   return touched;
+}
+
+// One-time (or repeatable) regroup: reorder an array so each character's entries are contiguous,
+// preserving first-seen group order and intra-group order. Fixes any past intermixing.
+function regroup(arrayName){
+  for (const f of BUILDERS){
+    const abs = path.join(REPO, f);
+    let src = fs.readFileSync(abs, 'utf8');
+    const decl = src.match(new RegExp('var\\s+' + arrayName + '\\s*=\\s*\\['));
+    if (!decl){ continue; }
+    const start = decl.index + decl[0].length, end = src.indexOf('];', start);
+    if (end < 0) continue;
+    const seg = src.slice(start, end);
+    const objRe = /\{[^}]*\}/g; const objs = []; let mm;
+    while ((mm = objRe.exec(seg)) !== null) objs.push(mm[0].trim());
+    const order = [], groups = {};
+    objs.forEach(function(o){ const lm = o.match(/label:\s*'([^']*)'/); const k = lm ? groupKey(lm[1]) : ''; if (!groups[k]){ groups[k] = []; order.push(k); } groups[k].push(o); });
+    const sorted = []; order.forEach(function(k){ groups[k].forEach(function(o){ sorted.push(o); }); });
+    const joined = sorted.map(function(o){ return '\n      ' + o; }).join(',');
+    src = src.slice(0, start) + joined + '\n    ' + src.slice(end);
+    fs.writeFileSync(abs, src);
+    console.log('regrouped ' + arrayName + ' in ' + f + ' (' + sorted.length + ' entries, ' + order.length + ' groups)');
+  }
 }
 
 function processOne(fileAbs, dest, name, desc){
@@ -181,6 +212,7 @@ function processAuto(push){
 
 function main(){
   const a = args();
+  if (a.regroup){ regroup(typeof a.regroup === 'string' ? a.regroup : 'CHARACTERS'); return; }
   if (a.auto){ processAuto(!!a.push); return; }
   if (a.file){
     const fileAbs = path.resolve(a.file);
