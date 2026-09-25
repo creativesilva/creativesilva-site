@@ -11,6 +11,7 @@ Fill these first. These override everything else.
 - **[CAMERA DIRECTION / YAW] =**
 - **[CAMERA PITCH / TILT] =**
 - **[FRAMING] =**
+- **[SUBJECT FACING] =**
 - **[LENS / FOCAL LENGTH] =**
 - **[APERTURE / DEPTH OF FIELD] =**
 - **[ASPECT RATIO] =**

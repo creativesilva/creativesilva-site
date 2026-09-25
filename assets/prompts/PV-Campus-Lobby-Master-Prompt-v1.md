@@ -12,6 +12,7 @@ Fill these first. These instructions override the default scene while preserving
 - **[CAMERA DIRECTION / YAW] =**
 - **[CAMERA PITCH / TILT] =**
 - **[FRAMING] =**
+- **[SUBJECT FACING] =**
 - **[LENS / FOCAL LENGTH] =**
 - **[APERTURE / DEPTH OF FIELD] =**
 - **[ASPECT RATIO] =**

@@ -219,6 +219,8 @@
   .pvb-check-note{font-size:.76rem; color:var(--pvb-muted); line-height:1.55; margin:0 0 12px;
     background:rgba(245,179,1,.10); border-left:3px solid var(--pvb-gold); padding:8px 11px;}
   .pvb-check-empty{font-size:.82rem; color:var(--pvb-faint); padding:8px 0;}
+  .pvb-stepnum{flex:0 0 22px; width:22px; height:22px; display:flex; align-items:center; justify-content:center; background:var(--pvb-teal); color:#04110f; font-weight:700; font-size:.74rem;}
+  .pvb-otherbox{margin-top:6px; width:100%; box-sizing:border-box; background:rgba(0,0,0,.28); border:1px solid var(--pvb-line); color:#eafeff; font-family:var(--pvb-font); font-size:.9rem; padding:9px 11px;}
   .pvb-checkrow{display:flex; gap:11px; align-items:center; padding:9px; background:rgba(0,184,184,.05); border-left:2px solid var(--pvb-gold); margin-bottom:8px;}
   .pvb-checkrow .th{flex:0 0 56px; width:56px; height:56px; overflow:hidden; background:#041413;}
   .pvb-checkrow .th img{width:100%; height:100%; object-fit:contain; display:block;}
@@ -308,8 +310,8 @@
           <div id="pvb-fields"></div>
 
           <div class="pvb-check">
-            <div class="pvb-check-h"><span class="t">Attach in ChatGPT &middot; checklist</span></div>
-            <p class="pvb-check-note">Attach these files in the generator. <b>Copy image</b> copies the picture but not its file name, so match each one by the role and order shown here. Attaching the real files keeps their names.</p>
+            <div class="pvb-check-h"><span class="t">Copy in order &middot; 1, 2, 3</span></div>
+            <p class="pvb-check-note">Go down this list in order: copy each row, paste it into ChatGPT, then come back for the next. <b>Copy image</b> copies the picture but not its file name, so match each one by the role shown. Attaching the real files instead keeps their names.</p>
             <div id="pvb-checklist"></div>
           </div>
         </div>
@@ -394,7 +396,8 @@
       lens:['24mm wide','35mm','50mm','85mm portrait','70-200mm telephoto'],
       aperture:['f/1.8 shallow','f/5.6 normal','f/11 deep'],
       aspect:['1:1 square','4:3 landscape','3:4 portrait','16:9 landscape','9:16 portrait','21:9 landscape'],
-      exteriorLocation:['main front entrance plaza','front drop-off zone','entry courtyard','side exterior walkway','outdoor gathering space','landscaped courtyard','exterior terrace or balcony view','building corner perspective','outdoor circulation corridor','plaza behind the sports complex','sports complex grandstand plaza']
+      exteriorLocation:['main front entrance plaza','front drop-off zone','entry courtyard','side exterior walkway','outdoor gathering space','landscaped courtyard','exterior terrace or balcony view','building corner perspective','outdoor circulation corridor','plaza behind the sports complex','sports complex grandstand plaza'],
+      subjectFacing:['straight on','three-quarter left','three-quarter right','profile left','profile right','from behind']
     };
     var CTX_OPTS={
       classroom:{height:['ground level','low','eye level','standing eye level','slightly elevated','high','overhead'],
@@ -412,6 +415,7 @@
     function ctxFor(f){ f=f||''; if(/Campus-Lobby|Lobby/i.test(f))return 'lobby'; if(/Campus-Exterior|Exterior/i.test(f))return 'exterior'; return 'classroom'; }
     function fieldOptsFor(ctx){ var c=CTX_OPTS[ctx]||CTX_OPTS.classroom; return [
       {re:/exterior location/i,opts:OPT.exteriorLocation},
+      {re:/subject facing/i,opts:OPT.subjectFacing},
       {re:/subject location within room/i,opts:c.subjectLoc},
       {re:/position within room/i,opts:c.cameraPos},
       {re:/height/i,opts:c.height},
@@ -437,11 +441,11 @@
 
     // ---- prompt catalog ----
     var PROMPTS=[
-      {title:'Classroom Environment',sub:'PV lab scene, any angle',mode:'Environment',ptype:'environment',canon:'PV Classroom Environment canon',file:'/assets/prompts/Classroom-Environment-Master-Prompt-v4.md'},
-      {title:'Campus Exterior',sub:'PV Academy, any exterior',mode:'Environment',ptype:'environment',canon:'PV Campus Exterior canon',file:'/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md'},
+      {title:'Classroom Environment',sub:'PV lab scene, any angle',mode:'Environment',ptype:'environment',canon:'PV Classroom Environment canon',file:'/assets/prompts/Classroom-Environment-Master-Prompt-v4.md',scene:'campus/pv-classroom-inspiration-v1.jpg'},
+      {title:'Campus Exterior',sub:'PV Academy, any exterior',mode:'Environment',ptype:'environment',canon:'PV Campus Exterior canon',file:'/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md',scene:'campus/pv-campus-front-v1.jpg',sceneMap:{'sports complex grandstand plaza':'campus/pv-sports-complex-back-v2.jpg','plaza behind the sports complex':'campus/pv-sports-complex-back-v2.jpg'}},
       {title:'Lobby Environment',sub:'PV Academy lobby',mode:'Environment',ptype:'environment',canon:'PV Academy Lobby canon',file:'/assets/prompts/PV-Campus-Lobby-Master-Prompt-v1.md'},
       {title:'Fresh Full-Image Rebuild',sub:'force a full rebuild',mode:'Fresh rebuild',ptype:'protocol',file:'/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt'},
-      {title:'X2 Exact Rebuild',sub:'1 image into 2 aligned upscales',mode:'Fresh rebuild',ptype:'protocol',file:'/assets/prompts/X2-Exact-Rebuild.md',guide:'<b>What it does:</b> turns one approved character image into two separate, same-scale files (an upper pass and a lower pass) that line up perfectly in Photoshop.<br><b>Before you run it, upload:</b> 1) the approved full-body character image, and 2) the approved headshot if you have one. The prompt on the right is ready to paste as-is.'},
+      {title:'X2 Exact Rebuild',sub:'1 image into 2 aligned upscales',mode:'Fresh rebuild',ptype:'protocol',delta:true,file:'/assets/prompts/X2-Exact-Rebuild.md',guide:'<b>Upload two images:</b> Image 1 is the approved full-body master (the authority for the whole picture). Image 2 is a supporting reference such as the headshot or character sheet, used only for fine detail, never for pose or body shape.<br><b>What it does:</b> rebuilds Image 1 as two aligned crops (upper and lower) that line up in Photoshop at 100 percent. The prompt is ready to paste. For an exact copy, leave the change box blank. To change one thing, type it in the change box and it goes into the prompt.'},
       {title:'Character Outfit Change',sub:'re-dress a character sheet',mode:'Outfit rebuild',ptype:'outfit',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md',
         views:[{label:'Full front / neutral stance',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md'},
                {label:'Left 3/4 front / face to camera / smile',file:'/assets/prompts/Character-Outfit-Change-Left-3Q-Front-v1.md'},
@@ -469,6 +473,7 @@
     var SVG_IMG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16"></rect><circle cx="8.5" cy="9.5" r="1.8"></circle><path d="M4 18l5-4 3.5 2.5L17 12l3 3.5"></path></svg>';
     var SVG_LINK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"></path><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"></path></svg>';
     var SVG_DL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="M7 12l5 5 5-5"></path><path d="M5 21h14"></path></svg>';
+    var PROMPT_ICON_URL='https://www.creativesilva.com/assets/Icons/assignment/design-teal-v1.png';
     function rtool(svg, title, fn){ var b=el('button','pvb-rtool',svg); b.type='button'; b.title=title; b.setAttribute('aria-label',title); b.addEventListener('click',function(e){ e.stopPropagation(); fn(b); }); return b; }
     function flashTool(btn, cls){ btn.classList.remove('ok','err'); btn.classList.add(cls); setTimeout(function(){ btn.classList.remove(cls); }, 1300); }
     function copyUrl(url, btn){ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(function(){flashTool(btn,'ok');},function(){legacyCopy(url);flashTool(btn,'ok');}); } else { legacyCopy(url); flashTool(btn,'ok'); } }
@@ -505,6 +510,17 @@
     var MODE='project'; try{ var _m=localStorage.getItem(NS+'mode'); if(_m==='full'||_m==='project') MODE=_m; }catch(e){}
 
     function freshState(){ return {fields:{},chars:['','','',''],items:['','','',''],scene:'',backdrop:(TWOPASS?'transparent':(OUTFIT?'white':'')),view:(OUTFIT?cfg.views[0].file:''),custom:''}; }
+    // Auto-pick the scene reference image that matches the chosen location (no double work).
+    function autoScene(){
+      if(!cfg || cfg.ptype!=='environment') return '';
+      var ln=(fieldNames||[]).filter(function(n){ return /exterior location|^location$/i.test(n); })[0];
+      var val= ln ? (state.fields[ln]||'') : '';
+      return (cfg.sceneMap && cfg.sceneMap[val]) || cfg.scene || '';
+    }
+    function onFieldChange(name){
+      if(cfg && cfg.ptype==='environment' && /exterior location|^location$/i.test(name)){ state.scene=autoScene(); buildRefs(); }
+      render();
+    }
 
     // MODE 'full' = the whole template (byte-identical to the current builder). MODE 'project' = send
     // overrides + references and let the ChatGPT project supply the saved canon. Protocols (Fresh /
@@ -516,6 +532,7 @@
     }
     function composeEnvFull(){
       var out=baseText,name;
+      if(cfg.delta){ var dv=(state.fields['DELTA']||'').trim(); if(dv) out=out.replace('DELTA: NONE. Preserve the master exactly.','DELTA: '+dv+'.'); }
       for(name in state.fields){ var v=state.fields[name]; if(v) out=out.split('['+name+'] =').join('['+name+'] = '+v); }
       var chars=state.chars.filter(Boolean).map(baseName), items=state.items.filter(Boolean).map(baseName), extra='';
       if(BACKDROP && state.backdrop && BACKDROP_TEXT[state.backdrop]) extra+=BACKDROP_TEXT[state.backdrop]+'\n\n';
@@ -597,15 +614,26 @@
       updateModeUI();
       // checklist
       checklistEl.innerHTML='';
-      var refs=selectedRefs();
-      if(!refs.length){ checklistEl.appendChild(el('div','pvb-check-empty','No reference files chosen yet. Pick characters, items, or a location.')); }
-      else refs.forEach(function(r){
+      var refs=selectedRefs(), step=1;
+      // Step 1: the prompt text itself
+      (function(){
         var row=el('div','pvb-checkrow');
+        row.appendChild(el('div','pvb-stepnum',String(step++)));
+        var th=el('div','th'); var im=el('img'); im.src=PROMPT_ICON_URL; im.alt='Prompt'; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
+        var meta=el('div','meta'); meta.appendChild(el('div','role','Prompt')); meta.appendChild(el('div','fn','Your prompt (paste this first)')); row.appendChild(meta);
+        var cb=el('button','cimg','Copy prompt'); cb.type='button'; cb.addEventListener('click',function(){ copyText(compose(), cb); }); row.appendChild(cb);
+        checklistEl.appendChild(row);
+      })();
+      // Steps 2+: each reference image to attach
+      refs.forEach(function(r){
+        var row=el('div','pvb-checkrow');
+        row.appendChild(el('div','pvb-stepnum',String(step++)));
         var th=el('div','th'); var im=el('img'); im.src=IMG+r.file; im.alt=r.label; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
         var meta=el('div','meta'); meta.appendChild(el('div','role',esc(r.role))); meta.appendChild(el('div','fn',esc(baseName(r.file)))); row.appendChild(meta);
         var cb=el('button','cimg','Copy image'); cb.type='button'; cb.addEventListener('click',function(){ copyImage(IMG+r.file,cb); }); row.appendChild(cb);
         checklistEl.appendChild(row);
       });
+      if(!refs.length){ checklistEl.appendChild(el('div','pvb-check-empty','Add characters, items, or a location above and they appear here as steps 2, 3, and so on.')); }
       var when=new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
       savedEl.innerHTML='Draft saved <b>'+when+'</b>. It restores when you come back.';
     }
@@ -648,6 +676,7 @@
     function buildFields(){
       fieldsEl.innerHTML=''; fieldNames=[];
       if(OUTFIT){ buildOutfitFields(); return; }
+      if(cfg.delta){ buildDeltaFields(); return; }
       var ctx=ctxFor(cfg.file);
       fieldsEl.appendChild(el('div','pvb-gtitle','Scene overrides'));
       var re=/^\s*(?:[-*]\s+)?(?:\*\*)?\[([^\]]+)\]\s*=/gm,m,names=[];
@@ -664,11 +693,22 @@
         var opts=optsFor(name,ctx), w=el('div','pvb-field'+(opts?'':' full')); w.appendChild(el('label',null,esc(name)));
         var input;
         if(opts){ input=document.createElement('select'); var d=document.createElement('option'); d.value=''; d.textContent='-'; input.appendChild(d);
-          opts.forEach(function(o){ var op=document.createElement('option'); op.value=o; op.textContent=o; if(state.fields[name]===o)op.selected=true; input.appendChild(op); });
-          input.addEventListener('change',function(){ state.fields[name]=input.value; render(); });
+          var cur=state.fields[name]||'', inList=false;
+          opts.forEach(function(o){ var op=document.createElement('option'); op.value=o; op.textContent=o; if(cur===o){op.selected=true; inList=true;} input.appendChild(op); });
+          var oo=document.createElement('option'); oo.value='__other__'; oo.textContent='Other (type your own)'; input.appendChild(oo);
+          var custom=document.createElement('input'); custom.type='text'; custom.className='pvb-otherbox'; custom.placeholder='Type your own '+name.toLowerCase();
+          var otherOn=(cur && !inList); if(otherOn){ oo.selected=true; custom.value=cur; } custom.style.display=otherOn?'block':'none';
+          input.addEventListener('change',function(){
+            if(input.value==='__other__'){ custom.style.display='block'; state.fields[name]=custom.value||''; custom.focus(); }
+            else { custom.style.display='none'; state.fields[name]=input.value; }
+            onFieldChange(name);
+          });
+          custom.addEventListener('input',function(){ state.fields[name]=custom.value; render(); });
+          w.appendChild(input); w.appendChild(custom);
         } else { input=document.createElement('textarea'); input.rows=2; input.placeholder='type here'; input.value=state.fields[name]||'';
-          input.addEventListener('input',function(){ state.fields[name]=input.value; input.style.height='auto'; input.style.height=input.scrollHeight+'px'; render(); }); }
-        w.appendChild(input); return w;
+          input.addEventListener('input',function(){ state.fields[name]=input.value; input.style.height='auto'; input.style.height=input.scrollHeight+'px'; render(); });
+          w.appendChild(input); }
+        return w;
       }
       var textNames=names.filter(function(n){return !optsFor(n,ctx);}), dropNames=names.filter(function(n){return optsFor(n,ctx);});
       var trailRe=/special changes|furniture/i;
@@ -690,6 +730,16 @@
       cf.appendChild(ta); g.appendChild(cf);
       fieldsEl.appendChild(g);
       fieldsEl.appendChild(el('div','pvb-note','The character name is taken from the character sheet you choose below, so there is no name to type. Body proportions always come from the character sheet, never the outfit or product images.'));
+    }
+    function buildDeltaFields(){
+      if(state.fields['DELTA']===undefined) state.fields['DELTA']='';
+      fieldsEl.appendChild(el('div','pvb-gtitle','Optional change'));
+      var g=el('div','pvb-fields');
+      var f=el('div','pvb-field full'); f.appendChild(el('label',null,'Change to make (leave blank for an exact rebuild)'));
+      var ta=document.createElement('textarea'); ta.rows=2; ta.placeholder='e.g., extend the undershirt hem to cover the belt loops'; ta.value=state.fields['DELTA']||'';
+      ta.addEventListener('input',function(){ state.fields['DELTA']=ta.value; ta.style.height='auto'; ta.style.height=ta.scrollHeight+'px'; render(); });
+      f.appendChild(ta); g.appendChild(f); fieldsEl.appendChild(g);
+      fieldsEl.appendChild(el('div','pvb-note','Leave blank and the prompt does an exact rebuild. Type one change here and it replaces the DELTA line in the prompt.'));
     }
 
     function buildRefs(){
@@ -738,7 +788,7 @@
       try{ localStorage.setItem(NS+'last', String(idx)); }catch(e){}
       var path=OUTFIT?(state.view||cfg.views[0].file):cfg.file;
       preEl.textContent='Loading base prompt…';
-      fetchPrompt(path).then(function(t){ baseText=t; buildFields(); buildRefs(); render(); })
+      fetchPrompt(path).then(function(t){ baseText=t; buildFields(); if(cfg.ptype==='environment' && !state.scene) state.scene=autoScene(); buildRefs(); render(); })
         .catch(function(){ baseText='[Could not load the base prompt file.]'; buildFields(); buildRefs(); render(); });
     }
 
