@@ -150,10 +150,14 @@
   .pvb-refcard.sel{outline-color:var(--pvb-teal);}
   .pvb-refcard .thumb{position:relative; width:100%; aspect-ratio:1/1; background:#0b1212;}
   .pvb-refcard .thumb img{width:100%; height:100%; object-fit:contain; display:block;}
-  .pvb-refcard .zoom{position:absolute; top:0; left:0; width:28px; height:28px; display:flex; align-items:center; justify-content:center;
-    background:rgba(3,16,15,.8); color:var(--pvb-teal-lt); border:0; padding:0; line-height:0; cursor:pointer;}
-  .pvb-refcard .zoom svg{width:15px; height:15px;}
-  .pvb-refcard .zoom:hover{background:var(--pvb-teal); color:#04110f;}
+  /* per-card catalog toolbar: view / copy image / copy URL / download, always visible under the name */
+  .pvb-rtools{display:flex; gap:4px; padding:0 8px 8px;}
+  .pvb-rtool{flex:1 1 0; display:flex; align-items:center; justify-content:center; height:26px; padding:0; cursor:pointer;
+    background:rgba(0,184,184,.12); border:1px solid var(--pvb-line-soft); color:var(--pvb-teal-lt); transition:background .12s, color .12s;}
+  .pvb-rtool:hover{background:rgba(0,184,184,.30); color:#eafeff;}
+  .pvb-rtool svg{width:14px; height:14px;}
+  .pvb-rtool.ok{background:var(--pvb-teal); color:#04110f;}
+  .pvb-rtool.err{background:#8a2f2f; color:#fff;}
   .pvb-refcard.sel .thumb::after{content:'\2713'; position:absolute; top:6px; right:6px; width:22px; height:22px;
     display:flex; align-items:center; justify-content:center; background:var(--pvb-teal); color:#04110f;
     font-weight:700; font-size:.8rem; border-radius:50%;}
@@ -441,6 +445,20 @@
         return new Promise(function(res,rej){ var im=new Image(); im.crossOrigin='anonymous'; im.onload=function(){ var c=document.createElement('canvas'); c.width=im.naturalWidth; c.height=im.naturalHeight; c.getContext('2d').drawImage(im,0,0); c.toBlob(function(pb){ pb?res(pb):rej(0); },'image/png'); }; im.onerror=rej; im.src=url; }); });
       btn.textContent='…'; navigator.clipboard.write([new ClipboardItem({'image/png':png})]).then(function(){done('✓ Copied');},function(){done('Failed');}); }
 
+    // ---- per-card catalog tools (view, copy image, copy URL, download) ----
+    var SVG_VIEW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line></svg>';
+    var SVG_IMG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16"></rect><circle cx="8.5" cy="9.5" r="1.8"></circle><path d="M4 18l5-4 3.5 2.5L17 12l3 3.5"></path></svg>';
+    var SVG_LINK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"></path><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"></path></svg>';
+    var SVG_DL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="M7 12l5 5 5-5"></path><path d="M5 21h14"></path></svg>';
+    function rtool(svg, title, fn){ var b=el('button','pvb-rtool',svg); b.type='button'; b.title=title; b.setAttribute('aria-label',title); b.addEventListener('click',function(e){ e.stopPropagation(); fn(b); }); return b; }
+    function flashTool(btn, cls){ btn.classList.remove('ok','err'); btn.classList.add(cls); setTimeout(function(){ btn.classList.remove(cls); }, 1300); }
+    function copyUrl(url, btn){ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(function(){flashTool(btn,'ok');},function(){legacyCopy(url);flashTool(btn,'ok');}); } else { legacyCopy(url); flashTool(btn,'ok'); } }
+    function cardCopyImg(url, btn){ if(!(navigator.clipboard&&window.ClipboardItem)){ flashTool(btn,'err'); return; }
+      var png=fetch(url).then(function(r){return r.blob();}).then(function(b){ if(b.type==='image/png')return b;
+        return new Promise(function(res,rej){ var im=new Image(); im.crossOrigin='anonymous'; im.onload=function(){ var c=document.createElement('canvas'); c.width=im.naturalWidth; c.height=im.naturalHeight; c.getContext('2d').drawImage(im,0,0); c.toBlob(function(pb){ pb?res(pb):rej(0); },'image/png'); }; im.onerror=rej; im.src=url; }); });
+      navigator.clipboard.write([new ClipboardItem({'image/png':png})]).then(function(){flashTool(btn,'ok');},function(){flashTool(btn,'err');}); }
+    function downloadImg(url, file, btn){ fetch(url,{cache:'no-store'}).then(function(r){return r.blob();}).then(function(b){ var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=baseName(file); document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500); flashTool(btn,'ok'); }).catch(function(){ flashTool(btn,'err'); }); }
+
     // ---- storage (namespaced) ----
     var NS='pvBeta.v1.';
     function loadState(key,def){ try{ var s=JSON.parse(localStorage.getItem(NS+'state:'+key)||'null'); return (s&&typeof s==='object')?s:def; }catch(e){ return def; } }
@@ -584,10 +602,15 @@
       function updCnt(){ var n=nSel(); cnt.textContent=n?(single?'1 selected':(n+' of '+maxN)):'none'; cnt.classList.toggle('has',n>0); }
       function toggle(f){ if(single){ state.scene=(state.scene===f)?'':f; } else { var i=arr.indexOf(f); if(i>=0){arr[i]='';} else { var s=arr.indexOf(''); if(s<0)return; arr[s]=f; } } cards(); updCnt(); render(); }
       function cards(){ grid.innerHTML=''; options.forEach(function(o){ var c=el('div','pvb-refcard'+(isSel(o.file)?' sel':''));
-        var t=el('div','thumb'); var im=el('img'); im.src=IMG+o.file; im.alt=o.label; im.loading='lazy'; t.appendChild(im);
-        var z=el('button','zoom'); z.type='button'; z.title='View larger'; z.setAttribute('aria-label','View larger'); z.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line></svg>'; z.addEventListener('click',function(e){ e.stopPropagation(); openLightbox(o.file,o.label); }); t.appendChild(z);
-        c.appendChild(t);
-        c.appendChild(el('div','nm',esc(o.label))); c.addEventListener('click',function(){toggle(o.file);}); grid.appendChild(c); }); }
+        var t=el('div','thumb'); var im=el('img'); im.src=IMG+o.file; im.alt=o.label; im.loading='lazy'; t.appendChild(im); c.appendChild(t);
+        c.appendChild(el('div','nm',esc(o.label)));
+        var url=IMG+o.file, tools=el('div','pvb-rtools');
+        tools.appendChild(rtool(SVG_VIEW,'View larger',function(){ openLightbox(o.file,o.label); }));
+        tools.appendChild(rtool(SVG_IMG,'Copy image to clipboard',function(b){ cardCopyImg(url,b); }));
+        tools.appendChild(rtool(SVG_LINK,'Copy image URL',function(b){ copyUrl(url,b); }));
+        tools.appendChild(rtool(SVG_DL,'Download full size',function(b){ downloadImg(url,o.file,b); }));
+        c.appendChild(tools);
+        c.addEventListener('click',function(){toggle(o.file);}); grid.appendChild(c); }); }
       head.addEventListener('click',function(){ var open=!wrap.classList.contains('open'); wrap.classList.toggle('open',open); });
       cards(); updCnt(); if(nSel()>0) wrap.classList.add('open');
       wrap.appendChild(head); wrap.appendChild(body); return wrap;
