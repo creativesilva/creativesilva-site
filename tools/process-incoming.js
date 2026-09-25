@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
- * process-incoming.js  —  CS Incoming intake processor (the brain of the auto-intake pipeline).
+ * process-incoming.js: CS Incoming intake processor (the brain of the auto-intake pipeline).
  *
  * Takes an image that was tagged at upload (destination + character + label), optimizes it,
  * versioned-renames it, files it into the right assets folder, and wires it into the Prompt
