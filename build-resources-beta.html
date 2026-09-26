@@ -560,7 +560,7 @@
         var dv=(state.fields['DELTA']||'').trim();
         if(dv) out=out.replace('DELTA = NONE.','DELTA = '+dv.replace(/\.+$/,'')+'.');
         var hasSupport=(state.fields['SUPPORT']===undefined)?true:(state.fields['SUPPORT']==='yes');
-        if(!hasSupport) out=out.replace('**Image 2 = SUPPORT ONLY.**','**No support image.**');
+        if(!hasSupport) out=out.replace('Image 2 = SUPPORT ONLY.','No support image.');
         out=out.replace(/\n+If there is no support image[^\n]*/,'');
       }
       for(name in state.fields){ var v=state.fields[name]; if(v) out=out.split('['+name+'] =').join('['+name+'] = '+v); }

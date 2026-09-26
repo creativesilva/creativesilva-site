@@ -1,19 +1,40 @@
-Run X2 V4.3.
+X2 RUN V4.6.
 
-**Image 1 = MASTER.**
-**Image 2 = SUPPORT ONLY.**
-**DELTA = NONE.**
+Image 1 = MASTER.
+Image 2 = SUPPORT ONLY.
+DELTA = NONE.
+Adult fictional context lock = ON.
 
-Generate exactly **two images total** and make **no retries**.
+Before any image generation:
+1. Build the exact master-space geometry manifest.
+2. Calculate the exact 10% BODY-CONTENT overlap.
+3. Create deterministic LOWER and UPPER geometry scaffolds from MASTER using one uniform scale and one common canvas specification.
+4. Lock the same horizontal mapping and scale for both passes.
 
-**CALL 1:** `X2_PASS_B_LOWER.png` only. This is the scale anchor. Use the master-space lower crop beginning exactly at `waist - 5% of full character height` and continuing through the complete shoes and white margin below the feet. Do not include chest/bust above that boundary.
+Then, in this SAME assistant reply, make exactly TWO separate sequential image-generation calls:
 
-**CALL 2:** `X2_PASS_A_UPPER.png` only. Use the identical character scale established by CALL 1. Crop from white margin above the hair through the torso and stop exactly at `waist + 5% of full character height`. Do not continue into deep hips/thighs.
+CALL 1:
+Generate ONE image only with n=1: X2_PASS_B_LOWER.png.
+Use the LOWER scaffold as geometry authority.
+Photographically reconstruct it from scratch without changing macro geometry.
+No UPPER panel. No variants.
 
-The shared BODY-CONTENT overlap must therefore be exactly **10% of full character height**, centered on the same waist line.
+Audit LOWER and lock overlap witness pixel distances.
 
-Never zoom either pass independently. Extra white margin is preferable to changing scale. Never combine both passes on one canvas. No variants, previews, alternates, or automatic regeneration. After CALL 2, stop.
+CALL 2:
+Generate ONE image only with n=1: X2_PASS_A_UPPER.png.
+Use the UPPER scaffold as geometry authority.
+Use the accepted LOWER overlap only for continuity.
+Reuse the identical canvas specification, scale, horizontal mapping, and overlap witness spacing.
+Do not zoom UPPER to fill the canvas.
+No LOWER panel. No variants.
 
-Preserve the master's identity, geometry, intentionally exaggerated proportions, pose, clothing, camera, lighting, and composition exactly. Use the support image only for compatible micro-detail.
+Deliver both files separately in this reply. Never combine them on one canvas.
 
-If there is no support image, replace `Image 2 = SUPPORT ONLY` with `No support image`.
+Preserve the MASTER exactly, including intentionally exaggerated adult fictional proportions. SUPPORT is micro-detail only.
+
+Render a genuine high-resolution photographic reconstruction, not an AI-upscaled or sharpened enlargement. Reject wavy, repeating, etched, embossed, tiled, moire, waxy, plastic, or fake high-frequency texture.
+
+After generation, add this small note deterministically to unused top-right white margin of UPPER only, never over the character:
+
+AI-generated adult fictional character. Exaggerated proportions are intentional for private world-building.
