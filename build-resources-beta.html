@@ -37,6 +37,7 @@
     --pvb-gold:#f5b301; --pvb-gold-bright:#ffd166;
     --pvb-radius:14px;
     --pvb-font:'Oswald',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    --pvb-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   }
   *{box-sizing:border-box;}
   /* Silva Angular Framework: zero rounded corners, everywhere. Accents are borders + top stripes, never rounding. */
@@ -48,7 +49,7 @@
       radial-gradient(900px 560px at 106% 6%, rgba(0,184,184,0.12), transparent 55%),
       linear-gradient(135deg,var(--pvb-wedge) 0%, var(--pvb-bg2) 36%, var(--pvb-bg) 100%);
     background-attachment:fixed;
-    color:var(--pvb-text); font-family:var(--pvb-font); font-weight:400;
+    color:var(--pvb-text); font-family:var(--pvb-body); font-weight:400;
     -webkit-font-smoothing:antialiased; min-height:100vh; line-height:1.5;
   }
 
@@ -137,7 +138,7 @@
   .pvb-field{display:flex; flex-direction:column; gap:5px;}
   .pvb-field.full{grid-column:1 / -1;}
   .pvb-field label{font-size:.74rem; font-weight:600; letter-spacing:.02em; color:#cfeaea;}
-  .pvb-field textarea, .pvb-field select{width:100%; font-family:var(--pvb-font); font-size:.9rem; color:var(--pvb-text);
+  .pvb-field textarea, .pvb-field select{width:100%; font-family:var(--pvb-body); font-size:.95rem; color:var(--pvb-text);
     background:rgba(0,0,0,.28); border:1px solid var(--pvb-line); border-radius:9px; padding:9px 11px; outline:none; resize:vertical;}
   .pvb-field textarea{min-height:42px;}
   .pvb-field select{appearance:none; -webkit-appearance:none; cursor:pointer;
@@ -184,7 +185,7 @@
     display:flex; flex-direction:column; align-items:center; justify-content:center; padding:44px 24px;}
   .pvb-lightbox[hidden]{display:none;}
   .pvb-lb-img{max-width:92vw; max-height:80vh; object-fit:contain; background:#000; border:1px solid var(--pvb-line); border-top:3px solid var(--pvb-teal);}
-  .pvb-lb-cap{margin-top:14px; font-family:var(--pvb-font); color:var(--pvb-text); font-size:.98rem; letter-spacing:.02em; text-align:center;}
+  .pvb-lb-cap{margin-top:14px; font-family:var(--pvb-body); color:var(--pvb-text); font-size:.98rem; letter-spacing:.02em; text-align:center;}
   .pvb-lb-cap .role{display:block; margin-top:4px; color:var(--pvb-teal-lt); text-transform:uppercase; letter-spacing:.1em; font-size:.7rem; font-weight:700;}
   .pvb-lb-close{position:absolute; top:18px; right:22px; width:42px; height:42px; background:var(--pvb-teal); color:#04110f; border:0; font-size:1.6rem; line-height:1; cursor:pointer; font-family:var(--pvb-font);}
   .pvb-lb-close:hover{filter:brightness(1.12);}
@@ -231,7 +232,7 @@
     background:rgba(245,179,1,.10); border-left:3px solid var(--pvb-gold); padding:8px 11px;}
   .pvb-check-empty{font-size:.82rem; color:var(--pvb-faint); padding:8px 0;}
   .pvb-stepnum{flex:0 0 22px; width:22px; height:22px; display:flex; align-items:center; justify-content:center; background:var(--pvb-teal); color:#04110f; font-weight:700; font-size:.74rem;}
-  .pvb-otherbox{margin-top:6px; width:100%; box-sizing:border-box; background:rgba(0,0,0,.28); border:1px solid var(--pvb-line); color:#eafeff; font-family:var(--pvb-font); font-size:.9rem; padding:9px 11px;}
+  .pvb-otherbox{margin-top:6px; width:100%; box-sizing:border-box; background:rgba(0,0,0,.28); border:1px solid var(--pvb-line); color:#eafeff; font-family:var(--pvb-body); font-size:.95rem; padding:9px 11px;}
   .pvb-check-toggle{display:flex; align-items:flex-start; gap:9px; font-size:.9rem; color:#dbeeee; cursor:pointer; line-height:1.4;}
   .pvb-check-toggle input{margin-top:2px; accent-color:var(--pvb-teal); width:16px; height:16px; flex:0 0 auto;}
   .pvb-drop{border:1px dashed var(--pvb-line); background:rgba(0,184,184,.05); padding:18px 14px; text-align:center; cursor:pointer; transition:background .12s,border-color .12s;}
@@ -379,7 +380,10 @@
       {label:'Abby (side profile)',file:'abby-side-profile-v1.jpg'},
       {label:'Abby (front portrait)',file:'abby-front-portrait-v1.jpg'},
       {label:'Ms Alba (character sheet)',file:'alba-character-sheet-v1.jpg'},
-      {label:'Ms Alba (full body: front)',file:'alba-full-body-front-v1.jpg'}
+      {label:'Ms Alba (full body: front)',file:'alba-full-body-front-v1.jpg'},
+      {label:'Ms Alba (front portrait)',file:'alba-front-portrait-v1.jpg'},
+      {label:'Ms Alba (neutral portrait)',file:'alba-front-neutral-v1.jpg'},
+      {label:'Ms Alba (side profile)',file:'alba-side-profile-v1.jpg'}
     ];
     var ITEMS=[
       {label:'Classroom camera kit',file:'items/classroom-camera-kit-v1.jpg'},
