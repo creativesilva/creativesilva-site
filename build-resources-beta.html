@@ -103,10 +103,11 @@
   .pvb-select-cur .s{display:block; font-size:.74rem; color:var(--pvb-faint); margin-top:2px;}
   .pvb-select-chev{flex:0 0 auto; width:10px; height:10px; border-right:2px solid var(--pvb-teal-lt); border-bottom:2px solid var(--pvb-teal-lt); transform:rotate(45deg); transition:transform .15s;}
   .pvb-select-btn[aria-expanded="true"] .pvb-select-chev{transform:rotate(-135deg);}
-  .pvb-select-menu{position:absolute; z-index:60; top:calc(100% + 4px); left:0; right:0; background:var(--pvb-panel-hi); border:1px solid var(--pvb-teal); max-height:70vh; overflow:auto;}
-  .pvb-select-opt{text-align:left; padding:10px 14px; cursor:pointer; border-left:3px solid transparent;}
-  .pvb-select-opt:hover{background:rgba(0,184,184,.12);}
-  .pvb-select-opt.active{background:rgba(0,184,184,.16); border-left-color:var(--pvb-teal);}
+  .pvb-select-menu{position:absolute; z-index:60; top:calc(100% + 4px); left:0; right:0; background:#0a2e2c; border:1px solid var(--pvb-teal); box-shadow:0 14px 32px rgba(0,0,0,.6); max-height:336px; overflow-y:auto; scroll-behavior:smooth; -webkit-overflow-scrolling:touch;}
+  .pvb-select-opt{text-align:left; padding:12px 16px; cursor:pointer; border-left:3px solid transparent; background:#0a2e2c;}
+  .pvb-select-opt + .pvb-select-opt{border-top:1px solid rgba(0,184,184,.14);}
+  .pvb-select-opt:hover{background:rgba(0,184,184,.16);}
+  .pvb-select-opt.active{background:rgba(0,184,184,.22); border-left-color:var(--pvb-teal);}
   .pvb-select-opt .t{display:block; font-weight:700; font-size:.9rem; text-transform:uppercase; letter-spacing:.04em; color:#eafeff;}
   .pvb-select-opt .s{display:block; font-size:.72rem; color:var(--pvb-faint); margin-top:2px;}
   /* ── themed scrollbars (match the aesthetic) ── */
