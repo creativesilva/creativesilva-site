@@ -120,8 +120,15 @@
 
   .pvb-card{background:var(--pvb-panel); border:1px solid var(--pvb-line); border-top:3px solid var(--pvb-teal); padding:18px 18px 20px; margin-top:16px;}
   .pvb-editor-head{display:flex; align-items:center; gap:10px; margin:2px 0 4px; flex-wrap:wrap;}
-  .pvb-editor-head h2{font-size:1.05rem; font-weight:700; margin:0; color:#fff; text-transform:uppercase; letter-spacing:.02em;}
+  .pvb-titlewrap{position:relative; flex:1 1 auto; min-width:0;}
+  .pvb-titlesel{display:flex; align-items:center; gap:10px; width:100%; background:transparent; border:0; cursor:pointer; padding:2px 6px 2px 0; color:#fff; text-align:left; font-family:var(--pvb-font);}
+  .pvb-titlesel:hover{opacity:.82;}
+  .pvb-titlesel-txt{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; min-width:0;}
+  .pvb-editor-head #pvb-title{font-size:1.05rem; font-weight:700; color:#fff; text-transform:uppercase; letter-spacing:.02em;}
   .pvb-editor-head .sub{font-size:.82rem; color:var(--pvb-muted);}
+  .pvb-titlesel[aria-expanded="true"] .pvb-select-chev{transform:rotate(-135deg);}
+  .pvb-titlewrap .pvb-select-menu{min-width:300px;}
+  .pvb-disc{margin:2px 0 12px;}
   .pvb-gtitle{font-size:.68rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
     color:var(--pvb-teal-lt); margin:20px 0 10px; padding-left:9px; border-left:3px solid var(--pvb-teal);}
   .pvb-note{font-size:.82rem; color:var(--pvb-muted); background:rgba(0,184,184,.08);
@@ -279,14 +286,17 @@
   <main class="pvb-wrap" id="pvb-app" style="display:none;">
     <p class="pvb-intro">Pick a prompt, fill what you need, and choose your reference images. The prompt on the right stays live the whole time. Attach your reference images in ChatGPT first, then click <b>Copy prompt</b> last and paste it in. (Copying an image replaces whatever is on your clipboard, so copy the prompt as your final step.)</p>
 
-    <div class="pvb-select" id="pvb-select" aria-label="Prompt type"></div>
-
     <div class="pvb-grid">
       <section>
         <div class="pvb-card">
           <div class="pvb-editor-head">
-            <h2 id="pvb-title">Loading</h2>
-            <span class="sub" id="pvb-sub"></span>
+            <div class="pvb-titlewrap">
+              <button type="button" class="pvb-titlesel" id="pvb-titlesel" aria-haspopup="listbox" aria-expanded="false" title="Switch prompt">
+                <span class="pvb-titlesel-txt"><span id="pvb-title">Loading</span><span class="sub" id="pvb-sub"></span></span>
+                <span class="pvb-select-chev"></span>
+              </button>
+              <div class="pvb-select-menu" id="pvb-promptmenu" role="listbox" hidden></div>
+            </div>
             <div class="pvb-headacts">
               <button type="button" class="pvb-smallbtn" id="pvb-copytop" title="Copy the prompt to your clipboard">Copy prompt</button>
               <button type="button" class="pvb-smallbtn ghost" id="pvb-resettop" title="Clear your entries for this prompt">Reset</button>
@@ -316,6 +326,7 @@
             </div>
           </div>
           <p class="pvb-modehint" id="pvb-modehint"></p>
+          <label class="pvb-check-toggle pvb-disc"><input type="checkbox" id="pvb-disc"> <span>Add AI disclaimer (small fine print, bottom-left, 50% opacity)</span></label>
           <h3>Your prompt</h3>
           <div class="pvb-preview" id="pvb-preview">Loading base prompt&#8230;</div>
           <div class="pvb-acts">
@@ -461,6 +472,22 @@
     };
     var REALISM_LOCK='MAXIMUM REALISM + PROPORTION LOCK: The result must look like a real photograph from a professional full-frame mirrorless camera. Real skin with natural pores and texture, real fabric weave and stitching, natural light falloff, and believable weight and contact. Do not produce an illustrated, painterly, 3D, CGI, plastic, or over-smoothed look. Lock the body proportions, height, silhouette, and physique to the approved character sheet (Image A) exactly. The new outfit adapts to this established body: never resize, slim, normalize, exaggerate, or reshape the character to fit the clothing, and never borrow body proportions from the outfit or product reference images.';
 
+    // ---- studio poses (white backdrop + model studio lighting). First 4 = character-sheet standards. ----
+    var POSES=[
+      {file:'front-neutral', label:'1. Front, neutral A-pose (reference)', desc:'standing straight and square to camera, facing forward, arms relaxed a few inches out from the sides in a neutral A-pose, hands open and relaxed, feet together, weight even, calm neutral expression'},
+      {file:'back-neutral', label:'2. Back, neutral (reference)', desc:'standing straight with the back fully to camera, facing directly away, arms relaxed at the sides, feet together, weight even, head level'},
+      {file:'side-profile', label:'3. Left side profile (reference)', desc:'standing straight in a full left side profile with the body at ninety degrees to camera, arms relaxed at the sides, feet together, looking straight ahead'},
+      {file:'three-quarter-front', label:'4. Three-quarter front, 45 degrees (reference)', desc:'standing at a forty-five degree three-quarter angle toward camera so the front and one side are both visible, arms relaxed, weight even, looking toward camera'},
+      {file:'contrapposto', label:'5. Contrapposto (relaxed stand)', desc:'a relaxed contrapposto stance with weight shifted onto one leg and the other knee slightly bent, hips gently angled, arms loose at the sides, natural and at ease'},
+      {file:'hands-on-hips', label:'6. Hands on hips', desc:'a confident stance with both hands on the hips, elbows out, shoulders back, feet about shoulder width apart, chin level'},
+      {file:'arms-crossed', label:'7. Arms crossed', desc:'standing with the arms crossed over the chest, relaxed shoulders, weight even, calm confident expression'},
+      {file:'hands-in-pockets', label:'8. Hands in pockets (casual)', desc:'a casual relaxed stance with the hands in the pockets, shoulders loose, a slight natural lean, easygoing expression'},
+      {file:'walking', label:'9. Walking toward camera', desc:'captured mid-stride walking toward camera, one foot forward, a natural arm swing, relaxed forward motion, looking ahead'},
+      {file:'three-quarter-rear', label:'10. Three-quarter rear, glancing back', desc:'the body turned three-quarters away from camera showing the back and one side, the head turned to glance back over the shoulder toward camera'},
+      {file:'seated', label:'11. Seated on a studio block', desc:'seated upright on a simple white studio posing block, back straight, hands resting naturally on the thighs, feet planted, the full figure in frame'},
+      {file:'power-stance', label:'12. Power stance', desc:'a strong grounded power stance, feet planted a little wider than the shoulders, weight even, shoulders squared, arms relaxed, a confident direct expression'}
+    ];
+
     // ---- prompt catalog ----
     var PROMPTS=[
       {title:'Classroom Environment',sub:'PV lab scene, any angle',mode:'Environment',ptype:'environment',canon:'PV Classroom Environment canon',file:'/assets/prompts/Classroom-Environment-Master-Prompt-v4.md',scene:'campus/pv-classroom-inspiration-v1.jpg'},
@@ -472,6 +499,7 @@
         views:[{label:'Full front / neutral stance',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md'},
                {label:'Left 3/4 front / face to camera / smile',file:'/assets/prompts/Character-Outfit-Change-Left-3Q-Front-v1.md'},
                {label:'3/4 rear / side-profile face',file:'/assets/prompts/Character-Outfit-Change-3Q-Rear-v1.md'}]},
+      {title:'Studio Pose',sub:'character on white studio, pick a pose',mode:'Studio pose',ptype:'pose'},
       {title:'Reset Artboard',sub:'clear the canvas memory',mode:'Reset',ptype:'protocol',file:'/assets/prompts/Blank-Artboard-Reset.txt'}
     ];
 
@@ -513,8 +541,7 @@
     function saveSetups(arr){ try{ localStorage.setItem(NS+'setups', JSON.stringify(arr)); }catch(e){} }
 
     // ---- DOM refs ----
-    var pillsEl=document.getElementById('pvb-select'),
-        titleEl=document.getElementById('pvb-title'), subEl=document.getElementById('pvb-sub'),
+    var titleEl=document.getElementById('pvb-title'), subEl=document.getElementById('pvb-sub'),
         fieldsEl=document.getElementById('pvb-fields'), refsEl=document.getElementById('pvb-refs'),
         preEl=document.getElementById('pvb-preview'), savedEl=document.getElementById('pvb-saved'),
         checklistEl=document.getElementById('pvb-checklist'), setupsEl=document.getElementById('pvb-setups'),
@@ -555,10 +582,16 @@
     // MODE 'full' = the whole template (byte-identical to the current builder). MODE 'project' = send
     // overrides + references and let the ChatGPT project supply the saved canon. Protocols (Fresh /
     // Two-Pass / Blank) are the instruction itself, so they are sent whole in both modes.
+    var DISC=false; try{ DISC=localStorage.getItem(NS+'disc')==='1'; }catch(e){}
+    var DISCLAIMER_TEXT='LABEL (add this after the image is generated, do not ask the image model to render tiny text): place one small line of neutral gray fine print in the bottom-left corner at about 50% opacity, kept small and never over the subject: "AI-generated image for private internal world-building and review only. Any exaggerated proportions are intentional. Not for public or external viewing; deleted after inspection."';
     function compose(){
-      if(OUTFIT) return (MODE==='full') ? composeOutfitFull() : composeOutfitProject();
-      if(MODE==='project' && cfg.ptype==='environment') return composeEnvProject();
-      return composeEnvFull();
+      var out;
+      if(OUTFIT) out=(MODE==='full') ? composeOutfitFull() : composeOutfitProject();
+      else if(cfg.ptype==='pose') out=composePose();
+      else if(MODE==='project' && cfg.ptype==='environment') out=composeEnvProject();
+      else out=composeEnvFull();
+      if(DISC) out += '\n\n' + DISCLAIMER_TEXT;
+      return out;
     }
     function composeEnvFull(){
       var out=baseText,name;
@@ -632,6 +665,21 @@
       parts.push('BODY: keep body proportions, height, and silhouette exactly as the attached character sheet (it is the authority). The outfit adapts to that body and is never reshaped. Never borrow body shape from the outfit or product images.');
       var cu=(state.custom||'').trim(); if(cu)parts.push('CUSTOM ADJUSTMENTS (apply exactly, without changing body proportions): '+cu);
       var rb=outfitRefBlock(); if(rb)parts.push(rb);
+      return parts.join('\n\n').replace(/\n{3,}/g,'\n\n').trim();
+    }
+    function composePose(){
+      var name=outfitName();
+      var pose=POSES.filter(function(p){return p.file===state.fields['POSE'];})[0] || POSES[0];
+      var parts=[];
+      parts.push('New single full-body studio photograph of '+name+', built fresh from the attached reference (not an edit of a past image).');
+      parts.push('POSE: '+pose.desc+'.');
+      parts.push('FRAMING: the complete figure from the top of the hair to the shoes with clean margin above and below, camera at chest height, straight on unless the pose implies otherwise.');
+      parts.push('BACKGROUND: seamless pure-white studio backdrop, no props unless the pose names one, no cast shadows on the backdrop.');
+      parts.push('LIGHTING: professional model studio lighting, a soft key plus fill and a gentle rim, clean catch lights in the eyes, even full-length illumination.');
+      parts.push('BODY: keep identity, face, hair, skin, height, silhouette, and proportions exactly as the attached character sheet. It is the authority. Never normalize, slim, exaggerate, or reshape.');
+      parts.push(REALISM_LOCK);
+      var cu=(state.custom||'').trim(); if(cu) parts.push('CUSTOM DETAILS (apply without changing body proportions): '+cu);
+      var rb=outfitRefBlock(); if(rb) parts.push(rb);
       return parts.join('\n\n').replace(/\n{3,}/g,'\n\n').trim();
     }
 
@@ -716,6 +764,7 @@
       fieldsEl.innerHTML=''; fieldNames=[];
       if(OUTFIT){ buildOutfitFields(); return; }
       if(cfg.delta){ buildDeltaFields(); return; }
+      if(cfg.ptype==='pose'){ buildPoseFields(); return; }
       var ctx=ctxFor(cfg.file);
       fieldsEl.appendChild(el('div','pvb-gtitle','Scene overrides'));
       var re=/^\s*(?:[-*]\s+)?(?:\*\*)?\[([^\]]+)\]\s*=/gm,m,names=[];
@@ -790,12 +839,31 @@
       f.appendChild(ta); g.appendChild(f); fieldsEl.appendChild(g);
       fieldsEl.appendChild(el('div','pvb-note','Leave blank and the prompt does an exact rebuild. Type one change here and it replaces the DELTA line in the prompt.'));
     }
+    function buildPoseFields(){
+      if(state.fields['POSE']===undefined) state.fields['POSE']=POSES[0].file;
+      fieldsEl.appendChild(el('div','pvb-gtitle','Studio pose'));
+      var g=el('div','pvb-fields');
+      var pf=el('div','pvb-field full'); pf.appendChild(el('label',null,'Pose'));
+      var sel=document.createElement('select');
+      POSES.forEach(function(p){ var op=document.createElement('option'); op.value=p.file; op.textContent=p.label; if(state.fields['POSE']===p.file)op.selected=true; sel.appendChild(op); });
+      sel.addEventListener('change',function(){ state.fields['POSE']=sel.value; render(); });
+      pf.appendChild(sel); g.appendChild(pf);
+      var cf=el('div','pvb-field full'); cf.appendChild(el('label',null,'Custom details (optional)'));
+      var ta=document.createElement('textarea'); ta.rows=2; ta.placeholder='Optional: expression, hand detail, wardrobe note, framing. Body proportions stay locked to the character sheet.'; ta.value=state.custom||'';
+      ta.addEventListener('input',function(){ state.custom=ta.value; ta.style.height='auto'; ta.style.height=ta.scrollHeight+'px'; render(); });
+      cf.appendChild(ta); g.appendChild(cf);
+      fieldsEl.appendChild(g);
+      fieldsEl.appendChild(el('div','pvb-note','Pick the character below. Every pose is on a pure white studio backdrop with model studio lighting. Poses 1 to 4 are the standard character-sheet views.'));
+    }
 
     function buildRefs(){
       refsEl.innerHTML='';
       if(cfg.delta){ renderX2drop(refsEl); return; }
       refsEl.appendChild(el('div','pvb-gtitle','Reference files'));
-      if(OUTFIT){
+      if(cfg.ptype==='pose'){
+        refsEl.appendChild(refAccordion('Characters', state.chars, CHARACTERS, false));
+        refsEl.appendChild(refAccordion('Outfit, apparel & items', state.items, ITEMS, false));
+      } else if(OUTFIT){
         refsEl.appendChild(refAccordion('Characters', state.chars, CHARACTERS, false));
         refsEl.appendChild(refAccordion('Outfit, apparel & items', state.items, ITEMS, false));
         refsEl.appendChild(backdropSlot());
@@ -867,10 +935,9 @@
     // ---- select prompt ----
     function selectPrompt(idx, overrideState){
       activeIdx=idx; cfg=PROMPTS[idx]; x2imgs=[];
-      var _sc=pillsEl.querySelector('.pvb-select-cur'); if(_sc){ _sc.innerHTML=''; _sc.appendChild(el('span','t',esc(cfg.title))); if(cfg.sub) _sc.appendChild(el('span','s',esc(cfg.sub))); }
-      Array.prototype.forEach.call(pillsEl.querySelectorAll('.pvb-select-opt'),function(o,i){ o.classList.toggle('active',i===idx); o.setAttribute('aria-selected',i===idx?'true':'false'); });
+      Array.prototype.forEach.call(document.querySelectorAll('#pvb-promptmenu .pvb-select-opt'),function(o,i){ o.classList.toggle('active',i===idx); o.setAttribute('aria-selected',i===idx?'true':'false'); });
       OUTFIT=!!(cfg.views&&cfg.views.length); TWOPASS=/two-pass/i.test(cfg.file||''); BACKDROP=TWOPASS||OUTFIT;
-      KEY=OUTFIT?'outfit-change':cfg.file;
+      KEY=OUTFIT?'outfit-change':(cfg.ptype==='pose'?'studio-pose':cfg.file);
       titleEl.textContent=cfg.title; subEl.textContent=cfg.sub?('('+cfg.sub+')'):'';
       if(guideEl){ if(cfg.guide){ guideBodyEl.innerHTML=cfg.guide; guideEl.hidden=false; } else { guideBodyEl.innerHTML=''; guideEl.hidden=true; } }
       var def=freshState();
@@ -878,6 +945,7 @@
       else { var sv=loadState(KEY,null); state = sv?Object.assign(def,sv):def; state.chars=(state.chars||[]).concat(['','','','']).slice(0,4); state.items=(state.items||[]).concat(['','','','']).slice(0,4); }
       DEFAULT_BACKDROP=def.backdrop; DEFAULT_VIEW=def.view;
       try{ localStorage.setItem(NS+'last', String(idx)); }catch(e){}
+      if(cfg.ptype==='pose'){ baseText=''; buildFields(); buildRefs(); render(); return; }
       var path=OUTFIT?(state.view||cfg.views[0].file):cfg.file;
       preEl.textContent='Loading base prompt…';
       fetchPrompt(path).then(function(t){ baseText=t; buildFields(); if(cfg.ptype==='environment' && !state.scene) state.scene=autoScene(); buildRefs(); render(); })
@@ -891,37 +959,39 @@
     resetB.addEventListener('click',doReset);
     var resetTopB=document.getElementById('pvb-resettop'); if(resetTopB) resetTopB.addEventListener('click',doReset);
 
-    // ---- build pills ----
+    // ---- build the prompt selector menu (opens from the editor title) ----
     (function(){
-      var selBtn=el('button','pvb-select-btn'); selBtn.type='button'; selBtn.setAttribute('aria-haspopup','listbox'); selBtn.setAttribute('aria-expanded','false');
-      selBtn.appendChild(el('span','pvb-select-cur')); selBtn.appendChild(el('span','pvb-select-chev'));
-      var selMenu=el('div','pvb-select-menu'); selMenu.setAttribute('role','listbox'); selMenu.hidden=true;
-      function closeMenu(){ selMenu.hidden=true; selBtn.setAttribute('aria-expanded','false'); }
+      var titleSel=document.getElementById('pvb-titlesel'), menu=document.getElementById('pvb-promptmenu');
+      function closeMenu(){ menu.hidden=true; titleSel.setAttribute('aria-expanded','false'); }
       PROMPTS.forEach(function(p,i){ var o=el('div','pvb-select-opt'); o.setAttribute('role','option');
         o.appendChild(el('span','t',esc(p.title))); if(p.sub)o.appendChild(el('span','s',esc(p.sub)));
         o.addEventListener('click',function(e){ e.stopPropagation(); selectPrompt(i); closeMenu(); });
-        selMenu.appendChild(o); });
-      selBtn.addEventListener('click',function(e){ e.stopPropagation(); var willOpen=selMenu.hidden; selMenu.hidden=!willOpen; selBtn.setAttribute('aria-expanded', willOpen?'true':'false'); });
+        menu.appendChild(o); });
+      titleSel.addEventListener('click',function(e){ e.stopPropagation(); var willOpen=menu.hidden; menu.hidden=!willOpen; titleSel.setAttribute('aria-expanded', willOpen?'true':'false'); });
       document.addEventListener('click', closeMenu);
       document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeMenu(); });
-      pillsEl.appendChild(selBtn); pillsEl.appendChild(selMenu);
     })();
 
     // ---- prompt mode toggle (PV Project vs Full template) ----
     var modeBtns=[].slice.call(document.querySelectorAll('.pvb-modebtn')), modeHint=document.getElementById('pvb-modehint');
     function updateModeUI(){
-      var isProtocol = cfg && cfg.ptype==='protocol';
+      var noMode = cfg && (cfg.ptype==='protocol' || cfg.ptype==='pose');
       var modebar=document.querySelector('.pvb-modebar');
-      if(modebar) modebar.style.display = isProtocol ? 'none' : '';
+      if(modebar) modebar.style.display = noMode ? 'none' : '';
       modeBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-mode')===MODE); });
       if(modeHint){
-        if(isProtocol) modeHint.textContent = 'This one is a full instruction on its own, so it is sent the same way every time. The PV Project and Full Template modes only change the Classroom, Campus, Lobby, and Outfit prompts.';
+        if(cfg && cfg.ptype==='pose') modeHint.textContent = 'Studio pose builds a fresh full-body image on a white studio backdrop. It reads the same in both modes.';
+        else if(noMode) modeHint.textContent = 'This one is a full instruction on its own, so it is sent the same way every time. The PV Project and Full Template modes only change the Classroom, Campus, Lobby, and Outfit prompts.';
         else if(MODE==='project') modeHint.textContent = 'PV Project sends a short prompt: only your scene changes and the reference list. Your ChatGPT project fills in the saved canon. Use this inside that project.';
         else modeHint.textContent = 'Full Template sends the entire prompt with all of the canon baked in. It is longer, but it works outside your ChatGPT project.';
       }
     }
     modeBtns.forEach(function(b){ b.addEventListener('click', function(){ MODE=b.getAttribute('data-mode'); try{localStorage.setItem(NS+'mode',MODE);}catch(e){} updateModeUI(); render(); }); });
     updateModeUI();
+
+    // ---- AI disclaimer toggle ----
+    var discCb=document.getElementById('pvb-disc');
+    if(discCb){ discCb.checked=DISC; discCb.addEventListener('change',function(){ DISC=discCb.checked; try{localStorage.setItem(NS+'disc',DISC?'1':'0');}catch(e){} render(); }); }
 
     renderSetups();
     var start=0; try{ var l=parseInt(localStorage.getItem(NS+'last'),10); if(!isNaN(l)&&l>=0&&l<PROMPTS.length)start=l; }catch(e){}
