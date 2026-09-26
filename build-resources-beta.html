@@ -93,16 +93,28 @@
   .pvb-grid{display:grid; grid-template-columns:minmax(0,1fr) 452px; gap:22px; align-items:start;}
   @media (max-width:980px){ .pvb-grid{grid-template-columns:1fr;} }
 
-  /* ── prompt selector ── */
-  .pvb-pills{display:flex; gap:9px; overflow-x:auto; padding:2px 2px 10px; scrollbar-width:thin;}
-  .pvb-pill{flex:0 0 auto; text-align:left; cursor:pointer; font-family:var(--pvb-font);
-    background:var(--pvb-panel); border:1px solid var(--pvb-line-soft); border-top:2px solid rgba(0,184,184,0.35);
-    padding:10px 14px; min-width:150px; color:var(--pvb-text); transition:background .15s, border-color .15s;}
-  .pvb-pill:hover{background:var(--pvb-panel-2);}
-  .pvb-pill.active{background:var(--pvb-panel-hi); border-color:var(--pvb-teal); border-top:2px solid var(--pvb-teal);}
-  .pvb-pill .t{display:block; font-weight:600; font-size:.92rem; text-transform:uppercase; letter-spacing:.04em;}
-  .pvb-pill .s{display:block; font-size:.72rem; color:var(--pvb-faint); margin-top:2px;}
-  .pvb-pill.active .s{color:rgba(0,184,184,.85);}
+  /* ── prompt selector (dropdown) ── */
+  .pvb-select{position:relative; max-width:460px; margin:2px 0 12px;}
+  .pvb-select-btn{width:100%; display:flex; align-items:center; gap:12px; text-align:left; cursor:pointer; font-family:var(--pvb-font);
+    background:var(--pvb-panel); border:1px solid var(--pvb-line); border-top:2px solid var(--pvb-teal); padding:11px 14px; color:var(--pvb-text); transition:background .15s;}
+  .pvb-select-btn:hover{background:var(--pvb-panel-2);}
+  .pvb-select-cur{flex:1 1 auto; min-width:0;}
+  .pvb-select-cur .t{display:block; font-weight:700; font-size:.95rem; text-transform:uppercase; letter-spacing:.04em; color:#fff;}
+  .pvb-select-cur .s{display:block; font-size:.74rem; color:var(--pvb-faint); margin-top:2px;}
+  .pvb-select-chev{flex:0 0 auto; width:10px; height:10px; border-right:2px solid var(--pvb-teal-lt); border-bottom:2px solid var(--pvb-teal-lt); transform:rotate(45deg); transition:transform .15s;}
+  .pvb-select-btn[aria-expanded="true"] .pvb-select-chev{transform:rotate(-135deg);}
+  .pvb-select-menu{position:absolute; z-index:60; top:calc(100% + 4px); left:0; right:0; background:var(--pvb-panel-hi); border:1px solid var(--pvb-teal); max-height:70vh; overflow:auto;}
+  .pvb-select-opt{text-align:left; padding:10px 14px; cursor:pointer; border-left:3px solid transparent;}
+  .pvb-select-opt:hover{background:rgba(0,184,184,.12);}
+  .pvb-select-opt.active{background:rgba(0,184,184,.16); border-left-color:var(--pvb-teal);}
+  .pvb-select-opt .t{display:block; font-weight:700; font-size:.9rem; text-transform:uppercase; letter-spacing:.04em; color:#eafeff;}
+  .pvb-select-opt .s{display:block; font-size:.72rem; color:var(--pvb-faint); margin-top:2px;}
+  /* ── themed scrollbars (match the aesthetic) ── */
+  ::-webkit-scrollbar{width:11px; height:11px;}
+  ::-webkit-scrollbar-track{background:#08201f;}
+  ::-webkit-scrollbar-thumb{background:rgba(0,184,184,.45); border:2px solid #08201f;}
+  ::-webkit-scrollbar-thumb:hover{background:rgba(0,184,184,.75);}
+  html{scrollbar-color:rgba(0,184,184,.55) #08201f; scrollbar-width:thin;}
 
   .pvb-card{background:var(--pvb-panel); border:1px solid var(--pvb-line); border-top:3px solid var(--pvb-teal); padding:18px 18px 20px; margin-top:16px;}
   .pvb-editor-head{display:flex; align-items:center; gap:10px; margin:2px 0 4px; flex-wrap:wrap;}
@@ -266,7 +278,7 @@
   <main class="pvb-wrap" id="pvb-app" style="display:none;">
     <p class="pvb-intro">Pick a prompt, fill what you need, and choose your reference images. The prompt on the right stays live the whole time. Attach your reference images in ChatGPT first, then click <b>Copy prompt</b> last and paste it in. (Copying an image replaces whatever is on your clipboard, so copy the prompt as your final step.)</p>
 
-    <div class="pvb-pills" id="pvb-pills" role="tablist" aria-label="Prompt type"></div>
+    <div class="pvb-select" id="pvb-select" aria-label="Prompt type"></div>
 
     <div class="pvb-grid">
       <section>
@@ -495,7 +507,7 @@
     function saveSetups(arr){ try{ localStorage.setItem(NS+'setups', JSON.stringify(arr)); }catch(e){} }
 
     // ---- DOM refs ----
-    var pillsEl=document.getElementById('pvb-pills'),
+    var pillsEl=document.getElementById('pvb-select'),
         titleEl=document.getElementById('pvb-title'), subEl=document.getElementById('pvb-sub'),
         fieldsEl=document.getElementById('pvb-fields'), refsEl=document.getElementById('pvb-refs'),
         preEl=document.getElementById('pvb-preview'), savedEl=document.getElementById('pvb-saved'),
@@ -849,7 +861,8 @@
     // ---- select prompt ----
     function selectPrompt(idx, overrideState){
       activeIdx=idx; cfg=PROMPTS[idx]; x2imgs=[];
-      Array.prototype.forEach.call(pillsEl.children,function(p,i){ p.classList.toggle('active',i===idx); p.setAttribute('aria-selected',i===idx?'true':'false'); });
+      var _sc=pillsEl.querySelector('.pvb-select-cur'); if(_sc){ _sc.innerHTML=''; _sc.appendChild(el('span','t',esc(cfg.title))); if(cfg.sub) _sc.appendChild(el('span','s',esc(cfg.sub))); }
+      Array.prototype.forEach.call(pillsEl.querySelectorAll('.pvb-select-opt'),function(o,i){ o.classList.toggle('active',i===idx); o.setAttribute('aria-selected',i===idx?'true':'false'); });
       OUTFIT=!!(cfg.views&&cfg.views.length); TWOPASS=/two-pass/i.test(cfg.file||''); BACKDROP=TWOPASS||OUTFIT;
       KEY=OUTFIT?'outfit-change':cfg.file;
       titleEl.textContent=cfg.title; subEl.textContent=cfg.sub?('('+cfg.sub+')'):'';
@@ -873,9 +886,20 @@
     var resetTopB=document.getElementById('pvb-resettop'); if(resetTopB) resetTopB.addEventListener('click',doReset);
 
     // ---- build pills ----
-    PROMPTS.forEach(function(p,i){ var b=el('button','pvb-pill'); b.type='button'; b.setAttribute('role','tab');
-      b.appendChild(el('span','t',esc(p.title))); if(p.sub)b.appendChild(el('span','s',esc(p.sub)));
-      b.addEventListener('click',function(){ selectPrompt(i); }); pillsEl.appendChild(b); });
+    (function(){
+      var selBtn=el('button','pvb-select-btn'); selBtn.type='button'; selBtn.setAttribute('aria-haspopup','listbox'); selBtn.setAttribute('aria-expanded','false');
+      selBtn.appendChild(el('span','pvb-select-cur')); selBtn.appendChild(el('span','pvb-select-chev'));
+      var selMenu=el('div','pvb-select-menu'); selMenu.setAttribute('role','listbox'); selMenu.hidden=true;
+      function closeMenu(){ selMenu.hidden=true; selBtn.setAttribute('aria-expanded','false'); }
+      PROMPTS.forEach(function(p,i){ var o=el('div','pvb-select-opt'); o.setAttribute('role','option');
+        o.appendChild(el('span','t',esc(p.title))); if(p.sub)o.appendChild(el('span','s',esc(p.sub)));
+        o.addEventListener('click',function(e){ e.stopPropagation(); selectPrompt(i); closeMenu(); });
+        selMenu.appendChild(o); });
+      selBtn.addEventListener('click',function(e){ e.stopPropagation(); var willOpen=selMenu.hidden; selMenu.hidden=!willOpen; selBtn.setAttribute('aria-expanded', willOpen?'true':'false'); });
+      document.addEventListener('click', closeMenu);
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeMenu(); });
+      pillsEl.appendChild(selBtn); pillsEl.appendChild(selMenu);
+    })();
 
     // ---- prompt mode toggle (PV Project vs Full template) ----
     var modeBtns=[].slice.call(document.querySelectorAll('.pvb-modebtn')), modeHint=document.getElementById('pvb-modehint');
