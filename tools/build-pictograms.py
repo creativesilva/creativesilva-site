@@ -89,9 +89,7 @@ def overview():
     en=banner("Module 01 &bull; Step 01","Pictograms: Start Here","Read this page and download your files, then go to Step 02 to find and save your pictograms.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=type_card("overview","Step 01 &middot; Read &amp; Download","What Is a Pictogram?",
         para("A pictogram is a simple picture that stands for an idea, an object, or an action. The best part is that you understand it without reading a single word. You just look at it and know what it means.")
-        + framed(HERO,"Pictograms")
-        + para("You are on Step 01 now: read this page and download your files below. Here are the steps that follow.")
-        + steps([("Step 02 &middot; Find &amp; Save:","build your pictogram folder in OneDrive and save the pictograms you find."),("Step 03 &middot; Sketch &amp; Reflect:","reimagine three pictograms in your sketchbook and turn in your reflection.")]))
+        + framed(HERO,"Pictograms"))
     en+=standards_box(False, PG_STANDARDS)
     en+=card("","Pictograms You Already Know",
         para("You already know a lot of them: a stop sign, a warning sign, a flammable symbol, or a restroom sign. They all use simple, clear shapes. That is the rule: if you can look at it and understand it with no words, it works.")
@@ -119,13 +117,14 @@ def overview():
            ("Negative Space","The empty space around and inside a shape. Good pictograms use it on purpose so the picture stays clean and easy to read."),
            ("Reimagine","To rethink an idea and make your own new version, not a copy of what you found. You keep the meaning but change the look.")]), False)
 
+    en+=card("HOW IT WORKS / YOUR PLAN","Your Next Two Steps",
+        para("You are on Step 01 now: read this page and download your files below. Here are the two steps that follow.")
+        + bullets([("Step 02 &middot; Find &amp; Save:","build your pictogram folder in OneDrive and save the pictograms you find."),("Step 03 &middot; Sketch &amp; Reflect:","reimagine three pictograms in your sketchbook and turn in your reflection.")]))
     en+=next_up("UP NEXT &middot; STEP 02 - Find &amp; Save","Build your pictogram folder in OneDrive.")
     es=banner("M&oacute;dulo 01 &bull; Paso 01","Pictogramas: Empieza Aqu&iacute;","Lee esta p&aacute;gina y descarga tus archivos, luego ve al Paso 02 para buscar y guardar tus pictogramas.","#top","Back to English", HICON_DESIGN)
     es+=type_card("overview","Paso 01 &middot; Lee y Descarga","&iquest;Qu&eacute; Es Un Pictograma?",
         para("Un pictograma es un dibujo simple que representa una idea, un objeto o una acci&oacute;n. Lo mejor es que lo entiendes sin leer ni una palabra. Solo lo miras y sabes qu&eacute; significa.")
-        + framed(HERO,"Pictogramas")
-        + para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina y descarga tus archivos abajo. Estos son los pasos que siguen.")
-        + steps([("Paso 02 &middot; Buscar y Guardar:","crea tu carpeta de pictogramas en OneDrive y guarda los pictogramas que encuentres."),("Paso 03 &middot; Dibuja y Reflexiona:","reimagina tres pictogramas en tu cuaderno y entrega tu reflexi&oacute;n.")]))
+        + framed(HERO,"Pictogramas"))
     es+=standards_box(True, PG_STANDARDS)
     es+=card("","Pictogramas Que Ya Conoces",
         para("Ya conoces muchos: un letrero de alto, un letrero de advertencia, un s&iacute;mbolo de inflamable o un letrero de ba&ntilde;o. Todos usan formas simples y claras. Esa es la regla: si lo puedes ver y entender sin palabras, funciona.")
@@ -153,6 +152,9 @@ def overview():
            ("Espacio Negativo","El espacio vac&iacute;o alrededor y dentro de una forma. Los buenos pictogramas lo usan a prop&oacute;sito para que el dibujo se vea limpio y f&aacute;cil de leer."),
            ("Reimaginar","Repensar una idea y hacer tu propia versi&oacute;n nueva, no una copia de lo que encontraste. Guardas el significado pero cambias el aspecto.")]), True)
 
+    es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Siguientes Dos Pasos",
+        para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina y descarga tus archivos abajo. Estos son los dos pasos que siguen.")
+        + bullets([("Paso 02 &middot; Buscar y Guardar:","crea tu carpeta de pictogramas en OneDrive y guarda los pictogramas que encuentres."),("Paso 03 &middot; Dibuja y Reflexiona:","reimagina tres pictogramas en tu cuaderno y entrega tu reflexi&oacute;n.")]))
     es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Buscar y Guardar","Crea tu carpeta de pictogramas en OneDrive.")
     dots=dot("",'1',"Step 01",True)+dot(S1,'2',"Step 02",False)+dot(S2,'3',"Step 03",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 02 &#8594;</a>'
