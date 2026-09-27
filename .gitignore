@@ -16,3 +16,7 @@ assets/_incoming/*
 
 # Outgoing: internal deliverables Claude saves for Chris to grab (local-only)
 _outgoing/
+
+# Confidential handoff / roster docs (may contain student PII — local-only, never commit)
+ROSTER_DASHBOARD_HANDOFF.md
+*_HANDOFF.md
