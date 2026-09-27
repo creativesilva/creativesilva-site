@@ -3,170 +3,150 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Camera Checkouts | Chris Silva</title>
-<meta name="description" content="Camera checkout calendar for Pioneer Valley photography." />
-<meta name="robots" content="noindex" />
-<link rel="icon" href="/logos/CS_Logo_Only_Teal.svg" />
-<style>:root { --course-accent: #007474; }</style>
-<link rel="stylesheet" href="/css/silva-module.css?v=d132cef2" />
+<title>Camera Checkout Calendar | Pioneer Valley Photography</title>
+<meta name="description" content="See which Pioneer Valley photography cameras are checked out and when they are due back." />
+<link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only_Teal.svg" />
+<link rel="apple-touch-icon" href="/logos/CS_AppIcon_Teal_180.png" />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
 <style>
-  /* Teacher-facing calendar. Uses the shared unified header (built by silva-nav.js). A
-     "View QR Code" button in the header opens the Camera Check Out popup. */
-  .cal-title {
-    font-family: 'Oswald', Arial, sans-serif; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.03em; font-size: clamp(1.6rem, 3.4vw, 2.5rem); line-height: 1.05;
-    color: #ffffff; text-align: center; margin: 4px 0 14px;
+  :root{
+    --bg:#041d1c; --bg2:#062a28; --wedge:#0a4a4a;
+    --panel:linear-gradient(135deg,rgba(0,184,184,0.12) 0%,rgba(4,20,19,0.55) 100%);
+    --teal:#00b8b8; --teal-lt:#5ff0f0; --teal-deep:#007474;
+    --text:#eafeff; --muted:rgba(206,244,244,0.66); --faint:rgba(206,244,244,0.42);
+    --line:rgba(0,184,184,0.35); --line-soft:rgba(0,184,184,0.2);
+    --ok:#3fa863; --orange:#ff6b1a; --grayed:rgba(160,180,180,0.34);
+    --font:'Oswald',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   }
-  .cal-title-rule { width: 80px; height: 3px; background: #00b8b8; margin: 0 auto 24px; }
-  .cal-frame { background: linear-gradient(135deg, #00b8b8 0%, rgba(0, 184, 184, 0.10) 100%); padding: 2px; }
-  .cal-frame iframe { display: block; width: 100%; height: 760px; border: 0; background: #ffffff; }
-
-  /* Reliable escape hatch: opens the calendar top-level, where Safari's third-party
-     iframe blocking (Prevent cross-site tracking / content blockers) does not apply. */
-  .cal-open-row { text-align: center; margin: 0 0 16px; }
-  .cal-open {
-    display: inline-flex; align-items: center; gap: 8px; cursor: pointer; text-decoration: none;
-    font-family: 'Oswald', Arial, sans-serif; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-    font-size: 0.8rem; color: #ffffff; padding: 11px 22px; background: #007474; border: 1px solid #00b8b8;
-    transition: filter 0.15s ease;
-  }
-  .cal-open:hover { filter: brightness(1.18); }
-  .cal-fallback { text-align: center; margin: 13px 0 0; font-size: 0.82rem; color: rgba(234, 247, 247, 0.6); }
-  .cal-fallback a { color: #00b8b8; }
-
-  /* "View QR Code" button, injected into the header (row 2), pushed to the right. */
-  .silva-uni-qrbtn {
-    margin-left: auto; align-self: center; height: 32px; box-sizing: border-box;
-    display: inline-flex; align-items: center; padding: 0 17px; cursor: pointer;
-    font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
-    font-size: 0.72rem; color: #fff; white-space: nowrap;
-    background: #007474; border: 1px solid #00b8b8; transition: filter 0.15s ease;
-  }
-  .silva-uni-qrbtn:hover { filter: brightness(1.18); }
-
-  /* "Voice" button, injected into the header (row 2) right beside the QR button. Opens Google
-     Voice in a compact floating pop-out window (GV cannot be iframed). */
-  .silva-uni-voicebtn {
-    margin-left: 10px; align-self: center; height: 32px; box-sizing: border-box;
-    display: inline-flex; align-items: center; padding: 0 17px; cursor: pointer;
-    font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
-    font-size: 0.72rem; color: #fff; white-space: nowrap;
-    background: #007474; border: 1px solid #00b8b8; transition: filter 0.15s ease;
-  }
-  .silva-uni-voicebtn:hover { filter: brightness(1.18); }
-
-  /* Camera Check Out QR popup */
-  #qr-modal { display: none; position: fixed; inset: 0; z-index: 1000; align-items: center; justify-content: center; padding: 24px; }
-  #qr-modal.open { display: flex; }
-  .qr-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.74); }
-  .qr-card {
-    position: relative; z-index: 1; width: min(92vw, 400px); background: #0d1414;
-    border: 1px solid rgba(255, 255, 255, 0.12); border-top: 3px solid #00b8b8;
-    padding: 26px 26px 24px; text-align: center;
-  }
-  .qr-close { position: absolute; top: 8px; right: 10px; background: none; border: 0; color: rgba(234, 247, 247, 0.55); font-size: 1.6rem; line-height: 1; cursor: pointer; padding: 4px 8px; }
-  .qr-close:hover { color: #ffffff; }
-  .qr-title { font-family: 'Oswald', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #ffffff; margin-bottom: 16px; }
-  .qr-imgwrap { background: #ffffff; padding: 13px; display: inline-block; border: 2px solid #00b8b8; }
-  .qr-img { display: block; width: min(74vw, 300px); height: auto; image-rendering: pixelated; }
-  .qr-hint { color: rgba(234, 247, 247, 0.7); font-size: 0.82rem; line-height: 1.5; margin: 16px 0 18px; }
-  .qr-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .qr-btn {
-    display: inline-flex; align-items: center; justify-content: center; text-decoration: none; cursor: pointer;
-    font-family: 'Oswald', Arial, sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-    color: #ffffff; padding: 10px 20px; background: #007474; border: 1px solid #00b8b8; transition: filter 0.15s ease;
-  }
-  .qr-btn:hover { filter: brightness(1.18); }
-  .qr-btn.copied { background: #26de78; border-color: #26de78; color: #04160c; }
-
-  @media (max-width: 640px) { .cal-frame iframe { height: 560px; } }
+  *{box-sizing:border-box;border-radius:0 !important;}
+  html,body{margin:0;padding:0;}
+  body{background:radial-gradient(1200px 700px at -6% -12%,rgba(0,184,184,0.30),transparent 52%),
+    radial-gradient(900px 560px at 106% 6%,rgba(0,184,184,0.12),transparent 55%),
+    linear-gradient(135deg,var(--wedge) 0%,var(--bg2) 36%,var(--bg) 100%);
+    background-attachment:fixed;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;}
+  .wrap{max-width:1000px;margin:0 auto;padding:26px 22px 70px;}
+  .top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px;}
+  .top img{width:40px;height:40px;object-fit:contain;}
+  h1{font-family:var(--font);font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:clamp(1.3rem,4vw,1.8rem);margin:0;color:#fff;}
+  .checkout-btn{margin-left:auto;font-family:var(--font);font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#04110f;background:var(--teal);border:0;padding:11px 18px;cursor:pointer;text-decoration:none;display:inline-block;}
+  .checkout-btn:hover{filter:brightness(1.1);}
+  .sub{color:var(--muted);font-size:.92rem;margin:2px 0 20px;}
+  .summary{display:flex;align-items:center;gap:14px 22px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--teal);padding:14px 18px;margin-bottom:18px;}
+  .summary .big{font-family:var(--font);font-size:1.6rem;color:var(--teal-lt);}
+  .summary .lab{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-left:auto;font-size:.74rem;color:var(--muted);}
+  .legend i{display:inline-block;width:11px;height:11px;margin-right:6px;vertical-align:-1px;}
+  .k-av{background:var(--ok);} .k-out{background:var(--orange);}
+  .h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:22px 0 12px;padding-left:9px;border-left:3px solid var(--teal);}
+  .board{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
+  .cam{background:rgba(0,0,0,.22);border:1px solid var(--line-soft);border-left:4px solid var(--ok);padding:13px 14px;}
+  .cam.out{border-left-color:var(--orange);}
+  .cam .n{font-family:var(--font);font-weight:600;letter-spacing:.03em;font-size:1rem;}
+  .cam .s{font-size:.78rem;color:var(--muted);margin-top:3px;}
+  .cam.out .s{color:#ffc7a6;}
+  /* month calendar */
+  .calhead{display:flex;align-items:center;gap:12px;margin:24px 0 10px;}
+  .mtitle{font-family:var(--font);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:1rem;color:#fff;}
+  .navb{font-family:var(--font);font-size:.9rem;color:#eafeff;background:rgba(0,184,184,.14);border:1px solid var(--line);cursor:pointer;padding:6px 12px;}
+  .navb:hover{background:rgba(0,184,184,.28);}
+  .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px;}
+  .dow div{font-family:var(--font);font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);text-align:center;}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+  .cell{min-height:92px;background:rgba(0,0,0,.22);border:1px solid var(--line-soft);padding:5px;display:flex;flex-direction:column;gap:4px;}
+  .cell.out-month{opacity:.32;} .cell.today{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal);}
+  .daynum{font-family:var(--font);font-size:.72rem;color:var(--muted);}
+  .cell.today .daynum{color:var(--teal-lt);font-weight:700;}
+  .pill{font-size:.68rem;line-height:1.25;padding:4px 6px;border-left:3px solid var(--teal);background:rgba(0,184,184,.14);color:#eafeff;}
+  .pill .cam{font-weight:700;display:block;background:none;border:0;padding:0;}
+  .pill .meta{color:var(--muted);font-size:.62rem;}
+  .pill.overdue{border-left-color:var(--orange);background:rgba(255,107,26,.14);}
+  .pill.returned{border-left-color:var(--grayed);background:rgba(160,180,180,.10);color:var(--faint);text-decoration:line-through;}
+  .foot{margin-top:22px;font-size:.74rem;color:var(--faint);}
+  body.embed .top, body.embed .sub{display:none;}
+  body.embed .wrap{padding-top:16px;}
 </style>
 </head>
 <body>
-<nav class="silva-nav" aria-label="Site navigation"></nav>
-<div class="silva-page">
-  <h1 class="cal-title">Camera Check Out Tracker</h1>
-  <div class="cal-title-rule"></div>
-  <div class="cal-open-row">
-    <a class="cal-open" href="https://calendar.google.com/calendar/embed?src=c_0aa19ce0d075f9150d5610114ee936928de02b4082b0f2cbadd81c2a38d32aaf%40group.calendar.google.com&ctz=America%2FLos_Angeles&mode=MONTH&showTitle=0&showPrint=0&showTz=0&showCalendars=0" target="_blank" rel="noopener">Open Full Calendar &#8599;</a>
-  </div>
-  <div class="cal-frame">
-    <iframe title="Camera Checkouts calendar" src="https://calendar.google.com/calendar/embed?src=c_0aa19ce0d075f9150d5610114ee936928de02b4082b0f2cbadd81c2a38d32aaf%40group.calendar.google.com&ctz=America%2FLos_Angeles&mode=MONTH&showTitle=0&showPrint=0&showTz=0&showCalendars=0" scrolling="no"></iframe>
-  </div>
-  <p class="cal-fallback">Calendar not showing above? <a href="https://calendar.google.com/calendar/embed?src=c_0aa19ce0d075f9150d5610114ee936928de02b4082b0f2cbadd81c2a38d32aaf%40group.calendar.google.com&ctz=America%2FLos_Angeles&mode=MONTH&showTitle=0&showPrint=0&showTz=0&showCalendars=0" target="_blank" rel="noopener">Open it in a new tab</a>. This can happen in Safari when cross-site tracking prevention or a content blocker blocks the embedded view.</p>
-</div>
-
-<div id="qr-modal">
-  <div class="qr-backdrop"></div>
-  <div class="qr-card" role="dialog" aria-modal="true" aria-label="Camera Check Out QR code">
-    <button class="qr-close" type="button" aria-label="Close">&times;</button>
-    <div class="qr-title">Camera Check Out</div>
-    <div class="qr-imgwrap"><img class="qr-img" src="/assets/camera-checkout-qr-v1.png" alt="Camera checkout QR code" /></div>
-    <div class="qr-hint">Point a phone camera at the code to open the form.</div>
-    <div class="qr-actions">
-      <button class="qr-btn qr-copy" type="button">Copy URL</button>
-      <a class="qr-btn qr-view" href="https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform" target="_blank" rel="noopener">View Form</a>
+  <div class="wrap">
+    <div class="top">
+      <img src="https://www.creativesilva.com/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School" />
+      <h1>Camera Checkout Calendar</h1>
+      <a class="checkout-btn" href="/camera-checkout.html">Check out a camera</a>
     </div>
+    <p class="sub">See which cameras are out and when they are due back before you ask. Updates automatically.</p>
+
+    <div class="summary">
+      <div><span class="big" id="outn">0</span> <span class="lab">of <span id="totn">0</span> cameras out</span></div>
+      <div class="legend"><span><i class="k-av"></i>Available</span><span><i class="k-out"></i>Checked out</span></div>
+    </div>
+
+    <div class="h">Cameras right now</div>
+    <div class="board" id="board"><span class="foot">Loading&#8230;</span></div>
+
+    <div class="calhead">
+      <button class="navb" id="prev">&#8249;</button>
+      <span class="mtitle" id="mtitle"></span>
+      <button class="navb" id="next">&#8250;</button>
+    </div>
+    <div class="dow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
+    <div class="grid" id="grid"></div>
+
+    <p class="foot" id="foot"></p>
   </div>
-</div>
 
-<script src="/js/silva-nav.js?v=86587696"></script>
 <script>
-  (function () {
-    var FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdfzMSJ-rsiNSBh5NsNNIm1POSvn5iHVVj93feXjs9FakdiIA/viewform";
-    var modal = document.getElementById('qr-modal');
-    function openModal() { modal.classList.add('open'); document.addEventListener('keydown', onEsc); }
-    function closeModal() { modal.classList.remove('open'); document.removeEventListener('keydown', onEsc); }
-    function onEsc(e) { if (e.key === 'Escape') closeModal(); }
+(function(){
+  var API='https://pvhs-canvas-grader.onrender.com';
+  if(/[?&]embed=1/.test(location.search)) document.body.classList.add('embed');
+  var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var view=new Date(); view.setDate(1);
+  var DATA={cameras:[],checkouts:[]};
+  var grid=document.getElementById('grid'), mtitle=document.getElementById('mtitle'),
+      board=document.getElementById('board'), outn=document.getElementById('outn'), totn=document.getElementById('totn'),
+      foot=document.getElementById('foot');
+  function todayISO(){ var d=new Date(); d.setHours(0,0,0,0); return d.toISOString().slice(0,10); }
+  function fmt(iso){ if(!iso)return''; var p=iso.split('-'); return MONTHS[+p[1]-1].slice(0,3)+' '+(+p[2]); }
+  function activeByCam(){ var m={}; DATA.checkouts.forEach(function(c){ if(!c.returned) m[c.camera]=c; }); return m; }
 
-    // Open Google Voice as a compact floating pop-out window (not a new tab). Reusing the window
-    // name focuses the same pop-out on repeat clicks instead of spawning new ones.
-    function openVoice() {
-      var w = 480, h = 780;
-      var baseLeft = (window.screenLeft != null ? window.screenLeft : window.screenX) || 0;
-      var baseTop = (window.screenTop != null ? window.screenTop : window.screenY) || 0;
-      var vw = window.innerWidth || document.documentElement.clientWidth || screen.width;
-      var vh = window.innerHeight || document.documentElement.clientHeight || screen.height;
-      var left = Math.round(baseLeft + Math.max(0, (vw - w) / 2));
-      var top = Math.round(baseTop + Math.max(0, (vh - h) / 2));
-      var features = 'popup=yes,width=' + w + ',height=' + h + ',left=' + left + ',top=' + top +
-                     ',menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes';
-      var win = window.open('https://voice.google.com/u/0/messages', 'gvoice_popout', features);
-      if (win) { win.focus(); }
+  function renderBoard(){
+    var active=activeByCam(); var cams=DATA.cameras||[];
+    outn.textContent=Object.keys(active).length; totn.textContent=cams.length;
+    board.innerHTML='';
+    if(!cams.length){ board.innerHTML='<span class="foot">No cameras configured yet.</span>'; return; }
+    cams.forEach(function(c){ var o=active[c]; var el=document.createElement('div'); el.className='cam'+(o?' out':'');
+      el.innerHTML='<div class="n">'+c+'</div><div class="s">'+(o?('Out &middot; due '+fmt(o.due)):'Available')+'</div>';
+      board.appendChild(el); });
+  }
+  function renderCal(){
+    mtitle.textContent=MONTHS[view.getMonth()]+' '+view.getFullYear();
+    var first=new Date(view.getFullYear(),view.getMonth(),1);
+    var start=new Date(first); start.setDate(1-first.getDay());
+    grid.innerHTML='';
+    for(var i=0;i<42;i++){ var d=new Date(start); d.setDate(start.getDate()+i); var iso=d.toISOString().slice(0,10);
+      var cell=document.createElement('div'); cell.className='cell'+(d.getMonth()!==view.getMonth()?' out-month':'')+(iso===todayISO()?' today':'');
+      var dn=document.createElement('div'); dn.className='daynum'; dn.textContent=d.getDate(); cell.appendChild(dn);
+      DATA.checkouts.filter(function(c){ return c.out===iso; }).forEach(function(c){
+        var overdue=!c.returned && c.due < todayISO();
+        var pill=document.createElement('div'); pill.className='pill'+(c.returned?' returned':(overdue?' overdue':''));
+        var st=c.returned?'returned':(overdue?('overdue '+fmt(c.due)):('due '+fmt(c.due)));
+        pill.innerHTML='<span class="cam">'+c.camera+'</span><span class="meta">'+st+'</span>';
+        cell.appendChild(pill);
+      });
+      grid.appendChild(cell);
     }
-    modal.querySelector('.qr-close').addEventListener('click', closeModal);
-    modal.querySelector('.qr-backdrop').addEventListener('click', closeModal);
-    var copyBtn = modal.querySelector('.qr-copy');
-    copyBtn.addEventListener('click', function () {
-      navigator.clipboard.writeText(FORM_URL).then(function () {
-        copyBtn.textContent = '✓ Copied'; copyBtn.classList.add('copied');
-        setTimeout(function () { copyBtn.textContent = 'Copy URL'; copyBtn.classList.remove('copied'); }, 2000);
-      }).catch(function () { window.prompt('Copy the camera checkout form URL:', FORM_URL); });
-    });
-
-    // Add a "View QR Code" button to the header (row 2), once silva-nav.js has built it.
-    function injectBtn() {
-      var bar = document.querySelector('.silva-uni-bar');
-      if (!bar) { return false; }
-      if (bar.querySelector('.silva-uni-qrbtn')) { return true; }
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'silva-uni-qrbtn';
-      btn.textContent = 'View QR Code';
-      btn.addEventListener('click', openModal);
-      bar.appendChild(btn);
-      var voice = document.createElement('button');
-      voice.type = 'button';
-      voice.className = 'silva-uni-voicebtn';
-      voice.textContent = 'Voice';
-      voice.addEventListener('click', openVoice);
-      bar.appendChild(voice);
-      return true;
-    }
-    function tryInject(n) { if (injectBtn() || n <= 0) { return; } setTimeout(function () { tryInject(n - 1); }, 40); }
-    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', function () { tryInject(50); }); }
-    else { tryInject(50); }
-  })();
+  }
+  function load(){
+    fetch(API+'/api/camera/calendar',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
+      DATA={cameras:d.cameras||[],checkouts:d.checkouts||[]};
+      renderBoard(); renderCal();
+      foot.textContent='Updated '+new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+'. Refreshes automatically.';
+    }).catch(function(){ foot.textContent='Could not load the calendar. It will keep trying.'; });
+  }
+  document.getElementById('prev').addEventListener('click',function(){ view.setMonth(view.getMonth()-1); renderCal(); });
+  document.getElementById('next').addEventListener('click',function(){ view.setMonth(view.getMonth()+1); renderCal(); });
+  load(); setInterval(load,60000);
+})();
 </script>
 </body>
 </html>
