@@ -77,14 +77,14 @@ def overview():
     en=banner("Photography 2A","Module 03: Studio Session","Photograph the Panther of the Quarter honorees.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Panther of the Quarter Portraits",
         para("Our studio is hosting the Panther of the Quarter (POTQ) honorees. There are 20 honorees to photograph for the school newsletter. For each honoree you will create a waist-up portrait and a shoulder-up headshot in our studio, then edit the results to a professional finish.")
-        + framed(HEADER,"The three-person studio crew at work, labeled Art Director, Photographer, and Lighting Assistant, with the Talent posing on the backdrop"))
+        + framed(HEADER,"The three-person studio crew at work, labeled Art Director, Photographer, and Lighting Assistant, with the Subject posing on the backdrop"))
     en+=standards_box(False, SS_STANDARDS)
     en+=downloads_block(False)
     en+=card("YOUR CREW / THREE ROLES","Work as a Team of Three",
         para("You will work in groups of three and rotate through three professional roles. Each group photographs one or two of the 20 honorees, and then each person edits the images their group captured.")
         + bullets([
             ("Photographer:","runs the camera. Owns the camera settings and the framing for every frame."),
-            ("Art Director:","handles the talent. Greets the honoree, asks their name and which side they favor, poses them, loosens them up, and checks their posture and hair before each frame."),
+            ("Art Director:","handles the subject. Greets the honoree, asks their name and which side they favor, poses them, loosens them up, and checks their posture and hair before each frame."),
             ("Lighting Assistant:","owns the light. Sets and adjusts the placement and height of the Westcott Eyelighter reflector."),
         ]))
     en+=card("FRAMING / WHAT TO CAPTURE","Two Frames per Honoree",
@@ -106,14 +106,14 @@ def overview():
     es=banner("Fotograf&iacute;a 2A","M&oacute;dulo 03: Sesi&oacute;n de Estudio","Fotograf&iacute;a a los honorados Pantera del Trimestre.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Retratos de la Pantera del Trimestre",
         para("Nuestro estudio recibe a los honorados de la Pantera del Trimestre (POTQ). Hay 20 honorados que fotografiar para el bolet&iacute;n de la escuela. Para cada honorado crear&aacute;s un retrato de cintura para arriba y un retrato de hombros para arriba (headshot) en nuestro estudio, y luego editar&aacute;s los resultados con un acabado profesional.")
-        + framed(HEADER,"El equipo de estudio de tres personas trabajando, con las etiquetas Director de Arte, Fot&oacute;grafo y Asistente de Iluminaci&oacute;n, y el Talento posando frente al fondo"))
+        + framed(HEADER,"El equipo de estudio de tres personas trabajando, con las etiquetas Director de Arte, Fot&oacute;grafo y Asistente de Iluminaci&oacute;n, y el Sujeto posando frente al fondo"))
     es+=standards_box(True, SS_STANDARDS)
     es+=downloads_block(True)
     es+=card("TU EQUIPO / TRES ROLES","Trabaja en Equipo de Tres",
         para("Trabajar&aacute;s en grupos de tres y rotar&aacute;n por tres roles profesionales. Cada grupo fotograf&iacute;a a uno o dos de los 20 honorados, y luego cada persona edita las im&aacute;genes que captur&oacute; su grupo.")
         + bullets([
             ("Fot&oacute;grafo:","maneja la c&aacute;mara. Es responsable de los ajustes de la c&aacute;mara y del encuadre en cada toma."),
-            ("Director de Arte:","atiende al talento. Saluda al honorado, le pregunta su nombre y qu&eacute; lado prefiere, lo posa, lo relaja y revisa su postura y su cabello antes de cada toma."),
+            ("Director de Arte:","atiende al sujeto. Saluda al honorado, le pregunta su nombre y qu&eacute; lado prefiere, lo posa, lo relaja y revisa su postura y su cabello antes de cada toma."),
             ("Asistente de Iluminaci&oacute;n:","maneja la luz. Coloca y ajusta la posici&oacute;n y la altura del reflector Westcott Eyelighter."),
         ]))
     es+=card("ENCUADRE / QU&Eacute; CAPTURAR","Dos Tomas por Honorado",

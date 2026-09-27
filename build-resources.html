@@ -459,6 +459,185 @@
       border: 2px dashed rgba(0, 184, 184, 0.45); background: rgba(0, 184, 184, 0.06);
       color: #80e0e0; text-align: center; padding: 40px 18px; font-size: 0.95rem; letter-spacing: 0.02em;
     }
+
+  /* ===== transplanted Image Prompt Builder (pvb-*) ===== */
+  :root{
+    --pvb-bg:#041d1c; --pvb-bg2:#062a28; --pvb-wedge:#0a4a4a;
+    --pvb-panel:linear-gradient(135deg,rgba(0,184,184,0.12) 0%,rgba(4,20,19,0.55) 100%);
+    --pvb-panel-2:linear-gradient(135deg,rgba(0,184,184,0.17) 0%,rgba(4,20,19,0.5) 100%);
+    --pvb-panel-hi:linear-gradient(135deg,rgba(0,184,184,0.26) 0%,rgba(0,184,184,0.06) 100%);
+    --pvb-teal:#00b8b8; --pvb-teal-lt:#5ff0f0; --pvb-teal-deep:#007474;
+    --pvb-text:#eafeff; --pvb-muted:rgba(206,244,244,0.66); --pvb-faint:rgba(206,244,244,0.44);
+    --pvb-line:rgba(0,184,184,0.35); --pvb-line-soft:rgba(0,184,184,0.2);
+    --pvb-gold:#f5b301; --pvb-gold-bright:#ffd166;
+    --pvb-radius:14px;
+    --pvb-font:'Oswald',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    --pvb-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  .pvb-wrap{max-width:1320px; margin:0 auto; padding:22px 26px 90px;}
+  .pvb-intro{color:var(--pvb-muted); font-size:.92rem; max-width:760px; margin:2px 0 18px;}
+  .pvb-grid{display:grid; grid-template-columns:minmax(0,1fr) 452px; gap:22px; align-items:start;}
+  @media (max-width:980px){ .pvb-grid{grid-template-columns:1fr;} }
+  .pvb-select{position:relative; max-width:460px; margin:2px 0 12px;}
+  .pvb-select-btn{width:100%; display:flex; align-items:center; gap:12px; text-align:left; cursor:pointer; font-family:var(--pvb-font);
+    background:var(--pvb-panel); border:1px solid var(--pvb-line); border-top:2px solid var(--pvb-teal); padding:11px 14px; color:var(--pvb-text); transition:background .15s;}
+  .pvb-select-btn:hover{background:var(--pvb-panel-2);}
+  .pvb-select-cur{flex:1 1 auto; min-width:0;}
+  .pvb-select-cur .t{display:block; font-weight:700; font-size:.95rem; text-transform:uppercase; letter-spacing:.04em; color:#fff;}
+  .pvb-select-cur .s{display:block; font-size:.74rem; color:var(--pvb-faint); margin-top:2px;}
+  .pvb-select-chev{flex:0 0 auto; width:10px; height:10px; border-right:2px solid var(--pvb-teal-lt); border-bottom:2px solid var(--pvb-teal-lt); transform:rotate(45deg); transition:transform .15s;}
+  .pvb-select-btn[aria-expanded="true"] .pvb-select-chev{transform:rotate(-135deg);}
+  .pvb-select-menu{position:absolute; z-index:60; top:calc(100% + 4px); left:0; right:0; background:#0a2e2c; border:1px solid var(--pvb-teal); box-shadow:0 14px 32px rgba(0,0,0,.6); max-height:336px; overflow-y:auto; scroll-behavior:smooth; -webkit-overflow-scrolling:touch;}
+  .pvb-select-opt{text-align:left; padding:12px 16px; cursor:pointer; border-left:3px solid transparent; background:#0a2e2c;}
+  .pvb-select-opt + .pvb-select-opt{border-top:1px solid rgba(0,184,184,.14);}
+  .pvb-select-opt:hover{background:rgba(0,184,184,.16);}
+  .pvb-select-opt.active{background:rgba(0,184,184,.22); border-left-color:var(--pvb-teal);}
+  .pvb-select-opt .t{display:block; font-weight:700; font-size:.9rem; text-transform:uppercase; letter-spacing:.04em; color:#eafeff;}
+  .pvb-select-opt .s{display:block; font-size:.72rem; color:var(--pvb-faint); margin-top:2px;}
+  .pvb-card{background:var(--pvb-panel); border:1px solid var(--pvb-line); border-top:3px solid var(--pvb-teal); padding:18px 18px 20px; margin-top:16px;}
+  .pvb-editor-head{display:flex; align-items:center; gap:10px; margin:2px 0 4px; flex-wrap:wrap;}
+  .pvb-titlewrap{position:relative; flex:1 1 auto; min-width:0;}
+  .pvb-titlesel{display:flex; align-items:center; gap:10px; width:100%; background:transparent; border:0; cursor:pointer; padding:2px 6px 2px 0; color:#fff; text-align:left; font-family:var(--pvb-font);}
+  .pvb-titlesel:hover{opacity:.82;}
+  .pvb-titlesel-txt{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; min-width:0;}
+  .pvb-editor-head #pvb-title{font-size:1.05rem; font-weight:700; color:#fff; text-transform:uppercase; letter-spacing:.02em;}
+  .pvb-editor-head .sub{font-size:.82rem; color:var(--pvb-muted);}
+  .pvb-titlesel[aria-expanded="true"] .pvb-select-chev{transform:rotate(-135deg);}
+  .pvb-titlewrap .pvb-select-menu{min-width:300px;}
+  .pvb-disc{margin:2px 0 12px;}
+  .pvb-gtitle{font-size:.68rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--pvb-teal-lt); margin:20px 0 10px; padding-left:9px; border-left:3px solid var(--pvb-teal);}
+  .pvb-note{font-size:.82rem; color:var(--pvb-muted); background:rgba(0,184,184,.08);
+    border-left:3px solid var(--pvb-teal); padding:9px 12px; margin:10px 0;}
+  .pvb-guide{background:rgba(0,184,184,.08); border:1px solid var(--pvb-line); border-left:3px solid var(--pvb-teal); padding:11px 13px; margin:10px 0 4px;}
+  .pvb-guide-h{font-size:.66rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--pvb-teal-lt); margin-bottom:6px;}
+  .pvb-guide-b{font-size:.82rem; color:var(--pvb-muted); line-height:1.55;}
+  .pvb-guide-b b{color:#eafeff; font-weight:700;}
+  .pvb-smallbtn.copied{background:#3fa863; color:#04110f;}
+  .pvb-fields{display:grid; grid-template-columns:1fr; gap:12px;}
+  @media (max-width:560px){ .pvb-fields{grid-template-columns:1fr;} }
+  .pvb-field{display:flex; flex-direction:column; gap:5px;}
+  .pvb-field.full{grid-column:1 / -1;}
+  .pvb-field label{font-size:.74rem; font-weight:600; letter-spacing:.02em; color:#cfeaea;}
+  .pvb-field textarea, .pvb-field select{width:100%; font-family:var(--pvb-body); font-size:.95rem; color:var(--pvb-text);
+    background:rgba(0,0,0,.28); border:1px solid var(--pvb-line); border-radius:9px; padding:9px 11px; outline:none; resize:vertical;}
+  .pvb-field textarea{min-height:42px;}
+  .pvb-field select{appearance:none; -webkit-appearance:none; cursor:pointer;
+    background-image:linear-gradient(45deg,transparent 50%,var(--pvb-muted) 50%),linear-gradient(135deg,var(--pvb-muted) 50%,transparent 50%);
+    background-position:calc(100% - 18px) 55%, calc(100% - 13px) 55%; background-size:5px 5px,5px 5px; background-repeat:no-repeat; padding-right:34px;}
+  .pvb-field textarea:focus, .pvb-field select:focus{border-color:var(--pvb-teal);}
+  .pvb-field select option{background:#0c1414; color:var(--pvb-text);}
+  .pvb-acc{background:rgba(0,184,184,.06); border:1px solid var(--pvb-line-soft); border-left:2px solid var(--pvb-teal-deep); margin-bottom:10px;}
+  .pvb-acc.open{border-left-color:var(--pvb-teal);}
+  .pvb-acc-head{width:100%; display:flex; align-items:center; gap:10px; cursor:pointer; font-family:var(--pvb-font);
+    background:transparent; border:0; color:var(--pvb-text); padding:12px 14px; text-align:left;}
+  .pvb-acc-head .lab{font-weight:600; font-size:.92rem;}
+  .pvb-acc-head .cnt{font-size:.7rem; color:var(--pvb-faint); letter-spacing:.04em;}
+  .pvb-acc-head .cnt.has{color:var(--pvb-teal);}
+  .pvb-acc-head .chev{margin-left:auto; width:9px; height:9px; border-right:2px solid var(--pvb-muted);
+    border-bottom:2px solid var(--pvb-muted); transform:rotate(45deg); transition:transform .18s;}
+  .pvb-acc.open .pvb-acc-head .chev{transform:rotate(-135deg);}
+  .pvb-acc-body{display:none; padding:4px 14px 14px;}
+  .pvb-acc.open .pvb-acc-body{display:block;}
+  .pvb-refgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); gap:12px;}
+  .pvb-refcard{cursor:pointer; border-radius:10px; overflow:hidden; background:rgba(255,255,255,.03);
+    outline:2px solid transparent; transition:outline-color .12s, transform .05s;}
+  .pvb-refcard:hover{transform:translateY(-1px);}
+  .pvb-refcard.sel{outline-color:var(--pvb-teal);}
+  .pvb-refcard .thumb{position:relative; width:100%; aspect-ratio:1/1; background:#0b1212;}
+  .pvb-refcard .thumb img{width:100%; height:100%; object-fit:contain; display:block;}
+  .pvb-rtools{display:flex; gap:4px; padding:0 8px 8px;}
+  .pvb-rtool{flex:1 1 0; display:flex; align-items:center; justify-content:center; height:26px; padding:0; cursor:pointer;
+    background:rgba(0,184,184,.12); border:1px solid var(--pvb-line-soft); color:var(--pvb-teal-lt); transition:background .12s, color .12s;}
+  .pvb-rtool:hover{background:rgba(0,184,184,.30); color:#eafeff;}
+  .pvb-rtool svg{width:14px; height:14px;}
+  .pvb-rtool.ok{background:var(--pvb-teal); color:#04110f;}
+  .pvb-rtool.err{background:#8a2f2f; color:#fff;}
+  .pvb-refcard.sel .thumb::after{content:'\2713'; position:absolute; top:6px; right:6px; width:22px; height:22px;
+    display:flex; align-items:center; justify-content:center; background:var(--pvb-teal); color:#04110f;
+    font-weight:700; font-size:.8rem; border-radius:50%;}
+  .pvb-refcard .nm{font-size:.74rem; color:#dbeeee; padding:7px 8px 8px; line-height:1.25;}
+  .pvb-lightbox{position:fixed; inset:0; z-index:9998; background:rgba(2,10,10,.94);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:44px 24px;}
+  .pvb-lightbox[hidden]{display:none;}
+  .pvb-lb-img{max-width:92vw; max-height:80vh; object-fit:contain; background:#000; border:1px solid var(--pvb-line); border-top:3px solid var(--pvb-teal);}
+  .pvb-lb-cap{margin-top:14px; font-family:var(--pvb-body); color:var(--pvb-text); font-size:.98rem; letter-spacing:.02em; text-align:center;}
+  .pvb-lb-cap .role{display:block; margin-top:4px; color:var(--pvb-teal-lt); text-transform:uppercase; letter-spacing:.1em; font-size:.7rem; font-weight:700;}
+  .pvb-lb-close{position:absolute; top:18px; right:22px; width:42px; height:42px; background:var(--pvb-teal); color:#04110f; border:0; font-size:1.6rem; line-height:1; cursor:pointer; font-family:var(--pvb-font);}
+  .pvb-lb-close:hover{filter:brightness(1.12);}
+  .pvb-lb-hint{position:absolute; bottom:18px; left:0; right:0; text-align:center; color:var(--pvb-faint); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;}
+  .pvb-setups{display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
+  .pvb-chip{display:inline-flex; align-items:center; gap:7px; font-size:.78rem; color:#eafeff;
+    background:rgba(0,184,184,.10); border:1px solid var(--pvb-line); border-left:3px solid var(--pvb-teal); padding:6px 8px 6px 12px;}
+  .pvb-chip button{background:transparent; border:0; color:var(--pvb-muted); cursor:pointer; font-size:1rem; line-height:1; padding:0 2px;}
+  .pvb-chip button:hover{color:#ff9a9a;}
+  .pvb-chip .load{color:#eafeff; cursor:pointer;}
+  .pvb-smallbtn{font-family:var(--pvb-font); font-size:.72rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:#04110f; background:var(--pvb-teal); border:0; padding:8px 14px; cursor:pointer;}
+  .pvb-smallbtn:hover{filter:brightness(1.12);}
+  .pvb-smallbtn.ghost{background:rgba(0,184,184,.14); color:#eafeff; border:1px solid var(--pvb-line);}
+  .pvb-headacts{margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .pvb-review{background:var(--pvb-panel-2); border:1px solid var(--pvb-line); border-top:4px solid var(--pvb-teal); padding:16px 16px 18px;}
+  .pvb-review h3{font-size:.68rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--pvb-teal-lt); margin:2px 0 10px;}
+  .pvb-modebar{display:flex; align-items:center; gap:10px; margin-bottom:7px; flex-wrap:wrap;}
+  .pvb-modelabel{font-size:.62rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--pvb-teal-lt);}
+  .pvb-modeseg{display:inline-flex; border:1px solid var(--pvb-line);}
+  .pvb-modebtn{font-family:var(--pvb-font); font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--pvb-muted); background:transparent; border:0; padding:7px 13px; cursor:pointer; transition:background .12s;}
+  .pvb-modebtn:hover{background:rgba(0,184,184,.12);}
+  .pvb-modebtn.active{background:var(--pvb-teal); color:#04110f;}
+  .pvb-modehint{font-size:.72rem; color:var(--pvb-faint); margin:0 0 12px; line-height:1.5;}
+  .pvb-preview{background:#04100f; border:1px solid var(--pvb-line-soft); border-left:3px solid var(--pvb-teal); padding:12px 13px; max-height:300px; overflow:auto;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.76rem; line-height:1.5; color:#d7f2f2; white-space:pre-wrap;}
+  .pvb-acts{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 4px;}
+  .pvb-btn{flex:1 1 auto; font-family:var(--pvb-font); font-size:.74rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:#04110f; background:var(--pvb-teal); border:0; border-radius:9px; padding:11px 12px; cursor:pointer; transition:filter .15s;}
+  .pvb-btn:hover{filter:brightness(1.1);}
+  .pvb-btn.ghost{color:#eafeff; background:rgba(0,184,184,.14); border:1px solid var(--pvb-line);}
+  .pvb-btn.copied{background:#3fa863; color:#04110f;}
+  .pvb-saved{font-size:.7rem; color:var(--pvb-faint); margin-top:8px; letter-spacing:.03em;}
+  .pvb-saved b{color:var(--pvb-teal-lt); font-weight:600;}
+  .pvb-check{margin-top:16px;}
+  .pvb-check-h{display:flex; align-items:center; gap:8px; margin-bottom:6px;}
+  .pvb-check-h .t{font-size:.68rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--pvb-gold-bright); padding-left:9px; border-left:3px solid var(--pvb-gold);}
+  .pvb-check-note{font-size:.76rem; color:var(--pvb-muted); line-height:1.55; margin:0 0 12px;
+    background:rgba(245,179,1,.10); border-left:3px solid var(--pvb-gold); padding:8px 11px;}
+  .pvb-check-empty{font-size:.82rem; color:var(--pvb-faint); padding:8px 0;}
+  .pvb-stepnum{flex:0 0 22px; width:22px; height:22px; display:flex; align-items:center; justify-content:center; background:var(--pvb-teal); color:#04110f; font-weight:700; font-size:.74rem;}
+  .pvb-otherbox{margin-top:6px; width:100%; box-sizing:border-box; background:rgba(0,0,0,.28); border:1px solid var(--pvb-line); color:#eafeff; font-family:var(--pvb-body); font-size:.95rem; padding:9px 11px;}
+  .pvb-check-toggle{display:flex; align-items:flex-start; gap:9px; font-size:.9rem; color:#dbeeee; cursor:pointer; line-height:1.4;}
+  .pvb-check-toggle input{margin-top:2px; accent-color:var(--pvb-teal); width:16px; height:16px; flex:0 0 auto;}
+  .pvb-drop{border:1px dashed var(--pvb-line); background:rgba(0,184,184,.05); padding:18px 14px; text-align:center; cursor:pointer; transition:background .12s,border-color .12s;}
+  .pvb-drop:hover,.pvb-drop.over{border-color:var(--pvb-teal); background:rgba(0,184,184,.14);}
+  .pvb-drop-hint{font-size:.82rem; color:var(--pvb-muted); line-height:1.5; pointer-events:none;}
+  .pvb-drop-list{margin-top:10px;}
+  .pvb-checkrow{display:flex; gap:11px; align-items:center; padding:9px; background:rgba(0,184,184,.05); border-left:2px solid var(--pvb-gold); margin-bottom:8px;}
+  .pvb-checkrow .th{flex:0 0 56px; width:56px; height:56px; overflow:hidden; background:#041413;}
+  .pvb-checkrow .th img{width:100%; height:100%; object-fit:contain; display:block;}
+  .pvb-checkrow .meta{flex:1 1 auto; min-width:0;}
+  .pvb-checkrow .role{font-size:.62rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--pvb-teal-lt);}
+  .pvb-checkrow .fn{font-size:.78rem; color:#dbeeee; word-break:break-all; line-height:1.3;}
+  .pvb-checkrow .cimg{flex:0 0 auto; font-family:var(--pvb-font); font-size:.66rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    color:#04110f; background:var(--pvb-teal); border:0; padding:8px 10px; cursor:pointer;}
+  .pvb-checkrow .cimg:hover{filter:brightness(1.12);}
+  .pvb-checkrow .cimg.copied{background:#3fa863; color:#04110f; border-color:#3fa863;}
+  :root{ --font-head:var(--pvb-font); --text:var(--pvb-text); --text-dim:var(--pvb-muted); --text-faint:var(--pvb-faint); }
+  .pvb-tabs{display:flex; gap:4px; flex-wrap:wrap; margin:0; padding:0;}
+  .pvb-tab{position:relative; font-family:var(--pvb-font); font-weight:700; letter-spacing:.1em; text-transform:uppercase; font-size:.8rem;
+    color:var(--pvb-muted); background:transparent; border:0; border-bottom:3px solid transparent; padding:12px 20px 11px; cursor:pointer; transition:color .15s, border-color .15s, background .15s;}
+  .pvb-tab:hover{color:var(--pvb-text); background:rgba(0,184,184,.08);}
+  .pvb-tab.active{color:var(--pvb-teal-lt); border-bottom-color:var(--pvb-teal);}
+  .pvb-tab .tabcount{font-size:.66rem; color:var(--pvb-faint); margin-left:6px; letter-spacing:.04em;}
+  .pvb-tabpanel[hidden]{display:none;}
+  .pvb-quickrow{display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin:2px 0 16px; padding:12px 14px;
+    background:rgba(0,184,184,.06); border:1px solid var(--pvb-line-soft); border-left:3px solid var(--pvb-teal);}
+  .pvb-quicklabel{font-size:.64rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--pvb-teal-lt);}
+  .pvb-quickbtn{font-family:var(--pvb-font); font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:#04110f; background:var(--pvb-teal); border:0; padding:9px 14px; cursor:pointer; transition:filter .15s;}
+  .pvb-quickbtn:hover{filter:brightness(1.1);}
+  .pvb-quickbtn.copied{background:#3fa863; color:#04110f;}
+  .pvb-quickhint{font-size:.74rem; color:var(--pvb-faint); flex:1 1 220px; min-width:180px;}
+  .pvb-galintro{color:var(--pvb-muted); font-size:.92rem; max-width:820px; margin:2px 0 16px; line-height:1.6;}
+  .pvb-galempty{color:var(--pvb-faint); font-style:italic; padding:10px 0;}
   </style>
 </head>
 <body>
@@ -519,13 +698,100 @@
           <a class="cal-btn br-back" href="/curriculum.html">&#8249;&nbsp; Catalog</a>
           <a class="cal-btn" href="/calendar.html">Calendar</a>
           <a class="cal-btn br-imagegen" href="https://chatgpt.com/g/g-p-6a455e17c5248191b8c24ad354aba9ae-imagegen-pv/project" target="imagegen-pv" rel="noopener" onclick="window.open(this.href,'imagegen-pv','popup=yes,width=1320,height=980');return false;">Image Gen</a>
-          <a class="cal-btn" href="/build-resources-beta.html">Image Prompt Builder</a>
           <iframe class="header-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
         </div>
+        <nav class="pvb-tabs" id="pvb-tabs">
+          <button type="button" class="pvb-tab active" data-tab="build">Build a Prompt</button>
+          <button type="button" class="pvb-tab" data-tab="gallery">Image Gallery<span class="tabcount" id="pvb-galcount"></span></button>
+          <button type="button" class="pvb-tab" data-tab="resources">Resources</button>
+        </nav>
       </div>
     </div>
 
-    <div class="br-main">
+    <section id="pvb-panel-build" class="pvb-tabpanel br-main">
+    <p class="pvb-intro">Pick a prompt, fill what you need, and choose your reference images. The prompt on the right stays live the whole time. Attach your reference images in ChatGPT first, then click <b>Copy prompt</b> last and paste it in. (Copying an image replaces whatever is on your clipboard, so copy the prompt as your final step.)</p>
+
+    <div class="pvb-quickrow">
+      <span class="pvb-quicklabel">One-click copies</span>
+      <button type="button" class="pvb-quickbtn" data-quick="/assets/prompts/Blank-Artboard-Reset.txt">Clear Artboard</button>
+      <button type="button" class="pvb-quickbtn" data-quick="/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt">Force Full Rebuild</button>
+      <span class="pvb-quickhint">Ready-made instructions with nothing to fill in. Click to copy, then paste into ChatGPT.</span>
+    </div>
+
+    <div class="pvb-grid">
+      <section>
+        <div class="pvb-card">
+          <div class="pvb-editor-head">
+            <div class="pvb-titlewrap">
+              <button type="button" class="pvb-titlesel" id="pvb-titlesel" aria-haspopup="listbox" aria-expanded="false" title="Switch prompt">
+                <span class="pvb-titlesel-txt"><span id="pvb-title">Loading</span><span class="sub" id="pvb-sub"></span></span>
+                <span class="pvb-select-chev"></span>
+              </button>
+              <div class="pvb-select-menu" id="pvb-promptmenu" role="listbox" hidden></div>
+            </div>
+            <div class="pvb-headacts">
+              <button type="button" class="pvb-smallbtn" id="pvb-copytop" title="Copy the prompt to your clipboard">Copy prompt</button>
+              <button type="button" class="pvb-smallbtn ghost" id="pvb-resettop" title="Clear your entries for this prompt">Reset</button>
+            </div>
+          </div>
+          <div class="pvb-guide" id="pvb-guide" hidden>
+            <div class="pvb-guide-h">How to use this prompt</div>
+            <div class="pvb-guide-b" id="pvb-guide-body"></div>
+          </div>
+          <div id="pvb-refs"></div>
+        </div>
+
+        <div class="pvb-card">
+          <div class="pvb-gtitle">Reusable setups</div>
+          <p class="pvb-intro" style="margin:0 0 12px;">Save the current prompt and its choices so you can load the same setup again later. Saved on this computer.</p>
+          <div class="pvb-setups" id="pvb-setups"></div>
+        </div>
+      </section>
+
+      <aside>
+        <div class="pvb-review">
+          <div class="pvb-modebar">
+            <span class="pvb-modelabel">Prompt mode</span>
+            <div class="pvb-modeseg">
+              <button type="button" class="pvb-modebtn" data-mode="project">PV Project</button>
+              <button type="button" class="pvb-modebtn" data-mode="full">Full template</button>
+            </div>
+          </div>
+          <p class="pvb-modehint" id="pvb-modehint"></p>
+          <label class="pvb-check-toggle pvb-disc"><input type="checkbox" id="pvb-disc"> <span>Add AI disclaimer (small fine print, bottom-left, 50% opacity)</span></label>
+          <h3>Your prompt</h3>
+          <div class="pvb-preview" id="pvb-preview">Loading base prompt&#8230;</div>
+          <div class="pvb-acts">
+            <button class="pvb-btn" id="pvb-copy">Copy prompt</button>
+            <button class="pvb-btn ghost" id="pvb-reset" title="Clear your entries for this prompt">Reset</button>
+          </div>
+          <div class="pvb-saved" id="pvb-saved">Draft saves automatically.</div>
+
+          <div id="pvb-fields"></div>
+
+          <div class="pvb-check">
+            <div class="pvb-check-h"><span class="t">Copy in order &middot; 1, 2, 3</span></div>
+            <p class="pvb-check-note">Go down this list in order: copy each row, paste it into ChatGPT, then come back for the next. <b>Copy image</b> copies the picture but not its file name, so match each one by the role shown. Attaching the real files instead keeps their names.</p>
+            <div id="pvb-checklist"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+    </section>
+
+    <section id="pvb-panel-gallery" class="pvb-tabpanel br-main" hidden>
+      <p class="pvb-galintro">Every hosted image used across your live course modules, grouped by course. Click any image to enlarge, or use <b>Download</b> to save the full-size file. These are the same reference files you attach while building a prompt.</p>
+      <div class="pvb-galwrap">
+                      <!-- LIVE_IMAGE_CATALOG_START -->
+                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Course Home &amp; Overview (6)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid"><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/digarts1a-home-hero-v2.png" alt="Digital Arts 1A course home hero" /></div><div class="logo-meta"><span class="logo-name">Digital Arts 1A &rsaquo; Course Home <span class="logo-fmt">Hero &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/digarts1a-home-hero-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/course-overview/digarts1a-overview-hero-v2.jpg" alt="Digital Arts 1A course overview hero" /></div><div class="logo-meta"><span class="logo-name">Digital Arts 1A &rsaquo; Course Overview <span class="logo-fmt">Hero &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/course-overview/digarts1a-overview-hero-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/photo1a-home-hero-v2.png" alt="Photography 1A course home hero" /></div><div class="logo-meta"><span class="logo-name">Photography 1A &rsaquo; Course Home <span class="logo-fmt">Hero &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/photo1a-home-hero-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/course-overview/photo1a-overview-hero-v2.jpg" alt="Photography 1A course overview hero" /></div><div class="logo-meta"><span class="logo-name">Photography 1A &rsaquo; Course Overview <span class="logo-fmt">Hero &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/course-overview/photo1a-overview-hero-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/photo2a-home-hero-v2.png" alt="Photography 2A course home hero" /></div><div class="logo-meta"><span class="logo-name">Photography 2A &rsaquo; Course Home <span class="logo-fmt">Hero &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/photo2a-home-hero-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/course-overview/photo2a-overview-hero-v2.jpg" alt="Photography 2A course overview hero" /></div><div class="logo-meta"><span class="logo-name">Photography 2A &rsaquo; Course Overview <span class="logo-fmt">Hero &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/course-overview/photo2a-overview-hero-v2.jpg" download>Download</a></div></div></div></div></details>
+                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Digital Arts 1A (17)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid"><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/pictograms/pictograms-hero-v2.png" alt="Pictograms" /></div><div class="logo-meta"><span class="logo-name">Pictograms &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/pictograms/pictograms-hero-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/pictograms/pictograms-step01-float-v2.png" alt="Student searching Google Images for pictograms to save" /></div><div class="logo-meta"><span class="logo-name">Pictograms &rsaquo; Step 01 &middot; Find Save <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/pictograms/pictograms-step01-float-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/pictograms/pictograms-sketch-float-v1.png" alt="Student sketching a pictogram in a sketchbook" /></div><div class="logo-meta"><span class="logo-name">Pictograms &rsaquo; Step 02 &middot; Sketch Reflect <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/pictograms/pictograms-sketch-float-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/color-theory/color-theory-header-v1.png" alt="Color Theory" /></div><div class="logo-meta"><span class="logo-name">Color Theory &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/color-theory/color-theory-header-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/color-theory/color-wheel.png" alt="Color wheel with primary, secondary, and tertiary colors" /></div><div class="logo-meta"><span class="logo-name">Color Theory &rsaquo; Step 01 &middot; Analysis <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/color-theory/color-wheel.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/sketchbook-cover/sketchbook-cover-header-v2.jpg" alt="Sketchbook Cover" /></div><div class="logo-meta"><span class="logo-name">Sketchbook Cover Art &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/sketchbook-cover/sketchbook-cover-header-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/sketchbook-cover/chick-fil-a-prize.jpg" alt="Chick-fil-A prize" /></div><div class="logo-meta"><span class="logo-name">Sketchbook Cover Art &rsaquo; Overview <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/sketchbook-cover/chick-fil-a-prize.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/sketchbook-cover/reflection-typing-v3.jpg" alt="A student typing the reflection on a computer" /></div><div class="logo-meta"><span class="logo-name">Sketchbook Cover Art &rsaquo; Step 02 &middot; Submit Reflect <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/sketchbook-cover/reflection-typing-v3.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/motivational-poster/motivational-poster-header-v2.png" alt="Example motivational poster" /></div><div class="logo-meta"><span class="logo-name">Motivational Poster &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/motivational-poster/motivational-poster-header-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/motivational-poster/wallpaper-float.jpg" alt="A student in the design lab holding her phone with the finished wallpaper, the same design open in Photoshop behind her" /></div><div class="logo-meta"><span class="logo-name">Motivational Poster &rsaquo; Step 02 <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/motivational-poster/wallpaper-float.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/motivational-poster/reflection-float-v1.jpg" alt="A student filling out the Motivational Poster reflection document on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Motivational Poster &rsaquo; Step 03 <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/motivational-poster/reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/live-stream-graphic/live-stream-end-example-v1.jpg" alt="Finished History 301 Live Stream graphic: an arch photo with an orange bar on the left, a blue bar on the right, a green wash, and the words HISTORY 301 and LIVE STREAM in white" /></div><div class="logo-meta"><span class="logo-name">Live Stream Graphic &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/live-stream-graphic/live-stream-end-example-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/live-stream-graphic/live-stream-youtube-channel-v1.jpg" alt="A YouTube channel page open in a browser, showing a row of the channel&rsquo;s video thumbnails that share the same bold-text, big-face design language" /></div><div class="logo-meta"><span class="logo-name">Live Stream Graphic &rsaquo; Step 02 &middot; Inspiration <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/live-stream-graphic/live-stream-youtube-channel-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/live-stream-graphic/live-stream-design-float-v1.jpg" alt="A Pioneer Valley student in the design lab making his own YouTube thumbnail in Photoshop, a bold &lsquo;5 Ways to Score Like a Pro&rsquo; basketball design on the iMac screen" /></div><div class="logo-meta"><span class="logo-name">Live Stream Graphic &rsaquo; Step 03 &middot; Design <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/live-stream-graphic/live-stream-design-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/elements-of-art/elements-of-art-header-v1.jpg" alt="A Pioneer Valley student in the Academy of Arts lab sketching an original character in a sketchbook, with a screen showing the 7 Elements of Art" /></div><div class="logo-meta"><span class="logo-name">Elements of Art, Character Design &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/elements-of-art/elements-of-art-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/elements-of-art/elements-of-art-step01-float-v1.jpg" alt="A student photographing a finished sketchbook character named Blobby with an iPad" /></div><div class="logo-meta"><span class="logo-name">Elements of Art, Character Design &rsaquo; Step 01 &middot; Draw <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/elements-of-art/elements-of-art-step01-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/elements-of-art/elements-of-art-reflection-float-v1.jpg" alt="A Pioneer Valley student typing the Character Design reflection in the Word document on an iMac in the creative lab, a decorated sketchbook on the desk" /></div><div class="logo-meta"><span class="logo-name">Elements of Art, Character Design &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/elements-of-art/elements-of-art-reflection-float-v1.jpg" download>Download</a></div></div></div></div></details>
+                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Photography 1A (27)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid"><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/self-portrait/self-portrait-hero-v1.png" alt="Self-Portrait" /></div><div class="logo-meta"><span class="logo-name">Self-Portrait &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/self-portrait/self-portrait-hero-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/self-portrait/self-portrait-float-v1.png" alt="Self-Portrait" /></div><div class="logo-meta"><span class="logo-name">Self-Portrait &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/self-portrait/self-portrait-float-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/self-portrait/self-portrait-reflection-float-v1.png" alt="Anthony typing his reflection in Word" /></div><div class="logo-meta"><span class="logo-name">Self-Portrait &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/self-portrait/self-portrait-reflection-float-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/composition-concepts/composition-concepts-header-v1.png" alt="Composition Concepts" /></div><div class="logo-meta"><span class="logo-name">Composition Concepts &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/composition-concepts/composition-concepts-header-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/composition-concepts/composition-concepts-step01-float-v1.png" alt="A student reviewing her photos on a phone" /></div><div class="logo-meta"><span class="logo-name">Composition Concepts &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/composition-concepts/composition-concepts-step01-float-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/composition-concepts/reflection-float-v1.jpg" alt="A student typing the Composition Concepts reflection on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Composition Concepts &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/composition-concepts/reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/leading-lines/leading-lines-header-v1.jpg" alt="Two Pioneer Valley students on a photo walk, one holding a Canon camera, outside the Academy of Arts building" /></div><div class="logo-meta"><span class="logo-name">Leading Lines Photo Walk &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/leading-lines/leading-lines-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/leading-lines/leading-lines-step01-float-v1.jpg" alt="A student kneeling to photograph down a long covered walkway whose columns lead the eye to a vanishing point, while a partner watches" /></div><div class="logo-meta"><span class="logo-name">Leading Lines Photo Walk &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/leading-lines/leading-lines-step01-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/leading-lines/reflection-float-v1.jpg" alt="A Pioneer Valley student typing his Leading Lines reflection in the Word document on an iMac in the lab, a Canon camera on the desk" /></div><div class="logo-meta"><span class="logo-name">Leading Lines Photo Walk &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/leading-lines/reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/image-series/header-v1.png" alt="Image Series Photo Walk header: a row of linked photos that form one cohesive series" /></div><div class="logo-meta"><span class="logo-name">Image Series Photo Walk &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/image-series/header-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/image-series/capture-float-v1.jpg" alt="A Pioneer Valley student kneeling to photograph a bee on a pink flower with a Canon EOS R5 on campus in golden light" /></div><div class="logo-meta"><span class="logo-name">Image Series Photo Walk &rsaquo; Step 01 &middot; Capture Import <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/image-series/capture-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/image-series/edit-float-v1.jpg" alt="A Pioneer Valley student editing her photos on an iMac in the lab, with her Canon EOS R5 on the desk" /></div><div class="logo-meta"><span class="logo-name">Image Series Photo Walk &rsaquo; Step 02 &middot; Cull Edit <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/image-series/edit-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/image-series/reflection-float-v1.jpg" alt="A Pioneer Valley student typing her Image Series reflection in the Word document on an iMac in the lab" /></div><div class="logo-meta"><span class="logo-name">Image Series Photo Walk &rsaquo; Step 03 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/image-series/reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/lrc-develop/develop-basics-header-v1.jpg" alt="A Pioneer Valley student editing a cityscape photo in the Lightroom Classic Develop module on an iMac in the creative lab, a Canon EOS camera on the desk, with other students editing behind her" /></div><div class="logo-meta"><span class="logo-name">Lightroom Editing &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/lrc-develop/develop-basics-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/lrc-develop/develop-basics-star-rating-float-v2.jpg" alt="The Lightroom Classic Library view filtered to 5-star photos, with the Filter Bar set to Attribute" /></div><div class="logo-meta"><span class="logo-name">Lightroom Editing &rsaquo; Step 01 &middot; Cull Export <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/lrc-develop/develop-basics-star-rating-float-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/lrc-develop/develop-basics-reflection-float-v2.jpg" alt="A Pioneer Valley student typing the Lightroom Editing reflection in the Word document on an iMac in the creative lab, with other students editing behind her" /></div><div class="logo-meta"><span class="logo-name">Lightroom Editing &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/lrc-develop/develop-basics-reflection-float-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/tiny-things-header-v1.jpg" alt="Tiny Things" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/tiny-things-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/tiny-things-step01-float-v1.jpg" alt="Extreme close-up of a grasshopper on red ground at a low bug&rsquo;s-eye angle" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/tiny-things-step01-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/tiny-things-reflection-float-v1.jpg" alt="A student typing a short reflection on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/tiny-things-reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/balloon-pop/balloon-pop-header-v1.jpg" alt="Two Pioneer Valley students outside by the panther statue: one aims a camera while the other pops a water balloon, the water frozen in mid-air as a clear globe" /></div><div class="logo-meta"><span class="logo-name">Balloon Pop &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/balloon-pop/balloon-pop-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/balloon-pop/balloon-pop-step01-float-v1.jpg" alt="Close-up of a water balloon at the instant it pops: the water holds a round globe shape in mid-air as a pin breaks the balloon" /></div><div class="logo-meta"><span class="logo-name">Balloon Pop &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/balloon-pop/balloon-pop-step01-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/balloon-pop/balloon-pop-reflection-float-v1.jpg" alt="A Pioneer Valley student typing the Balloon Pop reflection in the Word document on an iMac in the creative lab, a Canon camera on the desk" /></div><div class="logo-meta"><span class="logo-name">Balloon Pop &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/balloon-pop/balloon-pop-reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/aperture-portrait/header-v1.jpg" alt="Aperture Portrait module header" /></div><div class="logo-meta"><span class="logo-name">Aperture Portrait &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/aperture-portrait/header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/aperture-portrait/capture-float-v2.jpg" alt="A Pioneer Valley student photographing a partner in open shade with the Canon R50 held in portrait orientation" /></div><div class="logo-meta"><span class="logo-name">Aperture Portrait &rsaquo; Step 01 &middot; Capture Contact <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/aperture-portrait/capture-float-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/aperture-portrait/reflection-float-v1.jpg" alt="A Pioneer Valley student typing the Aperture Portrait reflection in the Word document on an iMac in the lab" /></div><div class="logo-meta"><span class="logo-name">Aperture Portrait &rsaquo; Step 03 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/aperture-portrait/reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/garcia-tiny-things-header-v1.jpg" alt="Tiny Things alternate overview header" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Overview <span class="logo-fmt">Alt Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/garcia-tiny-things-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/garcia-tiny-things-reflection-float-v1.jpg" alt="Tiny Things alternate reflection float" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Alt Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/garcia-tiny-things-reflection-float-v1.jpg" download>Download</a></div></div></div></div></details>
+                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Photography 2A (15)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid"><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/composition/photowalk-hero.png" alt="Composition Photo Walk" /></div><div class="logo-meta"><span class="logo-name">Composition Photo Walk &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/composition/photowalk-hero.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/composition/chick-fil-a-prize.jpg" alt="Chick-fil-A prize" /></div><div class="logo-meta"><span class="logo-name">Composition Photo Walk &rsaquo; Overview <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/composition/chick-fil-a-prize.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/composition/photowalk-step-float.png" alt="On the photo walk" /></div><div class="logo-meta"><span class="logo-name">Composition Photo Walk &rsaquo; Step 01 &middot; Photowalk <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/composition/photowalk-step-float.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/composition/photowalk-step2-float-v2.png" alt="Renee editing her photos in Lightroom" /></div><div class="logo-meta"><span class="logo-name">Composition Photo Walk &rsaquo; Step 02 &middot; Cull Export <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/composition/photowalk-step2-float-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/ocf/ocf-header-v4.png" alt="Students lighting an outdoor portrait with off-camera flash at the PV Academy of Arts" /></div><div class="logo-meta"><span class="logo-name">Off-Camera Flash &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/ocf/ocf-header-v4.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/ocf/ocf-step01-float.png" alt="A Pioneer Valley student researching off-camera flash examples on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Off-Camera Flash &rsaquo; Step 01 &middot; Inspiration <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/ocf/ocf-step01-float.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/ocf/ocf-step02-float.png" alt="A Pioneer Valley student portrait made with off-camera flash at golden hour" /></div><div class="logo-meta"><span class="logo-name">Off-Camera Flash &rsaquo; Step 02 &middot; Photowalk <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/ocf/ocf-step02-float.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/ocf/ocf-step03-float.png" alt="A Pioneer Valley student typing the Off-Camera Flash reflection on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Off-Camera Flash &rsaquo; Step 03 &middot; Reflection <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/ocf/ocf-step03-float.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/studio-session/studio-header-v4.jpg" alt="The three-person studio crew at work, labeled Art Director, Photographer, and Lighting Assistant, with the Subject posing on the backdrop" /></div><div class="logo-meta"><span class="logo-name">Studio Session &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/studio-session/studio-header-v4.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/studio-session/studio-header.jpg" alt="A raw studio portrait on the left next to the edited, retouched final on the right" /></div><div class="logo-meta"><span class="logo-name">Studio Session &rsaquo; Step 02 &middot; Cull Edit <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/studio-session/studio-header.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/build-your-own-preset/overview-hero-v1.jpg" alt="A Lightroom Classic edit of a natural light portrait, with the Develop panel sliders open on the right" /></div><div class="logo-meta"><span class="logo-name">Build Your Own Preset &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/build-your-own-preset/overview-hero-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/build-your-own-preset/capture-float-v1.jpg" alt="A Pioneer Valley student kneeling to photograph a pink flower with a bee, using a Canon camera in golden light in front of the PV campus" /></div><div class="logo-meta"><span class="logo-name">Build Your Own Preset &rsaquo; Step 01 &middot; Photowalk <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/build-your-own-preset/capture-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/aperture-portrait/header-v1.jpg" alt="Aperture Portrait module header" /></div><div class="logo-meta"><span class="logo-name">Aperture Portrait &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/aperture-portrait/header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/aperture-portrait/capture-float-v2.jpg" alt="A Pioneer Valley student photographing a partner in open shade with the Canon R50 held in portrait orientation" /></div><div class="logo-meta"><span class="logo-name">Aperture Portrait &rsaquo; Step 01 &middot; Capture Contact <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/aperture-portrait/capture-float-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/aperture-portrait/reflection-float-v1.jpg" alt="A Pioneer Valley student typing the Aperture Portrait reflection in the Word document on an iMac in the lab" /></div><div class="logo-meta"><span class="logo-name">Aperture Portrait &rsaquo; Step 03 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/aperture-portrait/reflection-float-v1.jpg" download>Download</a></div></div></div></div></details>
+                      <!-- LIVE_IMAGE_CATALOG_END -->
+      </div>
+    </section>
+
+    <div class="br-main pvb-tabpanel" id="pvb-panel-resources" hidden>
       <section style="margin-bottom:24px;">
         <div id="cs-incoming-mount"></div>
       </section>
@@ -533,14 +799,6 @@
               <summary class="cat-head"><span class="cat-name">Image Generation Tools</span><span class="cat-chevron"></span></summary>
               <div class="cat-body">
                 <div class="char-content" id="char-content">
-                  <details class="cat-acc" open>
-                    <summary class="cat-head"><span class="cat-name">Image Prompt Builder</span><span class="cat-chevron"></span></summary>
-                    <div class="cat-body">
-                    <div class="ps2-titlebar"><img class="ps2-tb-icon" src="https://www.creativesilva.com/assets/Icons/assignment/design-teal-v1.png" alt="" /><span class="ps2-tb-title">Image Prompt Builder</span></div>
-                    <p class="ps2-intro">The Image Prompt Builder is now its own full tool: pick a prompt, fill what you need, drop in your reference images, and copy your finished prompt ready to paste into ChatGPT. Everything you type saves on this computer.</p>
-                    <p style="margin:2px 0 0;"><a class="cal-btn br-imagegen" href="/build-resources-beta.html" style="text-decoration:none;">Open the Image Prompt Builder &#8250;</a></p>
-                    </div>
-                  </details>
                   <details class="cat-acc" open>
                     <summary class="cat-head"><span class="cat-name">Cast &amp; Campus</span><span class="cat-chevron"></span></summary>
                     <div class="cat-body">
@@ -579,17 +837,6 @@
                     <div class="logo-card"><div class="logo-tile"><img src="/assets/images/characters/campus/pv-sports-complex-back-v2.jpg" alt="PV Academy of Arts plaza behind the sports complex with the panther statue" /></div><div class="logo-meta"><span class="logo-name">Sports Complex Plaza (Rear) <span class="logo-fmt">Campus &middot; JPG</span></span><a class="logo-dl" href="/assets/images/characters/campus/pv-sports-complex-back-v2.jpg" download>Download</a></div></div>
                     </div></div>
                   </details>
-                    </div>
-                  </details>
-                  <details class="cat-acc">
-                    <summary class="cat-head"><span class="cat-name">Live Image Catalog</span><span class="cat-chevron"></span></summary>
-                    <div class="cat-body">
-                      <!-- LIVE_IMAGE_CATALOG_START -->
-                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Course Home &amp; Overview (6)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid"><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/digarts1a-home-hero-v2.png" alt="Digital Arts 1A course home hero" /></div><div class="logo-meta"><span class="logo-name">Digital Arts 1A &rsaquo; Course Home <span class="logo-fmt">Hero &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/digarts1a-home-hero-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/course-overview/digarts1a-overview-hero-v2.jpg" alt="Digital Arts 1A course overview hero" /></div><div class="logo-meta"><span class="logo-name">Digital Arts 1A &rsaquo; Course Overview <span class="logo-fmt">Hero &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/course-overview/digarts1a-overview-hero-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/photo1a-home-hero-v2.png" alt="Photography 1A course home hero" /></div><div class="logo-meta"><span class="logo-name">Photography 1A &rsaquo; Course Home <span class="logo-fmt">Hero &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/photo1a-home-hero-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/course-overview/photo1a-overview-hero-v2.jpg" alt="Photography 1A course overview hero" /></div><div class="logo-meta"><span class="logo-name">Photography 1A &rsaquo; Course Overview <span class="logo-fmt">Hero &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/course-overview/photo1a-overview-hero-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/photo2a-home-hero-v2.png" alt="Photography 2A course home hero" /></div><div class="logo-meta"><span class="logo-name">Photography 2A &rsaquo; Course Home <span class="logo-fmt">Hero &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/photo2a-home-hero-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/course-overview/photo2a-overview-hero-v2.jpg" alt="Photography 2A course overview hero" /></div><div class="logo-meta"><span class="logo-name">Photography 2A &rsaquo; Course Overview <span class="logo-fmt">Hero &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/course-overview/photo2a-overview-hero-v2.jpg" download>Download</a></div></div></div></div></details>
-                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Digital Arts 1A (17)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid"><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/pictograms/pictograms-hero-v2.png" alt="Pictograms" /></div><div class="logo-meta"><span class="logo-name">Pictograms &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/pictograms/pictograms-hero-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/pictograms/pictograms-step01-float-v2.png" alt="Student searching Google Images for pictograms to save" /></div><div class="logo-meta"><span class="logo-name">Pictograms &rsaquo; Step 01 &middot; Find Save <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/pictograms/pictograms-step01-float-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/pictograms/pictograms-sketch-float-v1.png" alt="Student sketching a pictogram in a sketchbook" /></div><div class="logo-meta"><span class="logo-name">Pictograms &rsaquo; Step 02 &middot; Sketch Reflect <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/pictograms/pictograms-sketch-float-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/color-theory/color-theory-header-v1.png" alt="Color Theory" /></div><div class="logo-meta"><span class="logo-name">Color Theory &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/color-theory/color-theory-header-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/color-theory/color-wheel.png" alt="Color wheel with primary, secondary, and tertiary colors" /></div><div class="logo-meta"><span class="logo-name">Color Theory &rsaquo; Step 01 &middot; Analysis <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/color-theory/color-wheel.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/sketchbook-cover/sketchbook-cover-header-v2.jpg" alt="Sketchbook Cover" /></div><div class="logo-meta"><span class="logo-name">Sketchbook Cover Art &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/sketchbook-cover/sketchbook-cover-header-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/sketchbook-cover/chick-fil-a-prize.jpg" alt="Chick-fil-A prize" /></div><div class="logo-meta"><span class="logo-name">Sketchbook Cover Art &rsaquo; Overview <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/sketchbook-cover/chick-fil-a-prize.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/sketchbook-cover/reflection-typing-v3.jpg" alt="A student typing the reflection on a computer" /></div><div class="logo-meta"><span class="logo-name">Sketchbook Cover Art &rsaquo; Step 02 &middot; Submit Reflect <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/sketchbook-cover/reflection-typing-v3.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/motivational-poster/motivational-poster-header-v2.png" alt="Example motivational poster" /></div><div class="logo-meta"><span class="logo-name">Motivational Poster &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/digarts1/motivational-poster/motivational-poster-header-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/motivational-poster/wallpaper-float.jpg" alt="A student in the design lab holding her phone with the finished wallpaper, the same design open in Photoshop behind her" /></div><div class="logo-meta"><span class="logo-name">Motivational Poster &rsaquo; Step 02 <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/motivational-poster/wallpaper-float.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/motivational-poster/reflection-float-v1.jpg" alt="A student filling out the Motivational Poster reflection document on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Motivational Poster &rsaquo; Step 03 <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/motivational-poster/reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/live-stream-graphic/live-stream-end-example-v1.jpg" alt="Finished History 301 Live Stream graphic: an arch photo with an orange bar on the left, a blue bar on the right, a green wash, and the words HISTORY 301 and LIVE STREAM in white" /></div><div class="logo-meta"><span class="logo-name">Live Stream Graphic &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/live-stream-graphic/live-stream-end-example-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/live-stream-graphic/live-stream-youtube-channel-v1.jpg" alt="A YouTube channel page open in a browser, showing a row of the channel&rsquo;s video thumbnails that share the same bold-text, big-face design language" /></div><div class="logo-meta"><span class="logo-name">Live Stream Graphic &rsaquo; Step 02 &middot; Inspiration <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/live-stream-graphic/live-stream-youtube-channel-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/live-stream-graphic/live-stream-design-float-v1.jpg" alt="A Pioneer Valley student in the design lab making his own YouTube thumbnail in Photoshop, a bold &lsquo;5 Ways to Score Like a Pro&rsquo; basketball design on the iMac screen" /></div><div class="logo-meta"><span class="logo-name">Live Stream Graphic &rsaquo; Step 03 &middot; Design <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/live-stream-graphic/live-stream-design-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/elements-of-art/elements-of-art-header-v1.jpg" alt="A Pioneer Valley student in the Academy of Arts lab sketching an original character in a sketchbook, with a screen showing the 7 Elements of Art" /></div><div class="logo-meta"><span class="logo-name">Elements of Art, Character Design &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/elements-of-art/elements-of-art-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/elements-of-art/elements-of-art-step01-float-v1.jpg" alt="A student photographing a finished sketchbook character named Blobby with an iPad" /></div><div class="logo-meta"><span class="logo-name">Elements of Art, Character Design &rsaquo; Step 01 &middot; Draw <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/elements-of-art/elements-of-art-step01-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/digarts1/elements-of-art/elements-of-art-reflection-float-v1.jpg" alt="A Pioneer Valley student typing the Character Design reflection in the Word document on an iMac in the creative lab, a decorated sketchbook on the desk" /></div><div class="logo-meta"><span class="logo-name">Elements of Art, Character Design &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/digarts1/elements-of-art/elements-of-art-reflection-float-v1.jpg" download>Download</a></div></div></div></div></details>
-                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Photography 1A (27)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid"><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/self-portrait/self-portrait-hero-v1.png" alt="Self-Portrait" /></div><div class="logo-meta"><span class="logo-name">Self-Portrait &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/self-portrait/self-portrait-hero-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/self-portrait/self-portrait-float-v1.png" alt="Self-Portrait" /></div><div class="logo-meta"><span class="logo-name">Self-Portrait &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/self-portrait/self-portrait-float-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/self-portrait/self-portrait-reflection-float-v1.png" alt="Anthony typing his reflection in Word" /></div><div class="logo-meta"><span class="logo-name">Self-Portrait &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/self-portrait/self-portrait-reflection-float-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/composition-concepts/composition-concepts-header-v1.png" alt="Composition Concepts" /></div><div class="logo-meta"><span class="logo-name">Composition Concepts &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/composition-concepts/composition-concepts-header-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/composition-concepts/composition-concepts-step01-float-v1.png" alt="A student reviewing her photos on a phone" /></div><div class="logo-meta"><span class="logo-name">Composition Concepts &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/composition-concepts/composition-concepts-step01-float-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/composition-concepts/reflection-float-v1.jpg" alt="A student typing the Composition Concepts reflection on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Composition Concepts &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/composition-concepts/reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/leading-lines/leading-lines-header-v1.jpg" alt="Two Pioneer Valley students on a photo walk, one holding a Canon camera, outside the Academy of Arts building" /></div><div class="logo-meta"><span class="logo-name">Leading Lines Photo Walk &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/leading-lines/leading-lines-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/leading-lines/leading-lines-step01-float-v1.jpg" alt="A student kneeling to photograph down a long covered walkway whose columns lead the eye to a vanishing point, while a partner watches" /></div><div class="logo-meta"><span class="logo-name">Leading Lines Photo Walk &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/leading-lines/leading-lines-step01-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/leading-lines/reflection-float-v1.jpg" alt="A Pioneer Valley student typing his Leading Lines reflection in the Word document on an iMac in the lab, a Canon camera on the desk" /></div><div class="logo-meta"><span class="logo-name">Leading Lines Photo Walk &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/leading-lines/reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/image-series/header-v1.png" alt="Image Series Photo Walk header: a row of linked photos that form one cohesive series" /></div><div class="logo-meta"><span class="logo-name">Image Series Photo Walk &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo1/image-series/header-v1.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/image-series/capture-float-v1.jpg" alt="A Pioneer Valley student kneeling to photograph a bee on a pink flower with a Canon EOS R5 on campus in golden light" /></div><div class="logo-meta"><span class="logo-name">Image Series Photo Walk &rsaquo; Step 01 &middot; Capture Import <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/image-series/capture-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/image-series/edit-float-v1.jpg" alt="A Pioneer Valley student editing her photos on an iMac in the lab, with her Canon EOS R5 on the desk" /></div><div class="logo-meta"><span class="logo-name">Image Series Photo Walk &rsaquo; Step 02 &middot; Cull Edit <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/image-series/edit-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/image-series/reflection-float-v1.jpg" alt="A Pioneer Valley student typing her Image Series reflection in the Word document on an iMac in the lab" /></div><div class="logo-meta"><span class="logo-name">Image Series Photo Walk &rsaquo; Step 03 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/image-series/reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/lrc-develop/develop-basics-header-v1.jpg" alt="A Pioneer Valley student editing a cityscape photo in the Lightroom Classic Develop module on an iMac in the creative lab, a Canon EOS camera on the desk, with other students editing behind her" /></div><div class="logo-meta"><span class="logo-name">Lightroom Editing &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/lrc-develop/develop-basics-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/lrc-develop/develop-basics-star-rating-float-v2.jpg" alt="The Lightroom Classic Library view filtered to 5-star photos, with the Filter Bar set to Attribute" /></div><div class="logo-meta"><span class="logo-name">Lightroom Editing &rsaquo; Step 01 &middot; Cull Export <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/lrc-develop/develop-basics-star-rating-float-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/lrc-develop/develop-basics-reflection-float-v2.jpg" alt="A Pioneer Valley student typing the Lightroom Editing reflection in the Word document on an iMac in the creative lab, with other students editing behind her" /></div><div class="logo-meta"><span class="logo-name">Lightroom Editing &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/lrc-develop/develop-basics-reflection-float-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/tiny-things-header-v1.jpg" alt="Tiny Things" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/tiny-things-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/tiny-things-step01-float-v1.jpg" alt="Extreme close-up of a grasshopper on red ground at a low bug&rsquo;s-eye angle" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/tiny-things-step01-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/tiny-things-reflection-float-v1.jpg" alt="A student typing a short reflection on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/tiny-things-reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/balloon-pop/balloon-pop-header-v1.jpg" alt="Two Pioneer Valley students outside by the panther statue: one aims a camera while the other pops a water balloon, the water frozen in mid-air as a clear globe" /></div><div class="logo-meta"><span class="logo-name">Balloon Pop &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/balloon-pop/balloon-pop-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/balloon-pop/balloon-pop-step01-float-v1.jpg" alt="Close-up of a water balloon at the instant it pops: the water holds a round globe shape in mid-air as a pin breaks the balloon" /></div><div class="logo-meta"><span class="logo-name">Balloon Pop &rsaquo; Step 01 &middot; Capture <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/balloon-pop/balloon-pop-step01-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/balloon-pop/balloon-pop-reflection-float-v1.jpg" alt="A Pioneer Valley student typing the Balloon Pop reflection in the Word document on an iMac in the creative lab, a Canon camera on the desk" /></div><div class="logo-meta"><span class="logo-name">Balloon Pop &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/balloon-pop/balloon-pop-reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/aperture-portrait/header-v1.jpg" alt="Aperture Portrait module header" /></div><div class="logo-meta"><span class="logo-name">Aperture Portrait &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/aperture-portrait/header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/aperture-portrait/capture-float-v2.jpg" alt="A Pioneer Valley student photographing a partner in open shade with the Canon R50 held in portrait orientation" /></div><div class="logo-meta"><span class="logo-name">Aperture Portrait &rsaquo; Step 01 &middot; Capture Contact <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/aperture-portrait/capture-float-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/aperture-portrait/reflection-float-v1.jpg" alt="A Pioneer Valley student typing the Aperture Portrait reflection in the Word document on an iMac in the lab" /></div><div class="logo-meta"><span class="logo-name">Aperture Portrait &rsaquo; Step 03 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/aperture-portrait/reflection-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/garcia-tiny-things-header-v1.jpg" alt="Tiny Things alternate overview header" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Overview <span class="logo-fmt">Alt Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/garcia-tiny-things-header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo1/tiny-things/garcia-tiny-things-reflection-float-v1.jpg" alt="Tiny Things alternate reflection float" /></div><div class="logo-meta"><span class="logo-name">Tiny Things &rsaquo; Step 02 &middot; Reflection <span class="logo-fmt">Alt Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo1/tiny-things/garcia-tiny-things-reflection-float-v1.jpg" download>Download</a></div></div></div></div></details>
-                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Photography 2A (15)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid"><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/composition/photowalk-hero.png" alt="Composition Photo Walk" /></div><div class="logo-meta"><span class="logo-name">Composition Photo Walk &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/composition/photowalk-hero.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/composition/chick-fil-a-prize.jpg" alt="Chick-fil-A prize" /></div><div class="logo-meta"><span class="logo-name">Composition Photo Walk &rsaquo; Overview <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/composition/chick-fil-a-prize.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/composition/photowalk-step-float.png" alt="On the photo walk" /></div><div class="logo-meta"><span class="logo-name">Composition Photo Walk &rsaquo; Step 01 &middot; Photowalk <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/composition/photowalk-step-float.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/composition/photowalk-step2-float-v2.png" alt="Renee editing her photos in Lightroom" /></div><div class="logo-meta"><span class="logo-name">Composition Photo Walk &rsaquo; Step 02 &middot; Cull Export <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/composition/photowalk-step2-float-v2.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/ocf/ocf-header-v4.png" alt="Students lighting an outdoor portrait with off-camera flash at the PV Academy of Arts" /></div><div class="logo-meta"><span class="logo-name">Off-Camera Flash &rsaquo; Overview <span class="logo-fmt">Header &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/ocf/ocf-header-v4.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/ocf/ocf-step01-float.png" alt="A Pioneer Valley student researching off-camera flash examples on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Off-Camera Flash &rsaquo; Step 01 &middot; Inspiration <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/ocf/ocf-step01-float.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/ocf/ocf-step02-float.png" alt="A Pioneer Valley student portrait made with off-camera flash at golden hour" /></div><div class="logo-meta"><span class="logo-name">Off-Camera Flash &rsaquo; Step 02 &middot; Photowalk <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/ocf/ocf-step02-float.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/ocf/ocf-step03-float.png" alt="A Pioneer Valley student typing the Off-Camera Flash reflection on a lab computer" /></div><div class="logo-meta"><span class="logo-name">Off-Camera Flash &rsaquo; Step 03 &middot; Reflection <span class="logo-fmt">Float &middot; PNG</span></span><a class="logo-dl" href="/assets/images/photo2/ocf/ocf-step03-float.png" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/studio-session/studio-header-v4.jpg" alt="The three-person studio crew at work, labeled Art Director, Photographer, and Lighting Assistant, with the Talent posing on the backdrop" /></div><div class="logo-meta"><span class="logo-name">Studio Session &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/studio-session/studio-header-v4.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/studio-session/studio-header.jpg" alt="A raw studio portrait on the left next to the edited, retouched final on the right" /></div><div class="logo-meta"><span class="logo-name">Studio Session &rsaquo; Step 02 &middot; Cull Edit <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/studio-session/studio-header.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/build-your-own-preset/overview-hero-v1.jpg" alt="A Lightroom Classic edit of a natural light portrait, with the Develop panel sliders open on the right" /></div><div class="logo-meta"><span class="logo-name">Build Your Own Preset &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/build-your-own-preset/overview-hero-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/build-your-own-preset/capture-float-v1.jpg" alt="A Pioneer Valley student kneeling to photograph a pink flower with a bee, using a Canon camera in golden light in front of the PV campus" /></div><div class="logo-meta"><span class="logo-name">Build Your Own Preset &rsaquo; Step 01 &middot; Photowalk <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/build-your-own-preset/capture-float-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/aperture-portrait/header-v1.jpg" alt="Aperture Portrait module header" /></div><div class="logo-meta"><span class="logo-name">Aperture Portrait &rsaquo; Overview <span class="logo-fmt">Header &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/aperture-portrait/header-v1.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/aperture-portrait/capture-float-v2.jpg" alt="A Pioneer Valley student photographing a partner in open shade with the Canon R50 held in portrait orientation" /></div><div class="logo-meta"><span class="logo-name">Aperture Portrait &rsaquo; Step 01 &middot; Capture Contact <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/aperture-portrait/capture-float-v2.jpg" download>Download</a></div></div><div class="logo-card"><div class="logo-tile"><img src="/assets/images/photo2/aperture-portrait/reflection-float-v1.jpg" alt="A Pioneer Valley student typing the Aperture Portrait reflection in the Word document on an iMac in the lab" /></div><div class="logo-meta"><span class="logo-name">Aperture Portrait &rsaquo; Step 03 &middot; Reflection <span class="logo-fmt">Float &middot; JPG</span></span><a class="logo-dl" href="/assets/images/photo2/aperture-portrait/reflection-float-v1.jpg" download>Download</a></div></div></div></div></details>
-                      <!-- LIVE_IMAGE_CATALOG_END -->
                     </div>
                   </details>
                 <details class="cat-acc">
@@ -1686,6 +1933,726 @@
     endpoint: 'https://script.google.com/macros/s/AKfycbxVMKQvcZFgOrLgXJQbX5C6qRKuFBKyYUwRd3vR21WXSci4H0dltBFJtpQ0CEjhpv8L/exec',
     key: 'cs-9d4f1a6b3e28'
   });
+  </script>
+  <div id="pvb-lightbox" class="pvb-lightbox" hidden>
+      <button class="pvb-lb-close" id="pvb-lb-close" type="button" aria-label="Close">&times;</button>
+      <img class="pvb-lb-img" id="pvb-lb-img" src="" alt="" />
+      <div class="pvb-lb-cap" id="pvb-lb-cap"></div>
+      <div class="pvb-lb-hint">Click anywhere to close</div>
+    </div>
+
+  <script>
+  (function(){
+    // (page-level PIN gate handles auth; this builder is embedded in Build Resources)
+
+    var IMG='https://www.creativesilva.com/assets/images/characters/';
+
+    // ---- reference manifest (copied from build-resources.html @ 17d36b8; read-only reuse) ----
+    var CHARACTERS=[
+      {label:'Patricia (side view cropped hoodie full body)',file:'patricia-side-view-cropped-hoodie-full-body-v1.jpg'},
+      {label:'Patricia (character sheet)',file:'patricia-character-sheet-v6.jpg'},
+      {label:'Patricia (cropped hoodie)',file:'patricia-cropped-hoodie-v3.jpg'},
+      {label:'Patricia (full body: front)',file:'patricia-cropped-hoodie-full-front-v2.png'},
+      {label:'Patricia (full body: 3/4 front)',file:'patricia-cropped-hoodie-full-angle-v2.png'},
+      {label:'Patricia (full body: 3/4 rear)',file:'patricia-cropped-hoodie-full-back-v2.png'},
+      {label:'Patricia (front portrait)',file:'patricia-portrait-front-v1.jpg'},
+      {label:'Patricia (side profile)',file:'patricia-portrait-side-v1.jpg'},
+      {label:'Patricia (smiling portrait)',file:'patricia-portrait-smile-v1.jpg'},
+      {label:'Patricia (bust closeup)',file:'patricia-cropped-hoodie-closeup-v2.png'},
+      {label:'Renee (short hair: side)',file:'renee-short-hair-side-v1.jpg'},
+      {label:'Renee (short hair: 3/4 smile)',file:'renee-short-hair-3-4-smile-v1.jpg'},
+      {label:'Renee (short hair: front)',file:'renee-short-hair-front-v1.jpg'},
+      {label:'Renee (character sheet)',file:'renee-character-sheet-v2.jpg'},
+      {label:'Renee (capri pants)',file:'renee-capri-pants-v2.jpg'},
+      {label:'Mr. Silva (character sheet)',file:'mr-silva-character-sheet-v2.jpg'},
+      {label:'Anthony (character sheet)',file:'anthony-character-sheet-v2.jpg'},
+      {label:'Anthony (zip-up long sleeve)',file:'anthony-zip-up-long-sleeve-v1.jpg'},
+      {label:'Ricardo (character sheet)',file:'ricardo-character-sheet-v3.jpg'},
+      {label:'Abby (full body: front)',file:'abby-full-body-front-v1.jpg'},
+      {label:'Abby (full body: side)',file:'abby-full-body-side-v1.jpg'},
+      {label:'Abby (full body: 3/4 rear)',file:'abby-full-body-3-4-rear-v1.jpg'},
+      {label:'Abby (side profile)',file:'abby-side-profile-v1.jpg'},
+      {label:'Abby (front portrait)',file:'abby-front-portrait-v1.jpg'},
+      {label:'Abby (neutral portrait)',file:'abby-front-neutral-v1.jpg'},
+      {label:'Ms Alba (character sheet)',file:'alba-character-sheet-v1.jpg'},
+      {label:'Ms Alba (full body: front)',file:'alba-full-body-front-v1.jpg'},
+      {label:'Ms Alba (front portrait)',file:'alba-front-portrait-v1.jpg'},
+      {label:'Ms Alba (neutral portrait)',file:'alba-front-neutral-v1.jpg'},
+      {label:'Ms Alba (side profile)',file:'alba-side-profile-v1.jpg'}
+    ];
+    var ITEMS=[
+      {label:'Classroom camera kit',file:'items/classroom-camera-kit-v1.jpg'},
+      {label:'Canon R5',file:'items/canon-eos-r5-pro-v1.png'},
+      {label:'Canon R50',file:'items/canon-eos-r50-v1.png'},
+      {label:'Canon R5 II (black telephoto)',file:'items/canon-r5-ii-telephoto-v1.png'},
+      {label:'Canon R5 II (white telephoto)',file:'items/canon-r5-ii-white-telephoto-v1.png'},
+      {label:'70-200 lens',file:'items/canon-70-200-lens-v1.png'},
+      {label:'Camera bag',file:'items/canon-camera-bag-v2.png'},
+      {label:'Sketchbook',file:'items/sketchbook-v1.png'},
+      {label:'MacBook Pro',file:'items/macbook-pro-v1.png'},
+      {label:'iMac 27',file:'items/imac-27-mockup-v2.png'},
+      {label:'iPad Pro + Pencil',file:'items/ipad-pro-apple-pencil-v1.jpg'},
+      {label:'Student iPad + keyboard',file:'items/student-ipad-keyboard-v1.png'},
+      {label:'iPhone',file:'items/iphone-mockup-v3.png'},
+      {label:'Pantone swatch book',file:'items/pantone-swatch-book-v1.png'},
+      {label:'Vomero 5 shoes (Patricia)',file:'patricia-vomero-5-v1.png'},
+      {label:'PV cheer outfit (female)',file:'items/pv-cheer-outfit-v1.jpg'},
+      {label:'PV quarter zip (male)',file:'items/quarter-zip-male-v1.jpg'},
+      {label:'Jordan 11 shoes (Anthony)',file:'items/anthony-jordan-11-teal-v1.png'},
+      {label:'Canon logo',file:'items/canon-logo-white-v1.png'}
+    ];
+    var SCENES=[
+      {label:'PV classroom',file:'campus/pv-classroom-inspiration-v1.jpg'},
+      {label:'Campus front',file:'campus/pv-campus-front-v1.jpg'},
+      {label:'Academy lobby (Photo)',file:'campus/pv-lobby-photography-v1.jpg'},
+      {label:'Academy lobby (Digital Arts)',file:'campus/pv-lobby-digital-arts-v1.jpg'},
+      {label:'Sports complex plaza (rear)',file:'campus/pv-sports-complex-back-v2.jpg'}
+    ];
+    var OPT={
+      pitch:['level','slightly down','angled down','slightly up','angled up'],
+      lens:['24mm wide','35mm','50mm','85mm portrait','70-200mm telephoto'],
+      aperture:['f/1.8 shallow','f/5.6 normal','f/11 deep'],
+      aspect:['1:1 square','4:3 landscape','3:4 portrait','16:9 landscape','9:16 portrait','21:9 landscape'],
+      exteriorLocation:['main front entrance plaza','front drop-off zone','entry courtyard','side exterior walkway','outdoor gathering space','landscaped courtyard','exterior terrace or balcony view','building corner perspective','outdoor circulation corridor','plaza behind the sports complex','sports complex grandstand plaza'],
+      subjectFacing:['straight on','three-quarter left','three-quarter right','profile left','profile right','from behind']
+    };
+    var CTX_OPTS={
+      classroom:{height:['ground level','low','eye level','standing eye level','slightly elevated','high','overhead'],
+        yaw:['facing the front wall','facing the rear wall','facing the window wall','facing the solid wall','three-quarter left','three-quarter right','profile left','profile right'],
+        lighting:['bright daylight','golden hour','overcast','warm interior evening','studio key + fill']},
+      exterior:{height:['ground level','low (upward, prestige)','eye level','standing eye level','slightly elevated','elevated / drone'],
+        yaw:['toward the main entrance','toward the PV logo wall','along the building facade','toward the entry plaza','toward the sculpture feature','toward the landscaping','three-quarter left','three-quarter right','profile left','profile right'],
+        lighting:['bright daylight','golden hour','clear blue sky, midday','long-shadow late afternoon','overcast','dusk with teal accent lighting']},
+      lobby:{height:['ground level','low','eye level','standing eye level','slightly elevated','mezzanine level','high / overhead'],
+        yaw:['toward the glass entrance wall','toward the staircase','toward the mezzanine','toward the PV logo wall','across the atrium','toward the lounge area','three-quarter left','three-quarter right','profile left','profile right'],
+        lighting:['bright daylight through the glass','golden hour through the glazing','soft overcast daylight','warm interior evening','teal accent glow after hours'],
+        subjectLoc:['near the main entrance','at the base of the staircase','on the staircase','on the mezzanine landing','in the lounge seating area','by the glass window wall','beside a planter','center of the atrium','in front of the PV logo wall','near the reception desk'],
+        cameraPos:['near the main entrance looking in','across the atrium','at the base of the staircase','from the mezzanine looking down','beside the lounge area','by the glass window wall','from under the mezzanine','center of the atrium']}
+    };
+    function ctxFor(f){ f=f||''; if(/Campus-Lobby|Lobby/i.test(f))return 'lobby'; if(/Campus-Exterior|Exterior/i.test(f))return 'exterior'; return 'classroom'; }
+    function fieldOptsFor(ctx){ var c=CTX_OPTS[ctx]||CTX_OPTS.classroom; return [
+      {re:/exterior location/i,opts:OPT.exteriorLocation},
+      {re:/subject facing/i,opts:OPT.subjectFacing},
+      {re:/subject location within room/i,opts:c.subjectLoc},
+      {re:/position within room/i,opts:c.cameraPos},
+      {re:/height/i,opts:c.height},
+      {re:/yaw|direction/i,opts:c.yaw},
+      {re:/pitch|tilt/i,opts:OPT.pitch},
+      {re:/lens|focal/i,opts:OPT.lens},
+      {re:/aperture|depth/i,opts:OPT.aperture},
+      {re:/aspect/i,opts:OPT.aspect},
+      {re:/lighting|time of day/i,opts:c.lighting}
+    ]; }
+    function optsFor(name,ctx){ var o=null; fieldOptsFor(ctx).forEach(function(f){ if(f.opts&&f.re.test(name))o=f.opts; }); return o; }
+
+    // ---- emitted text constants (verbatim) ----
+    var BACKDROP_TEXT={
+      transparent:'BACKGROUND: Light the subject with soft, flattering professional studio lighting and a clear catch light in the eyes on a seamless pure-white studio setup, then remove the background completely. Output the final image as a PNG with a fully transparent background: a clean alpha cutout around the subject, with no white edge fringe or halo.',
+      white:'BACKGROUND: Place the subject on a seamless, pure-white studio backdrop with no shadows on the background. Light the subject with soft, flattering professional studio lighting and a clear catch light in the eyes. Keep the white background in the final image.'
+    };
+    var OUTFIT_BG={
+      white:'FINAL BACKGROUND: keep a seamless, pure-white studio backdrop with soft, flattering professional studio lighting, a clear catch light in the eyes, and no shadows cast on the background.',
+      transparent:'FINAL BACKGROUND OVERRIDE: ignore any white-background instruction above. Keep the soft, flattering professional studio lighting and the catch light in the eyes, but remove the background completely and deliver the final image as a PNG with a fully transparent background: a clean alpha cutout around the character, with no white edge fringe or halo.'
+    };
+    var REALISM_LOCK='MAXIMUM REALISM + PROPORTION LOCK: The result must look like a real photograph from a professional full-frame mirrorless camera. Real skin with natural pores and texture, real fabric weave and stitching, natural light falloff, and believable weight and contact. Do not produce an illustrated, painterly, 3D, CGI, plastic, or over-smoothed look. Lock the body proportions, height, silhouette, and physique to the approved character sheet (Image A) exactly. The new outfit adapts to this established body: never resize, slim, normalize, exaggerate, or reshape the character to fit the clothing, and never borrow body proportions from the outfit or product reference images.';
+
+    // ---- studio poses (white backdrop + model studio lighting). First 4 = character-sheet standards. ----
+    var POSES=[
+      {file:'front-neutral', label:'1. Front, neutral A-pose (reference)', desc:'standing straight and square to camera, facing forward, arms relaxed a few inches out from the sides in a neutral A-pose, hands open and relaxed, feet together, weight even, calm neutral expression'},
+      {file:'back-neutral', label:'2. Back, neutral (reference)', desc:'standing straight with the back fully to camera, facing directly away, arms relaxed at the sides, feet together, weight even, head level'},
+      {file:'side-profile', label:'3. Left side profile (reference)', desc:'standing straight in a full left side profile with the body at ninety degrees to camera, arms relaxed at the sides, feet together, looking straight ahead'},
+      {file:'three-quarter-front', label:'4. Three-quarter front, 45 degrees (reference)', desc:'standing at a forty-five degree three-quarter angle toward camera so the front and one side are both visible, arms relaxed, weight even, looking toward camera'},
+      {file:'contrapposto', label:'5. Contrapposto (relaxed stand)', desc:'a relaxed contrapposto stance with weight shifted onto one leg and the other knee slightly bent, hips gently angled, arms loose at the sides, natural and at ease'},
+      {file:'hands-on-hips', label:'6. Hands on hips', desc:'a confident stance with both hands on the hips, elbows out, shoulders back, feet about shoulder width apart, chin level'},
+      {file:'arms-crossed', label:'7. Arms crossed', desc:'standing with the arms crossed over the chest, relaxed shoulders, weight even, calm confident expression'},
+      {file:'hands-in-pockets', label:'8. Hands in pockets (casual)', desc:'a casual relaxed stance with the hands in the pockets, shoulders loose, a slight natural lean, easygoing expression'},
+      {file:'walking', label:'9. Walking toward camera', desc:'captured mid-stride walking toward camera, one foot forward, a natural arm swing, relaxed forward motion, looking ahead'},
+      {file:'three-quarter-rear', label:'10. Three-quarter rear, glancing back', desc:'the body turned three-quarters away from camera showing the back and one side, the head turned to glance back over the shoulder toward camera'},
+      {file:'seated', label:'11. Seated on a studio block', desc:'seated upright on a simple white studio posing block, back straight, hands resting naturally on the thighs, feet planted, the full figure in frame'},
+      {file:'power-stance', label:'12. Power stance', desc:'a strong grounded power stance, feet planted a little wider than the shoulders, weight even, shoulders squared, arms relaxed, a confident direct expression'}
+    ];
+
+    // ---- prompt catalog ----
+    var PROMPTS=[
+      {title:'Classroom Environment',sub:'PV lab scene, any angle',mode:'Environment',ptype:'environment',canon:'PV Classroom Environment canon',file:'/assets/prompts/Classroom-Environment-Master-Prompt-v4.md',scene:'campus/pv-classroom-inspiration-v1.jpg'},
+      {title:'Campus Exterior',sub:'PV Academy, any exterior',mode:'Environment',ptype:'environment',canon:'PV Campus Exterior canon',file:'/assets/prompts/PV-Campus-Exterior-Master-Prompt-v1.md',scene:'campus/pv-campus-front-v1.jpg',sceneMap:{'sports complex grandstand plaza':'campus/pv-sports-complex-back-v2.jpg','plaza behind the sports complex':'campus/pv-sports-complex-back-v2.jpg'}},
+      {title:'Lobby Environment',sub:'PV Academy lobby',mode:'Environment',ptype:'environment',canon:'PV Academy Lobby canon',file:'/assets/prompts/PV-Campus-Lobby-Master-Prompt-v1.md'},
+      {title:'Fresh Full-Image Rebuild',sub:'force a full rebuild',mode:'Fresh rebuild',ptype:'protocol',quick:true,file:'/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt'},
+      {title:'X2 Exact Rebuild',sub:'1 image into 2 aligned upscales',mode:'Fresh rebuild',ptype:'protocol',delta:true,file:'/assets/prompts/X2-Exact-Rebuild.md',guide:'<b>Upload two images:</b> Image 1 is the full-body master (the authority for the whole picture). Image 2 is a support headshot, used only for fine detail, never for pose or body shape. If you only have the master, uncheck the support box below and the prompt switches to "No support image".<br><b>What it does:</b> rebuilds the master as two separate high-resolution files (a lower pass and an upper pass, in two calls) sized to line up in Photoshop at 100 percent. The prompt is ready to paste. For an exact copy leave the change box blank; type one change and it fills the DELTA line.<br><b>Why the prompt does not change when you add images:</b> it names them by position (Image 1, Image 2), not by file name, so it stays the same on purpose. Just attach the master first and the support second.'},
+      {title:'Character Outfit Change',sub:'re-dress a character sheet',mode:'Outfit rebuild',ptype:'outfit',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md',
+        views:[{label:'Full front / neutral stance',file:'/assets/prompts/Character-Outfit-Change-Full-Front-v1.md'},
+               {label:'Left 3/4 front / face to camera / smile',file:'/assets/prompts/Character-Outfit-Change-Left-3Q-Front-v1.md'},
+               {label:'3/4 rear / side-profile face',file:'/assets/prompts/Character-Outfit-Change-3Q-Rear-v1.md'}]},
+      {title:'Studio Pose',sub:'character on white studio, pick a pose',mode:'Studio pose',ptype:'pose'},
+      {title:'Reset Artboard',sub:'clear the canvas memory',mode:'Reset',ptype:'protocol',quick:true,file:'/assets/prompts/Blank-Artboard-Reset.txt'}
+    ];
+
+    // ---- helpers ----
+    function el(t,c,h){ var e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e; }
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function baseName(f){ return f.split('/').pop(); }
+    var cache={};
+    function fetchPrompt(p){ if(cache[p]!=null)return Promise.resolve(cache[p]); return fetch(p,{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){cache[p]=t;return t;}); }
+    function legacyCopy(text){ var a=document.createElement('textarea'); a.value=text; a.style.position='fixed'; a.style.opacity='0'; document.body.appendChild(a); a.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(a); }
+    function copyText(text,btn,label){ function ok(){ if(btn){ var o=label||btn.textContent; btn.classList.add('copied'); var was=btn.textContent; btn.textContent='✓ Copied'; setTimeout(function(){btn.classList.remove('copied'); btn.textContent=was;},1600);} }
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(ok,function(){legacyCopy(text);ok();}); } else { legacyCopy(text); ok(); } }
+    function copyImage(url,btn){ var orig=btn.textContent; function done(t){ btn.textContent=t; if(t==='✓ Copied')btn.classList.add('copied'); setTimeout(function(){btn.textContent=orig; btn.classList.remove('copied');},1700); }
+      if(!(navigator.clipboard&&window.ClipboardItem)){ done('No copy'); return; }
+      var png=fetch(url).then(function(r){return r.blob();}).then(function(b){ if(b.type==='image/png')return b;
+        return new Promise(function(res,rej){ var im=new Image(); im.crossOrigin='anonymous'; im.onload=function(){ var c=document.createElement('canvas'); c.width=im.naturalWidth; c.height=im.naturalHeight; c.getContext('2d').drawImage(im,0,0); c.toBlob(function(pb){ pb?res(pb):rej(0); },'image/png'); }; im.onerror=rej; im.src=url; }); });
+      btn.textContent='…'; navigator.clipboard.write([new ClipboardItem({'image/png':png})]).then(function(){done('✓ Copied');},function(){done('Failed');}); }
+
+    // ---- per-card catalog tools (view, copy image, copy URL, download) ----
+    var SVG_VIEW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line></svg>';
+    var SVG_IMG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16"></rect><circle cx="8.5" cy="9.5" r="1.8"></circle><path d="M4 18l5-4 3.5 2.5L17 12l3 3.5"></path></svg>';
+    var SVG_LINK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"></path><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"></path></svg>';
+    var SVG_DL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="M7 12l5 5 5-5"></path><path d="M5 21h14"></path></svg>';
+    var PROMPT_ICON_URL='https://www.creativesilva.com/assets/Icons/prompt-icon-gold-v1.png';
+    function rtool(svg, title, fn){ var b=el('button','pvb-rtool',svg); b.type='button'; b.title=title; b.setAttribute('aria-label',title); b.addEventListener('click',function(e){ e.stopPropagation(); fn(b); }); return b; }
+    function flashTool(btn, cls){ btn.classList.remove('ok','err'); btn.classList.add(cls); setTimeout(function(){ btn.classList.remove(cls); }, 1300); }
+    function copyUrl(url, btn){ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(function(){flashTool(btn,'ok');},function(){legacyCopy(url);flashTool(btn,'ok');}); } else { legacyCopy(url); flashTool(btn,'ok'); } }
+    function cardCopyImg(url, btn){ if(!(navigator.clipboard&&window.ClipboardItem)){ flashTool(btn,'err'); return; }
+      var png=fetch(url).then(function(r){return r.blob();}).then(function(b){ if(b.type==='image/png')return b;
+        return new Promise(function(res,rej){ var im=new Image(); im.crossOrigin='anonymous'; im.onload=function(){ var c=document.createElement('canvas'); c.width=im.naturalWidth; c.height=im.naturalHeight; c.getContext('2d').drawImage(im,0,0); c.toBlob(function(pb){ pb?res(pb):rej(0); },'image/png'); }; im.onerror=rej; im.src=url; }); });
+      navigator.clipboard.write([new ClipboardItem({'image/png':png})]).then(function(){flashTool(btn,'ok');},function(){flashTool(btn,'err');}); }
+    function downloadImg(url, file, btn){ fetch(url,{cache:'no-store'}).then(function(r){return r.blob();}).then(function(b){ var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=baseName(file); document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500); flashTool(btn,'ok'); }).catch(function(){ flashTool(btn,'err'); }); }
+
+    // ---- storage (namespaced) ----
+    var NS='pvBeta.v1.';
+    function loadState(key,def){ try{ var s=JSON.parse(localStorage.getItem(NS+'state:'+key)||'null'); return (s&&typeof s==='object')?s:def; }catch(e){ return def; } }
+    function saveState(key,st){ try{ localStorage.setItem(NS+'state:'+key, JSON.stringify(st)); }catch(e){} }
+    function loadSetups(){ try{ var s=JSON.parse(localStorage.getItem(NS+'setups')||'[]'); return Array.isArray(s)?s:[]; }catch(e){ return []; } }
+    function saveSetups(arr){ try{ localStorage.setItem(NS+'setups', JSON.stringify(arr)); }catch(e){} }
+
+    // ---- DOM refs ----
+    var titleEl=document.getElementById('pvb-title'), subEl=document.getElementById('pvb-sub'),
+        fieldsEl=document.getElementById('pvb-fields'), refsEl=document.getElementById('pvb-refs'),
+        preEl=document.getElementById('pvb-preview'), savedEl=document.getElementById('pvb-saved'),
+        checklistEl=document.getElementById('pvb-checklist'), setupsEl=document.getElementById('pvb-setups'),
+        copyB=document.getElementById('pvb-copy'), resetB=document.getElementById('pvb-reset'),
+        copyTopB=document.getElementById('pvb-copytop'), guideEl=document.getElementById('pvb-guide'), guideBodyEl=document.getElementById('pvb-guide-body');
+
+    // ---- click-to-enlarge lightbox ----
+    var lbEl=document.getElementById('pvb-lightbox'), lbImg=document.getElementById('pvb-lb-img'), lbCap=document.getElementById('pvb-lb-cap');
+    function openLightbox(file,label){ if(!lbEl)return; lbImg.src=IMG+file; lbCap.innerHTML=esc(label)+'<span class="role">'+esc(baseName(file))+'</span>'; lbEl.hidden=false; }
+    function closeLightbox(){ if(!lbEl)return; lbEl.hidden=true; lbImg.src=''; }
+    if(lbEl){ lbEl.addEventListener('click', closeLightbox); document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !lbEl.hidden) closeLightbox(); }); }
+    // gallery tiles use the page's existing cs-lightbox (bound to .logo-card .logo-tile)
+    // paste images straight into the X2 drop-zone (only when it is on screen)
+    document.addEventListener('paste', function(e){
+      if(!document.querySelector('.pvb-drop')) return;
+      var items=(e.clipboardData&&e.clipboardData.items)||[];
+      var files=[].slice.call(items).filter(function(it){return it.type&&it.type.indexOf('image')===0;}).map(function(it){return it.getAsFile();}).filter(Boolean);
+      if(files.length){ e.preventDefault(); if(cfg && cfg.delta) addX2Files(files); else addStagedFiles(files); }
+    });
+
+    // ---- active build ----
+    var activeIdx=0, cfg=null, state=null, baseText='', OUTFIT=false, TWOPASS=false, BACKDROP=false, KEY='', DEFAULT_BACKDROP='', DEFAULT_VIEW='', fieldNames=[];
+    var x2imgs=[]; // X2 drop-zone images, in-memory only (never persisted), cleared on prompt switch/reset
+    var staged=[]; // Your-own reference images (upload/paste/drop), in-memory only, cleared on prompt switch/reset
+    var MODE='project'; try{ var _m=localStorage.getItem(NS+'mode'); if(_m==='full'||_m==='project') MODE=_m; }catch(e){}
+
+    function freshState(){ return {fields:{},chars:[],items:[],scene:'',backdrop:(TWOPASS?'transparent':(OUTFIT?'white':'')),view:(OUTFIT?cfg.views[0].file:''),custom:''}; }
+    // Auto-pick the scene reference image that matches the chosen location (no double work).
+    function autoScene(){
+      if(!cfg || cfg.ptype!=='environment') return '';
+      var ln=(fieldNames||[]).filter(function(n){ return /exterior location|^location$/i.test(n); })[0];
+      var val= ln ? (state.fields[ln]||'') : '';
+      return (cfg.sceneMap && cfg.sceneMap[val]) || cfg.scene || '';
+    }
+    function onFieldChange(name){
+      if(cfg && cfg.ptype==='environment' && /exterior location|^location$/i.test(name)){ state.scene=autoScene(); buildRefs(); }
+      render();
+    }
+
+    // MODE 'full' = the whole template (byte-identical to the current builder). MODE 'project' = send
+    // overrides + references and let the ChatGPT project supply the saved canon. Protocols (Fresh /
+    // Two-Pass / Blank) are the instruction itself, so they are sent whole in both modes.
+    var DISC=false; try{ DISC=localStorage.getItem(NS+'disc')==='1'; }catch(e){}
+    var DISCLAIMER_TEXT='LABEL (add this after the image is generated, do not ask the image model to render tiny text): place one small line of neutral gray fine print in the bottom-left corner at about 50% opacity, kept small and never over the subject: "AI-generated image for private internal world-building and review only. Any exaggerated proportions are intentional. Not for public or external viewing; deleted after inspection."';
+    function compose(){
+      var out;
+      if(OUTFIT) out=(MODE==='full') ? composeOutfitFull() : composeOutfitProject();
+      else if(cfg.ptype==='pose') out=composePose();
+      else if(MODE==='project' && cfg.ptype==='environment') out=composeEnvProject();
+      else out=composeEnvFull();
+      if(staged.length){
+        var sb='YOUR OWN REFERENCE IMAGES (attached separately; use each only for what its note says):';
+        staged.forEach(function(im){ var nm=((im.name||'').trim())||'reference image'; var rl=(im.role||'').trim(); sb+='\n- '+nm+' = '+(rl||'reference image (add a note on what it is for).'); });
+        out += '\n\n' + sb;
+      }
+      if(DISC) out += '\n\n' + DISCLAIMER_TEXT;
+      return out;
+    }
+    function composeEnvFull(){
+      var out=baseText,name;
+      if(cfg.delta){
+        var dv=(state.fields['DELTA']||'').trim();
+        if(dv) out=out.replace('DELTA = NONE.','DELTA = '+dv.replace(/\.+$/,'')+'.');
+        var hasSupport=(state.fields['SUPPORT']===undefined)?true:(state.fields['SUPPORT']==='yes');
+        if(!hasSupport) out=out.replace('Image 2 = SUPPORT ONLY.','No support image.');
+        out=out.replace(/\n+If there is no support image[^\n]*/,'');
+      }
+      for(name in state.fields){ var v=state.fields[name]; if(v) out=out.split('['+name+'] =').join('['+name+'] = '+v); }
+      var chars=state.chars.filter(Boolean).map(baseName), items=state.items.filter(Boolean).map(baseName), extra='';
+      if(BACKDROP && state.backdrop && BACKDROP_TEXT[state.backdrop]) extra+=BACKDROP_TEXT[state.backdrop]+'\n\n';
+      if(chars.length||items.length||state.scene){
+        var b='ATTACHED REFERENCE FILES (match these exactly, by file name):\n';
+        if(chars.length) b+='- Characters: '+chars.join(', ')+'\n';
+        if(items.length) b+='- Items: '+items.join(', ')+'\n';
+        if(state.scene) b+='- Scene reference: '+baseName(state.scene)+'\n';
+        b+='\n'; extra+=b;
+      }
+      if(extra){ if(out.indexOf('REFERENCE USE')>=0) out=out.replace('REFERENCE USE',extra+'REFERENCE USE'); else out=out+'\n\n'+extra; }
+      return out;
+    }
+    function labelFor(file, arr){ var o=arr.filter(function(x){return x.file===file;})[0]; return o?o.label:baseName(file); }
+    // PV Project mode, aligned to the project's Prompt Compiler: short, sectioned, role-labeled.
+    // People come from the ATTACHED SHEET (the authority); the project supplies only room + brand canon.
+    function composeEnvProject(){
+      var canon=cfg.canon||'saved scene canon';
+      var goal=(state.fields['SUBJECT / ACTION']||'').trim();
+      var sceneName=cfg.title.replace(/\s*Environment$/i,'');
+      var L=[];
+      L.push('MODE: fresh generation from scratch (a new photo, not an edit of a past image).');
+      L.push('GOAL: '+(goal||('a photo inside the PV '+sceneName+'.')));
+      var refs=[];
+      state.chars.filter(Boolean).forEach(function(f){ var nm=labelFor(f,CHARACTERS).split('(')[0].trim(); refs.push('- '+nm+' = character sheet for this person. Use it for identity AND body (face, hair, skin, proportions, silhouette). Follow the attached sheet exactly; it is the authority.'); });
+      state.items.filter(Boolean).forEach(function(f){ refs.push('- '+labelFor(f,ITEMS)+' = this object only (its design and materials), not the people or the room.'); });
+      if(state.scene){ refs.push('- '+labelFor(state.scene,SCENES)+' = environment only (layout, materials, mood), not the people.'); }
+      if(refs.length){ L.push(''); L.push('LIVE REFERENCES (use each only for its job):'); refs.forEach(function(r){L.push(r);}); }
+      L.push('');
+      L.push('CANON: use the '+canon+' and the PV brand rules already in this project. Do not restate them.');
+      var ov=[];
+      (fieldNames&&fieldNames.length?fieldNames:Object.keys(state.fields)).forEach(function(n){ if(n==='SUBJECT / ACTION')return; var v=state.fields[n]; if(v)ov.push('- '+n+': '+v); });
+      if(ov.length){ L.push(''); L.push('OVERRIDES (change only these; leave everything else to the canon):'); ov.forEach(function(o){L.push(o);}); }
+      L.push('');
+      L.push('TEXT: no visible words or signs unless asked.');
+      var files=[].concat(state.chars.filter(Boolean),state.items.filter(Boolean)); if(state.scene)files.push(state.scene);
+      files=files.map(baseName);
+      if(files.length){ L.push(''); L.push('FILES TO ATTACH: '+files.join(', ')); }
+      return L.join('\n').replace(/\n{3,}/g,'\n\n').trim();
+    }
+    function outfitName(){ var cf=(state.chars||[]).filter(Boolean)[0]; if(!cf)return 'the character'; var co=CHARACTERS.filter(function(x){return x.file===cf;})[0]; return ((co&&co.label)?co.label:baseName(cf)).split('(')[0].trim()||'the character'; }
+    function outfitRefBlock(){
+      var chars=state.chars.filter(Boolean).map(baseName), items=state.items.filter(Boolean).map(baseName);
+      if(!(chars.length||items.length)) return '';
+      var b='ATTACHED REFERENCE FILES (match these exactly, by file name):';
+      if(chars.length) b+='\n- Character sheet + identity: '+chars.join(', ');
+      if(items.length) b+='\n- Outfit / apparel / items: '+items.join(', ')+' (wardrobe and props only, never body proportions)';
+      b+='\n- Any extra headshots or outfit images: attached separately in the generator.';
+      return b;
+    }
+    function composeOutfitFull(){
+      var out=(baseText||'').trim().split('[CHARACTER NAME]').join(outfitName());
+      var parts=[out], bg=OUTFIT_BG[state.backdrop]; if(bg)parts.push(bg); parts.push(REALISM_LOCK);
+      var cu=(state.custom||'').trim(); if(cu)parts.push('CUSTOM ADJUSTMENTS (apply exactly, without changing body proportions): '+cu);
+      var rb=outfitRefBlock(); if(rb)parts.push(rb);
+      return parts.join('\n\n').replace(/\n{3,}/g,'\n\n').trim();
+    }
+    function composeOutfitProject(){
+      var out=(baseText||'').trim().split('[CHARACTER NAME]').join(outfitName());
+      var parts=[out], bg=OUTFIT_BG[state.backdrop]; if(bg)parts.push(bg);
+      parts.push('BODY: keep body proportions, height, and silhouette exactly as the attached character sheet (it is the authority). The outfit adapts to that body and is never reshaped. Never borrow body shape from the outfit or product images.');
+      var cu=(state.custom||'').trim(); if(cu)parts.push('CUSTOM ADJUSTMENTS (apply exactly, without changing body proportions): '+cu);
+      var rb=outfitRefBlock(); if(rb)parts.push(rb);
+      return parts.join('\n\n').replace(/\n{3,}/g,'\n\n').trim();
+    }
+    function composePose(){
+      var name=outfitName();
+      var pose=POSES.filter(function(p){return p.file===state.fields['POSE'];})[0] || POSES[0];
+      var parts=[];
+      parts.push('New single full-body studio photograph of '+name+', built fresh from the attached reference (not an edit of a past image).');
+      parts.push('POSE: '+pose.desc+'.');
+      parts.push('FRAMING: the complete figure from the top of the hair to the shoes with clean margin above and below, camera at chest height, straight on unless the pose implies otherwise.');
+      parts.push('BACKGROUND: seamless pure-white studio backdrop, no props unless the pose names one, no cast shadows on the backdrop.');
+      parts.push('LIGHTING: professional model studio lighting, a soft key plus fill and a gentle rim, clean catch lights in the eyes, even full-length illumination.');
+      parts.push('BODY: keep identity, face, hair, skin, height, silhouette, and proportions exactly as the attached character sheet. It is the authority. Never normalize, slim, exaggerate, or reshape.');
+      parts.push(REALISM_LOCK);
+      var cu=(state.custom||'').trim(); if(cu) parts.push('CUSTOM DETAILS (apply without changing body proportions): '+cu);
+      var rb=outfitRefBlock(); if(rb) parts.push(rb);
+      return parts.join('\n\n').replace(/\n{3,}/g,'\n\n').trim();
+    }
+
+    function selectedRefs(){
+      var out=[],seen={};
+      function add(f,arr,role){ if(!f||seen[f])return; seen[f]=1; var o=arr.filter(function(x){return x.file===f;})[0]; if(o)out.push({label:o.label,file:o.file,role:role}); }
+      state.chars.forEach(function(f){add(f,CHARACTERS,OUTFIT?'Character sheet / identity':'Character');});
+      state.items.forEach(function(f){add(f,ITEMS,OUTFIT?'Outfit / apparel / item':'Item');});
+      add(state.scene,SCENES,'Scene / environment');
+      return out;
+    }
+
+    function render(){
+      preEl.textContent=compose();
+      saveState(KEY,state);
+      updateModeUI();
+      // checklist
+      checklistEl.innerHTML='';
+      var step=1;
+      // Step 1: the prompt text itself
+      (function(){
+        var row=el('div','pvb-checkrow');
+        row.appendChild(el('div','pvb-stepnum',String(step++)));
+        var th=el('div','th'); var im=el('img'); im.src=PROMPT_ICON_URL; im.alt='Prompt'; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
+        var meta=el('div','meta'); meta.appendChild(el('div','role','Prompt')); meta.appendChild(el('div','fn','Your prompt (paste this first)')); row.appendChild(meta);
+        var cb=el('button','cimg','Copy prompt'); cb.type='button'; cb.addEventListener('click',function(){ copyText(compose(), cb); }); row.appendChild(cb);
+        checklistEl.appendChild(row);
+      })();
+      // Steps 2+: images to attach. X2 uses your dropped images; other prompts use catalog references.
+      var attach = cfg.delta
+        ? x2imgs.map(function(im,i){ return {url:im.url, name:im.name, role:(i===0?'Image 1 (master)':'Image 2 (support)')}; })
+        : selectedRefs().map(function(r){ return {url:IMG+r.file, name:baseName(r.file), role:r.role}; });
+      if(staged.length){ attach = attach.concat(staged.map(function(im){ return {url:im.url, name:((im.name||'').trim()||'your reference image'), role:((im.role||'').trim()||'Your reference image')}; })); }
+      attach.forEach(function(a){
+        var row=el('div','pvb-checkrow');
+        row.appendChild(el('div','pvb-stepnum',String(step++)));
+        var th=el('div','th'); var im=el('img'); im.src=a.url; im.alt=a.role; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
+        var meta=el('div','meta'); meta.appendChild(el('div','role',esc(a.role))); meta.appendChild(el('div','fn',esc(a.name))); row.appendChild(meta);
+        var cb=el('button','cimg','Copy image'); cb.type='button'; cb.addEventListener('click',function(){ copyImage(a.url,cb); }); row.appendChild(cb);
+        checklistEl.appendChild(row);
+      });
+      if(!attach.length){ checklistEl.appendChild(el('div','pvb-check-empty', cfg.delta?'Drop your master (and optional support headshot) on the left; they show up here to copy in order.':'Add characters, items, or a location above and they appear here as steps 2, 3, and so on.')); }
+      var when=new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+      savedEl.innerHTML='Draft saved <b>'+when+'</b>. It restores when you come back.';
+    }
+
+    // ---- reference accordion (larger thumbnails) ----
+    function refAccordion(title, arr, options, single){
+      var maxN=single?1:0, wrap=el('div','pvb-acc'); // multi: 0 = no limit, add as many references as you want
+      var head=el('button','pvb-acc-head'); head.type='button';
+      head.appendChild(el('span','lab',esc(title)));
+      var cnt=el('span','cnt'); head.appendChild(cnt);
+      head.appendChild(el('span','chev'));
+      var body=el('div','pvb-acc-body'); var grid=el('div','pvb-refgrid'); body.appendChild(grid);
+      function isSel(f){ return single?(state.scene===f):(arr.indexOf(f)>=0); }
+      function nSel(){ return single?(state.scene?1:0):arr.filter(Boolean).length; }
+      function updCnt(){ var n=nSel(); cnt.textContent=n?(single?'1 selected':(n+' selected')):'none'; cnt.classList.toggle('has',n>0); }
+      function toggle(f){ if(single){ state.scene=(state.scene===f)?'':f; } else { var i=arr.indexOf(f); if(i>=0){arr.splice(i,1);} else { arr.push(f); } } cards(); updCnt(); render(); }
+      function cards(){ grid.innerHTML=''; options.forEach(function(o){ var c=el('div','pvb-refcard'+(isSel(o.file)?' sel':''));
+        var t=el('div','thumb'); var im=el('img'); im.src=IMG+o.file; im.alt=o.label; im.loading='lazy'; t.appendChild(im); c.appendChild(t);
+        c.appendChild(el('div','nm',esc(o.label)));
+        var url=IMG+o.file, tools=el('div','pvb-rtools');
+        tools.appendChild(rtool(SVG_VIEW,'View larger',function(){ openLightbox(o.file,o.label); }));
+        tools.appendChild(rtool(SVG_IMG,'Copy image to clipboard',function(b){ cardCopyImg(url,b); }));
+        tools.appendChild(rtool(SVG_LINK,'Copy image URL',function(b){ copyUrl(url,b); }));
+        tools.appendChild(rtool(SVG_DL,'Download full size',function(b){ downloadImg(url,o.file,b); }));
+        c.appendChild(tools);
+        c.addEventListener('click',function(){toggle(o.file);}); grid.appendChild(c); }); }
+      head.addEventListener('click',function(){ var open=!wrap.classList.contains('open'); wrap.classList.toggle('open',open); });
+      cards(); updCnt(); if(nSel()>0) wrap.classList.add('open');
+      wrap.appendChild(head); wrap.appendChild(body); return wrap;
+    }
+    function backdropSlot(){
+      var f=el('div','pvb-field full'); f.appendChild(el('label',null,'Background'));
+      var sel=document.createElement('select');
+      [['transparent','Transparent background (PNG)'],['white','White studio backdrop']].forEach(function(o){ var op=document.createElement('option'); op.value=o[0]; op.textContent=o[1]; if(state.backdrop===o[0])op.selected=true; sel.appendChild(op); });
+      sel.addEventListener('change',function(){ state.backdrop=sel.value; render(); });
+      f.appendChild(sel); return f;
+    }
+
+    // ---- fields ----
+    function buildFields(){
+      fieldsEl.innerHTML=''; fieldNames=[];
+      if(OUTFIT){ buildOutfitFields(); return; }
+      if(cfg.delta){ buildDeltaFields(); return; }
+      if(cfg.ptype==='pose'){ buildPoseFields(); return; }
+      var ctx=ctxFor(cfg.file);
+      fieldsEl.appendChild(el('div','pvb-gtitle','Scene overrides'));
+      var re=/^\s*(?:[-*]\s+)?(?:\*\*)?\[([^\]]+)\]\s*=/gm,m,names=[];
+      while((m=re.exec(baseText))!==null) names.push(m[1].trim());
+      fieldNames=names.slice();
+      if(!names.length){
+        var hasTokens=/\[[^\]]+\]/.test(baseText);
+        fieldsEl.appendChild(el('div','pvb-note', hasTokens
+          ? 'This prompt has placeholders in [BRACKETS] that you fill in ChatGPT after pasting. Pick your reference files below and copy.'
+          : 'This prompt has no fill-in fields. Pick your reference files below and copy.'));
+        return;
+      }
+      function fieldEl(name){ if(state.fields[name]===undefined) state.fields[name]='';
+        var opts=optsFor(name,ctx), w=el('div','pvb-field'+(opts?'':' full')); w.appendChild(el('label',null,esc(name)));
+        var input;
+        if(opts){ input=document.createElement('select'); var d=document.createElement('option'); d.value=''; d.textContent='-'; input.appendChild(d);
+          var cur=state.fields[name]||'', inList=false;
+          opts.forEach(function(o){ var op=document.createElement('option'); op.value=o; op.textContent=o; if(cur===o){op.selected=true; inList=true;} input.appendChild(op); });
+          var oo=document.createElement('option'); oo.value='__other__'; oo.textContent='Other (type your own)'; input.appendChild(oo);
+          var custom=document.createElement('input'); custom.type='text'; custom.className='pvb-otherbox'; custom.placeholder='Type your own '+name.toLowerCase();
+          var otherOn=(cur && !inList); if(otherOn){ oo.selected=true; custom.value=cur; } custom.style.display=otherOn?'block':'none';
+          input.addEventListener('change',function(){
+            if(input.value==='__other__'){ custom.style.display='block'; state.fields[name]=custom.value||''; custom.focus(); }
+            else { custom.style.display='none'; state.fields[name]=input.value; }
+            onFieldChange(name);
+          });
+          custom.addEventListener('input',function(){ state.fields[name]=custom.value; render(); });
+          w.appendChild(input); w.appendChild(custom);
+        } else { input=document.createElement('textarea'); input.rows=2; input.placeholder='type here'; input.value=state.fields[name]||'';
+          input.addEventListener('input',function(){ state.fields[name]=input.value; input.style.height='auto'; input.style.height=input.scrollHeight+'px'; render(); });
+          w.appendChild(input); }
+        return w;
+      }
+      var textNames=names.filter(function(n){return !optsFor(n,ctx);}), dropNames=names.filter(function(n){return optsFor(n,ctx);});
+      var trailRe=/special changes|furniture/i;
+      var lead=textNames.filter(function(n){return !trailRe.test(n);}), trail=textNames.filter(function(n){return trailRe.test(n);});
+      function grid(list){ if(!list.length)return; var g=el('div','pvb-fields'); list.forEach(function(n){ g.appendChild(fieldEl(n)); }); fieldsEl.appendChild(g); }
+      grid(lead); grid(dropNames); grid(trail);
+    }
+    function buildOutfitFields(){
+      fieldsEl.appendChild(el('div','pvb-gtitle','Outfit change'));
+      var g=el('div','pvb-fields');
+      var vf=el('div','pvb-field full'); vf.appendChild(el('label',null,'Pose / view'));
+      var sel=document.createElement('select');
+      cfg.views.forEach(function(v){ var op=document.createElement('option'); op.value=v.file; op.textContent=v.label; if(state.view===v.file)op.selected=true; sel.appendChild(op); });
+      sel.addEventListener('change',function(){ state.view=sel.value; saveState(KEY,state); fetchPrompt(sel.value).then(function(t){ baseText=t; render(); }); });
+      vf.appendChild(sel); g.appendChild(vf);
+      var cf=el('div','pvb-field full'); cf.appendChild(el('label',null,'Custom details (new outfit or output note)'));
+      var ta=document.createElement('textarea'); ta.rows=3; ta.placeholder='Optional: colors, materials, footwear, accessories, mood, framing. Body proportions stay locked to the character sheet.'; ta.value=state.custom||'';
+      ta.addEventListener('input',function(){ state.custom=ta.value; ta.style.height='auto'; ta.style.height=ta.scrollHeight+'px'; render(); });
+      cf.appendChild(ta); g.appendChild(cf);
+      fieldsEl.appendChild(g);
+      fieldsEl.appendChild(el('div','pvb-note','The character name is taken from the character sheet you choose below, so there is no name to type. Body proportions always come from the character sheet, never the outfit or product images.'));
+    }
+    function buildDeltaFields(){
+      // what are you attaching? (tailors the prompt to a support headshot or none)
+      if(state.fields['SUPPORT']===undefined) state.fields['SUPPORT']='yes';
+      fieldsEl.appendChild(el('div','pvb-gtitle','What are you attaching?'));
+      var sg=el('div','pvb-fields');
+      var slab=el('label','pvb-check-toggle');
+      var scb=document.createElement('input'); scb.type='checkbox'; scb.checked=(state.fields['SUPPORT']==='yes');
+      scb.addEventListener('change',function(){ state.fields['SUPPORT']=scb.checked?'yes':'no'; render(); });
+      slab.appendChild(scb); slab.appendChild(document.createTextNode(' I am attaching a support image (a clean headshot as Image 2)'));
+      sg.appendChild(slab); fieldsEl.appendChild(sg);
+      fieldsEl.appendChild(el('div','pvb-note','Checked: the prompt uses Image 2 as the support headshot. Unchecked: it switches to "No support image" so the prompt matches what you actually attach.'));
+      if(state.fields['DELTA']===undefined) state.fields['DELTA']='';
+      fieldsEl.appendChild(el('div','pvb-gtitle','Optional change'));
+      var g=el('div','pvb-fields');
+      var f=el('div','pvb-field full'); f.appendChild(el('label',null,'Change to make (leave blank for an exact rebuild)'));
+      var ta=document.createElement('textarea'); ta.rows=2; ta.placeholder='e.g., extend the undershirt hem to cover the belt loops'; ta.value=state.fields['DELTA']||'';
+      ta.addEventListener('input',function(){ state.fields['DELTA']=ta.value; ta.style.height='auto'; ta.style.height=ta.scrollHeight+'px'; render(); });
+      f.appendChild(ta); g.appendChild(f); fieldsEl.appendChild(g);
+      fieldsEl.appendChild(el('div','pvb-note','Leave blank and the prompt does an exact rebuild. Type one change here and it replaces the DELTA line in the prompt.'));
+    }
+    function buildPoseFields(){
+      if(state.fields['POSE']===undefined) state.fields['POSE']=POSES[0].file;
+      fieldsEl.appendChild(el('div','pvb-gtitle','Studio pose'));
+      var g=el('div','pvb-fields');
+      var pf=el('div','pvb-field full'); pf.appendChild(el('label',null,'Pose'));
+      var sel=document.createElement('select');
+      POSES.forEach(function(p){ var op=document.createElement('option'); op.value=p.file; op.textContent=p.label; if(state.fields['POSE']===p.file)op.selected=true; sel.appendChild(op); });
+      sel.addEventListener('change',function(){ state.fields['POSE']=sel.value; render(); });
+      pf.appendChild(sel); g.appendChild(pf);
+      var cf=el('div','pvb-field full'); cf.appendChild(el('label',null,'Custom details (optional)'));
+      var ta=document.createElement('textarea'); ta.rows=2; ta.placeholder='Optional: expression, hand detail, wardrobe note, framing. Body proportions stay locked to the character sheet.'; ta.value=state.custom||'';
+      ta.addEventListener('input',function(){ state.custom=ta.value; ta.style.height='auto'; ta.style.height=ta.scrollHeight+'px'; render(); });
+      cf.appendChild(ta); g.appendChild(cf);
+      fieldsEl.appendChild(g);
+      fieldsEl.appendChild(el('div','pvb-note','Pick the character below. Every pose is on a pure white studio backdrop with model studio lighting. Poses 1 to 4 are the standard character-sheet views.'));
+    }
+
+    function buildRefs(){
+      refsEl.innerHTML='';
+      if(cfg.delta){ renderX2drop(refsEl); return; }
+      refsEl.appendChild(el('div','pvb-gtitle','Reference files'));
+      if(cfg.ptype==='pose'){
+        refsEl.appendChild(refAccordion('Characters', state.chars, CHARACTERS, false));
+        refsEl.appendChild(refAccordion('Outfit, apparel & items', state.items, ITEMS, false));
+      } else if(OUTFIT){
+        refsEl.appendChild(refAccordion('Characters', state.chars, CHARACTERS, false));
+        refsEl.appendChild(refAccordion('Outfit, apparel & items', state.items, ITEMS, false));
+        refsEl.appendChild(backdropSlot());
+      } else {
+        refsEl.appendChild(refAccordion('Characters', state.chars, CHARACTERS, false));
+        refsEl.appendChild(refAccordion('Items', state.items, ITEMS, false));
+        if(BACKDROP) refsEl.appendChild(backdropSlot());
+        else refsEl.appendChild(refAccordion('Location', null, SCENES, true));
+      }
+      renderStaging(refsEl);
+    }
+
+    // ---- X2 local drop-zone (in-browser only; hand images back to a new GPT window) ----
+    function afterX2change(){
+      if(x2imgs.length>=2) state.fields['SUPPORT']='yes';
+      else if(x2imgs.length===1) state.fields['SUPPORT']='no';
+      buildFields(); buildRefs(); render();
+    }
+    function addX2Files(files){
+      [].slice.call(files||[]).forEach(function(f){
+        if(!/^image\//.test(f.type)) return;
+        if(x2imgs.length>=2) return;
+        var r=new FileReader();
+        r.onload=function(){ if(x2imgs.length>=2) return; x2imgs.push({name:f.name||('pasted-'+Date.now()+'.png'), url:r.result}); afterX2change(); };
+        r.readAsDataURL(f);
+      });
+    }
+    function renderX2drop(wrap){
+      wrap.appendChild(el('div','pvb-gtitle','Your images'));
+      var dz=el('div','pvb-drop');
+      dz.innerHTML='<div class="pvb-drop-hint">Drop or paste your images here, or click to choose.<br>First image = Image 1 (master). Second image = Image 2 (support headshot).</div>';
+      var fi=document.createElement('input'); fi.type='file'; fi.accept='image/*'; fi.multiple=true; fi.style.display='none';
+      dz.appendChild(fi);
+      dz.addEventListener('click',function(){ fi.click(); });
+      fi.addEventListener('change',function(){ addX2Files(fi.files); fi.value=''; });
+      dz.addEventListener('dragover',function(e){ e.preventDefault(); dz.classList.add('over'); });
+      dz.addEventListener('dragleave',function(){ dz.classList.remove('over'); });
+      dz.addEventListener('drop',function(e){ e.preventDefault(); dz.classList.remove('over'); addX2Files(e.dataTransfer.files); });
+      wrap.appendChild(dz);
+      var list=el('div','pvb-drop-list');
+      x2imgs.forEach(function(im,i){
+        var row=el('div','pvb-checkrow');
+        var th=el('div','th'); var img=document.createElement('img'); img.src=im.url; img.alt=im.name; th.appendChild(img); row.appendChild(th);
+        var meta=el('div','meta'); meta.appendChild(el('div','role', i===0?'Image 1 (master)':'Image 2 (support)')); meta.appendChild(el('div','fn',esc(im.name))); row.appendChild(meta);
+        var cbtn=el('button','cimg','Copy'); cbtn.type='button'; cbtn.addEventListener('click',function(){ copyImage(im.url,cbtn); }); row.appendChild(cbtn);
+        var dbtn=el('button','cimg','Save'); dbtn.type='button'; dbtn.addEventListener('click',function(){ downloadImg(im.url,im.name,dbtn); }); row.appendChild(dbtn);
+        var rm=el('button','cimg','×'); rm.type='button'; rm.title='Remove'; rm.addEventListener('click',function(){ x2imgs.splice(i,1); afterX2change(); }); row.appendChild(rm);
+        list.appendChild(row);
+      });
+      wrap.appendChild(list);
+      if(!x2imgs.length) wrap.appendChild(el('div','pvb-note','Nothing added yet. These stay on this computer only and clear when you reset or reload.'));
+    }
+
+    // ---- your-own reference image staging (in-browser only; attach to a new GPT window) ----
+    function afterStagedChange(){ buildRefs(); render(); }
+    function addStagedFiles(files){
+      [].slice.call(files||[]).forEach(function(f){
+        if(!/^image\//.test(f.type)) return;
+        var r=new FileReader();
+        r.onload=function(){ staged.push({name:(f.name||('reference-'+Date.now()+'.png')), role:'', url:r.result}); afterStagedChange(); };
+        r.readAsDataURL(f);
+      });
+    }
+    function renderStaging(wrap){
+      wrap.appendChild(el('div','pvb-gtitle','Your own reference image'));
+      wrap.appendChild(el('div','pvb-note','Add an outside image you found (upload, drop, or paste). Give it a name and say what it is for. It gets listed in the prompt and added to the copy list below. Stays on this computer only and clears when you reset or reload.'));
+      var dz=el('div','pvb-drop');
+      dz.innerHTML='<div class="pvb-drop-hint">Drop or paste an image here, or click to choose.</div>';
+      var fi=document.createElement('input'); fi.type='file'; fi.accept='image/*'; fi.multiple=true; fi.style.display='none';
+      dz.appendChild(fi);
+      dz.addEventListener('click',function(){ fi.click(); });
+      fi.addEventListener('change',function(){ addStagedFiles(fi.files); fi.value=''; });
+      dz.addEventListener('dragover',function(e){ e.preventDefault(); dz.classList.add('over'); });
+      dz.addEventListener('dragleave',function(){ dz.classList.remove('over'); });
+      dz.addEventListener('drop',function(e){ e.preventDefault(); dz.classList.remove('over'); addStagedFiles(e.dataTransfer.files); });
+      wrap.appendChild(dz);
+      var list=el('div','pvb-drop-list');
+      staged.forEach(function(im,i){
+        var row=el('div','pvb-checkrow');
+        var th=el('div','th'); var img=document.createElement('img'); img.src=im.url; img.alt=im.name||'reference'; th.appendChild(img); row.appendChild(th);
+        var meta=el('div','meta');
+        var nin=document.createElement('input'); nin.type='text'; nin.className='pvb-otherbox'; nin.placeholder='Name (for example: mood-board.jpg)'; nin.value=im.name||'';
+        nin.addEventListener('input',function(){ im.name=nin.value; render(); });
+        var rin=document.createElement('input'); rin.type='text'; rin.className='pvb-otherbox'; rin.style.marginTop='6px'; rin.placeholder='What is it for? (for example: mood and colors only, not the people)'; rin.value=im.role||'';
+        rin.addEventListener('input',function(){ im.role=rin.value; render(); });
+        meta.appendChild(nin); meta.appendChild(rin); row.appendChild(meta);
+        var cbtn=el('button','cimg','Copy'); cbtn.type='button'; cbtn.addEventListener('click',function(){ copyImage(im.url,cbtn); }); row.appendChild(cbtn);
+        var rm=el('button','cimg','×'); rm.type='button'; rm.title='Remove'; rm.addEventListener('click',function(){ staged.splice(i,1); afterStagedChange(); }); row.appendChild(rm);
+        list.appendChild(row);
+      });
+      wrap.appendChild(list);
+    }
+
+    // ---- reusable setups ----
+    function renderSetups(){
+      setupsEl.innerHTML='';
+      var add=el('button','pvb-smallbtn','+ Save current setup'); add.type='button';
+      add.addEventListener('click',function(){ var name=prompt('Name this setup (for example: Anthony editing, golden hour):'); if(!name)return; name=name.trim().slice(0,48); if(!name)return;
+        var arr=loadSetups(); arr.push({name:name, idx:activeIdx, state:JSON.parse(JSON.stringify(state))}); saveSetups(arr); renderSetups(); });
+      setupsEl.appendChild(add);
+      loadSetups().forEach(function(s,i){ var chip=el('span','pvb-chip');
+        var load=el('span','load',esc(s.name)); load.title='Load this setup'; load.addEventListener('click',function(){ applySetup(s); });
+        var del=el('button',null,'×'); del.type='button'; del.title='Delete'; del.addEventListener('click',function(e){ e.stopPropagation(); var arr=loadSetups(); arr.splice(i,1); saveSetups(arr); renderSetups(); });
+        chip.appendChild(load); chip.appendChild(del); setupsEl.appendChild(chip); });
+    }
+    function applySetup(s){
+      selectPrompt(s.idx, JSON.parse(JSON.stringify(s.state)));
+    }
+
+    // ---- select prompt ----
+    function selectPrompt(idx, overrideState){
+      activeIdx=idx; cfg=PROMPTS[idx]; x2imgs=[]; staged=[];
+      Array.prototype.forEach.call(document.querySelectorAll('#pvb-promptmenu .pvb-select-opt'),function(o,i){ o.classList.toggle('active',i===idx); o.setAttribute('aria-selected',i===idx?'true':'false'); });
+      OUTFIT=!!(cfg.views&&cfg.views.length); TWOPASS=/two-pass/i.test(cfg.file||''); BACKDROP=TWOPASS||OUTFIT;
+      KEY=OUTFIT?'outfit-change':(cfg.ptype==='pose'?'studio-pose':cfg.file);
+      titleEl.textContent=cfg.title; subEl.textContent=cfg.sub?('('+cfg.sub+')'):'';
+      if(guideEl){ if(cfg.guide){ guideBodyEl.innerHTML=cfg.guide; guideEl.hidden=false; } else { guideBodyEl.innerHTML=''; guideEl.hidden=true; } }
+      var def=freshState();
+      if(overrideState){ state=Object.assign(freshState(), overrideState); state.chars=(state.chars||[]).filter(Boolean); state.items=(state.items||[]).filter(Boolean); saveState(KEY,state); }
+      else { var sv=loadState(KEY,null); state = sv?Object.assign(def,sv):def; state.chars=(state.chars||[]).filter(Boolean); state.items=(state.items||[]).filter(Boolean); }
+      DEFAULT_BACKDROP=def.backdrop; DEFAULT_VIEW=def.view;
+      try{ localStorage.setItem(NS+'last', String(idx)); }catch(e){}
+      if(cfg.ptype==='pose'){ baseText=''; buildFields(); buildRefs(); render(); return; }
+      var path=OUTFIT?(state.view||cfg.views[0].file):cfg.file;
+      preEl.textContent='Loading base prompt…';
+      fetchPrompt(path).then(function(t){ baseText=t; buildFields(); if(cfg.ptype==='environment' && !state.scene) state.scene=autoScene(); buildRefs(); render(); })
+        .catch(function(){ baseText='[Could not load the base prompt file.]'; buildFields(); buildRefs(); render(); });
+    }
+
+    // ---- wire header actions ----
+    copyB.addEventListener('click',function(){ copyText(compose(), copyB); });
+    if(copyTopB) copyTopB.addEventListener('click',function(){ copyText(compose(), copyTopB); });
+    function doReset(){ if(!confirm('Clear your entries for this prompt? This cannot be undone.'))return; try{ localStorage.removeItem(NS+'state:'+KEY); }catch(e){} selectPrompt(activeIdx); }
+    resetB.addEventListener('click',doReset);
+    var resetTopB=document.getElementById('pvb-resettop'); if(resetTopB) resetTopB.addEventListener('click',doReset);
+
+    // ---- build the prompt selector menu (opens from the editor title) ----
+    (function(){
+      var titleSel=document.getElementById('pvb-titlesel'), menu=document.getElementById('pvb-promptmenu');
+      function closeMenu(){ menu.hidden=true; titleSel.setAttribute('aria-expanded','false'); }
+      PROMPTS.forEach(function(p,i){ if(p.quick) return; var o=el('div','pvb-select-opt'); o.setAttribute('role','option');
+        o.appendChild(el('span','t',esc(p.title))); if(p.sub)o.appendChild(el('span','s',esc(p.sub)));
+        o.addEventListener('click',function(e){ e.stopPropagation(); selectPrompt(i); closeMenu(); });
+        menu.appendChild(o); });
+      titleSel.addEventListener('click',function(e){ e.stopPropagation(); var willOpen=menu.hidden; menu.hidden=!willOpen; titleSel.setAttribute('aria-expanded', willOpen?'true':'false'); });
+      document.addEventListener('click', closeMenu);
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeMenu(); });
+    })();
+
+    // ---- prompt mode toggle (PV Project vs Full template) ----
+    var modeBtns=[].slice.call(document.querySelectorAll('.pvb-modebtn')), modeHint=document.getElementById('pvb-modehint');
+    function updateModeUI(){
+      var noMode = cfg && (cfg.ptype==='protocol' || cfg.ptype==='pose');
+      var modebar=document.querySelector('.pvb-modebar');
+      if(modebar) modebar.style.display = noMode ? 'none' : '';
+      modeBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-mode')===MODE); });
+      if(modeHint){
+        if(cfg && cfg.ptype==='pose') modeHint.textContent = 'Studio pose builds a fresh full-body image on a white studio backdrop. It reads the same in both modes.';
+        else if(noMode) modeHint.textContent = 'This one is a full instruction on its own, so it is sent the same way every time. The PV Project and Full Template modes only change the Classroom, Campus, Lobby, and Outfit prompts.';
+        else if(MODE==='project') modeHint.textContent = 'PV Project sends a short prompt: only your scene changes and the reference list. Your ChatGPT project fills in the saved canon. Use this inside that project.';
+        else modeHint.textContent = 'Full Template sends the entire prompt with all of the canon baked in. It is longer, but it works outside your ChatGPT project.';
+      }
+    }
+    modeBtns.forEach(function(b){ b.addEventListener('click', function(){ MODE=b.getAttribute('data-mode'); try{localStorage.setItem(NS+'mode',MODE);}catch(e){} updateModeUI(); render(); }); });
+    updateModeUI();
+
+    // ---- AI disclaimer toggle ----
+    var discCb=document.getElementById('pvb-disc');
+    if(discCb){ discCb.checked=DISC; discCb.addEventListener('change',function(){ DISC=discCb.checked; try{localStorage.setItem(NS+'disc',DISC?'1':'0');}catch(e){} render(); }); }
+
+    // ---- view tabs (Build a Prompt | Image Gallery) ----
+    (function(){
+      var tabs=[].slice.call(document.querySelectorAll('.pvb-tab'));
+      var panels={build:document.getElementById('pvb-panel-build'), gallery:document.getElementById('pvb-panel-gallery'), resources:document.getElementById('pvb-panel-resources')};
+      function show(name){
+        if(!panels[name]) name='build';
+        tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('data-tab')===name); });
+        Object.keys(panels).forEach(function(k){ if(panels[k]) panels[k].hidden=(k!==name); });
+        try{ localStorage.setItem(NS+'tab', name); }catch(e){}
+      }
+      tabs.forEach(function(t){ t.addEventListener('click', function(){ show(t.getAttribute('data-tab')); window.scrollTo(0,0); }); });
+      var gc=document.getElementById('pvb-galcount'); if(gc){ var n=document.querySelectorAll('#pvb-panel-gallery .logo-card').length; if(n) gc.textContent=' ('+n+')'; }
+      var t0='build'; try{ var s=localStorage.getItem(NS+'tab'); if(s==='gallery'||s==='build'||s==='resources')t0=s; }catch(e){}
+      show(t0);
+    })();
+
+    // ---- one-click copies (Clear Artboard, Force Full Rebuild): static protocol files, no fields ----
+    [].slice.call(document.querySelectorAll('.pvb-quickbtn')).forEach(function(b){
+      b.addEventListener('click', function(){ var f=b.getAttribute('data-quick'); if(!f)return;
+        fetchPrompt(f).then(function(t){ copyText(t, b); }).catch(function(){ var was=b.textContent; b.textContent='Failed'; setTimeout(function(){ b.textContent=was; },1600); });
+      });
+    });
+
+    renderSetups();
+    var start=0; try{ var l=parseInt(localStorage.getItem(NS+'last'),10); if(!isNaN(l)&&l>=0&&l<PROMPTS.length&&!PROMPTS[l].quick)start=l; }catch(e){}
+    selectPrompt(start);
+  })();
   </script>
 </body>
 </html>

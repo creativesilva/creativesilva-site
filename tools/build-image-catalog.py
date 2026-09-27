@@ -13,10 +13,7 @@ import os, re, html as _html
 
 ROOT=os.path.join(os.path.dirname(__file__),"..")
 SRC=os.path.join(ROOT,"curriculum.html")            # source of the MODULES array (order + membership)
-TARGET=os.path.join(ROOT,"build-resources.html")    # file that holds the catalog block + markers
-# The consolidated builder (build-resources-beta.html) embeds the same gallery under its Image Gallery
-# tab, so it carries the same markers and is filled from the same run. Optional: skipped if missing.
-BETA=os.path.join(ROOT,"build-resources-beta.html")
+TARGET=os.path.join(ROOT,"build-resources.html")    # the Build Resources hub: gallery lives in its Image Gallery tab
 SHARED=os.path.join(ROOT,"curriculum/shared")
 COURSE_NAME={"da1a":"Digital Arts 1A","photo1a":"Photography 1A","photo2a":"Photography 2A"}
 COURSE_ORDER=["da1a","photo1a","photo2a"]
@@ -147,11 +144,10 @@ def write_block(path, inner, required):
 def main():
     bycourse=collect()
     inner=render_course_heroes()+"\n                      "+render(bycourse)
-    r1=write_block(TARGET, inner, required=True)          # build-resources.html (catalog home)
-    r2=write_block(BETA, inner, required=False)            # build-resources-beta.html (consolidated builder)
+    r1=write_block(TARGET, inner, required=True)          # build-resources.html (Build Resources hub, Image Gallery tab)
     total=sum(len(v) for v in bycourse.values())+len(COURSE_HEROES)
     st={'wrote':'updated','nochange':'up to date','absent':'no markers'}
     print(f"Live Image Catalog: {total} images (Course Heroes={len(COURSE_HEROES)}, "+", ".join(f"{COURSE_NAME[c]}={len(bycourse[c])}" for c in COURSE_ORDER)+")")
-    print(f"  build-resources.html: {st[r1]}  |  build-resources-beta.html: {st[r2]}")
+    print(f"  build-resources.html: {st[r1]}")
 
 main()
