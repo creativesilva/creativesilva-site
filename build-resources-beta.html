@@ -559,12 +559,13 @@
       if(!document.querySelector('.pvb-drop')) return;
       var items=(e.clipboardData&&e.clipboardData.items)||[];
       var files=[].slice.call(items).filter(function(it){return it.type&&it.type.indexOf('image')===0;}).map(function(it){return it.getAsFile();}).filter(Boolean);
-      if(files.length){ e.preventDefault(); addX2Files(files); }
+      if(files.length){ e.preventDefault(); if(cfg && cfg.delta) addX2Files(files); else addStagedFiles(files); }
     });
 
     // ---- active build ----
     var activeIdx=0, cfg=null, state=null, baseText='', OUTFIT=false, TWOPASS=false, BACKDROP=false, KEY='', DEFAULT_BACKDROP='', DEFAULT_VIEW='', fieldNames=[];
     var x2imgs=[]; // X2 drop-zone images, in-memory only (never persisted), cleared on prompt switch/reset
+    var staged=[]; // Your-own reference images (upload/paste/drop), in-memory only, cleared on prompt switch/reset
     var MODE='project'; try{ var _m=localStorage.getItem(NS+'mode'); if(_m==='full'||_m==='project') MODE=_m; }catch(e){}
 
     function freshState(){ return {fields:{},chars:['','','',''],items:['','','',''],scene:'',backdrop:(TWOPASS?'transparent':(OUTFIT?'white':'')),view:(OUTFIT?cfg.views[0].file:''),custom:''}; }
@@ -591,6 +592,11 @@
       else if(cfg.ptype==='pose') out=composePose();
       else if(MODE==='project' && cfg.ptype==='environment') out=composeEnvProject();
       else out=composeEnvFull();
+      if(staged.length){
+        var sb='YOUR OWN REFERENCE IMAGES (attached separately; use each only for what its note says):';
+        staged.forEach(function(im){ var nm=((im.name||'').trim())||'reference image'; var rl=(im.role||'').trim(); sb+='\n- '+nm+' = '+(rl||'reference image (add a note on what it is for).'); });
+        out += '\n\n' + sb;
+      }
       if(DISC) out += '\n\n' + DISCLAIMER_TEXT;
       return out;
     }
@@ -713,6 +719,7 @@
       var attach = cfg.delta
         ? x2imgs.map(function(im,i){ return {url:im.url, name:im.name, role:(i===0?'Image 1 (master)':'Image 2 (support)')}; })
         : selectedRefs().map(function(r){ return {url:IMG+r.file, name:baseName(r.file), role:r.role}; });
+      if(staged.length){ attach = attach.concat(staged.map(function(im){ return {url:im.url, name:((im.name||'').trim()||'your reference image'), role:((im.role||'').trim()||'Your reference image')}; })); }
       attach.forEach(function(a){
         var row=el('div','pvb-checkrow');
         row.appendChild(el('div','pvb-stepnum',String(step++)));
@@ -874,6 +881,7 @@
         if(BACKDROP) refsEl.appendChild(backdropSlot());
         else refsEl.appendChild(refAccordion('Location', null, SCENES, true));
       }
+      renderStaging(refsEl);
     }
 
     // ---- X2 local drop-zone (in-browser only; hand images back to a new GPT window) ----
@@ -917,6 +925,46 @@
       if(!x2imgs.length) wrap.appendChild(el('div','pvb-note','Nothing added yet. These stay on this computer only and clear when you reset or reload.'));
     }
 
+    // ---- your-own reference image staging (in-browser only; attach to a new GPT window) ----
+    function afterStagedChange(){ buildRefs(); render(); }
+    function addStagedFiles(files){
+      [].slice.call(files||[]).forEach(function(f){
+        if(!/^image\//.test(f.type)) return;
+        var r=new FileReader();
+        r.onload=function(){ staged.push({name:(f.name||('reference-'+Date.now()+'.png')), role:'', url:r.result}); afterStagedChange(); };
+        r.readAsDataURL(f);
+      });
+    }
+    function renderStaging(wrap){
+      wrap.appendChild(el('div','pvb-gtitle','Your own reference image'));
+      wrap.appendChild(el('div','pvb-note','Add an outside image you found (upload, drop, or paste). Give it a name and say what it is for. It gets listed in the prompt and added to the copy list below. Stays on this computer only and clears when you reset or reload.'));
+      var dz=el('div','pvb-drop');
+      dz.innerHTML='<div class="pvb-drop-hint">Drop or paste an image here, or click to choose.</div>';
+      var fi=document.createElement('input'); fi.type='file'; fi.accept='image/*'; fi.multiple=true; fi.style.display='none';
+      dz.appendChild(fi);
+      dz.addEventListener('click',function(){ fi.click(); });
+      fi.addEventListener('change',function(){ addStagedFiles(fi.files); fi.value=''; });
+      dz.addEventListener('dragover',function(e){ e.preventDefault(); dz.classList.add('over'); });
+      dz.addEventListener('dragleave',function(){ dz.classList.remove('over'); });
+      dz.addEventListener('drop',function(e){ e.preventDefault(); dz.classList.remove('over'); addStagedFiles(e.dataTransfer.files); });
+      wrap.appendChild(dz);
+      var list=el('div','pvb-drop-list');
+      staged.forEach(function(im,i){
+        var row=el('div','pvb-checkrow');
+        var th=el('div','th'); var img=document.createElement('img'); img.src=im.url; img.alt=im.name||'reference'; th.appendChild(img); row.appendChild(th);
+        var meta=el('div','meta');
+        var nin=document.createElement('input'); nin.type='text'; nin.className='pvb-otherbox'; nin.placeholder='Name (for example: mood-board.jpg)'; nin.value=im.name||'';
+        nin.addEventListener('input',function(){ im.name=nin.value; render(); });
+        var rin=document.createElement('input'); rin.type='text'; rin.className='pvb-otherbox'; rin.style.marginTop='6px'; rin.placeholder='What is it for? (for example: mood and colors only, not the people)'; rin.value=im.role||'';
+        rin.addEventListener('input',function(){ im.role=rin.value; render(); });
+        meta.appendChild(nin); meta.appendChild(rin); row.appendChild(meta);
+        var cbtn=el('button','cimg','Copy'); cbtn.type='button'; cbtn.addEventListener('click',function(){ copyImage(im.url,cbtn); }); row.appendChild(cbtn);
+        var rm=el('button','cimg','×'); rm.type='button'; rm.title='Remove'; rm.addEventListener('click',function(){ staged.splice(i,1); afterStagedChange(); }); row.appendChild(rm);
+        list.appendChild(row);
+      });
+      wrap.appendChild(list);
+    }
+
     // ---- reusable setups ----
     function renderSetups(){
       setupsEl.innerHTML='';
@@ -935,7 +983,7 @@
 
     // ---- select prompt ----
     function selectPrompt(idx, overrideState){
-      activeIdx=idx; cfg=PROMPTS[idx]; x2imgs=[];
+      activeIdx=idx; cfg=PROMPTS[idx]; x2imgs=[]; staged=[];
       Array.prototype.forEach.call(document.querySelectorAll('#pvb-promptmenu .pvb-select-opt'),function(o,i){ o.classList.toggle('active',i===idx); o.setAttribute('aria-selected',i===idx?'true':'false'); });
       OUTFIT=!!(cfg.views&&cfg.views.length); TWOPASS=/two-pass/i.test(cfg.file||''); BACKDROP=TWOPASS||OUTFIT;
       KEY=OUTFIT?'outfit-change':(cfg.ptype==='pose'?'studio-pose':cfg.file);
