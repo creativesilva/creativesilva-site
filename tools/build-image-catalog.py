@@ -14,6 +14,9 @@ import os, re, html as _html
 ROOT=os.path.join(os.path.dirname(__file__),"..")
 SRC=os.path.join(ROOT,"curriculum.html")            # source of the MODULES array (order + membership)
 TARGET=os.path.join(ROOT,"build-resources.html")    # file that holds the catalog block + markers
+# The consolidated builder (build-resources-beta.html) embeds the same gallery under its Image Gallery
+# tab, so it carries the same markers and is filled from the same run. Optional: skipped if missing.
+BETA=os.path.join(ROOT,"build-resources-beta.html")
 SHARED=os.path.join(ROOT,"curriculum/shared")
 COURSE_NAME={"da1a":"Digital Arts 1A","photo1a":"Photography 1A","photo2a":"Photography 2A"}
 COURSE_ORDER=["da1a","photo1a","photo2a"]
@@ -123,15 +126,32 @@ def render_course_heroes():
       f'<span class="cat-name">Course Home &amp; Overview ({len(cards)})</span><span class="cat-chevron"></span></summary>'
       '<div class="cat-body"><div class="logo-grid">'+"".join(cards)+'</div></div></details>')
 
+def write_block(path, inner, required):
+    """Fill the LIVE_IMAGE_CATALOG markers in one file. required=True asserts the markers exist.
+    Returns 'wrote' if the file changed, 'nochange' if markers were present but content matched,
+    or 'absent' if the file or its markers are missing (only allowed when required=False)."""
+    if not os.path.exists(path):
+        if required: raise AssertionError(f"missing target: {path}")
+        return 'absent'
+    src=open(path,encoding="utf-8").read()
+    if "<!-- LIVE_IMAGE_CATALOG_START -->" not in src:
+        if required: raise AssertionError(f"markers not found in {os.path.basename(path)}")
+        return 'absent'
+    new=re.sub(r'(<!-- LIVE_IMAGE_CATALOG_START -->).*?(<!-- LIVE_IMAGE_CATALOG_END -->)',
+               lambda m: m.group(1)+"\n                      "+inner+"\n                      "+m.group(2), src, flags=re.S)
+    if new==src:
+        return 'nochange'
+    open(path,"w",encoding="utf-8").write(new)
+    return 'wrote'
+
 def main():
     bycourse=collect()
     inner=render_course_heroes()+"\n                      "+render(bycourse)
-    src=open(TARGET,encoding="utf-8").read()
-    new=re.sub(r'(<!-- LIVE_IMAGE_CATALOG_START -->).*?(<!-- LIVE_IMAGE_CATALOG_END -->)',
-               lambda m: m.group(1)+"\n                      "+inner+"\n                      "+m.group(2), src, flags=re.S)
-    assert new!=src, "markers not found in build-resources.html"
-    open(TARGET,"w",encoding="utf-8").write(new)
+    r1=write_block(TARGET, inner, required=True)          # build-resources.html (catalog home)
+    r2=write_block(BETA, inner, required=False)            # build-resources-beta.html (consolidated builder)
     total=sum(len(v) for v in bycourse.values())+len(COURSE_HEROES)
+    st={'wrote':'updated','nochange':'up to date','absent':'no markers'}
     print(f"Live Image Catalog: {total} images (Course Heroes={len(COURSE_HEROES)}, "+", ".join(f"{COURSE_NAME[c]}={len(bycourse[c])}" for c in COURSE_ORDER)+")")
+    print(f"  build-resources.html: {st[r1]}  |  build-resources-beta.html: {st[r2]}")
 
 main()
