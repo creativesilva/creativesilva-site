@@ -426,6 +426,12 @@ The hero image is the showcase. Width 52%, no max-width cap, strong shadow. The 
 ### D. Tips / Resources Card (optional)
 For things like Google Image Search tips, glossary, video embed. Use the same accent treatment as the Overview card.
 
+### D2. Course Resources page (course-level, PURPLE) — LOCKED 2026-09-26
+A distinct page type, separate from the (teal) Course Overview. Same framework + function (silva-module.css chrome, Copy/Download Canvas HTML, working Spanish `<details>` accordion), but **purple accent** (`#8b5cf6`, header text `#c4b5fd`, icons `resources-v1.png` / `design-purple-v1.png`, deep bg `#150d2e`), because purple = Resources. Keyed by URL as a standalone cross-course group in `silva-nav.js`, and a `Course Resources` row in `curriculum.html` MODULES right after `Course Syllabus`.
+- **Photography shares ONE page:** `curriculum/shared/photo-course-resources.html` for Photo 1A + 1B + 2A. Digital Arts has its own: `curriculum/shared/digarts1a-course-resources.html`. Content differs per subject; framework/function identical.
+- **Slide decks here = OVERVIEW / CONCEPT decks only**, linked as PDFs that open in a new tab so Chris can pull/swap them. Lesson-STEP / project decks (e.g. Live Stream, Build Your Own Preset, Image Series import) stay on their module pages, never on Resources.
+- Retire a superseded per-course resources file as a redirect to the shared page. Reference build: `curriculum/shared/digarts1a-course-resources.html`.
+
 ### E. How to Complete (orange section, scroll-boxed step cards)
 
 Long instruction lists use the visible-affordance vertical scroll pattern from §13. The "Scroll for more" hint + bottom gradient fade work even in Canvas (where custom scrollbar styling is stripped).
