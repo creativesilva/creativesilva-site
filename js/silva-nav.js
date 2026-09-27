@@ -117,6 +117,7 @@
 
     // Cross-course resources
     ['/curriculum/shared/photo-course-resources.html'],
+    ['/curriculum/shared/digarts1a-course-resources.html'],
 
     // Photography 1B: Final Exam Study Materials
     ['/curriculum/shared/photo1b-finals-quiz-prep.html',
@@ -202,8 +203,7 @@
      '/curriculum/shared/digarts1-elements-of-art-step02-reflection.html'],
     ['/curriculum/photo1/photo1a-home.html',
      '/curriculum/photo1/photo1a-course-overview.html',
-     '/curriculum/photo1/photo1a-syllabus.html',
-     '/curriculum/shared/photo1a-course-resources.html'],
+     '/curriculum/photo1/photo1a-syllabus.html'],
     ['/curriculum/shared/photo1-self-portrait-overview.html',
      '/curriculum/shared/photo1-self-portrait-step01-capture.html',
      '/curriculum/shared/photo1-self-portrait-step02-reflection.html'],
