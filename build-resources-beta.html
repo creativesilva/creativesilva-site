@@ -568,7 +568,7 @@
     var staged=[]; // Your-own reference images (upload/paste/drop), in-memory only, cleared on prompt switch/reset
     var MODE='project'; try{ var _m=localStorage.getItem(NS+'mode'); if(_m==='full'||_m==='project') MODE=_m; }catch(e){}
 
-    function freshState(){ return {fields:{},chars:['','','',''],items:['','','',''],scene:'',backdrop:(TWOPASS?'transparent':(OUTFIT?'white':'')),view:(OUTFIT?cfg.views[0].file:''),custom:''}; }
+    function freshState(){ return {fields:{},chars:[],items:[],scene:'',backdrop:(TWOPASS?'transparent':(OUTFIT?'white':'')),view:(OUTFIT?cfg.views[0].file:''),custom:''}; }
     // Auto-pick the scene reference image that matches the chosen location (no double work).
     function autoScene(){
       if(!cfg || cfg.ptype!=='environment') return '';
@@ -735,7 +735,7 @@
 
     // ---- reference accordion (larger thumbnails) ----
     function refAccordion(title, arr, options, single){
-      var maxN=single?1:4, wrap=el('div','pvb-acc');
+      var maxN=single?1:0, wrap=el('div','pvb-acc'); // multi: 0 = no limit, add as many references as you want
       var head=el('button','pvb-acc-head'); head.type='button';
       head.appendChild(el('span','lab',esc(title)));
       var cnt=el('span','cnt'); head.appendChild(cnt);
@@ -743,8 +743,8 @@
       var body=el('div','pvb-acc-body'); var grid=el('div','pvb-refgrid'); body.appendChild(grid);
       function isSel(f){ return single?(state.scene===f):(arr.indexOf(f)>=0); }
       function nSel(){ return single?(state.scene?1:0):arr.filter(Boolean).length; }
-      function updCnt(){ var n=nSel(); cnt.textContent=n?(single?'1 selected':(n+' of '+maxN)):'none'; cnt.classList.toggle('has',n>0); }
-      function toggle(f){ if(single){ state.scene=(state.scene===f)?'':f; } else { var i=arr.indexOf(f); if(i>=0){arr[i]='';} else { var s=arr.indexOf(''); if(s<0)return; arr[s]=f; } } cards(); updCnt(); render(); }
+      function updCnt(){ var n=nSel(); cnt.textContent=n?(single?'1 selected':(n+' selected')):'none'; cnt.classList.toggle('has',n>0); }
+      function toggle(f){ if(single){ state.scene=(state.scene===f)?'':f; } else { var i=arr.indexOf(f); if(i>=0){arr.splice(i,1);} else { arr.push(f); } } cards(); updCnt(); render(); }
       function cards(){ grid.innerHTML=''; options.forEach(function(o){ var c=el('div','pvb-refcard'+(isSel(o.file)?' sel':''));
         var t=el('div','thumb'); var im=el('img'); im.src=IMG+o.file; im.alt=o.label; im.loading='lazy'; t.appendChild(im); c.appendChild(t);
         c.appendChild(el('div','nm',esc(o.label)));
@@ -990,8 +990,8 @@
       titleEl.textContent=cfg.title; subEl.textContent=cfg.sub?('('+cfg.sub+')'):'';
       if(guideEl){ if(cfg.guide){ guideBodyEl.innerHTML=cfg.guide; guideEl.hidden=false; } else { guideBodyEl.innerHTML=''; guideEl.hidden=true; } }
       var def=freshState();
-      if(overrideState){ state=Object.assign(freshState(), overrideState); state.chars=(state.chars||[]).concat(['','','','']).slice(0,4); state.items=(state.items||[]).concat(['','','','']).slice(0,4); saveState(KEY,state); }
-      else { var sv=loadState(KEY,null); state = sv?Object.assign(def,sv):def; state.chars=(state.chars||[]).concat(['','','','']).slice(0,4); state.items=(state.items||[]).concat(['','','','']).slice(0,4); }
+      if(overrideState){ state=Object.assign(freshState(), overrideState); state.chars=(state.chars||[]).filter(Boolean); state.items=(state.items||[]).filter(Boolean); saveState(KEY,state); }
+      else { var sv=loadState(KEY,null); state = sv?Object.assign(def,sv):def; state.chars=(state.chars||[]).filter(Boolean); state.items=(state.items||[]).filter(Boolean); }
       DEFAULT_BACKDROP=def.backdrop; DEFAULT_VIEW=def.view;
       try{ localStorage.setItem(NS+'last', String(idx)); }catch(e){}
       if(cfg.ptype==='pose'){ baseText=''; buildFields(); buildRefs(); render(); return; }
