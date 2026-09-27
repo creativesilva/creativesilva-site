@@ -21,11 +21,11 @@ COURSE_ORDER=["da1a","photo1a","photo2a"]
 # Course-level hero art (not on module pages, so scanned separately). (course, page label, path, alt).
 COURSE_HEROES=[
   ("da1a","Course Home","/assets/images/digarts1/digarts1a-home-hero-v2.png","Digital Arts 1A course home hero"),
-  ("da1a","Course Overview","/assets/images/digarts1/course-overview/digarts1a-overview-hero-v1.jpg","Digital Arts 1A course overview hero"),
+  ("da1a","Course Overview","/assets/images/digarts1/course-overview/digarts1a-overview-hero-v2.jpg","Digital Arts 1A course overview hero"),
   ("photo1a","Course Home","/assets/images/photo1/photo1a-home-hero-v2.png","Photography 1A course home hero"),
-  ("photo1a","Course Overview","/assets/images/photo1/course-overview/photo1a-overview-hero-v1.png","Photography 1A course overview hero"),
+  ("photo1a","Course Overview","/assets/images/photo1/course-overview/photo1a-overview-hero-v2.jpg","Photography 1A course overview hero"),
   ("photo2a","Course Home","/assets/images/photo2/photo2a-home-hero-v2.png","Photography 2A course home hero"),
-  ("photo2a","Course Overview","/assets/images/photo2/course-overview/photo2a-overview-hero-v1.png","Photography 2A course overview hero"),
+  ("photo2a","Course Overview","/assets/images/photo2/course-overview/photo2a-overview-hero-v2.jpg","Photography 2A course overview hero"),
 ]
 
 # Extra images kept in the library that are NOT used on any live page (shown for reference only).
