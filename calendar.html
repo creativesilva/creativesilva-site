@@ -187,7 +187,10 @@
     return (DATA.checkouts||[]).filter(function(c){
       if(statusOf(c)==='returned') return false;
       var o=c.out||'', du=c.due||o;
-      return o && iso>=o && iso<=du;
+      if(!o) return false;
+      // The due date is the return day, not a day the camera is still out, so the span
+      // ends the day before "due" (matches how a calendar shows an all-day range).
+      return du>o ? (iso>=o && iso<du) : (iso===o);
     });
   }
   function prettyDate(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]);
