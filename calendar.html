@@ -219,7 +219,7 @@
       events.push({camera:c.camera, start:c.out, last:last, status:statusOf(c),
         overdue:(statusOf(c)==='out' && c.due && c.due<=todayISO())}); });
     grid.innerHTML='';
-    var MAXLANE=6;
+    var MAXLANE=18;   // show every checked-out camera (up to the full inventory), not a small cap
     for(var w=0; w<6; w++){
       var wkStartISO=addDays(startISO, w*7), wkEndISO=addDays(wkStartISO,6);
       var wev=events.filter(function(e){ return e.start<=wkEndISO && e.last>=wkStartISO; });
