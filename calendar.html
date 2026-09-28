@@ -75,12 +75,15 @@
   .wbars{position:absolute;top:23px;left:0;right:0;pointer-events:none;}
   .wbar{position:absolute;height:17px;line-height:17px;font-family:var(--font);font-weight:600;font-size:.62rem;letter-spacing:.02em;color:#04110f;padding:0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:auto;cursor:pointer;box-sizing:border-box;box-shadow:0 0 0 1px rgba(4,17,15,.25);}
   .wbar.out{background:var(--orange);} .wbar.res{background:#f5b301;} .wbar.od{background:#e0403a;color:#fff;}
-  /* pointed ends when a checkout continues into the previous/next week (Google-style) */
-  .wbar.contR{clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 50%, calc(100% - 6px) 100%, 0 100%);padding-right:12px;}
-  .wbar.contL{clip-path:polygon(6px 0, 100% 0, 100% 100%, 6px 100%, 0 50%);padding-left:12px;}
-  .wbar.contL.contR{clip-path:polygon(6px 0, calc(100% - 6px) 0, 100% 50%, calc(100% - 6px) 100%, 6px 100%, 0 50%);}
+  /* calendar bars stay flat; the coming/going arrows live in the day card, not here */
   .wmorebar{position:absolute;height:17px;line-height:17px;font-family:var(--font);font-weight:600;font-size:.6rem;letter-spacing:.04em;color:var(--teal-lt);padding:0 6px;white-space:nowrap;cursor:pointer;pointer-events:auto;box-sizing:border-box;}
   .wmorebar:hover{color:#fff;text-decoration:underline;}
+  /* day card: each camera is a bar; chevron ends show if it is coming (left) or going (right) that day */
+  .dm-bar{display:inline-block;min-width:64px;height:19px;line-height:19px;font-family:var(--font);font-weight:700;font-size:.66rem;letter-spacing:.03em;color:#04110f;padding:0 9px;text-align:center;box-sizing:border-box;}
+  .dm-bar.out{background:var(--orange);} .dm-bar.res{background:#f5b301;} .dm-bar.od{background:#e0403a;color:#fff;}
+  .dm-bar.cL{clip-path:polygon(7px 0,100% 0,100% 100%,7px 100%,0 50%);padding-left:14px;}
+  .dm-bar.cR{clip-path:polygon(0 0,calc(100% - 7px) 0,100% 50%,calc(100% - 7px) 100%,0 100%);padding-right:14px;}
+  .dm-bar.cL.cR{clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 50%,calc(100% - 7px) 100%,7px 100%,0 50%);padding:0 14px;}
   /* day pop-out: fixed size (fits all 18) so it never resizes between tabs */
   .daymodal{position:fixed;inset:0;background:rgba(2,12,12,.66);backdrop-filter:blur(8px) saturate(1.1);-webkit-backdrop-filter:blur(8px) saturate(1.1);display:none;align-items:center;justify-content:center;padding:20px;z-index:60;}
   .daymodal.open{display:flex;}
@@ -96,7 +99,7 @@
   .dm-tabn{font-size:.62rem;color:var(--faint);}
   .dm-tab.active .dm-tabn{color:var(--teal-lt);}
   .dm-body{flex:1 1 auto;overflow-y:auto;padding:8px 18px 18px;}
-  .dm-row{display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,184,184,.12);}
+  .dm-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,184,184,.12);}
   .dm-cam{font-family:var(--font);font-weight:700;min-width:60px;color:#fff;}
   .dm-range{color:var(--muted);font-size:.84rem;flex:1;}
   .dm-course{font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);white-space:nowrap;}
@@ -203,8 +206,8 @@
   function effLast(c){
     var st=statusOf(c); if(st==='returned') return null;
     var start=c.out; if(!start) return null;
-    var last=addDays(c.due||start,-1); if(last<start) last=start;
-    if(st==='out' && todayISO()>last) last=todayISO();
+    var last=c.due||start; if(last<start) last=start;      // due IS the return day (last out-day, inclusive)
+    if(st==='out' && todayISO()>last) last=todayISO();      // roll forward until toggled returned
     return last;
   }
   function checkoutsOnDay(iso){
@@ -285,6 +288,16 @@
   function dayAvailable(iso){ var busy={}; checkoutsOnDay(iso).forEach(function(c){ busy[c.camera]=1; }); return (DATA.cameras||[]).filter(function(c){ return !busy[c]; }); }
   function dmTab(t,label,n){ return '<button type="button" class="dm-tab'+(DM_TAB===t?' active':'')+'" data-tab="'+t+'">'+label+' <span class="dm-tabn">'+n+'</span></button>'; }
   function openDayModal(iso){ DM_DAY=iso; DM_TAB='out'; renderDayModal(); document.getElementById('daymodal').classList.add('open'); }
+  // A camera bar for the day card: chevron on the LEFT if it came in before this day,
+  // chevron on the RIGHT if it stays out after this day (shows coming / going that day).
+  function dmBar(c, day){
+    var st=statusOf(c);
+    var cls='dm-bar '+(st==='reserved'?'res':((c.due&&c.due<todayISO())?'od':'out'));
+    var last=effLast(c)||c.due||c.out;
+    if(c.out && c.out<day) cls+=' cL';
+    if(last && last>day) cls+=' cR';
+    return '<span class="'+cls+'">'+c.camera+'</span>';
+  }
   function renderDayModal(){
     var iso=DM_DAY; if(!iso) return;
     var out=dayOut(iso), res=dayReserved(iso), avail=dayAvailable(iso);
@@ -292,11 +305,11 @@
     document.getElementById('dm-tabs').innerHTML=dmTab('out','Checked out',out.length)+dmTab('reserved','Reserved',res.length)+dmTab('available','Available',avail.length);
     var body;
     if(DM_TAB==='reserved'){
-      body=res.length?res.map(function(c){ return '<div class="dm-row"><span class="dm-cam">'+c.camera+'</span><span class="dm-range">Reserved '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span></div>'; }).join(''):'<div class="dm-empty">No reservations this day.</div>';
+      body=res.length?res.map(function(c){ return '<div class="dm-row">'+dmBar(c,iso)+'<span class="dm-range">Reserved '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span></div>'; }).join(''):'<div class="dm-empty">No reservations this day.</div>';
     } else if(DM_TAB==='available'){
       body=avail.length?'<div class="dm-avail">'+avail.map(function(c){ return '<span class="dm-availcam">'+c+'<small>'+camCourse(c)+'</small></span>'; }).join('')+'</div>':'<div class="dm-empty">No cameras free this day.</div>';
     } else {
-      body=out.length?out.map(function(c){ var od=(c.due&&c.due<todayISO())?'<span class="dm-tag od">Overdue</span>':''; return '<div class="dm-row"><span class="dm-cam">'+c.camera+'</span><span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+od+'</div>'; }).join(''):'<div class="dm-empty">No cameras checked out this day.</div>';
+      body=out.length?out.map(function(c){ var od=(c.due&&c.due<todayISO())?'<span class="dm-tag od">Overdue</span>':''; return '<div class="dm-row">'+dmBar(c,iso)+'<span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+od+'</div>'; }).join(''):'<div class="dm-empty">No cameras checked out this day.</div>';
     }
     document.getElementById('dm-body').innerHTML=body;
     Array.prototype.forEach.call(document.querySelectorAll('#dm-tabs .dm-tab'), function(btn){
