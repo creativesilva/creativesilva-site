@@ -218,7 +218,7 @@ def step01():
             ("2 JPGs:","one photo of the front cover, one photo of the back cover."),
             ("Clean and clear:","good light, straight on, the whole cover in the frame."),
         ])
-        + note("This is Step 1 and it is graded on its own. The reflection is turned in separately on Step 2."))
+        + note("This is Step 2 and it is graded on its own. The reflection is turned in separately on Step 3."))
 
     en+=next_up("UP NEXT &middot; STEP 03 - Submit &amp; Reflect","Complete and upload your reflection.")
     es=banner("M&oacute;dulo 03 &bull; Paso 02","Dise&ntilde;a Tu Portada","Dise&ntilde;a tus portadas y entrega dos fotos.","#top","Back to English", HICON_DESIGN)
@@ -249,7 +249,7 @@ def step01():
             ("2 JPG:","una foto de la portada del frente, una del reverso."),
             ("Limpia y clara:","buena luz, de frente, con toda la portada en el encuadre."),
         ])
-        + note("Este es el Paso 1 y se califica por su cuenta. La reflexi&oacute;n se entrega por separado en el Paso 2."))
+        + note("Este es el Paso 2 y se califica por su cuenta. La reflexi&oacute;n se entrega por separado en el Paso 3."))
 
     es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Entrega y Reflexiona","Completa y sube tu reflexi&oacute;n.")
     dots=dot(OVER,'1',"Step 01",False)+dot("",'2',"Step 02",True)+dot(S2,'3',"Step 03",False)
@@ -265,7 +265,7 @@ def step02():
         + para("Finish with a short reflection. It asks about your 3 words, your Cooper Black word, and the 2 Adobe Fonts typefaces you chose, plus how you can test a font on Adobe Fonts.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + para("Type your answers, save the document, and upload it to this Canvas assignment.")
-        + note("Your 2 cover images were turned in on Step 1. Be honest and turn in your own work."))
+        + note("Your 2 cover images were turned in on Step 2. Be honest and turn in your own work."))
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
 
@@ -276,7 +276,7 @@ def step02():
         + para("Termina con una reflexi&oacute;n corta. Pregunta sobre tus 3 palabras, tu palabra en Cooper Black y los 2 tipos de letra de Adobe Fonts que elegiste, y c&oacute;mo puedes probar una fuente en Adobe Fonts.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
         + para("Escribe tus respuestas, guarda el documento y s&uacute;belo a esta tarea de Canvas.")
-        + note("Tus 2 im&aacute;genes de la portada se entregaron en el Paso 1. S&eacute; honesto y entrega tu propio trabajo."))
+        + note("Tus 2 im&aacute;genes de la portada se entregaron en el Paso 2. S&eacute; honesto y entrega tu propio trabajo."))
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completo, subido a esta tarea de Canvas.")])
 
