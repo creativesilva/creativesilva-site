@@ -159,6 +159,8 @@
   .eqcard .eqn{font-size:.9rem;line-height:1.15;}
   .eqnote{font-size:.72rem;color:#ffd889;border-top:1px dashed rgba(245,179,1,.28);padding-top:6px;margin-top:2px;line-height:1.45;}
   .eqnote b{color:#f5b301;font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.58rem;margin-right:5px;}
+  .eqnote.resvnote{color:#cfeaea;border-top-color:rgba(0,184,184,.24);} .eqnote.resvnote b{color:#5ff0f0;}
+  .cd-cur-note{font-size:.82rem;color:#5ff0f0;margin:4px 0 8px;}
   .hnote{color:#ffd889;}
   /* Camera Log: per-camera standing notes + condition */
   .csec.sec-camlog{border-left-color:#8b5cf6;} .csec-dot.camlog{background:#8b5cf6;}
@@ -499,6 +501,7 @@
     var _a=assetOf(cam), _iss=_a.issues||[], note='';
     if(_iss.length) note+='<div class="eqnote"><b>&#9888; Issue</b> '+esc(_iss.join(', '))+'</div>';
     if(_a.note) note+='<div class="eqnote"><b>Camera note</b> '+esc(_a.note)+'</div>';
+    if(c.note) note+='<div class="eqnote resvnote"><b>Reservation note</b> '+esc(c.note)+'</div>';   // student contact correction, etc.
     var acts;
     if(st==='reserved' && needsApproval){
       acts='<button class="btn sm" data-approve="'+c.id+'">Approve</button>'+
@@ -783,7 +786,7 @@
     var hist=(DATA.checkouts||[]).filter(function(x){ return x.camera===cam && x.kind!=='equipment'; }).sort(function(x,y){ return (x.out||'')<(y.out||'')?1:-1; });
     var statusPill=oos?'<span class="pill oos">Out of service</span>':(c?(statusOf(c)==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill '+(isOverdue(c)?'overdue':'out')+'">'+(isOverdue(c)?'Overdue':'Checked out')+'</span>'):'<span class="pill avail">Available</span>');
     var h='<div class="cd-row"><div>'+statusPill+(P2.indexOf(cam)>=0?' <span class="camlog-p2">Photo 2 only</span>':'')+'</div><button class="btn sm '+(oos?'':'danger')+'" id="cd-oos">'+(oos?'Return to service':'Mark out of service')+'</button></div>';
-    if(c){ h+='<div class="cd-cur"><div class="cd-cur-who">'+esc(nameOf(c))+'</div><div class="cd-cur-meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+esc(c.course||'')+' &middot; out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+' &middot; '+esc(statusOf(c))+'</div><div class="cd-cur-acts"><button class="btn sm ghost" id="cd-editcur">Edit / move student</button></div></div>'; }
+    if(c){ h+='<div class="cd-cur"><div class="cd-cur-who">'+esc(nameOf(c))+'</div><div class="cd-cur-meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+esc(c.course||'')+' &middot; out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+' &middot; '+esc(statusOf(c))+'</div>'+(c.note?'<div class="cd-cur-note">Reservation note: '+esc(c.note)+'</div>':'')+'<div class="cd-cur-acts"><button class="btn sm ghost" id="cd-editcur">Edit / move student</button></div></div>'; }
     h+='<div class="cd-sec"><div class="cd-h">Open condition issues</div>';
     h+=issues.length?('<div class="cd-issues">'+issues.map(function(it,i){ return '<div class="cd-issue"><span>'+esc(it)+'</span><button class="btn sm" data-resolve="'+i+'">Resolved</button></div>'; }).join('')+'</div>'):'<div class="cd-empty">No open issues.</div>';
     h+='<div class="cd-add"><input type="text" id="cd-newissue" placeholder="Add an issue (e.g. lens cap missing)"><button class="btn sm" id="cd-addissue">Add</button></div></div>';
