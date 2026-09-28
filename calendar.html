@@ -33,6 +33,15 @@
 
   /* camera-kit icon injected into the shared header title */
   .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;}
+  /* Reserve + Teacher Console buttons injected into the shared header bar (CS logo / Catalog row) */
+  .cal-navwrap{display:flex;align-items:center;gap:8px;margin-left:auto;padding:7px 12px 7px 0;flex-wrap:wrap;}
+  .cal-navbtn{align-self:center;display:inline-flex;align-items:center;gap:8px;min-height:32px;padding:0 15px;white-space:nowrap;
+    font-family:var(--font);font-weight:600;letter-spacing:.10em;text-transform:uppercase;font-size:.75rem;text-decoration:none;cursor:pointer;
+    color:rgba(234,247,247,.85);background:rgba(0,0,0,.26);border:1px solid rgba(0,184,184,.42);transition:background .15s,color .15s,border-color .15s,filter .15s;}
+  .cal-navbtn:hover{background:rgba(0,184,184,.14);color:#fff;border-color:rgba(0,184,184,.72);}
+  .cal-navbtn.primary{background:var(--teal);color:#04110f;border-color:var(--teal);}
+  .cal-navbtn.primary:hover{filter:brightness(1.1);background:var(--teal);color:#04110f;}
+  @media (max-width:760px){ .cal-navwrap{margin-left:0;flex-basis:100%;padding-left:12px;} }
 
   .wrap{max-width:1200px;margin:0 auto;padding:24px 32px 70px;}
   .intro{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:20px;}
@@ -121,7 +130,6 @@
 <div class="wrap">
   <div class="intro">
     <p class="sub">See which cameras are out and when they are due back before you ask. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.</p>
-    <a class="reserve-btn" href="/camera-checkout.html">Reserve a camera</a>
   </div>
 
   <div class="summary">
@@ -163,16 +171,24 @@
       board=document.getElementById('board'), outn=document.getElementById('outn'), totn=document.getElementById('totn'),
       foot=document.getElementById('foot');
 
-  // Inject the camera-kit icon into the shared header title once silva-nav.js has built it.
-  function injectIcon(){
-    var t=document.querySelector('.silva-uni-title');
-    if(!t) return false;
-    if(t.querySelector('.cal-title-icon')) return true;
-    var txt=t.textContent;
-    t.innerHTML='<img class="cal-title-icon" src="/assets/Icons/assignment/camera-kit-teal-v1.svg" alt="" />'+txt;
+  // Inject the camera-kit icon into the shared header title + the Reserve / Teacher Console
+  // buttons into the CS-logo / Catalog row, once silva-nav.js has built the header.
+  function injectHeader(){
+    var t=document.querySelector('.silva-uni-title'), bar=document.querySelector('.silva-uni-bar');
+    if(!t || !bar) return false;
+    if(!t.querySelector('.cal-title-icon')){
+      var txt=t.textContent;
+      t.innerHTML='<img class="cal-title-icon" src="/assets/Icons/assignment/camera-kit-teal-v1.svg" alt="" />'+txt;
+    }
+    if(!bar.querySelector('.cal-navwrap')){
+      var w=document.createElement('div'); w.className='cal-navwrap';
+      var res=document.createElement('a'); res.className='cal-navbtn primary'; res.href='/camera-checkout.html'; res.textContent='Reserve a Camera';
+      var con=document.createElement('a'); con.className='cal-navbtn'; con.href='/camera-manager.html'; con.textContent='Teacher Console';
+      w.appendChild(res); w.appendChild(con); bar.appendChild(w);
+    }
     return true;
   }
-  function tryInject(n){ if(injectIcon()||n<=0) return; setTimeout(function(){ tryInject(n-1); },40); }
+  function tryInject(n){ if(injectHeader()||n<=0) return; setTimeout(function(){ tryInject(n-1); },40); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ tryInject(60); }); else tryInject(60);
 
   function todayISO(){ var d=new Date(); d.setHours(0,0,0,0); return d.toISOString().slice(0,10); }
