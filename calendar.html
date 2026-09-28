@@ -75,7 +75,12 @@
   .wbars{position:absolute;top:23px;left:0;right:0;pointer-events:none;}
   .wbar{position:absolute;height:17px;line-height:17px;font-family:var(--font);font-weight:600;font-size:.62rem;letter-spacing:.02em;color:#04110f;padding:0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:auto;cursor:pointer;box-sizing:border-box;box-shadow:0 0 0 1px rgba(4,17,15,.25);}
   .wbar.out{background:var(--orange);} .wbar.res{background:#f5b301;} .wbar.od{background:#e0403a;color:#fff;}
-  .wbar.contL{margin-left:-1px;} .wbar.contR{}
+  /* pointed ends when a checkout continues into the previous/next week (Google-style) */
+  .wbar.contR{clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 50%, calc(100% - 6px) 100%, 0 100%);padding-right:12px;}
+  .wbar.contL{clip-path:polygon(6px 0, 100% 0, 100% 100%, 6px 100%, 0 50%);padding-left:12px;}
+  .wbar.contL.contR{clip-path:polygon(6px 0, calc(100% - 6px) 0, 100% 50%, calc(100% - 6px) 100%, 6px 100%, 0 50%);}
+  .wmorebar{position:absolute;height:17px;line-height:17px;font-family:var(--font);font-weight:600;font-size:.6rem;letter-spacing:.04em;color:var(--teal-lt);padding:0 6px;white-space:nowrap;cursor:pointer;pointer-events:auto;box-sizing:border-box;}
+  .wmorebar:hover{color:#fff;text-decoration:underline;}
   /* day pop-out: fixed size (fits all 18) so it never resizes between tabs */
   .daymodal{position:fixed;inset:0;background:rgba(2,12,12,.66);backdrop-filter:blur(8px) saturate(1.1);-webkit-backdrop-filter:blur(8px) saturate(1.1);display:none;align-items:center;justify-content:center;padding:20px;z-index:60;}
   .daymodal.open{display:flex;}
@@ -219,7 +224,7 @@
       events.push({camera:c.camera, start:c.out, last:last, status:statusOf(c),
         overdue:(statusOf(c)==='out' && c.due && c.due<=todayISO())}); });
     grid.innerHTML='';
-    var MAXLANE=18;   // show every checked-out camera (up to the full inventory), not a small cap
+    var MAXLANE=4;   // show up to 4 camera bars per day, then "+N more" opens the day card
     for(var w=0; w<6; w++){
       var wkStartISO=addDays(startISO, w*7), wkEndISO=addDays(wkStartISO,6);
       var wev=events.filter(function(e){ return e.start<=wkEndISO && e.last>=wkStartISO; });
@@ -231,21 +236,23 @@
         var ln=0; while(laneEnd[ln]!==undefined && laneEnd[ln]>=e._sc) ln++;
         laneEnd[ln]=e._ec; e._lane=ln;
       });
-      var week=el('div','week'); week.style.setProperty('--lanes', Math.min(laneEnd.length, MAXLANE));
+      // per-day totals vs what fits, so overflowing days get a "+N more"
+      var dayTot=[0,0,0,0,0,0,0], dayVis=[0,0,0,0,0,0,0];
+      wev.forEach(function(e){ for(var k=e._sc;k<=e._ec;k++){ dayTot[k]++; if(e._lane<MAXLANE) dayVis[k]++; } });
+      var anyMore=false; for(var q=0;q<7;q++){ if(dayTot[q]>dayVis[q]) anyMore=true; }
+      var week=el('div','week'); week.style.setProperty('--lanes', Math.min(laneEnd.length, MAXLANE) + (anyMore?1:0));
       var days=el('div','wdays');
       for(var d=0; d<7; d++){
         var diso=addDays(wkStartISO,d), dp=diso.split('-');
         var cell=el('div','wcell'+(((+dp[1]-1)===curMonth)?'':' out-month')+(diso===todayISO()?' today':''));
         cell.appendChild(el('div','wdaynum', String(+dp[2])));
-        var dayN=wev.filter(function(e){ return e._sc<=d && e._ec>=d; }).length;
-        if(dayN>MAXLANE) cell.appendChild(el('div','wmore','+'+(dayN-MAXLANE)+' more'));
         (function(day){ cell.addEventListener('click',function(){ openDayModal(day); }); })(diso);
         days.appendChild(cell);
       }
       week.appendChild(days);
       var bars=el('div','wbars');
       wev.forEach(function(e){
-        if(e._lane>=MAXLANE) return;
+        if(e._lane>=MAXLANE) return;   // hidden ones surface via "+N more" -> the day card
         var cls='wbar '+(e.status==='reserved'?'res':(e.overdue?'od':'out'));
         if(e.start<wkStartISO) cls+=' contL'; if(e.last>wkEndISO) cls+=' contR';
         var bar=el('div',cls, e.camera);
@@ -255,6 +262,16 @@
         (function(day){ bar.addEventListener('click',function(ev){ ev.stopPropagation(); openDayModal(day); }); })(e.start>wkStartISO?e.start:wkStartISO);
         bars.appendChild(bar);
       });
+      for(var d3=0; d3<7; d3++){
+        if(dayTot[d3]>dayVis[d3]){
+          var more=el('div','wmorebar','+'+(dayTot[d3]-dayVis[d3])+' more');
+          more.style.left='calc('+(d3/7*100)+'% + 2px)';
+          more.style.width='calc('+(1/7*100)+'% - 4px)';
+          more.style.top=(MAXLANE*20)+'px';
+          (function(day){ more.addEventListener('click',function(ev){ ev.stopPropagation(); openDayModal(day); }); })(addDays(wkStartISO,d3));
+          bars.appendChild(more);
+        }
+      }
       week.appendChild(bars);
       grid.appendChild(week);
     }
