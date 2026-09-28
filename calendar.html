@@ -239,6 +239,18 @@
   .rc-acc input{width:16px;height:16px;accent-color:var(--teal);}
   .rc-acc .soldout{color:var(--faint);}
   .rc-disc{background:rgba(245,179,1,.12);border:1px solid rgba(245,179,1,.35);border-left:4px solid #f5b301;padding:10px 12px;margin:12px 0;font-size:.82rem;color:#ffe1a6;}
+  /* Standard kit reassurance + low-key extra-gear accordion (most students just want the kit). */
+  .rc-kit{color:var(--muted);font-size:.84rem;line-height:1.45;margin:12px 0 2px;}
+  .rc-kit b{color:var(--text);font-weight:600;}
+  .rc-extra{border-top:1px dashed rgba(0,184,184,.18);margin-top:8px;}
+  .rc-extra>summary{list-style:none;cursor:pointer;padding:11px 0 5px;font-size:.76rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-lt);display:flex;align-items:center;gap:8px;}
+  .rc-extra>summary::-webkit-details-marker{display:none;}
+  .rc-extra>summary::before{content:"";width:8px;height:8px;border-right:2px solid var(--teal-lt);border-bottom:2px solid var(--teal-lt);transform:rotate(-45deg);transition:transform .15s;flex:0 0 auto;}
+  .rc-extra[open]>summary::before{transform:rotate(45deg);}
+  .rc-extra-hint{color:var(--faint);font-weight:400;letter-spacing:0;text-transform:none;font-size:.82rem;}
+  .rc-extra-body{padding:2px 0 4px;}
+  .rc-extra-body label{display:flex;align-items:center;gap:9px;font-size:.9rem;color:var(--text);padding:6px 0;cursor:pointer;text-transform:none;letter-spacing:0;font-weight:400;font-family:var(--body);}
+  .rc-extra-body input{width:16px;height:16px;accent-color:var(--teal);}
   .rc-msg{min-height:1.1em;font-size:.85rem;color:#ffb28a;margin:4px 0;}
   .rc-btnrow{display:flex;gap:10px;margin-top:8px;}
   .rc-btnrow .dc-btn{flex:1 1 0;justify-content:center;text-align:center;}
@@ -870,9 +882,12 @@
     var body='<div class="rc-head">Confirm your reservation</div>'+
       '<div class="rc-cam">'+esc(cam)+'</div>'+
       '<div class="rc-dates">Pick up '+fmt(iso)+' &rarr; due back '+fmt(due)+'</div>'+
-      '<div class="rc-acc"><div class="rc-acc-h">Add accessories (optional)</div>'+
-        EQUIP_MENU.map(function(e){ return '<label><input type="checkbox" id="rc-'+e.key+'"> '+esc(e.label)+'</label>'; }).join('')+
-      '</div>'+
+      '<div class="rc-kit">Your kit already comes with the <b>Canon EOS R50</b> camera, three lenses (RF 50mm, RF-S 18-45mm, RF-S 55-210mm), a battery, a charger, and a memory card. Most students just take the kit.</div>'+
+      '<details class="rc-extra"><summary>Need extra gear? <span class="rc-extra-hint">(optional)</span></summary>'+
+        '<div class="rc-extra-body">'+
+          EQUIP_MENU.map(function(e){ return '<label><input type="checkbox" id="rc-'+e.key+'"> '+esc(e.label)+'</label>'; }).join('')+
+        '</div>'+
+      '</details>'+
       '<div class="rc-disc">Check with your teacher that the kit is physically available for reservation before completing your reservation.</div>'+
       '<div class="rc-msg" id="rc-msg"></div>'+
       '<div class="rc-btnrow"><button type="button" class="dc-btn ghost" id="rc-back">Back</button><button type="button" class="dc-btn" id="rc-go">Confirm reservation</button></div>';
