@@ -193,6 +193,21 @@
   .wslot-count{font-size:.7rem;font-weight:700;letter-spacing:.02em;}
   .wslot-count.ok{color:#8ff0b0;} .wslot-count.over{color:#ff9a8a;}
   .wslot-empty{color:var(--faint);font-size:.78rem;margin:auto 0;}
+  /* Empty slot is a click target: type a student ID to hold a card ad-hoc. */
+  .wslot-add{text-align:left;width:100%;font-family:inherit;color:inherit;cursor:pointer;transition:border-color .12s,background .12s;}
+  .wslot-add:hover{border-color:var(--teal);border-left-color:var(--teal);background:rgba(0,184,184,.08);}
+  .wslot-addhint{font-size:.64rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-lt);opacity:.42;transition:opacity .12s;}
+  .wslot-add:hover .wslot-addhint{opacity:1;}
+  /* Overdue card (past 24h): flashing red translucent glow = pull &amp; format it. */
+  .wslot.expired{border-color:rgba(224,64,58,.55);border-left-color:#e0403a;animation:cardFlash 1.5s ease-in-out infinite;}
+  @keyframes cardFlash{0%,100%{box-shadow:0 0 0 0 rgba(224,64,58,0);background:rgba(224,64,58,.06);}50%{box-shadow:0 0 0 4px rgba(224,64,58,.30);background:rgba(224,64,58,.20);}}
+  .wslot.expired .wslot-n{color:#ff9a8a;}
+  .wslot-format{font-family:var(--font);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ff6b60;font-size:.82rem;display:flex;align-items:center;gap:6px;}
+  .wslot-fmtsub{font-size:.68rem;color:#ffb3a6;line-height:1.35;}
+  @media (prefers-reduced-motion:reduce){ .wslot.expired{animation:none;box-shadow:0 0 0 2px rgba(224,64,58,.32);} }
+  /* Ad-hoc hold: live student-name confirmation line. */
+  .ca-who{min-height:1.1em;font-size:.86rem;color:var(--muted);margin:2px 0 10px;}
+  .ca-who.ok{color:#8ff0b0;} .ca-who.warn{color:#ffb28a;}
   .camlog-top{display:flex;align-items:center;gap:8px;}
   .camlog-n{font-family:var(--font);font-weight:600;font-size:1.02rem;}
   .camlog-p2{margin-left:auto;font-size:.52rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);}
@@ -398,6 +413,23 @@
       <input type="text" id="cardNote" placeholder="e.g. 32GB SanDisk; offload by tomorrow" />
       <div class="mmsg" id="cardMsg"></div>
       <button class="go" id="cardGo">Pull card into this slot</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hold a card ad-hoc: click any empty wallet slot, type the student ID, start the 24h clock. -->
+<div class="modal" id="cardaddmodal">
+  <div class="mpanel">
+    <div class="mhead"><span class="mtitle" id="caTitle">Hold a card</span><button class="mx" id="cax" aria-label="Close">&times;</button></div>
+    <div class="mbody">
+      <p class="retsub" id="caSub">Type the student&#39;s ID number to hold their memory card in this slot. They have 24 hours to offload before it&#39;s ready to format.</p>
+      <label for="caId">Student ID number</label>
+      <input type="text" id="caId" inputmode="numeric" autocomplete="off" placeholder="Student ID" />
+      <div class="ca-who" id="caWho"></div>
+      <label for="caNote">Card note (optional)</label>
+      <input type="text" id="caNote" placeholder="e.g. 32GB SanDisk; asked me to hold it" />
+      <div class="mmsg" id="caMsg"></div>
+      <button class="go" id="caGo">Hold card in this slot</button>
     </div>
   </div>
 </div>
@@ -707,6 +739,7 @@
     b.querySelectorAll('[data-oos]').forEach(function(el){ el.onclick=function(){ setOOS(el.getAttribute('data-oos'), el.getAttribute('data-oosval')==='1', el); }; });
     b.querySelectorAll('[data-newcard]').forEach(function(el){ el.onclick=function(){ setNoCard(el.getAttribute('data-newcard'), false, el); }; });
     b.querySelectorAll('[data-cardreturn]').forEach(function(el){ el.onclick=function(){ if(confirm('Card returned to the student and offloaded? This clears the slot.')) cardReturn(el.getAttribute('data-cardreturn'), el); }; });
+    b.querySelectorAll('[data-cardadd]').forEach(function(el){ el.onclick=function(){ openAdHocCard(+el.getAttribute('data-cardadd')); }; });
     b.querySelectorAll('[data-approve]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-approve'), el); }; });
     b.querySelectorAll('[data-returncam]').forEach(function(el){ el.onclick=function(){ openReturnChecklist(el.getAttribute('data-returncam')); }; });
   }
@@ -872,14 +905,23 @@
     var cards=DATA.cards||{}, out='';
     for(var i=1;i<=18;i++){
       var c=cards[String(i)];
-      if(!c){ out+='<div class="wslot"><div class="wslot-n">Slot '+i+'</div><div class="wslot-empty">Empty</div></div>'; continue; }
-      var rem=cardHoursLeft(c.held_at), cls=rem>0?'ok':'over', txt=rem>0?(rem+'h left to offload'):('overdue by '+(-rem)+'h &middot; ok to format');
-      out+='<div class="wslot filled"><div class="wslot-n">Slot '+i+'</div>'+
-        '<div class="wslot-who">'+esc(c.student_name||'Unknown')+'</div>'+
-        '<div class="wslot-meta">from '+esc(c.from_camera||'')+' &middot; held '+fmtHeld(c.held_at)+'</div>'+
-        (c.note?'<div class="wslot-meta">'+esc(c.note)+'</div>':'')+
-        '<div class="wslot-count '+cls+'">'+txt+'</div>'+
-        '<button class="btn sm" data-cardreturn="'+i+'">Card returned</button></div>';
+      // Empty slot: click to hold a card ad-hoc (type the student ID, starts the 24h clock).
+      if(!c){ out+='<button type="button" class="wslot wslot-add" data-cardadd="'+i+'"><div class="wslot-n">Slot '+i+'</div><div class="wslot-empty">Empty</div><div class="wslot-addhint">+ Hold a card</div></button>'; continue; }
+      var rem=cardHoursLeft(c.held_at), expired=(rem<=0);
+      var who=esc(c.student_name || (c.student_id?('ID '+c.student_id):'Unknown'));
+      var meta=(c.from_camera?('from '+esc(c.from_camera)+' &middot; '):'')+'held '+fmtHeld(c.held_at);
+      var body='<div class="wslot-n">Slot '+i+'</div>'+
+        '<div class="wslot-who">'+who+'</div>'+
+        '<div class="wslot-meta">'+meta+'</div>'+
+        (c.note?'<div class="wslot-meta">'+esc(c.note)+'</div>':'');
+      if(expired){
+        body+='<div class="wslot-format">&#9888; Format card</div>'+
+              '<div class="wslot-fmtsub">Pull &amp; format it, or reach out to the student.</div>';
+      } else {
+        body+='<div class="wslot-count ok">'+rem+'h left to offload</div>';
+      }
+      body+='<button class="btn sm" data-cardreturn="'+i+'">Card returned</button>';
+      out+='<div class="wslot filled'+(expired?' expired':'')+'">'+body+'</div>';
     }
     return out;
   }
@@ -919,6 +961,50 @@
         .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ closeCardHold(); return loadBoard(); }).then(reloadCal)
         .catch(function(){ msg.className='mmsg err show'; msg.textContent='Could not save. Try again.'; })
         .then(function(){ g.disabled=false; g.textContent='Pull card into this slot'; });
+    };
+  })();
+
+  // ===== Ad-hoc card hold: click an empty wallet slot -> type the student ID -> 24h clock =====
+  var caSlot=null, caName='', caLookupTimer=null;
+  function openAdHocCard(slot){
+    caSlot=slot; caName='';
+    document.getElementById('caTitle').textContent='Hold a card · Slot '+slot;
+    document.getElementById('caId').value=''; document.getElementById('caNote').value='';
+    var who=document.getElementById('caWho'); who.textContent=''; who.className='ca-who';
+    var msg=document.getElementById('caMsg'); msg.className='mmsg'; msg.textContent='';
+    document.getElementById('cardaddmodal').classList.add('open');
+    setTimeout(function(){ document.getElementById('caId').focus(); },50);
+  }
+  function closeAdHocCard(){ document.getElementById('cardaddmodal').classList.remove('open'); caSlot=null; }
+  (function(){
+    var x=document.getElementById('cax'); if(x) x.onclick=closeAdHocCard;
+    var m=document.getElementById('cardaddmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeAdHocCard(); });
+    var idf=document.getElementById('caId');
+    if(idf) idf.addEventListener('input',function(){
+      var who=document.getElementById('caWho'); caName='';
+      var v=idf.value.replace(/\D/g,'');
+      if(v.length<5){ who.textContent=''; who.className='ca-who'; return; }
+      who.textContent='Checking…'; who.className='ca-who';
+      if(caLookupTimer) clearTimeout(caLookupTimer);
+      caLookupTimer=setTimeout(function(){
+        camAPI('/api/camera/lookup',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:v})})
+          .then(function(r){return r.json();}).then(function(j){
+            if(idf.value.replace(/\D/g,'')!==v) return;   // input changed while waiting
+            if(j&&j.found){ caName=j.label||''; who.textContent='Holding for '+(j.label||''); who.className='ca-who ok'; }
+            else { caName=''; who.textContent='No student found for that ID (you can still hold it).'; who.className='ca-who warn'; }
+          }).catch(function(){ who.textContent=''; who.className='ca-who'; });
+      },300);
+    });
+    var g=document.getElementById('caGo'); if(g) g.onclick=function(){
+      if(!caSlot) return;
+      var msg=document.getElementById('caMsg'), v=document.getElementById('caId').value.replace(/\D/g,'');
+      if(v.length<5){ msg.className='mmsg err show'; msg.textContent='Enter the student ID number.'; return; }
+      g.disabled=true; g.textContent='Holding…';
+      camAPI('/api/camera/card_hold',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({slot:caSlot,student_id:v,student_name:caName,note:document.getElementById('caNote').value.trim()})})
+        .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+        .then(function(res){ if(res.ok&&res.j&&res.j.ok){ closeAdHocCard(); return loadBoard().then(reloadCal); } else { msg.className='mmsg err show'; msg.textContent=(res.j&&res.j.error)||'Could not save. Try again.'; } })
+        .catch(function(){ msg.className='mmsg err show'; msg.textContent='Could not save. Try again.'; })
+        .then(function(){ g.disabled=false; g.textContent='Hold card in this slot'; });
     };
   })();
 
