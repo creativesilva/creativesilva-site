@@ -126,8 +126,8 @@ CT_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Digital Arts 1A","Module 02: Color Theory","How color builds a brand.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
-    en+=type_card("overview","The Module Overview","Color Theory: The Look of a Brand",
+    en=banner("Module 02 &bull; Step 01","Color Theory: Start Here","Read this page and download your files, then go to Step 02 to study a real brand.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
+    en+=type_card("overview","Step 01 &middot; Read &amp; Download","Color Theory: The Look of a Brand",
         para("Color theory is how colors work together and how they make people feel. Big brands pick a small set of colors and use them everywhere: the logo, the store, the packaging, even the staff shirts. When the colors match at every step, the brand feels strong and easy to remember. Today we learn the basics, then you study a real brand.")
         + framed(HERO,"Color Theory"))
     en+=standards_box(False, CT_STANDARDS)
@@ -138,9 +138,12 @@ def overview():
     en+=resources_card("Key Words",
         vocab_grid("On the Quiz","Heads up: these key words will be on the quiz.", EN_TERMS), False)
 
-    en+=next_up("UP NEXT &middot; STEP 01 - Brand Color Analysis","Homework: study a real brand.")
-    es=banner("Arte Digital 1A","M&oacute;dulo 02: Teor&iacute;a del Color","C&oacute;mo el color crea una marca.","#top","Back to English", HICON_DESIGN)
-    es+=type_card("overview","El Resumen del M&oacute;dulo","Teor&iacute;a del Color: El Aspecto de una Marca",
+    en+=card("HOW IT WORKS / YOUR PLAN","Your Next Step",
+        para("You are on Step 01 now: read this page and download your files below. Here is the step that follows.")
+        + bullets([("Step 02 &middot; Brand Color Analysis:","pick a real brand and study how it uses color at every customer touchpoint, then fill out and turn in the worksheet.")]))
+    en+=next_up("UP NEXT &middot; STEP 02 - Brand Color Analysis","Homework: study a real brand.")
+    es=banner("M&oacute;dulo 02 &bull; Paso 01","Teor&iacute;a del Color: Empieza Aqu&iacute;","Lee esta p&aacute;gina y descarga tus archivos, luego ve al Paso 02 para estudiar una marca real.","#top","Back to English", HICON_DESIGN)
+    es+=type_card("overview","Paso 01 &middot; Lee y Descarga","Teor&iacute;a del Color: El Aspecto de una Marca",
         para("La teor&iacute;a del color es c&oacute;mo los colores funcionan juntos y c&oacute;mo hacen sentir a la gente. Las marcas grandes eligen un grupo peque&ntilde;o de colores y los usan en todo: el logo, la tienda, el empaque y hasta las camisas del personal. Cuando los colores combinan en cada paso, la marca se siente fuerte y f&aacute;cil de recordar. Hoy aprendemos lo b&aacute;sico, y luego estudias una marca real.")
         + framed(HERO,"Teor&iacute;a del Color"))
     es+=standards_box(True, CT_STANDARDS)
@@ -151,15 +154,18 @@ def overview():
     es+=resources_card("Palabras Clave",
         vocab_grid("En el Examen","Atenci&oacute;n: estas palabras clave estar&aacute;n en el examen.", ES_TERMS), True)
 
-    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 01 - An&aacute;lisis de Color de Marca","Tarea: estudia una marca real.")
-    dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)
-    stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
-    return wrap_page("Color Theory | Digital Arts 1A | PVHS", nav("Overview",dots,stepnav), top_wrap(en,es), bottom)
+    es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tu Siguiente Paso",
+        para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina y descarga tus archivos abajo. Este es el paso que sigue.")
+        + bullets([("Paso 02 &middot; An&aacute;lisis de Color de Marca:","elige una marca real y estudia c&oacute;mo usa el color en cada punto de contacto, luego llena y entrega la hoja de trabajo.")]))
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - An&aacute;lisis de Color de Marca","Tarea: estudia una marca real.")
+    dots=dot("",'1',"Step 01",True)+dot(S1,'2',"Step 02",False)
+    stepnav=f'<a href="{S1}" class="silva-step-btn">Step 02 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 02 &#8594;</a></div>'
+    return wrap_page("Color Theory | Digital Arts 1A | PVHS", nav("Step 01",dots,stepnav), top_wrap(en,es), bottom)
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Module 02 &bull; Step 01","Brand Color Analysis","Homework: study a real brand.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
+    en=banner("Module 02 &bull; Step 02","Brand Color Analysis","Homework: study a real brand.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=card("","Brand Color Analysis",
         float_right(COLOR_WHEEL,"Color wheel with primary, secondary, and tertiary colors","")
         + para("Your job is to pick one well-known business and show how it uses color to build a strong, cohesive brand. Look at every customer touchpoint, name the colors you see, and explain why they work together. Then fill out the worksheet and add your example images."))
@@ -175,15 +181,15 @@ def step01():
             ("Employee Outfits:","uniforms, aprons, or shirts the workers wear."),
         ])
         + para("Then answer these questions: What are the 3 to 5 main brand colors? Why do you think they chose them? How does the color theme make you feel? Is the color the same at every touchpoint?")
-        + note("Download the worksheet from this module&rsquo;s Overview page (marked M at the top), fill it in, and add your images."))
+        + note("Download the worksheet from this module&rsquo;s Overview page (Step 01), fill it in, and add your images."))
     en+=deliverables_box(False,
         [("Your finished Brand Color Analysis worksheet","with your example images added (Word document, .docx), uploaded to this Canvas assignment.")])
     en+=card("","Turn It In",
         para("Finish the worksheet, add your example images, and upload it to Canvas. Next class we share our brands and talk about what makes each color theme work.")
-        + note("Looking for the worksheet? It is on this module&rsquo;s Overview page, marked M at the top, not here. Open it to download the Word document."))
+        + note("Looking for the worksheet? It is on this module&rsquo;s Overview page (Step 01), not here. Open it to download the Word document."))
 
     en+=next_up("UP NEXT &middot; MODULE 03 - Sketchbook Cover Art","Next module: design and decorate your own sketchbook cover.")
-    es=banner("M&oacute;dulo 02 &bull; Paso 01","An&aacute;lisis de Color de Marca","Tarea: estudia una marca real.","#top","Back to English", HICON_DESIGN)
+    es=banner("M&oacute;dulo 02 &bull; Paso 02","An&aacute;lisis de Color de Marca","Tarea: estudia una marca real.","#top","Back to English", HICON_DESIGN)
     es+=card("","An&aacute;lisis de Color de una Marca",
         float_right(COLOR_WHEEL,"Rueda de color con colores primarios, secundarios y terciarios","")
         + para("Tu trabajo es elegir un negocio muy conocido y mostrar c&oacute;mo usa el color para crear una marca fuerte y coherente. Mira cada punto de contacto con el cliente, nombra los colores que ves y explica por qu&eacute; funcionan juntos. Luego llena la hoja de trabajo y agrega tus im&aacute;genes de ejemplo."))
@@ -199,18 +205,18 @@ def step01():
             ("Ropa de los Empleados:","uniformes, delantales o camisas que usan los trabajadores."),
         ])
         + para("Luego responde estas preguntas: &iquest;Cu&aacute;les son los 3 a 5 colores principales de la marca? &iquest;Por qu&eacute; crees que los eligieron? &iquest;C&oacute;mo te hace sentir el tema de color? &iquest;Es el color igual en cada punto de contacto?")
-        + note("Descarga la hoja de trabajo desde la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba), ll&eacute;nala y agrega tus im&aacute;genes."))
+        + note("Descarga la hoja de trabajo desde la p&aacute;gina de Resumen de este m&oacute;dulo (Paso 01), ll&eacute;nala y agrega tus im&aacute;genes."))
     es+=deliverables_box(True,
         [("Tu hoja de trabajo de An&aacute;lisis de Color de Marca terminada","con tus im&aacute;genes de ejemplo agregadas (documento de Word, .docx), subida a esta tarea de Canvas.")])
     es+=card("","Entr&eacute;galo",
         para("Termina la hoja de trabajo, agrega tus im&aacute;genes de ejemplo y s&uacute;bela a Canvas. La pr&oacute;xima clase compartimos nuestras marcas y hablamos de qu&eacute; hace funcionar cada tema de color.")
-        + note("&iquest;Buscas la hoja de trabajo? Est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, marcada con M arriba, no aqu&iacute;. &Aacute;brela para descargar el documento de Word."))
+        + note("&iquest;Buscas la hoja de trabajo? Est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (Paso 01), no aqu&iacute;. &Aacute;brela para descargar el documento de Word."))
 
     es+=next_up("A CONTINUACI&Oacute;N &middot; M&Oacute;DULO 03 - Arte de la Portada","Pr&oacute;ximo m&oacute;dulo: dise&ntilde;a y decora la portada de tu cuaderno.")
-    dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)
-    stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><span></span></div>'
-    return wrap_page("Color Theory: Homework | Digital Arts 1A | PVHS", nav("Step 01",dots,stepnav), top_wrap(en,es), bottom)
+    dots=dot(OVER,'1',"Step 01",False)+dot("",'2',"Step 02",True)
+    stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><span></span></div>'
+    return wrap_page("Color Theory: Homework | Digital Arts 1A | PVHS", nav("Step 02",dots,stepnav), top_wrap(en,es), bottom)
 
 for fname,gen in [(OVER,overview),(S1,step01)]:
     html=ent(gen())
