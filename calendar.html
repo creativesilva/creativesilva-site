@@ -118,12 +118,14 @@
   .wbars{position:absolute;top:23px;left:0;right:0;pointer-events:none;}
   .wbar{position:absolute;height:17px;line-height:17px;font-family:var(--font);font-weight:600;font-size:.62rem;letter-spacing:.02em;color:#04110f;padding:0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:auto;cursor:pointer;box-sizing:border-box;box-shadow:0 0 0 1px rgba(4,17,15,.25);}
   .wbar.out{background:var(--orange);} .wbar.res{background:#f5b301;} .wbar.od{background:#e0403a;color:#fff;}
+  .wbar.ret{background:rgba(160,180,180,.34);color:rgba(4,17,15,.7);}   /* teacher-only grayed history */
   /* calendar bars stay flat; the coming/going arrows live in the day card, not here */
   .wmorebar{position:absolute;height:17px;line-height:17px;font-family:var(--font);font-weight:600;font-size:.6rem;letter-spacing:.04em;color:var(--teal-lt);padding:0 6px;white-space:nowrap;cursor:pointer;pointer-events:auto;box-sizing:border-box;}
   .wmorebar:hover{color:#fff;text-decoration:underline;}
   /* day card: each camera is a bar; chevron ends show if it is coming (left) or going (right) that day */
   .dm-bar{display:inline-block;min-width:64px;height:19px;line-height:19px;font-family:var(--font);font-weight:700;font-size:.66rem;letter-spacing:.03em;color:#04110f;padding:0 9px;text-align:center;box-sizing:border-box;}
   .dm-bar.out{background:var(--orange);} .dm-bar.res{background:#f5b301;} .dm-bar.od{background:#e0403a;color:#fff;}
+  .dm-bar.ret{background:rgba(160,180,180,.34);color:rgba(4,17,15,.7);}
   .dm-bar.cL{clip-path:polygon(7px 0,100% 0,100% 100%,7px 100%,0 50%);padding-left:14px;}
   .dm-bar.cR{clip-path:polygon(0 0,calc(100% - 7px) 0,100% 50%,calc(100% - 7px) 100%,0 100%);padding-right:14px;}
   .dm-bar.cL.cR{clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 50%,calc(100% - 7px) 100%,7px 100%,0 50%);padding:0 14px;}
@@ -504,7 +506,10 @@
     var startD=new Date(first); startD.setDate(1-first.getDay());
     var startISO=isoD(startD), curMonth=view.getMonth();
     var events=[];
-    (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment') return; var last=effLast(c); if(!last||!c.out) return;
+    (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment') return;
+      if(statusOf(c)==='returned'){ if(!AUTHED || !c.out) return;   // teacher-only grayed history bars
+        events.push({camera:c.camera, start:c.out, last:(c.returned_date||c.due||c.out), status:'returned'}); return; }
+      var last=effLast(c); if(!last||!c.out) return;
       events.push({camera:c.camera, start:c.out, last:last, status:statusOf(c),
         overdue:(statusOf(c)==='out' && c.due && c.due<todayISO())}); });
     grid.innerHTML='';
@@ -539,7 +544,7 @@
       var bars=el('div','wbars');
       wev.forEach(function(e){
         if(e._lane>=MAXLANE) return;   // hidden ones surface via "+N more" -> the day card
-        var cls='wbar '+(e.status==='reserved'?'res':(e.overdue?'od':'out'));
+        var cls='wbar '+(e.status==='returned'?'ret':(e.status==='reserved'?'res':(e.overdue?'od':'out')));
         if(e.start<wkStartISO) cls+=' contL'; if(e.last>wkEndISO) cls+=' contR';
         var bar=el('div',cls, e.camera);
         bar.style.left='calc('+(e._sc/7*100)+'% + 2px)';
@@ -572,6 +577,8 @@
   function dayOut(iso){ return checkoutsOnDay(iso).filter(function(c){ return statusOf(c)==='out'; }).sort(byCam); }
   function dayReserved(iso){ return checkoutsOnDay(iso).filter(function(c){ return statusOf(c)==='reserved'; }).sort(byCam); }
   function dayAvailable(iso){ var busy={}; checkoutsOnDay(iso).forEach(function(c){ busy[c.camera]=1; }); return (DATA.cameras||[]).filter(function(c){ return !busy[c]; }); }
+  // Teacher-only: cameras returned on/over this day, so Chris can see who had a kit last.
+  function dayReturned(iso){ if(!AUTHED) return []; return (DATA.checkouts||[]).filter(function(c){ if(c.kind==='equipment'||statusOf(c)!=='returned'||!c.out) return false; var end=c.returned_date||c.due||c.out; return iso>=c.out && iso<=end; }).sort(byCam); }
   function recForCamOnDay(cam,iso){ var m=checkoutsOnDay(iso).filter(function(c){ return c.camera===cam; }); return m[0]||null; }
   // Global: every picked-up camera now past its return date and not toggled returned.
   function overdueAll(){ return (DATA.checkouts||[]).filter(function(c){ return statusOf(c)==='out' && c.due && c.due<todayISO(); }).sort(byCam); }
@@ -593,15 +600,19 @@
     if(DM_DONE) return;                                    // keep the "Reserved!" confirmation up until closed
     if(isReserving()){ renderReserveDay(iso); return; }   // student picking a camera for this day
     if(DM_CAM){ renderCamDetail(iso, DM_CAM); return; }
-    var out=dayOut(iso), res=dayReserved(iso), avail=dayAvailable(iso), od=overdueAll();
+    var out=dayOut(iso), res=dayReserved(iso), avail=dayAvailable(iso), od=overdueAll(), ret=dayReturned(iso);
     if(DM_TAB==='overdue' && !od.length) DM_TAB='available';
+    if(DM_TAB==='returned' && !ret.length) DM_TAB='available';
     document.getElementById('dm-title').textContent=prettyDate(iso);
-    // Order everywhere: Available, then Checked out, then Reserved (Overdue last when present).
+    // Order everywhere: Available, then Checked out, then Reserved (Overdue + teacher Returned last).
     var tabs=dmTab('available','Available',avail.length)+dmTab('out','Checked out',out.length)+dmTab('reserved','Reserved',res.length);
     if(od.length) tabs+=dmTab('overdue','Overdue',od.length);
+    if(ret.length) tabs+=dmTab('returned','Returned',ret.length);
     document.getElementById('dm-tabs').innerHTML=tabs;
     var chev='<span class="dm-chev-r">&rsaquo;</span>', body;
-    if(DM_TAB==='overdue'){
+    if(DM_TAB==='returned'){
+      body=ret.length?ret.map(function(c){ return '<div class="dm-row"><span class="dm-bar ret">'+esc(c.camera)+'</span><span class="dm-range">'+esc(nameOf(c))+'</span><span class="dm-course">out '+fmt(c.out)+' &rarr; back '+fmt(c.returned_date||c.due)+'</span></div>'; }).join(''):'<div class="dm-empty">Nothing returned this day.</div>';
+    } else if(DM_TAB==='overdue'){
       body=od.length?od.map(function(c){ var n=dayDiff(c.due,todayISO()); return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,todayISO())+'<span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-tag od">'+n+(n===1?' day':' days')+' overdue</span>'+chev+'</div>'; }).join(''):'<div class="dm-empty">Nothing overdue.</div>';
     } else if(DM_TAB==='reserved'){
       body=res.length?res.map(function(c){ return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,iso)+'<span class="dm-range">Reserved '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+chev+'</div>'; }).join(''):'<div class="dm-empty">No reservations this day.</div>';
@@ -857,7 +868,7 @@
     var due=nextSchoolDay(iso), extras=[];
     EQUIP_MENU.forEach(function(e){ var el=document.getElementById('rc-'+e.key); if(el&&el.checked) extras.push(e.key); });
     var note=''; if(RESV.corr && (RESV.corr.student||RESV.corr.parent)){ note='Contact per student:'+(RESV.corr.student?(' cell '+RESV.corr.student):'')+(RESV.corr.parent?('; parent '+RESV.corr.parent):''); }
-    var payload={student_id:RESV.id,camera:cam,out:iso,due:due,status:'reserved',extras:extras}; if(note) payload.note=note;
+    var payload={student_id:RESV.id,camera:cam,out:iso,due:due,status:'reserved',extras:extras,pending:true}; if(note) payload.note=note;
     var btn=document.getElementById('rc-go'); if(btn){ btn.disabled=true; btn.textContent='Reserving…'; }
     fetch(API+'/api/camera/checkout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })

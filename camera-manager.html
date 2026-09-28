@@ -51,6 +51,15 @@
   .summary .lab{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;}
   .sync{margin-left:auto;font-size:.72rem;color:var(--faint);letter-spacing:.03em;}
   .sync b{color:var(--ok);font-weight:600;}
+  /* top-of-console digests */
+  .digest{padding:11px 16px;margin-bottom:14px;border:1px solid var(--line-soft);border-left:4px solid var(--muted);background:rgba(0,0,0,.22);}
+  .digest.overdue-digest{border-left-color:var(--red);background:rgba(224,64,58,.10);}
+  .digest.pending-digest{border-left-color:#8b5cf6;background:rgba(139,92,246,.10);}
+  .digest-h{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.8rem;margin-bottom:7px;}
+  .overdue-digest .digest-h{color:#ff9a8a;} .pending-digest .digest-h{color:#c9b8ff;}
+  .digest-body{display:flex;flex-wrap:wrap;gap:7px 14px;}
+  .digest-item{font-size:.82rem;color:var(--muted);}
+  .digest-item b{color:#ff9a8a;font-weight:700;}
 
   .h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:24px 0 12px;padding-left:9px;border-left:3px solid var(--teal);display:flex;align-items:center;gap:10px;}
   .h .hcount{color:var(--faint);font-weight:600;letter-spacing:.04em;}
@@ -68,6 +77,9 @@
   .pill.reserved{background:rgba(245,179,1,.18);color:#ffd889;}
   .pill.out{background:rgba(255,107,26,.18);color:#ffc7a6;}
   .pill.overdue{background:rgba(224,64,58,.22);color:#ff9a8a;}
+  .pill.pending{background:rgba(139,92,246,.22);color:#c9b8ff;}
+  .cam.pending-approval{border-left-color:#8b5cf6;}
+  .pendmsg{font-size:.66rem;color:#c9b8ff;letter-spacing:.02em;margin-top:-2px;}
   /* status accordion sections: all 18 cameras split by state (out/reserved/available) + equipment */
   .csec{margin-bottom:14px;border:1px solid var(--line-soft);border-left:4px solid var(--muted);background:rgba(0,0,0,.14);}
   .csec.sec-out{border-left-color:var(--orange);} .csec.sec-reserved{border-left-color:var(--gold);}
@@ -148,6 +160,10 @@
   .eqnote{font-size:.72rem;color:#ffd889;border-top:1px dashed rgba(245,179,1,.28);padding-top:6px;margin-top:2px;line-height:1.45;}
   .eqnote b{color:#f5b301;font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.58rem;margin-right:5px;}
   .hnote{color:#ffd889;}
+  .retsub{color:var(--muted);font-size:.86rem;margin:0 0 12px;}
+  .retitem{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,184,184,.12);font-family:var(--body);font-size:.95rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:400;cursor:pointer;}
+  .retitem input{width:17px;height:17px;accent-color:var(--teal);}
+  #retlist{margin-bottom:14px;}
   input:focus,select:focus{border-color:var(--teal);}
   select{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235ff0f0' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:38px;}
   select option{background:#0c1414;color:var(--text);}
@@ -219,6 +235,9 @@
     <div class="sync" id="sync">Connecting&#8230;</div>
   </div>
 
+  <div id="overdueDigest" style="display:none;"></div>
+  <div id="pendingDigest" style="display:none;"></div>
+
   <div class="h">Calendar <span class="hcount" id="calhint">Tap a day to see that day&#8217;s cameras</span></div>
   <div class="calpanel"><iframe id="calframe" src="/calendar.html?embed=1" title="Camera calendar" loading="lazy"></iframe></div>
 
@@ -267,6 +286,20 @@
   </div>
 </div>
 
+<!-- Return checklist: verify every kit component came back; anything unchecked is noted as missing -->
+<div class="modal" id="retmodal">
+  <div class="mpanel">
+    <div class="mhead"><span class="mtitle" id="retTitle">Return checklist</span><button class="mx" id="retx" aria-label="Close">&times;</button></div>
+    <div class="mbody">
+      <p class="retsub">Check off what came back. Anything left unchecked is saved as missing on this camera.</p>
+      <div id="retlist"></div>
+      <label for="retnote2">Extra note (optional)</label>
+      <input type="text" id="retnote2" placeholder="e.g. small scratch on the screen" />
+      <button class="go" id="retgo">Confirm return</button>
+    </div>
+  </div>
+</div>
+
 <script src="/js/silva-nav.js?v=catlock1"></script>
 <script>
 (function(){
@@ -309,6 +342,21 @@
     var an=document.getElementById('availn'); if(an) an.textContent=availCountOnDay(SELDAY);
     var tn=document.getElementById('totn'); if(tn) tn.textContent=(DATA.cameras||[]).length;
     var ad=document.getElementById('availday'); if(ad){ ad.textContent=(SELDAY===todayISO()?'today':'on '+dowShort(SELDAY))+' · '+fmtMDY(SELDAY); }
+  }
+  function daysBetween(a,b){ return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000); }
+  // Top-of-console digests: overdue cameras (seen every time you open it) + student requests awaiting approval.
+  function updateDigests(){
+    var today=todayISO();
+    var od=(DATA.checkouts||[]).filter(function(c){ return c.kind!=='equipment' && statusOf(c)==='out' && c.due && c.due<today; }).sort(function(a,b){ return (a.due||'')<(b.due||'')?-1:1; });
+    var odEl=document.getElementById('overdueDigest');
+    if(odEl){ if(od.length){ odEl.className='digest overdue-digest';
+        odEl.innerHTML='<div class="digest-h">&#9888; '+od.length+' camera'+(od.length>1?'s':'')+' overdue</div><div class="digest-body">'+od.map(function(c){ var n=daysBetween(c.due,today); return '<span class="digest-item">'+esc(c.camera)+' &middot; '+esc(nameOf(c))+' <b>'+n+'d</b></span>'; }).join('')+'</div>';
+        odEl.style.display=''; } else { odEl.style.display='none'; odEl.innerHTML=''; } }
+    var pend=(DATA.checkouts||[]).filter(function(c){ return c.kind!=='equipment' && statusOf(c)==='reserved' && c.approved===false; }).sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; });
+    var pEl=document.getElementById('pendingDigest');
+    if(pEl){ if(pend.length){ pEl.className='digest pending-digest';
+        pEl.innerHTML='<div class="digest-h">'+pend.length+' student request'+(pend.length>1?'s':'')+' awaiting approval</div><div class="digest-body">'+pend.map(function(c){ return '<span class="digest-item">'+esc(c.camera)+' &middot; '+esc(nameOf(c))+' &middot; '+fmt(c.out)+'</span>'; }).join('')+'</div>';
+        pEl.style.display=''; } else { pEl.style.display='none'; pEl.innerHTML=''; } }
   }
 
   function camAPI(path, opts){
@@ -372,24 +420,28 @@
              '<div class="acts"><button class="btn sm undo" data-undo="'+c.id+'">Undo return</button></div>'+
              '<div class="returning-msg">Goes back in the pool in <b data-count="'+c.id+'">15</b>s.</div></div>';
     }
-    var st=statusOf(c), od=isOverdue(c), cls=od?'overdue':st;
-    var pill=od?'<span class="pill overdue">Overdue</span>':(st==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill out">Picked up</span>');
+    var st=statusOf(c), od=isOverdue(c), needsApproval=(st==='reserved' && c.approved===false), cls=od?'overdue':(needsApproval?'pending-approval':st);
+    var pill=od?'<span class="pill overdue">Overdue</span>':(st==='reserved'?(needsApproval?'<span class="pill pending">Pending</span>':'<span class="pill reserved">Reserved</span>'):'<span class="pill out">Picked up</span>');
     var flag=(c.flag||'').indexOf('unknown')>=0?'<div class="flagwarn">&#9888; ID not in roster</div>':'';
     var note=c.note?'<div class="eqnote"><b>Note</b> '+esc(c.note)+'</div>':'';
     var acts;
-    if(st==='reserved'){
+    if(st==='reserved' && needsApproval){
+      acts='<button class="btn sm" data-approve="'+c.id+'">Approve</button>'+
+           '<button class="btn sm danger" data-del="'+c.id+'">Deny</button>';
+    } else if(st==='reserved'){
       acts='<button class="btn sm" data-status="out" data-id="'+c.id+'">Mark picked up</button>'+
            '<button class="btn sm danger" data-del="'+c.id+'">Cancel</button>';
     } else {
       acts='<button class="btn sm ghost" data-status="reserved" data-id="'+c.id+'">Undo pickup</button>'+
-           '<button class="btn sm warn" data-return="'+c.id+'">Mark returned</button>';
+           '<button class="btn sm warn" data-returncam="'+c.id+'">Mark returned</button>';
     }
     acts+='<button class="btn sm ghost" data-note="'+c.id+'">Note</button>';   // condition note (missing cap, etc.)
+    var pendmsg=needsApproval?'<div class="pendmsg">Student request &middot; approve to confirm</div>':'';
     // Layout (uniform): cam + pill, student name, ACTION BUTTONS up high, then details below; dates pop white.
     return '<div class="cam '+cls+'">'+
            '<div class="cam-top"><span class="n">'+cam+'</span>'+pill+'</div>'+
            '<div class="who">'+esc(nameOf(c))+'</div>'+
-           '<div class="acts">'+acts+'</div>'+
+           '<div class="acts">'+acts+'</div>'+pendmsg+
            (P2.indexOf(cam)>=0?'<div class="meta"><span class="co">Photo 2 only</span></div>':'')+
            '<div class="meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+'<span class="co">'+esc(c.course||camCourse(cam))+'</span></div>'+
            '<div class="meta dates">Out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+(c.picked_up_date?(' &middot; picked up '+fmt(c.picked_up_date)):'')+'</div>'+
@@ -449,6 +501,7 @@
     '</div>';
     host.innerHTML=html;
     updateSummary();
+    updateDigests();
     var ret=DATA.checkouts.filter(function(c){ return statusOf(c)==='returned'; })
       .sort(function(a,b){ return (b.returned_date||b.created||'')>(a.returned_date||a.created||'')?1:-1; });
     var hn=document.getElementById('histn'); if(hn) hn.textContent='('+ret.length+')';
@@ -469,6 +522,14 @@
     b.querySelectorAll('[data-del]').forEach(function(el){ el.onclick=function(){ if(confirm('Cancel this reservation? It will be removed.')) del(el.getAttribute('data-del'), el); }; });
     b.querySelectorAll('[data-reserve]').forEach(function(el){ el.onclick=function(){ openReserve(el.getAttribute('data-reserve')); }; });
     b.querySelectorAll('[data-note]').forEach(function(el){ el.onclick=function(){ openNote(el.getAttribute('data-note')); }; });
+    b.querySelectorAll('[data-approve]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-approve'), el); }; });
+    b.querySelectorAll('[data-returncam]').forEach(function(el){ el.onclick=function(){ openReturnChecklist(el.getAttribute('data-returncam')); }; });
+  }
+  function approve(id,btn){
+    if(btn) btn.disabled=true;
+    camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,approved:true})})
+      .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(reloadCal)
+      .catch(function(){ alert('Could not approve. Try again.'); if(btn) btn.disabled=false; });
   }
   // Mark-returned undo window: hold the return ~15s before committing, so a wrong camera can be undone.
   var pendingReturns={}, ticker=null;
@@ -545,6 +606,37 @@
         .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ closeNote(); return loadBoard(); }).then(reloadCal)
         .catch(function(){ alert('Could not save the note. Try again.'); })
         .then(function(){ s.disabled=false; s.textContent='Save note'; });
+    };
+  })();
+
+  // ---- return checklist (verify kit components on check-in; missing ones append to the note) ----
+  // Edit this list to match a complete kit.
+  var KIT_COMPONENTS=['Camera body','Kit lens','Battery','Battery charger','SD card','Neck strap','Lens cap','Camera bag'];
+  var retId=null;
+  function openReturnChecklist(id){
+    var c=findRec(id); if(!c) return; retId=id;
+    document.getElementById('retTitle').textContent='Return checklist · '+(c.camera||'Camera');
+    document.getElementById('retlist').innerHTML=KIT_COMPONENTS.map(function(k,i){ return '<label class="retitem"><input type="checkbox" id="ret_'+i+'" checked> '+esc(k)+'</label>'; }).join('');
+    document.getElementById('retnote2').value='';
+    document.getElementById('retmodal').classList.add('open');
+  }
+  function closeReturn(){ document.getElementById('retmodal').classList.remove('open'); retId=null; }
+  (function(){
+    var x=document.getElementById('retx'); if(x) x.onclick=closeReturn;
+    var m=document.getElementById('retmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeReturn(); });
+    var g=document.getElementById('retgo'); if(g) g.onclick=function(){
+      if(!retId) return; var id=retId, c=findRec(id);
+      var missing=[]; KIT_COMPONENTS.forEach(function(k,i){ var el=document.getElementById('ret_'+i); if(el && !el.checked) missing.push(k); });
+      var extra=document.getElementById('retnote2').value.trim();
+      var parts=[]; if(c && c.note) parts.push(c.note);
+      if(missing.length) parts.push('Returned missing: '+missing.join(', '));
+      if(extra) parts.push(extra);
+      closeReturn();
+      // Save any note change first, then start the 15s return (with its undo window).
+      if(missing.length || extra){
+        camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,note:parts.join(' | ')})})
+          .then(function(){ markReturned(id); }).catch(function(){ markReturned(id); });
+      } else { markReturned(id); }
     };
   })();
 
