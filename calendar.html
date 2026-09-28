@@ -119,13 +119,15 @@
      Frosted glass: semi-translucent + blur so the CS-logo shows softly below. */
   .wcell{position:relative;min-height:130px;background:rgba(8,16,15,0.55);border:1px solid var(--line-soft);border-top:0;border-left:0;padding:3px 6px;cursor:pointer;backdrop-filter:blur(9px) saturate(1.08);-webkit-backdrop-filter:blur(9px) saturate(1.08);}
   /* Teacher-only 3-dots (close/reopen a day) + its pop-out menu. */
-  .wdots{position:absolute;top:0;right:1px;width:20px;height:17px;line-height:15px;padding:0;border:0;background:none;color:var(--faint);font-size:1rem;cursor:pointer;opacity:.5;z-index:6;font-family:var(--body);}
-  .wdots:hover{opacity:1;color:var(--teal-lt);}
-  .wdaymenu{position:fixed;display:none;z-index:200;min-width:214px;background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.98));border:1px solid var(--line);border-top:2px solid var(--teal);box-shadow:0 18px 44px rgba(0,0,0,.6);padding:6px;}
-  .wdm-date{font-family:var(--font);font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 8px 8px;border-bottom:1px solid var(--line-soft);margin-bottom:4px;}
-  .wdm-item{display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;font-family:var(--font);font-size:.82rem;font-weight:600;letter-spacing:.02em;color:#eafeff;padding:10px 8px;}
-  .wdm-item:hover{background:rgba(0,184,184,.16);}
-  .wdm-item.close{color:#ffb28a;} .wdm-item.reopen{color:#8ff0b0;}
+  .wdots{position:absolute;top:0;right:2px;width:22px;height:18px;line-height:16px;padding:0;border:0;background:none;color:var(--teal-lt);font-size:1.2rem;font-weight:700;cursor:pointer;opacity:.82;z-index:6;font-family:var(--body);text-shadow:0 1px 3px rgba(0,0,0,.8);}
+  .wdots:hover{opacity:1;}
+  /* Day menu: near-opaque + blurred behind so it reads clearly over camera bars. */
+  .wdaymenu{position:fixed;display:none;z-index:200;min-width:232px;background:rgba(6,18,17,0.97);backdrop-filter:blur(14px) saturate(1.1);-webkit-backdrop-filter:blur(14px) saturate(1.1);border:1px solid var(--teal);border-top:3px solid var(--teal);box-shadow:0 22px 54px rgba(0,0,0,.8);padding:6px;}
+  .wdm-date{font-family:var(--font);font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-lt);padding:8px 9px 9px;border-bottom:1px solid var(--line-soft);margin-bottom:5px;}
+  .wdm-item{display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;font-family:var(--font);font-size:.86rem;font-weight:700;letter-spacing:.02em;color:#eafeff;padding:11px 9px;}
+  .wdm-item:hover{background:rgba(0,184,184,.22);}
+  .wdm-item.close{color:#ffc7a6;} .wdm-item.reopen{color:#8ff0b0;}
+  .wdm-note{font-size:.72rem;font-weight:400;color:var(--muted);letter-spacing:0;text-transform:none;padding:2px 9px 6px;line-height:1.4;}
   .wcell:first-child{border-left:1px solid var(--line-soft);}
   .week:first-child .wcell{border-top:1px solid var(--line-soft);}
   .wcell.out-month{opacity:.4;} .wcell.today{box-shadow:inset 0 0 0 2px var(--teal);}
@@ -770,10 +772,12 @@
     var m=document.getElementById('wdaymenu'); if(!m) return;
     var closed=isBlackout(iso);
     var label=closed?'Reopen this day':'Close this day for checkouts';
+    var note=closed?'Closed to new checkouts. You can still check cameras in.':'Students can’t check out this day. You can still check cameras in.';
     m.innerHTML='<div class="wdm-date">'+prettyDate(iso)+'</div>'+
-      '<button type="button" class="wdm-item '+(closed?'reopen':'close')+'" id="wdm-act">'+label+'</button>';
+      '<button type="button" class="wdm-item '+(closed?'reopen':'close')+'" id="wdm-act">'+label+'</button>'+
+      '<div class="wdm-note">'+note+'</div>';
     m.style.display='block';
-    var mw=214, mh=92, vw=window.innerWidth||800, vh=window.innerHeight||600;
+    var mw=232, mh=140, vw=window.innerWidth||800, vh=window.innerHeight||600;
     m.style.left=Math.max(8, Math.min(x, vw-mw-8))+'px';
     m.style.top=Math.max(8, Math.min(y, vh-mh-8))+'px';
     var b=document.getElementById('wdm-act'); if(b) b.addEventListener('click',function(){ toggleBlackout(iso, !closed); });
@@ -1128,7 +1132,9 @@
   function isReserving(){ return !!RESV; }
   function normPeriod(p){ return String(p||'').replace(/[^0-9]/g,'').replace(/^0+/,''); }
   function p2ok(){ return RESV && normPeriod(RESV.period)==='4'; }   // only Period 4 (Photo 2A) may take Cam 16/17/18
-  function nextSchoolDay(iso){ var d=addDays(iso,1); for(var i=0;i<420 && !isOpenDay(d);i++) d=addDays(d,1); return d; }
+  // Due date = the next SCHOOL day (weekend/holiday skipped). A blackout day is only closed to new
+  // checkouts, NOT to returns, so a camera can still be due back / checked in on a closed day.
+  function nextSchoolDay(iso){ var d=addDays(iso,1); for(var i=0;i<420 && !isSchoolDay(d);i++) d=addDays(d,1); return d; }
   function openReserveFlow(resumeDay){
     RESV_RESUME_DAY = resumeDay || null;   // set when launched from a day card, null from the month button
     RESV=null; DM_RESERVE_CAM=null; rvLookup=null;
