@@ -230,7 +230,7 @@
   .rv-sub b{color:var(--teal-lt);}
   .rv-who{font-family:var(--font);font-size:1.05rem;color:#fff;margin:2px 0 10px;}
   .rv-who b{color:var(--teal-lt);}
-  #rv-id,#rv-sc,#rv-pg,#rv-pc{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1.05rem;padding:11px 12px;outline:none;box-sizing:border-box;margin-bottom:10px;}
+  #rv-id,#rv-sc,#rv-pg,#rv-pc,#se-sc,#se-pg,#se-pc{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1.05rem;padding:11px 12px;outline:none;box-sizing:border-box;margin-bottom:10px;}
   .rv-msg{min-height:1.1em;font-size:.85rem;color:var(--muted);margin:2px 0 12px;}
   /* Missing-assignment hold: a clear, professional red notice shown at ID entry when a student is not eligible. */
   .rv-block{background:rgba(224,64,58,.14);border:1px solid rgba(224,64,58,.4);border-left:4px solid var(--red);padding:12px 14px;margin:4px 0 6px;font-size:.9rem;line-height:1.45;color:#ffb3a6;}
@@ -401,6 +401,25 @@
       <label class="nc-label" for="ncText">Condition / notes</label>
       <textarea id="ncText" rows="4" placeholder="e.g. lens cap missing, tripod plate lost, small scratch on body"></textarea>
       <button class="qr-btn" id="nc-save" type="button" style="margin-top:12px;width:100%;">Save note</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit student contact (teacher only): fixes a missing/wrong number at check-in AND saves it to
+     the student's profile (overrides) so it sticks for future checkouts. -->
+<div class="qrmodal" id="seditmodal">
+  <div class="qr-panel">
+    <div class="qr-head"><span class="qr-title" id="seTitle">Edit student info</span><button class="qr-x" id="se-x" aria-label="Close">&times;</button></div>
+    <div class="qr-body" style="text-align:left;">
+      <div id="se-who" class="rv-who" style="font-size:.95rem;margin:0 0 10px;"></div>
+      <label class="nc-label" for="se-sc">Student cell</label>
+      <input type="text" id="se-sc" inputmode="tel" autocomplete="off" placeholder="(805) 000-0000" />
+      <label class="nc-label" for="se-pg">Parent / guardian name</label>
+      <input type="text" id="se-pg" autocomplete="off" placeholder="Parent or guardian" />
+      <label class="nc-label" for="se-pc">Parent / guardian cell</label>
+      <input type="text" id="se-pc" inputmode="tel" autocomplete="off" placeholder="(805) 000-0000" />
+      <div class="rv-msg" id="se-msg"></div>
+      <button class="qr-btn" id="se-save" type="button" style="margin-top:8px;width:100%;">Save &amp; update profile</button>
     </div>
   </div>
 </div>
@@ -931,7 +950,7 @@
     if(AUTHED && (c.flag||'').indexOf('unknown')>=0) flag='<div class="dc-flag">&#9888; Student ID not in the roster</div>';
     // Condition note follows the camera (missing cap, scratch, etc.), teacher-editable.
     var condNote=c.note?'<div class="dc-note"><b>Condition note</b>'+esc(c.note)+'</div>':'';
-    var noteBtn=AUTHED?'<div class="dc-acts"><button type="button" class="dc-btn ghost" data-note="'+esc(c.id)+'">'+(c.note?'Edit condition note':'Add condition note')+'</button></div>':'';
+    var noteBtn=AUTHED?'<div class="dc-acts"><button type="button" class="dc-btn ghost" data-sedit="'+esc(c.id)+'">Edit student info</button><button type="button" class="dc-btn ghost" data-note="'+esc(c.id)+'">'+(c.note?'Edit condition note':'Add condition note')+'</button></div>':'';
     // Accessories checked out with this camera; each checks in + notes on its own.
     var accs=accessoriesFor(c), accHtml='';
     if(accs.length){
@@ -962,6 +981,9 @@
     Array.prototype.forEach.call(document.querySelectorAll('#dm-body [data-note]'), function(el){
       el.addEventListener('click', function(){ openNoteCal(el.getAttribute('data-note')); });
     });
+    Array.prototype.forEach.call(document.querySelectorAll('#dm-body [data-sedit]'), function(el){
+      el.addEventListener('click', function(){ openStudentEdit(el.getAttribute('data-sedit')); });
+    });
     if(document.getElementById('dc-count')) startCalTicker();
     postHeight();
   }
@@ -988,6 +1010,40 @@
         .catch(function(){ alert('Could not save the note. Try again.'); })
         .then(function(){ s.disabled=false; s.textContent='Save note'; });
     });
+  })();
+  // ---- Edit student contact at check-in (teacher). Updates THIS checkout AND the student's
+  // profile (overrides), so a fixed number sticks for future checkouts. ----
+  var seEditId=null;
+  function openStudentEdit(id){
+    var c=findRecCal(id); if(!c || !AUTHED) return; seEditId=id;
+    document.getElementById('seTitle').textContent='Edit student info';
+    document.getElementById('se-who').textContent=nameOf(c)+(c.student_id?(' · ID '+c.student_id):'');
+    document.getElementById('se-sc').value=c.student_cell||'';
+    document.getElementById('se-pg').value=c.parent_guardian||'';
+    document.getElementById('se-pc').value=c.parent_cell||'';
+    document.getElementById('se-msg').textContent='';
+    document.getElementById('seditmodal').classList.add('open');
+    setTimeout(function(){ document.getElementById('se-sc').focus(); },50);
+  }
+  function closeStudentEdit(){ document.getElementById('seditmodal').classList.remove('open'); seEditId=null; }
+  (function(){
+    var x=document.getElementById('se-x'); if(x) x.addEventListener('click',closeStudentEdit);
+    var m=document.getElementById('seditmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeStudentEdit(); });
+    var s=document.getElementById('se-save'); if(s) s.addEventListener('click',function(){
+      if(!seEditId) return; var c=findRecCal(seEditId); if(!c) return;
+      var sc=document.getElementById('se-sc').value.trim(), pg=document.getElementById('se-pg').value.trim(), pc=document.getElementById('se-pc').value.trim();
+      var msg=document.getElementById('se-msg'); msg.textContent='';
+      s.disabled=true; s.textContent='Saving…';
+      // 1) update THIS checkout so the card reflects it now
+      camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:seEditId,student_cell:sc,parent_guardian:pg,parent_cell:pc})})
+        .then(function(r){ if(!r.ok) throw new Error(); })
+        // 2) persist to the student's PROFILE (overrides) for FUTURE checkouts, when the ID is known
+        .then(function(){ if(c.student_id){ return camAPI('/api/camera/student_override',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:c.student_id,student_cell:sc,parent_guardian:pg,parent_cell:pc})}).catch(function(){}); } })
+        .then(function(){ closeStudentEdit(); notifyParent(); load(); })
+        .catch(function(){ msg.textContent='Could not save. Try again.'; })
+        .then(function(){ s.disabled=false; s.textContent='Save & update profile'; });
+    });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeStudentEdit(); });
   })();
   function camAction(act, id, el){
     if(act==='undoreturn'){ var p=pendingCal[id]; if(p&&p.timer) clearTimeout(p.timer); delete pendingCal[id]; renderDayModal(); return; }
