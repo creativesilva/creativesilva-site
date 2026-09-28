@@ -23,6 +23,12 @@
  */
 
 (function () {
+  // When this nav is loaded OFF the main site (e.g. the Command Center on
+  // command.creativesilva.com or onrender.com), root-relative links are rewritten
+  // to absolute www.creativesilva.com so they resolve. Empty string on the main
+  // site, so on-site pages (catalog, modules, calendar) are completely unaffected.
+  var BASE = /^(www\.)?creativesilva\.com$/i.test(location.hostname) ? '' : 'https://www.creativesilva.com';
+
   // ===== Top-left "Curriculum Catalog" dropdown menu (teacher navigation) =====
   // Active courses -> their modules -> the module's OVERVIEW url (first page).
   // TO ADD A MODULE TO THE MENU: add a line to the right course's `modules` list.
@@ -589,6 +595,15 @@
     inner.appendChild(buildTitlebar());
     inner.appendChild(buildCatalogRow());
     nav.insertBefore(inner, nav.firstChild);
+
+    // Off the main site (Command Center), make root-relative links + media absolute
+    // to www.creativesilva.com so they resolve. No-op on the main site (BASE empty).
+    if (BASE) {
+      var _a = nav.querySelectorAll('a[href^="/"]');
+      for (var _i = 0; _i < _a.length; _i++) { _a[_i].setAttribute('href', BASE + _a[_i].getAttribute('href')); }
+      var _m = nav.querySelectorAll('img[src^="/"], iframe[src^="/"]');
+      for (var _j = 0; _j < _m.length; _j++) { _m[_j].setAttribute('src', BASE + _m[_j].getAttribute('src')); }
+    }
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
