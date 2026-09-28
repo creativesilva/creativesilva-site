@@ -62,7 +62,7 @@
   .count{margin-top:auto;font-family:var(--font);font-weight:700;font-size:.86rem;color:#ffd0b0;background:rgba(255,107,26,.16);border-left:3px solid var(--orange);padding:4px 7px;}
   .count small{display:block;font-weight:400;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
   /* day pop-out */
-  .daymodal{position:fixed;inset:0;background:rgba(2,12,12,.74);display:none;align-items:center;justify-content:center;padding:20px;z-index:60;}
+  .daymodal{position:fixed;inset:0;background:rgba(2,12,12,.66);backdrop-filter:blur(8px) saturate(1.1);-webkit-backdrop-filter:blur(8px) saturate(1.1);display:none;align-items:center;justify-content:center;padding:20px;z-index:60;}
   .daymodal.open{display:flex;}
   .dm-panel{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.97));border:1px solid var(--line);border-top:3px solid var(--teal);max-width:460px;width:100%;max-height:82vh;overflow:auto;}
   .dm-head{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--line-soft);}
@@ -76,7 +76,15 @@
   .dm-range{color:var(--muted);font-size:.84rem;flex:1;}
   .dm-tag{font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;white-space:nowrap;}
   .dm-tag.res{background:rgba(245,179,1,.16);color:#ffd889;} .dm-tag.od{background:rgba(255,107,26,.18);color:#ffb28a;}
-  .dm-empty{color:var(--faint);}
+  .dm-empty{color:var(--faint);padding:6px 0;}
+  .dm-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line-soft);margin-bottom:12px;flex-wrap:wrap;}
+  .dm-tab{font-family:var(--font);font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:none;border:0;border-bottom:2px solid transparent;padding:9px 12px;cursor:pointer;}
+  .dm-tab:hover{color:var(--text);}
+  .dm-tab.active{color:var(--teal-lt);border-bottom-color:var(--teal);}
+  .dm-tabn{font-size:.62rem;color:var(--faint);}
+  .dm-tab.active .dm-tabn{color:var(--teal-lt);}
+  .dm-avail{display:flex;flex-wrap:wrap;gap:8px;}
+  .dm-availcam{font-family:var(--font);font-weight:700;font-size:.82rem;color:#8ff0b0;background:rgba(63,168,99,.13);border-left:3px solid var(--ok);padding:8px 12px;}
   .k-res{background:#f5b301;}
   .cam.reserved{border-left-color:#f5b301;} .cam.reserved .s{color:#ffd889;}
   .foot{margin-top:22px;font-size:.74rem;color:var(--faint);}
@@ -180,17 +188,30 @@
       grid.appendChild(cell);
     }
   }
-  function openDayModal(iso){
-    var list=checkoutsOnDay(iso).slice().sort(function(a,b){ return (a.camera||'').localeCompare(b.camera||''); });
-    var total=(DATA.cameras||[]).length;
+  var DM_DAY=null, DM_TAB='out';
+  function byCam(a,b){ return (a.camera||'').localeCompare(b.camera||''); }
+  function dayOut(iso){ return checkoutsOnDay(iso).filter(function(c){ return statusOf(c)==='out'; }).sort(byCam); }
+  function dayReserved(iso){ return checkoutsOnDay(iso).filter(function(c){ return statusOf(c)==='reserved'; }).sort(byCam); }
+  function dayAvailable(iso){ var busy={}; checkoutsOnDay(iso).forEach(function(c){ busy[c.camera]=1; }); return (DATA.cameras||[]).filter(function(c){ return !busy[c]; }); }
+  function dmTab(t,label,n){ return '<button type="button" class="dm-tab'+(DM_TAB===t?' active':'')+'" data-tab="'+t+'">'+label+' <span class="dm-tabn">'+n+'</span></button>'; }
+  function openDayModal(iso){ DM_DAY=iso; DM_TAB='out'; renderDayModal(); document.getElementById('daymodal').classList.add('open'); }
+  function renderDayModal(){
+    var iso=DM_DAY; if(!iso) return;
+    var out=dayOut(iso), res=dayReserved(iso), avail=dayAvailable(iso);
     document.getElementById('dm-title').textContent=prettyDate(iso);
-    var rows=list.map(function(c){
-      var s=statusOf(c);
-      var tag=s==='reserved'?'<span class="dm-tag res">Reserved</span>':((c.due&&c.due<todayISO())?'<span class="dm-tag od">Overdue</span>':'');
-      return '<div class="dm-row"><span class="dm-cam">'+c.camera+'</span><span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span>'+tag+'</div>';
-    }).join('') || '<div class="dm-empty">No cameras checked out this day.</div>';
-    document.getElementById('dm-body').innerHTML='<div class="dm-count">'+list.length+' of '+total+' cameras checked out</div>'+rows;
-    document.getElementById('daymodal').classList.add('open');
+    var tabs='<div class="dm-tabs">'+dmTab('out','Checked out',out.length)+dmTab('reserved','Reserved',res.length)+dmTab('available','Available',avail.length)+'</div>';
+    var body;
+    if(DM_TAB==='reserved'){
+      body=res.length?res.map(function(c){ return '<div class="dm-row"><span class="dm-cam">'+c.camera+'</span><span class="dm-range">Reserved '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-tag res">Reserved</span></div>'; }).join(''):'<div class="dm-empty">No reservations this day.</div>';
+    } else if(DM_TAB==='available'){
+      body=avail.length?'<div class="dm-avail">'+avail.map(function(c){ return '<span class="dm-availcam">'+c+'</span>'; }).join('')+'</div>':'<div class="dm-empty">No cameras free this day.</div>';
+    } else {
+      body=out.length?out.map(function(c){ var od=(c.due&&c.due<todayISO())?'<span class="dm-tag od">Overdue</span>':''; return '<div class="dm-row"><span class="dm-cam">'+c.camera+'</span><span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span>'+od+'</div>'; }).join(''):'<div class="dm-empty">No cameras checked out this day.</div>';
+    }
+    document.getElementById('dm-body').innerHTML=tabs+body;
+    Array.prototype.forEach.call(document.querySelectorAll('#dm-body .dm-tab'), function(btn){
+      btn.addEventListener('click', function(){ DM_TAB=btn.getAttribute('data-tab'); renderDayModal(); });
+    });
   }
   function closeDayModal(){ document.getElementById('daymodal').classList.remove('open'); }
   function load(){
