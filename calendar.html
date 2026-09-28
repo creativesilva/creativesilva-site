@@ -39,9 +39,24 @@
     font-family:var(--font);font-weight:600;letter-spacing:.10em;text-transform:uppercase;font-size:.75rem;text-decoration:none;cursor:pointer;
     color:rgba(234,247,247,.85);background:rgba(0,0,0,.26);border:1px solid rgba(0,184,184,.42);transition:background .15s,color .15s,border-color .15s,filter .15s;}
   .cal-navbtn:hover{background:rgba(0,184,184,.14);color:#fff;border-color:rgba(0,184,184,.72);}
-  .cal-navbtn.primary{background:var(--teal);color:#04110f;border-color:var(--teal);}
-  .cal-navbtn.primary:hover{filter:brightness(1.1);background:var(--teal);color:#04110f;}
   @media (max-width:760px){ .cal-navwrap{margin-left:0;flex-basis:100%;padding-left:12px;} }
+  /* QR pop-out card (reservation link): large scannable code + copy-link + download */
+  .qrmodal{position:fixed;inset:0;background:rgba(2,12,12,.66);backdrop-filter:blur(8px) saturate(1.1);-webkit-backdrop-filter:blur(8px) saturate(1.1);display:none;align-items:center;justify-content:center;padding:20px;z-index:70;}
+  .qrmodal.open{display:flex;}
+  .qr-panel{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.97));border:1px solid var(--line);border-top:3px solid var(--teal);width:100%;max-width:380px;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+  .qr-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line-soft);}
+  .qr-title{font-family:var(--font);font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#fff;font-size:1rem;}
+  .qr-x{background:none;border:0;color:var(--muted);font-size:1.7rem;line-height:1;cursor:pointer;padding:0 4px;}
+  .qr-x:hover{color:#fff;}
+  .qr-body{padding:20px 18px;text-align:center;}
+  .qr-sub{color:var(--muted);font-size:.86rem;margin:0 0 14px;}
+  .qr-canvas-wrap{background:#fff;padding:14px;display:inline-block;line-height:0;}
+  .qr-canvas-wrap canvas,.qr-canvas-wrap img{display:block;}
+  .qr-url{margin:14px 0 0;font-size:.8rem;color:var(--faint);word-break:break-all;}
+  .qr-acts{display:flex;gap:8px;margin-top:16px;}
+  .qr-btn{flex:1 1 0;font-family:var(--font);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#eafeff;background:rgba(0,184,184,.14);border:1px solid var(--line);padding:11px 10px;cursor:pointer;transition:background .12s,color .12s;}
+  .qr-btn:hover{background:rgba(0,184,184,.28);color:#fff;}
+  .qr-btn.copied{background:var(--ok);color:#04110f;border-color:var(--ok);}
 
   .wrap{max-width:1200px;margin:0 auto;padding:24px 32px 70px;}
   .intro{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:20px;}
@@ -159,6 +174,22 @@
   </div>
 </div>
 
+<div class="qrmodal" id="qrmodal">
+  <div class="qr-panel">
+    <div class="qr-head"><span class="qr-title">Reservation QR code</span><button class="qr-x" id="qr-x" aria-label="Close">&times;</button></div>
+    <div class="qr-body">
+      <p class="qr-sub">Students scan this to open the camera reservation form.</p>
+      <div class="qr-canvas-wrap"><canvas id="qr-canvas"></canvas></div>
+      <p class="qr-url" id="qr-url"></p>
+      <div class="qr-acts">
+        <button class="qr-btn" id="qr-copy" type="button">Copy link</button>
+        <button class="qr-btn" id="qr-dl" type="button">Download</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 <script src="/js/silva-nav.js?v=97b66897"></script>
 <script>
 (function(){
@@ -182,14 +213,41 @@
     }
     if(!bar.querySelector('.cal-navwrap')){
       var w=document.createElement('div'); w.className='cal-navwrap';
-      var res=document.createElement('a'); res.className='cal-navbtn primary'; res.href='/camera-checkout.html'; res.textContent='Reserve a Camera';
+      var res=document.createElement('a'); res.className='cal-navbtn'; res.href='/camera-checkout.html'; res.textContent='Reserve a Camera';
+      var qr=document.createElement('button'); qr.type='button'; qr.className='cal-navbtn'; qr.textContent='QR Code'; qr.addEventListener('click',openQR);
       var con=document.createElement('a'); con.className='cal-navbtn'; con.href='/camera-manager.html'; con.textContent='Teacher Console';
-      w.appendChild(res); w.appendChild(con); bar.appendChild(w);
+      w.appendChild(res); w.appendChild(qr); w.appendChild(con); bar.appendChild(w);
     }
     return true;
   }
   function tryInject(n){ if(injectHeader()||n<=0) return; setTimeout(function(){ tryInject(n-1); },40); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ tryInject(60); }); else tryInject(60);
+
+  // ---- QR pop-out card: large scannable code for the reservation link + copy + download ----
+  var QR_URL='https://www.creativesilva.com/camera-checkout.html';
+  var qrDrawn=false;
+  function openQR(){
+    var m=document.getElementById('qrmodal'); if(!m) return;
+    var u=document.getElementById('qr-url'); if(u) u.textContent=QR_URL;
+    if(!qrDrawn && window.QRious){
+      try{ new QRious({element:document.getElementById('qr-canvas'), value:QR_URL, size:264, level:'M', background:'#ffffff', foreground:'#04110f'}); qrDrawn=true; }catch(e){}
+    }
+    m.classList.add('open');
+  }
+  function closeQR(){ var m=document.getElementById('qrmodal'); if(m) m.classList.remove('open'); }
+  (function(){
+    var x=document.getElementById('qr-x'); if(x) x.addEventListener('click',closeQR);
+    var m=document.getElementById('qrmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeQR(); });
+    var cp=document.getElementById('qr-copy'); if(cp) cp.addEventListener('click',function(){
+      var b=this, done=function(){ b.textContent='Copied!'; b.classList.add('copied'); setTimeout(function(){ b.textContent='Copy link'; b.classList.remove('copied'); },1500); };
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(QR_URL).then(done,done); } else { done(); }
+    });
+    var dl=document.getElementById('qr-dl'); if(dl) dl.addEventListener('click',function(){
+      var c=document.getElementById('qr-canvas'); if(!c) return;
+      try{ var a=document.createElement('a'); a.href=c.toDataURL('image/png'); a.download='camera-reservation-qr.png'; document.body.appendChild(a); a.click(); a.remove(); }catch(e){}
+    });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeQR(); });
+  })();
 
   function todayISO(){ var d=new Date(); d.setHours(0,0,0,0); return d.toISOString().slice(0,10); }
   function fmt(iso){ if(!iso)return''; var p=iso.split('-'); return MONTHS[+p[1]-1].slice(0,3)+' '+(+p[2]); }
