@@ -99,6 +99,10 @@
   .contact b{color:var(--muted);font-weight:600;}
   .flagwarn{font-size:.66rem;color:#ffb28a;letter-spacing:.02em;}
   .acts{display:flex;gap:7px;flex-wrap:wrap;margin-top:2px;}
+  /* Available cards: identical layout/size, Reserve button in the same spot, caption UNDER it */
+  .avail-card{justify-content:flex-start;}
+  .avail-card .acts{margin-top:2px;}
+  .p2under{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);min-height:1em;line-height:1.2;}
 
   .histwrap{margin-top:8px;}
   .hist{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;}
@@ -301,9 +305,9 @@
   function camCard(cam){
     var c=activeFor(cam), p2=P2.indexOf(cam)>=0?'<span class="p2">Photo 2 only</span>':'';
     if(!c){
-      return '<div class="cam"><div class="cam-top"><span class="n">'+cam+'</span><span class="pill avail">Available</span></div>'+
-             (p2?'<div>'+p2+'</div>':'')+
-             '<div class="acts"><button class="btn sm" data-reserve="'+cam+'">Reserve</button></div></div>';
+      return '<div class="cam avail-card"><div class="cam-top"><span class="n">'+cam+'</span><span class="pill avail">Available</span></div>'+
+             '<div class="acts"><button class="btn sm" data-reserve="'+cam+'">Reserve</button></div>'+
+             '<div class="p2under">'+(P2.indexOf(cam)>=0?'Photo 2 only':'')+'</div></div>';
     }
     if(pendingReturns[c.id]){
       return '<div class="cam returning"><div class="cam-top"><span class="n">'+cam+'</span><span class="pill out">Returning</span></div>'+
