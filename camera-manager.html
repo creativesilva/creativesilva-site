@@ -103,6 +103,20 @@
   input:focus,select:focus{border-color:var(--teal);}
   select{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235ff0f0' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:38px;}
   select option{background:#0c1414;color:var(--text);}
+  /* custom teal dropdown (native <select> open lists show the OS blue highlight; this matches the dark aesthetic) */
+  .mdd{position:relative;width:100%;margin-bottom:14px;}
+  .mdd-btn{width:100%;display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;background:rgba(0,0,0,.30);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1.02rem;padding:11px 12px;}
+  .mdd-btn:hover{border-color:rgba(0,184,184,.5);}
+  .mdd.open .mdd-btn{border-color:var(--teal);}
+  .mdd-lbl{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .mdd-lbl.ph{color:var(--faint);}
+  .mdd-chev{flex:0 0 auto;width:9px;height:9px;border-right:2px solid var(--teal-lt);border-bottom:2px solid var(--teal-lt);transform:rotate(45deg);transition:transform .15s;margin-left:auto;}
+  .mdd.open .mdd-chev{transform:rotate(-135deg);}
+  .mdd-menu{position:absolute;z-index:80;top:calc(100% + 4px);left:0;right:0;background:#0a2e2c;border:1px solid var(--teal);box-shadow:0 14px 32px rgba(0,0,0,.6);max-height:300px;overflow-y:auto;}
+  .mdd-menu[hidden]{display:none;}
+  .mdd-opt{padding:11px 14px;cursor:pointer;border-left:3px solid transparent;color:#eafeff;font-size:.98rem;}
+  .mdd-opt+.mdd-opt{border-top:1px solid rgba(0,184,184,.14);}
+  .mdd-opt:hover,.mdd-opt.active{background:rgba(0,184,184,.20);border-left-color:var(--teal);color:#fff;}
   .who-line{font-size:.85rem;margin:-8px 0 14px;min-height:1.1em;}
   .who-line.ok{color:#8ff0b0;} .who-line.no{color:#ffd889;} .who-line.load{color:var(--faint);}
   .chk{display:flex;align-items:flex-start;gap:9px;font-size:.9rem;color:#dbeeee;cursor:pointer;line-height:1.4;margin-bottom:16px;}
@@ -178,7 +192,7 @@
       <input type="text" id="rsid" inputmode="numeric" placeholder="Student ID" />
       <div class="who-line" id="rwho" aria-live="polite"></div>
       <label for="rcam">Camera</label>
-      <select id="rcam"></select>
+      <div id="rcam"></div>
       <label for="rout">Checkout date</label>
       <input type="date" id="rout" />
       <label for="rdue">Due back</label>
@@ -328,11 +342,34 @@
       rpick=document.getElementById('rpick'), rgo=document.getElementById('rgo'), rwho=document.getElementById('rwho'),
       resmsg=document.getElementById('resmsg');
   function freeCams(){ return (DATA.cameras||[]).filter(function(c){ return !activeFor(c); }); }
+  // custom teal dropdown (matches the dark aesthetic; native <select> open lists show the OS blue highlight)
+  var rcamDD=null;
+  function mkDropdown(host, items, current, onSelect){
+    host.innerHTML='';
+    var wrap=document.createElement('div'); wrap.className='mdd';
+    var btn=document.createElement('button'); btn.type='button'; btn.className='mdd-btn';
+    var lbl=document.createElement('span'); lbl.className='mdd-lbl'; btn.appendChild(lbl);
+    btn.appendChild(document.createElement('span')).className='mdd-chev';
+    var menu=document.createElement('div'); menu.className='mdd-menu'; menu.hidden=true;
+    var cur=current;
+    function labelFor(v){ for(var i=0;i<items.length;i++) if(items[i].value===v) return items[i].label; return ''; }
+    function paint(){ var t=labelFor(cur); lbl.textContent=t||'Choose…'; lbl.classList.toggle('ph',!t); }
+    function close(){ if(menu.hidden)return; menu.hidden=true; wrap.classList.remove('open'); document.removeEventListener('mousedown',onDoc,true); }
+    function open(){ if(!menu.hidden)return; menu.hidden=false; wrap.classList.add('open'); document.addEventListener('mousedown',onDoc,true); var a=menu.querySelector('.active'); if(a)a.scrollIntoView({block:'nearest'}); }
+    function onDoc(e){ if(!wrap.contains(e.target)) close(); }
+    items.forEach(function(o){ var it=document.createElement('div'); it.className='mdd-opt'+(o.value===cur?' active':''); it.textContent=o.label;
+      it.addEventListener('click',function(e){ e.stopPropagation(); cur=o.value; paint(); [].forEach.call(menu.children,function(c){c.classList.toggle('active',c===it);}); close(); if(onSelect)onSelect(cur); });
+      menu.appendChild(it); });
+    btn.addEventListener('click',function(e){ e.stopPropagation(); if(menu.hidden)open(); else close(); });
+    paint(); wrap.appendChild(btn); wrap.appendChild(menu); host.appendChild(wrap);
+    return { value:function(){ return cur; } };
+  }
   function openReserve(preCam){
     resmsg.className='mmsg'; rwho.className='who-line'; rwho.textContent=''; rsid.value=''; lastLookup='';
     var free=freeCams();
-    rcam.innerHTML=free.map(function(c){ return '<option value="'+c+'">'+c+(P2.indexOf(c)>=0?' (Photo 2 only)':'')+'</option>'; }).join('')||'<option value="">No cameras free</option>';
-    if(preCam && free.indexOf(preCam)>=0) rcam.value=preCam;
+    var items=free.map(function(c){ return {value:c, label:c+(P2.indexOf(c)>=0?' (Photo 2 only)':'')}; });
+    var initial=(preCam && free.indexOf(preCam)>=0)?preCam:(free[0]||'');
+    rcamDD=mkDropdown(rcam, items, initial, null);
     rout.value=todayISO(); rdue.value=addDays(todayISO(),1); rpick.checked=true;
     resmodal.classList.add('open'); setTimeout(function(){ rsid.focus(); },50);
   }
@@ -356,7 +393,7 @@
   rsid.addEventListener('input',function(){ clearTimeout(lookupT); lookupT=setTimeout(doLookup,350); });
 
   rgo.onclick=function(){
-    var payload={ student_id:rsid.value.trim(), camera:rcam.value, out:rout.value, due:rdue.value };
+    var payload={ student_id:rsid.value.trim(), camera:(rcamDD?rcamDD.value():''), out:rout.value, due:rdue.value };
     if(rpick.checked) payload.status='out';
     if(!payload.student_id||!payload.camera||!payload.due){ resmsg.className='mmsg err show'; resmsg.textContent='Enter a student ID, a camera, and a due date.'; return; }
     rgo.disabled=true; rgo.textContent='Saving…';

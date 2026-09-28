@@ -448,6 +448,11 @@
     .lwz-tags input { flex: 1 1 200px; min-width: 160px; }
     .lwz-tags select:focus, .lwz-tags input:focus { border-color: #00b8b8; }
     .lwz-tags select option { background: #0c1414; color: #eafafa; }
+    /* CS Incoming routing selects use the shared custom teal dropdown (compact, inline) */
+    .lwz-tags .pvb-dd { width: auto; min-width: 210px; margin: 0; }
+    .lwz-tags .pvb-dd-btn { font-size: 0.82rem; padding: 7px 10px; border-radius: 0; border-top: 2px solid #00b8b8; }
+    .lwz-tags .pvb-dd-menu { min-width: 210px; }
+    .lwz-tags .pvb-dd-opt { font-size: 0.82rem; padding: 9px 12px; }
     /* Teacher Resources: every action pill the same width as the widest, for a uniform column. */
     #teacher-resources .course-doc-dl { min-width: 82px; box-sizing: border-box; text-align: center; }
     #teacher-resources .course-doc-ico { min-width: 46px; box-sizing: border-box; text-align: center; }
@@ -1880,18 +1885,8 @@
       const openBtn = c.folder ? `<a class="course-doc-dl" href="${c.folder}" target="_blank" rel="noopener">Open</a>` : "";
       const tags = c.tags ? (
         `<div class="lwz-tags">`
-        + `<select class="lwz-dest" onchange="lwzDestChange(this)" title="Where should this image be published?">`
-        +   `<option value="">Send to&#8230; (untagged: I file it by hand)</option>`
-        +   `<option value="character">Cast character</option>`
-        +   `<option value="item">Item / prop</option>`
-        +   `<option value="scene">Scene / campus</option>`
-        +   `<option value="logo">Logo</option>`
-        +   `<option value="icon">Icon</option>`
-        + `</select>`
-        + `<select class="lwz-char" hidden title="Which character?">`
-        +   `<option value="">Character&#8230;</option>`
-        +   `<option>Renee</option><option>Patricia</option><option>Anthony</option><option>Ricardo</option><option>Mr. Silva</option><option>Abby</option>`
-        + `</select>`
+        + `<div class="lwz-dest" title="Where should this image be published?"></div>`
+        + `<div class="lwz-char" hidden title="Which character?"></div>`
         + `<input class="lwz-label" type="text" placeholder="label (e.g. short hair front)" title="Short description used to name + list it">`
         + `</div>`
       ) : "";
@@ -1929,8 +1924,8 @@
       if (!row.dataset.endpoint) { status.textContent = "Setup needed: add the Apps Script URL"; return; }
       if (!files.length) { status.textContent = "No files"; return; }
       // Intake tags (only present on the tagged CS Incoming row): route the upload so the watcher publishes it.
-      const destEl = row.querySelector(".lwz-dest"), charEl = row.querySelector(".lwz-char"), labelEl = row.querySelector(".lwz-label");
-      const dest = destEl ? destEl.value : "", character = charEl ? charEl.value : "", label = labelEl ? labelEl.value.trim() : "";
+      const labelEl = row.querySelector(".lwz-label");
+      const dest = row.dataset.dest || "", character = row.dataset.char || "", label = labelEl ? labelEl.value.trim() : "";
       if (dest === "character" && !character) { status.textContent = "Pick which character first"; return; }
       if (dest && !label) { status.textContent = "Add a short label first (e.g. front portrait)"; return; }
       row.classList.add("lwz-busy");
@@ -1977,6 +1972,45 @@
     endpoint: 'https://script.google.com/macros/s/AKfycbxVMKQvcZFgOrLgXJQbX5C6qRKuFBKyYUwRd3vR21WXSci4H0dltBFJtpQ0CEjhpv8L/exec',
     key: 'cs-9d4f1a6b3e28'
   });
+  // Build the custom teal routing dropdowns for the CS Incoming row (replaces the native <select>s;
+  // selection is stored on row.dataset so lwzUpload keeps reading dest/char the same way).
+  (function(){
+    function lwzDropdown(host, items, current, onSelect, placeholder){
+      host.innerHTML='';
+      var wrap=document.createElement('div'); wrap.className='pvb-dd';
+      var btn=document.createElement('button'); btn.type='button'; btn.className='pvb-dd-btn';
+      var lbl=document.createElement('span'); lbl.className='pvb-dd-lbl'; btn.appendChild(lbl);
+      btn.appendChild(document.createElement('span')).className='pvb-select-chev';
+      var menu=document.createElement('div'); menu.className='pvb-select-menu pvb-dd-menu'; menu.hidden=true;
+      var cur=current;
+      function labelFor(v){ for(var i=0;i<items.length;i++) if(items[i].value===v) return items[i].label; return ''; }
+      function paint(){ var t=labelFor(cur); lbl.textContent=t||(placeholder||'Choose…'); lbl.classList.toggle('ph',!t); }
+      function close(){ if(menu.hidden)return; menu.hidden=true; wrap.classList.remove('open'); document.removeEventListener('mousedown',onDoc,true); }
+      function open(){ if(!menu.hidden)return; menu.hidden=false; wrap.classList.add('open'); document.addEventListener('mousedown',onDoc,true); var a=menu.querySelector('.active'); if(a)a.scrollIntoView({block:'nearest'}); }
+      function onDoc(e){ if(!wrap.contains(e.target)) close(); }
+      items.forEach(function(o){ var it=document.createElement('div'); it.className='pvb-dd-opt'+(o.value===cur?' active':''); it.textContent=o.label;
+        it.addEventListener('click',function(e){ e.stopPropagation(); cur=o.value; paint(); [].forEach.call(menu.children,function(x){x.classList.toggle('active',x===it);}); close(); if(onSelect)onSelect(cur); });
+        menu.appendChild(it); });
+      btn.addEventListener('click',function(e){ e.stopPropagation(); if(menu.hidden)open(); else close(); });
+      paint(); wrap.appendChild(btn); wrap.appendChild(menu); host.appendChild(wrap);
+    }
+    var row=document.querySelector('#cs-incoming-mount .lwz-row'); if(!row) return;
+    var destHost=row.querySelector('.lwz-dest'), charHost=row.querySelector('.lwz-char');
+    row.dataset.dest=''; row.dataset.char='';
+    lwzDropdown(destHost, [
+      {value:'',label:'Send to… (untagged: I file it by hand)'},
+      {value:'character',label:'Cast character'},
+      {value:'item',label:'Item / prop'},
+      {value:'scene',label:'Scene / campus'},
+      {value:'logo',label:'Logo'},
+      {value:'icon',label:'Icon'}
+    ], '', function(v){ row.dataset.dest=v; charHost.hidden=(v!=='character'); }, 'Send to…');
+    lwzDropdown(charHost, [
+      {value:'',label:'Character…'},
+      {value:'Renee',label:'Renee'},{value:'Patricia',label:'Patricia'},{value:'Anthony',label:'Anthony'},
+      {value:'Ricardo',label:'Ricardo'},{value:'Mr. Silva',label:'Mr. Silva'},{value:'Abby',label:'Abby'}
+    ], '', function(v){ row.dataset.char=v; }, 'Character…');
+  })();
   </script>
   <div id="pvb-lightbox" class="pvb-lightbox" hidden>
       <button class="pvb-lb-close" id="pvb-lb-close" type="button" aria-label="Close">&times;</button>
