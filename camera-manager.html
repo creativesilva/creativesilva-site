@@ -47,7 +47,10 @@
   .btn.danger:hover{background:rgba(224,64,58,.16);filter:none;}
 
   .summary{display:flex;align-items:center;gap:14px 22px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--teal);padding:13px 18px;margin-bottom:16px;}
-  .summary .big{font-family:var(--font);font-size:1.6rem;color:var(--teal-lt);}
+  /* Availability count as a glowing digital-clock readout (bright teal, soft pulse). */
+  .summary .big{display:inline-flex;align-items:center;justify-content:center;min-width:2.1em;padding:5px 15px;font-family:var(--font);font-weight:700;font-size:2rem;line-height:1;letter-spacing:.07em;color:#5ff0f0;background:rgba(0,22,22,.9);border:1px solid rgba(0,184,184,.55);font-variant-numeric:tabular-nums;text-shadow:0 0 8px rgba(95,240,240,.85),0 0 18px rgba(0,184,184,.55);animation:clockPulse 2.4s ease-in-out infinite;}
+  @keyframes clockPulse{0%,100%{box-shadow:inset 0 0 12px rgba(0,184,184,.15),0 0 12px rgba(0,184,184,.24);}50%{box-shadow:inset 0 0 14px rgba(0,184,184,.30),0 0 24px rgba(0,184,184,.55);}}
+  @media (prefers-reduced-motion:reduce){ .summary .big{animation:none;} }
   .summary .lab{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;}
   .sync{margin-left:auto;font-size:.72rem;color:var(--faint);letter-spacing:.03em;}
   .sync b{color:var(--ok);font-weight:600;}
