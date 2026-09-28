@@ -174,7 +174,7 @@
   .camlog-note.empty{color:var(--faint);border-top-color:rgba(0,184,184,.14);}
   .camlog-acts{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:2px;}
   .camlog-issues{font-size:.78rem;color:#ff9a8a;border-top:1px dashed rgba(224,64,58,.28);padding-top:6px;line-height:1.4;}
-  .camnum{cursor:pointer;text-decoration:underline;text-decoration-color:rgba(0,184,184,.45);text-underline-offset:3px;}
+  .camnum{cursor:pointer;text-transform:uppercase;text-decoration:underline;text-decoration-color:rgba(0,184,184,.45);text-underline-offset:3px;}
   .camnum:hover{color:var(--teal-lt);}
   /* Camera detail modal */
   .mpanel-lg{max-width:560px;}
@@ -423,12 +423,12 @@
     var od=(DATA.checkouts||[]).filter(function(c){ return c.kind!=='equipment' && statusOf(c)==='out' && c.due && c.due<today; }).sort(function(a,b){ return (a.due||'')<(b.due||'')?-1:1; });
     var odEl=document.getElementById('overdueDigest');
     if(odEl){ if(od.length){ odEl.className='digest overdue-digest';
-        odEl.innerHTML='<div class="digest-h">&#9888; '+od.length+' camera'+(od.length>1?'s':'')+' overdue</div><div class="digest-body">'+od.map(function(c){ var n=daysBetween(c.due,today); return '<span class="digest-item">'+esc(c.camera)+' &middot; '+esc(nameOf(c))+' <b>'+n+'d</b></span>'; }).join('')+'</div>';
+        odEl.innerHTML='<div class="digest-h">&#9888; '+od.length+' camera'+(od.length>1?'s':'')+' overdue</div><div class="digest-body">'+od.map(function(c){ var n=daysBetween(c.due,today); return '<span class="digest-item"><span class="camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span> &middot; '+esc(nameOf(c))+' <b>'+n+'d</b></span>'; }).join('')+'</div>';
         odEl.style.display=''; } else { odEl.style.display='none'; odEl.innerHTML=''; } }
     var pend=(DATA.checkouts||[]).filter(function(c){ return c.kind!=='equipment' && statusOf(c)==='reserved' && c.approved===false; }).sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; });
     var pEl=document.getElementById('pendingDigest');
     if(pEl){ if(pend.length){ pEl.className='digest pending-digest';
-        pEl.innerHTML='<div class="digest-h">'+pend.length+' student request'+(pend.length>1?'s':'')+' awaiting approval</div><div class="digest-body">'+pend.map(function(c){ return '<span class="digest-item">'+esc(c.camera)+' &middot; '+esc(nameOf(c))+' &middot; '+fmt(c.out)+'</span>'; }).join('')+'</div>';
+        pEl.innerHTML='<div class="digest-h">'+pend.length+' student request'+(pend.length>1?'s':'')+' awaiting approval</div><div class="digest-body">'+pend.map(function(c){ return '<span class="digest-item"><span class="camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span> &middot; '+esc(nameOf(c))+' &middot; '+fmt(c.out)+'</span>'; }).join('')+'</div>';
         pEl.style.display=''; } else { pEl.style.display='none'; pEl.innerHTML=''; } }
   }
 
@@ -604,8 +604,8 @@
       .sort(function(a,b){ return (b.returned_date||b.created||'')>(a.returned_date||a.created||'')?1:-1; });
     var hn=document.getElementById('histn'); if(hn) hn.textContent='('+ret.length+')';
     var hh=document.getElementById('hist'); if(hh) hh.innerHTML=ret.length?ret.map(function(c){
-      var label=c.camera||EQUIP_LABEL[c.item]||c.item||'Item';
-      return '<div class="hrow"><span class="hc">'+esc(label)+'</span> &middot; '+esc(nameOf(c))+
+      var hc=c.camera?('<span class="hc camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span>'):('<span class="hc">'+esc(EQUIP_LABEL[c.item]||c.item||'Item')+'</span>');
+      return '<div class="hrow">'+hc+' &middot; '+esc(nameOf(c))+
              (c.note?' &middot; <span class="hnote">'+esc(c.note)+'</span>':'')+
              '<div class="hre">Out '+fmt(c.out)+' &rarr; returned '+fmt(c.returned_date)+'</div></div>';
     }).join(''):'<div class="foot">No returned checkouts yet.</div>';
@@ -624,9 +624,16 @@
     b.querySelectorAll('[data-oos]').forEach(function(el){ el.onclick=function(){ setOOS(el.getAttribute('data-oos'), el.getAttribute('data-oosval')==='1', el); }; });
     b.querySelectorAll('[data-approve]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-approve'), el); }; });
     b.querySelectorAll('[data-returncam]').forEach(function(el){ el.onclick=function(){ openReturnChecklist(el.getAttribute('data-returncam')); }; });
-    b.querySelectorAll('[data-camdetail]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); openCamDetail(el.getAttribute('data-camdetail')); }; });
-    b.querySelectorAll('[data-editid]').forEach(function(el){ el.ondblclick=function(e){ if(e.target.closest('button')||e.target.closest('.camnum')) return; openEditCheckout(el.getAttribute('data-editid')); }; });
   }
+  // Delegated so a camera number is clickable ANYWHERE (board, Camera Log, digests, history):
+  // single-click a number -> camera detail; double-click a checked-out card body -> edit/move.
+  document.addEventListener('click', function(e){
+    var cn=e.target.closest('[data-camdetail]'); if(cn){ e.preventDefault(); e.stopPropagation(); openCamDetail(cn.getAttribute('data-camdetail')); }
+  });
+  document.addEventListener('dblclick', function(e){
+    if(e.target.closest('button')||e.target.closest('.camnum')) return;
+    var ed=e.target.closest('[data-editid]'); if(ed) openEditCheckout(ed.getAttribute('data-editid'));
+  });
   function approve(id,btn){
     if(btn) btn.disabled=true;
     camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,approved:true})})
