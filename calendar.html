@@ -98,6 +98,8 @@
   .dm-tab.active{color:var(--teal-lt);border-bottom-color:var(--teal);}
   .dm-tabn{font-size:.62rem;color:var(--faint);}
   .dm-tab.active .dm-tabn{color:var(--teal-lt);}
+  .dm-tab[data-tab="overdue"]{color:#ff9a8a;} .dm-tab[data-tab="overdue"] .dm-tabn{color:#e0403a;}
+  .dm-tab[data-tab="overdue"].active{color:#ffb3a6;border-bottom-color:#e0403a;}
   .dm-body{flex:1 1 auto;overflow-y:auto;padding:8px 18px 18px;}
   .dm-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,184,184,.12);}
   .dm-cam{font-family:var(--font);font-weight:700;min-width:60px;color:#fff;}
@@ -225,7 +227,7 @@
     var events=[];
     (DATA.checkouts||[]).forEach(function(c){ var last=effLast(c); if(!last||!c.out) return;
       events.push({camera:c.camera, start:c.out, last:last, status:statusOf(c),
-        overdue:(statusOf(c)==='out' && c.due && c.due<=todayISO())}); });
+        overdue:(statusOf(c)==='out' && c.due && c.due<todayISO())}); });
     grid.innerHTML='';
     var MAXLANE=4;   // show up to 4 camera bars per day, then "+N more" opens the day card
     for(var w=0; w<6; w++){
@@ -286,6 +288,8 @@
   function dayOut(iso){ return checkoutsOnDay(iso).filter(function(c){ return statusOf(c)==='out'; }).sort(byCam); }
   function dayReserved(iso){ return checkoutsOnDay(iso).filter(function(c){ return statusOf(c)==='reserved'; }).sort(byCam); }
   function dayAvailable(iso){ var busy={}; checkoutsOnDay(iso).forEach(function(c){ busy[c.camera]=1; }); return (DATA.cameras||[]).filter(function(c){ return !busy[c]; }); }
+  // Global: every picked-up camera now past its return date and not toggled returned.
+  function overdueAll(){ return (DATA.checkouts||[]).filter(function(c){ return statusOf(c)==='out' && c.due && c.due<todayISO(); }).sort(byCam); }
   function dmTab(t,label,n){ return '<button type="button" class="dm-tab'+(DM_TAB===t?' active':'')+'" data-tab="'+t+'">'+label+' <span class="dm-tabn">'+n+'</span></button>'; }
   function openDayModal(iso){ DM_DAY=iso; DM_TAB='out'; renderDayModal(); document.getElementById('daymodal').classList.add('open'); }
   // A camera bar for the day card: chevron on the LEFT if it came in before this day,
@@ -300,11 +304,16 @@
   }
   function renderDayModal(){
     var iso=DM_DAY; if(!iso) return;
-    var out=dayOut(iso), res=dayReserved(iso), avail=dayAvailable(iso);
+    var out=dayOut(iso), res=dayReserved(iso), avail=dayAvailable(iso), od=overdueAll();
+    if(DM_TAB==='overdue' && !od.length) DM_TAB='out';
     document.getElementById('dm-title').textContent=prettyDate(iso);
-    document.getElementById('dm-tabs').innerHTML=dmTab('out','Checked out',out.length)+dmTab('reserved','Reserved',res.length)+dmTab('available','Available',avail.length);
+    var tabs=dmTab('out','Checked out',out.length)+dmTab('reserved','Reserved',res.length)+dmTab('available','Available',avail.length);
+    if(od.length) tabs+=dmTab('overdue','Overdue',od.length);
+    document.getElementById('dm-tabs').innerHTML=tabs;
     var body;
-    if(DM_TAB==='reserved'){
+    if(DM_TAB==='overdue'){
+      body=od.length?od.map(function(c){ var n=dayDiff(c.due,todayISO()); return '<div class="dm-row">'+dmBar(c,todayISO())+'<span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-tag od">'+n+(n===1?' day':' days')+' overdue</span></div>'; }).join(''):'<div class="dm-empty">Nothing overdue.</div>';
+    } else if(DM_TAB==='reserved'){
       body=res.length?res.map(function(c){ return '<div class="dm-row">'+dmBar(c,iso)+'<span class="dm-range">Reserved '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span></div>'; }).join(''):'<div class="dm-empty">No reservations this day.</div>';
     } else if(DM_TAB==='available'){
       body=avail.length?'<div class="dm-avail">'+avail.map(function(c){ return '<span class="dm-availcam">'+c+'<small>'+camCourse(c)+'</small></span>'; }).join('')+'</div>':'<div class="dm-empty">No cameras free this day.</div>';
