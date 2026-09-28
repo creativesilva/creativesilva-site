@@ -53,16 +53,30 @@
   .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px;}
   .dow div{font-family:var(--font);font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);text-align:center;}
   .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
-  .cell{min-height:92px;background:rgba(0,0,0,.22);border:1px solid var(--line-soft);padding:5px;display:flex;flex-direction:column;gap:4px;}
+  .cell{min-height:74px;background:rgba(0,0,0,.22);border:1px solid var(--line-soft);padding:6px;display:flex;flex-direction:column;gap:6px;}
   .cell.out-month{opacity:.32;} .cell.today{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal);}
+  .cell.has{cursor:pointer;background:rgba(0,184,184,.10);}
+  .cell.has:hover{background:rgba(0,184,184,.22);border-color:var(--line);}
   .daynum{font-family:var(--font);font-size:.72rem;color:var(--muted);}
   .cell.today .daynum{color:var(--teal-lt);font-weight:700;}
-  .pill{font-size:.68rem;line-height:1.25;padding:4px 6px;border-left:3px solid var(--teal);background:rgba(0,184,184,.14);color:#eafeff;}
-  .pill .cam{font-weight:700;display:block;background:none;border:0;padding:0;}
-  .pill .meta{color:var(--muted);font-size:.62rem;}
-  .pill.overdue{border-left-color:var(--orange);background:rgba(255,107,26,.14);}
-  .pill.returned{border-left-color:var(--grayed);background:rgba(160,180,180,.10);color:var(--faint);text-decoration:line-through;}
-  .pill.reserved{border-left-color:#f5b301;background:rgba(245,179,1,.14);color:#ffe1a3;}
+  .count{margin-top:auto;font-family:var(--font);font-weight:700;font-size:.86rem;color:#ffd0b0;background:rgba(255,107,26,.16);border-left:3px solid var(--orange);padding:4px 7px;}
+  .count small{display:block;font-weight:400;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+  /* day pop-out */
+  .daymodal{position:fixed;inset:0;background:rgba(2,12,12,.74);display:none;align-items:center;justify-content:center;padding:20px;z-index:60;}
+  .daymodal.open{display:flex;}
+  .dm-panel{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.97));border:1px solid var(--line);border-top:3px solid var(--teal);max-width:460px;width:100%;max-height:82vh;overflow:auto;}
+  .dm-head{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--line-soft);}
+  .dm-title{font-family:var(--font);font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#fff;font-size:.98rem;}
+  .dm-x{background:none;border:0;color:var(--muted);font-size:1.7rem;line-height:1;cursor:pointer;padding:0 4px;}
+  .dm-x:hover{color:#fff;}
+  .dm-body{padding:14px 18px 20px;}
+  .dm-count{font-family:var(--font);color:var(--teal-lt);font-size:1rem;margin-bottom:12px;}
+  .dm-row{display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,184,184,.12);}
+  .dm-cam{font-family:var(--font);font-weight:700;min-width:60px;color:#fff;}
+  .dm-range{color:var(--muted);font-size:.84rem;flex:1;}
+  .dm-tag{font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;white-space:nowrap;}
+  .dm-tag.res{background:rgba(245,179,1,.16);color:#ffd889;} .dm-tag.od{background:rgba(255,107,26,.18);color:#ffb28a;}
+  .dm-empty{color:var(--faint);}
   .k-res{background:#f5b301;}
   .cam.reserved{border-left-color:#f5b301;} .cam.reserved .s{color:#ffd889;}
   .foot{margin-top:22px;font-size:.74rem;color:var(--faint);}
@@ -98,6 +112,13 @@
     <p class="foot" id="foot"></p>
   </div>
 
+  <div class="daymodal" id="daymodal">
+    <div class="dm-panel">
+      <div class="dm-head"><span class="dm-title" id="dm-title"></span><button class="dm-x" id="dm-x" aria-label="Close">&times;</button></div>
+      <div class="dm-body" id="dm-body"></div>
+    </div>
+  </div>
+
 <script>
 (function(){
   var API='https://pvhs-canvas-grader.onrender.com';
@@ -129,26 +150,49 @@
       board.appendChild(el);
     });
   }
+  // Hotel-style span: a camera counts as out every day from its pickup date through its due date.
+  function checkoutsOnDay(iso){
+    return (DATA.checkouts||[]).filter(function(c){
+      if(statusOf(c)==='returned') return false;
+      var o=c.out||'', du=c.due||o;
+      return o && iso>=o && iso<=du;
+    });
+  }
+  function prettyDate(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]);
+    var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    return days[d.getDay()]+', '+MONTHS[+p[1]-1]+' '+(+p[2]); }
   function renderCal(){
     mtitle.textContent=MONTHS[view.getMonth()]+' '+view.getFullYear();
     var first=new Date(view.getFullYear(),view.getMonth(),1);
     var start=new Date(first); start.setDate(1-first.getDay());
+    var total=(DATA.cameras||[]).length;
     grid.innerHTML='';
     for(var i=0;i<42;i++){ var d=new Date(start); d.setDate(start.getDate()+i); var iso=d.toISOString().slice(0,10);
       var cell=document.createElement('div'); cell.className='cell'+(d.getMonth()!==view.getMonth()?' out-month':'')+(iso===todayISO()?' today':'');
       var dn=document.createElement('div'); dn.className='daynum'; dn.textContent=d.getDate(); cell.appendChild(dn);
-      DATA.checkouts.filter(function(c){ return c.out===iso && statusOf(c)!=='returned'; }).forEach(function(c){
-        var s=statusOf(c);
-        var overdue=s==='out' && c.due < todayISO();
-        var cls=s==='reserved'?' reserved':(overdue?' overdue':'');
-        var meta=s==='reserved'?'reserved':(overdue?('overdue '+fmt(c.due)):('due '+fmt(c.due)));
-        var pill=document.createElement('div'); pill.className='pill'+cls;
-        pill.innerHTML='<span class="cam">'+c.camera+'</span><span class="meta">'+meta+'</span>';
-        cell.appendChild(pill);
-      });
+      var n=checkoutsOnDay(iso).length;
+      if(n){
+        cell.className+=' has';
+        var b=document.createElement('div'); b.className='count'; b.innerHTML=n+' of '+total+'<small>checked out</small>';
+        cell.appendChild(b);
+        (function(day){ cell.addEventListener('click',function(){ openDayModal(day); }); })(iso);
+      }
       grid.appendChild(cell);
     }
   }
+  function openDayModal(iso){
+    var list=checkoutsOnDay(iso).slice().sort(function(a,b){ return (a.camera||'').localeCompare(b.camera||''); });
+    var total=(DATA.cameras||[]).length;
+    document.getElementById('dm-title').textContent=prettyDate(iso);
+    var rows=list.map(function(c){
+      var s=statusOf(c);
+      var tag=s==='reserved'?'<span class="dm-tag res">Reserved</span>':((c.due&&c.due<todayISO())?'<span class="dm-tag od">Overdue</span>':'');
+      return '<div class="dm-row"><span class="dm-cam">'+c.camera+'</span><span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span>'+tag+'</div>';
+    }).join('') || '<div class="dm-empty">No cameras checked out this day.</div>';
+    document.getElementById('dm-body').innerHTML='<div class="dm-count">'+list.length+' of '+total+' cameras checked out</div>'+rows;
+    document.getElementById('daymodal').classList.add('open');
+  }
+  function closeDayModal(){ document.getElementById('daymodal').classList.remove('open'); }
   function load(){
     fetch(API+'/api/camera/calendar',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
       DATA={cameras:d.cameras||[],checkouts:d.checkouts||[]};
@@ -158,6 +202,9 @@
   }
   document.getElementById('prev').addEventListener('click',function(){ view.setMonth(view.getMonth()-1); renderCal(); });
   document.getElementById('next').addEventListener('click',function(){ view.setMonth(view.getMonth()+1); renderCal(); });
+  document.getElementById('dm-x').addEventListener('click',closeDayModal);
+  document.getElementById('daymodal').addEventListener('click',function(e){ if(e.target===this) closeDayModal(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeDayModal(); });
   load(); setInterval(load,60000);
 })();
 </script>
