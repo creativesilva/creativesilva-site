@@ -54,7 +54,7 @@
   .h .hcount{color:var(--faint);font-weight:600;letter-spacing:.04em;}
 
   .board{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px;}
-  .cam{background:rgba(0,0,0,.26);border:1px solid var(--line-soft);border-left:4px solid var(--ok);padding:13px 14px;display:flex;flex-direction:column;gap:7px;}
+  .cam{background:rgba(0,0,0,.32);border:1px solid var(--line-soft);border-left:4px solid var(--ok);padding:13px 14px;display:flex;flex-direction:column;gap:7px;backdrop-filter:blur(6px) saturate(1.05);-webkit-backdrop-filter:blur(6px) saturate(1.05);}
   .cam.reserved{border-left-color:var(--gold);}
   .cam.out{border-left-color:var(--orange);}
   .cam.overdue{border-left-color:var(--red);}
@@ -66,6 +66,32 @@
   .pill.reserved{background:rgba(245,179,1,.18);color:#ffd889;}
   .pill.out{background:rgba(255,107,26,.18);color:#ffc7a6;}
   .pill.overdue{background:rgba(224,64,58,.22);color:#ff9a8a;}
+  /* status accordion sections: all 18 cameras split by state (out/reserved/available) + equipment */
+  .csec{margin-bottom:14px;border:1px solid var(--line-soft);border-left:4px solid var(--muted);background:rgba(0,0,0,.14);}
+  .csec.sec-out{border-left-color:var(--orange);} .csec.sec-reserved{border-left-color:var(--gold);}
+  .csec.sec-avail{border-left-color:var(--ok);} .csec.sec-equip{border-left-color:var(--teal);}
+  .csec-head{width:100%;display:flex;align-items:center;gap:10px;cursor:pointer;background:transparent;border:0;color:var(--text);
+    font-family:var(--font);text-align:left;padding:13px 15px;text-transform:uppercase;letter-spacing:.1em;font-weight:600;font-size:.82rem;}
+  .csec-head:hover{background:rgba(0,184,184,.05);}
+  .csec-dot{width:11px;height:11px;flex:0 0 auto;}
+  .csec-dot.out{background:var(--orange);} .csec-dot.reserved{background:var(--gold);} .csec-dot.avail{background:var(--ok);} .csec-dot.equip{background:var(--teal);}
+  .csec-n{color:var(--faint);font-weight:700;}
+  .csec-chev{margin-left:auto;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .15s;}
+  .csec.open .csec-chev{transform:rotate(-135deg);}
+  .csec-body{display:none;padding:2px 14px 14px;}
+  .csec.open .csec-body{display:block;}
+  .csec-empty{color:var(--faint);font-size:.85rem;padding:6px 2px 2px;}
+  /* returning (undo) state */
+  .cam.returning{border-left-color:var(--teal);}
+  .returning-msg{font-size:.82rem;color:var(--teal-lt);}
+  .btn.undo{background:var(--teal);color:#04110f;border-color:var(--teal);font-weight:700;}
+  .btn.undo:hover{filter:brightness(1.1);}
+  /* equipment pool rows */
+  .equip-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 2px;border-bottom:1px solid rgba(0,184,184,.12);}
+  .equip-row:last-child{border-bottom:0;}
+  .equip-name{font-family:var(--font);font-weight:600;color:#eafeff;font-size:.92rem;}
+  .equip-avail{font-size:.82rem;white-space:nowrap;}
+  .equip-avail .ok{color:#8ff0b0;} .equip-avail .none{color:#ff9a8a;}
   .who{font-family:var(--font);font-weight:600;font-size:.95rem;color:#fff;}
   .meta{font-size:.76rem;color:var(--muted);}
   .meta .co{font-size:.6rem;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);}
@@ -86,7 +112,7 @@
   details.histbox[open] summary:before{content:"\25BE ";}
 
   .calpanel{margin-top:26px;border:1px solid var(--line);border-top:3px solid var(--teal);background:rgba(4,16,15,.5);}
-  .calpanel iframe{width:100%;height:940px;border:0;display:block;background:#060f0f;}
+  .calpanel iframe{width:100%;height:640px;border:0;display:block;background:#060f0f;}
   .foot{margin-top:20px;font-size:.74rem;color:var(--faint);}
 
   /* modal (reserve) + PIN gate share the backdrop look */
@@ -147,7 +173,7 @@
     <img src="https://www.creativesilva.com/assets/PV%20LOGO%20NEW.png" alt="PVHS" />
     <h2>Camera Manager</h2>
     <p>Teacher access. Enter the camera password to reserve, check out, and return cameras.</p>
-    <input type="text" id="pin" inputmode="text" autocomplete="off" data-1p-ignore data-lpignore="true" placeholder="Camera password" />
+    <input type="password" id="pin" autocomplete="off" data-1p-ignore data-lpignore="true" placeholder="Camera password" />
     <button class="go" id="pingo">Continue</button>
     <div class="err" id="pinerr"></div>
   </div>
@@ -166,8 +192,7 @@
     <div class="sync" id="sync">Connecting&#8230;</div>
   </div>
 
-  <div class="h">Cameras <span class="hcount" id="boardcount"></span></div>
-  <div class="board" id="board"><span class="foot">Loading&#8230;</span></div>
+  <div id="board"><span class="foot">Loading&#8230;</span></div>
 
   <div class="histwrap">
     <details class="histbox" id="histbox">
@@ -252,56 +277,105 @@
     if(par.length) bits.push('<b>Parent:</b> '+par.join(' '));
     return bits.length?'<div class="contact">'+bits.join('<br>')+'</div>':'';
   }
+  // Inventory of add-on gear (pools by quantity). Real product names per Chris.
+  var EQUIPMENT=[
+    {key:'tripod',label:'K&F Concept Tripod',total:5},
+    {key:'wide',label:'Canon RF-S 10-18mm ultra-wide',total:2},
+    {key:'zoom',label:'Canon RF 100-400mm ultra-zoom',total:2},
+    {key:'speedlite',label:'Canon Speedlite EL-10 flash',total:5}
+  ];
+  var SECDEF=[
+    {key:'out',label:'Checked out',cls:'sec-out',dot:'out'},
+    {key:'reserved',label:'Reserved',cls:'sec-reserved',dot:'reserved'},
+    {key:'avail',label:'Available',cls:'sec-avail',dot:'avail'}
+  ];
+  function secOpen(k){ try{ var v=sessionStorage.getItem('csec:'+k); return v===null?true:v==='1'; }catch(e){ return true; } }
+  function setSecOpen(k,o){ try{ sessionStorage.setItem('csec:'+k,o?'1':'0'); }catch(e){} }
+  function catOf(cam){ var c=activeFor(cam); if(!c) return 'avail'; return statusOf(c)==='reserved'?'reserved':'out'; }
+
+  function camCard(cam){
+    var c=activeFor(cam), p2=P2.indexOf(cam)>=0?'<span class="p2">Photo 2 only</span>':'';
+    if(!c){
+      return '<div class="cam"><div class="cam-top"><span class="n">'+cam+'</span><span class="pill avail">Available</span></div>'+
+             (p2?'<div>'+p2+'</div>':'')+
+             '<div class="acts"><button class="btn sm" data-reserve="'+cam+'">Reserve</button></div></div>';
+    }
+    if(pendingReturns[c.id]){
+      return '<div class="cam returning"><div class="cam-top"><span class="n">'+cam+'</span><span class="pill out">Returning</span></div>'+
+             (p2?'<div>'+p2+'</div>':'')+
+             '<div class="who">'+esc(nameOf(c))+'</div>'+
+             '<div class="returning-msg">Goes back in the pool in <b data-count="'+c.id+'">15</b>s.</div>'+
+             '<div class="acts"><button class="btn sm undo" data-undo="'+c.id+'">Undo return</button></div></div>';
+    }
+    var st=statusOf(c), od=isOverdue(c), cls=od?'overdue':st;
+    var pill=od?'<span class="pill overdue">Overdue</span>':(st==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill out">Picked up</span>');
+    var flag=(c.flag||'').indexOf('unknown')>=0?'<div class="flagwarn">&#9888; ID not in roster</div>':'';
+    var acts;
+    if(st==='reserved'){
+      acts='<button class="btn sm" data-status="out" data-id="'+c.id+'">Mark picked up</button>'+
+           '<button class="btn sm danger" data-del="'+c.id+'">Cancel</button>';
+    } else {
+      acts='<button class="btn sm ghost" data-status="reserved" data-id="'+c.id+'">Undo pickup</button>'+
+           '<button class="btn sm warn" data-return="'+c.id+'">Mark returned</button>';
+    }
+    return '<div class="cam '+cls+'"><div class="cam-top"><span class="n">'+cam+'</span>'+pill+'</div>'+
+           (p2?'<div>'+p2+'</div>':'')+
+           '<div class="who">'+esc(nameOf(c))+'</div>'+
+           '<div class="meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+'<span class="co">'+esc(c.course||camCourse(cam))+'</span></div>'+
+           '<div class="meta">Out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+(c.picked_up_date?(' &middot; picked up '+fmt(c.picked_up_date)):'')+'</div>'+
+           flag+contactLine(c)+
+           '<div class="acts">'+acts+'</div></div>';
+  }
+  function equipOut(){ var o={}; EQUIPMENT.forEach(function(e){ o[e.key]=0; }); DATA.checkouts.forEach(function(c){ if(statusOf(c)!=='returned'&&c.extras){ EQUIPMENT.forEach(function(e){ o[e.key]+=(+c.extras[e.key]||0); }); } }); return o; }
+
   function renderBoard(){
-    var cams=DATA.cameras.length?DATA.cameras:[], avail=0, html='';
-    cams.forEach(function(cam){
-      var c=activeFor(cam), p2=P2.indexOf(cam)>=0?'<span class="p2">Photo 2 only</span>':'';
-      if(!c){
-        avail++;
-        html+='<div class="cam"><div class="cam-top"><span class="n">'+cam+'</span><span class="pill avail">Available</span></div>'+
-              (p2?'<div>'+p2+'</div>':'')+
-              '<div class="acts"><button class="btn sm" data-reserve="'+cam+'">Reserve</button></div></div>';
-        return;
-      }
-      var st=statusOf(c), od=isOverdue(c), cls=od?'overdue':st;
-      var pill=od?'<span class="pill overdue">Overdue</span>':(st==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill out">Picked up</span>');
-      var flag=(c.flag||'').indexOf('unknown')>=0?'<div class="flagwarn">&#9888; ID not in roster</div>':'';
-      var acts='';
-      if(st==='reserved'){
-        acts='<button class="btn sm" data-status="out" data-id="'+c.id+'">Mark picked up</button>'+
-             '<button class="btn sm danger" data-del="'+c.id+'">Cancel</button>';
-      } else { // out / overdue
-        acts='<button class="btn sm warn" data-status="returned" data-id="'+c.id+'">Mark returned</button>'+
-             '<button class="btn sm ghost" data-status="reserved" data-id="'+c.id+'">Undo pickup</button>';
-      }
-      html+='<div class="cam '+cls+'"><div class="cam-top"><span class="n">'+cam+'</span>'+pill+'</div>'+
-            (p2?'<div>'+p2+'</div>':'')+
-            '<div class="who">'+esc(nameOf(c))+'</div>'+
-            '<div class="meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+'<span class="co">'+esc(c.course||camCourse(cam))+'</span></div>'+
-            '<div class="meta">Out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+(c.picked_up_date?(' &middot; picked up '+fmt(c.picked_up_date)):'')+'</div>'+
-            flag+contactLine(c)+
-            '<div class="acts">'+acts+'</div></div>';
+    var host=document.getElementById('board'); if(!host) return;
+    var cams=DATA.cameras||[], counts={out:0,reserved:0,avail:0};
+    cams.forEach(function(cam){ counts[catOf(cam)]++; });
+    var html='';
+    SECDEF.forEach(function(s){
+      var list=cams.filter(function(cam){ return catOf(cam)===s.key; });
+      var open=secOpen(s.key);
+      html+='<div class="csec '+s.cls+(open?' open':'')+'">'+
+        '<button class="csec-head" type="button" data-sectoggle="'+s.key+'"><span class="csec-dot '+s.dot+'"></span>'+s.label+' <span class="csec-n">'+list.length+'</span><span class="csec-chev"></span></button>'+
+        '<div class="csec-body">'+(list.length?('<div class="board">'+list.map(camCard).join('')+'</div>'):'<div class="csec-empty">None right now.</div>')+'</div>'+
+      '</div>';
     });
-    document.getElementById('board').innerHTML=html||'<span class="foot">No cameras configured.</span>';
-    document.getElementById('availn').textContent=avail;
-    document.getElementById('totn').textContent=cams.length;
-    document.getElementById('boardcount').textContent=(cams.length-avail)+' out, '+avail+' free';
-    // history (returned)
+    var eo=equipOut(), eopen=secOpen('equip');
+    html+='<div class="csec sec-equip'+(eopen?' open':'')+'">'+
+      '<button class="csec-head" type="button" data-sectoggle="equip"><span class="csec-dot equip"></span>Additional equipment<span class="csec-chev"></span></button>'+
+      '<div class="csec-body">'+EQUIPMENT.map(function(e){ var a=e.total-(eo[e.key]||0); return '<div class="equip-row"><span class="equip-name">'+esc(e.label)+'</span><span class="equip-avail"><span class="'+(a>0?'ok':'none')+'">'+a+' of '+e.total+' available</span></span></div>'; }).join('')+'</div>'+
+    '</div>';
+    host.innerHTML=html;
+    var an=document.getElementById('availn'); if(an) an.textContent=counts.avail;
+    var tn=document.getElementById('totn'); if(tn) tn.textContent=cams.length;
     var ret=DATA.checkouts.filter(function(c){ return statusOf(c)==='returned'; })
       .sort(function(a,b){ return (b.returned_date||b.created||'')>(a.returned_date||a.created||'')?1:-1; });
-    document.getElementById('histn').textContent='('+ret.length+')';
-    document.getElementById('hist').innerHTML=ret.length?ret.map(function(c){
+    var hn=document.getElementById('histn'); if(hn) hn.textContent='('+ret.length+')';
+    var hh=document.getElementById('hist'); if(hh) hh.innerHTML=ret.length?ret.map(function(c){
       return '<div class="hrow"><span class="hc">'+c.camera+'</span> &middot; '+esc(nameOf(c))+
              '<div class="hre">Out '+fmt(c.out)+' &rarr; returned '+fmt(c.returned_date)+'</div></div>';
     }).join(''):'<div class="foot">No returned checkouts yet.</div>';
-    bindBoard();
+    bindBoard(); startTicker();
   }
   function bindBoard(){
     var b=document.getElementById('board');
+    b.querySelectorAll('[data-sectoggle]').forEach(function(el){ el.onclick=function(){ var k=el.getAttribute('data-sectoggle'), sec=el.parentNode, open=!sec.classList.contains('open'); sec.classList.toggle('open',open); setSecOpen(k,open); }; });
+    b.querySelectorAll('[data-return]').forEach(function(el){ el.onclick=function(){ markReturned(el.getAttribute('data-return')); }; });
+    b.querySelectorAll('[data-undo]').forEach(function(el){ el.onclick=function(){ undoReturn(el.getAttribute('data-undo')); }; });
     b.querySelectorAll('[data-status]').forEach(function(el){ el.onclick=function(){ setStatus(el.getAttribute('data-id'), el.getAttribute('data-status'), el); }; });
     b.querySelectorAll('[data-del]').forEach(function(el){ el.onclick=function(){ if(confirm('Cancel this reservation? It will be removed.')) del(el.getAttribute('data-del'), el); }; });
     b.querySelectorAll('[data-reserve]').forEach(function(el){ el.onclick=function(){ openReserve(el.getAttribute('data-reserve')); }; });
   }
+  // Mark-returned undo window: hold the return ~15s before committing, so a wrong camera can be undone.
+  var pendingReturns={}, ticker=null;
+  function markReturned(id){ if(pendingReturns[id]) return; pendingReturns[id]={deadline:Date.now()+15000}; pendingReturns[id].timer=setTimeout(function(){ commitReturn(id); },15000); renderBoard(); }
+  function undoReturn(id){ var p=pendingReturns[id]; if(p&&p.timer) clearTimeout(p.timer); delete pendingReturns[id]; renderBoard(); }
+  function commitReturn(id){ var p=pendingReturns[id]; if(p&&p.timer) clearTimeout(p.timer); delete pendingReturns[id];
+    camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:'returned'})})
+      .then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).then(function(){ return loadBoard(); }).then(reloadCal)
+      .catch(function(){ alert('Could not mark returned. Try again.'); loadBoard(); }); }
+  function startTicker(){ if(ticker) return; ticker=setInterval(function(){ var any=false; Object.keys(pendingReturns).forEach(function(id){ any=true; var rem=Math.max(0,Math.ceil((pendingReturns[id].deadline-Date.now())/1000)); var el=document.querySelector('[data-count="'+id+'"]'); if(el) el.textContent=rem; }); if(!any){ clearInterval(ticker); ticker=null; } },500); }
 
   function markSync(ok){
     var s=document.getElementById('sync');
@@ -309,6 +383,8 @@
     else s.textContent='Reconnecting…';
   }
   function reloadCal(){ try{ var f=document.getElementById('calframe'); f.contentWindow.location.reload(); }catch(e){ var f2=document.getElementById('calframe'); f2.src=f2.src; } }
+  // The embedded calendar posts its height so the iframe fits with no inner scrollbar.
+  window.addEventListener('message',function(e){ if(e.data&&typeof e.data.calH==='number'){ var f=document.getElementById('calframe'); if(f&&e.data.calH>200) f.style.height=(e.data.calH+4)+'px'; } });
 
   var polling=false;
   function loadBoard(){

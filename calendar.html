@@ -71,7 +71,7 @@
   .k-res{background:#f5b301;} .k-out{background:var(--orange);}
   .h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:22px 0 12px;padding-left:9px;border-left:3px solid var(--teal);}
   .board{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:12px;}
-  .cam{background:rgba(0,0,0,.24);border:1px solid var(--line-soft);border-left:4px solid var(--orange);padding:13px 14px;}
+  .cam{background:rgba(0,0,0,.30);border:1px solid var(--line-soft);border-left:4px solid var(--orange);padding:13px 14px;backdrop-filter:blur(6px) saturate(1.05);-webkit-backdrop-filter:blur(6px) saturate(1.05);}
   .cam.reserved{border-left-color:#f5b301;}
   .cam .n{font-family:var(--font);font-weight:600;letter-spacing:.03em;font-size:1rem;}
   .cam .s{font-size:.78rem;color:#ffc7a6;margin-top:3px;}
@@ -88,7 +88,8 @@
   .grid{display:flex;flex-direction:column;}
   .week{position:relative;}
   .wdays{display:grid;grid-template-columns:repeat(7,1fr);}
-  .wcell{min-height:calc(24px + var(--lanes,0) * 20px + 6px);background:rgba(0,0,0,.24);border:1px solid var(--line-soft);border-top:0;border-left:0;padding:3px 6px;cursor:pointer;}
+  /* uniform day cells (same size regardless of how many camera bars), Google-calendar style */
+  .wcell{min-height:130px;background:rgba(0,0,0,.30);border:1px solid var(--line-soft);border-top:0;border-left:0;padding:3px 6px;cursor:pointer;backdrop-filter:blur(5px) saturate(1.05);-webkit-backdrop-filter:blur(5px) saturate(1.05);}
   .wcell:first-child{border-left:1px solid var(--line-soft);}
   .week:first-child .wcell{border-top:1px solid var(--line-soft);}
   .wcell.out-month{opacity:.4;} .wcell.today{box-shadow:inset 0 0 0 2px var(--teal);}
@@ -137,6 +138,9 @@
   .dm-availcam small{display:block;font-weight:400;font-size:.56rem;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:2px;}
   .foot{margin-top:22px;font-size:.74rem;color:var(--faint);}
   body.embed .silva-nav, body.embed .intro{display:none;}
+  /* embedded in the Teacher Console: show ONLY the month calendar (the console has its own board above) */
+  body.embed .summary, body.embed .h, body.embed #board{display:none;}
+  body.embed{min-height:0;}   /* so the parent can measure true content height (no min-height:100vh feedback loop) */
   body.embed .wrap{padding-top:16px;}
 </style>
 </head>
@@ -406,8 +410,12 @@
       DATA={cameras:d.cameras||[],checkouts:d.checkouts||[]};
       renderBoard(); renderCal(); if(DM_DAY) renderDayModal();
       foot.textContent='Updated '+new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+'. Refreshes automatically.';
+      postHeight(); setTimeout(postHeight,80);
     }).catch(function(){ foot.textContent='Could not load the calendar. It will keep trying.'; });
   }
+  // When embedded in the Teacher Console, tell the parent our height so the iframe fits with no scrollbar.
+  function postHeight(){ if(window.parent===window) return; try{ parent.postMessage({calH:document.body.scrollHeight}, '*'); }catch(e){} }
+  window.addEventListener('resize',postHeight);
   document.getElementById('prev').addEventListener('click',function(){ view.setMonth(view.getMonth()-1); renderCal(); });
   document.getElementById('next').addEventListener('click',function(){ view.setMonth(view.getMonth()+1); renderCal(); });
   document.getElementById('dm-x').addEventListener('click',closeDayModal);
