@@ -635,7 +635,7 @@
       try{
         var b=document.getElementById('dm-body');
         if(b) b.innerHTML='<div class="dm-empty" style="padding:24px 6px;text-align:center;">This screen did not load right. Tap reload and try again.<br><button type="button" class="dc-btn rv-primary" id="dm-retry" style="margin-top:14px;">Reload</button></div>';
-        var r=document.getElementById('dm-retry'); if(r) r.addEventListener('click', function(){ RESV=null; DM_RESERVE_CAM=null; DM_DONE=false; closeDayModal(); load(); });
+        var r=document.getElementById('dm-retry'); if(r) r.addEventListener('click', function(){ RESV=null; RESV_RESUME_DAY=null; DM_RESERVE_CAM=null; DM_CAM=null; DM_DONE=false; DM_DAY=null; closeDayModal(); load(); });
       }catch(e){}
     }
   }
@@ -881,7 +881,7 @@
   }
   function showBanner(){
     var b=document.getElementById('rvBanner');
-    b.innerHTML='<span>Reserving as <b>'+esc(RESV.label)+'</b>. Tap a <b>school day</b> below, then pick an available camera.</span><button type="button" id="rv-cancel" class="rv-cancelbtn">Cancel</button>';
+    b.innerHTML='<span>Reserving as <b>'+esc(RESV.label)+'</b> &nbsp;Tap a <b>school day</b> below, then pick an available camera.</span><button type="button" id="rv-cancel" class="rv-cancelbtn">Cancel</button>';
     b.style.display='';
     document.getElementById('rv-cancel').addEventListener('click',cancelReserve);
     try{ b.scrollIntoView({block:'center'}); }catch(e){}
@@ -969,7 +969,7 @@
     var st=document.getElementById('rv-start'); if(st) st.addEventListener('click',rvStart);
     var x=document.getElementById('rv-x'); if(x) x.addEventListener('click',closeReserveModal);
     var m=document.getElementById('rvmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeReserveModal(); });
-    var rb=document.getElementById('reserveMonthBtn'); if(rb) rb.addEventListener('click',openReserveFlow);
+    var rb=document.getElementById('reserveMonthBtn'); if(rb) rb.addEventListener('click',function(){ openReserveFlow(); });  // wrap: never pass the click Event as resumeDay
     var qb=document.getElementById('qrMonthBtn'); if(qb) qb.addEventListener('click',openQR);
   })();
 
