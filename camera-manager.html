@@ -173,6 +173,29 @@
   .camlog-note{font-size:.8rem;color:#ffd889;white-space:pre-line;line-height:1.4;border-top:1px dashed rgba(245,179,1,.28);padding-top:6px;}
   .camlog-note.empty{color:var(--faint);border-top-color:rgba(0,184,184,.14);}
   .camlog-acts{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:2px;}
+  .camlog-issues{font-size:.78rem;color:#ff9a8a;border-top:1px dashed rgba(224,64,58,.28);padding-top:6px;line-height:1.4;}
+  .camnum{cursor:pointer;text-decoration:underline;text-decoration-color:rgba(0,184,184,.45);text-underline-offset:3px;}
+  .camnum:hover{color:var(--teal-lt);}
+  /* Camera detail modal */
+  .mpanel-lg{max-width:560px;}
+  #cd-body{max-height:74vh;overflow-y:auto;}
+  .cd-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;}
+  .cd-cur{background:rgba(0,0,0,.24);border:1px solid var(--line-soft);border-left:3px solid var(--orange);padding:10px 12px;margin-bottom:14px;}
+  .cd-cur-who{font-family:var(--font);font-weight:600;color:#fff;font-size:1rem;}
+  .cd-cur-meta{font-size:.8rem;color:var(--muted);margin:3px 0 8px;}
+  .cd-sec{border-top:1px solid var(--line-soft);padding-top:12px;margin-top:12px;}
+  .cd-h{font-family:var(--font);font-size:.64rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-lt);margin-bottom:8px;}
+  .cd-issues{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
+  .cd-issue{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(224,64,58,.10);border-left:3px solid var(--red);padding:7px 10px;font-size:.88rem;color:#ffb3a6;}
+  .cd-add{display:flex;gap:8px;} .cd-add input{margin-bottom:0;}
+  #cd-note{margin-bottom:8px;}
+  .cd-log{display:flex;flex-direction:column;gap:5px;max-height:150px;overflow-y:auto;}
+  .cd-logrow{font-size:.82rem;color:var(--muted);} .cd-logdate{color:var(--teal-lt);font-weight:600;margin-right:6px;}
+  .cd-hist{display:flex;flex-direction:column;gap:6px;}
+  .cd-histrow{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted);border-bottom:1px solid rgba(0,184,184,.10);padding-bottom:5px;}
+  .cd-histwho{font-weight:600;color:#eafeff;flex:1 1 auto;} .cd-histdates{color:var(--faint);white-space:nowrap;}
+  .cd-empty{color:var(--faint);font-size:.85rem;}
+  .ed-btnrow{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:4px;}
   .retsub{color:var(--muted);font-size:.86rem;margin:0 0 12px;}
   .retitem{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,184,184,.12);font-family:var(--body);font-size:.95rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:400;cursor:pointer;}
   .retitem input{width:17px;height:17px;accent-color:var(--teal);}
@@ -313,6 +336,40 @@
   </div>
 </div>
 
+<!-- Camera detail: click a camera number. Condition issues (resolve when fixed), standing note,
+     permanent history log, and the camera's checkout history. -->
+<div class="modal" id="camdetail">
+  <div class="mpanel mpanel-lg">
+    <div class="mhead"><span class="mtitle" id="cd-title">Camera</span><button class="mx" id="cd-x" aria-label="Close">&times;</button></div>
+    <div class="mbody" id="cd-body"></div>
+  </div>
+</div>
+
+<!-- Edit / move / delete a checkout (double-click a card, or Edit from the camera detail) -->
+<div class="modal" id="editmodal">
+  <div class="mpanel">
+    <div class="mhead"><span class="mtitle" id="ed-title">Edit checkout</span><button class="mx" id="ed-x" aria-label="Close">&times;</button></div>
+    <div class="mbody">
+      <div class="mmsg" id="ed-msg"></div>
+      <label for="ed-sid">Student ID number</label>
+      <input type="text" id="ed-sid" inputmode="numeric" placeholder="Student ID" />
+      <div class="who-line" id="ed-who" aria-live="polite"></div>
+      <label for="ed-cam">Camera</label>
+      <div id="ed-cam"></div>
+      <label for="ed-out">Checkout date</label>
+      <input type="date" id="ed-out" />
+      <label for="ed-due">Due back</label>
+      <input type="date" id="ed-due" />
+      <label for="ed-status">Status</label>
+      <div id="ed-status"></div>
+      <div class="ed-btnrow">
+        <button class="go" id="ed-save">Save changes</button>
+        <button class="btn danger" id="ed-del" type="button">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="/js/silva-nav.js?v=catlock1"></script>
 <script>
 (function(){
@@ -426,12 +483,12 @@
   function camCard(cam){
     var c=activeFor(cam), p2=P2.indexOf(cam)>=0?'<span class="p2">Photo 2 only</span>':'';
     if(!c){
-      return '<div class="cam avail-card"><div class="cam-top"><span class="n">'+cam+'</span><span class="pill avail">Available</span></div>'+
+      return '<div class="cam avail-card"><div class="cam-top"><span class="n camnum" data-camdetail="'+cam+'" title="Open camera details">'+cam+'</span><span class="pill avail">Available</span></div>'+
              '<div class="acts"><button class="btn sm" data-reserve="'+cam+'">Reserve</button></div>'+
              '<div class="p2under">'+(P2.indexOf(cam)>=0?'Photo 2 only':'')+'</div></div>';
     }
     if(pendingReturns[c.id]){
-      return '<div class="cam returning"><div class="cam-top"><span class="n">'+cam+'</span><span class="pill out">Returning</span></div>'+
+      return '<div class="cam returning"><div class="cam-top"><span class="n camnum" data-camdetail="'+cam+'" title="Open camera details">'+cam+'</span><span class="pill out">Returning</span></div>'+
              '<div class="who">'+esc(nameOf(c))+'</div>'+
              '<div class="acts"><button class="btn sm undo" data-undo="'+c.id+'">Undo return</button></div>'+
              '<div class="returning-msg">Goes back in the pool in <b data-count="'+c.id+'">15</b>s.</div></div>';
@@ -439,7 +496,9 @@
     var st=statusOf(c), od=isOverdue(c), needsApproval=(st==='reserved' && c.approved===false), cls=od?'overdue':(needsApproval?'pending-approval':st);
     var pill=od?'<span class="pill overdue">Overdue</span>':(st==='reserved'?(needsApproval?'<span class="pill pending">Pending</span>':'<span class="pill reserved">Reserved</span>'):'<span class="pill out">Picked up</span>');
     var flag=(c.flag||'').indexOf('unknown')>=0?'<div class="flagwarn">&#9888; ID not in roster</div>':'';
-    var _a=assetOf(cam); var note=_a.note?'<div class="eqnote"><b>Camera note</b> '+esc(_a.note)+'</div>':'';
+    var _a=assetOf(cam), _iss=_a.issues||[], note='';
+    if(_iss.length) note+='<div class="eqnote"><b>&#9888; Issue</b> '+esc(_iss.join(', '))+'</div>';
+    if(_a.note) note+='<div class="eqnote"><b>Camera note</b> '+esc(_a.note)+'</div>';
     var acts;
     if(st==='reserved' && needsApproval){
       acts='<button class="btn sm" data-approve="'+c.id+'">Approve</button>'+
@@ -454,8 +513,9 @@
     acts+='<button class="btn sm ghost" data-assetnote="'+cam+'">Note</button>';   // per-camera note (follows the camera)
     var pendmsg=needsApproval?'<div class="pendmsg">Student request &middot; approve to confirm</div>':'';
     // Layout (uniform): cam + pill, student name, ACTION BUTTONS up high, then details below; dates pop white.
-    return '<div class="cam '+cls+'">'+
-           '<div class="cam-top"><span class="n">'+cam+'</span>'+pill+'</div>'+
+    // Double-click the card to edit / move / delete this checkout.
+    return '<div class="cam '+cls+'" data-editid="'+c.id+'" title="Double-click to edit">'+
+           '<div class="cam-top"><span class="n camnum" data-camdetail="'+cam+'" title="Open camera details">'+cam+'</span>'+pill+'</div>'+
            '<div class="who">'+esc(nameOf(c))+'</div>'+
            '<div class="acts">'+acts+'</div>'+pendmsg+
            (P2.indexOf(cam)>=0?'<div class="meta"><span class="co">Photo 2 only</span></div>':'')+
@@ -498,9 +558,12 @@
     var a=assetOf(cam), c=activeFor(cam), oos=!!a.oos, p2=P2.indexOf(cam)>=0;
     var status=oos?'<span class="pill oos">Out of service</span>':(c?(statusOf(c)==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill '+(isOverdue(c)?'overdue':'out')+'">'+(isOverdue(c)?'Overdue':'Checked out')+'</span>'):'<span class="pill avail">Available</span>');
     var who=c?'<div class="camlog-who">'+esc(nameOf(c))+' &middot; out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</div>':'';
-    var note=a.note?'<div class="camlog-note">'+esc(a.note)+'</div>':'<div class="camlog-note empty">No note. In good standing.</div>';
+    var issues=a.issues||[], note='';
+    if(issues.length) note+='<div class="camlog-issues">&#9888; Missing / issue: '+issues.map(esc).join(', ')+'</div>';
+    if(a.note) note+='<div class="camlog-note">'+esc(a.note)+'</div>';
+    if(!issues.length && !a.note) note='<div class="camlog-note empty">No issues. In good standing.</div>';
     return '<div class="camlog'+(oos?' oos':'')+'">'+
-      '<div class="camlog-top"><span class="camlog-n">'+cam+'</span>'+status+(p2?'<span class="camlog-p2">Photo 2</span>':'')+'</div>'+
+      '<div class="camlog-top"><span class="camlog-n camnum" data-camdetail="'+cam+'" title="Open camera details">'+cam+'</span>'+status+(p2?'<span class="camlog-p2">Photo 2</span>':'')+'</div>'+
       who+note+
       '<div class="camlog-acts"><button class="btn sm ghost" data-assetnote="'+cam+'">Edit note</button>'+
         '<button class="btn sm '+(oos?'':'danger')+'" data-oos="'+cam+'" data-oosval="'+(oos?'0':'1')+'">'+(oos?'Return to service':'Out of service')+'</button></div>'+
@@ -529,7 +592,7 @@
       '</div>'+
     '</div>';
     // CAMERA LOG: every camera, its standing note (follows the camera) + out-of-service, always editable.
-    var clopen=secOpen('camlog'), noted=cams.filter(function(c){ return assetOf(c).note||isOOS(c); }).length;
+    var clopen=secOpen('camlog'), noted=cams.filter(function(c){ var a=assetOf(c); return a.note||a.oos||(a.issues&&a.issues.length); }).length;
     html+='<div class="csec sec-camlog'+(clopen?' open':'')+'">'+
       '<button class="csec-head" type="button" data-sectoggle="camlog"><span class="csec-dot camlog"></span>Camera log &middot; notes &amp; condition <span class="csec-n">'+noted+' flagged</span><span class="csec-chev"></span></button>'+
       '<div class="csec-body"><div class="camlog-grid">'+cams.map(camLogCard).join('')+'</div></div>'+
@@ -561,6 +624,8 @@
     b.querySelectorAll('[data-oos]').forEach(function(el){ el.onclick=function(){ setOOS(el.getAttribute('data-oos'), el.getAttribute('data-oosval')==='1', el); }; });
     b.querySelectorAll('[data-approve]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-approve'), el); }; });
     b.querySelectorAll('[data-returncam]').forEach(function(el){ el.onclick=function(){ openReturnChecklist(el.getAttribute('data-returncam')); }; });
+    b.querySelectorAll('[data-camdetail]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); openCamDetail(el.getAttribute('data-camdetail')); }; });
+    b.querySelectorAll('[data-editid]').forEach(function(el){ el.ondblclick=function(e){ if(e.target.closest('button')||e.target.closest('.camnum')) return; openEditCheckout(el.getAttribute('data-editid')); }; });
   }
   function approve(id,btn){
     if(btn) btn.disabled=true;
@@ -683,19 +748,91 @@
       if(!retId) return; var id=retId, c=findRec(id), cam=c?c.camera:'';
       var missing=[]; KIT_COMPONENTS.forEach(function(k,i){ var el=document.getElementById('ret_'+i); if(el && !el.checked) missing.push(k); });
       var extra=document.getElementById('retnote2').value.trim();
-      var addl=[]; if(missing.length) addl.push('Returned missing: '+missing.join(', ')); if(extra) addl.push(extra);
       closeReturn();
-      // Missing items + notes append (dated) to the camera's STANDING asset note so they follow the
-      // camera; Chris clears them in the Camera Log once resolved (cap replaced). Then run the 15s return.
-      if(cam && addl.length){
-        var prev=(assetOf(cam).note||'').trim();
-        var line=fmt(todayISO())+': '+addl.join('; ');
-        var newNote=prev?(prev+'\n'+line):line;
-        camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({camera:cam,note:newNote})})
+      // Missing items become open ISSUES on the camera (resolve them in the camera card when fixed) and
+      // every finding is written to the permanent history LOG. Then run the 15s return (with its undo).
+      if(cam && (missing.length || extra)){
+        var a=assetOf(cam), ni=(a.issues||[]).slice(), nl=(a.log||[]).slice(), today=fmt(todayISO());
+        missing.forEach(function(m){ if(ni.indexOf(m)<0) ni.push(m); nl.push({date:today,text:'Returned missing: '+m}); });
+        if(extra) nl.push({date:today,text:extra});
+        camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({camera:cam,issues:ni,log:nl})})
           .then(function(){ markReturned(id); }).catch(function(){ markReturned(id); });
       } else { markReturned(id); }
     };
   })();
+
+  // ===== Camera detail modal (click a camera number): issues, note, history log, checkouts =====
+  var cdCam=null;
+  function openCamDetail(cam){ cdCam=cam; renderCamDetailModal(); document.getElementById('camdetail').classList.add('open'); }
+  function closeCamDetail(){ document.getElementById('camdetail').classList.remove('open'); cdCam=null; }
+  function saveAsset(cam, patch, then){
+    camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.assign({camera:cam},patch))})
+      .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(function(){ if(then) then(); }).catch(function(){ alert('Could not save. Try again.'); });
+  }
+  function renderCamDetailModal(){
+    var cam=cdCam; if(!cam) return;
+    var a=assetOf(cam), c=activeFor(cam), oos=!!a.oos, issues=a.issues||[], log=(a.log||[]).slice().reverse();
+    document.getElementById('cd-title').textContent=cam;
+    var hist=(DATA.checkouts||[]).filter(function(x){ return x.camera===cam && x.kind!=='equipment'; }).sort(function(x,y){ return (x.out||'')<(y.out||'')?1:-1; });
+    var statusPill=oos?'<span class="pill oos">Out of service</span>':(c?(statusOf(c)==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill '+(isOverdue(c)?'overdue':'out')+'">'+(isOverdue(c)?'Overdue':'Checked out')+'</span>'):'<span class="pill avail">Available</span>');
+    var h='<div class="cd-row"><div>'+statusPill+(P2.indexOf(cam)>=0?' <span class="camlog-p2">Photo 2 only</span>':'')+'</div><button class="btn sm '+(oos?'':'danger')+'" id="cd-oos">'+(oos?'Return to service':'Mark out of service')+'</button></div>';
+    if(c){ h+='<div class="cd-cur"><div class="cd-cur-who">'+esc(nameOf(c))+'</div><div class="cd-cur-meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+esc(c.course||'')+' &middot; out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+' &middot; '+esc(statusOf(c))+'</div><div class="cd-cur-acts"><button class="btn sm ghost" id="cd-editcur">Edit / move student</button></div></div>'; }
+    h+='<div class="cd-sec"><div class="cd-h">Open condition issues</div>';
+    h+=issues.length?('<div class="cd-issues">'+issues.map(function(it,i){ return '<div class="cd-issue"><span>'+esc(it)+'</span><button class="btn sm" data-resolve="'+i+'">Resolved</button></div>'; }).join('')+'</div>'):'<div class="cd-empty">No open issues.</div>';
+    h+='<div class="cd-add"><input type="text" id="cd-newissue" placeholder="Add an issue (e.g. lens cap missing)"><button class="btn sm" id="cd-addissue">Add</button></div></div>';
+    h+='<div class="cd-sec"><div class="cd-h">Standing note</div><textarea id="cd-note" rows="2" placeholder="Always-visible note for this camera">'+esc(a.note||'')+'</textarea><button class="btn sm" id="cd-savenote">Save note</button></div>';
+    h+='<div class="cd-sec"><div class="cd-h">History log</div>'+(log.length?('<div class="cd-log">'+log.map(function(e){ return '<div class="cd-logrow"><span class="cd-logdate">'+esc(e.date||'')+'</span> '+esc(e.text||'')+'</div>'; }).join('')+'</div>'):'<div class="cd-empty">No history yet.</div>')+'</div>';
+    h+='<div class="cd-sec"><div class="cd-h">Checkout history</div>'+(hist.length?('<div class="cd-hist">'+hist.map(function(x){ var s=statusOf(x); return '<div class="cd-histrow"><span class="cd-histwho">'+esc(nameOf(x))+'</span><span class="cd-histdates">out '+fmt(x.out)+' &rarr; '+(s==='returned'?('returned '+fmt(x.returned_date||x.due)):('due '+fmt(x.due)+' &middot; '+esc(s)))+'</span><button class="btn sm ghost" data-edithist="'+esc(x.id)+'">Edit</button></div>'; }).join('')+'</div>'):'<div class="cd-empty">No checkouts recorded.</div>')+'</div>';
+    document.getElementById('cd-body').innerHTML=h;
+    var oosb=document.getElementById('cd-oos'); if(oosb) oosb.onclick=function(){ saveAsset(cam,{oos:!oos},renderCamDetailModal); };
+    var ec=document.getElementById('cd-editcur'); if(ec) ec.onclick=function(){ openEditCheckout(c.id); };
+    document.querySelectorAll('#cd-body [data-resolve]').forEach(function(el){ el.onclick=function(){ var i=+el.getAttribute('data-resolve'), it=issues[i]; var ni=issues.slice(); ni.splice(i,1); var nl=(a.log||[]).concat([{date:fmt(todayISO()),text:'Resolved: '+it}]); saveAsset(cam,{issues:ni,log:nl},renderCamDetailModal); }; });
+    var ai=document.getElementById('cd-addissue'); if(ai) ai.onclick=function(){ var v=document.getElementById('cd-newissue').value.trim(); if(!v) return; var ni=(issues||[]).concat([v]); var nl=(a.log||[]).concat([{date:fmt(todayISO()),text:'Issue: '+v}]); saveAsset(cam,{issues:ni,log:nl},renderCamDetailModal); };
+    var sn=document.getElementById('cd-savenote'); if(sn) sn.onclick=function(){ saveAsset(cam,{note:document.getElementById('cd-note').value},renderCamDetailModal); };
+    document.querySelectorAll('#cd-body [data-edithist]').forEach(function(el){ el.onclick=function(){ openEditCheckout(el.getAttribute('data-edithist')); }; });
+  }
+  (function(){ var x=document.getElementById('cd-x'); if(x) x.onclick=closeCamDetail; var m=document.getElementById('camdetail'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeCamDetail(); }); })();
+
+  // ===== Edit / move / delete a checkout =====
+  var edId=null, edCamDD=null, edStatusDD=null, edLookupT=null;
+  function openEditCheckout(id){
+    var c=findRec(id); if(!c) return; edId=id;
+    if(document.getElementById('camdetail').classList.contains('open')) closeCamDetail();
+    document.getElementById('ed-title').textContent='Edit checkout · '+(c.camera||c.item||'');
+    var msg=document.getElementById('ed-msg'); msg.className='mmsg'; msg.textContent='';
+    document.getElementById('ed-sid').value=c.student_id||'';
+    var w=document.getElementById('ed-who'); w.className='who-line'; w.textContent=c.student_name?('Currently: '+c.student_name):'';
+    document.getElementById('ed-out').value=c.out||''; document.getElementById('ed-due').value=c.due||'';
+    edCamDD=mkDropdown(document.getElementById('ed-cam'), (DATA.cameras||[]).map(function(cm){ return {value:cm,label:cm+(P2.indexOf(cm)>=0?' (Photo 2 only)':'')}; }), c.camera||'', null);
+    edStatusDD=mkDropdown(document.getElementById('ed-status'), [{value:'reserved',label:'Reserved'},{value:'out',label:'Picked up (out)'},{value:'returned',label:'Returned'}], statusOf(c), null);
+    document.getElementById('editmodal').classList.add('open');
+  }
+  function closeEdit(){ document.getElementById('editmodal').classList.remove('open'); edId=null; }
+  (function(){
+    var x=document.getElementById('ed-x'); if(x) x.onclick=closeEdit;
+    var m=document.getElementById('editmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeEdit(); });
+    var sid=document.getElementById('ed-sid'); if(sid) sid.addEventListener('input',function(){ clearTimeout(edLookupT); edLookupT=setTimeout(edLookup,350); });
+    var s=document.getElementById('ed-save'); if(s) s.onclick=saveEdit;
+    var d=document.getElementById('ed-del'); if(d) d.onclick=function(){ if(edId && confirm('Delete this checkout record? This cannot be undone.')){ del(edId); closeEdit(); } };
+  })();
+  function edLookup(){
+    var v=document.getElementById('ed-sid').value.replace(/\D/g,''), w=document.getElementById('ed-who');
+    if(v.length<5){ w.className='who-line'; w.textContent=''; return; }
+    w.className='who-line load'; w.textContent='Checking…';
+    fetch(API+'/api/camera/lookup',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:v})}).then(function(r){return r.json();}).then(function(j){
+      if(j&&j.found){ w.className='who-line ok'; w.textContent='Will set to '+j.label; } else { w.className='who-line no'; w.textContent='Not in the roster (will flag).'; }
+    }).catch(function(){ w.className='who-line'; w.textContent=''; });
+  }
+  function saveEdit(){
+    if(!edId) return; var c=findRec(edId);
+    var payload={id:edId, camera:edCamDD?edCamDD.value():c.camera, out:document.getElementById('ed-out').value, due:document.getElementById('ed-due').value, status:edStatusDD?edStatusDD.value():statusOf(c)};
+    var sid=document.getElementById('ed-sid').value.trim(); if(sid && sid!==String(c.student_id||'')) payload.student_id=sid;
+    var s=document.getElementById('ed-save'); s.disabled=true; s.textContent='Saving…';
+    camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
+      .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ closeEdit(); return loadBoard(); }).then(reloadCal)
+      .catch(function(){ var msg=document.getElementById('ed-msg'); msg.className='mmsg err show'; msg.textContent='Could not save. Try again.'; })
+      .then(function(){ s.disabled=false; s.textContent='Save changes'; });
+  }
 
   // ---- reserve modal ----
   var resmodal=document.getElementById('resmodal'), rsid=document.getElementById('rsid'),
