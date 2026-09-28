@@ -541,6 +541,23 @@
   .pvb-acc.open .pvb-acc-head .chev{transform:rotate(-135deg);}
   .pvb-acc-body{display:none; padding:4px 14px 14px;}
   .pvb-acc.open .pvb-acc-body{display:block;}
+  /* Characters group: one collapsible sub-panel per person, collapsed to a neutral-face cover */
+  .pvb-characc{border-top:1px solid var(--pvb-line-soft);}
+  .pvb-characc:first-child{border-top:0;}
+  .pvb-charhead{width:100%; display:flex; align-items:center; gap:11px; cursor:pointer; text-align:left;
+    background:transparent; border:0; color:var(--pvb-text); font-family:var(--pvb-body); padding:8px 4px;}
+  .pvb-charhead:hover{background:rgba(0,184,184,.06);}
+  .pvb-charhead .cover{flex:0 0 auto; width:44px; height:44px; overflow:hidden; background:#0b2a2a; border:1px solid var(--pvb-line-soft);}
+  .pvb-charhead .cover img{width:100%; height:100%; object-fit:cover; object-position:center 22%; display:block;}
+  .pvb-characc.has-sel .pvb-charhead .cover{border-color:var(--pvb-teal);}
+  .pvb-charhead .cname{font-family:var(--pvb-font); font-weight:600; font-size:.9rem; letter-spacing:.02em;}
+  .pvb-charhead .pvb-charbadge{font-size:.62rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+    color:#04110f; background:var(--pvb-teal); padding:2px 8px; border-radius:10px;}
+  .pvb-charhead .chev{margin-left:auto; width:8px; height:8px; border-right:2px solid var(--pvb-muted);
+    border-bottom:2px solid var(--pvb-muted); transform:rotate(45deg); transition:transform .18s;}
+  .pvb-characc.open .pvb-charhead .chev{transform:rotate(-135deg);}
+  .pvb-charbody{display:none; padding:4px 2px 12px;}
+  .pvb-characc.open .pvb-charbody{display:block;}
   .pvb-refgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); gap:12px;}
   .pvb-refcard{cursor:pointer; border-radius:10px; overflow:hidden; background:rgba(255,255,255,.03);
     outline:2px solid transparent; transition:outline-color .12s, transform .05s;}
@@ -2342,12 +2359,22 @@
       head.appendChild(el('span','lab',esc(title)));
       var cnt=el('span','cnt'); head.appendChild(cnt);
       head.appendChild(el('span','chev'));
-      var body=el('div','pvb-acc-body'); var grid=el('div','pvb-refgrid'); body.appendChild(grid);
+      var body=el('div','pvb-acc-body');
+      var perChar=(title==='Characters');   // Characters group = a nested accordion, one collapsible sub-panel per person
       function isSel(f){ return single?(state.scene===f):(arr.indexOf(f)>=0); }
       function nSel(){ return single?(state.scene?1:0):arr.filter(Boolean).length; }
       function updCnt(){ var n=nSel(); cnt.textContent=n?(single?'1 selected':(n+' selected')):'none'; cnt.classList.toggle('has',n>0); }
-      function toggle(f){ if(single){ state.scene=(state.scene===f)?'':f; } else { var i=arr.indexOf(f); if(i>=0){arr.splice(i,1);} else { arr.push(f); } } cards(); updCnt(); render(); }
-      function cards(){ grid.innerHTML=''; options.forEach(function(o){ var c=el('div','pvb-refcard'+(isSel(o.file)?' sel':''));
+      var updBadges=function(){}, rebuildFlat=function(){};
+      function toggle(f, cardEl){
+        if(single){ state.scene=(state.scene===f)?'':f; }
+        else { var i=arr.indexOf(f); if(i>=0){arr.splice(i,1);} else { arr.push(f); } }
+        if(perChar){ if(cardEl) cardEl.classList.toggle('sel', isSel(f)); updBadges(); }   // no rebuild: keep the open person expanded
+        else { rebuildFlat(); }
+        updCnt(); render();
+      }
+      // one selectable image card (thumb + name + 4 tools), shared by both layouts
+      function makeCard(o){
+        var c=el('div','pvb-refcard'+(isSel(o.file)?' sel':''));
         var t=el('div','thumb'); var im=el('img'); im.src=IMG+o.file; im.alt=o.label; im.loading='lazy'; t.appendChild(im); c.appendChild(t);
         c.appendChild(el('div','nm',esc(o.label)));
         var url=IMG+o.file, tools=el('div','pvb-rtools');
@@ -2356,9 +2383,56 @@
         tools.appendChild(rtool(SVG_LINK,'Copy image URL',function(b){ copyUrl(url,b); }));
         tools.appendChild(rtool(SVG_DL,'Download full size',function(b){ downloadImg(url,o.file,b); }));
         c.appendChild(tools);
-        c.addEventListener('click',function(){toggle(o.file);}); grid.appendChild(c); }); }
-      head.addEventListener('click',function(){ var open=!wrap.classList.contains('open'); wrap.classList.toggle('open',open); });
-      cards(); updCnt(); if(nSel()>0) wrap.classList.add('open');
+        c.addEventListener('click',function(){ toggle(o.file, c); });
+        return c;
+      }
+      if(perChar){
+        // group images contiguously by person (label prefix before the first "(")
+        var groups=[], byName={};
+        options.forEach(function(o){
+          var nm=((o.label||'').split('(')[0]).trim()||o.label;
+          if(!byName[nm]){ byName[nm]={name:nm,items:[]}; groups.push(byName[nm]); }
+          byName[nm].items.push(o);
+        });
+        // cover thumbnail = the clean neutral face, else a front/portrait, else the character sheet
+        function coverOf(items){
+          function find(re){ for(var i=0;i<items.length;i++){ if(re.test(items[i].label)) return items[i]; } return null; }
+          function portrait(){ for(var i=0;i<items.length;i++){ if(/portrait/i.test(items[i].label)&&!/all angles/i.test(items[i].label)) return items[i]; } return null; }
+          return find(/neutral/i)||find(/front portrait/i)||portrait()||find(/character sheet/i)||items[0];
+        }
+        var accs=[];
+        groups.forEach(function(g){
+          var acc=el('div','pvb-characc');
+          var chead=el('button','pvb-charhead'); chead.type='button';
+          var cov=coverOf(g.items), cw=el('div','cover'); var ci=el('img'); ci.src=IMG+cov.file; ci.alt=g.name; ci.loading='lazy'; cw.appendChild(ci); chead.appendChild(cw);
+          chead.appendChild(el('span','cname',esc(g.name)));
+          var badge=el('span','pvb-charbadge'); chead.appendChild(badge);
+          chead.appendChild(el('span','chev'));
+          var cbody=el('div','pvb-charbody'), cgrid=el('div','pvb-refgrid');
+          g.items.forEach(function(o){ cgrid.appendChild(makeCard(o)); });
+          cbody.appendChild(cgrid); acc.appendChild(chead); acc.appendChild(cbody);
+          chead.addEventListener('click',function(){
+            var open=acc.classList.contains('open');
+            accs.forEach(function(a){ a.classList.remove('open'); });   // accordion: one person open at a time
+            if(!open) acc.classList.add('open');
+          });
+          g._acc=acc; g._badge=badge; accs.push(acc); body.appendChild(acc);
+        });
+        updBadges=function(){
+          groups.forEach(function(g){
+            var n=g.items.filter(function(o){return isSel(o.file);}).length;
+            g._badge.textContent=n?(n+' selected'):''; g._badge.style.display=n?'':'none';
+            g._acc.classList.toggle('has-sel',n>0);
+          });
+        };
+        updBadges();
+      } else {
+        var grid=el('div','pvb-refgrid'); body.appendChild(grid);
+        rebuildFlat=function(){ grid.innerHTML=''; options.forEach(function(o){ grid.appendChild(makeCard(o)); }); };
+        rebuildFlat();
+      }
+      head.addEventListener('click',function(){ wrap.classList.toggle('open'); });
+      updCnt(); if(nSel()>0) wrap.classList.add('open');
       wrap.appendChild(head); wrap.appendChild(body); return wrap;
     }
     function backdropSlot(){
