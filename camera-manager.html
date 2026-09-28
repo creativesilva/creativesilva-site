@@ -103,6 +103,9 @@
   .avail-card{justify-content:flex-start;}
   .avail-card .acts{margin-top:2px;}
   .p2under{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);min-height:1em;line-height:1.2;}
+  /* occupied cards: uniform height (empty space at the bottom is fine); out/due dates pop white */
+  .cam.out,.cam.overdue,.cam.reserved,.cam.returning{min-height:258px;}
+  .meta.dates{color:var(--text);font-weight:600;}
 
   .histwrap{margin-top:8px;}
   .hist{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;}
@@ -311,10 +314,9 @@
     }
     if(pendingReturns[c.id]){
       return '<div class="cam returning"><div class="cam-top"><span class="n">'+cam+'</span><span class="pill out">Returning</span></div>'+
-             (p2?'<div>'+p2+'</div>':'')+
              '<div class="who">'+esc(nameOf(c))+'</div>'+
-             '<div class="returning-msg">Goes back in the pool in <b data-count="'+c.id+'">15</b>s.</div>'+
-             '<div class="acts"><button class="btn sm undo" data-undo="'+c.id+'">Undo return</button></div></div>';
+             '<div class="acts"><button class="btn sm undo" data-undo="'+c.id+'">Undo return</button></div>'+
+             '<div class="returning-msg">Goes back in the pool in <b data-count="'+c.id+'">15</b>s.</div></div>';
     }
     var st=statusOf(c), od=isOverdue(c), cls=od?'overdue':st;
     var pill=od?'<span class="pill overdue">Overdue</span>':(st==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill out">Picked up</span>');
@@ -327,13 +329,16 @@
       acts='<button class="btn sm ghost" data-status="reserved" data-id="'+c.id+'">Undo pickup</button>'+
            '<button class="btn sm warn" data-return="'+c.id+'">Mark returned</button>';
     }
-    return '<div class="cam '+cls+'"><div class="cam-top"><span class="n">'+cam+'</span>'+pill+'</div>'+
-           (p2?'<div>'+p2+'</div>':'')+
+    // Layout (uniform): cam + pill, student name, ACTION BUTTONS up high, then details below; dates pop white.
+    return '<div class="cam '+cls+'">'+
+           '<div class="cam-top"><span class="n">'+cam+'</span>'+pill+'</div>'+
            '<div class="who">'+esc(nameOf(c))+'</div>'+
+           '<div class="acts">'+acts+'</div>'+
+           (P2.indexOf(cam)>=0?'<div class="meta"><span class="co">Photo 2 only</span></div>':'')+
            '<div class="meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+'<span class="co">'+esc(c.course||camCourse(cam))+'</span></div>'+
-           '<div class="meta">Out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+(c.picked_up_date?(' &middot; picked up '+fmt(c.picked_up_date)):'')+'</div>'+
+           '<div class="meta dates">Out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+(c.picked_up_date?(' &middot; picked up '+fmt(c.picked_up_date)):'')+'</div>'+
            flag+contactLine(c)+
-           '<div class="acts">'+acts+'</div></div>';
+           '</div>';
   }
   function equipOut(){ var o={}; EQUIPMENT.forEach(function(e){ o[e.key]=0; }); DATA.checkouts.forEach(function(c){ if(statusOf(c)!=='returned'&&c.extras){ EQUIPMENT.forEach(function(e){ o[e.key]+=(+c.extras[e.key]||0); }); } }); return o; }
 
