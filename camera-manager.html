@@ -349,7 +349,7 @@
     fetch(API+'/api/camera/lookup',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:v})})
       .then(function(r){return r.json();}).then(function(j){
         if(rsid.value.replace(/\D/g,'')!==v) return;
-        if(j&&j.found){ rwho.className='who-line ok'; rwho.textContent=j.label+'.'; }
+        if(j&&j.found){ rwho.className='who-line ok'; rwho.textContent='Checking out to '+j.label; }
         else { rwho.className='who-line no'; rwho.textContent='Not in the roster (you can still check it out; it will flag).'; }
       }).catch(function(){ rwho.className='who-line'; rwho.textContent=''; });
   }
