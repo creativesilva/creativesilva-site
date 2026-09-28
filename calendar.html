@@ -217,7 +217,7 @@
   .rv-sub b{color:var(--teal-lt);}
   .rv-who{font-family:var(--font);font-size:1.05rem;color:#fff;margin:2px 0 10px;}
   .rv-who b{color:var(--teal-lt);}
-  #rv-id,#rv-sc,#rv-pc{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1.05rem;padding:11px 12px;outline:none;box-sizing:border-box;margin-bottom:10px;}
+  #rv-id,#rv-sc,#rv-pg,#rv-pc{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1.05rem;padding:11px 12px;outline:none;box-sizing:border-box;margin-bottom:10px;}
   .rv-msg{min-height:1.1em;font-size:.85rem;color:var(--muted);margin:2px 0 12px;}
   .rv-vrow{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:.9rem;color:var(--muted);padding:7px 0;border-bottom:1px solid rgba(0,184,184,.12);}
   .rv-vrow b{color:#eafeff;}
@@ -346,15 +346,13 @@
       </div>
       <div id="rv-step1b" style="display:none;">
         <div class="rv-who" id="rv-who"></div>
-        <p class="rv-sub">Check your contact info, then start reserving.</p>
-        <div id="rv-verify"></div>
-        <label class="rv-changed"><input type="checkbox" id="rv-changed"> My cell or parent contact is missing or has changed</label>
-        <div id="rv-corr" style="display:none;">
-          <label class="nc-label" for="rv-sc">Your cell phone</label>
-          <input type="text" id="rv-sc" inputmode="tel" autocomplete="off" placeholder="(805) 000-0000" />
-          <label class="nc-label" for="rv-pc">Parent / guardian cell</label>
-          <input type="text" id="rv-pc" inputmode="tel" autocomplete="off" placeholder="(805) 000-0000" />
-        </div>
+        <p class="rv-sub">Check your info and fix anything that is wrong, then start reserving. Your changes are saved.</p>
+        <label class="nc-label" for="rv-sc">Your cell phone</label>
+        <input type="text" id="rv-sc" inputmode="tel" autocomplete="off" placeholder="(805) 000-0000" />
+        <label class="nc-label" for="rv-pg">Parent / guardian name</label>
+        <input type="text" id="rv-pg" autocomplete="off" placeholder="Parent or guardian" />
+        <label class="nc-label" for="rv-pc">Parent / guardian cell</label>
+        <input type="text" id="rv-pc" inputmode="tel" autocomplete="off" placeholder="(805) 000-0000" />
         <div class="rv-msg" id="rv-msg2"></div>
         <div class="rv-btnrow">
           <button class="qr-btn" id="rv-back" type="button">Back</button>
@@ -806,7 +804,6 @@
     RESV=null; DM_RESERVE_CAM=null; rvLookup=null;
     document.getElementById('rv-step1').style.display=''; document.getElementById('rv-step1b').style.display='none';
     document.getElementById('rv-id').value=''; document.getElementById('rv-msg').textContent='';
-    var ch=document.getElementById('rv-changed'); if(ch) ch.checked=false; document.getElementById('rv-corr').style.display='none';
     document.getElementById('rvmodal').classList.add('open');
     setTimeout(function(){ document.getElementById('rv-id').focus(); },50);
   }
@@ -815,44 +812,47 @@
     var v=document.getElementById('rv-id').value.replace(/\D/g,''), msg=document.getElementById('rv-msg');
     if(v.length<5){ msg.textContent='Enter your full student ID.'; return; }
     msg.textContent='Checking…';
-    fetch(API+'/api/camera/lookup',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:v})})
+    // Full info so the student can review + fix their own contact (saved to the live database).
+    fetch(API+'/api/camera/student_info',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:v})})
       .then(function(r){return r.json();}).then(function(j){
         if(!j||!j.found){ msg.innerHTML='<span style="color:#ffb28a">We could not find that ID. Check the number or see Mr. Silva.</span>'; return; }
-        rvLookup={id:v,label:j.label,period:String(j.period||''),s4:j.student_last4||'',p4:j.parent_last4||'',hasS:!!j.has_student_cell,hasP:!!j.has_parent_cell};
+        rvLookup={id:v,label:j.label,name:j.name||'',period:String(j.period||''),
+                  student_cell:j.student_cell||'',parent_guardian:j.parent_guardian||'',parent_cell:j.parent_cell||''};
         showVerify();
       }).catch(function(){ msg.textContent='Could not reach the server. Try again.'; });
   }
   function showVerify(){
     var L=rvLookup;
     document.getElementById('rv-who').innerHTML='Reserving as <b>'+esc(L.label)+'</b>'+(L.period?(' &middot; Period '+esc(normPeriod(L.period)||L.period)):'');
-    var v='';
-    v+='<div class="rv-vrow"><span>Your cell '+(L.hasS?('ending <b>&bull;&bull;'+esc(L.s4)+'</b>'):'')+'</span><span class="'+(L.hasS?'on':'off')+'">'+(L.hasS?'on file':'missing')+'</span></div>';
-    v+='<div class="rv-vrow"><span>Parent / guardian '+(L.hasP?('ending <b>&bull;&bull;'+esc(L.p4)+'</b>'):'')+'</span><span class="'+(L.hasP?'on':'off')+'">'+(L.hasP?'on file':'missing')+'</span></div>';
-    document.getElementById('rv-verify').innerHTML=v;
+    // Prefill the editable fields with what is on file so the student can confirm or correct it.
+    document.getElementById('rv-sc').value=L.student_cell||'';
+    document.getElementById('rv-pg').value=L.parent_guardian||'';
+    document.getElementById('rv-pc').value=L.parent_cell||'';
     document.getElementById('rv-msg2').textContent='';
-    // If anything is missing, force the correction fields open + prefill nothing.
-    var miss=(!L.hasS||!L.hasP), ch=document.getElementById('rv-changed');
-    ch.checked=miss; document.getElementById('rv-corr').style.display=miss?'':'none';
-    document.getElementById('rv-sc').value=''; document.getElementById('rv-pc').value='';
     document.getElementById('rv-step1').style.display='none'; document.getElementById('rv-step1b').style.display='';
   }
   function rvStart(){
-    var L=rvLookup, m2=document.getElementById('rv-msg2'), corr={student:'',parent:''};
-    if(document.getElementById('rv-changed').checked){
-      var sc=document.getElementById('rv-sc').value.trim(), pc=document.getElementById('rv-pc').value.trim();
-      // Require whichever is missing on file; a changed one is optional but captured if entered.
-      if(!L.hasS && sc.replace(/\D/g,'').length<7){ m2.textContent='Please enter your cell phone.'; return; }
-      if(!L.hasP && pc.replace(/\D/g,'').length<7){ m2.textContent='Please enter a parent / guardian cell.'; return; }
-      corr.student=sc; corr.parent=pc;
-    } else if(!L.hasS || !L.hasP){ m2.textContent='Your contact info is needed to reserve. Check the box to add it.'; return; }
-    RESV={id:L.id,label:L.label,period:L.period,corr:corr};
-    closeReserveModal(); showBanner();
-    // Launched from a day card: drop the student straight back into that day, now picking a camera.
-    if(RESV_RESUME_DAY){
-      DM_DAY=RESV_RESUME_DAY; DM_CAM=null; DM_RESERVE_CAM=null; DM_DONE=false; RESV_RESUME_DAY=null;
-      document.getElementById('daymodal').classList.add('open');
-      renderDayModal();
-    }
+    var L=rvLookup, m2=document.getElementById('rv-msg2');
+    var sc=document.getElementById('rv-sc').value.trim(), pg=document.getElementById('rv-pg').value.trim(), pc=document.getElementById('rv-pc').value.trim();
+    if(sc.replace(/\D/g,'').length<7){ m2.textContent='Please enter your cell phone.'; return; }
+    if(pc.replace(/\D/g,'').length<7){ m2.textContent='Please enter a parent / guardian cell.'; return; }
+    RESV={id:L.id,label:L.label,period:L.period};
+    var proceed=function(){
+      closeReserveModal(); showBanner();
+      // Launched from a day card: drop the student straight back into that day, now picking a camera.
+      if(RESV_RESUME_DAY){
+        DM_DAY=RESV_RESUME_DAY; DM_CAM=null; DM_RESERVE_CAM=null; DM_DONE=false; RESV_RESUME_DAY=null;
+        document.getElementById('daymodal').classList.add('open');
+        renderDayModal();
+      }
+    };
+    // Save any corrections to the live database (overrides), then continue. Never block reserving on the save.
+    var changed=(sc!==(L.student_cell||''))||(pg!==(L.parent_guardian||''))||(pc!==(L.parent_cell||''));
+    if(!changed){ proceed(); return; }
+    var st=document.getElementById('rv-start'); if(st){ st.disabled=true; st.textContent='Saving…'; }
+    fetch(API+'/api/camera/student_update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:L.id,student_cell:sc,parent_guardian:pg,parent_cell:pc})})
+      .then(function(r){return r.json();}).then(function(){ if(st){ st.disabled=false; st.innerHTML='Start reserving &rarr;'; } proceed(); })
+      .catch(function(){ if(st){ st.disabled=false; st.innerHTML='Start reserving &rarr;'; } proceed(); });
   }
   function showBanner(){
     var b=document.getElementById('rvBanner');
@@ -908,8 +908,9 @@
     var cam=DM_RESERVE_CAM; if(!cam||!RESV) return;
     var due=nextSchoolDay(iso), extras=[];
     EQUIP_MENU.forEach(function(e){ var el=document.getElementById('rc-'+e.key); if(el&&el.checked) extras.push(e.key); });
-    var note=''; if(RESV.corr && (RESV.corr.student||RESV.corr.parent)){ note='Contact per student:'+(RESV.corr.student?(' cell '+RESV.corr.student):'')+(RESV.corr.parent?('; parent '+RESV.corr.parent):''); }
-    var payload={student_id:RESV.id,camera:cam,out:iso,due:due,status:'reserved',extras:extras,pending:true}; if(note) payload.note=note;
+    // Contact corrections are saved to the roster (overrides) at the verify step, so the checkout
+    // resolves the up-to-date contact server-side; no per-reservation contact note needed.
+    var payload={student_id:RESV.id,camera:cam,out:iso,due:due,status:'reserved',extras:extras,pending:true};
     var btn=document.getElementById('rc-go'); if(btn){ btn.disabled=true; btn.textContent='Reserving…'; }
     fetch(API+'/api/camera/checkout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
@@ -932,7 +933,6 @@
     var st=document.getElementById('rv-start'); if(st) st.addEventListener('click',rvStart);
     var x=document.getElementById('rv-x'); if(x) x.addEventListener('click',closeReserveModal);
     var m=document.getElementById('rvmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeReserveModal(); });
-    var ch=document.getElementById('rv-changed'); if(ch) ch.addEventListener('change',function(){ document.getElementById('rv-corr').style.display=ch.checked?'':'none'; });
     var rb=document.getElementById('reserveMonthBtn'); if(rb) rb.addEventListener('click',openReserveFlow);
     var qb=document.getElementById('qrMonthBtn'); if(qb) qb.addEventListener('click',openQR);
   })();
