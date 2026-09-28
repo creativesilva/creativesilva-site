@@ -58,17 +58,24 @@
   .mtitle{font-family:var(--font);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:1rem;color:#fff;}
   .navb{font-family:var(--font);font-size:.9rem;color:#eafeff;background:rgba(0,184,184,.14);border:1px solid var(--line);cursor:pointer;padding:6px 12px;}
   .navb:hover{background:rgba(0,184,184,.28);}
-  .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px;}
-  .dow div{font-family:var(--font);font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);text-align:center;}
-  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
-  .cell{min-height:74px;background:rgba(0,0,0,.24);border:1px solid var(--line-soft);padding:6px;display:flex;flex-direction:column;gap:6px;}
-  .cell.out-month{opacity:.32;} .cell.today{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal);}
-  .cell.has{cursor:pointer;background:rgba(0,184,184,.10);}
-  .cell.has:hover{background:rgba(0,184,184,.22);border-color:var(--line);}
-  .daynum{font-family:var(--font);font-size:.72rem;color:var(--muted);}
-  .cell.today .daynum{color:var(--teal-lt);font-weight:700;}
-  .count{margin-top:auto;font-family:var(--font);font-weight:700;font-size:.86rem;color:#ffd0b0;background:rgba(255,107,26,.16);border-left:3px solid var(--orange);padding:4px 7px;}
-  .count small{display:block;font-weight:400;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+  .dow{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px;}
+  .dow div{font-family:var(--font);font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);text-align:left;padding-left:6px;}
+  /* Google-style month: each week is a band; camera checkouts are bars spanning their days. */
+  .grid{display:flex;flex-direction:column;}
+  .week{position:relative;}
+  .wdays{display:grid;grid-template-columns:repeat(7,1fr);}
+  .wcell{min-height:calc(24px + var(--lanes,0) * 20px + 6px);background:rgba(0,0,0,.24);border:1px solid var(--line-soft);border-top:0;border-left:0;padding:3px 6px;cursor:pointer;}
+  .wcell:first-child{border-left:1px solid var(--line-soft);}
+  .week:first-child .wcell{border-top:1px solid var(--line-soft);}
+  .wcell.out-month{opacity:.4;} .wcell.today{box-shadow:inset 0 0 0 2px var(--teal);}
+  .wcell:hover{background:rgba(0,184,184,.12);}
+  .wdaynum{font-family:var(--font);font-size:.72rem;color:var(--muted);}
+  .wcell.today .wdaynum{color:var(--teal-lt);font-weight:700;}
+  .wmore{font-family:var(--font);font-size:.6rem;color:var(--faint);margin-top:2px;}
+  .wbars{position:absolute;top:23px;left:0;right:0;pointer-events:none;}
+  .wbar{position:absolute;height:17px;line-height:17px;font-family:var(--font);font-weight:600;font-size:.62rem;letter-spacing:.02em;color:#04110f;padding:0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:auto;cursor:pointer;box-sizing:border-box;box-shadow:0 0 0 1px rgba(4,17,15,.25);}
+  .wbar.out{background:var(--orange);} .wbar.res{background:#f5b301;} .wbar.od{background:#e0403a;color:#fff;}
+  .wbar.contL{margin-left:-1px;} .wbar.contR{}
   /* day pop-out: fixed size (fits all 18) so it never resizes between tabs */
   .daymodal{position:fixed;inset:0;background:rgba(2,12,12,.66);backdrop-filter:blur(8px) saturate(1.1);-webkit-backdrop-filter:blur(8px) saturate(1.1);display:none;align-items:center;justify-content:center;padding:20px;z-index:60;}
   .daymodal.open{display:flex;}
@@ -182,37 +189,74 @@
     });
   }
 
-  // Hotel-style span: a camera counts as out every day from its pickup date through its due date.
+  function el(t,c,x){ var e=document.createElement(t); if(c) e.className=c; if(x!=null) e.textContent=x; return e; }
+  function isoD(d){ var x=new Date(d.getTime?d.getTime():d); x.setHours(12,0,0,0); return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'); }
+  function addDays(iso,n){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2],12,0,0); d.setDate(d.getDate()+n); return isoD(d); }
+  function dayDiff(a,b){ var pa=a.split('-'),pb=b.split('-'); return Math.round((new Date(+pb[0],+pb[1]-1,+pb[2])-new Date(+pa[0],+pa[1]-1,+pa[2]))/86400000); }
+  // Last day a camera is OUT. The due date is the return day (not an out-day). A picked-up
+  // camera that is not returned keeps rolling forward to today until it is toggled returned.
+  function effLast(c){
+    var st=statusOf(c); if(st==='returned') return null;
+    var start=c.out; if(!start) return null;
+    var last=addDays(c.due||start,-1); if(last<start) last=start;
+    if(st==='out' && todayISO()>last) last=todayISO();
+    return last;
+  }
   function checkoutsOnDay(iso){
-    return (DATA.checkouts||[]).filter(function(c){
-      if(statusOf(c)==='returned') return false;
-      var o=c.out||'', du=c.due||o;
-      if(!o) return false;
-      // The due date is the return day, not a day the camera is still out, so the span
-      // ends the day before "due" (matches how a calendar shows an all-day range).
-      return du>o ? (iso>=o && iso<du) : (iso===o);
-    });
+    return (DATA.checkouts||[]).filter(function(c){ var last=effLast(c); return last && c.out && iso>=c.out && iso<=last; });
   }
   function prettyDate(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]);
     var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     return days[d.getDay()]+', '+MONTHS[+p[1]-1]+' '+(+p[2]); }
+  // Google-style month: each week is a band; each active checkout is a bar spanning its out->return days.
   function renderCal(){
     mtitle.textContent=MONTHS[view.getMonth()]+' '+view.getFullYear();
     var first=new Date(view.getFullYear(),view.getMonth(),1);
-    var start=new Date(first); start.setDate(1-first.getDay());
-    var total=(DATA.cameras||[]).length;
+    var startD=new Date(first); startD.setDate(1-first.getDay());
+    var startISO=isoD(startD), curMonth=view.getMonth();
+    var events=[];
+    (DATA.checkouts||[]).forEach(function(c){ var last=effLast(c); if(!last||!c.out) return;
+      events.push({camera:c.camera, start:c.out, last:last, status:statusOf(c),
+        overdue:(statusOf(c)==='out' && c.due && c.due<=todayISO())}); });
     grid.innerHTML='';
-    for(var i=0;i<42;i++){ var d=new Date(start); d.setDate(start.getDate()+i); var iso=d.toISOString().slice(0,10);
-      var cell=document.createElement('div'); cell.className='cell'+(d.getMonth()!==view.getMonth()?' out-month':'')+(iso===todayISO()?' today':'');
-      var dn=document.createElement('div'); dn.className='daynum'; dn.textContent=d.getDate(); cell.appendChild(dn);
-      var n=checkoutsOnDay(iso).length;
-      if(n){
-        cell.className+=' has';
-        var b=document.createElement('div'); b.className='count'; b.innerHTML=n+' of '+total+'<small>checked out</small>';
-        cell.appendChild(b);
-        (function(day){ cell.addEventListener('click',function(){ openDayModal(day); }); })(iso);
+    var MAXLANE=6;
+    for(var w=0; w<6; w++){
+      var wkStartISO=addDays(startISO, w*7), wkEndISO=addDays(wkStartISO,6);
+      var wev=events.filter(function(e){ return e.start<=wkEndISO && e.last>=wkStartISO; });
+      wev.sort(function(a,b){ return a.start<b.start?-1:a.start>b.start?1:(a.camera||'').localeCompare(b.camera||''); });
+      var laneEnd=[];
+      wev.forEach(function(e){
+        e._sc=Math.max(0, dayDiff(wkStartISO, e.start));
+        e._ec=Math.min(6, dayDiff(wkStartISO, e.last));
+        var ln=0; while(laneEnd[ln]!==undefined && laneEnd[ln]>=e._sc) ln++;
+        laneEnd[ln]=e._ec; e._lane=ln;
+      });
+      var week=el('div','week'); week.style.setProperty('--lanes', Math.min(laneEnd.length, MAXLANE));
+      var days=el('div','wdays');
+      for(var d=0; d<7; d++){
+        var diso=addDays(wkStartISO,d), dp=diso.split('-');
+        var cell=el('div','wcell'+(((+dp[1]-1)===curMonth)?'':' out-month')+(diso===todayISO()?' today':''));
+        cell.appendChild(el('div','wdaynum', String(+dp[2])));
+        var dayN=wev.filter(function(e){ return e._sc<=d && e._ec>=d; }).length;
+        if(dayN>MAXLANE) cell.appendChild(el('div','wmore','+'+(dayN-MAXLANE)+' more'));
+        (function(day){ cell.addEventListener('click',function(){ openDayModal(day); }); })(diso);
+        days.appendChild(cell);
       }
-      grid.appendChild(cell);
+      week.appendChild(days);
+      var bars=el('div','wbars');
+      wev.forEach(function(e){
+        if(e._lane>=MAXLANE) return;
+        var cls='wbar '+(e.status==='reserved'?'res':(e.overdue?'od':'out'));
+        if(e.start<wkStartISO) cls+=' contL'; if(e.last>wkEndISO) cls+=' contR';
+        var bar=el('div',cls, e.camera);
+        bar.style.left='calc('+(e._sc/7*100)+'% + 2px)';
+        bar.style.width='calc('+((e._ec-e._sc+1)/7*100)+'% - 4px)';
+        bar.style.top=(e._lane*20)+'px';
+        (function(day){ bar.addEventListener('click',function(ev){ ev.stopPropagation(); openDayModal(day); }); })(e.start>wkStartISO?e.start:wkStartISO);
+        bars.appendChild(bar);
+      });
+      week.appendChild(bars);
+      grid.appendChild(week);
     }
   }
 
