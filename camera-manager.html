@@ -159,6 +159,11 @@
   #gate h2{font-family:var(--font);font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:1.2rem;margin:0 0 4px;color:#fff;}
   #gate p{color:var(--muted);font-size:.86rem;margin:0 0 18px;}
   #gate input{text-align:center;font-size:1.3rem;letter-spacing:.2em;}
+  /* mask via CSS (not type=password) so the browser's key icon + white autofill never appear */
+  #gate input.pinmask{-webkit-text-security:disc;text-security:disc;}
+  #gate input:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px rgba(0,0,0,.30) inset;-webkit-text-fill-color:var(--text);caret-color:var(--text);}
+  #gate input::-webkit-credentials-auto-fill-button,#gate input::-webkit-strong-password-auto-fill-button{display:none !important;visibility:hidden;width:0;margin:0;}
+  #gate input::-ms-reveal,#gate input::-ms-clear{display:none;}
   #gate .go{margin-top:2px;}
   #gate .err{color:#ff9a8a;font-size:.84rem;min-height:1.1em;margin-top:10px;}
   @media (max-width:560px){ .wrap{padding:18px 16px 60px;} }
@@ -173,7 +178,7 @@
     <img src="https://www.creativesilva.com/assets/PV%20LOGO%20NEW.png" alt="PVHS" />
     <h2>Camera Manager</h2>
     <p>Teacher access. Enter the camera password to reserve, check out, and return cameras.</p>
-    <input type="password" id="pin" autocomplete="off" data-1p-ignore data-lpignore="true" placeholder="Camera password" />
+    <input type="text" id="pin" class="pinmask" autocomplete="off" autocapitalize="off" spellcheck="false" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="Camera password" />
     <button class="go" id="pingo">Continue</button>
     <div class="err" id="pinerr"></div>
   </div>
