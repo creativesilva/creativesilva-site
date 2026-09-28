@@ -80,14 +80,8 @@
         <input type="date" id="due" required />
 
         <button type="submit" class="go" id="go">Reserve this camera</button>
-        <p class="note">Your name and contact come from the class roster automatically. You do not type them here. Your reservation is held until you pick the camera up from Mr. Silva.</p>
+        <p class="note">The list only shows cameras that are free right now. Your name comes from the class roster, so you do not type it. Then see Mr. Silva to pick your camera up.</p>
       </form>
-    </div>
-
-    <div class="card">
-      <div class="avail-h">Camera availability right now</div>
-      <div class="board" id="board"><span class="note">Loading&#8230;</span></div>
-      <p class="note" style="margin-top:14px;"><a class="viewcal" href="/calendar.html">See the full checkout calendar &rarr;</a></p>
     </div>
   </div>
 
@@ -95,7 +89,7 @@
 (function(){
   var API='https://pvhs-canvas-grader.onrender.com';
   var msg=document.getElementById('msg'), camSel=document.getElementById('cam'),
-      board=document.getElementById('board'), form=document.getElementById('form'),
+      form=document.getElementById('form'),
       sid=document.getElementById('sid'), due=document.getElementById('due'), go=document.getElementById('go');
 
   // default due date = 7 days out
@@ -131,21 +125,12 @@
   function load(){
     fetch(API+'/api/camera/calendar',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
       var cams=d.cameras||[], active=activeByCamera(d.checkouts);
-      // dropdown: available first, out ones labeled
+      // Only list cameras that are free right now, so students never pick a taken one.
+      var avail=cams.filter(function(c){ return !active[c]; });
+      if(!avail.length){ camSel.innerHTML='<option value="">No cameras are free right now</option>'; return; }
       camSel.innerHTML='<option value="">Choose a camera&#8230;</option>';
-      cams.forEach(function(c){ var o=document.createElement('option'); o.value=c; var a=active[c];
-        o.textContent = a ? (c+'  ('+(statusOf(a)==='reserved'?'reserved':('out, due '+fmt(a.due)))+')') : (c+'  (available)');
-        camSel.appendChild(o); });
-      // board
-      board.innerHTML='';
-      cams.forEach(function(c){ var a=active[c]; var st=a?statusOf(a):'available';
-        var el=document.createElement('div'); el.className='cam'+(st==='reserved'?' reserved':(st!=='available'?' out':''));
-        var s= st==='available'?'Available':(st==='reserved'?'Reserved':('Out &middot; due '+fmt(a.due)));
-        el.innerHTML='<div class="n">'+c+'</div><div class="s">'+s+'</div>';
-        board.appendChild(el); });
-      if(!cams.length){ board.innerHTML='<span class="note">No cameras configured yet.</span>'; }
-    }).catch(function(){ board.innerHTML='<span class="note">Could not load availability. You can still check out below.</span>';
-      if(camSel.options.length<=1){ camSel.innerHTML='<option value="">Choose a camera&#8230;</option>'; } });
+      avail.forEach(function(c){ var o=document.createElement('option'); o.value=c; o.textContent=c; camSel.appendChild(o); });
+    }).catch(function(){ if(camSel.options.length<=1){ camSel.innerHTML='<option value="">Choose a camera&#8230;</option>'; } });
   }
 
   form.addEventListener('submit',function(e){ e.preventDefault();

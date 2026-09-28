@@ -81,10 +81,10 @@
 
     <div class="summary">
       <div><span class="big" id="outn">0</span> <span class="lab">of <span id="totn">0</span> cameras available</span></div>
-      <div class="legend"><span><i class="k-av"></i>Available</span><span><i class="k-res"></i>Reserved</span><span><i class="k-out"></i>Checked out</span></div>
+      <div class="legend"><span><i class="k-res"></i>Reserved</span><span><i class="k-out"></i>Checked out</span></div>
     </div>
 
-    <div class="h">Cameras right now</div>
+    <div class="h">Checked out right now</div>
     <div class="board" id="board"><span class="foot">Loading&#8230;</span></div>
 
     <div class="calhead">
@@ -116,18 +116,16 @@
 
   function renderBoard(){
     var active=activeByCam(); var cams=DATA.cameras||[];
-    var avail=cams.filter(function(c){ return !active[c]; }).length;
-    outn.textContent=avail; totn.textContent=cams.length;
+    var outCams=cams.filter(function(c){ return active[c]; });      // only cameras that are taken
+    outn.textContent=(cams.length-outCams.length); totn.textContent=cams.length;
     board.innerHTML='';
-    if(!cams.length){ board.innerHTML='<span class="foot">No cameras configured yet.</span>'; return; }
-    cams.forEach(function(c){
-      var o=active[c]; var st=o?statusOf(o):'available';
+    if(!cams.length){ board.innerHTML='<span class="foot">No cameras set up yet.</span>'; return; }
+    if(!outCams.length){ board.innerHTML='<span class="foot">All cameras are available right now.</span>'; return; }
+    outCams.forEach(function(c){
+      var o=active[c]; var st=statusOf(o);
       var el=document.createElement('div');
-      el.className='cam'+(st==='reserved'?' reserved':(st!=='available'?' out':''));
-      var sub = st==='available' ? 'Available'
-              : st==='reserved' ? 'Reserved'
-              : ('Checked out &middot; due '+fmt(o.due));
-      el.innerHTML='<div class="n">'+c+'</div><div class="s">'+sub+'</div>';
+      el.className='cam'+(st==='reserved'?' reserved':' out');
+      el.innerHTML='<div class="n">'+c+'</div><div class="s">'+(st==='reserved'?'Reserved':('Checked out &middot; due '+fmt(o.due)))+'</div>';
       board.appendChild(el);
     });
   }
@@ -139,11 +137,11 @@
     for(var i=0;i<42;i++){ var d=new Date(start); d.setDate(start.getDate()+i); var iso=d.toISOString().slice(0,10);
       var cell=document.createElement('div'); cell.className='cell'+(d.getMonth()!==view.getMonth()?' out-month':'')+(iso===todayISO()?' today':'');
       var dn=document.createElement('div'); dn.className='daynum'; dn.textContent=d.getDate(); cell.appendChild(dn);
-      DATA.checkouts.filter(function(c){ return c.out===iso; }).forEach(function(c){
+      DATA.checkouts.filter(function(c){ return c.out===iso && statusOf(c)!=='returned'; }).forEach(function(c){
         var s=statusOf(c);
         var overdue=s==='out' && c.due < todayISO();
-        var cls=s==='returned'?' returned':(s==='reserved'?' reserved':(overdue?' overdue':''));
-        var meta=s==='returned'?'returned':(s==='reserved'?'reserved':(overdue?('overdue '+fmt(c.due)):('due '+fmt(c.due))));
+        var cls=s==='reserved'?' reserved':(overdue?' overdue':'');
+        var meta=s==='reserved'?'reserved':(overdue?('overdue '+fmt(c.due)):('due '+fmt(c.due)));
         var pill=document.createElement('div'); pill.className='pill'+cls;
         pill.innerHTML='<span class="cam">'+c.camera+'</span><span class="meta">'+meta+'</span>';
         cell.appendChild(pill);
