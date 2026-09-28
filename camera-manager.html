@@ -266,6 +266,25 @@
   .retitem{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,184,184,.12);font-family:var(--body);font-size:.95rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:400;cursor:pointer;}
   .retitem input{width:17px;height:17px;accent-color:var(--teal);}
   #retlist{margin-bottom:14px;}
+  /* Return checklist: linked additional gear (returned vs kept pending with a reason). */
+  .reteq-h{font-family:var(--font);font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-lt);margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--line-soft);}
+  .reteq{border:1px solid var(--line-soft);border-left:3px solid var(--teal-deep);padding:9px 11px;margin-bottom:8px;background:rgba(0,0,0,.2);}
+  .reteq-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .reteq-name{font-weight:600;color:#eafeff;font-size:.9rem;}
+  .reteq-toggle{display:inline-flex;flex:0 0 auto;}
+  .reteq-btn{font-family:var(--font);font-size:.64rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:6px 10px;cursor:pointer;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--muted);}
+  .reteq-btn+.reteq-btn{border-left:0;}
+  .reteq-btn.ret.active{background:var(--ok);color:#04110f;border-color:var(--ok);}
+  .reteq-btn.miss.active{background:var(--red);color:#fff;border-color:var(--red);}
+  .reteq-reason{margin-top:9px;display:flex;flex-wrap:wrap;gap:6px;}
+  .reteq-chip{font-family:var(--body);font-size:.72rem;padding:6px 10px;cursor:pointer;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--muted);}
+  .reteq-chip:hover{border-color:var(--teal);color:#fff;}
+  .reteq-chip.active{background:rgba(224,64,58,.2);border-color:var(--red);color:#ffd7d3;}
+  .reteq-note{flex:1 1 100%;margin-top:4px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:.9rem;padding:8px 10px;box-sizing:border-box;}
+  /* Pending gear (kit returned, this piece not fully back). */
+  .cam.pending{border-left-color:var(--gold);background:rgba(245,179,1,.05);}
+  .pill.pending{background:rgba(245,179,1,.22);color:#ffd889;}
+  .eqnote.pend b{color:var(--gold);}
   /* Attach gear to an existing checkout (tripod / lenses / flash), teacher console edit modal. */
   .ed-hint{color:var(--faint);font-size:.8rem;margin:-8px 0 10px;text-transform:none;letter-spacing:0;line-height:1.4;font-weight:400;}
   .ed-gear{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
@@ -415,6 +434,7 @@
     <div class="mbody">
       <p class="retsub">Check off what came back. Anything left unchecked is saved as missing on this camera.</p>
       <div id="retlist"></div>
+      <div id="retequip"></div>
       <label for="retnote2">Extra note (optional)</label>
       <input type="text" id="retnote2" placeholder="e.g. small scratch on the screen" />
       <label class="chk" style="margin-top:12px;"><input type="checkbox" id="ret_leavecard"> Student is leaving their memory card to offload later. You will pull the card into the wallet and the camera stays out of rotation until a fresh card is installed.</label>
@@ -702,15 +722,17 @@
              '<div class="acts"><button class="btn sm undo" data-undo="'+c.id+'">Undo check-in</button></div>'+
              '<div class="returning-msg">Back in the pool in <b data-count="'+c.id+'">15</b>s.</div></div>';
     }
-    var st=statusOf(c), od=isOverdue(c), cls=od?'overdue':st;
-    var pill=od?'<span class="pill overdue">Overdue</span>':(st==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill out">Checked out</span>');
-    var note=c.note?'<div class="eqnote"><b>Note</b> '+esc(c.note)+'</div>':'';
+    var st=statusOf(c), od=isOverdue(c), pend=(!!c.pending && st!=='returned');
+    var cls=pend?'pending':(od?'overdue':st);
+    var pill=pend?'<span class="pill pending">Pending</span>':(od?'<span class="pill overdue">Overdue</span>':(st==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill out">Checked out</span>'));
+    var linkedCam=(function(){ var p=c.group?findRec(c.group):null; return (p&&p.camera)?p.camera:''; })();
+    var note=c.note?'<div class="eqnote'+(pend?' pend':'')+'"><b>'+(pend?'Awaiting':'Note')+'</b> '+esc(c.note)+'</div>':'';
     return '<div class="cam '+cls+' eqcard">'+
       '<div class="cam-top"><span class="n eqn">'+esc(label)+'</span>'+pill+'</div>'+
       '<div class="who">'+esc(nameOf(c))+'</div>'+
-      '<div class="acts"><button class="btn sm warn" data-return="'+c.id+'">Check in</button>'+
+      '<div class="acts"><button class="btn sm warn" data-return="'+c.id+'">'+(pend?'Resolve / check in':'Check in')+'</button>'+
         '<button class="btn sm ghost" data-note="'+c.id+'">Note</button></div>'+
-      '<div class="meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+'<span class="co">'+esc(c.course||'')+'</span></div>'+
+      '<div class="meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+'<span class="co">'+esc(c.course||'')+'</span>'+(linkedCam?(' &middot; '+esc(linkedCam)):'')+'</div>'+
       '<div class="meta dates">Out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</div>'+
       note+contactLine(c)+
       '</div>';
@@ -923,11 +945,47 @@
   // ---- return checklist (verify kit components on check-in; missing ones append to the note) ----
   // Edit this list to match a complete kit.
   var KIT_COMPONENTS=['Canon EOS R50 body','RF 50mm lens','RF-S 18-45mm lens','RF-S 55-210mm lens','LP-E17 battery','LC-E17 charger','SD memory card','Neck strap','Lens caps','Camera bag'];
-  var retId=null;
+  var retId=null, retEquip=[];
+  // Item-aware quick reasons for a piece of gear that did not fully come back.
+  function retReasons(item){
+    if(item==='tripod') return ['Forgot at home','Missing mounting plate','Damaged'];
+    if(item==='wide'||item==='zoom') return ['Forgot at home','Missing lens cap','Damaged'];
+    if(item==='speedlite') return ['Forgot at home','Missing battery','Damaged'];
+    return ['Forgot at home','Missing part','Damaged'];
+  }
   function openReturnChecklist(id){
     var c=findRec(id); if(!c) return; retId=id;
     document.getElementById('retTitle').textContent='Return checklist · '+(c.camera||'Camera');
     document.getElementById('retlist').innerHTML=KIT_COMPONENTS.map(function(k,i){ return '<label class="retitem"><input type="checkbox" id="ret_'+i+'" checked> '+esc(k)+'</label>'; }).join('');
+    // Linked additional gear checked out with this kit: verify each piece comes back with it.
+    retEquip=(DATA.checkouts||[]).filter(function(e){ return e.kind==='equipment' && e.group===id && statusOf(e)!=='returned'; });
+    var eq=document.getElementById('retequip');
+    if(retEquip.length){
+      eq.innerHTML='<div class="reteq-h">Additional gear with this kit &middot; check each piece back in</div>'+retEquip.map(function(e){
+        var label=EQUIP_LABEL[e.item]||e.item||'Gear';
+        var chips=retReasons(e.item).map(function(r){ return '<button type="button" class="reteq-chip" data-reason="'+esc(r)+'">'+esc(r)+'</button>'; }).join('');
+        return '<div class="reteq" data-eqid="'+esc(e.id)+'">'+
+          '<div class="reteq-top"><span class="reteq-name">'+esc(label)+'</span>'+
+            '<span class="reteq-toggle"><button type="button" class="reteq-btn ret active" data-rr="ret">Returned</button>'+
+            '<button type="button" class="reteq-btn miss" data-rr="miss">Not returned</button></span></div>'+
+          '<div class="reteq-reason" style="display:none;">'+chips+
+            '<input type="text" class="reteq-note" placeholder="Add a note (optional)" /></div>'+
+          '</div>';
+      }).join('');
+      eq.querySelectorAll('.reteq').forEach(function(row){
+        var reason=row.querySelector('.reteq-reason');
+        row.querySelectorAll('.reteq-btn').forEach(function(b){ b.onclick=function(){
+          row.querySelectorAll('.reteq-btn').forEach(function(x){ x.classList.remove('active'); });
+          b.classList.add('active');
+          reason.style.display=(b.getAttribute('data-rr')==='miss')?'':'none';
+        }; });
+        row.querySelectorAll('.reteq-chip').forEach(function(ch){ ch.onclick=function(){
+          row.querySelectorAll('.reteq-chip').forEach(function(x){ x.classList.remove('active'); });
+          ch.classList.add('active');
+          var n=row.querySelector('.reteq-note'); if(n) n.value=ch.getAttribute('data-reason');
+        }; });
+      });
+    } else { eq.innerHTML=''; }
     document.getElementById('retnote2').value='';
     var lc=document.getElementById('ret_leavecard'); if(lc) lc.checked=false;
     document.getElementById('retmodal').classList.add('open');
@@ -942,6 +1000,13 @@
       var extra=document.getElementById('retnote2').value.trim();
       var lc=document.getElementById('ret_leavecard');
       var cardCtx=(lc&&lc.checked&&c)?{camera:cam, student_id:c.student_id||'', student_name:nameOf(c), checkout_id:c.id}:null;
+      // Capture each linked-gear decision before closing: returned, or kept pending with a reason.
+      var eqDecisions=(retEquip||[]).map(function(e){
+        var row=document.querySelector('#retequip .reteq[data-eqid="'+e.id+'"]');
+        var miss=row&&row.querySelector('.reteq-btn.miss.active');
+        var n=row&&row.querySelector('.reteq-note');
+        return {id:e.id, returned:!miss, note:(n&&n.value.trim())||''};
+      });
       closeReturn();
       // Missing items become open ISSUES on the camera (resolve them in the camera card when fixed) and
       // every finding is written to the permanent history LOG. Then run the 15s return (with its undo).
@@ -952,6 +1017,12 @@
         camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({camera:cam,issues:ni,log:nl})})
           .then(function(){ markReturned(id); }).catch(function(){ markReturned(id); });
       } else { markReturned(id); }
+      // Linked gear: check in what came back; keep the rest pending (still out) with a note.
+      var eqCalls=eqDecisions.map(function(d){
+        if(d.returned) return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:d.id,status:'returned'})});
+        return camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:d.id,status:'out',pending:true,note:d.note||'Not returned with the kit'})});
+      });
+      if(eqCalls.length) Promise.all(eqCalls).then(function(){ loadBoard(); }).catch(function(){ loadBoard(); });
       // Student is offloading later: pull the card into a wallet slot (flags the camera no-card).
       if(cardCtx) openCardHold(cardCtx);
     };
