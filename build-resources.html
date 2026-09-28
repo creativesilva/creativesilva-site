@@ -529,6 +529,23 @@
     background-position:calc(100% - 18px) 55%, calc(100% - 13px) 55%; background-size:5px 5px,5px 5px; background-repeat:no-repeat; padding-right:34px;}
   .pvb-field textarea:focus, .pvb-field select:focus{border-color:var(--pvb-teal);}
   .pvb-field select option{background:#0c1414; color:var(--pvb-text);}
+  /* Custom teal dropdown: replaces the native <select> popup so the OPEN list matches the
+     dark-teal aesthetic (native option lists use the OS blue highlight + system font and
+     cannot be styled). Closed button mirrors .pvb-field select; menu reuses .pvb-select-menu. */
+  .pvb-dd{position:relative; width:100%;}
+  .pvb-dd-btn{width:100%; display:flex; align-items:center; gap:10px; text-align:left; cursor:pointer;
+    font-family:var(--pvb-body); font-size:.95rem; color:var(--pvb-text);
+    background:rgba(0,0,0,.28); border:1px solid var(--pvb-line); border-radius:9px; padding:9px 12px;}
+  .pvb-dd-btn:hover{border-color:rgba(0,184,184,.5);}
+  .pvb-dd.open .pvb-dd-btn, .pvb-dd-btn:focus{border-color:var(--pvb-teal); outline:none;}
+  .pvb-dd-lbl{flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .pvb-dd-lbl.ph{color:var(--pvb-faint);}
+  .pvb-dd-btn .pvb-select-chev{margin-left:auto; width:9px; height:9px; border-right:2px solid var(--pvb-teal-lt); border-bottom:2px solid var(--pvb-teal-lt);}
+  .pvb-dd.open .pvb-dd-btn .pvb-select-chev{transform:rotate(-135deg);}
+  .pvb-dd-menu[hidden]{display:none;}
+  .pvb-dd-opt{text-align:left; padding:10px 14px; cursor:pointer; border-left:3px solid transparent; background:#0a2e2c; color:#eafeff; font-family:var(--pvb-body); font-size:.9rem; white-space:normal;}
+  .pvb-dd-opt + .pvb-dd-opt{border-top:1px solid rgba(0,184,184,.14);}
+  .pvb-dd-opt:hover, .pvb-dd-opt.active{background:rgba(0,184,184,.20); border-left-color:var(--pvb-teal); color:#fff;}
   .pvb-acc{background:rgba(0,184,184,.06); border:1px solid var(--pvb-line-soft); border-left:2px solid var(--pvb-teal-deep); margin-bottom:10px;}
   .pvb-acc.open{border-left-color:var(--pvb-teal);}
   .pvb-acc-head{width:100%; display:flex; align-items:center; gap:10px; cursor:pointer; font-family:var(--pvb-font);
@@ -2435,12 +2452,46 @@
       updCnt(); if(nSel()>0) wrap.classList.add('open');
       wrap.appendChild(head); wrap.appendChild(body); return wrap;
     }
+    // Custom teal dropdown (replaces native <select> so the open list matches the dark aesthetic).
+    // items: [{value,label}]; current: value; onSelect(value). Keyboard + click-outside + a11y.
+    function pvbDropdown(items, current, onSelect){
+      var wrap=el('div','pvb-dd');
+      var btn=el('button','pvb-dd-btn'); btn.type='button'; btn.setAttribute('aria-haspopup','listbox'); btn.setAttribute('aria-expanded','false');
+      var lbl=el('span','pvb-dd-lbl'); btn.appendChild(lbl); btn.appendChild(el('span','pvb-select-chev'));
+      var menu=el('div','pvb-select-menu pvb-dd-menu'); menu.setAttribute('role','listbox'); menu.hidden=true;
+      var cur=current, activeIdx=-1;
+      function labelFor(v){ for(var i=0;i<items.length;i++) if(items[i].value===v) return items[i].label; return ''; }
+      function paintLabel(){ var t=labelFor(cur); lbl.textContent=t||'Choose…'; lbl.classList.toggle('ph', !t); }
+      function build(){ menu.innerHTML=''; items.forEach(function(o,i){
+        var it=el('div','pvb-dd-opt'+(o.value===cur?' active':'')); it.setAttribute('role','option'); it.textContent=o.label;
+        it.addEventListener('click',function(e){ e.stopPropagation(); choose(i); });
+        it.addEventListener('mousemove',function(){ setActive(i); });
+        menu.appendChild(it);
+      }); }
+      function optEls(){ return menu.querySelectorAll('.pvb-dd-opt'); }
+      function setActive(i){ activeIdx=i; var os=optEls(); for(var k=0;k<os.length;k++) os[k].classList.toggle('active',k===i); if(os[i]) os[i].scrollIntoView({block:'nearest'}); }
+      function open(){ if(!menu.hidden) return; build(); menu.hidden=false; btn.setAttribute('aria-expanded','true'); wrap.classList.add('open');
+        var sel=-1; for(var i=0;i<items.length;i++) if(items[i].value===cur) sel=i; setActive(sel>=0?sel:0);
+        document.addEventListener('mousedown',onDoc,true); document.addEventListener('keydown',onKey,true); }
+      function close(){ if(menu.hidden) return; menu.hidden=true; btn.setAttribute('aria-expanded','false'); wrap.classList.remove('open');
+        document.removeEventListener('mousedown',onDoc,true); document.removeEventListener('keydown',onKey,true); }
+      function onDoc(e){ if(!wrap.contains(e.target)) close(); }
+      function onKey(e){ if(e.key==='Escape'){ close(); btn.focus(); }
+        else if(e.key==='ArrowDown'){ e.preventDefault(); setActive(Math.min(activeIdx+1,items.length-1)); }
+        else if(e.key==='ArrowUp'){ e.preventDefault(); setActive(Math.max(activeIdx-1,0)); }
+        else if(e.key==='Enter'||e.key===' '){ e.preventDefault(); if(activeIdx>=0) choose(activeIdx); } }
+      function choose(i){ cur=items[i].value; paintLabel(); close(); btn.focus(); if(onSelect) onSelect(cur); }
+      btn.addEventListener('click',function(e){ e.stopPropagation(); if(menu.hidden) open(); else close(); });
+      btn.addEventListener('keydown',function(e){ if((e.key==='ArrowDown'||e.key==='Enter'||e.key===' ')&&menu.hidden){ e.preventDefault(); open(); } });
+      paintLabel(); wrap.appendChild(btn); wrap.appendChild(menu);
+      wrap.ddSetValue=function(v){ cur=v; paintLabel(); };
+      return wrap;
+    }
     function backdropSlot(){
       var f=el('div','pvb-field full'); f.appendChild(el('label',null,'Background'));
-      var sel=document.createElement('select');
-      [['transparent','Transparent background (PNG)'],['white','White studio backdrop']].forEach(function(o){ var op=document.createElement('option'); op.value=o[0]; op.textContent=o[1]; if(state.backdrop===o[0])op.selected=true; sel.appendChild(op); });
-      sel.addEventListener('change',function(){ state.backdrop=sel.value; render(); });
-      f.appendChild(sel); return f;
+      var items=[{value:'transparent',label:'Transparent background (PNG)'},{value:'white',label:'White studio backdrop'}];
+      f.appendChild(pvbDropdown(items, state.backdrop, function(v){ state.backdrop=v; render(); }));
+      return f;
     }
 
     // ---- fields ----
@@ -2464,19 +2515,21 @@
       function fieldEl(name){ if(state.fields[name]===undefined) state.fields[name]='';
         var opts=optsFor(name,ctx), w=el('div','pvb-field'+(opts?'':' full')); w.appendChild(el('label',null,esc(name)));
         var input;
-        if(opts){ input=document.createElement('select'); var d=document.createElement('option'); d.value=''; d.textContent='-'; input.appendChild(d);
-          var cur=state.fields[name]||'', inList=false;
-          opts.forEach(function(o){ var op=document.createElement('option'); op.value=o; op.textContent=o; if(cur===o){op.selected=true; inList=true;} input.appendChild(op); });
-          var oo=document.createElement('option'); oo.value='__other__'; oo.textContent='Other (type your own)'; input.appendChild(oo);
+        if(opts){
+          var dcur=state.fields[name]||'', inList=false;
+          opts.forEach(function(o){ if(dcur===o) inList=true; });
           var custom=document.createElement('input'); custom.type='text'; custom.className='pvb-otherbox'; custom.placeholder='Type your own '+name.toLowerCase();
-          var otherOn=(cur && !inList); if(otherOn){ oo.selected=true; custom.value=cur; } custom.style.display=otherOn?'block':'none';
-          input.addEventListener('change',function(){
-            if(input.value==='__other__'){ custom.style.display='block'; state.fields[name]=custom.value||''; custom.focus(); }
-            else { custom.style.display='none'; state.fields[name]=input.value; }
+          var otherOn=(dcur && !inList); custom.value=otherOn?dcur:''; custom.style.display=otherOn?'block':'none';
+          var ditems=[{value:'',label:'-'}];
+          opts.forEach(function(o){ ditems.push({value:o,label:o}); });
+          ditems.push({value:'__other__',label:'Other (type your own)'});
+          var dd=pvbDropdown(ditems, otherOn?'__other__':(inList?dcur:''), function(v){
+            if(v==='__other__'){ custom.style.display='block'; state.fields[name]=custom.value||''; custom.focus(); }
+            else { custom.style.display='none'; state.fields[name]=v; }
             onFieldChange(name);
           });
           custom.addEventListener('input',function(){ state.fields[name]=custom.value; render(); });
-          w.appendChild(input); w.appendChild(custom);
+          w.appendChild(dd); w.appendChild(custom);
         } else { input=document.createElement('textarea'); input.rows=2; input.placeholder='type here'; input.value=state.fields[name]||'';
           input.addEventListener('input',function(){ state.fields[name]=input.value; input.style.height='auto'; input.style.height=input.scrollHeight+'px'; render(); });
           w.appendChild(input); }
@@ -2492,10 +2545,9 @@
       fieldsEl.appendChild(el('div','pvb-gtitle','Outfit change'));
       var g=el('div','pvb-fields');
       var vf=el('div','pvb-field full'); vf.appendChild(el('label',null,'Pose / view'));
-      var sel=document.createElement('select');
-      cfg.views.forEach(function(v){ var op=document.createElement('option'); op.value=v.file; op.textContent=v.label; if(state.view===v.file)op.selected=true; sel.appendChild(op); });
-      sel.addEventListener('change',function(){ state.view=sel.value; saveState(KEY,state); fetchPrompt(sel.value).then(function(t){ baseText=t; render(); }); });
-      vf.appendChild(sel); g.appendChild(vf);
+      var vitems=cfg.views.map(function(v){ return {value:v.file,label:v.label}; });
+      vf.appendChild(pvbDropdown(vitems, state.view, function(v){ state.view=v; saveState(KEY,state); fetchPrompt(v).then(function(t){ baseText=t; render(); }); }));
+      g.appendChild(vf);
       var cf=el('div','pvb-field full'); cf.appendChild(el('label',null,'Custom details (new outfit or output note)'));
       var ta=document.createElement('textarea'); ta.rows=3; ta.placeholder='Optional: colors, materials, footwear, accessories, mood, framing. Body proportions stay locked to the character sheet.'; ta.value=state.custom||'';
       ta.addEventListener('input',function(){ state.custom=ta.value; ta.style.height='auto'; ta.style.height=ta.scrollHeight+'px'; render(); });
@@ -2528,10 +2580,9 @@
       fieldsEl.appendChild(el('div','pvb-gtitle','Studio pose'));
       var g=el('div','pvb-fields');
       var pf=el('div','pvb-field full'); pf.appendChild(el('label',null,'Pose'));
-      var sel=document.createElement('select');
-      POSES.forEach(function(p){ var op=document.createElement('option'); op.value=p.file; op.textContent=p.label; if(state.fields['POSE']===p.file)op.selected=true; sel.appendChild(op); });
-      sel.addEventListener('change',function(){ state.fields['POSE']=sel.value; render(); });
-      pf.appendChild(sel); g.appendChild(pf);
+      var pitems=POSES.map(function(p){ return {value:p.file,label:p.label}; });
+      pf.appendChild(pvbDropdown(pitems, state.fields['POSE'], function(v){ state.fields['POSE']=v; render(); }));
+      g.appendChild(pf);
       var cf=el('div','pvb-field full'); cf.appendChild(el('label',null,'Custom details (optional)'));
       var ta=document.createElement('textarea'); ta.rows=2; ta.placeholder='Optional: expression, hand detail, wardrobe note, framing. Body proportions stay locked to the character sheet.'; ta.value=state.custom||'';
       ta.addEventListener('input',function(){ state.custom=ta.value; ta.style.height='auto'; ta.style.height=ta.scrollHeight+'px'; render(); });
