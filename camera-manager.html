@@ -658,7 +658,7 @@
   });
   function approve(id,btn){
     if(btn) btn.disabled=true;
-    camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,approved:true})})
+    return camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,approved:true})})
       .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(reloadCal)
       .catch(function(){ alert('Could not approve. Try again.'); if(btn) btn.disabled=false; });
   }
@@ -805,7 +805,12 @@
     var hist=(DATA.checkouts||[]).filter(function(x){ return x.camera===cam && x.kind!=='equipment'; }).sort(function(x,y){ return (x.out||'')<(y.out||'')?1:-1; });
     var statusPill=oos?'<span class="pill oos">Out of service</span>':(c?(statusOf(c)==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill '+(isOverdue(c)?'overdue':'out')+'">'+(isOverdue(c)?'Overdue':'Checked out')+'</span>'):'<span class="pill avail">Available</span>');
     var h='<div class="cd-row"><div>'+statusPill+(P2.indexOf(cam)>=0?' <span class="camlog-p2">Photo 2 only</span>':'')+'</div><button class="btn sm '+(oos?'':'danger')+'" id="cd-oos">'+(oos?'Return to service':'Mark out of service')+'</button></div>';
-    if(c){ h+='<div class="cd-cur"><div class="cd-cur-who">'+esc(nameOf(c))+'</div><div class="cd-cur-meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+esc(c.course||'')+' &middot; out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+' &middot; '+esc(statusOf(c))+'</div>'+(c.note?'<div class="cd-cur-note">Reservation note: '+esc(c.note)+'</div>':'')+'<div class="cd-cur-acts"><button class="btn sm ghost" id="cd-editcur">Edit / move student</button></div></div>'; }
+    if(c){
+      var cdPend=(statusOf(c)==='reserved' && c.approved===false);
+      var cdPendMsg=cdPend?'<div class="cd-cur-note" style="color:#c9b8ff;">Student request &middot; approve to confirm this reservation, or deny to free the camera.</div>':'';
+      var cdApprove=cdPend?'<button class="btn sm" data-cdapprove="'+esc(c.id)+'">Approve</button><button class="btn sm danger" data-cddeny="'+esc(c.id)+'">Deny</button>':'';
+      h+='<div class="cd-cur"><div class="cd-cur-who">'+esc(nameOf(c))+(cdPend?' <span class="pill pending">Pending</span>':'')+'</div><div class="cd-cur-meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+esc(c.course||'')+' &middot; out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+' &middot; '+esc(statusOf(c))+'</div>'+(c.note?'<div class="cd-cur-note">Reservation note: '+esc(c.note)+'</div>':'')+cdPendMsg+'<div class="cd-cur-acts">'+cdApprove+'<button class="btn sm ghost" id="cd-editcur">Edit / move student</button></div></div>';
+    }
     h+='<div class="cd-sec"><div class="cd-h">Open condition issues</div>';
     h+=issues.length?('<div class="cd-issues">'+issues.map(function(it,i){ return '<div class="cd-issue"><span>'+esc(it)+'</span><button class="btn sm" data-resolve="'+i+'">Resolved</button></div>'; }).join('')+'</div>'):'<div class="cd-empty">No open issues.</div>';
     h+='<div class="cd-add"><input type="text" id="cd-newissue" placeholder="Add an issue (e.g. lens cap missing)"><button class="btn sm" id="cd-addissue">Add</button></div></div>';
@@ -815,6 +820,8 @@
     document.getElementById('cd-body').innerHTML=h;
     var oosb=document.getElementById('cd-oos'); if(oosb) oosb.onclick=function(){ saveAsset(cam,{oos:!oos},renderCamDetailModal); };
     var ec=document.getElementById('cd-editcur'); if(ec) ec.onclick=function(){ openEditCheckout(c.id); };
+    document.querySelectorAll('#cd-body [data-cdapprove]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-cdapprove'), el).then(renderCamDetailModal); }; });
+    document.querySelectorAll('#cd-body [data-cddeny]').forEach(function(el){ el.onclick=function(){ if(confirm('Deny and cancel this reservation? The camera goes back in the pool.')){ del(el.getAttribute('data-cddeny'), el); closeCamDetail(); } }; });
     document.querySelectorAll('#cd-body [data-resolve]').forEach(function(el){ el.onclick=function(){ var i=+el.getAttribute('data-resolve'), it=issues[i]; var ni=issues.slice(); ni.splice(i,1); var nl=(a.log||[]).concat([{date:fmt(todayISO()),text:'Resolved: '+it}]); saveAsset(cam,{issues:ni,log:nl},renderCamDetailModal); }; });
     var ai=document.getElementById('cd-addissue'); if(ai) ai.onclick=function(){ var v=document.getElementById('cd-newissue').value.trim(); if(!v) return; var ni=(issues||[]).concat([v]); var nl=(a.log||[]).concat([{date:fmt(todayISO()),text:'Issue: '+v}]); saveAsset(cam,{issues:ni,log:nl},renderCamDetailModal); };
     var sn=document.getElementById('cd-savenote'); if(sn) sn.onclick=function(){ saveAsset(cam,{note:document.getElementById('cd-note').value},renderCamDetailModal); };
