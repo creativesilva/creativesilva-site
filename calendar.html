@@ -232,6 +232,9 @@
   .rv-who b{color:var(--teal-lt);}
   #rv-id,#rv-sc,#rv-pg,#rv-pc{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1.05rem;padding:11px 12px;outline:none;box-sizing:border-box;margin-bottom:10px;}
   .rv-msg{min-height:1.1em;font-size:.85rem;color:var(--muted);margin:2px 0 12px;}
+  /* Missing-assignment hold: a clear, professional red notice shown at ID entry when a student is not eligible. */
+  .rv-block{background:rgba(224,64,58,.14);border:1px solid rgba(224,64,58,.4);border-left:4px solid var(--red);padding:12px 14px;margin:4px 0 6px;font-size:.9rem;line-height:1.45;color:#ffb3a6;}
+  .rv-block b{display:block;color:#ff9a8a;font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.72rem;margin-bottom:5px;}
   .rv-vrow{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:.9rem;color:var(--muted);padding:7px 0;border-bottom:1px solid rgba(0,184,184,.12);}
   .rv-vrow b{color:#eafeff;}
   .rv-vrow .on{color:#8ff0b0;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;}
@@ -462,7 +465,9 @@
       updated:'Updated', refreshes:'Refreshes automatically.', loadErr:'Could not load the calendar. It will keep trying.',
       reloadMsg:'This screen did not load right. Tap reload and try again.', reload:'Reload',
       saving:'Saving…', eligibility:'Eligibility', status:'Status', freeOn:'Free on', availOne:'Available',
-      returnedWord:'Returned', openNote:'This camera is free. Reserve it from the reservation form.', more:'more'
+      returnedWord:'Returned', openNote:'This camera is free. Reserve it from the reservation form.', more:'more',
+      blockedTitle:'Reservation on hold',
+      blockedMsg:'You are not eligible to reserve a camera right now because you have more than {n} missing assignments. Please turn in your missing work, then try again.'
     },
     es:{
       intro:'Mira qué cámaras están prestadas y cuándo se deben devolver antes de preguntar. Las cámaras 16, 17 y 18 son solo para Fotografía 2. Se actualiza automáticamente.',
@@ -506,7 +511,9 @@
       updated:'Actualizado', refreshes:'Se actualiza automáticamente.', loadErr:'No se pudo cargar el calendario. Seguirá intentando.',
       reloadMsg:'Esta pantalla no cargó bien. Toca recargar e inténtalo de nuevo.', reload:'Recargar',
       saving:'Guardando…', eligibility:'Elegibilidad', status:'Estado', freeOn:'Libre el', availOne:'Disponible',
-      returnedWord:'Devuelta', openNote:'Esta cámara está libre. Resérvala desde el formulario de reserva.', more:'más'
+      returnedWord:'Devuelta', openNote:'Esta cámara está libre. Resérvala desde el formulario de reserva.', more:'más',
+      blockedTitle:'Reserva en espera',
+      blockedMsg:'No puedes reservar una cámara en este momento porque tienes más de {n} tareas faltantes. Por favor entrega tu trabajo pendiente y vuelve a intentarlo.'
     }
   };
   function t(k){ var v=(TR[LANG]&&TR[LANG][k]); return (v!=null)?v:(TR.en[k]!=null?TR.en[k]:k); }
@@ -521,7 +528,8 @@
     'That camera is for Photography 2 only.':'Esa cámara es solo para Fotografía 2.',
     'That camera is already booked for those days. Please pick another.':'Esa cámara ya está reservada para esos días. Por favor elige otra.',
     'Request too large.':'La solicitud es demasiado grande.',
-    'Invalid request.':'Solicitud inválida.'
+    'Invalid request.':'Solicitud inválida.',
+    'You are not eligible to reserve a camera right now because you have more than 3 missing assignments. Please turn in your missing work and try again later.':'No puedes reservar una cámara en este momento porque tienes más de 3 tareas faltantes. Por favor entrega tu trabajo pendiente y vuelve a intentarlo.'
   };
   function srvErr(en){ return (LANG==='es' && en && SRV_ES[en]) ? SRV_ES[en] : en; }
   // ---- Apply the current language to every STATIC string on the page (dynamic bits re-render on toggle). ----
@@ -1031,6 +1039,9 @@
     fetch(API+'/api/camera/student_info',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:v})})
       .then(function(r){return r.json();}).then(function(j){
         if(!j||!j.found){ msg.innerHTML='<span style="color:#ffb28a">'+t('idNotFound')+'</span>'; return; }
+        // Missing-assignment gate (Silva Photo students only; the server decides, fails open).
+        if(j.eligible===false){ var lim=(j.missing_limit!=null?j.missing_limit:3);
+          msg.innerHTML='<div class="rv-block"><b>'+t('blockedTitle')+'</b>'+t('blockedMsg').replace('{n}',lim)+'</div>'; return; }
         rvLookup={id:v,label:j.label,name:j.name||'',period:String(j.period||''),
                   student_cell:j.student_cell||'',parent_guardian:j.parent_guardian||'',parent_cell:j.parent_cell||''};
         showVerify();
