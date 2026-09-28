@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Camera Manager | Pioneer Valley Photography</title>
-<script>window.SILVA_HIDE_CATALOG=true;/* teacher tool: catalog stays on curriculum.html behind its PIN */</script>
+<script>window.SILVA_HIDE_CATALOG=true;window.SILVA_CATALOG_RETURN='/curriculum.html';/* teacher tool: no catalog dropdown, but a plain Return-to-catalog link (curriculum.html prompts for its PIN). Public calendar.html does NOT set this. */</script>
 <meta name="description" content="Teacher back-end for the Pioneer Valley camera checkout: reserve, mark picked up, mark returned." />
 <meta name="robots" content="noindex,nofollow" />
 <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only_Teal.svg" />
@@ -123,7 +123,13 @@
   .meta.dates{color:var(--text);font-weight:600;}
 
   .histwrap{margin-top:8px;}
-  .hist{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;}
+  .hist{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;max-height:280px;overflow-y:auto;padding-right:4px;}
+  .hist::-webkit-scrollbar{width:8px;} .hist::-webkit-scrollbar-thumb{background:rgba(0,184,184,.35);} .hist::-webkit-scrollbar-track{background:rgba(0,0,0,.2);}
+  .histbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+  .histbar .histnote{color:var(--faint);font-size:.72rem;}
+  .histdate{height:32px;width:150px;flex:0 0 auto;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:.82rem;padding:0 8px;box-sizing:border-box;}
+  .histdate:focus{outline:none;border-color:var(--teal);}
+  .histbar .histnote:first-child{flex:1 1 220px;min-width:180px;}
   .hrow{background:rgba(0,0,0,.18);border:1px solid rgba(160,180,180,.14);border-left:3px solid var(--grayed);padding:9px 11px;color:var(--grayed);font-size:.78rem;}
   .hrow .hc{font-family:var(--font);font-weight:600;color:rgba(200,220,220,.66);}
   .hrow .hre{font-size:.68rem;}
@@ -204,6 +210,7 @@
   .cd-cur{background:rgba(0,0,0,.24);border:1px solid var(--line-soft);border-left:3px solid var(--orange);padding:10px 12px;margin-bottom:14px;}
   .cd-cur-who{font-family:var(--font);font-weight:600;color:#fff;font-size:1rem;}
   .cd-cur-meta{font-size:.8rem;color:var(--muted);margin:3px 0 8px;}
+  .cd-cur-acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px;}
   .cd-sec{border-top:1px solid var(--line-soft);padding-top:12px;margin-top:12px;}
   .cd-h{font-family:var(--font);font-size:.64rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-lt);margin-bottom:8px;}
   .cd-issues{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
@@ -212,7 +219,8 @@
   #cd-note{margin-bottom:8px;}
   .cd-log{display:flex;flex-direction:column;gap:5px;max-height:150px;overflow-y:auto;}
   .cd-logrow{font-size:.82rem;color:var(--muted);} .cd-logdate{color:var(--teal-lt);font-weight:600;margin-right:6px;}
-  .cd-hist{display:flex;flex-direction:column;gap:6px;}
+  .cd-hist{display:flex;flex-direction:column;gap:6px;max-height:168px;overflow-y:auto;padding-right:4px;}
+  .cd-hist::-webkit-scrollbar{width:8px;} .cd-hist::-webkit-scrollbar-thumb{background:rgba(0,184,184,.35);} .cd-hist::-webkit-scrollbar-track{background:rgba(0,0,0,.2);}
   .cd-histrow{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted);border-bottom:1px solid rgba(0,184,184,.10);padding-bottom:5px;}
   .cd-histwho{font-weight:600;color:#eafeff;flex:1 1 auto;} .cd-histdates{color:var(--faint);white-space:nowrap;}
   .cd-empty{color:var(--faint);font-size:.85rem;}
@@ -317,6 +325,12 @@
   <div class="histwrap">
     <details class="histbox" id="histbox">
       <summary>Returned history <span id="histn"></span></summary>
+      <div class="histbar">
+        <span class="histnote">On screen: last 4 weeks. Download the full, detailed record (opens in Excel) for any date range, like a bank statement:</span>
+        <label class="histnote" for="histFrom">From</label><input type="date" id="histFrom" class="histdate">
+        <label class="histnote" for="histTo">To</label><input type="date" id="histTo" class="histdate">
+        <button class="btn sm" id="histCsv" type="button">Download CSV</button>
+      </div>
       <div class="hist" id="hist"></div>
     </details>
   </div>
@@ -427,7 +441,7 @@
   </div>
 </div>
 
-<script src="/js/silva-nav.js?v=catlock1"></script>
+<script src="/js/silva-nav.js?v=catret1"></script>
 <script>
 (function(){
   var API='https://command.creativesilva.com';
@@ -667,15 +681,17 @@
     host.innerHTML=html;
     updateSummary();
     updateDigests();
-    var ret=DATA.checkouts.filter(function(c){ return statusOf(c)==='returned'; })
+    var allRet=DATA.checkouts.filter(function(c){ return statusOf(c)==='returned'; })
       .sort(function(a,b){ return (b.returned_date||b.created||'')>(a.returned_date||a.created||'')?1:-1; });
-    var hn=document.getElementById('histn'); if(hn) hn.textContent='('+ret.length+')';
+    var cutoff4w=new Date(Date.now()-28*864e5).toISOString().slice(0,10);   // on screen: last 4 weeks only
+    var ret=allRet.filter(function(c){ return (c.returned_date||c.created||'')>=cutoff4w; });
+    var hn=document.getElementById('histn'); if(hn) hn.textContent='('+ret.length+' in last 4 weeks · '+allRet.length+' total)';
     var hh=document.getElementById('hist'); if(hh) hh.innerHTML=ret.length?ret.map(function(c){
       var hc=c.camera?('<span class="hc camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span>'):('<span class="hc">'+esc(EQUIP_LABEL[c.item]||c.item||'Item')+'</span>');
       return '<div class="hrow">'+hc+' &middot; '+esc(nameOf(c))+
              (c.note?' &middot; <span class="hnote">'+esc(c.note)+'</span>':'')+
              '<div class="hre">Out '+fmt(c.out)+' &rarr; returned '+fmt(c.returned_date)+'</div></div>';
-    }).join(''):'<div class="foot">No returned checkouts yet.</div>';
+    }).join(''):'<div class="foot">No returned checkouts in the last 4 weeks. Use Download CSV for the full record.</div>';
     bindBoard(); startTicker();
   }
   function bindBoard(){
@@ -904,6 +920,35 @@
         .catch(function(){ msg.className='mmsg err show'; msg.textContent='Could not save. Try again.'; })
         .then(function(){ g.disabled=false; g.textContent='Pull card into this slot'; });
     };
+  })();
+
+  // ===== Downloadable detailed history (CSV, opens in Excel), any date range =====
+  function csvCell(v){ v=(v==null?'':String(v)); return /[",\n]/.test(v)?('"'+v.replace(/"/g,'""')+'"'):v; }
+  function inRange(d, from, to){ if(!d) return false; if(from && d<from) return false; if(to && d>to) return false; return true; }
+  function downloadHistoryCSV(){
+    var from=(document.getElementById('histFrom')||{}).value||'', to=(document.getElementById('histTo')||{}).value||'';
+    var rows=[['Type','Camera / Item','Student','Student ID','Period','Course','Status','Reserved/Out','Due','Picked up','Returned','Note','Student cell','Parent / guardian','Parent cell']];
+    (DATA.checkouts||[]).slice().sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; }).forEach(function(c){
+      if(from||to){ var dts=[c.out,c.due,c.returned_date,c.picked_up_date].filter(Boolean); if(!dts.some(function(d){ return inRange(d, from, to); })) return; }
+      rows.push([ c.kind==='equipment'?'Equipment':'Camera',
+        c.kind==='equipment'?(EQUIP_LABEL[c.item]||c.item||''):(c.camera||''),
+        c.student_name||'', c.student_id||'', c.period||'', c.course||'',
+        statusOf(c), c.out||'', c.due||'', c.picked_up_date||'', c.returned_date||'',
+        c.note||'', c.student_cell||'', c.parent_guardian||'', c.parent_cell||'' ]);
+    });
+    var csv=rows.map(function(r){ return r.map(csvCell).join(','); }).join('\r\n');
+    var blob=new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8;'});
+    var url=URL.createObjectURL(blob), a=document.createElement('a');
+    a.href=url; a.download='camera-history_'+(from||'start')+'_to_'+(to||'today')+'.csv';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 600);
+  }
+  (function(){
+    var now=new Date(), first=new Date(now.getFullYear(), now.getMonth(), 1);
+    var f=document.getElementById('histFrom'), t=document.getElementById('histTo');
+    if(f && !f.value) f.value=first.toISOString().slice(0,10);
+    if(t && !t.value) t.value=now.toISOString().slice(0,10);
+    var b=document.getElementById('histCsv'); if(b) b.onclick=downloadHistoryCSV;
   })();
 
   // ===== Camera detail modal (click a camera number): issues, note, history log, checkouts =====

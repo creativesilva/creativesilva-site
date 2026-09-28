@@ -508,7 +508,20 @@
     // On camera pages (SILVA_HIDE_CATALOG) the teacher catalog dropdown is omitted entirely so
     // students/other teachers can't browse the module tree from the public calendar. The bar keeps
     // the CS logo (and any buttons the page injects). The catalog stays behind its PIN on curriculum.html.
-    if (window.SILVA_HIDE_CATALOG) { return bar; }
+    // A teacher-only page (the password-gated camera manager) can opt into a plain RETURN link to the
+    // catalog by setting window.SILVA_CATALOG_RETURN: same button look, no dropdown, and curriculum.html's
+    // own PIN gate prompts for the password.
+    if (window.SILVA_HIDE_CATALOG) {
+      if (window.SILVA_CATALOG_RETURN) {
+        var back = document.createElement('a');
+        back.className = 'silva-uni-cattrigger';
+        back.href = (typeof window.SILVA_CATALOG_RETURN === 'string') ? window.SILVA_CATALOG_RETURN : '/curriculum.html';
+        back.textContent = 'Catalog';
+        back.setAttribute('title', 'Return to the curriculum catalog');
+        bar.appendChild(back);
+      }
+      return bar;
+    }
 
     var cat = document.createElement('div');
     cat.className = 'silva-uni-cat';

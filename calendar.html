@@ -265,6 +265,12 @@
   .rc-done{text-align:center;padding:18px 8px;}
   .rc-done-ic{width:56px;height:56px;line-height:56px;margin:0 auto 12px;background:rgba(63,168,99,.18);color:#8ff0b0;font-size:1.8rem;border-radius:0;}
   .rc-done p{color:var(--text);font-size:1rem;} .rc-done-sub{color:var(--muted);font-size:.85rem;}
+  .rc-summary{text-align:left;border:1px solid var(--line);background:rgba(0,0,0,.28);margin:14px 0;}
+  .rc-sumrow{display:flex;justify-content:space-between;gap:12px;padding:9px 14px;border-bottom:1px solid rgba(0,184,184,.12);}
+  .rc-sumrow:last-child{border-bottom:0;}
+  .rc-sumrow span{color:var(--muted);text-transform:uppercase;font-size:.64rem;letter-spacing:.06em;align-self:center;flex:0 0 auto;}
+  .rc-sumrow b{color:#fff;text-align:right;font-size:.92rem;}
+  .rc-done .dc-btn{margin-top:4px;}
   .foot{margin-top:22px;font-size:.74rem;color:var(--faint);}
   body.embed .silva-nav, body.embed .intro{display:none;}
   /* embedded in the Teacher Console: show ONLY the month calendar (the console has its own board above) */
@@ -921,15 +927,26 @@
     var btn=document.getElementById('rc-go'); if(btn){ btn.disabled=true; btn.textContent='Reserving…'; }
     fetch(API+'/api/camera/checkout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
-      .then(function(res){ if(res.ok&&res.j&&res.j.ok){ reserveDone(cam,iso,due); } else { var m=document.getElementById('rc-msg'); if(m) m.textContent=(res.j&&res.j.error)||'Could not reserve. Try again.'; if(btn){ btn.disabled=false; btn.textContent='Confirm reservation'; } } })
+      .then(function(res){ if(res.ok&&res.j&&res.j.ok){ reserveDone(cam,iso,due,extras,RESV&&RESV.label); } else { var m=document.getElementById('rc-msg'); if(m) m.textContent=(res.j&&res.j.error)||'Could not reserve. Try again.'; if(btn){ btn.disabled=false; btn.textContent='Confirm reservation'; } } })
       .catch(function(){ var m=document.getElementById('rc-msg'); if(m) m.textContent='Could not reach the server.'; if(btn){ btn.disabled=false; btn.textContent='Confirm reservation'; } });
   }
-  function reserveDone(cam,iso,due){
+  function reserveDone(cam,iso,due,extras,who){
     RESV=null; DM_RESERVE_CAM=null; DM_DONE=true; document.getElementById('rvBanner').style.display='none';
     document.getElementById('dm-tabs').innerHTML='';
     var _f=document.getElementById('dm-foot'); if(_f) _f.innerHTML='';
     document.getElementById('dm-title').textContent='Reserved';
-    document.getElementById('dm-body').innerHTML='<div class="rc-done"><div class="rc-done-ic">&#10003;</div><p><b>'+esc(cam)+'</b> is reserved for you<br>'+prettyDate(iso)+' &rarr; due '+prettyDate(due)+'.</p><p class="rc-done-sub">See Mr. Silva to pick it up on a school day. Your reservation is pending until your teacher confirms the kit is available.</p><button type="button" class="dc-btn" id="rc-close">Done</button></div>';
+    var addons=(extras&&extras.length)?extras.map(function(k){ for(var i=0;i<EQUIP_MENU.length;i++){ if(EQUIP_MENU[i].key===k) return EQUIP_MENU[i].label; } return k; }).join(', '):'Just the kit, no extra gear';
+    var rows=(who?'<div class="rc-sumrow"><span>Reserved for</span><b>'+esc(who)+'</b></div>':'')+
+      '<div class="rc-sumrow"><span>Camera</span><b>'+esc(cam)+'</b></div>'+
+      '<div class="rc-sumrow"><span>Pick up</span><b>'+prettyDate(iso)+'</b></div>'+
+      '<div class="rc-sumrow"><span>Due back</span><b>'+prettyDate(due)+'</b></div>'+
+      '<div class="rc-sumrow"><span>Extra gear</span><b>'+esc(addons)+'</b></div>';
+    document.getElementById('dm-body').innerHTML=
+      '<div class="rc-done"><div class="rc-done-ic">&#10003;</div>'+
+      '<p><b>You&#8217;re reserved.</b> Take a quick look, then tap Done.</p>'+
+      '<div class="rc-summary">'+rows+'</div>'+
+      '<p class="rc-done-sub">See Mr. Silva to pick it up on a school day. Your reservation is pending until your teacher confirms the kit is available.</p>'+
+      '<button type="button" class="dc-btn rv-primary" id="rc-close">Done</button></div>';
     var cl=document.getElementById('rc-close'); if(cl) cl.addEventListener('click',closeDayModal);
     load();
   }
