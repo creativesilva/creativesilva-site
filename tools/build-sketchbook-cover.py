@@ -107,8 +107,8 @@ SC_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Digital Arts 1A","Module 03: Sketchbook Cover Art","Design a cover worth showing off.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
-    en+=type_card("overview","The Module Overview","Make Your Sketchbook Your Own",
+    en=banner("Module 03 &bull; Step 01","Sketchbook Cover Art: Start Here","Read this page and download your files, then go to Step 02 to design your cover.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
+    en+=type_card("overview","Step 01 &middot; Read &amp; Download","Make Your Sketchbook Your Own",
         para("Time to make your sketchbook yours. You will decorate and personalize the manila cover of your 8.5 by 11 inch sketchbook and turn it into art you are proud of. This is a friendly class competition: the best cover wins a prize. You have one week, and you may take your sketchbook home to keep working on it.")
         + framed(HEADER_IMG,"Sketchbook Cover"))
     en+=standards_box(False, SC_STANDARDS)
@@ -141,9 +141,12 @@ def overview():
         para("Pick your 2 typefaces on Adobe Fonts. Only this website is approved for the competition. On Adobe Fonts you can type your own word into the Sample Text box to see how it looks in any font.")
         + adobe_link("Adobe Fonts (fonts.adobe.com)"), False)
 
-    en+=next_up("UP NEXT &middot; STEP 01 - Design Your Cover","Design your covers, then turn in two photos.")
-    es=banner("Arte Digital 1A","M&oacute;dulo 03: Arte de la Portada","Dise&ntilde;a una portada digna de presumir.","#top","Back to English", HICON_DESIGN)
-    es+=type_card("overview","El Resumen del M&oacute;dulo","Haz Tuyo Tu Cuaderno",
+    en+=card("HOW IT WORKS / YOUR PLAN","Your Next Two Steps",
+        para("You are on Step 01 now: read this page and download your files below. Here are the two steps that follow.")
+        + bullets([("Step 02 &middot; Design Your Cover:","design your two cover options, then turn in the two photos."),("Step 03 &middot; Submit &amp; Reflect:","fill out the reflection and upload it.")]))
+    en+=next_up("UP NEXT &middot; STEP 02 - Design Your Cover","Design your covers, then turn in two photos.")
+    es=banner("M&oacute;dulo 03 &bull; Paso 01","Arte de la Portada: Empieza Aqu&iacute;","Lee esta p&aacute;gina y descarga tus archivos, luego ve al Paso 02 para dise&ntilde;ar tu portada.","#top","Back to English", HICON_DESIGN)
+    es+=type_card("overview","Paso 01 &middot; Lee y Descarga","Haz Tuyo Tu Cuaderno",
         para("Es hora de hacer tuyo tu cuaderno. Vas a decorar y personalizar la portada de manila de tu cuaderno de 8.5 por 11 pulgadas y convertirla en arte del que te sientas orgulloso. Esta es una competencia amistosa de la clase: la mejor portada gana un premio. Tienes una semana, y puedes llevar tu cuaderno a casa para seguir trabajando.")
         + framed(HEADER_IMG,"Portada del Cuaderno"))
     es+=standards_box(True, SC_STANDARDS)
@@ -176,15 +179,18 @@ def overview():
         para("Elige tus 2 tipos de letra en Adobe Fonts. Solo este sitio web est&aacute; aprobado para la competencia. En Adobe Fonts puedes escribir tu propia palabra en la casilla de Texto de Muestra para ver c&oacute;mo se ve en cualquier fuente.")
         + adobe_link("Adobe Fonts (fonts.adobe.com)"), True)
 
-    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 01 - Dise&ntilde;a Tu Portada","Dise&ntilde;a tus portadas y entrega dos fotos.")
-    dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
-    stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
-    return wrap_page("Sketchbook Cover Art | Digital Arts 1A | PVHS", nav("Overview",dots,stepnav), top_wrap(en,es), bottom)
+    es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Siguientes Dos Pasos",
+        para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina y descarga tus archivos abajo. Estos son los dos pasos que siguen.")
+        + bullets([("Paso 02 &middot; Dise&ntilde;a Tu Portada:","dise&ntilde;a tus dos opciones de portada y entrega las dos fotos."),("Paso 03 &middot; Entrega y Reflexiona:","llena la reflexi&oacute;n y s&uacute;bela.")]))
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Dise&ntilde;a Tu Portada","Dise&ntilde;a tus portadas y entrega dos fotos.")
+    dots=dot("",'1',"Step 01",True)+dot(S1,'2',"Step 02",False)+dot(S2,'3',"Step 03",False)
+    stepnav=f'<a href="{S1}" class="silva-step-btn">Step 02 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 02 &#8594;</a></div>'
+    return wrap_page("Sketchbook Cover Art | Digital Arts 1A | PVHS", nav("Step 01",dots,stepnav), top_wrap(en,es), bottom)
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Module 03 &bull; Step 01","Design Your Cover","Design your covers, then turn in two photos.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
+    en=banner("Module 03 &bull; Step 02","Design Your Cover","Design your covers, then turn in two photos.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=card("STEP 01 / DESIGN &amp; CREATE","Design Your Cover",
         cooper_float("One of your 3 words must be drawn in Cooper Black. Use this alphabet as your guide. Tap the image to open it full size.")
         + para("Now design your cover. Plan where your name, period, and 3 words will go, then decorate the front and the back. Take your time and make it yours. You can work in class and take your sketchbook home for more.")
@@ -214,8 +220,8 @@ def step01():
         ])
         + note("This is Step 1 and it is graded on its own. The reflection is turned in separately on Step 2."))
 
-    en+=next_up("UP NEXT &middot; STEP 02 - Submit &amp; Reflect","Complete and upload your reflection.")
-    es=banner("M&oacute;dulo 03 &bull; Paso 01","Dise&ntilde;a Tu Portada","Dise&ntilde;a tus portadas y entrega dos fotos.","#top","Back to English", HICON_DESIGN)
+    en+=next_up("UP NEXT &middot; STEP 03 - Submit &amp; Reflect","Complete and upload your reflection.")
+    es=banner("M&oacute;dulo 03 &bull; Paso 02","Dise&ntilde;a Tu Portada","Dise&ntilde;a tus portadas y entrega dos fotos.","#top","Back to English", HICON_DESIGN)
     es+=card("PASO 01 / DISE&Ntilde;A Y CREA","Dise&ntilde;a Tu Portada",
         cooper_float("Una de tus 3 palabras debe estar dibujada en Cooper Black. Usa este alfabeto como gu&iacute;a. Toca la imagen para abrirla en tama&ntilde;o completo.")
         + para("Ahora dise&ntilde;a tu portada. Planea d&oacute;nde ir&aacute;n tu nombre, tu periodo y tus 3 palabras, y luego decora el frente y el reverso. T&oacute;mate tu tiempo y hazla tuya. Puedes trabajar en clase y llevar tu cuaderno a casa para m&aacute;s.")
@@ -245,15 +251,15 @@ def step01():
         ])
         + note("Este es el Paso 1 y se califica por su cuenta. La reflexi&oacute;n se entrega por separado en el Paso 2."))
 
-    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Entrega y Reflexiona","Completa y sube tu reflexi&oacute;n.")
-    dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)
-    stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
-    return wrap_page("Sketchbook Cover Art: Design & Submit | Digital Arts 1A | PVHS", nav("Step 01",dots,stepnav), top_wrap(en,es), bottom)
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Entrega y Reflexiona","Completa y sube tu reflexi&oacute;n.")
+    dots=dot(OVER,'1',"Step 01",False)+dot("",'2',"Step 02",True)+dot(S2,'3',"Step 03",False)
+    stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a><a href="{S2}" class="silva-step-btn">Step 03 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S2}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
+    return wrap_page("Sketchbook Cover Art: Design & Submit | Digital Arts 1A | PVHS", nav("Step 02",dots,stepnav), top_wrap(en,es), bottom)
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Module 03 &bull; Step 02","Submit &amp; Reflect","Complete and upload your reflection.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
+    en=banner("Module 03 &bull; Step 03","Submit &amp; Reflect","Complete and upload your reflection.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("REFLECT / STEP 02","Complete and Upload the Reflection",
         float_right(REFLECT_TYPING,"A student typing the reflection on a computer","Type your answers right in the document.")
         + para("Finish with a short reflection. It asks about your 3 words, your Cooper Black word, and the 2 Adobe Fonts typefaces you chose, plus how you can test a font on Adobe Fonts.")
@@ -264,7 +270,7 @@ def step02():
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
 
     en+=next_up("UP NEXT &middot; MODULE 04 - Motivational Poster","Next module: design a poster in Photoshop that hypes up someone who inspires you.")
-    es=banner("M&oacute;dulo 03 &bull; Paso 02","Entrega y Reflexiona","Completa y sube tu reflexi&oacute;n.","#top","Back to English", HICON_REFLECT)
+    es=banner("M&oacute;dulo 03 &bull; Paso 03","Entrega y Reflexiona","Completa y sube tu reflexi&oacute;n.","#top","Back to English", HICON_REFLECT)
     es+=card("REFLEXIONA / PASO 02","Completa y Sube la Reflexi&oacute;n",
         float_right(REFLECT_TYPING,"Un estudiante escribiendo la reflexi&oacute;n en la computadora","Escribe tus respuestas en el documento.")
         + para("Termina con una reflexi&oacute;n corta. Pregunta sobre tus 3 palabras, tu palabra en Cooper Black y los 2 tipos de letra de Adobe Fonts que elegiste, y c&oacute;mo puedes probar una fuente en Adobe Fonts.")
@@ -275,10 +281,10 @@ def step02():
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completo, subido a esta tarea de Canvas.")])
 
     es+=next_up("A CONTINUACI&Oacute;N &middot; M&Oacute;DULO 04 - P&oacute;ster Motivacional","Pr&oacute;ximo m&oacute;dulo: dise&ntilde;a en Photoshop un p&oacute;ster que anime a alguien que te inspira.")
-    dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)
-    stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><span></span></div>'
-    return wrap_page("Sketchbook Cover Art: Reflection | Digital Arts 1A | PVHS", nav("Step 02",dots,stepnav), top_wrap(en,es), bottom)
+    dots=dot(OVER,'1',"Step 01",False)+dot(S1,'2',"Step 02",False)+dot("",'3',"Step 03",True)
+    stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 02</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'
+    return wrap_page("Sketchbook Cover Art: Reflection | Digital Arts 1A | PVHS", nav("Step 03",dots,stepnav), top_wrap(en,es), bottom)
 
 for fname,gen in [(OVER,overview),(S1,step01),(S2,step02)]:
     html=ent(gen())
