@@ -7,53 +7,61 @@
 <meta name="description" content="See which Pioneer Valley photography cameras are checked out and when they are due back." />
 <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only_Teal.svg" />
 <link rel="apple-touch-icon" href="/logos/CS_AppIcon_Teal_180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/css/silva-module.css?v=d132cef2" />
 <style>
+  /* Camera calendar: shares the unified header (silva-nav.js) + the catalog CS-logo
+     watermark background, so it matches curriculum.html. Body content below is
+     calendar-specific and uses .silva-* -free class names (no collisions). */
   :root{
-    --bg:#041d1c; --bg2:#062a28; --wedge:#0a4a4a;
-    --panel:linear-gradient(135deg,rgba(0,184,184,0.12) 0%,rgba(4,20,19,0.55) 100%);
     --teal:#00b8b8; --teal-lt:#5ff0f0; --teal-deep:#007474;
     --text:#eafeff; --muted:rgba(206,244,244,0.66); --faint:rgba(206,244,244,0.42);
-    --line:rgba(0,184,184,0.35); --line-soft:rgba(0,184,184,0.2);
+    --line:rgba(0,184,184,0.32); --line-soft:rgba(0,184,184,0.18);
     --ok:#3fa863; --orange:#ff6b1a; --grayed:rgba(160,180,180,0.34);
+    --panel:linear-gradient(135deg,rgba(0,184,184,0.10) 0%,rgba(4,20,19,0.55) 100%);
     --font:'Oswald',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
     --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   }
   *{box-sizing:border-box;border-radius:0 !important;}
   html,body{margin:0;padding:0;}
-  body{background:radial-gradient(1200px 700px at -6% -12%,rgba(0,184,184,0.30),transparent 52%),
-    radial-gradient(900px 560px at 106% 6%,rgba(0,184,184,0.12),transparent 55%),
-    linear-gradient(135deg,var(--wedge) 0%,var(--bg2) 36%,var(--bg) 100%);
-    background-attachment:fixed;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;}
-  .wrap{max-width:1000px;margin:0 auto;padding:26px 22px 70px;}
-  .top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px;}
-  .top img{width:40px;height:40px;object-fit:contain;}
-  h1{font-family:var(--font);font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:clamp(1.3rem,4vw,1.8rem);margin:0;color:#fff;}
-  .checkout-btn{margin-left:auto;font-family:var(--font);font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#04110f;background:var(--teal);border:0;padding:11px 18px;cursor:pointer;text-decoration:none;display:inline-block;}
-  .checkout-btn:hover{filter:brightness(1.1);}
-  .sub{color:var(--muted);font-size:.92rem;margin:2px 0 20px;}
+  body{background-color:#060f0f;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;}
+  /* Same watermark treatment as curriculum.html: glossy CS logo on near-black under one flat veil. */
+  body::before{content:"";position:fixed;inset:0;z-index:-2;background:#060f0f url("https://www.creativesilva.com/logos/CS_Logo_Glossy_Teal_v1.png") no-repeat center 40%;background-size:min(74vw,700px);}
+  body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(6,14,14,0.84);}
+  @media (max-width:900px){ body::before{background-size:min(88vw,460px);background-position:center 36%;} }
+
+  /* camera-kit icon injected into the shared header title */
+  .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;}
+
+  .wrap{max-width:1200px;margin:0 auto;padding:24px 32px 70px;}
+  .intro{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:20px;}
+  .sub{color:var(--muted);font-size:.95rem;margin:0;flex:1 1 320px;}
+  .reserve-btn{flex:0 0 auto;font-family:var(--font);font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:11px 20px;cursor:pointer;text-decoration:none;transition:filter .15s;}
+  .reserve-btn:hover{filter:brightness(1.12);}
   .summary{display:flex;align-items:center;gap:14px 22px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--teal);padding:14px 18px;margin-bottom:18px;}
   .summary .big{font-family:var(--font);font-size:1.6rem;color:var(--teal-lt);}
   .summary .lab{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;}
   .legend{display:flex;gap:14px;flex-wrap:wrap;margin-left:auto;font-size:.74rem;color:var(--muted);}
   .legend i{display:inline-block;width:11px;height:11px;margin-right:6px;vertical-align:-1px;}
-  .k-av{background:var(--ok);} .k-out{background:var(--orange);}
+  .k-res{background:#f5b301;} .k-out{background:var(--orange);}
   .h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:22px 0 12px;padding-left:9px;border-left:3px solid var(--teal);}
-  .board{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
-  .cam{background:rgba(0,0,0,.22);border:1px solid var(--line-soft);border-left:4px solid var(--ok);padding:13px 14px;}
-  .cam.out{border-left-color:var(--orange);}
+  .board{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:12px;}
+  .cam{background:rgba(0,0,0,.24);border:1px solid var(--line-soft);border-left:4px solid var(--orange);padding:13px 14px;}
+  .cam.reserved{border-left-color:#f5b301;}
   .cam .n{font-family:var(--font);font-weight:600;letter-spacing:.03em;font-size:1rem;}
-  .cam .s{font-size:.78rem;color:var(--muted);margin-top:3px;}
-  .cam.out .s{color:#ffc7a6;}
+  .cam .s{font-size:.78rem;color:#ffc7a6;margin-top:3px;}
+  .cam.reserved .s{color:#ffd889;}
+  .cam .course{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:5px;}
   /* month calendar */
-  .calhead{display:flex;align-items:center;gap:12px;margin:24px 0 10px;}
+  .calhead{display:flex;align-items:center;gap:12px;margin:26px 0 10px;}
   .mtitle{font-family:var(--font);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:1rem;color:#fff;}
   .navb{font-family:var(--font);font-size:.9rem;color:#eafeff;background:rgba(0,184,184,.14);border:1px solid var(--line);cursor:pointer;padding:6px 12px;}
   .navb:hover{background:rgba(0,184,184,.28);}
   .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px;}
   .dow div{font-family:var(--font);font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);text-align:center;}
   .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
-  .cell{min-height:74px;background:rgba(0,0,0,.22);border:1px solid var(--line-soft);padding:6px;display:flex;flex-direction:column;gap:6px;}
+  .cell{min-height:74px;background:rgba(0,0,0,.24);border:1px solid var(--line-soft);padding:6px;display:flex;flex-direction:column;gap:6px;}
   .cell.out-month{opacity:.32;} .cell.today{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal);}
   .cell.has{cursor:pointer;background:rgba(0,184,184,.10);}
   .cell.has:hover{background:rgba(0,184,184,.22);border-color:var(--line);}
@@ -61,72 +69,72 @@
   .cell.today .daynum{color:var(--teal-lt);font-weight:700;}
   .count{margin-top:auto;font-family:var(--font);font-weight:700;font-size:.86rem;color:#ffd0b0;background:rgba(255,107,26,.16);border-left:3px solid var(--orange);padding:4px 7px;}
   .count small{display:block;font-weight:400;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
-  /* day pop-out */
+  /* day pop-out: fixed size (fits all 18) so it never resizes between tabs */
   .daymodal{position:fixed;inset:0;background:rgba(2,12,12,.66);backdrop-filter:blur(8px) saturate(1.1);-webkit-backdrop-filter:blur(8px) saturate(1.1);display:none;align-items:center;justify-content:center;padding:20px;z-index:60;}
   .daymodal.open{display:flex;}
-  .dm-panel{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.97));border:1px solid var(--line);border-top:3px solid var(--teal);max-width:460px;width:100%;max-height:82vh;overflow:auto;}
-  .dm-head{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--line-soft);}
+  .dm-panel{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.97));border:1px solid var(--line);border-top:3px solid var(--teal);width:100%;max-width:480px;height:min(880px,86vh);display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+  .dm-head{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--line-soft);}
   .dm-title{font-family:var(--font);font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#fff;font-size:.98rem;}
   .dm-x{background:none;border:0;color:var(--muted);font-size:1.7rem;line-height:1;cursor:pointer;padding:0 4px;}
   .dm-x:hover{color:#fff;}
-  .dm-body{padding:14px 18px 20px;}
-  .dm-count{font-family:var(--font);color:var(--teal-lt);font-size:1rem;margin-bottom:12px;}
-  .dm-row{display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,184,184,.12);}
-  .dm-cam{font-family:var(--font);font-weight:700;min-width:60px;color:#fff;}
-  .dm-range{color:var(--muted);font-size:.84rem;flex:1;}
-  .dm-tag{font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;white-space:nowrap;}
-  .dm-tag.res{background:rgba(245,179,1,.16);color:#ffd889;} .dm-tag.od{background:rgba(255,107,26,.18);color:#ffb28a;}
-  .dm-empty{color:var(--faint);padding:6px 0;}
-  .dm-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line-soft);margin-bottom:12px;flex-wrap:wrap;}
-  .dm-tab{font-family:var(--font);font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:none;border:0;border-bottom:2px solid transparent;padding:9px 12px;cursor:pointer;}
+  .dm-tabs{flex:0 0 auto;display:flex;gap:4px;padding:0 12px;border-bottom:1px solid var(--line-soft);flex-wrap:wrap;}
+  .dm-tab{font-family:var(--font);font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:none;border:0;border-bottom:2px solid transparent;padding:11px 12px;cursor:pointer;}
   .dm-tab:hover{color:var(--text);}
   .dm-tab.active{color:var(--teal-lt);border-bottom-color:var(--teal);}
   .dm-tabn{font-size:.62rem;color:var(--faint);}
   .dm-tab.active .dm-tabn{color:var(--teal-lt);}
+  .dm-body{flex:1 1 auto;overflow-y:auto;padding:8px 18px 18px;}
+  .dm-row{display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px solid rgba(0,184,184,.12);}
+  .dm-cam{font-family:var(--font);font-weight:700;min-width:60px;color:#fff;}
+  .dm-range{color:var(--muted);font-size:.84rem;flex:1;}
+  .dm-course{font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);white-space:nowrap;}
+  .dm-tag{font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;white-space:nowrap;}
+  .dm-tag.res{background:rgba(245,179,1,.16);color:#ffd889;} .dm-tag.od{background:rgba(255,107,26,.18);color:#ffb28a;}
+  .dm-empty{color:var(--faint);padding:8px 0;}
   .dm-avail{display:flex;flex-wrap:wrap;gap:8px;}
-  .dm-availcam{font-family:var(--font);font-weight:700;font-size:.82rem;color:#8ff0b0;background:rgba(63,168,99,.13);border-left:3px solid var(--ok);padding:8px 12px;}
-  .k-res{background:#f5b301;}
-  .cam.reserved{border-left-color:#f5b301;} .cam.reserved .s{color:#ffd889;}
+  .dm-availcam{font-family:var(--font);font-weight:700;font-size:.82rem;color:#8ff0b0;background:rgba(63,168,99,.13);border-left:3px solid var(--ok);padding:8px 11px;}
+  .dm-availcam small{display:block;font-weight:400;font-size:.56rem;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:2px;}
   .foot{margin-top:22px;font-size:.74rem;color:var(--faint);}
-  body.embed .top, body.embed .sub{display:none;}
+  body.embed .silva-nav, body.embed .intro{display:none;}
   body.embed .wrap{padding-top:16px;}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="top">
-      <img src="https://www.creativesilva.com/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School" />
-      <h1>Camera Checkout Calendar</h1>
-      <a class="checkout-btn" href="/camera-checkout.html">Check out a camera</a>
-    </div>
-    <p class="sub">See which cameras are out and when they are due back before you ask. Updates automatically.</p>
-
-    <div class="summary">
-      <div><span class="big" id="outn">0</span> <span class="lab">of <span id="totn">0</span> cameras available</span></div>
-      <div class="legend"><span><i class="k-res"></i>Reserved</span><span><i class="k-out"></i>Checked out</span></div>
-    </div>
-
-    <div class="h">Checked out right now</div>
-    <div class="board" id="board"><span class="foot">Loading&#8230;</span></div>
-
-    <div class="calhead">
-      <button class="navb" id="prev">&#8249;</button>
-      <span class="mtitle" id="mtitle"></span>
-      <button class="navb" id="next">&#8250;</button>
-    </div>
-    <div class="dow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
-    <div class="grid" id="grid"></div>
-
-    <p class="foot" id="foot"></p>
+<nav class="silva-nav" aria-label="Site navigation"></nav>
+<div class="wrap">
+  <div class="intro">
+    <p class="sub">See which cameras are out and when they are due back before you ask. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.</p>
+    <a class="reserve-btn" href="/camera-checkout.html">Reserve a camera</a>
   </div>
 
-  <div class="daymodal" id="daymodal">
-    <div class="dm-panel">
-      <div class="dm-head"><span class="dm-title" id="dm-title"></span><button class="dm-x" id="dm-x" aria-label="Close">&times;</button></div>
-      <div class="dm-body" id="dm-body"></div>
-    </div>
+  <div class="summary">
+    <div><span class="big" id="outn">0</span> <span class="lab">of <span id="totn">0</span> cameras available</span></div>
+    <div class="legend"><span><i class="k-res"></i>Reserved</span><span><i class="k-out"></i>Checked out</span></div>
   </div>
 
+  <div class="h">Checked out right now</div>
+  <div class="board" id="board"><span class="foot">Loading&#8230;</span></div>
+
+  <div class="calhead">
+    <button class="navb" id="prev">&#8249;</button>
+    <span class="mtitle" id="mtitle"></span>
+    <button class="navb" id="next">&#8250;</button>
+  </div>
+  <div class="dow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
+  <div class="grid" id="grid"></div>
+
+  <p class="foot" id="foot"></p>
+</div>
+
+<div class="daymodal" id="daymodal">
+  <div class="dm-panel">
+    <div class="dm-head"><span class="dm-title" id="dm-title"></span><button class="dm-x" id="dm-x" aria-label="Close">&times;</button></div>
+    <div class="dm-tabs" id="dm-tabs"></div>
+    <div class="dm-body" id="dm-body"></div>
+  </div>
+</div>
+
+<script src="/js/silva-nav.js?v=97b66897"></script>
 <script>
 (function(){
   var API='https://pvhs-canvas-grader.onrender.com';
@@ -137,15 +145,30 @@
   var grid=document.getElementById('grid'), mtitle=document.getElementById('mtitle'),
       board=document.getElementById('board'), outn=document.getElementById('outn'), totn=document.getElementById('totn'),
       foot=document.getElementById('foot');
+
+  // Inject the camera-kit icon into the shared header title once silva-nav.js has built it.
+  function injectIcon(){
+    var t=document.querySelector('.silva-uni-title');
+    if(!t) return false;
+    if(t.querySelector('.cal-title-icon')) return true;
+    var txt=t.textContent;
+    t.innerHTML='<img class="cal-title-icon" src="/assets/Icons/assignment/camera-kit-teal-v1.svg" alt="" />'+txt;
+    return true;
+  }
+  function tryInject(n){ if(injectIcon()||n<=0) return; setTimeout(function(){ tryInject(n-1); },40); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ tryInject(60); }); else tryInject(60);
+
   function todayISO(){ var d=new Date(); d.setHours(0,0,0,0); return d.toISOString().slice(0,10); }
   function fmt(iso){ if(!iso)return''; var p=iso.split('-'); return MONTHS[+p[1]-1].slice(0,3)+' '+(+p[2]); }
   function statusOf(c){ return c.status||(c.returned?'returned':'out'); }
+  // Cam 16/17/18 are Photography 2 only; the rest serve Photo 1 and Photo 2.
+  function camCourse(cam){ var n=parseInt((cam||'').replace(/\D/g,''),10); return (n>=16)?'Photo 2 only':'Photo 1 &amp; 2'; }
   // A camera is unavailable while it is reserved OR picked up; returned frees it.
   function activeByCam(){ var m={}; DATA.checkouts.forEach(function(c){ if(statusOf(c)!=='returned') m[c.camera]=c; }); return m; }
 
   function renderBoard(){
     var active=activeByCam(); var cams=DATA.cameras||[];
-    var outCams=cams.filter(function(c){ return active[c]; });      // only cameras that are taken
+    var outCams=cams.filter(function(c){ return active[c]; });
     outn.textContent=(cams.length-outCams.length); totn.textContent=cams.length;
     board.innerHTML='';
     if(!cams.length){ board.innerHTML='<span class="foot">No cameras set up yet.</span>'; return; }
@@ -153,11 +176,12 @@
     outCams.forEach(function(c){
       var o=active[c]; var st=statusOf(o);
       var el=document.createElement('div');
-      el.className='cam'+(st==='reserved'?' reserved':' out');
-      el.innerHTML='<div class="n">'+c+'</div><div class="s">'+(st==='reserved'?'Reserved':('Checked out &middot; due '+fmt(o.due)))+'</div>';
+      el.className='cam'+(st==='reserved'?' reserved':'');
+      el.innerHTML='<div class="n">'+c+'</div><div class="s">'+(st==='reserved'?'Reserved':('Checked out &middot; due '+fmt(o.due)))+'</div><div class="course">'+camCourse(c)+'</div>';
       board.appendChild(el);
     });
   }
+
   // Hotel-style span: a camera counts as out every day from its pickup date through its due date.
   function checkoutsOnDay(iso){
     return (DATA.checkouts||[]).filter(function(c){
@@ -188,6 +212,8 @@
       grid.appendChild(cell);
     }
   }
+
+  // ---- Day pop-out: fixed-size window with Checked out / Reserved / Available tabs ----
   var DM_DAY=null, DM_TAB='out';
   function byCam(a,b){ return (a.camera||'').localeCompare(b.camera||''); }
   function dayOut(iso){ return checkoutsOnDay(iso).filter(function(c){ return statusOf(c)==='out'; }).sort(byCam); }
@@ -199,25 +225,26 @@
     var iso=DM_DAY; if(!iso) return;
     var out=dayOut(iso), res=dayReserved(iso), avail=dayAvailable(iso);
     document.getElementById('dm-title').textContent=prettyDate(iso);
-    var tabs='<div class="dm-tabs">'+dmTab('out','Checked out',out.length)+dmTab('reserved','Reserved',res.length)+dmTab('available','Available',avail.length)+'</div>';
+    document.getElementById('dm-tabs').innerHTML=dmTab('out','Checked out',out.length)+dmTab('reserved','Reserved',res.length)+dmTab('available','Available',avail.length);
     var body;
     if(DM_TAB==='reserved'){
-      body=res.length?res.map(function(c){ return '<div class="dm-row"><span class="dm-cam">'+c.camera+'</span><span class="dm-range">Reserved '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-tag res">Reserved</span></div>'; }).join(''):'<div class="dm-empty">No reservations this day.</div>';
+      body=res.length?res.map(function(c){ return '<div class="dm-row"><span class="dm-cam">'+c.camera+'</span><span class="dm-range">Reserved '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span></div>'; }).join(''):'<div class="dm-empty">No reservations this day.</div>';
     } else if(DM_TAB==='available'){
-      body=avail.length?'<div class="dm-avail">'+avail.map(function(c){ return '<span class="dm-availcam">'+c+'</span>'; }).join('')+'</div>':'<div class="dm-empty">No cameras free this day.</div>';
+      body=avail.length?'<div class="dm-avail">'+avail.map(function(c){ return '<span class="dm-availcam">'+c+'<small>'+camCourse(c)+'</small></span>'; }).join('')+'</div>':'<div class="dm-empty">No cameras free this day.</div>';
     } else {
-      body=out.length?out.map(function(c){ var od=(c.due&&c.due<todayISO())?'<span class="dm-tag od">Overdue</span>':''; return '<div class="dm-row"><span class="dm-cam">'+c.camera+'</span><span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span>'+od+'</div>'; }).join(''):'<div class="dm-empty">No cameras checked out this day.</div>';
+      body=out.length?out.map(function(c){ var od=(c.due&&c.due<todayISO())?'<span class="dm-tag od">Overdue</span>':''; return '<div class="dm-row"><span class="dm-cam">'+c.camera+'</span><span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+od+'</div>'; }).join(''):'<div class="dm-empty">No cameras checked out this day.</div>';
     }
-    document.getElementById('dm-body').innerHTML=tabs+body;
-    Array.prototype.forEach.call(document.querySelectorAll('#dm-body .dm-tab'), function(btn){
+    document.getElementById('dm-body').innerHTML=body;
+    Array.prototype.forEach.call(document.querySelectorAll('#dm-tabs .dm-tab'), function(btn){
       btn.addEventListener('click', function(){ DM_TAB=btn.getAttribute('data-tab'); renderDayModal(); });
     });
   }
   function closeDayModal(){ document.getElementById('daymodal').classList.remove('open'); }
+
   function load(){
     fetch(API+'/api/camera/calendar',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
       DATA={cameras:d.cameras||[],checkouts:d.checkouts||[]};
-      renderBoard(); renderCal();
+      renderBoard(); renderCal(); if(DM_DAY) renderDayModal();
       foot.textContent='Updated '+new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+'. Refreshes automatically.';
     }).catch(function(){ foot.textContent='Could not load the calendar. It will keep trying.'; });
   }
