@@ -428,7 +428,12 @@
   // Cam 16/17/18 are Photography 2 only; the rest serve Photo 1 and Photo 2.
   function camCourse(cam){ var n=parseInt((cam||'').replace(/\D/g,''),10); return (n>=16)?'Photo 2 only':'Photo 1 &amp; 2'; }
   // A camera is unavailable while it is reserved OR picked up; returned frees it.
-  function activeByCam(){ var m={}; DATA.checkouts.forEach(function(c){ if(c.kind==='equipment') return; if(statusOf(c)!=='returned') m[c.camera]=c; }); return m; }
+  // "Checked out right now" = a record whose window covers TODAY (out now or due to be picked up
+  // today); a future reservation of the same camera does NOT count as out today.
+  function activeByCam(){ var m={}, today=todayISO(); (DATA.checkouts||[]).forEach(function(c){
+      if(c.kind==='equipment' || statusOf(c)==='returned') return;
+      var last=effLast(c); if(!(last && c.out && today>=c.out && today<=last)) return;
+      if(!m[c.camera] || statusOf(c)==='out') m[c.camera]=c; }); return m; }
 
   function renderBoard(){
     var active=activeByCam(); var cams=DATA.cameras||[];

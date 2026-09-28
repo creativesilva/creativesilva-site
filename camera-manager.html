@@ -317,10 +317,23 @@
   }
 
   // ---- board ----
+  // The board shows ONE card per camera = its state RIGHT NOW. A camera that is physically out
+  // takes priority over a future reservation of the same camera (so a currently-out camera never
+  // hides behind a later reservation); ties break to the soonest checkout, then most recent.
   function activeFor(cam){
-    var best=null;
-    DATA.checkouts.forEach(function(c){ if(c.camera===cam && statusOf(c)!=='returned'){ if(!best || (c.created||'')>(best.created||'')) best=c; } });
-    return best;
+    var today=todayISO();
+    var recs=(DATA.checkouts||[]).filter(function(c){ return c.camera===cam && c.kind!=='equipment' && statusOf(c)!=='returned'; });
+    if(!recs.length) return null;
+    function score(c){
+      var st=statusOf(c);
+      if(st==='out') return 0;                                            // held now
+      if(c.out && c.out<=today && (c.due||c.out)>=today) return 1;        // reserved for today (due to be picked up)
+      return 2;                                                           // future reservation
+    }
+    recs.sort(function(a,b){ var sa=score(a),sb=score(b); if(sa!==sb) return sa-sb;
+      if((a.out||'')!==(b.out||'')) return (a.out||'')<(b.out||'')?-1:1;  // soonest first
+      return (a.created||'')>(b.created||'')?-1:1; });
+    return recs[0];
   }
   function contactLine(c){
     var bits=[];
