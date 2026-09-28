@@ -65,6 +65,16 @@
   .sub{color:var(--muted);font-size:.95rem;margin:0;flex:1 1 320px;}
   .reserve-btn{flex:0 0 auto;font-family:var(--font);font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:11px 20px;cursor:pointer;text-decoration:none;transition:filter .15s;}
   .reserve-btn:hover{filter:brightness(1.12);}
+  /* True EN/ES language toggle: segmented, angular, teal active. Students pick, choice is remembered. */
+  .langtoggle{flex:0 0 auto;display:inline-flex;align-items:stretch;border:1px solid var(--line);background:rgba(0,0,0,.30);height:38px;align-self:flex-start;backdrop-filter:blur(6px) saturate(1.05);-webkit-backdrop-filter:blur(6px) saturate(1.05);}
+  .langbtn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:100%;padding:0 15px;border:0;background:none;cursor:pointer;
+    font-family:var(--font);font-weight:700;letter-spacing:.09em;text-transform:uppercase;font-size:.73rem;color:rgba(234,247,247,.72);transition:background .15s,color .15s;}
+  .langbtn+.langbtn{border-left:1px solid var(--line);}
+  .langbtn:hover{color:#fff;}
+  .langbtn.active{background:var(--teal);color:#04110f;}
+  .langbtn-globe{width:15px;height:15px;display:inline-block;flex:0 0 auto;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23eafeff' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18'/%3E%3Cpath d='M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18'/%3E%3C/svg%3E") no-repeat center/contain;}
+  .langbtn.active .langbtn-globe{filter:brightness(0);}
+  @media (max-width:760px){ .langtoggle{align-self:stretch;} }
   .summary{display:flex;align-items:center;gap:14px 22px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--teal);padding:14px 18px;margin-bottom:18px;}
   .summary .big{font-family:var(--font);font-size:1.6rem;color:var(--teal-lt);}
   .summary .lab{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;}
@@ -291,18 +301,22 @@
 <nav class="silva-nav" aria-label="Site navigation"></nav>
 <div class="wrap">
   <div class="intro">
-    <p class="sub">See which cameras are out and when they are due back before you ask. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.</p>
+    <p class="sub" id="introSub">See which cameras are out and when they are due back before you ask. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.</p>
+    <div class="langtoggle" id="langToggle" role="group" aria-label="Language / Idioma">
+      <button type="button" class="langbtn" data-setlang="en"><span class="langbtn-globe" aria-hidden="true"></span>English</button>
+      <button type="button" class="langbtn" data-setlang="es">Espa&ntilde;ol</button>
+    </div>
   </div>
 
   <div class="rv-banner" id="rvBanner" style="display:none;"></div>
 
   <div class="summary">
-    <div><span class="big" id="outn">0</span> <span class="lab">of <span id="totn">0</span> cameras available</span></div>
-    <div class="legend"><span><i class="k-res"></i>Reserved</span><span><i class="k-out"></i>Checked out</span></div>
+    <div><span class="big" id="outn">0</span> <span class="lab"><span id="lab-of">of</span> <span id="totn">0</span> <span id="lab-avail">cameras available</span></span></div>
+    <div class="legend" id="legend"><span><i class="k-res"></i>Reserved</span><span><i class="k-out"></i>Checked out</span></div>
   </div>
 
-  <div class="h">Checked out right now</div>
-  <div class="board" id="board"><span class="foot">Loading&#8230;</span></div>
+  <div class="h" id="boardH">Checked out right now</div>
+  <div class="board" id="board"><span class="foot" id="boardLoading">Loading&#8230;</span></div>
 
   <div class="cal-stickyhead">
     <div class="calhead">
@@ -314,7 +328,7 @@
         <button type="button" class="cal-mbtn qr" id="qrMonthBtn">QR Code</button>
       </div>
     </div>
-    <div class="dow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
+    <div class="dow" id="dowRow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
   </div>
   <div class="grid" id="grid"></div>
 
@@ -332,9 +346,9 @@
 
 <div class="qrmodal" id="qrmodal">
   <div class="qr-panel">
-    <div class="qr-head"><span class="qr-title">Reservation QR code</span><button class="qr-x" id="qr-x" aria-label="Close">&times;</button></div>
+    <div class="qr-head"><span class="qr-title" id="qrModalTitle">Reservation QR code</span><button class="qr-x" id="qr-x" aria-label="Close">&times;</button></div>
     <div class="qr-body">
-      <p class="qr-sub">Students scan this to open the camera reservation form.</p>
+      <p class="qr-sub" id="qrModalSub">Students scan this to open the camera reservation form.</p>
       <div class="qr-canvas-wrap"><canvas id="qr-canvas"></canvas></div>
       <p class="qr-url" id="qr-url"></p>
       <div class="qr-acts">
@@ -348,23 +362,23 @@
 <!-- Student reserve, step 1 of 2: verify identity + contact before picking a day -->
 <div class="qrmodal" id="rvmodal">
   <div class="qr-panel rv-panel">
-    <div class="qr-head"><span class="qr-title">Reserve a Camera</span><button class="qr-x" id="rv-x" aria-label="Close">&times;</button></div>
+    <div class="qr-head"><span class="qr-title" id="rvModalTitle">Reserve a Camera</span><button class="qr-x" id="rv-x" aria-label="Close">&times;</button></div>
     <div class="qr-body" style="text-align:left;">
       <div id="rv-step1">
-        <p class="rv-sub"><b>Step 1 of 2.</b> Enter your student ID so we know it&#8217;s you.</p>
-        <label class="nc-label" for="rv-id">Student ID number</label>
+        <p class="rv-sub" id="rvStep1Sub"><b>Step 1 of 2.</b> Enter your student ID so we know it&#8217;s you.</p>
+        <label class="nc-label" for="rv-id" id="rvIdLabel">Student ID number</label>
         <input type="text" id="rv-id" inputmode="numeric" autocomplete="off" placeholder="Student ID" />
         <div class="rv-msg" id="rv-msg"></div>
         <button class="qr-btn rv-primary" id="rv-continue" type="button">Continue</button>
       </div>
       <div id="rv-step1b" style="display:none;">
         <div class="rv-who" id="rv-who"></div>
-        <p class="rv-sub">Check your info and fix anything that is wrong, then start reserving. Your changes are saved.</p>
-        <label class="nc-label" for="rv-sc">Your cell phone</label>
+        <p class="rv-sub" id="rvVerifyLead">Check your info and fix anything that is wrong, then start reserving. Your changes are saved.</p>
+        <label class="nc-label" for="rv-sc" id="rvScLabel">Your cell phone</label>
         <input type="text" id="rv-sc" inputmode="tel" autocomplete="off" placeholder="(805) 000-0000" />
-        <label class="nc-label" for="rv-pg">Parent / guardian name</label>
+        <label class="nc-label" for="rv-pg" id="rvPgLabel">Parent / guardian name</label>
         <input type="text" id="rv-pg" autocomplete="off" placeholder="Parent or guardian" />
-        <label class="nc-label" for="rv-pc">Parent / guardian cell</label>
+        <label class="nc-label" for="rv-pc" id="rvPcLabel">Parent / guardian cell</label>
         <input type="text" id="rv-pc" inputmode="tel" autocomplete="off" placeholder="(805) 000-0000" />
         <div class="rv-msg" id="rv-msg2"></div>
         <div class="rv-btnrow">
@@ -395,6 +409,166 @@
   var API='https://command.creativesilva.com';
   if(/[?&]embed=1/.test(location.search)) document.body.classList.add('embed');
   var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  // ===== Language (true EN/ES toggle; students choose, choice is remembered) =====
+  var LANG='en'; try{ LANG=(localStorage.getItem('silva-cal-lang')==='es')?'es':'en'; }catch(e){}
+  var MONTHS_L={ en:MONTHS,
+    es:['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'] };
+  var MON3_L={ en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    es:['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'] };
+  var DOWFULL_L={ en:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+    es:['domingo','lunes','martes','miércoles','jueves','viernes','sábado'] };
+  var DOW3_L={ en:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+    es:['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'] };
+  var TR={
+    en:{
+      intro:'See which cameras are out and when they are due back before you ask. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.',
+      availSuffix:'cameras available', of:'of', reserved:'Reserved', checkedOut:'Checked out',
+      checkedNow:'Checked out right now', loading:'Loading…',
+      reserveBtn:'Reserve a Camera', qrBtn:'QR Code',
+      noCamsSetup:'No cameras set up yet.', allAvail:'All cameras are available right now.',
+      dueShort:'due', photo2only:'Photo 2 only', photo12:'Photo 1 &amp; 2',
+      qrTitle:'Reservation QR code', qrSub:'Students scan this to open the camera reservation form.',
+      copyLink:'Copy link', copied:'Copied!', download:'Download',
+      step1:'Enter your student ID so we know it’s you.', step1lead:'Step 1 of 2.',
+      idLabel:'Student ID number', idPh:'Student ID', cont:'Continue',
+      verifyLead:'Check your info and fix anything that is wrong, then start reserving. Your changes are saved.',
+      yourCell:'Your cell phone', parentName:'Parent / guardian name', parentNamePh:'Parent or guardian',
+      parentCell:'Parent / guardian cell', back:'Back', startReserving:'Start reserving',
+      tabAvail:'Available', tabOut:'Checked out', tabRes:'Reserved', tabOverdue:'Overdue', tabReturned:'Returned',
+      emptyReturned:'Nothing returned this day.', emptyOverdue:'Nothing overdue.',
+      emptyRes:'No reservations this day.', emptyOut:'No cameras checked out this day.',
+      emptyAvail:'No cameras free this day.', cardMissing:'memory card missing',
+      pickedUp:'Picked up', due:'due', reservedWord:'Reserved', outWord:'Out', backWord:'back',
+      dayOverdue:'day overdue', daysOverdue:'days overdue',
+      reserveForLead:'Reserve for', dayPassed:'That day has passed. Pick today or a future school day.',
+      noSchool:'No school this day, so cameras can’t be picked up or returned. Pick a school day (Mon to Fri, not a holiday).',
+      tapCam:'Tap an available camera to reserve it. Due back the next school day', noneFree:'No cameras are free this day. Try another day.',
+      confirmTitle:'Confirm your reservation', pickUp:'Pick up', dueBack:'due back',
+      kitLine:'Your kit already comes with the <b>Canon EOS R50</b> camera, three lenses (RF 50mm, RF-S 18-45mm, RF-S 55-210mm), a battery, a charger, and a memory card. Most students just take the kit.',
+      needGear:'Need extra gear?', optional:'(optional)',
+      disc:'Check with your teacher that the kit is physically available for reservation before completing your reservation.',
+      confirmBtn:'Confirm reservation', reservingBtn:'Reserving…',
+      enterFullId:'Enter your full student ID.', checking:'Checking…',
+      idNotFound:'We could not find that ID. Check the number or see Mr. Silva.',
+      serverErr:'Could not reach the server. Try again.',
+      needCell:'Please enter your cell phone.', needParentCell:'Please enter a parent / guardian cell.',
+      couldNotReserve:'Could not reserve. Try again.', couldNotReach:'Could not reach the server.',
+      reservingAs:'Reserving as', tapSchoolDay:'Tap a <b>school day</b> below, then pick an available camera.', cancel:'Cancel',
+      doneTitle:'Reserved', reservedYou:'You’re reserved.', takeLook:'Take a quick look, then tap Done.',
+      sumReservedFor:'Reserved for', sumCamera:'Camera', sumPickUp:'Pick up', sumDueBack:'Due back', sumGear:'Extra gear',
+      justKit:'Just the kit, no extra gear',
+      doneSub:'See Mr. Silva to pick it up on a school day. Your reservation is pending until your teacher confirms the kit is available.',
+      doneBtn:'Done', period:'Period',
+      updated:'Updated', refreshes:'Refreshes automatically.', loadErr:'Could not load the calendar. It will keep trying.',
+      reloadMsg:'This screen did not load right. Tap reload and try again.', reload:'Reload',
+      saving:'Saving…', eligibility:'Eligibility', status:'Status', freeOn:'Free on', availOne:'Available',
+      returnedWord:'Returned', openNote:'This camera is free. Reserve it from the reservation form.', more:'more'
+    },
+    es:{
+      intro:'Mira qué cámaras están prestadas y cuándo se deben devolver antes de preguntar. Las cámaras 16, 17 y 18 son solo para Fotografía 2. Se actualiza automáticamente.',
+      availSuffix:'cámaras disponibles', of:'de', reserved:'Reservada', checkedOut:'Prestada',
+      checkedNow:'Prestadas ahora mismo', loading:'Cargando…',
+      reserveBtn:'Reservar una Cámara', qrBtn:'Código QR',
+      noCamsSetup:'Aún no hay cámaras configuradas.', allAvail:'Todas las cámaras están disponibles ahora.',
+      dueShort:'para', photo2only:'Solo Foto 2', photo12:'Foto 1 y 2',
+      qrTitle:'Código QR de reserva', qrSub:'Los estudiantes lo escanean para abrir el formulario de reserva.',
+      copyLink:'Copiar enlace', copied:'¡Copiado!', download:'Descargar',
+      step1:'Escribe tu número de estudiante para saber que eres tú.', step1lead:'Paso 1 de 2.',
+      idLabel:'Número de estudiante', idPh:'Número de estudiante', cont:'Continuar',
+      verifyLead:'Revisa tu información y corrige lo que esté mal, luego empieza a reservar. Tus cambios se guardan.',
+      yourCell:'Tu celular', parentName:'Nombre del padre / tutor', parentNamePh:'Padre o tutor',
+      parentCell:'Celular del padre / tutor', back:'Atrás', startReserving:'Empezar a reservar',
+      tabAvail:'Disponibles', tabOut:'Prestadas', tabRes:'Reservadas', tabOverdue:'Atrasadas', tabReturned:'Devueltas',
+      emptyReturned:'No se devolvió nada este día.', emptyOverdue:'Nada atrasado.',
+      emptyRes:'No hay reservas este día.', emptyOut:'No hay cámaras prestadas este día.',
+      emptyAvail:'No hay cámaras libres este día.', cardMissing:'falta tarjeta de memoria',
+      pickedUp:'Recogida', due:'para', reservedWord:'Reservada', outWord:'Prestada', backWord:'devuelta',
+      dayOverdue:'día atrasada', daysOverdue:'días atrasada',
+      reserveForLead:'Reservar para', dayPassed:'Ese día ya pasó. Elige hoy o un día de clases futuro.',
+      noSchool:'No hay clases este día, así que no se pueden recoger ni devolver cámaras. Elige un día de clases (lunes a viernes, no feriado).',
+      tapCam:'Toca una cámara disponible para reservarla. Se devuelve el siguiente día de clases', noneFree:'No hay cámaras libres este día. Prueba otro día.',
+      confirmTitle:'Confirma tu reserva', pickUp:'Recoger', dueBack:'devolver',
+      kitLine:'Tu kit ya incluye la cámara <b>Canon EOS R50</b>, tres lentes (RF 50mm, RF-S 18-45mm, RF-S 55-210mm), una batería, un cargador y una tarjeta de memoria. La mayoría de los estudiantes solo lleva el kit.',
+      needGear:'¿Necesitas equipo extra?', optional:'(opcional)',
+      disc:'Confirma con tu maestro que el kit está físicamente disponible antes de completar tu reserva.',
+      confirmBtn:'Confirmar reserva', reservingBtn:'Reservando…',
+      enterFullId:'Escribe tu número de estudiante completo.', checking:'Verificando…',
+      idNotFound:'No encontramos ese número. Revísalo o habla con el Sr. Silva.',
+      serverErr:'No se pudo conectar al servidor. Inténtalo de nuevo.',
+      needCell:'Por favor escribe tu celular.', needParentCell:'Por favor escribe un celular del padre / tutor.',
+      couldNotReserve:'No se pudo reservar. Inténtalo de nuevo.', couldNotReach:'No se pudo conectar al servidor.',
+      reservingAs:'Reservando como', tapSchoolDay:'Toca un <b>día de clases</b> abajo y luego elige una cámara disponible.', cancel:'Cancelar',
+      doneTitle:'Reservada', reservedYou:'¡Estás reservada!', takeLook:'Revisa rápido y luego toca Listo.',
+      sumReservedFor:'Reservada para', sumCamera:'Cámara', sumPickUp:'Recoger', sumDueBack:'Devolver', sumGear:'Equipo extra',
+      justKit:'Solo el kit, sin equipo extra',
+      doneSub:'Habla con el Sr. Silva para recogerla en un día de clases. Tu reserva queda pendiente hasta que tu maestro confirme que el kit está disponible.',
+      doneBtn:'Listo', period:'Período',
+      updated:'Actualizado', refreshes:'Se actualiza automáticamente.', loadErr:'No se pudo cargar el calendario. Seguirá intentando.',
+      reloadMsg:'Esta pantalla no cargó bien. Toca recargar e inténtalo de nuevo.', reload:'Recargar',
+      saving:'Guardando…', eligibility:'Elegibilidad', status:'Estado', freeOn:'Libre el', availOne:'Disponible',
+      returnedWord:'Devuelta', openNote:'Esta cámara está libre. Resérvala desde el formulario de reserva.', more:'más'
+    }
+  };
+  function t(k){ var v=(TR[LANG]&&TR[LANG][k]); return (v!=null)?v:(TR.en[k]!=null?TR.en[k]:k); }
+  // Server validation errors come back in English; translate the known ones for Spanish students.
+  var SRV_ES={
+    'Too many tries, slow down.':'Demasiados intentos, ve más despacio.',
+    'Please enter your student ID, a camera, and a due date.':'Escribe tu número de estudiante, una cámara y una fecha de entrega.',
+    'The due date is before the pickup date.':'La fecha de entrega es antes de la fecha de recogida.',
+    'Unknown camera.':'Cámara desconocida.',
+    'That camera is out of service right now. Please pick another.':'Esa cámara está fuera de servicio ahora. Por favor elige otra.',
+    'That camera is missing its memory card right now. Please pick another.':'A esa cámara le falta la tarjeta de memoria ahora. Por favor elige otra.',
+    'That camera is for Photography 2 only.':'Esa cámara es solo para Fotografía 2.',
+    'That camera is already booked for those days. Please pick another.':'Esa cámara ya está reservada para esos días. Por favor elige otra.',
+    'Request too large.':'La solicitud es demasiado grande.',
+    'Invalid request.':'Solicitud inválida.'
+  };
+  function srvErr(en){ return (LANG==='es' && en && SRV_ES[en]) ? SRV_ES[en] : en; }
+  // ---- Apply the current language to every STATIC string on the page (dynamic bits re-render on toggle). ----
+  function _setTxt(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+  function _setHtml(id,v){ var e=document.getElementById(id); if(e) e.innerHTML=v; }
+  function applyStatic(){
+    try{ document.documentElement.setAttribute('lang',LANG); }catch(e){}
+    _setTxt('introSub', t('intro'));
+    _setTxt('lab-of', t('of')); _setTxt('lab-avail', t('availSuffix'));
+    _setHtml('legend', '<span><i class="k-res"></i>'+t('reserved')+'</span><span><i class="k-out"></i>'+t('checkedOut')+'</span>');
+    _setTxt('boardH', t('checkedNow')); _setTxt('boardLoading', t('loading'));
+    _setTxt('reserveMonthBtn', t('reserveBtn')); _setTxt('qrMonthBtn', t('qrBtn'));
+    var dow=document.getElementById('dowRow'); if(dow){ dow.innerHTML=DOW3_L[LANG].map(function(d){ return '<div>'+d+'</div>'; }).join(''); }
+    _setTxt('qrModalTitle', t('qrTitle')); _setTxt('qrModalSub', t('qrSub'));
+    var qc=document.getElementById('qr-copy'); if(qc && !qc.classList.contains('copied')) qc.textContent=t('copyLink');
+    _setTxt('qr-dl', t('download'));
+    _setTxt('rvModalTitle', t('reserveBtn'));
+    _setHtml('rvStep1Sub', '<b>'+t('step1lead')+'</b> '+t('step1'));
+    _setTxt('rvIdLabel', t('idLabel'));
+    var idf=document.getElementById('rv-id'); if(idf) idf.setAttribute('placeholder', t('idPh'));
+    _setTxt('rv-continue', t('cont'));
+    _setTxt('rvVerifyLead', t('verifyLead'));
+    _setTxt('rvScLabel', t('yourCell'));
+    _setTxt('rvPgLabel', t('parentName'));
+    var pgf=document.getElementById('rv-pg'); if(pgf) pgf.setAttribute('placeholder', t('parentNamePh'));
+    _setTxt('rvPcLabel', t('parentCell'));
+    _setTxt('rv-back', t('back'));
+    _setHtml('rv-start', t('startReserving')+' &rarr;');
+    // Verify sub-step showing? refresh the dynamic "Reserving as ..." line without touching typed edits.
+    var s1b=document.getElementById('rv-step1b');
+    if(s1b && s1b.style.display!=='none' && rvLookup){ var L=rvLookup;
+      _setHtml('rv-who', t('reservingAs')+' <b>'+esc(L.label)+'</b>'+(L.period?(' &middot; '+t('period')+' '+esc(normPeriod(L.period)||L.period)):'')); }
+  }
+  function syncLangActive(){
+    Array.prototype.forEach.call(document.querySelectorAll('#langToggle .langbtn'), function(b){
+      b.classList.toggle('active', b.getAttribute('data-setlang')===LANG); });
+  }
+  function setLang(l){
+    LANG=(l==='es')?'es':'en';
+    try{ localStorage.setItem('silva-cal-lang',LANG); }catch(e){}
+    applyStatic(); syncLangActive();
+    renderBoard(); renderCal();
+    var dm=document.getElementById('daymodal');
+    if(dm && dm.classList.contains('open') && !DM_DONE) renderDayModal();
+    if(isReserving()) showBanner();
+    postHeight();
+  }
   var view=new Date(); view.setDate(1);
   var DATA={cameras:[],checkouts:[]};
   // Teacher context: the camera key (same-origin sessionStorage set by the console, or pushed in
@@ -448,7 +622,7 @@
     var x=document.getElementById('qr-x'); if(x) x.addEventListener('click',closeQR);
     var m=document.getElementById('qrmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeQR(); });
     var cp=document.getElementById('qr-copy'); if(cp) cp.addEventListener('click',function(){
-      var b=this, done=function(){ b.textContent='Copied!'; b.classList.add('copied'); setTimeout(function(){ b.textContent='Copy link'; b.classList.remove('copied'); },1500); };
+      var b=this, done=function(){ b.textContent=t('copied'); b.classList.add('copied'); setTimeout(function(){ b.textContent=t('copyLink'); b.classList.remove('copied'); },1500); };
       if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(QR_URL).then(done,done); } else { done(); }
     });
     var dl=document.getElementById('qr-dl'); if(dl) dl.addEventListener('click',function(){
@@ -459,10 +633,12 @@
   })();
 
   function todayISO(){ var d=new Date(); d.setHours(0,0,0,0); return d.toISOString().slice(0,10); }
-  function fmt(iso){ if(!iso)return''; var p=iso.split('-'); return MONTHS[+p[1]-1].slice(0,3)+' '+(+p[2]); }
+  // Short date. English reads "Sep 28"; Spanish reads "28 sep" (day before month).
+  function fmt(iso){ if(!iso)return''; var p=iso.split('-'); var mo=MON3_L[LANG][+p[1]-1], dy=(+p[2]);
+    return (LANG==='es')?(dy+' '+mo):(mo+' '+dy); }
   function statusOf(c){ return c.status||(c.returned?'returned':'out'); }
   // Cam 16/17/18 are Photography 2 only; the rest serve Photo 1 and Photo 2.
-  function camCourse(cam){ var n=parseInt((cam||'').replace(/\D/g,''),10); return (n>=16)?'Photo 2 only':'Photo 1 &amp; 2'; }
+  function camCourse(cam){ var n=parseInt((cam||'').replace(/\D/g,''),10); return (n>=16)?t('photo2only'):t('photo12'); }
   // A camera is unavailable while it is reserved OR picked up; returned frees it.
   // "Checked out right now" = a record whose window covers TODAY (out now or due to be picked up
   // today); a future reservation of the same camera does NOT count as out today.
@@ -476,13 +652,13 @@
     var outCams=cams.filter(function(c){ return active[c]; });
     outn.textContent=(cams.length-outCams.length); totn.textContent=cams.length;
     board.innerHTML='';
-    if(!cams.length){ board.innerHTML='<span class="foot">No cameras set up yet.</span>'; return; }
-    if(!outCams.length){ board.innerHTML='<span class="foot">All cameras are available right now.</span>'; return; }
+    if(!cams.length){ board.innerHTML='<span class="foot">'+t('noCamsSetup')+'</span>'; return; }
+    if(!outCams.length){ board.innerHTML='<span class="foot">'+t('allAvail')+'</span>'; return; }
     outCams.forEach(function(c){
       var o=active[c]; var st=statusOf(o);
       var el=document.createElement('div');
       el.className='cam'+(st==='reserved'?' reserved':'');
-      el.innerHTML='<div class="n">'+c+'</div><div class="s">'+(st==='reserved'?'Reserved':('Checked out &middot; due '+fmt(o.due)))+'</div><div class="course">'+camCourse(c)+'</div>';
+      el.innerHTML='<div class="n">'+c+'</div><div class="s">'+(st==='reserved'?t('reserved'):(t('checkedOut')+' · '+t('dueShort')+' '+fmt(o.due)))+'</div><div class="course">'+camCourse(c)+'</div>';
       board.appendChild(el);
     });
   }
@@ -506,9 +682,10 @@
   // Accessories (equipment records) linked to a camera checkout, so the detail card can show + return them.
   var EQUIP_LABEL_CAL={tripod:'K&F Concept Tripod',wide:'Canon RF-S 10-18mm ultra-wide',zoom:'Canon RF 100-400mm ultra-zoom',speedlite:'Canon Speedlite EL-10 flash'};
   function accessoriesFor(rec){ if(!rec) return []; return (DATA.checkouts||[]).filter(function(c){ return c.kind==='equipment' && c.group===rec.id; }); }
+  // Long date. English "Monday, September 28"; Spanish "lunes, 28 de septiembre".
   function prettyDate(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]);
-    var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    return days[d.getDay()]+', '+MONTHS[+p[1]-1]+' '+(+p[2]); }
+    var dow=DOWFULL_L[LANG][d.getDay()], mo=MONTHS_L[LANG][+p[1]-1], dy=(+p[2]);
+    return (LANG==='es')?(dow+', '+dy+' de '+mo):(dow+', '+mo+' '+dy); }
   // ---- PVHS 2026-27 no-school days: weekends, holidays/breaks, and days outside the school year.
   // Source: PVHS_Days_Off_2026-2027. Pickups + returns can only land on a school day. ----
   var SCHOOL_START='2026-08-13', SCHOOL_END='2027-06-09';
@@ -529,13 +706,21 @@
   ];
   var DAYS_OFF={};
   OFF_SPANS.forEach(function(s){ for(var d=s.a; d<=s.b; d=addDays(d,1)) DAYS_OFF[d]=s.t; });
+  // Spanish names for the no-school labels shown on the calendar.
+  var OFF_ES={
+    'Labor Day':'Día del Trabajo','Veterans Day':'Día de los Veteranos','Thanksgiving':'Acción de Gracias',
+    'Winter Break':'Vacaciones de Invierno','Staff Day':'Día del Personal','MLK Day':'Día de MLK',
+    "Lincoln's Day":'Día de Lincoln',"Presidents' Day":'Día de los Presidentes','Spring Vacation':'Vacaciones de Primavera',
+    'Spring Break':'Descanso de Primavera','Memorial Day':'Día de los Caídos','Juneteenth':'Juneteenth','Independence Day':'Día de la Independencia'
+  };
+  function offLabel(en){ return (LANG==='es' && en && OFF_ES[en]) ? OFF_ES[en] : en; }
   function isWeekend(iso){ var p=iso.split('-'); var g=new Date(+p[0],+p[1]-1,+p[2]).getDay(); return g===0||g===6; }
   function isSchoolDay(iso){ if(iso<SCHOOL_START||iso>SCHOOL_END) return false; if(isWeekend(iso)) return false; return !DAYS_OFF[iso]; }
   // Exposed so the reservation flow can gate pickup/return dates to school days.
   window.PVHS_isSchoolDay=isSchoolDay; window.PVHS_DAYS_OFF=DAYS_OFF;
   // Google-style month: each week is a band; each active checkout is a bar spanning its out->return days.
   function renderCal(){
-    mtitle.textContent=MONTHS[view.getMonth()]+' '+view.getFullYear();
+    mtitle.textContent=MONTHS_L[LANG][view.getMonth()]+' '+view.getFullYear();
     var first=new Date(view.getFullYear(),view.getMonth(),1);
     var startD=new Date(first); startD.setDate(1-first.getDay());
     var startISO=isoD(startD), curMonth=view.getMonth();
@@ -570,7 +755,7 @@
         var off=!isSchoolDay(diso);
         var cell=el('div','wcell'+(((+dp[1]-1)===curMonth)?'':' out-month')+(diso===todayISO()?' today':'')+(off?' no-school':''));
         cell.appendChild(el('div','wdaynum', String(+dp[2])));
-        if(DAYS_OFF[diso]) cell.appendChild(el('div','wdayoff', DAYS_OFF[diso]));
+        if(DAYS_OFF[diso]) cell.appendChild(el('div','wdayoff', offLabel(DAYS_OFF[diso])));
         (function(day){ cell.addEventListener('click',function(){ openDayModal(day); }); })(diso);
         days.appendChild(cell);
       }
@@ -589,7 +774,7 @@
       });
       for(var d3=0; d3<7; d3++){
         if(dayTot[d3]>dayVis[d3]){
-          var more=el('div','wmorebar','+'+(dayTot[d3]-dayVis[d3])+' more');
+          var more=el('div','wmorebar','+'+(dayTot[d3]-dayVis[d3])+' '+t('more'));
           more.style.left='calc('+(d3/7*100)+'% + 2px)';
           more.style.width='calc('+(1/7*100)+'% - 4px)';
           more.style.top=(MAXLANE*20)+'px';
@@ -639,7 +824,7 @@
     catch(err){
       try{
         var b=document.getElementById('dm-body');
-        if(b) b.innerHTML='<div class="dm-empty" style="padding:24px 6px;text-align:center;">This screen did not load right. Tap reload and try again.<br><button type="button" class="dc-btn rv-primary" id="dm-retry" style="margin-top:14px;">Reload</button></div>';
+        if(b) b.innerHTML='<div class="dm-empty" style="padding:24px 6px;text-align:center;">'+t('reloadMsg')+'<br><button type="button" class="dc-btn rv-primary" id="dm-retry" style="margin-top:14px;">'+t('reload')+'</button></div>';
         var r=document.getElementById('dm-retry'); if(r) r.addEventListener('click', function(){ RESV=null; RESV_RESUME_DAY=null; DM_RESERVE_CAM=null; DM_CAM=null; DM_DONE=false; DM_DAY=null; closeDayModal(); load(); });
       }catch(e){}
     }
@@ -655,24 +840,24 @@
     if(DM_TAB==='returned' && !ret.length) DM_TAB='available';
     document.getElementById('dm-title').textContent=prettyDate(iso);
     // Order everywhere: Available, then Checked out, then Reserved (Overdue + teacher Returned last).
-    var tabs=dmTab('available','Available',avail.length)+dmTab('out','Checked out',out.length)+dmTab('reserved','Reserved',res.length);
-    if(od.length) tabs+=dmTab('overdue','Overdue',od.length);
-    if(ret.length) tabs+=dmTab('returned','Returned',ret.length);
+    var tabs=dmTab('available',t('tabAvail'),avail.length)+dmTab('out',t('tabOut'),out.length)+dmTab('reserved',t('tabRes'),res.length);
+    if(od.length) tabs+=dmTab('overdue',t('tabOverdue'),od.length);
+    if(ret.length) tabs+=dmTab('returned',t('tabReturned'),ret.length);
     document.getElementById('dm-tabs').innerHTML=tabs;
     var chev='<span class="dm-chev-r">&rsaquo;</span>', body;
     if(DM_TAB==='returned'){
-      body=ret.length?ret.map(function(c){ return '<div class="dm-row"><span class="dm-bar ret">'+esc(c.camera)+'</span><span class="dm-range">'+esc(nameOf(c))+'</span><span class="dm-course">out '+fmt(c.out)+' &rarr; back '+fmt(c.returned_date||c.due)+'</span></div>'; }).join(''):'<div class="dm-empty">Nothing returned this day.</div>';
+      body=ret.length?ret.map(function(c){ return '<div class="dm-row"><span class="dm-bar ret">'+esc(c.camera)+'</span><span class="dm-range">'+esc(nameOf(c))+'</span><span class="dm-course">'+t('outWord').toLowerCase()+' '+fmt(c.out)+' &rarr; '+t('backWord')+' '+fmt(c.returned_date||c.due)+'</span></div>'; }).join(''):'<div class="dm-empty">'+t('emptyReturned')+'</div>';
     } else if(DM_TAB==='overdue'){
-      body=od.length?od.map(function(c){ var n=dayDiff(c.due,todayISO()); return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,todayISO())+'<span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-tag od">'+n+(n===1?' day':' days')+' overdue</span>'+chev+'</div>'; }).join(''):'<div class="dm-empty">Nothing overdue.</div>';
+      body=od.length?od.map(function(c){ var n=dayDiff(c.due,todayISO()); return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,todayISO())+'<span class="dm-range">'+t('pickedUp')+' '+fmt(c.out)+' &rarr; '+t('due')+' '+fmt(c.due)+'</span><span class="dm-tag od">'+n+' '+(n===1?t('dayOverdue'):t('daysOverdue'))+'</span>'+chev+'</div>'; }).join(''):'<div class="dm-empty">'+t('emptyOverdue')+'</div>';
     } else if(DM_TAB==='reserved'){
-      body=res.length?res.map(function(c){ return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,iso)+'<span class="dm-range">Reserved '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+chev+'</div>'; }).join(''):'<div class="dm-empty">No reservations this day.</div>';
+      body=res.length?res.map(function(c){ return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,iso)+'<span class="dm-range">'+t('reservedWord')+' '+fmt(c.out)+' &rarr; '+t('due')+' '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+chev+'</div>'; }).join(''):'<div class="dm-empty">'+t('emptyRes')+'</div>';
     } else if(DM_TAB==='out'){
-      body=out.length?out.map(function(c){ var odt=(c.due&&c.due<todayISO())?'<span class="dm-tag od">Overdue</span>':''; return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,iso)+'<span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+odt+chev+'</div>'; }).join(''):'<div class="dm-empty">No cameras checked out this day.</div>';
+      body=out.length?out.map(function(c){ var odt=(c.due&&c.due<todayISO())?'<span class="dm-tag od">'+t('tabOverdue')+'</span>':''; return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,iso)+'<span class="dm-range">'+t('pickedUp')+' '+fmt(c.out)+' &rarr; '+t('due')+' '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+odt+chev+'</div>'; }).join(''):'<div class="dm-empty">'+t('emptyOut')+'</div>';
     } else {
       var nc=dayNoCard(iso);
       var availHtml=avail.map(function(c){ return '<span class="dm-availcam clickable" data-cam="'+esc(c)+'">'+c+'<small>'+camCourse(c)+'</small></span>'; }).join('');
-      var ncHtml=nc.map(function(c){ return '<span class="dm-availcam nocard" title="Memory card missing, out of rotation">'+c+'<small>memory card missing</small></span>'; }).join('');
-      body=(avail.length||nc.length)?('<div class="dm-avail">'+availHtml+ncHtml+'</div>'):'<div class="dm-empty">No cameras free this day.</div>';
+      var ncHtml=nc.map(function(c){ return '<span class="dm-availcam nocard" title="'+t('cardMissing')+'">'+c+'<small>'+t('cardMissing')+'</small></span>'; }).join('');
+      body=(avail.length||nc.length)?('<div class="dm-avail">'+availHtml+ncHtml+'</div>'):'<div class="dm-empty">'+t('emptyAvail')+'</div>';
     }
     document.getElementById('dm-body').innerHTML=body;
     Array.prototype.forEach.call(document.querySelectorAll('#dm-tabs .dm-tab'), function(btn){
@@ -683,7 +868,7 @@
     });
     // Reserve straight from the day card: only on a present/future school day that actually has a free camera.
     if(_foot && iso>=todayISO() && isSchoolDay(iso) && avail.length){
-      _foot.innerHTML='<button type="button" class="dm-reserve-cta" id="dm-reserve">Reserve a Camera</button>';
+      _foot.innerHTML='<button type="button" class="dm-reserve-cta" id="dm-reserve">'+t('reserveBtn')+'</button>';
       document.getElementById('dm-reserve').addEventListener('click', function(){ openReserveFlow(iso); });
     }
   }
@@ -694,19 +879,19 @@
     var c=recForCamOnDay(cam,iso);
     document.getElementById('dm-tabs').innerHTML='';
     document.getElementById('dm-title').textContent=prettyDate(iso);
-    var head='<button type="button" class="dm-back" id="dm-back">&lsaquo; Back to '+prettyDate(iso)+'</button>';
+    var head='<button type="button" class="dm-back" id="dm-back">&lsaquo; '+t('back')+'</button>';
     if(!c){
       var abody=head+'<div class="dc"><div class="dc-top"><span class="dc-cam">'+esc(cam)+'</span>'+
-        '<span class="dm-tag" style="background:rgba(63,168,99,.16);color:#8ff0b0;">Available</span></div>'+
-        '<div class="dc-grid">'+kv('Eligibility',camCourse(cam))+kv('Status','Free on '+fmt(iso))+'</div>'+
-        (AUTHED?'<div class="dc-note"><b>Reserve</b>Use &ldquo;+ Reserve / check out&rdquo; on the console to book this camera.</div>':'<div class="dc-note"><b>Open</b>This camera is free. Reserve it from the reservation form.</div>')+
+        '<span class="dm-tag" style="background:rgba(63,168,99,.16);color:#8ff0b0;">'+t('availOne')+'</span></div>'+
+        '<div class="dc-grid">'+kv(t('eligibility'),camCourse(cam))+kv(t('status'),t('freeOn')+' '+fmt(iso))+'</div>'+
+        (AUTHED?'<div class="dc-note"><b>Reserve</b>Use &ldquo;+ Reserve / check out&rdquo; on the console to book this camera.</div>':'<div class="dc-note">'+t('openNote')+'</div>')+
         '</div>';
       setDetailBody(abody); return;
     }
     var st=statusOf(c), overdue=(st==='out'&&c.due&&c.due<todayISO()), pend=pendingCal[c.id];
     var cls=pend?'returning':(overdue?'overdue':st);
     var pill=pend?'<span class="dm-tag" style="background:rgba(0,184,184,.18);color:#5ff0f0;">Returning</span>':
-      (overdue?'<span class="dm-tag od">Overdue</span>':(st==='reserved'?'<span class="dm-tag res">Reserved</span>':(st==='returned'?'<span class="dm-tag" style="background:rgba(63,168,99,.16);color:#8ff0b0;">Returned</span>':'<span class="dm-tag" style="background:rgba(255,107,26,.18);color:#ffc7a6;">Picked up</span>')));
+      (overdue?'<span class="dm-tag od">'+t('tabOverdue')+'</span>':(st==='reserved'?'<span class="dm-tag res">'+t('reservedWord')+'</span>':(st==='returned'?'<span class="dm-tag" style="background:rgba(63,168,99,.16);color:#8ff0b0;">'+t('returnedWord')+'</span>':'<span class="dm-tag" style="background:rgba(255,107,26,.18);color:#ffc7a6;">'+t('pickedUp')+'</span>')));
     var acts='';
     if(AUTHED){
       if(pend){
@@ -720,15 +905,15 @@
              '<button type="button" class="dc-btn warn" data-act="return" data-id="'+esc(c.id)+'">Mark returned</button></div>';
       }
     }
-    var grid=kv('Camera', esc(cam)+' &middot; '+camCourse(cam));
+    var grid=kv(t('sumCamera'), esc(cam)+' &middot; '+camCourse(cam));
     if(AUTHED){
       grid+=kv('Student ID', esc(c.student_id||''));
       grid+=kv('Period', c.period?('Per '+esc(c.period)):'');
       grid+=kv('Class', esc(c.course||''));
     }
-    grid+=kv(st==='reserved'?'Reserved':'Checked out', 'Out '+fmt(c.out)+' &rarr; due '+fmt(c.due), true);
-    if(c.picked_up_date) grid+=kv('Picked up', fmt(c.picked_up_date));
-    if(c.returned_date) grid+=kv('Returned', fmt(c.returned_date));
+    grid+=kv(st==='reserved'?t('reservedWord'):t('checkedOut'), t('outWord')+' '+fmt(c.out)+' &rarr; '+t('due')+' '+fmt(c.due), true);
+    if(c.picked_up_date) grid+=kv(t('pickedUp'), fmt(c.picked_up_date));
+    if(c.returned_date) grid+=kv(t('returnedWord'), fmt(c.returned_date));
     if(AUTHED){
       grid+=kvc('Student cell', c.student_cell);
       grid+=kvc('Parent / guardian', c.parent_guardian);
@@ -840,20 +1025,20 @@
   function closeReserveModal(){ document.getElementById('rvmodal').classList.remove('open'); }
   function rvContinue(){
     var v=document.getElementById('rv-id').value.replace(/\D/g,''), msg=document.getElementById('rv-msg');
-    if(v.length<5){ msg.textContent='Enter your full student ID.'; return; }
-    msg.textContent='Checking…';
+    if(v.length<5){ msg.textContent=t('enterFullId'); return; }
+    msg.textContent=t('checking');
     // Full info so the student can review + fix their own contact (saved to the live database).
     fetch(API+'/api/camera/student_info',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:v})})
       .then(function(r){return r.json();}).then(function(j){
-        if(!j||!j.found){ msg.innerHTML='<span style="color:#ffb28a">We could not find that ID. Check the number or see Mr. Silva.</span>'; return; }
+        if(!j||!j.found){ msg.innerHTML='<span style="color:#ffb28a">'+t('idNotFound')+'</span>'; return; }
         rvLookup={id:v,label:j.label,name:j.name||'',period:String(j.period||''),
                   student_cell:j.student_cell||'',parent_guardian:j.parent_guardian||'',parent_cell:j.parent_cell||''};
         showVerify();
-      }).catch(function(){ msg.textContent='Could not reach the server. Try again.'; });
+      }).catch(function(){ msg.textContent=t('serverErr'); });
   }
   function showVerify(){
     var L=rvLookup;
-    document.getElementById('rv-who').innerHTML='Reserving as <b>'+esc(L.label)+'</b>'+(L.period?(' &middot; Period '+esc(normPeriod(L.period)||L.period)):'');
+    document.getElementById('rv-who').innerHTML=t('reservingAs')+' <b>'+esc(L.label)+'</b>'+(L.period?(' &middot; '+t('period')+' '+esc(normPeriod(L.period)||L.period)):'');
     // Prefill the editable fields with what is on file so the student can confirm or correct it.
     document.getElementById('rv-sc').value=L.student_cell||'';
     document.getElementById('rv-pg').value=L.parent_guardian||'';
@@ -864,8 +1049,8 @@
   function rvStart(){
     var L=rvLookup, m2=document.getElementById('rv-msg2');
     var sc=document.getElementById('rv-sc').value.trim(), pg=document.getElementById('rv-pg').value.trim(), pc=document.getElementById('rv-pc').value.trim();
-    if(sc.replace(/\D/g,'').length<7){ m2.textContent='Please enter your cell phone.'; return; }
-    if(pc.replace(/\D/g,'').length<7){ m2.textContent='Please enter a parent / guardian cell.'; return; }
+    if(sc.replace(/\D/g,'').length<7){ m2.textContent=t('needCell'); return; }
+    if(pc.replace(/\D/g,'').length<7){ m2.textContent=t('needParentCell'); return; }
     RESV={id:L.id,label:L.label,period:L.period};
     var proceed=function(){
       closeReserveModal(); showBanner();
@@ -879,14 +1064,14 @@
     // Save any corrections to the live database (overrides), then continue. Never block reserving on the save.
     var changed=(sc!==(L.student_cell||''))||(pg!==(L.parent_guardian||''))||(pc!==(L.parent_cell||''));
     if(!changed){ proceed(); return; }
-    var st=document.getElementById('rv-start'); if(st){ st.disabled=true; st.textContent='Saving…'; }
+    var st=document.getElementById('rv-start'); if(st){ st.disabled=true; st.textContent=t('saving'); }
     fetch(API+'/api/camera/student_update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:L.id,student_cell:sc,parent_guardian:pg,parent_cell:pc})})
-      .then(function(r){return r.json();}).then(function(){ if(st){ st.disabled=false; st.innerHTML='Start reserving &rarr;'; } proceed(); })
-      .catch(function(){ if(st){ st.disabled=false; st.innerHTML='Start reserving &rarr;'; } proceed(); });
+      .then(function(r){return r.json();}).then(function(){ if(st){ st.disabled=false; st.innerHTML=t('startReserving')+' &rarr;'; } proceed(); })
+      .catch(function(){ if(st){ st.disabled=false; st.innerHTML=t('startReserving')+' &rarr;'; } proceed(); });
   }
   function showBanner(){
     var b=document.getElementById('rvBanner');
-    b.innerHTML='<span>Reserving as <b>'+esc(RESV.label)+'</b> &nbsp;Tap a <b>school day</b> below, then pick an available camera.</span><button type="button" id="rv-cancel" class="rv-cancelbtn">Cancel</button>';
+    b.innerHTML='<span>'+t('reservingAs')+' <b>'+esc(RESV.label)+'</b> &nbsp;'+t('tapSchoolDay')+'</span><button type="button" id="rv-cancel" class="rv-cancelbtn">'+t('cancel')+'</button>';
     b.style.display='';
     document.getElementById('rv-cancel').addEventListener('click',cancelReserve);
     try{ b.scrollIntoView({block:'center'}); }catch(e){}
@@ -896,33 +1081,33 @@
     document.getElementById('dm-tabs').innerHTML='';
     document.getElementById('dm-title').textContent=prettyDate(iso);
     if(DM_RESERVE_CAM){ renderReserveConfirm(iso, DM_RESERVE_CAM); return; }
-    var body='<div class="rc-head">Reserve for '+esc(RESV.label)+'</div>';
-    if(iso<todayISO()){ body+='<div class="rc-notice">That day has passed. Pick today or a future school day.</div>'; setResvBody(body); return; }
-    if(!isSchoolDay(iso)){ body+='<div class="rc-notice">No school this day, so cameras can’t be picked up or returned. Pick a school day (Mon to Fri, not a holiday).</div>'; setResvBody(body); return; }
+    var body='<div class="rc-head">'+t('reserveForLead')+' '+esc(RESV.label)+'</div>';
+    if(iso<todayISO()){ body+='<div class="rc-notice">'+t('dayPassed')+'</div>'; setResvBody(body); return; }
+    if(!isSchoolDay(iso)){ body+='<div class="rc-notice">'+t('noSchool')+'</div>'; setResvBody(body); return; }
     var avail=dayAvailable(iso);
-    body+='<p class="rv-sub" style="margin:0 0 10px;">Tap an available camera to reserve it. Due back the next school day ('+fmt(nextSchoolDay(iso))+').</p>';
-    if(!avail.length){ body+='<div class="dm-empty">No cameras are free this day. Try another day.</div>'; setResvBody(body); return; }
+    body+='<p class="rv-sub" style="margin:0 0 10px;">'+t('tapCam')+' ('+fmt(nextSchoolDay(iso))+').</p>';
+    if(!avail.length){ body+='<div class="dm-empty">'+t('noneFree')+'</div>'; setResvBody(body); return; }
     body+='<div class="dm-avail">'+avail.map(function(c){
       var p2=(c==='Cam 16'||c==='Cam 17'||c==='Cam 18');
-      if(p2 && !p2ok()){ return '<span class="dm-availcam p2block" title="Photography 2 only">'+c+'<small>Photo 2 only</small></span>'; }
+      if(p2 && !p2ok()){ return '<span class="dm-availcam p2block" title="'+t('photo2only')+'">'+c+'<small>'+t('photo2only')+'</small></span>'; }
       return '<span class="dm-availcam resv" data-rcam="'+esc(c)+'">'+c+'<small>'+camCourse(c)+'</small></span>';
     }).join('')+'</div>';
     setResvBody(body);
   }
   function renderReserveConfirm(iso, cam){
     var due=nextSchoolDay(iso);
-    var body='<div class="rc-head">Confirm your reservation</div>'+
+    var body='<div class="rc-head">'+t('confirmTitle')+'</div>'+
       '<div class="rc-cam">'+esc(cam)+'</div>'+
-      '<div class="rc-dates">Pick up '+fmt(iso)+' &rarr; due back '+fmt(due)+'</div>'+
-      '<div class="rc-kit">Your kit already comes with the <b>Canon EOS R50</b> camera, three lenses (RF 50mm, RF-S 18-45mm, RF-S 55-210mm), a battery, a charger, and a memory card. Most students just take the kit.</div>'+
-      '<details class="rc-extra"><summary>Need extra gear? <span class="rc-extra-hint">(optional)</span></summary>'+
+      '<div class="rc-dates">'+t('pickUp')+' '+fmt(iso)+' &rarr; '+t('dueBack')+' '+fmt(due)+'</div>'+
+      '<div class="rc-kit">'+t('kitLine')+'</div>'+
+      '<details class="rc-extra"><summary>'+t('needGear')+' <span class="rc-extra-hint">'+t('optional')+'</span></summary>'+
         '<div class="rc-extra-body">'+
           EQUIP_MENU.map(function(e){ return '<label><input type="checkbox" id="rc-'+e.key+'"> '+esc(e.label)+'</label>'; }).join('')+
         '</div>'+
       '</details>'+
-      '<div class="rc-disc">Check with your teacher that the kit is physically available for reservation before completing your reservation.</div>'+
+      '<div class="rc-disc">'+t('disc')+'</div>'+
       '<div class="rc-msg" id="rc-msg"></div>'+
-      '<div class="rc-btnrow"><button type="button" class="dc-btn ghost" id="rc-back">Back</button><button type="button" class="dc-btn rv-primary" id="rc-go">Confirm reservation</button></div>';
+      '<div class="rc-btnrow"><button type="button" class="dc-btn ghost" id="rc-back">'+t('back')+'</button><button type="button" class="dc-btn rv-primary" id="rc-go">'+t('confirmBtn')+'</button></div>';
     setResvBody(body);
     document.getElementById('rc-back').addEventListener('click',function(){ DM_RESERVE_CAM=null; renderDayModal(); });
     document.getElementById('rc-go').addEventListener('click',function(){ submitReserve(iso); });
@@ -941,29 +1126,29 @@
     // Contact corrections are saved to the roster (overrides) at the verify step, so the checkout
     // resolves the up-to-date contact server-side; no per-reservation contact note needed.
     var payload={student_id:RESV.id,camera:cam,out:iso,due:due,status:'reserved',extras:extras,pending:true};
-    var btn=document.getElementById('rc-go'); if(btn){ btn.disabled=true; btn.textContent='Reserving…'; }
+    var btn=document.getElementById('rc-go'); if(btn){ btn.disabled=true; btn.textContent=t('reservingBtn'); }
     fetch(API+'/api/camera/checkout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
-      .then(function(res){ if(res.ok&&res.j&&res.j.ok){ reserveDone(cam,iso,due,extras,RESV&&RESV.label); } else { var m=document.getElementById('rc-msg'); if(m) m.textContent=(res.j&&res.j.error)||'Could not reserve. Try again.'; if(btn){ btn.disabled=false; btn.textContent='Confirm reservation'; } } })
-      .catch(function(){ var m=document.getElementById('rc-msg'); if(m) m.textContent='Could not reach the server.'; if(btn){ btn.disabled=false; btn.textContent='Confirm reservation'; } });
+      .then(function(res){ if(res.ok&&res.j&&res.j.ok){ reserveDone(cam,iso,due,extras,RESV&&RESV.label); } else { var m=document.getElementById('rc-msg'); if(m) m.textContent=srvErr(res.j&&res.j.error)||t('couldNotReserve'); if(btn){ btn.disabled=false; btn.textContent=t('confirmBtn'); } } })
+      .catch(function(){ var m=document.getElementById('rc-msg'); if(m) m.textContent=t('couldNotReach'); if(btn){ btn.disabled=false; btn.textContent=t('confirmBtn'); } });
   }
   function reserveDone(cam,iso,due,extras,who){
     RESV=null; DM_RESERVE_CAM=null; DM_DONE=true; document.getElementById('rvBanner').style.display='none';
     document.getElementById('dm-tabs').innerHTML='';
     var _f=document.getElementById('dm-foot'); if(_f) _f.innerHTML='';
-    document.getElementById('dm-title').textContent='Reserved';
-    var addons=(extras&&extras.length)?extras.map(function(k){ for(var i=0;i<EQUIP_MENU.length;i++){ if(EQUIP_MENU[i].key===k) return EQUIP_MENU[i].label; } return k; }).join(', '):'Just the kit, no extra gear';
-    var rows=(who?'<div class="rc-sumrow"><span>Reserved for</span><b>'+esc(who)+'</b></div>':'')+
-      '<div class="rc-sumrow"><span>Camera</span><b>'+esc(cam)+'</b></div>'+
-      '<div class="rc-sumrow"><span>Pick up</span><b>'+prettyDate(iso)+'</b></div>'+
-      '<div class="rc-sumrow"><span>Due back</span><b>'+prettyDate(due)+'</b></div>'+
-      '<div class="rc-sumrow"><span>Extra gear</span><b>'+esc(addons)+'</b></div>';
+    document.getElementById('dm-title').textContent=t('doneTitle');
+    var addons=(extras&&extras.length)?extras.map(function(k){ for(var i=0;i<EQUIP_MENU.length;i++){ if(EQUIP_MENU[i].key===k) return EQUIP_MENU[i].label; } return k; }).join(', '):t('justKit');
+    var rows=(who?'<div class="rc-sumrow"><span>'+t('sumReservedFor')+'</span><b>'+esc(who)+'</b></div>':'')+
+      '<div class="rc-sumrow"><span>'+t('sumCamera')+'</span><b>'+esc(cam)+'</b></div>'+
+      '<div class="rc-sumrow"><span>'+t('sumPickUp')+'</span><b>'+prettyDate(iso)+'</b></div>'+
+      '<div class="rc-sumrow"><span>'+t('sumDueBack')+'</span><b>'+prettyDate(due)+'</b></div>'+
+      '<div class="rc-sumrow"><span>'+t('sumGear')+'</span><b>'+esc(addons)+'</b></div>';
     document.getElementById('dm-body').innerHTML=
       '<div class="rc-done"><div class="rc-done-ic">&#10003;</div>'+
-      '<p><b>You&#8217;re reserved.</b> Take a quick look, then tap Done.</p>'+
+      '<p><b>'+t('reservedYou')+'</b> '+t('takeLook')+'</p>'+
       '<div class="rc-summary">'+rows+'</div>'+
-      '<p class="rc-done-sub">See Mr. Silva to pick it up on a school day. Your reservation is pending until your teacher confirms the kit is available.</p>'+
-      '<button type="button" class="dc-btn rv-primary" id="rc-close">Done</button></div>';
+      '<p class="rc-done-sub">'+t('doneSub')+'</p>'+
+      '<button type="button" class="dc-btn rv-primary" id="rc-close">'+t('doneBtn')+'</button></div>';
     var cl=document.getElementById('rc-close'); if(cl) cl.addEventListener('click',closeDayModal);
     load();
   }
@@ -976,6 +1161,14 @@
     var m=document.getElementById('rvmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeReserveModal(); });
     var rb=document.getElementById('reserveMonthBtn'); if(rb) rb.addEventListener('click',function(){ openReserveFlow(); });  // wrap: never pass the click Event as resumeDay
     var qb=document.getElementById('qrMonthBtn'); if(qb) qb.addEventListener('click',openQR);
+  })();
+
+  // ---- Language toggle: wire the EN/ES buttons + apply the remembered choice on first paint ----
+  (function(){
+    Array.prototype.forEach.call(document.querySelectorAll('#langToggle .langbtn'), function(b){
+      b.addEventListener('click', function(){ setLang(b.getAttribute('data-setlang')); });
+    });
+    applyStatic(); syncLangActive();   // reflect the stored LANG before data loads
   })();
 
   function load(){
@@ -994,9 +1187,9 @@
       // done): re-rendering the day modal then would reset their screen. Only refresh the day view when
       // they are just browsing a day, never during an active reserve sub-flow or on the confirmation.
       if(DM_DAY && !isReserving() && !DM_DONE && !document.getElementById('rvmodal').classList.contains('open')) renderDayModal();
-      foot.textContent='Updated '+new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+'. Refreshes automatically.';
+      foot.textContent=t('updated')+' '+new Date().toLocaleTimeString(LANG==='es'?'es':[], {hour:'numeric',minute:'2-digit'})+'. '+t('refreshes');
       postHeight(); setTimeout(postHeight,80);
-    }).catch(function(){ foot.textContent='Could not load the calendar. It will keep trying.'; });
+    }).catch(function(){ foot.textContent=t('loadErr'); });
   }
   // When embedded in the Teacher Console, tell the parent our height so the iframe fits with no scrollbar.
   function postHeight(){ if(window.parent===window) return; try{ parent.postMessage({calH:document.body.scrollHeight}, '*'); }catch(e){} }
