@@ -82,7 +82,10 @@
   .cam.reserved .s{color:#ffd889;}
   .cam .course{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:5px;}
   /* month calendar */
-  .calhead{display:flex;align-items:center;gap:10px;margin:26px 0 10px;flex-wrap:wrap;}
+  /* The month title + weekday row stay pinned below the site nav so you never lose track of which
+     column is which day while scrolling a long month (matters most on iPad landscape). */
+  .cal-stickyhead{position:sticky;top:var(--calnav-h,0);z-index:40;background:#060f0f;margin:26px 0 0;padding-top:2px;}
+  .calhead{display:flex;align-items:center;gap:10px;margin:0 0 10px;flex-wrap:wrap;}
   .mtitle{font-family:var(--font);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:1rem;color:#fff;min-width:168px;}
   .navb{font-family:var(--font);font-size:1rem;color:#eafeff;background:rgba(0,184,184,.14);border:1px solid var(--line);cursor:pointer;height:38px;width:38px;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;padding:0;}
   .navb:hover{background:rgba(0,184,184,.28);}
@@ -97,7 +100,7 @@
   @keyframes calPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,184,184,0);}50%{box-shadow:0 0 0 7px rgba(0,184,184,.16);}}
   @media (prefers-reduced-motion:reduce){ .cal-mbtn.reserve{animation:none;} }
   .dow{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px;}
-  .dow div{font-family:var(--font);font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);text-align:left;padding-left:6px;}
+  .dow div{font-family:var(--font);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#cfeaea;text-align:left;padding-left:6px;}
   /* Google-style month: each week is a band; camera checkouts are bars spanning their days. */
   .grid{display:flex;flex-direction:column;}
   .week{position:relative;}
@@ -114,7 +117,7 @@
   .wcell.no-school:hover{background:rgba(3,9,8,.72);}
   .wcell.no-school .wdaynum{color:#5c6b69;}
   .wdayoff{font-family:var(--font);font-size:.52rem;line-height:1.08;color:#6f8481;margin-top:1px;text-transform:uppercase;letter-spacing:.03em;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .wdaynum{font-family:var(--font);font-size:.72rem;color:var(--muted);}
+  .wdaynum{font-family:var(--font);font-size:.9rem;font-weight:700;color:#ffffff;}
   .wcell.today .wdaynum{color:var(--teal-lt);font-weight:700;}
   .wmore{font-family:var(--font);font-size:.6rem;color:var(--faint);margin-top:2px;}
   .wbars{position:absolute;top:23px;left:0;right:0;pointer-events:none;}
@@ -301,16 +304,18 @@
   <div class="h">Checked out right now</div>
   <div class="board" id="board"><span class="foot">Loading&#8230;</span></div>
 
-  <div class="calhead">
-    <button class="navb" id="prev" aria-label="Previous month">&#8249;</button>
-    <span class="mtitle" id="mtitle"></span>
-    <button class="navb" id="next" aria-label="Next month">&#8250;</button>
-    <div class="cal-monthacts">
-      <button type="button" class="cal-mbtn reserve" id="reserveMonthBtn">Reserve a Camera</button>
-      <button type="button" class="cal-mbtn qr" id="qrMonthBtn">QR Code</button>
+  <div class="cal-stickyhead">
+    <div class="calhead">
+      <button class="navb" id="prev" aria-label="Previous month">&#8249;</button>
+      <span class="mtitle" id="mtitle"></span>
+      <button class="navb" id="next" aria-label="Next month">&#8250;</button>
+      <div class="cal-monthacts">
+        <button type="button" class="cal-mbtn reserve" id="reserveMonthBtn">Reserve a Camera</button>
+        <button type="button" class="cal-mbtn qr" id="qrMonthBtn">QR Code</button>
+      </div>
     </div>
+    <div class="dow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
   </div>
-  <div class="dow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
   <div class="grid" id="grid"></div>
 
   <p class="foot" id="foot"></p>
@@ -1002,6 +1007,14 @@
   document.getElementById('daymodal').addEventListener('click',function(e){ if(e.target===this) closeDayModal(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeDayModal(); });
   load(); setInterval(load,60000);
+  // Pin the calendar header just below the site nav: measure the (sticky) nav height into --calnav-h.
+  // The nav is built by silva-nav.js after DOMContentLoaded, so re-measure on load, on resize, and a
+  // couple of delays to catch the async build.
+  function setCalNavH(){ var nav=document.querySelector('.silva-nav'); var h=(nav&&nav.offsetHeight)||0; document.documentElement.style.setProperty('--calnav-h', h+'px'); }
+  setCalNavH();
+  window.addEventListener('load', setCalNavH);
+  window.addEventListener('resize', setCalNavH);
+  setTimeout(setCalNavH, 300); setTimeout(setCalNavH, 1200);
 })();
 </script>
 </body>
