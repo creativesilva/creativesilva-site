@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Camera Manager | Pioneer Valley Photography</title>
+<meta name="description" content="Teacher back-end for the Pioneer Valley camera checkout: reserve, mark picked up, mark returned." />
+<meta name="robots" content="noindex,nofollow" />
+<link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only_Teal.svg" />
+<link rel="apple-touch-icon" href="/logos/CS_AppIcon_Teal_180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/css/silva-module.css?v=d132cef2" />
+<style>
+  /* Standalone camera back-end. Shares the unified header (silva-nav.js) + the catalog
+     CS-logo watermark so it matches curriculum.html and calendar.html. Talks to the same
+     Render backend as the Command Center, so every change syncs in real time. */
+  :root{
+    --teal:#00b8b8; --teal-lt:#5ff0f0; --teal-deep:#007474;
+    --text:#eafeff; --muted:rgba(206,244,244,0.66); --faint:rgba(206,244,244,0.42);
+    --line:rgba(0,184,184,0.32); --line-soft:rgba(0,184,184,0.18);
+    --ok:#3fa863; --orange:#ff6b1a; --gold:#f5b301; --red:#e0403a; --grayed:rgba(160,180,180,0.34);
+    --panel:linear-gradient(135deg,rgba(0,184,184,0.10) 0%,rgba(4,20,19,0.55) 100%);
+    --font:'Oswald',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;border-radius:0 !important;}
+  html,body{margin:0;padding:0;}
+  body{background-color:#060f0f;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;}
+  body::before{content:"";position:fixed;inset:0;z-index:-2;background:#060f0f url("https://www.creativesilva.com/logos/CS_Logo_Glossy_Teal_v1.png") no-repeat center 40%;background-size:min(74vw,700px);}
+  body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(6,14,14,0.84);}
+  @media (max-width:900px){ body::before{background-size:min(88vw,460px);background-position:center 36%;} }
+
+  .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;}
+
+  .wrap{max-width:1200px;margin:0 auto;padding:24px 32px 70px;}
+  .intro{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px;}
+  .sub{color:var(--muted);font-size:.95rem;margin:0;flex:1 1 320px;}
+  .btn{flex:0 0 auto;font-family:var(--font);font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:11px 18px;cursor:pointer;text-decoration:none;transition:filter .15s;}
+  .btn:hover{filter:brightness(1.12);}
+  .btn.ghost{background:rgba(0,184,184,.14);color:#eafeff;}
+  .btn.sm{padding:7px 12px;font-size:.66rem;}
+  .btn.warn{background:var(--gold);border-color:var(--gold);}
+  .btn.danger{background:transparent;border-color:rgba(224,64,58,.55);color:#ff9a8a;}
+  .btn.danger:hover{background:rgba(224,64,58,.16);filter:none;}
+
+  .summary{display:flex;align-items:center;gap:14px 22px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--teal);padding:13px 18px;margin-bottom:16px;}
+  .summary .big{font-family:var(--font);font-size:1.6rem;color:var(--teal-lt);}
+  .summary .lab{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;}
+  .sync{margin-left:auto;font-size:.72rem;color:var(--faint);letter-spacing:.03em;}
+  .sync b{color:var(--ok);font-weight:600;}
+
+  .h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:24px 0 12px;padding-left:9px;border-left:3px solid var(--teal);display:flex;align-items:center;gap:10px;}
+  .h .hcount{color:var(--faint);font-weight:600;letter-spacing:.04em;}
+
+  .board{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px;}
+  .cam{background:rgba(0,0,0,.26);border:1px solid var(--line-soft);border-left:4px solid var(--ok);padding:13px 14px;display:flex;flex-direction:column;gap:7px;}
+  .cam.reserved{border-left-color:var(--gold);}
+  .cam.out{border-left-color:var(--orange);}
+  .cam.overdue{border-left-color:var(--red);}
+  .cam-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .cam .n{font-family:var(--font);font-weight:600;letter-spacing:.03em;font-size:1.05rem;}
+  .cam .p2{font-size:.54rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);}
+  .pill{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;white-space:nowrap;}
+  .pill.avail{background:rgba(63,168,99,.16);color:#8ff0b0;}
+  .pill.reserved{background:rgba(245,179,1,.18);color:#ffd889;}
+  .pill.out{background:rgba(255,107,26,.18);color:#ffc7a6;}
+  .pill.overdue{background:rgba(224,64,58,.22);color:#ff9a8a;}
+  .who{font-family:var(--font);font-weight:600;font-size:.95rem;color:#fff;}
+  .meta{font-size:.76rem;color:var(--muted);}
+  .meta .co{font-size:.6rem;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);}
+  .contact{font-size:.72rem;color:var(--faint);border-top:1px dashed rgba(0,184,184,.16);padding-top:6px;margin-top:1px;line-height:1.5;}
+  .contact b{color:var(--muted);font-weight:600;}
+  .flagwarn{font-size:.66rem;color:#ffb28a;letter-spacing:.02em;}
+  .acts{display:flex;gap:7px;flex-wrap:wrap;margin-top:2px;}
+
+  .histwrap{margin-top:8px;}
+  .hist{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;}
+  .hrow{background:rgba(0,0,0,.18);border:1px solid rgba(160,180,180,.14);border-left:3px solid var(--grayed);padding:9px 11px;color:var(--grayed);font-size:.78rem;}
+  .hrow .hc{font-family:var(--font);font-weight:600;color:rgba(200,220,220,.66);}
+  .hrow .hre{font-size:.68rem;}
+  details.histbox{margin-top:6px;}
+  details.histbox summary{cursor:pointer;color:var(--muted);font-size:.8rem;list-style:none;}
+  details.histbox summary::-webkit-details-marker{display:none;}
+  details.histbox summary:before{content:"\25B8 ";color:var(--teal-lt);}
+  details.histbox[open] summary:before{content:"\25BE ";}
+
+  .calpanel{margin-top:26px;border:1px solid var(--line);border-top:3px solid var(--teal);background:rgba(4,16,15,.5);}
+  .calpanel iframe{width:100%;height:940px;border:0;display:block;background:#060f0f;}
+  .foot{margin-top:20px;font-size:.74rem;color:var(--faint);}
+
+  /* modal (reserve) + PIN gate share the backdrop look */
+  .modal{position:fixed;inset:0;background:rgba(2,12,12,.66);backdrop-filter:blur(8px) saturate(1.1);-webkit-backdrop-filter:blur(8px) saturate(1.1);display:none;align-items:center;justify-content:center;padding:20px;z-index:70;}
+  .modal.open{display:flex;}
+  .mpanel{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.97));border:1px solid var(--line);border-top:3px solid var(--teal);width:100%;max-width:440px;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+  .mhead{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--line-soft);}
+  .mtitle{font-family:var(--font);font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#fff;font-size:1rem;}
+  .mx{background:none;border:0;color:var(--muted);font-size:1.7rem;line-height:1;cursor:pointer;padding:0 4px;}
+  .mx:hover{color:#fff;}
+  .mbody{padding:16px 18px 20px;}
+  label{display:block;font-family:var(--font);font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#cfeaea;margin:0 0 6px;}
+  input[type=text],input[type=date],select{width:100%;background:rgba(0,0,0,.30);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1.02rem;padding:11px 12px;outline:none;margin-bottom:14px;}
+  input:focus,select:focus{border-color:var(--teal);}
+  select{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235ff0f0' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:38px;}
+  select option{background:#0c1414;color:var(--text);}
+  .who-line{font-size:.85rem;margin:-8px 0 14px;min-height:1.1em;}
+  .who-line.ok{color:#8ff0b0;} .who-line.no{color:#ffd889;} .who-line.load{color:var(--faint);}
+  .chk{display:flex;align-items:flex-start;gap:9px;font-size:.9rem;color:#dbeeee;cursor:pointer;line-height:1.4;margin-bottom:16px;}
+  .chk input{width:17px;height:17px;accent-color:var(--teal);flex:0 0 auto;margin-top:2px;}
+  .go{width:100%;font-family:var(--font);font-size:.95rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#04110f;background:var(--teal);border:0;padding:14px;cursor:pointer;}
+  .go:hover{filter:brightness(1.1);} .go:disabled{opacity:.5;cursor:default;}
+  .mmsg{display:none;padding:10px 13px;margin-bottom:14px;font-size:.9rem;border-left:4px solid var(--teal);}
+  .mmsg.show{display:block;} .mmsg.err{background:rgba(224,64,58,.14);border-left-color:var(--red);color:#ffd9d2;}
+
+  /* PIN gate */
+  #gate{position:fixed;inset:0;z-index:200;background:#060f0f;display:flex;align-items:center;justify-content:center;padding:22px;}
+  #gate .card{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.96));border:1px solid var(--line);border-top:3px solid var(--teal);max-width:380px;width:100%;padding:30px 26px 26px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+  #gate img{width:64px;height:auto;margin-bottom:12px;}
+  #gate h2{font-family:var(--font);font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:1.2rem;margin:0 0 4px;color:#fff;}
+  #gate p{color:var(--muted);font-size:.86rem;margin:0 0 18px;}
+  #gate input{text-align:center;font-size:1.3rem;letter-spacing:.2em;}
+  #gate .go{margin-top:2px;}
+  #gate .err{color:#ff9a8a;font-size:.84rem;min-height:1.1em;margin-top:10px;}
+  @media (max-width:560px){ .wrap{padding:18px 16px 60px;} }
+</style>
+</head>
+<body>
+
+<!-- Camera-scoped password gate. The password IS the server credential (X-Camera-Key),
+     validated by the backend, and unlocks camera actions only (not Canvas/grades/roster). -->
+<div id="gate">
+  <div class="card">
+    <img src="https://www.creativesilva.com/assets/PV%20LOGO%20NEW.png" alt="PVHS" />
+    <h2>Camera Manager</h2>
+    <p>Teacher access. Enter the camera password to reserve, check out, and return cameras.</p>
+    <input type="text" id="pin" inputmode="text" autocomplete="off" data-1p-ignore data-lpignore="true" placeholder="Camera password" />
+    <button class="go" id="pingo">Continue</button>
+    <div class="err" id="pinerr"></div>
+  </div>
+</div>
+
+<nav class="silva-nav" aria-label="Site navigation"></nav>
+<div class="wrap">
+  <div class="intro">
+    <p class="sub">Reserve a camera, mark it picked up when the student collects it, and mark it returned when it comes back. Changes sync to the calendar and the Command Center in real time.</p>
+    <button class="btn" id="reserveBtn">+ Reserve / check out</button>
+    <a class="btn ghost" href="/calendar.html" target="_blank" rel="noopener">Public calendar</a>
+  </div>
+
+  <div class="summary">
+    <div><span class="big" id="availn">0</span> <span class="lab">of <span id="totn">18</span> cameras available</span></div>
+    <div class="sync" id="sync">Connecting&#8230;</div>
+  </div>
+
+  <div class="h">Cameras <span class="hcount" id="boardcount"></span></div>
+  <div class="board" id="board"><span class="foot">Loading&#8230;</span></div>
+
+  <div class="histwrap">
+    <details class="histbox" id="histbox">
+      <summary>Returned history <span id="histn"></span></summary>
+      <div class="hist" id="hist"></div>
+    </details>
+  </div>
+
+  <div class="h">Calendar</div>
+  <div class="calpanel"><iframe id="calframe" src="/calendar.html?embed=1" title="Camera calendar" loading="lazy"></iframe></div>
+
+  <p class="foot">Cam 16, 17 and 18 are Photography 2 only. This page is teacher-only; keep the password within staff.</p>
+</div>
+
+<!-- Reserve / check out modal -->
+<div class="modal" id="resmodal">
+  <div class="mpanel">
+    <div class="mhead"><span class="mtitle">Reserve / check out</span><button class="mx" id="resx" aria-label="Close">&times;</button></div>
+    <div class="mbody">
+      <div class="mmsg" id="resmsg"></div>
+      <label for="rsid">Student ID number</label>
+      <input type="text" id="rsid" inputmode="numeric" placeholder="Student ID" />
+      <div class="who-line" id="rwho" aria-live="polite"></div>
+      <label for="rcam">Camera</label>
+      <select id="rcam"></select>
+      <label for="rout">Checkout date</label>
+      <input type="date" id="rout" />
+      <label for="rdue">Due back</label>
+      <input type="date" id="rdue" />
+      <label class="chk"><input type="checkbox" id="rpick" checked /> <span>Student is picking it up now (mark as picked up). Uncheck to just reserve.</span></label>
+      <button class="go" id="rgo">Reserve this camera</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/silva-nav.js?v=97b66897"></script>
+<script>
+(function(){
+  var API='https://command.creativesilva.com';
+  var KEY='';
+  try{ KEY=sessionStorage.getItem('silva-cam-key')||''; }catch(e){}
+  var P2=['Cam 16','Cam 17','Cam 18'];
+  var DATA={cameras:[],checkouts:[]};
+
+  // ---- shared header icon ----
+  function injectIcon(){
+    var t=document.querySelector('.silva-uni-title'); if(!t)return false;
+    var txt=t.textContent.trim(); if(!txt)return false;
+    if(t.querySelector('.cal-title-icon')) return true;
+    t.innerHTML='<img class="cal-title-icon" src="/assets/Icons/assignment/camera-kit-teal-v1.svg" alt="" />'+txt;
+    return true;
+  }
+  function tryInject(n){ if(injectIcon()||n<=0) return; setTimeout(function(){ tryInject(n-1); },40); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ tryInject(60); }); else tryInject(60);
+
+  // ---- helpers ----
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmt(iso){ if(!iso)return''; var p=String(iso).split('-'); if(p.length<3)return iso; return MON[+p[1]-1]+' '+(+p[2]); }
+  function todayISO(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function addDays(iso,n){ var d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function statusOf(c){ return c.status||(c.returned?'returned':'out'); }
+  function isOverdue(c){ return statusOf(c)==='out' && c.due && c.due<todayISO(); }
+  function nameOf(c){ return (c.student_name||'').trim() || (c.student_id?('ID '+c.student_id):'Unknown'); }
+  function camCourse(cam){ return P2.indexOf(cam)>=0?'Photo 2 only':'Photo 1 & 2'; }
+
+  function camAPI(path, opts){
+    opts=opts||{}; opts.headers=opts.headers||{}; opts.headers['X-Camera-Key']=KEY;
+    return fetch(API+path, opts);
+  }
+
+  // ---- board ----
+  function activeFor(cam){
+    var best=null;
+    DATA.checkouts.forEach(function(c){ if(c.camera===cam && statusOf(c)!=='returned'){ if(!best || (c.created||'')>(best.created||'')) best=c; } });
+    return best;
+  }
+  function contactLine(c){
+    var bits=[];
+    if(c.student_cell) bits.push('<b>Student:</b> '+esc(c.student_cell));
+    var par=[]; if(c.parent_guardian) par.push(esc(c.parent_guardian)); if(c.parent_cell) par.push(esc(c.parent_cell));
+    if(par.length) bits.push('<b>Parent:</b> '+par.join(' '));
+    return bits.length?'<div class="contact">'+bits.join('<br>')+'</div>':'';
+  }
+  function renderBoard(){
+    var cams=DATA.cameras.length?DATA.cameras:[], avail=0, html='';
+    cams.forEach(function(cam){
+      var c=activeFor(cam), p2=P2.indexOf(cam)>=0?'<span class="p2">Photo 2 only</span>':'';
+      if(!c){
+        avail++;
+        html+='<div class="cam"><div class="cam-top"><span class="n">'+cam+'</span><span class="pill avail">Available</span></div>'+
+              (p2?'<div>'+p2+'</div>':'')+
+              '<div class="acts"><button class="btn sm" data-reserve="'+cam+'">Reserve</button></div></div>';
+        return;
+      }
+      var st=statusOf(c), od=isOverdue(c), cls=od?'overdue':st;
+      var pill=od?'<span class="pill overdue">Overdue</span>':(st==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill out">Picked up</span>');
+      var flag=(c.flag||'').indexOf('unknown')>=0?'<div class="flagwarn">&#9888; ID not in roster</div>':'';
+      var acts='';
+      if(st==='reserved'){
+        acts='<button class="btn sm" data-status="out" data-id="'+c.id+'">Mark picked up</button>'+
+             '<button class="btn sm danger" data-del="'+c.id+'">Cancel</button>';
+      } else { // out / overdue
+        acts='<button class="btn sm warn" data-status="returned" data-id="'+c.id+'">Mark returned</button>'+
+             '<button class="btn sm ghost" data-status="reserved" data-id="'+c.id+'">Undo pickup</button>';
+      }
+      html+='<div class="cam '+cls+'"><div class="cam-top"><span class="n">'+cam+'</span>'+pill+'</div>'+
+            (p2?'<div>'+p2+'</div>':'')+
+            '<div class="who">'+esc(nameOf(c))+'</div>'+
+            '<div class="meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+'<span class="co">'+esc(c.course||camCourse(cam))+'</span></div>'+
+            '<div class="meta">Out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+(c.picked_up_date?(' &middot; picked up '+fmt(c.picked_up_date)):'')+'</div>'+
+            flag+contactLine(c)+
+            '<div class="acts">'+acts+'</div></div>';
+    });
+    document.getElementById('board').innerHTML=html||'<span class="foot">No cameras configured.</span>';
+    document.getElementById('availn').textContent=avail;
+    document.getElementById('totn').textContent=cams.length;
+    document.getElementById('boardcount').textContent=(cams.length-avail)+' out, '+avail+' free';
+    // history (returned)
+    var ret=DATA.checkouts.filter(function(c){ return statusOf(c)==='returned'; })
+      .sort(function(a,b){ return (b.returned_date||b.created||'')>(a.returned_date||a.created||'')?1:-1; });
+    document.getElementById('histn').textContent='('+ret.length+')';
+    document.getElementById('hist').innerHTML=ret.length?ret.map(function(c){
+      return '<div class="hrow"><span class="hc">'+c.camera+'</span> &middot; '+esc(nameOf(c))+
+             '<div class="hre">Out '+fmt(c.out)+' &rarr; returned '+fmt(c.returned_date)+'</div></div>';
+    }).join(''):'<div class="foot">No returned checkouts yet.</div>';
+    bindBoard();
+  }
+  function bindBoard(){
+    var b=document.getElementById('board');
+    b.querySelectorAll('[data-status]').forEach(function(el){ el.onclick=function(){ setStatus(el.getAttribute('data-id'), el.getAttribute('data-status'), el); }; });
+    b.querySelectorAll('[data-del]').forEach(function(el){ el.onclick=function(){ if(confirm('Cancel this reservation? It will be removed.')) del(el.getAttribute('data-del'), el); }; });
+    b.querySelectorAll('[data-reserve]').forEach(function(el){ el.onclick=function(){ openReserve(el.getAttribute('data-reserve')); }; });
+  }
+
+  function markSync(ok){
+    var s=document.getElementById('sync');
+    if(ok) s.innerHTML='<b>&#10003; Live</b> &middot; synced '+new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+    else s.textContent='Reconnecting…';
+  }
+  function reloadCal(){ try{ var f=document.getElementById('calframe'); f.contentWindow.location.reload(); }catch(e){ var f2=document.getElementById('calframe'); f2.src=f2.src; } }
+
+  var polling=false;
+  function loadBoard(){
+    return camAPI('/api/camera/checkouts',{cache:'no-store'}).then(function(r){
+      if(r.status===401){ showGate('That password did not work.'); throw new Error('401'); }
+      return r.json();
+    }).then(function(d){
+      DATA={cameras:d.cameras||[],checkouts:d.checkouts||[]};
+      renderBoard(); markSync(true);
+    }).catch(function(e){ if(String(e.message)!=='401') markSync(false); });
+  }
+
+  function setStatus(id,status,btn){
+    if(btn){ btn.disabled=true; }
+    camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})})
+      .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
+      .then(function(){ return loadBoard(); }).then(reloadCal)
+      .catch(function(){ alert('Could not update. Try again.'); if(btn) btn.disabled=false; });
+  }
+  function del(id,btn){
+    if(btn){ btn.disabled=true; }
+    camAPI('/api/camera/delete',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id})})
+      .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
+      .then(function(){ return loadBoard(); }).then(reloadCal)
+      .catch(function(){ alert('Could not cancel. Try again.'); if(btn) btn.disabled=false; });
+  }
+
+  // ---- reserve modal ----
+  var resmodal=document.getElementById('resmodal'), rsid=document.getElementById('rsid'),
+      rcam=document.getElementById('rcam'), rout=document.getElementById('rout'), rdue=document.getElementById('rdue'),
+      rpick=document.getElementById('rpick'), rgo=document.getElementById('rgo'), rwho=document.getElementById('rwho'),
+      resmsg=document.getElementById('resmsg');
+  function freeCams(){ return (DATA.cameras||[]).filter(function(c){ return !activeFor(c); }); }
+  function openReserve(preCam){
+    resmsg.className='mmsg'; rwho.className='who-line'; rwho.textContent=''; rsid.value=''; lastLookup='';
+    var free=freeCams();
+    rcam.innerHTML=free.map(function(c){ return '<option value="'+c+'">'+c+(P2.indexOf(c)>=0?' (Photo 2 only)':'')+'</option>'; }).join('')||'<option value="">No cameras free</option>';
+    if(preCam && free.indexOf(preCam)>=0) rcam.value=preCam;
+    rout.value=todayISO(); rdue.value=addDays(todayISO(),1); rpick.checked=true;
+    resmodal.classList.add('open'); setTimeout(function(){ rsid.focus(); },50);
+  }
+  function closeReserve(){ resmodal.classList.remove('open'); }
+  document.getElementById('resx').onclick=closeReserve;
+  resmodal.addEventListener('click',function(e){ if(e.target===resmodal) closeReserve(); });
+
+  var lookupT=null, lastLookup='';
+  function doLookup(){
+    var v=rsid.value.replace(/\D/g,'');
+    if(v.length<5){ rwho.className='who-line'; rwho.textContent=''; lastLookup=''; return; }
+    if(v===lastLookup) return; lastLookup=v;
+    rwho.className='who-line load'; rwho.textContent='Checking…';
+    fetch(API+'/api/camera/lookup',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:v})})
+      .then(function(r){return r.json();}).then(function(j){
+        if(rsid.value.replace(/\D/g,'')!==v) return;
+        if(j&&j.found){ rwho.className='who-line ok'; rwho.textContent=j.label+'.'; }
+        else { rwho.className='who-line no'; rwho.textContent='Not in the roster (you can still check it out; it will flag).'; }
+      }).catch(function(){ rwho.className='who-line'; rwho.textContent=''; });
+  }
+  rsid.addEventListener('input',function(){ clearTimeout(lookupT); lookupT=setTimeout(doLookup,350); });
+
+  rgo.onclick=function(){
+    var payload={ student_id:rsid.value.trim(), camera:rcam.value, out:rout.value, due:rdue.value };
+    if(rpick.checked) payload.status='out';
+    if(!payload.student_id||!payload.camera||!payload.due){ resmsg.className='mmsg err show'; resmsg.textContent='Enter a student ID, a camera, and a due date.'; return; }
+    rgo.disabled=true; rgo.textContent='Saving…';
+    camAPI('/api/camera/checkout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
+      .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+      .then(function(res){ if(res.ok&&res.j.ok){ closeReserve(); return loadBoard().then(reloadCal); } else { resmsg.className='mmsg err show'; resmsg.textContent=(res.j&&res.j.error)||'Could not save.'; } })
+      .catch(function(){ resmsg.className='mmsg err show'; resmsg.textContent='Could not reach the server.'; })
+      .then(function(){ rgo.disabled=false; rgo.textContent='Reserve this camera'; });
+  };
+  document.getElementById('reserveBtn').onclick=function(){ openReserve(''); };
+
+  // ---- PIN gate (the password is validated by the server) ----
+  var gate=document.getElementById('gate'), pin=document.getElementById('pin'), pinerr=document.getElementById('pinerr');
+  function showGate(msg){ KEY=''; try{ sessionStorage.removeItem('silva-cam-key'); }catch(e){} gate.style.display='flex'; pinerr.textContent=msg||''; pin.value=''; setTimeout(function(){ pin.focus(); },50); }
+  function startApp(){ gate.style.display='none'; if(!polling){ polling=true; setInterval(loadBoard,7000); } loadBoard(); }
+  function submitPin(){
+    var v=pin.value.trim(); if(!v){ pinerr.textContent='Enter the password.'; return; }
+    pinerr.textContent='Checking…'; KEY=v;
+    camAPI('/api/camera/checkouts',{cache:'no-store'}).then(function(r){
+      if(r.ok){ try{ sessionStorage.setItem('silva-cam-key',v); }catch(e){} return r.json().then(function(d){ DATA={cameras:d.cameras||[],checkouts:d.checkouts||[]}; renderBoard(); markSync(true); startApp(); }); }
+      if(r.status===401){ KEY=''; pinerr.textContent='That password did not work.'; return; }
+      pinerr.textContent='Server error. Try again.';
+    }).catch(function(){ pinerr.textContent='Could not reach the server.'; });
+  }
+  document.getElementById('pingo').onclick=submitPin;
+  pin.addEventListener('keydown',function(e){ if(e.key==='Enter') submitPin(); });
+
+  // if we already have a stored key, try it silently; otherwise show the gate
+  if(KEY){ camAPI('/api/camera/checkouts',{cache:'no-store'}).then(function(r){ if(r.ok){ return r.json().then(function(d){ DATA={cameras:d.cameras||[],checkouts:d.checkouts||[]}; renderBoard(); markSync(true); startApp(); }); } else { showGate(''); } }).catch(function(){ showGate(''); }); }
+  else { showGate(''); }
+})();
+</script>
+</body>
+</html>
