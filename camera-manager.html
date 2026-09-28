@@ -165,9 +165,28 @@
   /* Camera Log: per-camera standing notes + condition */
   .csec.sec-camlog{border-left-color:#8b5cf6;} .csec-dot.camlog{background:#8b5cf6;}
   .pill.oos{background:rgba(224,64,58,.24);color:#ff9a8a;}
+  .pill.nocard{background:rgba(245,179,1,.22);color:#ffd889;}
   .camlog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px;}
   .camlog{background:rgba(0,0,0,.30);border:1px solid var(--line-soft);border-left:4px solid var(--ok);padding:12px 13px;display:flex;flex-direction:column;gap:7px;}
   .camlog.oos{border-left-color:var(--red);background:rgba(224,64,58,.07);}
+  .camlog.nocard{border-left-color:#f5b301;background:rgba(245,179,1,.06);}
+  /* Memory-card wallet + the leave-card slot picker */
+  .card-slotgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:2px 0 14px;}
+  .card-slot{height:44px;border:1px solid var(--line);background:rgba(0,0,0,.3);color:var(--text);font-family:var(--font);font-weight:700;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .card-slot:hover{border-color:var(--teal);}
+  .card-slot.sel{background:var(--teal);color:#04110f;border-color:var(--teal);}
+  .card-slot.taken{opacity:.45;cursor:not-allowed;background:rgba(245,179,1,.12);border-color:rgba(245,179,1,.3);color:#ffd889;}
+  .csec.sec-wallet{border-left-color:#f5b301;} .csec-dot.wallet{background:#f5b301;}
+  .wallet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+  .wslot{background:rgba(0,0,0,.3);border:1px solid var(--line-soft);border-left:4px solid rgba(160,180,180,.3);padding:10px 11px;display:flex;flex-direction:column;gap:5px;min-height:74px;}
+  .wslot.filled{border-left-color:#f5b301;background:rgba(245,179,1,.06);}
+  .wslot-n{font-family:var(--font);font-weight:700;font-size:.72rem;color:var(--faint);letter-spacing:.08em;text-transform:uppercase;}
+  .wslot.filled .wslot-n{color:#ffd889;}
+  .wslot-who{font-weight:600;color:#fff;font-size:.9rem;line-height:1.2;}
+  .wslot-meta{font-size:.72rem;color:var(--muted);}
+  .wslot-count{font-size:.7rem;font-weight:700;letter-spacing:.02em;}
+  .wslot-count.ok{color:#8ff0b0;} .wslot-count.over{color:#ff9a8a;}
+  .wslot-empty{color:var(--faint);font-size:.78rem;margin:auto 0;}
   .camlog-top{display:flex;align-items:center;gap:8px;}
   .camlog-n{font-family:var(--font);font-weight:600;font-size:1.02rem;}
   .camlog-p2{margin-left:auto;font-size:.52rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);}
@@ -347,7 +366,24 @@
       <div id="retlist"></div>
       <label for="retnote2">Extra note (optional)</label>
       <input type="text" id="retnote2" placeholder="e.g. small scratch on the screen" />
+      <label class="chk" style="margin-top:12px;"><input type="checkbox" id="ret_leavecard"> Student is leaving their memory card to offload later. You will pull the card into the wallet and the camera stays out of rotation until a fresh card is installed.</label>
       <button class="go" id="retgo">Confirm return</button>
+    </div>
+  </div>
+</div>
+
+<!-- Leave memory card: drop a student's card into a wallet slot (1-18); flags the camera no-card -->
+<div class="modal" id="cardmodal">
+  <div class="mpanel">
+    <div class="mhead"><span class="mtitle" id="cardTitle">Leave memory card</span><button class="mx" id="cardx" aria-label="Close">&times;</button></div>
+    <div class="mbody">
+      <p class="retsub" id="cardSub"></p>
+      <label>Wallet slot (1-18)</label>
+      <div id="cardSlots" class="card-slotgrid"></div>
+      <label for="cardNote">Card note (optional)</label>
+      <input type="text" id="cardNote" placeholder="e.g. 32GB SanDisk; offload by tomorrow" />
+      <div class="mmsg" id="cardMsg"></div>
+      <button class="go" id="cardGo">Pull card into this slot</button>
     </div>
   </div>
 </div>
@@ -398,7 +434,7 @@
   var KEY='';
   try{ KEY=sessionStorage.getItem('silva-cam-key')||''; }catch(e){}
   var P2=['Cam 16','Cam 17','Cam 18'];
-  var DATA={cameras:[],checkouts:[],assets:{}};
+  var DATA={cameras:[],checkouts:[],assets:{},cards:{}};
 
   // ---- shared header icon ----
   function injectIcon(){
@@ -424,12 +460,13 @@
   // Per-camera asset record (standing note + out-of-service) that follows the physical camera.
   function assetOf(cam){ return (DATA.assets&&DATA.assets[cam])||{}; }
   function isOOS(cam){ return !!assetOf(cam).oos; }
+  function isNoCard(cam){ return !!assetOf(cam).no_card; }   // memory card pulled; out of rotation until a fresh card is installed
 
   // The summary bar reflects a SELECTED day (default today). Clicking a day in the calendar
   // posts {daySelected} and this recomputes how many cameras are free on that day.
   var SELDAY=todayISO();
   function effLastC(c){ var st=statusOf(c); if(st==='returned') return null; var start=c.out; if(!start) return null; var last=c.due||start; if(last<start) last=start; if(st==='out'&&todayISO()>last) last=todayISO(); return last; }
-  function availCountOnDay(iso){ var busy={}; (DATA.checkouts||[]).forEach(function(c){ var last=effLastC(c); if(last&&c.out&&iso>=c.out&&iso<=last) busy[c.camera]=1; }); return (DATA.cameras||[]).filter(function(cam){ return !busy[cam] && !isOOS(cam); }).length; }
+  function availCountOnDay(iso){ var busy={}; (DATA.checkouts||[]).forEach(function(c){ var last=effLastC(c); if(last&&c.out&&iso>=c.out&&iso<=last) busy[c.camera]=1; }); return (DATA.cameras||[]).filter(function(cam){ return !busy[cam] && !isOOS(cam) && !isNoCard(cam); }).length; }
   function fmtMDY(iso){ var p=String(iso).split('-'); return (+p[1])+'/'+(+p[2])+'/'+p[0]; }
   function dowShort(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]; }
   function updateSummary(){
@@ -499,7 +536,7 @@
   ];
   function secOpen(k){ try{ var v=sessionStorage.getItem('csec:'+k); return v===null?true:v==='1'; }catch(e){ return true; } }
   function setSecOpen(k,o){ try{ sessionStorage.setItem('csec:'+k,o?'1':'0'); }catch(e){} }
-  function catOf(cam){ var c=activeFor(cam); if(!c) return isOOS(cam)?'oos':'avail'; return statusOf(c)==='reserved'?'reserved':'out'; }
+  function catOf(cam){ var c=activeFor(cam); if(!c) return isOOS(cam)?'oos':(isNoCard(cam)?'nocard':'avail'); return statusOf(c)==='reserved'?'reserved':'out'; }
 
   function camCard(cam){
     var c=activeFor(cam), p2=P2.indexOf(cam)>=0?'<span class="p2">Photo 2 only</span>':'';
@@ -577,17 +614,19 @@
 
   // One row per physical camera: current state + the standing note that follows it + edit controls.
   function camLogCard(cam){
-    var a=assetOf(cam), c=activeFor(cam), oos=!!a.oos, p2=P2.indexOf(cam)>=0;
-    var status=oos?'<span class="pill oos">Out of service</span>':(c?(statusOf(c)==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill '+(isOverdue(c)?'overdue':'out')+'">'+(isOverdue(c)?'Overdue':'Checked out')+'</span>'):'<span class="pill avail">Available</span>');
+    var a=assetOf(cam), c=activeFor(cam), oos=!!a.oos, nc=!!a.no_card, p2=P2.indexOf(cam)>=0;
+    var status=oos?'<span class="pill oos">Out of service</span>':(c?(statusOf(c)==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill '+(isOverdue(c)?'overdue':'out')+'">'+(isOverdue(c)?'Overdue':'Checked out')+'</span>'):(nc?'<span class="pill nocard">Card missing</span>':'<span class="pill avail">Available</span>'));
     var who=c?'<div class="camlog-who">'+esc(nameOf(c))+' &middot; out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</div>':'';
     var issues=a.issues||[], note='';
+    if(nc) note+='<div class="camlog-issues">&#9888; Memory card missing. Install a fresh card to return this kit to rotation.</div>';
     if(issues.length) note+='<div class="camlog-issues">&#9888; Missing / issue: '+issues.map(esc).join(', ')+'</div>';
     if(a.note) note+='<div class="camlog-note">'+esc(a.note)+'</div>';
-    if(!issues.length && !a.note) note='<div class="camlog-note empty">No issues. In good standing.</div>';
-    return '<div class="camlog'+(oos?' oos':'')+'">'+
+    if(!nc && !issues.length && !a.note) note='<div class="camlog-note empty">No issues. In good standing.</div>';
+    return '<div class="camlog'+(oos?' oos':'')+(nc?' nocard':'')+'">'+
       '<div class="camlog-top"><span class="camlog-n camnum" data-camdetail="'+cam+'" title="Open camera details">'+cam+'</span>'+status+(p2?'<span class="camlog-p2">Photo 2</span>':'')+'</div>'+
       who+note+
       '<div class="camlog-acts"><button class="btn sm ghost" data-assetnote="'+cam+'">Edit note</button>'+
+        (nc?'<button class="btn sm" data-newcard="'+cam+'">New card installed</button>':'')+
         '<button class="btn sm '+(oos?'':'danger')+'" data-oos="'+cam+'" data-oosval="'+(oos?'0':'1')+'">'+(oos?'Return to service':'Out of service')+'</button></div>'+
       '</div>';
   }
@@ -619,6 +658,12 @@
       '<button class="csec-head" type="button" data-sectoggle="camlog"><span class="csec-dot camlog"></span>Camera log &middot; notes &amp; condition <span class="csec-n">'+noted+' flagged</span><span class="csec-chev"></span></button>'+
       '<div class="csec-body"><div class="camlog-grid">'+cams.map(camLogCard).join('')+'</div></div>'+
     '</div>';
+    // MEMORY CARD WALLET: cards a student left to offload later, each in a numbered slot with a 24h clock.
+    var wcards=DATA.cards||{}, wheld=Object.keys(wcards).length, wopen=secOpen('wallet');
+    html+='<div class="csec sec-wallet'+(wopen?' open':'')+'">'+
+      '<button class="csec-head" type="button" data-sectoggle="wallet"><span class="csec-dot wallet"></span>Memory card wallet <span class="csec-n">'+wheld+' held</span><span class="csec-chev"></span></button>'+
+      '<div class="csec-body"><div class="wallet-grid">'+walletSlotsHtml()+'</div></div>'+
+    '</div>';
     host.innerHTML=html;
     updateSummary();
     updateDigests();
@@ -644,6 +689,8 @@
     b.querySelectorAll('[data-note]').forEach(function(el){ el.onclick=function(){ openNote(el.getAttribute('data-note')); }; });
     b.querySelectorAll('[data-assetnote]').forEach(function(el){ el.onclick=function(){ openAssetNote(el.getAttribute('data-assetnote')); }; });
     b.querySelectorAll('[data-oos]').forEach(function(el){ el.onclick=function(){ setOOS(el.getAttribute('data-oos'), el.getAttribute('data-oosval')==='1', el); }; });
+    b.querySelectorAll('[data-newcard]').forEach(function(el){ el.onclick=function(){ setNoCard(el.getAttribute('data-newcard'), false, el); }; });
+    b.querySelectorAll('[data-cardreturn]').forEach(function(el){ el.onclick=function(){ if(confirm('Card returned to the student and offloaded? This clears the slot.')) cardReturn(el.getAttribute('data-cardreturn'), el); }; });
     b.querySelectorAll('[data-approve]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-approve'), el); }; });
     b.querySelectorAll('[data-returncam]').forEach(function(el){ el.onclick=function(){ openReturnChecklist(el.getAttribute('data-returncam')); }; });
   }
@@ -695,7 +742,7 @@
       if(r.status===401){ showGate('That password did not work.'); throw new Error('401'); }
       return r.json();
     }).then(function(d){
-      DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{}};
+      DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{}};
       renderBoard(); markSync(true);
     }).catch(function(e){ if(String(e.message)!=='401') markSync(false); });
   }
@@ -757,6 +804,13 @@
       .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(reloadCal)
       .catch(function(){ alert('Could not update. Try again.'); if(btn) btn.disabled=false; });
   }
+  // "New card installed": clear the memory-card-missing flag so the kit is complete and back in rotation.
+  function setNoCard(cam, val, btn){
+    if(btn){ btn.disabled=true; }
+    camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({camera:cam,no_card:val})})
+      .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(reloadCal).then(function(){ if(document.getElementById('camdetail').classList.contains('open')) renderCamDetailModal(); })
+      .catch(function(){ alert('Could not update. Try again.'); if(btn) btn.disabled=false; });
+  }
 
   // ---- return checklist (verify kit components on check-in; missing ones append to the note) ----
   // Edit this list to match a complete kit.
@@ -767,6 +821,7 @@
     document.getElementById('retTitle').textContent='Return checklist · '+(c.camera||'Camera');
     document.getElementById('retlist').innerHTML=KIT_COMPONENTS.map(function(k,i){ return '<label class="retitem"><input type="checkbox" id="ret_'+i+'" checked> '+esc(k)+'</label>'; }).join('');
     document.getElementById('retnote2').value='';
+    var lc=document.getElementById('ret_leavecard'); if(lc) lc.checked=false;
     document.getElementById('retmodal').classList.add('open');
   }
   function closeReturn(){ document.getElementById('retmodal').classList.remove('open'); retId=null; }
@@ -777,6 +832,8 @@
       if(!retId) return; var id=retId, c=findRec(id), cam=c?c.camera:'';
       var missing=[]; KIT_COMPONENTS.forEach(function(k,i){ var el=document.getElementById('ret_'+i); if(el && !el.checked) missing.push(k); });
       var extra=document.getElementById('retnote2').value.trim();
+      var lc=document.getElementById('ret_leavecard');
+      var cardCtx=(lc&&lc.checked&&c)?{camera:cam, student_id:c.student_id||'', student_name:nameOf(c), checkout_id:c.id}:null;
       closeReturn();
       // Missing items become open ISSUES on the camera (resolve them in the camera card when fixed) and
       // every finding is written to the permanent history LOG. Then run the 15s return (with its undo).
@@ -787,6 +844,65 @@
         camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({camera:cam,issues:ni,log:nl})})
           .then(function(){ markReturned(id); }).catch(function(){ markReturned(id); });
       } else { markReturned(id); }
+      // Student is offloading later: pull the card into a wallet slot (flags the camera no-card).
+      if(cardCtx) openCardHold(cardCtx);
+    };
+  })();
+
+  // ===== Memory card wallet: 18 slots holding cards students left to offload later =====
+  function cardHoursLeft(held){ if(!held) return 0; var t=new Date(held).getTime(); if(isNaN(t)) return 0; return Math.round((t+24*3600*1000-Date.now())/3600000); }
+  function fmtHeld(iso){ if(!iso) return ''; var d=new Date(iso); if(isNaN(d.getTime())) return iso; return (d.getMonth()+1)+'/'+d.getDate()+' '+d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}); }
+  function walletSlotsHtml(){
+    var cards=DATA.cards||{}, out='';
+    for(var i=1;i<=18;i++){
+      var c=cards[String(i)];
+      if(!c){ out+='<div class="wslot"><div class="wslot-n">Slot '+i+'</div><div class="wslot-empty">Empty</div></div>'; continue; }
+      var rem=cardHoursLeft(c.held_at), cls=rem>0?'ok':'over', txt=rem>0?(rem+'h left to offload'):('overdue by '+(-rem)+'h &middot; ok to format');
+      out+='<div class="wslot filled"><div class="wslot-n">Slot '+i+'</div>'+
+        '<div class="wslot-who">'+esc(c.student_name||'Unknown')+'</div>'+
+        '<div class="wslot-meta">from '+esc(c.from_camera||'')+' &middot; held '+fmtHeld(c.held_at)+'</div>'+
+        (c.note?'<div class="wslot-meta">'+esc(c.note)+'</div>':'')+
+        '<div class="wslot-count '+cls+'">'+txt+'</div>'+
+        '<button class="btn sm" data-cardreturn="'+i+'">Card returned</button></div>';
+    }
+    return out;
+  }
+  function cardReturn(slot, btn){
+    if(btn) btn.disabled=true;
+    camAPI('/api/camera/card_return',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({slot:String(slot)})})
+      .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(reloadCal)
+      .catch(function(){ alert('Could not update. Try again.'); if(btn) btn.disabled=false; });
+  }
+  // ===== Leave-card slot picker (opened from the return checklist) =====
+  var cardCtx=null, cardSlotSel=null;
+  function openCardHold(ctx){
+    cardCtx=ctx; cardSlotSel=null;
+    document.getElementById('cardTitle').textContent='Leave memory card · '+(ctx.camera||'');
+    document.getElementById('cardSub').innerHTML='Pull <b>'+esc(ctx.student_name||'the student')+'</b>&#39;s card from <b>'+esc(ctx.camera||'')+'</b> into a wallet slot. The camera stays out of rotation until you install a fresh card. The student has 24 hours to offload.';
+    document.getElementById('cardNote').value='';
+    var msg=document.getElementById('cardMsg'); msg.className='mmsg'; msg.textContent='';
+    renderCardSlots();
+    document.getElementById('cardmodal').classList.add('open');
+  }
+  function renderCardSlots(){
+    var cards=DATA.cards||{}, host=document.getElementById('cardSlots'), html='';
+    for(var i=1;i<=18;i++){ var taken=!!cards[String(i)]; html+='<button type="button" class="card-slot'+(taken?' taken':'')+(cardSlotSel===i?' sel':'')+'" data-slot="'+i+'"'+(taken?' disabled':'')+'>'+i+'</button>'; }
+    host.innerHTML=html;
+    host.querySelectorAll('[data-slot]').forEach(function(el){ if(el.disabled) return; el.onclick=function(){ cardSlotSel=+el.getAttribute('data-slot'); renderCardSlots(); }; });
+  }
+  function closeCardHold(){ document.getElementById('cardmodal').classList.remove('open'); cardCtx=null; }
+  (function(){
+    var x=document.getElementById('cardx'); if(x) x.onclick=closeCardHold;
+    var m=document.getElementById('cardmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeCardHold(); });
+    var g=document.getElementById('cardGo'); if(g) g.onclick=function(){
+      if(!cardCtx) return;
+      var msg=document.getElementById('cardMsg');
+      if(!cardSlotSel){ msg.className='mmsg err show'; msg.textContent='Pick a wallet slot.'; return; }
+      g.disabled=true; g.textContent='Saving…';
+      camAPI('/api/camera/card_hold',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({slot:cardSlotSel,from_camera:cardCtx.camera,student_id:cardCtx.student_id,student_name:cardCtx.student_name,checkout_id:cardCtx.checkout_id,note:document.getElementById('cardNote').value.trim()})})
+        .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ closeCardHold(); return loadBoard(); }).then(reloadCal)
+        .catch(function(){ msg.className='mmsg err show'; msg.textContent='Could not save. Try again.'; })
+        .then(function(){ g.disabled=false; g.textContent='Pull card into this slot'; });
     };
   })();
 
@@ -800,11 +916,12 @@
   }
   function renderCamDetailModal(){
     var cam=cdCam; if(!cam) return;
-    var a=assetOf(cam), c=activeFor(cam), oos=!!a.oos, issues=a.issues||[], log=(a.log||[]).slice().reverse();
+    var a=assetOf(cam), c=activeFor(cam), oos=!!a.oos, nc=!!a.no_card, issues=a.issues||[], log=(a.log||[]).slice().reverse();
     document.getElementById('cd-title').textContent=cam;
     var hist=(DATA.checkouts||[]).filter(function(x){ return x.camera===cam && x.kind!=='equipment'; }).sort(function(x,y){ return (x.out||'')<(y.out||'')?1:-1; });
-    var statusPill=oos?'<span class="pill oos">Out of service</span>':(c?(statusOf(c)==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill '+(isOverdue(c)?'overdue':'out')+'">'+(isOverdue(c)?'Overdue':'Checked out')+'</span>'):'<span class="pill avail">Available</span>');
+    var statusPill=oos?'<span class="pill oos">Out of service</span>':(c?(statusOf(c)==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill '+(isOverdue(c)?'overdue':'out')+'">'+(isOverdue(c)?'Overdue':'Checked out')+'</span>'):(nc?'<span class="pill nocard">Memory card missing</span>':'<span class="pill avail">Available</span>'));
     var h='<div class="cd-row"><div>'+statusPill+(P2.indexOf(cam)>=0?' <span class="camlog-p2">Photo 2 only</span>':'')+'</div><button class="btn sm '+(oos?'':'danger')+'" id="cd-oos">'+(oos?'Return to service':'Mark out of service')+'</button></div>';
+    if(nc) h+='<div class="cd-cur" style="border-left-color:#f5b301;"><div class="cd-cur-note" style="color:#ffd889;">&#9888; Memory card missing. This kit is out of rotation until a fresh card is installed.</div><div class="cd-cur-acts"><button class="btn sm" id="cd-newcard">New card installed</button></div></div>';
     if(c){
       var cdPend=(statusOf(c)==='reserved' && c.approved===false);
       var cdPendMsg=cdPend?'<div class="cd-cur-note" style="color:#c9b8ff;">Student request &middot; approve to confirm this reservation, or deny to free the camera.</div>':'';
@@ -819,6 +936,7 @@
     h+='<div class="cd-sec"><div class="cd-h">Checkout history</div>'+(hist.length?('<div class="cd-hist">'+hist.map(function(x){ var s=statusOf(x); return '<div class="cd-histrow"><span class="cd-histwho">'+esc(nameOf(x))+'</span><span class="cd-histdates">out '+fmt(x.out)+' &rarr; '+(s==='returned'?('returned '+fmt(x.returned_date||x.due)):('due '+fmt(x.due)+' &middot; '+esc(s)))+'</span><button class="btn sm ghost" data-edithist="'+esc(x.id)+'">Edit</button></div>'; }).join('')+'</div>'):'<div class="cd-empty">No checkouts recorded.</div>')+'</div>';
     document.getElementById('cd-body').innerHTML=h;
     var oosb=document.getElementById('cd-oos'); if(oosb) oosb.onclick=function(){ saveAsset(cam,{oos:!oos},renderCamDetailModal); };
+    var ncb=document.getElementById('cd-newcard'); if(ncb) ncb.onclick=function(){ setNoCard(cam,false,ncb); };
     var ec=document.getElementById('cd-editcur'); if(ec) ec.onclick=function(){ openEditCheckout(c.id); };
     document.querySelectorAll('#cd-body [data-cdapprove]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-cdapprove'), el).then(renderCamDetailModal); }; });
     document.querySelectorAll('#cd-body [data-cddeny]').forEach(function(el){ el.onclick=function(){ if(confirm('Deny and cancel this reservation? The camera goes back in the pool.')){ del(el.getAttribute('data-cddeny'), el); closeCamDetail(); } }; });
@@ -994,7 +1112,7 @@
     var v=pin.value.trim(); if(!v){ pinerr.textContent='Enter the password.'; return; }
     pinerr.textContent='Checking…'; KEY=v;
     camAPI('/api/camera/checkouts',{cache:'no-store'}).then(function(r){
-      if(r.ok){ try{ sessionStorage.setItem('silva-cam-key',v); }catch(e){} return r.json().then(function(d){ DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{}}; renderBoard(); markSync(true); startApp(); }); }
+      if(r.ok){ try{ sessionStorage.setItem('silva-cam-key',v); }catch(e){} return r.json().then(function(d){ DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{}}; renderBoard(); markSync(true); startApp(); }); }
       if(r.status===401){ KEY=''; pinerr.textContent='That password did not work.'; return; }
       pinerr.textContent='Server error. Try again.';
     }).catch(function(){ pinerr.textContent='Could not reach the server.'; });
@@ -1003,7 +1121,7 @@
   pin.addEventListener('keydown',function(e){ if(e.key==='Enter') submitPin(); });
 
   // if we already have a stored key, try it silently; otherwise show the gate
-  if(KEY){ camAPI('/api/camera/checkouts',{cache:'no-store'}).then(function(r){ if(r.ok){ return r.json().then(function(d){ DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{}}; renderBoard(); markSync(true); startApp(); }); } else { showGate(''); } }).catch(function(){ showGate(''); }); }
+  if(KEY){ camAPI('/api/camera/checkouts',{cache:'no-store'}).then(function(r){ if(r.ok){ return r.json().then(function(d){ DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{}}; renderBoard(); markSync(true); startApp(); }); } else { showGate(''); } }).catch(function(){ showGate(''); }); }
   else { showGate(''); }
 })();
 </script>
