@@ -127,7 +127,7 @@ CT_STANDARDS=[
 
 def overview():
     en=banner("Module 02 &bull; Step 01","Color Theory: Start Here","Read this page and download your files, then go to Step 02 to study a real brand.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
-    en+=type_card("overview","Step 01 &middot; Read &amp; Download","Color Theory: The Look of a Brand",
+    en+=type_card("overview","Step 01 &middot; Overview &amp; Download","Color Theory: The Look of a Brand",
         para("Color theory is how colors work together and how they make people feel. Big brands pick a small set of colors and use them everywhere: the logo, the store, the packaging, even the staff shirts. When the colors match at every step, the brand feels strong and easy to remember. Today we learn the basics, then you study a real brand.")
         + framed(HERO,"Color Theory"))
     en+=standards_box(False, CT_STANDARDS)
@@ -143,7 +143,7 @@ def overview():
         + bullets([("Step 02 &middot; Brand Color Analysis:","pick a real brand and study how it uses color at every customer touchpoint, then fill out and turn in the worksheet.")]))
     en+=next_up("UP NEXT &middot; STEP 02 - Brand Color Analysis","Homework: study a real brand.")
     es=banner("M&oacute;dulo 02 &bull; Paso 01","Teor&iacute;a del Color: Empieza Aqu&iacute;","Lee esta p&aacute;gina y descarga tus archivos, luego ve al Paso 02 para estudiar una marca real.","#top","Back to English", HICON_DESIGN)
-    es+=type_card("overview","Paso 01 &middot; Lee y Descarga","Teor&iacute;a del Color: El Aspecto de una Marca",
+    es+=type_card("overview","Paso 01 &middot; Resumen y Descarga","Teor&iacute;a del Color: El Aspecto de una Marca",
         para("La teor&iacute;a del color es c&oacute;mo los colores funcionan juntos y c&oacute;mo hacen sentir a la gente. Las marcas grandes eligen un grupo peque&ntilde;o de colores y los usan en todo: el logo, la tienda, el empaque y hasta las camisas del personal. Cuando los colores combinan en cada paso, la marca se siente fuerte y f&aacute;cil de recordar. Hoy aprendemos lo b&aacute;sico, y luego estudias una marca real.")
         + framed(HERO,"Teor&iacute;a del Color"))
     es+=standards_box(True, CT_STANDARDS)

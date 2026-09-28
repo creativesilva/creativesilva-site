@@ -186,7 +186,7 @@ MP_STANDARDS=[
 
 def overview():
     en=banner("Module 04 &bull; Step 01","Motivational Poster: Start Here","Read this page and download your files, then go to Step 02 to build your poster.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
-    en+=type_card("overview","Step 01 &middot; Read &amp; Download","What You Will Make",
+    en+=type_card("overview","Step 01 &middot; Overview &amp; Download","What You Will Make",
         para("You will design a motivational poster of someone who inspires you, in Photoshop. Your subject can be a real person or a fictional character: an athlete, a musician, a leader, a superhero, anyone who motivates you. You will cut your subject out of their background, add a bold motion-blurred background behind them, and finish with a real quote they actually said, their name, and colors that all work together. The goal is a clean, hype-worthy poster you would be proud to print and hang up.")
         + framed(EXAMPLE,"Example motivational poster")
         + note("Keep it school-appropriate. Your subject and everything on the poster must meet school standards: no drugs, alcohol, tobacco, weapons, violence, profanity, or other inappropriate content or characters. If you are unsure whether a choice is appropriate, ask Mr. Silva before you begin.")
@@ -219,7 +219,7 @@ def overview():
         + bullets([("Step 02 &middot; Build the Poster:","set up OneDrive, open Photoshop, and build your poster."),("Step 03 &middot; Make the Mobile Version:","remake your poster to fit a phone screen."),("Step 04 &middot; Turn In Your Reflection:","reflect on your design process and upload it.")]))
     en+=next_up("UP NEXT &middot; STEP 02 - Build the Poster","Set up OneDrive, open Photoshop, then build.")
     es=banner("M&oacute;dulo 04 &bull; Paso 01","P&oacute;ster Motivacional: Empieza Aqu&iacute;","Lee esta p&aacute;gina y descarga tus archivos, luego ve al Paso 02 para construir tu p&oacute;ster.","#top","Back to English", HICON_DESIGN)
-    es+=type_card("overview","Paso 01 &middot; Lee y Descarga","Lo Que Vas a Crear",
+    es+=type_card("overview","Paso 01 &middot; Resumen y Descarga","Lo Que Vas a Crear",
         para("Vas a dise&ntilde;ar un p&oacute;ster motivacional de alguien que te inspira, en Photoshop. Tu sujeto puede ser una persona real o un personaje de ficci&oacute;n: un atleta, un m&uacute;sico, un l&iacute;der, un superh&eacute;roe, cualquiera que te motive. Vas a recortar a tu sujeto de su fondo, agregar un fondo con desenfoque de movimiento detr&aacute;s, y terminar con una frase real que haya dicho, su nombre y colores que combinen. La meta es un p&oacute;ster limpio y llamativo que te sientas orgulloso de imprimir y colgar.")
         + framed(EXAMPLE,"Ejemplo de p&oacute;ster motivacional")
         + note("Mant&eacute;nlo apropiado para la escuela. Tu sujeto y todo lo que est&eacute; en el p&oacute;ster debe cumplir con las normas escolares: nada de drogas, alcohol, tabaco, armas, violencia, groser&iacute;as ni otro contenido o personajes inapropiados. Si no est&aacute;s seguro de si una opci&oacute;n es apropiada, preg&uacute;ntale al Sr. Silva antes de empezar.")

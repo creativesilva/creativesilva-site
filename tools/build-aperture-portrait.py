@@ -148,7 +148,7 @@ APERTURE_STANDARDS=[
 # ================= OVERVIEW =================
 def overview():
     en=banner("Module 08 &bull; Step 01","Aperture Portrait: Start Here","Read this page and download your files, then go to Step 02 to capture. This is a partner photo walk about aperture.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
-    en+=type_card("overview","Step 01 &middot; Read &amp; Download","One Partner, Three Apertures",
+    en+=type_card("overview","Step 01 &middot; Overview &amp; Download","One Partner, Three Apertures",
         para("This is a partner photo walk about <strong>aperture</strong>. You and a partner take turns: one of you is the <strong>photographer</strong> and the other is the <strong>subject</strong> (the person being photographed). Then you switch, so each of you photographs and each of you gets photographed.")
         + para("You work in Manual mode with the Canon R50 and the RF 50mm f/1.8 lens. ISO stays at 100. You capture the same portrait at three apertures: <strong>f/8</strong>, then <strong>f/4</strong>, then <strong>f/2</strong>, adjusting the shutter each time to balance the light. Then you build a contact sheet, pick your best three, and reflect.")
         + (framed(HEADER,"Aperture Portrait module header") if HAVE_HEADER else hero_ph("HEADER IMAGE PLACEHOLDER &middot; Aperture Portrait overview hero (16:9). Swap in when ready.")))
@@ -189,7 +189,7 @@ def overview():
     en+=next_up("UP NEXT &middot; STEP 02 - Capture &amp; Contact Sheet","Set Manual mode, capture at f/8, f/4, and f/2, then build your 12-Up contact sheet.")
 
     es=banner("M&oacute;dulo 08 &bull; Paso 01","Retrato de Apertura: Empieza Aqu&iacute;","Lee esta p&aacute;gina y descarga tus archivos, luego ve al Paso 02 para capturar. Esta es una caminata en pareja sobre la apertura.","#top","Back to English", HICON_PHOTO_WALK)
-    es+=type_card("overview","Paso 01 &middot; Lee y Descarga","Una Pareja, Tres Aperturas",
+    es+=type_card("overview","Paso 01 &middot; Resumen y Descarga","Una Pareja, Tres Aperturas",
         para("Esta es una caminata fotogr&aacute;fica en pareja sobre la <strong>apertura</strong>. T&uacute; y tu compa&ntilde;ero se turnan: uno es el <strong>fot&oacute;grafo</strong> y el otro es el <strong>sujeto</strong> (la persona fotografiada). Luego cambian, para que cada uno fotograf&iacute;e y cada uno sea fotografiado.")
         + para("Trabajas en modo Manual con la Canon R50 y el lente RF 50mm f/1.8. El ISO se queda en 100. Capturas el mismo retrato en tres aperturas: <strong>f/8</strong>, luego <strong>f/4</strong>, luego <strong>f/2</strong>, ajustando el obturador cada vez para equilibrar la luz. Despu&eacute;s armas una hoja de contactos, eliges tus tres mejores y reflexionas.")
         + (framed(HEADER,"Encabezado del m&oacute;dulo Retrato de Apertura") if HAVE_HEADER else hero_ph("IMAGEN DE ENCABEZADO (PLACEHOLDER) &middot; se cambia despu&eacute;s")))

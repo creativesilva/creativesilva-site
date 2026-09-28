@@ -108,7 +108,7 @@ SC_STANDARDS=[
 
 def overview():
     en=banner("Module 03 &bull; Step 01","Sketchbook Cover Art: Start Here","Read this page and download your files, then go to Step 02 to design your cover.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
-    en+=type_card("overview","Step 01 &middot; Read &amp; Download","Make Your Sketchbook Your Own",
+    en+=type_card("overview","Step 01 &middot; Overview &amp; Download","Make Your Sketchbook Your Own",
         para("Time to make your sketchbook yours. You will decorate and personalize the manila cover of your 8.5 by 11 inch sketchbook and turn it into art you are proud of. This is a friendly class competition: the best cover wins a prize. You have one week, and you may take your sketchbook home to keep working on it.")
         + framed(HEADER_IMG,"Sketchbook Cover"))
     en+=standards_box(False, SC_STANDARDS)
@@ -146,7 +146,7 @@ def overview():
         + bullets([("Step 02 &middot; Design Your Cover:","design your two cover options, then turn in the two photos."),("Step 03 &middot; Submit &amp; Reflect:","fill out the reflection and upload it.")]))
     en+=next_up("UP NEXT &middot; STEP 02 - Design Your Cover","Design your covers, then turn in two photos.")
     es=banner("M&oacute;dulo 03 &bull; Paso 01","Arte de la Portada: Empieza Aqu&iacute;","Lee esta p&aacute;gina y descarga tus archivos, luego ve al Paso 02 para dise&ntilde;ar tu portada.","#top","Back to English", HICON_DESIGN)
-    es+=type_card("overview","Paso 01 &middot; Lee y Descarga","Haz Tuyo Tu Cuaderno",
+    es+=type_card("overview","Paso 01 &middot; Resumen y Descarga","Haz Tuyo Tu Cuaderno",
         para("Es hora de hacer tuyo tu cuaderno. Vas a decorar y personalizar la portada de manila de tu cuaderno de 8.5 por 11 pulgadas y convertirla en arte del que te sientas orgulloso. Esta es una competencia amistosa de la clase: la mejor portada gana un premio. Tienes una semana, y puedes llevar tu cuaderno a casa para seguir trabajando.")
         + framed(HEADER_IMG,"Portada del Cuaderno"))
     es+=standards_box(True, SC_STANDARDS)

@@ -87,7 +87,7 @@ PG_STANDARDS=[
 
 def overview():
     en=banner("Module 01 &bull; Step 01","Pictograms: Start Here","Read this page and download your files, then go to Step 02 to find and save your pictograms.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
-    en+=type_card("overview","Step 01 &middot; Read &amp; Download","What Is a Pictogram?",
+    en+=type_card("overview","Step 01 &middot; Overview &amp; Download","What Is a Pictogram?",
         para("A pictogram is a simple picture that stands for an idea, an object, or an action. The best part is that you understand it without reading a single word. You just look at it and know what it means.")
         + framed(HERO,"Pictograms"))
     en+=standards_box(False, PG_STANDARDS)
@@ -122,7 +122,7 @@ def overview():
         + bullets([("Step 02 &middot; Find &amp; Save:","build your pictogram folder in OneDrive and save the pictograms you find."),("Step 03 &middot; Sketch &amp; Reflect:","reimagine three pictograms in your sketchbook and turn in your reflection.")]))
     en+=next_up("UP NEXT &middot; STEP 02 - Find &amp; Save","Build your pictogram folder in OneDrive.")
     es=banner("M&oacute;dulo 01 &bull; Paso 01","Pictogramas: Empieza Aqu&iacute;","Lee esta p&aacute;gina y descarga tus archivos, luego ve al Paso 02 para buscar y guardar tus pictogramas.","#top","Back to English", HICON_DESIGN)
-    es+=type_card("overview","Paso 01 &middot; Lee y Descarga","&iquest;Qu&eacute; Es Un Pictograma?",
+    es+=type_card("overview","Paso 01 &middot; Resumen y Descarga","&iquest;Qu&eacute; Es Un Pictograma?",
         para("Un pictograma es un dibujo simple que representa una idea, un objeto o una acci&oacute;n. Lo mejor es que lo entiendes sin leer ni una palabra. Solo lo miras y sabes qu&eacute; significa.")
         + framed(HERO,"Pictogramas"))
     es+=standards_box(True, PG_STANDARDS)
