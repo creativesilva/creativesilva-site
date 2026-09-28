@@ -227,8 +227,10 @@
   .rv-changed input{width:16px;height:16px;accent-color:var(--teal);}
   .rv-btnrow{display:flex;gap:10px;margin-top:8px;}
   .rv-btnrow .qr-btn{flex:1 1 0;}
-  .rv-primary{background:var(--teal)!important;color:#04110f!important;border-color:var(--teal)!important;font-weight:700;}
-  .rv-primary:hover{filter:brightness(1.1);}
+  /* Reserve-flow forward action = framework orange #FF6B1A (framework: orange is the action color). */
+  .rv-primary{background:#ff6b1a!important;color:#04110f!important;border-color:#ff6b1a!important;font-weight:700;padding:11px 18px!important;font-size:.78rem!important;}
+  .rv-primary:hover{filter:brightness(1.08);}
+  #rv-continue{display:block;width:100%;}
   /* reserve card inside the day modal */
   .rc-head{font-family:var(--font);font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-lt);margin-bottom:8px;}
   .rc-cam{font-family:var(--font);font-size:1.5rem;color:#fff;}
@@ -890,7 +892,7 @@
       '</details>'+
       '<div class="rc-disc">Check with your teacher that the kit is physically available for reservation before completing your reservation.</div>'+
       '<div class="rc-msg" id="rc-msg"></div>'+
-      '<div class="rc-btnrow"><button type="button" class="dc-btn ghost" id="rc-back">Back</button><button type="button" class="dc-btn" id="rc-go">Confirm reservation</button></div>';
+      '<div class="rc-btnrow"><button type="button" class="dc-btn ghost" id="rc-back">Back</button><button type="button" class="dc-btn rv-primary" id="rc-go">Confirm reservation</button></div>';
     setResvBody(body);
     document.getElementById('rc-back').addEventListener('click',function(){ DM_RESERVE_CAM=null; renderReserveDay(iso); });
     document.getElementById('rc-go').addEventListener('click',function(){ submitReserve(iso); });

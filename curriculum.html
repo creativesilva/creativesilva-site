@@ -918,6 +918,8 @@
       background: #007474; border: 1px solid #00b8b8; transition: filter 0.15s ease;
     }
     .cal-btn:hover { filter: brightness(1.18); }
+    /* Command Center = the framework orange (softer than the browser's visited-red on this external link). */
+    .cal-btn.cmd, .cal-btn.cmd:link, .cal-btn.cmd:visited { background: #ff6b1a; border-color: #ff8c4a; color: #04110f; }
     .catalog-search { position: relative; flex: 1 1 280px; max-width: 480px; margin-left: 0; }
     .catalog-search-input {
       width: 100%; box-sizing: border-box; height: 32px;
@@ -1275,7 +1277,7 @@
         <div class="catalog-titlebar">
           <h1 class="page-title">Curriculum Catalog</h1>
           <a class="cal-btn" href="/build-resources.html">Build Resources</a>
-          <a class="cal-btn" href="https://command.creativesilva.com" target="_blank" rel="noopener">Command Center</a>
+          <a class="cal-btn cmd" href="https://command.creativesilva.com" target="_blank" rel="noopener">Command Center</a>
           <a class="cal-btn" href="/calendar.html">Calendar</a>
           <button type="button" class="cal-btn cat-search-btn" id="cat-search-btn" aria-haspopup="dialog" aria-label="Search the catalog">Search</button>
           <iframe class="header-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
