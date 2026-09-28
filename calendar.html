@@ -62,6 +62,9 @@
   .pill .meta{color:var(--muted);font-size:.62rem;}
   .pill.overdue{border-left-color:var(--orange);background:rgba(255,107,26,.14);}
   .pill.returned{border-left-color:var(--grayed);background:rgba(160,180,180,.10);color:var(--faint);text-decoration:line-through;}
+  .pill.reserved{border-left-color:#f5b301;background:rgba(245,179,1,.14);color:#ffe1a3;}
+  .k-res{background:#f5b301;}
+  .cam.reserved{border-left-color:#f5b301;} .cam.reserved .s{color:#ffd889;}
   .foot{margin-top:22px;font-size:.74rem;color:var(--faint);}
   body.embed .top, body.embed .sub{display:none;}
   body.embed .wrap{padding-top:16px;}
@@ -77,8 +80,8 @@
     <p class="sub">See which cameras are out and when they are due back before you ask. Updates automatically.</p>
 
     <div class="summary">
-      <div><span class="big" id="outn">0</span> <span class="lab">of <span id="totn">0</span> cameras out</span></div>
-      <div class="legend"><span><i class="k-av"></i>Available</span><span><i class="k-out"></i>Checked out</span></div>
+      <div><span class="big" id="outn">0</span> <span class="lab">of <span id="totn">0</span> cameras available</span></div>
+      <div class="legend"><span><i class="k-av"></i>Available</span><span><i class="k-res"></i>Reserved</span><span><i class="k-out"></i>Checked out</span></div>
     </div>
 
     <div class="h">Cameras right now</div>
@@ -107,16 +110,26 @@
       foot=document.getElementById('foot');
   function todayISO(){ var d=new Date(); d.setHours(0,0,0,0); return d.toISOString().slice(0,10); }
   function fmt(iso){ if(!iso)return''; var p=iso.split('-'); return MONTHS[+p[1]-1].slice(0,3)+' '+(+p[2]); }
-  function activeByCam(){ var m={}; DATA.checkouts.forEach(function(c){ if(!c.returned) m[c.camera]=c; }); return m; }
+  function statusOf(c){ return c.status||(c.returned?'returned':'out'); }
+  // A camera is unavailable while it is reserved OR picked up; returned frees it.
+  function activeByCam(){ var m={}; DATA.checkouts.forEach(function(c){ if(statusOf(c)!=='returned') m[c.camera]=c; }); return m; }
 
   function renderBoard(){
     var active=activeByCam(); var cams=DATA.cameras||[];
-    outn.textContent=Object.keys(active).length; totn.textContent=cams.length;
+    var avail=cams.filter(function(c){ return !active[c]; }).length;
+    outn.textContent=avail; totn.textContent=cams.length;
     board.innerHTML='';
     if(!cams.length){ board.innerHTML='<span class="foot">No cameras configured yet.</span>'; return; }
-    cams.forEach(function(c){ var o=active[c]; var el=document.createElement('div'); el.className='cam'+(o?' out':'');
-      el.innerHTML='<div class="n">'+c+'</div><div class="s">'+(o?('Out &middot; due '+fmt(o.due)):'Available')+'</div>';
-      board.appendChild(el); });
+    cams.forEach(function(c){
+      var o=active[c]; var st=o?statusOf(o):'available';
+      var el=document.createElement('div');
+      el.className='cam'+(st==='reserved'?' reserved':(st!=='available'?' out':''));
+      var sub = st==='available' ? 'Available'
+              : st==='reserved' ? 'Reserved'
+              : ('Checked out &middot; due '+fmt(o.due));
+      el.innerHTML='<div class="n">'+c+'</div><div class="s">'+sub+'</div>';
+      board.appendChild(el);
+    });
   }
   function renderCal(){
     mtitle.textContent=MONTHS[view.getMonth()]+' '+view.getFullYear();
@@ -127,10 +140,12 @@
       var cell=document.createElement('div'); cell.className='cell'+(d.getMonth()!==view.getMonth()?' out-month':'')+(iso===todayISO()?' today':'');
       var dn=document.createElement('div'); dn.className='daynum'; dn.textContent=d.getDate(); cell.appendChild(dn);
       DATA.checkouts.filter(function(c){ return c.out===iso; }).forEach(function(c){
-        var overdue=!c.returned && c.due < todayISO();
-        var pill=document.createElement('div'); pill.className='pill'+(c.returned?' returned':(overdue?' overdue':''));
-        var st=c.returned?'returned':(overdue?('overdue '+fmt(c.due)):('due '+fmt(c.due)));
-        pill.innerHTML='<span class="cam">'+c.camera+'</span><span class="meta">'+st+'</span>';
+        var s=statusOf(c);
+        var overdue=s==='out' && c.due < todayISO();
+        var cls=s==='returned'?' returned':(s==='reserved'?' reserved':(overdue?' overdue':''));
+        var meta=s==='returned'?'returned':(s==='reserved'?'reserved':(overdue?('overdue '+fmt(c.due)):('due '+fmt(c.due))));
+        var pill=document.createElement('div'); pill.className='pill'+cls;
+        pill.innerHTML='<span class="cam">'+c.camera+'</span><span class="meta">'+meta+'</span>';
         cell.appendChild(pill);
       });
       grid.appendChild(cell);

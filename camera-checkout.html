@@ -48,9 +48,10 @@
   .board{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
   .cam{background:rgba(0,0,0,.22);border:1px solid var(--line-soft);border-left:3px solid var(--ok);padding:11px 12px;}
   .cam.out{border-left-color:var(--orange);}
+  .cam.reserved{border-left-color:#f5b301;}
   .cam .n{font-family:var(--font);font-weight:600;letter-spacing:.03em;font-size:.92rem;}
   .cam .s{font-size:.74rem;color:var(--muted);margin-top:2px;}
-  .cam.out .s{color:#ffc7a6;}
+  .cam.out .s{color:#ffc7a6;} .cam.reserved .s{color:#ffd889;}
   a.viewcal{color:var(--teal-lt);font-size:.9rem;text-decoration:none;border-bottom:1px solid var(--line);}
 </style>
 </head>
@@ -58,9 +59,9 @@
   <div class="wrap">
     <div class="brand">
       <img src="https://www.creativesilva.com/assets/PV%20LOGO%20NEW.png" alt="Pioneer Valley High School" />
-      <h1>Check Out a Camera</h1>
+      <h1>Reserve a Camera</h1>
     </div>
-    <p class="sub">Enter your student ID, pick a camera, and choose the day it is due back. That is it.</p>
+    <p class="sub">Enter your student ID, pick a camera, and choose the day it is due back. Then see Mr. Silva to pick it up.</p>
 
     <div class="msg" id="msg"></div>
 
@@ -75,8 +76,8 @@
         <label for="due">Due back</label>
         <input type="date" id="due" required />
 
-        <button type="submit" class="go" id="go">Check out this camera</button>
-        <p class="note">Your name and contact come from the class roster automatically. You do not type them here.</p>
+        <button type="submit" class="go" id="go">Reserve this camera</button>
+        <p class="note">Your name and contact come from the class roster automatically. You do not type them here. Your reservation is held until you pick the camera up from Mr. Silva.</p>
       </form>
     </div>
 
@@ -99,9 +100,10 @@
 
   function show(kind,text){ msg.className='msg show '+kind; msg.textContent=text; window.scrollTo(0,0); }
 
+  function statusOf(c){ return c.status||(c.returned?'returned':'out'); }
   function activeByCamera(checkouts){
     var map={};
-    (checkouts||[]).forEach(function(c){ if(!c.returned){ map[c.camera]=c; } });
+    (checkouts||[]).forEach(function(c){ if(statusOf(c)!=='returned'){ map[c.camera]=c; } });
     return map;
   }
   function fmt(iso){ if(!iso)return''; var p=iso.split('-'); var m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return m[+p[1]-1]+' '+(+p[2]); }
@@ -111,13 +113,15 @@
       var cams=d.cameras||[], active=activeByCamera(d.checkouts);
       // dropdown: available first, out ones labeled
       camSel.innerHTML='<option value="">Choose a camera&#8230;</option>';
-      cams.forEach(function(c){ var o=document.createElement('option'); o.value=c;
-        o.textContent = active[c] ? (c+'  (out, due '+fmt(active[c].due)+')') : (c+'  (available)');
+      cams.forEach(function(c){ var o=document.createElement('option'); o.value=c; var a=active[c];
+        o.textContent = a ? (c+'  ('+(statusOf(a)==='reserved'?'reserved':('out, due '+fmt(a.due)))+')') : (c+'  (available)');
         camSel.appendChild(o); });
       // board
       board.innerHTML='';
-      cams.forEach(function(c){ var out=active[c]; var el=document.createElement('div'); el.className='cam'+(out?' out':'');
-        el.innerHTML='<div class="n">'+c+'</div><div class="s">'+(out?('Out &middot; due '+fmt(out.due)):'Available')+'</div>';
+      cams.forEach(function(c){ var a=active[c]; var st=a?statusOf(a):'available';
+        var el=document.createElement('div'); el.className='cam'+(st==='reserved'?' reserved':(st!=='available'?' out':''));
+        var s= st==='available'?'Available':(st==='reserved'?'Reserved':('Out &middot; due '+fmt(a.due)));
+        el.innerHTML='<div class="n">'+c+'</div><div class="s">'+s+'</div>';
         board.appendChild(el); });
       if(!cams.length){ board.innerHTML='<span class="note">No cameras configured yet.</span>'; }
     }).catch(function(){ board.innerHTML='<span class="note">Could not load availability. You can still check out below.</span>';
@@ -127,7 +131,7 @@
   form.addEventListener('submit',function(e){ e.preventDefault();
     var payload={ student_id:sid.value.trim(), camera:camSel.value, due:due.value };
     if(!payload.student_id||!payload.camera||!payload.due){ show('err','Please fill in your ID, a camera, and a due date.'); return; }
-    go.disabled=true; go.textContent='Checking out&#8230;';
+    go.disabled=true; go.textContent='Reserving&#8230;';
     fetch(API+'/api/camera/checkout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
       .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
       .then(function(res){
@@ -136,7 +140,7 @@
         else { show('err', res.j.error || 'Something went wrong. Try again or see Mr. Silva.'); }
       })
       .catch(function(){ show('err','Could not reach the server. Check your connection and try again.'); })
-      .then(function(){ go.disabled=false; go.textContent='Check out this camera'; });
+      .then(function(){ go.disabled=false; go.textContent='Reserve this camera'; });
   });
 
   load();
