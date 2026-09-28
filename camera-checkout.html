@@ -34,6 +34,8 @@
   label{display:block;font-family:var(--font);font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#cfeaea;margin:0 0 6px;}
   input,select{width:100%;background:rgba(0,0,0,.30);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1.05rem;padding:12px 13px;outline:none;margin-bottom:16px;}
   input:focus,select:focus{border-color:var(--teal);}
+  .who{font-size:.86rem;margin:-8px 0 16px;min-height:1.15em;line-height:1.4;}
+  .who.ok{color:#8ff0b0;} .who.no{color:#ffd889;} .who.load{color:var(--faint);}
   select{appearance:none;-webkit-appearance:none;cursor:pointer;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235ff0f0' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:38px;}
   select option{background:#0c1414;color:var(--text);}
@@ -69,6 +71,7 @@
       <form id="form" autocomplete="off">
         <label for="sid">Student ID number</label>
         <input type="text" id="sid" inputmode="numeric" placeholder="Your ID number" required />
+        <div id="who" class="who" aria-live="polite"></div>
 
         <label for="cam">Camera / kit</label>
         <select id="cam" required><option value="">Loading cameras&#8230;</option></select>
@@ -99,6 +102,23 @@
   (function(){ var d=new Date(); d.setDate(d.getDate()+7); due.value=d.toISOString().slice(0,10); })();
 
   function show(kind,text){ msg.className='msg show '+kind; msg.textContent=text; window.scrollTo(0,0); }
+
+  // Confirm the student's identity from their FULL ID (first name + last initial only).
+  var who=document.getElementById('who'); var lookupT=null, lastLookup='';
+  function doLookup(){
+    var v=sid.value.replace(/\D/g,'');
+    if(v.length<5){ who.className='who'; who.textContent=''; lastLookup=''; return; }
+    if(v===lastLookup) return; lastLookup=v;
+    who.className='who load'; who.textContent='Checking…';
+    fetch(API+'/api/camera/lookup',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:v})})
+      .then(function(r){return r.json();}).then(function(j){
+        if(sid.value.replace(/\D/g,'')!==v) return;   // ignore stale response
+        if(j && j.found){ who.className='who ok'; who.textContent='Reserving as '+j.label+'. Not you? Re-check your ID.'; }
+        else { who.className='who no'; who.textContent='We could not find that ID. Double-check it before you reserve.'; }
+      }).catch(function(){ who.className='who'; who.textContent=''; });
+  }
+  sid.addEventListener('input',function(){ clearTimeout(lookupT); lookupT=setTimeout(doLookup,400); });
+  sid.addEventListener('blur',doLookup);
 
   function statusOf(c){ return c.status||(c.returned?'returned':'out'); }
   function activeByCamera(checkouts){
@@ -136,7 +156,7 @@
       .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
       .then(function(res){
         if(res.ok && res.j.ok){ show('ok',(res.j.message||'Checked out.')+'  ('+payload.camera+', due '+fmt(payload.due)+')');
-          form.reset(); var d=new Date(); d.setDate(d.getDate()+7); due.value=d.toISOString().slice(0,10); load(); }
+          form.reset(); who.className='who'; who.textContent=''; lastLookup=''; var d=new Date(); d.setDate(d.getDate()+7); due.value=d.toISOString().slice(0,10); load(); }
         else { show('err', res.j.error || 'Something went wrong. Try again or see Mr. Silva.'); }
       })
       .catch(function(){ show('err','Could not reach the server. Check your connection and try again.'); })
