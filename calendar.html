@@ -85,11 +85,12 @@
   .dow{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px;}
   .dow div{font-family:var(--font);font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);text-align:left;padding-left:6px;}
   /* Google-style month: each week is a band; camera checkouts are bars spanning their days. */
-  .grid{display:flex;flex-direction:column;}
+  .grid{display:flex;flex-direction:column;background:#0a1413;}
   .week{position:relative;}
   .wdays{display:grid;grid-template-columns:repeat(7,1fr);}
-  /* uniform day cells (same size regardless of how many camera bars), Google-calendar style */
-  .wcell{min-height:130px;background:rgba(0,0,0,.30);border:1px solid var(--line-soft);border-top:0;border-left:0;padding:3px 6px;cursor:pointer;backdrop-filter:blur(5px) saturate(1.05);-webkit-backdrop-filter:blur(5px) saturate(1.05);}
+  /* uniform day cells (same size regardless of how many camera bars), Google-calendar style.
+     Opaque surface so the page CS-logo watermark does NOT show through the calendar grid. */
+  .wcell{min-height:130px;background:#0a1413;border:1px solid var(--line-soft);border-top:0;border-left:0;padding:3px 6px;cursor:pointer;}
   .wcell:first-child{border-left:1px solid var(--line-soft);}
   .week:first-child .wcell{border-top:1px solid var(--line-soft);}
   .wcell.out-month{opacity:.4;} .wcell.today{box-shadow:inset 0 0 0 2px var(--teal);}
