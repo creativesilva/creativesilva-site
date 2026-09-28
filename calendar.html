@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Camera Checkout Calendar | Pioneer Valley Photography</title>
+<script>window.SILVA_HIDE_CATALOG=true;/* public page: never expose the teacher catalog dropdown */</script>
 <meta name="description" content="See which Pioneer Valley photography cameras are checked out and when they are due back." />
 <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only_Teal.svg" />
 <link rel="apple-touch-icon" href="/logos/CS_AppIcon_Teal_180.png" />
@@ -31,11 +32,12 @@
   body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(6,14,14,0.84);}
   @media (max-width:900px){ body::before{background-size:min(88vw,460px);background-position:center 36%;} }
 
-  /* camera-kit icon injected into the shared header title */
-  .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;}
-  /* Reserve + Teacher Console buttons injected into the shared header bar (CS logo / Catalog row) */
+  /* camera-kit icon injected into the shared header title (rendered WHITE) */
+  .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;filter:brightness(0) invert(1);}
+  /* Teacher Console button injected into the shared header bar (CS logo row). Reserve + QR now live
+     in the month row above the calendar. All nav/action buttons share ONE pixel height (38px). */
   .cal-navwrap{display:flex;align-items:center;gap:8px;margin-left:auto;padding:7px 12px 7px 0;flex-wrap:wrap;}
-  .cal-navbtn{align-self:center;display:inline-flex;align-items:center;gap:8px;min-height:32px;padding:0 15px;white-space:nowrap;
+  .cal-navbtn{align-self:center;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 16px;white-space:nowrap;box-sizing:border-box;
     font-family:var(--font);font-weight:600;letter-spacing:.10em;text-transform:uppercase;font-size:.75rem;text-decoration:none;cursor:pointer;
     color:rgba(234,247,247,.85);background:rgba(0,0,0,.26);border:1px solid rgba(0,184,184,.42);transition:background .15s,color .15s,border-color .15s,filter .15s;}
   .cal-navbtn:hover{background:rgba(0,184,184,.14);color:#fff;border-color:rgba(0,184,184,.72);}
@@ -78,10 +80,20 @@
   .cam.reserved .s{color:#ffd889;}
   .cam .course{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:5px;}
   /* month calendar */
-  .calhead{display:flex;align-items:center;gap:12px;margin:26px 0 10px;}
-  .mtitle{font-family:var(--font);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:1rem;color:#fff;}
-  .navb{font-family:var(--font);font-size:.9rem;color:#eafeff;background:rgba(0,184,184,.14);border:1px solid var(--line);cursor:pointer;padding:6px 12px;}
+  .calhead{display:flex;align-items:center;gap:10px;margin:26px 0 10px;flex-wrap:wrap;}
+  .mtitle{font-family:var(--font);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:1rem;color:#fff;min-width:168px;}
+  .navb{font-family:var(--font);font-size:1rem;color:#eafeff;background:rgba(0,184,184,.14);border:1px solid var(--line);cursor:pointer;height:38px;width:38px;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;padding:0;}
   .navb:hover{background:rgba(0,184,184,.28);}
+  /* Month-row actions: Reserve a Camera (soft pulse to draw the eye) + QR, pushed to the right. */
+  .cal-monthacts{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .cal-mbtn{height:38px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 18px;white-space:nowrap;cursor:pointer;text-decoration:none;border:0;
+    font-family:var(--font);font-weight:700;letter-spacing:.09em;text-transform:uppercase;font-size:.76rem;transition:filter .15s,background .15s,border-color .15s,color .15s;}
+  .cal-mbtn.qr{color:rgba(234,247,247,.9);background:rgba(0,0,0,.26);border:1px solid rgba(0,184,184,.42);}
+  .cal-mbtn.qr:hover{background:rgba(0,184,184,.14);color:#fff;border-color:rgba(0,184,184,.72);}
+  .cal-mbtn.reserve{color:#04110f;background:var(--teal);border:1px solid var(--teal);animation:calPulse 2.6s ease-in-out infinite;}
+  .cal-mbtn.reserve:hover{filter:brightness(1.12);animation:none;}
+  @keyframes calPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,184,184,0);}50%{box-shadow:0 0 0 7px rgba(0,184,184,.16);}}
+  @media (prefers-reduced-motion:reduce){ .cal-mbtn.reserve{animation:none;} }
   .dow{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px;}
   .dow div{font-family:var(--font);font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);text-align:left;padding-left:6px;}
   /* Google-style month: each week is a band; camera checkouts are bars spanning their days. */
@@ -169,12 +181,75 @@
   .dc-note b{color:var(--faint);font-weight:600;letter-spacing:.05em;text-transform:uppercase;font-size:.6rem;display:block;margin-bottom:2px;}
   .dc-flag{font-size:.7rem;color:#ffb28a;letter-spacing:.02em;}
   .dc-returning{font-size:.86rem;color:var(--teal-lt);}
+  /* accessories with a kit (each returns + notes on its own) */
+  .dc-accs{border-top:1px dashed rgba(0,184,184,.18);padding-top:10px;margin-top:4px;}
+  .dc-accs-h{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-lt);margin-bottom:7px;}
+  .dc-acc{background:rgba(0,0,0,.24);border:1px solid var(--line-soft);border-left:3px solid var(--teal-deep);padding:8px 10px;margin-bottom:7px;}
+  .dc-acc-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .dc-acc-name{font-family:var(--font);font-weight:600;font-size:.86rem;color:#eafeff;}
+  .dc-acc-badge{font-size:.54rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 7px;white-space:nowrap;}
+  .dc-acc-badge.out{background:rgba(255,107,26,.18);color:#ffc7a6;} .dc-acc-badge.res{background:rgba(245,179,1,.18);color:#ffd889;}
+  .dc-acc-badge.in{background:rgba(63,168,99,.16);color:#8ff0b0;} .dc-acc-badge.ret{background:rgba(0,184,184,.18);color:#5ff0f0;}
+  .dc-acc-note{font-size:.72rem;color:#ffd889;margin-top:5px;}
+  .dc-acc-acts{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px;}
+  .dc-abtn{font-family:var(--font);font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:6px 11px;cursor:pointer;}
+  .dc-abtn.warn{background:var(--gold);border-color:var(--gold);}
+  .dc-abtn.ghost{background:rgba(0,184,184,.14);color:#eafeff;}
+  .nc-label{display:block;font-family:var(--font);font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#cfeaea;margin:0 0 6px;}
+  #ncText{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1rem;padding:10px 12px;outline:none;resize:vertical;min-height:96px;line-height:1.4;box-sizing:border-box;}
+  /* ===== Student reserve flow ===== */
+  .rv-banner{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(0,184,184,.16),rgba(4,20,19,.6));border:1px solid var(--teal);border-left:4px solid var(--teal);padding:12px 16px;margin-bottom:16px;color:var(--text);font-size:.95rem;}
+  .rv-banner b{color:var(--teal-lt);}
+  .rv-cancelbtn{margin-left:auto;height:34px;padding:0 14px;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--muted);font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;}
+  .rv-cancelbtn:hover{color:#fff;border-color:var(--teal);}
+  .rv-panel{max-width:420px;}
+  .rv-sub{color:var(--muted);font-size:.9rem;margin:0 0 14px;}
+  .rv-sub b{color:var(--teal-lt);}
+  .rv-who{font-family:var(--font);font-size:1.05rem;color:#fff;margin:2px 0 10px;}
+  .rv-who b{color:var(--teal-lt);}
+  #rv-id,#rv-sc,#rv-pc{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1.05rem;padding:11px 12px;outline:none;box-sizing:border-box;margin-bottom:10px;}
+  .rv-msg{min-height:1.1em;font-size:.85rem;color:var(--muted);margin:2px 0 12px;}
+  .rv-vrow{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:.9rem;color:var(--muted);padding:7px 0;border-bottom:1px solid rgba(0,184,184,.12);}
+  .rv-vrow b{color:#eafeff;}
+  .rv-vrow .on{color:#8ff0b0;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;}
+  .rv-vrow .off{color:#ffb28a;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;}
+  .rv-changed{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted);margin:12px 0;cursor:pointer;}
+  .rv-changed input{width:16px;height:16px;accent-color:var(--teal);}
+  .rv-btnrow{display:flex;gap:10px;margin-top:8px;}
+  .rv-btnrow .qr-btn{flex:1 1 0;}
+  .rv-primary{background:var(--teal)!important;color:#04110f!important;border-color:var(--teal)!important;font-weight:700;}
+  .rv-primary:hover{filter:brightness(1.1);}
+  /* reserve card inside the day modal */
+  .rc-head{font-family:var(--font);font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-lt);margin-bottom:8px;}
+  .rc-cam{font-family:var(--font);font-size:1.5rem;color:#fff;}
+  .rc-dates{color:var(--text);font-weight:600;margin:6px 0 12px;}
+  .rc-acc{border-top:1px dashed rgba(0,184,184,.18);padding-top:10px;margin-top:6px;}
+  .rc-acc-h{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:8px;}
+  .rc-acc label{display:flex;align-items:center;gap:9px;font-size:.9rem;color:var(--text);padding:6px 0;cursor:pointer;text-transform:none;letter-spacing:0;font-weight:400;font-family:var(--body);}
+  .rc-acc input{width:16px;height:16px;accent-color:var(--teal);}
+  .rc-acc .soldout{color:var(--faint);}
+  .rc-disc{background:rgba(245,179,1,.12);border:1px solid rgba(245,179,1,.35);border-left:4px solid #f5b301;padding:10px 12px;margin:12px 0;font-size:.82rem;color:#ffe1a6;}
+  .rc-msg{min-height:1.1em;font-size:.85rem;color:#ffb28a;margin:4px 0;}
+  .rc-btnrow{display:flex;gap:10px;margin-top:8px;}
+  .rc-btnrow .dc-btn{flex:1 1 0;justify-content:center;text-align:center;}
+  .rc-notice{background:rgba(224,64,58,.14);border:1px solid rgba(224,64,58,.4);border-left:4px solid var(--red);padding:10px 12px;margin-bottom:12px;font-size:.85rem;color:#ffb3a6;}
+  .dm-availcam.p2block{opacity:.4;cursor:not-allowed;filter:grayscale(.5);}
+  .dm-availcam.resv{cursor:pointer;}
+  .dm-availcam.resv:hover{background:rgba(63,168,99,.28);}
+  .rc-done{text-align:center;padding:18px 8px;}
+  .rc-done-ic{width:56px;height:56px;line-height:56px;margin:0 auto 12px;background:rgba(63,168,99,.18);color:#8ff0b0;font-size:1.8rem;border-radius:0;}
+  .rc-done p{color:var(--text);font-size:1rem;} .rc-done-sub{color:var(--muted);font-size:.85rem;}
   .foot{margin-top:22px;font-size:.74rem;color:var(--faint);}
   body.embed .silva-nav, body.embed .intro{display:none;}
   /* embedded in the Teacher Console: show ONLY the month calendar (the console has its own board above) */
   body.embed .summary, body.embed .h, body.embed #board{display:none;}
-  body.embed{min-height:0;}   /* so the parent can measure true content height (no min-height:100vh feedback loop) */
-  body.embed .wrap{padding-top:16px;}
+  body.embed .cal-monthacts{display:none;}   /* Reserve/QR are student actions; the console has its own */
+  /* No own watermark/veil when embedded: the console page supplies the SINGLE background logo, and its
+     .calpanel blurs it, so the embedded calendar is transparent and the one blurred logo shows through. */
+  body.embed::before, body.embed::after{display:none;}
+  body.embed{background:transparent;min-height:0;}   /* transparent + true height (no feedback loop) */
+  body.embed .wrap{padding-top:10px;}
+  body.embed .wcell{background:rgba(6,14,14,0.34);}   /* lighter so the console's blurred logo shows softly */
 </style>
 </head>
 <body>
@@ -183,6 +258,8 @@
   <div class="intro">
     <p class="sub">See which cameras are out and when they are due back before you ask. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.</p>
   </div>
+
+  <div class="rv-banner" id="rvBanner" style="display:none;"></div>
 
   <div class="summary">
     <div><span class="big" id="outn">0</span> <span class="lab">of <span id="totn">0</span> cameras available</span></div>
@@ -193,9 +270,13 @@
   <div class="board" id="board"><span class="foot">Loading&#8230;</span></div>
 
   <div class="calhead">
-    <button class="navb" id="prev">&#8249;</button>
+    <button class="navb" id="prev" aria-label="Previous month">&#8249;</button>
     <span class="mtitle" id="mtitle"></span>
-    <button class="navb" id="next">&#8250;</button>
+    <button class="navb" id="next" aria-label="Next month">&#8250;</button>
+    <div class="cal-monthacts">
+      <button type="button" class="cal-mbtn reserve" id="reserveMonthBtn">Reserve a Camera</button>
+      <button type="button" class="cal-mbtn qr" id="qrMonthBtn">QR Code</button>
+    </div>
   </div>
   <div class="dow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
   <div class="grid" id="grid"></div>
@@ -222,6 +303,51 @@
         <button class="qr-btn" id="qr-copy" type="button">Copy link</button>
         <button class="qr-btn" id="qr-dl" type="button">Download</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Student reserve, step 1 of 2: verify identity + contact before picking a day -->
+<div class="qrmodal" id="rvmodal">
+  <div class="qr-panel rv-panel">
+    <div class="qr-head"><span class="qr-title">Reserve a Camera</span><button class="qr-x" id="rv-x" aria-label="Close">&times;</button></div>
+    <div class="qr-body" style="text-align:left;">
+      <div id="rv-step1">
+        <p class="rv-sub"><b>Step 1 of 2.</b> Enter your student ID so we know it&#8217;s you.</p>
+        <label class="nc-label" for="rv-id">Student ID number</label>
+        <input type="text" id="rv-id" inputmode="numeric" autocomplete="off" placeholder="Student ID" />
+        <div class="rv-msg" id="rv-msg"></div>
+        <button class="qr-btn rv-primary" id="rv-continue" type="button">Continue</button>
+      </div>
+      <div id="rv-step1b" style="display:none;">
+        <div class="rv-who" id="rv-who"></div>
+        <p class="rv-sub">Check your contact info, then start reserving.</p>
+        <div id="rv-verify"></div>
+        <label class="rv-changed"><input type="checkbox" id="rv-changed"> My cell or parent contact is missing or has changed</label>
+        <div id="rv-corr" style="display:none;">
+          <label class="nc-label" for="rv-sc">Your cell phone</label>
+          <input type="text" id="rv-sc" inputmode="tel" autocomplete="off" placeholder="(805) 000-0000" />
+          <label class="nc-label" for="rv-pc">Parent / guardian cell</label>
+          <input type="text" id="rv-pc" inputmode="tel" autocomplete="off" placeholder="(805) 000-0000" />
+        </div>
+        <div class="rv-msg" id="rv-msg2"></div>
+        <div class="rv-btnrow">
+          <button class="qr-btn" id="rv-back" type="button">Back</button>
+          <button class="qr-btn rv-primary" id="rv-start" type="button">Start reserving &rarr;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Condition / note editor (teacher only): a note follows the camera or the accessory -->
+<div class="qrmodal" id="ncmodal">
+  <div class="qr-panel">
+    <div class="qr-head"><span class="qr-title" id="ncTitle">Note</span><button class="qr-x" id="nc-x" aria-label="Close">&times;</button></div>
+    <div class="qr-body" style="text-align:left;">
+      <label class="nc-label" for="ncText">Condition / notes</label>
+      <textarea id="ncText" rows="4" placeholder="e.g. lens cap missing, tripod plate lost, small scratch on body"></textarea>
+      <button class="qr-btn" id="nc-save" type="button" style="margin-top:12px;width:100%;">Save note</button>
     </div>
   </div>
 </div>
@@ -260,10 +386,9 @@
     }
     if(!bar.querySelector('.cal-navwrap')){
       var w=document.createElement('div'); w.className='cal-navwrap';
-      var res=document.createElement('a'); res.className='cal-navbtn'; res.href='/camera-checkout.html'; res.textContent='Reserve a Camera';
-      var qr=document.createElement('button'); qr.type='button'; qr.className='cal-navbtn'; qr.textContent='QR Code'; qr.addEventListener('click',openQR);
+      // Reserve + QR now live in the month row above the calendar. Only Teacher Console stays up here.
       var con=document.createElement('a'); con.className='cal-navbtn'; con.href='/camera-manager.html'; con.textContent='Teacher Console';
-      w.appendChild(res); w.appendChild(qr); w.appendChild(con); bar.appendChild(w);
+      w.appendChild(con); bar.appendChild(w);
     }
     return true;
   }
@@ -271,7 +396,8 @@
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ tryInject(60); }); else tryInject(60);
 
   // ---- QR pop-out card: large scannable code for the reservation link + copy + download ----
-  var QR_URL='https://www.creativesilva.com/camera-checkout.html';
+  // Points at the calendar itself: students reserve right here (camera-checkout.html is retired).
+  var QR_URL='https://www.creativesilva.com/calendar.html';
   var qrDrawn=false;
   function openQR(){
     var m=document.getElementById('qrmodal'); if(!m) return;
@@ -302,7 +428,7 @@
   // Cam 16/17/18 are Photography 2 only; the rest serve Photo 1 and Photo 2.
   function camCourse(cam){ var n=parseInt((cam||'').replace(/\D/g,''),10); return (n>=16)?'Photo 2 only':'Photo 1 &amp; 2'; }
   // A camera is unavailable while it is reserved OR picked up; returned frees it.
-  function activeByCam(){ var m={}; DATA.checkouts.forEach(function(c){ if(statusOf(c)!=='returned') m[c.camera]=c; }); return m; }
+  function activeByCam(){ var m={}; DATA.checkouts.forEach(function(c){ if(c.kind==='equipment') return; if(statusOf(c)!=='returned') m[c.camera]=c; }); return m; }
 
   function renderBoard(){
     var active=activeByCam(); var cams=DATA.cameras||[];
@@ -334,8 +460,11 @@
     return last;
   }
   function checkoutsOnDay(iso){
-    return (DATA.checkouts||[]).filter(function(c){ var last=effLast(c); return last && c.out && iso>=c.out && iso<=last; });
+    return (DATA.checkouts||[]).filter(function(c){ if(c.kind==='equipment') return false; var last=effLast(c); return last && c.out && iso>=c.out && iso<=last; });
   }
+  // Accessories (equipment records) linked to a camera checkout, so the detail card can show + return them.
+  var EQUIP_LABEL_CAL={tripod:'K&F Concept Tripod',wide:'Canon RF-S 10-18mm ultra-wide',zoom:'Canon RF 100-400mm ultra-zoom',speedlite:'Canon Speedlite EL-10 flash'};
+  function accessoriesFor(rec){ if(!rec) return []; return (DATA.checkouts||[]).filter(function(c){ return c.kind==='equipment' && c.group===rec.id; }); }
   function prettyDate(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]);
     var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     return days[d.getDay()]+', '+MONTHS[+p[1]-1]+' '+(+p[2]); }
@@ -370,7 +499,7 @@
     var startD=new Date(first); startD.setDate(1-first.getDay());
     var startISO=isoD(startD), curMonth=view.getMonth();
     var events=[];
-    (DATA.checkouts||[]).forEach(function(c){ var last=effLast(c); if(!last||!c.out) return;
+    (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment') return; var last=effLast(c); if(!last||!c.out) return;
       events.push({camera:c.camera, start:c.out, last:last, status:statusOf(c),
         overdue:(statusOf(c)==='out' && c.due && c.due<todayISO())}); });
     grid.innerHTML='';
@@ -430,7 +559,7 @@
   }
 
   // ---- Day pop-out: Available / Checked out / Reserved tabs; click a camera for full detail ----
-  var DM_DAY=null, DM_TAB='available', DM_CAM=null;
+  var DM_DAY=null, DM_TAB='available', DM_CAM=null, DM_DONE=false;
   var pendingCal={};   // id -> {timer,deadline} for the 15s mark-returned undo window (teacher)
   function byCam(a,b){ return (a.camera||'').localeCompare(b.camera||''); }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -442,7 +571,7 @@
   // Global: every picked-up camera now past its return date and not toggled returned.
   function overdueAll(){ return (DATA.checkouts||[]).filter(function(c){ return statusOf(c)==='out' && c.due && c.due<todayISO(); }).sort(byCam); }
   function dmTab(t,label,n){ return '<button type="button" class="dm-tab'+(DM_TAB===t?' active':'')+'" data-tab="'+t+'">'+label+' <span class="dm-tabn">'+n+'</span></button>'; }
-  function openDayModal(iso){ DM_DAY=iso; DM_TAB='available'; DM_CAM=null; renderDayModal(); document.getElementById('daymodal').classList.add('open');
+  function openDayModal(iso){ DM_DAY=iso; DM_TAB='available'; DM_CAM=null; DM_RESERVE_CAM=null; DM_DONE=false; renderDayModal(); document.getElementById('daymodal').classList.add('open');
     if(window.parent!==window){ try{ parent.postMessage({daySelected:iso}, '*'); }catch(e){} } }
   // A camera bar for the day card: chevron on the LEFT if it came in before this day,
   // chevron on the RIGHT if it stays out after this day (shows coming / going that day).
@@ -456,6 +585,8 @@
   }
   function renderDayModal(){
     var iso=DM_DAY; if(!iso) return;
+    if(DM_DONE) return;                                    // keep the "Reserved!" confirmation up until closed
+    if(isReserving()){ renderReserveDay(iso); return; }   // student picking a camera for this day
     if(DM_CAM){ renderCamDetail(iso, DM_CAM); return; }
     var out=dayOut(iso), res=dayReserved(iso), avail=dayAvailable(iso), od=overdueAll();
     if(DM_TAB==='overdue' && !od.length) DM_TAB='available';
@@ -531,12 +662,28 @@
     }
     var flag='';
     if(AUTHED && (c.flag||'').indexOf('unknown')>=0) flag='<div class="dc-flag">&#9888; Student ID not in the roster</div>';
-    var noteTxt=(c.flag||'').replace(/unknown student id;?\s*/,'').trim();
-    var note=(AUTHED && noteTxt)?'<div class="dc-note"><b>Notes</b>'+esc(noteTxt)+'</div>':'';
+    // Condition note follows the camera (missing cap, scratch, etc.), teacher-editable.
+    var condNote=c.note?'<div class="dc-note"><b>Condition note</b>'+esc(c.note)+'</div>':'';
+    var noteBtn=AUTHED?'<div class="dc-acts"><button type="button" class="dc-btn ghost" data-note="'+esc(c.id)+'">'+(c.note?'Edit condition note':'Add condition note')+'</button></div>':'';
+    // Accessories checked out with this camera; each checks in + notes on its own.
+    var accs=accessoriesFor(c), accHtml='';
+    if(accs.length){
+      accHtml='<div class="dc-accs"><div class="dc-accs-h">Accessories with this kit</div>'+accs.map(function(a){
+        var ast=statusOf(a), apend=pendingCal[a.id], alabel=EQUIP_LABEL_CAL[a.item]||a.item||'Item';
+        var badge=apend?'<span class="dc-acc-badge ret">Returning</span>':(ast==='returned'?'<span class="dc-acc-badge in">Checked in</span>':(ast==='reserved'?'<span class="dc-acc-badge res">Reserved</span>':'<span class="dc-acc-badge out">Out</span>'));
+        var anote=a.note?'<div class="dc-acc-note">'+esc(a.note)+'</div>':'';
+        var aacts='';
+        if(AUTHED){
+          if(apend) aacts='<button type="button" class="dc-abtn" data-act="undoreturn" data-id="'+esc(a.id)+'">Undo</button>';
+          else if(ast!=='returned') aacts='<button type="button" class="dc-abtn warn" data-act="return" data-id="'+esc(a.id)+'">Check in</button><button type="button" class="dc-abtn ghost" data-note="'+esc(a.id)+'">Note</button>';
+        }
+        return '<div class="dc-acc"><div class="dc-acc-top"><span class="dc-acc-name">'+esc(alabel)+'</span>'+badge+'</div>'+anote+(aacts?'<div class="dc-acc-acts">'+aacts+'</div>':'')+'</div>';
+      }).join('')+'</div>';
+    }
     var namehtml=AUTHED?'<div class="dc-name">'+esc(nameOf(c))+'</div>':'';
     var dbody=head+'<div class="dc '+cls+'">'+
       '<div class="dc-top"><span class="dc-cam">'+esc(cam)+'</span>'+pill+'</div>'+
-      namehtml+acts+'<div class="dc-grid">'+grid+'</div>'+flag+note+'</div>';
+      namehtml+acts+'<div class="dc-grid">'+grid+'</div>'+flag+condNote+noteBtn+accHtml+'</div>';
     setDetailBody(dbody);
   }
   function setDetailBody(html){
@@ -545,9 +692,36 @@
     Array.prototype.forEach.call(document.querySelectorAll('#dm-body [data-act]'), function(el){
       el.addEventListener('click', function(){ camAction(el.getAttribute('data-act'), el.getAttribute('data-id'), el); });
     });
+    Array.prototype.forEach.call(document.querySelectorAll('#dm-body [data-note]'), function(el){
+      el.addEventListener('click', function(){ openNoteCal(el.getAttribute('data-note')); });
+    });
     if(document.getElementById('dc-count')) startCalTicker();
     postHeight();
   }
+  // ---- Condition-note editor (teacher; note follows the camera or the accessory) ----
+  var noteCalId=null;
+  function findRecCal(id){ for(var i=0;i<(DATA.checkouts||[]).length;i++){ if(DATA.checkouts[i].id===id) return DATA.checkouts[i]; } return null; }
+  function openNoteCal(id){
+    var c=findRecCal(id); if(!c || !AUTHED) return; noteCalId=id;
+    var label=c.kind==='equipment'?(EQUIP_LABEL_CAL[c.item]||c.item||'Equipment'):(c.camera||'Camera');
+    document.getElementById('ncTitle').textContent='Note · '+label;
+    document.getElementById('ncText').value=c.note||'';
+    document.getElementById('ncmodal').classList.add('open');
+    setTimeout(function(){ document.getElementById('ncText').focus(); },50);
+  }
+  function closeNoteCal(){ document.getElementById('ncmodal').classList.remove('open'); noteCalId=null; }
+  (function(){
+    var x=document.getElementById('nc-x'); if(x) x.addEventListener('click',closeNoteCal);
+    var m=document.getElementById('ncmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeNoteCal(); });
+    var s=document.getElementById('nc-save'); if(s) s.addEventListener('click',function(){
+      if(!noteCalId) return; var id=noteCalId, val=document.getElementById('ncText').value;
+      s.disabled=true; s.textContent='Saving…';
+      camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,note:val})})
+        .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ closeNoteCal(); notifyParent(); load(); })
+        .catch(function(){ alert('Could not save the note. Try again.'); })
+        .then(function(){ s.disabled=false; s.textContent='Save note'; });
+    });
+  })();
   function camAction(act, id, el){
     if(act==='undoreturn'){ var p=pendingCal[id]; if(p&&p.timer) clearTimeout(p.timer); delete pendingCal[id]; renderDayModal(); return; }
     if(act==='return'){ pendingCal[id]={deadline:Date.now()+15000}; pendingCal[id].timer=setTimeout(function(){ commitCal(id,'returned'); },15000); renderDayModal(); return; }
@@ -569,7 +743,141 @@
   function notifyParent(){ if(window.parent!==window){ try{ parent.postMessage({camAction:true}, '*'); }catch(e){} } }
   var calTicker=null;
   function startCalTicker(){ if(calTicker) return; calTicker=setInterval(function(){ var any=false; Object.keys(pendingCal).forEach(function(id){ any=true; var rem=Math.max(0,Math.ceil((pendingCal[id].deadline-Date.now())/1000)); var e=document.getElementById('dc-count'); if(e) e.textContent=rem; }); if(!any){ clearInterval(calTicker); calTicker=null; } },400); }
-  function closeDayModal(){ document.getElementById('daymodal').classList.remove('open'); }
+  function closeDayModal(){ document.getElementById('daymodal').classList.remove('open'); DM_DONE=false; }
+
+  // ===== Student 2-step reserve: (1) verify ID + contact  (2) click a school day -> pick a camera =====
+  var RESV=null;                 // {id,label,period,corr:{student,parent}} once verified
+  var DM_RESERVE_CAM=null;       // camera chosen inside the day card
+  var rvLookup=null;
+  var EQUIP_MENU=[{key:'tripod',label:'K&F Concept Tripod'},{key:'wide',label:'Canon RF-S 10-18mm ultra-wide'},{key:'zoom',label:'Canon RF 100-400mm ultra-zoom'},{key:'speedlite',label:'Canon Speedlite EL-10 flash'}];
+  function isReserving(){ return !!RESV; }
+  function normPeriod(p){ return String(p||'').replace(/[^0-9]/g,'').replace(/^0+/,''); }
+  function p2ok(){ return RESV && normPeriod(RESV.period)==='4'; }   // only Period 4 (Photo 2A) may take Cam 16/17/18
+  function nextSchoolDay(iso){ var d=addDays(iso,1); for(var i=0;i<420 && !isSchoolDay(d);i++) d=addDays(d,1); return d; }
+  function openReserveFlow(){
+    RESV=null; DM_RESERVE_CAM=null; rvLookup=null;
+    document.getElementById('rv-step1').style.display=''; document.getElementById('rv-step1b').style.display='none';
+    document.getElementById('rv-id').value=''; document.getElementById('rv-msg').textContent='';
+    var ch=document.getElementById('rv-changed'); if(ch) ch.checked=false; document.getElementById('rv-corr').style.display='none';
+    document.getElementById('rvmodal').classList.add('open');
+    setTimeout(function(){ document.getElementById('rv-id').focus(); },50);
+  }
+  function closeReserveModal(){ document.getElementById('rvmodal').classList.remove('open'); }
+  function rvContinue(){
+    var v=document.getElementById('rv-id').value.replace(/\D/g,''), msg=document.getElementById('rv-msg');
+    if(v.length<5){ msg.textContent='Enter your full student ID.'; return; }
+    msg.textContent='Checking…';
+    fetch(API+'/api/camera/lookup',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:v})})
+      .then(function(r){return r.json();}).then(function(j){
+        if(!j||!j.found){ msg.innerHTML='<span style="color:#ffb28a">We could not find that ID. Check the number or see Mr. Silva.</span>'; return; }
+        rvLookup={id:v,label:j.label,period:String(j.period||''),s4:j.student_last4||'',p4:j.parent_last4||'',hasS:!!j.has_student_cell,hasP:!!j.has_parent_cell};
+        showVerify();
+      }).catch(function(){ msg.textContent='Could not reach the server. Try again.'; });
+  }
+  function showVerify(){
+    var L=rvLookup;
+    document.getElementById('rv-who').innerHTML='Reserving as <b>'+esc(L.label)+'</b>'+(L.period?(' &middot; Period '+esc(normPeriod(L.period)||L.period)):'');
+    var v='';
+    v+='<div class="rv-vrow"><span>Your cell '+(L.hasS?('ending <b>&bull;&bull;'+esc(L.s4)+'</b>'):'')+'</span><span class="'+(L.hasS?'on':'off')+'">'+(L.hasS?'on file':'missing')+'</span></div>';
+    v+='<div class="rv-vrow"><span>Parent / guardian '+(L.hasP?('ending <b>&bull;&bull;'+esc(L.p4)+'</b>'):'')+'</span><span class="'+(L.hasP?'on':'off')+'">'+(L.hasP?'on file':'missing')+'</span></div>';
+    document.getElementById('rv-verify').innerHTML=v;
+    document.getElementById('rv-msg2').textContent='';
+    // If anything is missing, force the correction fields open + prefill nothing.
+    var miss=(!L.hasS||!L.hasP), ch=document.getElementById('rv-changed');
+    ch.checked=miss; document.getElementById('rv-corr').style.display=miss?'':'none';
+    document.getElementById('rv-sc').value=''; document.getElementById('rv-pc').value='';
+    document.getElementById('rv-step1').style.display='none'; document.getElementById('rv-step1b').style.display='';
+  }
+  function rvStart(){
+    var L=rvLookup, m2=document.getElementById('rv-msg2'), corr={student:'',parent:''};
+    if(document.getElementById('rv-changed').checked){
+      var sc=document.getElementById('rv-sc').value.trim(), pc=document.getElementById('rv-pc').value.trim();
+      // Require whichever is missing on file; a changed one is optional but captured if entered.
+      if(!L.hasS && sc.replace(/\D/g,'').length<7){ m2.textContent='Please enter your cell phone.'; return; }
+      if(!L.hasP && pc.replace(/\D/g,'').length<7){ m2.textContent='Please enter a parent / guardian cell.'; return; }
+      corr.student=sc; corr.parent=pc;
+    } else if(!L.hasS || !L.hasP){ m2.textContent='Your contact info is needed to reserve. Check the box to add it.'; return; }
+    RESV={id:L.id,label:L.label,period:L.period,corr:corr};
+    closeReserveModal(); showBanner();
+  }
+  function showBanner(){
+    var b=document.getElementById('rvBanner');
+    b.innerHTML='<span>Reserving as <b>'+esc(RESV.label)+'</b>. Tap a <b>school day</b> below, then pick an available camera.</span><button type="button" id="rv-cancel" class="rv-cancelbtn">Cancel</button>';
+    b.style.display='';
+    document.getElementById('rv-cancel').addEventListener('click',cancelReserve);
+    try{ b.scrollIntoView({block:'center'}); }catch(e){}
+  }
+  function cancelReserve(){ RESV=null; DM_RESERVE_CAM=null; document.getElementById('rvBanner').style.display='none'; closeDayModal(); }
+  function renderReserveDay(iso){
+    document.getElementById('dm-tabs').innerHTML='';
+    document.getElementById('dm-title').textContent=prettyDate(iso);
+    if(DM_RESERVE_CAM){ renderReserveConfirm(iso, DM_RESERVE_CAM); return; }
+    var body='<div class="rc-head">Reserve for '+esc(RESV.label)+'</div>';
+    if(iso<todayISO()){ body+='<div class="rc-notice">That day has passed. Pick today or a future school day.</div>'; setResvBody(body); return; }
+    if(!isSchoolDay(iso)){ body+='<div class="rc-notice">No school this day, so cameras can’t be picked up or returned. Pick a school day (Mon to Fri, not a holiday).</div>'; setResvBody(body); return; }
+    var avail=dayAvailable(iso);
+    body+='<p class="rv-sub" style="margin:0 0 10px;">Tap an available camera to reserve it. Due back the next school day ('+fmt(nextSchoolDay(iso))+').</p>';
+    if(!avail.length){ body+='<div class="dm-empty">No cameras are free this day. Try another day.</div>'; setResvBody(body); return; }
+    body+='<div class="dm-avail">'+avail.map(function(c){
+      var p2=(c==='Cam 16'||c==='Cam 17'||c==='Cam 18');
+      if(p2 && !p2ok()){ return '<span class="dm-availcam p2block" title="Photography 2 only">'+c+'<small>Photo 2 only</small></span>'; }
+      return '<span class="dm-availcam resv" data-rcam="'+esc(c)+'">'+c+'<small>'+camCourse(c)+'</small></span>';
+    }).join('')+'</div>';
+    setResvBody(body);
+  }
+  function renderReserveConfirm(iso, cam){
+    var due=nextSchoolDay(iso);
+    var body='<div class="rc-head">Confirm your reservation</div>'+
+      '<div class="rc-cam">'+esc(cam)+'</div>'+
+      '<div class="rc-dates">Pick up '+fmt(iso)+' &rarr; due back '+fmt(due)+'</div>'+
+      '<div class="rc-acc"><div class="rc-acc-h">Add accessories (optional)</div>'+
+        EQUIP_MENU.map(function(e){ return '<label><input type="checkbox" id="rc-'+e.key+'"> '+esc(e.label)+'</label>'; }).join('')+
+      '</div>'+
+      '<div class="rc-disc">Check with your teacher that the kit is physically available for reservation before completing your reservation.</div>'+
+      '<div class="rc-msg" id="rc-msg"></div>'+
+      '<div class="rc-btnrow"><button type="button" class="dc-btn ghost" id="rc-back">Back</button><button type="button" class="dc-btn" id="rc-go">Confirm reservation</button></div>';
+    setResvBody(body);
+    document.getElementById('rc-back').addEventListener('click',function(){ DM_RESERVE_CAM=null; renderReserveDay(iso); });
+    document.getElementById('rc-go').addEventListener('click',function(){ submitReserve(iso); });
+  }
+  function setResvBody(html){
+    document.getElementById('dm-body').innerHTML=html;
+    Array.prototype.forEach.call(document.querySelectorAll('#dm-body [data-rcam]'), function(el){
+      el.addEventListener('click', function(){ DM_RESERVE_CAM=el.getAttribute('data-rcam'); renderReserveDay(DM_DAY); });
+    });
+    postHeight();
+  }
+  function submitReserve(iso){
+    var cam=DM_RESERVE_CAM; if(!cam||!RESV) return;
+    var due=nextSchoolDay(iso), extras=[];
+    EQUIP_MENU.forEach(function(e){ var el=document.getElementById('rc-'+e.key); if(el&&el.checked) extras.push(e.key); });
+    var note=''; if(RESV.corr && (RESV.corr.student||RESV.corr.parent)){ note='Contact per student:'+(RESV.corr.student?(' cell '+RESV.corr.student):'')+(RESV.corr.parent?('; parent '+RESV.corr.parent):''); }
+    var payload={student_id:RESV.id,camera:cam,out:iso,due:due,status:'reserved',extras:extras}; if(note) payload.note=note;
+    var btn=document.getElementById('rc-go'); if(btn){ btn.disabled=true; btn.textContent='Reserving…'; }
+    fetch(API+'/api/camera/checkout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
+      .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+      .then(function(res){ if(res.ok&&res.j&&res.j.ok){ reserveDone(cam,iso,due); } else { var m=document.getElementById('rc-msg'); if(m) m.textContent=(res.j&&res.j.error)||'Could not reserve. Try again.'; if(btn){ btn.disabled=false; btn.textContent='Confirm reservation'; } } })
+      .catch(function(){ var m=document.getElementById('rc-msg'); if(m) m.textContent='Could not reach the server.'; if(btn){ btn.disabled=false; btn.textContent='Confirm reservation'; } });
+  }
+  function reserveDone(cam,iso,due){
+    RESV=null; DM_RESERVE_CAM=null; DM_DONE=true; document.getElementById('rvBanner').style.display='none';
+    document.getElementById('dm-tabs').innerHTML='';
+    document.getElementById('dm-title').textContent='Reserved';
+    document.getElementById('dm-body').innerHTML='<div class="rc-done"><div class="rc-done-ic">&#10003;</div><p><b>'+esc(cam)+'</b> is reserved for you<br>'+prettyDate(iso)+' &rarr; due '+prettyDate(due)+'.</p><p class="rc-done-sub">See Mr. Silva to pick it up on a school day. Your reservation is pending until your teacher confirms the kit is available.</p><button type="button" class="dc-btn" id="rc-close">Done</button></div>';
+    var cl=document.getElementById('rc-close'); if(cl) cl.addEventListener('click',closeDayModal);
+    load();
+  }
+  (function(){
+    var c=document.getElementById('rv-continue'); if(c) c.addEventListener('click',rvContinue);
+    var idf=document.getElementById('rv-id'); if(idf) idf.addEventListener('keydown',function(e){ if(e.key==='Enter') rvContinue(); });
+    var bk=document.getElementById('rv-back'); if(bk) bk.addEventListener('click',function(){ document.getElementById('rv-step1b').style.display='none'; document.getElementById('rv-step1').style.display=''; });
+    var st=document.getElementById('rv-start'); if(st) st.addEventListener('click',rvStart);
+    var x=document.getElementById('rv-x'); if(x) x.addEventListener('click',closeReserveModal);
+    var m=document.getElementById('rvmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeReserveModal(); });
+    var ch=document.getElementById('rv-changed'); if(ch) ch.addEventListener('change',function(){ document.getElementById('rv-corr').style.display=ch.checked?'':'none'; });
+    var rb=document.getElementById('reserveMonthBtn'); if(rb) rb.addEventListener('click',openReserveFlow);
+    var qb=document.getElementById('qrMonthBtn'); if(qb) qb.addEventListener('click',openQR);
+  })();
 
   function load(){
     var useKey=!!CAMKEY, opts={cache:'no-store'}; if(useKey) opts.headers={'X-Camera-Key':CAMKEY};

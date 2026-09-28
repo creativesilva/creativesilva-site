@@ -458,7 +458,9 @@
     var title = document.createElement('a');
     title.className = 'silva-uni-title';
     var at = locate();
-    title.href = at ? ('/' + MODULES[at.g][0].replace(/^\//, '')) : '/curriculum.html';
+    // On camera pages (SILVA_HIDE_CATALOG) the title must NOT link into the teacher catalog:
+    // students/other teachers should not reach it from the public calendar.
+    title.href = at ? ('/' + MODULES[at.g][0].replace(/^\//, '')) : (window.SILVA_HIDE_CATALOG ? location.pathname : '/curriculum.html');
     var docTitle = (document.title || '').split('|')[0].trim();
     title.textContent = docTitle || 'Curriculum Catalog';
     bar.appendChild(title);
@@ -469,14 +471,15 @@
     cal.textContent = 'Calendar';
     bar.appendChild(cal);
 
-    // Search Catalog button: module/calendar pages have no catalog index, so it opens the
-    // catalog home with its search shadow-box already open (?search=1).
-    var searchBtn = document.createElement('a');
-    searchBtn.className = 'silva-uni-searchbtn';
-    searchBtn.href = '/curriculum.html?search=1';
-    searchBtn.textContent = 'Search';
-    searchBtn.setAttribute('aria-label', 'Search the catalog');
-    bar.appendChild(searchBtn);
+    // Search jumps to the teacher catalog, so it is hidden on camera pages.
+    if (!window.SILVA_HIDE_CATALOG) {
+      var searchBtn = document.createElement('a');
+      searchBtn.className = 'silva-uni-searchbtn';
+      searchBtn.href = '/curriculum.html?search=1';
+      searchBtn.textContent = 'Search';
+      searchBtn.setAttribute('aria-label', 'Search the catalog');
+      bar.appendChild(searchBtn);
+    }
 
     // Rolling class-period countdown (live from the pvhs_tools schedule), top-right by search.
     var clock = document.createElement('iframe');
@@ -501,6 +504,11 @@
     logo.setAttribute('aria-label', 'creativesilva.com');
     logo.innerHTML = '<img src="/logos/CS_Logo_Only_Teal.svg" alt="Chris Silva" />';
     bar.appendChild(logo);
+
+    // On camera pages (SILVA_HIDE_CATALOG) the teacher catalog dropdown is omitted entirely so
+    // students/other teachers can't browse the module tree from the public calendar. The bar keeps
+    // the CS logo (and any buttons the page injects). The catalog stays behind its PIN on curriculum.html.
+    if (window.SILVA_HIDE_CATALOG) { return bar; }
 
     var cat = document.createElement('div');
     cat.className = 'silva-uni-cat';

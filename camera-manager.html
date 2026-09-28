@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Camera Manager | Pioneer Valley Photography</title>
+<script>window.SILVA_HIDE_CATALOG=true;/* teacher tool: catalog stays on curriculum.html behind its PIN */</script>
 <meta name="description" content="Teacher back-end for the Pioneer Valley camera checkout: reserve, mark picked up, mark returned." />
 <meta name="robots" content="noindex,nofollow" />
 <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only_Teal.svg" />
@@ -31,15 +32,16 @@
   body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(6,14,14,0.84);}
   @media (max-width:900px){ body::before{background-size:min(88vw,460px);background-position:center 36%;} }
 
-  .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;}
+  .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;filter:brightness(0) invert(1);}
 
   .wrap{max-width:1200px;margin:0 auto;padding:24px 32px 70px;}
   .intro{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px;}
   .sub{color:var(--muted);font-size:.95rem;margin:0;flex:1 1 320px;}
-  .btn{flex:0 0 auto;font-family:var(--font);font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:11px 18px;cursor:pointer;text-decoration:none;transition:filter .15s;}
+  /* Top-level buttons share ONE pixel height (38px); in-card .btn.sm share a smaller one (32px). */
+  .btn{flex:0 0 auto;height:38px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font);font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:0 18px;cursor:pointer;text-decoration:none;transition:filter .15s;}
   .btn:hover{filter:brightness(1.12);}
   .btn.ghost{background:rgba(0,184,184,.14);color:#eafeff;}
-  .btn.sm{padding:7px 12px;font-size:.66rem;}
+  .btn.sm{height:32px;padding:0 12px;font-size:.66rem;}
   .btn.warn{background:var(--gold);border-color:var(--gold);}
   .btn.danger{background:transparent;border-color:rgba(224,64,58,.55);color:#ff9a8a;}
   .btn.danger:hover{background:rgba(224,64,58,.16);filter:none;}
@@ -105,6 +107,7 @@
   .p2under{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);min-height:1em;line-height:1.2;}
   /* occupied cards: uniform height (empty space at the bottom is fine); out/due dates pop white */
   .cam.out,.cam.overdue,.cam.reserved,.cam.returning{min-height:258px;}
+  .cam.eqcard{min-height:188px;}   /* equipment cards uniform among themselves, shorter than camera cards */
   .meta.dates{color:var(--text);font-weight:600;}
 
   .histwrap{margin-top:8px;}
@@ -118,8 +121,10 @@
   details.histbox summary:before{content:"\25B8 ";color:var(--teal-lt);}
   details.histbox[open] summary:before{content:"\25BE ";}
 
-  .calpanel{margin-top:26px;border:1px solid var(--line);border-top:3px solid var(--teal);background:rgba(4,16,15,.5);}
-  .calpanel iframe{width:100%;height:640px;border:0;display:block;background:#060f0f;}
+  /* Frosted calendar panel: it blurs the ONE page background logo behind it, and the embedded
+     calendar is transparent (no logo of its own), so a single soft, blurred logo shows through. */
+  .calpanel{margin-top:12px;border:1px solid var(--line);border-top:3px solid var(--teal);background:rgba(6,14,14,.30);backdrop-filter:blur(16px) saturate(1.12);-webkit-backdrop-filter:blur(16px) saturate(1.12);}
+  .calpanel iframe{width:100%;height:640px;border:0;display:block;background:transparent;}
   .foot{margin-top:20px;font-size:.74rem;color:var(--faint);}
 
   /* modal (reserve) + PIN gate share the backdrop look */
@@ -132,7 +137,17 @@
   .mx:hover{color:#fff;}
   .mbody{padding:16px 18px 20px;}
   label{display:block;font-family:var(--font);font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#cfeaea;margin:0 0 6px;}
-  input[type=text],input[type=date],select{width:100%;background:rgba(0,0,0,.30);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1.02rem;padding:11px 12px;outline:none;margin-bottom:14px;}
+  input[type=text],input[type=date],select,textarea{width:100%;background:rgba(0,0,0,.30);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1.02rem;padding:11px 12px;outline:none;margin-bottom:14px;}
+  textarea{resize:vertical;min-height:96px;line-height:1.4;}
+  /* equipment summary chips + note lines */
+  .eqsummary{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;}
+  .eqchip{font-family:var(--font);font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:rgba(0,0,0,.24);border:1px solid var(--line-soft);padding:6px 10px;}
+  .eqchip b{font-weight:700;}
+  .eqchip.ok b{color:#8ff0b0;} .eqchip.none b{color:#ff9a8a;}
+  .eqcard .eqn{font-size:.9rem;line-height:1.15;}
+  .eqnote{font-size:.72rem;color:#ffd889;border-top:1px dashed rgba(245,179,1,.28);padding-top:6px;margin-top:2px;line-height:1.45;}
+  .eqnote b{color:#f5b301;font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.58rem;margin-right:5px;}
+  .hnote{color:#ffd889;}
   input:focus,select:focus{border-color:var(--teal);}
   select{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235ff0f0' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:38px;}
   select option{background:#0c1414;color:var(--text);}
@@ -240,6 +255,18 @@
   </div>
 </div>
 
+<!-- Condition / note modal (a note follows the camera or the gear: missing cap, lost plate, etc.) -->
+<div class="modal" id="notemodal">
+  <div class="mpanel">
+    <div class="mhead"><span class="mtitle" id="noteTitle">Note</span><button class="mx" id="notex" aria-label="Close">&times;</button></div>
+    <div class="mbody">
+      <label for="noteText">Condition / notes</label>
+      <textarea id="noteText" rows="4" placeholder="e.g. lens cap missing, tripod plate lost, small scratch on body"></textarea>
+      <button class="go" id="noteSave">Save note</button>
+    </div>
+  </div>
+</div>
+
 <script src="/js/silva-nav.js?v=97b66897"></script>
 <script>
 (function(){
@@ -335,6 +362,7 @@
     var st=statusOf(c), od=isOverdue(c), cls=od?'overdue':st;
     var pill=od?'<span class="pill overdue">Overdue</span>':(st==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill out">Picked up</span>');
     var flag=(c.flag||'').indexOf('unknown')>=0?'<div class="flagwarn">&#9888; ID not in roster</div>':'';
+    var note=c.note?'<div class="eqnote"><b>Note</b> '+esc(c.note)+'</div>':'';
     var acts;
     if(st==='reserved'){
       acts='<button class="btn sm" data-status="out" data-id="'+c.id+'">Mark picked up</button>'+
@@ -343,6 +371,7 @@
       acts='<button class="btn sm ghost" data-status="reserved" data-id="'+c.id+'">Undo pickup</button>'+
            '<button class="btn sm warn" data-return="'+c.id+'">Mark returned</button>';
     }
+    acts+='<button class="btn sm ghost" data-note="'+c.id+'">Note</button>';   // condition note (missing cap, etc.)
     // Layout (uniform): cam + pill, student name, ACTION BUTTONS up high, then details below; dates pop white.
     return '<div class="cam '+cls+'">'+
            '<div class="cam-top"><span class="n">'+cam+'</span>'+pill+'</div>'+
@@ -351,10 +380,37 @@
            (P2.indexOf(cam)>=0?'<div class="meta"><span class="co">Photo 2 only</span></div>':'')+
            '<div class="meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+'<span class="co">'+esc(c.course||camCourse(cam))+'</span></div>'+
            '<div class="meta dates">Out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+(c.picked_up_date?(' &middot; picked up '+fmt(c.picked_up_date)):'')+'</div>'+
-           flag+contactLine(c)+
+           note+flag+contactLine(c)+
            '</div>';
   }
-  function equipOut(){ var o={}; EQUIPMENT.forEach(function(e){ o[e.key]=0; }); DATA.checkouts.forEach(function(c){ if(statusOf(c)!=='returned'&&c.extras){ EQUIPMENT.forEach(function(e){ o[e.key]+=(+c.extras[e.key]||0); }); } }); return o; }
+  // ---- Add-on gear: each unit is its OWN record (kind='equipment'), checked in + noted on its own.
+  var EQUIP_LABEL={}; EQUIPMENT.forEach(function(e){ EQUIP_LABEL[e.key]=e.label; });
+  function equipRecs(){ return (DATA.checkouts||[]).filter(function(c){ return c.kind==='equipment'; }); }
+  function equipActive(){ return equipRecs().filter(function(c){ return statusOf(c)!=='returned'; }); }
+  function equipAvail(key){ var total=0; for(var i=0;i<EQUIPMENT.length;i++){ if(EQUIPMENT[i].key===key) total=EQUIPMENT[i].total; }
+    var out=equipRecs().filter(function(c){ return c.item===key && statusOf(c)!=='returned'; }).length; return {out:out,total:total,avail:Math.max(0,total-out)}; }
+  function byItem(a,b){ return (EQUIP_LABEL[a.item]||a.item||'').localeCompare(EQUIP_LABEL[b.item]||b.item||''); }
+  function equipCard(c){
+    var label=EQUIP_LABEL[c.item]||c.item||'Equipment';
+    if(pendingReturns[c.id]){
+      return '<div class="cam returning eqcard"><div class="cam-top"><span class="n eqn">'+esc(label)+'</span><span class="pill out">Returning</span></div>'+
+             '<div class="who">'+esc(nameOf(c))+'</div>'+
+             '<div class="acts"><button class="btn sm undo" data-undo="'+c.id+'">Undo check-in</button></div>'+
+             '<div class="returning-msg">Back in the pool in <b data-count="'+c.id+'">15</b>s.</div></div>';
+    }
+    var st=statusOf(c), od=isOverdue(c), cls=od?'overdue':st;
+    var pill=od?'<span class="pill overdue">Overdue</span>':(st==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill out">Checked out</span>');
+    var note=c.note?'<div class="eqnote"><b>Note</b> '+esc(c.note)+'</div>':'';
+    return '<div class="cam '+cls+' eqcard">'+
+      '<div class="cam-top"><span class="n eqn">'+esc(label)+'</span>'+pill+'</div>'+
+      '<div class="who">'+esc(nameOf(c))+'</div>'+
+      '<div class="acts"><button class="btn sm warn" data-return="'+c.id+'">Check in</button>'+
+        '<button class="btn sm ghost" data-note="'+c.id+'">Note</button></div>'+
+      '<div class="meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+'<span class="co">'+esc(c.course||'')+'</span></div>'+
+      '<div class="meta dates">Out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</div>'+
+      note+contactLine(c)+
+      '</div>';
+  }
 
   function renderBoard(){
     var host=document.getElementById('board'); if(!host) return;
@@ -369,10 +425,14 @@
         '<div class="csec-body">'+(list.length?('<div class="board">'+list.map(camCard).join('')+'</div>'):'<div class="csec-empty">None right now.</div>')+'</div>'+
       '</div>';
     });
-    var eo=equipOut(), eopen=secOpen('equip');
+    var eopen=secOpen('equip'), eActive=equipActive().sort(byItem);
+    var summary=EQUIPMENT.map(function(e){ var a=equipAvail(e.key); return '<span class="eqchip '+(a.avail>0?'ok':'none')+'">'+esc(e.label)+' <b>'+a.avail+' / '+a.total+'</b></span>'; }).join('');
     html+='<div class="csec sec-equip'+(eopen?' open':'')+'">'+
-      '<button class="csec-head" type="button" data-sectoggle="equip"><span class="csec-dot equip"></span>Additional equipment<span class="csec-chev"></span></button>'+
-      '<div class="csec-body">'+EQUIPMENT.map(function(e){ var a=e.total-(eo[e.key]||0); return '<div class="equip-row"><span class="equip-name">'+esc(e.label)+'</span><span class="equip-avail"><span class="'+(a>0?'ok':'none')+'">'+a+' of '+e.total+' available</span></span></div>'; }).join('')+'</div>'+
+      '<button class="csec-head" type="button" data-sectoggle="equip"><span class="csec-dot equip"></span>Additional equipment <span class="csec-n">'+eActive.length+' out</span><span class="csec-chev"></span></button>'+
+      '<div class="csec-body">'+
+        '<div class="eqsummary">'+summary+'</div>'+
+        (eActive.length?('<div class="board">'+eActive.map(equipCard).join('')+'</div>'):'<div class="csec-empty">All gear is in. Nothing checked out right now.</div>')+
+      '</div>'+
     '</div>';
     host.innerHTML=html;
     updateSummary();
@@ -380,7 +440,9 @@
       .sort(function(a,b){ return (b.returned_date||b.created||'')>(a.returned_date||a.created||'')?1:-1; });
     var hn=document.getElementById('histn'); if(hn) hn.textContent='('+ret.length+')';
     var hh=document.getElementById('hist'); if(hh) hh.innerHTML=ret.length?ret.map(function(c){
-      return '<div class="hrow"><span class="hc">'+c.camera+'</span> &middot; '+esc(nameOf(c))+
+      var label=c.camera||EQUIP_LABEL[c.item]||c.item||'Item';
+      return '<div class="hrow"><span class="hc">'+esc(label)+'</span> &middot; '+esc(nameOf(c))+
+             (c.note?' &middot; <span class="hnote">'+esc(c.note)+'</span>':'')+
              '<div class="hre">Out '+fmt(c.out)+' &rarr; returned '+fmt(c.returned_date)+'</div></div>';
     }).join(''):'<div class="foot">No returned checkouts yet.</div>';
     bindBoard(); startTicker();
@@ -393,6 +455,7 @@
     b.querySelectorAll('[data-status]').forEach(function(el){ el.onclick=function(){ setStatus(el.getAttribute('data-id'), el.getAttribute('data-status'), el); }; });
     b.querySelectorAll('[data-del]').forEach(function(el){ el.onclick=function(){ if(confirm('Cancel this reservation? It will be removed.')) del(el.getAttribute('data-del'), el); }; });
     b.querySelectorAll('[data-reserve]').forEach(function(el){ el.onclick=function(){ openReserve(el.getAttribute('data-reserve')); }; });
+    b.querySelectorAll('[data-note]').forEach(function(el){ el.onclick=function(){ openNote(el.getAttribute('data-note')); }; });
   }
   // Mark-returned undo window: hold the return ~15s before committing, so a wrong camera can be undone.
   var pendingReturns={}, ticker=null;
@@ -446,6 +509,31 @@
       .then(function(){ return loadBoard(); }).then(reloadCal)
       .catch(function(){ alert('Could not cancel. Try again.'); if(btn) btn.disabled=false; });
   }
+
+  // ---- condition / note modal (note follows the camera or the gear) ----
+  var noteId=null;
+  function findRec(id){ for(var i=0;i<DATA.checkouts.length;i++){ if(DATA.checkouts[i].id===id) return DATA.checkouts[i]; } return null; }
+  function openNote(id){
+    var c=findRec(id); if(!c) return; noteId=id;
+    var label=c.kind==='equipment'?(EQUIP_LABEL[c.item]||c.item||'Equipment'):(c.camera||'Camera');
+    document.getElementById('noteTitle').textContent='Note · '+label;
+    document.getElementById('noteText').value=c.note||'';
+    document.getElementById('notemodal').classList.add('open');
+    setTimeout(function(){ document.getElementById('noteText').focus(); },50);
+  }
+  function closeNote(){ document.getElementById('notemodal').classList.remove('open'); noteId=null; }
+  (function(){
+    var x=document.getElementById('notex'); if(x) x.onclick=closeNote;
+    var m=document.getElementById('notemodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeNote(); });
+    var s=document.getElementById('noteSave'); if(s) s.onclick=function(){
+      if(!noteId) return; var id=noteId, val=document.getElementById('noteText').value;
+      s.disabled=true; s.textContent='Saving…';
+      camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,note:val})})
+        .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ closeNote(); return loadBoard(); }).then(reloadCal)
+        .catch(function(){ alert('Could not save the note. Try again.'); })
+        .then(function(){ s.disabled=false; s.textContent='Save note'; });
+    };
+  })();
 
   // ---- reserve modal ----
   var resmodal=document.getElementById('resmodal'), rsid=document.getElementById('rsid'),
