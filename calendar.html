@@ -117,7 +117,15 @@
   .wdays{display:grid;grid-template-columns:repeat(7,1fr);}
   /* uniform day cells (same size regardless of how many camera bars), Google-calendar style.
      Frosted glass: semi-translucent + blur so the CS-logo shows softly below. */
-  .wcell{min-height:130px;background:rgba(8,16,15,0.55);border:1px solid var(--line-soft);border-top:0;border-left:0;padding:3px 6px;cursor:pointer;backdrop-filter:blur(9px) saturate(1.08);-webkit-backdrop-filter:blur(9px) saturate(1.08);}
+  .wcell{position:relative;min-height:130px;background:rgba(8,16,15,0.55);border:1px solid var(--line-soft);border-top:0;border-left:0;padding:3px 6px;cursor:pointer;backdrop-filter:blur(9px) saturate(1.08);-webkit-backdrop-filter:blur(9px) saturate(1.08);}
+  /* Teacher-only 3-dots (close/reopen a day) + its pop-out menu. */
+  .wdots{position:absolute;top:0;right:1px;width:20px;height:17px;line-height:15px;padding:0;border:0;background:none;color:var(--faint);font-size:1rem;cursor:pointer;opacity:.5;z-index:6;font-family:var(--body);}
+  .wdots:hover{opacity:1;color:var(--teal-lt);}
+  .wdaymenu{position:fixed;display:none;z-index:200;min-width:214px;background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.98));border:1px solid var(--line);border-top:2px solid var(--teal);box-shadow:0 18px 44px rgba(0,0,0,.6);padding:6px;}
+  .wdm-date{font-family:var(--font);font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 8px 8px;border-bottom:1px solid var(--line-soft);margin-bottom:4px;}
+  .wdm-item{display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;font-family:var(--font);font-size:.82rem;font-weight:600;letter-spacing:.02em;color:#eafeff;padding:10px 8px;}
+  .wdm-item:hover{background:rgba(0,184,184,.16);}
+  .wdm-item.close{color:#ffb28a;} .wdm-item.reopen{color:#8ff0b0;}
   .wcell:first-child{border-left:1px solid var(--line-soft);}
   .week:first-child .wcell{border-top:1px solid var(--line-soft);}
   .wcell.out-month{opacity:.4;} .wcell.today{box-shadow:inset 0 0 0 2px var(--teal);}
@@ -424,6 +432,9 @@
   </div>
 </div>
 
+<!-- Teacher-only day options menu (Close / Reopen a day for checkouts). Positioned at the 3-dots click. -->
+<div class="wdaymenu" id="wdaymenu"></div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 <script src="/js/silva-nav.js?v=catlock1"></script>
 <script>
@@ -464,6 +475,7 @@
       dayOverdue:'day overdue', daysOverdue:'days overdue',
       reserveForLead:'Reserve for', dayPassed:'That day has passed. Pick today or a future school day.',
       noSchool:'No school this day, so cameras can’t be picked up or returned. Pick a school day (Mon to Fri, not a holiday).',
+      dayClosed:'This day is not available for checkouts. Please pick another day.',
       tapCam:'Tap an available camera to reserve it. Due back the next school day', noneFree:'No cameras are free this day. Try another day.',
       confirmTitle:'Confirm your reservation', pickUp:'Pick up', dueBack:'due back',
       kitLine:'Your kit already comes with the <b>Canon EOS R50</b> camera, three lenses (RF 50mm, RF-S 18-45mm, RF-S 55-210mm), a battery, a charger, and a memory card. Most students just take the kit.',
@@ -510,6 +522,7 @@
       dayOverdue:'día atrasada', daysOverdue:'días atrasada',
       reserveForLead:'Reservar para', dayPassed:'Ese día ya pasó. Elige hoy o un día de clases futuro.',
       noSchool:'No hay clases este día, así que no se pueden recoger ni devolver cámaras. Elige un día de clases (lunes a viernes, no feriado).',
+      dayClosed:'Este día no está disponible para préstamos. Por favor elige otro día.',
       tapCam:'Toca una cámara disponible para reservarla. Se devuelve el siguiente día de clases', noneFree:'No hay cámaras libres este día. Prueba otro día.',
       confirmTitle:'Confirma tu reserva', pickUp:'Recoger', dueBack:'devolver',
       kitLine:'Tu kit ya incluye la cámara <b>Canon EOS R50</b>, tres lentes (RF 50mm, RF-S 18-45mm, RF-S 55-210mm), una batería, un cargador y una tarjeta de memoria. La mayoría de los estudiantes solo lleva el kit.',
@@ -548,7 +561,8 @@
     'That camera is already booked for those days. Please pick another.':'Esa cámara ya está reservada para esos días. Por favor elige otra.',
     'Request too large.':'La solicitud es demasiado grande.',
     'Invalid request.':'Solicitud inválida.',
-    'You are not eligible to reserve a camera right now because you have more than 3 missing assignments. Please turn in your missing work and try again later.':'No puedes reservar una cámara en este momento porque tienes más de 3 tareas faltantes. Por favor entrega tu trabajo pendiente y vuelve a intentarlo.'
+    'You are not eligible to reserve a camera right now because you have more than 3 missing assignments. Please turn in your missing work and try again later.':'No puedes reservar una cámara en este momento porque tienes más de 3 tareas faltantes. Por favor entrega tu trabajo pendiente y vuelve a intentarlo.',
+    'That day is not available for checkouts. Please pick another day.':'Ese día no está disponible para préstamos. Por favor elige otro día.'
   };
   function srvErr(en){ return (LANG==='es' && en && SRV_ES[en]) ? SRV_ES[en] : en; }
   // ---- Apply the current language to every STATIC string on the page (dynamic bits re-render on toggle). ----
@@ -745,6 +759,36 @@
   function isSchoolDay(iso){ if(iso<SCHOOL_START||iso>SCHOOL_END) return false; if(isWeekend(iso)) return false; return !DAYS_OFF[iso]; }
   // Exposed so the reservation flow can gate pickup/return dates to school days.
   window.PVHS_isSchoolDay=isSchoolDay; window.PVHS_DAYS_OFF=DAYS_OFF;
+  // Teacher-closed (blackout) days behave like no-school for students, but show NO reason.
+  function isBlackout(iso){ return (DATA.blackouts||[]).indexOf(iso)>=0; }
+  // A day OPEN to student checkouts = a school day the teacher has not closed.
+  function isOpenDay(iso){ return isSchoolDay(iso) && !isBlackout(iso); }
+  // ---- Teacher-only day menu: close/reopen a day to student checkouts (blackout toggle) ----
+  var DAYMENU_ISO=null;
+  function openDayMenu(iso, x, y){
+    DAYMENU_ISO=iso;
+    var m=document.getElementById('wdaymenu'); if(!m) return;
+    var closed=isBlackout(iso);
+    var label=closed?'Reopen this day':'Close this day for checkouts';
+    m.innerHTML='<div class="wdm-date">'+prettyDate(iso)+'</div>'+
+      '<button type="button" class="wdm-item '+(closed?'reopen':'close')+'" id="wdm-act">'+label+'</button>';
+    m.style.display='block';
+    var mw=214, mh=92, vw=window.innerWidth||800, vh=window.innerHeight||600;
+    m.style.left=Math.max(8, Math.min(x, vw-mw-8))+'px';
+    m.style.top=Math.max(8, Math.min(y, vh-mh-8))+'px';
+    var b=document.getElementById('wdm-act'); if(b) b.addEventListener('click',function(){ toggleBlackout(iso, !closed); });
+  }
+  function closeDayMenu(){ var m=document.getElementById('wdaymenu'); if(m){ m.style.display='none'; m.innerHTML=''; } DAYMENU_ISO=null; }
+  function toggleBlackout(iso, on){
+    var m=document.getElementById('wdaymenu'); var b=m&&m.querySelector('#wdm-act'); if(b){ b.disabled=true; b.textContent='Saving…'; }
+    camAPI('/api/camera/blackout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({date:iso,on:on})})
+      .then(function(r){ if(!r.ok) throw new Error(); })
+      .then(function(){ closeDayMenu(); notifyParent(); load(); })
+      .catch(function(){ if(b){ b.disabled=false; } alert('Could not update the day. Try again.'); });
+  }
+  document.addEventListener('click',function(e){ var m=document.getElementById('wdaymenu'); if(m && m.style.display==='block' && !m.contains(e.target)) closeDayMenu(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeDayMenu(); });
+  window.addEventListener('scroll',function(){ closeDayMenu(); }, true);
   // Google-style month: each week is a band; each active checkout is a bar spanning its out->return days.
   function renderCal(){
     mtitle.textContent=MONTHS_L[LANG][view.getMonth()]+' '+view.getFullYear();
@@ -779,11 +823,18 @@
       var days=el('div','wdays');
       for(var d=0; d<7; d++){
         var diso=addDays(wkStartISO,d), dp=diso.split('-');
-        var off=!isSchoolDay(diso);
+        var off=!isOpenDay(diso);
         var cell=el('div','wcell'+(((+dp[1]-1)===curMonth)?'':' out-month')+(diso===todayISO()?' today':'')+(off?' no-school':''));
         cell.appendChild(el('div','wdaynum', String(+dp[2])));
         if(DAYS_OFF[diso]) cell.appendChild(el('div','wdayoff', offLabel(DAYS_OFF[diso])));
+        else if(AUTHED && isBlackout(diso)) cell.appendChild(el('div','wdayoff','Closed'));  // teacher-only marker; students see no reason
         (function(day){ cell.addEventListener('click',function(){ openDayModal(day); }); })(diso);
+        // Teacher only: a 3-dots menu to close/reopen this day to student checkouts.
+        if(AUTHED && diso>=todayISO() && (isSchoolDay(diso)||isBlackout(diso))){
+          var dots=el('button','wdots'); dots.type='button'; dots.innerHTML='&#8942;'; dots.setAttribute('aria-label','Day options');
+          (function(day){ dots.addEventListener('click',function(ev){ ev.stopPropagation(); openDayMenu(day, ev.clientX, ev.clientY); }); })(diso);
+          cell.appendChild(dots);
+        }
         days.appendChild(cell);
       }
       week.appendChild(days);
@@ -894,7 +945,7 @@
       el.addEventListener('click', function(){ DM_CAM=el.getAttribute('data-cam'); renderDayModal(); });
     });
     // Reserve straight from the day card: only on a present/future school day that actually has a free camera.
-    if(_foot && iso>=todayISO() && isSchoolDay(iso) && avail.length){
+    if(_foot && iso>=todayISO() && isOpenDay(iso) && avail.length){
       _foot.innerHTML='<button type="button" class="dm-reserve-cta" id="dm-reserve">'+t('reserveBtn')+'</button>';
       document.getElementById('dm-reserve').addEventListener('click', function(){ openReserveFlow(iso); });
     }
@@ -1077,7 +1128,7 @@
   function isReserving(){ return !!RESV; }
   function normPeriod(p){ return String(p||'').replace(/[^0-9]/g,'').replace(/^0+/,''); }
   function p2ok(){ return RESV && normPeriod(RESV.period)==='4'; }   // only Period 4 (Photo 2A) may take Cam 16/17/18
-  function nextSchoolDay(iso){ var d=addDays(iso,1); for(var i=0;i<420 && !isSchoolDay(d);i++) d=addDays(d,1); return d; }
+  function nextSchoolDay(iso){ var d=addDays(iso,1); for(var i=0;i<420 && !isOpenDay(d);i++) d=addDays(d,1); return d; }
   function openReserveFlow(resumeDay){
     RESV_RESUME_DAY = resumeDay || null;   // set when launched from a day card, null from the month button
     RESV=null; DM_RESERVE_CAM=null; rvLookup=null;
@@ -1150,7 +1201,7 @@
     if(DM_RESERVE_CAM){ renderReserveConfirm(iso, DM_RESERVE_CAM); return; }
     var body='<div class="rc-head">'+t('reserveForLead')+' '+esc(RESV.label)+'</div>';
     if(iso<todayISO()){ body+='<div class="rc-notice">'+t('dayPassed')+'</div>'; setResvBody(body); return; }
-    if(!isSchoolDay(iso)){ body+='<div class="rc-notice">'+t('noSchool')+'</div>'; setResvBody(body); return; }
+    if(!isOpenDay(iso)){ body+='<div class="rc-notice">'+(isSchoolDay(iso)?t('dayClosed'):t('noSchool'))+'</div>'; setResvBody(body); return; }
     var avail=dayAvailable(iso);
     body+='<p class="rv-sub" style="margin:0 0 10px;">'+t('tapCam')+' ('+fmt(nextSchoolDay(iso))+').</p>';
     if(!avail.length){ body+='<div class="dm-empty">'+t('noneFree')+'</div>'; setResvBody(body); return; }
@@ -1249,6 +1300,8 @@
       DATA.oos=d.oos||(d.assets?Object.keys(d.assets).filter(function(k){return d.assets[k]&&d.assets[k].oos;}):[]);
       // Memory-card-missing cameras (out of rotation until a fresh card is installed).
       DATA.no_card=d.no_card||(d.assets?Object.keys(d.assets).filter(function(k){return d.assets[k]&&d.assets[k].no_card;}):[]);
+      // Teacher-closed (blackout) days: grayed + not reservable by students (no reason shown).
+      DATA.blackouts=d.blackouts||[];
       renderBoard(); renderCal();
       // The 60s auto-refresh must NOT clobber a student mid-reservation (verify -> pick -> confirm ->
       // done): re-rendering the day modal then would reset their screen. Only refresh the day view when
