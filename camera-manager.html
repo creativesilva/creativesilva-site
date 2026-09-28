@@ -217,6 +217,19 @@
   .ci-k{color:var(--faint);font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;align-self:center;font-family:var(--font);font-weight:700;}
   .ci-v{color:var(--muted);} .ci-v.pop{color:#fff;font-weight:600;}
   .ci-none{color:#ffb28a;}
+  /* Framework-styled confirm + toast (never the native browser confirm/alert). */
+  .silva-confirm-ov{position:fixed;inset:0;background:rgba(2,12,12,.74);backdrop-filter:blur(9px) saturate(1.1);-webkit-backdrop-filter:blur(9px) saturate(1.1);display:flex;align-items:center;justify-content:center;padding:20px;z-index:400;}
+  .silva-confirm-panel{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.98));border:1px solid var(--line);border-top:3px solid var(--teal);width:100%;max-width:420px;box-shadow:0 24px 60px rgba(0,0,0,.75);padding:22px 22px 18px;}
+  .silva-confirm-msg{color:var(--text);font-size:1rem;line-height:1.5;margin-bottom:18px;}
+  .silva-confirm-acts{display:flex;gap:10px;justify-content:flex-end;}
+  .silva-confirm-btn{font-family:var(--font);font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:11px 18px;cursor:pointer;border:1px solid var(--line);}
+  .silva-confirm-btn.cancel{background:rgba(0,0,0,.3);color:var(--muted);}
+  .silva-confirm-btn.cancel:hover{color:#fff;border-color:var(--teal);}
+  .silva-confirm-btn.ok{background:var(--teal);color:#04110f;border-color:var(--teal);}
+  .silva-confirm-btn.ok:hover{filter:brightness(1.1);}
+  .silva-confirm-btn.ok.danger{background:#e0403a;border-color:#e0403a;color:#fff;}
+  .silva-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:rgba(4,20,19,.98);border:1px solid #e0403a;border-left:4px solid #e0403a;color:#ffd7d3;font-size:.9rem;line-height:1.4;padding:12px 18px;z-index:420;box-shadow:0 16px 40px rgba(0,0,0,.6);opacity:0;transition:opacity .25s,transform .25s;max-width:90vw;}
+  .silva-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
   .camlog-top{display:flex;align-items:center;gap:8px;}
   .camlog-n{font-family:var(--font);font-weight:600;font-size:1.02rem;}
   .camlog-p2{margin-left:auto;font-size:.52rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);}
@@ -520,6 +533,30 @@
   function todayISO(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   function addDays(iso,n){ var d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  // Framework-styled confirm (Promise<bool>) + toast, replacing the native browser confirm/alert.
+  function silvaConfirm(message, opts){
+    opts=opts||{};
+    return new Promise(function(resolve){
+      var ov=document.createElement('div'); ov.className='silva-confirm-ov';
+      var panel=document.createElement('div'); panel.className='silva-confirm-panel'; panel.setAttribute('role','alertdialog'); panel.setAttribute('aria-modal','true');
+      var msg=document.createElement('div'); msg.className='silva-confirm-msg'; msg.textContent=message;
+      var acts=document.createElement('div'); acts.className='silva-confirm-acts';
+      var cancel=document.createElement('button'); cancel.type='button'; cancel.className='silva-confirm-btn cancel'; cancel.textContent=opts.cancelLabel||'Cancel';
+      var ok=document.createElement('button'); ok.type='button'; ok.className='silva-confirm-btn ok'+(opts.danger?' danger':''); ok.textContent=opts.okLabel||'OK';
+      acts.appendChild(cancel); acts.appendChild(ok); panel.appendChild(msg); panel.appendChild(acts); ov.appendChild(panel); document.body.appendChild(ov);
+      function done(v){ try{ document.body.removeChild(ov); }catch(e){} document.removeEventListener('keydown',key); resolve(v); }
+      function key(e){ if(e.key==='Escape') done(false); else if(e.key==='Enter') done(true); }
+      ov.addEventListener('click',function(e){ if(e.target===ov) done(false); });
+      cancel.onclick=function(){ done(false); }; ok.onclick=function(){ done(true); };
+      document.addEventListener('keydown',key);
+      setTimeout(function(){ ok.focus(); },30);
+    });
+  }
+  function silvaToast(message){
+    var t=document.createElement('div'); t.className='silva-toast'; t.textContent=message; document.body.appendChild(t);
+    setTimeout(function(){ t.classList.add('show'); },10);
+    setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ try{ document.body.removeChild(t); }catch(e){} },300); },3400);
+  }
   function statusOf(c){ return c.status||(c.returned?'returned':'out'); }
   function isOverdue(c){ return statusOf(c)==='out' && c.due && c.due<todayISO(); }
   function nameOf(c){ return (c.student_name||'').trim() || (c.student_id?('ID '+c.student_id):'Unknown'); }
@@ -753,13 +790,13 @@
     b.querySelectorAll('[data-return]').forEach(function(el){ el.onclick=function(){ markReturned(el.getAttribute('data-return')); }; });
     b.querySelectorAll('[data-undo]').forEach(function(el){ el.onclick=function(){ undoReturn(el.getAttribute('data-undo')); }; });
     b.querySelectorAll('[data-status]').forEach(function(el){ el.onclick=function(){ setStatus(el.getAttribute('data-id'), el.getAttribute('data-status'), el); }; });
-    b.querySelectorAll('[data-del]').forEach(function(el){ el.onclick=function(){ if(confirm('Cancel this reservation? It will be removed.')) del(el.getAttribute('data-del'), el); }; });
+    b.querySelectorAll('[data-del]').forEach(function(el){ el.onclick=function(){ silvaConfirm('Cancel this reservation? It will be removed.',{okLabel:'Cancel reservation',cancelLabel:'Keep it',danger:true}).then(function(ok){ if(ok) del(el.getAttribute('data-del'), el); }); }; });
     b.querySelectorAll('[data-reserve]').forEach(function(el){ el.onclick=function(){ openReserve(el.getAttribute('data-reserve')); }; });
     b.querySelectorAll('[data-note]').forEach(function(el){ el.onclick=function(){ openNote(el.getAttribute('data-note')); }; });
     b.querySelectorAll('[data-assetnote]').forEach(function(el){ el.onclick=function(){ openAssetNote(el.getAttribute('data-assetnote')); }; });
     b.querySelectorAll('[data-oos]').forEach(function(el){ el.onclick=function(){ setOOS(el.getAttribute('data-oos'), el.getAttribute('data-oosval')==='1', el); }; });
     b.querySelectorAll('[data-newcard]').forEach(function(el){ el.onclick=function(){ setNoCard(el.getAttribute('data-newcard'), false, el); }; });
-    b.querySelectorAll('[data-cardreturn]').forEach(function(el){ el.onclick=function(){ if(confirm('Card returned to the student and offloaded? This clears the slot.')) cardReturn(el.getAttribute('data-cardreturn'), el); }; });
+    b.querySelectorAll('[data-cardreturn]').forEach(function(el){ el.onclick=function(){ silvaConfirm('Card returned to the student and offloaded? This clears the slot.',{okLabel:'Clear slot',cancelLabel:'Cancel'}).then(function(ok){ if(ok) cardReturn(el.getAttribute('data-cardreturn'), el); }); }; });
     b.querySelectorAll('[data-cardadd]').forEach(function(el){ el.onclick=function(){ openAdHocCard(+el.getAttribute('data-cardadd')); }; });
     b.querySelectorAll('[data-cardinfo]').forEach(function(el){ el.onclick=function(){ openCardInfo(el.getAttribute('data-cardinfo')); }; });
     b.querySelectorAll('[data-approve]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-approve'), el); }; });
@@ -778,7 +815,7 @@
     if(btn) btn.disabled=true;
     return camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,approved:true})})
       .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(reloadCal)
-      .catch(function(){ alert('Could not approve. Try again.'); if(btn) btn.disabled=false; });
+      .catch(function(){ silvaToast('Could not approve. Try again.'); if(btn) btn.disabled=false; });
   }
   // Mark-returned undo window: hold the return ~15s before committing, so a wrong camera can be undone.
   var pendingReturns={}, ticker=null;
@@ -787,7 +824,7 @@
   function commitReturn(id){ var p=pendingReturns[id]; if(p&&p.timer) clearTimeout(p.timer); delete pendingReturns[id];
     camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:'returned'})})
       .then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).then(function(){ return loadBoard(); }).then(reloadCal)
-      .catch(function(){ alert('Could not mark returned. Try again.'); loadBoard(); }); }
+      .catch(function(){ silvaToast('Could not mark returned. Try again.'); loadBoard(); }); }
   function startTicker(){ if(ticker) return; ticker=setInterval(function(){ var any=false; Object.keys(pendingReturns).forEach(function(id){ any=true; var rem=Math.max(0,Math.ceil((pendingReturns[id].deadline-Date.now())/1000)); var el=document.querySelector('[data-count="'+id+'"]'); if(el) el.textContent=rem; }); if(!any){ clearInterval(ticker); ticker=null; } },500); }
 
   function markSync(ok){
@@ -823,14 +860,14 @@
     camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})})
       .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
       .then(function(){ return loadBoard(); }).then(reloadCal)
-      .catch(function(){ alert('Could not update. Try again.'); if(btn) btn.disabled=false; });
+      .catch(function(){ silvaToast('Could not update. Try again.'); if(btn) btn.disabled=false; });
   }
   function del(id,btn){
     if(btn){ btn.disabled=true; }
     camAPI('/api/camera/delete',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id})})
       .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
       .then(function(){ return loadBoard(); }).then(reloadCal)
-      .catch(function(){ alert('Could not cancel. Try again.'); if(btn) btn.disabled=false; });
+      .catch(function(){ silvaToast('Could not cancel. Try again.'); if(btn) btn.disabled=false; });
   }
 
   // ---- condition / note modal. Two targets: a checkout record (equipment note) OR a camera
@@ -864,7 +901,7 @@
       else { return; }
       s.disabled=true; s.textContent='Saving…';
       req.then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ closeNote(); return loadBoard(); }).then(reloadCal)
-        .catch(function(){ alert('Could not save the note. Try again.'); })
+        .catch(function(){ silvaToast('Could not save the note. Try again.'); })
         .then(function(){ s.disabled=false; s.textContent='Save note'; });
     };
   })();
@@ -873,14 +910,14 @@
     if(btn){ btn.disabled=true; }
     camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({camera:cam,oos:val})})
       .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(reloadCal)
-      .catch(function(){ alert('Could not update. Try again.'); if(btn) btn.disabled=false; });
+      .catch(function(){ silvaToast('Could not update. Try again.'); if(btn) btn.disabled=false; });
   }
   // "New card installed": clear the memory-card-missing flag so the kit is complete and back in rotation.
   function setNoCard(cam, val, btn){
     if(btn){ btn.disabled=true; }
     camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({camera:cam,no_card:val})})
       .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(reloadCal).then(function(){ if(document.getElementById('camdetail').classList.contains('open')) renderCamDetailModal(); })
-      .catch(function(){ alert('Could not update. Try again.'); if(btn) btn.disabled=false; });
+      .catch(function(){ silvaToast('Could not update. Try again.'); if(btn) btn.disabled=false; });
   }
 
   // ---- return checklist (verify kit components on check-in; missing ones append to the note) ----
@@ -951,7 +988,7 @@
     if(btn) btn.disabled=true;
     camAPI('/api/camera/card_return',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({slot:String(slot)})})
       .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(reloadCal)
-      .catch(function(){ alert('Could not update. Try again.'); if(btn) btn.disabled=false; });
+      .catch(function(){ silvaToast('Could not update. Try again.'); if(btn) btn.disabled=false; });
   }
   // ===== Leave-card slot picker (opened from the return checklist) =====
   var cardCtx=null, cardSlotSel=null;
@@ -1094,7 +1131,7 @@
   function closeCamDetail(){ document.getElementById('camdetail').classList.remove('open'); cdCam=null; }
   function saveAsset(cam, patch, then){
     camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.assign({camera:cam},patch))})
-      .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(function(){ if(then) then(); }).catch(function(){ alert('Could not save. Try again.'); });
+      .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(function(){ if(then) then(); }).catch(function(){ silvaToast('Could not save. Try again.'); });
   }
   function renderCamDetailModal(){
     var cam=cdCam; if(!cam) return;
@@ -1121,7 +1158,7 @@
     var ncb=document.getElementById('cd-newcard'); if(ncb) ncb.onclick=function(){ setNoCard(cam,false,ncb); };
     var ec=document.getElementById('cd-editcur'); if(ec) ec.onclick=function(){ openEditCheckout(c.id); };
     document.querySelectorAll('#cd-body [data-cdapprove]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-cdapprove'), el).then(renderCamDetailModal); }; });
-    document.querySelectorAll('#cd-body [data-cddeny]').forEach(function(el){ el.onclick=function(){ if(confirm('Deny and cancel this reservation? The camera goes back in the pool.')){ del(el.getAttribute('data-cddeny'), el); closeCamDetail(); } }; });
+    document.querySelectorAll('#cd-body [data-cddeny]').forEach(function(el){ el.onclick=function(){ silvaConfirm('Deny and cancel this reservation? The camera goes back in the pool.',{okLabel:'Deny',cancelLabel:'Keep it',danger:true}).then(function(ok){ if(ok){ del(el.getAttribute('data-cddeny'), el); closeCamDetail(); } }); }; });
     document.querySelectorAll('#cd-body [data-resolve]').forEach(function(el){ el.onclick=function(){ var i=+el.getAttribute('data-resolve'), it=issues[i]; var ni=issues.slice(); ni.splice(i,1); var nl=(a.log||[]).concat([{date:fmt(todayISO()),text:'Resolved: '+it}]); saveAsset(cam,{issues:ni,log:nl},renderCamDetailModal); }; });
     var ai=document.getElementById('cd-addissue'); if(ai) ai.onclick=function(){ var v=document.getElementById('cd-newissue').value.trim(); if(!v) return; var ni=(issues||[]).concat([v]); var nl=(a.log||[]).concat([{date:fmt(todayISO()),text:'Issue: '+v}]); saveAsset(cam,{issues:ni,log:nl},renderCamDetailModal); };
     var sn=document.getElementById('cd-savenote'); if(sn) sn.onclick=function(){ saveAsset(cam,{note:document.getElementById('cd-note').value},renderCamDetailModal); };
@@ -1172,7 +1209,7 @@
     var m=document.getElementById('editmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeEdit(); });
     var sid=document.getElementById('ed-sid'); if(sid) sid.addEventListener('input',function(){ clearTimeout(edLookupT); edLookupT=setTimeout(edLookup,350); });
     var s=document.getElementById('ed-save'); if(s) s.onclick=saveEdit;
-    var d=document.getElementById('ed-del'); if(d) d.onclick=function(){ if(edId && confirm('Delete this checkout record? This cannot be undone.')){ del(edId); closeEdit(); } };
+    var d=document.getElementById('ed-del'); if(d) d.onclick=function(){ if(!edId) return; silvaConfirm('Delete this checkout record? This cannot be undone.',{okLabel:'Delete',cancelLabel:'Cancel',danger:true}).then(function(ok){ if(ok){ del(edId); closeEdit(); } }); };
   })();
   function edLookup(){
     var v=document.getElementById('ed-sid').value.replace(/\D/g,''), w=document.getElementById('ed-who');

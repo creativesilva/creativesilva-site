@@ -128,6 +128,19 @@
   .wdm-item:hover{background:rgba(0,184,184,.22);}
   .wdm-item.close{color:#ffc7a6;} .wdm-item.reopen{color:#8ff0b0;}
   .wdm-note{font-size:.72rem;font-weight:400;color:var(--muted);letter-spacing:0;text-transform:none;padding:2px 9px 6px;line-height:1.4;}
+  /* Framework-styled confirm + toast (never the native browser confirm/alert). */
+  .silva-confirm-ov{position:fixed;inset:0;background:rgba(2,12,12,.74);backdrop-filter:blur(9px) saturate(1.1);-webkit-backdrop-filter:blur(9px) saturate(1.1);display:flex;align-items:center;justify-content:center;padding:20px;z-index:400;}
+  .silva-confirm-panel{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.98));border:1px solid var(--line);border-top:3px solid var(--teal);width:100%;max-width:420px;box-shadow:0 24px 60px rgba(0,0,0,.75);padding:22px 22px 18px;}
+  .silva-confirm-msg{color:var(--text);font-size:1rem;line-height:1.5;margin-bottom:18px;}
+  .silva-confirm-acts{display:flex;gap:10px;justify-content:flex-end;}
+  .silva-confirm-btn{font-family:var(--font);font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:11px 18px;cursor:pointer;border:1px solid var(--line);}
+  .silva-confirm-btn.cancel{background:rgba(0,0,0,.3);color:var(--muted);}
+  .silva-confirm-btn.cancel:hover{color:#fff;border-color:var(--teal);}
+  .silva-confirm-btn.ok{background:var(--teal);color:#04110f;border-color:var(--teal);}
+  .silva-confirm-btn.ok:hover{filter:brightness(1.1);}
+  .silva-confirm-btn.ok.danger{background:#e0403a;border-color:#e0403a;color:#fff;}
+  .silva-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:rgba(4,20,19,.98);border:1px solid #e0403a;border-left:4px solid #e0403a;color:#ffd7d3;font-size:.9rem;line-height:1.4;padding:12px 18px;z-index:420;box-shadow:0 16px 40px rgba(0,0,0,.6);opacity:0;transition:opacity .25s,transform .25s;max-width:90vw;}
+  .silva-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
   .wcell:first-child{border-left:1px solid var(--line-soft);}
   .week:first-child .wcell{border-top:1px solid var(--line-soft);}
   .wcell.out-month{opacity:.4;} .wcell.today{box-shadow:inset 0 0 0 2px var(--teal);}
@@ -788,7 +801,7 @@
     camAPI('/api/camera/blackout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({date:iso,on:on})})
       .then(function(r){ if(!r.ok) throw new Error(); })
       .then(function(){ closeDayMenu(); notifyParent(); load(); })
-      .catch(function(){ if(b){ b.disabled=false; } alert('Could not update the day. Try again.'); });
+      .catch(function(){ if(b){ b.disabled=false; } silvaToast('Could not update the day. Try again.'); });
   }
   document.addEventListener('click',function(e){ var m=document.getElementById('wdaymenu'); if(m && m.style.display==='block' && !m.contains(e.target)) closeDayMenu(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeDayMenu(); });
@@ -874,6 +887,30 @@
   var pendingCal={};   // id -> {timer,deadline} for the 15s mark-returned undo window (teacher)
   function byCam(a,b){ return (a.camera||'').localeCompare(b.camera||''); }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  // Framework-styled confirm (Promise<bool>) + toast, replacing the native browser confirm/alert.
+  function silvaConfirm(message, opts){
+    opts=opts||{};
+    return new Promise(function(resolve){
+      var ov=document.createElement('div'); ov.className='silva-confirm-ov';
+      var panel=document.createElement('div'); panel.className='silva-confirm-panel'; panel.setAttribute('role','alertdialog'); panel.setAttribute('aria-modal','true');
+      var msg=document.createElement('div'); msg.className='silva-confirm-msg'; msg.textContent=message;
+      var acts=document.createElement('div'); acts.className='silva-confirm-acts';
+      var cancel=document.createElement('button'); cancel.type='button'; cancel.className='silva-confirm-btn cancel'; cancel.textContent=opts.cancelLabel||'Cancel';
+      var ok=document.createElement('button'); ok.type='button'; ok.className='silva-confirm-btn ok'+(opts.danger?' danger':''); ok.textContent=opts.okLabel||'OK';
+      acts.appendChild(cancel); acts.appendChild(ok); panel.appendChild(msg); panel.appendChild(acts); ov.appendChild(panel); document.body.appendChild(ov);
+      function done(v){ try{ document.body.removeChild(ov); }catch(e){} document.removeEventListener('keydown',key); resolve(v); }
+      function key(e){ if(e.key==='Escape') done(false); else if(e.key==='Enter') done(true); }
+      ov.addEventListener('click',function(e){ if(e.target===ov) done(false); });
+      cancel.onclick=function(){ done(false); }; ok.onclick=function(){ done(true); };
+      document.addEventListener('keydown',key);
+      setTimeout(function(){ ok.focus(); },30);
+    });
+  }
+  function silvaToast(message){
+    var t=document.createElement('div'); t.className='silva-toast'; t.textContent=message; document.body.appendChild(t);
+    setTimeout(function(){ t.classList.add('show'); },10);
+    setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ try{ document.body.removeChild(t); }catch(e){} },300); },3400);
+  }
   function nameOf(c){ return (c.student_name||'').trim() || (c.student_id?('ID '+c.student_id):'Unknown'); }
   function dayOut(iso){ return checkoutsOnDay(iso).filter(function(c){ return statusOf(c)==='out'; }).sort(byCam); }
   function dayReserved(iso){ return checkoutsOnDay(iso).filter(function(c){ return statusOf(c)==='reserved'; }).sort(byCam); }
@@ -1062,7 +1099,7 @@
       s.disabled=true; s.textContent='Saving…';
       camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,note:val})})
         .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ closeNoteCal(); notifyParent(); load(); })
-        .catch(function(){ alert('Could not save the note. Try again.'); })
+        .catch(function(){ silvaToast('Could not save the note. Try again.'); })
         .then(function(){ s.disabled=false; s.textContent='Save note'; });
     });
   })();
@@ -1103,20 +1140,20 @@
   function camAction(act, id, el){
     if(act==='undoreturn'){ var p=pendingCal[id]; if(p&&p.timer) clearTimeout(p.timer); delete pendingCal[id]; renderDayModal(); return; }
     if(act==='return'){ pendingCal[id]={deadline:Date.now()+15000}; pendingCal[id].timer=setTimeout(function(){ commitCal(id,'returned'); },15000); renderDayModal(); return; }
-    if(act==='cancel'){ if(!confirm('Cancel this reservation? It will be removed.')) return; if(el) el.disabled=true;
+    if(act==='cancel'){ silvaConfirm('Cancel this reservation? It will be removed.',{okLabel:'Cancel reservation',cancelLabel:'Keep it',danger:true}).then(function(ok){ if(!ok) return; if(el) el.disabled=true;
       camAPI('/api/camera/delete',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id})})
         .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ afterAction(true); })
-        .catch(function(){ alert('Could not cancel. Try again.'); if(el) el.disabled=false; }); return; }
+        .catch(function(){ silvaToast('Could not cancel. Try again.'); if(el) el.disabled=false; }); }); return; }
     var status=(act==='pickup')?'out':'reserved';
     if(el) el.disabled=true;
     camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})})
       .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ afterAction(false); })
-      .catch(function(){ alert('Could not update. Try again.'); if(el) el.disabled=false; });
+      .catch(function(){ silvaToast('Could not update. Try again.'); if(el) el.disabled=false; });
   }
   function commitCal(id,status){ var p=pendingCal[id]; if(p&&p.timer) clearTimeout(p.timer); delete pendingCal[id];
     camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})})
       .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ afterAction(true); })
-      .catch(function(){ alert('Could not mark returned. Try again.'); load(); }); }
+      .catch(function(){ silvaToast('Could not mark returned. Try again.'); load(); }); }
   function afterAction(backToList){ if(backToList) DM_CAM=null; notifyParent(); load(); }
   function notifyParent(){ if(window.parent!==window){ try{ parent.postMessage({camAction:true}, '*'); }catch(e){} } }
   var calTicker=null;
