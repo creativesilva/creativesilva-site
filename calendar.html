@@ -18,7 +18,7 @@
     --teal:#00b8b8; --teal-lt:#5ff0f0; --teal-deep:#007474;
     --text:#eafeff; --muted:rgba(206,244,244,0.66); --faint:rgba(206,244,244,0.42);
     --line:rgba(0,184,184,0.32); --line-soft:rgba(0,184,184,0.18);
-    --ok:#3fa863; --orange:#ff6b1a; --grayed:rgba(160,180,180,0.34);
+    --ok:#3fa863; --orange:#ff6b1a; --gold:#f5b301; --red:#e0403a; --grayed:rgba(160,180,180,0.34);
     --panel:linear-gradient(135deg,rgba(0,184,184,0.10) 0%,rgba(4,20,19,0.55) 100%);
     --font:'Oswald',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
     --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
@@ -95,6 +95,11 @@
   .week:first-child .wcell{border-top:1px solid var(--line-soft);}
   .wcell.out-month{opacity:.4;} .wcell.today{box-shadow:inset 0 0 0 2px var(--teal);}
   .wcell:hover{background:rgba(0,184,184,.12);}
+  /* No-school days (weekends, holidays, breaks): darker but still translucent so the logo shows. */
+  .wcell.no-school{background:rgba(3,9,8,.66);}
+  .wcell.no-school:hover{background:rgba(3,9,8,.72);}
+  .wcell.no-school .wdaynum{color:#5c6b69;}
+  .wdayoff{font-family:var(--font);font-size:.52rem;line-height:1.08;color:#6f8481;margin-top:1px;text-transform:uppercase;letter-spacing:.03em;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .wdaynum{font-family:var(--font);font-size:.72rem;color:var(--muted);}
   .wcell.today .wdaynum{color:var(--teal-lt);font-weight:700;}
   .wmore{font-family:var(--font);font-size:.6rem;color:var(--faint);margin-top:2px;}
@@ -137,6 +142,33 @@
   .dm-avail{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;}
   .dm-availcam{font-family:var(--font);font-weight:700;font-size:.82rem;color:#8ff0b0;background:rgba(63,168,99,.13);border-left:3px solid var(--ok);padding:8px 11px;}
   .dm-availcam small{display:block;font-weight:400;font-size:.56rem;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:2px;}
+  .dm-row.clickable,.dm-availcam.clickable{cursor:pointer;transition:background .12s;}
+  .dm-row.clickable:hover{background:rgba(0,184,184,.08);}
+  .dm-availcam.clickable:hover{background:rgba(63,168,99,.22);}
+  .dm-chev-r{margin-left:auto;color:var(--faint);font-size:1rem;line-height:1;flex:0 0 auto;}
+  /* ---- Camera detail card inside the day modal (full info + teacher actions) ---- */
+  .dm-back{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-lt);background:none;border:0;cursor:pointer;padding:2px 0 12px;display:inline-flex;align-items:center;gap:6px;}
+  .dm-back:hover{color:#fff;}
+  .dc{background:rgba(0,0,0,.32);border:1px solid var(--line-soft);border-left:4px solid var(--ok);padding:15px 16px;display:flex;flex-direction:column;gap:9px;}
+  .dc.out{border-left-color:var(--orange);} .dc.reserved{border-left-color:var(--gold);} .dc.overdue{border-left-color:var(--red);} .dc.returning{border-left-color:var(--teal);}
+  .dc-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .dc-cam{font-family:var(--font);font-weight:600;letter-spacing:.03em;font-size:1.35rem;color:#fff;}
+  .dc-name{font-family:var(--font);font-weight:600;font-size:1.1rem;color:#fff;line-height:1.2;}
+  .dc-acts{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 4px;}
+  .dc-btn{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:9px 14px;cursor:pointer;transition:filter .15s;}
+  .dc-btn:hover{filter:brightness(1.12);}
+  .dc-btn.ghost{background:rgba(0,184,184,.14);color:#eafeff;}
+  .dc-btn.warn{background:var(--gold);border-color:var(--gold);}
+  .dc-btn.danger{background:transparent;border-color:rgba(224,64,58,.55);color:#ff9a8a;}
+  .dc-btn.danger:hover{background:rgba(224,64,58,.16);filter:none;}
+  .dc-grid{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.86rem;margin-top:2px;}
+  .dc-k{color:var(--faint);font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;align-self:center;}
+  .dc-v{color:var(--muted);}
+  .dc-v.pop{color:#fff;font-weight:600;}
+  .dc-note{border-top:1px dashed rgba(0,184,184,.18);padding-top:9px;margin-top:3px;font-size:.8rem;color:var(--muted);}
+  .dc-note b{color:var(--faint);font-weight:600;letter-spacing:.05em;text-transform:uppercase;font-size:.6rem;display:block;margin-bottom:2px;}
+  .dc-flag{font-size:.7rem;color:#ffb28a;letter-spacing:.02em;}
+  .dc-returning{font-size:.86rem;color:var(--teal-lt);}
   .foot{margin-top:22px;font-size:.74rem;color:var(--faint);}
   body.embed .silva-nav, body.embed .intro{display:none;}
   /* embedded in the Teacher Console: show ONLY the month calendar (the console has its own board above) */
@@ -203,6 +235,16 @@
   var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
   var view=new Date(); view.setDate(1);
   var DATA={cameras:[],checkouts:[]};
+  // Teacher context: the camera key (same-origin sessionStorage set by the console, or pushed in
+  // by the parent frame). When present we load FULL detail (names/phones) + enable check-in actions.
+  // A public visitor never has a key, so they only ever see the PII-free calendar endpoint.
+  var CAMKEY=''; try{ CAMKEY=sessionStorage.getItem('silva-cam-key')||''; }catch(e){}
+  var AUTHED=false;
+  function camAPI(path,opts){ opts=opts||{}; opts.headers=opts.headers||{}; opts.headers['X-Camera-Key']=CAMKEY; return fetch(API+path,opts); }
+  window.addEventListener('message',function(e){
+    if(!e.data) return;
+    if(e.data.camKey && e.data.camKey!==CAMKEY){ CAMKEY=e.data.camKey; try{ sessionStorage.setItem('silva-cam-key',CAMKEY); }catch(x){} load(); }
+  });
   var grid=document.getElementById('grid'), mtitle=document.getElementById('mtitle'),
       board=document.getElementById('board'), outn=document.getElementById('outn'), totn=document.getElementById('totn'),
       foot=document.getElementById('foot');
@@ -297,6 +339,30 @@
   function prettyDate(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]);
     var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     return days[d.getDay()]+', '+MONTHS[+p[1]-1]+' '+(+p[2]); }
+  // ---- PVHS 2026-27 no-school days: weekends, holidays/breaks, and days outside the school year.
+  // Source: PVHS_Days_Off_2026-2027. Pickups + returns can only land on a school day. ----
+  var SCHOOL_START='2026-08-13', SCHOOL_END='2027-06-09';
+  var OFF_SPANS=[
+    {a:'2026-09-07',b:'2026-09-07',t:'Labor Day'},
+    {a:'2026-11-11',b:'2026-11-11',t:'Veterans Day'},
+    {a:'2026-11-23',b:'2026-11-27',t:'Thanksgiving'},
+    {a:'2026-12-21',b:'2027-01-08',t:'Winter Break'},
+    {a:'2027-01-11',b:'2027-01-13',t:'Staff Day'},
+    {a:'2027-01-18',b:'2027-01-18',t:'MLK Day'},
+    {a:'2027-02-08',b:'2027-02-08',t:"Lincoln's Day"},
+    {a:'2027-02-15',b:'2027-02-15',t:"Presidents' Day"},
+    {a:'2027-03-26',b:'2027-03-26',t:'Spring Vacation'},
+    {a:'2027-03-29',b:'2027-04-02',t:'Spring Break'},
+    {a:'2027-05-31',b:'2027-05-31',t:'Memorial Day'},
+    {a:'2027-06-18',b:'2027-06-18',t:'Juneteenth'},
+    {a:'2027-07-05',b:'2027-07-05',t:'Independence Day'}
+  ];
+  var DAYS_OFF={};
+  OFF_SPANS.forEach(function(s){ for(var d=s.a; d<=s.b; d=addDays(d,1)) DAYS_OFF[d]=s.t; });
+  function isWeekend(iso){ var p=iso.split('-'); var g=new Date(+p[0],+p[1]-1,+p[2]).getDay(); return g===0||g===6; }
+  function isSchoolDay(iso){ if(iso<SCHOOL_START||iso>SCHOOL_END) return false; if(isWeekend(iso)) return false; return !DAYS_OFF[iso]; }
+  // Exposed so the reservation flow can gate pickup/return dates to school days.
+  window.PVHS_isSchoolDay=isSchoolDay; window.PVHS_DAYS_OFF=DAYS_OFF;
   // Google-style month: each week is a band; each active checkout is a bar spanning its out->return days.
   function renderCal(){
     mtitle.textContent=MONTHS[view.getMonth()]+' '+view.getFullYear();
@@ -328,8 +394,10 @@
       var days=el('div','wdays');
       for(var d=0; d<7; d++){
         var diso=addDays(wkStartISO,d), dp=diso.split('-');
-        var cell=el('div','wcell'+(((+dp[1]-1)===curMonth)?'':' out-month')+(diso===todayISO()?' today':''));
+        var off=!isSchoolDay(diso);
+        var cell=el('div','wcell'+(((+dp[1]-1)===curMonth)?'':' out-month')+(diso===todayISO()?' today':'')+(off?' no-school':''));
         cell.appendChild(el('div','wdaynum', String(+dp[2])));
+        if(DAYS_OFF[diso]) cell.appendChild(el('div','wdayoff', DAYS_OFF[diso]));
         (function(day){ cell.addEventListener('click',function(){ openDayModal(day); }); })(diso);
         days.appendChild(cell);
       }
@@ -361,16 +429,21 @@
     }
   }
 
-  // ---- Day pop-out: fixed-size window with Checked out / Reserved / Available tabs ----
-  var DM_DAY=null, DM_TAB='out';
+  // ---- Day pop-out: Available / Checked out / Reserved tabs; click a camera for full detail ----
+  var DM_DAY=null, DM_TAB='available', DM_CAM=null;
+  var pendingCal={};   // id -> {timer,deadline} for the 15s mark-returned undo window (teacher)
   function byCam(a,b){ return (a.camera||'').localeCompare(b.camera||''); }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function nameOf(c){ return (c.student_name||'').trim() || (c.student_id?('ID '+c.student_id):'Unknown'); }
   function dayOut(iso){ return checkoutsOnDay(iso).filter(function(c){ return statusOf(c)==='out'; }).sort(byCam); }
   function dayReserved(iso){ return checkoutsOnDay(iso).filter(function(c){ return statusOf(c)==='reserved'; }).sort(byCam); }
   function dayAvailable(iso){ var busy={}; checkoutsOnDay(iso).forEach(function(c){ busy[c.camera]=1; }); return (DATA.cameras||[]).filter(function(c){ return !busy[c]; }); }
+  function recForCamOnDay(cam,iso){ var m=checkoutsOnDay(iso).filter(function(c){ return c.camera===cam; }); return m[0]||null; }
   // Global: every picked-up camera now past its return date and not toggled returned.
   function overdueAll(){ return (DATA.checkouts||[]).filter(function(c){ return statusOf(c)==='out' && c.due && c.due<todayISO(); }).sort(byCam); }
   function dmTab(t,label,n){ return '<button type="button" class="dm-tab'+(DM_TAB===t?' active':'')+'" data-tab="'+t+'">'+label+' <span class="dm-tabn">'+n+'</span></button>'; }
-  function openDayModal(iso){ DM_DAY=iso; DM_TAB='out'; renderDayModal(); document.getElementById('daymodal').classList.add('open'); }
+  function openDayModal(iso){ DM_DAY=iso; DM_TAB='available'; DM_CAM=null; renderDayModal(); document.getElementById('daymodal').classList.add('open');
+    if(window.parent!==window){ try{ parent.postMessage({daySelected:iso}, '*'); }catch(e){} } }
   // A camera bar for the day card: chevron on the LEFT if it came in before this day,
   // chevron on the RIGHT if it stays out after this day (shows coming / going that day).
   function dmBar(c, day){
@@ -383,31 +456,127 @@
   }
   function renderDayModal(){
     var iso=DM_DAY; if(!iso) return;
+    if(DM_CAM){ renderCamDetail(iso, DM_CAM); return; }
     var out=dayOut(iso), res=dayReserved(iso), avail=dayAvailable(iso), od=overdueAll();
-    if(DM_TAB==='overdue' && !od.length) DM_TAB='out';
+    if(DM_TAB==='overdue' && !od.length) DM_TAB='available';
     document.getElementById('dm-title').textContent=prettyDate(iso);
-    var tabs=dmTab('out','Checked out',out.length)+dmTab('reserved','Reserved',res.length)+dmTab('available','Available',avail.length);
+    // Order everywhere: Available, then Checked out, then Reserved (Overdue last when present).
+    var tabs=dmTab('available','Available',avail.length)+dmTab('out','Checked out',out.length)+dmTab('reserved','Reserved',res.length);
     if(od.length) tabs+=dmTab('overdue','Overdue',od.length);
     document.getElementById('dm-tabs').innerHTML=tabs;
-    var body;
+    var chev='<span class="dm-chev-r">&rsaquo;</span>', body;
     if(DM_TAB==='overdue'){
-      body=od.length?od.map(function(c){ var n=dayDiff(c.due,todayISO()); return '<div class="dm-row">'+dmBar(c,todayISO())+'<span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-tag od">'+n+(n===1?' day':' days')+' overdue</span></div>'; }).join(''):'<div class="dm-empty">Nothing overdue.</div>';
+      body=od.length?od.map(function(c){ var n=dayDiff(c.due,todayISO()); return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,todayISO())+'<span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-tag od">'+n+(n===1?' day':' days')+' overdue</span>'+chev+'</div>'; }).join(''):'<div class="dm-empty">Nothing overdue.</div>';
     } else if(DM_TAB==='reserved'){
-      body=res.length?res.map(function(c){ return '<div class="dm-row">'+dmBar(c,iso)+'<span class="dm-range">Reserved '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span></div>'; }).join(''):'<div class="dm-empty">No reservations this day.</div>';
-    } else if(DM_TAB==='available'){
-      body=avail.length?'<div class="dm-avail">'+avail.map(function(c){ return '<span class="dm-availcam">'+c+'<small>'+camCourse(c)+'</small></span>'; }).join('')+'</div>':'<div class="dm-empty">No cameras free this day.</div>';
+      body=res.length?res.map(function(c){ return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,iso)+'<span class="dm-range">Reserved '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+chev+'</div>'; }).join(''):'<div class="dm-empty">No reservations this day.</div>';
+    } else if(DM_TAB==='out'){
+      body=out.length?out.map(function(c){ var odt=(c.due&&c.due<todayISO())?'<span class="dm-tag od">Overdue</span>':''; return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,iso)+'<span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+odt+chev+'</div>'; }).join(''):'<div class="dm-empty">No cameras checked out this day.</div>';
     } else {
-      body=out.length?out.map(function(c){ var od=(c.due&&c.due<todayISO())?'<span class="dm-tag od">Overdue</span>':''; return '<div class="dm-row">'+dmBar(c,iso)+'<span class="dm-range">Picked up '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+od+'</div>'; }).join(''):'<div class="dm-empty">No cameras checked out this day.</div>';
+      body=avail.length?'<div class="dm-avail">'+avail.map(function(c){ return '<span class="dm-availcam clickable" data-cam="'+esc(c)+'">'+c+'<small>'+camCourse(c)+'</small></span>'; }).join('')+'</div>':'<div class="dm-empty">No cameras free this day.</div>';
     }
     document.getElementById('dm-body').innerHTML=body;
     Array.prototype.forEach.call(document.querySelectorAll('#dm-tabs .dm-tab'), function(btn){
       btn.addEventListener('click', function(){ DM_TAB=btn.getAttribute('data-tab'); renderDayModal(); });
     });
+    Array.prototype.forEach.call(document.querySelectorAll('#dm-body [data-cam]'), function(el){
+      el.addEventListener('click', function(){ DM_CAM=el.getAttribute('data-cam'); renderDayModal(); });
+    });
   }
+  // ---- Full camera detail card (everything on file) + teacher check-in actions ----
+  function kv(k,v,pop){ if(v==null||v==='') return ''; return '<div class="dc-k">'+k+'</div><div class="dc-v'+(pop?' pop':'')+'">'+v+'</div>'; }
+  function kvc(k,v){ return '<div class="dc-k">'+k+'</div><div class="dc-v">'+(v?esc(v):'<span style="color:#ffb28a">Not on file</span>')+'</div>'; }
+  function renderCamDetail(iso, cam){
+    var c=recForCamOnDay(cam,iso);
+    document.getElementById('dm-tabs').innerHTML='';
+    document.getElementById('dm-title').textContent=prettyDate(iso);
+    var head='<button type="button" class="dm-back" id="dm-back">&lsaquo; Back to '+prettyDate(iso)+'</button>';
+    if(!c){
+      var abody=head+'<div class="dc"><div class="dc-top"><span class="dc-cam">'+esc(cam)+'</span>'+
+        '<span class="dm-tag" style="background:rgba(63,168,99,.16);color:#8ff0b0;">Available</span></div>'+
+        '<div class="dc-grid">'+kv('Eligibility',camCourse(cam))+kv('Status','Free on '+fmt(iso))+'</div>'+
+        (AUTHED?'<div class="dc-note"><b>Reserve</b>Use &ldquo;+ Reserve / check out&rdquo; on the console to book this camera.</div>':'<div class="dc-note"><b>Open</b>This camera is free. Reserve it from the reservation form.</div>')+
+        '</div>';
+      setDetailBody(abody); return;
+    }
+    var st=statusOf(c), overdue=(st==='out'&&c.due&&c.due<todayISO()), pend=pendingCal[c.id];
+    var cls=pend?'returning':(overdue?'overdue':st);
+    var pill=pend?'<span class="dm-tag" style="background:rgba(0,184,184,.18);color:#5ff0f0;">Returning</span>':
+      (overdue?'<span class="dm-tag od">Overdue</span>':(st==='reserved'?'<span class="dm-tag res">Reserved</span>':(st==='returned'?'<span class="dm-tag" style="background:rgba(63,168,99,.16);color:#8ff0b0;">Returned</span>':'<span class="dm-tag" style="background:rgba(255,107,26,.18);color:#ffc7a6;">Picked up</span>')));
+    var acts='';
+    if(AUTHED){
+      if(pend){
+        acts='<div class="dc-returning">Goes back in the pool in <b id="dc-count">15</b>s.</div>'+
+             '<div class="dc-acts"><button type="button" class="dc-btn" data-act="undoreturn" data-id="'+esc(c.id)+'">Undo return</button></div>';
+      } else if(st==='reserved'){
+        acts='<div class="dc-acts"><button type="button" class="dc-btn" data-act="pickup" data-id="'+esc(c.id)+'">Mark picked up</button>'+
+             '<button type="button" class="dc-btn danger" data-act="cancel" data-id="'+esc(c.id)+'">Cancel</button></div>';
+      } else if(st==='out'){
+        acts='<div class="dc-acts"><button type="button" class="dc-btn ghost" data-act="undopickup" data-id="'+esc(c.id)+'">Undo pickup</button>'+
+             '<button type="button" class="dc-btn warn" data-act="return" data-id="'+esc(c.id)+'">Mark returned</button></div>';
+      }
+    }
+    var grid=kv('Camera', esc(cam)+' &middot; '+camCourse(cam));
+    if(AUTHED){
+      grid+=kv('Student ID', esc(c.student_id||''));
+      grid+=kv('Period', c.period?('Per '+esc(c.period)):'');
+      grid+=kv('Class', esc(c.course||''));
+    }
+    grid+=kv(st==='reserved'?'Reserved':'Checked out', 'Out '+fmt(c.out)+' &rarr; due '+fmt(c.due), true);
+    if(c.picked_up_date) grid+=kv('Picked up', fmt(c.picked_up_date));
+    if(c.returned_date) grid+=kv('Returned', fmt(c.returned_date));
+    if(AUTHED){
+      grid+=kvc('Student cell', c.student_cell);
+      grid+=kvc('Parent / guardian', c.parent_guardian);
+      grid+=kvc('Parent cell', c.parent_cell);
+    }
+    var flag='';
+    if(AUTHED && (c.flag||'').indexOf('unknown')>=0) flag='<div class="dc-flag">&#9888; Student ID not in the roster</div>';
+    var noteTxt=(c.flag||'').replace(/unknown student id;?\s*/,'').trim();
+    var note=(AUTHED && noteTxt)?'<div class="dc-note"><b>Notes</b>'+esc(noteTxt)+'</div>':'';
+    var namehtml=AUTHED?'<div class="dc-name">'+esc(nameOf(c))+'</div>':'';
+    var dbody=head+'<div class="dc '+cls+'">'+
+      '<div class="dc-top"><span class="dc-cam">'+esc(cam)+'</span>'+pill+'</div>'+
+      namehtml+acts+'<div class="dc-grid">'+grid+'</div>'+flag+note+'</div>';
+    setDetailBody(dbody);
+  }
+  function setDetailBody(html){
+    document.getElementById('dm-body').innerHTML=html;
+    var b=document.getElementById('dm-back'); if(b) b.addEventListener('click',function(){ DM_CAM=null; renderDayModal(); });
+    Array.prototype.forEach.call(document.querySelectorAll('#dm-body [data-act]'), function(el){
+      el.addEventListener('click', function(){ camAction(el.getAttribute('data-act'), el.getAttribute('data-id'), el); });
+    });
+    if(document.getElementById('dc-count')) startCalTicker();
+    postHeight();
+  }
+  function camAction(act, id, el){
+    if(act==='undoreturn'){ var p=pendingCal[id]; if(p&&p.timer) clearTimeout(p.timer); delete pendingCal[id]; renderDayModal(); return; }
+    if(act==='return'){ pendingCal[id]={deadline:Date.now()+15000}; pendingCal[id].timer=setTimeout(function(){ commitCal(id,'returned'); },15000); renderDayModal(); return; }
+    if(act==='cancel'){ if(!confirm('Cancel this reservation? It will be removed.')) return; if(el) el.disabled=true;
+      camAPI('/api/camera/delete',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id})})
+        .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ afterAction(true); })
+        .catch(function(){ alert('Could not cancel. Try again.'); if(el) el.disabled=false; }); return; }
+    var status=(act==='pickup')?'out':'reserved';
+    if(el) el.disabled=true;
+    camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})})
+      .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ afterAction(false); })
+      .catch(function(){ alert('Could not update. Try again.'); if(el) el.disabled=false; });
+  }
+  function commitCal(id,status){ var p=pendingCal[id]; if(p&&p.timer) clearTimeout(p.timer); delete pendingCal[id];
+    camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})})
+      .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ afterAction(true); })
+      .catch(function(){ alert('Could not mark returned. Try again.'); load(); }); }
+  function afterAction(backToList){ if(backToList) DM_CAM=null; notifyParent(); load(); }
+  function notifyParent(){ if(window.parent!==window){ try{ parent.postMessage({camAction:true}, '*'); }catch(e){} } }
+  var calTicker=null;
+  function startCalTicker(){ if(calTicker) return; calTicker=setInterval(function(){ var any=false; Object.keys(pendingCal).forEach(function(id){ any=true; var rem=Math.max(0,Math.ceil((pendingCal[id].deadline-Date.now())/1000)); var e=document.getElementById('dc-count'); if(e) e.textContent=rem; }); if(!any){ clearInterval(calTicker); calTicker=null; } },400); }
   function closeDayModal(){ document.getElementById('daymodal').classList.remove('open'); }
 
   function load(){
-    fetch(API+'/api/camera/calendar',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
+    var useKey=!!CAMKEY, opts={cache:'no-store'}; if(useKey) opts.headers={'X-Camera-Key':CAMKEY};
+    fetch(API+(useKey?'/api/camera/checkouts':'/api/camera/calendar'),opts).then(function(r){
+      if(useKey && (r.status===401||r.status===403)){ CAMKEY=''; AUTHED=false; try{sessionStorage.removeItem('silva-cam-key');}catch(e){} return fetch(API+'/api/camera/calendar',{cache:'no-store'}).then(function(r2){return r2.json();}); }
+      AUTHED=useKey; return r.json();
+    }).then(function(d){
       DATA={cameras:d.cameras||[],checkouts:d.checkouts||[]};
       renderBoard(); renderCal(); if(DM_DAY) renderDayModal();
       foot.textContent='Updated '+new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+'. Refreshes automatically.';

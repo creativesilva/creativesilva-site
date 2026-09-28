@@ -200,9 +200,12 @@
   </div>
 
   <div class="summary">
-    <div><span class="big" id="availn">0</span> <span class="lab">of <span id="totn">18</span> cameras available</span></div>
+    <div><span class="big" id="availn">0</span> <span class="lab">of <span id="totn">18</span> cameras available <span id="availday">today</span></span></div>
     <div class="sync" id="sync">Connecting&#8230;</div>
   </div>
+
+  <div class="h">Calendar <span class="hcount" id="calhint">Tap a day to see that day&#8217;s cameras</span></div>
+  <div class="calpanel"><iframe id="calframe" src="/calendar.html?embed=1" title="Camera calendar" loading="lazy"></iframe></div>
 
   <div id="board"><span class="foot">Loading&#8230;</span></div>
 
@@ -212,9 +215,6 @@
       <div class="hist" id="hist"></div>
     </details>
   </div>
-
-  <div class="h">Calendar</div>
-  <div class="calpanel"><iframe id="calframe" src="/calendar.html?embed=1" title="Camera calendar" loading="lazy"></iframe></div>
 
   <p class="foot">Cam 16, 17 and 18 are Photography 2 only. This page is teacher-only; keep the password within staff.</p>
 </div>
@@ -271,6 +271,19 @@
   function nameOf(c){ return (c.student_name||'').trim() || (c.student_id?('ID '+c.student_id):'Unknown'); }
   function camCourse(cam){ return P2.indexOf(cam)>=0?'Photo 2 only':'Photo 1 & 2'; }
 
+  // The summary bar reflects a SELECTED day (default today). Clicking a day in the calendar
+  // posts {daySelected} and this recomputes how many cameras are free on that day.
+  var SELDAY=todayISO();
+  function effLastC(c){ var st=statusOf(c); if(st==='returned') return null; var start=c.out; if(!start) return null; var last=c.due||start; if(last<start) last=start; if(st==='out'&&todayISO()>last) last=todayISO(); return last; }
+  function availCountOnDay(iso){ var busy={}; (DATA.checkouts||[]).forEach(function(c){ var last=effLastC(c); if(last&&c.out&&iso>=c.out&&iso<=last) busy[c.camera]=1; }); return (DATA.cameras||[]).filter(function(cam){ return !busy[cam]; }).length; }
+  function fmtMDY(iso){ var p=String(iso).split('-'); return (+p[1])+'/'+(+p[2])+'/'+p[0]; }
+  function dowShort(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]; }
+  function updateSummary(){
+    var an=document.getElementById('availn'); if(an) an.textContent=availCountOnDay(SELDAY);
+    var tn=document.getElementById('totn'); if(tn) tn.textContent=(DATA.cameras||[]).length;
+    var ad=document.getElementById('availday'); if(ad){ ad.textContent=(SELDAY===todayISO()?'today':'on '+dowShort(SELDAY))+' · '+fmtMDY(SELDAY); }
+  }
+
   function camAPI(path, opts){
     opts=opts||{}; opts.headers=opts.headers||{}; opts.headers['X-Camera-Key']=KEY;
     return fetch(API+path, opts);
@@ -296,10 +309,11 @@
     {key:'zoom',label:'Canon RF 100-400mm ultra-zoom',total:2},
     {key:'speedlite',label:'Canon Speedlite EL-10 flash',total:5}
   ];
+  // Order everywhere: Available first, then Checked out, then Reserved.
   var SECDEF=[
+    {key:'avail',label:'Available',cls:'sec-avail',dot:'avail'},
     {key:'out',label:'Checked out',cls:'sec-out',dot:'out'},
-    {key:'reserved',label:'Reserved',cls:'sec-reserved',dot:'reserved'},
-    {key:'avail',label:'Available',cls:'sec-avail',dot:'avail'}
+    {key:'reserved',label:'Reserved',cls:'sec-reserved',dot:'reserved'}
   ];
   function secOpen(k){ try{ var v=sessionStorage.getItem('csec:'+k); return v===null?true:v==='1'; }catch(e){ return true; } }
   function setSecOpen(k,o){ try{ sessionStorage.setItem('csec:'+k,o?'1':'0'); }catch(e){} }
@@ -361,8 +375,7 @@
       '<div class="csec-body">'+EQUIPMENT.map(function(e){ var a=e.total-(eo[e.key]||0); return '<div class="equip-row"><span class="equip-name">'+esc(e.label)+'</span><span class="equip-avail"><span class="'+(a>0?'ok':'none')+'">'+a+' of '+e.total+' available</span></span></div>'; }).join('')+'</div>'+
     '</div>';
     host.innerHTML=html;
-    var an=document.getElementById('availn'); if(an) an.textContent=counts.avail;
-    var tn=document.getElementById('totn'); if(tn) tn.textContent=cams.length;
+    updateSummary();
     var ret=DATA.checkouts.filter(function(c){ return statusOf(c)==='returned'; })
       .sort(function(a,b){ return (b.returned_date||b.created||'')>(a.returned_date||a.created||'')?1:-1; });
     var hn=document.getElementById('histn'); if(hn) hn.textContent='('+ret.length+')';
@@ -398,7 +411,15 @@
   }
   function reloadCal(){ try{ var f=document.getElementById('calframe'); f.contentWindow.location.reload(); }catch(e){ var f2=document.getElementById('calframe'); f2.src=f2.src; } }
   // The embedded calendar posts its height so the iframe fits with no inner scrollbar.
-  window.addEventListener('message',function(e){ if(e.data&&typeof e.data.calH==='number'){ var f=document.getElementById('calframe'); if(f&&e.data.calH>200) f.style.height=(e.data.calH+4)+'px'; } });
+  window.addEventListener('message',function(e){
+    if(!e.data) return;
+    if(typeof e.data.calH==='number'){ var f=document.getElementById('calframe'); if(f&&e.data.calH>200) f.style.height=(e.data.calH+4)+'px'; }
+    else if(e.data.daySelected){ SELDAY=e.data.daySelected; updateSummary(); }        // bar follows the day clicked in the calendar
+    else if(e.data.camAction){ loadBoard(); }                                          // a check-in done from the calendar; refresh the board
+  });
+  // Hand the embedded calendar the camera key so it can show full detail + enable check-in (same origin; backup to shared sessionStorage).
+  function pushKey(){ try{ var f=document.getElementById('calframe'); if(f&&f.contentWindow&&KEY) f.contentWindow.postMessage({camKey:KEY},'*'); }catch(e){} }
+  (function(){ var f=document.getElementById('calframe'); if(f) f.addEventListener('load',pushKey); })();
 
   var polling=false;
   function loadBoard(){
@@ -498,7 +519,7 @@
   // ---- PIN gate (the password is validated by the server) ----
   var gate=document.getElementById('gate'), pin=document.getElementById('pin'), pinerr=document.getElementById('pinerr');
   function showGate(msg){ KEY=''; try{ sessionStorage.removeItem('silva-cam-key'); }catch(e){} gate.style.display='flex'; pinerr.textContent=msg||''; pin.value=''; setTimeout(function(){ pin.focus(); },50); }
-  function startApp(){ gate.style.display='none'; if(!polling){ polling=true; setInterval(loadBoard,7000); } loadBoard(); }
+  function startApp(){ gate.style.display='none'; if(!polling){ polling=true; setInterval(loadBoard,7000); } loadBoard(); pushKey(); }
   function submitPin(){
     var v=pin.value.trim(); if(!v){ pinerr.textContent='Enter the password.'; return; }
     pinerr.textContent='Checking…'; KEY=v;
