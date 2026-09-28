@@ -169,7 +169,7 @@
   .cd-cur-note{font-size:.82rem;color:#5ff0f0;margin:4px 0 8px;}
   .hnote{color:#ffd889;}
   /* Camera Log: per-camera standing notes + condition */
-  .csec.sec-camlog{border-left-color:#8b5cf6;} .csec-dot.camlog{background:#8b5cf6;}
+  .csec.sec-camlog{border-left-color:#8b5cf6;} .csec-dot.clog{background:#8b5cf6;}
   .pill.oos{background:rgba(224,64,58,.24);color:#ff9a8a;}
   .pill.nocard{background:rgba(245,179,1,.22);color:#ffd889;}
   .camlog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px;}
@@ -701,7 +701,7 @@
     // CAMERA LOG: every camera, its standing note (follows the camera) + out-of-service, always editable.
     var clopen=secOpen('camlog'), noted=cams.filter(function(c){ var a=assetOf(c); return a.note||a.oos||(a.issues&&a.issues.length); }).length;
     html+='<div class="csec sec-camlog'+(clopen?' open':'')+'">'+
-      '<button class="csec-head" type="button" data-sectoggle="camlog"><span class="csec-dot camlog"></span>Camera log &middot; notes &amp; condition <span class="csec-n">'+noted+' flagged</span><span class="csec-chev"></span></button>'+
+      '<button class="csec-head" type="button" data-sectoggle="camlog"><span class="csec-dot clog"></span>Camera log &middot; notes &amp; condition <span class="csec-n">'+noted+' flagged</span><span class="csec-chev"></span></button>'+
       '<div class="csec-body"><div class="camlog-grid">'+cams.map(camLogCard).join('')+'</div></div>'+
     '</div>';
     // MEMORY CARD WALLET: cards a student left to offload later, each in a numbered slot with a 24h clock.
