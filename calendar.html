@@ -576,7 +576,8 @@
   function nameOf(c){ return (c.student_name||'').trim() || (c.student_id?('ID '+c.student_id):'Unknown'); }
   function dayOut(iso){ return checkoutsOnDay(iso).filter(function(c){ return statusOf(c)==='out'; }).sort(byCam); }
   function dayReserved(iso){ return checkoutsOnDay(iso).filter(function(c){ return statusOf(c)==='reserved'; }).sort(byCam); }
-  function dayAvailable(iso){ var busy={}; checkoutsOnDay(iso).forEach(function(c){ busy[c.camera]=1; }); return (DATA.cameras||[]).filter(function(c){ return !busy[c]; }); }
+  function isOOS(cam){ return (DATA.oos||[]).indexOf(cam)>=0; }   // out-of-service cameras can't be reserved
+  function dayAvailable(iso){ var busy={}; checkoutsOnDay(iso).forEach(function(c){ busy[c.camera]=1; }); return (DATA.cameras||[]).filter(function(c){ return !busy[c] && !isOOS(c); }); }
   // Teacher-only: cameras returned on/over this day, so Chris can see who had a kit last.
   function dayReturned(iso){ if(!AUTHED) return []; return (DATA.checkouts||[]).filter(function(c){ if(c.kind==='equipment'||statusOf(c)!=='returned'||!c.out) return false; var end=c.returned_date||c.due||c.out; return iso>=c.out && iso<=end; }).sort(byCam); }
   function recForCamOnDay(cam,iso){ var m=checkoutsOnDay(iso).filter(function(c){ return c.camera===cam; }); return m[0]||null; }
@@ -902,6 +903,8 @@
       AUTHED=useKey; return r.json();
     }).then(function(d){
       DATA={cameras:d.cameras||[],checkouts:d.checkouts||[]};
+      // Out-of-service cameras: from the public `oos` list, or derived from the authed asset store.
+      DATA.oos=d.oos||(d.assets?Object.keys(d.assets).filter(function(k){return d.assets[k]&&d.assets[k].oos;}):[]);
       renderBoard(); renderCal(); if(DM_DAY) renderDayModal();
       foot.textContent='Updated '+new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+'. Refreshes automatically.';
       postHeight(); setTimeout(postHeight,80);
