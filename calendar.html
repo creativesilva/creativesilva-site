@@ -1258,7 +1258,7 @@
       .then(function(r){return r.json();}).then(function(j){
         if(!j||!j.found){ msg.innerHTML='<span style="color:#ffb28a">'+t('idNotFound')+'</span>'; return; }
         // Missing-assignment gate (Silva Photo students only; the server decides, fails open).
-        if(j.eligible===false){ var lim=(j.missing_limit!=null?j.missing_limit:3);
+        if(j.eligible===false){ var lim=(j.missing_limit!=null?j.missing_limit:6);
           var _b=(j.missing_count!=null)?t('blockedMsgN').replace('{c}',j.missing_count).replace('{n}',lim):t('blockedMsg').replace('{n}',lim);
           msg.innerHTML='<div class="rv-block"><b>'+t('blockedTitle')+'</b>'+_b+'</div>'; return; }
         rvLookup={id:v,label:j.label,name:j.name||'',period:String(j.period||''),
