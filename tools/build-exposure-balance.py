@@ -21,10 +21,18 @@ HAVE_HEADER=False; HAVE_S1_FLOAT=False; HAVE_S2_FLOAT=False; HAVE_S3_FLOAT=False
 COURSES=[
   {"prefix":"photo1","label":"Photography 1A","mod":"09",
    "reflect_en":f"{SITE}/assets/course-documents/Exposure-Balance-Reflection-EN.docx",
-   "reflect_es":f"{SITE}/assets/course-documents/Exposure-Balance-Reflection-ES.docx"},
+   "reflect_es":f"{SITE}/assets/course-documents/Exposure-Balance-Reflection-ES.docx",
+   "slide_en":f"{SITE}/assets/course-documents/Photo1-Camera-Aperture-Part1-Slides-EN-v3.pdf",
+   "slide_es":f"{SITE}/assets/course-documents/Photo1-Camera-Aperture-Part1-Slides-ES-v3.pdf",
+   "cover_en":f"{SITE}/assets/images/shared/aperture-part1-cover-photo1-en-v3.jpg",
+   "cover_es":f"{SITE}/assets/images/shared/aperture-part1-cover-photo1-es-v3.jpg"},
   {"prefix":"photo2","label":"Photography 2A","mod":"08",
    "reflect_en":f"{SITE}/assets/course-documents/Exposure-Balance-Photo2-Reflection-EN.docx",
-   "reflect_es":f"{SITE}/assets/course-documents/Exposure-Balance-Photo2-Reflection-ES.docx"},
+   "reflect_es":f"{SITE}/assets/course-documents/Exposure-Balance-Photo2-Reflection-ES.docx",
+   "slide_en":f"{SITE}/assets/course-documents/Photo2-Camera-Aperture-Part1-Slides-EN-v3.pdf",
+   "slide_es":f"{SITE}/assets/course-documents/Photo2-Camera-Aperture-Part1-Slides-ES-v3.pdf",
+   "cover_en":f"{SITE}/assets/images/shared/aperture-part1-cover-photo2-en-v3.jpg",
+   "cover_es":f"{SITE}/assets/images/shared/aperture-part1-cover-photo2-es-v3.jpg"},
 ]
 
 # Local ent: accents to entities AND en-dash to a plain hyphen (never emit &ndash;, per the hard dash ban).
@@ -108,6 +116,20 @@ def build_course(C):
             cap="Tap to open it full size in a new tab."
         return resources_card(heading, body, es, floatimg=purple_thumb(EXPOSURE_FULL, EXPOSURE_THUMB, alt, cap))
 
+    # ---- aperture concept deck (Camera Fundamentals: Aperture, Part 1), click-to-open PDF ----
+    def aperture_slides(es):
+        if es:
+            heading="Diapositivas de Apertura"
+            body=para("Estas diapositivas repasan c&oacute;mo funciona la apertura: la abertura dentro de tu lente, qu&eacute; significan los n&uacute;meros f, y c&oacute;mo una abertura amplia o peque&ntilde;a cambia tu foto. Rev&iacute;salas antes de capturar para que f/22 y f/1.8 tengan sentido.")
+            cap="Toca la portada para abrir las diapositivas en PDF en una pesta&ntilde;a nueva."
+        else:
+            heading="Aperture Slides"
+            body=para("These slides go over how aperture works: the opening inside your lens, what the f-stop numbers mean, and how a wide or small opening changes your photo. Look through them before you capture so f/22 and f/1.8 make sense.")
+            cap="Tap the cover to open the slides as a PDF in a new tab."
+        pdf=C['slide_es'] if es else C['slide_en']
+        cover=C['cover_es'] if es else C['cover_en']
+        return resources_card(heading, body, es, floatimg=slide_deck_thumb(pdf, es, thumb=cover, cap=cap))
+
     # ---- custom red camera-settings section: aperture steps the range; shutter + ISO balance ----
     def exposure_settings_section(es, quality="JPG"):
         red="#f90101"
@@ -139,6 +161,7 @@ def build_course(C):
             + (framed(f"{SITE}/assets/images/{C['prefix']}/exposure-balance/header-v1.jpg","Exposure Balance module header") if HAVE_HEADER else ""))
         en+=standards_box(False, EXPO_STANDARDS)
         en+=downloads_block(False)
+        en+=aperture_slides(False)
         en+=card("THE CONCEPT / THE EXPOSURE TRIANGLE","Aperture, Shutter, and ISO Work Together",
             para("Three settings make your exposure: <strong>aperture</strong> (how wide the lens opens), <strong>shutter speed</strong> (how long the light comes in), and <strong>ISO</strong> (how much the camera boosts the light). Together they are the <strong>exposure triangle</strong>. When you change one, you balance another to keep the light right.")
             + bullets([
@@ -182,6 +205,7 @@ def build_course(C):
             + (framed(f"{SITE}/assets/images/{C['prefix']}/exposure-balance/header-v1.jpg","Encabezado del m&oacute;dulo Balance de Exposici&oacute;n") if HAVE_HEADER else ""))
         es+=standards_box(True, EXPO_STANDARDS)
         es+=downloads_block(True)
+        es+=aperture_slides(True)
         es+=card("EL CONCEPTO / EL TRI&Aacute;NGULO DE EXPOSICI&Oacute;N","Apertura, Obturador e ISO Trabajan Juntos",
             para("Tres ajustes hacen tu exposici&oacute;n: la <strong>apertura</strong> (qu&eacute; tan abierto est&aacute; el lente), la <strong>velocidad del obturador</strong> (cu&aacute;nto tiempo entra la luz) y el <strong>ISO</strong> (cu&aacute;nto sube la luz la c&aacute;mara). Juntos son el <strong>tri&aacute;ngulo de exposici&oacute;n</strong>. Cuando cambias uno, equilibras otro para mantener la luz correcta.")
             + bullets([
