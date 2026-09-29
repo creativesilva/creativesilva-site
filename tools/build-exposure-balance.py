@@ -16,7 +16,7 @@ EXPOSURE_THUMB=f"{SITE}/assets/images/shared/exposure-basics-thumb-v1.jpg"
 
 # No module art yet: every image slot is gated OFF so nothing renders (a missing image shows nothing,
 # never a placeholder box). Flip a HAVE_* to True and drop the file in when the art is ready.
-HAVE_HEADER=False; HAVE_S1_FLOAT=False; HAVE_S2_FLOAT=False; HAVE_S3_FLOAT=False
+HAVE_HEADER=True; HAVE_S1_FLOAT=False; HAVE_S2_FLOAT=False; HAVE_S3_FLOAT=False
 
 COURSES=[
   {"prefix":"photo1","label":"Photography 1A","mod":"09",
