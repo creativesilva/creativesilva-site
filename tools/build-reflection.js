@@ -394,6 +394,32 @@ const DOCS = [
     '¿Qué cambiaste o refinaste en tu preset para estos retratos, o empezaste uno nuevo? ¿Qué está mejor ahora?',
     '¿Cómo equilibraste tu exposición en cada número f, y cuál apertura te gustó más, f/8, f/4 o f/2? ¿Por qué?',
   ]},
+
+  // Exposure Balance (Photography 1A = Module 09, Photography 2A = Module 08) -- same JPG exposure exercise both courses.
+  { ...EN, outfile: 'Exposure-Balance-Reflection-EN.docx', title: 'Exposure Balance: Reflection', subtitle: PVHS_EN('Photography 1A'), questions: [
+    'How did you balance your exposure at each f-stop? Tell how you used your shutter and ISO to keep the light meter between -1 and +1.',
+    'When did you have to raise your ISO, and why? When could you keep it at its lowest?',
+    'What did you notice about the background and depth of field as you opened up from f/22 to f/1.8?',
+    'Which f-stop gave you the look you liked best, and why?',
+  ]},
+  { ...ES, outfile: 'Exposure-Balance-Reflection-ES.docx', title: 'Balance de Exposición: Reflexión', subtitle: PVHS_ES('Fotografía 1A'), questions: [
+    '¿Cómo equilibraste tu exposición en cada número f? Cuenta cómo usaste el obturador y el ISO para mantener el exposímetro entre -1 y +1.',
+    '¿Cuándo tuviste que subir el ISO y por qué? ¿Cuándo pudiste dejarlo en lo más bajo?',
+    '¿Qué notaste en el fondo y en la profundidad de campo al abrir de f/22 a f/1.8?',
+    '¿Qué número f te dio el estilo que más te gustó, y por qué?',
+  ]},
+  { ...EN, outfile: 'Exposure-Balance-Photo2-Reflection-EN.docx', title: 'Exposure Balance: Reflection', subtitle: PVHS_EN('Photography 2A'), questions: [
+    'How did you balance your exposure at each f-stop? Tell how you used your shutter and ISO to keep the light meter between -1 and +1.',
+    'When did you have to raise your ISO, and why? When could you keep it at its lowest?',
+    'What did you notice about the background and depth of field as you opened up from f/22 to f/1.8?',
+    'Which f-stop gave you the look you liked best, and why?',
+  ]},
+  { ...ES, outfile: 'Exposure-Balance-Photo2-Reflection-ES.docx', title: 'Balance de Exposición: Reflexión', subtitle: PVHS_ES('Fotografía 2A'), questions: [
+    '¿Cómo equilibraste tu exposición en cada número f? Cuenta cómo usaste el obturador y el ISO para mantener el exposímetro entre -1 y +1.',
+    '¿Cuándo tuviste que subir el ISO y por qué? ¿Cuándo pudiste dejarlo en lo más bajo?',
+    '¿Qué notaste en el fondo y en la profundidad de campo al abrir de f/22 a f/1.8?',
+    '¿Qué número f te dio el estilo que más te gustó, y por qué?',
+  ]},
 ];
 
 (async () => { for (const d of DOCS) await buildDoc(d); })();

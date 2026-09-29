@@ -50,7 +50,8 @@
       { name: 'Lightroom Editing',        url: '/curriculum/shared/photo1-lightroom-editing-overview.html' },
       { name: 'Tiny Things',              url: '/curriculum/shared/photo1-tiny-things-overview.html' },
       { name: 'Balloon Pop',              url: '/curriculum/shared/photo1-balloon-pop-overview.html' },
-      { name: 'Aperture Portrait',        url: '/curriculum/shared/photo1-aperture-portrait-overview.html' }
+      { name: 'Aperture Portrait',        url: '/curriculum/shared/photo1-aperture-portrait-overview.html' },
+      { name: 'Exposure Balance',         url: '/curriculum/shared/photo1-exposure-balance-overview.html' }
     ]},
     { course: 'Photography 2A', modules: [
       { name: 'Composition Photo Walk', url: '/curriculum/shared/photo2-composition-overview.html' },
@@ -59,7 +60,8 @@
       { name: 'Build Your Own Preset',  url: '/curriculum/shared/photo2-preset-overview.html' },
       { name: 'Tiny Things',            url: '/curriculum/shared/photo2-tiny-things-overview.html' },
       { name: 'Balloon Pop',            url: '/curriculum/shared/photo2-balloon-pop-overview.html' },
-      { name: 'Aperture Portrait',      url: '/curriculum/shared/photo2-aperture-portrait-overview.html' }
+      { name: 'Aperture Portrait',      url: '/curriculum/shared/photo2-aperture-portrait-overview.html' },
+      { name: 'Exposure Balance',       url: '/curriculum/shared/photo2-exposure-balance-overview.html' }
     ]}
   ];
 
@@ -236,6 +238,10 @@
      '/curriculum/shared/photo1-aperture-portrait-step01-capture-contact.html',
      '/curriculum/shared/photo1-aperture-portrait-step02-cull-submit.html',
      '/curriculum/shared/photo1-aperture-portrait-step03-reflection.html'],
+    ['/curriculum/shared/photo1-exposure-balance-overview.html',
+     '/curriculum/shared/photo1-exposure-balance-step01-capture-contact.html',
+     '/curriculum/shared/photo1-exposure-balance-step02-edit-submit.html',
+     '/curriculum/shared/photo1-exposure-balance-step03-reflection.html'],
     ['/curriculum/photo2/photo2a-home.html',
      '/curriculum/photo2/photo2a-course-overview.html',
      '/curriculum/photo2/photo2a-syllabus.html'],
@@ -265,7 +271,11 @@
     ['/curriculum/shared/photo2-aperture-portrait-overview.html',
      '/curriculum/shared/photo2-aperture-portrait-step01-capture-contact.html',
      '/curriculum/shared/photo2-aperture-portrait-step02-edit-submit.html',
-     '/curriculum/shared/photo2-aperture-portrait-step03-reflection.html']
+     '/curriculum/shared/photo2-aperture-portrait-step03-reflection.html'],
+    ['/curriculum/shared/photo2-exposure-balance-overview.html',
+     '/curriculum/shared/photo2-exposure-balance-step01-capture-contact.html',
+     '/curriculum/shared/photo2-exposure-balance-step02-edit-submit.html',
+     '/curriculum/shared/photo2-exposure-balance-step03-reflection.html']
   ];
 
   var SEQUENCE = [];
