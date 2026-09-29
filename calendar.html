@@ -85,6 +85,21 @@
   .k-res{background:#f5b301;} .k-out{background:var(--orange);}
   .h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:22px 0 12px;padding-left:9px;border-left:3px solid var(--teal);}
   .board{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:12px;}
+  /* Day-scoped board: compact + scrollable when a day is selected */
+  .board.board-scroll{max-height:214px;overflow-y:auto;padding-right:4px;}
+  .board.board-scroll::-webkit-scrollbar{width:8px;} .board.board-scroll::-webkit-scrollbar-thumb{background:rgba(0,184,184,.35);} .board.board-scroll::-webkit-scrollbar-track{background:rgba(0,0,0,.2);}
+  .board-now{margin-left:10px;font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-lt);background:rgba(0,184,184,.14);border:1px solid rgba(0,184,184,.4);padding:3px 9px;cursor:pointer;vertical-align:middle;}
+  .board-now:hover{background:var(--teal);color:#04110f;}
+  /* Selected day in the month grid */
+  .wcell.sel{box-shadow:inset 0 0 0 2px var(--teal-lt) !important;background:rgba(0,184,184,.10);}
+  /* Reserve-on-this-day banner that slides down over the calendar */
+  .rv-daybanner{overflow:hidden;max-height:0;opacity:0;margin:0;transition:max-height .25s ease,opacity .2s ease,margin .25s ease;}
+  .rv-daybanner.show{max-height:160px;opacity:1;margin:0 0 12px;}
+  .rv-daybanner-inner{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(0,184,184,.16),rgba(0,116,116,.10));border:1px solid var(--teal);border-left:4px solid var(--teal);padding:12px 16px;}
+  .rv-daybanner-txt{flex:1 1 auto;min-width:150px;font-family:var(--font);font-weight:700;letter-spacing:.03em;color:#eafeff;font-size:.92rem;text-transform:uppercase;}
+  .rv-daybanner-txt small{display:block;font-weight:400;font-size:.74rem;color:var(--muted);letter-spacing:0;text-transform:none;margin-top:3px;}
+  .rv-daybanner-btn{flex:0 0 auto;font-family:var(--font);font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:11px 20px;cursor:pointer;}
+  .rv-daybanner-btn:hover{filter:brightness(1.12);}
   .cam{background:rgba(0,0,0,.30);border:1px solid var(--line-soft);border-left:4px solid var(--orange);padding:13px 14px;backdrop-filter:blur(6px) saturate(1.05);-webkit-backdrop-filter:blur(6px) saturate(1.05);}
   .cam.reserved{border-left-color:#f5b301;}
   .cam .n{font-family:var(--font);font-weight:600;letter-spacing:.03em;font-size:1rem;}
@@ -357,6 +372,7 @@
     </div>
     <div class="dow" id="dowRow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
   </div>
+  <div class="rv-daybanner" id="rvDayBanner"><div class="rv-daybanner-inner"><span class="rv-daybanner-txt" id="rvDayBannerTxt"></span><button type="button" class="rv-daybanner-btn" id="rvDayBannerBtn"></button></div></div>
   <div class="grid" id="grid"></div>
 
   <p class="foot" id="foot"></p>
@@ -472,7 +488,9 @@
     en:{
       intro:'See which cameras are out and when they are due back before you ask. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.',
       availSuffix:'cameras available', of:'of', reserved:'Reserved', checkedOut:'Checked out',
-      checkedNow:'Checked out right now', loading:'Loading…',
+      checkedNow:'Checked out right now',
+      checkedOnDay:'Checked out on {d}', showNow:'Show now', noneThatDay:'No cameras checked out that day.',
+      reserveOnDay:'Reserve a camera for {d}', reserveOnDaySub:'Tap Reserve, then pick your camera for this day.', loading:'Loading…',
       reserveBtn:'Reserve a Camera', qrBtn:'QR Code',
       noCamsSetup:'No cameras set up yet.', allAvail:'All cameras are available right now.',
       dueShort:'due', photo2only:'Photo 2 only', photo12:'Photo 1 &amp; 2',
@@ -522,7 +540,9 @@
     es:{
       intro:'Mira qué cámaras están prestadas y cuándo se deben devolver antes de preguntar. Las cámaras 16, 17 y 18 son solo para Fotografía 2. Se actualiza automáticamente.',
       availSuffix:'cámaras disponibles', of:'de', reserved:'Reservada', checkedOut:'Prestada',
-      checkedNow:'Prestadas ahora mismo', loading:'Cargando…',
+      checkedNow:'Prestadas ahora mismo',
+      checkedOnDay:'Prestadas el {d}', showNow:'Ver ahora', noneThatDay:'No hay c&aacute;maras prestadas ese d&iacute;a.',
+      reserveOnDay:'Reserva una c&aacute;mara para el {d}', reserveOnDaySub:'Toca Reservar y elige tu c&aacute;mara para este d&iacute;a.', loading:'Cargando…',
       reserveBtn:'Reservar una Cámara', qrBtn:'Código QR',
       noCamsSetup:'Aún no hay cámaras configuradas.', allAvail:'Todas las cámaras están disponibles ahora.',
       dueShort:'para', photo2only:'Solo Foto 2', photo12:'Foto 1 y 2',
@@ -595,7 +615,8 @@
     _setTxt('introSub', t('intro'));
     _setTxt('lab-of', t('of')); _setTxt('lab-avail', t('availSuffix'));
     _setHtml('legend', '<span><i class="k-res"></i>'+t('reserved')+'</span><span><i class="k-out"></i>'+t('checkedOut')+'</span>');
-    _setTxt('boardH', t('checkedNow')); _setTxt('boardLoading', t('loading'));
+    if(!SEL_DAY) _setTxt('boardH', t('checkedNow'));
+    _setTxt('boardLoading', t('loading'));
     _setTxt('reserveMonthBtn', t('reserveBtn')); _setTxt('qrMonthBtn', t('qrBtn'));
     var dow=document.getElementById('dowRow'); if(dow){ dow.innerHTML=DOW3_L[LANG].map(function(d){ return '<div>'+d+'</div>'; }).join(''); }
     _setTxt('qrModalTitle', t('qrTitle')); _setTxt('qrModalSub', t('qrSub'));
@@ -629,7 +650,7 @@
     LANG=(l==='es')?'es':'en';
     try{ localStorage.setItem('silva-cal-lang',LANG); }catch(e){}
     applyStatic(); syncLangActive();
-    renderBoard(); renderCal();
+    renderBoard(); renderCal(); updateDayBanner();
     var dm=document.getElementById('daymodal');
     if(dm && dm.classList.contains('open') && !DM_DONE) renderDayModal();
     if(isReserving()) showBanner();
@@ -709,11 +730,43 @@
       var last=effLast(c); if(!(last && c.out && today>=c.out && today<=last)) return;
       if(!m[c.camera] || statusOf(c)==='out') m[c.camera]=c; }); return m; }
 
+  // Selected calendar day (null = "right now"). Tapping a day scopes the board to that day + shows a reserve banner.
+  var SEL_DAY=null;
+  function selectDay(iso){
+    SEL_DAY=iso||null;
+    Array.prototype.forEach.call(document.querySelectorAll('.wcell.sel'), function(c){ c.classList.remove('sel'); });
+    if(SEL_DAY){ var c=document.querySelector('.wcell[data-diso="'+SEL_DAY+'"]'); if(c) c.classList.add('sel'); }
+    renderBoard(); updateDayBanner();
+    if(SEL_DAY){ try{ document.getElementById('boardH').scrollIntoView({block:'nearest',behavior:'smooth'}); }catch(e){} }
+  }
+  function updateDayBanner(){
+    var b=document.getElementById('rvDayBanner'); if(!b) return;
+    var ok = SEL_DAY && SEL_DAY>=todayISO() && isOpenDay(SEL_DAY) && !isReserving();
+    if(ok){
+      document.getElementById('rvDayBannerTxt').innerHTML=t('reserveOnDay').replace('{d}', prettyDate(SEL_DAY))+'<small>'+t('reserveOnDaySub')+'</small>';
+      var btn=document.getElementById('rvDayBannerBtn'); btn.textContent=t('reserveBtn'); btn.onclick=function(){ openDayModal(SEL_DAY); };
+      b.classList.add('show');
+    } else { b.classList.remove('show'); }
+  }
   function renderBoard(){
     var active=activeByCam(); var cams=DATA.cameras||[];
     var outCams=cams.filter(function(c){ return active[c]; });
     outn.textContent=(cams.length-outCams.length); totn.textContent=cams.length;
+    var bh=document.getElementById('boardH');
     board.innerHTML='';
+    if(SEL_DAY){
+      // Day-scoped: the cameras checked out ON the selected day (scrollable + compact).
+      bh.innerHTML=t('checkedOnDay').replace('{d}', prettyDate(SEL_DAY))+' <button type="button" class="board-now" id="board-now">'+t('showNow')+'</button>';
+      board.classList.add('board-scroll');
+      var recs=checkoutsOnDay(SEL_DAY).slice().sort(function(a,b){ return (a.camera||'').localeCompare(b.camera||''); });
+      if(!recs.length){ board.innerHTML='<span class="foot">'+t('noneThatDay')+'</span>'; }
+      else recs.forEach(function(o){ var st=statusOf(o); var el=document.createElement('div'); el.className='cam'+(st==='reserved'?' reserved':'');
+        el.innerHTML='<div class="n">'+esc(o.camera)+'</div><div class="s">'+(st==='reserved'?t('reserved'):(t('checkedOut')+' · '+t('dueShort')+' '+fmt(o.due)))+'</div><div class="course">'+camCourse(o.camera)+'</div>';
+        board.appendChild(el); });
+      var bn=document.getElementById('board-now'); if(bn) bn.onclick=function(){ selectDay(null); };
+      return;
+    }
+    bh.textContent=t('checkedNow'); board.classList.remove('board-scroll');
     if(!cams.length){ board.innerHTML='<span class="foot">'+t('noCamsSetup')+'</span>'; return; }
     if(!outCams.length){ board.innerHTML='<span class="foot">'+t('allAvail')+'</span>'; return; }
     outCams.forEach(function(c){
@@ -847,11 +900,12 @@
       for(var d=0; d<7; d++){
         var diso=addDays(wkStartISO,d), dp=diso.split('-');
         var off=!isOpenDay(diso);
-        var cell=el('div','wcell'+(((+dp[1]-1)===curMonth)?'':' out-month')+(diso===todayISO()?' today':'')+(off?' no-school':''));
+        var cell=el('div','wcell'+(((+dp[1]-1)===curMonth)?'':' out-month')+(diso===todayISO()?' today':'')+(off?' no-school':'')+(diso===SEL_DAY?' sel':''));
+        cell.setAttribute('data-diso', diso);
         cell.appendChild(el('div','wdaynum', String(+dp[2])));
         if(DAYS_OFF[diso]) cell.appendChild(el('div','wdayoff', offLabel(DAYS_OFF[diso])));
         else if(AUTHED && isBlackout(diso)) cell.appendChild(el('div','wdayoff','Closed'));  // teacher-only marker; students see no reason
-        (function(day){ cell.addEventListener('click',function(){ openDayModal(day); }); })(diso);
+        (function(day){ cell.addEventListener('click',function(){ isReserving()?openDayModal(day):selectDay(day); }); })(diso);
         // Teacher only: a 3-dots menu to close/reopen this day to student checkouts.
         if(AUTHED && diso>=todayISO() && (isSchoolDay(diso)||isBlackout(diso))){
           var dots=el('button','wdots'); dots.type='button'; dots.innerHTML='&#8942;'; dots.setAttribute('aria-label','Day options');
@@ -870,7 +924,7 @@
         bar.style.left='calc('+(e._sc/7*100)+'% + 2px)';
         bar.style.width='calc('+((e._ec-e._sc+1)/7*100)+'% - 4px)';
         bar.style.top=(e._lane*20)+'px';
-        (function(day){ bar.addEventListener('click',function(ev){ ev.stopPropagation(); openDayModal(day); }); })(e.start>wkStartISO?e.start:wkStartISO);
+        (function(day){ bar.addEventListener('click',function(ev){ ev.stopPropagation(); isReserving()?openDayModal(day):selectDay(day); }); })(e.start>wkStartISO?e.start:wkStartISO);
         bars.appendChild(bar);
       });
       for(var d3=0; d3<7; d3++){
@@ -879,7 +933,7 @@
           more.style.left='calc('+(d3/7*100)+'% + 2px)';
           more.style.width='calc('+(1/7*100)+'% - 4px)';
           more.style.top=(MAXLANE*20)+'px';
-          (function(day){ more.addEventListener('click',function(ev){ ev.stopPropagation(); openDayModal(day); }); })(addDays(wkStartISO,d3));
+          (function(day){ more.addEventListener('click',function(ev){ ev.stopPropagation(); isReserving()?openDayModal(day):selectDay(day); }); })(addDays(wkStartISO,d3));
           bars.appendChild(more);
         }
       }
@@ -1373,8 +1427,8 @@
   // When embedded in the Teacher Console, tell the parent our height so the iframe fits with no scrollbar.
   function postHeight(){ if(window.parent===window) return; try{ parent.postMessage({calH:document.body.scrollHeight}, '*'); }catch(e){} }
   window.addEventListener('resize',postHeight);
-  document.getElementById('prev').addEventListener('click',function(){ view.setMonth(view.getMonth()-1); renderCal(); });
-  document.getElementById('next').addEventListener('click',function(){ view.setMonth(view.getMonth()+1); renderCal(); });
+  document.getElementById('prev').addEventListener('click',function(){ view.setMonth(view.getMonth()-1); selectDay(null); renderCal(); });
+  document.getElementById('next').addEventListener('click',function(){ view.setMonth(view.getMonth()+1); selectDay(null); renderCal(); });
   document.getElementById('dm-x').addEventListener('click',closeDayModal);
   document.getElementById('daymodal').addEventListener('click',function(e){ if(e.target===this) closeDayModal(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeDayModal(); });
