@@ -398,6 +398,7 @@
     next.innerHTML = nextLabel;
     pager.appendChild(next);
 
+    pager.appendChild(makeBuildBtn());
     pager.appendChild(makeUrlBtn());
     pager.appendChild(makeCopyBtn());
     return pager;
@@ -437,15 +438,15 @@
     return b;
   }
 
-  // BUILD: quick jump to Build Resources in the catalog. Same accent pill as COPY URL /
+  // BUILD: quick jump straight to the Build Resources tools hub. Same accent pill as COPY URL /
   // COPY HTML, placed just left of COPY URL. Teacher-only, like the copy pills: it is
   // JS-injected, so it never lands in the HTML pasted into Canvas.
   function makeBuildBtn() {
     var a = document.createElement('a');
     a.className = 'pg-copy pg-build';
     a.textContent = 'BUILD';
-    a.href = 'https://www.creativesilva.com/curriculum.html#build-resources';
-    a.title = 'Go to Build Resources';
+    a.href = 'https://www.creativesilva.com/build-resources.html';
+    a.title = 'Go to Build Resources tools';
     return a;
   }
 
@@ -590,8 +591,9 @@
     menu.addEventListener('click', function (e) { if (e.target.closest('a')) { cat.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); } });
     bar.appendChild(cat);
 
-    // (Build Resources is intentionally NOT shown on module/calendar pages: it lives on the
-    // catalog home. Dropping it here keeps row 2 to one line: CS logo + Catalog + the pager.)
+    // No standalone Build Resources button sits directly in row 2 (keeps it to one line: CS logo
+    // + Catalog + the pager). Build Resources is reachable from module pages via the BUILD pill in
+    // the pager below (wired 2026-09-29 at Chris's request; the pill jumps to build-resources.html).
 
     // The module pager (Prev/Next + page numbers + BUILD / COPY URL / COPY HTML) is
     // the internal module navigation: it only exists on a loaded module page.
