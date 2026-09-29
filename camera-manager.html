@@ -514,7 +514,7 @@
     <div class="mhead"><span class="mtitle" id="noteTitle">Note</span><button class="mx" id="notex" aria-label="Close">&times;</button></div>
     <div class="mbody">
       <label for="noteText">Condition / notes</label>
-      <textarea id="noteText" rows="4" placeholder="e.g. lens cap missing, tripod plate lost, small scratch on body"></textarea>
+      <textarea id="noteText" rows="4" placeholder="e.g. small scratch on body, sticky zoom ring, tripod plate lost"></textarea>
       <button class="go" id="noteSave">Save note</button>
     </div>
   </div>
@@ -1119,9 +1119,9 @@
       .catch(function(){ silvaToast('Could not update. Try again.'); if(btn) btn.disabled=false; });
   }
 
-  // ---- return checklist (verify kit components on check-in; missing ones append to the note) ----
-  // Edit this list to match a complete kit.
-  var KIT_COMPONENTS=['Canon EOS R50 body','RF 50mm lens','RF-S 18-45mm lens','RF-S 55-210mm lens','LP-E17 battery','LC-E17 charger','SD memory card','Neck strap','Lens caps','Camera bag'];
+  // ---- return checklist (verify each kit item on check-in) ----
+  // Uses the SAME specific list as the Kit Contents tab (KIT_STD) and writes the SAME per-camera kit
+  // state, so check-in, the Kit Contents tab, and the student calendar all mirror each other.
   var retId=null, retEquip=[];
   // Item-aware quick reasons for a piece of gear that did not fully come back.
   function retReasons(item){
@@ -1133,7 +1133,8 @@
   function openReturnChecklist(id){
     var c=findRec(id); if(!c) return; retId=id;
     document.getElementById('retTitle').textContent='Return checklist · '+(c.camera||'Camera');
-    document.getElementById('retlist').innerHTML=KIT_COMPONENTS.map(function(k,i){ return '<label class="retitem"><input type="checkbox" id="ret_'+i+'" checked> '+esc(k)+'</label>'; }).join('');
+    var _kitMiss=(assetOf(c.camera).kit||[]);   // pre-check from the camera's current kit state (already-missing items start unchecked)
+    document.getElementById('retlist').innerHTML=KIT_STD.map(function(k,i){ var here=_kitMiss.indexOf(k)<0; return '<label class="retitem"><input type="checkbox" id="ret_'+i+'"'+(here?' checked':'')+'> '+esc(k)+'</label>'; }).join('');
     // Linked additional gear checked out with this kit: verify each piece comes back with it.
     retEquip=(DATA.checkouts||[]).filter(function(e){ return e.kind==='equipment' && e.group===id && statusOf(e)!=='returned'; });
     var eq=document.getElementById('retequip');
@@ -1173,7 +1174,7 @@
     var m=document.getElementById('retmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeReturn(); });
     var g=document.getElementById('retgo'); if(g) g.onclick=function(){
       if(!retId) return; var id=retId, c=findRec(id), cam=c?c.camera:'';
-      var missing=[]; KIT_COMPONENTS.forEach(function(k,i){ var el=document.getElementById('ret_'+i); if(el && !el.checked) missing.push(k); });
+      var missing=[]; KIT_STD.forEach(function(k,i){ var el=document.getElementById('ret_'+i); if(el && !el.checked) missing.push(k); });
       var extra=document.getElementById('retnote2').value.trim();
       var lc=document.getElementById('ret_leavecard');
       var cardCtx=(lc&&lc.checked&&c)?{camera:cam, student_id:c.student_id||'', student_name:nameOf(c), checkout_id:c.id}:null;
@@ -1187,11 +1188,15 @@
       closeReturn();
       // Missing items become open ISSUES on the camera (resolve them in the camera card when fixed) and
       // every finding is written to the permanent history LOG. Then run the 15s return (with its undo).
-      if(cam && (missing.length || extra)){
-        var a=assetOf(cam), ni=(a.issues||[]).slice(), nl=(a.log||[]).slice(), today=fmt(todayISO());
-        missing.forEach(function(m){ if(ni.indexOf(m)<0) ni.push(m); nl.push({date:today,text:'Returned missing: '+m}); });
+      if(cam){
+        var a=assetOf(cam), nl=(a.log||[]).slice(), today=fmt(todayISO());
+        missing.forEach(function(m){ nl.push({date:today,text:'Returned missing: '+m}); });
         if(extra) nl.push({date:today,text:extra});
-        camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({camera:cam,issues:ni,log:nl})})
+        // Check-in SETS the camera's kit state, so the Kit Contents tab, the kit score, and the student
+        // calendar all mirror what actually came back. Empty = complete (100%).
+        var patch={camera:cam,kit:missing};
+        if(missing.length||extra) patch.log=nl;
+        camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(patch)})
           .then(function(){ markReturned(id); }).catch(function(){ markReturned(id); });
       } else { markReturned(id); }
       // Linked gear: check in what came back; keep the rest pending (still out) with a note.
@@ -1377,7 +1382,8 @@
   // ===== Camera detail modal (click a camera number): issues, note, history log, checkouts =====
   var cdCam=null, cdTab='details';
   // Standard camera kit (Cam 1-15). Cam 16/17/18 (P2) are different kits, added later.
-  var KIT_STD=['Canon EOS R50 body','Canon RF 18-45mm kit lens','Canon RF 50mm lens','Canon RF 55-210mm lens','18-45mm lens cap','18-45mm lens filter','50mm lens cap','50mm lens filter','55-210mm lens cap','55-210mm lens filter','SD memory card','Canon LP-E17 battery','Canon LC-E17 charger'];
+  // Lead with the item TYPE + size so a missing piece is unmistakable and orderable (which cap, which filter).
+  var KIT_STD=['Camera Body (Canon EOS R50)','Lens 18-45mm (RF-S kit)','Lens 50mm (RF)','Lens 55-210mm (RF-S)','Lens Cap 18-45mm','Lens Cap 50mm','Lens Cap 55-210mm','Lens Filter 18-45mm','Lens Filter 50mm','Lens Filter 55-210mm','SD Memory Card','Battery (Canon LP-E17)','Charger (Canon LC-E17)'];
   function isStdKit(cam){ return P2.indexOf(cam)<0; }
   function kitMissing(cam){ var a=assetOf(cam); return (a.kit||[]).filter(function(x){ return KIT_STD.indexOf(x)>=0; }); }
   function kitPct(cam){ if(!isStdKit(cam)) return null; var m=kitMissing(cam).length; return Math.round((KIT_STD.length-m)/KIT_STD.length*100); }
@@ -1404,7 +1410,7 @@
     }
     h+='<div class="cd-sec"><div class="cd-h">Open condition issues</div>';
     h+=issues.length?('<div class="cd-issues">'+issues.map(function(it,i){ return '<div class="cd-issue"><span>'+esc(it)+'</span><button class="btn sm" data-resolve="'+i+'">Resolved</button></div>'; }).join('')+'</div>'):'<div class="cd-empty">No open issues.</div>';
-    h+='<div class="cd-add"><input type="text" id="cd-newissue" placeholder="Add an issue (e.g. lens cap missing)"><button class="btn sm" id="cd-addissue">Add</button></div></div>';
+    h+='<div class="cd-add"><input type="text" id="cd-newissue" placeholder="Add an issue (e.g. sticky zoom ring)"><button class="btn sm" id="cd-addissue">Add</button></div></div>';
     h+='<div class="cd-sec"><div class="cd-h">Standing note</div><textarea id="cd-note" rows="2" placeholder="Always-visible note for this camera">'+esc(a.note||'')+'</textarea><button class="btn sm" id="cd-savenote">Save note</button></div>';
     h+='<div class="cd-sec"><div class="cd-h">History log</div>'+(log.length?('<div class="cd-log">'+log.map(function(e){ return '<div class="cd-logrow"><span class="cd-logdate">'+esc(e.date||'')+'</span> '+esc(e.text||'')+'</div>'; }).join('')+'</div>'):'<div class="cd-empty">No history yet.</div>')+'</div>';
     h+='<div class="cd-sec"><div class="cd-h">Checkout history</div>'+(hist.length?('<div class="cd-hist">'+hist.map(function(x){ var s=statusOf(x); return '<div class="cd-histrow"><span class="cd-histwho">'+esc(nameOf(x))+'</span><span class="cd-histdates">out '+fmt(x.out)+' &rarr; '+(s==='returned'?('returned '+fmt(x.returned_date||x.due)):('due '+fmt(x.due)+' &middot; '+esc(s)))+'</span><button class="btn sm ghost" data-edithist="'+esc(x.id)+'">Edit</button></div>'; }).join('')+'</div>'):'<div class="cd-empty">No checkouts recorded.</div>')+'</div>';
