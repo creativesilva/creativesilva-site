@@ -264,6 +264,8 @@
   .silva-confirm-btn.ok{background:var(--teal);color:#04110f;border-color:var(--teal);}
   .silva-confirm-btn.ok:hover{filter:brightness(1.1);}
   .silva-confirm-btn.ok.danger{background:#e0403a;border-color:#e0403a;color:#fff;}
+  .qr-x{position:absolute;top:8px;right:10px;background:transparent;border:0;color:var(--muted);font-size:1.5rem;line-height:1;cursor:pointer;padding:4px 9px;transition:color .15s;}
+  .qr-x:hover{color:#fff;}
   .silva-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:rgba(4,20,19,.98);border:1px solid #e0403a;border-left:4px solid #e0403a;color:#ffd7d3;font-size:.9rem;line-height:1.4;padding:12px 18px;z-index:420;box-shadow:0 16px 40px rgba(0,0,0,.6);opacity:0;transition:opacity .25s,transform .25s;max-width:90vw;}
   .silva-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
   .camlog-top{display:flex;align-items:center;gap:8px;}
@@ -297,6 +299,36 @@
   .cd-histrow{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted);border-bottom:1px solid rgba(0,184,184,.10);padding-bottom:5px;}
   .cd-histwho{font-weight:600;color:#eafeff;flex:1 1 auto;} .cd-histdates{color:var(--faint);white-space:nowrap;}
   .cd-empty{color:var(--faint);font-size:.85rem;}
+  /* Camera detail tabs (Details / Kit contents) + kit checklist */
+  .cd-tabs{display:flex;gap:4px;border-bottom:1px solid rgba(255,255,255,.10);margin-bottom:16px;}
+  .cd-tab{font-family:var(--font);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);background:transparent;border:0;border-bottom:2px solid transparent;padding:10px 14px;margin-bottom:-1px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;}
+  .cd-tab:hover{color:var(--muted);}
+  .cd-tab.active{color:var(--teal-lt);border-bottom-color:var(--teal);}
+  .cd-tabscore{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:2px 6px;background:rgba(63,168,99,.18);color:#8ff0b0;}
+  .cd-tabscore.low{background:rgba(245,179,1,.18);color:#ffd889;} .cd-tabscore.crit{background:rgba(224,64,58,.20);color:#ff9a8a;}
+  .cd-tabpanel{display:none;} .cd-tabpanel.active{display:block;}
+  .kit-score{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+  .kit-score-pct{font-family:var(--font);font-weight:700;font-size:1.7rem;letter-spacing:.02em;color:var(--ok);line-height:1;min-width:74px;}
+  .kit-score.low .kit-score-pct{color:#ffd889;} .kit-score.crit .kit-score-pct{color:#ff9a8a;}
+  .kit-score-meta{flex:1;min-width:0;}
+  .kit-score-lab{font-family:var(--font);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+  .kit-score-bar{height:8px;background:rgba(255,255,255,.08);position:relative;margin-top:6px;}
+  .kit-score-fill{position:absolute;left:0;top:0;height:100%;background:var(--ok);transition:width .2s;}
+  .kit-score.low .kit-score-fill{background:#f5b301;} .kit-score.crit .kit-score-fill{background:var(--red);}
+  .kit-note{font-size:.82rem;color:var(--muted);margin-bottom:12px;line-height:1.5;}
+  .kit-note b{color:#ff9a8a;}
+  .kit-list{display:flex;flex-direction:column;gap:3px;}
+  .kit-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-left:3px solid var(--ok);}
+  .kit-row.missing{border-left-color:var(--red);background:rgba(224,64,58,.06);}
+  .kit-name{font-family:var(--body);font-size:.9rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:400;}
+  .kit-sw{display:inline-flex;align-items:center;gap:9px;background:transparent;border:0;cursor:pointer;padding:0;flex:0 0 auto;}
+  .kit-sw-track{position:relative;width:44px;height:23px;border:1px solid var(--ok);background:rgba(63,168,99,.22);transition:background .15s,border-color .15s;flex:0 0 auto;}
+  .kit-sw-knob{position:absolute;top:2px;left:2px;width:17px;height:17px;background:var(--ok);transition:left .15s,background .15s;}
+  .kit-sw-lab{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8ff0b0;min-width:52px;text-align:left;}
+  .kit-sw.missing .kit-sw-track{border-color:var(--red);background:rgba(224,64,58,.22);}
+  .kit-sw.missing .kit-sw-knob{left:24px;background:var(--red);}
+  .kit-sw.missing .kit-sw-lab{color:#ff9a8a;}
+  .kit-tbd{color:var(--faint);font-size:.9rem;padding:8px 2px;line-height:1.5;}
   .ed-btnrow{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:4px;}
   .retsub{color:var(--muted);font-size:.86rem;margin:0 0 12px;}
   .retitem{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,184,184,.12);font-family:var(--body);font-size:.95rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:400;cursor:pointer;}
@@ -579,19 +611,24 @@
   // ---- shared header icon ----
   // Show the reservations QR (students scan it to open the student calendar on their phones).
   function showQR(){
+    var CAL_URL='https://www.creativesilva.com/calendar.html';
     var ov=document.createElement('div'); ov.className='silva-confirm-ov';
-    var panel=document.createElement('div'); panel.className='silva-confirm-panel'; panel.style.textAlign='center'; panel.style.maxWidth='420px';
+    var panel=document.createElement('div'); panel.className='silva-confirm-panel'; panel.style.textAlign='center'; panel.style.maxWidth='420px'; panel.style.position='relative';
     panel.setAttribute('role','dialog'); panel.setAttribute('aria-modal','true');
-    panel.innerHTML='<div class="silva-confirm-msg" style="margin-bottom:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;">Camera Reservations Calendar</div>'
+    panel.innerHTML='<button type="button" class="qr-x" aria-label="Close">&times;</button>'
+      +'<div class="silva-confirm-msg" style="margin:2px 0 14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;">Camera Reservations Calendar</div>'
       +'<img src="/assets/camera-reservations-qr-v1.png" alt="QR code for the camera reservations calendar" style="display:block;width:280px;max-width:70vw;height:auto;background:#fff;padding:12px;margin:0 auto 14px;" />'
-      +'<div style="font-size:.85rem;color:rgba(234,247,247,.72);line-height:1.5;">Students scan this to open the reservations calendar on their phone.</div>';
-    var acts=document.createElement('div'); acts.className='silva-confirm-acts'; acts.style.justifyContent='center';
-    var close=document.createElement('button'); close.type='button'; close.className='silva-confirm-btn ok'; close.textContent='Close';
-    acts.appendChild(close); panel.appendChild(acts); ov.appendChild(panel); document.body.appendChild(ov);
+      +'<div style="font-size:.85rem;color:rgba(234,247,247,.72);line-height:1.5;">Students scan this to open the reservations calendar on their phone or iPad.</div>';
+    var acts=document.createElement('div'); acts.className='silva-confirm-acts'; acts.style.cssText='justify-content:center;margin-top:16px;';
+    var dl=document.createElement('a'); dl.className='silva-confirm-btn ok'; dl.textContent='Download QR'; dl.href='/assets/camera-reservations-qr-v1.png'; dl.setAttribute('download','camera-reservations-qr.png'); dl.style.textDecoration='none';
+    var cp=document.createElement('button'); cp.type='button'; cp.className='silva-confirm-btn cancel'; cp.textContent='Copy Link';
+    acts.appendChild(dl); acts.appendChild(cp); panel.appendChild(acts); ov.appendChild(panel); document.body.appendChild(ov);
     function done(){ try{ document.body.removeChild(ov); }catch(e){} document.removeEventListener('keydown',key); }
-    function key(e){ if(e.key==='Escape'||e.key==='Enter') done(); }
+    function key(e){ if(e.key==='Escape') done(); }
     ov.addEventListener('click',function(e){ if(e.target===ov) done(); });
-    close.onclick=done; document.addEventListener('keydown',key); setTimeout(function(){ close.focus(); },30);
+    panel.querySelector('.qr-x').onclick=done;
+    cp.onclick=function(){ try{ navigator.clipboard.writeText(CAL_URL).then(function(){ silvaToast('Calendar link copied.'); }, function(){ silvaToast(CAL_URL); }); }catch(e){ silvaToast(CAL_URL); } };
+    document.addEventListener('keydown',key); setTimeout(function(){ panel.querySelector('.qr-x').focus(); },30);
   }
   // Build the header to match the catalog: camera icon on the title, the redundant generic Calendar
   // link removed (Student Calendar covers it), Reserve + Student Calendar lifted into the top row
@@ -1279,8 +1316,14 @@
   })();
 
   // ===== Camera detail modal (click a camera number): issues, note, history log, checkouts =====
-  var cdCam=null;
-  function openCamDetail(cam){ cdCam=cam; renderCamDetailModal(); document.getElementById('camdetail').classList.add('open'); }
+  var cdCam=null, cdTab='details';
+  // Standard camera kit (Cam 1-15). Cam 16/17/18 (P2) are different kits, added later.
+  var KIT_STD=['Canon EOS R50 body','Canon RF 18-45mm kit lens','Canon RF 50mm lens','Canon RF 55-210mm lens','18-45mm lens cap','18-45mm lens filter','50mm lens cap','50mm lens filter','55-210mm lens cap','55-210mm lens filter','SD memory card','Canon LP-E17 battery','Canon LC-E17 charger'];
+  function isStdKit(cam){ return P2.indexOf(cam)<0; }
+  function kitMissing(cam){ var a=assetOf(cam); return (a.kit||[]).filter(function(x){ return KIT_STD.indexOf(x)>=0; }); }
+  function kitPct(cam){ if(!isStdKit(cam)) return null; var m=kitMissing(cam).length; return Math.round((KIT_STD.length-m)/KIT_STD.length*100); }
+  function kitScoreCls(pct){ return pct>=100?'':(pct>=80?'low':'crit'); }
+  function openCamDetail(cam){ cdCam=cam; cdTab='details'; renderCamDetailModal(); document.getElementById('camdetail').classList.add('open'); }
   function closeCamDetail(){ document.getElementById('camdetail').classList.remove('open'); cdCam=null; }
   function saveAsset(cam, patch, then){
     camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.assign({camera:cam},patch))})
@@ -1306,7 +1349,25 @@
     h+='<div class="cd-sec"><div class="cd-h">Standing note</div><textarea id="cd-note" rows="2" placeholder="Always-visible note for this camera">'+esc(a.note||'')+'</textarea><button class="btn sm" id="cd-savenote">Save note</button></div>';
     h+='<div class="cd-sec"><div class="cd-h">History log</div>'+(log.length?('<div class="cd-log">'+log.map(function(e){ return '<div class="cd-logrow"><span class="cd-logdate">'+esc(e.date||'')+'</span> '+esc(e.text||'')+'</div>'; }).join('')+'</div>'):'<div class="cd-empty">No history yet.</div>')+'</div>';
     h+='<div class="cd-sec"><div class="cd-h">Checkout history</div>'+(hist.length?('<div class="cd-hist">'+hist.map(function(x){ var s=statusOf(x); return '<div class="cd-histrow"><span class="cd-histwho">'+esc(nameOf(x))+'</span><span class="cd-histdates">out '+fmt(x.out)+' &rarr; '+(s==='returned'?('returned '+fmt(x.returned_date||x.due)):('due '+fmt(x.due)+' &middot; '+esc(s)))+'</span><button class="btn sm ghost" data-edithist="'+esc(x.id)+'">Edit</button></div>'; }).join('')+'</div>'):'<div class="cd-empty">No checkouts recorded.</div>')+'</div>';
-    document.getElementById('cd-body').innerHTML=h;
+    // ---- Kit contents tab ----
+    var _pct=kitPct(cam), _scls=(_pct==null?'':kitScoreCls(_pct)), _kit;
+    if(isStdKit(cam)){
+      var _miss=kitMissing(cam);
+      var _rows=KIT_STD.map(function(item){ var mm=_miss.indexOf(item)>=0;
+        return '<div class="kit-row'+(mm?' missing':'')+'"><span class="kit-name">'+esc(item)+'</span><button type="button" class="kit-sw'+(mm?' missing':'')+'" data-kititem="'+esc(item)+'" aria-pressed="'+(mm?'false':'true')+'"><span class="kit-sw-track"><span class="kit-sw-knob"></span></span><span class="kit-sw-lab">'+(mm?'Missing':'In kit')+'</span></button></div>';
+      }).join('');
+      _kit='<div class="kit-score '+_scls+'"><div class="kit-score-pct">'+_pct+'%</div><div class="kit-score-meta"><div class="kit-score-lab">'+(KIT_STD.length-_miss.length)+' of '+KIT_STD.length+' items in kit</div><div class="kit-score-bar"><span class="kit-score-fill" style="width:'+_pct+'%"></span></div></div></div><div class="kit-note">Toggle an item to <b>Missing</b> if it is not in the bag. The score updates here and for students on the calendar.</div><div class="kit-list">'+_rows+'</div>';
+    } else {
+      _kit='<div class="kit-tbd">This camera uses a different kit. Its item list will be added soon.</div>';
+    }
+    var _badge=(_pct==null?'':'<span class="cd-tabscore '+_scls+'">'+_pct+'%</span>');
+    document.getElementById('cd-body').innerHTML=
+      '<div class="cd-tabs"><button type="button" class="cd-tab'+(cdTab==='kit'?'':' active')+'" data-cdtab="details">Details</button>'+
+      '<button type="button" class="cd-tab'+(cdTab==='kit'?' active':'')+'" data-cdtab="kit">Kit contents '+_badge+'</button></div>'+
+      '<div class="cd-tabpanel'+(cdTab==='kit'?'':' active')+'" data-panel="details">'+h+'</div>'+
+      '<div class="cd-tabpanel'+(cdTab==='kit'?' active':'')+'" data-panel="kit">'+_kit+'</div>';
+    document.querySelectorAll('#cd-body .cd-tab').forEach(function(tb){ tb.onclick=function(){ cdTab=tb.getAttribute('data-cdtab'); document.querySelectorAll('#cd-body .cd-tab').forEach(function(x){ x.classList.toggle('active',x===tb); }); document.querySelectorAll('#cd-body .cd-tabpanel').forEach(function(p){ p.classList.toggle('active',p.getAttribute('data-panel')===cdTab); }); }; });
+    document.querySelectorAll('#cd-body .kit-sw').forEach(function(sw){ sw.onclick=function(){ var item=sw.getAttribute('data-kititem'), miss=kitMissing(cam).slice(), i=miss.indexOf(item); if(i>=0) miss.splice(i,1); else miss.push(item); cdTab='kit'; saveAsset(cam,{kit:miss},renderCamDetailModal); }; });
     var oosb=document.getElementById('cd-oos'); if(oosb) oosb.onclick=function(){ saveAsset(cam,{oos:!oos},renderCamDetailModal); };
     var ncb=document.getElementById('cd-newcard'); if(ncb) ncb.onclick=function(){ setNoCard(cam,false,ncb); };
     var ec=document.getElementById('cd-editcur'); if(ec) ec.onclick=function(){ openEditCheckout(c.id); };
