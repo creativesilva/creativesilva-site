@@ -19,14 +19,14 @@ EXPOSURE_THUMB=f"{SITE}/assets/images/shared/exposure-basics-thumb-v1.jpg"
 HAVE_HEADER=True; HAVE_S1_FLOAT=False; HAVE_S2_FLOAT=False; HAVE_S3_FLOAT=False
 
 COURSES=[
-  {"prefix":"photo1","label":"Photography 1A","mod":"09",
+  {"prefix":"photo1","label":"Photography 1A","mod":"09","raw":False,
    "reflect_en":f"{SITE}/assets/course-documents/Exposure-Balance-Reflection-EN.docx",
    "reflect_es":f"{SITE}/assets/course-documents/Exposure-Balance-Reflection-ES.docx",
    "slide_en":f"{SITE}/assets/course-documents/Photo1-Camera-Aperture-Part1-Slides-EN-v3.pdf",
    "slide_es":f"{SITE}/assets/course-documents/Photo1-Camera-Aperture-Part1-Slides-ES-v3.pdf",
    "cover_en":f"{SITE}/assets/images/shared/aperture-part1-cover-photo1-en-v3.jpg",
    "cover_es":f"{SITE}/assets/images/shared/aperture-part1-cover-photo1-es-v3.jpg"},
-  {"prefix":"photo2","label":"Photography 2A","mod":"08",
+  {"prefix":"photo2","label":"Photography 2A","mod":"08","raw":True,
    "reflect_en":f"{SITE}/assets/course-documents/Exposure-Balance-Photo2-Reflection-EN.docx",
    "reflect_es":f"{SITE}/assets/course-documents/Exposure-Balance-Photo2-Reflection-ES.docx",
    "slide_en":f"{SITE}/assets/course-documents/Photo2-Camera-Aperture-Part1-Slides-EN-v3.pdf",
@@ -69,7 +69,7 @@ def build_course(C):
     S1=f"{C['prefix']}-exposure-balance-step01-capture-contact.html"
     S2=f"{C['prefix']}-exposure-balance-step02-edit-submit.html"
     S3=f"{C['prefix']}-exposure-balance-step03-reflection.html"
-    MOD=C['mod']; LABEL=C['label']
+    MOD=C['mod']; LABEL=C['label']; RAW=C['raw']
 
     def nav(current,dots,stepnav):
         return ('      <div class="silva-breadcrumb">\n'
@@ -191,10 +191,10 @@ def build_course(C):
             para("You are on Step 01 now: read this page and download your files below. Here are the three steps that follow.")
             + bullets([
                 ("Step 02 &middot; Capture &amp; Contact Sheet:","frame your subject, start at f/22, and work down to f/1.8. Take at least two photos at each of your six f-stops (twelve or more), then turn in a 12-Up contact sheet of your whole take."),
-                ("Step 03 &middot; Edit &amp; Submit:","pick your best one at each f-stop (six finals, each a different f-stop), crop them, and turn in a 6-Up contact sheet plus the six final JPGs (seven files)."),
+                ("Step 03 &middot; Edit &amp; Submit:",("develop each one fully in Lightroom, fine-tune your preset, crop, and turn in a 6-Up contact sheet plus the six edited JPGs (seven files)." if RAW else "pick your best one at each f-stop (six finals, each a different f-stop), crop them, and turn in a 6-Up contact sheet plus the six final JPGs (seven files).")),
                 ("Step 04 &middot; Reflection:","tell what you learned about balancing your exposure."),
             ])
-            + note("This is a JPG capture. Get your exposure right in the camera so it looks good straight out of the camera. The only edit you need is a crop."))
+            + note("This is a RAW capture. In Step 03 you develop each photo fully: a detailed edit, your own preset, and a crop." if RAW else "This is a JPG capture. Get your exposure right in the camera so it looks good straight out of the camera. The only edit you need is a crop."))
         en+=resources_card("Key Words",
             vocab_grid("On the Quiz",
               "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
@@ -234,10 +234,10 @@ def build_course(C):
             para("Ahora est&aacute;s en el Paso 01: lee esta p&aacute;gina y descarga tus archivos abajo. Aqu&iacute; est&aacute;n los tres pasos que siguen.")
             + bullets([
                 ("Paso 02 &middot; Captura y Hoja de Contactos:","encuadra tu sujeto, empieza en f/22 y baja hasta f/1.8. Toma al menos dos fotos en cada uno de tus seis n&uacute;meros f (doce o m&aacute;s), luego entrega una hoja de contactos de 12 im&aacute;genes de todo tu trabajo."),
-                ("Paso 03 &middot; Edita y Entrega:","elige tu mejor foto en cada n&uacute;mero f (seis finales, cada una un n&uacute;mero f distinto), rec&oacute;rtalas y entrega una hoja de contactos de 6 m&aacute;s las seis im&aacute;genes finales en JPG (siete archivos)."),
+                ("Paso 03 &middot; Edita y Entrega:",("revela cada una por completo en Lightroom, ajusta tu preset, recorta y entrega una hoja de contactos de 6 m&aacute;s las seis im&aacute;genes editadas en JPG (siete archivos)." if RAW else "elige tu mejor foto en cada n&uacute;mero f (seis finales, cada una un n&uacute;mero f distinto), rec&oacute;rtalas y entrega una hoja de contactos de 6 m&aacute;s las seis im&aacute;genes finales en JPG (siete archivos).")),
                 ("Paso 04 &middot; Reflexi&oacute;n:","cuenta qu&eacute; aprendiste sobre equilibrar tu exposici&oacute;n."),
             ])
-            + note("Esta es una captura en JPG. Deja bien tu exposici&oacute;n en la c&aacute;mara para que se vea bien tal como sale. La &uacute;nica edici&oacute;n que necesitas es un recorte."))
+            + note("Esta es una captura en RAW. En el Paso 03 revelas cada foto por completo: una edici&oacute;n detallada, tu propio preset y un recorte." if RAW else "Esta es una captura en JPG. Deja bien tu exposici&oacute;n en la c&aacute;mara para que se vea bien tal como sale. La &uacute;nica edici&oacute;n que necesitas es un recorte."))
         es+=resources_card("Palabras Clave",
             vocab_grid("En el Examen",
               "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el de mitad de semestre y el del final. Apr&eacute;ndelas ahora, no la noche anterior.",
@@ -265,7 +265,7 @@ def build_course(C):
             ]))
         en+=deliverables_box(False,
             [("1 contact sheet:","a 12-Up contact sheet of your entire take, turned in as a high-resolution JPG.")])
-        en+=exposure_settings_section(False, "JPG")
+        en+=exposure_settings_section(False, "RAW" if RAW else "JPG")
         en+=exposure_poster(False)
         en+=card("WORK THE RANGE / SIX F-STOPS","f/22 Down to f/1.8, No Repeats",
             para("Start at f/22 and work your way down to f/1.8. Choose <strong>six different f-stops</strong> along the way (you pick them), and do not repeat the same f-stop twice. Take at least <strong>two photos at each f-stop</strong>, so your whole take is twelve photos or more.")
@@ -279,14 +279,14 @@ def build_course(C):
             ], accent="#f90101")
             + note("Keep your ISO as low as the light lets you, and never let the shutter go below 1/60. Same frame, six f-stops, every one well exposed."))
         en+=card("BUILD IT / CONTACT SHEET","Turn In a 12-Up Contact Sheet",
-            para("Bring your JPGs into Lightroom Classic and build a 12-Up contact sheet of your whole take, then print it to a high-resolution JPG.")
+            para(("Bring your RAW files into Lightroom Classic and build a 12-Up contact sheet of your whole take, then print it to a high-resolution JPG." if RAW else "Bring your JPGs into Lightroom Classic and build a 12-Up contact sheet of your whole take, then print it to a high-resolution JPG."))
             + steps([
-                ("Import your JPGs:","offload from the camera kit to OneDrive, then import into Lightroom Classic."),
+                (("Import your RAW files:" if RAW else "Import your JPGs:"),"offload from the camera kit to OneDrive, then import into Lightroom Classic."),
                 ("Use the 12-Up preset:","in the Print module, choose the 12-Up contact sheet preset (you installed it in Image Series)."),
                 ("Print to JPG:","use Print to File so it saves as a high-resolution JPG, then upload it here."),
             ])
             + note("Contact sheets are always turned in as a high-resolution JPG."))
-        en+=next_up("UP NEXT &middot; STEP 03 - Edit &amp; Submit","Pick your best one at each f-stop, crop, and turn in a 6-Up plus six final JPGs.")
+        en+=next_up("UP NEXT &middot; STEP 03 - Edit &amp; Submit",("Develop each photo, fine-tune your preset, crop, and turn in a 6-Up plus six edited JPGs." if RAW else "Pick your best one at each f-stop, crop, and turn in a 6-Up plus six final JPGs."))
 
         es=banner(f"M&oacute;dulo {MOD} &bull; Paso 02","Captura y Hoja de Contactos","Encuadra un sujeto, ve de f/22 hasta f/1.8, y arma una hoja de contactos de 12.","#top","Back to English", HICON_PHOTO_WALK)
         es+=type_card("photo-walk","Paso 02 &middot; Captura","Elige Tu Sujeto y Encu&aacute;dralo",
@@ -298,7 +298,7 @@ def build_course(C):
             ]))
         es+=deliverables_box(True,
             [("1 hoja de contactos:","una hoja de contactos de 12 im&aacute;genes de todo tu trabajo, entregada como un JPG de alta resoluci&oacute;n.")])
-        es+=exposure_settings_section(True, "JPG")
+        es+=exposure_settings_section(True, "RAW" if RAW else "JPG")
         es+=exposure_poster(True)
         es+=card("TRABAJA EL RANGO / SEIS N&Uacute;MEROS F","de f/22 a f/1.8, Sin Repetir",
             para("Empieza en f/22 y baja hasta f/1.8. Elige <strong>seis n&uacute;meros f distintos</strong> en el camino (t&uacute; los eliges) y no repitas el mismo n&uacute;mero f. Toma al menos <strong>dos fotos en cada n&uacute;mero f</strong>, para que todo tu trabajo sea doce fotos o m&aacute;s.")
@@ -312,14 +312,14 @@ def build_course(C):
             ], accent="#f90101")
             + note("Mant&eacute;n tu ISO lo m&aacute;s bajo que la luz permita, y nunca dejes que el obturador baje de 1/60. El mismo encuadre, seis n&uacute;meros f, cada uno bien expuesto."))
         es+=card("&Aacute;RMALA / HOJA DE CONTACTOS","Entrega una Hoja de Contactos de 12",
-            para("Lleva tus JPG a Lightroom Classic y arma una hoja de contactos de 12 im&aacute;genes de todo tu trabajo, luego impr&iacute;mela como un JPG de alta resoluci&oacute;n.")
+            para(("Lleva tus archivos RAW a Lightroom Classic y arma una hoja de contactos de 12 im&aacute;genes de todo tu trabajo, luego impr&iacute;mela como un JPG de alta resoluci&oacute;n." if RAW else "Lleva tus JPG a Lightroom Classic y arma una hoja de contactos de 12 im&aacute;genes de todo tu trabajo, luego impr&iacute;mela como un JPG de alta resoluci&oacute;n."))
             + steps([
-                ("Importa tus JPG:","descarga del kit de c&aacute;mara a OneDrive, luego importa a Lightroom Classic."),
+                (("Importa tus archivos RAW:" if RAW else "Importa tus JPG:"),"descarga del kit de c&aacute;mara a OneDrive, luego importa a Lightroom Classic."),
                 ("Usa el ajuste de 12:","en el m&oacute;dulo Print, elige el ajuste de hoja de contactos de 12 (lo instalaste en Serie de Im&aacute;genes)."),
                 ("Imprime a JPG:","usa Print to File para que se guarde como un JPG de alta resoluci&oacute;n, luego s&uacute;belo aqu&iacute;."),
             ])
             + note("Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n."))
-        es+=next_up("SIGUIENTE &middot; PASO 03 - Edita y Entrega","Elige tu mejor foto en cada n&uacute;mero f, recorta y entrega una hoja de 6 m&aacute;s seis JPG finales.")
+        es+=next_up("SIGUIENTE &middot; PASO 03 - Edita y Entrega",("Revela cada foto, ajusta tu preset, recorta y entrega una hoja de 6 m&aacute;s seis JPG editados." if RAW else "Elige tu mejor foto en cada n&uacute;mero f, recorta y entrega una hoja de 6 m&aacute;s seis JPG finales."))
 
         stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a> <a href="{S2}" class="silva-step-btn">Step 03 &#8594;</a>'
         bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S2}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
@@ -327,7 +327,7 @@ def build_course(C):
 
     # ================= STEP 03: Edit & Submit =================
     def step_edit():
-        en=banner(f"Module {MOD} &bull; Step 03","Edit &amp; Submit","Pick your best one at each f-stop, crop, and turn in a 6-Up plus six final JPGs.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
+        en=banner(f"Module {MOD} &bull; Step 03","Edit &amp; Submit",("Develop each photo, fine-tune your preset, crop, and turn in a 6-Up plus six edited JPGs." if RAW else "Pick your best one at each f-stop, crop, and turn in a 6-Up plus six final JPGs."),"#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
         en+=type_card("edit","Step 03 &middot; Select","Choose Your Six Finals",
             para("Look through your take and choose your <strong>six strongest photos, one at each f-stop</strong>. Each final must be a different f-stop, from f/22 to f/1.8, and each must be properly exposed. Keeping one at each f-stop shows the full range and sets up your reflection.")
             + bullets([
@@ -337,15 +337,25 @@ def build_course(C):
             ])
             + note("Call these your final selections, not &ldquo;picks.&rdquo; Choose on purpose."))
         en+=deliverables_box(False,
-            [("1 contact sheet:","a 6-Up contact sheet with your six final images loaded, as a high-resolution JPG."),
-             ("6 final photos:","your six selections, one per f-stop, exported individually as high-resolution JPGs."),
-             ("7 files total:","the 6-Up contact sheet plus the six final JPGs.")])
-        en+=card("LIGHT EDIT / CROP ONLY","Get It Right in Camera, Then Crop",
-            para("This is a JPG capture, so you got your exposure right in the camera. The only edit you need is a <strong>crop</strong>: tidy the framing so each photo reads clean.")
-            + bullets([
-                ("Crop for the frame:","straighten and tidy the edges. Keep the same look across all six so the range is easy to compare."),
-                ("Do not over-edit:","no heavy color or filters. The photo should already look good out of the camera."),
-            ]))
+            [("1 contact sheet:",("a 6-Up contact sheet with your six edited images loaded, as a high-resolution JPG." if RAW else "a 6-Up contact sheet with your six final images loaded, as a high-resolution JPG.")),
+             (("6 edited photos:" if RAW else "6 final photos:"),("your six developed finals, one per f-stop, exported individually as high-resolution JPGs." if RAW else "your six selections, one per f-stop, exported individually as high-resolution JPGs.")),
+             ("7 files total:",("the 6-Up contact sheet plus the six edited JPGs." if RAW else "the 6-Up contact sheet plus the six final JPGs."))])
+        if RAW:
+            en+=card("FULL EDIT / DEVELOP, PRESET &amp; CROP","Develop Each RAW File",
+                para("This is a RAW capture, so you develop each photo in the Lightroom <strong>Develop</strong> module. Make a detailed, thorough edit: set the white balance, exposure, contrast, highlights and shadows, and color until each photo looks its best.")
+                + bullets([
+                    ("Develop fully:","adjust white balance, exposure, contrast, tone, and color. Bring out the detail that RAW gives you."),
+                    ("Use and fine-tune your preset:","apply the preset you built earlier, then fine-tune it for this set. Keep exploring: adjust the settings and update your preset as you improve it."),
+                    ("Crop for the frame:","straighten and tidy the edges so each photo reads clean."),
+                    ("Keep the set consistent:","aim for a matching look across all six so the f-stop range is easy to compare."),
+                ]))
+        else:
+            en+=card("LIGHT EDIT / CROP ONLY","Get It Right in Camera, Then Crop",
+                para("This is a JPG capture, so you got your exposure right in the camera. The only edit you need is a <strong>crop</strong>: tidy the framing so each photo reads clean.")
+                + bullets([
+                    ("Crop for the frame:","straighten and tidy the edges. Keep the same look across all six so the range is easy to compare."),
+                    ("Do not over-edit:","no heavy color or filters. The photo should already look good out of the camera."),
+                ]))
         en+=card("BUILD IT / CONTACT SHEET + EXPORTS","Turn In a 6-Up Plus Six JPGs",
             steps([
                 ("Load your 6 finals:","in Lightroom Classic, select your six final photos, one at each f-stop."),
@@ -356,7 +366,7 @@ def build_course(C):
             + note("Contact sheets are always turned in as a high-resolution JPG."))
         en+=next_up("UP NEXT &middot; STEP 04 - Reflection","Tell what you learned about balancing your exposure across the range.")
 
-        es=banner(f"M&oacute;dulo {MOD} &bull; Paso 03","Edita y Entrega","Elige tu mejor foto en cada n&uacute;mero f, recorta y entrega una hoja de 6 m&aacute;s seis JPG finales.","#top","Back to English", HICON_PHOTO_WALK)
+        es=banner(f"M&oacute;dulo {MOD} &bull; Paso 03","Edita y Entrega",("Revela cada foto, ajusta tu preset, recorta y entrega una hoja de 6 m&aacute;s seis JPG editados." if RAW else "Elige tu mejor foto en cada n&uacute;mero f, recorta y entrega una hoja de 6 m&aacute;s seis JPG finales."),"#top","Back to English", HICON_PHOTO_WALK)
         es+=type_card("edit","Paso 03 &middot; Selecciona","Elige Tus Seis Finales",
             para("Revisa tu trabajo y elige tus <strong>seis fotos m&aacute;s fuertes, una en cada n&uacute;mero f</strong>. Cada final debe ser un n&uacute;mero f distinto, de f/22 a f/1.8, y cada una bien expuesta. Guardar una en cada n&uacute;mero f muestra todo el rango y prepara tu reflexi&oacute;n.")
             + bullets([
@@ -366,15 +376,25 @@ def build_course(C):
             ])
             + note("Llama a estas tus selecciones finales. Elige a prop&oacute;sito."))
         es+=deliverables_box(True,
-            [("1 hoja de contactos:","una hoja de contactos de 6 con tus seis im&aacute;genes finales cargadas, como un JPG de alta resoluci&oacute;n."),
-             ("6 fotos finales:","tus seis selecciones, una por n&uacute;mero f, exportadas por separado como JPG de alta resoluci&oacute;n."),
-             ("7 archivos en total:","la hoja de contactos de 6 m&aacute;s las seis im&aacute;genes finales en JPG.")])
-        es+=card("EDICI&Oacute;N LIGERA / SOLO RECORTE","Deja Bien la C&aacute;mara, Luego Recorta",
-            para("Esta es una captura en JPG, as&iacute; que dejaste bien tu exposici&oacute;n en la c&aacute;mara. La &uacute;nica edici&oacute;n que necesitas es un <strong>recorte</strong>: ordena el encuadre para que cada foto se vea limpia.")
-            + bullets([
-                ("Recorta el encuadre:","endereza y ordena los bordes. Mant&eacute;n el mismo estilo en las seis para que el rango sea f&aacute;cil de comparar."),
-                ("No edites de m&aacute;s:","sin color pesado ni filtros. La foto ya debe verse bien tal como sale de la c&aacute;mara."),
-            ]))
+            [("1 hoja de contactos:",("una hoja de contactos de 6 con tus seis im&aacute;genes editadas cargadas, como un JPG de alta resoluci&oacute;n." if RAW else "una hoja de contactos de 6 con tus seis im&aacute;genes finales cargadas, como un JPG de alta resoluci&oacute;n.")),
+             (("6 fotos editadas:" if RAW else "6 fotos finales:"),("tus seis finales reveladas, una por n&uacute;mero f, exportadas por separado como JPG de alta resoluci&oacute;n." if RAW else "tus seis selecciones, una por n&uacute;mero f, exportadas por separado como JPG de alta resoluci&oacute;n.")),
+             ("7 archivos en total:",("la hoja de contactos de 6 m&aacute;s las seis im&aacute;genes editadas en JPG." if RAW else "la hoja de contactos de 6 m&aacute;s las seis im&aacute;genes finales en JPG."))])
+        if RAW:
+            es+=card("EDICI&Oacute;N COMPLETA / REVELA, PRESET Y RECORTE","Revela Cada Archivo RAW",
+                para("Esta es una captura en RAW, as&iacute; que revelas cada foto en el m&oacute;dulo <strong>Develop</strong> de Lightroom. Haz una edici&oacute;n detallada y completa: ajusta el balance de blancos, la exposici&oacute;n, el contraste, las luces y sombras, y el color hasta que cada foto se vea lo mejor posible.")
+                + bullets([
+                    ("Revela por completo:","ajusta el balance de blancos, la exposici&oacute;n, el contraste, el tono y el color. Saca el detalle que te da el RAW."),
+                    ("Usa y ajusta tu preset:","aplica el preset que creaste antes, luego aj&uacute;stalo para este set. Sigue explorando: modifica los ajustes y actualiza tu preset conforme lo mejoras."),
+                    ("Recorta el encuadre:","endereza y ordena los bordes para que cada foto se vea limpia."),
+                    ("Mant&eacute;n el set consistente:","busca un estilo que combine en las seis para que el rango de n&uacute;meros f sea f&aacute;cil de comparar."),
+                ]))
+        else:
+            es+=card("EDICI&Oacute;N LIGERA / SOLO RECORTE","Deja Bien la C&aacute;mara, Luego Recorta",
+                para("Esta es una captura en JPG, as&iacute; que dejaste bien tu exposici&oacute;n en la c&aacute;mara. La &uacute;nica edici&oacute;n que necesitas es un <strong>recorte</strong>: ordena el encuadre para que cada foto se vea limpia.")
+                + bullets([
+                    ("Recorta el encuadre:","endereza y ordena los bordes. Mant&eacute;n el mismo estilo en las seis para que el rango sea f&aacute;cil de comparar."),
+                    ("No edites de m&aacute;s:","sin color pesado ni filtros. La foto ya debe verse bien tal como sale de la c&aacute;mara."),
+                ]))
         es+=card("&Aacute;RMALA / HOJA DE CONTACTOS + EXPORTES","Entrega una Hoja de 6 M&aacute;s Seis JPG",
             steps([
                 ("Carga tus 6 finales:","en Lightroom Classic, selecciona tus seis fotos finales, una en cada n&uacute;mero f."),
