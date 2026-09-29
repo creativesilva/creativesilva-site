@@ -83,21 +83,54 @@
   .pill.pending{background:rgba(139,92,246,.22);color:#c9b8ff;}
   .cam.pending-approval{border-left-color:#8b5cf6;}
   .pendmsg{font-size:.66rem;color:#c9b8ff;letter-spacing:.02em;margin-top:-2px;}
-  /* status accordion sections: all 18 cameras split by state (out/reserved/available) + equipment */
-  .csec{margin-bottom:14px;border:1px solid var(--line-soft);border-left:4px solid var(--muted);background:rgba(0,0,0,.14);}
+  /* ── Camera board = curriculum-catalog course-card look. One "Cameras" card (teal camera-icon
+     title box, blurred strips) opens to horizontal section strips; each strip opens to its tiles. ── */
+  .cam-top{background:linear-gradient(180deg,rgba(0,116,116,.10) 0%,rgba(0,116,116,.03) 100%);border:1px solid rgba(0,184,184,.22);margin-bottom:14px;position:relative;transition:border-color .2s ease;}
+  .cam-top.open,.cam-top:hover{border-color:rgba(0,184,184,.45);}
+  .cam-top-head{width:100%;display:flex;align-items:center;gap:18px;cursor:pointer;background:transparent;border:0;color:var(--text);text-align:left;font-family:var(--font);padding:22px 28px 22px 32px;}
+  .cam-top-head:hover{background:rgba(255,255,255,.02);}
+  .cam-top-titlebox{display:grid;grid-template-columns:40px auto;column-gap:13px;align-items:center;margin-right:auto;background:rgba(0,0,0,.40);border-left:4px solid #007474;padding:9px 20px 9px 13px;box-sizing:border-box;}
+  .cam-top-titlebox::before{content:"";grid-column:1;grid-row:1/3;align-self:center;width:40px;height:40px;background-color:#00b8b8;-webkit-mask:url("/assets/Icons/assignment/camera-kit-teal-v1.png") center/contain no-repeat;mask:url("/assets/Icons/assignment/camera-kit-teal-v1.png") center/contain no-repeat;}
+  .cam-top-code{grid-column:2;grid-row:1;font-family:var(--font);font-size:.65rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin-bottom:2px;}
+  .cam-top-title{grid-column:2;grid-row:2;font-family:var(--font);font-size:1.25rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;line-height:1.1;color:#5ff0f0;}
+  .cam-top-meta{display:flex;align-items:center;gap:16px;flex-shrink:0;}
+  .cam-top-meta .csec-n{font-size:.6rem;font-weight:600;letter-spacing:.16em;color:var(--muted);white-space:nowrap;}
+  .cam-top-chev{width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .2s ease;flex-shrink:0;}
+  .cam-top.open .cam-top-chev{transform:rotate(45deg);}
+  .cam-top-body{display:none;padding:4px 20px 22px;}
+  .cam-top.open .cam-top-body{display:block;animation:camAccOpen .22s ease;}
+  @keyframes camAccOpen{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:none;}}
+  /* Section strips inside the Cameras card: catalog module-row look (translucent + blur). */
+  .csec{margin-bottom:8px;border:1px solid rgba(255,255,255,.06);border-left:4px solid var(--muted);background:rgba(255,255,255,.04);backdrop-filter:blur(10px) saturate(1.1);-webkit-backdrop-filter:blur(10px) saturate(1.1);}
   .csec.sec-out{border-left-color:var(--orange);} .csec.sec-reserved{border-left-color:var(--gold);}
   .csec.sec-avail{border-left-color:var(--ok);} .csec.sec-equip{border-left-color:var(--teal);}
   .csec-head{width:100%;display:flex;align-items:center;gap:10px;cursor:pointer;background:transparent;border:0;color:var(--text);
-    font-family:var(--font);text-align:left;padding:13px 15px;text-transform:uppercase;letter-spacing:.1em;font-weight:600;font-size:.82rem;}
-  .csec-head:hover{background:rgba(0,184,184,.05);}
+    font-family:var(--font);text-align:left;padding:12px 14px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;font-size:.82rem;transition:background .15s ease;}
+  .csec-head:hover{background:rgba(255,255,255,.05);}
   .csec-dot{width:11px;height:11px;flex:0 0 auto;}
   .csec-dot.out{background:var(--orange);} .csec-dot.reserved{background:var(--gold);} .csec-dot.avail{background:var(--ok);} .csec-dot.equip{background:var(--teal);}
-  .csec-n{color:var(--faint);font-weight:700;}
-  .csec-chev{margin-left:auto;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .15s;}
-  .csec.open .csec-chev{transform:rotate(-135deg);}
+  .csec-n{color:var(--faint);font-weight:700;font-size:.72rem;letter-spacing:.04em;}
+  .csec-chev{margin-left:auto;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .2s;}
+  .csec.open .csec-chev{transform:rotate(45deg);}
   .csec-body{display:none;padding:2px 14px 14px;}
   .csec.open .csec-body{display:block;}
   .csec-empty{color:var(--faint);font-size:.85rem;padding:6px 2px 2px;}
+  /* Calendar + Returned History as catalog cards (same course-card look as the Cameras card). */
+  .cbox{background:linear-gradient(180deg,rgba(0,116,116,.10) 0%,rgba(0,116,116,.03) 100%);border:1px solid rgba(0,184,184,.22);margin-bottom:14px;transition:border-color .2s ease;}
+  .cbox[open],.cbox:hover{border-color:rgba(0,184,184,.45);}
+  summary.cbox-head{display:flex;align-items:center;gap:18px;cursor:pointer;list-style:none;padding:22px 28px 22px 32px;}
+  summary.cbox-head::-webkit-details-marker{display:none;}
+  summary.cbox-head:hover{background:rgba(255,255,255,.02);}
+  .cbox-titlebox{display:grid;grid-template-columns:40px auto;column-gap:13px;align-items:center;margin-right:auto;background:rgba(0,0,0,.40);border-left:4px solid #007474;padding:9px 20px 9px 13px;box-sizing:border-box;}
+  .cbox-titlebox::before{content:"";grid-column:1;grid-row:1/3;align-self:center;width:40px;height:40px;background-color:#00b8b8;-webkit-mask:url("/assets/Icons/assignment/camera-kit-teal-v1.png") center/contain no-repeat;mask:url("/assets/Icons/assignment/camera-kit-teal-v1.png") center/contain no-repeat;}
+  .cbox-code{grid-column:2;grid-row:1;font-size:.65rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin-bottom:2px;}
+  .cbox-title{grid-column:2;grid-row:2;font-size:1.25rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;line-height:1.1;color:#5ff0f0;}
+  .cbox-meta{display:flex;align-items:center;gap:14px;flex-shrink:0;}
+  .cbox-meta .hcount,.cbox-meta #histn{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+  .cbox-chev{width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .2s ease;flex-shrink:0;}
+  .cbox[open] .cbox-chev{transform:rotate(45deg);}
+  .cbox-body{padding:4px 20px 22px;}
+  .cbox[open] .cbox-body{animation:camAccOpen .22s ease;}
   /* returning (undo) state */
   .cam.returning{border-left-color:var(--teal);}
   .returning-msg{font-size:.82rem;color:var(--teal-lt);}
@@ -376,14 +409,17 @@
   <div id="overdueDigest" style="display:none;"></div>
   <div id="pendingDigest" style="display:none;"></div>
 
-  <div class="h">Calendar <span class="hcount" id="calhint">Tap a day to see that day&#8217;s cameras</span></div>
-  <div class="calpanel"><iframe id="calframe" src="/calendar.html?embed=1" title="Camera calendar" loading="lazy"></iframe></div>
+  <details class="cbox" id="calbox" open>
+    <summary class="cbox-head"><span class="cbox-titlebox"><span class="cbox-code">Reservations</span><span class="cbox-title">Calendar</span></span><span class="cbox-meta"><span class="hcount" id="calhint">Tap a day to see that day&#8217;s cameras</span><span class="cbox-chev"></span></span></summary>
+    <div class="cbox-body"><div class="calpanel"><iframe id="calframe" src="/calendar.html?embed=1" title="Camera calendar" loading="lazy"></iframe></div></div>
+  </details>
 
   <div id="board"><span class="foot">Loading&#8230;</span></div>
 
   <div class="histwrap">
-    <details class="histbox" id="histbox">
-      <summary>Returned history <span id="histn"></span></summary>
+    <details class="cbox" id="histbox">
+      <summary class="cbox-head"><span class="cbox-titlebox"><span class="cbox-code">Records</span><span class="cbox-title">Returned History</span></span><span class="cbox-meta"><span id="histn"></span><span class="cbox-chev"></span></span></summary>
+      <div class="cbox-body">
       <div class="histbar">
         <span class="histnote">On screen: last 4 weeks. Download the full, detailed record (opens in Excel) for any date range, like a bank statement:</span>
         <label class="histnote" for="histFrom">From</label><input type="date" id="histFrom" class="histdate">
@@ -391,6 +427,7 @@
         <button class="btn sm" id="histCsv" type="button">Download CSV</button>
       </div>
       <div class="hist" id="hist"></div>
+      </div>
     </details>
   </div>
 
@@ -793,35 +830,47 @@
     var host=document.getElementById('board'); if(!host) return;
     var cams=DATA.cameras||[], counts={out:0,reserved:0,avail:0};
     cams.forEach(function(cam){ counts[catOf(cam)]++; });
-    var html='';
+    // Build the section strips (order: Available, Checked out, Reserved, Camera log, Additional equipment, Memory card wallet).
+    var sec='';
     SECDEF.forEach(function(s){
       var list=cams.filter(function(cam){ return catOf(cam)===s.key; });
       var open=secOpen(s.key);
-      html+='<div class="csec '+s.cls+(open?' open':'')+'">'+
+      sec+='<div class="csec '+s.cls+(open?' open':'')+'">'+
         '<button class="csec-head" type="button" data-sectoggle="'+s.key+'"><span class="csec-dot '+s.dot+'"></span>'+s.label+' <span class="csec-n">'+list.length+'</span><span class="csec-chev"></span></button>'+
         '<div class="csec-body">'+(list.length?('<div class="board">'+list.map(camCard).join('')+'</div>'):'<div class="csec-empty">None right now.</div>')+'</div>'+
       '</div>';
     });
+    // CAMERA LOG: every camera, its standing note (follows the camera) + out-of-service, always editable.
+    var clopen=secOpen('camlog'), noted=cams.filter(function(c){ var a=assetOf(c); return a.note||a.oos||(a.issues&&a.issues.length); }).length;
+    sec+='<div class="csec sec-camlog'+(clopen?' open':'')+'">'+
+      '<button class="csec-head" type="button" data-sectoggle="camlog"><span class="csec-dot clog"></span>Camera log &middot; notes &amp; condition <span class="csec-n">'+noted+' flagged</span><span class="csec-chev"></span></button>'+
+      '<div class="csec-body"><div class="camlog-grid">'+cams.map(camLogCard).join('')+'</div></div>'+
+    '</div>';
+    // ADDITIONAL EQUIPMENT.
     var eopen=secOpen('equip'), eActive=equipActive().sort(byItem);
     var summary=EQUIPMENT.map(function(e){ var a=equipAvail(e.key); return '<span class="eqchip '+(a.avail>0?'ok':'none')+'">'+esc(e.label)+' <b>'+a.avail+' / '+a.total+'</b></span>'; }).join('');
-    html+='<div class="csec sec-equip'+(eopen?' open':'')+'">'+
+    sec+='<div class="csec sec-equip'+(eopen?' open':'')+'">'+
       '<button class="csec-head" type="button" data-sectoggle="equip"><span class="csec-dot equip"></span>Additional equipment <span class="csec-n">'+eActive.length+' out</span><span class="csec-chev"></span></button>'+
       '<div class="csec-body">'+
         '<div class="eqsummary">'+summary+'</div>'+
         (eActive.length?('<div class="board">'+eActive.map(equipCard).join('')+'</div>'):'<div class="csec-empty">All gear is in. Nothing checked out right now.</div>')+
       '</div>'+
     '</div>';
-    // CAMERA LOG: every camera, its standing note (follows the camera) + out-of-service, always editable.
-    var clopen=secOpen('camlog'), noted=cams.filter(function(c){ var a=assetOf(c); return a.note||a.oos||(a.issues&&a.issues.length); }).length;
-    html+='<div class="csec sec-camlog'+(clopen?' open':'')+'">'+
-      '<button class="csec-head" type="button" data-sectoggle="camlog"><span class="csec-dot clog"></span>Camera log &middot; notes &amp; condition <span class="csec-n">'+noted+' flagged</span><span class="csec-chev"></span></button>'+
-      '<div class="csec-body"><div class="camlog-grid">'+cams.map(camLogCard).join('')+'</div></div>'+
-    '</div>';
     // MEMORY CARD WALLET: cards a student left to offload later, each in a numbered slot with a 24h clock.
     var wcards=DATA.cards||{}, wheld=Object.keys(wcards).length, wopen=secOpen('wallet');
-    html+='<div class="csec sec-wallet'+(wopen?' open':'')+'">'+
+    sec+='<div class="csec sec-wallet'+(wopen?' open':'')+'">'+
       '<button class="csec-head" type="button" data-sectoggle="wallet"><span class="csec-dot wallet"></span>Memory card wallet <span class="csec-n">'+wheld+' held</span><span class="csec-chev"></span></button>'+
       '<div class="csec-body"><div class="wallet-grid">'+walletSlotsHtml()+'</div></div>'+
+    '</div>';
+    // Wrap all sections in the top-level "Cameras" card (curriculum-catalog course-card look).
+    var camsOpen=secOpen('cameras');
+    var topN=counts.avail+' available &middot; '+counts.out+' out &middot; '+counts.reserved+' reserved';
+    var html='<div class="cam-top'+(camsOpen?' open':'')+'">'+
+      '<button class="cam-top-head" type="button" data-sectoggle="cameras">'+
+        '<span class="cam-top-titlebox"><span class="cam-top-code">Equipment</span><span class="cam-top-title">Cameras</span></span>'+
+        '<span class="cam-top-meta"><span class="csec-n">'+topN+'</span><span class="cam-top-chev"></span></span>'+
+      '</button>'+
+      '<div class="cam-top-body">'+sec+'</div>'+
     '</div>';
     host.innerHTML=html;
     updateSummary();
