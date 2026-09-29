@@ -166,6 +166,27 @@
   .histdate{height:32px;width:150px;flex:0 0 auto;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:.82rem;padding:0 8px;box-sizing:border-box;}
   .histdate:focus{outline:none;border-color:var(--teal);}
   .histbar .histnote:first-child{flex:1 1 220px;min-width:180px;}
+  /* Custom framework date picker (replaces native <input type=date>: iOS ignores width + the OS calendar is off-brand) */
+  .dp{position:relative;display:inline-flex;flex:0 0 auto;}
+  .dp-trig{height:34px;min-width:132px;display:inline-flex;align-items:center;gap:8px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--muted);font-family:var(--font);font-size:.8rem;letter-spacing:.02em;padding:0 12px;cursor:pointer;text-align:left;white-space:nowrap;transition:border-color .15s,color .15s;}
+  .dp-trig::before{content:"";width:15px;height:15px;flex:0 0 auto;background:var(--teal-lt);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Crect x='3' y='4' width='18' height='18'/%3E%3Cpath d='M3 9h18M8 2v4M16 2v4'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Crect x='3' y='4' width='18' height='18'/%3E%3Cpath d='M3 9h18M8 2v4M16 2v4'/%3E%3C/svg%3E") center/contain no-repeat;}
+  .dp-trig.set{color:var(--text);border-color:rgba(0,184,184,.35);}
+  .dp-trig:hover{border-color:var(--teal);color:var(--text);}
+  .dp-pop{position:absolute;top:calc(100% + 4px);left:0;z-index:60;width:252px;background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.99));border:1px solid var(--teal);box-shadow:0 18px 48px rgba(0,0,0,.7);padding:12px;}
+  .dp-pop.up{top:auto;bottom:calc(100% + 4px);}
+  .dp-pop.right{left:auto;right:0;}
+  .dp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .dp-mtitle{font-family:var(--font);font-weight:700;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-lt);}
+  .dp-nav{width:28px;height:28px;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--text);font-size:1.1rem;line-height:1;cursor:pointer;}
+  .dp-nav:hover{border-color:var(--teal);color:var(--teal-lt);}
+  .dp-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:2px;}
+  .dp-dow span{text-align:center;font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.04em;color:var(--faint);}
+  .dp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+  .dp-day{height:30px;background:rgba(255,255,255,.03);border:1px solid transparent;color:var(--text);font-family:var(--font);font-size:.8rem;cursor:pointer;padding:0;}
+  .dp-day:hover{background:rgba(0,184,184,.16);border-color:var(--teal);}
+  .dp-day.om{color:var(--faint);opacity:.5;}
+  .dp-day.today{border-color:rgba(0,184,184,.45);}
+  .dp-day.sel{background:var(--teal);color:#04110f;border-color:var(--teal);font-weight:700;}
   .hrow{background:rgba(0,0,0,.18);border:1px solid rgba(160,180,180,.14);border-left:3px solid var(--grayed);padding:9px 11px;color:var(--grayed);font-size:.78rem;}
   .hrow .hc{font-family:var(--font);font-weight:600;color:rgba(200,220,220,.66);}
   .hrow .hre{font-size:.68rem;}
@@ -660,6 +681,43 @@
   function todayISO(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   function addDays(iso,n){ var d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  // ---- Custom framework date picker: replaces a native <input type=date>. Keeps the hidden input
+  // as the value store (existing code reads/sets .value), overlays a teal month-grid popover. ----
+  function mkDatePicker(input){
+    if(!input) return;
+    function _iso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+    if(!input._dp){
+      input._dp=true; input.style.display='none';
+      var wrap=document.createElement('span'); wrap.className='dp';
+      var trig=document.createElement('button'); trig.type='button'; trig.className='dp-trig';
+      input.parentNode.insertBefore(wrap, input.nextSibling); wrap.appendChild(trig);
+      var pop=null;
+      function label(){ var v=input.value; if(!v){ trig.textContent=input.getAttribute('data-ph')||'Pick a date'; trig.classList.remove('set'); } else { var p=v.split('-'); trig.textContent=MON[+p[1]-1]+' '+(+p[2])+', '+p[0]; trig.classList.add('set'); } }
+      function close(){ if(pop){ pop.remove(); pop=null; document.removeEventListener('click',out,true); } }
+      function out(e){ if(pop && !pop.contains(e.target) && e.target!==trig) close(); }
+      function open(){
+        if(pop){ close(); return; }
+        var cur=input.value||_iso(new Date()), vy=+cur.split('-')[0], vm=+cur.split('-')[1]-1;
+        pop=document.createElement('div'); pop.className='dp-pop';
+        function draw(){
+          var first=new Date(vy,vm,1), start=new Date(first); start.setDate(1-first.getDay()); var tISO=_iso(new Date());
+          var h='<div class="dp-head"><button type="button" class="dp-nav" data-d="-1">&lsaquo;</button><span class="dp-mtitle">'+MON[vm]+' '+vy+'</span><button type="button" class="dp-nav" data-d="1">&rsaquo;</button></div><div class="dp-dow"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div><div class="dp-grid">';
+          for(var i=0;i<42;i++){ var d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i), iso=_iso(d); h+='<button type="button" class="dp-day'+(d.getMonth()!==vm?' om':'')+(iso===input.value?' sel':'')+(iso===tISO?' today':'')+'" data-iso="'+iso+'">'+d.getDate()+'</button>'; }
+          h+='</div>'; pop.innerHTML=h;
+          pop.querySelectorAll('.dp-nav').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); vm+=+b.getAttribute('data-d'); if(vm<0){vm=11;vy--;} if(vm>11){vm=0;vy++;} draw(); }; });
+          pop.querySelectorAll('.dp-day').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); input.value=b.getAttribute('data-iso'); try{ input.dispatchEvent(new Event('change',{bubbles:true})); }catch(_){} label(); close(); }; });
+        }
+        draw(); wrap.appendChild(pop);
+        var pr=pop.getBoundingClientRect();
+        if(pr.bottom>window.innerHeight-6) pop.classList.add('up');       // flip above the trigger near the bottom
+        if(pr.right>window.innerWidth-6) pop.classList.add('right');      // align right near the edge
+        setTimeout(function(){ document.addEventListener('click',out,true); },0);
+      }
+      trig.onclick=function(e){ e.stopPropagation(); open(); };
+      input._dpLabel=label;
+    }
+    if(input._dpLabel) input._dpLabel();
+  }
   // Framework-styled confirm (Promise<bool>) + toast, replacing the native browser confirm/alert.
   function silvaConfirm(message, opts){
     opts=opts||{};
@@ -1312,6 +1370,7 @@
     var f=document.getElementById('histFrom'), t=document.getElementById('histTo');
     if(f && !f.value) f.value=first.toISOString().slice(0,10);
     if(t && !t.value) t.value=now.toISOString().slice(0,10);
+    mkDatePicker(f); mkDatePicker(t);
     var b=document.getElementById('histCsv'); if(b) b.onclick=downloadHistoryCSV;
   })();
 
@@ -1390,6 +1449,7 @@
     document.getElementById('ed-sid').value=c.student_id||'';
     var w=document.getElementById('ed-who'); w.className='who-line'; w.textContent=c.student_name?('Currently: '+c.student_name):'';
     document.getElementById('ed-out').value=c.out||''; document.getElementById('ed-due').value=c.due||'';
+    mkDatePicker(document.getElementById('ed-out')); mkDatePicker(document.getElementById('ed-due'));
     edCamDD=mkDropdown(document.getElementById('ed-cam'), (DATA.cameras||[]).map(function(cm){ return {value:cm,label:cm+(P2.indexOf(cm)>=0?' (Photo 2 only)':'')}; }), c.camera||'', null);
     edStatusDD=mkDropdown(document.getElementById('ed-status'), [{value:'reserved',label:'Reserved'},{value:'out',label:'Picked up (out)'},{value:'returned',label:'Returned'}], statusOf(c), null);
     renderEditGear(c);
@@ -1503,6 +1563,7 @@
     var initial=(preCam && free.indexOf(preCam)>=0)?preCam:(free[0]||'');
     rcamDD=mkDropdown(rcam, items, initial, null);
     rout.value=todayISO(); rdue.value=addDays(todayISO(),1); rpick.checked=true;
+    mkDatePicker(rout); mkDatePicker(rdue);
     resmodal.classList.add('open'); setTimeout(function(){ rsid.focus(); },50);
   }
   function closeReserve(){ resmodal.classList.remove('open'); }
