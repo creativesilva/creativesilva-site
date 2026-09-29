@@ -116,19 +116,28 @@ def build_course(C):
             cap="Tap to open it full size in a new tab."
         return resources_card(heading, body, es, floatimg=purple_thumb(EXPOSURE_FULL, EXPOSURE_THUMB, alt, cap))
 
-    # ---- aperture concept deck (Camera Fundamentals: Aperture, Part 1), click-to-open PDF ----
-    def aperture_slides(es):
+    # ---- study materials: ONE purple resources card holding both the aperture concept deck (PDF)
+    #      and the exposure basics poster, side by side (stacks on narrow). ----
+    def study_resources(es):
         if es:
-            heading="Diapositivas de Apertura"
-            body=para("Estas diapositivas repasan c&oacute;mo funciona la apertura: la abertura dentro de tu lente, qu&eacute; significan los n&uacute;meros f, y c&oacute;mo una abertura amplia o peque&ntilde;a cambia tu foto. Rev&iacute;salas antes de capturar para que f/22 y f/1.8 tengan sentido.")
-            cap="Toca la portada para abrir las diapositivas en PDF en una pesta&ntilde;a nueva."
+            heading="Diapositivas de Apertura y P&oacute;ster"
+            intro="Est&uacute;dialos antes de capturar. Las diapositivas muestran c&oacute;mo funcionan la apertura y los n&uacute;meros f; el p&oacute;ster cubre todo el tri&aacute;ngulo de exposici&oacute;n."
+            scap="Diapositivas de apertura (PDF). Toca para abrir en una pesta&ntilde;a nueva."
+            pcap="P&oacute;ster de conceptos de exposici&oacute;n. Toca para abrir en grande."
+            palt="P&oacute;ster de Conceptos de Exposici&oacute;n: apertura, velocidad del obturador e ISO"
         else:
-            heading="Aperture Slides"
-            body=para("These slides go over how aperture works: the opening inside your lens, what the f-stop numbers mean, and how a wide or small opening changes your photo. Look through them before you capture so f/22 and f/1.8 make sense.")
-            cap="Tap the cover to open the slides as a PDF in a new tab."
+            heading="Aperture Slides &amp; Poster"
+            intro="Study these before you capture. The slides show how aperture and f-stops work; the poster covers the whole exposure triangle."
+            scap="Aperture slides (PDF). Tap to open in a new tab."
+            pcap="Exposure basics poster. Tap to open full size."
+            palt="Exposure Basics poster: aperture, shutter speed, and ISO"
         pdf=C['slide_es'] if es else C['slide_en']
         cover=C['cover_es'] if es else C['cover_en']
-        return resources_card(heading, body, es, floatimg=slide_deck_thumb(pdf, es, thumb=cover, cap=cap))
+        two=('<div style="display:flex;flex-wrap:wrap;gap:20px 26px;align-items:flex-start;margin-top:8px;">'
+             + f'<div style="flex:1 1 280px;min-width:0;">{slide_deck_thumb(pdf, es, thumb=cover, cap=scap)}</div>'
+             + f'<div style="flex:1 1 280px;min-width:0;">{purple_thumb(EXPOSURE_FULL, EXPOSURE_THUMB, palt, pcap)}</div>'
+             + '</div>')
+        return resources_card(heading, para(intro)+two, es)
 
     # ---- custom red camera-settings section: aperture steps the range; shutter + ISO balance ----
     def exposure_settings_section(es, quality="JPG"):
@@ -161,7 +170,7 @@ def build_course(C):
             + (framed(f"{SITE}/assets/images/{C['prefix']}/exposure-balance/header-v1.jpg","Exposure Balance module header") if HAVE_HEADER else ""))
         en+=standards_box(False, EXPO_STANDARDS)
         en+=downloads_block(False)
-        en+=aperture_slides(False)
+        en+=study_resources(False)
         en+=card("THE CONCEPT / THE EXPOSURE TRIANGLE","Aperture, Shutter, and ISO Work Together",
             para("Three settings make your exposure: <strong>aperture</strong> (how wide the lens opens), <strong>shutter speed</strong> (how long the light comes in), and <strong>ISO</strong> (how much the camera boosts the light). Together they are the <strong>exposure triangle</strong>. When you change one, you balance another to keep the light right.")
             + bullets([
@@ -186,7 +195,6 @@ def build_course(C):
                 ("Step 04 &middot; Reflection:","tell what you learned about balancing your exposure."),
             ])
             + note("This is a JPG capture. Get your exposure right in the camera so it looks good straight out of the camera. The only edit you need is a crop."))
-        en+=exposure_poster(False)
         en+=resources_card("Key Words",
             vocab_grid("On the Quiz",
               "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
@@ -205,7 +213,7 @@ def build_course(C):
             + (framed(f"{SITE}/assets/images/{C['prefix']}/exposure-balance/header-v1.jpg","Encabezado del m&oacute;dulo Balance de Exposici&oacute;n") if HAVE_HEADER else ""))
         es+=standards_box(True, EXPO_STANDARDS)
         es+=downloads_block(True)
-        es+=aperture_slides(True)
+        es+=study_resources(True)
         es+=card("EL CONCEPTO / EL TRI&Aacute;NGULO DE EXPOSICI&Oacute;N","Apertura, Obturador e ISO Trabajan Juntos",
             para("Tres ajustes hacen tu exposici&oacute;n: la <strong>apertura</strong> (qu&eacute; tan abierto est&aacute; el lente), la <strong>velocidad del obturador</strong> (cu&aacute;nto tiempo entra la luz) y el <strong>ISO</strong> (cu&aacute;nto sube la luz la c&aacute;mara). Juntos son el <strong>tri&aacute;ngulo de exposici&oacute;n</strong>. Cuando cambias uno, equilibras otro para mantener la luz correcta.")
             + bullets([
@@ -230,7 +238,6 @@ def build_course(C):
                 ("Paso 04 &middot; Reflexi&oacute;n:","cuenta qu&eacute; aprendiste sobre equilibrar tu exposici&oacute;n."),
             ])
             + note("Esta es una captura en JPG. Deja bien tu exposici&oacute;n en la c&aacute;mara para que se vea bien tal como sale. La &uacute;nica edici&oacute;n que necesitas es un recorte."))
-        es+=exposure_poster(True)
         es+=resources_card("Palabras Clave",
             vocab_grid("En el Examen",
               "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el de mitad de semestre y el del final. Apr&eacute;ndelas ahora, no la noche anterior.",
