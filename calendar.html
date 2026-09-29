@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Camera Checkout Calendar | Pioneer Valley Photography</title>
+<title>Camera Reservations | Pioneer Valley Photography</title>
 <script>window.SILVA_HIDE_CATALOG=true;/* public page: never expose the teacher catalog dropdown */</script>
 <meta name="description" content="See which Pioneer Valley photography cameras are checked out and when they are due back." />
 <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only_Teal.svg" />
@@ -33,7 +33,10 @@
   @media (max-width:900px){ body::before{background-size:min(88vw,460px);background-position:center 36%;} }
 
   /* camera-kit icon injected into the shared header title (rendered WHITE) */
-  .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;filter:brightness(0) invert(1);}
+  .cal-title-icon{height:1.4em;width:auto;margin-right:.44em;vertical-align:-0.24em;filter:brightness(0) invert(1);}
+  /* Student calendar: hide the CS-logo/catalog row and the self-looping Calendar button for a clean single-row header. */
+  .silva-uni-bar{display:none !important;}
+  .silva-uni-cal{display:none !important;}
   /* Teacher Console button injected into the shared header bar (CS logo row). Reserve + QR now live
      in the month row above the calendar. All nav/action buttons share ONE pixel height (38px). */
   .cal-navwrap{display:flex;align-items:center;gap:8px;margin-left:auto;padding:7px 12px 7px 0;flex-wrap:wrap;}
@@ -349,10 +352,6 @@
       <button class="navb" id="prev" aria-label="Previous month">&#8249;</button>
       <span class="mtitle" id="mtitle"></span>
       <button class="navb" id="next" aria-label="Next month">&#8250;</button>
-      <div class="cal-monthacts">
-        <button type="button" class="cal-mbtn reserve" id="reserveMonthBtn">Reserve a Camera</button>
-        <button type="button" class="cal-mbtn qr" id="qrMonthBtn">QR Code</button>
-      </div>
     </div>
     <div class="dow" id="dowRow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
   </div>
@@ -644,17 +643,13 @@
   // Inject the camera-kit icon into the shared header title + the Reserve / Teacher Console
   // buttons into the CS-logo / Catalog row, once silva-nav.js has built the header.
   function injectHeader(){
-    var t=document.querySelector('.silva-uni-title'), bar=document.querySelector('.silva-uni-bar');
-    if(!t || !bar) return false;
+    // Student page: only the white camera icon on the title. No Teacher Console, no CS-logo row
+    // (that row + the self-looping Calendar button are hidden via CSS).
+    var t=document.querySelector('.silva-uni-title');
+    if(!t) return false;
     if(!t.querySelector('.cal-title-icon')){
       var txt=t.textContent;
       t.innerHTML='<img class="cal-title-icon" src="/assets/Icons/assignment/camera-kit-teal-v1.svg" alt="" />'+txt;
-    }
-    if(!bar.querySelector('.cal-navwrap')){
-      var w=document.createElement('div'); w.className='cal-navwrap';
-      // Reserve + QR now live in the month row above the calendar. Only Teacher Console stays up here.
-      var con=document.createElement('a'); con.className='cal-navbtn'; con.href='/camera-manager.html'; con.textContent='Teacher Console';
-      w.appendChild(con); bar.appendChild(w);
     }
     return true;
   }
