@@ -68,16 +68,12 @@
   .sub{color:var(--muted);font-size:.95rem;margin:0;flex:1 1 320px;}
   .reserve-btn{flex:0 0 auto;font-family:var(--font);font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:11px 20px;cursor:pointer;text-decoration:none;transition:filter .15s;}
   .reserve-btn:hover{filter:brightness(1.12);}
-  /* True EN/ES language toggle: segmented, angular, teal active. Students pick, choice is remembered. */
-  .langtoggle{flex:0 0 auto;display:inline-flex;align-items:stretch;border:1px solid var(--line);background:rgba(0,0,0,.30);height:38px;align-self:flex-start;backdrop-filter:blur(6px) saturate(1.05);-webkit-backdrop-filter:blur(6px) saturate(1.05);}
-  .langbtn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:100%;padding:0 15px;border:0;background:none;cursor:pointer;
-    font-family:var(--font);font-weight:700;letter-spacing:.09em;text-transform:uppercase;font-size:.73rem;color:rgba(234,247,247,.72);transition:background .15s,color .15s;}
-  .langbtn+.langbtn{border-left:1px solid var(--line);}
-  .langbtn:hover{color:#fff;}
-  .langbtn.active{background:var(--teal);color:#04110f;}
-  .langbtn-globe{width:15px;height:15px;display:inline-block;flex:0 0 auto;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23eafeff' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18'/%3E%3Cpath d='M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18'/%3E%3C/svg%3E") no-repeat center/contain;}
-  .langbtn.active .langbtn-globe{filter:brightness(0);}
-  @media (max-width:760px){ .langtoggle{align-self:stretch;} }
+  /* Language toggle: ONE button that shows the OTHER language and swaps to it. Lives in the availability bar. */
+  .langswap{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 16px;border:1px solid var(--teal);background:rgba(0,184,184,.12);cursor:pointer;
+    font-family:var(--font);font-weight:700;letter-spacing:.09em;text-transform:uppercase;font-size:.73rem;color:var(--teal-lt);transition:background .15s,color .15s;}
+  .langswap:hover,.langswap:focus-visible{background:var(--teal);color:#04110f;outline:none;}
+  .langbtn-globe{width:15px;height:15px;display:inline-block;flex:0 0 auto;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235ff0f0' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18'/%3E%3Cpath d='M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18'/%3E%3C/svg%3E") no-repeat center/contain;}
+  .langswap:hover .langbtn-globe,.langswap:focus-visible .langbtn-globe{filter:brightness(0);}
   .summary{display:flex;align-items:center;gap:14px 22px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--teal);padding:14px 18px;margin-bottom:18px;}
   /* Availability count as a glowing digital-clock readout (bright teal, soft pulse) — matches the console. */
   .summary .big{display:inline-flex;align-items:center;justify-content:center;min-width:2.1em;padding:5px 15px;font-family:var(--font);font-weight:700;font-size:2rem;line-height:1;letter-spacing:.07em;color:#5ff0f0;background:rgba(0,22,22,.9);border:1px solid rgba(0,184,184,.55);font-variant-numeric:tabular-nums;text-shadow:0 0 8px rgba(95,240,240,.85),0 0 18px rgba(0,184,184,.55);animation:clockPulse 2.4s ease-in-out infinite;}
@@ -334,10 +330,6 @@
 <div class="wrap">
   <div class="intro">
     <p class="sub" id="introSub">See which cameras are out and when they are due back before you ask. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.</p>
-    <div class="langtoggle" id="langToggle" role="group" aria-label="Language / Idioma">
-      <button type="button" class="langbtn" data-setlang="en"><span class="langbtn-globe" aria-hidden="true"></span>English</button>
-      <button type="button" class="langbtn" data-setlang="es">Espa&ntilde;ol</button>
-    </div>
   </div>
 
   <div class="rv-banner" id="rvBanner" style="display:none;"></div>
@@ -345,6 +337,7 @@
   <div class="summary">
     <div><span class="big" id="outn">0</span> <span class="lab"><span id="lab-of">of</span> <span id="totn">0</span> <span id="lab-avail">cameras available</span></span></div>
     <div class="legend" id="legend"><span><i class="k-res"></i>Reserved</span><span><i class="k-out"></i>Checked out</span></div>
+    <button type="button" class="langswap" id="langSwap" aria-label="Switch language"><span class="langbtn-globe" aria-hidden="true"></span><span id="langSwapLabel">Espa&ntilde;ol</span></button>
   </div>
 
   <div class="h" id="boardH">Checked out right now</div>
@@ -614,8 +607,11 @@
       _setHtml('rv-who', t('reservingAs')+' <b>'+esc(L.label)+'</b>'+(L.period?(' &middot; '+t('period')+' '+esc(normPeriod(L.period)||L.period)):'')); }
   }
   function syncLangActive(){
-    Array.prototype.forEach.call(document.querySelectorAll('#langToggle .langbtn'), function(b){
-      b.classList.toggle('active', b.getAttribute('data-setlang')===LANG); });
+    // Single toggle: the button always shows the OTHER language (the one a tap switches to).
+    var lbl=document.getElementById('langSwapLabel');
+    if(lbl) lbl.innerHTML=(LANG==='es')?'English':'Espa&ntilde;ol';
+    var b=document.getElementById('langSwap');
+    if(b) b.setAttribute('aria-label',(LANG==='es')?'Switch to English':'Switch to Spanish');
   }
   function setLang(l){
     LANG=(l==='es')?'es':'en';
@@ -1322,11 +1318,10 @@
     var qb=document.getElementById('qrMonthBtn'); if(qb) qb.addEventListener('click',openQR);
   })();
 
-  // ---- Language toggle: wire the EN/ES buttons + apply the remembered choice on first paint ----
+  // ---- Language toggle: one button that swaps to the other language; apply the remembered choice on first paint ----
   (function(){
-    Array.prototype.forEach.call(document.querySelectorAll('#langToggle .langbtn'), function(b){
-      b.addEventListener('click', function(){ setLang(b.getAttribute('data-setlang')); });
-    });
+    var sw=document.getElementById('langSwap');
+    if(sw) sw.addEventListener('click', function(){ setLang(LANG==='es'?'en':'es'); });
     applyStatic(); syncLangActive();   // reflect the stored LANG before data loads
   })();
 
