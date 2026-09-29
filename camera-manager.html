@@ -85,20 +85,20 @@
   .pendmsg{font-size:.66rem;color:#c9b8ff;letter-spacing:.02em;margin-top:-2px;}
   /* ── Camera board = curriculum-catalog course-card look. One "Cameras" card (teal camera-icon
      title box, blurred strips) opens to horizontal section strips; each strip opens to its tiles. ── */
-  .cam-top{background:linear-gradient(180deg,rgba(0,116,116,.10) 0%,rgba(0,116,116,.03) 100%);border:1px solid rgba(0,184,184,.22);margin-bottom:14px;position:relative;transition:border-color .2s ease;}
-  .cam-top.open,.cam-top:hover{border-color:rgba(0,184,184,.45);}
-  .cam-top-head{width:100%;display:flex;align-items:center;gap:18px;cursor:pointer;background:transparent;border:0;color:var(--text);text-align:left;font-family:var(--font);padding:22px 28px 22px 32px;}
-  .cam-top-head:hover{background:rgba(255,255,255,.02);}
-  .cam-top-titlebox{display:grid;grid-template-columns:40px auto;column-gap:13px;align-items:center;margin-right:auto;background:rgba(0,0,0,.40);border-left:4px solid #007474;padding:9px 20px 9px 13px;box-sizing:border-box;}
-  .cam-top-titlebox::before{content:"";grid-column:1;grid-row:1/3;align-self:center;width:40px;height:40px;background-color:#00b8b8;-webkit-mask:url("/assets/Icons/assignment/camera-kit-teal-v1.png") center/contain no-repeat;mask:url("/assets/Icons/assignment/camera-kit-teal-v1.png") center/contain no-repeat;}
-  .cam-top-code{grid-column:2;grid-row:1;font-family:var(--font);font-size:.65rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin-bottom:2px;}
-  .cam-top-title{grid-column:2;grid-row:2;font-family:var(--font);font-size:1.25rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;line-height:1.1;color:#5ff0f0;}
-  .cam-top-meta{display:flex;align-items:center;gap:16px;flex-shrink:0;}
-  .cam-top-meta .csec-n{font-size:.6rem;font-weight:600;letter-spacing:.16em;color:var(--muted);white-space:nowrap;}
-  .cam-top-chev{width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .2s ease;flex-shrink:0;}
-  .cam-top.open .cam-top-chev{transform:rotate(45deg);}
-  .cam-top-body{display:none;padding:4px 20px 22px;}
-  .cam-top.open .cam-top-body{display:block;animation:camAccOpen .22s ease;}
+  .camhub{background:linear-gradient(180deg,rgba(0,116,116,.10) 0%,rgba(0,116,116,.03) 100%);border:1px solid rgba(0,184,184,.22);margin-bottom:14px;position:relative;transition:border-color .2s ease;}
+  .camhub.open,.camhub:hover{border-color:rgba(0,184,184,.45);}
+  .camhub-head{width:100%;display:flex;align-items:center;gap:18px;cursor:pointer;background:transparent;border:0;color:var(--text);text-align:left;font-family:var(--font);padding:22px 28px 22px 32px;}
+  .camhub-head:hover{background:rgba(255,255,255,.02);}
+  .camhub-titlebox{display:grid;grid-template-columns:40px auto;column-gap:13px;align-items:center;margin-right:auto;background:rgba(0,0,0,.40);border-left:4px solid #007474;padding:9px 20px 9px 13px;box-sizing:border-box;}
+  .camhub-titlebox::before{content:"";grid-column:1;grid-row:1/3;align-self:center;width:40px;height:40px;background-color:#00b8b8;-webkit-mask:url("/assets/Icons/assignment/camera-kit-teal-v1.png") center/contain no-repeat;mask:url("/assets/Icons/assignment/camera-kit-teal-v1.png") center/contain no-repeat;}
+  .camhub-code{grid-column:2;grid-row:1;font-family:var(--font);font-size:.65rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin-bottom:2px;}
+  .camhub-title{grid-column:2;grid-row:2;font-family:var(--font);font-size:1.25rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;line-height:1.1;color:#5ff0f0;}
+  .camhub-meta{display:flex;align-items:center;gap:16px;flex-shrink:0;}
+  .camhub-meta .csec-n{font-size:.6rem;font-weight:600;letter-spacing:.16em;color:var(--muted);white-space:nowrap;}
+  .camhub-chev{width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .2s ease;flex-shrink:0;}
+  .camhub.open .camhub-chev{transform:rotate(45deg);}
+  .camhub-body{display:none;padding:4px 20px 22px;}
+  .camhub.open .camhub-body{display:block;animation:camAccOpen .22s ease;}
   @keyframes camAccOpen{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:none;}}
   /* Section strips inside the Cameras card: catalog module-row look (translucent + blur). */
   .csec{margin-bottom:8px;border:1px solid rgba(255,255,255,.06);border-left:4px solid var(--muted);background:rgba(255,255,255,.04);backdrop-filter:blur(10px) saturate(1.1);-webkit-backdrop-filter:blur(10px) saturate(1.1);}
@@ -865,12 +865,12 @@
     // Wrap all sections in the top-level "Cameras" card (curriculum-catalog course-card look).
     var camsOpen=secOpen('cameras');
     var topN=counts.avail+' available &middot; '+counts.out+' out &middot; '+counts.reserved+' reserved';
-    var html='<div class="cam-top'+(camsOpen?' open':'')+'">'+
-      '<button class="cam-top-head" type="button" data-sectoggle="cameras">'+
-        '<span class="cam-top-titlebox"><span class="cam-top-code">Equipment</span><span class="cam-top-title">Cameras</span></span>'+
-        '<span class="cam-top-meta"><span class="csec-n">'+topN+'</span><span class="cam-top-chev"></span></span>'+
+    var html='<div class="camhub'+(camsOpen?' open':'')+'">'+
+      '<button class="camhub-head" type="button" data-sectoggle="cameras">'+
+        '<span class="camhub-titlebox"><span class="camhub-code">Equipment</span><span class="camhub-title">Cameras</span></span>'+
+        '<span class="camhub-meta"><span class="csec-n">'+topN+'</span><span class="camhub-chev"></span></span>'+
       '</button>'+
-      '<div class="cam-top-body">'+sec+'</div>'+
+      '<div class="camhub-body">'+sec+'</div>'+
     '</div>';
     host.innerHTML=html;
     updateSummary();
