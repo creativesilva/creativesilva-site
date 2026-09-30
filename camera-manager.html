@@ -898,7 +898,9 @@
   function equipRecs(){ return (DATA.checkouts||[]).filter(function(c){ return c.kind==='equipment'; }); }
   function equipActive(){ return equipRecs().filter(function(c){ return statusOf(c)!=='returned'; }); }
   function equipAvail(key){ var total=0; for(var i=0;i<EQUIPMENT.length;i++){ if(EQUIPMENT[i].key===key) total=EQUIPMENT[i].total; }
-    var out=equipRecs().filter(function(c){ return c.item===key && statusOf(c)!=='returned'; }).length; return {out:out,total:total,avail:Math.max(0,total-out)}; }
+    var out=equipRecs().filter(function(c){ return c.item===key && statusOf(c)!=='returned'; }).length;
+    var down=(assetOf(key).down)||0;   // units out for repair -> not available to check out
+    return {out:out,total:total,down:down,avail:Math.max(0,total-out-down)}; }
   function byItem(a,b){ return (EQUIP_LABEL[a.item]||a.item||'').localeCompare(EQUIP_LABEL[b.item]||b.item||''); }
   function equipCard(c){
     var label=EQUIP_LABEL[c.item]||c.item||'Equipment';
@@ -949,16 +951,21 @@
   // speedlites). Shows units available / total, condition note + open issues, and in/out of service.
   // Gear is pooled by quantity, so the badge is the physical unit count; OOS flags the whole line.
   function gearCondCard(e){
-    var a=assetOf(e.key), oos=!!a.oos, av=equipAvail(e.key), issues=a.issues||[], cond='';
+    var a=assetOf(e.key), av=equipAvail(e.key), down=av.down, total=av.total, working=Math.max(0,total-down);
+    var issues=a.issues||[], cond='';
+    if(down>0) cond+='<div class="camlog-issues">&#9888; '+down+' of '+total+' down for repair</div>';
     if(issues.length) cond+='<div class="camlog-issues">&#9888; '+issues.map(esc).join(', ')+'</div>';
     if(a.note) cond+='<div class="camlog-note">'+esc(a.note)+'</div>';
-    if(!oos && !issues.length && !a.note) cond='<div class="camlog-note empty">Good standing</div>';
-    return '<div class="condcard gear'+(oos?' oos':'')+'">'+
-      '<div class="condcard-top"><span class="condcard-n">'+esc(e.label)+'</span><span class="kitpct '+(av.avail>0?'full':'low')+'">'+av.avail+'/'+av.total+'</span></div>'+
-      (oos?'<div><span class="condflag oos">Out of service</span></div>':'')+cond+
+    if(!down && !issues.length && !a.note) cond='<div class="camlog-note empty">Good standing</div>';
+    var badge=(working===total?'full':(working>0?'mid':'low'));
+    return '<div class="condcard gear'+(working===0?' oos':'')+'">'+
+      '<div class="condcard-top"><span class="condcard-n">'+esc(e.label)+'</span><span class="kitpct '+badge+'" title="'+working+' working of '+total+'">'+working+'/'+total+'</span></div>'+
+      cond+
       '<div class="condcard-acts"><button class="btn sm ghost" data-assetnote="'+esc(e.key)+'">Note</button>'+
-        '<button class="btn sm '+(oos?'':'danger')+'" data-oos="'+esc(e.key)+'" data-oosval="'+(oos?'0':'1')+'">'+(oos?'In service':'Out of service')+'</button></div>'+
-      '</div>';
+        (down>0?'<button class="btn sm" data-gearrestore="'+esc(e.key)+'">Restore 1</button>':'')+
+        (working>0?'<button class="btn sm danger" data-geardown="'+esc(e.key)+'">Mark 1 down</button>':'')+
+      '</div>'+
+    '</div>';
   }
   var _lastBoardSig=null;   // flicker guard: only replace #board when the rendered board actually changes
   function renderBoard(){
@@ -970,7 +977,7 @@
     // Condition + kit completion + in/out of service only; no reservation info (that is in the strips).
     var clopen=secOpen('camlog');
     var flagged=cams.filter(function(c){ var a=assetOf(c); return a.note||a.oos||a.no_card||(a.issues&&a.issues.length); }).length
-              + EQUIPMENT.filter(function(e){ var a=assetOf(e.key); return a.note||a.oos||(a.issues&&a.issues.length); }).length;
+              + EQUIPMENT.filter(function(e){ var a=assetOf(e.key); return a.note||a.down||(a.issues&&a.issues.length); }).length;
     var sec='<div class="csec sec-camlog'+(clopen?' open':'')+'">'+
       '<button class="csec-head" type="button" data-sectoggle="camlog"><span class="csec-dot clog"></span>Equipment &middot; notes &amp; condition <span class="csec-n">'+flagged+' flagged</span><span class="csec-chev"></span></button>'+
       '<div class="csec-body"><div class="cond-grid">'+cams.map(camLogCard).join('')+EQUIPMENT.map(gearCondCard).join('')+'</div></div>'+
@@ -1041,6 +1048,9 @@
     b.querySelectorAll('[data-assetnote]').forEach(function(el){ el.onclick=function(){ openAssetNote(el.getAttribute('data-assetnote')); }; });
     b.querySelectorAll('[data-oos]').forEach(function(el){ el.onclick=function(){ setOOS(el.getAttribute('data-oos'), el.getAttribute('data-oosval')==='1', el); }; });
     b.querySelectorAll('[data-newcard]').forEach(function(el){ el.onclick=function(){ setNoCard(el.getAttribute('data-newcard'), false, el); }; });
+    // Pooled gear: mark one unit out for repair (down+1) / bring one back (down-1). Availability follows.
+    b.querySelectorAll('[data-geardown]').forEach(function(el){ el.onclick=function(){ var k=el.getAttribute('data-geardown'); el.disabled=true; saveAsset(k,{down:((assetOf(k).down)||0)+1}); }; });
+    b.querySelectorAll('[data-gearrestore]').forEach(function(el){ el.onclick=function(){ var k=el.getAttribute('data-gearrestore'); el.disabled=true; saveAsset(k,{down:Math.max(0,((assetOf(k).down)||0)-1)}); }; });
     b.querySelectorAll('[data-cardreturn]').forEach(function(el){ el.onclick=function(){ silvaConfirm('Card returned to the student and offloaded? This clears the slot.',{okLabel:'Clear slot',cancelLabel:'Cancel'}).then(function(ok){ if(ok) cardReturn(el.getAttribute('data-cardreturn'), el); }); }; });
     b.querySelectorAll('[data-cardadd]').forEach(function(el){ el.onclick=function(){ openAdHocCard(+el.getAttribute('data-cardadd')); }; });
     b.querySelectorAll('[data-cardinfo]').forEach(function(el){ el.onclick=function(){ openCardInfo(el.getAttribute('data-cardinfo')); }; });
@@ -1129,7 +1139,7 @@
   }
   function openAssetNote(cam){
     noteAsset=cam; noteId=null;
-    document.getElementById('noteTitle').textContent='Camera note · '+cam;
+    document.getElementById('noteTitle').textContent=(EQUIP_LABEL[cam]?('Note · '+EQUIP_LABEL[cam]):('Camera note · '+cam));
     document.getElementById('noteText').value=(assetOf(cam).note)||'';
     document.getElementById('notemodal').classList.add('open');
     setTimeout(function(){ document.getElementById('noteText').focus(); },50);
