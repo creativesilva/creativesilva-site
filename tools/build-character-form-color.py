@@ -24,7 +24,9 @@ DOCS=f"{SITE}/assets/course-documents"
 REFL_EN=f"{DOCS}/Character-Design-Form-Color-Reflection-EN.docx"
 REFL_ES=f"{DOCS}/Character-Design-Form-Color-Reflection-ES.docx"
 DECK_PDF=f"{DOCS}/DA1-Character-Design-Slides-EN-v3.pdf"   # lesson slides (English), shown on the Overview
-DECK_COVER=f"{SITE}/assets/images/digarts1/character-form-color/deck-cover-v1.jpg"   # custom deck cover thumbnail
+DECK_COVER=f"{SITE}/assets/images/digarts1/character-form-color/deck-cover-v1.jpg"   # English deck cover thumbnail
+DECK_PDF_ES=f"{DOCS}/DA1-Character-Design-Slides-ES-v3.pdf"   # lesson slides (Spanish)
+DECK_COVER_ES=f"{SITE}/assets/images/digarts1/character-form-color/deck-cover-ES-v1.jpg"   # Spanish deck cover thumbnail
 AREA="Digital Arts Folder"
 MOD="07"
 NXT="08"
@@ -103,14 +105,16 @@ def module_resources(es):
     if es:
         heading="Diapositivas y Palabras Clave"; slides_lab="Diapositivas de la Lecci&oacute;n"; keys_lab="Palabras Clave"
         intro="Mira estas diapositivas antes de dibujar. Repasan el dise&ntilde;o de personaje y los Elementos del Arte, incluyendo la Forma y el Color."
-        cap="Diapositivas de la lecci&oacute;n (PDF, en ingl&eacute;s). Toca para abrir en una pesta&ntilde;a nueva."
+        cap="Diapositivas de la lecci&oacute;n (PDF). Toca para abrir en una pesta&ntilde;a nueva."
         vg=vocab_grid("En el Examen","Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes. Apr&eacute;ndelas ahora, no la noche anterior.", VOCAB_ES)
     else:
         heading="Slides &amp; Key Words"; slides_lab="Lesson Slides"; keys_lab="Key Words"
         intro="Look through these slides before you draw. They review character design and the Elements of Art, including Form and Color."
         cap="Lesson slides (PDF). Tap to open in a new tab."
         vg=vocab_grid("On the Quiz","Heads up: these key words will show up on your quizzes. Learn them now, not the night before.", VOCAB_EN)
-    deck='<div style="max-width:440px;margin:2px 0 6px;">'+slide_deck_thumb(DECK_PDF, es, thumb=DECK_COVER, cap=cap)+'</div>'
+    pdf=DECK_PDF_ES if es else DECK_PDF
+    cover=DECK_COVER_ES if es else DECK_COVER
+    deck='<div style="max-width:440px;margin:2px 0 6px;">'+slide_deck_thumb(pdf, es, thumb=cover, cap=cap)+'</div>'
     return resources_card(heading, sub(slides_lab)+para(intro)+deck+div+sub(keys_lab)+vg, es)
 
 # ---- nav breadcrumb + progress dots (Overview is Step 01; dots 1-2-3, no "M") ----
