@@ -24,6 +24,7 @@ DOCS=f"{SITE}/assets/course-documents"
 REFL_EN=f"{DOCS}/Character-Design-Form-Color-Reflection-EN.docx"
 REFL_ES=f"{DOCS}/Character-Design-Form-Color-Reflection-ES.docx"
 DECK_PDF=f"{DOCS}/DA1-Character-Design-Slides-EN-v3.pdf"   # lesson slides (English), shown on the Overview
+DECK_COVER=f"{SITE}/assets/images/digarts1/character-form-color/deck-cover-v1.jpg"   # custom deck cover thumbnail
 AREA="Digital Arts Folder"
 MOD="07"
 NXT="08"
@@ -96,7 +97,7 @@ def deck_resources(es):
            else "Look through these slides before you draw. They review character design and the Elements of Art, including Form and Color.")
     cap=("Diapositivas de la lecci&oacute;n (PDF, en ingl&eacute;s). Toca para abrir en una pesta&ntilde;a nueva." if es
          else "Lesson slides (PDF). Tap to open in a new tab.")
-    return resources_card(heading, para(intro), es, floatimg=slide_deck_thumb(DECK_PDF, es, cap=cap))
+    return resources_card(heading, para(intro), es, floatimg=slide_deck_thumb(DECK_PDF, es, thumb=DECK_COVER, cap=cap))
 
 # ---- nav breadcrumb + progress dots (Overview is Step 01; dots 1-2-3, no "M") ----
 def nav(current,dots,stepnav):
