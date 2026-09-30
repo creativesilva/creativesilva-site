@@ -29,10 +29,13 @@ AREA="Digital Arts Folder"
 MOD="07"
 NXT="08"
 
-# Text-only for now: no hero/step images exist yet. Gate them OFF (render nothing, no placeholder box).
-HAVE_HEADER=False
+# Images: header hero placed; step floats not supplied yet (gated OFF -> render nothing, no placeholder box).
+HAVE_HEADER=True
 HAVE_S1_FLOAT=False
 HAVE_S2_FLOAT=False
+HEADER=f"{SITE}/assets/images/digarts1/character-form-color/header-v1.jpg"
+HDR_ALT_EN="A Pioneer Valley student in the design lab redrawing their original character in color, with form studies and a color wheel on the screen"
+HDR_ALT_ES="Un estudiante de Pioneer Valley en el laboratorio de dise&ntilde;o volviendo a dibujar su personaje original a color, con estudios de forma y una rueda de color en la pantalla"
 
 OVER="digarts1-character-form-color-overview.html"
 S1="digarts1-character-form-color-step02-draw.html"        # Step 02 (Draw)
@@ -125,6 +128,7 @@ def overview():
     en=banner("Digital Arts 1A",f"Module {MOD}: Character Design, Form &amp; Color","Redraw your character and bring it to life with Form and Color.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=type_card("overview","Step 01 &middot; Overview &amp; Download","Redraw Your Character with Form &amp; Color",
         para("Last module you designed your very own original character using the first two Elements of Art: <strong>Line</strong> and <strong>Shape</strong>. Now bring it to life. In this module you redraw that <strong>same</strong> character as a new, clean, polished drawing and add the next two Elements of Art: <strong>Form</strong> and <strong>Color</strong>. Four elements now work together: Line, Shape, Form, and Color.")
+        + (framed(HEADER,HDR_ALT_EN) if HAVE_HEADER else "")
         + para("You are on Step 01 now: read this page and download your reflection document below.")
         + note_orange(ORIG_EN))
     en+=standards_box(False, FC_STANDARDS)
@@ -161,6 +165,7 @@ def overview():
     es=banner("Arte Digital 1A",f"M&oacute;dulo {MOD}: Dise&ntilde;o de Personaje, Forma y Color","Vuelve a dibujar tu personaje y dale vida con la Forma y el Color.","#top","Back to English", HICON_DESIGN)
     es+=type_card("overview","Paso 01 &middot; Resumen y Descarga","Vuelve a Dibujar Tu Personaje con Forma y Color",
         para("El m&oacute;dulo pasado dise&ntilde;aste tu propio personaje original usando los primeros dos Elementos del Arte: la <strong>L&iacute;nea</strong> y la <strong>Forma</strong>. Ahora dale vida. En este m&oacute;dulo vuelves a dibujar ese <strong>mismo</strong> personaje como un dibujo nuevo, limpio y pulido, y agregas los siguientes dos Elementos del Arte: la <strong>Forma (volumen)</strong> y el <strong>Color</strong>. Ahora trabajan cuatro elementos juntos: L&iacute;nea, Forma, Volumen y Color.")
+        + (framed(HEADER,HDR_ALT_ES) if HAVE_HEADER else "")
         + para("Est&aacute;s en el Paso 01: lee esta p&aacute;gina y descarga tu documento de reflexi&oacute;n abajo.")
         + note_orange(ORIG_ES))
     es+=standards_box(True, FC_STANDARDS)
