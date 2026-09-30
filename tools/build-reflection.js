@@ -368,6 +368,20 @@ const DOCS = [
     '¿Cómo podrías agregar Forma para que tu personaje se vea en 3D y no plano? (Forma)',
     '¿Qué texturas le faltan y dónde las agregarías? (Textura)',
   ]},
+  // Character Design, Form & Color (Digital Arts 1A, Module 07) -- redraw the SAME original character
+  // from Module 06, now adding Form and Color (4 elements total: line, shape, form, color).
+  { ...EN, outfile: 'Character-Design-Form-Color-Reflection-EN.docx', title: 'Character Design, Form & Color: Reflection', subtitle: PVHS_EN('Digital Arts 1A'), questions: [
+    'What did you name your character, and what makes it your own original idea (not a copy of one that already exists)?',
+    'Where did you add Form to make your character look 3D instead of flat, and how did you shade it? (Form)',
+    'What colors did you choose, and where did you put them? Why those colors? (Color)',
+    'How is this new version stronger than your first line-and-shape drawing? What element would you add next?',
+  ]},
+  { ...ES, outfile: 'Character-Design-Form-Color-Reflection-ES.docx', title: 'Diseño de Personaje, Forma y Color: Reflexión', subtitle: PVHS_ES('Arte Digital 1A'), questions: [
+    '¿Cómo nombraste a tu personaje, y qué lo hace tu propia idea original (no una copia de uno que ya existe)?',
+    '¿Dónde le agregaste Forma para que se vea en 3D y no plano, y cómo lo sombreaste? (Forma)',
+    '¿Qué colores elegiste, y dónde los pusiste? ¿Por qué esos colores? (Color)',
+    '¿Cómo es esta nueva versión más fuerte que tu primer dibujo de líneas y formas? ¿Qué elemento le agregarías después?',
+  ]},
   // Aperture Portrait (Photography 1A) -- balancing exposure across f/8, f/4, f/2; JPG capture.
   { ...EN, outfile: 'Aperture-Portrait-Reflection-EN.docx', title: 'Aperture Portrait: Reflection', subtitle: PVHS_EN('Photography 1A'), questions: [
     'How did you balance your exposure at each f-stop? Tell how you used the shutter to move the light meter to balanced.',

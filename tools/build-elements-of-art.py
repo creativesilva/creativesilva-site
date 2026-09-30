@@ -18,6 +18,7 @@ REFLECT_FLOAT=f"{IMG}/elements-of-art-reflection-float-v1.jpg"
 DOCS=f"{SITE}/assets/course-documents"
 REFL_EN=f"{DOCS}/Elements-of-Art-Reflection-EN.docx"
 REFL_ES=f"{DOCS}/Elements-of-Art-Reflection-ES.docx"
+DECK_PDF=f"{DOCS}/DA1-Elements-of-Art-Line-Shape-Slides-EN-v2.pdf"   # Part 1 lesson slides (Line & Shape), English
 AREA="Digital Arts Folder"
 MOD="06"
 NXT="07"
@@ -79,6 +80,14 @@ def downloads_block(es):
       + '</div>'
       + folder_note(es, AREA) + '</div>')
 
+def deck_resources(es):
+    heading="Diapositivas de la Lecci&oacute;n" if es else "Lesson Slides"
+    intro=("Mira estas diapositivas antes de dibujar. Repasan la l&iacute;nea y la forma, los primeros dos Elementos del Arte." if es
+           else "Look through these slides before you draw. They review line and shape, the first two Elements of Art.")
+    cap=("Diapositivas de la lecci&oacute;n (PDF, en ingl&eacute;s). Toca para abrir en una pesta&ntilde;a nueva." if es
+         else "Lesson slides (PDF). Tap to open in a new tab.")
+    return resources_card(heading, para(intro), es, floatimg=slide_deck_thumb(DECK_PDF, es, cap=cap))
+
 def nav(current, dots, stepnav):
     return ('      <div class="silva-breadcrumb">\n'
             '        <a href="/curriculum.html">Curriculum Catalog</a>\n'
@@ -101,6 +110,7 @@ def overview():
         + note_orange(ORIG_EN))
     en+=standards_box(False, EOA_STANDARDS)
     en+=downloads_block(False)
+    en+=deck_resources(False)
     en+=card("THE FIRST 2 ELEMENTS","Meet Line &amp; Shape",
         para("Line and shape are the foundation of every drawing. Get these two right and everything else you learn will build on top of them.")
         + bullets([
@@ -130,6 +140,7 @@ def overview():
         + note_orange(ORIG_ES))
     es+=standards_box(True, EOA_STANDARDS)
     es+=downloads_block(True)
+    es+=deck_resources(True)
     es+=card("LOS PRIMEROS 2 ELEMENTOS","Conoce la L&iacute;nea y la Forma",
         para("La l&iacute;nea y la forma son la base de todo dibujo. Si dominas estas dos, todo lo dem&aacute;s que aprendas se construir&aacute; sobre ellas.")
         + bullets([

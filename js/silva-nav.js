@@ -40,7 +40,8 @@
       { name: 'Sketchbook Cover Art', url: '/curriculum/shared/digarts1-sketchbook-cover-overview.html' },
       { name: 'Motivational Poster', url: '/curriculum/shared/digarts1-motivational-poster-overview.html' },
       { name: 'Live Stream Graphic',  url: '/curriculum/shared/digarts1-live-stream-graphic-overview.html' },
-      { name: 'Elements of Art',      url: '/curriculum/shared/digarts1-elements-of-art-overview.html' }
+      { name: 'Elements of Art',      url: '/curriculum/shared/digarts1-elements-of-art-overview.html' },
+      { name: 'Character Design: Form & Color', url: '/curriculum/shared/digarts1-character-form-color-overview.html' }
     ]},
     { course: 'Photography 1A', modules: [
       { name: 'Self-Portrait',            url: '/curriculum/shared/photo1-self-portrait-overview.html' },
@@ -209,6 +210,9 @@
     ['/curriculum/shared/digarts1-elements-of-art-overview.html',
      '/curriculum/shared/digarts1-elements-of-art-step01-draw.html',
      '/curriculum/shared/digarts1-elements-of-art-step02-reflection.html'],
+    ['/curriculum/shared/digarts1-character-form-color-overview.html',
+     '/curriculum/shared/digarts1-character-form-color-step02-draw.html',
+     '/curriculum/shared/digarts1-character-form-color-step03-reflection.html'],
     ['/curriculum/photo1/photo1a-home.html',
      '/curriculum/photo1/photo1a-course-overview.html',
      '/curriculum/photo1/photo1a-syllabus.html'],
