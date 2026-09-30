@@ -233,6 +233,27 @@
   .camlog{background:rgba(0,0,0,.30);border:1px solid var(--line-soft);border-left:4px solid var(--ok);padding:12px 13px;display:flex;flex-direction:column;gap:7px;}
   .camlog.oos{border-left-color:var(--red);background:rgba(224,64,58,.07);}
   .camlog.nocard{border-left-color:#f5b301;background:rgba(245,179,1,.06);}
+  /* Compact equipment CONDITION cards (notes & condition section): ~half the size of a board card. */
+  .cond-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:9px;}
+  .condcard{background:rgba(0,0,0,.30);border:1px solid var(--line-soft);border-left:4px solid var(--ok);padding:9px 10px;display:flex;flex-direction:column;gap:5px;}
+  .condcard.oos{border-left-color:var(--red);background:rgba(224,64,58,.07);}
+  .condcard.nocard{border-left-color:#f5b301;background:rgba(245,179,1,.06);}
+  .condcard.gear{border-left-color:#8b5cf6;}
+  .condcard-top{display:flex;align-items:center;justify-content:space-between;gap:6px;}
+  .condcard-n{font-family:var(--font);font-weight:700;font-size:.92rem;color:#fff;}
+  .condcard.gear .condcard-n{font-size:.72rem;line-height:1.25;font-weight:600;}
+  .condcard-tag{font-size:.54rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);}
+  .kitpct{font-family:var(--font);font-weight:700;font-size:.68rem;letter-spacing:.02em;padding:2px 6px;border:1px solid transparent;white-space:nowrap;}
+  .kitpct.full{color:#8ff0b0;border-color:rgba(143,240,176,.35);background:rgba(143,240,176,.10);}
+  .kitpct.mid{color:#ffd889;border-color:rgba(245,179,1,.35);background:rgba(245,179,1,.10);}
+  .kitpct.low{color:#ff9a8a;border-color:rgba(224,64,58,.40);background:rgba(224,64,58,.12);}
+  .kitpct.na{color:var(--faint);border-color:var(--line-soft);}
+  .condflag{display:inline-block;font-family:var(--font);font-weight:700;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;}
+  .condflag.oos{background:rgba(224,64,58,.22);color:#ff9a8a;}
+  .condflag.nocard{background:rgba(245,179,1,.20);color:#ffd889;}
+  .condcard-acts{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto;padding-top:3px;}
+  .condcard .btn.sm{padding:5px 8px;font-size:.6rem;}
+  .condcard .camlog-note,.condcard .camlog-issues{font-size:.72rem;padding-top:5px;}
   /* Memory-card wallet + the leave-card slot picker */
   .card-slotgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:2px 0 14px;}
   .card-slot{height:44px;border:1px solid var(--line);background:rgba(0,0,0,.3);color:var(--text);font-family:var(--font);font-weight:700;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
@@ -903,30 +924,58 @@
       '</div>';
   }
 
-  // One row per physical camera: current state + the standing note that follows it + edit controls.
+  // EQUIPMENT CONDITION CARD (one per camera): compact, management-only. Shows the camera number,
+  // kit completion %, condition (missing card / open issues / standing note) and in/out of service.
+  // Deliberately NO reservation info (who has it / dates) -- that lives in the board strips below.
   function camLogCard(cam){
-    var a=assetOf(cam), c=activeFor(cam), oos=!!a.oos, nc=!!a.no_card, p2=P2.indexOf(cam)>=0;
-    var status=oos?'<span class="pill oos">Out of service</span>':(c?(statusOf(c)==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill '+(isOverdue(c)?'overdue':'out')+'">'+(isOverdue(c)?'Overdue':'Checked out')+'</span>'):(nc?'<span class="pill nocard">Card missing</span>':'<span class="pill avail">Available</span>'));
-    var who=c?'<div class="camlog-who">'+esc(nameOf(c))+' &middot; out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</div>':'';
-    var issues=a.issues||[], note='';
-    if(nc) note+='<div class="camlog-issues">&#9888; Memory card missing. Install a fresh card to return this kit to rotation.</div>';
-    if(issues.length) note+='<div class="camlog-issues">&#9888; Missing / issue: '+issues.map(esc).join(', ')+'</div>';
-    if(a.note) note+='<div class="camlog-note">'+esc(a.note)+'</div>';
-    if(!nc && !issues.length && !a.note) note='<div class="camlog-note empty">No issues. In good standing.</div>';
-    return '<div class="camlog'+(oos?' oos':'')+(nc?' nocard':'')+'">'+
-      '<div class="camlog-top"><span class="camlog-n camnum" data-camdetail="'+cam+'" title="Open camera details">'+cam+'</span>'+status+(p2?'<span class="camlog-p2">Photo 2</span>':'')+'</div>'+
-      who+note+
-      '<div class="camlog-acts"><button class="btn sm ghost" data-assetnote="'+cam+'">Edit note</button>'+
-        (nc?'<button class="btn sm" data-newcard="'+cam+'">New card installed</button>':'')+
-        '<button class="btn sm '+(oos?'':'danger')+'" data-oos="'+cam+'" data-oosval="'+(oos?'0':'1')+'">'+(oos?'Return to service':'Out of service')+'</button></div>'+
+    var a=assetOf(cam), oos=!!a.oos, nc=!!a.no_card, p2=P2.indexOf(cam)>=0;
+    var pct=kitPct(cam);   // null when the camera has no standard kit yet (e.g. Cam 16-18)
+    var pctHtml=(pct!=null)?'<span class="kitpct '+(pct===100?'full':(pct>=70?'mid':'low'))+'">'+pct+'%</span>':'<span class="kitpct na">kit TBD</span>';
+    var svc=oos?'<span class="condflag oos">Out of service</span>':(nc?'<span class="condflag nocard">Card missing</span>':'');
+    var issues=a.issues||[], cond='';
+    if(issues.length) cond+='<div class="camlog-issues">&#9888; '+issues.map(esc).join(', ')+'</div>';
+    if(a.note) cond+='<div class="camlog-note">'+esc(a.note)+'</div>';
+    if(!oos && !nc && !issues.length && !a.note) cond='<div class="camlog-note empty">Good standing</div>';
+    return '<div class="condcard'+(oos?' oos':'')+(nc?' nocard':'')+'">'+
+      '<div class="condcard-top"><span class="condcard-n camnum" data-camdetail="'+cam+'" title="Open kit + condition">'+cam+'</span>'+pctHtml+'</div>'+
+      (p2?'<div class="condcard-tag">Photo 2 kit</div>':'')+
+      (svc?'<div>'+svc+'</div>':'')+cond+
+      '<div class="condcard-acts"><button class="btn sm ghost" data-assetnote="'+cam+'">Note</button>'+
+        (nc?'<button class="btn sm" data-newcard="'+cam+'">Card in</button>':'')+
+        '<button class="btn sm '+(oos?'':'danger')+'" data-oos="'+cam+'" data-oosval="'+(oos?'0':'1')+'">'+(oos?'In service':'Out of service')+'</button></div>'+
       '</div>';
   }
+  // EQUIPMENT CONDITION CARD (one per pooled gear line: tripods, ultra-wide + ultra-zoom lenses,
+  // speedlites). Shows units available / total, condition note + open issues, and in/out of service.
+  // Gear is pooled by quantity, so the badge is the physical unit count; OOS flags the whole line.
+  function gearCondCard(e){
+    var a=assetOf(e.key), oos=!!a.oos, av=equipAvail(e.key), issues=a.issues||[], cond='';
+    if(issues.length) cond+='<div class="camlog-issues">&#9888; '+issues.map(esc).join(', ')+'</div>';
+    if(a.note) cond+='<div class="camlog-note">'+esc(a.note)+'</div>';
+    if(!oos && !issues.length && !a.note) cond='<div class="camlog-note empty">Good standing</div>';
+    return '<div class="condcard gear'+(oos?' oos':'')+'">'+
+      '<div class="condcard-top"><span class="condcard-n">'+esc(e.label)+'</span><span class="kitpct '+(av.avail>0?'full':'low')+'">'+av.avail+'/'+av.total+'</span></div>'+
+      (oos?'<div><span class="condflag oos">Out of service</span></div>':'')+cond+
+      '<div class="condcard-acts"><button class="btn sm ghost" data-assetnote="'+esc(e.key)+'">Note</button>'+
+        '<button class="btn sm '+(oos?'':'danger')+'" data-oos="'+esc(e.key)+'" data-oosval="'+(oos?'0':'1')+'">'+(oos?'In service':'Out of service')+'</button></div>'+
+      '</div>';
+  }
+  var _lastBoardSig=null;   // flicker guard: only replace #board when the rendered board actually changes
   function renderBoard(){
     var host=document.getElementById('board'); if(!host) return;
     var cams=DATA.cameras||[], counts={out:0,reserved:0,avail:0};
     cams.forEach(function(cam){ counts[catOf(cam)]++; });
-    // Build the section strips (order: Available, Checked out, Reserved, Camera log, Additional equipment, Memory card wallet).
-    var sec='';
+    // EQUIPMENT - NOTES & CONDITION comes FIRST among the sections: it is the management view for
+    // every kit Silva owns (all cameras incl. Cam 16-18, plus tripods, lenses and speedlites).
+    // Condition + kit completion + in/out of service only; no reservation info (that is in the strips).
+    var clopen=secOpen('camlog');
+    var flagged=cams.filter(function(c){ var a=assetOf(c); return a.note||a.oos||a.no_card||(a.issues&&a.issues.length); }).length
+              + EQUIPMENT.filter(function(e){ var a=assetOf(e.key); return a.note||a.oos||(a.issues&&a.issues.length); }).length;
+    var sec='<div class="csec sec-camlog'+(clopen?' open':'')+'">'+
+      '<button class="csec-head" type="button" data-sectoggle="camlog"><span class="csec-dot clog"></span>Equipment &middot; notes &amp; condition <span class="csec-n">'+flagged+' flagged</span><span class="csec-chev"></span></button>'+
+      '<div class="csec-body"><div class="cond-grid">'+cams.map(camLogCard).join('')+EQUIPMENT.map(gearCondCard).join('')+'</div></div>'+
+    '</div>';
+    // Then the live board strips (order: Available, Checked out, Reserved).
     SECDEF.forEach(function(s){
       var list=cams.filter(function(cam){ return catOf(cam)===s.key; });
       var open=secOpen(s.key);
@@ -935,12 +984,6 @@
         '<div class="csec-body">'+(list.length?('<div class="board">'+list.map(camCard).join('')+'</div>'):'<div class="csec-empty">None right now.</div>')+'</div>'+
       '</div>';
     });
-    // CAMERA LOG: every camera, its standing note (follows the camera) + out-of-service, always editable.
-    var clopen=secOpen('camlog'), noted=cams.filter(function(c){ var a=assetOf(c); return a.note||a.oos||(a.issues&&a.issues.length); }).length;
-    sec+='<div class="csec sec-camlog'+(clopen?' open':'')+'">'+
-      '<button class="csec-head" type="button" data-sectoggle="camlog"><span class="csec-dot clog"></span>Camera log &middot; notes &amp; condition <span class="csec-n">'+noted+' flagged</span><span class="csec-chev"></span></button>'+
-      '<div class="csec-body"><div class="camlog-grid">'+cams.map(camLogCard).join('')+'</div></div>'+
-    '</div>';
     // ADDITIONAL EQUIPMENT.
     var eopen=secOpen('equip'), eActive=equipActive().sort(byItem);
     var summary=EQUIPMENT.map(function(e){ var a=equipAvail(e.key); return '<span class="eqchip '+(a.avail>0?'ok':'none')+'">'+esc(e.label)+' <b>'+a.avail+' / '+a.total+'</b></span>'; }).join('');
@@ -967,7 +1010,10 @@
       '</button>'+
       '<div class="camhub-body">'+sec+'</div>'+
     '</div>';
-    host.innerHTML=html;
+    // Flicker fix (Chris, 2026-09-29): the 7s poll used to replace #board on every tick, which
+    // re-composited every backdrop-filter card over the fixed CS-logo background and read as a
+    // periodic flicker. Only touch the DOM (and rebind) when the rendered board actually changed.
+    if(html!==_lastBoardSig){ _lastBoardSig=html; host.innerHTML=html; bindBoard(); }
     updateSummary();
     updateDigests();
     var allRet=DATA.checkouts.filter(function(c){ return statusOf(c)==='returned'; })
@@ -981,7 +1027,7 @@
              (c.note?' &middot; <span class="hnote">'+esc(c.note)+'</span>':'')+
              '<div class="hre">Out '+fmt(c.out)+' &rarr; returned '+fmt(c.returned_date)+'</div></div>';
     }).join(''):'<div class="foot">No returned checkouts in the last 4 weeks. Use Download CSV for the full record.</div>';
-    bindBoard(); startTicker();
+    startTicker();
   }
   function bindBoard(){
     var b=document.getElementById('board');
