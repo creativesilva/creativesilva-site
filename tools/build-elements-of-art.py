@@ -80,13 +80,24 @@ def downloads_block(es):
       + '</div>'
       + folder_note(es, AREA) + '</div>')
 
-def deck_resources(es):
-    heading="Diapositivas de la Lecci&oacute;n" if es else "Lesson Slides"
-    intro=("Mira estas diapositivas antes de dibujar. Repasan la l&iacute;nea y la forma, los primeros dos Elementos del Arte." if es
-           else "Look through these slides before you draw. They review line and shape, the first two Elements of Art.")
-    cap=("Diapositivas de la lecci&oacute;n (PDF, en ingl&eacute;s). Toca para abrir en una pesta&ntilde;a nueva." if es
-         else "Lesson slides (PDF). Tap to open in a new tab.")
-    return resources_card(heading, para(intro), es, floatimg=slide_deck_thumb(DECK_PDF, es, cap=cap))
+def module_resources(es):
+    # ONE consolidated purple Resources section (LOCKED 2026-09-30): slide deck FIRST, then Key Words
+    # below, in the SAME purple section. Never split resources into two purple sections spread across
+    # the page. See SILVA_ANGULAR_FRAMEWORK.md.
+    sub=lambda t:f'<div style="font-size:11pt;letter-spacing:0.12em;text-transform:uppercase;color:#c4b5fd;font-weight:700;margin:2px 0 12px;"><strong>{t}</strong></div>'
+    div='<div style="border-top:1px solid rgba(139,92,246,0.28);margin:24px 0 20px;"></div>'
+    if es:
+        heading="Diapositivas y Palabras Clave"; slides_lab="Diapositivas de la Lecci&oacute;n"; keys_lab="Palabras Clave"
+        intro="Mira estas diapositivas antes de dibujar. Repasan la l&iacute;nea y la forma, los primeros dos Elementos del Arte."
+        cap="Diapositivas de la lecci&oacute;n (PDF, en ingl&eacute;s). Toca para abrir en una pesta&ntilde;a nueva."
+        vg=vocab_grid("En el Examen","Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes. Apr&eacute;ndelas ahora, no la noche anterior.", VOCAB_ES)
+    else:
+        heading="Slides &amp; Key Words"; slides_lab="Lesson Slides"; keys_lab="Key Words"
+        intro="Look through these slides before you draw. They review line and shape, the first two Elements of Art."
+        cap="Lesson slides (PDF). Tap to open in a new tab."
+        vg=vocab_grid("On the Quiz","Heads up: these key words will show up on your quizzes. Learn them now, not the night before.", VOCAB_EN)
+    deck='<div style="max-width:440px;margin:2px 0 6px;">'+slide_deck_thumb(DECK_PDF, es, cap=cap)+'</div>'
+    return resources_card(heading, sub(slides_lab)+para(intro)+deck+div+sub(keys_lab)+vg, es)
 
 def nav(current, dots, stepnav):
     return ('      <div class="silva-breadcrumb">\n'
@@ -110,7 +121,6 @@ def overview():
         + note_orange(ORIG_EN))
     en+=standards_box(False, EOA_STANDARDS)
     en+=downloads_block(False)
-    en+=deck_resources(False)
     en+=card("THE FIRST 2 ELEMENTS","Meet Line &amp; Shape",
         para("Line and shape are the foundation of every drawing. Get these two right and everything else you learn will build on top of them.")
         + bullets([
@@ -127,9 +137,7 @@ def overview():
             ("Build from shapes:","start with simple shapes, then add lines."),
             ("Name it:","give your character an original name."),
         ]))
-    en+=resources_card("Key Words", vocab_grid("On the Quiz",
-        "Heads up: these key words will show up on your quizzes. Learn them now, not the night before.",
-        VOCAB_EN), False)
+    en+=module_resources(False)
     en+=next_up("UP NEXT &middot; STEP 01 - Draw Your Character","Grab your sketchbook and a pencil. Next you&rsquo;ll sketch, finalize, and name your original character.")
 
     es=banner("Arte Digital 1A",f"M&oacute;dulo {MOD}: Elementos del Arte, Dise&ntilde;o de Personaje","Conoce los primeros dos Elementos del Arte: la L&iacute;nea y la Forma.","#top","Back to English", HICON_DESIGN)
@@ -140,7 +148,6 @@ def overview():
         + note_orange(ORIG_ES))
     es+=standards_box(True, EOA_STANDARDS)
     es+=downloads_block(True)
-    es+=deck_resources(True)
     es+=card("LOS PRIMEROS 2 ELEMENTOS","Conoce la L&iacute;nea y la Forma",
         para("La l&iacute;nea y la forma son la base de todo dibujo. Si dominas estas dos, todo lo dem&aacute;s que aprendas se construir&aacute; sobre ellas.")
         + bullets([
@@ -157,9 +164,7 @@ def overview():
             ("Construye con formas:","empieza con formas simples y luego agrega l&iacute;neas."),
             ("Ponle nombre:","dale a tu personaje un nombre original."),
         ]))
-    es+=resources_card("Palabras Clave", vocab_grid("En el Examen",
-        "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes. Apr&eacute;ndelas ahora, no la noche anterior.",
-        VOCAB_ES), True)
+    es+=module_resources(True)
     es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 01 - Dibuja Tu Personaje","Toma tu cuaderno y un l&aacute;piz. Ahora vas a bocetar, finalizar y nombrar tu personaje original.")
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)

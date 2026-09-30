@@ -94,13 +94,24 @@ def downloads_block(es):
       + '</div>'
       + folder_note(es, AREA) + '</div>')
 
-def deck_resources(es):
-    heading="Diapositivas de la Lecci&oacute;n" if es else "Lesson Slides"
-    intro=("Mira estas diapositivas antes de dibujar. Repasan el dise&ntilde;o de personaje y los Elementos del Arte, incluyendo la Forma y el Color." if es
-           else "Look through these slides before you draw. They review character design and the Elements of Art, including Form and Color.")
-    cap=("Diapositivas de la lecci&oacute;n (PDF, en ingl&eacute;s). Toca para abrir en una pesta&ntilde;a nueva." if es
-         else "Lesson slides (PDF). Tap to open in a new tab.")
-    return resources_card(heading, para(intro), es, floatimg=slide_deck_thumb(DECK_PDF, es, thumb=DECK_COVER, cap=cap))
+def module_resources(es):
+    # ONE consolidated purple Resources section (LOCKED 2026-09-30): slide deck FIRST, then Key Words
+    # below, in the SAME purple section. Never split resources into two purple sections spread across
+    # the page. See SILVA_ANGULAR_FRAMEWORK.md.
+    sub=lambda t:f'<div style="font-size:11pt;letter-spacing:0.12em;text-transform:uppercase;color:#c4b5fd;font-weight:700;margin:2px 0 12px;"><strong>{t}</strong></div>'
+    div='<div style="border-top:1px solid rgba(139,92,246,0.28);margin:24px 0 20px;"></div>'
+    if es:
+        heading="Diapositivas y Palabras Clave"; slides_lab="Diapositivas de la Lecci&oacute;n"; keys_lab="Palabras Clave"
+        intro="Mira estas diapositivas antes de dibujar. Repasan el dise&ntilde;o de personaje y los Elementos del Arte, incluyendo la Forma y el Color."
+        cap="Diapositivas de la lecci&oacute;n (PDF, en ingl&eacute;s). Toca para abrir en una pesta&ntilde;a nueva."
+        vg=vocab_grid("En el Examen","Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes. Apr&eacute;ndelas ahora, no la noche anterior.", VOCAB_ES)
+    else:
+        heading="Slides &amp; Key Words"; slides_lab="Lesson Slides"; keys_lab="Key Words"
+        intro="Look through these slides before you draw. They review character design and the Elements of Art, including Form and Color."
+        cap="Lesson slides (PDF). Tap to open in a new tab."
+        vg=vocab_grid("On the Quiz","Heads up: these key words will show up on your quizzes. Learn them now, not the night before.", VOCAB_EN)
+    deck='<div style="max-width:440px;margin:2px 0 6px;">'+slide_deck_thumb(DECK_PDF, es, thumb=DECK_COVER, cap=cap)+'</div>'
+    return resources_card(heading, sub(slides_lab)+para(intro)+deck+div+sub(keys_lab)+vg, es)
 
 # ---- nav breadcrumb + progress dots (Overview is Step 01; dots 1-2-3, no "M") ----
 def nav(current,dots,stepnav):
@@ -133,7 +144,6 @@ def overview():
         + note_orange(ORIG_EN))
     en+=standards_box(False, FC_STANDARDS)
     en+=downloads_block(False)
-    en+=deck_resources(False)
     en+=card("THE NEXT 2 ELEMENTS","Meet Form &amp; Color",
         para("Form and Color are what turn a flat outline into a character that looks alive. Add them on purpose.")
         + bullets([
@@ -151,9 +161,7 @@ def overview():
             ("All four elements:","line, shape, form, and color, working together."),
             ("Name it:","write your character&rsquo;s name below the drawing."),
         ]))
-    en+=resources_card("Key Words", vocab_grid("On the Quiz",
-        "Heads up: these key words will show up on your quizzes. Learn them now, not the night before.",
-        VOCAB_EN), False)
+    en+=module_resources(False)
     en+=card("HOW THIS MODULE WORKS","The Steps",
         para("You are on Step 01 now: read this page and download your file. Here are the steps that follow.")
         + bullets([
@@ -170,7 +178,6 @@ def overview():
         + note_orange(ORIG_ES))
     es+=standards_box(True, FC_STANDARDS)
     es+=downloads_block(True)
-    es+=deck_resources(True)
     es+=card("LOS SIGUIENTES 2 ELEMENTOS","Conoce la Forma y el Color",
         para("La forma (el volumen) y el color son lo que convierte un contorno plano en un personaje que se ve vivo. Agr&eacute;galos a prop&oacute;sito.")
         + bullets([
@@ -188,9 +195,7 @@ def overview():
             ("Los cuatro elementos:","l&iacute;nea, forma, volumen y color, trabajando juntos."),
             ("Ponle nombre:","escribe el nombre de tu personaje debajo del dibujo."),
         ]))
-    es+=resources_card("Palabras Clave", vocab_grid("En el Examen",
-        "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes. Apr&eacute;ndelas ahora, no la noche anterior.",
-        VOCAB_ES), True)
+    es+=module_resources(True)
     es+=card("C&Oacute;MO FUNCIONA ESTE M&Oacute;DULO","Los Pasos",
         para("Est&aacute;s en el Paso 01: lee esta p&aacute;gina y descarga tu archivo. Estos son los pasos que siguen.")
         + bullets([
