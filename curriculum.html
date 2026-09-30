@@ -917,7 +917,10 @@
       font-size: 0.78rem; color: #fff; text-decoration: none; white-space: nowrap;
       background: #007474; border: 1px solid #00b8b8; transition: filter 0.15s ease;
     }
-    .cal-btn:hover { filter: brightness(1.18); }
+    .cal-btn:hover { filter: brightness(1.12); }
+    /* Teal buttons: pin white so the browser visited-red never shows; orange (not red) highlight on rollover. */
+    .cal-btn:link, .cal-btn:visited { color: #fff; }
+    .cal-btn:not(.cmd):hover { border-color: #ff8c4a; color: #ffb27c; }
     /* Command Center = the framework orange (softer than the browser's visited-red on this external link). */
     .cal-btn.cmd, .cal-btn.cmd:link, .cal-btn.cmd:visited { background: #ff6b1a; border-color: #ff8c4a; color: #04110f; }
     .catalog-search { position: relative; flex: 1 1 280px; max-width: 480px; margin-left: 0; }
