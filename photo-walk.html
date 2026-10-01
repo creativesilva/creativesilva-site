@@ -77,8 +77,9 @@
   .pw-kit.todo{border-left-color:var(--gold);}
   .pw-khead{display:flex;align-items:center;justify-content:space-between;gap:8px;}
   .pw-knum{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.08rem;color:#fff;}
-  .pw-knum-btn{background:none;border:0;padding:2px 0;cursor:pointer;text-align:left;border-bottom:1px dashed rgba(0,184,184,.5);}
-  .pw-knum-btn:hover{color:var(--teal-lt);border-bottom-color:var(--teal);}
+  /* The camera number reads as a real button (box + outline), not just an underline. */
+  .pw-knum-btn{background:rgba(0,0,0,.28);border:1px solid var(--line);padding:4px 12px;cursor:pointer;text-align:left;transition:border-color .12s,background .12s,color .12s;}
+  .pw-knum-btn:hover{color:var(--teal-lt);border-color:var(--teal);background:rgba(0,184,184,.12);}
   .pw-p2{font-family:var(--font);font-size:.52rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#ffb28a;border:1px solid rgba(255,107,26,.5);padding:1px 5px;margin-left:6px;vertical-align:middle;}
   .pw-pct{font-family:var(--font);font-weight:700;font-size:.82rem;letter-spacing:.02em;padding:2px 8px;color:#8ff0b0;background:rgba(63,168,99,.16);}
   .pw-pct.mid{color:#ffd889;background:rgba(245,179,1,.16);} .pw-pct.low{color:#ff9a8a;background:rgba(224,64,58,.18);} .pw-pct.na{color:var(--faint);background:rgba(160,180,180,.12);}
@@ -134,6 +135,8 @@
   .pw-mini.ret{border-color:var(--teal);color:var(--teal-lt);}
   .pw-mini.done{border-color:rgba(63,168,99,.6);color:#8ff0b0;background:rgba(63,168,99,.14);}
   .pw-mini.done:hover{border-color:var(--ok);color:#fff;}
+  .pw-mini{text-decoration:none;}                 /* Edit info is a link styled as a mini button */
+  .pw-mini.info{margin-left:auto;}                 /* push Edit info to the right of the action row */
   .pw-outline{font-size:.84rem;color:var(--muted);}
   .pw-outline b{color:#fff;font-weight:600;}
   .pw-badge{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);}
@@ -141,7 +144,10 @@
   .pw-hist{margin-top:26px;border-top:1px solid var(--line-soft);padding-top:18px;}
   .pw-histhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
   .pw-h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:0;padding-left:9px;border-left:3px solid var(--teal);}
-  .pw-histlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;}
+  /* History pop-out: a modal (reuses .pw-wheelov) holding the scrollable list of saved walks. */
+  .pw-histbox{background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);border-top:3px solid var(--teal);box-shadow:0 24px 60px rgba(0,0,0,.7);width:600px;max-width:94vw;max-height:calc(100vh - 48px);padding:16px 18px 18px;display:flex;flex-direction:column;}
+  .pw-histbox .pw-seatsub{margin-bottom:12px;}
+  .pw-histlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;overflow-y:auto;min-height:0;}
   .pw-histrow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(0,0,0,.26);border:1px solid var(--line-soft);border-left:3px solid var(--teal-deep);padding:10px 12px;cursor:pointer;transition:background .12s;}
   .pw-histrow:hover{background:rgba(0,184,184,.1);}
   .pw-histopen{flex:1 1 auto;min-width:0;}
@@ -214,20 +220,13 @@
       </div>
       <div class="pw-spacer"></div>
       <button class="btn ghost" id="histBtn">History</button>
-      <button class="btn save" id="saveBtn">Save report</button>
+      <button class="btn ghost" id="editBtn">Edit log</button>
+      <button class="btn save" id="saveBtn">Save log</button>
     </div>
 
     <div class="pw-status" id="statusLine"></div>
 
     <div class="pw-grid" id="kitGrid"></div>
-
-    <div class="pw-hist" id="histPanel" style="display:none;">
-      <div class="pw-histhead">
-        <h2 class="pw-h">Past photo walks</h2>
-        <span class="pw-badge" id="histCount"></span>
-      </div>
-      <div class="pw-histlist" id="histList"></div>
-    </div>
 
     <p class="pw-foot">This log is teacher-only. It records which kit each seat took and the kit&#39;s completion that day; it does not check kits out or require returns at the end of class.</p>
   </div>
@@ -240,6 +239,14 @@
     <div class="pw-wheels" id="seatWheels"></div>
     <button type="button" class="pw-addseat" id="seatAdd">+ Add another seat</button>
     <button type="button" class="btn save" id="seatConfirm" style="width:100%;">Confirm</button>
+  </div>
+</div>
+
+<div class="pw-wheelov" id="histOv">
+  <div class="pw-histbox">
+    <div class="pw-seathead"><span>Past photo walks <span class="pw-badge" id="histCount"></span></span><button class="pw-seatx" id="histX" aria-label="Close">&times;</button></div>
+    <div class="pw-seatsub">Up to a month of saved walks. Tap a date to open it.</div>
+    <div class="pw-histlist silva-scroll" id="histList"></div>
   </div>
 </div>
 
@@ -359,30 +366,33 @@
   function pctChip(cam){ var p=kitPct(cam); return '<span class="pw-pct '+pctCls(p)+'">'+(p==null?'TBD':(p+'%'))+'</span>'; }
   function seatNum(v){ var s=String(v==null?'':v).replace(/\D/g,''); return s.replace(/^0+/,'')||''; }
   function namesLine(k){ var out=[]; (k.seats||[]).forEach(function(v0,i){ var v=seatNum(v0); if(!v) return; if(k.names[i]) out.push('<span class="sn">#'+esc(v)+'</span> '+esc(k.names[i])); else out.push('<span class="bad">#'+esc(v)+' no student</span>'); }); return out.length?out.join('<br>'):'<span class="empty">Tap the camera number to assign seats</span>'; }
+  // EDIT INFO opens the SAME full camera window as the Equipment Manager (kit toggles, issues, note,
+  // out of service, history) via a deep link, so the kit interface stays a single source of truth.
+  function editInfo(cam){ return '<a class="pw-mini info" href="/camera-manager.html?cam='+encodeURIComponent(cam)+'" title="Open the full camera kit window">Edit info</a>'; }
   function liveKitCard(cam){
     var k=PW[cam], p2=(P2.indexOf(cam)>=0)?'<span class="pw-p2">P2</span>':'';
-    var cls='pw-kit', body='', numHtml;
+    var cls='pw-kit', body='', numHtml, ei=editInfo(cam);
     if(k.status==='checked_out'){
       numHtml='<span class="pw-knum">'+esc(cam)+p2+'</span>';
       cls+=' checkedout';
       body='<div class="pw-outline"><b>Checked out</b><br>'+esc(whoOf(k.co))+'</div>'+
-           '<div class="pw-kact"><button class="pw-mini ret" data-return="'+esc(cam)+'">Return to pool</button></div>';
+           '<div class="pw-kact"><button class="pw-mini ret" data-return="'+esc(cam)+'">Return to pool</button>'+ei+'</div>';
     } else if(k.status==='not_used'){
       numHtml='<button type="button" class="pw-knum pw-knum-btn" data-assign="'+esc(cam)+'">'+esc(cam)+p2+'</button>';
       cls+=' notused';
       body='<div class="pw-outline"><b>Not used</b> this walk</div>'+
-           '<div class="pw-kact"><button class="pw-mini" data-notused="'+esc(cam)+'">Undo</button></div>';
+           '<div class="pw-kact"><button class="pw-mini" data-notused="'+esc(cam)+'">Undo</button>'+ei+'</div>';
     } else if(k.status==='used'){
       numHtml='<button type="button" class="pw-knum pw-knum-btn" data-assign="'+esc(cam)+'">'+esc(cam)+p2+'</button>';
       cls+=' used';
       // Seats committed: the action button confirms "Kit assigned" (green) and re-opens the editor to change it.
       body='<div class="pw-names">'+namesLine(k)+'</div>'+
-           '<div class="pw-kact"><button class="pw-mini done" data-assign="'+esc(cam)+'">&#10003; Kit assigned</button></div>';
+           '<div class="pw-kact"><button class="pw-mini done" data-assign="'+esc(cam)+'">&#10003; Kit assigned</button>'+ei+'</div>';
     } else {
       numHtml='<button type="button" class="pw-knum pw-knum-btn" data-assign="'+esc(cam)+'">'+esc(cam)+p2+'</button>';
       cls+=' todo';
       body='<div class="pw-names">'+namesLine(k)+'</div>'+
-           '<div class="pw-kact"><button class="pw-mini warn" data-notused="'+esc(cam)+'">Mark not used</button></div>';
+           '<div class="pw-kact"><button class="pw-mini warn" data-notused="'+esc(cam)+'">Mark not used</button>'+ei+'</div>';
     }
     return '<div class="'+cls+'"><div class="pw-khead">'+numHtml+pctChip(cam)+'</div>'+body+'</div>';
   }
@@ -475,25 +485,26 @@
       .then(function(r){ if(!r.ok) throw new Error(); return loadBoard(); }).then(function(){ buildPW(); render(); toast(cam+' returned to the pool.'); })
       .catch(function(){ toast('Could not return '+cam+'. Try again.',true); });
   }
-  function setPeriod(p){ RO=null; PERIOD=p; buildPW(); render(); loadSavedIntoPW(p); }
-  // If a report was already saved for today + this period, load its assignments so Edit report shows
-  // the earlier students (and you can add late ones), instead of starting blank and overwriting.
-  function loadSavedIntoPW(p){ if(!p) return; var key=todayISO()+'|'+p;
+  function setPeriod(p){ RO=null; PERIOD=p; try{ sessionStorage.setItem('pwperiod',p); }catch(e){} buildPW(); render(); loadSavedIntoPW(p); }
+  // Load the saved log for today + this period so Edit Log shows the earlier students (and you can add
+  // late ones) instead of starting blank. announce=true (the Edit Log button) toasts the result.
+  function loadSavedIntoPW(p, announce){ if(!p) return; var key=todayISO()+'|'+p;
     camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'get',key:key})})
-      .then(function(r){ return r.json(); }).then(function(j){ if(!j||!j.log||PERIOD!==p) return;
+      .then(function(r){ return r.json(); }).then(function(j){ if(PERIOD!==p) return;
+        if(!j||!j.log){ if(announce) toast('No saved log yet for Period '+p+'. Assign seats, then Save log.'); return; }
         savedKeys[key]=true;
         (j.log.kits||[]).forEach(function(kk){ var pw=PW[kk.cam]; if(!pw||pw.status==='checked_out') return;
           if(kk.status==='not_used'){ pw.status='not_used'; pw.seats=[]; pw.names=[]; pw.ids=[]; }
           else if(kk.seats&&kk.seats.length){ pw.seats=kk.seats.map(function(s){return seatNum(s.seat);}); pw.names=kk.seats.map(function(s){return s.label||'';}); pw.ids=kk.seats.map(function(s){return s.id||'';}); pw.status='used'; }
         });
         render();
-      }).catch(function(){}); }
+        if(announce) toast('Loaded the saved log for Period '+p+'. Add anyone new, then Save log again.');
+      }).catch(function(){ if(announce) toast('Could not load the saved log. Try again.',true); }); }
 
   // ----- save -----
-  var savedKeys={};   // "date|period" -> true (from history + after a save); drives Save vs Edit label
-  function updateSaveBtn(){ var b=document.getElementById('saveBtn'); if(!b) return;
-    if(RO){ b.textContent='Save report'; return; }
-    b.textContent=(PERIOD && savedKeys[todayISO()+'|'+PERIOD])?'Edit report':'Save report'; }
+  var savedKeys={};   // "date|period" -> true (from history + after a save); tells Edit Log what exists
+  // Save/Edit are now two always-on buttons, so the Save button label is constant.
+  function updateSaveBtn(){ var b=document.getElementById('saveBtn'); if(b) b.textContent='Save log'; }
   function showUnassignedWarn(n, onOk){
     var they=(n>1?'they':'it'), were=(n>1?'were':'was'), cams='camera'+(n>1?'s':'');
     document.getElementById('warnText').innerHTML=n+' '+cams+' '+were+' not assigned a seat. If '+they+' stayed in the classroom this period, tap OK and '+they+' will be logged as <b>Not used</b> for this photo walk.';
@@ -512,7 +523,7 @@
       var btn=document.getElementById('saveBtn'); btn.disabled=true; btn.textContent='Saving&#8230;';
       camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'save',date:todayISO(),period:PERIOD,course:courseForPeriod(),kits:kits})})
         .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
-        .then(function(){ savedKeys[todayISO()+'|'+PERIOD]=true; btn.disabled=false; updateSaveBtn(); toast('Photo walk saved for Period '+PERIOD+'. Button is now Edit report.'); loadHistory(); })
+        .then(function(){ savedKeys[todayISO()+'|'+PERIOD]=true; btn.disabled=false; updateSaveBtn(); toast('Photo walk saved for Period '+PERIOD+'. Hit Edit log to reload it for late students.'); loadHistory(); })
         .catch(function(){ btn.disabled=false; updateSaveBtn(); toast('Could not save. Try again.',true); });
     };
     if(open.length){ showUnassignedWarn(open.length, function(){ open.forEach(function(cam){ var k=PW[cam]; k.status='not_used'; k.seats=[]; k.names=[]; k.ids=[]; }); renderGrid(); renderStatus(); go(); }); }
@@ -533,7 +544,7 @@
   }
   function openPast(key){
     camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'get',key:key})})
-      .then(function(r){ return r.json(); }).then(function(j){ if(j&&j.log){ RO=j.log; render(); window.scrollTo({top:0,behavior:'smooth'}); } })
+      .then(function(r){ return r.json(); }).then(function(j){ if(j&&j.log){ document.getElementById('histOv').classList.remove('open'); RO=j.log; render(); window.scrollTo({top:0,behavior:'smooth'}); } })
       .catch(function(){ toast('Could not open that walk.',true); });
   }
   function deletePast(key){
@@ -549,7 +560,9 @@
   function startApp(){
     gate.style.display='none'; app.classList.add('on');
     Promise.all([loadBoard(),loadSeatmap()]).then(function(){
-      var ap=autoPeriod(); if(ap && SEATMAP[ap]) setPeriod(ap); else { PERIOD=null; buildPW(); render(); }
+      var ap=autoPeriod(); var saved=''; try{ saved=sessionStorage.getItem('pwperiod')||''; }catch(e){}
+      var want=(ap&&SEATMAP[ap])?ap:((saved&&SEATMAP[saved])?saved:null);   // auto-detect current class, else the last one used
+      if(want) setPeriod(want); else { PERIOD=null; buildPW(); render(); }
       loadHistory();
     }).catch(function(){});
   }
@@ -576,7 +589,10 @@
   document.getElementById('warnCancel').onclick=function(){ document.getElementById('warnOv').classList.remove('open'); };
   document.getElementById('warnOv').addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
   document.getElementById('saveBtn').onclick=saveReport;
-  document.getElementById('histBtn').onclick=function(){ var h=document.getElementById('histPanel'); h.style.display=(h.style.display==='none')?'':'none'; if(h.style.display!=='none'){ loadHistory(); h.scrollIntoView({behavior:'smooth',block:'start'}); } };
+  document.getElementById('histBtn').onclick=function(){ document.getElementById('histOv').classList.add('open'); loadHistory(); };
+  document.getElementById('histX').onclick=function(){ document.getElementById('histOv').classList.remove('open'); };
+  document.getElementById('histOv').addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
+  document.getElementById('editBtn').onclick=function(){ if(RO){ toast('You are viewing a saved walk. Pick a period to log today.',true); return; } if(!PERIOD){ toast('Pick a class period first.',true); return; } loadSavedIntoPW(PERIOD, true); };
   document.getElementById('roExit').onclick=function(){ RO=null; var ap=autoPeriod(); if(ap&&SEATMAP[ap]) setPeriod(ap); else { PERIOD=PERIOD||null; buildPW(); render(); } };
 
   // boot: if we already hold the key (logged into the console), go straight in

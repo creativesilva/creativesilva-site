@@ -39,8 +39,9 @@
   .sub{color:var(--muted);font-size:.95rem;margin:0;flex:1 1 320px;}
   /* Top-level buttons share ONE pixel height (38px); in-card .btn.sm share a smaller one (32px). */
   .btn{flex:0 0 auto;height:38px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font);font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:0 18px;cursor:pointer;text-decoration:none;transition:filter .15s;}
-  /* Reserve / Photo Walk / Refresh when moved into the second bar: match the compact Catalog/QR row. */
-  .silva-uni-bar .cm-barbtn{height:34px;padding:0 15px;font-size:.68rem;letter-spacing:.07em;}
+  /* Every header action (Reserve, Photo Walk, Refresh, Student Calendar) shares the Catalog/QR
+     cattrigger look; the link-based ones just need their underline removed. */
+  .silva-uni-titlebar .silva-uni-cattrigger, .silva-uni-bar .silva-uni-cattrigger{ text-decoration:none; }
   .btn:hover{filter:brightness(1.12);}
   .btn.ghost{background:rgba(0,184,184,.14);color:#eafeff;}
   .btn.sm{height:32px;padding:0 12px;font-size:.66rem;}
@@ -549,10 +550,10 @@
 <div class="wrap">
   <div class="intro">
     <p class="sub">Reserve equipment, mark it picked up when the student collects it, and mark it returned when it comes back. Changes sync to the calendar and the Command Center in real time.</p>
-    <button class="btn" id="reserveBtn">+ Reserve / check out</button>
-    <button class="btn ghost" id="refreshBtn" title="Reload the latest data now">&#8635; Refresh</button>
-    <a class="btn ghost" id="studentCalBtn" href="/calendar.html?from=console" target="_blank" rel="noopener">Student Calendar</a>
-    <a class="btn ghost" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
+    <button class="silva-uni-cattrigger" id="reserveBtn">Reserve</button>
+    <button class="silva-uni-cattrigger" id="refreshBtn" title="Reload the latest data now">&#8635; Refresh</button>
+    <a class="silva-uni-cattrigger" id="studentCalBtn" href="/calendar.html?from=console" target="_blank" rel="noopener">Student Calendar</a>
+    <a class="silva-uni-cattrigger" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
   </div>
 
   <div class="summary">
@@ -773,8 +774,8 @@
       var qr=document.createElement('button'); qr.type='button'; qr.id='cmQrBtn'; qr.className='silva-uni-cattrigger'; qr.textContent='QR Code'; qr.onclick=showQR;
       var cat=bar.querySelector('.silva-uni-cattrigger'); if(cat) cat.insertAdjacentElement('afterend', qr); else bar.appendChild(qr);
     }
-    // SECOND ROW (with Catalog + QR Code): Reserve / check out, Photo Walk Log, Refresh.
-    [rb, pw, rf].forEach(function(b){ if(b && b.parentElement!==bar){ b.classList.add('cm-barbtn'); bar.appendChild(b); } });
+    // SECOND ROW (with Catalog + QR Code): Reserve, Photo Walk Log, Refresh. All share the cattrigger look.
+    [rb, pw, rf].forEach(function(b){ if(b && b.parentElement!==bar){ bar.appendChild(b); } });
     var intro=document.querySelector('.intro'); if(intro) intro.style.display='none';
     return true;
   }
@@ -1876,7 +1877,17 @@
   // ---- PIN gate (the password is validated by the server) ----
   var gate=document.getElementById('gate'), pin=document.getElementById('pin'), pinerr=document.getElementById('pinerr');
   function showGate(msg){ KEY=''; try{ sessionStorage.removeItem('silva-cam-key'); }catch(e){} gate.style.display='flex'; pinerr.textContent=msg||''; pin.value=''; setTimeout(function(){ pin.focus(); },50); }
-  function startApp(){ gate.style.display='none'; if(!polling){ polling=true; setInterval(loadBoard,7000); } loadBoard(); pushKey(); }
+  function startApp(){ gate.style.display='none'; if(!polling){ polling=true; setInterval(loadBoard,7000); } loadBoard(); pushKey(); maybeDeepLinkCam(); }
+  // EDIT INFO deep-link from the Photo Walk Log: /camera-manager.html?cam=Cam%2001 opens that camera's window.
+  var _deepLinked=false;
+  function maybeDeepLinkCam(){ if(_deepLinked) return; _deepLinked=true;
+    try{ var raw=new URLSearchParams(location.search).get('cam'); if(!raw) return;
+      var m=String(raw).match(/(\d{1,2})/); if(!m) return;
+      var cam='Cam '+(m[1].length<2?('0'+m[1]):m[1]);
+      setTimeout(function(){ try{ openCamDetail(cam); }catch(e){} },150);
+      try{ history.replaceState(null,'',location.pathname); }catch(e){}   // drop ?cam so a refresh won't reopen
+    }catch(e){}
+  }
   function submitPin(){
     var v=pin.value.trim(); if(!v){ pinerr.textContent='Enter the password.'; return; }
     pinerr.textContent='Checking…'; KEY=v;
