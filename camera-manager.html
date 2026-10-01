@@ -273,6 +273,12 @@
   .dcard.st-returning{border-left-color:var(--muted);} .dcard.st-returning .dcard-dot{background:var(--muted);}
   /* ONE consolidated, color-coded Cameras grid. Green=available, yellow=reserved-today, orange=checked
      out, red=overdue (pulsing), gray=out of service / card missing. Tap a tile -> the full window. */
+  /* Sort bar for the consolidated camera grid. */
+  .camsort{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 11px;align-items:center;}
+  .camsort-lab{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-right:4px;}
+  .camsort-b{font-family:var(--font);font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:rgba(0,0,0,.3);border:1px solid var(--line-soft);padding:6px 11px;cursor:pointer;transition:color .12s,border-color .12s,background .12s;}
+  .camsort-b:hover{color:#fff;border-color:var(--teal);}
+  .camsort-b.on{color:#04110f;background:var(--teal);border-color:var(--teal);}
   .camgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(204px,1fr));gap:9px;margin-bottom:10px;}
   .camtile{display:flex;flex-direction:column;gap:5px;align-items:flex-start;text-align:left;width:100%;background:rgba(0,0,0,.32);border:1px solid var(--line-soft);border-left:4px solid var(--grayed);padding:11px 13px;cursor:pointer;font-family:inherit;color:var(--text);transition:border-color .12s,background .12s;backdrop-filter:blur(5px) saturate(1.04);-webkit-backdrop-filter:blur(5px) saturate(1.04);}
   .camtile:hover{background:rgba(0,184,184,.07);}
@@ -1074,6 +1080,19 @@
     var title='<span class="dcard-title" data-geardetail="'+esc(e.key)+'" title="Open kit + details">'+esc((e.short||e.label).toUpperCase())+'</span>';
     return shell3('gc:'+e.key, down>=total?'st-oos':'st-ok', title, esc(e.label), chip, body);
   }
+  // Sort the consolidated camera grid. Persisted so it sticks across the 7s poll + reloads.
+  var CAM_SORT='num'; try{ CAM_SORT=sessionStorage.getItem('camsort')||'num'; }catch(e){}
+  var CAM_SORTS=[{k:'num',label:'Camera #'},{k:'avail',label:'Available'},{k:'out',label:'Checked out'},{k:'overdue',label:'Overdue'},{k:'pct',label:'Kit %'},{k:'oos',label:'Out of service'}];
+  function camSortKey(cam,mode){ var s=camState(cam), p=kitPct(cam);
+    if(mode==='avail') return s==='avail'?0:1;
+    if(mode==='out') return (s==='overdue'?0:(s==='out'?1:2));
+    if(mode==='overdue') return s==='overdue'?0:1;
+    if(mode==='oos') return s==='oos'?0:1;
+    if(mode==='pct') return (p==null?999:p);   // least-complete kits first; TBD last
+    return 0; }
+  function sortedCams(){ var arr=(DATA.cameras||[]).slice(); if(CAM_SORT==='num') return arr;
+    return arr.map(function(c,i){ return {c:c,i:i}; }).sort(function(a,b){ var ka=camSortKey(a.c,CAM_SORT), kb=camSortKey(b.c,CAM_SORT); return (ka!==kb)?(ka-kb):(a.i-b.i); }).map(function(x){ return x.c; }); }
+  function camSortBar(){ return '<div class="camsort"><span class="camsort-lab">Sort</span>'+CAM_SORTS.map(function(s){ return '<button type="button" class="camsort-b'+(CAM_SORT===s.k?' on':'')+'" data-camsort="'+s.k+'">'+s.label+'</button>'; }).join('')+'</div>'; }
   var _lastBoardSig=null;   // flicker guard: only replace #board when the rendered board actually changes
   function renderBoard(){
     var host=document.getElementById('board'); if(!host) return;
@@ -1083,7 +1102,7 @@
     // colored by today's status (green available, yellow reserved-today, orange checked out, red
     // overdue + pulsing, gray out of service / card missing). Tap a tile -> the full camera window.
     // Replaces the old separate Condition + Available + Checked-out + Reserved lists.
-    var sec='<div class="camgrid">'+cams.map(camTile).join('')+'</div>';
+    var sec=camSortBar()+'<div class="camgrid">'+sortedCams().map(camTile).join('')+'</div>';
     // ADDITIONAL EQUIPMENT keeps its own section: gear condition tiles (tap -> gear window) + what is out.
     var eopen=secOpen('equip'), eActive=equipActive().sort(byItem);
     sec+='<div class="csec sec-equip'+(eopen?' open':'')+'">'+
@@ -1131,6 +1150,7 @@
   function bindBoard(){
     var b=document.getElementById('board');
     b.querySelectorAll('[data-sectoggle]').forEach(function(el){ el.onclick=function(){ var k=el.getAttribute('data-sectoggle'), sec=el.parentNode, open=!sec.classList.contains('open'); sec.classList.toggle('open',open); setSecOpen(k,open); }; });
+    b.querySelectorAll('[data-camsort]').forEach(function(el){ el.onclick=function(){ CAM_SORT=el.getAttribute('data-camsort'); try{ sessionStorage.setItem('camsort',CAM_SORT); }catch(e){} renderBoard(); }; });
     b.querySelectorAll('[data-return]').forEach(function(el){ el.onclick=function(){ markReturned(el.getAttribute('data-return')); }; });
     b.querySelectorAll('[data-undo]').forEach(function(el){ el.onclick=function(){ undoReturn(el.getAttribute('data-undo')); }; });
     b.querySelectorAll('[data-status]').forEach(function(el){ el.onclick=function(){ setStatus(el.getAttribute('data-id'), el.getAttribute('data-status'), el); }; });
