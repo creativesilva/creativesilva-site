@@ -39,6 +39,8 @@
   .sub{color:var(--muted);font-size:.95rem;margin:0;flex:1 1 320px;}
   /* Top-level buttons share ONE pixel height (38px); in-card .btn.sm share a smaller one (32px). */
   .btn{flex:0 0 auto;height:38px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font);font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:0 18px;cursor:pointer;text-decoration:none;transition:filter .15s;}
+  /* Reserve / Photo Walk / Refresh when moved into the second bar: match the compact Catalog/QR row. */
+  .silva-uni-bar .cm-barbtn{height:34px;padding:0 15px;font-size:.68rem;letter-spacing:.07em;}
   .btn:hover{filter:brightness(1.12);}
   .btn.ghost{background:rgba(0,184,184,.14);color:#eafeff;}
   .btn.sm{height:32px;padding:0 12px;font-size:.66rem;}
@@ -280,12 +282,16 @@
   .camsortdd-trig b{color:var(--teal-lt);font-weight:700;}
   .camsortdd-cv{width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin-left:1px;opacity:.7;}
   .camsortdd.open .camsortdd-cv{transform:rotate(-135deg);}
-  .camsortdd-menu{display:none;position:absolute;top:calc(100% + 5px);right:0;z-index:60;min-width:184px;background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);box-shadow:0 16px 40px rgba(0,0,0,.7);}
-  .camsortdd.open .camsortdd-menu{display:block;}
-  .camsortdd-opt{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line-soft);color:var(--text);font-family:var(--font);font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:10px 13px;cursor:pointer;}
-  .camsortdd-opt:last-child{border-bottom:0;}
-  .camsortdd-opt:hover{background:rgba(0,184,184,.16);color:#fff;}
-  .camsortdd-opt.on{color:var(--teal-lt);}
+  /* Wheel selector: same width as the trigger, 3 options visible, center enlarged (= selected),
+     vertical scroll only (horizontal locked), blurred + semi-opaque behind. */
+  .camsortdd-wheel{display:none;position:absolute;top:calc(100% + 5px);left:0;right:0;z-index:60;background:rgba(4,20,19,.68);backdrop-filter:blur(12px) saturate(1.1);-webkit-backdrop-filter:blur(12px) saturate(1.1);border:1px solid var(--teal);box-shadow:0 16px 40px rgba(0,0,0,.7);overflow:hidden;}
+  .camsortdd.open .camsortdd-wheel{display:block;}
+  .camsortdd-scroll{position:relative;height:120px;overflow-y:auto;overflow-x:hidden;touch-action:pan-y;overscroll-behavior:contain;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .camsortdd-scroll::-webkit-scrollbar{display:none;}
+  .csw-pad{height:40px;}
+  .csw-item{height:40px;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.66rem;color:var(--faint);cursor:pointer;transition:color .12s,transform .12s,opacity .12s;opacity:.5;transform:scale(.82);white-space:nowrap;padding:0 8px;}
+  .csw-item.on{color:var(--teal-lt);opacity:1;transform:scale(1.1);}
+  .csw-center{position:absolute;left:0;right:0;top:40px;height:40px;border-top:1px solid var(--teal);border-bottom:1px solid var(--teal);pointer-events:none;}
   .camgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(204px,1fr));gap:9px;margin-bottom:10px;}
   .camtile{display:flex;flex-direction:column;gap:5px;align-items:flex-start;text-align:left;width:100%;background:rgba(0,0,0,.32);border:1px solid var(--line-soft);border-left:4px solid var(--grayed);padding:11px 13px;cursor:pointer;font-family:inherit;color:var(--text);transition:border-color .12s,background .12s;backdrop-filter:blur(5px) saturate(1.04);-webkit-backdrop-filter:blur(5px) saturate(1.04);}
   .camtile:hover{background:rgba(0,184,184,.07);}
@@ -759,15 +765,17 @@
     var clk=tb.querySelector('.silva-uni-clock');
     var rb=document.getElementById('reserveBtn'), sc=document.getElementById('studentCalBtn'),
         pw=document.getElementById('photoWalkBtn'), rf=document.getElementById('refreshBtn');
-    if(rb && rb.parentElement!==tb){ if(clk) tb.insertBefore(rb,clk); else tb.appendChild(rb); }
+    // TOP ROW: Student Calendar only, inserted BEFORE the clock so the period countdown stays all the
+    // way to the right (LOCKED, Chris 2026-10-01: the countdown is never moved off the top-right).
     if(sc && sc.parentElement!==tb){ if(clk) tb.insertBefore(sc,clk); else tb.appendChild(sc); }
-    if(pw && pw.parentElement!==tb){ if(clk) tb.insertBefore(pw,clk); else tb.appendChild(pw); }   // Photo Walk Log into the header
-    if(rf && rf.parentElement!==tb){ if(clk) tb.insertBefore(rf,clk); else tb.appendChild(rf); }   // Refresh into the header
-    var intro=document.querySelector('.intro'); if(intro) intro.style.display='none';
+    // QR Code button into the second bar (next to Catalog), once.
     if(!document.getElementById('cmQrBtn')){
       var qr=document.createElement('button'); qr.type='button'; qr.id='cmQrBtn'; qr.className='silva-uni-cattrigger'; qr.textContent='QR Code'; qr.onclick=showQR;
       var cat=bar.querySelector('.silva-uni-cattrigger'); if(cat) cat.insertAdjacentElement('afterend', qr); else bar.appendChild(qr);
     }
+    // SECOND ROW (with Catalog + QR Code): Reserve / check out, Photo Walk Log, Refresh.
+    [rb, pw, rf].forEach(function(b){ if(b && b.parentElement!==bar){ b.classList.add('cm-barbtn'); bar.appendChild(b); } });
+    var intro=document.querySelector('.intro'); if(intro) intro.style.display='none';
     return true;
   }
   function tryInject(n){ if(injectHeader()||n<=0) return; setTimeout(function(){ tryInject(n-1); },40); }
@@ -1108,8 +1116,15 @@
   function camSortDropdown(){ var cur=(CAM_SORTS.filter(function(s){return s.k===CAM_SORT;})[0]||CAM_SORTS[0]).label;
     return '<div class="camsortdd" id="camsortdd">'+
       '<button type="button" class="camsortdd-trig" data-sorttrig>Sort: <b>'+esc(cur)+'</b><i class="camsortdd-cv"></i></button>'+
-      '<div class="camsortdd-menu">'+CAM_SORTS.map(function(s){ return '<button type="button" class="camsortdd-opt'+(CAM_SORT===s.k?' on':'')+'" data-camsort="'+s.k+'">'+esc(s.label)+'</button>'; }).join('')+'</div>'+
+      '<div class="camsortdd-wheel"><div class="camsortdd-scroll" id="camsortScroll">'+
+        '<div class="csw-pad"></div>'+
+        CAM_SORTS.map(function(s){ return '<div class="csw-item'+(CAM_SORT===s.k?' on':'')+'" data-camsort="'+s.k+'">'+esc(s.label)+'</div>'; }).join('')+
+        '<div class="csw-pad"></div>'+
+      '</div><div class="csw-center"></div></div>'+
     '</div>'; }
+  function markSortCenter(sc){ var b=sc.getBoundingClientRect(), cy=b.top+b.height/2, best=null, bd=1e9;
+    sc.querySelectorAll('.csw-item').forEach(function(it){ var r=it.getBoundingClientRect(), d=Math.abs((r.top+r.height/2)-cy); if(d<bd){ bd=d; best=it; } });
+    sc.querySelectorAll('.csw-item').forEach(function(it){ it.classList.toggle('on', it===best); }); }
   var _lastBoardSig=null;   // flicker guard: only replace #board when the rendered board actually changes
   function renderBoard(){
     var host=document.getElementById('board'); if(!host) return;
@@ -1168,7 +1183,10 @@
   function bindBoard(){
     var b=document.getElementById('board');
     b.querySelectorAll('[data-sectoggle]').forEach(function(el){ el.onclick=function(){ var k=el.getAttribute('data-sectoggle'), sec=el.parentNode, open=!sec.classList.contains('open'); sec.classList.toggle('open',open); setSecOpen(k,open); }; });
-    var _st=b.querySelector('[data-sorttrig]'); if(_st){ _st.onclick=function(e){ e.stopPropagation(); var dd=_st.closest('.camsortdd'); if(dd) dd.classList.toggle('open'); }; }
+    var _st=b.querySelector('[data-sorttrig]'), _ssc=b.querySelector('#camsortScroll');
+    if(_st){ _st.onclick=function(e){ e.stopPropagation(); var dd=_st.closest('.camsortdd'); var opening=!dd.classList.contains('open'); dd.classList.toggle('open',opening);
+      if(opening && _ssc){ setTimeout(function(){ var cur=_ssc.querySelector('.csw-item.on')||_ssc.querySelector('.csw-item'); if(cur) cur.scrollIntoView({block:'center'}); markSortCenter(_ssc); },20); } }; }
+    if(_ssc){ _ssc.onscroll=function(){ clearTimeout(_ssc._t); _ssc._t=setTimeout(function(){ markSortCenter(_ssc); },60); }; }
     b.querySelectorAll('[data-camsort]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); CAM_SORT=el.getAttribute('data-camsort'); try{ sessionStorage.setItem('camsort',CAM_SORT); }catch(e2){} renderBoard(); }; });
     b.querySelectorAll('[data-return]').forEach(function(el){ el.onclick=function(){ markReturned(el.getAttribute('data-return')); }; });
     b.querySelectorAll('[data-undo]').forEach(function(el){ el.onclick=function(){ undoReturn(el.getAttribute('data-undo')); }; });
