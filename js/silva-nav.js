@@ -482,8 +482,9 @@
 
     var cal = document.createElement('a');
     cal.className = 'silva-uni-cal';
-    cal.href = '/calendar.html';
-    cal.textContent = 'Calendar';
+    // Per-page override: teacher pages (catalog, Command Center) point this at the Equipment Manager.
+    cal.href = window.SILVA_CAL_HREF || '/calendar.html';
+    cal.textContent = window.SILVA_CAL_LABEL || 'Calendar';
     bar.appendChild(cal);
 
     // Search jumps to the teacher catalog, so it is hidden on camera pages.
@@ -640,6 +641,12 @@
       for (var _i = 0; _i < _a.length; _i++) { _a[_i].setAttribute('href', BASE + _a[_i].getAttribute('href')); }
       var _m = nav.querySelectorAll('img[src^="/"], iframe[src^="/"]');
       for (var _j = 0; _j < _m.length; _j++) { _m[_j].setAttribute('src', BASE + _m[_j].getAttribute('src')); }
+    }
+
+    // Command Center: open every nav link in a new tab so the slow standalone page stays open.
+    if (window.SILVA_NAV_BLANK) {
+      var _b = nav.querySelectorAll('a[href]');
+      for (var _k = 0; _k < _b.length; _k++) { var _h = _b[_k].getAttribute('href') || ''; if (_h.charAt(0) !== '#') { _b[_k].setAttribute('target', '_blank'); _b[_k].setAttribute('rel', 'noopener'); } }
     }
 
     document.addEventListener('keydown', function (e) {
