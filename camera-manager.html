@@ -537,7 +537,8 @@
   <div class="intro">
     <p class="sub">Reserve equipment, mark it picked up when the student collects it, and mark it returned when it comes back. Changes sync to the calendar and the Command Center in real time.</p>
     <button class="btn" id="reserveBtn">+ Reserve / check out</button>
-    <a class="btn ghost" id="studentCalBtn" href="/calendar.html" target="_blank" rel="noopener">Student Calendar</a>
+    <button class="btn ghost" id="refreshBtn" title="Reload the latest data now">&#8635; Refresh</button>
+    <a class="btn ghost" id="studentCalBtn" href="/calendar.html?from=console" target="_blank" rel="noopener">Student Calendar</a>
     <a class="btn ghost" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
   </div>
 
@@ -1833,6 +1834,8 @@
       .then(function(){ rgo.disabled=false; rgo.textContent='Reserve this camera'; });
   };
   document.getElementById('reserveBtn').onclick=function(){ openReserve(''); };
+  document.getElementById('refreshBtn').onclick=function(){ var b=this; if(b.disabled) return; b.disabled=true; var o=b.innerHTML; b.innerHTML='&#8635; Refreshing&#8230;';
+    Promise.resolve(loadBoard()).then(function(){ reloadCal(); silvaToast('Refreshed with the latest.'); }).catch(function(){ silvaToast('Could not refresh. Try again.'); }).then(function(){ b.disabled=false; b.innerHTML=o; }); };
 
   // ---- PIN gate (the password is validated by the server) ----
   var gate=document.getElementById('gate'), pin=document.getElementById('pin'), pinerr=document.getElementById('pinerr');

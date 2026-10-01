@@ -345,6 +345,12 @@
   .rc-sumrow b{color:#fff;text-align:right;font-size:.92rem;}
   .rc-done .dc-btn{margin-top:4px;}
   .foot{margin-top:22px;font-size:.74rem;color:var(--faint);}
+  /* Back button: only shown when the teacher launched this from the console (?from=console), never
+     on the plain student link and never when embedded. Its target (the console) is password-gated. */
+  .cal-backbar{display:none;align-items:center;gap:8px;margin:2px 0 14px;height:40px;padding:0 16px;box-sizing:border-box;font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.72rem;color:var(--teal-lt);background:rgba(0,184,184,.1);border:1px solid var(--teal);text-decoration:none;width:fit-content;}
+  .cal-backbar:hover{background:rgba(0,184,184,.2);color:#fff;}
+  .cal-backbar.show{display:inline-flex;}
+  body.embed .cal-backbar{display:none !important;}
   body.embed .silva-nav, body.embed .intro{display:none;}
   /* embedded in the Teacher Console: show ONLY the month calendar (the console has its own board above) */
   body.embed .summary, body.embed .h, body.embed #board{display:none;}
@@ -360,6 +366,7 @@
 <body>
 <nav class="silva-nav" aria-label="Site navigation"></nav>
 <div class="wrap">
+  <a class="cal-backbar" id="calBack" href="/camera-manager.html">&lsaquo; Back to Equipment Manager</a>
   <div class="intro">
     <p class="sub" id="introSub">See which cameras are out and when they are due back before you ask. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.</p>
   </div>
@@ -484,6 +491,9 @@
 (function(){
   var API='https://command.creativesilva.com';
   if(/[?&]embed=1/.test(location.search)) document.body.classList.add('embed');
+  // Teacher launched this from the console (?from=console), standalone (not embedded): show a Back
+  // button. The plain student link has no param, so no button. The console itself is password-gated.
+  if(/[?&]from=console/.test(location.search) && !document.body.classList.contains('embed')){ var _cb=document.getElementById('calBack'); if(_cb) _cb.classList.add('show'); }
   var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
   // ===== Language (true EN/ES toggle; students choose, choice is remembered) =====
   var LANG='en'; try{ LANG=(localStorage.getItem('silva-cal-lang')==='es')?'es':'en'; }catch(e){}
