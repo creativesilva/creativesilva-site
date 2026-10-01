@@ -33,11 +33,10 @@
   body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(6,14,14,0.86);}
   /* Safe-area insets keep the title clear of the iPad status bar when launched as a Home Screen web app. */
   .wrap{max-width:1500px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right)) 60px calc(20px + env(safe-area-inset-left));}
-  .pw-titlerow{display:flex;align-items:center;gap:11px;margin:4px 0 5px;}
+  .pw-titlerow{display:flex;align-items:center;gap:11px;margin:4px 0 16px;}
   .pw-backsq{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;box-sizing:border-box;font-size:1.4rem;line-height:1;color:var(--teal-lt);background:rgba(0,184,184,.1);border:1px solid var(--teal);text-decoration:none;transition:background .15s,color .15s;}
   .pw-backsq:hover{background:rgba(0,184,184,.22);color:#fff;}
   .pw-title{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.5rem;color:#fff;margin:0;}
-  .pw-sub{font-size:.82rem;font-weight:400;letter-spacing:.01em;color:var(--muted);margin:0 0 16px;max-width:680px;}
   /* Control bar */
   .pw-bar{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--teal);padding:13px 16px;margin-bottom:14px;}
   .pw-field{display:flex;flex-direction:column;gap:3px;}
@@ -196,7 +195,6 @@
       <a class="pw-backsq" href="/camera-manager.html" aria-label="Back to Equipment Manager" title="Back to Equipment Manager">&#8592;</a>
       <h1 class="pw-title">Photo Walk Log</h1>
     </div>
-    <p class="pw-sub">Assign a kit to each seat as students head out. The log saves the kit&#39;s completion for that day.</p>
 
     <div class="pw-ro" id="roBanner">
       <span class="lab">Viewing a saved walk</span>
