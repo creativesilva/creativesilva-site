@@ -73,15 +73,33 @@
   .pw-pct{font-family:var(--font);font-weight:700;font-size:.82rem;letter-spacing:.02em;padding:2px 8px;color:#8ff0b0;background:rgba(63,168,99,.16);}
   .pw-pct.mid{color:#ffd889;background:rgba(245,179,1,.16);} .pw-pct.low{color:#ff9a8a;background:rgba(224,64,58,.18);} .pw-pct.na{color:var(--faint);background:rgba(160,180,180,.12);}
   /* Seat inputs */
-  .pw-seats{display:flex;flex-direction:column;gap:7px;}
-  .pw-seatrow{display:flex;align-items:center;gap:9px;}
-  .pw-seatbox{display:flex;flex-direction:column;gap:2px;flex:0 0 auto;}
-  .pw-seatbox label{font-family:var(--font);font-size:.54rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);}
-  .pw-seat{width:62px;height:36px;background:rgba(0,0,0,.4);border:1px solid var(--line);color:#fff;font-family:var(--font);font-size:1rem;font-weight:600;text-align:center;padding:0 4px;}
-  .pw-seat:focus{outline:none;border-color:var(--teal);}
-  .pw-name{flex:1 1 auto;min-width:0;font-size:.86rem;color:var(--text);line-height:1.25;overflow:hidden;}
-  .pw-name.empty{color:var(--faint);font-style:italic;}
-  .pw-name.bad{color:#ff9a8a;}
+  /* Seat slots: two side by side, tap to open the wheel (no typing). Compact, <=2 digits. iPad-first. */
+  .pw-seats-row{display:flex;gap:9px;align-items:stretch;}
+  .pw-slot{flex:0 0 auto;width:52px;height:46px;background:rgba(0,0,0,.4);border:1px solid var(--line);color:#fff;font-family:var(--font);font-size:1.45rem;font-weight:700;line-height:1;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .12s,background .12s,color .12s;padding:0;}
+  .pw-slot:hover{border-color:var(--teal);}
+  .pw-slot.set{border-color:var(--teal);color:var(--teal-lt);background:rgba(0,184,184,.12);}
+  .pw-slot.add{color:var(--faint);font-size:1.6rem;font-weight:400;}
+  .pw-names{font-size:.85rem;color:var(--text);line-height:1.35;min-height:1.1em;}
+  .pw-names .sn{color:var(--teal-lt);font-weight:600;}
+  .pw-names .empty{color:var(--faint);font-style:italic;}
+  .pw-names .bad{color:#ff9a8a;}
+  /* Wheel picker (Activity-Timer drum): tap a slot -> scroll/tap an available seat -> it collapses. */
+  .pw-wheelov{position:fixed;inset:0;z-index:140;background:rgba(2,12,12,.72);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;padding:20px;}
+  .pw-wheelov.open{display:flex;}
+  .pw-wheelbox{background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);border-top:3px solid var(--teal);box-shadow:0 24px 60px rgba(0,0,0,.7);width:250px;max-width:92vw;padding:16px;}
+  .pw-wheelhead{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.84rem;color:#fff;text-align:center;}
+  .pw-wheelsub{font-size:.72rem;color:var(--muted);text-align:center;margin-bottom:12px;}
+  .pw-wheel{position:relative;height:198px;overflow:hidden;}
+  .pw-wheelscroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .pw-wheelscroll::-webkit-scrollbar{display:none;}
+  .pw-wheelpad{height:77px;}
+  .pw-wheelitem{height:44px;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;font-family:var(--font);font-weight:700;font-size:1.6rem;color:var(--faint);cursor:pointer;transition:color .12s,transform .12s;}
+  .pw-wheelitem:hover{color:#fff;}
+  .pw-wheelitem.on{color:var(--teal-lt);transform:scale(1.18);}
+  .pw-wheelcenter{position:absolute;left:0;right:0;top:77px;height:44px;border-top:1px solid var(--teal);border-bottom:1px solid var(--teal);pointer-events:none;}
+  .pw-wheelactions{display:flex;gap:8px;margin-top:14px;}
+  .pw-wheelactions .btn{flex:1 1 0;height:38px;padding:0;}
+  .pw-nonefree{color:var(--muted);text-align:center;padding:30px 0;font-size:.9rem;}
   .pw-kact{display:flex;gap:8px;flex-wrap:wrap;margin-top:1px;}
   .pw-mini{flex:0 0 auto;height:30px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:0 11px;cursor:pointer;background:transparent;border:1px solid var(--line);color:var(--muted);transition:border-color .15s,color .15s,background .15s;}
   .pw-mini:hover{border-color:var(--teal);color:#fff;}
@@ -184,6 +202,15 @@
   </div>
 </div>
 
+<div class="pw-wheelov" id="wheelOv">
+  <div class="pw-wheelbox">
+    <div class="pw-wheelhead" id="wheelHead">Seat</div>
+    <div class="pw-wheelsub" id="wheelSub">Tap a seat number</div>
+    <div class="pw-wheel"><div class="pw-wheelscroll" id="wheelScroll"></div><div class="pw-wheelcenter"></div></div>
+    <div class="pw-wheelactions"><button class="btn ghost" id="wheelClear">Clear</button><button class="btn ghost" id="wheelClose">Close</button></div>
+  </div>
+</div>
+
 <div class="pw-toast" id="toast"></div>
 
 <script src="/js/silva-nav.js"></script>
@@ -283,14 +310,15 @@
     if(RO){ grid.innerHTML=RO.kits.map(roKitCard).join(''); return; }
     if(!PERIOD){ grid.innerHTML='<div class="pw-empty">Select a class period to see the kits.</div>'; return; }
     grid.innerHTML=CAMS.map(liveKitCard).join('');
-    // wire seat inputs
-    grid.querySelectorAll('.pw-seat').forEach(function(inp){
-      inp.oninput=function(){ var cam=inp.getAttribute('data-cam'), slot=+inp.getAttribute('data-slot'); onSeat(cam,slot,inp.value); };
-    });
+    // tap a seat slot -> open the wheel picker (no typing)
+    grid.querySelectorAll('[data-pick]').forEach(function(b){ b.onclick=function(){ openSeatPicker(b.getAttribute('data-pick'), +b.getAttribute('data-slot')); }; });
     grid.querySelectorAll('[data-notused]').forEach(function(b){ b.onclick=function(){ toggleNotUsed(b.getAttribute('data-notused')); }; });
     grid.querySelectorAll('[data-return]').forEach(function(b){ b.onclick=function(){ returnToPool(b.getAttribute('data-return')); }; });
   }
   function pctChip(cam){ var p=kitPct(cam); return '<span class="pw-pct '+pctCls(p)+'">'+(p==null?'TBD':(p+'%'))+'</span>'; }
+  function seatNum(v){ var s=String(v==null?'':v).replace(/\D/g,''); return s.replace(/^0+/,'')||''; }
+  function slotChip(cam,s,k){ var v=seatNum(k.seats[s]); return v?('<button class="pw-slot set" data-pick="'+esc(cam)+'" data-slot="'+s+'">'+esc(v)+'</button>'):('<button class="pw-slot add" data-pick="'+esc(cam)+'" data-slot="'+s+'" aria-label="Assign a seat">+</button>'); }
+  function namesLine(k){ var out=[]; [0,1].forEach(function(s){ var v=seatNum(k.seats[s]); if(v&&k.names[s]) out.push('<span class="sn">#'+esc(v)+'</span> '+esc(k.names[s])); else if(v&&!k.names[s]) out.push('<span class="bad">#'+esc(v)+' no student</span>'); }); return out.length?out.join('<br>'):'<span class="empty">Tap a seat to assign</span>'; }
   function liveKitCard(cam){
     var k=PW[cam], p2=(P2.indexOf(cam)>=0)?'<span class="pw-p2">P2</span>':'';
     var head='<div class="pw-khead"><span class="pw-knum">'+esc(cam)+p2+'</span>'+pctChip(cam)+'</div>';
@@ -306,14 +334,9 @@
            '<div class="pw-kact"><button class="pw-mini" data-notused="'+esc(cam)+'">Undo</button></div>';
     } else {
       if(k.status==='used') cls+=' used'; else cls+=' todo';
-      var rows='';
-      for(var s=0;s<2;s++){
-        var nm=k.names[s], bad=(k.seats[s] && !nm);
-        rows+='<div class="pw-seatrow"><div class="pw-seatbox"><label>Seat #</label>'+
-          '<input class="pw-seat" inputmode="numeric" maxlength="3" data-cam="'+esc(cam)+'" data-slot="'+s+'" value="'+esc(k.seats[s]||'')+'" /></div>'+
-          '<div class="pw-name '+(nm?'':(bad?'bad':'empty'))+'">'+(nm?esc(nm):(bad?'No student at that seat':(s===0?'Student':'(optional)')))+'</div></div>';
-      }
-      body='<div class="pw-seats">'+rows+'</div><div class="pw-kact"><button class="pw-mini warn" data-notused="'+esc(cam)+'">Mark not used</button></div>';
+      body='<div class="pw-seats-row">'+slotChip(cam,0,k)+slotChip(cam,1,k)+'</div>'+
+           '<div class="pw-names">'+namesLine(k)+'</div>'+
+           '<div class="pw-kact"><button class="pw-mini warn" data-notused="'+esc(cam)+'">Mark not used</button></div>';
     }
     return '<div class="'+cls+'">'+head+body+'</div>';
   }
@@ -328,15 +351,32 @@
     return '<div class="'+cls+'">'+head+body+'</div>';
   }
 
-  // ----- interactions -----
-  function onSeat(cam,slot,val){ var k=PW[cam]; k.seats[slot]=val;
-    var r=resolveSeat(val); k.names[slot]=r?r.label:''; k.ids[slot]=r?r.id:'';
-    k.status=(k.seats[0]&&k.names[0])||(k.seats[1]&&k.names[1])?'used':'open';
-    // update just this card's name + state without losing focus
-    var card=document.querySelector('.pw-seat[data-cam="'+CSS.escape(cam)+'"][data-slot="'+slot+'"]');
-    if(card){ var nameEl=card.closest('.pw-seatrow').querySelector('.pw-name'); if(nameEl){ var bad=(val && !r); nameEl.className='pw-name '+(r?'':(bad?'bad':'empty')); nameEl.innerHTML=r?esc(r.label):(bad?'No student at that seat':(slot===0?'Student':'(optional)')); } var kc=card.closest('.pw-kit'); if(kc){ kc.className='pw-kit '+(k.status==='used'?'used':'todo'); } }
-    renderStatus();
+  // ----- seat wheel picker (tap, no typing); each seat can go to only ONE kit this walk -----
+  var seatPick={cam:null,slot:null};
+  function assignedSeats(exCam,exSlot){ var set={}; CAMS.forEach(function(cam){ var k=PW[cam]; if(!k) return; [0,1].forEach(function(s){ if(cam===exCam && s===exSlot) return; var v=seatNum(k.seats[s]); if(v) set[v]=1; }); }); return set; }
+  function availableSeats(cam,slot){ var seats=seatsForPeriod(), taken=assignedSeats(cam,slot);
+    return Object.keys(seats).map(function(s){ return seatNum(s); }).filter(function(s){ return s && !taken[s]; })
+      .filter(function(v,i,a){ return a.indexOf(v)===i; }).sort(function(a,b){ return (+a)-(+b); }); }
+  function openSeatPicker(cam,slot){ seatPick={cam:cam,slot:slot};
+    var avail=availableSeats(cam,slot), cur=seatNum(PW[cam].seats[slot]);
+    document.getElementById('wheelHead').textContent=cam;
+    document.getElementById('wheelSub').textContent=avail.length?'Scroll, then tap a seat':'No seats left';
+    var sc=document.getElementById('wheelScroll');
+    sc.innerHTML=avail.length?('<div class="pw-wheelpad"></div>'+avail.map(function(s){ return '<div class="pw-wheelitem" data-seat="'+s+'">'+s+'</div>'; }).join('')+'<div class="pw-wheelpad"></div>'):'<div class="pw-nonefree">Every seat is already assigned to a kit.</div>';
+    document.getElementById('wheelClear').style.display=cur?'':'none';
+    document.getElementById('wheelOv').classList.add('open');
+    sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ it.onclick=function(){ pickSeat(it.getAttribute('data-seat')); }; });
+    sc.onscroll=function(){ clearTimeout(sc._t); sc._t=setTimeout(markCenter,60); };
+    setTimeout(function(){ var el=cur?sc.querySelector('.pw-wheelitem[data-seat="'+cur+'"]'):sc.querySelector('.pw-wheelitem'); if(el) el.scrollIntoView({block:'center'}); markCenter(); },30);
   }
+  function markCenter(){ var sc=document.getElementById('wheelScroll'); if(!sc) return; var b=sc.getBoundingClientRect(), cy=b.top+b.height/2, best=null, bd=1e9;
+    sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ it.classList.remove('on'); var r=it.getBoundingClientRect(), d=Math.abs((r.top+r.height/2)-cy); if(d<bd){ bd=d; best=it; } }); if(best) best.classList.add('on'); }
+  function pickSeat(seat){ var c=seatPick.cam, s=seatPick.slot, k=PW[c]; if(!k) return; var v=seatNum(seat);
+    k.seats[s]=v; var r=resolveSeat(v); k.names[s]=r?r.label:''; k.ids[s]=r?r.id:'';
+    k.status=((seatNum(k.seats[0])&&k.names[0])||(seatNum(k.seats[1])&&k.names[1]))?'used':'open'; closeWheel(); renderGrid(); renderStatus(); }
+  function clearSeatSlot(){ var c=seatPick.cam, s=seatPick.slot, k=PW[c]; if(!k) return; k.seats[s]=''; k.names[s]=''; k.ids[s]='';
+    k.status=((seatNum(k.seats[0])&&k.names[0])||(seatNum(k.seats[1])&&k.names[1]))?'used':'open'; closeWheel(); renderGrid(); renderStatus(); }
+  function closeWheel(){ document.getElementById('wheelOv').classList.remove('open'); }
   function toggleNotUsed(cam){ var k=PW[cam]; if(k.status==='not_used'){ k.status=(k.seats[0]&&k.names[0])?'used':'open'; } else { k.status='not_used'; k.seats=['','']; k.names=['','']; k.ids=['','']; } renderGrid(); renderStatus(); }
   function returnToPool(cam){ var k=PW[cam]; if(!k.co) return;
     camAPI('/api/camera/status',{method:'POST',body:JSON.stringify({id:k.co.id,status:'returned'})})
@@ -414,6 +454,9 @@
   // control-bar wiring
   document.getElementById('perTrig').onclick=function(){ document.getElementById('perDD').classList.toggle('open'); };
   document.addEventListener('click',function(e){ var dd=document.getElementById('perDD'); if(dd && !dd.contains(e.target)) dd.classList.remove('open'); });
+  document.getElementById('wheelClose').onclick=closeWheel;
+  document.getElementById('wheelClear').onclick=clearSeatSlot;
+  document.getElementById('wheelOv').addEventListener('click',function(e){ if(e.target===this) closeWheel(); });
   document.getElementById('saveBtn').onclick=saveReport;
   document.getElementById('histBtn').onclick=function(){ var h=document.getElementById('histPanel'); h.style.display=(h.style.display==='none')?'':'none'; if(h.style.display!=='none'){ loadHistory(); h.scrollIntoView({behavior:'smooth',block:'start'}); } };
   document.getElementById('roExit').onclick=function(){ RO=null; var ap=autoPeriod(); if(ap&&SEATMAP[ap]) setPeriod(ap); else { PERIOD=PERIOD||null; buildPW(); render(); } };

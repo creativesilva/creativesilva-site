@@ -302,6 +302,8 @@
   .wslot{background:rgba(0,0,0,.3);border:1px solid var(--line-soft);border-left:4px solid rgba(160,180,180,.3);padding:10px 11px;display:flex;flex-direction:column;gap:5px;min-height:74px;}
   .wslot.filled{border-left-color:#f5b301;background:rgba(245,179,1,.06);}
   .wslot-n{font-family:var(--font);font-weight:700;font-size:.72rem;color:var(--faint);letter-spacing:.08em;text-transform:uppercase;}
+  /* The SLOT # stands out: name font, white, larger. "· PER X" keeps the status color + small size. */
+  .wslot-slot{font-family:var(--body);font-weight:700;font-size:1rem;color:#fff;letter-spacing:0;text-transform:none;}
   .wslot.filled .wslot-n{color:#ffd889;}
   .wslot-who{font-weight:600;color:#fff;font-size:.9rem;line-height:1.2;}
   .wslot-meta{font-size:.72rem;color:var(--muted);}
@@ -1353,7 +1355,7 @@
     var out='';
     filled.forEach(function(i){ out+=walletCardHtml(i, cards[String(i)]); });
     // Empty slots after, in slot order. Click to hold a card ad-hoc (type the student ID, starts the 24h clock).
-    empty.forEach(function(i){ out+='<button type="button" class="wslot wslot-add" data-cardadd="'+i+'"><div class="wslot-n">Slot '+i+'</div><div class="wslot-empty">Empty</div><div class="wslot-addhint">+ Hold a card</div></button>'; });
+    empty.forEach(function(i){ out+='<button type="button" class="wslot wslot-add" data-cardadd="'+i+'"><div class="wslot-n"><span class="wslot-slot">Slot '+i+'</span></div><div class="wslot-empty">Empty</div><div class="wslot-addhint">+ Hold a card</div></button>'; });
     return out;
   }
   function walletCardHtml(i, c){
@@ -1361,7 +1363,7 @@
     var who=esc(c.student_name || (c.student_id?('ID '+c.student_id):'Unknown'));
     var per=(c.period!=null && String(c.period).trim()!=='')?(' &middot; Per '+esc(String(c.period))):'';
     var meta=(c.from_camera?('from '+esc(c.from_camera)+' &middot; '):'')+'held '+fmtHeld(c.held_at);
-    var body='<div class="wslot-n">Slot '+i+per+'</div>'+
+    var body='<div class="wslot-n"><span class="wslot-slot">Slot '+i+'</span>'+per+'</div>'+
       '<button type="button" class="wslot-who wslot-wholink" data-cardinfo="'+i+'" title="View contact, period &amp; teacher">'+who+'</button>'+
       '<div class="wslot-meta">'+meta+'</div>'+
       (c.note?'<div class="wslot-meta">'+esc(c.note)+'</div>':'');
