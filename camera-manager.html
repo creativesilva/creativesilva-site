@@ -869,7 +869,7 @@
     {key:'tripod',label:'K&F Concept Tripod',short:'Tripod',total:5,kit:['Quick-release plate','Carry bag']},
     {key:'wide',label:'Canon RF-S 10-18mm ultra-wide',short:'Ultra-Wide',total:2,kit:['Front lens cap','Rear lens cap','UV filter']},
     {key:'zoom',label:'Canon RF 100-400mm ultra-zoom',short:'Ultra-Zoom',total:2,kit:['Front lens cap','Rear lens cap','UV filter']},
-    {key:'speedlite',label:'Canon Speedlite EL-10 flash',short:'Speedlite',total:5,kit:['Stand / foot','Diffuser','Pouch']}
+    {key:'speedlite',label:'Canon Speedlite EL-10 flash',short:'Speedlite',total:5,kit:['Soft case','Canon LP-EL battery']}
   ];
   function equipDef(key){ for(var i=0;i<EQUIPMENT.length;i++){ if(EQUIPMENT[i].key===key) return EQUIPMENT[i]; } return null; }
   function gearKitItems(key){ var d=equipDef(key); return (d&&d.kit)||[]; }
@@ -910,7 +910,7 @@
     var uid='bd:'+cam, c=activeFor(cam);
     if(!c){
       var body='<div class="acts"><button class="btn sm" data-reserve="'+cam+'">Reserve</button>'+
-               '<button class="btn sm ghost" data-assetnote="'+cam+'">Note</button></div>';
+               '<button class="btn sm ghost" data-camdetail="'+cam+'">Note</button></div>';
       return shell3(uid,'st-avail',title,sub,'<span class="pill avail">Available</span>',body);
     }
     if(pendingReturns[c.id]){
@@ -938,7 +938,7 @@
       acts='<button class="btn sm ghost" data-status="reserved" data-id="'+c.id+'">Undo pickup</button>'+
            '<button class="btn sm warn" data-returncam="'+c.id+'">Mark returned</button>';
     }
-    acts+='<button class="btn sm ghost" data-assetnote="'+cam+'">Note</button>';   // per-camera note (follows the camera)
+    acts+='<button class="btn sm ghost" data-camdetail="'+cam+'">Note</button>';   // per-camera note (follows the camera)
     var pendmsg=needsApproval?'<div class="pendmsg">Student request &middot; approve to confirm</div>':'';
     // Expanded body: student, action buttons, then details. Double-click the body to edit / move / delete.
     var body='<div class="dcard-edit" data-editid="'+c.id+'" title="Double-click to edit">'+
@@ -977,7 +977,7 @@
     var note=c.note?'<div class="eqnote'+(pend?' pend':'')+'"><b>'+(pend?'Awaiting':'Note')+'</b> '+esc(c.note)+'</div>':'';
     var body='<div class="who">'+esc(nameOf(c))+'</div>'+
       '<div class="acts"><button class="btn sm warn" data-return="'+c.id+'">'+(pend?'Resolve / check in':'Check in')+'</button>'+
-        '<button class="btn sm ghost" data-note="'+c.id+'">Note</button></div>'+
+        '<button class="btn sm ghost" data-geardetail="'+esc(c.item||'')+'">Note</button></div>'+
       '<div class="meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+'<span class="co">'+esc(c.course||'')+'</span>'+(linkedCam?(' &middot; '+esc(linkedCam)):'')+'</div>'+
       '<div class="meta dates">Out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</div>'+
       note+contactLine(c);
@@ -995,7 +995,7 @@
     if(issues.length) cond+='<div class="camlog-issues">&#9888; '+issues.map(esc).join(', ')+'</div>';
     if(a.note) cond+='<div class="camlog-note">'+esc(a.note)+'</div>';
     if(!oos && !nc && !issues.length && !a.note) cond='<div class="camlog-note empty">Good standing</div>';
-    var body=cond+'<div class="condcard-acts"><button class="btn sm ghost" data-assetnote="'+cam+'">Note</button>'+
+    var body=cond+'<div class="condcard-acts"><button class="btn sm ghost" data-camdetail="'+cam+'">Note</button>'+
       (nc?'<button class="btn sm" data-newcard="'+cam+'">Card in</button>':'')+
       '<button class="btn sm '+(oos?'':'danger')+'" data-oos="'+cam+'" data-oosval="'+(oos?'0':'1')+'">'+(oos?'In service':'Out of service')+'</button></div>';
     var title='<span class="dcard-title camnum" data-camdetail="'+cam+'" title="Open kit + condition">'+cam+'</span>';
@@ -1014,10 +1014,9 @@
     if(!down && !kmiss.length && !issues.length && !a.note) cond='<div class="camlog-note empty">Good standing</div>';
     var badge=(working===total?'full':(working>0?'mid':'low'));
     var chip='<span class="kitpct '+badge+'" title="'+working+' working of '+total+'">'+working+'/'+total+'</span>';
-    var body=cond+'<div class="condcard-acts"><button class="btn sm ghost" data-assetnote="'+esc(e.key)+'">Note</button>'+
+    var body=cond+'<div class="condcard-acts"><button class="btn sm ghost" data-geardetail="'+esc(e.key)+'">Note</button>'+
       (down>0?'<button class="btn sm" data-gearrestore="'+esc(e.key)+'">Restore 1</button>':'')+
-      (working>0?'<button class="btn sm danger" data-geardown="'+esc(e.key)+'">Mark 1 down</button>':'')+
-      '<button class="btn sm ghost" data-geardetail="'+esc(e.key)+'">Kit &amp; details</button></div>';
+      (working>0?'<button class="btn sm danger" data-geardown="'+esc(e.key)+'">Mark 1 down</button>':'')+'</div>';
     var title='<span class="dcard-title" data-geardetail="'+esc(e.key)+'" title="Open kit + details">'+esc((e.short||e.label).toUpperCase())+'</span>';
     return shell3('gc:'+e.key, down>=total?'st-oos':'st-ok', title, esc(e.label), chip, body);
   }
