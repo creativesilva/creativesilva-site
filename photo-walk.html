@@ -103,10 +103,9 @@
   .pw-wheelitem.dis.on{transform:none;color:var(--grayed);}
   /* Seat modal: tap a camera number -> a window of vertical seat wheels + Confirm + X. */
   .pw-seatbox{background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);border-top:3px solid var(--teal);box-shadow:0 24px 60px rgba(0,0,0,.7);width:auto;max-width:94vw;padding:16px 18px 18px;}
-  .pw-seathead{display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:1rem;color:#fff;}
+  .pw-seathead{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:1rem;color:#fff;}
   .pw-seatx{background:none;border:0;color:var(--muted);font-size:1.7rem;line-height:1;cursor:pointer;padding:0 2px;}
   .pw-seatx:hover{color:#fff;}
-  .pw-seatsub{font-size:.72rem;color:var(--muted);margin:3px 0 14px;max-width:340px;}
   .pw-wheels{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
   .pw-wheelcol{display:flex;flex-direction:column;align-items:center;gap:6px;}
   .pw-wheellab{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);}
@@ -146,7 +145,6 @@
   .pw-h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:0;padding-left:9px;border-left:3px solid var(--teal);}
   /* History pop-out: a modal (reuses .pw-wheelov) holding the scrollable list of saved walks. */
   .pw-histbox{background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);border-top:3px solid var(--teal);box-shadow:0 24px 60px rgba(0,0,0,.7);width:600px;max-width:94vw;max-height:calc(100vh - 48px);padding:16px 18px 18px;display:flex;flex-direction:column;}
-  .pw-histbox .pw-seatsub{margin-bottom:12px;}
   .pw-histlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;overflow-y:auto;min-height:0;}
   .pw-histrow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(0,0,0,.26);border:1px solid var(--line-soft);border-left:3px solid var(--teal-deep);padding:10px 12px;cursor:pointer;transition:background .12s;}
   .pw-histrow:hover{background:rgba(0,184,184,.1);}
@@ -235,7 +233,6 @@
 <div class="pw-wheelov" id="seatOv">
   <div class="pw-seatbox">
     <div class="pw-seathead"><span id="seatHead">Assign seats</span><button class="pw-seatx" id="seatX" aria-label="Close">&times;</button></div>
-    <div class="pw-seatsub">Scroll each wheel to a seat, then Confirm. Leave a wheel on &ldquo;None&rdquo; to keep it empty.</div>
     <div class="pw-wheels" id="seatWheels"></div>
     <button type="button" class="pw-addseat" id="seatAdd">+ Add another seat</button>
     <button type="button" class="btn save" id="seatConfirm" style="width:100%;">Confirm</button>
@@ -245,7 +242,6 @@
 <div class="pw-wheelov" id="histOv">
   <div class="pw-histbox">
     <div class="pw-seathead"><span>Past photo walks <span class="pw-badge" id="histCount"></span></span><button class="pw-seatx" id="histX" aria-label="Close">&times;</button></div>
-    <div class="pw-seatsub">Up to a month of saved walks. Tap a date to open it.</div>
     <div class="pw-histlist silva-scroll" id="histList"></div>
   </div>
 </div>
