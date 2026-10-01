@@ -271,6 +271,26 @@
   .dcard.st-pending{border-left-color:#ffd166;} .dcard.st-pending .dcard-dot{background:#ffd166;}
   .dcard.st-nocard{border-left-color:#f5b301;} .dcard.st-nocard .dcard-dot{background:#f5b301;}
   .dcard.st-returning{border-left-color:var(--muted);} .dcard.st-returning .dcard-dot{background:var(--muted);}
+  /* ONE consolidated, color-coded Cameras grid. Green=available, yellow=reserved-today, orange=checked
+     out, red=overdue (pulsing), gray=out of service / card missing. Tap a tile -> the full window. */
+  .camgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(204px,1fr));gap:9px;margin-bottom:10px;}
+  .camtile{display:flex;flex-direction:column;gap:5px;align-items:flex-start;text-align:left;width:100%;background:rgba(0,0,0,.32);border:1px solid var(--line-soft);border-left:4px solid var(--grayed);padding:11px 13px;cursor:pointer;font-family:inherit;color:var(--text);transition:border-color .12s,background .12s;backdrop-filter:blur(5px) saturate(1.04);-webkit-backdrop-filter:blur(5px) saturate(1.04);}
+  .camtile:hover{background:rgba(0,184,184,.07);}
+  .camtile-top{display:flex;align-items:center;gap:8px;width:100%;}
+  .camtile-dot{width:10px;height:10px;flex:0 0 auto;background:var(--grayed);}
+  .camtile-n{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.05rem;color:#fff;}
+  .camtile-p2{font-family:var(--font);font-size:.5rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#ffb28a;border:1px solid rgba(255,107,26,.5);padding:1px 4px;}
+  .camtile-pct{margin-left:auto;font-family:var(--font);font-weight:700;font-size:.72rem;padding:1px 7px;color:#8ff0b0;background:rgba(63,168,99,.16);}
+  .camtile-pct.mid{color:#ffd889;background:rgba(245,179,1,.16);} .camtile-pct.low{color:#ff9a8a;background:rgba(224,64,58,.18);} .camtile-pct.na{color:var(--faint);background:rgba(160,180,180,.12);}
+  .camtile-status{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);}
+  .camtile-sub{font-size:.8rem;color:var(--muted);line-height:1.3;}
+  .camtile.cs-avail{border-left-color:var(--ok);} .camtile.cs-avail .camtile-dot{background:var(--ok);} .camtile.cs-avail .camtile-status{color:#8ff0b0;}
+  .camtile.cs-resv{border-left-color:var(--gold);} .camtile.cs-resv .camtile-dot{background:var(--gold);} .camtile.cs-resv .camtile-status{color:#ffd889;}
+  .camtile.cs-out{border-left-color:var(--orange);} .camtile.cs-out .camtile-dot{background:var(--orange);} .camtile.cs-out .camtile-status{color:#ffb28a;}
+  .camtile.cs-overdue{border-left-color:var(--red);border-color:rgba(224,64,58,.5);animation:cardFlash 1.5s ease-in-out infinite;} .camtile.cs-overdue .camtile-dot{background:var(--red);} .camtile.cs-overdue .camtile-status{color:#ff9a8a;}
+  .camtile.cs-oos{opacity:.5;border-left-color:var(--grayed);} .camtile.cs-oos .camtile-dot{background:var(--grayed);}
+  @media (prefers-reduced-motion:reduce){ .camtile.cs-overdue{animation:none;box-shadow:0 0 0 2px rgba(224,64,58,.32);} }
+  .eqout-h{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:12px 0 7px;}
   .cd-sub{font-size:.82rem;color:var(--muted);margin:-2px 0 14px;}
   .condcard{background:rgba(0,0,0,.30);border:1px solid var(--line-soft);border-left:4px solid var(--ok);padding:9px 10px;display:flex;flex-direction:column;gap:5px;}
   .condcard.oos{border-left-color:var(--red);background:rgba(224,64,58,.07);}
@@ -911,6 +931,28 @@
   function setSecOpen(k,o){ try{ sessionStorage.setItem('csec:'+k,o?'1':'0'); }catch(e){} }
   function catOf(cam){ var c=activeFor(cam); if(!c) return isOOS(cam)?'oos':(isNoCard(cam)?'nocard':'avail'); return statusOf(c)==='reserved'?'reserved':'out'; }
 
+  // Consolidated camera tile: ONE card per camera, colored by today's status, tap -> full window.
+  function camState(cam){ var a=assetOf(cam); if(a.oos||a.no_card) return 'oos'; var c=activeFor(cam); if(!c) return 'avail';
+    var st=statusOf(c); if(st==='out') return isOverdue(c)?'overdue':'out';
+    if(st==='reserved'){ var t=todayISO(); return (c.out && c.out<=t && (c.due||c.out)>=t)?'resv':'avail'; }   // reserved for TODAY = yellow; future = still in stock today = green
+    return 'avail'; }
+  function camStateLabel(cam,s){ var a=assetOf(cam); if(s==='oos') return a.oos?'Out of service':'Card missing';
+    return {avail:'Available',resv:'Reserved today',out:'Checked out',overdue:'Overdue'}[s]||''; }
+  function camTile(cam){
+    var s=camState(cam), a=assetOf(cam), c=activeFor(cam);
+    var p=kitPct(cam), pcls=(p==null?'na':(p>=100?'':(p>=70?'mid':'low')));
+    var p2=(P2.indexOf(cam)>=0)?'<span class="camtile-p2">P2</span>':'';
+    var sub='';
+    if(s==='out'||s==='overdue') sub=esc(nameOf(c))+' &middot; due '+fmt(c.due);
+    else if(s==='resv') sub=esc(nameOf(c))+' &middot; pickup '+fmt(c.out);
+    else if(s==='oos') sub=a.oos?'Marked out of service':'Memory card missing';
+    else { var fl=[]; if(c && statusOf(c)==='reserved' && c.out) fl.push('reserved '+fmt(c.out)); if(a.issues&&a.issues.length) fl.push(a.issues.length+' open issue'+(a.issues.length>1?'s':'')); sub=fl.length?fl.join(' &middot; '):'In the storage room'; }
+    return '<button type="button" class="camtile cs-'+s+'" data-camdetail="'+esc(cam)+'">'+
+      '<span class="camtile-top"><span class="camtile-dot"></span><span class="camtile-n">'+esc(cam)+'</span>'+p2+'<span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span></span>'+
+      '<span class="camtile-status">'+camStateLabel(cam,s)+'</span>'+
+      '<span class="camtile-sub">'+sub+'</span>'+
+    '</button>';
+  }
   function camCard(cam){
     var p2=P2.indexOf(cam)>=0, sub=p2?'Photo 2 only':'';
     var title='<span class="dcard-title camnum" data-camdetail="'+cam+'" title="Open window">'+cam+'</span>';
@@ -1037,33 +1079,18 @@
     var host=document.getElementById('board'); if(!host) return;
     var cams=DATA.cameras||[], counts={out:0,reserved:0,avail:0};
     cams.forEach(function(cam){ counts[catOf(cam)]++; });
-    // EQUIPMENT - NOTES & CONDITION comes FIRST among the sections: it is the management view for
-    // every kit Silva owns (all cameras incl. Cam 16-18, plus tripods, lenses and speedlites).
-    // Condition + kit completion + in/out of service only; no reservation info (that is in the strips).
-    var clopen=secOpen('camlog');
-    var flagged=cams.filter(function(c){ var a=assetOf(c); return a.note||a.oos||a.no_card||(a.issues&&a.issues.length); }).length
-              + EQUIPMENT.filter(function(e){ var a=assetOf(e.key); return a.note||a.down||(a.issues&&a.issues.length); }).length;
-    var sec='<div class="csec sec-camlog'+(clopen?' open':'')+'">'+
-      '<button class="csec-head" type="button" data-sectoggle="camlog"><span class="csec-dot clog"></span>Equipment &middot; notes &amp; condition <span class="csec-n">'+flagged+' flagged</span><span class="csec-chev"></span></button>'+
-      '<div class="csec-body"><div class="dcard-list">'+cams.map(camLogCard).join('')+EQUIPMENT.map(gearCondCard).join('')+'</div></div>'+
-    '</div>';
-    // Then the live board strips (order: Available, Checked out, Reserved).
-    SECDEF.forEach(function(s){
-      var list=cams.filter(function(cam){ return catOf(cam)===s.key; });
-      var open=secOpen(s.key);
-      sec+='<div class="csec '+s.cls+(open?' open':'')+'">'+
-        '<button class="csec-head" type="button" data-sectoggle="'+s.key+'"><span class="csec-dot '+s.dot+'"></span>'+s.label+' <span class="csec-n">'+list.length+'</span><span class="csec-chev"></span></button>'+
-        '<div class="csec-body">'+(list.length?('<div class="dcard-list">'+list.map(camCard).join('')+'</div>'):'<div class="csec-empty">None right now.</div>')+'</div>'+
-      '</div>';
-    });
-    // ADDITIONAL EQUIPMENT.
+    // ONE consolidated, color-coded Cameras grid (Chris, 2026-10-01): each camera appears ONCE,
+    // colored by today's status (green available, yellow reserved-today, orange checked out, red
+    // overdue + pulsing, gray out of service / card missing). Tap a tile -> the full camera window.
+    // Replaces the old separate Condition + Available + Checked-out + Reserved lists.
+    var sec='<div class="camgrid">'+cams.map(camTile).join('')+'</div>';
+    // ADDITIONAL EQUIPMENT keeps its own section: gear condition tiles (tap -> gear window) + what is out.
     var eopen=secOpen('equip'), eActive=equipActive().sort(byItem);
-    var summary=EQUIPMENT.map(function(e){ var a=equipAvail(e.key); return '<span class="eqchip '+(a.avail>0?'ok':'none')+'">'+esc(e.label)+' <b>'+a.avail+' / '+a.total+'</b></span>'; }).join('');
     sec+='<div class="csec sec-equip'+(eopen?' open':'')+'">'+
       '<button class="csec-head" type="button" data-sectoggle="equip"><span class="csec-dot equip"></span>Additional equipment <span class="csec-n">'+eActive.length+' out</span><span class="csec-chev"></span></button>'+
       '<div class="csec-body">'+
-        '<div class="eqsummary">'+summary+'</div>'+
-        (eActive.length?('<div class="dcard-list">'+eActive.map(equipCard).join('')+'</div>'):'<div class="csec-empty">All gear is in. Nothing checked out right now.</div>')+
+        '<div class="dcard-list">'+EQUIPMENT.map(gearCondCard).join('')+'</div>'+
+        (eActive.length?('<div class="eqout-h">Checked out</div><div class="dcard-list">'+eActive.map(equipCard).join('')+'</div>'):'')+
       '</div>'+
     '</div>';
     // MEMORY CARD WALLET: cards a student left to offload later, each in a numbered slot with a 24h clock.
