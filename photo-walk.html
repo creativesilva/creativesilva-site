@@ -2,11 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Photo Walk Log | Pioneer Valley Photography</title>
 <script>window.SILVA_HIDE_CATALOG=true;window.SILVA_CATALOG_RETURN='/curriculum.html';</script>
 <meta name="description" content="Mr. Silva's per-period photo walk log: which kit each seat took and its completion that day." />
 <meta name="robots" content="noindex,nofollow" />
+<!-- Home-screen web app: launch chromeless (no Safari bars) when added to the iPad Home Screen. -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Photo Walk" />
 <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only_Teal.svg" />
 <link rel="apple-touch-icon" href="/logos/CS_AppIcon_Teal_180.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -26,10 +31,13 @@
   body{background-color:#060f0f;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;margin:0;}
   body::before{content:"";position:fixed;inset:0;z-index:-2;background:#060f0f url("https://www.creativesilva.com/logos/CS_Logo_Glossy_Teal_v1.png") no-repeat center 40%;background-size:min(74vw,700px);}
   body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(6,14,14,0.86);}
-  .wrap{max-width:1500px;margin:0 auto;padding:18px 20px 60px;}
-  .pw-titlerow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 16px;}
+  /* Safe-area insets keep the title clear of the iPad status bar when launched as a Home Screen web app. */
+  .wrap{max-width:1500px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right)) 60px calc(20px + env(safe-area-inset-left));}
+  .pw-titlerow{display:flex;align-items:center;gap:11px;margin:4px 0 5px;}
+  .pw-backsq{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;box-sizing:border-box;font-size:1.4rem;line-height:1;color:var(--teal-lt);background:rgba(0,184,184,.1);border:1px solid var(--teal);text-decoration:none;transition:background .15s,color .15s;}
+  .pw-backsq:hover{background:rgba(0,184,184,.22);color:#fff;}
   .pw-title{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.5rem;color:#fff;margin:0;}
-  .pw-title small{display:block;font-size:.8rem;font-weight:400;letter-spacing:.02em;text-transform:none;color:var(--muted);margin-top:2px;}
+  .pw-sub{font-size:.82rem;font-weight:400;letter-spacing:.01em;color:var(--muted);margin:0 0 16px;max-width:680px;}
   /* Control bar */
   .pw-bar{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--teal);padding:13px 16px;margin-bottom:14px;}
   .pw-field{display:flex;flex-direction:column;gap:3px;}
@@ -39,7 +47,7 @@
   .pw-ddtrig:hover{border-color:var(--teal);}
   .pw-ddtrig .cv{opacity:.55;transition:transform .15s;}
   .pw-perdd.open .pw-ddtrig .cv{transform:rotate(180deg);}
-  .pw-ddmenu{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:40;background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);box-shadow:0 16px 40px rgba(0,0,0,.7);max-height:320px;overflow-y:auto;}
+  .pw-ddmenu{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:40;background:linear-gradient(135deg,rgba(0,184,184,.14),rgba(4,20,19,.82));backdrop-filter:blur(22px) saturate(1.3);-webkit-backdrop-filter:blur(22px) saturate(1.3);border:1px solid var(--teal);box-shadow:0 16px 40px rgba(0,0,0,.7);max-height:320px;overflow-y:auto;}
   .pw-perdd.open .pw-ddmenu{display:block;}
   .pw-ddopt{padding:10px 13px;cursor:pointer;font-family:var(--font);font-weight:600;font-size:.9rem;color:var(--text);border-bottom:1px solid var(--line-soft);display:flex;justify-content:space-between;gap:10px;}
   .pw-ddopt:hover{background:rgba(0,184,184,.16);}
@@ -88,8 +96,10 @@
   /* Wheel picker (Activity-Timer drum): tap a slot -> scroll/tap an available seat -> it collapses. */
   .pw-wheelov{position:fixed;inset:0;z-index:140;background:rgba(2,12,12,.72);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;padding:20px;}
   .pw-wheelov.open{display:flex;}
-  .pw-back{display:inline-flex;align-items:center;gap:6px;margin:2px 0 10px;height:36px;padding:0 14px;box-sizing:border-box;font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.68rem;color:var(--teal-lt);background:rgba(0,184,184,.1);border:1px solid var(--teal);text-decoration:none;width:fit-content;}
-  .pw-back:hover{background:rgba(0,184,184,.2);color:#fff;}
+  /* A seat already taken (by another wheel in this window, or committed to another camera kit):
+     grayed, not a snap target (the drum skips it), and not clickable. */
+  .pw-wheelitem.dis{color:var(--grayed);opacity:.5;scroll-snap-align:none;pointer-events:none;}
+  .pw-wheelitem.dis.on{transform:none;color:var(--grayed);}
   /* Seat modal: tap a camera number -> a window of vertical seat wheels + Confirm + X. */
   .pw-seatbox{background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);border-top:3px solid var(--teal);box-shadow:0 24px 60px rgba(0,0,0,.7);width:auto;max-width:94vw;padding:16px 18px 18px;}
   .pw-seathead{display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:1rem;color:#fff;}
@@ -122,6 +132,8 @@
   .pw-mini:hover{border-color:var(--teal);color:#fff;}
   .pw-mini.warn{border-color:rgba(245,179,1,.5);color:#ffd889;}
   .pw-mini.ret{border-color:var(--teal);color:var(--teal-lt);}
+  .pw-mini.done{border-color:rgba(63,168,99,.6);color:#8ff0b0;background:rgba(63,168,99,.14);}
+  .pw-mini.done:hover{border-color:var(--ok);color:#fff;}
   .pw-outline{font-size:.84rem;color:var(--muted);}
   .pw-outline b{color:#fff;font-weight:600;}
   .pw-badge{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);}
@@ -176,10 +188,11 @@
 
 <div id="app">
   <div class="wrap">
-    <a class="pw-back" href="/camera-manager.html">&lsaquo; Equipment Manager</a>
     <div class="pw-titlerow">
-      <h1 class="pw-title">Photo Walk Log<small>Assign a kit to each seat as students head out. The log saves the kit&#39;s completion for that day.</small></h1>
+      <a class="pw-backsq" href="/camera-manager.html" aria-label="Back to Equipment Manager" title="Back to Equipment Manager">&#8592;</a>
+      <h1 class="pw-title">Photo Walk Log</h1>
     </div>
+    <p class="pw-sub">Assign a kit to each seat as students head out. The log saves the kit&#39;s completion for that day.</p>
 
     <div class="pw-ro" id="roBanner">
       <span class="lab">Viewing a saved walk</span>
@@ -359,9 +372,15 @@
       cls+=' notused';
       body='<div class="pw-outline"><b>Not used</b> this walk</div>'+
            '<div class="pw-kact"><button class="pw-mini" data-notused="'+esc(cam)+'">Undo</button></div>';
+    } else if(k.status==='used'){
+      numHtml='<button type="button" class="pw-knum pw-knum-btn" data-assign="'+esc(cam)+'">'+esc(cam)+p2+'</button>';
+      cls+=' used';
+      // Seats committed: the action button confirms "Kit assigned" (green) and re-opens the editor to change it.
+      body='<div class="pw-names">'+namesLine(k)+'</div>'+
+           '<div class="pw-kact"><button class="pw-mini done" data-assign="'+esc(cam)+'">&#10003; Kit assigned</button></div>';
     } else {
       numHtml='<button type="button" class="pw-knum pw-knum-btn" data-assign="'+esc(cam)+'">'+esc(cam)+p2+'</button>';
-      if(k.status==='used') cls+=' used'; else cls+=' todo';
+      cls+=' todo';
       body='<div class="pw-names">'+namesLine(k)+'</div>'+
            '<div class="pw-kact"><button class="pw-mini warn" data-notused="'+esc(cam)+'">Mark not used</button></div>';
     }
@@ -379,10 +398,13 @@
   }
 
   // ----- seat modal: tap a camera number -> one vertical wheel per seat (+ add more) + Confirm -----
-  var seatCam=null, seatRows=2, SEAT_MAX=6;
-  function seatPoolFor(cam){ var seats=seatsForPeriod(), taken={};
-    CAMS.forEach(function(c){ if(c===cam) return; var kk=PW[c]; if(!kk) return; (kk.seats||[]).forEach(function(v){ var n=seatNum(v); if(n) taken[n]=1; }); });
-    return Object.keys(seats).map(seatNum).filter(function(s){ return s && !taken[s]; }).filter(function(v,i,a){ return a.indexOf(v)===i; }).sort(function(a,b){ return (+a)-(+b); }); }
+  // Each wheel lists EVERY seat for the period. A seat grays out (and the drum rolls past it) when it is
+  // already committed to another camera kit, or already centered in another wheel of THIS window, so the
+  // same seat can never be assigned twice.
+  var seatCam=null, seatRows=2, SEAT_MAX=6, _realign=false;
+  function periodSeats(){ var m=seatsForPeriod();
+    return Object.keys(m).map(seatNum).filter(Boolean).filter(function(v,i,a){ return a.indexOf(v)===i; }).sort(function(a,b){ return (+a)-(+b); }); }
+  function takenByOtherCams(cam){ var taken={}; CAMS.forEach(function(c){ if(c===cam) return; var kk=PW[c]; if(!kk) return; (kk.seats||[]).forEach(function(v){ var n=seatNum(v); if(n) taken[n]=c; }); }); return taken; }
   function openSeatModal(cam){ var k=PW[cam]; if(!k||k.status==='checked_out') return; seatCam=cam;
     var existing=(k.seats||[]).map(seatNum).filter(Boolean);
     seatRows=Math.min(SEAT_MAX, Math.max(2, existing.length));
@@ -390,7 +412,7 @@
     renderSeatWheels(existing);
     document.getElementById('seatOv').classList.add('open');
   }
-  function renderSeatWheels(values){ var pool=seatPoolFor(seatCam), host=document.getElementById('seatWheels'), html='';
+  function renderSeatWheels(values){ var pool=periodSeats(), host=document.getElementById('seatWheels'), html='';
     for(var i=0;i<seatRows;i++){
       html+='<div class="pw-wheelcol"><div class="pw-wheellab">Seat '+(i+1)+'</div>'+
         '<div class="pw-wheel"><div class="pw-wheelscroll" data-wheel="'+i+'">'+
@@ -402,16 +424,43 @@
     }
     host.innerHTML=html;
     document.getElementById('seatAdd').classList.toggle('hidden', seatRows>=SEAT_MAX);
-    Array.prototype.forEach.call(host.querySelectorAll('.pw-wheelscroll'), function(sc, i){
-      sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ it.onclick=function(){ it.scrollIntoView({block:'center'}); setTimeout(function(){ markWheel(sc); },140); }; });
-      sc.onscroll=function(){ clearTimeout(sc._t); sc._t=setTimeout(function(){ markWheel(sc); },60); };
-      setTimeout(function(){ var want=values[i]?seatNum(values[i]):''; var el=sc.querySelector('.pw-wheelitem[data-seat="'+want+'"]')||sc.querySelector('.pw-wheelitem[data-seat=""]'); if(el) el.scrollIntoView({block:'center'}); markWheel(sc); },30);
+    var scs=wheelScs();
+    scs.forEach(function(sc){
+      sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ it.onclick=function(){ if(it.classList.contains('dis')) return; _realign=true; it.scrollIntoView({block:'center'}); clearTimeout(sc._t); sc._t=setTimeout(function(){ _realign=false; settleWheel(sc); },180); }; });
+      sc.onscroll=function(){ if(_realign) return; clearTimeout(sc._t); sc._t=setTimeout(function(){ settleWheel(sc); },80); };
     });
+    applyDisabled(scs);
+    scs.forEach(function(sc,i){ var want=values[i]?seatNum(values[i]):'';
+      var el=sc.querySelector('.pw-wheelitem[data-seat="'+want+'"]');
+      if(el && el.classList.contains('dis')) el=null;
+      if(!el) el=sc.querySelector('.pw-wheelitem[data-seat=""]');
+      setTimeout(function(){ if(el) el.scrollIntoView({block:'center'}); markOn(sc); },30);
+    });
+    setTimeout(function(){ var a=wheelScs(); applyDisabled(a); a.forEach(markOn); },150);
   }
-  function centeredSeat(sc){ var b=sc.getBoundingClientRect(), cy=b.top+b.height/2, best=null, bd=1e9;
-    sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ var r=it.getBoundingClientRect(), d=Math.abs((r.top+r.height/2)-cy); if(d<bd){ bd=d; best=it; } }); return best?best.getAttribute('data-seat'):''; }
-  function markWheel(sc){ var v=centeredSeat(sc); sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ it.classList.toggle('on', it.getAttribute('data-seat')===v); }); return v; }
-  function addSeatRow(){ if(seatRows>=SEAT_MAX) return; var vals=[]; document.querySelectorAll('#seatWheels .pw-wheelscroll').forEach(function(sc){ vals.push(centeredSeat(sc)); }); seatRows++; renderSeatWheels(vals); }
+  function wheelScs(){ return Array.prototype.slice.call(document.querySelectorAll('#seatWheels .pw-wheelscroll')); }
+  function nearestItem(sc, enabledOnly){ var b=sc.getBoundingClientRect(), cy=b.top+b.height/2, best=null, bd=1e9;
+    sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ if(enabledOnly && it.classList.contains('dis')) return; var r=it.getBoundingClientRect(), d=Math.abs((r.top+r.height/2)-cy); if(d<bd){ bd=d; best=it; } }); return best; }
+  function centeredSeat(sc){ var it=nearestItem(sc,true); return it?it.getAttribute('data-seat'):''; }
+  function markOn(sc){ var v=centeredSeat(sc); sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ it.classList.toggle('on', !it.classList.contains('dis') && it.getAttribute('data-seat')===v); }); return v; }
+  function applyDisabled(scs){ scs=scs||wheelScs(); var taken=takenByOtherCams(seatCam);
+    var picks=scs.map(function(sc){ return seatNum(centeredSeat(sc)); });
+    scs.forEach(function(sc,i){ sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ var s=it.getAttribute('data-seat');
+      if(s===''){ it.classList.remove('dis'); return; }
+      var dis = !!taken[s] || picks.some(function(p,j){ return j!==i && p && p===s; });
+      it.classList.toggle('dis', dis); }); });
+  }
+  function settleWheel(sc){ if(_realign) return;
+    var over=nearestItem(sc,false);                       // what the drum is physically resting on
+    if(over && over.classList.contains('dis')){ var ne=nearestItem(sc,true); if(ne){ _realign=true; ne.scrollIntoView({block:'center'}); setTimeout(function(){ _realign=false; finishSettle(sc); },180); return; } }
+    finishSettle(sc);
+  }
+  function finishSettle(sc){ markOn(sc); var scs=wheelScs(); applyDisabled(scs);
+    // if this wheel's pick just grayed a seat another wheel was resting on, roll that wheel off it
+    scs.forEach(function(o){ if(o===sc) return; var over=nearestItem(o,false); if(over && over.classList.contains('dis')){ _realign=true; var ne=nearestItem(o,true); if(ne) ne.scrollIntoView({block:'center'}); markOn(o); } });
+    if(_realign) setTimeout(function(){ _realign=false; var a=wheelScs(); applyDisabled(a); a.forEach(markOn); },180);
+  }
+  function addSeatRow(){ if(seatRows>=SEAT_MAX) return; var vals=[]; wheelScs().forEach(function(sc){ vals.push(centeredSeat(sc)); }); seatRows++; renderSeatWheels(vals); }
   function confirmSeats(){ var cam=seatCam, k=PW[cam]; if(!k){ closeSeatModal(); return; }
     var picked=[], seen={};
     document.querySelectorAll('#seatWheels .pw-wheelscroll').forEach(function(sc){ var v=seatNum(centeredSeat(sc)); if(v && !seen[v]){ seen[v]=1; picked.push(v); } });
