@@ -69,6 +69,8 @@
   .pw-kit.todo{border-left-color:var(--gold);}
   .pw-khead{display:flex;align-items:center;justify-content:space-between;gap:8px;}
   .pw-knum{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.08rem;color:#fff;}
+  .pw-knum-btn{background:none;border:0;padding:2px 0;cursor:pointer;text-align:left;border-bottom:1px dashed rgba(0,184,184,.5);}
+  .pw-knum-btn:hover{color:var(--teal-lt);border-bottom-color:var(--teal);}
   .pw-p2{font-family:var(--font);font-size:.52rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#ffb28a;border:1px solid rgba(255,107,26,.5);padding:1px 5px;margin-left:6px;vertical-align:middle;}
   .pw-pct{font-family:var(--font);font-weight:700;font-size:.82rem;letter-spacing:.02em;padding:2px 8px;color:#8ff0b0;background:rgba(63,168,99,.16);}
   .pw-pct.mid{color:#ffd889;background:rgba(245,179,1,.16);} .pw-pct.low{color:#ff9a8a;background:rgba(224,64,58,.18);} .pw-pct.na{color:var(--faint);background:rgba(160,180,180,.12);}
@@ -86,20 +88,35 @@
   /* Wheel picker (Activity-Timer drum): tap a slot -> scroll/tap an available seat -> it collapses. */
   .pw-wheelov{position:fixed;inset:0;z-index:140;background:rgba(2,12,12,.72);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;padding:20px;}
   .pw-wheelov.open{display:flex;}
-  .pw-wheelbox{background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);border-top:3px solid var(--teal);box-shadow:0 24px 60px rgba(0,0,0,.7);width:250px;max-width:92vw;padding:16px;}
-  .pw-wheelhead{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.84rem;color:#fff;text-align:center;}
-  .pw-wheelsub{font-size:.72rem;color:var(--muted);text-align:center;margin-bottom:12px;}
-  .pw-wheel{position:relative;height:198px;overflow:hidden;}
-  .pw-wheelscroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .pw-back{display:inline-flex;align-items:center;gap:6px;margin:2px 0 10px;height:36px;padding:0 14px;box-sizing:border-box;font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.68rem;color:var(--teal-lt);background:rgba(0,184,184,.1);border:1px solid var(--teal);text-decoration:none;width:fit-content;}
+  .pw-back:hover{background:rgba(0,184,184,.2);color:#fff;}
+  /* Seat modal: tap a camera number -> a window of vertical seat wheels + Confirm + X. */
+  .pw-seatbox{background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);border-top:3px solid var(--teal);box-shadow:0 24px 60px rgba(0,0,0,.7);width:auto;max-width:94vw;padding:16px 18px 18px;}
+  .pw-seathead{display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:1rem;color:#fff;}
+  .pw-seatx{background:none;border:0;color:var(--muted);font-size:1.7rem;line-height:1;cursor:pointer;padding:0 2px;}
+  .pw-seatx:hover{color:#fff;}
+  .pw-seatsub{font-size:.72rem;color:var(--muted);margin:3px 0 14px;max-width:340px;}
+  .pw-wheels{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+  .pw-wheelcol{display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .pw-wheellab{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);}
+  .pw-wheel{position:relative;height:176px;width:86px;overflow:hidden;}
+  /* overflow-x:hidden + touch-action:pan-y lock the wheel to VERTICAL scrolling only. */
+  .pw-wheelscroll{height:100%;overflow-y:auto;overflow-x:hidden;touch-action:pan-y;overscroll-behavior:contain;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
   .pw-wheelscroll::-webkit-scrollbar{display:none;}
-  .pw-wheelpad{height:77px;}
-  .pw-wheelitem{height:44px;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;font-family:var(--font);font-weight:700;font-size:1.6rem;color:var(--faint);cursor:pointer;transition:color .12s,transform .12s;}
+  .pw-wheelpad{height:66px;}
+  .pw-wheelitem{height:44px;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;font-family:var(--font);font-weight:700;font-size:1.5rem;color:var(--faint);cursor:pointer;transition:color .12s,transform .12s;user-select:none;}
+  .pw-wheelitem[data-seat=""]{font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;}
   .pw-wheelitem:hover{color:#fff;}
-  .pw-wheelitem.on{color:var(--teal-lt);transform:scale(1.18);}
-  .pw-wheelcenter{position:absolute;left:0;right:0;top:77px;height:44px;border-top:1px solid var(--teal);border-bottom:1px solid var(--teal);pointer-events:none;}
-  .pw-wheelactions{display:flex;gap:8px;margin-top:14px;}
-  .pw-wheelactions .btn{flex:1 1 0;height:38px;padding:0;}
-  .pw-nonefree{color:var(--muted);text-align:center;padding:30px 0;font-size:.9rem;}
+  .pw-wheelitem.on{color:var(--teal-lt);transform:scale(1.14);}
+  .pw-wheelcenter{position:absolute;left:0;right:0;top:66px;height:44px;border-top:1px solid var(--teal);border-bottom:1px solid var(--teal);pointer-events:none;}
+  .pw-addseat{display:block;width:100%;margin:12px 0;height:34px;background:transparent;border:1px dashed var(--line);color:var(--muted);font-family:var(--font);font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;}
+  .pw-addseat:hover{border-color:var(--teal);color:#fff;}
+  .pw-addseat.hidden{display:none;}
+  .pw-warnbox{background:linear-gradient(135deg,rgba(245,179,1,.1),rgba(4,20,19,.99));border:1px solid var(--gold);border-top:3px solid var(--gold);box-shadow:0 24px 60px rgba(0,0,0,.7);width:360px;max-width:92vw;padding:20px;}
+  .pw-warnhead{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.9rem;color:#ffd889;margin-bottom:8px;}
+  .pw-warntext{font-size:.92rem;color:var(--text);line-height:1.45;margin-bottom:16px;}
+  .pw-warnacts{display:flex;gap:10px;}
+  .pw-warnacts .btn{flex:1 1 0;}
   .pw-kact{display:flex;gap:8px;flex-wrap:wrap;margin-top:1px;}
   .pw-mini{flex:0 0 auto;height:30px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:0 11px;cursor:pointer;background:transparent;border:1px solid var(--line);color:var(--muted);transition:border-color .15s,color .15s,background .15s;}
   .pw-mini:hover{border-color:var(--teal);color:#fff;}
@@ -159,6 +176,7 @@
 
 <div id="app">
   <div class="wrap">
+    <a class="pw-back" href="/camera-manager.html">&lsaquo; Equipment Manager</a>
     <div class="pw-titlerow">
       <h1 class="pw-title">Photo Walk Log<small>Assign a kit to each seat as students head out. The log saves the kit&#39;s completion for that day.</small></h1>
     </div>
@@ -202,12 +220,21 @@
   </div>
 </div>
 
-<div class="pw-wheelov" id="wheelOv">
-  <div class="pw-wheelbox">
-    <div class="pw-wheelhead" id="wheelHead">Seat</div>
-    <div class="pw-wheelsub" id="wheelSub">Tap a seat number</div>
-    <div class="pw-wheel"><div class="pw-wheelscroll" id="wheelScroll"></div><div class="pw-wheelcenter"></div></div>
-    <div class="pw-wheelactions"><button class="btn ghost" id="wheelClear">Clear</button><button class="btn ghost" id="wheelClose">Close</button></div>
+<div class="pw-wheelov" id="seatOv">
+  <div class="pw-seatbox">
+    <div class="pw-seathead"><span id="seatHead">Assign seats</span><button class="pw-seatx" id="seatX" aria-label="Close">&times;</button></div>
+    <div class="pw-seatsub">Scroll each wheel to a seat, then Confirm. Leave a wheel on &ldquo;None&rdquo; to keep it empty.</div>
+    <div class="pw-wheels" id="seatWheels"></div>
+    <button type="button" class="pw-addseat" id="seatAdd">+ Add another seat</button>
+    <button type="button" class="btn save" id="seatConfirm" style="width:100%;">Confirm</button>
+  </div>
+</div>
+
+<div class="pw-wheelov" id="warnOv">
+  <div class="pw-warnbox">
+    <div class="pw-warnhead">Before you save</div>
+    <div class="pw-warntext" id="warnText"></div>
+    <div class="pw-warnacts"><button type="button" class="btn ghost" id="warnCancel">Go back</button><button type="button" class="btn save" id="warnOk">OK, mark them not used</button></div>
   </div>
 </div>
 
@@ -268,7 +295,7 @@
   // ----- build the per-kit working state for the selected period -----
   function buildPW(){ PW={}; CAMS.forEach(function(cam){
       var co=checkoutToday(cam);
-      PW[cam]={ status: co?'checked_out':'open', seats:['',''], names:['',''], ids:['',''], co: co||null };
+      PW[cam]={ status: co?'checked_out':'open', seats:[], names:[], ids:[], co: co||null };
     });
   }
   function seatsForPeriod(){ var pd=SEATMAP[PERIOD]; return (pd&&pd.seats)||{}; }
@@ -287,6 +314,7 @@
     // status line
     renderStatus();
     renderGrid();
+    updateSaveBtn();
   }
   function renderPerMenu(){
     var trig=document.getElementById('perTrigLbl');
@@ -311,34 +339,33 @@
     if(!PERIOD){ grid.innerHTML='<div class="pw-empty">Select a class period to see the kits.</div>'; return; }
     grid.innerHTML=CAMS.map(liveKitCard).join('');
     // tap a seat slot -> open the wheel picker (no typing)
-    grid.querySelectorAll('[data-pick]').forEach(function(b){ b.onclick=function(){ openSeatPicker(b.getAttribute('data-pick'), +b.getAttribute('data-slot')); }; });
+    grid.querySelectorAll('[data-assign]').forEach(function(b){ b.onclick=function(){ openSeatModal(b.getAttribute('data-assign')); }; });
     grid.querySelectorAll('[data-notused]').forEach(function(b){ b.onclick=function(){ toggleNotUsed(b.getAttribute('data-notused')); }; });
     grid.querySelectorAll('[data-return]').forEach(function(b){ b.onclick=function(){ returnToPool(b.getAttribute('data-return')); }; });
   }
   function pctChip(cam){ var p=kitPct(cam); return '<span class="pw-pct '+pctCls(p)+'">'+(p==null?'TBD':(p+'%'))+'</span>'; }
   function seatNum(v){ var s=String(v==null?'':v).replace(/\D/g,''); return s.replace(/^0+/,'')||''; }
-  function slotChip(cam,s,k){ var v=seatNum(k.seats[s]); return v?('<button class="pw-slot set" data-pick="'+esc(cam)+'" data-slot="'+s+'">'+esc(v)+'</button>'):('<button class="pw-slot add" data-pick="'+esc(cam)+'" data-slot="'+s+'" aria-label="Assign a seat">+</button>'); }
-  function namesLine(k){ var out=[]; [0,1].forEach(function(s){ var v=seatNum(k.seats[s]); if(v&&k.names[s]) out.push('<span class="sn">#'+esc(v)+'</span> '+esc(k.names[s])); else if(v&&!k.names[s]) out.push('<span class="bad">#'+esc(v)+' no student</span>'); }); return out.length?out.join('<br>'):'<span class="empty">Tap a seat to assign</span>'; }
+  function namesLine(k){ var out=[]; (k.seats||[]).forEach(function(v0,i){ var v=seatNum(v0); if(!v) return; if(k.names[i]) out.push('<span class="sn">#'+esc(v)+'</span> '+esc(k.names[i])); else out.push('<span class="bad">#'+esc(v)+' no student</span>'); }); return out.length?out.join('<br>'):'<span class="empty">Tap the camera number to assign seats</span>'; }
   function liveKitCard(cam){
     var k=PW[cam], p2=(P2.indexOf(cam)>=0)?'<span class="pw-p2">P2</span>':'';
-    var head='<div class="pw-khead"><span class="pw-knum">'+esc(cam)+p2+'</span>'+pctChip(cam)+'</div>';
-    var cls='pw-kit';
-    var body='';
+    var cls='pw-kit', body='', numHtml;
     if(k.status==='checked_out'){
+      numHtml='<span class="pw-knum">'+esc(cam)+p2+'</span>';
       cls+=' checkedout';
       body='<div class="pw-outline"><b>Checked out</b><br>'+esc(whoOf(k.co))+'</div>'+
            '<div class="pw-kact"><button class="pw-mini ret" data-return="'+esc(cam)+'">Return to pool</button></div>';
     } else if(k.status==='not_used'){
+      numHtml='<button type="button" class="pw-knum pw-knum-btn" data-assign="'+esc(cam)+'">'+esc(cam)+p2+'</button>';
       cls+=' notused';
       body='<div class="pw-outline"><b>Not used</b> this walk</div>'+
            '<div class="pw-kact"><button class="pw-mini" data-notused="'+esc(cam)+'">Undo</button></div>';
     } else {
+      numHtml='<button type="button" class="pw-knum pw-knum-btn" data-assign="'+esc(cam)+'">'+esc(cam)+p2+'</button>';
       if(k.status==='used') cls+=' used'; else cls+=' todo';
-      body='<div class="pw-seats-row">'+slotChip(cam,0,k)+slotChip(cam,1,k)+'</div>'+
-           '<div class="pw-names">'+namesLine(k)+'</div>'+
+      body='<div class="pw-names">'+namesLine(k)+'</div>'+
            '<div class="pw-kact"><button class="pw-mini warn" data-notused="'+esc(cam)+'">Mark not used</button></div>';
     }
-    return '<div class="'+cls+'">'+head+body+'</div>';
+    return '<div class="'+cls+'"><div class="pw-khead">'+numHtml+pctChip(cam)+'</div>'+body+'</div>';
   }
   function roKitCard(k){
     var p2=(P2.indexOf(k.cam)>=0)?'<span class="pw-p2">P2</span>':'';
@@ -351,58 +378,96 @@
     return '<div class="'+cls+'">'+head+body+'</div>';
   }
 
-  // ----- seat wheel picker (tap, no typing); each seat can go to only ONE kit this walk -----
-  var seatPick={cam:null,slot:null};
-  function assignedSeats(exCam,exSlot){ var set={}; CAMS.forEach(function(cam){ var k=PW[cam]; if(!k) return; [0,1].forEach(function(s){ if(cam===exCam && s===exSlot) return; var v=seatNum(k.seats[s]); if(v) set[v]=1; }); }); return set; }
-  function availableSeats(cam,slot){ var seats=seatsForPeriod(), taken=assignedSeats(cam,slot);
-    return Object.keys(seats).map(function(s){ return seatNum(s); }).filter(function(s){ return s && !taken[s]; })
-      .filter(function(v,i,a){ return a.indexOf(v)===i; }).sort(function(a,b){ return (+a)-(+b); }); }
-  function openSeatPicker(cam,slot){ seatPick={cam:cam,slot:slot};
-    var avail=availableSeats(cam,slot), cur=seatNum(PW[cam].seats[slot]);
-    document.getElementById('wheelHead').textContent=cam;
-    document.getElementById('wheelSub').textContent=avail.length?'Scroll, then tap a seat':'No seats left';
-    var sc=document.getElementById('wheelScroll');
-    sc.innerHTML=avail.length?('<div class="pw-wheelpad"></div>'+avail.map(function(s){ return '<div class="pw-wheelitem" data-seat="'+s+'">'+s+'</div>'; }).join('')+'<div class="pw-wheelpad"></div>'):'<div class="pw-nonefree">Every seat is already assigned to a kit.</div>';
-    document.getElementById('wheelClear').style.display=cur?'':'none';
-    document.getElementById('wheelOv').classList.add('open');
-    sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ it.onclick=function(){ pickSeat(it.getAttribute('data-seat')); }; });
-    sc.onscroll=function(){ clearTimeout(sc._t); sc._t=setTimeout(markCenter,60); };
-    setTimeout(function(){ var el=cur?sc.querySelector('.pw-wheelitem[data-seat="'+cur+'"]'):sc.querySelector('.pw-wheelitem'); if(el) el.scrollIntoView({block:'center'}); markCenter(); },30);
+  // ----- seat modal: tap a camera number -> one vertical wheel per seat (+ add more) + Confirm -----
+  var seatCam=null, seatRows=2, SEAT_MAX=6;
+  function seatPoolFor(cam){ var seats=seatsForPeriod(), taken={};
+    CAMS.forEach(function(c){ if(c===cam) return; var kk=PW[c]; if(!kk) return; (kk.seats||[]).forEach(function(v){ var n=seatNum(v); if(n) taken[n]=1; }); });
+    return Object.keys(seats).map(seatNum).filter(function(s){ return s && !taken[s]; }).filter(function(v,i,a){ return a.indexOf(v)===i; }).sort(function(a,b){ return (+a)-(+b); }); }
+  function openSeatModal(cam){ var k=PW[cam]; if(!k||k.status==='checked_out') return; seatCam=cam;
+    var existing=(k.seats||[]).map(seatNum).filter(Boolean);
+    seatRows=Math.min(SEAT_MAX, Math.max(2, existing.length));
+    document.getElementById('seatHead').textContent=cam;
+    renderSeatWheels(existing);
+    document.getElementById('seatOv').classList.add('open');
   }
-  function markCenter(){ var sc=document.getElementById('wheelScroll'); if(!sc) return; var b=sc.getBoundingClientRect(), cy=b.top+b.height/2, best=null, bd=1e9;
-    sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ it.classList.remove('on'); var r=it.getBoundingClientRect(), d=Math.abs((r.top+r.height/2)-cy); if(d<bd){ bd=d; best=it; } }); if(best) best.classList.add('on'); }
-  function pickSeat(seat){ var c=seatPick.cam, s=seatPick.slot, k=PW[c]; if(!k) return; var v=seatNum(seat);
-    k.seats[s]=v; var r=resolveSeat(v); k.names[s]=r?r.label:''; k.ids[s]=r?r.id:'';
-    k.status=((seatNum(k.seats[0])&&k.names[0])||(seatNum(k.seats[1])&&k.names[1]))?'used':'open'; closeWheel(); renderGrid(); renderStatus(); }
-  function clearSeatSlot(){ var c=seatPick.cam, s=seatPick.slot, k=PW[c]; if(!k) return; k.seats[s]=''; k.names[s]=''; k.ids[s]='';
-    k.status=((seatNum(k.seats[0])&&k.names[0])||(seatNum(k.seats[1])&&k.names[1]))?'used':'open'; closeWheel(); renderGrid(); renderStatus(); }
-  function closeWheel(){ document.getElementById('wheelOv').classList.remove('open'); }
-  function toggleNotUsed(cam){ var k=PW[cam]; if(k.status==='not_used'){ k.status=(k.seats[0]&&k.names[0])?'used':'open'; } else { k.status='not_used'; k.seats=['','']; k.names=['','']; k.ids=['','']; } renderGrid(); renderStatus(); }
+  function renderSeatWheels(values){ var pool=seatPoolFor(seatCam), host=document.getElementById('seatWheels'), html='';
+    for(var i=0;i<seatRows;i++){
+      html+='<div class="pw-wheelcol"><div class="pw-wheellab">Seat '+(i+1)+'</div>'+
+        '<div class="pw-wheel"><div class="pw-wheelscroll" data-wheel="'+i+'">'+
+          '<div class="pw-wheelpad"></div>'+
+          '<div class="pw-wheelitem" data-seat="">None</div>'+
+          pool.map(function(s){ return '<div class="pw-wheelitem" data-seat="'+s+'">'+s+'</div>'; }).join('')+
+          '<div class="pw-wheelpad"></div>'+
+        '</div><div class="pw-wheelcenter"></div></div></div>';
+    }
+    host.innerHTML=html;
+    document.getElementById('seatAdd').classList.toggle('hidden', seatRows>=SEAT_MAX);
+    Array.prototype.forEach.call(host.querySelectorAll('.pw-wheelscroll'), function(sc, i){
+      sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ it.onclick=function(){ it.scrollIntoView({block:'center'}); setTimeout(function(){ markWheel(sc); },140); }; });
+      sc.onscroll=function(){ clearTimeout(sc._t); sc._t=setTimeout(function(){ markWheel(sc); },60); };
+      setTimeout(function(){ var want=values[i]?seatNum(values[i]):''; var el=sc.querySelector('.pw-wheelitem[data-seat="'+want+'"]')||sc.querySelector('.pw-wheelitem[data-seat=""]'); if(el) el.scrollIntoView({block:'center'}); markWheel(sc); },30);
+    });
+  }
+  function centeredSeat(sc){ var b=sc.getBoundingClientRect(), cy=b.top+b.height/2, best=null, bd=1e9;
+    sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ var r=it.getBoundingClientRect(), d=Math.abs((r.top+r.height/2)-cy); if(d<bd){ bd=d; best=it; } }); return best?best.getAttribute('data-seat'):''; }
+  function markWheel(sc){ var v=centeredSeat(sc); sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ it.classList.toggle('on', it.getAttribute('data-seat')===v); }); return v; }
+  function addSeatRow(){ if(seatRows>=SEAT_MAX) return; var vals=[]; document.querySelectorAll('#seatWheels .pw-wheelscroll').forEach(function(sc){ vals.push(centeredSeat(sc)); }); seatRows++; renderSeatWheels(vals); }
+  function confirmSeats(){ var cam=seatCam, k=PW[cam]; if(!k){ closeSeatModal(); return; }
+    var picked=[], seen={};
+    document.querySelectorAll('#seatWheels .pw-wheelscroll').forEach(function(sc){ var v=seatNum(centeredSeat(sc)); if(v && !seen[v]){ seen[v]=1; picked.push(v); } });
+    k.seats=picked; k.names=picked.map(function(v){ var r=resolveSeat(v); return r?r.label:''; }); k.ids=picked.map(function(v){ var r=resolveSeat(v); return r?r.id:''; });
+    k.status=picked.length?'used':'open';
+    closeSeatModal(); renderGrid(); renderStatus();
+  }
+  function closeSeatModal(){ document.getElementById('seatOv').classList.remove('open'); seatCam=null; }
+  function toggleNotUsed(cam){ var k=PW[cam]; if(k.status==='not_used'){ k.status='open'; } else { k.status='not_used'; k.seats=[]; k.names=[]; k.ids=[]; } renderGrid(); renderStatus(); }
   function returnToPool(cam){ var k=PW[cam]; if(!k.co) return;
     camAPI('/api/camera/status',{method:'POST',body:JSON.stringify({id:k.co.id,status:'returned'})})
       .then(function(r){ if(!r.ok) throw new Error(); return loadBoard(); }).then(function(){ buildPW(); render(); toast(cam+' returned to the pool.'); })
       .catch(function(){ toast('Could not return '+cam+'. Try again.',true); });
   }
-  function setPeriod(p){ RO=null; PERIOD=p; buildPW(); render(); }
+  function setPeriod(p){ RO=null; PERIOD=p; buildPW(); render(); loadSavedIntoPW(p); }
+  // If a report was already saved for today + this period, load its assignments so Edit report shows
+  // the earlier students (and you can add late ones), instead of starting blank and overwriting.
+  function loadSavedIntoPW(p){ if(!p) return; var key=todayISO()+'|'+p;
+    camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'get',key:key})})
+      .then(function(r){ return r.json(); }).then(function(j){ if(!j||!j.log||PERIOD!==p) return;
+        savedKeys[key]=true;
+        (j.log.kits||[]).forEach(function(kk){ var pw=PW[kk.cam]; if(!pw||pw.status==='checked_out') return;
+          if(kk.status==='not_used'){ pw.status='not_used'; pw.seats=[]; pw.names=[]; pw.ids=[]; }
+          else if(kk.seats&&kk.seats.length){ pw.seats=kk.seats.map(function(s){return seatNum(s.seat);}); pw.names=kk.seats.map(function(s){return s.label||'';}); pw.ids=kk.seats.map(function(s){return s.id||'';}); pw.status='used'; }
+        });
+        render();
+      }).catch(function(){}); }
 
   // ----- save -----
+  var savedKeys={};   // "date|period" -> true (from history + after a save); drives Save vs Edit label
+  function updateSaveBtn(){ var b=document.getElementById('saveBtn'); if(!b) return;
+    if(RO){ b.textContent='Save report'; return; }
+    b.textContent=(PERIOD && savedKeys[todayISO()+'|'+PERIOD])?'Edit report':'Save report'; }
+  function showUnassignedWarn(n, onOk){
+    var they=(n>1?'they':'it'), were=(n>1?'were':'was'), cams='camera'+(n>1?'s':'');
+    document.getElementById('warnText').innerHTML=n+' '+cams+' '+were+' not assigned a seat. If '+they+' stayed in the classroom this period, tap OK and '+they+' will be logged as <b>Not used</b> for this photo walk.';
+    var ok=document.getElementById('warnOk'); ok.onclick=function(){ document.getElementById('warnOv').classList.remove('open'); onOk(); };
+    document.getElementById('warnOv').classList.add('open');
+  }
   function saveReport(){
     if(RO){ toast('You are viewing a saved walk. Pick a period to log today.',true); return; }
     if(!PERIOD){ toast('Pick a class period first.',true); return; }
-    var need=kitCountNeeds();
+    var open=CAMS.filter(function(cam){ return PW[cam].status==='open'; });
     var go=function(){
       var kits=CAMS.map(function(cam){ var k=PW[cam];
-        var seats=[0,1].filter(function(s){ return k.seats[s]&&k.names[s]; }).map(function(s){ return {seat:String(k.seats[s]).replace(/\D/g,''),id:k.ids[s],label:k.names[s]}; });
+        var seats=[]; (k.seats||[]).forEach(function(v0,i){ var v=seatNum(v0); if(v) seats.push({seat:v, id:k.ids[i]||'', label:k.names[i]||''}); });
         return {cam:cam, pct:kitPct(cam), status:k.status==='open'?'unassigned':k.status, seats:seats};
       });
-      var btn=document.getElementById('saveBtn'); btn.disabled=true; btn.textContent='Saving…';
+      var btn=document.getElementById('saveBtn'); btn.disabled=true; btn.textContent='Saving&#8230;';
       camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'save',date:todayISO(),period:PERIOD,course:courseForPeriod(),kits:kits})})
         .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
-        .then(function(){ btn.disabled=false; btn.textContent='Save report'; toast('Photo walk saved for Period '+PERIOD+'.'); loadHistory(); })
-        .catch(function(){ btn.disabled=false; btn.textContent='Save report'; toast('Could not save. Try again.',true); });
+        .then(function(){ savedKeys[todayISO()+'|'+PERIOD]=true; btn.disabled=false; updateSaveBtn(); toast('Photo walk saved for Period '+PERIOD+'. Button is now Edit report.'); loadHistory(); })
+        .catch(function(){ btn.disabled=false; updateSaveBtn(); toast('Could not save. Try again.',true); });
     };
-    if(need){ if(!confirm(need+' kit'+(need>1?'s':'')+' still have no seat and are not marked Not used. Save anyway?')) return; }
-    go();
+    if(open.length){ showUnassignedWarn(open.length, function(){ open.forEach(function(cam){ var k=PW[cam]; k.status='not_used'; k.seats=[]; k.names=[]; k.ids=[]; }); renderGrid(); renderStatus(); go(); }); }
+    else go();
   }
 
   // ----- history -----
@@ -410,6 +475,7 @@
     camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'list'})})
       .then(function(r){ return r.json(); }).then(function(j){
         var rows=(j&&j.logs)||[]; document.getElementById('histCount').textContent=rows.length+' saved';
+        savedKeys={}; rows.forEach(function(r){ if(r.key) savedKeys[r.key]=true; }); updateSaveBtn();
         var list=document.getElementById('histList');
         list.innerHTML=rows.length?rows.map(function(r){ return '<div class="pw-histrow"><span class="pw-histopen" data-key="'+esc(r.key)+'"><span class="pw-histd">'+esc(r.date)+'</span> <span class="pw-histmeta">&middot; Per '+esc(r.period)+(r.course?(' &middot; '+esc(r.course)):'')+' &middot; '+esc(r.kits)+' kits</span></span><button class="pw-histdel" data-del="'+esc(r.key)+'" title="Delete this walk" aria-label="Delete">&times;</button></div>'; }).join(''):'<div class="pw-empty">No saved photo walks yet.</div>';
         list.querySelectorAll('.pw-histopen').forEach(function(el){ el.onclick=function(){ openPast(el.getAttribute('data-key')); }; });
@@ -454,9 +520,12 @@
   // control-bar wiring
   document.getElementById('perTrig').onclick=function(){ document.getElementById('perDD').classList.toggle('open'); };
   document.addEventListener('click',function(e){ var dd=document.getElementById('perDD'); if(dd && !dd.contains(e.target)) dd.classList.remove('open'); });
-  document.getElementById('wheelClose').onclick=closeWheel;
-  document.getElementById('wheelClear').onclick=clearSeatSlot;
-  document.getElementById('wheelOv').addEventListener('click',function(e){ if(e.target===this) closeWheel(); });
+  document.getElementById('seatX').onclick=closeSeatModal;
+  document.getElementById('seatAdd').onclick=addSeatRow;
+  document.getElementById('seatConfirm').onclick=confirmSeats;
+  document.getElementById('seatOv').addEventListener('click',function(e){ if(e.target===this) closeSeatModal(); });
+  document.getElementById('warnCancel').onclick=function(){ document.getElementById('warnOv').classList.remove('open'); };
+  document.getElementById('warnOv').addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
   document.getElementById('saveBtn').onclick=saveReport;
   document.getElementById('histBtn').onclick=function(){ var h=document.getElementById('histPanel'); h.style.display=(h.style.display==='none')?'':'none'; if(h.style.display!=='none'){ loadHistory(); h.scrollIntoView({behavior:'smooth',block:'start'}); } };
   document.getElementById('roExit').onclick=function(){ RO=null; var ap=autoPeriod(); if(ap&&SEATMAP[ap]) setPeriod(ap); else { PERIOD=PERIOD||null; buildPW(); render(); } };
