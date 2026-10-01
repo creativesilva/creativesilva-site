@@ -689,8 +689,8 @@
       <label for="ed-status">Status</label>
       <div id="ed-status"></div>
       <div id="ed-gearwrap" style="display:none">
-        <label>Attached gear</label>
-        <p class="ed-hint">Tap to add or remove. Added gear takes the same student and dates as this checkout.</p>
+        <label>Add equipment</label>
+        <p class="ed-hint">Tap a tripod, lens or flash to add it to this reservation (or tap again to remove). It takes the same student and dates as the camera.</p>
         <div id="ed-gear" class="ed-gear"></div>
       </div>
       <div class="ed-btnrow">
@@ -1194,6 +1194,7 @@
     if(typeof e.data.calH==='number'){ var f=document.getElementById('calframe'); if(f&&e.data.calH>200) f.style.height=(e.data.calH+4)+'px'; }
     else if(e.data.daySelected){ SELDAY=e.data.daySelected; updateSummary(); }        // bar follows the day clicked in the calendar
     else if(e.data.camAction){ loadBoard(); }                                          // a check-in done from the calendar; refresh the board
+    else if(e.data.openCam){ openCamDetail(e.data.openCam); }                           // tapped a camera in the embedded calendar -> open the full teacher window
   });
   // Hand the embedded calendar the camera key so it can show full detail + enable check-in (same origin; backup to shared sessionStorage).
   function pushKey(){ try{ var f=document.getElementById('calframe'); if(f&&f.contentWindow&&KEY) f.contentWindow.postMessage({camKey:KEY},'*'); }catch(e){} }
@@ -1611,7 +1612,7 @@
       var cdStat=statusOf(c);
       var cdPrimary=(cdStat==='out')?'<button class="btn sm warn" id="cd-return">Mark returned</button>'
         :((cdStat==='reserved'&&!cdPend)?'<button class="btn sm" id="cd-pickup">Mark picked up</button>':'');
-      h+='<div class="cd-cur"><div class="cd-cur-who">'+esc(nameOf(c))+(cdPend?' <span class="pill pending">Pending</span>':'')+'</div><div class="cd-cur-meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+esc(c.course||'')+' &middot; out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+' &middot; '+esc(statusOf(c))+'</div>'+(c.note?'<div class="cd-cur-note">Reservation note: '+esc(c.note)+'</div>':'')+cdPendMsg+'<div class="cd-cur-acts">'+cdApprove+cdPrimary+'<button class="btn sm ghost" id="cd-editcur">Edit / move student</button></div></div>';
+      h+='<div class="cd-cur"><div class="cd-cur-who">'+esc(nameOf(c))+(cdPend?' <span class="pill pending">Pending</span>':'')+'</div><div class="cd-cur-meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+esc(c.course||'')+' &middot; out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+' &middot; '+esc(statusOf(c))+'</div>'+(c.note?'<div class="cd-cur-note">Reservation note: '+esc(c.note)+'</div>':'')+cdPendMsg+'<div class="cd-cur-acts">'+cdApprove+cdPrimary+'<button class="btn sm" id="cd-addequip">Add equipment</button><button class="btn sm ghost" id="cd-editcur">Edit / move student</button></div></div>';
     }
     h+='<div class="cd-sec"><div class="cd-h">Open condition issues</div>';
     h+=issues.length?('<div class="cd-issues">'+issues.map(function(it,i){ return '<div class="cd-issue"><span>'+esc(it)+'</span><button class="btn sm" data-resolve="'+i+'">Resolved</button></div>'; }).join('')+'</div>'):'<div class="cd-empty">No open issues.</div>';
@@ -1641,6 +1642,7 @@
     var oosb=document.getElementById('cd-oos'); if(oosb) oosb.onclick=function(){ saveAsset(cam,{oos:!oos},renderCamDetailModal); };
     var ncb=document.getElementById('cd-newcard'); if(ncb) ncb.onclick=function(){ setNoCard(cam,false,ncb); };
     var ec=document.getElementById('cd-editcur'); if(ec) ec.onclick=function(){ openEditCheckout(c.id); };
+    var ae=document.getElementById('cd-addequip'); if(ae) ae.onclick=function(){ openEditCheckout(c.id); };   // opens Edit, which carries the Add equipment toggles
     // Check in right from this window (same return checklist used everywhere: kit + linked gear).
     var rtn=document.getElementById('cd-return'); if(rtn) rtn.onclick=function(){ closeCamDetail(); openReturnChecklist(c.id); };
     var pku=document.getElementById('cd-pickup'); if(pku) pku.onclick=function(){ setStatus(c.id,'out',pku).then(function(){ if(cdCam===cam) renderCamDetailModal(); }); };

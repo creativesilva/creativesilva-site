@@ -941,7 +941,7 @@
         cell.appendChild(el('div','wdaynum', String(+dp[2])));
         if(DAYS_OFF[diso]) cell.appendChild(el('div','wdayoff', offLabel(DAYS_OFF[diso])));
         else if(AUTHED && isBlackout(diso)) cell.appendChild(el('div','wdayoff','Closed'));  // teacher-only marker; students see no reason
-        (function(day){ cell.addEventListener('click',function(){ isReserving()?openDayModal(day):selectDay(day); }); })(diso);
+        (function(day){ cell.addEventListener('click',function(){ dayTap(day); }); })(diso);
         // Teacher only: a 3-dots menu to close/reopen this day to student checkouts.
         if(AUTHED && diso>=todayISO() && (isSchoolDay(diso)||isBlackout(diso))){
           var dots=el('button','wdots'); dots.type='button'; dots.innerHTML='&#8942;'; dots.setAttribute('aria-label','Day options');
@@ -960,7 +960,7 @@
         bar.style.left='calc('+(e._sc/7*100)+'% + 2px)';
         bar.style.width='calc('+((e._ec-e._sc+1)/7*100)+'% - 4px)';
         bar.style.top=(e._lane*20)+'px';
-        (function(day){ bar.addEventListener('click',function(ev){ ev.stopPropagation(); isReserving()?openDayModal(day):selectDay(day); }); })(e.start>wkStartISO?e.start:wkStartISO);
+        (function(day){ bar.addEventListener('click',function(ev){ ev.stopPropagation(); dayTap(day); }); })(e.start>wkStartISO?e.start:wkStartISO);
         bars.appendChild(bar);
       });
       for(var d3=0; d3<7; d3++){
@@ -969,7 +969,7 @@
           more.style.left='calc('+(d3/7*100)+'% + 2px)';
           more.style.width='calc('+(1/7*100)+'% - 4px)';
           more.style.top=(MAXLANE*20)+'px';
-          (function(day){ more.addEventListener('click',function(ev){ ev.stopPropagation(); isReserving()?openDayModal(day):selectDay(day); }); })(addDays(wkStartISO,d3));
+          (function(day){ more.addEventListener('click',function(ev){ ev.stopPropagation(); dayTap(day); }); })(addDays(wkStartISO,d3));
           bars.appendChild(more);
         }
       }
@@ -1020,6 +1020,9 @@
   // Global: every picked-up camera now past its return date and not toggled returned.
   function overdueAll(){ return (DATA.checkouts||[]).filter(function(c){ return statusOf(c)==='out' && c.due && c.due<todayISO(); }).sort(byCam); }
   function dmTab(t,label,n){ return '<button type="button" class="dm-tab'+(DM_TAB===t?' active':'')+'" data-tab="'+t+'">'+label+' <span class="dm-tabn">'+n+'</span></button>'; }
+  // A day tap: students scope the board (selectDay); the teacher (embedded + authed) or anyone mid-reserve
+  // gets the day WINDOW (all that day's cameras + reservations), where tapping a camera opens its window.
+  function dayTap(day){ if(isReserving() || (window.parent!==window && AUTHED)) openDayModal(day); else selectDay(day); }
   function openDayModal(iso){ DM_DAY=iso; DM_TAB='available'; DM_CAM=null; DM_RESERVE_CAM=null; DM_DONE=false; renderDayModal(); document.getElementById('daymodal').classList.add('open');
     if(window.parent!==window){ try{ parent.postMessage({daySelected:iso}, '*'); }catch(e){} } }
   // A camera bar for the day card: chevron on the LEFT if it came in before this day,
@@ -1079,7 +1082,10 @@
       btn.addEventListener('click', function(){ DM_TAB=btn.getAttribute('data-tab'); renderDayModal(); });
     });
     Array.prototype.forEach.call(document.querySelectorAll('#dm-body [data-cam]'), function(el){
-      el.addEventListener('click', function(){ DM_CAM=el.getAttribute('data-cam'); renderDayModal(); });
+      el.addEventListener('click', function(){ var cam=el.getAttribute('data-cam');
+        // Embedded in the teacher console: open the full teacher equipment window instead of the student view.
+        if(window.parent!==window && AUTHED){ try{ parent.postMessage({openCam:cam}, '*'); return; }catch(e){} }
+        DM_CAM=cam; renderDayModal(); });
     });
     // Reserve straight from the day card: only on a present/future school day that actually has a free camera.
     if(_foot && iso>=todayISO() && isOpenDay(iso) && avail.length){
