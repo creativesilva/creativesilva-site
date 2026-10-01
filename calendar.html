@@ -1022,7 +1022,12 @@
   function dmTab(t,label,n){ return '<button type="button" class="dm-tab'+(DM_TAB===t?' active':'')+'" data-tab="'+t+'">'+label+' <span class="dm-tabn">'+n+'</span></button>'; }
   // A day tap: students scope the board (selectDay); the teacher (embedded + authed) or anyone mid-reserve
   // gets the day WINDOW (all that day's cameras + reservations), where tapping a camera opens its window.
-  function dayTap(day){ if(isReserving() || (window.parent!==window && AUTHED)) openDayModal(day); else selectDay(day); }
+  function dayTap(day){
+    if((window.parent!==window && AUTHED) || isReserving()){ openDayModal(day); return; }   // teacher console, or already verified mid-reserve
+    // Student: tapping a reservable day opens the reservation window, which asks for the student
+    // number FIRST (the gate) and shows no equipment until verified. No slide-in banner.
+    if(day>=todayISO() && isOpenDay(day)) openReserveFlow(day);
+  }
   function openDayModal(iso){ DM_DAY=iso; DM_TAB='available'; DM_CAM=null; DM_RESERVE_CAM=null; DM_DONE=false; renderDayModal(); document.getElementById('daymodal').classList.add('open');
     if(window.parent!==window){ try{ parent.postMessage({daySelected:iso}, '*'); }catch(e){} } }
   // A camera bar for the day card: chevron on the LEFT if it came in before this day,
