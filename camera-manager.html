@@ -236,19 +236,27 @@
   /* Compact equipment CONDITION cards (notes & condition section): ~half the size of a board card. */
   .cond-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:9px;}
   /* Unified 3-state device card: collapsed bar -> tap to expand -> tap ALL-CAPS title for the pop-out window. */
-  .dcard-list{display:flex;flex-direction:column;gap:6px;}
-  .dcard{background:rgba(0,0,0,.30);border:1px solid var(--line-soft);border-left:4px solid var(--line);}
-  .dcard-head{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;-webkit-user-select:none;user-select:none;}
+  /* Responsive grid: many compact tiles per row on wide screens, auto-stacking to 1 column on a phone.
+     Uniform tile size; align-items:start so an expanded tile never stretches its row-mates. */
+  .dcard-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:8px;align-items:start;}
+  .dcard{background:rgba(0,0,0,.30);border:1px solid var(--line-soft);border-left:4px solid var(--line);min-width:0;}
+  .dcard.open{grid-column:1/-1;}   /* expanded tile becomes a full-width detail row (no holes left in the grid) */
+  .dcard-head{display:flex;align-items:center;gap:9px;padding:9px 12px;cursor:pointer;-webkit-user-select:none;user-select:none;}
   .dcard-head:hover{background:rgba(255,255,255,.035);}
-  .dcard-dot{width:9px;height:9px;flex:0 0 auto;background:var(--muted);border-radius:0;}
-  .dcard-id{flex:1 1 auto;min-width:0;display:flex;align-items:baseline;gap:4px 10px;flex-wrap:wrap;}
-  .dcard-title{font-family:var(--font);font-weight:700;font-size:.96rem;color:#fff;text-transform:uppercase;letter-spacing:.02em;cursor:pointer;text-decoration:underline;text-decoration-color:rgba(0,184,184,.45);text-underline-offset:3px;}
+  .dcard-dot{width:8px;height:8px;flex:0 0 auto;background:var(--muted);}
+  .dcard-id{flex:1 1 auto;min-width:0;display:flex;align-items:baseline;gap:8px;overflow:hidden;}
+  .dcard-title{flex:0 0 auto;font-family:var(--font);font-weight:700;font-size:.92rem;color:#fff;text-transform:uppercase;letter-spacing:.02em;cursor:pointer;white-space:nowrap;text-decoration:underline;text-decoration-color:rgba(0,184,184,.45);text-underline-offset:3px;}
   .dcard-title:hover{color:var(--teal-lt);}
-  .dcard-sub{font-size:.7rem;color:var(--faint);text-transform:none;letter-spacing:0;font-weight:400;}
-  .dcard-chev{flex:0 0 auto;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s;margin-left:2px;}
+  .dcard-sub{flex:1 1 auto;min-width:0;font-size:.68rem;color:var(--faint);text-transform:none;letter-spacing:0;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .dcard-chev{flex:0 0 auto;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s;}
   .dcard.open .dcard-chev{transform:rotate(45deg);}
   .dcard-body{display:none;padding:2px 12px 12px;}
-  .dcard.open .dcard-body{display:block;}
+  /* Expanded (full-width) card lays its details out in a wrapping row so it USES the width on wide
+     screens and stacks on a phone. .dcard-edit (the camCard body wrapper) flattens into the same row. */
+  .dcard.open .dcard-body{display:flex;flex-wrap:wrap;gap:6px 30px;align-items:flex-start;}
+  .dcard.open .dcard-edit{display:flex;flex-wrap:wrap;gap:6px 30px;align-items:flex-start;flex:1 1 100%;}
+  .dcard.open .dcard-body>*,.dcard.open .dcard-edit>*{min-width:0;margin-top:0;}
+  .dcard.open .acts{flex:0 0 auto;}
   .dcard-body .acts{margin-top:4px;}
   .dcard.st-avail{border-left-color:var(--ok);} .dcard.st-avail .dcard-dot{background:var(--ok);}
   .dcard.st-ok{border-left-color:var(--ok);} .dcard.st-ok .dcard-dot{background:var(--ok);}
