@@ -111,11 +111,12 @@
   /* month calendar */
   /* The month title + weekday row stay pinned below the site nav so you never lose track of which
      column is which day while scrolling a long month (matters most on iPad landscape). */
-  .cal-stickyhead{position:sticky;top:var(--calnav-h,0);z-index:40;background:#060f0f;margin:26px 0 0;padding-top:2px;}
-  .calhead{display:flex;align-items:center;gap:10px;margin:0 0 10px;flex-wrap:wrap;}
-  .mtitle{font-family:var(--font);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:1rem;color:#fff;min-width:168px;}
-  .navb{font-family:var(--font);font-size:1rem;color:#eafeff;background:rgba(0,184,184,.14);border:1px solid var(--line);cursor:pointer;height:38px;width:38px;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;padding:0;}
-  .navb:hover{background:rgba(0,184,184,.28);}
+  .cal-stickyhead{position:sticky;top:var(--calnav-h,0);z-index:40;background:#060f0f;margin:14px 0 0;padding-top:2px;}
+  /* Month row: title centered over the calendar, flanked by bare arrows (no button box), tight. */
+  .calhead{display:flex;align-items:center;justify-content:center;gap:18px;margin:0 0 7px;}
+  .mtitle{font-family:var(--font);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:1rem;color:#fff;text-align:center;}
+  .navb{font-family:var(--font);font-size:1.5rem;line-height:1;color:var(--teal-lt);background:none;border:0;cursor:pointer;padding:4px 10px;display:inline-flex;align-items:center;justify-content:center;transition:color .15s;}
+  .navb:hover{color:#fff;}
   /* Month-row actions: Reserve a Camera (soft pulse to draw the eye) + QR, pushed to the right. */
   .cal-monthacts{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
   .cal-mbtn{height:38px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 18px;white-space:nowrap;cursor:pointer;text-decoration:none;border:0;
