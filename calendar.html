@@ -534,8 +534,8 @@
       kitMissTitle:'Missing from this kit', kitFull:'Complete kit. The camera, all three lenses, caps, filters, battery, charger, and memory card are in the bag.',
       kitMissBody:'This kit is missing: {items}. Please tell your teacher when you pick it up.',
       blockedTitle:'Reservation on hold',
-      blockedMsgN:'You are missing {c} assignments right now. Please turn in your missing work, then try again. You can reserve a camera when you have {n} or fewer missing.',
-      blockedMsg:'You are not eligible to reserve a camera right now because you have more than {n} missing assignments. Please turn in your missing work, then try again.'
+      blockedMsgN:'You have {c} missing assignments in your Photography class right now, so camera reservations are on hold for you. You can reserve again once you are at {n} or fewer missing, so please turn in at least {x} more. If you still need a camera for class, please speak with your instructor, Mr. Silva.',
+      blockedMsg:'Your camera reservation is on hold because you have more than {n} missing assignments in your Photography class. Please turn in your missing work, then try again. If you still need a camera for class, please speak with your instructor, Mr. Silva.'
     },
     es:{
       intro:'Mira qué cámaras están prestadas y cuándo se deben devolver antes de preguntar. Las cámaras 16, 17 y 18 son solo para Fotografía 2. Se actualiza automáticamente.',
@@ -586,8 +586,8 @@
       kitMissTitle:'Falta en este kit', kitFull:'Kit completo. La cámara, los tres lentes, las tapas, los filtros, la batería, el cargador y la tarjeta de memoria están en la bolsa.',
       kitMissBody:'A este kit le falta: {items}. Por favor avísale a tu maestro cuando lo recojas.',
       blockedTitle:'Reserva en espera',
-      blockedMsgN:'Ahora te faltan {c} tareas. Por favor entrega tu trabajo pendiente y vuelve a intentarlo. Podrás reservar una cámara cuando te falten {n} o menos.',
-      blockedMsg:'No puedes reservar una cámara en este momento porque tienes más de {n} tareas faltantes. Por favor entrega tu trabajo pendiente y vuelve a intentarlo.'
+      blockedMsgN:'Ahora tienes {c} tareas faltantes en tu clase de Fotografía, así que tus reservas de cámara están en espera. Podrás reservar de nuevo cuando tengas {n} o menos, así que por favor entrega al menos {x} más. Si aún necesitas una cámara para la clase, por favor habla con tu instructor, el Sr. Silva.',
+      blockedMsg:'Tu reserva de cámara está en espera porque tienes más de {n} tareas faltantes en tu clase de Fotografía. Por favor entrega tu trabajo pendiente y vuelve a intentarlo. Si aún necesitas una cámara para la clase, por favor habla con tu instructor, el Sr. Silva.'
     }
   };
   function t(k){ var v=(TR[LANG]&&TR[LANG][k]); return (v!=null)?v:(TR.en[k]!=null?TR.en[k]:k); }
@@ -1259,7 +1259,9 @@
         if(!j||!j.found){ msg.innerHTML='<span style="color:#ffb28a">'+t('idNotFound')+'</span>'; return; }
         // Missing-assignment gate (Silva Photo students only; the server decides, fails open).
         if(j.eligible===false){ var lim=(j.missing_limit!=null?j.missing_limit:6);
-          var _b=(j.missing_count!=null)?t('blockedMsgN').replace('{c}',j.missing_count).replace('{n}',lim):t('blockedMsg').replace('{n}',lim);
+          var _b;
+          if(j.missing_count!=null){ var _x=Math.max(1, j.missing_count-lim); _b=t('blockedMsgN').replace('{c}',j.missing_count).replace('{n}',lim).replace('{x}',_x); }
+          else { _b=t('blockedMsg').replace('{n}',lim); }
           msg.innerHTML='<div class="rv-block"><b>'+t('blockedTitle')+'</b>'+_b+'</div>'; return; }
         rvLookup={id:v,label:j.label,name:j.name||'',period:String(j.period||''),
                   student_cell:j.student_cell||'',parent_guardian:j.parent_guardian||'',parent_cell:j.parent_cell||''};
