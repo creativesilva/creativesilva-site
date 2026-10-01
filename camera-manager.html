@@ -991,10 +991,15 @@
     var a=assetOf(cam), oos=!!a.oos, nc=!!a.no_card, p2=P2.indexOf(cam)>=0;
     var pct=kitPct(cam);   // null when the camera has no standard kit yet (e.g. Cam 16-18)
     var chip=oos?'<span class="pill oos">Out of service</span>':(nc?'<span class="pill nocard">Card missing</span>':((pct!=null)?'<span class="kitpct '+(pct===100?'full':(pct>=70?'mid':'low'))+'">'+pct+'%</span>':'<span class="kitpct na">kit TBD</span>'));
-    var issues=a.issues||[], cond='';
-    if(issues.length) cond+='<div class="camlog-issues">&#9888; '+issues.map(esc).join(', ')+'</div>';
-    if(a.note) cond+='<div class="camlog-note">'+esc(a.note)+'</div>';
-    if(!oos && !nc && !issues.length && !a.note) cond='<div class="camlog-note empty">Good standing</div>';
+    // Expanded wide strip explains WHY the rating is below 100% (which kit items are missing), plus any
+    // card/issues/note/service. Edit it all in the pop-out window (title or Note).
+    var kmiss=isStdKit(cam)?kitMissing(cam):[], issues=a.issues||[], cond='';
+    if(oos) cond+='<div class="camlog-issues">&#9888; Out of service</div>';
+    if(kmiss.length) cond+='<div class="camlog-issues">&#9888; Kit missing ('+kmiss.length+' of '+KIT_STD.length+'): '+kmiss.map(esc).join(', ')+'</div>';
+    if(nc) cond+='<div class="camlog-issues">&#9888; Memory card missing. Install a fresh card to return it to rotation.</div>';
+    if(issues.length) cond+='<div class="camlog-issues">&#9888; Issues: '+issues.map(esc).join(', ')+'</div>';
+    if(a.note) cond+='<div class="camlog-note">Note: '+esc(a.note)+'</div>';
+    if(!cond) cond='<div class="camlog-note empty">'+(isStdKit(cam)?'Good standing &middot; kit complete (13 of 13)':'Good standing')+'</div>';
     var body=cond+'<div class="condcard-acts"><button class="btn sm ghost" data-camdetail="'+cam+'">Note</button>'+
       (nc?'<button class="btn sm" data-newcard="'+cam+'">Card in</button>':'')+
       '<button class="btn sm '+(oos?'':'danger')+'" data-oos="'+cam+'" data-oosval="'+(oos?'0':'1')+'">'+(oos?'In service':'Out of service')+'</button></div>';
@@ -1008,7 +1013,7 @@
     var a=assetOf(e.key), av=equipAvail(e.key), down=av.down, total=av.total, working=Math.max(0,total-down);
     var kmiss=gearKitMissing(e.key), issues=a.issues||[], cond='';
     if(down>0) cond+='<div class="camlog-issues">&#9888; '+down+' of '+total+' down for repair</div>';
-    if(kmiss.length) cond+='<div class="camlog-issues">&#9888; Kit missing: '+kmiss.map(esc).join(', ')+'</div>';
+    if(kmiss.length) cond+='<div class="camlog-issues">&#9888; Kit missing ('+kmiss.length+' of '+gearKitItems(e.key).length+'): '+kmiss.map(esc).join(', ')+'</div>';
     if(issues.length) cond+='<div class="camlog-issues">&#9888; '+issues.map(esc).join(', ')+'</div>';
     if(a.note) cond+='<div class="camlog-note">'+esc(a.note)+'</div>';
     if(!down && !kmiss.length && !issues.length && !a.note) cond='<div class="camlog-note empty">Good standing</div>';
@@ -1331,28 +1336,38 @@
   function cardHoursLeft(held){ if(!held) return 0; var t=new Date(held).getTime(); if(isNaN(t)) return 0; return Math.round((t+24*3600*1000-Date.now())/3600000); }
   function fmtHeld(iso){ if(!iso) return ''; var d=new Date(iso); if(isNaN(d.getTime())) return iso; return (d.getMonth()+1)+'/'+d.getDate()+' '+d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}); }
   function walletSlotsHtml(){
-    var cards=DATA.cards||{}, out='';
-    for(var i=1;i<=18;i++){
-      var c=cards[String(i)];
-      // Empty slot: click to hold a card ad-hoc (type the student ID, starts the 24h clock).
-      if(!c){ out+='<button type="button" class="wslot wslot-add" data-cardadd="'+i+'"><div class="wslot-n">Slot '+i+'</div><div class="wslot-empty">Empty</div><div class="wslot-addhint">+ Hold a card</div></button>'; continue; }
-      var rem=cardHoursLeft(c.held_at), expired=(rem<=0);
-      var who=esc(c.student_name || (c.student_id?('ID '+c.student_id):'Unknown'));
-      var meta=(c.from_camera?('from '+esc(c.from_camera)+' &middot; '):'')+'held '+fmtHeld(c.held_at);
-      var body='<div class="wslot-n">Slot '+i+'</div>'+
-        '<button type="button" class="wslot-who wslot-wholink" data-cardinfo="'+i+'" title="View contact, period &amp; teacher">'+who+'</button>'+
-        '<div class="wslot-meta">'+meta+'</div>'+
-        (c.note?'<div class="wslot-meta">'+esc(c.note)+'</div>':'');
-      if(expired){
-        body+='<div class="wslot-format">&#9888; Format card</div>'+
-              '<div class="wslot-fmtsub">Pull &amp; format it, or reach out to the student.</div>';
-      } else {
-        body+='<div class="wslot-count ok">'+rem+'h left to offload</div>';
-      }
-      body+='<button class="btn sm" data-cardreturn="'+i+'">Card returned</button>';
-      out+='<div class="wslot filled'+(expired?' expired':'')+'">'+body+'</div>';
-    }
+    var cards=DATA.cards||{}, filled=[], empty=[];
+    for(var i=1;i<=18;i++){ if(cards[String(i)]) filled.push(i); else empty.push(i); }
+    // Sort held cards by PERIOD so Silva can offload / contact students period by period (unknown last).
+    // Each card still shows its physical slot number, so the card is easy to find in the wallet.
+    filled.sort(function(x,y){
+      var px=parseInt(cards[String(x)].period,10), py=parseInt(cards[String(y)].period,10);
+      var ax=isNaN(px)?999:px, ay=isNaN(py)?999:py;
+      return ax!==ay?ax-ay:x-y;
+    });
+    var out='';
+    filled.forEach(function(i){ out+=walletCardHtml(i, cards[String(i)]); });
+    // Empty slots after, in slot order. Click to hold a card ad-hoc (type the student ID, starts the 24h clock).
+    empty.forEach(function(i){ out+='<button type="button" class="wslot wslot-add" data-cardadd="'+i+'"><div class="wslot-n">Slot '+i+'</div><div class="wslot-empty">Empty</div><div class="wslot-addhint">+ Hold a card</div></button>'; });
     return out;
+  }
+  function walletCardHtml(i, c){
+    var rem=cardHoursLeft(c.held_at), expired=(rem<=0);
+    var who=esc(c.student_name || (c.student_id?('ID '+c.student_id):'Unknown'));
+    var per=(c.period!=null && String(c.period).trim()!=='')?(' &middot; Per '+esc(String(c.period))):'';
+    var meta=(c.from_camera?('from '+esc(c.from_camera)+' &middot; '):'')+'held '+fmtHeld(c.held_at);
+    var body='<div class="wslot-n">Slot '+i+per+'</div>'+
+      '<button type="button" class="wslot-who wslot-wholink" data-cardinfo="'+i+'" title="View contact, period &amp; teacher">'+who+'</button>'+
+      '<div class="wslot-meta">'+meta+'</div>'+
+      (c.note?'<div class="wslot-meta">'+esc(c.note)+'</div>':'');
+    if(expired){
+      body+='<div class="wslot-format">&#9888; Format card</div>'+
+            '<div class="wslot-fmtsub">Pull &amp; format it, or reach out to the student.</div>';
+    } else {
+      body+='<div class="wslot-count ok">'+rem+'h left to offload</div>';
+    }
+    body+='<button class="btn sm" data-cardreturn="'+i+'">Card returned</button>';
+    return '<div class="wslot filled'+(expired?' expired':'')+'">'+body+'</div>';
   }
   function cardReturn(slot, btn){
     if(btn) btn.disabled=true;
