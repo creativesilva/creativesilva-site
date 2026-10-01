@@ -679,6 +679,7 @@
   }
   var view=new Date(); view.setDate(1);
   var DATA={cameras:[],checkouts:[]};
+  var _calSig=null, _boardSig=null;   // last-rendered content signatures: skip rebuilds that would only re-flicker the CS-logo watermark
   // Teacher context: the camera key (same-origin sessionStorage set by the console, or pushed in
   // by the parent frame). When present we load FULL detail (names/phones) + enable check-in actions.
   // A public visitor never has a key, so they only ever see the PII-free calendar endpoint.
@@ -773,6 +774,13 @@
     var active=activeByCam(); var cams=DATA.cameras||[];
     var outCams=cams.filter(function(c){ return active[c]; });
     outn.textContent=(cams.length-outCams.length); totn.textContent=cams.length;
+    // Only rebuild the (frosted-glass) board cards when their inputs actually changed. Rebuilding
+    // every 60s poll re-composites the blur over the fixed CS-logo watermark = a visible flicker.
+    var bsig=SEL_DAY
+      ? 'd|'+SEL_DAY+'|'+LANG+'|'+checkoutsOnDay(SEL_DAY).map(function(o){return o.camera+':'+statusOf(o)+':'+(o.due||'');}).sort().join(',')
+      : 'n|'+LANG+'|'+todayISO()+'|'+cams.length+'|'+outCams.map(function(c){var o=active[c];return c+':'+statusOf(o)+':'+(o.due||'');}).join(',');
+    if(bsig===_boardSig && board.children.length) return;
+    _boardSig=bsig;
     var bh=document.getElementById('boardH');
     board.innerHTML='';
     if(SEL_DAY){
@@ -889,6 +897,13 @@
   // Google-style month: each week is a band; each active checkout is a bar spanning its out->return days.
   function renderCal(){
     mtitle.textContent=MONTHS_L[LANG][view.getMonth()]+' '+view.getFullYear();
+    // Skip the full grid rebuild when nothing that affects it changed, so a quiet 60s refresh does
+    // not re-composite the frosted day cells over the fixed CS-logo watermark (the background flicker).
+    var csig=JSON.stringify({m:view.getFullYear()+'-'+view.getMonth(),lang:LANG,sel:SEL_DAY,auth:AUTHED,today:todayISO(),
+      ev:(DATA.checkouts||[]).filter(function(c){return c.kind!=='equipment';}).map(function(c){return c.camera+'|'+c.out+'|'+c.due+'|'+(c.returned_date||'')+'|'+statusOf(c);}).sort(),
+      bo:(DATA.blackouts||[]).slice().sort()});
+    if(csig===_calSig && grid.children.length) return;
+    _calSig=csig;
     var first=new Date(view.getFullYear(),view.getMonth(),1);
     var startD=new Date(first); startD.setDate(1-first.getDay());
     var startISO=isoD(startD), curMonth=view.getMonth();
