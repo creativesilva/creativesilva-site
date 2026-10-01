@@ -1429,6 +1429,13 @@
   // When embedded in the Teacher Console, tell the parent our height so the iframe fits with no scrollbar.
   function postHeight(){ if(window.parent===window) return; try{ parent.postMessage({calH:document.body.scrollHeight}, '*'); }catch(e){} }
   window.addEventListener('resize',postHeight);
+  // Report height on ANY content change (tapping a day expands the view, the reserve banner, a month
+  // change, a data refresh) so the embedding console iframe grows to fit and never shows an inner scroll.
+  if(window.parent!==window){
+    if(window.ResizeObserver){ try{ new ResizeObserver(postHeight).observe(document.body); }catch(e){} }
+    window.addEventListener('load',postHeight);
+    setTimeout(postHeight,300); setTimeout(postHeight,1200);
+  }
   document.getElementById('prev').addEventListener('click',function(){ view.setMonth(view.getMonth()-1); selectDay(null); renderCal(); });
   document.getElementById('next').addEventListener('click',function(){ view.setMonth(view.getMonth()+1); selectDay(null); renderCal(); });
   document.getElementById('dm-x').addEventListener('click',closeDayModal);
