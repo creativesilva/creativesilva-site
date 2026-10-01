@@ -63,6 +63,14 @@ Chris has had to correct the same quality lapses repeatedly. Do NOT make him be 
 
 This standard is itself LOCKED (Chris, 2026-10-01): maintain it without being reminded. See [[feedback-self-audit-design-standard]].
 
+### Pop-out windows: float above everything, never clip, one unified window per item (LOCKED 2026-10-01)
+
+Applies to every modal / pop-out across the platform (teacher console, calendar, tools):
+
+- **Float above everything, every time.** A pop-out sits above all page chrome, including the sticky site nav. Bug that triggered this: the nav (`z-index:100`) painted over the modal's title + close, so the header looked "blocked." Modals now sit at `z-index:130` (below only `silva-confirm` 400 and toast 420). Any new overlay must out-rank the nav.
+- **Never clip.** The panel is capped to the viewport (`max-height:calc(100vh - 40px)`) as a flex column: the header (title + close) is `flex:0 0 auto` and always visible, and only the body (`flex:1 1 auto; overflow-y:auto; min-height:0`) scrolls. A window must never render with its header or close button off-screen or covered, at any window height.
+- **One unified window per item, with every action in it.** Each piece of equipment has ONE pop-out that carries its COMPLETE action set, so the user never menu-dives or navigates elsewhere to act on it: check in / mark returned, mark picked up, add/resolve a condition issue, standing note, toggle kit items missing (with the live %), out-of-service, and history, all in the same window. The same window opens from everywhere that item appears. Function, ease of use, and intuitiveness come before everything else: less is more. See [[camera-manager-catalog-accordion]].
+
 ## Hard Rules (Apply Project-Wide, Not Just Canvas Builds)
 
 These are non-negotiable. The user has flagged em dashes as a hard ban via global memory; the others come from accumulated feedback during builds.
