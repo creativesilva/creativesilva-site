@@ -2,8 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Equipment Manager | Pioneer Valley Photography</title>
+<!-- Home-screen web app: launch chromeless (no Safari bars) when added to the iPad Home Screen. -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Equipment" />
 <script>window.SILVA_HIDE_CATALOG=true;window.SILVA_CATALOG_RETURN='/curriculum.html';/* teacher tool: no catalog dropdown, but a plain Return-to-catalog link (curriculum.html prompts for its PIN). Public calendar.html does NOT set this. */</script>
 <meta name="description" content="Teacher back-end for the Pioneer Valley camera checkout: reserve, mark picked up, mark returned." />
 <meta name="robots" content="noindex,nofollow" />
@@ -35,6 +40,8 @@
   .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;filter:brightness(0) invert(1);}
 
   .wrap{max-width:1200px;margin:0 auto;padding:24px 32px 70px;}
+  /* Home-screen web app: keep the sticky nav clear of the iPad status bar (0 in a normal browser tab). */
+  .silva-nav{padding-top:env(safe-area-inset-top);}
   .intro{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px;}
   .sub{color:var(--muted);font-size:.95rem;margin:0;flex:1 1 320px;}
   /* Top-level buttons share ONE pixel height (38px); in-card .btn.sm share a smaller one (32px). */
@@ -310,7 +317,19 @@
   .camtile.cs-overdue{border-left-color:var(--red);border-color:rgba(224,64,58,.5);animation:cardFlash 1.5s ease-in-out infinite;} .camtile.cs-overdue .camtile-dot{background:var(--red);} .camtile.cs-overdue .camtile-status{color:#ff9a8a;}
   .camtile.cs-oos{opacity:.5;border-left-color:var(--grayed);} .camtile.cs-oos .camtile-dot{background:var(--grayed);}
   @media (prefers-reduced-motion:reduce){ .camtile.cs-overdue{animation:none;box-shadow:0 0 0 2px rgba(224,64,58,.32);} }
-  .eqout-h{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:12px 0 7px;}
+  /* Per-unit gear tiles: a camera tile with a small thumbnail on the left, grouped by type. */
+  .gtile{flex-direction:row;align-items:stretch;gap:10px;}
+  .gtile-main{display:flex;flex-direction:column;gap:5px;flex:1 1 auto;min-width:0;}
+  .gthumb{flex:0 0 auto;width:44px;height:44px;display:block;overflow:hidden;background:rgba(0,0,0,.3);border:1px solid var(--line-soft);}
+  .gthumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .gthumb-ph{position:relative;background:linear-gradient(135deg,rgba(0,184,184,.14),rgba(0,0,0,.3));}
+  .gthumb-ph::after{content:"";position:absolute;inset:10px;border:2px solid rgba(0,184,184,.5);background:radial-gradient(circle at 50% 46%, rgba(0,184,184,.55) 0 2.5px, transparent 3.5px);}
+  .geargroup{margin:0 0 12px;}
+  .geargroup-h{display:flex;align-items:center;gap:8px;font-family:var(--font);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-lt);margin:4px 0 7px;padding-left:8px;border-left:3px solid var(--teal);}
+  .geargroup-n{font-size:.56rem;color:var(--faint);border:1px solid var(--line-soft);padding:0 6px;}
+  .ed-geargrp{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-lt);margin:10px 0 4px;width:100%;}
+  .cd-thumbwrap{margin:0 0 12px;}
+  .cd-thumbwrap .gthumb{width:84px;height:84px;}
   .cd-sub{font-size:.82rem;color:var(--muted);margin:-2px 0 14px;}
   .condcard{background:rgba(0,0,0,.30);border:1px solid var(--line-soft);border-left:4px solid var(--ok);padding:9px 10px;display:flex;flex-direction:column;gap:5px;}
   .condcard.oos{border-left-color:var(--red);background:rgba(224,64,58,.07);}
@@ -919,17 +938,47 @@
     if(par.length) bits.push('<b>Parent:</b> '+par.join(' '));
     return bits.length?'<div class="contact">'+bits.join('<br>')+'</div>':'';
   }
-  // Inventory of add-on gear (pools by quantity). Real product names per Chris.
-  var EQUIPMENT=[
-    {key:'tripod',label:'K&F Concept Tripod',short:'Tripod',total:5,kit:['Quick-release plate','Carry bag']},
-    {key:'wide',label:'Canon RF-S 10-18mm ultra-wide',short:'Ultra-Wide',total:2,kit:['Front lens cap','Rear lens cap','UV filter']},
-    {key:'zoom',label:'Canon RF 100-400mm ultra-zoom',short:'Ultra-Zoom',total:2,kit:['Front lens cap','Rear lens cap','UV filter']},
-    {key:'speedlite',label:'Canon Speedlite EL-10 flash',short:'Speedlite',total:5,kit:['Soft case','Canon LP-EL battery']}
-  ];
-  function equipDef(key){ for(var i=0;i<EQUIPMENT.length;i++){ if(EQUIPMENT[i].key===key) return EQUIPMENT[i]; } return null; }
-  function gearKitItems(key){ var d=equipDef(key); return (d&&d.kit)||[]; }
-  function gearKitMissing(key){ var items=gearKitItems(key); return ((assetOf(key).gkit)||[]).filter(function(x){ return items.indexOf(x)>=0; }); }
-  function gearKitPct(key){ var items=gearKitItems(key); if(!items.length) return null; var m=gearKitMissing(key).length; return Math.round((items.length-m)/items.length*100); }
+  // PER-UNIT add-on gear: every unit is its own reservable asset like a camera. The unit registry,
+  // kits, and type labels come from the live feed (DATA.equipment_units / equipment_types), so the
+  // backend is the single source of truth.
+  function gearUnits(){ return DATA.equipment_units || {}; }               // {id:{type,label,pool,kit}}
+  function gearTypes(){ return DATA.equipment_types || {}; }               // {type:{label,unit}}
+  function gearPoolIds(){ return (DATA.equipment_pools||{}).silva || []; } // this console = Silva's view
+  function gearUnit(id){ return gearUnits()[id] || null; }
+  function gearLabel(id){ var u=gearUnit(id); return u?u.label:id; }
+  function gearKitItems(id){ var u=gearUnit(id); return (u&&u.kit)||[]; }
+  function gearKitMissing(id){ var items=gearKitItems(id); return ((assetOf(id).kit)||[]).filter(function(x){ return items.indexOf(x)>=0; }); }
+  function gearKitPct(id){ var items=gearKitItems(id); if(!items.length) return null; var m=gearKitMissing(id).length; return Math.round((items.length-m)/items.length*100); }
+  // One square thumbnail per TYPE, reused across that type's units. Empty until Chris drops the images;
+  // a clean placeholder shows until then (never a broken image). Square source, 400x400.
+  var GEAR_THUMB={ wide:'', zoom:'', speedlite:'', tripod:'', reflector:'', mankin_tripod:'', apple_pencil:'' };
+  function gearThumb(type){ var u=GEAR_THUMB[type]||'';
+    return u ? '<span class="gthumb"><img src="'+esc(u)+'" alt=""></span>' : '<span class="gthumb gthumb-ph" aria-hidden="true"></span>'; }
+  // A gear unit's live state + the one active (non-returned) record on it, mirroring the camera helpers.
+  function gearActiveFor(id){ var r=(DATA.checkouts||[]).filter(function(c){ return c.kind==='equipment' && c.item===id && statusOf(c)!=='returned'; }); return r[0]||null; }
+  function gearState(id){ var a=assetOf(id); if(a.oos) return 'oos'; var c=gearActiveFor(id); if(!c) return 'avail';
+    var st=statusOf(c); if(st==='out') return isOverdue(c)?'overdue':'out';
+    if(st==='reserved'){ var t=todayISO(); return (c.out && c.out<=t && (c.due||c.out)>=t)?'resv':'avail'; }
+    return 'avail'; }
+  function gearStateLabel(id,s){ if(s==='oos') return 'Out of service';
+    return {avail:'Available',resv:'Reserved today',out:'Checked out',overdue:'Overdue'}[s]||''; }
+  function gearTile(id){
+    var s=gearState(id), a=assetOf(id), c=gearActiveFor(id), u=gearUnit(id)||{};
+    var p=gearKitPct(id), pcls=(p==null?'na':(p>=100?'':(p>=70?'mid':'low')));
+    var sub='';
+    if(s==='out'||s==='overdue') sub=esc(nameOf(c))+' &middot; due '+fmt(c.due);
+    else if(s==='resv') sub=esc(nameOf(c))+' &middot; pickup '+fmt(c.out);
+    else if(s==='oos') sub='Marked out of service';
+    else { var fl=[]; if(c && statusOf(c)==='reserved' && c.out) fl.push('reserved '+fmt(c.out)); if(a.issues&&a.issues.length) fl.push(a.issues.length+' open issue'+(a.issues.length>1?'s':'')); sub=fl.length?fl.join(' &middot; '):'In the storage room'; }
+    return '<button type="button" class="camtile gtile cs-'+s+'" data-geardetail="'+esc(id)+'">'+
+      gearThumb(u.type)+
+      '<span class="gtile-main">'+
+        '<span class="camtile-top"><span class="camtile-dot"></span><span class="camtile-n">'+esc(u.label||id)+'</span><span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span></span>'+
+        '<span class="camtile-status">'+gearStateLabel(id,s)+'</span>'+
+        '<span class="camtile-sub">'+sub+'</span>'+
+      '</span>'+
+    '</button>';
+  }
   // 3-state card collapse memory: default COLLAPSED so the board is calm; expanded state persists per card.
   function cardOpen(uid){ try{ return sessionStorage.getItem('dcard:'+uid)==='1'; }catch(e){ return false; } }
   function setCardOpen(uid,o){ try{ sessionStorage.setItem('dcard:'+uid,o?'1':'0'); }catch(e){} }
@@ -1029,37 +1078,9 @@
     return shell3(uid,sc,title,sub,pill,body);
   }
   // ---- Add-on gear: each unit is its OWN record (kind='equipment'), checked in + noted on its own.
-  var EQUIP_LABEL={}; EQUIPMENT.forEach(function(e){ EQUIP_LABEL[e.key]=e.label; });
+  // All equipment checkout records (any unit). Per-unit labels come from gearLabel(id); each unit now
+  // shows as its own colored tile (gearTile) in the board grid, so the old pooled cards are retired.
   function equipRecs(){ return (DATA.checkouts||[]).filter(function(c){ return c.kind==='equipment'; }); }
-  function equipActive(){ return equipRecs().filter(function(c){ return statusOf(c)!=='returned'; }); }
-  function equipAvail(key){ var total=0; for(var i=0;i<EQUIPMENT.length;i++){ if(EQUIPMENT[i].key===key) total=EQUIPMENT[i].total; }
-    var out=equipRecs().filter(function(c){ return c.item===key && statusOf(c)!=='returned'; }).length;
-    var down=(assetOf(key).down)||0;   // units out for repair -> not available to check out
-    return {out:out,total:total,down:down,avail:Math.max(0,total-out-down)}; }
-  function byItem(a,b){ return (EQUIP_LABEL[a.item]||a.item||'').localeCompare(EQUIP_LABEL[b.item]||b.item||''); }
-  function equipCard(c){
-    var def=equipDef(c.item), label=EQUIP_LABEL[c.item]||c.item||'Equipment';
-    var title='<span class="dcard-title" data-geardetail="'+esc(c.item||'')+'" title="Open kit + details">'+esc(((def&&def.short)||label).toUpperCase())+'</span>';
-    var uid='eq:'+c.id;
-    if(pendingReturns[c.id]){
-      var bodyR='<div class="who">'+esc(nameOf(c))+'</div>'+
-        '<div class="acts"><button class="btn sm undo" data-undo="'+c.id+'">Undo check-in</button></div>'+
-        '<div class="returning-msg">Back in the pool in <b data-count="'+c.id+'">15</b>s.</div>';
-      return shell3(uid,'st-returning',title,esc(label),'<span class="pill out">Returning</span>',bodyR);
-    }
-    var st=statusOf(c), od=isOverdue(c), pend=(!!c.pending && st!=='returned');
-    var sc=pend?'st-pending':(od?'st-overdue':'st-'+st);
-    var pill=pend?'<span class="pill pending">Pending</span>':(od?'<span class="pill overdue">Overdue</span>':(st==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill out">Checked out</span>'));
-    var linkedCam=(function(){ var p=c.group?findRec(c.group):null; return (p&&p.camera)?p.camera:''; })();
-    var note=c.note?'<div class="eqnote'+(pend?' pend':'')+'"><b>'+(pend?'Awaiting':'Note')+'</b> '+esc(c.note)+'</div>':'';
-    var body='<div class="who">'+esc(nameOf(c))+'</div>'+
-      '<div class="acts"><button class="btn sm warn" data-return="'+c.id+'">'+(pend?'Resolve / check in':'Check in')+'</button>'+
-        '<button class="btn sm ghost" data-geardetail="'+esc(c.item||'')+'">Note</button></div>'+
-      '<div class="meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+'<span class="co">'+esc(c.course||'')+'</span>'+(linkedCam?(' &middot; '+esc(linkedCam)):'')+'</div>'+
-      '<div class="meta dates">Out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</div>'+
-      note+contactLine(c);
-    return shell3(uid,sc,title,esc(label),pill,body);
-  }
 
   // EQUIPMENT CONDITION CARD (one per camera): compact, management-only. Shows the camera number,
   // kit completion %, condition (missing card / open issues / standing note) and in/out of service.
@@ -1082,25 +1103,6 @@
       '<button class="btn sm '+(oos?'':'danger')+'" data-oos="'+cam+'" data-oosval="'+(oos?'0':'1')+'">'+(oos?'In service':'Out of service')+'</button></div>';
     var title='<span class="dcard-title camnum" data-camdetail="'+cam+'" title="Open kit + condition">'+cam+'</span>';
     return shell3('cl:'+cam, oos?'st-oos':(nc?'st-nocard':'st-ok'), title, p2?'Photo 2 only':'', chip, body);
-  }
-  // EQUIPMENT CONDITION CARD (one per pooled gear line: tripods, ultra-wide + ultra-zoom lenses,
-  // speedlites). Shows units available / total, condition note + open issues, and in/out of service.
-  // Gear is pooled by quantity, so the badge is the physical unit count; OOS flags the whole line.
-  function gearCondCard(e){
-    var a=assetOf(e.key), av=equipAvail(e.key), down=av.down, total=av.total, working=Math.max(0,total-down);
-    var kmiss=gearKitMissing(e.key), issues=a.issues||[], cond='';
-    if(down>0) cond+='<div class="camlog-issues">&#9888; '+down+' of '+total+' down for repair</div>';
-    if(kmiss.length) cond+='<div class="camlog-issues">&#9888; Kit missing ('+kmiss.length+' of '+gearKitItems(e.key).length+'): '+kmiss.map(esc).join(', ')+'</div>';
-    if(issues.length) cond+='<div class="camlog-issues">&#9888; '+issues.map(esc).join(', ')+'</div>';
-    if(a.note) cond+='<div class="camlog-note">'+esc(a.note)+'</div>';
-    if(!down && !kmiss.length && !issues.length && !a.note) cond='<div class="camlog-note empty">Good standing</div>';
-    var badge=(working===total?'full':(working>0?'mid':'low'));
-    var chip='<span class="kitpct '+badge+'" title="'+working+' working of '+total+'">'+working+'/'+total+'</span>';
-    var body=cond+'<div class="condcard-acts"><button class="btn sm ghost" data-geardetail="'+esc(e.key)+'">Note</button>'+
-      (down>0?'<button class="btn sm" data-gearrestore="'+esc(e.key)+'">Restore 1</button>':'')+
-      (working>0?'<button class="btn sm danger" data-geardown="'+esc(e.key)+'">Mark 1 down</button>':'')+'</div>';
-    var title='<span class="dcard-title" data-geardetail="'+esc(e.key)+'" title="Open kit + details">'+esc((e.short||e.label).toUpperCase())+'</span>';
-    return shell3('gc:'+e.key, down>=total?'st-oos':'st-ok', title, esc(e.label), chip, body);
   }
   // Sort the consolidated camera grid. Persisted so it sticks across the 7s poll + reloads.
   var CAM_SORT='num'; try{ CAM_SORT=sessionStorage.getItem('camsort')||'num'; }catch(e){}
@@ -1136,14 +1138,19 @@
     // overdue + pulsing, gray out of service / card missing). Tap a tile -> the full camera window.
     // Replaces the old separate Condition + Available + Checked-out + Reserved lists.
     var sec='<div class="camgrid">'+sortedCams().map(camTile).join('')+'</div>';
-    // ADDITIONAL EQUIPMENT keeps its own section: gear condition tiles (tap -> gear window) + what is out.
-    var eopen=secOpen('equip'), eActive=equipActive().sort(byItem);
+    // ADDITIONAL EQUIPMENT: each unit is its OWN tile (like a camera), grouped by type. Tap -> unit window.
+    var eopen=secOpen('equip'), gpool=gearPoolIds(), gtypes=gearTypes();
+    var gByType={}; gpool.forEach(function(id){ var u=gearUnit(id); if(!u) return; (gByType[u.type]=gByType[u.type]||[]).push(id); });
+    var gOrder=['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil'];
+    var gearHtml='';
+    gOrder.forEach(function(t){ var ids=gByType[t]; if(!ids||!ids.length) return;
+      var tl=(gtypes[t]&&gtypes[t].label)||t;
+      gearHtml+='<div class="geargroup"><div class="geargroup-h">'+esc(tl)+'<span class="geargroup-n">'+ids.length+'</span></div>'+
+        '<div class="camgrid">'+ids.map(gearTile).join('')+'</div></div>';
+    });
     sec+='<div class="csec sec-equip'+(eopen?' open':'')+'">'+
-      '<button class="csec-head" type="button" data-sectoggle="equip"><span class="csec-dot equip"></span>Additional equipment <span class="csec-n">'+eActive.length+' out</span><span class="csec-chev"></span></button>'+
-      '<div class="csec-body">'+
-        '<div class="dcard-list">'+EQUIPMENT.map(gearCondCard).join('')+'</div>'+
-        (eActive.length?('<div class="eqout-h">Checked out</div><div class="dcard-list">'+eActive.map(equipCard).join('')+'</div>'):'')+
-      '</div>'+
+      '<button class="csec-head" type="button" data-sectoggle="equip"><span class="csec-dot equip"></span>Additional equipment <span class="csec-n">'+gpool.length+' units</span><span class="csec-chev"></span></button>'+
+      '<div class="csec-body">'+(gearHtml||'<div class="foot">No equipment units yet.</div>')+'</div>'+
     '</div>';
     // MEMORY CARD WALLET: cards a student left to offload later, each in a numbered slot with a 24h clock.
     var wcards=DATA.cards||{}, wheld=Object.keys(wcards).length, wopen=secOpen('wallet');
@@ -1174,7 +1181,7 @@
     var ret=allRet.filter(function(c){ return (c.returned_date||c.created||'')>=cutoff4w; });
     var hn=document.getElementById('histn'); if(hn) hn.textContent='('+ret.length+' in last 4 weeks · '+allRet.length+' total)';
     var hh=document.getElementById('hist'); if(hh) hh.innerHTML=ret.length?ret.map(function(c){
-      var hc=c.camera?('<span class="hc camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span>'):('<span class="hc">'+esc(EQUIP_LABEL[c.item]||c.item||'Item')+'</span>');
+      var hc=c.camera?('<span class="hc camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span>'):('<span class="hc">'+esc(gearLabel(c.item))+'</span>');
       return '<div class="hrow">'+hc+' &middot; '+esc(nameOf(c))+
              (c.note?' &middot; <span class="hnote">'+esc(c.note)+'</span>':'')+
              '<div class="hre">Out '+fmt(c.out)+' &rarr; returned '+fmt(c.returned_date)+'</div></div>';
@@ -1199,8 +1206,6 @@
     b.querySelectorAll('[data-oos]').forEach(function(el){ el.onclick=function(){ setOOS(el.getAttribute('data-oos'), el.getAttribute('data-oosval')==='1', el); }; });
     b.querySelectorAll('[data-newcard]').forEach(function(el){ el.onclick=function(){ setNoCard(el.getAttribute('data-newcard'), false, el); }; });
     // Pooled gear: mark one unit out for repair (down+1) / bring one back (down-1). Availability follows.
-    b.querySelectorAll('[data-geardown]').forEach(function(el){ el.onclick=function(){ var k=el.getAttribute('data-geardown'); el.disabled=true; saveAsset(k,{down:((assetOf(k).down)||0)+1}); }; });
-    b.querySelectorAll('[data-gearrestore]').forEach(function(el){ el.onclick=function(){ var k=el.getAttribute('data-gearrestore'); el.disabled=true; saveAsset(k,{down:Math.max(0,((assetOf(k).down)||0)-1)}); }; });
     b.querySelectorAll('[data-cardreturn]').forEach(function(el){ el.onclick=function(){ silvaConfirm('Card returned to the student and offloaded? This clears the slot.',{okLabel:'Clear slot',cancelLabel:'Cancel'}).then(function(ok){ if(ok) cardReturn(el.getAttribute('data-cardreturn'), el); }); }; });
     b.querySelectorAll('[data-cardadd]').forEach(function(el){ el.onclick=function(){ openAdHocCard(+el.getAttribute('data-cardadd')); }; });
     b.querySelectorAll('[data-cardinfo]').forEach(function(el){ el.onclick=function(){ openCardInfo(el.getAttribute('data-cardinfo')); }; });
@@ -1264,7 +1269,8 @@
       if(r.status===401){ showGate('That password did not work.'); throw new Error('401'); }
       return r.json();
     }).then(function(d){
-      DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{}};
+      DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{},
+            pools:d.pools||{},equipment_pools:d.equipment_pools||{},equipment_units:d.equipment_units||{},equipment_types:d.equipment_types||{}};
       renderBoard(); markSync(true);
     }).catch(function(e){ if(String(e.message)!=='401') markSync(false); });
   }
@@ -1290,7 +1296,7 @@
   function findRec(id){ for(var i=0;i<DATA.checkouts.length;i++){ if(DATA.checkouts[i].id===id) return DATA.checkouts[i]; } return null; }
   function openNote(id){
     var c=findRec(id); if(!c) return; noteId=id; noteAsset=null;
-    var label=c.kind==='equipment'?(EQUIP_LABEL[c.item]||c.item||'Equipment'):(c.camera||'Camera');
+    var label=c.kind==='equipment'?gearLabel(c.item):(c.camera||'Camera');
     document.getElementById('noteTitle').textContent='Note · '+label;
     document.getElementById('noteText').value=c.note||'';
     document.getElementById('notemodal').classList.add('open');
@@ -1298,7 +1304,7 @@
   }
   function openAssetNote(cam){
     noteAsset=cam; noteId=null;
-    document.getElementById('noteTitle').textContent=(EQUIP_LABEL[cam]?('Note · '+EQUIP_LABEL[cam]):('Camera note · '+cam));
+    document.getElementById('noteTitle').textContent=(gearUnit(cam)?('Note · '+gearLabel(cam)):('Camera note · '+cam));
     document.getElementById('noteText').value=(assetOf(cam).note)||'';
     document.getElementById('notemodal').classList.add('open');
     setTimeout(function(){ document.getElementById('noteText').focus(); },50);
@@ -1340,9 +1346,11 @@
   var retId=null, retEquip=[];
   // Item-aware quick reasons for a piece of gear that did not fully come back.
   function retReasons(item){
-    if(item==='tripod') return ['Forgot at home','Missing mounting plate','Damaged'];
-    if(item==='wide'||item==='zoom') return ['Forgot at home','Missing lens cap','Damaged'];
-    if(item==='speedlite') return ['Forgot at home','Missing battery','Damaged'];
+    var t=(gearUnit(item)||{}).type || String(item).split('-')[0];
+    if(t==='tripod'||t==='mankin_tripod') return ['Forgot at home','Missing mounting plate','Damaged'];
+    if(t==='wide'||t==='zoom') return ['Forgot at home','Missing lens cap','Damaged'];
+    if(t==='speedlite') return ['Forgot at home','Missing battery','Damaged'];
+    if(t==='reflector') return ['Forgot at home','Missing zip surface','Missing zip case','Damaged'];
     return ['Forgot at home','Missing part','Damaged'];
   }
   function openReturnChecklist(id){
@@ -1355,7 +1363,7 @@
     var eq=document.getElementById('retequip');
     if(retEquip.length){
       eq.innerHTML='<div class="reteq-h">Additional gear with this kit &middot; check each piece back in</div>'+retEquip.map(function(e){
-        var label=EQUIP_LABEL[e.item]||e.item||'Gear';
+        var label=gearLabel(e.item);
         var chips=retReasons(e.item).map(function(r){ return '<button type="button" class="reteq-chip" data-reason="'+esc(r)+'">'+esc(r)+'</button>'; }).join('');
         return '<div class="reteq" data-eqid="'+esc(e.id)+'">'+
           '<div class="reteq-top"><span class="reteq-name">'+esc(label)+'</span>'+
@@ -1583,7 +1591,7 @@
     (DATA.checkouts||[]).slice().sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; }).forEach(function(c){
       if(from||to){ var dts=[c.out,c.due,c.returned_date,c.picked_up_date].filter(Boolean); if(!dts.some(function(d){ return inRange(d, from, to); })) return; }
       rows.push([ c.kind==='equipment'?'Equipment':'Camera',
-        c.kind==='equipment'?(EQUIP_LABEL[c.item]||c.item||''):(c.camera||''),
+        c.kind==='equipment'?gearLabel(c.item):(c.camera||''),
         c.student_name||'', c.student_id||'', c.period||'', c.course||'',
         statusOf(c), c.out||'', c.due||'', c.picked_up_date||'', c.returned_date||'',
         c.note||'', c.student_cell||'', c.parent_guardian||'', c.parent_cell||'' ]);
@@ -1618,37 +1626,55 @@
   // ===== Gear pop-out window (reuses the #camdetail modal shell): units + repair, kit checklist,
   // condition issues, standing note, history. One window per pooled gear line.
   var gdKey=null;
-  function openGearDetail(key){ if(!equipDef(key)) return; gdKey=key; cdCam=null; renderGearDetailModal(); document.getElementById('camdetail').classList.add('open'); }
+  function openGearDetail(id){ if(!gearUnit(id)) return; gdKey=id; cdCam=null; renderGearDetailModal(); document.getElementById('camdetail').classList.add('open'); }
   function renderGearDetailModal(){
-    var key=gdKey, def=equipDef(key); if(!def) return;
-    var a=assetOf(key), av=equipAvail(key), down=av.down, total=av.total, working=Math.max(0,total-down);
-    var items=gearKitItems(key), miss=gearKitMissing(key), kpct=gearKitPct(key);
+    var id=gdKey, u=gearUnit(id); if(!u) return;
+    var a=assetOf(id), oos=!!a.oos, c=gearActiveFor(id);
+    var items=gearKitItems(id), miss=gearKitMissing(id), kpct=gearKitPct(id);
     var issues=a.issues||[], log=(a.log||[]).slice().reverse();
-    document.getElementById('cd-title').textContent=(def.short||def.label).toUpperCase();
-    var h='<div class="cd-sub">'+esc(def.label)+'</div>';
-    h+='<div class="cd-row"><div><span class="pill '+(working>0?'avail':'oos')+'">'+working+' of '+total+' working</span></div>'+
-       '<div>'+(down>0?'<button class="btn sm" id="gd-restore">Restore 1</button> ':'')+(working>0?'<button class="btn sm danger" id="gd-down">Mark 1 down</button>':'')+'</div></div>';
-    if(down>0) h+='<div class="cd-cur" style="border-left-color:#e0403a;"><div class="cd-cur-note" style="color:#ff9a8a;">&#9888; '+down+' of '+total+' out for repair (removed from the checkout pool).</div></div>';
+    document.getElementById('cd-title').textContent=u.label;
+    var st=c?statusOf(c):'', od=!!(c&&isOverdue(c)), pend=!!(c && st==='reserved' && c.approved===false);
+    var pill=oos?'<span class="pill oos">Out of service</span>':(c?(pend?'<span class="pill pending">Pending</span>':(st==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill '+(od?'overdue':'out')+'">'+(od?'Overdue':'Checked out')+'</span>')):'<span class="pill avail">Available</span>');
+    var tlab=(gearTypes()[u.type]&&gearTypes()[u.type].label)||u.type;
+    var h='<div class="cd-sub">'+esc(tlab)+'</div>';
+    h+='<div class="cd-thumbwrap">'+gearThumb(u.type)+'</div>';
+    h+='<div class="cd-row"><div>'+pill+'</div><button class="btn sm '+(oos?'':'danger')+'" id="gd-oos">'+(oos?'Return to service':'Mark out of service')+'</button></div>';
+    if(c){
+      var acts='';
+      if(pend) acts='<button class="btn sm" id="gd-approve">Approve</button><button class="btn sm danger" id="gd-deny">Deny</button>';
+      else if(st==='reserved') acts='<button class="btn sm" id="gd-pickup">Mark picked up</button><button class="btn sm danger" id="gd-cancel">Cancel</button>';
+      else acts='<button class="btn sm ghost" id="gd-undo">Undo pickup</button><button class="btn sm warn" id="gd-return">Mark returned</button>';
+      h+='<div class="cd-cur"><div class="cd-cur-who">'+esc(nameOf(c))+(pend?' <span class="pill pending">Pending</span>':'')+'</div><div class="cd-cur-meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+esc(c.course||'')+' &middot; out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</div>'+(c.note?'<div class="cd-cur-note">Reservation note: '+esc(c.note)+'</div>':'')+'<div class="cd-cur-acts">'+acts+'</div></div>';
+    }
     h+='<div class="cd-sec"><div class="cd-h">Kit contents'+(items.length?(' <span class="cd-tabscore '+kitScoreCls(kpct)+'">'+kpct+'%</span>'):'')+'</div>';
     if(items.length){
-      h+='<div class="kit-note">Toggle an item to <b>Missing</b> if it is not with this gear.</div><div class="kit-list">'+
+      h+='<div class="kit-note">Toggle an item to <b>Missing</b> if it is not with this unit.</div><div class="kit-list">'+
         items.map(function(it){ var mm=miss.indexOf(it)>=0;
           return '<div class="kit-row'+(mm?' missing':'')+'"><span class="kit-name">'+esc(it)+'</span><button type="button" class="kit-sw'+(mm?' missing':'')+'" data-gkititem="'+esc(it)+'" aria-pressed="'+(mm?'false':'true')+'"><span class="kit-sw-track"><span class="kit-sw-knob"></span></span><span class="kit-sw-lab">'+(mm?'Missing':'In kit')+'</span></button></div>';
         }).join('')+'</div>';
-    } else { h+='<div class="cd-empty">No kit list for this item.</div>'; }
+    } else { h+='<div class="cd-empty">No kit list for this unit.</div>'; }
     h+='</div>';
     h+='<div class="cd-sec"><div class="cd-h">Open condition issues</div>';
     h+=issues.length?('<div class="cd-issues">'+issues.map(function(it,i){ return '<div class="cd-issue"><span>'+esc(it)+'</span><button class="btn sm" data-gresolve="'+i+'">Resolved</button></div>'; }).join('')+'</div>'):'<div class="cd-empty">No open issues.</div>';
     h+='<div class="cd-add"><input type="text" id="gd-newissue" placeholder="Add an issue (e.g. wobbly leg lock)"><button class="btn sm" id="gd-addissue">Add</button></div></div>';
-    h+='<div class="cd-sec"><div class="cd-h">Standing note</div><textarea id="gd-note" rows="2" placeholder="Always-visible note for this gear">'+esc(a.note||'')+'</textarea><button class="btn sm" id="gd-savenote">Save note</button></div>';
-    h+='<div class="cd-sec"><div class="cd-h">History log</div>'+(log.length?('<div class="cd-log">'+log.map(function(ev){ return '<div class="cd-logrow"><span class="cd-logdate">'+esc(ev.date||'')+'</span> '+esc(ev.text||'')+'</div>'; }).join('')+'</div>'):'<div class="cd-empty">No history yet.</div>')+'</div>';
+    h+='<div class="cd-sec"><div class="cd-h">Standing note</div><textarea id="gd-note" rows="2" placeholder="Always-visible note for this unit">'+esc(a.note||'')+'</textarea><button class="btn sm" id="gd-savenote">Save note</button></div>';
+    var hist=(DATA.checkouts||[]).filter(function(x){ return x.kind==='equipment' && x.item===id; }).sort(function(x,y){ return (x.out||'')<(y.out||'')?1:-1; });
+    h+='<div class="cd-sec"><div class="cd-h">History log</div>'+
+      (log.length?('<div class="cd-log">'+log.map(function(ev){ return '<div class="cd-logrow"><span class="cd-logdate">'+esc(ev.date||'')+'</span> '+esc(ev.text||'')+'</div>'; }).join('')+'</div>'):'')+
+      (hist.length?('<div class="cd-log">'+hist.map(function(x){ return '<div class="cd-logrow"><span class="cd-logdate">'+fmt(x.out)+'</span> '+esc(nameOf(x))+' &middot; '+esc(statusOf(x))+(x.returned_date?(' &rarr; '+fmt(x.returned_date)):'')+'</div>'; }).join('')+'</div>'):'')+
+      ((!log.length&&!hist.length)?'<div class="cd-empty">No history yet.</div>':'')+'</div>';
     document.getElementById('cd-body').innerHTML=h;
-    var rb=document.getElementById('gd-restore'); if(rb) rb.onclick=function(){ saveAsset(key,{down:Math.max(0,down-1)},renderGearDetailModal); };
-    var db=document.getElementById('gd-down'); if(db) db.onclick=function(){ saveAsset(key,{down:down+1},renderGearDetailModal); };
-    document.querySelectorAll('#cd-body .kit-sw').forEach(function(sw){ sw.onclick=function(){ var it=sw.getAttribute('data-gkititem'), m=gearKitMissing(key).slice(), i=m.indexOf(it); if(i>=0) m.splice(i,1); else m.push(it); saveAsset(key,{gkit:m},renderGearDetailModal); }; });
-    document.querySelectorAll('#cd-body [data-gresolve]').forEach(function(el){ el.onclick=function(){ var i=+el.getAttribute('data-gresolve'), it=issues[i]; var ni=issues.slice(); ni.splice(i,1); var nl=(a.log||[]).concat([{date:fmt(todayISO()),text:'Resolved: '+it}]); saveAsset(key,{issues:ni,log:nl},renderGearDetailModal); }; });
-    var ai=document.getElementById('gd-addissue'); if(ai) ai.onclick=function(){ var v=document.getElementById('gd-newissue').value.trim(); if(!v) return; var ni=(issues||[]).concat([v]); var nl=(a.log||[]).concat([{date:fmt(todayISO()),text:'Issue: '+v}]); saveAsset(key,{issues:ni,log:nl},renderGearDetailModal); };
-    var sn=document.getElementById('gd-savenote'); if(sn) sn.onclick=function(){ saveAsset(key,{note:document.getElementById('gd-note').value},renderGearDetailModal); };
+    var oosb=document.getElementById('gd-oos'); if(oosb) oosb.onclick=function(){ saveAsset(id,{oos:!oos},renderGearDetailModal); };
+    var pk=document.getElementById('gd-pickup'); if(pk) pk.onclick=function(){ setStatus(c.id,'out'); closeCamDetail(); };
+    var un=document.getElementById('gd-undo'); if(un) un.onclick=function(){ setStatus(c.id,'reserved'); closeCamDetail(); };
+    var rt=document.getElementById('gd-return'); if(rt) rt.onclick=function(){ markReturned(c.id); closeCamDetail(); };
+    var ap=document.getElementById('gd-approve'); if(ap) ap.onclick=function(){ approve(c.id); closeCamDetail(); };
+    var dn=document.getElementById('gd-deny'); if(dn) dn.onclick=function(){ del(c.id); closeCamDetail(); };
+    var cn=document.getElementById('gd-cancel'); if(cn) cn.onclick=function(){ del(c.id); closeCamDetail(); };
+    document.querySelectorAll('#cd-body .kit-sw').forEach(function(sw){ sw.onclick=function(){ var it=sw.getAttribute('data-gkititem'), m=gearKitMissing(id).slice(), i=m.indexOf(it); if(i>=0) m.splice(i,1); else m.push(it); saveAsset(id,{kit:m},renderGearDetailModal); }; });
+    document.querySelectorAll('#cd-body [data-gresolve]').forEach(function(el){ el.onclick=function(){ var i=+el.getAttribute('data-gresolve'), it=issues[i]; var ni=issues.slice(); ni.splice(i,1); var nl=(a.log||[]).concat([{date:fmt(todayISO()),text:'Resolved: '+it}]); saveAsset(id,{issues:ni,log:nl},renderGearDetailModal); }; });
+    var ai=document.getElementById('gd-addissue'); if(ai) ai.onclick=function(){ var v=document.getElementById('gd-newissue').value.trim(); if(!v) return; var ni=(issues||[]).concat([v]); var nl=(a.log||[]).concat([{date:fmt(todayISO()),text:'Issue: '+v}]); saveAsset(id,{issues:ni,log:nl},renderGearDetailModal); };
+    var sn=document.getElementById('gd-savenote'); if(sn) sn.onclick=function(){ saveAsset(id,{note:document.getElementById('gd-note').value},renderGearDetailModal); };
   }
   function saveAsset(cam, patch, then){
     camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.assign({camera:cam},patch))})
@@ -1734,21 +1760,25 @@
     var wrap=document.getElementById('ed-gearwrap'), host=document.getElementById('ed-gear');
     if(c.kind==='equipment'){ wrap.style.display='none'; host.innerHTML=''; edGearState=null; return; }
     wrap.style.display=''; host.innerHTML=''; edGearState={};
-    // Which items are already on this checkout (linked by group === this record id).
+    // Which UNITS are already on this checkout (linked by group === this record id).
     var attached={}; equipRecs().forEach(function(e){ if(e.group===edId && statusOf(e)!=='returned') attached[e.item]=e.id; });
-    EQUIPMENT.forEach(function(it){
-      var on=!!attached[it.key], av=equipAvail(it.key), freeBase=av.avail+(attached[it.key]?1:0);
-      edGearState[it.key]={on:on, id:attached[it.key]||null};
-      var btn=document.createElement('button'); btn.type='button';
-      btn.className='ed-gearitem'+(on?' on':'')+(freeBase<=0?' none-left':'');
-      function availText(state){ return state?'Added':(freeBase>0?(freeBase+' free'):'None free'); }
-      btn.innerHTML='<span class="ed-gearcheck"></span><span class="ed-gearlabel">'+esc(it.label)+'</span><span class="ed-gearavail">'+availText(on)+'</span>';
-      btn.addEventListener('click',function(){
-        var s=edGearState[it.key]; s.on=!s.on;
-        btn.classList.toggle('on',s.on);
-        btn.querySelector('.ed-gearavail').textContent=availText(s.on);
+    var gpool=gearPoolIds(), gtypes=gearTypes(), byType={};
+    gpool.forEach(function(id){ var u=gearUnit(id); if(!u) return; (byType[u.type]=byType[u.type]||[]).push(id); });
+    ['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil'].forEach(function(t){
+      var ids=byType[t]; if(!ids||!ids.length) return;
+      var hd=document.createElement('div'); hd.className='ed-geargrp'; hd.textContent=(gtypes[t]&&gtypes[t].label)||t; host.appendChild(hd);
+      ids.forEach(function(id){
+        var u=gearUnit(id)||{}, on=!!attached[id];
+        var blocked=!on && (!!gearActiveFor(id) || !!assetOf(id).oos);   // taken elsewhere or out of service
+        edGearState[id]={on:on, id:attached[id]||null};
+        var btn=document.createElement('button'); btn.type='button';
+        btn.className='ed-gearitem'+(on?' on':'')+(blocked?' none-left':'');
+        function availText(state){ return state?'Added':(assetOf(id).oos?'Out of service':(gearActiveFor(id)?'Taken':'Free')); }
+        btn.innerHTML='<span class="ed-gearcheck"></span><span class="ed-gearlabel">'+esc(u.label||id)+'</span><span class="ed-gearavail">'+availText(on)+'</span>';
+        if(blocked) btn.disabled=true;
+        btn.addEventListener('click',function(){ if(btn.disabled) return; var s=edGearState[id]; s.on=!s.on; btn.classList.toggle('on',s.on); btn.querySelector('.ed-gearavail').textContent=availText(s.on); });
+        host.appendChild(btn);
       });
-      host.appendChild(btn);
     });
   }
   function closeEdit(){ document.getElementById('editmodal').classList.remove('open'); edId=null; }
@@ -1901,7 +1931,7 @@
   pin.addEventListener('keydown',function(e){ if(e.key==='Enter') submitPin(); });
 
   // if we already have a stored key, try it silently; otherwise show the gate
-  if(KEY){ camAPI('/api/camera/checkouts',{cache:'no-store'}).then(function(r){ if(r.ok){ return r.json().then(function(d){ DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{}}; renderBoard(); markSync(true); startApp(); }); } else { showGate(''); } }).catch(function(){ showGate(''); }); }
+  if(KEY){ camAPI('/api/camera/checkouts',{cache:'no-store'}).then(function(r){ if(r.ok){ return r.json().then(function(d){ DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{},pools:d.pools||{},equipment_pools:d.equipment_pools||{},equipment_units:d.equipment_units||{},equipment_types:d.equipment_types||{}}; renderBoard(); markSync(true); startApp(); }); } else { showGate(''); } }).catch(function(){ showGate(''); }); }
   else { showGate(''); }
 })();
 </script>

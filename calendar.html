@@ -2,8 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Equipment Reservations | Pioneer Valley Photography</title>
+<!-- Home-screen web app: launch chromeless (no Safari bars) when added to the Home Screen. -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Reservations" />
 <script>window.SILVA_HIDE_CATALOG=true;/* public page: never expose the teacher catalog dropdown */</script>
 <meta name="description" content="See which Pioneer Valley photography cameras are checked out and when they are due back." />
 <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only_Teal.svg" />
@@ -335,6 +340,10 @@
   .rv-gearrow.out .rv-gearname{color:rgba(206,244,244,.6);}
   .rv-gearrow.out .rv-gearcount{color:#ffb28a;}
   .rv-gearrow .dm-chev-r{color:var(--faint);}
+  /* Per-unit gear reserve: type-group headers above the unit chips. */
+  .rv-geargrp{font-family:var(--font);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-lt);margin:12px 0 7px;padding-left:8px;border-left:3px solid var(--teal);}
+  .rv-geargrp:first-of-type{margin-top:2px;}
+  .rc-extra-grp{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-lt);margin:9px 0 3px;}
   .rc-done{text-align:center;padding:18px 8px;}
   .rc-done-ic{width:56px;height:56px;line-height:56px;margin:0 auto 12px;background:rgba(63,168,99,.18);color:#8ff0b0;font-size:1.8rem;border-radius:0;}
   .rc-done p{color:var(--text);font-size:1rem;} .rc-done-sub{color:var(--muted);font-size:.85rem;}
@@ -1292,7 +1301,6 @@
   var RV_TAB='cameras';          // which reserve tab is showing: 'cameras' | 'gear'
   var RESV_RESUME_DAY=null;      // if the flow started from a day card, jump back into reserving that day after ID verify
   var rvLookup=null;
-  var EQUIP_MENU=[{key:'tripod',label:'K&F Concept Tripod'},{key:'wide',label:'Canon RF-S 10-18mm ultra-wide'},{key:'zoom',label:'Canon RF 100-400mm ultra-zoom'},{key:'speedlite',label:'Canon Speedlite EL-10 flash'}];
   function isReserving(){ return !!RESV; }
   function normPeriod(p){ return String(p||'').replace(/[^0-9]/g,'').replace(/^0+/,''); }
   function p2ok(){ return RESV && normPeriod(RESV.period)==='4'; }   // only Period 4 (Photo 2A) may take Cam 16/17/18
@@ -1370,17 +1378,16 @@
   }
   function cancelReserve(){ RESV=null; DM_RESERVE_CAM=null; DM_RESERVE_GEAR=null; RV_TAB='cameras'; document.getElementById('rvBanner').style.display='none'; closeDayModal(); }
   // ---- Per-student pools + gear availability (drives the Cameras / Other Equipment reserve tabs) ----
-  function gearDef(key){ var d=(DATA.equipment_items||{})[key]; if(d) return d;
-    for(var i=0;i<EQUIP_MENU.length;i++){ if(EQUIP_MENU[i].key===key) return {label:EQUIP_MENU[i].label,total:0}; }
-    return {label:key,total:0}; }
-  function gearLabel(key){ return gearDef(key).label||key; }
+  function gearDef(id){ return (DATA.equipment_units||{})[id]||{label:id}; }   // per-unit: {type,label,pool,kit}
+  function gearLabel(id){ return gearDef(id).label||id; }
   // The student's teacher pool (set at ID verify). Fall back to Silva / all cameras if unknown.
   function myCamPool(){ var p=(RESV&&RESV.pool)||'silva'; var a=(DATA.pools||{})[p]; return (a&&a.length)?a:(DATA.cameras||[]); }
-  function myGearKeys(){ var p=(RESV&&RESV.pool)||'silva'; return ((DATA.equipment_pools||{})[p])||[]; }
-  function gearDownCount(key){ return (DATA.equipment_down||{})[key]||0; }
-  // Units of a gear item already reserved/out on a given day (inclusive overlap, like the camera view).
-  function gearBookedOnDay(key,iso){ var n=0; (DATA.equipment||[]).forEach(function(c){ if(c.item!==key||c.returned) return; var last=c.due||c.out; if(c.out&&last&&iso>=c.out&&iso<=last) n++; }); return n; }
-  function gearAvailOnDay(key,iso){ var d=gearDef(key); return Math.max(0,(d.total||0)-gearDownCount(key)-gearBookedOnDay(key,iso)); }
+  function myGearKeys(){ var p=(RESV&&RESV.pool)||'silva'; return ((DATA.equipment_pools||{})[p])||[]; }   // unit ids
+  function gearOos(id){ return (DATA.equipment_oos||[]).indexOf(id)>=0; }
+  // Per-unit, exactly like a camera: a unit is free on a day if it is not out of service and has no
+  // non-returned reservation overlapping that day.
+  function gearBookedOnDay(id,iso){ var busy=false; (DATA.equipment||[]).forEach(function(c){ if(c.item!==id||c.returned) return; var last=c.due||c.out; if(c.out&&last&&iso>=c.out&&iso<=last) busy=true; }); return busy; }
+  function gearAvailOnDay(id,iso){ return (!gearOos(id) && !gearBookedOnDay(id,iso)) ? 1 : 0; }
   function rvTab(id,label,n){ return '<button type="button" class="dm-tab'+(RV_TAB===id?' active':'')+'" data-rvtab="'+id+'">'+label+' <span class="dm-tabn">'+n+'</span></button>'; }
   function renderReserveDay(iso){
     document.getElementById('dm-title').textContent=prettyDate(iso);
@@ -1402,11 +1409,18 @@
     var body=lead+'<p class="rv-sub" style="margin:0 0 10px;">'+(RV_TAB==='gear'?t('pickGear'):t('tapCam'))+' ('+fmt(nextSchoolDay(iso))+').</p>';
     if(RV_TAB==='gear'){
       if(!gearKeys.length){ body+='<div class="dm-empty">'+t('noGearFree')+'</div>'; }
-      else body+=gearKeys.map(function(k){
-        var n=gearAvailOnDay(k,iso), label=esc(gearLabel(k));
-        if(n>0) return '<div class="rv-gearrow" data-rgear="'+esc(k)+'"><span class="rv-gearname">'+label+'</span><span class="rv-gearcount">'+n+' '+t('availCount')+'</span><span class="dm-chev-r">&rsaquo;</span></div>';
-        return '<div class="rv-gearrow out"><span class="rv-gearname">'+label+'</span><span class="rv-gearcount">'+t('allOutWord')+'</span></div>';
-      }).join('');
+      else {
+        var gBy={}; gearKeys.forEach(function(id){ var u=(DATA.equipment_units||{})[id]; var ty=u?u.type:'other'; (gBy[ty]=gBy[ty]||[]).push(id); });
+        ['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil'].forEach(function(ty){
+          var ids=gBy[ty]; if(!ids||!ids.length) return;
+          var tl=((DATA.equipment_types||{})[ty]||{}).label||ty;
+          body+='<div class="rv-geargrp">'+esc(tl)+'</div><div class="dm-avail">'+ids.map(function(id){
+            var u=(DATA.equipment_units||{})[id]||{};
+            if(gearAvailOnDay(id,iso)>0) return '<span class="dm-availcam resv" data-rgear="'+esc(id)+'">'+esc(u.label||id)+'</span>';
+            return '<span class="dm-availcam p2block" title="'+t('allOutWord')+'">'+esc(u.label||id)+'<small>'+t('allOutWord')+'</small></span>';
+          }).join('')+'</div>';
+        });
+      }
     } else {
       if(!avail.length){ body+='<div class="dm-empty">'+t('noneFree')+'</div>'; }
       else body+='<div class="dm-avail">'+avail.map(function(c){
@@ -1440,7 +1454,10 @@
       '<div class="rc-kit">'+t('kitLine')+'</div>'+
       (extraKeys.length?('<details class="rc-extra"><summary>'+t('needGear')+' <span class="rc-extra-hint">'+t('optional')+'</span></summary>'+
         '<div class="rc-extra-body">'+
-          extraKeys.map(function(k){ return '<label><input type="checkbox" id="rc-'+esc(k)+'"> '+esc(gearLabel(k))+'</label>'; }).join('')+
+          (function(){ var gBy={}; extraKeys.forEach(function(id){ var u=(DATA.equipment_units||{})[id]; var ty=u?u.type:'other'; (gBy[ty]=gBy[ty]||[]).push(id); });
+            var out=''; ['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil'].forEach(function(ty){ var ids=gBy[ty]; if(!ids||!ids.length) return;
+              out+='<div class="rc-extra-grp">'+esc(((DATA.equipment_types||{})[ty]||{}).label||ty)+'</div>'+ids.map(function(id){ return '<label><input type="checkbox" id="rc-'+esc(id)+'"> '+esc(gearLabel(id))+'</label>'; }).join(''); });
+            return out; })()+
         '</div>'+
       '</details>'):'')+
       '<div class="rc-disc">'+t('disc')+'</div>'+
@@ -1560,10 +1577,11 @@
       DATA.blackouts=d.blackouts||[];
       // Per-teacher pools + add-on gear, for the student "Other Equipment" reserve tab.
       DATA.pools=d.pools||{};                     // {silva:[cams], garcia:[...], mankin:[...]}
-      DATA.equipment_pools=d.equipment_pools||{}; // {silva:[gearKeys], ...}
-      DATA.equipment_items=d.equipment_items||{}; // {key:{label,total,pool}}
-      DATA.equipment=d.equipment||[];             // sanitized gear reservation records {item,out,due,returned,status}
-      DATA.equipment_down=d.equipment_down||{};   // {key: units out for repair}
+      DATA.equipment_pools=d.equipment_pools||{}; // {silva:[unit ids], ...}
+      DATA.equipment_units=d.equipment_units||{}; // {unit id:{type,label,pool,kit}}
+      DATA.equipment_types=d.equipment_types||{}; // {type:{label,unit}} for grouping headers
+      DATA.equipment=d.equipment||[];             // sanitized gear reservation records {item(unit id),out,due,returned,status}
+      DATA.equipment_oos=d.equipment_oos||[];     // unit ids out of service
       renderBoard(); renderCal();
       // The 60s auto-refresh must NOT clobber a student mid-reservation (verify -> pick -> confirm ->
       // done): re-rendering the day modal then would reset their screen. Only refresh the day view when
