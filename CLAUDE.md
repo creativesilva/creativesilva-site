@@ -50,6 +50,19 @@ When in doubt, ship clean, balanced, and minimal. Bloated copy and visual clutte
 
 ---
 
+## Design Standard & Self-Audit (NON-NEGOTIABLE, applies to every visual/UI deliverable)
+
+Chris has had to correct the same quality lapses repeatedly. Do NOT make him be your QA. When you build or change anything visual (a dashboard, a card, a page, a tool), hold yourself to his bar and verify it against these shared goals BEFORE you say it is done. "I did something" is not the goal; meeting the standard is.
+
+**The shared goals (what "good" means here):**
+- **Glanceable, modern, minimal, cohesive.** Clean at a glance; reveal detail progressively (compact by default, expand/pop-out on interaction). Not a wall of text or info.
+- **Best use of space.** This is the one most often missed. Design wide-first for a **27" 4K monitor and a horizontal iPad Pro**: use a **responsive multi-column grid** so the space is filled, then **reflow to a single stacked column only when the window narrows to phone width**. A single full-width column of sparse rows on a big screen is a FAIL.
+- **Uniform and consistent.** Same-sized cards, same-sized buttons, uniform sections, consistent placement and spacing. No one-off sizes.
+
+**The self-audit (run it every time, honestly):** before reporting a visual task complete, actually LOOK at the result at a **wide** width AND a **narrow** width (use the browser preview + `resize_window`; the gate password is known to Chris, test against live data). Ask: is it glanceable? Does it use the space well on 4K / iPad landscape? Does it reflow cleanly to one column on a phone? Are the cards/buttons/sections uniform? Is it cohesive with the rest of the tool? If any answer is no, fix it before shipping. Never ship slop to check a box: that wastes Chris's subscription tokens on avoidable back-and-forth, which is the opposite of respecting his investment.
+
+This standard is itself LOCKED (Chris, 2026-10-01): maintain it without being reminded. See [[feedback-self-audit-design-standard]].
+
 ## Hard Rules (Apply Project-Wide, Not Just Canvas Builds)
 
 These are non-negotiable. The user has flagged em dashes as a hard ban via global memory; the others come from accumulated feedback during builds.
