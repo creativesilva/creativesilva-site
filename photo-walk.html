@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Photo Walk Log | Pioneer Valley Photography</title>
+<script>window.SILVA_HIDE_CATALOG=true;window.SILVA_CATALOG_RETURN='/curriculum.html';</script>
+<meta name="description" content="Mr. Silva's per-period photo walk log: which kit each seat took and its completion that day." />
+<meta name="robots" content="noindex,nofollow" />
+<link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only_Teal.svg" />
+<link rel="apple-touch-icon" href="/logos/CS_AppIcon_Teal_180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/css/silva-module.css?v=d132cef2" />
+<style>
+  :root{
+    --teal:#00b8b8; --teal-lt:#5ff0f0; --teal-deep:#007474;
+    --text:#eafeff; --muted:rgba(206,244,244,0.66); --faint:rgba(206,244,244,0.42);
+    --line:rgba(0,184,184,0.32); --line-soft:rgba(0,184,184,0.18);
+    --ok:#3fa863; --orange:#ff6b1a; --gold:#f5b301; --red:#e0403a; --grayed:rgba(160,180,180,0.34);
+    --panel:linear-gradient(135deg,rgba(0,184,184,0.10) 0%,rgba(4,20,19,0.55) 100%);
+    --font:'Oswald',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    --body:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{background-color:#060f0f;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;margin:0;}
+  body::before{content:"";position:fixed;inset:0;z-index:-2;background:#060f0f url("https://www.creativesilva.com/logos/CS_Logo_Glossy_Teal_v1.png") no-repeat center 40%;background-size:min(74vw,700px);}
+  body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(6,14,14,0.86);}
+  .wrap{max-width:1500px;margin:0 auto;padding:18px 20px 60px;}
+  .pw-titlerow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 16px;}
+  .pw-title{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.5rem;color:#fff;margin:0;}
+  .pw-title small{display:block;font-size:.8rem;font-weight:400;letter-spacing:.02em;text-transform:none;color:var(--muted);margin-top:2px;}
+  /* Control bar */
+  .pw-bar{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--teal);padding:13px 16px;margin-bottom:14px;}
+  .pw-field{display:flex;flex-direction:column;gap:3px;}
+  .pw-flab{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);}
+  .pw-perdd{position:relative;}
+  .pw-ddtrig{height:40px;min-width:210px;display:inline-flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:var(--font);font-weight:600;letter-spacing:.03em;font-size:.92rem;padding:0 12px;cursor:pointer;text-align:left;}
+  .pw-ddtrig:hover{border-color:var(--teal);}
+  .pw-ddtrig .cv{opacity:.55;transition:transform .15s;}
+  .pw-perdd.open .pw-ddtrig .cv{transform:rotate(180deg);}
+  .pw-ddmenu{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:40;background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);box-shadow:0 16px 40px rgba(0,0,0,.7);max-height:320px;overflow-y:auto;}
+  .pw-perdd.open .pw-ddmenu{display:block;}
+  .pw-ddopt{padding:10px 13px;cursor:pointer;font-family:var(--font);font-weight:600;font-size:.9rem;color:var(--text);border-bottom:1px solid var(--line-soft);display:flex;justify-content:space-between;gap:10px;}
+  .pw-ddopt:hover{background:rgba(0,184,184,.16);}
+  .pw-ddopt .oc{color:var(--faint);font-weight:400;font-size:.8rem;}
+  .pw-ddopt.sel{color:var(--teal-lt);}
+  .pw-when{font-size:.84rem;color:var(--muted);}
+  .pw-when b{color:var(--teal-lt);font-weight:600;}
+  .pw-auto{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#04110f;background:var(--teal);padding:3px 7px;}
+  .pw-spacer{flex:1 1 auto;}
+  .btn{flex:0 0 auto;height:40px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font);font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:0 18px;cursor:pointer;text-decoration:none;transition:filter .15s,background .15s,color .15s;}
+  .btn:hover{filter:brightness(1.08);}
+  .btn.ghost{background:transparent;color:var(--muted);border-color:var(--line);}
+  .btn.ghost:hover{color:#fff;border-color:var(--teal);filter:none;}
+  .btn.save{background:var(--gold);border-color:var(--gold);}
+  .btn:disabled{opacity:.5;cursor:not-allowed;filter:none;}
+  /* Status / progress line */
+  .pw-status{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:.86rem;color:var(--muted);margin-bottom:14px;padding-left:2px;}
+  .pw-chip{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--line-soft);}
+  .pw-chip.ok{color:#8ff0b0;border-color:rgba(63,168,99,.5);background:rgba(63,168,99,.12);}
+  .pw-chip.todo{color:#ffd889;border-color:rgba(245,179,1,.5);background:rgba(245,179,1,.12);}
+  /* Kit grid: wide-first, fills a 4K / iPad, stacks to one column on a phone */
+  .pw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px;align-items:start;}
+  .pw-kit{background:rgba(0,0,0,.34);border:1px solid var(--line-soft);border-left:4px solid var(--grayed);padding:12px 13px;display:flex;flex-direction:column;gap:9px;backdrop-filter:blur(5px) saturate(1.04);-webkit-backdrop-filter:blur(5px) saturate(1.04);}
+  .pw-kit.used{border-left-color:var(--teal);}
+  .pw-kit.notused{border-left-color:var(--grayed);opacity:.6;}
+  .pw-kit.checkedout{border-left-color:var(--orange);opacity:.82;}
+  .pw-kit.todo{border-left-color:var(--gold);}
+  .pw-khead{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .pw-knum{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.08rem;color:#fff;}
+  .pw-p2{font-family:var(--font);font-size:.52rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#ffb28a;border:1px solid rgba(255,107,26,.5);padding:1px 5px;margin-left:6px;vertical-align:middle;}
+  .pw-pct{font-family:var(--font);font-weight:700;font-size:.82rem;letter-spacing:.02em;padding:2px 8px;color:#8ff0b0;background:rgba(63,168,99,.16);}
+  .pw-pct.mid{color:#ffd889;background:rgba(245,179,1,.16);} .pw-pct.low{color:#ff9a8a;background:rgba(224,64,58,.18);} .pw-pct.na{color:var(--faint);background:rgba(160,180,180,.12);}
+  /* Seat inputs */
+  .pw-seats{display:flex;flex-direction:column;gap:7px;}
+  .pw-seatrow{display:flex;align-items:center;gap:9px;}
+  .pw-seatbox{display:flex;flex-direction:column;gap:2px;flex:0 0 auto;}
+  .pw-seatbox label{font-family:var(--font);font-size:.54rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);}
+  .pw-seat{width:62px;height:36px;background:rgba(0,0,0,.4);border:1px solid var(--line);color:#fff;font-family:var(--font);font-size:1rem;font-weight:600;text-align:center;padding:0 4px;}
+  .pw-seat:focus{outline:none;border-color:var(--teal);}
+  .pw-name{flex:1 1 auto;min-width:0;font-size:.86rem;color:var(--text);line-height:1.25;overflow:hidden;}
+  .pw-name.empty{color:var(--faint);font-style:italic;}
+  .pw-name.bad{color:#ff9a8a;}
+  .pw-kact{display:flex;gap:8px;flex-wrap:wrap;margin-top:1px;}
+  .pw-mini{flex:0 0 auto;height:30px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:0 11px;cursor:pointer;background:transparent;border:1px solid var(--line);color:var(--muted);transition:border-color .15s,color .15s,background .15s;}
+  .pw-mini:hover{border-color:var(--teal);color:#fff;}
+  .pw-mini.warn{border-color:rgba(245,179,1,.5);color:#ffd889;}
+  .pw-mini.ret{border-color:var(--teal);color:var(--teal-lt);}
+  .pw-outline{font-size:.84rem;color:var(--muted);}
+  .pw-outline b{color:#fff;font-weight:600;}
+  .pw-badge{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);}
+  /* History */
+  .pw-hist{margin-top:26px;border-top:1px solid var(--line-soft);padding-top:18px;}
+  .pw-histhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+  .pw-h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:0;padding-left:9px;border-left:3px solid var(--teal);}
+  .pw-histlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;}
+  .pw-histrow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(0,0,0,.26);border:1px solid var(--line-soft);border-left:3px solid var(--teal-deep);padding:10px 12px;cursor:pointer;transition:background .12s;}
+  .pw-histrow:hover{background:rgba(0,184,184,.1);}
+  .pw-histopen{flex:1 1 auto;min-width:0;}
+  .pw-histdel{flex:0 0 auto;background:transparent;border:0;color:var(--faint);font-size:1.4rem;line-height:1;cursor:pointer;padding:0 4px;transition:color .12s;}
+  .pw-histdel:hover{color:#ff9a8a;}
+  .pw-histd{font-family:var(--font);font-weight:600;color:#fff;font-size:.92rem;}
+  .pw-histmeta{font-size:.76rem;color:var(--muted);}
+  .pw-empty{color:var(--faint);font-size:.88rem;padding:6px 2px;}
+  /* Read-only past-log banner */
+  .pw-ro{display:none;align-items:center;gap:12px;flex-wrap:wrap;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.4);border-left:4px solid #8b5cf6;padding:10px 14px;margin-bottom:14px;}
+  .pw-ro.show{display:flex;}
+  .pw-ro .lab{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.72rem;color:#c9b8ff;}
+  .pw-ro .meta{font-size:.84rem;color:var(--muted);flex:1 1 auto;}
+  /* Gate */
+  #gate{position:fixed;inset:0;z-index:300;background:#060f0f;display:flex;align-items:center;justify-content:center;padding:22px;}
+  #gate .card{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.96));border:1px solid var(--line);border-top:3px solid var(--teal);max-width:380px;width:100%;padding:30px 26px 26px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+  #gate img{width:120px;height:auto;margin-bottom:16px;}
+  #gate h2{font-family:var(--font);font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:1.2rem;margin:0 0 4px;color:#fff;}
+  #gate p{color:var(--muted);font-size:.86rem;margin:0 0 18px;}
+  #gate input{width:100%;height:46px;text-align:center;font-size:1.3rem;letter-spacing:.2em;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--text);font-family:var(--font);margin-bottom:12px;}
+  #gate input.pinmask{-webkit-text-security:disc;text-security:disc;}
+  #gate .err{color:#ff9a8a;font-size:.84rem;min-height:1.1em;margin-top:10px;}
+  #app{display:none;}
+  #app.on{display:block;}
+  .pw-foot{color:var(--faint);font-size:.8rem;margin-top:26px;}
+  /* Toast */
+  .pw-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:rgba(4,20,19,.98);border:1px solid var(--teal);border-left:4px solid var(--teal);color:#dfffff;font-size:.9rem;padding:12px 18px;z-index:420;box-shadow:0 16px 40px rgba(0,0,0,.6);opacity:0;transition:opacity .25s,transform .25s;max-width:90vw;}
+  .pw-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .pw-toast.bad{border-color:var(--red);border-left-color:var(--red);color:#ffd7d3;}
+  @media (max-width:560px){ .pw-ddtrig{min-width:0;width:100%;} .pw-field{width:100%;} .pw-bar .btn{flex:1 1 auto;} }
+</style>
+</head>
+<body>
+<div id="gate">
+  <div class="card">
+    <img src="/logos/CS_Logo_Only_Teal.svg" alt="Creative Silva" />
+    <h2>Photo Walk Log</h2>
+    <p>Teacher access. Enter the password to open your photo walk log.</p>
+    <input type="text" id="pin" class="pinmask" autocomplete="off" autocapitalize="off" spellcheck="false" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;" aria-label="Password" />
+    <button class="btn go" id="pingo" style="width:100%;">Open</button>
+    <div class="err" id="pinerr"></div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="wrap">
+    <div class="pw-titlerow">
+      <h1 class="pw-title">Photo Walk Log<small>Assign a kit to each seat as students head out. The log saves the kit&#39;s completion for that day.</small></h1>
+    </div>
+
+    <div class="pw-ro" id="roBanner">
+      <span class="lab">Viewing a saved walk</span>
+      <span class="meta" id="roMeta"></span>
+      <button class="btn ghost" id="roExit" style="height:34px;">Back to today</button>
+    </div>
+
+    <div class="pw-bar" id="controlBar">
+      <div class="pw-field">
+        <span class="pw-flab">Class period</span>
+        <div class="pw-perdd" id="perDD">
+          <button type="button" class="pw-ddtrig" id="perTrig"><span id="perTrigLbl">Select period</span><span class="cv">&#9662;</span></button>
+          <div class="pw-ddmenu" id="perMenu"></div>
+        </div>
+      </div>
+      <div class="pw-field">
+        <span class="pw-flab">Today</span>
+        <span class="pw-when" id="whenLine"></span>
+      </div>
+      <div class="pw-spacer"></div>
+      <button class="btn ghost" id="histBtn">History</button>
+      <button class="btn save" id="saveBtn">Save report</button>
+    </div>
+
+    <div class="pw-status" id="statusLine"></div>
+
+    <div class="pw-grid" id="kitGrid"></div>
+
+    <div class="pw-hist" id="histPanel" style="display:none;">
+      <div class="pw-histhead">
+        <h2 class="pw-h">Past photo walks</h2>
+        <span class="pw-badge" id="histCount"></span>
+      </div>
+      <div class="pw-histlist" id="histList"></div>
+    </div>
+
+    <p class="pw-foot">This log is teacher-only. It records which kit each seat took and the kit&#39;s completion that day; it does not check kits out or require returns at the end of class.</p>
+  </div>
+</div>
+
+<div class="pw-toast" id="toast"></div>
+
+<script src="/js/silva-nav.js"></script>
+<script>
+(function(){
+  var API='https://command.creativesilva.com';
+  var KEY=''; try{ KEY=sessionStorage.getItem('silva-cam-key')||''; }catch(e){}
+  var gate=document.getElementById('gate'), app=document.getElementById('app');
+  var pin=document.getElementById('pin'), pinerr=document.getElementById('pinerr');
+
+  // ----- standard 13-item camera kit (mirrors the console) -----
+  var KIT_STD=['Camera Body (Canon EOS R50)','Lens 18-45mm (RF-S kit)','Lens 50mm (RF)','Lens 55-210mm (RF-S)','Lens Cap 18-45mm','Lens Cap 50mm','Lens Cap 55-210mm','Lens Filter 18-45mm','Lens Filter 50mm','Lens Filter 55-210mm','SD Memory Card','Battery (Canon LP-E17)','Charger (Canon LC-E17)'];
+  var CAMS=[]; for(var i=1;i<=18;i++) CAMS.push('Cam '+(i<10?'0':'')+i);
+  var P2=['Cam 16','Cam 17','Cam 18'];
+  function pad(n){ n=String(n); return n.length<2?('0'+n):n; }
+
+  // ----- bell schedule (from PVHS_Schedule_Data_2026-2027) for auto-period -----
+  var MY_PERIODS=['1','2','4','5','6','7'];           // P3 is prep; no class
+  var MIN_DAYS=['2026-08-28','2026-09-25','2026-11-06','2027-02-26','2027-03-25','2027-04-16'];
+  var NO_AUTO=['2026-08-10','2026-08-11','2026-08-12','2027-01-11','2027-01-12','2027-01-13','2027-06-10','2026-12-16','2026-12-17','2026-12-18','2027-06-07','2027-06-08','2027-06-09'];
+  var SCHED={
+    regular:{'1':['08:30','09:20'],'2':['09:30','10:20'],'3':['10:35','11:25'],'4':['11:35','12:25'],'5':['13:05','13:55'],'6':['14:05','14:55'],'7':['15:05','15:55']},
+    monday: {'1':['08:30','09:10'],'2':['09:20','10:00'],'3':['10:15','10:55'],'4':['11:05','11:45'],'5':['12:25','13:05'],'6':['13:15','13:55'],'7':['14:05','14:45']},
+    minimum:{'1':['08:30','09:00'],'2':['09:10','09:40'],'3':['09:55','10:25'],'4':['10:35','11:05'],'5':['11:45','12:15'],'6':['12:25','12:55'],'7':['13:05','13:35']}
+  };
+  function toMin(hhmm){ var p=hhmm.split(':'); return (+p[0])*60+(+p[1]); }
+  function isoLocal(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function schedType(d){ var iso=isoLocal(d); if(NO_AUTO.indexOf(iso)>=0) return null; if(MIN_DAYS.indexOf(iso)>=0) return 'minimum'; if(d.getDay()===1) return 'monday'; if(d.getDay()===0||d.getDay()===6) return null; return 'regular'; }
+  function autoPeriod(){ var now=new Date(); var ty=schedType(now); if(!ty) return null; var sch=SCHED[ty], t=now.getHours()*60+now.getMinutes();
+    for(var p in sch){ if(t>=toMin(sch[p][0]) && t<=toMin(sch[p][1])){ return MY_PERIODS.indexOf(p)>=0?p:null; } } return null; }
+  function schedLabel(d){ var ty=schedType(d); return ty?({regular:'Regular',monday:'Monday',minimum:'Minimum day'})[ty]:'No class schedule'; }
+  function prettyToday(){ var d=new Date(); return d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'}); }
+
+  // ----- state -----
+  var SEATMAP={}, BOARD={cameras:[],checkouts:[],assets:{}}, PERIOD=null, PW={}, RO=null;  // RO = read-only past log
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function camAPI(path,opts){ opts=opts||{}; opts.headers=opts.headers||{}; opts.headers['X-Camera-Key']=KEY; opts.headers['Content-Type']='text/plain'; return fetch(API+path,opts); }
+  function toast(msg,bad){ var t=document.getElementById('toast'); t.textContent=msg; t.className='pw-toast show'+(bad?' bad':''); clearTimeout(t._t); t._t=setTimeout(function(){ t.className='pw-toast'+(bad?' bad':''); },3200); }
+  function todayISO(){ return isoLocal(new Date()); }
+
+  // ----- kit completion % (same math as the console) -----
+  function kitPct(cam){ var a=BOARD.assets[cam]||{}; if(P2.indexOf(cam)>=0 && !(a.kit)) return null; var miss=(a.kit||[]).filter(function(x){return KIT_STD.indexOf(x)>=0;}).length; return Math.round((KIT_STD.length-miss)/KIT_STD.length*100); }
+  function pctCls(p){ return p==null?'na':(p>=100?'':(p>=70?'mid':'low')); }
+
+  // ----- which cameras are checked out TODAY (from the board) -----
+  function statusOf(c){ return c.status||(c.returned?'returned':'out'); }
+  function checkoutToday(cam){ var t=todayISO();
+    var recs=(BOARD.checkouts||[]).filter(function(c){ return c.camera===cam && c.kind!=='equipment' && statusOf(c)!=='returned'; });
+    for(var i=0;i<recs.length;i++){ var c=recs[i]; var last=c.due||c.out; if(c.out && last && t>=c.out && t<=last) return c; if(statusOf(c)==='out') return c; }
+    return null;
+  }
+  function whoOf(c){ return (c&&(c.student_name||c.name))||'Checked out'; }
+
+  // ----- build the per-kit working state for the selected period -----
+  function buildPW(){ PW={}; CAMS.forEach(function(cam){
+      var co=checkoutToday(cam);
+      PW[cam]={ status: co?'checked_out':'open', seats:['',''], names:['',''], ids:['',''], co: co||null };
+    });
+  }
+  function seatsForPeriod(){ var pd=SEATMAP[PERIOD]; return (pd&&pd.seats)||{}; }
+  function courseForPeriod(){ var pd=SEATMAP[PERIOD]; return (pd&&pd.course)||''; }
+  function resolveSeat(seat){ var s=String(seat).replace(/\D/g,''); if(!s) return null; var m=seatsForPeriod(); return m[s]||m[pad(s)]||null; }
+
+  // ----- render -----
+  function kitCountNeeds(){ var n=0; CAMS.forEach(function(cam){ var k=PW[cam]; if(k.status==='open') n++; }); return n; }
+  function render(){
+    // control bar state
+    renderPerMenu();
+    document.getElementById('whenLine').innerHTML='<b>'+esc(prettyToday())+'</b> &middot; '+esc(schedLabel(new Date()));
+    // read-only banner
+    var ro=document.getElementById('roBanner'); ro.className='pw-ro'+(RO?' show':'');
+    if(RO){ document.getElementById('roMeta').textContent=RO.date+' · Period '+RO.period+(RO.course?(' · '+RO.course):''); }
+    // status line
+    renderStatus();
+    renderGrid();
+  }
+  function renderPerMenu(){
+    var trig=document.getElementById('perTrigLbl');
+    var course=courseForPeriod();
+    trig.innerHTML = PERIOD ? ('Period '+esc(PERIOD)+(course?(' &middot; '+esc(course)):'')) : 'Select period';
+    var menu=document.getElementById('perMenu');
+    menu.innerHTML=MY_PERIODS.map(function(p){ var pd=SEATMAP[p]; var c=pd?pd.course:''; return '<div class="pw-ddopt'+(p===PERIOD?' sel':'')+'" data-per="'+p+'">Period '+p+'<span class="oc">'+esc(c||'')+'</span></div>'; }).join('');
+    menu.querySelectorAll('[data-per]').forEach(function(el){ el.onclick=function(){ document.getElementById('perDD').classList.remove('open'); setPeriod(el.getAttribute('data-per')); }; });
+  }
+  function renderStatus(){
+    var el=document.getElementById('statusLine');
+    if(RO){ el.innerHTML='<span class="pw-chip">Saved '+esc((RO.saved_at||'').replace('T',' ').slice(0,16))+'</span> This is a saved walk. Open a period above to log today.'; return; }
+    if(!PERIOD){ el.innerHTML='<span class="pw-chip todo">Pick a period</span> Choose your class period to begin logging.'; return; }
+    var need=kitCountNeeds();
+    var used=0, notused=0, out=0; CAMS.forEach(function(cam){ var s=PW[cam].status; if(s==='used')used++; else if(s==='not_used')notused++; else if(s==='checked_out')out++; });
+    el.innerHTML = (need? '<span class="pw-chip todo">'+need+' kit'+(need>1?'s':'')+' need a seat or Not used</span>' : '<span class="pw-chip ok">All kits accounted for</span>')
+      + ' <span>Assigned '+used+' &middot; Not used '+notused+' &middot; Checked out '+out+'</span>';
+  }
+  function renderGrid(){
+    var grid=document.getElementById('kitGrid');
+    if(RO){ grid.innerHTML=RO.kits.map(roKitCard).join(''); return; }
+    if(!PERIOD){ grid.innerHTML='<div class="pw-empty">Select a class period to see the kits.</div>'; return; }
+    grid.innerHTML=CAMS.map(liveKitCard).join('');
+    // wire seat inputs
+    grid.querySelectorAll('.pw-seat').forEach(function(inp){
+      inp.oninput=function(){ var cam=inp.getAttribute('data-cam'), slot=+inp.getAttribute('data-slot'); onSeat(cam,slot,inp.value); };
+    });
+    grid.querySelectorAll('[data-notused]').forEach(function(b){ b.onclick=function(){ toggleNotUsed(b.getAttribute('data-notused')); }; });
+    grid.querySelectorAll('[data-return]').forEach(function(b){ b.onclick=function(){ returnToPool(b.getAttribute('data-return')); }; });
+  }
+  function pctChip(cam){ var p=kitPct(cam); return '<span class="pw-pct '+pctCls(p)+'">'+(p==null?'TBD':(p+'%'))+'</span>'; }
+  function liveKitCard(cam){
+    var k=PW[cam], p2=(P2.indexOf(cam)>=0)?'<span class="pw-p2">P2</span>':'';
+    var head='<div class="pw-khead"><span class="pw-knum">'+esc(cam)+p2+'</span>'+pctChip(cam)+'</div>';
+    var cls='pw-kit';
+    var body='';
+    if(k.status==='checked_out'){
+      cls+=' checkedout';
+      body='<div class="pw-outline"><b>Checked out</b><br>'+esc(whoOf(k.co))+'</div>'+
+           '<div class="pw-kact"><button class="pw-mini ret" data-return="'+esc(cam)+'">Return to pool</button></div>';
+    } else if(k.status==='not_used'){
+      cls+=' notused';
+      body='<div class="pw-outline"><b>Not used</b> this walk</div>'+
+           '<div class="pw-kact"><button class="pw-mini" data-notused="'+esc(cam)+'">Undo</button></div>';
+    } else {
+      if(k.status==='used') cls+=' used'; else cls+=' todo';
+      var rows='';
+      for(var s=0;s<2;s++){
+        var nm=k.names[s], bad=(k.seats[s] && !nm);
+        rows+='<div class="pw-seatrow"><div class="pw-seatbox"><label>Seat #</label>'+
+          '<input class="pw-seat" inputmode="numeric" maxlength="3" data-cam="'+esc(cam)+'" data-slot="'+s+'" value="'+esc(k.seats[s]||'')+'" /></div>'+
+          '<div class="pw-name '+(nm?'':(bad?'bad':'empty'))+'">'+(nm?esc(nm):(bad?'No student at that seat':(s===0?'Student':'(optional)')))+'</div></div>';
+      }
+      body='<div class="pw-seats">'+rows+'</div><div class="pw-kact"><button class="pw-mini warn" data-notused="'+esc(cam)+'">Mark not used</button></div>';
+    }
+    return '<div class="'+cls+'">'+head+body+'</div>';
+  }
+  function roKitCard(k){
+    var p2=(P2.indexOf(k.cam)>=0)?'<span class="pw-p2">P2</span>':'';
+    var pcls=pctCls(k.pct);
+    var head='<div class="pw-khead"><span class="pw-knum">'+esc(k.cam)+p2+'</span><span class="pw-pct '+pcls+'">'+(k.pct==null?'TBD':(k.pct+'%'))+'</span></div>';
+    var cls='pw-kit', body='';
+    if(k.status==='checked_out'){ cls+=' checkedout'; body='<div class="pw-outline"><b>Checked out</b> that day</div>'; }
+    else if(k.status==='not_used'){ cls+=' notused'; body='<div class="pw-outline"><b>Not used</b> this walk</div>'; }
+    else { cls+=' used'; var who=(k.seats||[]).filter(function(x){return x&&x.label;}).map(function(x){ return 'Seat '+esc(x.seat)+' &middot; '+esc(x.label); }); body='<div class="pw-outline">'+(who.length?who.join('<br>'):'Assigned')+'</div>'; }
+    return '<div class="'+cls+'">'+head+body+'</div>';
+  }
+
+  // ----- interactions -----
+  function onSeat(cam,slot,val){ var k=PW[cam]; k.seats[slot]=val;
+    var r=resolveSeat(val); k.names[slot]=r?r.label:''; k.ids[slot]=r?r.id:'';
+    k.status=(k.seats[0]&&k.names[0])||(k.seats[1]&&k.names[1])?'used':'open';
+    // update just this card's name + state without losing focus
+    var card=document.querySelector('.pw-seat[data-cam="'+CSS.escape(cam)+'"][data-slot="'+slot+'"]');
+    if(card){ var nameEl=card.closest('.pw-seatrow').querySelector('.pw-name'); if(nameEl){ var bad=(val && !r); nameEl.className='pw-name '+(r?'':(bad?'bad':'empty')); nameEl.innerHTML=r?esc(r.label):(bad?'No student at that seat':(slot===0?'Student':'(optional)')); } var kc=card.closest('.pw-kit'); if(kc){ kc.className='pw-kit '+(k.status==='used'?'used':'todo'); } }
+    renderStatus();
+  }
+  function toggleNotUsed(cam){ var k=PW[cam]; if(k.status==='not_used'){ k.status=(k.seats[0]&&k.names[0])?'used':'open'; } else { k.status='not_used'; k.seats=['','']; k.names=['','']; k.ids=['','']; } renderGrid(); renderStatus(); }
+  function returnToPool(cam){ var k=PW[cam]; if(!k.co) return;
+    camAPI('/api/camera/status',{method:'POST',body:JSON.stringify({id:k.co.id,status:'returned'})})
+      .then(function(r){ if(!r.ok) throw new Error(); return loadBoard(); }).then(function(){ buildPW(); render(); toast(cam+' returned to the pool.'); })
+      .catch(function(){ toast('Could not return '+cam+'. Try again.',true); });
+  }
+  function setPeriod(p){ RO=null; PERIOD=p; buildPW(); render(); }
+
+  // ----- save -----
+  function saveReport(){
+    if(RO){ toast('You are viewing a saved walk. Pick a period to log today.',true); return; }
+    if(!PERIOD){ toast('Pick a class period first.',true); return; }
+    var need=kitCountNeeds();
+    var go=function(){
+      var kits=CAMS.map(function(cam){ var k=PW[cam];
+        var seats=[0,1].filter(function(s){ return k.seats[s]&&k.names[s]; }).map(function(s){ return {seat:String(k.seats[s]).replace(/\D/g,''),id:k.ids[s],label:k.names[s]}; });
+        return {cam:cam, pct:kitPct(cam), status:k.status==='open'?'unassigned':k.status, seats:seats};
+      });
+      var btn=document.getElementById('saveBtn'); btn.disabled=true; btn.textContent='Saving…';
+      camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'save',date:todayISO(),period:PERIOD,course:courseForPeriod(),kits:kits})})
+        .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
+        .then(function(){ btn.disabled=false; btn.textContent='Save report'; toast('Photo walk saved for Period '+PERIOD+'.'); loadHistory(); })
+        .catch(function(){ btn.disabled=false; btn.textContent='Save report'; toast('Could not save. Try again.',true); });
+    };
+    if(need){ if(!confirm(need+' kit'+(need>1?'s':'')+' still have no seat and are not marked Not used. Save anyway?')) return; }
+    go();
+  }
+
+  // ----- history -----
+  function loadHistory(){
+    camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'list'})})
+      .then(function(r){ return r.json(); }).then(function(j){
+        var rows=(j&&j.logs)||[]; document.getElementById('histCount').textContent=rows.length+' saved';
+        var list=document.getElementById('histList');
+        list.innerHTML=rows.length?rows.map(function(r){ return '<div class="pw-histrow"><span class="pw-histopen" data-key="'+esc(r.key)+'"><span class="pw-histd">'+esc(r.date)+'</span> <span class="pw-histmeta">&middot; Per '+esc(r.period)+(r.course?(' &middot; '+esc(r.course)):'')+' &middot; '+esc(r.kits)+' kits</span></span><button class="pw-histdel" data-del="'+esc(r.key)+'" title="Delete this walk" aria-label="Delete">&times;</button></div>'; }).join(''):'<div class="pw-empty">No saved photo walks yet.</div>';
+        list.querySelectorAll('.pw-histopen').forEach(function(el){ el.onclick=function(){ openPast(el.getAttribute('data-key')); }; });
+        list.querySelectorAll('[data-del]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); deletePast(el.getAttribute('data-del')); }; });
+      }).catch(function(){});
+  }
+  function openPast(key){
+    camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'get',key:key})})
+      .then(function(r){ return r.json(); }).then(function(j){ if(j&&j.log){ RO=j.log; render(); window.scrollTo({top:0,behavior:'smooth'}); } })
+      .catch(function(){ toast('Could not open that walk.',true); });
+  }
+  function deletePast(key){
+    if(!confirm('Delete this saved photo walk? This cannot be undone.')) return;
+    camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'delete',key:key})})
+      .then(function(r){ if(!r.ok) throw new Error(); if(RO && (RO.date+'|'+RO.period)===key){ RO=null; render(); } loadHistory(); toast('Walk deleted.'); })
+      .catch(function(){ toast('Could not delete. Try again.',true); });
+  }
+
+  // ----- data load -----
+  function loadBoard(){ return camAPI('/api/camera/checkouts',{method:'GET'}).then(function(r){ if(r.status===401){ showGate('That password did not work.'); throw new Error('401'); } return r.json(); }).then(function(d){ BOARD={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{}}; }); }
+  function loadSeatmap(){ return camAPI('/api/camera/seatmap',{method:'POST',body:JSON.stringify({})}).then(function(r){ return r.json(); }).then(function(j){ SEATMAP=(j&&j.periods)||{}; }); }
+  function startApp(){
+    gate.style.display='none'; app.classList.add('on');
+    Promise.all([loadBoard(),loadSeatmap()]).then(function(){
+      var ap=autoPeriod(); if(ap && SEATMAP[ap]) setPeriod(ap); else { PERIOD=null; buildPW(); render(); }
+      loadHistory();
+    }).catch(function(){});
+  }
+
+  // ----- gate -----
+  function showGate(msg){ KEY=''; try{ sessionStorage.removeItem('silva-cam-key'); }catch(e){} gate.style.display='flex'; app.classList.remove('on'); pinerr.textContent=msg||''; pin.value=''; setTimeout(function(){ pin.focus(); },50); }
+  function tryKey(v){ pinerr.textContent='Checking…'; KEY=v;
+    camAPI('/api/camera/checkouts',{method:'GET'}).then(function(r){
+      if(r.ok){ try{ sessionStorage.setItem('silva-cam-key',v); }catch(e){} return r.json().then(function(d){ BOARD={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{}}; startApp(); }); }
+      if(r.status===401){ KEY=''; pinerr.textContent='That password did not work.'; return; }
+      pinerr.textContent='Could not reach the server. Try again.';
+    }).catch(function(){ pinerr.textContent='Could not reach the server. Try again.'; });
+  }
+  document.getElementById('pingo').onclick=function(){ var v=pin.value.trim(); if(!v){ pinerr.textContent='Enter the password.'; return; } tryKey(v); };
+  pin.addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('pingo').click(); });
+
+  // control-bar wiring
+  document.getElementById('perTrig').onclick=function(){ document.getElementById('perDD').classList.toggle('open'); };
+  document.addEventListener('click',function(e){ var dd=document.getElementById('perDD'); if(dd && !dd.contains(e.target)) dd.classList.remove('open'); });
+  document.getElementById('saveBtn').onclick=saveReport;
+  document.getElementById('histBtn').onclick=function(){ var h=document.getElementById('histPanel'); h.style.display=(h.style.display==='none')?'':'none'; if(h.style.display!=='none'){ loadHistory(); h.scrollIntoView({behavior:'smooth',block:'start'}); } };
+  document.getElementById('roExit').onclick=function(){ RO=null; var ap=autoPeriod(); if(ap&&SEATMAP[ap]) setPeriod(ap); else { PERIOD=PERIOD||null; buildPW(); render(); } };
+
+  // boot: if we already hold the key (logged into the console), go straight in
+  if(KEY){ startApp(); } else { gate.style.display='flex'; setTimeout(function(){ pin.focus(); },60); }
+})();
+</script>
+</body>
+</html>
