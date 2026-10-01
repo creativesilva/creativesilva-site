@@ -364,7 +364,7 @@
   // out of service, history) via a deep link, so the kit interface stays a single source of truth.
   function editInfo(cam){ return '<a class="pw-mini info" href="/camera-manager.html?cam='+encodeURIComponent(cam)+'" title="Open the full camera kit window">Edit info</a>'; }
   function liveKitCard(cam){
-    var k=PW[cam], p2=(P2.indexOf(cam)>=0)?'<span class="pw-p2">P2</span>':'';
+    var k=PW[cam], p2=(P2.indexOf(cam)>=0)?'<span class="pw-p2">PHOTO 2</span>':'';
     var cls='pw-kit', body='', numHtml, ei=editInfo(cam);
     if(k.status==='checked_out'){
       numHtml='<span class="pw-knum">'+esc(cam)+p2+'</span>';
@@ -391,7 +391,7 @@
     return '<div class="'+cls+'"><div class="pw-khead">'+numHtml+pctChip(cam)+'</div>'+body+'</div>';
   }
   function roKitCard(k){
-    var p2=(P2.indexOf(k.cam)>=0)?'<span class="pw-p2">P2</span>':'';
+    var p2=(P2.indexOf(k.cam)>=0)?'<span class="pw-p2">PHOTO 2</span>':'';
     var pcls=pctCls(k.pct);
     var head='<div class="pw-khead"><span class="pw-knum">'+esc(k.cam)+p2+'</span><span class="pw-pct '+pcls+'">'+(k.pct==null?'TBD':(k.pct+'%'))+'</span></div>';
     var cls='pw-kit', body='';
