@@ -89,11 +89,11 @@
   .camhub.open,.camhub:hover{border-color:rgba(0,184,184,.45);}
   .camhub-head{width:100%;display:flex;align-items:center;gap:18px;cursor:pointer;background:transparent;border:0;color:var(--text);text-align:left;font-family:var(--font);padding:22px 28px 22px 32px;}
   .camhub-head:hover{background:rgba(255,255,255,.02);}
-  .camhub-titlebox{display:grid;grid-template-columns:40px auto;column-gap:13px;align-items:center;margin-right:auto;background:rgba(0,0,0,.40);border-left:4px solid #007474;padding:9px 20px 9px 13px;box-sizing:border-box;}
+  .camhub-titlebox{display:grid;grid-template-columns:40px auto;column-gap:13px;align-items:center;background:rgba(0,0,0,.40);border-left:4px solid #007474;padding:9px 20px 9px 13px;box-sizing:border-box;}
   .camhub-titlebox::before{content:"";grid-column:1;grid-row:1/3;align-self:center;width:40px;height:40px;background-color:#00b8b8;-webkit-mask:url("/assets/Icons/assignment/camera-kit-teal-v1.png") center/contain no-repeat;mask:url("/assets/Icons/assignment/camera-kit-teal-v1.png") center/contain no-repeat;}
   .camhub-code{grid-column:2;grid-row:1;font-family:var(--font);font-size:.65rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin-bottom:2px;}
   .camhub-title{grid-column:2;grid-row:2;font-family:var(--font);font-size:1.25rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;line-height:1.1;color:#5ff0f0;}
-  .camhub-meta{display:flex;align-items:center;gap:16px;flex-shrink:0;}
+  .camhub-meta{display:flex;align-items:center;gap:16px;flex-shrink:0;margin-left:auto;}
   .camhub-meta .csec-n{font-size:.6rem;font-weight:600;letter-spacing:.16em;color:var(--muted);white-space:nowrap;}
   .camhub-chev{width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .2s ease;flex-shrink:0;}
   .camhub.open .camhub-chev{transform:rotate(45deg);}
@@ -273,12 +273,19 @@
   .dcard.st-returning{border-left-color:var(--muted);} .dcard.st-returning .dcard-dot{background:var(--muted);}
   /* ONE consolidated, color-coded Cameras grid. Green=available, yellow=reserved-today, orange=checked
      out, red=overdue (pulsing), gray=out of service / card missing. Tap a tile -> the full window. */
-  /* Sort bar for the consolidated camera grid. */
-  .camsort{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 11px;align-items:center;}
-  .camsort-lab{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-right:4px;}
-  .camsort-b{font-family:var(--font);font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:rgba(0,0,0,.3);border:1px solid var(--line-soft);padding:6px 11px;cursor:pointer;transition:color .12s,border-color .12s,background .12s;}
-  .camsort-b:hover{color:#fff;border-color:var(--teal);}
-  .camsort-b.on{color:#04110f;background:var(--teal);border-color:var(--teal);}
+  /* Compact sort dropdown (custom, not a native select), sits to the right of the Cameras title. */
+  .camsortdd{position:relative;flex:0 0 auto;}
+  .camsortdd-trig{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 12px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--muted);font-family:var(--font);font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:border-color .12s,color .12s;}
+  .camsortdd-trig:hover{border-color:var(--teal);color:#fff;}
+  .camsortdd-trig b{color:var(--teal-lt);font-weight:700;}
+  .camsortdd-cv{width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin-left:1px;opacity:.7;}
+  .camsortdd.open .camsortdd-cv{transform:rotate(-135deg);}
+  .camsortdd-menu{display:none;position:absolute;top:calc(100% + 5px);right:0;z-index:60;min-width:184px;background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);box-shadow:0 16px 40px rgba(0,0,0,.7);}
+  .camsortdd.open .camsortdd-menu{display:block;}
+  .camsortdd-opt{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line-soft);color:var(--text);font-family:var(--font);font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:10px 13px;cursor:pointer;}
+  .camsortdd-opt:last-child{border-bottom:0;}
+  .camsortdd-opt:hover{background:rgba(0,184,184,.16);color:#fff;}
+  .camsortdd-opt.on{color:var(--teal-lt);}
   .camgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(204px,1fr));gap:9px;margin-bottom:10px;}
   .camtile{display:flex;flex-direction:column;gap:5px;align-items:flex-start;text-align:left;width:100%;background:rgba(0,0,0,.32);border:1px solid var(--line-soft);border-left:4px solid var(--grayed);padding:11px 13px;cursor:pointer;font-family:inherit;color:var(--text);transition:border-color .12s,background .12s;backdrop-filter:blur(5px) saturate(1.04);-webkit-backdrop-filter:blur(5px) saturate(1.04);}
   .camtile:hover{background:rgba(0,184,184,.07);}
@@ -750,9 +757,12 @@
     if(!t.querySelector('.cal-title-icon')) t.innerHTML='<img class="cal-title-icon" src="/assets/Icons/assignment/camera-kit-teal-v1.svg" alt="" />'+txt;
     var cal=tb.querySelector('.silva-uni-cal'); if(cal) cal.style.display='none';
     var clk=tb.querySelector('.silva-uni-clock');
-    var rb=document.getElementById('reserveBtn'), sc=document.getElementById('studentCalBtn');
+    var rb=document.getElementById('reserveBtn'), sc=document.getElementById('studentCalBtn'),
+        pw=document.getElementById('photoWalkBtn'), rf=document.getElementById('refreshBtn');
     if(rb && rb.parentElement!==tb){ if(clk) tb.insertBefore(rb,clk); else tb.appendChild(rb); }
     if(sc && sc.parentElement!==tb){ if(clk) tb.insertBefore(sc,clk); else tb.appendChild(sc); }
+    if(pw && pw.parentElement!==tb){ if(clk) tb.insertBefore(pw,clk); else tb.appendChild(pw); }   // Photo Walk Log into the header
+    if(rf && rf.parentElement!==tb){ if(clk) tb.insertBefore(rf,clk); else tb.appendChild(rf); }   // Refresh into the header
     var intro=document.querySelector('.intro'); if(intro) intro.style.display='none';
     if(!document.getElementById('cmQrBtn')){
       var qr=document.createElement('button'); qr.type='button'; qr.id='cmQrBtn'; qr.className='silva-uni-cattrigger'; qr.textContent='QR Code'; qr.onclick=showQR;
@@ -761,6 +771,8 @@
     return true;
   }
   function tryInject(n){ if(injectHeader()||n<=0) return; setTimeout(function(){ tryInject(n-1); },40); }
+  // Close the camera sort dropdown on any click outside it.
+  document.addEventListener('click',function(e){ if(!e.target.closest('.camsortdd')){ var o=document.querySelector('.camsortdd.open'); if(o) o.classList.remove('open'); } });
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ tryInject(60); }); else tryInject(60);
 
   // ---- helpers ----
@@ -1093,7 +1105,11 @@
     return 0; }
   function sortedCams(){ var arr=(DATA.cameras||[]).slice(); if(CAM_SORT==='num') return arr;
     return arr.map(function(c,i){ return {c:c,i:i}; }).sort(function(a,b){ var ka=camSortKey(a.c,CAM_SORT), kb=camSortKey(b.c,CAM_SORT); return (ka!==kb)?(ka-kb):(a.i-b.i); }).map(function(x){ return x.c; }); }
-  function camSortBar(){ return '<div class="camsort"><span class="camsort-lab">Sort</span>'+CAM_SORTS.map(function(s){ return '<button type="button" class="camsort-b'+(CAM_SORT===s.k?' on':'')+'" data-camsort="'+s.k+'">'+s.label+'</button>'; }).join('')+'</div>'; }
+  function camSortDropdown(){ var cur=(CAM_SORTS.filter(function(s){return s.k===CAM_SORT;})[0]||CAM_SORTS[0]).label;
+    return '<div class="camsortdd" id="camsortdd">'+
+      '<button type="button" class="camsortdd-trig" data-sorttrig>Sort: <b>'+esc(cur)+'</b><i class="camsortdd-cv"></i></button>'+
+      '<div class="camsortdd-menu">'+CAM_SORTS.map(function(s){ return '<button type="button" class="camsortdd-opt'+(CAM_SORT===s.k?' on':'')+'" data-camsort="'+s.k+'">'+esc(s.label)+'</button>'; }).join('')+'</div>'+
+    '</div>'; }
   var _lastBoardSig=null;   // flicker guard: only replace #board when the rendered board actually changes
   function renderBoard(){
     var host=document.getElementById('board'); if(!host) return;
@@ -1103,7 +1119,7 @@
     // colored by today's status (green available, yellow reserved-today, orange checked out, red
     // overdue + pulsing, gray out of service / card missing). Tap a tile -> the full camera window.
     // Replaces the old separate Condition + Available + Checked-out + Reserved lists.
-    var sec=camSortBar()+'<div class="camgrid">'+sortedCams().map(camTile).join('')+'</div>';
+    var sec='<div class="camgrid">'+sortedCams().map(camTile).join('')+'</div>';
     // ADDITIONAL EQUIPMENT keeps its own section: gear condition tiles (tap -> gear window) + what is out.
     var eopen=secOpen('equip'), eActive=equipActive().sort(byItem);
     sec+='<div class="csec sec-equip'+(eopen?' open':'')+'">'+
@@ -1123,10 +1139,11 @@
     var camsOpen=secOpen('cameras');
     var topN=counts.avail+' available &middot; '+counts.out+' out &middot; '+counts.reserved+' reserved';
     var html='<div class="camhub'+(camsOpen?' open':'')+'">'+
-      '<button class="camhub-head" type="button" data-sectoggle="cameras">'+
+      '<div class="camhub-head" data-sectoggle="cameras">'+
         '<span class="camhub-titlebox"><span class="camhub-code">Equipment</span><span class="camhub-title">Cameras</span></span>'+
+        camSortDropdown()+
         '<span class="camhub-meta"><span class="csec-n">'+topN+'</span><span class="camhub-chev"></span></span>'+
-      '</button>'+
+      '</div>'+
       '<div class="camhub-body">'+sec+'</div>'+
     '</div>';
     // Flicker fix (Chris, 2026-09-29): the 7s poll used to replace #board on every tick, which
@@ -1151,7 +1168,8 @@
   function bindBoard(){
     var b=document.getElementById('board');
     b.querySelectorAll('[data-sectoggle]').forEach(function(el){ el.onclick=function(){ var k=el.getAttribute('data-sectoggle'), sec=el.parentNode, open=!sec.classList.contains('open'); sec.classList.toggle('open',open); setSecOpen(k,open); }; });
-    b.querySelectorAll('[data-camsort]').forEach(function(el){ el.onclick=function(){ CAM_SORT=el.getAttribute('data-camsort'); try{ sessionStorage.setItem('camsort',CAM_SORT); }catch(e){} renderBoard(); }; });
+    var _st=b.querySelector('[data-sorttrig]'); if(_st){ _st.onclick=function(e){ e.stopPropagation(); var dd=_st.closest('.camsortdd'); if(dd) dd.classList.toggle('open'); }; }
+    b.querySelectorAll('[data-camsort]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); CAM_SORT=el.getAttribute('data-camsort'); try{ sessionStorage.setItem('camsort',CAM_SORT); }catch(e2){} renderBoard(); }; });
     b.querySelectorAll('[data-return]').forEach(function(el){ el.onclick=function(){ markReturned(el.getAttribute('data-return')); }; });
     b.querySelectorAll('[data-undo]').forEach(function(el){ el.onclick=function(){ undoReturn(el.getAttribute('data-undo')); }; });
     b.querySelectorAll('[data-status]').forEach(function(el){ el.onclick=function(){ setStatus(el.getAttribute('data-id'), el.getAttribute('data-status'), el); }; });
