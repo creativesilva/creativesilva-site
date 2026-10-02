@@ -193,7 +193,7 @@
   /* day pop-out: fixed size (fits all 18) so it never resizes between tabs */
   .daymodal{position:fixed;inset:0;background:rgba(2,12,12,.72);backdrop-filter:blur(8px) saturate(1.1);-webkit-backdrop-filter:blur(8px) saturate(1.1);display:none;align-items:center;justify-content:center;padding:20px;z-index:120;}
   .daymodal.open{display:flex;}
-  .dm-panel{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.97));border:1px solid var(--line);border-top:3px solid var(--teal);width:100%;max-width:480px;height:min(880px,86vh);display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+  .dm-panel{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.97));border:1px solid var(--line);border-top:3px solid var(--teal);width:100%;max-width:480px;max-height:min(880px,86vh);display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.6);}
   .dm-head{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--line-soft);}
   .dm-title{font-family:var(--font);font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#fff;font-size:.98rem;}
   .dm-x{background:none;border:0;color:var(--muted);font-size:1.7rem;line-height:1;cursor:pointer;padding:0 4px;}
@@ -531,7 +531,7 @@
       verifyLead:'Check your info and fix anything that is wrong, then start reserving. Your changes are saved.',
       yourCell:'Your cell phone', parentName:'Parent / guardian name', parentNamePh:'Parent or guardian',
       parentCell:'Parent / guardian cell', back:'Back', startReserving:'Start reserving',
-      tabAvail:'Available', tabOut:'Checked out', tabRes:'Reserved', tabOverdue:'Overdue', tabReturned:'Returned',
+      tabAvail:'Available', tabOut:'Checked out', tabRes:'Reserved', tabEquip:'Equipment', tabOverdue:'Overdue', tabReturned:'Returned',
       emptyReturned:'Nothing returned this day.', emptyOverdue:'Nothing overdue.',
       emptyRes:'No reservations this day.', emptyOut:'No cameras checked out this day.',
       emptyAvail:'No cameras free this day.', cardMissing:'memory card missing',
@@ -588,7 +588,7 @@
       verifyLead:'Revisa tu información y corrige lo que esté mal, luego empieza a reservar. Tus cambios se guardan.',
       yourCell:'Tu celular', parentName:'Nombre del padre / tutor', parentNamePh:'Padre o tutor',
       parentCell:'Celular del padre / tutor', back:'Atrás', startReserving:'Empezar a reservar',
-      tabAvail:'Disponibles', tabOut:'Prestadas', tabRes:'Reservadas', tabOverdue:'Atrasadas', tabReturned:'Devueltas',
+      tabAvail:'Disponibles', tabOut:'Prestadas', tabRes:'Reservadas', tabEquip:'Equipo', tabOverdue:'Atrasadas', tabReturned:'Devueltas',
       emptyReturned:'No se devolvió nada este día.', emptyOverdue:'Nada atrasado.',
       emptyRes:'No hay reservas este día.', emptyOut:'No hay cámaras prestadas este día.',
       emptyAvail:'No hay cámaras libres este día.', cardMissing:'falta tarjeta de memoria',
@@ -1078,11 +1078,14 @@
     if(isReserving()){ renderReserveDay(iso); return; }   // student picking a camera for this day
     if(DM_CAM){ renderCamDetail(iso, DM_CAM); return; }
     var out=dayOut(iso), res=dayReserved(iso), avail=dayAvailable(iso), od=overdueAll(), ret=dayReturned(iso);
+    var gearKeys=myGearKeys().filter(function(k){ return gearAvailOnDay(k,iso)>0; });   // additional gear (tripods, speedlites, lenses, reflectors) free that day
     if(DM_TAB==='overdue' && !od.length) DM_TAB='available';
     if(DM_TAB==='returned' && !ret.length) DM_TAB='available';
+    if(DM_TAB==='equip' && !gearKeys.length) DM_TAB='available';
     document.getElementById('dm-title').textContent=prettyDate(iso);
     // Order everywhere: Available, then Checked out, then Reserved (Overdue + teacher Returned last).
     var tabs=dmTab('available',t('tabAvail'),avail.length)+dmTab('out',t('tabOut'),out.length)+dmTab('reserved',t('tabRes'),res.length);
+    if(gearKeys.length) tabs+=dmTab('equip',t('tabEquip'),gearKeys.length);
     if(od.length) tabs+=dmTab('overdue',t('tabOverdue'),od.length);
     if(ret.length) tabs+=dmTab('returned',t('tabReturned'),ret.length);
     document.getElementById('dm-tabs').innerHTML=tabs;
@@ -1095,6 +1098,13 @@
       body=res.length?res.map(function(c){ return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,iso)+'<span class="dm-range">'+t('reservedWord')+' '+fmt(c.out)+' &rarr; '+t('due')+' '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+chev+'</div>'; }).join(''):'<div class="dm-empty">'+t('emptyRes')+'</div>';
     } else if(DM_TAB==='out'){
       body=out.length?out.map(function(c){ var odt=(c.due&&c.due<todayISO())?'<span class="dm-tag od">'+t('tabOverdue')+'</span>':''; return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,iso)+'<span class="dm-range">'+t('pickedUp')+' '+fmt(c.out)+' &rarr; '+t('due')+' '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+odt+chev+'</div>'; }).join(''):'<div class="dm-empty">'+t('emptyOut')+'</div>';
+    } else if(DM_TAB==='equip'){
+      var gByType={}; gearKeys.forEach(function(id){ var ty=gearDef(id).type||'other'; (gByType[ty]=gByType[ty]||[]).push(id); });
+      var gOrder=['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil'];
+      Object.keys(gByType).forEach(function(ty){ if(gOrder.indexOf(ty)<0) gOrder.push(ty); });
+      var gHtml=''; gOrder.forEach(function(ty){ var ids=gByType[ty]; if(!ids||!ids.length) return;
+        gHtml+='<div class="rc-extra-grp">'+esc(((DATA.equipment_types||{})[ty]||{}).label||ty)+'</div><div class="dm-avail">'+ids.map(function(id){ return '<span class="dm-availcam resv clickable" data-rgear="'+esc(id)+'">'+esc(gearLabel(id))+'</span>'; }).join('')+'</div>'; });
+      body=gHtml||'<div class="dm-empty">'+t('emptyAvail')+'</div>';
     } else {
       var nc=dayNoCard(iso);
       var availHtml=avail.map(function(c){ return '<span class="dm-availcam clickable'+(kitMissingCal(c).length?' kitwarn':'')+'" data-cam="'+esc(c)+'">'+c+'<small>'+camCourse(c)+'</small></span>'; }).join('');
@@ -1111,8 +1121,12 @@
         if(window.parent!==window && AUTHED){ try{ parent.postMessage({openCam:cam}, '*'); return; }catch(e){} }
         DM_CAM=cam; renderDayModal(); });
     });
-    // Reserve straight from the day card: only on a present/future school day that actually has a free camera.
-    if(_foot && iso>=todayISO() && isOpenDay(iso) && avail.length){
+    // Tapping an available gear unit starts the reservation flow (verify, then pick on the Gear tab).
+    Array.prototype.forEach.call(document.querySelectorAll('#dm-body [data-rgear]'), function(el){
+      el.addEventListener('click', function(){ if(iso>=todayISO() && isOpenDay(iso)) openReserveFlow(iso); });
+    });
+    // Reserve straight from the day card: on a present/future school day with a free camera OR gear.
+    if(_foot && iso>=todayISO() && isOpenDay(iso) && (avail.length||gearKeys.length)){
       _foot.innerHTML='<button type="button" class="dm-reserve-cta" id="dm-reserve">'+t('reserveBtn')+'</button>';
       document.getElementById('dm-reserve').addEventListener('click', function(){ openReserveFlow(iso); });
     }
