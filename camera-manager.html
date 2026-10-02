@@ -99,15 +99,15 @@
   /* ── Camera board = curriculum-catalog course-card look. One "Cameras" card (teal camera-icon
      title box, blurred strips) opens to horizontal section strips; each strip opens to its tiles. ── */
   /* Teacher view toggle (Silva / Garcia / Mankin): angular segmented control, teal active. */
-  .tseg{display:inline-flex;border:1px solid var(--line);margin:0 0 14px;}
-  .tseg-btn{font-family:var(--font);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:rgba(0,0,0,.26);border:0;border-right:1px solid var(--line);padding:9px 18px;cursor:pointer;transition:background .12s,color .12s;}
+  /* Teacher switcher: rides the first header row, right of the title; buttons match the cattrigger
+     row below (32px tall, same subtle outline + dark fill), active teacher filled teal. */
+  .tseg{display:inline-flex;align-items:stretch;height:32px;border:1px solid rgba(0,184,184,.42);margin:0;}
+  .tseg-btn{display:inline-flex;align-items:center;font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:rgba(0,0,0,.26);border:0;border-right:1px solid rgba(0,184,184,.28);padding:0 16px;cursor:pointer;transition:background .12s,color .12s;}
   .tseg-btn:last-child{border-right:0;}
   .tseg-btn.on{background:var(--teal);color:#04110f;}
   .tseg-btn:hover:not(.on){color:#fff;background:rgba(0,184,184,.12);}
-  .poolbar-wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:2px 0 16px;}
+  .poolbar-wrap{display:inline-flex;align-items:center;margin:0;vertical-align:middle;}
   .poolbar-wrap:empty{display:none;}
-  .poolbar-lab{font-family:var(--font);font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);}
-  .poolbar-wrap .tseg{margin:0;}
   .camhub{background:linear-gradient(180deg,rgba(0,116,116,.10) 0%,rgba(0,116,116,.03) 100%);border:1px solid rgba(0,184,184,.22);margin-bottom:14px;position:relative;transition:border-color .2s ease;}
   .camhub.open,.camhub:hover{border-color:rgba(0,184,184,.45);}
   .camhub-head{width:100%;display:flex;align-items:center;gap:18px;cursor:pointer;background:transparent;border:0;color:var(--text);text-align:left;font-family:var(--font);padding:22px 28px 22px 32px;}
@@ -222,7 +222,7 @@
   /* Frosted calendar panel: it blurs the ONE page background logo behind it, and the embedded
      calendar is transparent (no logo of its own), so a single soft, blurred logo shows through. */
   .calpanel{margin-top:12px;border:1px solid var(--line);border-top:3px solid var(--teal);background:rgba(6,14,14,.30);backdrop-filter:blur(16px) saturate(1.12);-webkit-backdrop-filter:blur(16px) saturate(1.12);}
-  .calpanel iframe{width:100%;height:1280px;border:0;display:block;background:transparent;}   /* generous default; JS auto-sizes it to the exact calendar height (no inner scrollbar) */
+  .calpanel iframe{width:100%;height:calc(100vh - 160px);min-height:480px;border:0;display:block;background:transparent;}   /* viewport-capped so a tall calendar scrolls INSIDE the iframe and its sticky weekday row pins; JS refines to min(content, viewport) */
   .foot{margin-top:20px;font-size:.74rem;color:var(--faint);}
 
   /* modal (reserve) + PIN gate share the backdrop look */
@@ -802,6 +802,12 @@
     var tb=document.querySelector('.silva-uni-titlebar'), bar=document.querySelector('.silva-uni-bar');
     if(!tb || !bar) return false;
     if(!t.querySelector('.cal-title-icon')) t.innerHTML='<img class="cal-title-icon" src="/assets/Icons/assignment/camera-kit-teal-v1.svg" alt="" />'+txt;
+    // TEACHER switcher rides the FIRST row, right of the title (Chris 2026-10-02). Lift #poolbar out of
+    // the body into the titlebar, just after the title, so it shares the header's row and spacing.
+    var pb=document.getElementById('poolbar'); if(pb && pb.parentElement!==tb){ tb.insertBefore(pb, t.nextSibling);
+      // The title normally carries margin-right:auto to push the nav right; hand that auto-gap to the
+      // switcher instead so it sits right next to the title while the countdown stays far right.
+      t.style.marginRight='18px'; pb.style.marginRight='auto'; renderPoolBar(); }
     var cal=tb.querySelector('.silva-uni-cal'); if(cal) cal.style.display='none';
     var clk=tb.querySelector('.silva-uni-clock');
     var rb=document.getElementById('reserveBtn'), sc=document.getElementById('studentCalBtn'),
@@ -924,7 +930,8 @@
         odEl.style.display=''; } else { odEl.style.display='none'; odEl.innerHTML=''; } }
     var pend=(DATA.checkouts||[]).filter(function(c){ return c.kind!=='equipment' && statusOf(c)==='reserved' && c.approved===false; }).sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; });
     var pEl=document.getElementById('pendingDigest');
-    if(pEl){ if(pend.length){ pEl.className='digest pending-digest';
+    // The approval line is Silva's only: Garcia + Mankin do not approve student requests here.
+    if(pEl){ if(pend.length && SELECTED_POOL==='silva'){ pEl.className='digest pending-digest';
         pEl.innerHTML='<div class="digest-h">'+pend.length+' student request'+(pend.length>1?'s':'')+' awaiting approval</div><div class="digest-body">'+pend.map(function(c){ return '<span class="digest-item"><span class="camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span> &middot; '+esc(nameOf(c))+' &middot; '+fmt(c.out)+'</span>'; }).join('')+'</div>';
         pEl.style.display=''; } else { pEl.style.display='none'; pEl.innerHTML=''; } }
   }
@@ -1161,7 +1168,7 @@
   var _lastPoolSig=null;
   function renderPoolBar(){
     var el=document.getElementById('poolbar'); if(!el) return;
-    var html='<span class="poolbar-lab">Teacher</span>'+teacherSeg();
+    var html=teacherSeg();
     if(html===_lastPoolSig) return; _lastPoolSig=html; el.innerHTML=html;
     el.querySelectorAll('[data-pool]').forEach(function(b){ b.onclick=function(){
       SELECTED_POOL=b.getAttribute('data-pool'); try{ sessionStorage.setItem('cam_pool',SELECTED_POOL); }catch(e){}
@@ -1319,10 +1326,16 @@
     else s.textContent='Reconnecting…';
   }
   function reloadCal(){ try{ var f=document.getElementById('calframe'); f.contentWindow.location.reload(); }catch(e){ var f2=document.getElementById('calframe'); f2.src=f2.src; } }
-  // The embedded calendar posts its height so the iframe fits with no inner scrollbar.
+  // The embedded calendar posts its content height. We cap the iframe to the viewport so, when the
+  // calendar is taller than the screen, it scrolls INSIDE the iframe and the calendar's own sticky
+  // weekday row pins at the top (Chris 2026-10-02); on a tall screen it still fits with no scroll.
+  var _lastCalH=0;
+  function sizeCal(){ var f=document.getElementById('calframe'); if(!f||!_lastCalH) return;
+    var maxH=Math.max(480,(window.innerHeight||800)-160); f.style.height=Math.min(_lastCalH+4,maxH)+'px'; }
+  window.addEventListener('resize',sizeCal);
   window.addEventListener('message',function(e){
     if(!e.data) return;
-    if(typeof e.data.calH==='number'){ var f=document.getElementById('calframe'); if(f&&e.data.calH>200) f.style.height=(e.data.calH+4)+'px'; }
+    if(typeof e.data.calH==='number'){ if(e.data.calH>200){ _lastCalH=e.data.calH; sizeCal(); } }
     else if(e.data.daySelected){ SELDAY=e.data.daySelected; updateSummary(); }        // bar follows the day clicked in the calendar
     else if(e.data.camAction){ loadBoard(); }                                          // a check-in done from the calendar; refresh the board
     else if(e.data.openCam){ openCamDetail(e.data.openCam); }                           // tapped a camera in the embedded calendar -> open the full teacher window
