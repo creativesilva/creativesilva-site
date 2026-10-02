@@ -1008,10 +1008,16 @@
   function gearKitItems(id){ var u=gearUnit(id); return (u&&u.kit)||[]; }
   function gearKitMissing(id){ var items=gearKitItems(id); return ((assetOf(id).kit)||[]).filter(function(x){ return items.indexOf(x)>=0; }); }
   function gearKitPct(id){ var items=gearKitItems(id); if(!items.length) return null; var m=gearKitMissing(id).length; return Math.round((items.length-m)/items.length*100); }
-  // One square thumbnail per TYPE, reused across that type's units. Empty until Chris drops the images;
-  // a clean placeholder shows until then (never a broken image). Square source, 400x400.
-  var GEAR_THUMB={ wide:'', zoom:'', speedlite:'', tripod:'', reflector:'', mankin_tripod:'', apple_pencil:'' };
+  // One square thumbnail per TYPE, reused across that type's units. 400x400, hosted on the whitelisted
+  // domain. A type with no image yet (speedlite, apple pencil) falls back to the clean placeholder box.
+  var THUMB_BASE='https://www.creativesilva.com/assets/images/equipment/';
+  var GEAR_THUMB={ wide:THUMB_BASE+'ultrawide.jpg', zoom:THUMB_BASE+'ultrazoom.jpg', speedlite:'', tripod:THUMB_BASE+'tripod.jpg', reflector:THUMB_BASE+'reflector.jpg', mankin_tripod:THUMB_BASE+'tripod.jpg', apple_pencil:'' };
   function gearThumb(type){ var u=GEAR_THUMB[type]||'';
+    return u ? '<span class="gthumb"><img src="'+esc(u)+'" alt=""></span>' : '<span class="gthumb gthumb-ph" aria-hidden="true"></span>'; }
+  // Camera body thumbnails: the Photo classes use the Canon EOS R50; Mankin's class (cams 19+) uses the R50 V.
+  var CAMERA_THUMB={ r50:THUMB_BASE+'camera-r50.jpg', r50v:THUMB_BASE+'camera-r50v.jpg' };
+  function camThumb(cam){ var n=parseInt(String(cam).replace(/[^0-9]/g,''),10)||0;
+    var u=(n>=19)?CAMERA_THUMB.r50v:CAMERA_THUMB.r50;
     return u ? '<span class="gthumb"><img src="'+esc(u)+'" alt=""></span>' : '<span class="gthumb gthumb-ph" aria-hidden="true"></span>'; }
   // A gear unit's live state + the one active (non-returned) record on it, mirroring the camera helpers.
   function gearActiveFor(id){ var r=(DATA.checkouts||[]).filter(function(c){ return c.kind==='equipment' && c.item===id && statusOf(c)!=='returned'; }); return r[0]||null; }
@@ -1083,10 +1089,13 @@
     else if(s==='resv') sub=esc(nameOf(c))+' &middot; pickup '+fmt(c.out);
     else if(s==='oos') sub=a.oos?'Marked out of service':'Memory card missing';
     else { var fl=[]; if(c && statusOf(c)==='reserved' && c.out) fl.push('reserved '+fmt(c.out)); if(a.issues&&a.issues.length) fl.push(a.issues.length+' open issue'+(a.issues.length>1?'s':'')); sub=fl.length?fl.join(' &middot; '):'In the storage room'; }
-    return '<button type="button" class="camtile cs-'+s+'" data-camdetail="'+esc(cam)+'">'+
-      '<span class="camtile-top"><span class="camtile-dot"></span><span class="camtile-n">'+esc(cam)+'</span>'+p2+'<span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span></span>'+
-      '<span class="camtile-status">'+camStateLabel(cam,s)+'</span>'+
-      '<span class="camtile-sub">'+sub+'</span>'+
+    return '<button type="button" class="camtile gtile cs-'+s+'" data-camdetail="'+esc(cam)+'">'+
+      camThumb(cam)+
+      '<span class="gtile-main">'+
+        '<span class="camtile-top"><span class="camtile-dot"></span><span class="camtile-n">'+esc(cam)+'</span>'+p2+'<span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span></span>'+
+        '<span class="camtile-status">'+camStateLabel(cam,s)+'</span>'+
+        '<span class="camtile-sub">'+sub+'</span>'+
+      '</span>'+
     '</button>';
   }
   function camCard(cam){
