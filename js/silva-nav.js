@@ -29,6 +29,30 @@
   // site, so on-site pages (catalog, modules, calendar) are completely unaffected.
   var BASE = /^(www\.)?creativesilva\.com$/i.test(location.hostname) ? '' : 'https://www.creativesilva.com';
 
+  // ===== iOS standalone (home-screen web app): keep navigation INSIDE the app =====
+  // When added to the iPad home screen, iOS runs the pages in a standalone webview but,
+  // with only the legacy apple-mobile-web-app-capable meta and no manifest scope, a plain
+  // same-origin <a href> navigation (Equipment Manager -> Student Calendar, etc.) pops out
+  // to Safari. navigator.standalone is true only in that installed context; there we
+  // intercept same-origin link clicks and navigate the current webview, so it stays in-app.
+  // External links, mailto/tel, downloads, target=_blank (the Command Center's SILVA_NAV_BLANK
+  // links), and already-handled clicks are left untouched.
+  if (window.navigator.standalone === true) {
+    document.addEventListener('click', function (e) {
+      if (e.defaultPrevented) { return; }
+      var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+      if (!a) { return; }
+      if (a.target === '_blank' || a.hasAttribute('download')) { return; }
+      var href = a.getAttribute('href') || '';
+      if (!href || href.charAt(0) === '#' || /^(mailto|tel|sms|javascript):/i.test(href)) { return; }
+      var url;
+      try { url = new URL(a.href, location.href); } catch (_) { return; }
+      if (url.origin !== location.origin) { return; }   // external links open normally
+      e.preventDefault();
+      location.href = url.href;                          // stay inside the standalone webview
+    }, false);
+  }
+
   // ===== Top-left "Curriculum Catalog" dropdown menu (teacher navigation) =====
   // Active courses -> their modules -> the module's OVERVIEW url (first page).
   // TO ADD A MODULE TO THE MENU: add a line to the right course's `modules` list.

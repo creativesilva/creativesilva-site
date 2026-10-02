@@ -13,6 +13,7 @@
 <meta name="description" content="See which Pioneer Valley photography cameras are checked out and when they are due back." />
 <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only_Teal.svg" />
 <link rel="apple-touch-icon" href="/logos/CS_AppIcon_Teal_180.png" />
+<link rel="manifest" href="/app.webmanifest" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/silva-module.css?v=d132cef2" />
@@ -277,6 +278,7 @@
   .rv-who{font-family:var(--font);font-size:1.05rem;color:#fff;margin:2px 0 10px;}
   .rv-who b{color:var(--teal-lt);}
   #rv-id,#rv-sc,#rv-pg,#rv-pc,#se-sc,#se-pg,#se-pc{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1.05rem;padding:11px 12px;outline:none;box-sizing:border-box;margin-bottom:10px;}
+  .rv-badfield{border-color:#e0403a !important;box-shadow:0 0 0 2px rgba(224,64,58,.25);}
   .rv-msg{min-height:1.1em;font-size:.85rem;color:var(--muted);margin:2px 0 12px;}
   /* Missing-assignment hold: a clear, professional red notice shown at ID entry when a student is not eligible. */
   .rv-block{background:rgba(224,64,58,.14);border:1px solid rgba(224,64,58,.4);border-left:4px solid var(--red);padding:12px 14px;margin:4px 0 6px;font-size:.9rem;line-height:1.45;color:#ffb3a6;}
@@ -443,13 +445,13 @@
       </div>
       <div id="rv-step1b" style="display:none;">
         <div class="rv-who" id="rv-who"></div>
-        <p class="rv-sub" id="rvVerifyLead">Check your info and fix anything that is wrong, then start reserving. Your changes are saved.</p>
+        <p class="rv-sub" id="rvVerifyLead">Make sure all three are correct before you reserve. Your cell, a parent or guardian name, and their cell are required to check out a camera, and phone numbers must be 10 digits.</p>
         <label class="nc-label" for="rv-sc" id="rvScLabel">Your cell phone</label>
-        <input type="text" id="rv-sc" inputmode="tel" autocomplete="off" placeholder="(805) 000-0000" />
+        <input type="text" id="rv-sc" inputmode="tel" autocomplete="off" maxlength="12" placeholder="805-000-0000" />
         <label class="nc-label" for="rv-pg" id="rvPgLabel">Parent / guardian name</label>
         <input type="text" id="rv-pg" autocomplete="off" placeholder="Parent or guardian" />
         <label class="nc-label" for="rv-pc" id="rvPcLabel">Parent / guardian cell</label>
-        <input type="text" id="rv-pc" inputmode="tel" autocomplete="off" placeholder="(805) 000-0000" />
+        <input type="text" id="rv-pc" inputmode="tel" autocomplete="off" maxlength="12" placeholder="805-000-0000" />
         <div class="rv-msg" id="rv-msg2"></div>
         <div class="rv-btnrow">
           <button class="qr-btn" id="rv-back" type="button">Back</button>
@@ -495,7 +497,7 @@
 <div class="wdaymenu" id="wdaymenu"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-<script src="/js/silva-nav.js?v=catlock1"></script>
+<script src="/js/silva-nav.js?v=standalone1"></script>
 <script>
 (function(){
   var API='https://command.creativesilva.com';
@@ -528,9 +530,9 @@
       copyLink:'Copy link', copied:'Copied!', download:'Download',
       step1:'Enter your student ID so we know it’s you.', step1lead:'Step 1 of 2.',
       idLabel:'Student ID number', idPh:'Student ID', cont:'Continue',
-      verifyLead:'Check your info and fix anything that is wrong, then start reserving. Your changes are saved.',
+      verifyLead:'Make sure all three are correct before you reserve. Your cell, a parent or guardian name, and their cell are required to check out a camera, and phone numbers must be 10 digits.',
       yourCell:'Your cell phone', parentName:'Parent / guardian name', parentNamePh:'Parent or guardian',
-      parentCell:'Parent / guardian cell', back:'Back', startReserving:'Start reserving',
+      parentCell:'Parent / guardian cell', back:'Back', startReserving:'Confirm and continue',
       tabAvail:'Available', tabOut:'Checked out', tabRes:'Reserved', tabEquip:'Equipment', tabOverdue:'Overdue', tabReturned:'Returned',
       emptyReturned:'Nothing returned this day.', emptyOverdue:'Nothing overdue.',
       emptyRes:'No reservations this day.', emptyOut:'No cameras checked out this day.',
@@ -549,7 +551,7 @@
       enterFullId:'Enter your full student ID.', checking:'Checking…',
       idNotFound:'We could not find that ID. Check the number or see Mr. Silva.',
       serverErr:'Could not reach the server. Try again.',
-      needCell:'Please enter your cell phone.', needParentCell:'Please enter a parent / guardian cell.',
+      needCell:'Enter your 10-digit cell phone (example 805-631-0001).', needParentName:'Enter your parent or guardian name.', needParentCell:'Enter a 10-digit parent / guardian cell (example 805-631-0001).',
       couldNotReserve:'Could not reserve. Try again.', couldNotReach:'Could not reach the server.',
       reservingAs:'Reserving as', tapSchoolDay:'Tap a <b>school day</b> below, then pick an available camera.', cancel:'Cancel',
       doneTitle:'Reserved', reservedYou:'You’re reserved.', takeLook:'Take a quick look, then tap Done.',
@@ -585,9 +587,9 @@
       copyLink:'Copiar enlace', copied:'¡Copiado!', download:'Descargar',
       step1:'Escribe tu número de estudiante para saber que eres tú.', step1lead:'Paso 1 de 2.',
       idLabel:'Número de estudiante', idPh:'Número de estudiante', cont:'Continuar',
-      verifyLead:'Revisa tu información y corrige lo que esté mal, luego empieza a reservar. Tus cambios se guardan.',
+      verifyLead:'Asegúrate de que los tres datos estén correctos antes de reservar. Tu celular, el nombre de un padre o tutor y su celular son obligatorios para sacar una cámara, y los teléfonos deben tener 10 dígitos.',
       yourCell:'Tu celular', parentName:'Nombre del padre / tutor', parentNamePh:'Padre o tutor',
-      parentCell:'Celular del padre / tutor', back:'Atrás', startReserving:'Empezar a reservar',
+      parentCell:'Celular del padre / tutor', back:'Atrás', startReserving:'Confirmar y continuar',
       tabAvail:'Disponibles', tabOut:'Prestadas', tabRes:'Reservadas', tabEquip:'Equipo', tabOverdue:'Atrasadas', tabReturned:'Devueltas',
       emptyReturned:'No se devolvió nada este día.', emptyOverdue:'Nada atrasado.',
       emptyRes:'No hay reservas este día.', emptyOut:'No hay cámaras prestadas este día.',
@@ -606,7 +608,7 @@
       enterFullId:'Escribe tu número de estudiante completo.', checking:'Verificando…',
       idNotFound:'No encontramos ese número. Revísalo o habla con el Sr. Silva.',
       serverErr:'No se pudo conectar al servidor. Inténtalo de nuevo.',
-      needCell:'Por favor escribe tu celular.', needParentCell:'Por favor escribe un celular del padre / tutor.',
+      needCell:'Escribe tu celular de 10 dígitos (ejemplo 805-631-0001).', needParentName:'Escribe el nombre de tu padre o tutor.', needParentCell:'Escribe un celular del padre / tutor de 10 dígitos (ejemplo 805-631-0001).',
       couldNotReserve:'No se pudo reservar. Inténtalo de nuevo.', couldNotReach:'No se pudo conectar al servidor.',
       reservingAs:'Reservando como', tapSchoolDay:'Toca un <b>día de clases</b> abajo y luego elige una cámara disponible.', cancel:'Cancelar',
       doneTitle:'Reservada', reservedYou:'¡Estás reservada!', takeLook:'Revisa rápido y luego toca Listo.',
@@ -1317,6 +1319,11 @@
   var rvLookup=null;
   function isReserving(){ return !!RESV; }
   function normPeriod(p){ return String(p||'').replace(/[^0-9]/g,'').replace(/^0+/,''); }
+  // Format a phone as a 10-digit dashed number (805-631-0001). Drops a leading US "1", caps at 10.
+  function fmtPhone(v){ var d=String(v||'').replace(/\D/g,''); if(d.length===11&&d.charAt(0)==='1') d=d.slice(1); d=d.slice(0,10);
+    if(d.length>6) return d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6);
+    if(d.length>3) return d.slice(0,3)+'-'+d.slice(3);
+    return d; }
   function p2ok(){ return RESV && normPeriod(RESV.period)==='4'; }   // only Period 4 (Photo 2A) may take Cam 16/17/18
   // Due date = the next SCHOOL day (weekend/holiday skipped). A blackout day is only closed to new
   // checkouts, NOT to returns, so a camera can still be due back / checked in on a closed day.
@@ -1355,17 +1362,24 @@
     var L=rvLookup;
     document.getElementById('rv-who').innerHTML=t('reservingAs')+' <b>'+esc(L.label)+'</b>'+(L.period?(' &middot; '+t('period')+' '+esc(normPeriod(L.period)||L.period)):'');
     // Prefill the editable fields with what is on file so the student can confirm or correct it.
-    document.getElementById('rv-sc').value=L.student_cell||'';
+    document.getElementById('rv-sc').value=fmtPhone(L.student_cell||'');
     document.getElementById('rv-pg').value=L.parent_guardian||'';
-    document.getElementById('rv-pc').value=L.parent_cell||'';
+    document.getElementById('rv-pc').value=fmtPhone(L.parent_cell||'');
+    ['rv-sc','rv-pg','rv-pc'].forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.remove('rv-badfield'); });
     document.getElementById('rv-msg2').textContent='';
     document.getElementById('rv-step1').style.display='none'; document.getElementById('rv-step1b').style.display='';
   }
   function rvStart(){
     var L=rvLookup, m2=document.getElementById('rv-msg2');
     var sc=document.getElementById('rv-sc').value.trim(), pg=document.getElementById('rv-pg').value.trim(), pc=document.getElementById('rv-pc').value.trim();
-    if(sc.replace(/\D/g,'').length<7){ m2.textContent=t('needCell'); return; }
-    if(pc.replace(/\D/g,'').length<7){ m2.textContent=t('needParentCell'); return; }
+    var scD=sc.replace(/\D/g,''), pcD=pc.replace(/\D/g,'');
+    ['rv-sc','rv-pg','rv-pc'].forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.remove('rv-badfield'); });
+    function bad(id,key){ m2.textContent=t(key); var el=document.getElementById(id); if(el){ el.classList.add('rv-badfield'); try{ el.focus(); }catch(e){} } }
+    // All three are required to check out a camera, so we can reach the student or parent if gear goes missing.
+    if(scD.length!==10){ bad('rv-sc','needCell'); return; }
+    if(!pg){ bad('rv-pg','needParentName'); return; }
+    if(pcD.length!==10){ bad('rv-pc','needParentCell'); return; }
+    sc=fmtPhone(scD); pc=fmtPhone(pcD);   // store a clean 10-digit dashed number (805-631-0001) in the database
     RESV={id:L.id,label:L.label,period:L.period,pool:L.pool||'silva',teacher:L.teacher||''};
     var proceed=function(){
       closeReserveModal(); showBanner();
@@ -1562,6 +1576,8 @@
     var idf=document.getElementById('rv-id'); if(idf) idf.addEventListener('keydown',function(e){ if(e.key==='Enter') rvContinue(); });
     var bk=document.getElementById('rv-back'); if(bk) bk.addEventListener('click',function(){ document.getElementById('rv-step1b').style.display='none'; document.getElementById('rv-step1').style.display=''; });
     var st=document.getElementById('rv-start'); if(st) st.addEventListener('click',rvStart);
+    ['rv-sc','rv-pc'].forEach(function(id){ var el=document.getElementById(id); if(el) el.addEventListener('input',function(){ el.value=fmtPhone(el.value); el.classList.remove('rv-badfield'); }); });
+    var pgf2=document.getElementById('rv-pg'); if(pgf2) pgf2.addEventListener('input',function(){ pgf2.classList.remove('rv-badfield'); });
     var x=document.getElementById('rv-x'); if(x) x.addEventListener('click',closeReserveModal);
     var m=document.getElementById('rvmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeReserveModal(); });
     var rb=document.getElementById('reserveMonthBtn'); if(rb) rb.addEventListener('click',function(){ openReserveFlow(); });  // wrap: never pass the click Event as resumeDay

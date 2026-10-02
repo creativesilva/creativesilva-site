@@ -1,0 +1,13 @@
+{
+  "name": "PVHS Equipment",
+  "short_name": "Equipment",
+  "start_url": "/camera-manager.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0a1414",
+  "theme_color": "#0a1414",
+  "icons": [
+    { "src": "/logos/CS_AppIcon_Teal_180.png", "sizes": "180x180", "type": "image/png", "purpose": "any" }
+  ]
+}
