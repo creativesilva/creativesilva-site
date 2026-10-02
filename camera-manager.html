@@ -17,6 +17,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/silva-module.css?v=d132cef2" />
+<!-- EmailJS: student reservation-confirmation emails (Chris's creativesilva service). -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>try{ emailjs.init({ publicKey: '68UkiTjqHIKZMkeCC' }); }catch(e){}</script>
 <style>
   /* Standalone camera back-end. Shares the unified header (silva-nav.js) + the catalog
      CS-logo watermark so it matches curriculum.html and calendar.html. Talks to the same
@@ -95,6 +98,12 @@
   .pendmsg{font-size:.66rem;color:#c9b8ff;letter-spacing:.02em;margin-top:-2px;}
   /* ── Camera board = curriculum-catalog course-card look. One "Cameras" card (teal camera-icon
      title box, blurred strips) opens to horizontal section strips; each strip opens to its tiles. ── */
+  /* Teacher view toggle (Silva / Garcia / Mankin): angular segmented control, teal active. */
+  .tseg{display:inline-flex;border:1px solid var(--line);margin:0 0 14px;}
+  .tseg-btn{font-family:var(--font);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:rgba(0,0,0,.26);border:0;border-right:1px solid var(--line);padding:9px 18px;cursor:pointer;transition:background .12s,color .12s;}
+  .tseg-btn:last-child{border-right:0;}
+  .tseg-btn.on{background:var(--teal);color:#04110f;}
+  .tseg-btn:hover:not(.on){color:#fff;background:rgba(0,184,184,.12);}
   .camhub{background:linear-gradient(180deg,rgba(0,116,116,.10) 0%,rgba(0,116,116,.03) 100%);border:1px solid rgba(0,184,184,.22);margin-bottom:14px;position:relative;transition:border-color .2s ease;}
   .camhub.open,.camhub:hover{border-color:rgba(0,184,184,.45);}
   .camhub-head{width:100%;display:flex;align-items:center;gap:18px;cursor:pointer;background:transparent;border:0;color:var(--text);text-align:left;font-family:var(--font);padding:22px 28px 22px 32px;}
@@ -525,6 +534,8 @@
   .mdd-opt+.mdd-opt{border-top:1px solid rgba(0,184,184,.14);}
   .mdd-opt:hover,.mdd-opt.active{background:rgba(0,184,184,.20);border-left-color:var(--teal);color:#fff;}
   .who-line{font-size:.85rem;margin:-8px 0 14px;min-height:1.1em;}
+  /* Fixed unit shown in the reserve modal when checking out a single gear unit (no dropdown). */
+  .res-fixedunit{background:rgba(0,0,0,.35);border:1px solid var(--line);border-left:3px solid var(--teal);padding:11px 13px;margin-bottom:14px;font-family:var(--font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--teal-lt);}
   .who-line.ok{color:#8ff0b0;} .who-line.no{color:#ffd889;} .who-line.load{color:var(--faint);}
   .chk{display:flex;align-items:flex-start;gap:9px;font-size:.9rem;color:#dbeeee;cursor:pointer;line-height:1.4;margin-bottom:16px;}
   .chk input{width:17px;height:17px;accent-color:var(--teal);flex:0 0 auto;margin-top:2px;}
@@ -571,6 +582,7 @@
     <p class="sub">Reserve equipment, mark it picked up when the student collects it, and mark it returned when it comes back. Changes sync to the calendar and the Command Center in real time.</p>
     <button class="silva-uni-cattrigger" id="reserveBtn">Reserve</button>
     <button class="silva-uni-cattrigger" id="refreshBtn" title="Reload the latest data now">&#8635; Refresh</button>
+    <button class="silva-uni-cattrigger" id="reportsBtn" title="Missing kit items to order (opens a printable report)">Missing Items</button>
     <a class="silva-uni-cattrigger" id="studentCalBtn" href="/calendar.html?from=console" target="_blank" rel="noopener">Student Calendar</a>
     <a class="silva-uni-cattrigger" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
   </div>
@@ -749,6 +761,9 @@
   try{ KEY=sessionStorage.getItem('silva-cam-key')||''; }catch(e){}
   var P2=['Cam 16','Cam 17','Cam 18'];
   var DATA={cameras:[],checkouts:[],assets:{},cards:{}};
+  // Which teacher's equipment the console is viewing (Silva / Garcia / Mankin). Filters the board.
+  var SELECTED_POOL='silva'; try{ SELECTED_POOL=sessionStorage.getItem('cam_pool')||'silva'; }catch(e){}
+  function viewCams(){ var p=(DATA.pools||{})[SELECTED_POOL]; return (p&&p.length)?p:(DATA.cameras||[]); }
 
   // ---- shared header icon ----
   // Show the reservations QR (students scan it to open the student calendar on their phones).
@@ -784,7 +799,8 @@
     var cal=tb.querySelector('.silva-uni-cal'); if(cal) cal.style.display='none';
     var clk=tb.querySelector('.silva-uni-clock');
     var rb=document.getElementById('reserveBtn'), sc=document.getElementById('studentCalBtn'),
-        pw=document.getElementById('photoWalkBtn'), rf=document.getElementById('refreshBtn');
+        pw=document.getElementById('photoWalkBtn'), rf=document.getElementById('refreshBtn'),
+        rp=document.getElementById('reportsBtn');
     // TOP ROW: Student Calendar only, inserted BEFORE the clock so the period countdown stays all the
     // way to the right (LOCKED, Chris 2026-10-01: the countdown is never moved off the top-right).
     if(sc && sc.parentElement!==tb){ if(clk) tb.insertBefore(sc,clk); else tb.appendChild(sc); }
@@ -793,8 +809,8 @@
       var qr=document.createElement('button'); qr.type='button'; qr.id='cmQrBtn'; qr.className='silva-uni-cattrigger'; qr.textContent='QR Code'; qr.onclick=showQR;
       var cat=bar.querySelector('.silva-uni-cattrigger'); if(cat) cat.insertAdjacentElement('afterend', qr); else bar.appendChild(qr);
     }
-    // SECOND ROW (with Catalog + QR Code): Reserve, Photo Walk Log, Refresh. All share the cattrigger look.
-    [rb, pw, rf].forEach(function(b){ if(b && b.parentElement!==bar){ bar.appendChild(b); } });
+    // SECOND ROW (with Catalog + QR Code): Reserve, Photo Walk Log, Missing Items, Refresh. Shared cattrigger look.
+    [rb, pw, rp, rf].forEach(function(b){ if(b && b.parentElement!==bar){ bar.appendChild(b); } });
     var intro=document.querySelector('.intro'); if(intro) intro.style.display='none';
     return true;
   }
@@ -883,12 +899,12 @@
   // posts {daySelected} and this recomputes how many cameras are free on that day.
   var SELDAY=todayISO();
   function effLastC(c){ var st=statusOf(c); if(st==='returned') return null; var start=c.out; if(!start) return null; var last=c.due||start; if(last<start) last=start; if(st==='out'&&todayISO()>last) last=todayISO(); return last; }
-  function availCountOnDay(iso){ var busy={}; (DATA.checkouts||[]).forEach(function(c){ var last=effLastC(c); if(last&&c.out&&iso>=c.out&&iso<=last) busy[c.camera]=1; }); return (DATA.cameras||[]).filter(function(cam){ return !busy[cam] && !isOOS(cam) && !isNoCard(cam); }).length; }
+  function availCountOnDay(iso){ var busy={}; (DATA.checkouts||[]).forEach(function(c){ var last=effLastC(c); if(last&&c.out&&iso>=c.out&&iso<=last) busy[c.camera]=1; }); return viewCams().filter(function(cam){ return !busy[cam] && !isOOS(cam) && !isNoCard(cam); }).length; }
   function fmtMDY(iso){ var p=String(iso).split('-'); return (+p[1])+'/'+(+p[2])+'/'+p[0]; }
   function dowShort(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]; }
   function updateSummary(){
     var an=document.getElementById('availn'); if(an) an.textContent=availCountOnDay(SELDAY);
-    var tn=document.getElementById('totn'); if(tn) tn.textContent=(DATA.cameras||[]).length;
+    var tn=document.getElementById('totn'); if(tn) tn.textContent=viewCams().length;
     var ad=document.getElementById('availday'); if(ad){ ad.textContent=(SELDAY===todayISO()?'today':'on '+dowShort(SELDAY))+' · '+fmtMDY(SELDAY); }
   }
   function daysBetween(a,b){ return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000); }
@@ -943,7 +959,7 @@
   // backend is the single source of truth.
   function gearUnits(){ return DATA.equipment_units || {}; }               // {id:{type,label,pool,kit}}
   function gearTypes(){ return DATA.equipment_types || {}; }               // {type:{label,unit}}
-  function gearPoolIds(){ return (DATA.equipment_pools||{}).silva || []; } // this console = Silva's view
+  function gearPoolIds(){ return (DATA.equipment_pools||{})[SELECTED_POOL] || []; } // follows the teacher view toggle
   function gearUnit(id){ return gearUnits()[id] || null; }
   function gearLabel(id){ var u=gearUnit(id); return u?u.label:id; }
   function gearKitItems(id){ var u=gearUnit(id); return (u&&u.kit)||[]; }
@@ -1114,7 +1130,7 @@
     if(mode==='oos') return s==='oos'?0:1;
     if(mode==='pct') return (p==null?999:p);   // least-complete kits first; TBD last
     return 0; }
-  function sortedCams(){ var arr=(DATA.cameras||[]).slice(); if(CAM_SORT==='num') return arr;
+  function sortedCams(){ var arr=viewCams().slice(); if(CAM_SORT==='num') return arr;
     return arr.map(function(c,i){ return {c:c,i:i}; }).sort(function(a,b){ var ka=camSortKey(a.c,CAM_SORT), kb=camSortKey(b.c,CAM_SORT); return (ka!==kb)?(ka-kb):(a.i-b.i); }).map(function(x){ return x.c; }); }
   function camSortDropdown(){ var cur=(CAM_SORTS.filter(function(s){return s.k===CAM_SORT;})[0]||CAM_SORTS[0]).label;
     return '<div class="camsortdd" id="camsortdd">'+
@@ -1128,10 +1144,16 @@
   function markSortCenter(sc){ var b=sc.getBoundingClientRect(), cy=b.top+b.height/2, best=null, bd=1e9;
     sc.querySelectorAll('.csw-item').forEach(function(it){ var r=it.getBoundingClientRect(), d=Math.abs((r.top+r.height/2)-cy); if(d<bd){ bd=d; best=it; } });
     sc.querySelectorAll('.csw-item').forEach(function(it){ it.classList.toggle('on', it===best); }); }
+  // Teacher view toggle: Silva / Garcia / Mankin. Filters the board (cameras + gear) to that pool.
+  function teacherSeg(){
+    return '<div class="tseg">'+[['silva','Silva'],['garcia','Garcia'],['mankin','Mankin']].map(function(o){
+      return '<button type="button" class="tseg-btn'+(SELECTED_POOL===o[0]?' on':'')+'" data-pool="'+o[0]+'">'+o[1]+'</button>';
+    }).join('')+'</div>';
+  }
   var _lastBoardSig=null;   // flicker guard: only replace #board when the rendered board actually changes
   function renderBoard(){
     var host=document.getElementById('board'); if(!host) return;
-    var cams=DATA.cameras||[], counts={out:0,reserved:0,avail:0};
+    var cams=viewCams(), counts={out:0,reserved:0,avail:0};
     cams.forEach(function(cam){ counts[catOf(cam)]++; });
     // ONE consolidated, color-coded Cameras grid (Chris, 2026-10-01): each camera appears ONCE,
     // colored by today's status (green available, yellow reserved-today, orange checked out, red
@@ -1161,7 +1183,8 @@
     // Wrap all sections in the top-level "Cameras" card (curriculum-catalog course-card look).
     var camsOpen=secOpen('cameras');
     var topN=counts.avail+' available &middot; '+counts.out+' out &middot; '+counts.reserved+' reserved';
-    var html='<div class="camhub'+(camsOpen?' open':'')+'">'+
+    var html=teacherSeg()+
+      '<div class="camhub'+(camsOpen?' open':'')+'">'+
       '<div class="camhub-head" data-sectoggle="cameras">'+
         '<span class="camhub-titlebox"><span class="camhub-code">Equipment</span><span class="camhub-title">Cameras</span></span>'+
         camSortDropdown()+
@@ -1191,6 +1214,7 @@
   function bindBoard(){
     var b=document.getElementById('board');
     b.querySelectorAll('[data-sectoggle]').forEach(function(el){ el.onclick=function(){ var k=el.getAttribute('data-sectoggle'), sec=el.parentNode, open=!sec.classList.contains('open'); sec.classList.toggle('open',open); setSecOpen(k,open); }; });
+    b.querySelectorAll('[data-pool]').forEach(function(el){ el.onclick=function(){ SELECTED_POOL=el.getAttribute('data-pool'); try{ sessionStorage.setItem('cam_pool',SELECTED_POOL); }catch(e){} _lastBoardSig=null; renderBoard(); }; });
     var _st=b.querySelector('[data-sorttrig]'), _ssc=b.querySelector('#camsortScroll');
     if(_st){ _st.onclick=function(e){ e.stopPropagation(); var dd=_st.closest('.camsortdd'); var opening=!dd.classList.contains('open'); dd.classList.toggle('open',opening);
       if(opening && _ssc){ setTimeout(function(){ var cur=_ssc.querySelector('.csw-item.on')||_ssc.querySelector('.csw-item'); if(cur) cur.scrollIntoView({block:'center'}); markSortCenter(_ssc); },20); } }; }
@@ -1231,9 +1255,31 @@
   });
   function approve(id,btn){
     if(btn) btn.disabled=true;
+    var c=findRec(id);
     return camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,approved:true})})
       .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(reloadCal)
+      .then(function(){ if(c) offerReservationEmail(c); })
       .catch(function(){ silvaToast('Could not approve. Try again.'); if(btn) btn.disabled=false; });
+  }
+  // ---- Student reservation-confirmation email (EmailJS). Student address = <student id>@students-smjuhsd.org.
+  function studentEmail(c){ var sid=String((c&&c.student_id)||'').replace(/\D/g,''); return sid?(sid+'@students-smjuhsd.org'):''; }
+  function offerReservationEmail(c){
+    var email=studentEmail(c); if(!email) return;   // no id (e.g. ad-hoc) -> nothing to email
+    var what=c.kind==='equipment'?gearLabel(c.item):(c.camera||'equipment');
+    silvaConfirm('Approved. Email '+(nameOf(c)||'the student')+' a pickup confirmation for '+esc(what)+'?',
+      {okLabel:'Email confirmation',cancelLabel:'Skip'}).then(function(ok){ if(ok) sendReservationEmail(c,email,what); });
+  }
+  function sendReservationEmail(c,email,what){
+    if(!window.emailjs){ silvaToast('Email service is not loaded. Try again.'); return; }
+    emailjs.send('service_4mhkbik','template_reservation',{
+      to_email: email,
+      student_name: nameOf(c)||'there',
+      item: what,
+      pickup_room: 'Room 322',
+      pickup_date: fmt(c.out),
+      return_by: fmt(c.due||c.out)
+    }).then(function(){ silvaToast('Confirmation emailed to '+email+'.'); },
+      function(err){ silvaToast('Could not send the email'+((err&&err.text)?(': '+err.text):'. Check the EmailJS template.')); });
   }
   // Mark-returned undo window: hold the return ~15s before committing, so a wrong camera can be undone.
   var pendingReturns={}, ticker=null;
@@ -1645,6 +1691,9 @@
       else if(st==='reserved') acts='<button class="btn sm" id="gd-pickup">Mark picked up</button><button class="btn sm danger" id="gd-cancel">Cancel</button>';
       else acts='<button class="btn sm ghost" id="gd-undo">Undo pickup</button><button class="btn sm warn" id="gd-return">Mark returned</button>';
       h+='<div class="cd-cur"><div class="cd-cur-who">'+esc(nameOf(c))+(pend?' <span class="pill pending">Pending</span>':'')+'</div><div class="cd-cur-meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+esc(c.course||'')+' &middot; out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</div>'+(c.note?'<div class="cd-cur-note">Reservation note: '+esc(c.note)+'</div>':'')+'<div class="cd-cur-acts">'+acts+'</div></div>';
+    } else if(!oos){
+      // Available unit: check it out to a student on its own (no camera needed).
+      h+='<div class="cd-cur"><div class="cd-cur-acts"><button class="btn sm" id="gd-checkout">Check out to a student</button></div></div>';
     }
     h+='<div class="cd-sec"><div class="cd-h">Kit contents'+(items.length?(' <span class="cd-tabscore '+kitScoreCls(kpct)+'">'+kpct+'%</span>'):'')+'</div>';
     if(items.length){
@@ -1665,6 +1714,7 @@
       ((!log.length&&!hist.length)?'<div class="cd-empty">No history yet.</div>':'')+'</div>';
     document.getElementById('cd-body').innerHTML=h;
     var oosb=document.getElementById('gd-oos'); if(oosb) oosb.onclick=function(){ saveAsset(id,{oos:!oos},renderGearDetailModal); };
+    var cob=document.getElementById('gd-checkout'); if(cob) cob.onclick=function(){ closeCamDetail(); openReserveGear(id); };
     var pk=document.getElementById('gd-pickup'); if(pk) pk.onclick=function(){ setStatus(c.id,'out'); closeCamDetail(); };
     var un=document.getElementById('gd-undo'); if(un) un.onclick=function(){ setStatus(c.id,'reserved'); closeCamDetail(); };
     var rt=document.getElementById('gd-return'); if(rt) rt.onclick=function(){ markReturned(c.id); closeCamDetail(); };
@@ -1750,7 +1800,7 @@
     var w=document.getElementById('ed-who'); w.className='who-line'; w.textContent=c.student_name?('Currently: '+c.student_name):'';
     document.getElementById('ed-out').value=c.out||''; document.getElementById('ed-due').value=c.due||'';
     mkDatePicker(document.getElementById('ed-out')); mkDatePicker(document.getElementById('ed-due'));
-    edCamDD=mkDropdown(document.getElementById('ed-cam'), (DATA.cameras||[]).map(function(cm){ return {value:cm,label:cm+(P2.indexOf(cm)>=0?' (Photo 2 only)':'')}; }), c.camera||'', null);
+    edCamDD=mkDropdown(document.getElementById('ed-cam'), viewCams().map(function(cm){ return {value:cm,label:cm+(P2.indexOf(cm)>=0?' (Photo 2 only)':'')}; }), c.camera||'', null);
     edStatusDD=mkDropdown(document.getElementById('ed-status'), [{value:'reserved',label:'Reserved'},{value:'out',label:'Picked up (out)'},{value:'returned',label:'Returned'}], statusOf(c), null);
     renderEditGear(c);
     document.getElementById('editmodal').classList.add('open');
@@ -1837,7 +1887,7 @@
       rcam=document.getElementById('rcam'), rout=document.getElementById('rout'), rdue=document.getElementById('rdue'),
       rpick=document.getElementById('rpick'), rgo=document.getElementById('rgo'), rwho=document.getElementById('rwho'),
       resmsg=document.getElementById('resmsg');
-  function freeCams(){ return (DATA.cameras||[]).filter(function(c){ return !activeFor(c); }); }
+  function freeCams(){ return viewCams().filter(function(c){ return !activeFor(c); }); }
   // custom teal dropdown (matches the dark aesthetic; native <select> open lists show the OS blue highlight)
   var rcamDD=null;
   function mkDropdown(host, items, current, onSelect){
@@ -1860,14 +1910,31 @@
     paint(); wrap.appendChild(btn); wrap.appendChild(menu); host.appendChild(wrap);
     return { value:function(){ return cur; } };
   }
+  var resMode='camera', resGearId='';
   function openReserve(preCam){
+    resMode='camera'; resGearId='';
     resmsg.className='mmsg'; rwho.className='who-line'; rwho.textContent=''; rsid.value=''; lastLookup='';
     var free=freeCams();
     var items=free.map(function(c){ return {value:c, label:c+(P2.indexOf(c)>=0?' (Photo 2 only)':'')}; });
     var initial=(preCam && free.indexOf(preCam)>=0)?preCam:(free[0]||'');
-    rcamDD=mkDropdown(rcam, items, initial, null);
+    var lbl=document.querySelector('label[for="rcam"]'); if(lbl) lbl.textContent='Camera';
+    rcam.innerHTML=''; rcamDD=mkDropdown(rcam, items, initial, null);
     rout.value=todayISO(); rdue.value=addDays(todayISO(),1); rpick.checked=true;
     mkDatePicker(rout); mkDatePicker(rdue);
+    rgo.textContent='Reserve this camera';
+    document.querySelector('#resmodal .mtitle').textContent='Reserve / check out';
+    resmodal.classList.add('open'); setTimeout(function(){ rsid.focus(); },50);
+  }
+  // Check out / reserve a single gear UNIT on its own (no camera), from the unit's window.
+  function openReserveGear(id){ var u=gearUnit(id); if(!u) return;
+    resMode='gear'; resGearId=id;
+    resmsg.className='mmsg'; rwho.className='who-line'; rwho.textContent=''; rsid.value=''; lastLookup='';
+    var lbl=document.querySelector('label[for="rcam"]'); if(lbl) lbl.textContent='Equipment';
+    rcam.innerHTML='<div class="res-fixedunit">'+esc(u.label)+'</div>'; rcamDD=null;
+    rout.value=todayISO(); rdue.value=addDays(todayISO(),1); rpick.checked=true;
+    mkDatePicker(rout); mkDatePicker(rdue);
+    rgo.textContent='Check out this unit';
+    document.querySelector('#resmodal .mtitle').textContent='Check out equipment';
     resmodal.classList.add('open'); setTimeout(function(){ rsid.focus(); },50);
   }
   function closeReserve(){ resmodal.classList.remove('open'); }
@@ -1890,17 +1957,54 @@
   rsid.addEventListener('input',function(){ clearTimeout(lookupT); lookupT=setTimeout(doLookup,350); });
 
   rgo.onclick=function(){
-    var payload={ student_id:rsid.value.trim(), camera:(rcamDD?rcamDD.value():''), out:rout.value, due:rdue.value };
+    var gearMode=(resMode==='gear');
+    var payload=gearMode
+      ? { student_id:rsid.value.trim(), kind:'equipment', item:resGearId, out:rout.value, due:rdue.value }
+      : { student_id:rsid.value.trim(), camera:(rcamDD?rcamDD.value():''), out:rout.value, due:rdue.value };
     if(rpick.checked) payload.status='out';
-    if(!payload.student_id||!payload.camera||!payload.due){ resmsg.className='mmsg err show'; resmsg.textContent='Enter a student ID, a camera, and a due date.'; return; }
+    var missing=gearMode ? (!payload.student_id||!payload.item||!payload.due) : (!payload.student_id||!payload.camera||!payload.due);
+    if(missing){ resmsg.className='mmsg err show'; resmsg.textContent='Enter a student ID, a '+(gearMode?'unit':'camera')+', and a due date.'; return; }
+    var doneLabel=gearMode?'Check out this unit':'Reserve this camera';
     rgo.disabled=true; rgo.textContent='Saving…';
     camAPI('/api/camera/checkout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
       .then(function(res){ if(res.ok&&res.j.ok){ closeReserve(); return loadBoard().then(reloadCal); } else { resmsg.className='mmsg err show'; resmsg.textContent=(res.j&&res.j.error)||'Could not save.'; } })
       .catch(function(){ resmsg.className='mmsg err show'; resmsg.textContent='Could not reach the server.'; })
-      .then(function(){ rgo.disabled=false; rgo.textContent='Reserve this camera'; });
+      .then(function(){ rgo.disabled=false; rgo.textContent=doneLabel; });
   };
   document.getElementById('reserveBtn').onclick=function(){ openReserve(''); };
+  (function(){ var rp=document.getElementById('reportsBtn'); if(rp) rp.onclick=openMissingItemsReport; })();
+  // ---- Missing Items report: every missing kit piece across cameras + gear units, grouped for ordering.
+  // Opens a clean printable page in a NEW TAB (use the browser's Print to save as PDF).
+  function missingItemsData(){
+    var byItem={};   // item label -> [unit labels missing it]
+    viewCams().forEach(function(cam){ ((assetOf(cam).kit)||[]).forEach(function(it){ (byItem[it]=byItem[it]||[]).push(cam); }); });
+    gearPoolIds().forEach(function(id){ var u=gearUnit(id); ((assetOf(id).kit)||[]).forEach(function(it){ (byItem[it]=byItem[it]||[]).push((u&&u.label)||id); }); });
+    return byItem;
+  }
+  function openMissingItemsReport(){
+    var byItem=missingItemsData(), items=Object.keys(byItem).sort();
+    var total=items.reduce(function(n,it){ return n+byItem[it].length; },0);
+    var who={silva:'Silva',garcia:'Garcia',mankin:'Mankin'}[SELECTED_POOL]||'Silva';
+    var rows=items.length ? items.map(function(it){ var u=byItem[it]; return '<tr><td>'+esc(it)+'</td><td class="num">'+u.length+'</td><td>'+u.map(esc).join(', ')+'</td></tr>'; }).join('')
+      : '<tr><td colspan="3" class="empty">No missing items. Every kit is complete.</td></tr>';
+    var when=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    var html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Missing Items Report</title><style>'+
+      'body{font-family:-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;color:#111;margin:40px;}'+
+      'h1{font-size:20px;margin:0 0 3px;} .sub{color:#666;font-size:13px;margin:0 0 20px;}'+
+      'table{border-collapse:collapse;width:100%;font-size:13px;} th,td{border:1px solid #ccc;padding:8px 10px;text-align:left;vertical-align:top;}'+
+      'th{background:#f1f1f1;text-transform:uppercase;font-size:11px;letter-spacing:.05em;} td.num{text-align:center;font-weight:700;width:90px;} .empty{text-align:center;color:#888;padding:28px;}'+
+      '.tot{margin:16px 0 0;font-size:13px;color:#333;} .hint{color:#999;margin-top:22px;font-size:12px;} @media print{body{margin:.5in;} .hint{display:none;}}'+
+      '</style></head><body>'+
+      '<h1>Missing Items Report &middot; '+esc(who)+'</h1>'+
+      '<div class="sub">Pioneer Valley Photography &middot; '+esc(when)+'</div>'+
+      '<table><thead><tr><th>Item to order</th><th>Qty needed</th><th>Missing from</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+      (items.length?('<div class="tot">Total pieces to order: <b>'+total+'</b> across '+items.length+' item type'+(items.length>1?'s':'')+'.</div>'):'')+
+      '<div class="hint">Use your browser&#39;s Print (Cmd+P) to save this as a PDF.</div>'+
+      '</body></html>';
+    var w=window.open('','_blank'); if(!w){ silvaToast('Allow pop-ups to open the report.'); return; }
+    w.document.open(); w.document.write(html); w.document.close();
+  }
   document.getElementById('refreshBtn').onclick=function(){ var b=this; if(b.disabled) return; b.disabled=true; var o=b.innerHTML; b.innerHTML='&#8635; Refreshing&#8230;';
     Promise.resolve(loadBoard()).then(function(){ reloadCal(); silvaToast('Refreshed with the latest.'); }).catch(function(){ silvaToast('Could not refresh. Try again.'); }).then(function(){ b.disabled=false; b.innerHTML=o; }); };
 
