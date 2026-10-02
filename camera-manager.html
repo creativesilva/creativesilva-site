@@ -560,6 +560,18 @@
   #gate input:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px rgba(0,0,0,.30) inset;-webkit-text-fill-color:var(--text);caret-color:var(--text);}
   #gate input::-webkit-credentials-auto-fill-button,#gate input::-webkit-strong-password-auto-fill-button{display:none !important;visibility:hidden;width:0;margin:0;}
   #gate input::-ms-reveal,#gate input::-ms-clear{display:none;}
+  /* Teacher dashboard selector (shown after the password). */
+  #teacherGate{position:fixed;inset:0;z-index:210;background:#060f0f;display:flex;align-items:center;justify-content:center;padding:22px;}
+  #teacherGate .card{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.96));border:1px solid var(--line);border-top:3px solid var(--teal);max-width:380px;width:100%;padding:30px 26px 26px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+  #teacherGate img{width:140px;height:auto;margin-bottom:16px;}
+  #teacherGate h2{font-family:var(--font);font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:1.2rem;margin:0 0 18px;color:#fff;}
+  .tgate-grid{display:flex;flex-direction:column;gap:10px;}
+  .tgate-btn{font-family:var(--font);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:1rem;color:var(--text);background:rgba(0,0,0,.30);border:1px solid var(--line);border-left:3px solid var(--teal);padding:15px;cursor:pointer;transition:background .12s,color .12s;}
+  .tgate-btn:hover{background:var(--teal);color:#04110f;}
+  /* Header "current teacher / change" chip (replaces the inline toggle). */
+  .tchip{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 15px;font-family:var(--font);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5ff0f0;background:rgba(0,0,0,.26);border:1px solid rgba(0,184,184,.42);cursor:pointer;transition:background .12s,color .12s;}
+  .tchip:hover{background:rgba(0,184,184,.12);color:#fff;}
+  .tchip-x{font-size:.9em;opacity:.85;}
   #gate .go{margin-top:2px;}
   #gate .err{color:#ff9a8a;font-size:.84rem;min-height:1.1em;margin-top:10px;}
   @media (max-width:560px){ .wrap{padding:18px 16px 60px;} }
@@ -577,6 +589,20 @@
     <input type="text" id="pin" class="pinmask" autocomplete="off" autocapitalize="off" spellcheck="false" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;" aria-label="Camera password" />
     <button class="go" id="pingo">Continue</button>
     <div class="err" id="pinerr"></div>
+  </div>
+</div>
+
+<!-- Teacher dashboard selector: shows AFTER the password. Pick whose curated dashboard to open.
+     No inline toggle: to switch teachers you reopen this from the header chip. -->
+<div id="teacherGate" style="display:none;">
+  <div class="card">
+    <img src="https://www.creativesilva.com/logos/CS_Logo_Vector_TealWhite.svg" alt="Creative Silva" />
+    <h2>Equipment Manager</h2>
+    <div class="tgate-grid">
+      <button type="button" class="tgate-btn" data-tgate="silva">Silva</button>
+      <button type="button" class="tgate-btn" data-tgate="garcia">Garcia</button>
+      <button type="button" class="tgate-btn" data-tgate="mankin">Mankin</button>
+    </div>
   </div>
 </div>
 
@@ -923,16 +949,20 @@
   // Top-of-console digests: overdue cameras (seen every time you open it) + student requests awaiting approval.
   function updateDigests(){
     var today=todayISO();
-    var od=(DATA.checkouts||[]).filter(function(c){ return c.kind!=='equipment' && statusOf(c)==='out' && c.due && c.due<today; }).sort(function(a,b){ return (a.due||'')<(b.due||'')?-1:1; });
+    // Curate each teacher's dashboard to THEIR OWN stock (cameras + gear in their pool).
+    var poolCams=(DATA.pools||{})[SELECTED_POOL]||[], poolGear=(DATA.equipment_pools||{})[SELECTED_POOL]||[];
+    function inPool(c){ return c.kind==='equipment' ? (poolGear.indexOf(c.item)>=0) : (poolCams.indexOf(c.camera)>=0); }
+    var od=(DATA.checkouts||[]).filter(function(c){ return c.kind!=='equipment' && statusOf(c)==='out' && c.due && c.due<today && inPool(c); }).sort(function(a,b){ return (a.due||'')<(b.due||'')?-1:1; });
     var odEl=document.getElementById('overdueDigest');
     if(odEl){ if(od.length){ odEl.className='digest overdue-digest';
         odEl.innerHTML='<div class="digest-h">&#9888; '+od.length+' camera'+(od.length>1?'s':'')+' overdue</div><div class="digest-body">'+od.map(function(c){ var n=daysBetween(c.due,today); return '<span class="digest-item"><span class="camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span> &middot; '+esc(nameOf(c))+' <b>'+n+'d</b></span>'; }).join('')+'</div>';
         odEl.style.display=''; } else { odEl.style.display='none'; odEl.innerHTML=''; } }
-    var pend=(DATA.checkouts||[]).filter(function(c){ return c.kind!=='equipment' && statusOf(c)==='reserved' && c.approved===false; }).sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; });
+    // Approvals (purple): Silva + Mankin approve requests for THEIR OWN stock only; Garcia (2 periods) approves nothing, so the section never shows for her.
+    var showAppr=(SELECTED_POOL==='silva'||SELECTED_POOL==='mankin');
+    var pend=showAppr?(DATA.checkouts||[]).filter(function(c){ return statusOf(c)==='reserved' && c.approved===false && inPool(c); }).sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; }):[];
     var pEl=document.getElementById('pendingDigest');
-    // The approval line is Silva's only: Garcia + Mankin do not approve student requests here.
-    if(pEl){ if(pend.length && SELECTED_POOL==='silva'){ pEl.className='digest pending-digest';
-        pEl.innerHTML='<div class="digest-h">'+pend.length+' student request'+(pend.length>1?'s':'')+' awaiting approval</div><div class="digest-body">'+pend.map(function(c){ return '<span class="digest-item"><span class="camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span> &middot; '+esc(nameOf(c))+' &middot; '+fmt(c.out)+'</span>'; }).join('')+'</div>';
+    if(pEl){ if(pend.length){ pEl.className='digest pending-digest';
+        pEl.innerHTML='<div class="digest-h">'+pend.length+' student request'+(pend.length>1?'s':'')+' awaiting approval</div><div class="digest-body">'+pend.map(function(c){ var isG=c.kind==='equipment'; var chip=isG?('<span class="camnum">'+esc(gearLabel(c.item))+'</span>'):('<span class="camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span>'); return '<span class="digest-item">'+chip+' &middot; '+esc(nameOf(c))+' &middot; '+fmt(c.out)+'</span>'; }).join('')+'</div>';
         pEl.style.display=''; } else { pEl.style.display='none'; pEl.innerHTML=''; } }
   }
 
@@ -1166,14 +1196,19 @@
   // The teacher selector lives in its own bar at the very TOP of the page (#poolbar), above the
   // availability count and the calendar, so it is the first thing seen. It filters the whole view.
   var _lastPoolSig=null;
+  // No inline toggle: the header shows WHOSE dashboard you're in; tap it to reopen the teacher picker.
   function renderPoolBar(){
     var el=document.getElementById('poolbar'); if(!el) return;
-    var html=teacherSeg();
+    var who={silva:'Silva',garcia:'Garcia',mankin:'Mankin'}[SELECTED_POOL]||'Silva';
+    var html='<button type="button" class="tchip" data-tchange="1" title="Switch teacher">'+esc(who)+' <span class="tchip-x">&#9662;</span></button>';
     if(html===_lastPoolSig) return; _lastPoolSig=html; el.innerHTML=html;
-    el.querySelectorAll('[data-pool]').forEach(function(b){ b.onclick=function(){
-      SELECTED_POOL=b.getAttribute('data-pool'); try{ sessionStorage.setItem('cam_pool',SELECTED_POOL); }catch(e){}
-      _lastBoardSig=null; renderPoolBar(); renderBoard();
-    }; });
+    var b=el.querySelector('[data-tchange]'); if(b) b.onclick=showTeacherGate;
+  }
+  function showTeacherGate(){ var tg=document.getElementById('teacherGate'); if(tg) tg.style.display='flex'; }
+  function pickTeacher(pool){
+    SELECTED_POOL=pool; try{ sessionStorage.setItem('cam_pool',pool); }catch(e){}
+    var tg=document.getElementById('teacherGate'); if(tg) tg.style.display='none';
+    _lastBoardSig=null; _lastPoolSig=null; renderPoolBar(); renderBoard();
   }
   var _lastBoardSig=null;   // flicker guard: only replace #board when the rendered board actually changes
   function renderBoard(){
@@ -2046,7 +2081,7 @@
   // ---- PIN gate (the password is validated by the server) ----
   var gate=document.getElementById('gate'), pin=document.getElementById('pin'), pinerr=document.getElementById('pinerr');
   function showGate(msg){ KEY=''; try{ sessionStorage.removeItem('silva-cam-key'); }catch(e){} gate.style.display='flex'; pinerr.textContent=msg||''; pin.value=''; setTimeout(function(){ pin.focus(); },50); }
-  function startApp(){ gate.style.display='none'; if(!polling){ polling=true; setInterval(loadBoard,7000); } loadBoard(); pushKey(); maybeDeepLinkCam(); }
+  function startApp(){ gate.style.display='none'; if(!polling){ polling=true; setInterval(loadBoard,7000); } loadBoard(); pushKey(); maybeDeepLinkCam(); showTeacherGate(); }
   // EDIT INFO deep-link from the Photo Walk Log: /camera-manager.html?cam=Cam%2001 opens that camera's window.
   var _deepLinked=false;
   function maybeDeepLinkCam(){ if(_deepLinked) return; _deepLinked=true;
@@ -2067,6 +2102,7 @@
     }).catch(function(){ pinerr.textContent='Could not reach the server.'; });
   }
   document.getElementById('pingo').onclick=submitPin;
+  Array.prototype.forEach.call(document.querySelectorAll('#teacherGate [data-tgate]'), function(b){ b.onclick=function(){ pickTeacher(b.getAttribute('data-tgate')); }; });
   pin.addEventListener('keydown',function(e){ if(e.key==='Enter') submitPin(); });
 
   // if we already have a stored key, try it silently; otherwise show the gate
