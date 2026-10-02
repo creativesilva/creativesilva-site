@@ -1175,11 +1175,14 @@
       '<div class="csec-body">'+(gearHtml||'<div class="foot">No equipment units yet.</div>')+'</div>'+
     '</div>';
     // MEMORY CARD WALLET: cards a student left to offload later, each in a numbered slot with a 24h clock.
-    var wcards=DATA.cards||{}, wheld=Object.keys(wcards).length, wopen=secOpen('wallet');
-    sec+='<div class="csec sec-wallet'+(wopen?' open':'')+'">'+
-      '<button class="csec-head" type="button" data-sectoggle="wallet"><span class="csec-dot wallet"></span>Memory card wallet <span class="csec-n">'+wheld+' held</span><span class="csec-chev"></span></button>'+
-      '<div class="csec-body"><div class="wallet-grid">'+walletSlotsHtml()+'</div></div>'+
-    '</div>';
+    // Silva + Garcia only; Mankin has no card wallet, so it is omitted from her view.
+    if(SELECTED_POOL!=='mankin'){
+      var wcards=DATA.cards||{}, wheld=Object.keys(wcards).length, wopen=secOpen('wallet');
+      sec+='<div class="csec sec-wallet'+(wopen?' open':'')+'">'+
+        '<button class="csec-head" type="button" data-sectoggle="wallet"><span class="csec-dot wallet"></span>Memory card wallet <span class="csec-n">'+wheld+' held</span><span class="csec-chev"></span></button>'+
+        '<div class="csec-body"><div class="wallet-grid">'+walletSlotsHtml()+'</div></div>'+
+      '</div>';
+    }
     // Wrap all sections in the top-level "Cameras" card (curriculum-catalog course-card look).
     var camsOpen=secOpen('cameras');
     var topN=counts.avail+' available &middot; '+counts.out+' out &middot; '+counts.reserved+' reserved';
