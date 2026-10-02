@@ -1331,8 +1331,9 @@
   }
   function closeReserveModal(){ document.getElementById('rvmodal').classList.remove('open'); }
   function rvContinue(){
-    var v=document.getElementById('rv-id').value.replace(/\D/g,''), msg=document.getElementById('rv-msg');
-    if(v.length<5){ msg.textContent=t('enterFullId'); return; }
+    var raw=document.getElementById('rv-id').value.trim(), msg=document.getElementById('rv-msg');
+    var v=(raw.toLowerCase()==='teacher')?'teacher':raw.replace(/\D/g,'');   // "teacher" = Mr. Silva's demo account
+    if(v!=='teacher' && v.length<5){ msg.textContent=t('enterFullId'); return; }
     msg.textContent=t('checking');
     // Full info so the student can review + fix their own contact (saved to the live database).
     fetch(API+'/api/camera/student_info',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:v})})
