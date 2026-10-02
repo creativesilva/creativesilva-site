@@ -1011,7 +1011,7 @@
   // One square thumbnail per TYPE, reused across that type's units. 400x400, hosted on the whitelisted
   // domain. A type with no image yet (speedlite, apple pencil) falls back to the clean placeholder box.
   var THUMB_BASE='https://www.creativesilva.com/assets/images/equipment/';
-  var GEAR_THUMB={ wide:THUMB_BASE+'ultrawide.jpg', zoom:THUMB_BASE+'ultrazoom.jpg', speedlite:'', tripod:THUMB_BASE+'tripod.jpg', reflector:THUMB_BASE+'reflector.jpg', mankin_tripod:THUMB_BASE+'tripod.jpg', apple_pencil:'' };
+  var GEAR_THUMB={ wide:THUMB_BASE+'ultrawide.jpg', zoom:THUMB_BASE+'ultrazoom.jpg', speedlite:'', tripod:THUMB_BASE+'tripod.jpg', reflector:THUMB_BASE+'reflector.jpg', mankin_tripod:THUMB_BASE+'tripod.jpg', apple_pencil:THUMB_BASE+'ipad-stylus.jpg' };
   function gearThumb(type){ var u=GEAR_THUMB[type]||'';
     return u ? '<span class="gthumb"><img src="'+esc(u)+'" alt=""></span>' : '<span class="gthumb gthumb-ph" aria-hidden="true"></span>'; }
   // Camera body thumbnails: the Photo classes use the Canon EOS R50; Mankin's class (cams 19+) uses the R50 V.
