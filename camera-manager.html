@@ -104,6 +104,10 @@
   .tseg-btn:last-child{border-right:0;}
   .tseg-btn.on{background:var(--teal);color:#04110f;}
   .tseg-btn:hover:not(.on){color:#fff;background:rgba(0,184,184,.12);}
+  .poolbar-wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:2px 0 16px;}
+  .poolbar-wrap:empty{display:none;}
+  .poolbar-lab{font-family:var(--font);font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);}
+  .poolbar-wrap .tseg{margin:0;}
   .camhub{background:linear-gradient(180deg,rgba(0,116,116,.10) 0%,rgba(0,116,116,.03) 100%);border:1px solid rgba(0,184,184,.22);margin-bottom:14px;position:relative;transition:border-color .2s ease;}
   .camhub.open,.camhub:hover{border-color:rgba(0,184,184,.45);}
   .camhub-head{width:100%;display:flex;align-items:center;gap:18px;cursor:pointer;background:transparent;border:0;color:var(--text);text-align:left;font-family:var(--font);padding:22px 28px 22px 32px;}
@@ -586,6 +590,8 @@
     <a class="silva-uni-cattrigger" id="studentCalBtn" href="/calendar.html?from=console" target="_blank" rel="noopener">Student Calendar</a>
     <a class="silva-uni-cattrigger" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
   </div>
+
+  <div id="poolbar" class="poolbar-wrap" role="group" aria-label="Teacher view"></div>
 
   <div class="summary">
     <div><span class="big" id="availn">0</span> <span class="lab">of <span id="totn">18</span> cameras available <span id="availday">today</span></span></div>
@@ -1150,9 +1156,22 @@
       return '<button type="button" class="tseg-btn'+(SELECTED_POOL===o[0]?' on':'')+'" data-pool="'+o[0]+'">'+o[1]+'</button>';
     }).join('')+'</div>';
   }
+  // The teacher selector lives in its own bar at the very TOP of the page (#poolbar), above the
+  // availability count and the calendar, so it is the first thing seen. It filters the whole view.
+  var _lastPoolSig=null;
+  function renderPoolBar(){
+    var el=document.getElementById('poolbar'); if(!el) return;
+    var html='<span class="poolbar-lab">Teacher</span>'+teacherSeg();
+    if(html===_lastPoolSig) return; _lastPoolSig=html; el.innerHTML=html;
+    el.querySelectorAll('[data-pool]').forEach(function(b){ b.onclick=function(){
+      SELECTED_POOL=b.getAttribute('data-pool'); try{ sessionStorage.setItem('cam_pool',SELECTED_POOL); }catch(e){}
+      _lastBoardSig=null; renderPoolBar(); renderBoard();
+    }; });
+  }
   var _lastBoardSig=null;   // flicker guard: only replace #board when the rendered board actually changes
   function renderBoard(){
     var host=document.getElementById('board'); if(!host) return;
+    renderPoolBar();
     var cams=viewCams(), counts={out:0,reserved:0,avail:0};
     cams.forEach(function(cam){ counts[catOf(cam)]++; });
     // ONE consolidated, color-coded Cameras grid (Chris, 2026-10-01): each camera appears ONCE,
@@ -1186,7 +1205,7 @@
     // Wrap all sections in the top-level "Cameras" card (curriculum-catalog course-card look).
     var camsOpen=secOpen('cameras');
     var topN=counts.avail+' available &middot; '+counts.out+' out &middot; '+counts.reserved+' reserved';
-    var html=teacherSeg()+
+    var html=
       '<div class="camhub'+(camsOpen?' open':'')+'">'+
       '<div class="camhub-head" data-sectoggle="cameras">'+
         '<span class="camhub-titlebox"><span class="camhub-code">Equipment</span><span class="camhub-title">Cameras</span></span>'+
