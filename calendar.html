@@ -34,11 +34,13 @@
   }
   *{box-sizing:border-box;border-radius:0 !important;}
   html,body{margin:0;padding:0;}
-  body{background-color:#060f0f;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;}
-  /* Same watermark treatment as curriculum.html: glossy CS logo on near-black under one flat veil. */
-  body::before{content:"";position:fixed;inset:0;z-index:-2;background:#060f0f url("https://www.creativesilva.com/logos/CS_Logo_Glossy_Teal_v1.png") no-repeat center 40%;background-size:min(74vw,700px);}
-  body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(6,14,14,0.84);}
-  @media (max-width:900px){ body::before{background-size:min(88vw,460px);background-position:center 36%;} }
+  body{background-color:#080808;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;}
+  /* Cohesive with the curriculum CONTENT pages: a dark->teal->dark backdrop glow with a GHOSTED
+     (light, faint) CS logo watermark on top. NOT the PV panther (that stays on student course pages).
+     Standalone only; the embed stays transparent (body.embed::before/::after are hidden below). */
+  body::before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%);}
+  body::after{content:"";position:fixed;inset:0;z-index:-1;background:url("https://www.creativesilva.com/logos/CS_Logo_Glossy_Teal_v1.png") no-repeat center 40%;background-size:min(74vw,700px);filter:brightness(0) invert(1);opacity:.06;}
+  @media (max-width:900px){ body::after{background-size:min(88vw,460px);background-position:center 36%;} }
 
   /* camera-kit icon injected into the shared header title (rendered WHITE) */
   .cal-title-icon{height:1.4em;width:auto;margin-right:.44em;vertical-align:-0.24em;filter:brightness(0) invert(1);}
@@ -374,6 +376,25 @@
   body.embed{background:transparent;min-height:0;}   /* transparent + true height (no feedback loop) */
   body.embed .wrap{padding:8px 10px 14px;max-width:none;}   /* fill the console card: no wide side margins, no deep bottom gap (Chris 2026-10-04) */
   body.embed .wcell{background:rgba(6,14,14,0.34);}   /* lighter so the console's blurred logo shows softly */
+
+  /* ───── Course-framework polish (Chris 2026-10-04): teal-box summary + a "Checked out right now"
+     accordion moved BELOW the calendar, plus iPad sizing. The backdrop glow is set up top. ───── */
+  .summary{background:linear-gradient(180deg,rgba(0,116,116,.10) 0%,rgba(0,116,116,.03) 100%);border-color:rgba(0,184,184,.22);border-left:6px solid #00b8b8;}
+  .co-acc{background:linear-gradient(180deg,rgba(0,116,116,.10) 0%,rgba(0,116,116,.03) 100%);border:1px solid rgba(0,184,184,.22);border-left:6px solid #00b8b8;margin:22px 0 0;transition:border-color .2s ease;}
+  .co-acc[open]{border-color:rgba(0,184,184,.42);}
+  summary.co-head{display:flex;align-items:center;gap:14px;cursor:pointer;list-style:none;background:linear-gradient(90deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,.28) 45%,rgba(0,0,0,0) 100%);padding:15px 20px;min-height:58px;box-sizing:border-box;}
+  summary.co-head::-webkit-details-marker{display:none;}
+  summary.co-head:hover{filter:brightness(1.08);}
+  .co-titlebox{display:flex;flex-direction:column;gap:2px;margin-right:auto;min-width:0;}
+  .co-code{font-family:var(--font);font-size:.58rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);}
+  .co-title{font-family:var(--font);font-size:1.02rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.2;color:#5ff0f0;}
+  .co-chev{flex:0 0 auto;width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .2s;}
+  .co-acc[open] .co-chev{transform:rotate(45deg);}
+  .co-body{padding:14px 18px 18px;}
+  body.embed .co-acc{display:none;}
+  /* iPad A16 (11th gen): ~820pt portrait / ~1180pt landscape. More content width + slightly shorter cells so the month fits with the keyboard case attached. */
+  @media (min-width:768px) and (max-width:1200px){ .wrap{padding:20px 18px 56px;} }
+  @media (max-width:1024px){ .board{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));} .wcell{min-height:114px;} }
 </style>
 </head>
 <body>
@@ -392,9 +413,6 @@
     <button type="button" class="langswap" id="langSwap" aria-label="Switch language"><span class="langbtn-globe" aria-hidden="true"></span><span id="langSwapLabel">Espa&ntilde;ol</span></button>
   </div>
 
-  <div class="h" id="boardH">Checked out right now</div>
-  <div class="board" id="board"><span class="foot" id="boardLoading">Loading&#8230;</span></div>
-
   <div class="cal-stickyhead">
     <div class="calhead">
       <button class="navb" id="prev" aria-label="Previous month">&#8249;</button>
@@ -405,6 +423,18 @@
   </div>
   <div class="rv-daybanner" id="rvDayBanner"><div class="rv-daybanner-inner"><span class="rv-daybanner-txt" id="rvDayBannerTxt"></span><button type="button" class="rv-daybanner-btn" id="rvDayBannerBtn"></button></div></div>
   <div class="grid" id="grid"></div>
+
+  <!-- Checked out right now: moved BELOW the calendar, collapsible (Chris). #boardH + #board kept so
+       the day-select reuse still works; auto-opens when a day is tapped. Hidden in the console embed. -->
+  <details class="co-acc" id="coAcc">
+    <summary class="co-head">
+      <span class="co-titlebox"><span class="co-code">Live</span><span class="co-title" id="boardH">Checked out right now</span></span>
+      <span class="co-chev" aria-hidden="true"></span>
+    </summary>
+    <div class="co-body">
+      <div class="board" id="board"><span class="foot" id="boardLoading">Loading&#8230;</span></div>
+    </div>
+  </details>
 
   <p class="foot" id="foot"></p>
 </div>
@@ -782,7 +812,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('.wcell.sel'), function(c){ c.classList.remove('sel'); });
     if(SEL_DAY){ var c=document.querySelector('.wcell[data-diso="'+SEL_DAY+'"]'); if(c) c.classList.add('sel'); }
     renderBoard(); updateDayBanner();
-    if(SEL_DAY){ try{ document.getElementById('boardH').scrollIntoView({block:'nearest',behavior:'smooth'}); }catch(e){} }
+    if(SEL_DAY){ var _acc=document.getElementById('coAcc'); if(_acc) _acc.open=true; try{ document.getElementById('boardH').scrollIntoView({block:'nearest',behavior:'smooth'}); }catch(e){} }
   }
   function updateDayBanner(){
     var b=document.getElementById('rvDayBanner'); if(!b) return;
@@ -815,7 +845,7 @@
       else recs.forEach(function(o){ var st=statusOf(o); var el=document.createElement('div'); el.className='cam'+(st==='reserved'?' reserved':'');
         el.innerHTML='<div class="n">'+esc(o.camera)+'</div><div class="s">'+(st==='reserved'?t('reserved'):(t('checkedOut')+' · '+t('dueShort')+' '+fmt(o.due)))+'</div><div class="course">'+camCourse(o.camera)+'</div>';
         board.appendChild(el); });
-      var bn=document.getElementById('board-now'); if(bn) bn.onclick=function(){ selectDay(null); };
+      var bn=document.getElementById('board-now'); if(bn) bn.onclick=function(e){ if(e){e.preventDefault();e.stopPropagation();} selectDay(null); };
       return;
     }
     bh.textContent=t('checkedNow'); board.classList.remove('board-scroll');
