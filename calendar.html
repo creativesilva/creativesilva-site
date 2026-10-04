@@ -401,23 +401,26 @@
   /* Phone: compact the banner + availability box so the calendar is not pushed below the fold.
      (Desktop/iPad keep the fuller header.) Inline banner styles are overridden with !important. */
   @media (max-width:600px){
+    /* Reclaim the wasted side margins: the wrapper used 32px each side on phones. */
+    .wrap{ padding:14px 12px 44px; }
     .cal-hero > div > div{ justify-content:center !important; }
-    .cal-hero{ padding:13px 16px 15px !important; margin:0 0 14px !important; }
-    .cal-hero > div{ gap:7px 14px !important; }
-    .cal-hero img{ width:46px !important; }
-    #calHeroEyebrow{ font-size:9.5pt !important; letter-spacing:.05em !important; }
+    .cal-hero{ padding:14px 13px 16px !important; margin:0 0 13px !important; }
+    .cal-hero > div{ gap:6px 12px !important; }
+    .cal-hero img{ width:44px !important; }
+    #calHeroEyebrow{ font-size:9.5pt !important; letter-spacing:.04em !important; }
     #calHeroTitle{ font-size:16pt !important; }
     #calHeroSub{ font-size:10pt !important; }
-    /* countdown + toggle on one row (not stacked) to cut the banner height */
-    .cal-hero > div > div:last-child > div{ flex-direction:row !important; gap:14px !important; }
-    .cal-hero-clock{ width:116px !important; height:40px !important; }
+    /* countdown + toggle: one centered row that WRAPS instead of clipping if space is tight. */
+    .cal-hero > div > div:last-child > div{ flex-direction:row !important; flex-wrap:wrap !important; justify-content:center !important; gap:9px 12px !important; max-width:100% !important; }
+    .cal-hero-clock{ width:110px !important; height:40px !important; }
+    #langSwap{ height:40px !important; padding:0 15px !important; }
     /* shrink the "N of 18 available" box so it stops dominating */
-    .summary{ padding:9px 13px !important; gap:7px 14px !important; margin-bottom:12px !important; }
+    .summary{ padding:9px 12px !important; gap:6px 14px !important; margin-bottom:11px !important; }
     .summary .big{ font-size:1.3rem !important; padding:3px 11px !important; min-width:1.5em !important; }
     .summary .lab{ font-size:.72rem !important; }
     .legend{ font-size:.68rem !important; gap:10px !important; }
     /* tighten the intro line so the month grid surfaces sooner */
-    .intro{ margin-bottom:12px !important; }
+    .intro{ margin-bottom:11px !important; }
     .sub{ font-size:.86rem !important; }
   }
 </style>
