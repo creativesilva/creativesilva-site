@@ -506,9 +506,13 @@
 
     var cal = document.createElement('a');
     cal.className = 'silva-uni-cal';
-    // Per-page override: teacher pages (catalog, Command Center) point this at the Equipment Manager.
-    cal.href = window.SILVA_CAL_HREF || '/calendar.html';
-    cal.textContent = window.SILVA_CAL_LABEL || 'Calendar';
+    // Curriculum pages (the catalog + module pages) point this top-nav button at the Equipment Manager
+    // as teacher navigation (Chris 2026-10-04). Student landings (*-home) and non-curriculum pages (the
+    // public calendar, portfolio) keep the public calendar. A per-page window.SILVA_CAL_HREF still wins.
+    var _cp = location.pathname;
+    var _teacherCurr = (/\/curriculum\//.test(_cp) || /\/curriculum\.html$/.test(_cp)) && !/-home\.html$/.test(_cp);
+    cal.href = window.SILVA_CAL_HREF || (_teacherCurr ? '/camera-manager.html' : '/calendar.html');
+    cal.textContent = window.SILVA_CAL_LABEL || (_teacherCurr ? 'Equipment Manager' : 'Calendar');
     bar.appendChild(cal);
 
     // Search jumps to the teacher catalog, so it is hidden on camera pages.
