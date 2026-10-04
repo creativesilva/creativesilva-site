@@ -372,7 +372,7 @@
      .calpanel blurs it, so the embedded calendar is transparent and the one blurred logo shows through. */
   body.embed::before, body.embed::after{display:none;}
   body.embed{background:transparent;min-height:0;}   /* transparent + true height (no feedback loop) */
-  body.embed .wrap{padding-top:10px;}
+  body.embed .wrap{padding:8px 10px 14px;max-width:none;}   /* fill the console card: no wide side margins, no deep bottom gap (Chris 2026-10-04) */
   body.embed .wcell{background:rgba(6,14,14,0.34);}   /* lighter so the console's blurred logo shows softly */
 </style>
 </head>

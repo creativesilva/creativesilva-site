@@ -284,8 +284,10 @@
 
   /* Frosted calendar panel: it blurs the ONE page background logo behind it, and the embedded
      calendar is transparent (no logo of its own), so a single soft, blurred logo shows through. */
-  .calpanel{margin-top:12px;border:1px solid var(--line);border-top:3px solid var(--teal);background:rgba(6,14,14,.30);backdrop-filter:blur(16px) saturate(1.12);-webkit-backdrop-filter:blur(16px) saturate(1.12);}
-  .calpanel iframe{width:100%;height:calc(100vh - 160px);min-height:480px;border:0;display:block;background:transparent;}   /* viewport-capped so a tall calendar scrolls INSIDE the iframe and its sticky weekday row pins; JS refines to min(content, viewport) */
+  .calpanel{margin-top:10px;border:1px solid var(--line);border-top:3px solid var(--teal);background:rgba(6,14,14,.30);backdrop-filter:blur(16px) saturate(1.12);-webkit-backdrop-filter:blur(16px) saturate(1.12);}
+  .calpanel iframe{width:100%;min-height:520px;border:0;display:block;background:transparent;}   /* JS sizes height to the calendar's exact content so there is NO inner scroll (Chris 2026-10-04) */
+  /* Full-bleed the calendar to the card edges: the cbox-body pads 20px, so pull the panel back out to use that width (no wasted side margin). */
+  #calbox .cbox-body{padding:4px 8px 12px;}
   .foot{margin-top:20px;font-size:.74rem;color:var(--faint);}
 
   /* modal (reserve) + PIN gate share the backdrop look */
@@ -1639,12 +1641,12 @@
     else s.textContent='Reconnecting…';
   }
   function reloadCal(){ try{ var f=document.getElementById('calframe'); f.contentWindow.location.reload(); }catch(e){ var f2=document.getElementById('calframe'); f2.src=f2.src; } }
-  // The embedded calendar posts its content height. We cap the iframe to the viewport so, when the
-  // calendar is taller than the screen, it scrolls INSIDE the iframe and the calendar's own sticky
-  // weekday row pins at the top (Chris 2026-10-02); on a tall screen it still fits with no scroll.
+  // The embedded calendar posts its content height and we size the iframe to it EXACTLY, so the whole
+  // month shows with NO inner scrollbar: the page scrolls as one, never a scroll-within-a-scroll
+  // (Chris 2026-10-04, superseding the earlier viewport-cap). Grows and shrinks with the month.
   var _lastCalH=0;
   function sizeCal(){ var f=document.getElementById('calframe'); if(!f||!_lastCalH) return;
-    var maxH=Math.max(480,(window.innerHeight||800)-160); f.style.height=Math.min(_lastCalH+4,maxH)+'px'; }
+    f.style.height=(_lastCalH+2)+'px'; }
   window.addEventListener('resize',sizeCal);
   window.addEventListener('message',function(e){
     if(!e.data) return;
