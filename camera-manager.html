@@ -104,14 +104,38 @@
   .recent-grp-h{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-lt);margin:0 0 7px;display:flex;align-items:center;gap:7px;padding-left:7px;border-left:2px solid var(--teal);}
   .recent-grp-n{font-size:.56rem;color:var(--faint);border:1px solid var(--line-soft);padding:0 6px;}
   .recent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;}
-  .recent-card{display:flex;flex-direction:column;gap:3px;text-align:left;width:100%;background:rgba(0,0,0,.28);border:1px solid var(--line-soft);border-left:3px solid var(--gold);color:var(--text);font-family:inherit;padding:9px 11px;cursor:pointer;}
+  .recent-card{position:relative;display:flex;flex-direction:column;gap:3px;text-align:left;width:100%;background:rgba(0,0,0,.28);border:1px solid var(--line-soft);border-left:3px solid var(--gold);color:var(--text);font-family:inherit;padding:9px 11px;}
   .recent-card:hover{border-color:var(--teal);background:rgba(0,184,184,.07);}
   .recent-card.rr-out{border-left-color:var(--orange);} .recent-card.rr-returned{border-left-color:var(--grayed);opacity:.6;}
+  /* full-card hit overlay opens the reservation bundle; the item-name link sits above it to open the device window */
+  .rc-hit{position:absolute;inset:0;z-index:1;background:transparent;border:0;cursor:pointer;}
+  .rc-hit:focus-visible{outline:2px solid var(--teal);outline-offset:-2px;}
+  .rc-top,.rc-who,.rc-meta{position:relative;pointer-events:none;}
   .rc-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
   .rc-cam{font-family:var(--font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.82rem;color:#fff;}
   .rc-prog{font-family:var(--font);font-size:.56rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#ffc7a6;white-space:nowrap;}
   .rc-who{font-size:.85rem;color:var(--text);}
   .rc-meta{font-size:.72rem;color:var(--muted);}
+  /* clickable ALL-CAPS item name: a bare button that reads as a link and opens the device window */
+  .itemlink{position:relative;z-index:2;pointer-events:auto;background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;}
+  .itemlink:hover{text-decoration:underline;text-underline-offset:2px;color:#5ff0f0;}
+  .itemlink:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+  /* Reservation Activity: week stepper + styled date field inside the hub header */
+  .ra-ctl{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+  .ra-nav{width:30px;height:34px;display:inline-flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--teal-lt);font-size:1.15rem;line-height:1;padding:0;cursor:pointer;transition:border-color .15s,color .15s;}
+  .ra-nav:hover{border-color:var(--teal);color:#fff;}
+  .ra-range{font-family:var(--font);font-size:.68rem;letter-spacing:.04em;color:var(--muted);white-space:nowrap;}
+  /* Manage Equipment: condition-only tile accents (green complete, gold needs attention, gray out of service) */
+  .mt-cond{text-transform:none;letter-spacing:0;font-size:.74rem;color:var(--muted);}
+  .camtile.mt-ok{border-left-color:var(--ok);} .camtile.mt-ok .camtile-dot{background:var(--ok);} .camtile.mt-ok .mt-cond{color:#8ff0b0;}
+  .camtile.mt-warn{border-left-color:var(--gold);} .camtile.mt-warn .camtile-dot{background:var(--gold);} .camtile.mt-warn .mt-cond{color:#ffd889;}
+  .camtile.mt-oos{opacity:.55;border-left-color:var(--grayed);} .camtile.mt-oos .camtile-dot{background:var(--grayed);} .camtile.mt-oos .mt-cond{color:var(--faint);}
+  /* phone: let the hub header wrap so the date stepper / sort control drop to their own full-width row instead of bleeding off-screen */
+  @media (max-width:560px){
+    .camhub-head{flex-wrap:wrap;gap:10px 12px;padding:16px 16px 16px 18px;}
+    .camhub-head .ra-ctl{order:5;flex-basis:100%;justify-content:flex-start;}
+    .camhub-head .camsortdd{order:6;}
+  }
   /* Reservation window: the whole bundle + per-item check-in */
   .resv-meta{font-size:.85rem;color:var(--muted);margin-bottom:10px;}
   .resv-meta .co{color:var(--teal-lt);}
@@ -150,6 +174,11 @@
   .camhub-titlebox::before{content:"";grid-column:1;grid-row:1/3;align-self:center;width:40px;height:40px;background-color:#00b8b8;-webkit-mask:url("/assets/Icons/assignment/camera-kit-teal-v1.png") center/contain no-repeat;mask:url("/assets/Icons/assignment/camera-kit-teal-v1.png") center/contain no-repeat;}
   .camhub-code{grid-column:2;grid-row:1;font-family:var(--font);font-size:.65rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin-bottom:2px;}
   .camhub-title{grid-column:2;grid-row:2;font-family:var(--font);font-size:1.25rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;line-height:1.1;color:#5ff0f0;}
+  /* per-hub header glyphs: calendar for Reservation Activity, memory card for the wallet (Manage Equipment keeps the kit icon) */
+  .ra-hub .camhub-titlebox::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Crect x='3' y='4' width='18' height='18'/%3E%3Cpath d='M3 9h18M8 2v4M16 2v4'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Crect x='3' y='4' width='18' height='18'/%3E%3Cpath d='M3 9h18M8 2v4M16 2v4'/%3E%3C/svg%3E");}
+  .wallet-hub .camhub-titlebox{border-left-color:#f5b301;}
+  .wallet-hub .camhub-titlebox::before{background-color:#f5b301;-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M6 3h9l4 4v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z'/%3E%3Cpath d='M9 3v4M12 3v4M15 3v4'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M6 3h9l4 4v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z'/%3E%3Cpath d='M9 3v4M12 3v4M15 3v4'/%3E%3C/svg%3E");}
+  .wallet-hub .camhub-title{color:#ffd77a;}
   .camhub-meta{display:flex;align-items:center;gap:16px;flex-shrink:0;margin-left:auto;}
   .camhub-meta .csec-n{font-size:.6rem;font-weight:600;letter-spacing:.16em;color:var(--muted);white-space:nowrap;}
   .camhub-chev{width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .2s ease;flex-shrink:0;}
@@ -160,12 +189,12 @@
   /* Section strips inside the Cameras card: catalog module-row look (translucent + blur). */
   .csec{margin-bottom:8px;border:1px solid rgba(255,255,255,.06);border-left:4px solid var(--muted);background:rgba(255,255,255,.04);backdrop-filter:blur(10px) saturate(1.1);-webkit-backdrop-filter:blur(10px) saturate(1.1);}
   .csec.sec-out{border-left-color:var(--orange);} .csec.sec-reserved{border-left-color:var(--gold);}
-  .csec.sec-avail{border-left-color:var(--ok);} .csec.sec-equip{border-left-color:var(--teal);}
+  .csec.sec-avail{border-left-color:var(--ok);} .csec.sec-equip{border-left-color:var(--teal);} .csec.sec-returned{border-left-color:var(--grayed);}
   .csec-head{width:100%;display:flex;align-items:center;gap:10px;cursor:pointer;background:transparent;border:0;color:var(--text);
     font-family:var(--font);text-align:left;padding:12px 14px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;font-size:.82rem;transition:background .15s ease;}
   .csec-head:hover{background:rgba(255,255,255,.05);}
   .csec-dot{width:11px;height:11px;flex:0 0 auto;}
-  .csec-dot.out{background:var(--orange);} .csec-dot.reserved{background:var(--gold);} .csec-dot.avail{background:var(--ok);} .csec-dot.equip{background:var(--teal);}
+  .csec-dot.out{background:var(--orange);} .csec-dot.reserved{background:var(--gold);} .csec-dot.avail{background:var(--ok);} .csec-dot.equip{background:var(--teal);} .csec-dot.returned{background:var(--grayed);}
   .csec-n{color:var(--faint);font-weight:700;font-size:.72rem;letter-spacing:.04em;}
   .csec-chev{margin-left:auto;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .2s;}
   .csec.open .csec-chev{transform:rotate(45deg);}
@@ -1014,7 +1043,7 @@
           pEl.innerHTML='<div class="digest-h">'+pend.length+' student request'+(pend.length>1?'s':'')+' awaiting approval</div><div class="digest-body">'+pend.map(function(c){ var isG=c.kind==='equipment'; var chip=isG?('<span class="camnum">'+esc(gearLabel(c.item))+'</span>'):('<span class="camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span>'); return '<span class="digest-item">'+chip+' &middot; '+esc(nameOf(c))+' &middot; '+fmt(c.out)+'</span>'; }).join('')+'</div>';
           pEl.style.display=''; } else { pEl.style.display='none'; pEl.innerHTML=''; } }
     } else {
-      renderRecentReservations(pEl);
+      if(pEl){ pEl.style.display='none'; pEl.innerHTML=''; }   // Reservation Activity now renders in the board, below the calendar
     }
   }
 
@@ -1035,50 +1064,60 @@
   function resvReturnedCount(parent){ var items=resvItems(parent); return {done:items.filter(function(x){return statusOf(x)==='returned';}).length, total:items.length}; }
   function resvAllReturned(parent){ var rc=resvReturnedCount(parent); return rc.total>0 && rc.done===rc.total; }
   function resvDate(c){ return c.created || c.out || ''; }
-  function recentReservations(){
-    var cutoff=Date.now()-14*86400*1000;
-    var parents=(DATA.checkouts||[]).filter(function(c){
-      if(c.kind==='equipment' && c.group) return false;           // linked gear shows inside its camera reservation
-      if(!resvInScope(c)) return false;
-      if(!resvAllReturned(c)) return true;                         // active (reserved or still out)
-      var rd=resvItems(c).map(function(x){return x.returned_date||'';}).filter(Boolean).sort();
-      var last=rd.length?Date.parse(rd[rd.length-1]):0;
-      return last && last>=cutoff;                                 // recently returned (last ~14 days)
-    });
-    parents.sort(function(a,b){ return (resvDate(a)<resvDate(b))?1:-1; });   // newest first
-    return parents;
+  function resvStatusGroup(c){ var rc=resvReturnedCount(c); if(rc.total>0 && rc.done===rc.total) return 'returned'; return resvItems(c).some(function(x){return statusOf(x)==='out';})?'out':'reserved'; }
+  // ===== Reservation Activity date window: a rolling 7 days ENDING on the selected date (default today).
+  var ACTIVITY_DATE=null;   // ISO yyyy-mm-dd of the window's last day; null = today
+  function activityAnchor(){ return ACTIVITY_DATE || todayISO(); }
+  function activityWindow(){ var end=activityAnchor(); var d=new Date(end+'T00:00:00'); var s=new Date(d); s.setDate(s.getDate()-6); return {start:s.toISOString().slice(0,10), end:end}; }
+  function shiftActivity(days){ var d=new Date(activityAnchor()+'T00:00:00'); d.setDate(d.getDate()+days); ACTIVITY_DATE=d.toISOString().slice(0,10); _lastBoardSig=null; renderBoard(); }
+  function resvInWindow(c){
+    var w=activityWindow();
+    return [c.out, c.due, (c.created||'').slice(0,10), c.returned_date].some(function(d){ d=d?String(d).slice(0,10):''; return d && d>=w.start && d<=w.end; });
   }
-  function renderRecentReservations(pEl){
-    if(!pEl) return;
-    var list=recentReservations();
-    if(!list.length){ pEl.style.display='none'; pEl.innerHTML=''; return; }
-    pEl.className='digest recent-digest';
-    // Categorize by status so the board reads at a glance: what is out, what is upcoming, what is back.
-    function statusGroup(c){ var rc=resvReturnedCount(c); if(rc.total>0 && rc.done===rc.total) return 'returned'; return resvItems(c).some(function(x){return statusOf(x)==='out';})?'out':'reserved'; }
+  function activityReservations(){
+    return (DATA.checkouts||[]).filter(function(c){
+      if(c.kind==='equipment' && c.group) return false;   // linked gear shows inside its camera reservation
+      if(!resvInScope(c)) return false;
+      return resvInWindow(c);
+    }).sort(function(a,b){ return (resvDate(a)<resvDate(b))?1:-1; });   // newest first
+  }
+  function activityCard(c){
+    var items=resvItems(c), rc=resvReturnedCount(c), allRet=rc.done===rc.total;
+    var isG=c.kind==='equipment';
+    var nameLink=isG
+      ? '<button type="button" class="itemlink rc-cam" data-geardetail="'+esc(c.item)+'">'+esc(gearLabel(c.item)).toUpperCase()+'</button>'
+      : '<button type="button" class="itemlink rc-cam" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera).toUpperCase()+'</button>';
+    var addon=items.length-1;
+    var sub=isG?'1 item':('Kit'+(addon>0?(' + '+addon):''));
+    var st=resvStatusGroup(c);
+    var prog=(st==='out'&&rc.done>0&&!allRet)?(rc.done+'/'+rc.total+' back'):'';
+    return '<div class="recent-card rr-'+st+'"><div class="rc-hit" data-resv="'+esc(c.id)+'" role="button" tabindex="0"></div>'+
+      '<span class="rc-top">'+nameLink+(prog?('<span class="rc-prog">'+prog+'</span>'):'')+'</span>'+
+      '<span class="rc-who">'+esc(nameOf(c))+'</span>'+
+      '<span class="rc-meta">'+sub+' &middot; '+fmt(c.out)+'</span>'+
+    '</div>';
+  }
+  // Reservation Activity hub (date selector + Checked out / Reserved / Returned accordions). Below the calendar.
+  function reservationActivityHtml(){
+    var list=activityReservations(), w=activityWindow(), aOpen=secOpen('ractivity');
     var groups={out:[],reserved:[],returned:[]};
-    list.forEach(function(c){ groups[statusGroup(c)].push(c); });
-    function card(c){
-      var items=resvItems(c), rc=resvReturnedCount(c), allRet=rc.done===rc.total;
-      var label=c.kind==='equipment'?esc(gearLabel(c.item)):esc(c.camera);
-      var addon=items.length-1;
-      var sub=c.kind==='equipment'?'1 item':('Kit'+(addon>0?(' + '+addon):''));
-      var st=statusGroup(c);
-      var prog=(st==='out'&&rc.done>0&&!allRet)?(rc.done+'/'+rc.total+' back'):'';
-      return '<button type="button" class="recent-card rr-'+st+'" data-resv="'+esc(c.id)+'">'+
-        '<span class="rc-top"><span class="rc-cam">'+label+'</span>'+(prog?('<span class="rc-prog">'+prog+'</span>'):'')+'</span>'+
-        '<span class="rc-who">'+esc(nameOf(c))+'</span>'+
-        '<span class="rc-meta">'+sub+' &middot; '+fmt(c.out)+'</span>'+
-      '</button>';
-    }
-    var html='<div class="digest-h recent-h">Recent reservations &middot; tap to open</div>';
+    list.forEach(function(c){ groups[resvStatusGroup(c)].push(c); });
+    var ctl='<div class="ra-ctl" onclick="event.stopPropagation()">'+
+      '<button type="button" class="ra-nav" data-ranav="-7" title="Previous week">&#8249;</button>'+
+      '<input type="text" id="ra-date" class="ra-dateinput" data-ph="Pick a date" value="'+esc(activityAnchor())+'" />'+
+      '<button type="button" class="ra-nav" data-ranav="7" title="Next week">&#8250;</button>'+
+      '<span class="ra-range">'+fmt(w.start)+' to '+fmt(w.end)+'</span></div>';
+    var body='';
     [['out','Checked out'],['reserved','Reserved'],['returned','Returned']].forEach(function(g){
-      var arr=groups[g[0]]; if(!arr.length) return;
-      html+='<div class="recent-grp"><div class="recent-grp-h">'+g[1]+' <span class="recent-grp-n">'+arr.length+'</span></div>'+
-        '<div class="recent-grid">'+arr.slice(0,24).map(card).join('')+'</div></div>';
+      var arr=groups[g[0]], gopen=secOpen('ra-'+g[0]);
+      body+='<div class="csec ra-grp sec-'+g[0]+(gopen?' open':'')+'">'+
+        '<button class="csec-head" type="button" data-sectoggle="ra-'+g[0]+'"><span class="csec-dot '+g[0]+'"></span>'+g[1]+' <span class="csec-n">'+arr.length+'</span><span class="csec-chev"></span></button>'+
+        '<div class="csec-body">'+(arr.length?('<div class="recent-grid">'+arr.slice(0,40).map(activityCard).join('')+'</div>'):('<div class="foot">Nothing '+g[1].toLowerCase()+' in this window.</div>'))+'</div>'+
+      '</div>';
     });
-    pEl.innerHTML=html;
-    pEl.style.display='';
-    pEl.querySelectorAll('[data-resv]').forEach(function(el){ el.onclick=function(){ openReservation(el.getAttribute('data-resv')); }; });
+    return '<div class="camhub ra-hub'+(aOpen?' open':'')+'">'+
+      '<div class="camhub-head" data-sectoggle="ractivity"><span class="camhub-titlebox"><span class="camhub-code">Reservations</span><span class="camhub-title">Reservation Activity</span></span>'+ctl+'<span class="camhub-meta"><span class="camhub-chev"></span></span></div>'+
+      '<div class="camhub-body">'+body+'</div></div>';
   }
 
   // ===== Unified reservation window: every item in the bundle + per-item check-in (incremental) =====
@@ -1094,7 +1133,10 @@
     var prog='<div class="resv-prog"><b>'+rc.done+'</b> of <b>'+rc.total+'</b> returned</div>';
     var rows=items.map(function(it){
       var isCam=it.kind!=='equipment', s=statusOf(it);
-      var label=isCam?('Camera kit · '+esc(it.camera)):esc(gearLabel(it.item));
+      var nm=isCam
+        ? '<button type="button" class="itemlink" data-camdetail="'+esc(it.camera)+'">'+esc(it.camera).toUpperCase()+'</button>'
+        : '<button type="button" class="itemlink" data-geardetail="'+esc(it.item)+'">'+esc(gearLabel(it.item)).toUpperCase()+'</button>';
+      var label=isCam?('Camera kit · '+nm):nm;
       var chip='<span class="resv-chip '+s+'">'+({reserved:'Reserved',out:'Checked out',returned:'Returned'}[s]||s)+'</span>';
       var act='';
       if(s==='reserved'){ act='<button type="button" class="btn sm" data-resvpick="'+esc(it.id)+'">Mark picked up</button>'; }
@@ -1118,6 +1160,8 @@
     b.querySelectorAll('[data-resvret]').forEach(function(el){ el.onclick=function(){ resvSetStatus(el.getAttribute('data-resvret'),'returned'); }; });
     b.querySelectorAll('[data-resvmiss]').forEach(function(el){ el.onclick=function(){ resvMissing(el.getAttribute('data-resvmiss')); }; });
     b.querySelectorAll('[data-resvcam]').forEach(function(el){ el.onclick=function(){ var id=el.getAttribute('data-resvcam'); closeResv(); openReturnChecklist(id); }; });
+    b.querySelectorAll('[data-camdetail]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); var cam=el.getAttribute('data-camdetail'); closeResv(); openCamDetail(cam); }; });
+    b.querySelectorAll('[data-geardetail]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); var gid=el.getAttribute('data-geardetail'); closeResv(); openGearDetail(gid); }; });
     var all=document.getElementById('resvAll'); if(all) all.onclick=function(){ resvCheckInAll(parent); };
     var outAll=document.getElementById('resvOutAll'); if(outAll) outAll.onclick=function(){ resvCheckOutAll(parent); };
     var see=document.getElementById('resvSee'); if(see) see.onclick=function(){ var pid=parent.id; closeResv(); openEditCheckout(pid); };
@@ -1277,6 +1321,45 @@
       '</span>'+
     '</button>';
   }
+  // ===== Manage Equipment tiles: condition ONLY (no checkout/checkin status). Chris 2026-10-04:
+  // "burry the equipment cards on a manage equipment accordion that has no check out or check in
+  // statuses, just kit and contents and condition." Colored by CONDITION (green = complete + no
+  // issues, gold = something missing / open issue, gray = out of service). Tap -> the full window
+  // where he updates the kit, logs a missing cap, marks the kit complete, etc.
+  function camCond(cam){ var a=assetOf(cam); if(a.oos) return 'oos'; var p=kitPct(cam); return (a.no_card || (a.issues&&a.issues.length) || (p!=null&&p<100)) ? 'warn' : 'ok'; }
+  function gearCond(id){ var a=assetOf(id); if(a.oos) return 'oos'; var p=gearKitPct(id); return ((a.issues&&a.issues.length) || (p!=null&&p<100)) ? 'warn' : 'ok'; }
+  function camCondLabel(cam){ var a=assetOf(cam), p=kitPct(cam), b=[];
+    if(a.oos) return 'Out of service';
+    if(a.no_card) b.push('Memory card missing');
+    if(p!=null&&p<100) b.push('Kit incomplete');
+    if(a.issues&&a.issues.length) b.push(a.issues.length+' open issue'+(a.issues.length>1?'s':''));
+    return b.length?b.join(' &middot; '):'Kit complete, no issues'; }
+  function gearCondLabel(id){ var a=assetOf(id), p=gearKitPct(id), b=[];
+    if(a.oos) return 'Out of service';
+    if(p!=null&&p<100) b.push('Kit incomplete');
+    if(a.issues&&a.issues.length) b.push(a.issues.length+' open issue'+(a.issues.length>1?'s':''));
+    return b.length?b.join(' &middot; '):'Complete, no issues'; }
+  function manageTile(cam){
+    var cond=camCond(cam), p=kitPct(cam), pcls=(p==null?'na':(p>=100?'':(p>=70?'mid':'low')));
+    var p2=(P2.indexOf(cam)>=0)?'<span class="camtile-p2">P2</span>':'';
+    return '<button type="button" class="camtile gtile mt-'+cond+'" data-camdetail="'+esc(cam)+'">'+
+      camThumb(cam)+
+      '<span class="gtile-main">'+
+        '<span class="camtile-top"><span class="camtile-dot"></span><span class="camtile-n">'+esc(cam)+'</span>'+p2+'<span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span></span>'+
+        '<span class="camtile-status mt-cond">'+camCondLabel(cam)+'</span>'+
+      '</span>'+
+    '</button>';
+  }
+  function manageGearTile(id){
+    var u=gearUnit(id)||{}, cond=gearCond(id), p=gearKitPct(id), pcls=(p==null?'na':(p>=100?'':(p>=70?'mid':'low')));
+    return '<button type="button" class="camtile gtile mt-'+cond+'" data-geardetail="'+esc(id)+'">'+
+      gearThumb(u.type)+
+      '<span class="gtile-main">'+
+        '<span class="camtile-top"><span class="camtile-dot"></span><span class="camtile-n">'+esc(u.label||id)+'</span><span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span></span>'+
+        '<span class="camtile-status mt-cond">'+gearCondLabel(id)+'</span>'+
+      '</span>'+
+    '</button>';
+  }
   function camCard(cam){
     var p2=P2.indexOf(cam)>=0, sub=p2?'Photo 2 only':'';
     var title='<span class="dcard-title camnum" data-camdetail="'+cam+'" title="Open window">'+cam+'</span>';
@@ -1402,14 +1485,11 @@
   function renderBoard(){
     var host=document.getElementById('board'); if(!host) return;
     renderPoolBar();
-    var cams=viewCams(), counts={out:0,reserved:0,avail:0};
-    cams.forEach(function(cam){ counts[catOf(cam)]++; });
-    // ONE consolidated, color-coded Cameras grid (Chris, 2026-10-01): each camera appears ONCE,
-    // colored by today's status (green available, yellow reserved-today, orange checked out, red
-    // overdue + pulsing, gray out of service / card missing). Tap a tile -> the full camera window.
-    // Replaces the old separate Condition + Available + Checked-out + Reserved lists.
-    var sec='<div class="camgrid">'+sortedCams().map(camTile).join('')+'</div>';
-    // ADDITIONAL EQUIPMENT: each unit is its OWN tile (like a camera), grouped by type. Tap -> unit window.
+    // ===== MANAGE EQUIPMENT (buried catalog): every camera + gear unit as a CONDITION tile, with NO
+    // checkout/checkin status (Chris 2026-10-04). Cameras grid first, then Additional equipment
+    // grouped by type. Tap any tile -> its full window to update the kit / log an issue / mark complete.
+    var mcams=sortedCams();
+    var mgrid='<div class="camgrid">'+mcams.map(manageTile).join('')+'</div>';
     var eopen=secOpen('equip'), gpool=gearPoolIds(), gtypes=gearTypes();
     var gByType={}; gpool.forEach(function(id){ var u=gearUnit(id); if(!u) return; (gByType[u.type]=gByType[u.type]||[]).push(id); });
     var gOrder=['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil'];
@@ -1417,33 +1497,37 @@
     gOrder.forEach(function(t){ var ids=gByType[t]; if(!ids||!ids.length) return;
       var tl=(gtypes[t]&&gtypes[t].label)||t;
       gearHtml+='<div class="geargroup"><div class="geargroup-h">'+esc(tl)+'<span class="geargroup-n">'+ids.length+'</span></div>'+
-        '<div class="camgrid">'+ids.map(gearTile).join('')+'</div></div>';
+        '<div class="camgrid">'+ids.map(manageGearTile).join('')+'</div></div>';
     });
-    sec+='<div class="csec sec-equip'+(eopen?' open':'')+'">'+
+    var mbody=mgrid+
+      '<div class="csec sec-equip'+(eopen?' open':'')+'">'+
       '<button class="csec-head" type="button" data-sectoggle="equip"><span class="csec-dot equip"></span>Additional equipment <span class="csec-n">'+gpool.length+' units</span><span class="csec-chev"></span></button>'+
       '<div class="csec-body">'+(gearHtml||'<div class="foot">No equipment units yet.</div>')+'</div>'+
     '</div>';
-    // MEMORY CARD WALLET: cards a student left to offload later, each in a numbered slot with a 24h clock.
-    // Silva + Garcia only; Mankin has no card wallet, so it is omitted from her view.
+    var mOpen=secOpen('manage');
+    var manageHtml='<div class="camhub manage-hub'+(mOpen?' open':'')+'">'+
+      '<div class="camhub-head" data-sectoggle="manage">'+
+        '<span class="camhub-titlebox"><span class="camhub-code">Catalog</span><span class="camhub-title">Manage Equipment</span></span>'+
+        camSortDropdown()+
+        '<span class="camhub-meta"><span class="csec-n">'+mcams.length+' cameras &middot; '+gpool.length+' units</span><span class="camhub-chev"></span></span>'+
+      '</div>'+
+      '<div class="camhub-body">'+mbody+'</div>'+
+    '</div>';
+    // ===== MEMORY CARD WALLET: its own hub. Silva + Garcia only (Mankin has no card wallet). =====
+    var walletHtml='';
     if(SELECTED_POOL!=='mankin'){
-      var wcards=DATA.cards||{}, wheld=Object.keys(wcards).length, wopen=secOpen('wallet');
-      sec+='<div class="csec sec-wallet'+(wopen?' open':'')+'">'+
-        '<button class="csec-head" type="button" data-sectoggle="wallet"><span class="csec-dot wallet"></span>Memory card wallet <span class="csec-n">'+wheld+' held</span><span class="csec-chev"></span></button>'+
-        '<div class="csec-body"><div class="wallet-grid">'+walletSlotsHtml()+'</div></div>'+
+      var wheld=Object.keys(DATA.cards||{}).length, wOpen=secOpen('wallet');
+      walletHtml='<div class="camhub wallet-hub'+(wOpen?' open':'')+'">'+
+        '<div class="camhub-head" data-sectoggle="wallet">'+
+          '<span class="camhub-titlebox"><span class="camhub-code">Holding</span><span class="camhub-title">Memory Card Wallet</span></span>'+
+          '<span class="camhub-meta"><span class="csec-n">'+wheld+' held</span><span class="camhub-chev"></span></span>'+
+        '</div>'+
+        '<div class="camhub-body"><div class="wallet-grid">'+walletSlotsHtml()+'</div></div>'+
       '</div>';
     }
-    // Wrap all sections in the top-level "Cameras" card (curriculum-catalog course-card look).
-    var camsOpen=secOpen('cameras');
-    var topN=counts.avail+' available &middot; '+counts.out+' out &middot; '+counts.reserved+' reserved';
-    var html=
-      '<div class="camhub'+(camsOpen?' open':'')+'">'+
-      '<div class="camhub-head" data-sectoggle="cameras">'+
-        '<span class="camhub-titlebox"><span class="camhub-code">Equipment</span><span class="camhub-title">Cameras</span></span>'+
-        camSortDropdown()+
-        '<span class="camhub-meta"><span class="csec-n">'+topN+'</span><span class="camhub-chev"></span></span>'+
-      '</div>'+
-      '<div class="camhub-body">'+sec+'</div>'+
-    '</div>';
+    // Reservation Activity (date selector + Checked out / Reserved / Returned accordions) sits ON TOP
+    // as the daily glanceable status, then the buried Manage Equipment catalog, then the card wallet.
+    var html=reservationActivityHtml()+manageHtml+walletHtml;
     // Flicker fix (Chris, 2026-09-29): the 7s poll used to replace #board on every tick, which
     // re-composited every backdrop-filter card over the fixed CS-logo background and read as a
     // periodic flicker. Only touch the DOM (and rebind) when the rendered board actually changed.
@@ -1487,6 +1571,12 @@
     b.querySelectorAll('[data-cardinfo]').forEach(function(el){ el.onclick=function(){ openCardInfo(el.getAttribute('data-cardinfo')); }; });
     b.querySelectorAll('[data-approve]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-approve'), el); }; });
     b.querySelectorAll('[data-returncam]').forEach(function(el){ el.onclick=function(){ openReturnChecklist(el.getAttribute('data-returncam')); }; });
+    // Reservation Activity: styled date picker, +/- one week arrows, and open-the-bundle taps.
+    var _rd=b.querySelector('#ra-date');
+    if(_rd){ mkDatePicker(_rd); _rd.addEventListener('change',function(){ if(_rd.value){ ACTIVITY_DATE=_rd.value; _lastBoardSig=null; renderBoard(); } }); }
+    b.querySelectorAll('[data-ranav]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); shiftActivity(+el.getAttribute('data-ranav')); }; });
+    b.querySelectorAll('[data-resv]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); openReservation(el.getAttribute('data-resv')); };
+      el.onkeydown=function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openReservation(el.getAttribute('data-resv')); } }; });
   }
   // Delegated so a camera number is clickable ANYWHERE (board, Camera Log, digests, history):
   // single-click a number -> camera detail; double-click a checked-out card body -> edit/move.
