@@ -1164,12 +1164,12 @@
   // One square thumbnail per TYPE, reused across that type's units. 400x400, hosted on the whitelisted
   // domain. A type with no image yet (speedlite, apple pencil) falls back to the clean placeholder box.
   var THUMB_BASE='https://www.creativesilva.com/assets/images/equipment/';
-  var GEAR_THUMB={ wide:THUMB_BASE+'ultrawide-v2.jpg', zoom:THUMB_BASE+'ultrazoom-v2.jpg', speedlite:THUMB_BASE+'speedlite-v2.jpg', tripod:THUMB_BASE+'tripod-v2.jpg', reflector:THUMB_BASE+'reflector-v2.jpg', mankin_tripod:THUMB_BASE+'tripod-v2.jpg', apple_pencil:THUMB_BASE+'ipad-stylus-v2.jpg' };
+  var GEAR_THUMB={ wide:THUMB_BASE+'ultrawide-v2.png', zoom:THUMB_BASE+'ultrazoom-v2.png', speedlite:THUMB_BASE+'speedlite-v2.png', tripod:THUMB_BASE+'tripod-v2.png', reflector:THUMB_BASE+'reflector-v2.png', mankin_tripod:THUMB_BASE+'tripod-v2.png', apple_pencil:THUMB_BASE+'ipad-stylus-v2.png' };
   function gearThumb(type){ var u=GEAR_THUMB[type]||'';
     return u ? '<span class="gthumb"><img src="'+esc(u)+'" alt=""></span>' : '<span class="gthumb gthumb-ph" aria-hidden="true"></span>'; }
   // Camera body thumbnails: the Photo classes use the Canon EOS R50; Mankin's class (cams 19+) uses the R50 V.
-  var CAMERA_THUMB={ r50:THUMB_BASE+'camera-r50-v2.jpg', r50v:THUMB_BASE+'camera-r50v-v2.jpg' };
-  var SD_THUMB=THUMB_BASE+'sdcard-v2.jpg';   // generic memory-card image for the wallet section header
+  var CAMERA_THUMB={ r50:THUMB_BASE+'camera-r50-v2.png', r50v:THUMB_BASE+'camera-r50v-v2.png' };
+  var SD_THUMB=THUMB_BASE+'sdcard-v2.png';   // generic memory-card image for the wallet section header
   function camThumb(cam){ var n=parseInt(String(cam).replace(/[^0-9]/g,''),10)||0;
     var u=(n>=19)?CAMERA_THUMB.r50v:CAMERA_THUMB.r50;
     return u ? '<span class="gthumb"><img src="'+esc(u)+'" alt=""></span>' : '<span class="gthumb gthumb-ph" aria-hidden="true"></span>'; }
