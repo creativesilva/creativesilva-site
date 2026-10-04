@@ -1194,7 +1194,7 @@
     return u ? '<span class="gthumb"><img src="'+esc(u)+'" alt=""></span>' : '<span class="gthumb gthumb-ph" aria-hidden="true"></span>'; }
   // Camera body thumbnails: the Photo classes use the Canon EOS R50; Mankin's class (cams 19+) uses the R50 V.
   var CAMERA_THUMB={ r50:THUMB_BASE+'camera-r50-v2.png', r50v:THUMB_BASE+'camera-r50v-v2.png' };
-  var SD_THUMB=THUMB_BASE+'sdcard-v2.png';   // generic memory-card image for the wallet section header
+  var SD_THUMB=THUMB_BASE+'sdcard-v3.png';   // memory-card image shown on FILLED wallet slots only
   function camThumb(cam){ var n=parseInt(String(cam).replace(/[^0-9]/g,''),10)||0;
     var u=(n>=19)?CAMERA_THUMB.r50v:CAMERA_THUMB.r50;
     return u ? '<span class="gthumb"><img src="'+esc(u)+'" alt=""></span>' : '<span class="gthumb gthumb-ph" aria-hidden="true"></span>'; }
@@ -1755,7 +1755,7 @@
     var out='';
     filled.forEach(function(i){ out+=walletCardHtml(i, cards[String(i)]); });
     // Empty slots after, in slot order. Click to hold a card ad-hoc (type the student ID, starts the 24h clock).
-    empty.forEach(function(i){ out+='<button type="button" class="wslot wslot-add" data-cardadd="'+i+'"><img class="wslot-sd" src="'+esc(SD_THUMB)+'" alt="" /><span class="wslot-main"><div class="wslot-n"><span class="wslot-slot">Slot '+i+'</span></div><div class="wslot-empty">Empty</div><div class="wslot-addhint">+ Hold a card</div></span></button>'; });
+    empty.forEach(function(i){ out+='<button type="button" class="wslot wslot-add" data-cardadd="'+i+'"><span class="wslot-main"><div class="wslot-n"><span class="wslot-slot">Slot '+i+'</span></div><div class="wslot-empty">Empty</div><div class="wslot-addhint">+ Hold a card</div></span></button>'; });
     return out;
   }
   function walletCardHtml(i, c){
