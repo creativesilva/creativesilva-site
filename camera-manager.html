@@ -127,6 +127,9 @@
   .resv-iact{display:flex;gap:6px;margin-left:auto;}
   .resv-done{font-family:var(--font);font-size:.64rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#8ff0b0;}
   .resv-allback{font-family:var(--font);font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#8ff0b0;text-align:center;padding:8px;}
+  .resv-foot{display:flex;flex-direction:column;gap:8px;}
+  .go.resv-see{background:transparent;color:var(--teal-lt);border:1px solid var(--teal);}
+  .go.resv-see:hover{background:rgba(0,184,184,.1);color:var(--teal-lt);}
   /* ── Camera board = curriculum-catalog course-card look. One "Cameras" card (teal camera-icon
      title box, blurred strips) opens to horizontal section strips; each strip opens to its tiles. ── */
   /* Teacher view toggle (Silva / Garcia / Mankin): angular segmented control, teal active. */
@@ -364,8 +367,8 @@
   /* Per-unit gear tiles: a camera tile with a small thumbnail on the left, grouped by type. */
   .gtile{flex-direction:row;align-items:stretch;gap:10px;}
   .gtile-main{display:flex;flex-direction:column;gap:5px;flex:1 1 auto;min-width:0;}
-  .gthumb{flex:0 0 auto;width:44px;height:44px;display:block;overflow:hidden;background:rgba(0,0,0,.3);border:1px solid var(--line-soft);}
-  .gthumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .gthumb{flex:0 0 auto;width:44px;height:44px;display:block;}
+  .gthumb img{width:100%;height:100%;object-fit:contain;display:block;}
   .gthumb-ph{position:relative;background:linear-gradient(135deg,rgba(0,184,184,.14),rgba(0,0,0,.3));}
   .gthumb-ph::after{content:"";position:absolute;inset:10px;border:2px solid rgba(0,184,184,.5);background:radial-gradient(circle at 50% 46%, rgba(0,184,184,.55) 0 2.5px, transparent 3.5px);}
   .geargroup{margin:0 0 12px;}
@@ -1101,8 +1104,14 @@
       else { act='<span class="resv-done">Returned ✓</span>'; }
       return '<div class="resv-item ri-'+s+'"><span class="resv-ilabel">'+label+'</span>'+chip+'<span class="resv-iact">'+act+'</span></div>';
     }).join('');
-    var allRet=rc.done===rc.total, anyOut=items.some(function(x){return statusOf(x)==='out';});
-    var foot=allRet?'<div class="resv-allback">All items are back.</div>':(anyOut?'<button type="button" class="go" id="resvAll">Check in everything</button>':'');
+    var allRet=rc.done===rc.total, anyOut=items.some(function(x){return statusOf(x)==='out';}), anyReserved=items.some(function(x){return statusOf(x)==='reserved';});
+    var foot='<div class="resv-foot">';
+    if(allRet){ foot+='<div class="resv-allback">All items are back.</div>'; }
+    else {
+      if(anyReserved) foot+='<button type="button" class="go" id="resvOutAll">Check out everything</button>';
+      if(anyOut) foot+='<button type="button" class="go" id="resvAll">Check in everything</button>';
+    }
+    foot+='<button type="button" class="go resv-see" id="resvSee">See reservation</button></div>';
     document.getElementById('resvBody').innerHTML=head+prog+'<div class="resv-items">'+rows+'</div>'+foot;
     var b=document.getElementById('resvBody');
     b.querySelectorAll('[data-resvpick]').forEach(function(el){ el.onclick=function(){ resvSetStatus(el.getAttribute('data-resvpick'),'out'); }; });
@@ -1110,6 +1119,13 @@
     b.querySelectorAll('[data-resvmiss]').forEach(function(el){ el.onclick=function(){ resvMissing(el.getAttribute('data-resvmiss')); }; });
     b.querySelectorAll('[data-resvcam]').forEach(function(el){ el.onclick=function(){ var id=el.getAttribute('data-resvcam'); closeResv(); openReturnChecklist(id); }; });
     var all=document.getElementById('resvAll'); if(all) all.onclick=function(){ resvCheckInAll(parent); };
+    var outAll=document.getElementById('resvOutAll'); if(outAll) outAll.onclick=function(){ resvCheckOutAll(parent); };
+    var see=document.getElementById('resvSee'); if(see) see.onclick=function(){ var pid=parent.id; closeResv(); openEditCheckout(pid); };
+  }
+  function resvCheckOutAll(parent){   // mark every still-reserved item picked up at once
+    var res=resvItems(parent).filter(function(x){return statusOf(x)==='reserved';});
+    Promise.all(res.map(function(x){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:x.id,status:'out'})}); }))
+      .then(function(){ return loadBoard(); }).then(function(){ if(resvId) renderResvModal(); }).catch(function(){ if(resvId) renderResvModal(); });
   }
   function resvSetStatus(id,status){
     camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})})
@@ -1173,7 +1189,7 @@
   // One square thumbnail per TYPE, reused across that type's units. 400x400, hosted on the whitelisted
   // domain. A type with no image yet (speedlite, apple pencil) falls back to the clean placeholder box.
   var THUMB_BASE='https://www.creativesilva.com/assets/images/equipment/';
-  var GEAR_THUMB={ wide:THUMB_BASE+'ultrawide-v2.png', zoom:THUMB_BASE+'ultrazoom-v2.png', speedlite:THUMB_BASE+'speedlite-v2.png', tripod:THUMB_BASE+'tripod-v2.png', reflector:THUMB_BASE+'reflector-v2.png', mankin_tripod:THUMB_BASE+'tripod-v2.png', apple_pencil:THUMB_BASE+'ipad-stylus-v2.png' };
+  var GEAR_THUMB={ wide:THUMB_BASE+'ultrawide-v2.png', zoom:THUMB_BASE+'ultrazoom-v2.png', speedlite:THUMB_BASE+'speedlite-v2.png', tripod:THUMB_BASE+'tripod-v3.png', reflector:THUMB_BASE+'reflector-v2.png', mankin_tripod:THUMB_BASE+'tripod-v3.png', apple_pencil:THUMB_BASE+'ipad-stylus-v2.png' };
   function gearThumb(type){ var u=GEAR_THUMB[type]||'';
     return u ? '<span class="gthumb"><img src="'+esc(u)+'" alt=""></span>' : '<span class="gthumb gthumb-ph" aria-hidden="true"></span>'; }
   // Camera body thumbnails: the Photo classes use the Canon EOS R50; Mankin's class (cams 19+) uses the R50 V.
