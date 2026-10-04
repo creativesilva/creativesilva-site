@@ -35,12 +35,10 @@
   *{box-sizing:border-box;border-radius:0 !important;}
   html,body{margin:0;padding:0;}
   body{background-color:#080808;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;}
-  /* Cohesive with the curriculum CONTENT pages: a dark->teal->dark backdrop glow with a GHOSTED
-     (light, faint) CS logo watermark on top. NOT the PV panther (that stays on student course pages).
-     Standalone only; the embed stays transparent (body.embed::before/::after are hidden below). */
+  /* Cohesive with the curriculum CONTENT pages: a dark->teal->dark backdrop glow. The branding now
+     lives in the curriculum-style hero banner (.cal-hero) below (CS logo, title), so there is NO
+     background logo watermark. Standalone only; the embed stays transparent (body.embed::before hidden). */
   body::before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%);}
-  body::after{content:"";position:fixed;inset:0;z-index:-1;background:url("https://www.creativesilva.com/logos/CS_Logo_Glossy_Teal_v1.png") no-repeat center 40%;background-size:min(74vw,700px);filter:brightness(0) invert(1);opacity:.06;}
-  @media (max-width:900px){ body::after{background-size:min(88vw,460px);background-position:center 36%;} }
 
   /* camera-kit icon injected into the shared header title (rendered WHITE) */
   .cal-title-icon{height:1.4em;width:auto;margin-right:.44em;vertical-align:-0.24em;filter:brightness(0) invert(1);}
@@ -368,7 +366,7 @@
   body.embed .cal-backbar{display:none !important;}
   body.embed .silva-nav, body.embed .intro{display:none;}
   /* embedded in the Teacher Console: show ONLY the month calendar (the console has its own board above) */
-  body.embed .summary, body.embed .h, body.embed #board{display:none;}
+  body.embed .summary, body.embed .h, body.embed #board, body.embed .cal-hero{display:none;}
   body.embed .cal-monthacts{display:none;}   /* Reserve/QR are student actions; the console has its own */
   /* No own watermark/veil when embedded: the console page supplies the SINGLE background logo, and its
      .calpanel blurs it, so the embedded calendar is transparent and the one blurred logo shows through. */
@@ -395,12 +393,62 @@
   /* iPad A16 (11th gen): ~820pt portrait / ~1180pt landscape. More content width + slightly shorter cells so the month fits with the keyboard case attached. */
   @media (min-width:768px) and (max-width:1200px){ .wrap{padding:20px 18px 56px;} }
   @media (max-width:1024px){ .board{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));} .wcell{min-height:114px;} }
+  /* The curriculum-style hero banner IS the header now, so the shared top nav bar is hidden (its title
+     duplicated the banner). silva-nav.js still loads for the iOS standalone shim; only the visual bar is
+     hidden. The live class-period countdown now lives in the banner (stays visible on iPad/phone too). */
+  .silva-nav{display:none;}
+  .cal-hero-clock{width:150px;height:46px;border:0;background:transparent;display:block;}
+  /* Phone: compact the banner + availability box so the calendar is not pushed below the fold.
+     (Desktop/iPad keep the fuller header.) Inline banner styles are overridden with !important. */
+  @media (max-width:600px){
+    .cal-hero > div > div{ justify-content:center !important; }
+    .cal-hero{ padding:13px 16px 15px !important; margin:0 0 14px !important; }
+    .cal-hero > div{ gap:7px 14px !important; }
+    .cal-hero img{ width:46px !important; }
+    #calHeroEyebrow{ font-size:9.5pt !important; letter-spacing:.05em !important; }
+    #calHeroTitle{ font-size:16pt !important; }
+    #calHeroSub{ font-size:10pt !important; }
+    /* countdown + toggle on one row (not stacked) to cut the banner height */
+    .cal-hero > div > div:last-child > div{ flex-direction:row !important; gap:14px !important; }
+    .cal-hero-clock{ width:116px !important; height:40px !important; }
+    /* shrink the "N of 18 available" box so it stops dominating */
+    .summary{ padding:9px 13px !important; gap:7px 14px !important; margin-bottom:12px !important; }
+    .summary .big{ font-size:1.3rem !important; padding:3px 11px !important; min-width:1.5em !important; }
+    .summary .lab{ font-size:.72rem !important; }
+    .legend{ font-size:.68rem !important; gap:10px !important; }
+    /* tighten the intro line so the month grid surfaces sooner */
+    .intro{ margin-bottom:12px !important; }
+    .sub{ font-size:.86rem !important; }
+  }
 </style>
 </head>
 <body>
 <nav class="silva-nav" aria-label="Site navigation"></nav>
 <div class="wrap">
   <a class="cal-backbar" id="calBack" href="/camera-manager.html">&lsaquo; Back to Equipment Manager</a>
+
+  <!-- Curriculum-style hero banner (Chris 2026-10-04): mirrors the module banner (logo LEFT,
+       title CENTERED, icon RIGHT) so the tool page reads as cohesive with the course pages.
+       CS logo (NOT the PV panther, per the non-course-page rule). Hidden in the console embed. -->
+  <div class="cal-hero" style="background-color:#04191a;background-image:linear-gradient(90deg,rgba(3,18,20,0.95) 0%,rgba(0,66,68,0.5) 50%,rgba(3,18,20,0.95) 100%);border-top:2px solid #00b8b8;border-right:2px solid #00b8b8;border-bottom:2px solid #00b8b8;border-left:7px solid #00b8b8;box-sizing:border-box;padding:22px 28px 24px;margin:0 0 22px;">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;">
+      <div style="flex:1 1 150px;display:flex;justify-content:flex-start;align-items:center;">
+        <img src="https://www.creativesilva.com/assets/Icons/assignment/calendar-white-v1.png" alt="Equipment Reservations" style="width:clamp(62px,12vw,96px);height:auto;display:block;" />
+      </div>
+      <div style="flex:100 1 260px;min-width:200px;text-align:center;">
+        <div style="margin-bottom:6px;"><span id="calHeroEyebrow" style="font-size:13pt;color:#80e0e0;letter-spacing:0.04em;"><strong>Pioneer Valley Photography</strong></span></div>
+        <div id="calHeroTitle" style="color:#ffffff;font-size:clamp(17pt,4.5vw,23pt);line-height:1.1;"><strong>Equipment Reservations</strong></div>
+        <div style="color:rgba(255,255,255,0.82);margin-top:6px;"><span id="calHeroSub" style="font-size:12.5pt;font-style:italic;"><strong>Reserve a camera kit or gear. Tap a day to begin.</strong></span></div>
+      </div>
+      <div style="flex:1 1 150px;display:flex;justify-content:flex-end;align-items:center;">
+        <div style="display:inline-flex;flex-direction:column;align-items:center;gap:10px;">
+          <iframe class="cal-hero-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
+          <button type="button" class="langswap" id="langSwap" aria-label="Switch language"><span class="langbtn-globe" aria-hidden="true"></span><span id="langSwapLabel">Espa&ntilde;ol</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="intro">
     <p class="sub" id="introSub">See which cameras are out and when they are due back before you ask. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.</p>
   </div>
@@ -410,7 +458,6 @@
   <div class="summary">
     <div><span class="big" id="outn">0</span> <span class="lab"><span id="lab-of">of</span> <span id="totn">0</span> <span id="lab-avail">cameras available</span></span></div>
     <div class="legend" id="legend"><span><i class="k-res"></i>Reserved</span><span><i class="k-out"></i>Checked out</span></div>
-    <button type="button" class="langswap" id="langSwap" aria-label="Switch language"><span class="langbtn-globe" aria-hidden="true"></span><span id="langSwapLabel">Espa&ntilde;ol</span></button>
   </div>
 
   <div class="cal-stickyhead">
@@ -551,6 +598,9 @@
   var TR={
     en:{
       intro:'See which cameras are out and when they are due back before you ask. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.',
+      heroEyebrow:'Pioneer Valley Photography', heroTitle:'Equipment Reservations',
+      heroSub:'Reserve a camera kit or gear. Tap a day to begin.',
+      docTitle:'Equipment Reservations | Pioneer Valley Photography',
       availSuffix:'cameras available', of:'of', reserved:'Reserved', checkedOut:'Checked out',
       checkedNow:'Checked out right now',
       checkedOnDay:'Checked out on {d}', showNow:'Show now', noneThatDay:'No cameras checked out that day.',
@@ -608,6 +658,9 @@
     },
     es:{
       intro:'Mira qué cámaras están prestadas y cuándo se deben devolver antes de preguntar. Las cámaras 16, 17 y 18 son solo para Fotografía 2. Se actualiza automáticamente.',
+      heroEyebrow:'Fotografía de Pioneer Valley', heroTitle:'Reservaciones de Equipo',
+      heroSub:'Reserva un kit de cámara o equipo. Toca un día para empezar.',
+      docTitle:'Reservaciones de Equipo | Fotografía de Pioneer Valley',
       availSuffix:'cámaras disponibles', of:'de', reserved:'Reservada', checkedOut:'Prestada',
       checkedNow:'Prestadas ahora mismo',
       checkedOnDay:'Prestadas el {d}', showNow:'Ver ahora', noneThatDay:'No hay c&aacute;maras prestadas ese d&iacute;a.',
@@ -684,8 +737,16 @@
   // ---- Apply the current language to every STATIC string on the page (dynamic bits re-render on toggle). ----
   function _setTxt(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
   function _setHtml(id,v){ var e=document.getElementById(id); if(e) e.innerHTML=v; }
+  // The big title in the shared top nav is built from document.title; re-point it on language change too.
+  function syncNavTitle(){ try{ var nt=document.querySelector('.silva-uni-title'); if(nt) nt.textContent=(t('docTitle').split('|')[0]).trim(); }catch(e){} }
   function applyStatic(){
     try{ document.documentElement.setAttribute('lang',LANG); }catch(e){}
+    // Hero banner (curriculum-style header) strings + the browser/nav title, all bilingual.
+    _setHtml('calHeroEyebrow','<strong>'+t('heroEyebrow')+'</strong>');
+    _setHtml('calHeroTitle','<strong>'+t('heroTitle')+'</strong>');
+    _setHtml('calHeroSub','<strong>'+t('heroSub')+'</strong>');
+    try{ document.title=t('docTitle'); }catch(e){}
+    syncNavTitle();
     _setTxt('introSub', t('intro'));
     _setTxt('lab-of', t('of')); _setTxt('lab-avail', t('availSuffix'));
     _setHtml('legend', '<span><i class="k-res"></i>'+t('reserved')+'</span><span><i class="k-out"></i>'+t('checkedOut')+'</span>');
@@ -1689,6 +1750,9 @@
   window.addEventListener('load', setCalNavH);
   window.addEventListener('resize', setCalNavH);
   setTimeout(setCalNavH, 300); setTimeout(setCalNavH, 1200);
+  // The shared nav builds asynchronously; re-point its title once it exists so a stored ES choice sticks.
+  window.addEventListener('load', syncNavTitle);
+  setTimeout(syncNavTitle, 300); setTimeout(syncNavTitle, 1200);
 })();
 </script>
 </body>
