@@ -17,6 +17,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/silva-module.css?v=d132cef2" />
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>try{ emailjs.init({ publicKey: '68UkiTjqHIKZMkeCC' }); }catch(e){}</script>
 <style>
   /* Camera calendar: shares the unified header (silva-nav.js) + the catalog CS-logo
      watermark background, so it matches curriculum.html. Body content below is
@@ -1509,6 +1511,17 @@
     });
     postHeight();
   }
+  // Auto-confirmation email to the student (approval is shelved, so reservations confirm on submit).
+  // Student address = <student id digits>@students-smjuhsd.org; fails quietly and never blocks reserving.
+  function sendStudentConfirm(sid, name, item, pickup, returnBy){
+    try{
+      var digits=String(sid||'').replace(/\D/g,''); if(!digits || !window.emailjs) return;
+      emailjs.send('service_4mhkbik','template_reservation',{
+        to_email: digits+'@students-smjuhsd.org', student_name: name||'', item: item,
+        pickup_room: 'Room 322', pickup_date: prettyDate(pickup), return_by: prettyDate(returnBy)
+      }).catch(function(){});
+    }catch(e){}
+  }
   function submitReserve(iso){
     var cam=DM_RESERVE_CAM; if(!cam||!RESV) return;
     var due=nextSchoolDay(iso), extras=[];
@@ -1519,7 +1532,7 @@
     var btn=document.getElementById('rc-go'); if(btn){ btn.disabled=true; btn.textContent=t('reservingBtn'); }
     fetch(API+'/api/camera/checkout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
-      .then(function(res){ if(res.ok&&res.j&&res.j.ok){ reserveDone(cam,iso,due,extras,RESV&&RESV.label); } else { var m=document.getElementById('rc-msg'); if(m) m.textContent=srvErr(res.j&&res.j.error)||t('couldNotReserve'); if(btn){ btn.disabled=false; btn.textContent=t('confirmBtn'); } } })
+      .then(function(res){ if(res.ok&&res.j&&res.j.ok){ sendStudentConfirm(RESV&&RESV.id, RESV&&RESV.label, cam+(extras.length?(' + '+extras.map(function(k){return gearLabel(k);}).join(', ')):''), iso, due); reserveDone(cam,iso,due,extras,RESV&&RESV.label); } else { var m=document.getElementById('rc-msg'); if(m) m.textContent=srvErr(res.j&&res.j.error)||t('couldNotReserve'); if(btn){ btn.disabled=false; btn.textContent=t('confirmBtn'); } } })
       .catch(function(){ var m=document.getElementById('rc-msg'); if(m) m.textContent=t('couldNotReach'); if(btn){ btn.disabled=false; btn.textContent=t('confirmBtn'); } });
   }
   // Standalone gear reservation (Other Equipment tab): its own checkout record, kind='equipment'.
@@ -1530,7 +1543,7 @@
     var btn=document.getElementById('rc-go'); if(btn){ btn.disabled=true; btn.textContent=t('reservingBtn'); }
     fetch(API+'/api/camera/checkout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
-      .then(function(res){ if(res.ok&&res.j&&res.j.ok){ reserveDoneGear(key,iso,due,RESV&&RESV.label); } else { var m=document.getElementById('rc-msg'); if(m) m.textContent=srvErr(res.j&&res.j.error)||t('couldNotReserve'); if(btn){ btn.disabled=false; btn.textContent=t('confirmBtn'); } } })
+      .then(function(res){ if(res.ok&&res.j&&res.j.ok){ sendStudentConfirm(RESV&&RESV.id, RESV&&RESV.label, gearLabel(key), iso, due); reserveDoneGear(key,iso,due,RESV&&RESV.label); } else { var m=document.getElementById('rc-msg'); if(m) m.textContent=srvErr(res.j&&res.j.error)||t('couldNotReserve'); if(btn){ btn.disabled=false; btn.textContent=t('confirmBtn'); } } })
       .catch(function(){ var m=document.getElementById('rc-msg'); if(m) m.textContent=t('couldNotReach'); if(btn){ btn.disabled=false; btn.textContent=t('confirmBtn'); } });
   }
   function reserveDoneGear(key,iso,due,who){

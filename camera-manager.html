@@ -97,6 +97,36 @@
   .pill.pending{background:rgba(139,92,246,.22);color:#c9b8ff;}
   .cam.pending-approval{border-left-color:#8b5cf6;}
   .pendmsg{font-size:.66rem;color:#c9b8ff;letter-spacing:.02em;margin-top:-2px;}
+  /* Recent Reservations (replaces the approval queue while approval is shelved) */
+  .digest.recent-digest{border-left-color:var(--teal);background:rgba(0,116,116,.10);}
+  .recent-digest .recent-h{color:var(--teal-lt);}
+  .recent-list{display:flex;flex-direction:column;gap:5px;}
+  .recent-row{display:grid;grid-template-columns:minmax(74px,auto) 1.4fr 1fr auto auto;gap:12px;align-items:center;width:100%;text-align:left;background:rgba(0,0,0,.28);border:1px solid var(--line-soft);border-left:3px solid var(--gold);color:var(--text);font-family:inherit;padding:8px 12px;cursor:pointer;}
+  .recent-row:hover{border-color:var(--teal);background:rgba(0,184,184,.07);}
+  .recent-row.rr-out{border-left-color:var(--orange);}
+  .recent-row.rr-returned{border-left-color:var(--grayed);opacity:.62;}
+  .rr-cam{font-family:var(--font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.82rem;color:#fff;}
+  .rr-who{font-size:.85rem;color:var(--text);}
+  .rr-sub{font-size:.72rem;color:var(--muted);}
+  .rr-st{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--teal-lt);text-align:right;}
+  .recent-row.rr-out .rr-st{color:#ffc7a6;} .recent-row.rr-returned .rr-st{color:var(--faint);}
+  .rr-date{font-size:.72rem;color:var(--faint);text-align:right;white-space:nowrap;}
+  @media (max-width:720px){ .recent-row{grid-template-columns:1fr auto;gap:2px 10px;} .rr-sub,.rr-date{display:none;} }
+  /* Reservation window: the whole bundle + per-item check-in */
+  .resv-meta{font-size:.85rem;color:var(--muted);margin-bottom:10px;}
+  .resv-meta .co{color:var(--teal-lt);}
+  .resv-dates{font-size:.82rem;color:var(--muted);margin-top:3px;}
+  .resv-prog{font-family:var(--font);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-lt);margin:0 0 12px;}
+  .resv-prog b{color:#fff;}
+  .resv-items{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+  .resv-item{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:rgba(0,0,0,.28);border:1px solid var(--line-soft);border-left:3px solid var(--orange);padding:9px 11px;}
+  .resv-item.ri-reserved{border-left-color:var(--gold);} .resv-item.ri-returned{border-left-color:var(--grayed);opacity:.6;}
+  .resv-ilabel{font-weight:600;color:#fff;font-size:.9rem;flex:1 1 150px;}
+  .resv-chip{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 7px;white-space:nowrap;}
+  .resv-chip.reserved{background:rgba(245,179,1,.18);color:#ffd889;} .resv-chip.out{background:rgba(255,107,26,.18);color:#ffc7a6;} .resv-chip.returned{background:rgba(160,180,180,.14);color:var(--faint);}
+  .resv-iact{display:flex;gap:6px;margin-left:auto;}
+  .resv-done{font-family:var(--font);font-size:.64rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#8ff0b0;}
+  .resv-allback{font-family:var(--font);font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#8ff0b0;text-align:center;padding:8px;}
   /* ── Camera board = curriculum-catalog course-card look. One "Cameras" card (teal camera-icon
      title box, blurred strips) opens to horizontal section strips; each strip opens to its tiles. ── */
   /* Teacher view toggle (Silva / Garcia / Mankin): angular segmented control, teal active. */
@@ -703,6 +733,14 @@
   </div>
 </div>
 
+<!-- Reservation window: all items in one bundle (kit + add-ons), check each in as it comes back -->
+<div class="modal" id="resvmodal">
+  <div class="mpanel">
+    <div class="mhead"><span class="mtitle" id="resvTitle">Reservation</span><button class="mx" id="resvx" aria-label="Close">&times;</button></div>
+    <div class="mbody" id="resvBody"></div>
+  </div>
+</div>
+
 <!-- Leave memory card: drop a student's card into a wallet slot (1-18); flags the camera no-card -->
 <div class="modal" id="cardmodal">
   <div class="mpanel">
@@ -927,6 +965,9 @@
     setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ try{ document.body.removeChild(t); }catch(e){} },300); },3400);
   }
   function statusOf(c){ return c.status||(c.returned?'returned':'out'); }
+  // Approval is SHELVED by default (server sends approval_required=false): reservations auto-confirm
+  // and the console shows Recent Reservations instead of an approval queue. Flip the env var to restore.
+  function approvalOn(){ return !!(DATA && DATA.approval_required); }
   function isOverdue(c){ return statusOf(c)==='out' && c.due && c.due<todayISO(); }
   function nameOf(c){ return (c.student_name||'').trim() || (c.student_id?('ID '+c.student_id):'Unknown'); }
   function camCourse(cam){ return P2.indexOf(cam)>=0?'Photo 2 only':'Photo 1 & 2'; }
@@ -959,13 +1000,123 @@
     if(odEl){ if(od.length){ odEl.className='digest overdue-digest';
         odEl.innerHTML='<div class="digest-h">&#9888; '+od.length+' camera'+(od.length>1?'s':'')+' overdue</div><div class="digest-body">'+od.map(function(c){ var n=daysBetween(c.due,today); return '<span class="digest-item"><span class="camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span> &middot; '+esc(nameOf(c))+' <b>'+n+'d</b></span>'; }).join('')+'</div>';
         odEl.style.display=''; } else { odEl.style.display='none'; odEl.innerHTML=''; } }
-    // Approvals (purple): Silva + Mankin approve requests for THEIR OWN stock only; Garcia (2 periods) approves nothing, so the section never shows for her.
-    var showAppr=(SELECTED_POOL==='silva'||SELECTED_POOL==='mankin');
-    var pend=showAppr?(DATA.checkouts||[]).filter(function(c){ return statusOf(c)==='reserved' && c.approved===false && inPool(c); }).sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; }):[];
+    // Second slot: the approval queue when approval is ON, else the Recent Reservations list.
     var pEl=document.getElementById('pendingDigest');
-    if(pEl){ if(pend.length){ pEl.className='digest pending-digest';
-        pEl.innerHTML='<div class="digest-h">'+pend.length+' student request'+(pend.length>1?'s':'')+' awaiting approval</div><div class="digest-body">'+pend.map(function(c){ var isG=c.kind==='equipment'; var chip=isG?('<span class="camnum">'+esc(gearLabel(c.item))+'</span>'):('<span class="camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span>'); return '<span class="digest-item">'+chip+' &middot; '+esc(nameOf(c))+' &middot; '+fmt(c.out)+'</span>'; }).join('')+'</div>';
-        pEl.style.display=''; } else { pEl.style.display='none'; pEl.innerHTML=''; } }
+    if(approvalOn()){
+      var showAppr=(SELECTED_POOL==='silva'||SELECTED_POOL==='mankin');
+      var pend=showAppr?(DATA.checkouts||[]).filter(function(c){ return statusOf(c)==='reserved' && c.approved===false && inPool(c); }).sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; }):[];
+      if(pEl){ if(pend.length){ pEl.className='digest pending-digest';
+          pEl.innerHTML='<div class="digest-h">'+pend.length+' student request'+(pend.length>1?'s':'')+' awaiting approval</div><div class="digest-body">'+pend.map(function(c){ var isG=c.kind==='equipment'; var chip=isG?('<span class="camnum">'+esc(gearLabel(c.item))+'</span>'):('<span class="camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span>'); return '<span class="digest-item">'+chip+' &middot; '+esc(nameOf(c))+' &middot; '+fmt(c.out)+'</span>'; }).join('')+'</div>';
+          pEl.style.display=''; } else { pEl.style.display='none'; pEl.innerHTML=''; } }
+    } else {
+      renderRecentReservations(pEl);
+    }
+  }
+
+  // ===== Recent Reservations (shown when approval is shelved) =====
+  // A reservation = ONE parent record (a camera, or a standalone gear unit) plus any gear linked to a
+  // camera by `group`. Scope: Mankin (Digital Arts) sees only her stock (cams 19-21 + her gear); the
+  // photo teachers (silva/garcia) see everything else (all Photo 1 + Photo 2).
+  function resvIsMankin(c){
+    var mk=(DATA.pools||{}).mankin||[], mg=(DATA.equipment_pools||{}).mankin||[];
+    return c.kind==='equipment' ? (mg.indexOf(c.item)>=0) : (mk.indexOf(c.camera)>=0);
+  }
+  function resvInScope(c){ return SELECTED_POOL==='mankin' ? resvIsMankin(c) : !resvIsMankin(c); }
+  function resvItems(parent){
+    if(!parent || parent.kind==='equipment') return parent?[parent]:[];
+    var gear=(DATA.checkouts||[]).filter(function(e){ return e.kind==='equipment' && e.group===parent.id; });
+    return [parent].concat(gear);
+  }
+  function resvReturnedCount(parent){ var items=resvItems(parent); return {done:items.filter(function(x){return statusOf(x)==='returned';}).length, total:items.length}; }
+  function resvAllReturned(parent){ var rc=resvReturnedCount(parent); return rc.total>0 && rc.done===rc.total; }
+  function resvDate(c){ return c.created || c.out || ''; }
+  function recentReservations(){
+    var cutoff=Date.now()-14*86400*1000;
+    var parents=(DATA.checkouts||[]).filter(function(c){
+      if(c.kind==='equipment' && c.group) return false;           // linked gear shows inside its camera reservation
+      if(!resvInScope(c)) return false;
+      if(!resvAllReturned(c)) return true;                         // active (reserved or still out)
+      var rd=resvItems(c).map(function(x){return x.returned_date||'';}).filter(Boolean).sort();
+      var last=rd.length?Date.parse(rd[rd.length-1]):0;
+      return last && last>=cutoff;                                 // recently returned (last ~14 days)
+    });
+    parents.sort(function(a,b){ return (resvDate(a)<resvDate(b))?1:-1; });   // newest first
+    return parents;
+  }
+  function renderRecentReservations(pEl){
+    if(!pEl) return;
+    var list=recentReservations();
+    if(!list.length){ pEl.style.display='none'; pEl.innerHTML=''; return; }
+    pEl.className='digest recent-digest';
+    var rows=list.slice(0,40).map(function(c){
+      var items=resvItems(c), rc=resvReturnedCount(c), allRet=rc.done===rc.total;
+      var label=c.kind==='equipment'?esc(gearLabel(c.item)):esc(c.camera);
+      var addon=items.length-1;
+      var sub=c.kind==='equipment'?'1 item':('Kit'+(addon>0?(' + '+addon+' add-on'+(addon>1?'s':'')):''));
+      var st=allRet?'returned':(items.some(function(x){return statusOf(x)==='out';})?'out':'reserved');
+      var stlabel={reserved:'Reserved',out:'Checked out',returned:'Returned'}[st];
+      var prog=(st==='out'&&rc.done>0&&!allRet)?(' &middot; '+rc.done+'/'+rc.total+' back'):'';
+      return '<button type="button" class="recent-row rr-'+st+'" data-resv="'+esc(c.id)+'">'+
+        '<span class="rr-cam">'+label+'</span>'+
+        '<span class="rr-who">'+esc(nameOf(c))+'</span>'+
+        '<span class="rr-sub">'+sub+'</span>'+
+        '<span class="rr-st">'+stlabel+prog+'</span>'+
+        '<span class="rr-date">'+fmt(c.out)+'</span>'+
+      '</button>';
+    }).join('');
+    pEl.innerHTML='<div class="digest-h recent-h">Recent reservations &middot; tap to open</div><div class="recent-list">'+rows+'</div>';
+    pEl.style.display='';
+    pEl.querySelectorAll('[data-resv]').forEach(function(el){ el.onclick=function(){ openReservation(el.getAttribute('data-resv')); }; });
+  }
+
+  // ===== Unified reservation window: every item in the bundle + per-item check-in (incremental) =====
+  var resvId=null;
+  function openReservation(id){ var c=findRec(id); if(!c) return; resvId=id; renderResvModal(); document.getElementById('resvmodal').classList.add('open'); }
+  function closeResv(){ var m=document.getElementById('resvmodal'); if(m) m.classList.remove('open'); resvId=null; }
+  function renderResvModal(){
+    var parent=findRec(resvId); if(!parent){ closeResv(); return; }
+    var items=resvItems(parent), rc=resvReturnedCount(parent);
+    document.getElementById('resvTitle').textContent='Reservation · '+nameOf(parent);
+    var head='<div class="resv-meta">'+(parent.period?('Per '+esc(parent.period)+' · '):'')+'<span class="co">'+esc(parent.course||'')+'</span>'+
+      '<div class="resv-dates">Out '+fmt(parent.out)+' → due '+fmt(parent.due)+'</div>'+contactLine(parent)+'</div>';
+    var prog='<div class="resv-prog"><b>'+rc.done+'</b> of <b>'+rc.total+'</b> returned</div>';
+    var rows=items.map(function(it){
+      var isCam=it.kind!=='equipment', s=statusOf(it);
+      var label=isCam?('Camera kit · '+esc(it.camera)):esc(gearLabel(it.item));
+      var chip='<span class="resv-chip '+s+'">'+({reserved:'Reserved',out:'Checked out',returned:'Returned'}[s]||s)+'</span>';
+      var act='';
+      if(s==='reserved'){ act='<button type="button" class="btn sm" data-resvpick="'+esc(it.id)+'">Mark picked up</button>'; }
+      else if(s==='out'){ act=isCam
+        ? '<button type="button" class="btn sm warn" data-resvcam="'+esc(it.id)+'">Check in kit</button>'
+        : '<button type="button" class="btn sm warn" data-resvret="'+esc(it.id)+'">Returned</button><button type="button" class="btn sm danger" data-resvmiss="'+esc(it.id)+'">Missing</button>'; }
+      else { act='<span class="resv-done">Returned ✓</span>'; }
+      return '<div class="resv-item ri-'+s+'"><span class="resv-ilabel">'+label+'</span>'+chip+'<span class="resv-iact">'+act+'</span></div>';
+    }).join('');
+    var allRet=rc.done===rc.total, anyOut=items.some(function(x){return statusOf(x)==='out';});
+    var foot=allRet?'<div class="resv-allback">All items are back.</div>':(anyOut?'<button type="button" class="go" id="resvAll">Check in everything</button>':'');
+    document.getElementById('resvBody').innerHTML=head+prog+'<div class="resv-items">'+rows+'</div>'+foot;
+    var b=document.getElementById('resvBody');
+    b.querySelectorAll('[data-resvpick]').forEach(function(el){ el.onclick=function(){ resvSetStatus(el.getAttribute('data-resvpick'),'out'); }; });
+    b.querySelectorAll('[data-resvret]').forEach(function(el){ el.onclick=function(){ resvSetStatus(el.getAttribute('data-resvret'),'returned'); }; });
+    b.querySelectorAll('[data-resvmiss]').forEach(function(el){ el.onclick=function(){ resvMissing(el.getAttribute('data-resvmiss')); }; });
+    b.querySelectorAll('[data-resvcam]').forEach(function(el){ el.onclick=function(){ var id=el.getAttribute('data-resvcam'); closeResv(); openReturnChecklist(id); }; });
+    var all=document.getElementById('resvAll'); if(all) all.onclick=function(){ resvCheckInAll(parent); };
+  }
+  function resvSetStatus(id,status){
+    camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})})
+      .then(function(){ return loadBoard(); }).then(function(){ if(resvId) renderResvModal(); }).catch(function(){ if(resvId) renderResvModal(); });
+  }
+  function resvMissing(id){
+    var reason=window.prompt('What is missing or wrong with this item?','Not returned');
+    if(reason===null) return;
+    camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:'out',pending:true,note:reason||'Not returned'})})
+      .then(function(){ return loadBoard(); }).then(function(){ if(resvId) renderResvModal(); }).catch(function(){ if(resvId) renderResvModal(); });
+  }
+  function resvCheckInAll(parent){
+    if(parent.kind!=='equipment'){ closeResv(); openReturnChecklist(parent.id); return; }   // camera: full kit + gear checklist
+    var outs=resvItems(parent).filter(function(x){return statusOf(x)==='out';});
+    Promise.all(outs.map(function(x){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:x.id,status:'returned'})}); }))
+      .then(function(){ return loadBoard(); }).then(function(){ if(resvId) renderResvModal(); }).catch(function(){ if(resvId) renderResvModal(); });
   }
 
   function camAPI(path, opts){
@@ -1116,7 +1267,7 @@
         '<div class="returning-msg">Goes back in the pool in <b data-count="'+c.id+'">15</b>s.</div>';
       return shell3(uid,'st-returning',title,sub,'<span class="pill out">Returning</span>',bodyR);
     }
-    var st=statusOf(c), od=isOverdue(c), needsApproval=(st==='reserved' && c.approved===false);
+    var st=statusOf(c), od=isOverdue(c), needsApproval=(approvalOn() && st==='reserved' && c.approved===false);
     var sc=od?'st-overdue':(needsApproval?'st-pending':'st-'+st);
     var pill=od?'<span class="pill overdue">Overdue</span>':(st==='reserved'?(needsApproval?'<span class="pill pending">Pending</span>':'<span class="pill reserved">Reserved</span>'):'<span class="pill out">Picked up</span>');
     var flag=(c.flag||'').indexOf('unknown')>=0?'<div class="flagwarn">&#9888; ID not in roster</div>':'';
@@ -1523,6 +1674,8 @@
   (function(){
     var x=document.getElementById('retx'); if(x) x.onclick=closeReturn;
     var m=document.getElementById('retmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeReturn(); });
+    var rvx=document.getElementById('resvx'); if(rvx) rvx.onclick=closeResv;
+    var rvm=document.getElementById('resvmodal'); if(rvm) rvm.addEventListener('click',function(e){ if(e.target===rvm) closeResv(); });
     var g=document.getElementById('retgo'); if(g) g.onclick=function(){
       if(!retId) return; var id=retId, c=findRec(id), cam=c?c.camera:'';
       var missing=[]; KIT_STD.forEach(function(k,i){ var el=document.getElementById('ret_'+i); if(el && !el.checked) missing.push(k); });
