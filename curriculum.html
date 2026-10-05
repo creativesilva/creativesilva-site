@@ -1848,6 +1848,7 @@
         subaeries: { path: "file:///Users/riva/RIVA_CODE/01_TEACHING/SMJUHSD_Documents/AERIES%202026%20Fall%20Substitute%20Teacher%20Account%20Info.pdf", label: "Substitute AERIES Logins" },
         // Sub plan is schedule + instructions only, no student data. View = hosted PDF (browser viewer has its own download).
         subplan: { docx: "assets/course-documents/PVHS-Substitute-Plan-2026-09-16.docx", pdf: "assets/course-documents/PVHS-Substitute-Plan-2026-09-16.pdf", label: "Substitute Plan (Sept 16)" },
+        bathroomlog: { docx: "assets/course-documents/PVHS-Student-Bathroom-Sign-Out-Log.docx", pdf: "assets/course-documents/PVHS-Student-Bathroom-Sign-Out-Log.pdf", label: "Student Bathroom Sign-Out Log" },
         signature: { url: "assets/email-signature.html", label: "Mac Mail Signature" },
       },
       // Links (expandable): forms (Open + View QR + Copy URL, like the camera form), then external
@@ -2342,8 +2343,9 @@
         + (d.seatingchart ? rosterRow(d.seatingchart.path, d.seatingchart.label) : "")
         + (d.subaeries ? rosterRow(d.subaeries.path, d.subaeries.label) : "")
         + (d.subplan ? wordDocRow(d.subplan.docx, d.subplan.pdf, d.subplan.label) : "")
+        + (d.bathroomlog ? wordDocRow(d.bathroomlog.docx, d.bathroomlog.pdf, d.bathroomlog.label) : "")
         + (d.signature ? signatureRow(d.signature.url, d.signature.label) : "");
-      const nD = [d.roster, d.seatingchart, d.subaeries, d.subplan, d.signature].filter(Boolean).length;
+      const nD = [d.roster, d.seatingchart, d.subaeries, d.subplan, d.bathroomlog, d.signature].filter(Boolean).length;
       const docs = docRows ? subAcc("Documents", `${nD} file${nD === 1 ? "" : "s"}`, docRows) : "";
       // Links sub-section: external sites grouped Resources + Vendors, each a Visit button.
       const lk = t.links || {};
