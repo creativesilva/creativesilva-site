@@ -436,7 +436,7 @@
   <div class="cal-hero" style="background-color:#04191a;background-image:linear-gradient(90deg,rgba(3,18,20,0.95) 0%,rgba(0,66,68,0.5) 50%,rgba(3,18,20,0.95) 100%);border-top:2px solid #00b8b8;border-right:2px solid #00b8b8;border-bottom:2px solid #00b8b8;border-left:7px solid #00b8b8;box-sizing:border-box;padding:22px 28px 24px;margin:0 0 22px;">
     <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;">
       <div style="flex:1 1 150px;display:flex;justify-content:flex-start;align-items:center;">
-        <button type="button" id="teacherDoor" aria-label="Equipment Reservations" style="background:none;border:0;padding:0;margin:0;cursor:pointer;display:block;line-height:0;"><img src="https://www.creativesilva.com/assets/Icons/assignment/calendar-white-v1.png" alt="Equipment Reservations" style="width:clamp(62px,12vw,96px);height:auto;display:block;pointer-events:none;" /></button>
+        <a href="/camera-manager.html" aria-label="Equipment Manager" title="Equipment Manager" style="display:block;line-height:0;"><img src="https://www.creativesilva.com/assets/Icons/assignment/calendar-white-v1.png" alt="Equipment Reservations" style="width:clamp(62px,12vw,96px);height:auto;display:block;" /></a>
       </div>
       <div style="flex:100 1 260px;min-width:200px;text-align:center;">
         <div style="margin-bottom:6px;"><span id="calHeroEyebrow" style="font-size:13pt;color:#80e0e0;letter-spacing:0.04em;"><strong>Pioneer Valley Photography</strong></span></div>
@@ -577,21 +577,6 @@
 
 <!-- Teacher-only day options menu (Close / Reopen a day for checkouts). Positioned at the 3-dots click. -->
 <div class="wdaymenu" id="wdaymenu"></div>
-
-<!-- Teacher door: tapping the banner calendar icon asks for the Equipment Manager password. It is
-     validated server-side (the same authed call the console uses) and, on success, the key is stored and
-     the console opens directly with NO second gate. Hidden from students (they do not have the password). -->
-<div class="qrmodal" id="tdmodal">
-  <div class="qr-panel">
-    <div class="qr-head"><span class="qr-title">Teacher Access</span><button class="qr-x" id="td-x" aria-label="Close">&times;</button></div>
-    <div class="qr-body" style="text-align:left;">
-      <label class="nc-label" for="td-pin">Enter the teacher code to open the Equipment Manager.</label>
-      <input type="text" id="td-pin" inputmode="numeric" autocomplete="off" autocapitalize="off" spellcheck="false" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;" aria-label="Teacher code" />
-      <div class="rv-msg" id="td-err"></div>
-      <button class="qr-btn rv-primary" id="td-go" type="button">Open Equipment Manager</button>
-    </div>
-  </div>
-</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 <script src="/js/silva-nav.js?v=standalone1"></script>
@@ -1711,33 +1696,6 @@
     var sw=document.getElementById('langSwap');
     if(sw) sw.addEventListener('click', function(){ setLang(LANG==='es'?'en':'es'); });
     applyStatic(); syncLangActive();   // reflect the stored LANG before data loads
-  })();
-
-  // ---- Teacher door: the banner calendar icon opens a password prompt for the Equipment Manager. The
-  // password is validated server-side (same check as the console); on success the key is saved and the
-  // console opens with no second gate. Masked as dots (no type=password) so Safari never offers to save it. ----
-  (function(){
-    var door=document.getElementById('teacherDoor'), modal=document.getElementById('tdmodal'),
-        pin=document.getElementById('td-pin'), go=document.getElementById('td-go'),
-        x=document.getElementById('td-x'), err=document.getElementById('td-err');
-    if(!door||!modal) return;
-    if(pin){ pin.dataset.real=''; pin.addEventListener('input',function(){ var shown=pin.value, real=pin.dataset.real||''; var typed=shown.replace(/•/g,''); if(typed){ real=(real+typed).slice(0,10); } else { real=real.slice(0,shown.length); } pin.dataset.real=real; pin.value='•'.repeat(real.length); }); }
-    function openGate(){ modal.classList.add('open'); if(pin){ pin.value=''; pin.dataset.real=''; } if(err) err.textContent=''; setTimeout(function(){ if(pin) pin.focus(); },50); }
-    function closeGate(){ modal.classList.remove('open'); }
-    // Validate the Equipment Manager password server-side (same check the console uses: an authed
-    // call with the key). On success store the key and go straight into the console, no second gate.
-    function check(){ var v=((pin&&pin.dataset.real)||'').trim(); if(!v) return;
-      if(err) err.textContent='Checking…'; if(go) go.disabled=true;
-      fetch(API+'/api/camera/checkouts',{headers:{'X-Camera-Key':v},cache:'no-store'})
-        .then(function(r){ if(r.ok){ try{ sessionStorage.setItem('silva-cam-key',v); }catch(e){} location.href='/camera-manager.html'; }
-          else { if(err) err.textContent='Incorrect code.'; if(pin){ pin.value=''; pin.dataset.real=''; pin.focus(); } if(go) go.disabled=false; } })
-        .catch(function(){ if(err) err.textContent='Could not reach the server. Try again.'; if(go) go.disabled=false; }); }
-    door.addEventListener('click',openGate);
-    if(go) go.addEventListener('click',check);
-    if(pin) pin.addEventListener('keydown',function(e){ if(e.key==='Enter') check(); });
-    if(x) x.addEventListener('click',closeGate);
-    modal.addEventListener('click',function(e){ if(e.target===modal) closeGate(); });
-    document.addEventListener('keydown',function(e){ if(e.key==='Escape' && modal.classList.contains('open')) closeGate(); });
   })();
 
   function load(){
