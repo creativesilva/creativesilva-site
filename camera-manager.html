@@ -654,6 +654,20 @@
   .tchip-x{font-size:.9em;opacity:.85;}
   #gate .go{margin-top:2px;}
   #gate .err{color:#ff9a8a;font-size:.84rem;min-height:1.1em;margin-top:10px;}
+  /* iPad is the console's primary surface (landscape, Rugged Combo case): size the interactive
+     controls as comfortable finger targets for check-in / check-out. Placed last so it wins over the
+     base control sizes. Console-wide (also helps the trackpad + mouse); the full-width .go buttons
+     are already touch-sized. */
+  .btn{min-height:44px;height:auto;}
+  .btn.sm{min-height:40px;}
+  .go{padding:16px;}
+  .mx{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;font-size:2rem;padding:4px 10px;}
+  .cd-tab{min-height:46px;}
+  .ra-nav{width:40px;height:40px;}
+  .tchip{height:40px;}
+  .kit-sw{min-height:40px;padding:5px 0;}
+  .dp-trig{min-height:40px;}
+  .intro .silva-uni-cattrigger{min-height:42px;display:inline-flex;align-items:center;}
   @media (max-width:560px){ .wrap{padding:16px 12px 56px;} }
   /* Phone: compact the hero banner so the console surfaces (desktop/iPad keep the fuller header). */
   @media (max-width:600px){
