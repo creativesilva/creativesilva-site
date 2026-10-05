@@ -25,7 +25,7 @@ function headerLogo() {
     type: 'png', data: logo, transformation: { width: 92, height: 92 },
     floating: {
       horizontalPosition: { relative: HorizontalPositionRelativeFrom.PAGE, offset: 460000 },
-      verticalPosition: { relative: VerticalPositionRelativeFrom.PAGE, offset: 430000 },
+      verticalPosition: { relative: VerticalPositionRelativeFrom.PAGE, offset: 318000 }, // raised to match Chris's v2 (the live .docx is his exact file)
       allowOverlap: true, behindDocument: true, wrap: { type: TextWrappingType.NONE },
     },
     altText: { title: 'PVHS', description: 'Pioneer Valley High School', name: 'PVHS' },
