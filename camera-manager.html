@@ -37,15 +37,22 @@
   *{box-sizing:border-box;border-radius:0 !important;}
   html,body{margin:0;padding:0;}
   body{background-color:#060f0f;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;}
-  body::before{content:"";position:fixed;inset:0;z-index:-2;background:#060f0f url("https://www.creativesilva.com/logos/CS_Logo_Glossy_Teal_v1.png") no-repeat center 40%;background-size:min(74vw,700px);}
-  body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(6,14,14,0.84);}
-  @media (max-width:900px){ body::before{background-size:min(88vw,460px);background-position:center 36%;} }
+  /* Cohesive with the curriculum CONTENT pages + the student calendar: a dark->teal->dark backdrop glow
+     with the GHOSTED CS logo watermark kept on top (Chris wants the logo in the bg on the console). */
+  body::before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%);}
+  body::after{content:"";position:fixed;inset:0;z-index:-1;background:url("https://www.creativesilva.com/logos/CS_Logo_Glossy_Teal_v1.png") no-repeat center 40%;background-size:min(74vw,700px);filter:brightness(0) invert(1);opacity:.07;}
+  @media (max-width:900px){ body::after{background-size:min(88vw,460px);background-position:center 36%;} }
 
   .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;filter:brightness(0) invert(1);}
 
   .wrap{max-width:1200px;margin:0 auto;padding:24px 32px 70px;}
   /* Home-screen web app: keep the sticky nav clear of the iPad status bar (0 in a normal browser tab). */
-  .silva-nav{padding-top:env(safe-area-inset-top);}
+  /* The hero banner is the header now, so the shared top nav bar is hidden (silva-nav.js still loads for
+     the iOS standalone shim). The toolbar buttons + teacher switcher live in .intro / #poolbar below it. */
+  .silva-nav{padding-top:env(safe-area-inset-top);display:none;}
+  .cal-hero-clock{width:150px;height:46px;border:0;background:transparent;display:block;}
+  .intro .sub{display:none;}
+  .intro{justify-content:center;}
   .intro{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px;}
   .sub{color:var(--muted);font-size:.95rem;margin:0;flex:1 1 320px;}
   /* Top-level buttons share ONE pixel height (38px); in-card .btn.sm share a smaller one (32px). */
@@ -647,7 +654,15 @@
   .tchip-x{font-size:.9em;opacity:.85;}
   #gate .go{margin-top:2px;}
   #gate .err{color:#ff9a8a;font-size:.84rem;min-height:1.1em;margin-top:10px;}
-  @media (max-width:560px){ .wrap{padding:18px 16px 60px;} }
+  @media (max-width:560px){ .wrap{padding:16px 12px 56px;} }
+  /* Phone: compact the hero banner so the console surfaces (desktop/iPad keep the fuller header). */
+  @media (max-width:600px){
+    .cal-hero > div > div{ justify-content:center !important; }
+    .cal-hero{ padding:14px 13px 16px !important; margin:0 0 14px !important; }
+    .cal-hero > div{ gap:7px 12px !important; }
+    .cal-hero img{ width:46px !important; }
+    .cal-hero-clock{ width:120px !important; height:42px !important; }
+  }
 </style>
 </head>
 <body>
@@ -681,6 +696,23 @@
 
 <nav class="silva-nav" aria-label="Site navigation"></nav>
 <div class="wrap">
+  <!-- Curriculum-style hero banner: the console header. CS watermark stays in the background.
+       The toolbar (.intro buttons + Catalog/QR added by injectHeader) and the teacher switcher
+       (#poolbar) sit just below it. -->
+  <div class="cal-hero" style="background-color:#04191a;background-image:linear-gradient(90deg,rgba(3,18,20,0.95) 0%,rgba(0,66,68,0.5) 50%,rgba(3,18,20,0.95) 100%);border-top:2px solid #00b8b8;border-right:2px solid #00b8b8;border-bottom:2px solid #00b8b8;border-left:7px solid #00b8b8;box-sizing:border-box;padding:22px 28px 24px;margin:0 0 20px;">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;">
+      <div style="flex:1 1 150px;display:flex;justify-content:flex-start;align-items:center;">
+        <img src="/assets/Icons/assignment/camera-kit-white-v1.png" alt="Equipment Manager" style="width:clamp(62px,12vw,96px);height:auto;display:block;" />
+      </div>
+      <div style="flex:100 1 260px;min-width:200px;text-align:center;">
+        <div style="margin-bottom:6px;"><span style="font-size:13pt;color:#80e0e0;letter-spacing:0.05em;"><strong>Teacher Console &middot; Pioneer Valley</strong></span></div>
+        <div style="color:#ffffff;font-size:clamp(17pt,4.5vw,23pt);line-height:1.1;"><strong>Equipment Manager</strong></div>
+      </div>
+      <div style="flex:1 1 150px;display:flex;justify-content:flex-end;align-items:center;">
+        <iframe class="cal-hero-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
   <div class="intro">
     <p class="sub">Reserve equipment, mark it picked up when the student collects it, and mark it returned when it comes back. Changes sync to the calendar and the Command Center in real time.</p>
     <button class="silva-uni-cattrigger" id="reserveBtn">Reserve</button>
@@ -904,33 +936,17 @@
   // link removed (Student Calendar covers it), Reserve + Student Calendar lifted into the top row
   // before the countdown (which stays rightmost), and a QR Code button to the right of Catalog.
   function injectHeader(){
-    var t=document.querySelector('.silva-uni-title'); if(!t) return false;
-    var txt=t.textContent.trim(); if(!txt) return false;
-    var tb=document.querySelector('.silva-uni-titlebar'), bar=document.querySelector('.silva-uni-bar');
-    if(!tb || !bar) return false;
-    if(!t.querySelector('.cal-title-icon')) t.innerHTML='<img class="cal-title-icon" src="/assets/Icons/assignment/camera-kit-teal-v1.svg" alt="" />'+txt;
-    // TEACHER switcher rides the FIRST row, right of the title (Chris 2026-10-02). Lift #poolbar out of
-    // the body into the titlebar, just after the title, so it shares the header's row and spacing.
-    var pb=document.getElementById('poolbar'); if(pb && pb.parentElement!==tb){ tb.insertBefore(pb, t.nextSibling);
-      // The title normally carries margin-right:auto to push the nav right; hand that auto-gap to the
-      // switcher instead so it sits right next to the title while the countdown stays far right.
-      t.style.marginRight='18px'; pb.style.marginRight='auto'; renderPoolBar(); }
-    var cal=tb.querySelector('.silva-uni-cal'); if(cal) cal.style.display='none';
-    var clk=tb.querySelector('.silva-uni-clock');
-    var rb=document.getElementById('reserveBtn'), sc=document.getElementById('studentCalBtn'),
-        pw=document.getElementById('photoWalkBtn'), rf=document.getElementById('refreshBtn'),
-        rp=document.getElementById('reportsBtn');
-    // TOP ROW: Student Calendar only, inserted BEFORE the clock so the period countdown stays all the
-    // way to the right (LOCKED, Chris 2026-10-01: the countdown is never moved off the top-right).
-    if(sc && sc.parentElement!==tb){ if(clk) tb.insertBefore(sc,clk); else tb.appendChild(sc); }
-    // QR Code button into the second bar (next to Catalog), once.
+    // The shared nav is hidden; the hero banner is the header. Build the toolbar in the body: keep the
+    // existing .intro buttons (Reserve, Refresh, Missing Items, Student Calendar, Photo Walk Log), add
+    // Catalog (return to the catalog) + QR Code beside them, and render the teacher switcher (#poolbar).
+    var intro=document.querySelector('.intro'); if(!intro) return false;
     if(!document.getElementById('cmQrBtn')){
+      var cat=document.createElement('a'); cat.className='silva-uni-cattrigger'; cat.id='cmCatBtn'; cat.href='/curriculum.html'; cat.textContent='Catalog';
       var qr=document.createElement('button'); qr.type='button'; qr.id='cmQrBtn'; qr.className='silva-uni-cattrigger'; qr.textContent='QR Code'; qr.onclick=showQR;
-      var cat=bar.querySelector('.silva-uni-cattrigger'); if(cat) cat.insertAdjacentElement('afterend', qr); else bar.appendChild(qr);
+      var sub=intro.querySelector('.sub'), anchor=sub?sub.nextSibling:intro.firstChild;
+      intro.insertBefore(cat, anchor); intro.insertBefore(qr, anchor);
     }
-    // SECOND ROW (with Catalog + QR Code): Reserve, Photo Walk Log, Missing Items, Refresh. Shared cattrigger look.
-    [rb, pw, rp, rf].forEach(function(b){ if(b && b.parentElement!==bar){ bar.appendChild(b); } });
-    var intro=document.querySelector('.intro'); if(intro) intro.style.display='none';
+    renderPoolBar();
     return true;
   }
   function tryInject(n){ if(injectHeader()||n<=0) return; setTimeout(function(){ tryInject(n-1); },40); }
@@ -1300,7 +1316,10 @@
     {key:'out',label:'Checked out',cls:'sec-out',dot:'out'},
     {key:'reserved',label:'Reserved',cls:'sec-reserved',dot:'reserved'}
   ];
-  function secOpen(k){ try{ var v=sessionStorage.getItem('csec:'+k); return v===null?true:v==='1'; }catch(e){ return true; } }
+  // Collapsed-by-default (LOCKED global rule): the top-level hubs (Reservation Activity, Manage Equipment,
+  // Additional Equipment, Wallet) ship closed for a clean console; the ra-* sub-accordions (Checked out /
+  // Reserved / Returned) open once their hub is opened. A stored choice always wins.
+  function secOpen(k){ try{ var v=sessionStorage.getItem('csec:'+k); if(v!==null) return v==='1'; }catch(e){} return /^ra-/.test(k); }
   function setSecOpen(k,o){ try{ sessionStorage.setItem('csec:'+k,o?'1':'0'); }catch(e){} }
   function catOf(cam){ var c=activeFor(cam); if(!c) return isOOS(cam)?'oos':(isNoCard(cam)?'nocard':'avail'); return statusOf(c)==='reserved'?'reserved':'out'; }
 
