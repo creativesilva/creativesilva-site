@@ -356,7 +356,7 @@
   .dcard.open .dcard-chev{transform:rotate(45deg);}
   .dcard-body{display:none;padding:2px 12px 12px;}
   /* Expanded (full-width) card lays its details out in a wrapping row so it USES the width on wide
-     screens and stacks on a phone. .dcard-edit (the camCard body wrapper) flattens into the same row. */
+     screens and stacks on a phone. .dcard-edit (the expanded checkout-card body wrapper) flattens into the same row. */
   .dcard.open .dcard-body{display:flex;flex-wrap:wrap;gap:6px 30px;align-items:flex-start;}
   .dcard.open .dcard-edit{display:flex;flex-wrap:wrap;gap:6px 30px;align-items:flex-start;flex:1 1 100%;}
   .dcard.open .dcard-body>*,.dcard.open .dcard-edit>*{min-width:0;margin-top:0;}
@@ -1404,80 +1404,11 @@
       '</span>'+
     '</button>';
   }
-  function camCard(cam){
-    var p2=P2.indexOf(cam)>=0, sub=p2?'Photo 2 only':'';
-    var title='<span class="dcard-title camnum" data-camdetail="'+cam+'" title="Open window">'+cam+'</span>';
-    var uid='bd:'+cam, c=activeFor(cam);
-    if(!c){
-      var body='<div class="acts"><button class="btn sm" data-reserve="'+cam+'">Reserve</button>'+
-               '<button class="btn sm ghost" data-camdetail="'+cam+'">Note</button></div>';
-      return shell3(uid,'st-avail',title,sub,'<span class="pill avail">Available</span>',body);
-    }
-    if(pendingReturns[c.id]){
-      var bodyR='<div class="who">'+esc(nameOf(c))+'</div>'+
-        '<div class="acts"><button class="btn sm undo" data-undo="'+c.id+'">Undo return</button></div>'+
-        '<div class="returning-msg">Goes back in the pool in <b data-count="'+c.id+'">15</b>s.</div>';
-      return shell3(uid,'st-returning',title,sub,'<span class="pill out">Returning</span>',bodyR);
-    }
-    var st=statusOf(c), od=isOverdue(c), needsApproval=(approvalOn() && st==='reserved' && c.approved===false);
-    var sc=od?'st-overdue':(needsApproval?'st-pending':'st-'+st);
-    var pill=od?'<span class="pill overdue">Overdue</span>':(st==='reserved'?(needsApproval?'<span class="pill pending">Pending</span>':'<span class="pill reserved">Reserved</span>'):'<span class="pill out">Picked up</span>');
-    var flag=(c.flag||'').indexOf('unknown')>=0?'<div class="flagwarn">&#9888; ID not in roster</div>':'';
-    var _a=assetOf(cam), _iss=_a.issues||[], note='';
-    if(_iss.length) note+='<div class="eqnote"><b>&#9888; Issue</b> '+esc(_iss.join(', '))+'</div>';
-    if(_a.note) note+='<div class="eqnote"><b>Camera note</b> '+esc(_a.note)+'</div>';
-    if(c.note) note+='<div class="eqnote resvnote"><b>Reservation note</b> '+esc(c.note)+'</div>';   // student contact correction, etc.
-    var acts;
-    if(st==='reserved' && needsApproval){
-      acts='<button class="btn sm" data-approve="'+c.id+'">Approve</button>'+
-           '<button class="btn sm danger" data-del="'+c.id+'">Deny</button>';
-    } else if(st==='reserved'){
-      acts='<button class="btn sm" data-status="out" data-id="'+c.id+'">Mark picked up</button>'+
-           '<button class="btn sm danger" data-del="'+c.id+'">Cancel</button>';
-    } else {
-      acts='<button class="btn sm ghost" data-status="reserved" data-id="'+c.id+'">Undo pickup</button>'+
-           '<button class="btn sm warn" data-returncam="'+c.id+'">Mark returned</button>';
-    }
-    acts+='<button class="btn sm ghost" data-camdetail="'+cam+'">Note</button>';   // per-camera note (follows the camera)
-    var pendmsg=needsApproval?'<div class="pendmsg">Student request &middot; approve to confirm</div>':'';
-    // Expanded body: student, action buttons, then details. Double-click the body to edit / move / delete.
-    var body='<div class="dcard-edit" data-editid="'+c.id+'" title="Double-click to edit">'+
-           '<div class="who">'+esc(nameOf(c))+'</div>'+
-           '<div class="acts">'+acts+'</div>'+pendmsg+
-           (p2?'<div class="meta"><span class="co">Photo 2 only</span></div>':'')+
-           '<div class="meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+'<span class="co">'+esc(c.course||camCourse(cam))+'</span></div>'+
-           '<div class="meta dates">Out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+(c.picked_up_date?(' &middot; picked up '+fmt(c.picked_up_date)):'')+'</div>'+
-           note+flag+contactLine(c)+
-           '</div>';
-    return shell3(uid,sc,title,sub,pill,body);
-  }
   // ---- Add-on gear: each unit is its OWN record (kind='equipment'), checked in + noted on its own.
   // All equipment checkout records (any unit). Per-unit labels come from gearLabel(id); each unit now
   // shows as its own colored tile (gearTile) in the board grid, so the old pooled cards are retired.
   function equipRecs(){ return (DATA.checkouts||[]).filter(function(c){ return c.kind==='equipment'; }); }
 
-  // EQUIPMENT CONDITION CARD (one per camera): compact, management-only. Shows the camera number,
-  // kit completion %, condition (missing card / open issues / standing note) and in/out of service.
-  // Deliberately NO reservation info (who has it / dates) -- that lives in the board strips below.
-  function camLogCard(cam){
-    var a=assetOf(cam), oos=!!a.oos, nc=!!a.no_card, p2=P2.indexOf(cam)>=0;
-    var pct=kitPct(cam);   // null when the camera has no standard kit yet (e.g. Cam 16-18)
-    var chip=oos?'<span class="pill oos">Out of service</span>':(nc?'<span class="pill nocard">Card missing</span>':((pct!=null)?'<span class="kitpct '+(pct===100?'full':(pct>=70?'mid':'low'))+'">'+pct+'%</span>':'<span class="kitpct na">kit TBD</span>'));
-    // Expanded wide strip explains WHY the rating is below 100% (which kit items are missing), plus any
-    // card/issues/note/service. Edit it all in the pop-out window (title or Note).
-    var kmiss=isStdKit(cam)?kitMissing(cam):[], issues=a.issues||[], cond='';
-    if(oos) cond+='<div class="camlog-issues">&#9888; Out of service</div>';
-    if(kmiss.length) cond+='<div class="camlog-issues">&#9888; Kit missing ('+kmiss.length+' of '+KIT_STD.length+'): '+kmiss.map(esc).join(', ')+'</div>';
-    if(nc) cond+='<div class="camlog-issues">&#9888; Memory card missing. Install a fresh card to return it to rotation.</div>';
-    if(issues.length) cond+='<div class="camlog-issues">&#9888; Issues: '+issues.map(esc).join(', ')+'</div>';
-    if(a.note) cond+='<div class="camlog-note">Note: '+esc(a.note)+'</div>';
-    if(!cond) cond='<div class="camlog-note empty">'+(isStdKit(cam)?'Good standing &middot; kit complete (13 of 13)':'Good standing')+'</div>';
-    var body=cond+'<div class="condcard-acts"><button class="btn sm ghost" data-camdetail="'+cam+'">Note</button>'+
-      (nc?'<button class="btn sm" data-newcard="'+cam+'">Card in</button>':'')+
-      '<button class="btn sm '+(oos?'':'danger')+'" data-oos="'+cam+'" data-oosval="'+(oos?'0':'1')+'">'+(oos?'In service':'Out of service')+'</button></div>';
-    var title='<span class="dcard-title camnum" data-camdetail="'+cam+'" title="Open kit + condition">'+cam+'</span>';
-    return shell3('cl:'+cam, oos?'st-oos':(nc?'st-nocard':'st-ok'), title, p2?'Photo 2 only':'', chip, body);
-  }
   // Sort the consolidated camera grid. Persisted so it sticks across the 7s poll + reloads.
   var CAM_SORT='num'; try{ CAM_SORT=sessionStorage.getItem('camsort')||'num'; }catch(e){}
   var CAM_SORTS=[{k:'num',label:'Camera #'},{k:'avail',label:'Available'},{k:'out',label:'Checked out'},{k:'overdue',label:'Overdue'},{k:'pct',label:'Kit %'},{k:'oos',label:'Out of service'}];
@@ -1589,7 +1520,6 @@
              (c.note?' &middot; <span class="hnote">'+esc(c.note)+'</span>':'')+
              '<div class="hre">Out '+fmt(c.out)+' &rarr; returned '+fmt(c.returned_date)+'</div></div>';
     }).join(''):'<div class="foot">No returned checkouts in the last 4 weeks. Use Download CSV for the full record.</div>';
-    startTicker();
   }
   function bindBoard(){
     var b=document.getElementById('board');
@@ -1600,9 +1530,6 @@
       if(opening && _ssc){ setTimeout(function(){ var cur=_ssc.querySelector('.csw-item.on')||_ssc.querySelector('.csw-item'); if(cur) cur.scrollIntoView({block:'center'}); markSortCenter(_ssc); },20); } }; }
     if(_ssc){ _ssc.onscroll=function(){ clearTimeout(_ssc._t); _ssc._t=setTimeout(function(){ markSortCenter(_ssc); },60); }; }
     b.querySelectorAll('[data-camsort]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); CAM_SORT=el.getAttribute('data-camsort'); try{ sessionStorage.setItem('camsort',CAM_SORT); }catch(e2){} renderBoard(); }; });
-    b.querySelectorAll('[data-return]').forEach(function(el){ el.onclick=function(){ markReturned(el.getAttribute('data-return')); }; });
-    b.querySelectorAll('[data-undo]').forEach(function(el){ el.onclick=function(){ undoReturn(el.getAttribute('data-undo')); }; });
-    b.querySelectorAll('[data-status]').forEach(function(el){ el.onclick=function(){ setStatus(el.getAttribute('data-id'), el.getAttribute('data-status'), el); }; });
     b.querySelectorAll('[data-del]').forEach(function(el){ el.onclick=function(){ silvaConfirm('Cancel this reservation? It will be removed.',{okLabel:'Cancel reservation',cancelLabel:'Keep it',danger:true}).then(function(ok){ if(ok) del(el.getAttribute('data-del'), el); }); }; });
     b.querySelectorAll('[data-reserve]').forEach(function(el){ el.onclick=function(){ openReserve(el.getAttribute('data-reserve')); }; });
     b.querySelectorAll('[data-note]').forEach(function(el){ el.onclick=function(){ openNote(el.getAttribute('data-note')); }; });
@@ -1614,7 +1541,6 @@
     b.querySelectorAll('[data-cardadd]').forEach(function(el){ el.onclick=function(){ openAdHocCard(+el.getAttribute('data-cardadd')); }; });
     b.querySelectorAll('[data-cardinfo]').forEach(function(el){ el.onclick=function(){ openCardInfo(el.getAttribute('data-cardinfo')); }; });
     b.querySelectorAll('[data-approve]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-approve'), el); }; });
-    b.querySelectorAll('[data-returncam]').forEach(function(el){ el.onclick=function(){ openReturnChecklist(el.getAttribute('data-returncam')); }; });
     // Reservation Activity: styled date picker, +/- one week arrows, and open-the-bundle taps.
     var _rd=b.querySelector('#ra-date');
     if(_rd){ mkDatePicker(_rd); _rd.addEventListener('change',function(){ if(_rd.value){ ACTIVITY_DATE=_rd.value; _lastBoardSig=null; renderBoard(); } }); }
@@ -1670,19 +1596,12 @@
   // Check-in commits immediately and re-fetches the board, so the return shows live (no 15s delay,
   // which previously left the board unchanged and read as a failed check-in). A wrong check-in is
   // undone by re-opening the reservation and marking it picked up again.
-  var pendingReturns={}, ticker=null;
   function markReturned(id){
     camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:'returned'})})
       .then(function(r){ if(!r.ok) throw new Error(); return loadBoard(); })
       .then(function(){ reloadCal(); if(resvId) renderResvModal(); })
       .catch(function(){ silvaToast('Could not check it in. Try again.'); loadBoard(); });
   }
-  function undoReturn(id){ var p=pendingReturns[id]; if(p&&p.timer) clearTimeout(p.timer); delete pendingReturns[id]; renderBoard(); }
-  function commitReturn(id){ var p=pendingReturns[id]; if(p&&p.timer) clearTimeout(p.timer); delete pendingReturns[id];
-    camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:'returned'})})
-      .then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).then(function(){ return loadBoard(); }).then(reloadCal)
-      .catch(function(){ silvaToast('Could not mark returned. Try again.'); loadBoard(); }); }
-  function startTicker(){ if(ticker) return; ticker=setInterval(function(){ var any=false; Object.keys(pendingReturns).forEach(function(id){ any=true; var rem=Math.max(0,Math.ceil((pendingReturns[id].deadline-Date.now())/1000)); var el=document.querySelector('[data-count="'+id+'"]'); if(el) el.textContent=rem; }); if(!any){ clearInterval(ticker); ticker=null; } },500); }
 
   function markSync(ok){
     var s=document.getElementById('sync');
@@ -1857,7 +1776,7 @@
       });
       closeReturn();
       // Missing items become open ISSUES on the camera (resolve them in the camera card when fixed) and
-      // every finding is written to the permanent history LOG. Then run the 15s return (with its undo).
+      // every finding is written to the permanent history LOG. Then check the kit in (markReturned commits immediately).
       if(cam){
         var a=assetOf(cam), nl=(a.log||[]).slice(), today=fmt(todayISO());
         missing.forEach(function(m){ nl.push({date:today,text:'Returned missing: '+m}); });
