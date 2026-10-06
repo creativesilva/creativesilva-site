@@ -29,14 +29,16 @@
   }
   *{box-sizing:border-box;}
   body{background-color:#060f0f;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;margin:0;}
-  body::before{content:"";position:fixed;inset:0;z-index:-2;background:#060f0f url("https://www.creativesilva.com/logos/CS_Logo_Glossy_Teal_v1.png") no-repeat center 40%;background-size:min(74vw,700px);}
-  body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(6,14,14,0.86);}
+  /* Teal gradient backdrop + ghosted CS monogram (Silva teacher-tool treatment, matches the Equipment Manager). */
+  body::before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%);}
+  body::after{content:"";position:fixed;inset:0;z-index:-1;background:url("https://www.creativesilva.com/logos/CS_Logo_Glossy_Teal_v1.png") no-repeat center 40%;background-size:min(74vw,700px);filter:brightness(0) invert(1);opacity:.07;}
+  @media (max-width:900px){ body::after{background-size:min(88vw,460px);background-position:center 36%;} }
+  .silva-nav{display:none;}
+  .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;filter:brightness(0) invert(1);}
+  .cal-hero-clock{width:150px;height:46px;border:0;background:transparent;display:block;}
   /* Safe-area insets keep the title clear of the iPad status bar when launched as a Home Screen web app. */
   .wrap{max-width:1500px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right)) 60px calc(20px + env(safe-area-inset-left));}
-  .pw-titlerow{display:flex;align-items:center;gap:11px;margin:4px 0 16px;}
-  .pw-backsq{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;box-sizing:border-box;font-size:1.4rem;line-height:1;color:var(--teal-lt);background:rgba(0,184,184,.1);border:1px solid var(--teal);text-decoration:none;transition:background .15s,color .15s;}
-  .pw-backsq:hover{background:rgba(0,184,184,.22);color:#fff;}
-  .pw-title{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.5rem;color:#fff;margin:0;}
+  .pw-back{flex:0 0 auto;}
   /* Control bar */
   .pw-bar{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--teal);padding:13px 16px;margin-bottom:14px;}
   .pw-field{display:flex;flex-direction:column;gap:3px;}
@@ -174,7 +176,15 @@
   .pw-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:rgba(4,20,19,.98);border:1px solid var(--teal);border-left:4px solid var(--teal);color:#dfffff;font-size:.9rem;padding:12px 18px;z-index:420;box-shadow:0 16px 40px rgba(0,0,0,.6);opacity:0;transition:opacity .25s,transform .25s;max-width:90vw;}
   .pw-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
   .pw-toast.bad{border-color:var(--red);border-left-color:var(--red);color:#ffd7d3;}
-  @media (max-width:560px){ .pw-ddtrig{min-width:0;width:100%;} .pw-field{width:100%;} .pw-bar .btn{flex:1 1 auto;} }
+  @media (max-width:560px){
+    .pw-ddtrig{min-width:0;width:100%;} .pw-field{width:100%;} .pw-bar .btn{flex:1 1 auto;}
+    .wrap{padding:calc(14px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) 44px calc(12px + env(safe-area-inset-left));}
+    .cal-hero{padding:14px 13px 16px !important;margin:0 0 14px !important;}
+    .cal-hero > div{gap:7px 12px !important;}
+    .cal-hero > div > div{justify-content:center !important;}
+    .cal-hero img{width:46px !important;}
+    .cal-hero-clock{width:120px !important;height:42px !important;}
+  }
 </style>
 </head>
 <body>
@@ -191,9 +201,20 @@
 
 <div id="app">
   <div class="wrap">
-    <div class="pw-titlerow">
-      <a class="pw-backsq" href="/camera-manager.html" aria-label="Back to Equipment Manager" title="Back to Equipment Manager">&#8592;</a>
-      <h1 class="pw-title">Photo Walk Log</h1>
+    <!-- Cohesive Silva angular hero (matches calendar.html + camera-manager.html): icon left, title center, period countdown right. -->
+    <div class="cal-hero" style="background-color:#04191a;background-image:linear-gradient(90deg,rgba(3,18,20,0.95) 0%,rgba(0,66,68,0.5) 50%,rgba(3,18,20,0.95) 100%);border-top:2px solid #00b8b8;border-right:2px solid #00b8b8;border-bottom:2px solid #00b8b8;border-left:7px solid #00b8b8;box-sizing:border-box;padding:22px 28px 24px;margin:0 0 18px;">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;">
+        <div style="flex:1 1 150px;display:flex;justify-content:flex-start;align-items:center;">
+          <img src="/assets/Icons/assignment/photo-walk-white-v1.png" alt="Photo Walk Log" style="width:clamp(62px,12vw,96px);height:auto;display:block;" />
+        </div>
+        <div style="flex:100 1 260px;min-width:200px;text-align:center;">
+          <div style="margin-bottom:6px;"><span style="font-size:13pt;color:#80e0e0;letter-spacing:0.05em;"><strong>Teacher Console &middot; Pioneer Valley</strong></span></div>
+          <div style="color:#ffffff;font-size:clamp(17pt,4.5vw,23pt);line-height:1.1;"><strong>Photo Walk Log</strong></div>
+        </div>
+        <div style="flex:1 1 150px;display:flex;justify-content:flex-end;align-items:center;">
+          <iframe class="cal-hero-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
+        </div>
+      </div>
     </div>
 
     <div class="pw-ro" id="roBanner">
@@ -203,6 +224,7 @@
     </div>
 
     <div class="pw-bar" id="controlBar">
+      <a class="btn ghost pw-back" href="/camera-manager.html" title="Back to Equipment Manager">&#8592;&nbsp;Equipment Manager</a>
       <div class="pw-field">
         <span class="pw-flab">Class period</span>
         <div class="pw-perdd" id="perDD">
