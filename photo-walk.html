@@ -479,10 +479,11 @@
     if(over && over.classList.contains('dis')){ var ne=nearestItem(sc,true); if(ne){ _realign=true; ne.scrollIntoView({block:'center'}); setTimeout(function(){ _realign=false; finishSettle(sc); },180); return; } }
     finishSettle(sc);
   }
-  function finishSettle(sc){ markOn(sc); var scs=wheelScs(); applyDisabled(scs);
-    // if this wheel's pick just grayed a seat another wheel was resting on, roll that wheel off it
-    scs.forEach(function(o){ if(o===sc) return; var over=nearestItem(o,false); if(over && over.classList.contains('dis')){ _realign=true; var ne=nearestItem(o,true); if(ne) ne.scrollIntoView({block:'center'}); markOn(o); } });
-    if(_realign) setTimeout(function(){ _realign=false; var a=wheelScs(); applyDisabled(a); a.forEach(markOn); },180);
+  function finishSettle(sc){ var scs=wheelScs(); applyDisabled(scs); scs.forEach(markOn);
+    // Settling one wheel NEVER moves another wheel. (Rolling other wheels off a just-grayed seat is
+    // what made a pick in the right column jump the number in the left.) Taken seats gray out live;
+    // a wheel only moves when the user scrolls it; and confirmSeats() dedupes at commit, so two
+    // wheels can never keep the same seat anyway.
   }
   function addSeatRow(){ if(seatRows>=SEAT_MAX) return; var vals=[]; wheelScs().forEach(function(sc){ vals.push(centeredSeat(sc)); }); seatRows++; renderSeatWheels(vals); }
   function confirmSeats(){ var cam=seatCam, k=PW[cam]; if(!k){ closeSeatModal(); return; }
