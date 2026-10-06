@@ -915,19 +915,22 @@
        module section headers and the cal-hero family. Title sits on the dark-teal left; the
        action buttons + clock flow to the right over the fade. */
     .catalog-titlebar {
-      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-      padding: 15px 26px 15px 20px; margin: 12px 0 4px;
+      display: flex; align-items: center; gap: 16px; flex-wrap: nowrap;
+      padding: 14px 24px 14px 20px; margin: 12px 0 4px;
       background-image: linear-gradient(90deg, rgba(0, 66, 68, 0.96) 0%, rgba(3, 18, 20, 0.82) 44%, rgba(3, 18, 20, 0) 100%);
       border-left: 7px solid #00b8b8;
     }
     .catalog-titlebar .page-title {
-      margin: 0 auto 0 0; text-align: left; flex: 0 1 auto;
+      margin: 0; text-align: left; flex: 0 0 auto;
       font-size: clamp(1.45rem, 2.9vw, 2.05rem); line-height: 1.0; letter-spacing: 0.005em;
     }
+    /* Nav buttons are one right-aligned group that wraps internally; the clock stays a
+       separate, non-wrapping sibling pinned to the top-right (see .catalog-titlebar nowrap). */
+    .titlebar-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 1 1 auto; justify-content: flex-end; }
     .cal-btn {
-      margin-left: 0; flex: 0 0 auto; height: 32px; box-sizing: border-box;
-      display: inline-flex; align-items: center; padding: 0 22px;
-      font-family: var(--font-head, 'Oswald', sans-serif); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      margin-left: 0; flex: 0 0 auto; height: 34px; box-sizing: border-box;
+      display: inline-flex; align-items: center; padding: 0 15px;
+      font-family: var(--font-head, 'Oswald', sans-serif); font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
       font-size: 0.78rem; color: #fff; text-decoration: none; white-space: nowrap;
       background: #007474; border: 1px solid #00b8b8; transition: filter 0.15s ease;
     }
@@ -950,8 +953,13 @@
     .catalog-search-input::placeholder { color: rgba(234, 247, 247, 0.5); }
     .catalog-search-input:focus { outline: none; border-color: #00b8b8; background-color: rgba(0, 0, 0, 0.5); }
     /* Rolling class-period countdown (live from the pvhs_tools schedule), top-right by search. */
-    .header-clock { flex: 0 0 auto; width: 158px; height: 48px; border: 0; background: transparent; display: block; }
-    @media (max-width: 900px) { .header-clock { display: none; } }
+    /* Countdown: locked to the top-right of the header, always visible (consistent across
+       every teacher-facing page). margin-left:auto pins it right once the action buttons
+       move down into the quick-menu bar. */
+    .header-clock { flex: 0 0 auto; align-self: center; margin-left: auto; width: 150px; height: 46px; border: 0; background: transparent; display: block; }
+    /* buildCatBar() relocates .titlebar-actions into the quick-menu bar and adds this class,
+       right-aligning the buttons so the bar fills edge-to-edge (logo + Catalog left, buttons right). */
+    .cat-bar .cat-bar-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 0 0 auto; margin-left: auto; align-self: center; padding: 6px 0; }
     /* Search Catalog button (opens the search shadow-box) with a magnifier glyph. */
     .cat-search-btn { cursor: pointer; }
     .cat-search-btn::before {
@@ -995,10 +1003,13 @@
     .search-flash { animation: searchFlash 1.7s ease; }
     @media (max-width: 640px) {
       .catalog-sticky-inner { padding: 0 16px; }
-      .catalog-titlebar { gap: 10px; padding-bottom: 10px; }
+      .catalog-titlebar { gap: 10px; }
       .cal-btn { margin-left: 0; }
       .catalog-search { flex-basis: 100%; margin-left: 0; max-width: none; }
       .course-acc { scroll-margin-top: 178px; }   /* header wraps taller on phones */
+      /* Keep the title + countdown on one row on phones. */
+      .page-title { font-size: 1.3rem; }
+      .header-clock { width: 130px; }
     }
 
     /* Frameworks list (Build Resources): living docs that link to their source files. */
@@ -1293,10 +1304,12 @@
       <div class="catalog-sticky-inner">
         <div class="catalog-titlebar">
           <h1 class="page-title">Curriculum Catalog</h1>
-          <a class="cal-btn" href="/build-resources.html">Build Resources</a>
-          <a class="cal-btn cmd" href="https://command.creativesilva.com" target="_blank" rel="noopener">Command Center</a>
-          <a class="cal-btn" href="/camera-manager.html">Equipment Manager</a>
-          <button type="button" class="cal-btn cat-search-btn" id="cat-search-btn" aria-haspopup="dialog" aria-label="Search the catalog">Search</button>
+          <div class="titlebar-actions">
+            <a class="cal-btn" href="/build-resources.html">Build Resources</a>
+            <a class="cal-btn cmd" href="https://command.creativesilva.com" target="_blank" rel="noopener">Command Center</a>
+            <a class="cal-btn" href="/camera-manager.html">Equipment Manager</a>
+            <button type="button" class="cal-btn cat-search-btn" id="cat-search-btn" aria-haspopup="dialog" aria-label="Search the catalog">Search</button>
+          </div>
           <iframe class="header-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
         </div>
 
@@ -2678,6 +2691,12 @@
       items.appendChild(catWrap);
 
       inner.appendChild(items);
+
+      // Relocate the header action buttons into this quick-menu row (right-aligned) so the
+      // title block above holds just the title + countdown, and this bar fills edge-to-edge.
+      var _acts = document.querySelector('.catalog-titlebar .titlebar-actions');
+      if (_acts) { _acts.classList.add('cat-bar-actions'); inner.appendChild(_acts); }
+
       bar.appendChild(inner);
 
       document.addEventListener('click', function (e) { if (!bar.contains(e.target)) closeAll(); });
