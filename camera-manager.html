@@ -1187,8 +1187,11 @@
     var foot='<div class="resv-foot">';
     if(allRet){ foot+='<div class="resv-allback">All items are back.</div>'; }
     else {
-      if(anyReserved) foot+='<button type="button" class="go" id="resvOutAll">Check out everything</button>';
-      if(anyOut) foot+='<button type="button" class="go" id="resvAll">Check in everything</button>';
+      // Only offer the bulk buttons when the reservation has more than the one camera kit (i.e. it
+      // bundles add-on equipment). A lone kit needs only its single per-item action, not two buttons.
+      var multi=items.length>1;
+      if(anyReserved && multi) foot+='<button type="button" class="go" id="resvOutAll">Check out everything</button>';
+      if(anyOut && multi) foot+='<button type="button" class="go" id="resvAll">Check in everything</button>';
     }
     foot+='<button type="button" class="go resv-see" id="resvSee">See reservation</button></div>';
     document.getElementById('resvBody').innerHTML=head+prog+'<div class="resv-items">'+rows+'</div>'+foot;
@@ -1664,9 +1667,16 @@
     }).then(function(){ silvaToast('Confirmation emailed to '+email+'.'); },
       function(err){ silvaToast('Could not send the email'+((err&&err.text)?(': '+err.text):'. Check the EmailJS template.')); });
   }
-  // Mark-returned undo window: hold the return ~15s before committing, so a wrong camera can be undone.
+  // Check-in commits immediately and re-fetches the board, so the return shows live (no 15s delay,
+  // which previously left the board unchanged and read as a failed check-in). A wrong check-in is
+  // undone by re-opening the reservation and marking it picked up again.
   var pendingReturns={}, ticker=null;
-  function markReturned(id){ if(pendingReturns[id]) return; pendingReturns[id]={deadline:Date.now()+15000}; pendingReturns[id].timer=setTimeout(function(){ commitReturn(id); },15000); renderBoard(); }
+  function markReturned(id){
+    camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:'returned'})})
+      .then(function(r){ if(!r.ok) throw new Error(); return loadBoard(); })
+      .then(function(){ reloadCal(); if(resvId) renderResvModal(); })
+      .catch(function(){ silvaToast('Could not check it in. Try again.'); loadBoard(); });
+  }
   function undoReturn(id){ var p=pendingReturns[id]; if(p&&p.timer) clearTimeout(p.timer); delete pendingReturns[id]; renderBoard(); }
   function commitReturn(id){ var p=pendingReturns[id]; if(p&&p.timer) clearTimeout(p.timer); delete pendingReturns[id];
     camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:'returned'})})
