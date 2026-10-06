@@ -156,6 +156,9 @@
   .pw-histopen{flex:1 1 auto;min-width:0;}
   .pw-histdel{flex:0 0 auto;background:transparent;border:0;color:var(--faint);font-size:1.4rem;line-height:1;cursor:pointer;padding:0 4px;transition:color .12s;}
   .pw-histdel:hover{color:#ff9a8a;}
+  /* "View as spreadsheet" per-row button: exports that day+period to CSV (Excel / Numbers / Sheets). */
+  .pw-histsheet{flex:0 0 auto;background:rgba(0,184,184,.12);border:1px solid var(--line);color:var(--teal-lt);font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:7px 11px;cursor:pointer;white-space:nowrap;transition:background .12s,border-color .12s;}
+  .pw-histsheet:hover{background:rgba(0,184,184,.22);border-color:var(--teal);color:#fff;}
   .pw-histd{font-family:var(--font);font-weight:600;color:#fff;font-size:.92rem;}
   .pw-histmeta{font-size:.76rem;color:var(--muted);}
   .pw-empty{color:var(--faint);font-size:.88rem;padding:6px 2px;}
@@ -550,8 +553,9 @@
         var rows=(j&&j.logs)||[]; document.getElementById('histCount').textContent=rows.length+' saved';
         savedKeys={}; rows.forEach(function(r){ if(r.key) savedKeys[r.key]=true; }); setLive();
         var list=document.getElementById('histList');
-        list.innerHTML=rows.length?rows.map(function(r){ return '<div class="pw-histrow"><span class="pw-histopen" data-key="'+esc(r.key)+'"><span class="pw-histd">'+esc(r.date)+'</span> <span class="pw-histmeta">&middot; Per '+esc(r.period)+(r.course?(' &middot; '+esc(r.course)):'')+' &middot; '+esc(r.kits)+' kits</span></span><button class="pw-histdel" data-del="'+esc(r.key)+'" title="Delete this walk" aria-label="Delete">&times;</button></div>'; }).join(''):'<div class="pw-empty">No saved photo walks yet.</div>';
+        list.innerHTML=rows.length?rows.map(function(r){ return '<div class="pw-histrow"><span class="pw-histopen" data-key="'+esc(r.key)+'"><span class="pw-histd">'+esc(r.date)+'</span> <span class="pw-histmeta">&middot; Per '+esc(r.period)+(r.course?(' &middot; '+esc(r.course)):'')+' &middot; '+esc(r.kits)+' kits</span></span><button class="pw-histsheet" data-sheet="'+esc(r.key)+'" title="View as spreadsheet (opens in Excel, Numbers, or Google Sheets)">Spreadsheet</button><button class="pw-histdel" data-del="'+esc(r.key)+'" title="Delete this walk" aria-label="Delete">&times;</button></div>'; }).join(''):'<div class="pw-empty">No saved photo walks yet.</div>';
         list.querySelectorAll('.pw-histopen').forEach(function(el){ el.onclick=function(){ openPast(el.getAttribute('data-key')); }; });
+        list.querySelectorAll('[data-sheet]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); exportWalkSheet(el.getAttribute('data-sheet')); }; });
         list.querySelectorAll('[data-del]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); deletePast(el.getAttribute('data-del')); }; });
       }).catch(function(){});
   }
@@ -565,6 +569,34 @@
     camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'delete',key:key})})
       .then(function(r){ if(!r.ok) throw new Error(); if(RO && (RO.date+'|'+RO.period)===key){ RO=null; render(); } loadHistory(); toast('Walk deleted.'); })
       .catch(function(){ toast('Could not delete. Try again.',true); });
+  }
+
+  // ----- "View as spreadsheet": export one saved walk to CSV (opens in Excel / Numbers / Google Sheets) -----
+  function csvCell(v){ v=String(v==null?'':v); return /[",\n\r]/.test(v)?('"'+v.replace(/"/g,'""')+'"'):v; }
+  function downloadCSV(text, filename){
+    var blob=new Blob(['﻿'+text],{type:'text/csv;charset=utf-8;'});   // BOM so Excel reads UTF-8 names
+    var url=URL.createObjectURL(blob), a=document.createElement('a');
+    a.href=url; a.download=filename; document.body.appendChild(a); a.click();
+    setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); },500);
+  }
+  function exportWalkSheet(key){
+    camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'get',key:key})})
+      .then(function(r){ return r.json(); }).then(function(j){
+        var log=j&&j.log; if(!log){ toast('Could not open that walk.',true); return; }
+        var SL={used:'Assigned',not_used:'Not used',checked_out:'Checked out',unassigned:'Not logged',open:'Not logged'};
+        var rows=[];
+        rows.push(['Photo Walk Log','Period '+(log.period||''),log.date||'',log.course||'']);
+        rows.push([]);
+        rows.push(['Camera','Status','Seat','Student','Kit %']);
+        (log.kits||[]).forEach(function(k){
+          var st=SL[k.status]||k.status||'', pct=(k.pct==null?'TBD':(k.pct+'%'));
+          if(k.seats && k.seats.length){ k.seats.forEach(function(s){ rows.push([k.cam, st, s.seat||'', s.label||'', pct]); }); }
+          else { rows.push([k.cam, st, '', '', pct]); }
+        });
+        var csv=rows.map(function(r){ return r.map(csvCell).join(','); }).join('\r\n');
+        downloadCSV(csv, 'PhotoWalk_'+(log.date||'')+'_Period-'+(log.period||'')+'.csv');
+        toast('Spreadsheet downloaded. Open it in Excel, Numbers, or Google Sheets.');
+      }).catch(function(){ toast('Could not build the spreadsheet. Try again.',true); });
   }
 
   // ----- data load -----
