@@ -54,6 +54,8 @@
   .intro .sub{display:none;}
   .intro{justify-content:center;}
   .intro{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px;}
+  /* Refresh (last in the row) sits all the way to the right of the toolbar. */
+  .intro #refreshBtn{margin-left:auto;}
   .sub{color:var(--muted);font-size:.95rem;margin:0;flex:1 1 320px;}
   /* Top-level buttons share ONE pixel height (38px); in-card .btn.sm share a smaller one (32px). */
   .btn{flex:0 0 auto;height:38px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font);font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:0 18px;cursor:pointer;text-decoration:none;transition:filter .15s;}
@@ -730,10 +732,10 @@
   <div class="intro">
     <p class="sub">Reserve equipment, mark it picked up when the student collects it, and mark it returned when it comes back. Changes sync to the calendar and the Command Center in real time.</p>
     <button class="silva-uni-cattrigger" id="reserveBtn">Reserve</button>
-    <button class="silva-uni-cattrigger" id="refreshBtn" title="Reload the latest data now">&#8635; Refresh</button>
     <button class="silva-uni-cattrigger" id="reportsBtn" title="Missing kit items to order (opens a printable report)">Missing Items</button>
     <a class="silva-uni-cattrigger" id="studentCalBtn" href="/calendar.html?from=console" target="_blank" rel="noopener">Student Calendar</a>
     <a class="silva-uni-cattrigger" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
+    <button class="silva-uni-cattrigger" id="refreshBtn" title="Reload the latest data now">&#8635; Refresh</button>
   </div>
 
   <div id="poolbar" class="poolbar-wrap" role="group" aria-label="Teacher view"></div>
