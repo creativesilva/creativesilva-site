@@ -102,10 +102,6 @@
   /* Wheel picker (Activity-Timer drum): tap a slot -> scroll/tap an available seat -> it collapses. */
   .pw-wheelov{position:fixed;inset:0;z-index:140;background:rgba(2,12,12,.72);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;padding:20px;}
   .pw-wheelov.open{display:flex;}
-  /* A seat already taken (by another wheel in this window, or committed to another camera kit):
-     grayed, not a snap target (the drum skips it), and not clickable. */
-  .pw-wheelitem.dis{color:var(--grayed);opacity:.5;scroll-snap-align:none;pointer-events:none;}
-  .pw-wheelitem.dis.on{transform:none;color:var(--grayed);}
   /* Seat modal: tap a camera number -> a window of vertical seat wheels + Confirm + X. */
   .pw-seatbox{background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);border-top:3px solid var(--teal);box-shadow:0 24px 60px rgba(0,0,0,.7);width:auto;max-width:94vw;padding:16px 18px 18px;}
   .pw-seathead{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:1rem;color:#fff;}
@@ -425,13 +421,12 @@
   }
 
   // ----- seat modal: tap a camera number -> one vertical wheel per seat (+ add more) + Confirm -----
-  // Each wheel lists EVERY seat for the period. A seat grays out (and the drum rolls past it) when it is
-  // already committed to another camera kit, or already centered in another wheel of THIS window, so the
-  // same seat can never be assigned twice.
+  // Every seat is ALWAYS selectable on every wheel. No graying-out and no "this seat is taken"
+  // exclusivity (it made the wheels jump around). A wheel only moves when the user scrolls or taps it;
+  // confirmSeats() still drops a repeat so one camera can't log the same seat twice.
   var seatCam=null, seatRows=2, SEAT_MAX=6, _realign=false;
   function periodSeats(){ var m=seatsForPeriod();
     return Object.keys(m).map(seatNum).filter(Boolean).filter(function(v,i,a){ return a.indexOf(v)===i; }).sort(function(a,b){ return (+a)-(+b); }); }
-  function takenByOtherCams(cam){ var taken={}; CAMS.forEach(function(c){ if(c===cam) return; var kk=PW[c]; if(!kk) return; (kk.seats||[]).forEach(function(v){ var n=seatNum(v); if(n) taken[n]=c; }); }); return taken; }
   function openSeatModal(cam){ var k=PW[cam]; if(!k||k.status==='checked_out') return; seatCam=cam;
     var existing=(k.seats||[]).map(seatNum).filter(Boolean);
     seatRows=Math.min(SEAT_MAX, Math.max(2, existing.length));
@@ -453,41 +448,23 @@
     document.getElementById('seatAdd').classList.toggle('hidden', seatRows>=SEAT_MAX);
     var scs=wheelScs();
     scs.forEach(function(sc){
-      sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ it.onclick=function(){ if(it.classList.contains('dis')) return; _realign=true; it.scrollIntoView({block:'center'}); clearTimeout(sc._t); sc._t=setTimeout(function(){ _realign=false; settleWheel(sc); },180); }; });
+      sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ it.onclick=function(){ _realign=true; it.scrollIntoView({block:'center'}); clearTimeout(sc._t); sc._t=setTimeout(function(){ _realign=false; settleWheel(sc); },180); }; });
       sc.onscroll=function(){ if(_realign) return; clearTimeout(sc._t); sc._t=setTimeout(function(){ settleWheel(sc); },80); };
     });
-    applyDisabled(scs);
     scs.forEach(function(sc,i){ var want=values[i]?seatNum(values[i]):'';
-      var el=sc.querySelector('.pw-wheelitem[data-seat="'+want+'"]');
-      if(el && el.classList.contains('dis')) el=null;
-      if(!el) el=sc.querySelector('.pw-wheelitem[data-seat=""]');
+      var el=sc.querySelector('.pw-wheelitem[data-seat="'+want+'"]') || sc.querySelector('.pw-wheelitem[data-seat=""]');
       setTimeout(function(){ if(el) el.scrollIntoView({block:'center'}); markOn(sc); },30);
     });
-    setTimeout(function(){ var a=wheelScs(); applyDisabled(a); a.forEach(markOn); },150);
+    setTimeout(function(){ wheelScs().forEach(markOn); },150);
   }
   function wheelScs(){ return Array.prototype.slice.call(document.querySelectorAll('#seatWheels .pw-wheelscroll')); }
-  function nearestItem(sc, enabledOnly){ var b=sc.getBoundingClientRect(), cy=b.top+b.height/2, best=null, bd=1e9;
-    sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ if(enabledOnly && it.classList.contains('dis')) return; var r=it.getBoundingClientRect(), d=Math.abs((r.top+r.height/2)-cy); if(d<bd){ bd=d; best=it; } }); return best; }
-  function centeredSeat(sc){ var it=nearestItem(sc,true); return it?it.getAttribute('data-seat'):''; }
-  function markOn(sc){ var v=centeredSeat(sc); sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ it.classList.toggle('on', !it.classList.contains('dis') && it.getAttribute('data-seat')===v); }); return v; }
-  function applyDisabled(scs){ scs=scs||wheelScs(); var taken=takenByOtherCams(seatCam);
-    var picks=scs.map(function(sc){ return seatNum(centeredSeat(sc)); });
-    scs.forEach(function(sc,i){ sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ var s=it.getAttribute('data-seat');
-      if(s===''){ it.classList.remove('dis'); return; }
-      var dis = !!taken[s] || picks.some(function(p,j){ return j!==i && p && p===s; });
-      it.classList.toggle('dis', dis); }); });
-  }
-  function settleWheel(sc){ if(_realign) return;
-    var over=nearestItem(sc,false);                       // what the drum is physically resting on
-    if(over && over.classList.contains('dis')){ var ne=nearestItem(sc,true); if(ne){ _realign=true; ne.scrollIntoView({block:'center'}); setTimeout(function(){ _realign=false; finishSettle(sc); },180); return; } }
-    finishSettle(sc);
-  }
-  function finishSettle(sc){ var scs=wheelScs(); applyDisabled(scs); scs.forEach(markOn);
-    // Settling one wheel NEVER moves another wheel. (Rolling other wheels off a just-grayed seat is
-    // what made a pick in the right column jump the number in the left.) Taken seats gray out live;
-    // a wheel only moves when the user scrolls it; and confirmSeats() dedupes at commit, so two
-    // wheels can never keep the same seat anyway.
-  }
+  function nearestItem(sc){ var b=sc.getBoundingClientRect(), cy=b.top+b.height/2, best=null, bd=1e9;
+    sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ var r=it.getBoundingClientRect(), d=Math.abs((r.top+r.height/2)-cy); if(d<bd){ bd=d; best=it; } }); return best; }
+  function centeredSeat(sc){ var it=nearestItem(sc); return it?it.getAttribute('data-seat'):''; }
+  function markOn(sc){ var v=centeredSeat(sc); sc.querySelectorAll('.pw-wheelitem').forEach(function(it){ it.classList.toggle('on', it.getAttribute('data-seat')===v); }); return v; }
+  // No graying / exclusivity: a wheel just highlights whatever number it is centered on. It never
+  // rolls itself or any other wheel, so the selectors stop jumping around.
+  function settleWheel(sc){ if(_realign) return; markOn(sc); }
   function addSeatRow(){ if(seatRows>=SEAT_MAX) return; var vals=[]; wheelScs().forEach(function(sc){ vals.push(centeredSeat(sc)); }); seatRows++; renderSeatWheels(vals); }
   function confirmSeats(){ var cam=seatCam, k=PW[cam]; if(!k){ closeSeatModal(); return; }
     var picked=[], seen={};
