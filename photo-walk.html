@@ -56,6 +56,10 @@
   .pw-ddopt.sel{color:var(--teal-lt);}
   .pw-when{font-size:.84rem;color:var(--muted);}
   .pw-when b{color:var(--teal-lt);font-weight:600;}
+  /* Live auto-save indicator (replaces the Save button: the log saves itself). */
+  .pw-live{font-family:var(--font);font-size:.82rem;font-weight:600;letter-spacing:.02em;color:var(--teal-lt);white-space:nowrap;}
+  .pw-live.saving{color:var(--muted);}
+  .pw-live.err{color:#ff9a8a;}
   .pw-auto{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#04110f;background:var(--teal);padding:3px 7px;}
   .pw-spacer{flex:1 1 auto;}
   .btn{flex:0 0 auto;height:40px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font);font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:0 18px;cursor:pointer;text-decoration:none;transition:filter .15s,background .15s,color .15s;}
@@ -236,10 +240,12 @@
         <span class="pw-flab">Today</span>
         <span class="pw-when" id="whenLine"></span>
       </div>
+      <div class="pw-field">
+        <span class="pw-flab">Live log</span>
+        <span class="pw-live" id="liveStatus">Live</span>
+      </div>
       <div class="pw-spacer"></div>
       <button class="btn ghost" id="histBtn">History</button>
-      <button class="btn ghost" id="editBtn">Edit log</button>
-      <button class="btn save" id="saveBtn">Save log</button>
     </div>
 
     <div class="pw-status" id="statusLine"></div>
@@ -266,13 +272,6 @@
   </div>
 </div>
 
-<div class="pw-wheelov" id="warnOv">
-  <div class="pw-warnbox">
-    <div class="pw-warnhead">Before you save</div>
-    <div class="pw-warntext" id="warnText"></div>
-    <div class="pw-warnacts"><button type="button" class="btn ghost" id="warnCancel">Go back</button><button type="button" class="btn save" id="warnOk">OK, mark them not used</button></div>
-  </div>
-</div>
 
 <div class="pw-toast" id="toast"></div>
 
@@ -350,7 +349,7 @@
     // status line
     renderStatus();
     renderGrid();
-    updateSaveBtn();
+    setLive();
   }
   function renderPerMenu(){
     var trig=document.getElementById('perTrigLbl');
@@ -492,20 +491,22 @@
     document.querySelectorAll('#seatWheels .pw-wheelscroll').forEach(function(sc){ var v=seatNum(centeredSeat(sc)); if(v && !seen[v]){ seen[v]=1; picked.push(v); } });
     k.seats=picked; k.names=picked.map(function(v){ var r=resolveSeat(v); return r?r.label:''; }); k.ids=picked.map(function(v){ var r=resolveSeat(v); return r?r.id:''; });
     k.status=picked.length?'used':'open';
-    closeSeatModal(); renderGrid(); renderStatus();
+    closeSeatModal(); renderGrid(); renderStatus(); scheduleSave();
   }
   function closeSeatModal(){ document.getElementById('seatOv').classList.remove('open'); seatCam=null; }
-  function toggleNotUsed(cam){ var k=PW[cam]; if(k.status==='not_used'){ k.status='open'; } else { k.status='not_used'; k.seats=[]; k.names=[]; k.ids=[]; } renderGrid(); renderStatus(); }
+  function toggleNotUsed(cam){ var k=PW[cam]; if(k.status==='not_used'){ k.status='open'; } else { k.status='not_used'; k.seats=[]; k.names=[]; k.ids=[]; } renderGrid(); renderStatus(); scheduleSave(); }
   function returnToPool(cam){ var k=PW[cam]; if(!k.co) return;
     camAPI('/api/camera/status',{method:'POST',body:JSON.stringify({id:k.co.id,status:'returned'})})
-      .then(function(r){ if(!r.ok) throw new Error(); return loadBoard(); }).then(function(){ buildPW(); render(); toast(cam+' returned to the pool.'); })
+      .then(function(r){ if(!r.ok) throw new Error(); return loadBoard(); })
+      .then(function(){ buildPW(); return loadSavedIntoPW(PERIOD); })   // rebuild from the board, then restore the saved assignments
+      .then(function(){ render(); scheduleSave(); toast(cam+' returned to the pool.'); })
       .catch(function(){ toast('Could not return '+cam+'. Try again.',true); });
   }
   function setPeriod(p){ RO=null; PERIOD=p; try{ sessionStorage.setItem('pwperiod',p); }catch(e){} buildPW(); render(); loadSavedIntoPW(p); }
   // Load the saved log for today + this period so Edit Log shows the earlier students (and you can add
   // late ones) instead of starting blank. announce=true (the Edit Log button) toasts the result.
-  function loadSavedIntoPW(p, announce){ if(!p) return; var key=todayISO()+'|'+p;
-    camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'get',key:key})})
+  function loadSavedIntoPW(p, announce){ if(!p) return Promise.resolve(); var key=todayISO()+'|'+p;
+    return camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'get',key:key})})
       .then(function(r){ return r.json(); }).then(function(j){ if(PERIOD!==p) return;
         if(!j||!j.log){ if(announce) toast('No saved log yet for Period '+p+'. Assign seats, then Save log.'); return; }
         savedKeys[key]=true;
@@ -517,41 +518,37 @@
         if(announce) toast('Loaded the saved log for Period '+p+'. Add anyone new, then Save log again.');
       }).catch(function(){ if(announce) toast('Could not load the saved log. Try again.',true); }); }
 
-  // ----- save -----
-  var savedKeys={};   // "date|period" -> true (from history + after a save); tells Edit Log what exists
-  // Save/Edit are now two always-on buttons, so the Save button label is constant.
-  function updateSaveBtn(){ var b=document.getElementById('saveBtn'); if(b) b.textContent='Save log'; }
-  function showUnassignedWarn(n, onOk){
-    var they=(n>1?'they':'it'), were=(n>1?'were':'was'), cams='camera'+(n>1?'s':'');
-    document.getElementById('warnText').innerHTML=n+' '+cams+' '+were+' not assigned a seat. If '+they+' stayed in the classroom this period, tap OK and '+they+' will be logged as <b>Not used</b> for this photo walk.';
-    var ok=document.getElementById('warnOk'); ok.onclick=function(){ document.getElementById('warnOv').classList.remove('open'); onOk(); };
-    document.getElementById('warnOv').classList.add('open');
+  // ----- live auto-save (no Save button: the log is a live document that saves itself on
+  // every assignment and is filed by date+period; the backend overwrites the same key) -----
+  var savedKeys={};   // "date|period" -> true (from history + after a save)
+  var _saveT=null, _lastSavedAt='';
+  function setLive(state){ var el=document.getElementById('liveStatus'); if(!el) return;
+    if(RO){ el.textContent='Viewing a saved walk'; el.className='pw-live saving'; return; }
+    if(!PERIOD){ el.textContent='Pick a period'; el.className='pw-live saving'; return; }
+    if(state==='saving'){ el.textContent='Saving…'; el.className='pw-live saving'; }
+    else if(state==='err'){ el.textContent='Retrying save…'; el.className='pw-live err'; }
+    else { el.textContent=_lastSavedAt?('Saved '+_lastSavedAt):'Live'; el.className='pw-live'; }
   }
-  function saveReport(){
-    if(RO){ toast('You are viewing a saved walk. Pick a period to log today.',true); return; }
-    if(!PERIOD){ toast('Pick a class period first.',true); return; }
-    var open=CAMS.filter(function(cam){ return PW[cam].status==='open'; });
-    var go=function(){
-      var kits=CAMS.map(function(cam){ var k=PW[cam];
-        var seats=[]; (k.seats||[]).forEach(function(v0,i){ var v=seatNum(v0); if(v) seats.push({seat:v, id:k.ids[i]||'', label:k.names[i]||''}); });
-        return {cam:cam, pct:kitPct(cam), status:k.status==='open'?'unassigned':k.status, seats:seats};
-      });
-      var btn=document.getElementById('saveBtn'); btn.disabled=true; btn.textContent='Saving&#8230;';
-      camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'save',date:todayISO(),period:PERIOD,course:courseForPeriod(),kits:kits})})
-        .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
-        .then(function(){ savedKeys[todayISO()+'|'+PERIOD]=true; btn.disabled=false; updateSaveBtn(); toast('Photo walk saved for Period '+PERIOD+'. Hit Edit log to reload it for late students.'); loadHistory(); })
-        .catch(function(){ btn.disabled=false; updateSaveBtn(); toast('Could not save. Try again.',true); });
-    };
-    if(open.length){ showUnassignedWarn(open.length, function(){ open.forEach(function(cam){ var k=PW[cam]; k.status='not_used'; k.seats=[]; k.names=[]; k.ids=[]; }); renderGrid(); renderStatus(); go(); }); }
-    else go();
+  function buildKits(){ return CAMS.map(function(cam){ var k=PW[cam];
+      var seats=[]; (k.seats||[]).forEach(function(v0,i){ var v=seatNum(v0); if(v) seats.push({seat:v, id:k.ids[i]||'', label:k.names[i]||''}); });
+      return {cam:cam, pct:kitPct(cam), status:k.status==='open'?'unassigned':k.status, seats:seats};
+    }); }
+  function liveSave(){ if(RO||!PERIOD) return; var p=PERIOD, key=todayISO()+'|'+p;
+    camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'save',date:todayISO(),period:p,course:courseForPeriod(),kits:buildKits()})})
+      .then(function(r){ if(!r.ok) throw new Error(); var fresh=!savedKeys[key]; savedKeys[key]=true;
+        _lastSavedAt=new Date().toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+        if(PERIOD===p && !RO) setLive('saved'); if(fresh) loadHistory(); })
+      .catch(function(){ if(PERIOD===p && !RO){ setLive('err'); clearTimeout(_saveT); _saveT=setTimeout(liveSave,4000); } });
   }
+  // Debounced: every assignment schedules a save ~0.7s later (coalesces rapid edits).
+  function scheduleSave(){ if(RO||!PERIOD) return; setLive('saving'); clearTimeout(_saveT); _saveT=setTimeout(liveSave,700); }
 
   // ----- history -----
   function loadHistory(){
     camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'list'})})
       .then(function(r){ return r.json(); }).then(function(j){
         var rows=(j&&j.logs)||[]; document.getElementById('histCount').textContent=rows.length+' saved';
-        savedKeys={}; rows.forEach(function(r){ if(r.key) savedKeys[r.key]=true; }); updateSaveBtn();
+        savedKeys={}; rows.forEach(function(r){ if(r.key) savedKeys[r.key]=true; }); setLive();
         var list=document.getElementById('histList');
         list.innerHTML=rows.length?rows.map(function(r){ return '<div class="pw-histrow"><span class="pw-histopen" data-key="'+esc(r.key)+'"><span class="pw-histd">'+esc(r.date)+'</span> <span class="pw-histmeta">&middot; Per '+esc(r.period)+(r.course?(' &middot; '+esc(r.course)):'')+' &middot; '+esc(r.kits)+' kits</span></span><button class="pw-histdel" data-del="'+esc(r.key)+'" title="Delete this walk" aria-label="Delete">&times;</button></div>'; }).join(''):'<div class="pw-empty">No saved photo walks yet.</div>';
         list.querySelectorAll('.pw-histopen').forEach(function(el){ el.onclick=function(){ openPast(el.getAttribute('data-key')); }; });
@@ -576,12 +573,21 @@
   function startApp(){
     gate.style.display='none'; app.classList.add('on');
     Promise.all([loadBoard(),loadSeatmap()]).then(function(){
-      var ap=autoPeriod(); var saved=''; try{ saved=sessionStorage.getItem('pwperiod')||''; }catch(e){}
+      var ap=autoPeriod(); lastAutoPeriod=ap; var saved=''; try{ saved=sessionStorage.getItem('pwperiod')||''; }catch(e){}
       var want=(ap&&SEATMAP[ap])?ap:((saved&&SEATMAP[saved])?saved:null);   // auto-detect current class, else the last one used
       if(want) setPeriod(want); else { PERIOD=null; buildPW(); render(); }
       loadHistory();
     }).catch(function(){});
   }
+
+  // Live log follows the bell: when a new class period begins, file the current log (it is already
+  // saved) and open a fresh live log for the new period. A passing period (no class) holds the last log.
+  var lastAutoPeriod=null;
+  function periodWatch(){ if(RO) return; var ap=autoPeriod();
+    if(ap && SEATMAP[ap] && ap!==PERIOD && ap!==lastAutoPeriod){ lastAutoPeriod=ap; setPeriod(ap); toast('New class period. Now logging Period '+ap+'; the last log is filed.'); }
+    else if(ap){ lastAutoPeriod=ap; }
+  }
+  setInterval(periodWatch, 45000);
 
   // ----- gate -----
   function showGate(msg){ KEY=''; try{ sessionStorage.removeItem('silva-cam-key'); }catch(e){} gate.style.display='flex'; app.classList.remove('on'); pinerr.textContent=msg||''; pin.value=''; setTimeout(function(){ pin.focus(); },50); }
@@ -602,13 +608,9 @@
   document.getElementById('seatAdd').onclick=addSeatRow;
   document.getElementById('seatConfirm').onclick=confirmSeats;
   document.getElementById('seatOv').addEventListener('click',function(e){ if(e.target===this) closeSeatModal(); });
-  document.getElementById('warnCancel').onclick=function(){ document.getElementById('warnOv').classList.remove('open'); };
-  document.getElementById('warnOv').addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
-  document.getElementById('saveBtn').onclick=saveReport;
   document.getElementById('histBtn').onclick=function(){ document.getElementById('histOv').classList.add('open'); loadHistory(); };
   document.getElementById('histX').onclick=function(){ document.getElementById('histOv').classList.remove('open'); };
   document.getElementById('histOv').addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
-  document.getElementById('editBtn').onclick=function(){ if(RO){ toast('You are viewing a saved walk. Pick a period to log today.',true); return; } if(!PERIOD){ toast('Pick a class period first.',true); return; } loadSavedIntoPW(PERIOD, true); };
   document.getElementById('roExit').onclick=function(){ RO=null; var ap=autoPeriod(); if(ap&&SEATMAP[ap]) setPeriod(ap); else { PERIOD=PERIOD||null; buildPW(); render(); } };
 
   // boot: if we already hold the key (logged into the console), go straight in
