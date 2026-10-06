@@ -24,18 +24,24 @@
       --accent-green:   #3fa863;
       --accent-neutral: #5f8fbf;
     }
-    /* Dark-teal PV angular background (matches the catalog; overrides the portfolio cityscape). */
+    /* Teal gradient backdrop + ghosted white CS monogram (matches the catalog and the
+       calendar / camera-manager / photo-walk angular framework). */
     body::before {
-      background-image: url("/logos/CS_Logo_Glossy_Teal_v1.png");
-      background-size: min(74vw, 700px);
-      background-position: center 40%;
-      background-repeat: no-repeat;
       background-color: #060f0f;
+      background-image: linear-gradient(180deg, rgba(8, 8, 8, 0.97) 0%, rgba(0, 56, 56, 0.94) 50%, rgba(8, 8, 8, 0.97) 100%);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       filter: none;
     }
-    body::after { background: rgba(6, 14, 14, 0.84); }
+    body::after {
+      background: url("/logos/CS_Logo_Glossy_Teal_v1.png") no-repeat center 40%;
+      background-size: min(74vw, 700px);
+      filter: brightness(0) invert(1);
+      opacity: 0.07;
+    }
     @media (max-width: 900px) {
-      body::before { background-size: min(88vw, 460px); background-position: center 36%; }
+      body::after { background-size: min(88vw, 460px); background-position: center 36%; }
     }
     .site-header { display: none; }
 
@@ -80,7 +86,15 @@
       box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.72);
     }
     .catalog-sticky-inner { max-width: var(--max-width, 1200px); margin: 0 auto; padding: 0 32px; }
-    .catalog-titlebar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 16px 0 15px; }
+    /* Title block: spans the content width with a gradient that fades out to the right
+       (teal-rich left, revealing the teal backdrop on the right). Left teal accent, matching
+       the catalog and the cal-hero family. Title left; buttons + clock flow right over the fade. */
+    .catalog-titlebar {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      padding: 15px 26px 15px 20px; margin: 12px 0 4px;
+      background-image: linear-gradient(90deg, rgba(0, 66, 68, 0.96) 0%, rgba(3, 18, 20, 0.82) 44%, rgba(3, 18, 20, 0) 100%);
+      border-left: 7px solid #00b8b8;
+    }
     .catalog-titlebar .page-title {
       margin: 0 auto 0 0; text-align: left; flex: 0 1 auto;
       font-size: clamp(1.45rem, 2.9vw, 2.05rem); line-height: 1.0; letter-spacing: 0.005em;
