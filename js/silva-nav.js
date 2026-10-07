@@ -65,7 +65,8 @@
       { name: 'Motivational Poster', url: '/curriculum/shared/digarts1-motivational-poster-overview.html' },
       { name: 'Live Stream Graphic',  url: '/curriculum/shared/digarts1-live-stream-graphic-overview.html' },
       { name: 'Elements of Art',      url: '/curriculum/shared/digarts1-elements-of-art-overview.html' },
-      { name: 'Character Design: Form & Color', url: '/curriculum/shared/digarts1-character-form-color-overview.html' }
+      { name: 'Character Design: Form & Color', url: '/curriculum/shared/digarts1-character-form-color-overview.html' },
+      { name: 'Get to Know Illustrator', url: '/curriculum/shared/digarts1-get-to-know-illustrator-overview.html' }
     ]},
     { course: 'Photography 1A', modules: [
       { name: 'Self-Portrait',            url: '/curriculum/shared/photo1-self-portrait-overview.html' },
@@ -239,6 +240,8 @@
     ['/curriculum/shared/digarts1-character-form-color-overview.html',
      '/curriculum/shared/digarts1-character-form-color-step02-draw.html',
      '/curriculum/shared/digarts1-character-form-color-step03-reflection.html'],
+    ['/curriculum/shared/digarts1-get-to-know-illustrator-overview.html',
+     '/curriculum/shared/digarts1-get-to-know-illustrator-step02-practice.html'],
     ['/curriculum/photo1/photo1a-home.html',
      '/curriculum/photo1/photo1a-course-overview.html',
      '/curriculum/photo1/photo1a-syllabus.html'],
