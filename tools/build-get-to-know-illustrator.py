@@ -72,17 +72,26 @@ VOCAB_ES=[
 ]
 
 def adobe_button(es, url=ADOBE_URL):
+    # Solid PURPLE action button: same geometry as the orange download button (dl_link, 11px 22px /
+    # 11pt / 2px top accent), skinned to the purple Resources section it lives in. No arrow glyph
+    # (Chris 2026-10-07): a button already reads as clickable.
     label="Abrir el Tutorial de Adobe" if es else "Open the Adobe Tutorial"
-    return ('<div style="margin:16px 0 6px;">'
+    return ('<div style="margin:14px 0 4px;">'
       f'<a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;'
-      'background:#00b8b8;color:#04201f;padding:13px 28px;border-top:2px solid #80e0e0;font-size:12.5pt;'
-      f'letter-spacing:0.04em;"><strong>{label} &#8599;</strong></a></div>')
+      'background:#8b5cf6;color:#ffffff;padding:11px 22px;border-top:2px solid #c4b5fd;font-size:11pt;'
+      f'letter-spacing:0.04em;"><strong>{label}</strong></a></div>')
+
+def pnote(t):
+    # PURPLE note: a callout INSIDE a purple Resources card, matching the section color (cohesion).
+    return ('<div style="background:rgba(139,92,246,0.10);border:1px solid rgba(139,92,246,0.30);'
+      f'border-left:4px solid #8b5cf6;padding:11px 14px;margin:8px 0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
 
 def _tour_part(num, title, items):
+    # Numbered part inside a purple Resources scroller: purple badge + purple title + purple bullets.
     hd=('<div style="display:flex;align-items:center;gap:10px;margin:16px 0 8px;">'
-        f'<span style="flex:0 0 auto;width:26px;height:26px;background:#00b8b8;color:#04201f;font-size:12pt;line-height:26px;text-align:center;"><strong>{num}</strong></span>'
-        f'<span style="font-size:14pt;color:#80e0e0;"><strong>{title}</strong></span></div>')
-    return hd+bullets(items)
+        f'<span style="flex:0 0 auto;width:26px;height:26px;background:#8b5cf6;color:#140f24;font-size:12pt;line-height:26px;text-align:center;"><strong>{num}</strong></span>'
+        f'<span style="font-size:14pt;color:#c4b5fd;"><strong>{title}</strong></span></div>')
+    return hd+bullets(items, "#8b5cf6")
 
 def tour_notes(es):
     # The tutorial's written takeaways, rewritten simple + Mac-only, inside the LOCKED vertical
@@ -137,9 +146,9 @@ def tour_notes(es):
             ("In the Save As box:","name your file, pick where it goes, make sure Adobe Illustrator is chosen in the Format menu, then click Save."),
          ])
         )
-    hintline=f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
-    scroll=('<div class="silva-scroll" style="max-height:460px;overflow-y:auto;padding:14px 16px 20px;border:1px solid rgba(0,184,184,0.22);'
-      'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.16) 100%);">'
+    hintline=f'<div style="font-size:11pt;color:#c4b5fd;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
+    scroll=('<div class="silva-scroll" style="max-height:460px;overflow-y:auto;padding:14px 16px 20px;border:1px solid rgba(139,92,246,0.30);'
+      'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(139,92,246,0.16) 100%);">'
       f'{parts}</div>')
     return hintline+scroll
 
@@ -193,9 +202,9 @@ def sketch_notes(es):
             ("Arrange the type:","place it so it fits your art nicely."),
          ])
         )
-    hintline=f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
-    scroll=('<div class="silva-scroll" style="max-height:460px;overflow-y:auto;padding:14px 16px 20px;border:1px solid rgba(0,184,184,0.22);'
-      'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.16) 100%);">'
+    hintline=f'<div style="font-size:11pt;color:#c4b5fd;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
+    scroll=('<div class="silva-scroll" style="max-height:460px;overflow-y:auto;padding:14px 16px 20px;border:1px solid rgba(139,92,246,0.30);'
+      'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(139,92,246,0.16) 100%);">'
       f'{parts}</div>')
     return hintline+scroll
 
@@ -300,13 +309,15 @@ def overview():
 def step02():
     en=banner(f"Module {MODNUM} &bull; Step 02","Take the Tour &amp; Practice",
         "Follow the short Adobe tutorial, practice with your files, then turn in one screen capture of your workspace.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
-    en+=card("THE TOUR / WE DO IT TOGETHER","Follow the Adobe Tutorial",
-        para("Open Adobe Illustrator on your Mac. Then follow this short tutorial. It is made by Adobe and has four quick videos: the workspace, zooming and panning, making a new document, and saving your work.")
+    en+=card("YOUR TASK","Watch, Practice, Submit",
+        para("Open Adobe Illustrator on your Mac. In this step you follow Adobe&rsquo;s short guided tour, practice with the files you downloaded in Step 01, and turn in one screen capture of your workspace."))
+    en+=resources_card("Adobe Tutorial",
+        para("This guided tour is made by Adobe. It has four short videos: the workspace, zooming and panning, making a new document, and saving your work. Open it, watch each one, then do the same in your own copy of Illustrator.")
         + adobe_button(False)
-        + note("The tutorial opens on Adobe&rsquo;s own website in a new tab. Watch each short video, then do the same thing in your own copy of Illustrator. Keep this page open so you can come back to it."))
-    en+=card("QUICK NOTES FROM THE TOUR","What Each Part Teaches",
+        + pnote("The tutorial opens on Adobe&rsquo;s own website in a new tab. Keep this page open so you can come back to it."), False)
+    en+=resources_card("What the Tour Teaches",
         para("Here is what each part of the tour teaches, in short. Use it as a cheat sheet while you watch and while you practice. These steps are for a Mac.")
-        + tour_notes(False))
+        + tour_notes(False), False)
     en+=card("YOU PRACTICE / ON YOUR OWN","Practice With Your Files",
         (float_right(S2_FLOAT,"A Pioneer Valley student practicing in Adobe Illustrator on an iMac in the lab","Open each practice file and try the moves from the tour.") if HAVE_S2_FLOAT else "")
         + para("Now practice on your own with the three files you downloaded in Step 01. Open them from your Digital Arts project folder.")
@@ -323,13 +334,15 @@ def step02():
 
     es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 02","Haz el Recorrido y Practica",
         "Sigue el tutorial corto de Adobe, practica con tus archivos y luego entrega una captura de pantalla de tu espacio de trabajo.","#top","Back to English", HICON_DESIGN)
-    es+=card("EL RECORRIDO / LO HACEMOS JUNTOS","Sigue el Tutorial de Adobe",
-        para("Abre Adobe Illustrator en tu Mac. Luego sigue este tutorial corto. Est&aacute; hecho por Adobe y tiene cuatro videos r&aacute;pidos: el espacio de trabajo, el zoom, c&oacute;mo crear un documento nuevo y c&oacute;mo guardar tu trabajo.")
+    es+=card("TU TAREA","Mira, Practica, Entrega",
+        para("Abre Adobe Illustrator en tu Mac. En este paso sigues el recorrido guiado corto de Adobe, practicas con los archivos que descargaste en el Paso 01 y entregas una captura de pantalla de tu espacio de trabajo."))
+    es+=resources_card("Tutorial de Adobe",
+        para("Este recorrido guiado est&aacute; hecho por Adobe. Tiene cuatro videos cortos: el espacio de trabajo, el zoom, c&oacute;mo crear un documento nuevo y c&oacute;mo guardar tu trabajo. &Aacute;brelo, mira cada uno y luego haz lo mismo en tu propia copia de Illustrator.")
         + adobe_button(True)
-        + note("El tutorial se abre en el sitio web de Adobe en una pesta&ntilde;a nueva. Mira cada video corto y luego haz lo mismo en tu propia copia de Illustrator. Deja esta p&aacute;gina abierta para que puedas regresar."))
-    es+=card("NOTAS R&Aacute;PIDAS DEL RECORRIDO","Qu&eacute; Ense&ntilde;a Cada Parte",
+        + pnote("El tutorial se abre en el sitio web de Adobe en una pesta&ntilde;a nueva. Deja esta p&aacute;gina abierta para que puedas regresar."), True)
+    es+=resources_card("Qu&eacute; Ense&ntilde;a el Recorrido",
         para("Esto es lo que ense&ntilde;a cada parte del recorrido, en corto. &Uacute;salo como ayuda mientras miras y mientras practicas. Estos pasos son para una Mac.")
-        + tour_notes(True))
+        + tour_notes(True), True)
     es+=card("TU PRACTICAS / POR TU CUENTA","Practica Con Tus Archivos",
         (float_right(S2_FLOAT,"Un estudiante de Pioneer Valley practicando en Adobe Illustrator en una iMac en el laboratorio","Abre cada archivo de pr&aacute;ctica y prueba los pasos del recorrido.") if HAVE_S2_FLOAT else "")
         + para("Ahora practica por tu cuenta con los tres archivos que descargaste en el Paso 01. &Aacute;brelos desde la carpeta de tu proyecto de Arte Digital.")
@@ -356,13 +369,13 @@ def step03():
         para("Now that you know your way around Illustrator, you get to try real vector art. You will take a simple sketch, bring it into Illustrator, and trace over it to make clean lines that stay sharp at any size.")
         + para("This is your first attempt, so keep your sketch simple: a shape, a letter, or a small drawing. The goal is to practice tracing, not to make a perfect piece.")
         + note("Vector art is made from lines and shapes, so it never gets blurry when you make it bigger. That is why logos and icons are built this way."))
-    en+=card("FOLLOW THE ADOBE TUTORIAL","Watch: Turn a Sketch Into Vector Art",
+    en+=resources_card("Adobe Tutorial",
         para("Open Adobe Illustrator, then follow this short Adobe tutorial. It is about five minutes and shows you how to bring in a sketch and trace it with the drawing tools.")
         + adobe_button(False, ADOBE_URL2)
-        + note("The tutorial opens on Adobe&rsquo;s own website in a new tab. It also has its own practice sketch you can download there if you want one. Watch it, then try the same steps on your own sketch."))
-    en+=card("QUICK NOTES FROM THE TUTORIAL","How to Trace Your Sketch",
+        + pnote("The tutorial opens on Adobe&rsquo;s own website in a new tab. It also has its own practice sketch you can download there if you want one. Watch it, then try the same steps on your own sketch."), False)
+    en+=resources_card("How to Trace Your Sketch",
         para("Here are the steps in short. Use them as a cheat sheet while you work. These steps are for a Mac.")
-        + sketch_notes(False))
+        + sketch_notes(False), False)
     en+=card("YOU PRACTICE / ON YOUR OWN","Make Your Vector Art",
         (float_right(S3_FLOAT,"A Pioneer Valley student tracing a sketch into vector art in Adobe Illustrator on an iMac in the lab","Place your sketch, lock it, and trace on a new layer.") if HAVE_S3_FLOAT else "")
         + para("Pick a simple sketch to trace. You can draw your own on paper and photograph it with your school iPad, or download the practice sketch from the Adobe tutorial.")
@@ -384,13 +397,13 @@ def step03():
         para("Ahora que ya sabes moverte en Illustrator, vas a probar arte vectorial de verdad. Vas a tomar un boceto simple, traerlo a Illustrator y calcarlo encima para hacer l&iacute;neas limpias que se mantienen n&iacute;tidas en cualquier tama&ntilde;o.")
         + para("Es tu primer intento, as&iacute; que mant&eacute;n tu boceto simple: una forma, una letra o un dibujo peque&ntilde;o. La meta es practicar el calcado, no hacer una obra perfecta.")
         + note("El arte vectorial est&aacute; hecho de l&iacute;neas y formas, as&iacute; que nunca se ve borroso al agrandarlo. Por eso los logotipos y los &iacute;conos se hacen as&iacute;."))
-    es+=card("SIGUE EL TUTORIAL DE ADOBE","Mira: Convierte un Boceto en Arte Vectorial",
+    es+=resources_card("Tutorial de Adobe",
         para("Abre Adobe Illustrator, luego sigue este tutorial corto de Adobe. Dura unos cinco minutos y te muestra c&oacute;mo traer un boceto y calcarlo con las herramientas de dibujo.")
         + adobe_button(True, ADOBE_URL2)
-        + note("El tutorial se abre en el sitio web de Adobe en una pesta&ntilde;a nueva. Tambi&eacute;n tiene su propio boceto de pr&aacute;ctica que puedes descargar ah&iacute; si quieres uno. M&iacute;ralo, luego prueba los mismos pasos en tu propio boceto."))
-    es+=card("NOTAS R&Aacute;PIDAS DEL TUTORIAL","C&oacute;mo Calcar Tu Boceto",
+        + pnote("El tutorial se abre en el sitio web de Adobe en una pesta&ntilde;a nueva. Tambi&eacute;n tiene su propio boceto de pr&aacute;ctica que puedes descargar ah&iacute; si quieres uno. M&iacute;ralo, luego prueba los mismos pasos en tu propio boceto."), True)
+    es+=resources_card("C&oacute;mo Calcar Tu Boceto",
         para("Estos son los pasos en corto. &Uacute;salos como ayuda mientras trabajas. Estos pasos son para una Mac.")
-        + sketch_notes(True))
+        + sketch_notes(True), True)
     es+=card("T&Uacute; PRACTICAS / POR TU CUENTA","Haz Tu Arte Vectorial",
         (float_right(S3_FLOAT,"Un estudiante de Pioneer Valley calcando un boceto a arte vectorial en Adobe Illustrator en una iMac en el laboratorio","Coloca tu boceto, bloqu&eacute;alo y calca en una capa nueva.") if HAVE_S3_FLOAT else "")
         + para("Elige un boceto simple para calcar. Puedes dibujar el tuyo en papel y fotografiarlo con tu iPad escolar, o descargar el boceto de pr&aacute;ctica del tutorial de Adobe.")

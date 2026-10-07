@@ -316,11 +316,13 @@ def folder_note(es, area):
       'As each file finishes downloading, move it out of your Downloads folder into '
       f'OneDrive &rarr; {area} &rarr; that project folder so all your files stay together.</div>')
 
-def bullets(items):
+def bullets(items, accent="#00b8b8"):
+    # accent = the bullet-dot color, so a list inside a purple/orange section stays cohesive with it
+    # (defaults to teal, so every existing call is unchanged).
     r=""
     for b,rest in items:
         inner=(f'<strong>{b}</strong> {rest}' if b else rest)
-        r+=('<div style="margin-bottom:8px;line-height:1.55;"><span style="color:#00b8b8;">&bull;</span> '
+        r+=(f'<div style="margin-bottom:8px;line-height:1.55;"><span style="color:{accent};">&bull;</span> '
             f'<span style="font-size:13.5pt;color:rgba(255,255,255,0.88);">{inner}</span></div>')
     return f'<div style="margin-bottom:6px;">{r}</div>'
 
