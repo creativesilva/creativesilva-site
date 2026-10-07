@@ -29,7 +29,8 @@ def ent(s):
 # when the art is ready, then re-run this builder.
 HAVE_HEADER=True       # overview hero (21:9), assets/images/<course>/spell-your-name/header-v1.jpg
 HAVE_S2_FLOAT=False     # Step 02 capture float
-HAVE_S3_FLOAT=False     # Step 03 cull/edit float
+HAVE_S3_FLOAT=False     # Step 03 CULL card float (not supplied yet)
+HAVE_S3_EDIT_FLOAT=True # Step 03 EDIT card float (Lightroom editing), edit-float-v1.jpg
 HAVE_S4_FLOAT=False     # Step 04 reflection float
 
 # RAW capture panel with a daylight starting point; the lead + note make clear that any settings
@@ -105,6 +106,7 @@ def build(course):
     HEADER=f"{IMGDIR}/header-v1.jpg"
     S2_FLOAT=f"{IMGDIR}/capture-float-v1.jpg"
     S3_FLOAT=f"{IMGDIR}/cull-float-v1.jpg"
+    S3_EDIT_FLOAT=f"{IMGDIR}/edit-float-v1.jpg"
     S4_FLOAT=f"{IMGDIR}/reflection-float-v1.jpg"
     REFLECT_EN=f"{SITE}/assets/course-documents/Spell-Your-Name{PHOTO2TAG}-Reflection-EN.docx"
     REFLECT_ES=f"{SITE}/assets/course-documents/Spell-Your-Name{PHOTO2TAG}-Reflection-ES.docx"
@@ -280,7 +282,8 @@ def build(course):
                 ("Put them in order:","keep your selected letters in the order they spell your name."),
             ]))
         en+=card("EDIT / MAKE THEM CLEAN","Edit Your Selected Letters",
-            para("Edit each selected letter so it looks clean and natural. You captured in RAW, so you have room to adjust.")
+            (float_right(S3_EDIT_FLOAT,"A Pioneer Valley student editing her letter photos in Adobe Lightroom Classic on an iMac in the lab, a tree forming a letter on the screen","Edit each letter clean in Lightroom so it reads sharp.") if HAVE_S3_EDIT_FLOAT else "")
+            + para("Edit each selected letter so it looks clean and natural. You captured in RAW, so you have room to adjust.")
             + bullets([
                 ("Crop and straighten:","crop tight to the letter and straighten it so it reads clearly."),
                 ("Exposure and white balance:","fix the exposure and white balance so the letter looks right."),
@@ -309,7 +312,8 @@ def build(course):
                 ("Ponlas en orden:","mant&eacute;n tus letras seleccionadas en el orden en que escriben tu nombre."),
             ]))
         es+=card("EDITA / D&Eacute;JALAS LIMPIAS","Edita Tus Letras Seleccionadas",
-            para("Edita cada letra seleccionada para que se vea limpia y natural. Capturaste en RAW, as&iacute; que tienes margen para ajustar.")
+            (float_right(S3_EDIT_FLOAT,"Una estudiante de Pioneer Valley editando sus fotos de letras en Adobe Lightroom Classic en una iMac en el laboratorio, un &aacute;rbol formando una letra en la pantalla","Edita cada letra limpia en Lightroom para que se lea n&iacute;tida.") if HAVE_S3_EDIT_FLOAT else "")
+            + para("Edita cada letra seleccionada para que se vea limpia y natural. Capturaste en RAW, as&iacute; que tienes margen para ajustar.")
             + bullets([
                 ("Recorta y endereza:","recorta pegado a la letra y ender&eacute;zala para que se lea con claridad."),
                 ("Exposici&oacute;n y balance de blancos:","corrige la exposici&oacute;n y el balance de blancos para que la letra se vea bien."),
