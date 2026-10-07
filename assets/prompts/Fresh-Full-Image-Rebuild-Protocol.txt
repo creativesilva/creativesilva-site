@@ -1,65 +1,105 @@
 FRESH FULL-IMAGE REBUILD PROTOCOL
 
-Generate this as a completely new image from scratch.
+========================================
+STEP 0: CLEAR THE ARTBOARD FIRST
+========================================
+Reset the image-generation state before you build anything.
+Start from a completely blank artboard.
+Ignore every previous generated image, composition, camera angle, crop, subject, pose, environment, layout, lighting solution, and object placement unless I explicitly reintroduce it below.
+No carryover. No inheritance. No continuity. Blank artboard.
 
-This request is for a full scene reconstruction, not a light edit, refinement, variation, patch, correction pass, or partial modification of a previous image.
+========================================
+MODE
+========================================
+FULL FRESH GENERATION FROM SCRATCH. NEW COMPOSITION.
+Generate ONE completely new image. This is a new SCENE SOLUTION, not merely new pixels.
+Do not edit, reuse, patch, refine, extend, reconstruct, preserve, imitate, or initialize from any previous generated image as the working base.
 
-Do not reuse the previous image as a base.
-Do not preserve its composition, camera angle, crop, perspective, pose, staging, lighting setup, background arrangement, object placement, anatomy solution, or spatial relationships unless I explicitly instruct you to keep one of those elements.
+========================================
+PRIOR GENERATIONS ARE REJECTED AS SCENE AUTHORITY
+========================================
+Treat every previous generated image as REJECTED FOR COMPOSITIONAL CONTROL unless the current request explicitly names one as an edit base.
+Previous generations control NOTHING about:
+- camera position, camera height, camera yaw, camera pitch, lens behavior
+- crop, framing, aspect ratio
+- subject placement, body pose, gesture
+- furniture placement, object placement
+- foreground, midground, and background relationships
+- architecture geometry, room layout
+- lighting setup, shadow placement, reflections
+- depth, occlusion, material solution, scene staging, anatomy solution
+A previous image may be consulted ONLY for an attribute explicitly assigned to it, such as identity, wardrobe, equipment design, or environment style.
 
-If reference images are attached, treat them only as visual reference material for things such as:
-- subject identity
-- clothing
-- props
-- furniture
-- architectural design
-- materials
-- color language
-- environment aesthetic
-- product details
-- overall visual canon
+========================================
+REFERENCE FIREWALL
+========================================
+Every attached reference is used ONLY for its assigned role:
+- character / identity reference: face, hair, complexion, recurring visible identity only
+- body reference: body architecture, proportions, silhouette only
+- wardrobe reference: garment design, fit, construction, materials, footwear, accessories only
+- pose reference: pose and gesture only
+- environment reference: architecture, furniture, spatial design, materials only
+- camera / composition reference: camera position, crop, framing, staging only
+- lighting reference: direction, exposure, contrast, color temperature, atmosphere only
+- equipment reference: product shape, controls, materials, branding only
+- brand reference: approved logo, mascot, colors, brand identity only
+Never transfer unrelated attributes between references.
+A rejected prior image attached only to point at a failed detail does NOT become a composition, camera, crop, pose, lighting, or geometry reference.
 
-Do not assume the reference image's viewpoint or composition must be preserved.
+========================================
+REBUILD FROM ZERO
+========================================
+Recalculate and reconstruct every one of these independently from the written instructions:
+composition, camera location, camera perspective, lens behavior, crop, subject placement, body pose, anatomy, object geometry, environment geometry, furniture layout, contact points, lighting, shadows, reflections, depth, occlusion, materials, textures, and foreground / midground / background relationships.
+All visible elements must be generated as part of the new scene, never inherited from a previous output.
 
-Rebuild the requested image from the ground up using the current written instructions as the primary source of truth.
+========================================
+NEW COMPOSITION ENFORCEMENT
+========================================
+The new image must have a visibly independent scene solution.
+Do not fall back to the previous arrangement just because it already looks plausible.
+Introduce at least one new compositional anchor: move the camera left or right, raise or lower it, change camera-to-subject distance, change subject placement in frame, change the furniture or monitor viewing angle, change foreground overlap, change background reveal, or change the negative-space distribution.
+A result that reproduces the previous composition with only minor differences is a FAILED output.
 
-Recalculate and reconstruct:
-- composition
-- camera position
-- camera perspective
-- subject placement
-- body pose and anatomy
-- object geometry
-- environment geometry
-- lighting
-- shadows
-- reflections
-- depth
-- occlusion
-- materials
-- textures
-- foreground and background relationships
+========================================
+THE WRITTEN PROMPT OVERRIDES PRIOR IMAGES
+========================================
+The current written prompt is the primary source of truth.
+If it changes the camera angle, crop, pose, staging, environment layout, wardrobe, lighting, subject orientation, object placement, framing, or geometry, fully honor the new instruction even if it differs radically from any earlier image.
+Do not preserve an old scene solution out of convenience.
 
-All visible elements should be regenerated as part of the new scene rather than inherited from the previous result.
+========================================
+QUALITY PRIORITY (in this order)
+========================================
+1. identity and active canon
+2. body architecture and anatomy
+3. environment geometry and perspective
+4. wardrobe and object construction
+5. pose and physical contact
+6. camera composition
+7. lighting and materials
+8. branding and visible text
+9. fine detail
+QUALITY OVER SPEED. STRUCTURE OVER DETAIL.
+Require: believable adult anatomy, coherent perspective, physically buildable geometry, straight architectural lines where appropriate, correct contact and occlusion, realistic materials, physically motivated light, accurate shadows, plausible reflections, and believable depth.
 
-Prioritize:
-- highest possible image quality
-- realistic geometry
-- physically believable structure
-- accurate proportions
-- clean perspective
-- coherent lighting
-- realistic materials
-- correct object contact
-- correct depth and occlusion
-- natural photographic realism
-- strong adherence to the current prompt
+========================================
+DRIFT PREVENTION
+========================================
+Do not let any old generation silently rewrite canon. If a prior image contains an error, that error must NOT carry forward.
+Prohibited drift includes: keeping a wrong chair or furniture design, retaining a warped desk or wall line, copying an incorrect camera-strap path, inheriting an old body-proportion error, reusing an inaccurate monitor or screen angle, preserving a wrong wall opening, carrying over incorrect footwear, retaining accidental text, or cloning a previous lighting setup.
+Correct the controlling attribute from the proper canon source and rebuild it cleanly.
 
-Do not take shortcuts by keeping old scene structure simply because it already exists.
+========================================
+VISIBLE TEXT RULE
+========================================
+Default visible wording is NONE unless text is explicitly requested.
+Do not invent signage, labels, posters, slogans, decorative wall copy, or filler typography.
+When wording is requested, render only the exact requested wording.
 
-If the new prompt changes the camera angle, composition, character position, environment layout, or framing, fully honor those changes even if they differ significantly from the previous image.
-
-Treat prior generations as reference only unless I specifically request an edit.
-
-FINAL INSTRUCTION:
-Create a fresh, newly constructed image from scratch based on the current prompt. Do not perform a partial edit or reuse the previous image's scene solution.
+========================================
+FRESH-BUILD LOCK (final)
+========================================
+Build every visible element again from the ground up, using only the current written prompt plus the references explicitly assigned above.
+A successful output demonstrates an independently reconstructed composition with coherent geometry, realistic spatial relationships, and fresh scene staging.
+Reproducing the previous composition with minor changes is a failure. Deliver a new scene solution, not a disguised variation of the old one.
