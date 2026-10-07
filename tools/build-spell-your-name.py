@@ -27,7 +27,7 @@ def ent(s):
 
 # Every image slot starts OFF. Flip to True (and drop the file in assets/images/<course>/spell-your-name/)
 # when the art is ready, then re-run this builder.
-HAVE_HEADER=False      # overview hero (16:9)
+HAVE_HEADER=True       # overview hero (21:9), assets/images/<course>/spell-your-name/header-v1.jpg
 HAVE_S2_FLOAT=False     # Step 02 capture float
 HAVE_S3_FLOAT=False     # Step 03 cull/edit float
 HAVE_S4_FLOAT=False     # Step 04 reflection float
@@ -167,7 +167,7 @@ def build(course):
             para("On this photo walk you hunt for letters around campus to spell your name in photographs. Find one letter at a time, in signs, shadows, lines, reflections, textures, and shapes.")
             + para("You need at least <strong>4 letters</strong>. Use your first name, your last name, or a nickname, whatever fits you, as long as it is at least 4 letters long. A short 3-letter nickname is not enough, so pick a name with 4 or more.")
             + para(concept_rule_en)
-            + (framed(HEADER,"Student photographs of found letters arranged to spell a name") if HAVE_HEADER else ""))
+            + (framed(HEADER,"A Pioneer Valley student on a photo walk at sunset, taking photos with a Canon camera near the campus panther sculpture") if HAVE_HEADER else ""))
         en+=standards_box(False, STANDARDS)
         en+=downloads_block(False)
         en+=card("THE CONCEPT / WHAT TO LOOK FOR","Letters Are Everywhere",
@@ -191,7 +191,7 @@ def build(course):
             para("En esta caminata fotogr&aacute;fica buscas letras por la escuela para escribir tu nombre en fotograf&iacute;as. Encuentra una letra a la vez, en letreros, sombras, l&iacute;neas, reflejos, texturas y formas.")
             + para("Necesitas al menos <strong>4 letras</strong>. Usa tu primer nombre, tu apellido o un apodo, el que te quede, siempre que tenga al menos 4 letras. Un apodo corto de 3 letras no alcanza, as&iacute; que elige un nombre de 4 o m&aacute;s.")
             + para(concept_rule_es)
-            + (framed(HEADER,"Fotos de letras encontradas por estudiantes acomodadas para escribir un nombre") if HAVE_HEADER else ""))
+            + (framed(HEADER,"Un estudiante de Pioneer Valley en una caminata fotogr&aacute;fica al atardecer, tomando fotos con una c&aacute;mara Canon cerca de la escultura de la pantera de la escuela") if HAVE_HEADER else ""))
         es+=standards_box(True, STANDARDS)
         es+=downloads_block(True)
         es+=card("EL CONCEPTO / QU&Eacute; BUSCAR","Las Letras Est&aacute;n en Todas Partes",
