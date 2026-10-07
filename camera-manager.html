@@ -718,6 +718,22 @@
   .stu-hrow .d{color:var(--muted);white-space:nowrap;}
   .stu-hrow .st{margin-left:auto;font-size:.56rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:1px 7px;white-space:nowrap;}
   .stu-hrow .st.reserved{color:var(--gold);} .stu-hrow .st.out{color:var(--orange);} .stu-hrow .st.returned{color:var(--grayed);}
+
+  /* ===== Class Leads (fall roles): a pop-out card of each period's student leads ===== */
+  #leadsmodal .mpanel{max-width:600px;}
+  .leads-note{color:var(--muted);font-size:.78rem;line-height:1.5;margin:-2px 0 16px;}
+  .leads-per{margin-bottom:15px;}
+  .leads-per-h{font-family:var(--font);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.66rem;color:var(--teal-lt);border-bottom:1px solid var(--line);padding-bottom:5px;margin-bottom:8px;}
+  .leads-row{display:flex;align-items:center;gap:11px;padding:5px 0;font-size:.86rem;color:var(--text);}
+  .leads-badge{flex:0 0 auto;font-family:var(--font);font-weight:700;font-size:.52rem;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border:1px solid;white-space:nowrap;width:104px;text-align:center;box-sizing:border-box;}
+  .leads-badge.weekly{color:var(--teal-lt);border-color:var(--teal);background:rgba(0,184,184,.10);}
+  .leads-badge.pw{color:#ffb28a;border-color:var(--orange);background:rgba(255,107,26,.10);}
+  .leads-badge.tam{color:#c9b8ff;border-color:#8b5cf6;background:rgba(139,92,246,.12);}
+  .leads-spring{margin-top:4px;border-top:1px solid var(--line-strong,var(--line));padding-top:15px;}
+  .leads-spring .leads-per-h{color:var(--gold);}
+  .leads-srow{display:flex;align-items:center;gap:10px;padding:4px 0;font-size:.82rem;color:var(--muted);}
+  .leads-srow .sp{font-size:.56rem;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);white-space:nowrap;}
+  .stu-leadbadge{display:inline-block;margin-top:9px;font-family:var(--font);font-weight:700;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--teal);color:var(--teal-lt);background:rgba(0,184,184,.10);}
 </style>
 </head>
 <body>
@@ -774,6 +790,7 @@
     <button class="silva-uni-cattrigger" id="reportsBtn" title="Missing kit items to order (opens a printable report)">Missing Items</button>
     <a class="silva-uni-cattrigger" id="studentCalBtn" href="/calendar.html?from=console" target="_blank" rel="noopener">Student Calendar</a>
     <a class="silva-uni-cattrigger" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
+    <button class="silva-uni-cattrigger" id="leadsBtn" title="Your class leads by period: Equipment Managers, Photo Walk EQs, and Team Attendance Managers">Class Leads</button>
     <button class="silva-uni-cattrigger" id="refreshBtn" title="Reload the latest data now">&#8635; Refresh</button>
   </div>
 
@@ -882,6 +899,14 @@
   <div class="mpanel">
     <div class="mhead"><span class="mtitle" id="stuTitle">Student</span><button class="mx" id="stux" aria-label="Close">&times;</button></div>
     <div class="mbody" id="stuBody"></div>
+  </div>
+</div>
+
+<!-- Class Leads: each period's student leadership roles (fall only) -->
+<div class="modal" id="leadsmodal">
+  <div class="mpanel">
+    <div class="mhead"><span class="mtitle">Class Leads &middot; Fall 2026</span><button class="mx" id="leadsx" aria-label="Close">&times;</button></div>
+    <div class="mbody" id="leadsBody"></div>
   </div>
 </div>
 
@@ -1310,7 +1335,7 @@
   function stuRecs(sid){ return (DATA.checkouts||[]).filter(function(c){ return String(c.student_id||'')===String(sid); }); }
   function stuOrders(sid){ return stuRecs(sid).filter(function(c){ return !c.group; }).sort(function(a,b){ return (resvDate(a)<resvDate(b))?1:-1; }); }
   function stuMissingCount(sid){ return stuRecs(sid).filter(function(c){ return c.pending || (c.note && /missing|not returned|damage|lost/i.test(c.note)); }).length; }
-  function openStudentProfile(sid){ if(!sid) return; closeResv(); closeCamDetail(); closeReceipt(); stuId=sid; renderStudentProfile(); document.getElementById('stumodal').classList.add('open'); }
+  function openStudentProfile(sid){ if(!sid) return; closeResv(); closeCamDetail(); closeReceipt(); if(typeof closeLeads==='function') closeLeads(); stuId=sid; renderStudentProfile(); document.getElementById('stumodal').classList.add('open'); }
   function closeStudentProfile(){ var m=document.getElementById('stumodal'); if(m) m.classList.remove('open'); stuId=null; }
   function renderStudentProfile(){
     var sid=stuId; var orders=stuOrders(sid);
@@ -1324,6 +1349,7 @@
     function cc(v){ return v?esc(v):'<span class="miss">NOT ON FILE</span>'; }
     var sub=['ID '+esc(sid)]; if(ref.period) sub.push('Per '+esc(ref.period)); if(ref.teacher) sub.push(esc(ref.teacher)); if(ref.course) sub.push(esc(ref.course));
     var h='<div class="stu-sub">'+sub.join(' &middot; ')+'</div>';
+    var _lb=leadsById()[sid]; if(_lb){ h+='<div class="stu-leadbadge">Class Lead &middot; '+esc(_lb.role)+' (Per '+esc(_lb.period)+')</div>'; }
     h+='<div class="stu-sec"><div class="stu-sec-h">Contact on file</div><div class="stu-kv">'+
        '<span class="k">Student cell</span><span>'+cc(ref.student_cell)+'</span>'+
        '<span class="k">Parent</span><span>'+cc(ref.parent_guardian)+'</span>'+
@@ -1347,6 +1373,33 @@
   // One delegated handler: a student name anywhere on the console opens that student's profile.
   document.addEventListener('click', function(e){ var el=e.target.closest('[data-stu]'); if(el){ e.preventDefault(); e.stopPropagation(); openStudentProfile(el.getAttribute('data-stu')); } });
   (function(){ var x=document.getElementById('stux'); if(x) x.onclick=closeStudentProfile; var m=document.getElementById('stumodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeStudentProfile(); }); })();
+
+  // ===== Class Leads (fall-semester student roles). The DATA comes from the AUTHED feed
+  // (DATA.class_leads), NEVER hardcoded here: student names + IDs are FERPA PII and this page is
+  // public. The server resolves names from the gitignored roster and emits
+  //   class_leads = { periods:[{p, leads:[{r, c, id, n}]}], spring:[{id, n, p, why}] }.
+  function leadsData(){ return (typeof DATA!=='undefined' && DATA && DATA.class_leads) || {periods:[],spring:[]}; }
+  function leadsById(){ var m={}; (leadsData().periods||[]).forEach(function(pd){ (pd.leads||[]).forEach(function(L){ m[L.id]={role:L.r,period:pd.p}; }); }); return m; }
+  function leadLink(id,n){ return '<button type="button" class="stulink" data-stu="'+esc(id)+'">'+esc(n)+'</button>'; }
+  function openLeads(){ renderLeadsModal(); document.getElementById('leadsmodal').classList.add('open'); }
+  function closeLeads(){ var m=document.getElementById('leadsmodal'); if(m) m.classList.remove('open'); }
+  function renderLeadsModal(){
+    var LD=leadsData(), per=LD.periods||[], spr=LD.spring||[];
+    if(!per.length && !spr.length){ document.getElementById('leadsBody').innerHTML='<div class="leads-note">No class leads are set up yet.</div>'; return; }
+    var h='<div class="leads-note">Fall-semester roles. These reset for spring; the Spring Consideration list below (4th-position or interested students) is first in line then. Tap a name to open that student&rsquo;s profile.</div>';
+    per.forEach(function(pd){
+      h+='<div class="leads-per"><div class="leads-per-h">Period '+esc(pd.p)+'</div>';
+      (pd.leads||[]).forEach(function(L){ h+='<div class="leads-row"><span class="leads-badge '+esc(L.c||'')+'">'+esc(L.r)+'</span>'+leadLink(L.id,L.n)+'</div>'; });
+      h+='</div>';
+    });
+    if(spr.length){
+      h+='<div class="leads-spring"><div class="leads-per-h">Spring Consideration</div>';
+      spr.forEach(function(S){ h+='<div class="leads-srow">'+leadLink(S.id,S.n)+'<span class="sp">Per '+esc(S.p)+' &middot; '+esc(S.why||'')+'</span></div>'; });
+      h+='</div>';
+    }
+    document.getElementById('leadsBody').innerHTML=h;
+  }
+  (function(){ var b=document.getElementById('leadsBtn'); if(b) b.onclick=openLeads; var x=document.getElementById('leadsx'); if(x) x.onclick=closeLeads; var m=document.getElementById('leadsmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeLeads(); }); })();
   function resvCheckOutAll(parent){   // mark every still-reserved item picked up at once
     var res=resvItems(parent).filter(function(x){return statusOf(x)==='reserved';});
     Promise.all(res.map(function(x){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:x.id,status:'out'})}); }))
