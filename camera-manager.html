@@ -37,11 +37,9 @@
   *{box-sizing:border-box;border-radius:0 !important;}
   html,body{margin:0;padding:0;}
   body{background-color:#060f0f;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;}
-  /* Cohesive with the curriculum CONTENT pages + the student calendar: a dark->teal->dark backdrop glow
-     with the GHOSTED CS logo watermark kept on top (Chris wants the logo in the bg on the console). */
+  /* Cohesive with the curriculum CONTENT pages + the student calendar: a dark->teal->dark backdrop glow.
+     (CS logo watermark removed per Chris 2026-10-06.) */
   body::before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%);}
-  body::after{content:"";position:fixed;inset:0;z-index:-1;background:url("https://www.creativesilva.com/logos/CS_Logo_Glossy_Teal_v1.png") no-repeat center 40%;background-size:min(74vw,700px);filter:brightness(0) invert(1);opacity:.07;}
-  @media (max-width:900px){ body::after{background-size:min(88vw,460px);background-position:center 36%;} }
 
   .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;filter:brightness(0) invert(1);}
 
@@ -677,6 +675,31 @@
     .cal-hero img{ width:46px !important; }
     .cal-hero-clock{ width:120px !important; height:42px !important; }
   }
+
+  /* ===== Checkout receipt: plain Costco-style printable slip for one reservation ===== */
+  #rcptmodal{ z-index:140; }
+  #rcptmodal .rcpt-shell{ background:transparent; border:0; box-shadow:none; max-width:420px; width:100%; display:flex; flex-direction:column; align-items:center; gap:12px; overflow:visible; max-height:calc(100vh - 40px); }
+  .rcpt-actions{ display:flex; gap:10px; justify-content:center; flex:0 0 auto; }
+  .rcpt-paper{ background:#fdfdf6; color:#141414; width:360px; max-width:92vw; padding:24px 26px 28px; font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace; font-size:12.5px; line-height:1.5; box-shadow:0 18px 50px rgba(0,0,0,.6); overflow-y:auto; }
+  .rcpt-paper h2{ text-align:center; font-family:inherit; font-size:13px; font-weight:700; letter-spacing:.05em; margin:0; text-transform:uppercase; color:#111; }
+  .rcpt-paper .r-sub{ text-align:center; font-size:11px; color:#555; margin:2px 0 8px; letter-spacing:.03em; }
+  .rcpt-paper .r-rule{ border:0; border-top:1px dashed #9a9a90; margin:9px 0; }
+  .rcpt-paper .r-kv{ display:flex; justify-content:space-between; gap:12px; }
+  .rcpt-paper .r-kv .k{ color:#666; }
+  .rcpt-paper .r-strong{ font-weight:700; letter-spacing:.04em; }
+  .rcpt-paper .r-sec{ font-weight:700; letter-spacing:.09em; font-size:10.5px; color:#333; margin:1px 0 4px; }
+  .rcpt-paper .r-item{ display:flex; justify-content:space-between; gap:10px; }
+  .rcpt-paper .r-item .q{ color:#666; }
+  .rcpt-paper .r-miss{ color:#a8300a; }
+  .rcpt-paper .r-foot{ text-align:center; font-size:10px; color:#666; margin-top:11px; line-height:1.45; }
+  @media print {
+    html,body{ background:#fff !important; }
+    body > *:not(#rcptmodal){ display:none !important; }
+    #rcptmodal{ position:static !important; display:block !important; background:none !important; inset:auto !important; padding:0 !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
+    #rcptmodal .rcpt-shell{ margin:0; max-width:none; display:block; }
+    .rcpt-actions{ display:none !important; }
+    .rcpt-paper{ box-shadow:none !important; width:auto; max-width:none; margin:0; padding:0; overflow:visible; }
+  }
 </style>
 </head>
 <body>
@@ -825,6 +848,14 @@
   <div class="mpanel">
     <div class="mhead"><span class="mtitle" id="resvTitle">Reservation</span><button class="mx" id="resvx" aria-label="Close">&times;</button></div>
     <div class="mbody" id="resvBody"></div>
+  </div>
+</div>
+
+<!-- Checkout receipt: plain Costco-style printable slip for one reservation (also the future student email body) -->
+<div class="modal" id="rcptmodal">
+  <div class="rcpt-shell">
+    <div class="rcpt-actions"><button class="btn sm" id="rcptPrint">Print</button><button class="btn sm ghost" id="rcptClose">Close</button></div>
+    <div class="rcpt-paper" id="rcptPaper"></div>
   </div>
 </div>
 
@@ -1193,6 +1224,7 @@
       if(anyReserved && multi) foot+='<button type="button" class="go" id="resvOutAll">Check out everything</button>';
       if(anyOut && multi) foot+='<button type="button" class="go" id="resvAll">Check in everything</button>';
     }
+    foot+='<button type="button" class="go resv-see" id="resvReceipt">Receipt</button>';
     foot+='<button type="button" class="go resv-see" id="resvSee">See reservation</button></div>';
     document.getElementById('resvBody').innerHTML=head+prog+'<div class="resv-items">'+rows+'</div>'+foot;
     var b=document.getElementById('resvBody');
@@ -1205,7 +1237,44 @@
     var all=document.getElementById('resvAll'); if(all) all.onclick=function(){ resvCheckInAll(parent); };
     var outAll=document.getElementById('resvOutAll'); if(outAll) outAll.onclick=function(){ resvCheckOutAll(parent); };
     var see=document.getElementById('resvSee'); if(see) see.onclick=function(){ var pid=parent.id; closeResv(); openEditCheckout(pid); };
+    var rcpt=document.getElementById('resvReceipt'); if(rcpt) rcpt.onclick=function(){ openReceipt(parent.id); };
   }
+
+  // ===== Checkout receipt (one reservation order): plain printable slip, also the future student email body =====
+  function openReceipt(id){ var p=findRec(id); if(!p) return; renderReceipt(p); document.getElementById('rcptmodal').classList.add('open'); }
+  function closeReceipt(){ var m=document.getElementById('rcptmodal'); if(m) m.classList.remove('open'); }
+  function rcptItemLabel(it){
+    if(it.kind!=='equipment') return { name:String(it.camera||'').toUpperCase(), type:'Camera kit' };
+    var u=gearUnit(it.item); return { name:String(u?u.label:it.item).toUpperCase(), type:(u&&gearTypes()[u.type]&&gearTypes()[u.type].label)||'Equipment' };
+  }
+  function rcptMissing(it){ return it.kind!=='equipment' ? kitMissing(it.camera).slice() : gearKitMissing(it.item).slice(); }
+  function renderReceipt(p){
+    var items=resvItems(p), h='';
+    h+='<h2>Pioneer Valley Photography</h2><div class="r-sub">Equipment Checkout Receipt</div>';
+    h+='<hr class="r-rule">';
+    h+='<div class="r-kv"><span class="k">Student</span><span>'+esc(nameOf(p))+'</span></div>';
+    if(p.student_id) h+='<div class="r-kv"><span class="k">Student #</span><span>'+esc(p.student_id)+'</span></div>';
+    h+='<div class="r-kv"><span class="k">Class</span><span>'+(p.period?('Per '+esc(p.period)+' &middot; '):'')+esc(p.course||'')+'</span></div>';
+    h+='<div class="r-kv"><span class="k">Teacher</span><span>Mr. Silva</span></div>';
+    h+='<hr class="r-rule">';
+    h+='<div class="r-kv r-strong"><span>PICK UP</span><span>'+esc(fmt(p.out))+'</span></div>';
+    h+='<div class="r-kv r-strong"><span>RETURN BY</span><span>'+esc(fmt(p.due))+'</span></div>';
+    h+='<hr class="r-rule">';
+    h+='<div class="r-sec">ITEMS ('+items.length+')</div>';
+    items.forEach(function(it){ var L=rcptItemLabel(it); h+='<div class="r-item"><span>'+esc(L.name)+'</span><span class="q">'+esc(L.type)+'</span></div>'; });
+    var missBlocks=[];
+    items.forEach(function(it){ var m=rcptMissing(it); if(m.length){ var L=rcptItemLabel(it); missBlocks.push('<div class="r-item r-miss"><span>'+esc(L.name)+'</span><span>'+esc(m.join(', '))+'</span></div>'); } });
+    h+='<hr class="r-rule"><div class="r-sec">KNOWN MISSING ITEMS</div>';
+    h+= missBlocks.length ? missBlocks.join('') : '<div class="r-item"><span>None</span><span class="q">kit complete</span></div>';
+    h+='<hr class="r-rule"><div class="r-sec">CONTACT ON FILE</div>';
+    h+='<div class="r-kv"><span class="k">Student cell</span><span'+(p.student_cell?'':' class="r-miss"')+'>'+esc(p.student_cell||'NOT ON FILE')+'</span></div>';
+    h+='<div class="r-kv"><span class="k">Parent</span><span'+(p.parent_guardian?'':' class="r-miss"')+'>'+esc(p.parent_guardian||'NOT ON FILE')+'</span></div>';
+    h+='<div class="r-kv"><span class="k">Parent cell</span><span'+(p.parent_cell?'':' class="r-miss"')+'>'+esc(p.parent_cell||'NOT ON FILE')+'</span></div>';
+    h+='<hr class="r-rule">';
+    h+='<div class="r-foot">Ref '+esc(String(p.id||'').slice(-6).toUpperCase())+' &middot; Printed '+esc(fmt(todayISO()))+'<br>This equipment is the student&#39;s responsibility until returned.<br>Report loss or damage to Mr. Silva right away.</div>';
+    document.getElementById('rcptPaper').innerHTML=h;
+  }
+  (function(){ var x=document.getElementById('rcptClose'); if(x) x.onclick=closeReceipt; var pr=document.getElementById('rcptPrint'); if(pr) pr.onclick=function(){ window.print(); }; var m=document.getElementById('rcptmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeReceipt(); }); })();
   function resvCheckOutAll(parent){   // mark every still-reserved item picked up at once
     var res=resvItems(parent).filter(function(x){return statusOf(x)==='reserved';});
     Promise.all(res.map(function(x){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:x.id,status:'out'})}); }))
@@ -2007,8 +2076,8 @@
     h+='<div class="cd-row"><div>'+pill+'</div><button class="btn sm '+(oos?'':'danger')+'" id="gd-oos">'+(oos?'Return to service':'Mark out of service')+'</button></div>';
     if(c){
       var acts='';
-      if(pend) acts='<button class="btn sm" id="gd-approve">Approve</button><button class="btn sm danger" id="gd-deny">Deny</button>';
-      else if(st==='reserved') acts='<button class="btn sm" id="gd-pickup">Mark picked up</button><button class="btn sm danger" id="gd-cancel">Cancel</button>';
+      if(pend) acts='<button class="btn sm" id="gd-approve">Approve</button><button class="btn sm danger" id="gd-cancel">Cancel reservation</button>';
+      else if(st==='reserved') acts='<button class="btn sm" id="gd-pickup">Mark picked up</button><button class="btn sm danger" id="gd-cancel">Cancel reservation</button>';
       else acts='<button class="btn sm ghost" id="gd-undo">Undo pickup</button><button class="btn sm warn" id="gd-return">Mark returned</button>';
       h+='<div class="cd-cur"><div class="cd-cur-who">'+esc(nameOf(c))+(pend?' <span class="pill pending">Pending</span>':'')+'</div><div class="cd-cur-meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+esc(c.course||'')+' &middot; out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+'</div>'+(c.note?'<div class="cd-cur-note">Reservation note: '+esc(c.note)+'</div>':'')+'<div class="cd-cur-acts">'+acts+'</div></div>';
     } else if(!oos){
@@ -2039,8 +2108,7 @@
     var un=document.getElementById('gd-undo'); if(un) un.onclick=function(){ setStatus(c.id,'reserved'); closeCamDetail(); };
     var rt=document.getElementById('gd-return'); if(rt) rt.onclick=function(){ markReturned(c.id); closeCamDetail(); };
     var ap=document.getElementById('gd-approve'); if(ap) ap.onclick=function(){ approve(c.id); closeCamDetail(); };
-    var dn=document.getElementById('gd-deny'); if(dn) dn.onclick=function(){ del(c.id); closeCamDetail(); };
-    var cn=document.getElementById('gd-cancel'); if(cn) cn.onclick=function(){ del(c.id); closeCamDetail(); };
+    var cn=document.getElementById('gd-cancel'); if(cn) cn.onclick=function(){ silvaConfirm('Cancel this reservation? '+esc(u.label)+' goes back in the pool.',{okLabel:'Cancel reservation',cancelLabel:'Keep it',danger:true}).then(function(ok){ if(ok){ del(c.id); closeCamDetail(); } }); };
     document.querySelectorAll('#cd-body .kit-sw').forEach(function(sw){ sw.onclick=function(){ var it=sw.getAttribute('data-gkititem'), m=gearKitMissing(id).slice(), i=m.indexOf(it); if(i>=0) m.splice(i,1); else m.push(it); saveAsset(id,{kit:m},renderGearDetailModal); }; });
     document.querySelectorAll('#cd-body [data-gresolve]').forEach(function(el){ el.onclick=function(){ var i=+el.getAttribute('data-gresolve'), it=issues[i]; var ni=issues.slice(); ni.splice(i,1); var nl=(a.log||[]).concat([{date:fmt(todayISO()),text:'Resolved: '+it}]); saveAsset(id,{issues:ni,log:nl},renderGearDetailModal); }; });
     var ai=document.getElementById('gd-addissue'); if(ai) ai.onclick=function(){ var v=document.getElementById('gd-newissue').value.trim(); if(!v) return; var ni=(issues||[]).concat([v]); var nl=(a.log||[]).concat([{date:fmt(todayISO()),text:'Issue: '+v}]); saveAsset(id,{issues:ni,log:nl},renderGearDetailModal); };
@@ -2061,11 +2129,12 @@
     if(c){
       var cdPend=(statusOf(c)==='reserved' && c.approved===false);
       var cdPendMsg=cdPend?'<div class="cd-cur-note" style="color:#c9b8ff;">Student request &middot; approve to confirm this reservation, or deny to free the camera.</div>':'';
-      var cdApprove=cdPend?'<button class="btn sm" data-cdapprove="'+esc(c.id)+'">Approve</button><button class="btn sm danger" data-cddeny="'+esc(c.id)+'">Deny</button>':'';
+      var cdCancel='<button class="btn sm danger" data-cdcancel="'+esc(c.id)+'">Cancel reservation</button>';
+      var cdApprove=cdPend?'<button class="btn sm" data-cdapprove="'+esc(c.id)+'">Approve</button>'+cdCancel:'';
       // The window carries the full checkout action right here: check it in, or mark it picked up.
       var cdStat=statusOf(c);
       var cdPrimary=(cdStat==='out')?'<button class="btn sm warn" id="cd-return">Mark returned</button>'
-        :((cdStat==='reserved'&&!cdPend)?'<button class="btn sm" id="cd-pickup">Mark picked up</button>':'');
+        :((cdStat==='reserved'&&!cdPend)?'<button class="btn sm" id="cd-pickup">Mark picked up</button>'+cdCancel:'');
       h+='<div class="cd-cur"><div class="cd-cur-who">'+esc(nameOf(c))+(cdPend?' <span class="pill pending">Pending</span>':'')+'</div><div class="cd-cur-meta">'+(c.period?('Per '+esc(c.period)+' &middot; '):'')+esc(c.course||'')+' &middot; out '+fmt(c.out)+' &rarr; due '+fmt(c.due)+' &middot; '+esc(statusOf(c))+'</div>'+(c.note?'<div class="cd-cur-note">Reservation note: '+esc(c.note)+'</div>':'')+cdPendMsg+'<div class="cd-cur-acts">'+cdApprove+cdPrimary+'<button class="btn sm" id="cd-addequip">Add equipment</button><button class="btn sm ghost" id="cd-editcur">Edit / move student</button></div></div>';
     }
     h+='<div class="cd-sec"><div class="cd-h">Open condition issues</div>';
@@ -2101,7 +2170,7 @@
     var rtn=document.getElementById('cd-return'); if(rtn) rtn.onclick=function(){ closeCamDetail(); openReturnChecklist(c.id); };
     var pku=document.getElementById('cd-pickup'); if(pku) pku.onclick=function(){ setStatus(c.id,'out',pku).then(function(){ if(cdCam===cam) renderCamDetailModal(); }); };
     document.querySelectorAll('#cd-body [data-cdapprove]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-cdapprove'), el).then(renderCamDetailModal); }; });
-    document.querySelectorAll('#cd-body [data-cddeny]').forEach(function(el){ el.onclick=function(){ silvaConfirm('Deny and cancel this reservation? The camera goes back in the pool.',{okLabel:'Deny',cancelLabel:'Keep it',danger:true}).then(function(ok){ if(ok){ del(el.getAttribute('data-cddeny'), el); closeCamDetail(); } }); }; });
+    document.querySelectorAll('#cd-body [data-cdcancel]').forEach(function(el){ el.onclick=function(){ silvaConfirm('Cancel this reservation? '+esc(cam)+' goes back in the pool.',{okLabel:'Cancel reservation',cancelLabel:'Keep it',danger:true}).then(function(ok){ if(ok){ del(el.getAttribute('data-cdcancel'), el); closeCamDetail(); } }); }; });
     document.querySelectorAll('#cd-body [data-resolve]').forEach(function(el){ el.onclick=function(){ var i=+el.getAttribute('data-resolve'), it=issues[i]; var ni=issues.slice(); ni.splice(i,1); var nl=(a.log||[]).concat([{date:fmt(todayISO()),text:'Resolved: '+it}]); saveAsset(cam,{issues:ni,log:nl},renderCamDetailModal); }; });
     var ai=document.getElementById('cd-addissue'); if(ai) ai.onclick=function(){ var v=document.getElementById('cd-newissue').value.trim(); if(!v) return; var ni=(issues||[]).concat([v]); var nl=(a.log||[]).concat([{date:fmt(todayISO()),text:'Issue: '+v}]); saveAsset(cam,{issues:ni,log:nl},renderCamDetailModal); };
     var sn=document.getElementById('cd-savenote'); if(sn) sn.onclick=function(){ saveAsset(cam,{note:document.getElementById('cd-note').value},renderCamDetailModal); };
