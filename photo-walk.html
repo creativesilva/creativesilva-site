@@ -99,6 +99,8 @@
   .pw-names .sn{color:var(--teal-lt);font-weight:600;}
   .pw-names .empty{color:var(--faint);font-style:italic;}
   .pw-names .bad{color:#ff9a8a;}
+  .pw-stu{color:inherit;border-bottom:1px dotted var(--teal);text-decoration:none;cursor:pointer;}
+  .pw-stu:hover{color:var(--teal-lt);border-bottom-color:var(--teal-lt);}
   /* Wheel picker (Activity-Timer drum): tap a slot -> scroll/tap an available seat -> it collapses. */
   .pw-wheelov{position:fixed;inset:0;z-index:140;background:rgba(2,12,12,.72);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;padding:20px;}
   .pw-wheelov.open{display:flex;}
@@ -378,7 +380,10 @@
   }
   function pctChip(cam){ var p=kitPct(cam); return '<span class="pw-pct '+pctCls(p)+'">'+(p==null?'TBD':(p+'%'))+'</span>'; }
   function seatNum(v){ var s=String(v==null?'':v).replace(/\D/g,''); return s.replace(/^0+/,'')||''; }
-  function namesLine(k){ var out=[]; (k.seats||[]).forEach(function(v0,i){ var v=seatNum(v0); if(!v) return; if(k.names[i]) out.push('<span class="sn">#'+esc(v)+'</span> '+esc(k.names[i])); else out.push('<span class="bad">#'+esc(v)+' no student</span>'); }); return out.length?out.join('<br>'):'<span class="empty">Tap the camera number to assign seats</span>'; }
+  // The student name deep-links to its profile in the Equipment Manager (same single-source-of-truth
+  // pattern as Edit info), so tapping a seat's student opens their full profile card there.
+  function stuDeep(id,nm){ return id?('<a class="pw-stu" href="/camera-manager.html?stu='+encodeURIComponent(id)+'" title="Open student profile">'+nm+'</a>'):nm; }
+  function namesLine(k){ var out=[]; (k.seats||[]).forEach(function(v0,i){ var v=seatNum(v0); if(!v) return; if(k.names[i]) out.push('<span class="sn">#'+esc(v)+'</span> '+stuDeep((k.ids&&k.ids[i])||'',esc(k.names[i]))); else out.push('<span class="bad">#'+esc(v)+' no student</span>'); }); return out.length?out.join('<br>'):'<span class="empty">Tap the camera number to assign seats</span>'; }
   // EDIT INFO opens the SAME full camera window as the Equipment Manager (kit toggles, issues, note,
   // out of service, history) via a deep link, so the kit interface stays a single source of truth.
   function editInfo(cam){ return '<a class="pw-mini info" href="/camera-manager.html?cam='+encodeURIComponent(cam)+'" title="Open the full camera kit window">Edit info</a>'; }
@@ -416,7 +421,7 @@
     var cls='pw-kit', body='';
     if(k.status==='checked_out'){ cls+=' checkedout'; body='<div class="pw-outline"><b>Checked out</b> that day</div>'; }
     else if(k.status==='not_used'){ cls+=' notused'; body='<div class="pw-outline"><b>Not used</b> this walk</div>'; }
-    else { cls+=' used'; var who=(k.seats||[]).filter(function(x){return x&&x.label;}).map(function(x){ return 'Seat '+esc(x.seat)+' &middot; '+esc(x.label); }); body='<div class="pw-outline">'+(who.length?who.join('<br>'):'Assigned')+'</div>'; }
+    else { cls+=' used'; var who=(k.seats||[]).filter(function(x){return x&&x.label;}).map(function(x){ return 'Seat '+esc(x.seat)+' &middot; '+stuDeep(x.id||'',esc(x.label)); }); body='<div class="pw-outline">'+(who.length?who.join('<br>'):'Assigned')+'</div>'; }
     return '<div class="'+cls+'">'+head+body+'</div>';
   }
 

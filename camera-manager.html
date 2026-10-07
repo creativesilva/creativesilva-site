@@ -1771,6 +1771,7 @@
       DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{},
             pools:d.pools||{},equipment_pools:d.equipment_pools||{},equipment_units:d.equipment_units||{},equipment_types:d.equipment_types||{}};
       renderBoard(); markSync(true);
+      if(_pendingStu){ var _s=_pendingStu; _pendingStu=null; try{ openStudentProfile(_s); }catch(e){} }
     }).catch(function(e){ if(String(e.message)!=='401') markSync(false); });
   }
 
@@ -2468,9 +2469,12 @@
   function showGate(msg){ KEY=''; try{ sessionStorage.removeItem('silva-cam-key'); }catch(e){} gate.style.display='flex'; pinerr.textContent=msg||''; pin.value=''; setTimeout(function(){ pin.focus(); },50); }
   function startApp(){ gate.style.display='none'; if(!polling){ polling=true; setInterval(loadBoard,7000); } loadBoard(); pushKey(); maybeDeepLinkCam(); showTeacherGate(); }
   // EDIT INFO deep-link from the Photo Walk Log: /camera-manager.html?cam=Cam%2001 opens that camera's window.
-  var _deepLinked=false;
+  var _deepLinked=false, _pendingStu=null;
   function maybeDeepLinkCam(){ if(_deepLinked) return; _deepLinked=true;
-    try{ var raw=new URLSearchParams(location.search).get('cam'); if(!raw) return;
+    try{ var q=new URLSearchParams(location.search);
+      // ?stu=<id> (from the Photo Walk, or anywhere): open that student's profile once the board data loads.
+      var stu=q.get('stu'); if(stu){ _pendingStu=String(stu).trim(); try{ history.replaceState(null,'',location.pathname); }catch(e){} return; }
+      var raw=q.get('cam'); if(!raw) return;
       var m=String(raw).match(/(\d{1,2})/); if(!m) return;
       var cam='Cam '+(m[1].length<2?('0'+m[1]):m[1]);
       setTimeout(function(){ try{ openCamDetail(cam); }catch(e){} },150);
