@@ -380,14 +380,12 @@
   .camsortdd.open .camsortdd-cv{transform:rotate(-135deg);}
   /* Wheel selector: same width as the trigger, 3 options visible, center enlarged (= selected),
      vertical scroll only (horizontal locked), blurred + semi-opaque behind. */
-  .camsortdd-wheel{display:none;position:absolute;top:calc(100% + 5px);left:0;right:0;z-index:60;background:rgba(4,20,19,.68);backdrop-filter:blur(12px) saturate(1.1);-webkit-backdrop-filter:blur(12px) saturate(1.1);border:1px solid var(--teal);box-shadow:0 16px 40px rgba(0,0,0,.7);overflow:hidden;}
+  .camsortdd-wheel{display:none;position:absolute;top:calc(100% + 5px);left:0;min-width:100%;width:max-content;z-index:60;background:rgba(4,20,19,.68);backdrop-filter:blur(12px) saturate(1.1);-webkit-backdrop-filter:blur(12px) saturate(1.1);border:1px solid var(--teal);box-shadow:0 16px 40px rgba(0,0,0,.7);overflow:hidden;}
   .camsortdd.open .camsortdd-wheel{display:block;}
-  .camsortdd-scroll{position:relative;height:120px;overflow-y:auto;overflow-x:hidden;touch-action:pan-y;overscroll-behavior:contain;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-  .camsortdd-scroll::-webkit-scrollbar{display:none;}
-  .csw-pad{height:40px;}
-  .csw-item{height:40px;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.66rem;color:var(--faint);cursor:pointer;transition:color .12s,transform .12s,opacity .12s;opacity:.5;transform:scale(.82);white-space:nowrap;padding:0 8px;}
-  .csw-item.on{color:var(--teal-lt);opacity:1;transform:scale(1.1);}
-  .csw-center{position:absolute;left:0;right:0;top:40px;height:40px;border-top:1px solid var(--teal);border-bottom:1px solid var(--teal);pointer-events:none;}
+  .camsortdd-list{max-height:280px;overflow-y:auto;overflow-x:hidden;padding:4px;scrollbar-width:thin;}
+  .csw-item{display:block;width:100%;text-align:left;padding:9px 13px;font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.66rem;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background .12s,color .12s;border-left:3px solid transparent;}
+  .csw-item:hover{background:rgba(0,184,184,.10);color:#fff;}
+  .csw-item.on{color:var(--teal-lt);background:rgba(0,184,184,.08);border-left-color:var(--teal);}
   .camgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(204px,1fr));gap:9px;margin-bottom:10px;}
   .camtile{display:flex;flex-direction:column;gap:5px;align-items:flex-start;text-align:left;width:100%;background:rgba(0,0,0,.32);border:1px solid var(--line-soft);border-left:4px solid var(--grayed);padding:11px 13px;cursor:pointer;font-family:inherit;color:var(--text);transition:border-color .12s,background .12s;backdrop-filter:blur(5px) saturate(1.04);-webkit-backdrop-filter:blur(5px) saturate(1.04);}
   .camtile:hover{background:rgba(0,184,184,.07);}
@@ -1493,15 +1491,11 @@
   function camSortDropdown(){ var cur=(CAM_SORTS.filter(function(s){return s.k===CAM_SORT;})[0]||CAM_SORTS[0]).label;
     return '<div class="camsortdd" id="camsortdd">'+
       '<button type="button" class="camsortdd-trig" data-sorttrig>Sort: <b>'+esc(cur)+'</b><i class="camsortdd-cv"></i></button>'+
-      '<div class="camsortdd-wheel"><div class="camsortdd-scroll" id="camsortScroll">'+
-        '<div class="csw-pad"></div>'+
+      '<div class="camsortdd-wheel"><div class="camsortdd-list" id="camsortScroll">'+
         CAM_SORTS.map(function(s){ return '<div class="csw-item'+(CAM_SORT===s.k?' on':'')+'" data-camsort="'+s.k+'">'+esc(s.label)+'</div>'; }).join('')+
-        '<div class="csw-pad"></div>'+
-      '</div><div class="csw-center"></div></div>'+
+      '</div></div>'+
     '</div>'; }
-  function markSortCenter(sc){ var b=sc.getBoundingClientRect(), cy=b.top+b.height/2, best=null, bd=1e9;
-    sc.querySelectorAll('.csw-item').forEach(function(it){ var r=it.getBoundingClientRect(), d=Math.abs((r.top+r.height/2)-cy); if(d<bd){ bd=d; best=it; } });
-    sc.querySelectorAll('.csw-item').forEach(function(it){ it.classList.toggle('on', it===best); }); }
+  // (drum-wheel markSortCenter removed 2026-10-06: Sort is now a plain click-to-select list.)
   // Teacher view toggle: Silva / Garcia / Mankin. Filters the board (cameras + gear) to that pool.
   function teacherSeg(){
     return '<div class="tseg">'+[['silva','Silva'],['garcia','Garcia'],['mankin','Mankin']].map(function(o){
@@ -1594,10 +1588,8 @@
     var b=document.getElementById('board');
     b.querySelectorAll('[data-sectoggle]').forEach(function(el){ el.onclick=function(){ var k=el.getAttribute('data-sectoggle'), sec=el.parentNode, open=!sec.classList.contains('open'); sec.classList.toggle('open',open); setSecOpen(k,open); }; });
     b.querySelectorAll('[data-pool]').forEach(function(el){ el.onclick=function(){ SELECTED_POOL=el.getAttribute('data-pool'); try{ sessionStorage.setItem('cam_pool',SELECTED_POOL); }catch(e){} _lastBoardSig=null; renderBoard(); }; });
-    var _st=b.querySelector('[data-sorttrig]'), _ssc=b.querySelector('#camsortScroll');
-    if(_st){ _st.onclick=function(e){ e.stopPropagation(); var dd=_st.closest('.camsortdd'); var opening=!dd.classList.contains('open'); dd.classList.toggle('open',opening);
-      if(opening && _ssc){ setTimeout(function(){ var cur=_ssc.querySelector('.csw-item.on')||_ssc.querySelector('.csw-item'); if(cur) cur.scrollIntoView({block:'center'}); markSortCenter(_ssc); },20); } }; }
-    if(_ssc){ _ssc.onscroll=function(){ clearTimeout(_ssc._t); _ssc._t=setTimeout(function(){ markSortCenter(_ssc); },60); }; }
+    var _st=b.querySelector('[data-sorttrig]');
+    if(_st){ _st.onclick=function(e){ e.stopPropagation(); _st.closest('.camsortdd').classList.toggle('open'); }; }
     b.querySelectorAll('[data-camsort]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); CAM_SORT=el.getAttribute('data-camsort'); try{ sessionStorage.setItem('camsort',CAM_SORT); }catch(e2){} renderBoard(); }; });
     b.querySelectorAll('[data-del]').forEach(function(el){ el.onclick=function(){ silvaConfirm('Cancel this reservation? It will be removed.',{okLabel:'Cancel reservation',cancelLabel:'Keep it',danger:true}).then(function(ok){ if(ok) del(el.getAttribute('data-del'), el); }); }; });
     b.querySelectorAll('[data-reserve]').forEach(function(el){ el.onclick=function(){ openReserve(el.getAttribute('data-reserve')); }; });
