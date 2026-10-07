@@ -189,6 +189,39 @@ const DOCS = [
     '¿Cómo te ayudó trabajar con tu compañero? ¿Encontraron ustedes diferentes tipos de líneas?',
     '¿Qué harías diferente en tu próxima caminata para encontrar mejores líneas guía?',
   ]},
+  // Spell Your Name Photo Walk (Photography 1A + 2A) -- find letters around campus, minimum 4 letters.
+  { ...EN, outfile: 'Spell-Your-Name-Reflection-EN.docx', title: 'Spell Your Name: Reflection', subtitle: PVHS_EN('Photography 1A'), questions: [
+    'Which name did you spell, and how many letters is it? Tell us if it is your first name, your last name, or a nickname.',
+    'Where did you find your letters? Name two different things or places you found letters in, like a shadow, a railing, a sign, or a texture.',
+    'Look at your final letters. Which letter is your favorite, and what makes it read clearly as that letter?',
+    'How did you cull? How did you decide which photo was the best one for each letter?',
+    'What was the hardest letter to find or photograph, and how did you solve it?',
+    'What would you do differently on your next letter hunt to find stronger letters?',
+  ]},
+  { ...ES, outfile: 'Spell-Your-Name-Reflection-ES.docx', title: 'Escribe Tu Nombre: Reflexión', subtitle: PVHS_ES('Fotografía 1A'), questions: [
+    '¿Qué nombre escribiste y de cuántas letras es? Dinos si es tu primer nombre, tu apellido o un apodo.',
+    '¿Dónde encontraste tus letras? Nombra dos cosas o lugares distintos donde encontraste letras, como una sombra, un barandal, un letrero o una textura.',
+    'Mira tus letras finales. ¿Cuál letra es tu favorita, y qué la hace leerse claramente como esa letra?',
+    '¿Cómo seleccionaste (cull)? ¿Cómo decidiste cuál foto era la mejor para cada letra?',
+    '¿Cuál fue la letra más difícil de encontrar o fotografiar, y cómo lo resolviste?',
+    '¿Qué harías diferente en tu próxima búsqueda de letras para encontrar letras más fuertes?',
+  ]},
+  { ...EN, outfile: 'Spell-Your-Name-Photo2-Reflection-EN.docx', title: 'Spell Your Name: Reflection', subtitle: PVHS_EN('Photography 2A'), questions: [
+    'Which name did you spell, and how many letters is it? Tell us if it is your first name, your last name, or a nickname.',
+    'In Photography 2 every letter had to appear naturally, with no printed or made letters. Name two of your letters and tell what formed each one: a line, a shape, a shadow, a reflection, or a texture.',
+    'Look at your final letters. Which letter is your favorite, and what makes it read clearly as that letter?',
+    'How did you cull? How did you decide which photo was the best one for each letter?',
+    'What was the hardest letter to find without using a printed letter, and how did you solve it?',
+    'How did hunting for natural letters change the way you look at campus?',
+  ]},
+  { ...ES, outfile: 'Spell-Your-Name-Photo2-Reflection-ES.docx', title: 'Escribe Tu Nombre: Reflexión', subtitle: PVHS_ES('Fotografía 2A'), questions: [
+    '¿Qué nombre escribiste y de cuántas letras es? Dinos si es tu primer nombre, tu apellido o un apodo.',
+    'En Fotografía 2 cada letra tenía que aparecer de forma natural, sin letras impresas ni hechas. Nombra dos de tus letras y di qué formó cada una: una línea, una forma, una sombra, un reflejo o una textura.',
+    'Mira tus letras finales. ¿Cuál letra es tu favorita, y qué la hace leerse claramente como esa letra?',
+    '¿Cómo seleccionaste (cull)? ¿Cómo decidiste cuál foto era la mejor para cada letra?',
+    '¿Cuál fue la letra más difícil de encontrar sin usar una letra impresa, y cómo lo resolviste?',
+    '¿Cómo cambió tu forma de ver la escuela el buscar letras naturales?',
+  ]},
   // Sketchbook Cover (Digital Arts 1A) -- "medium" gets a plain-language parenthetical
   { ...EN, outfile: 'Sketchbook-Cover-Reflection-EN.docx', title: 'Sketchbook Cover Art: Reflection', subtitle: PVHS_EN('Digital Arts 1A'), questions: [
     'What are the 3 motivational words on your cover?',

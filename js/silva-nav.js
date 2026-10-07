@@ -76,7 +76,8 @@
       { name: 'Tiny Things',              url: '/curriculum/shared/photo1-tiny-things-overview.html' },
       { name: 'Balloon Pop',              url: '/curriculum/shared/photo1-balloon-pop-overview.html' },
       { name: 'Aperture Portrait',        url: '/curriculum/shared/photo1-aperture-portrait-overview.html' },
-      { name: 'Exposure Balance',         url: '/curriculum/shared/photo1-exposure-balance-overview.html' }
+      { name: 'Exposure Balance',         url: '/curriculum/shared/photo1-exposure-balance-overview.html' },
+      { name: 'Spell Your Name Photo Walk', url: '/curriculum/shared/photo1-spell-your-name-overview.html' }
     ]},
     { course: 'Photography 2A', modules: [
       { name: 'Composition Photo Walk', url: '/curriculum/shared/photo2-composition-overview.html' },
@@ -86,7 +87,8 @@
       { name: 'Tiny Things',            url: '/curriculum/shared/photo2-tiny-things-overview.html' },
       { name: 'Balloon Pop',            url: '/curriculum/shared/photo2-balloon-pop-overview.html' },
       { name: 'Aperture Portrait',      url: '/curriculum/shared/photo2-aperture-portrait-overview.html' },
-      { name: 'Exposure Balance',       url: '/curriculum/shared/photo2-exposure-balance-overview.html' }
+      { name: 'Exposure Balance',       url: '/curriculum/shared/photo2-exposure-balance-overview.html' },
+      { name: 'Spell Your Name Photo Walk', url: '/curriculum/shared/photo2-spell-your-name-overview.html' }
     ]}
   ];
 
@@ -270,6 +272,10 @@
      '/curriculum/shared/photo1-exposure-balance-step01-capture-contact.html',
      '/curriculum/shared/photo1-exposure-balance-step02-edit-submit.html',
      '/curriculum/shared/photo1-exposure-balance-step03-reflection.html'],
+    ['/curriculum/shared/photo1-spell-your-name-overview.html',
+     '/curriculum/shared/photo1-spell-your-name-step02-capture-contact.html',
+     '/curriculum/shared/photo1-spell-your-name-step03-cull-edit-export.html',
+     '/curriculum/shared/photo1-spell-your-name-step04-reflection.html'],
     ['/curriculum/photo2/photo2a-home.html',
      '/curriculum/photo2/photo2a-course-overview.html',
      '/curriculum/photo2/photo2a-syllabus.html'],
@@ -303,7 +309,11 @@
     ['/curriculum/shared/photo2-exposure-balance-overview.html',
      '/curriculum/shared/photo2-exposure-balance-step01-capture-contact.html',
      '/curriculum/shared/photo2-exposure-balance-step02-edit-submit.html',
-     '/curriculum/shared/photo2-exposure-balance-step03-reflection.html']
+     '/curriculum/shared/photo2-exposure-balance-step03-reflection.html'],
+    ['/curriculum/shared/photo2-spell-your-name-overview.html',
+     '/curriculum/shared/photo2-spell-your-name-step02-capture-contact.html',
+     '/curriculum/shared/photo2-spell-your-name-step03-cull-edit-export.html',
+     '/curriculum/shared/photo2-spell-your-name-step04-reflection.html']
   ];
 
   var SEQUENCE = [];
