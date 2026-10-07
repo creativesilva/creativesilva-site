@@ -38,21 +38,25 @@ def raw_settings_section(es):
     red="#f90101"
     if es:
         title="Ajustes de C&aacute;mara"
-        lead=("Trabaja en modo Manual (M) y captura en RAW. Estos valores son un buen punto de partida para la luz del d&iacute;a. "
-              "Cualquier lente y cualquier ajuste valen: cambia la apertura, el obturador o el ISO para que coincidan con tu luz y el estilo que buscas.")
-        note_t=("Tu meta es una letra clara y n&iacute;tida en cada foto. Ajusta lo que necesites para equilibrar el expos&iacute;metro y que la letra se lea bien. "
-                "En RAW tendr&aacute;s m&aacute;s margen para editar despu&eacute;s.")
+        lead=("Trabaja en modo Manual (M) y captura en RAW. Estos n&uacute;meros son solo un punto de partida para la luz del d&iacute;a. "
+              "Cada ajuste vale: el obturador, la apertura y el ISO pueden cambiar, y ninguno est&aacute; prohibido. "
+              "Si cambias al lente de 50mm o abres a una apertura baja como f/1.8, tus n&uacute;meros se ver&aacute;n muy distintos, y eso est&aacute; bien.")
+        note_t=("El expos&iacute;metro es una gu&iacute;a, no una regla fija. Mant&eacute;nlo entre -1 y +1, no tiene que quedar exactamente en 0. "
+                "Seg&uacute;n lo que fotograf&iacute;es, puede que lo lleves un poco m&aacute;s brillante (+1) o m&aacute;s oscuro (-1) para que tu letra se lea bien. "
+                "Tu meta es una letra clara y n&iacute;tida en cada foto, y RAW te da margen para arreglarla despu&eacute;s.")
     else:
         title="Camera Settings"
-        lead=("Work in Manual mode (M) and capture in RAW. These values are a solid daylight starting point. "
-              "Any lens and any settings are fair game: change the aperture, shutter, or ISO to match your light and the look you want.")
-        note_t=("Your goal is one clear, sharp letter in every photo. Adjust whatever you need to balance the light meter and make the letter read well. "
-                "RAW gives you more room to edit later.")
+        lead=("Work in Manual mode (M) and capture in RAW. These numbers are only a starting point for daylight. "
+              "Every setting is fair game: the shutter, the aperture, and the ISO can all change, and none are off limits. "
+              "If you switch to the 50mm lens or open up to a low aperture like f/1.8, your numbers will look very different, and that is okay.")
+        note_t=("The light meter is a guide, not a hard rule. Keep it between -1 and +1, it does not have to sit exactly on 0. "
+                "Depending on what you photograph, you may push it a little brighter (+1) or a little darker (-1) so your letter reads clearly. "
+                "Your goal is one clear, sharp letter in every photo, and RAW gives you room to fix it later.")
     lead_html=f'<div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{lead}</span></div>'
     note_box=(f'<div style="background:rgba(249,1,1,0.10);border:1px solid rgba(249,1,1,0.30);border-left:4px solid {red};padding:11px 14px;margin:0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.55;">{note_t}</div>')
     return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       + section_header(CAMSET_ICON, title, "#f90101", "#ff8f8f")
-      + f'<div class="silva-cfloat" style="float:right;width:50%;min-width:400px;margin:2px 0 16px 30px;">{capture_panel("RAW", "1/250", "F8", "100", "shutter")}</div>'
+      + f'<div class="silva-cfloat" style="float:right;width:50%;min-width:400px;margin:2px 0 16px 30px;">{capture_panel("RAW", "1/250", "F8", "100", "all")}</div>'
       + lead_html + note_box + '</div>')
 
 STANDARDS=[

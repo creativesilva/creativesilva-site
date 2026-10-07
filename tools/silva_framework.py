@@ -97,8 +97,13 @@ def capture_panel(quality="RAW", shutter="1/500", aperture="F6.3", iso="100", ch
          'line-height:1.3;">adjust to balance the light meter</div>')
     _F=[("shutter","Shutter",shutter),("aperture","Aperture",aperture),("iso","ISO",iso)]
     def _cell(key,lbl,v):
-        ch=(key==change_field); rel="position:relative;" if ch else ""
-        inner=(tag if ch else "")+label(lbl)+val(v)+(sub if ch else "")
+        # change_field names the one cell that wears the "CHANGE THIS" tag + the "adjust to balance"
+        # sub. The special value "all" tags EVERY exposure cell (any setting is fair game, none off
+        # limits); the per-cell sub would then repeat three times, so it is dropped and the section
+        # note carries the balancing guidance instead. Passing a specific field keeps the old output.
+        ch=(key==change_field) or (change_field=="all"); rel="position:relative;" if ch else ""
+        showsub=ch and change_field!="all"
+        inner=(tag if ch else "")+label(lbl)+val(v)+(sub if showsub else "")
         return f'<td style="{boxtd}{rel}">{inner}</td>'
     _row1="".join(_cell(k,l,v) for k,l,v in _F)
     labels13=["-3","","-2","","-1","","0","","+1","","+2","","+3"]
