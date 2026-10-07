@@ -18,13 +18,16 @@ MODNUM="08"
 CL_EN="Digital Arts 1A"
 CL_ES="Arte Digital 1A"
 ADOBE_URL="https://www.adobe.com/learn/illustrator/web/ai-basics-fundamentals"
+ADOBE_URL2="https://www.adobe.com/learn/illustrator/web/sketch-to-vector-art"
 ZIP=f"{SITE}/assets/digarts1/handouts/Get_to_Know_Illustrator.zip"
 IMGDIR=f"{SITE}/assets/images/da1/get-to-know-illustrator"
 HEADER=f"{IMGDIR}/header-v1.jpg"
 S2_FLOAT=f"{IMGDIR}/practice-float-v1.jpg"
+S3_FLOAT=f"{IMGDIR}/sketch-float-v1.jpg"
 
 OVER="digarts1-get-to-know-illustrator-overview.html"
 S2="digarts1-get-to-know-illustrator-step02-practice.html"
+S3="digarts1-get-to-know-illustrator-step03-sketch-to-vector.html"
 
 # Local ent: accents -> entities AND en-dash -> plain hyphen (never emit &ndash;, per the hard dash ban).
 def ent(s):
@@ -38,6 +41,7 @@ def ent(s):
 # assets/images/da1/get-to-know-illustrator/, and re-run this builder when art is ready.
 HAVE_HEADER=False
 HAVE_S2_FLOAT=False
+HAVE_S3_FLOAT=False
 
 STANDARDS=[
   {"code":"DGA.17.1","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
@@ -67,10 +71,10 @@ VOCAB_ES=[
  ("Save As (Guardar Como)","Guardar tu archivo con un nombre, un lugar y un tipo de archivo, para que puedas encontrarlo y abrirlo otra vez."),
 ]
 
-def adobe_button(es):
+def adobe_button(es, url=ADOBE_URL):
     label="Abrir el Tutorial de Adobe" if es else "Open the Adobe Tutorial"
     return ('<div style="margin:16px 0 6px;">'
-      f'<a href="{ADOBE_URL}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;'
+      f'<a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;'
       'background:#00b8b8;color:#04201f;padding:13px 28px;border-top:2px solid #80e0e0;font-size:12.5pt;'
       f'letter-spacing:0.04em;"><strong>{label} &#8599;</strong></a></div>')
 
@@ -139,6 +143,60 @@ def tour_notes(es):
       f'{parts}</div>')
     return hintline+scroll
 
+def sketch_notes(es):
+    # Sketch-to-vector steps (Step 03), rewritten simple + Mac-only, in the same locked scroller.
+    if es:
+        hint="Despl&aacute;zate dentro del cuadro para ver los pasos."
+        parts=(
+         _tour_part("1","Dibuja e importa",[
+            ("Haz un boceto simple:","dib&uacute;jalo en papel y t&oacute;male una foto. O descarga el boceto de pr&aacute;ctica desde la p&aacute;gina del tutorial de Adobe."),
+            ("Col&oacute;calo en Illustrator:","usa Archivo &gt; Colocar y elige la foto de tu boceto para traerla."),
+            ("Ponlo en su propia capa:","as&iacute; puedes calcar encima sin moverlo."),
+         ])
+         + _tour_part("2","Calca con las herramientas",[
+            ("Bloquea la capa del boceto:","haz clic en el candado junto a la capa en el panel Capas para que no se mueva."),
+            ("Crea una capa nueva encima:","ah&iacute; ir&aacute;n tus l&iacute;neas vectoriales."),
+            ("Herramienta Pluma:","para l&iacute;neas limpias y exactas."),
+            ("Herramienta L&aacute;piz:","para l&iacute;neas sueltas y fluidas. Calca tu boceto, l&iacute;nea por l&iacute;nea."),
+         ])
+         + _tour_part("3","Mejora tus trazos",[
+            ("Haz las l&iacute;neas m&aacute;s gruesas:","cambia el grosor del trazo en el panel Propiedades o Trazo para un look fuerte."),
+            ("Limpia las l&iacute;neas:","arregla las partes disparejas hasta que el arte se vea n&iacute;tido."),
+         ])
+         + _tour_part("4","Agrega texto (opcional)",[
+            ("Elige una fuente:","si tu arte necesita palabras, elige una fuente de Adobe Fonts."),
+            ("Acomoda el texto:","col&oacute;calo para que combine bien con tu arte."),
+         ])
+        )
+    else:
+        hint="Scroll inside the box to see the steps."
+        parts=(
+         _tour_part("1","Sketch and import",[
+            ("Make a simple sketch:","draw it on paper and take a photo of it. Or download the practice sketch from the Adobe tutorial page."),
+            ("Place it in Illustrator:","use File &gt; Place and choose your sketch photo to bring it in."),
+            ("Put it on its own layer:","so you can trace on top without moving it."),
+         ])
+         + _tour_part("2","Trace with the tools",[
+            ("Lock the sketch layer:","click the lock box next to the layer in the Layers panel so it cannot move."),
+            ("Make a new layer on top:","your vector lines go there."),
+            ("Pen tool:","for clean, exact lines."),
+            ("Pencil tool:","for loose, flowing lines. Trace your sketch, line by line."),
+         ])
+         + _tour_part("3","Refine your strokes",[
+            ("Thicken your lines:","change the stroke weight in the Properties or Stroke panel for a bold look."),
+            ("Clean it up:","fix any bumpy lines until the art looks sharp."),
+         ])
+         + _tour_part("4","Add type (optional)",[
+            ("Pick a font:","if your art needs words, choose a font from Adobe Fonts."),
+            ("Arrange the type:","place it so it fits your art nicely."),
+         ])
+        )
+    hintline=f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
+    scroll=('<div class="silva-scroll" style="max-height:460px;overflow-y:auto;padding:14px 16px 20px;border:1px solid rgba(0,184,184,0.22);'
+      'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.16) 100%);">'
+      f'{parts}</div>')
+    return hintline+scroll
+
 def downloads_block(es):
     heading="Descarga Tus Archivos" if es else "Download Your Files"
     lead=("Descarga los archivos de pr&aacute;ctica de Illustrator. Son tres archivos .ai dentro de un ZIP. Descompr&iacute;melo y gu&aacute;rdalo en la carpeta de tu proyecto para usarlo en el Paso 02." if es
@@ -164,7 +222,7 @@ def nav(current,dots,stepnav):
             f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
             f'      <div class="silva-step-nav">{stepnav}</div>')
 
-HREFS=[OVER,S2]; TITLES=[("1","Step 01"),("2","Step 02")]
+HREFS=[OVER,S2,S3]; TITLES=[("1","Step 01"),("2","Step 02"),("3","Step 03")]
 def dots_for(ai):
     return "".join(dot("" if i==ai else HREFS[i], lab, title, i==ai, module=False) for i,(lab,title) in enumerate(TITLES))
 
@@ -187,13 +245,14 @@ def overview():
             ("Make a new document:","start a fresh file and choose a size, so you know how every project begins."),
             ("Saving your work:","save your file the right way so you never lose your work and can open it again later."),
         ]))
-    en+=card("HOW THIS MODULE WORKS","Two Steps, No Project",
-        para("This module has two steps. You are on Step 01 now.")
+    en+=card("HOW THIS MODULE WORKS","Three Steps",
+        para("This module has three steps. You are on Step 01 now.")
         + bullets([
             ("Step 01 &middot; Overview &amp; Download (you are here):","read this page and download your practice files below."),
             ("Step 02 &middot; Take the Tour &amp; Practice:","follow the short Adobe tutorial, practice with your files, then turn in one screen capture of your Illustrator workspace."),
+            ("Step 03 &middot; Sketch to Vector Art:","now that you know your way around, turn a simple sketch into clean vector art and turn in a screen capture of it."),
         ])
-        + note("There is no reflection and no project for this warm-up. The only goal is to get comfortable moving around in Illustrator before the real projects start."))
+        + note("There is no written reflection in this module. It stays low-stakes: get comfortable in Illustrator, then make your first attempt at real vector art."))
     en+=resources_card("Key Words",
         vocab_grid("On the Quiz",
           "Heads up: these key words show up on your Digital Arts quizzes. Learn them now, not the night before.",
@@ -217,13 +276,14 @@ def overview():
             ("Crear un documento nuevo:","empieza un archivo nuevo y elige un tama&ntilde;o, para que sepas c&oacute;mo empieza cada proyecto."),
             ("Guardar tu trabajo:","guarda tu archivo de la forma correcta para que nunca pierdas tu trabajo y puedas abrirlo otra vez."),
         ]))
-    es+=card("C&Oacute;MO FUNCIONA ESTE M&Oacute;DULO","Dos Pasos, Sin Proyecto",
-        para("Este m&oacute;dulo tiene dos pasos. Est&aacute;s en el Paso 01 ahora.")
+    es+=card("C&Oacute;MO FUNCIONA ESTE M&Oacute;DULO","Tres Pasos",
+        para("Este m&oacute;dulo tiene tres pasos. Est&aacute;s en el Paso 01 ahora.")
         + bullets([
             ("Paso 01 &middot; Resumen y Descarga (est&aacute;s aqu&iacute;):","lee esta p&aacute;gina y descarga tus archivos de pr&aacute;ctica abajo."),
             ("Paso 02 &middot; Haz el Recorrido y Practica:","sigue el tutorial corto de Adobe, practica con tus archivos y luego entrega una captura de pantalla de tu espacio de trabajo de Illustrator."),
+            ("Paso 03 &middot; De Boceto a Arte Vectorial:","ahora que ya sabes moverte, convierte un boceto simple en arte vectorial limpio y entrega una captura de pantalla."),
         ])
-        + note("No hay reflexi&oacute;n ni proyecto en este calentamiento. La &uacute;nica meta es tomar confianza movi&eacute;ndote en Illustrator antes de que empiecen los proyectos de verdad."))
+        + note("Este m&oacute;dulo no tiene reflexi&oacute;n escrita. Sigue siendo de baja presi&oacute;n: toma confianza en Illustrator y luego haz tu primer intento de arte vectorial de verdad."))
     es+=resources_card("Palabras Clave",
         vocab_grid("En el Examen",
           "Atenci&oacute;n: estas palabras clave aparecen en tus ex&aacute;menes de Arte Digital. Apr&eacute;ndelas ahora, no la noche anterior.",
@@ -257,7 +317,7 @@ def step02():
         + note("To take a screen capture on a Mac, press Cmd + Shift + 4 to grab part of the screen, or Cmd + Shift + 3 for the whole screen. The image saves to your desktop."))
     en+=deliverables_box(False,
         [("1 screen capture (JPG or PNG):","a screen capture of your Illustrator workspace with one of the practice files open, uploaded to this Canvas assignment. It just needs to show that you opened Illustrator and found your way around.")])
-    en+=next_up("UP NEXT &middot; Sketch to Vector Art","Next lesson: now that you know your way around Illustrator, you will turn a hand sketch into clean vector art.")
+    en+=next_up("UP NEXT &middot; STEP 03 - Sketch to Vector Art","Now that you know your way around, you will turn a simple sketch into clean vector art.")
 
     es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 02","Haz el Recorrido y Practica",
         "Sigue el tutorial corto de Adobe, practica con tus archivos y luego entrega una captura de pantalla de tu espacio de trabajo.","#top","Back to English", HICON_DESIGN)
@@ -280,13 +340,73 @@ def step02():
         + note("Para tomar una captura de pantalla en una Mac, presiona Cmd + Shift + 4 para capturar una parte de la pantalla, o Cmd + Shift + 3 para toda la pantalla. La imagen se guarda en tu escritorio."))
     es+=deliverables_box(True,
         [("1 captura de pantalla (JPG o PNG):","una captura de pantalla de tu espacio de trabajo de Illustrator con uno de los archivos de pr&aacute;ctica abierto, subida a esta tarea de Canvas. Solo necesita mostrar que abriste Illustrator y que te supiste mover.")])
-    es+=next_up("A CONTINUACI&Oacute;N &middot; De Boceto a Arte Vectorial","Pr&oacute;xima lecci&oacute;n: ahora que ya sabes moverte en Illustrator, convertir&aacute;s un boceto hecho a mano en arte vectorial limpio.")
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - De Boceto a Arte Vectorial","Ahora que ya sabes moverte, convertir&aacute;s un boceto simple en arte vectorial limpio.")
 
-    stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><span></span></div>'
+    stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a> <a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
     return wrap_page(f"Step 2: Take the Tour and Practice | Get to Know Illustrator | {CL_EN} | PVHS", nav("Step 02",dots_for(1),stepnav), top_wrap(en,es), bottom)
 
-for fname,gen in [(OVER,overview),(S2,step02)]:
+# ================= STEP 03: Sketch to Vector Art =================
+def step03():
+    en=banner(f"Module {MODNUM} &bull; Step 03","Sketch to Vector Art",
+        "Turn a simple sketch into clean vector art by tracing it with the Pen and Pencil tools, then turn in a screen capture.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
+    en+=card("FROM SKETCH TO VECTOR / WHAT YOU WILL DO","Trace a Sketch Into Vector Art",
+        para("Now that you know your way around Illustrator, you get to try real vector art. You will take a simple sketch, bring it into Illustrator, and trace over it to make clean lines that stay sharp at any size.")
+        + para("This is your first attempt, so keep your sketch simple: a shape, a letter, or a small drawing. The goal is to practice tracing, not to make a perfect piece.")
+        + note("Vector art is made from lines and shapes, so it never gets blurry when you make it bigger. That is why logos and icons are built this way."))
+    en+=card("FOLLOW THE ADOBE TUTORIAL","Watch: Turn a Sketch Into Vector Art",
+        para("Open Adobe Illustrator, then follow this short Adobe tutorial. It is about five minutes and shows you how to bring in a sketch and trace it with the drawing tools.")
+        + adobe_button(False, ADOBE_URL2)
+        + note("The tutorial opens on Adobe&rsquo;s own website in a new tab. It also has its own practice sketch you can download there if you want one. Watch it, then try the same steps on your own sketch."))
+    en+=card("QUICK NOTES FROM THE TUTORIAL","How to Trace Your Sketch",
+        para("Here are the steps in short. Use them as a cheat sheet while you work. These steps are for a Mac.")
+        + sketch_notes(False))
+    en+=card("YOU PRACTICE / ON YOUR OWN","Make Your Vector Art",
+        (float_right(S3_FLOAT,"A Pioneer Valley student tracing a sketch into vector art in Adobe Illustrator on an iMac in the lab","Place your sketch, lock it, and trace on a new layer.") if HAVE_S3_FLOAT else "")
+        + para("Pick a simple sketch to trace. You can draw your own on paper and take a photo of it, or download the practice sketch from the Adobe tutorial.")
+        + bullets([
+            ("Place your sketch:","use File &gt; Place to bring your sketch into Illustrator."),
+            ("Lock the sketch layer:","so it stays still while you trace."),
+            ("Trace it:","use the Pen tool for clean lines and the Pencil tool for loose lines."),
+            ("Make it bold:","thicken your strokes so the art looks strong."),
+        ])
+        + note("Keep it simple and have fun. This is a first attempt, not a graded project."))
+    en+=deliverables_box(False,
+        [("1 screen capture (JPG or PNG):","a screen capture of your vector art in Illustrator, your traced sketch, uploaded to this Canvas assignment.")])
+    en+=next_up("MODULE COMPLETE","Nice work. You know your way around Illustrator and you have turned a sketch into vector art. You are ready for your first real Illustrator project.")
+
+    es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 03","De Boceto a Arte Vectorial",
+        "Convierte un boceto simple en arte vectorial limpio calc&aacute;ndolo con las herramientas Pluma y L&aacute;piz, luego entrega una captura de pantalla.","#top","Back to English", HICON_DESIGN)
+    es+=card("DE BOCETO A VECTOR / QU&Eacute; VAS A HACER","Calca un Boceto a Arte Vectorial",
+        para("Ahora que ya sabes moverte en Illustrator, vas a probar arte vectorial de verdad. Vas a tomar un boceto simple, traerlo a Illustrator y calcarlo encima para hacer l&iacute;neas limpias que se mantienen n&iacute;tidas en cualquier tama&ntilde;o.")
+        + para("Es tu primer intento, as&iacute; que mant&eacute;n tu boceto simple: una forma, una letra o un dibujo peque&ntilde;o. La meta es practicar el calcado, no hacer una obra perfecta.")
+        + note("El arte vectorial est&aacute; hecho de l&iacute;neas y formas, as&iacute; que nunca se ve borroso al agrandarlo. Por eso los logotipos y los &iacute;conos se hacen as&iacute;."))
+    es+=card("SIGUE EL TUTORIAL DE ADOBE","Mira: Convierte un Boceto en Arte Vectorial",
+        para("Abre Adobe Illustrator, luego sigue este tutorial corto de Adobe. Dura unos cinco minutos y te muestra c&oacute;mo traer un boceto y calcarlo con las herramientas de dibujo.")
+        + adobe_button(True, ADOBE_URL2)
+        + note("El tutorial se abre en el sitio web de Adobe en una pesta&ntilde;a nueva. Tambi&eacute;n tiene su propio boceto de pr&aacute;ctica que puedes descargar ah&iacute; si quieres uno. M&iacute;ralo, luego prueba los mismos pasos en tu propio boceto."))
+    es+=card("NOTAS R&Aacute;PIDAS DEL TUTORIAL","C&oacute;mo Calcar Tu Boceto",
+        para("Estos son los pasos en corto. &Uacute;salos como ayuda mientras trabajas. Estos pasos son para una Mac.")
+        + sketch_notes(True))
+    es+=card("T&Uacute; PRACTICAS / POR TU CUENTA","Haz Tu Arte Vectorial",
+        (float_right(S3_FLOAT,"Un estudiante de Pioneer Valley calcando un boceto a arte vectorial en Adobe Illustrator en una iMac en el laboratorio","Coloca tu boceto, bloqu&eacute;alo y calca en una capa nueva.") if HAVE_S3_FLOAT else "")
+        + para("Elige un boceto simple para calcar. Puedes dibujar el tuyo en papel y tomarle una foto, o descargar el boceto de pr&aacute;ctica del tutorial de Adobe.")
+        + bullets([
+            ("Coloca tu boceto:","usa Archivo &gt; Colocar para traer tu boceto a Illustrator."),
+            ("Bloquea la capa del boceto:","para que no se mueva mientras calcas."),
+            ("C&aacute;lcalo:","usa la herramienta Pluma para l&iacute;neas limpias y la herramienta L&aacute;piz para l&iacute;neas sueltas."),
+            ("Hazlo fuerte:","engrosa tus trazos para que el arte se vea s&oacute;lido."),
+        ])
+        + note("Mant&eacute;nlo simple y div&iacute;ertete. Es un primer intento, no un proyecto calificado."))
+    es+=deliverables_box(True,
+        [("1 captura de pantalla (JPG o PNG):","una captura de pantalla de tu arte vectorial en Illustrator, tu boceto calcado, subida a esta tarea de Canvas.")])
+    es+=next_up("M&Oacute;DULO COMPLETO","Buen trabajo. Ya sabes moverte en Illustrator y convertiste un boceto en arte vectorial. Est&aacute;s listo para tu primer proyecto de verdad en Illustrator.")
+
+    stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'
+    return wrap_page(f"Step 3: Sketch to Vector Art | Get to Know Illustrator | {CL_EN} | PVHS", nav("Step 03",dots_for(2),stepnav), top_wrap(en,es), bottom)
+
+for fname,gen in [(OVER,overview),(S2,step02),(S3,step03)]:
     html=ent(gen())
     ban_check(html, fname)
     open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
