@@ -74,6 +74,71 @@ def adobe_button(es):
       'background:#00b8b8;color:#04201f;padding:13px 28px;border-top:2px solid #80e0e0;font-size:12.5pt;'
       f'letter-spacing:0.04em;"><strong>{label} &#8599;</strong></a></div>')
 
+def _tour_part(num, title, items):
+    hd=('<div style="display:flex;align-items:center;gap:10px;margin:16px 0 8px;">'
+        f'<span style="flex:0 0 auto;width:26px;height:26px;background:#00b8b8;color:#04201f;font-size:12pt;line-height:26px;text-align:center;"><strong>{num}</strong></span>'
+        f'<span style="font-size:14pt;color:#80e0e0;"><strong>{title}</strong></span></div>')
+    return hd+bullets(items)
+
+def tour_notes(es):
+    # The tutorial's written takeaways, rewritten simple + Mac-only, inside the LOCKED vertical
+    # .silva-scroll panel so the step-by-step stays contained and never looks overwhelming (Chris).
+    if es:
+        hint="Despl&aacute;zate dentro del cuadro para ver las cuatro partes."
+        parts=(
+         _tour_part("1","Recorre el espacio de trabajo",[
+            ("Barra de men&uacute;:","la tira de hasta arriba (Archivo, Edici&oacute;n y m&aacute;s). Guarda los comandos y los ajustes."),
+            ("Panel de herramientas:","a la izquierda. Tiene las herramientas para crear y cambiar el arte. Las parecidas est&aacute;n juntas; mant&eacute;n presionada una para ver el grupo."),
+            ("Paneles:","a la derecha (como Propiedades y Capas). Te dan controles para tu arte. La lista completa est&aacute; en el men&uacute; Ventana."),
+            ("Ventana del documento:","el centro, donde se ve tu arte. Cada archivo abierto tiene su propia pesta&ntilde;a."),
+         ])
+         + _tour_part("2","Haz zoom y mu&eacute;vete",[
+            ("Herramienta Zoom:","en el panel de herramientas. Te deja ver m&aacute;s detalle. Mant&eacute;n Opci&oacute;n para cambiar de Acercar a Alejar."),
+            ("Herramienta Mano:","mant&eacute;n presionada la herramienta Zoom para encontrarla. Te deja deslizarte por la mesa de trabajo."),
+         ])
+         + _tour_part("3","Crea un documento nuevo",[
+            ("Archivo &gt; Nuevo:","abre el cuadro Nuevo documento. Elige un preset (como Impresi&oacute;n) para fijar el tama&ntilde;o y las opciones."),
+            ("Pantalla de inicio:","aparece cuando no hay archivos abiertos. Lista tus archivos recientes y presets listos para usar."),
+         ])
+         + _tour_part("4","Guarda tu trabajo",[
+            ("Archivo &gt; Guardar o Guardar como:","eliges Guardar en tu computadora o Guardar en Documentos en la nube."),
+            ("En tu computadora:","guarda el archivo directo en tu Mac."),
+            ("Documentos en la nube:","se guardan en la nube de Adobe. Los abres en cualquier dispositivo y se guardan solos."),
+            ("D&eacute;jalo editable:","guarda como archivo de Illustrator (.ai). Eso conserva tus capas y tu texto para editar despu&eacute;s."),
+            ("En el cuadro Guardar como:","nombra tu archivo, elige d&oacute;nde va, aseg&uacute;rate de que Adobe Illustrator est&eacute; elegido en el men&uacute; Formato y haz clic en Guardar."),
+         ])
+        )
+    else:
+        hint="Scroll inside the box to see all four parts."
+        parts=(
+         _tour_part("1","Tour the workspace",[
+            ("Menu bar:","the strip at the very top (File, Edit, and more). It holds commands and settings."),
+            ("Tools panel:","on the left. It holds the tools you use to make and change art. Tools that are alike are grouped; click and hold one to see the group."),
+            ("Panels:","on the right (like Properties and Layers). They give you controls for your art. The full list is under the Window menu."),
+            ("Document window:","the middle, where your art shows. Each open file has its own tab."),
+         ])
+         + _tour_part("2","Zoom and pan",[
+            ("Zoom tool:","in the Tools panel. It lets you see more detail. Hold Option to switch from Zoom In to Zoom Out."),
+            ("Hand tool:","click and hold the Zoom tool to find it. It lets you slide (pan) around your artboard."),
+         ])
+         + _tour_part("3","Make a new document",[
+            ("File &gt; New:","opens the New Document box. Pick a preset, like Print, to set the size and options."),
+            ("Start screen:","shows when no file is open. It lists your recent files and ready-made presets."),
+         ])
+         + _tour_part("4","Save your work",[
+            ("File &gt; Save or Save As:","you choose Save On Your Computer or Save To Cloud Documents."),
+            ("On your computer:","saves the file right on your Mac."),
+            ("Cloud documents:","save to Adobe&rsquo;s cloud. You can open them on any device, and they autosave as you work."),
+            ("Keep it editable:","save as an Illustrator file (.ai). That keeps your layers and type so you can edit it later."),
+            ("In the Save As box:","name your file, pick where it goes, make sure Adobe Illustrator is chosen in the Format menu, then click Save."),
+         ])
+        )
+    hintline=f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
+    scroll=('<div class="silva-scroll" style="max-height:460px;overflow-y:auto;padding:14px 16px 20px;border:1px solid rgba(0,184,184,0.22);'
+      'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.16) 100%);">'
+      f'{parts}</div>')
+    return hintline+scroll
+
 def downloads_block(es):
     heading="Descarga Tus Archivos" if es else "Download Your Files"
     lead=("Descarga los archivos de pr&aacute;ctica de Illustrator. Son tres archivos .ai dentro de un ZIP. Descompr&iacute;melo y gu&aacute;rdalo en la carpeta de tu proyecto para usarlo en el Paso 02." if es
@@ -174,16 +239,12 @@ def step02():
     en=banner(f"Module {MODNUM} &bull; Step 02","Take the Tour &amp; Practice",
         "Follow the short Adobe tutorial, practice with your files, then turn in one screen capture of your workspace.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=card("THE TOUR / WE DO IT TOGETHER","Follow the Adobe Tutorial",
-        para("Open Adobe Illustrator on your Mac. Then follow this short tutorial. It is made by Adobe and has four quick videos that walk you through the workspace, zooming, making a new document, and saving.")
+        para("Open Adobe Illustrator on your Mac. Then follow this short tutorial. It is made by Adobe and has four quick videos: the workspace, zooming and panning, making a new document, and saving your work.")
         + adobe_button(False)
-        + note("The tutorial opens on Adobe&rsquo;s own website in a new tab. Watch each short video, then do the same thing in your own copy of Illustrator. Keep this page open so you can come back to it.")
-        + para("The four parts of the tour are:")
-        + bullets([
-            ("1. Tour the workspace:","find the artboard, the Tools panel, and the panels around the edges."),
-            ("2. Zoom and move:","zoom in and out and move around your artboard."),
-            ("3. Make a new document:","start a new file and choose a size."),
-            ("4. Save your work:","save your file so you can open it again."),
-        ]))
+        + note("The tutorial opens on Adobe&rsquo;s own website in a new tab. Watch each short video, then do the same thing in your own copy of Illustrator. Keep this page open so you can come back to it."))
+    en+=card("QUICK NOTES FROM THE TOUR","What Each Part Teaches",
+        para("Here is what each part of the tour teaches, in short. Use it as a cheat sheet while you watch and while you practice. These steps are for a Mac.")
+        + tour_notes(False))
     en+=card("YOU PRACTICE / ON YOUR OWN","Practice With Your Files",
         (float_right(S2_FLOAT,"A Pioneer Valley student practicing in Adobe Illustrator on an iMac in the lab","Open each practice file and try the moves from the tour.") if HAVE_S2_FLOAT else "")
         + para("Now practice on your own with the three files you downloaded in Step 01. Open them from your Digital Arts project folder.")
@@ -201,16 +262,12 @@ def step02():
     es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 02","Haz el Recorrido y Practica",
         "Sigue el tutorial corto de Adobe, practica con tus archivos y luego entrega una captura de pantalla de tu espacio de trabajo.","#top","Back to English", HICON_DESIGN)
     es+=card("EL RECORRIDO / LO HACEMOS JUNTOS","Sigue el Tutorial de Adobe",
-        para("Abre Adobe Illustrator en tu Mac. Luego sigue este tutorial corto. Est&aacute; hecho por Adobe y tiene cuatro videos r&aacute;pidos que te ense&ntilde;an el espacio de trabajo, el zoom, c&oacute;mo crear un documento nuevo y c&oacute;mo guardar.")
+        para("Abre Adobe Illustrator en tu Mac. Luego sigue este tutorial corto. Est&aacute; hecho por Adobe y tiene cuatro videos r&aacute;pidos: el espacio de trabajo, el zoom, c&oacute;mo crear un documento nuevo y c&oacute;mo guardar tu trabajo.")
         + adobe_button(True)
-        + note("El tutorial se abre en el sitio web de Adobe en una pesta&ntilde;a nueva. Mira cada video corto y luego haz lo mismo en tu propia copia de Illustrator. Deja esta p&aacute;gina abierta para que puedas regresar.")
-        + para("Las cuatro partes del recorrido son:")
-        + bullets([
-            ("1. Recorre el espacio de trabajo:","encuentra la mesa de trabajo, el panel de herramientas y los paneles alrededor."),
-            ("2. Haz zoom y mu&eacute;vete:","acerca y aleja la vista y mu&eacute;vete por tu mesa de trabajo."),
-            ("3. Crea un documento nuevo:","empieza un archivo nuevo y elige un tama&ntilde;o."),
-            ("4. Guarda tu trabajo:","guarda tu archivo para que puedas abrirlo otra vez."),
-        ]))
+        + note("El tutorial se abre en el sitio web de Adobe en una pesta&ntilde;a nueva. Mira cada video corto y luego haz lo mismo en tu propia copia de Illustrator. Deja esta p&aacute;gina abierta para que puedas regresar."))
+    es+=card("NOTAS R&Aacute;PIDAS DEL RECORRIDO","Qu&eacute; Ense&ntilde;a Cada Parte",
+        para("Esto es lo que ense&ntilde;a cada parte del recorrido, en corto. &Uacute;salo como ayuda mientras miras y mientras practicas. Estos pasos son para una Mac.")
+        + tour_notes(True))
     es+=card("TU PRACTICAS / POR TU CUENTA","Practica Con Tus Archivos",
         (float_right(S2_FLOAT,"Un estudiante de Pioneer Valley practicando en Adobe Illustrator en una iMac en el laboratorio","Abre cada archivo de pr&aacute;ctica y prueba los pasos del recorrido.") if HAVE_S2_FLOAT else "")
         + para("Ahora practica por tu cuenta con los tres archivos que descargaste en el Paso 01. &Aacute;brelos desde la carpeta de tu proyecto de Arte Digital.")
