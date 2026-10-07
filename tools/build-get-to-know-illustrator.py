@@ -149,7 +149,8 @@ def sketch_notes(es):
         hint="Despl&aacute;zate dentro del cuadro para ver los pasos."
         parts=(
          _tour_part("1","Dibuja e importa",[
-            ("Haz un boceto simple:","dib&uacute;jalo en papel y t&oacute;male una foto. O descarga el boceto de pr&aacute;ctica desde la p&aacute;gina del tutorial de Adobe."),
+            ("Haz un boceto simple:","dib&uacute;jalo en papel. O descarga el boceto de pr&aacute;ctica desde la p&aacute;gina del tutorial de Adobe."),
+            ("Toma la foto con tu iPad escolar:","usa tu iPad escolar para tomarle una foto a tu boceto, luego pasa esa foto a tu Mac."),
             ("Col&oacute;calo en Illustrator:","usa Archivo &gt; Colocar y elige la foto de tu boceto para traerla."),
             ("Ponlo en su propia capa:","as&iacute; puedes calcar encima sin moverlo."),
          ])
@@ -172,7 +173,8 @@ def sketch_notes(es):
         hint="Scroll inside the box to see the steps."
         parts=(
          _tour_part("1","Sketch and import",[
-            ("Make a simple sketch:","draw it on paper and take a photo of it. Or download the practice sketch from the Adobe tutorial page."),
+            ("Make a simple sketch:","draw it on paper. Or download the practice sketch from the Adobe tutorial page."),
+            ("Photograph it with your school iPad:","use your school iPad to take a photo of your sketch, then get that photo onto your Mac."),
             ("Place it in Illustrator:","use File &gt; Place and choose your sketch photo to bring it in."),
             ("Put it on its own layer:","so you can trace on top without moving it."),
          ])
@@ -363,8 +365,9 @@ def step03():
         + sketch_notes(False))
     en+=card("YOU PRACTICE / ON YOUR OWN","Make Your Vector Art",
         (float_right(S3_FLOAT,"A Pioneer Valley student tracing a sketch into vector art in Adobe Illustrator on an iMac in the lab","Place your sketch, lock it, and trace on a new layer.") if HAVE_S3_FLOAT else "")
-        + para("Pick a simple sketch to trace. You can draw your own on paper and take a photo of it, or download the practice sketch from the Adobe tutorial.")
+        + para("Pick a simple sketch to trace. You can draw your own on paper and photograph it with your school iPad, or download the practice sketch from the Adobe tutorial.")
         + bullets([
+            ("Photograph your sketch:","draw on paper, then use your school iPad to take a photo of it and get that photo onto your Mac."),
             ("Place your sketch:","use File &gt; Place to bring your sketch into Illustrator."),
             ("Lock the sketch layer:","so it stays still while you trace."),
             ("Trace it:","use the Pen tool for clean lines and the Pencil tool for loose lines."),
@@ -390,8 +393,9 @@ def step03():
         + sketch_notes(True))
     es+=card("T&Uacute; PRACTICAS / POR TU CUENTA","Haz Tu Arte Vectorial",
         (float_right(S3_FLOAT,"Un estudiante de Pioneer Valley calcando un boceto a arte vectorial en Adobe Illustrator en una iMac en el laboratorio","Coloca tu boceto, bloqu&eacute;alo y calca en una capa nueva.") if HAVE_S3_FLOAT else "")
-        + para("Elige un boceto simple para calcar. Puedes dibujar el tuyo en papel y tomarle una foto, o descargar el boceto de pr&aacute;ctica del tutorial de Adobe.")
+        + para("Elige un boceto simple para calcar. Puedes dibujar el tuyo en papel y fotografiarlo con tu iPad escolar, o descargar el boceto de pr&aacute;ctica del tutorial de Adobe.")
         + bullets([
+            ("Fotograf&iacute;a tu boceto:","dib&uacute;jalo en papel, luego usa tu iPad escolar para tomarle una foto y pasarla a tu Mac."),
             ("Coloca tu boceto:","usa Archivo &gt; Colocar para traer tu boceto a Illustrator."),
             ("Bloquea la capa del boceto:","para que no se mueva mientras calcas."),
             ("C&aacute;lcalo:","usa la herramienta Pluma para l&iacute;neas limpias y la herramienta L&aacute;piz para l&iacute;neas sueltas."),
