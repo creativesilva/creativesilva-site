@@ -15,6 +15,15 @@
     }).observe(head);
   }
 
+  // Mobile: once the page scrolls past the top, the header swaps the live
+  // counter for the centered CREATIVE SILVA wordmark (CSS handles the swap).
+  var root = document.documentElement;
+  var onScroll = function () {
+    root.classList.toggle("is-scrolled", (window.pageYOffset || root.scrollTop || 0) > 24);
+  };
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
   function setMenu(open) {
     if (!nav) return;
     if (open) nav.style.setProperty("--menu-top", Math.max(0, nav.getBoundingClientRect().bottom) + "px");

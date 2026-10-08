@@ -126,6 +126,9 @@ a:hover { color: #fff; }
 .pc-q { font-family: var(--font-head); text-transform: uppercase; letter-spacing: 0.04em; font-size: 10.5px; color: var(--red-bright); margin-top: 3px; }
 .btn-donate { font-family: var(--font-head); text-transform: uppercase; letter-spacing: 0.1em; font-size: 13px; font-weight: 600; color: #fff; background: var(--red); border: 2px solid var(--red); padding: 12px 18px; text-decoration: none; white-space: nowrap; transition: background .2s, border-color .2s; }
 .btn-donate:hover { background: var(--red-dark); border-color: var(--red-dark); color: #fff; }
+/* Center wordmark: hidden by default; only the mobile scrolled header shows it. */
+.mast-wordmark { display: none; font-family: var(--font-head); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1; color: #fff; white-space: nowrap; }
+.mast-wordmark b { color: var(--red); font-weight: 700; }
 @media (max-width: 1180px) { .brand-tenure { display: none; } }
 @media (max-width: 1000px) { .pics-counter { display: none; } }
 
@@ -472,6 +475,13 @@ a, button { -webkit-tap-highlight-color: rgba(255,46,46,0.15); }
   .pc-eyebrow { font-size: 8px; letter-spacing: 0.08em; }
   .pc-num { font-size: 15px; line-height: 1.1; }
   .pc-q { font-size: 8px; letter-spacing: 0.03em; margin-top: 1px; }
+
+  /* Scrolled: the counter gives way to a centered CREATIVE SILVA wordmark,
+     and the left brand collapses to just the CS monogram. */
+  .mast-wordmark { font-size: 18px; }
+  html.is-scrolled .masthead .brand-lockup { display: none; }
+  html.is-scrolled .masthead .pics-counter { display: none; }
+  html.is-scrolled .masthead .mast-wordmark { display: inline-block; }
 
   .mainnav { position: sticky; top: calc(60px + env(safe-area-inset-top)); z-index: 59; box-shadow: 0 6px 18px rgba(0,0,0,0.45);
     background: linear-gradient(90deg, #990000 0%, #e00000 50%, #990000 100%); }
