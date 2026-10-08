@@ -10,61 +10,129 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20260524b" />
+  <link rel="stylesheet" href="css/portfolio.css?v=20261007" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <nav class="nav-left" aria-label="Primary">
-        <a href="artist-statement.html" class="active">Artist Statement</a>
-        <a href="artist-biography.html">Artist Biography</a>
-      </nav>
-      <a class="brand" href="curriculum.html" aria-label="Chris Silva, Home">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="masthead">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="Chris Silva, Home">
         <img src="logos/CS_Logo_Vector.svg" alt="Chris Silva" />
       </a>
-      <nav class="nav-right" aria-label="Primary">
-        <a href="work.html">Selected Works</a>
-        <a href="photo-club.html">Photo Club</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+      <div class="mast-tag">
+        <div class="t1">Fine Art Photography</div>
+        <div class="t2">Santa Maria, California</div>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="container">
-      <h1 class="page-title">Artist Statement</h1>
-      <div class="statement-layout">
-        <figure class="headshot">
-          <img src="images/Silva_Disjointed.jpg" alt="Chris Silva, Multiple Exposure Self Portrait on Full Frame Digital" loading="lazy" />
-          <figcaption>Multiple Exposure Self Portrait &nbsp;&middot;&nbsp; Full Frame Digital</figcaption>
-        </figure>
-        <div class="prose">
-          <p>We are living in an era where image volume is so extreme it should force anyone who cares about photography to stop and reconsider what they are doing. Estimates suggest that more than 2.1 trillion images will be created in 2026 alone. That is roughly 5.3 billion per day, 3.7 million per minute, and more than 61,000 every second. This is not a harmless trend. It is a flood.</p>
-          <p>Somewhere, vast farms of servers and storage arrays hum day and night, writing these images onto endless acres of hard drives. This is not metaphor. It is infrastructure. It is electricity. Global data centers already consume more than 500 terawatt hours of energy each year, close to 2 percent of the world's electricity, and that demand is projected to nearly double within the decade. A meaningful photograph now has to compete with a machine built to produce, upload, archive, and forget.</p>
-          <p>Most of these images are not photographs. They are "pics". A pic is made for speed. It is reflex. It is disposable. It proves something happened and then disappears. A photograph is different. A photograph is authored. Light is chosen or shaped. Exposure is understood before the shutter is pressed. Composition is deliberate. Timing is earned. Editing shows restraint. A photograph is not meant to be glanced at. It is meant to be read. It carries weight because the maker accepted responsibility.</p>
-          <p>In a tidal wave of images, how many are truly photographs?</p>
-          <p>The standard must be higher than ever. The world does not need more images. It needs photographs with consequence. Images that slow people down. Images that challenge. Images that bruise, leaving an impact that cannot be scrolled past.</p>
-          <p>That does not come from volume. It comes from discipline. From patience. From saying no to everything that does not belong in the frame.</p>
-          <p>My legacy is Room 322 and the students who walk through that door. They are not here to become content factories. They are here to become photographers who understand light, master mechanics, defend their choices, and raise the standard. In a sea of pics, they will learn to make photographs that endure.</p>
-          <p>That mindset comes from the All Blacks, New Zealand's national rugby team. For more than a century, they have sustained a win rate of 76 percent at the highest level of competition. Their culture is built on one principle: leave the jersey better than you found it. I do not play rugby, but I consider 322 my jersey number. That is the number on the placard outside my classroom. It moves forward every time a student stops chasing more and starts chasing better, every time they choose meaning over convenience, every time they make a photograph that refuses to disappear.</p>
+  <nav class="mainnav" aria-label="Primary">
+    <div class="wrap">
+      <a class="dock-logo" href="index.html" aria-label="Chris Silva, Home"><img src="logos/CS_Logo_Only.svg" alt="" /></a>
+      <button class="navtoggle" type="button" aria-expanded="false" aria-label="Open menu" aria-controls="primary-menu"><span class="bars" aria-hidden="true"></span><span class="navtoggle-label">Menu</span></button>
+      <ul id="primary-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="work.html">Selected Works</a></li>
+        <li><a href="student-work.html">Student Work</a></li>
+        <li><a href="photo-club.html">Photo Club</a></li>
+        <li><a href="artist-statement.html" aria-current="page">Statement</a></li>
+        <li><a href="artist-biography.html">Biography</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="nav-admin"><a href="curriculum.html">Admin Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="hero page" style="background-image:url('images/Silva_Disjointed.jpg');background-position:center 30%;" aria-label="Artist Statement">
+      <div class="wrap">
+        <p class="eyebrow">Chris Silva</p>
+        <h1>Artist Statement</h1>
+      </div>
+    </section>
+
+    <section class="band tight">
+      <div class="wrap">
+        <div class="statement-layout">
+          <figure class="headshot">
+            <img src="images/Silva_Disjointed.jpg" alt="Chris Silva, Multiple Exposure Self Portrait on Full Frame Digital" data-lb="statement" data-cap="Multiple Exposure Self Portrait | Full Frame Digital" loading="lazy" />
+            <figcaption>Multiple Exposure Self Portrait &nbsp;&middot;&nbsp; Full Frame Digital</figcaption>
+          </figure>
+          <div class="prose">
+            <p>We are living in an era where image volume is so extreme it should force anyone who cares about photography to stop and reconsider what they are doing. Estimates suggest that more than 2.1 trillion images will be created in 2026 alone. That is roughly 5.3 billion per day, 3.7 million per minute, and more than 61,000 every second. This is not a harmless trend. It is a flood.</p>
+            <p>Somewhere, vast farms of servers and storage arrays hum day and night, writing these images onto endless acres of hard drives. This is not metaphor. It is infrastructure. It is electricity. Global data centers already consume more than 500 terawatt hours of energy each year, close to 2 percent of the world&#x2019;s electricity, and that demand is projected to nearly double within the decade. A meaningful photograph now has to compete with a machine built to produce, upload, archive, and forget.</p>
+            <p>Most of these images are not photographs. They are &#x201C;pics&#x201D;. A pic is made for speed. It is reflex. It is disposable. It proves something happened and then disappears. A photograph is different. A photograph is authored. Light is chosen or shaped. Exposure is understood before the shutter is pressed. Composition is deliberate. Timing is earned. Editing shows restraint. A photograph is not meant to be glanced at. It is meant to be read. It carries weight because the maker accepted responsibility.</p>
+            <p>In a tidal wave of images, how many are truly photographs?</p>
+            <p>The standard must be higher than ever. The world does not need more images. It needs photographs with consequence. Images that slow people down. Images that challenge. Images that bruise, leaving an impact that cannot be scrolled past.</p>
+            <p>That does not come from volume. It comes from discipline. From patience. From saying no to everything that does not belong in the frame.</p>
+            <p>My legacy is Room 322 and the students who walk through that door. They are not here to become content factories. They are here to become photographers who understand light, master mechanics, defend their choices, and raise the standard. In a sea of pics, they will learn to make photographs that endure.</p>
+            <p>That mindset comes from the All Blacks, New Zealand&#x2019;s national rugby team. For more than a century, they have sustained a win rate of 76 percent at the highest level of competition. Their culture is built on one principle: leave the jersey better than you found it. I do not play rugby, but I consider 322 my jersey number. That is the number on the placard outside my classroom. It moves forward every time a student stops chasing more and starts chasing better, every time they choose meaning over convenience, every time they make a photograph that refuses to disappear.</p>
+          </div>
         </div>
       </div>
-      <section class="also-like">
-        <h2>Also View</h2>
-        <div class="also-like-track">
-          <a href="artist-biography.html"><img src="images/Silva_Selfie.jpg" alt="" loading="lazy" /><span class="label">Artist Biography</span></a>
-          <a href="work.html"><img src="images/Portraits-1_v3.jpg" alt="" loading="lazy" /><span class="label">Selected Works</span></a>
-          <a href="photo-club.html"><img src="images/lightwriterz-light-lw.jpg" alt="" loading="lazy" /><span class="label">Photo Club</span></a>
+    </section>
+
+    <section class="band tight">
+      <div class="wrap">
+        <div class="also-like">
+          <h2>Also View</h2>
+          <div class="also-like-slider-wrap">
+            <button class="slider-btn slider-btn--prev" aria-label="Scroll left">&#8249;</button>
+            <div class="also-like-track">
+              <a href="artist-biography.html"><img src="images/Silva_Selfie.jpg" alt="" loading="lazy" /><span class="label">Artist Biography</span></a>
+              <a href="work.html"><img src="images/Portraits-1_v3.jpg" alt="" loading="lazy" /><span class="label">Selected Works</span></a>
+              <a href="photo-club.html"><img src="images/lightwriterz-light-lw.jpg" alt="" loading="lazy" /><span class="label">Photo Club</span></a>
+            </div>
+            <button class="slider-btn slider-btn--next" aria-label="Scroll right">&#8250;</button>
+          </div>
         </div>
-      </section>
+      </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <a href="#" class="back-to-top">Back to Top</a>
-    <div>www.creativesilva.com</div>
+  <footer class="site">
+    <div class="wrap">
+      <div class="cols">
+        <div>
+          <a class="foot-logo" href="index.html" aria-label="Chris Silva, Home"><img src="logos/CS_Logo_Vector.svg" alt="Chris Silva" /></a>
+          <p class="foot-about">Black and white film and digital photography by Chris Silva. Fine art work rooted in place, presence, and lived experience, from Santa Maria, California.</p>
+        </div>
+        <div>
+          <h4>Collections</h4>
+          <ul>
+            <li><a href="portraits.html">Portraits</a></li>
+            <li><a href="the-streets.html">The Streets</a></li>
+            <li><a href="cityscapes.html">Cityscapes</a></li>
+            <li><a href="working-class.html">Working Class</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>More</h4>
+          <ul>
+            <li><a href="work.html">Selected Works</a></li>
+            <li><a href="student-work.html">Student Work</a></li>
+            <li><a href="photo-club.html">Photo Club</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="artist-statement.html">Artist Statement</a></li>
+            <li><a href="artist-biography.html">Biography</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="https://instagram.com/silvateaches" target="_blank" rel="noopener">Instagram</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="legal">
+        <span>&copy; <span id="yr">2026</span> Chris Silva &middot; www.creativesilva.com</span>
+        <a href="#main" class="back-to-top">Back to Top</a>
+      </div>
+    </div>
   </footer>
 
-  <script src="js/main.js?v=20260418d" defer></script>
+  <script src="js/portfolio.js?v=20261007" defer></script>
+  <script src="js/lightbox.js?v=20261007" defer></script>
 </body>
 </html>

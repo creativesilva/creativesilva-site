@@ -10,97 +10,136 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20260524b" />
+  <link rel="stylesheet" href="css/portfolio.css?v=20261007" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <nav class="nav-left" aria-label="Primary">
-        <a href="artist-statement.html">Artist Statement</a>
-        <a href="artist-biography.html">Artist Biography</a>
-      </nav>
-      <a class="brand" href="curriculum.html" aria-label="Chris Silva, Home">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="masthead">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="Chris Silva, Home">
         <img src="logos/CS_Logo_Vector.svg" alt="Chris Silva" />
       </a>
-      <nav class="nav-right" aria-label="Primary">
-        <a href="work.html" class="active">Selected Works</a>
-        <a href="photo-club.html">Photo Club</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+      <div class="mast-tag">
+        <div class="t1">Fine Art Photography</div>
+        <div class="t2">Santa Maria, California</div>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="container">
-      <div class="gallery-header">
-        <a href="working-class.html" class="gallery-nav-btn prev">
-          <span class="nav-arrow">&#8249;</span>
-          <span class="nav-label">Working Class</span>
-        </a>
-        <h1 class="page-title">Portraits</h1>
-        <a href="cityscapes.html" class="gallery-nav-btn next">
-          <span class="nav-label">Cityscapes</span>
-          <span class="nav-arrow">&#8250;</span>
-        </a>
-      </div>
-      <p class="gallery-intro">A portrait can be a mirror, or it can be a threshold. These images live at that edge, where silence carries meaning and a glance becomes a sentence. What is revealed is not explained. It lingers.</p>
+  <nav class="mainnav" aria-label="Primary">
+    <div class="wrap">
+      <a class="dock-logo" href="index.html" aria-label="Chris Silva, Home"><img src="logos/CS_Logo_Only.svg" alt="" /></a>
+      <button class="navtoggle" type="button" aria-expanded="false" aria-label="Open menu" aria-controls="primary-menu"><span class="bars" aria-hidden="true"></span><span class="navtoggle-label">Menu</span></button>
+      <ul id="primary-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="work.html" aria-current="page">Selected Works</a></li>
+        <li><a href="student-work.html">Student Work</a></li>
+        <li><a href="photo-club.html">Photo Club</a></li>
+        <li><a href="artist-statement.html">Statement</a></li>
+        <li><a href="artist-biography.html">Biography</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="nav-admin"><a href="curriculum.html">Admin Login</a></li>
+      </ul>
+    </div>
+  </nav>
 
-      <div class="gallery-grid">
-        <figure class="gallery-item">
-          <img src="images/Portraits-1_v3.jpg" alt="Forged by the Streets" loading="lazy" />
-          <figcaption>Forged by the Streets | 35mm Film</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/SILVA-19.jpg" alt="Quiet Songs Between Us" loading="lazy" />
-          <figcaption>Quiet Songs Between Us | 35mm Film</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/Portraits-2.jpg" alt="Single Lens Reflex" loading="lazy" />
-          <figcaption>Single Lens Reflex | 35mm Film</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/Portraits-3.jpg" alt="Through Her Own Lens" loading="lazy" />
-          <figcaption>Through Her Own Lens | 35mm Film</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/SILVA-59.jpg" alt="Defiance in Stillness" loading="lazy" />
-          <figcaption>Defiance in Stillness | Full Frame Digital</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/SILVA-60.jpg" alt="Elegance That Endures" loading="lazy" />
-          <figcaption>Elegance That Endures | Full Frame Digital</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/Portraits-4.jpg" alt="Wandering by Craft" loading="lazy" />
-          <figcaption>Wandering by Craft | 35mm Film</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/Portraits-5.jpg" alt="Stronger Than Before" loading="lazy" />
-          <figcaption>Stronger Than Before | Full Frame Digital</figcaption>
-        </figure>
+  <main id="main">
+    <section class="hero page" style="background-image:url('images/Portraits-1_v3.jpg');background-position:center 22%;" aria-label="Portraits">
+      <div class="wrap">
+        <p class="eyebrow">Selected Work &middot; Collection</p>
+        <h1>Portraits</h1>
       </div>
+    </section>
 
-      <section class="also-like">
-        <h2>Also View</h2>
-        <div class="also-like-slider-wrap">
-          <button class="slider-btn slider-btn--prev" aria-label="Previous">&#8592;</button>
-          <div class="also-like-track">
-            <a href="cityscapes.html"><img src="images/City-1.jpg" alt="" loading="lazy" /><span class="label">Cityscapes</span></a>
-            <a href="the-streets.html"><img src="images/City-2.jpg" alt="" loading="lazy" /><span class="label">The Streets</span></a>
-            <a href="working-class.html"><img src="images/Working-1.jpg" alt="" loading="lazy" /><span class="label">Working Class</span></a>
-            <a href="photo-club.html"><img src="images/lightwriterz-light-lw.jpg" alt="" loading="lazy" /><span class="label">Photo Club</span></a>
-          </div>
-          <button class="slider-btn slider-btn--next" aria-label="Next">&#8594;</button>
+    <section class="band tight">
+      <div class="wrap">
+        <div class="gal-intro">
+          <p class="gal-kicker">Portraits</p>
+          <p class="gal-statement">A portrait can be a mirror, or it can be a threshold. These images live at that edge, where silence carries meaning and a glance becomes a sentence. What is revealed is not explained. It lingers.</p>
+          <p class="gal-meta">35mm Film &amp; Full Frame Digital &middot; 8 Frames</p>
+          <nav class="gal-index" aria-label="Collections">
+            <a href="portraits.html" aria-current="page">Portraits</a>
+            <a href="the-streets.html">The Streets</a>
+            <a href="cityscapes.html">Cityscapes</a>
+            <a href="working-class.html">Working Class</a>
+          </nav>
         </div>
-      </section>
+
+        <div class="gallery-grid">
+          <figure class="gallery-item"><img src="images/Portraits-1_v3.jpg" alt="Forged by the Streets" data-lb="portraits" data-cap="Forged by the Streets | 35mm Film" loading="lazy" /><figcaption>Forged by the Streets</figcaption></figure>
+          <figure class="gallery-item"><img src="images/SILVA-19.jpg" alt="Quiet Songs Between Us" data-lb="portraits" data-cap="Quiet Songs Between Us | 35mm Film" loading="lazy" /><figcaption>Quiet Songs Between Us</figcaption></figure>
+          <figure class="gallery-item"><img src="images/Portraits-2.jpg" alt="Single Lens Reflex" data-lb="portraits" data-cap="Single Lens Reflex | 35mm Film" loading="lazy" /><figcaption>Single Lens Reflex</figcaption></figure>
+          <figure class="gallery-item"><img src="images/Portraits-3.jpg" alt="Through Her Own Lens" data-lb="portraits" data-cap="Through Her Own Lens | 35mm Film" loading="lazy" /><figcaption>Through Her Own Lens</figcaption></figure>
+          <figure class="gallery-item"><img src="images/SILVA-59.jpg" alt="Defiance in Stillness" data-lb="portraits" data-cap="Defiance in Stillness | Full Frame Digital" loading="lazy" /><figcaption>Defiance in Stillness</figcaption></figure>
+          <figure class="gallery-item"><img src="images/SILVA-60.jpg" alt="Elegance That Endures" data-lb="portraits" data-cap="Elegance That Endures | Full Frame Digital" loading="lazy" /><figcaption>Elegance That Endures</figcaption></figure>
+          <figure class="gallery-item"><img src="images/Portraits-4.jpg" alt="Wandering by Craft" data-lb="portraits" data-cap="Wandering by Craft | 35mm Film" loading="lazy" /><figcaption>Wandering by Craft</figcaption></figure>
+          <figure class="gallery-item"><img src="images/Portraits-5.jpg" alt="Stronger Than Before" data-lb="portraits" data-cap="Stronger Than Before | Full Frame Digital" loading="lazy" /><figcaption>Stronger Than Before</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band tight">
+      <div class="wrap">
+        <div class="also-like">
+          <h2>Also View</h2>
+          <div class="also-like-slider-wrap">
+            <button class="slider-btn slider-btn--prev" aria-label="Scroll left">&#8249;</button>
+            <div class="also-like-track">
+              <a href="cityscapes.html"><img src="images/City-1.jpg" alt="" loading="lazy" /><span class="label">Cityscapes</span></a>
+              <a href="the-streets.html"><img src="images/City-2.jpg" alt="" loading="lazy" /><span class="label">The Streets</span></a>
+              <a href="working-class.html"><img src="images/Working-1.jpg" alt="" loading="lazy" /><span class="label">Working Class</span></a>
+              <a href="photo-club.html"><img src="images/lightwriterz-light-lw.jpg" alt="" loading="lazy" /><span class="label">Photo Club</span></a>
+            </div>
+            <button class="slider-btn slider-btn--next" aria-label="Scroll right">&#8250;</button>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <a href="#" class="back-to-top">Back to Top</a>
-    <div>www.creativesilva.com</div>
+  <footer class="site">
+    <div class="wrap">
+      <div class="cols">
+        <div>
+          <a class="foot-logo" href="index.html" aria-label="Chris Silva, Home"><img src="logos/CS_Logo_Vector.svg" alt="Chris Silva" /></a>
+          <p class="foot-about">Black and white film and digital photography by Chris Silva. Fine art work rooted in place, presence, and lived experience, from Santa Maria, California.</p>
+        </div>
+        <div>
+          <h4>Collections</h4>
+          <ul>
+            <li><a href="portraits.html">Portraits</a></li>
+            <li><a href="the-streets.html">The Streets</a></li>
+            <li><a href="cityscapes.html">Cityscapes</a></li>
+            <li><a href="working-class.html">Working Class</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>More</h4>
+          <ul>
+            <li><a href="work.html">Selected Works</a></li>
+            <li><a href="student-work.html">Student Work</a></li>
+            <li><a href="photo-club.html">Photo Club</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="artist-statement.html">Artist Statement</a></li>
+            <li><a href="artist-biography.html">Biography</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="https://instagram.com/silvateaches" target="_blank" rel="noopener">Instagram</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="legal">
+        <span>&copy; <span id="yr">2026</span> Chris Silva &middot; www.creativesilva.com</span>
+        <a href="#main" class="back-to-top">Back to Top</a>
+      </div>
+    </div>
   </footer>
 
-  <script src="js/main.js?v=20260418d" defer></script>
+  <script src="js/portfolio.js?v=20261007" defer></script>
+  <script src="js/lightbox.js?v=20261007" defer></script>
 </body>
 </html>

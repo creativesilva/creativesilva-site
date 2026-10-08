@@ -7,92 +7,155 @@
   <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only.svg" />
   <link rel="apple-touch-icon" href="/logos/CS_AppIcon_180.png" />
   <meta name="description" content="Contact Chris Silva, photographer and visual arts educator." />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init({ publicKey: '68UkiTjqHIKZMkeCC' });</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20260524b" />
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>emailjs.init({ publicKey: '68UkiTjqHIKZMkeCC' });</script>
+  <link rel="stylesheet" href="css/portfolio.css?v=20261007" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <nav class="nav-left" aria-label="Primary">
-        <a href="artist-statement.html">Artist Statement</a>
-        <a href="artist-biography.html">Artist Biography</a>
-      </nav>
-      <a class="brand" href="curriculum.html" aria-label="Chris Silva, Home">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="masthead">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="Chris Silva, Home">
         <img src="logos/CS_Logo_Vector.svg" alt="Chris Silva" />
       </a>
-      <nav class="nav-right" aria-label="Primary">
-        <a href="work.html">Selected Works</a>
-        <a href="photo-club.html">Photo Club</a>
-        <a href="contact.html" class="active">Contact</a>
-      </nav>
+      <div class="mast-tag">
+        <div class="t1">Fine Art Photography</div>
+        <div class="t2">Santa Maria, California</div>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="container-narrow">
-      <h1 class="page-title">Contact</h1>
+  <nav class="mainnav" aria-label="Primary">
+    <div class="wrap">
+      <a class="dock-logo" href="index.html" aria-label="Chris Silva, Home"><img src="logos/CS_Logo_Only.svg" alt="" /></a>
+      <button class="navtoggle" type="button" aria-expanded="false" aria-label="Open menu" aria-controls="primary-menu"><span class="bars" aria-hidden="true"></span><span class="navtoggle-label">Menu</span></button>
+      <ul id="primary-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="work.html">Selected Works</a></li>
+        <li><a href="student-work.html">Student Work</a></li>
+        <li><a href="photo-club.html">Photo Club</a></li>
+        <li><a href="artist-statement.html">Statement</a></li>
+        <li><a href="artist-biography.html">Biography</a></li>
+        <li><a href="contact.html" aria-current="page">Contact</a></li>
+        <li class="nav-admin"><a href="curriculum.html">Admin Login</a></li>
+      </ul>
+    </div>
+  </nav>
 
-      <form class="contact-form" id="contactForm">
-        <div>
-          <label for="name">Name</label>
-          <input id="name" name="name" type="text" required />
-        </div>
-        <div>
-          <label for="email">Email Address</label>
-          <input id="email" name="email" type="email" required />
-        </div>
-        <div>
-          <label for="message">Message</label>
-          <textarea id="message" name="message" required></textarea>
-        </div>
-        <button type="submit" id="contactSubmit">Send</button>
-      </form>
+  <main id="main">
+    <section class="hero page" style="background-image:url('images/Landscapes-3.jpg');background-position:center 42%;" aria-label="Contact">
+      <div class="wrap">
+        <p class="eyebrow">Get in Touch</p>
+        <h1>Contact</h1>
+      </div>
+    </section>
 
-      <script>
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-          e.preventDefault();
-          const btn = document.getElementById('contactSubmit');
-          const name    = document.getElementById('name').value.trim();
-          const email   = document.getElementById('email').value.trim();
-          const message = document.getElementById('message').value.trim();
+    <section class="band tight">
+      <div class="wrap" style="max-width:620px;">
+        <form id="contactForm" class="form center">
+          <div>
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" required />
+          </div>
+          <div>
+            <label for="email">Email Address</label>
+            <input id="email" name="email" type="email" required />
+          </div>
+          <div>
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required></textarea>
+          </div>
+          <button type="submit" id="contactSubmit" class="btn">Send Message</button>
+          <p class="note" id="formNote" role="status" aria-live="polite"></p>
+        </form>
 
-          btn.disabled = true;
-          btn.textContent = 'Sending…';
-
-          emailjs.send('service_4mhkbik', 'template_creativesilva', {
-            name:    name,
-            email:   email,
-            message: message,
-          }).then(function() {
-            btn.textContent = '✅ Message sent!';
-            btn.style.opacity = '0.7';
-            document.getElementById('contactForm').reset();
-          }, function(error) {
-            btn.disabled = false;
-            btn.textContent = 'Send';
-            alert('Something went wrong, please try again or email chris@creativesilva.com directly.');
-            console.error('EmailJS error:', error);
-          });
-        });
-      </script>
-
-      <p class="contact-info">
-        Chris Silva &nbsp;|&nbsp;
-        <a href="mailto:chris@creativesilva.com">chris@creativesilva.com</a> &nbsp;|&nbsp;
-        <a href="https://instagram.com/silvateaches" target="_blank" rel="noopener">instagram @silvateaches</a>
-      </p>
+        <ul class="contact-list" style="margin-top:44px;">
+          <li><div class="k">Email</div><div class="v"><a href="mailto:chris@creativesilva.com">chris@creativesilva.com</a></div></li>
+          <li><div class="k">Instagram</div><div class="v"><a href="https://instagram.com/silvateaches" target="_blank" rel="noopener">@silvateaches</a></div></li>
+        </ul>
+      </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <a href="#" class="back-to-top">Back to Top</a>
-    <div>www.creativesilva.com</div>
+  <footer class="site">
+    <div class="wrap">
+      <div class="cols">
+        <div>
+          <a class="foot-logo" href="index.html" aria-label="Chris Silva, Home"><img src="logos/CS_Logo_Vector.svg" alt="Chris Silva" /></a>
+          <p class="foot-about">Black and white film and digital photography by Chris Silva. Fine art work rooted in place, presence, and lived experience, from Santa Maria, California.</p>
+        </div>
+        <div>
+          <h4>Collections</h4>
+          <ul>
+            <li><a href="portraits.html">Portraits</a></li>
+            <li><a href="the-streets.html">The Streets</a></li>
+            <li><a href="cityscapes.html">Cityscapes</a></li>
+            <li><a href="working-class.html">Working Class</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>More</h4>
+          <ul>
+            <li><a href="work.html">Selected Works</a></li>
+            <li><a href="student-work.html">Student Work</a></li>
+            <li><a href="photo-club.html">Photo Club</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="artist-statement.html">Artist Statement</a></li>
+            <li><a href="artist-biography.html">Biography</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="https://instagram.com/silvateaches" target="_blank" rel="noopener">Instagram</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="legal">
+        <span>&copy; <span id="yr">2026</span> Chris Silva &middot; www.creativesilva.com</span>
+        <a href="#main" class="back-to-top">Back to Top</a>
+      </div>
+    </div>
   </footer>
 
-  <script src="js/main.js?v=20260418d" defer></script>
+  <script>
+    (function () {
+      var form = document.getElementById('contactForm');
+      if (!form) return;
+      var btn = document.getElementById('contactSubmit');
+      var note = document.getElementById('formNote');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+        note.className = 'note';
+        note.textContent = '';
+        emailjs.send('service_4mhkbik', 'template_creativesilva', {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          message: document.getElementById('message').value
+        }).then(function () {
+          form.reset();
+          btn.disabled = false;
+          btn.textContent = 'Send Message';
+          note.className = 'note ok';
+          note.textContent = 'Message sent. Thank you, I will get back to you soon.';
+        }, function (error) {
+          btn.disabled = false;
+          btn.textContent = 'Send Message';
+          note.className = 'note err';
+          note.textContent = 'Something went wrong. Please email chris@creativesilva.com directly.';
+          console.error('EmailJS error:', error);
+        });
+      });
+    })();
+  </script>
+
+  <script src="js/portfolio.js?v=20261007" defer></script>
+  <script src="js/lightbox.js?v=20261007" defer></script>
 </body>
 </html>

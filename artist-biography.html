@@ -10,69 +10,137 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20260524b" />
+  <link rel="stylesheet" href="css/portfolio.css?v=20261007" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <nav class="nav-left" aria-label="Primary">
-        <a href="artist-statement.html">Artist Statement</a>
-        <a href="artist-biography.html" class="active">Artist Biography</a>
-      </nav>
-      <a class="brand" href="curriculum.html" aria-label="Chris Silva, Home">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="masthead">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="Chris Silva, Home">
         <img src="logos/CS_Logo_Vector.svg" alt="Chris Silva" />
       </a>
-      <nav class="nav-right" aria-label="Primary">
-        <a href="work.html">Selected Works</a>
-        <a href="photo-club.html">Photo Club</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+      <div class="mast-tag">
+        <div class="t1">Fine Art Photography</div>
+        <div class="t2">Santa Maria, California</div>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="container">
-      <h1 class="page-title">Artist Biography</h1>
-      <div class="statement-layout">
-        <figure class="headshot">
-          <img src="images/Silva_Selfie.jpg" alt="Chris Silva, Self Portrait on 35mm Film" loading="lazy" />
-          <figcaption>Self Portrait &nbsp;&middot;&nbsp; 35mm Film</figcaption>
-        </figure>
-        <div class="prose">
-        <p>Chris Silva is a photographer and visual arts educator based in Santa Maria, California. His work lives in a Fine Art practice that blends documentary observation, environmental portraiture, and experimentation, with a focus on meaningful, thought provoking images rooted in place, presence, and lived experience. Working primarily in black and white, he uses light, composition, and atmosphere to shape photographs that feel honest while remaining clearly authored.</p>
-        <p>Chris works across film, digital, and a film digital hybrid workflow. His foundation in traditional processes informs his technical discipline and visual decisions, while his digital practice supports precision in refinement, sequencing, and presentation. That balance of craft and control allows him to move fluidly between spontaneous observation and intentional construction, without losing consistency in tone or message.</p>
-        <p>Chris's storytelling began with light and a camera that still carries deep meaning. Shortly before he passed, his uncle, a proud member of the Yaqui Nation, placed a Nikon F3 in Chris's hands and trusted him to carry the legacy forward. His uncle named it "The Spirit Box," and Chris continues to photograph with that same film camera today as a reminder that image making can honor memory, identity, and purpose.</p>
+  <nav class="mainnav" aria-label="Primary">
+    <div class="wrap">
+      <a class="dock-logo" href="index.html" aria-label="Chris Silva, Home"><img src="logos/CS_Logo_Only.svg" alt="" /></a>
+      <button class="navtoggle" type="button" aria-expanded="false" aria-label="Open menu" aria-controls="primary-menu"><span class="bars" aria-hidden="true"></span><span class="navtoggle-label">Menu</span></button>
+      <ul id="primary-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="work.html">Selected Works</a></li>
+        <li><a href="student-work.html">Student Work</a></li>
+        <li><a href="photo-club.html">Photo Club</a></li>
+        <li><a href="artist-statement.html">Statement</a></li>
+        <li><a href="artist-biography.html" aria-current="page">Biography</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="nav-admin"><a href="curriculum.html">Admin Login</a></li>
+      </ul>
+    </div>
+  </nav>
 
-        <figure class="prose-figure" style="width:clamp(150px,26%,240px);">
-          <img src="images/Richard_Martinez.jpg" alt="Uncle Richard Martinez, who placed The Spirit Box in Chris's hands" loading="lazy" />
-          <figcaption>Uncle Richard Martinez &nbsp;&middot;&nbsp; In loving memory</figcaption>
-        </figure>
-        <figure class="prose-figure">
-          <img src="images/The_Spirit_Box.jpg" alt="The Spirit Box, Nikon F3 film camera" loading="lazy" />
-          <figcaption>The Spirit Box &nbsp;&middot;&nbsp; Nikon F3</figcaption>
-        </figure>
-        <p>That early foundation led him to Ernest Righetti High School, where Mr. Garcia's legendary film class sparked a lasting love for creating moving pictures. After high school, Chris built a content creation business that took him across the United States and internationally, including projects in Japan and Cancun. His early work developed under Alias Productions, later evolving into Creative Silva, and most recently <a href="https://www.crisandlaura.com/" target="_blank" rel="noopener">Cris &amp; Laura Inspired EYE Images</a>, alongside his wife, Laura. Over the years, he has worked across the medical field, extreme motorsports, music and entertainment, commercial photo and video production, weddings and portraiture, and brand development, including logo design, company branding, sign design and production, screen printing, and embroidery.</p>
-        <p>Chris continued building his craft through the Applied Arts and Design program at Allan Hancock College and later earned a Bachelor of Arts in Photography from Southern New Hampshire University. He is currently pursuing a Master of Arts in Education, Design, and Technology, a reflection of his belief that he never stops learning and that growth is a lifelong practice. Today, he brings that full journey into the classroom as a Photography and Digital Arts teacher at Pioneer Valley High School, supported by a formal CTE teaching credential earned through Cal Lutheran University in partnership with VCOE. His work is anchored in a three part creative foundation of photography, graphic design, and video production, strengthened by a background in marketing and visual communication.</p>
-        <p>In addition to his Fine Art work, Chris is affiliated with <a href="https://www.crisandlaura.com/" target="_blank" rel="noopener">Cris &amp; Laura Inspired EYE Images</a> and Creative Silva, where he applies the same standards of craft, clarity, and intention across commissioned projects. He works alongside his wife, Laura, an equally skilled and dedicated photography educator and industry professional. Together, they balance creative work and teaching with family life as parents of two daughters. Outside of the studio and classroom, they spend time outdoors exploring the Central Coast through off road and travel focused adventures that continue to shape their sense of place, story, and image making.</p>
-        <p>Whether he is building a photographic series, teaching the next generation of creatives, or creating work for clients, his goal remains the same: to produce photographs that invite reflection and stand up to time.</p>
+  <main id="main">
+    <section class="hero page" style="background-image:url('images/Silva_Selfie.jpg');background-position:center 28%;" aria-label="Artist Biography">
+      <div class="wrap">
+        <p class="eyebrow">Chris Silva</p>
+        <h1>Artist Biography</h1>
+      </div>
+    </section>
+
+    <section class="band tight">
+      <div class="wrap">
+        <div class="statement-layout">
+          <figure class="headshot">
+            <img src="images/Silva_Selfie.jpg" alt="Chris Silva, Self Portrait on 35mm Film" data-lb="bio" data-cap="Self Portrait | 35mm Film" loading="lazy" />
+            <figcaption>Self Portrait &nbsp;&middot;&nbsp; 35mm Film</figcaption>
+          </figure>
+          <div class="prose">
+            <p>Chris Silva is a photographer and visual arts educator based in Santa Maria, California. His work lives in a Fine Art practice that blends documentary observation, environmental portraiture, and experimentation, with a focus on meaningful, thought provoking images rooted in place, presence, and lived experience. Working primarily in black and white, he uses light, composition, and atmosphere to shape photographs that feel honest while remaining clearly authored.</p>
+            <p>Chris works across film, digital, and a film digital hybrid workflow. His foundation in traditional processes informs his technical discipline and visual decisions, while his digital practice supports precision in refinement, sequencing, and presentation. That balance of craft and control allows him to move fluidly between spontaneous observation and intentional construction, without losing consistency in tone or message.</p>
+            <p>Chris&#x2019;s storytelling began with light and a camera that still carries deep meaning. Shortly before he passed, his uncle, a proud member of the Yaqui Nation, placed a Nikon F3 in Chris&#x2019;s hands and trusted him to carry the legacy forward. His uncle named it &#x201C;The Spirit Box,&#x201D; and Chris continues to photograph with that same film camera today as a reminder that image making can honor memory, identity, and purpose.</p>
+
+            <figure class="prose-figure" style="width:clamp(150px,26%,240px);">
+              <img src="images/Richard_Martinez.jpg" alt="Uncle Richard Martinez, who placed The Spirit Box in Chris's hands" data-lb="bio" data-cap="Uncle Richard Martinez | In loving memory" loading="lazy" />
+              <figcaption>Uncle Richard Martinez &nbsp;&middot;&nbsp; In loving memory</figcaption>
+            </figure>
+            <figure class="prose-figure">
+              <img src="images/The_Spirit_Box.jpg" alt="The Spirit Box, Nikon F3 film camera" data-lb="bio" data-cap="The Spirit Box | Nikon F3" loading="lazy" />
+              <figcaption>The Spirit Box &nbsp;&middot;&nbsp; Nikon F3</figcaption>
+            </figure>
+            <p>That early foundation led him to Ernest Righetti High School, where Mr. Garcia&#x2019;s legendary film class sparked a lasting love for creating moving pictures. After high school, Chris built a content creation business that took him across the United States and internationally, including projects in Japan and Cancun. His early work developed under Alias Productions, later evolving into Creative Silva, and most recently <a href="https://www.crisandlaura.com/" target="_blank" rel="noopener">Cris &amp; Laura Inspired EYE Images</a>, alongside his wife, Laura. Over the years, he has worked across the medical field, extreme motorsports, music and entertainment, commercial photo and video production, weddings and portraiture, and brand development, including logo design, company branding, sign design and production, screen printing, and embroidery.</p>
+            <p>Chris continued building his craft through the Applied Arts and Design program at Allan Hancock College and later earned a Bachelor of Arts in Photography from Southern New Hampshire University. He is currently pursuing a Master of Arts in Education, Design, and Technology, a reflection of his belief that he never stops learning and that growth is a lifelong practice. Today, he brings that full journey into the classroom as a Photography and Digital Arts teacher at Pioneer Valley High School, supported by a formal CTE teaching credential earned through Cal Lutheran University in partnership with VCOE. His work is anchored in a three part creative foundation of photography, graphic design, and video production, strengthened by a background in marketing and visual communication.</p>
+            <p>In addition to his Fine Art work, Chris is affiliated with <a href="https://www.crisandlaura.com/" target="_blank" rel="noopener">Cris &amp; Laura Inspired EYE Images</a> and Creative Silva, where he applies the same standards of craft, clarity, and intention across commissioned projects. He works alongside his wife, Laura, an equally skilled and dedicated photography educator and industry professional. Together, they balance creative work and teaching with family life as parents of two daughters. Outside of the studio and classroom, they spend time outdoors exploring the Central Coast through off road and travel focused adventures that continue to shape their sense of place, story, and image making.</p>
+            <p>Whether he is building a photographic series, teaching the next generation of creatives, or creating work for clients, his goal remains the same: to produce photographs that invite reflection and stand up to time.</p>
+          </div>
         </div>
       </div>
-      <section class="also-like">
-        <h2>Also View</h2>
-        <div class="also-like-track">
-          <a href="artist-statement.html"><img src="images/Silva_Disjointed.jpg" alt="" loading="lazy" /><span class="label">Artist Statement</span></a>
-          <a href="work.html"><img src="images/Portraits-1_v3.jpg" alt="" loading="lazy" /><span class="label">Selected Works</span></a>
-          <a href="photo-club.html"><img src="images/lightwriterz-light-lw.jpg" alt="" loading="lazy" /><span class="label">Photo Club</span></a>
+    </section>
+
+    <section class="band tight">
+      <div class="wrap">
+        <div class="also-like">
+          <h2>Also View</h2>
+          <div class="also-like-slider-wrap">
+            <button class="slider-btn slider-btn--prev" aria-label="Scroll left">&#8249;</button>
+            <div class="also-like-track">
+              <a href="artist-statement.html"><img src="images/Silva_Disjointed.jpg" alt="" loading="lazy" /><span class="label">Artist Statement</span></a>
+              <a href="work.html"><img src="images/Portraits-1_v3.jpg" alt="" loading="lazy" /><span class="label">Selected Works</span></a>
+              <a href="photo-club.html"><img src="images/lightwriterz-light-lw.jpg" alt="" loading="lazy" /><span class="label">Photo Club</span></a>
+            </div>
+            <button class="slider-btn slider-btn--next" aria-label="Scroll right">&#8250;</button>
+          </div>
         </div>
-      </section>
+      </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <a href="#" class="back-to-top">Back to Top</a>
-    <div>www.creativesilva.com</div>
+  <footer class="site">
+    <div class="wrap">
+      <div class="cols">
+        <div>
+          <a class="foot-logo" href="index.html" aria-label="Chris Silva, Home"><img src="logos/CS_Logo_Vector.svg" alt="Chris Silva" /></a>
+          <p class="foot-about">Black and white film and digital photography by Chris Silva. Fine art work rooted in place, presence, and lived experience, from Santa Maria, California.</p>
+        </div>
+        <div>
+          <h4>Collections</h4>
+          <ul>
+            <li><a href="portraits.html">Portraits</a></li>
+            <li><a href="the-streets.html">The Streets</a></li>
+            <li><a href="cityscapes.html">Cityscapes</a></li>
+            <li><a href="working-class.html">Working Class</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>More</h4>
+          <ul>
+            <li><a href="work.html">Selected Works</a></li>
+            <li><a href="student-work.html">Student Work</a></li>
+            <li><a href="photo-club.html">Photo Club</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="artist-statement.html">Artist Statement</a></li>
+            <li><a href="artist-biography.html">Biography</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="https://instagram.com/silvateaches" target="_blank" rel="noopener">Instagram</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="legal">
+        <span>&copy; <span id="yr">2026</span> Chris Silva &middot; www.creativesilva.com</span>
+        <a href="#main" class="back-to-top">Back to Top</a>
+      </div>
+    </div>
   </footer>
 
-  <script src="js/main.js?v=20260418d" defer></script>
+  <script src="js/portfolio.js?v=20261007" defer></script>
+  <script src="js/lightbox.js?v=20261007" defer></script>
 </body>
 </html>

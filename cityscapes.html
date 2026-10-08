@@ -3,112 +3,145 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CITYSCAPES &middot; Chris Silva</title>
+  <title>Cityscapes &middot; Chris Silva</title>
   <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only.svg" />
   <link rel="apple-touch-icon" href="/logos/CS_AppIcon_180.png" />
   <meta name="description" content="Cityscape photography by Chris Silva." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20260524b" />
+  <link rel="stylesheet" href="css/portfolio.css?v=20261007" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <nav class="nav-left" aria-label="Primary">
-        <a href="artist-statement.html">Artist Statement</a>
-        <a href="artist-biography.html">Artist Biography</a>
-      </nav>
-      <a class="brand" href="curriculum.html" aria-label="Chris Silva, Home">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="masthead">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="Chris Silva, Home">
         <img src="logos/CS_Logo_Vector.svg" alt="Chris Silva" />
       </a>
-      <nav class="nav-right" aria-label="Primary">
-        <a href="work.html" class="active">Selected Works</a>
-        <a href="photo-club.html">Photo Club</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+      <div class="mast-tag">
+        <div class="t1">Fine Art Photography</div>
+        <div class="t2">Santa Maria, California</div>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="container">
-      <div class="gallery-header">
-        <a href="portraits.html" class="gallery-nav-btn prev">
-          <span class="nav-arrow">&#8249;</span>
-          <span class="nav-label">Portraits</span>
-        </a>
-        <h1 class="page-title">CITYSCAPES</h1>
-        <a href="the-streets.html" class="gallery-nav-btn next">
-          <span class="nav-label">The Streets</span>
-          <span class="nav-arrow">&#8250;</span>
-        </a>
-      </div>
-      <p class="gallery-intro">The streets are in endless motion, even when it appears still. Steel and shadow trade places. Light breaks across glass and concrete. A brief misstep becomes instruction, and the city continues forward, indifferent, precise, and unclaimed.</p>
+  <nav class="mainnav" aria-label="Primary">
+    <div class="wrap">
+      <a class="dock-logo" href="index.html" aria-label="Chris Silva, Home"><img src="logos/CS_Logo_Only.svg" alt="" /></a>
+      <button class="navtoggle" type="button" aria-expanded="false" aria-label="Open menu" aria-controls="primary-menu"><span class="bars" aria-hidden="true"></span><span class="navtoggle-label">Menu</span></button>
+      <ul id="primary-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="work.html" aria-current="page">Selected Works</a></li>
+        <li><a href="student-work.html">Student Work</a></li>
+        <li><a href="photo-club.html">Photo Club</a></li>
+        <li><a href="artist-statement.html">Statement</a></li>
+        <li><a href="artist-biography.html">Biography</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="nav-admin"><a href="curriculum.html">Admin Login</a></li>
+      </ul>
+    </div>
+  </nav>
 
-      <div class="gallery-grid">
-        <figure class="gallery-item">
-          <img src="images/City-1.jpg" alt="New York Inception" loading="lazy" />
-          <figcaption>New York Inception | 35mm Film</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/Landscapes-1.jpg" alt="Harbor of Industry" loading="lazy" />
-          <figcaption>Harbor of Industry | 35mm Film</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/Landscapes-2.jpg" alt="Liberty for All" loading="lazy" />
-          <figcaption>Liberty for All | 35mm Film</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/SILVA-45.jpg" alt="Liberty at Dusk, Unanswered" loading="lazy" />
-          <figcaption>Liberty at Dusk, Unanswered | 35mm Film</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/SILVA-46.jpg" alt="Borders Written in Salt" loading="lazy" />
-          <figcaption>Borders Written in Salt | 35mm Film</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/SILVA-40.jpg" alt="Undertow Hymn" loading="lazy" />
-          <figcaption>Undertow Hymn | 35mm Film</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/Landscapes-3.jpg" alt="Skyline Under Tension" loading="lazy" />
-          <figcaption>Skyline Under Tension | 35mm Film</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/Landscapes-4.jpg" alt="Vanishing into the Gray" loading="lazy" />
-          <figcaption>Vanishing into the Gray | 35mm Film</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/SILVA-53.jpg" alt="What Remains" loading="lazy" />
-          <figcaption>What Remains | 35mm Film</figcaption>
-        </figure>
-        <figure class="gallery-item">
-          <img src="images/Landscapes-5.jpg" alt="Grace Above the Current" loading="lazy" />
-          <figcaption>Grace Above the Current | 35mm Film</figcaption>
-        </figure>
+  <main id="main">
+    <section class="hero page" style="background-image:url('images/City-1.jpg');background-position:center 40%;" aria-label="Cityscapes">
+      <div class="wrap">
+        <p class="eyebrow">Selected Work &middot; Collection</p>
+        <h1>Cityscapes</h1>
       </div>
+    </section>
 
-      <section class="also-like">
-        <h2>Also View</h2>
-        <div class="also-like-slider-wrap">
-          <button class="slider-btn slider-btn--prev" aria-label="Previous">&#8592;</button>
-          <div class="also-like-track">
-            <a href="portraits.html"><img src="images/Portraits-1_v3.jpg" alt="" loading="lazy" /><span class="label">Portraits</span></a>
-            <a href="the-streets.html"><img src="images/City-2.jpg" alt="" loading="lazy" /><span class="label">The Streets</span></a>
-            <a href="working-class.html"><img src="images/Working-1.jpg" alt="" loading="lazy" /><span class="label">Working Class</span></a>
-            <a href="photo-club.html"><img src="images/lightwriterz-light-lw.jpg" alt="" loading="lazy" /><span class="label">Photo Club</span></a>
-          </div>
-          <button class="slider-btn slider-btn--next" aria-label="Next">&#8594;</button>
+    <section class="band tight">
+      <div class="wrap">
+        <div class="gal-intro">
+          <p class="gal-kicker">Cityscapes</p>
+          <p class="gal-statement">A city seen whole is its own kind of portrait. Skylines rise and dissolve into weather, harbors carry the weight of industry, and the horizon gives nothing away. These frames hold the scale of it, where steel meets water and light, and the gray keeps what the city will not say.</p>
+          <p class="gal-meta">35mm Film &middot; 10 Frames</p>
+          <nav class="gal-index" aria-label="Collections">
+            <a href="portraits.html">Portraits</a>
+            <a href="the-streets.html">The Streets</a>
+            <a href="cityscapes.html" aria-current="page">Cityscapes</a>
+            <a href="working-class.html">Working Class</a>
+          </nav>
         </div>
-      </section>
+
+        <div class="gallery-grid">
+          <figure class="gallery-item"><img src="images/City-1.jpg" alt="New York Inception" data-lb="cityscapes" data-cap="New York Inception | 35mm Film" loading="lazy" /><figcaption>New York Inception</figcaption></figure>
+          <figure class="gallery-item"><img src="images/Landscapes-1.jpg" alt="Harbor of Industry" data-lb="cityscapes" data-cap="Harbor of Industry | 35mm Film" loading="lazy" /><figcaption>Harbor of Industry</figcaption></figure>
+          <figure class="gallery-item"><img src="images/Landscapes-2.jpg" alt="Liberty for All" data-lb="cityscapes" data-cap="Liberty for All | 35mm Film" loading="lazy" /><figcaption>Liberty for All</figcaption></figure>
+          <figure class="gallery-item"><img src="images/SILVA-45.jpg" alt="Liberty at Dusk, Unanswered" data-lb="cityscapes" data-cap="Liberty at Dusk, Unanswered | 35mm Film" loading="lazy" /><figcaption>Liberty at Dusk, Unanswered</figcaption></figure>
+          <figure class="gallery-item"><img src="images/SILVA-46.jpg" alt="Borders Written in Salt" data-lb="cityscapes" data-cap="Borders Written in Salt | 35mm Film" loading="lazy" /><figcaption>Borders Written in Salt</figcaption></figure>
+          <figure class="gallery-item"><img src="images/SILVA-40.jpg" alt="Undertow Hymn" data-lb="cityscapes" data-cap="Undertow Hymn | 35mm Film" loading="lazy" /><figcaption>Undertow Hymn</figcaption></figure>
+          <figure class="gallery-item"><img src="images/Landscapes-3.jpg" alt="Skyline Under Tension" data-lb="cityscapes" data-cap="Skyline Under Tension | 35mm Film" loading="lazy" /><figcaption>Skyline Under Tension</figcaption></figure>
+          <figure class="gallery-item"><img src="images/Landscapes-4.jpg" alt="Vanishing into the Gray" data-lb="cityscapes" data-cap="Vanishing into the Gray | 35mm Film" loading="lazy" /><figcaption>Vanishing into the Gray</figcaption></figure>
+          <figure class="gallery-item"><img src="images/SILVA-53.jpg" alt="What Remains" data-lb="cityscapes" data-cap="What Remains | 35mm Film" loading="lazy" /><figcaption>What Remains</figcaption></figure>
+          <figure class="gallery-item"><img src="images/Landscapes-5.jpg" alt="Grace Above the Current" data-lb="cityscapes" data-cap="Grace Above the Current | 35mm Film" loading="lazy" /><figcaption>Grace Above the Current</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band tight">
+      <div class="wrap">
+        <div class="also-like">
+          <h2>Also View</h2>
+          <div class="also-like-slider-wrap">
+            <button class="slider-btn slider-btn--prev" aria-label="Scroll left">&#8249;</button>
+            <div class="also-like-track">
+              <a href="portraits.html"><img src="images/Portraits-1_v3.jpg" alt="" loading="lazy" /><span class="label">Portraits</span></a>
+              <a href="the-streets.html"><img src="images/City-2.jpg" alt="" loading="lazy" /><span class="label">The Streets</span></a>
+              <a href="working-class.html"><img src="images/Working-1.jpg" alt="" loading="lazy" /><span class="label">Working Class</span></a>
+              <a href="photo-club.html"><img src="images/lightwriterz-light-lw.jpg" alt="" loading="lazy" /><span class="label">Photo Club</span></a>
+            </div>
+            <button class="slider-btn slider-btn--next" aria-label="Scroll right">&#8250;</button>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <a href="#" class="back-to-top">Back to Top</a>
-    <div>www.creativesilva.com</div>
+  <footer class="site">
+    <div class="wrap">
+      <div class="cols">
+        <div>
+          <a class="foot-logo" href="index.html" aria-label="Chris Silva, Home"><img src="logos/CS_Logo_Vector.svg" alt="Chris Silva" /></a>
+          <p class="foot-about">Black and white film and digital photography by Chris Silva. Fine art work rooted in place, presence, and lived experience, from Santa Maria, California.</p>
+        </div>
+        <div>
+          <h4>Collections</h4>
+          <ul>
+            <li><a href="portraits.html">Portraits</a></li>
+            <li><a href="the-streets.html">The Streets</a></li>
+            <li><a href="cityscapes.html">Cityscapes</a></li>
+            <li><a href="working-class.html">Working Class</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>More</h4>
+          <ul>
+            <li><a href="work.html">Selected Works</a></li>
+            <li><a href="student-work.html">Student Work</a></li>
+            <li><a href="photo-club.html">Photo Club</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="artist-statement.html">Artist Statement</a></li>
+            <li><a href="artist-biography.html">Biography</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="https://instagram.com/silvateaches" target="_blank" rel="noopener">Instagram</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="legal">
+        <span>&copy; <span id="yr">2026</span> Chris Silva &middot; www.creativesilva.com</span>
+        <a href="#main" class="back-to-top">Back to Top</a>
+      </div>
+    </div>
   </footer>
 
-  <script src="js/main.js?v=20260418d" defer></script>
+  <script src="js/portfolio.js?v=20261007" defer></script>
+  <script src="js/lightbox.js?v=20261007" defer></script>
 </body>
 </html>

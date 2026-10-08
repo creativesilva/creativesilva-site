@@ -8,14 +8,12 @@
   <link rel="apple-touch-icon" href="/logos/CS_AppIcon_180.png" />
   <meta name="description" content="Student work from the inaugural CTE Photography and Digital Arts programs at Pioneer Valley High School." />
 
-  <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Chris Silva" />
   <meta property="og:title" content="Student Work | Chris Silva" />
   <meta property="og:description" content="Inaugural CTE Photography and Digital Arts programs at Pioneer Valley High School. Browse student galleries and judge the Spring 2026 finals." />
   <meta property="og:url" content="https://www.creativesilva.com/student-work.html" />
   <meta property="og:image" content="https://www.creativesilva.com/images/Student-Rolling-Stone.jpg" />
-
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Student Work | Chris Silva" />
   <meta name="twitter:description" content="Inaugural CTE Photography and Digital Arts programs at Pioneer Valley High School." />
@@ -24,165 +22,31 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20260524b" />
+  <link rel="stylesheet" href="css/portfolio.css?v=20261007" />
 
   <style>
-    /* ── Student Work index: 3-card layout matching curriculum.html aesthetic ── */
-
-    .sw-intro {
-      max-width: 720px;
-      margin: 0 auto 56px;
-      text-align: center;
-    }
-
-    .sw-intro p {
-      font-size: 1rem;
-      color: var(--text-dim);
-      line-height: 1.75;
-    }
-
-    .sw-label {
-      font-family: var(--font-head);
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 12px;
-    }
-
-    .sw-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-bottom: 64px;
-    }
-
-    @media (max-width: 960px) {
-      .sw-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
+    /* Student Work index: 3-card program grid (red = Photography, purple = Digital Arts). */
+    .sw-intro { max-width: 720px; margin: 0 auto 48px; text-align: center; }
+    .sw-intro p { font-size: 1rem; color: var(--text-dim); line-height: 1.75; }
+    .sw-label { font-family: var(--font-head); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--red-bright); margin-bottom: 12px; }
+    .sw-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 56px; }
+    @media (max-width: 960px) { .sw-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .sw-grid { grid-template-columns: 1fr; gap: 14px; } }
+    .sw-card { position: relative; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--surface-border); padding: 32px; min-width: 0; text-decoration: none; color: inherit; box-shadow: var(--glow); transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease; }
+    .sw-card:hover { border-color: rgba(255,255,255,0.20); transform: translateY(-3px); }
+    .sw-card-accent { position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
+    .sw-card-code { font-family: var(--font-head); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px; }
+    .sw-card-title { font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); margin: 0 0 12px; line-height: 1.1; }
+    .sw-card-desc { font-size: 0.9rem; color: var(--text-dim); line-height: 1.65; margin: 0 0 24px; flex: 1; }
+    .sw-card-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+    .sw-tag { font-family: var(--font-head); font-size: 0.58rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; padding: 3px 9px; border: 1px solid; color: var(--text-dim); border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.03); }
+    .sw-tag.voting { color: #ffb37a; border-color: rgba(255,107,26,0.55); background: rgba(255,107,26,0.10); }
+    .sw-tag.showcase { color: #ff6b6b; border-color: rgba(204,0,0,0.55); background: rgba(204,0,0,0.12); }
+    .sw-card-cta { font-family: var(--font-head); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red-bright); display: inline-flex; align-items: center; gap: 8px; }
+    .sw-card-cta::after { content: "\2192"; font-size: 1rem; transition: transform 0.2s ease; }
+    .sw-card:hover .sw-card-cta::after { transform: translateX(4px); }
     @media (max-width: 640px) {
-      .sw-grid { grid-template-columns: 1fr; gap: 14px; }
-    }
-
-    .sw-card {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 32px;
-      min-width: 0;
-      text-decoration: none;
-      color: inherit;
-      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-    }
-
-    .sw-card:hover {
-      border-color: rgba(255, 255, 255, 0.20);
-      background: rgba(255, 255, 255, 0.05);
-      transform: translateY(-2px);
-    }
-
-    .sw-card-accent {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 3px;
-      height: 100%;
-    }
-
-    .sw-card-code {
-      font-family: var(--font-head);
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--text-faint);
-      margin-bottom: 6px;
-    }
-
-    .sw-card-title {
-      font-family: var(--font-head);
-      font-size: 1.5rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text);
-      margin: 0 0 12px;
-      line-height: 1.1;
-    }
-
-    .sw-card-desc {
-      font-size: 0.9rem;
-      color: var(--text-dim);
-      line-height: 1.65;
-      margin: 0 0 24px;
-      flex: 1;
-    }
-
-    .sw-card-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 20px;
-    }
-
-    .sw-tag {
-      font-family: var(--font-head);
-      font-size: 0.58rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 3px 9px;
-      border: 1px solid;
-      color: var(--text-dim);
-      border-color: rgba(255, 255, 255, 0.18);
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .sw-tag.voting {
-      color: #ffb37a;
-      border-color: rgba(255, 107, 26, 0.55);
-      background: rgba(255, 107, 26, 0.10);
-    }
-
-    .sw-tag.showcase {
-      color: #80e0e0;
-      border-color: rgba(0, 184, 184, 0.55);
-      background: rgba(0, 184, 184, 0.10);
-    }
-
-    .sw-card-cta {
-      font-family: var(--font-head);
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: #9ecbff;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .sw-card-cta::after {
-      content: "→";
-      font-size: 1rem;
-      transition: transform 0.2s ease;
-    }
-
-    .sw-card:hover .sw-card-cta::after {
-      transform: translateX(4px);
-    }
-
-    /* Sign-off block reuses .showcase-signature styles in style.css */
-
-    @media (max-width: 640px) {
-      .sw-intro {
-        margin-bottom: 28px;
-        text-align: left;
-      }
+      .sw-intro { margin-bottom: 28px; text-align: left; }
       .sw-label { letter-spacing: 0.1em; text-align: left; }
       .sw-intro p { font-size: 0.88rem; line-height: 1.65; }
       .sw-card { padding: 22px 18px; }
@@ -192,106 +56,166 @@
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <nav class="nav-left" aria-label="Primary">
-        <a href="artist-statement.html">Artist Statement</a>
-        <a href="artist-biography.html">Artist Biography</a>
-      </nav>
-      <a class="brand" href="curriculum.html" aria-label="Chris Silva, Home">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="masthead">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="Chris Silva, Home">
         <img src="logos/CS_Logo_Vector.svg" alt="Chris Silva" />
       </a>
-      <nav class="nav-right" aria-label="Primary">
-        <a href="work.html">Selected Works</a>
-        <a href="student-work.html" class="active">Student Work</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+      <div class="mast-tag">
+        <div class="t1">Fine Art Photography</div>
+        <div class="t2">Santa Maria, California</div>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="container">
+  <nav class="mainnav" aria-label="Primary">
+    <div class="wrap">
+      <a class="dock-logo" href="index.html" aria-label="Chris Silva, Home"><img src="logos/CS_Logo_Only.svg" alt="" /></a>
+      <button class="navtoggle" type="button" aria-expanded="false" aria-label="Open menu" aria-controls="primary-menu"><span class="bars" aria-hidden="true"></span><span class="navtoggle-label">Menu</span></button>
+      <ul id="primary-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="work.html">Selected Works</a></li>
+        <li><a href="student-work.html" aria-current="page">Student Work</a></li>
+        <li><a href="photo-club.html">Photo Club</a></li>
+        <li><a href="artist-statement.html">Statement</a></li>
+        <li><a href="artist-biography.html">Biography</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="nav-admin"><a href="curriculum.html">Admin Login</a></li>
+      </ul>
+    </div>
+  </nav>
 
-      <h1 class="page-title">Student Work</h1>
-
-      <div class="sw-intro">
-        <p class="sw-label">Pioneer Valley High School &nbsp;&middot;&nbsp; 2025-2026</p>
-        <p>The inaugural year of CTE Photography and the continuing build of the Digital Arts program at PVHS. Each card below opens a gallery of student work. The Spring 2026 finals are open for judging.</p>
+  <main id="main">
+    <section class="hero page" style="background-image:url('images/Student-Rolling-Stone.jpg');background-position:center 22%;" aria-label="Student Work">
+      <div class="wrap">
+        <p class="eyebrow">Pioneer Valley High School</p>
+        <h1>Student Work</h1>
       </div>
+    </section>
 
-      <div class="sw-grid">
+    <section class="band tight">
+      <div class="wrap">
+        <div class="sw-intro">
+          <p class="sw-label">Pioneer Valley High School &nbsp;&middot;&nbsp; 2025-2026</p>
+          <p>The inaugural year of CTE Photography and the continuing build of the Digital Arts program at PVHS. Each card below opens a gallery of student work. The Spring 2026 finals are open for judging.</p>
+        </div>
 
-        <!-- ── Card 1: Magazine Cover Project (Photo 1B showcase) ── -->
-        <a class="sw-card" href="student-work/magazine-project.html">
-          <span class="sw-card-accent" style="background:#007474;"></span>
-          <p class="sw-card-code">Photography 1B</p>
-          <h2 class="sw-card-title">Magazine Cover Project</h2>
-          <p class="sw-card-desc">Editorial magazine covers conceived, lit, captured, and designed by the first photography students PVHS has ever had. Vogue, Rolling Stone, Time, Sports Illustrated, and People.</p>
-          <div class="sw-card-meta">
-            <span class="sw-tag showcase">Showcase</span>
-            <span class="sw-tag">5 Students</span>
+        <div class="sw-grid">
+          <a class="sw-card" href="student-work/magazine-project.html">
+            <span class="sw-card-accent" style="background:#cc0000;"></span>
+            <p class="sw-card-code">Photography 1B</p>
+            <h2 class="sw-card-title">Magazine Cover Project</h2>
+            <p class="sw-card-desc">Editorial magazine covers conceived, lit, captured, and designed by the first photography students PVHS has ever had. Vogue, Rolling Stone, Time, Sports Illustrated, and People.</p>
+            <div class="sw-card-meta">
+              <span class="sw-tag showcase">Showcase</span>
+              <span class="sw-tag">5 Students</span>
+            </div>
+            <span class="sw-card-cta">View Gallery</span>
+          </a>
+
+          <a class="sw-card" href="student-work/product-photography.html">
+            <span class="sw-card-accent" style="background:#cc0000;"></span>
+            <p class="sw-card-code">Photography 1B &nbsp;&middot;&nbsp; Spring Final</p>
+            <h2 class="sw-card-title">Product Photography</h2>
+            <p class="sw-card-desc">Spring final for Photography 1B. Each student captured a four-image product set in the studio. Judges rank 1st, 2nd, and 3rd place.</p>
+            <div class="sw-card-meta">
+              <span class="sw-tag voting">Voting Open</span>
+              <span class="sw-tag">$300 in Prizes</span>
+            </div>
+            <span class="sw-card-cta">Vote &amp; Browse</span>
+          </a>
+
+          <a class="sw-card" href="student-work/company-branding.html">
+            <span class="sw-card-accent" style="background:#8b5cf6;"></span>
+            <p class="sw-card-code">Digital Arts 1B + 2B &nbsp;&middot;&nbsp; Spring Final</p>
+            <h2 class="sw-card-title">Company Branding</h2>
+            <p class="sw-card-desc">Spring final for Digital Arts 1B and 2B, pooled into one competition. Each student designed a full three-page brand package for a fictional company.</p>
+            <div class="sw-card-meta">
+              <span class="sw-tag voting">Voting Open</span>
+              <span class="sw-tag">$300 in Prizes</span>
+            </div>
+            <span class="sw-card-cta">Vote &amp; Browse</span>
+          </a>
+        </div>
+
+        <div class="showcase-signature">
+          <div class="showcase-signature-block">
+            Mr. Chris Silva &nbsp;|&nbsp; Visual and Performing Arts Instructor<br />
+            Photography &nbsp;&middot;&nbsp; Digital Arts &nbsp;&middot;&nbsp; Video Production<br />
+            Founder, CTE Photography Program &nbsp;|&nbsp; Pioneer Valley High School
           </div>
-          <span class="sw-card-cta">View Gallery</span>
-        </a>
-
-        <!-- ── Card 2: Product Photography (Photo 1B voting) ── -->
-        <a class="sw-card" href="student-work/product-photography.html">
-          <span class="sw-card-accent" style="background:#007474;"></span>
-          <p class="sw-card-code">Photography 1B &nbsp;&middot;&nbsp; Spring Final</p>
-          <h2 class="sw-card-title">Product Photography</h2>
-          <p class="sw-card-desc">Spring final for Photography 1B. Each student captured a four-image product set in the studio. Judges rank 1st, 2nd, and 3rd place.</p>
-          <div class="sw-card-meta">
-            <span class="sw-tag voting">Voting Open</span>
-            <span class="sw-tag">$300 in Prizes</span>
+          <hr class="showcase-signature-rule" aria-hidden="true" />
+          <div class="showcase-signature-block">
+            Ms. Garcia &nbsp;|&nbsp; Visual and Performing Arts Instructor<br />
+            Photography<br />
+            Pioneer Valley High School
           </div>
-          <span class="sw-card-cta">Vote &amp; Browse</span>
-        </a>
-
-        <!-- ── Card 3: Company Branding (DA 1B + 2B voting) ── -->
-        <a class="sw-card" href="student-work/company-branding.html">
-          <span class="sw-card-accent" style="background:#6b6ef5;"></span>
-          <p class="sw-card-code">Digital Arts 1B + 2B &nbsp;&middot;&nbsp; Spring Final</p>
-          <h2 class="sw-card-title">Company Branding</h2>
-          <p class="sw-card-desc">Spring final for Digital Arts 1B and 2B, pooled into one competition. Each student designed a full three-page brand package for a fictional company.</p>
-          <div class="sw-card-meta">
-            <span class="sw-tag voting">Voting Open</span>
-            <span class="sw-tag">$300 in Prizes</span>
-          </div>
-          <span class="sw-card-cta">Vote &amp; Browse</span>
-        </a>
-
+        </div>
       </div>
+    </section>
 
-      <div class="showcase-signature">
-        <div class="showcase-signature-block">
-          Mr. Chris Silva &nbsp;|&nbsp; Visual and Performing Arts Instructor<br />
-          Photography &nbsp;&middot;&nbsp; Digital Arts &nbsp;&middot;&nbsp; Video Production<br />
-          Founder, CTE Photography Program &nbsp;|&nbsp; Pioneer Valley High School
-        </div>
-        <hr class="showcase-signature-rule" aria-hidden="true" />
-        <div class="showcase-signature-block">
-          Ms. Garcia &nbsp;|&nbsp; Visual and Performing Arts Instructor<br />
-          Photography<br />
-          Pioneer Valley High School
+    <section class="band tight">
+      <div class="wrap">
+        <div class="also-like">
+          <h2>Also View</h2>
+          <div class="also-like-slider-wrap">
+            <button class="slider-btn slider-btn--prev" aria-label="Scroll left">&#8249;</button>
+            <div class="also-like-track">
+              <a href="artist-statement.html"><img src="images/Silva_Disjointed.jpg" alt="" loading="lazy" /><span class="label">Artist Statement</span></a>
+              <a href="artist-biography.html"><img src="images/Silva_Selfie.jpg" alt="" loading="lazy" /><span class="label">Artist Biography</span></a>
+              <a href="work.html"><img src="images/Portraits-1_v3.jpg" alt="" loading="lazy" /><span class="label">Selected Works</span></a>
+            </div>
+            <button class="slider-btn slider-btn--next" aria-label="Scroll right">&#8250;</button>
+          </div>
         </div>
       </div>
-
-      <section class="also-like">
-        <h2>Also View</h2>
-        <div class="also-like-track">
-          <a href="artist-statement.html"><img src="images/Silva_Disjointed.jpg" alt="" loading="lazy" /><span class="label">Artist Statement</span></a>
-          <a href="artist-biography.html"><img src="images/Silva_Selfie.jpg" alt="" loading="lazy" /><span class="label">Artist Biography</span></a>
-          <a href="work.html"><img src="images/Portraits-1_v3.jpg" alt="" loading="lazy" /><span class="label">Selected Works</span></a>
-        </div>
-      </section>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <a href="#" class="back-to-top">Back to Top</a>
-    <div>www.creativesilva.com</div>
+  <footer class="site">
+    <div class="wrap">
+      <div class="cols">
+        <div>
+          <a class="foot-logo" href="index.html" aria-label="Chris Silva, Home"><img src="logos/CS_Logo_Vector.svg" alt="Chris Silva" /></a>
+          <p class="foot-about">Black and white film and digital photography by Chris Silva. Fine art work rooted in place, presence, and lived experience, from Santa Maria, California.</p>
+        </div>
+        <div>
+          <h4>Collections</h4>
+          <ul>
+            <li><a href="portraits.html">Portraits</a></li>
+            <li><a href="the-streets.html">The Streets</a></li>
+            <li><a href="cityscapes.html">Cityscapes</a></li>
+            <li><a href="working-class.html">Working Class</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>More</h4>
+          <ul>
+            <li><a href="work.html">Selected Works</a></li>
+            <li><a href="student-work.html">Student Work</a></li>
+            <li><a href="photo-club.html">Photo Club</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="artist-statement.html">Artist Statement</a></li>
+            <li><a href="artist-biography.html">Biography</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="https://instagram.com/silvateaches" target="_blank" rel="noopener">Instagram</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="legal">
+        <span>&copy; <span id="yr">2026</span> Chris Silva &middot; www.creativesilva.com</span>
+        <a href="#main" class="back-to-top">Back to Top</a>
+      </div>
+    </div>
   </footer>
 
-  <script src="js/main.js?v=20260418d" defer></script>
+  <script src="js/portfolio.js?v=20261007" defer></script>
+  <script src="js/lightbox.js?v=20261007" defer></script>
 </body>
 </html>
