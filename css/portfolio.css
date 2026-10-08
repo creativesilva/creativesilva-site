@@ -261,6 +261,8 @@ blockquote.pull cite { display: block; font-family: var(--font-body); text-trans
 
 /* Cards */
 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.cards.pair { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 760px) { .cards.pair { grid-template-columns: 1fr; } }
 .card { background: var(--surface); border: 1px solid var(--surface-border); border-top: 4px solid var(--red); padding: 28px; box-shadow: var(--glow); }
 .card .date { font-family: var(--font-head); text-transform: uppercase; letter-spacing: 0.12em; font-size: 13px; color: var(--red-bright); margin-bottom: 8px; }
 .card h3 { font-size: 22px; }
@@ -455,12 +457,21 @@ a, button { -webkit-tap-highlight-color: rgba(255,46,46,0.15); }
   .wrap { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
   h1, h2, h3 { overflow-wrap: anywhere; }
 
-  /* Phone header: one dark row (logo left, hamburger right), red bar reduced to a thin line. */
+  /* Phone header: compact stacked brand (left), live counter (center), hamburger (right);
+     the red bar drops to a thin line below. */
   .masthead { position: sticky; top: 0; z-index: 60; padding-top: env(safe-area-inset-top); border-bottom: 0; }
-  .masthead .wrap { position: relative; display: flex; min-height: 60px; align-items: center; justify-content: flex-start; gap: 12px; }
-  .brand-mark { height: 34px; }
-  .brand-name { font-size: 19px; }
-  .brand-tenure, .mast-right { display: none; }
+  .masthead .wrap { position: relative; display: flex; min-height: 70px; align-items: center; justify-content: space-between; gap: 8px; }
+  .brand { flex-direction: column; align-items: center; gap: 3px; flex-shrink: 0; }
+  .brand-mark { height: 30px; }
+  .brand-name { font-size: 11px; letter-spacing: 0.03em; line-height: 1; }
+  .brand-tenure { display: none; }
+  .mast-right { display: flex; flex: 1; min-width: 0; justify-content: center; }
+  .btn-donate { display: none; }
+  .pics-counter { display: flex; flex-direction: column; align-items: center; text-align: center; border: 0; background: none; padding: 0; }
+  .pics-counter:hover { background: none; border: 0; }
+  .pc-eyebrow { font-size: 8px; letter-spacing: 0.08em; }
+  .pc-num { font-size: 15px; line-height: 1.1; }
+  .pc-q { font-size: 8px; letter-spacing: 0.03em; margin-top: 1px; }
 
   .mainnav { position: sticky; top: calc(60px + env(safe-area-inset-top)); z-index: 59; box-shadow: 0 6px 18px rgba(0,0,0,0.45);
     background: linear-gradient(90deg, #990000 0%, #e00000 50%, #990000 100%); }
@@ -468,8 +479,8 @@ a, button { -webkit-tap-highlight-color: rgba(255,46,46,0.15); }
   .dock-logo { display: none; }
 
   .navtoggle { display: inline-flex; align-items: center; justify-content: center;
-    position: absolute; top: 50%; right: max(4px, calc(env(safe-area-inset-right) - 12px)); transform: translateY(-50%);
-    width: 48px; height: 48px; padding: 0; cursor: pointer; background: none; border: 0; color: #fff; }
+    position: static; transform: none;
+    width: 44px; height: 44px; padding: 0; cursor: pointer; background: none; border: 0; color: #fff; flex-shrink: 0; }
   .navtoggle-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .navtoggle .bars, .navtoggle .bars::before, .navtoggle .bars::after { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; position: relative; transition: transform 0.2s ease, background 0.2s ease; }
   .navtoggle .bars::before, .navtoggle .bars::after { content: ""; position: absolute; left: 0; }

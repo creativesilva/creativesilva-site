@@ -127,8 +127,6 @@
     var BASE_ANNUAL = 2.2e12;   // total images created in 2026
     var GROWTH = 0.07;          // about 7% more each year
     var MOBILE_FRAC = 0.94;     // taken on mobile devices
-    var AVG_BYTES = 3.5e6;      // about 3.5 MB per image
-    var pcGb = document.getElementById("pc-gb");
     var fmt = function (n) { return Math.floor(n).toLocaleString("en-US"); };
     var annual = function (y) { return BASE_ANNUAL * Math.pow(1 + GROWTH, y - BASE_YEAR); };
     var cumulativeImages = function (now) {
@@ -139,9 +137,7 @@
       return total;
     };
     var tickCounter = function () {
-      var imgs = cumulativeImages(Date.now()) * MOBILE_FRAC;
-      pcNum.textContent = fmt(imgs);
-      if (pcGb) pcGb.textContent = fmt(imgs * AVG_BYTES / 1e9);
+      pcNum.textContent = fmt(cumulativeImages(Date.now()) * MOBILE_FRAC);
     };
     tickCounter();
     setInterval(tickCounter, 80);
