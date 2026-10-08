@@ -29,10 +29,8 @@
   }
   *{box-sizing:border-box;}
   body{background-color:#060f0f;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;margin:0;}
-  /* Teal gradient backdrop + ghosted CS monogram (Silva teacher-tool treatment, matches the Equipment Manager). */
+  /* Teal gradient backdrop (Silva teacher-tool treatment, matches the Equipment Manager). */
   body::before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%);}
-  body::after{content:"";position:fixed;inset:0;z-index:-1;background:url("https://www.creativesilva.com/logos/CS_Logo_Glossy_Teal_v1.png") no-repeat center 40%;background-size:min(74vw,700px);filter:brightness(0) invert(1);opacity:.07;}
-  @media (max-width:900px){ body::after{background-size:min(88vw,460px);background-position:center 36%;} }
   .silva-nav{display:none;}
   .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;filter:brightness(0) invert(1);}
   .cal-hero-clock{width:150px;height:46px;border:0;background:transparent;display:block;}
