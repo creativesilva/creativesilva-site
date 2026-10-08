@@ -121,15 +121,27 @@
   // The sub-count shows how few are authored photographs.
   var pcNum = document.getElementById("pc-num");
   if (pcNum) {
-    var RATE = 70000;               // images per second, worldwide (~2.2 trillion/yr, 2026)
-    var PHOTO_RATE = RATE / 10000;  // only about 1 in 10,000 is a true photograph
-    var pcPhoto = document.getElementById("pc-photo");
-    var yearStart = Date.UTC(new Date().getUTCFullYear(), 0, 1);
+    // Cumulative phone pics captured worldwide since 2026, and the data they fill.
+    // Annual volume grows about 7% a year, so the rate steps up each new year.
+    var BASE_YEAR = 2026;
+    var BASE_ANNUAL = 2.2e12;   // total images created in 2026
+    var GROWTH = 0.07;          // about 7% more each year
+    var MOBILE_FRAC = 0.94;     // taken on mobile devices
+    var AVG_BYTES = 3.5e6;      // about 3.5 MB per image
+    var pcGb = document.getElementById("pc-gb");
     var fmt = function (n) { return Math.floor(n).toLocaleString("en-US"); };
+    var annual = function (y) { return BASE_ANNUAL * Math.pow(1 + GROWTH, y - BASE_YEAR); };
+    var cumulativeImages = function (now) {
+      var y = new Date(now).getUTCFullYear(), total = 0, yr;
+      for (yr = BASE_YEAR; yr < y; yr++) total += annual(yr);
+      var yearStart = Date.UTC(y, 0, 1), yearSecs = (Date.UTC(y + 1, 0, 1) - yearStart) / 1000;
+      total += annual(y) * Math.max(0, (now - yearStart) / 1000) / yearSecs;
+      return total;
+    };
     var tickCounter = function () {
-      var elapsed = (Date.now() - yearStart) / 1000;
-      pcNum.textContent = fmt(elapsed * RATE);
-      if (pcPhoto) pcPhoto.textContent = fmt(elapsed * PHOTO_RATE);
+      var imgs = cumulativeImages(Date.now()) * MOBILE_FRAC;
+      pcNum.textContent = fmt(imgs);
+      if (pcGb) pcGb.textContent = fmt(imgs * AVG_BYTES / 1e9);
     };
     tickCounter();
     setInterval(tickCounter, 80);
