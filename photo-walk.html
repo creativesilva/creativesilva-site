@@ -319,10 +319,13 @@
 
   // ----- which cameras are checked out TODAY (from the board) -----
   function statusOf(c){ return c.status||(c.returned?'returned':'out'); }
-  function checkoutToday(cam){ var t=todayISO();
-    var recs=(BOARD.checkouts||[]).filter(function(c){ return c.camera===cam && c.kind!=='equipment' && statusOf(c)!=='returned'; });
-    for(var i=0;i<recs.length;i++){ var c=recs[i]; var last=c.due||c.out; if(c.out && last && t>=c.out && t<=last) return c; if(statusOf(c)==='out') return c; }
-    return null;
+  // A camera only blocks a photo walk when it is PHYSICALLY out: picked up and not yet marked
+  // returned. A reservation that has NOT been picked up leaves the camera in stock, so it stays
+  // available for a class-period photo walk (walk cameras return to stock at the end of each period;
+  // the student still picks up the reservation after school).
+  function checkoutToday(cam){
+    var out=(BOARD.checkouts||[]).filter(function(c){ return c.camera===cam && c.kind!=='equipment' && statusOf(c)==='out'; });
+    return out.length? out[0] : null;
   }
   function whoOf(c){ return (c&&(c.student_name||c.name))||'Checked out'; }
 
