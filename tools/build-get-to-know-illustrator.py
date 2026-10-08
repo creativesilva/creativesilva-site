@@ -261,7 +261,7 @@ def overview():
         + bullets([
             ("Step 01 &middot; Overview &amp; Download (you are here):","read this page and download your practice files below."),
             ("Step 02 &middot; Take the Tour &amp; Practice:","follow the short Adobe tutorial, practice with your files, then turn in one screen capture of your Illustrator workspace."),
-            ("Step 03 &middot; Sketch to Vector Art:","now that you know your way around, turn a simple sketch into clean vector art and turn in a screen capture of it."),
+            ("Step 03 &middot; Sketch to Vector Art:","now that you know your way around, turn a simple sketch into clean vector art and turn in your Illustrator (.ai) file."),
         ])
         + note("There is no written reflection in this module. It stays low-stakes: get comfortable in Illustrator, then make your first attempt at real vector art."))
     en+=resources_card("Key Words",
@@ -292,7 +292,7 @@ def overview():
         + bullets([
             ("Paso 01 &middot; Resumen y Descarga (est&aacute;s aqu&iacute;):","lee esta p&aacute;gina y descarga tus archivos de pr&aacute;ctica abajo."),
             ("Paso 02 &middot; Haz el Recorrido y Practica:","sigue el tutorial corto de Adobe, practica con tus archivos y luego entrega una captura de pantalla de tu espacio de trabajo de Illustrator."),
-            ("Paso 03 &middot; De Boceto a Arte Vectorial:","ahora que ya sabes moverte, convierte un boceto simple en arte vectorial limpio y entrega una captura de pantalla."),
+            ("Paso 03 &middot; De Boceto a Arte Vectorial:","ahora que ya sabes moverte, convierte un boceto simple en arte vectorial limpio y entrega tu archivo de Illustrator (.ai)."),
         ])
         + note("Este m&oacute;dulo no tiene reflexi&oacute;n escrita. Sigue siendo de baja presi&oacute;n: toma confianza en Illustrator y luego haz tu primer intento de arte vectorial de verdad."))
     es+=resources_card("Palabras Clave",
@@ -364,7 +364,7 @@ def step02():
 # ================= STEP 03: Sketch to Vector Art =================
 def step03():
     en=banner(f"Module {MODNUM} &bull; Step 03","Sketch to Vector Art",
-        "Turn a simple sketch into clean vector art by tracing it with the Pen and Pencil tools, then turn in a screen capture.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
+        "Turn a simple sketch into clean vector art by tracing it with the Pen and Pencil tools, then save and turn in your Illustrator (.ai) file.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=card("FROM SKETCH TO VECTOR / WHAT YOU WILL DO","Trace a Sketch Into Vector Art",
         para("Now that you know your way around Illustrator, you get to try real vector art. You will take a simple sketch, bring it into Illustrator, and trace over it to make clean lines that stay sharp at any size.")
         + para("This is your first attempt, so keep your sketch simple: a shape, a letter, or a small drawing. The goal is to practice tracing, not to make a perfect piece.")
@@ -385,14 +385,15 @@ def step03():
             ("Lock the sketch layer:","so it stays still while you trace."),
             ("Trace it:","use the Pen tool for clean lines and the Pencil tool for loose lines."),
             ("Make it bold:","thicken your strokes so the art looks strong."),
+            ("Save it as a .ai file:","use File &gt; Save As, name your file, and choose Adobe Illustrator in the Format menu. This native .ai file is what you turn in."),
         ])
         + note("Keep it simple and have fun. This is a first attempt, not a graded project."))
     en+=deliverables_box(False,
-        [("1 screen capture (JPG or PNG):","a screen capture of your vector art in Illustrator, your traced sketch, uploaded to this Canvas assignment.")])
+        [("Your Illustrator file (.ai):","your traced vector art saved as a native Adobe Illustrator file (.ai), uploaded to this Canvas assignment. Use File &gt; Save As and pick Adobe Illustrator in the Format menu.")])
     en+=next_up("MODULE COMPLETE","Nice work. You know your way around Illustrator and you have turned a sketch into vector art. You are ready for your first real Illustrator project.")
 
     es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 03","De Boceto a Arte Vectorial",
-        "Convierte un boceto simple en arte vectorial limpio calc&aacute;ndolo con las herramientas Pluma y L&aacute;piz, luego entrega una captura de pantalla.","#top","Back to English", HICON_DESIGN)
+        "Convierte un boceto simple en arte vectorial limpio calc&aacute;ndolo con las herramientas Pluma y L&aacute;piz, luego guarda y entrega tu archivo de Illustrator (.ai).","#top","Back to English", HICON_DESIGN)
     es+=card("DE BOCETO A VECTOR / QU&Eacute; VAS A HACER","Calca un Boceto a Arte Vectorial",
         para("Ahora que ya sabes moverte en Illustrator, vas a probar arte vectorial de verdad. Vas a tomar un boceto simple, traerlo a Illustrator y calcarlo encima para hacer l&iacute;neas limpias que se mantienen n&iacute;tidas en cualquier tama&ntilde;o.")
         + para("Es tu primer intento, as&iacute; que mant&eacute;n tu boceto simple: una forma, una letra o un dibujo peque&ntilde;o. La meta es practicar el calcado, no hacer una obra perfecta.")
@@ -413,10 +414,11 @@ def step03():
             ("Bloquea la capa del boceto:","para que no se mueva mientras calcas."),
             ("C&aacute;lcalo:","usa la herramienta Pluma para l&iacute;neas limpias y la herramienta L&aacute;piz para l&iacute;neas sueltas."),
             ("Hazlo fuerte:","engrosa tus trazos para que el arte se vea s&oacute;lido."),
+            ("Gu&aacute;rdalo como archivo .ai:","usa Archivo &gt; Guardar Como, ponle nombre y elige Adobe Illustrator en el men&uacute; Formato. Ese archivo nativo .ai es lo que entregas."),
         ])
         + note("Mant&eacute;nlo simple y div&iacute;ertete. Es un primer intento, no un proyecto calificado."))
     es+=deliverables_box(True,
-        [("1 captura de pantalla (JPG o PNG):","una captura de pantalla de tu arte vectorial en Illustrator, tu boceto calcado, subida a esta tarea de Canvas.")])
+        [("Tu archivo de Illustrator (.ai):","tu arte vectorial calcado guardado como archivo nativo de Adobe Illustrator (.ai), subido a esta tarea de Canvas. Usa Archivo &gt; Guardar Como y elige Adobe Illustrator en el men&uacute; Formato.")])
     es+=next_up("M&Oacute;DULO COMPLETO","Buen trabajo. Ya sabes moverte en Illustrator y convertiste un boceto en arte vectorial. Est&aacute;s listo para tu primer proyecto de verdad en Illustrator.")
 
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
