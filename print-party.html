@@ -215,15 +215,29 @@
     var PP_ENDPOINT = "";                 // <-- paste the Apps Script /exec URL here
     var PP_KEY = "print-party-2026";      // must match the key in print-party-incoming.gs
     var PP_TARGET = "print-party";
+    var PP_VERIFY = "https://command.creativesilva.com/api/verify_student"; // checks the roster, returns only true/false
 
     function ppStatus(el, msg, kind) { var s = document.getElementById(el); s.textContent = msg; s.className = "pp-status" + (kind ? " " + kind : ""); }
 
-    function ppClearGate() {
-      var id = document.getElementById("pp-id").value.trim();
-      if (!/^[0-9]{4,10}$/.test(id)) { ppStatus("pp-gate-status", "Enter your student number (4 to 10 digits, numbers only).", "err"); return; }
+    function ppOpenForm() {
       document.getElementById("pp-gate").hidden = true;
       document.getElementById("pp-form").hidden = false;
       document.getElementById("pp-name").focus();
+    }
+    function ppClearGate() {
+      var id = document.getElementById("pp-id").value.trim();
+      if (!/^[0-9]{4,10}$/.test(id)) { ppStatus("pp-gate-status", "Enter your student number (4 to 10 digits, numbers only).", "err"); return; }
+      ppStatus("pp-gate-status", "Checking the roster…", "");
+      // Validate against Mr. Silva's roster through the Command Center. It returns
+      // only true/false (no name, no contact info). If it is unreachable, let them
+      // through on the format check so a submission is never blocked by an outage.
+      fetch(PP_VERIFY + "?id=" + encodeURIComponent(id))
+        .then(function (r) { return r.json(); })
+        .then(function (out) {
+          if (out && out.valid) { ppStatus("pp-gate-status", "", ""); ppOpenForm(); }
+          else { ppStatus("pp-gate-status", "That student number is not on the roster. Check it and try again.", "err"); }
+        })
+        .catch(function () { ppStatus("pp-gate-status", "", ""); ppOpenForm(); });
     }
     function ppReset() {
       document.getElementById("pp-form").hidden = true;
