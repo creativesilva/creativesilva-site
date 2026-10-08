@@ -109,4 +109,29 @@
   // ---------- Footer year ----------
   var yr = document.getElementById("yr");
   if (yr) yr.textContent = new Date().getFullYear();
+
+  // ---------- Tenure numbers (computed from start years, always current) ----------
+  var curYear = new Date().getFullYear();
+  document.querySelectorAll(".brand-tenure b[data-since]").forEach(function (b) {
+    b.textContent = curYear - parseInt(b.getAttribute("data-since"), 10);
+  });
+
+  // ---------- Live "images made worldwide" counter ----------
+  // Year-to-date images captured worldwide, at a grounded global rate (~2.1 trillion/yr).
+  // The sub-count shows how few are authored photographs.
+  var pcNum = document.getElementById("pc-num");
+  if (pcNum) {
+    var RATE = 66000;               // images per second, worldwide
+    var PHOTO_RATE = RATE / 10000;  // only about 1 in 10,000 is a true photograph
+    var pcPhoto = document.getElementById("pc-photo");
+    var yearStart = Date.UTC(new Date().getUTCFullYear(), 0, 1);
+    var fmt = function (n) { return Math.floor(n).toLocaleString("en-US"); };
+    var tickCounter = function () {
+      var elapsed = (Date.now() - yearStart) / 1000;
+      pcNum.textContent = fmt(elapsed * RATE);
+      if (pcPhoto) pcPhoto.textContent = fmt(elapsed * PHOTO_RATE);
+    };
+    tickCounter();
+    setInterval(tickCounter, 80);
+  }
 })();
