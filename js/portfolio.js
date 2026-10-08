@@ -117,16 +117,18 @@
   });
 
   // ---------- Live "images made worldwide" counter ----------
-  // Year-to-date images captured worldwide, at a grounded global rate (~2.1 trillion/yr).
-  // The sub-count shows how few are authored photographs.
+  // Cumulative phone pics captured worldwide since 2026, and the data they fill.
+  // Drives the compact header counter (#pc-num) and the large Photo Club
+  // feature (#feat-pics + #feat-gb). Annual volume grows about 7% a year.
   var pcNum = document.getElementById("pc-num");
-  if (pcNum) {
-    // Cumulative phone pics captured worldwide since 2026, and the data they fill.
-    // Annual volume grows about 7% a year, so the rate steps up each new year.
+  var featPics = document.getElementById("feat-pics");
+  var featGb = document.getElementById("feat-gb");
+  if (pcNum || featPics) {
     var BASE_YEAR = 2026;
-    var BASE_ANNUAL = 2.2e12;   // total images created in 2026
-    var GROWTH = 0.07;          // about 7% more each year
-    var MOBILE_FRAC = 0.94;     // taken on mobile devices
+    var BASE_ANNUAL = 2.2e12;    // total images created in 2026
+    var GROWTH = 0.07;           // about 7% more each year
+    var MOBILE_FRAC = 0.94;      // taken on mobile devices
+    var GB_PER_IMAGE = 0.0035;   // about 3.6 MB per phone photo, in gigabytes
     var fmt = function (n) { return Math.floor(n).toLocaleString("en-US"); };
     var annual = function (y) { return BASE_ANNUAL * Math.pow(1 + GROWTH, y - BASE_YEAR); };
     var cumulativeImages = function (now) {
@@ -137,7 +139,11 @@
       return total;
     };
     var tickCounter = function () {
-      pcNum.textContent = fmt(cumulativeImages(Date.now()) * MOBILE_FRAC);
+      var pics = cumulativeImages(Date.now()) * MOBILE_FRAC;
+      var picsText = fmt(pics);
+      if (pcNum) pcNum.textContent = picsText;
+      if (featPics) featPics.textContent = picsText;
+      if (featGb) featGb.textContent = fmt(pics * GB_PER_IMAGE);
     };
     tickCounter();
     setInterval(tickCounter, 80);
