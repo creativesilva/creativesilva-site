@@ -2176,7 +2176,7 @@
   function kitMissing(cam){ var a=assetOf(cam); return (a.kit||[]).filter(function(x){ return KIT_STD.indexOf(x)>=0; }); }
   function kitPct(cam){ if(!isStdKit(cam)) return null; var m=kitMissing(cam).length; return Math.round((KIT_STD.length-m)/KIT_STD.length*100); }
   function kitScoreCls(pct){ return pct>=100?'':(pct>=80?'low':'crit'); }
-  function openCamDetail(cam){ cdCam=cam; cdTab='details'; renderCamDetailModal(); document.getElementById('camdetail').classList.add('open'); }
+  function openCamDetail(cam, tab){ cdCam=cam; cdTab=(tab==='kit'?'kit':'details'); renderCamDetailModal(); document.getElementById('camdetail').classList.add('open'); }
   function closeCamDetail(){ document.getElementById('camdetail').classList.remove('open'); cdCam=null; gdKey=null; }
   // ===== Gear pop-out window (reuses the #camdetail modal shell): units + repair, kit checklist,
   // condition issues, standing note, history. One window per pooled gear line.
@@ -2528,9 +2528,10 @@
       // ?stu=<id> (from the Photo Walk, or anywhere): open that student's profile once the board data loads.
       var stu=q.get('stu'); if(stu){ _pendingStu=String(stu).trim(); try{ history.replaceState(null,'',location.pathname); }catch(e){} return; }
       var raw=q.get('cam'); if(!raw) return;
+      var tab=q.get('tab');   // ?tab=kit opens straight to the Kit contents tab (from the Photo Walk % chip)
       var m=String(raw).match(/(\d{1,2})/); if(!m) return;
       var cam='Cam '+(m[1].length<2?('0'+m[1]):m[1]);
-      setTimeout(function(){ try{ openCamDetail(cam); }catch(e){} },150);
+      setTimeout(function(){ try{ openCamDetail(cam, tab==='kit'?'kit':null); }catch(e){} },150);
       try{ history.replaceState(null,'',location.pathname); }catch(e){}   // drop ?cam so a refresh won't reopen
     }catch(e){}
   }

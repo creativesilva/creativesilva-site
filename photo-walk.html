@@ -88,6 +88,7 @@
   .pw-p2{font-family:var(--font);font-size:.52rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#ffb28a;border:1px solid rgba(255,107,26,.5);padding:1px 5px;margin-left:6px;vertical-align:middle;}
   .pw-pct{font-family:var(--font);font-weight:700;font-size:.82rem;letter-spacing:.02em;padding:2px 8px;color:#8ff0b0;background:rgba(63,168,99,.16);}
   .pw-pct.mid{color:#ffd889;background:rgba(245,179,1,.16);} .pw-pct.low{color:#ff9a8a;background:rgba(224,64,58,.18);} .pw-pct.na{color:var(--faint);background:rgba(160,180,180,.12);}
+  a.pw-pct{text-decoration:none;cursor:pointer;display:inline-block;transition:filter .15s,box-shadow .15s;} a.pw-pct:hover{filter:brightness(1.18);box-shadow:inset 0 0 0 1px currentColor;}
   /* Seat inputs */
   /* Seat slots: two side by side, tap to open the wheel (no typing). Compact, <=2 digits. iPad-first. */
   .pw-seats-row{display:flex;gap:9px;align-items:stretch;}
@@ -378,7 +379,9 @@
     grid.querySelectorAll('[data-notused]').forEach(function(b){ b.onclick=function(){ toggleNotUsed(b.getAttribute('data-notused')); }; });
     grid.querySelectorAll('[data-return]').forEach(function(b){ b.onclick=function(){ returnToPool(b.getAttribute('data-return')); }; });
   }
-  function pctChip(cam){ var p=kitPct(cam); return '<span class="pw-pct '+pctCls(p)+'">'+(p==null?'TBD':(p+'%'))+'</span>'; }
+  // The % chip deep-links to the SAME camera window as Edit info, opened straight to the
+  // Kit contents tab, so Silva can toggle missing/returned items on the fly and the % updates live.
+  function pctChip(cam){ var p=kitPct(cam); return '<a class="pw-pct '+pctCls(p)+'" href="/camera-manager.html?cam='+encodeURIComponent(cam)+'&tab=kit" title="Open the kit contents to update it on the fly">'+(p==null?'TBD':(p+'%'))+'</a>'; }
   function seatNum(v){ var s=String(v==null?'':v).replace(/\D/g,''); return s.replace(/^0+/,'')||''; }
   // The student name deep-links to its profile in the Equipment Manager (same single-source-of-truth
   // pattern as Edit info), so tapping a seat's student opens their full profile card there.
