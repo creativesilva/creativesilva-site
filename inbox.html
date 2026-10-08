@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Inbox Board | Command Center</title>
+<meta name="description" content="Mr. Silva's teacher-only Inbox Board: a calm, glanceable Kanban of district email that needs him." />
+<link rel="icon" type="image/svg+xml" href="https://www.creativesilva.com/logos/CS_Logo_Only.svg" />
+<link rel="apple-touch-icon" sizes="180x180" href="https://www.creativesilva.com/logos/CS_AppIcon_180.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Inbox" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *{box-sizing:border-box;}
+  :root{
+    --teal:#00b8b8; --teal-lt:#80e0e0; --teal-deep:#007474;
+    --text:#eafeff; --muted:rgba(206,244,244,0.66); --faint:rgba(206,244,244,0.42);
+    --line:rgba(0,184,184,0.32); --line-soft:rgba(0,184,184,0.16);
+    --ok:#3fa863; --orange:#ff6b1a; --grayed:rgba(160,180,180,0.34);
+    --panel:rgba(4,20,19,0.55);
+    --font:'Oswald',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  }
+  html,body{margin:0;padding:0;}
+  body{font-family:var(--font);color:var(--text);background:#060f0f;min-height:100vh;-webkit-font-smoothing:antialiased;}
+  body::before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%);}
+  a{color:inherit;}
+  .wrap{max-width:1500px;margin:0 auto;padding:18px max(16px,env(safe-area-inset-left)) 60px max(16px,env(safe-area-inset-right));}
+
+  /* Header */
+  .cc-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    background:linear-gradient(90deg,rgba(3,18,20,0.95) 0%,rgba(0,66,68,0.5) 50%,rgba(3,18,20,0.95) 100%);
+    border:2px solid var(--teal);border-left-width:7px;padding:16px 20px;margin-bottom:16px;}
+  .cc-head .lhs{display:flex;flex-direction:column;gap:2px;}
+  .cc-eyebrow{font-size:.66rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--teal-lt);}
+  .cc-title{font-size:clamp(1.5rem,4.5vw,2rem);font-weight:700;text-transform:uppercase;letter-spacing:.02em;line-height:1;color:#fff;}
+  .cc-sorted{font-size:.72rem;color:var(--muted);margin-top:4px;letter-spacing:.03em;}
+  .cc-head .rhs{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .cc-btn{font-family:var(--font);font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--text);background:rgba(0,184,184,.10);border:1px solid var(--line);padding:9px 14px;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s;}
+  .cc-btn:hover{background:rgba(0,184,184,.2);border-color:var(--teal);}
+
+  /* Stat strip */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:8px;}
+  .stat{background:var(--panel);border:1px solid var(--line-soft);border-top:3px solid var(--teal);padding:14px 16px;text-align:center;}
+  .stat.urgent{border-top-color:var(--orange);}
+  .stat .n{font-size:clamp(1.8rem,6vw,2.7rem);font-weight:700;line-height:1;color:#fff;font-variant-numeric:tabular-nums;}
+  .stat.urgent .n{color:#ffc7a6;}
+  .stat .l{font-size:.64rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px;}
+
+  /* Board */
+  .board{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px;align-items:start;}
+  .col{background:var(--panel);border:1px solid var(--line-soft);border-top:3px solid var(--teal);min-height:90px;display:flex;flex-direction:column;}
+  .col.c-today{border-top-color:var(--orange);}
+  .col.c-events{border-top-color:var(--teal-lt);}
+  .col.c-waiting{border-top-color:var(--grayed);}
+  .col.drop{outline:2px dashed var(--teal);outline-offset:-4px;background:rgba(0,184,184,.07);}
+  .col-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line-soft);}
+  .col-name{font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text);}
+  .col.c-today .col-name{color:#ffc7a6;} .col.c-events .col-name{color:var(--teal-lt);} .col.c-waiting .col-name{color:var(--faint);}
+  .col-n{font-size:.68rem;font-weight:600;color:var(--faint);background:rgba(0,0,0,.25);padding:1px 8px;}
+  .col-body{padding:9px;display:flex;flex-direction:column;gap:8px;}
+  .col-empty{color:var(--faint);font-size:.82rem;font-style:italic;padding:10px 4px;}
+  .more{font-family:var(--font);font-size:.68rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-lt);background:none;border:1px dashed var(--line);padding:7px;cursor:pointer;margin-top:1px;}
+  .more:hover{background:rgba(0,184,184,.08);}
+
+  /* Card */
+  .card{background:rgba(0,0,0,.30);border:1px solid var(--line-soft);border-left:3px solid var(--teal);padding:9px 11px;cursor:pointer;transition:border-color .15s,background .15s;}
+  .card:hover{border-color:var(--line);background:rgba(0,0,0,.42);}
+  .card.p-high{border-left-color:var(--orange);}
+  .card.dragging{opacity:.45;}
+  .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+  .card-ttl{display:flex;align-items:flex-start;gap:7px;font-size:.92rem;font-weight:600;line-height:1.2;color:#fff;}
+  .dot{flex:0 0 auto;width:8px;height:8px;margin-top:5px;background:var(--teal);}
+  .card.p-high .dot{background:var(--orange);}
+  .card-due{flex:0 0 auto;font-size:.6rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);white-space:nowrap;padding-top:2px;}
+  .card-due.today{color:#ffc7a6;}
+  .card-sub{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:6px;font-size:.72rem;color:var(--muted);}
+  .role{font-size:.56rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-lt);background:rgba(0,184,184,.14);padding:1px 6px;}
+  .draft{font-size:.56rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ok);background:rgba(63,168,99,.16);padding:1px 6px;}
+  .card.sensitive{border-left-color:var(--grayed);}
+  .card.sensitive .dot{background:var(--grayed);}
+
+  /* Card detail (inline) */
+  .detail{margin-top:9px;padding-top:9px;border-top:1px solid var(--line-soft);display:none;}
+  .card.open .detail{display:block;}
+  .detail p{margin:0 0 7px;font-size:.82rem;line-height:1.5;color:var(--text);}
+  .detail .nx{color:var(--teal-lt);}
+  .detail .lbl{font-size:.56rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:2px;}
+  .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;}
+  .act{font-family:var(--font);font-size:.66rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text);background:rgba(0,184,184,.10);border:1px solid var(--line);padding:7px 10px;cursor:pointer;white-space:nowrap;}
+  .act:hover{background:rgba(0,184,184,.22);}
+  .act.done{color:#061; background:var(--ok);border-color:var(--ok);color:#042;}
+  .act.out{color:var(--teal-lt);}
+  .movewrap{position:relative;display:inline-block;}
+  .movemenu{display:none;position:absolute;z-index:20;left:0;top:calc(100% + 3px);background:#04191a;border:1px solid var(--teal);min-width:130px;box-shadow:0 12px 30px rgba(0,0,0,.6);}
+  .movewrap.on .movemenu{display:block;}
+  .movemenu button{display:block;width:100%;text-align:left;font-family:var(--font);font-size:.72rem;letter-spacing:.04em;color:var(--text);background:none;border:0;border-bottom:1px solid var(--line-soft);padding:9px 11px;cursor:pointer;}
+  .movemenu button:hover{background:rgba(0,184,184,.14);}
+
+  /* Done + import */
+  .doneline{margin-top:18px;}
+  .doneline button{font-family:var(--font);font-size:.74rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:none;border:0;border-bottom:1px solid var(--line-soft);padding:6px 0;cursor:pointer;}
+  .doneline button:hover{color:var(--text);}
+  .donelist{display:none;margin-top:10px;background:var(--panel);border:1px solid var(--line-soft);padding:8px;}
+  .donelist.on{display:block;}
+  .donerow{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.78rem;color:var(--muted);padding:6px 6px;border-bottom:1px solid var(--line-soft);}
+  .donerow:last-child{border-bottom:0;}
+  .donerow .undo{font-size:.6rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-lt);background:none;border:1px solid var(--line);padding:4px 8px;cursor:pointer;}
+  .foot{margin-top:26px;display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--faint);font-size:.72rem;}
+  .gear{background:none;border:1px solid var(--line-soft);color:var(--faint);width:30px;height:30px;cursor:pointer;font-size:.9rem;}
+  .gear:hover{color:var(--text);border-color:var(--line);}
+  .import{display:none;margin-top:12px;background:var(--panel);border:1px solid var(--line-soft);padding:12px;}
+  .import.on{display:block;}
+  .import textarea{width:100%;height:120px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:ui-monospace,Menlo,monospace;font-size:.78rem;padding:8px;resize:vertical;}
+
+  /* Gate */
+  #gate{position:fixed;inset:0;z-index:300;background:#060f0f;display:none;align-items:center;justify-content:center;padding:22px;}
+  #gate.on{display:flex;}
+  #gate .card{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.96));border:1px solid var(--line);border-top:3px solid var(--teal);max-width:380px;width:100%;padding:30px 26px 26px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.6);cursor:default;}
+  #gate img{width:84px;height:auto;margin-bottom:14px;}
+  #gate h2{font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:1.2rem;margin:0 0 4px;color:#fff;}
+  #gate p{color:var(--muted);font-size:.86rem;margin:0 0 18px;}
+  #gate input{width:100%;height:46px;text-align:center;font-size:1.3rem;letter-spacing:.2em;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--text);font-family:var(--font);}
+  #gate input.pinmask{-webkit-text-security:disc;text-security:disc;}
+  #gate .go{width:100%;height:44px;margin-top:12px;font-family:var(--font);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#042;background:var(--teal);border:0;cursor:pointer;}
+  #gate .err{color:#ff9a8a;font-size:.84rem;min-height:1.1em;margin-top:10px;}
+
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(10px);background:rgba(4,20,19,.98);border:1px solid var(--teal);border-left:4px solid var(--teal);color:#dfffff;font-size:.88rem;padding:11px 18px;z-index:420;opacity:0;transition:opacity .2s,transform .2s;max-width:90vw;pointer-events:none;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  @media (max-width:1050px){ .board{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:620px){ .board{grid-template-columns:1fr;} .stats{gap:8px;} .cc-head{padding:14px 16px;} }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="card">
+    <img src="https://www.creativesilva.com/logos/CS_Logo_Glossy_Teal_v1.png" alt="" />
+    <h2>Command Center</h2>
+    <p>Teacher access. Enter the password to open your Inbox Board.</p>
+    <input type="text" id="pin" class="pinmask" autocomplete="off" autocapitalize="off" spellcheck="false" data-1p-ignore data-lpignore="true" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;" aria-label="Password" />
+    <button class="go" id="pingo" type="button">Open</button>
+    <div class="err" id="pinerr"></div>
+  </div>
+</div>
+
+<div class="wrap" id="app" style="display:none;">
+  <div class="cc-head">
+    <div class="lhs">
+      <span class="cc-eyebrow">PVHS Command Center</span>
+      <span class="cc-title">Inbox</span>
+      <span class="cc-sorted" id="sorted">Loading&hellip;</span>
+    </div>
+    <div class="rhs">
+      <a class="cc-btn" href="https://outlook.office.com/mail/" target="_blank" rel="noopener">Open Outlook &#8599;</a>
+      <a class="cc-btn" href="https://command.creativesilva.com/" target="_blank" rel="noopener">Command Center &#8599;</a>
+      <button class="cc-btn" id="refresh" type="button">Refresh</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n" id="s-needs">0</div><div class="l">Needs You</div></div>
+    <div class="stat"><div class="n" id="s-draft">0</div><div class="l">Drafts Ready</div></div>
+    <div class="stat urgent"><div class="n" id="s-due">0</div><div class="l">Due Today</div></div>
+  </div>
+
+  <div class="board" id="board"></div>
+
+  <div class="doneline">
+    <button id="doneToggle" type="button">0 done this week</button>
+    <div class="donelist" id="donelist"></div>
+  </div>
+
+  <div class="foot">
+    <span>Teacher-only. Cards carry short summaries, never email bodies or student details.</span>
+    <button class="gear" id="gear" type="button" title="Import JSON">&#9881;</button>
+  </div>
+  <div class="import" id="import">
+    <div class="cc-eyebrow" style="margin-bottom:8px;">Import cards (JSON array)</div>
+    <textarea id="importText" placeholder='[{"id":"...","title":"...","column":"today", ...}]'></textarea>
+    <div style="margin-top:8px;"><button class="act" id="importGo" type="button">Upsert</button> <span id="importMsg" style="color:var(--muted);font-size:.78rem;margin-left:8px;"></span></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var API='https://command.creativesilva.com';
+  var KEY=''; try{ KEY=sessionStorage.getItem('silva-cam-key')||''; }catch(e){}
+  var CARDS=[], EXPANDED={}, SHOW_ALL={};
+  var COLS=[['today','Today'],['week','This Week'],['waiting','Waiting'],['events','Events']];
+  var EMPTY={today:'Nothing due today.',week:'Nothing this week. Nice.',waiting:'Nothing waiting. Nice.',events:'No events right now.'};
+
+  var gate=document.getElementById('gate'), app=document.getElementById('app');
+  var pin=document.getElementById('pin'), pinerr=document.getElementById('pinerr');
+
+  function ccAPI(path,opts){ opts=opts||{}; opts.headers=opts.headers||{}; opts.headers['X-Camera-Key']=KEY; opts.headers['Content-Type']='text/plain'; return fetch(API+path,opts); }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function todayISO(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function toast(m){ var t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2200); }
+
+  // ----- date labels -----
+  function dueLabel(c){
+    if(!c.due) return c.receivedAt? ageLabel(c.receivedAt) : '';
+    var t=todayISO();
+    if(c.due===t) return 'Today';
+    var d=new Date(c.due+'T00:00:00'), now=new Date(t+'T00:00:00');
+    var diff=Math.round((d-now)/86400000);
+    if(diff<0) return Math.abs(diff)+'d late';
+    if(diff<7) return d.toLocaleDateString('en-US',{weekday:'short'});
+    return (d.getMonth()+1)+'/'+d.getDate();
+  }
+  function ageLabel(iso){ try{ var d=new Date(iso), days=Math.floor((Date.now()-d.getTime())/86400000); return days<=0?'today':days+'d'; }catch(e){ return ''; } }
+  function fmtSorted(iso){ if(!iso) return ''; try{ var d=new Date(iso); return d.toLocaleDateString('en-US',{weekday:'short',month:'numeric',day:'numeric'})+', '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}); }catch(e){ return iso; } }
+
+  // ----- render -----
+  function activeCards(){ return CARDS.filter(function(c){ return !c.done; }); }
+  function render(){
+    var act=activeCards();
+    var t=todayISO();
+    document.getElementById('s-needs').textContent=act.filter(function(c){ return c.column==='today'||c.column==='week'; }).length;
+    document.getElementById('s-draft').textContent=act.filter(function(c){ return c.draftReady; }).length;
+    document.getElementById('s-due').textContent=act.filter(function(c){ return c.due===t; }).length;
+
+    var board=document.getElementById('board'); board.innerHTML='';
+    COLS.forEach(function(co){
+      var key=co[0], items=act.filter(function(c){ return c.column===key; });
+      items.sort(function(a,b){ var pa=a.priority==='high'?0:1, pb=b.priority==='high'?0:1; if(pa!==pb) return pa-pb; return (a.due||'9999')<(b.due||'9999')?-1:1; });
+      var col=document.createElement('div'); col.className='col c-'+key; col.setAttribute('data-col',key);
+      var shown=SHOW_ALL[key]?items:items.slice(0,5);
+      var head='<div class="col-head"><span class="col-name">'+co[1]+'</span><span class="col-n">'+items.length+'</span></div>';
+      var body='<div class="col-body">';
+      if(!items.length){ body+='<div class="col-empty">'+EMPTY[key]+'</div>'; }
+      else { body+=shown.map(cardHTML).join(''); if(items.length>shown.length){ body+='<button class="more" data-more="'+key+'">+'+(items.length-shown.length)+' more</button>'; } }
+      body+='</div>';
+      col.innerHTML=head+body;
+      board.appendChild(col);
+    });
+    wireBoard();
+    renderDone();
+    document.getElementById('sorted').textContent='Last sorted: '+(LAST_SORTED? fmtSorted(LAST_SORTED):'not yet');
+  }
+  function cardHTML(c){
+    var open=EXPANDED[c.id]?' open':'';
+    var high=c.priority==='high'?' p-high':'';
+    var sens=c.sensitive?' sensitive':'';
+    var due=dueLabel(c), dueCls=(due==='Today')?' today':'';
+    var sub='<div class="card-sub"><span class="role">'+esc(c.role||'Staff')+'</span>'+(c.sender?'<span>'+esc(c.sender)+'</span>':'')+(c.draftReady?'<span class="draft">Draft &#10003;</span>':'')+'</div>';
+    var detail='<div class="detail">';
+    if(c.sensitive){ detail+='<p class="nx">The content stays in Outlook. Open it there.</p>'; }
+    else {
+      if(c.summary){ detail+='<span class="lbl">Context</span><p>'+esc(c.summary)+'</p>'; }
+      if(c.nextAction){ detail+='<span class="lbl">Next</span><p class="nx">'+esc(c.nextAction)+'</p>'; }
+    }
+    detail+='<div class="acts">'+
+      '<button class="act out" data-open="'+esc(c.id)+'">Open in Outlook &#8599;</button>'+
+      '<button class="act" data-drafts="1">Drafts &#8599;</button>'+
+      '<span class="movewrap"><button class="act" data-movebtn="'+esc(c.id)+'">Move to</button>'+
+        '<span class="movemenu">'+COLS.map(function(co){ return '<button data-move="'+esc(c.id)+'" data-col="'+co[0]+'">'+co[1]+'</button>'; }).join('')+'</span></span>'+
+      '<button class="act" data-snooze="'+esc(c.id)+'">Snooze</button>'+
+      '<button class="act done" data-done="'+esc(c.id)+'">Done</button>'+
+    '</div></div>';
+    return '<div class="card'+high+sens+open+'" draggable="true" data-id="'+esc(c.id)+'">'+
+      '<div class="card-top"><span class="card-ttl"><span class="dot"></span>'+esc(c.title)+'</span>'+(due?'<span class="card-due'+dueCls+'">'+esc(due)+'</span>':'')+'</div>'+
+      sub+detail+'</div>';
+  }
+  function renderDone(){
+    var done=CARDS.filter(function(c){ return c.done; }).sort(function(a,b){ return (a.doneAt||'')<(b.doneAt||'')?1:-1; });
+    document.getElementById('doneToggle').textContent=done.length+' done this week';
+    var dl=document.getElementById('donelist');
+    dl.innerHTML=done.length? done.map(function(c){ return '<div class="donerow"><span>'+esc(c.title)+(c.sender?' &middot; '+esc(c.sender):'')+'</span><button class="undo" data-undo="'+esc(c.id)+'">Reopen</button></div>'; }).join('') : '<div class="donerow"><span style="color:var(--faint)">Nothing done this week yet.</span></div>';
+  }
+
+  // ----- wiring -----
+  function wireBoard(){
+    var b=document.getElementById('board');
+    b.querySelectorAll('.card').forEach(function(card){
+      var id=card.getAttribute('data-id');
+      card.addEventListener('click',function(e){ if(e.target.closest('.act,.movemenu,.more,[data-move],[data-open],[data-done],[data-snooze],[data-drafts],[data-movebtn]')) return; EXPANDED[id]=!EXPANDED[id]; render(); });
+      card.addEventListener('dragstart',function(e){ card.classList.add('dragging'); e.dataTransfer.setData('text/plain',id); e.dataTransfer.effectAllowed='move'; });
+      card.addEventListener('dragend',function(){ card.classList.remove('dragging'); });
+    });
+    b.querySelectorAll('.col').forEach(function(col){
+      col.addEventListener('dragover',function(e){ e.preventDefault(); col.classList.add('drop'); });
+      col.addEventListener('dragleave',function(){ col.classList.remove('drop'); });
+      col.addEventListener('drop',function(e){ e.preventDefault(); col.classList.remove('drop'); var id=e.dataTransfer.getData('text/plain'); moveCard(id,col.getAttribute('data-col')); });
+    });
+    b.querySelectorAll('[data-more]').forEach(function(el){ el.onclick=function(){ SHOW_ALL[el.getAttribute('data-more')]=true; render(); }; });
+    b.querySelectorAll('[data-open]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); var c=byId(el.getAttribute('data-open')); if(c&&c.outlookUrl) window.open(c.outlookUrl,'_blank','noopener'); else window.open('https://outlook.office.com/mail/','_blank','noopener'); }; });
+    b.querySelectorAll('[data-drafts]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); window.open('https://outlook.office.com/mail/drafts','_blank','noopener'); }; });
+    b.querySelectorAll('[data-done]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); resolveCard(el.getAttribute('data-done'),true); }; });
+    b.querySelectorAll('[data-snooze]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); snoozeCard(el.getAttribute('data-snooze')); }; });
+    b.querySelectorAll('[data-movebtn]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); var w=el.closest('.movewrap'); var onNow=w.classList.contains('on'); b.querySelectorAll('.movewrap').forEach(function(x){ x.classList.remove('on'); }); if(!onNow) w.classList.add('on'); }; });
+    b.querySelectorAll('[data-move]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); moveCard(el.getAttribute('data-move'),el.getAttribute('data-col')); }; });
+  }
+  function byId(id){ return CARDS.filter(function(c){ return String(c.id)===String(id); })[0]; }
+
+  // ----- actions -----
+  function loadInbox(){ return ccAPI('/api/inbox/list',{method:'GET'}).then(function(r){ if(r.status===401){ showGate('That password did not work.'); throw new Error('401'); } return r.json(); }).then(function(j){ CARDS=(j&&j.cards)||[]; LAST_SORTED=(j&&j.lastSorted)||''; render(); }); }
+  var LAST_SORTED='';
+  function moveCard(id,col){ ccAPI('/api/inbox/move',{method:'POST',body:JSON.stringify({id:id,column:col})}).then(function(){ toast('Moved to '+colName(col)); return loadInbox(); }).catch(function(){ toast('Could not move it.'); }); }
+  function snoozeCard(id){ var d=new Date(); d.setDate(d.getDate()+1); var tm=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); ccAPI('/api/inbox/move',{method:'POST',body:JSON.stringify({id:id,column:'week',due:tm})}).then(function(){ toast('Snoozed to tomorrow'); return loadInbox(); }); }
+  function resolveCard(id,done){ ccAPI('/api/inbox/resolve',{method:'POST',body:JSON.stringify({ids:[id],done:done})}).then(function(){ toast(done?'Done':'Reopened'); delete EXPANDED[id]; return loadInbox(); }); }
+  function colName(k){ var f=COLS.filter(function(c){ return c[0]===k; })[0]; return f?f[1]:k; }
+
+  // ----- the API the email routine calls (only present when signed in) -----
+  function exposeAPI(){
+    window.CCInbox={
+      upsert:function(cards){ return ccAPI('/api/inbox/upsert',{method:'POST',body:JSON.stringify({cards:cards})}).then(function(r){ return r.json(); }).then(function(res){ loadInbox(); return res; }); },
+      list:function(){ return ccAPI('/api/inbox/list',{method:'GET'}).then(function(r){ return r.json(); }).then(function(j){ return (j&&j.cards)||[]; }); },
+      resolve:function(ids){ return ccAPI('/api/inbox/resolve',{method:'POST',body:JSON.stringify({ids:ids,done:true})}).then(function(r){ return r.json(); }).then(function(res){ loadInbox(); return res; }); }
+    };
+  }
+
+  // ----- gate -----
+  function showGate(msg){ KEY=''; try{ sessionStorage.removeItem('silva-cam-key'); }catch(e){} try{ delete window.CCInbox; }catch(e){ window.CCInbox=undefined; } gate.classList.add('on'); app.style.display='none'; pinerr.textContent=msg||''; pin.value=''; setTimeout(function(){ pin.focus(); },60); }
+  function startApp(){ gate.classList.remove('on'); app.style.display='block'; exposeAPI(); }
+  function tryKey(v){ pinerr.textContent='Checking…'; KEY=v;
+    ccAPI('/api/inbox/list',{method:'GET'}).then(function(r){
+      if(r.ok){ try{ sessionStorage.setItem('silva-cam-key',v); }catch(e){} return r.json().then(function(j){ CARDS=(j&&j.cards)||[]; LAST_SORTED=(j&&j.lastSorted)||''; startApp(); render(); }); }
+      if(r.status===401){ KEY=''; pinerr.textContent='That password did not work.'; return; }
+      pinerr.textContent='Server error. Try again.';
+    }).catch(function(){ pinerr.textContent='Could not reach the server.'; });
+  }
+  document.getElementById('pingo').onclick=function(){ var v=pin.value.trim(); if(v) tryKey(v); };
+  pin.addEventListener('keydown',function(e){ if(e.key==='Enter'){ var v=pin.value.trim(); if(v) tryKey(v); } });
+
+  // ----- footer / refresh / done / import -----
+  document.getElementById('refresh').onclick=function(){ loadInbox().then(function(){ toast('Refreshed'); }); };
+  document.getElementById('doneToggle').onclick=function(){ document.getElementById('donelist').classList.toggle('on'); };
+  document.getElementById('donelist').addEventListener('click',function(e){ var u=e.target.closest('[data-undo]'); if(u) resolveCard(u.getAttribute('data-undo'),false); });
+  document.getElementById('gear').onclick=function(){ document.getElementById('import').classList.toggle('on'); };
+  document.getElementById('importGo').onclick=function(){
+    var msg=document.getElementById('importMsg'); var arr;
+    try{ arr=JSON.parse(document.getElementById('importText').value); }catch(e){ msg.textContent='Not valid JSON.'; return; }
+    if(!Array.isArray(arr)){ msg.textContent='Must be a JSON array.'; return; }
+    window.CCInbox.upsert(arr).then(function(res){ msg.textContent='Added '+res.added+', updated '+res.updated+', skipped '+res.skipped+'.'; });
+  };
+  document.addEventListener('click',function(e){ if(!e.target.closest('.movewrap')) document.querySelectorAll('.movewrap').forEach(function(x){ x.classList.remove('on'); }); });
+
+  // light poll + refresh on focus so routine writes appear without a manual reload
+  setInterval(function(){ if(KEY && app.style.display!=='none' && !document.hidden) loadInbox().catch(function(){}); },25000);
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden && KEY && app.style.display!=='none') loadInbox().catch(function(){}); });
+
+  // ----- boot -----
+  if(KEY){ loadInbox().then(startApp).catch(function(){ showGate(''); }); } else { showGate(''); }
+})();
+</script>
+</body>
+</html>
