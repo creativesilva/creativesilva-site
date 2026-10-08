@@ -263,7 +263,7 @@
       '<span class="movewrap"><button class="act" data-movebtn="'+esc(c.id)+'">Move to</button>'+
         '<span class="movemenu">'+COLS.map(function(co){ return '<button data-move="'+esc(c.id)+'" data-col="'+co[0]+'">'+co[1]+'</button>'; }).join('')+'</span></span>'+
       '<button class="act" data-snooze="'+esc(c.id)+'">Snooze</button>'+
-      '<button class="act" data-arch="'+esc(c.id)+'" title="Clears it off the board and archives the email on the next routine run">Not for me</button>'+
+      '<button class="act" data-arch="'+esc(c.id)+'" title="Clears it off the board; the email gets archived on the next routine run">Archive</button>'+
       '<button class="act done" data-done="'+esc(c.id)+'">Done</button>'+
     '</div></div>';
     return '<div class="card'+high+sens+open+'" draggable="true" data-id="'+esc(c.id)+'">'+
@@ -274,7 +274,7 @@
     var done=CARDS.filter(function(c){ return c.done; }).sort(function(a,b){ return (a.doneAt||'')<(b.doneAt||'')?1:-1; });
     document.getElementById('doneToggle').textContent=done.length+' done this week';
     var dl=document.getElementById('donelist');
-    dl.innerHTML=done.length? done.map(function(c){ return '<div class="donerow"><span>'+esc(c.title)+(c.sender?' &middot; '+esc(c.sender):'')+(c.dismissed?' <span style="color:var(--faint)">&middot; not for you, filing next run</span>':'')+'</span><button class="undo" data-undo="'+esc(c.id)+'">Reopen</button></div>'; }).join('') : '<div class="donerow"><span style="color:var(--faint)">Nothing done this week yet.</span></div>';
+    dl.innerHTML=done.length? done.map(function(c){ return '<div class="donerow"><span>'+esc(c.title)+(c.sender?' &middot; '+esc(c.sender):'')+(c.dismissed?' <span style="color:var(--faint)">&middot; archiving next run</span>':'')+'</span><button class="undo" data-undo="'+esc(c.id)+'">Reopen</button></div>'; }).join('') : '<div class="donerow"><span style="color:var(--faint)">Nothing done this week yet.</span></div>';
   }
 
   // ----- wiring -----
@@ -308,7 +308,7 @@
   function moveCard(id,col){ ccAPI('/api/inbox/move',{method:'POST',body:JSON.stringify({id:id,column:col})}).then(function(){ toast('Moved to '+colName(col)); return loadInbox(); }).catch(function(){ toast('Could not move it.'); }); }
   function snoozeCard(id){ var d=new Date(); d.setDate(d.getDate()+1); var tm=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); ccAPI('/api/inbox/move',{method:'POST',body:JSON.stringify({id:id,column:'week',due:tm})}).then(function(){ toast('Snoozed to tomorrow'); return loadInbox(); }); }
   function resolveCard(id,done){ ccAPI('/api/inbox/resolve',{method:'POST',body:JSON.stringify({ids:[id],done:done})}).then(function(){ toast(done?'Done':'Reopened'); delete EXPANDED[id]; return loadInbox(); }); }
-  function archiveCard(id){ ccAPI('/api/inbox/resolve',{method:'POST',body:JSON.stringify({ids:[id],done:true,dismissed:true})}).then(function(){ toast('Not for you. It will be archived on the next run.'); delete EXPANDED[id]; return loadInbox(); }); }
+  function archiveCard(id){ ccAPI('/api/inbox/resolve',{method:'POST',body:JSON.stringify({ids:[id],done:true,dismissed:true})}).then(function(){ toast('Archived. The email gets filed on the next run.'); delete EXPANDED[id]; return loadInbox(); }); }
   function colName(k){ var f=COLS.filter(function(c){ return c[0]===k; })[0]; return f?f[1]:k; }
 
   // ----- the API the email routine calls (only present when signed in) -----
