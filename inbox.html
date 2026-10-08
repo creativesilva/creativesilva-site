@@ -263,6 +263,7 @@
       '<span class="movewrap"><button class="act" data-movebtn="'+esc(c.id)+'">Move to</button>'+
         '<span class="movemenu">'+COLS.map(function(co){ return '<button data-move="'+esc(c.id)+'" data-col="'+co[0]+'">'+co[1]+'</button>'; }).join('')+'</span></span>'+
       '<button class="act" data-snooze="'+esc(c.id)+'">Snooze</button>'+
+      '<button class="act" data-arch="'+esc(c.id)+'" title="Clears it off the board and archives the email on the next routine run">Not for me</button>'+
       '<button class="act done" data-done="'+esc(c.id)+'">Done</button>'+
     '</div></div>';
     return '<div class="card'+high+sens+open+'" draggable="true" data-id="'+esc(c.id)+'">'+
@@ -273,7 +274,7 @@
     var done=CARDS.filter(function(c){ return c.done; }).sort(function(a,b){ return (a.doneAt||'')<(b.doneAt||'')?1:-1; });
     document.getElementById('doneToggle').textContent=done.length+' done this week';
     var dl=document.getElementById('donelist');
-    dl.innerHTML=done.length? done.map(function(c){ return '<div class="donerow"><span>'+esc(c.title)+(c.sender?' &middot; '+esc(c.sender):'')+'</span><button class="undo" data-undo="'+esc(c.id)+'">Reopen</button></div>'; }).join('') : '<div class="donerow"><span style="color:var(--faint)">Nothing done this week yet.</span></div>';
+    dl.innerHTML=done.length? done.map(function(c){ return '<div class="donerow"><span>'+esc(c.title)+(c.sender?' &middot; '+esc(c.sender):'')+(c.dismissed?' <span style="color:var(--faint)">&middot; not for you, filing next run</span>':'')+'</span><button class="undo" data-undo="'+esc(c.id)+'">Reopen</button></div>'; }).join('') : '<div class="donerow"><span style="color:var(--faint)">Nothing done this week yet.</span></div>';
   }
 
   // ----- wiring -----
@@ -294,6 +295,7 @@
     b.querySelectorAll('[data-open]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); var c=byId(el.getAttribute('data-open')); if(c&&c.outlookUrl) window.open(c.outlookUrl,'_blank','noopener'); else window.open('https://outlook.office.com/mail/','_blank','noopener'); }; });
     b.querySelectorAll('[data-drafts]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); window.open('https://outlook.office.com/mail/drafts','_blank','noopener'); }; });
     b.querySelectorAll('[data-done]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); resolveCard(el.getAttribute('data-done'),true); }; });
+    b.querySelectorAll('[data-arch]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); archiveCard(el.getAttribute('data-arch')); }; });
     b.querySelectorAll('[data-snooze]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); snoozeCard(el.getAttribute('data-snooze')); }; });
     b.querySelectorAll('[data-movebtn]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); var w=el.closest('.movewrap'); var onNow=w.classList.contains('on'); b.querySelectorAll('.movewrap').forEach(function(x){ x.classList.remove('on'); }); if(!onNow) w.classList.add('on'); }; });
     b.querySelectorAll('[data-move]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); moveCard(el.getAttribute('data-move'),el.getAttribute('data-col')); }; });
@@ -306,6 +308,7 @@
   function moveCard(id,col){ ccAPI('/api/inbox/move',{method:'POST',body:JSON.stringify({id:id,column:col})}).then(function(){ toast('Moved to '+colName(col)); return loadInbox(); }).catch(function(){ toast('Could not move it.'); }); }
   function snoozeCard(id){ var d=new Date(); d.setDate(d.getDate()+1); var tm=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); ccAPI('/api/inbox/move',{method:'POST',body:JSON.stringify({id:id,column:'week',due:tm})}).then(function(){ toast('Snoozed to tomorrow'); return loadInbox(); }); }
   function resolveCard(id,done){ ccAPI('/api/inbox/resolve',{method:'POST',body:JSON.stringify({ids:[id],done:done})}).then(function(){ toast(done?'Done':'Reopened'); delete EXPANDED[id]; return loadInbox(); }); }
+  function archiveCard(id){ ccAPI('/api/inbox/resolve',{method:'POST',body:JSON.stringify({ids:[id],done:true,dismissed:true})}).then(function(){ toast('Not for you. It will be archived on the next run.'); delete EXPANDED[id]; return loadInbox(); }); }
   function colName(k){ var f=COLS.filter(function(c){ return c[0]===k; })[0]; return f?f[1]:k; }
 
   // ----- the API the email routine calls (only present when signed in) -----
