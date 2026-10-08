@@ -121,7 +121,7 @@
   // The sub-count shows how few are authored photographs.
   var pcNum = document.getElementById("pc-num");
   if (pcNum) {
-    var RATE = 66000;               // images per second, worldwide
+    var RATE = 70000;               // images per second, worldwide (~2.2 trillion/yr, 2026)
     var PHOTO_RATE = RATE / 10000;  // only about 1 in 10,000 is a true photograph
     var pcPhoto = document.getElementById("pc-photo");
     var yearStart = Date.UTC(new Date().getUTCFullYear(), 0, 1);

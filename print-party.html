@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Print Party &middot; Chris Silva</title>
+  <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only.svg" />
+  <link rel="apple-touch-icon" href="/logos/CS_AppIcon_180.png" />
+  <meta name="description" content="Print Party at Pioneer Valley High School. Submit the image you want printed, then join us in Room 322 to print it." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/portfolio.css?v=20261007" />
+  <style>
+    .pp-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin: 28px 0 0; border: 1px solid var(--surface-border); background: var(--surface-border); }
+    .pp-fact { background: #0d0d0d; padding: 22px 18px; }
+    .pp-fact .k { font-family: var(--font-head); text-transform: uppercase; letter-spacing: 0.16em; font-size: 11px; color: var(--red-bright); }
+    .pp-fact .v { font-family: var(--font-head); text-transform: uppercase; font-size: 20px; letter-spacing: 0.02em; color: #fff; margin-top: 6px; line-height: 1.15; }
+    @media (max-width: 760px) { .pp-facts { grid-template-columns: 1fr 1fr; } }
+
+    .pp-panel { max-width: 560px; margin: 0 auto; background: var(--surface); border: 1px solid var(--surface-border); box-shadow: var(--glow); padding: 32px 30px 34px; }
+    .pp-step-label { font-family: var(--font-head); text-transform: uppercase; letter-spacing: 0.18em; font-size: 12px; color: var(--red-bright); margin-bottom: 10px; }
+    .pp-panel h3 { font-size: 24px; margin-bottom: 6px; }
+    .pp-panel p.sub { color: var(--gray); font-size: 14px; margin-bottom: 20px; }
+    .pp-input { width: 100%; font: inherit; font-size: 17px; padding: 14px 15px; border: 1px solid rgba(255,255,255,0.16); background: rgba(0,0,0,0.4); color: #fff; }
+    .pp-input:focus { outline: none; border-color: var(--red-bright); background: rgba(204,0,0,0.08); }
+    .pp-id { text-align: center; letter-spacing: 0.35em; font-family: var(--font-head); font-size: 22px; }
+    .pp-field { margin-bottom: 16px; }
+    .pp-field label { display: block; font-family: var(--font-head); text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; color: var(--gray); margin-bottom: 7px; }
+    .pp-btn { width: 100%; font-family: var(--font-head); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; font-size: 16px; color: #fff; background: var(--red); border: 2px solid var(--red); padding: 15px; cursor: pointer; transition: background .2s, border-color .2s; }
+    .pp-btn:hover { background: var(--red-dark); border-color: var(--red-dark); }
+    .pp-btn:disabled { opacity: 0.5; cursor: default; }
+    .pp-drop { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; cursor: pointer; padding: 28px 18px; border: 1px dashed rgba(255,255,255,0.28); background: rgba(255,255,255,0.03); color: var(--gray); transition: border-color .2s, background .2s; }
+    .pp-drop:hover { border-color: var(--red-bright); background: rgba(204,0,0,0.06); color: #fff; }
+    .pp-drop b { font-family: var(--font-head); text-transform: uppercase; letter-spacing: 0.08em; color: #fff; font-size: 15px; }
+    .pp-drop small { font-size: 12px; }
+    .pp-preview { margin-top: 14px; display: none; }
+    .pp-preview.show { display: block; }
+    .pp-preview img { width: 100%; max-height: 300px; object-fit: contain; background: #000; border: 1px solid var(--surface-border); }
+    .pp-preview .fn { font-size: 12px; color: var(--gray); margin-top: 8px; text-align: center; word-break: break-all; }
+    .pp-status { margin-top: 16px; font-size: 14px; min-height: 1.2em; text-align: center; }
+    .pp-status.ok { color: var(--red-bright); }
+    .pp-status.err { color: #ff9a9a; }
+    .pp-reset { margin-top: 14px; text-align: center; }
+    .pp-reset a { font-family: var(--font-head); text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; color: var(--gray); cursor: pointer; }
+    .pp-reset a:hover { color: #fff; }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="masthead">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="Creative Silva, Home">
+        <img class="brand-mark" src="logos/CS_Monogram.svg" alt="" />
+        <span class="brand-lockup">
+          <span class="brand-name">Creative <b>Silva</b></span>
+          <span class="brand-tenure">
+            <span><b data-since="1993">33</b> Yrs Photographer</span>
+            <span><b data-since="2010">16</b> Yrs Professional</span>
+            <span><b data-since="2021">5</b> Yrs Educator</span>
+          </span>
+        </span>
+      </a>
+      <div class="mast-right">
+        <a class="pics-counter" href="artist-statement.html" title="Estimated images captured worldwide this year">
+          <span class="pc-eyebrow">Images Made Worldwide &middot; 2026</span>
+          <span class="pc-num" id="pc-num">&hellip;</span>
+          <span class="pc-sub">Only <b id="pc-photo">&hellip;</b> are photographs</span>
+        </a>
+        <a class="btn-donate" href="donate-a-camera.html">Donate a Camera</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="mainnav" aria-label="Primary">
+    <div class="wrap">
+      <a class="dock-logo" href="index.html" aria-label="Creative Silva, Home"><img src="logos/CS_Logo_Only.svg" alt="" /></a>
+      <button class="navtoggle" type="button" aria-expanded="false" aria-label="Open menu" aria-controls="primary-menu"><span class="bars" aria-hidden="true"></span><span class="navtoggle-label">Menu</span></button>
+      <ul id="primary-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="work.html">Selected Works</a></li>
+        <li><a href="student-work.html">Student Work</a></li>
+        <li><a href="photo-club.html">Photo Club</a></li>
+        <li><a href="artist-statement.html">Statement</a></li>
+        <li><a href="artist-biography.html">Biography</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="nav-donate"><a href="donate-a-camera.html">Donate a Camera</a></li>
+        <li class="nav-admin"><a href="curriculum.html">Admin Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="hero page" style="background-image:url('images/lightwriterz-light-lw.jpg');background-position:center 42%;" aria-label="Print Party">
+      <div class="wrap">
+        <p class="eyebrow">Bring Your Best Frame</p>
+        <h1>Print Party</h1>
+      </div>
+    </section>
+
+    <section class="band tight">
+      <div class="wrap" style="max-width:900px;">
+        <p class="lead" style="color:#e6e6e6;">Pick the one image you are proudest of, submit it below, then come to Room 322 and print it big. Walls, lockers, portfolios: this is the one that leaves the screen and becomes real.</p>
+        <div class="pp-facts">
+          <div class="pp-fact"><div class="k">When</div><div class="v">Friday<br/>October 16</div></div>
+          <div class="pp-fact"><div class="k">Time</div><div class="v">Lunch<br/>12:25 to 1:05</div></div>
+          <div class="pp-fact"><div class="k">Where</div><div class="v">Room<br/>322</div></div>
+          <div class="pp-fact"><div class="k">Print Sizes</div><div class="v">11&times;17<br/>13&times;19</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band gray">
+      <div class="wrap">
+        <div class="pp-panel">
+          <!-- Step 1: student-number gate -->
+          <div id="pp-gate">
+            <p class="pp-step-label">Step 1 of 2</p>
+            <h3>Enter Your Student Number</h3>
+            <p class="sub">This is how I match your print to you. Numbers only.</p>
+            <div class="pp-field">
+              <input id="pp-id" class="pp-input pp-id" type="text" inputmode="numeric" autocomplete="off" placeholder="000000" aria-label="Student number" />
+            </div>
+            <button type="button" class="pp-btn" onclick="ppClearGate()">Continue</button>
+            <p class="pp-status" id="pp-gate-status"></p>
+          </div>
+
+          <!-- Step 2: submit the image -->
+          <div id="pp-form" hidden>
+            <p class="pp-step-label">Step 2 of 2</p>
+            <h3>Submit Your Image</h3>
+            <p class="sub">One image, JPG or PNG. Choose the best version you have.</p>
+            <div class="pp-field">
+              <label for="pp-name">Your Name</label>
+              <input id="pp-name" class="pp-input" type="text" autocomplete="name" placeholder="First and last name" />
+            </div>
+            <div class="pp-field">
+              <label>The Image to Print</label>
+              <label class="pp-drop" for="pp-file">
+                <b>Choose Image</b>
+                <small>Tap to pick a JPG or PNG from your device</small>
+              </label>
+              <input id="pp-file" type="file" accept="image/jpeg,image/png" style="position:absolute;left:-9999px;" onchange="ppPreview()" />
+              <div class="pp-preview" id="pp-preview"><img id="pp-preview-img" alt="Your selected image" /><div class="fn" id="pp-preview-fn"></div></div>
+            </div>
+            <button type="button" class="pp-btn" id="pp-submit" onclick="ppSubmit()">Submit for Printing</button>
+            <p class="pp-status" id="pp-status"></p>
+            <div class="pp-reset"><a onclick="ppReset()">Use a different student number</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band tight">
+      <div class="wrap" style="max-width:760px;">
+        <h3>How It Works</h3>
+        <ul class="checklist" style="margin-top:14px;">
+          <li>Submit your image here before Friday, or right at the party</li>
+          <li>Come to Room 322 at lunch, Friday October 16, 12:25 to 1:05</li>
+          <li>We print it together at 11&times;17 or 13&times;19</li>
+          <li>Take home a real, physical print of your work</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <div class="cols">
+        <div>
+          <a class="foot-logo" href="index.html" aria-label="Creative Silva, Home"><img src="logos/CS_Logo_Vector.svg" alt="Chris Silva" /></a>
+          <p class="foot-about">Black and white film and digital photography by Chris Silva. Fine art work rooted in place and presence, from Santa Maria, California to San Francisco, Los Angeles, and New York.</p>
+        </div>
+        <div>
+          <h4>Collections</h4>
+          <ul>
+            <li><a href="portraits.html">Portraits</a></li>
+            <li><a href="the-streets.html">The Streets</a></li>
+            <li><a href="cityscapes.html">Cityscapes</a></li>
+            <li><a href="working-class.html">Working Class</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>More</h4>
+          <ul>
+            <li><a href="work.html">Selected Works</a></li>
+            <li><a href="student-work.html">Student Work</a></li>
+            <li><a href="photo-club.html">Photo Club</a></li>
+            <li><a href="donate-a-camera.html">Donate a Camera</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="artist-statement.html">Artist Statement</a></li>
+            <li><a href="artist-biography.html">Biography</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="https://instagram.com/silvateaches" target="_blank" rel="noopener">Instagram</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="legal">
+        <span>&copy; <span id="yr">2026</span> Chris Silva &middot; www.creativesilva.com</span>
+        <a href="#main" class="back-to-top">Back to Top</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Print Party submission. Images upload to a Google Drive folder through a
+    // Google Apps Script web app (same pattern as the Light Writerz uploader).
+    // SET ENDPOINT to the Apps Script /exec URL after deploying print-party-incoming.gs.
+    var PP_ENDPOINT = "";                 // <-- paste the Apps Script /exec URL here
+    var PP_KEY = "print-party-2026";      // must match the key in print-party-incoming.gs
+    var PP_TARGET = "print-party";
+
+    function ppStatus(el, msg, kind) { var s = document.getElementById(el); s.textContent = msg; s.className = "pp-status" + (kind ? " " + kind : ""); }
+
+    function ppClearGate() {
+      var id = document.getElementById("pp-id").value.trim();
+      if (!/^[0-9]{4,10}$/.test(id)) { ppStatus("pp-gate-status", "Enter your student number (4 to 10 digits, numbers only).", "err"); return; }
+      document.getElementById("pp-gate").hidden = true;
+      document.getElementById("pp-form").hidden = false;
+      document.getElementById("pp-name").focus();
+    }
+    function ppReset() {
+      document.getElementById("pp-form").hidden = true;
+      document.getElementById("pp-gate").hidden = false;
+      document.getElementById("pp-id").value = "";
+      ppStatus("pp-gate-status", "", "");
+    }
+    function ppPreview() {
+      var f = document.getElementById("pp-file").files[0];
+      var box = document.getElementById("pp-preview");
+      if (!f) { box.classList.remove("show"); return; }
+      document.getElementById("pp-preview-fn").textContent = f.name;
+      var r = new FileReader();
+      r.onload = function (e) { document.getElementById("pp-preview-img").src = e.target.result; box.classList.add("show"); };
+      r.readAsDataURL(f);
+    }
+    function ppReadBase64(file) {
+      return new Promise(function (resolve, reject) {
+        var r = new FileReader();
+        r.onload = function () { resolve(String(r.result).split(",")[1]); };
+        r.onerror = reject;
+        r.readAsDataURL(file);
+      });
+    }
+    function ppSubmit() {
+      var name = document.getElementById("pp-name").value.trim();
+      var id = document.getElementById("pp-id").value.trim();
+      var file = document.getElementById("pp-file").files[0];
+      if (!name) { ppStatus("pp-status", "Please enter your name.", "err"); document.getElementById("pp-name").focus(); return; }
+      if (!file) { ppStatus("pp-status", "Choose the image you want printed.", "err"); return; }
+      if (!/^image\/(jpeg|png)$/.test(file.type)) { ppStatus("pp-status", "JPG or PNG images only.", "err"); return; }
+      if (file.size > 40 * 1024 * 1024) { ppStatus("pp-status", "That file is over 40 MB. Export a smaller version.", "err"); return; }
+      if (!PP_ENDPOINT) { ppStatus("pp-status", "Online submissions are not switched on yet. Bring your file on a drive or phone to Room 322.", "err"); return; }
+      var btn = document.getElementById("pp-submit");
+      btn.disabled = true; ppStatus("pp-status", "Sending your image…", "");
+      ppReadBase64(file).then(function (data) {
+        return fetch(PP_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ target: PP_TARGET, key: PP_KEY, name: file.name, type: file.type, data: data, student: name, studentId: id })
+        });
+      }).then(function (r) { return r.json(); }).then(function (out) {
+        if (out && out.ok) {
+          ppStatus("pp-status", "Submitted. See you in Room 322 on Friday, " + name.split(" ")[0] + "!", "ok");
+          btn.textContent = "Submitted";
+        } else { throw new Error(out && out.error ? out.error : "failed"); }
+      }).catch(function (err) {
+        btn.disabled = false;
+        ppStatus("pp-status", "Something went wrong. Try again, or bring your file to Room 322. (" + err.message + ")", "err");
+      });
+    }
+  </script>
+  <script src="js/portfolio.js?v=20261007" defer></script>
+</body>
+</html>
