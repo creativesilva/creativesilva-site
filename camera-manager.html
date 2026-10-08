@@ -119,6 +119,8 @@
   .rc-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
   .rc-cam{font-family:var(--font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.82rem;color:#fff;}
   .rc-prog{font-family:var(--font);font-size:.56rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#ffc7a6;white-space:nowrap;}
+  .rc-tags{display:flex;align-items:center;gap:6px;pointer-events:none;flex-shrink:0;}
+  .rc-count{font-family:var(--font);font-size:.56rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#dfffff;background:rgba(0,184,184,.2);padding:1px 6px;white-space:nowrap;}
   .rc-who{font-size:.85rem;color:var(--text);}
   .rc-meta{font-size:.72rem;color:var(--muted);}
   /* clickable ALL-CAPS item name: a bare button that reads as a link and opens the device window */
@@ -1175,10 +1177,21 @@
     return c.kind==='equipment' ? (mg.indexOf(c.item)>=0) : (mk.indexOf(c.camera)>=0);
   }
   function resvInScope(c){ return SELECTED_POOL==='mankin' ? resvIsMankin(c) : !resvIsMankin(c); }
+  // Reservation key: the SAME student with the SAME checkout and return dates is ONE reservation,
+  // however many cameras and gear units it holds. (The group field still links add-on gear to its
+  // camera for the kit return checklist.) Falls back to camera + linked gear when a record is
+  // missing a student id or checkout date, so an orphan never swallows unrelated records.
+  function resvKey(c){ return String((c&&c.student_id)||'')+'|'+String((c&&c.out)||'')+'|'+String((c&&c.due)||''); }
   function resvItems(parent){
-    if(!parent || parent.kind==='equipment') return parent?[parent]:[];
-    var gear=(DATA.checkouts||[]).filter(function(e){ return e.kind==='equipment' && e.group===parent.id; });
-    return [parent].concat(gear);
+    if(!parent) return [];
+    if(!parent.student_id || !parent.out){
+      if(parent.kind==='equipment') return [parent];
+      var g=(DATA.checkouts||[]).filter(function(e){ return e.kind==='equipment' && e.group===parent.id; });
+      return [parent].concat(g);
+    }
+    var key=resvKey(parent);
+    return (DATA.checkouts||[]).filter(function(c){ return resvInScope(c) && resvKey(c)===key; })
+      .sort(function(a,b){ var ca=(a.kind==='equipment')?1:0, cb=(b.kind==='equipment')?1:0; if(ca!==cb) return ca-cb; return String(a.id)<String(b.id)?-1:1; });
   }
   function resvReturnedCount(parent){ var items=resvItems(parent); return {done:items.filter(function(x){return statusOf(x)==='returned';}).length, total:items.length}; }
   function resvAllReturned(parent){ var rc=resvReturnedCount(parent); return rc.total>0 && rc.done===rc.total; }
@@ -1194,24 +1207,29 @@
     return [c.out, c.due, (c.created||'').slice(0,10), c.returned_date].some(function(d){ d=d?String(d).slice(0,10):''; return d && d>=w.start && d<=w.end; });
   }
   function activityReservations(){
-    return (DATA.checkouts||[]).filter(function(c){
-      if(c.kind==='equipment' && c.group) return false;   // linked gear shows inside its camera reservation
-      if(!resvInScope(c)) return false;
-      return resvInWindow(c);
-    }).sort(function(a,b){ return (resvDate(a)<resvDate(b))?1:-1; });   // newest first
+    var reps={};
+    (DATA.checkouts||[]).forEach(function(c){
+      if(c.kind==='equipment' && c.group) return;          // add-on gear folds into its camera's card
+      if(!resvInScope(c) || !resvInWindow(c)) return;
+      var k=resvKey(c);
+      if(!reps[k] || (c.kind!=='equipment' && reps[k].kind==='equipment')) reps[k]=c;   // one card per reservation; prefer a camera as the anchor
+    });
+    return Object.keys(reps).map(function(k){ return reps[k]; }).sort(function(a,b){ return (resvDate(a)<resvDate(b))?1:-1; });   // newest first
   }
   function activityCard(c){
     var items=resvItems(c), rc=resvReturnedCount(c), allRet=rc.done===rc.total;
     var isG=c.kind==='equipment';
+    var cams=items.filter(function(x){return x.kind!=='equipment';}).length, gear=items.length-cams;
     var nameLink=isG
       ? '<button type="button" class="itemlink rc-cam" data-geardetail="'+esc(c.item)+'">'+esc(gearLabel(c.item)).toUpperCase()+'</button>'
       : '<button type="button" class="itemlink rc-cam" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera).toUpperCase()+'</button>';
-    var addon=items.length-1;
-    var sub=isG?'1 item':('Kit'+(addon>0?(' + '+addon):''));
+    var count=items.length>1?'<span class="rc-count">'+items.length+' items</span>':'';
+    var sub=items.length<=1?(isG?'1 item':'Kit')
+           :(cams>0?(cams+' camera kit'+(cams>1?'s':'')+(gear>0?(' + '+gear+' gear'):'')):(items.length+' gear items'));
     var st=resvStatusGroup(c);
     var prog=(st==='out'&&rc.done>0&&!allRet)?(rc.done+'/'+rc.total+' back'):'';
     return '<div class="recent-card rr-'+st+'"><div class="rc-hit" data-resv="'+esc(c.id)+'" role="button" tabindex="0"></div>'+
-      '<span class="rc-top">'+nameLink+(prog?('<span class="rc-prog">'+prog+'</span>'):'')+'</span>'+
+      '<span class="rc-top">'+nameLink+'<span class="rc-tags">'+count+(prog?('<span class="rc-prog">'+prog+'</span>'):'')+'</span></span>'+
       '<span class="rc-who">'+studentLink(c)+'</span>'+
       '<span class="rc-meta">'+sub+' &middot; '+fmt(c.out)+'</span>'+
     '</div>';
@@ -1415,9 +1433,9 @@
     camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:'out',pending:true,note:reason||'Not returned'})})
       .then(function(){ return loadBoard(); }).then(function(){ if(resvId) renderResvModal(); }).catch(function(){ if(resvId) renderResvModal(); });
   }
-  function resvCheckInAll(parent){
-    if(parent.kind!=='equipment'){ closeResv(); openReturnChecklist(parent.id); return; }   // camera: full kit + gear checklist
+  function resvCheckInAll(parent){   // the whole bundle back at once (every camera + gear marked returned)
     var outs=resvItems(parent).filter(function(x){return statusOf(x)==='out';});
+    if(!outs.length){ if(resvId) renderResvModal(); return; }
     Promise.all(outs.map(function(x){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:x.id,status:'returned'})}); }))
       .then(function(){ return loadBoard(); }).then(function(){ if(resvId) renderResvModal(); }).catch(function(){ if(resvId) renderResvModal(); });
   }
