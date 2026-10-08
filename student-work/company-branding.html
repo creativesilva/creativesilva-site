@@ -3,1177 +3,246 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Company Branding | Spring Final Voting | Chris Silva</title>
+  <title>Company Branding &middot; Student Work &middot; Chris Silva</title>
   <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only.svg" />
   <link rel="apple-touch-icon" href="/logos/CS_AppIcon_180.png" />
-  <meta name="description" content="Vote in the Spring 2026 Company Branding final for PVHS Digital Arts 1B and 2B." />
-
+  <meta name="description" content="Spring 2026 Company Branding final by Digital Arts 1B and 2B at Pioneer Valley High School." />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Chris Silva" />
-  <meta property="og:title" content="Company Branding | Spring Final Voting" />
-  <meta property="og:description" content="Spring 2026 Company Branding final for Digital Arts 1B and 2B at Pioneer Valley High School. Judges rank 1st, 2nd, and 3rd place." />
+  <meta property="og:title" content="Company Branding | Student Work" />
+  <meta property="og:description" content="Spring 2026 Company Branding final by Digital Arts 1B and 2B at Pioneer Valley High School." />
   <meta property="og:url" content="https://www.creativesilva.com/student-work/company-branding.html" />
-
+  <meta property="og:image" content="https://www.creativesilva.com/assets/student-work/company-branding-large/aguilarmaxx_1_lg.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/style.css?v=20260524b" />
-
+  <link rel="stylesheet" href="/css/portfolio.css?v=20261007" />
   <style>
-    .sw-back-link {
-      display: inline-block;
-      font-family: 'Oswald', sans-serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.55);
-      text-decoration: none;
-      margin-bottom: 24px;
-      padding: 6px 0;
-    }
-    .sw-back-link:hover { color: #ffffff; }
-    .sw-back-link::before { content: "← "; }
+    .sw-back { display: inline-block; font-family: var(--font-head); text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.72rem; color: var(--gray); text-decoration: none; margin-bottom: 6px; }
+    .sw-back::before { content: "\2190\00a0"; }
+    .sw-back:hover { color: #fff; }
+    .sw-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; margin-top: 30px; }
+    @media (min-width: 1100px) { .sw-gallery { grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width: 1500px) { .sw-gallery { grid-template-columns: repeat(5, 1fr); } }
+    .sw-student { background: var(--surface); border: 1px solid var(--surface-border); box-shadow: var(--glow); overflow: hidden; display: flex; flex-direction: column; transition: border-color 0.15s ease, transform 0.15s ease; }
+    .sw-student:hover { border-color: rgba(255,255,255,0.22); transform: translateY(-2px); }
+    .sw-student-imgs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: #000; }
+    .sw-student-imgs.single { grid-template-columns: 1fr; }
+    .sw-student-imgs img:last-child:nth-child(odd):not(:only-child) { grid-column: 1 / -1; aspect-ratio: 2 / 1; }
+    .sw-student-imgs img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; cursor: zoom-in; transition: opacity 0.15s ease; }
+    .sw-student-imgs img:hover { opacity: 0.8; }
+    .sw-student-name { font-family: var(--font-head); text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; color: #fff; margin: 0; padding: 12px 14px 14px; word-break: break-word; line-height: 1.2; }
+    .sw-loading { grid-column: 1 / -1; text-align: center; color: var(--gray); font-style: italic; padding: 50px 0; }
+    @media (max-width: 720px) { .sw-gallery { grid-template-columns: repeat(2, 1fr); gap: 8px; } .sw-student-name { font-size: 0.74rem; padding: 9px 9px 11px; } }
 
-    .voting-intro {
-      margin: 16px 0 24px;
-    }
-    .voting-intro h2 {
-      font-family: 'Oswald', sans-serif;
-      font-size: 2rem;
-      letter-spacing: 0.05em;
-      margin: 0 0 14px;
-      text-transform: uppercase;
-    }
-    .voting-intro p {
-      color: rgba(255,255,255,0.72);
-      max-width: 760px;
-      line-height: 1.7;
-      font-size: 1rem;
-      margin: 0 0 10px;
-    }
-
-    .vote-competition {
-      margin: 36px 0;
-      padding: 32px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-    }
-    .vote-competition h3 {
-      font-family: 'Oswald', sans-serif;
-      font-size: 1.55rem;
-      margin: 0 0 6px;
-      color: #ffffff;
-      letter-spacing: 0.03em;
-    }
-    .vote-competition .vote-meta {
-      color: rgba(255,255,255,0.55);
-      font-size: 0.9rem;
-      margin: 0 0 20px;
-    }
-
-    .vote-folder-link {
-      display: inline-block;
-      padding: 9px 18px;
-      background: rgba(95,143,191,0.20);
-      color: #9ecbff;
-      text-decoration: none;
-      border-radius: 999px;
-      font-size: 0.88rem;
-      margin-bottom: 22px;
-      border: 1px solid rgba(95,143,191,0.45);
-      font-weight: 600;
-      letter-spacing: 0.03em;
-    }
-    .vote-folder-link:hover {
-      background: rgba(95,143,191,0.30);
-      color: #ffffff;
-    }
-
-    .vote-judge-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 26px;
-      flex-wrap: wrap;
-    }
-    .vote-judge-row label {
-      font-family: 'Oswald', sans-serif;
-      color: rgba(255,255,255,0.85);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      font-size: 0.85rem;
-    }
-    .vote-judge-input {
-      flex: 1 1 280px;
-      max-width: 420px;
-      padding: 10px 14px;
-      background: rgba(0,0,0,0.45);
-      border: 1px solid rgba(255,255,255,0.20);
-      border-radius: 8px;
-      color: #ffffff;
-      font-size: 1rem;
-      font-family: inherit;
-    }
-    .vote-judge-input:focus {
-      outline: 0;
-      border-color: #5f8fbf;
-    }
-
-    .vote-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-    .vote-grid-loading {
-      color: rgba(255,255,255,0.4);
-      font-style: italic;
-      padding: 40px 0;
-      text-align: center;
-      grid-column: 1 / -1;
-    }
-
-    .vote-card {
-      background: rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 14px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: border-color 0.15s ease, transform 0.15s ease;
-    }
-    .vote-card:hover {
-      border-color: rgba(255,255,255,0.22);
-    }
-    .vote-card-images {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2px;
-      background: rgba(0,0,0,0.6);
-    }
-    .vote-card-images img {
-      width: 100%;
-      aspect-ratio: 3/4;            /* portrait pages */
-      object-fit: contain;          /* show whole page, no crop */
-      display: block;
-      cursor: zoom-in;
-      transition: opacity 0.15s ease;
-      background: #ffffff;
-    }
-    .vote-card-images img:hover {
-      opacity: 0.75;
-    }
-    .vote-card-images-single {
-      grid-template-columns: 1fr;
-    }
-    .vote-card-images-single img {
-      aspect-ratio: 3/4;
-    }
-    .vote-card-incomplete {
-      display: inline-block;
-      font-size: 0.58rem;
-      color: #ffb37a;
-      margin-left: 6px;
-      padding: 2px 7px;
-      border: 1px solid rgba(255, 107, 26, 0.55);
-      background: rgba(255, 107, 26, 0.12);
-      border-radius: 999px;
-      font-family: inherit;
-      letter-spacing: 0.08em;
-      vertical-align: middle;
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-    .vote-card-info {
-      padding: 12px 14px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .vote-card-name {
-      font-family: 'Oswald', sans-serif;
-      font-size: 0.92rem;
-      margin: 0;
-      color: #ffffff;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      word-break: break-word;
-      line-height: 1.2;
-    }
-    .vote-card-course {
-      display: inline-block;
-      font-size: 0.62rem;
-      color: rgba(255,255,255,0.55);
-      margin-left: 6px;
-      padding: 2px 7px;
-      border: 1px solid rgba(255,255,255,0.20);
-      border-radius: 999px;
-      font-family: inherit;
-      letter-spacing: 0.08em;
-      vertical-align: middle;
-    }
-    .vote-card-ranks {
-      display: flex;
-      gap: 6px;
-    }
-    .vote-card-ranks label {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;          /* circle on top, label below */
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-      padding: 7px 2px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 7px;
-      cursor: pointer;
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.82);
-      font-family: 'Oswald', sans-serif;
-      letter-spacing: 0.05em;
-      user-select: none;
-      transition: background 0.15s ease, border-color 0.15s ease;
-    }
-    .vote-card-ranks label:hover { background: rgba(255,255,255,0.10); }
-    .vote-card-ranks input[type="radio"] {
-      margin: 0;
-      cursor: pointer;
-      accent-color: #5f8fbf;
-    }
-    .vote-card-ranks label:has(input[type="radio"]:checked) {
-      background: rgba(95,143,191,0.35);
-      border-color: #5f8fbf;
-      color: #ffffff;
-    }
-    .vote-card-ranks label:has(input[type="radio"]:disabled) {
-      opacity: 0.28;
-      cursor: not-allowed;
-    }
-
-    .vote-submit-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      align-items: center;
-      margin-top: 8px;
-    }
-    .vote-submit-btn {
-      display: inline-block;
-      padding: 14px 32px;
-      background: #ff6b1a;
-      color: #ffffff;
-      border: 0;
-      border-radius: 999px;
-      font-size: 1rem;
-      font-family: 'Oswald', sans-serif;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .vote-submit-btn:hover { background: #ff7d3a; }
-    .vote-submit-btn:disabled {
-      background: rgba(255,255,255,0.10);
-      color: rgba(255,255,255,0.40);
-      cursor: not-allowed;
-    }
-    .vote-clear-btn {
-      display: inline-block;
-      padding: 12px 22px;
-      background: transparent;
-      color: rgba(255,255,255,0.75);
-      border: 1px solid rgba(255,255,255,0.30);
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-family: 'Oswald', sans-serif;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .vote-clear-btn:hover {
-      background: rgba(255,255,255,0.08);
-      color: #ffffff;
-      border-color: rgba(255,255,255,0.50);
-    }
-    .vote-clear-hint {
-      display: block;
-      color: rgba(255,255,255,0.55);
-      font-size: 0.78rem;
-      margin-top: 4px;
-      font-style: italic;
-    }
-    .vote-status {
-      color: rgba(255,255,255,0.65);
-      font-size: 0.9rem;
-      font-style: italic;
-    }
-    .vote-drive-embed {
-      margin-top: 32px;
-      padding-top: 28px;
-      border-top: 1px solid rgba(255,255,255,0.10);
-    }
-    .vote-drive-embed h4 {
-      font-family: 'Oswald', sans-serif;
-      font-size: 1.1rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #ffffff;
-      margin: 0 0 6px;
-    }
-    .vote-drive-embed p {
-      color: rgba(255,255,255,0.65);
-      font-size: 0.88rem;
-      margin: 0 0 16px;
-      line-height: 1.5;
-    }
-    .vote-drive-embed iframe {
-      width: 100%;
-      height: 620px;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      background: #f6f7f9;
-      display: block;
-    }
-
-    /* Lightbox */
-    .vw-lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.92);
-      z-index: 9999;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 60px;
-    }
+    /* Full-size viewer */
+    .vw-lightbox { display: none; position: fixed; inset: 0; background: rgba(4,4,4,0.95); z-index: 320; align-items: center; justify-content: center; padding: 40px 60px; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
     .vw-lightbox.open { display: flex; }
-    .vw-lightbox-content {
-      position: relative;
-      max-width: 92vw;
-      max-height: 92vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-    }
-    .vw-lightbox-img-wrap {
-      flex: 1;
-      max-width: 92vw;
-      max-height: 78vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .vw-lightbox-img {
-      max-width: 92vw;
-      max-height: 78vh;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      border-radius: 8px;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.8);
-    }
-    .vw-lightbox-caption {
-      color: rgba(255,255,255,0.92);
-      font-family: 'Oswald', sans-serif;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      font-size: 0.95rem;
-      text-align: center;
-    }
-    .vw-lightbox-filename {
-      color: rgba(255,255,255,0.55);
-      font-size: 0.78rem;
-      text-align: center;
-      font-style: italic;
-      max-width: 90vw;
-      word-break: break-all;
-      margin-top: -8px;
-    }
+    .vw-lightbox-content { position: relative; max-width: 92vw; max-height: 92vh; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .vw-lightbox-img-wrap { flex: 1; max-width: 92vw; max-height: 78vh; display: flex; align-items: center; justify-content: center; }
+    .vw-lightbox-img { max-width: 92vw; max-height: 78vh; width: auto; height: auto; object-fit: contain; box-shadow: 0 12px 40px rgba(0,0,0,0.8); }
+    .vw-lightbox-caption { color: rgba(255,255,255,0.92); font-family: var(--font-head); letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.95rem; text-align: center; }
+    .vw-lightbox-filename { color: rgba(255,255,255,0.5); font-size: 0.78rem; text-align: center; font-style: italic; max-width: 90vw; word-break: break-all; margin-top: -8px; }
     .vw-lightbox-filename:empty { display: none; }
-    .vw-lightbox-drive-link {
-      display: inline-block;
-      padding: 8px 18px;
-      background: rgba(255,255,255,0.10);
-      color: #ffffff;
-      text-decoration: none;
-      border-radius: 999px;
-      font-size: 0.82rem;
-      border: 1px solid rgba(255,255,255,0.30);
-      letter-spacing: 0.05em;
-    }
-    .vw-lightbox-drive-link:hover { background: rgba(255,255,255,0.18); }
-    .vw-lightbox-close,
-    .vw-lightbox-prev,
-    .vw-lightbox-next {
-      position: absolute;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.30);
-      color: #ffffff;
-      cursor: pointer;
-      font-size: 1.6rem;
-      line-height: 1;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      user-select: none;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    .vw-lightbox-close:hover,
-    .vw-lightbox-prev:hover,
-    .vw-lightbox-next:hover { background: rgba(255,255,255,0.25); }
-    .vw-lightbox-close {
-      top: -10px;
-      right: -10px;
-      font-size: 1.4rem;
-    }
-    .vw-lightbox-prev {
-      left: -70px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    .vw-lightbox-next {
-      right: -70px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    .vw-lightbox-prev[hidden],
-    .vw-lightbox-next[hidden] { display: none; }
-    @media (max-width: 720px) {
-      .vw-lightbox-prev { left: -8px; }
-      .vw-lightbox-next { right: -8px; }
-      .vw-lightbox-close { top: -36px; right: 0; }
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       Sticky voting bar (pinned just below the site header)
-       ═══════════════════════════════════════════════════════════════ */
-    /* On voting pages, the site header scrolls away normally so the sticky
-       voting bar can pin to the very top of the viewport. */
-    .site-header { position: static !important; }
-
-    .vote-stickybar {
-      position: sticky;
-      top: 0;
-      z-index: 49;
-      background: rgba(15, 15, 15, 0.96);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255,255,255,0.10);
-      padding: 12px 32px;
-      margin: 0 -32px 24px;
-    }
-    .vote-stickybar-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-    .vote-stickybar-judge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex: 0 0 auto;
-    }
-    .vote-stickybar-judge label {
-      font-family: 'Oswald', sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.70);
-    }
-    .vote-stickybar-judge input {
-      background: rgba(0,0,0,0.55);
-      border: 1px solid rgba(255,255,255,0.20);
-      border-radius: 6px;
-      color: #fff;
-      padding: 7px 11px;
-      font-size: 0.92rem;
-      width: 220px;
-      font-family: inherit;
-    }
-    .vote-stickybar-judge input:focus {
-      outline: 0;
-      border-color: #5f8fbf;
-    }
-    .vote-stickybar-picks {
-      display: flex;
-      gap: 6px;
-      flex: 1 1 auto;
-      min-width: 0;
-      flex-wrap: wrap;
-    }
-    .pick-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 11px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 999px;
-      font-size: 0.78rem;
-      font-family: 'Oswald', sans-serif;
-      letter-spacing: 0.04em;
-      color: rgba(255,255,255,0.55);
-      min-width: 0;
-      max-width: 100%;
-    }
-    .pick-chip.filled {
-      background: rgba(95,143,191,0.28);
-      border-color: #5f8fbf;
-      color: #ffffff;
-    }
-    .pick-rank {
-      font-weight: 700;
-      flex-shrink: 0;
-      color: rgba(255,255,255,0.62);
-    }
-    .pick-chip.filled .pick-rank { color: #9ecbff; }
-    .pick-name {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      max-width: 160px;
-    }
-    .vote-stickybar-actions {
-      display: flex;
-      gap: 6px;
-      flex: 0 0 auto;
-    }
-    .vote-stickybar-submit {
-      padding: 9px 22px;
-      background: #ff6b1a;
-      color: #fff;
-      border: 0;
-      border-radius: 999px;
-      font-size: 0.82rem;
-      font-family: 'Oswald', sans-serif;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .vote-stickybar-submit:hover { background: #ff7d3a; }
-    .vote-stickybar-submit:disabled {
-      background: rgba(255,255,255,0.08);
-      color: rgba(255,255,255,0.40);
-      cursor: not-allowed;
-    }
-    .vote-stickybar-clear {
-      padding: 9px 14px;
-      background: transparent;
-      color: rgba(255,255,255,0.70);
-      border: 1px solid rgba(255,255,255,0.28);
-      border-radius: 999px;
-      font-size: 0.72rem;
-      font-family: 'Oswald', sans-serif;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-    .vote-stickybar-clear:hover { background: rgba(255,255,255,0.07); color: #fff; }
-    .vote-stickybar-status {
-      max-width: 1200px;
-      margin: 6px auto 0;
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.62);
-      font-style: italic;
-      text-align: center;
-      min-height: 1.1em;
-    }
-    .vote-stickybar-status:empty { min-height: 0; margin-top: 0; }
-
-    /* ═══════════════ Judge / Student mode toggle ═══════════════ */
-    .vote-mode-toggle {
-      display: inline-flex;
-      background: rgba(0,0,0,0.45);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 999px;
-      padding: 3px;
-      gap: 2px;
-      flex: 0 0 auto;
-    }
-    .vote-mode-toggle button {
-      background: transparent;
-      border: 0;
-      color: rgba(255,255,255,0.55);
-      font-family: 'Oswald', sans-serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 6px 14px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.15s ease, color 0.15s ease;
-    }
-    .vote-mode-toggle button.active {
-      background: #5f8fbf;
-      color: #ffffff;
-    }
-    body.mode-student .vote-mode-toggle button[data-mode="student"].active {
-      background: #cc0000;
-    }
-
-    .student-warning {
-      display: none;
-      margin: 16px 0 22px;
-      padding: 14px 18px;
-      background: rgba(204, 0, 0, 0.10);
-      border: 1px solid rgba(204, 0, 0, 0.40);
-      border-left: 4px solid #cc0000;
-      border-radius: 8px;
-      color: rgba(255,255,255,0.85);
-      font-size: 0.92rem;
-      line-height: 1.55;
-    }
-    body.mode-student .student-warning { display: block; }
-
-    /* Show different prize/reward text depending on Judge vs Student mode */
-    .judge-only { display: block; }
-    .student-only { display: none; }
-    body.mode-student .judge-only { display: none; }
-    body.mode-student .student-only { display: block; }
-
-    /* ═══════════════════════════════════════════════════════════
-       First-visit explainer modal (judge vs student onboarding)
-       ═══════════════════════════════════════════════════════════ */
-    .vote-explainer-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      -webkit-backdrop-filter: blur(8px);
-      backdrop-filter: blur(8px);
-      z-index: 9999;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .vote-explainer-modal.open { display: flex; animation: vw-fadein 0.25s ease; }
-    @keyframes vw-fadein { from { opacity: 0; } to { opacity: 1; } }
-    .vote-explainer-card {
-      position: relative;
-      background: #0e0e0e;
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 20px;
-      padding: 36px 30px 28px;
-      max-width: 480px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-    }
-    .vote-explainer-close {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.10);
-      border: 0;
-      color: #fff;
-      font-size: 1.4rem;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      cursor: pointer;
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .vote-explainer-close:hover { background: rgba(255,255,255,0.20); }
-    .vote-explainer-card h2 {
-      font-family: 'Oswald', sans-serif;
-      font-size: 1.5rem;
-      letter-spacing: 0.04em;
-      color: #fff;
-      margin: 0 0 8px;
-      text-transform: uppercase;
-      padding-right: 40px;
-    }
-    .vote-explainer-intro {
-      color: rgba(255,255,255,0.70);
-      font-size: 0.92rem;
-      margin: 0 0 20px;
-      line-height: 1.5;
-    }
-    .vote-explainer-option {
-      display: block;
-      width: 100%;
-      text-align: left;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 14px;
-      padding: 16px 18px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      font-family: inherit;
-      color: inherit;
-      transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
-    }
-    .vote-explainer-option:hover {
-      background: rgba(255,255,255,0.08);
-      transform: translateY(-1px);
-    }
-    .vote-explainer-judge-btn:hover { border-color: #5f8fbf; }
-    .vote-explainer-student-btn:hover { border-color: #cc0000; }
-    .vote-explainer-tag {
-      display: inline-block;
-      font-family: 'Oswald', sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.16em;
-      padding: 3px 9px;
-      border-radius: 999px;
-      margin-bottom: 8px;
-      font-weight: 600;
-    }
-    .vote-explainer-judge-btn .vote-explainer-tag {
-      background: rgba(95,143,191,0.25);
-      color: #9ecbff;
-    }
-    .vote-explainer-student-btn .vote-explainer-tag {
-      background: rgba(204,0,0,0.25);
-      color: #ff7066;
-    }
-    .vote-explainer-option-label {
-      font-family: 'Oswald', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      color: #fff;
-      margin-bottom: 6px;
-    }
-    .vote-explainer-option-desc {
-      color: rgba(255,255,255,0.72);
-      font-size: 0.85rem;
-      line-height: 1.5;
-    }
-    .student-warning strong {
-      color: #ff7066;
-      display: block;
-      margin-bottom: 6px;
-      font-family: 'Oswald', sans-serif;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      font-size: 0.86rem;
-    }
-
-    /* Desktop polish */
-    @media (min-width: 1100px) {
-      .vote-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    }
-    @media (min-width: 1400px) {
-      .vote-grid { grid-template-columns: repeat(5, 1fr); }
-    }
-
-    /* Mobile tightening */
-    @media (max-width: 720px) {
-      .vote-stickybar {
-        top: 0;
-        padding: 10px 14px;
-        margin: 0 -16px 16px;
-      }
-      .vote-stickybar-inner { gap: 8px; }
-      .vote-stickybar-judge { flex: 1 1 100%; }
-      .vote-stickybar-judge input { width: 100%; flex: 1; }
-      .vote-stickybar-picks { flex: 1 1 100%; gap: 4px; }
-      .pick-chip {
-        flex: 1;
-        font-size: 0.68rem;
-        padding: 5px 7px;
-        justify-content: center;
-        gap: 4px;
-      }
-      .pick-name { max-width: 70px; font-size: 0.68rem; }
-      .vote-stickybar-actions { flex: 1 1 100%; gap: 6px; }
-      .vote-stickybar-submit { flex: 1; padding: 11px 16px; font-size: 0.82rem; }
-      .vote-stickybar-clear { flex: 0 0 auto; padding: 11px 14px; }
-
-      .voting-intro { margin: 12px 0 18px; }
-      .voting-intro h2 { font-size: 1.45rem; margin-bottom: 10px; }
-      .voting-intro p { font-size: 0.86rem; line-height: 1.6; }
-      .vote-competition { padding: 16px 12px; margin: 18px 0; border-radius: 14px; }
-      .vote-competition h3 { font-size: 1.2rem; }
-      .vote-competition .vote-meta { font-size: 0.82rem; margin-bottom: 14px; }
-      .vote-folder-link { padding: 10px 14px; font-size: 0.82rem; }
-      .vote-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
-      .vote-card { border-radius: 10px; }
-      .vote-card-info { padding: 9px 9px 11px; gap: 7px; }
-      .vote-card-name { font-size: 0.74rem; letter-spacing: 0.02em; }
-      .vote-card-course { font-size: 0.56rem; padding: 1px 5px; }
-      .vote-card-ranks { gap: 3px; }
-      .vote-card-ranks label { font-size: 0.68rem; padding: 7px 2px; gap: 3px; }
-      .vote-drive-embed { margin-top: 22px; padding-top: 20px; }
-      .vote-drive-embed h4 { font-size: 0.98rem; }
-      .vote-drive-embed p { font-size: 0.82rem; }
-      .vote-drive-embed iframe { height: 420px; }
-      .sw-back-link { margin-bottom: 14px; font-size: 0.72rem; }
-    }
+    .vw-lightbox-drive-link { display: inline-block; padding: 8px 18px; background: rgba(255,255,255,0.10); color: #fff; text-decoration: none; border-radius: 999px; font-size: 0.82rem; border: 1px solid rgba(255,255,255,0.30); letter-spacing: 0.05em; }
+    .vw-lightbox-drive-link:hover { background: rgba(204,0,0,0.5); border-color: var(--red); }
+    .vw-lightbox-close, .vw-lightbox-prev, .vw-lightbox-next { position: absolute; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.30); color: #fff; cursor: pointer; font-size: 1.6rem; line-height: 1; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; user-select: none; }
+    .vw-lightbox-close:hover, .vw-lightbox-prev:hover, .vw-lightbox-next:hover { background: var(--red); border-color: var(--red); }
+    .vw-lightbox-close { top: -10px; right: -10px; font-size: 1.4rem; }
+    .vw-lightbox-prev { left: -70px; top: 50%; transform: translateY(-50%); }
+    .vw-lightbox-next { right: -70px; top: 50%; transform: translateY(-50%); }
+    .vw-lightbox-prev[hidden], .vw-lightbox-next[hidden] { display: none; }
+    @media (max-width: 720px) { .vw-lightbox { padding: 20px 10px; } .vw-lightbox-prev { left: -4px; } .vw-lightbox-next { right: -4px; } .vw-lightbox-close { top: -40px; right: 0; } }
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <nav class="nav-left" aria-label="Primary">
-        <a href="/artist-statement.html">Artist Statement</a>
-        <a href="/artist-biography.html">Artist Biography</a>
-      </nav>
-      <a class="brand" href="/curriculum.html" aria-label="Chris Silva, Home">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="masthead">
+    <div class="wrap">
+      <a class="brand" href="/index.html" aria-label="Chris Silva, Home">
         <img src="/logos/CS_Logo_Vector.svg" alt="Chris Silva" />
       </a>
-      <nav class="nav-right" aria-label="Primary">
-        <a href="/work.html">Selected Works</a>
-        <a href="/student-work.html" class="active">Student Work</a>
-        <a href="/contact.html">Contact</a>
-      </nav>
+      <div class="mast-tag">
+        <div class="t1">Fine Art Photography</div>
+        <div class="t2">Santa Maria, California</div>
+      </div>
     </div>
   </header>
 
-  <!-- First-visit explainer modal -->
-  <div class="vote-explainer-modal" id="vote-explainer-modal" role="dialog" aria-modal="true" aria-labelledby="vote-explainer-title">
-    <div class="vote-explainer-card">
-      <button type="button" class="vote-explainer-close" onclick="dismissVoteExplainer()" aria-label="Close">&times;</button>
-      <h2 id="vote-explainer-title">Welcome! How are you voting?</h2>
-      <p class="vote-explainer-intro">There are two ways to vote on this page. Pick the one that fits you to start.</p>
-
-      <button type="button" class="vote-explainer-option vote-explainer-judge-btn" onclick="chooseExplainerMode('judge')">
-        <span class="vote-explainer-tag">JUDGE MODE</span>
-        <div class="vote-explainer-option-label">I'm a Judge</div>
-        <div class="vote-explainer-option-desc">For invited judges only. Enter your full name. Your votes set the official 1st, 2nd, and 3rd place cash prize winners.</div>
-      </button>
-
-      <button type="button" class="vote-explainer-option vote-explainer-student-btn" onclick="chooseExplainerMode('student')">
-        <span class="vote-explainer-tag">STUDENT MODE</span>
-        <div class="vote-explainer-option-label">I'm a Student</div>
-        <div class="vote-explainer-option-desc">For Mr. Silva's class. Enter your real Student ID number. Your top 3 picks earn People's Choice honorable mentions and a pizza party invite.</div>
-      </button>
+  <nav class="mainnav" aria-label="Primary">
+    <div class="wrap">
+      <a class="dock-logo" href="/index.html" aria-label="Chris Silva, Home"><img src="/logos/CS_Logo_Only.svg" alt="" /></a>
+      <button class="navtoggle" type="button" aria-expanded="false" aria-label="Open menu" aria-controls="primary-menu"><span class="bars" aria-hidden="true"></span><span class="navtoggle-label">Menu</span></button>
+      <ul id="primary-menu">
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/work.html">Selected Works</a></li>
+        <li><a href="/student-work.html" aria-current="page">Student Work</a></li>
+        <li><a href="/photo-club.html">Photo Club</a></li>
+        <li><a href="/artist-statement.html">Statement</a></li>
+        <li><a href="/artist-biography.html">Biography</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+        <li class="nav-admin"><a href="/curriculum.html">Admin Login</a></li>
+      </ul>
     </div>
-  </div>
+  </nav>
 
-  <main>
-    <section class="container">
-      <a class="sw-back-link" href="/student-work.html">Back to Student Work</a>
-
-      <div class="gallery-header">
-        <h1 class="page-title">Company Branding</h1>
+  <main id="main">
+    <section class="hero page" style="background-image:url('/assets/student-work/company-branding-large/aguilarmaxx_1_lg.jpg');background-position:center 40%;" aria-label="Company Branding">
+      <div class="wrap">
+        <p class="eyebrow">Student Work &middot; Digital Arts 1B + 2B</p>
+        <h1>Company Branding</h1>
       </div>
+    </section>
 
-      <!-- Sticky voting bar: pinned just below the site header so judges can
-           submit from anywhere on the page without scrolling to the bottom. -->
-      <div class="vote-stickybar" id="vote-stickybar">
-        <div class="vote-stickybar-inner">
-          <div class="vote-mode-toggle" role="tablist" aria-label="Voting mode">
-            <button type="button" class="active" data-mode="judge" onclick="setVoteMode('judge')">Judge</button>
-            <button type="button" data-mode="student" onclick="setVoteMode('student')">Student</button>
-          </div>
-          <div class="vote-stickybar-judge">
-            <label for="brand-judge" id="brand-judge-label">Judge:</label>
-            <input id="brand-judge" type="text" placeholder="Your full name" autocomplete="off" />
-          </div>
-          <div class="vote-stickybar-picks">
-            <span class="pick-chip" id="brand-chip-1"><span class="pick-rank">1st</span><span class="pick-name" id="brand-pick-1">&hellip;</span></span>
-            <span class="pick-chip" id="brand-chip-2"><span class="pick-rank">2nd</span><span class="pick-name" id="brand-pick-2">&hellip;</span></span>
-            <span class="pick-chip" id="brand-chip-3"><span class="pick-rank">3rd</span><span class="pick-name" id="brand-pick-3">&hellip;</span></span>
-          </div>
-          <div class="vote-stickybar-actions">
-            <button class="vote-stickybar-submit" type="button" onclick="submitVotes()">Submit</button>
-            <button class="vote-stickybar-clear" type="button" onclick="clearVotes()">Clear</button>
-          </div>
-        </div>
-        <div class="vote-stickybar-status" id="brand-status"></div>
-      </div>
-
-      <!-- Student-only People's Choice warning (only visible when toggle = Student) -->
-      <div class="student-warning" id="student-warning">
-        <strong>People's Choice Voting &middot; Mr. Silva's class only</strong>
-        Enter your real Student ID number. I cross-check every vote against my class roster: votes from numbers not on the roster are deleted. <strong style="display:inline; color:inherit; font-family:inherit; letter-spacing:0; text-transform:none;">One vote per student ID</strong>: duplicate votes are also deleted. This is the honor system, but I check every single one.
-      </div>
-
-      <section class="voting-intro">
-        <h2>Spring Final Voting</h2>
-        <p>Rank 1st, 2nd, and 3rd place. Each card is one student. Digital Arts 1B and 2B are pooled into one competition. Click any thumbnail to see the first page full-size. Your picks track in the bar pinned at the top, so you can hit Submit from anywhere on the page.</p>
-        <p class="judge-only"><strong>Prizes:</strong> 1st place $150, 2nd place $100, 3rd place $50.</p>
-        <p class="student-only"><strong>People&rsquo;s Choice:</strong> Your 1st, 2nd, and 3rd picks will be considered for <strong>honorable mentions</strong> and invited to the pizza party alongside the judge-picked winners.</p>
-      </section>
-
-      <section class="vote-competition" id="brand-comp">
-        <h3>Digital Arts Competition</h3>
-        <p class="vote-meta">Company Branding &nbsp;&middot;&nbsp; Digital Arts 1B and 2B (combined pool)</p>
-
-        <a class="vote-folder-link" id="brand-drive-link" href="https://drive.google.com/drive/folders/10ZX4D5d9MogPxA14UhPPz8Oke4xTwDrV?usp=drive_link" target="_blank" rel="noopener">&#128279; Browse All Originals on Google Drive</a>
-
-        <p class="vote-clear-hint">Tip: click a 1st/2nd/3rd button you already picked to clear that selection. Use Clear in the top bar to start over.</p>
-
-        <div class="vote-grid" id="brand-grid">
-          <div class="vote-grid-loading">Loading student submissions...</div>
+    <section class="band tight">
+      <div class="wrap">
+        <a class="sw-back" href="/student-work.html">Back to Student Work</a>
+        <div class="gal-intro">
+          <p class="gal-kicker">Spring 2026 Final</p>
+          <p class="gal-statement">The Spring final for Digital Arts 1B and 2B. Each student designed a full three-page brand package for a company of their own invention: logo, identity, and layout. Browse the full class below.</p>
+          <p class="gal-meta">Digital Arts 1B + 2B &middot; Spring 2026 &middot; 52 Students</p>
         </div>
 
-        <div class="vote-drive-embed">
-          <h4>Full-Size Originals (embedded from Google Drive)</h4>
-          <p>Scroll through all student PDF submissions below. Click any thumbnail to open the PDF in Google Drive and flip through all pages.</p>
-          <iframe src="https://drive.google.com/embeddedfolderview?id=10ZX4D5d9MogPxA14UhPPz8Oke4xTwDrV#grid" title="Company Branding submissions on Google Drive"></iframe>
+        <div class="sw-gallery" id="sw-grid">
+          <div class="sw-loading">Loading student work&hellip;</div>
         </div>
-      </section>
 
+        <div class="showcase-signature">
+          <div class="showcase-signature-block">
+            Mr. Chris Silva &nbsp;|&nbsp; Visual and Performing Arts Instructor<br />
+            Photography &nbsp;&middot;&nbsp; Digital Arts &nbsp;&middot;&nbsp; Video Production<br />
+            Founder, CTE Photography Program &nbsp;|&nbsp; Pioneer Valley High School
+          </div>
+          <hr class="showcase-signature-rule" aria-hidden="true" />
+          <div class="showcase-signature-block">
+            Ms. Garcia &nbsp;|&nbsp; Visual and Performing Arts Instructor<br />
+            Photography<br />
+            Pioneer Valley High School
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <a href="#" class="back-to-top">Back to Top</a>
-    <div>www.creativesilva.com</div>
+  <footer class="site">
+    <div class="wrap">
+      <div class="cols">
+        <div>
+          <a class="foot-logo" href="/index.html" aria-label="Chris Silva, Home"><img src="/logos/CS_Logo_Vector.svg" alt="Chris Silva" /></a>
+          <p class="foot-about">Black and white film and digital photography by Chris Silva. Fine art work rooted in place, presence, and lived experience, from Santa Maria, California.</p>
+        </div>
+        <div>
+          <h4>Collections</h4>
+          <ul>
+            <li><a href="/portraits.html">Portraits</a></li>
+            <li><a href="/the-streets.html">The Streets</a></li>
+            <li><a href="/cityscapes.html">Cityscapes</a></li>
+            <li><a href="/working-class.html">Working Class</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>More</h4>
+          <ul>
+            <li><a href="/work.html">Selected Works</a></li>
+            <li><a href="/student-work.html">Student Work</a></li>
+            <li><a href="/photo-club.html">Photo Club</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="/artist-statement.html">Artist Statement</a></li>
+            <li><a href="/artist-biography.html">Biography</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+            <li><a href="https://instagram.com/silvateaches" target="_blank" rel="noopener">Instagram</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="legal">
+        <span>&copy; <span id="yr">2026</span> Chris Silva &middot; www.creativesilva.com</span>
+        <a href="#main" class="back-to-top">Back to Top</a>
+      </div>
+    </div>
   </footer>
 
-  <!-- Lightbox -->
   <div class="vw-lightbox" id="vw-lightbox" onclick="closeLightbox(event)" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="vw-lightbox-content" onclick="event.stopPropagation()">
       <button type="button" class="vw-lightbox-close" onclick="closeLightbox()" aria-label="Close">&times;</button>
       <button type="button" class="vw-lightbox-prev" onclick="lightboxNav(-1)" aria-label="Previous image">&lsaquo;</button>
       <button type="button" class="vw-lightbox-next" onclick="lightboxNav(1)" aria-label="Next image">&rsaquo;</button>
-      <div class="vw-lightbox-img-wrap">
-        <img class="vw-lightbox-img" id="vw-lightbox-img" alt="" />
-      </div>
+      <div class="vw-lightbox-img-wrap"><img class="vw-lightbox-img" id="vw-lightbox-img" alt="" /></div>
       <div class="vw-lightbox-caption" id="vw-lightbox-caption"></div>
       <div class="vw-lightbox-filename" id="vw-lightbox-filename"></div>
       <a class="vw-lightbox-drive-link" id="vw-lightbox-drive-link" href="#" target="_blank" rel="noopener">Find on Google Drive &rarr;</a>
     </div>
   </div>
 
-  <script src="/js/main.js?v=20260418d" defer></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="/js/portfolio.js?v=20261007" defer></script>
   <script>
-    var EMAILJS_PUBLIC_KEY  = 'z2UjAu1N-IFmF2pbc';
-    var EMAILJS_SERVICE_ID  = 'service_i53d3dk';
-    var EMAILJS_TEMPLATE_ID = 'template_freuseb';
-
-    var BRAND_DRIVE_BASE = 'https://drive.google.com/drive/folders/10ZX4D5d9MogPxA14UhPPz8Oke4xTwDrV';
-
-    function studentDriveUrl(folderBase, studentPrefix) {
-      return folderBase + '?q=' + encodeURIComponent(studentPrefix);
-    }
-
-    var brandGalleries = {};
+    var DRIVE_BASE = 'https://drive.google.com/drive/folders/10ZX4D5d9MogPxA14UhPPz8Oke4xTwDrV';
+    var MANIFEST_KEY = 'company_branding';
+    var FOLDER = 'company-branding';
+    var galleries = {};
     var currentLightbox = null;
-
-    if (window.emailjs && EMAILJS_PUBLIC_KEY.indexOf('REPLACE_WITH') === -1) {
-      emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-    }
-
-    // Judge / Student mode toggle (see product-photography.html for notes)
-    var voteMode = 'judge';
-    function setVoteMode(mode) {
-      voteMode = mode;
-      document.body.classList.toggle('mode-student', mode === 'student');
-      document.querySelectorAll('.vote-mode-toggle button').forEach(function (btn) {
-        btn.classList.toggle('active', btn.dataset.mode === mode);
-      });
-      var label = document.getElementById('brand-judge-label');
-      var input = document.getElementById('brand-judge');
-      if (mode === 'student') {
-        label.textContent = 'Student #:';
-        input.placeholder = 'Your student ID number';
-        input.setAttribute('inputmode', 'numeric');
-        input.value = '';
-      } else {
-        label.textContent = 'Judge:';
-        input.placeholder = 'Your full name';
-        input.removeAttribute('inputmode');
-        input.value = '';
-      }
-    }
-
-    // First-visit explainer modal: shows once per browser. Stores a flag in
-    // localStorage so returning visitors do not see it again. Tapping a mode
-    // button sets that mode and dismisses the modal.
-    function showVoteExplainerIfNeeded() {
-      try {
-        if (localStorage.getItem('vw-voteExplainerSeen') === 'yes') return;
-      } catch (e) { /* localStorage blocked, just show */ }
-      setTimeout(function () {
-        var m = document.getElementById('vote-explainer-modal');
-        if (m) m.classList.add('open');
-      }, 600);
-    }
-    function chooseExplainerMode(mode) {
-      setVoteMode(mode);
-      dismissVoteExplainer();
-      var input = document.getElementById('brand-judge');
-      if (input) setTimeout(function () { input.focus(); }, 200);
-    }
-    function dismissVoteExplainer() {
-      var m = document.getElementById('vote-explainer-modal');
-      if (m) m.classList.remove('open');
-      try { localStorage.setItem('vw-voteExplainerSeen', 'yes'); } catch (e) {}
-    }
-    document.addEventListener('click', function (e) {
-      var m = document.getElementById('vote-explainer-modal');
-      if (m && m.classList.contains('open') && e.target === m) {
-        dismissVoteExplainer();
-      }
-    });
-    showVoteExplainerIfNeeded();
+    function studentDriveUrl(base, prefix) { return base + '?q=' + encodeURIComponent(prefix); }
+    function escapeHtml(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 
     fetch('/assets/student-work/manifest.json')
       .then(function (r) { return r.json(); })
-      .then(function (data) {
-        renderBrandCards(data.company_branding);
-        setupRankExclusion();
-      })
+      .then(function (data) { renderCards(data[MANIFEST_KEY] || []); })
       .catch(function (err) {
-        document.getElementById('brand-grid').innerHTML = '<div class="vote-grid-loading">Could not load submissions. Refresh the page or contact Mr. Silva.</div>';
+        document.getElementById('sw-grid').innerHTML = '<div class="sw-loading">Could not load student work. Please refresh the page.</div>';
         console.error(err);
       });
 
-    function escapeHtml(s) {
-      return String(s).replace(/[&<>"']/g, function (c) {
-        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-      });
-    }
-
-    function renderBrandCards(students) {
-      var grid = document.getElementById('brand-grid');
+    function renderCards(students) {
+      var grid = document.getElementById('sw-grid');
+      if (!students.length) { grid.innerHTML = '<div class="sw-loading">No student work to show yet.</div>'; return; }
       grid.innerHTML = students.map(function (s) {
-        var display = escapeHtml(s.display_name);
-        var student = escapeHtml(s.student);
-        var course = escapeHtml(s.course);
-        var fullDisplay = display + ' (' + course + ')';
-        // Cache large image URLs + originals for the lightbox
-        brandGalleries[s.student] = {
-          images: s.images.map(function (img) {
-            return '/assets/student-work/company-branding-large/' + encodeURIComponent(img.large);
-          }),
+        var display = escapeHtml(s.display_name), student = escapeHtml(s.student);
+        galleries[s.student] = {
+          images: s.images.map(function (img) { return '/assets/student-work/' + FOLDER + '-large/' + encodeURIComponent(img.large); }),
           originals: s.images.map(function (img) { return img.original; }),
-          display: fullDisplay,
-          driveUrl: studentDriveUrl(BRAND_DRIVE_BASE, s.student)
+          display: s.display_name,
+          driveUrl: studentDriveUrl(DRIVE_BASE, s.student)
         };
-        // Render thumbnail grid: 2x2 if 3+ images, single if 1
         var imgs = s.images.map(function (img, idx) {
-          return '<img src="/assets/student-work/company-branding/' + encodeURIComponent(img.thumb) +
-                 '" alt="Page ' + img.page + '" loading="lazy" onclick="openLightbox(\'' + student + '\', ' + idx + ')" />';
+          return '<img src="/assets/student-work/' + FOLDER + '/' + encodeURIComponent(img.thumb) +
+                 '" alt="" loading="lazy" onclick="openLightbox(\'' + student + '\',' + idx + ')" />';
         }).join('');
-        var imgsClass = s.images.length === 1 ? 'vote-card-images vote-card-images-single' : 'vote-card-images';
-        var incompleteBadge = s.incomplete
-          ? '<span class="vote-card-incomplete" title="Submitted ' + s.pages_submitted + ' of 3 pages">' + s.pages_submitted + '/3 pages</span>'
-          : '';
-        return [
-          '<article class="vote-card" data-student="' + student + '">',
-          '  <div class="' + imgsClass + '">' + imgs + '</div>',
-          '  <div class="vote-card-info">',
-          '    <h4 class="vote-card-name">' + display + ' <span class="vote-card-course">' + course + '</span>' + incompleteBadge + '</h4>',
-          '    <div class="vote-card-ranks">',
-          '      <label><input type="radio" name="brand-rank-1" value="' + student + '" data-display="' + fullDisplay + '" /><span>1st</span></label>',
-          '      <label><input type="radio" name="brand-rank-2" value="' + student + '" data-display="' + fullDisplay + '" /><span>2nd</span></label>',
-          '      <label><input type="radio" name="brand-rank-3" value="' + student + '" data-display="' + fullDisplay + '" /><span>3rd</span></label>',
-          '    </div>',
-          '  </div>',
-          '</article>'
-        ].join('');
+        var single = s.images.length === 1 ? ' single' : '';
+        return '<article class="sw-student"><div class="sw-student-imgs' + single + '">' + imgs +
+               '</div><h4 class="sw-student-name">' + display + '</h4></article>';
       }).join('');
     }
 
-    var radioPreClickState = new WeakMap();
-    function setupRankExclusion() {
-      var radios = document.querySelectorAll('input[name^="brand-rank-"]');
-      radios.forEach(function (radio) {
-        radio.addEventListener('mousedown', function () {
-          radioPreClickState.set(this, this.checked);
-        });
-        radio.addEventListener('click', function () {
-          if (radioPreClickState.get(this) === true) {
-            this.checked = false;
-            this.dispatchEvent(new Event('change', { bubbles: true }));
-          }
-        });
-        radio.addEventListener('change', function () {
-          var selectedStudents = new Set();
-          ['1', '2', '3'].forEach(function (r) {
-            var sel = document.querySelector('input[name="brand-rank-' + r + '"]:checked');
-            if (sel) selectedStudents.add(sel.value);
-          });
-          radios.forEach(function (r) {
-            r.disabled = (selectedStudents.has(r.value) && !r.checked);
-          });
-          updateStickyChips();
-        });
-      });
-      updateStickyChips();
-    }
-
-    // Sync the sticky-bar chips with current radio selections
-    function updateStickyChips() {
-      ['1', '2', '3'].forEach(function (r) {
-        var sel = document.querySelector('input[name="brand-rank-' + r + '"]:checked');
-        var chip = document.getElementById('brand-chip-' + r);
-        var nameEl = document.getElementById('brand-pick-' + r);
-        if (sel) {
-          nameEl.textContent = sel.dataset.display;
-          chip.classList.add('filled');
-        } else {
-          nameEl.textContent = '…'; // ellipsis
-          chip.classList.remove('filled');
-        }
-      });
-    }
-
-    function openLightbox(studentPrefix, startIndex) {
-      var entry = brandGalleries[studentPrefix];
-      if (!entry) return;
-      currentLightbox = {
-        images: entry.images,
-        originals: entry.originals || [],
-        index: startIndex || 0,
-        label: entry.display,
-        driveUrl: entry.driveUrl
-      };
+    function openLightbox(prefix, startIndex) {
+      var e = galleries[prefix]; if (!e) return;
+      currentLightbox = { images: e.images, originals: e.originals || [], index: startIndex || 0, label: e.display, driveUrl: e.driveUrl };
       updateLightbox();
       var box = document.getElementById('vw-lightbox');
-      box.classList.add('open');
-      box.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
+      box.classList.add('open'); box.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden';
     }
-
     function updateLightbox() {
       if (!currentLightbox) return;
       document.getElementById('vw-lightbox-img').src = currentLightbox.images[currentLightbox.index];
-      var caption = currentLightbox.label;
-      if (currentLightbox.images.length > 1) {
-        caption += ' (' + (currentLightbox.index + 1) + ' of ' + currentLightbox.images.length + ')';
-      }
-      document.getElementById('vw-lightbox-caption').textContent = caption;
-      var originalName = currentLightbox.originals[currentLightbox.index] || '';
-      document.getElementById('vw-lightbox-filename').textContent =
-        originalName ? ('Drive filename: ' + originalName) : '';
+      var cap = currentLightbox.label;
+      if (currentLightbox.images.length > 1) cap += ' (' + (currentLightbox.index + 1) + ' of ' + currentLightbox.images.length + ')';
+      document.getElementById('vw-lightbox-caption').textContent = cap;
+      var on = currentLightbox.originals[currentLightbox.index] || '';
+      document.getElementById('vw-lightbox-filename').textContent = on ? ('Drive filename: ' + on) : '';
       document.getElementById('vw-lightbox-drive-link').href = currentLightbox.driveUrl;
       var multi = currentLightbox.images.length > 1;
       document.querySelector('.vw-lightbox-prev').hidden = !multi;
       document.querySelector('.vw-lightbox-next').hidden = !multi;
     }
-
-    function lightboxNav(delta) {
-      if (!currentLightbox) return;
-      var n = currentLightbox.images.length;
-      currentLightbox.index = (currentLightbox.index + delta + n) % n;
-      updateLightbox();
-    }
-
+    function lightboxNav(d) { if (!currentLightbox) return; var n = currentLightbox.images.length; currentLightbox.index = (currentLightbox.index + d + n) % n; updateLightbox(); }
     function closeLightbox(event) {
       if (event && event.target !== event.currentTarget && !event.target.classList.contains('vw-lightbox-close')) return;
       var box = document.getElementById('vw-lightbox');
-      box.classList.remove('open');
-      box.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-      currentLightbox = null;
+      box.classList.remove('open'); box.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; currentLightbox = null;
     }
-
     document.addEventListener('keydown', function (e) {
       var box = document.getElementById('vw-lightbox');
       if (!box || !box.classList.contains('open')) return;
@@ -1181,79 +250,6 @@
       else if (e.key === 'ArrowLeft') lightboxNav(-1);
       else if (e.key === 'ArrowRight') lightboxNav(1);
     });
-
-    function clearVotes() {
-      var radios = document.querySelectorAll('input[name^="brand-rank-"]');
-      radios.forEach(function (r) {
-        r.checked = false;
-        r.disabled = false;
-        radioPreClickState.delete(r);
-      });
-      updateStickyChips();
-      var statusEl = document.getElementById('brand-status');
-      statusEl.textContent = 'All selections cleared.';
-      setTimeout(function () {
-        if (statusEl.textContent === 'All selections cleared.') statusEl.textContent = '';
-      }, 2200);
-    }
-
-    function submitVotes() {
-      var voterValue = document.getElementById('brand-judge').value.trim();
-      var statusEl = document.getElementById('brand-status');
-      var isStudent = voteMode === 'student';
-      if (!voterValue) {
-        statusEl.textContent = isStudent
-          ? 'Please enter your Student ID number first.'
-          : 'Please enter your judge name first.';
-        return;
-      }
-      if (isStudent && !/^\d{3,12}$/.test(voterValue)) {
-        statusEl.textContent = 'Student ID should be numbers only (3 to 12 digits).';
-        return;
-      }
-      var r1 = document.querySelector('input[name="brand-rank-1"]:checked');
-      var r2 = document.querySelector('input[name="brand-rank-2"]:checked');
-      var r3 = document.querySelector('input[name="brand-rank-3"]:checked');
-      if (!r1 || !r2 || !r3) {
-        statusEl.textContent = 'Please rank 1st, 2nd, and 3rd place before submitting.';
-        return;
-      }
-      var compName = 'Company Branding (Digital Arts 1B + 2B)';
-      var voterLabel = isStudent ? 'Student #' : 'Judge';
-
-      var summary = 'Submit your ' + (isStudent ? 'People’s Choice' : 'judge') +
-        ' vote for ' + compName + '?\n\n' +
-        '1st: ' + r1.dataset.display + '\n' +
-        '2nd: ' + r2.dataset.display + '\n' +
-        '3rd: ' + r3.dataset.display + '\n\n' +
-        voterLabel + ': ' + voterValue;
-      if (!confirm(summary)) return;
-
-      if (EMAILJS_PUBLIC_KEY.indexOf('REPLACE_WITH') !== -1) {
-        statusEl.textContent = 'EmailJS not configured yet. Mr. Silva needs to swap in the real credentials.';
-        return;
-      }
-
-      statusEl.textContent = 'Sending...';
-      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        competition: compName,
-        first_place: r1.dataset.display,
-        second_place: r2.dataset.display,
-        third_place: r3.dataset.display,
-        judge_name: voterValue,
-        voter_type: voteMode,
-        voted_at: new Date().toLocaleString()
-      }).then(function () {
-        var thanks = isStudent
-          ? 'Thanks! Student #' + voterValue + ' counted for ' + compName + '. I will cross-check against the roster.'
-          : 'Thank you ' + voterValue + '! Your vote for ' + compName + ' was submitted.';
-        statusEl.textContent = thanks;
-        document.querySelector('.vote-stickybar-submit').disabled = true;
-      }).catch(function (err) {
-        statusEl.textContent = 'Error sending vote: ' + (err.text || err.message || 'Unknown error');
-        console.error(err);
-      });
-    }
   </script>
 </body>
 </html>

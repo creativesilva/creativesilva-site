@@ -32,9 +32,13 @@
     .sw-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 56px; }
     @media (max-width: 960px) { .sw-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 640px) { .sw-grid { grid-template-columns: 1fr; gap: 14px; } }
-    .sw-card { position: relative; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--surface-border); padding: 32px; min-width: 0; text-decoration: none; color: inherit; box-shadow: var(--glow); transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease; }
+    .sw-card { position: relative; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--surface-border); padding: 0; overflow: hidden; min-width: 0; text-decoration: none; color: inherit; box-shadow: var(--glow); transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease; }
     .sw-card:hover { border-color: rgba(255,255,255,0.20); transform: translateY(-3px); }
-    .sw-card-accent { position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
+    .sw-card-accent { position: absolute; top: 0; left: 0; width: 4px; height: 100%; z-index: 1; }
+    .sw-thumb { aspect-ratio: 16 / 10; overflow: hidden; background: #0a0a0a; }
+    .sw-thumb img { width: 100%; height: 100%; object-fit: cover; opacity: 0.92; transition: transform 0.5s ease, opacity 0.3s ease; }
+    .sw-card:hover .sw-thumb img { transform: scale(1.04); opacity: 1; }
+    .sw-card-body { display: flex; flex-direction: column; flex: 1; padding: 26px 28px 30px; }
     .sw-card-code { font-family: var(--font-head); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px; }
     .sw-card-title { font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); margin: 0 0 12px; line-height: 1.1; }
     .sw-card-desc { font-size: 0.9rem; color: var(--text-dim); line-height: 1.65; margin: 0 0 24px; flex: 1; }
@@ -49,7 +53,7 @@
       .sw-intro { margin-bottom: 28px; text-align: left; }
       .sw-label { letter-spacing: 0.1em; text-align: left; }
       .sw-intro p { font-size: 0.88rem; line-height: 1.65; }
-      .sw-card { padding: 22px 18px; }
+      .sw-card-body { padding: 18px 18px 22px; }
       .sw-card-title { font-size: 1.2rem; }
       .sw-card-desc { font-size: 0.85rem; margin-bottom: 16px; }
     }
@@ -99,44 +103,51 @@
       <div class="wrap">
         <div class="sw-intro">
           <p class="sw-label">Pioneer Valley High School &nbsp;&middot;&nbsp; 2025-2026</p>
-          <p>The inaugural year of CTE Photography and the continuing build of the Digital Arts program at PVHS. Each card below opens a gallery of student work. The Spring 2026 finals are open for judging.</p>
+          <p>The inaugural year of CTE Photography and the continuing build of the Digital Arts program at PVHS. Each card below opens a gallery of student work, including the Spring 2026 finals.</p>
         </div>
 
         <div class="sw-grid">
           <a class="sw-card" href="student-work/magazine-project.html">
             <span class="sw-card-accent" style="background:#cc0000;"></span>
-            <p class="sw-card-code">Photography 1B</p>
-            <h2 class="sw-card-title">Magazine Cover Project</h2>
-            <p class="sw-card-desc">Editorial magazine covers conceived, lit, captured, and designed by the first photography students PVHS has ever had. Vogue, Rolling Stone, Time, Sports Illustrated, and People.</p>
-            <div class="sw-card-meta">
-              <span class="sw-tag showcase">Showcase</span>
-              <span class="sw-tag">5 Students</span>
+            <div class="sw-thumb"><img src="images/Student-Rolling-Stone.jpg" alt="" loading="lazy" /></div>
+            <div class="sw-card-body">
+              <p class="sw-card-code">Photography 1B</p>
+              <h2 class="sw-card-title">Magazine Cover Project</h2>
+              <p class="sw-card-desc">Editorial magazine covers conceived, lit, captured, and designed by the first photography students PVHS has ever had. Vogue, Rolling Stone, Time, Sports Illustrated, and People.</p>
+              <div class="sw-card-meta">
+                <span class="sw-tag showcase">Showcase</span>
+                <span class="sw-tag">5 Students</span>
+              </div>
+              <span class="sw-card-cta">View Gallery</span>
             </div>
-            <span class="sw-card-cta">View Gallery</span>
           </a>
 
           <a class="sw-card" href="student-work/product-photography.html">
             <span class="sw-card-accent" style="background:#cc0000;"></span>
-            <p class="sw-card-code">Photography 1B &nbsp;&middot;&nbsp; Spring Final</p>
-            <h2 class="sw-card-title">Product Photography</h2>
-            <p class="sw-card-desc">Spring final for Photography 1B. Each student captured a four-image product set in the studio. Judges rank 1st, 2nd, and 3rd place.</p>
-            <div class="sw-card-meta">
-              <span class="sw-tag voting">Voting Open</span>
-              <span class="sw-tag">$300 in Prizes</span>
+            <div class="sw-thumb"><img src="assets/student-work/product-photography/aguilarcesar_1.jpg" alt="" loading="lazy" /></div>
+            <div class="sw-card-body">
+              <p class="sw-card-code">Photography 1B &nbsp;&middot;&nbsp; Spring Final</p>
+              <h2 class="sw-card-title">Product Photography</h2>
+              <p class="sw-card-desc">The Spring final for Photography 1B. Each student captured a four-image product set in the studio.</p>
+              <div class="sw-card-meta">
+                <span class="sw-tag showcase">Showcase</span>
+              </div>
+              <span class="sw-card-cta">View Gallery</span>
             </div>
-            <span class="sw-card-cta">Vote &amp; Browse</span>
           </a>
 
           <a class="sw-card" href="student-work/company-branding.html">
             <span class="sw-card-accent" style="background:#8b5cf6;"></span>
-            <p class="sw-card-code">Digital Arts 1B + 2B &nbsp;&middot;&nbsp; Spring Final</p>
-            <h2 class="sw-card-title">Company Branding</h2>
-            <p class="sw-card-desc">Spring final for Digital Arts 1B and 2B, pooled into one competition. Each student designed a full three-page brand package for a fictional company.</p>
-            <div class="sw-card-meta">
-              <span class="sw-tag voting">Voting Open</span>
-              <span class="sw-tag">$300 in Prizes</span>
+            <div class="sw-thumb"><img src="assets/student-work/company-branding/aguilarmaxx_1.jpg" alt="" loading="lazy" /></div>
+            <div class="sw-card-body">
+              <p class="sw-card-code">Digital Arts 1B + 2B &nbsp;&middot;&nbsp; Spring Final</p>
+              <h2 class="sw-card-title">Company Branding</h2>
+              <p class="sw-card-desc">The Spring final for Digital Arts 1B and 2B. Each student designed a full three-page brand package for a fictional company.</p>
+              <div class="sw-card-meta">
+                <span class="sw-tag showcase">Showcase</span>
+              </div>
+              <span class="sw-card-cta">View Gallery</span>
             </div>
-            <span class="sw-card-cta">Vote &amp; Browse</span>
           </a>
         </div>
 
