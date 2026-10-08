@@ -86,7 +86,23 @@
   .pw-p2{font-family:var(--font);font-size:.52rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#ffb28a;border:1px solid rgba(255,107,26,.5);padding:1px 5px;margin-left:6px;vertical-align:middle;}
   .pw-pct{font-family:var(--font);font-weight:700;font-size:.82rem;letter-spacing:.02em;padding:2px 8px;color:#8ff0b0;background:rgba(63,168,99,.16);}
   .pw-pct.mid{color:#ffd889;background:rgba(245,179,1,.16);} .pw-pct.low{color:#ff9a8a;background:rgba(224,64,58,.18);} .pw-pct.na{color:var(--faint);background:rgba(160,180,180,.12);}
-  a.pw-pct{text-decoration:none;cursor:pointer;display:inline-block;transition:filter .15s,box-shadow .15s;} a.pw-pct:hover{filter:brightness(1.18);box-shadow:inset 0 0 0 1px currentColor;}
+  button.pw-pct{border:0;font-family:var(--font);cursor:pointer;display:inline-block;transition:filter .15s,box-shadow .15s;} button.pw-pct:hover{filter:brightness(1.18);box-shadow:inset 0 0 0 1px currentColor;}
+  /* Kit contents editor: the camera kit, edited inline without leaving the walk (reuses .pw-wheelov). */
+  .pw-kitcard{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.97));border:1px solid var(--teal);border-top:3px solid var(--teal);width:100%;max-width:460px;max-height:calc(100vh - 44px);display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+  .pw-kithead{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 18px;border-bottom:1px solid var(--line-soft);}
+  .pw-kithead b{font-size:1rem;letter-spacing:.04em;text-transform:uppercase;color:#fff;}
+  .pw-kitx{background:none;border:0;color:var(--muted);font-size:1.6rem;line-height:1;cursor:pointer;}
+  .pw-kitx:hover{color:#fff;}
+  .pw-kitpct{flex:0 0 auto;padding:11px 18px;font-size:.78rem;color:var(--muted);border-bottom:1px solid var(--line-soft);letter-spacing:.02em;line-height:1.5;}
+  .pw-kitpct b{color:#fff;font-size:1.05rem;}
+  .pw-kitlist{flex:1 1 auto;overflow-y:auto;min-height:0;}
+  .pw-kititem{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line-soft);cursor:pointer;}
+  .pw-kititem:hover{background:rgba(0,184,184,.09);}
+  .pw-kititem .nm{font-size:.85rem;color:var(--text);line-height:1.25;}
+  .pw-kititem .tog{flex:0 0 auto;font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;white-space:nowrap;}
+  .pw-kititem.present .tog{color:#8ff0b0;background:rgba(63,168,99,.16);}
+  .pw-kititem.missing .nm{color:#ff9a8a;}
+  .pw-kititem.missing .tog{color:#ff9a8a;background:rgba(224,64,58,.18);}
   /* Seat inputs */
   /* Seat slots: two side by side, tap to open the wheel (no typing). Compact, <=2 digits. iPad-first. */
   .pw-seats-row{display:flex;gap:9px;align-items:stretch;}
@@ -271,6 +287,14 @@
   </div>
 </div>
 
+<div class="pw-wheelov" id="kitOv">
+  <div class="pw-kitcard">
+    <div class="pw-kithead"><b id="kitTitle">Kit contents</b><button class="pw-kitx" id="kitX" type="button" aria-label="Close">&times;</button></div>
+    <div class="pw-kitpct" id="kitPctLine"></div>
+    <div class="pw-kitlist silva-scroll" id="kitList"></div>
+  </div>
+</div>
+
 
 <div class="pw-toast" id="toast"></div>
 
@@ -379,10 +403,38 @@
     grid.querySelectorAll('[data-assign]').forEach(function(b){ b.onclick=function(){ openSeatModal(b.getAttribute('data-assign')); }; });
     grid.querySelectorAll('[data-notused]').forEach(function(b){ b.onclick=function(){ toggleNotUsed(b.getAttribute('data-notused')); }; });
     grid.querySelectorAll('[data-return]').forEach(function(b){ b.onclick=function(){ returnToPool(b.getAttribute('data-return')); }; });
+    grid.querySelectorAll('[data-kit]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); openKitModal(b.getAttribute('data-kit')); }; });
   }
-  // The % chip deep-links to the SAME camera window as Edit info, opened straight to the
-  // Kit contents tab, so Silva can toggle missing/returned items on the fly and the % updates live.
-  function pctChip(cam){ var p=kitPct(cam); return '<a class="pw-pct '+pctCls(p)+'" href="/camera-manager.html?cam='+encodeURIComponent(cam)+'&tab=kit" title="Open the kit contents to update it on the fly">'+(p==null?'TBD':(p+'%'))+'</a>'; }
+  // The % chip opens the kit editor as a pop-up right here in the walk (no leaving the page),
+  // so Silva can flip missing/in-bag items on the fly and the % updates live. See openKitModal.
+  function pctChip(cam){ var p=kitPct(cam); return '<button type="button" class="pw-pct '+pctCls(p)+'" data-kit="'+esc(cam)+'" title="Open the kit contents to update it on the fly">'+(p==null?'TBD':(p+'%'))+'</button>'; }
+
+  // ---- Inline kit editor: the same camera kit the console shows, edited in place without leaving the walk ----
+  var KITCAM=null;
+  function kitMissing(cam){ var a=BOARD.assets[cam]||{}; return (a.kit||[]).filter(function(x){ return KIT_STD.indexOf(x)>=0; }); }
+  function openKitModal(cam){ KITCAM=cam; renderKitModal(); document.getElementById('kitOv').classList.add('open'); }
+  function closeKitModal(){ document.getElementById('kitOv').classList.remove('open'); KITCAM=null; }
+  function renderKitModal(){
+    var cam=KITCAM; if(!cam) return;
+    var miss=kitMissing(cam), p=kitPct(cam), have=KIT_STD.length-miss.length;
+    document.getElementById('kitTitle').textContent='Camera '+cam+' · Kit';
+    document.getElementById('kitPctLine').innerHTML='<b>'+(p==null?'TBD':p+'%')+'</b> complete · '+have+' of '+KIT_STD.length+' in the bag. Tap an item to flip it.';
+    var list=document.getElementById('kitList');
+    list.innerHTML=KIT_STD.map(function(item){ var m=miss.indexOf(item)>=0; return '<div class="pw-kititem '+(m?'missing':'present')+'" data-kititem="'+esc(item)+'"><span class="nm">'+esc(item)+'</span><span class="tog">'+(m?'Missing':'In bag')+'</span></div>'; }).join('');
+    list.querySelectorAll('[data-kititem]').forEach(function(el){ el.onclick=function(){ toggleKitItem(el.getAttribute('data-kititem')); }; });
+  }
+  function toggleKitItem(item){
+    var cam=KITCAM; if(!cam) return;
+    var miss=kitMissing(cam).slice(), i=miss.indexOf(item);
+    if(i>=0) miss.splice(i,1); else miss.push(item);
+    // Optimistic: reflect the flip immediately, then persist and re-sync the board.
+    (BOARD.assets[cam]=BOARD.assets[cam]||{}).kit=miss.slice();
+    renderKitModal(); renderGrid();
+    camAPI('/api/camera/asset',{method:'POST',body:JSON.stringify({camera:cam,kit:miss})})
+      .then(function(r){ if(!r.ok) throw new Error(); return loadBoard(); })
+      .then(function(){ renderKitModal(); renderGrid(); })
+      .catch(function(){ toast('Could not save. Check your connection.',true); });
+  }
   function seatNum(v){ var s=String(v==null?'':v).replace(/\D/g,''); return s.replace(/^0+/,'')||''; }
   // The student name deep-links to its profile in the Equipment Manager (same single-source-of-truth
   // pattern as Edit info), so tapping a seat's student opens their full profile card there.
@@ -629,6 +681,9 @@
   document.getElementById('histBtn').onclick=function(){ document.getElementById('histOv').classList.add('open'); loadHistory(); };
   document.getElementById('histX').onclick=function(){ document.getElementById('histOv').classList.remove('open'); };
   document.getElementById('histOv').addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
+
+  document.getElementById('kitX').onclick=closeKitModal;
+  document.getElementById('kitOv').addEventListener('click',function(e){ if(e.target===this) closeKitModal(); });
   document.getElementById('roExit').onclick=function(){ RO=null; var ap=autoPeriod(); if(ap&&SEATMAP[ap]) setPeriod(ap); else { PERIOD=PERIOD||null; buildPW(); render(); } };
 
   // boot: if we already hold the key (logged into the console), go straight in
