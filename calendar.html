@@ -584,6 +584,11 @@
 (function(){
   var API='https://command.creativesilva.com';
   if(/[?&]embed=1/.test(location.search)) document.body.classList.add('embed');
+  // Per-teacher student link: ?teacher=silva|garcia|mankin (alias ?pool=) scopes the whole page to
+  // ONE teacher's equipment, so each teacher can hand their class a link that shows only their gear.
+  // No param = the universal link (each student still resolves to their own pool after ID verify).
+  var LINK_POOL=null; (function(){ var m=/[?&](?:teacher|pool)=([a-z]+)/i.exec(location.search);
+    if(m){ var p=m[1].toLowerCase(); if(['silva','garcia','mankin'].indexOf(p)>=0) LINK_POOL=p; } })();
   // Teacher launched this from the console (?from=console), standalone (not embedded): show a Back
   // button. The plain student link has no param, so no button. The console itself is password-gated.
   if(/[?&]from=console/.test(location.search) && !document.body.classList.contains('embed')){ var _cb=document.getElementById('calBack'); if(_cb) _cb.classList.add('show'); }
@@ -635,6 +640,7 @@
       confirmBtn:'Confirm reservation', reservingBtn:'Reserving…',
       enterFullId:'Enter your full student ID.', checking:'Checking…',
       idNotFound:'We could not find that ID. Check the number or see Mr. Silva.',
+      wrongLink:'This reservation link is for {who}. Please open your own class link, or see your teacher.',
       serverErr:'Could not reach the server. Try again.',
       needCell:'Enter your 10-digit cell phone (example 805-631-0001).', needParentName:'Enter your parent or guardian name.', needParentCell:'Enter a 10-digit parent / guardian cell (example 805-631-0001).',
       couldNotReserve:'Could not reserve. Try again.', couldNotReach:'Could not reach the server.',
@@ -695,6 +701,7 @@
       confirmBtn:'Confirmar reserva', reservingBtn:'Reservando…',
       enterFullId:'Escribe tu número de estudiante completo.', checking:'Verificando…',
       idNotFound:'No encontramos ese número. Revísalo o habla con el Sr. Silva.',
+      wrongLink:'Este enlace de reservas es para {who}. Abre el enlace de tu propia clase o habla con tu maestro.',
       serverErr:'No se pudo conectar al servidor. Inténtalo de nuevo.',
       needCell:'Escribe tu celular de 10 dígitos (ejemplo 805-631-0001).', needParentName:'Escribe el nombre de tu padre o tutor.', needParentCell:'Escribe un celular del padre / tutor de 10 dígitos (ejemplo 805-631-0001).',
       couldNotReserve:'No se pudo reservar. Inténtalo de nuevo.', couldNotReach:'No se pudo conectar al servidor.',
@@ -888,7 +895,7 @@
     } else { b.classList.remove('show'); }
   }
   function renderBoard(){
-    var active=activeByCam(); var cams=DATA.cameras||[];
+    var active=activeByCam(); var cams=shownCams();
     var outCams=cams.filter(function(c){ return active[c]; });
     outn.textContent=(cams.length-outCams.length); totn.textContent=cams.length;
     // Only rebuild the (frosted-glass) board cards when their inputs actually changed. Rebuilding
@@ -1129,8 +1136,8 @@
   function dayReserved(iso){ return checkoutsOnDay(iso).filter(function(c){ return statusOf(c)==='reserved'; }).sort(byCam); }
   function isOOS(cam){ return (DATA.oos||[]).indexOf(cam)>=0; }   // out-of-service cameras can't be reserved
   function isNoCard(cam){ return (DATA.no_card||[]).indexOf(cam)>=0; }   // memory card missing: out of rotation until a new card is installed
-  function dayAvailable(iso){ var busy={}; checkoutsOnDay(iso).forEach(function(c){ busy[c.camera]=1; }); return (DATA.cameras||[]).filter(function(c){ return !busy[c] && !isOOS(c) && !isNoCard(c); }); }
-  function dayNoCard(iso){ var busy={}; checkoutsOnDay(iso).forEach(function(c){ busy[c.camera]=1; }); return (DATA.cameras||[]).filter(function(c){ return !busy[c] && isNoCard(c); }); }
+  function dayAvailable(iso){ var busy={}; checkoutsOnDay(iso).forEach(function(c){ busy[c.camera]=1; }); return shownCams().filter(function(c){ return !busy[c] && !isOOS(c) && !isNoCard(c); }); }
+  function dayNoCard(iso){ var busy={}; checkoutsOnDay(iso).forEach(function(c){ busy[c.camera]=1; }); return shownCams().filter(function(c){ return !busy[c] && isNoCard(c); }); }
   // Teacher-only: cameras returned on/over this day, so Chris can see who had a kit last.
   function dayReturned(iso){ if(!AUTHED) return []; return (DATA.checkouts||[]).filter(function(c){ if(c.kind==='equipment'||statusOf(c)!=='returned'||!c.out) return false; var end=c.returned_date||c.due||c.out; return iso>=c.out && iso<=end; }).sort(byCam); }
   function recForCamOnDay(cam,iso){ var m=checkoutsOnDay(iso).filter(function(c){ return c.camera===cam; }); return m[0]||null; }
@@ -1198,7 +1205,7 @@
       body=out.length?out.map(function(c){ var odt=(c.due&&c.due<todayISO())?'<span class="dm-tag od">'+t('tabOverdue')+'</span>':''; return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,iso)+'<span class="dm-range">'+t('pickedUp')+' '+fmt(c.out)+' &rarr; '+t('due')+' '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+odt+chev+'</div>'; }).join(''):'<div class="dm-empty">'+t('emptyOut')+'</div>';
     } else if(DM_TAB==='equip'){
       var gByType={}; gearKeys.forEach(function(id){ var ty=gearDef(id).type||'other'; (gByType[ty]=gByType[ty]||[]).push(id); });
-      var gOrder=['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil'];
+      var gOrder=gearOrder();
       Object.keys(gByType).forEach(function(ty){ if(gOrder.indexOf(ty)<0) gOrder.push(ty); });
       var gHtml=''; gOrder.forEach(function(ty){ var ids=gByType[ty]; if(!ids||!ids.length) return;
         gHtml+='<div class="rc-extra-grp">'+esc(((DATA.equipment_types||{})[ty]||{}).label||ty)+'</div><div class="dm-avail">'+ids.map(function(id){ return '<span class="dm-availcam resv clickable" data-rgear="'+esc(id)+'">'+esc(gearLabel(id))+'</span>'; }).join('')+'</div>'; });
@@ -1448,6 +1455,10 @@
           if(j.missing_count!=null){ var _x=Math.max(1, j.missing_count-lim); _b=t('blockedMsgN').replace('{c}',j.missing_count).replace('{n}',lim).replace('{x}',_x); }
           else { _b=t('blockedMsg').replace('{n}',lim); }
           msg.innerHTML='<div class="rv-block"><b>'+t('blockedTitle')+'</b>'+_b+'</div>'; return; }
+        // Per-teacher link: only that teacher's students may reserve here (they still see only her gear).
+        if(LINK_POOL && (j.pool||'silva')!==LINK_POOL){
+          var _who={silva:'Mr. Silva',garcia:'Ms. Garcia',mankin:'Ms. Mankin'}[LINK_POOL]||LINK_POOL;
+          msg.innerHTML='<span style="color:#ffb28a">'+t('wrongLink').replace('{who}',_who)+'</span>'; return; }
         rvLookup={id:v,label:j.label,name:j.name||'',period:String(j.period||''),
                   pool:j.pool||'silva',teacher:j.teacher||'',
                   student_cell:j.student_cell||'',parent_guardian:j.parent_guardian||'',parent_cell:j.parent_cell||''};
@@ -1477,6 +1488,7 @@
     if(pcD.length!==10){ bad('rv-pc','needParentCell'); return; }
     sc=fmtPhone(scD); pc=fmtPhone(pcD);   // store a clean 10-digit dashed number (805-631-0001) in the database
     RESV={id:L.id,label:L.label,period:L.period,pool:L.pool||'silva',teacher:L.teacher||''};
+    RV_TAB=(effPool()==='mankin')?'gear':'cameras';   // Mankin leads with the iPad styluses / gear tab
     var proceed=function(){
       closeReserveModal(); showBanner();
       // Launched from a day card: drop the student straight back into that day, now picking a camera.
@@ -1505,9 +1517,17 @@
   // ---- Per-student pools + gear availability (drives the Cameras / Other Equipment reserve tabs) ----
   function gearDef(id){ return (DATA.equipment_units||{})[id]||{label:id}; }   // per-unit: {type,label,pool,kit}
   function gearLabel(id){ return gearDef(id).label||id; }
-  // The student's teacher pool (set at ID verify). Fall back to Silva / all cameras if unknown.
-  function myCamPool(){ var p=(RESV&&RESV.pool)||'silva'; var a=(DATA.pools||{})[p]; return (a&&a.length)?a:(DATA.cameras||[]); }
-  function myGearKeys(){ var p=(RESV&&RESV.pool)||'silva'; return ((DATA.equipment_pools||{})[p])||[]; }   // unit ids
+  // The effective teacher pool: the link's pool if this is a per-teacher link, else the student's own
+  // pool (set at ID verify), else Silva. Drives which cameras + gear show and the gear ordering.
+  function effPool(){ return LINK_POOL||(RESV&&RESV.pool)||'silva'; }
+  // Cameras shown in the overview grid: the link's pool when scoped, else the public set (01-18).
+  function shownCams(){ if(LINK_POOL){ var a=(DATA.pools||{})[LINK_POOL]; if(a&&a.length) return a; } return (DATA.cameras||[]); }
+  // Gear order: Ms. Mankin leads with the iPad styluses (her focus), everyone else keeps camera gear first.
+  function gearOrder(){ return effPool()==='mankin'
+    ? ['apple_pencil','mankin_tripod','tripod','speedlite','wide','zoom','reflector']
+    : ['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil']; }
+  function myCamPool(){ var p=effPool(); var a=(DATA.pools||{})[p]; return (a&&a.length)?a:(DATA.cameras||[]); }
+  function myGearKeys(){ var p=effPool(); return ((DATA.equipment_pools||{})[p])||[]; }   // unit ids
   function gearOos(id){ return (DATA.equipment_oos||[]).indexOf(id)>=0; }
   // Per-unit, exactly like a camera: a unit is free on a day if it is not out of service and has no
   // non-returned reservation overlapping that day.
@@ -1536,7 +1556,7 @@
       if(!gearKeys.length){ body+='<div class="dm-empty">'+t('noGearFree')+'</div>'; }
       else {
         var gBy={}; gearKeys.forEach(function(id){ var u=(DATA.equipment_units||{})[id]; var ty=u?u.type:'other'; (gBy[ty]=gBy[ty]||[]).push(id); });
-        ['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil'].forEach(function(ty){
+        gearOrder().forEach(function(ty){
           var ids=gBy[ty]; if(!ids||!ids.length) return;
           var tl=((DATA.equipment_types||{})[ty]||{}).label||ty;
           body+='<div class="rv-geargrp">'+esc(tl)+'</div><div class="dm-avail">'+ids.map(function(id){
@@ -1580,7 +1600,7 @@
       (extraKeys.length?('<details class="rc-extra"><summary>'+t('needGear')+' <span class="rc-extra-hint">'+t('optional')+'</span></summary>'+
         '<div class="rc-extra-body">'+
           (function(){ var gBy={}; extraKeys.forEach(function(id){ var u=(DATA.equipment_units||{})[id]; var ty=u?u.type:'other'; (gBy[ty]=gBy[ty]||[]).push(id); });
-            var out=''; ['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil'].forEach(function(ty){ var ids=gBy[ty]; if(!ids||!ids.length) return;
+            var out=''; gearOrder().forEach(function(ty){ var ids=gBy[ty]; if(!ids||!ids.length) return;
               out+='<div class="rc-extra-grp">'+esc(((DATA.equipment_types||{})[ty]||{}).label||ty)+'</div>'+ids.map(function(id){ return '<label><input type="checkbox" id="rc-'+esc(id)+'"> '+esc(gearLabel(id))+'</label>'; }).join(''); });
             return out; })()+
         '</div>'+

@@ -1007,11 +1007,22 @@
   // Which teacher's equipment the console is viewing (Silva / Garcia / Mankin). Filters the board.
   var SELECTED_POOL='silva'; try{ SELECTED_POOL=sessionStorage.getItem('cam_pool')||'silva'; }catch(e){}
   function viewCams(){ var p=(DATA.pools||{})[SELECTED_POOL]; return (p&&p.length)?p:(DATA.cameras||[]); }
+  // Gear order per teacher: Mankin leads with the iPad styluses (her focus); others keep camera gear first.
+  function gOrderFor(){ return SELECTED_POOL==='mankin'
+    ? ['apple_pencil','mankin_tripod','tripod','speedlite','wide','zoom','reflector']
+    : ['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil']; }
+  // Point the Student Calendar button, the embedded preview, and the QR at the SELECTED teacher's
+  // scoped link, so each teacher hands their class a link that shows only their own equipment.
+  function studentCalURL(abs){ return (abs?'https://www.creativesilva.com':'')+'/calendar.html?teacher='+SELECTED_POOL; }
+  function syncStudentCalLink(){
+    var a=document.getElementById('studentCalBtn'); if(a) a.href=studentCalURL(false)+'&from=console';
+    var f=document.getElementById('calframe'); if(f){ var want=studentCalURL(false)+'&embed=1'; if((f.getAttribute('src')||'')!==want) f.setAttribute('src',want); }
+  }
 
   // ---- shared header icon ----
   // Show the reservations QR (students scan it to open the student calendar on their phones).
   function showQR(){
-    var CAL_URL='https://www.creativesilva.com/calendar.html';
+    var CAL_URL=studentCalURL(true);   // scoped to the selected teacher so their QR shows only their gear
     var ov=document.createElement('div'); ov.className='silva-confirm-ov';
     var panel=document.createElement('div'); panel.className='silva-confirm-panel'; panel.style.textAlign='center'; panel.style.maxWidth='420px'; panel.style.position='relative';
     panel.setAttribute('role','dialog'); panel.setAttribute('aria-modal','true');
@@ -1045,6 +1056,7 @@
       intro.insertBefore(cat, anchor); intro.insertBefore(qr, anchor);
     }
     renderPoolBar();
+    syncStudentCalLink();
     return true;
   }
   function tryInject(n){ if(injectHeader()||n<=0) return; setTimeout(function(){ tryInject(n-1); },40); }
@@ -1662,7 +1674,7 @@
   function pickTeacher(pool){
     SELECTED_POOL=pool; try{ sessionStorage.setItem('cam_pool',pool); }catch(e){}
     var tg=document.getElementById('teacherGate'); if(tg) tg.style.display='none';
-    _lastBoardSig=null; _lastPoolSig=null; renderPoolBar(); renderBoard();
+    _lastBoardSig=null; _lastPoolSig=null; renderPoolBar(); renderBoard(); syncStudentCalLink();
   }
   var _lastBoardSig=null;   // flicker guard: only replace #board when the rendered board actually changes
   function renderBoard(){
@@ -1675,18 +1687,19 @@
     var mgrid='<div class="camgrid">'+mcams.map(manageTile).join('')+'</div>';
     var eopen=secOpen('equip'), gpool=gearPoolIds(), gtypes=gearTypes();
     var gByType={}; gpool.forEach(function(id){ var u=gearUnit(id); if(!u) return; (gByType[u.type]=gByType[u.type]||[]).push(id); });
-    var gOrder=['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil'];
+    var gOrder=gOrderFor();
     var gearHtml='';
     gOrder.forEach(function(t){ var ids=gByType[t]; if(!ids||!ids.length) return;
       var tl=(gtypes[t]&&gtypes[t].label)||t;
       gearHtml+='<div class="geargroup"><div class="geargroup-h">'+esc(tl)+'<span class="geargroup-n">'+ids.length+'</span></div>'+
         '<div class="camgrid">'+ids.map(manageGearTile).join('')+'</div></div>';
     });
-    var mbody=mgrid+
-      '<div class="csec sec-equip'+(eopen?' open':'')+'">'+
+    var equipSection='<div class="csec sec-equip'+(eopen?' open':'')+'">'+
       '<button class="csec-head" type="button" data-sectoggle="equip"><span class="csec-dot equip"></span>Additional equipment <span class="csec-n">'+gpool.length+' units</span><span class="csec-chev"></span></button>'+
       '<div class="csec-body">'+(gearHtml||'<div class="foot">No equipment units yet.</div>')+'</div>'+
     '</div>';
+    // Mankin leads with her gear (iPad styluses first); the photo teachers lead with the camera grid.
+    var mbody=(SELECTED_POOL==='mankin')?(equipSection+mgrid):(mgrid+equipSection);
     var mOpen=secOpen('manage');
     var manageHtml='<div class="camhub manage-hub'+(mOpen?' open':'')+'">'+
       '<div class="camhub-head" data-sectoggle="manage">'+
@@ -1732,7 +1745,7 @@
   function bindBoard(){
     var b=document.getElementById('board');
     b.querySelectorAll('[data-sectoggle]').forEach(function(el){ el.onclick=function(){ var k=el.getAttribute('data-sectoggle'), sec=el.parentNode, open=!sec.classList.contains('open'); sec.classList.toggle('open',open); setSecOpen(k,open); }; });
-    b.querySelectorAll('[data-pool]').forEach(function(el){ el.onclick=function(){ SELECTED_POOL=el.getAttribute('data-pool'); try{ sessionStorage.setItem('cam_pool',SELECTED_POOL); }catch(e){} _lastBoardSig=null; renderBoard(); }; });
+    b.querySelectorAll('[data-pool]').forEach(function(el){ el.onclick=function(){ SELECTED_POOL=el.getAttribute('data-pool'); try{ sessionStorage.setItem('cam_pool',SELECTED_POOL); }catch(e){} _lastBoardSig=null; renderBoard(); syncStudentCalLink(); }; });
     var _st=b.querySelector('[data-sorttrig]');
     if(_st){ _st.onclick=function(e){ e.stopPropagation(); _st.closest('.camsortdd').classList.toggle('open'); }; }
     b.querySelectorAll('[data-camsort]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); CAM_SORT=el.getAttribute('data-camsort'); try{ sessionStorage.setItem('camsort',CAM_SORT); }catch(e2){} renderBoard(); }; });
@@ -2341,7 +2354,7 @@
     var attached={}; equipRecs().forEach(function(e){ if(e.group===edId && statusOf(e)!=='returned') attached[e.item]=e.id; });
     var gpool=gearPoolIds(), gtypes=gearTypes(), byType={};
     gpool.forEach(function(id){ var u=gearUnit(id); if(!u) return; (byType[u.type]=byType[u.type]||[]).push(id); });
-    ['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil'].forEach(function(t){
+    gOrderFor().forEach(function(t){
       var ids=byType[t]; if(!ids||!ids.length) return;
       var hd=document.createElement('div'); hd.className='ed-geargrp'; hd.textContent=(gtypes[t]&&gtypes[t].label)||t; host.appendChild(hd);
       ids.forEach(function(id){
