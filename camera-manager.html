@@ -709,6 +709,9 @@
   .stu-sec-h{font-family:var(--font);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.58rem;color:var(--teal-lt);margin-bottom:8px;}
   .stu-kv{display:grid;grid-template-columns:92px 1fr;gap:5px 12px;font-size:.85rem;color:var(--text);}
   .stu-kv .k{color:var(--faint);font-size:.68rem;letter-spacing:.04em;text-transform:uppercase;padding-top:2px;}
+  .stu-p2{display:flex;align-items:center;gap:9px;font-size:.85rem;color:var(--text);cursor:pointer;}
+  .stu-p2 input{width:17px;height:17px;accent-color:var(--teal);cursor:pointer;flex:0 0 auto;}
+  .stu-p2hint{font-size:.68rem;color:var(--faint);letter-spacing:.02em;margin-top:6px;line-height:1.4;}
   .stu-kv .miss{color:#ff9a7a;font-weight:700;}
   .stu-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
   .stu-stat{background:rgba(0,0,0,.3);border:1px solid var(--line-soft);border-left:3px solid var(--teal);padding:10px 12px;}
@@ -1390,6 +1393,15 @@
        '<span class="k">Student cell</span><span>'+cc(ref.student_cell)+'</span>'+
        '<span class="k">Parent</span><span>'+cc(ref.parent_guardian)+'</span>'+
        '<span class="k">Parent cell</span><span>'+cc(ref.parent_cell)+'</span></div></div>';
+    // Photo-2 access: Mr. Silva can grant this student the Photo-2 cameras (16-18) from here. Not shown
+    // in Mankin's view (she has no Photo-2 cameras).
+    if(SELECTED_POOL!=='mankin'){
+      var hasP2=(DATA.p2_grants||[]).map(String).indexOf(String(sid))>=0;
+      h+='<div class="stu-sec"><div class="stu-sec-h">Camera access</div>'+
+         '<label class="stu-p2"><input type="checkbox" id="stuP2"'+(hasP2?' checked':'')+'>'+
+         '<span class="stu-p2lab">Allow Photo-2 cameras (16, 17, 18)</span></label>'+
+         '<div class="stu-p2hint">Lets this student reserve the Photo-2 cameras even though they are not in Period 4.</div></div>';
+    }
     h+='<div class="stu-sec"><div class="stu-stats">'+
        '<div class="stu-stat"><div class="n">'+orders.length+'</div><div class="k">Times reserved</div></div>'+
        '<div class="stu-stat"><div class="n">'+activeOut+'</div><div class="k">Active now</div></div>'+
@@ -1403,6 +1415,12 @@
     }).join('');
     h+='<div class="stu-sec"><div class="stu-sec-h">Reservation history ('+orders.length+')</div><div class="stu-hist">'+(rows||'<div class="cd-empty">No reservations on record yet.</div>')+'</div></div>';
     var b=document.getElementById('stuBody'); b.innerHTML=h;
+    var _p2=document.getElementById('stuP2');
+    if(_p2){ _p2.onchange=function(){ var on=_p2.checked; _p2.disabled=true;
+      camAPI('/api/camera/student_override',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:sid,p2:on})})
+        .then(function(r){ return r.ok?r.json():Promise.reject(); })
+        .then(function(){ DATA.p2_grants=(DATA.p2_grants||[]).map(String).filter(function(x){ return x!==String(sid); }); if(on) DATA.p2_grants.push(String(sid)); _p2.disabled=false; silvaToast(on?'Photo-2 cameras unlocked for this student.':'Photo-2 access removed.'); })
+        .catch(function(){ _p2.checked=!on; _p2.disabled=false; silvaToast('Could not save. Try again.'); }); }; }
     b.querySelectorAll('[data-camdetail]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); closeStudentProfile(); openCamDetail(el.getAttribute('data-camdetail')); }; });
     b.querySelectorAll('[data-geardetail]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); closeStudentProfile(); openGearDetail(el.getAttribute('data-geardetail')); }; });
   }
@@ -1859,7 +1877,7 @@
       return r.json();
     }).then(function(d){
       DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{},
-            pools:d.pools||{},equipment_pools:d.equipment_pools||{},equipment_units:d.equipment_units||{},equipment_types:d.equipment_types||{}};
+            pools:d.pools||{},equipment_pools:d.equipment_pools||{},equipment_units:d.equipment_units||{},equipment_types:d.equipment_types||{},p2_grants:d.p2_grants||[]};
       renderBoard(); markSync(true);
       if(_pendingStu){ var _s=_pendingStu; _pendingStu=null; try{ openStudentProfile(_s); }catch(e){} }
     }).catch(function(e){ if(String(e.message)!=='401') markSync(false); });
@@ -2586,7 +2604,7 @@
   pin.addEventListener('keydown',function(e){ if(e.key==='Enter') submitPin(); });
 
   // if we already have a stored key, try it silently; otherwise show the gate
-  if(KEY){ camAPI('/api/camera/checkouts',{cache:'no-store'}).then(function(r){ if(r.ok){ return r.json().then(function(d){ DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{},pools:d.pools||{},equipment_pools:d.equipment_pools||{},equipment_units:d.equipment_units||{},equipment_types:d.equipment_types||{}}; renderBoard(); markSync(true); startApp(); }); } else { showGate(''); } }).catch(function(){ showGate(''); }); }
+  if(KEY){ camAPI('/api/camera/checkouts',{cache:'no-store'}).then(function(r){ if(r.ok){ return r.json().then(function(d){ DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{},pools:d.pools||{},equipment_pools:d.equipment_pools||{},equipment_units:d.equipment_units||{},equipment_types:d.equipment_types||{},p2_grants:d.p2_grants||[]}; renderBoard(); markSync(true); startApp(); }); } else { showGate(''); } }).catch(function(){ showGate(''); }); }
   else { showGate(''); }
 })();
 </script>

@@ -1427,7 +1427,7 @@
     if(d.length>6) return d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6);
     if(d.length>3) return d.slice(0,3)+'-'+d.slice(3);
     return d; }
-  function p2ok(){ return RESV && normPeriod(RESV.period)==='4'; }   // only Period 4 (Photo 2A) may take Cam 16/17/18
+  function p2ok(){ return RESV && (normPeriod(RESV.period)==='4' || RESV.p2_ok===true); }   // Period 4 (Photo 2A), OR a student Mr. Silva granted Photo-2 access
   // Due date = the next SCHOOL day (weekend/holiday skipped). A blackout day is only closed to new
   // checkouts, NOT to returns, so a camera can still be due back / checked in on a closed day.
   function nextSchoolDay(iso){ var d=addDays(iso,1); for(var i=0;i<420 && !isSchoolDay(d);i++) d=addDays(d,1); return d; }
@@ -1460,7 +1460,7 @@
           var _who={silva:'Mr. Silva',garcia:'Ms. Garcia',mankin:'Ms. Mankin'}[LINK_POOL]||LINK_POOL;
           msg.innerHTML='<span style="color:#ffb28a">'+t('wrongLink').replace('{who}',_who)+'</span>'; return; }
         rvLookup={id:v,label:j.label,name:j.name||'',period:String(j.period||''),
-                  pool:j.pool||'silva',teacher:j.teacher||'',
+                  pool:j.pool||'silva',teacher:j.teacher||'',p2_ok:!!j.p2_ok,
                   student_cell:j.student_cell||'',parent_guardian:j.parent_guardian||'',parent_cell:j.parent_cell||''};
         showVerify();
       }).catch(function(){ msg.textContent=t('serverErr'); });
@@ -1487,7 +1487,7 @@
     if(!pg){ bad('rv-pg','needParentName'); return; }
     if(pcD.length!==10){ bad('rv-pc','needParentCell'); return; }
     sc=fmtPhone(scD); pc=fmtPhone(pcD);   // store a clean 10-digit dashed number (805-631-0001) in the database
-    RESV={id:L.id,label:L.label,period:L.period,pool:L.pool||'silva',teacher:L.teacher||''};
+    RESV={id:L.id,label:L.label,period:L.period,pool:L.pool||'silva',teacher:L.teacher||'',p2_ok:!!L.p2_ok};
     RV_TAB=(effPool()==='mankin')?'gear':'cameras';   // Mankin leads with the iPad styluses / gear tab
     var proceed=function(){
       closeReserveModal(); showBanner();
@@ -1527,7 +1527,10 @@
   function gearOrder(){ return effPool()==='mankin'
     ? ['apple_pencil','mankin_tripod','tripod','speedlite','wide','zoom','reflector']
     : ['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil']; }
-  function myCamPool(){ var p=effPool(); var a=(DATA.pools||{})[p]; return (a&&a.length)?a:(DATA.cameras||[]); }
+  function myCamPool(){ var p=effPool(); var a=(DATA.pools||{})[p]; var base=(a&&a.length)?a:(DATA.cameras||[]);
+    // A student Mr. Silva granted Photo-2 access can also reserve cams 16-18, on top of their pool.
+    if(RESV && RESV.p2_ok){ base=base.slice(); ['Cam 16','Cam 17','Cam 18'].forEach(function(c){ if(base.indexOf(c)<0 && (DATA.cameras||[]).indexOf(c)>=0) base.push(c); }); }
+    return base; }
   function myGearKeys(){ var p=effPool(); return ((DATA.equipment_pools||{})[p])||[]; }   // unit ids
   function gearOos(id){ return (DATA.equipment_oos||[]).indexOf(id)>=0; }
   // Per-unit, exactly like a camera: a unit is free on a day if it is not out of service and has no
