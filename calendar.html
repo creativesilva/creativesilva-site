@@ -945,7 +945,7 @@
     return last;
   }
   function checkoutsOnDay(iso){
-    return (DATA.checkouts||[]).filter(function(c){ if(c.kind==='equipment') return false; var last=effLast(c); return last && c.out && iso>=c.out && iso<=last; });
+    return (DATA.checkouts||[]).filter(function(c){ if(c.kind==='equipment') return false; if(!inShown(c.camera)) return false; var last=effLast(c); return last && c.out && iso>=c.out && iso<=last; });
   }
   // Accessories (equipment records) linked to a camera checkout, so the detail card can show + return them.
   var EQUIP_LABEL_CAL={tripod:'K&F Concept Tripod',wide:'Canon RF-S 10-18mm ultra-wide',zoom:'Canon RF 100-400mm ultra-zoom',speedlite:'Canon Speedlite EL-10 flash'};
@@ -1032,7 +1032,7 @@
     var startD=new Date(first); startD.setDate(1-first.getDay());
     var startISO=isoD(startD), curMonth=view.getMonth();
     var events=[];
-    (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment') return;
+    (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment') return; if(!inShown(c.camera)) return;
       if(statusOf(c)==='returned'){ if(!AUTHED || !c.out) return;   // teacher-only grayed history bars
         events.push({camera:c.camera, start:c.out, last:(c.returned_date||c.due||c.out), status:'returned'}); return; }
       var last=effLast(c); if(!last||!c.out) return;
@@ -1522,6 +1522,7 @@
   function effPool(){ return LINK_POOL||(RESV&&RESV.pool)||'silva'; }
   // Cameras shown in the overview grid: the link's pool when scoped, else the public set (01-18).
   function shownCams(){ if(LINK_POOL){ var a=(DATA.pools||{})[LINK_POOL]; if(a&&a.length) return a; } return (DATA.cameras||[]); }
+  function inShown(cam){ return shownCams().indexOf(cam)>=0; }   // is this camera part of the scoped pool?
   // Gear order: Ms. Mankin leads with the iPad styluses (her focus), everyone else keeps camera gear first.
   function gearOrder(){ return effPool()==='mankin'
     ? ['apple_pencil','mankin_tripod','tripod','speedlite','wide','zoom','reflector']
