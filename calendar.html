@@ -293,6 +293,12 @@
   .rv-changed input{width:16px;height:16px;accent-color:var(--teal);}
   .rv-btnrow{display:flex;gap:10px;margin-top:8px;}
   .rv-btnrow .qr-btn{flex:1 1 0;}
+  /* Teacher override: skip the mandatory contact fields with the teacher code (for quick checkouts). */
+  .rv-ovwrap{margin-top:12px;text-align:center;}
+  .rv-ovlink{background:none;border:0;color:var(--muted);font-family:var(--body);font-size:.78rem;letter-spacing:.04em;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:4px;}
+  .rv-ovlink:hover{color:var(--teal-lt);}
+  #rv-ovc{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1.05rem;padding:11px 12px;outline:none;box-sizing:border-box;margin-top:10px;}
+  .rv-ovhint{color:var(--muted);font-size:.78rem;line-height:1.45;margin:8px 0 0;text-align:left;}
   /* Reserve-flow forward action = framework orange #FF6B1A (framework: orange is the action color). */
   .rv-primary{background:#ff6b1a!important;color:#04110f!important;border-color:#ff6b1a!important;font-weight:700;padding:11px 18px!important;font-size:.78rem!important;}
   .rv-primary:hover{filter:brightness(1.08);}
@@ -539,6 +545,13 @@
           <button class="qr-btn" id="rv-back" type="button">Back</button>
           <button class="qr-btn rv-primary" id="rv-start" type="button">Start reserving &rarr;</button>
         </div>
+        <div class="rv-ovwrap">
+          <button type="button" class="rv-ovlink" id="rv-ovtoggle">Teacher override</button>
+          <div id="rv-ovrow" style="display:none;">
+            <input type="password" id="rv-ovc" inputmode="numeric" autocomplete="off" placeholder="Override code" />
+            <p class="rv-ovhint" id="rv-ovhint">Enter the teacher code, then tap Confirm and continue to log this without the contact fields.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -621,6 +634,7 @@
       step1:'Enter your student ID so we know it’s you.', step1lead:'Step 1 of 2.',
       idLabel:'Student ID number', idPh:'Student ID', cont:'Continue',
       verifyLead:'Make sure all three are correct before you reserve. Your cell, a parent or guardian name, and their cell are required to check out a camera, and phone numbers must be 10 digits.',
+      ovToggle:'Teacher override', ovHint:'Enter the teacher code, then tap Confirm and continue to log this without the contact fields.', ovBad:'That override code is not recognized.',
       yourCell:'Your cell phone', parentName:'Parent / guardian name', parentNamePh:'Parent or guardian',
       parentCell:'Parent / guardian cell', back:'Back', startReserving:'Confirm and continue',
       tabAvail:'Available', tabOut:'Checked out', tabRes:'Reserved', tabEquip:'Equipment', tabOverdue:'Overdue', tabReturned:'Returned',
@@ -682,6 +696,7 @@
       step1:'Escribe tu número de estudiante para saber que eres tú.', step1lead:'Paso 1 de 2.',
       idLabel:'Número de estudiante', idPh:'Número de estudiante', cont:'Continuar',
       verifyLead:'Asegúrate de que los tres datos estén correctos antes de reservar. Tu celular, el nombre de un padre o tutor y su celular son obligatorios para sacar una cámara, y los teléfonos deben tener 10 dígitos.',
+      ovToggle:'Anulación del maestro', ovHint:'Escribe el código del maestro y toca Confirmar y continuar para registrar esto sin los datos de contacto.', ovBad:'Ese código de anulación no es válido.',
       yourCell:'Tu celular', parentName:'Nombre del padre / tutor', parentNamePh:'Padre o tutor',
       parentCell:'Celular del padre / tutor', back:'Atrás', startReserving:'Confirmar y continuar',
       tabAvail:'Disponibles', tabOut:'Prestadas', tabRes:'Reservadas', tabEquip:'Equipo', tabOverdue:'Atrasadas', tabReturned:'Devueltas',
@@ -773,6 +788,7 @@
     var idf=document.getElementById('rv-id'); if(idf) idf.setAttribute('placeholder', t('idPh'));
     _setTxt('rv-continue', t('cont'));
     _setTxt('rvVerifyLead', t('verifyLead'));
+    _setTxt('rv-ovtoggle', t('ovToggle')); _setTxt('rv-ovhint', t('ovHint'));
     _setTxt('rvScLabel', t('yourCell'));
     _setTxt('rvPgLabel', t('parentName'));
     var pgf=document.getElementById('rv-pg'); if(pgf) pgf.setAttribute('placeholder', t('parentNamePh'));
@@ -1474,19 +1490,27 @@
     document.getElementById('rv-pc').value=fmtPhone(L.parent_cell||'');
     ['rv-sc','rv-pg','rv-pc'].forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.remove('rv-badfield'); });
     document.getElementById('rv-msg2').textContent='';
+    var _ovc=document.getElementById('rv-ovc'); if(_ovc) _ovc.value=''; var _ovr=document.getElementById('rv-ovrow'); if(_ovr) _ovr.style.display='none';   // reset the teacher override each student
     document.getElementById('rv-step1').style.display='none'; document.getElementById('rv-step1b').style.display='';
   }
   function rvStart(){
     var L=rvLookup, m2=document.getElementById('rv-msg2');
     var sc=document.getElementById('rv-sc').value.trim(), pg=document.getElementById('rv-pg').value.trim(), pc=document.getElementById('rv-pc').value.trim();
     var scD=sc.replace(/\D/g,''), pcD=pc.replace(/\D/g,'');
+    var ov=((document.getElementById('rv-ovc')||{}).value||'').trim();   // teacher override code
     ['rv-sc','rv-pg','rv-pc'].forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.remove('rv-badfield'); });
     function bad(id,key){ m2.textContent=t(key); var el=document.getElementById(id); if(el){ el.classList.add('rv-badfield'); try{ el.focus(); }catch(e){} } }
-    // All three are required to check out a camera, so we can reach the student or parent if gear goes missing.
-    if(scD.length!==10){ bad('rv-sc','needCell'); return; }
-    if(!pg){ bad('rv-pg','needParentName'); return; }
-    if(pcD.length!==10){ bad('rv-pc','needParentCell'); return; }
-    sc=fmtPhone(scD); pc=fmtPhone(pcD);   // store a clean 10-digit dashed number (805-631-0001) in the database
+    var OVERRIDE=false;
+    if(ov){
+      if(ov!=='331331'){ m2.textContent=t('ovBad'); return; }   // wrong code: do not proceed
+      OVERRIDE=true;   // teacher override: log the checkout without the mandatory contact fields
+    } else {
+      // All three are required to check out, so we can reach the student or parent if gear goes missing.
+      if(scD.length!==10){ bad('rv-sc','needCell'); return; }
+      if(!pg){ bad('rv-pg','needParentName'); return; }
+      if(pcD.length!==10){ bad('rv-pc','needParentCell'); return; }
+    }
+    sc=(scD.length===10)?fmtPhone(scD):'';  pc=(pcD.length===10)?fmtPhone(pcD):'';   // clean dashed numbers; blank if overriding without them
     RESV={id:L.id,label:L.label,period:L.period,pool:L.pool||'silva',teacher:L.teacher||'',p2_ok:!!L.p2_ok};
     RV_TAB=(effPool()==='mankin')?'gear':'cameras';   // Mankin leads with the iPad styluses / gear tab
     var proceed=function(){
@@ -1498,6 +1522,7 @@
         renderDayModal();
       }
     };
+    if(OVERRIDE){ proceed(); return; }   // teacher override: skip the contact save, log the checkout as-is
     // Save any corrections to the live database (overrides), then continue. Never block reserving on the save.
     var changed=(sc!==(L.student_cell||''))||(pg!==(L.parent_guardian||''))||(pc!==(L.parent_cell||''));
     if(!changed){ proceed(); return; }
@@ -1707,6 +1732,7 @@
     var idf=document.getElementById('rv-id'); if(idf) idf.addEventListener('keydown',function(e){ if(e.key==='Enter') rvContinue(); });
     var bk=document.getElementById('rv-back'); if(bk) bk.addEventListener('click',function(){ document.getElementById('rv-step1b').style.display='none'; document.getElementById('rv-step1').style.display=''; });
     var st=document.getElementById('rv-start'); if(st) st.addEventListener('click',rvStart);
+    var ovt=document.getElementById('rv-ovtoggle'); if(ovt) ovt.addEventListener('click',function(){ var row=document.getElementById('rv-ovrow'); if(!row) return; var show=(row.style.display==='none'); row.style.display=show?'':'none'; if(show){ var i=document.getElementById('rv-ovc'); if(i){ try{ i.focus(); }catch(e){} } } });
     ['rv-sc','rv-pc'].forEach(function(id){ var el=document.getElementById(id); if(el) el.addEventListener('input',function(){ el.value=fmtPhone(el.value); el.classList.remove('rv-badfield'); }); });
     var pgf2=document.getElementById('rv-pg'); if(pgf2) pgf2.addEventListener('input',function(){ pgf2.classList.remove('rv-badfield'); });
     var x=document.getElementById('rv-x'); if(x) x.addEventListener('click',closeReserveModal);
