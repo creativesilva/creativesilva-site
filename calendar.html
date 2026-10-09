@@ -371,8 +371,10 @@
   .cal-backbar.show{display:inline-flex;}
   body.embed .cal-backbar{display:none !important;}
   body.embed .silva-nav, body.embed .intro{display:none;}
-  /* embedded in the Teacher Console: show ONLY the month calendar (the console has its own board above) */
-  body.embed .summary, body.embed .h, body.embed #board, body.embed .cal-hero{display:none;}
+  /* embedded in the Teacher Console: show the live stock counters + the month calendar (the console has its own board above) */
+  body.embed .h, body.embed #board, body.embed .cal-hero{display:none;}
+  body.embed #legend{display:none;}            /* keep it to the two stock boxes (styluses + cameras), no color key */
+  body.embed .summary{margin:0 0 12px;}        /* the stock counters sit tight above the month grid in the console */
   body.embed .cal-monthacts{display:none;}   /* Reserve/QR are student actions; the console has its own */
   /* No own watermark/veil when embedded: the console page supplies the SINGLE background logo, and its
      .calpanel blurs it, so the embedded calendar is transparent and the one blurred logo shows through. */
