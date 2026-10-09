@@ -1516,6 +1516,11 @@
   function gearUnit(id){ return gearUnits()[id] || null; }
   function gearLabel(id){ var u=gearUnit(id); return u?u.label:id; }
   function gearKitItems(id){ var u=gearUnit(id); return (u&&u.kit)||[]; }
+  function gearHasKit(id){ return gearKitItems(id).length>0; }   // single-piece gear (iPad styluses) has no kit to rate
+  // Condition label for kit-less gear: only real problems (out of service / open issues), never a "kit" rating.
+  function gearCondLabelNoKit(id){ var a=assetOf(id); if(a.oos) return 'Out of service';
+    if(a.issues&&a.issues.length) return a.issues.length+' open issue'+(a.issues.length>1?'s':'');
+    return ''; }
   function gearKitMissing(id){ var items=gearKitItems(id); return ((assetOf(id).kit)||[]).filter(function(x){ return items.indexOf(x)>=0; }); }
   function gearKitPct(id){ var items=gearKitItems(id); if(!items.length) return null; var m=gearKitMissing(id).length; return Math.round((items.length-m)/items.length*100); }
   // One square thumbnail per TYPE, reused across that type's units. 400x400, hosted on the whitelisted
@@ -1542,6 +1547,7 @@
   function gearTile(id){
     var s=gearState(id), a=assetOf(id), c=gearActiveFor(id), u=gearUnit(id)||{};
     var p=gearKitPct(id), pcls=(p==null?'na':(p>=100?'':(p>=70?'mid':'low')));
+    var pctChip=gearHasKit(id)?('<span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span>'):'';   // kit-less gear: no rating chip
     var sub='';
     if(s==='out'||s==='overdue') sub=esc(nameOf(c))+' &middot; due '+fmt(c.due);
     else if(s==='resv') sub=esc(nameOf(c))+' &middot; pickup '+fmt(c.out);
@@ -1550,7 +1556,7 @@
     return '<button type="button" class="camtile gtile cs-'+s+'" data-geardetail="'+esc(id)+'">'+
       gearThumb(u.type)+
       '<span class="gtile-main">'+
-        '<span class="camtile-top"><span class="camtile-n">'+esc(u.label||id)+'</span><span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span></span>'+
+        '<span class="camtile-top"><span class="camtile-n">'+esc(u.label||id)+'</span>'+pctChip+'</span>'+
         '<span class="camtile-status">'+gearStateLabel(id,s)+'</span>'+
         '<span class="camtile-sub">'+sub+'</span>'+
       '</span>'+
@@ -1643,12 +1649,18 @@
     '</button>';
   }
   function manageGearTile(id){
-    var u=gearUnit(id)||{}, cond=gearCond(id), p=gearKitPct(id), pcls=(p==null?'na':(p>=100?'':(p>=70?'mid':'low')));
+    var u=gearUnit(id)||{}, cond=gearCond(id), hk=gearHasKit(id);
+    var p=gearKitPct(id), pcls=(p==null?'na':(p>=100?'':(p>=70?'mid':'low')));
+    // Kit-less gear (iPad styluses) carries no kit % chip and no "complete" kit rating: just the unit,
+    // flagged only if it is out of service or has an open issue.
+    var pctChip=hk?('<span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span>'):'';
+    var lbl=hk?gearCondLabel(id):gearCondLabelNoKit(id);
+    var statusHtml=lbl?('<span class="camtile-status mt-cond">'+lbl+'</span>'):'';
     return '<button type="button" class="camtile gtile mt-'+cond+'" data-geardetail="'+esc(id)+'">'+
       gearThumb(u.type)+
       '<span class="gtile-main">'+
-        '<span class="camtile-top"><span class="camtile-n">'+esc(u.label||id)+'</span><span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span></span>'+
-        '<span class="camtile-status mt-cond">'+gearCondLabel(id)+'</span>'+
+        '<span class="camtile-top"><span class="camtile-n">'+esc(u.label||id)+'</span>'+pctChip+'</span>'+
+        statusHtml+
       '</span>'+
     '</button>';
   }
@@ -2286,14 +2298,15 @@
       // Available unit: check it out to a student on its own (no camera needed).
       h+='<div class="cd-cur"><div class="cd-cur-acts"><button class="btn sm" id="gd-checkout">Check out to a student</button></div></div>';
     }
-    h+='<div class="cd-sec"><div class="cd-h">Kit contents'+(items.length?(' <span class="cd-tabscore '+kitScoreCls(kpct)+'">'+kpct+'%</span>'):'')+'</div>';
+    // Kit contents section only for gear that actually HAS a kit; single-piece units (iPad styluses) skip it.
     if(items.length){
+      h+='<div class="cd-sec"><div class="cd-h">Kit contents <span class="cd-tabscore '+kitScoreCls(kpct)+'">'+kpct+'%</span></div>';
       h+='<div class="kit-note">Toggle an item to <b>Missing</b> if it is not with this unit.</div><div class="kit-list">'+
         items.map(function(it){ var mm=miss.indexOf(it)>=0;
           return '<div class="kit-row'+(mm?' missing':'')+'"><span class="kit-name">'+esc(it)+'</span><button type="button" class="kit-sw'+(mm?' missing':'')+'" data-gkititem="'+esc(it)+'" aria-pressed="'+(mm?'false':'true')+'"><span class="kit-sw-track"><span class="kit-sw-knob"></span></span><span class="kit-sw-lab">'+(mm?'Missing':'In kit')+'</span></button></div>';
         }).join('')+'</div>';
-    } else { h+='<div class="cd-empty">No kit list for this unit.</div>'; }
-    h+='</div>';
+      h+='</div>';
+    }
     h+='<div class="cd-sec"><div class="cd-h">Open condition issues</div>';
     h+=issues.length?('<div class="cd-issues">'+issues.map(function(it,i){ return '<div class="cd-issue"><span>'+esc(it)+'</span><button class="btn sm" data-gresolve="'+i+'">Resolved</button></div>'; }).join('')+'</div>'):'<div class="cd-empty">No open issues.</div>';
     h+='<div class="cd-add"><input type="text" id="gd-newissue" placeholder="Add an issue (e.g. wobbly leg lock)"><button class="btn sm" id="gd-addissue">Add</button></div></div>';

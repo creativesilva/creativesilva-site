@@ -459,13 +459,14 @@
   </div>
 
   <div class="intro">
-    <p class="sub" id="introSub">See which cameras are out and when they are due back before you ask. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.</p>
+    <p class="sub" id="introSub">See which cameras are out and when they are due back. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.</p>
   </div>
 
   <div class="rv-banner" id="rvBanner" style="display:none;"></div>
 
   <div class="summary">
-    <div><span class="big" id="outn">0</span> <span class="lab"><span id="lab-of">of</span> <span id="totn">0</span> <span id="lab-avail">cameras available</span></span></div>
+    <div id="sumPencils" style="display:none;"><span class="big" id="penAvail">0</span> <span class="lab"><span id="lab-pof">of</span> <span id="penTot">0</span> <span id="lab-penavail">iPad styluses available</span></span></div>
+    <div id="sumCams"><span class="big" id="outn">0</span> <span class="lab"><span id="lab-of">of</span> <span id="totn">0</span> <span id="lab-avail">cameras available</span></span></div>
     <div class="legend" id="legend"><span><i class="k-res"></i>Reserved</span><span><i class="k-out"></i>Checked out</span></div>
   </div>
 
@@ -618,11 +619,11 @@
     es:['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'] };
   var TR={
     en:{
-      intro:'See which cameras are out and when they are due back before you ask. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.',
+      intro:'See which cameras are out and when they are due back. Cam 16, 17 and 18 are Photography 2 only. Updates automatically.',
       heroEyebrow:'Pioneer Valley Photography', heroTitle:'Equipment Reservations',
       heroSub:'Reserve a camera kit or gear. Tap a day to begin.',
       docTitle:'Equipment Reservations | Pioneer Valley Photography',
-      availSuffix:'cameras available', of:'of', reserved:'Reserved', checkedOut:'Checked out',
+      availSuffix:'cameras available', availStylus:'iPad styluses available', gearOosTag:'out of service', of:'of', reserved:'Reserved', checkedOut:'Checked out',
       checkedNow:'Checked out right now',
       checkedOnDay:'Checked out on {d}', showNow:'Show now', noneThatDay:'No cameras checked out that day.',
       reserveOnDay:'Reserve equipment for {d}', reserveOnDaySub:'Tap Reserve, then pick your equipment for this day.', loading:'Loading…',
@@ -637,7 +638,7 @@
       ovToggle:'Teacher override', ovHint:'Enter the teacher code, then tap Confirm and continue to log this without the contact fields.', ovBad:'That override code is not recognized.',
       yourCell:'Your cell phone', parentName:'Parent / guardian name', parentNamePh:'Parent or guardian',
       parentCell:'Parent / guardian cell', back:'Back', startReserving:'Confirm and continue',
-      tabAvail:'Available', tabOut:'Checked out', tabRes:'Reserved', tabEquip:'Equipment', tabOverdue:'Overdue', tabReturned:'Returned',
+      tabAvail:'Available', tabOut:'Checked out', tabRes:'Reserved', tabEquip:'Equipment', tabStyluses:'iPad Styluses', tabOverdue:'Overdue', tabReturned:'Returned',
       emptyReturned:'Nothing returned this day.', emptyOverdue:'Nothing overdue.',
       emptyRes:'No reservations this day.', emptyOut:'No cameras checked out this day.',
       emptyAvail:'No cameras free this day.', cardMissing:'memory card missing',
@@ -662,7 +663,7 @@
       doneTitle:'Reserved', reservedYou:'You’re reserved.', takeLook:'Take a quick look, then tap Done.',
       sumReservedFor:'Reserved for', sumCamera:'Camera', sumPickUp:'Pick up', sumDueBack:'Due back', sumGear:'Extra gear',
       justKit:'Just the kit, no extra gear',
-      doneSub:'See Mr. Silva to pick it up on a school day. Your reservation is pending until your teacher confirms the kit is available.',
+      doneSub:'Pick it up from your teacher on your reserved day, then return it by the due date.',
       doneBtn:'Done', period:'Period',
       updated:'Updated', refreshes:'Refreshes automatically.', loadErr:'Could not load the calendar. It will keep trying.',
       reloadMsg:'This screen did not load right. Tap reload and try again.', reload:'Reload',
@@ -680,11 +681,11 @@
       gearLine:'Pick this item up from Mr. Silva on your reserved day, then return it by the due date.'
     },
     es:{
-      intro:'Mira qué cámaras están prestadas y cuándo se deben devolver antes de preguntar. Las cámaras 16, 17 y 18 son solo para Fotografía 2. Se actualiza automáticamente.',
+      intro:'Mira qué cámaras están prestadas y cuándo se deben devolver. Las cámaras 16, 17 y 18 son solo para Fotografía 2. Se actualiza automáticamente.',
       heroEyebrow:'Fotografía de Pioneer Valley', heroTitle:'Reservaciones de Equipo',
       heroSub:'Reserva un kit de cámara o equipo. Toca un día para empezar.',
       docTitle:'Reservaciones de Equipo | Fotografía de Pioneer Valley',
-      availSuffix:'cámaras disponibles', of:'de', reserved:'Reservada', checkedOut:'Prestada',
+      availSuffix:'cámaras disponibles', availStylus:'lápices iPad disponibles', gearOosTag:'fuera de servicio', of:'de', reserved:'Reservada', checkedOut:'Prestada',
       checkedNow:'Prestadas ahora mismo',
       checkedOnDay:'Prestadas el {d}', showNow:'Ver ahora', noneThatDay:'No hay c&aacute;maras prestadas ese d&iacute;a.',
       reserveOnDay:'Reserva equipo para el {d}', reserveOnDaySub:'Toca Reservar y elige tu equipo para este d&iacute;a.', loading:'Cargando…',
@@ -699,7 +700,7 @@
       ovToggle:'Anulación del maestro', ovHint:'Escribe el código del maestro y toca Confirmar y continuar para registrar esto sin los datos de contacto.', ovBad:'Ese código de anulación no es válido.',
       yourCell:'Tu celular', parentName:'Nombre del padre / tutor', parentNamePh:'Padre o tutor',
       parentCell:'Celular del padre / tutor', back:'Atrás', startReserving:'Confirmar y continuar',
-      tabAvail:'Disponibles', tabOut:'Prestadas', tabRes:'Reservadas', tabEquip:'Equipo', tabOverdue:'Atrasadas', tabReturned:'Devueltas',
+      tabAvail:'Disponibles', tabOut:'Prestadas', tabRes:'Reservadas', tabEquip:'Equipo', tabStyluses:'Lápices iPad', tabOverdue:'Atrasadas', tabReturned:'Devueltas',
       emptyReturned:'No se devolvió nada este día.', emptyOverdue:'Nada atrasado.',
       emptyRes:'No hay reservas este día.', emptyOut:'No hay cámaras prestadas este día.',
       emptyAvail:'No hay cámaras libres este día.', cardMissing:'falta tarjeta de memoria',
@@ -724,7 +725,7 @@
       doneTitle:'Reservada', reservedYou:'¡Estás reservada!', takeLook:'Revisa rápido y luego toca Listo.',
       sumReservedFor:'Reservada para', sumCamera:'Cámara', sumPickUp:'Recoger', sumDueBack:'Devolver', sumGear:'Equipo extra',
       justKit:'Solo el kit, sin equipo extra',
-      doneSub:'Habla con el Sr. Silva para recogerla en un día de clases. Tu reserva queda pendiente hasta que tu maestro confirme que el kit está disponible.',
+      doneSub:'Recoge el equipo con tu maestro el día de tu reserva y devuélvelo antes de la fecha límite.',
       doneBtn:'Listo', period:'Período',
       updated:'Actualizado', refreshes:'Se actualiza automáticamente.', loadErr:'No se pudo cargar el calendario. Seguirá intentando.',
       reloadMsg:'Esta pantalla no cargó bien. Toca recargar e inténtalo de nuevo.', reload:'Recargar',
@@ -774,6 +775,7 @@
     syncNavTitle();
     _setTxt('introSub', t('intro'));
     _setTxt('lab-of', t('of')); _setTxt('lab-avail', t('availSuffix'));
+    _setTxt('lab-pof', t('of')); _setTxt('lab-penavail', t('availStylus'));
     _setHtml('legend', '<span><i class="k-res"></i>'+t('reserved')+'</span><span><i class="k-out"></i>'+t('checkedOut')+'</span>');
     if(!SEL_DAY) _setTxt('boardH', t('checkedNow'));
     _setTxt('boardLoading', t('loading'));
@@ -914,6 +916,20 @@
     var active=activeByCam(); var cams=shownCams();
     var outCams=cams.filter(function(c){ return active[c]; });
     outn.textContent=(cams.length-outCams.length); totn.textContent=cams.length;
+    // Mankin leads with the iPad styluses (her most-reserved item), so her hero shows TWO live counters:
+    // styluses available first, then cameras. Only this teacher's link flips it on; everyone else keeps
+    // the single camera counter.
+    var _sp=document.getElementById('sumPencils');
+    if(_sp){
+      if(effPool()==='mankin'){
+        var _tI=todayISO();
+        var _pen=myGearKeys().filter(function(k){ return (gearDef(k).type)==='apple_pencil'; });
+        var _penAv=_pen.filter(function(k){ return gearAvailOnDay(k,_tI)>0; }).length;
+        var _pa=document.getElementById('penAvail'), _pt=document.getElementById('penTot');
+        if(_pa) _pa.textContent=_penAv; if(_pt) _pt.textContent=_pen.length;
+        _sp.style.display='';
+      } else { _sp.style.display='none'; }
+    }
     // Only rebuild the (frosted-glass) board cards when their inputs actually changed. Rebuilding
     // every 60s poll re-composites the blur over the fixed CS-logo watermark = a visible flicker.
     var bsig=SEL_DAY
@@ -1041,6 +1057,7 @@
     // not re-composite the frosted day cells over the fixed CS-logo watermark (the background flicker).
     var csig=JSON.stringify({m:view.getFullYear()+'-'+view.getMonth(),lang:LANG,sel:SEL_DAY,auth:AUTHED,today:todayISO(),
       ev:(DATA.checkouts||[]).filter(function(c){return c.kind!=='equipment';}).map(function(c){return c.camera+'|'+c.out+'|'+c.due+'|'+(c.returned_date||'')+'|'+statusOf(c);}).sort(),
+      eq:(DATA.equipment||[]).map(function(c){return (c.item||'')+'|'+(c.out||'')+'|'+(c.due||'')+'|'+(c.returned_date||'')+'|'+(c.status||'');}).sort(),
       bo:(DATA.blackouts||[]).slice().sort()});
     if(csig===_calSig && grid.children.length) return;
     _calSig=csig;
@@ -1054,6 +1071,15 @@
       var last=effLast(c); if(!last||!c.out) return;
       events.push({camera:c.camera, start:c.out, last:last, status:statusOf(c),
         overdue:(statusOf(c)==='out' && c.due && c.due<todayISO())}); });
+    // Scoped gear reservations (pencils, tripods, lenses) show as bars too, so a reserved item
+    // populates the grid exactly like a camera. Scoped to this link's pool via myGearKeys().
+    var _gk=myGearKeys();
+    (DATA.equipment||[]).forEach(function(c){ if(!c.item || _gk.indexOf(c.item)<0 || !c.out) return;
+      if(c.returned){ if(!AUTHED) return;   // teacher-only grayed history bars
+        events.push({camera:gearLabel(c.item), start:c.out, last:(c.returned_date||c.due||c.out), status:'returned', gear:true}); return; }
+      var gst=c.status||'reserved', glast=c.due||c.out;
+      events.push({camera:gearLabel(c.item), start:c.out, last:glast, status:gst,
+        overdue:(gst==='out' && c.due && c.due<todayISO()), gear:true}); });
     grid.innerHTML='';
     var MAXLANE=4;   // show up to 4 camera bars per day, then "+N more" opens the day card
     for(var w=0; w<6; w++){
@@ -1168,7 +1194,7 @@
     // number FIRST (the gate) and shows no equipment until verified. No slide-in banner.
     if(day>=todayISO() && isOpenDay(day)) openReserveFlow(day);
   }
-  function openDayModal(iso){ DM_DAY=iso; DM_TAB='available'; DM_CAM=null; DM_RESERVE_CAM=null; DM_DONE=false; renderDayModal(); document.getElementById('daymodal').classList.add('open');
+  function openDayModal(iso){ DM_DAY=iso; DM_TAB=(effPool()==='mankin'?'equip':'available'); DM_CAM=null; DM_RESERVE_CAM=null; DM_DONE=false; renderDayModal(); document.getElementById('daymodal').classList.add('open');
     if(window.parent!==window){ try{ parent.postMessage({daySelected:iso}, '*'); }catch(e){} } }
   // A camera bar for the day card: chevron on the LEFT if it came in before this day,
   // chevron on the RIGHT if it stays out after this day (shows coming / going that day).
@@ -1200,13 +1226,21 @@
     if(DM_CAM){ renderCamDetail(iso, DM_CAM); return; }
     var out=dayOut(iso), res=dayReserved(iso), avail=dayAvailable(iso), od=overdueAll(), ret=dayReturned(iso);
     var gearKeys=myGearKeys().filter(function(k){ return gearAvailOnDay(k,iso)>0; });   // additional gear (tripods, speedlites, lenses, reflectors) free that day
+    var isMankinDay=(effPool()==='mankin');
+    var gearAll=myGearKeys();                                                           // every scoped unit, for the full per-day picture
+    var gearBooked=gearAll.filter(function(k){ return !!gearBookingOnDay(k,iso); });    // reserved / checked out that day
     if(DM_TAB==='overdue' && !od.length) DM_TAB='available';
     if(DM_TAB==='returned' && !ret.length) DM_TAB='available';
-    if(DM_TAB==='equip' && !gearKeys.length) DM_TAB='available';
+    if(DM_TAB==='equip' && !gearKeys.length && !gearBooked.length) DM_TAB='available';  // nothing to show on the gear tab
     document.getElementById('dm-title').textContent=prettyDate(iso);
-    // Order everywhere: Available, then Checked out, then Reserved (Overdue + teacher Returned last).
-    var tabs=dmTab('available',t('tabAvail'),avail.length)+dmTab('out',t('tabOut'),out.length)+dmTab('reserved',t('tabRes'),res.length);
-    if(gearKeys.length) tabs+=dmTab('equip',t('tabEquip'),gearKeys.length);
+    // Order: Mankin leads with her iPad styluses; the photo teachers lead with cameras, gear after.
+    var tabs='';
+    if(isMankinDay){
+      tabs+=dmTab('equip',t('tabStyluses'),gearKeys.length)+dmTab('available',t('tabAvail'),avail.length)+dmTab('out',t('tabOut'),out.length)+dmTab('reserved',t('tabRes'),res.length);
+    } else {
+      tabs+=dmTab('available',t('tabAvail'),avail.length)+dmTab('out',t('tabOut'),out.length)+dmTab('reserved',t('tabRes'),res.length);
+      if(gearKeys.length) tabs+=dmTab('equip',t('tabEquip'),gearKeys.length);
+    }
     if(od.length) tabs+=dmTab('overdue',t('tabOverdue'),od.length);
     if(ret.length) tabs+=dmTab('returned',t('tabReturned'),ret.length);
     document.getElementById('dm-tabs').innerHTML=tabs;
@@ -1220,11 +1254,20 @@
     } else if(DM_TAB==='out'){
       body=out.length?out.map(function(c){ var odt=(c.due&&c.due<todayISO())?'<span class="dm-tag od">'+t('tabOverdue')+'</span>':''; return '<div class="dm-row clickable" data-cam="'+esc(c.camera)+'">'+dmBar(c,iso)+'<span class="dm-range">'+t('pickedUp')+' '+fmt(c.out)+' &rarr; '+t('due')+' '+fmt(c.due)+'</span><span class="dm-course">'+camCourse(c.camera)+'</span>'+odt+chev+'</div>'; }).join(''):'<div class="dm-empty">'+t('emptyOut')+'</div>';
     } else if(DM_TAB==='equip'){
-      var gByType={}; gearKeys.forEach(function(id){ var ty=gearDef(id).type||'other'; (gByType[ty]=gByType[ty]||[]).push(id); });
+      // Full per-day gear picture: available units are teal + tappable to reserve; reserved / checked-out
+      // units show amber with a tag (so a reservation visibly populates the day); out-of-service is gray.
+      var gByType={}; gearAll.forEach(function(id){ var ty=gearDef(id).type||'other'; (gByType[ty]=gByType[ty]||[]).push(id); });
       var gOrder=gearOrder();
       Object.keys(gByType).forEach(function(ty){ if(gOrder.indexOf(ty)<0) gOrder.push(ty); });
+      var canRsv=(iso>=todayISO() && isOpenDay(iso));
       var gHtml=''; gOrder.forEach(function(ty){ var ids=gByType[ty]; if(!ids||!ids.length) return;
-        gHtml+='<div class="rc-extra-grp">'+esc(((DATA.equipment_types||{})[ty]||{}).label||ty)+'</div><div class="dm-avail">'+ids.map(function(id){ return '<span class="dm-availcam resv clickable" data-rgear="'+esc(id)+'">'+esc(gearLabel(id))+'</span>'; }).join('')+'</div>'; });
+        var cells=ids.map(function(id){
+          if(gearOos(id)) return '<span class="dm-availcam nocard">'+esc(gearLabel(id))+'<small>'+t('gearOosTag')+'</small></span>';
+          var bk=gearBookingOnDay(id,iso);
+          if(bk){ var tg=(bk.status==='out')?t('outWord'):t('reservedWord'); return '<span class="dm-availcam kitwarn">'+esc(gearLabel(id))+'<small>'+tg+'</small></span>'; }
+          return '<span class="dm-availcam resv'+(canRsv?' clickable':'')+'"'+(canRsv?(' data-rgear="'+esc(id)+'"'):'')+'>'+esc(gearLabel(id))+'</span>';
+        }).join('');
+        gHtml+='<div class="rc-extra-grp">'+esc(((DATA.equipment_types||{})[ty]||{}).label||ty)+'</div><div class="dm-avail">'+cells+'</div>'; });
       body=gHtml||'<div class="dm-empty">'+t('emptyAvail')+'</div>';
     } else {
       var nc=dayNoCard(iso);
@@ -1561,6 +1604,8 @@
   // Per-unit, exactly like a camera: a unit is free on a day if it is not out of service and has no
   // non-returned reservation overlapping that day.
   function gearBookedOnDay(id,iso){ var busy=false; (DATA.equipment||[]).forEach(function(c){ if(c.item!==id||c.returned) return; var last=c.due||c.out; if(c.out&&last&&iso>=c.out&&iso<=last) busy=true; }); return busy; }
+  // The booking record (reserved / out) for a unit on a day, so the day card can tag it, not just hide it.
+  function gearBookingOnDay(id,iso){ var r=null; (DATA.equipment||[]).forEach(function(c){ if(c.item!==id||c.returned) return; var last=c.due||c.out; if(c.out&&last&&iso>=c.out&&iso<=last) r=c; }); return r; }
   function gearAvailOnDay(id,iso){ return (!gearOos(id) && !gearBookedOnDay(id,iso)) ? 1 : 0; }
   function rvTab(id,label,n){ return '<button type="button" class="dm-tab'+(RV_TAB===id?' active':'')+'" data-rvtab="'+id+'">'+label+' <span class="dm-tabn">'+n+'</span></button>'; }
   function renderReserveDay(iso){
@@ -1611,7 +1656,6 @@
       '<div class="rc-item">'+esc(gearLabel(key))+'</div>'+
       '<div class="rc-dates">'+t('pickUp')+' '+fmt(iso)+' &rarr; '+t('dueBack')+' '+fmt(due)+'</div>'+
       '<div class="rc-kit">'+t('gearLine')+'</div>'+
-      '<div class="rc-disc">'+t('disc')+'</div>'+
       '<div class="rc-msg" id="rc-msg"></div>'+
       '<div class="rc-btnrow"><button type="button" class="dc-btn ghost" id="rc-back">'+t('back')+'</button><button type="button" class="dc-btn rv-primary" id="rc-go">'+t('confirmBtn')+'</button></div>';
     setResvBody(body);
@@ -1634,7 +1678,6 @@
             return out; })()+
         '</div>'+
       '</details>'):'')+
-      '<div class="rc-disc">'+t('disc')+'</div>'+
       '<div class="rc-msg" id="rc-msg"></div>'+
       '<div class="rc-btnrow"><button type="button" class="dc-btn ghost" id="rc-back">'+t('back')+'</button><button type="button" class="dc-btn rv-primary" id="rc-go">'+t('confirmBtn')+'</button></div>';
     setResvBody(body);
