@@ -1811,7 +1811,12 @@
       DATA.equipment_pools=d.equipment_pools||{}; // {silva:[unit ids], ...}
       DATA.equipment_units=d.equipment_units||{}; // {unit id:{type,label,pool,kit}}
       DATA.equipment_types=d.equipment_types||{}; // {type:{label,unit}} for grouping headers
-      DATA.equipment=d.equipment||[];             // sanitized gear reservation records {item(unit id),out,due,returned,status}
+      // Gear reservation records {item(unit id),out,due,returned,status}. The public feed sends them as
+      // `equipment`; the authed console feed sends them mixed into `checkouts` (kind='equipment'), so
+      // derive them there. Without this the AUTHED (console) calendar draws no gear bars (Mankin bug).
+      DATA.equipment=(d.equipment&&d.equipment.length)?d.equipment
+        :(d.checkouts||[]).filter(function(c){return c.kind==='equipment';}).map(function(c){
+            var st=statusOf(c); return {id:c.id,item:c.item,out:c.out,due:c.due,returned:(st==='returned'),returned_date:c.returned_date||'',status:st}; });
       DATA.equipment_oos=d.equipment_oos||[];     // unit ids out of service
       renderBoard(); renderCal();
       // The 60s auto-refresh must NOT clobber a student mid-reservation (verify -> pick -> confirm ->
