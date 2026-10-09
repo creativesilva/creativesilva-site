@@ -1584,7 +1584,7 @@
   // Collapsed-by-default (LOCKED global rule): the top-level hubs (Reservation Activity, Manage Equipment,
   // Additional Equipment, Wallet) ship closed for a clean console; the ra-* sub-accordions (Checked out /
   // Reserved / Returned) open once their hub is opened. A stored choice always wins.
-  function secOpen(k){ try{ var v=sessionStorage.getItem('csec:'+k); if(v!==null) return v==='1'; }catch(e){} return /^ra-/.test(k); }
+  function secOpen(k){ try{ var v=sessionStorage.getItem('csec:'+k); if(v!==null) return v==='1'; }catch(e){} return /^ra-/.test(k) || k==='mkpencils'; }  // Mankin's iPad-stylus section leads open
   function setSecOpen(k,o){ try{ sessionStorage.setItem('csec:'+k,o?'1':'0'); }catch(e){} }
   function catOf(cam){ var c=activeFor(cam); if(!c) return isOOS(cam)?'oos':(isNoCard(cam)?'nocard':'avail'); return statusOf(c)==='reserved'?'reserved':'out'; }
 
@@ -1722,8 +1722,35 @@
       '<button class="csec-head" type="button" data-sectoggle="equip"><span class="csec-dot equip"></span>Additional equipment <span class="csec-n">'+gpool.length+' units</span><span class="csec-chev"></span></button>'+
       '<div class="csec-body">'+(gearHtml||'<div class="foot">No equipment units yet.</div>')+'</div>'+
     '</div>';
-    // Mankin leads with her gear (iPad styluses first); the photo teachers lead with the camera grid.
-    var mbody=(SELECTED_POOL==='mankin')?(equipSection+mgrid):(mgrid+equipSection);
+    // Mankin's board is three ordered sections: iPad styluses (expanded) -> Cameras (compressed) ->
+    // Additional equipment. The photo teachers keep the camera grid first, then their gear.
+    var mbody;
+    if(SELECTED_POOL==='mankin'){
+      var pIds=gByType['apple_pencil']||[];
+      var pLab=(gtypes['apple_pencil']&&gtypes['apple_pencil'].label)||'iPad Stylus';
+      var pTitle=pLab+(/s$/i.test(pLab)?'es':'s');
+      var pencilsSection='<div class="csec sec-equip'+(secOpen('mkpencils')?' open':'')+'">'+
+        '<button class="csec-head" type="button" data-sectoggle="mkpencils"><span class="csec-dot equip"></span>'+esc(pTitle)+' <span class="csec-n">'+pIds.length+' units</span><span class="csec-chev"></span></button>'+
+        '<div class="csec-body"><div class="camgrid">'+(pIds.length?pIds.map(manageGearTile).join(''):'<div class="foot">None yet.</div>')+'</div></div>'+
+      '</div>';
+      var camsSection='<div class="csec sec-equip'+(secOpen('mkcams')?' open':'')+'">'+
+        '<button class="csec-head" type="button" data-sectoggle="mkcams"><span class="csec-dot equip"></span>Cameras <span class="csec-n">'+mcams.length+'</span><span class="csec-chev"></span></button>'+
+        '<div class="csec-body">'+mgrid+'</div>'+
+      '</div>';
+      var restHtml='';
+      gOrder.forEach(function(t){ if(t==='apple_pencil') return; var ids=gByType[t]; if(!ids||!ids.length) return;
+        var tl=(gtypes[t]&&gtypes[t].label)||t;
+        restHtml+='<div class="geargroup"><div class="geargroup-h">'+esc(tl)+'<span class="geargroup-n">'+ids.length+'</span></div>'+
+          '<div class="camgrid">'+ids.map(manageGearTile).join('')+'</div></div>';
+      });
+      var addlSection='<div class="csec sec-equip'+(eopen?' open':'')+'">'+
+        '<button class="csec-head" type="button" data-sectoggle="equip"><span class="csec-dot equip"></span>Additional equipment <span class="csec-n">'+(gpool.length-pIds.length)+' units</span><span class="csec-chev"></span></button>'+
+        '<div class="csec-body">'+(restHtml||'<div class="foot">No equipment units yet.</div>')+'</div>'+
+      '</div>';
+      mbody=pencilsSection+camsSection+addlSection;
+    } else {
+      mbody=mgrid+equipSection;
+    }
     var mOpen=secOpen('manage');
     var manageHtml='<div class="camhub manage-hub'+(mOpen?' open':'')+'">'+
       '<div class="camhub-head" data-sectoggle="manage">'+
