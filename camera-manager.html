@@ -1188,7 +1188,13 @@
     var mk=(DATA.pools||{}).mankin||[], mg=(DATA.equipment_pools||{}).mankin||[];
     return c.kind==='equipment' ? (mg.indexOf(c.item)>=0) : (mk.indexOf(c.camera)>=0);
   }
-  function resvInScope(c){ return SELECTED_POOL==='mankin' ? resvIsMankin(c) : !resvIsMankin(c); }
+  // Each teacher's Reservation Activity + calendar is scoped to THEIR OWN pool: Silva 01-18, Garcia
+  // 01-15 (no Photo-2 16-18), Mankin 19-21 + her gear. So Garcia never sees the Photo-2 clutter and
+  // Mankin only ever sees her own students' reservations.
+  function resvInScope(c){
+    var pc=(DATA.pools||{})[SELECTED_POOL]||[], pg=(DATA.equipment_pools||{})[SELECTED_POOL]||[];
+    return c.kind==='equipment' ? (pg.indexOf(c.item)>=0) : (pc.indexOf(c.camera)>=0);
+  }
   // Reservation key: the SAME student with the SAME checkout and return dates is ONE reservation,
   // however many cameras and gear units it holds. (The group field still links add-on gear to its
   // camera for the kit return checklist.) Falls back to camera + linked gear when a record is
