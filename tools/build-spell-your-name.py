@@ -32,6 +32,7 @@ HAVE_S2_FLOAT=False     # Step 02 capture float
 HAVE_S3_FLOAT=False     # Step 03 CULL card float (not supplied yet)
 HAVE_S3_EDIT_FLOAT=True # Step 03 EDIT card float (Lightroom editing), edit-float-v1.jpg
 HAVE_S4_FLOAT=False     # Step 04 reflection float
+HAVE_S5_FLOAT=True      # Step 05 collage float (Photoshop with a finished name), collage-float-v1.jpg
 
 # RAW capture panel with a daylight starting point; the lead + note make clear that any settings
 # are fair game in Manual (this assignment is about seeing letters, not a fixed exposure recipe).
@@ -123,6 +124,7 @@ def build(course):
     S3_FLOAT=f"{IMGDIR}/cull-float-v1.jpg"
     S3_EDIT_FLOAT=f"{IMGDIR}/edit-float-v1.jpg"
     S4_FLOAT=f"{IMGDIR}/reflection-float-v1.jpg"
+    S5_FLOAT=f"{IMGDIR}/collage-float-v1.jpg"
     REFLECT_EN=f"{SITE}/assets/course-documents/Spell-Your-Name{PHOTO2TAG}-Reflection-EN.docx"
     REFLECT_ES=f"{SITE}/assets/course-documents/Spell-Your-Name{PHOTO2TAG}-Reflection-ES.docx"
     OVER=f"{course}-spell-your-name-overview.html"
@@ -429,7 +431,8 @@ def build(course):
     def step05():
         en=banner(f"Module {MODNUM} &bull; Step 05","Spell Your Name as One Collage","Open Photoshop for the first time and place your letters into one template to spell your name.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
         en+=card("STEP 05 / BUILD IT IN PHOTOSHOP","Put Your Letters Together",
-            para("Now put it all together. You will open <strong>Photoshop</strong> for the first time and build one finished piece: your letters placed in a row that spells your name.")
+            (float_right(S5_FLOAT,"Adobe Photoshop open with the name RENEE spelled out in the collage template: five found-letter photos in a row over a starry background, with the layers listed on the right","What you are building: your letters placed in the template to spell your name.") if HAVE_S5_FLOAT else "")
+            + para("Now put it all together. You will open <strong>Photoshop</strong> for the first time and build one finished piece: your letters placed in a row that spells your name.")
             + para("This is your first time in Photoshop, so go slow. This page walks you through every click. If you make a mistake, press <strong>Cmd</strong> + <strong>Z</strong> to undo it.")
             + note("You already made your letters in Step 03. Here you just place them into one template and spell your name. You do not take any new photos."))
         en+=deliverables_box(False,
@@ -485,7 +488,8 @@ def build(course):
 
         es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 05","Escribe Tu Nombre en un Collage","Abre Photoshop por primera vez y coloca tus letras en una plantilla para escribir tu nombre.","#top","Back to English", HICON_DESIGN)
         es+=card("PASO 05 / H&Aacute;ZLO EN PHOTOSHOP","Junta Tus Letras",
-            para("Ahora junta todo. Abrirás <strong>Photoshop</strong> por primera vez y crearás una pieza terminada: tus letras en fila que escriben tu nombre.")
+            (float_right(S5_FLOAT,"Adobe Photoshop abierto con el nombre RENEE escrito en la plantilla del collage: cinco fotos de letras en fila sobre un fondo de estrellas, con las capas a la derecha","Lo que vas a crear: tus letras colocadas en la plantilla para escribir tu nombre.") if HAVE_S5_FLOAT else "")
+            + para("Ahora junta todo. Abrirás <strong>Photoshop</strong> por primera vez y crearás una pieza terminada: tus letras en fila que escriben tu nombre.")
             + para("Es tu primera vez en Photoshop, así que ve despacio. Esta página te guía en cada clic. Si te equivocas, presiona <strong>Cmd</strong> + <strong>Z</strong> para deshacer.")
             + note("Ya hiciste tus letras en el Paso 03. Aquí solo las colocas en una plantilla y escribes tu nombre. No tomas fotos nuevas."))
         es+=deliverables_box(True,
