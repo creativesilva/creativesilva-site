@@ -809,7 +809,7 @@
   <div id="overdueDigest" style="display:none;"></div>
   <div id="pendingDigest" style="display:none;"></div>
 
-  <details class="cbox" id="calbox" open>
+  <details class="cbox" id="calbox">
     <summary class="cbox-head"><span class="cbox-titlebox"><span class="cbox-code">Reservations</span><span class="cbox-title">Calendar</span></span><span class="cbox-meta"><span class="hcount" id="calhint">Tap a day to see that day&#8217;s cameras</span><span class="cbox-chev"></span></span></summary>
     <div class="cbox-body"><div class="calpanel"><iframe id="calframe" src="/calendar.html?embed=1" title="Equipment calendar" loading="lazy"></iframe></div></div>
   </details>
@@ -1587,10 +1587,11 @@
     {key:'out',label:'Checked out',cls:'sec-out',dot:'out'},
     {key:'reserved',label:'Reserved',cls:'sec-reserved',dot:'reserved'}
   ];
-  // Collapsed-by-default (LOCKED global rule): the top-level hubs (Reservation Activity, Manage Equipment,
-  // Additional Equipment, Wallet) ship closed for a clean console; the ra-* sub-accordions (Checked out /
-  // Reserved / Returned) open once their hub is opened. A stored choice always wins.
-  function secOpen(k){ try{ var v=sessionStorage.getItem('csec:'+k); if(v!==null) return v==='1'; }catch(e){} return /^ra-/.test(k) || k==='mkpencils'; }  // Mankin's iPad-stylus section leads open
+  // Collapsed-by-default (LOCKED global rule, reinforced Chris 2026-10-12): EVERY section ships CLOSED on
+  // load, the top-level hubs (Reservation Activity, Manage Equipment, Wallet) AND their sub-accordions
+  // (ra-* Checked out / Reserved / Returned, mkpencils, etc.), until the user expands it. A stored choice
+  // from this session always wins (a section the user opened before stays open on re-render).
+  function secOpen(k){ try{ var v=sessionStorage.getItem('csec:'+k); if(v!==null) return v==='1'; }catch(e){} return false; }
   function setSecOpen(k,o){ try{ sessionStorage.setItem('csec:'+k,o?'1':'0'); }catch(e){} }
   function catOf(cam){ var c=activeFor(cam); if(!c) return isOOS(cam)?'oos':(isNoCard(cam)?'nocard':'avail'); return statusOf(c)==='reserved'?'reserved':'out'; }
 

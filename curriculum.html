@@ -2278,7 +2278,7 @@
       const tools = `${links}${vids}${cams}${forms}${qrs}${locals}`;
       const decks = slideDecksBlock(course); // nested Slide Decks expandable (published courses)
       if (!tools && !decks) return "";
-      return `<details class="slide-decks-acc class-tools-acc" open>`
+      return `<details class="slide-decks-acc class-tools-acc">`
         + `<summary class="slide-decks-sum"><span class="slide-decks-title">Class Tools</span>`
         + `<span class="slide-decks-meta">staff</span></summary>`
         + `<div class="slide-decks-body">${tools}${decks}</div></details>`;
@@ -2707,32 +2707,16 @@
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
     })();
 
-    // ── Accordion: deep-link, remembered open-state, sensible default ──────────
+    // ── Accordion: COLLAPSED by default on every load (Chris, LOCKED). No remembered
+    //    open-state, no auto-open of the first course. Only a deep-link (#courseId) opens one. ──
     (function initAccordion() {
-      const KEY = "curriculumOpenCourses";
       const items = Array.from(document.querySelectorAll("details.course-acc"));
       if (!items.length) return;
 
-      let saved = [];
-      try { saved = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) {}
-
       const hashId = decodeURIComponent((location.hash || "").replace(/^#/, ""));
-      let opened = false;
-
-      items.forEach(d => { if (saved.includes(d.id)) { d.open = true; opened = true; } });
-
       const target = hashId && document.getElementById(hashId);
-      if (target && target.matches("details.course-acc")) { target.open = true; opened = true; }
-
-      if (!opened) { items[0].open = true; }
-
-      function persist() {
-        const open = items.filter(d => d.open).map(d => d.id);
-        try { localStorage.setItem(KEY, JSON.stringify(open)); } catch (e) {}
-      }
-      items.forEach(d => d.addEventListener("toggle", persist));
-
-      if (target) {
+      if (target && target.matches("details.course-acc")) {
+        target.open = true;
         setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
       }
 
