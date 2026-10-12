@@ -441,33 +441,38 @@ def build(course):
                 ("Use your own photo:","any photo you like, from your project folder."),
                 ("Download a free photo:","go to <strong>unsplash.com</strong>, search for something you like, like sky, wall, or paper, and download it for free. You do not need an account."),
             ])
-            + note("Readability tip: if your letters are hard to read on top of the photo, you can blur the background a little with Gaussian Blur. The steps below show you how. Or leave it sharp if that looks better. It is your choice."))
-        hint_en="Scroll inside the box to see all five parts."
+            + note("Readability tip: a plain, simple background makes your letters easier to read than a busy, cluttered one."))
+        hint_en="Scroll inside the box to see all six parts."
         parts_en=(
-          _sp("1","Open your template",[
+          _sp("1","Set up Photoshop (do this once)",[
             ("Open Photoshop:","click the Photoshop icon in your Dock, or open it from your Applications folder."),
+            ("Open Settings:","in the top menu bar, click <strong>Photoshop &gt; Settings &gt; General</strong>. A shortcut is <strong>Cmd</strong> + <strong>K</strong>."),
+            ("Turn off Smart Objects:","find the box that says <strong>Always Create Smart Objects when Placing</strong> and click it so the checkmark is OFF (empty)."),
+            ("Click OK:","now your letters come in as normal layers you can crop and erase, not locked Smart Objects. You only do this once on a computer."),
+          ])
+          + _sp("2","Open your template",[
             ("Find your template:","the template you downloaded is a .psd file in your Downloads folder. Move it into your project folder first."),
             ("Open it:","in Photoshop, go to <strong>File &gt; Open</strong>. Click your template .psd, then click Open. You will see a long, see-through strip. Each square is one slot for a letter."),
           ])
-          + _sp("2","Add your background",[
+          + _sp("3","Add your background",[
             ("Place your photo:","go to <strong>File &gt; Place Embedded</strong>. Click your background photo, your own or the one from Unsplash, then click Place."),
             ("Make it fill the strip:","your photo drops in with a box and handles around it. Drag a corner handle outward until the photo covers the whole strip. Drag from the middle to move it."),
             ("Set it in place:","press <strong>Return</strong> (Enter) to finish placing it."),
-            ("Optional blur:","if your letters will be hard to read, go to <strong>Filter &gt; Blur &gt; Gaussian Blur</strong>, drag the slider until the photo looks soft, then click OK. Skip this if the sharp photo looks better."),
             ("Keep it on the bottom:","look at the Layers panel on the right side. Your background should sit at the bottom of the list, under your letters."),
           ])
-          + _sp("3","Place your first letter",[
+          + _sp("4","Place and trim your first letter",[
             ("Place a letter:","go to <strong>File &gt; Place Embedded</strong> again. Click your first letter photo, like 1_C.jpg, then click Place."),
             ("Move it to the first slot:","drag the letter to the first slot on the left."),
             ("Size it to fit:","drag a corner handle to make the letter fit its slot. It keeps its shape as you drag."),
             ("Set it in place:","press <strong>Return</strong> (Enter) to finish."),
+            ("Trim the extra space:","if there is extra photo on the side of your letter, pick the <strong>Rectangular Marquee</strong> tool, drag a box around the extra part, then press <strong>Delete</strong>. It disappears and your background shows through. This works because your letter is a normal layer, not a Smart Object."),
           ])
-          + _sp("4","Place the rest of your letters",[
-            ("Repeat for each letter:","do <strong>File &gt; Place Embedded</strong> for each letter, in order, left to right, so they spell your name."),
+          + _sp("5","Place the rest of your letters",[
+            ("Repeat for each letter:","do <strong>File &gt; Place Embedded</strong> for each letter, in order, left to right, so they spell your name. Trim each one the same way if it needs it."),
             ("Line them up:","keep the letters in a neat row across the strip so your name reads clearly."),
             ("More letters than slots?","if your name is longer than the template, use the 7-Up template and fit the extra letters in creatively. Make them a little smaller or overlap them a bit, but keep the name easy to read."),
           ])
-          + _sp("5","Export and turn it in",[
+          + _sp("6","Export and turn it in",[
             ("Export as a JPG:","go to <strong>File &gt; Export &gt; Export As</strong>. Set the format to <strong>JPG</strong> and the quality to high, then click Export."),
             ("Save it to your project folder:","name it with your name, like Collage_Chris.jpg, and save it in your Photography project folder."),
             ("Upload to Canvas:","upload your finished JPG to this Canvas assignment."),
@@ -492,33 +497,38 @@ def build(course):
                 ("Usa tu propia foto:","cualquier foto que te guste, de tu carpeta del proyecto."),
                 ("Descarga una foto gratis:","ve a <strong>unsplash.com</strong>, busca algo que te guste, como cielo, pared o papel, y descárgala gratis. No necesitas cuenta."),
             ])
-            + note("Consejo de legibilidad: si tus letras son difíciles de leer sobre la foto, puedes desenfocar un poco el fondo con Desenfoque gaussiano. Los pasos de abajo te dicen cómo. O déjalo nítido si se ve mejor. Tú decides."))
-        hint_es="Desplázate dentro del cuadro para ver las cinco partes."
+            + note("Consejo de legibilidad: un fondo sencillo hace que tus letras se lean más fácil que uno muy cargado."))
+        hint_es="Desplázate dentro del cuadro para ver las seis partes."
         parts_es=(
-          _sp("1","Abre tu plantilla",[
+          _sp("1","Configura Photoshop (hazlo una vez)",[
             ("Abre Photoshop:","haz clic en el ícono de Photoshop en el Dock, o ábrelo desde la carpeta de Aplicaciones."),
+            ("Abre Ajustes:","en la barra de menú de arriba, haz clic en <strong>Photoshop &gt; Ajustes &gt; Generales</strong>. Un atajo es <strong>Cmd</strong> + <strong>K</strong>."),
+            ("Desactiva los objetos inteligentes:","busca la casilla que dice <strong>Crear siempre objetos inteligentes al colocar</strong> y haz clic para quitar la palomita (que quede vacía)."),
+            ("Haz clic en OK:","ahora tus letras entran como capas normales que puedes recortar y borrar, no como objetos inteligentes bloqueados. Esto solo se hace una vez en una computadora."),
+          ])
+          + _sp("2","Abre tu plantilla",[
             ("Busca tu plantilla:","la plantilla que descargaste es un archivo .psd en tu carpeta de Descargas. Primero muévela a tu carpeta del proyecto."),
             ("Ábrela:","en Photoshop, ve a <strong>Archivo &gt; Abrir</strong>. Haz clic en tu plantilla .psd y luego en Abrir. Verás una tira larga y transparente. Cada cuadro es un espacio para una letra."),
           ])
-          + _sp("2","Pon tu fondo",[
+          + _sp("3","Pon tu fondo",[
             ("Coloca tu foto:","ve a <strong>Archivo &gt; Colocar incrustado</strong>. Haz clic en tu foto de fondo, la tuya o la de Unsplash, y luego en Colocar."),
             ("Que llene la tira:","tu foto entra con un recuadro y unos tiradores alrededor. Arrastra un tirador de la esquina hacia afuera hasta que la foto cubra toda la tira. Arrastra desde el centro para moverla."),
             ("Fíjala en su lugar:","presiona <strong>Retorno</strong> (Enter) para terminar de colocarla."),
-            ("Desenfoque opcional:","si tus letras serán difíciles de leer, ve a <strong>Filtro &gt; Desenfocar &gt; Desenfoque gaussiano</strong>, arrastra el control hasta que la foto se vea suave y haz clic en OK. Sáltalo si la foto nítida se ve mejor."),
             ("Déjala hasta abajo:","mira el panel Capas del lado derecho. Tu fondo debe quedar hasta abajo de la lista, debajo de tus letras."),
           ])
-          + _sp("3","Coloca tu primera letra",[
+          + _sp("4","Coloca y recorta tu primera letra",[
             ("Coloca una letra:","ve otra vez a <strong>Archivo &gt; Colocar incrustado</strong>. Haz clic en tu primera foto de letra, como 1_C.jpg, y luego en Colocar."),
             ("Llévala al primer espacio:","arrastra la letra al primer espacio de la izquierda."),
             ("Ajusta su tamaño:","arrastra un tirador de la esquina para que la letra quepa en su espacio. Mantiene su forma mientras arrastras."),
             ("Fíjala en su lugar:","presiona <strong>Retorno</strong> (Enter) para terminar."),
+            ("Recorta el espacio de más:","si hay foto de más al lado de tu letra, elige la herramienta <strong>Marco rectangular</strong>, arrastra un recuadro alrededor de la parte de más y presiona <strong>Suprimir</strong> (Delete). Desaparece y tu fondo se ve por detrás. Esto funciona porque tu letra es una capa normal, no un objeto inteligente."),
           ])
-          + _sp("4","Coloca el resto de tus letras",[
-            ("Repite con cada letra:","haz <strong>Archivo &gt; Colocar incrustado</strong> con cada letra, en orden, de izquierda a derecha, para que escriban tu nombre."),
+          + _sp("5","Coloca el resto de tus letras",[
+            ("Repite con cada letra:","haz <strong>Archivo &gt; Colocar incrustado</strong> con cada letra, en orden, de izquierda a derecha, para que escriban tu nombre. Recorta cada una igual si lo necesita."),
             ("Alínealas:","mantén las letras en una fila pareja a lo largo de la tira para que tu nombre se lea claro."),
             ("¿Más letras que espacios?","si tu nombre es más largo que la plantilla, usa la plantilla 7-Up y acomoda las letras de más de forma creativa. Hazlas un poco más pequeñas o encimálas un poco, pero que el nombre se lea fácil."),
           ])
-          + _sp("5","Exporta y entrégalo",[
+          + _sp("6","Exporta y entrégalo",[
             ("Exporta como JPG:","ve a <strong>Archivo &gt; Exportar &gt; Exportar como</strong>. Pon el formato en <strong>JPG</strong> y la calidad en alta, luego haz clic en Exportar."),
             ("Guárdalo en tu carpeta del proyecto:","nómbralo con tu nombre, como Collage_Chris.jpg, y guárdalo en tu carpeta del proyecto de Fotografía."),
             ("Súbelo a Canvas:","sube tu JPG terminado a esta tarea de Canvas."),
