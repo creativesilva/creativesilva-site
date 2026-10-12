@@ -119,7 +119,7 @@ def build(course):
     CL_ES = "Fotograf&iacute;a 2A" if p2 else "Fotograf&iacute;a 1A"
     PHOTO2TAG = "-Photo2" if p2 else ""
     IMGDIR=f"{SITE}/assets/images/{course}/spell-your-name"
-    HEADER=f"{IMGDIR}/header-v1.jpg"
+    HEADER=f"{IMGDIR}/header-v2.jpg"
     S2_FLOAT=f"{IMGDIR}/capture-float-v1.jpg"
     S3_FLOAT=f"{IMGDIR}/cull-float-v1.jpg"
     S3_EDIT_FLOAT=f"{IMGDIR}/edit-float-v1.jpg"
@@ -222,7 +222,7 @@ def build(course):
             para("On this photo walk you hunt for letters around campus to spell your name in photographs. Find one letter at a time, in signs, shadows, lines, reflections, textures, and shapes.")
             + para("You need at least <strong>4 letters</strong>. Use your first name, your last name, or a nickname, whatever fits you, as long as it is at least 4 letters long. A short 3-letter nickname is not enough, so pick a name with 4 or more.")
             + para(concept_rule_en)
-            + (framed(HEADER,"A Pioneer Valley student on a photo walk at sunset, taking photos with a Canon camera near the campus panther sculpture") if HAVE_HEADER else ""))
+            + (framed(HEADER,"A Pioneer Valley student working in Adobe Photoshop on an iMac in a bright computer lab, placing found-letter photos to spell the name RENEE, with classmates working at iMacs behind her") if HAVE_HEADER else ""))
         en+=standards_box(False, STANDARDS)
         en+=downloads_block(False)
         en+=card("THE CONCEPT / WHAT TO LOOK FOR","Letters Are Everywhere",
@@ -247,7 +247,7 @@ def build(course):
             para("En esta caminata fotogr&aacute;fica buscas letras por la escuela para escribir tu nombre en fotograf&iacute;as. Encuentra una letra a la vez, en letreros, sombras, l&iacute;neas, reflejos, texturas y formas.")
             + para("Necesitas al menos <strong>4 letras</strong>. Usa tu primer nombre, tu apellido o un apodo, el que te quede, siempre que tenga al menos 4 letras. Un apodo corto de 3 letras no alcanza, as&iacute; que elige un nombre de 4 o m&aacute;s.")
             + para(concept_rule_es)
-            + (framed(HEADER,"Un estudiante de Pioneer Valley en una caminata fotogr&aacute;fica al atardecer, tomando fotos con una c&aacute;mara Canon cerca de la escultura de la pantera de la escuela") if HAVE_HEADER else ""))
+            + (framed(HEADER,"Una estudiante de Pioneer Valley trabajando en Adobe Photoshop en una iMac en un laboratorio de c&oacute;mputo iluminado, colocando fotos de letras encontradas para escribir el nombre RENEE, con compa&ntilde;eros trabajando en iMacs detr&aacute;s") if HAVE_HEADER else ""))
         es+=standards_box(True, STANDARDS)
         es+=downloads_block(True)
         es+=card("EL CONCEPTO / QU&Eacute; BUSCAR","Las Letras Est&aacute;n en Todas Partes",
