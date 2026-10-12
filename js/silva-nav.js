@@ -279,7 +279,8 @@
     ['/curriculum/shared/photo1-spell-your-name-overview.html',
      '/curriculum/shared/photo1-spell-your-name-step02-capture-contact.html',
      '/curriculum/shared/photo1-spell-your-name-step03-cull-edit-export.html',
-     '/curriculum/shared/photo1-spell-your-name-step04-reflection.html'],
+     '/curriculum/shared/photo1-spell-your-name-step04-reflection.html',
+     '/curriculum/shared/photo1-spell-your-name-step05-name-collage.html'],
     ['/curriculum/photo2/photo2a-home.html',
      '/curriculum/photo2/photo2a-course-overview.html',
      '/curriculum/photo2/photo2a-syllabus.html'],
@@ -317,7 +318,8 @@
     ['/curriculum/shared/photo2-spell-your-name-overview.html',
      '/curriculum/shared/photo2-spell-your-name-step02-capture-contact.html',
      '/curriculum/shared/photo2-spell-your-name-step03-cull-edit-export.html',
-     '/curriculum/shared/photo2-spell-your-name-step04-reflection.html']
+     '/curriculum/shared/photo2-spell-your-name-step04-reflection.html',
+     '/curriculum/shared/photo2-spell-your-name-step05-name-collage.html']
   ];
 
   var SEQUENCE = [];

@@ -96,6 +96,21 @@ VOCAB_ES=[
  ("Found Letter (Letra Encontrada)","Una letra que descubres ya en el mundo, hecha por l&iacute;neas, formas, sombras o reflejos, no una que escribiste o imprimiste."),
 ]
 
+# ---- Step 05 teal scroller: numbered how-to parts inside a contained, LOCKED .silva-scroll panel
+# (scrollable-long-content rule). Teal because these are core CONTENT steps, not a linked resource.
+def _sp(num, title, items):
+    hd=('<div style="display:flex;align-items:center;gap:10px;margin:16px 0 8px;">'
+        f'<span style="flex:0 0 auto;width:26px;height:26px;background:#00b8b8;color:#04201f;font-size:12pt;line-height:26px;text-align:center;"><strong>{num}</strong></span>'
+        f'<span style="font-size:14pt;color:#80e0e0;"><strong>{title}</strong></span></div>')
+    return hd+bullets(items, "#00b8b8")
+
+def teal_scroller(hint, parts):
+    hintline=f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
+    scroll=('<div class="silva-scroll" style="max-height:470px;overflow-y:auto;padding:14px 16px 20px;border:1px solid rgba(0,184,184,0.30);'
+      'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.16) 100%);">'
+      f'{parts}</div>')
+    return hintline+scroll
+
 def build(course):
     p2 = (course == "photo2")
     MODNUM = "09" if p2 else "10"
@@ -114,6 +129,11 @@ def build(course):
     S2=f"{course}-spell-your-name-step02-capture-contact.html"
     S3=f"{course}-spell-your-name-step03-cull-edit-export.html"
     S4=f"{course}-spell-your-name-step04-reflection.html"
+    S5=f"{course}-spell-your-name-step05-name-collage.html"
+    # Name-collage PSD templates (shared by both courses). Zipped (per the PSD-download convention);
+    # each zip holds one transparent .psd, one 3.5in letter slot per "up" (4-Up ... 7-Up).
+    TPL_DIR=f"{SITE}/assets/templates/psd/name-collage"
+    TPL={n:f"{TPL_DIR}/Name_Template_{n}up.zip" for n in (4,5,6,7)}
 
     def nav(current,dots,stepnav):
         return ('      <div class="silva-breadcrumb">\n'
@@ -126,7 +146,7 @@ def build(course):
                 '      <div class="silva-nav-spacer"></div>\n'
                 f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
                 f'      <div class="silva-step-nav">{stepnav}</div>')
-    HREFS=[OVER,S2,S3,S4]; TITLES=[("1","Step 01"),("2","Step 02"),("3","Step 03"),("4","Step 04")]
+    HREFS=[OVER,S2,S3,S4,S5]; TITLES=[("1","Step 01"),("2","Step 02"),("3","Step 03"),("4","Step 04"),("5","Step 05")]
     def dots_for(ai):
         return "".join(dot("" if i==ai else HREFS[i], lab, title, i==ai, module=False) for i,(lab,title) in enumerate(TITLES))
 
@@ -162,6 +182,36 @@ def build(course):
           + '</div>'
           + folder_note(es, AREA) + '</div>')
 
+    # Step 05 ONLY: the 4 name-collage templates, embedded so students pick the one that fits their
+    # name length (Chris: put the template downloads ON this final step, student chooses which).
+    def tpl_downloads(es):
+        heading="Descarga Tu Plantilla" if es else "Download Your Template"
+        if es:
+            lead="Elige la plantilla que le queda a tu nombre, luego desc&aacute;rgala. Cuenta las letras del nombre que escribiste."
+            picks=[("4 letras:","descarga la plantilla 4-Up."),
+                   ("5 letras:","descarga la plantilla 5-Up."),
+                   ("6 letras:","descarga la plantilla 6-Up."),
+                   ("7 letras o m&aacute;s:","descarga la plantilla 7-Up y acomoda las letras de m&aacute;s de forma creativa.")]
+            labels={4:"Plantilla 4-Up",5:"Plantilla 5-Up",6:"Plantilla 6-Up",7:"Plantilla 7-Up"}
+            tnote="El fondo de la plantilla es transparente a prop&oacute;sito: se ve como un tablero de cuadros. T&uacute; le pondr&aacute;s tu propio fondo en Photoshop."
+        else:
+            lead="Pick the template that fits your name, then download it. Count the letters in the name you spelled."
+            picks=[("4 letters:","download the 4-Up template."),
+                   ("5 letters:","download the 5-Up template."),
+                   ("6 letters:","download the 6-Up template."),
+                   ("7 letters or more:","download the 7-Up template and fit the extra letters in creatively.")]
+            labels={4:"4-Up Template",5:"5-Up Template",6:"6-Up Template",7:"7-Up Template"}
+            tnote="The template background is see-through on purpose: it looks like a checkerboard. You will add your own background in Photoshop."
+        btns=('<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;">'
+              + "".join(dl_link(TPL[n],labels[n],row=True) for n in (4,5,6,7)) + '</div>')
+        return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+          + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
+          + para(lead)
+          + bullets(picks, "#FF6B1A")
+          + btns
+          + note_orange(tnote)
+          + folder_note(es, AREA) + '</div>')
+
     # ================= OVERVIEW (Step 01) =================
     def overview():
         en=banner(f"Module {MODNUM} &bull; Step 01","Spell Your Name: Start Here","Read this page and download your files, then go to Step 02 to capture. This is a photo walk about finding letters.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
@@ -181,6 +231,7 @@ def build(course):
                 ("Step 02 &middot; Capture &amp; Contact Sheet:","on the walk, capture the letters of your name in RAW. Import your full take and build a 12-Up contact sheet of everything you captured."),
                 ("Step 03 &middot; Cull, Edit &amp; Export:","select your strongest photo for each letter, edit it clean, build a 6-Up contact sheet of your finals, and export each final letter on its own."),
                 ("Step 04 &middot; Reflection:","tell what you learned about finding letters and making them read."),
+                ("Step 05 &middot; Name Collage in Photoshop:","open Photoshop for the first time and place your letters into one template to spell your name, then export your finished piece."),
             ]))
         en+=resources_card("Key Words",
             vocab_grid("On the Quiz",
@@ -205,6 +256,7 @@ def build(course):
                 ("Paso 02 &middot; Captura y Hoja de Contactos:","en la caminata, captura las letras de tu nombre en RAW. Importa tu toma completa y crea una hoja de contactos 12-Up de todo lo que capturaste."),
                 ("Paso 03 &middot; Selecciona, Edita y Exporta:","elige tu mejor foto de cada letra, ed&iacute;tala limpia, crea una hoja de contactos 6-Up de tus finales y exporta cada letra final por separado."),
                 ("Paso 04 &middot; Reflexi&oacute;n:","cuenta qu&eacute; aprendiste al encontrar letras y hacer que se lean."),
+                ("Paso 05 &middot; Collage del Nombre en Photoshop:","abre Photoshop por primera vez y coloca tus letras en una plantilla para escribir tu nombre, luego exporta tu pieza terminada."),
             ]))
         es+=resources_card("Palabras Clave",
             vocab_grid("En el Examen",
@@ -338,7 +390,6 @@ def build(course):
 
     # ================= STEP 04: Reflection =================
     def step04():
-        nextmod = ("Module 10" if p2 else "Module 11")
         en=banner(f"Module {MODNUM} &bull; Step 04","Turn In Your Reflection","Reflect on your photo walk, your letters, and what you learned.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
         en+=card("STEP 04 / REFLECT","Complete and Upload the Reflection",
             (float_right(S4_FLOAT,"A Pioneer Valley student typing the Spell Your Name reflection in the Word document on an iMac in the lab","Type your answers right in the reflection document.") if HAVE_S4_FLOAT else "")
@@ -352,7 +403,7 @@ def build(course):
             + note("Answer honestly, in your own words."))
         en+=deliverables_box(False,
             [("1 reflection (.docx):","your completed reflection Word document, uploaded to this Canvas assignment.")])
-        en+=next_up(f"UP NEXT &middot; {nextmod} - Layers &amp; Name Collage","Next module: learn Photoshop layers and compile your finished letters into one collage that spells your name.")
+        en+=next_up("UP NEXT &middot; STEP 05 - Spell Your Name as One Collage","Open Photoshop for the first time and place your finished letters into one template to spell your name.")
 
         es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 04","Entrega Tu Reflexi&oacute;n","Reflexiona sobre tu caminata, tus letras y lo que aprendiste.","#top","Back to English", HICON_REFLECT)
         es+=card("PASO 04 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
@@ -367,13 +418,121 @@ def build(course):
             + note("Contesta con honestidad, en tus propias palabras."))
         es+=deliverables_box(True,
             [("1 reflexi&oacute;n (.docx):","tu documento de Word de la reflexi&oacute;n, subido a esta tarea de Canvas.")])
-        es+=next_up(f"A CONTINUACI&Oacute;N &middot; {nextmod} - Capas y Collage del Nombre","Pr&oacute;ximo m&oacute;dulo: aprende capas en Photoshop y compila tus letras terminadas en un collage que escribe tu nombre.")
+        es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 05 - Escribe Tu Nombre en un Collage","Abre Photoshop por primera vez y coloca tus letras terminadas en una plantilla para escribir tu nombre.")
 
-        stepnav=f'<a href="{S3}" class="silva-step-btn">&#8592; Step 03</a>'
-        bottom=f'<div class="silva-bottom-nav"><a href="{S3}" class="silva-bottom-btn">&#8592; Step 03</a><span></span></div>'
+        stepnav=f'<a href="{S3}" class="silva-step-btn">&#8592; Step 03</a> <a href="{S5}" class="silva-step-btn">Step 05 &#8594;</a>'
+        bottom=f'<div class="silva-bottom-nav"><a href="{S3}" class="silva-bottom-btn">&#8592; Step 03</a><a href="{S5}" class="silva-bottom-btn">Step 05 &#8594;</a></div>'
         return wrap_page(f"Step 4: Reflection | Spell Your Name | {CL_EN} | PVHS", nav("Step 04",dots_for(3),stepnav), top_wrap(en,es), bottom)
 
-    for fname,gen in [(OVER,overview),(S2,step02),(S3,step03),(S4,step04)]:
+    # ================= STEP 05: Name Collage in Photoshop (first Photoshop use) =================
+    def step05():
+        en=banner(f"Module {MODNUM} &bull; Step 05","Spell Your Name as One Collage","Open Photoshop for the first time and place your letters into one template to spell your name.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
+        en+=card("STEP 05 / BUILD IT IN PHOTOSHOP","Put Your Letters Together",
+            para("Now put it all together. You will open <strong>Photoshop</strong> for the first time and build one finished piece: your letters placed in a row that spells your name.")
+            + para("This is your first time in Photoshop, so go slow. This page walks you through every click. If you make a mistake, press <strong>Cmd</strong> + <strong>Z</strong> to undo it.")
+            + note("You already made your letters in Step 03. Here you just place them into one template and spell your name. You do not take any new photos."))
+        en+=deliverables_box(False,
+            [("1 name collage (JPG):","your finished name, spelled out in the template with a background, exported as a high-resolution JPG and uploaded to this Canvas assignment.")])
+        en+=tpl_downloads(False)
+        en+=card("CHOOSE YOUR BACKGROUND","Your Template Is See-Through, So Add a Background",
+            para("Your template background is see-through, so it looks like a checkerboard. You need to put a background photo behind your letters. Pick one of two ways:")
+            + bullets([
+                ("Use your own photo:","any photo you like, from your project folder."),
+                ("Download a free photo:","go to <strong>unsplash.com</strong>, search for something you like, like sky, wall, or paper, and download it for free. You do not need an account."),
+            ])
+            + note("Readability tip: if your letters are hard to read on top of the photo, you can blur the background a little with Gaussian Blur. The steps below show you how. Or leave it sharp if that looks better. It is your choice."))
+        hint_en="Scroll inside the box to see all five parts."
+        parts_en=(
+          _sp("1","Open your template",[
+            ("Open Photoshop:","click the Photoshop icon in your Dock, or open it from your Applications folder."),
+            ("Unzip the template:","find the template you downloaded in your Downloads folder. Double-click the zip file and it opens into a .psd file."),
+            ("Open the .psd:","in Photoshop, go to <strong>File &gt; Open</strong>. Click your template .psd, then click Open. You will see a long, see-through strip. Each square is one slot for a letter."),
+          ])
+          + _sp("2","Add your background",[
+            ("Place your photo:","go to <strong>File &gt; Place Embedded</strong>. Click your background photo, your own or the one from Unsplash, then click Place."),
+            ("Make it fill the strip:","your photo drops in with a box and handles around it. Drag a corner handle outward until the photo covers the whole strip. Drag from the middle to move it."),
+            ("Set it in place:","press <strong>Return</strong> (Enter) to finish placing it."),
+            ("Optional blur:","if your letters will be hard to read, go to <strong>Filter &gt; Blur &gt; Gaussian Blur</strong>, drag the slider until the photo looks soft, then click OK. Skip this if the sharp photo looks better."),
+            ("Keep it on the bottom:","look at the Layers panel on the right side. Your background should sit at the bottom of the list, under your letters."),
+          ])
+          + _sp("3","Place your first letter",[
+            ("Place a letter:","go to <strong>File &gt; Place Embedded</strong> again. Click your first letter photo, like 1_C.jpg, then click Place."),
+            ("Move it to the first slot:","drag the letter to the first slot on the left."),
+            ("Size it to fit:","drag a corner handle to make the letter fit its slot. It keeps its shape as you drag."),
+            ("Set it in place:","press <strong>Return</strong> (Enter) to finish."),
+          ])
+          + _sp("4","Place the rest of your letters",[
+            ("Repeat for each letter:","do <strong>File &gt; Place Embedded</strong> for each letter, in order, left to right, so they spell your name."),
+            ("Line them up:","keep the letters in a neat row across the strip so your name reads clearly."),
+            ("More letters than slots?","if your name is longer than the template, use the 7-Up template and fit the extra letters in creatively. Make them a little smaller or overlap them a bit, but keep the name easy to read."),
+          ])
+          + _sp("5","Export and turn it in",[
+            ("Export as a JPG:","go to <strong>File &gt; Export &gt; Export As</strong>. Set the format to <strong>JPG</strong> and the quality to high, then click Export."),
+            ("Save it to your project folder:","name it with your name, like Collage_Chris.jpg, and save it in your Photography project folder."),
+            ("Upload to Canvas:","upload your finished JPG to this Canvas assignment."),
+          ])
+        )
+        en+=card("HOW TO BUILD IT / STEP BY STEP","Place Your Letters in Photoshop",
+            para("Follow these steps in order. Take your time.")
+            + teal_scroller(hint_en, parts_en))
+        en+=next_up("UP NEXT &middot; MORE APERTURE WORK","This week&rsquo;s photo walk: explore aperture with all three lenses in your kit, the 50mm, the 18-45mm, and the 55-210mm. More details soon.")
+
+        es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 05","Escribe Tu Nombre en un Collage","Abre Photoshop por primera vez y coloca tus letras en una plantilla para escribir tu nombre.","#top","Back to English", HICON_DESIGN)
+        es+=card("PASO 05 / H&Aacute;ZLO EN PHOTOSHOP","Junta Tus Letras",
+            para("Ahora junta todo. Abrirás <strong>Photoshop</strong> por primera vez y crearás una pieza terminada: tus letras en fila que escriben tu nombre.")
+            + para("Es tu primera vez en Photoshop, así que ve despacio. Esta página te guía en cada clic. Si te equivocas, presiona <strong>Cmd</strong> + <strong>Z</strong> para deshacer.")
+            + note("Ya hiciste tus letras en el Paso 03. Aquí solo las colocas en una plantilla y escribes tu nombre. No tomas fotos nuevas."))
+        es+=deliverables_box(True,
+            [("1 collage del nombre (JPG):","tu nombre terminado, escrito en la plantilla con un fondo, exportado como JPG de alta resolución y subido a esta tarea de Canvas.")])
+        es+=tpl_downloads(True)
+        es+=card("ELIGE TU FONDO","Tu Plantilla Es Transparente, Ponle un Fondo",
+            para("El fondo de tu plantilla es transparente, por eso se ve como un tablero de cuadros. Necesitas poner una foto de fondo detrás de tus letras. Elige una de dos maneras:")
+            + bullets([
+                ("Usa tu propia foto:","cualquier foto que te guste, de tu carpeta del proyecto."),
+                ("Descarga una foto gratis:","ve a <strong>unsplash.com</strong>, busca algo que te guste, como cielo, pared o papel, y descárgala gratis. No necesitas cuenta."),
+            ])
+            + note("Consejo de legibilidad: si tus letras son difíciles de leer sobre la foto, puedes desenfocar un poco el fondo con Desenfoque gaussiano. Los pasos de abajo te dicen cómo. O déjalo nítido si se ve mejor. Tú decides."))
+        hint_es="Desplázate dentro del cuadro para ver las cinco partes."
+        parts_es=(
+          _sp("1","Abre tu plantilla",[
+            ("Abre Photoshop:","haz clic en el ícono de Photoshop en el Dock, o ábrelo desde la carpeta de Aplicaciones."),
+            ("Descomprime la plantilla:","busca la plantilla que descargaste en tu carpeta de Descargas. Haz doble clic en el archivo zip y se abre en un archivo .psd."),
+            ("Abre el .psd:","en Photoshop, ve a <strong>Archivo &gt; Abrir</strong>. Haz clic en tu plantilla .psd y luego en Abrir. Verás una tira larga y transparente. Cada cuadro es un espacio para una letra."),
+          ])
+          + _sp("2","Pon tu fondo",[
+            ("Coloca tu foto:","ve a <strong>Archivo &gt; Colocar incrustado</strong>. Haz clic en tu foto de fondo, la tuya o la de Unsplash, y luego en Colocar."),
+            ("Que llene la tira:","tu foto entra con un recuadro y unos tiradores alrededor. Arrastra un tirador de la esquina hacia afuera hasta que la foto cubra toda la tira. Arrastra desde el centro para moverla."),
+            ("Fíjala en su lugar:","presiona <strong>Retorno</strong> (Enter) para terminar de colocarla."),
+            ("Desenfoque opcional:","si tus letras serán difíciles de leer, ve a <strong>Filtro &gt; Desenfocar &gt; Desenfoque gaussiano</strong>, arrastra el control hasta que la foto se vea suave y haz clic en OK. Sáltalo si la foto nítida se ve mejor."),
+            ("Déjala hasta abajo:","mira el panel Capas del lado derecho. Tu fondo debe quedar hasta abajo de la lista, debajo de tus letras."),
+          ])
+          + _sp("3","Coloca tu primera letra",[
+            ("Coloca una letra:","ve otra vez a <strong>Archivo &gt; Colocar incrustado</strong>. Haz clic en tu primera foto de letra, como 1_C.jpg, y luego en Colocar."),
+            ("Llévala al primer espacio:","arrastra la letra al primer espacio de la izquierda."),
+            ("Ajusta su tamaño:","arrastra un tirador de la esquina para que la letra quepa en su espacio. Mantiene su forma mientras arrastras."),
+            ("Fíjala en su lugar:","presiona <strong>Retorno</strong> (Enter) para terminar."),
+          ])
+          + _sp("4","Coloca el resto de tus letras",[
+            ("Repite con cada letra:","haz <strong>Archivo &gt; Colocar incrustado</strong> con cada letra, en orden, de izquierda a derecha, para que escriban tu nombre."),
+            ("Alínealas:","mantén las letras en una fila pareja a lo largo de la tira para que tu nombre se lea claro."),
+            ("¿Más letras que espacios?","si tu nombre es más largo que la plantilla, usa la plantilla 7-Up y acomoda las letras de más de forma creativa. Hazlas un poco más pequeñas o encimálas un poco, pero que el nombre se lea fácil."),
+          ])
+          + _sp("5","Exporta y entrégalo",[
+            ("Exporta como JPG:","ve a <strong>Archivo &gt; Exportar &gt; Exportar como</strong>. Pon el formato en <strong>JPG</strong> y la calidad en alta, luego haz clic en Exportar."),
+            ("Guárdalo en tu carpeta del proyecto:","nómbralo con tu nombre, como Collage_Chris.jpg, y guárdalo en tu carpeta del proyecto de Fotografía."),
+            ("Súbelo a Canvas:","sube tu JPG terminado a esta tarea de Canvas."),
+          ])
+        )
+        es+=card("CÓMO HACERLO / PASO A PASO","Coloca Tus Letras en Photoshop",
+            para("Sigue estos pasos en orden. Tómate tu tiempo.")
+            + teal_scroller(hint_es, parts_es))
+        es+=next_up("A CONTINUACIÓN &middot; MÁS TRABAJO DE APERTURA","La caminata de esta semana: explora la apertura con los tres lentes de tu kit, el 50mm, el 18-45mm y el 55-210mm. Más detalles pronto.")
+
+        stepnav=f'<a href="{S4}" class="silva-step-btn">&#8592; Step 04</a>'
+        bottom=f'<div class="silva-bottom-nav"><a href="{S4}" class="silva-bottom-btn">&#8592; Step 04</a><span></span></div>'
+        return wrap_page(f"Step 5: Name Collage | Spell Your Name | {CL_EN} | PVHS", nav("Step 05",dots_for(4),stepnav), top_wrap(en,es), bottom)
+
+    for fname,gen in [(OVER,overview),(S2,step02),(S3,step03),(S4,step04),(S5,step05)]:
         html=ent(gen())
         ban_check(html, fname)
         open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
