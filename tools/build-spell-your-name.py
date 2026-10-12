@@ -130,10 +130,11 @@ def build(course):
     S3=f"{course}-spell-your-name-step03-cull-edit-export.html"
     S4=f"{course}-spell-your-name-step04-reflection.html"
     S5=f"{course}-spell-your-name-step05-name-collage.html"
-    # Name-collage PSD templates (shared by both courses). Zipped (per the PSD-download convention);
-    # each zip holds one transparent .psd, one 3.5in letter slot per "up" (4-Up ... 7-Up).
+    # Name-collage PSD templates (shared by both courses). Hosted as raw .psd files (Chris: a single
+    # .psd does not need zipping). Each is a transparent template, one 3.5in letter slot per "up"
+    # (4-Up ... 7-Up). The download attribute makes the browser save the .psd rather than open it.
     TPL_DIR=f"{SITE}/assets/templates/psd/name-collage"
-    TPL={n:f"{TPL_DIR}/Name_Template_{n}up.zip" for n in (4,5,6,7)}
+    TPL={n:f"{TPL_DIR}/Name_Template_{n}up.psd" for n in (4,5,6,7)}
 
     def nav(current,dots,stepnav):
         return ('      <div class="silva-breadcrumb">\n'
@@ -192,7 +193,7 @@ def build(course):
                    ("5 letras:","descarga la plantilla 5-Up."),
                    ("6 letras:","descarga la plantilla 6-Up."),
                    ("7 letras o m&aacute;s:","descarga la plantilla 7-Up y acomoda las letras de m&aacute;s de forma creativa.")]
-            labels={4:"Plantilla 4-Up",5:"Plantilla 5-Up",6:"Plantilla 6-Up",7:"Plantilla 7-Up"}
+            labels={4:"Plantilla 4-Up (.psd)",5:"Plantilla 5-Up (.psd)",6:"Plantilla 6-Up (.psd)",7:"Plantilla 7-Up (.psd)"}
             tnote="El fondo de la plantilla es transparente a prop&oacute;sito: se ve como un tablero de cuadros. T&uacute; le pondr&aacute;s tu propio fondo en Photoshop."
         else:
             lead="Pick the template that fits your name, then download it. Count the letters in the name you spelled."
@@ -200,7 +201,7 @@ def build(course):
                    ("5 letters:","download the 5-Up template."),
                    ("6 letters:","download the 6-Up template."),
                    ("7 letters or more:","download the 7-Up template and fit the extra letters in creatively.")]
-            labels={4:"4-Up Template",5:"5-Up Template",6:"6-Up Template",7:"7-Up Template"}
+            labels={4:"4-Up Template (.psd)",5:"5-Up Template (.psd)",6:"6-Up Template (.psd)",7:"7-Up Template (.psd)"}
             tnote="The template background is see-through on purpose: it looks like a checkerboard. You will add your own background in Photoshop."
         btns=('<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;">'
               + "".join(dl_link(TPL[n],labels[n],row=True) for n in (4,5,6,7)) + '</div>')
@@ -445,8 +446,8 @@ def build(course):
         parts_en=(
           _sp("1","Open your template",[
             ("Open Photoshop:","click the Photoshop icon in your Dock, or open it from your Applications folder."),
-            ("Unzip the template:","find the template you downloaded in your Downloads folder. Double-click the zip file and it opens into a .psd file."),
-            ("Open the .psd:","in Photoshop, go to <strong>File &gt; Open</strong>. Click your template .psd, then click Open. You will see a long, see-through strip. Each square is one slot for a letter."),
+            ("Find your template:","the template you downloaded is a .psd file in your Downloads folder. Move it into your project folder first."),
+            ("Open it:","in Photoshop, go to <strong>File &gt; Open</strong>. Click your template .psd, then click Open. You will see a long, see-through strip. Each square is one slot for a letter."),
           ])
           + _sp("2","Add your background",[
             ("Place your photo:","go to <strong>File &gt; Place Embedded</strong>. Click your background photo, your own or the one from Unsplash, then click Place."),
@@ -496,8 +497,8 @@ def build(course):
         parts_es=(
           _sp("1","Abre tu plantilla",[
             ("Abre Photoshop:","haz clic en el ícono de Photoshop en el Dock, o ábrelo desde la carpeta de Aplicaciones."),
-            ("Descomprime la plantilla:","busca la plantilla que descargaste en tu carpeta de Descargas. Haz doble clic en el archivo zip y se abre en un archivo .psd."),
-            ("Abre el .psd:","en Photoshop, ve a <strong>Archivo &gt; Abrir</strong>. Haz clic en tu plantilla .psd y luego en Abrir. Verás una tira larga y transparente. Cada cuadro es un espacio para una letra."),
+            ("Busca tu plantilla:","la plantilla que descargaste es un archivo .psd en tu carpeta de Descargas. Primero muévela a tu carpeta del proyecto."),
+            ("Ábrela:","en Photoshop, ve a <strong>Archivo &gt; Abrir</strong>. Haz clic en tu plantilla .psd y luego en Abrir. Verás una tira larga y transparente. Cada cuadro es un espacio para una letra."),
           ])
           + _sp("2","Pon tu fondo",[
             ("Coloca tu foto:","ve a <strong>Archivo &gt; Colocar incrustado</strong>. Haz clic en tu foto de fondo, la tuya o la de Unsplash, y luego en Colocar."),
