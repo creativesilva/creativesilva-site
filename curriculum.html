@@ -845,6 +845,10 @@
       transition: filter 0.15s;
     }
     .pin-card button:hover { filter: brightness(1.15); }
+    .pin-or { margin: 16px 0 12px; font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .pin-card button.pin-google { background: #ffffff; color: #1f2937; display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-transform: none; letter-spacing: 0.01em; font-size: 0.84rem; }
+    .pin-card button.pin-google:hover { filter: brightness(0.96); }
+    .pin-card button.pin-google svg { width: 18px; height: 18px; flex: 0 0 auto; }
     .pin-error {
       font-size: 0.78rem;
       color: #f87171;
@@ -1234,6 +1238,8 @@
       <p>Private access only.<br>Enter your code to continue.</p>
       <input type="text" id="pin-input" inputmode="numeric" autocomplete="off" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="••••••" maxlength="10" />
       <button onclick="silvaCheckPin()">Continue</button>
+      <div class="pin-or">or</div>
+      <button type="button" class="pin-google" id="pin-google-btn"><svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg>Sign in with Google</button>
       <div class="pin-error" id="pin-error"></div>
     </div>
   </div>
@@ -1278,6 +1284,46 @@
         el.value = ''; el.dataset.real = ''; el.focus();
       }
     }
+  </script>
+  <script>
+    // ── Google sign-in gate (Firebase, same project as the Command Center) ──
+    // Only these Google accounts (lowercase) unlock the catalog. The PIN above still works as a
+    // fallback during rollout; once Google sign-in is confirmed, the PIN block can be removed.
+    // NOTE: this is a static page, so the allowed-email check is client-side (gates the view, not
+    // the raw source). It is a stronger gate than a shared PIN, not a server-enforced lock.
+    window.SILVA_ALLOWED_EMAILS = ['creativesilva1@gmail.com'];
+    (async function () {
+      var errEl = function () { return document.getElementById('pin-error'); };
+      try {
+        var cfg = { apiKey: "AIzaSyCXVzzAeh3U-RwYaKzCXOTBiNAarHWNqVo", authDomain: "girl-scouts-silva.firebaseapp.com", projectId: "girl-scouts-silva" };
+        var appMod = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+        var authMod = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+        var app = appMod.initializeApp(cfg);
+        var auth = authMod.getAuth(app);
+        var provider = new authMod.GoogleAuthProvider();
+        var btn = document.getElementById('pin-google-btn');
+        if (btn) btn.addEventListener('click', function () {
+          if (errEl()) errEl().textContent = '';
+          authMod.signInWithPopup(auth, provider).catch(function (e) {
+            if (errEl()) errEl().textContent = 'Google sign-in failed: ' + ((e && e.code) || (e && e.message) || 'try again');
+          });
+        });
+        authMod.onAuthStateChanged(auth, function (user) {
+          if (!user) return; // not signed in: leave the gate up (the PIN is still available)
+          var email = (user.email || '').toLowerCase();
+          if (window.SILVA_ALLOWED_EMAILS.indexOf(email) >= 0) {
+            sessionStorage.setItem('silva-auth', 'ok');
+            var g = document.getElementById('pin-gate'); if (g) g.classList.add('hidden');
+          } else {
+            if (errEl()) errEl().textContent = 'That account (' + (user.email || '') + ') is not authorized.';
+            authMod.signOut(auth);
+          }
+        });
+      } catch (e) {
+        // Firebase could not load: the PIN fallback still works, so fail quietly.
+        if (window.console) console.warn('Google sign-in unavailable:', e);
+      }
+    })();
   </script>
 
   <header class="site-header">
