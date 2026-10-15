@@ -32,8 +32,8 @@ def ent(s):
 
 # Every image slot starts OFF. Flip to True (and drop the file in assets/images/<course>/important-person/)
 # when the art is ready, then re-run this builder.
-HAVE_HEADER=False    # overview hero (21:9), assets/images/<course>/important-person/header-v1.jpg
-HAVE_S2_FLOAT=False  # Step 02 journaling float, assets/images/<course>/important-person/journal-float-v1.jpg
+HAVE_HEADER=True     # overview hero (21:9), assets/images/<course>/important-person/header-v1.jpg
+HAVE_S2_FLOAT=True   # Step 02 float: a B&W environmental portrait of a photography teacher (example important person), assets/images/<course>/important-person/journal-float-v1.jpg
 
 STANDARDS=[
   {"code":"SA.17.2","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
@@ -105,7 +105,7 @@ def build(course):
                 ("Image 2 is them in action:","a photo of your person doing or showing what they do."),
                 ("Image 3 is them in action again:","a second photo of them doing their thing, from a new angle or a new moment."),
             ])
-            + (framed(HEADER,"A Pioneer Valley student&rsquo;s three image series about an important person: a portrait beside two photos of that person doing what they do") if HAVE_HEADER else ""))
+            + (framed(HEADER,"A warm portrait of two people smiling side by side, an older man with his arm around a younger man, the kind of important person this project celebrates") if HAVE_HEADER else ""))
         en+=standards_box(False, STANDARDS)
         en+=card("WHY THIS PERSON","Start With Someone Who Matters",
             para("The strongest photo stories come from real feelings. Think about someone who made your life better. Maybe they taught you something, believed in you, worked hard for you, or showed you how to do something you love.")
@@ -133,7 +133,7 @@ def build(course):
                 ("La imagen 2 es en acci&oacute;n:","una foto de tu persona haciendo o mostrando lo que hace."),
                 ("La imagen 3 es en acci&oacute;n otra vez:","una segunda foto de ella haciendo lo suyo, desde un nuevo &aacute;ngulo o un nuevo momento."),
             ])
-            + (framed(HEADER,"La serie de tres im&aacute;genes de una estudiante de Pioneer Valley sobre una persona importante: un retrato junto a dos fotos de esa persona haciendo lo que hace") if HAVE_HEADER else ""))
+            + (framed(HEADER,"Un retrato c&aacute;lido de dos personas sonriendo lado a lado, un hombre mayor con el brazo sobre un hombre m&aacute;s joven, el tipo de persona importante que celebra este proyecto") if HAVE_HEADER else ""))
         es+=standards_box(True, STANDARDS)
         es+=card("POR QU&Eacute; ESTA PERSONA","Empieza con Alguien que Importa",
             para("Las historias en fotos m&aacute;s fuertes nacen de sentimientos reales. Piensa en alguien que hizo tu vida mejor. Tal vez te ense&ntilde;&oacute; algo, crey&oacute; en ti, trabaj&oacute; duro por ti o te mostr&oacute; c&oacute;mo hacer algo que amas.")
@@ -160,7 +160,7 @@ def build(course):
             "A journal writing exercise. Brainstorm three people, then pick the one with the strongest story.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_SKETCH)
         en+=card("STEP 02 &middot; JOURNAL / BRAINSTORM","Write About Three People You Could Choose",
-            (float_right(S2_FLOAT,"A Pioneer Valley student writing a brainstorm list of three important people in a journal","Think on paper first. Your best story starts here.") if HAVE_S2_FLOAT else "")
+            (float_right(S2_FLOAT,"A black and white environmental portrait of a smiling photography teacher standing beside his medium format camera on a tripod","A teacher could be your important person. See how this photo shows him with what he does.") if HAVE_S2_FLOAT else "")
             + para("Before you pick up a camera, think on paper. In your journal, brainstorm <strong>three different people</strong> you could tell a story about. Writing it out helps you choose the person with the strongest story.")
             + para("For each of your three people, write <strong>three short reasons</strong> why you are thinking about them. That is three people, and three reasons for each.")
             + bullets([
@@ -185,7 +185,7 @@ def build(course):
             "Un ejercicio de escritura en el diario. Haz una lluvia de ideas de tres personas y elige la de la historia m&aacute;s fuerte.",
             "#top","Back to English", HICON_SKETCH)
         es+=card("PASO 02 &middot; DIARIO / LLUVIA DE IDEAS","Escribe Sobre Tres Personas que Podr&iacute;as Elegir",
-            (float_right(S2_FLOAT,"Una estudiante de Pioneer Valley escribiendo una lista de tres personas importantes en un diario","Piensa en papel primero. Tu mejor historia empieza aqu&iacute;.") if HAVE_S2_FLOAT else "")
+            (float_right(S2_FLOAT,"Un retrato ambiental en blanco y negro de un maestro de fotograf&iacute;a sonriendo junto a su c&aacute;mara de formato medio sobre un tr&iacute;pode","Un maestro puede ser tu persona importante. Mira c&oacute;mo esta foto lo muestra con lo que hace.") if HAVE_S2_FLOAT else "")
             + para("Antes de tomar una c&aacute;mara, piensa en papel. En tu diario, haz una lluvia de ideas de <strong>tres personas distintas</strong> sobre las que podr&iacute;as contar una historia. Escribirlo te ayuda a elegir a la persona de la historia m&aacute;s fuerte.")
             + para("Para cada una de tus tres personas, escribe <strong>tres razones cortas</strong> de por qu&eacute; est&aacute;s pensando en ellas. Son tres personas, y tres razones para cada una.")
             + bullets([
