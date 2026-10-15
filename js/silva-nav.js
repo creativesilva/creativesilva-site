@@ -284,7 +284,8 @@
      '/curriculum/shared/photo1-spell-your-name-step04-reflection.html',
      '/curriculum/shared/photo1-spell-your-name-step05-name-collage.html'],
     ['/curriculum/shared/photo1-important-person-overview.html',
-     '/curriculum/shared/photo1-important-person-step02-choose-your-person.html'],
+     '/curriculum/shared/photo1-important-person-step02-choose-your-person.html',
+     '/curriculum/shared/photo1-important-person-step03-storyboard.html'],
     ['/curriculum/photo2/photo2a-home.html',
      '/curriculum/photo2/photo2a-course-overview.html',
      '/curriculum/photo2/photo2a-syllabus.html'],
@@ -325,7 +326,8 @@
      '/curriculum/shared/photo2-spell-your-name-step04-reflection.html',
      '/curriculum/shared/photo2-spell-your-name-step05-name-collage.html'],
     ['/curriculum/shared/photo2-important-person-overview.html',
-     '/curriculum/shared/photo2-important-person-step02-choose-your-person.html']
+     '/curriculum/shared/photo2-important-person-step02-choose-your-person.html',
+     '/curriculum/shared/photo2-important-person-step03-storyboard.html']
   ];
 
   var SEQUENCE = [];

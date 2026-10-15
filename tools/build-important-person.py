@@ -34,6 +34,7 @@ def ent(s):
 # when the art is ready, then re-run this builder.
 HAVE_HEADER=True     # overview hero (21:9), assets/images/<course>/important-person/header-v1.jpg
 HAVE_S2_FLOAT=True   # Step 02 float: a B&W environmental portrait of a photography teacher (example important person), assets/images/<course>/important-person/journal-float-v1.jpg
+HAVE_S3_FLOAT=False  # Step 03 storyboard float (none supplied yet), assets/images/<course>/important-person/storyboard-float-v1.jpg
 
 STANDARDS=[
   {"code":"SA.17.2","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
@@ -74,8 +75,10 @@ def build(course):
     IMGDIR=f"{SITE}/assets/images/{course}/important-person"
     HEADER=f"{IMGDIR}/header-v1.jpg"
     S2_FLOAT=f"{IMGDIR}/journal-float-v1.jpg"
+    S3_FLOAT=f"{IMGDIR}/storyboard-float-v1.jpg"
     OVER=f"{course}-important-person-overview.html"
     S2=f"{course}-important-person-step02-choose-your-person.html"
+    S3=f"{course}-important-person-step03-storyboard.html"
 
     def nav(current,dots,stepnav):
         return ('      <div class="silva-breadcrumb">\n'
@@ -88,7 +91,7 @@ def build(course):
                 '      <div class="silva-nav-spacer"></div>\n'
                 f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
                 f'      <div class="silva-step-nav">{stepnav}</div>')
-    HREFS=[OVER,S2]; TITLES=[("1","Step 01"),("2","Step 02")]
+    HREFS=[OVER,S2,S3]; TITLES=[("1","Step 01"),("2","Step 02"),("3","Step 03")]
     def dots_for(ai):
         return "".join(dot("" if i==ai else HREFS[i], lab, title, i==ai, module=False) for i,(lab,title) in enumerate(TITLES))
 
@@ -110,11 +113,20 @@ def build(course):
         en+=card("WHY THIS PERSON","Start With Someone Who Matters",
             para("The strongest photo stories come from real feelings. Think about someone who made your life better. Maybe they taught you something, believed in you, worked hard for you, or showed you how to do something you love.")
             + para("The more the person means to you, the stronger your photos will be. You will get to know their story and show it through your three images."))
+        en+=card("THE THREE IMAGE STORY","Why Three Images",
+            para("One photo can show a face. Three photos can tell a story. That is why this project uses a <strong>three image series</strong>, a small photo story about one person.")
+            + bullets([
+                ("The portrait shows who they are:","your first image is a clear portrait. We look them in the eye and meet them."),
+                ("The action images show what they do:","your next two images show your person doing their thing: teaching, coaching, cooking, building, or playing. This is where their story comes alive."),
+                ("Together they say more than one photo can:","a portrait plus real action tells us who this person is and why they matter to you."),
+            ])
+            + note("Tip: pick someone you can actually photograph doing their thing. The best important-person stories happen when you can be there while they do what they love."))
         en+=card("HOW THIS MODULE WORKS","From an Idea to a Photo Story",
             para("You are on Step 01 now: read this page so you understand the project. Here is what comes next.")
             + bullets([
                 ("Step 02 &middot; Choose Your Person:","in your journal, brainstorm three people you could photograph and three reasons for each, then pick the one with the strongest story."),
-                ("Coming next:","over the next weeks you will plan your three images, photograph your person, and edit your series. New steps will appear here in this module."),
+                ("Step 03 &middot; Storyboard &amp; Treatment:","plan your three images on paper. Sketch each one and write its full plan: composition, focal length, aperture, and lighting."),
+                ("Coming next:","with your plan ready, you will photograph your important person and edit your series. New steps will appear here in this module."),
             ]))
         en+=resources_card("Key Words",
             vocab_grid("On the Quiz",
@@ -138,11 +150,20 @@ def build(course):
         es+=card("POR QU&Eacute; ESTA PERSONA","Empieza con Alguien que Importa",
             para("Las historias en fotos m&aacute;s fuertes nacen de sentimientos reales. Piensa en alguien que hizo tu vida mejor. Tal vez te ense&ntilde;&oacute; algo, crey&oacute; en ti, trabaj&oacute; duro por ti o te mostr&oacute; c&oacute;mo hacer algo que amas.")
             + para("Entre m&aacute;s signifique la persona para ti, m&aacute;s fuertes ser&aacute;n tus fotos. Conocer&aacute;s su historia y la mostrar&aacute;s con tus tres im&aacute;genes."))
+        es+=card("LA HISTORIA EN TRES IM&Aacute;GENES","Por Qu&eacute; Tres Im&aacute;genes",
+            para("Una foto puede mostrar una cara. Tres fotos pueden contar una historia. Por eso este proyecto usa una <strong>serie de tres im&aacute;genes</strong>, una peque&ntilde;a historia en fotos sobre una persona.")
+            + bullets([
+                ("El retrato muestra qui&eacute;n es:","tu primera imagen es un retrato claro. La miramos a los ojos y la conocemos."),
+                ("Las im&aacute;genes de acci&oacute;n muestran qu&eacute; hace:","tus siguientes dos im&aacute;genes muestran a tu persona haciendo lo suyo: ense&ntilde;ando, entrenando, cocinando, construyendo o jugando. Aqu&iacute; cobra vida su historia."),
+                ("Juntas dicen m&aacute;s que una sola foto:","un retrato m&aacute;s acci&oacute;n real nos dice qui&eacute;n es esta persona y por qu&eacute; es importante para ti."),
+            ])
+            + note("Consejo: elige a alguien que de verdad puedas fotografiar haciendo lo suyo. Las mejores historias pasan cuando puedes estar ah&iacute; mientras hace lo que ama."))
         es+=card("C&Oacute;MO FUNCIONA ESTE M&Oacute;DULO","De una Idea a una Historia en Fotos",
             para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina para entender el proyecto. Esto es lo que sigue.")
             + bullets([
                 ("Paso 02 &middot; Elige a Tu Persona:","en tu diario, haz una lluvia de ideas de tres personas que podr&iacute;as fotografiar y tres razones para cada una, luego elige la de la historia m&aacute;s fuerte."),
-                ("Lo que sigue:","en las pr&oacute;ximas semanas planear&aacute;s tus tres im&aacute;genes, fotografiar&aacute;s a tu persona y editar&aacute;s tu serie. Los nuevos pasos aparecer&aacute;n aqu&iacute; en este m&oacute;dulo."),
+                ("Paso 03 &middot; Storyboard y Tratamiento:","planea tus tres im&aacute;genes en papel. Dibuja cada una y escribe su plan completo: composici&oacute;n, distancia focal, apertura e iluminaci&oacute;n."),
+                ("Lo que sigue:","con tu plan listo, fotografiar&aacute;s a tu persona importante y editar&aacute;s tu serie. Los nuevos pasos aparecer&aacute;n aqu&iacute; en este m&oacute;dulo."),
             ]))
         es+=resources_card("Palabras Clave",
             vocab_grid("En el Examen",
@@ -179,7 +200,7 @@ def build(course):
                 ("Take a photo with your student iPad:","fill the frame with your page and keep it straight, so your writing is easy to read."),
                 ("Upload the JPG:","upload your photo to this Canvas assignment."),
             ]))
-        en+=next_up("UP NEXT &middot; PLAN &amp; CAPTURE YOUR SERIES","Soon you will plan your three images and photograph your important person. New steps are coming to this module.")
+        en+=next_up("UP NEXT &middot; STEP 03 - Storyboard &amp; Treatment","Plan your three images on paper: sketch each one and write its full plan before you pick up a camera.")
 
         es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 02","Elige a Tu Persona Importante",
             "Un ejercicio de escritura en el diario. Haz una lluvia de ideas de tres personas y elige la de la historia m&aacute;s fuerte.",
@@ -204,13 +225,85 @@ def build(course):
                 ("Toma una foto con tu iPad de estudiante:","llena el encuadre con tu p&aacute;gina y mantenla derecha, para que tu letra se lea f&aacute;cil."),
                 ("Sube el JPG:","sube tu foto a esta tarea de Canvas."),
             ]))
-        es+=next_up("A CONTINUACI&Oacute;N &middot; PLANEA Y CAPTURA TU SERIE","Pronto planear&aacute;s tus tres im&aacute;genes y fotografiar&aacute;s a tu persona importante. Vienen nuevos pasos a este m&oacute;dulo.")
+        es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Storyboard y Tratamiento","Planea tus tres im&aacute;genes en papel: dibuja cada una y escribe su plan completo antes de tomar la c&aacute;mara.")
 
-        stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a>'
-        bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><span></span></div>'
+        stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a> <a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
+        bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
         return wrap_page(f"Step 2: Choose Your Person | The Important Person Project | {CL_EN} | PVHS", nav("Step 02",dots_for(1),stepnav), top_wrap(en,es), bottom)
 
-    for fname,gen in [(OVER,overview),(S2,step02)]:
+    # ================= STEP 03: Storyboard & Treatment (plan the series, hand journal) =================
+    def step03():
+        en=banner(f"Module {MODNUM} &bull; Step 03","Storyboard Your Three Images",
+            "Plan your series on paper before you pick up a camera. Sketch each image and write its plan.",
+            "#espanol","Clic para Espa&ntilde;ol", HICON_SKETCH)
+        en+=card("STEP 03 &middot; PLAN YOUR SERIES","Storyboard and Treatment",
+            (float_right(S3_FLOAT,"A storyboard page with a hand sketch of a planned photo and a written plan beside it","Plan each image before you make it.") if HAVE_S3_FLOAT else "")
+            + para("Before you photograph your important person, plan it. Real photographers call this <strong>pre-production</strong>, the thinking you do before the camera comes out. A strong plan makes a strong series.")
+            + para("You will make two things in your journal for your series: a <strong>storyboard</strong> and a <strong>treatment</strong>.")
+            + bullets([
+                ("Storyboard:","a simple sketch of each of your three images. It does not need to be fancy. Draw a box and show where your person is, what is behind them, and what is happening."),
+                ("Treatment:","a short written plan for each image. It describes exactly how you will make that photo. Treatment is the real industry word for your written plan."),
+            ])
+            + note("You already picked your person in Step 02. Now you plan the three photos you will take of them: one portrait and two of them in action."))
+        en+=card("WHAT TO PLAN / EACH IMAGE","Write a Full Plan for All Three Images",
+            para("Make one page for each of your three images. On every page, sketch the image, then write a paragraph that covers your full plan. Answer all of these:")
+            + bullets([
+                ("What is happening:","what is your person doing in this image, and what story does it tell?"),
+                ("Composition:","how will you frame it? Where will your person sit in the photo? Think about the rule of thirds, the foreground, and the background."),
+                ("Focal length:","which lens or zoom will you use? Close and tight on your person, or wide to show the whole scene?"),
+                ("Aperture:","do you want a blurry background (a low f-number like f/2.8) or a sharp background (a higher f-number like f/8)?"),
+                ("Lighting:","where will your light come from, and how will you shape it? Think about window light, open shade, or adding your own light."),
+            ])
+            + note("Remember the three image plan: image 1 is a portrait, and images 2 and 3 are your person in action, doing what they do."))
+        en+=deliverables_box(False,
+            [("3 storyboard pages (JPG):","a clear photo of each of your three storyboard pages, one per image, with a sketch and a full written plan on every page, uploaded to this Canvas assignment.")])
+        en+=card("HOW TO TURN IT IN","Scan Your Storyboard Pages With Your iPad",
+            para("Your storyboard is on paper, so take a photo of each page to turn it in. Use your <strong>school student iPad</strong> as a camera. This is how we scan paper work in this class.")
+            + bullets([
+                ("Lay each page flat:","good light, with no shadow across your sketch or your writing."),
+                ("Take a photo with your student iPad:","fill the frame with the page and keep it straight, so your sketch and plan are easy to read."),
+                ("Upload all three JPGs:","upload one photo for each image, three pages in all."),
+            ]))
+        en+=next_up("UP NEXT &middot; CAPTURE YOUR SERIES","With your plan ready, you will photograph your important person: your portrait and two images of them in action. New steps are coming to this module.")
+
+        es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 03","Haz el Storyboard de Tus Tres Im&aacute;genes",
+            "Planea tu serie en papel antes de tomar la c&aacute;mara. Dibuja cada imagen y escribe su plan.",
+            "#top","Back to English", HICON_SKETCH)
+        es+=card("PASO 03 &middot; PLANEA TU SERIE","Storyboard y Tratamiento",
+            (float_right(S3_FLOAT,"Una p&aacute;gina de storyboard con el dibujo a mano de una foto planeada y un plan escrito al lado","Planea cada imagen antes de hacerla.") if HAVE_S3_FLOAT else "")
+            + para("Antes de fotografiar a tu persona importante, plan&eacute;alo. Los fot&oacute;grafos de verdad llaman a esto <strong>preproducci&oacute;n</strong>, el pensar que haces antes de sacar la c&aacute;mara. Un buen plan hace una buena serie.")
+            + para("Har&aacute;s dos cosas en tu diario para tu serie: un <strong>storyboard</strong> y un <strong>tratamiento</strong>.")
+            + bullets([
+                ("Storyboard (gui&oacute;n gr&aacute;fico):","un dibujo sencillo de cada una de tus tres im&aacute;genes. No tiene que ser elegante. Dibuja un recuadro y muestra d&oacute;nde est&aacute; tu persona, qu&eacute; hay detr&aacute;s y qu&eacute; est&aacute; pasando."),
+                ("Tratamiento (treatment):","un plan corto escrito para cada imagen. Describe exactamente c&oacute;mo vas a hacer esa foto. Tratamiento es la palabra profesional para tu plan escrito."),
+            ])
+            + note("Ya elegiste a tu persona en el Paso 02. Ahora planeas las tres fotos que le tomar&aacute;s: un retrato y dos de ella en acci&oacute;n."))
+        es+=card("QU&Eacute; PLANEAR / CADA IMAGEN","Escribe un Plan Completo para las Tres Im&aacute;genes",
+            para("Haz una p&aacute;gina para cada una de tus tres im&aacute;genes. En cada p&aacute;gina, dibuja la imagen y luego escribe un p&aacute;rrafo con tu plan completo. Contesta todo esto:")
+            + bullets([
+                ("Qu&eacute; est&aacute; pasando:","&iquest;qu&eacute; hace tu persona en esta imagen y qu&eacute; historia cuenta?"),
+                ("Composici&oacute;n:","&iquest;c&oacute;mo vas a encuadrar? &iquest;D&oacute;nde estar&aacute; tu persona en la foto? Piensa en la regla de los tercios, el primer plano y el fondo."),
+                ("Distancia focal:","&iquest;qu&eacute; lente o zoom usar&aacute;s? &iquest;Cerca y cerrado sobre tu persona, o abierto para mostrar toda la escena?"),
+                ("Apertura:","&iquest;quieres un fondo borroso (un n&uacute;mero f bajo como f/2.8) o un fondo n&iacute;tido (un n&uacute;mero f m&aacute;s alto como f/8)?"),
+                ("Iluminaci&oacute;n:","&iquest;de d&oacute;nde vendr&aacute; tu luz y c&oacute;mo la vas a controlar? Piensa en luz de ventana, sombra abierta o agregar tu propia luz."),
+            ])
+            + note("Recuerda el plan de tres im&aacute;genes: la imagen 1 es un retrato, y las im&aacute;genes 2 y 3 son tu persona en acci&oacute;n, haciendo lo que hace."))
+        es+=deliverables_box(True,
+            [("3 p&aacute;ginas de storyboard (JPG):","una foto clara de cada una de tus tres p&aacute;ginas de storyboard, una por imagen, con un dibujo y un plan escrito completo en cada p&aacute;gina, subida a esta tarea de Canvas.")])
+        es+=card("C&Oacute;MO ENTREGARLO","Escanea Tus P&aacute;ginas de Storyboard con Tu iPad",
+            para("Tu storyboard est&aacute; en papel, as&iacute; que toma una foto de cada p&aacute;gina para entregarlo. Usa tu <strong>iPad escolar de estudiante</strong> como c&aacute;mara. As&iacute; escaneamos el trabajo en papel en esta clase.")
+            + bullets([
+                ("Pon cada p&aacute;gina plana:","buena luz, sin que una sombra cruce tu dibujo o tu texto."),
+                ("Toma una foto con tu iPad de estudiante:","llena el encuadre con la p&aacute;gina y mantenla derecha, para que tu dibujo y tu plan se lean f&aacute;cil."),
+                ("Sube las tres JPG:","sube una foto por cada imagen, tres p&aacute;ginas en total."),
+            ]))
+        es+=next_up("A CONTINUACI&Oacute;N &middot; CAPTURA TU SERIE","Con tu plan listo, fotografiar&aacute;s a tu persona importante: tu retrato y dos im&aacute;genes de ella en acci&oacute;n. Vienen nuevos pasos a este m&oacute;dulo.")
+
+        stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
+        bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'
+        return wrap_page(f"Step 3: Storyboard and Treatment | The Important Person Project | {CL_EN} | PVHS", nav("Step 03",dots_for(2),stepnav), top_wrap(en,es), bottom)
+
+    for fname,gen in [(OVER,overview),(S2,step02),(S3,step03)]:
         html=ent(gen())
         ban_check(html, fname)
         open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
