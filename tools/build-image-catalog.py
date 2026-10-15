@@ -50,7 +50,7 @@ def modules_from_catalog():
         c=re.search(r'course:\s*"([^"]+)"',b); n=re.search(r'name:\s*"([^"]+)"',b); u=re.search(r'url:\s*"([^"]+)"',b)
         st=re.search(r'status:\s*"([^"]+)"',b); inact='inactive: true' in b or 'inactive:true' in b
         if not (c and n and u): continue
-        if not re.match(r'Module\s*\d',n.group(1)): continue           # module entries only
+        if not re.match(r'(Module|Project)\s*\d',n.group(1)): continue  # module + project entries
         if c.group(1) not in COURSE_NAME: continue                      # active teaching courses
         if inact or (st and st.group(1)!="published"): continue
         mods.append((c.group(1), n.group(1), u.group(1)))
@@ -82,7 +82,7 @@ def collect():
     mods=modules_from_catalog()
     seen=set(); bycourse={c:[] for c in COURSE_ORDER}
     for course,name,overview_url in mods:
-        title=re.sub(r'^Module\s*\d+:\s*','',name)   # "Module 05: Live Stream Graphic" -> title
+        title=re.sub(r'^(Module|Project)\s*\d+:\s*','',name)   # "Module 05: Live Stream Graphic" / "Project 01: ..." -> title
         stem,steps=step_pages(overview_url)
         overview=os.path.join(ROOT,overview_url)
         # header: first teal-framed content image on the overview

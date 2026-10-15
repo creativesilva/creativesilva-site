@@ -70,7 +70,7 @@ VOCAB_ES=[
 
 def build(course):
     p2 = (course == "photo2")
-    MODNUM = "10" if p2 else "11"
+    PROJNUM = "01"  # Important Person is each course's FIRST project (a project, not a module)
     CL_EN = "Photography 2A" if p2 else "Photography 1A"
     IMGDIR=f"{SITE}/assets/images/{course}/important-person"
     HEADER=f"{IMGDIR}/header-v1.jpg"
@@ -97,7 +97,7 @@ def build(course):
 
     # ================= OVERVIEW (Step 01) =================
     def overview():
-        en=banner(f"Module {MODNUM} &bull; Step 01","The Important Person Project",
+        en=banner(f"Project {PROJNUM} &bull; Step 01","The Important Person Project",
             "Tell the story of someone who changed your life, in three photos. Read this page, then go to Step 02.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_CAMERA_KIT)
         en+=type_card("overview","Step 01 &middot; Overview","Tell Someone&rsquo;s Story in Three Photos",
@@ -122,12 +122,12 @@ def build(course):
                 ("Image 3 &middot; Wide action:","the whole team celebrating the win, the coach lifting his arm in the middle of it. A wide photo, knees to full body. We feel the big moment."),
             ])
             + note("Your person does not have to be a coach. A cook in their kitchen, a mechanic in the shop, an abuela at the stove, a musician on a stage, anyone with a space and a craft works. Pick someone you can be with while they do their thing, then plan your own three photos the same way: who they are, them in action up close, then the wide moment."))
-        en+=card("HOW THIS MODULE WORKS","From an Idea to a Photo Story",
+        en+=card("HOW THIS PROJECT WORKS","From an Idea to a Photo Story",
             para("You are on Step 01 now: read this page so you understand the project. Here is what comes next.")
             + bullets([
                 ("Step 02 &middot; Choose Your Person:","in your journal, brainstorm three important people, with why you are considering each one and how they impacted your life, then pick the one with the strongest story."),
                 ("Step 03 &middot; Storyboard &amp; Treatment:","plan your three images on paper. Sketch each one and write its full plan: composition, focal length, aperture, and lighting."),
-                ("Coming next:","with your plan ready, you will photograph your important person and edit your series. New steps will appear here in this module."),
+                ("Coming next:","with your plan ready, you will photograph your important person and edit your series. New steps will appear here in this project."),
             ]))
         en+=resources_card("Key Words",
             vocab_grid("On the Quiz",
@@ -135,7 +135,7 @@ def build(course):
               VOCAB_EN), False)
         en+=next_up("UP NEXT &middot; STEP 02 - Choose Your Person","Open your journal and brainstorm three people you could tell a story about.")
 
-        es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 01","El Proyecto de la Persona Importante",
+        es=banner(f"Proyecto {PROJNUM} &bull; Paso 01","El Proyecto de la Persona Importante",
             "Cuenta la historia de alguien que cambi&oacute; tu vida, en tres fotos. Lee esta p&aacute;gina y luego ve al Paso 02.",
             "#top","Back to English", HICON_CAMERA_KIT)
         es+=type_card("overview","Paso 01 &middot; Resumen","Cuenta la Historia de Alguien en Tres Fotos",
@@ -160,12 +160,12 @@ def build(course):
                 ("Imagen 3 &middot; Acci&oacute;n abierta:","todo el equipo celebrando la victoria, con el entrenador levantando el brazo en medio de todos. Una foto abierta, de las rodillas al cuerpo completo. Sentimos el gran momento."),
             ])
             + note("Tu persona no tiene que ser un entrenador. Un cocinero en su cocina, un mec&aacute;nico en el taller, una abuela en la estufa, un m&uacute;sico en un escenario, cualquiera con un espacio y un oficio sirve. Elige a alguien con quien puedas estar mientras hace lo suyo, y luego planea tus propias tres fotos igual: qui&eacute;n es, en acci&oacute;n de cerca, y luego el momento abierto."))
-        es+=card("C&Oacute;MO FUNCIONA ESTE M&Oacute;DULO","De una Idea a una Historia en Fotos",
+        es+=card("C&Oacute;MO FUNCIONA ESTE PROYECTO","De una Idea a una Historia en Fotos",
             para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina para entender el proyecto. Esto es lo que sigue.")
             + bullets([
                 ("Paso 02 &middot; Elige a Tu Persona:","en tu diario, haz una lluvia de ideas de tres personas importantes, con por qu&eacute; consideras a cada una y c&oacute;mo impactaron tu vida, luego elige la de la historia m&aacute;s fuerte."),
                 ("Paso 03 &middot; Storyboard y Tratamiento:","planea tus tres im&aacute;genes en papel. Dibuja cada una y escribe su plan completo: composici&oacute;n, distancia focal, apertura e iluminaci&oacute;n."),
-                ("Lo que sigue:","con tu plan listo, fotografiar&aacute;s a tu persona importante y editar&aacute;s tu serie. Los nuevos pasos aparecer&aacute;n aqu&iacute; en este m&oacute;dulo."),
+                ("Lo que sigue:","con tu plan listo, fotografiar&aacute;s a tu persona importante y editar&aacute;s tu serie. Los nuevos pasos aparecer&aacute;n aqu&iacute; en este proyecto."),
             ]))
         es+=resources_card("Palabras Clave",
             vocab_grid("En el Examen",
@@ -179,7 +179,7 @@ def build(course):
 
     # ================= STEP 02: Choose Your Person (journal writing exercise) =================
     def step02():
-        en=banner(f"Module {MODNUM} &bull; Step 02","Choose Your Important Person",
+        en=banner(f"Project {PROJNUM} &bull; Step 02","Choose Your Important Person",
             "A journal writing exercise. Brainstorm three people, then pick the one with the strongest story.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_SKETCH)
         en+=card("STEP 02 &middot; JOURNAL / BRAINSTORM","Write About Three People You Could Choose",
@@ -204,7 +204,7 @@ def build(course):
             ]))
         en+=next_up("UP NEXT &middot; STEP 03 - Storyboard &amp; Treatment","Plan your three images on paper: sketch each one and write its full plan before you pick up a camera.")
 
-        es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 02","Elige a Tu Persona Importante",
+        es=banner(f"Proyecto {PROJNUM} &bull; Paso 02","Elige a Tu Persona Importante",
             "Un ejercicio de escritura en el diario. Haz una lluvia de ideas de tres personas y elige la de la historia m&aacute;s fuerte.",
             "#top","Back to English", HICON_SKETCH)
         es+=card("PASO 02 &middot; DIARIO / LLUVIA DE IDEAS","Escribe Sobre Tres Personas que Podr&iacute;as Elegir",
@@ -235,7 +235,7 @@ def build(course):
 
     # ================= STEP 03: Storyboard & Treatment (plan the series, hand journal) =================
     def step03():
-        en=banner(f"Module {MODNUM} &bull; Step 03","Storyboard Your Three Images",
+        en=banner(f"Project {PROJNUM} &bull; Step 03","Storyboard Your Three Images",
             "Plan your series on paper before you pick up a camera. Sketch each image and write its plan.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_SKETCH)
         en+=card("STEP 03 &middot; PLAN YOUR SERIES","Storyboard and Treatment",
@@ -266,9 +266,9 @@ def build(course):
                 ("Take a photo with your student iPad:","fill the frame with the page and keep it straight, so your sketch and plan are easy to read."),
                 ("Upload all three JPGs:","upload one photo for each image, three pages in all."),
             ]))
-        en+=next_up("UP NEXT &middot; CAPTURE YOUR SERIES","With your plan ready, you will photograph your important person: your portrait and two images of them in action. New steps are coming to this module.")
+        en+=next_up("UP NEXT &middot; CAPTURE YOUR SERIES","With your plan ready, you will photograph your important person: your portrait and two images of them in action. New steps are coming to this project.")
 
-        es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 03","Haz el Storyboard de Tus Tres Im&aacute;genes",
+        es=banner(f"Proyecto {PROJNUM} &bull; Paso 03","Haz el Storyboard de Tus Tres Im&aacute;genes",
             "Planea tu serie en papel antes de tomar la c&aacute;mara. Dibuja cada imagen y escribe su plan.",
             "#top","Back to English", HICON_SKETCH)
         es+=card("PASO 03 &middot; PLANEA TU SERIE","Storyboard y Tratamiento",
@@ -299,7 +299,7 @@ def build(course):
                 ("Toma una foto con tu iPad de estudiante:","llena el encuadre con la p&aacute;gina y mantenla derecha, para que tu dibujo y tu plan se lean f&aacute;cil."),
                 ("Sube las tres JPG:","sube una foto por cada imagen, tres p&aacute;ginas en total."),
             ]))
-        es+=next_up("A CONTINUACI&Oacute;N &middot; CAPTURA TU SERIE","Con tu plan listo, fotografiar&aacute;s a tu persona importante: tu retrato y dos im&aacute;genes de ella en acci&oacute;n. Vienen nuevos pasos a este m&oacute;dulo.")
+        es+=next_up("A CONTINUACI&Oacute;N &middot; CAPTURA TU SERIE","Con tu plan listo, fotografiar&aacute;s a tu persona importante: tu retrato y dos im&aacute;genes de ella en acci&oacute;n. Vienen nuevos pasos a este proyecto.")
 
         stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a>'
         bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'

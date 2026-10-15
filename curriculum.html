@@ -1656,7 +1656,7 @@
       { course: "photo1a", name: "Module 08: Aperture Portrait", pages: 4, status: "published", url: "curriculum/shared/photo1-aperture-portrait-overview.html" },
       { course: "photo1a", name: "Module 09: Exposure Balance", pages: 4, status: "published", url: "curriculum/shared/photo1-exposure-balance-overview.html" },
       { course: "photo1a", name: "Module 10: Spell Your Name Photo Walk", pages: 5, status: "published", url: "curriculum/shared/photo1-spell-your-name-overview.html" },
-      { course: "photo1a", name: "Module 11: The Important Person Project", pages: 3, status: "published", url: "curriculum/shared/photo1-important-person-overview.html" },
+      { course: "photo1a", name: "Project 01: The Important Person Project", pages: 3, status: "published", url: "curriculum/shared/photo1-important-person-overview.html" },
       { course: "photo2a", name: "Course Home", pages: 1, status: "published", url: "curriculum/photo2/photo2a-home.html" },
       { course: "photo2a", name: "Course Overview", pages: 1, status: "published", url: "curriculum/photo2/photo2a-course-overview.html" },
       { course: "photo2a", name: "Course Syllabus", pages: 1, status: "published", url: "curriculum/photo2/photo2a-syllabus.html" },
@@ -1670,7 +1670,7 @@
       { course: "photo2a", name: "Module 07: Aperture Portrait", pages: 4, status: "published", url: "curriculum/shared/photo2-aperture-portrait-overview.html" },
       { course: "photo2a", name: "Module 08: Exposure Balance", pages: 4, status: "published", url: "curriculum/shared/photo2-exposure-balance-overview.html" },
       { course: "photo2a", name: "Module 09: Spell Your Name Photo Walk", pages: 5, status: "published", url: "curriculum/shared/photo2-spell-your-name-overview.html" },
-      { course: "photo2a", name: "Module 10: The Important Person Project", pages: 3, status: "published", url: "curriculum/shared/photo2-important-person-overview.html" },
+      { course: "photo2a", name: "Project 01: The Important Person Project", pages: 3, status: "published", url: "curriculum/shared/photo2-important-person-overview.html" },
       { course: "photo2b", name: "Course Home", pages: 1, status: "published", url: "curriculum/photo2/photo2b-home.html" }
     ];
 
@@ -2492,6 +2492,7 @@
       return [overviewUrl];
     }
     function isModuleEntry(m) { return /^Module\s*\d/i.test(m.name); }
+    function isProjectEntry(m) { return /^Project\s*\d/i.test(m.name); }
     function pageLabel(url, i) {
       if (i === 0) return "Overview";
       const m = (url || "").match(/step0*(\d+)-(.+)\.html$/i);
@@ -2528,8 +2529,9 @@
       const subjCls = /photo/i.test(course.id) ? " course-photo" : (/da/i.test(course.id) ? " course-da" : "");
       const all = visibleModules(course.id);
       const announcements = all.filter(m => m.type === "announcement");
-      const coursePages = all.filter(m => !isModuleEntry(m) && m.type !== "announcement");
+      const coursePages = all.filter(m => !isModuleEntry(m) && !isProjectEntry(m) && m.type !== "announcement");
       const modules = all.filter(m => isModuleEntry(m) && m.type !== "announcement");
+      const projects = all.filter(m => isProjectEntry(m) && m.type !== "announcement");
 
       // "Course Pages": Home, Overview, Syllabus (+ Resources) packaged like a module.
       const coursePagesAcc = coursePages.length
@@ -2547,9 +2549,14 @@
           </details>`
         : "";
 
-      const moduleRows = coursePagesAcc + announcementsAcc + modules.map(moduleAcc).join("");
+      // Projects are a sibling category to Modules: same accordion UI, grouped under a "Projects"
+      // divider after the module list so each course shows its Modules AND its Projects.
+      const projectsBlock = projects.length
+        ? `<div class="module-group-label" style="margin:16px 4px 6px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.12);font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--course-accent);font-weight:700;opacity:0.95;">Projects</div>` + projects.map(moduleAcc).join("")
+        : "";
+      const moduleRows = coursePagesAcc + announcementsAcc + modules.map(moduleAcc).join("") + projectsBlock;
 
-      const empty = (coursePages.length + announcements.length + modules.length) === 0
+      const empty = (coursePages.length + announcements.length + modules.length + projects.length) === 0
         ? `<div class="course-empty"><p>No published modules yet</p></div>`
         : "";
 
@@ -2557,9 +2564,10 @@
         ? `<p class="staging-hint">To add a module: append an entry to MODULES in curriculum.html and set status to "staged" or "published".</p>`
         : "";
 
-      const liveCount = modules.filter(m => m.status === "published").length;
-      const countBadge = modules.length
-        ? `<span class="course-acc-count">${modules.length} module${modules.length === 1 ? "" : "s"} &middot; <span class="live">${liveCount} live</span></span>`
+      const liveCount = modules.concat(projects).filter(m => m.status === "published").length;
+      const projCount = projects.length;
+      const countBadge = (modules.length || projCount)
+        ? `<span class="course-acc-count">${modules.length} module${modules.length === 1 ? "" : "s"}${projCount ? ` &middot; ${projCount} project${projCount === 1 ? "" : "s"}` : ""} &middot; <span class="live">${liveCount} live</span></span>`
         : `<span class="course-acc-count empty">Coming soon</span>`;
 
       return `
@@ -2576,7 +2584,7 @@
             </span>
           </summary>
           <div class="course-acc-body">
-            ${(coursePages.length + announcements.length + modules.length) ? `<div class="module-list">${moduleRows}</div>` : empty}
+            ${(coursePages.length + announcements.length + modules.length + projects.length) ? `<div class="module-list">${moduleRows}</div>` : empty}
             ${docsBlock(course)}
             ${slideDecksBlock(course)}
             ${hint}
@@ -2687,7 +2695,7 @@
       ['da1a', 'photo1a', 'photo2a'].forEach(function (cid) {
         var course = COURSES.find(function (c) { return c.id === cid; });
         var mods = MODULES.filter(function (m) {
-          return m.course === cid && /^Module\s*\d/i.test(m.name) && m.status === 'published';
+          return m.course === cid && /^(Module|Project)\s*\d/i.test(m.name) && m.status === 'published';
         });
         if (!course || !mods.length) return;
         var hd = document.createElement('div');
@@ -2698,7 +2706,7 @@
           var a = document.createElement('a');
           a.href = '/' + m.url.replace(/^\//, '');
           a.className = 'cbc-mod';
-          a.textContent = m.name.replace(/^Module\s*(\d+):\s*/i, '$1 ');
+          a.textContent = m.name.replace(/^Module\s*(\d+):\s*/i, '$1 ').replace(/^Project\s*(\d+):\s*/i, 'Project $1: ');
           catMenu.appendChild(a);
         });
       });
