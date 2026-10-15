@@ -32,39 +32,43 @@ def ent(s):
 
 # Every image slot starts OFF. Flip to True (and drop the file in assets/images/<course>/important-person/)
 # when the art is ready, then re-run this builder.
-HAVE_HEADER=False    # GATED OFF (Chris 2026-10-15): retracted the Mr. Silva + Mr. Garcia photo. It is a retrospective of his OWN high-school important person, which contradicts the project's "current, actively-impacting person" rule, so it modeled the wrong thing. Awaiting a fitting present-day image. assets/images/<course>/important-person/header-v1.jpg
-HAVE_S2_FLOAT=False  # GATED OFF (Chris 2026-10-15): retracted the younger-Mr-Garcia headshot (a past image, same reason). assets/images/<course>/important-person/journal-float-v1.jpg
+HAVE_HEADER=True     # ON: Mr. Silva + Mr. Garcia. KEPT but REFRAMED (Chris 2026-10-15) as Mr. Silva's OWN example, who he would have chosen in high school when Mr. Garcia was actively his teacher. The "A Note From Mr. Silva" card explains it is NOT the student turn-in standard. assets/images/<course>/important-person/header-v1.jpg
+HAVE_S2_FLOAT=True   # ON: the B&W Mr. Garcia headshot, same reframe (Mr. Silva's example, not the turn-in standard). assets/images/<course>/important-person/journal-float-v1.jpg
 HAVE_S3_FLOAT=False  # Step 03 storyboard float (none supplied yet), assets/images/<course>/important-person/storyboard-float-v1.jpg
 
 STANDARDS=[
   {"code":"SA.17.2","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
-   "en_title":"Visual Communication","es_title":"Comunicaci&oacute;n Visual",
-   "en_desc":"You plan and tell a true story about a real person through a three image series.",
-   "es_desc":"Planeas y cuentas una historia verdadera sobre una persona real a trav&eacute;s de una serie de tres im&aacute;genes."},
+   "en_title":"Visual Communication &amp; Storytelling","es_title":"Comunicaci&oacute;n Visual y Narrativa",
+   "en_desc":"You plan and tell a true, honest story that honors a real person, told as a three image photo essay.",
+   "es_desc":"Planeas y cuentas una historia verdadera y honesta que honra a una persona real, contada como un ensayo fotogr&aacute;fico de tres im&aacute;genes."},
   {"code":"SA.17.1","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
    "en_title":"Art &amp; Design Fundamentals","es_title":"Fundamentos de Arte y Dise&ntilde;o",
-   "en_desc":"You use framing, angle, and background to build a strong portrait of your subject.",
-   "es_desc":"Usas el encuadre, el &aacute;ngulo y el fondo para crear un retrato fuerte de tu sujeto."},
+   "en_desc":"You use framing, angle, light, and background to make each image strong and full of feeling.",
+   "es_desc":"Usas el encuadre, el &aacute;ngulo, la luz y el fondo para que cada imagen sea fuerte y llena de sentimiento."},
   {"code":"SA.17.5","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
-   "en_title":"Image Production &amp; Planning","es_title":"Producci&oacute;n y Planeaci&oacute;n de Imagen",
-   "en_desc":"You plan a photo project on purpose, choosing your subject and your three images before you capture them.",
-   "es_desc":"Planeas un proyecto fotogr&aacute;fico a prop&oacute;sito, eligiendo tu sujeto y tus tres im&aacute;genes antes de capturarlas."},
+   "en_title":"Pre-Production &amp; Planning","es_title":"Preproducci&oacute;n y Planeaci&oacute;n",
+   "en_desc":"You plan your photo essay on purpose: you choose your subject and storyboard your three images before you capture them.",
+   "es_desc":"Planeas tu ensayo fotogr&aacute;fico a prop&oacute;sito: eliges tu sujeto y haces el storyboard de tus tres im&aacute;genes antes de capturarlas."},
+  {"code":"SA.17.8","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
+   "en_title":"Documentary &amp; Photojournalism","es_title":"Documental y Fotoperiodismo",
+   "en_desc":"You work like a photojournalist: you capture real, honest moments and present a finished essay that moves the viewer.",
+   "es_desc":"Trabajas como fotoperiodista: capturas momentos reales y honestos y presentas un ensayo terminado que conmueve a quien lo ve."},
 ]
 
 VOCAB_EN=[
  ("Subject","The person you photograph. In this project, your subject is your important person."),
- ("Portrait","A photo that shows who a person is, usually their face and their expression."),
- ("Environmental Portrait","A portrait taken where the person works or does their thing, so the background helps tell their story."),
+ ("Photo Essay","A set of photos that work together to tell one true story. Yours is a three image essay that honors your person."),
+ ("Photojournalism","Telling a real, honest story with your camera. You capture true moments as they happen, not posed or faked."),
+ ("Environmental Portrait","A portrait taken where the person lives or does their thing, so the background helps tell their story."),
  ("Candid","A natural, unposed photo taken while a person is busy doing something, not looking at the camera."),
- ("Photo Story","A small set of photos that work together to tell one story. Yours is three images."),
  ("Composition","How you arrange everything inside the frame: where your person sits, what is behind them, and what you leave out."),
 ]
 VOCAB_ES=[
  ("Subject (Sujeto)","La persona que fotograf&iacute;as. En este proyecto, tu sujeto es tu persona importante."),
- ("Portrait (Retrato)","Una foto que muestra qui&eacute;n es una persona, casi siempre su cara y su expresi&oacute;n."),
- ("Environmental Portrait (Retrato Ambiental)","Un retrato tomado donde la persona trabaja o hace lo suyo, para que el fondo ayude a contar su historia."),
+ ("Photo Essay (Ensayo Fotogr&aacute;fico)","Un grupo de fotos que juntas cuentan una sola historia verdadera. El tuyo es un ensayo de tres im&aacute;genes que honra a tu persona."),
+ ("Photojournalism (Fotoperiodismo)","Contar una historia real y honesta con tu c&aacute;mara. Capturas momentos verdaderos tal como pasan, sin pose y sin fingir."),
+ ("Environmental Portrait (Retrato Ambiental)","Un retrato tomado donde la persona vive o hace lo suyo, para que el fondo ayude a contar su historia."),
  ("Candid (Espont&aacute;nea)","Una foto natural y sin pose, tomada mientras la persona hace algo, sin mirar a la c&aacute;mara."),
- ("Photo Story (Historia en Fotos)","Un peque&ntilde;o grupo de fotos que juntas cuentan una sola historia. La tuya son tres im&aacute;genes."),
  ("Composition (Composici&oacute;n)","C&oacute;mo acomodas todo dentro del encuadre: d&oacute;nde est&aacute; tu persona, qu&eacute; hay detr&aacute;s y qu&eacute; dejas fuera."),
 ]
 
@@ -98,18 +102,24 @@ def build(course):
     # ================= OVERVIEW (Step 01) =================
     def overview():
         en=banner(f"Project {PROJNUM} &bull; Step 01","The Important Person Project",
-            "Tell the story of someone who changed your life, in three photos. Read this page, then go to Step 02.",
+            "A three photo essay to honor someone who makes your life better. Read this page, then go to Step 02.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_CAMERA_KIT)
-        en+=type_card("overview","Step 01 &middot; Overview","Tell Someone&rsquo;s Story in Three Photos",
-            para("In this project you tell the story of one important person in your life. Pick someone who is part of your life <strong>right now</strong> and still makes it better today. It could be a parent, an aunt, an uncle, a grandparent, a coach, a teacher, a mentor, or a close friend.")
-            + para("You will tell their story with a <strong>three image series</strong>, and all three photos are captured in <strong>horizontal (landscape) orientation</strong>. The three images work together as one story:")
+        en+=type_card("overview","Step 01 &middot; Overview","Honor Someone, in Three Photos",
+            para("In this project you <strong>honor</strong> one important person in your life with a <strong>three image photo essay</strong>. Pick someone who is part of your life <strong>right now</strong> and still makes it better today. It could be a parent, an aunt, an uncle, a grandparent, a coach, a teacher, a mentor, or a close friend.")
+            + para("This is more than three photos. It is a true story, told in images, meant to <strong>move the people who see it</strong> and make them feel why this person matters to you. All three photos are captured in <strong>horizontal (landscape) orientation</strong>, and they work together as one story:")
             + bullets([
                 ("Image 1 &middot; Environmental portrait:","your person in their own space, surrounded by the things that show who they are. Waist up, and they can look at the camera or be caught in a real moment."),
                 ("Image 2 &middot; Close action:","a medium to close photo of your person in action, doing their thing, framed tight so we feel the intensity."),
                 ("Image 3 &middot; Wide action:","a wider photo, framed from the knees up to full body, that shows the whole scene and the bigger moment."),
             ])
             + note("All three photos are horizontal. Together they move from who your person is, to them in action up close, to the full scene.")
-            + (framed(HEADER,"A student with the important person they chose for their series") if HAVE_HEADER else ""))
+            + (framed(HEADER,"Mr. Silva with Mr. Garcia, the teacher who was there for him during a hard time in his childhood") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Mr. Silva with Mr. Garcia, the teacher he would have honored with this project back in high school. Read the note below.</div>' if HAVE_HEADER else ""))
+        en+=card("A NOTE FROM MR. SILVA","Who I Would Have Chosen",
+            para("The two people in the photo above are me, Mr. Silva, and Mr. Garcia. He is who I would have chosen for this project if I had done it in high school. Mr. Garcia was my teacher, and he was there for me through a hard, tumultuous time in my childhood. He still mentors me today, but the moment to tell this story was back then, when he was actively my teacher and in my corner every day. That is exactly why you choose someone who is in your life and holding you up <strong>right now</strong>.")
+            + note("<strong>These photos are not what you turn in.</strong> They are polished portraits made to show you who Mr. Garcia is. Your three images will be your own and real: new photos you take with the school camera kit, plus meaningful photos you already have of your person on your camera roll. Honest images from your own life, not a studio session."))
+        en+=card("WORK LIKE A PHOTOJOURNALIST","Tell the Truth With Your Camera",
+            para("A <strong>photojournalist</strong> tells a true story with honest photos. They do not fake it. They capture real moments as they happen, and that is what makes the photos powerful.")
+            + para("Do the same here. Show your person as they really are, doing what they really do. The most moving image is almost always the most honest one."))
         en+=standards_box(False, STANDARDS)
         en+=card("WHY THIS PERSON","Start With Someone Who Matters",
             para("The strongest photo stories come from real feelings. Think about someone who makes your life better. Maybe they teach you something, believe in you, work hard for you, or show you how to do something you love.")
@@ -137,18 +147,24 @@ def build(course):
         en+=next_up("UP NEXT &middot; STEP 02 - Choose Your Person","Open your journal and brainstorm three people you could tell a story about.")
 
         es=banner(f"Proyecto {PROJNUM} &bull; Paso 01","El Proyecto de la Persona Importante",
-            "Cuenta la historia de alguien que cambi&oacute; tu vida, en tres fotos. Lee esta p&aacute;gina y luego ve al Paso 02.",
+            "Un ensayo fotogr&aacute;fico de tres im&aacute;genes para honrar a alguien que hace tu vida mejor. Lee esta p&aacute;gina y luego ve al Paso 02.",
             "#top","Back to English", HICON_CAMERA_KIT)
-        es+=type_card("overview","Paso 01 &middot; Resumen","Cuenta la Historia de Alguien en Tres Fotos",
-            para("En este proyecto cuentas la historia de una persona importante en tu vida. Elige a alguien que sea parte de tu vida <strong>ahora mismo</strong> y que todav&iacute;a la haga mejor hoy. Puede ser un pap&aacute;, una mam&aacute;, una t&iacute;a, un t&iacute;o, un abuelo, un entrenador, un maestro, un mentor o un buen amigo.")
-            + para("Contar&aacute;s su historia con una <strong>serie de tres im&aacute;genes</strong>, y las tres fotos se capturan en <strong>orientaci&oacute;n horizontal</strong>. Las tres im&aacute;genes trabajan juntas como una sola historia:")
+        es+=type_card("overview","Paso 01 &middot; Resumen","Honra a Alguien, en Tres Fotos",
+            para("En este proyecto <strong>honras</strong> a una persona importante en tu vida con un <strong>ensayo fotogr&aacute;fico de tres im&aacute;genes</strong>. Elige a alguien que sea parte de tu vida <strong>ahora mismo</strong> y que todav&iacute;a la haga mejor hoy. Puede ser un pap&aacute;, una mam&aacute;, una t&iacute;a, un t&iacute;o, un abuelo, un entrenador, un maestro, un mentor o un buen amigo.")
+            + para("Esto es m&aacute;s que tres fotos. Es una historia verdadera, contada en im&aacute;genes, hecha para <strong>conmover a quien la ve</strong> y hacer que sienta por qu&eacute; esta persona es importante para ti. Las tres fotos se capturan en <strong>orientaci&oacute;n horizontal</strong> y trabajan juntas como una sola historia:")
             + bullets([
                 ("Imagen 1 &middot; Retrato ambiental:","tu persona en su propio espacio, rodeada de las cosas que muestran qui&eacute;n es. De la cintura para arriba, y puede mirar a la c&aacute;mara o estar en un momento real."),
                 ("Imagen 2 &middot; Acci&oacute;n cercana:","una foto media a cercana de tu persona en acci&oacute;n, haciendo lo suyo, encuadrada de cerca para sentir la intensidad."),
                 ("Imagen 3 &middot; Acci&oacute;n abierta:","una foto m&aacute;s abierta, encuadrada de las rodillas hasta el cuerpo completo, que muestra toda la escena y el momento m&aacute;s grande."),
             ])
             + note("Las tres fotos son horizontales. Juntas van de qui&eacute;n es tu persona, a ella en acci&oacute;n de cerca, hasta la escena completa.")
-            + (framed(HEADER,"Un estudiante con la persona importante que eligi&oacute; para su serie") if HAVE_HEADER else ""))
+            + (framed(HEADER,"El Sr. Silva con el Sr. Garcia, el maestro que estuvo con &eacute;l durante una &eacute;poca dif&iacute;cil de su ni&ntilde;ez") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">El Sr. Silva con el Sr. Garcia, el maestro que habr&iacute;a honrado con este proyecto cuando estaba en la prepa. Lee la nota abajo.</div>' if HAVE_HEADER else ""))
+        es+=card("UNA NOTA DEL SR. SILVA","A Qui&eacute;n Habr&iacute;a Elegido Yo",
+            para("Las dos personas en la foto de arriba somos yo, el Sr. Silva, y el Sr. Garcia. &Eacute;l es a quien yo habr&iacute;a elegido para este proyecto si lo hubiera hecho en la prepa. El Sr. Garcia fue mi maestro, y estuvo conmigo durante una &eacute;poca dif&iacute;cil y dolorosa de mi ni&ntilde;ez. Todav&iacute;a es mi mentor hoy, pero el momento de contar esta historia era entonces, cuando era activamente mi maestro y estaba conmigo cada d&iacute;a. Por eso eliges a alguien que est&eacute; en tu vida y te sostenga <strong>ahora mismo</strong>.")
+            + note("<strong>Estas fotos no son lo que entregas.</strong> Son retratos pulidos hechos para mostrarte qui&eacute;n es el Sr. Garcia. Tus tres im&aacute;genes ser&aacute;n tuyas y reales: fotos nuevas que tomas con el kit de c&aacute;mara de la escuela, m&aacute;s fotos con significado que ya tienes de tu persona en tu galer&iacute;a. Im&aacute;genes honestas de tu propia vida, no una sesi&oacute;n de estudio."))
+        es+=card("TRABAJA COMO FOTOPERIODISTA","Di la Verdad con Tu C&aacute;mara",
+            para("Un <strong>fotoperiodista</strong> cuenta una historia verdadera con fotos honestas. No finge. Captura momentos reales tal como pasan, y eso es lo que hace poderosas a las fotos.")
+            + para("Haz lo mismo aqu&iacute;. Muestra a tu persona tal como es, haciendo lo que de verdad hace. La imagen que m&aacute;s conmueve casi siempre es la m&aacute;s honesta."))
         es+=standards_box(True, STANDARDS)
         es+=card("POR QU&Eacute; ESTA PERSONA","Empieza con Alguien que Importa",
             para("Las historias en fotos m&aacute;s fuertes nacen de sentimientos reales. Piensa en alguien que hace tu vida mejor. Tal vez te ense&ntilde;a algo, cree en ti, trabaja duro por ti o te muestra c&oacute;mo hacer algo que amas.")
@@ -182,10 +198,10 @@ def build(course):
     # ================= STEP 02: Choose Your Person (journal writing exercise) =================
     def step02():
         en=banner(f"Project {PROJNUM} &bull; Step 02","Choose Your Important Person",
-            "A journal writing exercise. Brainstorm three people, then pick the one with the strongest story.",
+            "A journal writing exercise. Brainstorm three people you could honor, then pick the one with the strongest story.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_SKETCH)
         en+=card("STEP 02 &middot; JOURNAL / BRAINSTORM","Write About Three People You Could Choose",
-            (float_right(S2_FLOAT,"An important person in their element, doing what they do","Your important person, in their element. Who is yours?") if HAVE_S2_FLOAT else "")
+            (float_right(S2_FLOAT,"Mr. Garcia in a black and white portrait, Mr. Silva&rsquo;s example of an important person","Mr. Garcia again, Mr. Silva&rsquo;s example (see the overview). Your important person is someone active in your life now.") if HAVE_S2_FLOAT else "")
             + para("Before you pick up a camera, think on paper. In your journal, brainstorm <strong>three different people</strong> you could tell a story about. Writing it out helps you choose the person with the strongest story.")
             + note("Each person on your list must be in your life <strong>right now</strong> and still helping, teaching, or inspiring you today. You can mention the past, but they have to be a positive part of your life in the present, not someone only from your past.")
             + para("For each of your three people, write <strong>why you are considering them</strong> and <strong>how they have impacted your life</strong>. A few honest sentences for each.")
@@ -208,10 +224,10 @@ def build(course):
         en+=next_up("UP NEXT &middot; STEP 03 - Storyboard &amp; Treatment","Plan your three images on paper: sketch each one and write its full plan before you pick up a camera.")
 
         es=banner(f"Proyecto {PROJNUM} &bull; Paso 02","Elige a Tu Persona Importante",
-            "Un ejercicio de escritura en el diario. Haz una lluvia de ideas de tres personas y elige la de la historia m&aacute;s fuerte.",
+            "Un ejercicio de escritura en el diario. Haz una lluvia de ideas de tres personas que podr&iacute;as honrar y elige la de la historia m&aacute;s fuerte.",
             "#top","Back to English", HICON_SKETCH)
         es+=card("PASO 02 &middot; DIARIO / LLUVIA DE IDEAS","Escribe Sobre Tres Personas que Podr&iacute;as Elegir",
-            (float_right(S2_FLOAT,"Una persona importante en su elemento, haciendo lo suyo","Tu persona importante, en su elemento. &iquest;Qui&eacute;n es la tuya?") if HAVE_S2_FLOAT else "")
+            (float_right(S2_FLOAT,"El Sr. Garcia en un retrato en blanco y negro, el ejemplo del Sr. Silva de una persona importante","El Sr. Garcia otra vez, el ejemplo del Sr. Silva (ver el resumen). Tu persona importante es alguien activo en tu vida ahora.") if HAVE_S2_FLOAT else "")
             + para("Antes de tomar una c&aacute;mara, piensa en papel. En tu diario, haz una lluvia de ideas de <strong>tres personas distintas</strong> sobre las que podr&iacute;as contar una historia. Escribirlo te ayuda a elegir a la persona de la historia m&aacute;s fuerte.")
             + note("Cada persona de tu lista debe estar en tu vida <strong>ahora mismo</strong> y seguir ayud&aacute;ndote, ense&ntilde;&aacute;ndote o inspir&aacute;ndote hoy. Puedes mencionar el pasado, pero debe ser una parte positiva de tu vida en el presente, no alguien solo de tu pasado.")
             + para("Para cada una de tus tres personas, escribe <strong>por qu&eacute; la est&aacute;s considerando</strong> y <strong>c&oacute;mo ha impactado tu vida</strong>. Unas cuantas oraciones honestas para cada una.")
@@ -254,7 +270,7 @@ def build(course):
         en+=card("WHAT TO PLAN / EACH IMAGE","Write a Full Plan for All Three Images",
             para("Make one page for each of your three images. On every page, sketch the image, then write a paragraph that covers your full plan. Answer all of these:")
             + bullets([
-                ("What is happening:","what is your person doing in this image, and what story does it tell?"),
+                ("What is happening, and the feeling:","what is your person doing in this image, what story does it tell, and what should the viewer <strong>feel</strong> when they see it?"),
                 ("Composition:","how will you frame it? Where will your person sit in the photo? Think about the rule of thirds, the foreground, and the background."),
                 ("Focal length:","which lens or zoom will you use? Close and tight on your person, or wide to show the whole scene?"),
                 ("Aperture:","do you want a blurry background (a low f-number like f/2.8) or a sharp background (a higher f-number like f/8)?"),
@@ -287,7 +303,7 @@ def build(course):
         es+=card("QU&Eacute; PLANEAR / CADA IMAGEN","Escribe un Plan Completo para las Tres Im&aacute;genes",
             para("Haz una p&aacute;gina para cada una de tus tres im&aacute;genes. En cada p&aacute;gina, dibuja la imagen y luego escribe un p&aacute;rrafo con tu plan completo. Contesta todo esto:")
             + bullets([
-                ("Qu&eacute; est&aacute; pasando:","&iquest;qu&eacute; hace tu persona en esta imagen y qu&eacute; historia cuenta?"),
+                ("Qu&eacute; est&aacute; pasando y qu&eacute; se siente:","&iquest;qu&eacute; hace tu persona en esta imagen, qu&eacute; historia cuenta y qu&eacute; debe <strong>sentir</strong> quien la ve?"),
                 ("Composici&oacute;n:","&iquest;c&oacute;mo vas a encuadrar? &iquest;D&oacute;nde estar&aacute; tu persona en la foto? Piensa en la regla de los tercios, el primer plano y el fondo."),
                 ("Distancia focal:","&iquest;qu&eacute; lente o zoom usar&aacute;s? &iquest;Cerca y cerrado sobre tu persona, o abierto para mostrar toda la escena?"),
                 ("Apertura:","&iquest;quieres un fondo borroso (un n&uacute;mero f bajo como f/2.8) o un fondo n&iacute;tido (un n&uacute;mero f m&aacute;s alto como f/8)?"),
