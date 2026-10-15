@@ -1874,16 +1874,18 @@
         { url: "https://vimeo.com/showcase/10188771?share=copy&amp;fl=sm&amp;fe=fs", label: "Digital Arts Showcase" },
         { url: "https://vimeo.com/showcase/11854006?fl=so&amp;fe=fs", label: "Photography Showcase" },
       ],
-      // Documents (expandable): roster (LOCAL-file link, student data, never published), sub plan, signature.
-      // Roster path/label gets bumped every time the roll sheet is rebuilt (see the roster/seating
-      // reconciliation session log in Class Rosters & Seating Charts/.../PVHS_Roster_ClaudeCode_Handoff.md).
-      // The build script (build_rollsheet.py) always writes to this SAME filename (overwritten in
-      // place), so the path below never needs to change, only the date in the label.
-      // NOTE: no seating chart PHOTO CARD chart is hosted here. The PSD supplied 2026-09-15 was a
-      // POPULATED chart (student names/photos/SSA flags), not a blank template; never host one until
-      // a BLANK template exists. Seat numbers ARE included in the roll sheet below (data, not photos).
+      // Documents (expandable): sub plan, signature, etc. Roster is handled separately below --
+      // NOT hosted here. GitHub Pages can't actually gate a file behind this page's Google sign-in
+      // (any static asset in this repo is a plain public URL, login screen or not -- confirmed via
+      // DOM inspection 2026-10-15: the full page renders before auth resolves). Real auth lives on
+      // the Command Center (server.py checks a Firebase token / API key), so the roll sheet is
+      // uploaded there instead and this just deep-links to its Reports tab. See
+      // Class Rosters & Seating Charts/.../PVHS_Roster_ClaudeCode_Handoff.md for the sync routine.
+      // NOTE: no seating chart PHOTO CARD chart is hosted here either. The PSD supplied 2026-09-15
+      // was a POPULATED chart (student names/photos/SSA flags), not a blank template; never host
+      // one until a BLANK template exists.
       documents: {
-        roster: { path: "file:///Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site/assets/_incoming/PVHS%20Class%20Roll%20Sheet%20-%20Fall%202026-2027%20(Full%20Names).pdf", label: "Class Roll Sheet (Roster + Seats, 10-15-26)" },
+        rollsheet: { url: "https://command.creativesilva.com/#reports", label: "Class Roll Sheet (Command Center, sign in required)" },
         // Seating chart has student photos = PII: LOCAL-file link only, never hosted. Opens the PSD in Photoshop when the catalog is opened locally.
         seatingchart: { path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/9-22-26_Seating_Chart_Template_322-331.psd", label: "Seating Chart Template (322-331, PSD)" },
         // Substitute AERIES logins (usernames + passwords, extremely confidential): LOCAL-file
@@ -2384,7 +2386,7 @@
       const vimeo = vims ? subAcc("Vimeo", `${nV} video${nV === 1 ? "" : "s"}`, vims) : "";
       // Documents sub-section
       const d = t.documents || {};
-      const docRows = (d.roster ? rosterRow(d.roster.path, d.roster.label) : "")
+      const docRows = (d.rollsheet ? appRow(d.rollsheet.url, d.rollsheet.label) : "")
         + (d.seatingchart ? rosterRow(d.seatingchart.path, d.seatingchart.label) : "")
         + (d.subaeries ? rosterRow(d.subaeries.path, d.subaeries.label) : "")
         + (d.subplan ? wordDocRow(d.subplan.docx, d.subplan.pdf, d.subplan.label) : "")
@@ -2392,7 +2394,7 @@
         + (d.permission ? wordDocRow(d.permission.docx, d.permission.pdf, d.permission.label) : "")
         + (d.purchaseorder ? docRow(d.purchaseorder.pdf, d.purchaseorder.label) : "")
         + (d.signature ? signatureRow(d.signature.url, d.signature.label) : "");
-      const nD = [d.roster, d.seatingchart, d.subaeries, d.subplan, d.bathroomlog, d.permission, d.purchaseorder, d.signature].filter(Boolean).length;
+      const nD = [d.rollsheet, d.seatingchart, d.subaeries, d.subplan, d.bathroomlog, d.permission, d.purchaseorder, d.signature].filter(Boolean).length;
       const docs = docRows ? subAcc("Documents", `${nD} file${nD === 1 ? "" : "s"}`, docRows) : "";
       // Links sub-section: external sites grouped Resources + Vendors, each a Visit button.
       const lk = t.links || {};
