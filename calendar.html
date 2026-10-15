@@ -1604,10 +1604,19 @@
   function myGearKeys(){ var p=effPool(); return ((DATA.equipment_pools||{})[p])||[]; }   // unit ids
   function gearOos(id){ return (DATA.equipment_oos||[]).indexOf(id)>=0; }
   // Per-unit, exactly like a camera: a unit is free on a day if it is not out of service and has no
-  // non-returned reservation overlapping that day.
-  function gearBookedOnDay(id,iso){ var busy=false; (DATA.equipment||[]).forEach(function(c){ if(c.item!==id||c.returned) return; var last=c.due||c.out; if(c.out&&last&&iso>=c.out&&iso<=last) busy=true; }); return busy; }
-  // The booking record (reserved / out) for a unit on a day, so the day card can tag it, not just hide it.
-  function gearBookingOnDay(id,iso){ var r=null; (DATA.equipment||[]).forEach(function(c){ if(c.item!==id||c.returned) return; var last=c.due||c.out; if(c.out&&last&&iso>=c.out&&iso<=last) r=c; }); return r; }
+  // non-returned reservation holding it that day. A unit that is physically OUT (picked up, not yet
+  // checked in) is held for EVERY day from its pickup forward, even past its stored due date, until
+  // it is returned, so an already-checked-out unit can never be re-reserved while it is still out
+  // (Mankin pencil double-book fix). A unit only RESERVED (not picked up yet) is held just within its
+  // own [out, due] window, so legitimate future days and same-day handoffs still work.
+  function gearBookingOnDay(id,iso){ var r=null; (DATA.equipment||[]).forEach(function(c){
+    if(c.item!==id) return;
+    var st=(c.status||'').toLowerCase();
+    if(st==='returned'||c.returned) return;
+    if(st==='out'){ if(c.out&&iso>=c.out) r=c; return; }               // out: held from pickup onward
+    var last=c.due||c.out; if(c.out&&last&&iso>=c.out&&iso<=last) r=c;  // reserved: its own window only
+  }); return r; }
+  function gearBookedOnDay(id,iso){ return !!gearBookingOnDay(id,iso); }
   function gearAvailOnDay(id,iso){ return (!gearOos(id) && !gearBookedOnDay(id,iso)) ? 1 : 0; }
   function rvTab(id,label,n){ return '<button type="button" class="dm-tab'+(RV_TAB===id?' active':'')+'" data-rvtab="'+id+'">'+label+' <span class="dm-tabn">'+n+'</span></button>'; }
   function renderReserveDay(iso){

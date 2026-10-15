@@ -395,6 +395,9 @@
   .camtile-dot{width:10px;height:10px;flex:0 0 auto;background:var(--grayed);}
   .camtile-n{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.05rem;color:#fff;}
   .camtile-p2{font-family:var(--font);font-size:.5rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#ffb28a;border:1px solid rgba(255,107,26,.5);padding:1px 4px;}
+  /* Manage Equipment stays CONDITION-colored (locked 2026-10-04); this is the one checkout signal there:
+     a small orange OUT chip on a gear unit that is physically checked out, leaving condition color intact. */
+  .camtile-outchip{margin-left:auto;font-family:var(--font);font-size:.5rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#1a0f05;background:var(--orange);border:1px solid var(--orange);padding:1px 6px;}
   .camtile-pct{margin-left:auto;font-family:var(--font);font-weight:700;font-size:.72rem;padding:1px 7px;color:#8ff0b0;background:rgba(63,168,99,.16);}
   .camtile-pct.mid{color:#ffd889;background:rgba(245,179,1,.16);} .camtile-pct.low{color:#ff9a8a;background:rgba(224,64,58,.18);} .camtile-pct.na{color:var(--faint);background:rgba(160,180,180,.12);}
   .camtile-status{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);}
@@ -1255,6 +1258,10 @@
       '<span class="rc-meta">'+sub+' &middot; '+fmt(c.out)+'</span>'+
     '</div>';
   }
+  // Checked-out gear lists in unit-number order: pull the trailing number from a unit id like
+  // "apple_pencil-31" (-> 31). Camera reservations have no unit number (null) and keep their order.
+  function raGearNum(c){ if(c&&c.kind==='equipment'&&c.item){ var m=String(c.item).match(/\d+/g); return m?parseInt(m[m.length-1],10):null; } return null; }
+  function raGearNumCmp(a,b){ var na=raGearNum(a),nb=raGearNum(b); if(na==null&&nb==null) return 0; if(na==null) return -1; if(nb==null) return 1; return na-nb; }
   // Reservation Activity hub (date selector + Checked out / Reserved / Returned accordions). Below the calendar.
   function reservationActivityHtml(){
     var list=activityReservations(), w=activityWindow(), aOpen=secOpen('ractivity');
@@ -1268,6 +1275,9 @@
     var body='';
     [['out','Checked out'],['reserved','Reserved'],['returned','Returned']].forEach(function(g){
       var arr=groups[g[0]], gopen=secOpen('ra-'+g[0]);
+      // Checked-out GEAR (Mankin's iPad styluses) lists in unit-number order (31, 32, 33...); camera
+      // reservations keep their newest-first order and sort ahead of any gear.
+      if(g[0]==='out') arr=arr.slice().sort(raGearNumCmp);
       body+='<div class="csec ra-grp sec-'+g[0]+(gopen?' open':'')+'">'+
         '<button class="csec-head" type="button" data-sectoggle="ra-'+g[0]+'"><span class="csec-dot '+g[0]+'"></span>'+g[1]+' <span class="csec-n">'+arr.length+'</span><span class="csec-chev"></span></button>'+
         '<div class="csec-body">'+(arr.length?('<div class="recent-grid">'+arr.slice(0,40).map(activityCard).join('')+'</div>'):('<div class="foot">Nothing '+g[1].toLowerCase()+' in this window.</div>'))+'</div>'+
@@ -1657,10 +1667,14 @@
     var pctChip=hk?('<span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span>'):'';
     var lbl=hk?gearCondLabel(id):gearCondLabelNoKit(id);
     var statusHtml=lbl?('<span class="camtile-status mt-cond">'+lbl+'</span>'):'';
+    // The tile keeps its CONDITION color (locked 2026-10-04). The ONE added checkout signal: a unit
+    // physically out (checked out or overdue) shows a small orange OUT chip (Mankin), so "needs
+    // attention" and "checked out" stay independently readable at a glance.
+    var gs=gearState(id); var outChip=(gs==='out'||gs==='overdue')?'<span class="camtile-outchip">OUT</span>':'';
     return '<button type="button" class="camtile gtile mt-'+cond+'" data-geardetail="'+esc(id)+'">'+
       gearThumb(u.type)+
       '<span class="gtile-main">'+
-        '<span class="camtile-top"><span class="camtile-n">'+esc(u.label||id)+'</span>'+pctChip+'</span>'+
+        '<span class="camtile-top"><span class="camtile-n">'+esc(u.label||id)+'</span>'+outChip+pctChip+'</span>'+
         statusHtml+
       '</span>'+
     '</button>';
