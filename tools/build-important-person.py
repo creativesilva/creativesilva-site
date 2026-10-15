@@ -32,8 +32,8 @@ def ent(s):
 
 # Every image slot starts OFF. Flip to True (and drop the file in assets/images/<course>/important-person/)
 # when the art is ready, then re-run this builder.
-HAVE_HEADER=True     # overview hero (21:9), assets/images/<course>/important-person/header-v1.jpg
-HAVE_S2_FLOAT=True   # Step 02 float: a B&W environmental portrait of a photography teacher (example important person), assets/images/<course>/important-person/journal-float-v1.jpg
+HAVE_HEADER=False    # GATED OFF (Chris 2026-10-15): retracted the Mr. Silva + Mr. Garcia photo. It is a retrospective of his OWN high-school important person, which contradicts the project's "current, actively-impacting person" rule, so it modeled the wrong thing. Awaiting a fitting present-day image. assets/images/<course>/important-person/header-v1.jpg
+HAVE_S2_FLOAT=False  # GATED OFF (Chris 2026-10-15): retracted the younger-Mr-Garcia headshot (a past image, same reason). assets/images/<course>/important-person/journal-float-v1.jpg
 HAVE_S3_FLOAT=False  # Step 03 storyboard float (none supplied yet), assets/images/<course>/important-person/storyboard-float-v1.jpg
 
 STANDARDS=[
@@ -101,7 +101,7 @@ def build(course):
             "Tell the story of someone who changed your life, in three photos. Read this page, then go to Step 02.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_CAMERA_KIT)
         en+=type_card("overview","Step 01 &middot; Overview","Tell Someone&rsquo;s Story in Three Photos",
-            para("In this project you tell the story of one important person in your life. Pick someone who helped you in a real, meaningful way. It could be a parent, an aunt, an uncle, a grandparent, a coach, a teacher, a mentor, or a close friend.")
+            para("In this project you tell the story of one important person in your life. Pick someone who is part of your life <strong>right now</strong> and still makes it better today. It could be a parent, an aunt, an uncle, a grandparent, a coach, a teacher, a mentor, or a close friend.")
             + para("You will tell their story with a <strong>three image series</strong>, and all three photos are captured in <strong>horizontal (landscape) orientation</strong>. The three images work together as one story:")
             + bullets([
                 ("Image 1 &middot; Environmental portrait:","your person in their own space, surrounded by the things that show who they are. Waist up, and they can look at the camera or be caught in a real moment."),
@@ -109,10 +109,11 @@ def build(course):
                 ("Image 3 &middot; Wide action:","a wider photo, framed from the knees up to full body, that shows the whole scene and the bigger moment."),
             ])
             + note("All three photos are horizontal. Together they move from who your person is, to them in action up close, to the full scene.")
-            + (framed(HEADER,"Mr. Silva (right) with his important person Mr. Garcia (left), the two smiling side by side") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Mr. Silva and his important person, Mr. Garcia.</div>' if HAVE_HEADER else ""))
+            + (framed(HEADER,"A student with the important person they chose for their series") if HAVE_HEADER else ""))
         en+=standards_box(False, STANDARDS)
         en+=card("WHY THIS PERSON","Start With Someone Who Matters",
-            para("The strongest photo stories come from real feelings. Think about someone who made your life better. Maybe they taught you something, believed in you, worked hard for you, or showed you how to do something you love.")
+            para("The strongest photo stories come from real feelings. Think about someone who makes your life better. Maybe they teach you something, believe in you, work hard for you, or show you how to do something you love.")
+            + note("<strong>Choose someone who is in your life right now.</strong> They must still be actively helping, teaching, or inspiring you today, in the present. You can write about what they have done for you in the past, but they need to be a positive part of your life now. This is not a look back at someone from your past.")
             + para("The more the person means to you, the stronger your photos will be. You will get to know their story and show it through your three images."))
         en+=card("AN EXAMPLE SERIES","A Coach, Told in Three Photos",
             para("Here is what a finished series could look like. Picture an important person who is a football coach.")
@@ -139,7 +140,7 @@ def build(course):
             "Cuenta la historia de alguien que cambi&oacute; tu vida, en tres fotos. Lee esta p&aacute;gina y luego ve al Paso 02.",
             "#top","Back to English", HICON_CAMERA_KIT)
         es+=type_card("overview","Paso 01 &middot; Resumen","Cuenta la Historia de Alguien en Tres Fotos",
-            para("En este proyecto cuentas la historia de una persona importante en tu vida. Elige a alguien que te ayud&oacute; de una manera real y significativa. Puede ser un pap&aacute;, una mam&aacute;, una t&iacute;a, un t&iacute;o, un abuelo, un entrenador, un maestro, un mentor o un buen amigo.")
+            para("En este proyecto cuentas la historia de una persona importante en tu vida. Elige a alguien que sea parte de tu vida <strong>ahora mismo</strong> y que todav&iacute;a la haga mejor hoy. Puede ser un pap&aacute;, una mam&aacute;, una t&iacute;a, un t&iacute;o, un abuelo, un entrenador, un maestro, un mentor o un buen amigo.")
             + para("Contar&aacute;s su historia con una <strong>serie de tres im&aacute;genes</strong>, y las tres fotos se capturan en <strong>orientaci&oacute;n horizontal</strong>. Las tres im&aacute;genes trabajan juntas como una sola historia:")
             + bullets([
                 ("Imagen 1 &middot; Retrato ambiental:","tu persona en su propio espacio, rodeada de las cosas que muestran qui&eacute;n es. De la cintura para arriba, y puede mirar a la c&aacute;mara o estar en un momento real."),
@@ -147,10 +148,11 @@ def build(course):
                 ("Imagen 3 &middot; Acci&oacute;n abierta:","una foto m&aacute;s abierta, encuadrada de las rodillas hasta el cuerpo completo, que muestra toda la escena y el momento m&aacute;s grande."),
             ])
             + note("Las tres fotos son horizontales. Juntas van de qui&eacute;n es tu persona, a ella en acci&oacute;n de cerca, hasta la escena completa.")
-            + (framed(HEADER,"El Sr. Silva (derecha) con su persona importante, el Sr. Garcia (izquierda), los dos sonriendo lado a lado") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">El Sr. Silva y su persona importante, el Sr. Garcia.</div>' if HAVE_HEADER else ""))
+            + (framed(HEADER,"Un estudiante con la persona importante que eligi&oacute; para su serie") if HAVE_HEADER else ""))
         es+=standards_box(True, STANDARDS)
         es+=card("POR QU&Eacute; ESTA PERSONA","Empieza con Alguien que Importa",
-            para("Las historias en fotos m&aacute;s fuertes nacen de sentimientos reales. Piensa en alguien que hizo tu vida mejor. Tal vez te ense&ntilde;&oacute; algo, crey&oacute; en ti, trabaj&oacute; duro por ti o te mostr&oacute; c&oacute;mo hacer algo que amas.")
+            para("Las historias en fotos m&aacute;s fuertes nacen de sentimientos reales. Piensa en alguien que hace tu vida mejor. Tal vez te ense&ntilde;a algo, cree en ti, trabaja duro por ti o te muestra c&oacute;mo hacer algo que amas.")
+            + note("<strong>Elige a alguien que est&eacute; en tu vida ahora mismo.</strong> Debe seguir ayud&aacute;ndote, ense&ntilde;&aacute;ndote o inspir&aacute;ndote hoy, en el presente. Puedes escribir sobre lo que ha hecho por ti en el pasado, pero debe ser una parte positiva de tu vida ahora. Este no es un recuerdo de alguien de tu pasado.")
             + para("Entre m&aacute;s signifique la persona para ti, m&aacute;s fuertes ser&aacute;n tus fotos. Conocer&aacute;s su historia y la mostrar&aacute;s con tus tres im&aacute;genes."))
         es+=card("UNA SERIE DE EJEMPLO","Un Entrenador, Contado en Tres Fotos",
             para("As&iacute; podr&iacute;a verse una serie terminada. Imagina que tu persona importante es un entrenador de f&uacute;tbol americano.")
@@ -183,8 +185,9 @@ def build(course):
             "A journal writing exercise. Brainstorm three people, then pick the one with the strongest story.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_SKETCH)
         en+=card("STEP 02 &middot; JOURNAL / BRAINSTORM","Write About Three People You Could Choose",
-            (float_right(S2_FLOAT,"Mr. Garcia, a photographer, in a black and white portrait standing beside his medium format camera on a tripod","Mr. Silva&rsquo;s important person is Mr. Garcia. Here he is in his element, with his camera. Who is yours?") if HAVE_S2_FLOAT else "")
+            (float_right(S2_FLOAT,"An important person in their element, doing what they do","Your important person, in their element. Who is yours?") if HAVE_S2_FLOAT else "")
             + para("Before you pick up a camera, think on paper. In your journal, brainstorm <strong>three different people</strong> you could tell a story about. Writing it out helps you choose the person with the strongest story.")
+            + note("Each person on your list must be in your life <strong>right now</strong> and still helping, teaching, or inspiring you today. You can mention the past, but they have to be a positive part of your life in the present, not someone only from your past.")
             + para("For each of your three people, write <strong>why you are considering them</strong> and <strong>how they have impacted your life</strong>. A few honest sentences for each.")
             + bullets([
                 ("Person 1:","their name and how you know them, why you are considering them, and how they have impacted your life."),
@@ -208,8 +211,9 @@ def build(course):
             "Un ejercicio de escritura en el diario. Haz una lluvia de ideas de tres personas y elige la de la historia m&aacute;s fuerte.",
             "#top","Back to English", HICON_SKETCH)
         es+=card("PASO 02 &middot; DIARIO / LLUVIA DE IDEAS","Escribe Sobre Tres Personas que Podr&iacute;as Elegir",
-            (float_right(S2_FLOAT,"El Sr. Garcia, un fot&oacute;grafo, en un retrato en blanco y negro junto a su c&aacute;mara de formato medio sobre un tr&iacute;pode","La persona importante del Sr. Silva es el Sr. Garcia. Aqu&iacute; est&aacute; en su elemento, con su c&aacute;mara. &iquest;Qui&eacute;n es la tuya?") if HAVE_S2_FLOAT else "")
+            (float_right(S2_FLOAT,"Una persona importante en su elemento, haciendo lo suyo","Tu persona importante, en su elemento. &iquest;Qui&eacute;n es la tuya?") if HAVE_S2_FLOAT else "")
             + para("Antes de tomar una c&aacute;mara, piensa en papel. En tu diario, haz una lluvia de ideas de <strong>tres personas distintas</strong> sobre las que podr&iacute;as contar una historia. Escribirlo te ayuda a elegir a la persona de la historia m&aacute;s fuerte.")
+            + note("Cada persona de tu lista debe estar en tu vida <strong>ahora mismo</strong> y seguir ayud&aacute;ndote, ense&ntilde;&aacute;ndote o inspir&aacute;ndote hoy. Puedes mencionar el pasado, pero debe ser una parte positiva de tu vida en el presente, no alguien solo de tu pasado.")
             + para("Para cada una de tus tres personas, escribe <strong>por qu&eacute; la est&aacute;s considerando</strong> y <strong>c&oacute;mo ha impactado tu vida</strong>. Unas cuantas oraciones honestas para cada una.")
             + bullets([
                 ("Persona 1:","su nombre y c&oacute;mo la conoces, por qu&eacute; la est&aacute;s considerando y c&oacute;mo ha impactado tu vida."),
