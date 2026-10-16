@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=14" />
+<link rel="stylesheet" href="/css/store.css?v=15" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -37,33 +37,33 @@
   </div>
 </header>
 
-<!-- Equipment header hero: the banner image with the category nav + date bar overlaid on it -->
+<!-- Equipment header hero: image background; controls in a dark top band (nav left, dates right) -->
 <div class="store-hero">
-
-<!-- Category nav (horizontal, teal line-art icons above the names), over the hero image -->
-<nav class="catnav">
-  <div class="wrap catnav-row" id="catnav">
-    <button type="button" class="catn active" data-cat="cameras"><span class="catn-ic" style="--ic:url('/assets/Icons/store/camera-v1.png')"></span>Camera Kits</button>
-    <button type="button" class="catn" data-cat="lenses"><span class="catn-ic" style="--ic:url('/assets/Icons/store/lenses-v1.png')"></span>Lenses</button>
-    <button type="button" class="catn" data-cat="lighting"><span class="catn-ic" style="--ic:url('/assets/Icons/store/lighting-v1.png')"></span>Lighting</button>
-    <button type="button" class="catn" data-cat="accessories"><span class="catn-ic" style="--ic:url('/assets/Icons/store/accessories-v1.png')"></span>Accessories</button>
-  </div>
-</nav>
-
-<!-- One clickable Checkout box steps through day -> pickup -> return time; Return + Days auto-fill -->
-<div class="datebar">
-  <div class="wrap datebar-row">
-    <div class="datebar-leadwrap">
-      <div class="datebar-lead">When do you need it?</div>
-      <div class="datebar-note">Return is the next school day. Choose your pickup time at checkout.</div>
+  <div class="wrap hero-top">
+    <!-- Category nav (teal line-art icons), top-left -->
+    <nav class="catnav">
+      <div class="catnav-row" id="catnav">
+        <button type="button" class="catn active" data-cat="cameras"><span class="catn-ic" style="--ic:url('/assets/Icons/store/camera-v1.png')"></span>Camera Kits</button>
+        <button type="button" class="catn" data-cat="lenses"><span class="catn-ic" style="--ic:url('/assets/Icons/store/lenses-v1.png')"></span>Lenses</button>
+        <button type="button" class="catn" data-cat="lighting"><span class="catn-ic" style="--ic:url('/assets/Icons/store/lighting-v1.png')"></span>Lighting</button>
+        <button type="button" class="catn" data-cat="accessories"><span class="catn-ic" style="--ic:url('/assets/Icons/store/accessories-v1.png')"></span>Accessories</button>
+      </div>
+    </nav>
+    <!-- One clickable Checkout box steps through day -> pickup -> return time; Return + Days auto-fill -->
+    <div class="datebar">
+      <div class="datebar-row">
+        <div class="datebar-leadwrap">
+          <div class="datebar-lead">When do you need it?</div>
+          <div class="datebar-note">Return is the next school day. Choose your pickup time at checkout.</div>
+        </div>
+        <div class="datecards hero-dates" id="dateCards">
+          <button type="button" class="datecard pick step co" id="dcCheckout" aria-label="Set checkout day, pickup time and return time"><span class="dc-lab">Checkout</span><span class="dc-val" id="dcCheckoutVal"></span></button>
+          <div class="datecard ret step rt"><span class="dc-lab">Return</span><span class="dc-val" id="dcReturnVal"></span></div>
+          <div class="datecard days step"><span class="dc-lab">Days</span><span class="dc-val" id="dcDaysVal"></span></div>
+        </div>
+      </div>
     </div>
-    <div class="datecards hero-dates" id="dateCards">
-      <button type="button" class="datecard pick step co" id="dcCheckout" aria-label="Set checkout day, pickup time and return time"><span class="dc-lab">Checkout</span><span class="dc-val" id="dcCheckoutVal"></span></button>
-      <div class="datecard ret step rt"><span class="dc-lab">Return</span><span class="dc-val" id="dcReturnVal"></span></div>
-      <div class="datecard days step"><span class="dc-lab">Days</span><span class="dc-val" id="dcDaysVal"></span></div>
-    </div>
   </div>
-</div>
 </div>
 
 <!-- Missing-work hold banner (shown only when the signed-in student is on hold) -->

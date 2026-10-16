@@ -16,7 +16,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{font-family:var(--font-body);background:var(--black);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;}
+/* teal radial glow rising from the bottom-right, fixed behind everything, for depth */
+body{font-family:var(--font-body);background:radial-gradient(ellipse 100% 60% at 92% 106%, rgba(0,116,116,.28) 0%, rgba(0,116,116,.09) 40%, transparent 66%) fixed, var(--black);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;}
 img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button{font-family:inherit;cursor:pointer;}
 .wrap{width:100%;max-width:var(--max);margin:0 auto;padding:0 20px;}
 
@@ -53,19 +54,23 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .store-search button:hover{filter:brightness(1.1);}
 .noresults{color:var(--gray);font-size:.95rem;padding:24px 2px;}
 
-/* ---- equipment header hero: nav + date bar overlaid on the banner image ---- */
-.store-hero{position:relative;border-bottom:1px solid var(--line);background:#0a0d0d url('/assets/images/equipment/store-header-v1.jpg') center 50% / cover no-repeat;}
-.store-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom, rgba(10,13,13,.66) 0%, rgba(10,13,13,.58) 42%, rgba(10,13,13,.76) 100%);pointer-events:none;}
+/* ---- equipment header hero: controls in a dark top band, image revealed below ---- */
+.store-hero{position:relative;border-bottom:1px solid var(--line);min-height:360px;background:#0a0d0d url('/assets/images/equipment/store-header-v1.jpg') center 52% / cover no-repeat;}
+/* dark shading strongest at the top (behind the controls), gradient fading DOWN to reveal the gear */
+.store-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom, rgba(10,13,13,.95) 0%, rgba(10,13,13,.82) 16%, rgba(10,13,13,.22) 48%, rgba(10,13,13,.1) 72%, rgba(10,13,13,.42) 100%);pointer-events:none;}
 .store-hero > *{position:relative;z-index:1;}
-/* content sits at FULL opacity over the image, with a shadow for contrast (never translucent) */
-.store-hero .catn{text-shadow:0 1px 6px rgba(0,0,0,.7);}
-.store-hero .catn:not(.active){color:#e2ebeb;}   /* lighter than gray for contrast over the image */
-.store-hero .catn-ic{filter:drop-shadow(0 1px 4px rgba(0,0,0,.65));}
-.store-hero .datebar-lead{text-shadow:0 1px 7px rgba(0,0,0,.75);}
-.store-hero .datebar-note{color:#cbd6d6;text-shadow:0 1px 6px rgba(0,0,0,.75);}
-/* give the hero room to breathe so the gear shows between the nav and the date bar */
-.store-hero .catnav{padding-top:8px;}
-.store-hero .datebar-row{padding-top:30px;padding-bottom:30px;}
+/* top band: category nav on the left, the date planner on the right */
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;padding-top:6px;}
+.hero-top .catnav{flex:0 0 auto;background:transparent;border-bottom:0;padding-top:8px;}
+.hero-top .datebar{flex:0 0 auto;background:transparent;}
+.hero-top .datebar-row{padding:4px 0 0;gap:18px;flex-wrap:nowrap;align-items:flex-start;}
+.hero-top .datebar-leadwrap{padding-top:8px;}
+/* content at FULL opacity over the image, shadow for contrast (never translucent) */
+.store-hero .catn{text-shadow:0 1px 6px rgba(0,0,0,.8);}
+.store-hero .catn:not(.active){color:#e2ebeb;}
+.store-hero .catn-ic{filter:drop-shadow(0 1px 4px rgba(0,0,0,.7));}
+.store-hero .datebar-lead{text-shadow:0 1px 7px rgba(0,0,0,.85);}
+.store-hero .datebar-note{color:#cbd6d6;text-shadow:0 1px 6px rgba(0,0,0,.85);}
 
 /* ---- category nav (horizontal, icons + name), transparent over the hero ---- */
 .catnav{background:transparent;border-bottom:1px solid rgba(255,255,255,.14);}
@@ -258,8 +263,14 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
   .store-nav .wrap{flex-wrap:wrap;gap:10px;padding-top:9px;padding-bottom:9px;}
   .store-search{order:5;flex-basis:100%;max-width:none;}
   .catnav{position:static;}   /* header height is variable on phone; drop the sticky offset */
+  /* hero: stack the nav + date band on phones, reveal the image below */
+  .store-hero{min-height:0;padding-bottom:40px;}
+  .hero-top{flex-direction:column;gap:14px;}
+  .hero-top .catnav,.hero-top .datebar{flex:1 1 auto;width:100%;}
+  .hero-top .datebar-row{flex-wrap:wrap;gap:12px;}
   .util-l,.util-r{font-size:.68rem;}
-  .catn{padding:10px 14px;font-size:.72rem;}
+  .hero-top .catnav-row{justify-content:space-between;}
+  .catn{padding:10px 6px;font-size:.64rem;}
   .datebar-leadwrap{flex-basis:100%;max-width:none;} .datebar-lead{font-size:.95rem;} .datebar-note{font-size:.72rem;}
   /* three boxes on phones: Checkout full-width (the clickable one), Return + Days share the next row */
   .datecards{flex:1 1 100%;gap:6px;flex-wrap:wrap;}
