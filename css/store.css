@@ -183,6 +183,20 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .prod-stock{font-size:.72rem;font-weight:600;letter-spacing:.02em;color:var(--teal-bright);margin:8px 0 9px;}
 .prod-stock.low{color:#ffd166;}   /* 1-2 left */
 .prod-stock.out{color:#ff9a8a;}   /* none free that day */
+/* clickable image + name, and the "View details" link, open the detail pop-out */
+.prod-img[data-detail],.prod-name[data-detail]{cursor:pointer;}
+.prod-name[data-detail]:hover{color:var(--teal-bright);}
+.prod-details{display:inline-block;align-self:flex-start;background:transparent;border:0;padding:0;margin:0 0 10px;color:var(--teal-bright);font-size:.76rem;font-weight:600;letter-spacing:.03em;cursor:pointer;font-family:var(--font-body);}
+.prod-details:hover{color:#fff;}
+
+/* ---- item detail dialog ---- */
+.sheet.detail{max-width:440px;}
+.detail-img{position:relative;aspect-ratio:16/10;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;margin:-24px -22px 16px;overflow:hidden;}
+.detail-img img{max-width:82%;max-height:82%;object-fit:contain;}
+.detail-blurb{font-size:.95rem;color:var(--ink);line-height:1.5;margin:10px 0 16px;}
+.spec-list{display:flex;flex-direction:column;gap:1px;margin-bottom:16px;}
+.spec-row{display:flex;justify-content:space-between;gap:14px;padding:9px 10px;background:rgba(255,255,255,.03);font-size:.84rem;}
+.spec-row span:first-child{color:var(--gray);flex:0 0 auto;} .spec-row span:last-child{color:#fff;text-align:right;font-weight:600;}
 
 /* ---- dialogs (sign-in + calendar) ---- */
 .sov{position:fixed;inset:0;z-index:200;background:rgba(5,8,8,.72);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:18px;}

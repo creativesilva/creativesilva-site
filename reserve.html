@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=17" />
+<link rel="stylesheet" href="/css/store.css?v=18" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -230,6 +230,14 @@
   </div>
 </div>
 
+<!-- Item detail (blurb + key specs) -->
+<div class="sov" id="detailOv" aria-hidden="true">
+  <div class="sheet detail" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <button type="button" class="sheet-x" data-close="detailOv" aria-label="Close">&times;</button>
+    <div class="sheet-bd" id="detailBody"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast" aria-live="polite"></div>
 
 <script>
@@ -393,6 +401,19 @@
   };
   function findItem(name){ var f=null; Object.keys(CATS).forEach(function(k){ CATS[k].items.forEach(function(it){ if(it.name===name) f=it; }); }); return f; }
 
+  // ----- item detail (short blurb + real key specs) -----
+  var SPECS={
+    'Canon EOS R50':{blurb:'A compact APS-C camera that is great for learning. Light, fast, and easy to carry.',specs:[['Sensor','24.2MP APS-C (1.6x crop)'],['Autofocus','Dual Pixel CMOS AF II, 651 points, eye &#38; face detect'],['Video','4K UHD 30p (oversampled), Full HD 120p'],['Viewfinder','2.36M-dot EVF + vari-angle touchscreen'],['Weight','About 375 g']]},
+    'Canon EOS RP':{blurb:'A lightweight full-frame camera. The big sensor gives soft backgrounds and strong low-light photos.',specs:[['Sensor','26.2MP full-frame'],['Autofocus','Dual Pixel CMOS AF'],['Video','4K UHD 24p (1.7x crop)'],['Mount','Canon RF'],['Weight','About 485 g']]},
+    'Canon EOS R8':{blurb:'The lightest full-frame EOS R. Fast autofocus and clean 4K video.',specs:[['Sensor','24.2MP full-frame'],['Autofocus','Dual Pixel CMOS AF II, 1053 points'],['Video','4K UHD up to 60p (oversampled from 6K)'],['Burst','Up to 40 fps electronic'],['Weight','About 461 g']]},
+    'Canon EOS R50 V':{blurb:'Built for creators. Great for video, vlogging, and livestreams.',specs:[['Sensor','24.2MP APS-C, DIGIC X'],['Video','4K up to 60p (6K oversampled), Full HD 120p'],['Color','Canon Log 3, 4:2:2 10-bit internal'],['Creator','Mic + headphone jacks, UVC livestream, tally light'],['Weight','About 370 g']]},
+    'Ultra-Wide 10-18mm':{blurb:'Canon RF-S 10-18mm. An ultra-wide zoom for big rooms, landscapes, and tight spaces.',specs:[['Focal length','10-18mm (16-29mm equivalent)'],['Aperture','f/4.5-6.3'],['Stabilization','Optical IS, up to 4 stops'],['Filter','49mm'],['Weight','About 150 g']]},
+    'Ultra-Zoom 100-400mm':{blurb:'Canon RF 100-400mm. A long zoom for sports, wildlife, and far-away subjects.',specs:[['Focal length','100-400mm'],['Aperture','f/5.6-8'],['Stabilization','Optical IS, about 5.5 stops'],['Focus','Nano USM, min 0.88 m'],['Filter','67mm'],['Weight','About 635 g']]},
+    'Speedlite EL-5':{blurb:'Canon Speedlite EL-5. A strong flash for portraits and creative lighting.',specs:[['Guide number','60 (at 200mm, ISO 100)'],['Zoom','24-200mm, with wide panel'],['Control','E-TTL II, 2.4GHz radio, up to 15 units'],['Head','Tilts 120&#176; up, rotates 180&#176; each way'],['Extras','LED modeling lamp, weather-resistant']]},
+    'K&F Concept Tripod':{blurb:'A steady, lightweight tripod with a ball head. Keeps your photos sharp.',specs:[['Type','Aluminum travel tripod'],['Head','Ball head with quick-release plate'],['Good for','Long exposures, video, steady framing'],['Build','Folds compact for carrying']]},
+    'Neewer Reflector':{blurb:'A 5-in-1 reflector. Bounce and shape light for better portraits.',specs:[['Surfaces','Silver, gold, white, black, translucent'],['Good for','Filling shadows, softening or warming light'],['Size','About 43 in (110 cm)'],['Build','Collapsible, folds into a small case']]}
+  };
+
   // ----- live stock levels (free / total of real units for the chosen checkout span) -----
   var CAL=null;
   function loadCal(){ fetch(API+'/api/camera/calendar').then(function(r){return r.json();}).then(function(j){ CAL=j; rerender(); }).catch(function(){}); }
@@ -438,14 +459,29 @@
           : '<button type="button" class="btn sm block prod-add" data-add="'+encodeURIComponent(it.name)+'">Add to bag</button>');
     var st = (!locked) ? stockFor(it) : null;   // stock only on items this student can access
     var stock = st ? '<div class="prod-stock'+(st.free<=0?' out':(st.free<=2?' low':''))+'">'+st.free+' / '+st.total+' available</div>' : '';
+    var det=encodeURIComponent(it.name);
+    var more = SPECS[it.name] ? '<button type="button" class="prod-details" data-detail="'+det+'">View details</button>' : '';
     return '<div class="prod'+(locked?' locked':'')+'">'+
-      '<div class="prod-img"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.tag&&!locked?'<span class="prod-tag">'+esc(it.tag)+'</span>':'')+(locked?'<span class="prod-lockbadge">Photo 2 only</span>':'')+'</div>'+
-      '<div class="prod-name">'+esc(it.name)+'</div>'+ stock + btn + '</div>';
+      '<div class="prod-img" data-detail="'+det+'"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.tag&&!locked?'<span class="prod-tag">'+esc(it.tag)+'</span>':'')+(locked?'<span class="prod-lockbadge">Photo 2 only</span>':'')+'</div>'+
+      '<div class="prod-name" data-detail="'+det+'">'+esc(it.name)+'</div>'+ stock + more + btn + '</div>';
   }
   function wireCards(g){
     g.querySelectorAll('[data-add]').forEach(function(b){ b.onclick=function(){ addToBag(decodeURIComponent(b.getAttribute('data-add'))); }; });
     g.querySelectorAll('[data-remove]').forEach(function(b){ b.onclick=function(){ removeFromBag(decodeURIComponent(b.getAttribute('data-remove'))); }; });
     g.querySelectorAll('[data-unlock]').forEach(function(b){ b.onclick=function(){ openGear(); }; });
+    g.querySelectorAll('[data-detail]').forEach(function(b){ b.onclick=function(){ openDetail(decodeURIComponent(b.getAttribute('data-detail'))); }; });
+  }
+  function openDetail(name){
+    var it=findItem(name), sp=SPECS[name];
+    var img = it && it.img ? '<div class="detail-img"><img src="'+it.img+'" alt="" />'+(it.tag?'<span class="prod-tag">'+esc(it.tag)+'</span>':'')+'</div>' : '';
+    var rows = sp ? sp.specs.map(function(r){ return '<div class="spec-row"><span>'+r[0]+'</span><span>'+r[1]+'</span></div>'; }).join('') : '';
+    document.getElementById('detailBody').innerHTML=
+      img + '<h2 id="detailTitle">'+esc(name)+'</h2>'+
+      (sp?'<p class="detail-blurb">'+sp.blurb+'</p>':'')+
+      '<div class="spec-list">'+rows+'</div>'+
+      '<button type="button" class="btn block" id="detailAdd">Add to bag</button>';
+    var ab=document.getElementById('detailAdd'); if(ab) ab.onclick=function(){ close('detailOv'); addToBag(name); };
+    open('detailOv');
   }
   function renderCat(cat){
     var c=CATS[cat]||CATS.cameras;
@@ -509,7 +545,7 @@
   function open(id){ document.getElementById(id).classList.add('open'); }
   function close(id){ document.getElementById(id).classList.remove('open'); }
   document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ close(b.getAttribute('data-close')); }; });
-  ['signinOv','holdOv','gearOv','bagOv','planOv','hoursOv','infoOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
+  ['signinOv','holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
   function toast(msg){ var t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2800); }
   function pulseDates(){ var d=document.querySelector('.datebar'); if(!d) return; d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash'); }
 
