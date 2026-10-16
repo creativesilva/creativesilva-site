@@ -311,6 +311,15 @@ def build(course):
             + para("Study these <strong>environmental portraits</strong>. Each one shows a person in their own world, their space, their tools, their light, so you understand who they are before they say a word. That is what your Image 1 is after.")
             + (env_slider(False) if HAVE_ENV_SLIDER else "")
             + note("Reference images are for inspiration only. They are not your photos. You will capture your own real images later with the school camera kit."))
+        if p2:
+            en+=card("YOUR LIGHTING &middot; REQUIRED","You Light Every Image With Off-Camera Flash",
+                para("In Photography 2, you <strong>light all three images with off-camera flash</strong>. You will use our <strong>Godox AD200 Pro II</strong> on a light stand with a modifier, placed off to the side to shape the light the way you want. This is required for every photo.")
+                + para("So your research and your mood board should show the <strong>lighting look</strong> you are going for: light that is placed intentionally and shaped, not just whatever light is already there. Look for reference images with strong, directional, off-camera light.")
+                + note("Photographing outdoors in bright sun? You may also need <strong>ND filters</strong> to control the exposure, and a <strong>scrim</strong> with an assistant, a classmate or a family member, to soften or block the sun. Plan for that in your mood board."))
+        else:
+            en+=card("YOUR LIGHTING","Work With the Light You Have",
+                para("In Photography 1, you are <strong>not required</strong> to use off-camera flash, strobes, or modifiers. Work with the natural light in your person&rsquo;s space. Real, honest light is part of telling a true story.")
+                + para("If you want to push for higher-quality images, <strong>reflectors and scrims</strong> are available to bounce light into shadows or soften harsh sun. Use them if they help your photo, they are optional for you. Let your research and mood board show the light you can actually work with."))
         en+=card("RESEARCH ALL THREE / COLLECT YOUR INSPO","Find Reference Images for Your Three People",
             para("In Step 02 you brainstormed three people. Now research <strong>all three</strong>. For each person, collect <strong>six reference images</strong> from the internet that show the kinds of photos you want to make of them.")
             + bullets([
@@ -351,6 +360,15 @@ def build(course):
             + para("Observa estos <strong>retratos ambientales</strong>. Cada uno muestra a una persona en su propio mundo, su espacio, sus herramientas, su luz, para que sepas qui&eacute;n es antes de que diga una palabra. Eso es lo que busca tu Imagen 1.")
             + (env_slider(True) if HAVE_ENV_SLIDER else "")
             + note("Las im&aacute;genes de referencia son solo inspiraci&oacute;n. No son tus fotos. Captura tus propias im&aacute;genes reales despu&eacute;s con el kit de c&aacute;mara de la escuela."))
+        if p2:
+            es+=card("TU ILUMINACI&Oacute;N &middot; OBLIGATORIA","Iluminas Cada Imagen con Flash Fuera de C&aacute;mara",
+                para("En Fotograf&iacute;a 2, <strong>iluminas las tres im&aacute;genes con flash fuera de c&aacute;mara</strong>. Usar&aacute;s nuestro <strong>Godox AD200 Pro II</strong> en un tr&iacute;pode de luz con un modificador, colocado a un lado para dar forma a la luz como t&uacute; quieras. Es obligatorio para cada foto.")
+                + para("Por eso tu investigaci&oacute;n y tu mood board deben mostrar el <strong>estilo de luz</strong> que buscas: luz colocada de forma intencional y con forma, no solo la que ya hay. Busca im&aacute;genes de referencia con luz fuerte, direccional y fuera de c&aacute;mara.")
+                + note("&iquest;Fotografiando al aire libre bajo el sol fuerte? Tambi&eacute;n puedes necesitar <strong>filtros ND</strong> para controlar la exposici&oacute;n, y un <strong>scrim</strong> con un asistente, un compa&ntilde;ero o un familiar, para suavizar o bloquear el sol. Pl&aacute;nealo en tu mood board."))
+        else:
+            es+=card("TU ILUMINACI&Oacute;N","Trabaja con la Luz que Tienes",
+                para("En Fotograf&iacute;a 1, <strong>no est&aacute;s obligado</strong> a usar flash fuera de c&aacute;mara, estrobos ni modificadores. Trabaja con la luz natural del espacio de tu persona. La luz real y honesta es parte de contar una historia verdadera.")
+                + para("Si quieres lograr im&aacute;genes de mayor calidad, hay <strong>reflectores y scrims</strong> disponibles para rebotar luz hacia las sombras o suavizar el sol fuerte. &Uacute;salos si ayudan a tu foto, para ti son opcionales. Deja que tu investigaci&oacute;n y tu mood board muestren la luz con la que de verdad puedes trabajar."))
         es+=card("INVESTIGA LAS TRES / RE&Uacute;NE TU INSPO","Busca Im&aacute;genes de Referencia para Tus Tres Personas",
             para("En el Paso 02 pensaste en tres personas. Ahora investiga a <strong>las tres</strong>. Para cada persona, re&uacute;ne <strong>seis im&aacute;genes de referencia</strong> de internet que muestren el tipo de fotos que quieres hacer de ella.")
             + bullets([
