@@ -88,13 +88,24 @@
   .digest-item b{color:#ff9a8a;font-weight:700;}
   /* Phase 1: always-visible "Today" cart board */
   .todayboard{margin-bottom:14px;border:1px solid var(--line-soft);border-left:4px solid #00b8b8;background:rgba(0,0,0,.24);padding:11px 16px;}
-  .tb-head{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+  .tb-head{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-bottom:9px;}
   .tb-title{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;color:#8ff7f7;}
   .tb-n{font-family:var(--font);font-weight:700;font-size:.72rem;padding:1px 8px;color:#001414;background:#00b8b8;}
   .tb-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:10px;font-size:.72rem;color:var(--muted);}
   .tb-legend i.lg{display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px;}
   .tb-legend .st-ok{background:var(--ok);} .tb-legend .st-reserved{background:var(--gold);} .tb-legend .st-out{background:var(--orange);} .tb-legend .st-overdue{background:var(--red);} .tb-legend .st-oos{background:var(--grayed);}
-  .tb-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(440px,100%),1fr));gap:8px;}
+  .tb-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .tb-col{border:1px solid var(--line-soft);background:rgba(0,0,0,.18);display:flex;flex-direction:column;min-width:0;}
+  .tb-colh{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.74rem;padding:7px 11px;border-bottom:1px solid var(--line-soft);display:flex;align-items:center;gap:8px;}
+  .tb-colh.out{color:#ffd889;border-bottom-color:rgba(245,179,1,.3);} .tb-colh.in{color:#8ff7f7;border-bottom-color:rgba(0,184,184,.3);}
+  .tb-cn{font-weight:700;font-size:.7rem;padding:0 7px;color:#001414;background:#7a8a8a;} .tb-colh.out .tb-cn{background:var(--gold);} .tb-colh.in .tb-cn{background:#00b8b8;}
+  .tb-colbody{padding:8px;display:flex;flex-direction:column;gap:7px;max-height:46vh;overflow-y:auto;}
+  .tb-step{display:flex;align-items:center;gap:8px;}
+  .tb-nav{font-family:var(--font);font-weight:700;font-size:1rem;line-height:1;padding:2px 10px;border:1px solid var(--line-soft);background:rgba(0,0,0,.3);color:#cfefe9;cursor:pointer;}
+  .tb-day{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem;color:#fff;min-width:118px;text-align:center;}
+  .tb-today{font-family:var(--font);font-weight:700;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border:1px solid #00b8b8;background:transparent;color:#8ff7f7;cursor:pointer;}
+  .tb-proj{font-size:.68rem;color:#ffb28a;letter-spacing:.04em;text-transform:uppercase;}
+  @media (max-width:760px){ .tb-cols{grid-template-columns:1fr;} .tb-colbody{max-height:none;} }
   .tb-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 11px;border:1px solid var(--line-soft);border-left:3px solid var(--muted);background:rgba(255,255,255,.025);}
   .tb-row.rr-out{border-left-color:var(--orange);} .tb-row.rr-reserved{border-left-color:var(--gold);} .tb-row.rr-returned{border-left-color:var(--ok);}
   .tb-main{display:flex;align-items:center;gap:10px 12px;flex-wrap:wrap;flex:1 1 320px;min-width:0;}
@@ -1258,20 +1269,30 @@
   function cartChip(it){ var isG=it.kind==='equipment'; var lbl=isG?gearLabel(it.item):String(it.camera||'').toUpperCase();
     var at=isG?('data-geardetail="'+esc(it.item)+'"'):('data-camdetail="'+esc(it.camera)+'"');
     return '<button type="button" class="cartchip st-'+itemState(it)+'" '+at+'>'+esc(lbl)+'</button>'; }
-  function tbRelevant(c){ var rc=resvReturnedCount(c); if(rc.total>0 && rc.done===rc.total) return false;
-    return resvItems(c).some(function(it){ var st=statusOf(it); if(st==='returned') return false; var o=it.out||'', d=it.due||o;
-      return o && (st==='out' ? (SELDAY>=o) : (SELDAY>=o && SELDAY<=d)); }); }
-  function todayReservations(){ var reps={};
+  // Grouped reservations in the selected pool (one row per student + checkout dates).
+  function groupedReservations(){ var reps={};
     (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment' && c.group) return; if(!resvInScope(c)) return;
       var k=resvKey(c); if(!reps[k] || (c.kind!=='equipment' && reps[k].kind==='equipment')) reps[k]=c; });
-    return Object.keys(reps).map(function(k){ return reps[k]; }).filter(tbRelevant)
-      .sort(function(a,b){ var o={out:0,reserved:1,returned:2}, ra=o[resvStatusGroup(a)], rb=o[resvStatusGroup(b)];
-        return ra!==rb?ra-rb:((a.out||'')<(b.out||'')?-1:1); }); }
-  function todayCartRow(c){ var items=resvItems(c), st=resvStatusGroup(c);
+    return Object.keys(reps).map(function(k){ return reps[k]; }); }
+  // SELDAY = today: show anything still open on/before today. A FUTURE day: exactly that day, in good
+  // faith (assume on-time returns). OUTGOING = reservations to hand out; INCOMING = checkouts to take back.
+  function dayHit(d, iso, isT){ return d ? (isT ? (d<=iso) : (d===iso)) : false; }
+  function outgoingFor(iso){ var isT=(iso===todayISO());
+    return groupedReservations().filter(function(c){ return resvItems(c).some(function(it){
+      return statusOf(it)==='reserved' && dayHit(it.out, iso, isT); }); })
+      .sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; }); }
+  function incomingFor(iso){ var isT=(iso===todayISO());
+    return groupedReservations().filter(function(c){ return resvItems(c).some(function(it){
+      return statusOf(it)==='out' && dayHit(it.due||it.out, iso, isT); }); })
+      .sort(function(a,b){ return ((a.due||a.out||'')<(b.due||b.out||''))?-1:1; }); }
+  function stepDay(n){ var d=new Date(SELDAY+'T00:00:00'); d.setDate(d.getDate()+n);
+    SELDAY=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    renderTodayBoard(); updateSummary(); }
+  function todayCartRow(c, mode){ var items=resvItems(c), st=resvStatusGroup(c);
     var meta=[(c.period?'Per '+esc(c.period):''),(c.course?esc(c.course):'')].filter(Boolean).join(' &middot; ');
-    var anyRes=items.some(function(x){return statusOf(x)==='reserved';}), anyOut=items.some(function(x){return statusOf(x)==='out';});
-    var act=anyRes?('<button type="button" class="tb-act tb-out" data-tbout="'+esc(c.id)+'">Check out</button>')
-           :anyOut?('<button type="button" class="tb-act tb-in" data-tbin="'+esc(c.id)+'">Check in</button>'):'';
+    var act = mode==='in'
+      ? '<button type="button" class="tb-act tb-in" data-tbin="'+esc(c.id)+'">Check in</button>'
+      : '<button type="button" class="tb-act tb-out" data-tbout="'+esc(c.id)+'">Check out</button>';
     return '<div class="tb-row rr-'+st+'"><div class="tb-main">'+
       '<span class="tb-who">'+studentLink(c)+'</span>'+(meta?('<span class="tb-meta">'+meta+'</span>'):'')+
       '<span class="tb-cart">'+items.map(cartChip).join('')+'</span></div>'+
@@ -1281,13 +1302,22 @@
     '<span><i class="lg st-out"></i>Checked out</span><span><i class="lg st-overdue"></i>Overdue</span>'+
     '<span><i class="lg st-oos"></i>Out of service</span></div>'; }
   function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
-    var list=todayReservations(), dayL=(SELDAY===todayISO()?'Today':fmtMDY(SELDAY));
+    var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), inc=incomingFor(SELDAY);
+    var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY));
+    var stepper='<div class="tb-step"><button type="button" class="tb-nav" data-tbday="-1" title="Previous day">&#8249;</button>'+
+      '<span class="tb-day">'+esc(dayL)+'</span><button type="button" class="tb-nav" data-tbday="1" title="Next day">&#8250;</button>'+
+      (isT?'':'<button type="button" class="tb-today" data-tbtoday="1">Today</button><span class="tb-proj">Projected &middot; assumes on-time returns</span>')+'</div>';
+    function col(cls,label,items,mode){ return '<div class="tb-col">'+
+      '<div class="tb-colh '+cls+'">'+label+' <span class="tb-cn">'+items.length+'</span></div>'+
+      '<div class="tb-colbody">'+(items.length?items.map(function(c){return todayCartRow(c,mode);}).join('')
+        :('<div class="tb-empty">'+(cls==='out'?'Nothing to hand out':'Nothing due back')+' '+(isT?'today':'that day')+'.</div>'))+'</div></div>'; }
     el.className='todayboard'; el.style.display='';
-    el.innerHTML='<div class="tb-head"><span class="tb-title">'+dayL+' &middot; Reservations</span><span class="tb-n">'+list.length+'</span></div>'+
-      tbLegend()+(list.length?('<div class="tb-list">'+list.map(todayCartRow).join('')+'</div>')
-        :('<div class="tb-empty">Nothing out or going out '+(SELDAY===todayISO()?'today':'that day')+'.</div>'));
+    el.innerHTML='<div class="tb-head"><span class="tb-title">Reservations</span>'+stepper+'</div>'+tbLegend()+
+      '<div class="tb-cols">'+col('out','Outgoing',out,'out')+col('in','Incoming',inc,'in')+'</div>';
     el.querySelectorAll('[data-tbout]').forEach(function(b){ b.onclick=function(){ var p=findRec(b.getAttribute('data-tbout')); if(p) resvCheckOutAll(p); }; });
     el.querySelectorAll('[data-tbin]').forEach(function(b){ b.onclick=function(){ var p=findRec(b.getAttribute('data-tbin')); if(p) resvCheckInAll(p); }; });
+    el.querySelectorAll('[data-tbday]').forEach(function(b){ b.onclick=function(){ stepDay(parseInt(b.getAttribute('data-tbday'),10)); }; });
+    el.querySelectorAll('[data-tbtoday]').forEach(function(b){ b.onclick=function(){ SELDAY=todayISO(); renderTodayBoard(); updateSummary(); }; });
   }
   // ===== Reservation Activity date window: a rolling 7 days ENDING on the selected date (default today).
   var ACTIVITY_DATE=null;   // ISO yyyy-mm-dd of the window's last day; null = today
@@ -1869,7 +1899,7 @@
     }
     // Reservation Activity (date selector + Checked out / Reserved / Returned accordions) sits ON TOP
     // as the daily glanceable status, then the buried Manage Equipment catalog, then the card wallet.
-    var html=reservationActivityHtml()+manageHtml+walletHtml;
+    var html=manageHtml+walletHtml;   // Reservation Activity retired: the two-column Today board (above) replaces it.
     // Flicker fix (Chris, 2026-09-29): the 7s poll used to replace #board on every tick, which
     // re-composited every backdrop-filter card over the fixed CS-logo background and read as a
     // periodic flicker. Only touch the DOM (and rebind) when the rendered board actually changed.
@@ -1986,7 +2016,7 @@
   window.addEventListener('message',function(e){
     if(!e.data) return;
     if(typeof e.data.calH==='number'){ if(e.data.calH>200){ _lastCalH=e.data.calH; sizeCal(); } }
-    else if(e.data.daySelected){ SELDAY=e.data.daySelected; updateSummary(); }        // bar follows the day clicked in the calendar
+    else if(e.data.daySelected){ SELDAY=e.data.daySelected; updateSummary(); renderTodayBoard(); }        // bar follows the day clicked in the calendar
     else if(e.data.camAction){ loadBoard(); }                                          // a check-in done from the calendar; refresh the board
     else if(e.data.openCam){ openCamDetail(e.data.openCam); }                           // tapped a camera in the embedded calendar -> open the full teacher window
   });
