@@ -86,6 +86,28 @@
   .digest-body{display:flex;flex-wrap:wrap;gap:7px 14px;}
   .digest-item{font-size:.82rem;color:var(--muted);}
   .digest-item b{color:#ff9a8a;font-weight:700;}
+  /* Phase 1: always-visible "Today" cart board */
+  .todayboard{margin-bottom:14px;border:1px solid var(--line-soft);border-left:4px solid #00b8b8;background:rgba(0,0,0,.24);padding:11px 16px;}
+  .tb-head{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+  .tb-title{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;color:#8ff7f7;}
+  .tb-n{font-family:var(--font);font-weight:700;font-size:.72rem;padding:1px 8px;color:#001414;background:#00b8b8;}
+  .tb-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:10px;font-size:.72rem;color:var(--muted);}
+  .tb-legend i.lg{display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px;}
+  .tb-legend .st-ok{background:var(--ok);} .tb-legend .st-reserved{background:var(--gold);} .tb-legend .st-out{background:var(--orange);} .tb-legend .st-overdue{background:var(--red);} .tb-legend .st-oos{background:var(--grayed);}
+  .tb-list{display:flex;flex-direction:column;gap:8px;}
+  .tb-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 11px;border:1px solid var(--line-soft);border-left:3px solid var(--muted);background:rgba(255,255,255,.025);}
+  .tb-row.rr-out{border-left-color:var(--orange);} .tb-row.rr-reserved{border-left-color:var(--gold);} .tb-row.rr-returned{border-left-color:var(--ok);}
+  .tb-main{display:flex;align-items:center;gap:10px 12px;flex-wrap:wrap;flex:1 1 320px;min-width:0;}
+  .tb-who{font-family:var(--font);font-weight:700;font-size:.95rem;color:#fff;}
+  .tb-meta{font-size:.8rem;color:var(--muted);}
+  .tb-cart{display:flex;flex-wrap:wrap;gap:5px;}
+  .cartchip{font-family:var(--font);font-weight:700;font-size:.68rem;letter-spacing:.03em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--line-soft);background:rgba(0,0,0,.3);color:#fff;cursor:pointer;}
+  .cartchip.st-reserved{border-color:var(--gold);color:#ffd889;} .cartchip.st-out{border-color:var(--orange);color:#ffb28a;} .cartchip.st-overdue{border-color:var(--red);color:#ff9a8a;animation:cardFlash 1.5s ease-in-out infinite;} .cartchip.st-returned{border-color:var(--ok);color:#8ff0b0;}
+  .tb-actwrap{flex:0 0 auto;margin-left:auto;}
+  .tb-act{font-family:var(--font);font-weight:700;font-size:.74rem;letter-spacing:.04em;text-transform:uppercase;padding:6px 14px;border:1px solid var(--line-soft);background:rgba(0,0,0,.3);color:#fff;cursor:pointer;}
+  .tb-act.go{border-color:var(--gold);color:#ffd889;} .tb-act.warn{border-color:var(--orange);color:#ffb28a;}
+  .tb-empty{font-size:.85rem;color:var(--muted);}
+  @media (max-width:640px){ .tb-row{align-items:flex-start;} .tb-actwrap{margin-left:0;width:100%;} .tb-act{width:100%;} }
 
   .h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:24px 0 12px;padding-left:9px;border-left:3px solid var(--teal);display:flex;align-items:center;gap:10px;}
   .h .hcount{color:var(--faint);font-weight:600;letter-spacing:.04em;}
@@ -815,6 +837,7 @@
 
   <div id="overdueDigest" style="display:none;"></div>
   <div id="pendingDigest" style="display:none;"></div>
+  <div id="todayBoard" style="display:none;"></div>
 
   <details class="cbox" id="calbox">
     <summary class="cbox-head"><span class="cbox-titlebox"><span class="cbox-code">Reservations</span><span class="cbox-title">Calendar</span></span><span class="cbox-meta"><span class="hcount" id="calhint">Tap a day to see that day&#8217;s cameras</span><span class="cbox-chev"></span></span></summary>
@@ -1225,6 +1248,47 @@
   function resvAllReturned(parent){ var rc=resvReturnedCount(parent); return rc.total>0 && rc.done===rc.total; }
   function resvDate(c){ return c.created || c.out || ''; }
   function resvStatusGroup(c){ var rc=resvReturnedCount(c); if(rc.total>0 && rc.done===rc.total) return 'returned'; return resvItems(c).some(function(x){return statusOf(x)==='out';})?'out':'reserved'; }
+
+  // ===== Phase 1: always-visible "Today" cart board (color-coded, one-tap). =====
+  // Each active reservation relevant to SELDAY, scoped to the selected pool, shown as a glanceable cart:
+  // student + period + course, every item as a status-colored chip, and a one-tap Check out / Check in.
+  // Student names (data-stu) and item chips (data-camdetail/data-geardetail) use the document-level
+  // delegated handlers, so only the action buttons need wiring.
+  function itemState(it){ if(statusOf(it)==='returned') return 'returned'; if(isOverdue(it)) return 'overdue'; return statusOf(it)==='out'?'out':'reserved'; }
+  function cartChip(it){ var isG=it.kind==='equipment'; var lbl=isG?gearLabel(it.item):String(it.camera||'').toUpperCase();
+    var at=isG?('data-geardetail="'+esc(it.item)+'"'):('data-camdetail="'+esc(it.camera)+'"');
+    return '<button type="button" class="cartchip st-'+itemState(it)+'" '+at+'>'+esc(lbl)+'</button>'; }
+  function tbRelevant(c){ var rc=resvReturnedCount(c); if(rc.total>0 && rc.done===rc.total) return false;
+    return resvItems(c).some(function(it){ var st=statusOf(it); if(st==='returned') return false; var o=it.out||'', d=it.due||o;
+      return o && (st==='out' ? (SELDAY>=o) : (SELDAY>=o && SELDAY<=d)); }); }
+  function todayReservations(){ var reps={};
+    (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment' && c.group) return; if(!resvInScope(c)) return;
+      var k=resvKey(c); if(!reps[k] || (c.kind!=='equipment' && reps[k].kind==='equipment')) reps[k]=c; });
+    return Object.keys(reps).map(function(k){ return reps[k]; }).filter(tbRelevant)
+      .sort(function(a,b){ var o={out:0,reserved:1,returned:2}, ra=o[resvStatusGroup(a)], rb=o[resvStatusGroup(b)];
+        return ra!==rb?ra-rb:((a.out||'')<(b.out||'')?-1:1); }); }
+  function todayCartRow(c){ var items=resvItems(c), st=resvStatusGroup(c);
+    var meta=[(c.period?'Per '+esc(c.period):''),(c.course?esc(c.course):'')].filter(Boolean).join(' &middot; ');
+    var anyRes=items.some(function(x){return statusOf(x)==='reserved';}), anyOut=items.some(function(x){return statusOf(x)==='out';});
+    var act=anyRes?('<button type="button" class="tb-act go" data-tbout="'+esc(c.id)+'">Check out</button>')
+           :anyOut?('<button type="button" class="tb-act warn" data-tbin="'+esc(c.id)+'">Check in</button>'):'';
+    return '<div class="tb-row rr-'+st+'"><div class="tb-main">'+
+      '<span class="tb-who">'+studentLink(c)+'</span>'+(meta?('<span class="tb-meta">'+meta+'</span>'):'')+
+      '<span class="tb-cart">'+items.map(cartChip).join('')+'</span></div>'+
+      '<div class="tb-actwrap">'+act+'</div></div>'; }
+  function tbLegend(){ return '<div class="tb-legend">'+
+    '<span><i class="lg st-ok"></i>In storage</span><span><i class="lg st-reserved"></i>Reserved</span>'+
+    '<span><i class="lg st-out"></i>Checked out</span><span><i class="lg st-overdue"></i>Overdue</span>'+
+    '<span><i class="lg st-oos"></i>Out of service</span></div>'; }
+  function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
+    var list=todayReservations(), dayL=(SELDAY===todayISO()?'Today':fmtMDY(SELDAY));
+    el.className='todayboard'; el.style.display='';
+    el.innerHTML='<div class="tb-head"><span class="tb-title">'+dayL+' &middot; Reservations</span><span class="tb-n">'+list.length+'</span></div>'+
+      tbLegend()+(list.length?('<div class="tb-list">'+list.map(todayCartRow).join('')+'</div>')
+        :('<div class="tb-empty">Nothing out or going out '+(SELDAY===todayISO()?'today':'that day')+'.</div>'));
+    el.querySelectorAll('[data-tbout]').forEach(function(b){ b.onclick=function(){ var p=findRec(b.getAttribute('data-tbout')); if(p) resvCheckOutAll(p); }; });
+    el.querySelectorAll('[data-tbin]').forEach(function(b){ b.onclick=function(){ var p=findRec(b.getAttribute('data-tbin')); if(p) resvCheckInAll(p); }; });
+  }
   // ===== Reservation Activity date window: a rolling 7 days ENDING on the selected date (default today).
   var ACTIVITY_DATE=null;   // ISO yyyy-mm-dd of the window's last day; null = today
   function activityAnchor(){ return ACTIVITY_DATE || todayISO(); }
@@ -1812,6 +1876,7 @@
     if(html!==_lastBoardSig){ _lastBoardSig=html; host.innerHTML=html; bindBoard(); }
     updateSummary();
     updateDigests();
+    try{ renderTodayBoard(); }catch(e){ console.warn('today board render error:', e); }   // never let it break the board
     var allRet=DATA.checkouts.filter(function(c){ return statusOf(c)==='returned'; })
       .sort(function(a,b){ return (b.returned_date||b.created||'')>(a.returned_date||a.created||'')?1:-1; });
     var cutoff4w=new Date(Date.now()-28*864e5).toISOString().slice(0,10);   // on screen: last 4 weeks only
