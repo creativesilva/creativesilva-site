@@ -21,7 +21,10 @@
 <!-- EmailJS SDK self-hosted on creativesilva.com: the jsDelivr CDN is blocked on student Canvas/district
      devices, so loading it there left window.emailjs undefined and reservation receipts silently never sent. -->
 <script src="/js/emailjs-browser-4.min.js"></script>
-<script>try{ emailjs.init({ publicKey: '68UkiTjqHIKZMkeCC' }); }catch(e){}</script>
+<!-- Reservation receipts use the CreativeSilva EmailJS account (service service_i53d3dk) where
+     template_reservation actually lives. The 68Uki... account that contact.html/awards use has no
+     reservation template, so a send there returned 400 "template not found". Do not revert this key. -->
+<script>try{ emailjs.init({ publicKey: 'z2UjAu1N-IFmF2pbc' }); }catch(e){}</script>
 <style>
   /* Standalone camera back-end. Shares the unified header (silva-nav.js) + the catalog
      CS-logo watermark so it matches curriculum.html and calendar.html. Talks to the same
@@ -1881,7 +1884,7 @@
   }
   function sendReservationEmail(c,email,what){
     if(!window.emailjs){ silvaToast('Email service is not loaded. Try again.'); return; }
-    emailjs.send('service_4mhkbik','template_reservation',{
+    emailjs.send('service_i53d3dk','template_reservation',{
       to_email: email,
       student_name: nameOf(c)||'there',
       item: what,
