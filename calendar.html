@@ -17,7 +17,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/silva-module.css?v=d132cef2" />
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<!-- EmailJS SDK self-hosted on creativesilva.com: the jsDelivr CDN is blocked on student Canvas/district
+     devices, so loading it from there left window.emailjs undefined and reservation receipts silently never sent. -->
+<script src="/js/emailjs-browser-4.min.js"></script>
 <script>try{ emailjs.init({ publicKey: '68UkiTjqHIKZMkeCC' }); }catch(e){}</script>
 <style>
   /* Camera calendar: shares the unified header (silva-nav.js) + the catalog CS-logo
@@ -1710,14 +1712,18 @@
   }
   // Auto-confirmation email to the student (approval is shelved, so reservations confirm on submit).
   // Student address = <student id digits>@students-smjuhsd.org; fails quietly and never blocks reserving.
+  // Returns true if a receipt send was ATTEMPTED (SDK present + a numeric id), so the done screen only
+  // claims "receipt sent" when it actually fired. Never blocks reserving; logs instead of swallowing.
   function sendStudentConfirm(sid, name, item, pickup, returnBy){
     try{
-      var digits=String(sid||'').replace(/\D/g,''); if(!digits || !window.emailjs) return;
+      var digits=String(sid||'').replace(/\D/g,''); if(!digits) return false;
+      if(!window.emailjs){ console.warn('Reservation receipt NOT sent: EmailJS SDK did not load.'); return false; }
       emailjs.send('service_4mhkbik','template_reservation',{
         to_email: digits+'@students-smjuhsd.org', student_name: name||'', item: item,
         pickup_room: 'Room 322', pickup_date: prettyDate(pickup), return_by: prettyDate(returnBy)
-      }).catch(function(){});
-    }catch(e){}
+      }).then(null, function(err){ console.warn('Reservation receipt send failed:', (err&&(err.text||err.status))||err); });
+      return true;
+    }catch(e){ console.warn('Reservation receipt error:', e); return false; }
   }
   function submitReserve(iso){
     var cam=DM_RESERVE_CAM; if(!cam||!RESV) return;
@@ -1729,7 +1735,7 @@
     var btn=document.getElementById('rc-go'); if(btn){ btn.disabled=true; btn.textContent=t('reservingBtn'); }
     fetch(API+'/api/camera/checkout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
-      .then(function(res){ if(res.ok&&res.j&&res.j.ok){ sendStudentConfirm(RESV&&RESV.id, RESV&&RESV.label, cam+(extras.length?(' + '+extras.map(function(k){return gearLabel(k);}).join(', ')):''), iso, due); reserveDone(cam,iso,due,extras,RESV&&RESV.label); } else { var m=document.getElementById('rc-msg'); if(m) m.textContent=srvErr(res.j&&res.j.error)||t('couldNotReserve'); if(btn){ btn.disabled=false; btn.textContent=t('confirmBtn'); } } })
+      .then(function(res){ if(res.ok&&res.j&&res.j.ok){ var _sent=sendStudentConfirm(RESV&&RESV.id, RESV&&RESV.label, cam+(extras.length?(' + '+extras.map(function(k){return gearLabel(k);}).join(', ')):''), iso, due); reserveDone(cam,iso,due,extras,RESV&&RESV.label,_sent); } else { var m=document.getElementById('rc-msg'); if(m) m.textContent=srvErr(res.j&&res.j.error)||t('couldNotReserve'); if(btn){ btn.disabled=false; btn.textContent=t('confirmBtn'); } } })
       .catch(function(){ var m=document.getElementById('rc-msg'); if(m) m.textContent=t('couldNotReach'); if(btn){ btn.disabled=false; btn.textContent=t('confirmBtn'); } });
   }
   // Standalone gear reservation (Other Equipment tab): its own checkout record, kind='equipment'.
@@ -1740,10 +1746,10 @@
     var btn=document.getElementById('rc-go'); if(btn){ btn.disabled=true; btn.textContent=t('reservingBtn'); }
     fetch(API+'/api/camera/checkout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
-      .then(function(res){ if(res.ok&&res.j&&res.j.ok){ sendStudentConfirm(RESV&&RESV.id, RESV&&RESV.label, gearLabel(key), iso, due); reserveDoneGear(key,iso,due,RESV&&RESV.label); } else { var m=document.getElementById('rc-msg'); if(m) m.textContent=srvErr(res.j&&res.j.error)||t('couldNotReserve'); if(btn){ btn.disabled=false; btn.textContent=t('confirmBtn'); } } })
+      .then(function(res){ if(res.ok&&res.j&&res.j.ok){ var _sent=sendStudentConfirm(RESV&&RESV.id, RESV&&RESV.label, gearLabel(key), iso, due); reserveDoneGear(key,iso,due,RESV&&RESV.label,_sent); } else { var m=document.getElementById('rc-msg'); if(m) m.textContent=srvErr(res.j&&res.j.error)||t('couldNotReserve'); if(btn){ btn.disabled=false; btn.textContent=t('confirmBtn'); } } })
       .catch(function(){ var m=document.getElementById('rc-msg'); if(m) m.textContent=t('couldNotReach'); if(btn){ btn.disabled=false; btn.textContent=t('confirmBtn'); } });
   }
-  function reserveDoneGear(key,iso,due,who){
+  function reserveDoneGear(key,iso,due,who,sent){
     RESV=null; DM_RESERVE_CAM=null; DM_RESERVE_GEAR=null; RV_TAB='cameras'; DM_DONE=true; document.getElementById('rvBanner').style.display='none';
     document.getElementById('dm-tabs').innerHTML='';
     var _f=document.getElementById('dm-foot'); if(_f) _f.innerHTML='';
@@ -1756,12 +1762,13 @@
       '<div class="rc-done"><div class="rc-done-ic">&#10003;</div>'+
       '<p><b>'+t('reservedYou')+'</b> '+t('takeLook')+'</p>'+
       '<div class="rc-summary">'+rows+'</div>'+
+      (sent?('<p class="rc-done-sub" style="color:#3fa863">'+(LANG==='es'?'Enviamos un recibo a tu correo escolar.':'A receipt was sent to your school email.')+'</p>'):'')+
       '<p class="rc-done-sub">'+t('doneSub')+'</p>'+
       '<button type="button" class="dc-btn rv-primary" id="rc-close">'+t('doneBtn')+'</button></div>';
     var cl=document.getElementById('rc-close'); if(cl) cl.addEventListener('click',closeDayModal);
     load();
   }
-  function reserveDone(cam,iso,due,extras,who){
+  function reserveDone(cam,iso,due,extras,who,sent){
     RESV=null; DM_RESERVE_CAM=null; DM_RESERVE_GEAR=null; RV_TAB='cameras'; DM_DONE=true; document.getElementById('rvBanner').style.display='none';
     document.getElementById('dm-tabs').innerHTML='';
     var _f=document.getElementById('dm-foot'); if(_f) _f.innerHTML='';
@@ -1776,6 +1783,7 @@
       '<div class="rc-done"><div class="rc-done-ic">&#10003;</div>'+
       '<p><b>'+t('reservedYou')+'</b> '+t('takeLook')+'</p>'+
       '<div class="rc-summary">'+rows+'</div>'+
+      (sent?('<p class="rc-done-sub" style="color:#3fa863">'+(LANG==='es'?'Enviamos un recibo a tu correo escolar.':'A receipt was sent to your school email.')+'</p>'):'')+
       '<p class="rc-done-sub">'+t('doneSub')+'</p>'+
       '<button type="button" class="dc-btn rv-primary" id="rc-close">'+t('doneBtn')+'</button></div>';
     var cl=document.getElementById('rc-close'); if(cl) cl.addEventListener('click',closeDayModal);

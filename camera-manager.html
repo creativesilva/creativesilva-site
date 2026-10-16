@@ -18,8 +18,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/silva-module.css?v=d132cef2" />
-<!-- EmailJS: student reservation-confirmation emails (Chris's creativesilva service). -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<!-- EmailJS SDK self-hosted on creativesilva.com: the jsDelivr CDN is blocked on student Canvas/district
+     devices, so loading it there left window.emailjs undefined and reservation receipts silently never sent. -->
+<script src="/js/emailjs-browser-4.min.js"></script>
 <script>try{ emailjs.init({ publicKey: '68UkiTjqHIKZMkeCC' }); }catch(e){}</script>
 <style>
   /* Standalone camera back-end. Shares the unified header (silva-nav.js) + the catalog
@@ -2560,7 +2561,7 @@
   document.getElementById('resx').onclick=closeReserve;
   resmodal.addEventListener('click',function(e){ if(e.target===resmodal) closeReserve(); });
 
-  var lookupT=null, lastLookup='';
+  var lookupT=null, lastLookup='', lastLabel='';
   function doLookup(){
     var v=rsid.value.replace(/\D/g,'');
     if(v.length<5){ rwho.className='who-line'; rwho.textContent=''; lastLookup=''; return; }
@@ -2569,8 +2570,8 @@
     fetch(API+'/api/camera/lookup',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:v})})
       .then(function(r){return r.json();}).then(function(j){
         if(rsid.value.replace(/\D/g,'')!==v) return;
-        if(j&&j.found){ rwho.className='who-line ok'; rwho.textContent='Checking out to '+j.label; }
-        else { rwho.className='who-line no'; rwho.textContent='Not in the roster (you can still check it out; it will flag).'; }
+        if(j&&j.found){ rwho.className='who-line ok'; rwho.textContent='Checking out to '+j.label; lastLabel=j.label||''; }
+        else { rwho.className='who-line no'; rwho.textContent='Not in the roster (you can still check it out; it will flag).'; lastLabel=''; }
       }).catch(function(){ rwho.className='who-line'; rwho.textContent=''; });
   }
   rsid.addEventListener('input',function(){ clearTimeout(lookupT); lookupT=setTimeout(doLookup,350); });
@@ -2587,7 +2588,11 @@
     rgo.disabled=true; rgo.textContent='Saving…';
     camAPI('/api/camera/checkout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
-      .then(function(res){ if(res.ok&&res.j.ok){ closeReserve(); return loadBoard().then(reloadCal); } else { resmsg.className='mmsg err show'; resmsg.textContent=(res.j&&res.j.error)||'Could not save.'; } })
+      .then(function(res){ if(res.ok&&res.j.ok){
+          // Teacher-made checkout: email the student the same reservation receipt (quiet, non-blocking).
+          try{ var _em=studentEmail(payload); if(_em) sendReservationEmail({student_id:payload.student_id, student_name:lastLabel, camera:payload.camera||'', item:payload.item||'', kind:(gearMode?'equipment':'camera'), out:payload.out, due:payload.due}, _em, (gearMode?gearLabel(resGearId):payload.camera)); }catch(e){ console.warn('Receipt email error:', e); }
+          closeReserve(); return loadBoard().then(reloadCal);
+        } else { resmsg.className='mmsg err show'; resmsg.textContent=(res.j&&res.j.error)||'Could not save.'; } })
       .catch(function(){ resmsg.className='mmsg err show'; resmsg.textContent='Could not reach the server.'; })
       .then(function(){ rgo.disabled=false; rgo.textContent=doneLabel; });
   };
