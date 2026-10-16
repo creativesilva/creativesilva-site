@@ -8,7 +8,9 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=1" />
+<link rel="stylesheet" href="/css/store.css?v=2" />
+<!-- Live PVHS school calendar (for the auto "next school day" return). Mirrored to creativesilva.com in production. -->
+<script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
 <body>
 
@@ -23,52 +25,61 @@
   </div>
 </header>
 
-<section class="store-hero" id="hero">
-  <div class="wrap">
-    <div class="hero-eyebrow" id="heroEyebrow">Pioneer Valley Photography</div>
-    <h1 class="hero-title"><span class="dim">reserve your</span><br>GEAR.</h1>
-    <p class="hero-sub">Browse the kit, add what you need, pick your day and pickup time. Sign in with your student number to start.</p>
+<!-- Category nav (horizontal, icons + name only) -->
+<nav class="catnav">
+  <div class="wrap catnav-row" id="catnav">
+    <button type="button" class="catn active" data-cat="cameras"><span class="catn-ic" data-ic="camera"></span>Camera Kits</button>
+    <button type="button" class="catn" data-cat="tripods"><span class="catn-ic" data-ic="tripod"></span>Tripods</button>
+    <button type="button" class="catn" data-cat="lighting"><span class="catn-ic" data-ic="lighting"></span>Lighting</button>
+    <button type="button" class="catn" data-cat="accessories"><span class="catn-ic" data-ic="accessories"></span>Accessories</button>
   </div>
-</section>
+</nav>
 
-<main class="wrap">
-  <section class="cats">
-    <div class="section-head"><span class="bar"></span>Reserve Equipment</div>
-    <div class="tiles" id="cats">
-      <button type="button" class="tile" data-cat="cameras">
-        <span class="tnum">01</span>
-        <h3>Camera Kits</h3>
-        <span class="tsub">R50 &middot; RP &middot; R8 &rarr;</span>
+<!-- Date bar: CHECKOUT (changeable) / RETURN (auto next school day) / DAYS (auto) -->
+<div class="datebar">
+  <div class="wrap datebar-row">
+    <div class="datebar-lead">When do you need it?</div>
+    <div class="datecards">
+      <button type="button" class="datecard pick" id="dcCheckout" aria-label="Choose checkout day">
+        <span class="dc-lab">Checkout</span><span class="dc-dow" id="coDow">&mdash;</span><span class="dc-mon" id="coMon">&mdash;</span><span class="dc-day" id="coDay">&mdash;</span>
       </button>
-      <button type="button" class="tile" data-cat="tripods">
-        <span class="tnum">02</span>
-        <h3>Tripods</h3>
-        <span class="tsub">K&amp;F Concept &rarr;</span>
-      </button>
-      <button type="button" class="tile" data-cat="lighting">
-        <span class="tnum">03</span>
-        <h3>Lighting</h3>
-        <span class="tsub">Speedlite &middot; Godox &rarr;</span>
-      </button>
-      <button type="button" class="tile accent" data-cat="accessories">
-        <span class="tnum">04</span>
-        <h3>Accessories</h3>
-        <span class="tsub">Lenses &middot; remotes &middot; more &rarr;</span>
-      </button>
+      <div class="datecard ret">
+        <span class="dc-lab">Return</span><span class="dc-dow" id="rtDow">&mdash;</span><span class="dc-mon" id="rtMon">&mdash;</span><span class="dc-day" id="rtDay">&mdash;</span>
+      </div>
+      <div class="datecard days">
+        <span class="dc-lab">Days</span><span class="dc-num" id="dyNum">&mdash;</span>
+      </div>
     </div>
+    <div class="datebar-note">Return is the next school day. Pick a pickup time at checkout.</div>
+  </div>
+</div>
+
+<!-- Product grid for the active category -->
+<main class="wrap">
+  <section class="products">
+    <div class="prod-head"><span class="bar"></span><span id="prodHeadLabel">Camera Kits</span></div>
+    <div class="prod-grid" id="prodGrid"></div>
   </section>
 </main>
 
-<!-- Sign-in dialog: student number only, no password. -->
+<!-- Checkout-day calendar popup -->
+<div class="sov" id="calOv" aria-hidden="true">
+  <div class="sheet cal" role="dialog" aria-modal="true" aria-label="Choose checkout day">
+    <div class="sheet-bd">
+      <div class="cal-head"><button type="button" class="cal-nav" id="calPrev">&#8249;</button><span id="calTitle">&mdash;</span><button type="button" class="cal-nav" id="calNext">&#8250;</button></div>
+      <div class="cal-dow"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Sign-in dialog: student number only, no password -->
 <div class="sov" id="signinOv" aria-hidden="true">
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="signinTitle">
     <div class="sheet-bd">
       <h2 id="signinTitle">My Account</h2>
-      <p>Sign in with your student number to reserve equipment.</p>
-      <div class="field">
-        <label for="sid">Student number</label>
-        <input type="text" id="sid" inputmode="numeric" autocomplete="off" placeholder="e.g. 123456" />
-      </div>
+      <p>Sign in with your student number to reserve.</p>
+      <div class="field"><label for="sid">Student number</label><input type="text" id="sid" inputmode="numeric" autocomplete="off" placeholder="e.g. 123456" /></div>
       <div class="sheet-msg" id="signinMsg"></div>
       <button type="button" class="btn block" id="signinGo">Sign in</button>
     </div>
@@ -77,39 +88,120 @@
 
 <script>
 (function(){
-  // Teacher scope from the link (?teacher=silva|garcia|mankin); drives which inventory shows.
   var TEACHER=(new URLSearchParams(location.search).get('teacher')||'silva').toLowerCase();
-  var SIGNED_IN=false; try{ SIGNED_IN=!!sessionStorage.getItem('pv_sid'); }catch(e){}
+  function pad(n){ n=String(n); return n.length<2?('0'+n):n; }
+  function isoOf(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  var DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-  var ov=document.getElementById('signinOv');
-  function openSignin(){ ov.classList.add('open'); ov.setAttribute('aria-hidden','false'); var i=document.getElementById('sid'); if(i){ try{ i.focus(); }catch(e){} } }
-  function closeSignin(){ ov.classList.remove('open'); ov.setAttribute('aria-hidden','true'); }
-  ov.addEventListener('click', function(e){ if(e.target===ov) closeSignin(); });
-
-  document.getElementById('acctBtn').addEventListener('click', openSignin);
-
-  // Until signed in, any category click routes to sign-in first (the "must sign in" behavior).
-  document.getElementById('cats').addEventListener('click', function(e){
-    var t=e.target.closest('[data-cat]'); if(!t) return;
-    if(!SIGNED_IN){ openSignin(); return; }
-    // Browse view wired in the next build increment (store.js).
-  });
-  document.getElementById('cartBtn').addEventListener('click', function(){ if(!SIGNED_IN) openSignin(); });
-
-  // Sign-in stub: accepts a numeric student number for now; roster validation + contact confirm
-  // + eligibility gate are wired to /api/camera/lookup in the next increment.
-  function doSignin(){
-    var v=(document.getElementById('sid').value||'').replace(/\D/g,''); var m=document.getElementById('signinMsg');
-    if(v.length<5){ m.className='sheet-msg err'; m.textContent='Enter your student number.'; return; }
-    try{ sessionStorage.setItem('pv_sid', v); }catch(e){}
-    SIGNED_IN=true;
-    document.getElementById('acctBtn').classList.add('in');
-    m.className='sheet-msg ok'; m.textContent='Signed in.';
-    setTimeout(closeSignin, 400);
+  // ----- school-day logic (live from pvhs_tools; weekday fallback if the script is blocked) -----
+  function isSchoolDay(d){
+    if(typeof schoolDays!=='undefined' && Array.isArray(schoolDays)) return schoolDays.indexOf(isoOf(d))!==-1;
+    var w=d.getDay(); return w!==0 && w!==6;   // fallback: Mon-Fri
   }
+  function nextSchoolDay(d){ var x=new Date(d); for(var i=0;i<14;i++){ x.setDate(x.getDate()+1); if(isSchoolDay(x)) return x; } return x; }
+
+  // ----- the checkout/return/days state -----
+  var checkout=new Date(); checkout.setHours(0,0,0,0);
+  // default checkout = today if it's a school day, else the next school day
+  if(!isSchoolDay(checkout)) checkout=nextSchoolDay(checkout);
+  function renderDates(){
+    var ret=nextSchoolDay(checkout);
+    var days=Math.round((ret-checkout)/86400000);
+    document.getElementById('coDow').textContent=DOW[checkout.getDay()];
+    document.getElementById('coMon').textContent=MON[checkout.getMonth()];
+    document.getElementById('coDay').textContent=checkout.getDate();
+    document.getElementById('rtDow').textContent=DOW[ret.getDay()];
+    document.getElementById('rtMon').textContent=MON[ret.getMonth()];
+    document.getElementById('rtDay').textContent=ret.getDate();
+    document.getElementById('dyNum').textContent=days;
+  }
+
+  // ----- calendar popup (pick the checkout day) -----
+  var calOv=document.getElementById('calOv'), calView=new Date(checkout.getFullYear(), checkout.getMonth(), 1);
+  function openCal(){ calView=new Date(checkout.getFullYear(), checkout.getMonth(), 1); drawCal(); calOv.classList.add('open'); }
+  function closeCal(){ calOv.classList.remove('open'); }
+  function drawCal(){
+    document.getElementById('calTitle').textContent=MON[calView.getMonth()]+' '+calView.getFullYear();
+    var first=new Date(calView.getFullYear(), calView.getMonth(), 1), start=first.getDay();
+    var dim=new Date(calView.getFullYear(), calView.getMonth()+1, 0).getDate();
+    var today=new Date(); today.setHours(0,0,0,0);
+    var html='';
+    for(var i=0;i<start;i++) html+='<span class="cal-cell blank"></span>';
+    for(var dnum=1;dnum<=dim;dnum++){
+      var d=new Date(calView.getFullYear(), calView.getMonth(), dnum);
+      var school=isSchoolDay(d), past=d<today;
+      var sel=(isoOf(d)===isoOf(checkout));
+      var cls='cal-cell'+(school&&!past?'':' off')+(sel?' sel':'');
+      html+=(school&&!past)
+        ? '<button type="button" class="'+cls+'" data-d="'+isoOf(d)+'">'+dnum+'</button>'
+        : '<span class="'+cls+'">'+dnum+'</span>';
+    }
+    document.getElementById('calGrid').innerHTML=html;
+    document.getElementById('calGrid').querySelectorAll('[data-d]').forEach(function(b){ b.onclick=function(){
+      var p=b.getAttribute('data-d').split('-'); checkout=new Date(+p[0],+p[1]-1,+p[2]); renderDates(); closeCal(); }; });
+  }
+  document.getElementById('dcCheckout').addEventListener('click', openCal);
+  document.getElementById('calPrev').addEventListener('click', function(){ calView.setMonth(calView.getMonth()-1); drawCal(); });
+  document.getElementById('calNext').addEventListener('click', function(){ calView.setMonth(calView.getMonth()+1); drawCal(); });
+  calOv.addEventListener('click', function(e){ if(e.target===calOv) closeCal(); });
+
+  // ----- categories + product grid (static inventory for now; availability-by-date wired next) -----
+  var CATS={
+    cameras:{label:'Camera Kits', items:[
+      {name:'Canon EOS R50', img:'/assets/images/equipment/camera-r50-v2.png'},
+      {name:'Canon EOS RP', img:'/assets/images/equipment/camera-rp-v1.png', p2:true},
+      {name:'Canon EOS R8', img:'/assets/images/equipment/camera-r8-v1.png', p2:true},
+      {name:'Canon EOS R50 V', img:'/assets/images/equipment/camera-r50v-v2.png'}
+    ]},
+    tripods:{label:'Tripods', items:[ {name:'K&F Concept Tripod', img:'/assets/images/equipment/tripod-v3.png'} ]},
+    lighting:{label:'Lighting', items:[
+      {name:'Speedlite EL-5', img:'/assets/images/equipment/speedlite-v2.png'},
+      {name:'Godox AD200 Pro II Kit', img:'', p2:true}
+    ]},
+    accessories:{label:'Accessories', items:[
+      {name:'Ultra-Wide 10-18mm', img:'/assets/images/equipment/ultrawide-v2.png'},
+      {name:'Ultra-Zoom 100-400mm', img:'/assets/images/equipment/ultrazoom-v2.png'},
+      {name:'Neewer Reflector', img:'/assets/images/equipment/reflector-v2.png'}
+    ]}
+  };
+  var SIGNED_IN=false; try{ SIGNED_IN=!!sessionStorage.getItem('pv_sid'); }catch(e){}
+  function renderCat(cat){
+    var c=CATS[cat]||CATS.cameras;
+    document.getElementById('prodHeadLabel').textContent=c.label;
+    var g=document.getElementById('prodGrid');
+    // only items with a real thumbnail render (no placeholder boxes ship); add img to surface more
+    g.innerHTML=c.items.filter(function(it){ return it.img; }).map(function(it){
+      return '<div class="prod">'+
+        '<div class="prod-img"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.p2?'<span class="prod-tag">Photo 2</span>':'')+'</div>'+
+        '<div class="prod-name">'+it.name+'</div>'+
+        '<button type="button" class="btn sm block prod-add" data-add="'+encodeURIComponent(it.name)+'">Add to cart</button>'+
+        '</div>';
+    }).join('');
+    g.querySelectorAll('[data-add]').forEach(function(b){ b.onclick=function(){ if(!SIGNED_IN){ openSignin(); return; } /* cart wired next */ }; });
+  }
+  document.getElementById('catnav').addEventListener('click', function(e){
+    var t=e.target.closest('[data-cat]'); if(!t) return;
+    document.querySelectorAll('.catn').forEach(function(x){ x.classList.remove('active'); }); t.classList.add('active');
+    renderCat(t.getAttribute('data-cat'));
+  });
+
+  // ----- sign-in (stub; roster validation + contact confirm + eligibility wired next) -----
+  var sov=document.getElementById('signinOv');
+  function openSignin(){ sov.classList.add('open'); var i=document.getElementById('sid'); if(i){ try{ i.focus(); }catch(e){} } }
+  function closeSignin(){ sov.classList.remove('open'); }
+  sov.addEventListener('click', function(e){ if(e.target===sov) closeSignin(); });
+  document.getElementById('acctBtn').addEventListener('click', openSignin);
+  document.getElementById('cartBtn').addEventListener('click', function(){ if(!SIGNED_IN) openSignin(); });
+  function doSignin(){ var v=(document.getElementById('sid').value||'').replace(/\D/g,''); var m=document.getElementById('signinMsg');
+    if(v.length<5){ m.className='sheet-msg err'; m.textContent='Enter your student number.'; return; }
+    try{ sessionStorage.setItem('pv_sid', v); }catch(e){} SIGNED_IN=true;
+    document.getElementById('acctBtn').classList.add('in'); m.className='sheet-msg ok'; m.textContent='Signed in.'; setTimeout(closeSignin,400); }
   document.getElementById('signinGo').addEventListener('click', doSignin);
   document.getElementById('sid').addEventListener('keydown', function(e){ if(e.key==='Enter') doSignin(); });
   if(SIGNED_IN) document.getElementById('acctBtn').classList.add('in');
+
+  // init
+  renderDates(); renderCat('cameras');
 })();
 </script>
 </body>
