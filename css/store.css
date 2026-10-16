@@ -58,7 +58,9 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .catnav-row{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;} .catnav-row::-webkit-scrollbar{display:none;}
 .catn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 20px;background:transparent;border:0;border-bottom:3px solid transparent;color:var(--gray);font-family:var(--font-head);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.78rem;white-space:nowrap;}
 .catn:hover{color:#fff;} .catn.active{color:var(--teal-bright);border-bottom-color:var(--teal-bright);}
-.catn-ic{width:28px;height:28px;background-position:center;background-repeat:no-repeat;background-size:contain;} .catn-ic:not([style]){display:none;}
+/* category icons: black line-art PNGs tinted bright teal via mask; uniform box normalizes mixed aspect ratios */
+.catn-ic{width:48px;height:38px;background:var(--teal-bright);-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat;transition:background .15s;}
+.catn:hover .catn-ic{background:#fff;}
 
 /* ---- date bar: checkout / return / days ---- */
 .datebar{background:var(--teal-wash);border-bottom:1px solid var(--line);}

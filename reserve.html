@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=4" />
+<link rel="stylesheet" href="/css/store.css?v=5" />
 <!-- Live PVHS school calendar (for the auto "next school day" return). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -40,10 +40,10 @@
 <!-- Category nav (horizontal, icons + name only) -->
 <nav class="catnav">
   <div class="wrap catnav-row" id="catnav">
-    <button type="button" class="catn active" data-cat="cameras"><span class="catn-ic" data-ic="camera"></span>Camera Kits</button>
-    <button type="button" class="catn" data-cat="tripods"><span class="catn-ic" data-ic="tripod"></span>Tripods</button>
-    <button type="button" class="catn" data-cat="lighting"><span class="catn-ic" data-ic="lighting"></span>Lighting</button>
-    <button type="button" class="catn" data-cat="accessories"><span class="catn-ic" data-ic="accessories"></span>Accessories</button>
+    <button type="button" class="catn active" data-cat="cameras"><span class="catn-ic" style="--ic:url('/assets/Icons/store/camera-v1.png')"></span>Camera Kits</button>
+    <button type="button" class="catn" data-cat="lenses"><span class="catn-ic" style="--ic:url('/assets/Icons/store/lenses-v1.png')"></span>Lenses</button>
+    <button type="button" class="catn" data-cat="lighting"><span class="catn-ic" style="--ic:url('/assets/Icons/store/lighting-v1.png')"></span>Lighting</button>
+    <button type="button" class="catn" data-cat="accessories"><span class="catn-ic" style="--ic:url('/assets/Icons/store/accessories-v1.png')"></span>Accessories</button>
   </div>
 </nav>
 
@@ -167,14 +167,16 @@
       {name:'Canon EOS R8', img:'/assets/images/equipment/camera-r8-v1.png', p2:true},
       {name:'Canon EOS R50 V', img:'/assets/images/equipment/camera-r50v-v2.png'}
     ]},
-    tripods:{label:'Tripods', items:[ {name:'K&F Concept Tripod', img:'/assets/images/equipment/tripod-v3.png'} ]},
+    lenses:{label:'Lenses', items:[
+      {name:'Ultra-Wide 10-18mm', img:'/assets/images/equipment/ultrawide-v2.png'},
+      {name:'Ultra-Zoom 100-400mm', img:'/assets/images/equipment/ultrazoom-v2.png'}
+    ]},
     lighting:{label:'Lighting', items:[
       {name:'Speedlite EL-5', img:'/assets/images/equipment/speedlite-v2.png'},
       {name:'Godox AD200 Pro II Kit', img:'', p2:true}
     ]},
     accessories:{label:'Accessories', items:[
-      {name:'Ultra-Wide 10-18mm', img:'/assets/images/equipment/ultrawide-v2.png'},
-      {name:'Ultra-Zoom 100-400mm', img:'/assets/images/equipment/ultrazoom-v2.png'},
+      {name:'K&F Concept Tripod', img:'/assets/images/equipment/tripod-v3.png'},
       {name:'Neewer Reflector', img:'/assets/images/equipment/reflector-v2.png'}
     ]}
   };
