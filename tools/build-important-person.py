@@ -77,8 +77,8 @@ HAVE_ENV_SLIDER=True   # 4 environmental-portraiture examples for the Step 03 ve
 ENV_DIR=f"{SITE}/assets/images/important-person/env-examples"
 MOODBOARD_ZIP=f"{SITE}/assets/templates/important-person/Important_Person.zip"
 ENV_EXAMPLES=[
- ("env-portrait-butcher.jpg","A butcher in his meat locker","Un carnicero en su c&aacute;mara fr&iacute;a"),
  ("env-portrait-metal-worker.jpg","A metalworker in his workshop","Un herrero en su taller"),
+ ("env-portrait-butcher.jpg","A butcher in his meat locker","Un carnicero en su c&aacute;mara fr&iacute;a"),
  ("env-portrait-musician.jpg","A musician in his art-filled room","Un m&uacute;sico en su cuarto lleno de arte"),
  ("env-portrait-football.jpg","A football player on the field at night","Un jugador de f&uacute;tbol americano en el campo de noche"),
 ]
