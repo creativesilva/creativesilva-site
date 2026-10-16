@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=7" />
+<link rel="stylesheet" href="/css/store.css?v=8" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -52,10 +52,10 @@
   <div class="wrap datebar-row">
     <div class="datebar-lead">Set your<br>pickup &amp; return</div>
     <div class="datecards" id="dateCards">
-      <button type="button" class="datecard pick step" id="dcCheckout" aria-label="Choose checkout day"><span class="dc-lab">Checkout Day</span><span class="dc-val" id="dcCheckoutVal"></span></button>
-      <button type="button" class="datecard pick step" id="dcPickup" aria-label="Choose pickup time"><span class="dc-lab">Pickup Time</span><span class="dc-val" id="dcPickupVal"></span></button>
-      <div class="datecard ret step"><span class="dc-lab">Return Day</span><span class="dc-val" id="dcReturnVal"></span></div>
-      <button type="button" class="datecard pick step" id="dcReturnTime" aria-label="Choose return time"><span class="dc-lab">Return Time</span><span class="dc-val" id="dcReturnTimeVal"></span></button>
+      <button type="button" class="datecard pick step co" id="dcCheckout" aria-label="Choose checkout day"><span class="dc-lab">Checkout Day</span><span class="dc-val" id="dcCheckoutVal"></span></button>
+      <button type="button" class="datecard pick step co" id="dcPickup" aria-label="Choose pickup time"><span class="dc-lab">Pickup Time</span><span class="dc-val" id="dcPickupVal"></span></button>
+      <div class="datecard ret step rt"><span class="dc-lab">Return Day</span><span class="dc-val" id="dcReturnVal"></span></div>
+      <button type="button" class="datecard pick step rt" id="dcReturnTime" aria-label="Choose return time"><span class="dc-lab">Return Time</span><span class="dc-val" id="dcReturnTimeVal"></span></button>
       <div class="datecard days step"><span class="dc-lab">Days</span><span class="dc-val" id="dcDaysVal"></span></div>
     </div>
   </div>
@@ -279,10 +279,10 @@
   // ----- inventory (static catalog; availability-by-date wired next increment) -----
   var CATS={
     cameras:{label:'Camera Kits', items:[
-      {name:'Canon EOS R50', img:'/assets/images/equipment/camera-r50-v2.png'},
-      {name:'Canon EOS RP', img:'/assets/images/equipment/camera-rp-v1.png', p2:true},
-      {name:'Canon EOS R8', img:'/assets/images/equipment/camera-r8-v1.png', p2:true},
-      {name:'Canon EOS R50 V', img:'/assets/images/equipment/camera-r50v-v2.png'}
+      {name:'Canon EOS R50', img:'/assets/images/equipment/camera-r50-v2.png', tag:'Photo 1 / Photo 2'},
+      {name:'Canon EOS RP', img:'/assets/images/equipment/camera-rp-v1.png', p2:true, tag:'Photo 2'},
+      {name:'Canon EOS R8', img:'/assets/images/equipment/camera-r8-v1.png', p2:true, tag:'Photo 2'},
+      {name:'Canon EOS R50 V', img:'/assets/images/equipment/camera-r50v-v2.png', tag:'Digital Arts'}
     ]},
     lenses:{label:'Lenses', items:[
       {name:'Ultra-Wide 10-18mm', img:'/assets/images/equipment/ultrawide-v2.png'},
@@ -290,7 +290,7 @@
     ]},
     lighting:{label:'Lighting', items:[
       {name:'Speedlite EL-5', img:'/assets/images/equipment/speedlite-v2.png'},
-      {name:'Godox AD200 Pro II Kit', img:'', p2:true}
+      {name:'Godox AD200 Pro II Kit', img:'', p2:true, tag:'Photo 2'}
     ]},
     accessories:{label:'Accessories', items:[
       {name:'K&F Concept Tripod', img:'/assets/images/equipment/tripod-v3.png'},
@@ -318,7 +318,7 @@
           ? '<button type="button" class="btn sm block prod-inbag" data-remove="'+encodeURIComponent(it.name)+'">In bag &middot; remove</button>'
           : '<button type="button" class="btn sm block prod-add" data-add="'+encodeURIComponent(it.name)+'">Add to bag</button>');
     return '<div class="prod'+(locked?' locked':'')+'">'+
-      '<div class="prod-img"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.p2&&!locked?'<span class="prod-tag">Photo 2</span>':'')+(locked?'<span class="prod-lockbadge">Photo 2 only</span>':'')+'</div>'+
+      '<div class="prod-img"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.tag&&!locked?'<span class="prod-tag">'+esc(it.tag)+'</span>':'')+(locked?'<span class="prod-lockbadge">Photo 2 only</span>':'')+'</div>'+
       '<div class="prod-name">'+esc(it.name)+'</div>'+ btn + '</div>';
   }
   function wireCards(g){
