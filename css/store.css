@@ -72,8 +72,9 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .datecard.days .dc-lab{background:var(--teal);color:#fff;}
 .dc-dow{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);padding-top:6px;}
 .dc-mon{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-bright);}
-.dc-day,.dc-num{font-family:var(--font-head);font-weight:700;font-size:2rem;line-height:1;color:#fff;}
-.dc-day{padding:1px 0 8px;} .dc-num{padding:14px 0;}
+.dc-dow{padding-top:9px;}  /* small top gap under the label */
+/* numbers bottom-align across all three cards so 16 / 19 / 3 share one baseline */
+.dc-day,.dc-num{font-family:var(--font-head);font-weight:700;font-size:2rem;line-height:1;color:#fff;margin-top:auto;padding:5px 0 11px;}
 .datebar-note{font-size:.74rem;color:var(--gray);margin-left:auto;max-width:300px;line-height:1.35;}
 
 /* ---- buttons ---- */
