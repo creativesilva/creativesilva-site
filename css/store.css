@@ -254,6 +254,26 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#0e1414;border:1px solid var(--teal-bright);color:#fff;font-size:.9rem;padding:12px 18px;box-shadow:var(--glow);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:300;max-width:90vw;text-align:center;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
+/* ---- footer ---- */
+.store-foot{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:44px;background:rgba(0,0,0,.25);}
+.foot-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;padding:38px 20px 30px;}
+.foot-col h4{font-family:var(--font-head);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.82rem;color:#fff;margin-bottom:14px;}
+.foot-link{display:block;background:transparent;border:0;padding:0;text-align:left;color:var(--gray);font-size:.84rem;line-height:1.5;margin-bottom:9px;cursor:pointer;font-family:var(--font-body);}
+.foot-link:hover{color:var(--teal-bright);}
+.foot-ig{display:flex;align-items:center;gap:7px;} .foot-ig svg{flex:0 0 auto;}
+.foot-static{display:block;color:var(--gray);font-size:.84rem;line-height:1.5;margin-bottom:9px;}
+.foot-addr{display:block;color:var(--gray);font-size:.84rem;line-height:1.55;margin:4px 0 10px;}
+.foot-bar{border-top:1px solid var(--line);}
+.foot-bar .wrap{padding:16px 20px;font-size:.74rem;letter-spacing:.04em;color:var(--gray);}
+
+/* ---- bell schedule (business hours dialog) ---- */
+.hours-sub{font-size:.8rem;color:var(--teal-bright);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:10px;}
+.sched{display:flex;flex-direction:column;gap:1px;}
+.sched-row{display:flex;justify-content:space-between;gap:12px;padding:8px 10px;background:rgba(255,255,255,.03);font-size:.86rem;}
+.sched-row span:first-child{color:#fff;font-weight:600;} .sched-row span:last-child{color:var(--teal-bright);white-space:nowrap;}
+.hours-note{font-size:.78rem;color:var(--gray);line-height:1.45;margin-top:12px;}
+#infoBody p{font-size:.92rem;color:var(--ink);line-height:1.55;}
+
 /* ---- responsive ---- */
 @media (max-width:720px){
   .store-logo{width:42px;height:42px;} .store-brand b{font-size:1rem;} .store-brand span{display:none;}
@@ -278,4 +298,5 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
   .datecard.co{flex-basis:100%;}
   .dv-big{font-size:1.1rem;} .dv-days{font-size:1.5rem;} .dv-top{font-size:.54rem;}
   .prod-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+  .foot-cols{grid-template-columns:repeat(2,1fr);gap:22px 18px;padding:28px 16px 24px;}
 }

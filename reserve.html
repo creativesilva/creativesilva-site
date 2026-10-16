@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=15" />
+<link rel="stylesheet" href="/css/store.css?v=16" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -71,7 +71,7 @@
 
 <!-- Product grid for the active category -->
 <main class="wrap">
-  <section class="howitworks">
+  <section class="howitworks" id="howitworks">
     <div class="prod-head"><span class="bar"></span><span>How it works</span></div>
     <div class="hiw-steps">
       <div class="hiw-step"><div class="hiw-num">1</div><div class="hiw-body"><b>Pick your dates</b><span>Set your checkout day, pickup time, and return time.</span></div></div>
@@ -86,6 +86,60 @@
     <div class="prod-grid" id="prodGrid"></div>
   </section>
 </main>
+
+<!-- Footer -->
+<footer class="store-foot">
+  <div class="wrap foot-cols">
+    <div class="foot-col">
+      <h4>Program Info</h4>
+      <button type="button" class="foot-link" id="footProgram">Digital Arts program</button>
+      <a href="#howitworks" class="foot-link">How it works</a>
+      <button type="button" class="foot-link" id="footRental">Rental agreement</button>
+      <button type="button" class="foot-link" id="footJobs">Jobs</button>
+    </div>
+    <div class="foot-col">
+      <h4>Partners</h4>
+      <a href="https://www.creativesilva.com" class="foot-link" target="_blank" rel="noopener">Chris Silva &middot; Photo &#38; Digital Arts</a>
+      <a href="https://www.chrisandlaura.com" class="foot-link" target="_blank" rel="noopener">Laura Garcia &middot; Photography</a>
+      <span class="foot-static">Rileigh Mankin &middot; Digital Arts</span>
+    </div>
+    <div class="foot-col">
+      <h4>Get Social</h4>
+      <a href="https://instagram.com/silvateaches" class="foot-link foot-ig" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 1.8.25 2.2.42.56.22.96.48 1.38.9.42.42.68.82.9 1.38.17.4.36 1 .42 2.2.07 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.06 1.2-.25 1.8-.42 2.2-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.4.17-1 .36-2.2.42-1.3.07-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.06-1.8-.25-2.2-.42a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.17-.4-.36-1-.42-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.06-1.2.25-1.8.42-2.2.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.4-.17 1-.36 2.2-.42C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.14 0-3.5 0-4.74.07-.9.04-1.4.2-1.72.32-.43.17-.74.37-1.06.69-.32.32-.52.63-.69 1.06-.12.32-.28.82-.32 1.72C3.2 8.5 3.2 8.86 3.2 12s0 3.5.07 4.74c.04.9.2 1.4.32 1.72.17.43.37.74.69 1.06.32.32.63.52 1.06.69.32.12.82.28 1.72.32 1.24.07 1.6.07 4.74.07s3.5 0 4.74-.07c.9-.04 1.4-.2 1.72-.32.43-.17.74-.37 1.06-.69.32-.32.52-.63.69-1.06.12-.32.28-.82.32-1.72.07-1.24.07-1.6.07-4.74s0-3.5-.07-4.74c-.04-.9-.2-1.4-.32-1.72a2.9 2.9 0 0 0-.69-1.06 2.9 2.9 0 0 0-1.06-.69c-.32-.12-.82-.28-1.72-.32C15.5 4 15.14 4 12 4zm0 3.06A4.94 4.94 0 1 1 7.06 12 4.94 4.94 0 0 1 12 7.06zm0 1.8A3.14 3.14 0 1 0 15.14 12 3.14 3.14 0 0 0 12 8.86zm6.3-.9a1.15 1.15 0 1 1-1.15-1.15 1.15 1.15 0 0 1 1.15 1.15z"/></svg>@silvateaches</a>
+      <a href="https://instagram.com/light_writerz" class="foot-link foot-ig" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 1.8.25 2.2.42.56.22.96.48 1.38.9.42.42.68.82.9 1.38.17.4.36 1 .42 2.2.07 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.06 1.2-.25 1.8-.42 2.2-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.4.17-1 .36-2.2.42-1.3.07-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.06-1.8-.25-2.2-.42a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.17-.4-.36-1-.42-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.06-1.2.25-1.8.42-2.2.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.4-.17 1-.36 2.2-.42C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.14 0-3.5 0-4.74.07-.9.04-1.4.2-1.72.32-.43.17-.74.37-1.06.69-.32.32-.52.63-.69 1.06-.12.32-.28.82-.32 1.72C3.2 8.5 3.2 8.86 3.2 12s0 3.5.07 4.74c.04.9.2 1.4.32 1.72.17.43.37.74.69 1.06.32.32.63.52 1.06.69.32.12.82.28 1.72.32 1.24.07 1.6.07 4.74.07s3.5 0 4.74-.07c.9-.04 1.4-.2 1.72-.32.43-.17.74-.37 1.06-.69.32-.32.52-.63.69-1.06.12-.32.28-.82.32-1.72.07-1.24.07-1.6.07-4.74s0-3.5-.07-4.74c-.04-.9-.2-1.4-.32-1.72a2.9 2.9 0 0 0-.69-1.06 2.9 2.9 0 0 0-1.06-.69c-.32-.12-.82-.28-1.72-.32C15.5 4 15.14 4 12 4zm0 3.06A4.94 4.94 0 1 1 7.06 12 4.94 4.94 0 0 1 12 7.06zm0 1.8A3.14 3.14 0 1 0 15.14 12 3.14 3.14 0 0 0 12 8.86zm6.3-.9a1.15 1.15 0 1 1-1.15-1.15 1.15 1.15 0 0 1 1.15 1.15z"/></svg>@light_writerz</a>
+    </div>
+    <div class="foot-col">
+      <h4>Contact</h4>
+      <a href="mailto:csilva@smjuhsd.org" class="foot-link">csilva@smjuhsd.org</a>
+      <a href="sms:+18056310001" class="foot-link">Text: 805-631-0001</a>
+      <span class="foot-addr">Pioneer Valley High School<br>675 Panther Drive<br>Santa Maria, CA 93454</span>
+      <button type="button" class="foot-link" id="footHours">Business hours &#38; bell schedule</button>
+    </div>
+  </div>
+  <div class="foot-bar"><div class="wrap">Pioneer Valley High School &middot; Equipment Rental</div></div>
+</footer>
+
+<!-- Business hours / bell schedule dialog -->
+<div class="sov" id="hoursOv" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="hoursTitle">
+    <button type="button" class="sheet-x" data-close="hoursOv" aria-label="Close">&times;</button>
+    <div class="sheet-bd">
+      <h2 id="hoursTitle">Business hours</h2>
+      <div id="hoursBody"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Generic info dialog (Jobs, Program, Rental agreement) -->
+<div class="sov" id="infoOv" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+    <button type="button" class="sheet-x" data-close="infoOv" aria-label="Close">&times;</button>
+    <div class="sheet-bd">
+      <h2 id="infoTitle"></h2>
+      <div id="infoBody"></div>
+    </div>
+  </div>
+</div>
 
 <!-- One-box planner: steps through checkout day -> pickup time -> return time in place -->
 <div class="sov" id="planOv" aria-hidden="true">
@@ -455,7 +509,7 @@
   function open(id){ document.getElementById(id).classList.add('open'); }
   function close(id){ document.getElementById(id).classList.remove('open'); }
   document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ close(b.getAttribute('data-close')); }; });
-  ['signinOv','holdOv','gearOv','bagOv','planOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
+  ['signinOv','holdOv','gearOv','bagOv','planOv','hoursOv','infoOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
   function toast(msg){ var t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2800); }
   function pulseDates(){ var d=document.querySelector('.datebar'); if(!d) return; d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash'); }
 
@@ -568,6 +622,25 @@
       else { m.className='sheet-msg err'; m.textContent='That code is not recognized.'; }
     }).catch(function(){ m.className='sheet-msg err'; m.textContent='Could not reach the server. Try again.'; });
   });
+
+  // ===== footer interactions =====
+  function openInfo(title, body){ document.getElementById('infoTitle').textContent=title; document.getElementById('infoBody').innerHTML=body; open('infoOv'); }
+  function openHours(){
+    var d=new Date(); d.setHours(0,0,0,0); if(!isSchoolDay(d)) d=nextSchoolDay(d);
+    var blocks=sched(d);
+    var rows = blocks.length
+      ? blocks.map(function(b){ return '<div class="sched-row"><span>'+esc(b.l)+'</span><span>'+f12(b.s)+' to '+f12(b.e)+'</span></div>'; }).join('')
+      : '<p class="noresults">Schedule unavailable right now.</p>';
+    document.getElementById('hoursBody').innerHTML=
+      '<p class="hours-sub">Bell schedule &middot; '+DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate()+'</p>'+
+      '<div class="sched">'+rows+'</div>'+
+      '<p class="hours-note">Equipment pickup and return happen during the school day. Closed on holidays. Rally, minimum, and finals days run a different schedule.</p>';
+    open('hoursOv');
+  }
+  document.getElementById('footHours').onclick=openHours;
+  document.getElementById('footJobs').onclick=function(){ openInfo('Jobs', '<p>Want to be an equipment manager? Ask your teacher. It may count for extra credit.</p>'); };
+  document.getElementById('footRental').onclick=function(){ openInfo('Rental agreement', '<p>The equipment rental agreement will be posted here soon. Ask your teacher for a copy in the meantime.</p>'); };
+  document.getElementById('footProgram').onclick=function(){ openInfo('Digital Arts program', '<p>Our Digital Arts program website is coming soon.</p>'); };
 
   // ===== init =====
   renderDates();
