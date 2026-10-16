@@ -106,19 +106,18 @@
   .tb-today{font-family:var(--font);font-weight:700;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border:1px solid #00b8b8;background:transparent;color:#8ff7f7;cursor:pointer;}
   .tb-proj{font-size:.68rem;color:#ffb28a;letter-spacing:.04em;text-transform:uppercase;}
   @media (max-width:760px){ .tb-cols{grid-template-columns:1fr;} .tb-colbody{max-height:none;} }
-  .tb-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 11px;border:1px solid var(--line-soft);border-left:3px solid var(--muted);background:rgba(255,255,255,.025);}
+  .tb-row{display:flex;align-items:stretch;gap:10px;min-height:56px;padding:8px 11px;border:1px solid var(--line-soft);border-left:3px solid var(--muted);background:rgba(255,255,255,.025);}
   .tb-row.rr-out{border-left-color:var(--orange);} .tb-row.rr-reserved{border-left-color:var(--gold);} .tb-row.rr-returned{border-left-color:var(--ok);}
-  .tb-main{display:flex;align-items:center;gap:10px 12px;flex-wrap:wrap;flex:1 1 320px;min-width:0;}
-  .tb-who{font-family:var(--font);font-weight:700;font-size:.95rem;color:#fff;}
-  .tb-meta{font-size:.8rem;color:var(--muted);}
-  .tb-cart{display:flex;flex-wrap:wrap;gap:5px;}
+  .tb-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:5px;}
+  .tb-line1{display:flex;flex-wrap:wrap;gap:5px;} .tb-line2{display:flex;align-items:baseline;flex-wrap:wrap;gap:3px 8px;}
+  .tb-who{font-family:var(--font);font-weight:700;font-size:.9rem;color:#fff;}
+  .tb-meta{font-size:.78rem;color:var(--muted);}
   .cartchip{font-family:var(--font);font-weight:700;font-size:.68rem;letter-spacing:.03em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--line-soft);background:rgba(0,0,0,.3);color:#fff;cursor:pointer;}
   .cartchip.st-reserved{border-color:var(--gold);color:#ffd889;} .cartchip.st-out{border-color:var(--orange);color:#ffb28a;} .cartchip.st-overdue{border-color:var(--red);color:#ff9a8a;animation:cardFlash 1.5s ease-in-out infinite;} .cartchip.st-returned{border-color:var(--ok);color:#8ff0b0;}
-  .tb-actwrap{flex:0 0 auto;margin-left:auto;}
-  .tb-act{font-family:var(--font);font-weight:700;font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;padding:7px 16px;border:1px solid transparent;color:#00141a;cursor:pointer;}
+  .tb-actwrap{flex:0 0 auto;display:flex;align-items:center;}
+  .tb-act{width:106px;height:40px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font);font-weight:700;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;border:1px solid transparent;color:#00141a;cursor:pointer;padding:0;}
   .tb-act.tb-out{background:#00b8b8;} .tb-act.tb-in{background:var(--gold);}
   .tb-empty{font-size:.85rem;color:var(--muted);}
-  @media (max-width:640px){ .tb-row{align-items:flex-start;} .tb-actwrap{margin-left:0;width:100%;} .tb-act{width:100%;} }
 
   .h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:24px 0 12px;padding-left:9px;border-left:3px solid var(--teal);display:flex;align-items:center;gap:10px;}
   .h .hcount{color:var(--faint);font-weight:600;letter-spacing:.04em;}
@@ -1266,9 +1265,9 @@
   // Student names (data-stu) and item chips (data-camdetail/data-geardetail) use the document-level
   // delegated handlers, so only the action buttons need wiring.
   function itemState(it){ if(statusOf(it)==='returned') return 'returned'; if(isOverdue(it)) return 'overdue'; return statusOf(it)==='out'?'out':'reserved'; }
-  function cartChip(it){ var isG=it.kind==='equipment'; var lbl=isG?gearLabel(it.item):String(it.camera||'').toUpperCase();
+  function cartChip(it, forceState){ var isG=it.kind==='equipment'; var lbl=isG?gearLabel(it.item):String(it.camera||'').toUpperCase();
     var at=isG?('data-geardetail="'+esc(it.item)+'"'):('data-camdetail="'+esc(it.camera)+'"');
-    return '<button type="button" class="cartchip st-'+itemState(it)+'" '+at+'>'+esc(lbl)+'</button>'; }
+    return '<button type="button" class="cartchip st-'+(forceState||itemState(it))+'" '+at+'>'+esc(lbl)+'</button>'; }
   // Grouped reservations in the selected pool (one row per student + checkout dates).
   function groupedReservations(){ var reps={};
     (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment' && c.group) return; if(!resvInScope(c)) return;
@@ -1279,45 +1278,58 @@
   function dayHit(d, iso, isT){ return d ? (isT ? (d<=iso) : (d===iso)) : false; }
   function outgoingFor(iso){ var isT=(iso===todayISO());
     return groupedReservations().filter(function(c){ return resvItems(c).some(function(it){
-      return statusOf(it)==='reserved' && dayHit(it.out, iso, isT); }); })
+      if(statusOf(it)==='returned') return false; var o=it.out||'', d=it.due||o;
+      return isT ? (statusOf(it)==='reserved' && o && o<=iso)     // today: still to hand out
+                 : (o && o<=iso && (!d || d>=iso)); }); })         // future: forecast = projected OUT that day
       .sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; }); }
   function incomingFor(iso){ var isT=(iso===todayISO());
     return groupedReservations().filter(function(c){ return resvItems(c).some(function(it){
-      return statusOf(it)==='out' && dayHit(it.due||it.out, iso, isT); }); })
+      if(statusOf(it)==='returned') return false; var d=it.due||it.out||'';
+      return isT ? (statusOf(it)==='out' && d && d<=iso)          // today: out + due today or overdue
+                 : (d===iso); }); })                               // future: projected returns that day
       .sort(function(a,b){ return ((a.due||a.out||'')<(b.due||b.out||''))?-1:1; }); }
   function stepDay(n){ var d=new Date(SELDAY+'T00:00:00'); d.setDate(d.getDate()+n);
     SELDAY=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
     renderTodayBoard(); updateSummary(); }
-  function todayCartRow(c, mode){ var items=resvItems(c), st=resvStatusGroup(c);
+  function todayCartRow(c, mode, proj){ var items=resvItems(c), st=proj?'out':resvStatusGroup(c);
+    // Line 1 = item + number chips (de-duped so a unit never shows twice); Line 2 = student + period.
+    var seen={}, chips=items.filter(function(it){ var k=it.kind==='equipment'?('g:'+it.item):('c:'+it.camera); if(seen[k]) return false; seen[k]=1; return true; });
     var meta=[(c.period?'Per '+esc(c.period):''),(c.course?esc(c.course):'')].filter(Boolean).join(' &middot; ');
-    var act = mode==='in'
+    var act = proj ? '' : (mode==='in'      // future days are a read-only forecast: no action buttons
       ? '<button type="button" class="tb-act tb-in" data-tbin="'+esc(c.id)+'">Check in</button>'
-      : '<button type="button" class="tb-act tb-out" data-tbout="'+esc(c.id)+'">Check out</button>';
+      : '<button type="button" class="tb-act tb-out" data-tbout="'+esc(c.id)+'">Check out</button>');
     return '<div class="tb-row rr-'+st+'"><div class="tb-main">'+
-      '<span class="tb-who">'+studentLink(c)+'</span>'+(meta?('<span class="tb-meta">'+meta+'</span>'):'')+
-      '<span class="tb-cart">'+items.map(cartChip).join('')+'</span></div>'+
-      '<div class="tb-actwrap">'+act+'</div></div>'; }
+      '<div class="tb-line1">'+chips.map(function(it){ return cartChip(it, proj?'out':undefined); }).join('')+'</div>'+
+      '<div class="tb-line2"><span class="tb-who">'+studentLink(c)+'</span>'+(meta?('<span class="tb-meta">'+meta+'</span>'):'')+'</div>'+
+      '</div>'+(act?('<div class="tb-actwrap">'+act+'</div>'):'')+'</div>'; }
   function tbLegend(){ return '<div class="tb-legend">'+
     '<span><i class="lg st-ok"></i>In storage</span><span><i class="lg st-reserved"></i>Reserved</span>'+
     '<span><i class="lg st-out"></i>Checked out</span><span><i class="lg st-overdue"></i>Overdue</span>'+
     '<span><i class="lg st-oos"></i>Out of service</span></div>'; }
+  var _lastTBSig=null;
   function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
     var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), inc=incomingFor(SELDAY);
+    // Scroll-reset guard: the 7s poll re-renders; skip the rewrite when nothing changed so an open
+    // column keeps its scroll position. Actions + day-step null _lastTBSig to force a redraw.
+    var sig=SELDAY+'|'+out.map(function(c){return c.id+':'+resvStatusGroup(c);}).join(',')+'|'+inc.map(function(c){return c.id+':'+resvStatusGroup(c);}).join(',');
+    if(sig===_lastTBSig && el.innerHTML) return; _lastTBSig=sig;
     var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY));
     var stepper='<div class="tb-step"><button type="button" class="tb-nav" data-tbday="-1" title="Previous day">&#8249;</button>'+
       '<span class="tb-day">'+esc(dayL)+'</span><button type="button" class="tb-nav" data-tbday="1" title="Next day">&#8250;</button>'+
       (isT?'':'<button type="button" class="tb-today" data-tbtoday="1">Today</button><span class="tb-proj">Projected &middot; assumes on-time returns</span>')+'</div>';
     function col(cls,label,items,mode){ return '<div class="tb-col">'+
       '<div class="tb-colh '+cls+'">'+label+' <span class="tb-cn">'+items.length+'</span></div>'+
-      '<div class="tb-colbody">'+(items.length?items.map(function(c){return todayCartRow(c,mode);}).join('')
+      '<div class="tb-colbody">'+(items.length?items.map(function(c){return todayCartRow(c,mode,!isT);}).join('')
         :('<div class="tb-empty">'+(cls==='out'?'Nothing to hand out':'Nothing due back')+' '+(isT?'today':'that day')+'.</div>'))+'</div></div>'; }
     el.className='todayboard'; el.style.display='';
     el.innerHTML='<div class="tb-head"><span class="tb-title">Reservations</span>'+stepper+'</div>'+tbLegend()+
       '<div class="tb-cols">'+col('out','Outgoing',out,'out')+col('in','Incoming',inc,'in')+'</div>';
-    el.querySelectorAll('[data-tbout]').forEach(function(b){ b.onclick=function(){ var p=findRec(b.getAttribute('data-tbout')); if(p) resvCheckOutAll(p); }; });
-    el.querySelectorAll('[data-tbin]').forEach(function(b){ b.onclick=function(){ var p=findRec(b.getAttribute('data-tbin')); if(p) resvCheckInAll(p); }; });
-    el.querySelectorAll('[data-tbday]').forEach(function(b){ b.onclick=function(){ stepDay(parseInt(b.getAttribute('data-tbday'),10)); }; });
-    el.querySelectorAll('[data-tbtoday]').forEach(function(b){ b.onclick=function(){ SELDAY=todayISO(); renderTodayBoard(); updateSummary(); }; });
+    el.querySelectorAll('[data-tbout]').forEach(function(b){ b.onclick=function(){ var p=findRec(b.getAttribute('data-tbout')); if(!p) return;
+      silvaConfirm('Hand this equipment to '+(nameOf(p)||'the student')+'? This checks it out.', {okLabel:'Handed to student',cancelLabel:'Cancel'})
+        .then(function(ok){ if(ok){ _lastTBSig=null; resvCheckOutAll(p); } }); }; });
+    el.querySelectorAll('[data-tbin]').forEach(function(b){ b.onclick=function(){ var p=findRec(b.getAttribute('data-tbin')); if(p){ _lastTBSig=null; resvCheckInAll(p); } }; });
+    el.querySelectorAll('[data-tbday]').forEach(function(b){ b.onclick=function(){ _lastTBSig=null; stepDay(parseInt(b.getAttribute('data-tbday'),10)); }; });
+    el.querySelectorAll('[data-tbtoday]').forEach(function(b){ b.onclick=function(){ _lastTBSig=null; SELDAY=todayISO(); renderTodayBoard(); updateSummary(); }; });
   }
   // ===== Reservation Activity date window: a rolling 7 days ENDING on the selected date (default today).
   var ACTIVITY_DATE=null;   // ISO yyyy-mm-dd of the window's last day; null = today
