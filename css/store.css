@@ -55,7 +55,7 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 
 /* ---- equipment header hero: nav + date bar overlaid on the banner image ---- */
 .store-hero{position:relative;border-bottom:1px solid var(--line);background:#0a0d0d url('/assets/images/equipment/store-header-v1.jpg') center 50% / cover no-repeat;}
-.store-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom, rgba(10,13,13,.55) 0%, rgba(10,13,13,.3) 42%, rgba(10,13,13,.66) 100%);pointer-events:none;}
+.store-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom, rgba(10,13,13,.66) 0%, rgba(10,13,13,.58) 42%, rgba(10,13,13,.76) 100%);pointer-events:none;}
 .store-hero > *{position:relative;z-index:1;}
 /* content sits at FULL opacity over the image, with a shadow for contrast (never translucent) */
 .store-hero .catn{text-shadow:0 1px 6px rgba(0,0,0,.7);}
@@ -123,6 +123,16 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .pd.done{background:var(--teal);border-color:var(--teal);color:#fff;}
 .plan-back{margin-top:12px;background:transparent;border:0;color:var(--teal-bright);font-family:var(--font-head);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.74rem;padding:4px 0;cursor:pointer;}
 .plan-back:hover{color:#fff;}
+/* "during your class period" selector (periods 1-7, student's own highlighted) */
+.plan-sub2{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray);margin:16px 0 8px;}
+.per-chips{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+.per-chip{display:flex;flex-direction:column;align-items:center;gap:1px;background:rgba(0,0,0,.3);border:1px solid var(--surface-bd);color:#fff;padding:9px 2px;cursor:pointer;}
+.per-chip b{font-family:var(--font-head);font-weight:700;font-size:.95rem;line-height:1;}
+.per-chip span{font-size:.58rem;color:var(--teal-bright);}
+.per-chip:hover{border-color:var(--teal-bright);}
+.per-chip.mine{border-color:var(--teal-bright);background:rgba(25,211,197,.14);}
+/* late-return warning on the return step */
+.plan-note{font-size:.76rem;color:#ffd166;line-height:1.42;margin-top:14px;padding:10px 12px;background:rgba(245,179,1,.08);border-left:3px solid #ffd166;}
 
 /* ---- time option buttons (pickup / return picker) ---- */
 .time-opts{display:flex;flex-direction:column;gap:8px;margin-top:4px;}

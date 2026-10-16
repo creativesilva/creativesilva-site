@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=13" />
+<link rel="stylesheet" href="/css/store.css?v=14" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -222,6 +222,10 @@
     var one=fb(b,/1ST PERIOD/); if(one){ out.push({label:'Before 1st period',s:minus15(one.s),e:one.s}); var nx=nextAfter(b,one); if(nx&&/PASSING/.test(nx.l)) out.push({label:'Between 1st & 2nd',s:nx.s,e:nx.e}); }
     var n=fb(b,/NUTRITION/); if(n) out.push({label:'Nutrition',s:n.s,e:n.e});
     return out; }
+  // Class-period windows (Period 1-7) for "pick up during my class period".
+  function periodOptions(d){ var b=sched(d), out=[], nm=['1ST','2ND','3RD','4TH','5TH','6TH','7TH'];
+    for(var p=1;p<=7;p++){ var blk=fb(b, new RegExp(nm[p-1]+' PERIOD')); if(blk) out.push({period:p, s:blk.s, e:blk.e}); }
+    return out; }
 
   // ----- checkout / pickup / return / return-time / days state -----
   var checkout=new Date(); checkout.setHours(0,0,0,0);
@@ -259,19 +263,33 @@
       document.getElementById('planTitle').textContent='Pickup time';
       document.getElementById('planSub').textContent='When will you pick up on '+DOW[checkout.getDay()]+' '+MON[checkout.getMonth()]+' '+checkout.getDate()+'?';
       cal.style.display='none'; opts.style.display='';
-      renderOpts(pickupOptions(checkout), function(o){ pickup=o; renderDates(); planStep=3; renderPlan(); });
+      renderPickup(checkout, function(o){ pickup=o; renderDates(); planStep=3; renderPlan(); });
     } else {
       document.getElementById('planTitle').textContent='Return time';
       document.getElementById('planSub').textContent='Due back '+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+' (the next school day). When will you return it?';
       cal.style.display='none'; opts.style.display='';
-      renderOpts(returnOptions(returnDay), function(o){ returnTime=o; renderDates(); close('planOv'); });
+      renderOpts(returnOptions(returnDay), function(o){ returnTime=o; renderDates(); close('planOv'); }, 'These are the only return times. If you return late, you may lose the chance to check out cameras next time.');
     }
   }
-  function renderOpts(opts, pick){
+  function renderOpts(opts, pick, note){
     var w=document.getElementById('planOpts');
     if(!opts.length){ w.innerHTML='<p class="noresults">No set windows for that day. Ask your teacher.</p>'; return; }
-    w.innerHTML=opts.map(function(o,i){ return '<button type="button" class="time-opt" data-i="'+i+'"><b>'+esc(o.label)+'</b><span>'+f12(o.s)+' to '+f12(o.e)+'</span></button>'; }).join('');
+    w.innerHTML=opts.map(function(o,i){ return '<button type="button" class="time-opt" data-i="'+i+'"><b>'+esc(o.label)+'</b><span>'+f12(o.s)+' to '+f12(o.e)+'</span></button>'; }).join('') + (note?'<div class="plan-note">'+esc(note)+'</div>':'');
     w.querySelectorAll('[data-i]').forEach(function(b){ b.onclick=function(){ pick(opts[+b.getAttribute('data-i')]); }; });
+  }
+  // Pickup step: the schedule windows PLUS "during your class period" (periods 1-7, default = the student's own period).
+  function renderPickup(day, pick){
+    var w=document.getElementById('planOpts');
+    var times=pickupOptions(day), pers=periodOptions(day);
+    var myPer=(USER && USER.period)?parseInt(String(USER.period).replace(/\D/g,''),10):0;
+    var html=times.map(function(o,i){ return '<button type="button" class="time-opt" data-t="'+i+'"><b>'+esc(o.label)+'</b><span>'+f12(o.s)+' to '+f12(o.e)+'</span></button>'; }).join('');
+    if(pers.length){
+      html+='<div class="plan-sub2">During your class period'+(myPer?' &middot; yours is highlighted':'')+'</div>';
+      html+='<div class="per-chips">'+pers.map(function(o){ return '<button type="button" class="per-chip'+(o.period===myPer?' mine':'')+'" data-p="'+o.period+'"><b>P'+o.period+'</b><span>'+f12(o.s)+'</span></button>'; }).join('')+'</div>';
+    }
+    w.innerHTML=html;
+    w.querySelectorAll('[data-t]').forEach(function(b){ b.onclick=function(){ pick(times[+b.getAttribute('data-t')]); }; });
+    w.querySelectorAll('[data-p]').forEach(function(b){ b.onclick=function(){ var p=+b.getAttribute('data-p'), o=null; pers.forEach(function(x){ if(x.period===p) o=x; }); if(o) pick({label:'Period '+p, s:o.s, e:o.e}); }; });
   }
   function drawCal(){
     document.getElementById('calTitle').textContent=MON[calView.getMonth()]+' '+calView.getFullYear();
