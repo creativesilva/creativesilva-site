@@ -84,18 +84,19 @@ ENV_EXAMPLES=[
 ]
 
 def env_slider(es):
-    # Vertical slider (contained .silva-scroll panel) of environmental-portraiture examples.
-    hint = "Despl&aacute;zate dentro del cuadro para ver los cuatro ejemplos." if es else "Scroll inside the box to see all four examples."
-    hintline=f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
-    inner=""
+    # HORIZONTAL slider (contained .silva-scroll panel) of environmental-portraiture examples:
+    # fixed-width landscape cards in a nowrap flex row, scrolled sideways.
+    hint = "Despl&aacute;zate de lado para ver los cuatro ejemplos." if es else "Scroll sideways to see all four examples."
+    hintline=f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.85;">&#8594; {hint}</div>'
+    cards=""
     for slug,en_lab,es_lab in ENV_EXAMPLES:
         lab = es_lab if es else en_lab
         alt = (f"Retrato ambiental: {es_lab}" if es else f"Environmental portrait: {en_lab}")
-        inner += ('<div style="margin-bottom:18px;">' + framed(f"{ENV_DIR}/{slug}", alt)
-                  + f'<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;">{lab}</div></div>')
-    scroll=('<div class="silva-scroll" style="max-height:520px;overflow-y:auto;padding:14px 16px;margin:4px 0 2px;border:1px solid rgba(0,184,184,0.30);'
-      'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 90%, rgba(0,184,184,0.16) 100%);">'
-      f'{inner}</div>')
+        cards += ('<div style="flex:0 0 320px;max-width:320px;">' + framed(f"{ENV_DIR}/{slug}", alt)
+                  + f'<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.35;white-space:normal;">{lab}</div></div>')
+    scroll=('<div class="silva-scroll" style="overflow-x:auto;overflow-y:hidden;padding:14px 16px 18px;margin:4px 0 2px;border:1px solid rgba(0,184,184,0.30);'
+      'background:linear-gradient(90deg, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.16) 100%);">'
+      f'<div style="display:flex;flex-wrap:nowrap;gap:16px;align-items:flex-start;width:max-content;">{cards}</div></div>')
     return hintline+scroll
 
 def project_downloads(es):
