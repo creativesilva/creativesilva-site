@@ -1718,6 +1718,11 @@
   // Returns true if a receipt send was ATTEMPTED (SDK present + a numeric id), so the done screen only
   // claims "receipt sent" when it actually fired. Never blocks reserving; logs instead of swallowing.
   function sendStudentConfirm(sid, name, item, pickup, returnBy){
+    // DISABLED (Chris 2026-10-15): student receipt email is OFF. He does not want his personal
+    // CreativeSilva Gmail emailing students, and students rarely read email; the on-screen "Reserved"
+    // confirmation is the receipt. The self-hosted SDK + account config stay wired for easy revival:
+    // delete this return and connect a school-owned sender (e.g. Outlook csilva@smjuhsd.org) to re-enable.
+    return false;
     try{
       var digits=String(sid||'').replace(/\D/g,''); if(!digits) return false;
       if(!window.emailjs){ console.warn('Reservation receipt NOT sent: EmailJS SDK did not load.'); return false; }

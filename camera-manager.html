@@ -1883,6 +1883,7 @@
       {okLabel:'Email confirmation',cancelLabel:'Skip'}).then(function(ok){ if(ok) sendReservationEmail(c,email,what); });
   }
   function sendReservationEmail(c,email,what){
+    return;   // DISABLED (Chris 2026-10-15): student receipt email off (no personal Gmail to students). See calendar.html.
     if(!window.emailjs){ silvaToast('Email service is not loaded. Try again.'); return; }
     emailjs.send('service_i53d3dk','template_reservation',{
       to_email: email,
