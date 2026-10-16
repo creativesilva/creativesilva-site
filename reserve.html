@@ -8,16 +8,28 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=2" />
+<link rel="stylesheet" href="/css/store.css?v=3" />
 <!-- Live PVHS school calendar (for the auto "next school day" return). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
 <body>
 
+<!-- Top utility strip: classroom pickup (no shipping) + text-only contact -->
+<div class="util">
+  <div class="wrap util-row">
+    <span class="util-l"><b>Classroom pickup</b> &middot; <span id="pickRoom">Room 322</span></span>
+    <a class="util-r" href="sms:+18056310001">Text us: 805-631-0001 <em>(text only)</em></a>
+  </div>
+</div>
+
 <header class="store-nav">
   <div class="wrap">
     <a class="store-logo" href="/reserve.html" aria-label="Pioneer Valley"><img src="/assets/PV_Square_Logo.png" alt="Pioneer Valley" /></a>
     <div class="store-brand"><b>Pioneer Valley</b><span>Equipment Rental</span></div>
+    <form class="store-search" id="searchForm" role="search">
+      <input type="search" id="searchIn" placeholder="Search equipment" aria-label="Search equipment" autocomplete="off" />
+      <button type="submit" aria-label="Search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="20.5" y1="20.5" x2="16.5" y2="16.5"></line></svg></button>
+    </form>
     <div class="nav-right">
       <button type="button" class="acct-btn" id="acctBtn">My Account</button>
       <button type="button" class="cart-btn" id="cartBtn">Cart <span class="cart-n empty" id="cartN">0</span></button>
@@ -41,16 +53,16 @@
     <div class="datebar-lead">When do you need it?</div>
     <div class="datecards">
       <button type="button" class="datecard pick" id="dcCheckout" aria-label="Choose checkout day">
-        <span class="dc-lab">Checkout</span><span class="dc-dow" id="coDow">&mdash;</span><span class="dc-mon" id="coMon">&mdash;</span><span class="dc-day" id="coDay">&mdash;</span>
+        <span class="dc-lab">Checkout</span><span class="dc-dow" id="coDow">&middot;</span><span class="dc-mon" id="coMon">&middot;</span><span class="dc-day" id="coDay">&middot;</span>
       </button>
       <div class="datecard ret">
-        <span class="dc-lab">Return</span><span class="dc-dow" id="rtDow">&mdash;</span><span class="dc-mon" id="rtMon">&mdash;</span><span class="dc-day" id="rtDay">&mdash;</span>
+        <span class="dc-lab">Return</span><span class="dc-dow" id="rtDow">&middot;</span><span class="dc-mon" id="rtMon">&middot;</span><span class="dc-day" id="rtDay">&middot;</span>
       </div>
       <div class="datecard days">
-        <span class="dc-lab">Days</span><span class="dc-num" id="dyNum">&mdash;</span>
+        <span class="dc-lab">Days</span><span class="dc-num" id="dyNum">&middot;</span>
       </div>
     </div>
-    <div class="datebar-note">Return is the next school day. Pick a pickup time at checkout.</div>
+    <div class="datebar-note">Return is the next school day. Choose your pickup time at checkout.</div>
   </div>
 </div>
 
@@ -66,7 +78,7 @@
 <div class="sov" id="calOv" aria-hidden="true">
   <div class="sheet cal" role="dialog" aria-modal="true" aria-label="Choose checkout day">
     <div class="sheet-bd">
-      <div class="cal-head"><button type="button" class="cal-nav" id="calPrev">&#8249;</button><span id="calTitle">&mdash;</span><button type="button" class="cal-nav" id="calNext">&#8250;</button></div>
+      <div class="cal-head"><button type="button" class="cal-nav" id="calPrev">&#8249;</button><span id="calTitle">&middot;</span><button type="button" class="cal-nav" id="calNext">&#8250;</button></div>
       <div class="cal-dow"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
       <div class="cal-grid" id="calGrid"></div>
     </div>
@@ -89,6 +101,8 @@
 <script>
 (function(){
   var TEACHER=(new URLSearchParams(location.search).get('teacher')||'silva').toLowerCase();
+  var ROOM=(TEACHER==='mankin')?'Room 331':'Room 322';   // Silva + Garcia = 322, Mankin = 331
+  (function(){ var el=document.getElementById('pickRoom'); if(el) el.textContent=ROOM; })();
   function pad(n){ n=String(n); return n.length<2?('0'+n):n; }
   function isoOf(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
   var DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -165,25 +179,50 @@
     ]}
   };
   var SIGNED_IN=false; try{ SIGNED_IN=!!sessionStorage.getItem('pv_sid'); }catch(e){}
+  // only items with a real thumbnail render (no placeholder boxes ship); add an img to surface more
+  function cardHtml(it){
+    return '<div class="prod">'+
+      '<div class="prod-img"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.p2?'<span class="prod-tag">Photo 2</span>':'')+'</div>'+
+      '<div class="prod-name">'+it.name+'</div>'+
+      '<button type="button" class="btn sm block prod-add" data-add="'+encodeURIComponent(it.name)+'">Add to cart</button>'+
+      '</div>';
+  }
+  function wireAdds(g){ g.querySelectorAll('[data-add]').forEach(function(b){ b.onclick=function(){ if(!SIGNED_IN){ openSignin(); return; } /* cart wired next */ }; }); }
   function renderCat(cat){
     var c=CATS[cat]||CATS.cameras;
     document.getElementById('prodHeadLabel').textContent=c.label;
     var g=document.getElementById('prodGrid');
-    // only items with a real thumbnail render (no placeholder boxes ship); add img to surface more
-    g.innerHTML=c.items.filter(function(it){ return it.img; }).map(function(it){
-      return '<div class="prod">'+
-        '<div class="prod-img"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.p2?'<span class="prod-tag">Photo 2</span>':'')+'</div>'+
-        '<div class="prod-name">'+it.name+'</div>'+
-        '<button type="button" class="btn sm block prod-add" data-add="'+encodeURIComponent(it.name)+'">Add to cart</button>'+
-        '</div>';
-    }).join('');
-    g.querySelectorAll('[data-add]').forEach(function(b){ b.onclick=function(){ if(!SIGNED_IN){ openSignin(); return; } /* cart wired next */ }; });
+    g.innerHTML=c.items.filter(function(it){ return it.img; }).map(cardHtml).join('');
+    wireAdds(g);
   }
   document.getElementById('catnav').addEventListener('click', function(e){
     var t=e.target.closest('[data-cat]'); if(!t) return;
+    var si=document.getElementById('searchIn'); if(si) si.value='';
     document.querySelectorAll('.catn').forEach(function(x){ x.classList.remove('active'); }); t.classList.add('active');
     renderCat(t.getAttribute('data-cat'));
   });
+
+  // ----- search across every category (matches name + category label) -----
+  var ALL=[]; Object.keys(CATS).forEach(function(k){ var lab=CATS[k].label; CATS[k].items.forEach(function(it){ if(it.img) ALL.push({it:it, hay:(it.name+' '+lab).toLowerCase()}); }); });
+  function renderResults(q){
+    var needle=q.trim().toLowerCase();
+    var hits=ALL.filter(function(r){ return r.hay.indexOf(needle)!==-1; }).map(function(r){ return r.it; });
+    document.querySelectorAll('.catn').forEach(function(x){ x.classList.remove('active'); });
+    document.getElementById('prodHeadLabel').textContent='Results: “'+q.trim()+'”';
+    var g=document.getElementById('prodGrid');
+    if(!hits.length){ g.innerHTML='<p class="noresults">No equipment matches that. Try a category above.</p>'; return; }
+    g.innerHTML=hits.map(cardHtml).join(''); wireAdds(g);
+  }
+  var searchIn=document.getElementById('searchIn');
+  function doSearch(){
+    var q=searchIn.value;
+    if(q.trim()){ renderResults(q); }
+    else { var a=document.querySelector('.catn[data-cat="cameras"]'); if(a) a.classList.add('active'); renderCat('cameras'); }
+  }
+  if(searchIn){
+    searchIn.addEventListener('input', doSearch);
+    document.getElementById('searchForm').addEventListener('submit', function(e){ e.preventDefault(); searchIn.blur(); doSearch(); });
+  }
 
   // ----- sign-in (stub; roster validation + contact confirm + eligibility wired next) -----
   var sov=document.getElementById('signinOv');
