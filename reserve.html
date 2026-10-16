@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=9" />
+<link rel="stylesheet" href="/css/store.css?v=10" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -50,7 +50,10 @@
 <!-- One clickable Checkout box steps through day -> pickup -> return time; Return + Days auto-fill -->
 <div class="datebar">
   <div class="wrap datebar-row">
-    <div class="datebar-lead">When do you<br>need it?</div>
+    <div class="datebar-leadwrap">
+      <div class="datebar-lead">When do you need it?</div>
+      <div class="datebar-note">Return is the next school day. Choose your pickup time at checkout.</div>
+    </div>
     <div class="datecards" id="dateCards">
       <button type="button" class="datecard pick step co" id="dcCheckout" aria-label="Set checkout day, pickup time and return time"><span class="dc-lab">Checkout</span><span class="dc-val" id="dcCheckoutVal"></span></button>
       <div class="datecard ret step rt"><span class="dc-lab">Return</span><span class="dc-val" id="dcReturnVal"></span></div>
@@ -274,7 +277,7 @@
     }
     document.getElementById('calGrid').innerHTML=html;
     document.getElementById('calGrid').querySelectorAll('[data-d]').forEach(function(b){ b.onclick=function(){
-      var p=b.getAttribute('data-d').split('-'); checkout=new Date(+p[0],+p[1]-1,+p[2]); pickup=null; returnTime=null; renderDates(); planStep=2; renderPlan(); }; });
+      var p=b.getAttribute('data-d').split('-'); checkout=new Date(+p[0],+p[1]-1,+p[2]); pickup=null; returnTime=null; renderDates(); rerender(); planStep=2; renderPlan(); }; });
   }
   document.getElementById('dcCheckout').addEventListener('click', openPlan);
   document.getElementById('calPrev').addEventListener('click', function(){ calView.setMonth(calView.getMonth()-1); drawCal(); });
@@ -304,6 +307,31 @@
   };
   function findItem(name){ var f=null; Object.keys(CATS).forEach(function(k){ CATS[k].items.forEach(function(it){ if(it.name===name) f=it; }); }); return f; }
 
+  // ----- live stock levels (free / total of real units for the chosen checkout span) -----
+  var CAL=null;
+  function loadCal(){ fetch(API+'/api/camera/calendar').then(function(r){return r.json();}).then(function(j){ CAL=j; rerender(); }).catch(function(){}); }
+  function camsFor(name){ var r={'Canon EOS R50':[1,15],'Canon EOS RP':[16,17],'Canon EOS R8':[18,18],'Canon EOS R50 V':[19,21]}[name]; if(!r) return null; var a=[]; for(var i=r[0];i<=r[1];i++) a.push('Cam '+(i<10?'0':'')+i); return a; }
+  var EQTYPE={'Ultra-Wide 10-18mm':'wide','Ultra-Zoom 100-400mm':'zoom','Speedlite EL-5':'speedlite','K&F Concept Tripod':'tripod','Neewer Reflector':'reflector'};
+  function overlaps(out,due,co,ret){ return out && due && out<=ret && due>=co; }   // ISO date strings compare lexicographically
+  function stockFor(it){
+    if(!CAL) return null;
+    var co=isoOf(checkout), ret=isoOf(returnDay||nextSchoolDay(checkout));
+    var cams=camsFor(it.name);
+    if(cams){
+      var busy={}; (CAL.oos||[]).concat(CAL.no_card||[]).forEach(function(cm){ if(cams.indexOf(cm)>=0) busy[cm]=1; });
+      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && overlaps(c.out,c.due,co,ret)) busy[c.camera]=1; });
+      return {free:cams.filter(function(cm){return !busy[cm];}).length, total:cams.length};
+    }
+    var type=EQTYPE[it.name], eu=CAL.equipment_units||{};
+    if(type){
+      var units=Object.keys(eu).filter(function(u){ return eu[u] && eu[u].type===type; });
+      var eb={}; (CAL.equipment_oos||[]).forEach(function(u){ if(eu[u] && eu[u].type===type) eb[u]=1; });
+      (CAL.equipment||[]).forEach(function(c){ if(!c.returned && eu[c.item] && eu[c.item].type===type && overlaps(c.out,c.due,co,ret)) eb[c.item]=1; });
+      return {free:units.filter(function(u){return !eb[u];}).length, total:units.length};
+    }
+    return null;
+  }
+
   // ===== signed-in student + equipment bag state =====
   var USER=null, BAG=[];
   try{ var _u=sessionStorage.getItem('pv_user'); if(_u) USER=JSON.parse(_u); }catch(e){}
@@ -322,9 +350,11 @@
       : (inbag
           ? '<button type="button" class="btn sm block prod-inbag" data-remove="'+encodeURIComponent(it.name)+'">In bag &middot; remove</button>'
           : '<button type="button" class="btn sm block prod-add" data-add="'+encodeURIComponent(it.name)+'">Add to bag</button>');
+    var st = (!locked) ? stockFor(it) : null;   // stock only on items this student can access
+    var stock = st ? '<div class="prod-stock'+(st.free<=0?' out':(st.free<=2?' low':''))+'">'+st.free+' / '+st.total+' available</div>' : '';
     return '<div class="prod'+(locked?' locked':'')+'">'+
       '<div class="prod-img"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.tag&&!locked?'<span class="prod-tag">'+esc(it.tag)+'</span>':'')+(locked?'<span class="prod-lockbadge">Photo 2 only</span>':'')+'</div>'+
-      '<div class="prod-name">'+esc(it.name)+'</div>'+ btn + '</div>';
+      '<div class="prod-name">'+esc(it.name)+'</div>'+ stock + btn + '</div>';
   }
   function wireCards(g){
     g.querySelectorAll('[data-add]').forEach(function(b){ b.onclick=function(){ addToBag(decodeURIComponent(b.getAttribute('data-add'))); }; });
@@ -511,6 +541,7 @@
   renderDates();
   renderCat('cameras');
   refreshAccount();
+  loadCal();
 })();
 </script>
 </body>

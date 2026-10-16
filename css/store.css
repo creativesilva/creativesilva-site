@@ -77,7 +77,8 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .dc-dow{padding-top:9px;}  /* small top gap under the label */
 /* numbers bottom-align across all three cards so 16 / 19 / 3 share one baseline */
 .dc-day,.dc-num{font-family:var(--font-head);font-weight:700;font-size:2rem;line-height:1;color:#fff;margin-top:auto;padding:5px 0 11px;}
-.datebar-note{font-size:.74rem;color:var(--gray);margin-left:auto;max-width:300px;line-height:1.35;}
+.datebar-leadwrap{display:flex;flex-direction:column;gap:6px;max-width:320px;}
+.datebar-note{font-size:.76rem;color:var(--gray);line-height:1.4;}
 
 /* ---- date/time workflow card values (Checkout Day / Pickup Time / Return Day / Return Time / Days) ---- */
 .dc-val{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:1px;margin-top:auto;padding:5px 4px 10px;min-height:46px;}
@@ -137,6 +138,10 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .prod-noimg{width:100%;height:100%;background:repeating-linear-gradient(45deg,rgba(255,255,255,.02) 0 10px,transparent 10px 20px);}
 .prod-tag{position:absolute;top:8px;left:8px;font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--orange);color:#140a04;padding:2px 6px;white-space:nowrap;}
 .prod-name{font-family:var(--font-head);font-weight:700;letter-spacing:.02em;text-transform:uppercase;font-size:1.05rem;color:#fff;line-height:1.05;margin-bottom:auto;}
+/* live stock counter (free / total available for the chosen checkout span) */
+.prod-stock{font-size:.72rem;font-weight:600;letter-spacing:.02em;color:var(--teal-bright);margin:8px 0 9px;}
+.prod-stock.low{color:#ffd166;}   /* 1-2 left */
+.prod-stock.out{color:#ff9a8a;}   /* none free that day */
 
 /* ---- dialogs (sign-in + calendar) ---- */
 .sov{position:fixed;inset:0;z-index:200;background:rgba(5,8,8,.72);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:18px;}
@@ -222,7 +227,7 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
   .catnav{position:static;}   /* header height is variable on phone; drop the sticky offset */
   .util-l,.util-r{font-size:.68rem;}
   .catn{padding:10px 14px;font-size:.72rem;}
-  .datebar-note{display:none;} .datebar-lead{font-size:.85rem;flex-basis:100%;}
+  .datebar-leadwrap{flex-basis:100%;max-width:none;} .datebar-lead{font-size:.95rem;} .datebar-note{font-size:.72rem;}
   /* three boxes on phones: Checkout full-width (the clickable one), Return + Days share the next row */
   .datecards{flex:1 1 100%;gap:6px;flex-wrap:wrap;}
   .datecard{flex:1 1 46%;min-width:0;}
