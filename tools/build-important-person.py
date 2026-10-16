@@ -84,19 +84,21 @@ ENV_EXAMPLES=[
 ]
 
 def env_slider(es):
-    # HORIZONTAL slider (contained .silva-scroll panel) of environmental-portraiture examples:
-    # fixed-width landscape cards in a nowrap flex row, scrolled sideways.
+    # HORIZONTAL slider: ONE large landscape image per view (flex:0 0 100%), scroll/snap to the next.
+    # Image capped at ~1100px and centered so it showcases big without upscaling the 1000px source much.
     hint = "Despl&aacute;zate de lado para ver los cuatro ejemplos." if es else "Scroll sideways to see all four examples."
     hintline=f'<div style="font-size:11pt;color:#80e0e0;margin-bottom:8px;opacity:0.85;">&#8594; {hint}</div>'
     cards=""
     for slug,en_lab,es_lab in ENV_EXAMPLES:
         lab = es_lab if es else en_lab
         alt = (f"Retrato ambiental: {es_lab}" if es else f"Environmental portrait: {en_lab}")
-        cards += ('<div style="flex:0 0 320px;max-width:320px;">' + framed(f"{ENV_DIR}/{slug}", alt)
-                  + f'<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:6px;opacity:0.9;line-height:1.35;white-space:normal;">{lab}</div></div>')
-    scroll=('<div class="silva-scroll" style="overflow-x:auto;overflow-y:hidden;padding:14px 16px 18px;margin:4px 0 2px;border:1px solid rgba(0,184,184,0.30);'
-      'background:linear-gradient(90deg, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.16) 100%);">'
-      f'<div style="display:flex;flex-wrap:nowrap;gap:16px;align-items:flex-start;width:max-content;">{cards}</div></div>')
+        cards += ('<div style="flex:0 0 100%;box-sizing:border-box;scroll-snap-align:center;padding:0 4px;">'
+                  + '<div style="max-width:1100px;margin:0 auto;">' + framed(f"{ENV_DIR}/{slug}", alt)
+                  + f'<div style="font-size:12pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.4;">{lab}</div></div></div>')
+    scroll=('<div class="silva-scroll" style="display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;'
+      'padding:14px 8px 18px;margin:4px 0 2px;border:1px solid rgba(0,184,184,0.30);'
+      'background:linear-gradient(90deg, rgba(0,0,0,0.16) 0%, rgba(0,0,0,0.10) 100%);">'
+      f'{cards}</div>')
     return hintline+scroll
 
 def project_downloads(es):
