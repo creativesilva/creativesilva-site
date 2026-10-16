@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=5" />
+<link rel="stylesheet" href="/css/store.css?v=6" />
 <!-- Live PVHS school calendar (for the auto "next school day" return). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -32,12 +32,12 @@
     </form>
     <div class="nav-right">
       <button type="button" class="acct-btn" id="acctBtn">My Account</button>
-      <button type="button" class="cart-btn" id="cartBtn">Cart <span class="cart-n empty" id="cartN">0</span></button>
+      <button type="button" class="cart-btn" id="cartBtn">Equipment Bag <span class="cart-n empty" id="cartN">0</span></button>
     </div>
   </div>
 </header>
 
-<!-- Category nav (horizontal, icons + name only) -->
+<!-- Category nav (horizontal, teal line-art icons above the names) -->
 <nav class="catnav">
   <div class="wrap catnav-row" id="catnav">
     <button type="button" class="catn active" data-cat="cameras"><span class="catn-ic" style="--ic:url('/assets/Icons/store/camera-v1.png')"></span>Camera Kits</button>
@@ -66,6 +66,9 @@
   </div>
 </div>
 
+<!-- Missing-work hold banner (shown only when the signed-in student is on hold) -->
+<div class="holdbar" id="holdBanner" style="display:none"></div>
+
 <!-- Product grid for the active category -->
 <main class="wrap">
   <section class="products">
@@ -85,26 +88,89 @@
   </div>
 </div>
 
-<!-- Sign-in dialog: student number only, no password -->
+<!-- Sign-in dialog: student number only, no password. Two steps: ID entry, then confirm contact. -->
 <div class="sov" id="signinOv" aria-hidden="true">
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="signinTitle">
+    <button type="button" class="sheet-x" data-close="signinOv" aria-label="Close">&times;</button>
     <div class="sheet-bd">
-      <h2 id="signinTitle">My Account</h2>
-      <p>Sign in with your student number to reserve.</p>
-      <div class="field"><label for="sid">Student number</label><input type="text" id="sid" inputmode="numeric" autocomplete="off" placeholder="e.g. 123456" /></div>
-      <div class="sheet-msg" id="signinMsg"></div>
-      <button type="button" class="btn block" id="signinGo">Sign in</button>
+      <!-- Step 1: enter student number -->
+      <div id="siStep1">
+        <h2 id="signinTitle">My Account</h2>
+        <p>Sign in with your student number. No password.</p>
+        <div class="field"><label for="sid">Student number</label><input type="text" id="sid" inputmode="numeric" autocomplete="off" placeholder="e.g. 123456" /></div>
+        <div class="sheet-msg" id="signinMsg"></div>
+        <button type="button" class="btn block" id="signinGo">Sign in</button>
+      </div>
+      <!-- Step 2: confirm identity + contact -->
+      <div id="siStep2" style="display:none">
+        <h2>Is this you?</h2>
+        <p id="siWho"></p>
+        <div class="field"><label for="siSc">Your cell</label><input type="tel" id="siSc" inputmode="numeric" autocomplete="off" placeholder="805-555-1234" /></div>
+        <div class="field"><label for="siPg">Parent or guardian name</label><input type="text" id="siPg" autocomplete="off" placeholder="First and last name" /></div>
+        <div class="field"><label for="siPc">Parent or guardian cell</label><input type="tel" id="siPc" inputmode="numeric" autocomplete="off" placeholder="805-555-1234" /></div>
+        <div class="sheet-msg" id="siMsg2"></div>
+        <button type="button" class="btn block" id="siConfirm">That&#x2019;s me &middot; continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Missing-work hold dialog: can browse, cannot add. Shows the count + how many to turn in. -->
+<div class="sov" id="holdOv" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="holdTitle">
+    <div class="sheet-bd">
+      <h2 id="holdTitle">Reservations on hold</h2>
+      <div class="rv-block" id="holdBody"></div>
+      <div class="ov-row" id="holdOvRow" style="display:none">
+        <input type="password" id="holdOvc" inputmode="numeric" autocomplete="off" placeholder="Teacher override code" />
+        <button type="button" class="btn sm" id="holdOvGo">Unlock</button>
+      </div>
+      <div class="sheet-msg" id="holdMsg"></div>
+      <div class="sheet-actions">
+        <button type="button" class="btn ghost" data-close="holdOv">Browse equipment</button>
+        <button type="button" class="btn ghost sm" id="holdOvToggle">Teacher override</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Gear-unlock dialog: a teacher unlocks a course-mismatch (Photo-2) item with the gear code. -->
+<div class="sov" id="gearOv" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="gearTitle">
+    <button type="button" class="sheet-x" data-close="gearOv" aria-label="Close">&times;</button>
+    <div class="sheet-bd">
+      <h2 id="gearTitle">Teacher unlock</h2>
+      <p>This item is for Photo 2 students. A teacher can unlock it for this session with the gear code.</p>
+      <div class="field"><label for="gearOvc">Gear override code</label><input type="password" id="gearOvc" inputmode="numeric" autocomplete="off" placeholder="Teacher code" /></div>
+      <div class="sheet-msg" id="gearMsg"></div>
+      <button type="button" class="btn block" id="gearGo">Unlock Photo 2 gear</button>
+    </div>
+  </div>
+</div>
+
+<!-- Equipment Bag panel -->
+<div class="sov" id="bagOv" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="bagTitle">
+    <button type="button" class="sheet-x" data-close="bagOv" aria-label="Close">&times;</button>
+    <div class="sheet-bd">
+      <h2 id="bagTitle">Equipment Bag</h2>
+      <div id="bagList"></div>
+      <div class="sheet-msg" id="bagNote"></div>
     </div>
   </div>
 </div>
 
 <script>
 (function(){
+  var API='https://command.creativesilva.com';
   var TEACHER=(new URLSearchParams(location.search).get('teacher')||'silva').toLowerCase();
   var ROOM=(TEACHER==='mankin')?'Room 331':'Room 322';   // Silva + Garcia = 322, Mankin = 331
   (function(){ var el=document.getElementById('pickRoom'); if(el) el.textContent=ROOM; })();
   function pad(n){ n=String(n); return n.length<2?('0'+n):n; }
   function isoOf(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function fmtPhone(x){ x=String(x||'').replace(/\D/g,''); return x.length===10?(x.slice(0,3)+'-'+x.slice(3,6)+'-'+x.slice(6)):String(x||''); }
+  function api(path,body){ return fetch(API+path,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(body||{})}).then(function(r){return r.json();}); }
   var DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
   // ----- school-day logic (live from pvhs_tools; weekday fallback if the script is blocked) -----
@@ -114,10 +180,9 @@
   }
   function nextSchoolDay(d){ var x=new Date(d); for(var i=0;i<14;i++){ x.setDate(x.getDate()+1); if(isSchoolDay(x)) return x; } return x; }
 
-  // ----- the checkout/return/days state -----
+  // ----- checkout / return / days state -----
   var checkout=new Date(); checkout.setHours(0,0,0,0);
-  // default checkout = today if it's a school day, else the next school day
-  if(!isSchoolDay(checkout)) checkout=nextSchoolDay(checkout);
+  if(!isSchoolDay(checkout)) checkout=nextSchoolDay(checkout);   // default checkout = today if a school day, else the next
   function renderDates(){
     var ret=nextSchoolDay(checkout);
     var days=Math.round((ret-checkout)/86400000);
@@ -159,7 +224,7 @@
   document.getElementById('calNext').addEventListener('click', function(){ calView.setMonth(calView.getMonth()+1); drawCal(); });
   calOv.addEventListener('click', function(e){ if(e.target===calOv) closeCal(); });
 
-  // ----- categories + product grid (static inventory for now; availability-by-date wired next) -----
+  // ----- inventory (static catalog; availability-by-date wired next increment) -----
   var CATS={
     cameras:{label:'Camera Kits', items:[
       {name:'Canon EOS R50', img:'/assets/images/equipment/camera-r50-v2.png'},
@@ -180,23 +245,44 @@
       {name:'Neewer Reflector', img:'/assets/images/equipment/reflector-v2.png'}
     ]}
   };
-  var SIGNED_IN=false; try{ SIGNED_IN=!!sessionStorage.getItem('pv_sid'); }catch(e){}
-  // only items with a real thumbnail render (no placeholder boxes ship); add an img to surface more
+  function findItem(name){ var f=null; Object.keys(CATS).forEach(function(k){ CATS[k].items.forEach(function(it){ if(it.name===name) f=it; }); }); return f; }
+
+  // ===== signed-in student + equipment bag state =====
+  var USER=null, BAG=[];
+  try{ var _u=sessionStorage.getItem('pv_user'); if(_u) USER=JSON.parse(_u); }catch(e){}
+  try{ var _b=sessionStorage.getItem('pv_bag'); if(_b) BAG=JSON.parse(_b)||[]; }catch(e){}
+  function saveUser(){ try{ USER?sessionStorage.setItem('pv_user',JSON.stringify(USER)):sessionStorage.removeItem('pv_user'); }catch(e){} }
+  function saveBag(){ try{ sessionStorage.setItem('pv_bag',JSON.stringify(BAG)); }catch(e){} }
+  function onHold(){ return !!(USER && USER.hold); }
+  function itemLocked(it){ return !!(USER && it.p2 && !USER.p2_ok && !USER.gearUnlocked); }   // Photo-2 gear for a non-Photo-2 student
+
+  // ----- product cards (lock + add states depend on the signed-in student) -----
   function cardHtml(it){
-    return '<div class="prod">'+
-      '<div class="prod-img"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.p2?'<span class="prod-tag">Photo 2</span>':'')+'</div>'+
-      '<div class="prod-name">'+it.name+'</div>'+
-      '<button type="button" class="btn sm block prod-add" data-add="'+encodeURIComponent(it.name)+'">Add to cart</button>'+
-      '</div>';
+    var locked=itemLocked(it);
+    var inbag=BAG.indexOf(it.name)>=0;
+    var btn = locked
+      ? '<button type="button" class="btn sm block prod-locked" data-unlock="1">Locked &middot; ask teacher</button>'
+      : (inbag
+          ? '<button type="button" class="btn sm block prod-inbag" data-remove="'+encodeURIComponent(it.name)+'">In bag &middot; remove</button>'
+          : '<button type="button" class="btn sm block prod-add" data-add="'+encodeURIComponent(it.name)+'">Add to bag</button>');
+    return '<div class="prod'+(locked?' locked':'')+'">'+
+      '<div class="prod-img"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.p2&&!locked?'<span class="prod-tag">Photo 2</span>':'')+(locked?'<span class="prod-lockbadge">Photo 2 only</span>':'')+'</div>'+
+      '<div class="prod-name">'+esc(it.name)+'</div>'+ btn + '</div>';
   }
-  function wireAdds(g){ g.querySelectorAll('[data-add]').forEach(function(b){ b.onclick=function(){ if(!SIGNED_IN){ openSignin(); return; } /* cart wired next */ }; }); }
+  function wireCards(g){
+    g.querySelectorAll('[data-add]').forEach(function(b){ b.onclick=function(){ addToBag(decodeURIComponent(b.getAttribute('data-add'))); }; });
+    g.querySelectorAll('[data-remove]').forEach(function(b){ b.onclick=function(){ removeFromBag(decodeURIComponent(b.getAttribute('data-remove'))); }; });
+    g.querySelectorAll('[data-unlock]').forEach(function(b){ b.onclick=function(){ openGear(); }; });
+  }
   function renderCat(cat){
     var c=CATS[cat]||CATS.cameras;
     document.getElementById('prodHeadLabel').textContent=c.label;
     var g=document.getElementById('prodGrid');
     g.innerHTML=c.items.filter(function(it){ return it.img; }).map(cardHtml).join('');
-    wireAdds(g);
+    wireCards(g);
   }
+  function rerender(){ var a=document.querySelector('.catn.active'); var si=document.getElementById('searchIn');
+    if(si && si.value.trim()){ renderResults(si.value); } else { renderCat(a?a.getAttribute('data-cat'):'cameras'); } }
   document.getElementById('catnav').addEventListener('click', function(e){
     var t=e.target.closest('[data-cat]'); if(!t) return;
     var si=document.getElementById('searchIn'); if(si) si.value='';
@@ -213,7 +299,7 @@
     document.getElementById('prodHeadLabel').textContent='Results: “'+q.trim()+'”';
     var g=document.getElementById('prodGrid');
     if(!hits.length){ g.innerHTML='<p class="noresults">No equipment matches that. Try a category above.</p>'; return; }
-    g.innerHTML=hits.map(cardHtml).join(''); wireAdds(g);
+    g.innerHTML=hits.map(cardHtml).join(''); wireCards(g);
   }
   var searchIn=document.getElementById('searchIn');
   function doSearch(){
@@ -226,23 +312,152 @@
     document.getElementById('searchForm').addEventListener('submit', function(e){ e.preventDefault(); searchIn.blur(); doSearch(); });
   }
 
-  // ----- sign-in (stub; roster validation + contact confirm + eligibility wired next) -----
-  var sov=document.getElementById('signinOv');
-  function openSignin(){ sov.classList.add('open'); var i=document.getElementById('sid'); if(i){ try{ i.focus(); }catch(e){} } }
-  function closeSignin(){ sov.classList.remove('open'); }
-  sov.addEventListener('click', function(e){ if(e.target===sov) closeSignin(); });
-  document.getElementById('acctBtn').addEventListener('click', openSignin);
-  document.getElementById('cartBtn').addEventListener('click', function(){ if(!SIGNED_IN) openSignin(); });
-  function doSignin(){ var v=(document.getElementById('sid').value||'').replace(/\D/g,''); var m=document.getElementById('signinMsg');
-    if(v.length<5){ m.className='sheet-msg err'; m.textContent='Enter your student number.'; return; }
-    try{ sessionStorage.setItem('pv_sid', v); }catch(e){} SIGNED_IN=true;
-    document.getElementById('acctBtn').classList.add('in'); m.className='sheet-msg ok'; m.textContent='Signed in.'; setTimeout(closeSignin,400); }
+  // ===== equipment bag =====
+  function updateBag(){ var n=document.getElementById('cartN'); n.textContent=BAG.length; n.className='cart-n'+(BAG.length?'':' empty'); }
+  function bagPulse(){ var b=document.getElementById('cartBtn'); b.classList.add('pulse'); setTimeout(function(){ b.classList.remove('pulse'); },320); }
+  function addToBag(name){
+    if(!USER){ openSignin(); return; }
+    if(onHold()){ openHold(); return; }                 // missing-work hold: browse yes, add no
+    var it=findItem(name); if(it && itemLocked(it)){ openGear(); return; }
+    if(BAG.indexOf(name)<0){ BAG.push(name); saveBag(); updateBag(); bagPulse(); }
+    rerender();
+  }
+  function removeFromBag(name){ var i=BAG.indexOf(name); if(i>=0){ BAG.splice(i,1); saveBag(); updateBag(); rerender(); renderBag(); } }
+  function renderBag(){
+    var w=document.getElementById('bagList'), note=document.getElementById('bagNote');
+    if(!BAG.length){ w.innerHTML='<p class="bag-empty">Your equipment bag is empty. Add gear to get started.</p>'; note.textContent=''; return; }
+    w.innerHTML=BAG.map(function(nm){ return '<div class="bag-item"><span>'+esc(nm)+'</span><button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">Remove</button></div>'; }).join('');
+    w.querySelectorAll('[data-bx]').forEach(function(b){ b.onclick=function(){ removeFromBag(decodeURIComponent(b.getAttribute('data-bx'))); }; });
+    note.textContent='Next: choose your pickup time and confirm. (Coming soon.)';
+  }
+
+  // ===== overlays helpers =====
+  function open(id){ document.getElementById(id).classList.add('open'); }
+  function close(id){ document.getElementById(id).classList.remove('open'); }
+  document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ close(b.getAttribute('data-close')); }; });
+  ['signinOv','holdOv','gearOv','bagOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
+
+  // ===== account chip + hold banner =====
+  function refreshAccount(){
+    var a=document.getElementById('acctBtn');
+    if(USER){ a.classList.add('in'); a.textContent=USER.label||'My account'; }
+    else { a.classList.remove('in'); a.textContent='My Account'; }
+    updateBag();
+    rerender();   // re-apply the course gray-out / in-bag state for the current student
+    var hb=document.getElementById('holdBanner');
+    if(USER && USER.hold){
+      var lim=(USER.missing_limit!=null?USER.missing_limit:6);
+      var more=(USER.missing!=null)?Math.max(1,USER.missing-lim):null;
+      hb.style.display='';
+      hb.innerHTML='<div class="wrap holdbar-row"><span><b>Reservations are on hold.</b> '+
+        (USER.missing!=null?('You have '+USER.missing+' missing assignments. Turn in '+more+' more to check out equipment.'):'You have too many missing assignments right now.')+
+        ' You can still browse everything below.</span>'+
+        '<button type="button" class="hb-link" id="hbWhy">Details</button></div>';
+      var w=document.getElementById('hbWhy'); if(w) w.onclick=openHold;
+    } else { hb.style.display='none'; }
+  }
+
+  // ===== sign-in =====
+  function openSignin(){ showStep1(); open('signinOv'); var i=document.getElementById('sid'); if(i){ try{ i.focus(); }catch(e){} } }
+  function showStep1(){ document.getElementById('siStep1').style.display=''; document.getElementById('siStep2').style.display='none'; document.getElementById('signinMsg').textContent=''; }
+  function showStep2(j){
+    document.getElementById('siStep1').style.display='none'; document.getElementById('siStep2').style.display='';
+    var per=String(j.period||'').replace(/^0+/,'');
+    document.getElementById('siWho').innerHTML='<b>'+esc(j.label||'')+'</b>'+(per?(' &middot; Period '+esc(per)):'')+(j.course?('<br><span class="si-course">'+esc(j.course)+'</span>'):'');
+    document.getElementById('siSc').value=fmtPhone(j.student_cell||'');
+    document.getElementById('siPg').value=j.parent_guardian||'';
+    document.getElementById('siPc').value=fmtPhone(j.parent_cell||'');
+    document.getElementById('siMsg2').textContent='';
+  }
+  function doSignin(){
+    var raw=(document.getElementById('sid').value||'').trim();
+    var v=(raw.toLowerCase()==='teacher')?'teacher':raw.replace(/\D/g,'');
+    var m=document.getElementById('signinMsg');
+    if(v!=='teacher' && v.length<5){ m.className='sheet-msg err'; m.textContent='Enter your full student number.'; return; }
+    m.className='sheet-msg'; m.textContent='Checking…';
+    api('/api/camera/student_info',{student_id:v}).then(function(j){
+      if(!j||!j.found){ m.className='sheet-msg err'; m.textContent='We could not find that student number.'; return; }
+      if(j.eligible===false){
+        // Missing-work hold: sign them in so they can browse, but on hold (no adding).
+        USER={ id:v, label:j.label||'', hold:true, missing:(j.missing_count!=null?j.missing_count:null),
+               missing_limit:(j.missing_limit!=null?j.missing_limit:6), p2_ok:false, gearUnlocked:false, pool:TEACHER };
+        saveUser(); refreshAccount(); close('signinOv'); openHold(); return;
+      }
+      // Eligible: confirm identity + contact.
+      window._siLookup={ id:v, label:j.label||'', name:j.name||'', period:String(j.period||''), course:j.course||'',
+                         pool:j.pool||TEACHER, teacher:j.teacher||'', p2_ok:!!j.p2_ok };
+      showStep2(j);
+    }).catch(function(){ m.className='sheet-msg err'; m.textContent='Could not reach the server. Try again.'; });
+  }
+  function siConfirm(){
+    var L=window._siLookup||{};
+    var sc=document.getElementById('siSc').value.trim(), pg=document.getElementById('siPg').value.trim(), pc=document.getElementById('siPc').value.trim();
+    var scD=sc.replace(/\D/g,''), pcD=pc.replace(/\D/g,'');
+    USER={ id:L.id, label:L.label, name:L.name, period:L.period, course:L.course, pool:L.pool, teacher:L.teacher,
+           p2_ok:!!L.p2_ok, hold:false, gearUnlocked:false,
+           sc:(scD.length===10?fmtPhone(scD):''), pg:pg, pc:(pcD.length===10?fmtPhone(pcD):'') };
+    saveUser(); refreshAccount(); close('signinOv');
+    // Persist any contact correction to the student's profile (non-blocking).
+    if(scD.length===10 || pg || pcD.length===10){
+      api('/api/camera/student_update',{student_id:L.id, student_cell:USER.sc, parent_guardian:pg, parent_cell:USER.pc}).catch(function(){});
+    }
+  }
   document.getElementById('signinGo').addEventListener('click', doSignin);
   document.getElementById('sid').addEventListener('keydown', function(e){ if(e.key==='Enter') doSignin(); });
-  if(SIGNED_IN) document.getElementById('acctBtn').classList.add('in');
+  document.getElementById('siConfirm').addEventListener('click', siConfirm);
+  document.getElementById('acctBtn').addEventListener('click', function(){ if(USER && USER.hold){ openHold(); } else if(USER){ openAccount(); } else { openSignin(); } });
+  document.getElementById('cartBtn').addEventListener('click', function(){ if(!USER){ openSignin(); return; } renderBag(); open('bagOv'); });
 
-  // init
-  renderDates(); renderCat('cameras');
+  // minimal account view = reuse sign-in sheet step1 area is taken; show a small sign-out via hold sheet is wrong.
+  function openAccount(){
+    // Reuse the bag dialog? No: show a tiny account prompt via confirm-like. Keep it simple: toggle a sign-out.
+    if(window.confirm('Signed in as '+(USER.label||'student')+'.\n\nSign out?')){ USER=null; saveUser(); refreshAccount(); }
+  }
+
+  // ===== missing-work hold dialog =====
+  function openHold(){
+    var lim=(USER&&USER.missing_limit!=null?USER.missing_limit:6);
+    var body=document.getElementById('holdBody');
+    if(USER && USER.missing!=null){
+      var more=Math.max(1,USER.missing-lim);
+      body.innerHTML='<b>Your reservations are on hold.</b>You have <b>'+USER.missing+'</b> missing assignments in your Photography class. Equipment checkout opens back up once you are at <b>'+lim+'</b> or fewer, so turn in <b>'+more+'</b> more. You can still browse all the gear below. If you need equipment for class, talk with Mr. Silva.';
+    } else {
+      body.innerHTML='<b>Your reservations are on hold.</b>You have more than '+lim+' missing assignments in your Photography class. Turn in your missing work, then try again. You can still browse all the gear below. If you need equipment for class, talk with Mr. Silva.';
+    }
+    document.getElementById('holdOvRow').style.display='none';
+    document.getElementById('holdOvc').value=''; document.getElementById('holdMsg').textContent='';
+    open('holdOv');
+  }
+  document.getElementById('holdOvToggle').addEventListener('click', function(){
+    var r=document.getElementById('holdOvRow'); r.style.display=(r.style.display==='none'?'':'none');
+    if(r.style.display===''){ var i=document.getElementById('holdOvc'); if(i){ try{ i.focus(); }catch(e){} } }
+  });
+  document.getElementById('holdOvGo').addEventListener('click', function(){
+    var code=(document.getElementById('holdOvc').value||'').trim(), m=document.getElementById('holdMsg');
+    if(!code){ m.className='sheet-msg err'; m.textContent='Enter the teacher code.'; return; }
+    m.className='sheet-msg'; m.textContent='Checking…';
+    api('/api/camera/override',{code:code, kind:'missing'}).then(function(j){
+      if(j && j.ok){ USER.hold=false; saveUser(); refreshAccount(); m.className='sheet-msg ok'; m.textContent='Unlocked by teacher.'; setTimeout(function(){ close('holdOv'); },600); }
+      else { m.className='sheet-msg err'; m.textContent='That code is not recognized.'; }
+    }).catch(function(){ m.className='sheet-msg err'; m.textContent='Could not reach the server. Try again.'; });
+  });
+
+  // ===== gear-unlock dialog (course-mismatch item) =====
+  function openGear(){ document.getElementById('gearOvc').value=''; document.getElementById('gearMsg').textContent=''; open('gearOv'); var i=document.getElementById('gearOvc'); if(i){ try{ i.focus(); }catch(e){} } }
+  document.getElementById('gearGo').addEventListener('click', function(){
+    var code=(document.getElementById('gearOvc').value||'').trim(), m=document.getElementById('gearMsg');
+    if(!code){ m.className='sheet-msg err'; m.textContent='Enter the teacher code.'; return; }
+    m.className='sheet-msg'; m.textContent='Checking…';
+    api('/api/camera/override',{code:code, kind:'gear'}).then(function(j){
+      if(j && j.ok){ if(USER){ USER.gearUnlocked=true; saveUser(); } m.className='sheet-msg ok'; m.textContent='Photo 2 gear unlocked.'; rerender(); setTimeout(function(){ close('gearOv'); },600); }
+      else { m.className='sheet-msg err'; m.textContent='That code is not recognized.'; }
+    }).catch(function(){ m.className='sheet-msg err'; m.textContent='Could not reach the server. Try again.'; });
+  });
+
+  // ===== init =====
+  renderDates();
+  renderCat('cameras');
+  refreshAccount();
 })();
 </script>
 </body>
