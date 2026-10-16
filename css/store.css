@@ -188,6 +188,13 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .prod-name[data-detail]:hover{color:var(--teal-bright);}
 .prod-details{display:inline-block;align-self:flex-start;background:transparent;border:0;padding:0;margin:0 0 10px;color:var(--teal-bright);font-size:.76rem;font-weight:600;letter-spacing:.03em;cursor:pointer;font-family:var(--font-body);}
 .prod-details:hover{color:#fff;}
+/* ---- Popular & New showcase (2 most-reserved + 1 newest, ribbon-tagged) ---- */
+.featured{padding:10px 0 56px;border-top:1px solid var(--line);margin-top:4px;}
+.feat-grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+.feat-wrap{position:relative;display:flex;}
+.feat-wrap>.prod{flex:1 1 auto;width:100%;}
+.feat-ribbon{position:absolute;top:0;right:0;z-index:3;font-family:var(--font-head);font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:.62rem;line-height:1;padding:5px 11px;background:var(--teal-bright);color:#021414;}
+.feat-ribbon.new{background:var(--green);color:#03180b;}
 
 /* ---- item detail dialog ---- */
 .sheet.detail{max-width:440px;}

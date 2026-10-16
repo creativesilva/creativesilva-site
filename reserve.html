@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=18" />
+<link rel="stylesheet" href="/css/store.css?v=19" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -84,6 +84,10 @@
   <section class="products">
     <div class="prod-head"><span class="bar"></span><span id="prodHeadLabel">Camera Kits</span></div>
     <div class="prod-grid" id="prodGrid"></div>
+  </section>
+  <section class="featured" id="featured" style="display:none">
+    <div class="prod-head"><span class="bar"></span><span>Popular &#38; New</span></div>
+    <div class="prod-grid feat-grid" id="featGrid"></div>
   </section>
 </main>
 
@@ -381,22 +385,22 @@
   // ----- inventory (static catalog; availability-by-date wired next increment) -----
   var CATS={
     cameras:{label:'Camera Kits', items:[
-      {name:'Canon EOS R50', img:'/assets/images/equipment/camera-r50-v2.png', tag:'Photo 1 / Photo 2'},
-      {name:'Canon EOS RP', img:'/assets/images/equipment/camera-rp-v1.png', p2:true, tag:'Photo 2'},
-      {name:'Canon EOS R8', img:'/assets/images/equipment/camera-r8-v1.png', p2:true, tag:'Photo 2'},
-      {name:'Canon EOS R50 V', img:'/assets/images/equipment/camera-r50v-v2.png', tag:'Digital Arts'}
+      {name:'Canon EOS R50', img:'/assets/images/equipment/camera-r50-v2.png', tag:'Photo 1 / Photo 2', added:'2024-08-01'},
+      {name:'Canon EOS RP', img:'/assets/images/equipment/camera-rp-v1.png', p2:true, tag:'Photo 2', added:'2024-08-01'},
+      {name:'Canon EOS R8', img:'/assets/images/equipment/camera-r8-v1.png', p2:true, tag:'Photo 2', added:'2025-01-15'},
+      {name:'Canon EOS R50 V', img:'/assets/images/equipment/camera-r50v-v2.png', tag:'Digital Arts', added:'2025-09-15'}
     ]},
     lenses:{label:'Lenses', items:[
-      {name:'Ultra-Wide 10-18mm', img:'/assets/images/equipment/ultrawide-v2.png'},
-      {name:'Ultra-Zoom 100-400mm', img:'/assets/images/equipment/ultrazoom-v2.png'}
+      {name:'Ultra-Wide 10-18mm', img:'/assets/images/equipment/ultrawide-v2.png', added:'2024-08-01'},
+      {name:'Ultra-Zoom 100-400mm', img:'/assets/images/equipment/ultrazoom-v2.png', added:'2024-08-15'}
     ]},
     lighting:{label:'Lighting', items:[
-      {name:'Speedlite EL-5', img:'/assets/images/equipment/speedlite-v2.png'},
-      {name:'Godox AD200 Pro II Kit', img:'', p2:true, tag:'Photo 2'}
+      {name:'Speedlite EL-5', img:'/assets/images/equipment/speedlite-v2.png', added:'2024-09-01'},
+      {name:'Godox AD200 Pro II Kit', img:'', p2:true, tag:'Photo 2', added:'2026-10-16'}
     ]},
     accessories:{label:'Accessories', items:[
-      {name:'K&F Concept Tripod', img:'/assets/images/equipment/tripod-v3.png'},
-      {name:'Neewer Reflector', img:'/assets/images/equipment/reflector-v2.png'}
+      {name:'K&F Concept Tripod', img:'/assets/images/equipment/tripod-v3.png', added:'2024-08-01'},
+      {name:'Neewer Reflector', img:'/assets/images/equipment/reflector-v2.png', added:'2024-09-01'}
     ]}
   };
   function findItem(name){ var f=null; Object.keys(CATS).forEach(function(k){ CATS[k].items.forEach(function(it){ if(it.name===name) f=it; }); }); return f; }
@@ -416,7 +420,7 @@
 
   // ----- live stock levels (free / total of real units for the chosen checkout span) -----
   var CAL=null;
-  function loadCal(){ fetch(API+'/api/camera/calendar').then(function(r){return r.json();}).then(function(j){ CAL=j; rerender(); }).catch(function(){}); }
+  function loadCal(){ fetch(API+'/api/camera/calendar').then(function(r){return r.json();}).then(function(j){ CAL=j; rerender(); renderFeatured(); }).catch(function(){}); }
   function camsFor(name){ var r={'Canon EOS R50':[1,15],'Canon EOS RP':[16,17],'Canon EOS R8':[18,18],'Canon EOS R50 V':[19,21]}[name]; if(!r) return null; var a=[]; for(var i=r[0];i<=r[1];i++) a.push('Cam '+(i<10?'0':'')+i); return a; }
   var EQTYPE={'Ultra-Wide 10-18mm':'wide','Ultra-Zoom 100-400mm':'zoom','Speedlite EL-5':'speedlite','K&F Concept Tripod':'tripod','Neewer Reflector':'reflector'};
   function overlaps(out,due,co,ret){ return out && due && out<=ret && due>=co; }   // ISO date strings compare lexicographically
@@ -437,6 +441,36 @@
       return {free:units.filter(function(u){return !eb[u];}).length, total:units.length};
     }
     return null;
+  }
+
+  // ----- Popular & New: 2 most-reserved items + 1 newest-on-the-menu -----
+  function modelOfCam(cam){ var n=parseInt(String(cam).replace(/\D/g,''),10); if(n>=1&&n<=15) return 'Canon EOS R50'; if(n>=16&&n<=17) return 'Canon EOS RP'; if(n===18) return 'Canon EOS R8'; if(n>=19&&n<=21) return 'Canon EOS R50 V'; return null; }
+  function modelOfType(t){ return {wide:'Ultra-Wide 10-18mm',zoom:'Ultra-Zoom 100-400mm',speedlite:'Speedlite EL-5',tripod:'K&F Concept Tripod',reflector:'Neewer Reflector'}[t]||null; }
+  function featuredItems(){
+    if(!CAL) return [];
+    var count={};
+    (CAL.checkouts||[]).forEach(function(c){ var m=modelOfCam(c.camera); if(m) count[m]=(count[m]||0)+1; });
+    var eu=CAL.equipment_units||{};
+    (CAL.equipment||[]).forEach(function(c){ var u=eu[c.item]; var m=u?modelOfType(u.type):null; if(m) count[m]=(count[m]||0)+1; });
+    var pop=Object.keys(count).filter(function(n){ var it=findItem(n); return it&&it.img; })
+      .sort(function(a,b){ return count[b]-count[a]; });
+    var picks=[], used={};
+    pop.slice(0,2).forEach(function(n){ picks.push({it:findItem(n), ribbon:'Popular'}); used[n]=1; });
+    var newest=null, nd='';
+    Object.keys(CATS).forEach(function(k){ CATS[k].items.forEach(function(it){ if(it.img && !used[it.name] && it.added && it.added>nd){ nd=it.added; newest=it; } }); });
+    if(newest) picks.push({it:newest, ribbon:'New'});
+    return picks;
+  }
+  function renderFeatured(){
+    var sec=document.getElementById('featured'), g=document.getElementById('featGrid');
+    if(!sec||!g) return;
+    var picks=featuredItems();
+    if(picks.length<2){ sec.style.display='none'; return; }
+    g.innerHTML=picks.map(function(p){
+      return '<div class="feat-wrap"><span class="feat-ribbon'+(p.ribbon==='New'?' new':'')+'">'+p.ribbon+'</span>'+cardHtml(p.it)+'</div>';
+    }).join('');
+    wireCards(g);
+    sec.style.display='';
   }
 
   // ===== signed-in student + equipment bag state =====
@@ -555,7 +589,7 @@
     if(USER){ a.classList.add('in'); a.textContent=USER.label||'My account'; }
     else { a.classList.remove('in'); a.textContent='My Account'; }
     updateBag(); refreshPickupInfo();
-    rerender();   // re-apply the course gray-out / in-bag state for the current student
+    rerender(); renderFeatured();   // re-apply the course gray-out / in-bag state for the current student
     var hb=document.getElementById('holdBanner');
     if(USER && USER.hold){
       var lim=(USER.missing_limit!=null?USER.missing_limit:6);
