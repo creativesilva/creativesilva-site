@@ -94,7 +94,7 @@
   .tb-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:10px;font-size:.72rem;color:var(--muted);}
   .tb-legend i.lg{display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px;}
   .tb-legend .st-ok{background:var(--ok);} .tb-legend .st-reserved{background:var(--gold);} .tb-legend .st-out{background:var(--orange);} .tb-legend .st-overdue{background:var(--red);} .tb-legend .st-oos{background:var(--grayed);}
-  .tb-list{display:flex;flex-direction:column;gap:8px;}
+  .tb-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(440px,100%),1fr));gap:8px;}
   .tb-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 11px;border:1px solid var(--line-soft);border-left:3px solid var(--muted);background:rgba(255,255,255,.025);}
   .tb-row.rr-out{border-left-color:var(--orange);} .tb-row.rr-reserved{border-left-color:var(--gold);} .tb-row.rr-returned{border-left-color:var(--ok);}
   .tb-main{display:flex;align-items:center;gap:10px 12px;flex-wrap:wrap;flex:1 1 320px;min-width:0;}
@@ -104,8 +104,8 @@
   .cartchip{font-family:var(--font);font-weight:700;font-size:.68rem;letter-spacing:.03em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--line-soft);background:rgba(0,0,0,.3);color:#fff;cursor:pointer;}
   .cartchip.st-reserved{border-color:var(--gold);color:#ffd889;} .cartchip.st-out{border-color:var(--orange);color:#ffb28a;} .cartchip.st-overdue{border-color:var(--red);color:#ff9a8a;animation:cardFlash 1.5s ease-in-out infinite;} .cartchip.st-returned{border-color:var(--ok);color:#8ff0b0;}
   .tb-actwrap{flex:0 0 auto;margin-left:auto;}
-  .tb-act{font-family:var(--font);font-weight:700;font-size:.74rem;letter-spacing:.04em;text-transform:uppercase;padding:6px 14px;border:1px solid var(--line-soft);background:rgba(0,0,0,.3);color:#fff;cursor:pointer;}
-  .tb-act.go{border-color:var(--gold);color:#ffd889;} .tb-act.warn{border-color:var(--orange);color:#ffb28a;}
+  .tb-act{font-family:var(--font);font-weight:700;font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;padding:7px 16px;border:1px solid transparent;color:#00141a;cursor:pointer;}
+  .tb-act.tb-out{background:#00b8b8;} .tb-act.tb-in{background:var(--gold);}
   .tb-empty{font-size:.85rem;color:var(--muted);}
   @media (max-width:640px){ .tb-row{align-items:flex-start;} .tb-actwrap{margin-left:0;width:100%;} .tb-act{width:100%;} }
 
@@ -1270,8 +1270,8 @@
   function todayCartRow(c){ var items=resvItems(c), st=resvStatusGroup(c);
     var meta=[(c.period?'Per '+esc(c.period):''),(c.course?esc(c.course):'')].filter(Boolean).join(' &middot; ');
     var anyRes=items.some(function(x){return statusOf(x)==='reserved';}), anyOut=items.some(function(x){return statusOf(x)==='out';});
-    var act=anyRes?('<button type="button" class="tb-act go" data-tbout="'+esc(c.id)+'">Check out</button>')
-           :anyOut?('<button type="button" class="tb-act warn" data-tbin="'+esc(c.id)+'">Check in</button>'):'';
+    var act=anyRes?('<button type="button" class="tb-act tb-out" data-tbout="'+esc(c.id)+'">Check out</button>')
+           :anyOut?('<button type="button" class="tb-act tb-in" data-tbin="'+esc(c.id)+'">Check in</button>'):'';
     return '<div class="tb-row rr-'+st+'"><div class="tb-main">'+
       '<span class="tb-who">'+studentLink(c)+'</span>'+(meta?('<span class="tb-meta">'+meta+'</span>'):'')+
       '<span class="tb-cart">'+items.map(cartChip).join('')+'</span></div>'+
