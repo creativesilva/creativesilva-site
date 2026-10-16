@@ -96,6 +96,18 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .datecard.co:hover{border-color:var(--green);} .datecard.rt:hover{border-color:var(--orange);}
 .datecard.co.todo{border-color:var(--green);} .datecard.co.todo .dv-sel{color:var(--green);} .datecard.co.todo::after{border-color:var(--green);}
 .datecard.rt.todo{border-color:var(--orange);} .datecard.rt.todo .dv-sel{color:var(--orange);} .datecard.rt.todo::after{border-color:var(--orange);}
+/* box sub-line: the pickup / return time shown inside the Checkout + Return boxes */
+.dv-sub{font-size:.64rem;letter-spacing:.02em;color:#fff;margin-top:4px;font-weight:600;line-height:1.1;text-align:center;}
+.dv-sub.muted{color:var(--gray);text-transform:uppercase;letter-spacing:.05em;font-size:.56rem;font-weight:700;}
+
+/* one-box planner popup (steps through day -> pickup -> return time) */
+.sheet.plan{max-width:360px;}
+.plan-prog{display:flex;gap:8px;justify-content:center;margin-bottom:14px;}
+.pd{width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:700;font-size:.8rem;background:rgba(255,255,255,.06);border:1px solid var(--surface-bd);color:var(--gray);}
+.pd.on{background:var(--teal-bright);border-color:var(--teal-bright);color:#021414;}
+.pd.done{background:var(--teal);border-color:var(--teal);color:#fff;}
+.plan-back{margin-top:12px;background:transparent;border:0;color:var(--teal-bright);font-family:var(--font-head);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.74rem;padding:4px 0;cursor:pointer;}
+.plan-back:hover{color:#fff;}
 
 /* ---- time option buttons (pickup / return picker) ---- */
 .time-opts{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
@@ -211,9 +223,10 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
   .util-l,.util-r{font-size:.68rem;}
   .catn{padding:10px 14px;font-size:.72rem;}
   .datebar-note{display:none;} .datebar-lead{font-size:.85rem;flex-basis:100%;}
-  /* five date/time cards wrap 3-per-row on phones (never a cramped single row) */
+  /* three boxes on phones: Checkout full-width (the clickable one), Return + Days share the next row */
   .datecards{flex:1 1 100%;gap:6px;flex-wrap:wrap;}
-  .datecard{flex:1 1 29%;min-width:0;}
-  .dv-big{font-size:1rem;} .dv-days{font-size:1.5rem;} .dv-top{font-size:.52rem;}
+  .datecard{flex:1 1 46%;min-width:0;}
+  .datecard.co{flex-basis:100%;}
+  .dv-big{font-size:1.1rem;} .dv-days{font-size:1.5rem;} .dv-top{font-size:.54rem;}
   .prod-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
 }
