@@ -8,16 +8,16 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=6" />
-<!-- Live PVHS school calendar (for the auto "next school day" return). Mirrored to creativesilva.com in production. -->
+<link rel="stylesheet" href="/css/store.css?v=7" />
+<!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
 <body>
 
-<!-- Top utility strip: classroom pickup (no shipping) + text-only contact -->
+<!-- Top utility strip: pickup room (blank until a student signs in) + text-only contact -->
 <div class="util">
   <div class="wrap util-row">
-    <span class="util-l"><b>Classroom pickup</b> &middot; <span id="pickRoom">Room 322</span></span>
+    <span class="util-l" id="pickupInfo"><b>Equipment pickup</b></span>
     <a class="util-r" href="sms:+18056310001">Text us: 805-631-0001 <em>(text only)</em></a>
   </div>
 </div>
@@ -47,22 +47,17 @@
   </div>
 </nav>
 
-<!-- Date bar: CHECKOUT (changeable) / RETURN (auto next school day) / DAYS (auto) -->
+<!-- Date/time workflow: Checkout Day -> Pickup Time -> Return Day (auto) -> Return Time -> Days -->
 <div class="datebar">
   <div class="wrap datebar-row">
-    <div class="datebar-lead">When do you need it?</div>
-    <div class="datecards">
-      <button type="button" class="datecard pick" id="dcCheckout" aria-label="Choose checkout day">
-        <span class="dc-lab">Checkout</span><span class="dc-dow" id="coDow">&middot;</span><span class="dc-mon" id="coMon">&middot;</span><span class="dc-day" id="coDay">&middot;</span>
-      </button>
-      <div class="datecard ret">
-        <span class="dc-lab">Return</span><span class="dc-dow" id="rtDow">&middot;</span><span class="dc-mon" id="rtMon">&middot;</span><span class="dc-day" id="rtDay">&middot;</span>
-      </div>
-      <div class="datecard days">
-        <span class="dc-lab">Days</span><span class="dc-num" id="dyNum">&middot;</span>
-      </div>
+    <div class="datebar-lead">Set your<br>pickup &amp; return</div>
+    <div class="datecards" id="dateCards">
+      <button type="button" class="datecard pick step" id="dcCheckout" aria-label="Choose checkout day"><span class="dc-lab">Checkout Day</span><span class="dc-val" id="dcCheckoutVal"></span></button>
+      <button type="button" class="datecard pick step" id="dcPickup" aria-label="Choose pickup time"><span class="dc-lab">Pickup Time</span><span class="dc-val" id="dcPickupVal"></span></button>
+      <div class="datecard ret step"><span class="dc-lab">Return Day</span><span class="dc-val" id="dcReturnVal"></span></div>
+      <button type="button" class="datecard pick step" id="dcReturnTime" aria-label="Choose return time"><span class="dc-lab">Return Time</span><span class="dc-val" id="dcReturnTimeVal"></span></button>
+      <div class="datecard days step"><span class="dc-lab">Days</span><span class="dc-val" id="dcDaysVal"></span></div>
     </div>
-    <div class="datebar-note">Return is the next school day. Choose your pickup time at checkout.</div>
   </div>
 </div>
 
@@ -80,10 +75,23 @@
 <!-- Checkout-day calendar popup -->
 <div class="sov" id="calOv" aria-hidden="true">
   <div class="sheet cal" role="dialog" aria-modal="true" aria-label="Choose checkout day">
+    <button type="button" class="sheet-x" data-close="calOv" aria-label="Close">&times;</button>
     <div class="sheet-bd">
       <div class="cal-head"><button type="button" class="cal-nav" id="calPrev">&#8249;</button><span id="calTitle">&middot;</span><button type="button" class="cal-nav" id="calNext">&#8250;</button></div>
       <div class="cal-dow"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
       <div class="cal-grid" id="calGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Pickup / return time picker -->
+<div class="sov" id="timeOv" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="timeTitle">
+    <button type="button" class="sheet-x" data-close="timeOv" aria-label="Close">&times;</button>
+    <div class="sheet-bd">
+      <h2 id="timeTitle">Pickup time</h2>
+      <p id="timeSub"></p>
+      <div class="time-opts" id="timeOpts"></div>
     </div>
   </div>
 </div>
@@ -93,7 +101,6 @@
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="signinTitle">
     <button type="button" class="sheet-x" data-close="signinOv" aria-label="Close">&times;</button>
     <div class="sheet-bd">
-      <!-- Step 1: enter student number -->
       <div id="siStep1">
         <h2 id="signinTitle">My Account</h2>
         <p>Sign in with your student number. No password.</p>
@@ -101,7 +108,6 @@
         <div class="sheet-msg" id="signinMsg"></div>
         <button type="button" class="btn block" id="signinGo">Sign in</button>
       </div>
-      <!-- Step 2: confirm identity + contact -->
       <div id="siStep2" style="display:none">
         <h2>Is this you?</h2>
         <p id="siWho"></p>
@@ -160,18 +166,27 @@
   </div>
 </div>
 
+<div class="toast" id="toast" aria-live="polite"></div>
+
 <script>
 (function(){
   var API='https://command.creativesilva.com';
   var TEACHER=(new URLSearchParams(location.search).get('teacher')||'silva').toLowerCase();
-  var ROOM=(TEACHER==='mankin')?'Room 331':'Room 322';   // Silva + Garcia = 322, Mankin = 331
-  (function(){ var el=document.getElementById('pickRoom'); if(el) el.textContent=ROOM; })();
+  var TEACHER_NAME={silva:'Mr. Silva',garcia:'Ms. Garcia',mankin:'Ms. Mankin'};
+  function roomFor(pool){ return (pool==='mankin')?'Room 331':'Room 322'; }   // Silva + Garcia = 322, Mankin = 331
   function pad(n){ n=String(n); return n.length<2?('0'+n):n; }
   function isoOf(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function fmtPhone(x){ x=String(x||'').replace(/\D/g,''); return x.length===10?(x.slice(0,3)+'-'+x.slice(3,6)+'-'+x.slice(6)):String(x||''); }
   function api(path,body){ return fetch(API+path,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(body||{})}).then(function(r){return r.json();}); }
   var DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  // pickup strip: blank room/teacher until a student authenticates; then their own teacher + room
+  function refreshPickupInfo(){
+    var el=document.getElementById('pickupInfo'); if(!el) return;
+    if(USER){ var teach=USER.teacher||TEACHER_NAME[USER.pool]||''; el.innerHTML='<b>Classroom pickup</b>'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+roomFor(USER.pool); }
+    else { el.innerHTML='<b>Equipment pickup</b>'; }
+  }
 
   // ----- school-day logic (live from pvhs_tools; weekday fallback if the script is blocked) -----
   function isSchoolDay(d){
@@ -180,25 +195,48 @@
   }
   function nextSchoolDay(d){ var x=new Date(d); for(var i=0;i<14;i++){ x.setDate(x.getDate()+1); if(isSchoolDay(x)) return x; } return x; }
 
-  // ----- checkout / return / days state -----
+  // ----- bell-schedule windows (live; follows rally / minimum / Monday days) -----
+  function sched(d){ try{ return (typeof getScheduleBlocks!=='undefined')?getScheduleBlocks(isoOf(d)):[]; }catch(e){ return []; } }
+  function fb(b,re){ for(var i=0;i<b.length;i++){ if(re.test(b[i].l)) return b[i]; } return null; }
+  function nextAfter(b,x){ var i=b.indexOf(x); return (i>=0 && i+1<b.length)?b[i+1]:null; }
+  function minus15(t){ var p=t.split(':'); var m=(+p[0])*60+(+p[1])-15; if(m<0)m=0; return pad(Math.floor(m/60))+':'+pad(m%60); }
+  function f12(t){ try{ return (typeof fmt12!=='undefined')?fmt12(t):t; }catch(e){ return t; } }
+  // Pickup windows: Nutrition, Lunch, After 6th period (Chris's spec).
+  function pickupOptions(d){ var b=sched(d), out=[];
+    var n=fb(b,/NUTRITION/); if(n) out.push({label:'Nutrition',s:n.s,e:n.e});
+    var l=fb(b,/LUNCH/); if(l) out.push({label:'Lunch',s:l.s,e:l.e});
+    var six=fb(b,/6TH PERIOD/); if(six){ var nx=nextAfter(b,six); out.push({label:'After 6th period',s:six.e,e:(nx?nx.e:six.e)}); }
+    return out; }
+  // Return windows: Before 1st period, Between 1st & 2nd (passing), Nutrition (morning returns).
+  function returnOptions(d){ var b=sched(d), out=[];
+    var one=fb(b,/1ST PERIOD/); if(one){ out.push({label:'Before 1st period',s:minus15(one.s),e:one.s}); var nx=nextAfter(b,one); if(nx&&/PASSING/.test(nx.l)) out.push({label:'Between 1st & 2nd',s:nx.s,e:nx.e}); }
+    var n=fb(b,/NUTRITION/); if(n) out.push({label:'Nutrition',s:n.s,e:n.e});
+    return out; }
+
+  // ----- checkout / pickup / return / return-time / days state -----
   var checkout=new Date(); checkout.setHours(0,0,0,0);
   if(!isSchoolDay(checkout)) checkout=nextSchoolDay(checkout);   // default checkout = today if a school day, else the next
+  var pickup=null, returnTime=null, returnDay=null;
+  function dayVal(d){ return '<span class="dv-top">'+DOW[d.getDay()]+'</span><span class="dv-big">'+MON[d.getMonth()]+' '+d.getDate()+'</span>'; }
+  function timeVal(o){ return o?('<span class="dv-top">'+esc(o.label)+'</span><span class="dv-big">'+f12(o.s)+'</span>'):'<span class="dv-sel">Select</span>'; }
+  function datesReady(){ return !!(pickup && returnTime); }   // checkout + returnDay are always set
   function renderDates(){
-    var ret=nextSchoolDay(checkout);
-    var days=Math.round((ret-checkout)/86400000);
-    document.getElementById('coDow').textContent=DOW[checkout.getDay()];
-    document.getElementById('coMon').textContent=MON[checkout.getMonth()];
-    document.getElementById('coDay').textContent=checkout.getDate();
-    document.getElementById('rtDow').textContent=DOW[ret.getDay()];
-    document.getElementById('rtMon').textContent=MON[ret.getMonth()];
-    document.getElementById('rtDay').textContent=ret.getDate();
-    document.getElementById('dyNum').textContent=days;
+    returnDay=nextSchoolDay(checkout);
+    var days=Math.round((returnDay-checkout)/86400000);
+    document.getElementById('dcCheckoutVal').innerHTML=dayVal(checkout);
+    document.getElementById('dcReturnVal').innerHTML=dayVal(returnDay);
+    document.getElementById('dcPickupVal').innerHTML=timeVal(pickup);
+    document.getElementById('dcReturnTimeVal').innerHTML=timeVal(returnTime);
+    document.getElementById('dcDaysVal').innerHTML='<span class="dv-big dv-days">'+days+'</span>';
+    document.getElementById('dcPickup').classList.toggle('done',!!pickup);
+    document.getElementById('dcReturnTime').classList.toggle('done',!!returnTime);
+    document.getElementById('dcPickup').classList.toggle('todo',!pickup);
+    document.getElementById('dcReturnTime').classList.toggle('todo',!!pickup&&!returnTime);
   }
 
-  // ----- calendar popup (pick the checkout day) -----
+  // ----- checkout-day calendar popup -----
   var calOv=document.getElementById('calOv'), calView=new Date(checkout.getFullYear(), checkout.getMonth(), 1);
-  function openCal(){ calView=new Date(checkout.getFullYear(), checkout.getMonth(), 1); drawCal(); calOv.classList.add('open'); }
-  function closeCal(){ calOv.classList.remove('open'); }
+  function openCal(){ calView=new Date(checkout.getFullYear(), checkout.getMonth(), 1); drawCal(); open('calOv'); }
   function drawCal(){
     document.getElementById('calTitle').textContent=MON[calView.getMonth()]+' '+calView.getFullYear();
     var first=new Date(calView.getFullYear(), calView.getMonth(), 1), start=first.getDay();
@@ -217,12 +255,26 @@
     }
     document.getElementById('calGrid').innerHTML=html;
     document.getElementById('calGrid').querySelectorAll('[data-d]').forEach(function(b){ b.onclick=function(){
-      var p=b.getAttribute('data-d').split('-'); checkout=new Date(+p[0],+p[1]-1,+p[2]); renderDates(); closeCal(); }; });
+      var p=b.getAttribute('data-d').split('-'); checkout=new Date(+p[0],+p[1]-1,+p[2]); pickup=null; returnTime=null; renderDates(); close('calOv'); }; });
   }
   document.getElementById('dcCheckout').addEventListener('click', openCal);
   document.getElementById('calPrev').addEventListener('click', function(){ calView.setMonth(calView.getMonth()-1); drawCal(); });
   document.getElementById('calNext').addEventListener('click', function(){ calView.setMonth(calView.getMonth()+1); drawCal(); });
-  calOv.addEventListener('click', function(e){ if(e.target===calOv) closeCal(); });
+
+  // ----- pickup / return time pickers -----
+  function openTime(kind){
+    var day=(kind==='pickup')?checkout:returnDay;
+    var opts=(kind==='pickup')?pickupOptions(day):returnOptions(day);
+    document.getElementById('timeTitle').textContent=(kind==='pickup')?'Pickup time':'Return time';
+    document.getElementById('timeSub').textContent=(kind==='pickup'?'When will you pick up on ':'When will you return on ')+DOW[day.getDay()]+' '+MON[day.getMonth()]+' '+day.getDate()+'?';
+    var w=document.getElementById('timeOpts');
+    if(!opts.length){ w.innerHTML='<p class="noresults">No set windows for that day. Ask your teacher.</p>'; }
+    else { w.innerHTML=opts.map(function(o,i){ return '<button type="button" class="time-opt" data-i="'+i+'"><b>'+esc(o.label)+'</b><span>'+f12(o.s)+' to '+f12(o.e)+'</span></button>'; }).join('');
+      w.querySelectorAll('[data-i]').forEach(function(b){ b.onclick=function(){ var o=opts[+b.getAttribute('data-i')]; if(kind==='pickup') pickup=o; else returnTime=o; renderDates(); close('timeOv'); }; }); }
+    open('timeOv');
+  }
+  document.getElementById('dcPickup').addEventListener('click', function(){ openTime('pickup'); });
+  document.getElementById('dcReturnTime').addEventListener('click', function(){ openTime('return'); });
 
   // ----- inventory (static catalog; availability-by-date wired next increment) -----
   var CATS={
@@ -312,12 +364,13 @@
     document.getElementById('searchForm').addEventListener('submit', function(e){ e.preventDefault(); searchIn.blur(); doSearch(); });
   }
 
-  // ===== equipment bag =====
+  // ===== equipment bag (gated: sign in + pickup/return times first) =====
   function updateBag(){ var n=document.getElementById('cartN'); n.textContent=BAG.length; n.className='cart-n'+(BAG.length?'':' empty'); }
   function bagPulse(){ var b=document.getElementById('cartBtn'); b.classList.add('pulse'); setTimeout(function(){ b.classList.remove('pulse'); },320); }
   function addToBag(name){
-    if(!USER){ openSignin(); return; }
-    if(onHold()){ openHold(); return; }                 // missing-work hold: browse yes, add no
+    if(!USER){ openSignin(); return; }                                  // 1) confirm student id
+    if(!datesReady()){ pulseDates(); toast('First set your pickup time and return time above.'); return; }  // 2) dates/times up front
+    if(onHold()){ openHold(); return; }                                 // missing-work hold: browse yes, add no
     var it=findItem(name); if(it && itemLocked(it)){ openGear(); return; }
     if(BAG.indexOf(name)<0){ BAG.push(name); saveBag(); updateBag(); bagPulse(); }
     rerender();
@@ -328,21 +381,23 @@
     if(!BAG.length){ w.innerHTML='<p class="bag-empty">Your equipment bag is empty. Add gear to get started.</p>'; note.textContent=''; return; }
     w.innerHTML=BAG.map(function(nm){ return '<div class="bag-item"><span>'+esc(nm)+'</span><button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">Remove</button></div>'; }).join('');
     w.querySelectorAll('[data-bx]').forEach(function(b){ b.onclick=function(){ removeFromBag(decodeURIComponent(b.getAttribute('data-bx'))); }; });
-    note.textContent='Next: choose your pickup time and confirm. (Coming soon.)';
+    note.textContent='Next: confirm your reservation. (Coming soon.)';
   }
 
-  // ===== overlays helpers =====
+  // ===== overlays + toast helpers =====
   function open(id){ document.getElementById(id).classList.add('open'); }
   function close(id){ document.getElementById(id).classList.remove('open'); }
   document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ close(b.getAttribute('data-close')); }; });
-  ['signinOv','holdOv','gearOv','bagOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
+  ['signinOv','holdOv','gearOv','bagOv','timeOv','calOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
+  function toast(msg){ var t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2800); }
+  function pulseDates(){ var d=document.querySelector('.datebar'); if(!d) return; d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash'); }
 
   // ===== account chip + hold banner =====
   function refreshAccount(){
     var a=document.getElementById('acctBtn');
     if(USER){ a.classList.add('in'); a.textContent=USER.label||'My account'; }
     else { a.classList.remove('in'); a.textContent='My Account'; }
-    updateBag();
+    updateBag(); refreshPickupInfo();
     rerender();   // re-apply the course gray-out / in-bag state for the current student
     var hb=document.getElementById('holdBanner');
     if(USER && USER.hold){
@@ -378,12 +433,11 @@
     api('/api/camera/student_info',{student_id:v}).then(function(j){
       if(!j||!j.found){ m.className='sheet-msg err'; m.textContent='We could not find that student number.'; return; }
       if(j.eligible===false){
-        // Missing-work hold: sign them in so they can browse, but on hold (no adding).
         USER={ id:v, label:j.label||'', hold:true, missing:(j.missing_count!=null?j.missing_count:null),
-               missing_limit:(j.missing_limit!=null?j.missing_limit:6), p2_ok:false, gearUnlocked:false, pool:TEACHER };
+               missing_limit:(j.missing_limit!=null?j.missing_limit:6), p2_ok:false, gearUnlocked:false,
+               pool:(j.pool||TEACHER), teacher:(j.teacher||'') };
         saveUser(); refreshAccount(); close('signinOv'); openHold(); return;
       }
-      // Eligible: confirm identity + contact.
       window._siLookup={ id:v, label:j.label||'', name:j.name||'', period:String(j.period||''), course:j.course||'',
                          pool:j.pool||TEACHER, teacher:j.teacher||'', p2_ok:!!j.p2_ok };
       showStep2(j);
@@ -397,7 +451,6 @@
            p2_ok:!!L.p2_ok, hold:false, gearUnlocked:false,
            sc:(scD.length===10?fmtPhone(scD):''), pg:pg, pc:(pcD.length===10?fmtPhone(pcD):'') };
     saveUser(); refreshAccount(); close('signinOv');
-    // Persist any contact correction to the student's profile (non-blocking).
     if(scD.length===10 || pg || pcD.length===10){
       api('/api/camera/student_update',{student_id:L.id, student_cell:USER.sc, parent_guardian:pg, parent_cell:USER.pc}).catch(function(){});
     }
@@ -407,12 +460,7 @@
   document.getElementById('siConfirm').addEventListener('click', siConfirm);
   document.getElementById('acctBtn').addEventListener('click', function(){ if(USER && USER.hold){ openHold(); } else if(USER){ openAccount(); } else { openSignin(); } });
   document.getElementById('cartBtn').addEventListener('click', function(){ if(!USER){ openSignin(); return; } renderBag(); open('bagOv'); });
-
-  // minimal account view = reuse sign-in sheet step1 area is taken; show a small sign-out via hold sheet is wrong.
-  function openAccount(){
-    // Reuse the bag dialog? No: show a tiny account prompt via confirm-like. Keep it simple: toggle a sign-out.
-    if(window.confirm('Signed in as '+(USER.label||'student')+'.\n\nSign out?')){ USER=null; saveUser(); refreshAccount(); }
-  }
+  function openAccount(){ if(window.confirm('Signed in as '+(USER.label||'student')+'.\n\nSign out?')){ USER=null; saveUser(); refreshAccount(); } }
 
   // ===== missing-work hold dialog =====
   function openHold(){

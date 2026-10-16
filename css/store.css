@@ -79,6 +79,28 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .dc-day,.dc-num{font-family:var(--font-head);font-weight:700;font-size:2rem;line-height:1;color:#fff;margin-top:auto;padding:5px 0 11px;}
 .datebar-note{font-size:.74rem;color:var(--gray);margin-left:auto;max-width:300px;line-height:1.35;}
 
+/* ---- date/time workflow card values (Checkout Day / Pickup Time / Return Day / Return Time / Days) ---- */
+.dc-val{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:1px;margin-top:auto;padding:5px 4px 10px;min-height:46px;}
+.dv-top{font-size:.56rem;letter-spacing:.05em;text-transform:uppercase;color:var(--teal-bright);line-height:1.15;text-align:center;}
+.dv-big{font-family:var(--font-head);font-weight:700;font-size:1.18rem;color:#fff;line-height:1.05;text-align:center;}
+.dv-days{font-size:1.9rem;padding-top:3px;}
+.dv-sel{font-family:var(--font-head);font-weight:700;font-size:.9rem;color:var(--gray);text-transform:uppercase;letter-spacing:.04em;padding:10px 0;}
+.datecard.step{position:relative;}
+.datecard.todo{border-color:var(--teal-bright);} .datecard.todo .dv-sel{color:var(--teal-bright);}
+.datecard.todo::after{content:"";position:absolute;inset:0;border:1px solid var(--teal-bright);pointer-events:none;animation:cardtodo 1.5s ease-in-out infinite;}
+@keyframes cardtodo{0%,100%{opacity:.25;}50%{opacity:1;}}
+
+/* ---- time option buttons (pickup / return picker) ---- */
+.time-opts{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+.time-opt{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(0,0,0,.3);border:1px solid var(--surface-bd);color:#fff;padding:12px 14px;text-align:left;}
+.time-opt:hover{border-color:var(--teal-bright);background:rgba(25,211,197,.08);}
+.time-opt b{font-family:var(--font-head);font-weight:700;letter-spacing:.02em;text-transform:uppercase;font-size:.98rem;}
+.time-opt span{color:var(--teal-bright);font-size:.92rem;font-weight:600;}
+
+/* ---- datebar attention flash ---- */
+.datebar.flash{animation:dbflash .8s ease;}
+@keyframes dbflash{0%,100%{background:var(--teal-wash);}30%{background:rgba(25,211,197,.22);}}
+
 /* ---- buttons ---- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--font-head);font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:.9rem;padding:13px 24px;border:2px solid transparent;color:#021414;background:var(--teal);transition:filter .15s,background .15s;}
 .btn:hover{filter:brightness(1.08);} .btn.ghost{background:transparent;border-color:#fff;color:#fff;} .btn.ghost:hover{background:rgba(255,255,255,.08);filter:none;}
@@ -166,6 +188,10 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
 .cart-btn.pulse{animation:bagpulse .32s ease;}
 @keyframes bagpulse{0%{transform:scale(1);}45%{transform:scale(1.09);}100%{transform:scale(1);}}
 
+/* ---- toast ---- */
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#0e1414;border:1px solid var(--teal-bright);color:#fff;font-size:.9rem;padding:12px 18px;box-shadow:var(--glow);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:300;max-width:90vw;text-align:center;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
 /* ---- responsive ---- */
 @media (max-width:720px){
   .store-logo{width:42px;height:42px;} .store-brand b{font-size:1rem;} .store-brand span{display:none;}
@@ -178,9 +204,9 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
   .util-l,.util-r{font-size:.68rem;}
   .catn{padding:10px 14px;font-size:.72rem;}
   .datebar-note{display:none;} .datebar-lead{font-size:.85rem;flex-basis:100%;}
-  /* date cards share the row as equal thirds so they never overflow narrow screens */
-  .datecards{flex:1 1 100%;gap:7px;}
-  .datecard{flex:1 1 0;min-width:0;}
-  .dc-day,.dc-num{font-size:1.55rem;}
+  /* five date/time cards wrap 3-per-row on phones (never a cramped single row) */
+  .datecards{flex:1 1 100%;gap:6px;flex-wrap:wrap;}
+  .datecard{flex:1 1 29%;min-width:0;}
+  .dv-big{font-size:1rem;} .dv-days{font-size:1.5rem;} .dv-top{font-size:.52rem;}
   .prod-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
 }
