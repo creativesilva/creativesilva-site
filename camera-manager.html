@@ -193,6 +193,13 @@
   @media (prefers-reduced-motion:reduce){ .tb-reconcile.flash{animation:none;box-shadow:0 0 0 2px rgba(245,179,1,.3);} }
   /* Double-booked flag inline on a board line. */
   .til-dup{margin-left:7px;font-family:var(--font);font-weight:700;letter-spacing:.06em;font-size:.56rem;color:#fff;background:var(--red);padding:2px 5px;vertical-align:middle;}
+  /* "i" help button on the board header + the guide popup sections */
+  .tb-help{flex:0 0 auto;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;background:rgba(0,184,184,.14);border:1px solid var(--teal);color:var(--teal-lt);font-family:var(--font);font-weight:700;font-style:italic;font-size:.82rem;cursor:pointer;line-height:1;}
+  .tb-help:hover{background:var(--teal);color:#04110f;}
+  .help-body{display:flex;flex-direction:column;gap:14px;}
+  .help-sec{border-left:3px solid var(--teal);padding-left:11px;}
+  .help-h{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.74rem;color:#8ff7f7;margin-bottom:3px;}
+  .help-t{font-size:.86rem;color:var(--muted);line-height:1.5;}
 
   .h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:24px 0 12px;padding-left:9px;border-left:3px solid var(--teal);display:flex;align-items:center;gap:10px;}
   .h .hcount{color:var(--faint);font-weight:600;letter-spacing:.04em;}
@@ -1123,6 +1130,8 @@
   </div>
 </div>
 
+<!-- Bell schedule (same source as the rest of the system): lets the end-of-day reconcile nudge fire at the real last bell. -->
+<script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 <script src="/js/silva-nav.js?v=standalone1"></script>
 <script>
 (function(){
@@ -1446,7 +1455,18 @@
     (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment'||cams.indexOf(c.camera)<0) return; if(statusOf(c)==='out') outSet[c.camera]=1; });
     (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment'||cams.indexOf(c.camera)<0) return; if(statusOf(c)==='reserved' && c.out && c.out<=today && !outSet[c.camera]) resvSet[c.camera]=1; });
     var out=Object.keys(outSet).length; return {total:cams.length, out:out, here:cams.length-out, resv:Object.keys(resvSet).length}; }
-  function isAfterSchool(){ var d=new Date(), dow=d.getDay(); if(dow===0||dow===6) return false; return (d.getHours()*60+d.getMinutes())>=(14*60+30); }   // weekday, after 2:30pm (nudge window)
+  // End-of-day = after the LAST bell. Uses the real schedule when it loaded (so it fires at the true last
+  // period, and never on a non-school day); falls back to "weekday after 2:30pm" only if the script is unavailable.
+  function isAfterSchool(){ var d=new Date(), dow=d.getDay(); if(dow===0||dow===6) return false;
+    var nowMin=d.getHours()*60+d.getMinutes();
+    if(typeof getScheduleBlocks==='function'){
+      try{ var blocks=getScheduleBlocks(todayISO());
+        if(!blocks||!blocks.length) return false;                          // no school today -> no nudge
+        var endMin=0; blocks.forEach(function(b){ if(b&&b.e){ var p=String(b.e).split(':'); var m=(+p[0])*60+(+p[1]); if(m>endMin) endMin=m; } });
+        if(endMin) return nowMin>=endMin;
+      }catch(e){}
+    }
+    return nowMin>=(14*60+30); }
   function cartTallyHtml(){ var t=cartTally();
     return '<div class="tb-tally"><span class="tt-k">Cameras</span><span class="tt-v out">'+t.out+'</span> handed out <span class="tt-sep">&middot;</span> <span class="tt-v here">'+t.here+'</span> still here'+
       (t.resv?(' <span class="tt-sep">&middot;</span> <span class="tt-v resv">'+t.resv+'</span> to hand out'):'')+'</div>'; }
@@ -1496,11 +1516,12 @@
       return '<div class="tb-col"><div class="tb-colh '+cls+'">'+label+' <span class="tb-cn">'+total+'</span>'+selBtn+'</div>'+search+'<div class="tb-colbody">'+body+'</div>'+bulk+'</div>';
     }
     el.className='todayboard'; el.style.display='';
-    el.innerHTML='<div class="tb-head"><span class="tb-title">Reservations</span>'+stepper+'</div>'+tbLegend()+
+    el.innerHTML='<div class="tb-head"><span class="tb-title">Reservations</span><button type="button" class="tb-help" data-tbhelp="1" title="How this board works" aria-label="How this board works">i</button>'+stepper+'</div>'+tbLegend()+
       (isT?cartTallyHtml():'')+(isT?reconcileBannerHtml(outItemCount):'')+
       overdueAccHtml(odp)+
       '<div class="tb-cols">'+col('out','Outgoing',out,'out')+col('in','Incoming',inc,'in')+'</div>';
     var odAcc=el.querySelector('.od-acc'); if(odAcc) odAcc.addEventListener('toggle',function(){ _odOpen=odAcc.open; });
+    var hb=el.querySelector('[data-tbhelp]'); if(hb) hb.onclick=openBoardHelp;
     el.querySelectorAll('[data-odstock]').forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-odstock'); var c=findRec(id);
       silvaConfirm('Return '+esc(((c&&c.kind!=='equipment')?c.camera:gearLabel(c&&c.item))||'this item')+' to stock? This cancels '+esc(nameOf(c||{}))+'’s reservation so you can check it out to someone else.', {okLabel:'Return to stock',cancelLabel:'Keep'})
         .then(function(ok){ if(ok){ _lastTBSig=null; del(id); } }); }; });
@@ -1817,6 +1838,25 @@
     else { var t=(gearUnit(it.item)||{}).type; free=gearPoolIds().filter(function(u){ var gu=gearUnit(u); return gu && gu.type===t && u!==it.item && !(assetOf(u).oos)
         && !unitBusyForSpan(function(c){return c.kind==='equipment'&&c.item===u;}, out, due, id); }); }
     openSwapPicker(it, isCam, free);
+  }
+  // The one "i" on the board: a short guide to the new workflows (so Garcia and Mankin can learn them
+  // without any how-to text cluttering the board Chris uses all day).
+  function openBoardHelp(){
+    var secs=[
+      ['Board','Each item is its own line: the big kit or unit number, then the student. A student’s items share a spine and travel together. Tap any line to open that student’s reservation card.'],
+      ['Find fast','Type in a column’s search (camera, kit, tripod, flash, lens) and that type floats to the top in number order. Clear it to go back to the grouped view.'],
+      ['The card','Picked up marks one item. Pick up all hands over the whole kit in one tap. Done finishes the student and cancels anything they did not take. Swap moves the reservation to a free unit (Cam 03 to Cam 04, flash 03 to 04); only free units show.'],
+      ['Select many','Tap Select on a column for a checkbox on every line, then Select all and Picked up, Mark returned, or Cancel the chosen ones all at once.'],
+      ['Overdue','Anything reserved for a past day that was never collected drops into the red list. Text the student, or Return it to stock to free the unit for someone else.'],
+      ['Reconcile','A red DUP means that unit is on two reservations at once. The tally shows how many cameras are handed out vs still here, and the gold banner reminds you to clear everything before you leave so nothing rolls into tomorrow.']
+    ];
+    var body=secs.map(function(s){ return '<div class="help-sec"><div class="help-h">'+s[0]+'</div><div class="help-t">'+s[1]+'</div></div>'; }).join('');
+    var ov=document.createElement('div'); ov.className='modal open'; ov.id='helpmodal';
+    ov.innerHTML='<div class="mpanel"><div class="mhead"><span class="mtitle">How this board works</span><button class="mx" aria-label="Close">&times;</button></div><div class="mbody help-body">'+body+'</div></div>';
+    document.body.appendChild(ov);
+    function close(){ try{ document.body.removeChild(ov); }catch(e){} }
+    ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+    ov.querySelector('.mx').onclick=close;
   }
   function openSwapPicker(it, isCam, free){
     var cur=isCam?it.camera:gearLabel(it.item);
