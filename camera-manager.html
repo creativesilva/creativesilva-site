@@ -112,6 +112,11 @@
   .tb-line1{display:flex;flex-wrap:wrap;gap:5px;} .tb-line2{display:flex;align-items:baseline;flex-wrap:wrap;gap:3px 8px;}
   .tb-who{font-family:var(--font);font-weight:700;font-size:.9rem;color:#fff;}
   .tb-meta{font-size:.78rem;color:var(--muted);}
+  /* Go-out date (Outgoing col) / due-back date (Incoming col), color-matched to the column header. */
+  .tb-date{display:inline-flex;align-items:baseline;gap:5px;white-space:nowrap;}
+  .tb-date i{font-style:normal;font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);}
+  .tb-date b{font-size:.8rem;font-weight:700;}
+  .tb-date.out b{color:#ffd889;} .tb-date.in b{color:#8ff7f7;}
   .cartchip{font-family:var(--font);font-weight:700;font-size:.68rem;letter-spacing:.03em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--line-soft);background:rgba(0,0,0,.3);color:#fff;cursor:pointer;}
   .cartchip.st-reserved{border-color:var(--gold);color:#ffd889;} .cartchip.st-out{border-color:var(--orange);color:#ffb28a;} .cartchip.st-overdue{border-color:var(--red);color:#ff9a8a;animation:cardFlash 1.5s ease-in-out infinite;} .cartchip.st-returned{border-color:var(--ok);color:#8ff0b0;}
   .tb-actwrap{flex:0 0 auto;display:flex;align-items:center;}
@@ -1192,6 +1197,7 @@
   function effLastC(c){ var st=statusOf(c); if(st==='returned') return null; var start=c.out; if(!start) return null; var last=c.due||start; if(last<start) last=start; if(st==='out'&&todayISO()>last) last=todayISO(); return last; }
   function availCountOnDay(iso){ var busy={}; (DATA.checkouts||[]).forEach(function(c){ var last=effLastC(c); if(last&&c.out&&iso>=c.out&&iso<=last) busy[c.camera]=1; }); return viewCams().filter(function(cam){ return !busy[cam] && !isOOS(cam) && !isNoCard(cam); }).length; }
   function fmtMDY(iso){ var p=String(iso).split('-'); return (+p[1])+'/'+(+p[2])+'/'+p[0]; }
+  function fmtDoWMD(iso){ if(!iso) return ''; var p=String(iso).split('-'); return dowShort(iso)+' '+(+p[1])+'/'+(+p[2]); }   // "Mon 10/20" (no year, compact)
   function dowShort(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]; }
   function updateSummary(){
     var an=document.getElementById('availn'); if(an) an.textContent=availCountOnDay(SELDAY);
@@ -1295,12 +1301,15 @@
     // Line 1 = item + number chips (de-duped so a unit never shows twice); Line 2 = student + period.
     var seen={}, chips=items.filter(function(it){ var k=it.kind==='equipment'?('g:'+it.item):('c:'+it.camera); if(seen[k]) return false; seen[k]=1; return true; });
     var meta=[(c.period?'Per '+esc(c.period):''),(c.course?esc(c.course):'')].filter(Boolean).join(' &middot; ');
+    // Outgoing col shows when it goes out (c.out); Incoming col shows when it is due back (c.due).
+    var dISO=(mode==='in')?(c.due||c.out||''):(c.out||''), dLbl=(mode==='in')?'Due':'Out';
+    var dHtml=dISO?('<span class="tb-date '+(mode==='in'?'in':'out')+'"><i>'+dLbl+'</i><b>'+esc(fmtDoWMD(dISO))+'</b></span>'):'';
     var act = proj ? '' : (mode==='in'      // future days are a read-only forecast: no action buttons
       ? '<button type="button" class="tb-act tb-in" data-tbin="'+esc(c.id)+'">Check in</button>'
       : '<button type="button" class="tb-act tb-out" data-tbout="'+esc(c.id)+'">Check out</button>');
     return '<div class="tb-row rr-'+st+'"><div class="tb-main">'+
       '<div class="tb-line1">'+chips.map(function(it){ return cartChip(it, proj?'out':undefined); }).join('')+'</div>'+
-      '<div class="tb-line2"><span class="tb-who">'+studentLink(c)+'</span>'+(meta?('<span class="tb-meta">'+meta+'</span>'):'')+'</div>'+
+      '<div class="tb-line2"><span class="tb-who">'+studentLink(c)+'</span>'+(meta?('<span class="tb-meta">'+meta+'</span>'):'')+dHtml+'</div>'+
       '</div>'+(act?('<div class="tb-actwrap">'+act+'</div>'):'')+'</div>'; }
   function tbLegend(){ return '<div class="tb-legend">'+
     '<span><i class="lg st-ok"></i>In storage</span><span><i class="lg st-reserved"></i>Reserved</span>'+
