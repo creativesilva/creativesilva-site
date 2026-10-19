@@ -150,6 +150,20 @@
   .til-date i{font-style:normal;font-size:.56rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);}
   .til-date.out{color:#ffd889;} .til-date.in{color:#8ff7f7;}
   .til-chev{flex:0 0 auto;color:var(--faint);font-size:1.1rem;line-height:1;}
+  /* multi-select mode: a Select toggle in the header, checkboxes on lines, a bulk action bar */
+  .tb-selbtn{margin-left:auto;background:rgba(0,184,184,.14);border:1px solid var(--line-soft);color:#cdeff0;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.6rem;padding:4px 10px;cursor:pointer;}
+  .tb-selbtn:hover{border-color:#00b8b8;color:#fff;}
+  .til-selmode{cursor:pointer;}
+  .til-chk{flex:0 0 auto;width:18px;height:18px;border:1.5px solid var(--line);background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;}
+  .til-selmode.on{background:rgba(0,184,184,.1);border-color:#00b8b8;}
+  .til-selmode.on .til-chk{background:#00b8b8;border-color:#00b8b8;}
+  .til-selmode.on .til-chk::after{content:"\2713";color:#04110f;font-size:.8rem;font-weight:700;}
+  .tb-bulkbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:9px 8px;border-top:1px solid var(--line-soft);background:rgba(0,0,0,.28);}
+  .tb-selall{background:transparent;border:1px solid var(--teal);color:var(--teal-lt);font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.62rem;padding:6px 10px;cursor:pointer;}
+  .tb-selcount{font-size:.74rem;color:var(--muted);margin-right:auto;}
+  .tb-bulk-act{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.62rem;padding:7px 11px;border:1px solid transparent;cursor:pointer;color:#04110f;}
+  .tb-bulk-act.out{background:#00b8b8;} .tb-bulk-act.in{background:var(--gold);} .tb-bulk-act.danger{background:transparent;border-color:var(--red);color:#ff9a8a;}
+  .tb-bulk-act.danger:hover{background:rgba(224,64,58,.14);}
 
   .h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:24px 0 12px;padding-left:9px;border-left:3px solid var(--teal);display:flex;align-items:center;gap:10px;}
   .h .hcount{color:var(--faint);font-weight:600;letter-spacing:.04em;}
@@ -1339,6 +1353,8 @@
   // ---- per-item line board: each piece its own line (kit number big, student second), grouped by
   //      bundle so one student's items travel together; a per-column search floats a type to the top. ----
   var TBQ={out:'',in:''};                               // per-column search text
+  var TBSEL={out:false,in:false};                       // multi-select mode per column
+  var TBSELSET={out:{},in:{}};                           // {itemId:true} selected per column
   // The items to show in a column: today = reserved (to hand out) / out (to take back); a future day = projected.
   function lineItemsFor(c, mode, isT){
     var items=resvItems(c).filter(function(it){ return statusOf(it)!=='returned'; });
@@ -1359,13 +1375,15 @@
     return hay.some(function(h){ return h.indexOf(q)>=0; }); }
   // One tappable item line; the whole line opens that student's reservation card. showDate on the bundle's first line only.
   function itemLine(c, it, mode, showDate){
+    var key=(mode==='in')?'in':'out';
     var dISO=(mode==='in')?(c.due||c.out||''):(c.out||''), dLbl=(mode==='in')?'Due':'Out';
-    var date=showDate&&dISO?('<span class="til-date '+(mode==='in'?'in':'out')+'"><i>'+dLbl+'</i>'+esc(fmtDoWMD(dISO))+'</span>'):'';
-    return '<button type="button" class="til" data-resvopen="'+esc(c.id)+'">'+
-      '<span class="til-dot '+itemState(it)+'"></span>'+
-      '<span class="til-big">'+esc(itemBig(it)).toUpperCase()+'</span>'+
-      '<span class="til-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span>'+
-      date+'<span class="til-chev">&#8250;</span></button>'; }
+    var date=showDate&&dISO?('<span class="til-date '+key+'"><i>'+dLbl+'</i>'+esc(fmtDoWMD(dISO))+'</span>'):'';
+    var dot='<span class="til-dot '+itemState(it)+'"></span>';
+    var mid='<span class="til-big">'+esc(itemBig(it)).toUpperCase()+'</span>'+
+      '<span class="til-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span>';
+    if(TBSEL[key]){ var on=!!TBSELSET[key][it.id];                 // select mode: tap toggles the checkbox, not the card
+      return '<div class="til til-selmode'+(on?' on':'')+'" data-selid="'+esc(it.id)+'" data-selcol="'+key+'"><span class="til-chk"></span>'+dot+mid+date+'</div>'; }
+    return '<button type="button" class="til" data-resvopen="'+esc(c.id)+'">'+dot+mid+date+'<span class="til-chev">&#8250;</span></button>'; }
   function tbLegend(){ return '<div class="tb-legend">'+
     '<span><i class="lg st-ok"></i>In storage</span><span><i class="lg st-reserved"></i>Reserved</span>'+
     '<span><i class="lg st-out"></i>Checked out</span><span><i class="lg st-overdue"></i>Overdue</span>'+
@@ -1375,14 +1393,14 @@
     var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), inc=incomingFor(SELDAY);
     // Scroll-reset guard: the 7s poll re-renders; skip the rewrite when nothing changed so an open
     // column keeps its scroll position. Actions + day-step null _lastTBSig to force a redraw.
-    var sig=SELDAY+'|'+TBQ.out+'|'+TBQ['in']+'|'+out.map(function(c){return c.id+':'+resvStatusGroup(c);}).join(',')+'|'+inc.map(function(c){return c.id+':'+resvStatusGroup(c);}).join(',');
+    var sig=SELDAY+'|'+TBQ.out+'|'+TBQ['in']+'|'+(TBSEL.out?'S':'')+(TBSEL['in']?'S':'')+'|'+Object.keys(TBSELSET.out).length+'-'+Object.keys(TBSELSET['in']).length+'|'+out.map(function(c){return c.id+':'+resvStatusGroup(c)+':'+resvItems(c).map(function(x){return (x.camera||x.item);}).join('.');}).join(',')+'|'+inc.map(function(c){return c.id+':'+resvStatusGroup(c)+':'+resvItems(c).map(function(x){return (x.camera||x.item);}).join('.');}).join(',');
     if(sig===_lastTBSig && el.innerHTML) return; _lastTBSig=sig;
     var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY));
     var stepper='<div class="tb-step"><button type="button" class="tb-nav" data-tbday="-1" title="Previous day">&#8249;</button>'+
       '<span class="tb-day">'+esc(dayL)+'</span><button type="button" class="tb-nav" data-tbday="1" title="Next day">&#8250;</button>'+
       (isT?'':'<button type="button" class="tb-today" data-tbtoday="1">Today</button><span class="tb-proj">Projected &middot; assumes on-time returns</span>')+'</div>';
     function col(cls,label,resvs,mode){
-      var key=(mode==='in')?'in':'out', q=TBQ[key];
+      var key=(mode==='in')?'in':'out', q=TBQ[key], selMode=TBSEL[key];
       var groups=[]; resvs.forEach(function(c){ var its=lineItemsFor(c,mode,isT); if(its.length) groups.push({c:c,items:its}); });
       var total=groups.reduce(function(n,g){ return n+g.items.length; },0), body;
       if(q.trim()){                                            // type search: flat list, floated by type/number
@@ -1397,7 +1415,16 @@
       }
       var search='<div class="tb-search"><input type="text" class="tb-sin" data-tbsearch="'+key+'" placeholder="Find camera, tripod, flash&hellip;" value="'+esc(q)+'" autocomplete="off" autocapitalize="off" spellcheck="false" />'+
         (q?'<button type="button" class="tb-sx" data-tbclear="'+key+'" title="Clear">&times;</button>':'')+'</div>';
-      return '<div class="tb-col"><div class="tb-colh '+cls+'">'+label+' <span class="tb-cn">'+total+'</span></div>'+search+'<div class="tb-colbody">'+body+'</div></div>';
+      var selBtn = total ? '<button type="button" class="tb-selbtn" data-tbselect="'+key+'">'+(selMode?'Done':'Select')+'</button>' : '';
+      var bulk='';
+      if(selMode){
+        var n=Object.keys(TBSELSET[key]).length;
+        var acts = n ? ((mode==='in')
+          ? '<button type="button" class="tb-bulk-act in" data-bulk="return" data-col="'+key+'">Mark returned ('+n+')</button>'
+          : '<button type="button" class="tb-bulk-act out" data-bulk="pick" data-col="'+key+'">Picked up ('+n+')</button><button type="button" class="tb-bulk-act danger" data-bulk="cancel" data-col="'+key+'">Cancel ('+n+')</button>') : '';
+        bulk='<div class="tb-bulkbar"><button type="button" class="tb-selall" data-tbselall="'+key+'">'+((n>=total&&total>0)?'Clear':'Select all')+'</button><span class="tb-selcount">'+n+' selected</span>'+acts+'</div>';
+      }
+      return '<div class="tb-col"><div class="tb-colh '+cls+'">'+label+' <span class="tb-cn">'+total+'</span>'+selBtn+'</div>'+search+'<div class="tb-colbody">'+body+'</div>'+bulk+'</div>';
     }
     el.className='todayboard'; el.style.display='';
     el.innerHTML='<div class="tb-head"><span class="tb-title">Reservations</span>'+stepper+'</div>'+tbLegend()+
@@ -1405,6 +1432,10 @@
     el.querySelectorAll('[data-resvopen]').forEach(function(b){ b.onclick=function(){ openReservation(b.getAttribute('data-resvopen')); }; });
     el.querySelectorAll('[data-tbsearch]').forEach(function(inp){ inp.oninput=function(){ var k=inp.getAttribute('data-tbsearch'); TBQ[k]=inp.value; _tbFocus={col:k,pos:inp.selectionStart}; _lastTBSig=null; renderTodayBoard(); }; });
     el.querySelectorAll('[data-tbclear]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-tbclear'); TBQ[k]=''; _tbFocus={col:k,pos:0}; _lastTBSig=null; renderTodayBoard(); }; });
+    el.querySelectorAll('[data-tbselect]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-tbselect'); TBSEL[k]=!TBSEL[k]; if(!TBSEL[k]) TBSELSET[k]={}; _lastTBSig=null; renderTodayBoard(); }; });
+    el.querySelectorAll('[data-selid]').forEach(function(d){ d.onclick=function(){ var k=d.getAttribute('data-selcol'), id=d.getAttribute('data-selid'); if(TBSELSET[k][id]) delete TBSELSET[k][id]; else TBSELSET[k][id]=true; _lastTBSig=null; renderTodayBoard(); }; });
+    el.querySelectorAll('[data-tbselall]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-tbselall'); var ids=[].map.call(el.querySelectorAll('[data-selid][data-selcol="'+k+'"]'),function(d){return d.getAttribute('data-selid');}); var allOn=ids.length&&ids.every(function(id){return TBSELSET[k][id];}); TBSELSET[k]={}; if(!allOn) ids.forEach(function(id){ TBSELSET[k][id]=true; }); _lastTBSig=null; renderTodayBoard(); }; });
+    el.querySelectorAll('[data-bulk]').forEach(function(b){ b.onclick=function(){ bulkAction(b.getAttribute('data-bulk'), b.getAttribute('data-col')); }; });
     el.querySelectorAll('[data-tbday]').forEach(function(b){ b.onclick=function(){ _lastTBSig=null; stepDay(parseInt(b.getAttribute('data-tbday'),10)); }; });
     el.querySelectorAll('[data-tbtoday]').forEach(function(b){ b.onclick=function(){ _lastTBSig=null; SELDAY=todayISO(); renderTodayBoard(); updateSummary(); }; });
     if(_tbFocus){ var fi=el.querySelector('[data-tbsearch="'+_tbFocus.col+'"]'); if(fi){ try{ fi.focus(); fi.setSelectionRange(_tbFocus.pos,_tbFocus.pos); }catch(e){} } _tbFocus=null; }
@@ -1734,6 +1765,18 @@
       .then(function(){ _lastTBSig=null; return loadBoard(); })   // a swap keeps id+status, so force the board to redraw
       .then(function(){ if(resvId) renderResvModal(); silvaToast('Swapped to '+esc((isCam?to:gearLabel(to)).toUpperCase())+'.'); })
       .catch(function(){ silvaToast('Could not swap. Try again.'); });
+  }
+  // ---- Multi-select bulk actions on a board column (mark the chosen items picked up / returned / cancelled). ----
+  function bulkAction(action, key){
+    var ids=Object.keys(TBSELSET[key]||{}); if(!ids.length) return;
+    function finish(verb){ TBSELSET[key]={}; _lastTBSig=null; return loadBoard().then(function(){ silvaToast(verb+' '+ids.length+' item'+(ids.length>1?'s':'')+'.'); }); }
+    function status(st,verb){ Promise.all(ids.map(function(id){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:st})}); }))
+      .then(function(){ return finish(verb); }).catch(function(){ silvaToast('Some did not update. Try again.'); }); }
+    if(action==='pick') status('out','Picked up');
+    else if(action==='return') status('returned','Checked in');
+    else if(action==='cancel'){ silvaConfirm('Cancel '+ids.length+' selected item'+(ids.length>1?'s':'')+'? They are removed and no longer linked to anyone. This cannot be undone.', {okLabel:'Cancel '+ids.length, cancelLabel:'Keep'}).then(function(ok){ if(!ok) return;
+      Promise.all(ids.map(function(id){ return camAPI('/api/camera/delete',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id})}); }))
+        .then(function(){ return finish('Cancelled'); }).catch(function(){ silvaToast('Some did not cancel. Try again.'); }); }); }
   }
 
   function camAPI(path, opts){
