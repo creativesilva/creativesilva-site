@@ -229,6 +229,15 @@
   .resv-foot{display:flex;flex-direction:column;gap:8px;}
   .go.resv-see{background:transparent;color:var(--teal-lt);border:1px solid var(--teal);}
   .go.resv-see:hover{background:rgba(0,184,184,.1);color:var(--teal-lt);}
+  /* Done cancels anything not picked up: gold-accented so it reads as a finish/wipe, not a plain action. */
+  .go.resv-done-btn{background:transparent;color:#ffd889;border:1px solid var(--gold);}
+  .go.resv-done-btn:hover{background:rgba(245,179,1,.12);}
+  /* On-the-fly Swap picker (free units of the same type only). */
+  .swap-sub{font-size:.82rem;color:var(--muted);line-height:1.45;margin-bottom:12px;}
+  .swap-opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;}
+  .swap-opt{font-family:var(--font);font-weight:700;letter-spacing:.03em;font-size:.9rem;color:#eafeff;background:rgba(0,184,184,.12);border:1px solid var(--line-soft);padding:12px 8px;cursor:pointer;}
+  .swap-opt:hover{background:rgba(0,184,184,.24);border-color:#00b8b8;}
+  .swap-none{font-size:.85rem;color:var(--muted);line-height:1.5;padding:4px 0 2px;}
   /* ── Camera board = curriculum-catalog course-card look. One "Cameras" card (teal camera-icon
      title box, blurred strips) opens to horizontal section strips; each strip opens to its tiles. ── */
   /* Teacher view toggle (Silva / Garcia / Mankin): angular segmented control, teal active. */
@@ -1487,35 +1496,38 @@
       var label=isCam?('Camera kit · '+nm):nm;
       var chip='<span class="resv-chip '+s+'">'+({reserved:'Reserved',out:'Checked out',returned:'Returned'}[s]||s)+'</span>';
       var act='';
-      if(s==='reserved'){ act='<button type="button" class="btn sm" data-resvpick="'+esc(it.id)+'">Mark picked up</button>'; }
+      if(s==='reserved'){ act='<button type="button" class="btn sm" data-resvpick="'+esc(it.id)+'">Picked up</button>'+
+        '<button type="button" class="btn sm ghost" data-resvswap="'+esc(it.id)+'">Swap</button>'; }
       else if(s==='out'){ act=isCam
         ? '<button type="button" class="btn sm warn" data-resvcam="'+esc(it.id)+'">Check in kit</button>'
         : '<button type="button" class="btn sm warn" data-resvret="'+esc(it.id)+'">Returned</button><button type="button" class="btn sm danger" data-resvmiss="'+esc(it.id)+'">Missing</button>'; }
       else { act='<span class="resv-done">Returned ✓</span>'; }
       return '<div class="resv-item ri-'+s+'"><span class="resv-ilabel">'+label+'</span>'+chip+'<span class="resv-iact">'+act+'</span></div>';
     }).join('');
-    var allRet=rc.done===rc.total, anyOut=items.some(function(x){return statusOf(x)==='out';}), anyReserved=items.some(function(x){return statusOf(x)==='reserved';});
+    var allRet=rc.done===rc.total, anyOut=items.some(function(x){return statusOf(x)==='out';});
+    var resvLeft=items.filter(function(x){return statusOf(x)==='reserved';}).length, anyReserved=resvLeft>0;
     var foot='<div class="resv-foot">';
     if(allRet){ foot+='<div class="resv-allback">All items are back.</div>'; }
     else {
-      // Only offer the bulk buttons when the reservation has more than the one camera kit (i.e. it
-      // bundles add-on equipment). A lone kit needs only its single per-item action, not two buttons.
-      var multi=items.length>1;
-      if(anyReserved && multi) foot+='<button type="button" class="go" id="resvOutAll">Check out everything</button>';
-      if(anyOut && multi) foot+='<button type="button" class="go" id="resvAll">Check in everything</button>';
+      if(anyReserved && resvLeft>1) foot+='<button type="button" class="go" id="resvPickAll">Pick up all ('+resvLeft+')</button>';
+      // Done: finish this student. Anything still reserved (not picked up) is cancelled so a no-show never stays linked to them.
+      if(anyReserved) foot+='<button type="button" class="go resv-done-btn" id="resvDone">Done &middot; '+(items.some(function(x){return statusOf(x)!=='reserved';})?'cancel '+resvLeft+' not picked up':'no-show, cancel')+'</button>';
+      if(anyOut && items.length>1) foot+='<button type="button" class="go" id="resvAll">Check in everything</button>';
     }
     foot+='<button type="button" class="go resv-see" id="resvReceipt">Receipt</button>';
     foot+='<button type="button" class="go resv-see" id="resvSee">See reservation</button></div>';
     document.getElementById('resvBody').innerHTML=head+prog+'<div class="resv-items">'+rows+'</div>'+foot;
     var b=document.getElementById('resvBody');
     b.querySelectorAll('[data-resvpick]').forEach(function(el){ el.onclick=function(){ resvSetStatus(el.getAttribute('data-resvpick'),'out'); }; });
+    b.querySelectorAll('[data-resvswap]').forEach(function(el){ el.onclick=function(){ resvSwap(el.getAttribute('data-resvswap')); }; });
     b.querySelectorAll('[data-resvret]').forEach(function(el){ el.onclick=function(){ resvSetStatus(el.getAttribute('data-resvret'),'returned'); }; });
     b.querySelectorAll('[data-resvmiss]').forEach(function(el){ el.onclick=function(){ resvMissing(el.getAttribute('data-resvmiss')); }; });
     b.querySelectorAll('[data-resvcam]').forEach(function(el){ el.onclick=function(){ var id=el.getAttribute('data-resvcam'); closeResv(); openReturnChecklist(id); }; });
     b.querySelectorAll('[data-camdetail]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); var cam=el.getAttribute('data-camdetail'); closeResv(); openCamDetail(cam); }; });
     b.querySelectorAll('[data-geardetail]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); var gid=el.getAttribute('data-geardetail'); closeResv(); openGearDetail(gid); }; });
     var all=document.getElementById('resvAll'); if(all) all.onclick=function(){ resvCheckInAll(parent); };
-    var outAll=document.getElementById('resvOutAll'); if(outAll) outAll.onclick=function(){ resvCheckOutAll(parent); };
+    var pickAll=document.getElementById('resvPickAll'); if(pickAll) pickAll.onclick=function(){ resvPickAll(parent); };
+    var done=document.getElementById('resvDone'); if(done) done.onclick=function(){ resvDone(parent); };
     var see=document.getElementById('resvSee'); if(see) see.onclick=function(){ var pid=parent.id; closeResv(); openEditCheckout(pid); };
     var rcpt=document.getElementById('resvReceipt'); if(rcpt) rcpt.onclick=function(){ openReceipt(parent.id); };
   }
@@ -1664,6 +1676,64 @@
     if(!outs.length){ if(resvId) renderResvModal(); return; }
     Promise.all(outs.map(function(x){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:x.id,status:'returned'})}); }))
       .then(function(){ return loadBoard(); }).then(function(){ if(resvId) renderResvModal(); }).catch(function(){ if(resvId) renderResvModal(); });
+  }
+  // Pick up the whole kit in one tap, then close the card (the full-kit fast path).
+  function resvPickAll(parent){
+    var res=resvItems(parent).filter(function(x){return statusOf(x)==='reserved';});
+    if(!res.length){ closeResv(); return; }
+    Promise.all(res.map(function(x){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:x.id,status:'out'})}); }))
+      .then(function(){ return loadBoard(); }).then(function(){ closeResv(); silvaToast('Picked up '+res.length+' item'+(res.length>1?'s':'')+'.'); }).catch(function(){ silvaToast('Could not update. Try again.'); });
+  }
+  // Done: finish this student. Anything still reserved (not picked up) is cancelled so a no-show never stays linked to them.
+  function resvDone(parent){
+    var left=resvItems(parent).filter(function(x){return statusOf(x)==='reserved';});
+    if(!left.length){ closeResv(); return; }                                 // everything was taken already
+    var tookSome=resvItems(parent).some(function(x){return statusOf(x)!=='reserved';});
+    var msg=tookSome
+      ? 'Cancel '+left.length+' item'+(left.length>1?'s':'')+' the student did not pick up? They will be removed from this reservation.'
+      : 'The student picked up nothing. Cancel this whole reservation ('+left.length+' item'+(left.length>1?'s':'')+')?';
+    silvaConfirm(msg, {okLabel:'Cancel '+(tookSome?'those':'reservation'), cancelLabel:'Keep'}).then(function(ok){ if(!ok) return;
+      Promise.all(left.map(function(x){ return camAPI('/api/camera/delete',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:x.id})}); }))
+        .then(function(){ return loadBoard(); }).then(function(){ closeResv(); silvaToast('Cancelled '+left.length+' not picked up.'); }).catch(function(){ silvaToast('Could not cancel. Try again.'); });
+    });
+  }
+  // ---- On-the-fly unit swap: move a reservation to a DIFFERENT free unit of the same type at pickup. ----
+  function unitBusyForSpan(match, out, due, exceptId){   // match(c) => is this record for the unit we're testing
+    due=due||out;
+    return (DATA.checkouts||[]).some(function(c){ if(c.id===exceptId) return false; if(!match(c)) return false; if(statusOf(c)==='returned') return false;
+      var o=c.out; if(!o) return false; var d=c.due||o; if(statusOf(c)==='out'&&todayISO()>d) d=todayISO(); return o<=due && d>=out; });
+  }
+  function resvSwap(id){
+    var it=findRec(id); if(!it) return;
+    var isCam=it.kind!=='equipment', out=it.out, due=it.due||it.out, free;
+    if(isCam){ free=viewCams().filter(function(cam){ return cam!==it.camera && !isOOS(cam) && !isNoCard(cam)
+        && !unitBusyForSpan(function(c){return c.kind!=='equipment'&&c.camera===cam;}, out, due, id); }); }
+    else { var t=(gearUnit(it.item)||{}).type; free=gearPoolIds().filter(function(u){ var gu=gearUnit(u); return gu && gu.type===t && u!==it.item && !(assetOf(u).oos)
+        && !unitBusyForSpan(function(c){return c.kind==='equipment'&&c.item===u;}, out, due, id); }); }
+    openSwapPicker(it, isCam, free);
+  }
+  function openSwapPicker(it, isCam, free){
+    var cur=isCam?it.camera:gearLabel(it.item);
+    var opts=free.length
+      ? free.map(function(u){ var lbl=isCam?u:gearLabel(u); return '<button type="button" class="swap-opt" data-swapto="'+esc(u)+'">'+esc(lbl).toUpperCase()+'</button>'; }).join('')
+      : '<div class="swap-none">Nothing else of this type is free for '+esc(fmt(it.out))+'. Everything is reserved, out, or out of service.</div>';
+    var ov=document.createElement('div'); ov.className='modal open'; ov.id='swapmodal';
+    ov.innerHTML='<div class="mpanel"><div class="mhead"><span class="mtitle">Swap '+esc(cur).toUpperCase()+'</span><button class="mx" aria-label="Close">&times;</button></div>'+
+      '<div class="mbody"><div class="swap-sub">Move this reservation to a free unit. Anything reserved, out, or out of service is hidden.</div>'+
+      '<div class="swap-opts">'+opts+'</div></div></div>';
+    document.body.appendChild(ov);
+    function close(){ try{ document.body.removeChild(ov); }catch(e){} }
+    ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+    ov.querySelector('.mx').onclick=close;
+    ov.querySelectorAll('[data-swapto]').forEach(function(bt){ bt.onclick=function(){ var to=bt.getAttribute('data-swapto'); close(); doSwap(it.id, isCam, to); }; });
+  }
+  function doSwap(id, isCam, to){
+    var body=isCam?{id:id,camera:to}:{id:id,item:to};
+    camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(body)})
+      .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
+      .then(function(){ _lastTBSig=null; return loadBoard(); })   // a swap keeps id+status, so force the board to redraw
+      .then(function(){ if(resvId) renderResvModal(); silvaToast('Swapped to '+esc((isCam?to:gearLabel(to)).toUpperCase())+'.'); })
+      .catch(function(){ silvaToast('Could not swap. Try again.'); });
   }
 
   function camAPI(path, opts){
