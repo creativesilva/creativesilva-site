@@ -180,6 +180,19 @@
   .od-act.text{background:#00b8b8;color:#04110f;border:1px solid #00b8b8;}
   .od-act.stock{background:transparent;color:#ff9a8a;border:1px solid var(--red);}
   .od-act.stock:hover{background:rgba(224,64,58,.14);}
+  /* Cart tally: handed-out vs still-here, the signal for the end-of-day sweep. */
+  .tb-tally{font-size:.82rem;color:var(--muted);margin-bottom:10px;padding:8px 11px;background:rgba(0,0,0,.22);border:1px solid var(--line-soft);}
+  .tb-tally .tt-k{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.66rem;color:var(--teal-lt);margin-right:7px;}
+  .tb-tally .tt-v{font-weight:700;}.tb-tally .tt-v.out{color:#8ff7f7;}.tb-tally .tt-v.here{color:#fff;}.tb-tally .tt-v.resv{color:#ffd889;}
+  .tb-tally .tt-sep{color:var(--faint);margin:0 3px;}
+  /* End-of-day reconcile nudge: flashes late in the day while anything is unresolved. */
+  .tb-reconcile{display:flex;align-items:center;gap:9px;margin-bottom:12px;padding:10px 12px;border:1px solid var(--gold);border-left:3px solid var(--gold);background:rgba(245,179,1,.1);color:#ffe3a0;font-family:var(--font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.76rem;}
+  .tb-reconcile .rc-ic{flex:0 0 auto;font-size:1rem;}
+  .tb-reconcile.flash{animation:reconFlash 1.6s ease-in-out infinite;}
+  @keyframes reconFlash{0%,100%{box-shadow:0 0 0 0 rgba(245,179,1,0);background:rgba(245,179,1,.08);}50%{box-shadow:0 0 0 4px rgba(245,179,1,.28);background:rgba(245,179,1,.2);}}
+  @media (prefers-reduced-motion:reduce){ .tb-reconcile.flash{animation:none;box-shadow:0 0 0 2px rgba(245,179,1,.3);} }
+  /* Double-booked flag inline on a board line. */
+  .til-dup{margin-left:7px;font-family:var(--font);font-weight:700;letter-spacing:.06em;font-size:.56rem;color:#fff;background:var(--red);padding:2px 5px;vertical-align:middle;}
 
   .h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:24px 0 12px;padding-left:9px;border-left:3px solid var(--teal);display:flex;align-items:center;gap:10px;}
   .h .hcount{color:var(--faint);font-weight:600;letter-spacing:.04em;}
@@ -1395,7 +1408,8 @@
     var dISO=(mode==='in')?(c.due||c.out||''):(c.out||''), dLbl=(mode==='in')?'Due':'Out';
     var date=showDate&&dISO?('<span class="til-date '+key+'"><i>'+dLbl+'</i>'+esc(fmtDoWMD(dISO))+'</span>'):'';
     var dot='<span class="til-dot '+itemState(it)+'"></span>';
-    var mid='<span class="til-big">'+esc(itemBig(it)).toUpperCase()+'</span>'+
+    var dup=_DUP[it.id]?'<span class="til-dup" title="This unit is on more than one open reservation">DUP</span>':'';
+    var mid='<span class="til-big">'+esc(itemBig(it)).toUpperCase()+dup+'</span>'+
       '<span class="til-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span>';
     if(TBSEL[key]){ var on=!!TBSELSET[key][it.id];                 // select mode: tap toggles the checkbox, not the card
       return '<div class="til til-selmode'+(on?' on':'')+'" data-selid="'+esc(it.id)+'" data-selcol="'+key+'"><span class="til-chk"></span>'+dot+mid+date+'</div>'; }
@@ -1420,11 +1434,35 @@
           (cell?'<a class="od-act text" href="sms:'+esc(cell)+'">Text</a>':'')+
           '<button type="button" class="od-act stock" data-odstock="'+esc(c.id)+'">Return to stock</button></div>'; }).join('')+'</div></details>';
   }
+  // ----- Reconcile: duplicates (a unit on two open records), a cart tally, and an end-of-day nudge. -----
+  var _DUP={};                                           // {recordId: unitKey} for every record of a double-booked unit
+  function openDupes(){ var map={}, dup={};
+    (DATA.checkouts||[]).forEach(function(c){ if(!resvInScope(c)||statusOf(c)==='returned') return; var u=c.kind==='equipment'?('g:'+c.item):('c:'+c.camera); if(u==='c:'||u==='g:') return; (map[u]=map[u]||[]).push(c.id); });
+    Object.keys(map).forEach(function(u){ if(map[u].length>1) map[u].forEach(function(id){ dup[id]=u; }); });
+    return dup; }
+  function dupUnitCount(){ var s={}; Object.keys(_DUP).forEach(function(id){ s[_DUP[id]]=1; }); return Object.keys(s).length; }
+  // Cart tally for the selected pool: how many cameras the app thinks are handed out vs still here.
+  function cartTally(){ var cams=viewCams(), today=todayISO(), outSet={}, resvSet={};
+    (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment'||cams.indexOf(c.camera)<0) return; if(statusOf(c)==='out') outSet[c.camera]=1; });
+    (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment'||cams.indexOf(c.camera)<0) return; if(statusOf(c)==='reserved' && c.out && c.out<=today && !outSet[c.camera]) resvSet[c.camera]=1; });
+    var out=Object.keys(outSet).length; return {total:cams.length, out:out, here:cams.length-out, resv:Object.keys(resvSet).length}; }
+  function isAfterSchool(){ var d=new Date(), dow=d.getDay(); if(dow===0||dow===6) return false; return (d.getHours()*60+d.getMinutes())>=(14*60+30); }   // weekday, after 2:30pm (nudge window)
+  function cartTallyHtml(){ var t=cartTally();
+    return '<div class="tb-tally"><span class="tt-k">Cameras</span><span class="tt-v out">'+t.out+'</span> handed out <span class="tt-sep">&middot;</span> <span class="tt-v here">'+t.here+'</span> still here'+
+      (t.resv?(' <span class="tt-sep">&middot;</span> <span class="tt-v resv">'+t.resv+'</span> to hand out'):'')+'</div>'; }
+  function reconcileBannerHtml(outItemCount){ var dups=dupUnitCount(), afterSchool=isAfterSchool(), bits=[];
+    if(dups) bits.push(dups+' double-booked');
+    if(afterSchool && outItemCount) bits.push(outItemCount+' not picked up');
+    if(!bits.length) return '';
+    var flash=(afterSchool||dups)?' flash':'';
+    return '<div class="tb-reconcile'+flash+'"><span class="rc-ic">&#9888;</span><span class="rc-t">Reconcile before you leave &middot; '+bits.join(' &middot; ')+'</span></div>'; }
   function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
     var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), inc=incomingFor(SELDAY), odp=(isT?overduePickups():[]);
+    _DUP = isT ? openDupes() : {};
+    var outItemCount = out.reduce(function(n,c){ return n+lineItemsFor(c,'out',isT).length; },0);
     // Scroll-reset guard: the 7s poll re-renders; skip the rewrite when nothing changed so an open
     // column keeps its scroll position. Actions + day-step null _lastTBSig to force a redraw.
-    var sig=SELDAY+'|'+TBQ.out+'|'+TBQ['in']+'|'+(TBSEL.out?'S':'')+(TBSEL['in']?'S':'')+'|'+Object.keys(TBSELSET.out).length+'-'+Object.keys(TBSELSET['in']).length+'|od'+odp.map(function(c){return c.id;}).join('.')+'|'+out.map(function(c){return c.id+':'+resvStatusGroup(c)+':'+resvItems(c).map(function(x){return (x.camera||x.item);}).join('.');}).join(',')+'|'+inc.map(function(c){return c.id+':'+resvStatusGroup(c)+':'+resvItems(c).map(function(x){return (x.camera||x.item);}).join('.');}).join(',');
+    var sig=SELDAY+'|'+TBQ.out+'|'+TBQ['in']+'|'+(TBSEL.out?'S':'')+(TBSEL['in']?'S':'')+'|'+Object.keys(TBSELSET.out).length+'-'+Object.keys(TBSELSET['in']).length+'|od'+odp.map(function(c){return c.id;}).join('.')+'|dup'+Object.keys(_DUP).sort().join('.')+'|'+out.map(function(c){return c.id+':'+resvStatusGroup(c)+':'+resvItems(c).map(function(x){return (x.camera||x.item);}).join('.');}).join(',')+'|'+inc.map(function(c){return c.id+':'+resvStatusGroup(c)+':'+resvItems(c).map(function(x){return (x.camera||x.item);}).join('.');}).join(',');
     if(sig===_lastTBSig && el.innerHTML) return; _lastTBSig=sig;
     var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY));
     var stepper='<div class="tb-step"><button type="button" class="tb-nav" data-tbday="-1" title="Previous day">&#8249;</button>'+
@@ -1459,6 +1497,7 @@
     }
     el.className='todayboard'; el.style.display='';
     el.innerHTML='<div class="tb-head"><span class="tb-title">Reservations</span>'+stepper+'</div>'+tbLegend()+
+      (isT?cartTallyHtml():'')+(isT?reconcileBannerHtml(outItemCount):'')+
       overdueAccHtml(odp)+
       '<div class="tb-cols">'+col('out','Outgoing',out,'out')+col('in','Incoming',inc,'in')+'</div>';
     var odAcc=el.querySelector('.od-acc'); if(odAcc) odAcc.addEventListener('toggle',function(){ _odOpen=odAcc.open; });
