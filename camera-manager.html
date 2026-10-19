@@ -164,6 +164,22 @@
   .tb-bulk-act{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.62rem;padding:7px 11px;border:1px solid transparent;cursor:pointer;color:#04110f;}
   .tb-bulk-act.out{background:#00b8b8;} .tb-bulk-act.in{background:var(--gold);} .tb-bulk-act.danger{background:transparent;border-color:var(--red);color:#ff9a8a;}
   .tb-bulk-act.danger:hover{background:rgba(224,64,58,.14);}
+  /* Overdue pickups accordion (reserved, never collected): red-accented, default closed. */
+  .od-acc{border:1px solid rgba(224,64,58,.4);border-left:3px solid var(--red);background:rgba(224,64,58,.08);margin-bottom:12px;}
+  .od-sum{list-style:none;display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;font-family:var(--font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.78rem;color:#ffb0a4;}
+  .od-sum::-webkit-details-marker{display:none;}
+  .od-badge{flex:0 0 auto;min-width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:#fff;font-size:.74rem;padding:0 6px;}
+  .od-sumt{flex:1 1 auto;} .od-chev{flex:0 0 auto;transition:transform .15s;color:#ff9a8a;} .od-acc[open] .od-chev{transform:rotate(180deg);}
+  .od-body{display:flex;flex-direction:column;gap:6px;padding:0 10px 10px;}
+  .od-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:rgba(0,0,0,.26);border:1px solid var(--line-soft);padding:8px 10px;}
+  .od-dot{flex:0 0 auto;width:8px;height:8px;background:var(--red);}
+  .od-big{flex:0 0 auto;font-family:var(--font);font-weight:700;font-size:1rem;color:#fff;}
+  .od-who{flex:1 1 auto;min-width:0;font-size:.82rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .od-when{flex:0 0 auto;font-size:.72rem;color:var(--faint);}
+  .od-act{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.6rem;padding:6px 10px;cursor:pointer;text-decoration:none;}
+  .od-act.text{background:#00b8b8;color:#04110f;border:1px solid #00b8b8;}
+  .od-act.stock{background:transparent;color:#ff9a8a;border:1px solid var(--red);}
+  .od-act.stock:hover{background:rgba(224,64,58,.14);}
 
   .h{font-family:var(--font);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-lt);margin:24px 0 12px;padding-left:9px;border-left:3px solid var(--teal);display:flex;align-items:center;gap:10px;}
   .h .hcount{color:var(--faint);font-weight:600;letter-spacing:.04em;}
@@ -1389,11 +1405,26 @@
     '<span><i class="lg st-out"></i>Checked out</span><span><i class="lg st-overdue"></i>Overdue</span>'+
     '<span><i class="lg st-oos"></i>Out of service</span></div>'; }
   var _lastTBSig=null;
+  // Overdue pickups: reserved for a day that has already passed and never collected (a no-show to chase or return to stock).
+  var _odOpen=false;
+  function overduePickups(){ var today=todayISO(), r=[];
+    (DATA.checkouts||[]).forEach(function(c){ if(!resvInScope(c)) return; if(statusOf(c)!=='reserved') return; var o=c.out||''; if(o && o<today) r.push(c); });
+    return r.sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; }); }
+  function overdueAccHtml(odp){
+    if(!odp.length) return '';
+    return '<details class="od-acc"'+(_odOpen?' open':'')+'><summary class="od-sum"><span class="od-badge">'+odp.length+'</span><span class="od-sumt">Overdue pickup'+(odp.length>1?'s':'')+' &middot; reserved, never collected</span><span class="od-chev">&#9662;</span></summary>'+
+      '<div class="od-body">'+odp.map(function(c){ var isCam=c.kind!=='equipment', big=isCam?c.camera:gearLabel(c.item), cell=String(c.student_cell||'').replace(/\D/g,'');
+        return '<div class="od-row"><span class="od-dot overdue"></span><span class="od-big">'+esc(big).toUpperCase()+'</span>'+
+          '<span class="od-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span>'+
+          '<span class="od-when">reserved '+esc(fmtDoWMD(c.out))+'</span>'+
+          (cell?'<a class="od-act text" href="sms:'+esc(cell)+'">Text</a>':'')+
+          '<button type="button" class="od-act stock" data-odstock="'+esc(c.id)+'">Return to stock</button></div>'; }).join('')+'</div></details>';
+  }
   function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
-    var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), inc=incomingFor(SELDAY);
+    var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), inc=incomingFor(SELDAY), odp=(isT?overduePickups():[]);
     // Scroll-reset guard: the 7s poll re-renders; skip the rewrite when nothing changed so an open
     // column keeps its scroll position. Actions + day-step null _lastTBSig to force a redraw.
-    var sig=SELDAY+'|'+TBQ.out+'|'+TBQ['in']+'|'+(TBSEL.out?'S':'')+(TBSEL['in']?'S':'')+'|'+Object.keys(TBSELSET.out).length+'-'+Object.keys(TBSELSET['in']).length+'|'+out.map(function(c){return c.id+':'+resvStatusGroup(c)+':'+resvItems(c).map(function(x){return (x.camera||x.item);}).join('.');}).join(',')+'|'+inc.map(function(c){return c.id+':'+resvStatusGroup(c)+':'+resvItems(c).map(function(x){return (x.camera||x.item);}).join('.');}).join(',');
+    var sig=SELDAY+'|'+TBQ.out+'|'+TBQ['in']+'|'+(TBSEL.out?'S':'')+(TBSEL['in']?'S':'')+'|'+Object.keys(TBSELSET.out).length+'-'+Object.keys(TBSELSET['in']).length+'|od'+odp.map(function(c){return c.id;}).join('.')+'|'+out.map(function(c){return c.id+':'+resvStatusGroup(c)+':'+resvItems(c).map(function(x){return (x.camera||x.item);}).join('.');}).join(',')+'|'+inc.map(function(c){return c.id+':'+resvStatusGroup(c)+':'+resvItems(c).map(function(x){return (x.camera||x.item);}).join('.');}).join(',');
     if(sig===_lastTBSig && el.innerHTML) return; _lastTBSig=sig;
     var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY));
     var stepper='<div class="tb-step"><button type="button" class="tb-nav" data-tbday="-1" title="Previous day">&#8249;</button>'+
@@ -1428,7 +1459,12 @@
     }
     el.className='todayboard'; el.style.display='';
     el.innerHTML='<div class="tb-head"><span class="tb-title">Reservations</span>'+stepper+'</div>'+tbLegend()+
+      overdueAccHtml(odp)+
       '<div class="tb-cols">'+col('out','Outgoing',out,'out')+col('in','Incoming',inc,'in')+'</div>';
+    var odAcc=el.querySelector('.od-acc'); if(odAcc) odAcc.addEventListener('toggle',function(){ _odOpen=odAcc.open; });
+    el.querySelectorAll('[data-odstock]').forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-odstock'); var c=findRec(id);
+      silvaConfirm('Return '+esc(((c&&c.kind!=='equipment')?c.camera:gearLabel(c&&c.item))||'this item')+' to stock? This cancels '+esc(nameOf(c||{}))+'’s reservation so you can check it out to someone else.', {okLabel:'Return to stock',cancelLabel:'Keep'})
+        .then(function(ok){ if(ok){ _lastTBSig=null; del(id); } }); }; });
     el.querySelectorAll('[data-resvopen]').forEach(function(b){ b.onclick=function(){ openReservation(b.getAttribute('data-resvopen')); }; });
     el.querySelectorAll('[data-tbsearch]').forEach(function(inp){ inp.oninput=function(){ var k=inp.getAttribute('data-tbsearch'); TBQ[k]=inp.value; _tbFocus={col:k,pos:inp.selectionStart}; _lastTBSig=null; renderTodayBoard(); }; });
     el.querySelectorAll('[data-tbclear]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-tbclear'); TBQ[k]=''; _tbFocus={col:k,pos:0}; _lastTBSig=null; renderTodayBoard(); }; });
