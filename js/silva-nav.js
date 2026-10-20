@@ -352,6 +352,20 @@
     return a === b || a === b.replace(/^\//, '') || ('/' + a) === b;
   }
 
+  // Announcement pages use plain "Previous / Next" pager labels, never "... Module"
+  // (Chris, 2026-10-20): an announcement is not a module, so the cross-group jump to/from
+  // it should not be labeled "Module". Any page listed here gets the generic edge labels.
+  var ANNOUNCEMENTS = [
+    '/curriculum/shared/da1-field-trip-sbma.html',
+    '/curriculum/shared/photo1-field-trip-sbma.html',
+    '/curriculum/shared/photo2-field-trip-sbma.html',
+    '/curriculum/shared/digarts1-cover-decoration-winners.html'
+  ];
+  function isAnnouncement(u) {
+    for (var i = 0; i < ANNOUNCEMENTS.length; i++) { if (samePath(ANNOUNCEMENTS[i], u)) { return true; } }
+    return false;
+  }
+
   function locate() {
     var path = window.location.pathname;
     for (var i = 0; i < MODULES.length; i++) {
@@ -401,6 +415,7 @@
     var at = locate();
     if (!at) { return null; }
     var mod = MODULES[at.g];
+    var curAnn = isAnnouncement(mod[at.p]);
 
     var pager = document.createElement('nav');
     pager.className = 'silva-pager';
@@ -417,6 +432,7 @@
       prevHref = pmod[pmod.length - 1];
       prevLabel = '&#8249;&nbsp; Previous Module';
     }
+    if (curAnn && prevHref) { prevLabel = '&#8249;&nbsp; Previous'; }
     var prev = document.createElement(prevHref ? 'a' : 'span');
     prev.className = 'pg-edge pg-prev' + (prevHref ? '' : ' pg-disabled');
     if (prevHref) { prev.href = prevHref; }
@@ -453,6 +469,7 @@
     else if (inActive(at.g)) {
       if (at.g < ACTIVE_LAST) { nextHref = MODULES[at.g + 1][0]; nextLabel = 'Next Module &nbsp;&#8250;'; }
     } else if (at.g < MODULES.length - 1) { nextHref = MODULES[at.g + 1][0]; nextLabel = 'Next Module &nbsp;&#8250;'; }
+    if (curAnn && nextHref) { nextLabel = 'Next &nbsp;&#8250;'; }
     var next = document.createElement(nextHref ? 'a' : 'span');
     next.className = 'pg-edge pg-next' + (nextHref ? '' : ' pg-disabled');
     if (nextHref) { next.href = nextHref; }
