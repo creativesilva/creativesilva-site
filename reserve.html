@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=20" />
+<link rel="stylesheet" href="/css/store.css?v=21" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -238,13 +238,21 @@
   </div>
 </div>
 
+<!-- Reservation receipt (on-screen confirmation) -->
+<div class="sov" id="rcptOv" aria-hidden="true">
+  <div class="sheet rcpt" role="dialog" aria-modal="true">
+    <button type="button" class="sheet-x" data-close="rcptOv" aria-label="Close">&times;</button>
+    <div class="sheet-bd" id="rcptBody"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast" aria-live="polite"></div>
 
 <script>
 (function(){
   var API='https://command.creativesilva.com';
   var TEACHER=(new URLSearchParams(location.search).get('teacher')||'silva').toLowerCase();
-  var TEACHER_NAME={silva:'Mr. Silva',garcia:'Ms. Garcia',mankin:'Ms. Mankin'};
+  var TEACHER_NAME={silva:'Mr. Silva',garcia:'Ms. Garcia-Solorio',mankin:'Ms. Mankin'};
   function roomFor(pool){ return (pool==='mankin')?'Room 331':'Room 322'; }   // Silva + Garcia = 322, Mankin = 331
   function pad(n){ n=String(n); return n.length<2?('0'+n):n; }
   function isoOf(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
@@ -331,7 +339,7 @@
       document.getElementById('planTitle').textContent='Return time';
       document.getElementById('planSub').textContent='Due back '+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+' (the next school day). When will you return it?';
       cal.style.display='none'; opts.style.display='';
-      renderOpts(returnOptions(returnDay), function(o){ returnTime=o; renderDates(); var nm=pendingAdd; pendingAdd=null; close('planOv'); if(nm) addToBag(nm); }, 'These are the only return times. If you return late, you may lose the chance to check out cameras next time.');
+      renderOpts(returnOptions(returnDay), function(o){ returnTime=o; renderDates(); var nm=pendingAdd; pendingAdd=null; close('planOv'); if(nm){ addToBag(nm); renderBag(); open('bagOv'); } }, 'These are the only return times. If you return late, you may lose the chance to check out cameras next time.');
     }
   }
   function renderOpts(opts, pick, note){
@@ -441,7 +449,26 @@
     return null;
   }
 
-  // ----- Popular & New: 2 most-reserved items + 1 newest-on-the-menu -----
+  // The actual free unit IDs (Cam NN for cameras, unit ids for gear) for the chosen span, to assign at reserve.
+  function freeUnitsFor(it){
+    if(!CAL) return null;
+    var co=isoOf(checkout), ret=isoOf(returnDay||nextSchoolDay(checkout));
+    var cams=camsFor(it.name);
+    if(cams){
+      var busy={}; (CAL.oos||[]).concat(CAL.no_card||[]).forEach(function(cm){ if(cams.indexOf(cm)>=0) busy[cm]=1; });
+      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && overlaps(c.out,c.due,co,ret)) busy[c.camera]=1; });
+      return cams.filter(function(cm){ return !busy[cm]; });
+    }
+    var type=EQTYPE[it.name], eu=CAL.equipment_units||{};
+    if(type){
+      var units=Object.keys(eu).filter(function(u){ return eu[u] && eu[u].type===type; });
+      var eb={}; (CAL.equipment_oos||[]).forEach(function(u){ if(eu[u] && eu[u].type===type) eb[u]=1; });
+      (CAL.equipment||[]).forEach(function(c){ if(!c.returned && eu[c.item] && eu[c.item].type===type && overlaps(c.out,c.due,co,ret)) eb[c.item]=1; });
+      return units.filter(function(u){ return !eb[u]; });
+    }
+    return null;
+  }
+  // ----- Popular Rentals: most-reserved items -----
   function modelOfCam(cam){ var n=parseInt(String(cam).replace(/\D/g,''),10); if(n>=1&&n<=15) return 'Canon EOS R50'; if(n===16) return 'Canon EOS R8'; if(n>=17&&n<=18) return 'Canon EOS RP'; if(n>=19&&n<=21) return 'Canon EOS R50 V'; return null; }
   function modelOfType(t){ return {wide:'Ultra-Wide 10-18mm',zoom:'Ultra-Zoom 100-400mm',speedlite:'Speedlite EL-5',tripod:'K&F Concept Tripod',reflector:'Neewer Reflector'}[t]||null; }
   // Popular Rentals (the default/home view): the 4 most-reserved items the student can actually rent.
@@ -581,19 +608,74 @@
     rerender();
   }
   function removeFromBag(name){ var i=BAG.indexOf(name); if(i>=0){ BAG.splice(i,1); saveBag(); updateBag(); rerender(); renderBag(); } }
+  function setBagMsg(msg, err){ var n=document.getElementById('bagNote'); if(n){ n.className='sheet-msg'+(err?' err':''); n.innerHTML=msg||''; } }
   function renderBag(){
-    var w=document.getElementById('bagList'), note=document.getElementById('bagNote');
-    if(!BAG.length){ w.innerHTML='<p class="bag-empty">Your equipment bag is empty. Add gear to get started.</p>'; note.textContent=''; return; }
-    w.innerHTML=BAG.map(function(nm){ return '<div class="bag-item"><span>'+esc(nm)+'</span><button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">Remove</button></div>'; }).join('');
+    var w=document.getElementById('bagList');
+    if(!BAG.length){ w.innerHTML='<p class="bag-empty">Your equipment bag is empty. Add gear to get started.</p>'; setBagMsg(''); return; }
+    var teach=USER?(USER.teacher||TEACHER_NAME[USER.pool]||''):'', room=USER?roomFor(USER.pool):'';
+    var dates;
+    if(datesReady()){
+      dates='<div class="bag-dates">'+
+        '<div class="bag-drow"><span class="bag-dk">Pick up</span><span class="bag-dv">'+DOW[checkout.getDay()]+' '+MON[checkout.getMonth()]+' '+checkout.getDate()+' &middot; '+esc(pickup.label)+' ('+f12(pickup.s)+')</span></div>'+
+        '<div class="bag-drow"><span class="bag-dk">Return</span><span class="bag-dv">'+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+' &middot; '+esc(returnTime.label)+' ('+f12(returnTime.s)+')</span></div>'+
+        '<div class="bag-drow"><span class="bag-dk">Where</span><span class="bag-dv">Classroom pickup'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div>'+
+        '<button type="button" class="bag-editdates" id="bagEditDates">Change dates</button></div>';
+    } else { dates='<button type="button" class="btn block" id="bagSetDates">Set your checkout dates</button>'; }
+    var items='<div class="bag-items">'+BAG.map(function(nm){ var it=findItem(nm); return '<div class="bag-item">'+(it&&it.img?'<img class="bag-thumb" src="'+it.img+'" alt="">':'')+'<span class="bag-name">'+esc(nm)+'</span><button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">Remove</button></div>'; }).join('')+'</div>';
+    var action = datesReady() ? '<button type="button" class="btn block bag-reserve" id="bagReserve">Reserve this gear</button>' : '';
+    w.innerHTML=dates+items+action;
     w.querySelectorAll('[data-bx]').forEach(function(b){ b.onclick=function(){ removeFromBag(decodeURIComponent(b.getAttribute('data-bx'))); }; });
-    note.textContent='Next: confirm your reservation. (Coming soon.)';
+    var ed=document.getElementById('bagEditDates'); if(ed) ed.onclick=function(){ pendingAdd=null; openPlan(); };
+    var sd=document.getElementById('bagSetDates'); if(sd) sd.onclick=function(){ pendingAdd=null; openPlan(); };
+    var rv=document.getElementById('bagReserve'); if(rv) rv.onclick=submitReservation;
+    setBagMsg('');
+  }
+  // Reserve: assign a free unit to each bag item for the chosen span, then POST to the teacher board.
+  function submitReservation(){
+    if(!BAG.length || !datesReady()) return;
+    if(onHold()){ openHold(); return; }
+    var co=isoOf(checkout), ret=isoOf(returnDay);
+    var used={}, cameras=[], gear=[], failed=[];
+    BAG.forEach(function(nm){ var it=findItem(nm); if(!it) return;
+      var free=(freeUnitsFor(it)||[]).filter(function(u){ return !used[u]; });
+      if(!free.length){ failed.push(nm); return; }
+      used[free[0]]=1;
+      if(camsFor(nm)) cameras.push({name:nm, cam:free[0]}); else gear.push({name:nm, item:free[0]});
+    });
+    if(failed.length){ setBagMsg('No longer free for your dates: <b>'+failed.map(esc).join(', ')+'</b>. Remove it or change your dates.', true); return; }
+    var rv=document.getElementById('bagReserve'); if(rv){ rv.disabled=true; rv.textContent='Reserving…'; }
+    var posts=[];
+    if(cameras.length){
+      posts.push({ student_id:USER.id, camera:cameras[0].cam, out:co, due:ret, extras:gear.map(function(g){ return g.item; }) });
+      cameras.slice(1).forEach(function(c){ posts.push({ student_id:USER.id, camera:c.cam, out:co, due:ret }); });
+    } else { gear.forEach(function(g){ posts.push({ student_id:USER.id, kind:'equipment', item:g.item, out:co, due:ret }); }); }
+    Promise.all(posts.map(function(p){ return api('/api/camera/checkout', p); })).then(function(results){
+      var bad=null; for(var i=0;i<results.length;i++){ if(!results[i]||!results[i].ok){ bad=results[i]; break; } }
+      if(bad){ setBagMsg((bad&&bad.error)||'Could not reserve. Please try again.', true); if(rv){ rv.disabled=false; rv.textContent='Reserve this gear'; } loadCal(); return; }
+      var summary={ items:cameras.map(function(c){return c.name;}).concat(gear.map(function(g){return g.name;})), checkout:new Date(checkout), returnDay:new Date(returnDay), pickup:pickup, returnTime:returnTime };
+      BAG=[]; saveBag(); updateBag(); close('bagOv'); showReceipt(summary); loadCal(); rerender();
+    }).catch(function(){ setBagMsg('Could not reach the server. Try again.', true); if(rv){ rv.disabled=false; rv.textContent='Reserve this gear'; } });
+  }
+  function showReceipt(s){
+    var teach=USER?(USER.teacher||TEACHER_NAME[USER.pool]||''):'', room=USER?roomFor(USER.pool):'';
+    document.getElementById('rcptBody').innerHTML=
+      '<div class="rcpt-check">&#10003;</div><h2 class="rcpt-h">You&#8217;re all set!</h2>'+
+      '<p class="rcpt-sub">Your reservation is on its way to '+(teach?esc(teach):'your teacher')+'.</p>'+
+      '<div class="rcpt-card">'+
+        '<div class="rcpt-row"><span class="rcpt-k">Gear</span><span class="rcpt-v">'+s.items.map(esc).join(', ')+'</span></div>'+
+        '<div class="rcpt-row"><span class="rcpt-k">Pick up</span><span class="rcpt-v">'+DOW[s.checkout.getDay()]+' '+MON[s.checkout.getMonth()]+' '+s.checkout.getDate()+' &middot; '+esc(s.pickup.label)+' ('+f12(s.pickup.s)+')</span></div>'+
+        '<div class="rcpt-row"><span class="rcpt-k">Return</span><span class="rcpt-v">'+DOW[s.returnDay.getDay()]+' '+MON[s.returnDay.getMonth()]+' '+s.returnDay.getDate()+' &middot; '+esc(s.returnTime.label)+' ('+f12(s.returnTime.s)+')</span></div>'+
+        '<div class="rcpt-row"><span class="rcpt-k">Where</span><span class="rcpt-v">Classroom pickup'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div></div>'+
+      '<button type="button" class="btn block" id="rcptDone">Done</button>';
+    document.getElementById('rcptDone').onclick=function(){ close('rcptOv'); renderPopular(); };
+    open('rcptOv');
   }
 
   // ===== overlays + toast helpers =====
   function open(id){ document.getElementById(id).classList.add('open'); }
   function close(id){ document.getElementById(id).classList.remove('open'); if(id==='planOv') pendingAdd=null; }
   document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ close(b.getAttribute('data-close')); }; });
-  ['signinOv','holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
+  ['signinOv','holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
   function toast(msg){ var t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2800); }
   function pulseDates(){ var d=document.querySelector('.datebar'); if(!d) return; d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash'); }
 

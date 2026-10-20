@@ -269,10 +269,34 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
 /* ---- equipment bag ---- */
 .bag-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);}
 .bag-item span{font-family:var(--font-head);font-weight:700;letter-spacing:.02em;text-transform:uppercase;font-size:.95rem;color:#fff;}
-.bag-x{background:transparent;border:0;color:#ff9a8a;font-size:.76rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;}
+.bag-thumb{width:40px;height:40px;object-fit:contain;flex:0 0 auto;background:#fff;padding:3px;}
+.bag-name{flex:1 1 auto;}
+.bag-x{background:transparent;border:0;color:#ff9a8a;font-size:.76rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;flex:0 0 auto;}
 .bag-x:hover{color:#ffb9ad;}
 .bag-empty{color:var(--gray);font-size:.95rem;padding:14px 0;}
 .si-course{color:var(--gray);font-size:.8rem;}
+
+/* ---- bag: dates summary + confirm ---- */
+.bag-dates{border:1px solid var(--surface-bd);background:var(--surface);padding:12px 14px;margin-bottom:14px;}
+.bag-drow{display:flex;justify-content:space-between;gap:14px;padding:6px 0;border-bottom:1px solid var(--line);}
+.bag-drow:last-of-type{border-bottom:0;}
+.bag-dk{font-family:var(--font-head);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.64rem;color:var(--teal-bright);flex:0 0 auto;padding-top:3px;}
+.bag-dv{font-size:.88rem;color:#fff;text-align:right;line-height:1.3;}
+.bag-editdates{margin-top:11px;background:transparent;border:0;color:var(--teal-bright);font-family:var(--font-head);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.7rem;cursor:pointer;padding:0;}
+.bag-editdates:hover{color:#fff;}
+.bag-items{margin-bottom:16px;}
+.btn.block.bag-reserve{margin-top:2px;}
+
+/* ---- reservation receipt ---- */
+.sheet.rcpt{max-width:400px;}
+.rcpt-check{width:52px;height:52px;margin:2px auto 14px;border:2px solid var(--teal-bright);color:var(--teal-bright);display:flex;align-items:center;justify-content:center;font-size:1.7rem;font-weight:700;line-height:1;}
+.rcpt-h{text-align:center;}
+.rcpt-sub{text-align:center;}
+.rcpt-card{border:1px solid var(--surface-bd);background:var(--surface);padding:12px 14px;margin:16px 0 18px;}
+.rcpt-row{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-bottom:1px solid var(--line);}
+.rcpt-row:last-child{border-bottom:0;}
+.rcpt-k{font-family:var(--font-head);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.64rem;color:var(--teal-bright);flex:0 0 auto;padding-top:3px;}
+.rcpt-v{font-size:.88rem;color:#fff;text-align:right;line-height:1.3;}
 
 /* ---- bag button pulse on add ---- */
 .cart-btn.pulse{animation:bagpulse .32s ease;}
