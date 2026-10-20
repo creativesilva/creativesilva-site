@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=21" />
+<link rel="stylesheet" href="/css/store.css?v=22" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -196,6 +196,7 @@
         <button type="button" class="btn sm" id="holdOvGo">Unlock</button>
       </div>
       <div class="sheet-msg" id="holdMsg"></div>
+      <button type="button" class="btn block" id="holdReq">Ask Mr. Silva to approve it anyway</button>
       <div class="sheet-actions">
         <button type="button" class="btn ghost" data-close="holdOv">Browse equipment</button>
         <button type="button" class="btn ghost sm" id="holdOvToggle">Teacher override</button>
@@ -210,10 +211,12 @@
     <button type="button" class="sheet-x" data-close="gearOv" aria-label="Close">&times;</button>
     <div class="sheet-bd">
       <h2 id="gearTitle">Teacher unlock</h2>
-      <p>This item is for Photo 2 students. A teacher can unlock it for this session with the gear code.</p>
+      <p id="gearIntro">This item is for Photo 2 students. A teacher can unlock it with the code, or you can ask Mr. Silva to approve it.</p>
       <div class="field"><label for="gearOvc">Gear override code</label><input type="password" id="gearOvc" inputmode="numeric" autocomplete="off" placeholder="Teacher code" /></div>
       <div class="sheet-msg" id="gearMsg"></div>
-      <button type="button" class="btn block" id="gearGo">Unlock Photo 2 gear</button>
+      <button type="button" class="btn block" id="gearGo">Unlock with code</button>
+      <div class="sheet-or">or</div>
+      <button type="button" class="btn block ghost" id="gearReq">Ask Mr. Silva to approve it</button>
     </div>
   </div>
 </div>
@@ -401,7 +404,8 @@
     ]},
     lighting:{label:'Lighting', items:[
       {name:'Speedlite EL-5', img:'/assets/images/equipment/speedlite-v2.png', added:'2024-09-01'},
-      {name:'Godox AD200 Pro II Kit', img:'/assets/images/equipment/godox-v1.png', p2:true, tag:'Photo 2', added:'2026-10-16'}
+      {name:'Godox AD200 Pro II Kit', img:'/assets/images/equipment/godox-v1.png', p2:true, tag:'Photo 2', added:'2026-10-16'},
+      {name:'SmallRig Overhead Light Kit', img:'/assets/images/equipment/smallrig-v1.png', added:'2026-10-20'}
     ]},
     accessories:{label:'Accessories', items:[
       {name:'K&F Concept Tripod', img:'/assets/images/equipment/tripod-v3.png', added:'2024-08-01'},
@@ -421,14 +425,15 @@
     'Speedlite EL-5':{blurb:'Canon Speedlite EL-5. A strong flash for portraits and creative lighting.',specs:[['Guide number','60 (at 200mm, ISO 100)'],['Zoom','24-200mm, with wide panel'],['Control','E-TTL II, 2.4GHz radio, up to 15 units'],['Head','Tilts 120&#176; up, rotates 180&#176; each way'],['Extras','LED modeling lamp, weather-resistant']]},
     'K&F Concept Tripod':{blurb:'A steady, lightweight tripod with a ball head. Keeps your photos sharp.',specs:[['Type','Aluminum travel tripod'],['Head','Ball head with quick-release plate'],['Good for','Long exposures, video, steady framing'],['Build','Folds compact for carrying']]},
     'Neewer Reflector':{blurb:'A 5-in-1 reflector. Bounce and shape light for better portraits.',specs:[['Surfaces','Silver, gold, white, black, translucent'],['Good for','Filling shadows, softening or warming light'],['Size','About 43 in (110 cm)'],['Build','Collapsible, folds into a small case']]},
-    'Godox AD200 Pro II Kit':{blurb:'The Godox AD200 Pro II, a 200Ws pocket flash for studio-style light anywhere. Comes with the Canon trigger and a light stand. Photo 2 only.',specs:[['Flash','Godox AD200 Pro II, 200Ws pocket flash'],['Heads','Speedlite flash head + bare-bulb head'],['Trigger','Godox XProC wireless trigger (Canon)'],['Stand','Adjustable light stand'],['Good for','Portraits and creative off-camera lighting']]}
+    'Godox AD200 Pro II Kit':{blurb:'The Godox AD200 Pro II, a 200Ws pocket flash for studio-style light anywhere. Comes with the Canon trigger and a light stand. Photo 2 only.',specs:[['Flash','Godox AD200 Pro II, 200Ws pocket flash'],['Heads','Speedlite flash head + bare-bulb head'],['Trigger','Godox XProC wireless trigger (Canon)'],['Stand','Adjustable light stand'],['Good for','Portraits and creative off-camera lighting']]},
+    'SmallRig Overhead Light Kit':{blurb:'A 22-inch Magic Arm clamp holds your phone or camera above your work, paired with the SmallRig RM 25C RGB LED light. Great for top-down and flat-lay photos.',specs:[['Arm','22-inch Magic Arm clamp, overhead phone / camera mount'],['Light','SmallRig RM 25C, 25W RGBWW mini LED'],['White','2500K to 10000K, CRI 96'],['Colors','Full RGB, 36,000+ colors, 14 effects'],['Power','Built-in battery, USB-C rechargeable'],['Good for','Top-down and flat-lay photos, product and art photos']]}
   };
 
   // ----- live stock levels (free / total of real units for the chosen checkout span) -----
   var CAL=null;
   function loadCal(){ fetch(API+'/api/camera/calendar').then(function(r){return r.json();}).then(function(j){ CAL=j; rerender(); }).catch(function(){}); }
   function camsFor(name){ var r={'Canon EOS R50':[1,15],'Canon EOS R8':[16,16],'Canon EOS RP':[17,18],'Canon EOS R50 V':[19,21]}[name]; if(!r) return null; var a=[]; for(var i=r[0];i<=r[1];i++) a.push('Cam '+(i<10?'0':'')+i); return a; }
-  var EQTYPE={'Ultra-Wide 10-18mm':'wide','Ultra-Zoom 100-400mm':'zoom','Speedlite EL-5':'speedlite','K&F Concept Tripod':'tripod','Neewer Reflector':'reflector','Godox AD200 Pro II Kit':'godox'};
+  var EQTYPE={'Ultra-Wide 10-18mm':'wide','Ultra-Zoom 100-400mm':'zoom','Speedlite EL-5':'speedlite','K&F Concept Tripod':'tripod','Neewer Reflector':'reflector','Godox AD200 Pro II Kit':'godox','SmallRig Overhead Light Kit':'smallrig'};
   function overlaps(out,due,co,ret){ return out && due && out<=ret && due>=co; }   // ISO date strings compare lexicographically
   function stockFor(it){
     if(!CAL) return null;
@@ -470,7 +475,7 @@
   }
   // ----- Popular Rentals: most-reserved items -----
   function modelOfCam(cam){ var n=parseInt(String(cam).replace(/\D/g,''),10); if(n>=1&&n<=15) return 'Canon EOS R50'; if(n===16) return 'Canon EOS R8'; if(n>=17&&n<=18) return 'Canon EOS RP'; if(n>=19&&n<=21) return 'Canon EOS R50 V'; return null; }
-  function modelOfType(t){ return {wide:'Ultra-Wide 10-18mm',zoom:'Ultra-Zoom 100-400mm',speedlite:'Speedlite EL-5',tripod:'K&F Concept Tripod',reflector:'Neewer Reflector'}[t]||null; }
+  function modelOfType(t){ return {wide:'Ultra-Wide 10-18mm',zoom:'Ultra-Zoom 100-400mm',speedlite:'Speedlite EL-5',tripod:'K&F Concept Tripod',reflector:'Neewer Reflector',godox:'Godox AD200 Pro II Kit',smallrig:'SmallRig Overhead Light Kit'}[t]||null; }
   // Popular Rentals (the default/home view): the 4 most-reserved items the student can actually rent.
   function popularItems(){
     var count={};
@@ -498,6 +503,14 @@
   try{ var _b=sessionStorage.getItem('pv_bag'); if(_b) BAG=JSON.parse(_b)||[]; }catch(e){}
   function saveUser(){ try{ USER?sessionStorage.setItem('pv_user',JSON.stringify(USER)):sessionStorage.removeItem('pv_user'); }catch(e){} }
   function saveBag(){ try{ sessionStorage.setItem('pv_bag',JSON.stringify(BAG)); }catch(e){} }
+  // Items the student asked for despite a course lock (name -> reason 'photo2'). These reserve as a
+  // PENDING request for the teacher to approve. USER.holdRequest makes the WHOLE reservation a request
+  // (a missing-work student who chose "request anyway").
+  var REQ={};
+  try{ var _r=sessionStorage.getItem('pv_req'); if(_r) REQ=JSON.parse(_r)||{}; }catch(e){}
+  function saveReq(){ try{ sessionStorage.setItem('pv_req',JSON.stringify(REQ)); }catch(e){} }
+  function reqMode(){ return !!(USER && USER.holdRequest); }
+  function itemNeedsApproval(name){ return reqMode() || !!REQ[name]; }
   function onHold(){ return !!(USER && USER.hold); }
   function itemDA(it){ return !!(it.da || it.tag==='Digital Arts'); }       // Mankin / Digital Arts gear
   // Gray out equipment that is not for the signed-in student's course (teacher override lifts it).
@@ -512,25 +525,27 @@
 
   // ----- product cards (lock + add states depend on the signed-in student) -----
   function cardHtml(it){
-    var locked=itemLocked(it);
     var inbag=BAG.indexOf(it.name)>=0;
-    var btn = locked
-      ? '<button type="button" class="btn sm block prod-locked" data-unlock="1">Locked &middot; ask teacher</button>'
-      : (inbag
-          ? '<button type="button" class="btn sm block prod-inbag" data-remove="'+encodeURIComponent(it.name)+'">In bag &middot; remove</button>'
-          : '<button type="button" class="btn sm block prod-add" data-add="'+encodeURIComponent(it.name)+'">Add to bag</button>');
+    var locked=itemLocked(it);
+    var showLocked=locked && !inbag;                 // an item already in the bag (e.g. requested) reads as in-bag, not locked
+    var enc=encodeURIComponent(it.name);
+    var btn = inbag
+      ? '<button type="button" class="btn sm block prod-inbag" data-remove="'+enc+'">In bag &middot; remove</button>'
+      : (locked
+          ? '<button type="button" class="btn sm block prod-locked" data-unlock="'+enc+'">Locked &middot; ask teacher</button>'
+          : '<button type="button" class="btn sm block prod-add" data-add="'+enc+'">Add to bag</button>');
     var st = (!locked) ? stockFor(it) : null;   // stock only on items this student can access
     var stock = st ? '<div class="prod-stock'+(st.free<=0?' out':(st.free<=2?' low':''))+'">'+st.free+' / '+st.total+' available</div>' : '';
-    var det=encodeURIComponent(it.name);
+    var det=enc;
     var more = SPECS[it.name] ? '<button type="button" class="prod-details" data-detail="'+det+'">View details</button>' : '';
-    return '<div class="prod'+(locked?' locked':'')+'">'+
-      '<div class="prod-img" data-detail="'+det+'"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.tag&&!locked?'<span class="prod-tag">'+esc(it.tag)+'</span>':'')+(locked?'<span class="prod-lockbadge">'+esc(lockReason(it))+'</span>':'')+'</div>'+
+    return '<div class="prod'+(showLocked?' locked':'')+'">'+
+      '<div class="prod-img" data-detail="'+det+'"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.tag&&!showLocked?'<span class="prod-tag">'+esc(it.tag)+'</span>':'')+(showLocked?'<span class="prod-lockbadge">'+esc(lockReason(it))+'</span>':'')+'</div>'+
       '<div class="prod-name" data-detail="'+det+'">'+esc(it.name)+'</div>'+ stock + more + btn + '</div>';
   }
   function wireCards(g){
     g.querySelectorAll('[data-add]').forEach(function(b){ b.onclick=function(){ addToBag(decodeURIComponent(b.getAttribute('data-add'))); }; });
     g.querySelectorAll('[data-remove]').forEach(function(b){ b.onclick=function(){ removeFromBag(decodeURIComponent(b.getAttribute('data-remove'))); }; });
-    g.querySelectorAll('[data-unlock]').forEach(function(b){ b.onclick=function(){ openGear(); }; });
+    g.querySelectorAll('[data-unlock]').forEach(function(b){ b.onclick=function(){ openGear(decodeURIComponent(b.getAttribute('data-unlock'))); }; });
     g.querySelectorAll('[data-detail]').forEach(function(b){ b.onclick=function(){ openDetail(decodeURIComponent(b.getAttribute('data-detail'))); }; });
   }
   function openDetail(name){
@@ -597,22 +612,31 @@
   function bagPulse(){ var b=document.getElementById('cartBtn'); b.classList.add('pulse'); setTimeout(function(){ b.classList.remove('pulse'); },320); }
   function addToBag(name){
     if(!USER){ openSignin(); return; }                                  // confirm student id first
-    var it=findItem(name); if(it && itemLocked(it)){ openGear(); return; }  // off-course gear: teacher override
-    if(onHold()){ openHold(); return; }                                 // missing-work hold: browse yes, add no
+    var it=findItem(name);
+    if(it && itemLocked(it) && !REQ[name]){ openGear(name); return; }   // off-course gear: unlock with the code OR request it anyway
+    if(onHold() && !reqMode()){ openHold(); return; }                   // missing-work hold: browse yes, add no (unless they chose to request)
     if(!datesReady()){ pendingAdd=name; openPlan(); return; }           // no dates yet: walk them through checkout dates, then add
     doAddToBag(name);
   }
   function doAddToBag(name){
     if(BAG.indexOf(name)<0){ BAG.push(name); saveBag(); updateBag(); bagPulse(); }
-    toast('Added to your bag.');
+    toast(itemNeedsApproval(name)?'Added. This one needs Mr. Silva&#8217;s OK.':'Added to your bag.');
     rerender();
   }
-  function removeFromBag(name){ var i=BAG.indexOf(name); if(i>=0){ BAG.splice(i,1); saveBag(); updateBag(); rerender(); renderBag(); } }
+  function removeFromBag(name){ var i=BAG.indexOf(name); if(i>=0){ BAG.splice(i,1); if(REQ[name]){ delete REQ[name]; saveReq(); } saveBag(); updateBag(); rerender(); renderBag(); } }
   function setBagMsg(msg, err){ var n=document.getElementById('bagNote'); if(n){ n.className='sheet-msg'+(err?' err':''); n.innerHTML=msg||''; } }
+  // Bag button text: everything needs a teacher OK -> "Send request"; some do -> "Reserve + request"; none -> normal.
+  function reserveLabel(){
+    if(!BAG.length) return 'Reserve this gear';
+    var every=BAG.every(itemNeedsApproval), some=BAG.some(itemNeedsApproval);
+    return every?'Send request':(some?'Reserve + request':'Reserve this gear');
+  }
   function renderBag(){
     var w=document.getElementById('bagList');
     if(!BAG.length){ w.innerHTML='<p class="bag-empty">Your equipment bag is empty. Add gear to get started.</p>'; setBagMsg(''); return; }
     var teach=USER?(USER.teacher||TEACHER_NAME[USER.pool]||''):'', room=USER?roomFor(USER.pool):'';
+    var note = reqMode()
+      ? '<div class="bag-reqnote">Because of missing work, Mr. Silva must approve this reservation. Turn in your work to speed it up.</div>' : '';
     var dates;
     if(datesReady()){
       dates='<div class="bag-dates">'+
@@ -621,9 +645,11 @@
         '<div class="bag-drow"><span class="bag-dk">Where</span><span class="bag-dv">Classroom pickup'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div>'+
         '<button type="button" class="bag-editdates" id="bagEditDates">Change dates</button></div>';
     } else { dates='<button type="button" class="btn block" id="bagSetDates">Set your checkout dates</button>'; }
-    var items='<div class="bag-items">'+BAG.map(function(nm){ var it=findItem(nm); return '<div class="bag-item">'+(it&&it.img?'<img class="bag-thumb" src="'+it.img+'" alt="">':'')+'<span class="bag-name">'+esc(nm)+'</span><button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">Remove</button></div>'; }).join('')+'</div>';
-    var action = datesReady() ? '<button type="button" class="btn block bag-reserve" id="bagReserve">Reserve this gear</button>' : '';
-    w.innerHTML=dates+items+action;
+    var items='<div class="bag-items">'+BAG.map(function(nm){ var it=findItem(nm);
+      var tag = (!reqMode() && REQ[nm]) ? '<span class="bag-reqtag">Needs OK</span>' : '';
+      return '<div class="bag-item">'+(it&&it.img?'<img class="bag-thumb" src="'+it.img+'" alt="">':'')+'<span class="bag-name">'+esc(nm)+tag+'</span><button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">Remove</button></div>'; }).join('')+'</div>';
+    var action = datesReady() ? '<button type="button" class="btn block bag-reserve" id="bagReserve">'+reserveLabel()+'</button>' : '';
+    w.innerHTML=note+dates+items+action;
     w.querySelectorAll('[data-bx]').forEach(function(b){ b.onclick=function(){ removeFromBag(decodeURIComponent(b.getAttribute('data-bx'))); }; });
     var ed=document.getElementById('bagEditDates'); if(ed) ed.onclick=function(){ pendingAdd=null; openPlan(); };
     var sd=document.getElementById('bagSetDates'); if(sd) sd.onclick=function(){ pendingAdd=null; openPlan(); };
@@ -631,38 +657,65 @@
     setBagMsg('');
   }
   // Reserve: assign a free unit to each bag item for the chosen span, then POST to the teacher board.
+  // An item that needs a teacher OK (a locked item the student requested, or ANY item when the student
+  // is on a missing-work hold and chose to request) posts with request:true -> a PENDING reservation.
   function submitReservation(){
     if(!BAG.length || !datesReady()) return;
-    if(onHold()){ openHold(); return; }
+    if(onHold() && !reqMode()){ openHold(); return; }
     var co=isoOf(checkout), ret=isoOf(returnDay);
-    var used={}, cameras=[], gear=[], failed=[];
+    var used={}, resolved=[], failed=[];
     BAG.forEach(function(nm){ var it=findItem(nm); if(!it) return;
       var free=(freeUnitsFor(it)||[]).filter(function(u){ return !used[u]; });
       if(!free.length){ failed.push(nm); return; }
       used[free[0]]=1;
-      if(camsFor(nm)) cameras.push({name:nm, cam:free[0]}); else gear.push({name:nm, item:free[0]});
+      resolved.push({ name:nm, unit:free[0], isCam:!!camsFor(nm), req:itemNeedsApproval(nm), reason:(reqMode()?'missing':(REQ[nm]||'')) });
     });
     if(failed.length){ setBagMsg('No longer free for your dates: <b>'+failed.map(esc).join(', ')+'</b>. Remove it or change your dates.', true); return; }
-    var rv=document.getElementById('bagReserve'); if(rv){ rv.disabled=true; rv.textContent='Reserving…'; }
+    // Normal (approved) items group like a kit; request items each post on their own, flagged.
     var posts=[];
-    if(cameras.length){
-      posts.push({ student_id:USER.id, camera:cameras[0].cam, out:co, due:ret, extras:gear.map(function(g){ return g.item; }) });
-      cameras.slice(1).forEach(function(c){ posts.push({ student_id:USER.id, camera:c.cam, out:co, due:ret }); });
-    } else { gear.forEach(function(g){ posts.push({ student_id:USER.id, kind:'equipment', item:g.item, out:co, due:ret }); }); }
+    function kitPosts(list, req){
+      var cams=list.filter(function(r){return r.isCam;}), gear=list.filter(function(r){return !r.isCam;}), base={student_id:USER.id, out:co, due:ret};
+      if(req){ base.request=true; base.request_reason='missing'; }
+      if(cams.length){
+        posts.push(Object.assign({}, base, {camera:cams[0].unit, extras:gear.map(function(g){return g.unit;})}));
+        cams.slice(1).forEach(function(c){ posts.push(Object.assign({}, base, {camera:c.unit})); });
+      } else { gear.forEach(function(g){ posts.push(Object.assign({}, base, {kind:'equipment', item:g.unit})); }); }
+    }
+    if(reqMode()){ kitPosts(resolved, true); }
+    else {
+      kitPosts(resolved.filter(function(r){return !r.req;}), false);
+      resolved.filter(function(r){return r.req;}).forEach(function(r){
+        posts.push(r.isCam ? {student_id:USER.id, camera:r.unit, out:co, due:ret, request:true, request_reason:r.reason}
+                           : {student_id:USER.id, kind:'equipment', item:r.unit, out:co, due:ret, request:true, request_reason:r.reason});
+      });
+    }
+    var lbl=reserveLabel(), sending=(lbl==='Send request')?'Sending…':'Reserving…';
+    var rv=document.getElementById('bagReserve'); if(rv){ rv.disabled=true; rv.textContent=sending; }
     Promise.all(posts.map(function(p){ return api('/api/camera/checkout', p); })).then(function(results){
       var bad=null; for(var i=0;i<results.length;i++){ if(!results[i]||!results[i].ok){ bad=results[i]; break; } }
-      if(bad){ setBagMsg((bad&&bad.error)||'Could not reserve. Please try again.', true); if(rv){ rv.disabled=false; rv.textContent='Reserve this gear'; } loadCal(); return; }
-      var summary={ items:cameras.map(function(c){return c.name;}).concat(gear.map(function(g){return g.name;})), checkout:new Date(checkout), returnDay:new Date(returnDay), pickup:pickup, returnTime:returnTime };
-      BAG=[]; saveBag(); updateBag(); close('bagOv'); showReceipt(summary); loadCal(); rerender();
-    }).catch(function(){ setBagMsg('Could not reach the server. Try again.', true); if(rv){ rv.disabled=false; rv.textContent='Reserve this gear'; } });
+      if(bad){ setBagMsg((bad&&bad.error)||'Could not reserve. Please try again.', true); if(rv){ rv.disabled=false; rv.textContent=lbl; } loadCal(); return; }
+      var summary={ reserved:resolved.filter(function(r){return !r.req;}).map(function(r){return r.name;}),
+                    requested:resolved.filter(function(r){return r.req;}).map(function(r){return r.name;}),
+                    checkout:new Date(checkout), returnDay:new Date(returnDay), pickup:pickup, returnTime:returnTime };
+      BAG=[]; saveBag(); REQ={}; saveReq(); if(USER){ USER.holdRequest=false; saveUser(); }
+      updateBag(); refreshAccount(); close('bagOv'); showReceipt(summary); loadCal(); rerender();
+    }).catch(function(){ setBagMsg('Could not reach the server. Try again.', true); if(rv){ rv.disabled=false; rv.textContent=lbl; } });
   }
   function showReceipt(s){
     var teach=USER?(USER.teacher||TEACHER_NAME[USER.pool]||''):'', room=USER?roomFor(USER.pool):'';
+    var hasReq=s.requested.length>0, hasRes=s.reserved.length>0, pureReq=hasReq && !hasRes;
+    var icon = pureReq ? '<div class="rcpt-check wait">&#8987;</div>' : '<div class="rcpt-check">&#10003;</div>';
+    var head = pureReq ? 'Request sent!' : (hasReq ? 'Almost there!' : 'You&#8217;re all set!');
+    var sub = pureReq ? ('Mr. Silva needs to approve this. You&#8217;ll get your gear once he says yes.')
+            : (hasReq ? 'Your gear is reserved. The item'+(s.requested.length>1?'s':'')+' that need Mr. Silva&#8217;s OK are waiting for him.'
+            : 'Your reservation is on its way to '+(teach?esc(teach):'your teacher')+'.');
+    var rows='';
+    if(hasRes) rows+='<div class="rcpt-row"><span class="rcpt-k">Reserved</span><span class="rcpt-v">'+s.reserved.map(esc).join(', ')+'</span></div>';
+    if(hasReq) rows+='<div class="rcpt-row"><span class="rcpt-k">Needs OK</span><span class="rcpt-v">'+s.requested.map(esc).join(', ')+'</span></div>';
     document.getElementById('rcptBody').innerHTML=
-      '<div class="rcpt-check">&#10003;</div><h2 class="rcpt-h">You&#8217;re all set!</h2>'+
-      '<p class="rcpt-sub">Your reservation is on its way to '+(teach?esc(teach):'your teacher')+'.</p>'+
-      '<div class="rcpt-card">'+
-        '<div class="rcpt-row"><span class="rcpt-k">Gear</span><span class="rcpt-v">'+s.items.map(esc).join(', ')+'</span></div>'+
+      icon+'<h2 class="rcpt-h">'+head+'</h2>'+
+      '<p class="rcpt-sub">'+sub+'</p>'+
+      '<div class="rcpt-card">'+ rows +
         '<div class="rcpt-row"><span class="rcpt-k">Pick up</span><span class="rcpt-v">'+DOW[s.checkout.getDay()]+' '+MON[s.checkout.getMonth()]+' '+s.checkout.getDate()+' &middot; '+esc(s.pickup.label)+' ('+f12(s.pickup.s)+')</span></div>'+
         '<div class="rcpt-row"><span class="rcpt-k">Return</span><span class="rcpt-v">'+DOW[s.returnDay.getDay()]+' '+MON[s.returnDay.getMonth()]+' '+s.returnDay.getDate()+' &middot; '+esc(s.returnTime.label)+' ('+f12(s.returnTime.s)+')</span></div>'+
         '<div class="rcpt-row"><span class="rcpt-k">Where</span><span class="rcpt-v">Classroom pickup'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div></div>'+
@@ -775,6 +828,11 @@
     var r=document.getElementById('holdOvRow'); r.style.display=(r.style.display==='none'?'':'none');
     if(r.style.display===''){ var i=document.getElementById('holdOvc'); if(i){ try{ i.focus(); }catch(e){} } }
   });
+  document.getElementById('holdReq').addEventListener('click', function(){
+    if(USER){ USER.holdRequest=true; saveUser(); }   // whole reservation becomes a pending request
+    refreshAccount(); close('holdOv'); rerender();
+    toast('OK. Add your gear, then send the request to Mr. Silva.');
+  });
   document.getElementById('holdOvGo').addEventListener('click', function(){
     var code=(document.getElementById('holdOvc').value||'').trim(), m=document.getElementById('holdMsg');
     if(!code){ m.className='sheet-msg err'; m.textContent='Enter the teacher code.'; return; }
@@ -786,7 +844,21 @@
   });
 
   // ===== gear-unlock dialog (course-mismatch item) =====
-  function openGear(){ document.getElementById('gearOvc').value=''; document.getElementById('gearMsg').textContent=''; open('gearOv'); var i=document.getElementById('gearOvc'); if(i){ try{ i.focus(); }catch(e){} } }
+  var pendingGearItem=null;   // the locked item whose unlock/approval sheet is open
+  function openGear(name){
+    pendingGearItem=name||null;
+    var it=pendingGearItem?findItem(pendingGearItem):null;
+    var intro=document.getElementById('gearIntro');
+    if(intro) intro.innerHTML = it ? ('<b>'+esc(it.name)+'</b> is '+(itemDA(it)?'for Digital Arts':'for Photo 2')+'. A teacher can unlock it with the code, or you can ask Mr. Silva to approve it.') : 'A teacher can unlock this with the code, or you can ask Mr. Silva to approve it.';
+    var rq=document.getElementById('gearReq'); if(rq) rq.style.display = pendingGearItem ? '' : 'none';   // no item (global unlock) -> code only
+    document.getElementById('gearOvc').value=''; document.getElementById('gearMsg').textContent='';
+    open('gearOv'); var i=document.getElementById('gearOvc'); if(i){ try{ i.focus(); }catch(e){} }
+  }
+  document.getElementById('gearReq').addEventListener('click', function(){
+    if(!pendingGearItem){ close('gearOv'); return; }
+    REQ[pendingGearItem]=(findItem(pendingGearItem)&&itemDA(findItem(pendingGearItem)))?'digital_arts':'photo2';
+    saveReq(); var nm=pendingGearItem; pendingGearItem=null; close('gearOv'); addToBag(nm);
+  });
   document.getElementById('gearGo').addEventListener('click', function(){
     var code=(document.getElementById('gearOvc').value||'').trim(), m=document.getElementById('gearMsg');
     if(!code){ m.className='sheet-msg err'; m.textContent='Enter the teacher code.'; return; }

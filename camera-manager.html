@@ -194,6 +194,20 @@
   .rec-dates{font-size:.76rem;color:var(--muted);}
   .rec-acts{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;}
   .rec-none{font-size:.9rem;color:var(--muted);line-height:1.5;}
+  /* ---- Special Requests: notification banner (clickable) + approve/deny cards ---- */
+  .digest-open{display:block;width:100%;text-align:left;background:transparent;border:0;padding:0;cursor:pointer;color:inherit;font:inherit;}
+  .digest-open .digest-h{color:#c9b8ff;} .digest-open:hover .digest-h{color:#e4dcff;}
+  .req-chip{display:inline-block;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.56rem;padding:2px 7px;vertical-align:middle;color:#04110f;}
+  .req-chip.req-missing{background:var(--gold);} .req-chip.req-photo2{background:#8b5cf6;color:#fff;} .req-chip.req-digital_arts{background:var(--teal);} .req-chip.req-other{background:var(--faint);color:#04110f;}
+  .req-card{border:1px solid var(--surface-bd);border-left:3px solid #8b5cf6;background:rgba(0,0,0,.26);padding:11px 12px;margin-bottom:10px;}
+  .req-top{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px;}
+  .req-who{font-weight:600;color:#fff;font-size:.92rem;}
+  .req-items{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px;}
+  .req-dates{font-size:.78rem;color:var(--muted);margin-bottom:8px;}
+  .req-note{font-size:.82rem;color:var(--text);font-style:italic;margin:0 0 8px;opacity:.9;}
+  .req-acts{display:flex;gap:7px;flex-wrap:wrap;}
+  .btn.good{background:var(--ok);border-color:var(--ok);color:#04110f;}
+  .btn.good:hover{filter:brightness(1.08);}
   .tb-reconcile.flash{animation:reconFlash 1.6s ease-in-out infinite;}
   @keyframes reconFlash{0%,100%{box-shadow:0 0 0 0 rgba(245,179,1,0);background:rgba(245,179,1,.08);}50%{box-shadow:0 0 0 4px rgba(245,179,1,.28);background:rgba(245,179,1,.2);}}
   @media (prefers-reduced-motion:reduce){ .tb-reconcile.flash{animation:none;box-shadow:0 0 0 2px rgba(245,179,1,.3);} }
@@ -1312,18 +1326,28 @@
     if(odEl){ if(od.length){ odEl.className='digest overdue-digest';
         odEl.innerHTML='<div class="digest-h">&#9888; '+od.length+' camera'+(od.length>1?'s':'')+' overdue</div><div class="digest-body">'+od.map(function(c){ var n=daysBetween(c.due,today); return '<span class="digest-item"><span class="camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span> &middot; '+studentLink(c)+' <b>'+n+'d</b></span>'; }).join('')+'</div>';
         odEl.style.display=''; } else { odEl.style.display='none'; odEl.innerHTML=''; } }
-    // Second slot: the approval queue when approval is ON, else the Recent Reservations list.
+    // Special Requests notification: any PENDING (approved:false) reservation in this pool, regardless of
+    // the global APPROVAL_REQUIRED flag. The student store's "request anyway" path (missing-work hold or
+    // a locked Photo-2 item) creates these. Tap the banner to review + approve/deny.
     var pEl=document.getElementById('pendingDigest');
-    if(approvalOn()){
-      var showAppr=(SELECTED_POOL==='silva'||SELECTED_POOL==='mankin');
-      var pend=showAppr?(DATA.checkouts||[]).filter(function(c){ return statusOf(c)==='reserved' && c.approved===false && inPool(c); }).sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; }):[];
-      if(pEl){ if(pend.length){ pEl.className='digest pending-digest';
-          pEl.innerHTML='<div class="digest-h">'+pend.length+' student request'+(pend.length>1?'s':'')+' awaiting approval</div><div class="digest-body">'+pend.map(function(c){ var isG=c.kind==='equipment'; var chip=isG?('<span class="camnum">'+esc(gearLabel(c.item))+'</span>'):('<span class="camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span>'); return '<span class="digest-item">'+chip+' &middot; '+studentLink(c)+' &middot; '+fmt(c.out)+'</span>'; }).join('')+'</div>';
-          pEl.style.display=''; } else { pEl.style.display='none'; pEl.innerHTML=''; } }
-    } else {
-      if(pEl){ pEl.style.display='none'; pEl.innerHTML=''; }   // Reservation Activity now renders in the board, below the calendar
-    }
+    var groups=pendingGroups();
+    if(pEl){ if(groups.length){ pEl.className='digest pending-digest';
+        pEl.innerHTML='<button type="button" class="digest-open" data-openreq="1"><span class="digest-h">'+groups.length+(groups.length>1?' student requests need':' student request needs')+' review &rarr;</span><span class="digest-body">'+groups.map(function(g){ var c=g[0]; return '<span class="digest-item">'+reqReasonChip(c)+' '+esc(nameOf(c)||'Student')+' &middot; '+esc(reqItemsLabel(g))+'</span>'; }).join('')+'</span></button>';
+        var ob=pEl.querySelector('[data-openreq]'); if(ob) ob.onclick=openRequests;
+        pEl.style.display=''; } else { pEl.style.display='none'; pEl.innerHTML=''; } }
   }
+  // Pending (approved:false) reservations in the current pool, grouped into one entry per reservation
+  // (a camera and its linked gear are one request). Newest-first.
+  function pendingGroups(){
+    var pend=(DATA.checkouts||[]).filter(function(c){ return statusOf(c)==='reserved' && c.approved===false && resvInScope(c); });
+    var byKey={}, order=[];
+    pend.forEach(function(c){ var k=resvKey(c); if(!byKey[k]){ byKey[k]=[]; order.push(k); } byKey[k].push(c); });
+    order.sort(function(a,b){ var ca=byKey[a][0], cb=byKey[b][0]; return (cb.created||'')>(ca.created||'')?1:-1; });
+    return order.map(function(k){ return byKey[k].sort(function(a,b){ var ca=(a.kind==='equipment')?1:0, cb=(b.kind==='equipment')?1:0; return ca-cb; }); });
+  }
+  function reqReasonLabel(reason){ return reason==='missing'?'Missing work':(reason==='photo2'?'Photo 2':(reason==='digital_arts'?'Digital Arts':'Request')); }
+  function reqReasonChip(c){ var r=(c&&c.request_reason)||''; return '<span class="req-chip req-'+(r||'other')+'">'+reqReasonLabel(r)+'</span>'; }
+  function reqItemsLabel(g){ return g.map(function(x){ return x.kind==='equipment'?gearLabel(x.item):x.camera; }).filter(Boolean).join(', '); }
 
   // ===== Recent Reservations (shown when approval is shelved) =====
   // A reservation = ONE parent record (a camera, or a standalone gear unit) plus any gear linked to a
@@ -1888,6 +1912,43 @@
       silvaConfirm('Cancel '+esc(nameOf(c||{}))+'’s booking of '+esc(((c&&c.kind!=='equipment')?c.camera:gearLabel(c&&c.item))||'this unit')+'? It is removed from the schedule.', {okLabel:'Cancel booking',cancelLabel:'Keep'}).then(function(ok){ if(!ok) return; b.disabled=true; _lastTBSig=null;
         camAPI('/api/camera/delete',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id})}).then(function(){ return loadBoard(); }).then(function(){ close(); openReconcile(); }).catch(function(){ silvaToast('Could not cancel. Try again.'); }); }); }; });
   }
+  // ===== Special Requests: approve/deny student reservations that need the teacher's OK =====
+  // Every record sharing a reservation (a camera + its linked gear) is one request; approve/deny acts on all.
+  function reqGroupOf(id){ var c=findRec(id); if(!c) return []; var key=resvKey(c); return (DATA.checkouts||[]).filter(function(x){ return statusOf(x)==='reserved' && x.approved===false && resvKey(x)===key; }); }
+  function approveRequest(id, btn){
+    if(btn) btn.disabled=true;
+    var recs=reqGroupOf(id);
+    return Promise.all(recs.map(function(c){ return camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:c.id,approved:true})}); }))
+      .then(function(){ return loadBoard(); }).then(reloadCal).then(function(){ silvaToast('Approved. It is on the board now.'); })
+      .catch(function(){ silvaToast('Could not approve. Try again.'); if(btn) btn.disabled=false; });
+  }
+  function denyRequest(id, btn, reopen){
+    var c=findRec(id), recs=reqGroupOf(id);
+    silvaConfirm('Deny '+esc(nameOf(c||{}))+'’s request? It is removed and the gear frees up.', {okLabel:'Deny request',cancelLabel:'Keep'}).then(function(ok){ if(!ok) return; if(btn) btn.disabled=true;
+      Promise.all(recs.map(function(x){ return camAPI('/api/camera/delete',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:x.id})}); }))
+        .then(function(){ return loadBoard(); }).then(reloadCal).then(function(){ silvaToast('Denied.'); if(reopen) reopen(); })
+        .catch(function(){ silvaToast('Could not deny. Try again.'); if(btn) btn.disabled=false; }); });
+  }
+  function openRequests(){
+    var groups=pendingGroups();
+    var body=groups.length? groups.map(function(g){ var c=g[0];
+      var items=g.map(function(x){ return x.kind==='equipment'?('<span class="camnum">'+esc(gearLabel(x.item))+'</span>'):('<span class="camnum" data-camdetail="'+esc(x.camera)+'">'+esc(x.camera)+'</span>'); }).join(' ');
+      var note=c.request_note?('<div class="req-note">&ldquo;'+esc(c.request_note)+'&rdquo;</div>'):'';
+      return '<div class="req-card"><div class="req-top">'+reqReasonChip(c)+'<span class="req-who">'+studentLink(c)+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span></div>'+
+        '<div class="req-items">'+items+'</div>'+
+        '<div class="req-dates">'+esc(fmtDoWMD(c.out))+' &rarr; '+esc(fmt(c.due))+'</div>'+ note +
+        '<div class="req-acts"><button type="button" class="btn sm good" data-reqok="'+esc(c.id)+'">Approve</button><button type="button" class="btn sm danger" data-reqno="'+esc(c.id)+'">Deny</button></div></div>';
+    }).join('') : '<div class="rec-none">No student requests right now.</div>';
+    var sub=groups.length?'<div class="rec-sub">Students asked for gear that needs your OK (missing work, or a Photo 2 item). Approve to put it on the board, or deny to free it up.</div>':'';
+    var ov=document.createElement('div'); ov.className='modal open'; ov.id='requestsmodal';
+    ov.innerHTML='<div class="mpanel"><div class="mhead"><span class="mtitle">Special Requests</span><button class="mx" aria-label="Close">&times;</button></div><div class="mbody">'+sub+body+'</div></div>';
+    document.body.appendChild(ov);
+    function close(){ try{ document.body.removeChild(ov); }catch(e){} }
+    ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+    ov.querySelector('.mx').onclick=close;
+    ov.querySelectorAll('[data-reqok]').forEach(function(b){ b.onclick=function(){ approveRequest(b.getAttribute('data-reqok'), b).then(function(){ close(); if(pendingGroups().length) openRequests(); }); }; });
+    ov.querySelectorAll('[data-reqno]').forEach(function(b){ b.onclick=function(){ denyRequest(b.getAttribute('data-reqno'), b, function(){ close(); if(pendingGroups().length) openRequests(); }); }; });
+  }
   // The one "i" on the board: a short guide to the new workflows (so Garcia and Mankin can learn them
   // without any how-to text cluttering the board Chris uses all day).
   function openBoardHelp(){
@@ -1985,6 +2046,17 @@
     bundle('1012348','Mia Torres',1,'Photo 2',yst,tod,'Cam 03',[],'out');
     bundle('1012349','Ava Nguyen',6,'Photo 2',yst,tod,'Cam 18',['reflector-01'],'out');
     bundle('1012350','Noah Park',2,'Photo 1',y2,yst,'Cam 06',[],'out');             // stale/overdue return, duplicates Cam 06
+    // Pending Special Requests (approved:false): the store's "request anyway" path.
+    function reqBundle(sid,name,per,course,cam,gear,reason){
+      var cid=nid();
+      recs.push({id:cid,kind:'camera',item:'',group:'',camera:cam,student_id:sid,student_name:name,period:per,course:course,teacher:'Silva',
+        student_cell:'(805) 555-07'+('0'+per).slice(-2),parent_guardian:name.split(' ')[0]+'’s parent',parent_cell:'(805) 555-08'+('0'+per).slice(-2),
+        out:tmr,due:iso(2),status:'reserved',approved:false,request_reason:reason,request_note:'',picked_up_date:'',returned:false,returned_date:'',note:'',created:tod+'T16:00:00Z'});
+      (gear||[]).forEach(function(g){ recs.push({id:nid(),kind:'equipment',item:g,group:cid,camera:'',student_id:sid,student_name:name,period:per,course:course,teacher:'Silva',
+        out:tmr,due:iso(2),status:'reserved',approved:false,request_reason:reason,request_note:'',picked_up_date:'',returned:false,returned_date:'',note:'',created:tod+'T16:00:00Z'}); });
+    }
+    reqBundle('1012360','Emma Flores',1,'Photo 1','Cam 16',[],'photo2');            // Photo-1 student asked for a Photo-2 R8
+    reqBundle('1012361','Jacob Rivera',3,'Photo 1','Cam 07',['tripod-03'],'missing'); // on a missing-work hold, requested anyway
     return {cameras:cams,checkouts:recs,assets:{},cards:{},
       pools:{silva:cams,garcia:cams.slice(0,15),mankin:['Cam 19','Cam 20','Cam 21']},
       equipment_pools:{silva:gpool,garcia:[],mankin:[]},equipment_units:units,
