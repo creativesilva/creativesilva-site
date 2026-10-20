@@ -181,8 +181,19 @@
   .tb-tally .tt-v{font-weight:700;}.tb-tally .tt-v.out{color:#8ff7f7;}.tb-tally .tt-v.here{color:#fff;}.tb-tally .tt-v.resv{color:#ffd889;}
   .tb-tally .tt-sep{color:var(--faint);margin:0 3px;}
   /* End-of-day reconcile nudge: flashes late in the day while anything is unresolved. */
-  .tb-reconcile{display:flex;align-items:center;gap:9px;margin-bottom:12px;padding:10px 12px;border:1px solid var(--gold);border-left:3px solid var(--gold);background:rgba(245,179,1,.1);color:#ffe3a0;font-family:var(--font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.76rem;}
-  .tb-reconcile .rc-ic{flex:0 0 auto;font-size:1rem;}
+  .tb-reconcile{display:flex;align-items:center;gap:9px;width:100%;text-align:left;margin-bottom:12px;padding:10px 12px;border:1px solid var(--gold);border-left:3px solid var(--gold);background:rgba(245,179,1,.1);color:#ffe3a0;font-family:var(--font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.76rem;cursor:pointer;}
+  .tb-reconcile:hover{background:rgba(245,179,1,.18);}
+  .tb-reconcile .rc-ic{flex:0 0 auto;font-size:1rem;} .tb-reconcile .rc-t{flex:1 1 auto;} .tb-reconcile .rc-go{flex:0 0 auto;font-size:1.1rem;color:#ffd166;}
+  /* Reconcile modal: each double-booked unit + its overlapping records, with resolve actions. */
+  .rec-sub{font-size:.84rem;color:var(--muted);line-height:1.45;margin-bottom:14px;}
+  .rec-unit{margin-bottom:14px;border-left:3px solid var(--red);padding-left:11px;}
+  .rec-unith{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.95rem;color:#fff;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+  .rec-rec{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:rgba(0,0,0,.26);border:1px solid var(--line-soft);padding:9px 11px;margin-bottom:6px;}
+  .rec-info{display:flex;flex-direction:column;gap:2px;flex:1 1 150px;min-width:0;}
+  .rec-who{font-weight:600;color:#fff;font-size:.9rem;}
+  .rec-dates{font-size:.76rem;color:var(--muted);}
+  .rec-acts{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;}
+  .rec-none{font-size:.9rem;color:var(--muted);line-height:1.5;}
   .tb-reconcile.flash{animation:reconFlash 1.6s ease-in-out infinite;}
   @keyframes reconFlash{0%,100%{box-shadow:0 0 0 0 rgba(245,179,1,0);background:rgba(245,179,1,.08);}50%{box-shadow:0 0 0 4px rgba(245,179,1,.28);background:rgba(245,179,1,.2);}}
   @media (prefers-reduced-motion:reduce){ .tb-reconcile.flash{animation:none;box-shadow:0 0 0 2px rgba(245,179,1,.3);} }
@@ -1439,9 +1450,18 @@
   }
   // ----- Reconcile: duplicates (a unit on two open records), a cart tally, and an end-of-day nudge. -----
   var _DUP={};                                           // {recordId: unitKey} for every record of a double-booked unit
+  function nextISO(iso){ var d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+1); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  // Effective occupancy span [o,d) of an open record. An item physically OUT holds the unit from its out
+  // date until it is marked returned, so if it is still out today it occupies at least through today.
+  function recSpan(c){ var o=c.out||''; if(!o) return null; var d=c.due||o;
+    if(statusOf(c)==='out'){ var tm=nextISO(todayISO()); if(o<=todayISO() && d<tm) d=tm; }
+    return {o:o, d:d}; }
+  function spansOverlap(a,b){ return a.o<b.d && b.o<a.d; }   // half-open: a unit due back on day X may go out again that same day
+  // A unit is double-booked ONLY when two of its open records actually OVERLAP in time (not merely both exist;
+  // the same camera reserved for several different, non-overlapping dates is normal, not a conflict).
   function openDupes(){ var map={}, dup={};
-    (DATA.checkouts||[]).forEach(function(c){ if(!resvInScope(c)||statusOf(c)==='returned') return; var u=c.kind==='equipment'?('g:'+c.item):('c:'+c.camera); if(u==='c:'||u==='g:') return; (map[u]=map[u]||[]).push(c.id); });
-    Object.keys(map).forEach(function(u){ if(map[u].length>1) map[u].forEach(function(id){ dup[id]=u; }); });
+    (DATA.checkouts||[]).forEach(function(c){ if(!resvInScope(c)||statusOf(c)==='returned') return; var u=c.kind==='equipment'?('g:'+c.item):('c:'+c.camera); if(u==='c:'||u==='g:') return; var sp=recSpan(c); if(!sp) return; (map[u]=map[u]||[]).push({id:c.id,sp:sp}); });
+    Object.keys(map).forEach(function(u){ var a=map[u]; for(var i=0;i<a.length;i++){ for(var j=i+1;j<a.length;j++){ if(spansOverlap(a[i].sp,a[j].sp)){ dup[a[i].id]=u; dup[a[j].id]=u; } } } });
     return dup; }
   function dupUnitCount(){ var s={}; Object.keys(_DUP).forEach(function(id){ s[_DUP[id]]=1; }); return Object.keys(s).length; }
   // Cart tally for the selected pool: how many cameras the app thinks are handed out vs still here.
@@ -1469,7 +1489,7 @@
     if(afterSchool && outItemCount) bits.push(outItemCount+' not picked up');
     if(!bits.length) return '';
     var flash=(afterSchool||dups)?' flash':'';
-    return '<div class="tb-reconcile'+flash+'"><span class="rc-ic">&#9888;</span><span class="rc-t">Reconcile before you leave &middot; '+bits.join(' &middot; ')+'</span></div>'; }
+    return '<button type="button" class="tb-reconcile'+flash+'" data-reconcile="1"><span class="rc-ic">&#9888;</span><span class="rc-t">Reconcile before you leave &middot; '+bits.join(' &middot; ')+'</span><span class="rc-go">&#8250;</span></button>'; }
   function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
     var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), inc=incomingFor(SELDAY), odp=(isT?overduePickups():[]);
     _DUP = isT ? openDupes() : {};
@@ -1516,6 +1536,7 @@
       '<div class="tb-cols">'+col('out','Outgoing',out,'out')+col('in','Incoming',inc,'in')+'</div>';
     var odAcc=el.querySelector('.od-acc'); if(odAcc) odAcc.addEventListener('toggle',function(){ _odOpen=odAcc.open; });
     var hb=el.querySelector('[data-tbhelp]'); if(hb) hb.onclick=openBoardHelp;
+    var rcb=el.querySelector('[data-reconcile]'); if(rcb) rcb.onclick=openReconcile;
     el.querySelectorAll('[data-odstock]').forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-odstock'); var c=findRec(id);
       silvaConfirm('Return '+esc(((c&&c.kind!=='equipment')?c.camera:gearLabel(c&&c.item))||'this item')+' to stock? This cancels '+esc(nameOf(c||{}))+'’s reservation so you can check it out to someone else.', {okLabel:'Return to stock',cancelLabel:'Keep'})
         .then(function(ok){ if(ok){ _lastTBSig=null; del(id); } }); }; });
@@ -1832,6 +1853,40 @@
     else { var t=(gearUnit(it.item)||{}).type; free=gearPoolIds().filter(function(u){ var gu=gearUnit(u); return gu && gu.type===t && u!==it.item && !(assetOf(u).oos)
         && !unitBusyForSpan(function(c){return c.kind==='equipment'&&c.item===u;}, out, due, id); }); }
     openSwapPicker(it, isCam, free);
+  }
+  // Tap the reconcile banner -> see exactly which units are double-booked (overlapping records) and fix them.
+  function reconcileGroups(){
+    var dup=openDupes(), byUnit={};
+    Object.keys(dup).forEach(function(id){ (byUnit[dup[id]]=byUnit[dup[id]]||[]).push(id); });
+    return Object.keys(byUnit).map(function(u){
+      var recs=byUnit[u].map(findRec).filter(Boolean).sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; });
+      var label=(u.charAt(0)==='c')?((recs[0]&&recs[0].camera)||u.slice(2)):gearLabel(u.slice(2));
+      return {unit:label, recs:recs};
+    });
+  }
+  function openReconcile(){
+    var groups=reconcileGroups();
+    var body=groups.length ? groups.map(function(g){
+      return '<div class="rec-unit"><div class="rec-unith"><span class="til-dup">DUP</span>'+esc((g.unit||'').toUpperCase())+'</div>'+
+        g.recs.map(function(c){ var st=statusOf(c);
+          return '<div class="rec-rec"><div class="rec-info"><span class="rec-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span>'+
+            '<span class="rec-dates">'+esc(fmtDoWMD(c.out))+' &rarr; '+esc(fmt(c.due))+' &middot; '+({reserved:'Reserved',out:'Checked out'}[st]||st)+'</span></div>'+
+            '<div class="rec-acts"><button type="button" class="btn sm" data-recopen="'+esc(c.id)+'">Open</button>'+
+            (st==='out'?'<button type="button" class="btn sm warn" data-recret="'+esc(c.id)+'">Mark returned</button>':'')+
+            '<button type="button" class="btn sm danger" data-reccancel="'+esc(c.id)+'">Cancel</button></div></div>'; }).join('')+'</div>';
+    }).join('') : '<div class="rec-none">Nothing is actually double-booked. Every unit is on one reservation at a time (the same camera booked for different dates is fine).</div>';
+    var sub=groups.length?'<div class="rec-sub">These units are booked to more than one person for OVERLAPPING dates. Mark the one that is really back as returned, or cancel the booking that should not be there.</div>':'';
+    var ov=document.createElement('div'); ov.className='modal open'; ov.id='reconcilemodal';
+    ov.innerHTML='<div class="mpanel"><div class="mhead"><span class="mtitle">Reconcile double-booked</span><button class="mx" aria-label="Close">&times;</button></div><div class="mbody">'+sub+body+'</div></div>';
+    document.body.appendChild(ov);
+    function close(){ try{ document.body.removeChild(ov); }catch(e){} }
+    ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+    ov.querySelector('.mx').onclick=close;
+    ov.querySelectorAll('[data-recopen]').forEach(function(b){ b.onclick=function(){ close(); openReservation(b.getAttribute('data-recopen')); }; });
+    ov.querySelectorAll('[data-recret]').forEach(function(b){ b.onclick=function(){ b.disabled=true; _lastTBSig=null; Promise.resolve(setStatus(b.getAttribute('data-recret'),'returned')).then(function(){ close(); openReconcile(); }); }; });
+    ov.querySelectorAll('[data-reccancel]').forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-reccancel'), c=findRec(id);
+      silvaConfirm('Cancel '+esc(nameOf(c||{}))+'’s booking of '+esc(((c&&c.kind!=='equipment')?c.camera:gearLabel(c&&c.item))||'this unit')+'? It is removed from the schedule.', {okLabel:'Cancel booking',cancelLabel:'Keep'}).then(function(ok){ if(!ok) return; b.disabled=true; _lastTBSig=null;
+        camAPI('/api/camera/delete',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id})}).then(function(){ return loadBoard(); }).then(function(){ close(); openReconcile(); }).catch(function(){ silvaToast('Could not cancel. Try again.'); }); }); }; });
   }
   // The one "i" on the board: a short guide to the new workflows (so Garcia and Mankin can learn them
   // without any how-to text cluttering the board Chris uses all day).
