@@ -311,6 +311,7 @@
 
   // ----- the one-box stepped planner: checkout day -> pickup time -> return time, all in place -----
   var calView=new Date(checkout.getFullYear(), checkout.getMonth(), 1), planStep=1;
+  var pendingAdd=null;   // an item waiting on the checkout-date flow; added to the bag once dates are set
   function openPlan(){ planStep=1; renderPlan(); open('planOv'); }
   function renderPlan(){
     document.getElementById('planProg').innerHTML=[1,2,3].map(function(n){ return '<span class="pd'+(n===planStep?' on':(n<planStep?' done':''))+'">'+n+'</span>'; }).join('');
@@ -330,7 +331,7 @@
       document.getElementById('planTitle').textContent='Return time';
       document.getElementById('planSub').textContent='Due back '+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+' (the next school day). When will you return it?';
       cal.style.display='none'; opts.style.display='';
-      renderOpts(returnOptions(returnDay), function(o){ returnTime=o; renderDates(); close('planOv'); }, 'These are the only return times. If you return late, you may lose the chance to check out cameras next time.');
+      renderOpts(returnOptions(returnDay), function(o){ returnTime=o; renderDates(); var nm=pendingAdd; pendingAdd=null; close('planOv'); if(nm) addToBag(nm); }, 'These are the only return times. If you return late, you may lose the chance to check out cameras next time.');
     }
   }
   function renderOpts(opts, pick, note){
@@ -568,11 +569,15 @@
   function updateBag(){ var n=document.getElementById('cartN'); n.textContent=BAG.length; n.className='cart-n'+(BAG.length?'':' empty'); }
   function bagPulse(){ var b=document.getElementById('cartBtn'); b.classList.add('pulse'); setTimeout(function(){ b.classList.remove('pulse'); },320); }
   function addToBag(name){
-    if(!USER){ openSignin(); return; }                                  // 1) confirm student id
-    if(!datesReady()){ pulseDates(); toast('First set your pickup time and return time above.'); return; }  // 2) dates/times up front
+    if(!USER){ openSignin(); return; }                                  // confirm student id first
+    var it=findItem(name); if(it && itemLocked(it)){ openGear(); return; }  // off-course gear: teacher override
     if(onHold()){ openHold(); return; }                                 // missing-work hold: browse yes, add no
-    var it=findItem(name); if(it && itemLocked(it)){ openGear(); return; }
+    if(!datesReady()){ pendingAdd=name; openPlan(); return; }           // no dates yet: walk them through checkout dates, then add
+    doAddToBag(name);
+  }
+  function doAddToBag(name){
     if(BAG.indexOf(name)<0){ BAG.push(name); saveBag(); updateBag(); bagPulse(); }
+    toast('Added to your bag.');
     rerender();
   }
   function removeFromBag(name){ var i=BAG.indexOf(name); if(i>=0){ BAG.splice(i,1); saveBag(); updateBag(); rerender(); renderBag(); } }
@@ -586,7 +591,7 @@
 
   // ===== overlays + toast helpers =====
   function open(id){ document.getElementById(id).classList.add('open'); }
-  function close(id){ document.getElementById(id).classList.remove('open'); }
+  function close(id){ document.getElementById(id).classList.remove('open'); if(id==='planOv') pendingAdd=null; }
   document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ close(b.getAttribute('data-close')); }; });
   ['signinOv','holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
   function toast(msg){ var t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2800); }
