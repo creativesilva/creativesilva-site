@@ -253,6 +253,7 @@
      '/curriculum/photo1/photo1a-syllabus.html'],
     // Announcements (match the catalog Announcements accordion: after Course Pages, before modules)
     ['/curriculum/shared/photo1-field-trip-sbma.html'],
+    ['/curriculum/shared/dia-de-los-muertos-honor-photo.html'],
     ['/curriculum/shared/photo1-self-portrait-overview.html',
      '/curriculum/shared/photo1-self-portrait-step01-capture.html',
      '/curriculum/shared/photo1-self-portrait-step02-reflection.html'],
@@ -359,7 +360,8 @@
     '/curriculum/shared/da1-field-trip-sbma.html',
     '/curriculum/shared/photo1-field-trip-sbma.html',
     '/curriculum/shared/photo2-field-trip-sbma.html',
-    '/curriculum/shared/digarts1-cover-decoration-winners.html'
+    '/curriculum/shared/digarts1-cover-decoration-winners.html',
+    '/curriculum/shared/dia-de-los-muertos-honor-photo.html'
   ];
   function isAnnouncement(u) {
     for (var i = 0; i < ANNOUNCEMENTS.length; i++) { if (samePath(ANNOUNCEMENTS[i], u)) { return true; } }
