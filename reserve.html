@@ -396,7 +396,7 @@
     ]},
     lighting:{label:'Lighting', items:[
       {name:'Speedlite EL-5', img:'/assets/images/equipment/speedlite-v2.png', added:'2024-09-01'},
-      {name:'Godox AD200 Pro II Kit', img:'', p2:true, tag:'Photo 2', added:'2026-10-16'}
+      {name:'Godox AD200 Pro II Kit', img:'/assets/images/equipment/godox-v1.png', p2:true, tag:'Photo 2', added:'2026-10-16'}
     ]},
     accessories:{label:'Accessories', items:[
       {name:'K&F Concept Tripod', img:'/assets/images/equipment/tripod-v3.png', added:'2024-08-01'},
@@ -415,14 +415,15 @@
     'Ultra-Zoom 100-400mm':{blurb:'Canon RF 100-400mm. A long zoom for sports, wildlife, and far-away subjects.',specs:[['Focal length','100-400mm'],['Aperture','f/5.6-8'],['Stabilization','Optical IS, about 5.5 stops'],['Focus','Nano USM, min 0.88 m'],['Filter','67mm'],['Weight','About 635 g']]},
     'Speedlite EL-5':{blurb:'Canon Speedlite EL-5. A strong flash for portraits and creative lighting.',specs:[['Guide number','60 (at 200mm, ISO 100)'],['Zoom','24-200mm, with wide panel'],['Control','E-TTL II, 2.4GHz radio, up to 15 units'],['Head','Tilts 120&#176; up, rotates 180&#176; each way'],['Extras','LED modeling lamp, weather-resistant']]},
     'K&F Concept Tripod':{blurb:'A steady, lightweight tripod with a ball head. Keeps your photos sharp.',specs:[['Type','Aluminum travel tripod'],['Head','Ball head with quick-release plate'],['Good for','Long exposures, video, steady framing'],['Build','Folds compact for carrying']]},
-    'Neewer Reflector':{blurb:'A 5-in-1 reflector. Bounce and shape light for better portraits.',specs:[['Surfaces','Silver, gold, white, black, translucent'],['Good for','Filling shadows, softening or warming light'],['Size','About 43 in (110 cm)'],['Build','Collapsible, folds into a small case']]}
+    'Neewer Reflector':{blurb:'A 5-in-1 reflector. Bounce and shape light for better portraits.',specs:[['Surfaces','Silver, gold, white, black, translucent'],['Good for','Filling shadows, softening or warming light'],['Size','About 43 in (110 cm)'],['Build','Collapsible, folds into a small case']]},
+    'Godox AD200 Pro II Kit':{blurb:'A strong, portable flash kit for studio-style light anywhere. Comes with the Canon trigger and a light stand. Photo 2 only.',specs:[['Flash','Godox AD200 Pro II, 200Ws'],['Trigger','Godox XProC wireless trigger (Canon)'],['Stand','Adjustable light stand'],['Heads','Speedlite head + bare-bulb head'],['Good for','Portraits and creative off-camera lighting']]}
   };
 
   // ----- live stock levels (free / total of real units for the chosen checkout span) -----
   var CAL=null;
   function loadCal(){ fetch(API+'/api/camera/calendar').then(function(r){return r.json();}).then(function(j){ CAL=j; rerender(); renderFeatured(); }).catch(function(){}); }
   function camsFor(name){ var r={'Canon EOS R50':[1,15],'Canon EOS R8':[16,16],'Canon EOS RP':[17,18],'Canon EOS R50 V':[19,21]}[name]; if(!r) return null; var a=[]; for(var i=r[0];i<=r[1];i++) a.push('Cam '+(i<10?'0':'')+i); return a; }
-  var EQTYPE={'Ultra-Wide 10-18mm':'wide','Ultra-Zoom 100-400mm':'zoom','Speedlite EL-5':'speedlite','K&F Concept Tripod':'tripod','Neewer Reflector':'reflector'};
+  var EQTYPE={'Ultra-Wide 10-18mm':'wide','Ultra-Zoom 100-400mm':'zoom','Speedlite EL-5':'speedlite','K&F Concept Tripod':'tripod','Neewer Reflector':'reflector','Godox AD200 Pro II Kit':'godox'};
   function overlaps(out,due,co,ret){ return out && due && out<=ret && due>=co; }   // ISO date strings compare lexicographically
   function stockFor(it){
     if(!CAL) return null;
