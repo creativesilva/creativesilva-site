@@ -1009,7 +1009,6 @@
       <div id="retequip"></div>
       <label for="retnote2">Extra note (optional)</label>
       <input type="text" id="retnote2" placeholder="e.g. small scratch on the screen" />
-      <label class="chk" style="margin-top:12px;"><input type="checkbox" id="ret_leavecard"> Student is leaving their memory card to offload later. You will pull the card into the wallet and the camera stays out of rotation until a fresh card is installed.</label>
       <button class="go" id="retgo">Confirm return</button>
     </div>
   </div>
@@ -2506,7 +2505,6 @@
       });
     } else { eq.innerHTML=''; }
     document.getElementById('retnote2').value='';
-    var lc=document.getElementById('ret_leavecard'); if(lc) lc.checked=false;
     document.getElementById('retmodal').classList.add('open');
   }
   function closeReturn(){ document.getElementById('retmodal').classList.remove('open'); retId=null; }
@@ -2519,8 +2517,6 @@
       if(!retId) return; var id=retId, c=findRec(id), cam=c?c.camera:'';
       var missing=[]; KIT_STD.forEach(function(k,i){ var el=document.getElementById('ret_'+i); if(el && !el.checked) missing.push(k); });
       var extra=document.getElementById('retnote2').value.trim();
-      var lc=document.getElementById('ret_leavecard');
-      var cardCtx=(lc&&lc.checked&&c)?{camera:cam, student_id:c.student_id||'', student_name:nameOf(c), checkout_id:c.id}:null;
       // Capture each linked-gear decision before closing: returned, or kept pending with a reason.
       var eqDecisions=(retEquip||[]).map(function(e){
         var row=document.querySelector('#retequip .reteq[data-eqid="'+e.id+'"]');
@@ -2548,8 +2544,6 @@
         return camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:d.id,status:'out',pending:true,note:d.note||'Not returned with the kit'})});
       });
       if(eqCalls.length) Promise.all(eqCalls).then(function(){ loadBoard(); }).catch(function(){ loadBoard(); });
-      // Student is offloading later: pull the card into a wallet slot (flags the camera no-card).
-      if(cardCtx) openCardHold(cardCtx);
     };
   })();
 
