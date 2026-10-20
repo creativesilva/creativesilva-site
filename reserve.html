@@ -421,7 +421,7 @@
   // ----- live stock levels (free / total of real units for the chosen checkout span) -----
   var CAL=null;
   function loadCal(){ fetch(API+'/api/camera/calendar').then(function(r){return r.json();}).then(function(j){ CAL=j; rerender(); renderFeatured(); }).catch(function(){}); }
-  function camsFor(name){ var r={'Canon EOS R50':[1,15],'Canon EOS RP':[16,17],'Canon EOS R8':[18,18],'Canon EOS R50 V':[19,21]}[name]; if(!r) return null; var a=[]; for(var i=r[0];i<=r[1];i++) a.push('Cam '+(i<10?'0':'')+i); return a; }
+  function camsFor(name){ var r={'Canon EOS R50':[1,15],'Canon EOS R8':[16,16],'Canon EOS RP':[17,18],'Canon EOS R50 V':[19,21]}[name]; if(!r) return null; var a=[]; for(var i=r[0];i<=r[1];i++) a.push('Cam '+(i<10?'0':'')+i); return a; }
   var EQTYPE={'Ultra-Wide 10-18mm':'wide','Ultra-Zoom 100-400mm':'zoom','Speedlite EL-5':'speedlite','K&F Concept Tripod':'tripod','Neewer Reflector':'reflector'};
   function overlaps(out,due,co,ret){ return out && due && out<=ret && due>=co; }   // ISO date strings compare lexicographically
   function stockFor(it){
@@ -444,7 +444,7 @@
   }
 
   // ----- Popular & New: 2 most-reserved items + 1 newest-on-the-menu -----
-  function modelOfCam(cam){ var n=parseInt(String(cam).replace(/\D/g,''),10); if(n>=1&&n<=15) return 'Canon EOS R50'; if(n>=16&&n<=17) return 'Canon EOS RP'; if(n===18) return 'Canon EOS R8'; if(n>=19&&n<=21) return 'Canon EOS R50 V'; return null; }
+  function modelOfCam(cam){ var n=parseInt(String(cam).replace(/\D/g,''),10); if(n>=1&&n<=15) return 'Canon EOS R50'; if(n===16) return 'Canon EOS R8'; if(n>=17&&n<=18) return 'Canon EOS RP'; if(n>=19&&n<=21) return 'Canon EOS R50 V'; return null; }
   function modelOfType(t){ return {wide:'Ultra-Wide 10-18mm',zoom:'Ultra-Zoom 100-400mm',speedlite:'Speedlite EL-5',tripod:'K&F Concept Tripod',reflector:'Neewer Reflector'}[t]||null; }
   function featuredItems(){
     if(!CAL) return [];
@@ -480,7 +480,16 @@
   function saveUser(){ try{ USER?sessionStorage.setItem('pv_user',JSON.stringify(USER)):sessionStorage.removeItem('pv_user'); }catch(e){} }
   function saveBag(){ try{ sessionStorage.setItem('pv_bag',JSON.stringify(BAG)); }catch(e){} }
   function onHold(){ return !!(USER && USER.hold); }
-  function itemLocked(it){ return !!(USER && it.p2 && !USER.p2_ok && !USER.gearUnlocked); }   // Photo-2 gear for a non-Photo-2 student
+  function itemDA(it){ return !!(it.da || it.tag==='Digital Arts'); }       // Mankin / Digital Arts gear
+  // Gray out equipment that is not for the signed-in student's course (teacher override lifts it).
+  function itemLocked(it){
+    if(!USER || USER.gearUnlocked) return false;                             // browsing (not signed in) or teacher-overridden
+    if(USER.pool==='mankin') return !itemDA(it);                             // Digital Arts student: only Digital Arts gear
+    if(itemDA(it)) return true;                                              // photo student can't take Digital Arts gear
+    if(it.p2 && !USER.p2_ok) return true;                                    // Photo-2-only gear needs a Photo 2 student
+    return false;                                                            // shared photo gear
+  }
+  function lockReason(it){ if(itemDA(it)) return 'Digital Arts only'; if(it.p2) return 'Photo 2 only'; return 'Ask teacher'; }
 
   // ----- product cards (lock + add states depend on the signed-in student) -----
   function cardHtml(it){
@@ -496,7 +505,7 @@
     var det=encodeURIComponent(it.name);
     var more = SPECS[it.name] ? '<button type="button" class="prod-details" data-detail="'+det+'">View details</button>' : '';
     return '<div class="prod'+(locked?' locked':'')+'">'+
-      '<div class="prod-img" data-detail="'+det+'"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.tag&&!locked?'<span class="prod-tag">'+esc(it.tag)+'</span>':'')+(locked?'<span class="prod-lockbadge">Photo 2 only</span>':'')+'</div>'+
+      '<div class="prod-img" data-detail="'+det+'"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.tag&&!locked?'<span class="prod-tag">'+esc(it.tag)+'</span>':'')+(locked?'<span class="prod-lockbadge">'+esc(lockReason(it))+'</span>':'')+'</div>'+
       '<div class="prod-name" data-detail="'+det+'">'+esc(it.name)+'</div>'+ stock + more + btn + '</div>';
   }
   function wireCards(g){

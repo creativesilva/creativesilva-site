@@ -2041,11 +2041,11 @@
   function gearThumb(type){ var u=GEAR_THUMB[type]||'';
     return u ? '<span class="gthumb"><img src="'+esc(u)+'" alt=""></span>' : '<span class="gthumb gthumb-ph" aria-hidden="true"></span>'; }
   // Camera body thumbnails: the Photo classes use the Canon EOS R50; Mankin's class (cams 19+) uses the R50 V.
-  var CAMERA_THUMB={ r50:THUMB_BASE+'camera-r50-v2.png', r50v:THUMB_BASE+'camera-r50v-v2.png', rp:THUMB_BASE+'camera-rp-v1.png' };
+  var CAMERA_THUMB={ r50:THUMB_BASE+'camera-r50-v2.png', r50v:THUMB_BASE+'camera-r50v-v2.png', rp:THUMB_BASE+'camera-rp-v1.png', r8:THUMB_BASE+'camera-r8-v1.png' };
   var SD_THUMB=THUMB_BASE+'sdcard-v3.png';   // memory-card image shown on FILLED wallet slots only
-  // R50 for Photo 1 cams 01-15, Canon EOS RP for the Photo 2 cams 16-18, R50V for Mankin 19+.
+  // R50 for Photo 1 cams 01-15; Cam 16 = R8, Cams 17-18 = RP (Photo 2); R50V for Mankin 19+.
   function camThumb(cam){ var n=parseInt(String(cam).replace(/[^0-9]/g,''),10)||0;
-    var u=(n>=19)?CAMERA_THUMB.r50v:((n>=16&&n<=18)?CAMERA_THUMB.rp:CAMERA_THUMB.r50);
+    var u=(n>=19)?CAMERA_THUMB.r50v:(n===16?CAMERA_THUMB.r8:((n>=17&&n<=18)?CAMERA_THUMB.rp:CAMERA_THUMB.r50));
     return u ? '<span class="gthumb"><img src="'+esc(u)+'" alt=""></span>' : '<span class="gthumb gthumb-ph" aria-hidden="true"></span>'; }
   // A gear unit's live state + the one active (non-returned) record on it, mirroring the camera helpers.
   function gearActiveFor(id){ var r=(DATA.checkouts||[]).filter(function(c){ return c.kind==='equipment' && c.item===id && statusOf(c)!=='returned'; }); return r[0]||null; }
