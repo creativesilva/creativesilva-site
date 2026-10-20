@@ -219,6 +219,9 @@
     ['/curriculum/digarts1/digarts1a-home.html',
      '/curriculum/digarts1/digarts1a-course-overview.html',
      '/curriculum/digarts1/digarts1a-syllabus.html'],
+    // Announcements (match the catalog Announcements accordion: after Course Pages, before modules)
+    ['/curriculum/shared/digarts1-cover-decoration-winners.html'],
+    ['/curriculum/shared/da1-field-trip-sbma.html'],
     ['/curriculum/shared/digarts1-pictograms-overview.html',
      '/curriculum/shared/digarts1-pictograms-step01-find-save.html',
      '/curriculum/shared/digarts1-pictograms-step02-sketch-reflect.html'],
@@ -248,6 +251,8 @@
     ['/curriculum/photo1/photo1a-home.html',
      '/curriculum/photo1/photo1a-course-overview.html',
      '/curriculum/photo1/photo1a-syllabus.html'],
+    // Announcements (match the catalog Announcements accordion: after Course Pages, before modules)
+    ['/curriculum/shared/photo1-field-trip-sbma.html'],
     ['/curriculum/shared/photo1-self-portrait-overview.html',
      '/curriculum/shared/photo1-self-portrait-step01-capture.html',
      '/curriculum/shared/photo1-self-portrait-step02-reflection.html'],
@@ -290,6 +295,8 @@
     ['/curriculum/photo2/photo2a-home.html',
      '/curriculum/photo2/photo2a-course-overview.html',
      '/curriculum/photo2/photo2a-syllabus.html'],
+    // Announcements (match the catalog Announcements accordion: after Course Pages, before modules)
+    ['/curriculum/shared/photo2-field-trip-sbma.html'],
     ['/curriculum/shared/photo2-composition-overview.html',
      '/curriculum/shared/photo2-composition-step01-photowalk.html',
      '/curriculum/shared/photo2-composition-step02-cull-export.html',
