@@ -45,12 +45,6 @@
   /* Installed web-app feel: no sideways scroll or rubber-band bounce (pinch-zoom is off via the viewport meta). */
   html,body{overflow-x:hidden;overscroll-behavior-x:none;max-width:100%;}
   body{background-color:#0a0d0d;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;}
-  /* Pull-to-refresh indicator (only wired up when running as an installed PWA). Angular, on-brand. */
-  #ptr{position:fixed;top:0;left:0;right:0;height:58px;display:flex;align-items:center;justify-content:center;z-index:200;pointer-events:none;transform:translateY(-58px);will-change:transform;}
-  #ptr .ptr-spin{width:22px;height:22px;border:3px solid rgba(0,184,184,0.28);border-top-color:#00b8b8;}
-  #ptr.ptr-ready .ptr-spin{border-color:rgba(0,184,184,0.5);border-top-color:#19d3c5;}
-  #ptr.ptr-anim .ptr-spin{animation:ptrspin .7s linear infinite;}
-  @keyframes ptrspin{to{transform:rotate(360deg);}}
   /* Match the student reservation store: a teal radial glow rising from the bottom-right over the black base. */
   body::before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse 100% 60% at 92% 106%, rgba(0,116,116,.30) 0%, rgba(0,116,116,.10) 40%, transparent 66%);}
 
@@ -3078,47 +3072,13 @@
     var w=window.open('','_blank'); if(!w){ silvaToast('Allow pop-ups to open the report.'); return; }
     w.document.open(); w.document.write(html); w.document.close();
   }
-  document.getElementById('refreshBtn').onclick=function(){ var b=this; if(b.disabled) return; b.disabled=true; var o=b.innerHTML; b.innerHTML='&#8635; Refreshing&#8230;';
-    Promise.resolve(loadBoard()).then(function(){ reloadCal(); silvaToast('Refreshed with the latest.'); }).catch(function(){ silvaToast('Could not refresh. Try again.'); }).then(function(){ b.disabled=false; b.innerHTML=o; }); };
+  // Refresh = a full page reload, exactly like Cmd+R (the stored password re-authenticates silently).
+  document.getElementById('refreshBtn').onclick=function(){ location.reload(); };
 
-  // ===== iPad web-app feel: block pinch-zoom + custom pull-to-refresh =====
+  // ===== iPad web-app feel: block pinch-zoom (no sideways scroll/bounce comes from the CSS). =====
   (function(){
-    // Block pinch-zoom gestures (belt-and-suspenders with the viewport meta; double-tap zoom is handled by user-scalable=no).
     ['gesturestart','gesturechange','gestureend'].forEach(function(ev){
       document.addEventListener(ev, function(e){ e.preventDefault(); }, {passive:false}); });
-
-    // Pull-to-refresh: only when running as an installed web app (Safari browser has its own). ?ptr=1 forces it on for testing.
-    var standalone=(navigator.standalone===true)||(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
-    if(!standalone && location.search.indexOf('ptr=1')<0) return;
-    var H=58, THRESH=52, MAX=92, startY=0, dist=0, active=false, busy=false;
-    var bar=document.createElement('div'); bar.id='ptr'; bar.setAttribute('aria-hidden','true'); bar.innerHTML='<div class="ptr-spin"></div>';
-    document.body.appendChild(bar);
-    function sTop(){ return window.pageYOffset||document.documentElement.scrollTop||0; }
-    function set(y){ bar.style.transform='translateY('+(y-H)+'px)'; }
-    function modalOpen(){ return !!document.querySelector('.modal.open') || (function(){ var g=document.getElementById('gate'); return g && g.style.display!=='none'; })(); }
-    set(0);
-    document.addEventListener('touchstart', function(e){
-      if(busy||e.touches.length!==1||sTop()>0||modalOpen()){ active=false; return; }
-      startY=e.touches[0].clientY; active=true; dist=0; bar.style.transition='';
-    }, {passive:true});
-    document.addEventListener('touchmove', function(e){
-      if(!active||busy) return;
-      dist=e.touches[0].clientY-startY;
-      if(dist<=0||sTop()>0){ active=false; set(0); return; }
-      e.preventDefault();                                   // stop the native top bounce while pulling
-      var y=Math.min(MAX, dist*0.5); set(y);
-      bar.classList.toggle('ptr-ready', y>=THRESH);
-    }, {passive:false});
-    document.addEventListener('touchend', function(){
-      if(!active||busy){ active=false; return; }
-      active=false; var y=Math.min(MAX, dist*0.5);
-      bar.style.transition='transform .22s ease';
-      if(y>=THRESH){
-        busy=true; bar.classList.add('ptr-anim','ptr-ready'); set(H*0.72);
-        Promise.resolve(loadBoard()).then(function(){ reloadCal(); }).catch(function(){})
-          .then(function(){ setTimeout(function(){ set(0); setTimeout(function(){ bar.classList.remove('ptr-anim','ptr-ready'); busy=false; },240); }, 280); });
-      } else { bar.classList.remove('ptr-ready'); set(0); }
-    }, {passive:true});
   })();
 
   // ---- PIN gate (the password is validated by the server) ----
