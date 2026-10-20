@@ -43,7 +43,7 @@
     <!-- Category nav (teal line-art icons), top-left -->
     <nav class="catnav">
       <div class="catnav-row" id="catnav">
-        <button type="button" class="catn active" data-cat="cameras"><span class="catn-ic" style="--ic:url('/assets/Icons/store/camera-v1.png')"></span>Camera Kits</button>
+        <button type="button" class="catn" data-cat="cameras"><span class="catn-ic" style="--ic:url('/assets/Icons/store/camera-v1.png')"></span>Camera Kits</button>
         <button type="button" class="catn" data-cat="lenses"><span class="catn-ic" style="--ic:url('/assets/Icons/store/lenses-v1.png')"></span>Lenses</button>
         <button type="button" class="catn" data-cat="lighting"><span class="catn-ic" style="--ic:url('/assets/Icons/store/lighting-v1.png')"></span>Lighting</button>
         <button type="button" class="catn" data-cat="accessories"><span class="catn-ic" style="--ic:url('/assets/Icons/store/accessories-v1.png')"></span>Accessories</button>
@@ -82,12 +82,8 @@
     </div>
   </section>
   <section class="products">
-    <div class="prod-head"><span class="bar"></span><span id="prodHeadLabel">Camera Kits</span></div>
+    <div class="prod-head"><span class="bar"></span><span id="prodHeadLabel">Popular Rentals</span></div>
     <div class="prod-grid" id="prodGrid"></div>
-  </section>
-  <section class="featured" id="featured" style="display:none">
-    <div class="prod-head"><span class="bar"></span><span>Popular &#38; New</span></div>
-    <div class="prod-grid feat-grid" id="featGrid"></div>
   </section>
 </main>
 
@@ -421,7 +417,7 @@
 
   // ----- live stock levels (free / total of real units for the chosen checkout span) -----
   var CAL=null;
-  function loadCal(){ fetch(API+'/api/camera/calendar').then(function(r){return r.json();}).then(function(j){ CAL=j; rerender(); renderFeatured(); }).catch(function(){}); }
+  function loadCal(){ fetch(API+'/api/camera/calendar').then(function(r){return r.json();}).then(function(j){ CAL=j; rerender(); }).catch(function(){}); }
   function camsFor(name){ var r={'Canon EOS R50':[1,15],'Canon EOS R8':[16,16],'Canon EOS RP':[17,18],'Canon EOS R50 V':[19,21]}[name]; if(!r) return null; var a=[]; for(var i=r[0];i<=r[1];i++) a.push('Cam '+(i<10?'0':'')+i); return a; }
   var EQTYPE={'Ultra-Wide 10-18mm':'wide','Ultra-Zoom 100-400mm':'zoom','Speedlite EL-5':'speedlite','K&F Concept Tripod':'tripod','Neewer Reflector':'reflector','Godox AD200 Pro II Kit':'godox'};
   function overlaps(out,due,co,ret){ return out && due && out<=ret && due>=co; }   // ISO date strings compare lexicographically
@@ -447,31 +443,25 @@
   // ----- Popular & New: 2 most-reserved items + 1 newest-on-the-menu -----
   function modelOfCam(cam){ var n=parseInt(String(cam).replace(/\D/g,''),10); if(n>=1&&n<=15) return 'Canon EOS R50'; if(n===16) return 'Canon EOS R8'; if(n>=17&&n<=18) return 'Canon EOS RP'; if(n>=19&&n<=21) return 'Canon EOS R50 V'; return null; }
   function modelOfType(t){ return {wide:'Ultra-Wide 10-18mm',zoom:'Ultra-Zoom 100-400mm',speedlite:'Speedlite EL-5',tripod:'K&F Concept Tripod',reflector:'Neewer Reflector'}[t]||null; }
-  function featuredItems(){
-    if(!CAL) return [];
+  // Popular Rentals (the default/home view): the 4 most-reserved items the student can actually rent.
+  function popularItems(){
     var count={};
-    (CAL.checkouts||[]).forEach(function(c){ var m=modelOfCam(c.camera); if(m) count[m]=(count[m]||0)+1; });
-    var eu=CAL.equipment_units||{};
-    (CAL.equipment||[]).forEach(function(c){ var u=eu[c.item]; var m=u?modelOfType(u.type):null; if(m) count[m]=(count[m]||0)+1; });
-    var pop=Object.keys(count).filter(function(n){ var it=findItem(n); return it&&it.img; })
-      .sort(function(a,b){ return count[b]-count[a]; });
-    var picks=[], used={};
-    pop.slice(0,2).forEach(function(n){ picks.push({it:findItem(n), ribbon:'Popular'}); used[n]=1; });
-    var newest=null, nd='';
-    Object.keys(CATS).forEach(function(k){ CATS[k].items.forEach(function(it){ if(it.img && !used[it.name] && it.added && it.added>nd){ nd=it.added; newest=it; } }); });
-    if(newest) picks.push({it:newest, ribbon:'New'});
-    return picks;
+    if(CAL){
+      (CAL.checkouts||[]).forEach(function(c){ var m=modelOfCam(c.camera); if(m) count[m]=(count[m]||0)+1; });
+      var eu=CAL.equipment_units||{};
+      (CAL.equipment||[]).forEach(function(c){ var u=eu[c.item]; var m=u?modelOfType(u.type):null; if(m) count[m]=(count[m]||0)+1; });
+    }
+    var all=[]; Object.keys(CATS).forEach(function(k){ CATS[k].items.forEach(function(it){ if(it.img && !itemLocked(it)) all.push(it); }); });
+    all.sort(function(a,b){ var ca=count[a.name]||0, cb=count[b.name]||0; if(cb!==ca) return cb-ca; return (b.added||'')<(a.added||'')?-1:1; });
+    return all.slice(0,4);
   }
-  function renderFeatured(){
-    var sec=document.getElementById('featured'), g=document.getElementById('featGrid');
-    if(!sec||!g) return;
-    var picks=featuredItems();
-    if(picks.length<2){ sec.style.display='none'; return; }
-    g.innerHTML=picks.map(function(p){
-      return '<div class="feat-wrap"><span class="feat-ribbon'+(p.ribbon==='New'?' new':'')+'">'+p.ribbon+'</span>'+cardHtml(p.it)+'</div>';
-    }).join('');
+  function renderPopular(){
+    CURVIEW='popular';
+    document.getElementById('prodHeadLabel').textContent='Popular Rentals';
+    var g=document.getElementById('prodGrid'); var items=popularItems();
+    g.innerHTML=items.length?items.map(cardHtml).join(''):'<p class="noresults">Loading popular rentals&hellip;</p>';
     wireCards(g);
-    sec.style.display='';
+    document.querySelectorAll('.catn').forEach(function(x){ x.classList.remove('active'); });
   }
 
   // ===== signed-in student + equipment bag state =====
@@ -527,21 +517,30 @@
     var ab=document.getElementById('detailAdd'); if(ab) ab.onclick=function(){ close('detailOv'); addToBag(name); };
     open('detailOv');
   }
+  var CURVIEW='popular';   // which single section is showing: 'popular' (home) or a category key
   function renderCat(cat){
+    CURVIEW=cat;
     var c=CATS[cat]||CATS.cameras;
     document.getElementById('prodHeadLabel').textContent=c.label;
     var g=document.getElementById('prodGrid');
     g.innerHTML=c.items.filter(function(it){ return it.img; }).map(cardHtml).join('');
     wireCards(g);
   }
-  function rerender(){ var a=document.querySelector('.catn.active'); var si=document.getElementById('searchIn');
-    if(si && si.value.trim()){ renderResults(si.value); } else { renderCat(a?a.getAttribute('data-cat'):'cameras'); } }
+  // One section at a time: re-render whichever view is active (search > popular/category).
+  function renderView(){ var si=document.getElementById('searchIn');
+    if(si && si.value.trim()){ renderResults(si.value); return; }
+    if(CURVIEW==='popular'){ renderPopular(); } else { renderCat(CURVIEW); } }
+  function rerender(){ renderView(); }
   document.getElementById('catnav').addEventListener('click', function(e){
     var t=e.target.closest('[data-cat]'); if(!t) return;
     var si=document.getElementById('searchIn'); if(si) si.value='';
     document.querySelectorAll('.catn').forEach(function(x){ x.classList.remove('active'); }); t.classList.add('active');
     renderCat(t.getAttribute('data-cat'));
   });
+  // Home (the logo or the brand) returns to Popular Rentals in place, no reload.
+  (function(){ function goHome(e){ if(e) e.preventDefault(); var si=document.getElementById('searchIn'); if(si) si.value=''; renderPopular(); }
+    var lg=document.querySelector('.store-logo'); if(lg) lg.addEventListener('click', goHome);
+    var bd=document.querySelector('.store-brand'); if(bd){ bd.style.cursor='pointer'; bd.addEventListener('click', goHome); } })();
 
   // ----- search across every category (matches name + category label) -----
   var ALL=[]; Object.keys(CATS).forEach(function(k){ var lab=CATS[k].label; CATS[k].items.forEach(function(it){ if(it.img) ALL.push({it:it, hay:(it.name+' '+lab).toLowerCase()}); }); });
@@ -558,7 +557,7 @@
   function doSearch(){
     var q=searchIn.value;
     if(q.trim()){ renderResults(q); }
-    else { var a=document.querySelector('.catn[data-cat="cameras"]'); if(a) a.classList.add('active'); renderCat('cameras'); }
+    else { renderView(); }   // cleared search: back to whichever section was active (popular or a category)
   }
   if(searchIn){
     searchIn.addEventListener('input', doSearch);
@@ -607,7 +606,7 @@
     var bs=document.getElementById('brandStu');
     if(bs){ if(USER && (USER.period||USER.teacher||USER.course)){ bs.innerHTML=brandStuLine(USER); bs.hidden=false; } else { bs.hidden=true; bs.innerHTML=''; } }
     updateBag(); refreshPickupInfo();
-    rerender(); renderFeatured();   // re-apply the course gray-out / in-bag state for the current student
+    rerender();   // re-apply the course gray-out / in-bag state for the current student
     var hb=document.getElementById('holdBanner');
     if(USER && USER.hold){
       var lim=(USER.missing_limit!=null?USER.missing_limit:6);
@@ -732,7 +731,7 @@
 
   // ===== init =====
   renderDates();
-  renderCat('cameras');
+  renderPopular();   // home view = Popular Rentals (not a category)
   refreshAccount();
   loadCal();
   // Prompt for a student number 3s after the page loads (unless already signed in or the sheet is open).
