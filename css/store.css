@@ -29,6 +29,10 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .store-brand{display:flex;flex-direction:column;line-height:1.05;}
 .store-brand b{font-family:var(--font-head);font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:1.2rem;color:#fff;}
 .store-brand span{font-size:.7rem;letter-spacing:.04em;color:var(--gray);}
+/* Signed-in student context line: Period | Teacher | Course. */
+.store-brand .store-stu{display:flex;align-items:center;gap:7px;margin-top:3px;font-family:var(--font-head);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.62rem;color:var(--teal-bright);white-space:nowrap;}
+.store-brand .store-stu[hidden]{display:none;}
+.store-brand .store-stu .bs-sep{color:var(--gray);font-weight:400;font-style:normal;}
 .nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
 .acct-btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-head);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.76rem;padding:9px 15px;border:1px solid var(--teal-bright);color:var(--teal-bright);background:transparent;}
 .acct-btn.in{background:var(--teal);border-color:var(--teal);color:#021414;}
@@ -38,7 +42,7 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 
 /* ---- top utility strip (classroom pickup + text-only contact) ---- */
 .util{background:var(--teal-deep);border-bottom:1px solid var(--line);}
-.util-row{display:flex;align-items:center;justify-content:space-between;gap:10px 18px;min-height:32px;padding:5px 0;flex-wrap:wrap;}
+.util-row{display:flex;align-items:center;justify-content:space-between;gap:10px 18px;min-height:32px;padding:5px 20px;flex-wrap:wrap;}
 .util-l,.util-r{font-size:.75rem;letter-spacing:.02em;color:var(--ink);}
 .util b{font-family:var(--font-head);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;}
 .util #pickRoom{font-weight:700;color:var(--teal-bright);}

@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=19" />
+<link rel="stylesheet" href="/css/store.css?v=20" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -25,7 +25,7 @@
 <header class="store-nav">
   <div class="wrap">
     <a class="store-logo" href="/reserve.html" aria-label="Pioneer Valley"><img src="/assets/PV_Square_Logo.png" alt="Pioneer Valley" /></a>
-    <div class="store-brand"><b>Pioneer Valley</b><span>Equipment Rental</span></div>
+    <div class="store-brand"><b>Pioneer Valley</b><span>Equipment Rental</span><span class="store-stu" id="brandStu" hidden></span></div>
     <form class="store-search" id="searchForm" role="search">
       <input type="search" id="searchIn" placeholder="Search equipment" aria-label="Search equipment" autocomplete="off" />
       <button type="submit" aria-label="Search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="20.5" y1="20.5" x2="16.5" y2="16.5"></line></svg></button>
@@ -584,10 +584,18 @@
   function pulseDates(){ var d=document.querySelector('.datebar'); if(!d) return; d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash'); }
 
   // ===== account chip + hold banner =====
+  // Top-left line under "Equipment Rental": the signed-in student's Period | Teacher | Course.
+  function brandStuLine(u){
+    var per=String(u.period||'').replace(/\D/g,''); per=per?('Period '+('0'+per).slice(-2)):'';
+    var crs=String(u.course||''); var mp=crs.match(/photography\s*(\d)/i); if(mp) crs='Photo '+('0'+mp[1]).slice(-2);
+    return [per, u.teacher||'', crs].filter(Boolean).map(esc).join('<i class="bs-sep">|</i>');
+  }
   function refreshAccount(){
     var a=document.getElementById('acctBtn');
     if(USER){ a.classList.add('in'); a.textContent=USER.label||'My account'; }
     else { a.classList.remove('in'); a.textContent='My Account'; }
+    var bs=document.getElementById('brandStu');
+    if(bs){ if(USER && (USER.period||USER.teacher||USER.course)){ bs.innerHTML=brandStuLine(USER); bs.hidden=false; } else { bs.hidden=true; bs.innerHTML=''; } }
     updateBag(); refreshPickupInfo();
     rerender(); renderFeatured();   // re-apply the course gray-out / in-bag state for the current student
     var hb=document.getElementById('holdBanner');
@@ -717,6 +725,8 @@
   renderCat('cameras');
   refreshAccount();
   loadCal();
+  // Prompt for a student number 3s after the page loads (unless already signed in or the sheet is open).
+  if(!USER){ setTimeout(function(){ var ov=document.getElementById('signinOv'); if(!USER && ov && !ov.classList.contains('open')) openSignin(); }, 3000); }
 })();
 </script>
 </body>
