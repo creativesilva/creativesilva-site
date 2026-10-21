@@ -76,7 +76,7 @@ VOCAB_ES=[
 HAVE_ENV_SLIDER=True   # 4 environmental-portraiture examples for the Step 03 vertical slider
 ENV_DIR=f"{SITE}/assets/images/important-person/env-examples"
 MOODBOARD_ZIP=f"{SITE}/assets/templates/important-person/Important_Person.zip"
-MOODBOARD_EXAMPLE=f"{SITE}/assets/images/important-person/mood-board-example-v1.jpg"  # Mr. Silva's finished mood board (David Silva, Father): float-right on the Step 03 "Find Reference Images" card
+MOODBOARD_EXAMPLE=f"{SITE}/assets/images/important-person/mood-board-example-v2.jpg"  # Mr. Silva's finished mood board (David Silva, Father): FULL-WIDTH on the Step 03 "Find Reference Images" card (Chris 2026-10-21: span the page; the float was too small to read the details)
 ENV_EXAMPLES=[
  ("env-portrait-metal-worker.jpg","A metalworker in his workshop","Un herrero en su taller"),
  ("env-portrait-butcher.jpg","A butcher in his meat locker","Un carnicero en su c&aacute;mara fr&iacute;a"),
@@ -337,7 +337,8 @@ def build(course):
             ])
             + para("That is <strong>six reference images</strong> in all, two options for each of your three photos, so you can choose the strongest idea for each one. Save them into the <strong>Inspo_Images</strong> folder inside the Important_Person project folder you downloaded on Step 01.")
             + note("Look for images of your person doing what they are known to do, helping or inspiring others the way they help you. This is research, so you know what you want to capture.")
-            + float_right(MOODBOARD_EXAMPLE,"Mr. Silva&rsquo;s finished mood board honoring his father, David Silva, with two options for each of the three photos","Mr. Silva&rsquo;s mood board for his father: two options each for the environmental portrait and the two supporting images."))
+            + framed(MOODBOARD_EXAMPLE,"Mr. Silva&rsquo;s finished mood board honoring his father, David Silva, with two options for each of the three photos")
+            + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Mr. Silva&rsquo;s finished mood board for his father, David Silva: two options each for the environmental portrait and the two supporting images.</div>')
         en+=deliverables_box(False,
             [("1 inspo folder (PNG):","a screen capture of your Inspo_Images folder in icon view, showing your six reference images, uploaded to this Canvas assignment."),
              ("1 mood board (JPG):","your finished mood board for the person you chose, with their name in the bottom right, exported as a JPG and uploaded to this Canvas assignment.")])
@@ -384,7 +385,8 @@ def build(course):
             ])
             + para("Son <strong>seis im&aacute;genes de referencia</strong> en total, dos opciones para cada una de tus tres fotos, para que elijas la mejor idea para cada una. Gu&aacute;rdalas en la carpeta <strong>Inspo_Images</strong> dentro de la carpeta del proyecto Important_Person que descargaste en el Paso 01.")
             + note("Busca im&aacute;genes de tu persona haciendo lo que la hace conocida, ayudando o inspirando a otros como te ayuda a ti. Es investigaci&oacute;n, para saber qu&eacute; quieres capturar.")
-            + float_right(MOODBOARD_EXAMPLE,"El mood board terminado del Sr. Silva en honor a su padre, David Silva, con dos opciones para cada una de las tres fotos","El mood board del Sr. Silva para su padre: dos opciones para el retrato ambiental y las dos im&aacute;genes de apoyo."))
+            + framed(MOODBOARD_EXAMPLE,"El mood board terminado del Sr. Silva en honor a su padre, David Silva, con dos opciones para cada una de las tres fotos")
+            + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">El mood board terminado del Sr. Silva para su padre, David Silva: dos opciones para el retrato ambiental y las dos im&aacute;genes de apoyo.</div>')
         es+=deliverables_box(True,
             [("1 carpeta inspo (PNG):","una captura de pantalla de tu carpeta Inspo_Images en vista de iconos, que muestre tus seis im&aacute;genes de referencia, subida a esta tarea de Canvas."),
              ("1 mood board (JPG):","tu mood board terminado de la persona que elegiste, con su nombre abajo a la derecha, exportado como JPG y subido a esta tarea de Canvas.")])
