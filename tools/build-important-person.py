@@ -119,6 +119,37 @@ def project_downloads(es):
       + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">' + dl_link(MOODBOARD_ZIP, label, row=True) + '</div>'
       + note_orange(note_t) + '</div>')
 
+def moodboard_downloads(es):
+    # ORANGE Downloads section repeated on STEP 03 (Chris 2026-10-21): students overlooked the Step 01
+    # download and could not find the PSD, so the project folder + a breakdown of its contents + how to
+    # open the PSD template live here too, right before they gather images and build.
+    if es:
+        heading="Descarga la Carpeta del Proyecto"
+        lead="Para hacer tu mood board necesitas la carpeta del proyecto Important_Person. Si no la descargaste en el Paso 01, desc&aacute;rgala aqu&iacute;. Adentro encontrar&aacute;s:"
+        items=[
+            ("Carpeta Inspo_Images:","aqu&iacute; guardas las seis im&aacute;genes de ejemplo que encuentras en internet."),
+            ("Carpeta RAW_Images:","aqu&iacute; ir&aacute;n tus propias fotos cuando las captures m&aacute;s adelante."),
+            ("Important_Person_Mood_Board.psd:","es tu plantilla de mood board. <strong>Haz doble clic en este archivo</strong> para abrirlo en Photoshop y empezar tu tablero."),
+        ]
+        label="Carpeta del Proyecto Important_Person (ZIP)"
+        note_t="&iquest;Ya la descargaste en el Paso 01? Usa esa, no necesitas descargarla otra vez."
+    else:
+        heading="Download the Project Folder"
+        lead="To make your mood board you need the Important_Person project folder. If you did not download it on Step 01, download it here. Inside you will find:"
+        items=[
+            ("Inspo_Images folder:","this is where you save the six example images you find online."),
+            ("RAW_Images folder:","this is where your own photos will go when you capture them later."),
+            ("Important_Person_Mood_Board.psd:","this is your mood board template. <strong>Double-click this file</strong> to open it in Photoshop and start your board."),
+        ]
+        label="Important_Person Project Folder (ZIP)"
+        note_t="Already downloaded it on Step 01? Use that one, you do not need to download it again."
+    return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
+      + para(lead)
+      + bullets(items, accent="#FF6B1A")
+      + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">' + dl_link(MOODBOARD_ZIP, label, row=True) + '</div>'
+      + note_orange(note_t) + '</div>')
+
 def build(course):
     p2 = (course == "photo2")
     PROJNUM = "01"  # Important Person is each course's FIRST project (a project, not a module)
@@ -328,6 +359,7 @@ def build(course):
             en+=card("YOUR LIGHTING","Work With the Light You Have",
                 para("In Photography 1, you are <strong>not required</strong> to use off-camera flash, strobes, or modifiers. Work with the natural light in your person&rsquo;s space. Real, honest light is part of telling a true story.")
                 + para("If you want to push for higher-quality images, <strong>reflectors and scrims</strong> are available to bounce light into shadows or soften harsh sun. Use them if they help your photo, they are optional for you. Let your research and mood board show the light you can actually work with."))
+        en+=moodboard_downloads(False)
         en+=card("FIND EXAMPLE IMAGES / COLLECT YOUR INSPO","Find Example Images Online",
             para("In Step 02 you brainstormed three people. Now <strong>pick the one</strong> with the strongest story, the person you will actually photograph, and focus on them. Then <strong>search the internet</strong> for <strong>six example photos</strong> that match the kind of images you want to make for your three photo series, two options for each of your three photos:")
             + bullets([
@@ -335,25 +367,16 @@ def build(course):
                 ("2 for the closer supporting image:","two online examples of a closer, tight photo of someone in action, like your Image 2."),
                 ("2 for the wider supporting image:","two online examples of a wider photo of the action or the scene, like your Image 3."),
             ])
-            + para("That is <strong>six example photos</strong> in all, two options for each of your three photos, so you can choose the strongest idea for each one. Save them into the <strong>Inspo_Images</strong> folder inside the Important_Person project folder you downloaded on Step 01.")
+            + para("That is <strong>six example photos</strong> in all, two options for each of your three photos, so you can choose the strongest idea for each one. Save them into the <strong>Inspo_Images</strong> folder inside the Important_Person project folder you downloaded above.")
             + note("<strong>You are not searching your camera roll, and these are not photos of your person.</strong> You are searching <strong>online</strong> for example images that show the look you want, so you have a clear plan before you capture your own photos later.")
             + framed(MOODBOARD_EXAMPLE,"Mr. Silva&rsquo;s finished mood board honoring his father, David Silva, with two options for each of the three photos")
             + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Mr. Silva&rsquo;s finished mood board for his father, David Silva: two options each for the environmental portrait and the two supporting images.</div>')
         en+=deliverables_box(False,
-            [("1 inspo folder (PNG):","a screen capture of your Inspo_Images folder in icon view, showing your six reference images, uploaded to this Canvas assignment."),
-             ("1 mood board (JPG):","your finished mood board for the person you chose, with their name in the bottom right, exported as a JPG and uploaded to this Canvas assignment.")])
-        en+=card("SHOW YOUR RESEARCH","Capture Your Inspo Folder",
-            para("Prove you found your six example images online. Open your <strong>Inspo_Images</strong> folder and capture it.")
-            + bullets([
-                ("Set the view to icons:","in Finder, click <strong>View &gt; as Icons</strong> so every image shows as a thumbnail."),
-                ("Capture the whole screen:","press <strong>Shift</strong> + <strong>Cmd</strong> + <strong>3</strong>. A PNG of your screen saves to your Desktop."),
-                ("Check it shows all six:","your capture should show all six reference images."),
-                ("Upload the PNG:","upload that PNG to this Canvas assignment."),
-            ]))
+            [("1 mood board (JPG):","your finished mood board for the person you chose, with their name in the bottom right, exported as a JPG and uploaded to this Canvas assignment.")])
         en+=card("BUILD IT IN PHOTOSHOP","Make Your Mood Board",
             para("You have your person and your six reference images. Now build your mood board. <strong>Talk to Mr. Silva about who you chose.</strong> He will come around next week to see your person and your inspiration images, so he knows who you picked and what you plan to capture.")
             + bullets([
-                ("Open the template:","open <strong>Important_Person_Mood_Board.psd</strong> from your project folder in Photoshop."),
+                ("Open the template:","in the project folder you downloaded above, <strong>double-click Important_Person_Mood_Board.psd</strong> to open it in Photoshop."),
                 ("Place your images:","go to <strong>File &gt; Place Embedded</strong> and add your six reference images, two for each of your three planned photos. Arrange them to fill the board, like Mr. Silva&rsquo;s example above."),
                 ("Add the name:","in the <strong>Name:</strong> field at the bottom right, type your important person&rsquo;s name."),
                 ("Save a copy as JPG:","go to <strong>File &gt; Save a Copy</strong>, change the format to <strong>JPG</strong>, and save it in your project folder."),
@@ -376,6 +399,7 @@ def build(course):
             es+=card("TU ILUMINACI&Oacute;N","Trabaja con la Luz que Tienes",
                 para("En Fotograf&iacute;a 1, <strong>no est&aacute;s obligado</strong> a usar flash fuera de c&aacute;mara, estrobos ni modificadores. Trabaja con la luz natural del espacio de tu persona. La luz real y honesta es parte de contar una historia verdadera.")
                 + para("Si quieres lograr im&aacute;genes de mayor calidad, hay <strong>reflectores y scrims</strong> disponibles para rebotar luz hacia las sombras o suavizar el sol fuerte. &Uacute;salos si ayudan a tu foto, para ti son opcionales. Deja que tu investigaci&oacute;n y tu mood board muestren la luz con la que de verdad puedes trabajar."))
+        es+=moodboard_downloads(True)
         es+=card("BUSCA IM&Aacute;GENES DE EJEMPLO / RE&Uacute;NE TU INSPO","Busca Im&aacute;genes de Ejemplo en Internet",
             para("En el Paso 02 pensaste en tres personas. Ahora <strong>elige a la que tenga la historia m&aacute;s fuerte</strong>, la que de verdad vas a fotografiar, y enf&oacute;cate en ella. Luego <strong>busca en internet</strong> <strong>seis fotos de ejemplo</strong> que se parezcan al tipo de im&aacute;genes que quieres hacer para tu serie de tres fotos, dos opciones para cada una de tus tres fotos:")
             + bullets([
@@ -383,25 +407,16 @@ def build(course):
                 ("2 para la imagen de apoyo cercana:","dos ejemplos en internet de una foto cercana y cerrada de alguien en acci&oacute;n, como tu Imagen 2."),
                 ("2 para la imagen de apoyo abierta:","dos ejemplos en internet de una foto m&aacute;s abierta de la acci&oacute;n o la escena, como tu Imagen 3."),
             ])
-            + para("Son <strong>seis fotos de ejemplo</strong> en total, dos opciones para cada una de tus tres fotos, para que elijas la mejor idea para cada una. Gu&aacute;rdalas en la carpeta <strong>Inspo_Images</strong> dentro de la carpeta del proyecto Important_Person que descargaste en el Paso 01.")
+            + para("Son <strong>seis fotos de ejemplo</strong> en total, dos opciones para cada una de tus tres fotos, para que elijas la mejor idea para cada una. Gu&aacute;rdalas en la carpeta <strong>Inspo_Images</strong> dentro de la carpeta del proyecto Important_Person que descargaste arriba.")
             + note("<strong>No est&aacute;s buscando en la galer&iacute;a de tu tel&eacute;fono, y estas no son fotos de tu persona.</strong> Est&aacute;s buscando <strong>en internet</strong> im&aacute;genes de ejemplo que muestren el estilo que quieres, para tener un plan claro antes de capturar tus propias fotos despu&eacute;s.")
             + framed(MOODBOARD_EXAMPLE,"El mood board terminado del Sr. Silva en honor a su padre, David Silva, con dos opciones para cada una de las tres fotos")
             + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">El mood board terminado del Sr. Silva para su padre, David Silva: dos opciones para el retrato ambiental y las dos im&aacute;genes de apoyo.</div>')
         es+=deliverables_box(True,
-            [("1 carpeta inspo (PNG):","una captura de pantalla de tu carpeta Inspo_Images en vista de iconos, que muestre tus seis im&aacute;genes de referencia, subida a esta tarea de Canvas."),
-             ("1 mood board (JPG):","tu mood board terminado de la persona que elegiste, con su nombre abajo a la derecha, exportado como JPG y subido a esta tarea de Canvas.")])
-        es+=card("MUESTRA TU INVESTIGACI&Oacute;N","Captura Tu Carpeta Inspo",
-            para("Demuestra que encontraste tus seis im&aacute;genes de ejemplo en internet. Abre tu carpeta <strong>Inspo_Images</strong> y capt&uacute;rala.")
-            + bullets([
-                ("Pon la vista en iconos:","en Finder, haz clic en <strong>Visualizaci&oacute;n &gt; como Iconos</strong> para que cada imagen se vea como miniatura."),
-                ("Captura toda la pantalla:","presiona <strong>Shift</strong> + <strong>Cmd</strong> + <strong>3</strong>. Un PNG de tu pantalla se guarda en tu Escritorio."),
-                ("Revisa que se vean las seis:","tu captura debe mostrar las seis im&aacute;genes de referencia."),
-                ("Sube el PNG:","sube ese PNG a esta tarea de Canvas."),
-            ]))
+            [("1 mood board (JPG):","tu mood board terminado de la persona que elegiste, con su nombre abajo a la derecha, exportado como JPG y subido a esta tarea de Canvas.")])
         es+=card("CONSTR&Uacute;YELO EN PHOTOSHOP","Haz Tu Mood Board",
             para("Ya tienes a tu persona y tus seis im&aacute;genes de referencia. Ahora construye tu mood board. <strong>Habla con el Sr. Silva sobre a qui&eacute;n elegiste.</strong> &Eacute;l pasar&aacute; la pr&oacute;xima semana a ver a tu persona y tus im&aacute;genes de inspiraci&oacute;n, para saber a qui&eacute;n elegiste y qu&eacute; planeas capturar.")
             + bullets([
-                ("Abre la plantilla:","abre <strong>Important_Person_Mood_Board.psd</strong> de tu carpeta del proyecto en Photoshop."),
+                ("Abre la plantilla:","en la carpeta del proyecto que descargaste arriba, <strong>haz doble clic en Important_Person_Mood_Board.psd</strong> para abrirlo en Photoshop."),
                 ("Coloca tus im&aacute;genes:","ve a <strong>Archivo &gt; Colocar incrustado</strong> y agrega tus seis im&aacute;genes de referencia, dos por cada una de tus tres fotos planeadas. Acom&oacute;dalas para llenar el tablero, como el ejemplo del Sr. Silva de arriba."),
                 ("Agrega el nombre:","en el campo <strong>Name:</strong> de abajo a la derecha, escribe el nombre de tu persona importante."),
                 ("Guarda una copia como JPG:","ve a <strong>Archivo &gt; Guardar una copia</strong>, cambia el formato a <strong>JPG</strong> y gu&aacute;rdalo en tu carpeta del proyecto."),
