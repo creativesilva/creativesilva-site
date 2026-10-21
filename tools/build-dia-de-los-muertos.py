@@ -21,36 +21,36 @@ HERO=f"{SITE}/assets/images/dia-de-los-muertos/header-v1.jpg"
 def cap(text):
     return f'<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">{text}</div>'
 
-def gold_box(es, items):
-    # GOLD deliverables callout, same locked style as deliverables_box, with single-page copy
-    # (this page IS the assignment, not a multi-step module).
-    title="ENTREGABLES &middot; ENTR&Eacute;GALO" if es else "DELIVERABLES &middot; TURN IT IN"
-    lead=("Esta p&aacute;gina es tu tarea. Cuando tengas tu foto lista, entrega lo siguiente:" if es
-          else "This page is your assignment. When you are ready, turn in the work below:")
+def optional_box(es, items):
+    # TEAL "optional, not graded" callout (this is an invitation, not a graded deliverable, so it does
+    # NOT use the gold deliverables style, which signals a required turn-in).
+    title="OPCIONAL &middot; C&Oacute;MO PARTICIPAR" if es else "OPTIONAL &middot; HOW TO TAKE PART"
+    lead=("Participar es completamente opcional y no cuenta para calificaci&oacute;n. Si quieres ser parte de nuestra ofrenda de clase, as&iacute; lo haces:" if es
+          else "Taking part is completely optional, and it is not graded. If you would like to be part of our class ofrenda, here is how:")
     lis=""
     for b,rest in items:
-        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#f5b301;">&bull;</span> '
+        lis+=('<div style="margin-bottom:6px;line-height:1.5;"><span style="color:#00b8b8;">&bull;</span> '
               f'<span style="font-size:13pt;color:rgba(255,255,255,0.90);"><strong>{b}</strong> {rest}</span></div>')
-    return ('<div style="background:linear-gradient(180deg,rgba(245,179,1,0.12) 0%,rgba(245,179,1,0.03) 100%);border:1px solid rgba(245,179,1,0.35);border-left:6px solid #f5b301;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      + section_header(DELIVER_ICON, title, "#f5b301", "#ffd166")
+    return ('<div style="background:linear-gradient(180deg,rgba(0,184,184,0.12) 0%,rgba(0,184,184,0.03) 100%);border:1px solid rgba(0,184,184,0.35);border-left:6px solid #00b8b8;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      + section_header(CONTENT_ICON, title, "#00b8b8", "#80e0e0")
       + f'<div style="font-size:13pt;color:#ffffff;margin-bottom:10px;line-height:1.5;">{lead}</div>'
       + f'{lis}</div>')
 
 def build():
     # -------- English (#top) --------
     en=banner("D&iacute;a de los Muertos","Honor Someone You Love",
-        "Share a photo of a person you want to remember for our class ofrenda.","#espanol","","")
-    en+=type_card("overview","D&iacute;a de los Muertos &middot; Studio Exhibit","We Will Honor Someone We Love",
+        "Optional: honor someone from your life or your heritage for our class ofrenda.","#espanol","","")
+    en+=type_card("overview","D&iacute;a de los Muertos &middot; Studio Exhibit","An Invitation to Honor Someone",
         para("For <strong>D&iacute;a de los Muertos</strong>, the Day of the Dead, our class is building an "
-             "<strong>ofrenda</strong> (an altar) in our studio to honor and remember the people we love who have "
-             "passed away. You will add to it by sharing <strong>one photo</strong> of a person you want to honor: an "
-             "ancestor, a family member, or a friend.")
-        + para("This is personal, and it is meaningful. The photo you choose will be part of our class ofrenda, so pick "
-               "someone who matters to you and a photo that shows who they are.")
+             "<strong>ofrenda</strong> (an altar) in our studio to honor and remember the people we love. If you would "
+             "like, you can add to it by sharing <strong>one photo</strong> of someone you want to honor: an ancestor, a "
+             "family member, a friend, or someone from your <strong>heritage</strong>.")
+        + note("<strong>This is completely optional, and it is not graded.</strong> It is an invitation to take part, not a required assignment. Take part only if you want to.")
+        + para("If you choose to share, this is personal and meaningful. The photo you pick will be part of our class ofrenda, so choose someone who matters to you and a photo that shows who they are.")
         + framed(HERO,"A D&iacute;a de los Muertos ofrenda decorated with marigolds, candles, and framed photographs")
         + cap("An ofrenda honors loved ones with marigolds, candles, and their photographs."))
-    en+=gold_box(False,[
-        ("One photo, JPG format:","upload one clear <strong>JPG</strong> image of the person you are honoring to this Canvas assignment."),
+    en+=optional_box(False,[
+        ("One photo (JPG):","if you choose to take part, upload one clear <strong>JPG</strong> image of the person you are honoring here."),
     ])
     en+=card("ABOUT THE TRADITION","What Is D&iacute;a de los Muertos?",
         para("<strong>D&iacute;a de los Muertos</strong> is a Mexican tradition celebrated on <strong>November 1 and "
@@ -64,29 +64,30 @@ def build():
              "their smile, and the way they looked at us.")
         + para("For many families, a <strong>photograph is all we have left</strong> of someone we love. That is why "
                "sharing a photo is such a powerful way to honor them. It keeps them present, and it keeps their story alive."))
-    en+=card("HOW TO SHARE YOUR PHOTO","Four Steps",
-        steps([
+    en+=card("HOW TO TAKE PART","If You Want to Share a Photo",
+        para("Taking part is optional. If you would like to share a photo, here is how.")
+        + steps([
             ("Choose your person:","think of someone you want to honor and remember."),
             ("Find a photo:","look for a photo that shows who they are. A clear photo of their face works best. If your photo is a printed picture, take a photo of it with your <strong>student iPad</strong> to scan it, then save it."),
             ("Save it as a JPG:","make sure your image is a <strong>JPG</strong> file."),
-            ("Upload it here:","turn it in by uploading your JPG to this Canvas assignment."),
+            ("Upload it here:","if you want to take part, upload your JPG to this Canvas assignment."),
         ])
-        + note("This is personal. Honor whoever is meaningful to you. If it feels hard, that is okay. You can always talk to Mr. Silva."))
+        + note("This is personal, and it is optional. Honor whoever is meaningful to you, and only if you want to. If it feels hard, that is okay. You can always talk to Mr. Silva."))
 
     # -------- Spanish (#espanol) --------
     es=banner("D&iacute;a de los Muertos","Honra a Alguien que Amas",
-        "Comparte una foto de una persona que quieres recordar para nuestra ofrenda de clase.","#top","","")
-    es+=type_card("overview","D&iacute;a de los Muertos &middot; Exhibici&oacute;n del Estudio","Vamos a Honrar a Alguien que Amamos",
+        "Opcional: honra a alguien de tu vida o de tu herencia para nuestra ofrenda de clase.","#top","","")
+    es+=type_card("overview","D&iacute;a de los Muertos &middot; Exhibici&oacute;n del Estudio","Una Invitaci&oacute;n a Honrar a Alguien",
         para("Para el <strong>D&iacute;a de los Muertos</strong>, nuestra clase va a construir una <strong>ofrenda</strong> "
-             "(un altar) en nuestro estudio para honrar y recordar a las personas que amamos y que ya fallecieron. T&uacute; "
-             "vas a participar compartiendo <strong>una foto</strong> de una persona que quieres honrar: un antepasado, un "
-             "familiar o un amigo.")
-        + para("Esto es algo personal y con mucho significado. La foto que elijas ser&aacute; parte de nuestra ofrenda de "
-               "clase, as&iacute; que elige a alguien que es importante para ti y una foto que muestre qui&eacute;n es.")
+             "(un altar) en nuestro estudio para honrar y recordar a las personas que amamos. Si quieres, puedes participar "
+             "compartiendo <strong>una foto</strong> de alguien que quieres honrar: un antepasado, un familiar, un amigo, o "
+             "alguien de tu <strong>herencia</strong>.")
+        + note("<strong>Esto es completamente opcional y no cuenta para calificaci&oacute;n.</strong> Es una invitaci&oacute;n a participar, no una tarea obligatoria. Participa solo si quieres.")
+        + para("Si decides compartir, esto es algo personal y con significado. La foto que elijas ser&aacute; parte de nuestra ofrenda de clase, as&iacute; que elige a alguien que es importante para ti y una foto que muestre qui&eacute;n es.")
         + framed(HERO,"Una ofrenda de D&iacute;a de los Muertos decorada con cempas&uacute;chil, velas y fotograf&iacute;as")
         + cap("Una ofrenda honra a los seres queridos con cempas&uacute;chil, velas y sus fotograf&iacute;as."))
-    es+=gold_box(True,[
-        ("Una foto, en formato JPG:","sube una imagen <strong>JPG</strong> clara de la persona que est&aacute;s honrando a esta tarea de Canvas."),
+    es+=optional_box(True,[
+        ("Una foto (JPG):","si decides participar, sube una imagen <strong>JPG</strong> clara de la persona que est&aacute;s honrando aqu&iacute;."),
     ])
     es+=card("SOBRE LA TRADICI&Oacute;N","&iquest;Qu&eacute; es el D&iacute;a de los Muertos?",
         para("El <strong>D&iacute;a de los Muertos</strong> es una tradici&oacute;n mexicana que se celebra el <strong>1 y 2 "
@@ -102,14 +103,15 @@ def build():
              "rostro, su sonrisa y la forma en que nos miraban.")
         + para("Para muchas familias, una <strong>fotograf&iacute;a es todo lo que queda</strong> de alguien que aman. Por "
                "eso compartir una foto es una manera tan poderosa de honrarlos. Los mantiene presentes y mantiene viva su historia."))
-    es+=card("C&Oacute;MO COMPARTIR TU FOTO","Cuatro Pasos",
-        steps([
+    es+=card("C&Oacute;MO PARTICIPAR","Si Quieres Compartir una Foto",
+        para("Participar es opcional. Si quieres compartir una foto, as&iacute; lo haces.")
+        + steps([
             ("Elige a tu persona:","piensa en alguien que quieres honrar y recordar."),
             ("Busca una foto:","busca una foto que muestre qui&eacute;n es. Una foto clara de su rostro funciona mejor. Si tu foto es una foto impresa, t&oacute;male una foto con tu <strong>iPad de estudiante</strong> para escanearla, y gu&aacute;rdala."),
             ("Gu&aacute;rdala como JPG:","aseg&uacute;rate de que tu imagen sea un archivo <strong>JPG</strong>."),
-            ("S&uacute;bela aqu&iacute;:","entr&eacute;gala subiendo tu JPG a esta tarea de Canvas."),
+            ("S&uacute;bela aqu&iacute;:","si quieres participar, sube tu JPG a esta tarea de Canvas."),
         ])
-        + note("Esto es personal. Honra a quien sea importante para ti. Si se siente dif&iacute;cil, est&aacute; bien. Siempre puedes hablar con el Sr. Silva."))
+        + note("Esto es personal y es opcional. Honra a quien sea importante para ti, y solo si quieres. Si se siente dif&iacute;cil, est&aacute; bien. Siempre puedes hablar con el Sr. Silva."))
 
     nav_inner=('      <div class="silva-breadcrumb">\n'
         '        <a href="/curriculum.html">Curriculum Catalog</a>\n'
