@@ -125,30 +125,33 @@ def moodboard_downloads(es):
     # open the PSD template live here too, right before they gather images and build.
     if es:
         heading="Descarga la Carpeta del Proyecto"
-        lead="Para hacer tu mood board necesitas la carpeta del proyecto Important_Person. Si no la descargaste en el Paso 01, desc&aacute;rgala aqu&iacute;. Adentro encontrar&aacute;s:"
+        already="&iquest;Ya descargaste la carpeta del proyecto en el Paso 01? Entonces usa esa. No necesitas descargarla otra vez."
+        lead="Si todav&iacute;a no la descargaste, obtenla con el bot&oacute;n de abajo. La carpeta del proyecto Important_Person tiene todo lo que necesitas para hacer tu mood board. Adentro encontrar&aacute;s:"
         items=[
             ("Carpeta Inspo_Images:","aqu&iacute; guardas las seis im&aacute;genes de ejemplo que encuentras en internet."),
             ("Carpeta RAW_Images:","aqu&iacute; ir&aacute;n tus propias fotos cuando las captures m&aacute;s adelante."),
             ("Important_Person_Mood_Board.psd:","es tu plantilla de mood board. <strong>Haz doble clic en este archivo</strong> para abrirlo en Photoshop y empezar tu tablero."),
         ]
         label="Carpeta del Proyecto Important_Person (ZIP)"
-        note_t="&iquest;Ya la descargaste en el Paso 01? Usa esa, no necesitas descargarla otra vez."
     else:
         heading="Download the Project Folder"
-        lead="To make your mood board you need the Important_Person project folder. If you did not download it on Step 01, download it here. Inside you will find:"
+        already="Already downloaded the project folder on Step 01? Then use that one. You do not need to download it again."
+        lead="If you have not downloaded it yet, grab it from the button at the bottom. The Important_Person project folder holds everything you need to make your mood board. Inside you will find:"
         items=[
             ("Inspo_Images folder:","this is where you save the six example images you find online."),
             ("RAW_Images folder:","this is where your own photos will go when you capture them later."),
             ("Important_Person_Mood_Board.psd:","this is your mood board template. <strong>Double-click this file</strong> to open it in Photoshop and start your board."),
         ]
         label="Important_Person Project Folder (ZIP)"
-        note_t="Already downloaded it on Step 01? Use that one, you do not need to download it again."
+    prominent=('<div style="background:rgba(255,107,26,0.18);border:1px solid rgba(255,107,26,0.45);border-left:5px solid #FF6B1A;padding:14px 18px;margin:2px 0 18px;overflow:hidden;">'
+      f'<span style="font-size:13.5pt;color:#ffd9bf;line-height:1.5;"><strong>{already}</strong></span></div>')
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
+      + prominent
       + para(lead)
       + bullets(items, accent="#FF6B1A")
-      + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">' + dl_link(MOODBOARD_ZIP, label, row=True) + '</div>'
-      + note_orange(note_t) + '</div>')
+      + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;">' + dl_link(MOODBOARD_ZIP, label, row=True) + '</div>'
+      + '</div>')
 
 def build(course):
     p2 = (course == "photo2")
