@@ -189,7 +189,7 @@ def build(course):
             para("You are on Step 01 now: read this page so you understand the project. Here is what comes next.")
             + bullets([
                 ("Step 02 &middot; Choose Your Person:","in your journal, brainstorm three important people, with why you are considering each one and how they impacted your life, then pick the one with the strongest story."),
-                ("Step 03 &middot; Mood Board:","pick your person, find six reference images for them, then design their mood board."),
+                ("Step 03 &middot; Mood Board:","pick your person, find six example photos online that show the look you want, then design your mood board."),
                 ("Step 04 &middot; Storyboard &amp; Treatment:","plan your three images on paper. Sketch each one and write its full plan: composition, focal length, aperture, and lighting."),
                 ("Coming next:","with your plan ready, you will photograph your important person and edit your series. New steps will appear here in this project."),
             ]))
@@ -239,7 +239,7 @@ def build(course):
             para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina para entender el proyecto. Esto es lo que sigue.")
             + bullets([
                 ("Paso 02 &middot; Elige a Tu Persona:","en tu diario, haz una lluvia de ideas de tres personas importantes, con por qu&eacute; consideras a cada una y c&oacute;mo impactaron tu vida, luego elige la de la historia m&aacute;s fuerte."),
-                ("Paso 03 &middot; Mood Board:","elige a tu persona, busca seis im&aacute;genes de referencia para ella y dise&ntilde;a su mood board."),
+                ("Paso 03 &middot; Mood Board:","elige a tu persona, busca seis fotos de ejemplo en internet que muestren el estilo que quieres y dise&ntilde;a tu mood board."),
                 ("Paso 04 &middot; Storyboard y Tratamiento:","planea tus tres im&aacute;genes en papel. Dibuja cada una y escribe su plan completo: composici&oacute;n, distancia focal, apertura e iluminaci&oacute;n."),
                 ("Lo que sigue:","con tu plan listo, fotografiar&aacute;s a tu persona importante y editar&aacute;s tu serie. Los nuevos pasos aparecer&aacute;n aqu&iacute; en este proyecto."),
             ]))
@@ -317,8 +317,8 @@ def build(course):
             "Research the photos you want to make, then design a mood board for the person you choose.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
         en+=card("STEP 03 &middot; GATHER YOUR VISION","What a Mood Board Is",
-            para("A <strong>mood board</strong> is a collage of reference images that shows the look and the feeling you are going for, before you ever pick up a camera. Photographers, designers, and filmmakers all build one. Yours collects the kinds of photos you want to make of your important person.")
-            + note("Reference images are for inspiration only. They are not your photos. You will capture your own real images later with the school camera kit."))
+            para("A <strong>mood board</strong> is a collage of <strong>example photos</strong> that shows the look and feeling you are going for, before you ever pick up a camera. Photographers, designers, and filmmakers all build one. You <strong>search the internet</strong> for example photos that match the kind of images you want to make, then arrange them into one board. It becomes your <strong>visual roadmap</strong> for the three photos you will capture later.")
+            + note("<strong>These are NOT photos of your important person, and NOT from your camera roll.</strong> They are example images you find <strong>online</strong> that show the style, setting, and feeling you want. You will capture your own real photos of your person later with the school camera kit."))
         if p2:
             en+=card("YOUR LIGHTING &middot; REQUIRED","You Light Every Image With Off-Camera Flash",
                 para("In Photography 2, you <strong>light all three images with off-camera flash</strong>. You will use our <strong>Godox AD200 Pro II</strong> on a light stand with a modifier, placed off to the side to shape the light the way you want. This is required for every photo.")
@@ -328,22 +328,22 @@ def build(course):
             en+=card("YOUR LIGHTING","Work With the Light You Have",
                 para("In Photography 1, you are <strong>not required</strong> to use off-camera flash, strobes, or modifiers. Work with the natural light in your person&rsquo;s space. Real, honest light is part of telling a true story.")
                 + para("If you want to push for higher-quality images, <strong>reflectors and scrims</strong> are available to bounce light into shadows or soften harsh sun. Use them if they help your photo, they are optional for you. Let your research and mood board show the light you can actually work with."))
-        en+=card("FIND REFERENCE IMAGES / COLLECT YOUR INSPO","Find Reference Images for Your Person",
-            para("In Step 02 you brainstormed three people. Now <strong>pick the one</strong> with the strongest story, the person you will actually photograph, and focus on them. Research <strong>that one person</strong> and collect <strong>six reference images</strong> from the internet that show the kinds of photos you want to make of them, two options for each of your three photos:")
+        en+=card("FIND EXAMPLE IMAGES / COLLECT YOUR INSPO","Find Example Images Online",
+            para("In Step 02 you brainstormed three people. Now <strong>pick the one</strong> with the strongest story, the person you will actually photograph, and focus on them. Then <strong>search the internet</strong> for <strong>six example photos</strong> that match the kind of images you want to make for your three photo series, two options for each of your three photos:")
             + bullets([
-                ("2 for the environmental portrait:","two options for your Image 1, a person in their own space."),
-                ("2 for the closer supporting image:","two options for your Image 2, a closer photo of the action."),
-                ("2 for the wider supporting image:","two options for your Image 3, a wider photo of the action or the scene."),
+                ("2 for the environmental portrait:","two online examples of a person in their own space, the way your Image 1 will look."),
+                ("2 for the closer supporting image:","two online examples of a closer, tight photo of someone in action, like your Image 2."),
+                ("2 for the wider supporting image:","two online examples of a wider photo of the action or the scene, like your Image 3."),
             ])
-            + para("That is <strong>six reference images</strong> in all, two options for each of your three photos, so you can choose the strongest idea for each one. Save them into the <strong>Inspo_Images</strong> folder inside the Important_Person project folder you downloaded on Step 01.")
-            + note("Look for images of your person doing what they are known to do, helping or inspiring others the way they help you. This is research, so you know what you want to capture.")
+            + para("That is <strong>six example photos</strong> in all, two options for each of your three photos, so you can choose the strongest idea for each one. Save them into the <strong>Inspo_Images</strong> folder inside the Important_Person project folder you downloaded on Step 01.")
+            + note("<strong>You are not searching your camera roll, and these are not photos of your person.</strong> You are searching <strong>online</strong> for example images that show the look you want, so you have a clear plan before you capture your own photos later.")
             + framed(MOODBOARD_EXAMPLE,"Mr. Silva&rsquo;s finished mood board honoring his father, David Silva, with two options for each of the three photos")
             + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Mr. Silva&rsquo;s finished mood board for his father, David Silva: two options each for the environmental portrait and the two supporting images.</div>')
         en+=deliverables_box(False,
             [("1 inspo folder (PNG):","a screen capture of your Inspo_Images folder in icon view, showing your six reference images, uploaded to this Canvas assignment."),
              ("1 mood board (JPG):","your finished mood board for the person you chose, with their name in the bottom right, exported as a JPG and uploaded to this Canvas assignment.")])
         en+=card("SHOW YOUR RESEARCH","Capture Your Inspo Folder",
-            para("Prove you did the research for your person. Open your <strong>Inspo_Images</strong> folder and capture it.")
+            para("Prove you found your six example images online. Open your <strong>Inspo_Images</strong> folder and capture it.")
             + bullets([
                 ("Set the view to icons:","in Finder, click <strong>View &gt; as Icons</strong> so every image shows as a thumbnail."),
                 ("Capture the whole screen:","press <strong>Shift</strong> + <strong>Cmd</strong> + <strong>3</strong>. A PNG of your screen saves to your Desktop."),
@@ -365,8 +365,8 @@ def build(course):
             "Investiga las fotos que quieres hacer, luego dise&ntilde;a un mood board para la persona que elijas.",
             "#top","Back to English", HICON_DESIGN)
         es+=card("PASO 03 &middot; RE&Uacute;NE TU VISI&Oacute;N","Qu&eacute; Es un Mood Board",
-            para("Un <strong>mood board</strong> es un collage de im&aacute;genes de referencia que muestra el estilo y el sentimiento que buscas, antes de tomar una c&aacute;mara. Los fot&oacute;grafos, dise&ntilde;adores y cineastas lo usan. El tuyo re&uacute;ne el tipo de fotos que quieres hacer de tu persona importante.")
-            + note("Las im&aacute;genes de referencia son solo inspiraci&oacute;n. No son tus fotos. Captura tus propias im&aacute;genes reales despu&eacute;s con el kit de c&aacute;mara de la escuela."))
+            para("Un <strong>mood board</strong> es un collage de <strong>fotos de ejemplo</strong> que muestra el estilo y el sentimiento que buscas, antes de tomar una c&aacute;mara. Los fot&oacute;grafos, dise&ntilde;adores y cineastas lo usan. <strong>Buscas en internet</strong> fotos de ejemplo que se parezcan al tipo de im&aacute;genes que quieres hacer, y las acomodas en un tablero. Se convierte en tu <strong>mapa visual</strong> para las tres fotos que capturar&aacute;s despu&eacute;s.")
+            + note("<strong>Estas NO son fotos de tu persona importante, ni de la galer&iacute;a de tu tel&eacute;fono.</strong> Son im&aacute;genes de ejemplo que encuentras <strong>en internet</strong> y que muestran el estilo, el lugar y el sentimiento que buscas. T&uacute; capturar&aacute;s tus propias fotos reales de tu persona despu&eacute;s con el kit de c&aacute;mara de la escuela."))
         if p2:
             es+=card("TU ILUMINACI&Oacute;N &middot; OBLIGATORIA","Iluminas Cada Imagen con Flash Fuera de C&aacute;mara",
                 para("En Fotograf&iacute;a 2, <strong>iluminas las tres im&aacute;genes con flash fuera de c&aacute;mara</strong>. Usar&aacute;s nuestro <strong>Godox AD200 Pro II</strong> en un tr&iacute;pode de luz con un modificador, colocado a un lado para dar forma a la luz como t&uacute; quieras. Es obligatorio para cada foto.")
@@ -376,22 +376,22 @@ def build(course):
             es+=card("TU ILUMINACI&Oacute;N","Trabaja con la Luz que Tienes",
                 para("En Fotograf&iacute;a 1, <strong>no est&aacute;s obligado</strong> a usar flash fuera de c&aacute;mara, estrobos ni modificadores. Trabaja con la luz natural del espacio de tu persona. La luz real y honesta es parte de contar una historia verdadera.")
                 + para("Si quieres lograr im&aacute;genes de mayor calidad, hay <strong>reflectores y scrims</strong> disponibles para rebotar luz hacia las sombras o suavizar el sol fuerte. &Uacute;salos si ayudan a tu foto, para ti son opcionales. Deja que tu investigaci&oacute;n y tu mood board muestren la luz con la que de verdad puedes trabajar."))
-        es+=card("BUSCA IM&Aacute;GENES DE REFERENCIA / RE&Uacute;NE TU INSPO","Busca Im&aacute;genes de Referencia para Tu Persona",
-            para("En el Paso 02 pensaste en tres personas. Ahora <strong>elige a la que tenga la historia m&aacute;s fuerte</strong>, la que de verdad vas a fotografiar, y enf&oacute;cate en ella. Investiga a <strong>esa persona</strong> y re&uacute;ne <strong>seis im&aacute;genes de referencia</strong> de internet que muestren el tipo de fotos que quieres hacer de ella, dos opciones para cada una de tus tres fotos:")
+        es+=card("BUSCA IM&Aacute;GENES DE EJEMPLO / RE&Uacute;NE TU INSPO","Busca Im&aacute;genes de Ejemplo en Internet",
+            para("En el Paso 02 pensaste en tres personas. Ahora <strong>elige a la que tenga la historia m&aacute;s fuerte</strong>, la que de verdad vas a fotografiar, y enf&oacute;cate en ella. Luego <strong>busca en internet</strong> <strong>seis fotos de ejemplo</strong> que se parezcan al tipo de im&aacute;genes que quieres hacer para tu serie de tres fotos, dos opciones para cada una de tus tres fotos:")
             + bullets([
-                ("2 para el retrato ambiental:","dos opciones para tu Imagen 1, una persona en su propio espacio."),
-                ("2 para la imagen de apoyo cercana:","dos opciones para tu Imagen 2, una foto m&aacute;s cercana de la acci&oacute;n."),
-                ("2 para la imagen de apoyo abierta:","dos opciones para tu Imagen 3, una foto m&aacute;s abierta de la acci&oacute;n o de la escena."),
+                ("2 para el retrato ambiental:","dos ejemplos en internet de una persona en su propio espacio, como se ver&aacute; tu Imagen 1."),
+                ("2 para la imagen de apoyo cercana:","dos ejemplos en internet de una foto cercana y cerrada de alguien en acci&oacute;n, como tu Imagen 2."),
+                ("2 para la imagen de apoyo abierta:","dos ejemplos en internet de una foto m&aacute;s abierta de la acci&oacute;n o la escena, como tu Imagen 3."),
             ])
-            + para("Son <strong>seis im&aacute;genes de referencia</strong> en total, dos opciones para cada una de tus tres fotos, para que elijas la mejor idea para cada una. Gu&aacute;rdalas en la carpeta <strong>Inspo_Images</strong> dentro de la carpeta del proyecto Important_Person que descargaste en el Paso 01.")
-            + note("Busca im&aacute;genes de tu persona haciendo lo que la hace conocida, ayudando o inspirando a otros como te ayuda a ti. Es investigaci&oacute;n, para saber qu&eacute; quieres capturar.")
+            + para("Son <strong>seis fotos de ejemplo</strong> en total, dos opciones para cada una de tus tres fotos, para que elijas la mejor idea para cada una. Gu&aacute;rdalas en la carpeta <strong>Inspo_Images</strong> dentro de la carpeta del proyecto Important_Person que descargaste en el Paso 01.")
+            + note("<strong>No est&aacute;s buscando en la galer&iacute;a de tu tel&eacute;fono, y estas no son fotos de tu persona.</strong> Est&aacute;s buscando <strong>en internet</strong> im&aacute;genes de ejemplo que muestren el estilo que quieres, para tener un plan claro antes de capturar tus propias fotos despu&eacute;s.")
             + framed(MOODBOARD_EXAMPLE,"El mood board terminado del Sr. Silva en honor a su padre, David Silva, con dos opciones para cada una de las tres fotos")
             + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">El mood board terminado del Sr. Silva para su padre, David Silva: dos opciones para el retrato ambiental y las dos im&aacute;genes de apoyo.</div>')
         es+=deliverables_box(True,
             [("1 carpeta inspo (PNG):","una captura de pantalla de tu carpeta Inspo_Images en vista de iconos, que muestre tus seis im&aacute;genes de referencia, subida a esta tarea de Canvas."),
              ("1 mood board (JPG):","tu mood board terminado de la persona que elegiste, con su nombre abajo a la derecha, exportado como JPG y subido a esta tarea de Canvas.")])
         es+=card("MUESTRA TU INVESTIGACI&Oacute;N","Captura Tu Carpeta Inspo",
-            para("Demuestra que investigaste a tu persona. Abre tu carpeta <strong>Inspo_Images</strong> y capt&uacute;rala.")
+            para("Demuestra que encontraste tus seis im&aacute;genes de ejemplo en internet. Abre tu carpeta <strong>Inspo_Images</strong> y capt&uacute;rala.")
             + bullets([
                 ("Pon la vista en iconos:","en Finder, haz clic en <strong>Visualizaci&oacute;n &gt; como Iconos</strong> para que cada imagen se vea como miniatura."),
                 ("Captura toda la pantalla:","presiona <strong>Shift</strong> + <strong>Cmd</strong> + <strong>3</strong>. Un PNG de tu pantalla se guarda en tu Escritorio."),
