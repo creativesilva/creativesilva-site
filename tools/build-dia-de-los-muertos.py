@@ -34,7 +34,7 @@ def optional_box(es):
 
 def build():
     # -------- English (#top) --------
-    en=banner("D&iacute;a de los Muertos","Honor Someone You Love",
+    en=banner("D&iacute;a de los Muertos","Honor and Remember Someone",
         "Honor someone from your life or your heritage for our class ofrenda.","#espanol","","")
     en+=type_card("overview","D&iacute;a de los Muertos &middot; Studio Exhibit","An Invitation to Honor Someone",
         para("For <strong>D&iacute;a de los Muertos</strong>, the Day of the Dead, our class is building an "
@@ -70,7 +70,7 @@ def build():
         + note("This is personal. Honor whoever is meaningful to you. If it feels hard, that is okay. You can always talk to Mr. Silva."))
 
     # -------- Spanish (#espanol) --------
-    es=banner("D&iacute;a de los Muertos","Honra a Alguien que Amas",
+    es=banner("D&iacute;a de los Muertos","Honra y Recuerda a Alguien",
         "Honra a alguien de tu vida o de tu herencia para nuestra ofrenda de clase.","#top","","")
     es+=type_card("overview","D&iacute;a de los Muertos &middot; Exhibici&oacute;n del Estudio","Una Invitaci&oacute;n a Honrar a Alguien",
         para("Para el <strong>D&iacute;a de los Muertos</strong>, nuestra clase va a construir una <strong>ofrenda</strong> "
@@ -114,7 +114,7 @@ def build():
         '      </div>\n'
         '      <div class="silva-nav-spacer"></div>')
 
-    return wrap_page("D&iacute;a de los Muertos: Honor Someone You Love | PVHS",
+    return wrap_page("D&iacute;a de los Muertos: Honor and Remember Someone | PVHS",
         nav_inner, top_wrap(en,es), "")
 
 if __name__=="__main__":
