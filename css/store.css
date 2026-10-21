@@ -168,8 +168,16 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .prod-head .bar{width:24px;height:3px;background:var(--teal-bright);}
 
 /* ---- how it works (process steps, chevron cards) ---- */
-.howitworks{padding:22px 0 10px;}
-.hiw-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(214px,1fr));gap:12px;}
+.howitworks{padding:16px 0 10px;}
+/* collapsed-by-default accordion header (native <details>/<summary>) */
+.hiw-sum{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;font-family:var(--font-head);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.3rem;color:#fff;padding:4px 0;}
+.hiw-sum::-webkit-details-marker{display:none;}
+.hiw-sum .bar{width:24px;height:3px;background:var(--teal-bright);}
+.hiw-chev{margin-left:auto;width:10px;height:10px;border-right:2px solid var(--teal-bright);border-bottom:2px solid var(--teal-bright);transform:rotate(45deg);transition:transform .18s ease;}
+.howitworks[open] .hiw-chev{transform:rotate(-135deg);}
+.hiw-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(214px,1fr));gap:12px;margin-top:16px;}
+/* author display:grid above defeats the native collapse, so re-hide when closed */
+.howitworks:not([open]) .hiw-steps{display:none;}
 .hiw-step{display:flex;align-items:stretch;background:var(--surface);border:1px solid var(--surface-bd);min-height:92px;overflow:hidden;}
 .hiw-num{flex:0 0 52px;background:var(--teal);color:#021414;font-family:var(--font-head);font-weight:700;font-size:1.7rem;display:flex;align-items:center;justify-content:center;padding-right:11px;clip-path:polygon(0 0,66% 0,100% 50%,66% 100%,0 100%);}
 .hiw-body{flex:1 1 auto;min-width:0;padding:13px 15px 13px 2px;display:flex;flex-direction:column;gap:4px;justify-content:center;}
