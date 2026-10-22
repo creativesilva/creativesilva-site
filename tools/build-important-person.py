@@ -153,6 +153,10 @@ def moodboard_downloads(es):
       + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;">' + dl_link(MOODBOARD_ZIP, label, row=True) + '</div>'
       + '</div>')
 
+def pnote(t):
+    # PURPLE note, for a callout inside a purple resources_card (keeps the section color cohesive).
+    return (f'<div style="background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.30);border-left:4px solid #8b5cf6;padding:11px 14px;margin:8px 0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
+
 def lens_table(es):
     # Canon EOS R50 (RF mount) lens guide for the Step 04 treatment: students pick a lens per image.
     # f-stop (max-aperture) ranges verified from Canon's official spec pages (Chris 2026-10-22, "research
@@ -174,14 +178,14 @@ def lens_table(es):
             ("RF 50mm","portrait","50mm","f/1.8","Closer portraits, waist up or chest up. Low f-stops for a soft, blurry background."),
             ("RF-S 55-210mm","telephoto","55-210mm","f/5-7.1","Lots of reach. Use it when you need to photograph your person from far away."),
         ]
-    th="".join(f'<th style="text-align:left;padding:11px 14px;background:rgba(0,184,184,0.18);border:1px solid rgba(0,184,184,0.35);font-size:10.5pt;letter-spacing:0.06em;text-transform:uppercase;color:#80e0e0;white-space:nowrap;">{c}</th>' for c in cols)
+    th="".join(f'<th style="text-align:left;padding:11px 14px;background:rgba(139,92,246,0.18);border:1px solid rgba(139,92,246,0.35);font-size:10.5pt;letter-spacing:0.06em;text-transform:uppercase;color:#c4b5fd;white-space:nowrap;">{c}</th>' for c in cols)
     trs=""
     for name,role,fl,ap,best in rows:
         trs+=('<tr>'
-          f'<td style="padding:11px 14px;border:1px solid rgba(0,184,184,0.22);vertical-align:top;white-space:nowrap;"><span style="font-size:12.5pt;color:#ffffff;"><strong>{name}</strong></span><span style="display:block;font-size:9.5pt;color:#80e0e0;letter-spacing:0.05em;text-transform:uppercase;margin-top:3px;">{role}</span></td>'
-          f'<td style="padding:11px 14px;border:1px solid rgba(0,184,184,0.22);vertical-align:top;font-size:12pt;color:rgba(255,255,255,0.90);white-space:nowrap;">{fl}</td>'
-          f'<td style="padding:11px 14px;border:1px solid rgba(0,184,184,0.22);vertical-align:top;font-size:12pt;color:rgba(255,255,255,0.90);white-space:nowrap;">{ap}</td>'
-          f'<td style="padding:11px 14px;border:1px solid rgba(0,184,184,0.22);vertical-align:top;font-size:11.5pt;color:rgba(255,255,255,0.90);line-height:1.5;min-width:230px;">{best}</td>'
+          f'<td style="padding:11px 14px;border:1px solid rgba(139,92,246,0.22);vertical-align:top;white-space:nowrap;"><span style="font-size:12.5pt;color:#ffffff;"><strong>{name}</strong></span><span style="display:block;font-size:9.5pt;color:#c4b5fd;letter-spacing:0.05em;text-transform:uppercase;margin-top:3px;">{role}</span></td>'
+          f'<td style="padding:11px 14px;border:1px solid rgba(139,92,246,0.22);vertical-align:top;font-size:12pt;color:rgba(255,255,255,0.90);white-space:nowrap;">{fl}</td>'
+          f'<td style="padding:11px 14px;border:1px solid rgba(139,92,246,0.22);vertical-align:top;font-size:12pt;color:rgba(255,255,255,0.90);white-space:nowrap;">{ap}</td>'
+          f'<td style="padding:11px 14px;border:1px solid rgba(139,92,246,0.22);vertical-align:top;font-size:11.5pt;color:rgba(255,255,255,0.90);line-height:1.5;min-width:230px;">{best}</td>'
           '</tr>')
     table=('<table style="width:100%;min-width:620px;border-collapse:collapse;margin:4px 0 2px;">'
       f'<thead><tr>{th}</tr></thead><tbody>{trs}</tbody></table>')
@@ -489,12 +493,13 @@ def build(course):
                 (("Lighting, required for Photo 2:","plan how you will <strong>modify the light</strong> for each image. For every photo, will you use a <strong>reflector</strong>, the <strong>Godox AD200 Pro II</strong> portable strobe, the <strong>Smallrig 25W LD RGB</strong> light panel, or a <strong>combination</strong>? Shape the light on purpose, do not just use whatever light is already there.") if p2 else ("Lighting:","where will your light come from, and how will you shape it? Think about window light, open shade, or adding your own light.")),
             ])
             + note("Remember the three image plan: image 1 is a portrait, and images 2 and 3 are your person in action, doing what they do."))
-        en+=card("YOUR LENSES / PICK A LENS","Pick a Lens for Each Image",
+        en+=resources_card("Pick a Lens for Each Image",
             para("In this class we use the Canon EOS R50. You have four lenses to choose from. Pick the best one for each of your three images, then <strong>name the lens in your treatment</strong>.")
+            + para("You can use the <strong>same lens for more than one image</strong> if your story calls for it, or a <strong>different lens for each image</strong> for variety. It is your choice.")
             + lens_table(False)
-            + note("The <strong>f-stop range</strong> above is how <strong>wide</strong> each lens opens, which sets how blurry the background can get. Every one of these lenses can also close down to <strong>f/22 or smaller</strong>, so with any of them you can still choose f/8 or f/12 for a sharp background."))
+            + pnote("The <strong>f-stop range</strong> above is how <strong>wide</strong> each lens opens, which sets how blurry the background can get. Every one of these lenses also closes down to <strong>f/22 or smaller</strong>, so with any of them you can still choose f/8 or f/12 for a sharp background."), False)
         en+=deliverables_box(False,
-            [("3 storyboard pages (JPG):","a clear photo of each of your three storyboard pages, one per image, with a sketch and a full written plan on every page, uploaded to this Canvas assignment.")])
+            [("3 storyboard pages (JPG):","a clear photo of each of your three storyboard pages, one per image, with a sketch and a full written plan on every page, uploaded to this Canvas assignment.")], files=3)
         en+=card("HOW TO TURN IT IN","Scan Your Storyboard Pages With Your iPad",
             para("Your storyboard is on paper, so take a photo of each page to turn it in. Use your <strong>school student iPad</strong> as a camera. This is how we scan paper work in this class.")
             + bullets([
@@ -526,12 +531,13 @@ def build(course):
                 (("Iluminaci&oacute;n, obligatoria en Foto 2:","planea c&oacute;mo vas a <strong>modificar la luz</strong> en cada imagen. Para cada foto, &iquest;usar&aacute;s un <strong>reflector</strong>, el estrobo port&aacute;til <strong>Godox AD200 Pro II</strong>, el panel de luz <strong>Smallrig 25W LD RGB</strong>, o una <strong>combinaci&oacute;n</strong>? Da forma a la luz a prop&oacute;sito, no uses solo la luz que ya hay.") if p2 else ("Iluminaci&oacute;n:","&iquest;de d&oacute;nde vendr&aacute; tu luz y c&oacute;mo la vas a controlar? Piensa en luz de ventana, sombra abierta o agregar tu propia luz.")),
             ])
             + note("Recuerda el plan de tres im&aacute;genes: la imagen 1 es un retrato, y las im&aacute;genes 2 y 3 son tu persona en acci&oacute;n, haciendo lo que hace."))
-        es+=card("TUS LENTES / ELIGE UN LENTE","Elige un Lente para Cada Imagen",
+        es+=resources_card("Elige un Lente para Cada Imagen",
             para("En esta clase usamos la Canon EOS R50. Tienes cuatro lentes para elegir. Escoge el mejor para cada una de tus tres im&aacute;genes y luego <strong>nombra el lente en tu tratamiento</strong>.")
+            + para("Puedes usar el <strong>mismo lente para m&aacute;s de una imagen</strong> si tu historia lo pide, o un <strong>lente diferente para cada imagen</strong> para dar variedad. T&uacute; decides.")
             + lens_table(True)
-            + note("El <strong>rango de n&uacute;mero f</strong> de arriba es qu&eacute; tan <strong>abierto</strong> llega cada lente, lo que define qu&eacute; tan borroso puede quedar el fondo. Todos estos lentes tambi&eacute;n pueden cerrarse hasta <strong>f/22 o m&aacute;s</strong>, as&iacute; que con cualquiera puedes elegir f/8 o f/12 para un fondo n&iacute;tido."))
+            + pnote("El <strong>rango de n&uacute;mero f</strong> de arriba es qu&eacute; tan <strong>abierto</strong> llega cada lente, lo que define qu&eacute; tan borroso puede quedar el fondo. Todos estos lentes tambi&eacute;n se cierran hasta <strong>f/22 o m&aacute;s</strong>, as&iacute; que con cualquiera puedes elegir f/8 o f/12 para un fondo n&iacute;tido."), True)
         es+=deliverables_box(True,
-            [("3 p&aacute;ginas de storyboard (JPG):","una foto clara de cada una de tus tres p&aacute;ginas de storyboard, una por imagen, con un dibujo y un plan escrito completo en cada p&aacute;gina, subida a esta tarea de Canvas.")])
+            [("3 p&aacute;ginas de storyboard (JPG):","una foto clara de cada una de tus tres p&aacute;ginas de storyboard, una por imagen, con un dibujo y un plan escrito completo en cada p&aacute;gina, subida a esta tarea de Canvas.")], files=3)
         es+=card("C&Oacute;MO ENTREGARLO","Escanea Tus P&aacute;ginas de Storyboard con Tu iPad",
             para("Tu storyboard est&aacute; en papel, as&iacute; que toma una foto de cada p&aacute;gina para entregarlo. Usa tu <strong>iPad escolar de estudiante</strong> como c&aacute;mara. As&iacute; escaneamos el trabajo en papel en esta clase.")
             + bullets([

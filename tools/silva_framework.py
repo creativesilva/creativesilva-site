@@ -413,10 +413,16 @@ def vocab_grid(quiz_label, quiz_body, terms):
           '</details>')
     return note_box+hintline+f'<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;">{items}</div>'
 
-def deliverables_box(es,items):
+def deliverables_box(es,items,files=None):
     # GOLD deliverables section, chip header (icon LEFT), at the TOP of the step. Opens with a
-    # forecast, then the turn-in bullets.
-    title="ENTREGABLES &middot; ENTR&Eacute;GALO" if es else "DELIVERABLES &middot; TURN IT IN"
+    # forecast, then the turn-in bullets. Title shows the FILE COUNT (Chris 2026-10-22): e.g.
+    # "DELIVERABLES / TURN IN 2 FILES". Defaults to the number of bullets; pass files= when a single
+    # bullet is actually several files (e.g. "3 storyboard pages").
+    n = files if files is not None else len(items)
+    if es:
+        title = f"ENTREGABLES &middot; ENTREGA {n} ARCHIVO" + ("S" if n != 1 else "")
+    else:
+        title = f"DELIVERABLES &middot; TURN IN {n} FILE" + ("S" if n != 1 else "")
     lead=("Trabaja cada tarea de esta p&aacute;gina para terminar bien este paso. Cada paso de este m&oacute;dulo tiene su propia calificaci&oacute;n, as&iacute; que entrega lo siguiente:" if es
           else "Work through every task on this page to finish this step the right way. Each step in this module gets its own grade, so turn in the work below:")
     lis=""
