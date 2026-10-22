@@ -113,7 +113,7 @@ def tour_notes(es):
          ])
          + _tour_part("2","Haz zoom y mu&eacute;vete",[
             ("Herramienta Zoom:","en el panel de herramientas. Te deja ver m&aacute;s detalle. Mant&eacute;n Opci&oacute;n para cambiar de Acercar a Alejar."),
-            ("Herramienta Mano:","mant&eacute;n presionada la herramienta Zoom para encontrarla. Te deja deslizarte por la mesa de trabajo."),
+            ("Herramienta Mano:","b&uacute;scala en el panel de herramientas, o mant&eacute;n presionada la barra espaciadora para tomarla en cualquier momento. Te deja deslizarte por la mesa de trabajo."),
          ])
          + _tour_part("3","Crea un documento nuevo",[
             ("Archivo &gt; Nuevo:","abre el cuadro Nuevo documento. Elige un preset (como Impresi&oacute;n) para fijar el tama&ntilde;o y las opciones."),
@@ -138,7 +138,7 @@ def tour_notes(es):
          ])
          + _tour_part("2","Zoom and pan",[
             ("Zoom tool:","in the Tools panel. It lets you see more detail. Hold Option to switch from Zoom In to Zoom Out."),
-            ("Hand tool:","click and hold the Zoom tool to find it. It lets you slide (pan) around your artboard."),
+            ("Hand tool:","find it in the Tools panel, or hold down the Spacebar to grab it anytime. It lets you slide (pan) around your artboard."),
          ])
          + _tour_part("3","Make a new document",[
             ("File &gt; New:","opens the New Document box. Pick a preset, like Print, to set the size and options."),
@@ -201,8 +201,8 @@ def sketch_notes(es):
             ("Pen tool:","draw the custom shapes and outlines the shape tools cannot make."),
             ("Build it over your sketch:","piece by piece, cover your sketch with clean vector shapes."),
          ])
-         + _tour_part("3","Merge and order",[
-            ("Pathfinder to merge:","select shapes that should be one piece, then use the Pathfinder panel (Unite) to merge them into one."),
+         + _tour_part("3","Unite and order",[
+            ("Pathfinder to unite:","select the shapes that should be one piece, then open the Pathfinder panel and click Unite to combine them into one shape."),
             ("Layer order:","in the Layers panel, drag layers up or down to set what is in front and what is behind."),
          ])
          + _tour_part("4","Add color",[
@@ -252,9 +252,9 @@ def dots_for(ai):
 # ================= OVERVIEW (Step 01) =================
 def overview():
     en=banner(f"Module {MODNUM} &bull; Step 01","Get to Know Illustrator",
-        "Read this page and download your practice files, then go to Step 02 to take the tour. This is a warm-up, there is no project to turn in yet.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
+        "Read this page and download your practice files, then go to Step 02 to take the tour. Steps 01 and 02 are your warm-up. The project begins in Step 03.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=type_card("overview","Step 01 &middot; Overview &amp; Download","Meet Adobe Illustrator",
-        para("Illustrator is the program artists and designers use to make logos, icons, posters, and art that can be printed at any size. This module is a warm-up. You will take a short guided tour to learn your way around the program. There is no project to turn in yet, so relax and just get comfortable.")
+        para("Illustrator is the program artists and designers use to make logos, icons, posters, and art that can be printed at any size. This module is a warm-up. You will take a short guided tour to learn your way around the program. There is nothing to turn in for the tour, so relax and get comfortable. Your project begins in Step 03, where you draw your character.")
         + para("Illustrator makes <strong>vector</strong> art. Vector art is built from points and lines using math, so it stays sharp and clean at any size, from a tiny icon to a wall-sized banner. A photo gets blurry when you blow it up. Vector art never does.")
         + para("In this warm-up you will tour the workspace, learn to zoom and move around, make a new document, and save your work. Then you will practice with the files you download below.")
         + (framed(HEADER,"The Adobe Illustrator workspace with the Tools panel and an artboard") if HAVE_HEADER else ""))
@@ -285,9 +285,9 @@ def overview():
     en+=next_up("UP NEXT &middot; STEP 02 - Take the Tour &amp; Practice","Follow the guided Adobe tour, practice with your files, and capture your workspace.")
 
     es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 01","Conoce Illustrator",
-        "Lee esta p&aacute;gina y descarga tus archivos de pr&aacute;ctica, luego ve al Paso 02 para hacer el recorrido. Esto es un calentamiento, todav&iacute;a no hay proyecto que entregar.","#top","Back to English", HICON_DESIGN)
+        "Lee esta p&aacute;gina y descarga tus archivos de pr&aacute;ctica, luego ve al Paso 02 para hacer el recorrido. Los Pasos 01 y 02 son tu calentamiento. El proyecto empieza en el Paso 03.","#top","Back to English", HICON_DESIGN)
     es+=type_card("overview","Paso 01 &middot; Resumen y Descarga","Conoce Adobe Illustrator",
-        para("Illustrator es el programa que usan los artistas y dise&ntilde;adores para hacer logotipos, &iacute;conos, carteles y arte que se puede imprimir en cualquier tama&ntilde;o. Este m&oacute;dulo es un calentamiento. Har&aacute;s un recorrido corto y guiado para aprender a moverte en el programa. Todav&iacute;a no hay proyecto que entregar, as&iacute; que rel&aacute;jate y toma confianza.")
+        para("Illustrator es el programa que usan los artistas y dise&ntilde;adores para hacer logotipos, &iacute;conos, carteles y arte que se puede imprimir en cualquier tama&ntilde;o. Este m&oacute;dulo es un calentamiento. Har&aacute;s un recorrido corto y guiado para aprender a moverte en el programa. No hay nada que entregar en el recorrido, as&iacute; que rel&aacute;jate y toma confianza. Tu proyecto empieza en el Paso 03, donde dibujas tu personaje.")
         + para("Illustrator hace arte <strong>vectorial</strong>. El arte vectorial se construye con puntos y l&iacute;neas usando matem&aacute;ticas, as&iacute; que se mantiene n&iacute;tido y limpio en cualquier tama&ntilde;o, desde un &iacute;cono peque&ntilde;o hasta un cartel del tama&ntilde;o de una pared. Una foto se ve borrosa al agrandarla. El arte vectorial nunca.")
         + para("En este calentamiento vas a recorrer el espacio de trabajo, aprender a hacer zoom y moverte, crear un documento nuevo y guardar tu trabajo. Luego practicar&aacute;s con los archivos que descargues abajo.")
         + (framed(HEADER,"El espacio de trabajo de Adobe Illustrator con el panel de herramientas y una mesa de trabajo") if HAVE_HEADER else ""))
@@ -398,7 +398,7 @@ def step03():
         + bullets([
             ("Place your character sketch:","photograph your sketch with your school iPad, get it onto your Mac, then use File &gt; Place in Illustrator. Put it on its own layer and lock it as your guide."),
             ("Build your character:","on a new layer, use the Shape tools and the Pen tool to draw your character over the sketch."),
-            ("Merge and color:","use the Pathfinder panel to merge shapes into one, set your layer order, and give each shape a fill color."),
+            ("Unite and color:","in the Pathfinder panel, click Unite to combine shapes into one, set your layer order, and give each shape a fill color."),
             ("Delete the sketch layer:","once your character is done, delete the sketch image layer so only your vector art is left."),
             ("Save .ai and .svg:","File &gt; Save As and pick Adobe Illustrator for the .ai, then File &gt; Save As again and pick SVG for the .svg. Turn in both files."),
         ])
@@ -449,21 +449,20 @@ def backside_notes(es):
         hint="Despl&aacute;zate dentro del cuadro para ver los pasos."
         parts=(
          _tour_part("1","Agrega una segunda mesa de trabajo",[
-            ("Elige la herramienta Mesa de trabajo:","en la barra de herramientas, elige la herramienta Mesa de trabajo. Aparece un marco alrededor de tu mesa."),
-            ("Mant&eacute;n Opci&oacute;n y arrastra:","mant&eacute;n presionada la tecla Opci&oacute;n y arrastra tu mesa hacia un lado. Esto copia toda la mesa y tu personaje a una segunda mesa."),
-            ("Presiona Escape:","presiona Escape para salir de la herramienta. Ahora tienes dos mesas: el frente y una copia para hacer la espalda."),
+            ("Elige la herramienta Mesa de trabajo:","en el panel de herramientas, elige la herramienta Mesa de trabajo. Aparece un marco alrededor de tu mesa."),
+            ("Mant&eacute;n Opci&oacute;n y arrastra:","mant&eacute;n presionada la tecla Opci&oacute;n y arrastra tu mesa hacia un lado. Esto copia toda la mesa y tu personaje a una segunda mesa. Presiona Escape cuando termines."),
          ])
-         + _tour_part("2","Mant&eacute;n la misma silueta",[
-            ("Qu&eacute; es la silueta:","la silueta es la forma de afuera de tu personaje, como su sombra. El frente y la espalda deben tener el mismo contorno para que coincidan al imprimir."),
-            ("No cambies el contorno:","deja la forma de afuera igual en la espalda. Solo cambia lo que va adentro."),
+         + _tour_part("2","Selecciona todo tu personaje",[
+            ("Agr&uacute;palo primero:","haz clic en tu personaje con la herramienta Selecci&oacute;n y elige Objeto &gt; Agrupar (Cmd+G) para que todas las piezas se muevan como una."),
+            ("Selecciona todo:","con la herramienta Selecci&oacute;n, haz clic en tu personaje agrupado, o elige Edici&oacute;n &gt; Seleccionar todo (Cmd+A) para tomar todas las piezas de una vez."),
          ])
-         + _tour_part("3","Reusa tus formas",[
-            ("Empieza desde la copia:","ya tienes tu personaje en la segunda mesa. No lo vuelves a dibujar desde cero."),
-            ("Reusa las partes que coinciden:","los brazos, las piernas, el cabello y la forma del cuerpo muchas veces son iguales por detr&aacute;s. Qu&eacute;date con esas partes y mu&eacute;velas si lo necesitas."),
+         + _tour_part("3","Voltea horizontalmente",[
+            ("Refleja tu personaje:","con tu personaje seleccionado, elige Objeto &gt; Transformar &gt; Reflejar. Elige el eje Vertical y haz clic en OK. Esto lo voltea de izquierda a derecha, para que mire hacia el otro lado."),
+            ("La misma silueta:","voltear mantiene el mismo contorno (silueta) exacto, as&iacute; la espalda va a coincidir con el frente cuando se imprima."),
          ])
          + _tour_part("4","Convi&eacute;rtela en la espalda",[
             ("Quita los detalles del frente:","borra lo que solo se ve de frente, como la cara, los ojos y los botones."),
-            ("Agrega detalles de la espalda:","dibuja lo que se ve por detr&aacute;s, como la parte de atr&aacute;s del cabello, una mochila, una cola o un dise&ntilde;o en la espalda. Usa las herramientas de Forma y la Pluma."),
+            ("Agrega detalles de la espalda:","usa las herramientas de Forma y la Pluma para dibujar lo que se ve por detr&aacute;s, como la parte de atr&aacute;s del cabello, una mochila, una cola o un dise&ntilde;o en la espalda. Reusa las formas que coinciden."),
             ("Combina tus colores:","usa los mismos colores de relleno para que el frente y la espalda se vean como el mismo personaje."),
          ])
          + _tour_part("5","Termina y guarda",[
@@ -476,21 +475,20 @@ def backside_notes(es):
         hint="Scroll inside the box to see the steps."
         parts=(
          _tour_part("1","Add a second artboard",[
-            ("Pick the Artboard tool:","in the toolbar, choose the Artboard tool. A frame appears around your artboard."),
-            ("Hold Option and drag:","hold the Option key and drag your artboard to the side. This copies the whole artboard and your character onto a second artboard."),
-            ("Press Escape:","press Escape to leave the Artboard tool. Now you have two artboards: the front and a copy to make the back."),
+            ("Pick the Artboard tool:","in the Tools panel, choose the Artboard tool. A frame appears around your artboard."),
+            ("Hold Option and drag:","hold the Option key and drag your artboard to the side. This copies the whole artboard and your character onto a second artboard. Press Escape when you are done."),
          ])
-         + _tour_part("2","Keep the same silhouette",[
-            ("What a silhouette is:","the silhouette is the outer shape of your character, like its shadow. The front and the back must have the same outline so they match when printed."),
-            ("Do not change the outline:","keep the outer shape the same on the back. Only change what is inside it."),
+         + _tour_part("2","Select your whole character",[
+            ("Group it first:","click your character with the Selection tool and choose Object &gt; Group (Cmd+G) so all the pieces move as one."),
+            ("Select the whole thing:","with the Selection tool, click your grouped character, or choose Edit &gt; Select All (Cmd+A) to grab every piece at once."),
          ])
-         + _tour_part("3","Reuse your shapes",[
-            ("Start from the copy:","you already have your character on the second artboard. You do not redraw it from nothing."),
-            ("Reuse the parts that match:","arms, legs, hair, and the body shape are often the same from behind. Keep those and move them if you need to."),
+         + _tour_part("3","Flip it horizontally",[
+            ("Mirror your character:","with your character selected, choose Object &gt; Transform &gt; Reflect. Pick the Vertical axis and click OK. This flips it left to right, so it faces the other way."),
+            ("Same silhouette:","flipping keeps the exact same outline (silhouette), so the back will line up with the front when it is printed."),
          ])
          + _tour_part("4","Make it the back",[
             ("Remove front-only details:","take away the things you only see from the front, like the face, eyes, and buttons."),
-            ("Add back details:","draw what you see from behind, like the back of the hair, a backpack, a tail, or a design on the back. Use the Shape tools and the Pen tool."),
+            ("Add back details:","use the Shape tools and the Pen tool to draw what you see from behind, like the back of the hair, a backpack, a tail, or a design on the back. Reuse the shapes that match."),
             ("Match your colors:","use the same fill colors so the front and back look like the same character."),
          ])
          + _tour_part("5","Finish and save",[
@@ -512,7 +510,7 @@ def step04():
     en+=card("FRONT AND BACK / WHAT YOU WILL DO","Draw Your Character from Behind",
         para("In Step 03 you drew the <strong>front</strong> of your character. Now you draw the <strong>back</strong>. You add a <strong>second artboard</strong>, keep the <strong>same silhouette</strong> (the outer shape), and change what is inside so your figure has detail from every side.")
         + para("A 3D print needs to look right from <strong>every angle</strong>. The back view gives the printer the detail it needs so your character is not flat or blank behind.")
-        + note("You can <strong>duplicate</strong> your whole artboard and character, then turn the copy into the back. You do not start over."))
+        + note("You <strong>duplicate</strong> your whole artboard and character, <strong>mirror</strong> the copy, then change it into the back. You do not start over."))
     en+=resources_card("How to Draw the Back",
         para("Here are the steps in short. Use them as a cheat sheet while you work. These steps are for a Mac.")
         + backside_notes(False), False)
@@ -521,12 +519,12 @@ def step04():
         + para("Duplicate your artboard, keep the outline the same, and turn the copy into the back view.")
         + bullets([
             ("Add a second artboard:","pick the Artboard tool, hold Option, and drag your artboard to the side to copy it and your character."),
-            ("Keep the same silhouette:","do not change the outer shape. The back must match the front so they line up when printed."),
-            ("Reuse your shapes:","keep the parts that look the same from behind, like arms, legs, hair, and the body."),
-            ("Make it the back:","remove front-only details like the face, then add back details like the back of the hair, a backpack, or a design. Match your colors."),
+            ("Select your whole character:","group it with Object &gt; Group (Cmd+G), then click it with the Selection tool, or use Edit &gt; Select All (Cmd+A)."),
+            ("Flip it horizontally:","choose Object &gt; Transform &gt; Reflect, pick the Vertical axis, and click OK. Your character mirrors left to right and keeps the same silhouette."),
+            ("Make it the back:","remove front-only details like the face, then add back details like the back of the hair, a backpack, or a design. Reuse the shapes that match and keep the same colors."),
             ("Save .ai and .svg:","File &gt; Save As and pick Adobe Illustrator for the .ai, then File &gt; Save As again and pick SVG for the .svg. Turn in both files."),
         ])
-        + note("Keeping the <strong>same silhouette</strong> is the key. When the front and back share the same outline, Mr. Silva can print a character with detail on every side."))
+        + note("Keeping the <strong>same silhouette</strong> is the key, so the front and back line up when printed. One tip: if your character has any letters or numbers on it, flip those back so they still read the right way."))
     en+=deliverables_box(False,
         [("Your Illustrator file (.ai):","your character with its back view on a second artboard, saved as a native Adobe Illustrator file. File &gt; Save As, pick Adobe Illustrator, then upload it to this Canvas assignment."),
          ("Your exported file (.svg):","the same file saved again as an SVG. File &gt; Save As again, pick SVG, then upload it to this Canvas assignment."),
@@ -538,7 +536,7 @@ def step04():
     es+=card("FRENTE Y ESPALDA / QU&Eacute; VAS A HACER","Dibuja Tu Personaje por Detr&aacute;s",
         para("En el Paso 03 dibujaste el <strong>frente</strong> de tu personaje. Ahora dibujas la <strong>espalda</strong>. Agregas una <strong>segunda mesa de trabajo</strong>, mantienes la <strong>misma silueta</strong> (la forma de afuera) y cambias lo de adentro para que tu figura tenga detalle por todos lados.")
         + para("Una impresi&oacute;n 3D tiene que verse bien desde <strong>todos los &aacute;ngulos</strong>. La vista de espalda le da a la impresora el detalle que necesita para que tu personaje no quede plano ni vac&iacute;o por detr&aacute;s.")
-        + note("Puedes <strong>duplicar</strong> toda tu mesa de trabajo y tu personaje, y luego convertir la copia en la espalda. No empiezas de nuevo."))
+        + note("<strong>Duplicas</strong> toda tu mesa de trabajo y tu personaje, <strong>reflejas</strong> la copia y luego la conviertes en la espalda. No empiezas de nuevo."))
     es+=resources_card("C&oacute;mo Dibujar la Espalda",
         para("Estos son los pasos en corto. &Uacute;salos como ayuda mientras trabajas. Estos pasos son para una Mac.")
         + backside_notes(True), True)
@@ -547,12 +545,12 @@ def step04():
         + para("Duplica tu mesa de trabajo, mant&eacute;n el contorno igual y convierte la copia en la vista de espalda.")
         + bullets([
             ("Agrega una segunda mesa:","elige la herramienta Mesa de trabajo, mant&eacute;n Opci&oacute;n y arrastra tu mesa hacia un lado para copiarla junto con tu personaje."),
-            ("Mant&eacute;n la misma silueta:","no cambies la forma de afuera. La espalda debe coincidir con el frente para que se alineen al imprimir."),
-            ("Reusa tus formas:","qu&eacute;date con las partes que se ven iguales por detr&aacute;s, como brazos, piernas, cabello y el cuerpo."),
-            ("Convi&eacute;rtela en la espalda:","quita los detalles del frente como la cara, luego agrega detalles de la espalda como la parte de atr&aacute;s del cabello, una mochila o un dise&ntilde;o. Combina tus colores."),
+            ("Selecciona todo tu personaje:","agr&uacute;palo con Objeto &gt; Agrupar (Cmd+G), luego haz clic en &eacute;l con la herramienta Selecci&oacute;n, o usa Edici&oacute;n &gt; Seleccionar todo (Cmd+A)."),
+            ("Voltea horizontalmente:","elige Objeto &gt; Transformar &gt; Reflejar, elige el eje Vertical y haz clic en OK. Tu personaje se refleja de izquierda a derecha y mantiene la misma silueta."),
+            ("Convi&eacute;rtela en la espalda:","quita los detalles del frente como la cara, luego agrega detalles de la espalda como la parte de atr&aacute;s del cabello, una mochila o un dise&ntilde;o. Reusa las formas que coinciden y mant&eacute;n los mismos colores."),
             ("Guarda .ai y .svg:","Archivo &gt; Guardar Como y elige Adobe Illustrator para el .ai, luego Archivo &gt; Guardar Como otra vez y elige SVG para el .svg. Entrega los dos archivos."),
         ])
-        + note("Mantener la <strong>misma silueta</strong> es la clave. Cuando el frente y la espalda tienen el mismo contorno, el Sr. Silva puede imprimir un personaje con detalle por todos lados."))
+        + note("Mantener la <strong>misma silueta</strong> es la clave, para que el frente y la espalda se alineen al imprimir. Un consejo: si tu personaje tiene letras o n&uacute;meros, voltea esos de nuevo para que se lean bien."))
     es+=deliverables_box(True,
         [("Tu archivo de Illustrator (.ai):","tu personaje con su vista de espalda en una segunda mesa de trabajo, guardado como archivo nativo de Adobe Illustrator. Archivo &gt; Guardar Como, elige Adobe Illustrator, luego s&uacute;belo a esta tarea de Canvas."),
          ("Tu archivo exportado (.svg):","el mismo archivo guardado otra vez como SVG. Archivo &gt; Guardar Como otra vez, elige SVG, luego s&uacute;belo a esta tarea de Canvas."),
