@@ -218,11 +218,13 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .spec-row span:first-child{color:var(--gray);flex:0 0 auto;} .spec-row span:last-child{color:#fff;text-align:right;font-weight:600;}
 
 /* ---- dialogs (sign-in + calendar) ---- */
-.sov{position:fixed;inset:0;z-index:200;background:rgba(5,8,8,.72);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:18px;}
+.sov{position:fixed;inset:0;z-index:200;background:rgba(5,8,8,.72);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:18px;overflow-y:auto;}
 .sov.open{display:flex;}
-.sheet{width:100%;max-width:440px;background:var(--paper);border:1px solid var(--surface-bd);box-shadow:var(--glow);position:relative;}
-.sheet::before{content:"";position:absolute;left:0;right:0;top:-1px;height:3px;background:linear-gradient(90deg,var(--teal),var(--teal-bright));}
-.sheet-bd{padding:24px 22px;}
+/* Cap every dialog to the viewport and scroll its body, so the action button is ALWAYS reachable on a
+   short phone screen (iOS toolbars / keyboard / landscape). dvh tracks the live visible height on iOS. */
+.sheet{width:100%;max-width:440px;background:var(--paper);border:1px solid var(--surface-bd);box-shadow:var(--glow);position:relative;display:flex;flex-direction:column;max-height:calc(100vh - 36px);max-height:calc(100dvh - 36px);}
+.sheet::before{content:"";position:absolute;left:0;right:0;top:-1px;height:3px;background:linear-gradient(90deg,var(--teal),var(--teal-bright));z-index:3;}
+.sheet-bd{padding:24px 22px;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;min-height:0;flex:1 1 auto;}
 .sheet h2{font-family:var(--font-head);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:1.5rem;color:#fff;margin-bottom:6px;}
 .sheet p{font-size:.9rem;color:var(--gray);margin-bottom:16px;}
 .field{margin-bottom:14px;}
@@ -282,6 +284,8 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
 .bag-x{background:transparent;border:0;color:#ff9a8a;font-size:.76rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;flex:0 0 auto;}
 .bag-x:hover{color:#ffb9ad;}
 .bag-empty{color:var(--gray);font-size:.95rem;padding:14px 0;}
+#siWho{color:#fff;font-size:1rem;}   /* name + period stand out white on the "Is this you?" confirm */
+#siWho b{color:#fff;}
 .si-course{color:var(--gray);font-size:.8rem;}
 
 /* ---- bag: dates summary + confirm ---- */
