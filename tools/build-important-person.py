@@ -441,18 +441,18 @@ def build(course):
             + para("Before you photograph your important person, plan it. Real photographers call this <strong>pre-production</strong>, the thinking you do before the camera comes out. A strong plan makes a strong series.")
             + para("You will make two things in your journal for your series: a <strong>storyboard</strong> and a <strong>treatment</strong>.")
             + bullets([
-                ("Storyboard:","a simple sketch of each of your three images. It does not need to be fancy. Draw a box and show where your person is, what is behind them, and what is happening."),
+                ("Storyboard:","a simple sketch of each of your three images. It does not need to be fancy. Draw a <strong>horizontal rectangle (landscape)</strong> for each frame, because all three photos are horizontal, then show where your person is, what is behind them, and what is happening."),
                 ("Treatment:","a short written plan for each image. It describes exactly how you will make that photo. Treatment is the real industry word for your written plan."),
             ])
             + note("You chose your person in Step 02 and built your mood board in Step 03. Now plan the three photos you will take of them: one portrait and two of them in action."))
         en+=card("WHAT TO PLAN / EACH IMAGE","Write a Full Plan for All Three Images",
-            para("Make one page for each of your three images. On every page, sketch the image, then write a paragraph that covers your full plan. Answer all of these:")
+            para("Make one page for each of your three images. On every page, sketch the image inside a <strong>horizontal (landscape) rectangle</strong>, then write a paragraph that covers your full plan. Answer all of these:")
             + bullets([
                 ("What is happening, and the feeling:","what is your person doing in this image, what story does it tell, and what should the viewer <strong>feel</strong> when they see it?"),
                 ("Composition:","how will you frame it? Where will your person sit in the photo? Think about the rule of thirds, the foreground, and the background."),
                 ("Focal length:","which lens or zoom will you use? Close and tight on your person, or wide to show the whole scene?"),
-                ("Aperture:","do you want a blurry background (a low f-number like f/2.8) or a sharp background (a higher f-number like f/8)?"),
-                ("Lighting:","where will your light come from, and how will you shape it? Think about window light, open shade, or adding your own light."),
+                ("Aperture:","do you want a blurry background (a low f-number like f/2.8) or a sharp background that shows lots of their world (a higher f-number like <strong>f/8 or f/12</strong>)?"),
+                (("Lighting, required for Photo 2:","plan how you will <strong>modify the light</strong> for each image. For every photo, will you use a <strong>reflector</strong>, the <strong>Godox AD200 Pro II</strong> portable strobe, the <strong>Smallrig 25W LD RGB</strong> light panel, or a <strong>combination</strong>? Shape the light on purpose, do not just use whatever light is already there.") if p2 else ("Lighting:","where will your light come from, and how will you shape it? Think about window light, open shade, or adding your own light.")),
             ])
             + note("Remember the three image plan: image 1 is a portrait, and images 2 and 3 are your person in action, doing what they do."))
         en+=deliverables_box(False,
@@ -474,18 +474,18 @@ def build(course):
             + para("Antes de fotografiar a tu persona importante, plan&eacute;alo. Los fot&oacute;grafos de verdad llaman a esto <strong>preproducci&oacute;n</strong>, el pensar que haces antes de sacar la c&aacute;mara. Un buen plan hace una buena serie.")
             + para("Har&aacute;s dos cosas en tu diario para tu serie: un <strong>storyboard</strong> y un <strong>tratamiento</strong>.")
             + bullets([
-                ("Storyboard (gui&oacute;n gr&aacute;fico):","un dibujo sencillo de cada una de tus tres im&aacute;genes. No tiene que ser elegante. Dibuja un recuadro y muestra d&oacute;nde est&aacute; tu persona, qu&eacute; hay detr&aacute;s y qu&eacute; est&aacute; pasando."),
+                ("Storyboard (gui&oacute;n gr&aacute;fico):","un dibujo sencillo de cada una de tus tres im&aacute;genes. No tiene que ser elegante. Dibuja un <strong>rect&aacute;ngulo horizontal (apaisado)</strong> para cada cuadro, porque las tres fotos son horizontales, y muestra d&oacute;nde est&aacute; tu persona, qu&eacute; hay detr&aacute;s y qu&eacute; est&aacute; pasando."),
                 ("Tratamiento (treatment):","un plan corto escrito para cada imagen. Describe exactamente c&oacute;mo vas a hacer esa foto. Tratamiento es la palabra profesional para tu plan escrito."),
             ])
             + note("Elegiste a tu persona en el Paso 02 y creaste tu mood board en el Paso 03. Ahora planeas las tres fotos que le tomar&aacute;s: un retrato y dos de ella en acci&oacute;n."))
         es+=card("QU&Eacute; PLANEAR / CADA IMAGEN","Escribe un Plan Completo para las Tres Im&aacute;genes",
-            para("Haz una p&aacute;gina para cada una de tus tres im&aacute;genes. En cada p&aacute;gina, dibuja la imagen y luego escribe un p&aacute;rrafo con tu plan completo. Contesta todo esto:")
+            para("Haz una p&aacute;gina para cada una de tus tres im&aacute;genes. En cada p&aacute;gina, dibuja la imagen dentro de un <strong>rect&aacute;ngulo horizontal (apaisado)</strong>, luego escribe un p&aacute;rrafo con tu plan completo. Contesta todo esto:")
             + bullets([
                 ("Qu&eacute; est&aacute; pasando y qu&eacute; se siente:","&iquest;qu&eacute; hace tu persona en esta imagen, qu&eacute; historia cuenta y qu&eacute; debe <strong>sentir</strong> quien la ve?"),
                 ("Composici&oacute;n:","&iquest;c&oacute;mo vas a encuadrar? &iquest;D&oacute;nde estar&aacute; tu persona en la foto? Piensa en la regla de los tercios, el primer plano y el fondo."),
                 ("Distancia focal:","&iquest;qu&eacute; lente o zoom usar&aacute;s? &iquest;Cerca y cerrado sobre tu persona, o abierto para mostrar toda la escena?"),
-                ("Apertura:","&iquest;quieres un fondo borroso (un n&uacute;mero f bajo como f/2.8) o un fondo n&iacute;tido (un n&uacute;mero f m&aacute;s alto como f/8)?"),
-                ("Iluminaci&oacute;n:","&iquest;de d&oacute;nde vendr&aacute; tu luz y c&oacute;mo la vas a controlar? Piensa en luz de ventana, sombra abierta o agregar tu propia luz."),
+                ("Apertura:","&iquest;quieres un fondo borroso (un n&uacute;mero f bajo como f/2.8) o un fondo n&iacute;tido que muestre mucho de su mundo (un n&uacute;mero f m&aacute;s alto como <strong>f/8 o f/12</strong>)?"),
+                (("Iluminaci&oacute;n, obligatoria en Foto 2:","planea c&oacute;mo vas a <strong>modificar la luz</strong> en cada imagen. Para cada foto, &iquest;usar&aacute;s un <strong>reflector</strong>, el estrobo port&aacute;til <strong>Godox AD200 Pro II</strong>, el panel de luz <strong>Smallrig 25W LD RGB</strong>, o una <strong>combinaci&oacute;n</strong>? Da forma a la luz a prop&oacute;sito, no uses solo la luz que ya hay.") if p2 else ("Iluminaci&oacute;n:","&iquest;de d&oacute;nde vendr&aacute; tu luz y c&oacute;mo la vas a controlar? Piensa en luz de ventana, sombra abierta o agregar tu propia luz.")),
             ])
             + note("Recuerda el plan de tres im&aacute;genes: la imagen 1 es un retrato, y las im&aacute;genes 2 y 3 son tu persona en acci&oacute;n, haciendo lo que hace."))
         es+=deliverables_box(True,
