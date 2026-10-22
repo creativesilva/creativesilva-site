@@ -384,16 +384,17 @@
   // Pickup step: the schedule windows PLUS "during your class period" (periods 1-7, default = the student's own period).
   function renderPickup(day, pick){
     var w=document.getElementById('planOpts');
-    var times=pickupOptions(day), pers=periodOptions(day);
+    var times=pickupOptions(day).slice();   // Nutrition, Lunch, After 6th period
     var myPer=(USER && USER.period)?parseInt(String(USER.period).replace(/\D/g,''),10):0;
-    var html=times.map(function(o,i){ return '<button type="button" class="time-opt" data-t="'+i+'"><b>'+esc(o.label)+'</b><span>'+f12(o.s)+' to '+f12(o.e)+'</span></button>'; }).join('');
-    if(pers.length){
-      html+='<div class="plan-sub2">During your class period'+(myPer?' &middot; yours is highlighted':'')+'</div>';
-      html+='<div class="per-chips">'+pers.map(function(o){ return '<button type="button" class="per-chip'+(o.period===myPer?' mine':'')+'" data-p="'+o.period+'"><b>P'+o.period+'</b><span>'+f12(o.s)+'</span></button>'; }).join('')+'</div>';
-    }
-    w.innerHTML=html;
+    // "During class" = the student's OWN period window, listed like the other options (no P1-P7 chips).
+    var myBlk=null; periodOptions(day).forEach(function(o){ if(o.period===myPer) myBlk=o; });
+    if(myBlk) times.push({label:'Period '+myPer, s:myBlk.s, e:myBlk.e, during:true});
+    w.innerHTML=times.map(function(o,i){
+      var head=o.during?'During class':esc(o.label);
+      var sub=o.during?('Period '+myPer+' &middot; '+f12(o.s)+' to '+f12(o.e)):(f12(o.s)+' to '+f12(o.e));
+      return '<button type="button" class="time-opt" data-t="'+i+'"><b>'+head+'</b><span>'+sub+'</span></button>';
+    }).join('');
     w.querySelectorAll('[data-t]').forEach(function(b){ b.onclick=function(){ pick(times[+b.getAttribute('data-t')]); }; });
-    w.querySelectorAll('[data-p]').forEach(function(b){ b.onclick=function(){ var p=+b.getAttribute('data-p'), o=null; pers.forEach(function(x){ if(x.period===p) o=x; }); if(o) pick({label:'Period '+p, s:o.s, e:o.e}); }; });
   }
   function drawCal(){
     document.getElementById('calTitle').textContent=MON[calView.getMonth()]+' '+calView.getFullYear();
