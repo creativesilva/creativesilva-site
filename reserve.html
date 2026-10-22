@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=26" />
+<link rel="stylesheet" href="/css/store.css?v=27" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -578,6 +578,21 @@
     }
     return null;
   }
+  // ALL unit ids for an item's type (free + busy), for the per-unit picker on the detail screen.
+  function allUnitsFor(it){
+    if(!it) return [];
+    var cams=camsFor(it.name); if(cams) return cams.slice();
+    var type=EQTYPE[it.name], eu=(CAL&&CAL.equipment_units)||{};
+    if(type) return Object.keys(eu).filter(function(u){ return eu[u] && eu[u].type===type; }).sort();
+    return [];
+  }
+  function unitNum(it,u){   // short chip label: "Cam 17" -> "17"; "Speedlite 01" (gear label) -> "01"
+    if(it && camsFor(it.name)) return String(u).replace(/\D/g,'');
+    var eu=(CAL&&CAL.equipment_units)||{}; var l=(eu[u]&&eu[u].label)||u; var m=String(l).match(/(\d+)\s*$/); return m?m[1]:String(l);
+  }
+  function unitFull(name,u){   // full label for the bag/receipt: cameras "Cam 17"; gear "Speedlite 01"
+    if(!u) return ''; if(camsFor(name)) return u; var eu=(CAL&&CAL.equipment_units)||{}; return (eu[u]&&eu[u].label)||u;
+  }
   // ----- Popular Rentals: most-reserved items -----
   function modelOfCam(cam){ var n=parseInt(String(cam).replace(/\D/g,''),10); if(n>=1&&n<=15) return 'Canon EOS R50'; if(n===16) return 'Canon EOS R8'; if(n>=17&&n<=18) return 'Canon EOS RP'; if(n>=19&&n<=21) return 'Canon EOS R50 V'; return null; }
   function modelOfType(t){ return {wide:'Ultra-Wide 10-18mm',zoom:'Ultra-Zoom 100-400mm',speedlite:'Speedlite EL-5',tripod:'K&F Concept Tripod',reflector:'Neewer Reflector',godox:'Godox AD200 Pro II Kit',smallrig:'SmallRig Overhead Light Kit'}[t]||null; }
@@ -617,6 +632,11 @@
   function reqMode(){ return !!(USER && USER.holdRequest); }
   function itemNeedsApproval(name){ return reqMode() || !!REQ[name]; }
   function onHold(){ return !!(USER && USER.hold); }
+  // The specific unit the student picked per model (name -> 'Cam 17' / 'speedlite-01'), chosen on the
+  // detail screen or auto-assigned (first free) on a quick add. Reserved exactly, falling back if taken.
+  var PICK={};
+  try{ var _pk=sessionStorage.getItem('pv_pick'); if(_pk) PICK=JSON.parse(_pk)||{}; }catch(e){}
+  function savePick(){ try{ sessionStorage.setItem('pv_pick',JSON.stringify(PICK)); }catch(e){} }
   function itemDA(it){ return !!(it.da || it.tag==='Digital Arts'); }       // Mankin / Digital Arts gear
   // Gray out equipment that is not for the signed-in student's course (teacher override lifts it).
   function itemLocked(it){
@@ -653,16 +673,27 @@
     g.querySelectorAll('[data-unlock]').forEach(function(b){ b.onclick=function(){ openGear(decodeURIComponent(b.getAttribute('data-unlock'))); }; });
     g.querySelectorAll('[data-detail]').forEach(function(b){ b.onclick=function(){ openDetail(decodeURIComponent(b.getAttribute('data-detail'))); }; });
   }
+  var detailUnit=null;   // the unit chosen in the open detail screen
   function openDetail(name){
     var it=findItem(name), sp=SPECS[name];
     var img = it && it.img ? '<div class="detail-img"><img src="'+it.img+'" alt="" />'+(it.tag?'<span class="prod-tag">'+esc(it.tag)+'</span>':'')+'</div>' : '';
     var rows = sp ? sp.specs.map(function(r){ return '<div class="spec-row"><span>'+r[0]+'</span><span>'+r[1]+'</span></div>'; }).join('') : '';
+    // Per-unit picker: every number for this model, free ones selectable, checked-out ones greyed.
+    var all=allUnitsFor(it), free=freeUnitsFor(it)||[], freeSet={}; free.forEach(function(u){ freeSet[u]=1; });
+    detailUnit = (PICK[name] && freeSet[PICK[name]]) ? PICK[name] : (free[0]||null);
+    var selLab = camsFor(name) ? 'Pick your camera number' : 'Pick a unit number';
+    var chips = all.map(function(u){ var busy=!freeSet[u]; return '<button type="button" class="unit-chip'+(busy?' busy':'')+(u===detailUnit?' on':'')+'"'+(busy?' disabled aria-disabled="true"':' data-u="'+esc(u)+'"')+'>'+esc(unitNum(it,u))+'</button>'; }).join('');
+    var selector = all.length ? ('<div class="unit-pick"><div class="unit-pick-lab">'+selLab+(free.length?'':' &middot; none free for your dates')+'</div><div class="unit-chips">'+chips+'</div></div>') : '';
+    var addBtn = free.length ? '<button type="button" class="btn block" id="detailAdd">Add to bag</button>'
+                             : '<button type="button" class="btn block" disabled>None free for your dates</button>';
     document.getElementById('detailBody').innerHTML=
       img + '<h2 id="detailTitle">'+esc(name)+'</h2>'+
       (sp?'<p class="detail-blurb">'+sp.blurb+'</p>':'')+
-      '<div class="spec-list">'+rows+'</div>'+
-      '<button type="button" class="btn block" id="detailAdd">Add to bag</button>';
-    var ab=document.getElementById('detailAdd'); if(ab) ab.onclick=function(){ close('detailOv'); addToBag(name); };
+      '<div class="spec-list">'+rows+'</div>'+ selector + addBtn;
+    document.querySelectorAll('#detailBody .unit-chip[data-u]').forEach(function(b){ b.onclick=function(){
+      detailUnit=b.getAttribute('data-u');
+      document.querySelectorAll('#detailBody .unit-chip').forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on'); }; });
+    var ab=document.getElementById('detailAdd'); if(ab) ab.onclick=function(){ if(detailUnit){ PICK[name]=detailUnit; savePick(); } close('detailOv'); addToBag(name); };
     open('detailOv');
   }
   var CURVIEW='popular';   // which single section is showing: 'popular' (home) or a category key
@@ -725,10 +756,11 @@
   }
   function doAddToBag(name){
     if(BAG.indexOf(name)<0){ BAG.push(name); saveBag(); updateBag(); bagPulse(); }
+    if(!PICK[name]){ var free=freeUnitsFor(findItem(name)); if(free && free.length){ PICK[name]=free[0]; savePick(); } }   // quick add: assign the first free unit
     toast(itemNeedsApproval(name)?'Added. This one needs Mr. Silva&#8217;s OK.':'Added to your bag.');
     rerender(); if(pickerOpen) renderPicker();
   }
-  function removeFromBag(name){ var i=BAG.indexOf(name); if(i>=0){ BAG.splice(i,1); if(REQ[name]){ delete REQ[name]; saveReq(); } saveBag(); updateBag(); rerender(); renderBag(); if(pickerOpen) renderPicker(); } }
+  function removeFromBag(name){ var i=BAG.indexOf(name); if(i>=0){ BAG.splice(i,1); if(REQ[name]){ delete REQ[name]; saveReq(); } if(PICK[name]){ delete PICK[name]; savePick(); } saveBag(); updateBag(); rerender(); renderBag(); if(pickerOpen) renderPicker(); } }
   function setBagMsg(msg, err){ var n=document.getElementById('bagNote'); if(n){ n.className='sheet-msg'+(err?' err':''); n.innerHTML=msg||''; } }
   // Bag button text: everything needs a teacher OK -> "Send request"; some do -> "Reserve + request"; none -> normal.
   function reserveLabel(){
@@ -752,7 +784,8 @@
     } else { dates='<button type="button" class="btn block" id="bagSetDates">Set your checkout dates</button>'; }
     var items='<div class="bag-items">'+BAG.map(function(nm){ var it=findItem(nm);
       var tag = (!reqMode() && REQ[nm]) ? '<span class="bag-reqtag">Needs OK</span>' : '';
-      return '<div class="bag-item">'+(it&&it.img?'<img class="bag-thumb" src="'+it.img+'" alt="">':'')+'<span class="bag-name">'+esc(nm)+tag+'</span><button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">Remove</button></div>'; }).join('')+'</div>';
+      var unit = PICK[nm] ? '<span class="bag-unit">'+esc(unitFull(nm,PICK[nm]))+'</span>' : '';
+      return '<div class="bag-item">'+(it&&it.img?'<img class="bag-thumb" src="'+it.img+'" alt="">':'')+'<span class="bag-name">'+esc(nm)+unit+tag+'</span><button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">Remove</button></div>'; }).join('')+'</div>';
     var action = datesReady() ? '<div class="bag-actions"><button type="button" class="btn ghost bag-addmore" id="bagAddMore">Add more gear</button><button type="button" class="btn bag-reserve" id="bagReserve">'+reserveLabel()+'</button></div>' : '';
     w.innerHTML=note+dates+items+action;
     w.querySelectorAll('[data-bx]').forEach(function(b){ b.onclick=function(){ removeFromBag(decodeURIComponent(b.getAttribute('data-bx'))); }; });
@@ -773,8 +806,9 @@
     BAG.forEach(function(nm){ var it=findItem(nm); if(!it) return;
       var free=(freeUnitsFor(it)||[]).filter(function(u){ return !used[u]; });
       if(!free.length){ failed.push(nm); return; }
-      used[free[0]]=1;
-      resolved.push({ name:nm, unit:free[0], isCam:!!camsFor(nm), req:itemNeedsApproval(nm), reason:(reqMode()?'missing':(REQ[nm]||'')) });
+      var pick=(PICK[nm] && free.indexOf(PICK[nm])>=0) ? PICK[nm] : free[0];   // the student's chosen unit if still free, else the first free one
+      used[pick]=1;
+      resolved.push({ name:nm, unit:pick, isCam:!!camsFor(nm), req:itemNeedsApproval(nm), reason:(reqMode()?'missing':(REQ[nm]||'')) });
     });
     if(failed.length){ setBagMsg('No longer free for your dates: <b>'+failed.map(esc).join(', ')+'</b>. Remove it or change your dates.', true); return; }
     // Normal (approved) items group like a kit; request items each post on their own, flagged.
@@ -800,8 +834,9 @@
     Promise.all(posts.map(function(p){ return api('/api/camera/checkout', p); })).then(function(results){
       var bad=null; for(var i=0;i<results.length;i++){ if(!results[i]||!results[i].ok){ bad=results[i]; break; } }
       if(bad){ setBagMsg((bad&&bad.error)||'Could not reserve. Please try again.', true); if(rv){ rv.disabled=false; rv.textContent=lbl; } loadCal(); return; }
-      var summary={ reserved:resolved.filter(function(r){return !r.req;}).map(function(r){return r.name;}),
-                    requested:resolved.filter(function(r){return r.req;}).map(function(r){return r.name;}),
+      function disp(r){ return r.name + (r.unit?(' ('+unitFull(r.name,r.unit)+')'):''); }
+      var summary={ reserved:resolved.filter(function(r){return !r.req;}).map(disp),
+                    requested:resolved.filter(function(r){return r.req;}).map(disp),
                     checkout:new Date(checkout), returnDay:new Date(returnDay), pickup:pickup, returnTime:returnTime };
       BAG=[]; saveBag(); REQ={}; saveReq(); if(USER){ USER.holdRequest=false; saveUser(); }
       updateBag(); refreshAccount(); close('bagOv'); showReceipt(summary); loadCal(); rerender();
