@@ -153,6 +153,40 @@ def moodboard_downloads(es):
       + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;">' + dl_link(MOODBOARD_ZIP, label, row=True) + '</div>'
       + '</div>')
 
+def lens_table(es):
+    # Canon EOS R50 (RF mount) lens guide for the Step 04 treatment: students pick a lens per image.
+    # f-stop (max-aperture) ranges verified from Canon's official spec pages (Chris 2026-10-22, "research
+    # the RF lenses"). A real <table> (Canvas keeps tables) inside a .silva-scroll so it scrolls, not
+    # breaks, on a phone.
+    if es:
+        cols=["Lente","Distancia focal","Apertura (n&uacute;mero f)","Mejor para"]
+        rows=[
+            ("RF-S 10-18mm","ultragran angular","10-18mm","f/4.5-6.3","La vista m&aacute;s amplia, a&uacute;n m&aacute;s que el lente kit. Capta la mayor parte del entorno y el fondo. Ideal para mostrar toda la escena."),
+            ("RF-S 18-45mm","lente kit","18-45mm","f/4.5-6.3","Tomas amplias a medias. Cuerpo completo o de la cintura para arriba. Muestra el entorno y el fondo alrededor de tu persona."),
+            ("RF 50mm","retrato","50mm","f/1.8","Retratos m&aacute;s cercanos, de la cintura o el pecho para arriba. N&uacute;meros f bajos para un fondo suave y borroso."),
+            ("RF-S 55-210mm","telefoto","55-210mm","f/5-7.1","Mucho alcance. &Uacute;salo cuando necesites fotografiar a tu persona desde lejos."),
+        ]
+    else:
+        cols=["Lens","Focal length","Aperture (f-stop)","Best for"]
+        rows=[
+            ("RF-S 10-18mm","ultra-wide","10-18mm","f/4.5-6.3","The widest view, even wider than the kit lens. Brings in the most environment and background. Great for showing the whole scene."),
+            ("RF-S 18-45mm","kit lens","18-45mm","f/4.5-6.3","Wide to medium framing. Full body or waist up. Shows the environment and background around your person."),
+            ("RF 50mm","portrait","50mm","f/1.8","Closer portraits, waist up or chest up. Low f-stops for a soft, blurry background."),
+            ("RF-S 55-210mm","telephoto","55-210mm","f/5-7.1","Lots of reach. Use it when you need to photograph your person from far away."),
+        ]
+    th="".join(f'<th style="text-align:left;padding:11px 14px;background:rgba(0,184,184,0.18);border:1px solid rgba(0,184,184,0.35);font-size:10.5pt;letter-spacing:0.06em;text-transform:uppercase;color:#80e0e0;white-space:nowrap;">{c}</th>' for c in cols)
+    trs=""
+    for name,role,fl,ap,best in rows:
+        trs+=('<tr>'
+          f'<td style="padding:11px 14px;border:1px solid rgba(0,184,184,0.22);vertical-align:top;white-space:nowrap;"><span style="font-size:12.5pt;color:#ffffff;"><strong>{name}</strong></span><span style="display:block;font-size:9.5pt;color:#80e0e0;letter-spacing:0.05em;text-transform:uppercase;margin-top:3px;">{role}</span></td>'
+          f'<td style="padding:11px 14px;border:1px solid rgba(0,184,184,0.22);vertical-align:top;font-size:12pt;color:rgba(255,255,255,0.90);white-space:nowrap;">{fl}</td>'
+          f'<td style="padding:11px 14px;border:1px solid rgba(0,184,184,0.22);vertical-align:top;font-size:12pt;color:rgba(255,255,255,0.90);white-space:nowrap;">{ap}</td>'
+          f'<td style="padding:11px 14px;border:1px solid rgba(0,184,184,0.22);vertical-align:top;font-size:11.5pt;color:rgba(255,255,255,0.90);line-height:1.5;min-width:230px;">{best}</td>'
+          '</tr>')
+    table=('<table style="width:100%;min-width:620px;border-collapse:collapse;margin:4px 0 2px;">'
+      f'<thead><tr>{th}</tr></thead><tbody>{trs}</tbody></table>')
+    return f'<div class="silva-scroll" style="overflow-x:auto;overflow-y:hidden;padding-bottom:8px;">{table}</div>'
+
 def build(course):
     p2 = (course == "photo2")
     PROJNUM = "01"  # Important Person is each course's FIRST project (a project, not a module)
@@ -450,11 +484,15 @@ def build(course):
             + bullets([
                 ("What is happening, and the feeling:","what is your person doing in this image, what story does it tell, and what should the viewer <strong>feel</strong> when they see it?"),
                 ("Composition:","how will you frame it? Where will your person sit in the photo? Think about the rule of thirds, the foreground, and the background."),
-                ("Focal length:","which lens or zoom will you use? Close and tight on your person, or wide to show the whole scene?"),
+                ("Lens and focal length:","name the lens you will use for this image, and the zoom. Use the lens guide below to choose. Close and tight on your person, or wide to show the whole scene?"),
                 ("Aperture:","do you want a blurry background (a low f-number like f/2.8) or a sharp background that shows lots of their world (a higher f-number like <strong>f/8 or f/12</strong>)?"),
                 (("Lighting, required for Photo 2:","plan how you will <strong>modify the light</strong> for each image. For every photo, will you use a <strong>reflector</strong>, the <strong>Godox AD200 Pro II</strong> portable strobe, the <strong>Smallrig 25W LD RGB</strong> light panel, or a <strong>combination</strong>? Shape the light on purpose, do not just use whatever light is already there.") if p2 else ("Lighting:","where will your light come from, and how will you shape it? Think about window light, open shade, or adding your own light.")),
             ])
             + note("Remember the three image plan: image 1 is a portrait, and images 2 and 3 are your person in action, doing what they do."))
+        en+=card("YOUR LENSES / PICK A LENS","Pick a Lens for Each Image",
+            para("In this class we use the Canon EOS R50. You have four lenses to choose from. Pick the best one for each of your three images, then <strong>name the lens in your treatment</strong>.")
+            + lens_table(False)
+            + note("The <strong>f-stop range</strong> above is how <strong>wide</strong> each lens opens, which sets how blurry the background can get. Every one of these lenses can also close down to <strong>f/22 or smaller</strong>, so with any of them you can still choose f/8 or f/12 for a sharp background."))
         en+=deliverables_box(False,
             [("3 storyboard pages (JPG):","a clear photo of each of your three storyboard pages, one per image, with a sketch and a full written plan on every page, uploaded to this Canvas assignment.")])
         en+=card("HOW TO TURN IT IN","Scan Your Storyboard Pages With Your iPad",
@@ -483,11 +521,15 @@ def build(course):
             + bullets([
                 ("Qu&eacute; est&aacute; pasando y qu&eacute; se siente:","&iquest;qu&eacute; hace tu persona en esta imagen, qu&eacute; historia cuenta y qu&eacute; debe <strong>sentir</strong> quien la ve?"),
                 ("Composici&oacute;n:","&iquest;c&oacute;mo vas a encuadrar? &iquest;D&oacute;nde estar&aacute; tu persona en la foto? Piensa en la regla de los tercios, el primer plano y el fondo."),
-                ("Distancia focal:","&iquest;qu&eacute; lente o zoom usar&aacute;s? &iquest;Cerca y cerrado sobre tu persona, o abierto para mostrar toda la escena?"),
+                ("Lente y distancia focal:","nombra el lente que usar&aacute;s para esta imagen, y el zoom. Usa la gu&iacute;a de lentes de abajo para elegir. &iquest;Cerca y cerrado sobre tu persona, o abierto para mostrar toda la escena?"),
                 ("Apertura:","&iquest;quieres un fondo borroso (un n&uacute;mero f bajo como f/2.8) o un fondo n&iacute;tido que muestre mucho de su mundo (un n&uacute;mero f m&aacute;s alto como <strong>f/8 o f/12</strong>)?"),
                 (("Iluminaci&oacute;n, obligatoria en Foto 2:","planea c&oacute;mo vas a <strong>modificar la luz</strong> en cada imagen. Para cada foto, &iquest;usar&aacute;s un <strong>reflector</strong>, el estrobo port&aacute;til <strong>Godox AD200 Pro II</strong>, el panel de luz <strong>Smallrig 25W LD RGB</strong>, o una <strong>combinaci&oacute;n</strong>? Da forma a la luz a prop&oacute;sito, no uses solo la luz que ya hay.") if p2 else ("Iluminaci&oacute;n:","&iquest;de d&oacute;nde vendr&aacute; tu luz y c&oacute;mo la vas a controlar? Piensa en luz de ventana, sombra abierta o agregar tu propia luz.")),
             ])
             + note("Recuerda el plan de tres im&aacute;genes: la imagen 1 es un retrato, y las im&aacute;genes 2 y 3 son tu persona en acci&oacute;n, haciendo lo que hace."))
+        es+=card("TUS LENTES / ELIGE UN LENTE","Elige un Lente para Cada Imagen",
+            para("En esta clase usamos la Canon EOS R50. Tienes cuatro lentes para elegir. Escoge el mejor para cada una de tus tres im&aacute;genes y luego <strong>nombra el lente en tu tratamiento</strong>.")
+            + lens_table(True)
+            + note("El <strong>rango de n&uacute;mero f</strong> de arriba es qu&eacute; tan <strong>abierto</strong> llega cada lente, lo que define qu&eacute; tan borroso puede quedar el fondo. Todos estos lentes tambi&eacute;n pueden cerrarse hasta <strong>f/22 o m&aacute;s</strong>, as&iacute; que con cualquiera puedes elegir f/8 o f/12 para un fondo n&iacute;tido."))
         es+=deliverables_box(True,
             [("3 p&aacute;ginas de storyboard (JPG):","una foto clara de cada una de tus tres p&aacute;ginas de storyboard, una por imagen, con un dibujo y un plan escrito completo en cada p&aacute;gina, subida a esta tarea de Canvas.")])
         es+=card("C&Oacute;MO ENTREGARLO","Escanea Tus P&aacute;ginas de Storyboard con Tu iPad",
