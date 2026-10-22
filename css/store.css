@@ -330,7 +330,9 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
 .bag-editdates{margin-top:11px;background:transparent;border:0;color:var(--teal-bright);font-family:var(--font-head);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.7rem;cursor:pointer;padding:0;}
 .bag-editdates:hover{color:#fff;}
 .bag-items{margin-bottom:16px;}
-.btn.block.bag-reserve{margin-top:2px;}
+.bag-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:2px;}
+.bag-actions .btn{flex:1 1 150px;}
+.bag-actions .bag-reserve{flex:2 1 180px;}   /* keep the primary action the wider / more prominent one */
 
 /* ---- reservation receipt ---- */
 .sheet.rcpt{max-width:400px;}

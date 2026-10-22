@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=25" />
+<link rel="stylesheet" href="/css/store.css?v=26" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -753,11 +753,12 @@
     var items='<div class="bag-items">'+BAG.map(function(nm){ var it=findItem(nm);
       var tag = (!reqMode() && REQ[nm]) ? '<span class="bag-reqtag">Needs OK</span>' : '';
       return '<div class="bag-item">'+(it&&it.img?'<img class="bag-thumb" src="'+it.img+'" alt="">':'')+'<span class="bag-name">'+esc(nm)+tag+'</span><button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">Remove</button></div>'; }).join('')+'</div>';
-    var action = datesReady() ? '<button type="button" class="btn block bag-reserve" id="bagReserve">'+reserveLabel()+'</button>' : '';
+    var action = datesReady() ? '<div class="bag-actions"><button type="button" class="btn ghost bag-addmore" id="bagAddMore">Add more gear</button><button type="button" class="btn bag-reserve" id="bagReserve">'+reserveLabel()+'</button></div>' : '';
     w.innerHTML=note+dates+items+action;
     w.querySelectorAll('[data-bx]').forEach(function(b){ b.onclick=function(){ removeFromBag(decodeURIComponent(b.getAttribute('data-bx'))); }; });
     var ed=document.getElementById('bagEditDates'); if(ed) ed.onclick=function(){ pendingAdd=null; openPlan(); };
     var sd=document.getElementById('bagSetDates'); if(sd) sd.onclick=function(){ pendingAdd=null; openPlan(); };
+    var am=document.getElementById('bagAddMore'); if(am) am.onclick=function(){ close('bagOv'); openPicker(); };   // reuse the category -> item picker, then Done returns here
     var rv=document.getElementById('bagReserve'); if(rv) rv.onclick=submitReservation;
     setBagMsg('');
   }
