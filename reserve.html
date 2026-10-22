@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=24" />
+<link rel="stylesheet" href="/css/store.css?v=25" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -85,6 +85,21 @@
     <div class="prod-head"><span class="bar"></span><span id="prodHeadLabel">Popular Rentals</span></div>
     <div class="prod-grid" id="prodGrid"></div>
   </section>
+  <!-- Calendar view: a month with per-day free-camera counts. Tap an open day -> sign in -> pickup/return
+       times -> pick equipment by category -> Done opens the bag. A visual alternate to browsing. -->
+  <details class="calview" id="calview">
+    <summary class="hiw-sum"><span class="bar"></span><span>Calendar view</span><span class="hiw-chev" aria-hidden="true"></span></summary>
+    <div class="calview-bd">
+      <div class="cv-head">
+        <button type="button" class="cv-nav" id="cvPrev" aria-label="Previous month">&lsaquo;</button>
+        <span class="cv-title" id="cvTitle"></span>
+        <button type="button" class="cv-nav" id="cvNext" aria-label="Next month">&rsaquo;</button>
+      </div>
+      <div class="cv-dow"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+      <div class="cv-grid" id="cvGrid"></div>
+      <div class="cv-legend">Tap an open day to reserve. The number is how many cameras are free that day.</div>
+    </div>
+  </details>
 </main>
 
 <!-- Footer -->
@@ -249,6 +264,18 @@
   </div>
 </div>
 
+<!-- Calendar-view equipment picker: category -> item -> Add other / Done -->
+<div class="sov" id="pickerOv" aria-hidden="true">
+  <div class="sheet picker" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
+    <button type="button" class="sheet-x" data-close="pickerOv" aria-label="Close">&times;</button>
+    <div class="sheet-bd">
+      <h2 id="pickerTitle">Add equipment</h2>
+      <p id="pickerSub">Pick a category, then add what you need.</p>
+      <div id="pickerBody"></div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast" aria-live="polite"></div>
 
 <script>
@@ -323,7 +350,8 @@
   // ----- the one-box stepped planner: checkout day -> pickup time -> return time, all in place -----
   var calView=new Date(checkout.getFullYear(), checkout.getMonth(), 1), planStep=1;
   var pendingAdd=null;   // an item waiting on the checkout-date flow; added to the bag once dates are set
-  function openPlan(){ planStep=1; renderPlan(); open('planOv'); }
+  var planMode='add';    // 'add' = normal (date flow -> add pendingAdd to bag); 'calendar' = calendar view (date flow -> equipment picker)
+  function openPlan(){ planMode='add'; planStep=1; renderPlan(); open('planOv'); }
   function renderPlan(){
     document.getElementById('planProg').innerHTML=[1,2,3].map(function(n){ return '<span class="pd'+(n===planStep?' on':(n<planStep?' done':''))+'">'+n+'</span>'; }).join('');
     document.getElementById('planBack').style.display=(planStep>1)?'':'none';
@@ -342,7 +370,9 @@
       document.getElementById('planTitle').textContent='Return time';
       document.getElementById('planSub').textContent='Due back '+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+' (the next school day). When will you return it?';
       cal.style.display='none'; opts.style.display='';
-      renderOpts(returnOptions(returnDay), function(o){ returnTime=o; renderDates(); var nm=pendingAdd; pendingAdd=null; close('planOv'); if(nm){ addToBag(nm); renderBag(); open('bagOv'); } }, 'These are the only return times. If you return late, you may lose the chance to check out cameras next time.');
+      renderOpts(returnOptions(returnDay), function(o){ returnTime=o; renderDates();
+        if(planMode==='calendar'){ planMode='add'; close('planOv'); openPicker(); return; }   // calendar view: dates set, now pick equipment
+        var nm=pendingAdd; pendingAdd=null; close('planOv'); if(nm){ addToBag(nm); renderBag(); open('bagOv'); } }, 'These are the only return times. If you return late, you may lose the chance to check out cameras next time.');
     }
   }
   function renderOpts(opts, pick, note){
@@ -389,6 +419,80 @@
   document.getElementById('calPrev').addEventListener('click', function(){ calView.setMonth(calView.getMonth()-1); drawCal(); });
   document.getElementById('calNext').addEventListener('click', function(){ calView.setMonth(calView.getMonth()+1); drawCal(); });
   document.getElementById('planBack').addEventListener('click', function(){ if(planStep>1){ planStep--; renderPlan(); } });
+
+  // ===== Calendar view: a month with per-day free-camera counts; tap a day -> dates -> picker =====
+  var cvMonth=new Date(checkout.getFullYear(), checkout.getMonth(), 1);
+  function isBlackoutIso(iso){ return !!(CAL && CAL.blackouts && CAL.blackouts.indexOf(iso)>=0); }
+  // The cameras this student can actually reserve (course-scoped); everyone sees all before sign-in.
+  function studentCams(){ var set={}; (CATS.cameras.items||[]).forEach(function(it){ if(USER && itemLocked(it)) return; var cs=camsFor(it.name); if(cs) cs.forEach(function(c){ set[c]=1; }); }); return Object.keys(set); }
+  function freeCamsOnDay(iso){
+    if(!CAL) return null;
+    var cams=studentCams(), busy={};
+    (CAL.oos||[]).concat(CAL.no_card||[]).forEach(function(cm){ busy[cm]=1; });
+    (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && c.out && c.due && c.out<=iso && c.due>=iso) busy[c.camera]=1; });
+    return cams.filter(function(cm){ return !busy[cm]; }).length;
+  }
+  function renderCalView(){
+    var grid=document.getElementById('cvGrid'); if(!grid) return;
+    document.getElementById('cvTitle').textContent=MON[cvMonth.getMonth()]+' '+cvMonth.getFullYear();
+    var start=new Date(cvMonth.getFullYear(), cvMonth.getMonth(), 1).getDay();
+    var dim=new Date(cvMonth.getFullYear(), cvMonth.getMonth()+1, 0).getDate();
+    var today=new Date(); today.setHours(0,0,0,0);
+    var html='';
+    for(var i=0;i<start;i++) html+='<span class="cv-cell blank"></span>';
+    for(var dn=1;dn<=dim;dn++){
+      var d=new Date(cvMonth.getFullYear(), cvMonth.getMonth(), dn), iso=isoOf(d);
+      var isOpen=isSchoolDay(d) && d>=today && !isBlackoutIso(iso);
+      if(isOpen){
+        var free=freeCamsOnDay(iso), full=(free===0);
+        html+='<button type="button" class="cv-day'+(full?' full':'')+'" data-cvd="'+iso+'"><span class="cv-n">'+dn+'</span><span class="cv-free">'+(free==null?'&middot;':(free+' free'))+'</span></button>';
+      } else { html+='<span class="cv-cell off">'+dn+'</span>'; }
+    }
+    grid.innerHTML=html;
+    grid.querySelectorAll('[data-cvd]').forEach(function(b){ b.onclick=function(){ calDayTap(b.getAttribute('data-cvd')); }; });
+  }
+  function syncCalView(){ var cv=document.getElementById('calview'); if(cv && cv.open) renderCalView(); }
+  var pendingCalDay=null;   // a calendar day tapped before sign-in; resumed after the student confirms their ID
+  function calDayTap(iso){
+    if(!USER){ pendingCalDay=iso; openSignin(); return; }      // login box first
+    if(onHold() && !reqMode()){ openHold(); return; }          // missing-work hold still applies (they can choose "request anyway")
+    var p=iso.split('-'); checkout=new Date(+p[0],+p[1]-1,+p[2]); checkout.setHours(0,0,0,0);
+    pickup=null; returnTime=null; renderDates(); rerender();
+    planMode='calendar'; planStep=2; renderPlan(); open('planOv');   // skip the day picker (day already chosen); ask pickup -> return
+  }
+  (function(){ var cv=document.getElementById('calview');
+    if(cv) cv.addEventListener('toggle', function(){ if(cv.open) renderCalView(); });
+    var pv=document.getElementById('cvPrev'), nx=document.getElementById('cvNext');
+    if(pv) pv.onclick=function(){ cvMonth.setMonth(cvMonth.getMonth()-1); renderCalView(); };
+    if(nx) nx.onclick=function(){ cvMonth.setMonth(cvMonth.getMonth()+1); renderCalView(); };
+  })();
+
+  // ===== Calendar-view equipment picker: category -> items -> Add other / Done =====
+  var pickerCat=null, pickerOpen=false;
+  function catIcon(k){ var m={cameras:'camera',lenses:'lenses',lighting:'lighting',accessories:'accessories'}; return '/assets/Icons/store/'+(m[k]||k)+'-v1.png'; }
+  function openPicker(){ pickerCat=null; pickerOpen=true; renderPicker(); open('pickerOv'); }
+  function pickerDone(){ pickerOpen=false; pickerCat=null; close('pickerOv'); renderBag(); open('bagOv'); }
+  function renderPicker(){
+    var body=document.getElementById('pickerBody'), sub=document.getElementById('pickerSub');
+    if(!pickerCat){
+      if(sub) sub.textContent='Pick a category, then add what you need.';
+      body.innerHTML='<div class="pk-cats">'+Object.keys(CATS).map(function(k){ return '<button type="button" class="pk-cat" data-pcat="'+k+'"><span class="pk-cat-ic" style="--ic:url(\''+catIcon(k)+'\')"></span>'+esc(CATS[k].label)+'</button>'; }).join('')+'</div>'+
+        '<button type="button" class="btn block" id="pkDone0">Done</button>';
+      body.querySelectorAll('[data-pcat]').forEach(function(b){ b.onclick=function(){ pickerCat=b.getAttribute('data-pcat'); renderPicker(); }; });
+      var d0=document.getElementById('pkDone0'); if(d0) d0.onclick=pickerDone;
+    } else {
+      var c=CATS[pickerCat];
+      if(sub) sub.textContent=c.label;
+      var grid=c.items.filter(function(it){ return it.img; }).map(cardHtml).join('');
+      body.innerHTML='<button type="button" class="pk-back" id="pkBack">&lsaquo; All categories</button>'+
+        '<div class="prod-grid pk-grid">'+grid+'</div>'+
+        '<div class="pk-foot"><button type="button" class="btn ghost" id="pkMore">Add other equipment</button><button type="button" class="btn" id="pkDone">Done</button></div>';
+      wireCards(body);
+      document.getElementById('pkBack').onclick=function(){ pickerCat=null; renderPicker(); };
+      document.getElementById('pkMore').onclick=function(){ pickerCat=null; renderPicker(); };
+      document.getElementById('pkDone').onclick=pickerDone;
+    }
+  }
 
   // ----- inventory (static catalog; availability-by-date wired next increment) -----
   var CATS={
@@ -573,7 +677,7 @@
   function renderView(){ var si=document.getElementById('searchIn');
     if(si && si.value.trim()){ renderResults(si.value); return; }
     if(CURVIEW==='popular'){ renderPopular(); } else { renderCat(CURVIEW); } }
-  function rerender(){ renderView(); }
+  function rerender(){ renderView(); syncCalView(); }
   document.getElementById('catnav').addEventListener('click', function(e){
     var t=e.target.closest('[data-cat]'); if(!t) return;
     var si=document.getElementById('searchIn'); if(si) si.value='';
@@ -621,9 +725,9 @@
   function doAddToBag(name){
     if(BAG.indexOf(name)<0){ BAG.push(name); saveBag(); updateBag(); bagPulse(); }
     toast(itemNeedsApproval(name)?'Added. This one needs Mr. Silva&#8217;s OK.':'Added to your bag.');
-    rerender();
+    rerender(); if(pickerOpen) renderPicker();
   }
-  function removeFromBag(name){ var i=BAG.indexOf(name); if(i>=0){ BAG.splice(i,1); if(REQ[name]){ delete REQ[name]; saveReq(); } saveBag(); updateBag(); rerender(); renderBag(); } }
+  function removeFromBag(name){ var i=BAG.indexOf(name); if(i>=0){ BAG.splice(i,1); if(REQ[name]){ delete REQ[name]; saveReq(); } saveBag(); updateBag(); rerender(); renderBag(); if(pickerOpen) renderPicker(); } }
   function setBagMsg(msg, err){ var n=document.getElementById('bagNote'); if(n){ n.className='sheet-msg'+(err?' err':''); n.innerHTML=msg||''; } }
   // Bag button text: everything needs a teacher OK -> "Send request"; some do -> "Reserve + request"; none -> normal.
   function reserveLabel(){
@@ -726,9 +830,9 @@
 
   // ===== overlays + toast helpers =====
   function open(id){ document.getElementById(id).classList.add('open'); }
-  function close(id){ document.getElementById(id).classList.remove('open'); if(id==='planOv') pendingAdd=null; }
+  function close(id){ document.getElementById(id).classList.remove('open'); if(id==='planOv') pendingAdd=null; if(id==='pickerOv') pickerOpen=false; }
   document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ close(b.getAttribute('data-close')); }; });
-  ['signinOv','holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
+  ['signinOv','holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv','pickerOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
   function toast(msg){ var t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2800); }
   function pulseDates(){ var d=document.querySelector('.datebar'); if(!d) return; d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash'); }
 
@@ -802,7 +906,9 @@
     if(scD.length===10 || pg || pcD.length===10){
       api('/api/camera/student_update',{student_id:L.id, student_cell:USER.sc, parent_guardian:pg, parent_cell:USER.pc}).catch(function(){});
     }
+    resumeCalDay();   // if they tapped a calendar day before signing in, continue into it now
   }
+  function resumeCalDay(){ if(pendingCalDay){ var d=pendingCalDay; pendingCalDay=null; setTimeout(function(){ calDayTap(d); }, 80); } }
   document.getElementById('signinGo').addEventListener('click', doSignin);
   document.getElementById('sid').addEventListener('keydown', function(e){ if(e.key==='Enter') doSignin(); });
   document.getElementById('siConfirm').addEventListener('click', siConfirm);
@@ -832,6 +938,7 @@
     if(USER){ USER.holdRequest=true; saveUser(); }   // whole reservation becomes a pending request
     refreshAccount(); close('holdOv'); rerender();
     toast('OK. Add your gear, then send the request to Mr. Silva.');
+    resumeCalDay();   // if they reached the hold from a calendar-day tap, continue into it now
   });
   document.getElementById('holdOvGo').addEventListener('click', function(){
     var code=(document.getElementById('holdOvc').value||'').trim(), m=document.getElementById('holdMsg');
