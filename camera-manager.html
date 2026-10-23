@@ -825,7 +825,14 @@
   .kit-sw{min-height:40px;padding:5px 0;}
   .dp-trig{min-height:40px;}
   .intro .silva-uni-cattrigger{min-height:42px;display:inline-flex;align-items:center;}
-  @media (max-width:560px){ .wrap{padding:16px 12px 56px;} }
+  /* Tools dropdown: the secondary tools consolidated into one menu (keeps the checkout board front and center). */
+  .cm-tools{position:relative;display:inline-flex;}
+  .cm-toolsbtn.on{background:#00b8b8;color:#04110f;}
+  .cm-toolsmenu{position:absolute;top:calc(100% + 8px);right:0;min-width:214px;background:var(--surface);border:1px solid var(--surface-bd);box-shadow:0 18px 50px rgba(0,0,0,.5);z-index:200;padding:6px 0;display:flex;flex-direction:column;}
+  .cm-toolsmenu[hidden]{display:none;}
+  .cm-toolitem{text-align:left;background:transparent;border:0;color:var(--text);font-family:var(--body);font-size:.92rem;padding:10px 16px;cursor:pointer;text-decoration:none;display:block;width:100%;white-space:nowrap;}
+  .cm-toolitem:hover{background:rgba(0,184,184,.1);color:#fff;}
+  @media (max-width:560px){ .wrap{padding:16px 12px 56px;} .cm-toolsmenu{right:auto;left:0;} }
   /* Phone: compact the hero banner so the console surfaces (desktop/iPad keep the fuller header). */
   @media (max-width:600px){
     .cal-hero > div > div{ justify-content:center !important; }
@@ -949,13 +956,19 @@
     </div>
   </div>
   <div class="intro">
-    <p class="sub">Reserve equipment, mark it picked up when the student collects it, and mark it returned when it comes back. Changes sync to the calendar and the Command Center in real time.</p>
+    <p class="sub">Hand out gear, mark it picked up when the student collects it, and mark it returned when it comes back. Changes sync to the calendar and the Command Center in real time.</p>
     <button class="silva-uni-cattrigger" id="reserveBtn">Reserve</button>
-    <button class="silva-uni-cattrigger" id="reportsBtn" title="Missing kit items to order (opens a printable report)">Missing Items</button>
-    <a class="silva-uni-cattrigger" id="studentCalBtn" href="/calendar.html?from=console" target="_blank" rel="noopener">Student Calendar</a>
-    <a class="silva-uni-cattrigger" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
-    <button class="silva-uni-cattrigger" id="leadsBtn" title="Your class leads by period: Equipment Managers, Photo Walk EQs, and Team Attendance Managers">Class Leads</button>
     <button class="silva-uni-cattrigger" id="refreshBtn" title="Reload the latest data now">&#8635; Refresh</button>
+    <!-- Secondary tools consolidated into one dropdown so the checkout board stays front and center -->
+    <div class="cm-tools">
+      <button type="button" class="silva-uni-cattrigger cm-toolsbtn" id="cmToolsBtn" aria-haspopup="true" aria-expanded="false">Tools &#9662;</button>
+      <div class="cm-toolsmenu" id="cmToolsMenu" hidden>
+        <button type="button" class="cm-toolitem" id="reportsBtn" title="Missing kit items to order (opens a printable report)">Missing Items</button>
+        <a class="cm-toolitem" id="studentCalBtn" href="/calendar.html?from=console" target="_blank" rel="noopener">Student Calendar</a>
+        <a class="cm-toolitem" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
+        <button type="button" class="cm-toolitem" id="leadsBtn" title="Your class leads by period: Equipment Managers, Photo Walk EQs, and Team Attendance Managers">Class Leads</button>
+      </div>
+    </div>
   </div>
 
   <div id="poolbar" class="poolbar-wrap" role="group" aria-label="Teacher view"></div>
@@ -1217,10 +1230,19 @@
     // Catalog (return to the catalog) + QR Code beside them, and render the teacher switcher (#poolbar).
     var intro=document.querySelector('.intro'); if(!intro) return false;
     if(!document.getElementById('cmQrBtn')){
-      var cat=document.createElement('a'); cat.className='silva-uni-cattrigger'; cat.id='cmCatBtn'; cat.href='/curriculum.html'; cat.textContent='Catalog';
-      var qr=document.createElement('button'); qr.type='button'; qr.id='cmQrBtn'; qr.className='silva-uni-cattrigger'; qr.textContent='QR Code'; qr.onclick=showQR;
-      var sub=intro.querySelector('.sub'), anchor=sub?sub.nextSibling:intro.firstChild;
-      intro.insertBefore(cat, anchor); intro.insertBefore(qr, anchor);
+      var menu=document.getElementById('cmToolsMenu');
+      var qr=document.createElement('button'); qr.type='button'; qr.id='cmQrBtn'; qr.className='cm-toolitem'; qr.textContent='QR Code'; qr.onclick=showQR;
+      var cat=document.createElement('a'); cat.className='cm-toolitem'; cat.id='cmCatBtn'; cat.href='/curriculum.html'; cat.textContent='Return to Catalog';
+      if(menu){ menu.appendChild(qr); menu.appendChild(cat); }
+      else { var sub=intro.querySelector('.sub'), anchor=sub?sub.nextSibling:intro.firstChild; intro.insertBefore(cat, anchor); intro.insertBefore(qr, anchor); }
+    }
+    // Tools dropdown: open/close + close on item pick or outside click.
+    var tb=document.getElementById('cmToolsBtn'), tm=document.getElementById('cmToolsMenu');
+    if(tb && tm && !tb._wired){ tb._wired=true;
+      tb.onclick=function(e){ e.stopPropagation(); var willOpen=tm.hidden; tm.hidden=!willOpen; tb.setAttribute('aria-expanded', willOpen?'true':'false'); tb.classList.toggle('on', willOpen); };
+      tm.addEventListener('click', function(e){ if(e.target.closest('.cm-toolitem')){ tm.hidden=true; tb.setAttribute('aria-expanded','false'); tb.classList.remove('on'); } });
+      document.addEventListener('click', function(e){ if(!tm.hidden && !e.target.closest('.cm-tools')){ tm.hidden=true; tb.setAttribute('aria-expanded','false'); tb.classList.remove('on'); } });
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !tm.hidden){ tm.hidden=true; tb.setAttribute('aria-expanded','false'); tb.classList.remove('on'); } });
     }
     renderPoolBar();
     syncStudentCalLink();
