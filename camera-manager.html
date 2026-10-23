@@ -1819,11 +1819,11 @@
     else {
       if(anyReserved && resvLeft>1) foot+='<button type="button" class="go" id="resvPickAll">Pick up all ('+resvLeft+')</button>';
       // Done: finish this student. Anything still reserved (not picked up) is cancelled so a no-show never stays linked to them.
-      if(anyReserved) foot+='<button type="button" class="go resv-done-btn" id="resvDone">Done &middot; '+(items.some(function(x){return statusOf(x)!=='reserved';})?'cancel '+resvLeft+' not picked up':'no-show, cancel')+'</button>';
+      if(anyReserved) foot+='<button type="button" class="go resv-done-btn" id="resvDone">Cancel</button>';
       if(anyOut && items.length>1) foot+='<button type="button" class="go" id="resvAll">Check in everything</button>';
     }
     foot+='<button type="button" class="go resv-see" id="resvReceipt">Receipt</button>';
-    foot+='<button type="button" class="go resv-see" id="resvSee">Add / edit equipment</button></div>';
+    foot+='<button type="button" class="go resv-see" id="resvSee">Edit Reservation</button></div>';
     document.getElementById('resvBody').innerHTML=head+prog+'<div class="resv-items">'+rows+'</div>'+foot;
     var b=document.getElementById('resvBody');
     b.querySelectorAll('[data-resvpick]').forEach(function(el){ el.onclick=function(){ resvSetStatus(el.getAttribute('data-resvpick'),'out'); }; });
