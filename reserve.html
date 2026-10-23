@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=36" />
+<link rel="stylesheet" href="/css/store.css?v=37" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -64,6 +64,16 @@
       </div>
     </div>
   </div>
+  <!-- How it works: a strip across the bottom of the hero image (replaces the old accordion below the hero) -->
+  <div class="hero-hiw" id="howitworks">
+    <div class="wrap hero-hiw-row">
+      <div class="hhiw-step"><span class="hhiw-n">1</span><div class="hhiw-tx"><b>Pick your dates</b><span>Checkout day, pickup and return time.</span></div></div>
+      <div class="hhiw-step"><span class="hhiw-n">2</span><div class="hhiw-tx"><b>Choose your gear</b><span>Add what you need to your Equipment Bag.</span></div></div>
+      <div class="hhiw-step"><span class="hhiw-n">3</span><div class="hhiw-tx"><b>Check the kit</b><span>At pickup, confirm every item is in your bag.</span></div></div>
+      <div class="hhiw-step"><span class="hhiw-n">4</span><div class="hhiw-tx"><b>Use it</b><span>Use your gear safely during your rental.</span></div></div>
+      <div class="hhiw-step"><span class="hhiw-n">5</span><div class="hhiw-tx"><b>Return it</b><span>Same bag and condition, on your return day.</span></div></div>
+    </div>
+  </div>
 </div>
 
 <!-- Missing-work hold banner (shown only when the signed-in student is on hold) -->
@@ -71,16 +81,6 @@
 
 <!-- Product grid for the active category -->
 <main class="wrap">
-  <details class="howitworks" id="howitworks">
-    <summary class="hiw-sum"><span class="bar"></span><span>How it works</span><span class="hiw-chev" aria-hidden="true"></span></summary>
-    <div class="hiw-steps">
-      <div class="hiw-step"><div class="hiw-num">1</div><div class="hiw-body"><b>Pick your dates</b><span>Set your checkout day, pickup time, and return time.</span></div></div>
-      <div class="hiw-step"><div class="hiw-num">2</div><div class="hiw-body"><b>Choose your gear</b><span>Add the cameras and equipment you need to your Equipment Bag.</span></div></div>
-      <div class="hiw-step"><div class="hiw-num">3</div><div class="hiw-body"><b>Check the kit</b><span>At pickup, make sure every item on the kit list is in your bag.</span></div></div>
-      <div class="hiw-step"><div class="hiw-num">4</div><div class="hiw-body"><b>Use it</b><span>Use your gear during your rental period. Keep it safe and dry.</span></div></div>
-      <div class="hiw-step"><div class="hiw-num">5</div><div class="hiw-body"><b>Return it</b><span>Bring it all back in the same bag and condition on your return day.</span></div></div>
-    </div>
-  </details>
   <section class="products">
     <div class="prod-head"><span class="bar"></span><span id="prodHeadLabel">Popular Rentals</span></div>
     <div class="prod-grid" id="prodGrid"></div>
@@ -1237,11 +1237,6 @@
   document.getElementById('footJobs').onclick=function(){ openInfo('Jobs', '<p>Want to be an equipment manager? Ask your teacher. It may count for extra credit.</p>'); };
   document.getElementById('footRental').onclick=function(){ openInfo('Rental agreement', '<p>The equipment rental agreement will be posted here soon. Ask your teacher for a copy in the meantime.</p>'); };
   document.getElementById('footProgram').onclick=function(){ openInfo('Digital Arts program', '<p>Our Digital Arts program website is coming soon.</p>'); };
-  // Footer "How it works" (and a #howitworks link) opens the collapsed accordion, not just scrolls to it.
-  (function(){ var hiw=document.getElementById('howitworks'), fl=document.querySelector('.foot-link[href="#howitworks"]');
-    if(fl&&hiw) fl.addEventListener('click', function(){ hiw.open=true; });
-    if(hiw&&location.hash==='#howitworks') hiw.open=true;
-  })();
 
   // ===== init =====
   renderDates();
