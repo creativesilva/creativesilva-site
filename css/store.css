@@ -16,8 +16,14 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-/* teal radial glow rising from the bottom-right, fixed behind everything, for depth */
-body{font-family:var(--font-body);background:radial-gradient(ellipse 100% 60% at 92% 106%, rgba(0,116,116,.28) 0%, rgba(0,116,116,.09) 40%, transparent 66%) fixed, var(--black);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;}
+/* Lifted teal-charcoal backdrop (Chris 2026-10-22, "Option B"): twin teal glows (bright top-left +
+   deeper bottom-right) over a base that fades from a dark teal-charcoal to near-black. Brighter than
+   the old near-black, still clearly dark mode. Fixed behind everything for an ambient, non-scrolling glow. */
+body{font-family:var(--font-body);background:
+    radial-gradient(ellipse 75% 55% at 6% 2%, rgba(25,211,197,.16) 0%, transparent 60%),
+    radial-gradient(ellipse 95% 65% at 96% 104%, rgba(0,116,116,.34) 0%, rgba(0,116,116,.10) 44%, transparent 70%),
+    linear-gradient(170deg, #11191b 0%, #0b0f10 55%, var(--black) 100%);
+  background-attachment:fixed;color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;}
 img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button{font-family:inherit;cursor:pointer;}
 .wrap{width:100%;max-width:var(--max);margin:0 auto;padding:0 20px;}
 
