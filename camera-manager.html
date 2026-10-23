@@ -90,7 +90,8 @@
   .digest-item{font-size:.82rem;color:var(--muted);}
   .digest-item b{color:#ff9a8a;font-weight:700;}
   /* Phase 1: always-visible "Today" cart board */
-  .todayboard{margin-bottom:14px;border:1px solid var(--line-soft);border-left:4px solid #00b8b8;background:rgba(0,0,0,.24);padding:11px 16px;}
+  /* Full-bleed band: the daily checkout flow spans the entire screen width (portrait + landscape). */
+  .todayboard{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);box-sizing:border-box;margin-bottom:16px;border:0;border-top:3px solid var(--teal);background:rgba(0,0,0,.30);padding:16px clamp(16px,4vw,48px) 20px;}
   .tb-head{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-bottom:9px;}
   .tb-title{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;color:#8ff7f7;}
   .tb-n{font-family:var(--font);font-weight:700;font-size:.72rem;padding:1px 8px;color:#001414;background:#00b8b8;}
@@ -109,6 +110,37 @@
   .tb-today{font-family:var(--font);font-weight:700;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border:1px solid #00b8b8;background:transparent;color:#8ff7f7;cursor:pointer;}
   .tb-proj{font-size:.68rem;color:#ffb28a;letter-spacing:.04em;text-transform:uppercase;}
   @media (max-width:760px){ .tb-cols{grid-template-columns:1fr;} .tb-colbody{max-height:none;} }
+  /* ===== Full-width 3-view board: Outgoing (gold) / Incoming (teal) / Checked out (orange) ===== */
+  .tb-toggle{display:flex;width:100%;border:1px solid var(--line-soft);margin-bottom:12px;}
+  .tb-tg{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;font-family:var(--font);font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:.84rem;padding:13px 10px;background:rgba(255,255,255,.015);border:0;border-right:1px solid var(--line-soft);cursor:pointer;transition:background .15s,color .15s;}
+  .tb-tg:last-child{border-right:0;}
+  .tb-tg.out{color:#ffd889;} .tb-tg.in{color:#8ff7f7;} .tb-tg.checked{color:#ffb380;}
+  .tb-tg:hover:not(.on){background:rgba(255,255,255,.05);}
+  .tb-tgn{font-family:var(--font);font-weight:700;font-size:.72rem;padding:1px 8px;background:rgba(255,255,255,.1);color:var(--text);}
+  .tb-tgod{font-family:var(--font);font-weight:700;font-size:.58rem;letter-spacing:.04em;padding:2px 7px;background:var(--red);color:#fff;}
+  .tb-tg.out.on{background:var(--gold);color:#2a1e00;} .tb-tg.out.on .tb-tgn{background:rgba(0,0,0,.22);color:#2a1e00;}
+  .tb-tg.in.on{background:var(--teal);color:#04110f;} .tb-tg.in.on .tb-tgn{background:rgba(0,0,0,.2);color:#04110f;}
+  .tb-tg.checked.on{background:var(--orange);color:#2a1300;} .tb-tg.checked.on .tb-tgn{background:rgba(0,0,0,.2);color:#2a1300;}
+  .tb-nowlabel{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.72rem;color:#ffb380;}
+  .tb-searchrow{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 2px 0;}
+  .tb-searchrow .tb-search{flex:1 1 220px;padding:0;}
+  .tb-searchrow .tb-sx{top:50%;transform:translateY(-50%);right:11px;}
+  .tb-searchrow .tb-selbtn{flex:0 0 auto;margin-left:0;}
+  .tb-sort{display:inline-flex;align-items:center;flex:0 0 auto;border:1px solid var(--line-soft);}
+  .tb-sort-l{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.56rem;color:var(--muted);padding:0 9px;}
+  .tb-sortbtn{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.62rem;color:var(--muted);background:rgba(255,255,255,.02);border:0;border-left:1px solid var(--line-soft);padding:8px 12px;cursor:pointer;transition:background .15s,color .15s;}
+  .tb-sortbtn.on{background:var(--teal);color:#04110f;}
+  .tb-sortbtn:hover:not(.on){color:#fff;background:rgba(255,255,255,.06);}
+  .tb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:9px;align-content:start;max-height:66vh;overflow-y:auto;padding:8px 2px 2px;}
+  .tb-grid .tb-bundle{margin:0;min-width:0;}
+  .tb-grid.view-out .tb-bundle{border-left-color:var(--gold);}
+  .tb-grid.view-in .tb-bundle{border-left-color:var(--teal);}
+  .tb-grid.view-checked .tb-bundle{border-left-color:var(--orange);}
+  .tb-grid.view-checked .tb-bundle.tb-od{border-left-color:var(--red);animation:tbOdPulse 1.5s ease-in-out infinite;}
+  @keyframes tbOdPulse{0%,100%{box-shadow:0 0 0 0 rgba(224,64,58,0);}50%{box-shadow:0 0 0 3px rgba(224,64,58,.38);}}
+  .tb-grid .tb-empty{grid-column:1 / -1;padding:10px 2px;}
+  @media (prefers-reduced-motion:reduce){ .tb-grid .tb-bundle.tb-od{animation:none;box-shadow:0 0 0 2px rgba(224,64,58,.45);} }
+  @media (max-width:760px){ .tb-grid{grid-template-columns:1fr;max-height:none;} }
   .tb-row{display:flex;align-items:stretch;gap:10px;min-height:56px;padding:8px 11px;border:1px solid var(--line-soft);border-left:3px solid var(--muted);background:rgba(255,255,255,.025);}
   .tb-row.rr-out{border-left-color:var(--orange);} .tb-row.rr-reserved{border-left-color:var(--gold);} .tb-row.rr-returned{border-left-color:var(--ok);}
   .tb-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:5px;}
@@ -137,13 +169,13 @@
   .til:hover{background:rgba(0,184,184,.08);border-color:rgba(0,184,184,.3);}
   .tb-flat .til{border-left:1px solid var(--line-soft);}
   .til-dot{flex:0 0 auto;width:9px;height:9px;background:var(--muted);}
-  .til-dot.reserved{background:var(--gold);} .til-dot.out{background:#00b8b8;} .til-dot.overdue{background:var(--red);} .til-dot.returned{background:var(--grayed);}
+  .til-dot.reserved{background:var(--gold);} .til-dot.out{background:var(--orange);} .til-dot.overdue{background:var(--red);} .til-dot.returned{background:var(--grayed);}
   .til-big{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.02em;font-size:1.12rem;color:#fff;white-space:nowrap;}
   .til-who{flex:1 1 auto;min-width:0;font-size:.82rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .til-per{color:var(--faint);font-size:.74rem;}
   .til-date{flex:0 0 auto;display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap;font-size:.8rem;font-weight:700;}
   .til-date i{font-style:normal;font-size:.56rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);}
-  .til-date.out{color:#ffd889;} .til-date.in{color:#8ff7f7;}
+  .til-date.out{color:#ffd889;} .til-date.in{color:#8ff7f7;} .til-date.checked{color:#ffb380;}
   .til-chev{flex:0 0 auto;color:var(--faint);font-size:1.1rem;line-height:1;}
   /* Camera-kit line: the camera carries its gear as associated chips (one pickup line for the whole kit). */
   .til-kit{align-items:flex-start;}
@@ -1415,6 +1447,18 @@
   function resvAllReturned(parent){ var rc=resvReturnedCount(parent); return rc.total>0 && rc.done===rc.total; }
   function resvDate(c){ return c.created || c.out || ''; }
   function resvStatusGroup(c){ var rc=resvReturnedCount(c); if(rc.total>0 && rc.done===rc.total) return 'returned'; return resvItems(c).some(function(x){return statusOf(x)==='out';})?'out':'reserved'; }
+  // ---- Today-board sort (Chris 2026-10-23): default = camera-kit NUMBER order; a-la-carte gear (no camera)
+  //      sorts numerically AFTER all the kits. Alternative: by student last name. ----
+  function tbResvCamNum(c){ var min=Infinity; resvItems(c).forEach(function(it){ if(it.kind!=='equipment' && it.camera){ var m=String(it.camera).match(/\d+/); if(m){ var n=+m[0]; if(n<min) min=n; } } }); return min; }  // Infinity = camera-less (a-la-carte)
+  function tbResvGearNum(c){ var min=Infinity; resvItems(c).forEach(function(it){ if(it.kind==='equipment' && it.item){ var m=String(it.item).match(/\d+/g); if(m){ var n=+m[m.length-1]; if(n<min) min=n; } } }); return min; }
+  function tbLastName(c){ var n=String(nameOf(c)||'').trim(); if(!n) return '~'; if(n.indexOf(',')>=0) return n.split(',')[0].trim().toLowerCase(); var p=n.split(/\s+/); return (p[p.length-1]||n).toLowerCase(); }   // "Last, First" -> Last; "First Last" -> Last
+  function tbSortCmp(a,b){
+    if(TBSORT==='name'){ var na=tbLastName(a), nb=tbLastName(b); if(na<nb) return -1; if(na>nb) return 1; }
+    var ca=tbResvCamNum(a), cb=tbResvCamNum(b);                              // camera kits by number; a-la-carte (Infinity) after
+    if(ca!==cb) return ca-cb;
+    if(ca===Infinity){ var ga=tbResvGearNum(a), gb=tbResvGearNum(b); if(ga!==gb) return ga-gb; }   // a-la-carte: by gear number
+    return (resvDate(a)<resvDate(b))?1:-1;
+  }
 
   // ===== Phase 1: always-visible "Today" cart board (color-coded, one-tap). =====
   // Each active reservation relevant to SELDAY, scoped to the selected pool, shown as a glanceable cart:
@@ -1445,17 +1489,26 @@
       return isT ? (statusOf(it)==='out' && d && d<=iso)          // today: out + due today or overdue
                  : (d===iso); }); })                               // future: projected returns that day
       .sort(function(a,b){ return ((a.due||a.out||'')<(b.due||b.out||''))?-1:1; }); }
+  // CHECKED OUT = everything physically in a student's hands right now (status out), whatever the due
+  // date. Overdue items (past due) sort first so they lead the view and pulse red as a contact nudge.
+  function checkedOutFor(){
+    return groupedReservations().filter(function(c){ return resvItems(c).some(function(it){ return statusOf(it)==='out'; }); })
+      .sort(function(a,b){ var ao=resvItems(a).some(isOverdue), bo=resvItems(b).some(isOverdue);
+        if(ao!==bo) return ao?-1:1; return ((a.due||a.out||'')<(b.due||b.out||''))?-1:1; }); }
   function stepDay(n){ var d=new Date(SELDAY+'T00:00:00'); d.setDate(d.getDate()+n);
     SELDAY=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
     renderTodayBoard(); updateSummary(); }
   // ---- per-item line board: each piece its own line (kit number big, student second), grouped by
   //      bundle so one student's items travel together; a per-column search floats a type to the top. ----
-  var TBQ={out:'',in:''};                               // per-column search text
-  var TBSEL={out:false,in:false};                       // multi-select mode per column
-  var TBSELSET={out:{},in:{}};                           // {itemId:true} selected per column
+  var TBVIEW='out';                                     // active view: 'out' (hand out) | 'in' (due back) | 'checked' (in hands now)
+  var TBSORT=(function(){ try{ return sessionStorage.getItem('tbsort')||'cam'; }catch(e){ return 'cam'; } })();  // 'cam' = camera-kit number order (default) | 'name' = student last name
+  var TBQ={out:'',in:'',checked:''};                    // per-view search text
+  var TBSEL={out:false,in:false,checked:false};         // multi-select mode per view
+  var TBSELSET={out:{},in:{},checked:{}};               // {itemId:true} selected per view
   // The items to show in a column: today = reserved (to hand out) / out (to take back); a future day = projected.
   function lineItemsFor(c, mode, isT){
     var items=resvItems(c).filter(function(it){ return statusOf(it)!=='returned'; });
+    if(mode==='checked') return items.filter(function(it){ return statusOf(it)==='out'; });   // in a student's hands now
     if(isT) return items.filter(function(it){ return mode==='in' ? statusOf(it)==='out' : statusOf(it)==='reserved'; });
     return items.filter(function(it){ var o=it.out||c.out||'', d=it.due||it.out||c.due||'';
       return mode==='in' ? (d===SELDAY) : (o && o<=SELDAY && (!d||d>=SELDAY)); });
@@ -1473,8 +1526,8 @@
     return hay.some(function(h){ return h.indexOf(q)>=0; }); }
   // One tappable item line; the whole line opens that student's reservation card. showDate on the bundle's first line only.
   function itemLine(c, it, mode, showDate){
-    var key=(mode==='in')?'in':'out';
-    var dISO=(mode==='in')?(c.due||c.out||''):(c.out||''), dLbl=(mode==='in')?'Due':'Out';
+    var key=mode, inLike=(mode==='in'||mode==='checked');
+    var dISO=inLike?(c.due||c.out||''):(c.out||''), dLbl=inLike?'Due':'Out';
     var date=showDate&&dISO?('<span class="til-date '+key+'"><i>'+dLbl+'</i>'+esc(fmtDoWMD(dISO))+'</span>'):'';
     var dot='<span class="til-dot '+itemState(it)+'"></span>';
     var dup=_DUP[it.id]?'<span class="til-dup" title="This unit is on more than one open reservation">DUP</span>':'';
@@ -1486,8 +1539,8 @@
   // A camera-kit line: ONE pickup line for the whole kit. The camera carries its linked gear
   // (lens, tripod, remote, lighting) as associated chips, so the teacher packages it as one unit.
   function kitLineHtml(c, cam, gear, mode, showDate){
-    var key=(mode==='in')?'in':'out';
-    var dISO=(mode==='in')?(c.due||c.out||''):(c.out||''), dLbl=(mode==='in')?'Due':'Out';
+    var key=mode, inLike=(mode==='in'||mode==='checked');
+    var dISO=inLike?(c.due||c.out||''):(c.out||''), dLbl=inLike?'Due':'Out';
     var date=showDate&&dISO?('<span class="til-date '+key+'"><i>'+dLbl+'</i>'+esc(fmtDoWMD(dISO))+'</span>'):'';
     var dot='<span class="til-dot '+itemState(cam)+'"></span>';
     var dup=_DUP[cam.id]?'<span class="til-dup" title="This unit is on more than one open reservation">DUP</span>':'';
@@ -1505,13 +1558,21 @@
     var cams=items.filter(function(it){ return it.kind!=='equipment'; });
     var gear=items.filter(function(it){ return it.kind==='equipment'; });
     var used={}, html='', showDate=firstDate;
-    cams.forEach(function(cam){ var kg=gear.filter(function(g){ return g.group===cam.id; }); kg.forEach(function(g){ used[g.id]=1; });
-      html+=kitLineHtml(c, cam, kg, mode, showDate); showDate=false; });
+    if(cams.length===1){
+      // ONE camera carries the whole reservation: fold ALL its gear under that kit, even if a gear
+      // record lost its group link (Chris 2026-10-23). A-la-carte lines are only for camera-less reservations.
+      gear.forEach(function(g){ used[g.id]=1; });
+      html+=kitLineHtml(c, cams[0], gear, mode, showDate); showDate=false;
+    } else {
+      cams.forEach(function(cam){ var kg=gear.filter(function(g){ return g.group===cam.id; }); kg.forEach(function(g){ used[g.id]=1; });
+        html+=kitLineHtml(c, cam, kg, mode, showDate); showDate=false; });
+    }
     gear.forEach(function(g){ if(used[g.id]) return; html+=itemLine(c, g, mode, showDate); showDate=false; });  // a-la-carte: its own line
     return html; }
   // How many hand-out/return LINES a reservation's items make: one per camera kit + one per a-la-carte gear unit.
   function bundleLineCount(items){ var cams={}, nCam=0, nAlc=0;
     items.forEach(function(it){ if(it.kind!=='equipment'){ cams[it.id]=1; nCam++; } });
+    if(nCam===1) return 1;                                  // one camera carries ALL its gear (matches renderBundle)
     items.forEach(function(it){ if(it.kind==='equipment' && !cams[it.group]) nAlc++; });
     return nCam+nAlc; }
   function tbLegend(){ return '<div class="tb-legend">'+
@@ -1577,48 +1638,63 @@
     var flash=(afterSchool||dups)?' flash':'';
     return '<button type="button" class="tb-reconcile'+flash+'" data-reconcile="1"><span class="rc-ic">&#9888;</span><span class="rc-t">Reconcile before you leave &middot; '+bits.join(' &middot; ')+'</span><span class="rc-go">&#8250;</span></button>'; }
   function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
-    var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), inc=incomingFor(SELDAY), odp=(isT?overduePickups():[]);
+    var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), inc=incomingFor(SELDAY), chk=checkedOutFor(), odp=(isT?overduePickups():[]);
     _DUP = isT ? openDupes() : {};
-    var outItemCount = out.reduce(function(n,c){ return n+bundleLineCount(lineItemsFor(c,'out',isT)); },0);
-    // Scroll-reset guard: the 7s poll re-renders; skip the rewrite when nothing changed so an open
-    // column keeps its scroll position. Actions + day-step null _lastTBSig to force a redraw.
-    var sig=SELDAY+'|'+TBQ.out+'|'+TBQ['in']+'|'+(TBSEL.out?'S':'')+(TBSEL['in']?'S':'')+'|'+Object.keys(TBSELSET.out).length+'-'+Object.keys(TBSELSET['in']).length+'|od'+odp.map(function(c){return c.id;}).join('.')+'|dup'+Object.keys(_DUP).sort().join('.')+'|'+out.map(function(c){return c.id+':'+resvStatusGroup(c)+':'+resvItems(c).map(function(x){return (x.camera||x.item);}).join('.');}).join(',')+'|'+inc.map(function(c){return c.id+':'+resvStatusGroup(c)+':'+resvItems(c).map(function(x){return (x.camera||x.item);}).join('.');}).join(',');
+    function countLines(resvs,mode){ return resvs.reduce(function(n,c){ return n+bundleLineCount(lineItemsFor(c,mode,isT)); },0); }
+    var nOut=countLines(out,'out'), nIn=countLines(inc,'in'), nChk=countLines(chk,'checked');
+    var odLines=chk.reduce(function(n,c){ return n+(lineItemsFor(c,'checked',isT).some(isOverdue)?1:0); },0);
+    var view=(TBVIEW==='in'||TBVIEW==='checked')?TBVIEW:'out';
+    var active=(view==='out')?out:(view==='in'?inc:chk), q=TBQ[view], selMode=TBSEL[view];
+    active=active.slice().sort(tbSortCmp);                      // default: camera-kit number order (a-la-carte after); or by last name
+    // Scroll-reset guard: the 7s poll re-renders; skip the rewrite when nothing changed so the open
+    // view keeps its scroll position + caret. Actions, view-switch and day-step null _lastTBSig.
+    function listSig(resvs,mode){ return resvs.map(function(c){ return c.id+':'+resvStatusGroup(c)+':'+lineItemsFor(c,mode,isT).map(function(x){return (x.camera||x.item)+itemState(x);}).join('.'); }).join(','); }
+    var sig=view+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]).length+'|od'+odp.map(function(c){return c.id;}).join('.')+'|dup'+Object.keys(_DUP).sort().join('.')+'|n'+nOut+'.'+nIn+'.'+nChk+'|'+listSig(active,view);
     if(sig===_lastTBSig && el.innerHTML) return; _lastTBSig=sig;
+    // ----- header: title + help + day stepper (Outgoing/Incoming only; Checked out is "right now") -----
     var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY));
-    var stepper='<div class="tb-step"><button type="button" class="tb-nav" data-tbday="-1" title="Previous day">&#8249;</button>'+
+    var stepper=(view==='checked')?'<span class="tb-nowlabel">Right now</span>':
+      ('<div class="tb-step"><button type="button" class="tb-nav" data-tbday="-1" title="Previous day">&#8249;</button>'+
       '<span class="tb-day">'+esc(dayL)+'</span><button type="button" class="tb-nav" data-tbday="1" title="Next day">&#8250;</button>'+
-      (isT?'':'<button type="button" class="tb-today" data-tbtoday="1">Today</button><span class="tb-proj">Projected &middot; assumes on-time returns</span>')+'</div>';
-    function col(cls,label,resvs,mode){
-      var key=(mode==='in')?'in':'out', q=TBQ[key], selMode=TBSEL[key];
-      var groups=[]; resvs.forEach(function(c){ var its=lineItemsFor(c,mode,isT); if(its.length) groups.push({c:c,items:its}); });
-      var total=groups.reduce(function(n,g){ return n+bundleLineCount(g.items); },0), body;
-      if(q.trim()){                                            // type search: flat list, floated by type/number
-        var flat=[]; groups.forEach(function(g){ g.items.forEach(function(it){ if(itemMatch(it,q)) flat.push({c:g.c,it:it}); }); });
-        flat.sort(function(a,b){ return itemSortKey(a.it)<itemSortKey(b.it)?-1:1; });
-        body = flat.length ? '<div class="tb-flat">'+flat.map(function(L){ return itemLine(L.c,L.it,mode,true); }).join('')+'</div>'
-          : '<div class="tb-empty">No match for &ldquo;'+esc(q.trim())+'&rdquo;.</div>';
-      } else {                                                 // default: one line per CAMERA KIT (gear folds in); a-la-carte gear keeps its own line
-        body = groups.length ? groups.map(function(g){ return '<div class="tb-bundle">'+renderBundle(g.c, g.items, mode, true)+'</div>'; }).join('')
-          : '<div class="tb-empty">'+(cls==='out'?'Nothing to hand out':'Nothing due back')+' '+(isT?'today':'that day')+'.</div>';
-      }
-      var search='<div class="tb-search"><input type="text" class="tb-sin" data-tbsearch="'+key+'" placeholder="Find camera, tripod, flash&hellip;" value="'+esc(q)+'" autocomplete="off" autocapitalize="off" spellcheck="false" />'+
-        (q?'<button type="button" class="tb-sx" data-tbclear="'+key+'" title="Clear">&times;</button>':'')+'</div>';
-      var selBtn = total ? '<button type="button" class="tb-selbtn" data-tbselect="'+key+'">'+(selMode?'Done':'Select')+'</button>' : '';
-      var bulk='';
-      if(selMode){
-        var n=Object.keys(TBSELSET[key]).length;
-        var acts = n ? ((mode==='in')
-          ? '<button type="button" class="tb-bulk-act in" data-bulk="return" data-col="'+key+'">Mark returned ('+n+')</button>'
-          : '<button type="button" class="tb-bulk-act out" data-bulk="pick" data-col="'+key+'">Picked up ('+n+')</button><button type="button" class="tb-bulk-act danger" data-bulk="cancel" data-col="'+key+'">Cancel ('+n+')</button>') : '';
-        bulk='<div class="tb-bulkbar"><button type="button" class="tb-selall" data-tbselall="'+key+'">'+((n>=total&&total>0)?'Clear':'Select all')+'</button><span class="tb-selcount">'+n+' selected</span>'+acts+'</div>';
-      }
-      return '<div class="tb-col"><div class="tb-colh '+cls+'">'+label+' <span class="tb-cn">'+total+'</span>'+selBtn+'</div>'+search+'<div class="tb-colbody">'+body+'</div>'+bulk+'</div>';
+      (isT?'':'<button type="button" class="tb-today" data-tbtoday="1">Today</button><span class="tb-proj">Projected &middot; assumes on-time returns</span>')+'</div>');
+    // ----- 3-view toggle: Outgoing (gold, default) / Incoming (teal) / Checked out (orange) -----
+    function tg(k,label,cnt,extra){ return '<button type="button" class="tb-tg '+k+(view===k?' on':'')+'" data-tbview="'+k+'">'+label+' <span class="tb-tgn">'+cnt+'</span>'+(extra||'')+'</button>'; }
+    var toggle='<div class="tb-toggle">'+tg('out','Outgoing',nOut)+tg('in','Incoming',nIn)+tg('checked','Checked out',nChk,odLines?('<span class="tb-tgod">'+odLines+' overdue</span>'):'')+'</div>';
+    // ----- active-view body: a full-width responsive grid of cards (or flat search results) -----
+    var groups=[]; active.forEach(function(c){ var its=lineItemsFor(c,view,isT); if(its.length) groups.push({c:c,items:its}); });
+    var total=groups.reduce(function(n,g){ return n+bundleLineCount(g.items); },0), body;
+    if(q.trim()){                                              // type search: flat list, floated by type/number
+      var flat=[]; groups.forEach(function(g){ g.items.forEach(function(it){ if(itemMatch(it,q)) flat.push({c:g.c,it:it}); }); });
+      flat.sort(function(a,b){ return itemSortKey(a.it)<itemSortKey(b.it)?-1:1; });
+      body = flat.length ? '<div class="tb-grid view-'+view+' tb-flat">'+flat.map(function(L){ return itemLine(L.c,L.it,view,true); }).join('')+'</div>'
+        : '<div class="tb-grid"><div class="tb-empty">No match for &ldquo;'+esc(q.trim())+'&rdquo;.</div></div>';
+    } else {                                                   // default: one card per CAMERA KIT (gear folds in); a-la-carte gear keeps its own card
+      body = groups.length ? '<div class="tb-grid view-'+view+'">'+groups.map(function(g){ var od=(view==='checked'&&g.items.some(isOverdue)); return '<div class="tb-bundle'+(od?' tb-od':'')+'">'+renderBundle(g.c, g.items, view, true)+'</div>'; }).join('')+'</div>'
+        : '<div class="tb-grid"><div class="tb-empty">'+(view==='out'?('Nothing to hand out '+(isT?'today':'that day')+'.'):(view==='in'?('Nothing due back '+(isT?'today':'that day')+'.'):'Nothing checked out right now.'))+'</div></div>';
+    }
+    var sortCtl='<div class="tb-sort"><span class="tb-sort-l">Sort</span>'+
+      '<button type="button" class="tb-sortbtn'+(TBSORT==='cam'?' on':'')+'" data-tbsort="cam">Camera #</button>'+
+      '<button type="button" class="tb-sortbtn'+(TBSORT==='name'?' on':'')+'" data-tbsort="name">Last name</button></div>';
+    var search='<div class="tb-searchrow"><div class="tb-search"><input type="text" class="tb-sin" data-tbsearch="'+view+'" placeholder="Find camera, tripod, flash&hellip;" value="'+esc(q)+'" autocomplete="off" autocapitalize="off" spellcheck="false" />'+
+      (q?'<button type="button" class="tb-sx" data-tbclear="'+view+'" title="Clear">&times;</button>':'')+'</div>'+
+      sortCtl+
+      (total?'<button type="button" class="tb-selbtn" data-tbselect="'+view+'">'+(selMode?'Done':'Select')+'</button>':'')+'</div>';
+    var bulk='';
+    if(selMode){
+      var n=Object.keys(TBSELSET[view]).length;
+      var acts = n ? ((view==='out')
+        ? '<button type="button" class="tb-bulk-act out" data-bulk="pick" data-col="'+view+'">Picked up ('+n+')</button><button type="button" class="tb-bulk-act danger" data-bulk="cancel" data-col="'+view+'">Cancel ('+n+')</button>'
+        : '<button type="button" class="tb-bulk-act in" data-bulk="return" data-col="'+view+'">Mark returned ('+n+')</button>') : '';
+      bulk='<div class="tb-bulkbar"><button type="button" class="tb-selall" data-tbselall="'+view+'">'+((n>=total&&total>0)?'Clear':'Select all')+'</button><span class="tb-selcount">'+n+' selected</span>'+acts+'</div>';
     }
     el.className='todayboard'; el.style.display='';
-    el.innerHTML='<div class="tb-head"><span class="tb-title">Reservations</span><button type="button" class="tb-help" data-tbhelp="1" title="How this board works" aria-label="How this board works">i</button>'+stepper+'</div>'+tbLegend()+
-      (isT?cartTallyHtml():'')+(isT?reconcileBannerHtml(outItemCount):'')+
-      overdueAccHtml(odp)+
-      '<div class="tb-cols">'+col('out','Outgoing',out,'out')+col('in','Incoming',inc,'in')+'</div>';
+    el.innerHTML='<div class="tb-head"><span class="tb-title">Reservations</span><button type="button" class="tb-help" data-tbhelp="1" title="How this board works" aria-label="How this board works">i</button>'+stepper+'</div>'+
+      toggle+
+      (isT?cartTallyHtml():'')+(isT?reconcileBannerHtml(nOut):'')+
+      (view==='out'?overdueAccHtml(odp):'')+
+      search+body+bulk;
+    el.querySelectorAll('[data-tbview]').forEach(function(b){ b.onclick=function(){ var v=b.getAttribute('data-tbview'); if(v!==TBVIEW){ TBVIEW=v; _lastTBSig=null; renderTodayBoard(); } }; });
+    el.querySelectorAll('[data-tbsort]').forEach(function(b){ b.onclick=function(){ var s=b.getAttribute('data-tbsort'); if(s!==TBSORT){ TBSORT=s; try{ sessionStorage.setItem('tbsort',s); }catch(e){} _lastTBSig=null; renderTodayBoard(); } }; });
     var odAcc=el.querySelector('.od-acc'); if(odAcc) odAcc.addEventListener('toggle',function(){ _odOpen=odAcc.open; });
     var hb=el.querySelector('[data-tbhelp]'); if(hb) hb.onclick=openBoardHelp;
     var rcb=el.querySelector('[data-reconcile]'); if(rcb) rcb.onclick=openReconcile;
@@ -2112,6 +2188,22 @@
     bundle('1012348','Mia Torres',1,'Photo 2',yst,tod,'Cam 03',[],'out');
     bundle('1012349','Ava Nguyen',6,'Photo 2',yst,tod,'Cam 18',['reflector-01'],'out');
     bundle('1012350','Noah Park',2,'Photo 1',y2,yst,'Cam 06',[],'out');             // stale/overdue return, duplicates Cam 06
+    // Jayden-style data drift: a camera + gear where two gear records lost their group link (group:'').
+    // The board must STILL fold all of it under the one Cam 02 kit, not float speedlite/wide a-la-carte.
+    (function(){ var sid='1012355', name='Jayden Guerrero', per=6, out=tod, due=tmr, cam='Cam 02', cid=nid();
+      recs.push({id:cid,kind:'camera',item:'',group:'',camera:cam,student_id:sid,student_name:name,period:per,course:'Photo 1',teacher:'Silva',
+        student_cell:'(805) 555-0106',parent_guardian:'Jayden’s parent',parent_cell:'(805) 555-0206',
+        out:out,due:due,status:'reserved',picked_up_date:'',returned:false,returned_date:'',note:'',created:out+'T15:00:00Z'});
+      [['tripod-01',cid],['speedlite-02',''],['wide-01','']].forEach(function(g){
+        recs.push({id:nid(),kind:'equipment',item:g[0],group:g[1],camera:'',student_id:sid,student_name:name,period:per,course:'Photo 1',teacher:'Silva',
+          out:out,due:due,status:'reserved',picked_up_date:'',returned:false,returned_date:'',note:'',created:out+'T15:00:00Z'}); });
+    })();
+    // A-la-carte reservations (student uses their OWN camera, reserves just gear -> no camera kit). These
+    // sort AFTER all camera kits, among themselves in gear-number order (zoom-02 before tripod-04).
+    [['1012356','Maya Cole',4,'tripod-04'],['1012357','Owen Brooks',5,'zoom-02']].forEach(function(a){
+      recs.push({id:nid(),kind:'equipment',item:a[3],group:'',camera:'',student_id:a[0],student_name:a[1],period:a[2],course:'Photo 2',teacher:'Silva',
+        student_cell:'(805) 555-03'+('0'+a[2]).slice(-2),parent_guardian:a[1].split(' ')[0]+'’s parent',parent_cell:'(805) 555-04'+('0'+a[2]).slice(-2),
+        out:tod,due:tmr,status:'reserved',picked_up_date:'',returned:false,returned_date:'',note:'',created:tod+'T15:00:00Z'}); });
     // Pending Special Requests (approved:false): the store's "request anyway" path.
     function reqBundle(sid,name,per,course,cam,gear,reason){
       var cid=nid();
