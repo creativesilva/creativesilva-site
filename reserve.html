@@ -539,7 +539,10 @@
   function loadCal(){ fetch(API+'/api/camera/calendar').then(function(r){return r.json();}).then(function(j){ CAL=j; rerender(); }).catch(function(){}); }
   function camsFor(name){ var r={'Canon EOS R50':[1,15],'Canon EOS R8':[16,16],'Canon EOS RP':[17,18],'Canon EOS R50 V':[19,21]}[name]; if(!r) return null; var a=[]; for(var i=r[0];i<=r[1];i++) a.push('Cam '+(i<10?'0':'')+i); return a; }
   var EQTYPE={'Ultra-Wide 10-18mm':'wide','Ultra-Zoom 100-400mm':'zoom','Speedlite EL-5':'speedlite','K&F Concept Tripod':'tripod','Neewer Reflector':'reflector','Godox AD200 Pro II Kit':'godox','SmallRig Overhead Light Kit':'smallrig'};
-  function overlaps(out,due,co,ret){ return out && due && out<=ret && due>=co; }   // ISO date strings compare lexicographically
+  // A reservation [out,due] blocks a new request [co,ret] only on a HALF-OPEN overlap (out<ret && due>co),
+  // matching the server: a same-day handoff is allowed, so an item reserved FROM the day you return it is
+  // still available to you. (Closed intervals wrongly flagged the return-day boundary as a conflict.)
+  function overlaps(out,due,co,ret){ return out && due && out<ret && due>co; }   // ISO date strings compare lexicographically
   function stockFor(it){
     if(!CAL) return null;
     var co=isoOf(checkout), ret=isoOf(returnDay||nextSchoolDay(checkout));
