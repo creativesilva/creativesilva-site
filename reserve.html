@@ -363,7 +363,7 @@
   var calView=new Date(checkout.getFullYear(), checkout.getMonth(), 1), planStep=1;
   var pendingAdd=null;   // an item waiting on the checkout-date flow; added to the bag once dates are set
   var planMode='add';    // 'add' = normal (date flow -> add pendingAdd to bag); 'calendar' = calendar view (date flow -> equipment picker)
-  function openPlan(){ planMode='add'; planStep=1; renderPlan(); open('planOv'); }
+  function openPlan(atStep){ planMode='add'; planStep=atStep||1; renderPlan(); open('planOv'); }   // atStep 2 skips the day picker (day already chosen)
   function renderPlan(){
     document.getElementById('planProg').innerHTML=[1,2,3].map(function(n){ return '<span class="pd'+(n===planStep?' on':(n<planStep?' done':''))+'">'+n+'</span>'; }).join('');
     document.getElementById('planBack').style.display=(planStep>1)?'':'none';
@@ -571,7 +571,7 @@
   function calDayPick(iso, name){
     var p=iso.split('-'); checkout=new Date(+p[0],+p[1]-1,+p[2]); checkout.setHours(0,0,0,0);
     renderDates(); rerender();   // keeps any pickup/return times already set; returnDay recomputes from the new day
-    openDetail(name);
+    openDetail(name, false, true);   // day already chosen on the calendar -> Add skips the day picker
   }
   (function(){ var cv=document.getElementById('calview');
     if(cv) cv.addEventListener('toggle', function(){ if(cv.open) renderCalView(); });
@@ -827,7 +827,8 @@
       scope.querySelectorAll('.unit-chip').forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on'); }; });
   }
   // fromBag: opened from the Equipment Bag to change a unit -> Save updates the unit and returns to the bag.
-  function openDetail(name, fromBag){
+  // fromCalDay: opened from the calendar day panel (day already chosen) -> Add skips the day-picker step.
+  function openDetail(name, fromBag, fromCalDay){
     detailReturnToBag=!!fromBag;
     var c=detailContentHtml(name);
     var addBtn = c.free ? '<button type="button" class="btn block" id="detailAdd">'+(fromBag?'Save this one':'Add to bag')+'</button>'
@@ -837,7 +838,7 @@
     var ab=document.getElementById('detailAdd'); if(ab) ab.onclick=function(){
       if(detailUnit){ PICK[name]=detailUnit; savePick(); }
       var rb=detailReturnToBag; detailReturnToBag=false; close('detailOv');
-      if(rb){ rerender(); renderBag(); open('bagOv'); } else { addToBag(name); }
+      if(rb){ rerender(); renderBag(); open('bagOv'); } else { addToBag(name, fromCalDay); }
     };
     open('detailOv');
   }
@@ -891,12 +892,13 @@
   // ===== equipment bag (gated: sign in + pickup/return times first) =====
   function updateBag(){ var n=document.getElementById('cartN'); n.textContent=BAG.length; n.className='cart-n'+(BAG.length?'':' empty'); }
   function bagPulse(){ var b=document.getElementById('cartBtn'); b.classList.add('pulse'); setTimeout(function(){ b.classList.remove('pulse'); },320); }
-  function addToBag(name){
+  // skipDay: the checkout day was already chosen (from the calendar view), so jump straight to the pickup-time step.
+  function addToBag(name, skipDay){
     if(!USER){ openSignin(); return; }                                  // confirm student id first
     var it=findItem(name);
     if(it && itemLocked(it) && !REQ[name]){ openGear(name); return; }   // off-course gear: unlock with the code OR request it anyway
     if(onHold() && !reqMode()){ openHold(); return; }                   // missing-work hold: browse yes, add no (unless they chose to request)
-    if(!datesReady()){ pendingAdd=name; openPlan(); return; }           // no dates yet: walk them through checkout dates, then add
+    if(!datesReady()){ pendingAdd=name; openPlan(skipDay?2:1); return; } // no times yet: ask pickup/return (skip the day when it is already set)
     doAddToBag(name);
   }
   function doAddToBag(name){
