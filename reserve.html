@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=30" />
+<link rel="stylesheet" href="/css/store.css?v=31" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -689,7 +689,8 @@
           ? '<button type="button" class="btn sm block prod-locked" data-unlock="'+enc+'">Locked &middot; ask teacher</button>'
           : '<button type="button" class="btn sm block prod-add" data-add="'+enc+'">Add to bag</button>');
     var st = (!locked) ? stockFor(it) : null;   // stock only on items this student can access
-    var stock = st ? '<div class="prod-stock'+(st.free<=0?' out':(st.free<=2?' low':''))+'">'+st.free+' / '+st.total+' available</div>' : '';
+    // Availability colour (Chris's framework): GREEN = all free, YELLOW = some reserved, RED = none free.
+    var stock = st ? '<div class="prod-stock'+(st.free<=0?' out':(st.free<st.total?' low':''))+'">'+st.free+' / '+st.total+' available</div>' : '';
     var det=enc;
     var more = SPECS[it.name] ? '<button type="button" class="prod-details" data-detail="'+det+'">View details</button>' : '';
     return '<div class="prod'+(showLocked?' locked':'')+'">'+
