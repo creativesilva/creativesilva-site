@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=34" />
+<link rel="stylesheet" href="/css/store.css?v=35" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -497,26 +497,66 @@
     gear.sort(function(a,b){ return a.label<b.label?-1:1; });
     return {cams:cams, gear:gear};
   }
+  // Per-item free/total for a SINGLE day (closed overlap), matching the calendar's day count.
+  function dayStock(it, iso){
+    if(!CAL) return null;
+    var cams=camsFor(it.name);
+    if(cams){
+      var busy={}; (CAL.oos||[]).concat(CAL.no_card||[]).forEach(function(cm){ if(cams.indexOf(cm)>=0) busy[cm]=1; });
+      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && c.out && c.due && c.out<=iso && c.due>=iso) busy[c.camera]=1; });
+      return {free:cams.filter(function(cm){return !busy[cm];}).length, total:cams.length};
+    }
+    var type=EQTYPE[it.name], eu=CAL.equipment_units||{};
+    if(type){
+      var units=Object.keys(eu).filter(function(u){ return eu[u] && eu[u].type===type; });
+      var eb={}; (CAL.equipment_oos||[]).forEach(function(u){ if(eu[u] && eu[u].type===type) eb[u]=1; });
+      (CAL.equipment||[]).forEach(function(c){ if(!c.returned && eu[c.item] && eu[c.item].type===type && c.out && c.due && c.out<=iso && c.due>=iso) eb[c.item]=1; });
+      return {free:units.filter(function(u){return !eb[u];}).length, total:units.length};
+    }
+    return null;
+  }
+  // The rentable items with at least one unit free on the day, scoped to what this student can access.
+  function dayAvail(iso){
+    var out=[];
+    Object.keys(CATS).forEach(function(k){ CATS[k].items.forEach(function(it){
+      if(!it.img) return; if(USER && itemLocked(it)) return;
+      var st=dayStock(it, iso); if(st && st.free>0) out.push({name:it.name, free:st.free});
+    }); });
+    return out;
+  }
   function renderDayPanel(){
     var panel=document.getElementById('cvDayPanel'); if(!panel) return;
-    if(!CVSEL){ panel.hidden=true; panel.innerHTML=''; return; }
+    if(!CVSEL){ panel.hidden=true; panel.innerHTML=''; panel.style.maxHeight=''; return; }
     panel.hidden=false;
     var p=CVSEL.split('-'), d=new Date(+p[0],+p[1]-1,+p[2]);
-    var free=freeCamsOnDay(CVSEL), total=studentCams().length, di=dayItems(CVSEL);
-    function rows(arr){ return arr.map(function(r){
+    var free=freeCamsOnDay(CVSEL), total=studentCams().length;
+    var di=dayItems(CVSEL), reserved=di.cams.concat(di.gear), av=dayAvail(CVSEL);
+    // Available to reserve: clickable rows that open that item's detail (unit picker) for this day.
+    var availRows = av.length ? av.map(function(a){
+      return '<button type="button" class="cv-av-row" data-avail="'+encodeURIComponent(a.name)+'">'+
+        '<span class="cv-dp-nm">'+esc(a.name)+'</span>'+
+        '<span class="cv-av-free">'+a.free+' free</span><span class="cv-av-go" aria-hidden="true">&rsaquo;</span></button>';
+    }).join('') : '<div class="cv-dp-empty">Every item is booked for this day.</div>';
+    // Already reserved: who has what (period only, never a name).
+    var resRows = reserved.length ? reserved.map(function(r){
       return '<div class="cv-dp-row"><span class="cv-dp-nm">'+esc(r.label)+'</span>'+
         (r.period?'<span class="cv-dp-per">'+esc(r.period)+'</span>':'')+
-        '<span class="cv-tag'+(r.out?' out':'')+'">'+(r.out?'Out':'Booked')+'</span></div>'; }).join(''); }
-    function sect(title,arr){ return arr.length?('<div class="cv-dp-sect"><div class="cv-dp-sect-t">'+title+'</div>'+rows(arr)+'</div>'):''; }
-    var body=sect('Cameras', di.cams)+sect('Gear', di.gear);
-    if(!di.cams.length && !di.gear.length) body='<div class="cv-dp-empty">Nothing is reserved yet. Everything is open for this day.</div>';
+        '<span class="cv-tag'+(r.out?' out':'')+'">'+(r.out?'Out':'Booked')+'</span></div>'; }).join('')
+      : '<div class="cv-dp-empty">Nothing reserved yet. Everything is open.</div>';
     panel.innerHTML='<div class="cv-dp-head"><div><div class="cv-dp-date">'+DOW[d.getDay()]+' &middot; '+MON[d.getMonth()]+' '+d.getDate()+'</div>'+
         '<div class="cv-dp-free'+(free===0?' none':'')+'">'+(free==null?'&middot;':(free+' of '+total+' cameras free'))+'</div></div>'+
         '<button type="button" class="cv-dp-x" id="cvDpX" aria-label="Close day">&times;</button></div>'+
-      '<div class="cv-dp-body silva-scroll">'+body+'</div>'+
+      '<div class="cv-dp-body silva-scroll">'+
+        '<div class="cv-dp-sect"><div class="cv-dp-sect-t">Available to reserve</div>'+availRows+'</div>'+
+        '<div class="cv-dp-sect"><div class="cv-dp-sect-t">Reserved this day</div>'+resRows+'</div>'+
+      '</div>'+
       '<button type="button" class="btn block cv-dp-go" id="cvDpGo">Reserve for this day</button>';
+    panel.querySelectorAll('[data-avail]').forEach(function(b){ b.onclick=function(){ calDayPick(CVSEL, decodeURIComponent(b.getAttribute('data-avail'))); }; });
     document.getElementById('cvDpX').onclick=function(){ CVSEL=null; renderCalView(); };
     document.getElementById('cvDpGo').onclick=function(){ calDayReserve(CVSEL); };
+    // Desktop (side-by-side): cap the panel to the calendar's height so a long list fills top-to-bottom, then scrolls.
+    if(window.matchMedia && window.matchMedia('(min-width:760px)').matches){ var cal=document.querySelector('.cv-calendar'); panel.style.maxHeight = cal ? Math.round(cal.getBoundingClientRect().height)+'px' : ''; }
+    else { panel.style.maxHeight=''; }
   }
   // Start a reservation for a chosen day: sign-in + hold gates, then jump to the pickup/return step.
   function calDayReserve(iso){
@@ -525,6 +565,13 @@
     var p=iso.split('-'); checkout=new Date(+p[0],+p[1]-1,+p[2]); checkout.setHours(0,0,0,0);
     pickup=null; returnTime=null; renderDates(); rerender();
     planMode='calendar'; planStep=2; renderPlan(); open('planOv');   // skip the day picker (day already chosen); ask pickup -> return
+  }
+  // From the day panel: tap an AVAILABLE item -> reserve it for the selected day (opens its detail + unit picker).
+  // Browsing the detail needs no sign-in; Add to bag applies the usual sign-in/hold/time gates for the chosen day.
+  function calDayPick(iso, name){
+    var p=iso.split('-'); checkout=new Date(+p[0],+p[1]-1,+p[2]); checkout.setHours(0,0,0,0);
+    renderDates(); rerender();   // keeps any pickup/return times already set; returnDay recomputes from the new day
+    openDetail(name);
   }
   (function(){ var cv=document.getElementById('calview');
     if(cv) cv.addEventListener('toggle', function(){ if(cv.open) renderCalView(); });

@@ -200,6 +200,7 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
   .calview-bd{max-width:none;display:flex;gap:20px;align-items:flex-start;}
   .cv-calendar{flex:1 1 auto;}
   .cv-daypanel{flex:0 0 360px;margin-top:0;}
+  .cv-dp-body{max-height:none;}   /* desktop: the panel's JS-set max-height (= calendar height) governs, body fills + scrolls */
   .cv-grid,.cv-dow{gap:8px;}
   .cv-dow span{font-size:.66rem;}
   .cv-title{font-size:1.3rem;}
@@ -231,13 +232,13 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 /* Day-detail panel: what is reserved on the tapped day. Student-facing, so period only (a group), never a name. */
 .cv-daypanel{margin-top:14px;background:var(--surface);border:1px solid var(--surface-bd);display:flex;flex-direction:column;}
 .cv-daypanel[hidden]{display:none;}
-.cv-dp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 14px 12px;border-bottom:1px solid var(--line);}
+.cv-dp-head{flex:0 0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 14px 12px;border-bottom:1px solid var(--line);}
 .cv-dp-date{font-family:var(--font-head);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.02rem;color:#fff;line-height:1.1;}
 .cv-dp-free{margin-top:3px;font-family:var(--font-head);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.66rem;color:var(--green);}
 .cv-dp-free.none{color:#ff9a8a;}
 .cv-dp-x{flex:0 0 auto;width:30px;height:30px;background:transparent;border:1px solid var(--surface-bd);color:var(--gray);font-size:1.2rem;line-height:1;cursor:pointer;}
 .cv-dp-x:hover{border-color:var(--teal-bright);color:#fff;}
-.cv-dp-body{padding:12px 14px;max-height:420px;overflow-y:auto;}
+.cv-dp-body{flex:1 1 auto;min-height:0;padding:12px 14px;max-height:62vh;overflow-y:auto;}
 .cv-dp-sect+.cv-dp-sect{margin-top:14px;}
 .cv-dp-sect-t{font-family:var(--font-head);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.62rem;color:var(--teal-bright);margin-bottom:7px;}
 .cv-dp-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--line);}
@@ -247,7 +248,13 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .cv-tag{flex:0 0 auto;font-family:var(--font-head);font-weight:700;letter-spacing:.06em;font-size:.56rem;text-transform:uppercase;color:var(--gray);border:1px solid var(--surface-bd);padding:2px 6px;}
 .cv-tag.out{color:#f0b357;border-color:rgba(240,179,87,0.42);}
 .cv-dp-empty{font-size:.86rem;color:var(--gray);line-height:1.5;padding:6px 0 10px;}
-.cv-dp-go{margin:0 14px 14px;}
+/* Available-to-reserve rows: clickable, open that item's detail for the selected day. */
+.cv-av-row{width:100%;display:flex;align-items:center;gap:8px;padding:9px 8px;border:0;border-top:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;text-align:left;transition:background .12s;}
+.cv-dp-sect-t+.cv-av-row{border-top:0;}
+.cv-av-row:hover{background:var(--teal-wash);}
+.cv-av-free{flex:0 0 auto;font-family:var(--font-head);font-weight:700;letter-spacing:.03em;font-size:.6rem;text-transform:uppercase;color:var(--green);}
+.cv-av-go{flex:0 0 auto;color:var(--teal-bright);font-size:1.1rem;line-height:1;}
+.cv-dp-go{flex:0 0 auto;margin:0 14px 14px;}
 
 /* ---- calendar-view equipment picker (category tiles -> item grid) ---- */
 .sheet.picker{max-width:500px;}
