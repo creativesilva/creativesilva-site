@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=40" />
+<link rel="stylesheet" href="/css/store.css?v=41" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -905,7 +905,7 @@
     var it=findItem(name);
     if(it && itemLocked(it) && !REQ[name]){ openGear(name); return; }   // off-course gear: unlock with the code OR request it anyway
     if(onHold() && !reqMode()){ openHold(); return; }                   // missing-work hold: browse yes, add no (unless they chose to request)
-    if(!datesReady()){ pendingAdd=name; openPlan(skipDay?2:1); return; } // no times yet: ask pickup/return (skip the day when it is already set)
+    if(!modifyMode && !datesReady()){ pendingAdd=name; openPlan(skipDay?2:1); return; } // no times yet: ask pickup/return (skip the day when already set; a modify keeps the reservation's dates)
     var free=freeUnitsFor(it);
     if(free && !free.length){ toast(name+' is not free for your dates.'); return; }   // every unit is booked for the chosen span: do not add
     doAddToBag(name);
@@ -924,14 +924,55 @@
     var every=BAG.every(itemNeedsApproval), some=BAG.some(itemNeedsApproval);
     return every?'Send request':(some?'Reserve + request':'Reserve this gear');
   }
+  // ----- modify an existing reservation (edit dates / add / remove) -----
+  var modifyMode=false, editingResvId=null;
+  function exitModify(){ modifyMode=false; editingResvId=null; }
+  // Load a reservation back into the bag as an edit session; Save writes it back via /api/camera/modify.
+  function modifyReservation(resv){
+    if(!resv) return;
+    BAG=[]; PICK={};
+    (resv.items||[]).forEach(function(it){
+      var unit=it.unit, model=null;
+      if(it.kind==='camera'){ model=modelOfCam(unit); }
+      else { var u=(CAL&&CAL.equipment_units&&CAL.equipment_units[unit]); model=u?modelOfType(u.type):null; }
+      if(model && findItem(model)){ if(BAG.indexOf(model)<0) BAG.push(model); PICK[model]=unit; }
+    });
+    saveBag(); savePick();
+    var p=String(resv.out).split('-'); checkout=new Date(+p[0],+p[1]-1,+p[2]); checkout.setHours(0,0,0,0);
+    pickup=null; returnTime=null; renderDates();   // returnDay = the next school day, as the store always books
+    modifyMode=true; editingResvId=resv.id;
+    updateBag(); rerender();
+    close('acctOv'); renderBag(); open('bagOv');
+  }
+  // Save the edited reservation: send the complete unit set + dates to the modify endpoint.
+  function saveModify(){
+    if(!BAG.length){ setBagMsg('Keep at least one item, or cancel the reservation instead.', true); return; }
+    var co=isoOf(checkout), ret=isoOf(returnDay), units=[], seen={};
+    BAG.forEach(function(nm){ var it=findItem(nm); if(!it) return;
+      var unit=PICK[nm]; if(!unit){ var f=freeUnitsFor(it)||[]; unit=f[0]; }
+      if(!unit || seen[unit]) return; seen[unit]=1;
+      units.push({ kind: camsFor(nm)?'camera':'equipment', unit: unit }); });
+    if(!units.length){ setBagMsg('Could not read your items. Try again.', true); return; }
+    api('/api/camera/modify',{student_id:USER.id, id:editingResvId, out:co, due:ret, units:units}).then(function(j){
+      if(j&&j.ok){ toast('Reservation updated.'); exitModify(); BAG=[]; PICK={}; saveBag(); savePick(); updateBag(); close('bagOv'); loadCal(); openAccount(); }
+      else { setBagMsg((j&&j.error)||'Could not update. Try again.', true); }
+    }).catch(function(){ setBagMsg('Could not update. Try again.', true); });
+  }
   function renderBag(){
     var w=document.getElementById('bagList');
     if(!BAG.length){ w.innerHTML='<p class="bag-empty">Your equipment bag is empty. Add gear to get started.</p>'; setBagMsg(''); return; }
     var teach=USER?(USER.teacher||TEACHER_NAME[USER.pool]||''):'', room=USER?roomFor(USER.pool):'';
-    var note = reqMode()
-      ? '<div class="bag-reqnote">Because of missing work, Mr. Silva must approve this reservation. Turn in your work to speed it up.</div>' : '';
+    var note = modifyMode
+      ? '<div class="bag-modnote">Changing your reservation. Edit the gear or the day, then <b>Save changes</b>. Close this to keep it as it was.</div>'
+      : (reqMode() ? '<div class="bag-reqnote">Because of missing work, Mr. Silva must approve this reservation. Turn in your work to speed it up.</div>' : '');
     var dates;
-    if(datesReady()){
+    if(modifyMode){
+      dates='<div class="bag-dates">'+
+        '<div class="bag-drow"><span class="bag-dk">Pick up</span><span class="bag-dv">'+DOW[checkout.getDay()]+' '+MON[checkout.getMonth()]+' '+checkout.getDate()+'</span></div>'+
+        '<div class="bag-drow"><span class="bag-dk">Return</span><span class="bag-dv">'+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+' &middot; next school day</span></div>'+
+        '<div class="bag-drow"><span class="bag-dk">Where</span><span class="bag-dv">Classroom pickup'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div>'+
+        '<button type="button" class="bag-editdates" id="bagEditDates">Change the day</button></div>';
+    } else if(datesReady()){
       dates='<div class="bag-dates">'+
         '<div class="bag-drow"><span class="bag-dk">Pick up</span><span class="bag-dv">'+DOW[checkout.getDay()]+' '+MON[checkout.getMonth()]+' '+checkout.getDate()+' &middot; '+esc(pickup.label)+' ('+f12(pickup.s)+')</span></div>'+
         '<div class="bag-drow"><span class="bag-dk">Return</span><span class="bag-dv">'+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+' &middot; '+esc(returnTime.label)+' ('+f12(returnTime.s)+')</span></div>'+
@@ -948,9 +989,11 @@
           '<span class="bag-name">'+esc(nm)+unit+tag+'</span><span class="bag-go" aria-hidden="true">&rsaquo;</span>'+
         '</button>'+
         '<button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">Remove</button></div>'; }).join('')+'</div>';
-    var primary = datesReady()
-      ? '<button type="button" class="btn bag-reserve" id="bagReserve">'+reserveLabel()+'</button>'
-      : '<button type="button" class="btn" id="bagSetDates">Set checkout dates</button>';
+    var primary = modifyMode
+      ? '<button type="button" class="btn bag-reserve" id="bagSave">Save changes</button>'
+      : (datesReady()
+          ? '<button type="button" class="btn bag-reserve" id="bagReserve">'+reserveLabel()+'</button>'
+          : '<button type="button" class="btn" id="bagSetDates">Set checkout dates</button>');
     var action = '<div class="bag-actions"><button type="button" class="btn ghost bag-addmore" id="bagAddMore">Add equipment</button>'+primary+'</div>';
     w.innerHTML=note+dates+items+action;
     w.querySelectorAll('[data-bx]').forEach(function(b){ b.onclick=function(){ removeFromBag(decodeURIComponent(b.getAttribute('data-bx'))); }; });
@@ -959,6 +1002,7 @@
     var sd=document.getElementById('bagSetDates'); if(sd) sd.onclick=function(){ pendingAdd=null; openPlan(); };
     var am=document.getElementById('bagAddMore'); if(am) am.onclick=function(){ openPicker(); };   // continue shopping: the picker opens on top; Done returns here
     var rv=document.getElementById('bagReserve'); if(rv) rv.onclick=submitReservation;
+    var sv=document.getElementById('bagSave'); if(sv) sv.onclick=saveModify;
     setBagMsg('');
   }
   // Reserve: assign a free unit to each bag item for the chosen span, then POST to the teacher board.
@@ -1041,7 +1085,11 @@
     else if(!anyOpen && locked){ document.documentElement.classList.remove('modal-lock'); document.body.style.top=''; window.scrollTo(0,_lockY); }
   }
   function open(id){ document.getElementById(id).classList.add('open'); syncScrollLock(); }
-  function close(id){ document.getElementById(id).classList.remove('open'); if(id==='planOv') pendingAdd=null; if(id==='pickerOv') pickerOpen=false; syncScrollLock(); }
+  function close(id){
+    // Closing the bag mid-edit abandons the modify (restores the reservation as it was).
+    if(id==='bagOv' && modifyMode){ exitModify(); BAG=[]; PICK={}; saveBag(); savePick(); updateBag(); rerender(); }
+    document.getElementById(id).classList.remove('open'); if(id==='planOv') pendingAdd=null; if(id==='pickerOv') pickerOpen=false; syncScrollLock();
+  }
   document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ close(b.getAttribute('data-close')); }; });
   ['signinOv','holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv','pickerOv','acctOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
   function toast(msg){ var t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2800); }
@@ -1148,7 +1196,7 @@
       if(!pickedUp){
         action = (confirmingCancel===r.id)
           ? '<div class="resv-confirm"><span>Cancel this reservation?</span><div class="resv-confirm-btns"><button type="button" class="btn sm" data-cxyes="'+esc(r.id)+'">Yes, cancel</button><button type="button" class="btn sm ghost" data-cxno="1">Keep it</button></div></div>'
-          : '<button type="button" class="btn sm ghost resv-cancel" data-cx="'+esc(r.id)+'">Cancel reservation</button>';
+          : '<div class="resv-btns"><button type="button" class="btn sm resv-mod" data-mod="'+esc(r.id)+'">Modify</button><button type="button" class="btn sm ghost resv-cancel" data-cx="'+esc(r.id)+'">Cancel</button></div>';
       } else { action='<div class="resv-note">Picked up. Return it to Mr. Silva when you are done.</div>'; }
       return '<div class="resv-card"><div class="resv-top"><span class="resv-dates">'+fmtResvDate(r.out)+' &rarr; '+fmtResvDate(r.due)+'</span>'+pill+'</div>'+
         '<div class="resv-items">'+esc(resvItemsLabel(r))+'</div>'+action+'</div>';
@@ -1185,6 +1233,7 @@
       b.querySelectorAll('[data-cx]').forEach(function(x){ x.onclick=function(){ confirmingCancel=x.getAttribute('data-cx'); renderAccount(); }; });
       b.querySelectorAll('[data-cxno]').forEach(function(x){ x.onclick=function(){ confirmingCancel=null; renderAccount(); }; });
       b.querySelectorAll('[data-cxyes]').forEach(function(x){ x.onclick=function(){ doCancelResv(x.getAttribute('data-cxyes')); }; });
+      b.querySelectorAll('[data-mod]').forEach(function(x){ x.onclick=function(){ var id=x.getAttribute('data-mod'); var r=((MYRESV&&MYRESV.active)||[]).filter(function(z){return z.id===id;})[0]; if(r) modifyReservation(r); }; });
     } else {
       b.innerHTML='<h2 id="acctTitle">Edit my info</h2>'+
         '<p>Fix anything that is wrong. This updates what is on file for you.</p>'+

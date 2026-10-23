@@ -385,8 +385,13 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
 .resv-pill.pend{color:var(--teal-bright);border-color:rgba(25,211,197,.4);}
 .resv-items{font-size:.84rem;color:var(--ink);margin:6px 0 9px;line-height:1.35;}
 .resv-cancel{width:auto;}
+.resv-btns{display:flex;gap:8px;}
+.resv-btns .btn{flex:0 0 auto;}
+.btn.sm.resv-mod{background:var(--teal);color:#021414;border:0;}
+.btn.sm.resv-mod:hover{filter:brightness(1.08);background:var(--teal);}
 .btn.sm.resv-cancel{color:#ff9a8a;border:1px solid rgba(255,154,138,.4);background:transparent;}
 .btn.sm.resv-cancel:hover{border-color:#ff9a8a;background:rgba(255,154,138,.08);filter:none;}
+.bag-modnote{background:var(--teal-wash);border:1px solid rgba(25,211,197,.3);border-left:4px solid var(--teal-bright);padding:10px 12px;font-size:.84rem;color:var(--ink);line-height:1.4;margin-bottom:14px;}
 .resv-confirm{display:flex;flex-direction:column;gap:8px;}
 .resv-confirm>span{font-size:.82rem;color:#ff9a8a;}
 .resv-confirm-btns{display:flex;gap:8px;}
