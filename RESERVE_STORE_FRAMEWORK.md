@@ -99,13 +99,14 @@ Session storage: `pv_user` (the signed-in student), `pv_bag` (model names), `pv_
 
 - Student-facing assets on `www.creativesilva.com` only. No em dashes. No "shoot/shot/screenshot". 5th-grade reading level.
 - Mobile-first: the store is built for student iPads and phones. **Every dialog caps to the live viewport (`100dvh`) and scrolls its body** so the action button is always reachable on a short phone screen; verify at a short height, not just the emulator (which scales height and hides overflow).
+- **Background scroll lock:** while any dialog is open the page behind does not scroll. `syncScrollLock()` (in `open()`/`close()`) pins `<body>` with `position:fixed` at `top:-scrollY` under `html.modal-lock` and restores the scroll position on close. Only the card body scrolls, and only when too tall.
 - The reservation is a **soft gate**: client checks + server-validated override codes. Teacher override code (both gear-unlock and missing-work): **322331** (repo default; set a Render env var for a private code). Keep availability math matching the backend.
 
 ---
 
 ## 10. Decisions log (dated, newest first)
 
-- **2026-10-23**: Availability color framework: GREEN all free / YELLOW some reserved / RED none (was a buggy "<=2 = yellow" scarcity rule). Desktop calendar accordion enlarged (`max-width:1000px`, bigger cells).
+- **2026-10-23**: Availability color framework: GREEN all free / YELLOW some reserved / RED none (was a buggy "<=2 = yellow" scarcity rule). Desktop calendar accordion enlarged (`max-width:1000px`, bigger cells). Background scroll lock behind dialogs. SmallRig renamed to "SmallRig RGB LED Panel", 4 units, Magic Arm attached to the panel (not a phone mount). This framework doc created.
 - **2026-10-22**: Half-open overlap fix (same-day handoff). Account card (profile + Edit + Log out). In-place picker detail + Amazon-style cart (Add equipment always present, tap-to-change-unit). Per-unit picker on the detail screen. "Option B" lifted teal-charcoal background. Pickup "During class" single option. Calendar View accordion. Teacher override code set to 322331.
 - **2026-10-20**: Submission + on-screen receipt (Phase A). Request → approval queue (Phase B). SmallRig overhead light kit added. "How it works" collapsed to an accordion.
 - **2026-10-16**: Store shell live: lensprotogo dense layout reskinned dark PV-teal; sign-in + eligibility gate; date planner with bell-schedule windows; live stock counters; item detail pop-out; Godox kit.
