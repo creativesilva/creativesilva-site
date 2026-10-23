@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=43" />
+<link rel="stylesheet" href="/css/store.css?v=44" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -599,6 +599,8 @@
     if(pv) pv.onclick=function(){ cvMonth.setMonth(cvMonth.getMonth()-1); CVSEL=null; renderCalView(); };
     if(nx) nx.onclick=function(){ cvMonth.setMonth(cvMonth.getMonth()+1); CVSEL=null; renderCalView(); };
   })();
+  // Keep the day panel's height (and so the Reserve button position) matched to the calendar as the window resizes.
+  var _dpResize; window.addEventListener('resize', function(){ clearTimeout(_dpResize); _dpResize=setTimeout(function(){ if(CVSEL) renderDayPanel(); }, 120); });
 
   // ===== Calendar-view equipment picker: category -> items -> Add other / Done =====
   var pickerCat=null, pickerItem=null, pickerOpen=false;
