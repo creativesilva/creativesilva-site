@@ -642,7 +642,9 @@
     ]},
     accessories:{label:'Accessories', items:[
       {name:'K&F Concept Tripod', img:'/assets/images/equipment/tripod-v3.png', added:'2024-08-01'},
-      {name:'Neewer Reflector', img:'/assets/images/equipment/reflector-v2.png', added:'2024-09-01'}
+      {name:'Neewer Reflector', img:'/assets/images/equipment/reflector-v2.png', added:'2024-09-01'},
+      {name:'Bluetooth Remote', img:'/assets/images/equipment/bluetooth-v1.png', added:'2026-10-23'},
+      {name:'iPad Stylus', img:'/assets/images/equipment/ipad-stylus-v2.png', da:true, tag:'Digital Arts', added:'2026-10-23'}
     ]}
   };
   function findItem(name){ var f=null; Object.keys(CATS).forEach(function(k){ CATS[k].items.forEach(function(it){ if(it.name===name) f=it; }); }); return f; }
@@ -659,14 +661,16 @@
     'K&F Concept Tripod':{blurb:'A steady, lightweight tripod with a ball head. Keeps your photos sharp.',specs:[['Type','Aluminum travel tripod'],['Head','Ball head with quick-release plate'],['Good for','Long exposures, video, steady framing'],['Build','Folds compact for carrying']]},
     'Neewer Reflector':{blurb:'A 5-in-1 reflector. Bounce and shape light for better portraits.',specs:[['Surfaces','Silver, gold, white, black, translucent'],['Good for','Filling shadows, softening or warming light'],['Size','About 43 in (110 cm)'],['Build','Collapsible, folds into a small case']]},
     'Godox AD200 Pro II Kit':{blurb:'The Godox AD200 Pro II, a 200Ws pocket flash for studio-style light anywhere. Comes with the Canon trigger and a light stand. Photo 2 only.',specs:[['Flash','Godox AD200 Pro II, 200Ws pocket flash'],['Heads','Speedlite flash head + bare-bulb head'],['Trigger','Godox XProC wireless trigger (Canon)'],['Stand','Adjustable light stand'],['Good for','Portraits and creative off-camera lighting']]},
-    'SmallRig RGB LED Panel':{blurb:'A SmallRig RM 25C RGB LED panel with a Magic Arm clamp attached. Clamp the light to anything to light a scene or a product photo. Full RGB color, so you can add color too.',specs:[['Light','SmallRig RM 25C RGBWW LED panel'],['Color','Full RGB plus white (2500K to 10000K)'],['Mount','Magic Arm clamp, attached, clamps to anything'],['Power','Built-in battery, USB-C rechargeable'],['Good for','Lighting a scene, product photos, adding color']]}
+    'SmallRig RGB LED Panel':{blurb:'A SmallRig RM 25C RGB LED panel with a Magic Arm clamp attached. Clamp the light to anything to light a scene or a product photo. Full RGB color, so you can add color too.',specs:[['Light','SmallRig RM 25C RGBWW LED panel'],['Color','Full RGB plus white (2500K to 10000K)'],['Mount','Magic Arm clamp, attached, clamps to anything'],['Power','Built-in battery, USB-C rechargeable'],['Good for','Lighting a scene, product photos, adding color']]},
+    'Bluetooth Remote':{blurb:'A Canon BR-E1 wireless remote. Fire the shutter from a distance for group photos, self-portraits, and sharp long exposures without touching the camera.',specs:[['Type','Bluetooth wireless remote, no line of sight needed'],['Range','About 5 m (16 ft)'],['Controls','Shutter now or 2-second delay, autofocus, start and stop video'],['Works with','Canon EOS cameras with Bluetooth (R50, RP, R8, R50 V)'],['Power','CR2032 coin battery, about 1 year']]},
+    'iPad Stylus':{blurb:'A stylus for the class iPads. Draw, sketch, and design right on the screen. For Digital Arts.',specs:[['Use','Drawing, sketching, and design on the iPad'],['For','Digital Arts students'],['Tip','Fine point for precise lines'],['Care','Return it undamaged so the next student can use it']]}
   };
 
   // ----- live stock levels (free / total of real units for the chosen checkout span) -----
   var CAL=null;
   function loadCal(){ fetch(API+'/api/camera/calendar').then(function(r){return r.json();}).then(function(j){ CAL=j; rerender(); }).catch(function(){}); }
   function camsFor(name){ var r={'Canon EOS R50':[1,15],'Canon EOS R8':[16,16],'Canon EOS RP':[17,18],'Canon EOS R50 V':[19,21]}[name]; if(!r) return null; var a=[]; for(var i=r[0];i<=r[1];i++) a.push('Cam '+(i<10?'0':'')+i); return a; }
-  var EQTYPE={'Ultra-Wide 10-18mm':'wide','Ultra-Zoom 100-400mm':'zoom','Speedlite EL-5':'speedlite','K&F Concept Tripod':'tripod','Neewer Reflector':'reflector','Godox AD200 Pro II Kit':'godox','SmallRig RGB LED Panel':'smallrig'};
+  var EQTYPE={'Ultra-Wide 10-18mm':'wide','Ultra-Zoom 100-400mm':'zoom','Speedlite EL-5':'speedlite','K&F Concept Tripod':'tripod','Neewer Reflector':'reflector','Godox AD200 Pro II Kit':'godox','SmallRig RGB LED Panel':'smallrig','Bluetooth Remote':'bluetooth','iPad Stylus':'apple_pencil'};
   // A reservation [out,due] blocks a new request [co,ret] only on a HALF-OPEN overlap (out<ret && due>co),
   // matching the server: a same-day handoff is allowed, so an item reserved FROM the day you return it is
   // still available to you. (Closed intervals wrongly flagged the return-day boundary as a conflict.)
@@ -726,7 +730,7 @@
   }
   // ----- Popular Rentals: most-reserved items -----
   function modelOfCam(cam){ var n=parseInt(String(cam).replace(/\D/g,''),10); if(n>=1&&n<=15) return 'Canon EOS R50'; if(n===16) return 'Canon EOS R8'; if(n>=17&&n<=18) return 'Canon EOS RP'; if(n>=19&&n<=21) return 'Canon EOS R50 V'; return null; }
-  function modelOfType(t){ return {wide:'Ultra-Wide 10-18mm',zoom:'Ultra-Zoom 100-400mm',speedlite:'Speedlite EL-5',tripod:'K&F Concept Tripod',reflector:'Neewer Reflector',godox:'Godox AD200 Pro II Kit',smallrig:'SmallRig RGB LED Panel'}[t]||null; }
+  function modelOfType(t){ return {wide:'Ultra-Wide 10-18mm',zoom:'Ultra-Zoom 100-400mm',speedlite:'Speedlite EL-5',tripod:'K&F Concept Tripod',reflector:'Neewer Reflector',godox:'Godox AD200 Pro II Kit',smallrig:'SmallRig RGB LED Panel',bluetooth:'Bluetooth Remote',apple_pencil:'iPad Stylus'}[t]||null; }
   // Popular Rentals (the default/home view): the 4 most-reserved items the student can actually rent.
   function popularItems(){
     var count={};
