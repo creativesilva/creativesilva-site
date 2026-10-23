@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=35" />
+<link rel="stylesheet" href="/css/store.css?v=36" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -817,7 +817,9 @@
     var selLab = camsFor(name) ? 'Pick your camera number' : 'Pick a unit number';
     var chips = all.map(function(u){ var busy=!freeSet[u]; return '<button type="button" class="unit-chip'+(busy?' busy':'')+(u===detailUnit?' on':'')+'"'+(busy?' disabled aria-disabled="true"':' data-u="'+esc(u)+'"')+'>'+esc(unitNum(it,u))+'</button>'; }).join('');
     var selector = all.length ? ('<div class="unit-pick"><div class="unit-pick-lab">'+selLab+(free.length?'':' &middot; none free for your dates')+'</div><div class="unit-chips">'+chips+'</div></div>') : '';
-    return { html: img+'<h2 class="detail-title">'+esc(name)+'</h2>'+(sp?'<p class="detail-blurb">'+sp.blurb+'</p>':'')+'<div class="spec-list">'+rows+'</div>'+selector, free: free.length };
+    // Specs live in a collapsed accordion (tap to expand) so the card stays compact and the picker + Add button show without scrolling.
+    var specAcc = (sp && rows) ? '<details class="spec-acc"><summary class="spec-sum"><span class="bar"></span><span>Specs</span><span class="hiw-chev" aria-hidden="true"></span></summary><div class="spec-list">'+rows+'</div></details>' : '';
+    return { html: img+'<h2 class="detail-title">'+esc(name)+'</h2>'+(sp?'<p class="detail-blurb">'+sp.blurb+'</p>':'')+specAcc+selector, free: free.length };
   }
   function wireUnitChips(scope){
     scope.querySelectorAll('.unit-chip[data-u]').forEach(function(b){ b.onclick=function(){

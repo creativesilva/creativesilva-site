@@ -11,7 +11,7 @@ Modeled on lensprotogo-style browsing, reskinned to the Pioneer Valley dark teal
 | File | Role |
 |------|------|
 | `reserve.html` | The whole storefront: markup + one inline `<script>` app. No build step. |
-| `css/store.css` | The only stylesheet. Bump the `?v=NN` query in `reserve.html` on every CSS change to bust cache. Currently **v35**. |
+| `css/store.css` | The only stylesheet. Bump the `?v=NN` query in `reserve.html` on every CSS change to bust cache. Currently **v36**. |
 | `pvhs-dashboard/server.py` | The backend (Render, `command.creativesilva.com`). The **source of truth** for inventory, availability, eligibility, reservations. Separate repo, auto-deploys from `main` (~60-90s). |
 
 The store is a static page that calls the live backend. Deploy = push `main`, GitHub Pages serves in ~60-180s. Always confirm live on the public URL before telling Chris it's done.
@@ -107,6 +107,7 @@ Session storage: `pv_user` (the signed-in student), `pv_bag` (model names), `pv_
 
 ## 10. Decisions log (dated, newest first)
 
+- **2026-10-22**: Item-detail specs are a collapsed accordion (css v36). `detailContentHtml` wraps the spec table in `<details class="spec-acc">` (closed by default, "Specs" summary + chevron, matches the `.hiw-sum` pattern), so the card stays compact and the unit picker + Add to bag show without scrolling; tap to expand. Covers all three detail surfaces (modal, in-place picker, bag). Per the LOCKED accordions-default-closed rule.
 - **2026-10-22**: Day panel upgraded (css v35). It now leads with an **Available to reserve** list (clickable `N free` rows per rentable item the student can access; a tap opens that item's detail/unit-picker for the selected day via `calDayPick`), above **Reserved this day**. On desktop the panel height is JS-capped to the calendar height (keyed off `matchMedia('(min-width:760px)')`, NOT `innerWidth`, which is unreliable under the preview emulator) so a long list fills top-to-bottom then scrolls; phone body caps at 62vh.
 - **2026-10-22**: Item-detail image never clips (css v34). The detail banner (`.detail-img`) used a fixed `aspect-ratio:16/10` box; a cached older build cropped the top of the flash photo. Rebuilt so the banner hugs the photo (contain, `max-height:min(230px,34vh)`, height follows the image); short windows shrink the photo and scroll the card instead of clipping. See §9.
 - **2026-10-22**: Calendar day-detail panel (§12): tap a day to see every camera + gear reserved that day, grouped Cameras / Gear, Booked/Out tag + class period (group only, never a name). Panel is right of the calendar on desktop, stacked on phone; calendar now fills the wrap and keeps large cells beside it. Browsing a day needs no sign-in; "Reserve for this day" (in the panel) does. Backend: added `period` to the sanitized `/api/camera/calendar` records (the one identifying-adjacent field allowed; still no name/ID/phone). Teacher-portal version of this view is DEFERRED until the student store is done.
