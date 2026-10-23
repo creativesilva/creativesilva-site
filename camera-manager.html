@@ -90,8 +90,8 @@
   .digest-item{font-size:.82rem;color:var(--muted);}
   .digest-item b{color:#ff9a8a;font-weight:700;}
   /* Phase 1: always-visible "Today" cart board */
-  /* Full-bleed band: the daily checkout flow spans the entire screen width (portrait + landscape). */
-  .todayboard{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);box-sizing:border-box;margin-bottom:16px;border:0;border-top:3px solid var(--teal);background:rgba(0,0,0,.30);padding:16px clamp(16px,4vw,48px) 20px;}
+  /* Daily checkout flow: a contained block the same width as the Calendar / Manage Equipment sections below it. */
+  .todayboard{margin-bottom:16px;border:1px solid var(--line-soft);border-top:3px solid var(--teal);background:rgba(0,0,0,.30);padding:14px 16px 18px;}
   .tb-head{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-bottom:9px;}
   .tb-title{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;color:#8ff7f7;}
   .tb-n{font-family:var(--font);font-weight:700;font-size:.72rem;padding:1px 8px;color:#001414;background:#00b8b8;}
@@ -131,7 +131,7 @@
   .tb-sortbtn{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.62rem;color:var(--muted);background:rgba(255,255,255,.02);border:0;border-left:1px solid var(--line-soft);padding:8px 12px;cursor:pointer;transition:background .15s,color .15s;}
   .tb-sortbtn.on{background:var(--teal);color:#04110f;}
   .tb-sortbtn:hover:not(.on){color:#fff;background:rgba(255,255,255,.06);}
-  .tb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:9px;align-content:start;max-height:66vh;overflow-y:auto;padding:8px 2px 2px;}
+  .tb-grid{display:flex;flex-direction:column;gap:7px;padding:8px 0 2px;}   /* single column: each reservation is a full-width row, stacked */
   .tb-grid .tb-bundle{margin:0;min-width:0;}
   .tb-grid.view-out .tb-bundle{border-left-color:var(--gold);}
   .tb-grid.view-in .tb-bundle{border-left-color:var(--teal);}
