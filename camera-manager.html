@@ -1823,7 +1823,7 @@
       if(anyOut && items.length>1) foot+='<button type="button" class="go" id="resvAll">Check in everything</button>';
     }
     foot+='<button type="button" class="go resv-see" id="resvReceipt">Receipt</button>';
-    foot+='<button type="button" class="go resv-see" id="resvSee">See reservation</button></div>';
+    foot+='<button type="button" class="go resv-see" id="resvSee">Add / edit equipment</button></div>';
     document.getElementById('resvBody').innerHTML=head+prog+'<div class="resv-items">'+rows+'</div>'+foot;
     var b=document.getElementById('resvBody');
     b.querySelectorAll('[data-resvpick]').forEach(function(el){ el.onclick=function(){ resvSetStatus(el.getAttribute('data-resvpick'),'out'); }; });
@@ -2161,6 +2161,10 @@
         else { c.picked_up_date=''; c.returned=false; c.returned_date=''; } } }
     else if(path.indexOf('/delete')>=0){ DEMO_DATA.checkouts=DEMO_DATA.checkouts.filter(function(x){ return x.id!==body.id; }); }
     else if(path.indexOf('/update')>=0){ var c2=rec(body.id); if(c2){ Object.keys(body).forEach(function(k){ if(k!=='id') c2[k]=body[k]; }); } }
+    else if(path.indexOf('/checkout')>=0){ var cam=body.group?rec(body.group):null;
+      DEMO_DATA.checkouts.push({id:'ck_demo_add_'+Date.now()+'_'+Math.floor(Math.random()*10000), kind:body.kind||'camera', item:body.item||'', group:body.group||'', camera:body.camera||'',
+        student_id:body.student_id||(cam&&cam.student_id)||'', student_name:(cam&&cam.student_name)||'', period:(cam&&cam.period)||'', course:(cam&&cam.course)||'', teacher:'Silva',
+        out:body.out||'', due:body.due||'', status:body.status||'reserved', picked_up_date:body.status==='out'?(body.out||todayISO()):'', returned:false, returned_date:'', note:'', created:todayISO()+'T15:00:00Z'}); }
     return Promise.resolve({ok:true,status:200,json:function(){ return Promise.resolve({ok:true}); }});
   }
   // Synthetic reservations for the ?demo=1 preview: multi-item bundles, an overdue pickup, a due-back
