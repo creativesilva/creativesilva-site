@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=39" />
+<link rel="stylesheet" href="/css/store.css?v=40" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -1123,10 +1123,43 @@
   document.getElementById('siConfirm').addEventListener('click', siConfirm);
   document.getElementById('acctBtn').addEventListener('click', function(){ if(USER){ openAccount(); } else { openSignin(); } });
   document.getElementById('cartBtn').addEventListener('click', function(){ if(!USER){ openSignin(); return; } renderBag(); open('bagOv'); });
-  // ===== student account: profile card -> Edit / Log out =====
-  var acctEdit=false;
-  function openAccount(){ if(!USER){ openSignin(); return; } acctEdit=false; renderAccount(); open('acctOv'); }
+  // ===== student account: profile card -> my reservations -> Edit / Log out =====
+  var acctEdit=false, MYRESV=null, confirmingCancel=null;   // MYRESV={active,history} once loaded; confirmingCancel = the reservation id awaiting a cancel confirm
+  function openAccount(){ if(!USER){ openSignin(); return; } acctEdit=false; MYRESV=null; confirmingCancel=null; renderAccount(); open('acctOv'); loadMyReservations(); }
   function acctRow(k,v){ return '<div class="acct-row"><span class="acct-k">'+esc(k)+'</span><span class="acct-v">'+(v?esc(v):'<em class="acct-empty">Not set</em>')+'</span></div>'; }
+  function fmtResvDate(iso){ if(!iso) return ''; var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate(); }
+  function loadMyReservations(){
+    api('/api/camera/my_reservations',{student_id:USER.id})
+      .then(function(j){ MYRESV={active:(j&&j.active)||[], history:(j&&j.history)||[]}; if(!acctEdit && document.getElementById('acctOv').classList.contains('open')) renderAccount(); })
+      .catch(function(){ MYRESV={active:[], history:[], err:true}; if(!acctEdit && document.getElementById('acctOv').classList.contains('open')) renderAccount(); });
+  }
+  function resvItemsLabel(r){ return r.items.map(function(i){ return i.label; }).filter(Boolean).join(', '); }
+  function resvSectionHtml(){
+    if(MYRESV===null) return '<div class="acct-sec"><div class="acct-sec-t">My reservations</div><div class="acct-resv-load">Loading&hellip;</div></div>';
+    var a=MYRESV.active||[], h=MYRESV.history||[];
+    var rows = a.length ? a.map(function(r){
+      var pending=(r.approved===false), pickedUp=(r.status==='out');
+      var pill = pending?'<span class="resv-pill pend">Waiting for OK</span>':(pickedUp?'<span class="resv-pill out">Picked up</span>':'<span class="resv-pill ok">Reserved</span>');
+      var action='';
+      if(!pickedUp){
+        action = (confirmingCancel===r.id)
+          ? '<div class="resv-confirm"><span>Cancel this reservation?</span><div class="resv-confirm-btns"><button type="button" class="btn sm" data-cxyes="'+esc(r.id)+'">Yes, cancel</button><button type="button" class="btn sm ghost" data-cxno="1">Keep it</button></div></div>'
+          : '<button type="button" class="btn sm ghost resv-cancel" data-cx="'+esc(r.id)+'">Cancel reservation</button>';
+      } else { action='<div class="resv-note">Picked up. Return it to Mr. Silva when you are done.</div>'; }
+      return '<div class="resv-card"><div class="resv-top"><span class="resv-dates">'+fmtResvDate(r.out)+' &rarr; '+fmtResvDate(r.due)+'</span>'+pill+'</div>'+
+        '<div class="resv-items">'+esc(resvItemsLabel(r))+'</div>'+action+'</div>';
+    }).join('') : '<div class="acct-resv-empty">'+(MYRESV.err?'Could not load your reservations. Try again.':'You have no reservations right now.')+'</div>';
+    var histBlock = h.length ? ('<details class="resv-hist"><summary class="resv-hsum">Past reservations ('+h.length+')</summary>'+
+      h.map(function(r){ return '<div class="resv-hline"><span class="resv-hdate">'+fmtResvDate(r.out)+' &rarr; '+fmtResvDate(r.due)+'</span><span class="resv-hitems">'+esc(resvItemsLabel(r))+'</span></div>'; }).join('')+'</details>') : '';
+    return '<div class="acct-sec"><div class="acct-sec-t">My reservations</div>'+rows+histBlock+'</div>';
+  }
+  function doCancelResv(id){
+    confirmingCancel=null;
+    api('/api/camera/cancel',{student_id:USER.id, id:id}).then(function(j){
+      if(j&&j.ok){ toast('Reservation canceled.'); MYRESV=null; renderAccount(); loadMyReservations(); loadCal(); }
+      else { toast((j&&j.error)||'Could not cancel. Try again.'); }
+    }).catch(function(){ toast('Could not cancel. Try again.'); });
+  }
   function renderAccount(){
     var b=document.getElementById('acctBody'); if(!b||!USER) return;
     var per=String(USER.period||'').replace(/\D/g,''), teach=USER.teacher||TEACHER_NAME[USER.pool]||'';
@@ -1141,9 +1174,13 @@
           acctRow('Parent or guardian', USER.pg)+
           acctRow('Parent or guardian cell', USER.pc)+
         '</div>'+
+        resvSectionHtml()+
         '<div class="sheet-actions"><button type="button" class="btn ghost" id="acctEditBtn">Edit my info</button><button type="button" class="btn" id="acctLogout">Log out</button></div>';
       document.getElementById('acctEditBtn').onclick=function(){ acctEdit=true; renderAccount(); };
       document.getElementById('acctLogout').onclick=function(){ USER=null; saveUser(); refreshAccount(); close('acctOv'); rerender(); toast('Logged out.'); };
+      b.querySelectorAll('[data-cx]').forEach(function(x){ x.onclick=function(){ confirmingCancel=x.getAttribute('data-cx'); renderAccount(); }; });
+      b.querySelectorAll('[data-cxno]').forEach(function(x){ x.onclick=function(){ confirmingCancel=null; renderAccount(); }; });
+      b.querySelectorAll('[data-cxyes]').forEach(function(x){ x.onclick=function(){ doCancelResv(x.getAttribute('data-cxyes')); }; });
     } else {
       b.innerHTML='<h2 id="acctTitle">Edit my info</h2>'+
         '<p>Fix anything that is wrong. This updates what is on file for you.</p>'+

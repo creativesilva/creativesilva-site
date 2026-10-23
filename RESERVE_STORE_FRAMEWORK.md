@@ -11,7 +11,7 @@ Modeled on lensprotogo-style browsing, reskinned to the Pioneer Valley dark teal
 | File | Role |
 |------|------|
 | `reserve.html` | The whole storefront: markup + one inline `<script>` app. No build step. |
-| `css/store.css` | The only stylesheet. Bump the `?v=NN` query in `reserve.html` on every CSS change to bust cache. Currently **v39**. |
+| `css/store.css` | The only stylesheet. Bump the `?v=NN` query in `reserve.html` on every CSS change to bust cache. Currently **v40**. |
 | `pvhs-dashboard/server.py` | The backend (Render, `command.creativesilva.com`). The **source of truth** for inventory, availability, eligibility, reservations. Separate repo, auto-deploys from `main` (~60-90s). |
 
 The store is a static page that calls the live backend. Deploy = push `main`, GitHub Pages serves in ~60-180s. Always confirm live on the public URL before telling Chris it's done.
@@ -85,7 +85,9 @@ Category tiles → item grid → **in-place detail** (the selected item takes ov
 
 ## 7. Account card
 
-The account chip opens a **My Account** sheet: name, period/course/teacher, student number, your cell, parent/guardian name and cell, plus **Edit my info** (prefilled form → `/api/camera/student_update`) and **Log out**. Opens for any signed-in student (hold or not).
+The account chip opens a **My Account** sheet: name, period/course/teacher, student number, your cell, parent/guardian name and cell, then a **My reservations** section, plus **Edit my info** (prefilled form → `/api/camera/student_update`) and **Log out**. Opens for any signed-in student (hold or not).
+
+**My reservations** (`loadMyReservations`/`resvSectionHtml`): on open, `POST /api/camera/my_reservations {student_id}` returns the student's own bookings grouped (camera + its linked gear = one reservation), split into `active` + `history`. Each active card shows the dates, the items, a status pill (Reserved / Waiting for OK / Picked up), and **Cancel reservation** when still `reserved` (an inline Yes/Keep confirm → `POST /api/camera/cancel {student_id, id}`; the backend refuses once picked up or returned, and refuses a reservation that is not this student's). Past (returned) bookings sit in a collapsed "Past reservations" accordion. Canceling frees the gear (`loadCal()` refreshes). There is no in-place date/item EDIT yet: cancel + re-reserve is the path (possible follow-up).
 
 ---
 
@@ -107,6 +109,7 @@ Session storage: `pv_user` (the signed-in student), `pv_bag` (model names), `pv_
 
 ## 10. Decisions log (dated, newest first)
 
+- **2026-10-23**: My Account now shows the student's own reservations with Cancel (css v40, server.py commit 808b628). New PUBLIC student endpoints `/api/camera/my_reservations` (grouped active + history) and `/api/camera/cancel` (own, pre-pickup, ownership-verified). Inline Yes/Keep confirm; canceling frees the gear. No in-place date/item edit yet (cancel + re-reserve). Verified end-to-end against the live backend incl. the ownership guard.
 - **2026-10-23**: Fixed a fully-booked item being addable (css v39). A product card's "Add to bag" button was always active even at 0 free, so `doAddToBag` pushed the item to the bag with NO unit (it showed in the bag with no unit chip, then failed at reserve). Now `cardHtml` renders a DISABLED muted "None free for your dates" button when `stockFor(it).free<=0` (matching the item detail + the new `.btn:disabled` style), and `addToBag` has a defensive guard: if `freeUnitsFor(it)` is empty it toasts "<item> is not free for your dates." and does not add. (`submitReservation` already rejected no-unit items; this blocks them at add time.) The zoom lenses really were booked Oct 23-26 by a Period 5 + Period 6 student.
 - **2026-10-22**: Restored the how-it-works step markers to Chris's right-pointing TRIANGLE cards (css v38). When moving the strip into the hero (v37) I had swapped them for plain square badges, which Chris did not ask for. The hero strip now uses the original `.hiw-step` cards (`.hiw-num` teal `clip-path:polygon(0 0,66% 0,100% 50%,66% 100%,0 100%)` arrow + `.hiw-body` title/desc), kept over the bottom of the header image. LESSON: do not restyle Chris's existing design elements when the task was only to relocate them.
 - **2026-10-22**: Calendar-pick reservations skip the day picker. Reserving from the calendar day panel (tap a day, then an available item) already fixes the checkout day, so the planner now opens at the PICKUP-time step, not the Checkout-day step. Implemented by threading `fromCalDay` through `openDetail(name, fromBag, fromCalDay)` -> `addToBag(name, skipDay)` -> `openPlan(skipDay?2:1)` (the day is still set by `calDayPick`, and the planner's Back button + the bag's "Change dates" both reopen the day picker so the student can still change it). Normal product-card adds are unchanged (still open at the Checkout-day picker). JS only, no css bump.
