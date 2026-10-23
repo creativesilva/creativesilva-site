@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=29" />
+<link rel="stylesheet" href="/css/store.css?v=30" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -380,7 +380,9 @@
       cal.style.display='none'; opts.style.display='';
       renderOpts(returnOptions(returnDay), function(o){ returnTime=o; renderDates();
         if(planMode==='calendar'){ planMode='add'; close('planOv'); openPicker(); return; }   // calendar view: dates set, now pick equipment
-        var nm=pendingAdd; pendingAdd=null; close('planOv'); if(nm){ addToBag(nm); renderBag(); open('bagOv'); } }, 'These are the only return times. If you return late, you may lose the chance to check out cameras next time.');
+        var nm=pendingAdd; pendingAdd=null; close('planOv');
+        if(nm){ addToBag(nm); renderBag(); open('bagOv'); }
+        else if(document.getElementById('bagOv').classList.contains('open')) renderBag(); }, 'These are the only return times. If you return late, you may lose the chance to check out cameras next time.');
     }
   }
   function renderOpts(opts, pick, note){
@@ -477,12 +479,26 @@
   })();
 
   // ===== Calendar-view equipment picker: category -> items -> Add other / Done =====
-  var pickerCat=null, pickerOpen=false;
+  var pickerCat=null, pickerItem=null, pickerOpen=false;
   function catIcon(k){ var m={cameras:'camera',lenses:'lenses',lighting:'lighting',accessories:'accessories'}; return '/assets/Icons/store/'+(m[k]||k)+'-v1.png'; }
-  function openPicker(){ pickerCat=null; pickerOpen=true; renderPicker(); open('pickerOv'); }
-  function pickerDone(){ pickerOpen=false; pickerCat=null; close('pickerOv'); renderBag(); open('bagOv'); }
+  function openPicker(){ pickerCat=null; pickerItem=null; pickerOpen=true; renderPicker(); open('pickerOv'); }
+  function pickerDone(){ pickerOpen=false; pickerCat=null; pickerItem=null; close('pickerOv'); renderBag(); open('bagOv'); }
   function renderPicker(){
-    var body=document.getElementById('pickerBody'), sub=document.getElementById('pickerSub');
+    var body=document.getElementById('pickerBody'), sub=document.getElementById('pickerSub'), title=document.getElementById('pickerTitle');
+    // 3) In-place DETAIL: the selected item takes over the card, with a back button to the grid.
+    if(pickerItem){
+      if(title) title.textContent='Equipment details';
+      if(sub) sub.style.display='none';
+      var dc=detailContentHtml(pickerItem);
+      body.innerHTML='<button type="button" class="pk-back" id="pkDBack">&lsaquo; Back to '+esc((CATS[pickerCat]&&CATS[pickerCat].label)||'list')+'</button>'+dc.html+
+        (dc.free?'<button type="button" class="btn block" id="pkDAdd">Add to bag</button>':'<button type="button" class="btn block" disabled>None free for your dates</button>');
+      wireUnitChips(body);
+      document.getElementById('pkDBack').onclick=function(){ pickerItem=null; renderPicker(); };
+      var pa=document.getElementById('pkDAdd'); if(pa) pa.onclick=function(){ var nm=pickerItem; if(detailUnit){ PICK[nm]=detailUnit; savePick(); } pickerItem=null; renderPicker(); addToBag(nm); };
+      return;
+    }
+    if(sub) sub.style.display='';
+    if(title) title.textContent='Add equipment';
     if(!pickerCat){
       if(sub) sub.textContent='Pick a category, then add what you need.';
       body.innerHTML='<div class="pk-cats">'+Object.keys(CATS).map(function(k){ return '<button type="button" class="pk-cat" data-pcat="'+k+'"><span class="pk-cat-ic" style="--ic:url(\''+catIcon(k)+'\')"></span>'+esc(CATS[k].label)+'</button>'; }).join('')+'</div>'+
@@ -497,6 +513,8 @@
         '<div class="prod-grid pk-grid">'+grid+'</div>'+
         '<div class="pk-foot"><button type="button" class="btn ghost" id="pkMore">Add other equipment</button><button type="button" class="btn" id="pkDone">Done</button></div>';
       wireCards(body);
+      // View details / tapping a card opens the in-place detail, not the hidden detail modal.
+      body.querySelectorAll('[data-detail]').forEach(function(b){ b.onclick=function(){ pickerItem=decodeURIComponent(b.getAttribute('data-detail')); renderPicker(); }; });
       document.getElementById('pkBack').onclick=function(){ pickerCat=null; renderPicker(); };
       document.getElementById('pkMore').onclick=function(){ pickerCat=null; renderPicker(); };
       document.getElementById('pkDone').onclick=pickerDone;
@@ -684,27 +702,38 @@
     g.querySelectorAll('[data-unlock]').forEach(function(b){ b.onclick=function(){ openGear(decodeURIComponent(b.getAttribute('data-unlock'))); }; });
     g.querySelectorAll('[data-detail]').forEach(function(b){ b.onclick=function(){ openDetail(decodeURIComponent(b.getAttribute('data-detail'))); }; });
   }
-  var detailUnit=null;   // the unit chosen in the open detail screen
-  function openDetail(name){
+  var detailUnit=null, detailReturnToBag=false;   // the unit chosen on the open detail; whether Add returns to the bag
+  // Build the detail body (image, title, blurb, specs, per-unit picker). Shared by the detail modal AND
+  // the in-place picker detail. Sets detailUnit to the student's prior pick if still free, else first free.
+  function detailContentHtml(name){
     var it=findItem(name), sp=SPECS[name];
     var img = it && it.img ? '<div class="detail-img"><img src="'+it.img+'" alt="" />'+(it.tag?'<span class="prod-tag">'+esc(it.tag)+'</span>':'')+'</div>' : '';
     var rows = sp ? sp.specs.map(function(r){ return '<div class="spec-row"><span>'+r[0]+'</span><span>'+r[1]+'</span></div>'; }).join('') : '';
-    // Per-unit picker: every number for this model, free ones selectable, checked-out ones greyed.
     var all=allUnitsFor(it), free=freeUnitsFor(it)||[], freeSet={}; free.forEach(function(u){ freeSet[u]=1; });
     detailUnit = (PICK[name] && freeSet[PICK[name]]) ? PICK[name] : (free[0]||null);
     var selLab = camsFor(name) ? 'Pick your camera number' : 'Pick a unit number';
     var chips = all.map(function(u){ var busy=!freeSet[u]; return '<button type="button" class="unit-chip'+(busy?' busy':'')+(u===detailUnit?' on':'')+'"'+(busy?' disabled aria-disabled="true"':' data-u="'+esc(u)+'"')+'>'+esc(unitNum(it,u))+'</button>'; }).join('');
     var selector = all.length ? ('<div class="unit-pick"><div class="unit-pick-lab">'+selLab+(free.length?'':' &middot; none free for your dates')+'</div><div class="unit-chips">'+chips+'</div></div>') : '';
-    var addBtn = free.length ? '<button type="button" class="btn block" id="detailAdd">Add to bag</button>'
-                             : '<button type="button" class="btn block" disabled>None free for your dates</button>';
-    document.getElementById('detailBody').innerHTML=
-      img + '<h2 id="detailTitle">'+esc(name)+'</h2>'+
-      (sp?'<p class="detail-blurb">'+sp.blurb+'</p>':'')+
-      '<div class="spec-list">'+rows+'</div>'+ selector + addBtn;
-    document.querySelectorAll('#detailBody .unit-chip[data-u]').forEach(function(b){ b.onclick=function(){
+    return { html: img+'<h2 class="detail-title">'+esc(name)+'</h2>'+(sp?'<p class="detail-blurb">'+sp.blurb+'</p>':'')+'<div class="spec-list">'+rows+'</div>'+selector, free: free.length };
+  }
+  function wireUnitChips(scope){
+    scope.querySelectorAll('.unit-chip[data-u]').forEach(function(b){ b.onclick=function(){
       detailUnit=b.getAttribute('data-u');
-      document.querySelectorAll('#detailBody .unit-chip').forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on'); }; });
-    var ab=document.getElementById('detailAdd'); if(ab) ab.onclick=function(){ if(detailUnit){ PICK[name]=detailUnit; savePick(); } close('detailOv'); addToBag(name); };
+      scope.querySelectorAll('.unit-chip').forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on'); }; });
+  }
+  // fromBag: opened from the Equipment Bag to change a unit -> Save updates the unit and returns to the bag.
+  function openDetail(name, fromBag){
+    detailReturnToBag=!!fromBag;
+    var c=detailContentHtml(name);
+    var addBtn = c.free ? '<button type="button" class="btn block" id="detailAdd">'+(fromBag?'Save this one':'Add to bag')+'</button>'
+                        : '<button type="button" class="btn block" disabled>None free for your dates</button>';
+    var bd=document.getElementById('detailBody'); bd.innerHTML=c.html+addBtn;
+    wireUnitChips(bd);
+    var ab=document.getElementById('detailAdd'); if(ab) ab.onclick=function(){
+      if(detailUnit){ PICK[name]=detailUnit; savePick(); }
+      var rb=detailReturnToBag; detailReturnToBag=false; close('detailOv');
+      if(rb){ rerender(); renderBag(); open('bagOv'); } else { addToBag(name); }
+    };
     open('detailOv');
   }
   var CURVIEW='popular';   // which single section is showing: 'popular' (home) or a category key
@@ -792,17 +821,27 @@
         '<div class="bag-drow"><span class="bag-dk">Return</span><span class="bag-dv">'+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+' &middot; '+esc(returnTime.label)+' ('+f12(returnTime.s)+')</span></div>'+
         '<div class="bag-drow"><span class="bag-dk">Where</span><span class="bag-dv">Classroom pickup'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div>'+
         '<button type="button" class="bag-editdates" id="bagEditDates">Change dates</button></div>';
-    } else { dates='<button type="button" class="btn block" id="bagSetDates">Set your checkout dates</button>'; }
+    } else { dates='<div class="bag-nodates">No dates yet. Pick when you need the gear, then reserve.</div>'; }
+    // Each item is tappable to change its unit (opens its detail), like clicking a cart item's options.
     var items='<div class="bag-items">'+BAG.map(function(nm){ var it=findItem(nm);
       var tag = (!reqMode() && REQ[nm]) ? '<span class="bag-reqtag">Needs OK</span>' : '';
       var unit = PICK[nm] ? '<span class="bag-unit">'+esc(unitFull(nm,PICK[nm]))+'</span>' : '';
-      return '<div class="bag-item">'+(it&&it.img?'<img class="bag-thumb" src="'+it.img+'" alt="">':'')+'<span class="bag-name">'+esc(nm)+unit+tag+'</span><button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">Remove</button></div>'; }).join('')+'</div>';
-    var action = datesReady() ? '<div class="bag-actions"><button type="button" class="btn ghost bag-addmore" id="bagAddMore">Add more gear</button><button type="button" class="btn bag-reserve" id="bagReserve">'+reserveLabel()+'</button></div>' : '';
+      return '<div class="bag-item">'+
+        '<button type="button" class="bag-edit" data-edit="'+encodeURIComponent(nm)+'" aria-label="Change '+esc(nm)+'">'+
+          (it&&it.img?'<img class="bag-thumb" src="'+it.img+'" alt="">':'')+
+          '<span class="bag-name">'+esc(nm)+unit+tag+'</span><span class="bag-go" aria-hidden="true">&rsaquo;</span>'+
+        '</button>'+
+        '<button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">Remove</button></div>'; }).join('')+'</div>';
+    var primary = datesReady()
+      ? '<button type="button" class="btn bag-reserve" id="bagReserve">'+reserveLabel()+'</button>'
+      : '<button type="button" class="btn" id="bagSetDates">Set checkout dates</button>';
+    var action = '<div class="bag-actions"><button type="button" class="btn ghost bag-addmore" id="bagAddMore">Add equipment</button>'+primary+'</div>';
     w.innerHTML=note+dates+items+action;
     w.querySelectorAll('[data-bx]').forEach(function(b){ b.onclick=function(){ removeFromBag(decodeURIComponent(b.getAttribute('data-bx'))); }; });
+    w.querySelectorAll('[data-edit]').forEach(function(b){ b.onclick=function(){ openDetail(decodeURIComponent(b.getAttribute('data-edit')), true); }; });   // detail opens ON TOP of the bag
     var ed=document.getElementById('bagEditDates'); if(ed) ed.onclick=function(){ pendingAdd=null; openPlan(); };
     var sd=document.getElementById('bagSetDates'); if(sd) sd.onclick=function(){ pendingAdd=null; openPlan(); };
-    var am=document.getElementById('bagAddMore'); if(am) am.onclick=function(){ close('bagOv'); openPicker(); };   // reuse the category -> item picker, then Done returns here
+    var am=document.getElementById('bagAddMore'); if(am) am.onclick=function(){ openPicker(); };   // continue shopping: the picker opens on top; Done returns here
     var rv=document.getElementById('bagReserve'); if(rv) rv.onclick=submitReservation;
     setBagMsg('');
   }

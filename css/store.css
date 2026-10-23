@@ -338,6 +338,11 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
 .bag-item span{font-family:var(--font-head);font-weight:700;letter-spacing:.02em;text-transform:uppercase;font-size:.95rem;color:#fff;}
 .bag-thumb{width:40px;height:40px;object-fit:contain;flex:0 0 auto;background:#fff;padding:3px;}
 .bag-name{flex:1 1 auto;}
+/* tappable item (opens its detail to change the unit), like a cart item's options */
+.bag-edit{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:10px;background:transparent;border:0;padding:0;cursor:pointer;text-align:left;}
+.bag-item .bag-go{flex:0 0 auto;color:var(--teal-bright);font-size:1.25rem;line-height:1;opacity:.6;}
+.bag-edit:hover .bag-go{opacity:1;}
+.bag-nodates{color:var(--gray);font-size:.86rem;line-height:1.45;margin-bottom:14px;padding:11px 13px;border:1px solid var(--surface-bd);background:var(--surface);}
 .bag-x{background:transparent;border:0;color:#ff9a8a;font-size:.76rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;flex:0 0 auto;}
 .bag-x:hover{color:#ffb9ad;}
 .bag-empty{color:var(--gray);font-size:.95rem;padding:14px 0;}
