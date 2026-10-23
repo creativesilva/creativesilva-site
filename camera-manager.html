@@ -145,6 +145,15 @@
   .til-date i{font-style:normal;font-size:.56rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);}
   .til-date.out{color:#ffd889;} .til-date.in{color:#8ff7f7;}
   .til-chev{flex:0 0 auto;color:var(--faint);font-size:1.1rem;line-height:1;}
+  /* Camera-kit line: the camera carries its gear as associated chips (one pickup line for the whole kit). */
+  .til-kit{align-items:flex-start;}
+  .til-kit .til-dot{margin-top:5px;} .til-kit .til-date{margin-top:1px;} .til-kit .til-chev{margin-top:3px;}
+  .til-kitmain{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:3px;}
+  .til-kittop{display:flex;align-items:baseline;gap:8px;min-width:0;}
+  .til-kitn{flex:0 0 auto;font-family:var(--font);font-weight:700;font-size:.6rem;letter-spacing:.03em;color:#04110f;background:#00b8b8;padding:1px 5px;align-self:center;}
+  .til-kitgear{display:flex;flex-wrap:wrap;gap:4px 5px;align-items:baseline;font-size:.74rem;color:#9fd2d2;line-height:1.25;}
+  .til-kitgear i{color:var(--faint);font-style:normal;}
+  .til-kitgear .dup{color:var(--red);}
   /* multi-select mode: a Select toggle in the header, checkboxes on lines, a bulk action bar */
   .tb-selbtn{margin-left:auto;background:rgba(0,184,184,.14);border:1px solid var(--line-soft);color:#cdeff0;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.6rem;padding:4px 10px;cursor:pointer;}
   .tb-selbtn:hover{border-color:#00b8b8;color:#fff;}
@@ -1452,6 +1461,37 @@
     if(TBSEL[key]){ var on=!!TBSELSET[key][it.id];                 // select mode: tap toggles the checkbox, not the card
       return '<div class="til til-selmode'+(on?' on':'')+'" data-selid="'+esc(it.id)+'" data-selcol="'+key+'"><span class="til-chk"></span>'+dot+mid+date+'</div>'; }
     return '<button type="button" class="til" data-resvopen="'+esc(c.id)+'">'+dot+mid+date+'<span class="til-chev">&#8250;</span></button>'; }
+  // A camera-kit line: ONE pickup line for the whole kit. The camera carries its linked gear
+  // (lens, tripod, remote, lighting) as associated chips, so the teacher packages it as one unit.
+  function kitLineHtml(c, cam, gear, mode, showDate){
+    var key=(mode==='in')?'in':'out';
+    var dISO=(mode==='in')?(c.due||c.out||''):(c.out||''), dLbl=(mode==='in')?'Due':'Out';
+    var date=showDate&&dISO?('<span class="til-date '+key+'"><i>'+dLbl+'</i>'+esc(fmtDoWMD(dISO))+'</span>'):'';
+    var dot='<span class="til-dot '+itemState(cam)+'"></span>';
+    var dup=_DUP[cam.id]?'<span class="til-dup" title="This unit is on more than one open reservation">DUP</span>':'';
+    var kitn=gear.length?'<span class="til-kitn">+'+gear.length+'</span>':'';
+    var gearRow=gear.length?'<span class="til-kitgear">'+gear.map(function(g){ return '<span'+(_DUP[g.id]?' class="dup"':'')+'>'+esc(gearLabel(g.item))+'</span>'; }).join('<i>&middot;</i>')+'</span>':'';
+    var main='<span class="til-kitmain"><span class="til-kittop"><span class="til-big">'+esc((cam.camera||'Camera').toUpperCase())+dup+'</span>'+kitn+
+      '<span class="til-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span></span>'+gearRow+'</span>';
+    if(TBSEL[key]){ var ids=[cam.id].concat(gear.map(function(g){return g.id;}));
+      var on=ids.every(function(id){return TBSELSET[key][id];});
+      return '<div class="til til-kit til-selmode'+(on?' on':'')+'" data-selids="'+esc(ids.join(','))+'" data-selcol="'+key+'"><span class="til-chk"></span>'+dot+main+date+'</div>'; }
+    return '<button type="button" class="til til-kit" data-resvopen="'+esc(c.id)+'">'+dot+main+date+'<span class="til-chev">&#8250;</span></button>'; }
+  // Split a reservation's visible items into camera KITS (gear folds under its camera via the group link)
+  // plus any truly standalone (a-la-carte) gear, which keeps its own line.
+  function renderBundle(c, items, mode, firstDate){
+    var cams=items.filter(function(it){ return it.kind!=='equipment'; });
+    var gear=items.filter(function(it){ return it.kind==='equipment'; });
+    var used={}, html='', showDate=firstDate;
+    cams.forEach(function(cam){ var kg=gear.filter(function(g){ return g.group===cam.id; }); kg.forEach(function(g){ used[g.id]=1; });
+      html+=kitLineHtml(c, cam, kg, mode, showDate); showDate=false; });
+    gear.forEach(function(g){ if(used[g.id]) return; html+=itemLine(c, g, mode, showDate); showDate=false; });  // a-la-carte: its own line
+    return html; }
+  // How many hand-out/return LINES a reservation's items make: one per camera kit + one per a-la-carte gear unit.
+  function bundleLineCount(items){ var cams={}, nCam=0, nAlc=0;
+    items.forEach(function(it){ if(it.kind!=='equipment'){ cams[it.id]=1; nCam++; } });
+    items.forEach(function(it){ if(it.kind==='equipment' && !cams[it.group]) nAlc++; });
+    return nCam+nAlc; }
   function tbLegend(){ return '<div class="tb-legend">'+
     '<span><i class="lg st-ok"></i>In storage</span><span><i class="lg st-reserved"></i>Reserved</span>'+
     '<span><i class="lg st-out"></i>Checked out</span><span><i class="lg st-overdue"></i>Overdue</span>'+
@@ -1517,7 +1557,7 @@
   function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
     var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), inc=incomingFor(SELDAY), odp=(isT?overduePickups():[]);
     _DUP = isT ? openDupes() : {};
-    var outItemCount = out.reduce(function(n,c){ return n+lineItemsFor(c,'out',isT).length; },0);
+    var outItemCount = out.reduce(function(n,c){ return n+bundleLineCount(lineItemsFor(c,'out',isT)); },0);
     // Scroll-reset guard: the 7s poll re-renders; skip the rewrite when nothing changed so an open
     // column keeps its scroll position. Actions + day-step null _lastTBSig to force a redraw.
     var sig=SELDAY+'|'+TBQ.out+'|'+TBQ['in']+'|'+(TBSEL.out?'S':'')+(TBSEL['in']?'S':'')+'|'+Object.keys(TBSELSET.out).length+'-'+Object.keys(TBSELSET['in']).length+'|od'+odp.map(function(c){return c.id;}).join('.')+'|dup'+Object.keys(_DUP).sort().join('.')+'|'+out.map(function(c){return c.id+':'+resvStatusGroup(c)+':'+resvItems(c).map(function(x){return (x.camera||x.item);}).join('.');}).join(',')+'|'+inc.map(function(c){return c.id+':'+resvStatusGroup(c)+':'+resvItems(c).map(function(x){return (x.camera||x.item);}).join('.');}).join(',');
@@ -1529,15 +1569,14 @@
     function col(cls,label,resvs,mode){
       var key=(mode==='in')?'in':'out', q=TBQ[key], selMode=TBSEL[key];
       var groups=[]; resvs.forEach(function(c){ var its=lineItemsFor(c,mode,isT); if(its.length) groups.push({c:c,items:its}); });
-      var total=groups.reduce(function(n,g){ return n+g.items.length; },0), body;
+      var total=groups.reduce(function(n,g){ return n+bundleLineCount(g.items); },0), body;
       if(q.trim()){                                            // type search: flat list, floated by type/number
         var flat=[]; groups.forEach(function(g){ g.items.forEach(function(it){ if(itemMatch(it,q)) flat.push({c:g.c,it:it}); }); });
         flat.sort(function(a,b){ return itemSortKey(a.it)<itemSortKey(b.it)?-1:1; });
         body = flat.length ? '<div class="tb-flat">'+flat.map(function(L){ return itemLine(L.c,L.it,mode,true); }).join('')+'</div>'
           : '<div class="tb-empty">No match for &ldquo;'+esc(q.trim())+'&rdquo;.</div>';
-      } else {                                                 // default: grouped by student (items travel together)
-        body = groups.length ? groups.map(function(g){ return '<div class="tb-bundle">'+
-          g.items.map(function(it,i){ return itemLine(g.c,it,mode,i===0); }).join('')+'</div>'; }).join('')
+      } else {                                                 // default: one line per CAMERA KIT (gear folds in); a-la-carte gear keeps its own line
+        body = groups.length ? groups.map(function(g){ return '<div class="tb-bundle">'+renderBundle(g.c, g.items, mode, true)+'</div>'; }).join('')
           : '<div class="tb-empty">'+(cls==='out'?'Nothing to hand out':'Nothing due back')+' '+(isT?'today':'that day')+'.</div>';
       }
       var search='<div class="tb-search"><input type="text" class="tb-sin" data-tbsearch="'+key+'" placeholder="Find camera, tripod, flash&hellip;" value="'+esc(q)+'" autocomplete="off" autocapitalize="off" spellcheck="false" />'+
@@ -1569,7 +1608,12 @@
     el.querySelectorAll('[data-tbclear]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-tbclear'); TBQ[k]=''; _tbFocus={col:k,pos:0}; _lastTBSig=null; renderTodayBoard(); }; });
     el.querySelectorAll('[data-tbselect]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-tbselect'); TBSEL[k]=!TBSEL[k]; if(!TBSEL[k]) TBSELSET[k]={}; _lastTBSig=null; renderTodayBoard(); }; });
     el.querySelectorAll('[data-selid]').forEach(function(d){ d.onclick=function(){ var k=d.getAttribute('data-selcol'), id=d.getAttribute('data-selid'); if(TBSELSET[k][id]) delete TBSELSET[k][id]; else TBSELSET[k][id]=true; _lastTBSig=null; renderTodayBoard(); }; });
-    el.querySelectorAll('[data-tbselall]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-tbselall'); var ids=[].map.call(el.querySelectorAll('[data-selid][data-selcol="'+k+'"]'),function(d){return d.getAttribute('data-selid');}); var allOn=ids.length&&ids.every(function(id){return TBSELSET[k][id];}); TBSELSET[k]={}; if(!allOn) ids.forEach(function(id){ TBSELSET[k][id]=true; }); _lastTBSig=null; renderTodayBoard(); }; });
+    // A camera kit selects/deselects as one unit (the camera + all its gear ids).
+    el.querySelectorAll('[data-selids]').forEach(function(d){ d.onclick=function(){ var k=d.getAttribute('data-selcol'), ids=d.getAttribute('data-selids').split(','); var allOn=ids.every(function(id){return TBSELSET[k][id];}); ids.forEach(function(id){ if(allOn) delete TBSELSET[k][id]; else TBSELSET[k][id]=true; }); _lastTBSig=null; renderTodayBoard(); }; });
+    el.querySelectorAll('[data-tbselall]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-tbselall'); var ids=[];
+      [].forEach.call(el.querySelectorAll('[data-selid][data-selcol="'+k+'"]'),function(d){ ids.push(d.getAttribute('data-selid')); });
+      [].forEach.call(el.querySelectorAll('[data-selids][data-selcol="'+k+'"]'),function(d){ d.getAttribute('data-selids').split(',').forEach(function(id){ ids.push(id); }); });
+      var allOn=ids.length&&ids.every(function(id){return TBSELSET[k][id];}); TBSELSET[k]={}; if(!allOn) ids.forEach(function(id){ TBSELSET[k][id]=true; }); _lastTBSig=null; renderTodayBoard(); }; });
     el.querySelectorAll('[data-bulk]').forEach(function(b){ b.onclick=function(){ bulkAction(b.getAttribute('data-bulk'), b.getAttribute('data-col')); }; });
     el.querySelectorAll('[data-tbday]').forEach(function(b){ b.onclick=function(){ _lastTBSig=null; stepDay(parseInt(b.getAttribute('data-tbday'),10)); }; });
     el.querySelectorAll('[data-tbtoday]').forEach(function(b){ b.onclick=function(){ _lastTBSig=null; SELDAY=todayISO(); renderTodayBoard(); updateSummary(); }; });
