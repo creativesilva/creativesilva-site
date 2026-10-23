@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=32" />
+<link rel="stylesheet" href="/css/store.css?v=33" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -90,14 +90,18 @@
   <details class="calview" id="calview">
     <summary class="hiw-sum"><span class="bar"></span><span>Calendar view</span><span class="hiw-chev" aria-hidden="true"></span></summary>
     <div class="calview-bd">
-      <div class="cv-head">
-        <button type="button" class="cv-nav" id="cvPrev" aria-label="Previous month">&lsaquo;</button>
-        <span class="cv-title" id="cvTitle"></span>
-        <button type="button" class="cv-nav" id="cvNext" aria-label="Next month">&rsaquo;</button>
+      <div class="cv-calendar">
+        <div class="cv-head">
+          <button type="button" class="cv-nav" id="cvPrev" aria-label="Previous month">&lsaquo;</button>
+          <span class="cv-title" id="cvTitle"></span>
+          <button type="button" class="cv-nav" id="cvNext" aria-label="Next month">&rsaquo;</button>
+        </div>
+        <div class="cv-dow"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+        <div class="cv-grid" id="cvGrid"></div>
+        <div class="cv-legend">Tap a day to see what is reserved. The number is how many cameras are free that day.</div>
       </div>
-      <div class="cv-dow"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
-      <div class="cv-grid" id="cvGrid"></div>
-      <div class="cv-legend">Tap an open day to reserve. The number is how many cameras are free that day.</div>
+      <!-- Day detail: what is checked out on the tapped day. Student-facing, so period only (a group), never a name. -->
+      <aside class="cv-daypanel" id="cvDayPanel" hidden></aside>
     </div>
   </details>
 </main>
@@ -456,15 +460,66 @@
       var isOpen=isSchoolDay(d) && d>=today && !isBlackoutIso(iso);
       if(isOpen){
         var free=freeCamsOnDay(iso), full=(free===0);
-        html+='<button type="button" class="cv-day'+(full?' full':'')+'" data-cvd="'+iso+'"><span class="cv-n">'+dn+'</span><span class="cv-free">'+(free==null?'&middot;':(free+' free'))+'</span></button>';
+        html+='<button type="button" class="cv-day'+(full?' full':'')+(iso===CVSEL?' sel':'')+'" data-cvd="'+iso+'"><span class="cv-n">'+dn+'</span><span class="cv-free">'+(free==null?'&middot;':(free+' free'))+'</span></button>';
       } else { html+='<span class="cv-cell off">'+dn+'</span>'; }
     }
     grid.innerHTML=html;
-    grid.querySelectorAll('[data-cvd]').forEach(function(b){ b.onclick=function(){ calDayTap(b.getAttribute('data-cvd')); }; });
+    grid.querySelectorAll('[data-cvd]').forEach(function(b){ b.onclick=function(){ calSelectDay(b.getAttribute('data-cvd')); }; });
+    renderDayPanel();
   }
   function syncCalView(){ var cv=document.getElementById('calview'); if(cv && cv.open) renderCalView(); }
   var pendingCalDay=null;   // a calendar day tapped before sign-in; resumed after the student confirms their ID
-  function calDayTap(iso){
+  var CVSEL=null;           // the day currently open in the detail panel (no sign-in needed to browse it)
+
+  // Tap a day -> open the detail panel (what is reserved that day). Browsing only; no sign-in required.
+  function calSelectDay(iso){
+    CVSEL=(CVSEL===iso)?null:iso;   // tap the same day again to close
+    renderCalView();                // re-highlights + renders the panel
+    if(CVSEL && window.innerWidth<760){ var pnl=document.getElementById('cvDayPanel'); if(pnl) pnl.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+  }
+  function perLabel(p){ p=String(p==null?'':p).replace(/\D/g,''); return p?('Per. '+p):''; }   // class period only, never a name
+  // Everything checked out (reserved or picked up) on one day, scoped to what this student can rent.
+  function dayItems(iso){
+    var cams=[], gear=[]; if(!CAL) return {cams:cams, gear:gear};
+    var mine=studentCams(), eu=CAL.equipment_units||{}, et=CAL.equipment_types||{};
+    (CAL.checkouts||[]).forEach(function(c){
+      if(c.returned || !c.out || !c.due || !(c.out<=iso && c.due>=iso)) return;
+      if(mine.indexOf(c.camera)<0) return;
+      cams.push({label:c.camera, out:(c.status==='out'), period:perLabel(c.period)});
+    });
+    (CAL.equipment||[]).forEach(function(c){
+      if(c.returned || !c.out || !c.due || !(c.out<=iso && c.due>=iso)) return;
+      var u=eu[c.item], type=u?u.type:(et[c.item]?c.item:null), label=u?u.label:((et[c.item]&&et[c.item].label)||c.item);
+      if(!type || !modelOfType(type)) return;   // only gear the store actually offers (skips other pools)
+      gear.push({label:label, out:(c.status==='out'), period:perLabel(c.period)});
+    });
+    cams.sort(function(a,b){ return a.label<b.label?-1:1; });
+    gear.sort(function(a,b){ return a.label<b.label?-1:1; });
+    return {cams:cams, gear:gear};
+  }
+  function renderDayPanel(){
+    var panel=document.getElementById('cvDayPanel'); if(!panel) return;
+    if(!CVSEL){ panel.hidden=true; panel.innerHTML=''; return; }
+    panel.hidden=false;
+    var p=CVSEL.split('-'), d=new Date(+p[0],+p[1]-1,+p[2]);
+    var free=freeCamsOnDay(CVSEL), total=studentCams().length, di=dayItems(CVSEL);
+    function rows(arr){ return arr.map(function(r){
+      return '<div class="cv-dp-row"><span class="cv-dp-nm">'+esc(r.label)+'</span>'+
+        (r.period?'<span class="cv-dp-per">'+esc(r.period)+'</span>':'')+
+        '<span class="cv-tag'+(r.out?' out':'')+'">'+(r.out?'Out':'Booked')+'</span></div>'; }).join(''); }
+    function sect(title,arr){ return arr.length?('<div class="cv-dp-sect"><div class="cv-dp-sect-t">'+title+'</div>'+rows(arr)+'</div>'):''; }
+    var body=sect('Cameras', di.cams)+sect('Gear', di.gear);
+    if(!di.cams.length && !di.gear.length) body='<div class="cv-dp-empty">Nothing is reserved yet. Everything is open for this day.</div>';
+    panel.innerHTML='<div class="cv-dp-head"><div><div class="cv-dp-date">'+DOW[d.getDay()]+' &middot; '+MON[d.getMonth()]+' '+d.getDate()+'</div>'+
+        '<div class="cv-dp-free'+(free===0?' none':'')+'">'+(free==null?'&middot;':(free+' of '+total+' cameras free'))+'</div></div>'+
+        '<button type="button" class="cv-dp-x" id="cvDpX" aria-label="Close day">&times;</button></div>'+
+      '<div class="cv-dp-body silva-scroll">'+body+'</div>'+
+      '<button type="button" class="btn block cv-dp-go" id="cvDpGo">Reserve for this day</button>';
+    document.getElementById('cvDpX').onclick=function(){ CVSEL=null; renderCalView(); };
+    document.getElementById('cvDpGo').onclick=function(){ calDayReserve(CVSEL); };
+  }
+  // Start a reservation for a chosen day: sign-in + hold gates, then jump to the pickup/return step.
+  function calDayReserve(iso){
     if(!USER){ pendingCalDay=iso; openSignin(); return; }      // login box first
     if(onHold() && !reqMode()){ openHold(); return; }          // missing-work hold still applies (they can choose "request anyway")
     var p=iso.split('-'); checkout=new Date(+p[0],+p[1]-1,+p[2]); checkout.setHours(0,0,0,0);
@@ -474,8 +529,8 @@
   (function(){ var cv=document.getElementById('calview');
     if(cv) cv.addEventListener('toggle', function(){ if(cv.open) renderCalView(); });
     var pv=document.getElementById('cvPrev'), nx=document.getElementById('cvNext');
-    if(pv) pv.onclick=function(){ cvMonth.setMonth(cvMonth.getMonth()-1); renderCalView(); };
-    if(nx) nx.onclick=function(){ cvMonth.setMonth(cvMonth.getMonth()+1); renderCalView(); };
+    if(pv) pv.onclick=function(){ cvMonth.setMonth(cvMonth.getMonth()-1); CVSEL=null; renderCalView(); };
+    if(nx) nx.onclick=function(){ cvMonth.setMonth(cvMonth.getMonth()+1); CVSEL=null; renderCalView(); };
   })();
 
   // ===== Calendar-view equipment picker: category -> items -> Add other / Done =====
@@ -1006,7 +1061,7 @@
     }
     resumeCalDay();   // if they tapped a calendar day before signing in, continue into it now
   }
-  function resumeCalDay(){ if(pendingCalDay){ var d=pendingCalDay; pendingCalDay=null; setTimeout(function(){ calDayTap(d); }, 80); } }
+  function resumeCalDay(){ if(pendingCalDay){ var d=pendingCalDay; pendingCalDay=null; setTimeout(function(){ calDayReserve(d); }, 80); } }
   document.getElementById('signinGo').addEventListener('click', doSignin);
   document.getElementById('sid').addEventListener('keydown', function(e){ if(e.key==='Enter') doSignin(); });
   document.getElementById('siConfirm').addEventListener('click', siConfirm);
