@@ -1167,8 +1167,8 @@
   function viewCams(){ var p=(DATA.pools||{})[SELECTED_POOL]; return (p&&p.length)?p:(DATA.cameras||[]); }
   // Gear order per teacher: Mankin leads with the iPad styluses (her focus); others keep camera gear first.
   function gOrderFor(){ return SELECTED_POOL==='mankin'
-    ? ['apple_pencil','mankin_tripod','tripod','speedlite','wide','zoom','reflector']
-    : ['wide','zoom','speedlite','tripod','reflector','mankin_tripod','apple_pencil']; }
+    ? ['apple_pencil','mankin_tripod','tripod','speedlite','wide','zoom','reflector','bluetooth']
+    : ['wide','zoom','speedlite','tripod','reflector','bluetooth','mankin_tripod','apple_pencil']; }
   // Point the Student Calendar button, the embedded preview, and the QR at the SELECTED teacher's
   // scoped link, so each teacher hands their class a link that shows only their own equipment.
   function studentCalURL(abs){ return (abs?'https://www.creativesilva.com':'')+'/calendar.html?teacher='+SELECTED_POOL; }
@@ -2029,7 +2029,7 @@
     var cams=[]; for(var i=1;i<=18;i++) cams.push('Cam '+('0'+i).slice(-2));
     var units={}, gpool=[];
     function addUnits(type,label,n){ for(var k=1;k<=n;k++){ var uid=type+'-'+('0'+k).slice(-2); units[uid]={type:type,label:label+' '+k,pool:'silva',kit:''}; gpool.push(uid); } }
-    addUnits('tripod','Tripod',5); addUnits('speedlite','Speedlite',5); addUnits('reflector','Reflector',5); addUnits('wide','Ultra-Wide',2); addUnits('zoom','Ultra-Zoom',2);
+    addUnits('tripod','Tripod',5); addUnits('speedlite','Speedlite',5); addUnits('reflector','Reflector',5); addUnits('wide','Ultra-Wide',2); addUnits('zoom','Ultra-Zoom',2); addUnits('bluetooth','Bluetooth Remote',4);
     var seq=0; function nid(){ return 'ck_demo_'+(++seq); }
     var recs=[];
     function bundle(sid,name,per,course,out,due,cam,gear,status){
@@ -2060,7 +2060,7 @@
     return {cameras:cams,checkouts:recs,assets:{},cards:{},
       pools:{silva:cams,garcia:cams.slice(0,15),mankin:['Cam 19','Cam 20','Cam 21']},
       equipment_pools:{silva:gpool,garcia:[],mankin:[]},equipment_units:units,
-      equipment_types:{tripod:{label:'Tripod'},speedlite:{label:'Speedlite'},reflector:{label:'Reflector'},wide:{label:'Ultra-Wide'},zoom:{label:'Ultra-Zoom'}},
+      equipment_types:{tripod:{label:'Tripod'},speedlite:{label:'Speedlite'},reflector:{label:'Reflector'},wide:{label:'Ultra-Wide'},zoom:{label:'Ultra-Zoom'},bluetooth:{label:'Bluetooth Remote'}},
       p2_grants:[]};
   }
 
@@ -2109,7 +2109,7 @@
   // One square thumbnail per TYPE, reused across that type's units. 400x400, hosted on the whitelisted
   // domain. A type with no image yet (speedlite, apple pencil) falls back to the clean placeholder box.
   var THUMB_BASE='https://www.creativesilva.com/assets/images/equipment/';
-  var GEAR_THUMB={ wide:THUMB_BASE+'ultrawide-v2.png', zoom:THUMB_BASE+'ultrazoom-v2.png', speedlite:THUMB_BASE+'speedlite-v2.png', tripod:THUMB_BASE+'tripod-v3.png', reflector:THUMB_BASE+'reflector-v2.png', mankin_tripod:THUMB_BASE+'tripod-v3.png', apple_pencil:THUMB_BASE+'ipad-stylus-v2.png' };
+  var GEAR_THUMB={ wide:THUMB_BASE+'ultrawide-v2.png', zoom:THUMB_BASE+'ultrazoom-v2.png', speedlite:THUMB_BASE+'speedlite-v2.png', tripod:THUMB_BASE+'tripod-v3.png', reflector:THUMB_BASE+'reflector-v2.png', mankin_tripod:THUMB_BASE+'tripod-v3.png', apple_pencil:THUMB_BASE+'ipad-stylus-v2.png', bluetooth:THUMB_BASE+'bluetooth-v1.png' };
   function gearThumb(type){ var u=GEAR_THUMB[type]||'';
     return u ? '<span class="gthumb"><img src="'+esc(u)+'" alt=""></span>' : '<span class="gthumb gthumb-ph" aria-hidden="true"></span>'; }
   // Camera body thumbnails: the Photo classes use the Canon EOS R50; Mankin's class (cams 19+) uses the R50 V.
@@ -2589,6 +2589,7 @@
     if(t==='wide'||t==='zoom') return ['Forgot at home','Missing lens cap','Damaged'];
     if(t==='speedlite') return ['Forgot at home','Missing battery','Damaged'];
     if(t==='reflector') return ['Forgot at home','Missing zip surface','Missing zip case','Damaged'];
+    if(t==='bluetooth') return ['Forgot at home','Missing battery','Damaged'];
     return ['Forgot at home','Missing part','Damaged'];
   }
   function openReturnChecklist(id){
