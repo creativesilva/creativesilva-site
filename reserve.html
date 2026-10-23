@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=38" />
+<link rel="stylesheet" href="/css/store.css?v=39" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -785,12 +785,15 @@
     var locked=itemLocked(it);
     var showLocked=locked && !inbag;                 // an item already in the bag (e.g. requested) reads as in-bag, not locked
     var enc=encodeURIComponent(it.name);
+    var st = (!locked) ? stockFor(it) : null;   // stock only on items this student can access
+    var soldOut = !!(st && st.free<=0);         // nothing free for the chosen dates -> cannot add
     var btn = inbag
       ? '<button type="button" class="btn sm block prod-inbag" data-remove="'+enc+'">In bag &middot; remove</button>'
       : (locked
           ? '<button type="button" class="btn sm block prod-locked" data-unlock="'+enc+'">Locked &middot; ask teacher</button>'
-          : '<button type="button" class="btn sm block prod-add" data-add="'+enc+'">Add to bag</button>');
-    var st = (!locked) ? stockFor(it) : null;   // stock only on items this student can access
+          : (soldOut
+              ? '<button type="button" class="btn sm block" disabled>None free for your dates</button>'
+              : '<button type="button" class="btn sm block prod-add" data-add="'+enc+'">Add to bag</button>'));
     // Availability colour (Chris's framework): GREEN = all free, YELLOW = some reserved, RED = none free.
     var stock = st ? '<div class="prod-stock'+(st.free<=0?' out':(st.free<st.total?' low':''))+'">'+st.free+' / '+st.total+' available</div>' : '';
     var det=enc;
@@ -899,6 +902,8 @@
     if(it && itemLocked(it) && !REQ[name]){ openGear(name); return; }   // off-course gear: unlock with the code OR request it anyway
     if(onHold() && !reqMode()){ openHold(); return; }                   // missing-work hold: browse yes, add no (unless they chose to request)
     if(!datesReady()){ pendingAdd=name; openPlan(skipDay?2:1); return; } // no times yet: ask pickup/return (skip the day when it is already set)
+    var free=freeUnitsFor(it);
+    if(free && !free.length){ toast(name+' is not free for your dates.'); return; }   // every unit is booked for the chosen span: do not add
     doAddToBag(name);
   }
   function doAddToBag(name){
