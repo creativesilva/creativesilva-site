@@ -45,6 +45,21 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .cart-btn{position:relative;display:inline-flex;align-items:center;gap:7px;font-family:var(--font-head);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.76rem;padding:9px 15px;border:1px solid transparent;background:var(--teal);color:#021414;}
 .cart-n{min-width:19px;height:19px;display:inline-flex;align-items:center;justify-content:center;font-size:.68rem;background:var(--orange);color:#140a04;padding:0 5px;}
 .cart-n.empty{display:none;}
+/* ---- quick-access dropdown nav (hamburger) ---- */
+.navmenu-wrap{position:relative;display:inline-flex;}
+.nav-burger{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:42px;height:38px;border:1px solid var(--surface-bd);background:transparent;cursor:pointer;}
+.nav-burger span{display:block;width:20px;height:2px;background:var(--teal-bright);transition:transform .18s,opacity .18s;}
+.nav-burger:hover{border-color:var(--teal-bright);}
+.nav-burger.on span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.nav-burger.on span:nth-child(2){opacity:0;}
+.nav-burger.on span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+.navmenu{position:absolute;top:calc(100% + 11px);right:0;min-width:224px;background:var(--paper);border:1px solid var(--surface-bd);box-shadow:var(--glow);z-index:90;padding:8px 0;display:flex;flex-direction:column;}
+.navmenu[hidden]{display:none;}
+.navmenu-lab{font-family:var(--font-head);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.56rem;color:var(--gray);padding:7px 16px 4px;}
+.navmenu button,.navmenu-link{text-align:left;background:transparent;border:0;color:var(--ink);font-size:.9rem;padding:9px 16px;cursor:pointer;text-decoration:none;display:block;width:100%;font-family:var(--font-body);}
+.navmenu button:hover,.navmenu-link:hover{background:var(--teal-wash);color:#fff;}
+.navmenu-link{color:var(--teal-bright);font-weight:600;}
+.navmenu-sep{height:1px;background:var(--line);margin:6px 0;}
 
 /* ---- top utility strip (classroom pickup + text-only contact) ---- */
 .util{background:var(--teal-deep);border-bottom:1px solid var(--line);}

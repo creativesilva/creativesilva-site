@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=41" />
+<link rel="stylesheet" href="/css/store.css?v=42" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -33,6 +33,26 @@
     <div class="nav-right">
       <button type="button" class="acct-btn" id="acctBtn">My Account</button>
       <button type="button" class="cart-btn" id="cartBtn">Equipment Bag <span class="cart-n empty" id="cartN">0</span></button>
+      <!-- Quick-access dropdown nav (hamburger) -->
+      <div class="navmenu-wrap">
+        <button type="button" class="nav-burger" id="navBtn" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span></span><span></span><span></span></button>
+        <nav class="navmenu" id="navMenu" hidden>
+          <div class="navmenu-lab">Browse</div>
+          <button type="button" data-nav="popular">Popular Rentals</button>
+          <button type="button" data-nav="cat:cameras">Camera Kits</button>
+          <button type="button" data-nav="cat:lenses">Lenses</button>
+          <button type="button" data-nav="cat:lighting">Lighting</button>
+          <button type="button" data-nav="cat:accessories">Accessories</button>
+          <button type="button" data-nav="calendar">Calendar View</button>
+          <div class="navmenu-sep"></div>
+          <div class="navmenu-lab">You</div>
+          <button type="button" data-nav="account">My Account</button>
+          <button type="button" data-nav="bag">Equipment Bag</button>
+          <button type="button" data-nav="howitworks">How it works</button>
+          <div class="navmenu-sep"></div>
+          <a class="navmenu-link" href="sms:+18056310001">Text us: 805-631-0001</a>
+        </nav>
+      </div>
     </div>
   </div>
 </header>
@@ -1175,6 +1195,28 @@
   document.getElementById('siConfirm').addEventListener('click', siConfirm);
   document.getElementById('acctBtn').addEventListener('click', function(){ if(USER){ openAccount(); } else { openSignin(); } });
   document.getElementById('cartBtn').addEventListener('click', function(){ if(!USER){ openSignin(); return; } renderBag(); open('bagOv'); });
+  // Quick-access dropdown nav (hamburger)
+  (function(){
+    var btn=document.getElementById('navBtn'), menu=document.getElementById('navMenu'), wrap=btn&&btn.closest('.navmenu-wrap');
+    if(!btn||!menu) return;
+    function openMenu(){ menu.hidden=false; btn.setAttribute('aria-expanded','true'); btn.classList.add('on'); }
+    function closeMenu(){ menu.hidden=true; btn.setAttribute('aria-expanded','false'); btn.classList.remove('on'); }
+    btn.addEventListener('click', function(e){ e.stopPropagation(); if(menu.hidden) openMenu(); else closeMenu(); });
+    document.addEventListener('click', function(e){ if(!menu.hidden && wrap && !wrap.contains(e.target)) closeMenu(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeMenu(); });
+    function toProducts(){ var p=document.querySelector('.products'); if(p) p.scrollIntoView({behavior:'smooth',block:'start'}); }
+    menu.querySelectorAll('[data-nav]').forEach(function(b){ b.addEventListener('click', function(){
+      var a=b.getAttribute('data-nav');
+      if(a==='popular'){ renderPopular(); toProducts(); }
+      else if(a.indexOf('cat:')===0){ var c=a.slice(4); renderCat(c); document.querySelectorAll('.catn').forEach(function(x){ x.classList.toggle('active', x.getAttribute('data-cat')===c); }); toProducts(); }
+      else if(a==='calendar'){ var cv=document.getElementById('calview'); if(cv){ cv.open=true; renderCalView(); cv.scrollIntoView({behavior:'smooth',block:'start'}); } }
+      else if(a==='account'){ document.getElementById('acctBtn').click(); }
+      else if(a==='bag'){ document.getElementById('cartBtn').click(); }
+      else if(a==='howitworks'){ var h=document.getElementById('howitworks'); if(h) h.scrollIntoView({behavior:'smooth',block:'start'}); }
+      closeMenu();
+    }); });
+    menu.querySelectorAll('.navmenu-link').forEach(function(l){ l.addEventListener('click', closeMenu); });
+  })();
   // ===== student account: profile card -> my reservations -> Edit / Log out =====
   var acctEdit=false, MYRESV=null, confirmingCancel=null;   // MYRESV={active,history} once loaded; confirmingCancel = the reservation id awaiting a cancel confirm
   function openAccount(){ if(!USER){ openSignin(); return; } acctEdit=false; MYRESV=null; confirmingCancel=null; renderAccount(); open('acctOv'); loadMyReservations(); }
