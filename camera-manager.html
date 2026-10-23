@@ -1312,6 +1312,10 @@
   function fmt(iso){ if(!iso)return''; var p=String(iso).split('-'); if(p.length<3)return iso; return MON[+p[1]-1]+' '+(+p[2]); }
   function todayISO(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   function addDays(iso,n){ var d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  // School-day helpers (match the student store + schedule-data.js `schoolDays`), so a due date never defaults to a weekend/holiday.
+  function isSchoolDayISO(iso){ if(typeof schoolDays!=='undefined' && Array.isArray(schoolDays)) return schoolDays.indexOf(iso)!==-1;
+    var w=new Date(iso+'T00:00:00').getDay(); return w!==0 && w!==6; }
+  function nextSchoolDayISO(iso){ var x=iso; for(var i=0;i<14;i++){ x=addDays(x,1); if(isSchoolDayISO(x)) return x; } return x; }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   // ---- Custom framework date picker: replaces a native <input type=date>. Keeps the hidden input
   // as the value store (existing code reads/sets .value), overlays a teal month-grid popover. ----
@@ -3337,7 +3341,7 @@
     var initial=(preCam && free.indexOf(preCam)>=0)?preCam:(free[0]||'');
     var lbl=document.querySelector('label[for="rcam"]'); if(lbl) lbl.textContent='Camera';
     rcam.innerHTML=''; rcamDD=mkDropdown(rcam, items, initial, null);
-    rout.value=todayISO(); rdue.value=addDays(todayISO(),1); rpick.checked=true;
+    var _co=isSchoolDayISO(todayISO())?todayISO():nextSchoolDayISO(todayISO()); rout.value=_co; rdue.value=nextSchoolDayISO(_co); rpick.checked=true;
     mkDatePicker(rout); mkDatePicker(rdue);
     rgo.textContent='Reserve this camera';
     document.querySelector('#resmodal .mtitle').textContent='Reserve / check out';
@@ -3349,7 +3353,7 @@
     resmsg.className='mmsg'; rwho.className='who-line'; rwho.textContent=''; rsid.value=''; lastLookup='';
     var lbl=document.querySelector('label[for="rcam"]'); if(lbl) lbl.textContent='Equipment';
     rcam.innerHTML='<div class="res-fixedunit">'+esc(u.label)+'</div>'; rcamDD=null;
-    rout.value=todayISO(); rdue.value=addDays(todayISO(),1); rpick.checked=true;
+    var _co=isSchoolDayISO(todayISO())?todayISO():nextSchoolDayISO(todayISO()); rout.value=_co; rdue.value=nextSchoolDayISO(_co); rpick.checked=true;
     mkDatePicker(rout); mkDatePicker(rdue);
     rgo.textContent='Check out this unit';
     document.querySelector('#resmodal .mtitle').textContent='Check out equipment';
