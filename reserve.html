@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=28" />
+<link rel="stylesheet" href="/css/store.css?v=29" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -273,6 +273,14 @@
       <p id="pickerSub">Pick a category, then add what you need.</p>
       <div id="pickerBody"></div>
     </div>
+  </div>
+</div>
+
+<!-- Student account: profile (number, contacts) + Edit + Log out -->
+<div class="sov" id="acctOv" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="acctTitle">
+    <button type="button" class="sheet-x" data-close="acctOv" aria-label="Close">&times;</button>
+    <div class="sheet-bd" id="acctBody"></div>
   </div>
 </div>
 
@@ -872,7 +880,7 @@
   function open(id){ document.getElementById(id).classList.add('open'); }
   function close(id){ document.getElementById(id).classList.remove('open'); if(id==='planOv') pendingAdd=null; if(id==='pickerOv') pickerOpen=false; }
   document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ close(b.getAttribute('data-close')); }; });
-  ['signinOv','holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv','pickerOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
+  ['signinOv','holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv','pickerOv','acctOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
   function toast(msg){ var t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2800); }
   function pulseDates(){ var d=document.querySelector('.datebar'); if(!d) return; d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash'); }
 
@@ -925,9 +933,11 @@
     api('/api/camera/student_info',{student_id:v}).then(function(j){
       if(!j||!j.found){ m.className='sheet-msg err'; m.textContent='We could not find that student number.'; return; }
       if(j.eligible===false){
-        USER={ id:v, label:j.label||'', hold:true, missing:(j.missing_count!=null?j.missing_count:null),
+        USER={ id:v, label:j.label||'', name:j.name||'', period:String(j.period||''), course:j.course||'',
+               hold:true, missing:(j.missing_count!=null?j.missing_count:null),
                missing_limit:(j.missing_limit!=null?j.missing_limit:6), p2_ok:false, gearUnlocked:false,
-               pool:(j.pool||TEACHER), teacher:(j.teacher||'') };
+               pool:(j.pool||TEACHER), teacher:(j.teacher||''),
+               sc:(j.student_cell||''), pg:(j.parent_guardian||''), pc:(j.parent_cell||'') };
         saveUser(); refreshAccount(); close('signinOv'); openHold(); return;
       }
       window._siLookup={ id:v, label:j.label||'', name:j.name||'', period:String(j.period||''), course:j.course||'',
@@ -952,9 +962,50 @@
   document.getElementById('signinGo').addEventListener('click', doSignin);
   document.getElementById('sid').addEventListener('keydown', function(e){ if(e.key==='Enter') doSignin(); });
   document.getElementById('siConfirm').addEventListener('click', siConfirm);
-  document.getElementById('acctBtn').addEventListener('click', function(){ if(USER && USER.hold){ openHold(); } else if(USER){ openAccount(); } else { openSignin(); } });
+  document.getElementById('acctBtn').addEventListener('click', function(){ if(USER){ openAccount(); } else { openSignin(); } });
   document.getElementById('cartBtn').addEventListener('click', function(){ if(!USER){ openSignin(); return; } renderBag(); open('bagOv'); });
-  function openAccount(){ if(window.confirm('Signed in as '+(USER.label||'student')+'.\n\nSign out?')){ USER=null; saveUser(); refreshAccount(); } }
+  // ===== student account: profile card -> Edit / Log out =====
+  var acctEdit=false;
+  function openAccount(){ if(!USER){ openSignin(); return; } acctEdit=false; renderAccount(); open('acctOv'); }
+  function acctRow(k,v){ return '<div class="acct-row"><span class="acct-k">'+esc(k)+'</span><span class="acct-v">'+(v?esc(v):'<em class="acct-empty">Not set</em>')+'</span></div>'; }
+  function renderAccount(){
+    var b=document.getElementById('acctBody'); if(!b||!USER) return;
+    var per=String(USER.period||'').replace(/\D/g,''), teach=USER.teacher||TEACHER_NAME[USER.pool]||'';
+    var meta=[(per?('Period '+per):''), (USER.course||''), teach].filter(Boolean).map(esc).join(' &middot; ');
+    if(!acctEdit){
+      b.innerHTML='<h2 id="acctTitle">My account</h2>'+
+        '<div class="acct-name">'+esc(USER.name||USER.label||'Student')+'</div>'+
+        (meta?'<div class="acct-meta">'+meta+'</div>':'')+
+        '<div class="acct-rows">'+
+          acctRow('Student number', USER.id)+
+          acctRow('Your cell', USER.sc)+
+          acctRow('Parent or guardian', USER.pg)+
+          acctRow('Parent or guardian cell', USER.pc)+
+        '</div>'+
+        '<div class="sheet-actions"><button type="button" class="btn ghost" id="acctEditBtn">Edit my info</button><button type="button" class="btn" id="acctLogout">Log out</button></div>';
+      document.getElementById('acctEditBtn').onclick=function(){ acctEdit=true; renderAccount(); };
+      document.getElementById('acctLogout').onclick=function(){ USER=null; saveUser(); refreshAccount(); close('acctOv'); rerender(); toast('Logged out.'); };
+    } else {
+      b.innerHTML='<h2 id="acctTitle">Edit my info</h2>'+
+        '<p>Fix anything that is wrong. This updates what is on file for you.</p>'+
+        '<div class="field"><label for="acSc">Your cell</label><input type="tel" id="acSc" inputmode="numeric" autocomplete="off" value="'+esc(USER.sc||'')+'" placeholder="805-555-1234"></div>'+
+        '<div class="field"><label for="acPg">Parent or guardian name</label><input type="text" id="acPg" autocomplete="off" value="'+esc(USER.pg||'')+'" placeholder="First and last name"></div>'+
+        '<div class="field"><label for="acPc">Parent or guardian cell</label><input type="tel" id="acPc" inputmode="numeric" autocomplete="off" value="'+esc(USER.pc||'')+'" placeholder="805-555-1234"></div>'+
+        '<div class="sheet-msg" id="acMsg"></div>'+
+        '<div class="sheet-actions"><button type="button" class="btn ghost" id="acCancel">Cancel</button><button type="button" class="btn" id="acSave">Save changes</button></div>';
+      document.getElementById('acCancel').onclick=function(){ acctEdit=false; renderAccount(); };
+      document.getElementById('acSave').onclick=saveAccountEdit;
+    }
+  }
+  function saveAccountEdit(){
+    var sc=document.getElementById('acSc').value.trim(), pg=document.getElementById('acPg').value.trim(), pc=document.getElementById('acPc').value.trim();
+    var scD=sc.replace(/\D/g,''), pcD=pc.replace(/\D/g,''), m=document.getElementById('acMsg');
+    USER.sc=(scD.length===10?fmtPhone(scD):sc); USER.pg=pg; USER.pc=(pcD.length===10?fmtPhone(pcD):pc);
+    saveUser();
+    api('/api/camera/student_update',{student_id:USER.id, student_cell:USER.sc, parent_guardian:pg, parent_cell:USER.pc}).catch(function(){});
+    if(m){ m.className='sheet-msg ok'; m.textContent='Saved.'; }
+    setTimeout(function(){ acctEdit=false; renderAccount(); }, 500);
+  }
 
   // ===== missing-work hold dialog =====
   function openHold(){
