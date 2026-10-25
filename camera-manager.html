@@ -3232,8 +3232,13 @@
     var wrap=document.getElementById('ed-gearwrap'), host=document.getElementById('ed-gear');
     if(c.kind==='equipment'){ wrap.style.display='none'; host.innerHTML=''; edGearState=null; return; }
     wrap.style.display=''; host.innerHTML=''; edGearState={};
-    // Which UNITS are already on this checkout (linked by group === this record id).
-    var attached={}; equipRecs().forEach(function(e){ if(e.group===edId && statusOf(e)!=='returned') attached[e.item]=e.id; });
+    // Which UNITS are already on this checkout: linked by group===this record id, PLUS unlinked gear
+    // (group:'') that shares this reservation's key (same student + out/due) so a broken link still
+    // shows as "Added" and gets RE-LINKED on Save (the Jayden case). See resvKey.
+    var camKey=(c.student_id&&c.out)?resvKey(c):null;
+    var attached={}; equipRecs().forEach(function(e){ if(statusOf(e)==='returned') return;
+      if(e.group===edId){ attached[e.item]=e.id; }
+      else if(camKey && !e.group && resvKey(e)===camKey){ attached[e.item]=e.id; } });
     var gpool=gearPoolIds(), gtypes=gearTypes(), byType={};
     gpool.forEach(function(id){ var u=gearUnit(id); if(!u) return; (byType[u.type]=byType[u.type]||[]).push(id); });
     gOrderFor().forEach(function(t){
@@ -3296,7 +3301,8 @@
       if(g.on && !g.id){
         ops.push(camAPI('/api/camera/checkout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({kind:'equipment',item:key,group:pid,student_id:sid,out:out,due:due,status:status})}));
       } else if(g.on && g.id){
-        ops.push(camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:g.id,out:out,due:due,status:status,student_id:sid})}));
+        // include group:pid so a kept/newly-detected gear unit is (re-)linked to this camera, repairing a broken link.
+        ops.push(camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:g.id,group:pid,out:out,due:due,status:status,student_id:sid})}));
       } else if(!g.on && g.id){
         ops.push(camAPI('/api/camera/delete',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:g.id})}));
       }
