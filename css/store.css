@@ -552,8 +552,11 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
   .hero-top .catnav,.hero-top .datebar{flex:1 1 auto;width:100%;}
   .hero-top .datebar-row{flex-wrap:wrap;gap:12px;}
   .util-l,.util-r{font-size:.68rem;}
-  .hero-top .catnav-row{justify-content:space-between;}
-  .catn{padding:10px 6px;font-size:.64rem;}
+  /* category nav on phone: larger icons + labels, still all four on ONE row (no stack, no scroll).
+     Tighter letter-spacing + minimal padding buys the width the bigger type needs. */
+  .hero-top .catnav-row{justify-content:space-between;overflow-x:hidden;}
+  .catn{padding:9px 2px;font-size:.78rem;letter-spacing:.02em;gap:6px;}
+  .catn-ic{width:60px;height:47px;}
   .datebar-leadwrap{flex-basis:100%;max-width:none;} .datebar-lead{font-size:.95rem;} .datebar-note{font-size:.72rem;}
   /* three date boxes in ONE row on phones (Checkout, Return, Days) */
   .datecards{flex:1 1 100%;gap:5px;flex-wrap:nowrap;}
