@@ -1317,6 +1317,12 @@
   function isSchoolDayISO(iso){ if(typeof schoolDays!=='undefined' && Array.isArray(schoolDays)) return schoolDays.indexOf(iso)!==-1;
     var w=new Date(iso+'T00:00:00').getDay(); return w!==0 && w!==6; }
   function nextSchoolDayISO(iso){ var x=iso; for(var i=0;i<14;i++){ x=addDays(x,1); if(isSchoolDayISO(x)) return x; } return x; }
+  // First school day of the week (Monday, or the first day back if Monday is a holiday): the board leads with
+  // Incoming that day since the weekend's cameras are coming back. Every other school day leads with Outgoing.
+  function isFirstSchoolDayOfWeek(iso){ var dow=new Date(iso+'T00:00:00').getDay();
+    if(dow===0||dow===6||!isSchoolDayISO(iso)) return false;
+    for(var back=1; back<dow; back++){ if(isSchoolDayISO(addDays(iso,-back))) return false; }   // an earlier school day this week -> today is not the first
+    return true; }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   // ---- Custom framework date picker: replaces a native <input type=date>. Keeps the hidden input
   // as the value store (existing code reads/sets .value), overlays a teal month-grid popover. ----
@@ -1527,7 +1533,7 @@
     renderTodayBoard(); updateSummary(); }
   // ---- per-item line board: each piece its own line (kit number big, student second), grouped by
   //      bundle so one student's items travel together; a per-column search floats a type to the top. ----
-  var TBVIEW='out';                                     // active view: 'out' (hand out) | 'in' (due back) | 'checked' (in hands now)
+  var TBVIEW=isFirstSchoolDayOfWeek(todayISO())?'in':'out';   // active view: Monday (weekend returns) defaults to Incoming; other days to Outgoing. 'out'|'in'|'checked'|'avail'
   var TBSORT=(function(){ try{ return sessionStorage.getItem('tbsort')||'cam'; }catch(e){ return 'cam'; } })();  // 'cam' = camera-kit number order (default) | 'name' = student last name
   var TBQ={out:'',in:'',checked:'',avail:''};           // per-view search text
   var TBSEL={out:false,in:false,checked:false,avail:false};   // multi-select mode per view
