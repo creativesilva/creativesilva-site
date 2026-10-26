@@ -534,7 +534,10 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
   /* hero: stack the nav + date band on phones, reveal the image below */
   .store-hero{min-height:0;padding-bottom:0;}
   .hero-top{flex-direction:column;gap:14px;padding-bottom:10px;}
-  .hero-hiw .hiw-steps{grid-template-columns:repeat(2,1fr);gap:10px;padding:12px 0 14px;}
+  /* narrow: the 1-5 steps become a horizontal swipe scroller (one row), not a tall stack */
+  .hero-hiw .hiw-steps{display:flex;overflow-x:auto;gap:10px;padding:12px 0 14px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .hero-hiw .hiw-steps::-webkit-scrollbar{display:none;}
+  .hero-hiw .hiw-step{flex:0 0 80%;max-width:280px;scroll-snap-align:start;}
   .hero-top .catnav,.hero-top .datebar{flex:1 1 auto;width:100%;}
   .hero-top .datebar-row{flex-wrap:wrap;gap:12px;}
   .util-l,.util-r{font-size:.68rem;}
