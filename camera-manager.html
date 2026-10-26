@@ -58,7 +58,9 @@
   .cal-hero-clock{width:150px;height:46px;border:0;background:transparent;display:block;}
   .intro .sub{display:none;}
   .intro{justify-content:center;}
-  .intro{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px;}
+  .intro{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
+  .summ-metric{display:inline-flex;align-items:center;flex:0 1 auto;}
+  .summary .poolbar-wrap{flex:0 0 auto;}
   .sub{color:var(--muted);font-size:.95rem;margin:0;flex:1 1 320px;}
   /* Top-level buttons share ONE pixel height (38px); in-card .btn.sm share a smaller one (32px). */
   .btn{flex:0 0 auto;height:38px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font);font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#04110f;background:var(--teal);border:1px solid var(--teal);padding:0 18px;cursor:pointer;text-decoration:none;transition:filter .15s;}
@@ -1025,10 +1027,9 @@
     </div>
   </div>
 
-  <div id="poolbar" class="poolbar-wrap" role="group" aria-label="Teacher view"></div>
-
   <div class="summary">
-    <div><span class="big" id="availn">0</span> <span class="lab">of <span id="totn">18</span> cameras available <span id="availday">today</span></span></div>
+    <div id="poolbar" class="poolbar-wrap" role="group" aria-label="Teacher view"></div>
+    <div class="summ-metric"><span class="big" id="availn">0</span> <span class="lab">of <span id="totn">18</span> <span id="availunit">cameras</span> available <span id="availday">today</span></span></div>
     <div class="sync" id="sync">Connecting&#8230;</div>
   </div>
 
@@ -1406,8 +1407,16 @@
   function fmtDoWMD(iso){ if(!iso) return ''; var p=String(iso).split('-'); return dowShort(iso)+' '+(+p[1])+'/'+(+p[2]); }   // "Mon 10/20" (no year, compact)
   function dowShort(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]; }
   function updateSummary(){
-    var an=document.getElementById('availn'); if(an) an.textContent=availCountOnDay(SELDAY);
-    var tn=document.getElementById('totn'); if(tn) tn.textContent=viewCams().length;
+    var an=document.getElementById('availn'), tn=document.getElementById('totn'), au=document.getElementById('availunit');
+    if(SELECTED_POOL==='mankin'){                               // Digital Arts: show iPad STYLUSES available, not cameras
+      var ids=gearPoolIds().filter(function(id){ var u=gearUnit(id); return u && u.type==='apple_pencil'; });
+      var free=ids.filter(function(id){ return gearState(id)==='avail'; }).length;
+      if(an) an.textContent=free; if(tn) tn.textContent=ids.length;
+      if(au) au.textContent=(ids.length===1?'iPad stylus':'iPad styluses');
+    } else {
+      if(an) an.textContent=availCountOnDay(SELDAY); if(tn) tn.textContent=viewCams().length;
+      if(au) au.textContent='cameras';
+    }
     var ad=document.getElementById('availday'); if(ad){ ad.textContent=(SELDAY===todayISO()?'today':'on '+dowShort(SELDAY))+' · '+fmtMDY(SELDAY); }
   }
   function daysBetween(a,b){ return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000); }
@@ -2295,10 +2304,13 @@
     }
     reqBundle('1012360','Emma Flores',1,'Photo 1','Cam 16',[],'photo2');            // Photo-1 student asked for a Photo-2 R8
     reqBundle('1012361','Jacob Rivera',3,'Photo 1','Cam 07',['tripod-03'],'missing'); // on a missing-work hold, requested anyway
+    // Mankin (Digital Arts): 38 iPad styluses, one checked out, so her summary reads "37 of 38 iPad styluses".
+    var mkStyli=[]; for(var ps=1;ps<=38;ps++){ var pid='apple_pencil-'+('0'+ps).slice(-2); units[pid]={type:'apple_pencil',label:'iPad Stylus '+ps,pool:'mankin',kit:''}; mkStyli.push(pid); }
+    recs.push({id:nid(),kind:'equipment',item:'apple_pencil-04',group:'',camera:'',student_id:'1013001',student_name:'Noa Kim',period:1,course:'Digital Arts',teacher:'Mankin',out:tod,due:tmr,status:'out',picked_up_date:tod,returned:false,returned_date:'',note:'',created:tod+'T15:00:00Z'});
     return {cameras:cams,checkouts:recs,assets:{},cards:{},
       pools:{silva:cams,garcia:cams.slice(0,15),mankin:['Cam 19','Cam 20','Cam 21']},
-      equipment_pools:{silva:gpool,garcia:[],mankin:[]},equipment_units:units,
-      equipment_types:{tripod:{label:'Tripod'},speedlite:{label:'Speedlite'},reflector:{label:'Reflector'},wide:{label:'Ultra-Wide'},zoom:{label:'Ultra-Zoom'},bluetooth:{label:'Bluetooth Remote'}},
+      equipment_pools:{silva:gpool,garcia:[],mankin:mkStyli},equipment_units:units,
+      equipment_types:{tripod:{label:'Tripod'},speedlite:{label:'Speedlite'},reflector:{label:'Reflector'},wide:{label:'Ultra-Wide'},zoom:{label:'Ultra-Zoom'},bluetooth:{label:'Bluetooth Remote'},apple_pencil:{label:'iPad Stylus'}},
       p2_grants:[]};
   }
 
