@@ -1129,12 +1129,20 @@
     var crs=String(u.course||''); var mp=crs.match(/photography\s*(\d)/i); if(mp) crs='Photo '+('0'+mp[1]).slice(-2);
     return [per, u.teacher||'', crs].filter(Boolean).map(esc).join('<i class="bs-sep">|</i>');
   }
+  // Digital Arts students (Mankin pool) get the stylus icon on the Accessories tab; everyone else keeps the tripod.
+  function applyCatIcons(){
+    var acc=document.querySelector('.catn[data-cat="accessories"] .catn-ic');
+    if(!acc) return;
+    var da=(USER && USER.pool==='mankin');
+    acc.style.setProperty('--ic', "url('/assets/Icons/store/"+(da?'stylus-v1':'accessories-v1')+".png')");
+  }
   function refreshAccount(){
     var a=document.getElementById('acctBtn');
     if(USER){ a.classList.add('in'); a.textContent=USER.label||'My account'; }
     else { a.classList.remove('in'); a.textContent='My Account'; }
     var bs=document.getElementById('brandStu');
     if(bs){ if(USER && (USER.period||USER.teacher||USER.course)){ bs.innerHTML=brandStuLine(USER); bs.hidden=false; } else { bs.hidden=true; bs.innerHTML=''; } }
+    applyCatIcons();   // Accessories icon = stylus for Digital Arts students, tripod otherwise
     updateBag(); refreshPickupInfo();
     rerender();   // re-apply the course gray-out / in-bag state for the current student
     var hb=document.getElementById('holdBanner');
