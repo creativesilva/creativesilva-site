@@ -1018,7 +1018,7 @@
       <button type="button" class="silva-uni-cattrigger cm-toolsbtn" id="cmToolsBtn" aria-haspopup="true" aria-expanded="false">Tools &#9662;</button>
       <div class="cm-toolsmenu" id="cmToolsMenu" hidden>
         <button type="button" class="cm-toolitem" id="reportsBtn" title="Missing kit items to order (opens a printable report)">Missing Items</button>
-        <a class="cm-toolitem" id="studentCalBtn" href="/calendar.html?from=console" target="_blank" rel="noopener">Student Calendar</a>
+        <a class="cm-toolitem" id="studentCalBtn" href="/reserve.html" target="_blank" rel="noopener">Student Store</a>
         <a class="cm-toolitem" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
         <button type="button" class="cm-toolitem" id="leadsBtn" title="Your class leads by period: Equipment Managers, Photo Walk EQs, and Team Attendance Managers">Class Leads</button>
       </div>
@@ -1247,16 +1247,17 @@
     : ['wide','zoom','speedlite','tripod','reflector','bluetooth','mankin_tripod','apple_pencil']; }
   // Point the Student Calendar button, the embedded preview, and the QR at the SELECTED teacher's
   // scoped link, so each teacher hands their class a link that shows only their own equipment.
-  function studentCalURL(abs){ return (abs?'https://www.creativesilva.com':'')+'/calendar.html?teacher='+SELECTED_POOL; }
+  function studentCalURL(abs){ return (abs?'https://www.creativesilva.com':'')+'/calendar.html?teacher='+SELECTED_POOL; }     // embedded MONTH calendar (teacher console calframe)
+  function studentStoreURL(abs){ return (abs?'https://www.creativesilva.com':'')+'/reserve.html?teacher='+SELECTED_POOL; }    // the student reservation STORE (launched 2026-10-26)
   function syncStudentCalLink(){
-    var a=document.getElementById('studentCalBtn'); if(a) a.href=studentCalURL(false)+'&from=console';
-    var f=document.getElementById('calframe'); if(f){ var want=studentCalURL(false)+'&embed=1'; if((f.getAttribute('src')||'')!==want) f.setAttribute('src',want); }
+    var a=document.getElementById('studentCalBtn'); if(a) a.href=studentStoreURL(false);                                     // the Tools link + QR open the STORE now
+    var f=document.getElementById('calframe'); if(f){ var want=studentCalURL(false)+'&embed=1'; if((f.getAttribute('src')||'')!==want) f.setAttribute('src',want); }   // calframe stays the month calendar
   }
 
   // ---- shared header icon ----
   // Show the reservations QR (students scan it to open the student calendar on their phones).
   function showQR(){
-    var CAL_URL=studentCalURL(true);   // scoped to the selected teacher so their QR shows only their gear
+    var CAL_URL=studentStoreURL(true);   // QR -> the student store, scoped to the selected teacher
     var ov=document.createElement('div'); ov.className='silva-confirm-ov';
     var panel=document.createElement('div'); panel.className='silva-confirm-panel'; panel.style.textAlign='center'; panel.style.maxWidth='420px'; panel.style.position='relative';
     panel.setAttribute('role','dialog'); panel.setAttribute('aria-modal','true');

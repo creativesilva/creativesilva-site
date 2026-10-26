@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<!-- LAUNCH 2026-10-26: the student reservation flow moved to the store (reserve.html). Any direct (non-embedded)
+     visit forwards there, preserving ?teacher=, so every student link + QR + Canvas link lands on the store.
+     The teacher console's embedded month calendar loads this page with ?embed=1 and is NOT redirected. -->
+<script>(function(){try{var p=new URLSearchParams(location.search);if(p.get('embed')!=='1'){var t=p.get('teacher');location.replace('/reserve.html'+(t?('?teacher='+encodeURIComponent(t)):''));}}catch(e){}})();</script>
 <title>Equipment Reservations | Pioneer Valley Photography</title>
 <!-- Home-screen web app: launch chromeless (no Safari bars) when added to the Home Screen. -->
 <meta name="apple-mobile-web-app-capable" content="yes" />
