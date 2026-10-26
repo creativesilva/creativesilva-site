@@ -211,6 +211,7 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 .hiw-body{flex:1 1 auto;min-width:0;padding:11px 13px 11px 2px;display:flex;flex-direction:column;gap:3px;justify-content:center;}
 .hiw-body b{font-family:var(--font-head);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.9rem;color:var(--teal-bright);line-height:1.08;}
 .hiw-body span{font-size:.73rem;color:#c3d0d0;line-height:1.34;}
+.hiw-ctrl{display:none;}
 
 /* ---- calendar view: month with per-day free-camera counts (collapsed-by-default accordion) ---- */
 .calview{padding:2px 0 18px;}
@@ -534,10 +535,20 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
   /* hero: stack the nav + date band on phones, reveal the image below */
   .store-hero{min-height:0;padding-bottom:0;}
   .hero-top{flex-direction:column;gap:14px;padding-bottom:10px;}
-  /* narrow: the 1-5 steps become a horizontal swipe scroller (one row), not a tall stack */
-  .hero-hiw .hiw-steps{display:flex;overflow-x:auto;gap:10px;padding:12px 0 14px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  /* narrow: the 1-5 steps become a horizontal carousel (one row), not a tall stack.
+     The next card peeks at the right edge, and a control row (arrows + square position
+     dots) under it makes scrolling obvious and mouse-friendly. Drag-to-scroll is wired in JS. */
+  .hero-hiw .hiw-steps{display:flex;overflow-x:auto;gap:10px;padding:12px 0 8px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;cursor:grab;}
+  .hero-hiw .hiw-steps.drag{cursor:grabbing;scroll-snap-type:none;}
   .hero-hiw .hiw-steps::-webkit-scrollbar{display:none;}
-  .hero-hiw .hiw-step{flex:0 0 80%;max-width:280px;scroll-snap-align:start;}
+  .hero-hiw .hiw-step{flex:0 0 82%;max-width:300px;min-width:0;scroll-snap-align:center;}
+  .hiw-ctrl{display:flex;align-items:center;justify-content:center;gap:14px;padding:0 20px 14px;}
+  .hiw-arrow{width:30px;height:30px;flex:0 0 30px;display:flex;align-items:center;justify-content:center;background:rgba(14,19,19,.82);border:1px solid var(--surface-bd);color:var(--teal-bright);font-size:1.35rem;line-height:1;cursor:pointer;font-family:var(--font-head);padding:0 0 3px;transition:opacity .15s ease,border-color .15s ease;}
+  .hiw-arrow:hover{border-color:var(--teal-bright);}
+  .hiw-arrow:disabled{opacity:.28;cursor:default;border-color:var(--surface-bd);}
+  .hiw-dots{display:flex;align-items:center;gap:8px;}
+  .hiw-dot{width:8px;height:8px;flex:0 0 8px;padding:0;background:rgba(255,255,255,.26);border:0;cursor:pointer;transition:width .2s ease,background .2s ease;}
+  .hiw-dot.on{width:22px;background:var(--teal-bright);}
   .hero-top .catnav,.hero-top .datebar{flex:1 1 auto;width:100%;}
   .hero-top .datebar-row{flex-wrap:wrap;gap:12px;}
   .util-l,.util-r{font-size:.68rem;}

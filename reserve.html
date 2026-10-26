@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=45" />
+<link rel="stylesheet" href="/css/store.css?v=46" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -86,12 +86,17 @@
   </div>
   <!-- How it works: a strip across the bottom of the hero image (replaces the old accordion below the hero) -->
   <div class="hero-hiw" id="howitworks">
-    <div class="wrap hiw-steps">
+    <div class="wrap hiw-steps" id="hiwSteps">
       <div class="hiw-step"><div class="hiw-num">1</div><div class="hiw-body"><b>Pick your dates</b><span>Set your checkout day, pickup time, and return time.</span></div></div>
       <div class="hiw-step"><div class="hiw-num">2</div><div class="hiw-body"><b>Choose your gear</b><span>Add the cameras and equipment you need to your Equipment Bag.</span></div></div>
       <div class="hiw-step"><div class="hiw-num">3</div><div class="hiw-body"><b>Check the kit</b><span>At pickup, make sure every item on the kit list is in your bag.</span></div></div>
       <div class="hiw-step"><div class="hiw-num">4</div><div class="hiw-body"><b>Use it</b><span>Use your gear during your rental period. Keep it safe and dry.</span></div></div>
       <div class="hiw-step"><div class="hiw-num">5</div><div class="hiw-body"><b>Return it</b><span>Bring it all back in the same bag and condition on your return day.</span></div></div>
+    </div>
+    <div class="wrap hiw-ctrl">
+      <button type="button" class="hiw-arrow" data-dir="-1" aria-label="Previous step">&lsaquo;</button>
+      <div class="hiw-dots"></div>
+      <button type="button" class="hiw-arrow" data-dir="1" aria-label="Next step">&rsaquo;</button>
     </div>
   </div>
 </div>
@@ -1386,6 +1391,50 @@
   loadCal();
   // Prompt for a student number 3s after the page loads (unless already signed in or the sheet is open).
   if(!USER){ setTimeout(function(){ var ov=document.getElementById('signinOv'); if(!USER && ov && !ov.classList.contains('open')) openSignin(); }, 3000); }
+})();
+</script>
+<script>
+/* How-it-works carousel (narrow view only): position dots, prev/next arrows, mouse drag-to-scroll;
+   native swipe + snap on touch. The control row is hidden by CSS at wide widths. */
+(function(){
+  var steps=document.getElementById('hiwSteps');
+  var ctrl=document.querySelector('.hiw-ctrl');
+  if(!steps||!ctrl) return;
+  var cards=[].slice.call(steps.querySelectorAll('.hiw-step'));
+  if(!cards.length) return;
+  var dotsWrap=ctrl.querySelector('.hiw-dots');
+  var arrows=[].slice.call(ctrl.querySelectorAll('.hiw-arrow'));
+  var dots=cards.map(function(_,i){
+    var d=document.createElement('button');
+    d.type='button'; d.className='hiw-dot'; d.setAttribute('aria-label','Go to step '+(i+1));
+    d.addEventListener('click',function(){ scrollToCard(i); });
+    dotsWrap.appendChild(d); return d;
+  });
+  function current(){
+    var cr=steps.getBoundingClientRect(), cc=cr.left+cr.width/2, best=0, bd=1e9;
+    cards.forEach(function(card,i){ var r=card.getBoundingClientRect(), dd=Math.abs((r.left+r.width/2)-cc); if(dd<bd){bd=dd;best=i;} });
+    return best;
+  }
+  function scrollToCard(i){
+    i=Math.max(0,Math.min(cards.length-1,i));
+    var cr=steps.getBoundingClientRect(), r=cards[i].getBoundingClientRect();
+    steps.scrollTo({left:steps.scrollLeft+((r.left+r.width/2)-(cr.left+cr.width/2)), behavior:'smooth'});
+  }
+  function sync(){
+    var i=current();
+    dots.forEach(function(d,j){ d.classList.toggle('on', j===i); });
+    arrows.forEach(function(a){ var dir=+a.getAttribute('data-dir'); a.disabled=(dir<0&&i<=0)||(dir>0&&i>=cards.length-1); });
+  }
+  arrows.forEach(function(a){ a.addEventListener('click',function(){ scrollToCard(current()+(+a.getAttribute('data-dir'))); }); });
+  var raf; steps.addEventListener('scroll',function(){ cancelAnimationFrame(raf); raf=requestAnimationFrame(sync); });
+  var down=false,sx=0,sl=0,moved=false;
+  steps.addEventListener('pointerdown',function(e){ if(e.pointerType==='touch') return; down=true;moved=false;sx=e.clientX;sl=steps.scrollLeft;steps.classList.add('drag'); try{steps.setPointerCapture(e.pointerId);}catch(_){ } });
+  steps.addEventListener('pointermove',function(e){ if(!down) return; var dx=e.clientX-sx; if(Math.abs(dx)>3)moved=true; steps.scrollLeft=sl-dx; });
+  function end(e){ if(!down)return; down=false; steps.classList.remove('drag'); try{steps.releasePointerCapture(e.pointerId);}catch(_){ } if(moved)scrollToCard(current()); }
+  steps.addEventListener('pointerup',end); steps.addEventListener('pointercancel',end); steps.addEventListener('pointerleave',end);
+  steps.addEventListener('dragstart',function(e){ e.preventDefault(); });
+  sync();
+  window.addEventListener('resize',function(){ cancelAnimationFrame(raf); raf=requestAnimationFrame(sync); });
 })();
 </script>
 </body>
