@@ -455,7 +455,7 @@
     document.getElementById('calGrid').querySelectorAll('[data-d]').forEach(function(b){ b.onclick=function(){
       var p=b.getAttribute('data-d').split('-'); checkout=new Date(+p[0],+p[1]-1,+p[2]); pickup=null; returnTime=null; renderDates(); rerender(); planStep=2; renderPlan(); }; });
   }
-  document.getElementById('dcCheckout').addEventListener('click', openPlan);
+  document.getElementById('dcCheckout').addEventListener('click', function(){ openPlan(1); });   // always open at step 1 (the calendar); a bare openPlan ref passed the click event as atStep and jumped to the return-time step
   document.getElementById('calPrev').addEventListener('click', function(){ calView.setMonth(calView.getMonth()-1); drawCal(); });
   document.getElementById('calNext').addEventListener('click', function(){ calView.setMonth(calView.getMonth()+1); drawCal(); });
   document.getElementById('planBack').addEventListener('click', function(){ if(planStep>1){ planStep--; renderPlan(); } });
