@@ -233,7 +233,7 @@
 <div class="sov" id="holdOv" aria-hidden="true">
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="holdTitle">
     <div class="sheet-bd">
-      <h2 id="holdTitle">Reservations on hold</h2>
+      <h2 id="holdTitle">Equipment checkout on hold</h2>
       <div class="rv-block" id="holdBody"></div>
       <div class="ov-row" id="holdOvRow" style="display:none">
         <input type="password" id="holdOvc" inputmode="numeric" autocomplete="off" placeholder="Teacher override code" />
@@ -1150,8 +1150,8 @@
       var lim=(USER.missing_limit!=null?USER.missing_limit:6);
       var more=(USER.missing!=null)?Math.max(1,USER.missing-lim):null;
       hb.style.display='';
-      hb.innerHTML='<div class="wrap holdbar-row"><span><b>Reservations are on hold.</b> '+
-        (USER.missing!=null?('You have '+USER.missing+' missing assignments. Turn in '+more+' more to check out equipment.'):'You have too many missing assignments right now.')+
+      hb.innerHTML='<div class="wrap holdbar-row"><span><b>Equipment checkout is on hold.</b> '+
+        (USER.missing!=null?('You have '+USER.missing+' missing assignments in Photography; turn in '+more+' more to check out equipment again.'):'You have too many missing assignments to check out equipment right now.')+
         ' You can still browse everything below.</span>'+
         '<button type="button" class="hb-link" id="hbWhy">Details</button></div>';
       var w=document.getElementById('hbWhy'); if(w) w.onclick=openHold;
@@ -1195,9 +1195,20 @@
     var L=window._siLookup||{};
     var sc=document.getElementById('siSc').value.trim(), pg=document.getElementById('siPg').value.trim(), pc=document.getElementById('siPc').value.trim();
     var scD=sc.replace(/\D/g,''), pcD=pc.replace(/\D/g,'');
+    // HARD RULE: a student cannot continue without all three contacts (own cell, parent/guardian name, parent/guardian cell).
+    var m2=document.getElementById('siMsg2'), miss=[];
+    if(scD.length!==10) miss.push('your cell number');
+    if(!pg) miss.push('a parent or guardian name');
+    if(pcD.length!==10) miss.push('a parent or guardian cell number');
+    if(miss.length){
+      var phrase=(miss.length===1)?miss[0]:(miss.slice(0,-1).join(', ')+' and '+miss[miss.length-1]);
+      m2.className='sheet-msg err'; m2.textContent='All three are required to continue. Please add '+phrase+'.';
+      return;
+    }
+    m2.className='sheet-msg'; m2.textContent='';
     USER={ id:L.id, label:L.label, name:L.name, period:L.period, course:L.course, pool:L.pool, teacher:L.teacher,
            p2_ok:!!L.p2_ok, hold:false, gearUnlocked:false,
-           sc:(scD.length===10?fmtPhone(scD):''), pg:pg, pc:(pcD.length===10?fmtPhone(pcD):'') };
+           sc:fmtPhone(scD), pg:pg, pc:fmtPhone(pcD) };
     saveUser(); refreshAccount(); close('signinOv');
     if(scD.length===10 || pg || pcD.length===10){
       api('/api/camera/student_update',{student_id:L.id, student_cell:USER.sc, parent_guardian:pg, parent_cell:USER.pc}).catch(function(){});
@@ -1319,9 +1330,9 @@
     var body=document.getElementById('holdBody');
     if(USER && USER.missing!=null){
       var more=Math.max(1,USER.missing-lim);
-      body.innerHTML='<b>Your reservations are on hold.</b>You have <b>'+USER.missing+'</b> missing assignments in your Photography class. Equipment checkout opens back up once you are at <b>'+lim+'</b> or fewer, so turn in <b>'+more+'</b> more. You can still browse all the gear below. If you need equipment for class, talk with Mr. Silva.';
+      body.innerHTML='<b>Equipment checkout is on hold for your account.</b>You currently have <b>'+USER.missing+'</b> missing assignments in Photography. To restore your checkout access, please turn in <b>'+more+'</b> more so your total is <b>'+lim+'</b> or fewer. You can still browse all the equipment below. If you need gear for a class assignment, please see Mr. Silva.';
     } else {
-      body.innerHTML='<b>Your reservations are on hold.</b>You have more than '+lim+' missing assignments in your Photography class. Turn in your missing work, then try again. You can still browse all the gear below. If you need equipment for class, talk with Mr. Silva.';
+      body.innerHTML='<b>Equipment checkout is on hold for your account.</b>You currently have more than <b>'+lim+'</b> missing assignments in Photography. Please turn in your missing work so your total is <b>'+lim+'</b> or fewer to restore your checkout access. You can still browse all the equipment below. If you need gear for a class assignment, please see Mr. Silva.';
     }
     document.getElementById('holdOvRow').style.display='none';
     document.getElementById('holdOvc').value=''; document.getElementById('holdMsg').textContent='';
