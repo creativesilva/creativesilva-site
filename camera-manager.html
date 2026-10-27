@@ -423,6 +423,9 @@
   .resv-done{font-family:var(--font);font-size:.64rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#8ff0b0;}
   .resv-allback{font-family:var(--font);font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#8ff0b0;text-align:center;padding:8px;}
   .resv-foot{display:flex;flex-direction:column;gap:8px;}
+  /* Check in is the primary action on a checked-out reservation: gold-filled, matching the old inline button. */
+  .resv-foot .resv-checkin{background:var(--gold);color:#2a1e00;}
+  .resv-foot .resv-checkin:hover{background:#ffce4d;}
   .go.resv-see{background:transparent;color:var(--teal-lt);border:1px solid var(--teal);}
   .go.resv-see:hover{background:rgba(0,184,184,.1);color:var(--teal-lt);}
   /* Done cancels anything not picked up: gold-accented so it reads as a finish/wipe, not a plain action. */
@@ -577,6 +580,8 @@
      never covered. Stays below silva-confirm (400) and toast (420), which should sit on top of a modal. */
   .modal{position:fixed;inset:0;background:rgba(2,12,12,.66);backdrop-filter:blur(8px) saturate(1.1);-webkit-backdrop-filter:blur(8px) saturate(1.1);display:none;align-items:center;justify-content:center;padding:20px;z-index:130;}
   .modal.open{display:flex;}
+  /* The return checklist can open on top of the reservation card (footer Check in), so it must out-rank it. */
+  #retmodal{z-index:141;}
   /* Pop-outs NEVER clip: cap the panel to the viewport and make it a flex column so the header
      (title + close) is always visible and only the body scrolls. Applies to every modal. */
   .mpanel{background:linear-gradient(160deg,rgba(255,255,255,.06) 0%,rgba(10,13,13,.98) 60%);border:1px solid var(--surface-bd);border-top:3px solid var(--teal);width:100%;max-width:440px;box-shadow:0 24px 60px rgba(0,0,0,.6);max-height:calc(100vh - 40px);display:flex;flex-direction:column;overflow:hidden;}
@@ -1980,9 +1985,7 @@
       var act='';
       if(s==='reserved'){ act='<button type="button" class="btn sm" data-resvpick="'+esc(it.id)+'">Picked up</button>'+
         '<button type="button" class="btn sm ghost" data-resvswap="'+esc(it.id)+'">Swap</button>'; }
-      else if(s==='out'){ act=isCam
-        ? '<button type="button" class="btn sm warn" data-resvcam="'+esc(it.id)+'">Check in kit</button>'
-        : '<button type="button" class="btn sm warn" data-resvret="'+esc(it.id)+'">Returned</button><button type="button" class="btn sm danger" data-resvmiss="'+esc(it.id)+'">Missing</button>'; }
+      else if(s==='out'){ act=''; }   // check-in is the stacked footer button now, not an inline per-row button
       else { act='<span class="resv-done">Returned ✓</span>'; }
       return '<div class="resv-item ri-'+s+'"><span class="resv-ilabel">'+label+'</span>'+chip+'<span class="resv-iact">'+act+'</span></div>';
     }).join('');
@@ -1992,12 +1995,13 @@
     if(allRet){ foot+='<div class="resv-allback">All items are back.</div>'; }
     else {
       if(anyReserved && resvLeft>1) foot+='<button type="button" class="go" id="resvPickAll">Pick up all ('+resvLeft+')</button>';
+      // Check in: a prominent stacked button (not inline on the item row). It disappears once everything is back.
+      if(anyOut) foot+='<button type="button" class="go resv-checkin" id="resvCheckin">Check in</button>';
       // Done: finish this student. Anything still reserved (not picked up) is cancelled so a no-show never stays linked to them.
       if(anyReserved) foot+='<button type="button" class="go resv-done-btn" id="resvDone">Cancel</button>';
-      if(anyOut && items.length>1) foot+='<button type="button" class="go" id="resvAll">Check in everything</button>';
     }
-    foot+='<button type="button" class="go resv-see" id="resvReceipt">Receipt</button>';
-    foot+='<button type="button" class="go resv-see" id="resvSee">Edit Reservation</button></div>';
+    foot+='<button type="button" class="go resv-see" id="resvSee">Edit Reservation</button>';
+    foot+='<button type="button" class="go resv-see" id="resvReceipt">Receipt</button></div>';
     document.getElementById('resvBody').innerHTML=hero+head+prog+'<div class="resv-items">'+rows+'</div>'+foot;
     var b=document.getElementById('resvBody');
     b.querySelectorAll('[data-resvpick]').forEach(function(el){ el.onclick=function(){ resvSetStatus(el.getAttribute('data-resvpick'),'out'); }; });
@@ -2007,7 +2011,7 @@
     b.querySelectorAll('[data-resvcam]').forEach(function(el){ el.onclick=function(){ var id=el.getAttribute('data-resvcam'); closeResv(); openReturnChecklist(id); }; });
     b.querySelectorAll('[data-camdetail]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); var cam=el.getAttribute('data-camdetail'); closeResv(); openCamDetail(cam); }; });
     b.querySelectorAll('[data-geardetail]').forEach(function(el){ el.onclick=function(ev){ ev.stopPropagation(); var gid=el.getAttribute('data-geardetail'); closeResv(); openGearDetail(gid); }; });
-    var all=document.getElementById('resvAll'); if(all) all.onclick=function(){ resvCheckInAll(parent); };
+    var ci=document.getElementById('resvCheckin'); if(ci) ci.onclick=function(){ resvCheckInKit(parent); };
     var pickAll=document.getElementById('resvPickAll'); if(pickAll) pickAll.onclick=function(){ resvPickAll(parent); };
     var done=document.getElementById('resvDone'); if(done) done.onclick=function(){ resvDone(parent); };
     var see=document.getElementById('resvSee'); if(see) see.onclick=function(){ var pid=parent.id; closeResv(); openEditCheckout(pid); };
@@ -2192,6 +2196,15 @@
     if(!outs.length){ if(resvId) renderResvModal(); return; }
     Promise.all(outs.map(function(x){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:x.id,status:'returned'})}); }))
       .then(function(){ return loadBoard(); }).then(function(){ if(resvId) renderResvModal(); }).catch(function(){ if(resvId) renderResvModal(); });
+  }
+  // The stacked footer "Check in": the next out camera kit opens its return checklist (linked gear rides along);
+  // the card stays open behind it, and markReturned re-renders this card afterward so the button disappears.
+  // A reservation with only loose gear (no camera) just marks it returned.
+  function resvCheckInKit(parent){
+    var outs=resvItems(parent).filter(function(x){return statusOf(x)==='out';});
+    var cam=outs.filter(function(x){return x.kind!=='equipment';})[0];
+    if(cam){ openReturnChecklist(cam.id); }   // do NOT closeResv: the checklist (z-index 141) stacks above this card
+    else { resvCheckInAll(parent); }
   }
   // Pick up the whole kit in one tap, then close the card (the full-kit fast path).
   function resvPickAll(parent){
@@ -3038,7 +3051,7 @@
         if(d.returned) return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:d.id,status:'returned'})});
         return camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:d.id,status:'out',pending:true,note:d.note||'Not returned with the kit'})});
       });
-      if(eqCalls.length) Promise.all(eqCalls).then(function(){ loadBoard(); }).catch(function(){ loadBoard(); });
+      if(eqCalls.length) Promise.all(eqCalls).then(function(){ return loadBoard(); }).then(function(){ if(resvId) renderResvModal(); }).catch(function(){ loadBoard(); });
     };
   })();
 
