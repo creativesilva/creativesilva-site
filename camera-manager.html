@@ -143,12 +143,15 @@
   .tb-tg.checked.on{background:var(--orange);color:#2a1300;} .tb-tg.checked.on .tb-tgn{background:rgba(0,0,0,.2);color:#2a1300;}
   .tb-tg.avail{color:#86e0a6;}
   .tb-tg.avail.on{background:var(--ok);color:#04140a;} .tb-tg.avail.on .tb-tgn{background:rgba(0,0,0,.2);color:#04140a;}
-  /* Overdue (red) + Requests (purple) tabs. The .hot state tints the tab when there is something waiting, even when it is not the active view, so it pulls the eye. */
-  .tb-tg.overdue{color:#9fb0b0;} .tb-tg.overdue.hot{color:#ff9a8a;background:rgba(224,64,58,.12);}
+  /* Overdue (red) + Requests (purple) tabs ALWAYS forecast their section color in the label + count square (like Outgoing=gold, Incoming=teal, Available=green). The .hot state adds a background tint when something is waiting; .on is the active view (rules last so they win). */
+  .tb-tg.overdue{color:#d49b94;} .tb-tg.overdue.hot{color:#ff9a8a;background:rgba(224,64,58,.12);}
+  .tb-tg.requests{color:#bdaee8;} .tb-tg.requests.hot{color:#d9ccff;background:rgba(139,92,246,.14);}
+  .tb-tg.overdue .tb-tgn{background:rgba(224,64,58,.2);color:#ffb3aa;}
+  .tb-tg.requests .tb-tgn{background:rgba(139,92,246,.26);color:#d9ccff;}
+  .tb-tg.overdue .tb-tgn.tb-tgn-od{background:var(--red);color:#fff;}
+  .tb-tg.requests .tb-tgn.tb-tgn-req{background:#8b5cf6;color:#fff;}
   .tb-tg.overdue.on{background:var(--red);color:#fff;} .tb-tg.overdue.on .tb-tgn{background:rgba(0,0,0,.22);color:#fff;}
-  .tb-tg.requests{color:#9fb0b0;} .tb-tg.requests.hot{color:#c9b8ff;background:rgba(139,92,246,.12);}
   .tb-tg.requests.on{background:#8b5cf6;color:#120a24;} .tb-tg.requests.on .tb-tgn{background:rgba(0,0,0,.2);color:#120a24;}
-  .tb-tgn.tb-tgn-od{background:var(--red);color:#fff;} .tb-tgn.tb-tgn-req{background:#8b5cf6;color:#fff;}
   /* Quick check-in button on an out-item row (Incoming / Overdue): sits just left of the due date; the rest of the row opens the detail card. */
   .til-ci{flex:0 0 auto;margin-left:auto;font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.62rem;padding:6px 11px;background:rgba(0,184,184,.14);border:1px solid var(--teal);color:var(--teal-lt);cursor:pointer;white-space:nowrap;}
   .til-ci:hover{background:var(--teal);color:#04110f;}
@@ -189,10 +192,10 @@
   .stu-searchbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px;padding:10px 14px;border:1px solid var(--line);border-left:4px solid var(--teal);background:var(--surface);}
   .stu-barlabel{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.7rem;color:var(--teal-lt);}
   .stu-barfield{flex:1 1 320px;display:flex;align-items:center;gap:8px;min-width:0;}
-  .stu-barin{flex:1 1 auto;min-width:0;background:#0b1414;border:1px solid var(--surface-bd);color:var(--text);font-family:var(--body);font-size:.92rem;padding:9px 12px;}
+  .stu-searchbar .stu-barin{flex:1 1 auto;min-width:0;height:42px;box-sizing:border-box;margin:0;background:#0b1414;border:1px solid var(--surface-bd);color:var(--text);font-family:var(--body);font-size:.92rem;padding:0 12px;}
   .stu-barin:focus{outline:none;border-color:var(--teal);}
   .stu-barin::placeholder{color:var(--faint);}
-  .stu-bargo{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.72rem;padding:9px 18px;background:rgba(0,184,184,.14);border:1px solid var(--teal);color:var(--teal-lt);cursor:pointer;}
+  .stu-bargo{flex:0 0 auto;height:42px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.72rem;padding:0 20px;background:rgba(0,184,184,.14);border:1px solid var(--teal);color:var(--teal-lt);cursor:pointer;}
   .stu-bargo:hover{background:var(--teal);color:#04110f;}
   .stu-barmsg{flex:1 1 100%;font-size:.82rem;color:var(--muted);}
   .stu-barmsg:empty{display:none;}
