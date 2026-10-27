@@ -155,7 +155,6 @@
   /* Quick check-in button on an out-item row (Incoming / Overdue): sits just left of the due date; the rest of the row opens the detail card. */
   .til-ci{flex:0 0 auto;margin-left:auto;font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.62rem;padding:6px 11px;background:rgba(0,184,184,.14);border:1px solid var(--teal);color:var(--teal-lt);cursor:pointer;white-space:nowrap;}
   .til-ci:hover{background:var(--teal);color:#04110f;}
-  .til-kit .til-ci{align-self:flex-start;}
   .til-date.overdue{color:#ff9a8a;}
   /* Requests view: a responsive grid of request cards (reuses .req-card from the review modal). */
   .tb-reqsub{font-size:.82rem;color:var(--muted);padding:12px 2px 10px;line-height:1.45;}
@@ -252,10 +251,10 @@
   .til-date.out{color:#ffd889;} .til-date.in{color:#8ff7f7;} .til-date.checked{color:#ffb380;}
   .til-chev{flex:0 0 auto;color:var(--faint);font-size:1.1rem;line-height:1;}
   /* Camera-kit line: the camera carries its gear as associated chips (one pickup line for the whole kit). */
-  .til-kit{align-items:flex-start;}
-  .til-kit .til-dot{margin-top:5px;} .til-kit .til-date{margin-top:1px;} .til-kit .til-chev{margin-top:3px;}
+  .til-kit{align-items:center;}   /* vertically center the dot, kit info, check-in button and due date on one row */
   .til-kitmain{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:3px;}
   .til-kittop{display:flex;align-items:baseline;gap:8px;min-width:0;}
+  .til-kittop .til-dot{align-self:center;}   /* center the status dot with the camera number on the kit's top line */
   .til-kitn{flex:0 0 auto;font-family:var(--font);font-weight:700;font-size:.6rem;letter-spacing:.03em;color:#04110f;background:#00b8b8;padding:1px 5px;align-self:center;}
   .til-kitgear{display:flex;flex-wrap:wrap;gap:4px 5px;align-items:baseline;font-size:.74rem;color:#9fd2d2;line-height:1.25;}
   .til-kitgear i{color:var(--faint);font-style:normal;}
@@ -1680,13 +1679,14 @@
     var dup=_DUP[cam.id]?'<span class="til-dup" title="This unit is on more than one open reservation">DUP</span>':'';
     var kitn=gear.length?'<span class="til-kitn">+'+gear.length+'</span>':'';
     var gearRow=gear.length?'<span class="til-kitgear">'+gear.map(function(g){ return '<span'+(_DUP[g.id]?' class="dup"':'')+'>'+esc(gearLabel(g.item))+'</span>'; }).join('<i>&middot;</i>')+'</span>':'';
-    var main='<span class="til-kitmain"><span class="til-kittop"><span class="til-big">'+esc((cam.camera||'Camera').toUpperCase())+dup+'</span>'+kitn+
+    // The status dot lives on the kit's top line so it stays beside the camera number on a multi-line kit; single-line kits still center cleanly.
+    var main='<span class="til-kitmain"><span class="til-kittop">'+dot+'<span class="til-big">'+esc((cam.camera||'Camera').toUpperCase())+dup+'</span>'+kitn+
       '<span class="til-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span></span>'+gearRow+'</span>';
     if(TBSEL[key]){ var ids=[cam.id].concat(gear.map(function(g){return g.id;}));
       var on=ids.every(function(id){return TBSELSET[key][id];});
-      return '<div class="til til-kit til-selmode'+(on?' on':'')+'" data-selids="'+esc(ids.join(','))+'" data-selcol="'+key+'"><span class="til-chk"></span>'+dot+main+date+'</div>'; }
+      return '<div class="til til-kit til-selmode'+(on?' on':'')+'" data-selids="'+esc(ids.join(','))+'" data-selcol="'+key+'"><span class="til-chk"></span>'+main+date+'</div>'; }
     var ci=(mode==='in'||mode==='overdue')?'<button type="button" class="til-ci" data-quickci="'+esc(cam.id)+'" title="Check in this kit">Check in</button>':'';
-    return '<div class="til til-kit" data-resvopen="'+esc(c.id)+'" role="button" tabindex="0">'+dot+main+ci+date+'<span class="til-chev">&#8250;</span></div>'; }
+    return '<div class="til til-kit" data-resvopen="'+esc(c.id)+'" role="button" tabindex="0">'+main+ci+date+'<span class="til-chev">&#8250;</span></div>'; }
   // Split a reservation's visible items into camera KITS (gear folds under its camera via the group link)
   // plus any truly standalone (a-la-carte) gear, which keeps its own line.
   function renderBundle(c, items, mode, firstDate){
