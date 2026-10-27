@@ -58,7 +58,7 @@
   .cal-hero-clock{width:150px;height:46px;border:0;background:transparent;display:block;}
   .intro .sub{display:none;}
   .intro{justify-content:center;}
-  .intro{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
+  .intro{display:none;}   /* controls moved into the availability (.summary) row; .intro stays only as the injectHeader anchor */
   .summ-metric{display:inline-flex;align-items:center;flex:0 1 auto;}
   .summary .poolbar-wrap{flex:0 0 auto;}
   .sub{color:var(--muted);font-size:.95rem;margin:0;flex:1 1 320px;}
@@ -82,6 +82,18 @@
   .summary .lab{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;}
   .sync{margin-left:auto;font-size:.72rem;color:var(--faint);letter-spacing:.03em;}
   .sync b{color:var(--ok);font-weight:600;}
+  /* Toolbar controls (Reserve / Refresh / Tools) consolidated into the availability row, right-aligned. */
+  .summ-right{display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:wrap;}
+  .summary .summ-btn{height:34px;min-height:0;padding:0 14px;font-size:.78rem;}
+  .summary .summ-ico{padding:0 11px;font-size:1.05rem;letter-spacing:0;}
+  .summ-right .sync{margin-left:2px;}
+  /* Student lookup search overlay */
+  .stu-search-row{display:flex;gap:10px;align-items:center;}
+  #stuSearchIn{flex:1 1 auto;background:#0b1414;border:1px solid var(--surface-bd);color:#fff;padding:11px 14px;font-size:1.05rem;font-family:var(--font);letter-spacing:.04em;}
+  #stuSearchIn:focus{outline:none;border-color:#00b8b8;}
+  .stu-search-hint{color:var(--muted);font-size:.78rem;margin-top:12px;line-height:1.45;}
+  #stuSearchMsg{margin-top:10px;font-size:.82rem;color:#ff9a8a;}
+  #stuSearchMsg .stulink{color:#5ff0f0;background:none;border:0;cursor:pointer;font:inherit;padding:0;text-decoration:underline;}
   /* top-of-console digests */
   .digest{padding:11px 16px;margin-bottom:14px;border:1px solid var(--line-soft);border-left:4px solid var(--muted);background:rgba(0,0,0,.22);}
   .digest.overdue-digest{border-left-color:var(--red);background:rgba(224,64,58,.10);}
@@ -1013,27 +1025,28 @@
       </div>
     </div>
   </div>
-  <div class="intro">
-    <p class="sub">Hand out gear, mark it picked up when the student collects it, and mark it returned when it comes back. Changes sync to the calendar and the Command Center in real time.</p>
-    <button class="silva-uni-cattrigger" id="reserveBtn">Reserve</button>
-    <button class="silva-uni-cattrigger" id="refreshBtn" title="Reload the latest data now">&#8635; Refresh</button>
-    <!-- Secondary tools consolidated into one dropdown so the checkout board stays front and center -->
-    <div class="cm-tools">
-      <button type="button" class="silva-uni-cattrigger cm-toolsbtn" id="cmToolsBtn" aria-haspopup="true" aria-expanded="false">Tools &#9662;</button>
-      <div class="cm-toolsmenu" id="cmToolsMenu" hidden>
-        <button type="button" class="cm-toolitem" id="reportsBtn" title="Missing kit items to order (opens a printable report)">Missing Items</button>
-        <a class="cm-toolitem" id="studentCalBtn" href="/reserve.html" target="_blank" rel="noopener">Student Store</a>
-        <a class="cm-toolitem" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
-        <button type="button" class="cm-toolitem" id="leadsBtn" title="Your class leads by period: Equipment Managers, Photo Walk EQs, and Team Attendance Managers">Class Leads</button>
-      </div>
-    </div>
-  </div>
+  <!-- Toolbar controls now live in the availability row below; .intro stays only as the injectHeader anchor (hidden). -->
+  <div class="intro"><p class="sub">Hand out gear, mark it picked up when the student collects it, and mark it returned when it comes back. Changes sync to the calendar and the Command Center in real time.</p></div>
 
   <div class="status-strip">
     <div class="summary">
       <div id="poolbar" class="poolbar-wrap" role="group" aria-label="Teacher view"></div>
       <div class="summ-metric"><span class="big" id="availn">0</span> <span class="lab">of <span id="totn">18</span> <span id="availunit">cameras</span> available <span id="availday">today</span></span></div>
-      <div class="sync" id="sync">Connecting&#8230;</div>
+      <div class="summ-right">
+        <button class="silva-uni-cattrigger summ-btn" id="reserveBtn">Reserve</button>
+        <button class="silva-uni-cattrigger summ-btn summ-ico" id="refreshBtn" title="Reload the latest data now" aria-label="Refresh">&#8635;</button>
+        <div class="cm-tools">
+          <button type="button" class="silva-uni-cattrigger cm-toolsbtn summ-btn" id="cmToolsBtn" aria-haspopup="true" aria-expanded="false">Tools &#9662;</button>
+          <div class="cm-toolsmenu" id="cmToolsMenu" hidden>
+            <button type="button" class="cm-toolitem" id="stuLookupBtn" title="Search a student number to see their full rental history, current rental, and upcoming reservations">Student lookup</button>
+            <button type="button" class="cm-toolitem" id="reportsBtn" title="Missing kit items to order (opens a printable report)">Missing Items</button>
+            <a class="cm-toolitem" id="studentCalBtn" href="/reserve.html" target="_blank" rel="noopener">Student Store</a>
+            <a class="cm-toolitem" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
+            <button type="button" class="cm-toolitem" id="leadsBtn" title="Your class leads by period: Equipment Managers, Photo Walk EQs, and Team Attendance Managers">Class Leads</button>
+          </div>
+        </div>
+        <div class="sync" id="sync">Connecting&#8230;</div>
+      </div>
     </div>
     <div id="overdueDigest" style="display:none;"></div>
     <div id="pendingDigest" style="display:none;"></div>
@@ -1130,6 +1143,16 @@
 </div>
 
 <!-- Student profile (teacher-only): opens from any clickable student name -->
+<div class="modal" id="stuSearchOv">
+  <div class="mpanel">
+    <div class="mhead"><span class="mtitle">Look up a student</span><button class="mx" id="stuSearchX" aria-label="Close">&times;</button></div>
+    <div class="mbody">
+      <div class="stu-search-row"><input type="text" id="stuSearchIn" inputmode="numeric" placeholder="Student number" autocomplete="off" /><button type="button" class="btn" id="stuSearchGo">Find</button></div>
+      <div class="stu-search-hint">See a student&#8217;s full rental history, current rental, and upcoming reservations.</div>
+      <div id="stuSearchMsg"></div>
+    </div>
+  </div>
+</div>
 <div class="modal" id="stumodal">
   <div class="mpanel">
     <div class="mhead"><span class="mtitle" id="stuTitle">Student</span><button class="mx" id="stux" aria-label="Close">&times;</button></div>
@@ -1996,6 +2019,31 @@
   }
   // One delegated handler: a student name anywhere on the console opens that student's profile.
   document.addEventListener('click', function(e){ var el=e.target.closest('[data-stu]'); if(el){ e.preventDefault(); e.stopPropagation(); openStudentProfile(el.getAttribute('data-stu')); } });
+  // ===== Student lookup: search any student number (or name on record) -> open that student's full profile =====
+  function openStuSearch(){ var ov=document.getElementById('stuSearchOv'); if(!ov) return; ov.classList.add('open'); var i=document.getElementById('stuSearchIn'); if(i){ i.value=''; try{ i.focus(); }catch(e){} } var m=document.getElementById('stuSearchMsg'); if(m) m.innerHTML=''; }
+  function closeStuSearch(){ var ov=document.getElementById('stuSearchOv'); if(ov) ov.classList.remove('open'); }
+  function doStuSearch(){
+    var v=(document.getElementById('stuSearchIn').value||'').trim(), m=document.getElementById('stuSearchMsg');
+    var digits=v.replace(/\D/g,'');
+    if(digits.length>=4){ closeStuSearch(); openStudentProfile(digits); return; }
+    if(v){
+      var lc=v.toLowerCase(), hits={};
+      (DATA.checkouts||[]).concat(DATA.equipment||[]).forEach(function(c){ var nm=(c.student_name||''); if(nm && c.student_id && nm.toLowerCase().indexOf(lc)>-1){ hits[String(c.student_id)]=nm; } });
+      var ids=Object.keys(hits);
+      if(ids.length===1){ closeStuSearch(); openStudentProfile(ids[0]); return; }
+      if(ids.length>1){ m.innerHTML='Did you mean: '+ids.map(function(id){ return '<button type="button" class="stulink" data-stu="'+esc(id)+'" data-closesearch="1">'+esc(hits[id])+'</button>'; }).join(' &middot; '); return; }
+    }
+    m.textContent='Enter a student number, or a name that is on record.';
+  }
+  (function(){
+    var lk=document.getElementById('stuLookupBtn'); if(lk) lk.onclick=openStuSearch;
+    var x=document.getElementById('stuSearchX'); if(x) x.onclick=closeStuSearch;
+    var go=document.getElementById('stuSearchGo'); if(go) go.onclick=doStuSearch;
+    var inp=document.getElementById('stuSearchIn'); if(inp) inp.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); doStuSearch(); } });
+    var ov=document.getElementById('stuSearchOv'); if(ov) ov.addEventListener('click', function(e){ if(e.target===ov) closeStuSearch(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ var o=document.getElementById('stuSearchOv'); if(o && o.classList.contains('open')) closeStuSearch(); } });
+    document.addEventListener('click', function(e){ if(e.target.closest('[data-closesearch]')) closeStuSearch(); });
+  })();
   (function(){ var x=document.getElementById('stux'); if(x) x.onclick=closeStudentProfile; var m=document.getElementById('stumodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeStudentProfile(); }); })();
 
   // ===== Class Leads (fall-semester student roles). The DATA comes from the AUTHED feed
