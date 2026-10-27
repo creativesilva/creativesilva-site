@@ -143,6 +143,20 @@
   .tb-tg.checked.on{background:var(--orange);color:#2a1300;} .tb-tg.checked.on .tb-tgn{background:rgba(0,0,0,.2);color:#2a1300;}
   .tb-tg.avail{color:#86e0a6;}
   .tb-tg.avail.on{background:var(--ok);color:#04140a;} .tb-tg.avail.on .tb-tgn{background:rgba(0,0,0,.2);color:#04140a;}
+  /* Overdue (red) + Requests (purple) tabs. The .hot state tints the tab when there is something waiting, even when it is not the active view, so it pulls the eye. */
+  .tb-tg.overdue{color:#9fb0b0;} .tb-tg.overdue.hot{color:#ff9a8a;background:rgba(224,64,58,.12);}
+  .tb-tg.overdue.on{background:var(--red);color:#fff;} .tb-tg.overdue.on .tb-tgn{background:rgba(0,0,0,.22);color:#fff;}
+  .tb-tg.requests{color:#9fb0b0;} .tb-tg.requests.hot{color:#c9b8ff;background:rgba(139,92,246,.12);}
+  .tb-tg.requests.on{background:#8b5cf6;color:#120a24;} .tb-tg.requests.on .tb-tgn{background:rgba(0,0,0,.2);color:#120a24;}
+  .tb-tgn.tb-tgn-od{background:var(--red);color:#fff;} .tb-tgn.tb-tgn-req{background:#8b5cf6;color:#fff;}
+  /* Quick check-in button on an out-item row (Incoming / Overdue): sits just left of the due date; the rest of the row opens the detail card. */
+  .til-ci{flex:0 0 auto;margin-left:auto;font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.62rem;padding:6px 11px;background:rgba(0,184,184,.14);border:1px solid var(--teal);color:var(--teal-lt);cursor:pointer;white-space:nowrap;}
+  .til-ci:hover{background:var(--teal);color:#04110f;}
+  .til-kit .til-ci{align-self:flex-start;}
+  .til-date.overdue{color:#ff9a8a;}
+  /* Requests view: a responsive grid of request cards (reuses .req-card from the review modal). */
+  .tb-reqsub{font-size:.82rem;color:var(--muted);padding:12px 2px 10px;line-height:1.45;}
+  .tb-reqgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;padding-bottom:4px;}
   /* Available (green) view: equipment by model/type, avail/total, expandable to units with a quick Assign. */
   .tb-avail{display:flex;flex-direction:column;gap:7px;padding:8px 0 2px;}
   .av-type{border:1px solid var(--line-soft);background:var(--surface);}
@@ -1049,7 +1063,6 @@
         <div class="sync" id="sync">Connecting&#8230;</div>
       </div>
     </div>
-    <div id="pendingDigest" style="display:none;"></div>
   </div>
   <div id="todayBoard" style="display:none;"></div>
 
@@ -1074,8 +1087,6 @@
       </div>
     </details>
   </div>
-
-  <p class="foot">Cam 16, 17 and 18 are Photography 2 only. This page is teacher-only; keep the password within staff.</p>
 </div>
 
 <!-- Reserve / check out modal -->
@@ -1471,6 +1482,19 @@
   function reqReasonLabel(reason){ return reason==='missing'?'Missing work':(reason==='photo2'?'Photo 2':(reason==='digital_arts'?'Digital Arts':'Request')); }
   function reqReasonChip(c){ var r=(c&&c.request_reason)||''; return '<span class="req-chip req-'+(r||'other')+'">'+reqReasonLabel(r)+'</span>'; }
   function reqItemsLabel(g){ return g.map(function(x){ return x.kind==='equipment'?gearLabel(x.item):x.camera; }).filter(Boolean).join(', '); }
+  // Requests view body: one card per pending reservation (reason, student, items, dates) with Approve / Deny inline.
+  function requestsBodyHtml(pend){
+    if(!pend.length) return '<div class="tb-grid"><div class="tb-empty">No student requests waiting. When a student asks for gear that needs your OK, it shows up here.</div></div>';
+    var sub='<div class="tb-reqsub">Students asked for gear that needs your OK (missing work, or a Photo 2 item). Approve to put it on the board, or Deny to free it up.</div>';
+    return sub+'<div class="tb-reqgrid">'+pend.map(function(g){ var c=g[0];
+      var items=g.map(function(x){ return x.kind==='equipment'?('<span class="camnum">'+esc(gearLabel(x.item))+'</span>'):('<span class="camnum" data-camdetail="'+esc(x.camera)+'">'+esc(x.camera)+'</span>'); }).join(' ');
+      var note=c.request_note?('<div class="req-note">&ldquo;'+esc(c.request_note)+'&rdquo;</div>'):'';
+      return '<div class="req-card"><div class="req-top">'+reqReasonChip(c)+'<span class="req-who">'+studentLink(c)+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span></div>'+
+        '<div class="req-items">'+items+'</div>'+
+        '<div class="req-dates">'+esc(fmtDoWMD(c.out))+' &rarr; '+esc(fmt(c.due))+'</div>'+note+
+        '<div class="req-acts"><button type="button" class="btn sm good" data-reqok="'+esc(c.id)+'">Approve</button><button type="button" class="btn sm danger" data-reqno="'+esc(c.id)+'">Deny</button></div></div>';
+    }).join('')+'</div>';
+  }
 
   // ===== Recent Reservations (shown when approval is shelved) =====
   // A reservation = ONE parent record (a camera, or a standalone gear unit) plus any gear linked to a
@@ -1560,19 +1584,23 @@
     renderTodayBoard(); updateSummary(); }
   // ---- per-item line board: each piece its own line (kit number big, student second), grouped by
   //      bundle so one student's items travel together; a per-column search floats a type to the top. ----
-  var TBVIEW=isFirstSchoolDayOfWeek(todayISO())?'in':'out';   // active view: Monday (weekend returns) defaults to Incoming; other days to Outgoing. 'out'|'in'|'checked'|'avail'
+  var TBVIEW=isFirstSchoolDayOfWeek(todayISO())?'in':'out';   // active view: Monday (weekend returns) defaults to Incoming; other days to Outgoing. 'out'|'in'|'overdue'|'avail'|'requests'
   var TBSORT=(function(){ try{ return sessionStorage.getItem('tbsort')||'cam'; }catch(e){ return 'cam'; } })();  // 'cam' = camera-kit number order (default) | 'name' = student last name
-  var TBQ={out:'',in:'',checked:'',avail:''};           // per-view search text
-  var TBSEL={out:false,in:false,checked:false,avail:false};   // multi-select mode per view
-  var TBSELSET={out:{},in:{},checked:{},avail:{}};      // {itemId:true} selected per view
+  var TBQ={out:'',in:'',overdue:'',avail:'',requests:''};           // per-view search text
+  var TBSEL={out:false,in:false,overdue:false,avail:false,requests:false};   // multi-select mode per view
+  var TBSELSET={out:{},in:{},overdue:{},avail:{},requests:{}};      // {itemId:true} selected per view
   var TBAVOPEN=null;                                    // Available view: which model/type row is expanded to its units
   // The items to show in a column: today = reserved (to hand out) / out (to take back); a future day = projected.
   function lineItemsFor(c, mode, isT){
     var items=resvItems(c).filter(function(it){ return statusOf(it)!=='returned'; });
-    if(mode==='checked') return items.filter(function(it){ return statusOf(it)==='out'; });   // in a student's hands now
-    if(isT) return items.filter(function(it){ return mode==='in' ? statusOf(it)==='out' : statusOf(it)==='reserved'; });
+    // Incoming = everything in a student's hands right now (the old Checked out), each shown with its due date.
+    // Overdue = the out items past their due date. Both are "right now", not day-scoped.
+    if(mode==='checked' || mode==='in') return items.filter(function(it){ return statusOf(it)==='out'; });
+    if(mode==='overdue') return items.filter(function(it){ return statusOf(it)==='out' && isOverdue(it); });
+    // Outgoing: today = still to hand out (reserved); a future day = projected out that day.
+    if(isT) return items.filter(function(it){ return statusOf(it)==='reserved'; });
     return items.filter(function(it){ var o=it.out||c.out||'', d=it.due||it.out||c.due||'';
-      return mode==='in' ? (d===SELDAY) : (o && o<=SELDAY && (!d||d>=SELDAY)); });
+      return (o && o<=SELDAY && (!d||d>=SELDAY)); });
   }
   function itemBig(it){ return it.kind==='equipment' ? gearLabel(it.item) : (it.camera||'Camera'); }
   // Sort key for the type search: cameras first (by number), then gear by type then unit number.
@@ -1587,7 +1615,7 @@
     return hay.some(function(h){ return h.indexOf(q)>=0; }); }
   // One tappable item line; the whole line opens that student's reservation card. showDate on the bundle's first line only.
   function itemLine(c, it, mode, showDate){
-    var key=mode, inLike=(mode==='in'||mode==='checked');
+    var key=mode, inLike=(mode==='in'||mode==='checked'||mode==='overdue');
     var dISO=inLike?(c.due||c.out||''):(c.out||''), dLbl=inLike?'Due':'Out';
     var date=showDate&&dISO?('<span class="til-date '+key+'"><i>'+dLbl+'</i>'+esc(fmtDoWMD(dISO))+'</span>'):'';
     var dot='<span class="til-dot '+itemState(it)+'"></span>';
@@ -1596,11 +1624,12 @@
       '<span class="til-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span>';
     if(TBSEL[key]){ var on=!!TBSELSET[key][it.id];                 // select mode: tap toggles the checkbox, not the card
       return '<div class="til til-selmode'+(on?' on':'')+'" data-selid="'+esc(it.id)+'" data-selcol="'+key+'"><span class="til-chk"></span>'+dot+mid+date+'</div>'; }
-    return '<button type="button" class="til" data-resvopen="'+esc(c.id)+'">'+dot+mid+date+'<span class="til-chev">&#8250;</span></button>'; }
+    var ci=(mode==='in'||mode==='overdue')?'<button type="button" class="til-ci" data-quickret="'+esc(it.id)+'" title="Check this item in">Check in</button>':'';
+    return '<div class="til" data-resvopen="'+esc(c.id)+'" role="button" tabindex="0">'+dot+mid+ci+date+'<span class="til-chev">&#8250;</span></div>'; }
   // A camera-kit line: ONE pickup line for the whole kit. The camera carries its linked gear
   // (lens, tripod, remote, lighting) as associated chips, so the teacher packages it as one unit.
   function kitLineHtml(c, cam, gear, mode, showDate){
-    var key=mode, inLike=(mode==='in'||mode==='checked');
+    var key=mode, inLike=(mode==='in'||mode==='checked'||mode==='overdue');
     var dISO=inLike?(c.due||c.out||''):(c.out||''), dLbl=inLike?'Due':'Out';
     var date=showDate&&dISO?('<span class="til-date '+key+'"><i>'+dLbl+'</i>'+esc(fmtDoWMD(dISO))+'</span>'):'';
     var dot='<span class="til-dot '+itemState(cam)+'"></span>';
@@ -1612,7 +1641,8 @@
     if(TBSEL[key]){ var ids=[cam.id].concat(gear.map(function(g){return g.id;}));
       var on=ids.every(function(id){return TBSELSET[key][id];});
       return '<div class="til til-kit til-selmode'+(on?' on':'')+'" data-selids="'+esc(ids.join(','))+'" data-selcol="'+key+'"><span class="til-chk"></span>'+dot+main+date+'</div>'; }
-    return '<button type="button" class="til til-kit" data-resvopen="'+esc(c.id)+'">'+dot+main+date+'<span class="til-chev">&#8250;</span></button>'; }
+    var ci=(mode==='in'||mode==='overdue')?'<button type="button" class="til-ci" data-quickci="'+esc(cam.id)+'" title="Check in this kit">Check in</button>':'';
+    return '<div class="til til-kit" data-resvopen="'+esc(c.id)+'" role="button" tabindex="0">'+dot+main+ci+date+'<span class="til-chev">&#8250;</span></div>'; }
   // Split a reservation's visible items into camera KITS (gear folds under its camera via the group link)
   // plus any truly standalone (a-la-carte) gear, which keeps its own line.
   function renderBundle(c, items, mode, firstDate){
@@ -1728,34 +1758,44 @@
         return '<div class="av-unit"><button type="button" class="av-u-main" data-avunit="'+esc(u.id)+'" data-avkind="'+u.kind+'"><span class="av-u-dot '+u.state+'"></span><span class="av-u-nm">'+esc(u.label)+'</span><span class="av-u-st">'+availUnitLabel(u)+'</span></button>'+assign+'</div>'; }).join('');
       return '<div class="av-type'+(open?' open':'')+'"><button type="button" class="av-type-head" data-avexpand="'+esc(row.key)+'"><span class="av-type-nm">'+esc(row.label)+'</span><span class="av-type-ct'+(zero?' zero':'')+'"><b>'+row.avail+'</b> / '+row.total+' free</span><span class="av-type-chev">&#8250;</span></button><div class="av-type-units">'+units+'</div></div>'; }).join('')+'</div>'; }
   function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
-    var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), inc=incomingFor(SELDAY), chk=checkedOutFor(), odp=(isT?overduePickups():[]);
+    var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), chk=checkedOutFor(), odp=(isT?overduePickups():[]);
+    var ovr=chk.filter(function(c){ return resvItems(c).some(function(it){ return statusOf(it)==='out' && isOverdue(it); }); });   // checked out AND past due
+    var pend=pendingGroups();                                                   // student requests awaiting the teacher's OK
     _DUP = isT ? openDupes() : {};
     function countLines(resvs,mode){ return resvs.reduce(function(n,c){ return n+bundleLineCount(lineItemsFor(c,mode,isT)); },0); }
-    var nOut=countLines(out,'out'), nIn=countLines(inc,'in'), nChk=countLines(chk,'checked');
-    var odLines=chk.reduce(function(n,c){ return n+(lineItemsFor(c,'checked',isT).some(isOverdue)?1:0); },0);
-    var view=(TBVIEW==='in'||TBVIEW==='checked'||TBVIEW==='avail')?TBVIEW:'out';
+    var nOut=countLines(out,'out'), nIn=countLines(chk,'in'), nOvr=countLines(ovr,'overdue'), nReq=pend.length;
+    var view=(TBVIEW==='in'||TBVIEW==='overdue'||TBVIEW==='avail'||TBVIEW==='requests')?TBVIEW:'out';
     var inv=(view==='avail')?availInventory():null, availCameras=availCountOnDay(todayISO());
-    var active=(view==='out')?out:(view==='in'?inc:(view==='checked'?chk:[])), q=TBQ[view]||'', selMode=TBSEL[view];
+    var active=(view==='out')?out:(view==='in'?chk:(view==='overdue'?ovr:[])), q=TBQ[view]||'', selMode=TBSEL[view];
     active=active.slice().sort(tbSortCmp);                      // default: camera-kit number order (a-la-carte after); or by last name
     // Scroll-reset guard: the 7s poll re-renders; skip the rewrite when nothing changed so the open
     // view keeps its scroll position + caret. Actions, view-switch and day-step null _lastTBSig.
     function listSig(resvs,mode){ return resvs.map(function(c){ return c.id+':'+resvStatusGroup(c)+':'+lineItemsFor(c,mode,isT).map(function(x){return (x.camera||x.item)+itemState(x);}).join('.'); }).join(','); }
     var invSig=inv?inv.map(function(r){ return r.key+r.avail+'/'+r.total+':'+r.units.map(function(u){return u.state+(u.rec?('~'+(u.rec.student_id||u.rec.student_name||'')):'');}).join('.'); }).join('|'):'';
-    var sig=view+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+'|od'+odp.map(function(c){return c.id;}).join('.')+'|dup'+Object.keys(_DUP).sort().join('.')+'|n'+nOut+'.'+nIn+'.'+nChk+'|'+listSig(active,view)+'|av'+(TBAVOPEN||'')+'|'+invSig;
+    var sig=view+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+'|od'+odp.map(function(c){return c.id;}).join('.')+'|dup'+Object.keys(_DUP).sort().join('.')+'|n'+nOut+'.'+nIn+'.'+nOvr+'.'+nReq+'|'+listSig(active,view)+'|req'+pend.map(function(g){return g[0].id;}).join('.')+'|av'+(TBAVOPEN||'')+'|'+invSig;
     if(sig===_lastTBSig && el.innerHTML) return; _lastTBSig=sig;
     // ----- header: title + help + day stepper (Outgoing/Incoming only; Checked out + Available are "right now") -----
     var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY));
-    var stepper=(view==='checked'||view==='avail')?'<span class="tb-nowlabel">Right now</span>':
+    var stepper=(view!=='out')?'<span class="tb-nowlabel">Right now</span>':
       ('<div class="tb-step"><button type="button" class="tb-nav" data-tbday="-1" title="Previous day">&#8249;</button>'+
       '<span class="tb-day">'+esc(dayL)+'</span><button type="button" class="tb-nav" data-tbday="1" title="Next day">&#8250;</button>'+
       (isT?'':'<button type="button" class="tb-today" data-tbtoday="1">Today</button><span class="tb-proj">Projected &middot; assumes on-time returns</span>')+'</div>');
-    // ----- view toggle: Outgoing (gold) / Incoming (teal) / Checked out (orange) / Available (green) -----
-    function tg(k,label,cnt,extra){ return '<button type="button" class="tb-tg '+k+(view===k?' on':'')+'" data-tbview="'+k+'">'+label+' <span class="tb-tgn">'+cnt+'</span>'+(extra||'')+'</button>'; }
-    var toggle='<div class="tb-toggle">'+tg('out','Outgoing',nOut)+tg('in','Incoming',nIn)+tg('checked','Checked out',nChk,odLines?('<span class="tb-tgod">&#9888;&#xFE0E; '+odLines+' overdue</span>'):'')+tg('avail','Available',availCameras)+'</div>';
+    // ----- view toggle: Outgoing (gold) / Incoming (teal) / Overdue (red) / Available (green) / Requests (purple) -----
+    function tg(k,label,cnt){ return '<button type="button" class="tb-tg '+k+(view===k?' on':'')+'" data-tbview="'+k+'">'+label+' <span class="tb-tgn">'+cnt+'</span></button>'; }
+    var ovLabel=nOvr>0?('&#9888;&#xFE0E; '+nOvr):String(nOvr);
+    var toggle='<div class="tb-toggle">'+
+      tg('out','Outgoing',nOut)+
+      tg('in','Incoming',nIn)+
+      '<button type="button" class="tb-tg overdue'+(view==='overdue'?' on':'')+(nOvr>0?' hot':'')+'" data-tbview="overdue">Overdue <span class="tb-tgn'+(nOvr>0?' tb-tgn-od':'')+'">'+ovLabel+'</span></button>'+
+      tg('avail','Available',availCameras)+
+      '<button type="button" class="tb-tg requests'+(view==='requests'?' on':'')+(nReq>0?' hot':'')+'" data-tbview="requests">Requests <span class="tb-tgn'+(nReq>0?' tb-tgn-req':'')+'">'+nReq+'</span></button>'+
+      '</div>';
     // ----- active-view body: a full-width responsive grid of cards (or flat search results) -----
     var body, total=0, search='', bulk='';
     if(view==='avail'){                                        // Available: equipment inventory by model/type (no search/sort/select)
       body=availBodyHtml(inv);
+    } else if(view==='requests'){                              // Requests: student asks awaiting the teacher's OK (Approve / Deny inline)
+      body=requestsBodyHtml(pend);
     } else {
       var groups=[]; active.forEach(function(c){ var its=lineItemsFor(c,view,isT); if(its.length) groups.push({c:c,items:its}); });
       total=groups.reduce(function(n,g){ return n+bundleLineCount(g.items); },0);
@@ -1765,8 +1805,9 @@
         body = flat.length ? '<div class="tb-grid view-'+view+' tb-flat">'+flat.map(function(L){ return itemLine(L.c,L.it,view,true); }).join('')+'</div>'
           : '<div class="tb-grid"><div class="tb-empty">No match for &ldquo;'+esc(q.trim())+'&rdquo;.</div></div>';
       } else {                                                 // default: one card per CAMERA KIT (gear folds in); a-la-carte gear keeps its own card
-        body = groups.length ? '<div class="tb-grid view-'+view+'">'+groups.map(function(g){ var od=(view==='checked'&&g.items.some(isOverdue)); return '<div class="tb-bundle'+(od?' tb-od':'')+'">'+renderBundle(g.c, g.items, view, true)+'</div>'; }).join('')+'</div>'
-          : '<div class="tb-grid"><div class="tb-empty">'+(view==='out'?('Nothing to hand out '+(isT?'today':'that day')+'.'):(view==='in'?('Nothing due back '+(isT?'today':'that day')+'.'):'Nothing checked out right now.'))+'</div></div>';
+        var emptyMsg=view==='out'?('Nothing to hand out '+(isT?'today':'that day')+'.'):(view==='overdue'?'Nothing overdue right now.':'Nothing checked out right now.');
+        body = groups.length ? '<div class="tb-grid view-'+view+'">'+groups.map(function(g){ var od=((view==='in'||view==='overdue')&&g.items.some(isOverdue)); return '<div class="tb-bundle'+(od?' tb-od':'')+'">'+renderBundle(g.c, g.items, view, true)+'</div>'; }).join('')+'</div>'
+          : '<div class="tb-grid"><div class="tb-empty">'+emptyMsg+'</div></div>';
       }
       var sortCtl='<div class="tb-sort"><span class="tb-sort-l">Sort</span>'+
         '<button type="button" class="tb-sortbtn'+(TBSORT==='cam'?' on':'')+'" data-tbsort="cam">Camera #</button>'+
@@ -1786,7 +1827,7 @@
     el.className='todayboard'; el.style.display='';
     el.innerHTML='<div class="tb-head"><span class="tb-title">Reservations</span><button type="button" class="tb-help" data-tbhelp="1" title="How this board works" aria-label="How this board works">i</button>'+stepper+'</div>'+
       toggle+
-      (view==='avail' ? body
+      ((view==='avail'||view==='requests') ? body
         : ((isT?cartTallyHtml():'')+(isT?reconcileBannerHtml(nOut):'')+(view==='out'?overdueAccHtml(odp):'')+search+body+bulk));
     el.querySelectorAll('[data-tbview]').forEach(function(b){ b.onclick=function(){ var v=b.getAttribute('data-tbview'); if(v!==TBVIEW){ TBVIEW=v; _lastTBSig=null; renderTodayBoard(); } }; });
     el.querySelectorAll('[data-tbsort]').forEach(function(b){ b.onclick=function(){ var s=b.getAttribute('data-tbsort'); if(s!==TBSORT){ TBSORT=s; try{ sessionStorage.setItem('tbsort',s); }catch(e){} _lastTBSig=null; renderTodayBoard(); } }; });
@@ -1801,6 +1842,13 @@
       silvaConfirm('Return '+esc(((c&&c.kind!=='equipment')?c.camera:gearLabel(c&&c.item))||'this item')+' to stock? This cancels '+esc(nameOf(c||{}))+'’s reservation so you can check it out to someone else.', {okLabel:'Return to stock',cancelLabel:'Keep'})
         .then(function(ok){ if(ok){ _lastTBSig=null; del(id); } }); }; });
     el.querySelectorAll('[data-resvopen]').forEach(function(b){ b.onclick=function(){ openReservation(b.getAttribute('data-resvopen')); }; });
+    // Quick check-in right on the row (left of the due date): a kit opens its return checklist; a standalone gear piece marks returned. The rest of the row still opens the detail card.
+    el.querySelectorAll('[data-quickci]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); openReturnChecklist(b.getAttribute('data-quickci')); }; });
+    el.querySelectorAll('[data-quickret]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); resvSetStatus(b.getAttribute('data-quickret'),'returned'); silvaToast('Checked in.'); }; });
+    // Requests view: Approve puts it on the board, Deny frees the gear (both reload the board).
+    el.querySelectorAll('[data-reqok]').forEach(function(b){ b.onclick=function(){ approveRequest(b.getAttribute('data-reqok'), b); }; });
+    el.querySelectorAll('[data-reqno]').forEach(function(b){ b.onclick=function(){ denyRequest(b.getAttribute('data-reqno'), b); }; });
+    el.querySelectorAll('.req-items [data-camdetail]').forEach(function(elx){ elx.onclick=function(ev){ ev.stopPropagation(); openCamDetail(elx.getAttribute('data-camdetail')); }; });
     el.querySelectorAll('[data-tbsearch]').forEach(function(inp){ inp.oninput=function(){ var k=inp.getAttribute('data-tbsearch'); TBQ[k]=inp.value; _tbFocus={col:k,pos:inp.selectionStart}; _lastTBSig=null; renderTodayBoard(); }; });
     el.querySelectorAll('[data-tbclear]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-tbclear'); TBQ[k]=''; _tbFocus={col:k,pos:0}; _lastTBSig=null; renderTodayBoard(); }; });
     el.querySelectorAll('[data-tbselect]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-tbselect'); TBSEL[k]=!TBSEL[k]; if(!TBSEL[k]) TBSELSET[k]={}; _lastTBSig=null; renderTodayBoard(); }; });
