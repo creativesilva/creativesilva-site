@@ -1066,6 +1066,9 @@
                            : {student_id:USER.id, kind:'equipment', item:r.unit, out:co, due:ret, request:true, request_reason:r.reason});
       });
     }
+    // Carry the student's chosen pickup + return windows (label + start time) onto every record so the teacher board can show when they said they would come.
+    var win={}; if(pickup){ win.pickup_label=pickup.label; win.pickup_time=pickup.s; } if(returnTime){ win.return_label=returnTime.label; win.return_time=returnTime.s; }
+    posts=posts.map(function(p){ return Object.assign(p, win); });
     var lbl=reserveLabel(), sending=(lbl==='Send request')?'Sending…':'Reserving…';
     var rv=document.getElementById('bagReserve'); if(rv){ rv.disabled=true; rv.textContent=sending; }
     Promise.all(posts.map(function(p){ return api('/api/camera/checkout', p); })).then(function(results){

@@ -382,6 +382,8 @@
   .resv-meta{font-size:.85rem;color:var(--muted);margin-bottom:10px;}
   .resv-meta .co{color:var(--teal-lt);}
   .resv-dates{font-size:.82rem;color:var(--muted);margin-top:3px;}
+  .resv-win{font-size:.82rem;color:var(--muted);margin-top:3px;}
+  .resv-win b{color:var(--teal-lt);font-weight:700;margin-right:7px;text-transform:uppercase;letter-spacing:.04em;font-size:.66rem;}
   .resv-prog{font-family:var(--font);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-lt);margin:0 0 12px;}
   .resv-prog b{color:#fff;}
   .resv-items{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
@@ -1349,6 +1351,8 @@
   // ---- helpers ----
   var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function fmt(iso){ if(!iso)return''; var p=String(iso).split('-'); if(p.length<3)return iso; return MON[+p[1]-1]+' '+(+p[2]); }
+  // 24h "HH:MM" -> "H:MM AM/PM"; blank if not a time (reservations made before windows were stored have none).
+  function fmtTime12(t){ var m=String(t||'').match(/^(\d{1,2}):(\d{2})/); if(!m) return ''; var h=+m[1], ap=h>=12?'PM':'AM'; h=h%12; if(h===0)h=12; return h+':'+m[2]+' '+ap; }
   function todayISO(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   function addDays(iso,n){ var d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   // School-day helpers (match the student store + schedule-data.js `schoolDays`), so a due date never defaults to a weekend/holiday.
@@ -1916,8 +1920,10 @@
     var parent=findRec(resvId); if(!parent){ closeResv(); return; }
     var items=resvItems(parent), rc=resvReturnedCount(parent);
     document.getElementById('resvTitle').innerHTML='Reservation · '+studentLink(parent);
+    function winLine(lbl,label,tm){ var t=fmtTime12(tm); if(!label && !t) return ''; return '<div class="resv-win"><b>'+lbl+'</b>'+esc(label||'')+(t?(' &middot; '+esc(t)):'')+'</div>'; }
+    var winHtml=winLine('Pick up',parent.pickup_label,parent.pickup_time)+winLine('Return',parent.return_label,parent.return_time);
     var head='<div class="resv-meta">'+(parent.period?('Per '+esc(parent.period)+' · '):'')+'<span class="co">'+esc(parent.course||'')+'</span>'+
-      '<div class="resv-dates">Out '+fmt(parent.out)+' → due '+fmt(parent.due)+'</div>'+contactLine(parent)+'</div>';
+      '<div class="resv-dates">Out '+fmt(parent.out)+' → due '+fmt(parent.due)+'</div>'+winHtml+contactLine(parent)+'</div>';
     var prog='<div class="resv-prog"><b>'+rc.done+'</b> of <b>'+rc.total+'</b> returned</div>';
     var rows=items.map(function(it){
       var isCam=it.kind!=='equipment', s=statusOf(it);
@@ -2330,7 +2336,7 @@
       var cid=nid();
       recs.push({id:cid,kind:'camera',item:'',group:'',camera:cam,student_id:sid,student_name:name,period:per,course:course,teacher:'Silva',
         student_cell:'(805) 555-01'+('0'+per).slice(-2),parent_guardian:name.split(' ')[0]+'’s parent',parent_cell:'(805) 555-02'+('0'+per).slice(-2),
-        out:out,due:due,status:status,picked_up_date:status==='out'?out:'',returned:false,returned_date:'',note:'',created:out+'T15:00:00Z'});
+        out:out,due:due,pickup_label:'Lunch',pickup_time:'12:30',return_label:'After 6th period',return_time:'14:50',status:status,picked_up_date:status==='out'?out:'',returned:false,returned_date:'',note:'',created:out+'T15:00:00Z'});
       (gear||[]).forEach(function(g){ recs.push({id:nid(),kind:'equipment',item:g,group:cid,camera:'',student_id:sid,student_name:name,period:per,course:course,teacher:'Silva',
         out:out,due:due,status:status,picked_up_date:status==='out'?out:'',returned:false,returned_date:'',note:'',created:out+'T15:00:00Z'}); });
     }
