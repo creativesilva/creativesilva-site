@@ -76,7 +76,7 @@
 
   .summary{display:flex;align-items:center;gap:14px 22px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--teal);padding:13px 18px;margin-bottom:16px;}
   /* Availability count as a glowing digital-clock readout (bright teal, soft pulse). */
-  .summary .big{display:inline-flex;align-items:center;justify-content:center;min-width:2.1em;padding:5px 15px;font-family:var(--font);font-weight:700;font-size:2rem;line-height:1;letter-spacing:.07em;color:#5ff0f0;background:rgba(0,22,22,.9);border:1px solid rgba(0,184,184,.55);font-variant-numeric:tabular-nums;text-shadow:0 0 8px rgba(95,240,240,.85),0 0 18px rgba(0,184,184,.55);animation:clockPulse 2.4s ease-in-out infinite;}
+  .summary .big{display:inline-flex;align-items:center;justify-content:center;min-width:1.45em;padding:5px 10px;margin-right:13px;font-family:var(--font);font-weight:700;font-size:2rem;line-height:1;letter-spacing:.02em;color:#5ff0f0;background:rgba(0,22,22,.9);border:1px solid rgba(0,184,184,.55);font-variant-numeric:tabular-nums;text-shadow:0 0 8px rgba(95,240,240,.85),0 0 18px rgba(0,184,184,.55);animation:clockPulse 2.4s ease-in-out infinite;}
   @keyframes clockPulse{0%,100%{box-shadow:inset 0 0 12px rgba(0,184,184,.15),0 0 12px rgba(0,184,184,.24);}50%{box-shadow:inset 0 0 14px rgba(0,184,184,.30),0 0 24px rgba(0,184,184,.55);}}
   @media (prefers-reduced-motion:reduce){ .summary .big{animation:none;} }
   .summary .lab{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;}
@@ -182,6 +182,21 @@
   .tb-searchrow .tb-search{flex:1 1 220px;padding:0;}
   .tb-searchrow .tb-sx{top:50%;transform:translateY(-50%);right:11px;}
   .tb-searchrow .tb-selbtn{flex:0 0 auto;margin-left:0;}
+  /* Board control row after the equipment search was removed: Sort on the left, Select pushed right. */
+  .tb-ctlrow{justify-content:flex-start;gap:10px;padding-top:0;}
+  .tb-ctlrow .tb-selbtn{margin-left:auto;}
+  /* Prominent student lookup bar (sits above the board): type a name or ID to open that student's profile card. */
+  .stu-searchbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px;padding:10px 14px;border:1px solid var(--line);border-left:4px solid var(--teal);background:var(--surface);}
+  .stu-barlabel{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.7rem;color:var(--teal-lt);}
+  .stu-barfield{flex:1 1 320px;display:flex;align-items:center;gap:8px;min-width:0;}
+  .stu-barin{flex:1 1 auto;min-width:0;background:#0b1414;border:1px solid var(--surface-bd);color:var(--text);font-family:var(--body);font-size:.92rem;padding:9px 12px;}
+  .stu-barin:focus{outline:none;border-color:var(--teal);}
+  .stu-barin::placeholder{color:var(--faint);}
+  .stu-bargo{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.72rem;padding:9px 18px;background:rgba(0,184,184,.14);border:1px solid var(--teal);color:var(--teal-lt);cursor:pointer;}
+  .stu-bargo:hover{background:var(--teal);color:#04110f;}
+  .stu-barmsg{flex:1 1 100%;font-size:.82rem;color:var(--muted);}
+  .stu-barmsg:empty{display:none;}
+  .stu-barmsg .stulink{color:#5ff0f0;text-decoration:underline;}
   .tb-sort{display:inline-flex;align-items:center;flex:0 0 auto;border:1px solid var(--line-soft);}
   .tb-sort-l{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.56rem;color:var(--muted);padding:0 9px;}
   .tb-sortbtn{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.62rem;color:var(--muted);background:rgba(255,255,255,.02);border:0;border-left:1px solid var(--line-soft);padding:8px 12px;cursor:pointer;transition:background .15s,color .15s;}
@@ -1055,7 +1070,6 @@
         <div class="cm-tools">
           <button type="button" class="silva-uni-cattrigger cm-toolsbtn summ-btn" id="cmToolsBtn" aria-haspopup="true" aria-expanded="false">Tools &#9662;</button>
           <div class="cm-toolsmenu" id="cmToolsMenu" hidden>
-            <button type="button" class="cm-toolitem" id="stuLookupBtn" title="Search a student number to see their full rental history, current rental, and upcoming reservations">Student lookup</button>
             <button type="button" class="cm-toolitem" id="reportsBtn" title="Missing kit items to order (opens a printable report)">Missing Items</button>
             <a class="cm-toolitem" id="studentCalBtn" href="/reserve.html" target="_blank" rel="noopener">Student Store</a>
             <a class="cm-toolitem" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
@@ -1065,6 +1079,15 @@
         <div class="sync" id="sync">Connecting&#8230;</div>
       </div>
     </div>
+  </div>
+  <!-- Prominent student lookup: type a name or ID to open that student's profile (contact + current/future/past reservations) in one card. -->
+  <div class="stu-searchbar">
+    <span class="stu-barlabel">Student</span>
+    <div class="stu-barfield">
+      <input type="text" id="stuBarIn" class="stu-barin" placeholder="Find a student by name or ID to open their profile, contact &amp; reservations" autocomplete="off" autocapitalize="off" spellcheck="false" />
+      <button type="button" class="stu-bargo" id="stuBarGo">Find</button>
+    </div>
+    <span class="stu-barmsg" id="stuBarMsg"></span>
   </div>
   <div id="todayBoard" style="display:none;"></div>
 
@@ -1816,9 +1839,7 @@
       var sortCtl='<div class="tb-sort"><span class="tb-sort-l">Sort</span>'+
         '<button type="button" class="tb-sortbtn'+(TBSORT==='cam'?' on':'')+'" data-tbsort="cam">Camera #</button>'+
         '<button type="button" class="tb-sortbtn'+(TBSORT==='name'?' on':'')+'" data-tbsort="name">Last name</button></div>';
-      search='<div class="tb-searchrow"><div class="tb-search"><input type="text" class="tb-sin" data-tbsearch="'+view+'" placeholder="Find camera, tripod, flash&hellip;" value="'+esc(q)+'" autocomplete="off" autocapitalize="off" spellcheck="false" />'+
-        (q?'<button type="button" class="tb-sx" data-tbclear="'+view+'" title="Clear">&times;</button>':'')+'</div>'+
-        sortCtl+
+      search='<div class="tb-searchrow tb-ctlrow">'+sortCtl+
         (total?'<button type="button" class="tb-selbtn" data-tbselect="'+view+'">'+(selMode?'Done':'Select')+'</button>':'')+'</div>';
       if(selMode){
         var n=Object.keys(TBSELSET[view]).length;
@@ -2068,20 +2089,29 @@
   // ===== Student lookup: search any student number (or name on record) -> open that student's full profile =====
   function openStuSearch(){ var ov=document.getElementById('stuSearchOv'); if(!ov) return; ov.classList.add('open'); var i=document.getElementById('stuSearchIn'); if(i){ i.value=''; try{ i.focus(); }catch(e){} } var m=document.getElementById('stuSearchMsg'); if(m) m.innerHTML=''; }
   function closeStuSearch(){ var ov=document.getElementById('stuSearchOv'); if(ov) ov.classList.remove('open'); }
-  function doStuSearch(){
-    var v=(document.getElementById('stuSearchIn').value||'').trim(), m=document.getElementById('stuSearchMsg');
-    var digits=v.replace(/\D/g,'');
-    if(digits.length>=4){ closeStuSearch(); openStudentProfile(digits); return; }
+  // Student search core: a 4+ digit number opens that student's profile; a name matches students on record.
+  // Used by BOTH the prominent board search bar and the (legacy) overlay. m = the message element to write into.
+  function runStuSearch(v, m){
+    v=(v||'').trim(); var digits=v.replace(/\D/g,'');
+    function msg(h){ if(m){ m.innerHTML=h; } }
+    if(digits.length>=4){ closeStuSearch(); openStudentProfile(digits); return true; }
     if(v){
       var lc=v.toLowerCase(), hits={};
       (DATA.checkouts||[]).concat(DATA.equipment||[]).forEach(function(c){ var nm=(c.student_name||''); if(nm && c.student_id && nm.toLowerCase().indexOf(lc)>-1){ hits[String(c.student_id)]=nm; } });
       var ids=Object.keys(hits);
-      if(ids.length===1){ closeStuSearch(); openStudentProfile(ids[0]); return; }
-      if(ids.length>1){ m.innerHTML='Did you mean: '+ids.map(function(id){ return '<button type="button" class="stulink" data-stu="'+esc(id)+'" data-closesearch="1">'+esc(hits[id])+'</button>'; }).join(' &middot; '); return; }
+      if(ids.length===1){ closeStuSearch(); openStudentProfile(ids[0]); return true; }
+      if(ids.length>1){ msg('Did you mean: '+ids.map(function(id){ return '<button type="button" class="stulink" data-stu="'+esc(id)+'" data-closesearch="1">'+esc(hits[id])+'</button>'; }).join(' &middot; ')); return false; }
     }
-    m.textContent='Enter a student number, or a name that is on record.';
+    msg('Enter a student number, or a name that is on record.');
+    return false;
   }
+  function doStuSearch(){ runStuSearch((document.getElementById('stuSearchIn')||{}).value, document.getElementById('stuSearchMsg')); }
   (function(){
+    // Prominent board student search bar.
+    var bgo=document.getElementById('stuBarGo'), bin=document.getElementById('stuBarIn'), bmsg=document.getElementById('stuBarMsg');
+    function barSearch(){ if(runStuSearch(bin?bin.value:'', bmsg) && bin){ bin.value=''; } }
+    if(bgo) bgo.onclick=barSearch;
+    if(bin) bin.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); barSearch(); } });
     var lk=document.getElementById('stuLookupBtn'); if(lk) lk.onclick=openStuSearch;
     var x=document.getElementById('stuSearchX'); if(x) x.onclick=closeStuSearch;
     var go=document.getElementById('stuSearchGo'); if(go) go.onclick=doStuSearch;
