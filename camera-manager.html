@@ -898,11 +898,12 @@
   /* Tools dropdown: the secondary tools consolidated into one menu (keeps the checkout board front and center). */
   .cm-tools{position:relative;display:inline-flex;}
   .cm-toolsbtn.on{background:#00b8b8;color:#04110f;}
-  .cm-toolsmenu{position:absolute;top:calc(100% + 8px);right:0;min-width:214px;background:var(--surface);border:1px solid var(--surface-bd);box-shadow:0 18px 50px rgba(0,0,0,.5);z-index:200;padding:6px 0;display:flex;flex-direction:column;}
+  /* frosted + opaque so the board behind never bleeds through (matches the .dp-pop date-picker framework, Chris 2026-10-04) */
+  .cm-toolsmenu{position:absolute;top:calc(100% + 8px);right:0;min-width:214px;background:linear-gradient(135deg,rgba(0,184,184,.13),rgba(4,20,19,.975));backdrop-filter:blur(18px) saturate(1.14);-webkit-backdrop-filter:blur(18px) saturate(1.14);border:1px solid var(--teal);box-shadow:0 18px 50px rgba(0,0,0,.7);z-index:200;padding:6px 0;display:flex;flex-direction:column;}
   .cm-toolsmenu[hidden]{display:none;}
   .cm-toolitem{text-align:left;background:transparent;border:0;color:var(--text);font-family:var(--body);font-size:.92rem;padding:10px 16px;cursor:pointer;text-decoration:none;display:block;width:100%;white-space:nowrap;}
   .cm-toolitem:hover{background:rgba(0,184,184,.1);color:#fff;}
-  @media (max-width:560px){ .wrap{padding:16px 12px 56px;} .cm-toolsmenu{right:auto;left:0;} }
+  @media (max-width:560px){ .wrap{padding:16px 12px 56px;} .cm-toolsmenu{right:0;left:auto;max-width:calc(100vw - 24px);} }
   /* Phone: compact the hero banner so the console surfaces (desktop/iPad keep the fuller header). */
   @media (max-width:600px){
     .cal-hero > div > div{ justify-content:center !important; }
@@ -1048,7 +1049,6 @@
         <div class="sync" id="sync">Connecting&#8230;</div>
       </div>
     </div>
-    <div id="overdueDigest" style="display:none;"></div>
     <div id="pendingDigest" style="display:none;"></div>
   </div>
   <div id="todayBoard" style="display:none;"></div>
@@ -1446,17 +1446,9 @@
     var ad=document.getElementById('availday'); if(ad){ ad.textContent=(SELDAY===todayISO()?'today':'on '+dowShort(SELDAY))+' · '+fmtMDY(SELDAY); }
   }
   function daysBetween(a,b){ return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000); }
-  // Top-of-console digests: overdue cameras (seen every time you open it) + student requests awaiting approval.
+  // Top-of-console digest: student requests awaiting review (the store's "request anyway" path).
+  // Overdue cameras live on the red OVERDUE tag on the Checked out tab, not a separate panel (Chris 2026-10-27).
   function updateDigests(){
-    var today=todayISO();
-    // Curate each teacher's dashboard to THEIR OWN stock (cameras + gear in their pool).
-    var poolCams=(DATA.pools||{})[SELECTED_POOL]||[], poolGear=(DATA.equipment_pools||{})[SELECTED_POOL]||[];
-    function inPool(c){ return c.kind==='equipment' ? (poolGear.indexOf(c.item)>=0) : (poolCams.indexOf(c.camera)>=0); }
-    var od=(DATA.checkouts||[]).filter(function(c){ return c.kind!=='equipment' && statusOf(c)==='out' && c.due && c.due<today && inPool(c); }).sort(function(a,b){ return (a.due||'')<(b.due||'')?-1:1; });
-    var odEl=document.getElementById('overdueDigest');
-    if(odEl){ if(od.length){ odEl.className='digest overdue-digest';
-        odEl.innerHTML='<div class="digest-h">&#9888; '+od.length+' camera'+(od.length>1?'s':'')+' overdue</div><div class="digest-body">'+od.map(function(c){ var n=daysBetween(c.due,today); return '<span class="digest-item"><span class="camnum" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera)+'</span> &middot; '+studentLink(c)+' <b>'+n+'d</b></span>'; }).join('')+'</div>';
-        odEl.style.display=''; } else { odEl.style.display='none'; odEl.innerHTML=''; } }
     // Special Requests notification: any PENDING (approved:false) reservation in this pool, regardless of
     // the global APPROVAL_REQUIRED flag. The student store's "request anyway" path (missing-work hold or
     // a locked Photo-2 item) creates these. Tap the banner to review + approve/deny.
@@ -1759,7 +1751,7 @@
       (isT?'':'<button type="button" class="tb-today" data-tbtoday="1">Today</button><span class="tb-proj">Projected &middot; assumes on-time returns</span>')+'</div>');
     // ----- view toggle: Outgoing (gold) / Incoming (teal) / Checked out (orange) / Available (green) -----
     function tg(k,label,cnt,extra){ return '<button type="button" class="tb-tg '+k+(view===k?' on':'')+'" data-tbview="'+k+'">'+label+' <span class="tb-tgn">'+cnt+'</span>'+(extra||'')+'</button>'; }
-    var toggle='<div class="tb-toggle">'+tg('out','Outgoing',nOut)+tg('in','Incoming',nIn)+tg('checked','Checked out',nChk,odLines?('<span class="tb-tgod">'+odLines+' overdue</span>'):'')+tg('avail','Available',availCameras)+'</div>';
+    var toggle='<div class="tb-toggle">'+tg('out','Outgoing',nOut)+tg('in','Incoming',nIn)+tg('checked','Checked out',nChk,odLines?('<span class="tb-tgod">&#9888;&#xFE0E; '+odLines+' overdue</span>'):'')+tg('avail','Available',availCameras)+'</div>';
     // ----- active-view body: a full-width responsive grid of cards (or flat search results) -----
     var body, total=0, search='', bulk='';
     if(view==='avail'){                                        // Available: equipment inventory by model/type (no search/sort/select)
