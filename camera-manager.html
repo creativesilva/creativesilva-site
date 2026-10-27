@@ -396,15 +396,22 @@
     .camhub-head .camsortdd{order:6;}
   }
   /* Reservation window: the whole bundle + per-item check-in */
-  /* Hero: the glance facts (camera #, student, period) lead the card and stand out most. */
-  .resv-hero{display:flex;align-items:center;gap:14px 18px;flex-wrap:wrap;padding:2px 0 14px;margin-bottom:13px;border-bottom:1px solid var(--line-soft);}
-  .resv-hero-cam{display:inline-flex;align-items:center;gap:10px;font-family:var(--font);font-weight:700;font-size:1.85rem;line-height:1;letter-spacing:.03em;color:#5ff0f0;text-shadow:0 0 10px rgba(95,240,240,.45);white-space:nowrap;}
-  .resv-hero-who{display:flex;flex-direction:column;gap:6px;align-items:flex-start;min-width:0;}
-  .resv-hero-name{text-align:left;background:none;border:0;padding:0;margin:0;cursor:pointer;font-family:var(--font);font-weight:700;font-size:1.3rem;line-height:1.05;letter-spacing:.01em;color:#fff;transition:color .12s;}
+  /* Title bar carries the equipment (camera number). Overdue reads red. */
+  #resvTitle{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .rv-h{color:#fff;} .rv-sep{color:var(--faint);font-weight:400;}
+  .rv-cam{background:none;border:0;padding:0;margin:0;cursor:pointer;font-family:var(--font);font-weight:700;letter-spacing:.03em;font-size:1.2rem;color:#5ff0f0;text-shadow:0 0 9px rgba(95,240,240,.4);text-transform:uppercase;}
+  .rv-cam:hover{color:#fff;} .rv-cam.od{color:#ff9a8a;text-shadow:0 0 9px rgba(224,64,58,.4);}
+  .rv-od{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.56rem;color:#fff;background:var(--red);padding:3px 8px;}
+  /* Hero: period + student on ONE line; attached equipment listed below. */
+  .resv-hero{padding:4px 0 13px;margin-bottom:13px;border-bottom:1px solid var(--line-soft);}
+  .resv-hero-line{display:flex;align-items:center;gap:11px;flex-wrap:wrap;min-width:0;}
+  .resv-hero-per{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:.72rem;color:#04110f;background:var(--teal);padding:3px 11px;}
+  .resv-hero-name{text-align:left;background:none;border:0;padding:0;margin:0;cursor:pointer;font-family:var(--font);font-weight:700;font-size:1.15rem;line-height:1.1;letter-spacing:.01em;color:#fff;transition:color .12s;}
   .resv-hero-name:hover{color:var(--teal-lt);}
-  .resv-hero-per{font-family:var(--font);font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:.72rem;color:#04110f;background:var(--teal);padding:3px 11px;}
-  .resv-hero.od .resv-hero-cam{color:#ff9a8a;text-shadow:0 0 10px rgba(224,64,58,.4);}
-  .resv-hero-od{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.58rem;color:#fff;background:var(--red);padding:3px 8px;}
+  .resv-gear{display:flex;flex-wrap:wrap;align-items:center;gap:5px 7px;margin-top:9px;font-size:.86rem;color:#9fd2d2;}
+  .resv-gear-k{font-family:var(--font);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.62rem;color:var(--faint);margin-right:2px;}
+  .resv-gear-i{background:none;border:0;padding:0;margin:0;cursor:pointer;font:inherit;color:#9fd2d2;} .resv-gear-i:hover{color:var(--teal-lt);}
+  .resv-gear i{color:var(--faint);font-style:normal;}
   .resv-meta{font-size:.85rem;color:var(--muted);margin-bottom:10px;}
   .resv-meta .co{color:var(--teal-lt);}
   .resv-dates{font-size:.82rem;color:var(--muted);margin-top:3px;}
@@ -1958,39 +1965,38 @@
     var parent=findRec(resvId); if(!parent){ closeResv(); return; }
     var items=resvItems(parent), rc=resvReturnedCount(parent);
     var od=items.some(isOverdue);
-    document.getElementById('resvTitle').innerHTML='Reservation';
+    var cams=items.filter(function(it){ return it.kind!=='equipment'; });
+    var gearItems=items.filter(function(it){ return it.kind==='equipment'; });
+    // Equipment up in the title bar: the camera number(s) (or a gear-only reservation's unit). Overdue reads red here.
+    var titleEq = cams.length
+      ? cams.map(function(c){ return '<button type="button" class="rv-cam'+(od?' od':'')+'" data-camdetail="'+esc(c.camera)+'">'+esc(String(c.camera||'').toUpperCase())+'</button>'; }).join('<span class="rv-sep">&middot;</span>')
+      : (gearItems.length ? '<span class="rv-cam">'+esc(gearLabel(gearItems[0].item).toUpperCase())+'</span>' : '');
+    document.getElementById('resvTitle').innerHTML='<span class="rv-h">Reservation</span>'+(titleEq?('<span class="rv-sep">&middot;</span>'+titleEq):'')+(od?'<span class="rv-od">Overdue</span>':'');
     function winLine(lbl,label,tm){ var t=fmtTime12(tm); if(!label && !t) return ''; return '<div class="resv-win"><b>'+lbl+'</b>'+esc(label||'')+(t?(' &middot; '+esc(t)):'')+'</div>'; }
     var winHtml=winLine('Pick up',parent.pickup_label,parent.pickup_time)+winLine('Return',parent.return_label,parent.return_time);
-    // Hero: the three facts that matter most at a glance -- camera number(s), student name, period. The name opens the student profile.
-    var heroCams=items.filter(function(it){ return it.kind!=='equipment'; });
-    var heroBig = heroCams.length ? heroCams.map(function(c){ return esc(String(c.camera||'').toUpperCase()); }).join(' &middot; ')
-      : (items.length ? esc(gearLabel(items[0].item).toUpperCase()) : 'RESERVATION');
     var hsid=String(parent.student_id||'');
-    var hero='<div class="resv-hero'+(od?' od':'')+'">'+
-      '<span class="resv-hero-cam">'+heroBig+(od?'<span class="resv-hero-od">Overdue</span>':'')+'</span>'+
-      '<span class="resv-hero-who">'+
-        (hsid?('<button type="button" class="resv-hero-name" data-stu="'+esc(hsid)+'">'+esc(nameOf(parent))+'</button>'):('<span class="resv-hero-name">'+esc(nameOf(parent))+'</span>'))+
+    // Hero: period + student on ONE line; any additional equipment attached to the reservation lists below (none for a lone camera).
+    // Gear lists in the hero only when there are no reserved pickup rows below (which would already show it), so it never doubles up.
+    var gearList = (gearItems.length && !items.some(function(x){return statusOf(x)==='reserved';})) ? '<div class="resv-gear"><span class="resv-gear-k">With</span>'+gearItems.map(function(g){ return '<button type="button" class="resv-gear-i" data-geardetail="'+esc(g.item)+'">'+esc(gearLabel(g.item))+'</button>'; }).join('<i>&middot;</i>')+'</div>' : '';
+    var hero='<div class="resv-hero"><div class="resv-hero-line">'+
         (parent.period?('<span class="resv-hero-per">Period '+esc(parent.period)+'</span>'):'')+
-      '</span></div>';
+        (hsid?('<button type="button" class="resv-hero-name" data-stu="'+esc(hsid)+'">'+esc(nameOf(parent))+'</button>'):('<span class="resv-hero-name">'+esc(nameOf(parent))+'</span>'))+
+      '</div>'+gearList+'</div>';
     var head='<div class="resv-meta"><span class="co">'+esc(parent.course||'')+'</span>'+
       '<div class="resv-dates">Out '+fmt(parent.out)+' → due '+fmt(parent.due)+'</div>'+winHtml+contactLine(parent)+'</div>';
-    var prog='<div class="resv-prog"><b>'+rc.done+'</b> of <b>'+rc.total+'</b> returned</div>';
-    var rows=items.map(function(it){
-      var isCam=it.kind!=='equipment', s=statusOf(it);
-      var nm=isCam
-        ? '<button type="button" class="itemlink" data-camdetail="'+esc(it.camera)+'">'+esc(it.camera).toUpperCase()+'</button>'
-        : '<button type="button" class="itemlink" data-geardetail="'+esc(it.item)+'">'+esc(gearLabel(it.item)).toUpperCase()+'</button>';
-      var label=isCam?('Camera kit · '+nm):nm;
-      var chip='<span class="resv-chip '+s+'">'+({reserved:'Reserved',out:'Checked out',returned:'Returned'}[s]||s)+'</span>';
-      var act='';
-      if(s==='reserved'){ act='<button type="button" class="btn sm" data-resvpick="'+esc(it.id)+'">Picked up</button>'+
-        '<button type="button" class="btn sm ghost" data-resvswap="'+esc(it.id)+'">Swap</button>'; }
-      else if(s==='out'){ act=''; }   // check-in is the stacked footer button now, not an inline per-row button
-      else { act='<span class="resv-done">Returned ✓</span>'; }
-      return '<div class="resv-item ri-'+s+'"><span class="resv-ilabel">'+label+'</span>'+chip+'<span class="resv-iact">'+act+'</span></div>';
-    }).join('');
     var allRet=rc.done===rc.total, anyOut=items.some(function(x){return statusOf(x)==='out';});
     var resvLeft=items.filter(function(x){return statusOf(x)==='reserved';}).length, anyReserved=resvLeft>0;
+    var prog=(anyOut||rc.done>0)?'<div class="resv-prog"><b>'+rc.done+'</b> of <b>'+rc.total+'</b> returned</div>':'';
+    // Item rows are the hand-out controls for anything still RESERVED; checked-out / returned items live in the title + hero, so no redundant row.
+    var rows=items.filter(function(x){return statusOf(x)==='reserved';}).map(function(it){
+      var isCam=it.kind!=='equipment';
+      var nm=isCam ? '<button type="button" class="itemlink" data-camdetail="'+esc(it.camera)+'">'+esc(it.camera).toUpperCase()+'</button>'
+                   : '<button type="button" class="itemlink" data-geardetail="'+esc(it.item)+'">'+esc(gearLabel(it.item)).toUpperCase()+'</button>';
+      var label=isCam?('Camera kit · '+nm):nm;
+      var act='<button type="button" class="btn sm" data-resvpick="'+esc(it.id)+'">Picked up</button><button type="button" class="btn sm ghost" data-resvswap="'+esc(it.id)+'">Swap</button>';
+      return '<div class="resv-item ri-reserved"><span class="resv-ilabel">'+label+'</span><span class="resv-chip reserved">Reserved</span><span class="resv-iact">'+act+'</span></div>';
+    }).join('');
+    var itemsHtml = rows ? '<div class="resv-items">'+rows+'</div>' : '';
     var foot='<div class="resv-foot">';
     if(allRet){ foot+='<div class="resv-allback">All items are back.</div>'; }
     else {
@@ -2002,7 +2008,9 @@
     }
     foot+='<button type="button" class="go resv-see" id="resvSee">Edit Reservation</button>';
     foot+='<button type="button" class="go resv-see" id="resvReceipt">Receipt</button></div>';
-    document.getElementById('resvBody').innerHTML=hero+head+prog+'<div class="resv-items">'+rows+'</div>'+foot;
+    document.getElementById('resvBody').innerHTML=hero+head+prog+itemsHtml+foot;
+    // The camera number(s) in the TITLE open the camera detail (the title is outside resvBody, so wire it here).
+    document.getElementById('resvTitle').querySelectorAll('[data-camdetail]').forEach(function(el){ el.onclick=function(){ var cam=el.getAttribute('data-camdetail'); closeResv(); openCamDetail(cam); }; });
     var b=document.getElementById('resvBody');
     b.querySelectorAll('[data-resvpick]').forEach(function(el){ el.onclick=function(){ resvSetStatus(el.getAttribute('data-resvpick'),'out'); }; });
     b.querySelectorAll('[data-resvswap]').forEach(function(el){ el.onclick=function(){ resvSwap(el.getAttribute('data-resvswap')); }; });
