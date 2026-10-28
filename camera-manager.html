@@ -248,6 +248,9 @@
   .til-per{color:var(--faint);font-size:.74rem;}
   .til-date{flex:0 0 auto;display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap;font-size:.8rem;font-weight:700;}
   .til-date i{font-style:normal;font-size:.56rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);}
+  /* Fixed-width weekday + tabular digits -> every date block is the same width, so Check-in buttons + dates + chevrons line up in columns. */
+  .til-dow{display:inline-block;min-width:2.5em;}
+  .til-md{font-variant-numeric:tabular-nums;}
   .til-date.out{color:#ffd889;} .til-date.in{color:#8ff7f7;} .til-date.checked{color:#ffb380;}
   .til-chev{flex:0 0 auto;color:var(--faint);font-size:1.1rem;line-height:1;}
   /* Camera-kit line: the camera carries its gear as associated chips (one pickup line for the whole kit). */
@@ -1492,6 +1495,15 @@
   function availCountOnDay(iso){ var busy={}; (DATA.checkouts||[]).forEach(function(c){ var last=effLastC(c); if(last&&c.out&&iso>=c.out&&iso<=last) busy[c.camera]=1; }); return viewCams().filter(function(cam){ return !busy[cam] && !isOOS(cam) && !isNoCard(cam); }).length; }
   function fmtMDY(iso){ var p=String(iso).split('-'); return (+p[1])+'/'+(+p[2])+'/'+p[0]; }
   function fmtDoWMD(iso){ if(!iso) return ''; var p=String(iso).split('-'); return dowShort(iso)+' '+(+p[1])+'/'+(+p[2]); }   // "Mon 10/20" (no year, compact)
+  // Row date cell: the day-of-week sits in a FIXED-WIDTH box and the digits are tabular, so every date block is the
+  // same width (Wed is naturally wider than Tue). That keeps the Check-in button, the dates and the chevron in straight
+  // vertical columns across all rows. ALIGNMENT RULE: any variable-width content on the right of a row gets a reserved
+  // width so nothing to its left can shift. (Chris 2026-10-27: never let the buttons "wave".)
+  function tilDate(dLbl, iso, key){
+    if(!iso) return '';
+    var p=String(iso).split('-'), md=(+p[1])+'/'+(+p[2]);
+    return '<span class="til-date '+key+'"><i>'+dLbl+'</i><span class="til-dow">'+esc(dowShort(iso))+'</span><span class="til-md">'+esc(md)+'</span></span>';
+  }
   function dowShort(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]; }
   function updateSummary(){
     var an=document.getElementById('availn'), tn=document.getElementById('totn'), au=document.getElementById('availunit');
@@ -1667,7 +1679,7 @@
   function itemLine(c, it, mode, showDate){
     var key=mode, inLike=(mode==='in'||mode==='checked'||mode==='overdue');
     var dISO=inLike?(c.due||c.out||''):(c.out||''), dLbl=inLike?'Due':'Out';
-    var date=showDate&&dISO?('<span class="til-date '+key+'"><i>'+dLbl+'</i>'+esc(fmtDoWMD(dISO))+'</span>'):'';
+    var date=showDate&&dISO?tilDate(dLbl, dISO, key):'';
     var dot='<span class="til-dot '+itemState(it)+'"></span>';
     var dup=_DUP[it.id]?'<span class="til-dup" title="This unit is on more than one open reservation">DUP</span>':'';
     var mid='<span class="til-big">'+esc(itemBig(it)).toUpperCase()+dup+'</span>'+
@@ -1681,7 +1693,7 @@
   function kitLineHtml(c, cam, gear, mode, showDate){
     var key=mode, inLike=(mode==='in'||mode==='checked'||mode==='overdue');
     var dISO=inLike?(c.due||c.out||''):(c.out||''), dLbl=inLike?'Due':'Out';
-    var date=showDate&&dISO?('<span class="til-date '+key+'"><i>'+dLbl+'</i>'+esc(fmtDoWMD(dISO))+'</span>'):'';
+    var date=showDate&&dISO?tilDate(dLbl, dISO, key):'';
     var dot='<span class="til-dot '+itemState(cam)+'"></span>';
     var dup=_DUP[cam.id]?'<span class="til-dup" title="This unit is on more than one open reservation">DUP</span>':'';
     var kitn=gear.length?'<span class="til-kitn">+'+gear.length+'</span>':'';
