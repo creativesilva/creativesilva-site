@@ -294,6 +294,41 @@ const DOCS = [
     '¿Cómo tomaste tus decisiones de edición? Describe varios cambios específicos que hiciste para que cada homenajeado se viera nítido, bien iluminado y consistente.',
     '¿De qué estás más orgulloso, y qué harías diferente para la próxima sesión de Panther of the Quarter?',
   ]},
+  // Spooky Portraits (Photography 1A AND 2A, identical except course) -- planned horror lighting,
+  // groups of 3 rotate subject / lighting assistant / camera operator, 3 portraits (change one thing
+  // between each), continuous Amaran RGB lights. Group makes 3, each student edits + submits their own.
+  { ...EN, outfile: 'Spooky-Portraits-Reflection-EN.docx', title: 'Spooky Portraits: Reflection', subtitle: PVHS_EN('Photography 1A'), questions: [
+    'What horror lighting look inspired you? Describe one image from your reference folder and what you liked about it.',
+    'Pick one of your three portraits. Where was each light, what color was it, and what height did you use? Why did that create the mood you wanted?',
+    'What did you change between your three portraits (light position, light height, or color), and how did it change the mood?',
+    'What role did each person in your group play (subject, lighting assistant, or camera operator), and how did your group work together?',
+    'How did you make your editing choices in Lightroom? Describe a few changes you made.',
+    'Which of your three portraits is your favorite, and why? What would you try next time?',
+  ]},
+  { ...ES, outfile: 'Spooky-Portraits-Reflection-ES.docx', title: 'Retratos de Terror: Reflexión', subtitle: PVHS_ES('Fotografía 1A'), questions: [
+    '¿Qué estilo de iluminación de terror te inspiró? Describe una imagen de tu carpeta de referencia y qué te gustó de ella.',
+    'Elige uno de tus tres retratos. ¿Dónde estaba cada luz, de qué color era y qué altura usaste? ¿Por qué eso creó el ambiente que buscabas?',
+    '¿Qué cambiaste entre tus tres retratos (posición de la luz, altura de la luz o color), y cómo cambió el ambiente?',
+    '¿Qué rol tuvo cada persona de tu grupo (sujeto, asistente de iluminación u operador de cámara), y cómo trabajaron juntos?',
+    '¿Cómo tomaste tus decisiones de edición en Lightroom? Describe algunos cambios que hiciste.',
+    '¿Cuál de tus tres retratos es tu favorito, y por qué? ¿Qué probarías la próxima vez?',
+  ]},
+  { ...EN, outfile: 'Spooky-Portraits-Photo2-Reflection-EN.docx', title: 'Spooky Portraits: Reflection', subtitle: PVHS_EN('Photography 2A'), questions: [
+    'What horror lighting look inspired you? Describe one image from your reference folder and what you liked about it.',
+    'Pick one of your three portraits. Where was each light, what color was it, and what height did you use? Why did that create the mood you wanted?',
+    'What did you change between your three portraits (light position, light height, or color), and how did it change the mood?',
+    'What role did each person in your group play (subject, lighting assistant, or camera operator), and how did your group work together?',
+    'How did you make your editing choices in Lightroom? Describe a few changes you made.',
+    'Which of your three portraits is your favorite, and why? What would you try next time?',
+  ]},
+  { ...ES, outfile: 'Spooky-Portraits-Photo2-Reflection-ES.docx', title: 'Retratos de Terror: Reflexión', subtitle: PVHS_ES('Fotografía 2A'), questions: [
+    '¿Qué estilo de iluminación de terror te inspiró? Describe una imagen de tu carpeta de referencia y qué te gustó de ella.',
+    'Elige uno de tus tres retratos. ¿Dónde estaba cada luz, de qué color era y qué altura usaste? ¿Por qué eso creó el ambiente que buscabas?',
+    '¿Qué cambiaste entre tus tres retratos (posición de la luz, altura de la luz o color), y cómo cambió el ambiente?',
+    '¿Qué rol tuvo cada persona de tu grupo (sujeto, asistente de iluminación u operador de cámara), y cómo trabajaron juntos?',
+    '¿Cómo tomaste tus decisiones de edición en Lightroom? Describe algunos cambios que hiciste.',
+    '¿Cuál de tus tres retratos es tu favorito, y por qué? ¿Qué probarías la próxima vez?',
+  ]},
   // Build Your Own Preset (Photography 2A)
   { ...EN, outfile: 'Build-Your-Own-Preset-Reflection-EN.docx', title: 'Build Your Own Preset: Reflection', subtitle: PVHS_EN('Photography 2A'), questions: [
     'What series did you choose (natural light portraits, close-ups of flowers, architecture, or something else), and why did you pick it?',
