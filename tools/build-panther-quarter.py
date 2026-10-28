@@ -25,7 +25,7 @@ S1_FLOAT=f"{IMGDIR}/capture-float-v1.jpg"
 S2_FLOAT=f"{IMGDIR}/edit-float-v1.jpg"
 S3_FLOAT=f"{IMGDIR}/reflection-float-v1.jpg"
 HAVE_HEADER=True
-HAVE_S1_FLOAT=False
+HAVE_S1_FLOAT=True        # reference portrait (Chris, from a previous session): the standard to hit
 HAVE_S2_FLOAT=False
 HAVE_S3_FLOAT=False
 
@@ -269,7 +269,7 @@ def step01():
         "Run the studio flow, capture in RAW, share the files, and turn in a 12-Up contact sheet of your full take.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("IN THE STUDIO / TAKE TURNS","Your Group Runs the Flow",
         para("Honorees arrive during the period. Your group runs the four-role flow for each one: the Greeter brings them in, the Honoree Assistant poses them, the Lighting Assistant sets the reflector, and the Photographer captures the 7 frames.")
-        + (float_right(S1_FLOAT,"Pioneer Valley students running the Panther of the Quarter studio flow with a honoree on the tape line") if HAVE_S1_FLOAT else "")
+        + (float_right(S1_FLOAT,"An example Panther of the Quarter portrait: sharp eyes, even studio light, and a clean, soft backdrop","The standard you are going for: sharp eyes, even light, a clean backdrop.") if HAVE_S1_FLOAT else "")
         + bullets([
             ("One group at a time:","there is one set of lights and one tape line. Only the working group stands near the studio."),
             ("Rotate roles:","switch roles after each honoree, so everyone photographs, guides, and lights."),
@@ -310,7 +310,7 @@ def step01():
         "Maneja el flujo del estudio, captura en RAW, comparte los archivos y entrega una hoja de contactos de 12 de todo tu trabajo.","#top","Back to English")
     es+=card("EN EL ESTUDIO / TOMEN TURNOS","Tu Grupo Maneja el Flujo",
         para("Los homenajeados llegan durante el periodo. Tu grupo maneja el flujo de cuatro roles con cada uno: el Recepcionista lo trae, el Asistente del Homenajeado lo posa, el Asistente de Iluminaci&oacute;n ajusta el reflector y el Fot&oacute;grafo captura las 7 im&aacute;genes.")
-        + (float_right(S1_FLOAT,"Estudiantes de Pioneer Valley manejando el flujo del estudio Panther of the Quarter con un homenajeado en la l&iacute;nea de cinta") if HAVE_S1_FLOAT else "")
+        + (float_right(S1_FLOAT,"Un retrato de ejemplo de Panther of the Quarter: ojos n&iacute;tidos, luz de estudio pareja y un fondo limpio y suave","El est&aacute;ndar que buscas: ojos n&iacute;tidos, luz pareja y un fondo limpio.") if HAVE_S1_FLOAT else "")
         + bullets([
             ("Un grupo a la vez:","hay un solo juego de luces y una sola l&iacute;nea de cinta. Solo el grupo que trabaja se para cerca del estudio."),
             ("Roten los roles:","cambien de rol despu&eacute;s de cada homenajeado, para que todos fotograf&iacute;en, gu&iacute;en e iluminen."),
