@@ -2082,7 +2082,10 @@
   function stuRecs(sid){ return (DATA.checkouts||[]).filter(function(c){ return String(c.student_id||'')===String(sid); }); }
   function stuOrders(sid){ return stuRecs(sid).filter(function(c){ return !c.group; }).sort(function(a,b){ return (resvDate(a)<resvDate(b))?1:-1; }); }
   function stuMissingCount(sid){ return stuRecs(sid).filter(function(c){ return c.pending || (c.note && /missing|not returned|damage|lost/i.test(c.note)); }).length; }
-  function openStudentProfile(sid){ if(!sid) return; closeResv(); closeCamDetail(); closeReceipt(); if(typeof closeLeads==='function') closeLeads(); stuId=sid; renderStudentProfile(); document.getElementById('stumodal').classList.add('open'); }
+  function openStudentProfile(sid){ if(!sid) return; closeResv(); closeCamDetail(); closeReceipt(); if(typeof closeLeads==='function') closeLeads(); stuId=sid;
+    // Always open the card, even if one piece of the render trips on odd data, so a click never silently does nothing.
+    try{ renderStudentProfile(); }catch(e){ try{ console.error('student profile render', e); document.getElementById('stuTitle').textContent='Student '+sid; document.getElementById('stuBody').innerHTML='<div class="cd-empty">Could not load the full profile for this student.</div>'; }catch(_){} }
+    document.getElementById('stumodal').classList.add('open'); }
   function closeStudentProfile(){ var m=document.getElementById('stumodal'); if(m) m.classList.remove('open'); stuId=null; }
   function renderStudentProfile(){
     var sid=stuId; var orders=stuOrders(sid);
@@ -2114,7 +2117,7 @@
        '<div class="stu-stat"><div class="n">'+orders.length+'</div><div class="k">Times reserved</div></div>'+
        '<div class="stu-stat"><div class="n">'+activeOut+'</div><div class="k">Active now</div></div>'+
        '<div class="stu-stat'+(missed?' warn':'')+'"><div class="n">'+missed+'</div><div class="k">Flagged returns</div></div></div></div>';
-    var rows=orders.map(function(o){ var items=resvItems(o), st=resvStatusGroup(o), lead=items[0];
+    var rows=orders.map(function(o){ var items=resvItems(o), st=resvStatusGroup(o), lead=items[0]||o;   // fall back to the order itself if its items are out of the current pool/scope, so the profile never crashes
       var nm=lead.kind!=='equipment'
         ? '<button type="button" class="itemlink" data-camdetail="'+esc(lead.camera)+'">'+esc(String(lead.camera).toUpperCase())+'</button>'
         : '<button type="button" class="itemlink" data-geardetail="'+esc(lead.item)+'">'+esc(String(gearLabel(lead.item)).toUpperCase())+'</button>';
