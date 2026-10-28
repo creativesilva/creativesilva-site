@@ -1902,6 +1902,7 @@
         subplan: { docx: "assets/course-documents/PVHS-Substitute-Plan-2026-09-16.docx", pdf: "assets/course-documents/PVHS-Substitute-Plan-2026-09-16.pdf", label: "Substitute Plan (Sept 16)" },
         bathroomlog: { docx: "assets/course-documents/PVHS-Student-Bathroom-Sign-Out-Log.docx", pdf: "assets/course-documents/PVHS-Student-Bathroom-Sign-Out-Log.pdf", label: "Student Bathroom Sign-Out Log" },
         permission: { docx: "assets/course-documents/SMJUHSD-Wix-Portfolio-Permission-Form-EN-ES.docx", pdf: "assets/course-documents/SMJUHSD-Wix-Portfolio-Permission-Form-EN-ES.pdf", label: "Wix Portfolio Permission Form (EN/ES)" },
+        fieldtrip: { docx: "assets/course-documents/PVHS-Off-Campus-Field-Trip-Form-B-EN-ES.docx", pdf: "assets/course-documents/PVHS-Off-Campus-Field-Trip-Form-B-EN-ES.pdf", label: "Off-Campus Field Trip Form B (EN/ES)" },
         purchaseorder: { pdf: "assets/course-documents/BPO27-00850-Amazon-2000.pdf", label: "Purchase Order: BPO27-00850 Amazon ($2,000)" },
         signature: { url: "assets/email-signature.html", label: "Mac Mail Signature" },
       },
@@ -2400,9 +2401,10 @@
         + (d.subplan ? wordDocRow(d.subplan.docx, d.subplan.pdf, d.subplan.label) : "")
         + (d.bathroomlog ? wordDocRow(d.bathroomlog.docx, d.bathroomlog.pdf, d.bathroomlog.label) : "")
         + (d.permission ? wordDocRow(d.permission.docx, d.permission.pdf, d.permission.label) : "")
+        + (d.fieldtrip ? wordDocRow(d.fieldtrip.docx, d.fieldtrip.pdf, d.fieldtrip.label) : "")
         + (d.purchaseorder ? docRow(d.purchaseorder.pdf, d.purchaseorder.label) : "")
         + (d.signature ? signatureRow(d.signature.url, d.signature.label) : "");
-      const nD = [d.rollsheet, d.seatingchart, d.subaeries, d.subplan, d.bathroomlog, d.permission, d.purchaseorder, d.signature].filter(Boolean).length;
+      const nD = [d.rollsheet, d.seatingchart, d.subaeries, d.subplan, d.bathroomlog, d.permission, d.fieldtrip, d.purchaseorder, d.signature].filter(Boolean).length;
       const docs = docRows ? subAcc("Documents", `${nD} file${nD === 1 ? "" : "s"}`, docRows) : "";
       // Links sub-section: external sites grouped Resources + Vendors, each a Visit button.
       const lk = t.links || {};
