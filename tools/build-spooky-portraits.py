@@ -24,9 +24,11 @@ IMGDIR=f"{SITE}/assets/images/shared/spooky-portraits"
 HEADER=f"{IMGDIR}/header-v1.jpg"
 PLAN_FLOAT=f"{IMGDIR}/plan-float-v1.jpg"
 CAP_FLOAT=f"{IMGDIR}/capture-float-v1.jpg"
+DIRECTIONS=f"{IMGDIR}/directions-v1.jpg"   # 5-direction lighting reference grid (Chris)
 HAVE_HEADER=True
 HAVE_PLAN_FLOAT=False
-HAVE_CAP_FLOAT=False
+HAVE_CAP_FLOAT=True        # underlit example portrait (Chris) on the Capture step
+HAVE_DIRECTIONS=True       # light-direction grid on the Plan step
 
 COURSES=[
   {"prefix":"photo1","title":"Photography 1A","zip":f"{SITE}/assets/course-documents/Spooky-Portraits-Project-Folder-Photo1.zip"},
@@ -305,6 +307,10 @@ def build_course(c):
                 ("Name the image:","name the inspiration image from your folder that guided you."),
             ])
             + note("There is no scanner on campus. Take a photo of your finished journal page with your student iPad and upload it here."))
+        en+=card("LIGHT DIRECTION / SEE THE DIFFERENCE","Five Ways to Light a Face",
+            para("Where you put the light changes everything. Here is the same face lit from five directions. Use it to choose your light position when you draw your plan.")
+            + (framed(DIRECTIONS,"A lighting reference: the same face lit from the front, 45 degrees, the side, behind, and below, each with a small diagram of the light position") if HAVE_DIRECTIONS else "")
+            + note("Light from below (the last one) is the classic spooky underlight. Light from the side splits the face into light and shadow."))
         en+=cheat_sheet(False)
         en+=next_up("UP NEXT &middot; STEP 03 - Capture &amp; Deliver","Rotate roles, capture your three portraits, then cull, edit, and export your JPGs.")
 
@@ -336,6 +342,10 @@ def build_course(c):
                 ("Nombra la imagen:","nombra la imagen de inspiraci&oacute;n de tu carpeta que te gui&oacute;."),
             ])
             + note("No hay esc&aacute;ner en la escuela. Toma una foto de tu p&aacute;gina del diario terminada con tu iPad de estudiante y s&uacute;bela aqu&iacute;."))
+        es+=card("DIRECCI&Oacute;N DE LA LUZ / VE LA DIFERENCIA","Cinco Formas de Iluminar una Cara",
+            para("D&oacute;nde pones la luz lo cambia todo. Aqu&iacute; est&aacute; la misma cara iluminada desde cinco direcciones. &Uacute;sala para elegir la posici&oacute;n de tu luz cuando dibujes tu plan.")
+            + (framed(DIRECTIONS,"Una referencia de iluminaci&oacute;n: la misma cara iluminada desde el frente, a 45 grados, de lado, por detr&aacute;s y desde abajo, cada una con un peque&ntilde;o diagrama de la posici&oacute;n de la luz") if HAVE_DIRECTIONS else "")
+            + note("La luz desde abajo (la &uacute;ltima) es la cl&aacute;sica luz inferior de terror. La luz de lado divide la cara en luz y sombra."))
         es+=cheat_sheet(True)
         es+=next_up("SIGUIENTE &middot; PASO 03 - Captura y Entrega","Roten los roles, capturen sus tres retratos, luego selecciona, edita y exporta tus JPG.")
 
@@ -349,7 +359,7 @@ def build_course(c):
             "Rotate roles, capture your three portraits, then cull, edit, and export your JPGs.","#espanol","Clic para Espa&ntilde;ol")
         en+=card("IN THE STUDIO / TAKE TURNS","Rotate and Capture Three Portraits",
             para("Set up your lights from your journal plan. Your group of three rotates roles: <strong>subject</strong>, <strong>lighting assistant</strong>, and <strong>camera operator</strong>. After each portrait, switch roles, so everyone operates the camera once and your group makes three portraits.")
-            + (float_right(CAP_FLOAT,"An example spooky studio portrait lit with colored light") if HAVE_CAP_FLOAT else "")
+            + (float_right(CAP_FLOAT,"An example spooky portrait lit from below, the classic underlighting look","Underlighting: the light comes from below, so the shadows climb upward for an eerie look.") if HAVE_CAP_FLOAT else "")
             + bullets([
                 ("Three portraits:","one per rotation. Each one is a new look."),
                 ("Change one thing:","change at least one thing between portraits: light position, light height, or color."),
@@ -392,7 +402,7 @@ def build_course(c):
             "Roten los roles, capturen sus tres retratos, luego selecciona, edita y exporta tus JPG.","#top","Back to English")
         es+=card("EN EL ESTUDIO / TOMEN TURNOS","Roten y Capturen Tres Retratos",
             para("Monten sus luces desde el plan de tu diario. Tu grupo de tres rota los roles: <strong>sujeto</strong>, <strong>asistente de iluminaci&oacute;n</strong> y <strong>operador de c&aacute;mara</strong>. Despu&eacute;s de cada retrato, cambien de rol, para que cada quien opere la c&aacute;mara una vez y tu grupo haga tres retratos.")
-            + (float_right(CAP_FLOAT,"Un retrato de estudio de terror de ejemplo iluminado con luz de color") if HAVE_CAP_FLOAT else "")
+            + (float_right(CAP_FLOAT,"Un retrato de terror de ejemplo iluminado desde abajo, el look cl&aacute;sico de luz inferior","Luz inferior: la luz viene desde abajo, as&iacute; que las sombras suben para un look espeluznante.") if HAVE_CAP_FLOAT else "")
             + bullets([
                 ("Tres retratos:","uno por rotaci&oacute;n. Cada uno es un look nuevo."),
                 ("Cambia una cosa:","cambia al menos una cosa entre retratos: posici&oacute;n de la luz, altura de la luz o color."),
