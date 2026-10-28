@@ -154,21 +154,23 @@ def build_course(c):
         if es:
             heading="Descarga Tu Carpeta del Proyecto"
             lead=("Descarga tu carpeta del proyecto. Es un archivo .zip. Al abrirlo tendr&aacute;s la carpeta "
-                  "<strong>Spooky_Portraits</strong>, y adentro hay una carpeta <strong>RAW_Images</strong> para tus fotos RAW "
+                  "<strong>Spooky_Portraits</strong>, y adentro hay una carpeta <strong>RAW_Images</strong> para tus fotos RAW, "
+                  "una carpeta <strong>Reference_Images</strong> para tus im&aacute;genes de inspiraci&oacute;n, "
                   "y tu documento de reflexi&oacute;n (en ingl&eacute;s y en espa&ntilde;ol).")
             label="Carpeta del Proyecto (.zip)"
             note_t=("<strong style=\"color:#ffb27c;\">Mantente organizado:</strong> cuando el .zip termine de descargarse, "
                     "&aacute;brelo y mueve la carpeta <strong>Spooky_Portraits</strong> a "
-                    f"OneDrive &rarr; {AREA}. Guarda tus fotos RAW dentro de <strong>RAW_Images</strong>.")
+                    f"OneDrive &rarr; {AREA}. Guarda tus fotos RAW dentro de <strong>RAW_Images</strong> y tus im&aacute;genes de inspiraci&oacute;n dentro de <strong>Reference_Images</strong>.")
         else:
             heading="Download Your Project Folder"
             lead=("Download your project folder. It is a .zip file. When you open it you get the "
                   "<strong>Spooky_Portraits</strong> folder, and inside it is a <strong>RAW_Images</strong> folder for your RAW "
-                  "photos and your reflection document (English and Spanish).")
+                  "photos, a <strong>Reference_Images</strong> folder for your inspiration images, "
+                  "and your reflection document (English and Spanish).")
             label="Project Folder (.zip)"
             note_t=("<strong style=\"color:#ffb27c;\">Stay organized:</strong> when the .zip finishes downloading, "
                     "open it and move the <strong>Spooky_Portraits</strong> folder into "
-                    f"OneDrive &rarr; {AREA}. Keep your RAW photos inside <strong>RAW_Images</strong>.")
+                    f"OneDrive &rarr; {AREA}. Keep your RAW photos inside <strong>RAW_Images</strong> and your inspiration images inside <strong>Reference_Images</strong>.")
         return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
           + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
           + para(lead)
@@ -351,17 +353,16 @@ def build_course(c):
             para("Great spooky portraits are planned, not lucky. First you gather ideas in a reference folder. Then you draw a lighting plan so your group can set up fast and repeat it.")
             + (float_right(PLAN_FLOAT,"An example Spooky Portraits top-view lighting diagram on a photo journal page") if HAVE_PLAN_FLOAT else ""))
         en+=deliverables_box(False,
-            [("Reference folder photo:","1 photo of your iPad reference folder, showing your 5 to 8 inspiration images."),
+            [("Reference folder:","1 screen capture of your Reference_Images folder, showing your 5 to 8 inspiration images."),
              ("Lighting plan photo:","1 photo of your lighting-plan journal page (the top-view diagram with your call-outs).")])
         en+=card("STEP A / REFERENCE FOLDER","Gather 5 to 8 Inspiration Images",
-            para("On your iPad, search for <strong>horror movie lighting</strong> you like. Old or new, any style.")
+            para("Search for <strong>horror movie lighting</strong> you like. Old or new, any style. Your project folder already has a <strong>Reference_Images</strong> folder waiting for them.")
             + bullets([
-                ("Make the folder:","name a folder <strong>Spooky_Portraits_Reference</strong> on your iPad."),
-                ("Save 5 to 8 images:","pick images that show where the light comes from, what color it is, and how it feels."),
+                ("Save 5 to 8 images:","save them into your <strong>Reference_Images</strong> folder. Pick images that show where the light comes from, what color it is, and how it feels."),
                 ("For each one, be ready to say:","where is the light, what color is it, and what mood does it make?"),
             ])
-            + note("These images are for your private study. Do not repost them or turn them in as your own work. You turn in a photo of your folder, not the images.")
-            + note("Take the photo of your reference folder with your student iPad and upload it here."))
+            + note("These images are for your private study. Do not repost them or turn them in as your own work. You turn in a screen capture of your folder, not the images.")
+            + note("Take a screen capture of your Reference_Images folder showing your 5 to 8 images and upload it here."))
         en+=card("STEP B / LIGHTING PLAN","Draw Your Journal Page",
             para("On one page of your photo journal, draw a <strong>top view</strong>, like looking straight down from the ceiling.")
             + steps([
@@ -383,17 +384,16 @@ def build_course(c):
             para("Los buenos retratos de terror se planean, no son suerte. Primero juntas ideas en una carpeta de referencia. Luego dibujas un plan de iluminaci&oacute;n para que tu grupo monte r&aacute;pido y lo pueda repetir.")
             + (float_right(PLAN_FLOAT,"Un diagrama de iluminaci&oacute;n de vista superior de ejemplo de Retratos de Terror en una p&aacute;gina del diario de fotograf&iacute;a") if HAVE_PLAN_FLOAT else ""))
         es+=deliverables_box(True,
-            [("Foto de la carpeta de referencia:","1 foto de tu carpeta de referencia del iPad, mostrando tus 5 a 8 im&aacute;genes de inspiraci&oacute;n."),
+            [("Carpeta de referencia:","1 captura de pantalla de tu carpeta Reference_Images, mostrando tus 5 a 8 im&aacute;genes de inspiraci&oacute;n."),
              ("Foto del plan de iluminaci&oacute;n:","1 foto de la p&aacute;gina de tu plan de iluminaci&oacute;n (el diagrama de vista superior con tus anotaciones).")])
         es+=card("PARTE A / CARPETA DE REFERENCIA","Junta 5 a 8 Im&aacute;genes de Inspiraci&oacute;n",
-            para("En tu iPad, busca <strong>iluminaci&oacute;n de pel&iacute;culas de terror</strong> que te guste. Vieja o nueva, cualquier estilo.")
+            para("Busca <strong>iluminaci&oacute;n de pel&iacute;culas de terror</strong> que te guste. Vieja o nueva, cualquier estilo. Tu carpeta del proyecto ya tiene una carpeta <strong>Reference_Images</strong> lista para ellas.")
             + bullets([
-                ("Crea la carpeta:","ponle de nombre <strong>Spooky_Portraits_Reference</strong> en tu iPad."),
-                ("Guarda 5 a 8 im&aacute;genes:","elige im&aacute;genes que muestren de d&oacute;nde viene la luz, de qu&eacute; color es y c&oacute;mo se siente."),
+                ("Guarda 5 a 8 im&aacute;genes:","gu&aacute;rdalas en tu carpeta <strong>Reference_Images</strong>. Elige im&aacute;genes que muestren de d&oacute;nde viene la luz, de qu&eacute; color es y c&oacute;mo se siente."),
                 ("De cada una, prep&aacute;rate para decir:","&iquest;d&oacute;nde est&aacute; la luz, de qu&eacute; color es y qu&eacute; ambiente crea?"),
             ])
-            + note("Estas im&aacute;genes son para tu estudio privado. No las vuelvas a publicar ni las entregues como tu propio trabajo. Entregas una foto de tu carpeta, no las im&aacute;genes.")
-            + note("Toma la foto de tu carpeta de referencia con tu iPad de estudiante y s&uacute;bela aqu&iacute;."))
+            + note("Estas im&aacute;genes son para tu estudio privado. No las vuelvas a publicar ni las entregues como tu propio trabajo. Entregas una captura de pantalla de tu carpeta, no las im&aacute;genes.")
+            + note("Toma una captura de pantalla de tu carpeta Reference_Images mostrando tus 5 a 8 im&aacute;genes y s&uacute;bela aqu&iacute;."))
         es+=card("PARTE B / PLAN DE ILUMINACI&Oacute;N","Dibuja la P&aacute;gina de Tu Diario",
             para("En una p&aacute;gina de tu diario de fotograf&iacute;a, dibuja una <strong>vista superior</strong>, como si miraras hacia abajo desde el techo.")
             + steps([
@@ -495,15 +495,15 @@ def build_course(c):
         en=banner("Module 11 &bull; Step 02","Capture &amp; Contact Sheet",
             "Gather your inspiration, capture your three portraits, and build a contact sheet.","#espanol","Clic para Espa&ntilde;ol")
         en+=card("FIND YOUR INSPIRATION","Start with 5 to 8 Horror-Lighting Images",
-            para("Good spooky portraits start with good ideas. Before you light anyone, gather a folder of horror-lighting images you want your look to feel like.")
+            para("Good spooky portraits start with good ideas. Before you light anyone, gather a folder of horror-lighting images you want your look to feel like. Your project folder already has a <strong>Reference_Images</strong> folder waiting for them.")
             + bullets([
-                ("Make the folder:","on your iPad, make a folder named <strong>Spooky_Portraits_Reference</strong>."),
-                ("Save 5 to 8 images:","search horror movie lighting, old or new, any style. Pick images that show where the light is, what color it is, and how it feels."),
-                ("Take a photo of your folder:","use your student iPad to take a photo of your reference folder, and upload it here."),
+                ("Save 5 to 8 images:","search horror movie lighting, old or new, any style. Pick images that show where the light is, what color it is, and how it feels, and save them into your <strong>Reference_Images</strong> folder."),
+                ("Be ready to say:","for each image, where is the light, what color is it, and what mood does it make?"),
+                ("Turn it in:","take a screen capture of your <strong>Reference_Images</strong> folder showing your 5 to 8 images, and upload it here."),
             ])
-            + note("These images are for your private study. Do not repost them or turn them in as your own work. You turn in a photo of your folder, not the images."))
+            + note("These images are for your private study. Do not repost them or turn them in as your own work. You turn in a screen capture of your folder, not the images."))
         en+=deliverables_box(False,
-            [("Reference folder photo:","1 photo of your iPad reference folder, showing your 5 to 8 inspiration images."),
+            [("Reference folder:","1 screen capture of your Reference_Images folder, showing your 5 to 8 inspiration images."),
              ("Contact sheet:","1 contact sheet of your three portraits, built in Lightroom and turned in as a high-resolution JPG.")])
         en+=spooky_settings(False)
         en+=safety_card(False)
@@ -532,15 +532,15 @@ def build_course(c):
         es=banner("M&oacute;dulo 11 &bull; Paso 02","Captura y Hoja de Contactos",
             "Junta tu inspiraci&oacute;n, captura tus tres retratos y arma una hoja de contactos.","#top","Back to English")
         es+=card("ENCUENTRA TU INSPIRACI&Oacute;N","Empieza con 5 a 8 Im&aacute;genes de Iluminaci&oacute;n de Terror",
-            para("Los buenos retratos de terror empiezan con buenas ideas. Antes de iluminar a nadie, junta una carpeta de im&aacute;genes de iluminaci&oacute;n de terror con el look que quieres lograr.")
+            para("Los buenos retratos de terror empiezan con buenas ideas. Antes de iluminar a nadie, junta una carpeta de im&aacute;genes de iluminaci&oacute;n de terror con el look que quieres lograr. Tu carpeta del proyecto ya tiene una carpeta <strong>Reference_Images</strong> lista para ellas.")
             + bullets([
-                ("Crea la carpeta:","en tu iPad, crea una carpeta llamada <strong>Spooky_Portraits_Reference</strong>."),
-                ("Guarda 5 a 8 im&aacute;genes:","busca iluminaci&oacute;n de pel&iacute;culas de terror, vieja o nueva, cualquier estilo. Elige im&aacute;genes que muestren d&oacute;nde est&aacute; la luz, de qu&eacute; color es y c&oacute;mo se siente."),
-                ("Toma una foto de tu carpeta:","usa tu iPad de estudiante para tomar una foto de tu carpeta de referencia, y s&uacute;bela aqu&iacute;."),
+                ("Guarda 5 a 8 im&aacute;genes:","busca iluminaci&oacute;n de pel&iacute;culas de terror, vieja o nueva, cualquier estilo. Elige im&aacute;genes que muestren d&oacute;nde est&aacute; la luz, de qu&eacute; color es y c&oacute;mo se siente, y gu&aacute;rdalas en tu carpeta <strong>Reference_Images</strong>."),
+                ("Prep&aacute;rate para decir:","de cada imagen, &iquest;d&oacute;nde est&aacute; la luz, de qu&eacute; color es y qu&eacute; ambiente crea?"),
+                ("Entr&eacute;gala:","toma una captura de pantalla de tu carpeta <strong>Reference_Images</strong> mostrando tus 5 a 8 im&aacute;genes, y s&uacute;bela aqu&iacute;."),
             ])
-            + note("Estas im&aacute;genes son para tu estudio privado. No las vuelvas a publicar ni las entregues como tu propio trabajo. Entregas una foto de tu carpeta, no las im&aacute;genes."))
+            + note("Estas im&aacute;genes son para tu estudio privado. No las vuelvas a publicar ni las entregues como tu propio trabajo. Entregas una captura de pantalla de tu carpeta, no las im&aacute;genes."))
         es+=deliverables_box(True,
-            [("Foto de la carpeta de referencia:","1 foto de tu carpeta de referencia del iPad, mostrando tus 5 a 8 im&aacute;genes de inspiraci&oacute;n."),
+            [("Carpeta de referencia:","1 captura de pantalla de tu carpeta Reference_Images, mostrando tus 5 a 8 im&aacute;genes de inspiraci&oacute;n."),
              ("Hoja de contactos:","1 hoja de contactos de tus tres retratos, armada en Lightroom y entregada como un JPG de alta resoluci&oacute;n.")])
         es+=spooky_settings(True)
         es+=safety_card(True)
