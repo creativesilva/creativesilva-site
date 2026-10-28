@@ -275,6 +275,25 @@ const DOCS = [
     '¿Qué harías diferente la próxima vez, si acaso algo?',
     '¿Cómo tomaste tus decisiones de edición? Describe varios cambios específicos que hiciste a tus imágenes.',
   ]},
+  // Panther of the Quarter Portrait Studio (Photography 2A) -- real-client group studio job for Mr. Movahedi.
+  // Roles: Greeter, Honoree Assistant, Lighting Assistant, Photographer. One photographer per group,
+  // but all three share the take and each edits + submits their own JPEGs (best waist + best chest per honoree).
+  { ...EN, outfile: 'Panther-of-the-Quarter-Reflection-EN.docx', title: 'Panther of the Quarter: Reflection', subtitle: PVHS_EN('Photography 2A'), questions: [
+    'Who was in your group, and what role did each person play (Greeter, Honoree Assistant, Lighting Assistant, or Photographer)? List your name and your group members.',
+    'This was a real job for a real client, Mr. Movahedi. How did that change the way you worked?',
+    'Walk through your part of the flow. What did your role do well, and what was the hardest part?',
+    'How did your group share the images so each of you could edit your own? What worked, and what would you do differently?',
+    'How did you make your editing decisions? Describe several specific changes you made so every honoree looked sharp, evenly lit, and consistent.',
+    'What are you most proud of, and what would you do differently for the next Panther of the Quarter session?',
+  ]},
+  { ...ES, outfile: 'Panther-of-the-Quarter-Reflection-ES.docx', title: 'Panther of the Quarter: Reflexión', subtitle: PVHS_ES('Fotografía 2A'), questions: [
+    '¿Quiénes estaban en tu grupo y qué rol tuvo cada uno (Recepcionista, Asistente del Homenajeado, Asistente de Iluminación o Fotógrafo)? Escribe tu nombre y el de tus compañeros de grupo.',
+    'Este fue un trabajo real para un cliente real, el Sr. Movahedi. ¿Cómo cambió eso tu forma de trabajar?',
+    'Explica tu parte del flujo. ¿Qué hizo bien tu rol, y cuál fue la parte más difícil?',
+    '¿Cómo compartió tu grupo las imágenes para que cada uno editara las suyas? ¿Qué funcionó, y qué harías diferente?',
+    '¿Cómo tomaste tus decisiones de edición? Describe varios cambios específicos que hiciste para que cada homenajeado se viera nítido, bien iluminado y consistente.',
+    '¿De qué estás más orgulloso, y qué harías diferente para la próxima sesión de Panther of the Quarter?',
+  ]},
   // Build Your Own Preset (Photography 2A)
   { ...EN, outfile: 'Build-Your-Own-Preset-Reflection-EN.docx', title: 'Build Your Own Preset: Reflection', subtitle: PVHS_EN('Photography 2A'), questions: [
     'What series did you choose (natural light portraits, close-ups of flowers, architecture, or something else), and why did you pick it?',

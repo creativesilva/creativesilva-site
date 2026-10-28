@@ -91,6 +91,7 @@
       { name: 'Aperture Portrait',      url: '/curriculum/shared/photo2-aperture-portrait-overview.html' },
       { name: 'Exposure Balance',       url: '/curriculum/shared/photo2-exposure-balance-overview.html' },
       { name: 'Spell Your Name Photo Walk', url: '/curriculum/shared/photo2-spell-your-name-overview.html' },
+      { name: 'Panther of the Quarter',     url: '/curriculum/shared/photo2-panther-quarter-overview.html' },
       { name: 'The Important Person Project', url: '/curriculum/shared/photo2-important-person-overview.html' }
     ]}
   ];
@@ -336,6 +337,10 @@
      '/curriculum/shared/photo2-spell-your-name-step03-cull-edit-export.html',
      '/curriculum/shared/photo2-spell-your-name-step04-reflection.html',
      '/curriculum/shared/photo2-spell-your-name-step05-name-collage.html'],
+    ['/curriculum/shared/photo2-panther-quarter-overview.html',
+     '/curriculum/shared/photo2-panther-quarter-step01-capture-contact.html',
+     '/curriculum/shared/photo2-panther-quarter-step02-cull-edit-deliver.html',
+     '/curriculum/shared/photo2-panther-quarter-step03-reflection.html'],
     ['/curriculum/shared/photo2-important-person-overview.html',
      '/curriculum/shared/photo2-important-person-step02-choose-your-person.html',
      '/curriculum/shared/photo2-important-person-step03-mood-board.html',
