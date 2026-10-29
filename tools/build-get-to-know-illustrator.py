@@ -295,7 +295,7 @@ def overview():
             ("Step 03 &middot; Sketch to Vector Art:","now that you know your way around, draw your character in vector and turn in your .ai and .svg files so it can be 3D printed."),
             ("Step 04 &middot; Draw the Back of Your Character:","add a second artboard and make the back view of your character, keeping the same silhouette, and turn in your .ai and .svg files."),
             ("Step 05 &middot; Put Your Character in a Scene:","build a 16:9 widescreen scene around your character, show its scale, and turn in your .ai and .svg files."),
-            ("Step 06 &middot; Comic Book Cover:","open the provided 8.5 by 11 template in Photoshop, bring in your character and scene as Smart Objects, add a title and an issue number, and turn in a print-ready PDF."),
+            ("Step 06 &middot; Comic Book Cover:","open the provided 8.5 by 11 template in Photoshop, bring in your character and background as Smart Objects, add a title and subtitle, and turn in a print-ready PDF to go with your 3D printed figure."),
         ])
         + note("There is no written reflection in this module. You get comfortable in Illustrator, draw your character front and back, build a scene, and finish with a comic book cover."))
     en+=resources_card("Key Words",
@@ -329,7 +329,7 @@ def overview():
             ("Paso 03 &middot; De Boceto a Arte Vectorial:","ahora que ya sabes moverte, dibuja tu personaje en vector y entrega tus archivos .ai y .svg para poder imprimirlo en 3D."),
             ("Paso 04 &middot; Dibuja la Espalda de Tu Personaje:","agrega una segunda mesa de trabajo y haz la vista de atr&aacute;s de tu personaje, con la misma silueta, y entrega tus archivos .ai y .svg."),
             ("Paso 05 &middot; Pon Tu Personaje en una Escena:","construye una escena 16:9 panor&aacute;mica alrededor de tu personaje, muestra su escala y entrega tus archivos .ai y .svg."),
-            ("Paso 06 &middot; Portada de C&oacute;mic:","abre la plantilla de 8.5 por 11 en Photoshop, trae tu personaje y escena como Objetos Inteligentes, agrega un t&iacute;tulo y un n&uacute;mero de edici&oacute;n, y entrega un PDF listo para imprimir."),
+            ("Paso 06 &middot; Portada de C&oacute;mic:","abre la plantilla de 8.5 por 11 en Photoshop, trae tu personaje y fondo como Objetos Inteligentes, agrega un t&iacute;tulo y subt&iacute;tulo, y entrega un PDF listo para imprimir que acompa&ntilde;a tu figura impresa en 3D."),
         ])
         + note("Este m&oacute;dulo no tiene reflexi&oacute;n escrita. Toma confianza en Illustrator, dibuja tu personaje de frente y de espalda, construye una escena y termina con una portada de c&oacute;mic."))
     es+=resources_card("Palabras Clave",
@@ -670,7 +670,7 @@ def step05():
         [("Your Illustrator file (.ai):","your finished scene with your character in it, saved as a native Adobe Illustrator file. File &gt; Save As, pick Adobe Illustrator, then upload it to this Canvas assignment."),
          ("Your exported file (.svg):","the same scene saved again as an SVG. File &gt; Save As, pick SVG, then upload it to this Canvas assignment."),
          ])
-    en+=next_up("UP NEXT &middot; STEP 06 - Comic Book Cover","Turn your character and scene into an 8.5 by 11 comic book cover with a title and an issue number, and export a print-ready PDF.")
+    en+=next_up("UP NEXT &middot; STEP 06 - Comic Book Cover","Turn your character and scene into an 8.5 by 11 comic book cover with a title and subtitle, then export a print-ready PDF to go with your 3D printed figure.")
 
     es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 05","Pon Tu Personaje en una Escena",
         "Construye una escena 16:9 panor&aacute;mica alrededor de tu personaje en Illustrator, luego entrega tus archivos .ai y .svg.","#top","Back to English", HICON_DESIGN)
@@ -696,7 +696,7 @@ def step05():
         [("Tu archivo de Illustrator (.ai):","tu escena terminada con tu personaje, guardada como archivo nativo de Adobe Illustrator. Archivo &gt; Guardar Como, elige Adobe Illustrator, luego s&uacute;belo a esta tarea de Canvas."),
          ("Tu archivo exportado (.svg):","la misma escena guardada otra vez como SVG. Archivo &gt; Guardar Como, elige SVG, luego s&uacute;belo a esta tarea de Canvas."),
          ])
-    es+=next_up("SIGUIENTE &middot; PASO 06 - Portada de C&oacute;mic","Convierte tu personaje y escena en una portada de c&oacute;mic de 8.5 por 11 con un t&iacute;tulo y un n&uacute;mero de edici&oacute;n, y exporta un PDF listo para imprimir.")
+    es+=next_up("SIGUIENTE &middot; PASO 06 - Portada de C&oacute;mic","Convierte tu personaje y escena en una portada de c&oacute;mic de 8.5 por 11 con un t&iacute;tulo y subt&iacute;tulo, luego exporta un PDF listo para imprimir que acompa&ntilde;a tu figura impresa en 3D.")
 
     stepnav=f'<a href="{S4}" class="silva-step-btn">&#8592; Step 04</a> <a href="{S6}" class="silva-step-btn">Step 06 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S4}" class="silva-bottom-btn">&#8592; Step 04</a><a href="{S6}" class="silva-bottom-btn">Step 06 &#8594;</a></div>'
@@ -710,6 +710,7 @@ def cover_notes(es):
          _tour_part("1","Abre la plantilla",[
             ("Desc&aacute;rgala y descompr&iacute;mela:","consigue la plantilla de portada de c&oacute;mic de la descarga en esta p&aacute;gina, y descompr&iacute;mela."),
             ("&Aacute;brela en Photoshop:","abre la plantilla .psd en Adobe Photoshop. No haces un documento nuevo: la plantilla ya est&aacute; lista en 8.5 por 11 para imprimir."),
+            ("Lo que ya trae:","la plantilla ya tiene el cuadro de esquina de PVHS Comics Group arriba a la izquierda. D&eacute;jalo as&iacute;. Las l&iacute;neas turquesa son solo gu&iacute;as para mantener tu texto adentro: <strong>no</strong> se imprimen."),
          ])
          + _tour_part("2","Lleva tu arte a Photoshop",[
             ("Copia desde Illustrator:","abre tu archivo del Paso 05 en Illustrator, selecciona tu personaje y escena, y c&oacute;pialo con Cmd+C."),
@@ -721,10 +722,10 @@ def cover_notes(es):
             ("Busca el &iacute;cono:","una capa de Objeto Inteligente tiene un peque&ntilde;o <strong>&iacute;cono</strong> en la esquina inferior derecha de la miniatura de la capa. Si ves ese &iacute;cono, tu arte es un Objeto Inteligente."),
             ("Por qu&eacute; importa:","un Objeto Inteligente guarda tu vector de Illustrator adentro, as&iacute; que puedes hacerlo m&aacute;s grande o m&aacute;s peque&ntilde;o sin que se vea borroso. Si no hay &iacute;cono, deshaz y pega otra vez como Objeto Inteligente."),
          ])
-         + _tour_part("4","Agrega tu t&iacute;tulo, subt&iacute;tulo y n&uacute;mero",[
-            ("Usa la herramienta Texto:","elige la herramienta Texto (la T) y haz clic donde la plantilla marca tu t&iacute;tulo, subt&iacute;tulo y n&uacute;mero de edici&oacute;n."),
+         + _tour_part("4","Agrega tu t&iacute;tulo y subt&iacute;tulo",[
+            ("Usa la herramienta Texto:","elige la herramienta Texto (la T) y haz clic adentro de las gu&iacute;as turquesa para que tu texto no se corte al imprimir."),
             ("Masthead:","escribe el nombre de tu c&oacute;mic, grande y en negrita. Esta es tu cabecera (masthead)."),
-            ("Subt&iacute;tulo y n&uacute;mero:","agrega un subt&iacute;tulo corto y un n&uacute;mero peque&ntilde;o como #1."),
+            ("Subt&iacute;tulo:","debajo del t&iacute;tulo, escribe <strong>Vector Character Design</strong> como tu subt&iacute;tulo."),
          ])
          + _tour_part("5","Guarda y exporta un PDF",[
             ("Guarda tu archivo de Photoshop:","Archivo &gt; Guardar, para conservar tu trabajo y poder editarlo otra vez."),
@@ -737,6 +738,7 @@ def cover_notes(es):
          _tour_part("1","Open the template",[
             ("Download and unzip it:","get the comic cover template from the download on this page, and unzip it."),
             ("Open it in Photoshop:","open the template .psd in Adobe Photoshop. You do not make a new document: the template is already set up at 8.5 by 11 for printing."),
+            ("What is already there:","the template already has the PVHS Comics Group corner box in the top-left. Leave it. The colored (teal) lines are just guides to keep your text inside. They will <strong>not</strong> print."),
          ])
          + _tour_part("2","Bring your art into Photoshop",[
             ("Copy from Illustrator:","open your Step 05 file in Illustrator, select your character and scene, and copy it with Cmd+C."),
@@ -748,10 +750,10 @@ def cover_notes(es):
             ("Look for the badge:","a Smart Object layer has a small <strong>badge icon</strong> in the bottom-right corner of its layer thumbnail. If you see that badge, your art is a Smart Object."),
             ("Why it matters:","a Smart Object keeps your Illustrator vector inside it, so you can scale it bigger or smaller with no blur. If there is no badge, undo and paste again as a Smart Object."),
          ])
-         + _tour_part("4","Add your title, subtitle, and number",[
-            ("Use the Type tool:","pick the Type tool (the T) and click where the template shows your title, subtitle, and issue number go."),
+         + _tour_part("4","Add your title and subtitle",[
+            ("Use the Type tool:","pick the Type tool (the T) and click inside the teal guides so your text does not get cut off when it prints."),
             ("Masthead:","type the name of your comic, big and bold. This is your masthead."),
-            ("Subtitle and number:","add a short subtitle and a small issue number like #1."),
+            ("Subtitle:","under the title, type <strong>Vector Character Design</strong> as your subtitle."),
          ])
          + _tour_part("5","Save and export a PDF",[
             ("Save your Photoshop file:","File &gt; Save, so you keep your work and can edit it again."),
@@ -767,11 +769,13 @@ def cover_notes(es):
 # ================= STEP 06: Comic Book Cover =================
 def step06():
     en=banner(f"Module {MODNUM} &bull; Step 06","Comic Book Cover",
-        "Open the comic cover template in Photoshop, bring in your character and scene as Smart Objects, and export a print-ready PDF.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
+        "Open the comic cover template in Photoshop, add your character, background, and title, and export a print-ready PDF to go with your 3D printed figure.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=card("YOUR COMIC COVER / WHAT YOU WILL DO","Make a Comic Cover for Your Character",
-        para("You have a character and a scene. Now put them on a <strong>comic book cover</strong>. You will open the <strong>provided template</strong> in Photoshop, bring in your character and scene as <strong>Smart Objects</strong>, and add a <strong>masthead</strong> (your comic&rsquo;s title), a <strong>subtitle</strong>, and an <strong>issue number</strong>.")
+        para("You have a character and a scene. Now put them on a <strong>comic book cover</strong>. You will open the <strong>provided template</strong> in Photoshop, bring in your <strong>character</strong> and your <strong>background</strong> as <strong>Smart Objects</strong>, and add a <strong>title</strong> (your comic&rsquo;s name) and a <strong>subtitle</strong>.")
+        + para("We print these covers to go with your <strong>3D printed figure</strong>. Your cover and your figure get shown together, so make it look great.")
         + para("A cover has one job: grab attention. The title is big and bold, and your character is the hero of the art. Make someone want to pick it up.")
-        + note("You do <strong>not</strong> redraw anything. Use the character and scene you already made in Step 05."))
+        + note("You do <strong>not</strong> redraw anything. Use the character and scene you already made in Step 05.")
+        + note("The template already has the <strong>PVHS Comics Group corner box</strong> in the top-left. Leave it. The <strong>teal lines are guides</strong> that keep your title and text inside the safe area. They will <strong>not</strong> print."))
     en+=template_download(False)
     en+=resources_card("How to Build Your Cover",
         para("Here are the steps in short. Use them as a cheat sheet while you work. These steps are for a Mac.")
@@ -780,23 +784,25 @@ def step06():
         (float_right(S6_FLOAT,"An example comic book cover titled Adventures of Blobby, with a big masthead, a subtitle, and the character as the hero of the art","An example cover: a big masthead, a subtitle, and your character as the star.") if HAVE_S6_FLOAT else "")
         + para("Build your cover and make your character the star.")
         + bullets([
-            ("Open the template:","download and unzip the template above, then open the .psd in Photoshop. You do not make a new document."),
-            ("Bring in your art:","in Illustrator, copy your Step 05 scene (Cmd+C), then paste it into Photoshop (Cmd+V) and choose Smart Object. Size and place it."),
+            ("Open the template:","download and unzip the template above, then open the .psd in Photoshop. You do not make a new document. Leave the corner box; the teal lines are only guides and will not print."),
+            ("Bring in your art:","in Illustrator, copy your Step 05 scene (Cmd+C), then paste it into Photoshop (Cmd+V) and choose Smart Object. Size and place your character and background."),
             ("Check the Smart Object badge:","in the Layers panel, your pasted layer should have a small badge icon on its thumbnail. That means your vector is kept, so it scales with no blur."),
-            ("Add your title, subtitle, and number:","use the Type tool to fill the template&rsquo;s spots: your masthead (title), a subtitle, and a small issue number like #1."),
+            ("Add your title and subtitle:","use the Type tool: type your comic&rsquo;s name as the big title, then type <strong>Vector Character Design</strong> as the subtitle. Keep text inside the teal guides."),
             ("Export a PDF:","File &gt; Save to keep your Photoshop file, then File &gt; Save As and pick Photoshop PDF. Turn in the PDF."),
         ])
-        + note("Keep your title and important parts a little in from the edge so nothing gets cut off when it prints."))
+        + note("Keep your title and important parts inside the teal guides so nothing gets cut off when it prints."))
     en+=deliverables_box(False,
-        [("Your comic cover (PDF):","your finished comic book cover, exported as a print-ready Adobe PDF, uploaded to this Canvas assignment.")])
+        [("Your comic cover (PDF):","your finished comic book cover, exported as a print-ready Adobe PDF, uploaded to this Canvas assignment. It gets printed to go with your 3D figure.")])
     en+=next_up("MODULE COMPLETE","Nice work. You designed a character, drew its front and back, built its world, and put it on a comic book cover. That is a full character-design project, start to finish.")
 
     es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 06","Portada de C&oacute;mic",
-        "Abre la plantilla de portada de c&oacute;mic en Photoshop, trae tu personaje y escena como Objetos Inteligentes, y exporta un PDF listo para imprimir.","#top","Back to English", HICON_DESIGN)
+        "Abre la plantilla de portada de c&oacute;mic en Photoshop, agrega tu personaje, fondo y t&iacute;tulo, y exporta un PDF listo para imprimir que acompa&ntilde;a tu figura impresa en 3D.","#top","Back to English", HICON_DESIGN)
     es+=card("TU PORTADA DE C&Oacute;MIC / QU&Eacute; VAS A HACER","Haz una Portada de C&oacute;mic para Tu Personaje",
-        para("Ya tienes un personaje y una escena. Ahora ponlos en una <strong>portada de c&oacute;mic</strong>. Vas a abrir la <strong>plantilla incluida</strong> en Photoshop, traer tu personaje y escena como <strong>Objetos Inteligentes</strong>, y agregar una <strong>cabecera</strong> (masthead, el t&iacute;tulo de tu c&oacute;mic), un <strong>subt&iacute;tulo</strong> y un <strong>n&uacute;mero de edici&oacute;n</strong>.")
+        para("Ya tienes un personaje y una escena. Ahora ponlos en una <strong>portada de c&oacute;mic</strong>. Vas a abrir la <strong>plantilla incluida</strong> en Photoshop, traer tu <strong>personaje</strong> y tu <strong>fondo</strong> como <strong>Objetos Inteligentes</strong>, y agregar un <strong>t&iacute;tulo</strong> (el nombre de tu c&oacute;mic) y un <strong>subt&iacute;tulo</strong>.")
+        + para("Estas portadas se imprimen para acompa&ntilde;ar tu <strong>figura impresa en 3D</strong>. Tu portada y tu figura se muestran juntas, as&iacute; que haz que se vea genial.")
         + para("Una portada tiene un solo trabajo: llamar la atenci&oacute;n. El t&iacute;tulo es grande y en negrita, y tu personaje es la estrella del arte. Haz que alguien quiera tomarla.")
-        + note("<strong>No</strong> vuelves a dibujar nada. Usa el personaje y la escena que ya hiciste en el Paso 05."))
+        + note("<strong>No</strong> vuelves a dibujar nada. Usa el personaje y la escena que ya hiciste en el Paso 05.")
+        + note("La plantilla ya trae el <strong>cuadro de esquina de PVHS Comics Group</strong> arriba a la izquierda. D&eacute;jalo. Las <strong>l&iacute;neas turquesa son gu&iacute;as</strong> para mantener tu t&iacute;tulo y texto en el &aacute;rea segura. <strong>No</strong> se imprimen."))
     es+=template_download(True)
     es+=resources_card("C&oacute;mo Armar Tu Portada",
         para("Estos son los pasos en corto. &Uacute;salos como ayuda mientras trabajas. Estos pasos son para una Mac.")
@@ -805,15 +811,15 @@ def step06():
         (float_right(S6_FLOAT,"Una portada de c&oacute;mic de ejemplo titulada Adventures of Blobby, con una cabecera grande, un subt&iacute;tulo y el personaje como la estrella del arte","Una portada de ejemplo: una cabecera grande, un subt&iacute;tulo y tu personaje como la estrella.") if HAVE_S6_FLOAT else "")
         + para("Arma tu portada y haz que tu personaje sea la estrella.")
         + bullets([
-            ("Abre la plantilla:","descarga y descomprime la plantilla de arriba, luego abre el .psd en Photoshop. No haces un documento nuevo."),
-            ("Trae tu arte:","en Illustrator, copia tu escena del Paso 05 (Cmd+C), luego p&eacute;gala en Photoshop (Cmd+V) y elige Objeto Inteligente. Ajusta el tama&ntilde;o y col&oacute;cala."),
+            ("Abre la plantilla:","descarga y descomprime la plantilla de arriba, luego abre el .psd en Photoshop. No haces un documento nuevo. Deja el cuadro de esquina; las l&iacute;neas turquesa son solo gu&iacute;as y no se imprimen."),
+            ("Trae tu arte:","en Illustrator, copia tu escena del Paso 05 (Cmd+C), luego p&eacute;gala en Photoshop (Cmd+V) y elige Objeto Inteligente. Ajusta el tama&ntilde;o y coloca tu personaje y tu fondo."),
             ("Revisa el &iacute;cono de Objeto Inteligente:","en el panel Capas, tu capa pegada debe tener un peque&ntilde;o &iacute;cono en su miniatura. Eso significa que tu vector se conserva, as&iacute; que escala sin verse borroso."),
-            ("Agrega tu t&iacute;tulo, subt&iacute;tulo y n&uacute;mero:","usa la herramienta Texto para llenar los espacios de la plantilla: tu cabecera (t&iacute;tulo), un subt&iacute;tulo y un n&uacute;mero peque&ntilde;o como #1."),
+            ("Agrega tu t&iacute;tulo y subt&iacute;tulo:","usa la herramienta Texto: escribe el nombre de tu c&oacute;mic como el t&iacute;tulo grande, luego escribe <strong>Vector Character Design</strong> como el subt&iacute;tulo. Mant&eacute;n el texto adentro de las gu&iacute;as turquesa."),
             ("Exporta un PDF:","Archivo &gt; Guardar para conservar tu archivo de Photoshop, luego Archivo &gt; Guardar Como y elige Photoshop PDF. Entrega el PDF."),
         ])
-        + note("Mant&eacute;n tu t&iacute;tulo y las partes importantes un poco adentro del borde para que nada se corte al imprimir."))
+        + note("Mant&eacute;n tu t&iacute;tulo y las partes importantes adentro de las gu&iacute;as turquesa para que nada se corte al imprimir."))
     es+=deliverables_box(True,
-        [("Tu portada de c&oacute;mic (PDF):","tu portada de c&oacute;mic terminada, exportada como un PDF de Adobe listo para imprimir, subida a esta tarea de Canvas.")])
+        [("Tu portada de c&oacute;mic (PDF):","tu portada de c&oacute;mic terminada, exportada como un PDF de Adobe listo para imprimir, subida a esta tarea de Canvas. Se imprime para acompa&ntilde;ar tu figura 3D.")])
     es+=next_up("M&Oacute;DULO COMPLETO","Buen trabajo. Dise&ntilde;aste un personaje, dibujaste su frente y su espalda, construiste su mundo y lo pusiste en una portada de c&oacute;mic. Ese es un proyecto completo de dise&ntilde;o de personaje, de principio a fin.")
 
     stepnav=f'<a href="{S5}" class="silva-step-btn">&#8592; Step 05</a>'
