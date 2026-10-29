@@ -331,7 +331,7 @@
   // pickup strip: blank room/teacher until a student authenticates; then their own teacher + room
   function refreshPickupInfo(){
     var el=document.getElementById('pickupInfo'); if(!el) return;
-    if(USER){ var teach=USER.teacher||TEACHER_NAME[USER.pool]||''; el.innerHTML='<b>Classroom pickup</b>'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+roomFor(USER.pool); }
+    if(USER){ var teach=USER.teacher||TEACHER_NAME[USER.pool]||''; el.innerHTML='<b>Classroom pickup</b>'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(pickupRoom()); }
     else { el.innerHTML='<b>Equipment pickup</b>'; }
   }
 
@@ -800,13 +800,32 @@
   try{ var _pk=sessionStorage.getItem('pv_pick'); if(_pk) PICK=JSON.parse(_pk)||{}; }catch(e){}
   function savePick(){ try{ sessionStorage.setItem('pv_pick',JSON.stringify(PICK)); }catch(e){} }
   function itemDA(it){ return !!(it.da || it.tag==='Digital Arts'); }       // Mankin / Digital Arts gear
-  // Gray out equipment that is not for the signed-in student's course (teacher override lifts it).
+  // The equipment pools the signed-in student may use. A dual-enrolled student (Photo with Mr. Silva or
+  // Ms. Garcia AND Digital Arts in Ms. Mankin's room) carries more than one; everyone else has the single
+  // pool the server resolved them to.
+  function userPools(){ if(!USER) return []; if(USER.pools&&USER.pools.length) return USER.pools; return USER.pool?[USER.pool]:[]; }
+  function hasPool(p){ return userPools().indexOf(p)>=0; }
+  function isMultiPool(){ return (hasPool('silva')||hasPool('garcia')) && hasPool('mankin'); }
+  // Pickup room(s). Photo gear is Room 322, Digital Arts gear is Room 331. A single-pool student always
+  // sees their one room; a dual-pool student sees only the room(s) the bagged gear needs (both until they
+  // bag anything), so a receipt never names a room they do not actually visit.
+  function pickupRoom(){
+    if(!USER) return '';
+    var photo=hasPool('silva')||hasPool('garcia'), da=hasPool('mankin');
+    if(!(photo&&da)) return da?'Room 331':'Room 322';
+    var needPhoto=false, needDA=false;
+    (BAG||[]).forEach(function(nm){ var it=findItem(nm); if(!it) return; if(itemDA(it)) needDA=true; else needPhoto=true; });
+    if(!needPhoto && !needDA){ needPhoto=true; needDA=true; }
+    if(needPhoto && needDA) return 'Room 322 (Photo) and Room 331 (Digital Arts)';
+    return needDA?'Room 331 (Digital Arts)':'Room 322 (Photo)';
+  }
+  // Gray out equipment that is not for the signed-in student's course(s) (teacher override lifts it).
   function itemLocked(it){
     if(!USER || USER.gearUnlocked) return false;                             // browsing (not signed in) or teacher-overridden
-    if(USER.pool==='mankin') return !itemDA(it);                             // Digital Arts student: only Digital Arts gear
-    if(itemDA(it)) return true;                                              // photo student can't take Digital Arts gear
-    if(it.p2 && !USER.p2_ok) return true;                                    // Photo-2-only gear needs a Photo 2 student
-    return false;                                                            // shared photo gear
+    if(itemDA(it)) return !hasPool('mankin');                                // Digital Arts gear needs the Digital Arts (Mankin) pool
+    if(!(hasPool('silva')||hasPool('garcia'))) return true;                  // photo gear needs a photo pool
+    if(it.p2 && !USER.p2_ok) return true;                                    // Photo-2-only gear still needs a Photo 2 student
+    return false;                                                            // shared photo gear this student can access
   }
   function lockReason(it){ if(itemDA(it)) return 'Digital Arts only'; if(it.p2) return 'Photo 2 only'; return 'Ask teacher'; }
 
@@ -988,7 +1007,7 @@
   function renderBag(){
     var w=document.getElementById('bagList');
     if(!BAG.length){ w.innerHTML='<p class="bag-empty">Your equipment bag is empty. Add gear to get started.</p>'; setBagMsg(''); return; }
-    var teach=USER?(USER.teacher||TEACHER_NAME[USER.pool]||''):'', room=USER?roomFor(USER.pool):'';
+    var teach=USER?(USER.teacher||TEACHER_NAME[USER.pool]||''):'', room=USER?pickupRoom():'';
     var note = modifyMode
       ? '<div class="bag-modnote">Changing your reservation. Edit the gear or the day, then <b>Save changes</b>. Close this to keep it as it was.</div>'
       : (reqMode() ? '<div class="bag-reqnote">Because of missing work, Mr. Silva must approve this reservation. Turn in your work to speed it up.</div>' : '');
@@ -1085,7 +1104,7 @@
     }).catch(function(){ setBagMsg('Could not reach the server. Try again.', true); if(rv){ rv.disabled=false; rv.textContent=lbl; } });
   }
   function showReceipt(s){
-    var teach=USER?(USER.teacher||TEACHER_NAME[USER.pool]||''):'', room=USER?roomFor(USER.pool):'';
+    var teach=USER?(USER.teacher||TEACHER_NAME[USER.pool]||''):'', room=USER?pickupRoom():'';
     var hasReq=s.requested.length>0, hasRes=s.reserved.length>0, pureReq=hasReq && !hasRes;
     var icon = pureReq ? '<div class="rcpt-check wait">&#8987;</div>' : '<div class="rcpt-check">&#10003;</div>';
     var head = pureReq ? 'Request sent!' : (hasReq ? 'Almost there!' : 'You&#8217;re all set!');
@@ -1138,11 +1157,12 @@
     var crs=String(u.course||''); var mp=crs.match(/photography\s*(\d)/i); if(mp) crs='Photo '+('0'+mp[1]).slice(-2);
     return [per, u.teacher||'', crs].filter(Boolean).map(esc).join('<i class="bs-sep">|</i>');
   }
-  // Digital Arts students (Mankin pool) get the stylus icon on the Accessories tab; everyone else keeps the tripod.
+  // Digital Arts-only students (Mankin pool) get the stylus icon on the Accessories tab; photo students and
+  // dual-pool students (mixed accessories) keep the generic accessories icon.
   function applyCatIcons(){
     var acc=document.querySelector('.catn[data-cat="accessories"] .catn-ic');
     if(!acc) return;
-    var da=(USER && USER.pool==='mankin');
+    var da=(USER && hasPool('mankin') && !isMultiPool());
     acc.style.setProperty('--ic', "url('/assets/Icons/store/"+(da?'stylus-v1':'accessories-v1')+".png')");
   }
   function refreshAccount(){
@@ -1191,12 +1211,12 @@
         USER={ id:v, label:j.label||'', name:j.name||'', period:String(j.period||''), course:j.course||'',
                hold:true, missing:(j.missing_count!=null?j.missing_count:null),
                missing_limit:(j.missing_limit!=null?j.missing_limit:6), p2_ok:false, gearUnlocked:false,
-               pool:(j.pool||TEACHER), teacher:(j.teacher||''),
+               pool:(j.pool||TEACHER), pools:(j.pools||null), teacher:(j.teacher||''),
                sc:(j.student_cell||''), pg:(j.parent_guardian||''), pc:(j.parent_cell||'') };
         saveUser(); refreshAccount(); close('signinOv'); openHold(); return;
       }
       window._siLookup={ id:v, label:j.label||'', name:j.name||'', period:String(j.period||''), course:j.course||'',
-                         pool:j.pool||TEACHER, teacher:j.teacher||'', p2_ok:!!j.p2_ok };
+                         pool:j.pool||TEACHER, pools:(j.pools||null), teacher:j.teacher||'', p2_ok:!!j.p2_ok };
       showStep2(j);
     }).catch(function(){ m.className='sheet-msg err'; m.textContent='Could not reach the server. Try again.'; });
   }
@@ -1215,7 +1235,7 @@
       return;
     }
     m2.className='sheet-msg'; m2.textContent='';
-    USER={ id:L.id, label:L.label, name:L.name, period:L.period, course:L.course, pool:L.pool, teacher:L.teacher,
+    USER={ id:L.id, label:L.label, name:L.name, period:L.period, course:L.course, pool:L.pool, pools:(L.pools||null), teacher:L.teacher,
            p2_ok:!!L.p2_ok, hold:false, gearUnlocked:false,
            sc:fmtPhone(scD), pg:pg, pc:fmtPhone(pcD) };
     saveUser(); refreshAccount(); close('signinOv');
