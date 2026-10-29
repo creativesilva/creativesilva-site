@@ -1068,6 +1068,8 @@
     }
     // Carry the student's chosen pickup + return windows (label + start time) onto every record so the teacher board can show when they said they would come.
     var win={}; if(pickup){ win.pickup_label=pickup.label; win.pickup_time=pickup.s; } if(returnTime){ win.return_label=returnTime.label; win.return_time=returnTime.s; }
+    // Also carry the confirmed contact so the server can enforce reachable contact even if the sign-in save was dropped (gear protection).
+    if(USER){ win.student_cell=USER.sc||''; win.parent_guardian=USER.pg||''; win.parent_cell=USER.pc||''; }
     posts=posts.map(function(p){ return Object.assign(p, win); });
     var lbl=reserveLabel(), sending=(lbl==='Send request')?'Sending…':'Reserving…';
     var rv=document.getElementById('bagReserve'); if(rv){ rv.disabled=true; rv.textContent=sending; }
