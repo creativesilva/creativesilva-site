@@ -52,7 +52,7 @@ HAVE_S2_FLOAT=False
 HAVE_S3_FLOAT=False
 HAVE_S4_FLOAT=False  # Step 04 backside float (none supplied yet), assets/images/da1/get-to-know-illustrator/back-float-v1.jpg
 HAVE_S5_FLOAT=False  # Step 05 scene float (none supplied yet), assets/images/da1/get-to-know-illustrator/scene-float-v1.jpg
-HAVE_S6_FLOAT=False  # Step 06 comic-cover float (none supplied yet), assets/images/da1/get-to-know-illustrator/cover-float-v1.jpg
+HAVE_S6_FLOAT=True   # Step 06 comic-cover example (Chris: "Adventures of Blobby")
 
 STANDARDS=[
   {"code":"DGA.17.1","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
@@ -764,7 +764,7 @@ def step06():
         para("Here are the steps in short. Use them as a cheat sheet while you work. These steps are for a Mac.")
         + cover_notes(False), False)
     en+=card("YOU PRACTICE / ON YOUR OWN","Design Your Cover",
-        (float_right(S6_FLOAT,"A Pioneer Valley student designing a comic book cover around a vector character in Adobe Illustrator","Make your character the star of the cover.") if HAVE_S6_FLOAT else "")
+        (float_right(S6_FLOAT,"An example comic book cover titled Adventures of Blobby, with a big masthead, a subtitle, and the character as the hero of the art","An example cover: a big masthead, a subtitle, and your character as the star.") if HAVE_S6_FLOAT else "")
         + para("Build your cover and make your character the star.")
         + bullets([
             ("New 8.5 by 11 page:","File &gt; New. Set the size to Letter, 8.5 by 11 inches, portrait, and set the Color Mode to RGB in Advanced Options."),
@@ -788,7 +788,7 @@ def step06():
         para("Estos son los pasos en corto. &Uacute;salos como ayuda mientras trabajas. Estos pasos son para una Mac.")
         + cover_notes(True), True)
     es+=card("T&Uacute; PRACTICAS / POR TU CUENTA","Dise&ntilde;a Tu Portada",
-        (float_right(S6_FLOAT,"Un estudiante de Pioneer Valley dise&ntilde;ando una portada de c&oacute;mic alrededor de un personaje vectorial en Adobe Illustrator","Haz que tu personaje sea la estrella de la portada.") if HAVE_S6_FLOAT else "")
+        (float_right(S6_FLOAT,"Una portada de c&oacute;mic de ejemplo titulada Adventures of Blobby, con una cabecera grande, un subt&iacute;tulo y el personaje como la estrella del arte","Una portada de ejemplo: una cabecera grande, un subt&iacute;tulo y tu personaje como la estrella.") if HAVE_S6_FLOAT else "")
         + para("Arma tu portada y haz que tu personaje sea la estrella.")
         + bullets([
             ("Mesa de 8.5 por 11:","Archivo &gt; Nuevo. Pon el tama&ntilde;o en Carta, 8.5 por 11 pulgadas, vertical, y pon el Modo de Color en RGB en Opciones Avanzadas."),
