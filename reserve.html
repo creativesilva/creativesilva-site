@@ -1114,11 +1114,15 @@
     if(anyOpen && !locked){ _lockY=window.pageYOffset||document.documentElement.scrollTop||0; document.body.style.top=(-_lockY)+'px'; document.documentElement.classList.add('modal-lock'); }
     else if(!anyOpen && locked){ document.documentElement.classList.remove('modal-lock'); document.body.style.top=''; window.scrollTo(0,_lockY); }
   }
-  function open(id){ document.getElementById(id).classList.add('open'); syncScrollLock(); }
+  // Stacking: the most recently opened overlay sits on TOP. Every .sov shares z-index:200, so without this a
+  // dialog opened over another (e.g. "Change dates" from the bag -> the date picker) renders BEHIND it in DOM
+  // order and looks like nothing happened. Each open gets 200 + how many are now open (bounded, stays under the
+  // toast at 300); close clears it. (Chris 2026-10-28: fixes the modify-date picker hidden behind the bag.)
+  function open(id){ var el=document.getElementById(id); el.classList.add('open'); el.style.zIndex=(200+document.querySelectorAll('.sov.open').length); syncScrollLock(); }
   function close(id){
     // Closing the bag mid-edit abandons the modify (restores the reservation as it was).
     if(id==='bagOv' && modifyMode){ exitModify(); BAG=[]; PICK={}; saveBag(); savePick(); updateBag(); rerender(); }
-    document.getElementById(id).classList.remove('open'); if(id==='planOv') pendingAdd=null; if(id==='pickerOv') pickerOpen=false; syncScrollLock();
+    var el=document.getElementById(id); el.classList.remove('open'); el.style.zIndex=''; if(id==='planOv') pendingAdd=null; if(id==='pickerOv') pickerOpen=false; syncScrollLock();
   }
   document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ close(b.getAttribute('data-close')); }; });
   ['signinOv','holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv','pickerOv','acctOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
