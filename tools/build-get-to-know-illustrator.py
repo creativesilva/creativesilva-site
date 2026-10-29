@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-# Digital Arts 1A - Module 08: Get to Know Illustrator (software warm-up, NO project, NO reflection).
+# Digital Arts 1A - Module 08: Vector Character Design (renamed from "Get to Know Illustrator"; URLs/slugs
+# keep the get-to-know-illustrator stem so Canvas links do not break). Tour warm-up (steps 01-02), then the
+# character project: vector character front (03), back (04), scene (05), and a comic book cover (06). No reflection.
 # Two pages: Overview (Step 01, read + download the practice files) + Step 02 (take the guided Adobe
 # tour, practice with the files, turn in ONE screen capture of the workspace). Bilingual EN/ES,
 # 5th-grade. Dark teal angular framework via silva_framework. HICON_DESIGN crown.
@@ -26,12 +28,14 @@ S2_FLOAT=f"{IMGDIR}/practice-float-v1.jpg"
 S3_FLOAT=f"{IMGDIR}/sketch-float-v1.jpg"
 S4_FLOAT=f"{IMGDIR}/back-float-v1.jpg"
 S5_FLOAT=f"{IMGDIR}/scene-float-v1.jpg"
+S6_FLOAT=f"{IMGDIR}/cover-float-v1.jpg"
 
 OVER="digarts1-get-to-know-illustrator-overview.html"
 S2="digarts1-get-to-know-illustrator-step02-practice.html"
 S3="digarts1-get-to-know-illustrator-step03-sketch-to-vector.html"
 S4="digarts1-get-to-know-illustrator-step04-character-back.html"
 S5="digarts1-get-to-know-illustrator-step05-character-scene.html"
+S6="digarts1-get-to-know-illustrator-step06-comic-cover.html"
 
 # Local ent: accents -> entities AND en-dash -> plain hyphen (never emit &ndash;, per the hard dash ban).
 def ent(s):
@@ -48,6 +52,7 @@ HAVE_S2_FLOAT=False
 HAVE_S3_FLOAT=False
 HAVE_S4_FLOAT=False  # Step 04 backside float (none supplied yet), assets/images/da1/get-to-know-illustrator/back-float-v1.jpg
 HAVE_S5_FLOAT=False  # Step 05 scene float (none supplied yet), assets/images/da1/get-to-know-illustrator/scene-float-v1.jpg
+HAVE_S6_FLOAT=False  # Step 06 comic-cover float (none supplied yet), assets/images/da1/get-to-know-illustrator/cover-float-v1.jpg
 
 STANDARDS=[
   {"code":"DGA.17.1","en_tier":"Design &amp; Graphic Arts","es_tier":"Dise&ntilde;o y Artes Gr&aacute;ficas",
@@ -65,7 +70,7 @@ VOCAB_EN=[
  ("Artboard","The page inside your Illustrator file where your art goes. One file can hold more than one artboard."),
  ("Workspace","The way your panels and tools are arranged around your artboard. You can move panels and reset the workspace back to normal."),
  ("Tools Panel","The strip of tools along the side, like the Selection tool, the Zoom tool, and the Type tool. You pick a tool, then use it on your art."),
- ("Zoom","Moving in closer or farther to see your art. Zooming changes only your view, not the real size of the art."),
+ ("Masthead","The big title of a comic on the cover, drawn in a bold, eye-catching style. It is the first thing you read."),
  ("Save As","Saving your file with a name, a place, and a file type, so you can find it and open it again later."),
 ]
 VOCAB_ES=[
@@ -73,7 +78,7 @@ VOCAB_ES=[
  ("Artboard (Mesa de Trabajo)","La p&aacute;gina dentro de tu archivo de Illustrator donde va tu arte. Un archivo puede tener m&aacute;s de una mesa de trabajo."),
  ("Workspace (Espacio de Trabajo)","La forma en que est&aacute;n acomodados tus paneles y herramientas alrededor de la mesa de trabajo. Puedes mover los paneles y regresar el espacio de trabajo a lo normal."),
  ("Tools Panel (Panel de Herramientas)","La barra de herramientas al costado, como la de Selecci&oacute;n, la de Zoom y la de Texto. Eliges una herramienta y luego la usas en tu arte."),
- ("Zoom (Zoom)","Acercarte o alejarte para ver tu arte. El zoom cambia solo tu vista, no el tama&ntilde;o real del arte."),
+ ("Masthead (Cabecera)","El t&iacute;tulo grande de un c&oacute;mic en la portada, hecho en un estilo llamativo y en negrita. Es lo primero que lees."),
  ("Save As (Guardar Como)","Guardar tu archivo con un nombre, un lugar y un tipo de archivo, para que puedas encontrarlo y abrirlo otra vez."),
 ]
 
@@ -237,7 +242,7 @@ def nav(current,dots,stepnav):
     return ('      <div class="silva-breadcrumb">\n'
             '        <a href="/curriculum.html">Curriculum Catalog</a>\n'
             '        <span class="bc-sep">&rsaquo;</span>\n'
-            f'        <a href="{OVER}" class="bc-hide-sm">Get to Know Illustrator</a>\n'
+            f'        <a href="{OVER}" class="bc-hide-sm">Vector Character Design</a>\n'
             '        <span class="bc-sep bc-hide-sm">&rsaquo;</span>\n'
             f'        <span class="bc-current">{current}</span>\n'
             '      </div>\n'
@@ -245,13 +250,13 @@ def nav(current,dots,stepnav):
             f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
             f'      <div class="silva-step-nav">{stepnav}</div>')
 
-HREFS=[OVER,S2,S3,S4,S5]; TITLES=[("1","Step 01"),("2","Step 02"),("3","Step 03"),("4","Step 04"),("5","Step 05")]
+HREFS=[OVER,S2,S3,S4,S5,S6]; TITLES=[("1","Step 01"),("2","Step 02"),("3","Step 03"),("4","Step 04"),("5","Step 05"),("6","Step 06")]
 def dots_for(ai):
     return "".join(dot("" if i==ai else HREFS[i], lab, title, i==ai, module=False) for i,(lab,title) in enumerate(TITLES))
 
 # ================= OVERVIEW (Step 01) =================
 def overview():
-    en=banner(f"Module {MODNUM} &bull; Step 01","Get to Know Illustrator",
+    en=banner(f"Module {MODNUM} &bull; Step 01","Vector Character Design",
         "Read this page and download your practice files, then go to Step 02 to take the tour. Steps 01 and 02 are your warm-up. The project begins in Step 03.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=type_card("overview","Step 01 &middot; Overview &amp; Download","Meet Adobe Illustrator",
         para("Illustrator is the program artists and designers use to make logos, icons, posters, and art that can be printed at any size. This module is a warm-up. You will take a short guided tour to learn your way around the program. There is nothing to turn in for the tour, so relax and get comfortable. Your project begins in Step 03, where you draw your character.")
@@ -268,23 +273,24 @@ def overview():
             ("Make a new document:","start a fresh file and choose a size, so you know how every project begins."),
             ("Saving your work:","save your file the right way so you never lose your work and can open it again later."),
         ]))
-    en+=card("HOW THIS MODULE WORKS","Five Steps",
-        para("This module has five steps. You are on Step 01 now.")
+    en+=card("HOW THIS MODULE WORKS","Six Steps",
+        para("This module has six steps. You are on Step 01 now.")
         + bullets([
             ("Step 01 &middot; Overview &amp; Download (you are here):","read this page and download your practice files below."),
             ("Step 02 &middot; Take the Tour &amp; Practice:","follow the short Adobe tutorial, practice with your files, then turn in one screen capture of your Illustrator workspace."),
             ("Step 03 &middot; Sketch to Vector Art:","now that you know your way around, draw your character in vector and turn in your .ai and .svg files so it can be 3D printed."),
             ("Step 04 &middot; Draw the Back of Your Character:","add a second artboard and make the back view of your character, keeping the same silhouette, and turn in your .ai and .svg files."),
             ("Step 05 &middot; Put Your Character in a Scene:","build a 16:9 widescreen scene around your character, show its scale, and turn in your .ai and .svg files."),
+            ("Step 06 &middot; Comic Book Cover:","turn your character and scene into an 8.5 by 11 comic book cover with a title and an issue number, and turn in a print-ready PDF."),
         ])
-        + note("There is no written reflection in this module. You get comfortable in Illustrator, draw your character front and back, then build a scene around it."))
+        + note("There is no written reflection in this module. You get comfortable in Illustrator, draw your character front and back, build a scene, and finish with a comic book cover."))
     en+=resources_card("Key Words",
         vocab_grid("On the Quiz",
           "Heads up: these key words show up on your Digital Arts quizzes. Learn them now, not the night before.",
           VOCAB_EN), False)
     en+=next_up("UP NEXT &middot; STEP 02 - Take the Tour &amp; Practice","Follow the guided Adobe tour, practice with your files, and capture your workspace.")
 
-    es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 01","Conoce Illustrator",
+    es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 01","Dise&ntilde;o de Personaje Vectorial",
         "Lee esta p&aacute;gina y descarga tus archivos de pr&aacute;ctica, luego ve al Paso 02 para hacer el recorrido. Los Pasos 01 y 02 son tu calentamiento. El proyecto empieza en el Paso 03.","#top","Back to English", HICON_DESIGN)
     es+=type_card("overview","Paso 01 &middot; Resumen y Descarga","Conoce Adobe Illustrator",
         para("Illustrator es el programa que usan los artistas y dise&ntilde;adores para hacer logotipos, &iacute;conos, carteles y arte que se puede imprimir en cualquier tama&ntilde;o. Este m&oacute;dulo es un calentamiento. Har&aacute;s un recorrido corto y guiado para aprender a moverte en el programa. No hay nada que entregar en el recorrido, as&iacute; que rel&aacute;jate y toma confianza. Tu proyecto empieza en el Paso 03, donde dibujas tu personaje.")
@@ -301,16 +307,17 @@ def overview():
             ("Crear un documento nuevo:","empieza un archivo nuevo y elige un tama&ntilde;o, para que sepas c&oacute;mo empieza cada proyecto."),
             ("Guardar tu trabajo:","guarda tu archivo de la forma correcta para que nunca pierdas tu trabajo y puedas abrirlo otra vez."),
         ]))
-    es+=card("C&Oacute;MO FUNCIONA ESTE M&Oacute;DULO","Cinco Pasos",
-        para("Este m&oacute;dulo tiene cinco pasos. Est&aacute;s en el Paso 01 ahora.")
+    es+=card("C&Oacute;MO FUNCIONA ESTE M&Oacute;DULO","Seis Pasos",
+        para("Este m&oacute;dulo tiene seis pasos. Est&aacute;s en el Paso 01 ahora.")
         + bullets([
             ("Paso 01 &middot; Resumen y Descarga (est&aacute;s aqu&iacute;):","lee esta p&aacute;gina y descarga tus archivos de pr&aacute;ctica abajo."),
             ("Paso 02 &middot; Haz el Recorrido y Practica:","sigue el tutorial corto de Adobe, practica con tus archivos y luego entrega una captura de pantalla de tu espacio de trabajo de Illustrator."),
             ("Paso 03 &middot; De Boceto a Arte Vectorial:","ahora que ya sabes moverte, dibuja tu personaje en vector y entrega tus archivos .ai y .svg para poder imprimirlo en 3D."),
             ("Paso 04 &middot; Dibuja la Espalda de Tu Personaje:","agrega una segunda mesa de trabajo y haz la vista de atr&aacute;s de tu personaje, con la misma silueta, y entrega tus archivos .ai y .svg."),
             ("Paso 05 &middot; Pon Tu Personaje en una Escena:","construye una escena 16:9 panor&aacute;mica alrededor de tu personaje, muestra su escala y entrega tus archivos .ai y .svg."),
+            ("Paso 06 &middot; Portada de C&oacute;mic:","convierte tu personaje y escena en una portada de c&oacute;mic de 8.5 por 11 con un t&iacute;tulo y un n&uacute;mero de edici&oacute;n, y entrega un PDF listo para imprimir."),
         ])
-        + note("Este m&oacute;dulo no tiene reflexi&oacute;n escrita. Toma confianza en Illustrator, dibuja tu personaje de frente y de espalda, y luego construye una escena a su alrededor."))
+        + note("Este m&oacute;dulo no tiene reflexi&oacute;n escrita. Toma confianza en Illustrator, dibuja tu personaje de frente y de espalda, construye una escena y termina con una portada de c&oacute;mic."))
     es+=resources_card("Palabras Clave",
         vocab_grid("En el Examen",
           "Atenci&oacute;n: estas palabras clave aparecen en tus ex&aacute;menes de Arte Digital. Apr&eacute;ndelas ahora, no la noche anterior.",
@@ -319,7 +326,7 @@ def overview():
 
     stepnav=f'<a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S2}" class="silva-bottom-btn">Next: Step 02 &#8594;</a></div>'
-    return wrap_page(f"Get to Know Illustrator | {CL_EN} | PVHS", nav("Step 01",dots_for(0),stepnav), top_wrap(en,es), bottom)
+    return wrap_page(f"Vector Character Design | {CL_EN} | PVHS", nav("Step 01",dots_for(0),stepnav), top_wrap(en,es), bottom)
 
 # ================= STEP 02: Take the Tour & Practice =================
 def step02():
@@ -375,7 +382,7 @@ def step02():
 
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a> <a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
-    return wrap_page(f"Step 2: Take the Tour and Practice | Get to Know Illustrator | {CL_EN} | PVHS", nav("Step 02",dots_for(1),stepnav), top_wrap(en,es), bottom)
+    return wrap_page(f"Step 2: Take the Tour and Practice | Vector Character Design | {CL_EN} | PVHS", nav("Step 02",dots_for(1),stepnav), top_wrap(en,es), bottom)
 
 # ================= STEP 03: Sketch to Vector Art =================
 def step03():
@@ -441,7 +448,7 @@ def step03():
 
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a> <a href="{S4}" class="silva-step-btn">Step 04 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><a href="{S4}" class="silva-bottom-btn">Step 04 &#8594;</a></div>'
-    return wrap_page(f"Step 3: Sketch to Vector Art | Get to Know Illustrator | {CL_EN} | PVHS", nav("Step 03",dots_for(2),stepnav), top_wrap(en,es), bottom)
+    return wrap_page(f"Step 3: Sketch to Vector Art | Vector Character Design | {CL_EN} | PVHS", nav("Step 03",dots_for(2),stepnav), top_wrap(en,es), bottom)
 
 def backside_notes(es):
     # Step 04 "draw the back of your character" steps, in the same locked purple scroller.
@@ -559,7 +566,7 @@ def step04():
 
     stepnav=f'<a href="{S3}" class="silva-step-btn">&#8592; Step 03</a> <a href="{S5}" class="silva-step-btn">Step 05 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S3}" class="silva-bottom-btn">&#8592; Step 03</a><a href="{S5}" class="silva-bottom-btn">Step 05 &#8594;</a></div>'
-    return wrap_page(f"Step 4: Draw the Back of Your Character | Get to Know Illustrator | {CL_EN} | PVHS", nav("Step 04",dots_for(3),stepnav), top_wrap(en,es), bottom)
+    return wrap_page(f"Step 4: Draw the Back of Your Character | Vector Character Design | {CL_EN} | PVHS", nav("Step 04",dots_for(3),stepnav), top_wrap(en,es), bottom)
 
 def scene_notes(es):
     # Step 05 "put your character in a scene" steps, in the same locked purple scroller.
@@ -649,7 +656,7 @@ def step05():
         [("Your Illustrator file (.ai):","your finished scene with your character in it, saved as a native Adobe Illustrator file. File &gt; Save As, pick Adobe Illustrator, then upload it to this Canvas assignment."),
          ("Your exported file (.svg):","the same scene saved again as an SVG. File &gt; Save As, pick SVG, then upload it to this Canvas assignment."),
          ])
-    en+=next_up("MODULE COMPLETE","Nice work. You drew your character and built a scene that shows its scale, and you turned in your .ai and .svg files. You are ready for your next Illustrator project.")
+    en+=next_up("UP NEXT &middot; STEP 06 - Comic Book Cover","Turn your character and scene into an 8.5 by 11 comic book cover with a title and an issue number, and export a print-ready PDF.")
 
     es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 05","Pon Tu Personaje en una Escena",
         "Construye una escena 16:9 panor&aacute;mica alrededor de tu personaje en Illustrator, luego entrega tus archivos .ai y .svg.","#top","Back to English", HICON_DESIGN)
@@ -675,13 +682,131 @@ def step05():
         [("Tu archivo de Illustrator (.ai):","tu escena terminada con tu personaje, guardada como archivo nativo de Adobe Illustrator. Archivo &gt; Guardar Como, elige Adobe Illustrator, luego s&uacute;belo a esta tarea de Canvas."),
          ("Tu archivo exportado (.svg):","la misma escena guardada otra vez como SVG. Archivo &gt; Guardar Como, elige SVG, luego s&uacute;belo a esta tarea de Canvas."),
          ])
-    es+=next_up("M&Oacute;DULO COMPLETO","Buen trabajo. Dibujaste tu personaje y construiste una escena que muestra su escala, y entregaste tus archivos .ai y .svg. Est&aacute;s listo para tu pr&oacute;ximo proyecto de Illustrator.")
+    es+=next_up("SIGUIENTE &middot; PASO 06 - Portada de C&oacute;mic","Convierte tu personaje y escena en una portada de c&oacute;mic de 8.5 por 11 con un t&iacute;tulo y un n&uacute;mero de edici&oacute;n, y exporta un PDF listo para imprimir.")
 
-    stepnav=f'<a href="{S4}" class="silva-step-btn">&#8592; Step 04</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{S4}" class="silva-bottom-btn">&#8592; Step 04</a><span></span></div>'
-    return wrap_page(f"Step 5: Put Your Character in a Scene | Get to Know Illustrator | {CL_EN} | PVHS", nav("Step 05",dots_for(4),stepnav), top_wrap(en,es), bottom)
+    stepnav=f'<a href="{S4}" class="silva-step-btn">&#8592; Step 04</a> <a href="{S6}" class="silva-step-btn">Step 06 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{S4}" class="silva-bottom-btn">&#8592; Step 04</a><a href="{S6}" class="silva-bottom-btn">Step 06 &#8594;</a></div>'
+    return wrap_page(f"Step 5: Put Your Character in a Scene | Vector Character Design | {CL_EN} | PVHS", nav("Step 05",dots_for(4),stepnav), top_wrap(en,es), bottom)
 
-for fname,gen in [(OVER,overview),(S2,step02),(S3,step03),(S4,step04),(S5,step05)]:
+def cover_notes(es):
+    # Step 06 "comic book cover" steps, in the same locked purple scroller.
+    if es:
+        hint="Despl&aacute;zate dentro del cuadro para ver los pasos."
+        parts=(
+         _tour_part("1","Mesa de 8.5 por 11",[
+            ("Archivo &gt; Nuevo:","abre la ventana de Documento Nuevo para empezar un archivo nuevo."),
+            ("Hazla de 8.5 por 11, vertical:","pon el tama&ntilde;o en Carta, 8.5 por 11 pulgadas, parada (vertical). Este es el tama&ntilde;o que vas a imprimir."),
+            ("Modo de color RGB:","abre Opciones Avanzadas y elige Color RGB, el mismo modo que tu escena, para que tus colores no cambien."),
+         ])
+         + _tour_part("2","Trae tu personaje y escena",[
+            ("Abre tu archivo del Paso 05:","abre el .ai de la escena con tu personaje. No vuelves a dibujar nada."),
+            ("Copia y pega:","selecciona toda tu escena, c&oacute;piala y p&eacute;gala en tu portada."),
+            ("Ajusta a la hoja vertical:","escala y mueve tu arte para que llene la portada. Tu personaje es la estrella, as&iacute; que hazlo grande y f&aacute;cil de ver."),
+         ])
+         + _tour_part("3","Agrega tu masthead (el t&iacute;tulo)",[
+            ("Elige la herramienta Texto:","en el panel de herramientas, elige la herramienta Texto (la T)."),
+            ("Nombra tu c&oacute;mic:","haz clic cerca de arriba y escribe el nombre de tu c&oacute;mic. Hazlo grande y en negrita para que se lea desde lejos. Esta es tu cabecera (masthead)."),
+            ("Que resalte:","elige una fuente fuerte y un color que resalte sobre tu arte."),
+         ])
+         + _tour_part("4","Agrega un subt&iacute;tulo y un n&uacute;mero de edici&oacute;n",[
+            ("Subt&iacute;tulo:","con la herramienta Texto, agrega una l&iacute;nea m&aacute;s corta cerca de tu t&iacute;tulo. Este es tu subt&iacute;tulo, unas palabras que dan el ambiente."),
+            ("N&uacute;mero de edici&oacute;n:","agrega un n&uacute;mero peque&ntilde;o como #1 en una esquina, para que parezca una primera edici&oacute;n de verdad."),
+         ])
+         + _tour_part("5","Guarda y exporta un PDF",[
+            ("Ordena tus capas:","en el panel Capas, aseg&uacute;rate de que tu t&iacute;tulo y texto queden delante de tu arte."),
+            ("Guarda como .ai:","Archivo &gt; Guardar Como, elige Adobe Illustrator, para poder editar tu portada otra vez."),
+            ("Exporta un PDF:","Archivo &gt; Guardar Como otra vez, elige Adobe PDF. Este PDF listo para imprimir es lo que entregas."),
+         ])
+        )
+    else:
+        hint="Scroll inside the box to see the steps."
+        parts=(
+         _tour_part("1","New 8.5 by 11 page",[
+            ("File &gt; New:","open the New Document window to start a fresh file."),
+            ("Make it 8.5 by 11, portrait:","set the size to Letter, 8.5 by 11 inches, standing up tall (portrait). This is the size you will print."),
+            ("Color mode RGB:","open Advanced Options and choose RGB Color, the same mode as your scene, so your colors do not shift."),
+         ])
+         + _tour_part("2","Bring in your character and scene",[
+            ("Open your Step 05 file:","open the .ai of the scene with your character in it. You do not redraw anything."),
+            ("Copy and paste:","select your whole scene, copy it, and paste it onto your cover page."),
+            ("Fit the tall page:","scale and move your art so it fills the cover. Your character is the star, so make it big and easy to see."),
+         ])
+         + _tour_part("3","Add your masthead (the title)",[
+            ("Pick the Type tool:","in the Tools panel, choose the Type tool (the T)."),
+            ("Name your comic:","click near the top and type the name of your comic. Make it big and bold so it reads from across the room. This is your masthead."),
+            ("Make it pop:","pick a strong font and a color that stands out against your art."),
+         ])
+         + _tour_part("4","Add a subtitle and an issue number",[
+            ("Subtitle:","with the Type tool, add a shorter line near your title. This is your subtitle, a few words that set the mood."),
+            ("Issue number:","add a small number like #1 in a corner, so it looks like a real first issue."),
+         ])
+         + _tour_part("5","Save and export a PDF",[
+            ("Order your layers:","in the Layers panel, make sure your title and text sit in front of your art."),
+            ("Save as .ai:","File &gt; Save As, pick Adobe Illustrator, so you can edit your cover again later."),
+            ("Export a PDF:","File &gt; Save As again, pick Adobe PDF. This print-ready PDF is what you turn in."),
+         ])
+        )
+    hintline=f'<div style="font-size:11pt;color:#c4b5fd;margin-bottom:8px;opacity:0.85;">&#8595; {hint}</div>'
+    scroll=('<div class="silva-scroll" style="max-height:460px;overflow-y:auto;padding:14px 16px 20px;border:1px solid rgba(139,92,246,0.30);'
+      'background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.14) 88%, rgba(139,92,246,0.16) 100%);">'
+      f'{parts}</div>')
+    return hintline+scroll
+
+# ================= STEP 06: Comic Book Cover =================
+def step06():
+    en=banner(f"Module {MODNUM} &bull; Step 06","Comic Book Cover",
+        "Turn your character and scene into an 8.5 by 11 comic book cover, then export a print-ready PDF.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
+    en+=card("YOUR COMIC COVER / WHAT YOU WILL DO","Make a Comic Cover for Your Character",
+        para("You have a character and a scene. Now put them on a <strong>comic book cover</strong>. You will set up an <strong>8.5 by 11</strong> page, bring in your character and scene, and add a <strong>masthead</strong> (your comic&rsquo;s title), a <strong>subtitle</strong>, and an <strong>issue number</strong>.")
+        + para("A cover has one job: grab attention. The title is big and bold, and your character is the hero of the art. Make someone want to pick it up.")
+        + note("You do <strong>not</strong> redraw anything. Use the character and scene you already made in Step 05."))
+    en+=resources_card("How to Build Your Cover",
+        para("Here are the steps in short. Use them as a cheat sheet while you work. These steps are for a Mac.")
+        + cover_notes(False), False)
+    en+=card("YOU PRACTICE / ON YOUR OWN","Design Your Cover",
+        (float_right(S6_FLOAT,"A Pioneer Valley student designing a comic book cover around a vector character in Adobe Illustrator","Make your character the star of the cover.") if HAVE_S6_FLOAT else "")
+        + para("Build your cover and make your character the star.")
+        + bullets([
+            ("New 8.5 by 11 page:","File &gt; New. Set the size to Letter, 8.5 by 11 inches, portrait, and set the Color Mode to RGB in Advanced Options."),
+            ("Bring in your art:","open your Step 05 .ai, copy your scene with your character, and paste it onto the cover. Fit it to the tall page. Do not redraw it."),
+            ("Add your masthead:","use the Type tool to add your comic&rsquo;s title at the top, big and bold."),
+            ("Add a subtitle and issue number:","add a short subtitle near the title, and a small issue number like #1 in a corner."),
+            ("Export a PDF:","File &gt; Save As and pick Adobe Illustrator to keep your .ai, then File &gt; Save As again and pick Adobe PDF. Turn in the PDF."),
+        ])
+        + note("Keep your title and important parts a little in from the edge so nothing gets cut off when it prints."))
+    en+=deliverables_box(False,
+        [("Your comic cover (PDF):","your finished comic book cover, exported as a print-ready Adobe PDF, uploaded to this Canvas assignment.")])
+    en+=next_up("MODULE COMPLETE","Nice work. You designed a character, drew its front and back, built its world, and put it on a comic book cover. That is a full character-design project, start to finish.")
+
+    es=banner(f"M&oacute;dulo {MODNUM} &bull; Paso 06","Portada de C&oacute;mic",
+        "Convierte tu personaje y escena en una portada de c&oacute;mic de 8.5 por 11, luego exporta un PDF listo para imprimir.","#top","Back to English", HICON_DESIGN)
+    es+=card("TU PORTADA DE C&Oacute;MIC / QU&Eacute; VAS A HACER","Haz una Portada de C&oacute;mic para Tu Personaje",
+        para("Ya tienes un personaje y una escena. Ahora ponlos en una <strong>portada de c&oacute;mic</strong>. Vas a crear una p&aacute;gina de <strong>8.5 por 11</strong>, traer tu personaje y escena, y agregar una <strong>cabecera</strong> (masthead, el t&iacute;tulo de tu c&oacute;mic), un <strong>subt&iacute;tulo</strong> y un <strong>n&uacute;mero de edici&oacute;n</strong>.")
+        + para("Una portada tiene un solo trabajo: llamar la atenci&oacute;n. El t&iacute;tulo es grande y en negrita, y tu personaje es la estrella del arte. Haz que alguien quiera tomarla.")
+        + note("<strong>No</strong> vuelves a dibujar nada. Usa el personaje y la escena que ya hiciste en el Paso 05."))
+    es+=resources_card("C&oacute;mo Armar Tu Portada",
+        para("Estos son los pasos en corto. &Uacute;salos como ayuda mientras trabajas. Estos pasos son para una Mac.")
+        + cover_notes(True), True)
+    es+=card("T&Uacute; PRACTICAS / POR TU CUENTA","Dise&ntilde;a Tu Portada",
+        (float_right(S6_FLOAT,"Un estudiante de Pioneer Valley dise&ntilde;ando una portada de c&oacute;mic alrededor de un personaje vectorial en Adobe Illustrator","Haz que tu personaje sea la estrella de la portada.") if HAVE_S6_FLOAT else "")
+        + para("Arma tu portada y haz que tu personaje sea la estrella.")
+        + bullets([
+            ("Mesa de 8.5 por 11:","Archivo &gt; Nuevo. Pon el tama&ntilde;o en Carta, 8.5 por 11 pulgadas, vertical, y pon el Modo de Color en RGB en Opciones Avanzadas."),
+            ("Trae tu arte:","abre tu .ai del Paso 05, copia tu escena con tu personaje y p&eacute;gala en la portada. Aj&uacute;stala a la hoja vertical. No la vuelvas a dibujar."),
+            ("Agrega tu masthead:","usa la herramienta Texto para agregar el t&iacute;tulo de tu c&oacute;mic arriba, grande y en negrita."),
+            ("Agrega un subt&iacute;tulo y n&uacute;mero de edici&oacute;n:","agrega un subt&iacute;tulo corto cerca del t&iacute;tulo, y un n&uacute;mero peque&ntilde;o como #1 en una esquina."),
+            ("Exporta un PDF:","Archivo &gt; Guardar Como y elige Adobe Illustrator para conservar tu .ai, luego Archivo &gt; Guardar Como otra vez y elige Adobe PDF. Entrega el PDF."),
+        ])
+        + note("Mant&eacute;n tu t&iacute;tulo y las partes importantes un poco adentro del borde para que nada se corte al imprimir."))
+    es+=deliverables_box(True,
+        [("Tu portada de c&oacute;mic (PDF):","tu portada de c&oacute;mic terminada, exportada como un PDF de Adobe listo para imprimir, subida a esta tarea de Canvas.")])
+    es+=next_up("M&Oacute;DULO COMPLETO","Buen trabajo. Dise&ntilde;aste un personaje, dibujaste su frente y su espalda, construiste su mundo y lo pusiste en una portada de c&oacute;mic. Ese es un proyecto completo de dise&ntilde;o de personaje, de principio a fin.")
+
+    stepnav=f'<a href="{S5}" class="silva-step-btn">&#8592; Step 05</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{S5}" class="silva-bottom-btn">&#8592; Step 05</a><span></span></div>'
+    return wrap_page(f"Step 6: Comic Book Cover | Vector Character Design | {CL_EN} | PVHS", nav("Step 06",dots_for(5),stepnav), top_wrap(en,es), bottom)
+
+for fname,gen in [(OVER,overview),(S2,step02),(S3,step03),(S4,step04),(S5,step05),(S6,step06)]:
     html=ent(gen())
     ban_check(html, fname)
     open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
