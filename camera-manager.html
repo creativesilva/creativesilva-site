@@ -76,7 +76,7 @@
 
   .summary{display:flex;align-items:center;gap:14px 22px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--teal);padding:13px 18px;margin-bottom:16px;}
   /* Availability count as a glowing digital-clock readout (bright teal, soft pulse). */
-  .summary .big{display:inline-flex;align-items:center;justify-content:center;min-width:1.45em;padding:5px 10px;margin-right:13px;font-family:var(--font);font-weight:700;font-size:2rem;line-height:1;letter-spacing:.02em;color:#5ff0f0;background:rgba(0,22,22,.9);border:1px solid rgba(0,184,184,.55);font-variant-numeric:tabular-nums;text-shadow:0 0 8px rgba(95,240,240,.85),0 0 18px rgba(0,184,184,.55);animation:clockPulse 2.4s ease-in-out infinite;}
+  .summary .big{display:inline-flex;align-items:center;justify-content:center;min-width:1.45em;height:40px;box-sizing:border-box;padding:0 10px;margin-right:13px;font-family:var(--font);font-weight:700;font-size:2rem;line-height:1;letter-spacing:.02em;color:#5ff0f0;background:rgba(0,22,22,.9);border:1px solid rgba(0,184,184,.55);font-variant-numeric:tabular-nums;text-shadow:0 0 8px rgba(95,240,240,.85),0 0 18px rgba(0,184,184,.55);animation:clockPulse 2.4s ease-in-out infinite;}
   @keyframes clockPulse{0%,100%{box-shadow:inset 0 0 12px rgba(0,184,184,.15),0 0 12px rgba(0,184,184,.24);}50%{box-shadow:inset 0 0 14px rgba(0,184,184,.30),0 0 24px rgba(0,184,184,.55);}}
   @media (prefers-reduced-motion:reduce){ .summary .big{animation:none;} }
   .summary .lab{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;}
@@ -662,7 +662,7 @@
   /* ONE consolidated, color-coded Cameras grid. Green=available, yellow=reserved-today, orange=checked
      out, red=overdue (pulsing), gray=out of service / card missing. Tap a tile -> the full window. */
   /* Compact sort dropdown (custom, not a native select), sits to the right of the Cameras title. */
-  .camsortdd{position:relative;flex:0 0 auto;}
+  .camsortdd{position:relative;flex:0 0 auto;z-index:120;}
   .camsortdd-trig{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 12px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--muted);font-family:var(--font);font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:border-color .12s,color .12s;}
   .camsortdd-trig:hover{border-color:var(--teal);color:#fff;}
   .camsortdd-trig b{color:var(--teal-lt);font-weight:700;}
@@ -679,14 +679,15 @@
   .camgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(204px,1fr));gap:9px;margin-bottom:10px;}
   .camtile{display:flex;flex-direction:column;gap:5px;align-items:flex-start;text-align:left;width:100%;background:var(--surface);border:1px solid var(--surface-bd);border-left:4px solid var(--grayed);padding:11px 13px;cursor:pointer;font-family:inherit;color:var(--text);transition:border-color .12s,background .12s;backdrop-filter:blur(5px) saturate(1.04);-webkit-backdrop-filter:blur(5px) saturate(1.04);}
   .camtile:hover{background:rgba(0,184,184,.07);}
-  .camtile-top{display:flex;align-items:center;gap:8px;width:100%;}
+  .camtile-top{display:flex;align-items:center;gap:6px 8px;width:100%;flex-wrap:wrap;}
+  .camtile-badges{margin-left:auto;display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;}
   .camtile-dot{width:10px;height:10px;flex:0 0 auto;background:var(--grayed);}
-  .camtile-n{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.05rem;color:#fff;}
+  .camtile-n{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.05rem;color:#fff;flex:0 1 auto;min-width:0;overflow-wrap:break-word;}
   .camtile-p2{font-family:var(--font);font-size:.5rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#ffb28a;border:1px solid rgba(255,107,26,.5);padding:1px 4px;}
   /* Manage Equipment stays CONDITION-colored (locked 2026-10-04); this is the one checkout signal there:
      a small orange OUT chip on a gear unit that is physically checked out, leaving condition color intact. */
-  .camtile-outchip{margin-left:auto;font-family:var(--font);font-size:.5rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#1a0f05;background:var(--orange);border:1px solid var(--orange);padding:1px 6px;}
-  .camtile-pct{margin-left:auto;font-family:var(--font);font-weight:700;font-size:.72rem;padding:1px 7px;color:#8ff0b0;background:rgba(63,168,99,.16);}
+  .camtile-outchip{font-family:var(--font);font-size:.5rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#1a0f05;background:var(--orange);border:1px solid var(--orange);padding:1px 6px;}
+  .camtile-pct{font-family:var(--font);font-weight:700;font-size:.72rem;padding:1px 7px;color:#8ff0b0;background:rgba(63,168,99,.16);}
   .camtile-pct.mid{color:#ffd889;background:rgba(245,179,1,.16);} .camtile-pct.low{color:#ff9a8a;background:rgba(224,64,58,.18);} .camtile-pct.na{color:var(--faint);background:rgba(160,180,180,.12);}
   .camtile-status{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);}
   .camtile-sub{font-size:.8rem;color:var(--muted);line-height:1.3;}
@@ -1096,6 +1097,7 @@
       <div class="summ-metric"><span class="big" id="availn">0</span> <span class="lab">of <span id="totn">18</span> <span id="availunit">cameras</span> available <span id="availday">today</span></span></div>
       <div class="summ-right">
         <button class="silva-uni-cattrigger summ-btn" id="reserveBtn">Reserve</button>
+        <a class="silva-uni-cattrigger summ-btn" id="storeBtn" target="_blank" rel="noopener">Student Store</a>
         <button class="silva-uni-cattrigger summ-btn summ-ico" id="refreshBtn" title="Reload the latest data now" aria-label="Refresh">&#8635;</button>
         <div class="cm-tools">
           <button type="button" class="silva-uni-cattrigger cm-toolsbtn summ-btn" id="cmToolsBtn" aria-haspopup="true" aria-expanded="false">Tools &#9662;</button>
@@ -1344,6 +1346,7 @@
   function studentStoreURL(abs){ return (abs?'https://www.creativesilva.com':'')+'/reserve.html?teacher='+SELECTED_POOL; }    // the student reservation STORE (launched 2026-10-26)
   function syncStudentCalLink(){
     var a=document.getElementById('studentCalBtn'); if(a) a.href=studentStoreURL(false);                                     // the Tools link + QR open the STORE now
+    var sb=document.getElementById('storeBtn'); if(sb) sb.href=studentStoreURL(true);                                        // prominent header button -> the student store (new tab)
     var f=document.getElementById('calframe'); if(f){ var want=studentCalURL(false)+'&embed=1'; if((f.getAttribute('src')||'')!==want) f.setAttribute('src',want); }   // calframe stays the month calendar
   }
 
@@ -1520,7 +1523,7 @@
       if(an) an.textContent=availCountOnDay(SELDAY); if(tn) tn.textContent=viewCams().length;
       if(au) au.textContent='cameras';
     }
-    var ad=document.getElementById('availday'); if(ad){ ad.textContent=(SELDAY===todayISO()?'today':'on '+dowShort(SELDAY))+' · '+fmtMDY(SELDAY); }
+    var ad=document.getElementById('availday'); if(ad){ ad.textContent=(SELDAY===todayISO()?'':'on '+dowShort(SELDAY)+' ')+'· '+fmtMDY(SELDAY); }
   }
   function daysBetween(a,b){ return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000); }
   // Top-of-console digest: student requests awaiting review (the store's "request anyway" path).
@@ -2570,7 +2573,7 @@
     return '<button type="button" class="camtile gtile cs-'+s+'" data-geardetail="'+esc(id)+'">'+
       gearThumb(u.type)+
       '<span class="gtile-main">'+
-        '<span class="camtile-top"><span class="camtile-n">'+esc(u.label||id)+'</span>'+pctChip+'</span>'+
+        '<span class="camtile-top"><span class="camtile-n">'+esc(u.label||id)+'</span><span class="camtile-badges">'+pctChip+'</span></span>'+
         '<span class="camtile-status">'+gearStateLabel(id,s)+'</span>'+
         '<span class="camtile-sub">'+sub+'</span>'+
       '</span>'+
@@ -2628,7 +2631,7 @@
     return '<button type="button" class="camtile gtile cs-'+s+'" data-camdetail="'+esc(cam)+'">'+
       camThumb(cam)+
       '<span class="gtile-main">'+
-        '<span class="camtile-top"><span class="camtile-n">'+esc(cam)+'</span>'+p2+'<span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span></span>'+
+        '<span class="camtile-top"><span class="camtile-n">'+esc(cam)+'</span>'+p2+'<span class="camtile-badges"><span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span></span></span>'+
         '<span class="camtile-status">'+camStateLabel(cam,s)+'</span>'+
         '<span class="camtile-sub">'+sub+'</span>'+
       '</span>'+
@@ -2658,7 +2661,7 @@
     return '<button type="button" class="camtile gtile mt-'+cond+'" data-camdetail="'+esc(cam)+'">'+
       camThumb(cam)+
       '<span class="gtile-main">'+
-        '<span class="camtile-top"><span class="camtile-n">'+esc(cam)+'</span>'+p2+'<span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span></span>'+
+        '<span class="camtile-top"><span class="camtile-n">'+esc(cam)+'</span>'+p2+'<span class="camtile-badges"><span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span></span></span>'+
         '<span class="camtile-status mt-cond">'+camCondLabel(cam)+'</span>'+
       '</span>'+
     '</button>';
@@ -2678,7 +2681,7 @@
     return '<button type="button" class="camtile gtile mt-'+cond+'" data-geardetail="'+esc(id)+'">'+
       gearThumb(u.type)+
       '<span class="gtile-main">'+
-        '<span class="camtile-top"><span class="camtile-n">'+esc(u.label||id)+'</span>'+outChip+pctChip+'</span>'+
+        '<span class="camtile-top"><span class="camtile-n">'+esc(u.label||id)+'</span><span class="camtile-badges">'+outChip+pctChip+'</span></span>'+
         statusHtml+
       '</span>'+
     '</button>';
