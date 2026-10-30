@@ -1065,6 +1065,7 @@
       <button type="button" class="tgate-btn" data-tgate="silva">Silva</button>
       <button type="button" class="tgate-btn" data-tgate="garcia">Garcia</button>
       <button type="button" class="tgate-btn" data-tgate="mankin">Mankin</button>
+      <button type="button" class="tgate-btn" data-tgate="all">All (Silva + Mankin)</button>
     </div>
   </div>
 </div>
@@ -1577,6 +1578,7 @@
   // 01-15 (no Photo-2 16-18), Mankin 19-21 + her gear. So Garcia never sees the Photo-2 clutter and
   // Mankin only ever sees her own students' reservations.
   function resvInScope(c){
+    if(SELECTED_POOL==='all') return true;                    // All view: every pool's reservations are in scope
     var pc=(DATA.pools||{})[SELECTED_POOL]||[], pg=(DATA.equipment_pools||{})[SELECTED_POOL]||[];
     return c.kind==='equipment' ? (pg.indexOf(c.item)>=0) : (pc.indexOf(c.camera)>=0);
   }
@@ -2529,7 +2531,7 @@
   // backend is the single source of truth.
   function gearUnits(){ return DATA.equipment_units || {}; }               // {id:{type,label,pool,kit}}
   function gearTypes(){ return DATA.equipment_types || {}; }               // {type:{label,unit}}
-  function gearPoolIds(){ return (DATA.equipment_pools||{})[SELECTED_POOL] || []; } // follows the teacher view toggle
+  function gearPoolIds(){ if(SELECTED_POOL==='all'){ var seen={},out=[]; Object.keys(DATA.equipment_pools||{}).forEach(function(p){ ((DATA.equipment_pools||{})[p]||[]).forEach(function(id){ if(!seen[id]){ seen[id]=1; out.push(id); } }); }); return out; } return (DATA.equipment_pools||{})[SELECTED_POOL] || []; } // follows the teacher view toggle; All = union of every pool
   function gearUnit(id){ return gearUnits()[id] || null; }
   function gearLabel(id){ var u=gearUnit(id); return u?u.label:id; }
   function gearKitItems(id){ var u=gearUnit(id); return (u&&u.kit)||[]; }
@@ -2723,7 +2725,7 @@
   // No inline toggle: the header shows WHOSE dashboard you're in; tap it to reopen the teacher picker.
   function renderPoolBar(){
     var el=document.getElementById('poolbar'); if(!el) return;
-    var who={silva:'Silva',garcia:'Garcia',mankin:'Mankin'}[SELECTED_POOL]||'Silva';
+    var who={silva:'Silva',garcia:'Garcia',mankin:'Mankin',all:'All'}[SELECTED_POOL]||'Silva';
     var html='<button type="button" class="tchip" data-tchange="1" title="Switch teacher">'+esc(who)+' <span class="tchip-x">&#9662;</span></button>';
     if(html===_lastPoolSig) return; _lastPoolSig=html; el.innerHTML=html;
     var b=el.querySelector('[data-tchange]'); if(b) b.onclick=showTeacherGate;
@@ -3620,7 +3622,7 @@
   function openMissingItemsReport(){
     var byItem=missingItemsData(), items=Object.keys(byItem).sort();
     var total=items.reduce(function(n,it){ return n+byItem[it].length; },0);
-    var who={silva:'Silva',garcia:'Garcia',mankin:'Mankin'}[SELECTED_POOL]||'Silva';
+    var who={silva:'Silva',garcia:'Garcia',mankin:'Mankin',all:'All'}[SELECTED_POOL]||'Silva';
     var rows=items.length ? items.map(function(it){ var u=byItem[it]; return '<tr><td>'+esc(it)+'</td><td class="num">'+u.length+'</td><td>'+u.map(esc).join(', ')+'</td></tr>'; }).join('')
       : '<tr><td colspan="3" class="empty">No missing items. Every kit is complete.</td></tr>';
     var when=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
