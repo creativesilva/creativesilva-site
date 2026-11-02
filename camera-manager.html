@@ -265,6 +265,8 @@
   /* multi-select mode: a Select toggle in the header, checkboxes on lines, a bulk action bar */
   .tb-selbtn{margin-left:auto;background:rgba(0,184,184,.14);border:1px solid var(--line-soft);color:#cdeff0;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.6rem;padding:4px 10px;cursor:pointer;}
   .tb-selbtn:hover{border-color:#00b8b8;color:#fff;}
+  .tb-pickall{background:var(--gold);border:1px solid var(--gold);color:#2a1e00;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.6rem;padding:4px 12px;cursor:pointer;white-space:nowrap;}
+  .tb-pickall:hover{filter:brightness(1.08);}
   .til-selmode{cursor:pointer;}
   .til-chk{flex:0 0 auto;width:18px;height:18px;border:1.5px solid var(--line);background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;}
   .til-selmode.on{background:rgba(0,184,184,.1);border-color:#00b8b8;}
@@ -1885,8 +1887,10 @@
         '<button type="button" class="tb-sortbtn'+(TBSORT==='cam'?' on':'')+'" data-tbsort="cam">Camera #</button>'+
         '<button type="button" class="tb-sortbtn'+(TBSORT==='name'?' on':'')+'" data-tbsort="name">Last name</button></div>';
       // Sort + Select only when there is something to sort/select; an empty day shows just the message.
+      // End-of-day one-tap sweep (Outgoing + today only): mark every remaining reserved item picked up.
+      var pickAllBtn=(view==='out'&&isT&&!selMode&&total>0)?'<button type="button" class="tb-pickall" data-tbpickall="1">Mark all picked up</button>':'';
       search = total ? ('<div class="tb-searchrow tb-ctlrow">'+sortCtl+
-        '<button type="button" class="tb-selbtn" data-tbselect="'+view+'">'+(selMode?'Done':'Select')+'</button></div>') : '';
+        '<button type="button" class="tb-selbtn" data-tbselect="'+view+'">'+(selMode?'Done':'Select')+'</button>'+pickAllBtn+'</div>') : '';
       if(selMode){
         var n=Object.keys(TBSELSET[view]).length;
         var acts = n ? ((view==='out')
@@ -1931,6 +1935,7 @@
       [].forEach.call(el.querySelectorAll('[data-selids][data-selcol="'+k+'"]'),function(d){ d.getAttribute('data-selids').split(',').forEach(function(id){ ids.push(id); }); });
       var allOn=ids.length&&ids.every(function(id){return TBSELSET[k][id];}); TBSELSET[k]={}; if(!allOn) ids.forEach(function(id){ TBSELSET[k][id]=true; }); _lastTBSig=null; renderTodayBoard(); }; });
     el.querySelectorAll('[data-bulk]').forEach(function(b){ b.onclick=function(){ bulkAction(b.getAttribute('data-bulk'), b.getAttribute('data-col')); }; });
+    var pab=el.querySelector('[data-tbpickall]'); if(pab) pab.onclick=function(){ pickUpAllOutgoing(); };
     el.querySelectorAll('[data-tbday]').forEach(function(b){ b.onclick=function(){ _lastTBSig=null; stepDay(parseInt(b.getAttribute('data-tbday'),10)); }; });
     el.querySelectorAll('[data-tbtoday]').forEach(function(b){ b.onclick=function(){ _lastTBSig=null; SELDAY=todayISO(); renderTodayBoard(); updateSummary(); }; });
     if(_tbFocus){ var fi=el.querySelector('[data-tbsearch="'+_tbFocus.col+'"]'); if(fi){ try{ fi.focus(); fi.setSelectionRange(_tbFocus.pos,_tbFocus.pos); }catch(e){} } _tbFocus=null; }
@@ -2415,6 +2420,26 @@
     else if(action==='cancel'){ silvaConfirm('Cancel '+ids.length+' selected item'+(ids.length>1?'s':'')+'? They are removed and no longer linked to anyone. This cannot be undone.', {okLabel:'Cancel '+ids.length, cancelLabel:'Keep'}).then(function(ok){ if(!ok) return;
       Promise.all(ids.map(function(id){ return camAPI('/api/camera/delete',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id})}); }))
         .then(function(){ return finish('Cancelled'); }).catch(function(){ silvaToast('Some did not cancel. Try again.'); }); }); }
+  }
+
+  // One-tap end-of-day sweep: mark every still-reserved item in TODAY'S Outgoing list (current pool
+  // scope) as picked up, for when the cart is physically empty but some were never marked during the day.
+  function outgoingReservedIds(){
+    var isT=(SELDAY===todayISO()); if(!isT) return [];
+    var ids=[];
+    outgoingFor(SELDAY).forEach(function(c){
+      lineItemsFor(c,'out',isT).forEach(function(it){ if(statusOf(it)==='reserved' && it.id) ids.push(it.id); });
+    });
+    return ids;
+  }
+  function pickUpAllOutgoing(){
+    var ids=outgoingReservedIds();
+    if(!ids.length){ silvaToast('Nothing left to hand out.'); return; }
+    silvaConfirm('Mark all '+ids.length+' remaining item'+(ids.length>1?'s':'')+' as picked up? Do this only when the cart is empty and everything has physically been handed out.', {okLabel:'Mark all picked up', cancelLabel:'Not yet'}).then(function(ok){ if(!ok) return;
+      _lastTBSig=null;
+      Promise.all(ids.map(function(id){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:'out'})}); }))
+        .then(function(){ return loadBoard(); }).then(function(){ silvaToast('Picked up '+ids.length+' item'+(ids.length>1?'s':'')+'.'); }).catch(function(){ silvaToast('Some did not update. Try again.'); });
+    });
   }
 
   function camAPI(path, opts){
