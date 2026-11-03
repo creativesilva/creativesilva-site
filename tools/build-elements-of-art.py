@@ -113,7 +113,7 @@ def nav(current, dots, stepnav):
 
 # ---------------- OVERVIEW ----------------
 def overview():
-    en=banner("Digital Arts 1A",f"Module {MOD}: Elements of Art, Character Design","Meet the first two Elements of Art: Line and Shape.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
+    en=banner(f"Module {MOD} &bull; Step 01","Elements of Art, Character Design","Meet the first two Elements of Art: Line and Shape.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=type_card("overview","The Module Overview","Design a Character from Line &amp; Shape",
         para("Welcome to the Elements of Art. Artists build every drawing from 7 simple building blocks called the Elements of Art. In this module you meet the first two: <strong>Line</strong> and <strong>Shape</strong>. Your job is to design your very own original character using only lines and shapes, in black and white. No color, no texture, no shading yet: just line and shape. The rest come later.")
         + framed(HEADER,"A Pioneer Valley student in the Academy of Arts lab sketching an original character in a sketchbook, with a screen showing the 7 Elements of Art")
@@ -138,9 +138,9 @@ def overview():
             ("Name it:","give your character an original name."),
         ]))
     en+=module_resources(False)
-    en+=next_up("UP NEXT &middot; STEP 01 - Draw Your Character","Grab your sketchbook and a pencil. Next you&rsquo;ll sketch, finalize, and name your original character.")
+    en+=next_up("UP NEXT &middot; STEP 02 - Draw Your Character","Grab your sketchbook and a pencil. Next you&rsquo;ll sketch, finalize, and name your original character.")
 
-    es=banner("Arte Digital 1A",f"M&oacute;dulo {MOD}: Elementos del Arte, Dise&ntilde;o de Personaje","Conoce los primeros dos Elementos del Arte: la L&iacute;nea y la Forma.","#top","Back to English", HICON_DESIGN)
+    es=banner(f"M&oacute;dulo {MOD} &bull; Paso 01","Elementos del Arte, Dise&ntilde;o de Personaje","Conoce los primeros dos Elementos del Arte: la L&iacute;nea y la Forma.","#top","Back to English", HICON_DESIGN)
     es+=type_card("overview","El Resumen del M&oacute;dulo","Dise&ntilde;a un Personaje con L&iacute;nea y Forma",
         para("Bienvenido a los Elementos del Arte. Los artistas construyen todo dibujo a partir de 7 piezas b&aacute;sicas llamadas los Elementos del Arte. En este m&oacute;dulo conoces los primeros dos: la <strong>L&iacute;nea</strong> y la <strong>Forma</strong>. Tu trabajo es dise&ntilde;ar tu propio personaje original usando solo l&iacute;neas y formas, en blanco y negro. Nada de color, textura ni sombras todav&iacute;a: solo l&iacute;nea y forma. Lo dem&aacute;s viene despu&eacute;s.")
         + framed(HEADER,"Un estudiante de Pioneer Valley en el laboratorio de la Academia de Artes dibujando un personaje original en un cuaderno, con una pantalla que muestra los 7 Elementos del Arte")
@@ -165,7 +165,7 @@ def overview():
             ("Ponle nombre:","dale a tu personaje un nombre original."),
         ]))
     es+=module_resources(True)
-    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 01 - Dibuja Tu Personaje","Toma tu cuaderno y un l&aacute;piz. Ahora vas a bocetar, finalizar y nombrar tu personaje original.")
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Dibuja Tu Personaje","Toma tu cuaderno y un l&aacute;piz. Ahora vas a bocetar, finalizar y nombrar tu personaje original.")
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
@@ -174,7 +174,7 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner(f"Module {MOD} &bull; Step 01","Draw Your Character","Sketch it, finalize it, name it.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
+    en=banner(f"Module {MOD} &bull; Step 02","Draw Your Character","Sketch it, finalize it, name it.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=card("STEP 01 / DRAW","Sketch, Finalize &amp; Name Your Character",
         float_right(STEP1_FLOAT,"A student photographing a finished sketchbook character named Blobby with an iPad","A finished character, drawn with clean lines and simple shapes, ready to photograph and turn in.")
         + para("Grab your sketchbook and a pencil. Start by lightly sketching your character using only simple shapes: maybe a circle for the head, an oval for the body, and lines for the arms and legs. Move things around until you like how it looks, then add lines for the face and small details.")
@@ -192,9 +192,9 @@ def step01():
     en+=card("TURN IT IN","Photograph and Upload Your Character",
         para("When your character is finished and named, take a clean, clear photo of your sketchbook page with your school iPad. Use good light, hold the iPad straight above the page, and avoid glare. Upload the photo (JPG) to this Canvas assignment. Then go to Step 02 for the reflection.")
         + note("Be honest and turn in your own original work."))
-    en+=next_up("UP NEXT &middot; STEP 02 - Reflection","With your character turned in, you&rsquo;ll reflect on what to add next: color, form, and texture.")
+    en+=next_up("UP NEXT &middot; STEP 03 - Reflection","With your character turned in, you&rsquo;ll reflect on what to add next: color, form, and texture.")
 
-    es=banner(f"M&oacute;dulo {MOD} &bull; Paso 01","Dibuja Tu Personaje","Boc&eacute;talo, final&iacute;zalo, nómbralo.","#top","Back to English", HICON_DESIGN)
+    es=banner(f"M&oacute;dulo {MOD} &bull; Paso 02","Dibuja Tu Personaje","Boc&eacute;talo, final&iacute;zalo, nómbralo.","#top","Back to English", HICON_DESIGN)
     es+=card("PASO 01 / DIBUJA","Boceta, Finaliza y Nombra Tu Personaje",
         float_right(STEP1_FLOAT,"Un estudiante fotografiando con un iPad su personaje terminado en el cuaderno","Un personaje terminado, dibujado con l&iacute;neas limpias y formas simples, listo para fotografiar y entregar.")
         + para("Toma tu cuaderno y un l&aacute;piz. Empieza bocetando suave tu personaje usando solo formas simples: tal vez un c&iacute;rculo para la cabeza, un &oacute;valo para el cuerpo y l&iacute;neas para los brazos y las piernas. Mueve las cosas hasta que te guste c&oacute;mo se ve, y luego agrega l&iacute;neas para la cara y los detalles peque&ntilde;os.")
@@ -212,7 +212,7 @@ def step01():
     es+=card("ENTR&Eacute;GALO","Fotograf&iacute;a y Sube Tu Personaje",
         para("Cuando tu personaje est&eacute; terminado y con nombre, toma una foto limpia y clara de la p&aacute;gina de tu cuaderno con tu iPad de la escuela. Usa buena luz, sostiene el iPad recto sobre la p&aacute;gina y evita el reflejo. Sube la foto (JPG) a esta tarea de Canvas. Luego ve al Paso 02 para la reflexi&oacute;n.")
         + note("S&eacute; honesto y entrega tu propio trabajo original."))
-    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Reflexi&oacute;n","Con tu personaje entregado, vas a reflexionar sobre qu&eacute; agregar despu&eacute;s: color, forma y textura.")
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Reflexi&oacute;n","Con tu personaje entregado, vas a reflexionar sobre qu&eacute; agregar despu&eacute;s: color, forma y textura.")
 
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
@@ -221,7 +221,7 @@ def step01():
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner(f"Module {MOD} &bull; Step 02","Reflection","What comes next for your character?","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
+    en=banner(f"Module {MOD} &bull; Step 03","Reflection","What comes next for your character?","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("STEP 02 / REFLECTION","Reflect on Your Character",
         float_right(REFLECT_FLOAT,"A Pioneer Valley student typing the Character Design reflection in the Word document on an iMac in the creative lab, a decorated sketchbook on the desk","")
         + para("Your character is built from line and shape. Now look ahead. In a short reflection, think about what you would add next to bring it to life: what would you add, what colors would fit and where, how you could use Form to make it look 3D instead of flat, and what textures are missing.")
@@ -231,7 +231,7 @@ def step02():
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=next_up(f"UP NEXT &middot; MODULE {NXT} - Form &amp; Color","Next module you add the next two Elements of Art, Form and Color, to a new draft of your character, and keep building toward all 7 Elements of Art.")
 
-    es=banner(f"M&oacute;dulo {MOD} &bull; Paso 02","Reflexi&oacute;n","&iquest;Qu&eacute; sigue para tu personaje?","#top","Back to English", HICON_REFLECT)
+    es=banner(f"M&oacute;dulo {MOD} &bull; Paso 03","Reflexi&oacute;n","&iquest;Qu&eacute; sigue para tu personaje?","#top","Back to English", HICON_REFLECT)
     es+=card("PASO 02 / REFLEXI&Oacute;N","Reflexiona Sobre Tu Personaje",
         float_right(REFLECT_FLOAT,"Un estudiante de Pioneer Valley escribiendo la reflexi&oacute;n de Dise&ntilde;o de Personaje en el documento de Word en una iMac del laboratorio, con un cuaderno decorado en el escritorio","")
         + para("Tu personaje est&aacute; hecho de l&iacute;nea y forma. Ahora mira hacia adelante. En una reflexi&oacute;n corta, piensa qu&eacute; le agregar&iacute;as para darle vida: qu&eacute; agregar&iacute;as, qu&eacute; colores le quedar&iacute;an y d&oacute;nde, c&oacute;mo podr&iacute;as usar la Forma para que se vea en 3D y no plano, y qu&eacute; texturas le faltan.")

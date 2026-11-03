@@ -82,7 +82,7 @@ PR_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Photography 2A","Module 04: Build Your Own Preset","Capture a series, edit one photo, and save your look as a preset.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
+    en=banner("Module 04 &bull; Step 01","Build Your Own Preset","Capture a series, edit one photo, and save your look as a preset.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
     en+=type_card("overview","The Module Overview","Make a Look, Then Save It",
         para("In this project you pick a subject you love and capture a whole series of it: natural light portraits, close-ups of flowers, buildings on campus, or your own idea. You capture at least 12 images that go together, edit the first one until it looks the way you want, and then save those edits as a preset. A preset is your look, saved once, ready to drop on every photo in the series.")
         + para("Then you sync your preset across the series so all your photos share the same feel, select your best 6, and turn them in.")
@@ -115,8 +115,8 @@ def overview():
            ("Contrast","The difference between the darkest darks and the brightest lights."),
            ("HSL","Hue, Saturation, Luminance: the panel that lets you change each color on its own.")]), False)
 
-    en+=next_up("UP NEXT &middot; STEP 01 - Photo Walk: Capture &amp; Cull","Pick a series, capture 12 or more, then turn in a contact sheet.")
-    es=banner("Fotograf&iacute;a 2A","M&oacute;dulo 04: Crea Tu Propio Preset","Captura una serie, edita una foto y guarda tu estilo como preset.","#top","Back to English", HICON_PHOTO_WALK)
+    en+=next_up("UP NEXT &middot; STEP 02 - Photo Walk: Capture &amp; Cull","Pick a series, capture 12 or more, then turn in a contact sheet.")
+    es=banner("M&oacute;dulo 04 &bull; Paso 01","Crea Tu Propio Preset","Captura una serie, edita una foto y guarda tu estilo como preset.","#top","Back to English", HICON_PHOTO_WALK)
     es+=type_card("overview","El Resumen del M&oacute;dulo","Crea un Estilo y Gu&aacute;rdalo",
         para("En este proyecto eliges un tema que te encante y capturas toda una serie: retratos con luz natural, primeros planos de flores, edificios de la escuela o tu propia idea. Capturas al menos 12 im&aacute;genes que van juntas, editas la primera hasta que se vea como quieres, y luego guardas esos ajustes como un preset. Un preset es tu estilo, guardado una vez, listo para poner en cada foto de la serie.")
         + para("Despu&eacute;s sincronizas tu preset en toda la serie para que todas tus fotos tengan la misma sensaci&oacute;n, eliges tus mejores 6 y las entregas.")
@@ -155,7 +155,7 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Module 04 &bull; Step 01","Photo Walk: Capture &amp; Cull","Pick a series, capture 12 or more, then turn in a contact sheet.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
+    en=banner("Module 04 &bull; Step 02","Photo Walk: Capture &amp; Cull","Pick a series, capture 12 or more, then turn in a contact sheet.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
     en+=card("CHOOSE / YOUR SERIES","Pick One Subject and One Light",
         para("A series is a group of photos that belong together. To make that happen, pick one subject and one kind of light, then stick with it. When your photos already match, your preset will make them match even more.")
         + bullets([
@@ -187,8 +187,8 @@ def step01():
     en+=deliverables_box(False,
         [("1 contact sheet:","your 12-image contact sheet (high-resolution JPG), showing your culled series, uploaded to this Canvas assignment.")])
 
-    en+=next_up("UP NEXT &middot; STEP 02 - Edit &amp; Create Your Preset","Edit your first image, then save your look as a preset.")
-    es=banner("M&oacute;dulo 04 &bull; Paso 01","Caminata: Captura y Selecci&oacute;n","Elige una serie, captura 12 o m&aacute;s y entrega una hoja de contactos.","#top","Back to English", HICON_PHOTO_WALK)
+    en+=next_up("UP NEXT &middot; STEP 03 - Edit &amp; Create Your Preset","Edit your first image, then save your look as a preset.")
+    es=banner("M&oacute;dulo 04 &bull; Paso 02","Caminata: Captura y Selecci&oacute;n","Elige una serie, captura 12 o m&aacute;s y entrega una hoja de contactos.","#top","Back to English", HICON_PHOTO_WALK)
     es+=card("ELIGE / TU SERIE","Elige un Tema y una Luz",
         para("Una serie es un grupo de fotos que van juntas. Para lograrlo, elige un tema y un tipo de luz, y qu&eacute;date con eso. Cuando tus fotos ya combinan, tu preset las har&aacute; combinar a&uacute;n m&aacute;s.")
         + bullets([
@@ -222,11 +222,11 @@ def step01():
 
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
-    return wrap_page("Step 1: Photo Walk, Capture and Cull | Build Your Own Preset | Photography 2A | PVHS", nav("Step 01",dots_for(1),stepnav), top_wrap(en,es), bottom)
+    return wrap_page("Step 2: Photo Walk, Capture and Cull | Build Your Own Preset | Photography 2A | PVHS", nav("Step 01",dots_for(1),stepnav), top_wrap(en,es), bottom)
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Module 04 &bull; Step 02","Edit &amp; Create Your Preset","Edit your first image, then save your look as a preset.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
+    en=banner("Module 04 &bull; Step 03","Edit &amp; Create Your Preset","Edit your first image, then save your look as a preset.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
     en+=resources_card("Presets in Lightroom Classic",
         para("Start here. This slide deck walks you through what a preset is, how to edit your look, and how to save it. Open it to see every step: it opens as a PDF in a new tab, so you can read it full screen and download it."),
         False, floatimg=slide_deck(False))
@@ -251,8 +251,8 @@ def step02():
             ("Export the file:","right-click your preset in the panel and choose Export. Save the .xmp file so you can turn it in."),
         ]))
 
-    en+=next_up("UP NEXT &middot; STEP 03 - Deliver Your Series","Sync your preset, fine-tune, and turn in your best six.")
-    es=banner("M&oacute;dulo 04 &bull; Paso 02","Edita y Crea Tu Preset","Edita tu primera imagen y guarda tu estilo como preset.","#top","Back to English", HICON_PHOTO_WALK)
+    en+=next_up("UP NEXT &middot; STEP 04 - Deliver Your Series","Sync your preset, fine-tune, and turn in your best six.")
+    es=banner("M&oacute;dulo 04 &bull; Paso 03","Edita y Crea Tu Preset","Edita tu primera imagen y guarda tu estilo como preset.","#top","Back to English", HICON_PHOTO_WALK)
     es+=resources_card("Presets en Lightroom Classic",
         para("Empieza aqu&iacute;. Estas diapositivas te explican qu&eacute; es un preset, c&oacute;mo editar tu estilo y c&oacute;mo guardarlo. &Aacute;brela para ver cada paso: se abre como PDF en una pesta&ntilde;a nueva, para que la veas en pantalla completa y la descargues."),
         True, floatimg=slide_deck(True))
@@ -279,11 +279,11 @@ def step02():
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
-    return wrap_page("Step 2: Edit and Create Your Preset | Build Your Own Preset | Photography 2A | PVHS", nav("Step 02",dots_for(2),stepnav), top_wrap(en,es), bottom)
+    return wrap_page("Step 3: Edit and Create Your Preset | Build Your Own Preset | Photography 2A | PVHS", nav("Step 02",dots_for(2),stepnav), top_wrap(en,es), bottom)
 
 # ---------------- STEP 03 ----------------
 def step03():
-    en=banner("Module 04 &bull; Step 03","Deliver Your Series","Sync your preset, fine-tune, and turn in your best six.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
+    en=banner("Module 04 &bull; Step 04","Deliver Your Series","Sync your preset, fine-tune, and turn in your best six.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
     en+=card("APPLY / SYNC YOUR PRESET","Put Your Look on the Whole Series",
         para("This is where your preset saves you time. Add your look to every photo in your series at once.")
         + steps([
@@ -310,8 +310,8 @@ def step03():
         [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG)."),
          ("6 high-resolution images:","your 6 best photos, exported as high-resolution JPGs, uploaded to this Canvas assignment.")])
 
-    en+=next_up("UP NEXT &middot; STEP 04 - Reflection","Tell the story of your series and your preset.")
-    es=banner("M&oacute;dulo 04 &bull; Paso 03","Entrega Tu Serie","Sincroniza tu preset, haz ajustes y entrega tus mejores seis.","#top","Back to English", HICON_PHOTO_WALK)
+    en+=next_up("UP NEXT &middot; STEP 05 - Reflection","Tell the story of your series and your preset.")
+    es=banner("M&oacute;dulo 04 &bull; Paso 04","Entrega Tu Serie","Sincroniza tu preset, haz ajustes y entrega tus mejores seis.","#top","Back to English", HICON_PHOTO_WALK)
     es+=card("APLICA / SINCRONIZA TU PRESET","Pon Tu Estilo en Toda la Serie",
         para("Aqu&iacute; es donde tu preset te ahorra tiempo. Pon tu estilo en cada foto de tu serie de una vez.")
         + steps([
@@ -340,11 +340,11 @@ def step03():
 
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a><a href="{S4}" class="silva-step-btn">Step 04 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><a href="{S4}" class="silva-bottom-btn">Step 04 &#8594;</a></div>'
-    return wrap_page("Step 3: Deliver Your Series | Build Your Own Preset | Photography 2A | PVHS", nav("Step 03",dots_for(3),stepnav), top_wrap(en,es), bottom)
+    return wrap_page("Step 4: Deliver Your Series | Build Your Own Preset | Photography 2A | PVHS", nav("Step 03",dots_for(3),stepnav), top_wrap(en,es), bottom)
 
 # ---------------- STEP 04 ----------------
 def step04():
-    en=banner("Module 04 &bull; Step 04","Reflection","Tell the story of your series and your preset.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
+    en=banner("Module 04 &bull; Step 05","Reflection","Tell the story of your series and your preset.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("STEP 04 / REFLECT","Complete and Upload the Reflection",
         para("Finish with a short reflection. It asks about the series you chose, the look you built, how your preset worked across your photos, and what you would do differently next time.")
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
@@ -358,7 +358,7 @@ def step04():
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
 
     en+=next_up("UP NEXT &middot; MODULE 05 - Tiny Things","Next module: a weekend challenge, photograph 6 tiny things from a bug&rsquo;s-eye view.")
-    es=banner("M&oacute;dulo 04 &bull; Paso 04","Reflexi&oacute;n","Cuenta la historia de tu serie y tu preset.","#top","Back to English", HICON_REFLECT)
+    es=banner("M&oacute;dulo 04 &bull; Paso 05","Reflexi&oacute;n","Cuenta la historia de tu serie y tu preset.","#top","Back to English", HICON_REFLECT)
     es+=card("PASO 04 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         para("Termina con una reflexi&oacute;n corta. Te pregunta sobre la serie que elegiste, el estilo que creaste, c&oacute;mo funcion&oacute; tu preset en tus fotos y qu&eacute; har&iacute;as diferente la pr&oacute;xima vez.")
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
@@ -373,7 +373,7 @@ def step04():
 
     stepnav=f'<a href="{S3}" class="silva-step-btn">&#8592; Step 03</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S3}" class="silva-bottom-btn">&#8592; Step 03</a><span></span></div>'
-    return wrap_page("Step 4: Reflection | Build Your Own Preset | Photography 2A | PVHS", nav("Step 04",dots_for(4),stepnav), top_wrap(en,es), bottom)
+    return wrap_page("Step 5: Reflection | Build Your Own Preset | Photography 2A | PVHS", nav("Step 04",dots_for(4),stepnav), top_wrap(en,es), bottom)
 
 for fname,gen in [(OVER,overview),(S1,step01),(S2,step02),(S3,step03),(S4,step04)]:
     html=ent(gen())

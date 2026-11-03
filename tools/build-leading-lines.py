@@ -72,7 +72,7 @@ LL_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Photography 1A","Module 03: Leading Lines Photo Walk","Pair up, take leading-line photos, and cull your best six.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 03 &bull; Step 01","Leading Lines Photo Walk","Pair up, take leading-line photos, and cull your best six.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Leading Lines on the Walk",
         para("On this photo walk you and a partner hunt for leading lines: lines that pull your eye through a photo toward the subject. You share one class camera, two students per camera. Each of you takes 3 different examples of leading lines. Then you swap photos, cull your best, and turn in 6 photos in all.")
         + framed(HEADER,"Two Pioneer Valley students on a photo walk, one holding a Canon camera, outside the Academy of Arts building"))
@@ -103,8 +103,8 @@ def overview():
            ("JPG","A common photo file that is ready to share without editing."),
            ("Vanishing Point","The spot far away where leading lines seem to meet.")]), False)
 
-    en+=next_up("UP NEXT &middot; STEP 01 - Capture, Cull &amp; Submit","Take your leading lines, then select your best six.")
-    es=banner("Fotograf&iacute;a 1A","M&oacute;dulo 03: Caminata de L&iacute;neas Gu&iacute;a","Trabaja en pareja, toma fotos de l&iacute;neas gu&iacute;a y selecciona tus mejores seis.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 02 - Capture, Cull &amp; Submit","Take your leading lines, then select your best six.")
+    es=banner("M&oacute;dulo 03 &bull; Paso 01","Caminata de L&iacute;neas Gu&iacute;a","Trabaja en pareja, toma fotos de l&iacute;neas gu&iacute;a y selecciona tus mejores seis.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","L&iacute;neas Gu&iacute;a en la Caminata",
         para("En esta caminata fotogr&aacute;fica t&uacute; y un compa&ntilde;ero buscan l&iacute;neas gu&iacute;a: l&iacute;neas que llevan tu mirada a trav&eacute;s de la foto hacia el sujeto. Comparten una c&aacute;mara de la clase, dos estudiantes por c&aacute;mara. Cada uno toma 3 ejemplos diferentes de l&iacute;neas gu&iacute;a. Luego intercambian fotos, seleccionan sus mejores y entregan 6 fotos en total.")
         + framed(HEADER,"Dos estudiantes de Pioneer Valley en una caminata fotogr&aacute;fica, uno con una c&aacute;mara Canon, afuera del edificio Academy of Arts"))
@@ -135,7 +135,7 @@ def overview():
            ("JPG","Un archivo de foto com&uacute;n, listo para compartir sin editar."),
            ("Vanishing Point (Punto de Fuga)","El punto a lo lejos donde las l&iacute;neas gu&iacute;a parecen unirse.")]), True)
 
-    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 01 - Captura, Selecciona y Entrega","Toma tus l&iacute;neas gu&iacute;a y luego elige tus mejores seis.")
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Captura, Selecciona y Entrega","Toma tus l&iacute;neas gu&iacute;a y luego elige tus mejores seis.")
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Start: Step 01 &#8594;</a></div>'
@@ -143,7 +143,7 @@ def overview():
 
 # ---------------- STEP 01 ----------------
 def step01():
-    en=banner("Module 03 &bull; Step 01","Capture, Cull &amp; Submit","Take your leading lines, then select your best six.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 03 &bull; Step 02","Capture, Cull &amp; Submit","Take your leading lines, then select your best six.","#espanol","Clic para Espa&ntilde;ol")
     en+=camera_settings_section(False,"JPG")
     en+=card("CAPTURE / ON THE WALK","Take Your Leading Lines",
         float_right(FLOAT,"A student kneeling to photograph down a long covered walkway whose columns lead the eye to a vanishing point, while a partner watches","Hunting leading lines on the walk.")
@@ -171,8 +171,8 @@ def step01():
     en+=deliverables_box(False,
         [("6 JPGs:","your best 3 leading-line photos and your partner&rsquo;s best 3, uploaded to this Canvas assignment.")])
 
-    en+=next_up("UP NEXT &middot; STEP 02 - Turn In Your Reflection","Reflect on the walk, your partner, and your photos.")
-    es=banner("M&oacute;dulo 03 &bull; Paso 01","Captura, Selecciona y Entrega","Toma tus l&iacute;neas gu&iacute;a y luego elige tus mejores seis.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 03 - Turn In Your Reflection","Reflect on the walk, your partner, and your photos.")
+    es=banner("M&oacute;dulo 03 &bull; Paso 02","Captura, Selecciona y Entrega","Toma tus l&iacute;neas gu&iacute;a y luego elige tus mejores seis.","#top","Back to English")
     es+=camera_settings_section(True,"JPG")
     es+=card("CAPTURA / EN LA CAMINATA","Toma Tus L&iacute;neas Gu&iacute;a",
         float_right(FLOAT,"Un estudiante arrodillado fotografiando por un pasillo largo cuyas columnas gu&iacute;an la mirada hacia un punto de fuga, mientras un compa&ntilde;ero observa","Buscando l&iacute;neas gu&iacute;a en la caminata.")
@@ -200,15 +200,15 @@ def step01():
     es+=deliverables_box(True,
         [("6 JPG:","tus mejores 3 fotos de l&iacute;neas gu&iacute;a y las mejores 3 de tu compa&ntilde;ero, subidas a esta tarea de Canvas.")])
 
-    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Entrega Tu Reflexi&oacute;n","Reflexiona sobre la caminata, tu compa&ntilde;ero y tus fotos.")
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Entrega Tu Reflexi&oacute;n","Reflexiona sobre la caminata, tu compa&ntilde;ero y tus fotos.")
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
-    return wrap_page("Step 1: Capture, Cull and Submit | Leading Lines | Photography 1A | PVHS", nav("Step 01",dots,stepnav), top_wrap(en,es), bottom)
+    return wrap_page("Step 2: Capture, Cull and Submit | Leading Lines | Photography 1A | PVHS", nav("Step 01",dots,stepnav), top_wrap(en,es), bottom)
 
 # ---------------- STEP 02 ----------------
 def step02():
-    en=banner("Module 03 &bull; Step 02","Turn In Your Reflection","Reflect on the walk, your partner, and your photos.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
+    en=banner("Module 03 &bull; Step 03","Turn In Your Reflection","Reflect on the walk, your partner, and your photos.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("STEP 02 / REFLECT","Complete and Upload the Reflection",
         float_right(REFLECT_FLOAT,"A Pioneer Valley student typing his Leading Lines reflection in the Word document on an iMac in the lab, a Canon camera on the desk","Type your answers right in the reflection document.")
         + para("Finish with a short reflection. It asks you to name your partner, explain what leading lines are, tell how you culled, and select your favorite photo.")
@@ -224,7 +224,7 @@ def step02():
         [("1 reflection:","your completed reflection Word document (.docx), with your partner named, uploaded to this Canvas assignment.")])
 
     en+=next_up("UP NEXT &middot; MODULE 04 - Image Series Photo Walk","Next module: capture a cohesive series with the camera kit, then import and edit it.")
-    es=banner("M&oacute;dulo 03 &bull; Paso 02","Entrega Tu Reflexi&oacute;n","Reflexiona sobre la caminata, tu compa&ntilde;ero y tus fotos.","#top","Back to English", HICON_REFLECT)
+    es=banner("M&oacute;dulo 03 &bull; Paso 03","Entrega Tu Reflexi&oacute;n","Reflexiona sobre la caminata, tu compa&ntilde;ero y tus fotos.","#top","Back to English", HICON_REFLECT)
     es+=card("PASO 02 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
         float_right(REFLECT_FLOAT,"Un estudiante de Pioneer Valley escribiendo su reflexi&oacute;n de L&iacute;neas Gu&iacute;a en el documento de Word en una iMac en el laboratorio, con una c&aacute;mara Canon sobre el escritorio","Escribe tus respuestas directamente en el documento de reflexi&oacute;n.")
         + para("Termina con una reflexi&oacute;n corta. Te pide el nombre de tu compa&ntilde;ero, explicar qu&eacute; son las l&iacute;neas gu&iacute;a, contar c&oacute;mo seleccionaste (cull) y elegir tu foto favorita.")
@@ -243,7 +243,7 @@ def step02():
     dots=dot(OVER,'M',"Overview",False,True)+dot(S1,'1',"Step 01",False)+dot("",'2',"Step 02",True)
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><span></span></div>'
-    return wrap_page("Step 2: Reflection | Leading Lines | Photography 1A | PVHS", nav("Step 02",dots,stepnav), top_wrap(en,es), bottom)
+    return wrap_page("Step 3: Reflection | Leading Lines | Photography 1A | PVHS", nav("Step 02",dots,stepnav), top_wrap(en,es), bottom)
 
 for fname,gen in [(OVER,overview),(S1,step01),(S2,step02)]:
     html=ent(gen())

@@ -174,7 +174,7 @@ LE_STANDARDS=[
 ]
 
 def overview():
-    en=banner("Photography 1A","Module 05: Lightroom Editing","Import, crop and develop in Lightroom Classic, cull your best 6, and export finals.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 05 &bull; Step 01","Lightroom Editing","Import, crop and develop in Lightroom Classic, cull your best 6, and export finals.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("edit","The Module Overview","Go Deeper Into Real Editing",
         para("This week you take a deeper dive into real editing in Lightroom Classic. You will work in the Develop module: the place where you crop, fix color, and bring your photos to life. Editing is non-destructive, which means your original photo file is never changed.")
         + para("You can edit photos you have <strong>already captured</strong>, or take <strong>new photos</strong> for this project. Either way, you will import them, crop and develop them, cull down to your best 6, build a 6-Up contact sheet, and export your 6 finals as high-resolution JPEGs.")
@@ -233,8 +233,8 @@ def overview():
            ("Cull","Looking through your photos and keeping only the strongest ones. In this class you cull with the 5-star rating."),
            ("Contact Sheet","One page that shows a set of your photos as small thumbnails, saved as a high-resolution JPG.")]))
 
-    en+=next_up("UP NEXT &middot; STEP 01 - Cull, Contact Sheet &amp; Export","Rate and cull to 6, build a 6-Up contact sheet, and export your finals.")
-    es=banner("Fotograf&iacute;a 1A","M&oacute;dulo 05: Edici&oacute;n en Lightroom","Importa, recorta y revela en Lightroom Classic, elige tus mejores 6 y exporta tus finales.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 02 - Cull, Contact Sheet &amp; Export","Rate and cull to 6, build a 6-Up contact sheet, and export your finals.")
+    es=banner("M&oacute;dulo 05 &bull; Paso 01","Edici&oacute;n en Lightroom","Importa, recorta y revela en Lightroom Classic, elige tus mejores 6 y exporta tus finales.","#top","Back to English")
     es+=type_card("edit","El Resumen del M&oacute;dulo","Profundiza en la Edici&oacute;n Real",
         para("Esta semana profundizas en la edici&oacute;n real en Lightroom Classic. Trabajar&aacute;s en el m&oacute;dulo Revelar: el lugar donde recortas, corriges el color y das vida a tus fotos. La edici&oacute;n no es destructiva, lo que significa que tu archivo de foto original nunca cambia.")
         + para("Puedes editar fotos que <strong>ya capturaste</strong>, o tomar <strong>fotos nuevas</strong> para este proyecto. En ambos casos, las importar&aacute;s, las recortar&aacute;s y revelar&aacute;s, elegir&aacute;s tus mejores 6, crear&aacute;s una hoja de contactos de 6 y exportar&aacute;s tus 6 finales como JPEG de alta resoluci&oacute;n.")
@@ -299,7 +299,7 @@ def overview():
 
 # ================= STEP 01: CULL, CONTACT SHEET & EXPORT =================
 def cull_export():
-    en=banner("Module 05 &bull; Step 01","Cull, Contact Sheet &amp; Export","Rate and cull to 6, build a 6-Up contact sheet, and export your finals.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner("Module 05 &bull; Step 02","Cull, Contact Sheet &amp; Export","Rate and cull to 6, build a 6-Up contact sheet, and export your finals.","#espanol","Clic para Espa&ntilde;ol")
     en+=deliverables_box(False,
         [("1 contact sheet:","your 6-Up contact sheet (high-resolution JPG) showing your best 6 edited images."),
          ("6 final images:","your 6 edited photos, each exported as a high-resolution JPG."),
@@ -332,8 +332,8 @@ def cull_export():
         ])
         + note("Turn in all 7 files here: your 6-Up contact sheet plus your 6 exported high-resolution JPGs."))
 
-    en+=next_up("UP NEXT &middot; STEP 02 - Reflection","Tell the story of your edits and your crop choices.")
-    es=banner("M&oacute;dulo 05 &bull; Paso 01","Selecciona, Hoja de Contactos y Exporta","Califica y elige 6, crea una hoja de contactos de 6 y exporta tus finales.","#top","Back to English")
+    en+=next_up("UP NEXT &middot; STEP 03 - Reflection","Tell the story of your edits and your crop choices.")
+    es=banner("M&oacute;dulo 05 &bull; Paso 02","Selecciona, Hoja de Contactos y Exporta","Califica y elige 6, crea una hoja de contactos de 6 y exporta tus finales.","#top","Back to English")
     es+=deliverables_box(True,
         [("1 hoja de contactos:","tu hoja de contactos de 6 (JPG de alta resoluci&oacute;n) que muestra tus mejores 6 im&aacute;genes editadas."),
          ("6 im&aacute;genes finales:","tus 6 fotos editadas, cada una exportada como JPG de alta resoluci&oacute;n."),
@@ -368,11 +368,11 @@ def cull_export():
 
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
-    return wrap_page("Step 1: Cull, Contact Sheet and Export | Lightroom Editing | Photography 1A | PVHS", nav("Step 01",dots_for(1),stepnav), top_wrap(en,es), bottom)
+    return wrap_page("Step 2: Cull, Contact Sheet and Export | Lightroom Editing | Photography 1A | PVHS", nav("Step 01",dots_for(1),stepnav), top_wrap(en,es), bottom)
 
 # ================= STEP 02: REFLECTION =================
 def reflection():
-    en=banner("Module 05 &bull; Step 02","Reflection","Tell the story of your edits and your crop choices.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
+    en=banner("Module 05 &bull; Step 03","Reflection","Tell the story of your edits and your crop choices.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=deliverables_box(False,
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to this Canvas assignment.")])
     en+=card("STEP 02 / REFLECT","Complete and Upload the Reflection",
@@ -387,7 +387,7 @@ def reflection():
         + note("Answer honestly, in your own words."))
 
     en+=next_up("UP NEXT &middot; MODULE 06 - Tiny Things","Next module: a weekend challenge, photograph 6 tiny things from a bug&rsquo;s-eye view.")
-    es=banner("M&oacute;dulo 05 &bull; Paso 02","Reflexi&oacute;n","Cuenta la historia de tus ediciones y tus decisiones de recorte.","#top","Back to English", HICON_REFLECT)
+    es=banner("M&oacute;dulo 05 &bull; Paso 03","Reflexi&oacute;n","Cuenta la historia de tus ediciones y tus decisiones de recorte.","#top","Back to English", HICON_REFLECT)
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu documento de Word (.docx) de la reflexi&oacute;n completado, subido a esta tarea de Canvas.")])
     es+=card("PASO 02 / REFLEXIONA","Completa y Sube la Reflexi&oacute;n",
@@ -403,7 +403,7 @@ def reflection():
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 01</a><span></span></div>'
-    return wrap_page("Step 2: Reflection | Lightroom Editing | Photography 1A | PVHS", nav("Step 02",dots_for(2),stepnav), top_wrap(en,es), bottom)
+    return wrap_page("Step 3: Reflection | Lightroom Editing | Photography 1A | PVHS", nav("Step 02",dots_for(2),stepnav), top_wrap(en,es), bottom)
 
 for fname,gen in [(OVER,overview),(S1,cull_export),(S2,reflection)]:
     html=ent(gen())

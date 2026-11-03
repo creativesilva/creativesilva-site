@@ -138,7 +138,7 @@ def nav(current,dots,stepnav,C):
 # ---------------- OVERVIEW ----------------
 def overview(C):
     OVER,S1,S2=C["over"],C["s1"],C["s2"]
-    en=banner(f'{C["cn_en"]}',f'Module {C["mod"]}: Balloon Pop',"Freeze a water balloon into a globe the instant it bursts.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner(f'Module {C["mod"]} &bull; Step 01','Balloon Pop',"Freeze a water balloon into a globe the instant it bursts.","#espanol","Clic para Espa&ntilde;ol")
     en+=type_card("overview","The Module Overview","Balloon Pop",
         para("This is our big finish for shutter speed. You and a partner will pop water balloons outside and use a fast shutter to freeze the water in mid-air. For one split second, right after the balloon breaks, the water still holds a round shape like a little globe. Your job is to catch that exact moment.")
         + framed(HEADER,"Two Pioneer Valley students outside by the panther statue: one aims a camera while the other pops a water balloon, the water frozen in mid-air as a clear globe")
@@ -162,9 +162,9 @@ def overview(C):
          ("Manual Mode (M)","A camera mode where you set the shutter, aperture, and ISO yourself. The camera keeps them locked, so every frame comes out the same."),
          ("ISO","How sensitive the camera is to light. A higher ISO, like 800, makes the photo brighter, which helps when you are using a very fast shutter."),
          ("Aperture","How wide the lens opens, shown as an f-number like F8.0. It controls how much light comes in and how much of the photo is in focus. It is the focus of our next module.")]), False)
-    en+=next_up("UP NEXT &middot; STEP 01 - Capture, Crop &amp; Submit","Grab your camera kit and a partner. Next you&rsquo;ll head outside and freeze the balloon pop.")
+    en+=next_up("UP NEXT &middot; STEP 02 - Capture, Crop &amp; Submit","Grab your camera kit and a partner. Next you&rsquo;ll head outside and freeze the balloon pop.")
 
-    es=banner(f'{C["cn_es"]}',f'M&oacute;dulo {C["mod"]}: Globo de Agua',"Congela un globo de agua en una esfera en el instante en que revienta.","#top","Back to English")
+    es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 01','Globo de Agua',"Congela un globo de agua en una esfera en el instante en que revienta.","#top","Back to English")
     es+=type_card("overview","El Resumen del M&oacute;dulo","Globo de Agua",
         para("Este es nuestro gran cierre de la velocidad del obturador. T&uacute; y tu pareja van a reventar globos de agua afuera y usar un obturador r&aacute;pido para congelar el agua en el aire. Por una fracci&oacute;n de segundo, justo despu&eacute;s de que el globo se rompe, el agua a&uacute;n mantiene una forma redonda como una peque&ntilde;a esfera. Tu trabajo es atrapar ese momento exacto.")
         + framed(HEADER,"Dos estudiantes de Pioneer Valley afuera junto a la estatua de la pantera: uno apunta una c&aacute;mara mientras la otra revienta un globo de agua, con el agua congelada en el aire como una esfera")
@@ -188,7 +188,7 @@ def overview(C):
          ("Modo Manual (M)","Un modo de c&aacute;mara donde t&uacute; pones el obturador, la apertura y el ISO. La c&aacute;mara los deja fijos, as&iacute; que cada toma sale igual."),
          ("ISO","Qu&eacute; tan sensible es la c&aacute;mara a la luz. Un ISO m&aacute;s alto, como 800, hace la foto m&aacute;s brillante, lo que ayuda cuando usas un obturador muy r&aacute;pido."),
          ("Apertura","Qu&eacute; tan ancho se abre el lente, mostrado como un n&uacute;mero f como F8.0. Controla cu&aacute;nta luz entra y cu&aacute;nto de la foto queda en foco. Es el tema de nuestro pr&oacute;ximo m&oacute;dulo.")]), True)
-    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 01 - Captura, Recorta y Entrega","Toma tu kit de c&aacute;mara y una pareja. Ahora vas a salir y congelar el globo de agua.")
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Captura, Recorta y Entrega","Toma tu kit de c&aacute;mara y una pareja. Ahora vas a salir y congelar el globo de agua.")
 
     dots=dot("",'M',"Overview",True)+dot(S1,'1',"Step 01",False)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 01 &#8594;</a>'
@@ -198,7 +198,7 @@ def overview(C):
 # ---------------- STEP 01 ----------------
 def step01(C):
     OVER,S1,S2=C["over"],C["s1"],C["s2"]
-    en=banner(f'Module {C["mod"]} &bull; Step 01',"Capture, Crop &amp; Submit","Work in pairs. Pop, freeze, and capture the burst.","#espanol","Clic para Espa&ntilde;ol")
+    en=banner(f'Module {C["mod"]} &bull; Step 02',"Capture, Crop &amp; Submit","Work in pairs. Pop, freeze, and capture the burst.","#espanol","Clic para Espa&ntilde;ol")
     en+=card("STEP 01 / CAPTURE","Pop, Freeze, and Capture",
         float_right(STEP1_FLOAT,"Close-up of a water balloon at the instant it pops: the water holds a round globe shape in mid-air as a pin breaks the balloon","The exact moment to catch: the water still holds a globe shape the instant the balloon breaks.")
         + para("Head outside with your partner and your camera kit. One person holds and pops the water balloon. The other person captures a fast burst of photos at the exact moment it bursts. Then trade places so you both get a turn.")
@@ -216,9 +216,9 @@ def step01(C):
     en+=card("CROP &amp; SUBMIT","A Light Crop, Then Turn It In",
         para("Bring your favorite photos into Lightroom and do a light edit. Since these are JPG files, keep it simple: mostly just crop to frame the water globe and straighten it if needed. You do not need heavy edits.")
         + para("Export your best 1 to 3 images as high-quality JPGs and upload them to Canvas. Then go to Step 02 for the reflection."))
-    en+=next_up("UP NEXT &middot; STEP 02 - Reflection","With your favorites turned in, you&rsquo;ll write a short reflection and pitch another outdoor photo activity.")
+    en+=next_up("UP NEXT &middot; STEP 03 - Reflection","With your favorites turned in, you&rsquo;ll write a short reflection and pitch another outdoor photo activity.")
 
-    es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 01',"Captura, Recorta y Entrega","Trabajen en parejas. Revienta, congela y captura el estallido.","#top","Back to English")
+    es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 02',"Captura, Recorta y Entrega","Trabajen en parejas. Revienta, congela y captura el estallido.","#top","Back to English")
     es+=card("PASO 01 / CAPTURA","Revienta, Congela y Captura",
         float_right(STEP1_FLOAT,"Primer plano de un globo de agua en el instante en que revienta: el agua mantiene una forma redonda en el aire mientras un alfiler rompe el globo","El momento exacto que hay que atrapar: el agua a&uacute;n mantiene una forma de esfera en el instante en que el globo se rompe.")
         + para("Sal afuera con tu pareja y tu kit de c&aacute;mara. Una persona sostiene y revienta el globo de agua. La otra persona captura una r&aacute;faga r&aacute;pida de fotos en el momento exacto en que revienta. Luego cambien de lugar para que ambos tengan su turno.")
@@ -236,7 +236,7 @@ def step01(C):
     es+=card("RECORTA Y ENTREGA","Un Recorte Ligero, Luego Entrega",
         para("Lleva tus fotos favoritas a Lightroom y haz una edici&oacute;n ligera. Como son archivos JPG, mantenlo simple: sobre todo recorta para encuadrar la esfera de agua y enderezarla si hace falta. No necesitas ediciones fuertes.")
         + para("Exporta tus mejores 1 a 3 im&aacute;genes como JPG de alta calidad y s&uacute;belas a Canvas. Luego ve al Paso 02 para la reflexi&oacute;n."))
-    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Reflexi&oacute;n","Con tus favoritas entregadas, vas a escribir una reflexi&oacute;n corta y proponer otra actividad de fotos al aire libre.")
+    es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Reflexi&oacute;n","Con tus favoritas entregadas, vas a escribir una reflexi&oacute;n corta y proponer otra actividad de fotos al aire libre.")
 
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
@@ -247,7 +247,7 @@ def step01(C):
 def step02(C):
     OVER,S1,S2=C["over"],C["s1"],C["s2"]
     NX=nxt_mod(C)
-    en=banner(f'Module {C["mod"]} &bull; Step 02',"Reflection","What worked, what didn&rsquo;t, and what&rsquo;s next.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
+    en=banner(f'Module {C["mod"]} &bull; Step 03',"Reflection","What worked, what didn&rsquo;t, and what&rsquo;s next.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
     en+=card("STEP 02 / REFLECTION","Reflect on the Balloon Pop",
         float_right(REFLECT_FLOAT,"A Pioneer Valley student typing the Balloon Pop reflection in the Word document on an iMac in the creative lab, a Canon camera on the desk","")
         + para("Finish with a short and simple reflection. Tell what worked, what did not work, and what you would do better next time. Then share any feedback or an idea for another outdoor photography activity we could try as a class.")
@@ -257,7 +257,7 @@ def step02(C):
         [("1 reflection:","your completed reflection Word document (.docx), uploaded to Canvas.")])
     en+=next_up(f"UP NEXT &middot; MODULE {NX} - Aperture","That wraps up shutter speed. Next module we switch to aperture: the f-number that controls how much of your photo is in focus, from a soft, blurry background to sharp from front to back.")
 
-    es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 02',"Reflexi&oacute;n","Qu&eacute; funcion&oacute;, qu&eacute; no, y qu&eacute; sigue.","#top","Back to English", HICON_REFLECT)
+    es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 03',"Reflexi&oacute;n","Qu&eacute; funcion&oacute;, qu&eacute; no, y qu&eacute; sigue.","#top","Back to English", HICON_REFLECT)
     es+=card("PASO 02 / REFLEXI&Oacute;N","Reflexiona Sobre el Globo de Agua",
         float_right(REFLECT_FLOAT,"Un estudiante de Pioneer Valley escribiendo la reflexi&oacute;n del Globo de Agua en el documento de Word en una iMac del laboratorio, con una c&aacute;mara Canon en el escritorio","")
         + para("Termina con una reflexi&oacute;n corta y simple. Di qu&eacute; funcion&oacute;, qu&eacute; no funcion&oacute; y qu&eacute; har&iacute;as mejor la pr&oacute;xima vez. Luego comparte cualquier idea o comentario para otra actividad de fotograf&iacute;a al aire libre que podamos probar como clase.")

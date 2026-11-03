@@ -469,6 +469,20 @@
     prev.innerHTML = prevLabel;
     pager.appendChild(prev);
 
+    // Page numbers should MATCH the step numbers in each page's banner. Modules that number their
+    // Overview as "Step 01" (work steps 02, 03...) need 1-based page numbers (1,2,3...); older/legacy
+    // modules whose Overview is unnumbered and whose first work step is "Step 01" need 0-based (0,1,2).
+    // Rather than hardcode which is which, read the CURRENT page's banner eyebrow step number and
+    // derive the offset: a page at index at.p whose banner says "Step N" means every page index n
+    // displays n + (N - at.p). An unnumbered legacy overview yields no number, so the offset stays 0.
+    // This makes Step-01 modules read 1,2,3 and legacy/MRC modules keep 0,1,2, with no module list.
+    // (Chris 2026-11-03)
+    var stepOffset = 0;
+    try {
+      var _eb = document.querySelector('#top span[style*="color:#80e0e0"]');
+      var _m = _eb && _eb.textContent.match(/(?:Step|Paso)\s*0*(\d+)/i);
+      if (_m) { stepOffset = parseInt(_m[1], 10) - at.p; }
+    } catch (e) {}
     // Page numbers (only meaningful when the module has more than one page)
     if (mod.length > 1) {
       pageWindow(mod.length, at.p).forEach(function (n) {
@@ -483,8 +497,9 @@
         var num = document.createElement(isCur ? 'span' : 'a');
         num.className = 'pg-num' + (isCur ? ' active' : '');
         if (!isCur) { num.href = mod[n]; }
-        num.textContent = n;
-        num.setAttribute('title', n === 0 ? 'Overview' : 'Step ' + n);
+        var shown = n + stepOffset;
+        num.textContent = shown;
+        num.setAttribute('title', (stepOffset > 0 ? 'Step ' + String(shown).padStart(2, '0') : (n === 0 ? 'Overview' : 'Step ' + shown)));
         if (isCur) { num.setAttribute('aria-current', 'page'); }
         pager.appendChild(num);
       });
