@@ -509,6 +509,7 @@
     pager.appendChild(makeBuildBtn());
     pager.appendChild(makeUrlBtn());
     pager.appendChild(makeCopyBtn());
+    pager.appendChild(makeDownloadAllBtn());
     return pager;
   }
 
@@ -526,6 +527,57 @@
         b.classList.add('copied');
         setTimeout(function () { b.textContent = 'COPY HTML'; b.classList.remove('copied'); }, 2500);
       }).catch(function () { alert('Copy failed. Try selecting the page source manually.'); });
+    });
+    return b;
+  }
+
+  // DOWNLOAD ALL: bundles every page of the CURRENT module into one Markdown file, each page's
+  // Canvas-pasteable #top HTML in a labeled ```html block, so a teacher can download the whole
+  // module's code in a single file and keep it. Fetches same-origin, so it works on the live site
+  // and in local preview. Teacher-only and JS-injected, so it never lands in the Canvas-pasted HTML.
+  // (Chris 2026-11-03)
+  function makeDownloadAllBtn() {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pg-copy';
+    b.textContent = 'DOWNLOAD ALL';
+    b.title = 'Download every page of this module as one Markdown file';
+    b.addEventListener('click', function () {
+      var at = locate();
+      var urls = (at ? MODULES[at.g] : [location.pathname]).map(function (u) { return u.replace(/^\//, ''); });
+      var origin = location.origin;
+      var parts = (document.title || '').split('|').map(function (s) { return s.trim(); }).filter(Boolean);
+      var modTitle = (parts.length >= 4) ? parts[1] : (parts[0] || 'Module');
+      var slug = (urls[0] || 'module').replace(/.*\//, '').replace(/-overview\.html$/, '').replace(/\.html$/, '');
+      var orig = b.textContent;
+      b.textContent = 'Building…';
+      Promise.all(urls.map(function (u) {
+        return fetch(origin + '/' + u).then(function (r) { return r.text(); }).then(function (html) {
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var tm = doc.querySelector('title');
+          var pageTitle = tm ? tm.textContent.split('|')[0].trim() : u;
+          var top = doc.getElementById('top');
+          return { url: u, title: pageTitle, code: top ? top.outerHTML : html };
+        }).catch(function () { return { url: u, title: u, code: '(could not load this page)' }; });
+      })).then(function (pages) {
+        var md = '# ' + modTitle + '\n\n';
+        md += '_All pages of this module, downloaded ' + new Date().toISOString().slice(0, 10) + ' from creativesilva.com._\n\n';
+        md += 'Each section holds that page’s Canvas-pasteable HTML (the same code the COPY HTML button copies).\n\n';
+        pages.forEach(function (p, i) {
+          md += '---\n\n## ' + (i + 1) + '. ' + p.title + '\n\n`' + origin + '/' + p.url + '`\n\n```html\n' + p.code + '\n```\n\n';
+        });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown;charset=utf-8' }));
+        a.download = slug + '-all-pages.md';
+        document.body.appendChild(a); a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+        b.textContent = '✓ Downloaded';
+        b.classList.add('copied');
+        setTimeout(function () { b.textContent = orig; b.classList.remove('copied'); }, 2500);
+      }).catch(function () {
+        b.textContent = orig;
+        alert('Download failed. Try again, or use COPY HTML per page.');
+      });
     });
     return b;
   }

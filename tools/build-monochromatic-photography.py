@@ -61,46 +61,28 @@ MONO_STANDARDS=[
 ]
 
 def mono_settings(es):
-    # RED camera settings. The signature setting for this module is Picture Style = Monochrome, plus RAW.
-    red="#f90101"
-    raw_badge=f'<img src="{RAW_BADGE}" alt="RAW" style="height:1.5em;width:auto;vertical-align:middle;margin:0 3px;display:inline-block;" />'
+    # LOCKED camera-settings template (silva_framework.camera_settings_section): title spans the page,
+    # the exposure grid (Shutter / Aperture / ISO / Light Meter / Image Quality) floats right, and
+    # students balance the meter in MANUAL mode (Chris: we always capture manual). Recommended STARTING
+    # values only; students fine-tune for the best exposure. The module's signature Monochrome Picture
+    # Style + the RAW/JPG format + the Lightroom-shows-color note go in the `extra` block below the grid.
     if es:
-        title="Ajustes de C&aacute;mara"
-        lead=("El ajuste clave de este m&oacute;dulo es el <strong>Estilo de Imagen (Picture Style)</strong>. En el "
-              "men&uacute; de la c&aacute;mara, elige <strong>Picture Style</strong> y ponlo en "
-              "<strong>Monocromo (Monochrome)</strong>. As&iacute; el visor te muestra la escena en blanco y negro mientras capturas, "
-              "pero el RAW guarda todo el detalle.")
-        items=[
-            ("Modo:","Av (prioridad de apertura). La c&aacute;mara pone la velocidad y t&uacute; controlas la profundidad."),
-            ("Estilo de Imagen:","Monocromo (Monochrome), para ver en blanco y negro en el visor."),
-            ("Apertura:","alrededor de f/8, para detalle n&iacute;tido en paredes, l&iacute;neas y texturas."),
-            ("ISO:","lo m&aacute;s bajo que permita la luz (100 a 400 con sol)."),
-            ("Enfoque:","un punto, sobre tu tema."),
-            ("Formato:",f"captura en RAW {raw_badge} para guardar todos los tonos."),
-        ]
-        note_t=("Lightroom puede mostrar tu foto en color al principio. Es normal. El RAW guarda todo el detalle, "
-                "y t&uacute; la terminas en blanco y negro al editar.")
+        note=("Pon tu c&aacute;mara en <strong>Manual (M)</strong>. Estos son un <strong>punto de partida</strong>: "
+              "deja la apertura y el ISO, y cambia la velocidad del obturador para equilibrar el expos&iacute;metro "
+              "(m&aacute;s r&aacute;pida si est&aacute; muy brillante, m&aacute;s lenta si est&aacute; muy oscuro). "
+              "Tambi&eacute;n puedes ajustar el ISO si te quedas sin rango.")
+        extra=(para("<strong>Estilo de Imagen: Monocromo.</strong> En el men&uacute; de la c&aacute;mara, elige Picture Style y ponlo en <strong>Monocromo (Monochrome)</strong>, para que el visor se vea en blanco y negro mientras capturas.")
+             + para("Captura en <strong>RAW</strong> para guardar el mayor detalle, o en <strong>JPG</strong> para una foto en blanco y negro directa de la c&aacute;mara. Tu maestro te dir&aacute; cu&aacute;l usar. En Lightroom tu RAW puede verse en color al principio: es normal, y terminas el blanco y negro al editar."))
+        activity="esta caminata en blanco y negro"
     else:
-        title="Camera Settings"
-        lead=("The key setting for this module is the <strong>Picture Style</strong>. In the camera menu, choose "
-              "<strong>Picture Style</strong> and set it to "
-              "<strong>Monochrome</strong>. Now your viewfinder shows the scene in black and white while you capture, "
-              "but the RAW keeps all the detail.")
-        items=[
-            ("Mode:","Av (Aperture Priority). The camera sets the shutter; you control the depth of field."),
-            ("Picture Style:","Monochrome, so you see in black and white in the viewfinder."),
-            ("Aperture:","around f/8, for sharp detail in walls, lines, and textures."),
-            ("ISO:","as low as the light allows (100 to 400 in sun)."),
-            ("Focus:","single point, on your subject."),
-            ("Format:",f"capture in RAW {raw_badge} so you keep every tone."),
-        ]
-        note_t=("Lightroom may show your photo in color at first. That is normal. The RAW keeps all the detail, "
-                "and you finish it in black and white when you edit.")
-    lead_html=f'<div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{lead}</span></div>'
-    note_box=f'<div style="background:rgba(249,1,1,0.10);border:1px solid rgba(249,1,1,0.30);border-left:4px solid {red};padding:11px 14px;margin:8px 0 0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.55;"><strong>{note_t}</strong></div>'
-    return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
-      + section_header(CAMSET_ICON, title, "#f90101", "#ff8f8f")
-      + lead_html + bullets(items, accent=red) + note_box + '</div>')
+        note=("Set your camera to <strong>Manual (M)</strong>. These are a <strong>starting point</strong>: "
+              "keep the aperture and ISO, and change the shutter speed to balance the light meter "
+              "(faster if it is too bright, slower if it is too dark). You can adjust the ISO too if you run out of room.")
+        extra=(para("<strong>Picture Style: Monochrome.</strong> In the camera menu, choose Picture Style and set it to <strong>Monochrome</strong>, so your viewfinder previews in black and white while you capture.")
+             + para("Capture in <strong>RAW</strong> to keep the most detail, or <strong>JPG</strong> for a black-and-white photo straight from the camera. Your teacher will tell you which to use. In Lightroom your RAW may show in color at first: that is normal, and you finish the black and white when you edit."))
+        activity="this black-and-white photo walk"
+    return camera_settings_section(es, quality="RAW", shutter="1/250", aperture="F8", iso="200",
+                                   change_field="shutter", activity=activity, note=note, extra=extra)
 
 def walk_safety(es):
     if es:
