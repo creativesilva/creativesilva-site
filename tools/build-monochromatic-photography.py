@@ -26,10 +26,10 @@ HAVE_CAP_FLOAT=True
 HAVE_EDIT_FLOAT=False
 
 COURSES=[
-  {"prefix":"photo1","title":"Photography 1A","nf":4,"nc":12,
+  {"prefix":"photo1","title":"Photography 1A","nf":4,"nc":8,
    "refl":"Monochromatic-Photography-Reflection",
    "zip":f"{SITE}/assets/course-documents/Monochromatic-Photography-Project-Folder-Photo1.zip"},
-  {"prefix":"photo2","title":"Photography 2A","nf":8,"nc":24,
+  {"prefix":"photo2","title":"Photography 2A","nf":8,"nc":16,
    "refl":"Monochromatic-Photography-Photo2-Reflection",
    "zip":f"{SITE}/assets/course-documents/Monochromatic-Photography-Project-Folder-Photo2.zip"},
 ]
@@ -217,6 +217,33 @@ def build_course(c):
                ("Leading Lines","Lines in the photo that lead your eyes to the subject, like a hallway or a railing."),
                ("Silhouette","The dark shape of a subject against a lighter background, with no detail inside.")]))
 
+    def challenge_card(es):
+        # Specific direction for the walk: hunt for one photo per vocab word (black-and-white +
+        # composition concepts). Keeps the counts honest with a concrete goal (Chris 2026-11-03).
+        if es:
+            return card("TU RETO / ENCUENTRA ESTO","Busca las Seis",
+                para(f"No solo captures {NC} fotos. Sal a buscar. Trata de volver con al menos una foto fuerte para cada una de estas seis ideas. Vienen de tus palabras clave.")
+                + bullets([
+                    ("Contraste:","encuentra un lugar donde la luz brillante y la sombra profunda se junten, como una pared al sol junto a su sombra."),
+                    ("Valor tonal:","encuentra un tema con un rango completo: negros reales, blancos limpios y grises en medio."),
+                    ("Espacio negativo:","encuentra un solo tema contra un fondo simple y vac&iacute;o, como una hoja sola en una pared lisa."),
+                    ("Textura:","ac&eacute;rcate a una superficie &aacute;spera para casi sentirla: corteza, concreto agrietado o grava."),
+                    ("L&iacute;neas gu&iacute;a:","encuentra l&iacute;neas que lleven tu mirada a un tema, como un pasillo, un barandal o una fila de ventanas."),
+                    ("Silueta:","encuentra una forma oscura contra un fondo brillante, como un &aacute;rbol o un letrero contra el cielo."),
+                ], accent="#00b8b8")
+                + note("M&aacute;rcalas a medida que las encuentres. Lograr las seis es el reto."))
+        return card("YOUR CHALLENGE / FIND THESE","Hunt for These Six",
+            para(f"Do not just capture {NC} photos. Go hunting. Try to come back with at least one strong photo for each of these six ideas. They come straight from your key words.")
+            + bullets([
+                ("Contrast:","find a spot where bright light and deep shadow meet, like a sunny wall next to its shadow."),
+                ("Tonal value:","find a subject with a full range: real blacks, clean whites, and grays between."),
+                ("Negative space:","find one subject alone against a simple, empty background, like a single leaf on a blank wall."),
+                ("Texture:","get close to a rough surface so you can almost feel it: bark, cracked concrete, or gravel."),
+                ("Leading lines:","find lines that pull your eye to a subject, like a hallway, a railing, or a row of windows."),
+                ("Silhouette:","find a dark shape against a bright background, like a tree or a sign against the sky."),
+            ], accent="#00b8b8")
+            + note("Check them off as you find them. Getting all six is the challenge."))
+
     # ---------- STEP 01: OVERVIEW ----------
     def overview():
         sub_en="See the campus in black and white. Walk, capture, edit, and deliver your best monochrome photos."
@@ -295,6 +322,7 @@ def build_course(c):
             ]))
         en+=deliverables_box(False,
             [("Contact sheet (JPG):","1 contact sheet of your full take, built in Lightroom Classic and turned in as a high-resolution JPG.")])
+        en+=challenge_card(False)
         en+=mono_settings(False)
         en+=walk_safety(False)
         en+=card("BACK INSIDE / BUILD YOUR CONTACT SHEET","Import, Then Make Your Contact Sheet",
@@ -319,6 +347,7 @@ def build_course(c):
             ]))
         es+=deliverables_box(True,
             [("Hoja de contactos (JPG):","1 hoja de contactos de todo tu trabajo, armada en Lightroom Classic y entregada como un JPG de alta resoluci&oacute;n.")])
+        es+=challenge_card(True)
         es+=mono_settings(True)
         es+=walk_safety(True)
         es+=card("DE REGRESO / ARMA TU HOJA DE CONTACTOS","Importa, Luego Arma Tu Hoja de Contactos",
