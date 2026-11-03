@@ -18,11 +18,11 @@ ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 AREA="Photography Folder"
 
 IMGDIR=f"{SITE}/assets/images/shared/monochromatic-photography"
-HEADER=f"{IMGDIR}/header-v1.jpg"
+HEADER=f"{IMGDIR}/header-v1.png"      # 21:9 title graphic, transparent PNG (keeps its soft alpha edges)
 CAP_FLOAT=f"{IMGDIR}/capture-float-v1.jpg"
 EDIT_FLOAT=f"{IMGDIR}/edit-float-v1.jpg"
-HAVE_HEADER=False
-HAVE_CAP_FLOAT=False
+HAVE_HEADER=True
+HAVE_CAP_FLOAT=True
 HAVE_EDIT_FLOAT=False
 
 COURSES=[
@@ -243,7 +243,7 @@ def build_course(c):
         en+=type_card("overview","Step 01 &middot; Overview &amp; Download","See a Different Way, Then Capture It",
             para("Today you look at our campus in <strong>black and white</strong>. The goal is not to find something beautiful. It is to make an ordinary subject strong through composition.")
             + para("Do not look for interesting things to photograph. Look for interesting ways to photograph ordinary things. A wall, a shadow, a tree, or a staircase can become powerful when you stop using color and start seeing light.")
-            + (framed(HEADER,"Monochromatic Photography title graphic: black-and-white campus photos") if HAVE_HEADER else ""))
+            + (framed(HEADER,"A student on campus capturing black-and-white photos with a camera, the PV Academy of Arts building and a dove behind them") if HAVE_HEADER else ""))
         en+=standards_box(False, MONO_STANDARDS)
         en+=project_downloads(False)
         en+=card("THE BIG IDEA / HOW TO SEE","Monochrome Is a Way of Seeing",
@@ -271,7 +271,7 @@ def build_course(c):
         es+=type_card("overview","Paso 01 &middot; Resumen y Descarga","Mira de Otra Forma, Luego Captura",
             para("Hoy miras nuestra escuela en <strong>blanco y negro</strong>. La meta no es encontrar algo bonito. Es hacer que un tema com&uacute;n sea fuerte por su composici&oacute;n.")
             + para("No busques cosas interesantes para fotografiar. Busca formas interesantes de fotografiar cosas comunes. Una pared, una sombra, un &aacute;rbol o una escalera pueden volverse poderosos cuando dejas el color y empiezas a ver la luz.")
-            + (framed(HEADER,"Gr&aacute;fico de t&iacute;tulo de Fotograf&iacute;a Monocrom&aacute;tica: fotos de la escuela en blanco y negro") if HAVE_HEADER else ""))
+            + (framed(HEADER,"Un estudiante en la escuela capturando fotos en blanco y negro con una c&aacute;mara, con el edificio PV Academy of Arts y una paloma detr&aacute;s") if HAVE_HEADER else ""))
         es+=standards_box(True, MONO_STANDARDS)
         es+=project_downloads(True)
         es+=card("LA GRAN IDEA / C&Oacute;MO VER","El Monocromo Es una Forma de Ver",
@@ -305,7 +305,7 @@ def build_course(c):
             "Set the Monochrome preview, walk the campus, capture your take, and build a contact sheet.","#espanol","Clic para Espa&ntilde;ol")
         en+=card("ON THE WALK / WHAT YOU DO","Walk, Look, and Capture on Purpose",
             para(f"Set your camera to a Monochrome preview and RAW, then walk the campus. Look for light, shadow, lines, texture, and simple shapes. Capture at least <strong>{NC} photos</strong> on purpose, not random photos.")
-            + (float_right(CAP_FLOAT,"An example black-and-white campus photo: a staircase with strong side light and deep shadows","A strong monochrome frame: side light, deep shadows, and clean lines.") if HAVE_CAP_FLOAT else "")
+            + (float_right(CAP_FLOAT,"A black-and-white photo of a dove resting on a concrete campus ledge, side light showing the feather texture","An ordinary campus subject made strong: feather texture, a clear tonal range, and a simple background.") if HAVE_CAP_FLOAT else "")
             + bullets([
                 ("Look first:","before each photo, ask: what is my subject, and what makes it strong without color?"),
                 ("Try more than one view:","move closer, change your height, and simplify the background. Make more than one view of the same subject and compare them."),
@@ -329,7 +329,7 @@ def build_course(c):
             "Pon la vista Monocromo, camina por la escuela, captura tu trabajo y arma una hoja de contactos.","#top","Back to English")
         es+=card("EN LA CAMINATA / QU&Eacute; HACES","Camina, Mira y Captura con Intenci&oacute;n",
             para(f"Pon tu c&aacute;mara en vista Monocromo y RAW, luego camina por la escuela. Busca luz, sombra, l&iacute;neas, textura y formas simples. Captura al menos <strong>{NC} fotos</strong> pensadas, no fotos al azar.")
-            + (float_right(CAP_FLOAT,"Una foto de ejemplo de la escuela en blanco y negro: una escalera con luz de lado fuerte y sombras profundas","Un encuadre monocromo fuerte: luz de lado, sombras profundas y l&iacute;neas limpias.") if HAVE_CAP_FLOAT else "")
+            + (float_right(CAP_FLOAT,"Una foto en blanco y negro de una paloma sobre una repisa de concreto en la escuela, con luz de lado que muestra la textura de las plumas","Un tema com&uacute;n de la escuela hecho fuerte: la textura de las plumas, un buen rango tonal y un fondo simple.") if HAVE_CAP_FLOAT else "")
             + bullets([
                 ("Mira primero:","antes de cada foto, preg&uacute;ntate: &iquest;cu&aacute;l es mi tema y qu&eacute; lo hace fuerte sin color?"),
                 ("Prueba m&aacute;s de una vista:","ac&eacute;rcate, cambia tu altura y simplifica el fondo. Haz m&aacute;s de una vista del mismo tema y compara."),
