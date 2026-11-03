@@ -120,8 +120,12 @@
   /* Wheel picker (Activity-Timer drum): tap a slot -> scroll/tap an available seat -> it collapses. */
   .pw-wheelov{position:fixed;inset:0;z-index:140;background:rgba(2,12,12,.72);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;padding:20px;}
   .pw-wheelov.open{display:flex;}
+  /* While a pop-out is open, lock the page behind it so a swipe over the overlay never scrolls the
+     background (iOS-safe: position:fixed, restored on close). Only the wheels/box scroll. Chris 2026-11-03. */
+  html.modal-lock{overflow:hidden;}
+  html.modal-lock body{position:fixed;left:0;right:0;width:100%;overflow:hidden;}
   /* Seat modal: tap a camera number -> a window of vertical seat wheels + Confirm + X. */
-  .pw-seatbox{background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);border-top:3px solid var(--teal);box-shadow:0 24px 60px rgba(0,0,0,.7);width:auto;max-width:94vw;padding:16px 18px 18px;}
+  .pw-seatbox{background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);border-top:3px solid var(--teal);box-shadow:0 24px 60px rgba(0,0,0,.7);width:auto;max-width:94vw;max-height:calc(100vh - 36px);overflow-y:auto;overscroll-behavior:contain;padding:16px 18px 18px;}
   .pw-seathead{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:1rem;color:#fff;}
   .pw-seatx{background:none;border:0;color:var(--muted);font-size:1.7rem;line-height:1;cursor:pointer;padding:0 2px;}
   .pw-seatx:hover{color:#fff;}
@@ -682,6 +686,16 @@
   document.getElementById('kitX').onclick=closeKitModal;
   document.getElementById('kitOv').addEventListener('click',function(e){ if(e.target===this) closeKitModal(); });
   document.getElementById('roExit').onclick=function(){ RO=null; var ap=autoPeriod(); if(ap&&SEATMAP[ap]) setPeriod(ap); else { PERIOD=PERIOD||null; buildPW(); render(); } };
+
+  // Lock the background scroll whenever a pop-out (seat picker, kit editor, history) is open, so a swipe
+  // on the wheels never grabs and scrolls the page behind it on the iPad. Restored on close. Chris 2026-11-03.
+  var _lockY=0;
+  function syncScrollLock(){
+    var anyOpen=!!document.querySelector('.pw-wheelov.open'), locked=document.documentElement.classList.contains('modal-lock');
+    if(anyOpen && !locked){ _lockY=window.pageYOffset||document.documentElement.scrollTop||0; document.body.style.top=(-_lockY)+'px'; document.documentElement.classList.add('modal-lock'); }
+    else if(!anyOpen && locked){ document.documentElement.classList.remove('modal-lock'); document.body.style.top=''; window.scrollTo(0,_lockY); }
+  }
+  [].forEach.call(document.querySelectorAll('.pw-wheelov'), function(ov){ new MutationObserver(syncScrollLock).observe(ov, {attributes:true, attributeFilter:['class']}); });
 
   // boot: if we already hold the key (logged into the console), go straight in
   if(KEY){ startApp(); } else { gate.style.display='flex'; setTimeout(function(){ pin.focus(); },60); }
