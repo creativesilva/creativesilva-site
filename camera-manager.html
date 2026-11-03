@@ -398,6 +398,7 @@
   .camtile.mt-ok{border-left-color:var(--ok);} .camtile.mt-ok .camtile-dot{background:var(--ok);} .camtile.mt-ok .mt-cond{color:#8ff0b0;}
   .camtile.mt-warn{border-left-color:var(--gold);} .camtile.mt-warn .camtile-dot{background:var(--gold);} .camtile.mt-warn .mt-cond{color:#ffd889;}
   .camtile.mt-oos{opacity:.55;border-left-color:var(--grayed);} .camtile.mt-oos .camtile-dot{background:var(--grayed);} .camtile.mt-oos .mt-cond{color:var(--faint);}
+  .camtile.mt-locked{opacity:.5;border-left-color:var(--grayed);cursor:default;} .camtile.mt-locked:hover{background:var(--surface);} .camtile.mt-locked .camtile-status{color:var(--faint);}
   /* phone: let the hub header wrap so the date stepper / sort control drop to their own full-width row instead of bleeding off-screen */
   @media (max-width:560px){
     .camhub-head{flex-wrap:wrap;gap:10px 12px;padding:16px 16px 16px 18px;}
@@ -1352,6 +1353,11 @@
     return [SELECTED_POOL];
   }
   function viewCams(){ var seen={},out=[]; scopePools().forEach(function(p){ ((DATA.pools||{})[p]||[]).forEach(function(c){ if(!seen[c]){ seen[c]=1; out.push(c); } }); }); return out.length?out:(DATA.cameras||[]); }
+  // Garcia teaches Photo 1 only, but should still SEE the Photo-2 cameras (16-18) in her catalog, grayed
+  // and view-only (Chris 2026-11-03). They are added to the DISPLAY list only; viewCams() (what she can
+  // hand out / counts as available / the Reserve list) stays Photo 1, so she can never reserve a P2 camera.
+  function camLocked(cam){ return SELECTED_POOL==='garcia' && P2.indexOf(cam)>=0; }
+  function displayCams(){ var cams=viewCams().slice(); if(SELECTED_POOL==='garcia'){ var seen={}; cams.forEach(function(c){ seen[c]=1; }); P2.forEach(function(c){ if(!seen[c]) cams.push(c); }); } return cams; }
   // Gear order per teacher: Mankin leads with the iPad styluses (her focus); others keep camera gear first.
   function gOrderFor(){ return SELECTED_POOL==='mankin'
     ? ['apple_pencil','mankin_tripod','tripod','speedlite','wide','zoom','reflector','bluetooth']
@@ -2738,6 +2744,11 @@
     if(a.issues&&a.issues.length) b.push(a.issues.length+' open issue'+(a.issues.length>1?'s':''));
     return b.length?b.join(' &middot; '):'Complete, no issues'; }
   function manageTile(cam){
+    if(camLocked(cam)){   // Garcia's Photo-2 cameras: shown grayed + view-only (not hers to hand out)
+      return '<div class="camtile gtile mt-locked" title="Photo 2 only">'+camThumb(cam)+
+        '<span class="gtile-main"><span class="camtile-top"><span class="camtile-n">'+esc(cam)+'</span><span class="camtile-p2">P2</span></span>'+
+        '<span class="camtile-status mt-cond">Photo 2 only</span></span></div>';
+    }
     var cond=camCond(cam), p=kitPct(cam), pcls=(p==null?'na':(p>=100?'':(p>=70?'mid':'low')));
     var p2=(P2.indexOf(cam)>=0)?'<span class="camtile-p2">P2</span>':'';
     return '<button type="button" class="camtile gtile mt-'+cond+'" data-camdetail="'+esc(cam)+'">'+
@@ -2783,7 +2794,7 @@
     if(mode==='oos') return s==='oos'?0:1;
     if(mode==='pct') return (p==null?999:p);   // least-complete kits first; TBD last
     return 0; }
-  function sortedCams(){ var arr=viewCams().slice(); if(CAM_SORT==='num') return arr;
+  function sortedCams(){ var arr=displayCams(); if(CAM_SORT==='num') return arr;
     return arr.map(function(c,i){ return {c:c,i:i}; }).sort(function(a,b){ var ka=camSortKey(a.c,CAM_SORT), kb=camSortKey(b.c,CAM_SORT); return (ka!==kb)?(ka-kb):(a.i-b.i); }).map(function(x){ return x.c; }); }
   function camSortDropdown(){ var cur=(CAM_SORTS.filter(function(s){return s.k===CAM_SORT;})[0]||CAM_SORTS[0]).label;
     return '<div class="camsortdd" id="camsortdd">'+
