@@ -190,7 +190,7 @@ def step01():
     en+=deliverables_box(False,
         [("1 photo (JPG),","a clear photo of your finished, named character drawing, uploaded to this Canvas assignment.")])
     en+=card("TURN IT IN","Photograph and Upload Your Character",
-        para("When your character is finished and named, take a clean, clear photo of your sketchbook page with your school iPad. Use good light, hold the iPad straight above the page, and avoid glare. Upload the photo (JPG) to this Canvas assignment. Then go to Step 02 for the reflection.")
+        para("When your character is finished and named, take a clean, clear photo of your sketchbook page with your school iPad. Use good light, hold the iPad straight above the page, and avoid glare. Upload the photo (JPG) to this Canvas assignment. Then go to Step 03 for the reflection.")
         + note("Be honest and turn in your own original work."))
     en+=next_up("UP NEXT &middot; STEP 03 - Reflection","With your character turned in, you&rsquo;ll reflect on what to add next: color, form, and texture.")
 
@@ -210,7 +210,7 @@ def step01():
     es+=deliverables_box(True,
         [("1 foto (JPG),","una foto clara de tu dibujo del personaje terminado y con nombre, subida a esta tarea de Canvas.")])
     es+=card("ENTR&Eacute;GALO","Fotograf&iacute;a y Sube Tu Personaje",
-        para("Cuando tu personaje est&eacute; terminado y con nombre, toma una foto limpia y clara de la p&aacute;gina de tu cuaderno con tu iPad de la escuela. Usa buena luz, sostiene el iPad recto sobre la p&aacute;gina y evita el reflejo. Sube la foto (JPG) a esta tarea de Canvas. Luego ve al Paso 02 para la reflexi&oacute;n.")
+        para("Cuando tu personaje est&eacute; terminado y con nombre, toma una foto limpia y clara de la p&aacute;gina de tu cuaderno con tu iPad de la escuela. Usa buena luz, sostiene el iPad recto sobre la p&aacute;gina y evita el reflejo. Sube la foto (JPG) a esta tarea de Canvas. Luego ve al Paso 03 para la reflexi&oacute;n.")
         + note("S&eacute; honesto y entrega tu propio trabajo original."))
     es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Reflexi&oacute;n","Con tu personaje entregado, vas a reflexionar sobre qu&eacute; agregar despu&eacute;s: color, forma y textura.")
 

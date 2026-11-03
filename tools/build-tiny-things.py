@@ -166,7 +166,7 @@ def step01(C):
     en+=deliverables_box(False,
         [("Your 6 photos (JPG),","all 6 tiny-thing captures, uploaded to this Canvas assignment.")])
     en+=card("TURN IT IN","Upload Your 6 Photos",
-        para("Upload all 6 photos to Canvas. A photo straight from your phone or iPad (JPG) is perfect. Then go to Step 02 for the reflection."))
+        para("Upload all 6 photos to Canvas. A photo straight from your phone or iPad (JPG) is perfect. Then go to Step 03 for the reflection."))
     en+=next_up("UP NEXT &middot; STEP 03 - Reflection","With your 6 photos turned in, you&rsquo;ll write a short reflection and pitch next weekend&rsquo;s challenge.")
 
     es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 02',"Captura y Entrega","Fotograf&iacute;a tus 6 cosas peque&ntilde;as.","#top","Back to English")
@@ -184,7 +184,7 @@ def step01(C):
     es+=deliverables_box(True,
         [("Tus 6 fotos (JPG),","las 6 capturas de cosas pequeñas, subidas a esta tarea de Canvas.")])
     es+=card("ENTR&Eacute;GALO","Sube Tus 6 Fotos",
-        para("Sube las 6 fotos a Canvas. Una foto directa de tu teléfono o iPad (JPG) es perfecta. Luego ve al Paso 02 para la reflexión."))
+        para("Sube las 6 fotos a Canvas. Una foto directa de tu teléfono o iPad (JPG) es perfecta. Luego ve al Paso 03 para la reflexión."))
     es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Reflexi&oacute;n","Con tus 6 fotos entregadas, vas a escribir una reflexi&oacute;n corta y proponer el reto del pr&oacute;ximo fin de semana.")
 
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)

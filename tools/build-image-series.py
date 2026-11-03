@@ -457,7 +457,7 @@ def overview():
             ("Cull &amp; Edit:","select your best 6, do a light edit (exposure, highlights, shadows, color temperature), and turn in a 6-image contact sheet."),
             ("Reflection:","tell the story of your series."),
         ])
-        + note("Capture in RAW, not JPG. Set your Canon EOS R50 to RAW before you start. Step 01 shows you how."))
+        + note("Capture in RAW, not JPG. Set your Canon EOS R50 to RAW before you start. Step 02 shows you how."))
     en+=resources_card("Key Words",
         vocab_grid("On the Quiz",
           "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
@@ -489,7 +489,7 @@ def overview():
             ("Selecciona y Edita:","elige tus mejores 6, haz una edici&oacute;n ligera (exposici&oacute;n, luces, sombras, temperatura de color) y entrega una hoja de contactos de 6 im&aacute;genes."),
             ("Reflexi&oacute;n:","cuenta la historia de tu serie."),
         ])
-        + note("Captura en RAW, no en JPG. Pon tu Canon EOS R50 en RAW antes de empezar. El Paso 01 te ense&ntilde;a c&oacute;mo."))
+        + note("Captura en RAW, no en JPG. Pon tu Canon EOS R50 en RAW antes de empezar. El Paso 02 te ense&ntilde;a c&oacute;mo."))
     es+=resources_card("Palabras Clave",
         vocab_grid("En el Examen",
           "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",

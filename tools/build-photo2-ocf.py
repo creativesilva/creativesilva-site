@@ -168,7 +168,7 @@ def overview():
             ("Step 5","Go to Photography","In OneDrive, open your Photography folder."),
             ("Step 6","Make the Main Folder","Create a new folder and name it &lsquo;Off Camera Flash.&rsquo;"),
             ("Step 7","Make Two Subfolders","Inside &lsquo;Off Camera Flash,&rsquo; make two folders: &lsquo;Inspiration Images&rsquo; and &lsquo;RAW.&rsquo;"),
-            ("Step 8","What They Are For","&lsquo;Inspiration Images&rsquo; holds your Step 1 examples. &lsquo;RAW&rsquo; is where you import your photo walk images in Step 2."),
+            ("Step 8","What They Are For","&lsquo;Inspiration Images&rsquo; holds your Step 2 examples. &lsquo;RAW&rsquo; is where you import your photo walk images in Step 3."),
         ]))
     en+=card("","Natural Light vs Off-Camera Flash",
         para("The goal is a balanced exposure: a rich, detailed background and a well-lit subject in the same frame. You control the background with your camera settings (ambient exposure) and control your subject with the flash (flash exposure).")
@@ -219,7 +219,7 @@ def overview():
             ("Paso 5","Ve a Fotograf&iacute;a","En OneDrive, abre tu carpeta de Fotograf&iacute;a."),
             ("Paso 6","Crea la Carpeta Principal","Crea una carpeta nueva y ll&aacute;mala &lsquo;Off Camera Flash.&rsquo;"),
             ("Paso 7","Crea Dos Subcarpetas","Dentro de &lsquo;Off Camera Flash,&rsquo; crea dos carpetas: &lsquo;Inspiration Images&rsquo; y &lsquo;RAW.&rsquo;"),
-            ("Paso 8","Para Qu&eacute; Sirven","&lsquo;Inspiration Images&rsquo; guarda tus ejemplos del Paso 1. &lsquo;RAW&rsquo; es donde importas tus im&aacute;genes de la caminata en el Paso 2."),
+            ("Paso 8","Para Qu&eacute; Sirven","&lsquo;Inspiration Images&rsquo; guarda tus ejemplos del Paso 2. &lsquo;RAW&rsquo; es donde importas tus im&aacute;genes de la caminata en el Paso 3."),
         ]))
     es+=card("","Luz Natural vs Flash Fuera de C&aacute;mara",
         para("La meta es una exposici&oacute;n equilibrada: un fondo rico y con detalle, y un sujeto bien iluminado en el mismo cuadro. T&uacute; controlas el fondo con tus configuraciones (exposici&oacute;n ambiente) y controlas a tu sujeto con el flash (exposici&oacute;n de flash).")

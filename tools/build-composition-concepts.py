@@ -229,7 +229,7 @@ def step01():
     en+=deliverables_box(False,
         [("Your 3 final photos (JPG),","uploaded to this Canvas assignment.")])
     en+=card("TURN IT IN","Upload Your 3 Photos",
-        para("Upload your 3 final photos to Canvas. A photo straight from your phone or iPad (JPG) is perfect. Then go to Step 02 for the reflection."))
+        para("Upload your 3 final photos to Canvas. A photo straight from your phone or iPad (JPG) is perfect. Then go to Step 03 for the reflection."))
 
     en+=next_up("UP NEXT &middot; STEP 03 - Reflection","Reflect on your work.")
     es=banner("M&oacute;dulo 02 &bull; Paso 02","Captura y Entrega","Captura tus 3 conceptos.","#top","Back to English")
@@ -246,7 +246,7 @@ def step01():
     es+=deliverables_box(True,
         [("Tus 3 fotos finales (JPG),","subidas a esta tarea de Canvas.")])
     es+=card("ENTR&Eacute;GALO","Sube Tus 3 Fotos",
-        para("Sube tus 3 fotos finales a Canvas. Una foto directa de tu tel&eacute;fono o iPad (JPG) es perfecta. Luego ve al Paso 02 para la reflexi&oacute;n."))
+        para("Sube tus 3 fotos finales a Canvas. Una foto directa de tu tel&eacute;fono o iPad (JPG) es perfecta. Luego ve al Paso 03 para la reflexi&oacute;n."))
 
     es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Reflexi&oacute;n","Reflexiona sobre tu trabajo.")
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)
@@ -263,7 +263,7 @@ def step02():
         + note("The reflection document is on this module&rsquo;s Overview page, the first page of this module. If you have not downloaded it yet, go back and get it. Before you open it, move it from your Downloads folder into your project folder.")
         + para("Type your answers in the document, save it, and upload it to Canvas with your 3 photos."))
     en+=deliverables_box(False,
-        [("3 photos:","one for each concept, all different (from Step 01)."),
+        [("3 photos:","one for each concept, all different (from Step 02)."),
          ("1 reflection:","the completed Word document (.docx).")])
 
     en+=next_up("UP NEXT &middot; MODULE 03 - Leading Lines Photo Walk","Next module: pair up for a photo walk and use leading lines to pull the eye through your photos.")
@@ -274,7 +274,7 @@ def step02():
         + note("El documento de reflexi&oacute;n est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo, la primera p&aacute;gina de este m&oacute;dulo. Si a&uacute;n no lo has descargado, regresa y cons&iacute;guelo. Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto.")
         + para("Escribe tus respuestas en el documento, gu&aacute;rdalo y s&uacute;belo a Canvas con tus 3 fotos."))
     es+=deliverables_box(True,
-        [("3 fotos:","una para cada concepto, todas diferentes (del Paso 01)."),
+        [("3 fotos:","una para cada concepto, todas diferentes (del Paso 02)."),
          ("1 reflexi&oacute;n:","el documento de Word completo (.docx).")])
 
     es+=next_up("A CONTINUACI&Oacute;N &middot; M&Oacute;DULO 03 - Caminata de L&iacute;neas Gu&iacute;a","Pr&oacute;ximo m&oacute;dulo: trabaja en pareja en una caminata y usa l&iacute;neas gu&iacute;a para llevar la mirada por tus fotos.")

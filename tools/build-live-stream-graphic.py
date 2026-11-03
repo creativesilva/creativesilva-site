@@ -40,12 +40,12 @@ def ps_folder_note(es):
         return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
           '<strong style="color:#ffb27c;">Mantente organizado:</strong> crea una carpeta llamada '
           f'&lsquo;{FOLDER}&rsquo; en OneDrive &rarr; {AREA}. Guarda ah&iacute; todo lo de esta lecci&oacute;n: '
-          'tus archivos del proyecto, las capturas de pantalla de inspiraci&oacute;n que guardes en el Paso 2, '
+          'tus archivos del proyecto, las capturas de pantalla de inspiraci&oacute;n que guardes en el Paso 3, '
           'y tu miniatura terminada.</div>')
     return ('<div style="margin-top:16px;font-size:12pt;color:rgba(255,255,255,0.82);line-height:1.55;">'
       '<strong style="color:#ffb27c;">Stay organized:</strong> make a folder called '
       f'&lsquo;{FOLDER}&rsquo; in OneDrive &rarr; {AREA}. Keep everything for this lesson there: '
-      'your project files, the inspiration screen captures you save in Step 2, and your finished thumbnail.</div>')
+      'your project files, the inspiration screen captures you save in Step 3, and your finished thumbnail.</div>')
 
 def downloads_block(es):
     # Orange Downloads section (Overview only): project files, the Lesson Slides PDF, the reflection
@@ -106,10 +106,10 @@ LSG_STANDARDS=[
 def overview():
     en=banner("Module 05 &bull; Step 01","Live Stream Graphic","Learn Photoshop, then design your own YouTube thumbnail.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=type_card("overview","The Module Overview","Build a Graphic, Then Design Your Own Thumbnail",
-        float_right(END_IMG,"Finished History 301 Live Stream graphic: an arch photo with an orange bar on the left, a blue bar on the right, a green wash, and the words HISTORY 301 and LIVE STREAM in white","The live stream graphic you build in Step 1 (your warm-up).")
-        + para("In this project you learn Adobe Photoshop, then use it to make something of your own. First, in Step 1, you follow clear steps to build a live stream promo graphic, so everyone learns the same tools. Then, in Steps 2 to 4, you find YouTube thumbnail inspiration, design your own thumbnail, and reflect on it.")
+        float_right(END_IMG,"Finished History 301 Live Stream graphic: an arch photo with an orange bar on the left, a blue bar on the right, a green wash, and the words HISTORY 301 and LIVE STREAM in white","The live stream graphic you build in Step 2 (your warm-up).")
+        + para("In this project you learn Adobe Photoshop, then use it to make something of your own. First, in Step 2, you follow clear steps to build a live stream promo graphic, so everyone learns the same tools. Then, in Steps 3 to 5, you find YouTube thumbnail inspiration, design your own thumbnail, and reflect on it.")
         + para("In the warm-up you will make a new Photoshop file, add a photo, add colored bars, add words, blend colors, use Generative Fill, and export. Those are the same skills you will reuse to make your own thumbnail.")
-        + note("Step 1 is a follow-along how-to. Steps 2 to 4 are your own YouTube thumbnail: inspiration, design, and reflection."))
+        + note("Step 2 is a follow-along how-to. Steps 3 to 5 are your own YouTube thumbnail: inspiration, design, and reflection."))
     en+=standards_box(False, LSG_STANDARDS)
     en+=downloads_block(False)
     en+=card("SKILLS / WHAT YOU WILL LEARN","New Photoshop Skills",
@@ -136,10 +136,10 @@ def overview():
     en+=next_up("UP NEXT &middot; STEP 02 - Build It in Photoshop","Follow the steps to build your warm-up graphic.")
     es=banner("M&oacute;dulo 05 &bull; Paso 01","Gr&aacute;fico de Live Stream","Aprende Photoshop y luego dise&ntilde;a tu propia miniatura de YouTube.","#top","Back to English", HICON_DESIGN)
     es+=type_card("overview","El Resumen del M&oacute;dulo","Crea un Gr&aacute;fico y Luego Dise&ntilde;a Tu Propia Miniatura",
-        float_right(END_IMG,"Gr&aacute;fico terminado de History 301 Live Stream: una foto de un arco con una barra naranja a la izquierda, una barra azul a la derecha, un ba&ntilde;o verde y las palabras HISTORY 301 y LIVE STREAM en blanco","El gr&aacute;fico de live stream que creas en el Paso 1 (tu calentamiento).")
-        + para("En este proyecto aprendes Adobe Photoshop y luego lo usas para crear algo tuyo. Primero, en el Paso 1, sigues pasos claros para crear un gr&aacute;fico promocional de live stream, para que todos aprendan las mismas herramientas. Luego, en los Pasos 2 al 4, buscas inspiraci&oacute;n de miniaturas de YouTube, dise&ntilde;as tu propia miniatura y reflexionas sobre ella.")
+        float_right(END_IMG,"Gr&aacute;fico terminado de History 301 Live Stream: una foto de un arco con una barra naranja a la izquierda, una barra azul a la derecha, un ba&ntilde;o verde y las palabras HISTORY 301 y LIVE STREAM en blanco","El gr&aacute;fico de live stream que creas en el Paso 2 (tu calentamiento).")
+        + para("En este proyecto aprendes Adobe Photoshop y luego lo usas para crear algo tuyo. Primero, en el Paso 2, sigues pasos claros para crear un gr&aacute;fico promocional de live stream, para que todos aprendan las mismas herramientas. Luego, en los Pasos 3 al 5, buscas inspiraci&oacute;n de miniaturas de YouTube, dise&ntilde;as tu propia miniatura y reflexionas sobre ella.")
         + para("En el calentamiento vas a crear un archivo nuevo de Photoshop, agregar una foto, agregar barras de color, agregar palabras, mezclar colores, usar Relleno Generativo y exportar. Esas son las mismas habilidades que vas a reusar para crear tu propia miniatura.")
-        + note("El Paso 1 es un instructivo para seguir. Los Pasos 2 al 4 son tu propia miniatura de YouTube: inspiraci&oacute;n, dise&ntilde;o y reflexi&oacute;n."))
+        + note("El Paso 2 es un instructivo para seguir. Los Pasos 3 al 5 son tu propia miniatura de YouTube: inspiraci&oacute;n, dise&ntilde;o y reflexi&oacute;n."))
     es+=standards_box(True, LSG_STANDARDS)
     es+=downloads_block(True)
     es+=card("HABILIDADES / LO QUE APRENDER&Aacute;S","Nuevas Habilidades de Photoshop",
@@ -175,7 +175,7 @@ def step01():
     en+=resources_card("Lesson Slides",
         para("Build your graphic in Adobe Photoshop by following the Lesson Slides. They show a picture for every step, from the new document all the way to the final export. Click the cover to open the slides in a new tab, then keep them next to Photoshop and work through the steps in order.")
         + para("Use the color codes exactly as written (like ff7f00) so your colors match the example.")
-        + note("This build is your warm-up. You will use these same skills to design your own YouTube thumbnail in Step 3."),
+        + note("This build is your warm-up. You will use these same skills to design your own YouTube thumbnail in Step 4."),
         False, floatimg=slide_deck(False))
 
     en+=next_up("UP NEXT &middot; STEP 03 - Find Your Inspiration","Pick one channel you love and study its thumbnails.")
@@ -185,7 +185,7 @@ def step01():
     es+=resources_card("Diapositivas de la Lecci&oacute;n",
         para("Crea tu gr&aacute;fico en Adobe Photoshop siguiendo las Diapositivas de la Lecci&oacute;n. Muestran una imagen de cada paso, desde el documento nuevo hasta la exportaci&oacute;n final. Haz clic en la portada para abrir las diapositivas en una pesta&ntilde;a nueva, luego mantenlas junto a Photoshop y haz los pasos en orden.")
         + para("Usa los c&oacute;digos de color tal como est&aacute;n escritos (como ff7f00) para que tus colores coincidan con el ejemplo.")
-        + note("Este gr&aacute;fico es tu calentamiento. Vas a usar estas mismas habilidades para dise&ntilde;ar tu propia miniatura de YouTube en el Paso 3."),
+        + note("Este gr&aacute;fico es tu calentamiento. Vas a usar estas mismas habilidades para dise&ntilde;ar tu propia miniatura de YouTube en el Paso 4."),
         True, floatimg=slide_deck(True))
 
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
@@ -236,7 +236,7 @@ def step03():
     en=banner("Module 05 &bull; Step 04","Design Your Own Thumbnail","Make your own YouTube thumbnail in Photoshop.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
     en+=card("STEP 03 / DESIGN","Design Your Thumbnail",
         float_right(DESIGN_FLOAT,"A Pioneer Valley student in the design lab making his own YouTube thumbnail in Photoshop, a bold &lsquo;5 Ways to Score Like a Pro&rsquo; basketball design on the iMac screen","Design your own thumbnail in Photoshop, bold and easy to read.")
-        + para("Now make your own. Use the Photoshop skills from your Step 1 warm-up and the ideas you gathered in Step 2.")
+        + para("Now make your own. Use the Photoshop skills from your Step 2 warm-up and the ideas you gathered in Step 3.")
         + steps([
             ("","Make a new Photoshop file at 1280 by 720 pixels, the YouTube thumbnail size."),
             ("","Add a background: a photo, a solid color, or a gradient."),
@@ -253,7 +253,7 @@ def step03():
     es=banner("M&oacute;dulo 05 &bull; Paso 04","Dise&ntilde;a Tu Propia Miniatura","Crea tu propia miniatura de YouTube en Photoshop.","#top","Back to English", HICON_DESIGN)
     es+=card("PASO 03 / DISE&Ntilde;O","Dise&ntilde;a Tu Miniatura",
         float_right(DESIGN_FLOAT,"Un estudiante de Pioneer Valley en el laboratorio creando su propia miniatura de YouTube en Photoshop, un dise&ntilde;o de baloncesto en negrita &lsquo;5 Ways to Score Like a Pro&rsquo; en la pantalla de la iMac","Dise&ntilde;a tu propia miniatura en Photoshop, en negrita y f&aacute;cil de leer.")
-        + para("Ahora crea la tuya. Usa las habilidades de Photoshop de tu calentamiento del Paso 1 y las ideas que juntaste en el Paso 2.")
+        + para("Ahora crea la tuya. Usa las habilidades de Photoshop de tu calentamiento del Paso 2 y las ideas que juntaste en el Paso 3.")
         + steps([
             ("","Crea un archivo nuevo de Photoshop de 1280 por 720 p&iacute;xeles, el tama&ntilde;o de una miniatura de YouTube."),
             ("","Agrega un fondo: una foto, un color s&oacute;lido o un degradado."),

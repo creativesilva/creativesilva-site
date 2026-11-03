@@ -26,8 +26,8 @@ def downloads_block(es):
     heading="Descarga Tus Archivos" if es else "Download Your Files"
     lead=("Descarga aqu&iacute; todo lo que necesitas para este m&oacute;dulo. Consigue tus archivos antes de empezar." if es
           else "Download everything you need for this module here. Get your files before you start.")
-    rawpara=("<strong>Archivos raw:</strong> descarga los archivos raw de tu grupo del Google Drive de la clase, luego crea tus carpetas e imp&oacute;rtalos a Lightroom Classic (los pasos completos est&aacute;n en el Paso 01). Ya deber&iacute;as tener instalados los presets de hoja de contactos de Lightroom; si no, est&aacute;n en el resumen del curso de Fotograf&iacute;a 2A." if es
-             else "<strong>Raw files:</strong> download your group&rsquo;s raw files from the class Google Drive, then set up your folders and import into Lightroom Classic (full steps on Step 01). You should already have the Lightroom contact sheet presets installed; if not, they are on the Photography 2A course overview.")
+    rawpara=("<strong>Archivos raw:</strong> descarga los archivos raw de tu grupo del Google Drive de la clase, luego crea tus carpetas e imp&oacute;rtalos a Lightroom Classic (los pasos completos est&aacute;n en el Paso 02). Ya deber&iacute;as tener instalados los presets de hoja de contactos de Lightroom; si no, est&aacute;n en el resumen del curso de Fotograf&iacute;a 2A." if es
+             else "<strong>Raw files:</strong> download your group&rsquo;s raw files from the class Google Drive, then set up your folders and import into Lightroom Classic (full steps on Step 02). You should already have the Lightroom contact sheet presets installed; if not, they are on the Photography 2A course overview.")
     gdlabel="Google Drive: Archivos Raw" if es else "Google Drive: Raw Files"
     reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
     ref=REFLECT_ES if es else REFLECT_EN

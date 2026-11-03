@@ -215,7 +215,7 @@ def step01(C):
         [("1 to 3 favorite images (JPG),","your best frozen-globe photos, lightly cropped and uploaded to this Canvas assignment.")])
     en+=card("CROP &amp; SUBMIT","A Light Crop, Then Turn It In",
         para("Bring your favorite photos into Lightroom and do a light edit. Since these are JPG files, keep it simple: mostly just crop to frame the water globe and straighten it if needed. You do not need heavy edits.")
-        + para("Export your best 1 to 3 images as high-quality JPGs and upload them to Canvas. Then go to Step 02 for the reflection."))
+        + para("Export your best 1 to 3 images as high-quality JPGs and upload them to Canvas. Then go to Step 03 for the reflection."))
     en+=next_up("UP NEXT &middot; STEP 03 - Reflection","With your favorites turned in, you&rsquo;ll write a short reflection and pitch another outdoor photo activity.")
 
     es=banner(f'M&oacute;dulo {C["mod"]} &bull; Paso 02',"Captura, Recorta y Entrega","Trabajen en parejas. Revienta, congela y captura el estallido.","#top","Back to English")
@@ -235,7 +235,7 @@ def step01(C):
         [("1 a 3 im&aacute;genes favoritas (JPG),","tus mejores fotos de la esfera congelada, con un recorte ligero y subidas a esta tarea de Canvas.")])
     es+=card("RECORTA Y ENTREGA","Un Recorte Ligero, Luego Entrega",
         para("Lleva tus fotos favoritas a Lightroom y haz una edici&oacute;n ligera. Como son archivos JPG, mantenlo simple: sobre todo recorta para encuadrar la esfera de agua y enderezarla si hace falta. No necesitas ediciones fuertes.")
-        + para("Exporta tus mejores 1 a 3 im&aacute;genes como JPG de alta calidad y s&uacute;belas a Canvas. Luego ve al Paso 02 para la reflexi&oacute;n."))
+        + para("Exporta tus mejores 1 a 3 im&aacute;genes como JPG de alta calidad y s&uacute;belas a Canvas. Luego ve al Paso 03 para la reflexi&oacute;n."))
     es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Reflexi&oacute;n","Con tus favoritas entregadas, vas a escribir una reflexi&oacute;n corta y proponer otra actividad de fotos al aire libre.")
 
     dots=dot(OVER,'M',"Overview",False,True)+dot("",'1',"Step 01",True)+dot(S2,'2',"Step 02",False)

@@ -222,7 +222,7 @@ def overview():
             ("Cull, Contact Sheet &amp; Export:","rate and cull to your best 6, build a 6-Up contact sheet, and export your 6 finals as high-resolution JPEGs."),
             ("Reflection:","tell the story of your edits and your crop choices."),
         ])
-        + note("Your final turn-in is 7 files on Step 1 (your 6-Up contact sheet plus your 6 exported high-resolution JPEGs), plus your reflection on Step 2."))
+        + note("Your final turn-in is 7 files on Step 2 (your 6-Up contact sheet plus your 6 exported high-resolution JPEGs), plus your reflection on Step 3."))
     en+=resources_card("Key Words",
         vocab_grid("On the Quiz",
           "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
@@ -282,7 +282,7 @@ def overview():
             ("Selecciona, Hoja de Contactos y Exporta:","califica y elige tus mejores 6, crea una hoja de contactos de 6 y exporta tus 6 finales como JPEG de alta resoluci&oacute;n."),
             ("Reflexi&oacute;n:","cuenta la historia de tus ediciones y tus decisiones de recorte."),
         ])
-        + note("Tu entrega final son 7 archivos en el Paso 1 (tu hoja de contactos de 6 m&aacute;s tus 6 JPEG de alta resoluci&oacute;n exportados), m&aacute;s tu reflexi&oacute;n en el Paso 2."))
+        + note("Tu entrega final son 7 archivos en el Paso 2 (tu hoja de contactos de 6 m&aacute;s tus 6 JPEG de alta resoluci&oacute;n exportados), m&aacute;s tu reflexi&oacute;n en el Paso 3."))
     es+=resources_card("Palabras Clave",
         vocab_grid("En el Examen",
           "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
