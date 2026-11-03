@@ -317,7 +317,11 @@
   .digest-open{display:block;width:100%;text-align:left;background:transparent;border:0;padding:0;cursor:pointer;color:inherit;font:inherit;}
   .digest-open .digest-h{color:#c9b8ff;} .digest-open:hover .digest-h{color:#e4dcff;}
   .req-chip{display:inline-block;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.56rem;padding:2px 7px;vertical-align:middle;color:#04110f;}
-  .req-chip.req-missing{background:var(--gold);} .req-chip.req-photo2{background:#8b5cf6;color:#fff;} .req-chip.req-digital_arts{background:var(--teal);} .req-chip.req-other{background:var(--faint);color:#04110f;}
+  .req-chip.req-missing{background:var(--gold);} .req-chip.req-photo2{background:#8b5cf6;color:#fff;} .req-chip.req-digital_arts{background:var(--teal);} .req-chip.req-other{background:var(--faint);color:#04110f;} .req-chip.req-multiday{background:var(--orange);color:#231200;}
+  /* Multi-day / double-book pre-check line inside the Reserve + Edit modals: red when the unit clashes (Save blocked), green when a multi-day span is clear. */
+  .mconf{display:none;margin:-4px 0 13px;padding:8px 10px;border:1px solid rgba(224,64,58,.5);border-left:3px solid var(--red);background:rgba(224,64,58,.12);color:#ffb3aa;font-size:.8rem;line-height:1.38;}
+  .mconf.show{display:block;}
+  .mconf.free{border-color:rgba(63,168,99,.5);border-left-color:var(--ok);background:rgba(63,168,99,.12);color:#8ff0b0;}
   .req-card{border:1px solid var(--surface-bd);border-left:3px solid #8b5cf6;background:rgba(0,0,0,.26);padding:11px 12px;margin-bottom:10px;}
   .req-top{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px;}
   .req-who{font-weight:600;color:#fff;font-size:.92rem;}
@@ -1163,6 +1167,7 @@
       <input type="date" id="rout" />
       <label for="rdue">Due back</label>
       <input type="date" id="rdue" />
+      <div class="mconf" id="res-conf"></div>
       <label class="chk"><input type="checkbox" id="rpick" checked /> <span>Student is picking it up now (mark as picked up). Uncheck to just reserve.</span></label>
       <button class="go" id="rgo">Reserve this camera</button>
     </div>
@@ -1307,6 +1312,7 @@
       <input type="date" id="ed-out" />
       <label for="ed-due">Due back</label>
       <input type="date" id="ed-due" />
+      <div class="mconf" id="ed-conf"></div>
       <label for="ed-status">Status</label>
       <div id="ed-status"></div>
       <div id="ed-gearwrap" style="display:none">
@@ -1509,6 +1515,29 @@
   // posts {daySelected} and this recomputes how many cameras are free on that day.
   var SELDAY=todayISO();
   function effLastC(c){ var st=statusOf(c); if(st==='returned') return null; var start=c.out; if(!start) return null; var last=c.due||start; if(last<start) last=start; if(st==='out'&&todayISO()>last) last=todayISO(); return last; }
+  // ---- Multi-day conflict pre-check (mirrors the backend's half-open [out,due) rule EXACTLY so the
+  // console warns about precisely what the server will refuse). Returns the clashing reservation
+  // records for a unit over [out,due), excluding one reservation group's own records (so extending or
+  // re-linking a booking's own kit never looks like a self-conflict). Chris 2026-11-02. ----
+  function spanConflicts(unit, kind, out, due, excludeGroupId){
+    if(!unit||!out||!due) return [];
+    var ex={}; if(excludeGroupId){ ex[excludeGroupId]=1; (DATA.checkouts||[]).forEach(function(x){ if(x.id===excludeGroupId||x.group===excludeGroupId) ex[x.id]=1; }); }
+    return (DATA.checkouts||[]).filter(function(c){
+      if(ex[c.id]) return false;
+      if(statusOf(c)==='returned') return false;
+      if(kind==='equipment'){ if(c.kind!=='equipment'||c.item!==unit) return false; }
+      else { if(c.kind==='equipment'||c.camera!==unit) return false; }
+      var eo=String(c.out||''), ed=String(c.due||'')||eo;
+      if(kind==='equipment' && statusOf(c)==='out') return !!(eo && due>eo);   // physically out blocks forward
+      return !!(eo && ed && eo<due && out<ed);
+    });
+  }
+  // One-line human summary of a conflict list (teacher side, so names + dates are fine to show).
+  function conflictSummary(list){
+    if(!list.length) return '';
+    var c=list[0], extra=(list.length>1)?(' and '+(list.length-1)+' more'):'';
+    return nameOf(c)+' has it '+fmt(c.out)+' to '+fmt(c.due)+extra+'.';
+  }
   function availCountOnDay(iso){ var busy={}; (DATA.checkouts||[]).forEach(function(c){ var last=effLastC(c); if(last&&c.out&&iso>=c.out&&iso<=last) busy[c.camera]=1; }); return viewCams().filter(function(cam){ return !busy[cam] && !isOOS(cam) && !isNoCard(cam); }).length; }
   function fmtMDY(iso){ var p=String(iso).split('-'); return (+p[1])+'/'+(+p[2])+'/'+p[0]; }
   function fmtDoWMD(iso){ if(!iso) return ''; var p=String(iso).split('-'); return dowShort(iso)+' '+(+p[1])+'/'+(+p[2]); }   // "Mon 10/20" (no year, compact)
@@ -1558,13 +1587,13 @@
     order.sort(function(a,b){ var ca=byKey[a][0], cb=byKey[b][0]; return (cb.created||'')>(ca.created||'')?1:-1; });
     return order.map(function(k){ return byKey[k].sort(function(a,b){ var ca=(a.kind==='equipment')?1:0, cb=(b.kind==='equipment')?1:0; return ca-cb; }); });
   }
-  function reqReasonLabel(reason){ return reason==='missing'?'Missing work':(reason==='photo2'?'Photo 2':(reason==='digital_arts'?'Digital Arts':'Request')); }
+  function reqReasonLabel(reason){ return reason==='missing'?'Missing work':(reason==='photo2'?'Photo 2':(reason==='digital_arts'?'Digital Arts':(reason==='multiday'?'Multi-day':'Request'))); }
   function reqReasonChip(c){ var r=(c&&c.request_reason)||''; return '<span class="req-chip req-'+(r||'other')+'">'+reqReasonLabel(r)+'</span>'; }
   function reqItemsLabel(g){ return g.map(function(x){ return x.kind==='equipment'?gearLabel(x.item):x.camera; }).filter(Boolean).join(', '); }
   // Requests view body: one card per pending reservation (reason, student, items, dates) with Approve / Deny inline.
   function requestsBodyHtml(pend){
     if(!pend.length) return '<div class="tb-grid"><div class="tb-empty">No student requests waiting. When a student asks for gear that needs your OK, it shows up here.</div></div>';
-    var sub='<div class="tb-reqsub">Students asked for gear that needs your OK (missing work, or a Photo 2 item). Approve to put it on the board, or Deny to free it up.</div>';
+    var sub='<div class="tb-reqsub">Students asked for gear that needs your OK (missing work, a Photo 2 item, or a multi-day rental). Approve to put it on the board, or Deny to free it up.</div>';
     return sub+'<div class="tb-reqgrid">'+pend.map(function(g){ var c=g[0];
       var items=g.map(function(x){ return x.kind==='equipment'?('<span class="camnum">'+esc(gearLabel(x.item))+'</span>'):('<span class="camnum" data-camdetail="'+esc(x.camera)+'">'+esc(x.camera)+'</span>'); }).join(' ');
       var note=c.request_note?('<div class="req-note">&ldquo;'+esc(c.request_note)+'&rdquo;</div>'):'';
@@ -2364,7 +2393,7 @@
         '<div class="req-dates">'+esc(fmtDoWMD(c.out))+' &rarr; '+esc(fmt(c.due))+'</div>'+ note +
         '<div class="req-acts"><button type="button" class="btn sm good" data-reqok="'+esc(c.id)+'">Approve</button><button type="button" class="btn sm danger" data-reqno="'+esc(c.id)+'">Deny</button></div></div>';
     }).join('') : '<div class="rec-none">No student requests right now.</div>';
-    var sub=groups.length?'<div class="rec-sub">Students asked for gear that needs your OK (missing work, or a Photo 2 item). Approve to put it on the board, or deny to free it up.</div>':'';
+    var sub=groups.length?'<div class="rec-sub">Students asked for gear that needs your OK (missing work, a Photo 2 item, or a multi-day rental). Approve to put it on the board, or deny to free it up.</div>':'';
     var ov=document.createElement('div'); ov.className='modal open'; ov.id='requestsmodal';
     ov.innerHTML='<div class="mpanel"><div class="mhead"><span class="mtitle">Special Requests</span><button class="mx" aria-label="Close">&times;</button></div><div class="mbody">'+sub+body+'</div></div>';
     document.body.appendChild(ov);
@@ -3459,9 +3488,11 @@
     var w=document.getElementById('ed-who'); w.className='who-line'; w.textContent=c.student_name?('Currently: '+c.student_name):'';
     document.getElementById('ed-out').value=c.out||''; document.getElementById('ed-due').value=c.due||'';
     mkDatePicker(document.getElementById('ed-out')); mkDatePicker(document.getElementById('ed-due'));
-    edCamDD=mkDropdown(document.getElementById('ed-cam'), viewCams().map(function(cm){ return {value:cm,label:cm+(P2.indexOf(cm)>=0?' (Photo 2 only)':'')}; }), c.camera||'', null);
+    document.getElementById('ed-out').onchange=edCheckConflicts; document.getElementById('ed-due').onchange=edCheckConflicts;
+    edCamDD=mkDropdown(document.getElementById('ed-cam'), viewCams().map(function(cm){ return {value:cm,label:cm+(P2.indexOf(cm)>=0?' (Photo 2 only)':'')}; }), c.camera||'', edCheckConflicts);
     edStatusDD=mkDropdown(document.getElementById('ed-status'), [{value:'reserved',label:'Reserved'},{value:'out',label:'Picked up (out)'},{value:'returned',label:'Returned'}], statusOf(c), null);
     renderEditGear(c);
+    edCheckConflicts();
     document.getElementById('editmodal').classList.add('open');
   }
   // Gear attach/detach lives only on a camera checkout (you don't attach gear to gear).
@@ -3490,7 +3521,7 @@
         function availText(state){ return state?'Added':(assetOf(id).oos?'Out of service':(gearActiveFor(id)?'Taken':'Free')); }
         btn.innerHTML='<span class="ed-gearcheck"></span><span class="ed-gearlabel">'+esc(u.label||id)+'</span><span class="ed-gearavail">'+availText(on)+'</span>';
         if(blocked) btn.disabled=true;
-        btn.addEventListener('click',function(){ if(btn.disabled) return; var s=edGearState[id]; s.on=!s.on; btn.classList.toggle('on',s.on); btn.querySelector('.ed-gearavail').textContent=availText(s.on); });
+        btn.addEventListener('click',function(){ if(btn.disabled) return; var s=edGearState[id]; s.on=!s.on; btn.classList.toggle('on',s.on); btn.querySelector('.ed-gearavail').textContent=availText(s.on); edCheckConflicts(); });
         host.appendChild(btn);
       });
     });
@@ -3511,10 +3542,33 @@
       if(j&&j.found){ w.className='who-line ok'; w.textContent='Will set to '+j.label; } else { w.className='who-line no'; w.textContent='Not in the roster (will flag).'; }
     }).catch(function(){ w.className='who-line'; w.textContent=''; });
   }
+  // Live multi-day / double-book guard for the Edit modal: recomputes on every date, camera or gear
+  // change. Red + Save disabled on any clash (hard stop, Chris 2026-11-02); a quiet green line
+  // confirms a clear multi-day extend. The backend re-checks too (defense in depth).
+  function edCheckConflicts(){
+    var box=document.getElementById('ed-conf'), save=document.getElementById('ed-save');
+    if(!box) return;
+    var c=findRec(edId); if(!c){ box.className='mconf'; box.textContent=''; if(save) save.disabled=false; return; }
+    var out=document.getElementById('ed-out').value, due=document.getElementById('ed-due').value, gid=c.group||c.id;
+    function fail(msg){ box.className='mconf show'; box.textContent=msg; if(save) save.disabled=true; }
+    function ok(msg){ box.className='mconf'+(msg?' show free':''); box.textContent=msg||''; if(save) save.disabled=false; }
+    if(!out||!due){ ok(''); return; }
+    if(due<out){ fail('The return date must be after the checkout date.'); return; }
+    var units=[];
+    if(c.kind==='equipment'){ units.push({unit:c.item, kind:'equipment'}); }
+    else { var cam=edCamDD?edCamDD.value():c.camera; if(cam) units.push({unit:cam, kind:'camera'});
+      if(edGearState) Object.keys(edGearState).forEach(function(id){ if(edGearState[id]&&edGearState[id].on) units.push({unit:id, kind:'equipment'}); }); }
+    for(var i=0;i<units.length;i++){ var u=units[i], hit=spanConflicts(u.unit,u.kind,out,due,gid);
+      if(hit.length){ var label=(u.kind==='equipment'?gearLabel(u.unit):u.unit); fail(label+' is already booked. '+conflictSummary(hit)+' Pick another'+(u.kind==='equipment'?' unit':' camera')+' or a shorter return.'); return; } }
+    var normalDue=(typeof nextSchoolDayISO==='function')?nextSchoolDayISO(out):out;
+    ok(due>normalDue ? ('Free the whole time. Multi-day rental, due back '+fmt(due)+'.') : '');
+  }
   function saveEdit(){
     if(!edId) return;
     var pid=edId, c=findRec(pid), gear=edGearState;
     var out=document.getElementById('ed-out').value, due=document.getElementById('ed-due').value;
+    edCheckConflicts();
+    if(document.getElementById('ed-save').disabled) return;   // hard stop: a clash is showing
     var status=edStatusDD?edStatusDD.value():statusOf(c);
     var payload={id:pid, camera:edCamDD?edCamDD.value():c.camera, out:out, due:due, status:status};
     var sid=document.getElementById('ed-sid').value.trim();
@@ -3522,11 +3576,11 @@
     if(sid && sid!==String(c.student_id||'')) payload.student_id=sid;
     var s=document.getElementById('ed-save'); s.disabled=true; s.textContent='Saving…';
     camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
-      .then(function(r){ if(!r.ok) throw new Error(); })
+      .then(function(r){ if(r.ok) return null; return r.json().then(function(j){ throw new Error((j&&j.error)||'Could not save.'); }); })
       .then(function(){ return applyGear(gear, pid, finalSid, out, due, status); })   // attach / detach gear, kept in sync with this checkout
       .then(function(){ closeEdit(); return loadBoard(); }).then(reloadCal)
-      .catch(function(){ var msg=document.getElementById('ed-msg'); msg.className='mmsg err show'; msg.textContent='Could not save. Try again.'; })
-      .then(function(){ s.disabled=false; s.textContent='Save changes'; });
+      .catch(function(e){ var msg=document.getElementById('ed-msg'); msg.className='mmsg err show'; msg.textContent=(e&&e.message)||'Could not save. Try again.'; })
+      .then(function(){ var s2=document.getElementById('ed-save'); if(s2){ s2.disabled=false; s2.textContent='Save changes'; } });
   }
   // Reconcile the toggled gear against what is on the checkout: add new, drop removed, and keep
   // still-attached gear pointing at the same student and dates as its camera.
@@ -3583,11 +3637,13 @@
     var items=free.map(function(c){ return {value:c, label:c+(P2.indexOf(c)>=0?' (Photo 2 only)':'')}; });
     var initial=(preCam && free.indexOf(preCam)>=0)?preCam:(free[0]||'');
     var lbl=document.querySelector('label[for="rcam"]'); if(lbl) lbl.textContent='Camera';
-    rcam.innerHTML=''; rcamDD=mkDropdown(rcam, items, initial, null);
+    rcam.innerHTML=''; rcamDD=mkDropdown(rcam, items, initial, resCheckConflicts);
     var _co=isSchoolDayISO(todayISO())?todayISO():nextSchoolDayISO(todayISO()); rout.value=_co; rdue.value=nextSchoolDayISO(_co); rpick.checked=true;
     mkDatePicker(rout); mkDatePicker(rdue);
+    rout.onchange=resCheckConflicts; rdue.onchange=resCheckConflicts;
     rgo.textContent='Reserve this camera';
     document.querySelector('#resmodal .mtitle').textContent='Reserve / check out';
+    resCheckConflicts();
     resmodal.classList.add('open'); setTimeout(function(){ rsid.focus(); },50);
   }
   // Check out / reserve a single gear UNIT on its own (no camera), from the unit's window.
@@ -3598,8 +3654,10 @@
     rcam.innerHTML='<div class="res-fixedunit">'+esc(u.label)+'</div>'; rcamDD=null;
     var _co=isSchoolDayISO(todayISO())?todayISO():nextSchoolDayISO(todayISO()); rout.value=_co; rdue.value=nextSchoolDayISO(_co); rpick.checked=true;
     mkDatePicker(rout); mkDatePicker(rdue);
+    rout.onchange=resCheckConflicts; rdue.onchange=resCheckConflicts;
     rgo.textContent='Check out this unit';
     document.querySelector('#resmodal .mtitle').textContent='Check out equipment';
+    resCheckConflicts();
     resmodal.classList.add('open'); setTimeout(function(){ rsid.focus(); },50);
   }
   function closeReserve(){ resmodal.classList.remove('open'); }
@@ -3621,6 +3679,21 @@
   }
   rsid.addEventListener('input',function(){ clearTimeout(lookupT); lookupT=setTimeout(doLookup,350); });
 
+  // Live multi-day / double-book guard for the Reserve modal (same half-open rule as the board + backend).
+  function resCheckConflicts(){
+    var box=document.getElementById('res-conf'), go=document.getElementById('rgo');
+    if(!box) return;
+    var out=(document.getElementById('rout')||{}).value, due=(document.getElementById('rdue')||{}).value;
+    var unit=(resMode==='gear')?resGearId:(rcamDD?rcamDD.value():''), kind=(resMode==='gear')?'equipment':'camera';
+    function fail(msg){ box.className='mconf show'; box.textContent=msg; if(go) go.disabled=true; }
+    function ok(msg){ box.className='mconf'+(msg?' show free':''); box.textContent=msg||''; if(go) go.disabled=false; }
+    if(!unit||!out||!due){ ok(''); return; }
+    if(due<out){ fail('The return date must be after the checkout date.'); return; }
+    var hit=spanConflicts(unit,kind,out,due,null);
+    if(hit.length){ var label=(kind==='equipment'?gearLabel(unit):unit); fail(label+' is already booked. '+conflictSummary(hit)+' Pick another'+(kind==='equipment'?' unit':' camera')+' or a shorter return.'); return; }
+    var normalDue=(typeof nextSchoolDayISO==='function')?nextSchoolDayISO(out):out;
+    ok(due>normalDue ? ('Free the whole time. Multi-day rental, due back '+fmt(due)+'.') : '');
+  }
   rgo.onclick=function(){
     var gearMode=(resMode==='gear');
     var payload=gearMode
