@@ -1612,10 +1612,29 @@
     var mk=(DATA.pools||{}).mankin||[], mg=(DATA.equipment_pools||{}).mankin||[];
     return c.kind==='equipment' ? (mg.indexOf(c.item)>=0) : (mk.indexOf(c.camera)>=0);
   }
-  // Each teacher's Reservation Activity + calendar is scoped to THEIR OWN pool: Silva 01-18, Garcia
-  // 01-15 (no Photo-2 16-18), Mankin 19-21 + her gear. So Garcia never sees the Photo-2 clutter and
-  // Mankin only ever sees her own students' reservations.
+  // Who OWNS a reservation = the reserving student's teacher/class, read off the record. Digital Arts 1
+  // is Mr. Silva's class and Digital Arts 2 is Ms. Mankin's, but BOTH carry teacher "Ms. Mankin" in the
+  // roster (they share room 331), so the SECTION number in the course name is the only reliable splitter;
+  // Photo is split by the teacher name. (Chris 2026-11-03.)
+  function ownerOf(c){
+    var course=String((c&&c.course)||'').toLowerCase(), t=String((c&&c.teacher)||'').toLowerCase();
+    if((course.indexOf('digital')>=0 || course.indexOf('art')>=0) && course.indexOf('photo')<0){
+      if(course.indexOf('2')>=0) return 'mankin';               // Digital Arts 2 = Ms. Mankin's class
+      if(course.indexOf('1')>=0) return 'silva';                // Digital Arts 1 = Mr. Silva's class
+      return t.indexOf('mankin')>=0 ? 'mankin' : 'silva';       // no section number: fall back to the listed teacher
+    }
+    if(t.indexOf('garcia')>=0) return 'garcia';
+    if(t.indexOf('mankin')>=0) return 'mankin';
+    return 'silva';                                             // Mr. Silva (Photo 1/2) or default
+  }
+  // Mr. Silva's board (Incoming / Outgoing / Overdue / Requests / Reservation Activity) is scoped by the
+  // RESERVING STUDENT: his own (Photo 1/2 + Digital Arts 1) and Garcia's, NEVER Ms. Mankin's Digital Arts 2
+  // students, so his room-331 Incoming isn't flooded by her iPad-stylus returns (he's only in 331 2nd period).
+  // Availability/catalog stays POOL-based (scopePools), so he can still hand styluses to his own DA-1 students;
+  // only the reservation LISTS are owner-scoped. Garcia/Mankin/legacy 'all' keep the original pool scoping:
+  // Garcia 01-15 (no Photo-2 clutter), Mankin 19-21 + her gear (every Digital Arts return in her room).
   function resvInScope(c){
+    if(SELECTED_POOL==='silva'){ var o=ownerOf(c); return o==='silva' || o==='garcia'; }
     var ps=scopePools(), inCam=false, inGear=false;           // union across every subject this view teaches
     ps.forEach(function(p){ if(((DATA.pools||{})[p]||[]).indexOf(c.camera)>=0) inCam=true; if(((DATA.equipment_pools||{})[p]||[]).indexOf(c.item)>=0) inGear=true; });
     return c.kind==='equipment' ? inGear : inCam;
