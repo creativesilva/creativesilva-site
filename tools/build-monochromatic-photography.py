@@ -29,7 +29,7 @@ COURSES=[
   {"prefix":"photo1","title":"Photography 1A","nf":4,"nc":8,
    "refl":"Monochromatic-Photography-Reflection",
    "zip":f"{SITE}/assets/course-documents/Monochromatic-Photography-Project-Folder-Photo1.zip"},
-  {"prefix":"photo2","title":"Photography 2A","nf":8,"nc":16,
+  {"prefix":"photo2","title":"Photography 2A","nf":6,"nc":16,
    "refl":"Monochromatic-Photography-Photo2-Reflection",
    "zip":f"{SITE}/assets/course-documents/Monochromatic-Photography-Project-Folder-Photo2.zip"},
 ]
@@ -269,7 +269,7 @@ def build_course(c):
             para("You are on Step 01 now: read this page and download your project folder above. Here are the three steps that follow.")
             + bullets([
                 ("Step 02 &middot; Capture &amp; Contact Sheet:",f"set your camera to a Monochrome preview and RAW, then walk the campus and capture at least {NC} deliberate photos. Import them and build a contact sheet of your full take."),
-                ("Step 03 &middot; Cull, Edit &amp; Deliver:",f"choose your best {NF} photos, finish them in black and white in Lightroom, and export your {NF} JPGs."),
+                ("Step 03 &middot; Cull, Edit &amp; Deliver:","pick your best photos (one per concept), finish them in black and white, build a 6-up contact sheet, and export each as a JPG renamed by concept."),
                 ("Step 04 &middot; Reflection:","tell what you looked for, how black and white changed what you saw, and which photo is your best."),
             ])
             + note("Slow down. Look first, then capture. One strong photo beats ten quick ones."))
@@ -297,7 +297,7 @@ def build_course(c):
             para("Est&aacute;s en el Paso 01: lee esta p&aacute;gina y descarga tu carpeta del proyecto arriba. Estos son los tres pasos que siguen.")
             + bullets([
                 ("Paso 02 &middot; Captura y Hoja de Contactos:",f"pon tu c&aacute;mara en vista Monocromo y RAW, luego camina por la escuela y captura al menos {NC} fotos pensadas. Imp&oacute;rtalas y arma una hoja de contactos de todo tu trabajo."),
-                ("Paso 03 &middot; Selecciona, Edita y Entrega:",f"elige tus mejores {NF} fotos, term&iacute;nalas en blanco y negro en Lightroom y exporta tus {NF} JPG."),
+                ("Paso 03 &middot; Selecciona, Edita y Entrega:","elige tus mejores fotos (una por concepto), term&iacute;nalas en blanco y negro, arma una hoja de contactos de 6 y exporta cada una como JPG renombrada por concepto."),
                 ("Paso 04 &middot; Reflexi&oacute;n:","cuenta qu&eacute; buscaste, c&oacute;mo el blanco y negro cambi&oacute; lo que ve&iacute;as y cu&aacute;l foto es tu mejor."),
             ])
             + note("Ve despacio. Mira primero, luego captura. Una foto fuerte vale m&aacute;s que diez r&aacute;pidas."))
@@ -333,7 +333,7 @@ def build_course(c):
                 ("Print to JPG:","use Print to File so it saves as a high-resolution JPG, then upload it here."),
             ])
             + note("Contact sheets are always turned in as a high-resolution JPG."))
-        en+=next_up("UP NEXT &middot; STEP 03 - Cull, Edit &amp; Deliver",f"Choose your best {NF} photos, finish them in black and white, and export your {NF} JPGs.")
+        en+=next_up("UP NEXT &middot; STEP 03 - Cull, Edit &amp; Deliver","Pick your best photos (one per concept), build a 6-up contact sheet, and export each as a JPG renamed by concept.")
 
         es=banner("M&oacute;dulo 12 &bull; Paso 02","Captura y Hoja de Contactos",
             "Pon la vista Monocromo, camina por la escuela, captura tu trabajo y arma una hoja de contactos.","#top","Back to English")
@@ -358,7 +358,7 @@ def build_course(c):
                 ("Imprime a JPG:","usa Print to File para que se guarde como un JPG de alta resoluci&oacute;n, luego s&uacute;belo aqu&iacute;."),
             ])
             + note("Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n."))
-        es+=next_up("SIGUIENTE &middot; PASO 03 - Selecciona, Edita y Entrega",f"Elige tus mejores {NF} fotos, term&iacute;nalas en blanco y negro y exporta tus {NF} JPG.")
+        es+=next_up("SIGUIENTE &middot; PASO 03 - Selecciona, Edita y Entrega","Elige tus mejores fotos (una por concepto), arma una hoja de contactos de 6 y exporta cada una como JPG renombrada por concepto.")
 
         stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a> <a href="{S2}" class="silva-step-btn">Step 03 &#8594;</a>'
         bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S2}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
@@ -366,19 +366,42 @@ def build_course(c):
 
     # ---------- STEP 03: CULL, EDIT & DELIVER ----------
     def cull_deliver():
+        # Concept-driven deliverable (Chris 2026-11-03): from the 6-concept hunt, pick one photo PER
+        # concept (Photo 2 = all 6; Photo 1 = best 4 of the 6), edit in B&W, build a 6-up contact sheet
+        # from the 6-up template, then export each photo on its own and RENAME it by the concept it
+        # shows. The rename is a NEW requirement, so it is highlighted (note_orange).
+        allsix = (NF >= 6)
+        if allsix:
+            cull_head_en="Pick One for Each Concept"; cull_head_es="Elige Una por Cada Concepto"
+            cull_lead_en=f"Open your take in Lightroom Classic. From your hunt, pick your single best photo for <strong>each of the 6 concepts</strong>, so you end with <strong>6 photos</strong>, one per concept."
+            cull_lead_es=f"Abre tu trabajo en Lightroom Classic. De tu b&uacute;squeda, elige tu mejor foto para <strong>cada uno de los 6 conceptos</strong>, para terminar con <strong>6 fotos</strong>, una por concepto."
+            end_en=f"Call these your selections, not &ldquo;picks.&rdquo; You end with {NF}: one strong photo for each concept."
+            end_es=f"Llama a estas tus selecciones. Terminas con {NF}: una foto fuerte para cada concepto."
+        else:
+            cull_head_en="Pick Your Strongest, One Per Concept"; cull_head_es="Elige Tus M&aacute;s Fuertes, Una por Concepto"
+            cull_lead_en=f"Open your take in Lightroom Classic. From your hunt, pick your <strong>{NF} strongest photos</strong>, and make each one a <strong>different concept</strong> (for example contrast, texture, leading lines, and silhouette)."
+            cull_lead_es=f"Abre tu trabajo en Lightroom Classic. De tu b&uacute;squeda, elige tus <strong>{NF} fotos m&aacute;s fuertes</strong>, y haz que cada una sea un <strong>concepto diferente</strong> (por ejemplo contraste, textura, l&iacute;neas gu&iacute;a y silueta)."
+            end_en=f"Call these your selections, not &ldquo;picks.&rdquo; You end with {NF}, each showing a different concept."
+            end_es=f"Llama a estas tus selecciones. Terminas con {NF}, cada una con un concepto diferente."
+        rename_en=("<strong>NEW: name each photo by its concept.</strong> This is a new rule, so do not skip it. Rename every exported JPG so the file name is your name plus the concept it shows: "
+                   "<strong>Lee_Mia_Contrast.jpg</strong>, <strong>Lee_Mia_Texture.jpg</strong>, <strong>Lee_Mia_Silhouette.jpg</strong>, and so on. For a two-word idea, join it: <strong>Lee_Mia_LeadingLines.jpg</strong>. The file name tells Mr. Silva which concept each photo is for.")
+        rename_es=("<strong>NUEVO: nombra cada foto por su concepto.</strong> Es una regla nueva, as&iacute; que no te la saltes. Renombra cada JPG para que el nombre del archivo sea tu nombre m&aacute;s el concepto que muestra: "
+                   "<strong>Lee_Mia_Contrast.jpg</strong>, <strong>Lee_Mia_Texture.jpg</strong>, <strong>Lee_Mia_Silhouette.jpg</strong>, y as&iacute;. Para una idea de dos palabras, &uacute;nela: <strong>Lee_Mia_LeadingLines.jpg</strong>. El nombre del archivo le dice al Sr. Silva qu&eacute; concepto es cada foto.")
+
         en=banner("Module 12 &bull; Step 03","Cull, Edit &amp; Deliver",
-            f"Choose your best {NF} photos, finish them in black and white, and export your {NF} JPGs.","#espanol","Clic para Espa&ntilde;ol")
-        en+=card("CULL / CHOOSE YOUR BEST","Pick Your Strongest Photos",
-            para(f"Open your take in Lightroom Classic. Go through your full take and choose your best <strong>{NF} photos</strong>, the ones that are strong in black and white.")
+            "Pick your best photos (one per concept), build a 6-up contact sheet, and export each as a renamed JPG.","#espanol","Clic para Espa&ntilde;ol")
+        en+=card("CULL / ONE PER CONCEPT",cull_head_en,
+            para(cull_lead_en)
             + (float_right(EDIT_FLOAT,"A before-and-after of one campus photo: a flat color RAW on the left, a finished high-contrast black-and-white edit on the right","Before and after: a flat color RAW, then a finished black-and-white edit with a full tonal range.") if HAVE_EDIT_FLOAT else "")
             + bullets([
-                ("Strong tones:","keep the photos with a full range: real blacks, clean whites, and grays between."),
-                ("Clear subject:","keep the photos where the subject stands out, helped by light, line, or negative space."),
-                ("Sharp where it counts:","keep the sharp frames. Skip the soft ones."),
+                ("Different concepts:","no two photos should show the same idea. Spread them across the concepts you hunted."),
+                ("Strong tones:","keep the ones with a full range: real blacks, clean whites, and grays between."),
+                ("Clear and sharp:","keep the frames where the subject stands out and the focus is sharp."),
             ])
-            + note(f"Call these your selections, not &ldquo;picks.&rdquo; You end with {NF}: your strongest black-and-white photos."))
+            + note(end_en))
         en+=deliverables_box(False,
-            [(f"Your {NF} edited photos (JPGs):",f"your best {NF} photos from the walk, finished in black and white and exported as full-resolution JPGs, uploaded to this Canvas assignment.")])
+            [("Your 6-up contact sheet (JPG):","1 six-up contact sheet with your selected photos, printed to file as a high-resolution JPG."),
+             (f"Your {NF} photos, renamed (JPGs):",f"your {NF} edited black-and-white photos, exported full-resolution and <strong>renamed by concept</strong>, uploaded to this Canvas assignment.")], files=1+NF)
         en+=card("EDIT / FINISH IN BLACK AND WHITE","Make Each Photo Its Best",
             para("These are RAW files, so you have room to edit. Finish each photo in black and white on the Mac in Lightroom Classic.")
             + steps([
@@ -388,27 +411,37 @@ def build_course(c):
                 ("Guide the eye:","dodge (lighten) and burn (darken) small areas to lead the eye to your subject."),
             ])
             + note("Not every black-and-white photo needs maximum contrast. Soft midtones can carry a quiet photo. You decide."))
-        en+=card("DELIVER / NAME AND UPLOAD",f"Export Your {NF} JPGs",
+        en+=card("CONTACT SHEET / SHOW YOUR SET","Build Your 6-Up Contact Sheet",
+            para("Put your selected photos into one sheet so your whole set reads at a glance.")
+            + steps([
+                ("Select your photos:","in Lightroom, select your edited photos for this step."),
+                ("Use your 6-up template:","in the Print module, choose your <strong>6-up contact sheet template</strong> and load your photos into it."),
+                ("Print to file:","use Print to File so it saves as a high-resolution JPG, then upload it here."),
+            ])
+            + note("Contact sheets are always turned in as a high-resolution JPG."))
+        en+=card("EXPORT &amp; RENAME / ONE JPG PER PHOTO","Export Each Photo, Named by Concept",
             steps([
                 ("Export full-resolution JPGs:",f"go to File &rsaquo; Export and export your {NF} edited photos as full-resolution JPGs into your project folder."),
-                ("Name each file:","use your last name and first name plus the photo number, like <strong>Lee_Mia_Mono1.jpg</strong>."),
-                ("Upload here:",f"turn in your {NF} edited black-and-white JPGs to this Canvas assignment."),
+                ("Rename by concept:","rename each JPG by the concept it shows (see the note below)."),
+                ("Upload here:","turn in your 6-up contact sheet and your renamed JPGs to this Canvas assignment."),
             ]))
+        en+=note_orange(rename_en)
         en+=next_up("UP NEXT &middot; STEP 04 - Reflection","Tell what you looked for, how black and white changed what you saw, and which photo is your best.")
 
         es=banner("M&oacute;dulo 12 &bull; Paso 03","Selecciona, Edita y Entrega",
-            f"Elige tus mejores {NF} fotos, term&iacute;nalas en blanco y negro y exporta tus {NF} JPG.","#top","Back to English")
-        es+=card("SELECCIONA / ELIGE LAS MEJORES","Elige Tus Fotos M&aacute;s Fuertes",
-            para(f"Abre tu trabajo en Lightroom Classic. Revisa todo tu trabajo y elige tus mejores <strong>{NF} fotos</strong>, las que son fuertes en blanco y negro.")
+            "Elige tus mejores fotos (una por concepto), arma una hoja de contactos de 6 y exporta cada una como JPG renombrada.","#top","Back to English")
+        es+=card("SELECCIONA / UNA POR CONCEPTO",cull_head_es,
+            para(cull_lead_es)
             + (float_right(EDIT_FLOAT,"Un antes y despu&eacute;s de una foto de la escuela: un RAW plano a color a la izquierda, una edici&oacute;n terminada en blanco y negro con mucho contraste a la derecha","Antes y despu&eacute;s: un RAW plano a color, luego una edici&oacute;n terminada en blanco y negro con un rango tonal completo.") if HAVE_EDIT_FLOAT else "")
             + bullets([
-                ("Tonos fuertes:","guarda las fotos con un rango completo: negros reales, blancos limpios y grises en medio."),
-                ("Tema claro:","guarda las fotos donde el tema resalta, con ayuda de la luz, la l&iacute;nea o el espacio negativo."),
-                ("N&iacute;tidas donde importa:","guarda las im&aacute;genes n&iacute;tidas. Descarta las borrosas."),
+                ("Conceptos diferentes:","ninguna foto debe repetir la idea de otra. Rep&aacute;rtelas entre los conceptos que buscaste."),
+                ("Tonos fuertes:","guarda las que tienen un rango completo: negros reales, blancos limpios y grises en medio."),
+                ("Clara y n&iacute;tida:","guarda las im&aacute;genes donde el tema resalta y el enfoque es n&iacute;tido."),
             ])
-            + note(f"Llama a estas tus selecciones. Terminas con {NF}: tus fotos m&aacute;s fuertes en blanco y negro."))
+            + note(end_es))
         es+=deliverables_box(True,
-            [(f"Tus {NF} fotos editadas (JPG):",f"tus mejores {NF} fotos de la caminata, terminadas en blanco y negro y exportadas como JPG a resoluci&oacute;n completa, subidas a esta tarea de Canvas.")])
+            [("Tu hoja de contactos de 6 (JPG):","1 hoja de contactos de 6 con tus fotos seleccionadas, impresa a archivo como un JPG de alta resoluci&oacute;n."),
+             (f"Tus {NF} fotos, renombradas (JPG):",f"tus {NF} fotos editadas en blanco y negro, exportadas a resoluci&oacute;n completa y <strong>renombradas por concepto</strong>, subidas a esta tarea de Canvas.")], files=1+NF)
         es+=card("EDITA / TERMINA EN BLANCO Y NEGRO","Haz Que Cada Foto Sea la Mejor",
             para("Estos son archivos RAW, as&iacute; que tienes espacio para editar. Termina cada foto en blanco y negro en la Mac en Lightroom Classic.")
             + steps([
@@ -418,12 +451,21 @@ def build_course(c):
                 ("Gu&iacute;a la mirada:","aclara (dodge) y oscurece (burn) zonas peque&ntilde;as para llevar la mirada a tu tema."),
             ])
             + note("No toda foto en blanco y negro necesita el m&aacute;ximo contraste. Los grises suaves pueden cargar una foto tranquila. T&uacute; decides."))
-        es+=card("ENTREGA / NOMBRA Y SUBE",f"Exporta Tus {NF} JPG",
+        es+=card("HOJA DE CONTACTOS / MUESTRA TU SET","Arma Tu Hoja de Contactos de 6",
+            para("Pon tus fotos seleccionadas en una sola hoja para que todo tu set se vea de un vistazo.")
+            + steps([
+                ("Selecciona tus fotos:","en Lightroom, selecciona tus fotos editadas para este paso."),
+                ("Usa tu plantilla de 6:","en el m&oacute;dulo Print, elige tu <strong>plantilla de hoja de contactos de 6</strong> y carga tus fotos."),
+                ("Imprime a archivo:","usa Print to File para que se guarde como un JPG de alta resoluci&oacute;n, luego s&uacute;belo aqu&iacute;."),
+            ])
+            + note("Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n."))
+        es+=card("EXPORTA Y RENOMBRA / UN JPG POR FOTO","Exporta Cada Foto, Nombrada por Concepto",
             steps([
                 ("Exporta JPG a resoluci&oacute;n completa:",f"ve a File &rsaquo; Export y exporta tus {NF} fotos editadas como JPG a resoluci&oacute;n completa a la carpeta de tu proyecto."),
-                ("Nombra cada archivo:","usa tu apellido y tu nombre m&aacute;s el n&uacute;mero de la foto, como <strong>Lee_Mia_Mono1.jpg</strong>."),
-                ("Sube aqu&iacute;:",f"entrega tus {NF} JPG editados en blanco y negro a esta tarea de Canvas."),
+                ("Renombra por concepto:","renombra cada JPG por el concepto que muestra (mira la nota de abajo)."),
+                ("Sube aqu&iacute;:","entrega tu hoja de contactos de 6 y tus JPG renombrados a esta tarea de Canvas."),
             ]))
+        es+=note_orange(rename_es)
         es+=next_up("SIGUIENTE &middot; PASO 04 - Reflexi&oacute;n","Cuenta qu&eacute; buscaste, c&oacute;mo el blanco y negro cambi&oacute; lo que ve&iacute;as y cu&aacute;l foto es tu mejor.")
 
         stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 02</a> <a href="{S3}" class="silva-step-btn">Step 04 &#8594;</a>'
