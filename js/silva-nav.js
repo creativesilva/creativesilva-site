@@ -80,6 +80,7 @@
       { name: 'Exposure Balance',         url: '/curriculum/shared/photo1-exposure-balance-overview.html' },
       { name: 'Spell Your Name Photo Walk', url: '/curriculum/shared/photo1-spell-your-name-overview.html' },
       { name: 'Spooky Portraits',           url: '/curriculum/shared/photo1-spooky-portraits-overview.html' },
+      { name: 'Monochromatic Photography',  url: '/curriculum/shared/photo1-monochromatic-photography-overview.html' },
       { name: 'The Important Person Project', url: '/curriculum/shared/photo1-important-person-overview.html' }
     ]},
     { course: 'Photography 2A', modules: [
@@ -94,6 +95,7 @@
       { name: 'Spell Your Name Photo Walk', url: '/curriculum/shared/photo2-spell-your-name-overview.html' },
       { name: 'Panther of the Quarter',     url: '/curriculum/shared/photo2-panther-quarter-overview.html' },
       { name: 'Spooky Portraits',           url: '/curriculum/shared/photo2-spooky-portraits-overview.html' },
+      { name: 'Monochromatic Photography',  url: '/curriculum/shared/photo2-monochromatic-photography-overview.html' },
       { name: 'The Important Person Project', url: '/curriculum/shared/photo2-important-person-overview.html' }
     ]}
   ];
@@ -299,6 +301,10 @@
      '/curriculum/shared/photo1-spooky-portraits-step01-capture-contact.html',
      '/curriculum/shared/photo1-spooky-portraits-step02-cull-edit-deliver.html',
      '/curriculum/shared/photo1-spooky-portraits-step03-reflection.html'],
+    ['/curriculum/shared/photo1-monochromatic-photography-overview.html',
+     '/curriculum/shared/photo1-monochromatic-photography-step01-capture-contact.html',
+     '/curriculum/shared/photo1-monochromatic-photography-step02-cull-edit-deliver.html',
+     '/curriculum/shared/photo1-monochromatic-photography-step03-reflection.html'],
     ['/curriculum/shared/photo1-important-person-overview.html',
      '/curriculum/shared/photo1-important-person-step02-choose-your-person.html',
      '/curriculum/shared/photo1-important-person-step03-mood-board.html',
@@ -352,6 +358,10 @@
      '/curriculum/shared/photo2-spooky-portraits-step01-plan.html',
      '/curriculum/shared/photo2-spooky-portraits-step02-capture-deliver.html',
      '/curriculum/shared/photo2-spooky-portraits-step03-reflection.html'],
+    ['/curriculum/shared/photo2-monochromatic-photography-overview.html',
+     '/curriculum/shared/photo2-monochromatic-photography-step01-capture-contact.html',
+     '/curriculum/shared/photo2-monochromatic-photography-step02-cull-edit-deliver.html',
+     '/curriculum/shared/photo2-monochromatic-photography-step03-reflection.html'],
     ['/curriculum/shared/photo2-important-person-overview.html',
      '/curriculum/shared/photo2-important-person-step02-choose-your-person.html',
      '/curriculum/shared/photo2-important-person-step03-mood-board.html',

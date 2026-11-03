@@ -329,6 +329,41 @@ const DOCS = [
     '¿Cómo tomaste tus decisiones de edición en Lightroom? Describe algunos cambios que hiciste.',
     '¿Cuál de tus tres retratos es tu favorito, y por qué? ¿Qué probarías la próxima vez?',
   ]},
+  // Monochromatic Photography (Photography 1A + 2A): campus black-and-white photo walk. Solo work.
+  // Photo 1 delivers 4 edited B&W JPGs, Photo 2 delivers 8. Reflection content is shared; only the
+  // course subtitle differs (Photo2 variant).
+  { ...EN, outfile: 'Monochromatic-Photography-Reflection-EN.docx', title: 'Monochromatic Photography: Reflection', subtitle: PVHS_EN('Photography 1A'), questions: [
+    'What did you look for on your campus walk: light, shadow, line, texture, or negative space? Give one example you found.',
+    'How did black and white change what you saw? What did you notice that color would have hidden?',
+    'Pick your best photo. What is the subject, and what makes it strong without color?',
+    'Talk about the tonal range of your best photo: where are the darkest darks, the brightest brights, and the grays between?',
+    'How did you edit your photos in Lightroom to finish them in black and white? Describe a few changes you made.',
+    'What would you do differently on your next black-and-white walk?',
+  ]},
+  { ...ES, outfile: 'Monochromatic-Photography-Reflection-ES.docx', title: 'Fotografía Monocromática: Reflexión', subtitle: PVHS_ES('Fotografía 1A'), questions: [
+    '¿Qué buscaste en tu caminata por la escuela: luz, sombra, línea, textura o espacio negativo? Da un ejemplo que encontraste.',
+    '¿Cómo cambió el blanco y negro lo que veías? ¿Qué notaste que el color habría escondido?',
+    'Elige tu mejor foto. ¿Cuál es el tema y qué la hace fuerte sin color?',
+    'Habla del rango tonal de tu mejor foto: ¿dónde están los más oscuros, los más claros y los grises de en medio?',
+    '¿Cómo editaste tus fotos en Lightroom para terminarlas en blanco y negro? Describe algunos cambios que hiciste.',
+    '¿Qué harías diferente en tu próxima caminata en blanco y negro?',
+  ]},
+  { ...EN, outfile: 'Monochromatic-Photography-Photo2-Reflection-EN.docx', title: 'Monochromatic Photography: Reflection', subtitle: PVHS_EN('Photography 2A'), questions: [
+    'What did you look for on your campus walk: light, shadow, line, texture, or negative space? Give one example you found.',
+    'How did black and white change what you saw? What did you notice that color would have hidden?',
+    'Pick your best photo. What is the subject, and what makes it strong without color?',
+    'Talk about the tonal range of your best photo: where are the darkest darks, the brightest brights, and the grays between?',
+    'How did you edit your photos in Lightroom to finish them in black and white? Describe a few changes you made.',
+    'What would you do differently on your next black-and-white walk?',
+  ]},
+  { ...ES, outfile: 'Monochromatic-Photography-Photo2-Reflection-ES.docx', title: 'Fotografía Monocromática: Reflexión', subtitle: PVHS_ES('Fotografía 2A'), questions: [
+    '¿Qué buscaste en tu caminata por la escuela: luz, sombra, línea, textura o espacio negativo? Da un ejemplo que encontraste.',
+    '¿Cómo cambió el blanco y negro lo que veías? ¿Qué notaste que el color habría escondido?',
+    'Elige tu mejor foto. ¿Cuál es el tema y qué la hace fuerte sin color?',
+    'Habla del rango tonal de tu mejor foto: ¿dónde están los más oscuros, los más claros y los grises de en medio?',
+    '¿Cómo editaste tus fotos en Lightroom para terminarlas en blanco y negro? Describe algunos cambios que hiciste.',
+    '¿Qué harías diferente en tu próxima caminata en blanco y negro?',
+  ]},
   // Build Your Own Preset (Photography 2A)
   { ...EN, outfile: 'Build-Your-Own-Preset-Reflection-EN.docx', title: 'Build Your Own Preset: Reflection', subtitle: PVHS_EN('Photography 2A'), questions: [
     'What series did you choose (natural light portraits, close-ups of flowers, architecture, or something else), and why did you pick it?',
