@@ -3123,6 +3123,11 @@
       // Search shadow-box: the header holds only a "Search Catalog" button; the field + results
       // live in this modal so the header stays compact.
       var modal = document.getElementById('search-modal');
+      // The modal is authored inside .catalog-sticky, which has backdrop-filter: that makes the
+      // sticky the containing block + stacking context for this position:fixed modal, so inset:0
+      // snaps to the header box (not the viewport) and its z-index is trapped below body overlays.
+      // Re-parent it to <body> so it covers the full viewport and stacks correctly.
+      if (modal && modal.parentElement !== document.body) document.body.appendChild(modal);
       var openBtn = document.getElementById('cat-search-btn');
       function openModal() {
         if (!modal) return;
