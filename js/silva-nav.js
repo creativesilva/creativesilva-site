@@ -572,16 +572,22 @@
     var bar = document.createElement('div');
     bar.className = 'silva-uni-titlebar';
 
-    // The title reflects the loaded page: the module/step title (first segment of the page
-    // <title>), linked back to that module's overview. Falls back to the catalog name.
+    // Teacher-facing: show the COURSE this page belongs to (e.g. "Photography 1A"), so a teacher
+    // can tell at a glance which course a module view is for. The module + step is already shown
+    // inside the module banner, so repeating it in the header would be redundant (Chris 2026-11-03).
+    // The course is the segment just before "PVHS" in the page <title> ("... | <Course> | PVHS").
+    // Non-module pages (camera, build resources, catalog home) keep their first-segment title.
     var title = document.createElement('a');
     title.className = 'silva-uni-title';
     var at = locate();
     // On camera pages (SILVA_HIDE_CATALOG) the title must NOT link into the teacher catalog:
-    // students/other teachers should not reach it from the public calendar.
-    title.href = at ? ('/' + MODULES[at.g][0].replace(/^\//, '')) : (window.SILVA_HIDE_CATALOG ? location.pathname : '/curriculum.html');
-    var docTitle = (document.title || '').split('|')[0].trim();
-    title.textContent = docTitle || 'Curriculum Catalog';
+    // students/other teachers should not reach it from the public calendar. Elsewhere the course
+    // title links back to the catalog, where the teacher navigates courses.
+    title.href = window.SILVA_HIDE_CATALOG ? location.pathname : '/curriculum.html';
+    var _tparts = (document.title || '').split('|').map(function (s) { return s.trim(); }).filter(Boolean);
+    var _course = (at && _tparts.length >= 2 && /^pvhs$/i.test(_tparts[_tparts.length - 1]))
+      ? _tparts[_tparts.length - 2] : '';
+    title.textContent = _course || _tparts[0] || 'Curriculum Catalog';
     bar.appendChild(title);
 
     var cal = document.createElement('a');
