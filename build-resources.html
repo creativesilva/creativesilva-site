@@ -890,7 +890,10 @@
   .pbg-handle{flex:0 0 auto; display:flex; align-items:center; justify-content:center; height:26px; background:none; border:0; cursor:grab; touch-action:none;}
   .pbg-handle span{width:40px; height:5px; border-radius:999px; background:rgba(180,245,245,.5);}
   .pbg-handle:active{cursor:grabbing;}
-  .pbg-tabs{flex:0 0 auto; display:flex; gap:4px; padding:4px 10px 10px; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none;}
+  .pbg-tabs{flex:0 0 auto; display:flex; gap:4px; padding:4px 10px 10px; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none;
+    max-height:84px; transition:max-height .42s cubic-bezier(.32,.72,0,1), opacity .3s ease, padding .42s cubic-bezier(.32,.72,0,1), margin .42s;}
+  /* at full screen the top tabs dissolve; the bottom dock is the only nav */
+  .pbg-sheet.at-full .pbg-tabs{max-height:0; opacity:0; padding-top:0; padding-bottom:0; margin:0; overflow:hidden; pointer-events:none;}
   .pbg-tabs::-webkit-scrollbar{display:none;}
   .pbg-tab{flex:1 1 0; min-width:max-content; position:relative; display:flex; align-items:center; justify-content:center; gap:7px;
     font-family:var(--pvb-font); font-weight:700; letter-spacing:.05em; text-transform:uppercase; font-size:.72rem;
@@ -2875,6 +2878,12 @@
         dock.style.opacity=dv.toFixed(3);
         dock.style.pointerEvents = dv>0.5?'auto':'none';
         dock.style.zIndex = (ty<TY_HALF-2)?'50':'3';
+        // top tabs dissolve as the sheet pulls up (the dock becomes the only nav at full)
+        var f=Math.max(0,Math.min(1, TY_HALF? ty/TY_HALF : 1));   // 1 at half, 0 at full
+        tabsEl.style.transition = anim ? '' : 'none';
+        tabsEl.style.opacity=f.toFixed(2);
+        tabsEl.style.pointerEvents = f<0.4?'none':'auto';
+        if(anim) sheet.classList.toggle('at-full', ty < TY_HALF*0.5);   // collapse the tab row at rest-full
       }
       function snap(vy){
         var target;
@@ -2907,8 +2916,9 @@
       function headerH(){ var h=document.querySelector('.catalog-sticky'); return h?Math.round(h.getBoundingClientRect().height):92; }
       function applyMode(){
         document.documentElement.style.setProperty('--pbg-top', headerH()+'px');
-        if(isPhone()){ measure(); if(!cur || cur>TY_CLOSED) cur=TY_HALF; setTY(cur,false); }
-        else { sheet.style.transform=''; sheet.style.transition=''; dock.style.opacity=''; dock.style.pointerEvents=''; dock.style.zIndex=''; }
+        if(isPhone()){ measure(); if(!cur || cur>TY_CLOSED) cur=TY_HALF; setTY(cur,true); }
+        else { sheet.style.transform=''; sheet.style.transition=''; dock.style.opacity=''; dock.style.pointerEvents=''; dock.style.zIndex='';
+          sheet.classList.remove('at-full'); tabsEl.style.opacity=''; tabsEl.style.pointerEvents=''; }   // desktop: tabs are the nav
       }
       var mq=window.matchMedia('(max-width:820px)');
       if(mq.addEventListener) mq.addEventListener('change',applyMode); else if(mq.addListener) mq.addListener(applyMode);
