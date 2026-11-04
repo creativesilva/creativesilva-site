@@ -21,6 +21,7 @@ CL_EN="Digital Arts 1A"
 CL_ES="Arte Digital 1A"
 ADOBE_URL="https://www.adobe.com/learn/illustrator/web/ai-basics-fundamentals"
 ADOBE_URL2="https://www.adobe.com/learn/illustrator/web/sketch-to-vector-art"
+ADOBE_FONTS_URL="https://fonts.adobe.com/fonts?purpose=desktop&amp;ref=tk.com&amp;referrer=0189d50fcf"
 ZIP=f"{SITE}/assets/digarts1/handouts/Get_to_Know_Illustrator.zip"
 TEMPLATE_ZIP=f"{SITE}/assets/digarts1/handouts/Comic_Cover_Template.zip"
 IMGDIR=f"{SITE}/assets/images/da1/get-to-know-illustrator"
@@ -83,11 +84,12 @@ VOCAB_ES=[
  ("Save As (Guardar Como)","Guardar tu archivo con un nombre, un lugar y un tipo de archivo, para que puedas encontrarlo y abrirlo otra vez."),
 ]
 
-def adobe_button(es, url=ADOBE_URL):
+def adobe_button(es, url=ADOBE_URL, label=None):
     # Solid PURPLE action button: same geometry as the orange download button (dl_link, 11px 22px /
     # 11pt / 2px top accent), skinned to the purple Resources section it lives in. No arrow glyph
     # (Chris 2026-10-07): a button already reads as clickable.
-    label="Abrir el Tutorial de Adobe" if es else "Open the Adobe Tutorial"
+    if label is None:
+        label="Abrir el Tutorial de Adobe" if es else "Open the Adobe Tutorial"
     return ('<div style="margin:14px 0 4px;">'
       f'<a href="{url}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;'
       'background:#8b5cf6;color:#ffffff;padding:11px 22px;border-top:2px solid #c4b5fd;font-size:11pt;'
@@ -97,6 +99,33 @@ def pnote(t):
     # PURPLE note: a callout INSIDE a purple Resources card, matching the section color (cohesion).
     return ('<div style="background:rgba(139,92,246,0.10);border:1px solid rgba(139,92,246,0.30);'
       f'border-left:4px solid #8b5cf6;padding:11px 14px;margin:8px 0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
+
+def fonts_resource(es):
+    # Purple Resources card (Step 06): get more fonts from Adobe Fonts and activate a family through
+    # Creative Cloud so they sync to the Mac for the cover title/masthead. Steps verified vs Adobe docs.
+    if es:
+        intro=para("&iquest;Quieres un t&iacute;tulo o una cabecera m&aacute;s llamativa? Puedes agregar m&aacute;s fuentes desde <strong>Adobe Fonts</strong>. Son gratis con tu cuenta escolar de Adobe y funcionan en Photoshop y en Illustrator.")
+        btn=adobe_button(True, url=ADOBE_FONTS_URL, label="Abrir Adobe Fonts")
+        st=steps([
+            ("Abre Adobe Fonts.","Haz clic en el bot&oacute;n de arriba (o ve a fonts.adobe.com). Si te lo pide, inicia sesi&oacute;n con tu <strong>correo y contrase&ntilde;a de estudiante</strong> para verificar tu cuenta de Adobe."),
+            ("Busca una fuente.","Explora o busca y elige una <strong>familia</strong> de fuentes que te guste."),
+            ("Agrega la familia.","Abre la familia y haz clic en <strong>Add family</strong> (Agregar familia). Eso agrega todas sus fuentes a tu cuenta."),
+            ("Deja que Creative Cloud sincronice.","Aseg&uacute;rate de que la app de <strong>Creative Cloud</strong> est&eacute; abierta y con tu sesi&oacute;n iniciada en la Mac. Ella trae las fuentes a tu computadora."),
+            ("&Uacute;sala.","En Photoshop (o Illustrator), elige la herramienta Texto y busca tu fuente nueva en la lista. Si no aparece, cierra y vuelve a abrir la app."),
+        ], accent="#8b5cf6")
+        return resources_card("Consigue M&aacute;s Fuentes de Adobe", intro+btn+st
+            + pnote("Puede que tengas que iniciar sesi&oacute;n otra vez en Adobe Fonts con tu <strong>correo y contrase&ntilde;a de estudiante</strong> para verificar tu cuenta de Adobe. Usa el mismo inicio de sesi&oacute;n que usas en Illustrator y Photoshop."), True)
+    intro=para("Want a cooler title or masthead? You can add more fonts from <strong>Adobe Fonts</strong>. They are free with your school Adobe account, and they work in Photoshop and Illustrator.")
+    btn=adobe_button(False, url=ADOBE_FONTS_URL, label="Open Adobe Fonts")
+    st=steps([
+        ("Open Adobe Fonts.","Click the button above (or go to fonts.adobe.com). If it asks, sign in with your <strong>student email and password</strong> to verify your Adobe account."),
+        ("Find a font.","Browse or search, then pick a font <strong>family</strong> you like."),
+        ("Add the family.","Open the family and click <strong>Add family</strong>. This adds all of its fonts to your account."),
+        ("Let Creative Cloud sync.","Make sure the <strong>Creative Cloud</strong> app is open and signed in on your Mac. It brings the fonts to your computer."),
+        ("Use it.","In Photoshop (or Illustrator), pick the Type tool and find your new font in the font list. If you do not see it, close and open the app again."),
+    ], accent="#8b5cf6")
+    return resources_card("Get More Fonts from Adobe", intro+btn+st
+        + pnote("You may have to sign in again at Adobe Fonts with your <strong>student email and password</strong> to verify your Adobe account. Use the same login you use for Illustrator and Photoshop."), False)
 
 def _tour_part(num, title, items):
     # Numbered part inside a purple Resources scroller: purple badge + purple title + purple bullets.
@@ -780,6 +809,7 @@ def step06():
     en+=resources_card("How to Build Your Cover",
         para("Here are the steps in short. Use them as a cheat sheet while you work. These steps are for a Mac.")
         + cover_notes(False), False)
+    en+=fonts_resource(False)
     en+=card("YOU PRACTICE / ON YOUR OWN","Design Your Cover",
         (float_right(S6_FLOAT,"An example comic book cover titled Adventures of Blobby, with a big masthead, a subtitle, and the character as the hero of the art","An example cover: a big masthead, a subtitle, and your character as the star.") if HAVE_S6_FLOAT else "")
         + para("Build your cover and make your character the star.")
@@ -807,6 +837,7 @@ def step06():
     es+=resources_card("C&oacute;mo Armar Tu Portada",
         para("Estos son los pasos en corto. &Uacute;salos como ayuda mientras trabajas. Estos pasos son para una Mac.")
         + cover_notes(True), True)
+    es+=fonts_resource(True)
     es+=card("T&Uacute; PRACTICAS / POR TU CUENTA","Dise&ntilde;a Tu Portada",
         (float_right(S6_FLOAT,"Una portada de c&oacute;mic de ejemplo titulada Adventures of Blobby, con una cabecera grande, un subt&iacute;tulo y el personaje como la estrella del arte","Una portada de ejemplo: una cabecera grande, un subt&iacute;tulo y tu personaje como la estrella.") if HAVE_S6_FLOAT else "")
         + para("Arma tu portada y haz que tu personaje sea la estrella.")
