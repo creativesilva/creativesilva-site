@@ -612,8 +612,11 @@
     outline:2px solid transparent; transition:outline-color .12s, transform .05s;}
   .pvb-refcard:hover{transform:translateY(-1px);}
   .pvb-refcard.sel{outline-color:var(--pvb-teal);}
-  .pvb-refcard .thumb{position:relative; width:100%; aspect-ratio:1/1; background:#0b1212;}
-  .pvb-refcard .thumb img{width:100%; height:100%; object-fit:contain; display:block;}
+  .pvb-refcard .thumb{position:relative; width:100%; aspect-ratio:1/1; overflow:hidden; background:#062322;}
+  /* Frosted-glass letterbox: a blurred, dimmed copy of the same image fills the bars instead of flat black. */
+  .pvb-refcard .thumb::before{content:''; position:absolute; inset:0; z-index:0;
+    background:var(--thumb-img,none) center center / cover no-repeat; filter:blur(20px) saturate(1.2) brightness(.74); transform:scale(1.25);}
+  .pvb-refcard .thumb img{position:relative; z-index:1; width:100%; height:100%; object-fit:contain; display:block; filter:drop-shadow(0 2px 10px rgba(0,0,0,.4));}
   .pvb-rtools{display:flex; gap:4px; padding:0 8px 8px;}
   .pvb-rtool{flex:1 1 0; display:flex; align-items:center; justify-content:center; height:26px; padding:0; cursor:pointer;
     background:rgba(0,184,184,.12); border:1px solid var(--pvb-line-soft); color:var(--pvb-teal-lt); transition:background .12s, color .12s;}
@@ -623,7 +626,7 @@
   .pvb-rtool.err{background:#8a2f2f; color:#fff;}
   .pvb-refcard.sel .thumb::after{content:'\2713'; position:absolute; top:6px; right:6px; width:22px; height:22px;
     display:flex; align-items:center; justify-content:center; background:var(--pvb-teal); color:#04110f;
-    font-weight:700; font-size:.8rem; border-radius:50%;}
+    font-weight:700; font-size:.8rem; border-radius:50%; z-index:2;}
   .pvb-refcard .nm{font-size:.74rem; color:#dbeeee; padding:7px 8px 8px; line-height:1.25;}
   /* Prompt navigation: curriculum-style grouped accordion at the top of the builder */
   .pvb-promptnav{margin:0 0 22px; padding:0 0 18px; border-bottom:1px solid var(--pvb-line);}
@@ -1926,7 +1929,7 @@
       // one selectable image card (thumb + name + 4 tools), shared by both layouts
       function makeCard(o){
         var c=el('div','pvb-refcard'+(isSel(o.file)?' sel':''));
-        var t=el('div','thumb'); var im=el('img'); im.src=IMG+o.file; im.alt=o.label; im.loading='lazy'; t.appendChild(im); c.appendChild(t);
+        var t=el('div','thumb'); t.style.setProperty('--thumb-img','url("'+IMG+o.file+'")'); var im=el('img'); im.src=IMG+o.file; im.alt=o.label; im.loading='lazy'; t.appendChild(im); c.appendChild(t);
         c.appendChild(el('div','nm',esc(o.label)));
         var url=IMG+o.file, tools=el('div','pvb-rtools');
         tools.appendChild(rtool(SVG_VIEW,'View larger',function(){ openLightbox(o.file,o.label); }));
@@ -1992,7 +1995,7 @@
     // as the per-prompt pickers above, so nothing is maintained in two places.
     function libCard(o){
       var c=el('div','pvb-refcard lib'), url=IMG+o.file;
-      var t=el('div','thumb'); var im=el('img'); im.src=url; im.alt=o.label; im.loading='lazy'; t.appendChild(im); c.appendChild(t);
+      var t=el('div','thumb'); t.style.setProperty('--thumb-img','url("'+url+'")'); var im=el('img'); im.src=url; im.alt=o.label; im.loading='lazy'; t.appendChild(im); c.appendChild(t);
       c.appendChild(el('div','nm',esc(o.label)));
       var tools=el('div','pvb-rtools');
       tools.appendChild(rtool(SVG_VIEW,'View larger',function(){ openLightbox(o.file,o.label); }));
