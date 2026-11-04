@@ -79,11 +79,68 @@ def style_ideas(es):
                 f'<div style="font-size:12.5pt;color:#9fc3c3;margin-top:4px;line-height:1.45;">{d}</div></div>')
     return f'<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:4px;">{cards}</div>'
 
-def scroll_steps(inner):
-    # locked contained scroller (teal), so a long how-to never looks like a tall intimidating stack
-    return ('<div class="silva-scroll" style="max-height:440px;overflow-y:auto;padding:14px 16px 20px;'
-            'border:1px solid rgba(0,184,184,0.30);background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, '
-            'rgba(0,0,0,0.14) 88%, rgba(0,184,184,0.14) 100%);">' + inner + '</div>')
+def scroll_steps(inner, rgb="0,184,184"):
+    # locked contained scroller, so a long how-to never looks like a tall intimidating stack.
+    # rgb sets the accent (teal content default; "139,92,246" for a purple Resources scroller).
+    return (f'<div class="silva-scroll" style="max-height:440px;overflow-y:auto;padding:14px 16px 20px;'
+            f'border:1px solid rgba({rgb},0.30);background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, '
+            f'rgba(0,0,0,0.14) 88%, rgba({rgb},0.14) 100%);">' + inner + '</div>')
+
+def subhead(t, color="#c4b5fd"):
+    return f'<div style="font-size:12.5pt;font-weight:700;color:{color};letter-spacing:0.04em;margin:12px 0 8px;">{t}</div>'
+
+def draw_resource(es):
+    # Purple Resources deep-dive: HOW to draw a letter from scratch (Pen tool, closing shapes,
+    # Pathfinder/Shape Builder) + best-practice tips, in a contained purple scroller. Steps verified
+    # against Adobe docs. This is the "you design the letterforms, not pick a font" detail.
+    P="#8b5cf6"; rgb="139,92,246"
+    if es:
+        intro=para("Aqu&iacute; dibujas cada letra t&uacute; mismo. Hay dos maneras de armar una letra. Elige la que te sea m&aacute;s f&aacute;cil. El Sr. Silva te ense&ntilde;ar&aacute; las dos.")
+        inner=(subhead("Manera 1: Con formas (m&aacute;s f&aacute;cil)")
+            + steps([
+                ("Dibuja formas simples que se encimen para armar tu letra.","Rect&aacute;ngulos para las partes rectas, c&iacute;rculos para las partes redondas."),
+                ("Selecciona las formas y &uacute;nelas.","Presiona Shift+M (Creador de formas) y arrastra sobre las partes para unirlas en una sola forma. Mant&eacute;n Option y haz clic para quitar una parte."),
+                ("O usa Pathfinder.","Abre Ventana &rarr; Buscatrazos, luego haz clic en Unir para fusionar las formas en una."),
+            ], accent=P)
+            + subhead("Manera 2: Con la herramienta Pluma")
+            + steps([
+                ("Presiona P para la Pluma.","Haz clic para una esquina. Haz clic y arrastra para una curva."),
+                ("Sigue el contorno de tu letra.","Haz clic alrededor de toda la letra."),
+                ("Cierra la forma.","Regresa a tu primer punto hasta que aparezca un c&iacute;rculo peque&ntilde;o, y haz clic. Ya es una forma cerrada que puedes rellenar con color."),
+            ], accent=P)
+            + subhead("Consejos")
+            + bullets([
+                ("Cierra cada forma","una forma abierta no se rellena bien con color."),
+                ("Mismo grosor","que cada letra tenga el mismo grosor para que combinen."),
+                ("Pocos puntos","usa pocos puntos para curvas m&aacute;s limpias."),
+                ("L&iacute;neas rectas","mant&eacute;n Shift al hacer clic para l&iacute;neas rectas y parejas."),
+                ("Trabaja en grande","acerca el zoom (presiona Z) y trabaja grande."),
+                ("Punto redondo a esquina","usa la herramienta V&eacute;rtice (Shift+C) para volver un punto redondo en una esquina."),
+            ], accent=P))
+        return resources_card("C&oacute;mo Dibujar Tus Letras", intro+scroll_steps(inner,rgb), es=True)
+    intro=para("Here you draw every letter yourself. There are two ways to build a letter. Pick the one that feels easier. Mr. Silva will show you both.")
+    inner=(subhead("Way 1: Build from shapes (easier)")
+        + steps([
+            ("Draw simple shapes that overlap to make your letter.","Rectangles for the straight parts, circles for the round parts."),
+            ("Select the shapes and join them.","Press Shift+M for the Shape Builder tool and drag across the parts to join them into one shape. Hold Option and click to cut a part away."),
+            ("Or use Pathfinder.","Open Window &rarr; Pathfinder, then click Unite to fuse the shapes into one."),
+        ], accent=P)
+        + subhead("Way 2: Draw with the Pen tool")
+        + steps([
+            ("Press P for the Pen tool.","Click to make a corner. Click and drag to make a curve."),
+            ("Trace the outline of your letter.","Keep clicking around the whole letter."),
+            ("Close the shape.","Go back to your first point until a small circle shows, then click. Now it is a closed shape you can fill with color."),
+        ], accent=P)
+        + subhead("Tips")
+        + bullets([
+            ("Close every shape","an open shape will not fill with solid color."),
+            ("Same thickness","keep every letter the same thickness so they match."),
+            ("Few points","use only a few points for smooth, clean curves."),
+            ("Straight lines","hold Shift while you click for straight, even lines."),
+            ("Work big","zoom in (press Z) and work large."),
+            ("Round point to corner","use the Anchor Point tool (Shift+C) to turn a round point into a sharp corner."),
+        ], accent=P))
+    return resources_card("How to Draw Your Letters", intro+scroll_steps(inner,rgb), es=False)
 
 def vocab3(es):
     if es:
@@ -159,6 +216,7 @@ def overview():
     en+=card("Learn &middot; the idea","Turn a Word Into a Sticker",
         (float_right(HERO_SCRIPT,"A brush-script vinyl sticker with a white border, held over grass","Your word can become a sticker like this.") if HAVE_ART else "")
         + para("This is an <strong>Adobe Illustrator</strong> project. You will <strong>draw your own letters</strong> and turn a word into a <strong>sticker</strong>.")
+        + para("You are <strong>not</strong> picking a font. You design every letter yourself, from scratch, like a type designer who builds a whole font face.")
         + para("Pick a word you like: your name, a nickname, or any short word. Give every letter the same style, so your word looks like one set."))
     en+=resources_card("Watch &amp; look",
         (float_purple(EX_LOVE,"A LOVE sticker: each letter drawn in one style with a pattern, a black outline, and a white border","One style on every letter, with a white sticker border.") if HAVE_ART else "")
@@ -185,6 +243,7 @@ def overview():
     es+=card("Aprende &middot; la idea","Convierte una Palabra en un Sticker",
         (float_right(HERO_SCRIPT,"Un sticker de letra de pincel con borde blanco, sobre el pasto","Tu palabra puede volverse un sticker as&iacute;.") if HAVE_ART else "")
         + para("Este es un proyecto de <strong>Adobe Illustrator</strong>. Vas a <strong>dibujar tus propias letras</strong> y convertir una palabra en un <strong>sticker</strong>.")
+        + para("<strong>No</strong> est&aacute;s eligiendo una fuente. T&uacute; dise&ntilde;as cada letra, desde cero, como un dise&ntilde;ador que crea una fuente completa.")
         + para("Elige una palabra que te guste: tu nombre, un apodo o cualquier palabra corta. Dale a cada letra el mismo estilo, para que tu palabra se vea como un solo conjunto."))
     es+=resources_card("Mira y observa",
         (float_purple(EX_LOVE,"Un sticker de LOVE: cada letra dibujada en un estilo con un patr&oacute;n, un borde negro y un borde blanco","Un estilo en cada letra, con un borde blanco de sticker.") if HAVE_ART else "")
@@ -207,14 +266,15 @@ def overview():
     es+=next_up("SIGUIENTE &middot; PASO 02 - Haz Tu Palabra","Elige un estilo, dibuja una palabra que te guste y convi&eacute;rtela en un sticker.")
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Next: Step 02 &#8594;</a></div>'
-    return wrap_page(f"Design a Sticker |{CT} | PVHS", nav("Step 01",dots_for(0),stepnav), top_wrap(en,es), bottom)
+    return wrap_page(f"Design a Sticker | {CT} | PVHS", nav("Step 01",dots_for(0),stepnav), top_wrap(en,es), bottom)
 
 def make_word():
     # ---- EN ----
     en=banner("Module 09 &bull; Step 02","Make Your Word",
         "Draw your letters and turn your word into a sticker.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_DESIGN)
     en+=card("Learn &middot; pick your style","Pick a Style to Draw",
-        para("You will <strong>draw</strong> your letters, no fonts. Pick <strong>ONE</strong> style and draw every letter the same way.")
+        note("You are <strong>designing</strong> the letters yourself. You are NOT choosing a font. Every letter is drawn by you, from scratch.")
+        + para("Pick <strong>ONE</strong> style and draw every letter the same way.")
         + (style_ideas(False) if HAVE_ART else "")
         + para("Your sticker should look good on a <strong>light</strong> and a <strong>dark</strong> background. The white border is what makes that happen."))
     en+=card("Learn &middot; make it","Make It in Adobe Illustrator",
@@ -228,6 +288,7 @@ def make_word():
             ("Save, then export a JPG.","Click <strong>File &rarr; Save</strong> (your .ai file). Then <strong>File &rarr; Export &rarr; Export As</strong> and pick <strong>JPEG</strong>. This JPG is what you turn in."),
         ], accent="#00b8b8"))
         + note("On the Mac, press <strong>Cmd</strong> (not Ctrl). Ask Mr. Silva if you get stuck."))
+    en+=draw_resource(False)
     en+=card("Learn &middot; check yourself","Before You Turn It In",
         para("Look at your sticker. Can you check all five?")
         + bullets([
@@ -244,7 +305,8 @@ def make_word():
     es=banner("M&oacute;dulo 09 &bull; Paso 02","Haz Tu Palabra",
         "Dibuja tus letras y convierte tu palabra en un sticker.","#top","Back to English",hicon=HICON_DESIGN)
     es+=card("Aprende &middot; elige tu estilo","Elige un Estilo para Dibujar",
-        para("Vas a <strong>dibujar</strong> tus letras, sin fuentes. Elige <strong>UN</strong> estilo y dibuja cada letra de la misma manera.")
+        note("T&uacute; <strong>dise&ntilde;as</strong> las letras. NO est&aacute;s eligiendo una fuente. Cada letra la dibujas t&uacute;, desde cero.")
+        + para("Elige <strong>UN</strong> estilo y dibuja cada letra de la misma manera.")
         + (style_ideas(True) if HAVE_ART else "")
         + para("Tu sticker debe verse bien en un fondo <strong>claro</strong> y en uno <strong>oscuro</strong>. El borde blanco es lo que lo logra."))
     es+=card("Aprende &middot; hazlo","Hazlo en Adobe Illustrator",
@@ -258,6 +320,7 @@ def make_word():
             ("Guarda y exporta un JPG.","Haz clic en <strong>Archivo &rarr; Guardar</strong> (tu archivo .ai). Luego <strong>Archivo &rarr; Exportar &rarr; Exportar como</strong> y elige <strong>JPEG</strong>. Ese JPG es lo que entregas."),
         ], accent="#00b8b8"))
         + note("En la Mac, presiona <strong>Cmd</strong> (no Ctrl). Preg&uacute;ntale al Sr. Silva si te atoras."))
+    es+=draw_resource(True)
     es+=card("Aprende &middot; rev&iacute;sate","Antes de Entregar",
         para("Mira tu sticker. &iquest;Puedes marcar las cinco?")
         + bullets([
@@ -272,7 +335,7 @@ def make_word():
     es+=next_up("SIGUIENTE &middot; PASO 03 - Reflexi&oacute;n","Cuenta sobre tu sticker: tu estilo y la parte m&aacute;s dif&iacute;cil.")
     stepnav=f'<a href="{S2}" class="silva-step-btn">Step 03 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S2}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
-    return wrap_page(f"Step 2: Make Your Word | Design a Sticker |{CT} | PVHS", nav("Step 02",dots_for(1),stepnav), top_wrap(en,es), bottom)
+    return wrap_page(f"Step 2: Make Your Word | Design a Sticker | {CT} | PVHS", nav("Step 02",dots_for(1),stepnav), top_wrap(en,es), bottom)
 
 def reflection():
     # ---- EN ----
@@ -295,7 +358,7 @@ def reflection():
     es+=next_up("M&Oacute;DULO COMPLETO","Buen trabajo. Dibujaste tus propias letras y convertiste una palabra en un sticker, como un verdadero artista de letras.")
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 02</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'
-    return wrap_page(f"Step 3: Reflection | Design a Sticker |{CT} | PVHS", nav("Step 03",dots_for(2),stepnav), top_wrap(en,es), bottom)
+    return wrap_page(f"Step 3: Reflection | Design a Sticker | {CT} | PVHS", nav("Step 03",dots_for(2),stepnav), top_wrap(en,es), bottom)
 
 # ================= BUILD =================
 for fname,gen in [(OVER,overview),(S1,make_word),(S2,reflection)]:
