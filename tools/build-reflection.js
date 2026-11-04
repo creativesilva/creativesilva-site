@@ -116,17 +116,17 @@ const DOCS = [
   { ...EN, outfile: 'Make-Your-Mark-Reflection-EN.docx', title: 'Make Your Mark: Reflection', subtitle: PVHS_EN('Digital Arts 1A'),
     instructions: 'Answer in a few words or a short sentence. There are no wrong answers.', questions: [
     'What word did you make? Why did you pick it?',
-    'What style did you use? (Liquid Chrome, Neon, Paper Cut, Brush, Leaf, or 3D Pop)',
+    'What style did you draw? (bubble, script, block, outline, or patterns)',
     'What was the hardest part of making all your letters match?',
-    'Does your word look good on a light AND a dark background? How can you tell?',
+    'Does your sticker have a white border so it works on a light AND a dark background?',
     'Which letter is your favorite, and why?',
   ]},
   { ...ES, outfile: 'Make-Your-Mark-Reflection-ES.docx', title: 'Make Your Mark: Reflexión', subtitle: PVHS_ES('Arte Digital 1A'),
     instructions: 'Responde con pocas palabras o una oración corta. No hay respuestas incorrectas.', questions: [
     '¿Qué palabra hiciste? ¿Por qué la elegiste?',
-    '¿Qué estilo usaste? (Cromo, Neón, Papel, Pincel, Hoja o 3D)',
+    '¿Qué estilo dibujaste? (burbuja, pincel, bloque, contorno o patrones)',
     '¿Qué fue lo más difícil de hacer que todas tus letras combinaran?',
-    '¿Tu palabra se ve bien en un fondo claro Y en uno oscuro? ¿Cómo lo sabes?',
+    '¿Tu sticker tiene un borde blanco para que funcione en un fondo claro Y en uno oscuro?',
     '¿Cuál letra es tu favorita y por qué?',
   ]},
   // Self-Portrait (Photography 1A)
