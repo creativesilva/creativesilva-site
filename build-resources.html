@@ -757,6 +757,13 @@
   #pvb-checklist .ckpill button:active{filter:brightness(.94);}
   #pvb-checklist .ckpill button.ok{background:var(--g-primary); color:#04110f; box-shadow:inset 0 0 0 2px rgba(130,245,230,.95), var(--g-spec);}
   #pvb-checklist .ckpill button.err{box-shadow:inset 0 0 0 2px rgba(255,120,120,.9);}
+  /* uncheck/remove a reference from the build order (lives left of the pill; hints red on hover) */
+  #pvb-checklist .ckrm{flex:0 0 auto; width:30px; height:30px; margin-right:9px; align-self:center; display:inline-flex; align-items:center; justify-content:center;
+    border-radius:var(--g-r-pill); border:1px solid var(--g-edge-soft); background:transparent; color:var(--g-muted); cursor:pointer; font-size:1.05rem; line-height:1;
+    transition:color .15s, border-color .15s, background .15s;}
+  #pvb-checklist .ckrm:hover{color:#fff; border-color:var(--g-danger); background:rgba(255,122,122,.14);}
+  /* the prompt is the LAST step: a hairline separates it from the references above */
+  #pvb-checklist .pvb-promptrow{margin-top:10px; padding-top:12px; border-top:1px solid var(--g-edge-soft);}
   .pvb-checkrow .cimg{flex:0 0 auto; font-family:var(--pvb-font); font-size:.66rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
     color:#04110f; background:var(--pvb-teal); border:0; padding:8px 10px; cursor:pointer;}
   .pvb-checkrow .cimg:hover{filter:brightness(1.12);}
@@ -2388,10 +2395,10 @@
 
     function selectedRefs(){
       var out=[],seen={};
-      function add(f,arr,role){ if(!f||seen[f])return; seen[f]=1; var o=arr.filter(function(x){return x.file===f;})[0]; if(o)out.push({label:o.label,file:o.file,role:role}); }
-      state.chars.forEach(function(f){add(f,CHARACTERS,OUTFIT?'Character sheet / identity':'Character');});
-      state.items.forEach(function(f){add(f,ITEMS,OUTFIT?'Outfit / apparel / item':'Item');});
-      add(state.scene,SCENES,'Scene / environment');
+      function add(f,arr,role,kind){ if(!f||seen[f])return; seen[f]=1; var o=arr.filter(function(x){return x.file===f;})[0]; if(o)out.push({label:o.label,file:o.file,role:role,kind:kind}); }
+      state.chars.forEach(function(f){add(f,CHARACTERS,OUTFIT?'Character sheet / identity':'Character','char');});
+      state.items.forEach(function(f){add(f,ITEMS,OUTFIT?'Outfit / apparel / item':'Item','item');});
+      add(state.scene,SCENES,'Scene / environment','scene');
       return out;
     }
 
@@ -2424,6 +2431,16 @@
       else { box.style.display=''; box.innerHTML=w.map(function(x){ return '<div class="pvb-lint-row '+(x.level==='warn'?'warn':'tip')+'"><span class="li-ic" aria-hidden="true">!</span><span>'+esc(x.msg)+'</span></div>'; }).join(''); }
       var wiz=document.getElementById('pbg-wizard'); if(wiz) wiz.classList.toggle('has-lint', w.some(function(x){return x.level==='warn';}));
     }
+    // Remove a reference straight from the build order: deselect it in state, rebuild the pickers so they
+    // stay in sync, then render() re-composes the prompt + re-runs the preflight (so a warning clears live).
+    function removeRef(kind,file){
+      if(kind==='char'){ state.chars=state.chars.filter(function(x){return x!==file;}); }
+      else if(kind==='item'){ state.items=state.items.filter(function(x){return x!==file;}); }
+      else if(kind==='scene'){ if(state.scene===file) state.scene=''; }
+      else return;
+      buildRefs(); render();
+    }
+    function removeStagedAt(i){ if(i>=0 && i<staged.length){ staged.splice(i,1); buildRefs(); render(); } }
     function render(){
       preEl.textContent=compose();
       if(window.pvbmSync) pvbmSync();
@@ -2432,33 +2449,41 @@
       // checklist
       checklistEl.innerHTML='';
       var step=1;
-      // Step 1: the prompt text itself
-      (function(){
-        var row=el('div','pvb-checkrow');
-        row.appendChild(el('div','pvb-stepnum',String(step++)));
-        var th=el('div','th'); var im=el('img'); im.src=PROMPT_ICON_URL; im.alt='Prompt'; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
-        var meta=el('div','meta'); meta.appendChild(el('div','role','Prompt')); meta.appendChild(el('div','fn','Your prompt (paste this first)')); row.appendChild(meta);
-        var dl=el('button','ckdl',SVG_DL); dl.type='button'; dl.title='Download prompt (.txt)'; dl.setAttribute('aria-label','Download prompt'); dl.addEventListener('click',function(){ downloadText(promptText(), promptFile(), dl); });
-        var cb=el('button','cimg',SVG_COPY); cb.type='button'; cb.title='Copy prompt'; cb.setAttribute('aria-label','Copy prompt'); cb.addEventListener('click',function(){ copyText(promptText(), cb, true); if(window.pbgPushHistory) pbgPushHistory(); });
-        var cka=el('div','ckacts ckpill'); cka.appendChild(dl); cka.appendChild(cb); row.appendChild(cka);
-        checklistEl.appendChild(row);
-      })();
-      // Steps 2+: images to attach. X2 uses your dropped images; other prompts use catalog references.
+      // BUILD ORDER: the reference images come FIRST so you can review (and uncheck) them, and the PROMPT
+      // is LAST so any removal is already reflected before you copy it. (It is still pasted first in ChatGPT.)
+      // X2 uses your dropped images; other prompts use catalog references + any staged images.
       var attach = cfg.delta
         ? x2imgs.map(function(im,i){ return {url:im.url, name:im.name, role:(i===0?'Image 1 (master)':'Image 2 (support)')}; })
-        : selectedRefs().map(function(r){ return {url:IMG+r.file, name:baseName(r.file), role:r.role}; });
-      if(staged.length){ attach = attach.concat(staged.map(function(im){ return {url:im.url, name:((im.name||'').trim()||'your reference image'), role:((im.role||'').trim()||'Your reference image')}; })); }
+        : selectedRefs().map(function(r){ return {url:IMG+r.file, name:baseName(r.file), role:r.role, kind:r.kind, file:r.file}; });
+      if(staged.length){ attach = attach.concat(staged.map(function(im,i){ return {url:im.url, name:((im.name||'').trim()||'your reference image'), role:((im.role||'').trim()||'Your reference image'), staged:i}; })); }
       attach.forEach(function(a){
         var row=el('div','pvb-checkrow');
         row.appendChild(el('div','pvb-stepnum',String(step++)));
         var th=el('div','th'); var im=el('img'); im.src=a.url; im.alt=a.role; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
         var meta=el('div','meta'); meta.appendChild(el('div','role',esc(a.role))); meta.appendChild(el('div','fn',esc(a.name))); row.appendChild(meta);
+        // uncheck/remove this reference: drops it from the build AND live-updates the prompt + clears any warning
+        if(a.kind || a.staged!=null){
+          var rm=el('button','ckrm','×'); rm.type='button'; rm.title='Remove from this build'; rm.setAttribute('aria-label','Remove '+a.name+' from this build');
+          rm.addEventListener('click',function(){ if(a.staged!=null){ removeStagedAt(a.staged); } else { removeRef(a.kind,a.file); } });
+          row.appendChild(rm);
+        }
         var db=el('button','ckdl',SVG_DL); db.type='button'; db.title='Download image'; db.setAttribute('aria-label','Download image'); db.addEventListener('click',function(){ downloadImg(a.url,a.name,db); });
         var cb=el('button','cimg',SVG_COPY); cb.type='button'; cb.title='Copy image'; cb.setAttribute('aria-label','Copy image'); cb.addEventListener('click',function(){ cardCopyImg(a.url,cb); });
         var cka=el('div','ckacts ckpill'); cka.appendChild(db); cka.appendChild(cb); row.appendChild(cka);
         checklistEl.appendChild(row);
       });
-      if(!attach.length){ checklistEl.appendChild(el('div','pvb-check-empty', cfg.delta?'Drop your master (and optional support headshot) on the left; they show up here to copy in order.':'Add characters, items, or a location above and they appear here as steps 2, 3, and so on.')); }
+      if(!attach.length){ checklistEl.appendChild(el('div','pvb-check-empty', cfg.delta?'Drop your master (and optional support headshot) on the left; they show up here to copy in order, before the prompt.':'Add characters, items, or a location above and they appear here to attach, in order, before the prompt below.')); }
+      // LAST STEP: the prompt text itself (copy it after you have reviewed/removed the references above)
+      (function(){
+        var row=el('div','pvb-checkrow pvb-promptrow');
+        row.appendChild(el('div','pvb-stepnum',String(step++)));
+        var th=el('div','th'); var im=el('img'); im.src=PROMPT_ICON_URL; im.alt='Prompt'; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
+        var meta=el('div','meta'); meta.appendChild(el('div','role','Prompt')); meta.appendChild(el('div','fn','Copy last &middot; paste this FIRST in ChatGPT')); row.appendChild(meta);
+        var dl=el('button','ckdl',SVG_DL); dl.type='button'; dl.title='Download prompt (.txt)'; dl.setAttribute('aria-label','Download prompt'); dl.addEventListener('click',function(){ downloadText(promptText(), promptFile(), dl); });
+        var cb=el('button','cimg',SVG_COPY); cb.type='button'; cb.title='Copy prompt'; cb.setAttribute('aria-label','Copy prompt'); cb.addEventListener('click',function(){ copyText(promptText(), cb, true); if(window.pbgPushHistory) pbgPushHistory(); });
+        var cka=el('div','ckacts ckpill'); cka.appendChild(dl); cka.appendChild(cb); row.appendChild(cka);
+        checklistEl.appendChild(row);
+      })();
       var when=new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
       savedEl.innerHTML='Draft saved <b>'+when+'</b>. It restores when you come back.';
       renderLint();
