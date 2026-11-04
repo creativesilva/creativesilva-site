@@ -14,19 +14,22 @@ ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 AREA="Digital Arts Folder"
 CT="Digital Arts 1A"; PFX="digarts1"
 IMGDIR=f"{SITE}/assets/images/digarts1/make-your-mark"
-HERO=f"{IMGDIR}/mark-hero-v1.png"
+HERO=f"{IMGDIR}/mark-hero-v2.png"
 HAVE_ART=True
 
-# style key -> (EN name, ES name, image)
+# style key -> (EN name, ES name, image). v2 (Chris 2026-11-04): a power/positive word rendered as
+# artwork in each style (less "font with a filter"), and EVERY panel is baked onto a split
+# light/dark background so the "a strong word reads on a light OR a dark background" lesson is visible.
 STYLES=[
-  ("graffiti","Graffiti","Grafiti",   f"{IMGDIR}/style-graffiti-v1.png"),
-  ("arcade",  "Arcade",  "Arcade",    f"{IMGDIR}/style-arcade-v1.png"),
-  ("candy",   "Candy",   "Dulce",     f"{IMGDIR}/style-candy-v1.png"),
-  ("chrome",  "Chrome",  "Cromo",     f"{IMGDIR}/style-chrome-v1.png"),
-  ("fire",    "Fire",    "Fuego",     f"{IMGDIR}/style-fire-v1.png"),
-  ("slime",   "Slime",   "Baba",      f"{IMGDIR}/style-slime-v1.png"),
+  ("chrome","Liquid Chrome","Cromo",  f"{IMGDIR}/style-chrome-v2.png"),  # DREAM
+  ("neon",  "Neon",         "Neón", f"{IMGDIR}/style-neon-v2.png"),  # FOCUS
+  ("paper", "Paper Cut",    "Papel",   f"{IMGDIR}/style-paper-v2.png"),   # BOLD
+  ("brush", "Brush",        "Pincel",  f"{IMGDIR}/style-brush-v2.png"),   # LOVE
+  ("leaf",  "Leaf",         "Hoja",    f"{IMGDIR}/style-leaf-v2.png"),    # PEACE
+  ("pop",   "3D Pop",       "3D",      f"{IMGDIR}/style-pop-v2.png"),     # RISE
 ]
-GALLERY=[f"{IMGDIR}/ex-skate-v1.png",f"{IMGDIR}/ex-game-v1.png",f"{IMGDIR}/ex-yum-v1.png",f"{IMGDIR}/ex-lit-v1.png"]
+LD_DEMO=f"{IMGDIR}/style-pop-v2.png"   # one clear panel reused as the light/dark demo (RISE)
+GALLERY=[f"{IMGDIR}/ex-shine-v2.png",f"{IMGDIR}/ex-brave-v2.png",f"{IMGDIR}/ex-kind-v2.png",f"{IMGDIR}/ex-hope-v2.png"]
 
 REFL_EN=f"{SITE}/assets/course-documents/Make-Your-Mark-Reflection-EN.docx"
 REFL_ES=f"{SITE}/assets/course-documents/Make-Your-Mark-Reflection-ES.docx"
@@ -63,29 +66,31 @@ MYM_STANDARDS=[
 ]
 
 # ---------- visual components (Canvas-safe: inline styles + images, flex not grid) ----------
-def img_center(src, alt, maxw="360px", maxh="150px"):
-    return (f'<div style="display:flex;align-items:center;justify-content:center;background:#0a1414;'
-            f'border:1px solid rgba(255,255,255,0.08);padding:18px;margin:6px 0 2px;">'
-            f'<img src="{src}" alt="{alt}" style="max-width:{maxw};max-height:{maxh};width:auto;height:auto;display:block;" /></div>')
+def img_center(src, alt, maxw="640px"):
+    # each v2 panel carries its own baked split light/dark background, so no dark wrapper box:
+    # show it full-width (capped), centered, with a thin frame to seat it in the card.
+    return (f'<div style="margin:10px 0 2px;text-align:center;">'
+            f'<img src="{src}" alt="{alt}" style="width:100%;max-width:{maxw};height:auto;display:block;margin:0 auto;'
+            f'border:1px solid rgba(255,255,255,0.12);box-sizing:border-box;" /></div>')
 
 def style_menu(es):
     cards=""
     for key,en,esn,src in STYLES:
         name=esn if es else en
-        cards+=(f'<div style="flex:1 1 28%;min-width:150px;max-width:calc(33.333% - 8px);background:#0a1414;border:1px solid rgba(255,255,255,0.08);'
-                f'border-top:2px solid #00b8b8;padding:14px 10px 12px;text-align:center;box-sizing:border-box;">'
-                f'<div style="height:58px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;">'
-                f'<img src="{src}" alt="{name}" style="max-width:100%;max-height:56px;width:auto;height:auto;display:block;" /></div>'
-                f'<div style="font-size:12pt;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#eafeff;">{name}</div>'
+        cards+=(f'<div style="flex:1 1 30%;min-width:210px;max-width:calc(33.333% - 9px);background:#0a1414;'
+                f'border:1px solid rgba(255,255,255,0.08);border-top:2px solid #00b8b8;padding:0 0 12px;'
+                f'text-align:center;box-sizing:border-box;overflow:hidden;">'
+                f'<img src="{src}" alt="{name}" style="width:100%;height:auto;display:block;" />'
+                f'<div style="font-size:12pt;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#eafeff;margin-top:11px;">{name}</div>'
                 f'</div>')
-    return (f'<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:4px;">{cards}</div>')
+    return (f'<div style="display:flex;flex-wrap:wrap;gap:13px;margin-top:4px;">{cards}</div>')
 
 def example_gallery():
     imgs=""
     for src in GALLERY:
-        imgs+=(f'<img src="{src}" alt="Example word" style="max-height:72px;max-width:46%;width:auto;height:auto;display:block;" />')
-    return (f'<div style="display:flex;flex-wrap:wrap;gap:16px 22px;align-items:center;justify-content:center;'
-            f'background:#0a1414;border:1px solid rgba(255,255,255,0.08);padding:20px;">{imgs}</div>')
+        imgs+=(f'<img src="{src}" alt="Example word" style="flex:1 1 44%;min-width:220px;max-width:calc(50% - 7px);'
+               f'width:100%;height:auto;display:block;border:1px solid rgba(255,255,255,0.10);box-sizing:border-box;" />')
+    return (f'<div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:4px;">{imgs}</div>')
 
 def vocab3(es):
     # three ideas shown as pictures, done with inline styles (no font files needed, Canvas-safe)
@@ -162,14 +167,19 @@ def overview():
     en+=card("Learn &middot; the idea","Turn a Word Into One Cool Style",
         para("Pick a word you like. It can be your name, a nickname, or any short word. <strong>Give every letter the same cool style.</strong> That is the whole job.")
         + para("When all your letters match, they look like a real font: one family.")
-        + (img_center(HERO,"The word MARK in a graffiti style") if HAVE_ART else ""))
+        + (img_center(HERO,"The word MARK styled as bold 3D art, shown on a light side and a dark side") if HAVE_ART else ""))
     en+=resources_card("Watch &amp; look",
-        para("Here are some words other people styled. Look at how every letter in a word matches. Pick a style you like.")
+        para("Here are words other people turned into art. Look at how every letter in a word matches. Pick a style you like.")
         + (example_gallery() if HAVE_ART else "")
+        + para("Each word is shown on a <strong>light</strong> side and a <strong>dark</strong> side, so you can see it looks good on both.")
         + para("<strong>Watch:</strong> your teacher will show you a quick demo before you start."),es=False)
     en+=card("Learn &middot; 3 things that make it work","Check These Three",
         vocab3(False)
         + para("If you added one more letter, would it fit right in? If yes, your word is a family."))
+    en+=card("Learn &middot; one more rule","Make It Work Anywhere",
+        para("A strong word looks good on a <strong>light</strong> background and a <strong>dark</strong> one. Look at the examples: each word sits on a light side and a dark side.")
+        + (img_center(LD_DEMO,"The word RISE shown on a light side and a dark side",maxw="520px") if HAVE_ART else "")
+        + para("Make your word work on both. You will check this before you turn it in."))
     en+=downloads(False)
     en+=card("How It Works / Your Plan","Your Next 2 Steps",
         para("You are on Step 01 now: read this page and get your reflection sheet. Here are the two steps that follow.")
@@ -185,14 +195,19 @@ def overview():
     es+=card("Aprende &middot; la idea","Convierte una Palabra en un Solo Estilo",
         para("Elige una palabra que te guste. Puede ser tu nombre, un apodo o cualquier palabra corta. <strong>Dale a cada letra el mismo estilo.</strong> Ese es todo el trabajo.")
         + para("Cuando todas tus letras se parecen, se ven como una fuente real: una familia.")
-        + (img_center(HERO,"La palabra MARK en estilo grafiti") if HAVE_ART else ""))
+        + (img_center(HERO,"La palabra MARK como arte 3D en negrita, en un lado claro y un lado oscuro") if HAVE_ART else ""))
     es+=resources_card("Mira y observa",
-        para("Aqu&iacute; hay palabras que otras personas estilizaron. Mira c&oacute;mo cada letra de una palabra se parece. Elige un estilo que te guste.")
+        para("Aqu&iacute; hay palabras que otras personas convirtieron en arte. Mira c&oacute;mo cada letra de una palabra se parece. Elige un estilo que te guste.")
         + (example_gallery() if HAVE_ART else "")
+        + para("Cada palabra se muestra en un lado <strong>claro</strong> y un lado <strong>oscuro</strong>, para que veas que se ve bien en los dos.")
         + para("<strong>Mira:</strong> tu maestro te ense&ntilde;ar&aacute; una demostraci&oacute;n corta antes de empezar."),es=True)
     es+=card("Aprende &middot; 3 cosas que lo hacen funcionar","Revisa Estas Tres",
         vocab3(True)
         + para("Si agregaras una letra m&aacute;s, &iquest;combinar&iacute;a bien? Si s&iacute;, tu palabra es una familia."))
+    es+=card("Aprende &middot; una regla m&aacute;s","Haz Que Funcione en Todos Lados",
+        para("Una palabra fuerte se ve bien en un fondo <strong>claro</strong> y en uno <strong>oscuro</strong>. Mira los ejemplos: cada palabra est&aacute; en un lado claro y un lado oscuro.")
+        + (img_center(LD_DEMO,"La palabra RISE en un lado claro y un lado oscuro",maxw="520px") if HAVE_ART else "")
+        + para("Haz que tu palabra funcione en los dos. Revisar&aacute;s esto antes de entregar."))
     es+=downloads(True)
     es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Siguientes 2 Pasos",
         para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina y descarga tu hoja de reflexi&oacute;n. Aqu&iacute; est&aacute;n los dos pasos que siguen.")
@@ -212,7 +227,8 @@ def make_word():
         "Pick a style, type your word, and make every letter match.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_DESIGN)
     en+=card("Learn &middot; pick your style","Pick ONE Style",
         para("Tap a style you like. <strong>Every letter in your word gets this same style.</strong> You only pick one.")
-        + (style_menu(False) if HAVE_ART else ""))
+        + (style_menu(False) if HAVE_ART else "")
+        + para("Each style is shown on a <strong>light</strong> side and a <strong>dark</strong> side. Pick one that looks good on both."))
     en+=card("Learn &middot; make it","Make Your Word on the Mac",
         steps([
             ("Open Adobe Illustrator.","Your teacher sets up the file for you."),
@@ -222,13 +238,16 @@ def make_word():
         ], accent="#00b8b8")
         + note("On the Mac, press <strong>Cmd</strong> (not Ctrl). Ask your teacher if you get stuck."))
     en+=card("Learn &middot; check yourself","Before You Turn It In",
-        para("Look at your word. Can you check all four?")
+        para("Look at your word. Can you check all five?")
         + bullets([
             ("Same thickness","every letter is the same weight."),
             ("Same style","every letter has the same look."),
             ("Same line","all letters sit on one line."),
+            ("Works on light AND dark","it looks good on a light background and a dark one."),
             ("Would a new letter fit in?","if yes, your word is a family."),
-        ]))
+        ])
+        + (img_center(LD_DEMO,"The word RISE on a light side and a dark side",maxw="520px") if HAVE_ART else "")
+        + para("<strong>Like this:</strong> the same word on a light side and a dark side. Yours should work on both."))
     en+=deliverables_box(False,
         [("1 image:","your finished word, saved as a <strong>JPG</strong> (File &rarr; Export), uploaded to this Canvas assignment.")])
     en+=next_up("UP NEXT &middot; STEP 03 - Reflection","Tell about your word: your style, and the hardest part.")
@@ -237,7 +256,8 @@ def make_word():
         "Elige un estilo, escribe tu palabra y haz que cada letra combine.","#top","Back to English",hicon=HICON_DESIGN)
     es+=card("Aprende &middot; elige tu estilo","Elige UN Estilo",
         para("Toca un estilo que te guste. <strong>Cada letra de tu palabra recibe este mismo estilo.</strong> Solo eliges uno.")
-        + (style_menu(True) if HAVE_ART else ""))
+        + (style_menu(True) if HAVE_ART else "")
+        + para("Cada estilo se muestra en un lado <strong>claro</strong> y un lado <strong>oscuro</strong>. Elige uno que se vea bien en los dos."))
     es+=card("Aprende &middot; hazlo","Haz Tu Palabra en la Mac",
         steps([
             ("Abre Adobe Illustrator.","Tu maestro te prepara el archivo."),
@@ -247,13 +267,16 @@ def make_word():
         ], accent="#00b8b8")
         + note("En la Mac, presiona <strong>Cmd</strong> (no Ctrl). Preg&uacute;ntale a tu maestro si te atoras."))
     es+=card("Aprende &middot; rev&iacute;sate","Antes de Entregar",
-        para("Mira tu palabra. &iquest;Puedes marcar las cuatro?")
+        para("Mira tu palabra. &iquest;Puedes marcar las cinco?")
         + bullets([
             ("Mismo grosor","cada letra tiene el mismo peso."),
             ("Mismo estilo","cada letra tiene el mismo look."),
             ("Misma l&iacute;nea","todas las letras sobre una l&iacute;nea."),
+            ("Funciona en claro Y oscuro","se ve bien en un fondo claro y en uno oscuro."),
             ("&iquest;Combinar&iacute;a una letra nueva?","si s&iacute;, tu palabra es una familia."),
-        ]))
+        ])
+        + (img_center(LD_DEMO,"La palabra RISE en un lado claro y un lado oscuro",maxw="520px") if HAVE_ART else "")
+        + para("<strong>As&iacute;:</strong> la misma palabra en un lado claro y un lado oscuro. La tuya debe funcionar en los dos."))
     es+=deliverables_box(True,
         [("1 imagen:","tu palabra terminada, guardada como <strong>JPG</strong> (Archivo &rarr; Exportar), subida a esta tarea de Canvas.")])
     es+=next_up("SIGUIENTE &middot; PASO 03 - Reflexi&oacute;n","Cuenta sobre tu palabra: tu estilo y la parte m&aacute;s dif&iacute;cil.")
