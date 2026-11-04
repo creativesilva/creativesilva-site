@@ -406,7 +406,7 @@
   .dv-row.open .dv-rmain{background:rgba(255,255,255,.04);}
   .dv-lead{flex:0 0 auto;width:10px;height:10px;border-radius:50%;background:var(--muted);}
   .dv-row.hand .dv-lead{background:var(--gold);} .dv-row.out .dv-lead{background:var(--orange);} .dv-row.od .dv-lead{background:var(--red);} .dv-row.ret .dv-lead{background:var(--ok);}
-  .dv-code{flex:0 0 auto;font-size:1.02rem;font-weight:700;color:#fff;min-width:54px;}
+  .dv-code{flex:0 0 auto;font-size:1.02rem;font-weight:700;color:#fff;min-width:58px;font-variant-numeric:tabular-nums;}
   .dv-who{flex:1 1 auto;min-width:0;font-size:.95rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .dv-meta{flex:0 0 auto;display:flex;align-items:center;gap:9px;}
   .dv-per{font-size:.82rem;font-weight:600;color:var(--faint);font-variant-numeric:tabular-nums;}
@@ -441,8 +441,8 @@
   .dv-acc-badge.out{background:rgba(255,159,10,.18);color:#ffc7a6;} .dv-acc-badge.in{background:rgba(48,209,88,.16);color:#9be8b3;} .dv-acc-badge.res{background:rgba(245,179,1,.18);color:#ffd889;} .dv-acc-badge.ret{background:rgba(0,184,184,.18);color:#5ff0f0;}
   .dv-abtn{font-size:.72rem;font-weight:600;border:0;padding:7px 13px;border-radius:999px;cursor:pointer;background:var(--ok);color:#00210c;margin-top:8px;}
   .dv-abtn.tint{background:rgba(0,184,184,.16);color:var(--teal-lt);}
-  .dv-chips{display:flex;flex-wrap:wrap;gap:8px;padding:13px 14px;}
-  .dv-chip{font-size:.92rem;font-weight:600;color:#5ff0f0;background:rgba(0,184,184,.14);border-radius:11px;padding:10px 13px;min-width:62px;text-align:center;}
+  .dv-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;padding:13px 14px;}
+  .dv-chip{font-size:.92rem;font-weight:600;color:#5ff0f0;background:rgba(0,184,184,.14);border-radius:11px;padding:10px 8px;text-align:center;min-width:0;}
   .dv-chip.gear{color:#9be8b3;background:rgba(63,168,99,.14);}
   .dv-chip.na{color:var(--faint);background:rgba(160,180,180,.1);}
   .dv-chip small{display:block;font-size:.58rem;font-weight:600;color:var(--faint);text-transform:uppercase;margin-top:2px;}
