@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Make Your Mark: DA1A typography module (Module 09), lighter DA1 dialect, full color-coding kept
+# Design a Sticker (display name; URL slug stays make-your-mark): DA1A module (Module 09), full color-coding kept
 # (teal = learn, purple = watch/look, orange = download, gold = turn in, green = standards).
 # Direction (Chris, 2026-11-04): this is an Adobe Illustrator project where students DRAW their own
 # letters from scratch (no fonts) and turn a word into a STICKER. A vinyl sticker has a white border
@@ -137,7 +137,7 @@ def nav(current,dots,stepnav):
     return ('      <div class="silva-breadcrumb">\n'
             '        <a href="/curriculum.html">Curriculum Catalog</a>\n'
             '        <span class="bc-sep">&rsaquo;</span>\n'
-            f'        <a href="{OVER}" class="bc-hide-sm">Make Your Mark</a>\n'
+            f'        <a href="{OVER}" class="bc-hide-sm">Design a Sticker</a>\n'
             '        <span class="bc-sep bc-hide-sm">&rsaquo;</span>\n'
             f'        <span class="bc-current">{current}</span>\n'
             '      </div>\n'
@@ -154,7 +154,7 @@ def dots_for(active):
 # ================= PAGES =================
 def overview():
     # ---- EN ----
-    en=banner("Module 09 &bull; Step 01","Make Your Mark: Start Here",
+    en=banner("Module 09 &bull; Step 01","Design a Sticker: Start Here",
         "Read this page, then go to Step 02 to make your sticker.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_DESIGN)
     en+=card("Learn &middot; the idea","Turn a Word Into a Sticker",
         (float_right(HERO_SCRIPT,"A brush-script vinyl sticker with a white border, held over grass","Your word can become a sticker like this.") if HAVE_ART else "")
@@ -180,7 +180,7 @@ def overview():
     en+=standards_box(False, MYM_STANDARDS)
     en+=next_up("UP NEXT &middot; STEP 02 - Make Your Word","Pick a style, draw a word you like, and turn it into a sticker.")
     # ---- ES ----
-    es=banner("M&oacute;dulo 09 &bull; Paso 01","Make Your Mark: Empieza Aqu&iacute;",
+    es=banner("M&oacute;dulo 09 &bull; Paso 01","Dise&ntilde;a un Sticker: Empieza Aqu&iacute;",
         "Lee esta p&aacute;gina y luego ve al Paso 02 para hacer tu sticker.","#top","Back to English",hicon=HICON_DESIGN)
     es+=card("Aprende &middot; la idea","Convierte una Palabra en un Sticker",
         (float_right(HERO_SCRIPT,"Un sticker de letra de pincel con borde blanco, sobre el pasto","Tu palabra puede volverse un sticker as&iacute;.") if HAVE_ART else "")
@@ -207,7 +207,7 @@ def overview():
     es+=next_up("SIGUIENTE &middot; PASO 02 - Haz Tu Palabra","Elige un estilo, dibuja una palabra que te guste y convi&eacute;rtela en un sticker.")
     stepnav=f'<a href="{S1}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Next: Step 02 &#8594;</a></div>'
-    return wrap_page(f"Make Your Mark | {CT} | PVHS", nav("Step 01",dots_for(0),stepnav), top_wrap(en,es), bottom)
+    return wrap_page(f"Design a Sticker |{CT} | PVHS", nav("Step 01",dots_for(0),stepnav), top_wrap(en,es), bottom)
 
 def make_word():
     # ---- EN ----
@@ -272,7 +272,7 @@ def make_word():
     es+=next_up("SIGUIENTE &middot; PASO 03 - Reflexi&oacute;n","Cuenta sobre tu sticker: tu estilo y la parte m&aacute;s dif&iacute;cil.")
     stepnav=f'<a href="{S2}" class="silva-step-btn">Step 03 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S2}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
-    return wrap_page(f"Step 2: Make Your Word | Make Your Mark | {CT} | PVHS", nav("Step 02",dots_for(1),stepnav), top_wrap(en,es), bottom)
+    return wrap_page(f"Step 2: Make Your Word | Design a Sticker |{CT} | PVHS", nav("Step 02",dots_for(1),stepnav), top_wrap(en,es), bottom)
 
 def reflection():
     # ---- EN ----
@@ -295,7 +295,7 @@ def reflection():
     es+=next_up("M&Oacute;DULO COMPLETO","Buen trabajo. Dibujaste tus propias letras y convertiste una palabra en un sticker, como un verdadero artista de letras.")
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 02</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'
-    return wrap_page(f"Step 3: Reflection | Make Your Mark | {CT} | PVHS", nav("Step 03",dots_for(2),stepnav), top_wrap(en,es), bottom)
+    return wrap_page(f"Step 3: Reflection | Design a Sticker |{CT} | PVHS", nav("Step 03",dots_for(2),stepnav), top_wrap(en,es), bottom)
 
 # ================= BUILD =================
 for fname,gen in [(OVER,overview),(S1,make_word),(S2,reflection)]:

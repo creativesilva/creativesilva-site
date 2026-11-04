@@ -67,7 +67,7 @@
       { name: 'Elements of Art',      url: '/curriculum/shared/digarts1-elements-of-art-overview.html' },
       { name: 'Character Design: Form & Color', url: '/curriculum/shared/digarts1-character-form-color-overview.html' },
       { name: 'Vector Character Design', url: '/curriculum/shared/digarts1-get-to-know-illustrator-overview.html' },
-      { name: 'Make Your Mark', url: '/curriculum/shared/digarts1-make-your-mark-overview.html' }
+      { name: 'Design a Sticker', url: '/curriculum/shared/digarts1-make-your-mark-overview.html' }
     ]},
     { course: 'Photography 1A', modules: [
       { name: 'Self-Portrait',            url: '/curriculum/shared/photo1-self-portrait-overview.html' },
