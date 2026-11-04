@@ -604,8 +604,9 @@
   .pvb-charhead .cover{flex:0 0 auto; width:44px; height:44px; overflow:hidden; background:#0b2a2a; border:1px solid var(--pvb-line-soft);}
   .pvb-charhead .cover img{width:100%; height:100%; object-fit:cover; object-position:center 22%; display:block;}
   .pvb-characc.has-sel .pvb-charhead .cover{border-color:var(--pvb-teal);}
-  .pvb-charhead .cname{font-family:var(--pvb-font); font-weight:600; font-size:.9rem; letter-spacing:.02em;}
-  .pvb-charhead .pvb-charbadge{font-size:.62rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+  .pvb-charhead .cname{flex:0 0 auto; width:106px; font-family:var(--pvb-font); font-weight:600; font-size:.9rem; letter-spacing:.02em;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .pvb-charhead .pvb-charbadge{flex:0 0 auto; white-space:nowrap; font-size:.62rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
     color:#04110f; background:linear-gradient(135deg,var(--pvb-teal-lt),var(--pvb-teal)); padding:3px 11px; border-radius:999px;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.4);}
   .pvb-charhead .chev{margin-left:auto; width:8px; height:8px; border-right:2px solid var(--pvb-muted);
@@ -724,17 +725,29 @@
   .pvb-checkrow .role{font-size:.62rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--pvb-teal-lt);}
   .pvb-checkrow .fn{font-size:.78rem; color:#dbeeee; overflow-wrap:anywhere; word-break:normal; line-height:1.3;}
   /* build-order step rows: meta on the top line, the action buttons on their own full-width line below */
-  #pvb-checklist .pvb-checkrow{flex-wrap:wrap; padding:12px; margin-bottom:10px; border:1px solid var(--pvb-line-soft); border-left:2px solid var(--pvb-teal);
-    background:linear-gradient(135deg, rgba(0,184,184,.11), rgba(6,16,16,.34)); box-shadow:inset 0 1px 0 rgba(185,255,255,.1);}
-  #pvb-checklist .pvb-checkrow .meta{flex:1 1 120px;}
-  #pvb-checklist .ckacts{flex:1 1 100%; display:flex; gap:9px; margin-top:8px; padding-left:67px;}
-  #pvb-checklist .ckacts .cimg{flex:1 1 auto; text-align:center; padding:12px 10px; border-radius:var(--pbg-r-pill);
-    background:linear-gradient(135deg, var(--pvb-teal-lt), var(--pvb-teal));
-    box-shadow:0 5px 16px rgba(0,184,184,.3), inset 0 1px 0 rgba(255,255,255,.42); transition:filter .15s, box-shadow .15s;}
-  #pvb-checklist .ckacts .cimg:hover{filter:brightness(1.06);}
-  #pvb-checklist .ckacts .cimg.ghost{color:#eafeff; background:rgba(0,184,184,.13); border:1px solid rgba(112,246,246,.32);
-    box-shadow:inset 0 1px 0 rgba(185,255,255,.18);}
-  #pvb-checklist .ckacts .cimg.ghost:hover{background:rgba(0,184,184,.22); filter:none;}
+  #pvb-checklist .pvb-checkrow{align-items:center; padding:13px; margin-bottom:11px; border:1px solid rgba(112,246,246,.22); border-left:2px solid var(--pvb-teal);
+    background:linear-gradient(145deg, rgba(0,184,184,.14), rgba(132,80,226,.07) 58%, rgba(6,16,16,.26));
+    backdrop-filter:blur(14px) saturate(150%); -webkit-backdrop-filter:blur(14px) saturate(150%);
+    box-shadow:0 8px 24px rgba(0,0,0,.26), inset 0 1px 0 rgba(185,255,255,.14);}
+  #pvb-checklist .pvb-checkrow{gap:10px;}
+  #pvb-checklist .pvb-checkrow .meta{flex:1 1 auto; min-width:0;}
+  #pvb-checklist .pvb-checkrow .th{flex:0 0 46px; width:46px; height:46px;}
+  #pvb-checklist .pvb-checkrow .fn{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-top:2px;}
+  /* build-order actions: ONE glass pill, split into a download icon + a copy icon (no words) */
+  #pvb-checklist .ckacts{flex:0 0 auto; width:auto; display:flex;}
+  #pvb-checklist .ckpill{display:inline-flex; align-items:stretch; overflow:hidden; border-radius:var(--pbg-r-pill);
+    border:1px solid rgba(112,246,246,.3);
+    background:linear-gradient(145deg, rgba(0,184,184,.15), rgba(132,80,226,.07) 60%, rgba(6,16,16,.22));
+    backdrop-filter:blur(13px) saturate(150%); -webkit-backdrop-filter:blur(13px) saturate(150%);
+    box-shadow:0 6px 16px rgba(0,0,0,.22), inset 0 1px 0 rgba(185,255,255,.16);}
+  #pvb-checklist .ckpill button{display:inline-flex; align-items:center; justify-content:center; width:50px; padding:12px 0; cursor:pointer; border:0; background:transparent; color:#eafeff; transition:background .14s, filter .14s, box-shadow .14s;}
+  #pvb-checklist .ckpill button svg{width:19px; height:19px;}
+  #pvb-checklist .ckpill .ckdl{border-right:1px solid rgba(112,246,246,.24);}
+  #pvb-checklist .ckpill .ckdl:hover{background:rgba(0,184,184,.2);}
+  #pvb-checklist .ckpill .cimg{color:#04110f; background:linear-gradient(135deg,var(--pvb-teal-lt),var(--pvb-teal)); box-shadow:inset 0 1px 0 rgba(255,255,255,.4);}
+  #pvb-checklist .ckpill .cimg:hover{filter:brightness(1.08);}
+  #pvb-checklist .ckpill button.ok{box-shadow:inset 0 0 0 2px rgba(130,245,230,.95), inset 0 1px 0 rgba(255,255,255,.4);}
+  #pvb-checklist .ckpill button.err{box-shadow:inset 0 0 0 2px rgba(255,120,120,.9);}
   .pvb-checkrow .cimg{flex:0 0 auto; font-family:var(--pvb-font); font-size:.66rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
     color:#04110f; background:var(--pvb-teal); border:0; padding:8px 10px; cursor:pointer;}
   .pvb-checkrow .cimg:hover{filter:brightness(1.12);}
@@ -856,16 +869,24 @@
   /* copy count, right of the title in Build Order mode (no separate bar) */
   .pbg-head-prog{display:none; font-size:.82rem; font-weight:700; letter-spacing:.03em; color:var(--pvb-teal-lt); white-space:nowrap;}
   .pbg-card[data-mode="export"] .pbg-head-prog{display:block;}
-  /* dual action button: INGREDIENTS | RESET */
-  .pbg-dual{display:flex; border-radius:var(--pbg-r-pill); overflow:hidden; border:1px solid var(--pvb-line);}
-  .pbg-dual-main{flex:1 1 auto; display:inline-flex; align-items:center; justify-content:center; gap:9px; padding:13px 16px; cursor:pointer; border:0;
-    font-family:var(--pvb-font); font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:.8rem; color:#04110f;
-    background:linear-gradient(135deg,var(--pvb-teal-lt),var(--pvb-teal));}
-  .pbg-dual-main svg{width:17px; height:17px;}
-  .pbg-dual-main:hover{filter:brightness(1.07);}
-  .pbg-dual-reset{flex:0 0 auto; padding:13px 22px; cursor:pointer; border:0; border-left:1px solid rgba(4,17,15,.35);
-    font-family:var(--pvb-font); font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:.8rem; color:#eafeff; background:rgba(0,184,184,.14);}
-  .pbg-dual-reset:hover{background:rgba(0,184,184,.26);}
+  /* composed-prompt footer: ONE glass pill split into a download icon + a copy icon (no words) */
+  .pbg-promptpill{display:flex; border-radius:var(--pbg-r-pill); overflow:hidden; border:1px solid rgba(112,246,246,.3);
+    background:linear-gradient(145deg, rgba(0,184,184,.15), rgba(132,80,226,.07) 60%, rgba(6,16,16,.22));
+    backdrop-filter:blur(16px) saturate(150%); -webkit-backdrop-filter:blur(16px) saturate(150%);
+    box-shadow:0 8px 22px rgba(0,0,0,.26), inset 0 1px 0 rgba(185,255,255,.18);}
+  .pbg-promptpill button{flex:1 1 0; display:inline-flex; align-items:center; justify-content:center; padding:14px 0; cursor:pointer; border:0; background:transparent; color:#eafeff; transition:background .15s, filter .15s, box-shadow .15s;}
+  .pbg-promptpill button svg{width:20px; height:20px;}
+  .pbg-promptpill .pp-dl{border-right:1px solid rgba(112,246,246,.26);}
+  .pbg-promptpill .pp-dl:hover{background:rgba(0,184,184,.2);}
+  .pbg-promptpill .pp-copy{color:#04110f; background:linear-gradient(135deg,var(--pvb-teal-lt),var(--pvb-teal)); box-shadow:inset 0 1px 0 rgba(255,255,255,.42);}
+  .pbg-promptpill .pp-copy:hover{filter:brightness(1.08);}
+  .pbg-promptpill button.ok{box-shadow:inset 0 0 0 2px rgba(130,245,230,.95), inset 0 1px 0 rgba(255,255,255,.42);}
+  .pbg-promptpill button.err{box-shadow:inset 0 0 0 2px rgba(255,120,120,.9);}
+  /* subtle reset, tucked into the "more" section (was the old RESET half) */
+  .pbg-resetlink{align-self:flex-start; margin-top:16px; padding:8px 14px; cursor:pointer; border-radius:var(--pbg-r-pill);
+    border:1px solid rgba(112,246,246,.26); background:rgba(0,184,184,.08); color:var(--pvb-muted);
+    font-family:var(--pvb-font); font-size:.72rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; transition:color .15s, border-color .15s, background .15s;}
+  .pbg-resetlink:hover{color:#eafeff; border-color:rgba(112,246,246,.45); background:rgba(0,184,184,.16);}
   /* nested "more" section in the Prompt pane (keeps the picker clean) */
   .pbg-more{margin-top:16px; border:1px solid var(--pvb-line-soft); border-radius:var(--pbg-r-sm); background:rgba(0,184,184,.04);}
   .pbg-more>summary{list-style:none; cursor:pointer; padding:11px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -1042,6 +1063,17 @@
     /* show only the active pane */
     .pbg-body .pbg-pane{display:none;}
     .pbg-body .pbg-pane.on{display:block;}
+    /* the build order opens from the footer pill only on phone; on desktop surface a Get Ingredients CTA here */
+    .pbg-wizard{display:flex; padding:0 0 12px; margin:0;}
+    .pbg-wiz-back{display:none;}
+    .pbg-sheet-export{flex:1 1 auto; display:inline-flex; align-items:center; justify-content:center; gap:9px;
+      padding:13px 16px; cursor:pointer; border-radius:var(--pbg-r-pill);
+      border:1px solid rgba(112,246,246,.42); background:linear-gradient(135deg, rgba(0,184,184,.34), rgba(132,80,226,.24)); color:#eafeff;
+      font-family:var(--pvb-font); font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.78rem;}
+    .pbg-sheet-export svg{width:17px; height:17px; flex:0 0 auto;}
+    .pbg-sheet-export .se-sub{font-weight:400; text-transform:none; letter-spacing:0; color:var(--pvb-muted); font-size:.72rem;}
+    .pbg-sheet-export .se-arrow{margin-left:auto;}
+    .pbg-sheet-export.ready{border-color:rgba(112,246,246,.7); box-shadow:0 0 0 1px rgba(112,246,246,.3), 0 10px 26px rgba(0,184,184,.28);}
   }
   /* big screens: give the controls room, cap the tile columns so they stay tidy */
   @media (min-width:1500px){
@@ -1199,7 +1231,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
           </button>
           <div class="pbg-card-titles">
-            <div class="pbg-eyebrow" id="pbg-eyebrow">Prompt Studio</div>
+            <div class="pbg-eyebrow" id="pbg-eyebrow">Prompt Ingredients</div>
             <div class="pbg-title" id="pvb-title">Loading</div>
             <div class="pbg-sub" id="pvb-sub"></div>
           </div>
@@ -1221,12 +1253,9 @@
               <div class="pvb-preview" id="pvb-preview" contenteditable="true" spellcheck="false" aria-label="Your prompt (editable)">Loading base prompt&#8230;</div>
             </div>
             <div class="pbg-edit-foot">
-              <div class="pbg-dual">
-                <button type="button" class="pbg-dual-main" id="pbg-open-export">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-                  <span>Ingredients</span>
-                </button>
-                <button type="button" class="pbg-dual-reset" id="pvb-reset" title="Clear your entries for this prompt">Reset</button>
+              <div class="pbg-promptpill">
+                <button type="button" class="pp-dl" id="pbg-dl-prompt" title="Download prompt (.txt)" aria-label="Download prompt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 12l5 5 5-5"/><path d="M5 21h14"/></svg></button>
+                <button type="button" class="pp-copy" id="pbg-copy-prompt" title="Copy prompt" aria-label="Copy prompt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="1.7"/><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/></svg></button>
               </div>
               <div class="pvb-saved" id="pvb-saved" hidden></div>
             </div>
@@ -1285,6 +1314,7 @@
                   <div class="pvb-gtitle">Saved builds</div>
                   <div class="pvb-setups" id="pvb-setups"></div>
                 </div>
+                <button type="button" class="pbg-resetlink" id="pvb-reset" title="Clear your entries for this prompt">Reset this prompt</button>
               </div>
             </details>
           </section>
@@ -2104,7 +2134,7 @@
     var cache={};
     function fetchPrompt(p){ if(cache[p]!=null)return Promise.resolve(cache[p]); return fetch(p,{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){cache[p]=t;return t;}); }
     function legacyCopy(text){ var a=document.createElement('textarea'); a.value=text; a.style.position='fixed'; a.style.opacity='0'; document.body.appendChild(a); a.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(a); }
-    function copyText(text,btn,label){ function ok(){ if(btn){ btn.classList.add('copied'); var was=btn.innerHTML; btn.textContent='Copied!'; setTimeout(function(){btn.classList.remove('copied'); btn.innerHTML=was;},1600);} }
+    function copyText(text,btn,icon){ function ok(){ if(!btn)return; if(icon){ btn.classList.add('ok'); setTimeout(function(){btn.classList.remove('ok');},1300); return; } btn.classList.add('copied'); var was=btn.innerHTML; btn.textContent='Copied!'; setTimeout(function(){btn.classList.remove('copied'); btn.innerHTML=was;},1600); }
       if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(ok,function(){legacyCopy(text);ok();}); } else { legacyCopy(text); ok(); } }
     function copyImage(url,btn){ var orig=btn.textContent; function done(t){ btn.textContent=t; if(t==='Copied!')btn.classList.add('copied'); setTimeout(function(){btn.textContent=orig; btn.classList.remove('copied');},1700); }
       if(!(navigator.clipboard&&window.ClipboardItem)){ done('No copy'); return; }
@@ -2117,6 +2147,7 @@
     var SVG_IMG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16"></rect><circle cx="8.5" cy="9.5" r="1.8"></circle><path d="M4 18l5-4 3.5 2.5L17 12l3 3.5"></path></svg>';
     var SVG_LINK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"></path><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"></path></svg>';
     var SVG_DL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="M7 12l5 5 5-5"></path><path d="M5 21h14"></path></svg>';
+    var SVG_COPY='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="1.7"></rect><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"></path></svg>';
     var PROMPT_ICON_URL='https://www.creativesilva.com/assets/Icons/prompt-icon-gold-v1.png';
     function rtool(svg, title, fn){ var b=el('button','pvb-rtool',svg); b.type='button'; b.title=title; b.setAttribute('aria-label',title); b.addEventListener('click',function(e){ e.stopPropagation(); fn(b); }); return b; }
     function flashTool(btn, cls){ btn.classList.remove('ok','err'); btn.classList.add(cls); setTimeout(function(){ btn.classList.remove(cls); }, 1300); }
@@ -2126,6 +2157,8 @@
         return new Promise(function(res,rej){ var im=new Image(); im.crossOrigin='anonymous'; im.onload=function(){ var c=document.createElement('canvas'); c.width=im.naturalWidth; c.height=im.naturalHeight; c.getContext('2d').drawImage(im,0,0); c.toBlob(function(pb){ pb?res(pb):rej(0); },'image/png'); }; im.onerror=rej; im.src=url; }); });
       navigator.clipboard.write([new ClipboardItem({'image/png':png})]).then(function(){flashTool(btn,'ok');},function(){flashTool(btn,'err');}); }
     function downloadImg(url, file, btn){ fetch(url,{cache:'no-store'}).then(function(r){return r.blob();}).then(function(b){ var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=baseName(file); document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500); flashTool(btn,'ok'); }).catch(function(){ flashTool(btn,'err'); }); }
+    function downloadText(text, file, btn){ try{ var b=new Blob([text||''],{type:'text/plain;charset=utf-8'}); var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=file; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500); flashTool(btn,'ok'); }catch(e){ flashTool(btn,'err'); } }
+    function promptFile(){ var s=((cfg&&cfg.title)||'prompt').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); return (s||'prompt')+'.txt'; }
 
     // ---- storage (namespaced) ----
     var NS='pvBeta.v1.';
@@ -2309,8 +2342,9 @@
         row.appendChild(el('div','pvb-stepnum',String(step++)));
         var th=el('div','th'); var im=el('img'); im.src=PROMPT_ICON_URL; im.alt='Prompt'; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
         var meta=el('div','meta'); meta.appendChild(el('div','role','Prompt')); meta.appendChild(el('div','fn','Your prompt (paste this first)')); row.appendChild(meta);
-        var cb=el('button','cimg','Copy prompt'); cb.type='button'; cb.addEventListener('click',function(){ copyText(promptText(), cb); if(window.pbgPushHistory) pbgPushHistory(); });
-        var cka=el('div','ckacts'); cka.appendChild(cb); row.appendChild(cka);
+        var dl=el('button','ckdl',SVG_DL); dl.type='button'; dl.title='Download prompt (.txt)'; dl.setAttribute('aria-label','Download prompt'); dl.addEventListener('click',function(){ downloadText(promptText(), promptFile(), dl); });
+        var cb=el('button','cimg',SVG_COPY); cb.type='button'; cb.title='Copy prompt'; cb.setAttribute('aria-label','Copy prompt'); cb.addEventListener('click',function(){ copyText(promptText(), cb, true); if(window.pbgPushHistory) pbgPushHistory(); });
+        var cka=el('div','ckacts ckpill'); cka.appendChild(dl); cka.appendChild(cb); row.appendChild(cka);
         checklistEl.appendChild(row);
       })();
       // Steps 2+: images to attach. X2 uses your dropped images; other prompts use catalog references.
@@ -2323,9 +2357,9 @@
         row.appendChild(el('div','pvb-stepnum',String(step++)));
         var th=el('div','th'); var im=el('img'); im.src=a.url; im.alt=a.role; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
         var meta=el('div','meta'); meta.appendChild(el('div','role',esc(a.role))); meta.appendChild(el('div','fn',esc(a.name))); row.appendChild(meta);
-        var cb=el('button','cimg','Copy image'); cb.type='button'; cb.addEventListener('click',function(){ copyImage(a.url,cb); });
-        var db=el('button','cimg ghost','Download'); db.type='button'; db.addEventListener('click',function(){ downloadImg(a.url,a.name,db); });
-        var cka=el('div','ckacts'); cka.appendChild(cb); cka.appendChild(db); row.appendChild(cka);
+        var db=el('button','ckdl',SVG_DL); db.type='button'; db.title='Download image'; db.setAttribute('aria-label','Download image'); db.addEventListener('click',function(){ downloadImg(a.url,a.name,db); });
+        var cb=el('button','cimg',SVG_COPY); cb.type='button'; cb.title='Copy image'; cb.setAttribute('aria-label','Copy image'); cb.addEventListener('click',function(){ cardCopyImg(a.url,cb); });
+        var cka=el('div','ckacts ckpill'); cka.appendChild(db); cka.appendChild(cb); row.appendChild(cka);
         checklistEl.appendChild(row);
       });
       if(!attach.length){ checklistEl.appendChild(el('div','pvb-check-empty', cfg.delta?'Drop your master (and optional support headshot) on the left; they show up here to copy in order.':'Add characters, items, or a location above and they appear here as steps 2, 3, and so on.')); }
@@ -2990,6 +3024,7 @@
         if(isPhone()){ measure(); if(!cur || cur>TY_CLOSED) cur=TY_HALF; setTY(cur,true); }
         else { sheet.style.transform=''; sheet.style.transition=''; dock.style.opacity=''; dock.style.pointerEvents=''; dock.style.zIndex='';
           sheet.classList.remove('at-full'); tabsEl.style.opacity=''; tabsEl.style.pointerEvents=''; }   // desktop: tabs are the nav
+        if(window.pbgWizard) window.pbgWizard();   // keep the CTA correct (Get Ingredients on desktop, Next/Get on phone)
       }
       var mq=window.matchMedia('(max-width:820px)');
       if(mq.addEventListener) mq.addEventListener('change',applyMode); else if(mq.addListener) mq.addListener(applyMode);
@@ -3020,6 +3055,10 @@
       // the pinned sheet button is a wizard: Next walks the tabs, the last tab becomes Get Ingredients
       window.pbgWizard=function(){
         if(!sheetExportBtn) return;
+        if(!isPhone()){ /* desktop/iPad: the sheet CTA is always Get Ingredients (no tab-walking) */
+          sheetExportBtn.setAttribute('data-act','export'); if(seMain)seMain.textContent='Get Ingredients';
+          var nd=refCount(); if(seSub)seSub.textContent=nd?('('+nd+' + prompt)'):''; sheetExportBtn.classList.toggle('ready',nd>0);
+          if(wizBack) wizBack.disabled=true; return; }
         var i=TAB_ORDER.indexOf(active), last=(i>=TAB_ORDER.length-1);
         if(last){ sheetExportBtn.setAttribute('data-act','export'); if(seMain)seMain.textContent='Get Ingredients';
           var n=refCount(); if(seSub)seSub.textContent=n?('('+n+' + prompt)'):''; sheetExportBtn.classList.toggle('ready',n>0); }
@@ -3028,6 +3067,9 @@
         if(wizBack) wizBack.disabled=(i<=0);
       };
       if(openExportBtn) openExportBtn.addEventListener('click',function(){ setMode('export'); });
+      var dlPromptBtn=document.getElementById('pbg-dl-prompt'), copyPromptBtn=document.getElementById('pbg-copy-prompt');
+      if(dlPromptBtn) dlPromptBtn.addEventListener('click',function(){ downloadText(promptText(), promptFile(), dlPromptBtn); });
+      if(copyPromptBtn) copyPromptBtn.addEventListener('click',function(){ copyText(promptText(), copyPromptBtn, true); if(window.pbgPushHistory) pbgPushHistory(); });
       if(sheetExportBtn) sheetExportBtn.addEventListener('click',function(){
         if(sheetExportBtn.getAttribute('data-act')==='next'){ var i=TAB_ORDER.indexOf(active); setTab(TAB_ORDER[Math.min(i+1,TAB_ORDER.length-1)], true); }
         else setMode('export'); });
