@@ -2371,7 +2371,7 @@
         var cams=(state.items||[]).filter(Boolean).filter(function(f){return CAMERA_BODIES[f];}).map(function(f){return CAMERA_BODIES[f];});
         if(cams.length>1) w.push({level:'warn', msg:cams.length+' camera bodies selected ('+cams.join(', ')+'). Pick one so the model does not blend them.'});
         var total=(state.chars||[]).filter(Boolean).length+(state.items||[]).filter(Boolean).length+(state.scene?1:0)+((staged&&staged.length)||0);
-        if(total>5) w.push({level:'tip', msg:total+' references selected. A lot of references can blend and soften identity; keep the ones this shot needs.'});
+        if(total>5) w.push({level:'tip', msg:total+' references selected. A lot of references can blend and soften identity; keep the ones this image needs.'});
         var act=((state.fields&&state.fields['SUBJECT / ACTION'])||'').trim();
         var hasChar=(state.chars||[]).filter(Boolean).length>0;
         if(!hasChar && !OUTFIT && cfg && cfg.ptype==='environment' && act && LINT_PERSON_RE.test(act))
