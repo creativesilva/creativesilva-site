@@ -350,6 +350,73 @@
   .dc-kitok{background:rgba(63,168,99,.10);border-left:4px solid var(--ok);padding:9px 12px;margin-top:10px;font-size:.82rem;color:#8ff0b0;line-height:1.5;}
   .dm-availcam.resv{cursor:pointer;}
   .dm-availcam.resv:hover{background:rgba(63,168,99,.28);}
+
+  /* ===== Teacher DAY VIEW: Apple-style dark status panels (left) + detail / mini-month rail (right). Chris 2026-11-03. ===== */
+  .dm-panel.dm-wide{max-width:1000px;max-height:min(900px,92vh);}
+  .dm-wide .dm-tabs:empty{display:none;}
+  .dm-wide .dm-body{padding:0;overflow:hidden;display:flex;flex-direction:column;min-height:0;}
+  .dm-stripe{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:8px 14px;border-bottom:1px solid var(--line-soft);background:rgba(4,20,19,.45);}
+  .dm-stepper{display:flex;gap:4px;}
+  .dm-step{width:27px;height:27px;border:1px solid var(--line-soft);background:rgba(0,184,184,.08);color:var(--teal-lt);cursor:pointer;font-size:1.05rem;line-height:1;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font);}
+  .dm-step:hover{background:rgba(0,184,184,.2);color:#fff;}
+  .dm-today-btn{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--teal-lt);background:rgba(0,184,184,.1);border:1px solid var(--line-soft);padding:0 11px;height:27px;cursor:pointer;}
+  .dm-today-btn:hover{background:rgba(0,184,184,.2);color:#fff;}
+  .dm-stats{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;}
+  .dm-stat{display:inline-flex;align-items:baseline;gap:5px;font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);padding:4px 9px;background:rgba(0,0,0,.28);border:1px solid var(--line-soft);}
+  .dm-stat b{font-size:.84rem;color:#fff;}
+  .dm-stat.free b{color:var(--teal-lt);} .dm-stat.out b{color:#ffc7a6;} .dm-stat.od b{color:#ff9a8a;}
+  .dm-split{flex:1 1 auto;display:flex;min-height:0;}
+  .dm-main{flex:1 1 auto;min-width:0;overflow-y:auto;padding:13px 14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:11px;align-content:start;}
+  .dm-rail{flex:0 0 300px;overflow-y:auto;border-left:1px solid var(--line-soft);background:rgba(1,12,11,.5);padding:14px;}
+  .dmp{border:1px solid var(--line-soft);border-top:2px solid var(--muted);background:rgba(0,0,0,.2);display:flex;flex-direction:column;align-self:start;}
+  .dmp.hand{border-top-color:var(--gold);} .dmp.out{border-top-color:var(--orange);} .dmp.od{border-top-color:var(--red);} .dmp.ret{border-top-color:var(--ok);} .dmp.free{border-top-color:var(--teal);}
+  .dmp-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 11px;border-bottom:1px solid rgba(0,184,184,.1);}
+  .dmp-t{font-family:var(--font);font-weight:700;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+  .dmp.hand .dmp-t{color:#ffd889;} .dmp.out .dmp-t{color:#ffc7a6;} .dmp.od .dmp-t{color:#ff9a8a;} .dmp.ret .dmp-t{color:#9be8b3;} .dmp.free .dmp-t{color:var(--teal-lt);}
+  .dmp-n{font-family:var(--font);font-weight:700;font-size:.62rem;color:var(--faint);min-width:18px;text-align:right;}
+  .dmp-list{display:flex;flex-direction:column;}
+  .dmi{display:flex;align-items:center;gap:8px;padding:7px 11px;border:0;border-bottom:1px solid rgba(255,255,255,.045);cursor:pointer;text-align:left;background:none;width:100%;color:var(--text);font-family:var(--body);}
+  .dmi:last-child{border-bottom:0;}
+  .dmi:hover{background:rgba(0,184,184,.08);}
+  .dmi.sel{background:rgba(0,184,184,.15);box-shadow:inset 3px 0 0 var(--teal);}
+  .dmi-dot{flex:0 0 auto;width:8px;height:8px;}
+  .dmi-dot.hand{background:var(--gold);} .dmi-dot.out{background:var(--orange);} .dmi-dot.od{background:var(--red);} .dmi-dot.ret{background:var(--ok);}
+  .dmi-code{flex:0 0 auto;font-family:var(--font);font-weight:700;font-size:.82rem;color:#fff;min-width:56px;}
+  .dmi-who{flex:1 1 auto;min-width:0;font-size:.77rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .dmi-per{flex:0 0 auto;font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.05em;color:var(--faint);text-transform:uppercase;min-width:24px;text-align:right;}
+  .dmi-od{flex:0 0 auto;font-family:var(--font);font-size:.56rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#ff9a8a;white-space:nowrap;}
+  .dmp-empty{padding:10px 11px;color:var(--faint);font-size:.76rem;}
+  .dmp-free{display:grid;grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:6px;padding:9px 10px;}
+  .dm-freechip{font-family:var(--font);font-weight:700;font-size:.78rem;color:var(--teal-lt);background:rgba(0,184,184,.1);border:1px solid var(--line-soft);border-left:3px solid var(--teal);padding:7px 5px;text-align:center;cursor:pointer;}
+  .dm-freechip:hover{background:rgba(0,184,184,.22);color:#fff;}
+  .dm-freechip.gear{color:#9be8b3;border-left-color:var(--ok);background:rgba(63,168,99,.1);cursor:default;}
+  .dm-freechip.nocard{color:rgba(206,244,244,.5);border-left-color:var(--grayed);background:rgba(160,180,180,.08);cursor:default;}
+  .mm{margin-bottom:13px;}
+  .mm-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+  .mm-title{font-family:var(--font);font-weight:700;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#fff;}
+  .mm-nav{display:flex;gap:4px;}
+  .mm-arw{width:24px;height:24px;border:1px solid var(--line-soft);background:rgba(0,184,184,.08);color:var(--teal-lt);cursor:pointer;font-size:.95rem;line-height:1;display:inline-flex;align-items:center;justify-content:center;}
+  .mm-arw:hover{background:rgba(0,184,184,.2);color:#fff;}
+  .mm-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+  .mm-dow{font-family:var(--font);font-size:.52rem;font-weight:700;text-transform:uppercase;color:var(--faint);text-align:center;padding:3px 0;}
+  .mm-cell{position:relative;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-family:var(--font);font-size:.74rem;font-weight:600;color:var(--muted);cursor:pointer;background:rgba(255,255,255,.02);border:1px solid transparent;}
+  .mm-cell.blank{background:none;cursor:default;}
+  .mm-cell:not(.blank):not(.off):hover{background:rgba(0,184,184,.14);color:#fff;}
+  .mm-cell.off{color:rgba(206,244,244,.22);cursor:default;background:none;}
+  .mm-cell.today{border-color:var(--teal);color:var(--teal-lt);}
+  .mm-cell.sel{background:var(--teal);color:#04110f;font-weight:700;}
+  .mm-act{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:var(--gold);}
+  .mm-cell.sel .mm-act{background:#04110f;}
+  .mm-free{font-family:var(--font);font-size:.66rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);padding:11px 0 2px;border-top:1px solid var(--line-soft);}
+  .mm-free b{color:var(--teal-lt);font-size:.9rem;}
+  .dm-rail .dm-reserve-cta{margin-top:11px;}
+  .dr-back{font-family:var(--font);font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-lt);background:rgba(0,184,184,.08);border:1px solid var(--line-soft);cursor:pointer;padding:8px 11px;margin-bottom:12px;display:flex;align-items:center;gap:6px;width:100%;}
+  .dr-back:hover{background:rgba(0,184,184,.18);color:#fff;}
+  @media (max-width:760px){
+    .dm-split{flex-direction:column;}
+    .dm-main{grid-template-columns:1fr;}
+    .dm-rail{flex:1 1 auto;border-left:0;border-top:1px solid var(--line-soft);}
+  }
   /* Other Equipment (gear) reserve rows: full-width so long product names read cleanly. */
   .rv-gearrow{display:flex;align-items:center;gap:10px;padding:11px 12px;border-left:3px solid var(--ok);background:rgba(63,168,99,.13);margin-bottom:8px;cursor:pointer;transition:background .12s;}
   .rv-gearrow:hover{background:rgba(63,168,99,.24);}
@@ -1217,6 +1284,140 @@
     if(last && last>day) cls+=' cR';
     return '<span class="'+cls+'">'+c.camera+'</span>';
   }
+  // ===== Teacher console DAY VIEW (Apple-style): status panels (left) + detail / mini-month rail (right). Chris 2026-11-03. =====
+  var MM_VIEW=null;                                    // month shown in the rail mini-month (Date; null = follow DM_DAY)
+  function isTeacherConsole(){ return (AUTHED && window.parent!==window); }
+  function isoShift(iso,n){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  function dmGoDay(iso){ DM_DAY=iso; DM_CAM=null; MM_VIEW=null; renderDayModal(); if(window.parent!==window){ try{ parent.postMessage({daySelected:iso},'*'); }catch(e){} } }
+  function tdRow(c, dotcls, metaType){
+    var meta='';
+    if(metaType==='per') meta='<span class="dmi-per">'+(c.period?('P'+esc(c.period)):'')+'</span>';
+    else if(metaType==='od'){ var n=dayDiff(c.due,todayISO()); meta='<span class="dmi-od">'+(n>0?n:1)+'d late</span>'; }
+    return '<button type="button" class="dmi'+(DM_CAM===c.camera?' sel':'')+'" data-cam="'+esc(c.camera)+'">'+
+      '<span class="dmi-dot '+dotcls+'"></span><span class="dmi-code">'+esc(c.camera)+'</span>'+
+      '<span class="dmi-who">'+esc(nameOf(c))+'</span>'+meta+'</button>';
+  }
+  function tdPanel(cls, title, list, dotcls, metaType, emptyMsg){
+    var inner=list.length?list.map(function(c){ return tdRow(c,dotcls,metaType); }).join('')
+      :'<div class="dmp-empty">'+emptyMsg+'</div>';
+    return '<section class="dmp '+cls+'"><div class="dmp-h"><span class="dmp-t">'+title+'</span><span class="dmp-n">'+list.length+'</span></div><div class="dmp-list">'+inner+'</div></section>';
+  }
+  function tdFreePanel(avail, nc, gearFree){
+    var chips=avail.map(function(cam){ return '<button type="button" class="dm-freechip" data-cam="'+esc(cam)+'">'+esc(cam)+'</button>'; }).join('');
+    chips+=(gearFree||[]).map(function(k){ return '<span class="dm-freechip gear">'+esc(gearLabel(k))+'</span>'; }).join('');
+    chips+=(nc||[]).map(function(cam){ return '<span class="dm-freechip nocard" title="Memory card missing">'+esc(cam)+'</span>'; }).join('');
+    var total=avail.length+((gearFree||[]).length)+((nc||[]).length);
+    var body=total?('<div class="dmp-free">'+chips+'</div>'):'<div class="dmp-empty">Nothing free this day.</div>';
+    return '<section class="dmp free"><div class="dmp-h"><span class="dmp-t">Free to lend</span><span class="dmp-n">'+avail.length+'</span></div>'+body+'</section>';
+  }
+  function tdMiniMonth(iso){
+    if(!MM_VIEW){ var p0=iso.split('-'); MM_VIEW=new Date(+p0[0],+p0[1]-1,1); }
+    var y=MM_VIEW.getFullYear(), m=MM_VIEW.getMonth();
+    var first=new Date(y,m,1).getDay(), dim=new Date(y,m+1,0).getDate(), today=todayISO();
+    var dows=['S','M','T','W','T','F','S'].map(function(d){ return '<div class="mm-dow">'+d+'</div>'; }).join('');
+    var cells='';
+    for(var i=0;i<first;i++) cells+='<div class="mm-cell blank"></div>';
+    for(var dn=1;dn<=dim;dn++){
+      var diso=y+'-'+('0'+(m+1)).slice(-2)+'-'+('0'+dn).slice(-2);
+      var off=!isSchoolDay(diso), cls='mm-cell';
+      if(off) cls+=' off';
+      if(diso===today) cls+=' today';
+      if(diso===DM_DAY) cls+=' sel';
+      var act=(!off && checkoutsOnDay(diso).length>0)?'<span class="mm-act"></span>':'';
+      cells+='<div class="'+cls+'"'+(off?'':(' data-mmday="'+diso+'"'))+'>'+dn+act+'</div>';
+    }
+    return '<div class="mm"><div class="mm-head"><span class="mm-title">'+MONTHS[m]+' '+y+'</span>'+
+      '<div class="mm-nav"><button type="button" class="mm-arw" data-mm="-1">&lsaquo;</button><button type="button" class="mm-arw" data-mm="1">&rsaquo;</button></div></div>'+
+      '<div class="mm-grid">'+dows+cells+'</div></div>';
+  }
+  function tdRailNav(iso, freeCount){
+    var cta=(iso>=todayISO() && isOpenDay(iso))?'<button type="button" class="dm-reserve-cta" id="dm-reserve">'+t('reserveBtn')+'</button>':'';
+    return tdMiniMonth(iso)+'<div class="mm-free"><b>'+freeCount+'</b> cameras free '+(iso===todayISO()?'today':'this day')+'</div>'+cta;
+  }
+  // Rail detail for a tapped camera: status, student, dates, contact, condition, accessories + teacher check-in actions.
+  function tdRailDetail(iso, cam){
+    var c=recForCamOnDay(cam,iso);
+    var back='<button type="button" class="dr-back" id="dr-back">&lsaquo; Back to the day</button>';
+    if(!c){
+      return back+'<div class="dc"><div class="dc-top"><span class="dc-cam">'+esc(cam)+'</span>'+
+        '<span class="dm-tag" style="background:rgba(63,168,99,.16);color:#8ff0b0;">'+t('availOne')+'</span></div>'+
+        '<div class="dc-grid">'+kv(t('eligibility'),camCourse(cam))+kv(t('status'),t('freeOn')+' '+fmt(iso))+'</div>'+
+        '<div class="dc-note"><b>Reserve</b>Use the Reserve button on this day to book this camera.</div>'+kitLineCal(cam)+'</div>';
+    }
+    var st=statusOf(c), overdue=(st==='out'&&c.due&&c.due<todayISO()), pend=pendingCal[c.id];
+    var cls=pend?'returning':(overdue?'overdue':st);
+    var pill=pend?'<span class="dm-tag" style="background:rgba(0,184,184,.18);color:#5ff0f0;">Returning</span>':
+      (overdue?'<span class="dm-tag od">'+t('tabOverdue')+'</span>':(st==='reserved'?'<span class="dm-tag res">'+t('reservedWord')+'</span>':(st==='returned'?'<span class="dm-tag" style="background:rgba(63,168,99,.16);color:#8ff0b0;">'+t('returnedWord')+'</span>':'<span class="dm-tag" style="background:rgba(255,107,26,.18);color:#ffc7a6;">'+t('pickedUp')+'</span>')));
+    var acts='';
+    if(pend){
+      acts='<div class="dc-returning">Goes back in the pool in <b id="dc-count">15</b>s.</div><div class="dc-acts"><button type="button" class="dc-btn" data-act="undoreturn" data-id="'+esc(c.id)+'">Undo return</button></div>';
+    } else if(st==='reserved'){
+      acts='<div class="dc-acts"><button type="button" class="dc-btn" data-act="pickup" data-id="'+esc(c.id)+'">Mark picked up</button><button type="button" class="dc-btn danger" data-act="cancel" data-id="'+esc(c.id)+'">Cancel</button></div>';
+    } else if(st==='out'){
+      acts='<div class="dc-acts"><button type="button" class="dc-btn ghost" data-act="undopickup" data-id="'+esc(c.id)+'">Undo pickup</button><button type="button" class="dc-btn warn" data-act="return" data-id="'+esc(c.id)+'">Mark returned</button></div>';
+    }
+    var grid=kv(t('sumCamera'), esc(cam)+' &middot; '+camCourse(cam));
+    grid+=kv('Student ID', esc(c.student_id||''));
+    grid+=kv('Period', c.period?('Per '+esc(c.period)):'');
+    grid+=kv('Class', esc(c.course||''));
+    grid+=kv(st==='reserved'?t('reservedWord'):t('checkedOut'), t('outWord')+' '+fmt(c.out)+' &rarr; '+t('due')+' '+fmt(c.due), true);
+    if(c.picked_up_date) grid+=kv(t('pickedUp'), fmt(c.picked_up_date));
+    if(c.returned_date) grid+=kv(t('returnedWord'), fmt(c.returned_date));
+    grid+=kvc('Student cell', c.student_cell);
+    grid+=kvc('Parent / guardian', c.parent_guardian);
+    grid+=kvc('Parent cell', c.parent_cell);
+    var flag=((c.flag||'').indexOf('unknown')>=0)?'<div class="dc-flag">&#9888; Student ID not in the roster</div>':'';
+    var condNote=c.note?'<div class="dc-note"><b>Condition note</b>'+esc(c.note)+'</div>':'';
+    var noteBtn='<div class="dc-acts"><button type="button" class="dc-btn ghost" data-sedit="'+esc(c.id)+'">Edit student info</button><button type="button" class="dc-btn ghost" data-note="'+esc(c.id)+'">'+(c.note?'Edit condition note':'Add condition note')+'</button></div>';
+    var accs=accessoriesFor(c), accHtml='';
+    if(accs.length){
+      accHtml='<div class="dc-accs"><div class="dc-accs-h">Accessories with this kit</div>'+accs.map(function(a){
+        var ast=statusOf(a), apend=pendingCal[a.id], alabel=EQUIP_LABEL_CAL[a.item]||a.item||'Item';
+        var badge=apend?'<span class="dc-acc-badge ret">Returning</span>':(ast==='returned'?'<span class="dc-acc-badge in">Checked in</span>':(ast==='reserved'?'<span class="dc-acc-badge res">Reserved</span>':'<span class="dc-acc-badge out">Out</span>'));
+        var anote=a.note?'<div class="dc-acc-note">'+esc(a.note)+'</div>':'';
+        var aacts='';
+        if(apend) aacts='<button type="button" class="dc-abtn" data-act="undoreturn" data-id="'+esc(a.id)+'">Undo</button>';
+        else if(ast!=='returned') aacts='<button type="button" class="dc-abtn warn" data-act="return" data-id="'+esc(a.id)+'">Check in</button><button type="button" class="dc-abtn ghost" data-note="'+esc(a.id)+'">Note</button>';
+        return '<div class="dc-acc"><div class="dc-acc-top"><span class="dc-acc-name">'+esc(alabel)+'</span>'+badge+'</div>'+anote+(aacts?'<div class="dc-acc-acts">'+aacts+'</div>':'')+'</div>';
+      }).join('')+'</div>';
+    }
+    return back+'<div class="dc '+cls+'"><div class="dc-top"><span class="dc-cam">'+esc(cam)+'</span>'+pill+'</div>'+
+      '<div class="dc-name">'+esc(nameOf(c))+'</div>'+acts+'<div class="dc-grid">'+grid+'</div>'+flag+condNote+noteBtn+accHtml+'</div>';
+  }
+  function renderTeacherDay(iso){
+    var pnl=document.querySelector('#daymodal .dm-panel'); if(pnl) pnl.classList.add('dm-wide');
+    document.getElementById('dm-tabs').innerHTML='';
+    document.getElementById('dm-title').textContent=prettyDate(iso);
+    var _f=document.getElementById('dm-foot'); if(_f) _f.innerHTML='';
+    var res=dayReserved(iso), od=overdueAll(), ret=dayReturned(iso), avail=dayAvailable(iso), nc=dayNoCard(iso);
+    var _odids={}; od.forEach(function(c){ _odids[c.id]=1; });
+    var out=dayOut(iso).filter(function(c){ return !_odids[c.id]; });   // overdue gets its own panel, not "out now"
+    var gearFree=myGearKeys().filter(function(k){ return gearAvailOnDay(k,iso)>0; });
+    var stats='<div class="dm-stats"><span class="dm-stat free"><b>'+avail.length+'</b> free</span><span class="dm-stat out"><b>'+out.length+'</b> out</span>'+(od.length?('<span class="dm-stat od"><b>'+od.length+'</b> overdue</span>'):'')+'</div>';
+    var stripe='<div class="dm-stripe"><div class="dm-stepper"><button type="button" class="dm-step" data-dstep="-1">&lsaquo;</button><button type="button" class="dm-step" data-dstep="1">&rsaquo;</button></div><button type="button" class="dm-today-btn" data-dtoday="1">Today</button>'+stats+'</div>';
+    var panels=tdPanel('hand','To hand out',res,'hand','per','Nothing to hand out.')+
+      tdPanel('out','Out now',out,'out','per','Nothing out right now.')+
+      (od.length?tdPanel('od','Overdue',od,'od','od',''):'')+
+      (ret.length?tdPanel('ret','Returned',ret,'ret','per',''):'')+
+      tdFreePanel(avail,nc,gearFree);
+    var rail=DM_CAM?tdRailDetail(iso,DM_CAM):tdRailNav(iso,avail.length);
+    document.getElementById('dm-body').innerHTML=stripe+'<div class="dm-split"><div class="dm-main">'+panels+'</div><aside class="dm-rail" id="dm-rail">'+rail+'</aside></div>';
+    wireTeacherDay(iso);
+    if(document.getElementById('dc-count')) startCalTicker();
+  }
+  function wireTeacherDay(iso){
+    var body=document.getElementById('dm-body');
+    Array.prototype.forEach.call(body.querySelectorAll('[data-dstep]'),function(el){ el.addEventListener('click',function(){ dmGoDay(isoShift(iso,+el.getAttribute('data-dstep'))); }); });
+    var tb=body.querySelector('[data-dtoday]'); if(tb) tb.addEventListener('click',function(){ dmGoDay(todayISO()); });
+    Array.prototype.forEach.call(body.querySelectorAll('.dm-main [data-cam]'),function(el){ el.addEventListener('click',function(){ DM_CAM=el.getAttribute('data-cam'); renderDayModal(); }); });
+    Array.prototype.forEach.call(body.querySelectorAll('[data-mmday]'),function(el){ el.addEventListener('click',function(){ dmGoDay(el.getAttribute('data-mmday')); }); });
+    Array.prototype.forEach.call(body.querySelectorAll('[data-mm]'),function(el){ el.addEventListener('click',function(){ if(!MM_VIEW){ var p=iso.split('-'); MM_VIEW=new Date(+p[0],+p[1]-1,1); } MM_VIEW=new Date(MM_VIEW.getFullYear(),MM_VIEW.getMonth()+(+el.getAttribute('data-mm')),1); renderDayModal(); }); });
+    var rv=body.querySelector('#dm-reserve'); if(rv) rv.addEventListener('click',function(){ openReserveFlow(iso); });
+    var bk=body.querySelector('#dr-back'); if(bk) bk.addEventListener('click',function(){ DM_CAM=null; renderDayModal(); });
+    Array.prototype.forEach.call(body.querySelectorAll('#dm-rail [data-act]'),function(el){ el.addEventListener('click',function(){ camAction(el.getAttribute('data-act'), el.getAttribute('data-id'), el); }); });
+    Array.prototype.forEach.call(body.querySelectorAll('#dm-rail [data-note]'),function(el){ el.addEventListener('click',function(){ openNoteCal(el.getAttribute('data-note')); }); });
+    Array.prototype.forEach.call(body.querySelectorAll('#dm-rail [data-sedit]'),function(el){ el.addEventListener('click',function(){ openStudentEdit(el.getAttribute('data-sedit')); }); });
+  }
   function renderDayModal(){
     // Never leave the day card as an empty black overlay: if a render throws (bad data, a mid-deploy
     // race, etc.) show a friendly reload instead of a blank screen.
@@ -1234,6 +1435,8 @@
     if(DM_DONE) return;                                    // keep the "Reserved!" confirmation up until closed
     var _foot=document.getElementById('dm-foot'); if(_foot) _foot.innerHTML='';  // only the normal day view shows the reserve CTA
     if(isReserving()){ renderReserveDay(iso); return; }   // student picking a camera for this day
+    var _pnl=document.querySelector('#daymodal .dm-panel'); if(_pnl) _pnl.classList.remove('dm-wide');   // non-console views use the narrow panel
+    if(isTeacherConsole()){ renderTeacherDay(iso); return; }   // console: Apple-style status-panel day view (Chris 2026-11-03)
     if(DM_CAM){ renderCamDetail(iso, DM_CAM); return; }
     var out=dayOut(iso), res=dayReserved(iso), avail=dayAvailable(iso), od=overdueAll(), ret=dayReturned(iso);
     var gearKeys=myGearKeys().filter(function(k){ return gearAvailOnDay(k,iso)>0; });   // additional gear (tripods, speedlites, lenses, reflectors) free that day
