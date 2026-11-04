@@ -378,7 +378,22 @@
   .dv-pip{width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:0;}
   .dv-day.has .dv-pip{opacity:1;} .dv-day.sel .dv-pip{background:#04110f;}
   .dv-sec{margin-top:22px;}
-  .dv-sec-h{display:flex;align-items:center;gap:9px;padding:0 4px 9px;}
+  .dv-sec-h{display:flex;align-items:center;gap:9px;padding:9px 4px;width:100%;background:none;border:0;cursor:pointer;text-align:left;color:inherit;font-family:inherit;}
+  .dv-sec-h:active{opacity:.7;}
+  .dv-sec-chev{flex:0 0 auto;width:8px;height:8px;border-right:2px solid var(--faint);border-bottom:2px solid var(--faint);transform:rotate(45deg);transition:transform .2s;margin:-2px 3px 0 2px;}
+  .dv-sec.open > .dv-sec-h .dv-sec-chev,.dv-grp.open .dv-grp-h .dv-sec-chev{transform:rotate(225deg);}
+  .dv-secbody,.dv-grp-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .26s cubic-bezier(.33,1,.68,1);}
+  .dv-sec.open > .dv-secbody,.dv-grp.open > .dv-grp-body{grid-template-rows:1fr;}
+  .dv-secbody-in,.dv-grp-in{overflow:hidden;min-height:0;}
+  .dv-grp + .dv-grp .dv-grp-h{border-top:.5px solid rgba(255,255,255,.08);}
+  .dv-grp-h{display:flex;align-items:center;gap:11px;padding:13px 15px;width:100%;min-height:54px;background:none;border:0;cursor:pointer;text-align:left;color:inherit;font-family:inherit;}
+  .dv-grp-h:active{background:rgba(255,255,255,.05);}
+  .dv-grp-h .dv-lead.free{background:var(--teal-lt);}
+  .dv-grp.gearg .dv-grp-h .dv-lead.free{background:var(--ok);} .dv-grp.nag .dv-grp-h .dv-lead.free{background:var(--grayed);}
+  .dv-grp-name{flex:0 0 auto;font-size:1rem;font-weight:700;color:#fff;}
+  .dv-grp-meta{flex:1 1 auto;min-width:0;font-size:.9rem;font-weight:600;color:var(--teal-lt);}
+  .dv-grp.gearg .dv-grp-meta{color:#9be8b3;} .dv-grp.nag .dv-grp-meta{color:var(--faint);}
+  .dv-grp-in .dv-chips{padding:2px 15px 14px;}
   .dv-sdot{width:9px;height:9px;border-radius:3px;flex:0 0 auto;}
   .dv-sec-h h3{font-size:1.18rem;font-weight:700;letter-spacing:-.2px;margin:0;flex:1 1 auto;min-width:0;color:#fff;}
   .dv-cnt{font-size:.95rem;font-weight:600;color:var(--faint);font-variant-numeric:tabular-nums;}
@@ -1344,20 +1359,28 @@
       '<span class="dv-who">'+esc(nameOf(c))+'</span><span class="dv-meta">'+meta+'<span class="dv-chev"></span></span></span></button>'+
       '<div class="dv-detail"><div class="dv-din"><div class="dv-dpad">'+dvDetail(c)+'</div></div></div></div>';
   }
-  function dvSection(cls, title, list, metaType, emptyMsg){
+  function dvSecHead(cls,title,n){ return '<button type="button" class="dv-sec-h" data-sectoggle="1"><span class="dv-sdot"></span><h3>'+title+'</h3><span class="dv-cnt">'+n+'</span><span class="dv-sec-chev"></span></button>'; }
+  function dvSection(cls, title, list, metaType, emptyMsg, open){
     if(!list.length && !emptyMsg) return '';
-    var head='<div class="dv-sec-h"><span class="dv-sdot"></span><h3>'+title+'</h3><span class="dv-cnt">'+list.length+'</span></div>';
-    var body=list.length?('<div class="dv-card">'+list.map(function(c){ return dvRow(c,cls,metaType); }).join('')+'</div>')
+    var inner=list.length?('<div class="dv-card">'+list.map(function(c){ return dvRow(c,cls,metaType); }).join('')+'</div>')
       :('<div class="dv-card"><div class="dv-empty">'+emptyMsg+'</div></div>');
-    return '<div class="dv-sec '+cls+'">'+head+body+'</div>';
+    return '<div class="dv-sec '+cls+(open?' open':'')+'">'+dvSecHead(cls,title,list.length)+'<div class="dv-secbody"><div class="dv-secbody-in">'+inner+'</div></div></div>';
   }
-  function dvFree(avail, nc, gearFree){
-    var chips=avail.map(function(cam){ return '<div class="dv-chip">'+esc(cam)+'</div>'; }).join('');
-    chips+=(gearFree||[]).map(function(k){ return '<div class="dv-chip gear">'+esc(gearLabel(k))+'</div>'; }).join('');
-    chips+=(nc||[]).map(function(cam){ return '<div class="dv-chip na">'+esc(cam)+'<small>card</small></div>'; }).join('');
-    var total=avail.length+((gearFree||[]).length)+((nc||[]).length);
-    var body=total?('<div class="dv-chips">'+chips+'</div>'):'<div class="dv-empty">Nothing free this day.</div>';
-    return '<div class="dv-sec free"><div class="dv-sec-h"><span class="dv-sdot"></span><h3>Free to lend</h3><span class="dv-cnt">'+avail.length+'</span></div><div class="dv-card">'+body+'</div></div>';
+  function dvCamModel(cam){ var n=parseInt(String(cam).replace(/\D/g,''),10)||0; return n>=19?'R50V':(n===16?'R8':((n>=17&&n<=18)?'RP':'R50')); }
+  // A sub-accordion inside Free: similar items grouped (one camera model, or one gear type).
+  function dvGrp(key,name,meta,chips,cls){
+    return '<div class="dv-grp'+(cls?(' '+cls):'')+'" data-grp="'+esc(key)+'"><button type="button" class="dv-grp-h" data-grptoggle="1"><span class="dv-lead free"></span><span class="dv-grp-name">'+esc(name)+'</span><span class="dv-grp-meta">'+meta+'</span><span class="dv-sec-chev"></span></button><div class="dv-grp-body"><div class="dv-grp-in"><div class="dv-chips">'+chips+'</div></div></div></div>';
+  }
+  function dvFree(avail, nc, gearFree, open){
+    var MODL={R50:'Canon EOS R50',RP:'Canon EOS RP',R8:'Canon EOS R8',R50V:'Canon EOS R50 V'};
+    var byM={}, mo=[]; avail.forEach(function(cam){ var m=dvCamModel(cam); if(!byM[m]){ byM[m]=[]; mo.push(m); } byM[m].push(cam); });
+    var byG={}, go=[]; (gearFree||[]).forEach(function(k){ var ty=(gearDef(k).type)||'gear'; if(!byG[ty]){ byG[ty]=[]; go.push(ty); } byG[ty].push(k); });
+    var groups='';
+    mo.forEach(function(m){ var chips=byM[m].map(function(c){ return '<div class="dv-chip">'+esc(c)+'</div>'; }).join(''); groups+=dvGrp('m:'+m, MODL[m]||m, byM[m].length+' free', chips); });
+    go.forEach(function(ty){ var lbl=((DATA.equipment_types||{})[ty]||{}).label||ty; var chips=byG[ty].map(function(k){ return '<div class="dv-chip gear">'+esc(gearLabel(k))+'</div>'; }).join(''); groups+=dvGrp('g:'+ty, lbl, byG[ty].length+' free', chips, 'gearg'); });
+    if(nc&&nc.length){ var ch=nc.map(function(c){ return '<div class="dv-chip na">'+esc(c)+'</div>'; }).join(''); groups+=dvGrp('nocard','Card missing', String(nc.length), ch, 'nag'); }
+    var inner=groups?('<div class="dv-card">'+groups+'</div>'):('<div class="dv-card"><div class="dv-empty">Nothing free this day.</div></div>');
+    return '<div class="dv-sec free'+(open?' open':'')+'">'+dvSecHead('free','Free to lend',avail.length)+'<div class="dv-secbody"><div class="dv-secbody-in">'+inner+'</div></div></div>';
   }
   function dvStrip(iso){
     var html='';
@@ -1380,11 +1403,12 @@
     var p=iso.split('-'), dd=new Date(+p[0],+p[1]-1,+p[2]);
     var hdr='<div class="dv-eyebrow">'+DOWFULL_L[LANG][dd.getDay()]+'</div><h2 class="dv-title">'+MONTHS_L[LANG][+p[1]-1]+' '+(+p[2])+'</h2>'+
       '<div class="dv-summary"><span class="dv-stat free"><b>'+avail.length+'</b> free</span><span class="dv-stat out"><b>'+out.length+'</b> out</span>'+(od.length?('<span class="dv-stat od"><b>'+od.length+'</b> overdue</span>'):'')+'</div>';
-    var secs=dvSection('od','Overdue',od,'od',null)+
-      dvSection('hand','To hand out',res,'per','Nothing to hand out.')+
-      dvSection('out','Out now',out,'per','Nothing out right now.')+
-      dvSection('ret','Returned',ret,'per',null)+
-      dvFree(avail,nc,gearFree);
+    var openSec=od.length?'od':(res.length?'hand':(out.length?'out':(ret.length?'ret':'free')));   // only the first non-empty section opens; the rest are collapsed accordions
+    var secs=dvSection('od','Overdue',od,'od',null,openSec==='od')+
+      dvSection('hand','To hand out',res,'per','Nothing to hand out.',openSec==='hand')+
+      dvSection('out','Out now',out,'per','Nothing out right now.',openSec==='out')+
+      dvSection('ret','Returned',ret,'per',null,openSec==='ret')+
+      dvFree(avail,nc,gearFree,openSec==='free');
     var cta=(iso>=todayISO() && isOpenDay(iso))?'<button type="button" class="dv-reserve" id="dv-reserve"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg> '+t('reserveBtn')+'</button>':'';
     var fc='<p class="dv-freecount">'+avail.length+' cameras free '+(iso===todayISO()?'today':'this day')+'</p>';
     document.getElementById('dm-body').innerHTML=hdr+dvStrip(iso)+secs+cta+fc;
@@ -1394,6 +1418,10 @@
   function wireTeacherDay(iso){
     var body=document.getElementById('dm-body');
     Array.prototype.forEach.call(body.querySelectorAll('[data-goday]'),function(el){ el.addEventListener('click',function(){ dmGoDay(el.getAttribute('data-goday')); }); });
+    // Section accordion: only one section open at a time (the one you tap).
+    Array.prototype.forEach.call(body.querySelectorAll('[data-sectoggle]'),function(el){ el.addEventListener('click',function(){ var sec=el.parentNode, wasOpen=sec.classList.contains('open'); Array.prototype.forEach.call(body.querySelectorAll('.dv-sec.open'),function(s){ s.classList.remove('open'); }); if(!wasOpen) sec.classList.add('open'); }); });
+    // Free sub-groups (by model / type): each toggles on its own.
+    Array.prototype.forEach.call(body.querySelectorAll('[data-grptoggle]'),function(el){ el.addEventListener('click',function(e){ e.stopPropagation(); el.parentNode.classList.toggle('open'); }); });
     Array.prototype.forEach.call(body.querySelectorAll('.dv-row'),function(el){ el.addEventListener('click',function(){ var wasOpen=el.classList.contains('open'); Array.prototype.forEach.call(body.querySelectorAll('.dv-row.open'),function(r){ r.classList.remove('open'); }); if(!wasOpen) el.classList.add('open'); }); });
     var rv=body.querySelector('#dv-reserve'); if(rv) rv.addEventListener('click',function(){ openReserveFlow(iso); });
     Array.prototype.forEach.call(body.querySelectorAll('[data-act]'),function(el){ if(el.tagName==='A') return; el.addEventListener('click',function(e){ e.stopPropagation(); camAction(el.getAttribute('data-act'), el.getAttribute('data-id'), el); }); });
