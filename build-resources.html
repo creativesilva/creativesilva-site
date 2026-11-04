@@ -924,10 +924,13 @@
     border:1px solid rgba(112,246,246,.26); background:rgba(0,184,184,.08); color:var(--pvb-muted);
     font-family:var(--pvb-font); font-size:.72rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; transition:color .15s, border-color .15s, background .15s;}
   .pbg-resetlink:hover{color:#eafeff; border-color:rgba(112,246,246,.45); background:rgba(0,184,184,.16);}
-  /* nested "more" section in the Prompt pane (keeps the picker clean) */
-  .pbg-more{margin-top:16px; border:1px solid var(--pvb-line-soft); border-radius:var(--pbg-r-sm); background:rgba(0,184,184,.04);}
-  .pbg-more>summary{list-style:none; cursor:pointer; padding:11px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px;
-    font-family:var(--pvb-font); font-weight:600; font-size:.8rem; letter-spacing:.03em; color:var(--pvb-muted);}
+  /* nested "more" section in the Prompt pane: the SAME glass accordion as the prompt groups above it,
+     so all four cards in the Prompt tab are one uniform shape with uniform gaps + aligned chevrons. */
+  .pbg-more{margin-top:10px; border:1px solid var(--g-edge-soft); border-radius:var(--g-r-md); background:var(--g-glass-quiet);
+    backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur); box-shadow:var(--g-shadow-sm), var(--g-spec); overflow:hidden;}
+  .pbg-more[open]{border-color:var(--g-edge);}
+  .pbg-more>summary{list-style:none; cursor:pointer; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+    font-family:var(--pvb-font); font-weight:600; font-size:.92rem; letter-spacing:.02em; color:var(--pvb-text);}
   .pbg-more>summary::-webkit-details-marker{display:none;}
   .pbg-more>summary::after{content:''; flex:0 0 auto; width:9px; height:9px; border-right:2px solid var(--pvb-muted); border-bottom:2px solid var(--pvb-muted); transform:rotate(45deg); transition:transform .18s;}
   .pbg-more[open]>summary::after{transform:rotate(-135deg);}
