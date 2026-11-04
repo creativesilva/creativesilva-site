@@ -641,13 +641,20 @@
   .pvb-pnav-title{font-family:var(--pvb-font); font-weight:800; letter-spacing:.14em; text-transform:uppercase; font-size:.86rem; color:var(--pvb-teal-lt); padding-left:11px; border-left:3px solid var(--pvb-teal);}
   .pvb-pnav-sub{font-size:.82rem; color:var(--pvb-faint); padding-left:11px;}
   .pvb-acc.pnav{background:rgba(0,184,184,.05);}
-  .pvb-acc.pnav .pvb-acc-body{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:8px; padding:6px 12px 12px;}
-  .pvb-pnav-item{display:flex; flex-direction:column; align-items:flex-start; gap:2px; width:100%; text-align:left; cursor:pointer;
-    background:rgba(255,255,255,.02); border:1px solid var(--pvb-line-soft); border-left:2px solid transparent; padding:9px 12px; font-family:var(--pvb-font); transition:background .12s, border-color .12s;}
+  .pvb-acc.pnav.has-sel{border-left-color:var(--pvb-teal);}
+  /* the picked prompt rides the collapsed group header; hidden once the group opens */
+  .pvb-acc.pnav .pvb-acc-head .selname{flex:1 1 auto; min-width:0; margin-left:10px; text-align:right;
+    font-size:.78rem; font-weight:600; color:var(--pvb-teal-lt); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .pvb-acc.pnav .pvb-acc-head .chev{margin-left:10px;}
+  .pvb-acc.pnav.open .pvb-acc-head .selname{display:none;}
+  .pvb-acc.pnav .pvb-acc-body{display:none; grid-template-columns:repeat(auto-fill,minmax(208px,1fr)); gap:7px; padding:6px 12px 12px;}
+  .pvb-acc.pnav.open .pvb-acc-body{display:grid;}
+  .pvb-pnav-item{display:flex; flex-direction:column; align-items:flex-start; gap:1px; width:100%; text-align:left; cursor:pointer;
+    background:rgba(255,255,255,.02); border:1px solid var(--pvb-line-soft); border-left:2px solid transparent; padding:8px 11px; font-family:var(--pvb-font); transition:background .12s, border-color .12s;}
   .pvb-pnav-item:hover{background:rgba(0,184,184,.10); border-left-color:var(--pvb-teal-deep);}
   .pvb-pnav-item.sel{background:rgba(0,184,184,.15); border-left-color:var(--pvb-teal);}
-  .pvb-pnav-item .t{font-weight:600; font-size:.92rem; color:var(--pvb-text);}
-  .pvb-pnav-item .s{font-size:.78rem; color:var(--pvb-faint);}
+  .pvb-pnav-item .t{font-weight:600; font-size:.85rem; color:var(--pvb-text); line-height:1.25;}
+  .pvb-pnav-item .s{font-size:.73rem; color:var(--pvb-faint); line-height:1.2;}
   /* Reference Library: one browse+download home for cast, props, campus, and logos */
   .pvb-reflib{margin-top:28px; border-top:1px solid var(--pvb-line);}
   .pvb-reflib-head{display:flex; flex-direction:column; gap:4px; margin:22px 0 14px;}
@@ -929,15 +936,22 @@
   .pbg-buildorder .bo-arrow{flex:0 0 auto; color:var(--pvb-teal-lt); font-size:1.15rem;}
   .pbg-card[data-ready="1"] .pbg-buildorder{animation:pbgBoGlow 2.4s ease-in-out infinite;}
   @keyframes pbgBoGlow{0%,100%{box-shadow:0 0 0 0 rgba(95,240,240,0);}50%{box-shadow:0 0 18px 2px rgba(95,240,240,.4), 0 0 30px 6px rgba(132,80,226,.22);}}
-  /* wizard bar pinned in the phone sheet: [back] [Next / Get Ingredients ->] (desktop uses the card + tabs) */
-  .pbg-wizard{display:none; gap:8px; align-items:stretch;}
-  .pbg-wiz-back{flex:0 0 auto; width:48px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer;
-    border-radius:var(--pbg-r-pill); border:1px solid rgba(112,246,246,.3); background:rgba(0,184,184,.12); color:var(--pvb-teal-lt);}
-  .pbg-wiz-back svg{width:18px; height:18px;}
+  /* wizard bar: [<- circle]  [check | current card title]  [next  -> circle] */
+  .pbg-wizard{display:none; align-items:center; gap:10px;}
+  .pbg-wiz-circle{flex:0 0 auto; width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center;
+    border-radius:50%; border:1px solid rgba(112,246,246,.32); background:rgba(0,184,184,.12); color:var(--pvb-teal-lt); transition:background .15s, border-color .15s, box-shadow .15s;}
+  .pbg-wiz-circle svg{width:18px; height:18px;}
+  .pbg-wiz-back{cursor:pointer;}
   .pbg-wiz-back:hover{background:rgba(0,184,184,.24);}
-  .pbg-wiz-back:disabled{opacity:.32; pointer-events:none;}
-  .pbg-sheet-export .se-arrow{color:var(--pvb-teal-lt); font-size:1.05rem;}
-  .pbg-sheet-export.ready{animation:pbgBoGlow 2.4s ease-in-out infinite;}
+  .pbg-wiz-back:disabled{opacity:.3; pointer-events:none;}
+  .pbg-wiz-mid{flex:1 1 auto; min-width:0; display:inline-flex; align-items:center; justify-content:center; gap:9px;
+    color:#eafeff; font-family:var(--pvb-font); font-weight:700; letter-spacing:.09em; text-transform:uppercase; font-size:.84rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .pbg-wiz-mid .pbg-wiz-check{flex:0 0 auto; width:19px; height:19px; color:var(--pvb-teal-lt);}
+  .pbg-wiz-fwd{flex:0 0 auto; display:inline-flex; align-items:center; gap:9px; background:transparent; border:0; cursor:pointer;
+    font-family:var(--pvb-font); font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:.78rem;}
+  .pbg-wiz-fwd .wf-word{color:var(--pvb-teal-lt);}
+  .pbg-wiz-fwd:hover .wf-circle{background:rgba(0,184,184,.24);}
+  .pbg-wiz-fwd.ready .wf-circle{border-color:rgba(112,246,246,.7); background:linear-gradient(135deg,var(--pvb-teal-lt),var(--pvb-teal)); color:#04110f; animation:pbgBoGlow 2.4s ease-in-out infinite;}
   /* build order view */
   /* the progress header stays docked at the top of the build order; steps scroll under it, frosted */
   .pbg-bo-dock{position:sticky; top:0; z-index:3; margin:0 -16px 12px; padding:12px 16px 10px;
@@ -1064,16 +1078,8 @@
     .pbg-body .pbg-pane{display:none;}
     .pbg-body .pbg-pane.on{display:block;}
     /* the build order opens from the footer pill only on phone; on desktop surface a Get Ingredients CTA here */
-    .pbg-wizard{display:flex; padding:0 0 12px; margin:0;}
-    .pbg-wiz-back{display:none;}
-    .pbg-sheet-export{flex:1 1 auto; display:inline-flex; align-items:center; justify-content:center; gap:9px;
-      padding:13px 16px; cursor:pointer; border-radius:var(--pbg-r-pill);
-      border:1px solid rgba(112,246,246,.42); background:linear-gradient(135deg, rgba(0,184,184,.34), rgba(132,80,226,.24)); color:#eafeff;
-      font-family:var(--pvb-font); font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.78rem;}
-    .pbg-sheet-export svg{width:17px; height:17px; flex:0 0 auto;}
-    .pbg-sheet-export .se-sub{font-weight:400; text-transform:none; letter-spacing:0; color:var(--pvb-muted); font-size:.72rem;}
-    .pbg-sheet-export .se-arrow{margin-left:auto;}
-    .pbg-sheet-export.ready{border-color:rgba(112,246,246,.7); box-shadow:0 0 0 1px rgba(112,246,246,.3), 0 10px 26px rgba(0,184,184,.28);}
+    /* same wizard bar on desktop: back circle | current card | next + forward circle */
+    .pbg-wizard{display:flex; padding:4px 6px 14px; margin:0;}
   }
   /* big screens: give the controls room, cap the tile columns so they stay tidy */
   @media (min-width:1500px){
@@ -1098,12 +1104,6 @@
       transition:opacity .4s ease, transform .4s ease;}
     .pbg-tabs{padding-left:max(10px,env(safe-area-inset-left,0)); padding-right:max(10px,env(safe-area-inset-right,0));}
     .pbg-wizard{display:flex; margin:0 max(14px,env(safe-area-inset-left,0)) 9px;}
-    .pbg-sheet-export{display:inline-flex; align-items:center; justify-content:center; gap:9px; flex:1 1 auto;
-      padding:12px 14px; cursor:pointer; border-radius:var(--pbg-r-pill);
-      border:1px solid rgba(112,246,246,.42); background:linear-gradient(135deg, rgba(0,184,184,.34), rgba(132,80,226,.24)); color:#eafeff;
-      font-family:var(--pvb-font); font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.78rem;}
-    .pbg-sheet-export svg{width:17px; height:17px; flex:0 0 auto;}
-    .pbg-sheet-export .se-sub{font-weight:400; text-transform:none; letter-spacing:0; color:var(--pvb-muted); font-size:.72rem;}
     /* a runway at the bottom of the scroll so every field clears the floating dock (~84px tall) */
     .pbg-body{padding-left:max(14px,env(safe-area-inset-left,0)); padding-right:max(14px,env(safe-area-inset-right,0)); padding-bottom:calc(104px + env(safe-area-inset-bottom,0));}
     /* desktop-only chrome off */
@@ -1277,12 +1277,16 @@
       <div class="pbg-sheet" id="pbg-sheet">
         <button type="button" class="pbg-handle" id="pbg-handle" aria-label="Drag to resize"><span></span></button>
         <div class="pbg-wizard" id="pbg-wizard">
-          <button type="button" class="pbg-wiz-back" id="pbg-wiz-back" aria-label="Previous step">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          <button type="button" class="pbg-wiz-circle pbg-wiz-back" id="pbg-wiz-back" aria-label="Previous card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
           </button>
-          <button type="button" class="pbg-sheet-export" id="pbg-sheet-export">
-            <svg id="pbg-se-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            <span id="pbg-se-main">Next</span><span class="se-sub" id="pbg-se-sub"></span><span class="se-arrow">&rarr;</span>
+          <div class="pbg-wiz-mid">
+            <svg class="pbg-wiz-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span id="pbg-wiz-label">Prompt</span>
+          </div>
+          <button type="button" class="pbg-wiz-fwd" id="pbg-sheet-export" aria-label="Next card">
+            <span class="wf-word" id="pbg-se-main">Next</span>
+            <span class="pbg-wiz-circle wf-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></span>
           </button>
         </div>
         <div class="pbg-tabs" id="pbg-tabs" role="tablist"></div>
@@ -2523,27 +2527,37 @@
         var head=el('button','pvb-acc-head'); head.type='button';
         head.appendChild(el('span','lab',esc(cat)));
         var cnt=el('span','cnt'); cnt.textContent=idxs.length; head.appendChild(cnt);
+        head.appendChild(el('span','selname'));   // the picked prompt, shown while this group is collapsed
         head.appendChild(el('span','chev'));
         var body=el('div','pvb-acc-body');
         idxs.forEach(function(i){
           var p=PROMPTS[i];
           var it=el('button','pvb-pnav-item'); it.type='button'; it.setAttribute('data-idx',i);
           it.appendChild(el('span','t',esc(p.title)));
-          it.appendChild(el('span','s',esc(p.sub||'')));
+          if(p.sub) it.appendChild(el('span','s',esc(p.sub)));
           it.addEventListener('click',function(){ selectPrompt(i); highlightPromptNav(i); });
           body.appendChild(it);
         });
-        head.addEventListener('click',function(){ wrap.classList.toggle('open'); });
+        // single-open accordion: opening one closes the others (keeps the card compact)
+        head.addEventListener('click',function(){
+          var open=wrap.classList.contains('open');
+          [].slice.call(mount.querySelectorAll('.pvb-acc.pnav')).forEach(function(g){ g.classList.remove('open'); });
+          if(!open) wrap.classList.add('open');
+        });
         wrap.appendChild(head); wrap.appendChild(body); mount.appendChild(wrap);
       });
       highlightPromptNav(activeIdx);
     }
     function highlightPromptNav(idx){
       var mount=document.getElementById('pvb-pnav-groups'); if(!mount) return;
-      [].slice.call(mount.querySelectorAll('.pvb-acc.pnav')).forEach(function(g){ g.classList.remove('open'); });
       [].slice.call(mount.querySelectorAll('.pvb-pnav-item')).forEach(function(it){
-        var on=parseInt(it.getAttribute('data-idx'),10)===idx; it.classList.toggle('sel',on);
-        if(on){ var grp=it.parentElement && it.parentElement.parentElement; if(grp && grp.classList.contains('pvb-acc')) grp.classList.add('open'); }
+        it.classList.toggle('sel', parseInt(it.getAttribute('data-idx'),10)===idx);
+      });
+      // mark the group that holds the pick + surface the picked title on its collapsed header (no auto-open)
+      [].slice.call(mount.querySelectorAll('.pvb-acc.pnav')).forEach(function(g){
+        var sel=g.querySelector('.pvb-pnav-item.sel'); g.classList.toggle('has-sel', !!sel);
+        var tag=g.querySelector('.pvb-acc-head .selname'), t=sel&&sel.querySelector('.t');
+        if(tag) tag.textContent = t ? t.textContent : '';
       });
     }
     function wireLibrarySearch(){
@@ -3010,7 +3024,8 @@
       window.pvbmSync=function(){
         if(!state) return;
         var counts={ cast:(state.chars||[]).filter(Boolean).length, items:(state.items||[]).filter(Boolean).length,
-          scene:(state.scene?1:0), options:Object.keys(state.fields||{}).filter(function(k){ return state.fields[k] && k!=='SUPPORT'; }).length, prompt:0 };
+          scene:(state.scene?1:0), options:Object.keys(state.fields||{}).filter(function(k){ return state.fields[k] && k!=='SUPPORT'; }).length,
+          prompt:(typeof activeIdx==='number'&&activeIdx>=0?1:0) };
         [].slice.call(tabsEl.querySelectorAll('.tb')).forEach(function(b){ var n=counts[b.getAttribute('data-bk')]||0; b.textContent=n; b.classList.toggle('show',n>0); });
         [].slice.call(dock.querySelectorAll('.b')).forEach(function(b){ var n=counts[b.getAttribute('data-bk')]||0; b.textContent=n; b.classList.toggle('show',n>0); });
         refreshRefs();
@@ -3055,15 +3070,13 @@
       // the pinned sheet button is a wizard: Next walks the tabs, the last tab becomes Get Ingredients
       window.pbgWizard=function(){
         if(!sheetExportBtn) return;
-        if(!isPhone()){ /* desktop/iPad: the sheet CTA is always Get Ingredients (no tab-walking) */
-          sheetExportBtn.setAttribute('data-act','export'); if(seMain)seMain.textContent='Get Ingredients';
-          var nd=refCount(); if(seSub)seSub.textContent=nd?('('+nd+' + prompt)'):''; sheetExportBtn.classList.toggle('ready',nd>0);
-          if(wizBack) wizBack.disabled=true; return; }
+        var midLabel=document.getElementById('pbg-wiz-label');
         var i=TAB_ORDER.indexOf(active), last=(i>=TAB_ORDER.length-1);
-        if(last){ sheetExportBtn.setAttribute('data-act','export'); if(seMain)seMain.textContent='Get Ingredients';
-          var n=refCount(); if(seSub)seSub.textContent=n?('('+n+' + prompt)'):''; sheetExportBtn.classList.toggle('ready',n>0); }
+        if(midLabel) midLabel.textContent = TAB_LABEL[active] || '';   // center shows the card you are on
+        if(last){ sheetExportBtn.setAttribute('data-act','export'); if(seMain)seMain.textContent='Ingredients';
+          sheetExportBtn.classList.toggle('ready', refCount()>0); }
         else { sheetExportBtn.setAttribute('data-act','next'); if(seMain)seMain.textContent='Next';
-          if(seSub)seSub.textContent=TAB_LABEL[TAB_ORDER[i+1]]||''; sheetExportBtn.classList.remove('ready'); }
+          sheetExportBtn.classList.remove('ready'); }
         if(wizBack) wizBack.disabled=(i<=0);
       };
       if(openExportBtn) openExportBtn.addEventListener('click',function(){ setMode('export'); });
