@@ -2508,14 +2508,19 @@
     }
     function isModuleEntry(m) { return /^Module\s*\d/i.test(m.name); }
     function isProjectEntry(m) { return /^Project\s*\d/i.test(m.name); }
-    function pageLabel(url, i) {
-      if (i === 0) return "Overview";
-      const m = (url || "").match(/step0*(\d+)-(.+)\.html$/i);
-      if (m) {
-        const rest = m[2].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-        return "Step " + String(m[1]).padStart(2, "0") + " &middot; " + rest;
+    // Converted PVHS modules number the Overview as Step 01 (so work steps read 02, 03, 04...).
+    // MRC (/mrc/) is still on the old scheme: Overview is not a step, and work steps keep their file number.
+    function pageLabel(url, i, legacy) {
+      const descOf = u => { const d = (u || "").match(/step0*\d+-(.+)\.html$/i); return d ? d[1].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()) : ""; };
+      if (legacy) {
+        if (i === 0) return "Overview";
+        const m = (url || "").match(/step0*(\d+)-(.+)\.html$/i);
+        if (m) return "Step " + String(m[1]).padStart(2, "0") + " &middot; " + m[2].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+        return "Step " + String(i).padStart(2, "0");
       }
-      return "Step " + String(i).padStart(2, "0");
+      if (i === 0) return "Step 01 &middot; Overview";
+      const desc = descOf(url);
+      return "Step " + String(i + 1).padStart(2, "0") + (desc ? " &middot; " + desc : "");
     }
     // One page's row: name + Copy Code / Download / View Page.
     function pageRow(label, url) {
@@ -2531,7 +2536,8 @@
     }
     function moduleAcc(m) {
       const pages = pagesFor(m.url);
-      const rows = pages.map((u, i) => pageRow(pageLabel(u, i), u)).join("");
+      const legacy = /\/mrc\//i.test(m.url);
+      const rows = pages.map((u, i) => pageRow(pageLabel(u, i, legacy), u)).join("");
       const tag = `<span class="module-status ${m.status}">${statusLabel(m.status)}</span>`;
       return `<details class="module-acc">
         <summary class="module-acc-head"><span class="module-row-name">${m.name}</span><span class="module-page-count">${m.pages}p</span>${tag}<span class="macc-chev"></span></summary>

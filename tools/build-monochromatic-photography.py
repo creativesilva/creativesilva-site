@@ -23,7 +23,7 @@ CAP_FLOAT=f"{IMGDIR}/capture-float-v1.jpg"
 EDIT_FLOAT=f"{IMGDIR}/edit-float-v1.jpg"
 HAVE_HEADER=True
 HAVE_CAP_FLOAT=True
-HAVE_EDIT_FLOAT=False
+HAVE_EDIT_FLOAT=True
 
 COURSES=[
   {"prefix":"photo1","title":"Photography 1A","nf":4,"nc":8,
@@ -392,7 +392,7 @@ def build_course(c):
             "Pick your best photos (one per concept), build a 6-up contact sheet, and export each as a renamed JPG.","#espanol","Clic para Espa&ntilde;ol")
         en+=card("CULL / ONE PER CONCEPT",cull_head_en,
             para(cull_lead_en)
-            + (float_right(EDIT_FLOAT,"A before-and-after of one campus photo: a flat color RAW on the left, a finished high-contrast black-and-white edit on the right","Before and after: a flat color RAW, then a finished black-and-white edit with a full tonal range.") if HAVE_EDIT_FLOAT else "")
+            + (float_right(EDIT_FLOAT,"A Pioneer Valley student editing her black-and-white dove photo in Adobe Lightroom Classic on an iMac in the lab","Bring your strongest frame into Lightroom and push it to a full black-and-white tonal range: deep blacks, clean whites, and rich mid-tones.") if HAVE_EDIT_FLOAT else "")
             + bullets([
                 ("Different concepts:","no two photos should show the same idea. Spread them across the concepts you hunted."),
                 ("Strong tones:","keep the ones with a full range: real blacks, clean whites, and grays between."),
@@ -432,7 +432,7 @@ def build_course(c):
             "Elige tus mejores fotos (una por concepto), arma una hoja de contactos de 6 y exporta cada una como JPG renombrada.","#top","Back to English")
         es+=card("SELECCIONA / UNA POR CONCEPTO",cull_head_es,
             para(cull_lead_es)
-            + (float_right(EDIT_FLOAT,"Un antes y despu&eacute;s de una foto de la escuela: un RAW plano a color a la izquierda, una edici&oacute;n terminada en blanco y negro con mucho contraste a la derecha","Antes y despu&eacute;s: un RAW plano a color, luego una edici&oacute;n terminada en blanco y negro con un rango tonal completo.") if HAVE_EDIT_FLOAT else "")
+            + (float_right(EDIT_FLOAT,"Una estudiante de Pioneer Valley editando su foto de una paloma en blanco y negro en Adobe Lightroom Classic en una iMac del laboratorio","Lleva tu mejor foto a Lightroom y ll&eacute;vala a un rango tonal completo en blanco y negro: negros profundos, blancos limpios y tonos medios ricos.") if HAVE_EDIT_FLOAT else "")
             + bullets([
                 ("Conceptos diferentes:","ninguna foto debe repetir la idea de otra. Rep&aacute;rtelas entre los conceptos que buscaste."),
                 ("Tonos fuertes:","guarda las que tienen un rango completo: negros reales, blancos limpios y grises en medio."),
