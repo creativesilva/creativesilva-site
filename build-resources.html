@@ -524,6 +524,7 @@
   .pvb-grid > * > :first-child{margin-top:0;}
   .pvb-editor-head{display:flex; align-items:center; gap:10px; margin:2px 0 4px; flex-wrap:wrap;}
   .pvb-titlewrap{position:relative; flex:1 1 auto; min-width:0;}
+  .pvb-titledisp{padding:2px 6px 2px 0; min-width:0;}
   .pvb-titlesel{display:flex; align-items:center; gap:10px; width:100%; background:transparent; border:0; cursor:pointer; padding:2px 6px 2px 0; color:#fff; text-align:left; font-family:var(--pvb-font);}
   .pvb-titlesel:hover{opacity:.82;}
   .pvb-titlesel-txt{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; min-width:0;}
@@ -624,6 +625,19 @@
     display:flex; align-items:center; justify-content:center; background:var(--pvb-teal); color:#04110f;
     font-weight:700; font-size:.8rem; border-radius:50%;}
   .pvb-refcard .nm{font-size:.74rem; color:#dbeeee; padding:7px 8px 8px; line-height:1.25;}
+  /* Prompt navigation: curriculum-style grouped accordion at the top of the builder */
+  .pvb-promptnav{margin:0 0 22px; padding:0 0 18px; border-bottom:1px solid var(--pvb-line);}
+  .pvb-pnav-head{display:flex; flex-direction:column; gap:4px; margin:0 0 12px;}
+  .pvb-pnav-title{font-family:var(--pvb-font); font-weight:800; letter-spacing:.14em; text-transform:uppercase; font-size:.86rem; color:var(--pvb-teal-lt); padding-left:11px; border-left:3px solid var(--pvb-teal);}
+  .pvb-pnav-sub{font-size:.82rem; color:var(--pvb-faint); padding-left:11px;}
+  .pvb-acc.pnav{background:rgba(0,184,184,.05);}
+  .pvb-acc.pnav .pvb-acc-body{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:8px; padding:6px 12px 12px;}
+  .pvb-pnav-item{display:flex; flex-direction:column; align-items:flex-start; gap:2px; width:100%; text-align:left; cursor:pointer;
+    background:rgba(255,255,255,.02); border:1px solid var(--pvb-line-soft); border-left:2px solid transparent; padding:9px 12px; font-family:var(--pvb-font); transition:background .12s, border-color .12s;}
+  .pvb-pnav-item:hover{background:rgba(0,184,184,.10); border-left-color:var(--pvb-teal-deep);}
+  .pvb-pnav-item.sel{background:rgba(0,184,184,.15); border-left-color:var(--pvb-teal);}
+  .pvb-pnav-item .t{font-weight:600; font-size:.92rem; color:var(--pvb-text);}
+  .pvb-pnav-item .s{font-size:.78rem; color:var(--pvb-faint);}
   /* Reference Library: one browse+download home for cast, props, campus, and logos */
   .pvb-reflib{margin-top:28px; border-top:1px solid var(--pvb-line);}
   .pvb-reflib-head{display:flex; flex-direction:column; gap:4px; margin:22px 0 14px;}
@@ -794,6 +808,13 @@
     </div>
 
     <section id="pvb-panel-build" class="pvb-tabpanel br-main">
+    <section class="pvb-promptnav" id="pvb-promptnav">
+      <div class="pvb-pnav-head">
+        <span class="pvb-pnav-title">Choose a prompt</span>
+        <span class="pvb-pnav-sub">Pick what you're making. The builder below loads with that prompt ready to fill.</span>
+      </div>
+      <div id="pvb-pnav-groups"></div>
+    </section>
     <p class="pvb-intro">Pick a prompt, fill what you need, and choose your reference images. The prompt on the right stays live the whole time. Attach your reference images in ChatGPT first, then click <b>Copy prompt</b> last and paste it in. (Copying an image replaces whatever is on your clipboard, so copy the prompt as your final step.)</p>
 
     <div class="pvb-quickrow">
@@ -808,11 +829,7 @@
         <div class="pvb-card">
           <div class="pvb-editor-head">
             <div class="pvb-titlewrap">
-              <button type="button" class="pvb-titlesel" id="pvb-titlesel" aria-haspopup="listbox" aria-expanded="false" title="Switch prompt">
-                <span class="pvb-titlesel-txt"><span id="pvb-title">Loading</span><span class="sub" id="pvb-sub"></span></span>
-                <span class="pvb-select-chev"></span>
-              </button>
-              <div class="pvb-select-menu" id="pvb-promptmenu" role="listbox" hidden></div>
+              <div class="pvb-titledisp"><span class="pvb-titlesel-txt"><span id="pvb-title">Loading</span><span class="sub" id="pvb-sub"></span></span></div>
             </div>
             <div class="pvb-headacts">
               <button type="button" class="pvb-smallbtn" id="pvb-copytop" title="Copy the prompt to your clipboard">Copy prompt</button>
@@ -2025,6 +2042,46 @@
       mount.appendChild(libAccordion('Props & items', ITEMS, false));
       mount.appendChild(libAccordion('Campus & locations', SCENES, false));
     }
+    // ---- Prompt navigation (curriculum-style grouped accordion at the top) ----
+    function promptCat(p){
+      if(p.ptype==='environment') return 'Scenes & environments';
+      if(p.ptype==='outfit'||p.ptype==='pose') return 'Characters';
+      return 'Rebuild & reset';
+    }
+    function buildPromptNav(){
+      var mount=document.getElementById('pvb-pnav-groups'); if(!mount) return;
+      mount.innerHTML='';
+      var ORDER=['Scenes & environments','Characters','Rebuild & reset'], byCat={};
+      PROMPTS.forEach(function(p,i){ var c=promptCat(p); (byCat[c]=byCat[c]||[]).push(i); });
+      ORDER.forEach(function(cat){
+        var idxs=byCat[cat]; if(!idxs||!idxs.length) return;
+        var wrap=el('div','pvb-acc pnav');
+        var head=el('button','pvb-acc-head'); head.type='button';
+        head.appendChild(el('span','lab',esc(cat)));
+        var cnt=el('span','cnt'); cnt.textContent=idxs.length; head.appendChild(cnt);
+        head.appendChild(el('span','chev'));
+        var body=el('div','pvb-acc-body');
+        idxs.forEach(function(i){
+          var p=PROMPTS[i];
+          var it=el('button','pvb-pnav-item'); it.type='button'; it.setAttribute('data-idx',i);
+          it.appendChild(el('span','t',esc(p.title)));
+          it.appendChild(el('span','s',esc(p.sub||'')));
+          it.addEventListener('click',function(){ selectPrompt(i); highlightPromptNav(i); });
+          body.appendChild(it);
+        });
+        head.addEventListener('click',function(){ wrap.classList.toggle('open'); });
+        wrap.appendChild(head); wrap.appendChild(body); mount.appendChild(wrap);
+      });
+      highlightPromptNav(activeIdx);
+    }
+    function highlightPromptNav(idx){
+      var mount=document.getElementById('pvb-pnav-groups'); if(!mount) return;
+      [].slice.call(mount.querySelectorAll('.pvb-acc.pnav')).forEach(function(g){ g.classList.remove('open'); });
+      [].slice.call(mount.querySelectorAll('.pvb-pnav-item')).forEach(function(it){
+        var on=parseInt(it.getAttribute('data-idx'),10)===idx; it.classList.toggle('sel',on);
+        if(on){ var grp=it.parentElement && it.parentElement.parentElement; if(grp && grp.classList.contains('pvb-acc')) grp.classList.add('open'); }
+      });
+    }
     function wireLibrarySearch(){
       var box=document.getElementById('pvb-lib-search'); if(!box) return;
       var lib=document.getElementById('pvb-reflib'); if(!lib) return;
@@ -2302,6 +2359,7 @@
     function selectPrompt(idx, overrideState){
       activeIdx=idx; cfg=PROMPTS[idx]; x2imgs=[]; staged=[];
       Array.prototype.forEach.call(document.querySelectorAll('#pvb-promptmenu .pvb-select-opt'),function(o,i){ o.classList.toggle('active',i===idx); o.setAttribute('aria-selected',i===idx?'true':'false'); });
+      if(typeof highlightPromptNav==='function') highlightPromptNav(idx);
       OUTFIT=!!(cfg.views&&cfg.views.length); TWOPASS=/two-pass/i.test(cfg.file||''); BACKDROP=TWOPASS||OUTFIT;
       KEY=OUTFIT?'outfit-change':(cfg.ptype==='pose'?'studio-pose':cfg.file);
       titleEl.textContent=cfg.title; subEl.textContent=cfg.sub?('('+cfg.sub+')'):'';
@@ -2325,18 +2383,7 @@
     resetB.addEventListener('click',doReset);
     var resetTopB=document.getElementById('pvb-resettop'); if(resetTopB) resetTopB.addEventListener('click',doReset);
 
-    // ---- build the prompt selector menu (opens from the editor title) ----
-    (function(){
-      var titleSel=document.getElementById('pvb-titlesel'), menu=document.getElementById('pvb-promptmenu');
-      function closeMenu(){ menu.hidden=true; titleSel.setAttribute('aria-expanded','false'); }
-      PROMPTS.forEach(function(p,i){ if(p.quick) return; var o=el('div','pvb-select-opt'); o.setAttribute('role','option');
-        o.appendChild(el('span','t',esc(p.title))); if(p.sub)o.appendChild(el('span','s',esc(p.sub)));
-        o.addEventListener('click',function(e){ e.stopPropagation(); selectPrompt(i); closeMenu(); });
-        menu.appendChild(o); });
-      titleSel.addEventListener('click',function(e){ e.stopPropagation(); var willOpen=menu.hidden; menu.hidden=!willOpen; titleSel.setAttribute('aria-expanded', willOpen?'true':'false'); });
-      document.addEventListener('click', closeMenu);
-      document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeMenu(); });
-    })();
+    // Prompt switching lives in the "Choose a prompt" accordion nav at the top; the editor title is a plain label.
 
     // ---- prompt mode toggle (PV Project vs Full template) ----
     var modeBtns=[].slice.call(document.querySelectorAll('.pvb-modebtn')), modeHint=document.getElementById('pvb-modehint');
@@ -2388,6 +2435,7 @@
     renderSetups();
     var start=0; try{ var l=parseInt(localStorage.getItem(NS+'last'),10); if(!isNaN(l)&&l>=0&&l<PROMPTS.length&&!PROMPTS[l].quick)start=l; }catch(e){}
     selectPrompt(start);
+    buildPromptNav();
   })();
   </script>
 </body>
