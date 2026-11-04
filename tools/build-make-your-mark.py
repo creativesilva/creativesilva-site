@@ -61,11 +61,13 @@ MYM_STANDARDS=[
 ]
 
 # ---------- visual components (Canvas-safe: inline styles + images, flex not grid) ----------
-def photo(src, alt, maxw="540px"):
-    # one of Chris's real sticker photos, centered and framed
-    return (f'<div style="margin:10px 0 2px;text-align:center;">'
-            f'<img src="{src}" alt="{alt}" style="width:100%;max-width:{maxw};height:auto;display:block;margin:0 auto;'
-            f'border:1px solid rgba(255,255,255,0.12);box-sizing:border-box;" /></div>')
+def float_purple(src, alt, cap=""):
+    # purple-framed FLOAT content photo, for the purple Watch & look card (keeps the accent cohesive;
+    # float_right is teal and belongs in teal cards). Same FLOAT markers so the card hoists it right.
+    capdiv=(f'<div style="font-size:10.5pt;color:#c4b5fd;text-align:center;margin-top:6px;opacity:0.9;line-height:1.4;">{cap}</div>' if cap else '')
+    return ('<!--FLOAT-->'
+      f'<div style="background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;"><img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>'
+      + capdiv + '<!--/FLOAT-->')
 
 def style_ideas(es):
     cards=""
@@ -155,12 +157,12 @@ def overview():
     en=banner("Module 09 &bull; Step 01","Make Your Mark: Start Here",
         "Read this page, then go to Step 02 to make your sticker.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_DESIGN)
     en+=card("Learn &middot; the idea","Turn a Word Into a Sticker",
-        para("This is an <strong>Adobe Illustrator</strong> project. You will <strong>draw your own letters</strong> and turn a word into a <strong>sticker</strong>.")
-        + para("Pick a word you like: your name, a nickname, or any short word. Give every letter the same style, so your word looks like one set.")
-        + (photo(HERO_SCRIPT,"A brush-script vinyl sticker with a white border, held over grass") if HAVE_ART else ""))
+        (float_right(HERO_SCRIPT,"A brush-script vinyl sticker with a white border, held over grass","Your word can become a sticker like this.") if HAVE_ART else "")
+        + para("This is an <strong>Adobe Illustrator</strong> project. You will <strong>draw your own letters</strong> and turn a word into a <strong>sticker</strong>.")
+        + para("Pick a word you like: your name, a nickname, or any short word. Give every letter the same style, so your word looks like one set."))
     en+=resources_card("Watch &amp; look",
-        para("Here are real stickers. Look how every letter is drawn in <strong>one style</strong>, with a black outline. The <strong>white border</strong> around the word makes the sticker pop on any color.")
-        + (photo(EX_LOVE,"A LOVE sticker: each letter drawn in one style with a pattern, a black outline, and a white border") if HAVE_ART else "")
+        (float_purple(EX_LOVE,"A LOVE sticker: each letter drawn in one style with a pattern, a black outline, and a white border","One style on every letter, with a white sticker border.") if HAVE_ART else "")
+        + para("Here are real stickers. Look how every letter is drawn in <strong>one style</strong>, with a black outline. The <strong>white border</strong> around the word makes the sticker pop on any color.")
         + para("<strong>Watch:</strong> Mr. Silva will show you a quick demo before you start."),es=False)
     en+=card("Learn &middot; 3 things that make it work","Check These Three",
         vocab3(False)
@@ -181,12 +183,12 @@ def overview():
     es=banner("M&oacute;dulo 09 &bull; Paso 01","Make Your Mark: Empieza Aqu&iacute;",
         "Lee esta p&aacute;gina y luego ve al Paso 02 para hacer tu sticker.","#top","Back to English",hicon=HICON_DESIGN)
     es+=card("Aprende &middot; la idea","Convierte una Palabra en un Sticker",
-        para("Este es un proyecto de <strong>Adobe Illustrator</strong>. Vas a <strong>dibujar tus propias letras</strong> y convertir una palabra en un <strong>sticker</strong>.")
-        + para("Elige una palabra que te guste: tu nombre, un apodo o cualquier palabra corta. Dale a cada letra el mismo estilo, para que tu palabra se vea como un solo conjunto.")
-        + (photo(HERO_SCRIPT,"Un sticker de letra de pincel con borde blanco, sobre el pasto") if HAVE_ART else ""))
+        (float_right(HERO_SCRIPT,"Un sticker de letra de pincel con borde blanco, sobre el pasto","Tu palabra puede volverse un sticker as&iacute;.") if HAVE_ART else "")
+        + para("Este es un proyecto de <strong>Adobe Illustrator</strong>. Vas a <strong>dibujar tus propias letras</strong> y convertir una palabra en un <strong>sticker</strong>.")
+        + para("Elige una palabra que te guste: tu nombre, un apodo o cualquier palabra corta. Dale a cada letra el mismo estilo, para que tu palabra se vea como un solo conjunto."))
     es+=resources_card("Mira y observa",
-        para("Aqu&iacute; hay stickers reales. Mira c&oacute;mo cada letra est&aacute; dibujada en <strong>un estilo</strong>, con un borde negro. El <strong>borde blanco</strong> alrededor de la palabra hace que el sticker resalte en cualquier color.")
-        + (photo(EX_LOVE,"Un sticker de LOVE: cada letra dibujada en un estilo con un patr&oacute;n, un borde negro y un borde blanco") if HAVE_ART else "")
+        (float_purple(EX_LOVE,"Un sticker de LOVE: cada letra dibujada en un estilo con un patr&oacute;n, un borde negro y un borde blanco","Un estilo en cada letra, con un borde blanco de sticker.") if HAVE_ART else "")
+        + para("Aqu&iacute; hay stickers reales. Mira c&oacute;mo cada letra est&aacute; dibujada en <strong>un estilo</strong>, con un borde negro. El <strong>borde blanco</strong> alrededor de la palabra hace que el sticker resalte en cualquier color.")
         + para("<strong>Mira:</strong> el Sr. Silva te ense&ntilde;ar&aacute; una demostraci&oacute;n corta antes de empezar."),es=True)
     es+=card("Aprende &middot; 3 cosas que lo hacen funcionar","Revisa Estas Tres",
         vocab3(True)
