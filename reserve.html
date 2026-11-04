@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=47" />
+<link rel="stylesheet" href="/css/store.css?v=50" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -37,6 +37,8 @@
       <div class="navmenu-wrap">
         <button type="button" class="nav-burger" id="navBtn" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span></span><span></span><span></span></button>
         <nav class="navmenu" id="navMenu" hidden>
+          <a class="navmenu-link" id="navBackEM" href="/camera-manager.html" hidden>&#8592;&nbsp;Equipment Manager</a>
+          <div class="navmenu-sep" id="navBackSep" hidden></div>
           <div class="navmenu-lab">Browse</div>
           <button type="button" data-nav="popular">Popular Rentals</button>
           <button type="button" data-nav="cat:cameras">Camera Kits</button>
@@ -319,6 +321,12 @@
 (function(){
   var API='https://command.creativesilva.com';
   var TEACHER=(new URLSearchParams(location.search).get('teacher')||'silva').toLowerCase();
+  // A teacher opening the store from the Equipment Manager console carries ?from=console; remember it for
+  // this tab session so the Back-to-Equipment-Manager menu link survives in-store navigation. Students reach
+  // the store without this param (direct /reserve link or the calendar redirect) and never see the link.
+  var FROM_CONSOLE=false;
+  try{ if((new URLSearchParams(location.search).get('from')||'')==='console') sessionStorage.setItem('pv_from_console','1'); FROM_CONSOLE=(sessionStorage.getItem('pv_from_console')==='1'); }
+  catch(e){ FROM_CONSOLE=((new URLSearchParams(location.search).get('from')||'')==='console'); }
   var TEACHER_NAME={silva:'Mr. Silva',garcia:'Ms. Garcia-Solorio',mankin:'Ms. Mankin'};
   function roomFor(pool){ return (pool==='mankin')?'Room 331':'Room 322'; }   // Silva + Garcia = 322, Mankin = 331
   function pad(n){ n=String(n); return n.length<2?('0'+n):n; }
@@ -368,6 +376,7 @@
   var checkout=new Date(); checkout.setHours(0,0,0,0);
   if(!isSchoolDay(checkout)) checkout=nextSchoolDay(checkout);   // default checkout = today if a school day, else the next
   var pickup=null, returnTime=null, returnDay=null;
+  var MULTI=null, MULTI_REASON='', multiOpen=false;   // student multi-day request: chosen return Date + why + the opt-in panel state. One-day stays the default; a multi-day booking is always a teacher-approved request.
   function datesReady(){ return !!(pickup && returnTime); }   // checkout day is always set; times are the gate
   function boxDay(d, timeObj, prompt){
     var sub = timeObj ? ('<span class="dv-sub">'+esc(timeObj.label)+' &middot; '+f12(timeObj.s)+'</span>')
@@ -375,7 +384,7 @@
     return '<span class="dv-top">'+DOW[d.getDay()]+'</span><span class="dv-big">'+MON[d.getMonth()]+' '+d.getDate()+'</span>'+sub;
   }
   function renderDates(){
-    returnDay=nextSchoolDay(checkout);
+    returnDay=MULTI||nextSchoolDay(checkout);   // a chosen multi-day return overrides the normal next-school-day; the whole store (availability, bag, submit) keys off returnDay, so it stays span-aware
     var days=Math.round((returnDay-checkout)/86400000);
     document.getElementById('dcCheckoutVal').innerHTML=boxDay(checkout, pickup, 'Tap to set times');
     document.getElementById('dcReturnVal').innerHTML=boxDay(returnDay, returnTime, 'Set at checkout');
@@ -388,7 +397,9 @@
   var calView=new Date(checkout.getFullYear(), checkout.getMonth(), 1), planStep=1;
   var pendingAdd=null;   // an item waiting on the checkout-date flow; added to the bag once dates are set
   var planMode='add';    // 'add' = normal (date flow -> add pendingAdd to bag); 'calendar' = calendar view (date flow -> equipment picker)
-  function openPlan(atStep){ planMode='add'; planStep=atStep||1; renderPlan(); open('planOv'); }   // atStep 2 skips the day picker (day already chosen)
+  function openPlan(atStep){ planMode='add'; MULTI=null; MULTI_REASON=''; multiOpen=false; planStep=atStep||1; renderPlan(); open('planOv'); }   // atStep 2 skips the day picker (day already chosen). Redoing dates always resets to a one-day rental.
+  // The multi-day return choices: the 2nd..5th school day after checkout (one-day is the normal, non-multi default).
+  function multiDayOptions(){ var out=[], d=new Date(checkout); for(var n=1;n<=5;n++){ d=nextSchoolDay(d); if(n>=2) out.push({d:new Date(d), iso:isoOf(d), n:n}); } return out; }
   function renderPlan(){
     document.getElementById('planProg').innerHTML=[1,2,3].map(function(n){ return '<span class="pd'+(n===planStep?' on':(n<planStep?' done':''))+'">'+n+'</span>'; }).join('');
     document.getElementById('planBack').style.display=(planStep>1)?'':'none';
@@ -967,15 +978,17 @@
   // Bag button text: everything needs a teacher OK -> "Send request"; some do -> "Reserve + request"; none -> normal.
   function reserveLabel(){
     if(!BAG.length) return 'Reserve this gear';
+    if(MULTI) return 'Send request';   // a multi-day booking always goes to Mr. Silva as a request
     var every=BAG.every(itemNeedsApproval), some=BAG.some(itemNeedsApproval);
     return every?'Send request':(some?'Reserve + request':'Reserve this gear');
   }
   // ----- modify an existing reservation (edit dates / add / remove) -----
   var modifyMode=false, editingResvId=null;
-  function exitModify(){ modifyMode=false; editingResvId=null; }
+  function exitModify(){ modifyMode=false; editingResvId=null; MULTI=null; MULTI_REASON=''; multiOpen=false; }
   // Load a reservation back into the bag as an edit session; Save writes it back via /api/camera/modify.
   function modifyReservation(resv){
     if(!resv) return;
+    MULTI=null; MULTI_REASON=''; multiOpen=false;   // editing an existing reservation is its own flow (uses /api/camera/modify), never the multi-day request path
     BAG=[]; PICK={};
     (resv.items||[]).forEach(function(it){
       var unit=it.unit, model=null;
@@ -1041,7 +1054,23 @@
           ? '<button type="button" class="btn bag-reserve" id="bagReserve">'+reserveLabel()+'</button>'
           : '<button type="button" class="btn" id="bagSetDates">Set checkout dates</button>');
     var action = '<div class="bag-actions"><button type="button" class="btn ghost bag-addmore" id="bagAddMore">Add equipment</button>'+primary+'</div>';
-    w.innerHTML=note+dates+items+action;
+    // Special request: a lowkey accordion (mostly hidden). Opening it reveals a note + a new return-day option.
+    var multi='';
+    if(!modifyMode && datesReady()){
+      if(MULTI){
+        multi='<div class="bag-special done"><div class="bsp-chosen"><span class="bsp-ctext">Special request &middot; return <b>'+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+'</b> &middot; needs Mr. Silva&#8217;s OK'+(MULTI_REASON?('<br>&ldquo;'+esc(MULTI_REASON)+'&rdquo;'):'')+'</span><button type="button" class="bsp-clear" id="bagMultiClear">Remove</button></div></div>';
+      } else {
+        var mbody='';
+        if(multiOpen){
+          var mchips=multiDayOptions().map(function(o){ return '<button type="button" class="bag-mchip" data-mday="'+o.iso+'"><b>'+DOW[o.d.getDay()]+' '+MON[o.d.getMonth()]+' '+o.d.getDate()+'</b><span>'+o.n+' days</span></button>'; }).join('');
+          mbody='<div class="bsp-body"><div class="bsp-hint">Need something different, like keeping it longer for a project? Add a note and pick a new return day. Mr. Silva reviews it.</div>'+
+            '<textarea class="bag-mreason" id="bagMultiReason" rows="2" placeholder="What do you need, and why? (a few words)">'+esc(MULTI_REASON)+'</textarea>'+
+            '<div class="bsp-dayslab">New return day</div><div class="bag-mdays">'+mchips+'</div></div>';
+        }
+        multi='<div class="bag-special'+(multiOpen?' open':'')+'"><button type="button" class="bsp-toggle" id="bagMultiOpen">Special request <span class="bsp-chev">&rsaquo;</span></button>'+mbody+'</div>';
+      }
+    }
+    w.innerHTML=note+dates+multi+items+action;
     w.querySelectorAll('[data-bx]').forEach(function(b){ b.onclick=function(){ removeFromBag(decodeURIComponent(b.getAttribute('data-bx'))); }; });
     w.querySelectorAll('[data-edit]').forEach(function(b){ b.onclick=function(){ openDetail(decodeURIComponent(b.getAttribute('data-edit')), true); }; });   // detail opens ON TOP of the bag
     var ed=document.getElementById('bagEditDates'); if(ed) ed.onclick=function(){ pendingAdd=null; openPlan(); };
@@ -1049,6 +1078,17 @@
     var am=document.getElementById('bagAddMore'); if(am) am.onclick=function(){ openPicker(); };   // continue shopping: the picker opens on top; Done returns here
     var rv=document.getElementById('bagReserve'); if(rv) rv.onclick=submitReservation;
     var sv=document.getElementById('bagSave'); if(sv) sv.onclick=saveModify;
+    var mOpen=document.getElementById('bagMultiOpen'); if(mOpen) mOpen.onclick=function(){ multiOpen=!multiOpen; renderBag(); };   // accordion toggle
+    var mClear=document.getElementById('bagMultiClear'); if(mClear) mClear.onclick=function(){ MULTI=null; MULTI_REASON=''; multiOpen=false; renderDates(); rerender(); renderBag(); };
+    var mReason=document.getElementById('bagMultiReason'); if(mReason) mReason.addEventListener('input',function(){ MULTI_REASON=mReason.value; });
+    w.querySelectorAll('[data-mday]').forEach(function(b){ b.onclick=function(){
+      var mr=document.getElementById('bagMultiReason'); if(mr) MULTI_REASON=mr.value;
+      if(!MULTI_REASON.trim()){ setBagMsg('Add a short note first so Mr. Silva knows what you need.', true); if(mr) mr.focus(); return; }
+      var p=b.getAttribute('data-mday').split('-'); MULTI=new Date(+p[0],+p[1]-1,+p[2]); MULTI.setHours(0,0,0,0);
+      multiOpen=false; renderDates(); rerender(); renderBag();
+      var gone=BAG.filter(function(nm){ var it=findItem(nm); var fu=freeUnitsFor(it); return !(fu&&fu.length); });
+      if(gone.length) setBagMsg('Heads up: <b>'+gone.map(esc).join(', ')+'</b> is not free for the whole time. Pick a shorter return or swap it out.', true);
+    }; });
     setBagMsg('');
   }
   // Reserve: assign a free unit to each bag item for the chosen span, then POST to the teacher board.
@@ -1056,6 +1096,7 @@
   // is on a missing-work hold and chose to request) posts with request:true -> a PENDING reservation.
   function submitReservation(){
     if(!BAG.length || !datesReady()) return;
+    if(MULTI && !MULTI_REASON.trim()){ multiOpen=true; renderBag(); setBagMsg('Add a short note so Mr. Silva knows what you need.', true); return; }
     if(onHold() && !reqMode()){ openHold(); return; }
     var co=isoOf(checkout), ret=isoOf(returnDay);
     var used={}, resolved=[], failed=[];
@@ -1069,15 +1110,16 @@
     if(failed.length){ setBagMsg('No longer free for your dates: <b>'+failed.map(esc).join(', ')+'</b>. Remove it or change your dates.', true); return; }
     // Normal (approved) items group like a kit; request items each post on their own, flagged.
     var posts=[];
-    function kitPosts(list, req){
+    function kitPosts(list, req, reason, note){
       var cams=list.filter(function(r){return r.isCam;}), gear=list.filter(function(r){return !r.isCam;}), base={student_id:USER.id, out:co, due:ret};
-      if(req){ base.request=true; base.request_reason='missing'; }
+      if(req){ base.request=true; base.request_reason=reason||'missing'; if(note) base.request_note=note; }
       if(cams.length){
         posts.push(Object.assign({}, base, {camera:cams[0].unit, extras:gear.map(function(g){return g.unit;})}));
         cams.slice(1).forEach(function(c){ posts.push(Object.assign({}, base, {camera:c.unit})); });
       } else { gear.forEach(function(g){ posts.push(Object.assign({}, base, {kind:'equipment', item:g.unit})); }); }
     }
-    if(reqMode()){ kitPosts(resolved, true); }
+    if(MULTI){ kitPosts(resolved, true, 'multiday', MULTI_REASON.trim()); }   // multi-day: the whole reservation is one pending request Mr. Silva approves
+    else if(reqMode()){ kitPosts(resolved, true, 'missing'); }
     else {
       kitPosts(resolved.filter(function(r){return !r.req;}), false);
       resolved.filter(function(r){return r.req;}).forEach(function(r){
@@ -1099,7 +1141,7 @@
       var summary={ reserved:resolved.filter(function(r){return !r.req;}).map(disp),
                     requested:resolved.filter(function(r){return r.req;}).map(disp),
                     checkout:new Date(checkout), returnDay:new Date(returnDay), pickup:pickup, returnTime:returnTime };
-      BAG=[]; saveBag(); REQ={}; saveReq(); if(USER){ USER.holdRequest=false; saveUser(); }
+      BAG=[]; saveBag(); REQ={}; saveReq(); MULTI=null; MULTI_REASON=''; multiOpen=false; if(USER){ USER.holdRequest=false; saveUser(); }
       updateBag(); refreshAccount(); close('bagOv'); showReceipt(summary); loadCal(); rerender();
     }).catch(function(){ setBagMsg('Could not reach the server. Try again.', true); if(rv){ rv.disabled=false; rv.textContent=lbl; } });
   }
@@ -1254,6 +1296,7 @@
   (function(){
     var btn=document.getElementById('navBtn'), menu=document.getElementById('navMenu'), wrap=btn&&btn.closest('.navmenu-wrap');
     if(!btn||!menu) return;
+    if(FROM_CONSOLE){ var _bk=document.getElementById('navBackEM'), _bs=document.getElementById('navBackSep'); if(_bk) _bk.hidden=false; if(_bs) _bs.hidden=false; }   // show "Back to Equipment Manager" only when opened from the console
     function openMenu(){ menu.hidden=false; btn.setAttribute('aria-expanded','true'); btn.classList.add('on'); }
     function closeMenu(){ menu.hidden=true; btn.setAttribute('aria-expanded','false'); btn.classList.remove('on'); }
     btn.addEventListener('click', function(e){ e.stopPropagation(); if(menu.hidden) openMenu(); else closeMenu(); });

@@ -600,6 +600,10 @@
      never covered. Stays below silva-confirm (400) and toast (420), which should sit on top of a modal. */
   .modal{position:fixed;inset:0;background:rgba(2,12,12,.66);backdrop-filter:blur(8px) saturate(1.1);-webkit-backdrop-filter:blur(8px) saturate(1.1);display:none;align-items:center;justify-content:center;padding:20px;z-index:130;}
   .modal.open{display:flex;}
+  /* While any card/modal is open (blurred backdrop), lock the page behind it so it cannot scroll or be
+     swiped through (iOS-safe: position:fixed, scroll restored on close). Chris 2026-11-03. */
+  html.modal-lock{overflow:hidden;}
+  html.modal-lock body{position:fixed;left:0;right:0;width:100%;overflow:hidden;overscroll-behavior:none;}
   /* The return checklist can open on top of the reservation card (footer Check in), so it must out-rank it. */
   #retmodal{z-index:141;}
   /* Pop-outs NEVER clip: cap the panel to the viewport and make it a flex column so the header
@@ -1365,7 +1369,7 @@
   // Point the Student Calendar button, the embedded preview, and the QR at the SELECTED teacher's
   // scoped link, so each teacher hands their class a link that shows only their own equipment.
   function studentCalURL(abs){ return (abs?'https://www.creativesilva.com':'')+'/calendar.html?teacher='+SELECTED_POOL; }     // embedded MONTH calendar (teacher console calframe)
-  function studentStoreURL(abs){ return (abs?'https://www.creativesilva.com':'')+'/reserve.html?teacher='+SELECTED_POOL; }    // the student reservation STORE (launched 2026-10-26)
+  function studentStoreURL(abs){ return (abs?'https://www.creativesilva.com':'')+'/reserve.html?teacher='+SELECTED_POOL+'&from=console'; }    // the student reservation STORE (launched 2026-10-26); from=console shows the Back-to-Equipment-Manager link (students never get it)
   function syncStudentCalLink(){
     var a=document.getElementById('studentCalBtn'); if(a) a.href=studentStoreURL(false);                                     // the Tools link + QR open the STORE now
     var sb=document.getElementById('storeBtn'); if(sb) sb.href=studentStoreURL(true);                                        // prominent header button -> the student store (new tab)
@@ -3664,6 +3668,11 @@
     resMode='camera'; resGearId='';
     resmsg.className='mmsg'; rwho.className='who-line'; rwho.textContent=''; rsid.value=''; lastLookup='';
     var free=freeCams();
+    // The Available tab offers "Assign" on a camera that is free TODAY even when it is reserved for a
+    // FUTURE day, so that camera is NOT in freeCams (which excludes ANY non-returned reservation). Honor
+    // the explicit pick: add it so the dropdown pre-selects the camera the teacher actually clicked, not a
+    // different one (the bug where Assign looked like it took but did nothing). Backend + guard still block a real overlap.
+    if(preCam && free.indexOf(preCam)<0 && viewCams().indexOf(preCam)>=0) free=[preCam].concat(free);
     var items=free.map(function(c){ return {value:c, label:c+(P2.indexOf(c)>=0?' (Photo 2 only)':'')}; });
     var initial=(preCam && free.indexOf(preCam)>=0)?preCam:(free[0]||'');
     var lbl=document.querySelector('label[for="rcam"]'); if(lbl) lbl.textContent='Camera';
@@ -3745,6 +3754,20 @@
       .then(function(){ rgo.disabled=false; rgo.textContent=doneLabel; });
   };
   document.getElementById('reserveBtn').onclick=function(){ openReserve(''); };
+  // Lock the page behind any open card/modal (blurred backdrop) so it can't scroll or be swiped through
+  // (iPad). Static modals toggle `.open`; the confirm dialog + Requests modal are appended to <body>, so we
+  // also watch body's children. Restored on close. Chris 2026-11-03.
+  (function(){
+    var _mlY=0;
+    function syncModalLock(){
+      var any=document.querySelector('.modal.open')||document.querySelector('.silva-confirm-ov');
+      var locked=document.documentElement.classList.contains('modal-lock');
+      if(any && !locked){ _mlY=window.pageYOffset||document.documentElement.scrollTop||0; document.body.style.top=(-_mlY)+'px'; document.documentElement.classList.add('modal-lock'); }
+      else if(!any && locked){ document.documentElement.classList.remove('modal-lock'); document.body.style.top=''; window.scrollTo(0,_mlY); }
+    }
+    [].forEach.call(document.querySelectorAll('.modal'), function(m){ new MutationObserver(syncModalLock).observe(m, {attributes:true, attributeFilter:['class']}); });
+    new MutationObserver(syncModalLock).observe(document.body, {childList:true});
+  })();
   (function(){ var rp=document.getElementById('reportsBtn'); if(rp) rp.onclick=openMissingItemsReport; })();
   // ---- Missing Items report: every missing kit piece across cameras + gear units, grouped for ordering.
   // Opens a clean printable page in a NEW TAB (use the browser's Print to save as PDF).
