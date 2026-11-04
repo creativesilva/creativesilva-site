@@ -113,7 +113,7 @@ const PVHS_ES = (course) => `${course} · Pioneer Valley High School · Sr. Silv
 
 const DOCS = [
   // Design a Sticker (Digital Arts 1A; doc slug stays Make-Your-Mark): short fill-in frames, 5th-grade reading
-  { ...EN, outfile: 'Make-Your-Mark-Reflection-EN.docx', title: 'Design a Sticker: Reflection', subtitle: PVHS_EN('Digital Arts 1A'),
+  { ...EN, outfile: 'Design-A-Sticker-Reflection-EN.docx', title: 'Design a Sticker: Reflection', subtitle: PVHS_EN('Digital Arts 1A'),
     instructions: 'Answer in a few words or a short sentence. There are no wrong answers.', questions: [
     'What word did you make? Why did you pick it?',
     'What style did you draw? (bubble, script, block, outline, or patterns)',
@@ -121,7 +121,7 @@ const DOCS = [
     'Does your sticker have a white border so it works on a light AND a dark background?',
     'Which letter is your favorite, and why?',
   ]},
-  { ...ES, outfile: 'Make-Your-Mark-Reflection-ES.docx', title: 'Diseña un Sticker: Reflexión', subtitle: PVHS_ES('Arte Digital 1A'),
+  { ...ES, outfile: 'Design-A-Sticker-Reflection-ES.docx', title: 'Diseña un Sticker: Reflexión', subtitle: PVHS_ES('Arte Digital 1A'),
     instructions: 'Responde con pocas palabras o una oración corta. No hay respuestas incorrectas.', questions: [
     '¿Qué palabra hiciste? ¿Por qué la elegiste?',
     '¿Qué estilo dibujaste? (burbuja, pincel, bloque, contorno o patrones)',

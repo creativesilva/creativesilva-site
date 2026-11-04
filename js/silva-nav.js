@@ -568,6 +568,9 @@
       var parts = (document.title || '').split('|').map(function (s) { return s.trim(); }).filter(Boolean);
       var modTitle = (parts.length >= 4) ? parts[1] : (parts[0] || 'Module');
       var slug = (urls[0] || 'module').replace(/.*\//, '').replace(/-overview\.html$/, '').replace(/\.html$/, '');
+      // Name the download file from the module TITLE, not the URL slug, so a renamed module
+      // (display name != slug) downloads with its current name (Chris 2026-11-04).
+      var titleSlug = (modTitle || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
       var orig = b.textContent;
       b.textContent = 'Building…';
       Promise.all(urls.map(function (u) {
@@ -587,7 +590,7 @@
         });
         var a = document.createElement('a');
         a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown;charset=utf-8' }));
-        a.download = slug + '-all-pages.md';
+        a.download = (titleSlug || slug) + '-all-pages.md';
         document.body.appendChild(a); a.click();
         setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
         b.textContent = '✓ Downloaded';

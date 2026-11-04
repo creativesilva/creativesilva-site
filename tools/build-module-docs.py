@@ -31,6 +31,7 @@ ALIAS = {
     "character-form-color": "Character-Design-Form-Color",
     "panther-quarter": "Panther-of-the-Quarter",
     "get-to-know-illustrator": None,              # no docs yet
+    "make-your-mark": "Design-A-Sticker",         # URL slug stays make-your-mark; docs use the display name
 }
 
 def norm(u):

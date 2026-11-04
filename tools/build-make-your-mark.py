@@ -26,11 +26,13 @@ STYLE_IDEAS=[
   ("Patterns","Patrones","fill each letter with plaid, dots, or hearts.","llena cada letra con cuadros, puntos o corazones."),
 ]
 
-REFL_EN=f"{SITE}/assets/course-documents/Make-Your-Mark-Reflection-EN.docx"
-REFL_ES=f"{SITE}/assets/course-documents/Make-Your-Mark-Reflection-ES.docx"
-# ONE project-folder zip (Chris 2026-11-04): extracts to a Design_A_Sticker/ folder holding the
-# Design_A_Sticker.ai starter file + both reflection docx. Students download this and open the .ai.
-PROJECT_ZIP=f"{SITE}/assets/course-documents/Make-Your-Mark-Project-Folder.zip"
+# Downloadable asset files carry the DISPLAY name (Design-A-Sticker), not the make-your-mark URL slug,
+# so a file Chris/students download is not named with the old module title (Chris 2026-11-04).
+REFL_EN=f"{SITE}/assets/course-documents/Design-A-Sticker-Reflection-EN.docx"
+REFL_ES=f"{SITE}/assets/course-documents/Design-A-Sticker-Reflection-ES.docx"
+# ONE project-folder zip: extracts to a Design_A_Sticker/ folder holding the Design_A_Sticker.ai
+# starter file + both reflection docx. Students download this and open the .ai.
+PROJECT_ZIP=f"{SITE}/assets/course-documents/Design-A-Sticker-Project-Folder.zip"
 HAVE_REFL=True
 
 OVER=f"{PFX}-make-your-mark-overview.html"
