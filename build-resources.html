@@ -745,67 +745,224 @@
   .pvb-galintro{color:var(--pvb-muted); font-size:.92rem; max-width:820px; margin:2px 0 16px; line-height:1.6;}
   .pvb-galempty{color:var(--pvb-faint); font-style:italic; padding:10px 0;}
 
-  /* ====================== MOBILE APP-SHELL (phone; activated by JS via body.pvbm) ====================== */
-  #pvbm-bar,#pvbm-canvas,#pvbm-sheet{display:none;}
-  body.pvbm{overflow-x:hidden;}
-  /* hide desktop-only chrome */
-  body.pvbm .pvb-quickrow,body.pvbm #pvb-reflib,body.pvbm .pvb-intro,
-  body.pvbm .pvb-editor-head,body.pvbm .pvb-guide,
-  body.pvbm #pvb-refs > :not([data-cat]),
-  body.pvbm #pvb-promptnav .pvb-pnav-head{display:none !important;}
-  body.pvbm .pvb-grid{display:block !important;}
-  body.pvbm .pvb-grid > section > .pvb-card + .pvb-card{display:none;}  /* Reusable setups card */
-  body.pvbm .pvb-card{background:none;border:0;padding:0;margin:0;}
-  body.pvbm #pvb-panel-build{padding:12px 0 164px !important;}
-  body.pvbm #pvb-panel-build > *{padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));}
-  /* ---- stage show/hide ---- */
-  body.pvbm[data-stage="prompt"] .pvb-grid{display:none !important;}
-  body.pvbm:not([data-stage="prompt"]) #pvb-promptnav{display:none !important;}
-  body.pvbm[data-stage="cast"] .pvb-grid > aside,
-  body.pvbm[data-stage="items"] .pvb-grid > aside,
-  body.pvbm[data-stage="scene"] .pvb-grid > aside{display:none !important;}
-  body.pvbm[data-stage="options"] .pvb-grid > section{display:none !important;}
-  body.pvbm[data-stage="cast"] #pvb-refs [data-cat]:not([data-cat="cast"]),
-  body.pvbm[data-stage="items"] #pvb-refs [data-cat]:not([data-cat="items"]),
-  body.pvbm[data-stage="scene"] #pvb-refs [data-cat]:not([data-cat="scene"]){display:none !important;}
-  /* the active category accordion fills the panel: force open, drop its toggle head */
-  body.pvbm #pvb-refs > .pvb-acc > .pvb-acc-head{display:none !important;}
-  body.pvbm #pvb-refs > .pvb-acc > .pvb-acc-body{display:block !important;}
-  body.pvbm #pvb-refs .pvb-acc{border:0 !important;}
-  /* options stage keeps mode + disclaimer + fields; preview/copy/checklist live in the canvas */
-  body.pvbm .pvb-review > h3,
-  body.pvbm .pvb-review > #pvb-preview,
-  body.pvbm .pvb-review > .pvb-acts,
-  body.pvbm .pvb-review > #pvb-saved,
-  body.pvbm .pvb-review > .pvb-check{display:none !important;}
-  /* ---- fixed canvas: live-prompt peek + Copy ---- */
-  body.pvbm #pvbm-canvas{display:flex;position:fixed;left:0;right:0;bottom:calc(60px + env(safe-area-inset-bottom,0px));
-    z-index:40;align-items:center;gap:10px;padding:8px max(12px,env(safe-area-inset-left,0px));
-    background:rgba(4,20,19,.93);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--pvb-line);}
-  #pvbm-peek{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px;background:none;border:0;text-align:left;cursor:pointer;padding:0;}
-  #pvbm-peek .pk-k{font-family:var(--pvb-font);font-size:.5rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--pvb-faint);}
-  #pvbm-peek .pk-v{font-size:.82rem;color:var(--pvb-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  #pvbm-peek .pk-v b{color:var(--pvb-teal-lt);}
-  #pvbm-copy{flex:0 0 auto;background:var(--pvb-teal);color:#04110f;font-family:var(--pvb-font);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:.82rem;padding:13px 20px;border:0;cursor:pointer;}
-  #pvbm-copy:active{filter:brightness(1.12);}
-  /* ---- fixed stage bar ---- */
-  body.pvbm #pvbm-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:41;
-    padding:0 max(4px,env(safe-area-inset-left,0px)) env(safe-area-inset-bottom,0px);background:rgba(3,15,14,.98);border-top:1px solid var(--pvb-line);}
-  .pvbm-stg{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px 9px;position:relative;background:none;border:0;cursor:pointer;}
-  .pvbm-stg svg{width:20px;height:20px;color:var(--pvb-faint);}
-  .pvbm-stg .l{font-family:var(--pvb-font);font-size:.5rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--pvb-faint);}
-  .pvbm-stg.on svg,.pvbm-stg.on .l{color:var(--pvb-teal-lt);}
-  .pvbm-stg.on::before{content:"";position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--pvb-teal);}
-  .pvbm-stg .b{position:absolute;top:4px;right:calc(50% - 22px);min-width:15px;height:15px;padding:0 3px;background:var(--pvb-teal);color:#04110f;font-family:var(--pvb-font);font-weight:700;font-size:.54rem;display:none;align-items:center;justify-content:center;}
-  .pvbm-stg .b.show{display:flex;}
-  /* ---- preview sheet (tap the peek) ---- */
-  body.pvbm #pvbm-sheet.open{display:block;position:fixed;inset:0;z-index:50;background:rgba(2,12,12,.62);}
-  #pvbm-sheet-panel{position:absolute;left:0;right:0;bottom:0;max-height:82%;display:flex;flex-direction:column;background:var(--pvb-bg2);border-top:2px solid var(--pvb-teal);}
-  #pvbm-sheet-head{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--pvb-line-soft);}
-  #pvbm-sheet-head .t{font-family:var(--pvb-font);font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--pvb-text);}
-  #pvbm-sheet-x{margin-left:auto;background:none;border:0;color:var(--pvb-muted);font-size:1.5rem;line-height:1;cursor:pointer;}
-  #pvbm-sheet-body{padding:14px 16px calc(18px + env(safe-area-inset-bottom,0px));overflow-y:auto;}
-  #pvbm-sheet-text{white-space:pre-wrap;font-size:.84rem;line-height:1.6;color:var(--pvb-muted);}
+  /* ============================================================================
+     GLASS PROMPT STUDIO  (liquid-glass shell; supersedes the old pvb-grid + pvbm shell)
+     Phone: a composed-prompt card + a draggable glass sheet + a bottom dock.
+     Desktop / iPad: a wide two-column glass workspace (controls + sticky prompt card).
+     Angular / zero-radius is intentionally LIFTED for this one surface (Chris, 2026-11-04).
+     Galaxy palette + glass values verified in the Prompt Studio Glass concept.
+     ============================================================================ */
+  :root{
+    --pbg-r:20px; --pbg-r-sm:14px; --pbg-r-pill:999px;
+    --pbg-glass:radial-gradient(130% 86% at 12% -8%, rgba(210,255,255,.20), transparent 52%),
+                linear-gradient(177deg, rgba(120,250,250,.13), rgba(0,184,184,.05) 42%, rgba(6,16,16,.58));
+    --pbg-blur:blur(20px) saturate(185%) brightness(1.06);
+    --pbg-edge:1px solid rgba(112,246,246,.30);
+    --pbg-spec:inset 0 2px 0 rgba(224,255,255,.60), inset 1px 0 0 rgba(185,255,255,.20),
+               inset -1px 0 0 rgba(0,0,0,.26), inset 0 -1px 0 rgba(0,0,0,.4);
+    --pbg-shadow:0 18px 54px rgba(0,0,0,.5);
+    --pbg-top:96px;              /* header height; JS keeps it current on phone */
+    --pbg-ty:58%;               /* sheet translateY; JS drives the detents on phone */
+  }
+
+  /* ---------- galaxy backdrop (fixed; only painted while the Build tab is on screen) ---------- */
+  .pbg-bg{position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; background:#06100f;}
+  .pbg-mesh{position:absolute; inset:-25%; filter:blur(46px) saturate(128%); mix-blend-mode:screen;
+    background:
+      radial-gradient(38% 30% at 10% 6%, rgba(0,238,224,.80), transparent 66%),
+      radial-gradient(30% 25% at 90% 8%, rgba(150,255,255,.58), transparent 70%),
+      radial-gradient(40% 34% at 62% 26%, rgba(56,134,248,.58), transparent 70%),
+      radial-gradient(32% 30% at 94% 40%, rgba(150,92,242,.54), transparent 70%),
+      radial-gradient(30% 26% at 74% 60%, rgba(232,110,206,.3), transparent 72%),
+      radial-gradient(30% 26% at 18% 52%, rgba(24,214,184,.46), transparent 72%),
+      radial-gradient(54% 46% at 68% 96%, rgba(0,178,176,.68), transparent 72%),
+      radial-gradient(44% 38% at 10% 92%, rgba(0,224,220,.5), transparent 72%);
+    animation:pbgDrift 34s ease-in-out infinite alternate;}
+  .pbg-glow{position:absolute; inset:0; mix-blend-mode:screen; filter:blur(1.5px);
+    background:
+      radial-gradient(46px 46px at 15% 10%, rgba(120,255,248,.38), transparent 68%),
+      radial-gradient(40px 40px at 90% 13%, rgba(175,220,255,.34), transparent 68%),
+      radial-gradient(42px 42px at 95% 42%, rgba(200,165,255,.32), transparent 68%),
+      radial-gradient(9px 9px at 24% 23%, rgba(215,255,255,.95), transparent 64%),
+      radial-gradient(6px 6px at 69% 15%, rgba(170,220,255,.88), transparent 64%),
+      radial-gradient(7px 7px at 86% 44%, rgba(214,185,255,.88), transparent 64%),
+      radial-gradient(6px 6px at 39% 64%, rgba(185,255,255,.9), transparent 64%),
+      radial-gradient(9px 9px at 58% 86%, rgba(135,255,240,.9), transparent 64%),
+      radial-gradient(5px 5px at 12% 70%, rgba(210,235,255,.84), transparent 64%),
+      radial-gradient(6px 6px at 92% 78%, rgba(170,255,255,.86), transparent 64%);
+    animation:pbgGlow 6s ease-in-out infinite alternate;}
+  @keyframes pbgDrift{from{transform:translate3d(-2%,-1%,0) scale(1);}to{transform:translate3d(3%,2%,0) scale(1.08);}}
+  @keyframes pbgGlow{from{opacity:.6}to{opacity:1}}
+
+  /* let the glass own all spacing inside the Build tab */
+  #pvb-panel-build.br-main{padding:0; max-width:none; background:transparent; overflow:visible;}
+  .pbg{position:relative; z-index:1;}
+
+  /* ---------- glass primitive ---------- */
+  .pbg-card,.pbg-sheet,.pbg-dock,.pbg-tab.on,.pbg-dk{
+    background:var(--pbg-glass); backdrop-filter:var(--pbg-blur); -webkit-backdrop-filter:var(--pbg-blur);
+    border:var(--pbg-edge); box-shadow:var(--pbg-shadow), var(--pbg-spec);}
+
+  /* ---------- composed prompt card ---------- */
+  .pbg-card{border-radius:var(--pbg-r); display:flex; flex-direction:column; min-height:0; overflow:hidden;}
+  .pbg-card-head{display:flex; align-items:center; gap:12px; padding:16px 16px 12px;}
+  .pbg-card-titles{flex:1 1 auto; min-width:0;}
+  .pbg-eyebrow{font-family:var(--pvb-font); font-size:.58rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--pvb-teal-lt); opacity:.85;}
+  .pbg-title{font-family:var(--pvb-font); font-size:1.32rem; font-weight:700; letter-spacing:.01em; color:#fff; line-height:1.15; margin-top:2px;}
+  .pbg-sub{font-size:.8rem; color:var(--pvb-muted); margin-top:2px;}
+  .pbg-sub:empty{display:none;}
+  .pbg-copy{flex:0 0 auto; display:inline-flex; align-items:center; gap:7px; font-family:var(--pvb-font);
+    font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.74rem; color:#042;
+    background:linear-gradient(135deg,var(--pvb-teal-lt),var(--pvb-teal)); color:#04110f; border:0;
+    border-radius:var(--pbg-r-pill); padding:10px 16px; cursor:pointer; box-shadow:0 6px 18px rgba(0,184,184,.3), inset 0 1px 0 rgba(255,255,255,.4);}
+  .pbg-copy svg{width:15px; height:15px;}
+  .pbg-copy:hover{filter:brightness(1.08);}
+  .pbg-copy.copied{background:#3fd08a;}
+  .pbg-card-body{flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:0 16px 16px;}
+  .pbg-card-body .pvb-preview{max-height:none; border-radius:var(--pbg-r-sm); border:1px solid var(--pvb-line-soft); border-left:3px solid var(--pvb-teal); background:rgba(2,12,11,.5);}
+  .pbg-card-acts{display:flex; gap:9px; margin:12px 0 4px;}
+  .pbg-card-acts .pvb-btn{border-radius:var(--pbg-r-pill);}
+
+  /* ---------- controls sheet ---------- */
+  .pbg-sheet{border-radius:var(--pbg-r) var(--pbg-r) 0 0; display:flex; flex-direction:column; min-height:0; overflow:hidden;}
+  .pbg-handle{flex:0 0 auto; display:flex; align-items:center; justify-content:center; height:26px; background:none; border:0; cursor:grab; touch-action:none;}
+  .pbg-handle span{width:40px; height:5px; border-radius:999px; background:rgba(180,245,245,.5);}
+  .pbg-handle:active{cursor:grabbing;}
+  .pbg-tabs{flex:0 0 auto; display:flex; gap:4px; padding:4px 10px 10px; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none;}
+  .pbg-tabs::-webkit-scrollbar{display:none;}
+  .pbg-tab{flex:1 1 0; min-width:max-content; position:relative; display:flex; align-items:center; justify-content:center; gap:7px;
+    font-family:var(--pvb-font); font-weight:700; letter-spacing:.05em; text-transform:uppercase; font-size:.72rem;
+    color:var(--pvb-muted); background:transparent; border:1px solid transparent; border-radius:var(--pbg-r-pill);
+    padding:9px 13px; cursor:pointer; transition:color .15s, background .15s, border-color .15s; white-space:nowrap;}
+  .pbg-tab:hover{color:var(--pvb-text);}
+  .pbg-tab.on{color:#fff; border-color:rgba(112,246,246,.3);}
+  .pbg-tab .tb{min-width:16px; height:16px; padding:0 4px; border-radius:999px; background:var(--pvb-teal); color:#04110f;
+    font-size:.6rem; font-weight:800; display:none; align-items:center; justify-content:center; letter-spacing:0;}
+  .pbg-tab .tb.show{display:inline-flex;}
+  .pbg-body{flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:2px 14px 18px;}
+  .pbg-pane{display:none;}
+  .pbg-pane.on{display:block; animation:pbgFade .25s ease;}
+  @keyframes pbgFade{from{opacity:0; transform:translateY(4px);}to{opacity:1; transform:none;}}
+  .pbg-pane-h{font-family:var(--pvb-font); font-size:1.02rem; font-weight:700; color:#fff; letter-spacing:.01em; margin:6px 0 2px;}
+  .pbg-pane-sub{font-size:.8rem; color:var(--pvb-muted); margin:0 0 12px; line-height:1.5;}
+  .pbg-quick{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:16px 0; padding:12px 13px;
+    background:rgba(0,184,184,.06); border:1px solid var(--pvb-line-soft); border-radius:var(--pbg-r-sm);}
+  .pbg-quick .pvb-quickbtn{border-radius:var(--pbg-r-pill);}
+  .pbg-modewrap{margin:16px 0; padding:13px; background:rgba(0,184,184,.05); border:1px solid var(--pvb-line-soft); border-radius:var(--pbg-r-sm);}
+  .pbg-modewrap .pvb-modeseg{border-radius:var(--pbg-r-pill); overflow:hidden;}
+  .pbg-setups{margin-top:18px;}
+
+  /* ---------- bottom dock (phone) ---------- */
+  .pbg-dock{display:flex; gap:6px; padding:8px; border-radius:var(--pbg-r) var(--pbg-r) 0 0;}
+  .pbg-dk{flex:1 1 0; min-width:0; position:relative; display:flex; flex-direction:column; align-items:center; gap:3px;
+    padding:8px 2px; background:transparent; border:1px solid transparent; border-radius:var(--pbg-r-sm); cursor:pointer; transition:background .15s, border-color .15s;}
+  .pbg-dk svg{width:20px; height:20px; color:var(--pvb-faint);}
+  .pbg-dk .l{font-family:var(--pvb-font); font-size:.52rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--pvb-faint);}
+  .pbg-dk.on{background:rgba(0,184,184,.14); border-color:rgba(112,246,246,.28);}
+  .pbg-dk.on svg,.pbg-dk.on .l{color:var(--pvb-teal-lt);}
+  .pbg-dk .b{position:absolute; top:3px; right:calc(50% - 20px); min-width:15px; height:15px; padding:0 3px; border-radius:999px;
+    background:var(--pvb-teal); color:#04110f; font-family:var(--pvb-font); font-weight:800; font-size:.54rem; display:none; align-items:center; justify-content:center;}
+  .pbg-dk .b.show{display:flex;}
+
+  /* ---------- reskin engine-rendered components to the glass look ---------- */
+  #pvb-panel-build .pvb-acc{border-radius:var(--pbg-r-sm); overflow:hidden; background:rgba(0,184,184,.05); border:1px solid var(--pvb-line-soft); border-left:2px solid var(--pvb-teal-deep);}
+  #pvb-panel-build .pvb-refcard{border-radius:var(--pbg-r-sm);}
+  #pvb-panel-build .pvb-refcard .thumb{border-radius:var(--pbg-r-sm) var(--pbg-r-sm) 0 0;}
+  #pvb-panel-build .pvb-dd-btn,#pvb-panel-build .pvb-field textarea,#pvb-panel-build .pvb-otherbox,#pvb-panel-build .pvb-reflib-search{border-radius:var(--pbg-r-sm);}
+  #pvb-panel-build .pvb-dd-menu{border-radius:var(--pbg-r-sm); overflow:hidden;}
+  #pvb-panel-build .pvb-charhead .cover{border-radius:10px;}
+  #pvb-panel-build .pvb-rtool{border-radius:9px;}
+  #pvb-panel-build .pvb-chip{border-radius:var(--pbg-r-pill);}
+  #pvb-panel-build .pvb-smallbtn{border-radius:var(--pbg-r-pill);}
+  #pvb-panel-build .pvb-checkrow{border-radius:var(--pbg-r-sm); border-left:2px solid var(--pvb-gold);}
+  #pvb-panel-build .pvb-checkrow .th{border-radius:9px;}
+  #pvb-panel-build .pvb-note,#pvb-panel-build .pvb-guide,#pvb-panel-build .pvb-check-note{border-radius:var(--pbg-r-sm);}
+  #pvb-panel-build .pvb-stepnum{border-radius:8px;}
+  #pvb-panel-build .pvb-modebtn.active{border-radius:var(--pbg-r-pill);}
+  #pvb-panel-build .pvb-pnav-item{border-radius:var(--pbg-r-sm); border-left:2px solid transparent;}
+  #pvb-panel-build .pvb-btn{border-radius:var(--pbg-r-pill);}
+  #pvb-panel-build .pvb-quickbtn{border-radius:var(--pbg-r-pill);}
+  /* prompt-nav inside the sheet: plain groups, no outer frame */
+  #pvb-panel-build .pvb-acc.pnav{background:transparent; border:0; margin-bottom:6px;}
+  #pvb-panel-build .pvb-acc.pnav .pvb-acc-head{padding:8px 4px;}
+
+  /* ---------- data-cat filtering: Cast / Items / Scene tabs show one ref section ---------- */
+  .pbg[data-cat="cast"]  #pvb-refs [data-cat]:not([data-cat="cast"]),
+  .pbg[data-cat="items"] #pvb-refs [data-cat]:not([data-cat="items"]),
+  .pbg[data-cat="scene"] #pvb-refs [data-cat]:not([data-cat="scene"]){display:none;}
+  /* the lead "Reference files for this prompt" title + trailing "your own" staging only on Scene */
+  .pbg[data-cat="cast"]  #pvb-refs > .pvb-gtitle,
+  .pbg[data-cat="items"] #pvb-refs > .pvb-gtitle{display:none;}
+  .pbg[data-cat="cast"]  #pvb-refs > :not([data-cat]):not(.pvb-gtitle),
+  .pbg[data-cat="items"] #pvb-refs > :not([data-cat]):not(.pvb-gtitle){display:none;}
+  /* the active ref accordion fills the pane: force open, hide its toggle head */
+  .pbg[data-catmode="single"] #pvb-refs > .pvb-acc[data-cat] > .pvb-acc-head{display:none;}
+  .pbg[data-catmode="single"] #pvb-refs > .pvb-acc[data-cat] > .pvb-acc-body{display:block; padding-top:8px;}
+  .pbg[data-catmode="single"] #pvb-refs > .pvb-acc[data-cat]{border:0; background:transparent;}
+
+  /* ============================ DESKTOP / iPAD workspace (>=821px) ============================ */
+  @media (min-width:821px){
+    .pbg{display:grid; grid-template-columns:minmax(0,1fr) clamp(360px,33vw,460px); gap:22px; align-items:start;
+      max-width:1500px; margin:0 auto; padding:22px 26px 56px;}
+    .pbg-sheet{order:1; position:relative; transform:none !important; border-radius:var(--pbg-r); max-height:calc(100vh - var(--pbg-top) - 44px);}
+    .pbg-card{order:2; position:sticky; top:calc(var(--pbg-top) + 14px); max-height:calc(100vh - var(--pbg-top) - 44px);}
+    .pbg-handle{display:none;}
+    .pbg-dock{display:none;}
+    .pbg-tab{flex:0 1 auto;}
+    /* show only the active pane */
+    .pbg-body .pbg-pane{display:none;}
+    .pbg-body .pbg-pane.on{display:block;}
+  }
+  /* big screens: give the controls room, cap the tile columns so they stay tidy */
+  @media (min-width:1500px){
+    .pbg{grid-template-columns:minmax(0,1fr) 460px;}
+  }
+
+  /* ============================ PHONE (<=820px): draggable sheet ============================ */
+  @media (max-width:820px){
+    #pvb-panel-build.br-main{position:fixed; top:var(--pbg-top); left:0; right:0; bottom:0; z-index:1; overflow:hidden;}
+    .pbg{position:absolute; inset:0;}
+    .pbg-card{position:absolute; inset:0; border-radius:0; border:0; box-shadow:none;}
+    .pbg-card-head{padding:14px max(14px,env(safe-area-inset-left,0)) 10px;}
+    .pbg-card-body{padding-left:max(14px,env(safe-area-inset-left,0)); padding-right:max(14px,env(safe-area-inset-right,0)); padding-bottom:120px;}
+    .pbg-sheet{position:absolute; left:0; right:0; bottom:0; top:0; z-index:6;
+      transform:translateY(var(--pbg-ty)); transition:transform .44s cubic-bezier(.32,.72,0,1); will-change:transform;
+      box-shadow:0 -16px 50px rgba(0,0,0,.55), var(--pbg-spec);}
+    .pbg-sheet.dragging{transition:none;}
+    .pbg-dock{position:absolute; left:0; right:0; bottom:0; z-index:3; padding-bottom:max(8px,env(safe-area-inset-bottom,0));
+      transition:opacity .4s ease, transform .4s ease;}
+    .pbg-tabs{padding-left:max(10px,env(safe-area-inset-left,0)); padding-right:max(10px,env(safe-area-inset-right,0));}
+    .pbg-body{padding-left:max(14px,env(safe-area-inset-left,0)); padding-right:max(14px,env(safe-area-inset-right,0)); padding-bottom:max(18px,env(safe-area-inset-bottom,0));}
+    /* desktop-only chrome off */
+    #pvb-reflib{display:none;}
+  }
+
+  /* reference library sits below the glass workspace on desktop */
+  @media (min-width:821px){
+    #pvb-reflib{max-width:1500px; margin-left:auto; margin-right:auto; padding:0 26px;}
+  }
+
+  /* ---------- polish: redundant title, denser cast, 2-up options ---------- */
+  /* the tab already names the section, so drop the engine's lead "Reference files" title */
+  .pbg[data-catmode="single"] #pvb-refs > .pvb-gtitle:first-child{display:none;}
+  /* 2-up option fields once there is room (dropdowns pair; full-width text stays full) */
+  @media (min-width:560px){
+    #pvb-panel-build .pbg-pane[data-pane="options"] .pvb-fields{grid-template-columns:1fr 1fr; gap:12px 16px;}
+    #pvb-panel-build .pbg-pane[data-pane="options"] .pvb-field.full{grid-column:1 / -1;}
+  }
+  /* desktop Cast: show collapsed people two-up; an opened person spans the row with a full image grid */
+  @media (min-width:821px){
+    .pbg[data-catmode="single"][data-cat="cast"] #pvb-refs > .pvb-acc[data-cat="cast"] > .pvb-acc-body{display:grid; grid-template-columns:1fr 1fr; gap:0 22px; align-items:start;}
+    .pbg[data-cat="cast"] #pvb-refs .pvb-characc{border-top:0;}
+    .pbg[data-cat="cast"] #pvb-refs .pvb-characc.open{grid-column:1 / -1;}
+  }
+
+  /* ---------- accessibility fallbacks ---------- */
+  @media (prefers-reduced-motion:reduce){ .pbg-mesh,.pbg-glow{animation:none;} .pbg-sheet{transition:none;} .pbg-pane.on{animation:none;} }
+  @media (prefers-reduced-transparency:reduce){
+    .pbg-card,.pbg-sheet,.pbg-dock,.pbg-tab.on,.pbg-dk.on{backdrop-filter:none; -webkit-backdrop-filter:none; background:rgba(8,26,25,.96);}
+    .pbg-mesh,.pbg-glow{display:none;}
+  }
   </style>
 </head>
 <body>
@@ -878,76 +1035,91 @@
     </div>
 
     <section id="pvb-panel-build" class="pvb-tabpanel br-main">
-    <section class="pvb-promptnav" id="pvb-promptnav">
-      <div class="pvb-pnav-head">
-        <span class="pvb-pnav-title">Choose a prompt</span>
-        <span class="pvb-pnav-sub">Pick what you're making. The builder below loads with that prompt ready to fill.</span>
-      </div>
-      <div id="pvb-pnav-groups"></div>
-    </section>
-    <p class="pvb-intro">Pick a prompt, fill what you need, and choose your reference images. The prompt on the right stays live the whole time. Attach your reference images in ChatGPT first, then click <b>Copy prompt</b> last and paste it in. (Copying an image replaces whatever is on your clipboard, so copy the prompt as your final step.)</p>
+    <!-- ===================== GLASS PROMPT STUDIO (liquid-glass shell over the engine) =====================
+         Phone: the composed-prompt card fills the screen; a draggable glass sheet rises with the active tool;
+         a bottom dock switches tools. Desktop/iPad: a wide multi-column glass workspace (prompt card +
+         docked controls). Same 5-tool model (Prompt / Cast / Items / Scene / Options) on every width.
+         Every engine container id below is preserved so the existing builder engine drives it unchanged. -->
+    <div class="pbg-bg" aria-hidden="true"><div class="pbg-mesh"></div><div class="pbg-glow"></div></div>
 
-    <div class="pvb-quickrow">
-      <span class="pvb-quicklabel">One-click copies</span>
-      <button type="button" class="pvb-quickbtn" data-quick="/assets/prompts/Blank-Artboard-Reset.txt">Clear Artboard</button>
-      <button type="button" class="pvb-quickbtn" data-quick="/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt">Force Full Rebuild</button>
-      <span class="pvb-quickhint">Ready-made instructions with nothing to fill in. Click to copy, then paste into ChatGPT.</span>
-    </div>
-
-    <div class="pvb-grid">
-      <section>
-        <div class="pvb-card">
-          <div class="pvb-editor-head">
-            <div class="pvb-titlewrap">
-              <div class="pvb-titledisp"><span class="pvb-titlesel-txt"><span id="pvb-title">Loading</span><span class="sub" id="pvb-sub"></span></span></div>
-            </div>
-            <div class="pvb-headacts">
-              <button type="button" class="pvb-smallbtn" id="pvb-copytop" title="Copy the prompt to your clipboard">Copy prompt</button>
-              <button type="button" class="pvb-smallbtn ghost" id="pvb-resettop" title="Clear your entries for this prompt">Reset</button>
-            </div>
+    <div class="pbg" id="pbg">
+      <!-- ---------- composed prompt (always visible) ---------- -->
+      <div class="pbg-card" id="pbg-card">
+        <div class="pbg-card-head">
+          <div class="pbg-card-titles">
+            <div class="pbg-eyebrow">Prompt Studio</div>
+            <div class="pbg-title" id="pvb-title">Loading</div>
+            <div class="pbg-sub" id="pvb-sub"></div>
           </div>
+          <button type="button" class="pbg-copy" id="pvb-copytop" title="Copy the prompt to your clipboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+            <span>Copy</span>
+          </button>
+        </div>
+        <div class="pbg-card-body" id="pbg-card-body">
           <div class="pvb-guide" id="pvb-guide" hidden>
             <div class="pvb-guide-h">How to use this prompt</div>
             <div class="pvb-guide-b" id="pvb-guide-body"></div>
           </div>
-          <div id="pvb-refs"></div>
-        </div>
-
-        <div class="pvb-card">
-          <div class="pvb-gtitle">Reusable setups</div>
-          <p class="pvb-intro" style="margin:0 0 12px;">Save the current prompt and its choices so you can load the same setup again later. Saved on this computer.</p>
-          <div class="pvb-setups" id="pvb-setups"></div>
-        </div>
-      </section>
-
-      <aside>
-        <div class="pvb-review">
-          <div class="pvb-modebar">
-            <span class="pvb-modelabel">Prompt mode</span>
-            <div class="pvb-modeseg">
-              <button type="button" class="pvb-modebtn" data-mode="project">PV Project</button>
-              <button type="button" class="pvb-modebtn" data-mode="full">Full template</button>
-            </div>
-          </div>
-          <p class="pvb-modehint" id="pvb-modehint"></p>
-          <label class="pvb-check-toggle pvb-disc"><input type="checkbox" id="pvb-disc"> <span>Add AI disclaimer (small fine print, bottom-left, 50% opacity)</span></label>
-          <h3>Your prompt</h3>
           <div class="pvb-preview" id="pvb-preview">Loading base prompt&#8230;</div>
-          <div class="pvb-acts">
+          <div class="pbg-card-acts">
             <button class="pvb-btn" id="pvb-copy">Copy prompt</button>
             <button class="pvb-btn ghost" id="pvb-reset" title="Clear your entries for this prompt">Reset</button>
           </div>
           <div class="pvb-saved" id="pvb-saved">Draft saves automatically.</div>
-
-          <div id="pvb-fields"></div>
-
           <div class="pvb-check">
             <div class="pvb-check-h"><span class="t">Copy in order &middot; 1, 2, 3</span></div>
             <p class="pvb-check-note">Go down this list in order: copy each row, paste it into ChatGPT, then come back for the next. <b>Copy image</b> copies the picture but not its file name, so match each one by the role shown. Attaching the real files instead keeps their names.</p>
             <div id="pvb-checklist"></div>
           </div>
         </div>
-      </aside>
+      </div>
+
+      <!-- ---------- controls sheet (phone: draggable; desktop: docked column) ---------- -->
+      <div class="pbg-sheet" id="pbg-sheet">
+        <button type="button" class="pbg-handle" id="pbg-handle" aria-label="Drag to resize"><span></span></button>
+        <div class="pbg-tabs" id="pbg-tabs" role="tablist"></div>
+        <div class="pbg-body" id="pbg-body">
+          <!-- Prompt pane: pick a prompt + how to send it + saved setups -->
+          <section class="pbg-pane" data-pane="prompt">
+            <div class="pbg-pane-h">Choose a prompt</div>
+            <div class="pbg-pane-sub">Pick what you&#8217;re making. The builder loads it ready to fill.</div>
+            <div id="pvb-pnav-groups"></div>
+            <div class="pbg-quick">
+              <span class="pvb-quicklabel">One-click copies</span>
+              <button type="button" class="pvb-quickbtn" data-quick="/assets/prompts/Blank-Artboard-Reset.txt">Clear Artboard</button>
+              <button type="button" class="pvb-quickbtn" data-quick="/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt">Force Full Rebuild</button>
+            </div>
+            <div class="pbg-modewrap">
+              <div class="pvb-modebar">
+                <span class="pvb-modelabel">Prompt mode</span>
+                <div class="pvb-modeseg">
+                  <button type="button" class="pvb-modebtn" data-mode="project">PV Project</button>
+                  <button type="button" class="pvb-modebtn" data-mode="full">Full template</button>
+                </div>
+              </div>
+              <p class="pvb-modehint" id="pvb-modehint"></p>
+              <label class="pvb-check-toggle pvb-disc"><input type="checkbox" id="pvb-disc"> <span>Add AI disclaimer (small fine print, bottom-left, 50% opacity)</span></label>
+            </div>
+            <div class="pbg-setups">
+              <div class="pvb-gtitle">Reusable setups</div>
+              <div class="pbg-pane-sub" style="margin:-4px 0 10px;">Save the current prompt and its choices to reload later. Saved on this computer.</div>
+              <div class="pvb-setups" id="pvb-setups"></div>
+            </div>
+          </section>
+          <!-- Cast / Items / Scene panes all read the engine's #pvb-refs (filtered by data-cat) -->
+          <section class="pbg-pane" data-pane="refs">
+            <div id="pvb-refs"></div>
+          </section>
+          <!-- Options pane = the engine's dynamic fields (dropdowns become wheels) -->
+          <section class="pbg-pane" data-pane="options">
+            <div id="pvb-fields"></div>
+          </section>
+        </div>
+      </div>
+
+      <!-- ---------- bottom dock (phone tool switcher) ---------- -->
+      <nav class="pbg-dock" id="pbg-dock" aria-label="Builder tools"></nav>
     </div>
 
     <section class="pvb-reflib" id="pvb-reflib">
@@ -999,16 +1171,6 @@
                   </details>
     </section>
 
-    <!-- Mobile app-shell (phone only): live-prompt canvas + bottom stage bar over the existing engine -->
-    <div id="pvbm-canvas">
-      <button id="pvbm-peek" type="button"><span class="pk-k">Your prompt</span><span class="pk-v" id="pvbm-peek-v">Tap to preview</span></button>
-      <button id="pvbm-copy" type="button">Copy</button>
-    </div>
-    <nav id="pvbm-bar" aria-label="Builder stages"></nav>
-    <div id="pvbm-sheet"><div id="pvbm-sheet-panel">
-      <div id="pvbm-sheet-head"><span class="t">Your prompt</span><button id="pvbm-sheet-x" type="button" aria-label="Close">&times;</button></div>
-      <div id="pvbm-sheet-body"><div id="pvbm-sheet-text"></div></div>
-    </div></div>
     </section>
 
     <div class="br-main pvb-tabpanel" id="pvb-panel-resources" hidden>
@@ -2522,9 +2684,14 @@
     selectPrompt(start);
     buildPromptNav();
 
-    // ---- mobile app-shell: a bottom stage bar + a live-prompt canvas over the existing engine ----
+    // ---- glass shell: composed card + draggable sheet (phone) / docked workspace (desktop) ----
+    // Lives inside the engine IIFE, so it reads state/compose/copyText/selectPrompt directly.
     (function(){
-      var bar=document.getElementById('pvbm-bar'); if(!bar) return;
+      var pbg=document.getElementById('pbg'); if(!pbg) return;
+      var sheet=document.getElementById('pbg-sheet'), body=document.getElementById('pbg-body'),
+          tabsEl=document.getElementById('pbg-tabs'), dock=document.getElementById('pbg-dock'),
+          handle=document.getElementById('pbg-handle'), panes=[].slice.call(pbg.querySelectorAll('.pbg-pane')),
+          refsEl2=document.getElementById('pvb-refs');
       var IC={
         prompt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>',
         cast:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
@@ -2532,36 +2699,104 @@
         scene:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16"/><path d="m3 15 5-5 4 4 3-3 6 6"/><circle cx="8" cy="9" r="1.3"/></svg>',
         options:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><circle cx="9" cy="7" r="2.3"/><line x1="4" y1="17" x2="20" y2="17"/><circle cx="15" cy="17" r="2.3"/></svg>'
       };
-      var STAGES=[['prompt','Prompt'],['cast','Cast'],['items','Items'],['scene','Scene'],['options','Options']];
-      bar.innerHTML=STAGES.map(function(s){return '<button class="pvbm-stg" type="button" data-stg="'+s[0]+'">'+IC[s[0]]+'<span class="l">'+s[1]+'</span><span class="b" data-bk="'+s[0]+'"></span></button>';}).join('');
-      function setStage(id){ document.body.setAttribute('data-stage',id);
-        [].slice.call(bar.querySelectorAll('.pvbm-stg')).forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-stg')===id); });
-        try{ window.scrollTo(0,0); }catch(e){}
+      var TABS=[['prompt','Prompt'],['cast','Cast'],['items','Items'],['scene','Scene'],['options','Options']];
+      var PANE={prompt:'prompt',cast:'refs',items:'refs',scene:'refs',options:'options'};
+      var active='cast';
+      // build tabs + dock
+      tabsEl.innerHTML=TABS.map(function(t){return '<button class="pbg-tab" type="button" role="tab" data-t="'+t[0]+'"><span>'+t[1]+'</span><span class="tb" data-bk="'+t[0]+'"></span></button>';}).join('');
+      dock.innerHTML=TABS.map(function(t){return '<button class="pbg-dk" type="button" data-t="'+t[0]+'">'+IC[t[0]]+'<span class="l">'+t[1]+'</span><span class="b" data-bk="'+t[0]+'"></span></button>';}).join('');
+      // empty-state note injected into the refs pane
+      var emptyNote=document.createElement('div'); emptyNote.className='pbg-empty pvb-note'; emptyNote.style.display='none';
+      var refsPane=pbg.querySelector('.pbg-pane[data-pane="refs"]'); if(refsPane) refsPane.appendChild(emptyNote);
+
+      function isPhone(){ return window.matchMedia('(max-width:820px)').matches; }
+
+      function refreshRefs(){
+        // which categories does the current prompt expose?
+        var cats={}; [].slice.call(refsEl2.querySelectorAll('[data-cat]')).forEach(function(n){ cats[n.getAttribute('data-cat')]=1; });
+        var hasAny=Object.keys(cats).length>0;
+        pbg.setAttribute('data-catmode', hasAny?'single':'all');
+        if(active==='cast'||active==='items'||active==='scene'){
+          pbg.setAttribute('data-cat',active);
+          // empty state: the selected category has no section (e.g. Scene on a pose prompt)
+          var show = hasAny && !cats[active];
+          emptyNote.style.display = show?'block':'none';
+          if(show){
+            emptyNote.textContent = active==='scene'
+              ? 'This prompt has no location or backdrop to pick. Add your own reference image under Scene, or move on.'
+              : 'Nothing to choose here for this prompt.';
+          }
+        } else { pbg.removeAttribute('data-cat'); emptyNote.style.display='none'; }
       }
-      bar.addEventListener('click',function(e){ var b=e.target.closest('.pvbm-stg'); if(b) setStage(b.getAttribute('data-stg')); });
-      var cp=document.getElementById('pvbm-copy'); if(cp) cp.addEventListener('click',function(){ copyText(compose(), cp); });
-      var sheet=document.getElementById('pvbm-sheet'), peek=document.getElementById('pvbm-peek'), sText=document.getElementById('pvbm-sheet-text');
-      function openSheet(){ if(sText) sText.textContent=compose(); if(sheet) sheet.classList.add('open'); }
-      function closeSheet(){ if(sheet) sheet.classList.remove('open'); }
-      if(peek) peek.addEventListener('click',openSheet);
-      var sx=document.getElementById('pvbm-sheet-x'); if(sx) sx.addEventListener('click',closeSheet);
-      if(sheet) sheet.addEventListener('click',function(e){ if(e.target===sheet) closeSheet(); });
+
+      function setTab(id, openIfClosed){
+        active=id;
+        panes.forEach(function(p){ p.classList.toggle('on', p.getAttribute('data-pane')===PANE[id]); });
+        [].slice.call(tabsEl.querySelectorAll('.pbg-tab')).forEach(function(b){ var on=b.getAttribute('data-t')===id; b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false'); });
+        [].slice.call(dock.querySelectorAll('.pbg-dk')).forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-t')===id); });
+        refreshRefs();
+        if(body) body.scrollTop=0;
+        if(isPhone() && openIfClosed && cur>=TY_HALF-2) setTY(TY_HALF,true);
+      }
+      tabsEl.addEventListener('click',function(e){ var b=e.target.closest('.pbg-tab'); if(b) setTab(b.getAttribute('data-t'), true); });
+      dock.addEventListener('click',function(e){ var b=e.target.closest('.pbg-dk'); if(b) setTab(b.getAttribute('data-t'), true); });
+
+      // ---------- sheet physics (phone only) ----------
+      var H=0, TY_FULL=0, TY_HALF=0, TY_CLOSED=0, cur=0;
+      function measure(){ H=pbg.clientHeight||window.innerHeight; TY_FULL=0; TY_HALF=Math.round(H*0.46); TY_CLOSED=H; }
+      function setTY(ty, anim){
+        cur=ty;
+        sheet.style.transition = anim ? '' : 'none';
+        sheet.style.transform='translateY('+ty+'px)';
+        // dock fades up at full + is present at closed; hidden at half (Chris's ask)
+        var dv = ty>=TY_HALF ? (TY_CLOSED-TY_HALF?(ty-TY_HALF)/(TY_CLOSED-TY_HALF):1) : (TY_HALF?(TY_HALF-ty)/TY_HALF:1);
+        dv=Math.max(0,Math.min(1,dv));
+        dock.style.opacity=dv.toFixed(3);
+        dock.style.pointerEvents = dv>0.5?'auto':'none';
+        dock.style.zIndex = (ty<TY_HALF-2)?'50':'3';
+      }
+      function snap(vy){
+        var target;
+        if(vy>0.55) target = cur<TY_HALF ? TY_HALF : TY_CLOSED;        // flung down
+        else if(vy<-0.55) target = cur>TY_HALF ? TY_HALF : TY_FULL;    // flung up
+        else { var d=[TY_FULL,TY_HALF,TY_CLOSED].map(function(t){return Math.abs(t-cur);}); target=[TY_FULL,TY_HALF,TY_CLOSED][d.indexOf(Math.min.apply(null,d))]; }
+        setTY(target,true);
+      }
+      var dragging=false, startY=0, startTY=0, lastY=0, lastT=0, vy=0;
+      function down(e){ if(!isPhone())return; dragging=true; measure(); startY=e.clientY; startTY=cur; lastY=e.clientY; lastT=e.timeStamp||Date.now(); vy=0; sheet.classList.add('dragging'); try{handle.setPointerCapture(e.pointerId);}catch(_){ } e.preventDefault(); }
+      function move(e){ if(!dragging)return; var ty=Math.max(TY_FULL,Math.min(TY_CLOSED,startTY+(e.clientY-startY))); var now=e.timeStamp||Date.now(); var dt=now-lastT; if(dt>0){ vy=(e.clientY-lastY)/dt; } lastY=e.clientY; lastT=now; setTY(ty,false); }
+      function up(){ if(!dragging)return; dragging=false; sheet.classList.remove('dragging'); snap(vy); }
+      handle.addEventListener('pointerdown',down);
+      window.addEventListener('pointermove',move,{passive:false});
+      window.addEventListener('pointerup',up);
+      window.addEventListener('pointercancel',up);
+
+      // ---------- live badge + empty-state sync (engine render() calls this) ----------
       window.pvbmSync=function(){
         if(!state) return;
-        var counts={ cast:(state.chars||[]).filter(Boolean).length, items:(state.items||[]).filter(Boolean).length, scene:state.scene?1:0, options:0, prompt:0 };
-        [].slice.call(bar.querySelectorAll('.b')).forEach(function(b){ var n=counts[b.getAttribute('data-bk')]||0; b.textContent=n; b.classList.toggle('show',n>0); });
-        var nref=counts.cast+counts.items+counts.scene, pv=document.getElementById('pvbm-peek-v');
-        if(pv) pv.innerHTML=nref?('<b>'+nref+'</b> reference image'+(nref>1?'s':'')+' &middot; tap to preview'):'Tap to preview';
-        if(sheet && sheet.classList.contains('open') && sText) sText.textContent=compose();
+        var counts={ cast:(state.chars||[]).filter(Boolean).length, items:(state.items||[]).filter(Boolean).length,
+          scene:(state.scene?1:0), options:Object.keys(state.fields||{}).filter(function(k){ return state.fields[k] && k!=='SUPPORT'; }).length, prompt:0 };
+        [].slice.call(tabsEl.querySelectorAll('.tb')).forEach(function(b){ var n=counts[b.getAttribute('data-bk')]||0; b.textContent=n; b.classList.toggle('show',n>0); });
+        [].slice.call(dock.querySelectorAll('.b')).forEach(function(b){ var n=counts[b.getAttribute('data-bk')]||0; b.textContent=n; b.classList.toggle('show',n>0); });
+        refreshRefs();
       };
-      var mq=window.matchMedia('(max-width: 859px)');
-      function apply(){
-        if(mq.matches){ if(!document.body.classList.contains('pvbm')){ document.body.classList.add('pvbm'); if(!document.body.getAttribute('data-stage')) setStage('cast'); } }
-        else { document.body.classList.remove('pvbm'); }
-        if(window.pvbmSync) pvbmSync();
+
+      // ---------- responsive: header offset + initial detents ----------
+      function headerH(){ var h=document.querySelector('.catalog-sticky'); return h?Math.round(h.getBoundingClientRect().height):92; }
+      function applyMode(){
+        document.documentElement.style.setProperty('--pbg-top', headerH()+'px');
+        if(isPhone()){ measure(); if(!cur || cur>TY_CLOSED) cur=TY_HALF; setTY(cur,false); }
+        else { sheet.style.transform=''; sheet.style.transition=''; dock.style.opacity=''; dock.style.pointerEvents=''; dock.style.zIndex=''; }
       }
-      if(mq.addEventListener) mq.addEventListener('change',apply); else if(mq.addListener) mq.addListener(apply);
-      apply();
+      var mq=window.matchMedia('(max-width:820px)');
+      if(mq.addEventListener) mq.addEventListener('change',applyMode); else if(mq.addListener) mq.addListener(applyMode);
+      window.addEventListener('resize',function(){ document.documentElement.style.setProperty('--pbg-top', headerH()+'px'); if(isPhone()){ var frac=TY_CLOSED?cur/TY_CLOSED:0; measure(); setTY(Math.round(frac*TY_CLOSED),false); } });
+
+      setTab('cast',false);
+      applyMode();
+      // start the phone sheet at half so the active tool is in reach
+      if(isPhone()) setTY(TY_HALF,false);
+      if(window.pvbmSync) pvbmSync();
     })();
   })();
   </script>
