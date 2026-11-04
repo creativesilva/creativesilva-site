@@ -497,7 +497,7 @@
     --pvb-panel-2:linear-gradient(135deg,rgba(0,184,184,0.17) 0%,rgba(4,20,19,0.5) 100%);
     --pvb-panel-hi:linear-gradient(135deg,rgba(0,184,184,0.26) 0%,rgba(0,184,184,0.06) 100%);
     --pvb-teal:#00b8b8; --pvb-teal-lt:#5ff0f0; --pvb-teal-deep:#007474;
-    --pvb-text:#eafeff; --pvb-muted:rgba(206,244,244,0.66); --pvb-faint:rgba(206,244,244,0.44);
+    --pvb-text:#eafeff; --pvb-muted:rgba(214,247,247,0.82); --pvb-faint:rgba(206,244,244,0.6);
     --pvb-line:rgba(0,184,184,0.35); --pvb-line-soft:rgba(0,184,184,0.2);
     --pvb-gold:#f5b301; --pvb-gold-bright:#ffd166;
     --pvb-radius:0;
@@ -822,6 +822,64 @@
   .pbg-card-body .pvb-preview{max-height:none; border-radius:var(--pbg-r-sm); border:1px solid var(--pvb-line-soft); border-left:3px solid var(--pvb-teal); background:rgba(2,12,11,.5);}
   .pbg-card-acts{display:flex; gap:9px; margin:12px 0 4px;}
   .pbg-card-acts .pvb-btn{border-radius:var(--pbg-r-pill);}
+  /* ---------- card modes: edit / build order / history ---------- */
+  .pbg-back{flex:0 0 auto; display:none; width:38px; height:38px; align-items:center; justify-content:center; border-radius:var(--pbg-r-pill);
+    background:rgba(0,184,184,.12); border:1px solid var(--pvb-line-soft); color:var(--pvb-teal-lt); cursor:pointer;}
+  .pbg-back:hover{background:rgba(0,184,184,.24);}
+  .pbg-back svg{width:18px;height:18px;}
+  .pbg-head-acts{flex:0 0 auto; display:flex; align-items:center; gap:8px; margin-left:auto;}
+  .pbg-iconbtn{width:38px; height:38px; display:inline-flex; align-items:center; justify-content:center; border-radius:var(--pbg-r-pill);
+    background:rgba(0,184,184,.1); border:1px solid var(--pvb-line-soft); color:var(--pvb-teal-lt); cursor:pointer;}
+  .pbg-iconbtn:hover{background:rgba(0,184,184,.22); color:#eafeff;}
+  .pbg-iconbtn svg{width:18px;height:18px;}
+  .pbg-card[data-mode="export"] .pbg-back, .pbg-card[data-mode="history"] .pbg-back{display:inline-flex;}
+  .pbg-card[data-mode="export"] .pbg-eyebrow, .pbg-card[data-mode="history"] .pbg-eyebrow,
+  .pbg-card[data-mode="export"] .pbg-sub, .pbg-card[data-mode="history"] .pbg-sub{display:none;}
+  .pbg-card[data-mode="export"] #pbg-history-btn, .pbg-card[data-mode="history"] #pbg-history-btn{display:none;}
+  .pbg-card[data-mode="history"] #pvb-copytop{display:none;}
+  .pbg-card[data-mode="export"] .pbg-title, .pbg-card[data-mode="history"] .pbg-title{font-size:1.02rem;}
+  .pbg-view{display:none;}
+  .pbg-card[data-mode="edit"] .pbg-view[data-view="edit"],
+  .pbg-card[data-mode="export"] .pbg-view[data-view="export"],
+  .pbg-card[data-mode="history"] .pbg-view[data-view="history"]{display:block; animation:pbgViewIn .34s cubic-bezier(.32,.72,0,1);}
+  @keyframes pbgViewIn{from{opacity:0; transform:translateY(8px) scale(.992);}to{opacity:1; transform:none;}}
+  /* Build Order entry button */
+  .pbg-buildorder{display:flex; align-items:center; gap:12px; width:100%; margin:14px 0 8px; padding:13px 15px; cursor:pointer; text-align:left;
+    border-radius:var(--pbg-r-sm); border:1px solid rgba(112,246,246,.3); background:linear-gradient(135deg, rgba(0,184,184,.2), rgba(132,80,226,.14)); color:#eafeff;}
+  .pbg-buildorder:hover{border-color:var(--pvb-teal-lt); filter:brightness(1.08);}
+  .pbg-buildorder .bo-ic{flex:0 0 auto; width:34px; height:34px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:rgba(0,184,184,.2); color:var(--pvb-teal-lt);}
+  .pbg-buildorder .bo-ic svg{width:19px;height:19px;}
+  .pbg-buildorder .bo-txt{flex:1 1 auto; display:flex; flex-direction:column; min-width:0; gap:1px;}
+  .pbg-buildorder .bo-txt b{font-family:var(--pvb-font); font-weight:700; letter-spacing:.04em; text-transform:uppercase; font-size:.82rem;}
+  .pbg-buildorder .bo-txt span{font-size:.76rem; color:var(--pvb-muted);}
+  .pbg-buildorder .bo-arrow{flex:0 0 auto; color:var(--pvb-teal-lt); font-size:1.15rem;}
+  .pbg-card[data-ready="1"] .pbg-buildorder{animation:pbgBoGlow 2.4s ease-in-out infinite;}
+  @keyframes pbgBoGlow{0%,100%{box-shadow:0 0 0 0 rgba(95,240,240,0);}50%{box-shadow:0 0 18px 2px rgba(95,240,240,.4), 0 0 30px 6px rgba(132,80,226,.22);}}
+  /* build order view */
+  .pbg-bo-top{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin:4px 0 8px;}
+  .pbg-bo-title{font-family:var(--pvb-font); font-weight:700; letter-spacing:.02em; font-size:1.05rem; color:#fff;}
+  .pbg-bo-prog{font-size:.76rem; color:var(--pvb-teal-lt); font-weight:700; letter-spacing:.04em; white-space:nowrap;}
+  .pbg-bo-bar{height:4px; border-radius:999px; background:rgba(0,184,184,.16); overflow:hidden; margin-bottom:12px;}
+  .pbg-bo-bar span{display:block; height:100%; width:0; border-radius:999px; background:linear-gradient(90deg,var(--pvb-teal-lt),var(--pvb-teal)); transition:width .4s ease;}
+  .pbg-bo-note{font-size:.78rem; color:var(--pvb-muted); line-height:1.5; background:rgba(245,179,1,.1); border-left:3px solid var(--pvb-gold); padding:9px 11px; border-radius:var(--pbg-r-sm); margin:0 0 12px;}
+  .pbg-bo-done{display:none; margin-top:12px; padding:12px 14px; border-radius:var(--pbg-r-sm); text-align:center; font-size:.86rem; color:#eafeff; line-height:1.4;
+    background:linear-gradient(135deg, rgba(0,184,184,.24), rgba(132,80,226,.2)); border:1px solid rgba(112,246,246,.4);}
+  .pbg-card.build-complete .pbg-bo-done{display:block; animation:pbgViewIn .4s, pbgCopyFlash 1s ease-out;}
+  .pbg-checkrow.done{opacity:.6;} .pbg-checkrow.done .cimg{background:#17c7b6;}
+  #pvb-checklist .pvb-checkrow.done .pvb-stepnum{background:#17c7b6;}
+  /* history list */
+  #pbg-history-list{display:flex; flex-direction:column; gap:9px;}
+  .pbg-hist{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:var(--pbg-r-sm);
+    background:rgba(0,184,184,.06); border:1px solid var(--pvb-line-soft); border-left:2px solid var(--pvb-teal-deep);}
+  .pbg-hist .h-main{flex:1 1 auto; min-width:0; cursor:pointer;}
+  .pbg-hist:hover{background:rgba(0,184,184,.13); border-left-color:var(--pvb-teal);}
+  .pbg-hist.pinned{border-left-color:var(--pvb-gold);}
+  .pbg-hist .h-title{font-weight:600; font-size:.9rem; color:#eafeff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .pbg-hist .h-meta{font-size:.72rem; color:var(--pvb-faint); margin-top:1px;}
+  .pbg-hist .h-act{flex:0 0 auto; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:8px; background:transparent; border:0; color:var(--pvb-muted); cursor:pointer; font-size:1rem; line-height:1;}
+  .pbg-hist .h-act:hover{background:rgba(0,184,184,.18); color:#eafeff;}
+  .pbg-hist .h-act.on{color:var(--pvb-gold-bright);}
+  .pbg-hist-empty{font-size:.84rem; color:var(--pvb-faint); padding:16px 2px; text-align:center;}
 
   /* ---------- controls sheet ---------- */
   .pbg-sheet{border-radius:var(--pbg-r) var(--pbg-r) 0 0; display:flex; flex-direction:column; min-height:0; overflow:hidden;}
@@ -929,10 +987,14 @@
       transform:translateY(var(--pbg-ty)); transition:transform .44s cubic-bezier(.32,.72,0,1); will-change:transform;
       box-shadow:0 -16px 50px rgba(0,0,0,.55), var(--pbg-spec);}
     .pbg-sheet.dragging{transition:none;}
+    /* the dock is a SOLID bar on phone (not see-through) so content never hides behind it */
     .pbg-dock{position:absolute; left:0; right:0; bottom:0; z-index:3; padding-bottom:max(8px,env(safe-area-inset-bottom,0));
+      background:linear-gradient(to top, rgba(5,13,12,.98), rgba(7,20,19,.94)); backdrop-filter:blur(26px) saturate(150%); -webkit-backdrop-filter:blur(26px) saturate(150%);
+      border-top:1px solid rgba(112,246,246,.3); box-shadow:0 -10px 30px rgba(0,0,0,.5);
       transition:opacity .4s ease, transform .4s ease;}
     .pbg-tabs{padding-left:max(10px,env(safe-area-inset-left,0)); padding-right:max(10px,env(safe-area-inset-right,0));}
-    .pbg-body{padding-left:max(14px,env(safe-area-inset-left,0)); padding-right:max(14px,env(safe-area-inset-right,0)); padding-bottom:max(18px,env(safe-area-inset-bottom,0));}
+    /* a runway at the bottom of the scroll so every field clears the floating dock (~84px tall) */
+    .pbg-body{padding-left:max(14px,env(safe-area-inset-left,0)); padding-right:max(14px,env(safe-area-inset-right,0)); padding-bottom:calc(104px + env(safe-area-inset-bottom,0));}
     /* desktop-only chrome off */
     #pvb-reflib{display:none;}
   }
@@ -945,28 +1007,25 @@
   /* ---------- polish: redundant title, denser cast, 2-up options ---------- */
   /* the tab already names the section, so drop the engine's lead "Reference files" title */
   .pbg[data-catmode="single"] #pvb-refs > .pvb-gtitle:first-child{display:none;}
-  /* option fields two-up (wheels on phone, dropdowns on desktop); full-width text spans the row */
+  /* option fields two-up (glass dropdowns); full-width text spans the row */
   #pvb-panel-build .pbg-pane[data-pane="options"] .pvb-fields{grid-template-columns:1fr 1fr; gap:14px;}
   #pvb-panel-build .pbg-pane[data-pane="options"] .pvb-field.full{grid-column:1 / -1;}
-  /* iOS wheel picker (phone only; desktop uses the glass dropdown) */
-  .pvb-wheel{position:relative; height:146px; margin-top:2px;}
-  .pvb-wheel-scroll{height:100%; overflow-y:auto; overflow-x:hidden; scroll-snap-type:y mandatory; -webkit-overflow-scrolling:touch;
-    perspective:620px; perspective-origin:50% 50%; touch-action:pan-y; scrollbar-width:none; -ms-overflow-style:none;
-    -webkit-mask:linear-gradient(180deg,transparent,#000 27%,#000 73%,transparent); mask:linear-gradient(180deg,transparent,#000 27%,#000 73%,transparent);}
-  .pvb-wheel-scroll::-webkit-scrollbar{display:none;}
-  .pvb-wheel-sp{flex:0 0 auto;}
-  .pvb-wheel-item{height:44px; display:flex; align-items:center; justify-content:center; text-align:center; scroll-snap-align:center;
-    transform-origin:center center; backface-visibility:hidden; will-change:transform,opacity;}
-  .pvb-wheel-item span{display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden;
-    font-family:var(--pvb-body); font-size:.82rem; line-height:1.12; color:#eafeff; padding:0 8px;}
-  .pvb-wheel-band{position:absolute; left:3px; right:3px; top:50%; height:44px; transform:translateY(-50%); pointer-events:none;
-    border-top:1px solid rgba(112,246,246,.4); border-bottom:1px solid rgba(112,246,246,.4); background:rgba(0,184,184,.12); border-radius:11px;}
   /* desktop Cast: show collapsed people two-up; an opened person spans the row with a full image grid */
   @media (min-width:821px){
     .pbg[data-catmode="single"][data-cat="cast"] #pvb-refs > .pvb-acc[data-cat="cast"] > .pvb-acc-body{display:grid; grid-template-columns:1fr 1fr; gap:0 22px; align-items:start;}
     .pbg[data-cat="cast"] #pvb-refs .pvb-characc{border-top:0;}
     .pbg[data-cat="cast"] #pvb-refs .pvb-characc.open{grid-column:1 / -1;}
   }
+
+  /* ---------- galaxy copy confirmation (every copy button flashes on click) ---------- */
+  @keyframes pbgCopyFlash{
+    0%{box-shadow:0 0 0 0 rgba(95,240,240,.0), 0 0 0 0 rgba(150,92,242,0);}
+    35%{box-shadow:0 0 20px 5px rgba(120,255,255,.75), 0 0 38px 13px rgba(150,92,242,.5), 0 0 58px 22px rgba(56,134,248,.32);}
+    100%{box-shadow:0 0 0 0 rgba(95,240,240,0), 0 0 0 0 rgba(150,92,242,0);}
+  }
+  #pvb-panel-build .copied, #pvb-panel-build .pvb-rtool.ok{
+    background:linear-gradient(135deg,#7df0e6,#17c7b6) !important; color:#04110f !important; animation:pbgCopyFlash .9s ease-out;}
+  @media (prefers-reduced-motion:reduce){ #pvb-panel-build .copied, #pvb-panel-build .pvb-rtool.ok{animation:none;} }
 
   /* ---------- accessibility fallbacks ---------- */
   @media (prefers-reduced-motion:reduce){ .pbg-mesh,.pbg-glow{animation:none;} .pbg-sheet{transition:none;} .pbg-pane.on{animation:none;} }
@@ -1055,33 +1114,61 @@
 
     <div class="pbg" id="pbg">
       <!-- ---------- composed prompt (always visible) ---------- -->
-      <div class="pbg-card" id="pbg-card">
+      <div class="pbg-card" id="pbg-card" data-mode="edit">
         <div class="pbg-card-head">
+          <button type="button" class="pbg-back" id="pbg-back" title="Back to editing" aria-label="Back to editing">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
           <div class="pbg-card-titles">
-            <div class="pbg-eyebrow">Prompt Studio</div>
+            <div class="pbg-eyebrow" id="pbg-eyebrow">Prompt Studio</div>
             <div class="pbg-title" id="pvb-title">Loading</div>
             <div class="pbg-sub" id="pvb-sub"></div>
           </div>
-          <button type="button" class="pbg-copy" id="pvb-copytop" title="Copy the prompt to your clipboard">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-            <span>Copy</span>
-          </button>
+          <div class="pbg-head-acts">
+            <button type="button" class="pbg-iconbtn" id="pbg-history-btn" title="Prompt history" aria-label="Prompt history">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            </button>
+            <button type="button" class="pbg-copy" id="pvb-copytop" title="Copy the prompt to your clipboard">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+              <span>Copy</span>
+            </button>
+          </div>
         </div>
         <div class="pbg-card-body" id="pbg-card-body">
-          <div class="pvb-guide" id="pvb-guide" hidden>
-            <div class="pvb-guide-h">How to use this prompt</div>
-            <div class="pvb-guide-b" id="pvb-guide-body"></div>
+          <!-- EDIT view: the live prompt + a Build Order entry -->
+          <div class="pbg-view" data-view="edit">
+            <div class="pvb-guide" id="pvb-guide" hidden>
+              <div class="pvb-guide-h">How to use this prompt</div>
+              <div class="pvb-guide-b" id="pvb-guide-body"></div>
+            </div>
+            <div class="pvb-preview" id="pvb-preview">Loading base prompt&#8230;</div>
+            <button type="button" class="pbg-buildorder" id="pbg-open-export">
+              <span class="bo-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+              <span class="bo-txt"><b>Build Order</b><span id="pbg-bo-sub">Collect everything to copy</span></span>
+              <span class="bo-arrow">&rarr;</span>
+            </button>
+            <div class="pbg-card-acts">
+              <button class="pvb-btn" id="pvb-copy">Copy prompt</button>
+              <button class="pvb-btn ghost" id="pvb-reset" title="Clear your entries for this prompt">Reset</button>
+            </div>
+            <div class="pvb-saved" id="pvb-saved">Draft saves automatically.</div>
           </div>
-          <div class="pvb-preview" id="pvb-preview">Loading base prompt&#8230;</div>
-          <div class="pbg-card-acts">
-            <button class="pvb-btn" id="pvb-copy">Copy prompt</button>
-            <button class="pvb-btn ghost" id="pvb-reset" title="Clear your entries for this prompt">Reset</button>
-          </div>
-          <div class="pvb-saved" id="pvb-saved">Draft saves automatically.</div>
-          <div class="pvb-check">
-            <div class="pvb-check-h"><span class="t">Copy in order &middot; 1, 2, 3</span></div>
-            <p class="pvb-check-note">Go down this list in order: copy each row, paste it into ChatGPT, then come back for the next. <b>Copy image</b> copies the picture but not its file name, so match each one by the role shown. Attaching the real files instead keeps their names.</p>
+          <!-- EXPORT view: the final build order, copy straight down the list -->
+          <div class="pbg-view" data-view="export">
+            <div class="pbg-bo-top">
+              <div class="pbg-bo-title">Build Order</div>
+              <div class="pbg-bo-prog"><span id="pbg-progress">0 / 0</span> copied</div>
+            </div>
+            <div class="pbg-bo-bar"><span id="pbg-bo-fill"></span></div>
+            <p class="pbg-bo-note">Copy each row in order and paste it into a fresh image-gen chat: the prompt first, then each reference image. For images, <b>Copy</b> puts the picture on your clipboard; <b>Download</b> saves the real file so the name is kept.</p>
             <div id="pvb-checklist"></div>
+            <div class="pbg-bo-done" id="pbg-bo-done"><b>Build complete.</b> Everything is in your image gen. Generate your image.</div>
+          </div>
+          <!-- HISTORY view: past builds, reopen + tweak + re-export -->
+          <div class="pbg-view" data-view="history">
+            <div class="pbg-bo-top"><div class="pbg-bo-title">Prompt History</div></div>
+            <p class="pbg-bo-note">Every build you copy is saved here. Reopen one, change what you want, and export it again in a fresh chat.</p>
+            <div id="pbg-history-list"></div>
           </div>
         </div>
       </div>
@@ -1934,13 +2021,13 @@
     var cache={};
     function fetchPrompt(p){ if(cache[p]!=null)return Promise.resolve(cache[p]); return fetch(p,{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){cache[p]=t;return t;}); }
     function legacyCopy(text){ var a=document.createElement('textarea'); a.value=text; a.style.position='fixed'; a.style.opacity='0'; document.body.appendChild(a); a.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(a); }
-    function copyText(text,btn,label){ function ok(){ if(btn){ var o=label||btn.textContent; btn.classList.add('copied'); var was=btn.textContent; btn.textContent='✓ Copied'; setTimeout(function(){btn.classList.remove('copied'); btn.textContent=was;},1600);} }
+    function copyText(text,btn,label){ function ok(){ if(btn){ btn.classList.add('copied'); var was=btn.innerHTML; btn.textContent='Copied!'; setTimeout(function(){btn.classList.remove('copied'); btn.innerHTML=was;},1600);} }
       if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(ok,function(){legacyCopy(text);ok();}); } else { legacyCopy(text); ok(); } }
-    function copyImage(url,btn){ var orig=btn.textContent; function done(t){ btn.textContent=t; if(t==='✓ Copied')btn.classList.add('copied'); setTimeout(function(){btn.textContent=orig; btn.classList.remove('copied');},1700); }
+    function copyImage(url,btn){ var orig=btn.textContent; function done(t){ btn.textContent=t; if(t==='Copied!')btn.classList.add('copied'); setTimeout(function(){btn.textContent=orig; btn.classList.remove('copied');},1700); }
       if(!(navigator.clipboard&&window.ClipboardItem)){ done('No copy'); return; }
       var png=fetch(url).then(function(r){return r.blob();}).then(function(b){ if(b.type==='image/png')return b;
         return new Promise(function(res,rej){ var im=new Image(); im.crossOrigin='anonymous'; im.onload=function(){ var c=document.createElement('canvas'); c.width=im.naturalWidth; c.height=im.naturalHeight; c.getContext('2d').drawImage(im,0,0); c.toBlob(function(pb){ pb?res(pb):rej(0); },'image/png'); }; im.onerror=rej; im.src=url; }); });
-      btn.textContent='…'; navigator.clipboard.write([new ClipboardItem({'image/png':png})]).then(function(){done('✓ Copied');},function(){done('Failed');}); }
+      btn.textContent='…'; navigator.clipboard.write([new ClipboardItem({'image/png':png})]).then(function(){done('Copied!');},function(){done('Failed');}); }
 
     // ---- per-card catalog tools (view, copy image, copy URL, download) ----
     var SVG_VIEW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line></svg>';
@@ -2137,7 +2224,7 @@
         row.appendChild(el('div','pvb-stepnum',String(step++)));
         var th=el('div','th'); var im=el('img'); im.src=PROMPT_ICON_URL; im.alt='Prompt'; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
         var meta=el('div','meta'); meta.appendChild(el('div','role','Prompt')); meta.appendChild(el('div','fn','Your prompt (paste this first)')); row.appendChild(meta);
-        var cb=el('button','cimg','Copy prompt'); cb.type='button'; cb.addEventListener('click',function(){ copyText(compose(), cb); }); row.appendChild(cb);
+        var cb=el('button','cimg','Copy prompt'); cb.type='button'; cb.addEventListener('click',function(){ copyText(compose(), cb); if(window.pbgPushHistory) pbgPushHistory(); }); row.appendChild(cb);
         checklistEl.appendChild(row);
       })();
       // Steps 2+: images to attach. X2 uses your dropped images; other prompts use catalog references.
@@ -2151,6 +2238,7 @@
         var th=el('div','th'); var im=el('img'); im.src=a.url; im.alt=a.role; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
         var meta=el('div','meta'); meta.appendChild(el('div','role',esc(a.role))); meta.appendChild(el('div','fn',esc(a.name))); row.appendChild(meta);
         var cb=el('button','cimg','Copy image'); cb.type='button'; cb.addEventListener('click',function(){ copyImage(a.url,cb); }); row.appendChild(cb);
+        var db=el('button','cimg ghost','Download'); db.type='button'; db.addEventListener('click',function(){ downloadImg(a.url,a.name,db); }); row.appendChild(db);
         checklistEl.appendChild(row);
       });
       if(!attach.length){ checklistEl.appendChild(el('div','pvb-check-empty', cfg.delta?'Drop your master (and optional support headshot) on the left; they show up here to copy in order.':'Add characters, items, or a location above and they appear here as steps 2, 3, and so on.')); }
@@ -2389,36 +2477,6 @@
       wrap.ddSetValue=function(v){ cur=v; paintLabel(); };
       return wrap;
     }
-    // iOS-style wheel picker (PHONE ONLY; desktop keeps pvbDropdown). Same contract: items [{value,label}],
-    // current value, onSelect(value) fired when the wheel settles. Needs _init() once it is on screen.
-    function pvbIsPhone(){ try{ return window.matchMedia('(max-width:820px)').matches; }catch(e){ return false; } }
-    function pvbWheel(items, current, onSelect){
-      var IH=44;
-      var wrap=el('div','pvb-wheel'); var sc=el('div','pvb-wheel-scroll');
-      var spT=el('div','pvb-wheel-sp'), spB=el('div','pvb-wheel-sp'); sc.appendChild(spT);
-      var itemEls=[];
-      items.forEach(function(o,i){ var it=el('div','pvb-wheel-item','<span>'+esc(o.label)+'</span>'); it.addEventListener('click',function(){ goTo(i,true); }); sc.appendChild(it); itemEls.push(it); });
-      sc.appendChild(spB);
-      var band=el('div','pvb-wheel-band'); wrap.appendChild(sc); wrap.appendChild(band);
-      var SP=0;
-      function curIndex(){ for(var i=0;i<items.length;i++) if(items[i].value===current) return i; return 0; }
-      function paint(){ var vc=sc.scrollTop+sc.clientHeight/2;
-        itemEls.forEach(function(it,i){ var center=SP+i*IH+IH/2, r=(center-vc)/IH, cr=Math.max(-2,Math.min(2,r));
-          it.style.transform='rotateX('+(-cr*30).toFixed(1)+'deg) scale('+Math.max(.62,1-Math.abs(cr)*0.16).toFixed(3)+')';
-          it.style.opacity=Math.max(.22,1-Math.abs(r)*0.34).toFixed(3); }); }
-      function nearest(){ return Math.max(0,Math.min(items.length-1,Math.round(sc.scrollTop/IH))); }
-      function goTo(i,anim){ try{ sc.scrollTo({top:i*IH,behavior:anim?'smooth':'auto'}); }catch(e){ sc.scrollTop=i*IH; } }
-      var t=null;
-      sc.addEventListener('scroll',function(){ paint(); if(t)clearTimeout(t); t=setTimeout(settle,130); });
-      function settle(){ if(!sc.isConnected) return;   // the wheel was rebuilt/removed; a stale timer must not clear state
-        var i=nearest(); if(Math.abs(sc.scrollTop-i*IH)>1) sc.scrollTop=i*IH; paint(); var v=items[i].value; if(v!==current){ current=v; onSelect(v); } }
-      wrap._init=function(){ SP=Math.max(0,(sc.clientHeight-IH)/2); spT.style.height=SP+'px'; spB.style.height=SP+'px'; sc.scrollTop=curIndex()*IH; paint(); };
-      wrap.ddSetValue=function(v){ current=v; goTo(curIndex(),false); paint(); };
-      requestAnimationFrame(function(){ if(wrap.offsetParent) wrap._init(); });
-      return wrap;
-    }
-    // re-center every on-screen wheel (called when the Options pane is shown or the phone/desktop mode flips)
-    window.pvbInitWheels=function(){ [].slice.call(document.querySelectorAll('#pvb-fields .pvb-wheel')).forEach(function(w){ if(w._init && w.offsetParent) w._init(); }); };
     function backdropSlot(){
       var f=el('div','pvb-field full'); f.appendChild(el('label',null,'Background'));
       var items=[{value:'transparent',label:'Transparent background (PNG)'},{value:'white',label:'White studio backdrop'}];
@@ -2461,7 +2519,7 @@
             else { custom.style.display='none'; state.fields[name]=v; }
             onFieldChange(name);
           };
-          var dd = pvbIsPhone() ? pvbWheel(ditems, startVal, onChoose) : pvbDropdown(ditems, startVal, onChoose);
+          var dd = pvbDropdown(ditems, startVal, onChoose);
           custom.addEventListener('input',function(){ state.fields[name]=custom.value; render(); });
           w.appendChild(dd); w.appendChild(custom);
         } else { input=document.createElement('textarea'); input.rows=2; input.placeholder='type here'; input.value=state.fields[name]||'';
@@ -2631,6 +2689,7 @@
 
     // ---- reusable setups ----
     function renderSetups(){
+      if(window.pbgRenderSetups){ window.pbgRenderSetups(); return; }   // folded into Prompt History (glass shell)
       setupsEl.innerHTML='';
       var add=el('button','pvb-smallbtn','+ Save current setup'); add.type='button';
       add.addEventListener('click',function(){ var name=prompt('Name this setup (for example: Anthony editing, golden hour):'); if(!name)return; name=name.trim().slice(0,48); if(!name)return;
@@ -2779,7 +2838,6 @@
         [].slice.call(dock.querySelectorAll('.pbg-dk')).forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-t')===id); });
         refreshRefs();
         if(body) body.scrollTop=0;
-        if(id==='options' && window.pvbInitWheels) requestAnimationFrame(window.pvbInitWheels);
         if(isPhone() && openIfClosed && cur>=TY_HALF-2) setTY(TY_HALF,true);
       }
       tabsEl.addEventListener('click',function(e){ var b=e.target.closest('.pbg-tab'); if(b) setTab(b.getAttribute('data-t'), true); });
@@ -2823,6 +2881,7 @@
         [].slice.call(tabsEl.querySelectorAll('.tb')).forEach(function(b){ var n=counts[b.getAttribute('data-bk')]||0; b.textContent=n; b.classList.toggle('show',n>0); });
         [].slice.call(dock.querySelectorAll('.b')).forEach(function(b){ var n=counts[b.getAttribute('data-bk')]||0; b.textContent=n; b.classList.toggle('show',n>0); });
         refreshRefs();
+        if(window.pbgCardSync) window.pbgCardSync(counts);
       };
 
       // ---------- responsive: header offset + initial detents ----------
@@ -2832,13 +2891,73 @@
         if(isPhone()){ measure(); if(!cur || cur>TY_CLOSED) cur=TY_HALF; setTY(cur,false); }
         else { sheet.style.transform=''; sheet.style.transition=''; dock.style.opacity=''; dock.style.pointerEvents=''; dock.style.zIndex=''; }
       }
-      var mq=window.matchMedia('(max-width:820px)'), lastPhone=isPhone();
-      // crossing the phone/desktop line swaps option wheels <-> dropdowns; fire on BOTH the media-query
-      // change and a plain resize (some engines don't dispatch the MQL change on an emulated resize).
-      function checkModeFlip(){ var p=isPhone(); if(p===lastPhone) return; lastPhone=p;
-        try{ buildFields(); render(); }catch(e){} if(window.pvbInitWheels) requestAnimationFrame(window.pvbInitWheels); }
-      if(mq.addEventListener) mq.addEventListener('change',function(){ checkModeFlip(); applyMode(); }); else if(mq.addListener) mq.addListener(function(){ checkModeFlip(); applyMode(); });
-      window.addEventListener('resize',function(){ document.documentElement.style.setProperty('--pbg-top', headerH()+'px'); checkModeFlip(); if(isPhone()){ var frac=TY_CLOSED?cur/TY_CLOSED:0; measure(); setTY(Math.round(frac*TY_CLOSED),false); } });
+      var mq=window.matchMedia('(max-width:820px)');
+      if(mq.addEventListener) mq.addEventListener('change',applyMode); else if(mq.addListener) mq.addListener(applyMode);
+      window.addEventListener('resize',function(){ document.documentElement.style.setProperty('--pbg-top', headerH()+'px'); if(isPhone()){ var frac=TY_CLOSED?cur/TY_CLOSED:0; measure(); setTY(Math.round(frac*TY_CLOSED),false); } });
+
+      // ---------- build order + prompt history (the card morphs between edit / export / history) ----------
+      var card=document.getElementById('pbg-card'), pbgCardBody=document.getElementById('pbg-card-body'),
+          backBtn=document.getElementById('pbg-back'), openExportBtn=document.getElementById('pbg-open-export'),
+          histBtn=document.getElementById('pbg-history-btn'), histList=document.getElementById('pbg-history-list'),
+          setupsEl2=document.getElementById('pvb-setups'), clEl=document.getElementById('pvb-checklist'),
+          progEl=document.getElementById('pbg-progress'), boFill=document.getElementById('pbg-bo-fill'), boSub=document.getElementById('pbg-bo-sub');
+      function setMode(m){ card.setAttribute('data-mode',m);
+        if(m==='export'){ card.classList.remove('build-complete'); clearDone(); updateProgress(); }
+        if(m==='history') renderHistoryList();
+        if(isPhone()) setTY(m==='edit'?TY_HALF:TY_CLOSED,true);
+        if(pbgCardBody) pbgCardBody.scrollTop=0;
+      }
+      function clearDone(){ [].slice.call(clEl.querySelectorAll('.pvb-checkrow')).forEach(function(r){ r.classList.remove('done'); }); }
+      function updateProgress(){ var total=clEl.querySelectorAll('.pvb-checkrow').length, done=clEl.querySelectorAll('.pvb-checkrow.done').length;
+        if(progEl) progEl.textContent=done+' / '+total;
+        if(boFill) boFill.style.width=(total?Math.round(done/total*100):0)+'%';
+        card.classList.toggle('build-complete', total>0 && done===total); }
+      clEl.addEventListener('click',function(e){ var b=e.target.closest('.cimg'); if(!b) return; var row=b.closest('.pvb-checkrow'); if(row){ row.classList.add('done'); setTimeout(updateProgress,20); } });
+      if(openExportBtn) openExportBtn.addEventListener('click',function(){ setMode('export'); });
+      if(backBtn) backBtn.addEventListener('click',function(){ setMode('edit'); });
+      if(histBtn) histBtn.addEventListener('click',function(){ setMode('history'); });
+      // readiness glow + build-order subtext (called from pvbmSync on every render)
+      window.pbgCardSync=function(counts){ counts=counts||{}; var nref=(counts.cast||0)+(counts.items||0)+(counts.scene||0);
+        try{ nref+=(staged&&staged.length)||0; }catch(e){}
+        card.setAttribute('data-ready', nref>0?'1':'0');
+        if(boSub) boSub.textContent = nref>0 ? (nref+' reference image'+(nref>1?'s':'')+' + your prompt') : 'Collect everything to copy';
+        if(card.getAttribute('data-mode')==='export') updateProgress(); };
+      // ----- history store (auto-saved on copy; pinned ones surface under the Prompt tab) -----
+      function histK(){ return NS+'history'; }
+      function loadHist(){ try{ var h=JSON.parse(localStorage.getItem(histK())||'[]'); return Array.isArray(h)?h:[]; }catch(e){ return []; } }
+      function saveHist(a){ try{ localStorage.setItem(histK(), JSON.stringify(a.slice(0,80))); }catch(e){} }
+      window.pbgPushHistory=function(){ if(!state||!cfg) return;
+        var snap={ t:Date.now(), idx:activeIdx, title:(cfg.title||'Build'), preview:(compose()||'').slice(0,100), st:JSON.parse(JSON.stringify(state)), pin:false, name:'' };
+        var a=loadHist();
+        if(a.length && a[0].idx===snap.idx && JSON.stringify(a[0].st)===JSON.stringify(snap.st)){ a[0].t=snap.t; saveHist(a); return; }
+        a.unshift(snap); saveHist(a); if(window.pbgRenderSetups) window.pbgRenderSetups(); };
+      function fmtT(t){ var d=new Date(t), n=new Date(), tm=d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+        return d.toDateString()===n.toDateString() ? ('Today '+tm) : (d.toLocaleDateString([], {month:'short',day:'numeric'})+' '+tm); }
+      function sortedHist(){ var a=loadHist().map(function(e,i){ return {e:e,i:i}; }); a.sort(function(x,y){ var p=(y.e.pin?1:0)-(x.e.pin?1:0); return p||(y.e.t-x.e.t); }); return a; }
+      function loadHistEntry(e){ selectPrompt(e.idx, JSON.parse(JSON.stringify(e.st))); setMode('edit'); setTab('cast',false); }
+      function renderHistoryList(){ histList.innerHTML=''; var a=sortedHist();
+        if(!a.length){ histList.appendChild(el('div','pbg-hist-empty','No saved builds yet. Copy a prompt and it is saved here automatically.')); return; }
+        a.forEach(function(o){ var e=o.e, idx=o.i, row=el('div','pbg-hist'+(e.pin?' pinned':''));
+          var main=el('div','h-main'); main.appendChild(el('div','h-title',esc(e.name||e.title)));
+          main.appendChild(el('div','h-meta',esc(fmtT(e.t)+' · '+((PROMPTS[e.idx]&&PROMPTS[e.idx].title)||'build'))));
+          main.addEventListener('click',function(){ loadHistEntry(e); }); row.appendChild(main);
+          var pin=el('button','h-act'+(e.pin?' on':''),'★'); pin.type='button'; pin.title='Pin to Saved'; pin.addEventListener('click',function(ev){ ev.stopPropagation(); var b=loadHist(); if(b[idx]){ b[idx].pin=!b[idx].pin; saveHist(b); renderHistoryList(); if(window.pbgRenderSetups) window.pbgRenderSetups(); } }); row.appendChild(pin);
+          var rn=el('button','h-act','✎'); rn.type='button'; rn.title='Rename'; rn.addEventListener('click',function(ev){ ev.stopPropagation(); var nm=prompt('Name this build:', e.name||e.title); if(nm==null)return; var b=loadHist(); if(b[idx]){ b[idx].name=(nm||'').trim().slice(0,48); saveHist(b); renderHistoryList(); if(window.pbgRenderSetups) window.pbgRenderSetups(); } }); row.appendChild(rn);
+          var del=el('button','h-act','×'); del.type='button'; del.title='Delete'; del.addEventListener('click',function(ev){ ev.stopPropagation(); var b=loadHist(); b.splice(idx,1); saveHist(b); renderHistoryList(); if(window.pbgRenderSetups) window.pbgRenderSetups(); }); row.appendChild(del);
+          histList.appendChild(row); }); }
+      // Prompt-tab "Saved builds" = pinned history + a one-tap save
+      window.pbgRenderSetups=function(){ if(!setupsEl2) return; setupsEl2.innerHTML='';
+        var add=el('button','pvb-smallbtn','+ Save this build'); add.type='button';
+        add.addEventListener('click',function(){ if(window.pbgPushHistory) pbgPushHistory(); var b=loadHist(); if(b[0]){ b[0].pin=true; saveHist(b); } window.pbgRenderSetups(); });
+        setupsEl2.appendChild(add);
+        var pinned=loadHist().map(function(e,i){return {e:e,i:i};}).filter(function(o){return o.e.pin;});
+        if(!pinned.length){ setupsEl2.appendChild(el('span','pvb-note','Pinned builds show here. Tap the star on anything in your History (the clock, top of the prompt card).')); return; }
+        pinned.forEach(function(o){ var e=o.e, idx=o.i, chip=el('span','pvb-chip');
+          var load=el('span','load',esc(e.name||e.title)); load.title='Load this build'; load.addEventListener('click',function(){ loadHistEntry(e); });
+          var del=el('button',null,'×'); del.type='button'; del.title='Unpin'; del.addEventListener('click',function(ev){ ev.stopPropagation(); var b=loadHist(); if(b[idx]){ b[idx].pin=false; saveHist(b); } window.pbgRenderSetups(); });
+          chip.appendChild(load); chip.appendChild(del); setupsEl2.appendChild(chip); }); };
+      ['pvb-copy','pvb-copytop'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click',function(){ if(window.pbgPushHistory) pbgPushHistory(); }); });
+      if(window.pbgRenderSetups) window.pbgRenderSetups();
 
       setTab('cast',false);
       applyMode();
