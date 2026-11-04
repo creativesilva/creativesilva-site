@@ -111,7 +111,13 @@
   .status-strip > .digest{flex:1 1 300px;margin:0;display:flex;flex-direction:column;justify-content:center;}
   /* Phase 1: always-visible "Today" cart board */
   /* Daily checkout flow: a contained block the same width as the Calendar / Manage Equipment sections below it. */
-  .todayboard{margin-bottom:16px;border:1px solid var(--line-soft);border-top:3px solid var(--teal);background:rgba(0,0,0,.30);padding:14px 16px 18px;}
+  .todayboard{margin-bottom:16px;border:1px solid var(--line-soft);border-top:3px solid var(--teal);background:rgba(0,0,0,.30);padding:14px 16px 18px;transition:background .2s,border-color .2s;}
+  /* Tint the whole reservations section to the active tab's color so it's unmistakable which view you're in (Chris 2026-11-03). */
+  .todayboard.tbsec-out{border-top-color:var(--gold);border-color:rgba(245,179,1,.3);background:linear-gradient(180deg,rgba(245,179,1,.12),rgba(245,179,1,.045)),rgba(0,0,0,.4);}
+  .todayboard.tbsec-in{border-top-color:var(--teal);border-color:rgba(0,184,184,.32);background:linear-gradient(180deg,rgba(0,184,184,.12),rgba(0,184,184,.045)),rgba(0,0,0,.4);}
+  .todayboard.tbsec-overdue{border-top-color:var(--red);border-color:rgba(224,64,58,.34);background:linear-gradient(180deg,rgba(224,64,58,.13),rgba(224,64,58,.05)),rgba(0,0,0,.4);}
+  .todayboard.tbsec-avail{border-top-color:var(--ok);border-color:rgba(63,168,99,.32);background:linear-gradient(180deg,rgba(63,168,99,.12),rgba(63,168,99,.045)),rgba(0,0,0,.4);}
+  .todayboard.tbsec-requests{border-top-color:#8b5cf6;border-color:rgba(139,92,246,.34);background:linear-gradient(180deg,rgba(139,92,246,.13),rgba(139,92,246,.05)),rgba(0,0,0,.4);}
   .tb-head{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-bottom:9px;}
   .tb-title{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;color:#8ff7f7;}
   .tb-n{font-family:var(--font);font-weight:700;font-size:.72rem;padding:1px 8px;color:#001414;background:#00b8b8;}
@@ -204,7 +210,7 @@
   .tb-sortbtn{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.62rem;color:var(--muted);background:rgba(255,255,255,.02);border:0;border-left:1px solid var(--line-soft);padding:8px 12px;cursor:pointer;transition:background .15s,color .15s;}
   .tb-sortbtn.on{background:var(--teal);color:#04110f;}
   .tb-sortbtn:hover:not(.on){color:#fff;background:rgba(255,255,255,.06);}
-  .tb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:7px;padding:8px 0 2px;align-items:start;}   /* wide-first: cards flow into as many columns as fit (2-3 on a 4K / iPad-landscape board), stacking to 1 column on a phone */
+  .tb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:8px 0 2px;align-items:start;}   /* at most 2 columns (Chris 2026-11-03: never 3), stacking to 1 column on a phone */
   .tb-grid .tb-bundle{margin:0;min-width:0;}
   .tb-grid.view-out .tb-bundle{border-left-color:var(--gold);}
   .tb-grid.view-in .tb-bundle{border-left-color:var(--teal);}
@@ -1946,7 +1952,7 @@
         bulk='<div class="tb-bulkbar"><button type="button" class="tb-selall" data-tbselall="'+view+'">'+((n>=total&&total>0)?'Clear':'Select all')+'</button><span class="tb-selcount">'+n+' selected</span>'+acts+'</div>';
       }
     }
-    el.className='todayboard'; el.style.display='';
+    el.className='todayboard tbsec-'+view; el.style.display='';
     el.innerHTML='<div class="tb-head"><span class="tb-title">Reservations</span><button type="button" class="tb-help" data-tbhelp="1" title="How this board works" aria-label="How this board works">i</button>'+stepper+'</div>'+
       toggle+
       ((view==='avail'||view==='requests') ? body
