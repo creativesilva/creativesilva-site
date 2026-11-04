@@ -19,8 +19,8 @@
   <div class="wrap util-row">
     <span class="util-l" id="pickupInfo"><b>Equipment pickup</b></span>
     <div class="util-right">
-      <!-- EN/ES toggle: hidden until the Spanish layer is fully wired, so a half-translated ES is never exposed. -->
-      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language / Idioma" hidden>
+      <!-- EN/ES language toggle: flips every student-facing string at a 5th-grade reading level. -->
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language / Idioma">
         <button type="button" data-lang="en" class="lang-on">EN</button>
         <button type="button" data-lang="es">ES</button>
       </div>
@@ -169,7 +169,7 @@
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="hoursTitle">
     <button type="button" class="sheet-x" data-close="hoursOv" aria-label="Close">&times;</button>
     <div class="sheet-bd">
-      <h2 id="hoursTitle">Business hours</h2>
+      <h2 id="hoursTitle" data-i18n="Business hours">Business hours</h2>
       <div id="hoursBody"></div>
     </div>
   </div>
@@ -200,7 +200,7 @@
         <div class="cal-grid" id="calGrid"></div>
       </div>
       <div class="time-opts" id="planOpts" style="display:none"></div>
-      <button type="button" class="plan-back" id="planBack" style="display:none">&#8249; Back</button>
+      <button type="button" class="plan-back" id="planBack" style="display:none">&#8249; <span data-i18n="Back">Back</span></button>
     </div>
   </div>
 </div>
@@ -255,13 +255,13 @@
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="gearTitle">
     <button type="button" class="sheet-x" data-close="gearOv" aria-label="Close">&times;</button>
     <div class="sheet-bd">
-      <h2 id="gearTitle">Teacher unlock</h2>
-      <p id="gearIntro">This item is for Photo 2 students. A teacher can unlock it with the code, or you can ask Mr. Silva to approve it.</p>
-      <div class="field"><label for="gearOvc">Gear override code</label><input type="password" id="gearOvc" inputmode="numeric" autocomplete="off" placeholder="Teacher code" /></div>
+      <h2 id="gearTitle" data-i18n="Teacher unlock">Teacher unlock</h2>
+      <p id="gearIntro" data-i18n="This item is for Photo 2 students. A teacher can unlock it with the code, or you can ask Mr. Silva to approve it.">This item is for Photo 2 students. A teacher can unlock it with the code, or you can ask Mr. Silva to approve it.</p>
+      <div class="field"><label for="gearOvc" data-i18n="Gear override code">Gear override code</label><input type="password" id="gearOvc" inputmode="numeric" autocomplete="off" placeholder="Teacher code" data-i18n-ph="Teacher code" /></div>
       <div class="sheet-msg" id="gearMsg"></div>
-      <button type="button" class="btn block" id="gearGo">Unlock with code</button>
-      <div class="sheet-or">or</div>
-      <button type="button" class="btn block ghost" id="gearReq">Ask Mr. Silva to approve it</button>
+      <button type="button" class="btn block" id="gearGo" data-i18n="Unlock with code">Unlock with code</button>
+      <div class="sheet-or" data-i18n="or">or</div>
+      <button type="button" class="btn block ghost" id="gearReq" data-i18n="Ask Mr. Silva to approve it">Ask Mr. Silva to approve it</button>
     </div>
   </div>
 </div>
@@ -271,7 +271,7 @@
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="bagTitle">
     <button type="button" class="sheet-x" data-close="bagOv" aria-label="Close">&times;</button>
     <div class="sheet-bd">
-      <h2 id="bagTitle">Equipment Bag</h2>
+      <h2 id="bagTitle" data-i18n="Equipment Bag">Equipment Bag</h2>
       <div id="bagList"></div>
       <div class="sheet-msg" id="bagNote"></div>
     </div>
@@ -354,7 +354,7 @@
     'Browse':'Explorar','You':'Tú','Popular Rentals':'Rentas Populares','Camera Kits':'Kits de Cámara','Lenses':'Lentes',
     'Lighting':'Iluminación','Accessories':'Accesorios','Calendar View':'Ver Calendario','Calendar view':'Ver calendario',
     'How it works':'Cómo funciona','Equipment Manager':'Administrador de Equipo','(text only)':'(solo texto)',
-    'Equipment pickup':'Recoge tu equipo','Classroom pickup':'Recoge en el salón','Equipment Bag':'Bolsa de Equipo',
+    'Equipment pickup':'Recoge tu equipo','Classroom pickup':'Recoge en el salón','Equipment Bag':'Bolsa de Equipo','Room':'Salón','Photo':'Foto','and':'y','Period':'Período',
     'k_textus':'Envíanos un texto: 805-631-0001','k_text_num':'Texto: 805-631-0001','k_footbar':'Pioneer Valley High School · Renta de Equipo','k_sid_ph':'p. ej. 123456',
     // --- hero ---
     'When do you need it?':'¿Cuándo lo necesitas?',
@@ -365,7 +365,8 @@
     'Pick your dates':'Elige tus fechas','Choose the day you pick up and the day you bring it back.':'Escoge el día que lo recoges y el día que lo regresas.',
     'Add your gear':'Agrega tu equipo','Tap a camera or item to put it in your bag.':'Toca una cámara o un artículo para ponerlo en tu bolsa.',
     'Add gear':'Agregar equipo','Open bag':'Abrir bolsa',
-    'After you reserve':'Después de reservar','guide_after_body':'revisa la lista del kit al recoger, cuida tu equipo y mantenlo seco, y regrésalo todo en la misma bolsa el día de devolución.',
+    'After you reserve':'Después de reservar','Pick dates':'Elige fechas',
+    'check the kit list at pickup, keep your gear safe and dry, and bring it all back in the same bag on your return day.':'revisa la lista del kit al recoger, cuida tu equipo y mantenlo seco, y regrésalo todo en la misma bolsa el día de devolución.',
     'Dates set. Tap any camera or item to add it to your bag.':'Fechas listas. Toca cualquier cámara o artículo para agregarlo a tu bolsa.',
     'You are signed in. Now pick your dates.':'Iniciaste sesión. Ahora elige tus fechas.',
     'OK. Pick your dates and gear, then send the request to Mr. Silva.':'Listo. Elige tus fechas y equipo, luego envía la solicitud al Sr. Silva.',
@@ -377,61 +378,95 @@
     'Enter your full student number.':'Escribe tu número de estudiante completo.','Checking…':'Verificando…',
     'We could not find that student number.':'No encontramos ese número de estudiante.',
     'Could not reach the server. Try again.':'No se pudo conectar al servidor. Intenta de nuevo.',
-    'your cell number':'tu número de celular','a parent or guardian name':'un nombre de padre o tutor','a parent or guardian cell number':'un número de celular de padre o tutor',
+    'your cell number':'tu número de celular','a parent or guardian name':'un nombre de padre o tutor','a parent or guardian cell number':'un número de celular de padre o tutor','All three are required to continue. Please add %s.':'Los tres son necesarios para continuar. Por favor agrega %s.',
     // --- planner ---
     'Checkout day':'Día para recoger','Pick the school day you will check out.':'Elige el día de clases en que lo recogerás.',
-    'Pickup time':'Hora para recoger','Return time':'Hora para regresar','Back':'Atrás','During class':'En tu clase',
-    'No set windows for that day. Ask your teacher.':'No hay horarios para ese día. Pregúntale al Sr. Silva.',
+    'Pickup time':'Hora para recoger','Return time':'Hora para regresar','Back':'Atrás','During class':'En tu clase','Period %s':'Período %s',
+    'When will you pick up on %s?':'¿A qué hora recogerás el %s?',
+    'Due back %s (the next school day). When will you return it?':'Se regresa el %s (el siguiente día de clases). ¿A qué hora lo regresarás?',
+    'No set windows for that day. Ask your teacher.':'No hay horarios para ese día. Pregúntale al Sr. Silva.','to':'a',
     'These are the only return times. If you return late, you may lose the chance to check out cameras next time.':'Estas son las únicas horas para regresar. Si lo regresas tarde, puedes perder la oportunidad de sacar cámaras la próxima vez.',
     'Nutrition':'Nutrición','Lunch':'Almuerzo','After 6th period':'Después del período 6','Before 1st period':'Antes del período 1','Between 1st & 2nd':'Entre período 1 y 2',
     // --- product cards / detail ---
-    'Add to bag':'Agregar a la bolsa','In bag · remove':'En la bolsa · quitar','Locked · ask teacher':'Bloqueado · pídelo',
+    'Add to bag':'Agregar a la bolsa','In bag &middot; remove':'En la bolsa &middot; quitar','Locked &middot; ask teacher':'Bloqueado &middot; pídelo',
     'None free for your dates':'Ninguno libre para tus fechas','available':'disponibles','View details':'Ver detalles',
     'Digital Arts only':'Solo Arte Digital','Photo 2 only':'Solo Foto 2','Ask teacher':'Pregúntale',
     'Pick your camera number':'Elige tu número de cámara','Pick a unit number':'Elige un número de unidad',
-    ' · none free for your dates':' · ninguno libre para tus fechas','Specs':'Especificaciones','Save this one':'Guardar este',
+    ' &middot; none free for your dates':' &middot; ninguno libre para tus fechas','Specs':'Especificaciones','Save this one':'Guardar este',
+    'Photo 1 / Photo 2':'Foto 1 / Foto 2','Photo 2':'Foto 2','Digital Arts':'Arte Digital',
+    'Added to your bag.':'Se agregó a tu bolsa.','Added. This one needs Mr. Silva&#8217;s OK.':'Agregado. Este necesita el visto bueno del Sr. Silva.','is not free for your dates.':'no está libre para tus fechas.',
     // --- bag ---
     'Your equipment bag is empty. Add gear to get started.':'Tu bolsa de equipo está vacía. Agrega equipo para empezar.',
     'Pick up':'Recoger','Where':'Dónde','next school day':'siguiente día de clases','Change the day':'Cambiar el día','Change dates':'Cambiar fechas',
     'No dates yet. Pick when you need the gear, then reserve.':'Aún no hay fechas. Elige cuándo necesitas el equipo, luego reserva.',
     'Needs OK':'Por aprobar','Remove':'Quitar','Add equipment':'Agregar equipo','Set checkout dates':'Elegir fechas','Save changes':'Guardar cambios',
     'Reserve this gear':'Reservar este equipo','Send request':'Enviar solicitud','Reserve + request':'Reservar + solicitar',
-    'Special request':'Solicitud especial','New return day':'Nuevo día de devolución',
+    'Special request':'Solicitud especial','New return day':'Nuevo día de devolución','return':'regresar','days':'días','needs Mr. Silva&#8217;s OK':'necesita el visto bueno del Sr. Silva',
+    'Need something different, like keeping it longer for a project? Add a note and pick a new return day. Mr. Silva reviews it.':'¿Necesitas algo diferente, como tenerlo más tiempo para un proyecto? Agrega una nota y elige un nuevo día de devolución. El Sr. Silva lo revisa.',
+    'Heads up:':'Aviso:','is not free for the whole time. Pick a shorter return or swap it out.':'no está libre todo el tiempo. Elige una devolución más corta o cámbialo.',
+    'Could not update. Try again.':'No se pudo actualizar. Intenta de nuevo.','Change %s':'Cambiar %s','No longer free for your dates:':'Ya no está libre para tus fechas:','Remove it or change your dates.':'Quítalo o cambia tus fechas.',
+    'Changing your reservation. Edit the gear or the day, then <b>Save changes</b>. Close this to keep it as it was.':'Estás cambiando tu reservación. Edita el equipo o el día, luego <b>Guarda los cambios</b>. Cierra esto para dejarlo como estaba.',
+    'Because of missing work, Mr. Silva must approve this reservation. Turn in your work to speed it up.':'Por trabajo faltante, el Sr. Silva debe aprobar esta reservación. Entrega tu trabajo para que sea más rápido.',
     'What do you need, and why? (a few words)':'¿Qué necesitas y por qué? (unas palabras)',
     'Add a short note first so Mr. Silva knows what you need.':'Agrega una nota corta primero para que el Sr. Silva sepa qué necesitas.',
     'Add a short note so Mr. Silva knows what you need.':'Agrega una nota corta para que el Sr. Silva sepa qué necesitas.',
     // --- submit / receipt ---
     'Reserving…':'Reservando…','Sending…':'Enviando…','Could not reserve. Please try again.':'No se pudo reservar. Intenta de nuevo.',
-    'Request sent!':'¡Solicitud enviada!','Almost there!':'¡Ya casi!','Reserved':'Reservado','Done':'Listo',
+    'Request sent!':'¡Solicitud enviada!','Almost there!':'¡Ya casi!','Reserved':'Reservado','Done':'Listo','You&#8217;re all set!':'¡Todo listo!',
+    'Mr. Silva needs to approve this. You&#8217;ll get your gear once he says yes.':'El Sr. Silva debe aprobar esto. Recibirás tu equipo cuando él diga que sí.',
+    'Your gear is reserved. The %s that need Mr. Silva&#8217;s OK are waiting for him.':'Tu equipo está reservado. El/los %s que necesitan el visto bueno del Sr. Silva lo están esperando.',
+    'Your reservation is on its way to %s.':'Tu reservación va en camino a %s.','item':'artículo','items':'artículos',
     // --- picker ---
     'Equipment details':'Detalles del equipo','Pick a category, then add what you need.':'Elige una categoría, luego agrega lo que necesitas.',
-    'All categories':'Todas las categorías','Add other equipment':'Agregar otro equipo',
+    'All categories':'Todas las categorías','Add other equipment':'Agregar otro equipo','Back to %s':'Volver a %s','list':'lista',
     // --- calendar ---
     'Tap a day to see what is reserved. The number is how many cameras are free that day.':'Toca un día para ver qué está reservado. El número es cuántas cámaras están libres ese día.',
     'Available to reserve':'Disponible para reservar','Reserved this day':'Reservado este día',
     'Nothing reserved yet. Everything is open.':'Nada reservado aún. Todo está abierto.','Every item is booked for this day.':'Todo está reservado para este día.',
-    'Reserve for this day':'Reservar para este día','Out':'Afuera','Booked':'Reservado',
+    'Reserve for this day':'Reservar para este día','Out':'Afuera','Booked':'Reservado','free':'libres','%s of %s cameras free':'%s de %s cámaras libres',
     'Sun':'Dom','Mon':'Lun','Tue':'Mar','Wed':'Mié','Thu':'Jue','Fri':'Vie','Sat':'Sáb',
     // --- account ---
     'Parent or guardian':'Padre o tutor','Not set':'Sin poner','Student':'Estudiante','Edit my info':'Editar mi información','Log out':'Cerrar sesión',
     'My reservations':'Mis reservaciones','Loading…':'Cargando…','Waiting for OK':'Esperando aprobación','Picked up':'Recogido',
     'Modify':'Modificar','Cancel':'Cancelar','Yes, cancel':'Sí, cancelar','Keep it':'Mantenerla','Cancel this reservation?':'¿Cancelar esta reservación?',
     'Picked up. Return it to Mr. Silva when you are done.':'Recogido. Regrésalo al Sr. Silva cuando termines.',
-    'You have no reservations right now.':'No tienes reservaciones ahora.','Could not load your reservations. Try again.':'No se pudieron cargar tus reservaciones. Intenta de nuevo.',
+    'You have no reservations right now.':'No tienes reservaciones ahora.','Could not load your reservations. Try again.':'No se pudieron cargar tus reservaciones. Intenta de nuevo.','Past reservations (%s)':'Reservaciones pasadas (%s)',
     'Fix anything that is wrong. This updates what is on file for you.':'Corrige lo que esté mal. Esto actualiza lo que tenemos registrado de ti.',
     'Saved.':'Guardado.','Reservation canceled.':'Reservación cancelada.','Could not cancel. Try again.':'No se pudo cancelar. Intenta de nuevo.','Logged out.':'Sesión cerrada.',
+    'Keep at least one item, or cancel the reservation instead.':'Deja al menos un artículo, o mejor cancela la reservación.','Could not read your items. Try again.':'No se pudieron leer tus artículos. Intenta de nuevo.','Reservation updated.':'Reservación actualizada.',
     // --- hold / gear ---
     'Enter the teacher code.':'Escribe el código de maestro.','Unlocked by teacher.':'Desbloqueado por el maestro.','That code is not recognized.':'Ese código no se reconoce.',
     'Equipment checkout on hold':'Préstamo en pausa','Browse equipment':'Ver equipo','Teacher override':'Código de maestro','Unlock':'Desbloquear',
     'Ask Mr. Silva to approve it anyway':'Pide al Sr. Silva que lo apruebe de todos modos',
     'Teacher unlock':'Desbloqueo de maestro','This item is for Photo 2 students. A teacher can unlock it with the code, or you can ask Mr. Silva to approve it.':'Este artículo es para estudiantes de Foto 2. Un maestro puede desbloquearlo con el código, o puedes pedir al Sr. Silva que lo apruebe.',
-    'Gear override code':'Código de desbloqueo','Unlock with code':'Desbloquear con código','or':'o','Ask Mr. Silva to approve it':'Pide al Sr. Silva que lo apruebe','Photo 2 gear unlocked.':'Equipo de Foto 2 desbloqueado.',
+    'Gear override code':'Código de desbloqueo','Unlock with code':'Desbloquear con código','or':'o','Ask Mr. Silva to approve it':'Pide al Sr. Silva que lo apruebe','Photo 2 gear unlocked.':'Equipo de Foto 2 desbloqueado.','Teacher code':'Código de maestro',
     'for Digital Arts':'para Arte Digital','for Photo 2':'para Foto 2',
+    '%s is %s. ':'%s es %s. ','A teacher can unlock it with the code, or you can ask Mr. Silva to approve it.':'Un maestro puede desbloquearlo con el código, o puedes pedir al Sr. Silva que lo apruebe.',
+    'A teacher can unlock this with the code, or you can ask Mr. Silva to approve it.':'Un maestro puede desbloquear esto con el código, o puedes pedir al Sr. Silva que lo apruebe.',
+    'Equipment checkout is on hold.':'El préstamo de equipo está en pausa.','You can still browse everything below.':'Aún puedes ver todo abajo.','Details':'Detalles','Photo 2 gear unlocked.':'Equipo de Foto 2 desbloqueado.',
     // --- footer / hours / info ---
     'Program Info':'Información del programa','Digital Arts program':'Programa de Arte Digital','Rental agreement':'Acuerdo de renta','Jobs':'Trabajos',
     'Partners':'Colaboradores','Get Social':'Redes sociales','Contact':'Contacto','Business hours & bell schedule':'Horario y campanas','Business hours':'Horario',
-    'Schedule unavailable right now.':'Horario no disponible ahora.','No equipment matches that. Try a category above.':'Ningún equipo coincide. Prueba una categoría de arriba.',
-    'Loading popular rentals…':'Cargando rentas populares…'
+    'Schedule unavailable right now.':'Horario no disponible ahora.','No equipment matches that. Try a category above.':'Ningún equipo coincide. Prueba una categoría de arriba.','Bell schedule':'Horario de campanas',
+    'Equipment pickup and return happen during the school day. Closed on holidays. Rally, minimum, and finals days run a different schedule.':'Recoger y regresar el equipo es durante el día de clases. Cerrado en días feriados. Los días de rally, horario mínimo y finales tienen otro horario.',
+    'Want to be an equipment manager? Ask your teacher. It may count for extra credit.':'¿Quieres ser encargado de equipo? Habla con el Sr. Silva. Puede contar como crédito extra.',
+    'The equipment rental agreement will be posted here soon. Ask your teacher for a copy in the meantime.':'El acuerdo de renta se publicará aquí pronto. Mientras tanto, pide una copia al Sr. Silva.',
+    'Our Digital Arts program website is coming soon.':'El sitio del programa de Arte Digital llegará pronto.',
+    'Loading popular rentals…':'Cargando rentas populares…','Results:':'Resultados:',
+    // --- product blurbs (detail screen; specs stay in their technical form) ---
+    'A compact APS-C camera that is great for learning. Light, fast, and easy to carry.':'Una cámara APS-C compacta, ideal para aprender. Ligera, rápida y fácil de llevar.',
+    'A lightweight full-frame camera. The big sensor gives soft backgrounds and strong low-light photos.':'Una cámara full-frame ligera. El sensor grande da fondos suaves y buenas fotos con poca luz.',
+    'The lightest full-frame EOS R. Fast autofocus and clean 4K video.':'La EOS R full-frame más ligera. Enfoque rápido y video 4K limpio.',
+    'Built for creators. Great for video, vlogging, and livestreams.':'Hecha para creadores. Perfecta para video, vlogs y transmisiones en vivo.',
+    'Canon RF-S 10-18mm. An ultra-wide zoom for big rooms, landscapes, and tight spaces.':'Canon RF-S 10-18mm. Un zoom ultra ancho para salones grandes, paisajes y espacios estrechos.',
+    'Canon RF 100-400mm. A long zoom for sports, wildlife, and far-away subjects.':'Canon RF 100-400mm. Un zoom largo para deportes, animales y sujetos lejanos.',
+    'Canon Speedlite EL-5. A strong flash for portraits and creative lighting.':'Canon Speedlite EL-5. Un flash potente para retratos e iluminación creativa.',
+    'A steady, lightweight tripod with a ball head. Keeps your photos sharp.':'Un trípode estable y ligero con cabeza de bola. Mantén tus fotos nítidas.',
+    'A 5-in-1 reflector. Bounce and shape light for better portraits.':'Un reflector 5 en 1. Rebota y da forma a la luz para mejores retratos.',
+    'The Godox AD200 Pro II, a 200Ws pocket flash for studio-style light anywhere. Comes with the Canon trigger and a light stand. Photo 2 only.':'El Godox AD200 Pro II, un flash de bolsillo de 200Ws para luz de estudio en cualquier lugar. Incluye el disparador Canon y un tripié de luz. Solo Foto 2.',
+    'A SmallRig RM 25C RGB LED panel with a Magic Arm clamp attached. Clamp the light to anything to light a scene or a product photo. Full RGB color, so you can add color too.':'Un panel LED RGB SmallRig RM 25C con un brazo mágico incluido. Sujeta la luz a cualquier cosa para iluminar una escena o una foto de producto. Color RGB completo, para agregar color también.',
+    'A Canon BR-E1 wireless remote. Fire the shutter from a distance for group photos, self-portraits, and sharp long exposures without touching the camera.':'Un control remoto inalámbrico Canon BR-E1. Dispara el obturador a distancia para fotos de grupo, autorretratos y exposiciones largas nítidas sin tocar la cámara.',
+    'A stylus for the class iPads. Draw, sketch, and design right on the screen. For Digital Arts.':'Un lápiz para los iPads de la clase. Dibuja, boceta y diseña directo en la pantalla. Para Arte Digital.'
   };
   // Fill static [data-i18n] text + placeholders for the current language; sets <html lang>.
   // Each element's original English is captured once, so EN restores it exactly (keys may be short codes)
@@ -465,8 +500,8 @@
   // pickup strip: blank room/teacher until a student authenticates; then their own teacher + room
   function refreshPickupInfo(){
     var el=document.getElementById('pickupInfo'); if(!el) return;
-    if(USER){ var teach=USER.teacher||TEACHER_NAME[USER.pool]||''; el.innerHTML='<b>Classroom pickup</b>'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(pickupRoom()); }
-    else { el.innerHTML='<b>Equipment pickup</b>'; }
+    if(USER){ var teach=USER.teacher||TEACHER_NAME[USER.pool]||''; el.innerHTML='<b>'+t('Classroom pickup')+'</b>'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(pickupRoom()); }
+    else { el.innerHTML='<b>'+t('Equipment pickup')+'</b>'; }
   }
 
   // ----- school-day logic (live from pvhs_tools; weekday fallback if the script is blocked) -----
@@ -505,15 +540,15 @@
   var MULTI=null, MULTI_REASON='', multiOpen=false;   // student multi-day request: chosen return Date + why + the opt-in panel state. One-day stays the default; a multi-day booking is always a teacher-approved request.
   function datesReady(){ return !!(pickup && returnTime); }   // checkout day is always set; times are the gate
   function boxDay(d, timeObj, prompt){
-    var sub = timeObj ? ('<span class="dv-sub">'+esc(timeObj.label)+' &middot; '+f12(timeObj.s)+'</span>')
+    var sub = timeObj ? ('<span class="dv-sub">'+esc(t(timeObj.label))+' &middot; '+f12(timeObj.s)+'</span>')
                       : ('<span class="dv-sub muted">'+prompt+'</span>');
     return '<span class="dv-top">'+DOW[d.getDay()]+'</span><span class="dv-big">'+MON[d.getMonth()]+' '+d.getDate()+'</span>'+sub;
   }
   function renderDates(){
     returnDay=MULTI||nextSchoolDay(checkout);   // a chosen multi-day return overrides the normal next-school-day; the whole store (availability, bag, submit) keys off returnDay, so it stays span-aware
     var days=Math.round((returnDay-checkout)/86400000);
-    document.getElementById('dcCheckoutVal').innerHTML=boxDay(checkout, pickup, 'Tap to set times');
-    document.getElementById('dcReturnVal').innerHTML=boxDay(returnDay, returnTime, 'Set at checkout');
+    document.getElementById('dcCheckoutVal').innerHTML=boxDay(checkout, pickup, t('Tap to set times'));
+    document.getElementById('dcReturnVal').innerHTML=boxDay(returnDay, returnTime, t('Set at checkout'));
     document.getElementById('dcDaysVal').innerHTML='<span class="dv-big dv-days">'+days+'</span>';
     document.getElementById('dcCheckout').classList.toggle('todo', !datesReady());
     document.getElementById('dcCheckout').classList.toggle('done', datesReady());
@@ -532,18 +567,18 @@
     document.getElementById('planBack').style.display=(planStep>1)?'':'none';
     var cal=document.getElementById('planCal'), opts=document.getElementById('planOpts');
     if(planStep===1){
-      document.getElementById('planTitle').textContent='Checkout day';
-      document.getElementById('planSub').textContent='Pick the school day you will check out.';
+      document.getElementById('planTitle').textContent=t('Checkout day');
+      document.getElementById('planSub').textContent=t('Pick the school day you will check out.');
       cal.style.display=''; opts.style.display='none';
       calView=new Date(checkout.getFullYear(), checkout.getMonth(), 1); drawCal();
     } else if(planStep===2){
-      document.getElementById('planTitle').textContent='Pickup time';
-      document.getElementById('planSub').textContent='When will you pick up on '+DOW[checkout.getDay()]+' '+MON[checkout.getMonth()]+' '+checkout.getDate()+'?';
+      document.getElementById('planTitle').textContent=t('Pickup time');
+      document.getElementById('planSub').textContent=tf('When will you pick up on %s?', DOW[checkout.getDay()]+' '+MON[checkout.getMonth()]+' '+checkout.getDate());
       cal.style.display='none'; opts.style.display='';
       renderPickup(checkout, function(o){ pickup=o; renderDates(); planStep=3; renderPlan(); });
     } else {
-      document.getElementById('planTitle').textContent='Return time';
-      document.getElementById('planSub').textContent='Due back '+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+' (the next school day). When will you return it?';
+      document.getElementById('planTitle').textContent=t('Return time');
+      document.getElementById('planSub').textContent=tf('Due back %s (the next school day). When will you return it?', DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate());
       cal.style.display='none'; opts.style.display='';
       renderOpts(returnOptions(returnDay), function(o){ returnTime=o; renderDates();
         if(planMode==='calendar'){ planMode='add'; close('planOv'); openPicker(); return; }   // calendar view: dates set, now pick equipment
@@ -555,8 +590,8 @@
   }
   function renderOpts(opts, pick, note){
     var w=document.getElementById('planOpts');
-    if(!opts.length){ w.innerHTML='<p class="noresults">No set windows for that day. Ask your teacher.</p>'; return; }
-    w.innerHTML=opts.map(function(o,i){ return '<button type="button" class="time-opt" data-i="'+i+'"><b>'+esc(o.label)+'</b><span>'+f12(o.s)+' to '+f12(o.e)+'</span></button>'; }).join('') + (note?'<div class="plan-note">'+esc(note)+'</div>':'');
+    if(!opts.length){ w.innerHTML='<p class="noresults">'+t('No set windows for that day. Ask your teacher.')+'</p>'; return; }
+    w.innerHTML=opts.map(function(o,i){ return '<button type="button" class="time-opt" data-i="'+i+'"><b>'+esc(t(o.label))+'</b><span>'+f12(o.s)+' '+t('to')+' '+f12(o.e)+'</span></button>'; }).join('') + (note?'<div class="plan-note">'+esc(t(note))+'</div>':'');
     w.querySelectorAll('[data-i]').forEach(function(b){ b.onclick=function(){ pick(opts[+b.getAttribute('data-i')]); }; });
   }
   // Pickup step: the schedule windows PLUS "during your class period" (periods 1-7, default = the student's own period).
@@ -568,8 +603,8 @@
     var myBlk=null; periodOptions(day).forEach(function(o){ if(o.period===myPer) myBlk=o; });
     if(myBlk) times.push({label:'Period '+myPer, s:myBlk.s, e:myBlk.e, during:true});
     w.innerHTML=times.map(function(o,i){
-      var head=o.during?'During class':esc(o.label);
-      var sub=o.during?('Period '+myPer+' &middot; '+f12(o.s)+' to '+f12(o.e)):(f12(o.s)+' to '+f12(o.e));
+      var head=o.during?t('During class'):esc(t(o.label));
+      var sub=o.during?(tf('Period %s', myPer)+' &middot; '+f12(o.s)+' '+t('to')+' '+f12(o.e)):(f12(o.s)+' '+t('to')+' '+f12(o.e));
       return '<button type="button" class="time-opt" data-t="'+i+'"><b>'+head+'</b><span>'+sub+'</span></button>';
     }).join('');
     w.querySelectorAll('[data-t]').forEach(function(b){ b.onclick=function(){ pick(times[+b.getAttribute('data-t')]); }; });
@@ -624,7 +659,7 @@
       var isOpen=isSchoolDay(d) && d>=today && !isBlackoutIso(iso);
       if(isOpen){
         var free=freeCamsOnDay(iso), full=(free===0);
-        html+='<button type="button" class="cv-day'+(full?' full':'')+(iso===CVSEL?' sel':'')+'" data-cvd="'+iso+'"><span class="cv-n">'+dn+'</span><span class="cv-free">'+(free==null?'&middot;':(free+' free'))+'</span></button>';
+        html+='<button type="button" class="cv-day'+(full?' full':'')+(iso===CVSEL?' sel':'')+'" data-cvd="'+iso+'"><span class="cv-n">'+dn+'</span><span class="cv-free">'+(free==null?'&middot;':(free+' '+t('free')))+'</span></button>';
       } else { html+='<span class="cv-cell off">'+dn+'</span>'; }
     }
     grid.innerHTML=html;
@@ -699,22 +734,22 @@
     var availRows = av.length ? av.map(function(a){
       return '<button type="button" class="cv-av-row" data-avail="'+encodeURIComponent(a.name)+'">'+
         '<span class="cv-dp-nm">'+esc(a.name)+'</span>'+
-        '<span class="cv-av-free">'+a.free+' free</span><span class="cv-av-go" aria-hidden="true">&rsaquo;</span></button>';
-    }).join('') : '<div class="cv-dp-empty">Every item is booked for this day.</div>';
+        '<span class="cv-av-free">'+a.free+' '+t('free')+'</span><span class="cv-av-go" aria-hidden="true">&rsaquo;</span></button>';
+    }).join('') : '<div class="cv-dp-empty">'+t('Every item is booked for this day.')+'</div>';
     // Already reserved: who has what (period only, never a name).
     var resRows = reserved.length ? reserved.map(function(r){
       return '<div class="cv-dp-row"><span class="cv-dp-nm">'+esc(r.label)+'</span>'+
         (r.period?'<span class="cv-dp-per">'+esc(r.period)+'</span>':'')+
-        '<span class="cv-tag'+(r.out?' out':'')+'">'+(r.out?'Out':'Booked')+'</span></div>'; }).join('')
-      : '<div class="cv-dp-empty">Nothing reserved yet. Everything is open.</div>';
+        '<span class="cv-tag'+(r.out?' out':'')+'">'+(r.out?t('Out'):t('Booked'))+'</span></div>'; }).join('')
+      : '<div class="cv-dp-empty">'+t('Nothing reserved yet. Everything is open.')+'</div>';
     panel.innerHTML='<div class="cv-dp-head"><div><div class="cv-dp-date">'+DOW[d.getDay()]+' &middot; '+MON[d.getMonth()]+' '+d.getDate()+'</div>'+
-        '<div class="cv-dp-free'+(free===0?' none':'')+'">'+(free==null?'&middot;':(free+' of '+total+' cameras free'))+'</div></div>'+
+        '<div class="cv-dp-free'+(free===0?' none':'')+'">'+(free==null?'&middot;':tf('%s of %s cameras free', free, total))+'</div></div>'+
         '<button type="button" class="cv-dp-x" id="cvDpX" aria-label="Close day">&times;</button></div>'+
       '<div class="cv-dp-body silva-scroll">'+
-        '<div class="cv-dp-sect"><div class="cv-dp-sect-t">Available to reserve</div>'+availRows+'</div>'+
-        '<div class="cv-dp-sect"><div class="cv-dp-sect-t">Reserved this day</div>'+resRows+'</div>'+
+        '<div class="cv-dp-sect"><div class="cv-dp-sect-t">'+t('Available to reserve')+'</div>'+availRows+'</div>'+
+        '<div class="cv-dp-sect"><div class="cv-dp-sect-t">'+t('Reserved this day')+'</div>'+resRows+'</div>'+
       '</div>'+
-      '<button type="button" class="btn block cv-dp-go" id="cvDpGo">Reserve for this day</button>';
+      '<button type="button" class="btn block cv-dp-go" id="cvDpGo">'+t('Reserve for this day')+'</button>';
     panel.querySelectorAll('[data-avail]').forEach(function(b){ b.onclick=function(){ calDayPick(CVSEL, decodeURIComponent(b.getAttribute('data-avail'))); }; });
     document.getElementById('cvDpX').onclick=function(){ CVSEL=null; renderCalView(); };
     document.getElementById('cvDpGo').onclick=function(){ calDayReserve(CVSEL); };
@@ -755,31 +790,31 @@
     var body=document.getElementById('pickerBody'), sub=document.getElementById('pickerSub'), title=document.getElementById('pickerTitle');
     // 3) In-place DETAIL: the selected item takes over the card, with a back button to the grid.
     if(pickerItem){
-      if(title) title.textContent='Equipment details';
+      if(title) title.textContent=t('Equipment details');
       if(sub) sub.style.display='none';
       var dc=detailContentHtml(pickerItem);
-      body.innerHTML='<button type="button" class="pk-back" id="pkDBack">&lsaquo; Back to '+esc((CATS[pickerCat]&&CATS[pickerCat].label)||'list')+'</button>'+dc.html+
-        (dc.free?'<button type="button" class="btn block" id="pkDAdd">Add to bag</button>':'<button type="button" class="btn block" disabled>None free for your dates</button>');
+      body.innerHTML='<button type="button" class="pk-back" id="pkDBack">&lsaquo; '+tf('Back to %s', esc(t((CATS[pickerCat]&&CATS[pickerCat].label)||'list')))+'</button>'+dc.html+
+        (dc.free?'<button type="button" class="btn block" id="pkDAdd">'+t('Add to bag')+'</button>':'<button type="button" class="btn block" disabled>'+t('None free for your dates')+'</button>');
       wireUnitChips(body);
       document.getElementById('pkDBack').onclick=function(){ pickerItem=null; renderPicker(); };
       var pa=document.getElementById('pkDAdd'); if(pa) pa.onclick=function(){ var nm=pickerItem; if(detailUnit){ PICK[nm]=detailUnit; savePick(); } pickerItem=null; renderPicker(); addToBag(nm); };
       return;
     }
     if(sub) sub.style.display='';
-    if(title) title.textContent='Add equipment';
+    if(title) title.textContent=t('Add equipment');
     if(!pickerCat){
-      if(sub) sub.textContent='Pick a category, then add what you need.';
-      body.innerHTML='<div class="pk-cats">'+Object.keys(CATS).map(function(k){ return '<button type="button" class="pk-cat" data-pcat="'+k+'"><span class="pk-cat-ic" style="--ic:url(\''+catIcon(k)+'\')"></span>'+esc(CATS[k].label)+'</button>'; }).join('')+'</div>'+
-        '<button type="button" class="btn block" id="pkDone0">Done</button>';
+      if(sub) sub.textContent=t('Pick a category, then add what you need.');
+      body.innerHTML='<div class="pk-cats">'+Object.keys(CATS).map(function(k){ return '<button type="button" class="pk-cat" data-pcat="'+k+'"><span class="pk-cat-ic" style="--ic:url(\''+catIcon(k)+'\')"></span>'+esc(t(CATS[k].label))+'</button>'; }).join('')+'</div>'+
+        '<button type="button" class="btn block" id="pkDone0">'+t('Done')+'</button>';
       body.querySelectorAll('[data-pcat]').forEach(function(b){ b.onclick=function(){ pickerCat=b.getAttribute('data-pcat'); renderPicker(); }; });
       var d0=document.getElementById('pkDone0'); if(d0) d0.onclick=pickerDone;
     } else {
       var c=CATS[pickerCat];
-      if(sub) sub.textContent=c.label;
+      if(sub) sub.textContent=t(c.label);
       var grid=c.items.filter(function(it){ return it.img; }).map(cardHtml).join('');
-      body.innerHTML='<button type="button" class="pk-back" id="pkBack">&lsaquo; All categories</button>'+
+      body.innerHTML='<button type="button" class="pk-back" id="pkBack">&lsaquo; '+t('All categories')+'</button>'+
         '<div class="prod-grid pk-grid">'+grid+'</div>'+
-        '<div class="pk-foot"><button type="button" class="btn ghost" id="pkMore">Add other equipment</button><button type="button" class="btn" id="pkDone">Done</button></div>';
+        '<div class="pk-foot"><button type="button" class="btn ghost" id="pkMore">'+t('Add other equipment')+'</button><button type="button" class="btn" id="pkDone">'+t('Done')+'</button></div>';
       wireCards(body);
       // View details / tapping a card opens the in-place detail, not the hidden detail modal.
       body.querySelectorAll('[data-detail]').forEach(function(b){ b.onclick=function(){ pickerItem=decodeURIComponent(b.getAttribute('data-detail')); renderPicker(); }; });
@@ -911,9 +946,9 @@
   }
   function renderPopular(){
     CURVIEW='popular';
-    document.getElementById('prodHeadLabel').textContent='Popular Rentals';
+    document.getElementById('prodHeadLabel').textContent=t('Popular Rentals');
     var g=document.getElementById('prodGrid'); var items=popularItems();
-    g.innerHTML=items.length?items.map(cardHtml).join(''):'<p class="noresults">Loading popular rentals&hellip;</p>';
+    g.innerHTML=items.length?items.map(cardHtml).join(''):'<p class="noresults">'+t('Loading popular rentals…')+'</p>';
     wireCards(g);
     document.querySelectorAll('.catn').forEach(function(x){ x.classList.remove('active'); });
   }
@@ -950,13 +985,14 @@
   // bag anything), so a receipt never names a room they do not actually visit.
   function pickupRoom(){
     if(!USER) return '';
+    var R=function(n){ return t('Room')+' '+n; }, P=' ('+t('Photo')+')', D=' ('+t('Digital Arts')+')';
     var photo=hasPool('silva')||hasPool('garcia'), da=hasPool('mankin');
-    if(!(photo&&da)) return da?'Room 331':'Room 322';
+    if(!(photo&&da)) return da?R('331'):R('322');
     var needPhoto=false, needDA=false;
     (BAG||[]).forEach(function(nm){ var it=findItem(nm); if(!it) return; if(itemDA(it)) needDA=true; else needPhoto=true; });
     if(!needPhoto && !needDA){ needPhoto=true; needDA=true; }
-    if(needPhoto && needDA) return 'Room 322 (Photo) and Room 331 (Digital Arts)';
-    return needDA?'Room 331 (Digital Arts)':'Room 322 (Photo)';
+    if(needPhoto && needDA) return R('322')+P+' '+t('and')+' '+R('331')+D;
+    return needDA?(R('331')+D):(R('322')+P);
   }
   // Gray out equipment that is not for the signed-in student's course(s) (teacher override lifts it).
   function itemLocked(it){
@@ -977,18 +1013,18 @@
     var st = (!locked) ? stockFor(it) : null;   // stock only on items this student can access
     var soldOut = !!(st && st.free<=0);         // nothing free for the chosen dates -> cannot add
     var btn = inbag
-      ? '<button type="button" class="btn sm block prod-inbag" data-remove="'+enc+'">In bag &middot; remove</button>'
+      ? '<button type="button" class="btn sm block prod-inbag" data-remove="'+enc+'">'+t('In bag &middot; remove')+'</button>'
       : (locked
-          ? '<button type="button" class="btn sm block prod-locked" data-unlock="'+enc+'">Locked &middot; ask teacher</button>'
+          ? '<button type="button" class="btn sm block prod-locked" data-unlock="'+enc+'">'+t('Locked &middot; ask teacher')+'</button>'
           : (soldOut
-              ? '<button type="button" class="btn sm block" disabled>None free for your dates</button>'
-              : '<button type="button" class="btn sm block prod-add" data-add="'+enc+'">Add to bag</button>'));
+              ? '<button type="button" class="btn sm block" disabled>'+t('None free for your dates')+'</button>'
+              : '<button type="button" class="btn sm block prod-add" data-add="'+enc+'">'+t('Add to bag')+'</button>'));
     // Availability colour (Chris's framework): GREEN = all free, YELLOW = some reserved, RED = none free.
-    var stock = st ? '<div class="prod-stock'+(st.free<=0?' out':(st.free<st.total?' low':''))+'">'+st.free+' / '+st.total+' available</div>' : '';
+    var stock = st ? '<div class="prod-stock'+(st.free<=0?' out':(st.free<st.total?' low':''))+'">'+st.free+' / '+st.total+' '+t('available')+'</div>' : '';
     var det=enc;
-    var more = SPECS[it.name] ? '<button type="button" class="prod-details" data-detail="'+det+'">View details</button>' : '';
+    var more = SPECS[it.name] ? '<button type="button" class="prod-details" data-detail="'+det+'">'+t('View details')+'</button>' : '';
     return '<div class="prod'+(showLocked?' locked':'')+'">'+
-      '<div class="prod-img" data-detail="'+det+'"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.tag&&!showLocked?'<span class="prod-tag">'+esc(it.tag)+'</span>':'')+(showLocked?'<span class="prod-lockbadge">'+esc(lockReason(it))+'</span>':'')+'</div>'+
+      '<div class="prod-img" data-detail="'+det+'"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.tag&&!showLocked?'<span class="prod-tag">'+esc(t(it.tag))+'</span>':'')+(showLocked?'<span class="prod-lockbadge">'+esc(t(lockReason(it)))+'</span>':'')+'</div>'+
       '<div class="prod-name" data-detail="'+det+'">'+esc(it.name)+'</div>'+ stock + more + btn + '</div>';
   }
   function wireCards(g){
@@ -1002,16 +1038,16 @@
   // the in-place picker detail. Sets detailUnit to the student's prior pick if still free, else first free.
   function detailContentHtml(name){
     var it=findItem(name), sp=SPECS[name];
-    var img = it && it.img ? '<div class="detail-img"><img src="'+it.img+'" alt="" />'+(it.tag?'<span class="prod-tag">'+esc(it.tag)+'</span>':'')+'</div>' : '';
+    var img = it && it.img ? '<div class="detail-img"><img src="'+it.img+'" alt="" />'+(it.tag?'<span class="prod-tag">'+esc(t(it.tag))+'</span>':'')+'</div>' : '';
     var rows = sp ? sp.specs.map(function(r){ return '<div class="spec-row"><span>'+r[0]+'</span><span>'+r[1]+'</span></div>'; }).join('') : '';
     var all=allUnitsFor(it), free=freeUnitsFor(it)||[], freeSet={}; free.forEach(function(u){ freeSet[u]=1; });
     detailUnit = (PICK[name] && freeSet[PICK[name]]) ? PICK[name] : (free[0]||null);
-    var selLab = camsFor(name) ? 'Pick your camera number' : 'Pick a unit number';
+    var selLab = camsFor(name) ? t('Pick your camera number') : t('Pick a unit number');
     var chips = all.map(function(u){ var busy=!freeSet[u]; return '<button type="button" class="unit-chip'+(busy?' busy':'')+(u===detailUnit?' on':'')+'"'+(busy?' disabled aria-disabled="true"':' data-u="'+esc(u)+'"')+'>'+esc(unitNum(it,u))+'</button>'; }).join('');
-    var selector = all.length ? ('<div class="unit-pick"><div class="unit-pick-lab">'+selLab+(free.length?'':' &middot; none free for your dates')+'</div><div class="unit-chips">'+chips+'</div></div>') : '';
+    var selector = all.length ? ('<div class="unit-pick"><div class="unit-pick-lab">'+selLab+(free.length?'':t(' &middot; none free for your dates'))+'</div><div class="unit-chips">'+chips+'</div></div>') : '';
     // Specs live in a collapsed accordion (tap to expand) so the card stays compact and the picker + Add button show without scrolling.
-    var specAcc = (sp && rows) ? '<details class="spec-acc"><summary class="spec-sum"><span class="bar"></span><span>Specs</span><span class="hiw-chev" aria-hidden="true"></span></summary><div class="spec-list">'+rows+'</div></details>' : '';
-    return { html: img+'<h2 class="detail-title">'+esc(name)+'</h2>'+(sp?'<p class="detail-blurb">'+sp.blurb+'</p>':'')+specAcc+selector, free: free.length };
+    var specAcc = (sp && rows) ? '<details class="spec-acc"><summary class="spec-sum"><span class="bar"></span><span>'+t('Specs')+'</span><span class="hiw-chev" aria-hidden="true"></span></summary><div class="spec-list">'+rows+'</div></details>' : '';
+    return { html: img+'<h2 class="detail-title">'+esc(name)+'</h2>'+(sp?'<p class="detail-blurb">'+t(sp.blurb)+'</p>':'')+specAcc+selector, free: free.length };
   }
   function wireUnitChips(scope){
     scope.querySelectorAll('.unit-chip[data-u]').forEach(function(b){ b.onclick=function(){
@@ -1023,8 +1059,8 @@
   function openDetail(name, fromBag, fromCalDay){
     detailReturnToBag=!!fromBag;
     var c=detailContentHtml(name);
-    var addBtn = c.free ? '<button type="button" class="btn block" id="detailAdd">'+(fromBag?'Save this one':'Add to bag')+'</button>'
-                        : '<button type="button" class="btn block" disabled>None free for your dates</button>';
+    var addBtn = c.free ? '<button type="button" class="btn block" id="detailAdd">'+(fromBag?t('Save this one'):t('Add to bag'))+'</button>'
+                        : '<button type="button" class="btn block" disabled>'+t('None free for your dates')+'</button>';
     var bd=document.getElementById('detailBody'); bd.innerHTML=c.html+addBtn;
     wireUnitChips(bd);
     var ab=document.getElementById('detailAdd'); if(ab) ab.onclick=function(){
@@ -1038,7 +1074,7 @@
   function renderCat(cat){
     CURVIEW=cat;
     var c=CATS[cat]||CATS.cameras;
-    document.getElementById('prodHeadLabel').textContent=c.label;
+    document.getElementById('prodHeadLabel').textContent=t(c.label);
     var g=document.getElementById('prodGrid');
     g.innerHTML=c.items.filter(function(it){ return it.img; }).map(cardHtml).join('');
     wireCards(g);
@@ -1065,9 +1101,9 @@
     var needle=q.trim().toLowerCase();
     var hits=ALL.filter(function(r){ return r.hay.indexOf(needle)!==-1; }).map(function(r){ return r.it; });
     document.querySelectorAll('.catn').forEach(function(x){ x.classList.remove('active'); });
-    document.getElementById('prodHeadLabel').textContent='Results: “'+q.trim()+'”';
+    document.getElementById('prodHeadLabel').textContent=t('Results:')+' “'+q.trim()+'”';
     var g=document.getElementById('prodGrid');
-    if(!hits.length){ g.innerHTML='<p class="noresults">No equipment matches that. Try a category above.</p>'; return; }
+    if(!hits.length){ g.innerHTML='<p class="noresults">'+t('No equipment matches that. Try a category above.')+'</p>'; return; }
     g.innerHTML=hits.map(cardHtml).join(''); wireCards(g);
   }
   var searchIn=document.getElementById('searchIn');
@@ -1092,7 +1128,7 @@
     if(onHold() && !reqMode()){ openHold(); return; }                   // missing-work hold: browse yes, add no (unless they chose to request)
     if(!modifyMode && !datesReady()){ pendingAdd=name; openPlan(skipDay?2:1); return; } // no times yet: ask pickup/return (skip the day when already set; a modify keeps the reservation's dates)
     var free=freeUnitsFor(it);
-    if(free && !free.length){ toast(name+' is not free for your dates.'); return; }   // every unit is booked for the chosen span: do not add
+    if(free && !free.length){ toast(name+' '+t('is not free for your dates.')); return; }   // every unit is booked for the chosen span: do not add
     doAddToBag(name);
   }
   function doAddToBag(name){
@@ -1137,69 +1173,69 @@
   }
   // Save the edited reservation: send the complete unit set + dates to the modify endpoint.
   function saveModify(){
-    if(!BAG.length){ setBagMsg('Keep at least one item, or cancel the reservation instead.', true); return; }
+    if(!BAG.length){ setBagMsg(t('Keep at least one item, or cancel the reservation instead.'), true); return; }
     var co=isoOf(checkout), ret=isoOf(returnDay), units=[], seen={};
     BAG.forEach(function(nm){ var it=findItem(nm); if(!it) return;
       var unit=PICK[nm]; if(!unit){ var f=freeUnitsFor(it)||[]; unit=f[0]; }
       if(!unit || seen[unit]) return; seen[unit]=1;
       units.push({ kind: camsFor(nm)?'camera':'equipment', unit: unit }); });
-    if(!units.length){ setBagMsg('Could not read your items. Try again.', true); return; }
+    if(!units.length){ setBagMsg(t('Could not read your items. Try again.'), true); return; }
     api('/api/camera/modify',{student_id:USER.id, id:editingResvId, out:co, due:ret, units:units}).then(function(j){
-      if(j&&j.ok){ toast('Reservation updated.'); exitModify(); BAG=[]; PICK={}; saveBag(); savePick(); updateBag(); close('bagOv'); loadCal(); openAccount(); }
-      else { setBagMsg((j&&j.error)||'Could not update. Try again.', true); }
-    }).catch(function(){ setBagMsg('Could not update. Try again.', true); });
+      if(j&&j.ok){ toast(t('Reservation updated.')); exitModify(); BAG=[]; PICK={}; saveBag(); savePick(); updateBag(); close('bagOv'); loadCal(); openAccount(); }
+      else { setBagMsg((j&&j.error)||t('Could not update. Try again.'), true); }
+    }).catch(function(){ setBagMsg(t('Could not update. Try again.'), true); });
   }
   function renderBag(){
     var w=document.getElementById('bagList');
-    if(!BAG.length){ w.innerHTML='<p class="bag-empty">Your equipment bag is empty. Add gear to get started.</p>'; setBagMsg(''); return; }
+    if(!BAG.length){ w.innerHTML='<p class="bag-empty">'+t('Your equipment bag is empty. Add gear to get started.')+'</p>'; setBagMsg(''); return; }
     var teach=USER?(USER.teacher||TEACHER_NAME[USER.pool]||''):'', room=USER?pickupRoom():'';
     var note = modifyMode
-      ? '<div class="bag-modnote">Changing your reservation. Edit the gear or the day, then <b>Save changes</b>. Close this to keep it as it was.</div>'
-      : (reqMode() ? '<div class="bag-reqnote">Because of missing work, Mr. Silva must approve this reservation. Turn in your work to speed it up.</div>' : '');
+      ? '<div class="bag-modnote">'+t('Changing your reservation. Edit the gear or the day, then <b>Save changes</b>. Close this to keep it as it was.')+'</div>'
+      : (reqMode() ? '<div class="bag-reqnote">'+t('Because of missing work, Mr. Silva must approve this reservation. Turn in your work to speed it up.')+'</div>' : '');
     var dates;
     if(modifyMode){
       dates='<div class="bag-dates">'+
-        '<div class="bag-drow"><span class="bag-dk">Pick up</span><span class="bag-dv">'+DOW[checkout.getDay()]+' '+MON[checkout.getMonth()]+' '+checkout.getDate()+'</span></div>'+
-        '<div class="bag-drow"><span class="bag-dk">Return</span><span class="bag-dv">'+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+' &middot; next school day</span></div>'+
-        '<div class="bag-drow"><span class="bag-dk">Where</span><span class="bag-dv">Classroom pickup'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div>'+
-        '<button type="button" class="bag-editdates" id="bagEditDates">Change the day</button></div>';
+        '<div class="bag-drow"><span class="bag-dk">'+t('Pick up')+'</span><span class="bag-dv">'+DOW[checkout.getDay()]+' '+MON[checkout.getMonth()]+' '+checkout.getDate()+'</span></div>'+
+        '<div class="bag-drow"><span class="bag-dk">'+t('Return')+'</span><span class="bag-dv">'+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+' &middot; '+t('next school day')+'</span></div>'+
+        '<div class="bag-drow"><span class="bag-dk">'+t('Where')+'</span><span class="bag-dv">'+t('Classroom pickup')+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div>'+
+        '<button type="button" class="bag-editdates" id="bagEditDates">'+t('Change the day')+'</button></div>';
     } else if(datesReady()){
       dates='<div class="bag-dates">'+
-        '<div class="bag-drow"><span class="bag-dk">Pick up</span><span class="bag-dv">'+DOW[checkout.getDay()]+' '+MON[checkout.getMonth()]+' '+checkout.getDate()+' &middot; '+esc(pickup.label)+' ('+f12(pickup.s)+')</span></div>'+
-        '<div class="bag-drow"><span class="bag-dk">Return</span><span class="bag-dv">'+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+' &middot; '+esc(returnTime.label)+' ('+f12(returnTime.s)+')</span></div>'+
-        '<div class="bag-drow"><span class="bag-dk">Where</span><span class="bag-dv">Classroom pickup'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div>'+
-        '<button type="button" class="bag-editdates" id="bagEditDates">Change dates</button></div>';
-    } else { dates='<div class="bag-nodates">No dates yet. Pick when you need the gear, then reserve.</div>'; }
+        '<div class="bag-drow"><span class="bag-dk">'+t('Pick up')+'</span><span class="bag-dv">'+DOW[checkout.getDay()]+' '+MON[checkout.getMonth()]+' '+checkout.getDate()+' &middot; '+esc(t(pickup.label))+' ('+f12(pickup.s)+')</span></div>'+
+        '<div class="bag-drow"><span class="bag-dk">'+t('Return')+'</span><span class="bag-dv">'+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+' &middot; '+esc(t(returnTime.label))+' ('+f12(returnTime.s)+')</span></div>'+
+        '<div class="bag-drow"><span class="bag-dk">'+t('Where')+'</span><span class="bag-dv">'+t('Classroom pickup')+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div>'+
+        '<button type="button" class="bag-editdates" id="bagEditDates">'+t('Change dates')+'</button></div>';
+    } else { dates='<div class="bag-nodates">'+t('No dates yet. Pick when you need the gear, then reserve.')+'</div>'; }
     // Each item is tappable to change its unit (opens its detail), like clicking a cart item's options.
     var items='<div class="bag-items">'+BAG.map(function(nm){ var it=findItem(nm);
-      var tag = (!reqMode() && REQ[nm]) ? '<span class="bag-reqtag">Needs OK</span>' : '';
+      var tag = (!reqMode() && REQ[nm]) ? '<span class="bag-reqtag">'+t('Needs OK')+'</span>' : '';
       var unit = PICK[nm] ? '<span class="bag-unit">'+esc(unitFull(nm,PICK[nm]))+'</span>' : '';
       return '<div class="bag-item">'+
-        '<button type="button" class="bag-edit" data-edit="'+encodeURIComponent(nm)+'" aria-label="Change '+esc(nm)+'">'+
+        '<button type="button" class="bag-edit" data-edit="'+encodeURIComponent(nm)+'" aria-label="'+esc(tf('Change %s', nm))+'">'+
           (it&&it.img?'<img class="bag-thumb" src="'+it.img+'" alt="">':'')+
           '<span class="bag-name">'+esc(nm)+unit+tag+'</span><span class="bag-go" aria-hidden="true">&rsaquo;</span>'+
         '</button>'+
-        '<button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">Remove</button></div>'; }).join('')+'</div>';
+        '<button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">'+t('Remove')+'</button></div>'; }).join('')+'</div>';
     var primary = modifyMode
-      ? '<button type="button" class="btn bag-reserve" id="bagSave">Save changes</button>'
+      ? '<button type="button" class="btn bag-reserve" id="bagSave">'+t('Save changes')+'</button>'
       : (datesReady()
-          ? '<button type="button" class="btn bag-reserve" id="bagReserve">'+reserveLabel()+'</button>'
-          : '<button type="button" class="btn" id="bagSetDates">Set checkout dates</button>');
-    var action = '<div class="bag-actions"><button type="button" class="btn ghost bag-addmore" id="bagAddMore">Add equipment</button>'+primary+'</div>';
+          ? '<button type="button" class="btn bag-reserve" id="bagReserve">'+t(reserveLabel())+'</button>'
+          : '<button type="button" class="btn" id="bagSetDates">'+t('Set checkout dates')+'</button>');
+    var action = '<div class="bag-actions"><button type="button" class="btn ghost bag-addmore" id="bagAddMore">'+t('Add equipment')+'</button>'+primary+'</div>';
     // Special request: a lowkey accordion (mostly hidden). Opening it reveals a note + a new return-day option.
     var multi='';
     if(!modifyMode && datesReady()){
       if(MULTI){
-        multi='<div class="bag-special done"><div class="bsp-chosen"><span class="bsp-ctext">Special request &middot; return <b>'+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+'</b> &middot; needs Mr. Silva&#8217;s OK'+(MULTI_REASON?('<br>&ldquo;'+esc(MULTI_REASON)+'&rdquo;'):'')+'</span><button type="button" class="bsp-clear" id="bagMultiClear">Remove</button></div></div>';
+        multi='<div class="bag-special done"><div class="bsp-chosen"><span class="bsp-ctext">'+t('Special request')+' &middot; '+t('return')+' <b>'+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+'</b> &middot; '+t('needs Mr. Silva&#8217;s OK')+(MULTI_REASON?('<br>&ldquo;'+esc(MULTI_REASON)+'&rdquo;'):'')+'</span><button type="button" class="bsp-clear" id="bagMultiClear">'+t('Remove')+'</button></div></div>';
       } else {
         var mbody='';
         if(multiOpen){
-          var mchips=multiDayOptions().map(function(o){ return '<button type="button" class="bag-mchip" data-mday="'+o.iso+'"><b>'+DOW[o.d.getDay()]+' '+MON[o.d.getMonth()]+' '+o.d.getDate()+'</b><span>'+o.n+' days</span></button>'; }).join('');
-          mbody='<div class="bsp-body"><div class="bsp-hint">Need something different, like keeping it longer for a project? Add a note and pick a new return day. Mr. Silva reviews it.</div>'+
-            '<textarea class="bag-mreason" id="bagMultiReason" rows="2" placeholder="What do you need, and why? (a few words)">'+esc(MULTI_REASON)+'</textarea>'+
-            '<div class="bsp-dayslab">New return day</div><div class="bag-mdays">'+mchips+'</div></div>';
+          var mchips=multiDayOptions().map(function(o){ return '<button type="button" class="bag-mchip" data-mday="'+o.iso+'"><b>'+DOW[o.d.getDay()]+' '+MON[o.d.getMonth()]+' '+o.d.getDate()+'</b><span>'+o.n+' '+t('days')+'</span></button>'; }).join('');
+          mbody='<div class="bsp-body"><div class="bsp-hint">'+t('Need something different, like keeping it longer for a project? Add a note and pick a new return day. Mr. Silva reviews it.')+'</div>'+
+            '<textarea class="bag-mreason" id="bagMultiReason" rows="2" placeholder="'+esc(t('What do you need, and why? (a few words)'))+'">'+esc(MULTI_REASON)+'</textarea>'+
+            '<div class="bsp-dayslab">'+t('New return day')+'</div><div class="bag-mdays">'+mchips+'</div></div>';
         }
-        multi='<div class="bag-special'+(multiOpen?' open':'')+'"><button type="button" class="bsp-toggle" id="bagMultiOpen">Special request <span class="bsp-chev">&rsaquo;</span></button>'+mbody+'</div>';
+        multi='<div class="bag-special'+(multiOpen?' open':'')+'"><button type="button" class="bsp-toggle" id="bagMultiOpen">'+t('Special request')+' <span class="bsp-chev">&rsaquo;</span></button>'+mbody+'</div>';
       }
     }
     w.innerHTML=note+dates+multi+items+action;
@@ -1215,11 +1251,11 @@
     var mReason=document.getElementById('bagMultiReason'); if(mReason) mReason.addEventListener('input',function(){ MULTI_REASON=mReason.value; });
     w.querySelectorAll('[data-mday]').forEach(function(b){ b.onclick=function(){
       var mr=document.getElementById('bagMultiReason'); if(mr) MULTI_REASON=mr.value;
-      if(!MULTI_REASON.trim()){ setBagMsg('Add a short note first so Mr. Silva knows what you need.', true); if(mr) mr.focus(); return; }
+      if(!MULTI_REASON.trim()){ setBagMsg(t('Add a short note first so Mr. Silva knows what you need.'), true); if(mr) mr.focus(); return; }
       var p=b.getAttribute('data-mday').split('-'); MULTI=new Date(+p[0],+p[1]-1,+p[2]); MULTI.setHours(0,0,0,0);
       multiOpen=false; renderDates(); rerender(); renderBag();
       var gone=BAG.filter(function(nm){ var it=findItem(nm); var fu=freeUnitsFor(it); return !(fu&&fu.length); });
-      if(gone.length) setBagMsg('Heads up: <b>'+gone.map(esc).join(', ')+'</b> is not free for the whole time. Pick a shorter return or swap it out.', true);
+      if(gone.length) setBagMsg(t('Heads up:')+' <b>'+gone.map(esc).join(', ')+'</b> '+t('is not free for the whole time. Pick a shorter return or swap it out.'), true);
     }; });
     setBagMsg('');
   }
@@ -1228,7 +1264,7 @@
   // is on a missing-work hold and chose to request) posts with request:true -> a PENDING reservation.
   function submitReservation(){
     if(!BAG.length || !datesReady()) return;
-    if(MULTI && !MULTI_REASON.trim()){ multiOpen=true; renderBag(); setBagMsg('Add a short note so Mr. Silva knows what you need.', true); return; }
+    if(MULTI && !MULTI_REASON.trim()){ multiOpen=true; renderBag(); setBagMsg(t('Add a short note so Mr. Silva knows what you need.'), true); return; }
     if(onHold() && !reqMode()){ openHold(); return; }
     var co=isoOf(checkout), ret=isoOf(returnDay);
     var used={}, resolved=[], failed=[];
@@ -1239,7 +1275,7 @@
       used[pick]=1;
       resolved.push({ name:nm, unit:pick, isCam:!!camsFor(nm), req:itemNeedsApproval(nm), reason:(reqMode()?'missing':(REQ[nm]||'')) });
     });
-    if(failed.length){ setBagMsg('No longer free for your dates: <b>'+failed.map(esc).join(', ')+'</b>. Remove it or change your dates.', true); return; }
+    if(failed.length){ setBagMsg(t('No longer free for your dates:')+' <b>'+failed.map(esc).join(', ')+'</b>. '+t('Remove it or change your dates.'), true); return; }
     // Normal (approved) items group like a kit; request items each post on their own, flagged.
     var posts=[];
     function kitPosts(list, req, reason, note){
@@ -1264,38 +1300,38 @@
     // Also carry the confirmed contact so the server can enforce reachable contact even if the sign-in save was dropped (gear protection).
     if(USER){ win.student_cell=USER.sc||''; win.parent_guardian=USER.pg||''; win.parent_cell=USER.pc||''; }
     posts=posts.map(function(p){ return Object.assign(p, win); });
-    var lbl=reserveLabel(), sending=(lbl==='Send request')?'Sending…':'Reserving…';
+    var lbl=reserveLabel(), sending=(lbl==='Send request')?t('Sending…'):t('Reserving…');
     var rv=document.getElementById('bagReserve'); if(rv){ rv.disabled=true; rv.textContent=sending; }
     Promise.all(posts.map(function(p){ return api('/api/camera/checkout', p); })).then(function(results){
       var bad=null; for(var i=0;i<results.length;i++){ if(!results[i]||!results[i].ok){ bad=results[i]; break; } }
-      if(bad){ setBagMsg((bad&&bad.error)||'Could not reserve. Please try again.', true); if(rv){ rv.disabled=false; rv.textContent=lbl; } loadCal(); return; }
+      if(bad){ setBagMsg((bad&&bad.error)||t('Could not reserve. Please try again.'), true); if(rv){ rv.disabled=false; rv.textContent=t(lbl); } loadCal(); return; }
       function disp(r){ return r.name + (r.unit?(' ('+unitFull(r.name,r.unit)+')'):''); }
       var summary={ reserved:resolved.filter(function(r){return !r.req;}).map(disp),
                     requested:resolved.filter(function(r){return r.req;}).map(disp),
                     checkout:new Date(checkout), returnDay:new Date(returnDay), pickup:pickup, returnTime:returnTime };
       BAG=[]; saveBag(); REQ={}; saveReq(); MULTI=null; MULTI_REASON=''; multiOpen=false; if(USER){ USER.holdRequest=false; saveUser(); }
       updateBag(); refreshAccount(); close('bagOv'); showReceipt(summary); loadCal(); rerender();
-    }).catch(function(){ setBagMsg('Could not reach the server. Try again.', true); if(rv){ rv.disabled=false; rv.textContent=lbl; } });
+    }).catch(function(){ setBagMsg(t('Could not reach the server. Try again.'), true); if(rv){ rv.disabled=false; rv.textContent=t(lbl); } });
   }
   function showReceipt(s){
     var teach=USER?(USER.teacher||TEACHER_NAME[USER.pool]||''):'', room=USER?pickupRoom():'';
     var hasReq=s.requested.length>0, hasRes=s.reserved.length>0, pureReq=hasReq && !hasRes;
     var icon = pureReq ? '<div class="rcpt-check wait">&#8987;</div>' : '<div class="rcpt-check">&#10003;</div>';
-    var head = pureReq ? 'Request sent!' : (hasReq ? 'Almost there!' : 'You&#8217;re all set!');
-    var sub = pureReq ? ('Mr. Silva needs to approve this. You&#8217;ll get your gear once he says yes.')
-            : (hasReq ? 'Your gear is reserved. The item'+(s.requested.length>1?'s':'')+' that need Mr. Silva&#8217;s OK are waiting for him.'
-            : 'Your reservation is on its way to '+(teach?esc(teach):'your teacher')+'.');
+    var head = pureReq ? t('Request sent!') : (hasReq ? t('Almost there!') : t('You&#8217;re all set!'));
+    var sub = pureReq ? t('Mr. Silva needs to approve this. You&#8217;ll get your gear once he says yes.')
+            : (hasReq ? tf('Your gear is reserved. The %s that need Mr. Silva&#8217;s OK are waiting for him.', s.requested.length>1?t('items'):t('item'))
+            : tf('Your reservation is on its way to %s.', teach?esc(teach):(LANG==='es'?'el Sr. Silva':'Mr. Silva')));
     var rows='';
-    if(hasRes) rows+='<div class="rcpt-row"><span class="rcpt-k">Reserved</span><span class="rcpt-v">'+s.reserved.map(esc).join(', ')+'</span></div>';
-    if(hasReq) rows+='<div class="rcpt-row"><span class="rcpt-k">Needs OK</span><span class="rcpt-v">'+s.requested.map(esc).join(', ')+'</span></div>';
+    if(hasRes) rows+='<div class="rcpt-row"><span class="rcpt-k">'+t('Reserved')+'</span><span class="rcpt-v">'+s.reserved.map(esc).join(', ')+'</span></div>';
+    if(hasReq) rows+='<div class="rcpt-row"><span class="rcpt-k">'+t('Needs OK')+'</span><span class="rcpt-v">'+s.requested.map(esc).join(', ')+'</span></div>';
     document.getElementById('rcptBody').innerHTML=
       icon+'<h2 class="rcpt-h">'+head+'</h2>'+
       '<p class="rcpt-sub">'+sub+'</p>'+
       '<div class="rcpt-card">'+ rows +
-        '<div class="rcpt-row"><span class="rcpt-k">Pick up</span><span class="rcpt-v">'+DOW[s.checkout.getDay()]+' '+MON[s.checkout.getMonth()]+' '+s.checkout.getDate()+' &middot; '+esc(s.pickup.label)+' ('+f12(s.pickup.s)+')</span></div>'+
-        '<div class="rcpt-row"><span class="rcpt-k">Return</span><span class="rcpt-v">'+DOW[s.returnDay.getDay()]+' '+MON[s.returnDay.getMonth()]+' '+s.returnDay.getDate()+' &middot; '+esc(s.returnTime.label)+' ('+f12(s.returnTime.s)+')</span></div>'+
-        '<div class="rcpt-row"><span class="rcpt-k">Where</span><span class="rcpt-v">Classroom pickup'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div></div>'+
-      '<button type="button" class="btn block" id="rcptDone">Done</button>';
+        '<div class="rcpt-row"><span class="rcpt-k">'+t('Pick up')+'</span><span class="rcpt-v">'+DOW[s.checkout.getDay()]+' '+MON[s.checkout.getMonth()]+' '+s.checkout.getDate()+' &middot; '+esc(t(s.pickup.label))+' ('+f12(s.pickup.s)+')</span></div>'+
+        '<div class="rcpt-row"><span class="rcpt-k">'+t('Return')+'</span><span class="rcpt-v">'+DOW[s.returnDay.getDay()]+' '+MON[s.returnDay.getMonth()]+' '+s.returnDay.getDate()+' &middot; '+esc(t(s.returnTime.label))+' ('+f12(s.returnTime.s)+')</span></div>'+
+        '<div class="rcpt-row"><span class="rcpt-k">'+t('Where')+'</span><span class="rcpt-v">'+t('Classroom pickup')+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div></div>'+
+      '<button type="button" class="btn block" id="rcptDone">'+t('Done')+'</button>';
     document.getElementById('rcptDone').onclick=function(){ close('rcptOv'); renderPopular(); };
     open('rcptOv');
   }
@@ -1327,8 +1363,8 @@
   // ===== account chip + hold banner =====
   // Top-left line under "Equipment Rental": the signed-in student's Period | Teacher | Course.
   function brandStuLine(u){
-    var per=String(u.period||'').replace(/\D/g,''); per=per?('Period '+('0'+per).slice(-2)):'';
-    var crs=String(u.course||''); var mp=crs.match(/photography\s*(\d)/i); if(mp) crs='Photo '+('0'+mp[1]).slice(-2);
+    var per=String(u.period||'').replace(/\D/g,''); per=per?(t('Period')+' '+('0'+per).slice(-2)):'';
+    var crs=String(u.course||''); var mp=crs.match(/photography\s*(\d)/i); if(mp) crs=t('Photo')+' '+('0'+mp[1]).slice(-2);
     return [per, u.teacher||'', crs].filter(Boolean).map(esc).join('<i class="bs-sep">|</i>');
   }
   // Digital Arts-only students (Mankin pool) get the stylus icon on the Accessories tab; photo students and
@@ -1353,10 +1389,12 @@
       var lim=(USER.missing_limit!=null?USER.missing_limit:6);
       var more=(USER.missing!=null)?Math.max(1,USER.missing-lim):null;
       hb.style.display='';
-      hb.innerHTML='<div class="wrap holdbar-row"><span><b>Equipment checkout is on hold.</b> '+
-        (USER.missing!=null?('You have '+USER.missing+' missing assignments in Photography; turn in '+more+' more to check out equipment again.'):'You have too many missing assignments to check out equipment right now.')+
-        ' You can still browse everything below.</span>'+
-        '<button type="button" class="hb-link" id="hbWhy">Details</button></div>';
+      var midEN=(USER.missing!=null?('You have '+USER.missing+' missing assignments in Photography; turn in '+more+' more to check out equipment again.'):'You have too many missing assignments to check out equipment right now.');
+      var midES=(USER.missing!=null?('Tienes '+USER.missing+' tareas faltantes en Fotografía; entrega '+more+' más para sacar equipo otra vez.'):'Tienes demasiadas tareas faltantes para sacar equipo ahora.');
+      hb.innerHTML='<div class="wrap holdbar-row"><span><b>'+t('Equipment checkout is on hold.')+'</b> '+
+        (LANG==='es'?midES:midEN)+
+        ' '+t('You can still browse everything below.')+'</span>'+
+        '<button type="button" class="hb-link" id="hbWhy">'+t('Details')+'</button></div>';
       var w=document.getElementById('hbWhy'); if(w) w.onclick=openHold;
     } else { hb.style.display='none'; }
   }
@@ -1368,10 +1406,13 @@
     var s1=!!USER, s2=s1&&datesReady(), s3=s2&&BAG.length>0;
     var active=!s1?1:(!s2?2:(!s3?3:0));   // the first incomplete step (0 = all three done)
     var inbag=BAG.length;
+    var sub3 = s3 ? (LANG==='es' ? (inbag+' '+(inbag>1?'artículos':'artículo')+' en tu bolsa. Ábrela para reservar.')
+                                 : (inbag+' item'+(inbag>1?'s':'')+' in your bag. Open it to reserve.'))
+                  : t('Tap a camera or item to put it in your bag.');
     var steps=[
-      {n:1,done:s1,title:'Sign in',sub:'Type your student number. No password needed.',cta:'Sign in'},
-      {n:2,done:s2,title:'Pick your dates',sub:'Choose the day you pick up and the day you bring it back.',cta:'Pick dates'},
-      {n:3,done:s3,title:'Add your gear',sub:(s3?(inbag+' item'+(inbag>1?'s':'')+' in your bag. Open it to reserve.'):'Tap a camera or item to put it in your bag.'),cta:(s3?'Open bag':'Add gear')}
+      {n:1,done:s1,title:t('Sign in'),sub:t('Type your student number. No password needed.'),cta:t('Sign in')},
+      {n:2,done:s2,title:t('Pick your dates'),sub:t('Choose the day you pick up and the day you bring it back.'),cta:t('Pick dates')},
+      {n:3,done:s3,title:t('Add your gear'),sub:sub3,cta:(s3?t('Open bag'):t('Add gear'))}
     ];
     g.innerHTML=steps.map(function(s){
       var state=s.done?'done':(s.n===active?'active':'todo');
@@ -1387,13 +1428,13 @@
       else if(k==='3'){ if(!USER){ openSignin(); } else if(BAG.length){ renderBag(); open('bagOv'); } else { guideGoGear(); } }
     }; });
     var af=document.getElementById('guideAfter');
-    if(af) af.innerHTML='<b>After you reserve:</b> check the kit list at pickup, keep your gear safe and dry, and bring it all back in the same bag on your return day.';
+    if(af) af.innerHTML='<b>'+t('After you reserve')+':</b> '+t('check the kit list at pickup, keep your gear safe and dry, and bring it all back in the same bag on your return day.');
   }
   // Dates are set: close any planner and point the student at the equipment grid (no blank "now what?" moment).
   function guideGoGear(){
     close('planOv');
     var p=document.querySelector('.products'); if(p) p.scrollIntoView({behavior:'smooth',block:'start'});
-    toast('Dates set. Tap any camera or item to add it to your bag.');
+    toast(t('Dates set. Tap any camera or item to add it to your bag.'));
   }
   // After the student signs in (or a hold student chooses "request anyway"): continue whatever they were
   // doing, or walk them straight to the date picker. The next sheet opens BEFORE the auth sheet closes so
@@ -1401,7 +1442,7 @@
   function walkAfterAuth(fromSheet, dateToast){
     if(pendingCalDay){ var d=pendingCalDay; pendingCalDay=null; calDayReserve(d); if(fromSheet) close(fromSheet); return; }
     if(pendingAdd && datesReady()){ var a=pendingAdd; pendingAdd=null; if(fromSheet) close(fromSheet); addToBag(a); return; }
-    if(!datesReady()){ openPlan(1); if(fromSheet) close(fromSheet); if(dateToast) toast(dateToast); return; }   // auto-open the date picker
+    if(!datesReady()){ openPlan(1); if(fromSheet) close(fromSheet); if(dateToast) toast(t(dateToast)); return; }   // auto-open the date picker
     if(fromSheet) close(fromSheet); guideGoGear();   // already have dates + nothing pending: send them to the gear
   }
 
@@ -1411,7 +1452,7 @@
   function showStep2(j){
     document.getElementById('siStep1').style.display='none'; document.getElementById('siStep2').style.display='';
     var per=String(j.period||'').replace(/^0+/,'');
-    document.getElementById('siWho').innerHTML='<b>'+esc(j.label||'')+'</b>'+(per?(' &middot; Period '+esc(per)):'')+(j.course?('<br><span class="si-course">'+esc(j.course)+'</span>'):'');
+    document.getElementById('siWho').innerHTML='<b>'+esc(j.label||'')+'</b>'+(per?(' &middot; '+t('Period')+' '+esc(per)):'')+(j.course?('<br><span class="si-course">'+esc(j.course)+'</span>'):'');
     document.getElementById('siSc').value=fmtPhone(j.student_cell||'');
     document.getElementById('siPg').value=j.parent_guardian||'';
     document.getElementById('siPc').value=fmtPhone(j.parent_cell||'');
@@ -1421,10 +1462,10 @@
     var raw=(document.getElementById('sid').value||'').trim();
     var v=(raw.toLowerCase()==='teacher')?'teacher':raw.replace(/\D/g,'');
     var m=document.getElementById('signinMsg');
-    if(v!=='teacher' && v.length<5){ m.className='sheet-msg err'; m.textContent='Enter your full student number.'; return; }
-    m.className='sheet-msg'; m.textContent='Checking…';
+    if(v!=='teacher' && v.length<5){ m.className='sheet-msg err'; m.textContent=t('Enter your full student number.'); return; }
+    m.className='sheet-msg'; m.textContent=t('Checking…');
     api('/api/camera/student_info',{student_id:v}).then(function(j){
-      if(!j||!j.found){ m.className='sheet-msg err'; m.textContent='We could not find that student number.'; return; }
+      if(!j||!j.found){ m.className='sheet-msg err'; m.textContent=t('We could not find that student number.'); return; }
       if(j.eligible===false){
         USER={ id:v, label:j.label||'', name:j.name||'', period:String(j.period||''), course:j.course||'',
                hold:true, missing:(j.missing_count!=null?j.missing_count:null),
@@ -1436,7 +1477,7 @@
       window._siLookup={ id:v, label:j.label||'', name:j.name||'', period:String(j.period||''), course:j.course||'',
                          pool:j.pool||TEACHER, pools:(j.pools||null), teacher:j.teacher||'', p2_ok:!!j.p2_ok };
       showStep2(j);
-    }).catch(function(){ m.className='sheet-msg err'; m.textContent='Could not reach the server. Try again.'; });
+    }).catch(function(){ m.className='sheet-msg err'; m.textContent=t('Could not reach the server. Try again.'); });
   }
   function siConfirm(){
     var L=window._siLookup||{};
@@ -1444,12 +1485,12 @@
     var scD=sc.replace(/\D/g,''), pcD=pc.replace(/\D/g,'');
     // HARD RULE: a student cannot continue without all three contacts (own cell, parent/guardian name, parent/guardian cell).
     var m2=document.getElementById('siMsg2'), miss=[];
-    if(scD.length!==10) miss.push('your cell number');
-    if(!pg) miss.push('a parent or guardian name');
-    if(pcD.length!==10) miss.push('a parent or guardian cell number');
+    if(scD.length!==10) miss.push(t('your cell number'));
+    if(!pg) miss.push(t('a parent or guardian name'));
+    if(pcD.length!==10) miss.push(t('a parent or guardian cell number'));
     if(miss.length){
-      var phrase=(miss.length===1)?miss[0]:(miss.slice(0,-1).join(', ')+' and '+miss[miss.length-1]);
-      m2.className='sheet-msg err'; m2.textContent='All three are required to continue. Please add '+phrase+'.';
+      var phrase=(miss.length===1)?miss[0]:(miss.slice(0,-1).join(', ')+' '+t('and')+' '+miss[miss.length-1]);
+      m2.className='sheet-msg err'; m2.textContent=tf('All three are required to continue. Please add %s.', phrase);
       return;
     }
     m2.className='sheet-msg'; m2.textContent='';
@@ -1493,7 +1534,7 @@
   // ===== student account: profile card -> my reservations -> Edit / Log out =====
   var acctEdit=false, MYRESV=null, confirmingCancel=null;   // MYRESV={active,history} once loaded; confirmingCancel = the reservation id awaiting a cancel confirm
   function openAccount(){ if(!USER){ openSignin(); return; } acctEdit=false; MYRESV=null; confirmingCancel=null; renderAccount(); open('acctOv'); loadMyReservations(); }
-  function acctRow(k,v){ return '<div class="acct-row"><span class="acct-k">'+esc(k)+'</span><span class="acct-v">'+(v?esc(v):'<em class="acct-empty">Not set</em>')+'</span></div>'; }
+  function acctRow(k,v){ return '<div class="acct-row"><span class="acct-k">'+esc(k)+'</span><span class="acct-v">'+(v?esc(v):'<em class="acct-empty">'+t('Not set')+'</em>')+'</span></div>'; }
   function fmtResvDate(iso){ if(!iso) return ''; var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate(); }
   function loadMyReservations(){
     api('/api/camera/my_reservations',{student_id:USER.id})
@@ -1502,61 +1543,61 @@
   }
   function resvItemsLabel(r){ return r.items.map(function(i){ return i.label; }).filter(Boolean).join(', '); }
   function resvSectionHtml(){
-    if(MYRESV===null) return '<div class="acct-sec"><div class="acct-sec-t">My reservations</div><div class="acct-resv-load">Loading&hellip;</div></div>';
+    if(MYRESV===null) return '<div class="acct-sec"><div class="acct-sec-t">'+t('My reservations')+'</div><div class="acct-resv-load">'+t('Loading…')+'</div></div>';
     var a=MYRESV.active||[], h=MYRESV.history||[];
     var rows = a.length ? a.map(function(r){
       var pending=(r.approved===false), pickedUp=(r.status==='out');
-      var pill = pending?'<span class="resv-pill pend">Waiting for OK</span>':(pickedUp?'<span class="resv-pill out">Picked up</span>':'<span class="resv-pill ok">Reserved</span>');
+      var pill = pending?'<span class="resv-pill pend">'+t('Waiting for OK')+'</span>':(pickedUp?'<span class="resv-pill out">'+t('Picked up')+'</span>':'<span class="resv-pill ok">'+t('Reserved')+'</span>');
       var action='';
       if(!pickedUp){
         action = (confirmingCancel===r.id)
-          ? '<div class="resv-confirm"><span>Cancel this reservation?</span><div class="resv-confirm-btns"><button type="button" class="btn sm" data-cxyes="'+esc(r.id)+'">Yes, cancel</button><button type="button" class="btn sm ghost" data-cxno="1">Keep it</button></div></div>'
-          : '<div class="resv-btns"><button type="button" class="btn sm resv-mod" data-mod="'+esc(r.id)+'">Modify</button><button type="button" class="btn sm ghost resv-cancel" data-cx="'+esc(r.id)+'">Cancel</button></div>';
-      } else { action='<div class="resv-note">Picked up. Return it to Mr. Silva when you are done.</div>'; }
+          ? '<div class="resv-confirm"><span>'+t('Cancel this reservation?')+'</span><div class="resv-confirm-btns"><button type="button" class="btn sm" data-cxyes="'+esc(r.id)+'">'+t('Yes, cancel')+'</button><button type="button" class="btn sm ghost" data-cxno="1">'+t('Keep it')+'</button></div></div>'
+          : '<div class="resv-btns"><button type="button" class="btn sm resv-mod" data-mod="'+esc(r.id)+'">'+t('Modify')+'</button><button type="button" class="btn sm ghost resv-cancel" data-cx="'+esc(r.id)+'">'+t('Cancel')+'</button></div>';
+      } else { action='<div class="resv-note">'+t('Picked up. Return it to Mr. Silva when you are done.')+'</div>'; }
       return '<div class="resv-card"><div class="resv-top"><span class="resv-dates">'+fmtResvDate(r.out)+' &rarr; '+fmtResvDate(r.due)+'</span>'+pill+'</div>'+
         '<div class="resv-items">'+esc(resvItemsLabel(r))+'</div>'+action+'</div>';
-    }).join('') : '<div class="acct-resv-empty">'+(MYRESV.err?'Could not load your reservations. Try again.':'You have no reservations right now.')+'</div>';
-    var histBlock = h.length ? ('<details class="resv-hist"><summary class="resv-hsum">Past reservations ('+h.length+')</summary>'+
+    }).join('') : '<div class="acct-resv-empty">'+(MYRESV.err?t('Could not load your reservations. Try again.'):t('You have no reservations right now.'))+'</div>';
+    var histBlock = h.length ? ('<details class="resv-hist"><summary class="resv-hsum">'+tf('Past reservations (%s)', h.length)+'</summary>'+
       h.map(function(r){ return '<div class="resv-hline"><span class="resv-hdate">'+fmtResvDate(r.out)+' &rarr; '+fmtResvDate(r.due)+'</span><span class="resv-hitems">'+esc(resvItemsLabel(r))+'</span></div>'; }).join('')+'</details>') : '';
-    return '<div class="acct-sec"><div class="acct-sec-t">My reservations</div>'+rows+histBlock+'</div>';
+    return '<div class="acct-sec"><div class="acct-sec-t">'+t('My reservations')+'</div>'+rows+histBlock+'</div>';
   }
   function doCancelResv(id){
     confirmingCancel=null;
     api('/api/camera/cancel',{student_id:USER.id, id:id}).then(function(j){
-      if(j&&j.ok){ toast('Reservation canceled.'); MYRESV=null; renderAccount(); loadMyReservations(); loadCal(); }
-      else { toast((j&&j.error)||'Could not cancel. Try again.'); }
-    }).catch(function(){ toast('Could not cancel. Try again.'); });
+      if(j&&j.ok){ toast(t('Reservation canceled.')); MYRESV=null; renderAccount(); loadMyReservations(); loadCal(); }
+      else { toast((j&&j.error)||t('Could not cancel. Try again.')); }
+    }).catch(function(){ toast(t('Could not cancel. Try again.')); });
   }
   function renderAccount(){
     var b=document.getElementById('acctBody'); if(!b||!USER) return;
     var per=String(USER.period||'').replace(/\D/g,''), teach=USER.teacher||TEACHER_NAME[USER.pool]||'';
-    var meta=[(per?('Period '+per):''), (USER.course||''), teach].filter(Boolean).map(esc).join(' &middot; ');
+    var meta=[(per?(t('Period')+' '+per):''), (USER.course||''), teach].filter(Boolean).map(esc).join(' &middot; ');
     if(!acctEdit){
-      b.innerHTML='<h2 id="acctTitle">My account</h2>'+
-        '<div class="acct-name">'+esc(USER.name||USER.label||'Student')+'</div>'+
+      b.innerHTML='<h2 id="acctTitle">'+t('My account')+'</h2>'+
+        '<div class="acct-name">'+esc(USER.name||USER.label||t('Student'))+'</div>'+
         (meta?'<div class="acct-meta">'+meta+'</div>':'')+
         '<div class="acct-rows">'+
-          acctRow('Student number', USER.id)+
-          acctRow('Your cell', USER.sc)+
-          acctRow('Parent or guardian', USER.pg)+
-          acctRow('Parent or guardian cell', USER.pc)+
+          acctRow(t('Student number'), USER.id)+
+          acctRow(t('Your cell'), USER.sc)+
+          acctRow(t('Parent or guardian'), USER.pg)+
+          acctRow(t('Parent or guardian cell'), USER.pc)+
         '</div>'+
         resvSectionHtml()+
-        '<div class="sheet-actions"><button type="button" class="btn ghost" id="acctEditBtn">Edit my info</button><button type="button" class="btn" id="acctLogout">Log out</button></div>';
+        '<div class="sheet-actions"><button type="button" class="btn ghost" id="acctEditBtn">'+t('Edit my info')+'</button><button type="button" class="btn" id="acctLogout">'+t('Log out')+'</button></div>';
       document.getElementById('acctEditBtn').onclick=function(){ acctEdit=true; renderAccount(); };
-      document.getElementById('acctLogout').onclick=function(){ USER=null; saveUser(); refreshAccount(); close('acctOv'); rerender(); toast('Logged out.'); };
+      document.getElementById('acctLogout').onclick=function(){ USER=null; saveUser(); refreshAccount(); close('acctOv'); rerender(); toast(t('Logged out.')); };
       b.querySelectorAll('[data-cx]').forEach(function(x){ x.onclick=function(){ confirmingCancel=x.getAttribute('data-cx'); renderAccount(); }; });
       b.querySelectorAll('[data-cxno]').forEach(function(x){ x.onclick=function(){ confirmingCancel=null; renderAccount(); }; });
       b.querySelectorAll('[data-cxyes]').forEach(function(x){ x.onclick=function(){ doCancelResv(x.getAttribute('data-cxyes')); }; });
       b.querySelectorAll('[data-mod]').forEach(function(x){ x.onclick=function(){ var id=x.getAttribute('data-mod'); var r=((MYRESV&&MYRESV.active)||[]).filter(function(z){return z.id===id;})[0]; if(r) modifyReservation(r); }; });
     } else {
-      b.innerHTML='<h2 id="acctTitle">Edit my info</h2>'+
-        '<p>Fix anything that is wrong. This updates what is on file for you.</p>'+
-        '<div class="field"><label for="acSc">Your cell</label><input type="tel" id="acSc" inputmode="numeric" autocomplete="off" value="'+esc(USER.sc||'')+'" placeholder="805-555-1234"></div>'+
-        '<div class="field"><label for="acPg">Parent or guardian name</label><input type="text" id="acPg" autocomplete="off" value="'+esc(USER.pg||'')+'" placeholder="First and last name"></div>'+
-        '<div class="field"><label for="acPc">Parent or guardian cell</label><input type="tel" id="acPc" inputmode="numeric" autocomplete="off" value="'+esc(USER.pc||'')+'" placeholder="805-555-1234"></div>'+
+      b.innerHTML='<h2 id="acctTitle">'+t('Edit my info')+'</h2>'+
+        '<p>'+t('Fix anything that is wrong. This updates what is on file for you.')+'</p>'+
+        '<div class="field"><label for="acSc">'+t('Your cell')+'</label><input type="tel" id="acSc" inputmode="numeric" autocomplete="off" value="'+esc(USER.sc||'')+'" placeholder="805-555-1234"></div>'+
+        '<div class="field"><label for="acPg">'+t('Parent or guardian name')+'</label><input type="text" id="acPg" autocomplete="off" value="'+esc(USER.pg||'')+'" placeholder="'+esc(t('First and last name'))+'"></div>'+
+        '<div class="field"><label for="acPc">'+t('Parent or guardian cell')+'</label><input type="tel" id="acPc" inputmode="numeric" autocomplete="off" value="'+esc(USER.pc||'')+'" placeholder="805-555-1234"></div>'+
         '<div class="sheet-msg" id="acMsg"></div>'+
-        '<div class="sheet-actions"><button type="button" class="btn ghost" id="acCancel">Cancel</button><button type="button" class="btn" id="acSave">Save changes</button></div>';
+        '<div class="sheet-actions"><button type="button" class="btn ghost" id="acCancel">'+t('Cancel')+'</button><button type="button" class="btn" id="acSave">'+t('Save changes')+'</button></div>';
       document.getElementById('acCancel').onclick=function(){ acctEdit=false; renderAccount(); };
       document.getElementById('acSave').onclick=saveAccountEdit;
     }
@@ -1567,7 +1608,7 @@
     USER.sc=(scD.length===10?fmtPhone(scD):sc); USER.pg=pg; USER.pc=(pcD.length===10?fmtPhone(pcD):pc);
     saveUser();
     api('/api/camera/student_update',{student_id:USER.id, student_cell:USER.sc, parent_guardian:pg, parent_cell:USER.pc}).catch(function(){});
-    if(m){ m.className='sheet-msg ok'; m.textContent='Saved.'; }
+    if(m){ m.className='sheet-msg ok'; m.textContent=t('Saved.'); }
     setTimeout(function(){ acctEdit=false; renderAccount(); }, 500);
   }
 
@@ -1577,9 +1618,13 @@
     var body=document.getElementById('holdBody');
     if(USER && USER.missing!=null){
       var more=Math.max(1,USER.missing-lim);
-      body.innerHTML='<b>Equipment checkout is on hold for your account.</b>You currently have <b>'+USER.missing+'</b> missing assignments in Photography. To restore your checkout access, please turn in <b>'+more+'</b> more so your total is <b>'+lim+'</b> or fewer. You can still browse all the equipment below. If you need gear for a class assignment, please see Mr. Silva.';
+      body.innerHTML=(LANG==='es')
+        ? '<b>El préstamo de equipo está en pausa para tu cuenta.</b>Ahora tienes <b>'+USER.missing+'</b> tareas faltantes en Fotografía. Para recuperar tu acceso, entrega <b>'+more+'</b> más para que tu total sea <b>'+lim+'</b> o menos. Aún puedes ver todo el equipo abajo. Si necesitas equipo para una tarea de clase, habla con el Sr. Silva.'
+        : '<b>Equipment checkout is on hold for your account.</b>You currently have <b>'+USER.missing+'</b> missing assignments in Photography. To restore your checkout access, please turn in <b>'+more+'</b> more so your total is <b>'+lim+'</b> or fewer. You can still browse all the equipment below. If you need gear for a class assignment, please see Mr. Silva.';
     } else {
-      body.innerHTML='<b>Equipment checkout is on hold for your account.</b>You currently have more than <b>'+lim+'</b> missing assignments in Photography. Please turn in your missing work so your total is <b>'+lim+'</b> or fewer to restore your checkout access. You can still browse all the equipment below. If you need gear for a class assignment, please see Mr. Silva.';
+      body.innerHTML=(LANG==='es')
+        ? '<b>El préstamo de equipo está en pausa para tu cuenta.</b>Tienes más de <b>'+lim+'</b> tareas faltantes en Fotografía. Entrega tu trabajo faltante para que tu total sea <b>'+lim+'</b> o menos y recuperes tu acceso. Aún puedes ver todo el equipo abajo. Si necesitas equipo para una tarea de clase, habla con el Sr. Silva.'
+        : '<b>Equipment checkout is on hold for your account.</b>You currently have more than <b>'+lim+'</b> missing assignments in Photography. Please turn in your missing work so your total is <b>'+lim+'</b> or fewer to restore your checkout access. You can still browse all the equipment below. If you need gear for a class assignment, please see Mr. Silva.';
     }
     document.getElementById('holdOvRow').style.display='none';
     document.getElementById('holdOvc').value=''; document.getElementById('holdMsg').textContent='';
@@ -1596,12 +1641,12 @@
   });
   document.getElementById('holdOvGo').addEventListener('click', function(){
     var code=(document.getElementById('holdOvc').value||'').trim(), m=document.getElementById('holdMsg');
-    if(!code){ m.className='sheet-msg err'; m.textContent='Enter the teacher code.'; return; }
-    m.className='sheet-msg'; m.textContent='Checking…';
+    if(!code){ m.className='sheet-msg err'; m.textContent=t('Enter the teacher code.'); return; }
+    m.className='sheet-msg'; m.textContent=t('Checking…');
     api('/api/camera/override',{code:code, kind:'missing'}).then(function(j){
-      if(j && j.ok){ USER.hold=false; saveUser(); refreshAccount(); m.className='sheet-msg ok'; m.textContent='Unlocked by teacher.'; setTimeout(function(){ close('holdOv'); },600); }
-      else { m.className='sheet-msg err'; m.textContent='That code is not recognized.'; }
-    }).catch(function(){ m.className='sheet-msg err'; m.textContent='Could not reach the server. Try again.'; });
+      if(j && j.ok){ USER.hold=false; saveUser(); refreshAccount(); m.className='sheet-msg ok'; m.textContent=t('Unlocked by teacher.'); setTimeout(function(){ close('holdOv'); },600); }
+      else { m.className='sheet-msg err'; m.textContent=t('That code is not recognized.'); }
+    }).catch(function(){ m.className='sheet-msg err'; m.textContent=t('Could not reach the server. Try again.'); });
   });
 
   // ===== gear-unlock dialog (course-mismatch item) =====
@@ -1610,7 +1655,7 @@
     pendingGearItem=name||null;
     var it=pendingGearItem?findItem(pendingGearItem):null;
     var intro=document.getElementById('gearIntro');
-    if(intro) intro.innerHTML = it ? ('<b>'+esc(it.name)+'</b> is '+(itemDA(it)?'for Digital Arts':'for Photo 2')+'. A teacher can unlock it with the code, or you can ask Mr. Silva to approve it.') : 'A teacher can unlock this with the code, or you can ask Mr. Silva to approve it.';
+    if(intro) intro.innerHTML = it ? (tf('%s is %s. ', '<b>'+esc(it.name)+'</b>', (itemDA(it)?t('for Digital Arts'):t('for Photo 2')))+t('A teacher can unlock it with the code, or you can ask Mr. Silva to approve it.')) : t('A teacher can unlock this with the code, or you can ask Mr. Silva to approve it.');
     var rq=document.getElementById('gearReq'); if(rq) rq.style.display = pendingGearItem ? '' : 'none';   // no item (global unlock) -> code only
     document.getElementById('gearOvc').value=''; document.getElementById('gearMsg').textContent='';
     open('gearOv'); var i=document.getElementById('gearOvc'); if(i){ try{ i.focus(); }catch(e){} }
@@ -1622,12 +1667,12 @@
   });
   document.getElementById('gearGo').addEventListener('click', function(){
     var code=(document.getElementById('gearOvc').value||'').trim(), m=document.getElementById('gearMsg');
-    if(!code){ m.className='sheet-msg err'; m.textContent='Enter the teacher code.'; return; }
-    m.className='sheet-msg'; m.textContent='Checking…';
+    if(!code){ m.className='sheet-msg err'; m.textContent=t('Enter the teacher code.'); return; }
+    m.className='sheet-msg'; m.textContent=t('Checking…');
     api('/api/camera/override',{code:code, kind:'gear'}).then(function(j){
-      if(j && j.ok){ if(USER){ USER.gearUnlocked=true; saveUser(); } m.className='sheet-msg ok'; m.textContent='Photo 2 gear unlocked.'; rerender(); setTimeout(function(){ close('gearOv'); },600); }
-      else { m.className='sheet-msg err'; m.textContent='That code is not recognized.'; }
-    }).catch(function(){ m.className='sheet-msg err'; m.textContent='Could not reach the server. Try again.'; });
+      if(j && j.ok){ if(USER){ USER.gearUnlocked=true; saveUser(); } m.className='sheet-msg ok'; m.textContent=t('Photo 2 gear unlocked.'); rerender(); setTimeout(function(){ close('gearOv'); },600); }
+      else { m.className='sheet-msg err'; m.textContent=t('That code is not recognized.'); }
+    }).catch(function(){ m.className='sheet-msg err'; m.textContent=t('Could not reach the server. Try again.'); });
   });
 
   // ===== footer interactions =====
@@ -1636,18 +1681,18 @@
     var d=new Date(); d.setHours(0,0,0,0); if(!isSchoolDay(d)) d=nextSchoolDay(d);
     var blocks=sched(d);
     var rows = blocks.length
-      ? blocks.map(function(b){ return '<div class="sched-row"><span>'+esc(b.l)+'</span><span>'+f12(b.s)+' to '+f12(b.e)+'</span></div>'; }).join('')
-      : '<p class="noresults">Schedule unavailable right now.</p>';
+      ? blocks.map(function(b){ return '<div class="sched-row"><span>'+esc(b.l)+'</span><span>'+f12(b.s)+' '+t('to')+' '+f12(b.e)+'</span></div>'; }).join('')
+      : '<p class="noresults">'+t('Schedule unavailable right now.')+'</p>';
     document.getElementById('hoursBody').innerHTML=
-      '<p class="hours-sub">Bell schedule &middot; '+DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate()+'</p>'+
+      '<p class="hours-sub">'+t('Bell schedule')+' &middot; '+DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate()+'</p>'+
       '<div class="sched">'+rows+'</div>'+
-      '<p class="hours-note">Equipment pickup and return happen during the school day. Closed on holidays. Rally, minimum, and finals days run a different schedule.</p>';
+      '<p class="hours-note">'+t('Equipment pickup and return happen during the school day. Closed on holidays. Rally, minimum, and finals days run a different schedule.')+'</p>';
     open('hoursOv');
   }
   document.getElementById('footHours').onclick=openHours;
-  document.getElementById('footJobs').onclick=function(){ openInfo('Jobs', '<p>Want to be an equipment manager? Ask your teacher. It may count for extra credit.</p>'); };
-  document.getElementById('footRental').onclick=function(){ openInfo('Rental agreement', '<p>The equipment rental agreement will be posted here soon. Ask your teacher for a copy in the meantime.</p>'); };
-  document.getElementById('footProgram').onclick=function(){ openInfo('Digital Arts program', '<p>Our Digital Arts program website is coming soon.</p>'); };
+  document.getElementById('footJobs').onclick=function(){ openInfo(t('Jobs'), '<p>'+t('Want to be an equipment manager? Ask your teacher. It may count for extra credit.')+'</p>'); };
+  document.getElementById('footRental').onclick=function(){ openInfo(t('Rental agreement'), '<p>'+t('The equipment rental agreement will be posted here soon. Ask your teacher for a copy in the meantime.')+'</p>'); };
+  document.getElementById('footProgram').onclick=function(){ openInfo(t('Digital Arts program'), '<p>'+t('Our Digital Arts program website is coming soon.')+'</p>'); };
 
   // ===== init =====
   // Language: wire the EN/ES toggle, then skin the page (static text + dates) for the stored choice.
