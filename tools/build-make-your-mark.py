@@ -217,7 +217,7 @@ def overview():
         "Read this page, then go to Step 02 to make your sticker.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_DESIGN)
     en+=card("Learn &middot; the idea","Turn a Word Into a Sticker",
         (float_right(HERO_SCRIPT,"A brush-script vinyl sticker with a white border, held over grass","Your word can become a sticker like this.") if HAVE_ART else "")
-        + para("This is an <strong>Adobe Illustrator</strong> project. You will <strong>draw your own letters</strong> and turn a word into a <strong>sticker</strong>.")
+        + para("This is a <strong>type</strong> project. First you explore <strong>typefaces and fonts</strong>. Then you <strong>design your own letters</strong> and turn a word into a <strong>sticker</strong> in Adobe Illustrator.")
         + para("Your sticker will be printed on a big <strong>wide format sticker printer</strong>, so this project uses print colors (<strong>CMYK</strong>). The file is already set up that way.")
         + para("You are <strong>not</strong> picking a font. You design every letter yourself, from scratch, like a type designer who builds a whole font face.")
         + para("Pick a word you like: your name, a nickname, or any short word. Give every letter the same style, so your word looks like one set.")
@@ -232,6 +232,9 @@ def overview():
     en+=card("Learn &middot; the sticker trick","Make It Work Anywhere",
         para("A sticker needs a <strong>white border</strong> around it. That border makes your word pop on <strong>any</strong> color: a dark window or a white car.")
         + para("You will add a white border in Step 02. You will check for it before you turn it in."))
+    en+=card("Learn &middot; the big picture","This Is Your First Draft",
+        para("This project has two parts. Right now is the <strong>design draft</strong>: you explore type, design your letters, and make your sticker art.")
+        + para("In the <strong>next project</strong>, we print a whole sheet of everyone&rsquo;s stickers on the sticker printer, and you learn to cut out your own. You are making the art now so it is ready to print later."))
     en+=downloads(False)
     en+=card("How It Works / Your Plan","Your Next 2 Steps",
         para("You are on Step 01 now: read this page and download your project folder. Here are the two steps that follow.")
@@ -246,7 +249,7 @@ def overview():
         "Lee esta p&aacute;gina y luego ve al Paso 02 para hacer tu sticker.","#top","Back to English",hicon=HICON_DESIGN)
     es+=card("Aprende &middot; la idea","Convierte una Palabra en un Sticker",
         (float_right(HERO_SCRIPT,"Un sticker de letra de pincel con borde blanco, sobre el pasto","Tu palabra puede volverse un sticker as&iacute;.") if HAVE_ART else "")
-        + para("Este es un proyecto de <strong>Adobe Illustrator</strong>. Vas a <strong>dibujar tus propias letras</strong> y convertir una palabra en un <strong>sticker</strong>.")
+        + para("Este es un proyecto de <strong>tipograf&iacute;a</strong>. Primero exploras <strong>tipograf&iacute;as y fuentes</strong>. Luego <strong>dise&ntilde;as tus propias letras</strong> y conviertes una palabra en un <strong>sticker</strong> en Adobe Illustrator.")
         + para("Tu sticker se imprimir&aacute; en una <strong>impresora grande de stickers</strong>, por eso este proyecto usa colores de impresi&oacute;n (<strong>CMYK</strong>). El archivo ya est&aacute; listo as&iacute;.")
         + para("<strong>No</strong> est&aacute;s eligiendo una fuente. T&uacute; dise&ntilde;as cada letra, desde cero, como un dise&ntilde;ador que crea una fuente completa.")
         + para("Elige una palabra que te guste: tu nombre, un apodo o cualquier palabra corta. Dale a cada letra el mismo estilo, para que tu palabra se vea como un solo conjunto.")
@@ -261,6 +264,9 @@ def overview():
     es+=card("Aprende &middot; el truco del sticker","Haz Que Funcione en Todos Lados",
         para("Un sticker necesita un <strong>borde blanco</strong> alrededor. Ese borde hace que tu palabra resalte en <strong>cualquier</strong> color: una ventana oscura o un carro blanco.")
         + para("Agregar&aacute;s un borde blanco en el Paso 02. Lo revisar&aacute;s antes de entregar."))
+    es+=card("Aprende &middot; el panorama","Este Es Tu Primer Borrador",
+        para("Este proyecto tiene dos partes. Ahora es el <strong>borrador de dise&ntilde;o</strong>: exploras tipograf&iacute;a, dise&ntilde;as tus letras y haces el arte de tu sticker.")
+        + para("En el <strong>siguiente proyecto</strong>, imprimimos una hoja completa con los stickers de todos en la impresora de stickers, y aprendes a recortar el tuyo. Est&aacute;s creando el arte ahora para que est&eacute; listo para imprimir despu&eacute;s."))
     es+=downloads(True)
     es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Siguientes 2 Pasos",
         para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina y descarga tu carpeta del proyecto. Aqu&iacute; est&aacute;n los dos pasos que siguen.")
@@ -278,11 +284,11 @@ def make_word():
     # ---- EN ----
     en=banner("Module 09 &bull; Step 02","Make Your Word",
         "Draw your letters and turn your word into a sticker.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_DESIGN)
-    en+=card("Learn &middot; pick your style","Pick a Style to Draw",
-        note("You are <strong>designing</strong> the letters yourself. You are NOT choosing a font. Every letter is drawn by you, from scratch.")
-        + para("Pick <strong>ONE</strong> style and draw every letter the same way. Keep your word <strong>school appropriate</strong>.")
+    en+=card("Learn &middot; explore a style","Explore a Style to Draw",
+        note("You are <strong>designing</strong> the letters yourself, not choosing a font. You have <strong>creative freedom</strong>. The one rule: all your letters match and look like <strong>one font</strong>, not random letters put together.")
+        + para("Here are some <strong>style ideas</strong> to get you started. Pick one, mix them, or <strong>invent your own</strong>. Keep your word <strong>school appropriate</strong>.")
         + (style_ideas(False) if HAVE_ART else "")
-        + para("Your sticker should look good on a <strong>light</strong> and a <strong>dark</strong> background. The white border is what makes that happen."))
+        + para("You can <strong>garnish</strong> your letters with fun extras, and add <strong>offset outlines</strong> or a border so your sticker reads well on a <strong>light</strong> and a <strong>dark</strong> surface."))
     en+=card("Learn &middot; make it","Make It in Adobe Illustrator",
         scroll_steps(steps([
             ("Open Adobe Illustrator.","Find it in the Dock or in Launchpad."),
@@ -311,11 +317,11 @@ def make_word():
     # ---- ES ----
     es=banner("M&oacute;dulo 09 &bull; Paso 02","Haz Tu Palabra",
         "Dibuja tus letras y convierte tu palabra en un sticker.","#top","Back to English",hicon=HICON_DESIGN)
-    es+=card("Aprende &middot; elige tu estilo","Elige un Estilo para Dibujar",
-        note("T&uacute; <strong>dise&ntilde;as</strong> las letras. NO est&aacute;s eligiendo una fuente. Cada letra la dibujas t&uacute;, desde cero.")
-        + para("Elige <strong>UN</strong> estilo y dibuja cada letra de la misma manera. Mant&eacute;n tu palabra <strong>apropiada para la escuela</strong>.")
+    es+=card("Aprende &middot; explora un estilo","Explora un Estilo para Dibujar",
+        note("T&uacute; <strong>dise&ntilde;as</strong> las letras, no eliges una fuente. Tienes <strong>libertad creativa</strong>. La &uacute;nica regla: que todas tus letras combinen y se vean como <strong>una sola fuente</strong>, no letras al azar.")
+        + para("Aqu&iacute; hay <strong>ideas de estilo</strong> para empezar. Elige una, m&eacute;zclalas o <strong>inventa la tuya</strong>. Mant&eacute;n tu palabra <strong>apropiada para la escuela</strong>.")
         + (style_ideas(True) if HAVE_ART else "")
-        + para("Tu sticker debe verse bien en un fondo <strong>claro</strong> y en uno <strong>oscuro</strong>. El borde blanco es lo que lo logra."))
+        + para("Puedes <strong>adornar</strong> tus letras con detalles divertidos, y agregar <strong>contornos</strong> o un borde para que tu sticker se lea bien en una superficie <strong>clara</strong> y una <strong>oscura</strong>."))
     es+=card("Aprende &middot; hazlo","Hazlo en Adobe Illustrator",
         scroll_steps(steps([
             ("Abre Adobe Illustrator.","B&uacute;scalo en el Dock o en Launchpad."),
