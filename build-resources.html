@@ -828,7 +828,7 @@
   /* the active view fills the body; export/history scroll as a whole, edit splits scroll + pinned footer */
   .pbg-card[data-mode="edit"] .pbg-view[data-view="edit"]{flex-direction:column;}
   .pbg-view[data-view="edit"]{min-height:0;}
-  .pbg-view[data-view="export"],.pbg-view[data-view="history"]{overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:0 16px 16px;}
+  .pbg-view[data-view="export"],.pbg-view[data-view="history"]{overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:12px 16px 16px;}
   .pbg-edit-scroll{flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:0 16px 4px;}
   .pbg-edit-foot{flex:0 0 auto; padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--pvb-line-soft);
     background:linear-gradient(to top, rgba(6,16,15,.96), rgba(8,22,21,.78)); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);}
@@ -844,7 +844,35 @@
     background:rgba(0,184,184,.12); border:1px solid var(--pvb-line-soft); color:var(--pvb-teal-lt); cursor:pointer;}
   .pbg-back:hover{background:rgba(0,184,184,.24);}
   .pbg-back svg{width:18px;height:18px;}
-  .pbg-head-acts{flex:0 0 auto; display:flex; align-items:center; gap:8px; margin-left:auto;}
+  .pbg-head-acts{flex:0 0 auto; display:flex; align-items:center; gap:10px; margin-left:auto;}
+  /* copy count, right of the title in Build Order mode (no separate bar) */
+  .pbg-head-prog{display:none; font-size:.82rem; font-weight:700; letter-spacing:.03em; color:var(--pvb-teal-lt); white-space:nowrap;}
+  .pbg-card[data-mode="export"] .pbg-head-prog{display:block;}
+  /* dual action button: INGREDIENTS | RESET */
+  .pbg-dual{display:flex; border-radius:var(--pbg-r-pill); overflow:hidden; border:1px solid var(--pvb-line);}
+  .pbg-dual-main{flex:1 1 auto; display:inline-flex; align-items:center; justify-content:center; gap:9px; padding:13px 16px; cursor:pointer; border:0;
+    font-family:var(--pvb-font); font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:.8rem; color:#04110f;
+    background:linear-gradient(135deg,var(--pvb-teal-lt),var(--pvb-teal));}
+  .pbg-dual-main svg{width:17px; height:17px;}
+  .pbg-dual-main:hover{filter:brightness(1.07);}
+  .pbg-dual-reset{flex:0 0 auto; padding:13px 22px; cursor:pointer; border:0; border-left:1px solid rgba(4,17,15,.35);
+    font-family:var(--pvb-font); font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:.8rem; color:#eafeff; background:rgba(0,184,184,.14);}
+  .pbg-dual-reset:hover{background:rgba(0,184,184,.26);}
+  /* nested "more" section in the Prompt pane (keeps the picker clean) */
+  .pbg-more{margin-top:16px; border:1px solid var(--pvb-line-soft); border-radius:var(--pbg-r-sm); background:rgba(0,184,184,.04);}
+  .pbg-more>summary{list-style:none; cursor:pointer; padding:11px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+    font-family:var(--pvb-font); font-weight:600; font-size:.8rem; letter-spacing:.03em; color:var(--pvb-muted);}
+  .pbg-more>summary::-webkit-details-marker{display:none;}
+  .pbg-more>summary::after{content:''; flex:0 0 auto; width:9px; height:9px; border-right:2px solid var(--pvb-muted); border-bottom:2px solid var(--pvb-muted); transform:rotate(45deg); transition:transform .18s;}
+  .pbg-more[open]>summary::after{transform:rotate(-135deg);}
+  .pbg-more-body{padding:2px 14px 14px;}
+  .pbg-more-body .pbg-modewrap{margin:4px 0 0;}
+  .pbg-more-body .pbg-quick{margin:14px 0 0;}
+  .pbg-more-body .pbg-setups{margin-top:16px;}
+  /* compact prompt picker items */
+  #pvb-panel-build .pbg-pane[data-pane="prompt"] .pvb-acc.pnav .pvb-acc-body{gap:6px; padding:4px 12px 12px;}
+  #pvb-panel-build .pbg-pane[data-pane="prompt"] .pvb-pnav-item{padding:8px 13px;}
+  #pvb-panel-build .pbg-pane[data-pane="prompt"] .pvb-pnav-item .s{font-size:.75rem;}
   .pbg-iconbtn{width:38px; height:38px; display:inline-flex; align-items:center; justify-content:center; border-radius:var(--pbg-r-pill);
     background:rgba(0,184,184,.1); border:1px solid var(--pvb-line-soft); color:var(--pvb-teal-lt); cursor:pointer;}
   .pbg-iconbtn:hover{background:rgba(0,184,184,.22); color:#eafeff;}
@@ -1161,6 +1189,7 @@
             <div class="pbg-sub" id="pvb-sub"></div>
           </div>
           <div class="pbg-head-acts">
+            <div class="pbg-head-prog"><span id="pbg-progress">0 / 0</span> copied</div>
             <button type="button" class="pbg-iconbtn" id="pbg-history-btn" title="Prompt history" aria-label="Prompt history">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
             </button>
@@ -1177,26 +1206,18 @@
               <div class="pvb-preview" id="pvb-preview" contenteditable="true" spellcheck="false" aria-label="Your prompt (editable)">Loading base prompt&#8230;</div>
             </div>
             <div class="pbg-edit-foot">
-              <button type="button" class="pbg-buildorder" id="pbg-open-export">
-                <span class="bo-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
-                <span class="bo-txt"><b>Build Order</b><span id="pbg-bo-sub">Collect everything to copy</span></span>
-                <span class="bo-arrow">&rarr;</span>
-              </button>
-              <div class="pbg-card-acts">
-                <button class="pvb-btn ghost" id="pvb-reset" title="Clear your entries for this prompt">Reset</button>
+              <div class="pbg-dual">
+                <button type="button" class="pbg-dual-main" id="pbg-open-export">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                  <span>Ingredients</span>
+                </button>
+                <button type="button" class="pbg-dual-reset" id="pvb-reset" title="Clear your entries for this prompt">Reset</button>
               </div>
-              <div class="pvb-saved" id="pvb-saved">Draft saves automatically.</div>
+              <div class="pvb-saved" id="pvb-saved" hidden></div>
             </div>
           </div>
-          <!-- EXPORT view: the final build order, copy straight down the list -->
+          <!-- EXPORT view: the final build order (the count lives in the header now) -->
           <div class="pbg-view" data-view="export">
-            <div class="pbg-bo-dock">
-              <div class="pbg-bo-top">
-                <div class="pbg-bo-title">Build Order</div>
-                <div class="pbg-bo-prog"><span id="pbg-progress">0 / 0</span> copied</div>
-              </div>
-              <div class="pbg-bo-bar"><span id="pbg-bo-fill"></span></div>
-            </div>
             <div id="pvb-checklist"></div>
             <div class="pbg-bo-done" id="pbg-bo-done"><b>Build complete.</b> Everything is in your image gen. Generate your image.</div>
           </div>
@@ -1213,36 +1234,39 @@
         <button type="button" class="pbg-handle" id="pbg-handle" aria-label="Drag to resize"><span></span></button>
         <button type="button" class="pbg-sheet-export" id="pbg-sheet-export">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          <span>Build Order</span><span class="se-sub" id="pbg-se-sub"></span><span class="se-arrow">&rarr;</span>
+          <span>Ingredients</span><span class="se-sub" id="pbg-se-sub"></span><span class="se-arrow">&rarr;</span>
         </button>
         <div class="pbg-tabs" id="pbg-tabs" role="tablist"></div>
         <div class="pbg-body" id="pbg-body">
           <!-- Prompt pane: pick a prompt + how to send it + saved setups -->
           <section class="pbg-pane" data-pane="prompt">
-            <div class="pbg-pane-h">Choose a prompt</div>
-            <div class="pbg-pane-sub">Pick what you&#8217;re making. The builder loads it ready to fill.</div>
             <div id="pvb-pnav-groups"></div>
-            <div class="pbg-quick">
-              <span class="pvb-quicklabel">One-click copies</span>
-              <button type="button" class="pvb-quickbtn" data-quick="/assets/prompts/Blank-Artboard-Reset.txt">Clear Artboard</button>
-              <button type="button" class="pvb-quickbtn" data-quick="/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt">Force Full Rebuild</button>
-            </div>
-            <div class="pbg-modewrap">
-              <div class="pvb-modebar">
-                <span class="pvb-modelabel">Prompt mode</span>
-                <div class="pvb-modeseg">
-                  <button type="button" class="pvb-modebtn" data-mode="project">PV Project</button>
-                  <button type="button" class="pvb-modebtn" data-mode="full">Full template</button>
+            <!-- secondary controls nested so the picker stays clean -->
+            <details class="pbg-more">
+              <summary><span>Mode &middot; disclaimer &middot; saved builds</span></summary>
+              <div class="pbg-more-body">
+                <div class="pbg-modewrap">
+                  <div class="pvb-modebar">
+                    <span class="pvb-modelabel">Prompt mode</span>
+                    <div class="pvb-modeseg">
+                      <button type="button" class="pvb-modebtn" data-mode="project">PV Project</button>
+                      <button type="button" class="pvb-modebtn" data-mode="full">Full template</button>
+                    </div>
+                  </div>
+                  <p class="pvb-modehint" id="pvb-modehint"></p>
+                  <label class="pvb-check-toggle pvb-disc"><input type="checkbox" id="pvb-disc"> <span>Add AI disclaimer (small fine print, bottom-left, 50% opacity)</span></label>
+                </div>
+                <div class="pbg-quick">
+                  <span class="pvb-quicklabel">One-click copies</span>
+                  <button type="button" class="pvb-quickbtn" data-quick="/assets/prompts/Blank-Artboard-Reset.txt">Clear Artboard</button>
+                  <button type="button" class="pvb-quickbtn" data-quick="/assets/prompts/Fresh-Full-Image-Rebuild-Protocol.txt">Force Full Rebuild</button>
+                </div>
+                <div class="pbg-setups">
+                  <div class="pvb-gtitle">Saved builds</div>
+                  <div class="pvb-setups" id="pvb-setups"></div>
                 </div>
               </div>
-              <p class="pvb-modehint" id="pvb-modehint"></p>
-              <label class="pvb-check-toggle pvb-disc"><input type="checkbox" id="pvb-disc"> <span>Add AI disclaimer (small fine print, bottom-left, 50% opacity)</span></label>
-            </div>
-            <div class="pbg-setups">
-              <div class="pvb-gtitle">Reusable setups</div>
-              <div class="pbg-pane-sub" style="margin:-4px 0 10px;">Save the current prompt and its choices to reload later. Saved on this computer.</div>
-              <div class="pvb-setups" id="pvb-setups"></div>
-            </div>
+            </details>
           </section>
           <!-- Cast / Items / Scene panes all read the engine's #pvb-refs (filtered by data-cat) -->
           <section class="pbg-pane" data-pane="refs">
