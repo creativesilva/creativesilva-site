@@ -2233,6 +2233,18 @@
       if(DISC) out += '\n\n' + DISCLAIMER_TEXT;
       return out;
     }
+    // camera jargon -> plain-language look (tells the model what to render; spec kept as a tag). [audit: plain-language camera]
+    var CAM_LOOK={
+      '24mm wide':'wide environmental perspective, more room visible, the face not distorted (24mm)',
+      '35mm':'natural documentary perspective, the subject and surroundings both clear (35mm)',
+      '50mm':'normal eye-level perspective with natural proportions (50mm)',
+      '85mm portrait':'portrait perspective, the subject separated from a softly compressed background (85mm)',
+      '70-200mm telephoto':'strong background compression from a distance, a tight candid feel (70-200mm)',
+      'f/1.8 shallow':'the eyes sharp, the background clearly blurred but still believable (f/1.8)',
+      'f/5.6 normal':'the subject sharp, the background softly recognizable (f/5.6)',
+      'f/11 deep':'the subject and background both clearly readable (f/11)'
+    };
+    function camLook(v){ return CAM_LOOK[v]||v; }
     function composeEnvFull(){
       var out=baseText,name;
       if(cfg.delta){
@@ -2242,7 +2254,7 @@
         if(!hasSupport) out=out.replace('Image 2 = SUPPORT ONLY.','No support image.');
         out=out.replace(/\n+If there is no support image[^\n]*/,'');
       }
-      for(name in state.fields){ var v=state.fields[name]; if(v) out=out.split('['+name+'] =').join('['+name+'] = '+v); }
+      for(name in state.fields){ var v=state.fields[name]; if(v) out=out.split('['+name+'] =').join('['+name+'] = '+camLook(v)); }
       var chars=state.chars.filter(Boolean).map(baseName), items=state.items.filter(Boolean).map(baseName), extra='';
       if(BACKDROP && state.backdrop && BACKDROP_TEXT[state.backdrop]) extra+=BACKDROP_TEXT[state.backdrop]+'\n\n';
       if(chars.length||items.length||state.scene){
@@ -2273,7 +2285,7 @@
       L.push('');
       L.push('CANON: use the '+canon+' and the PV brand rules already in this project. Do not restate them.');
       var ov=[];
-      (fieldNames&&fieldNames.length?fieldNames:Object.keys(state.fields)).forEach(function(n){ if(n==='SUBJECT / ACTION')return; var v=state.fields[n]; if(v)ov.push('- '+n+': '+v); });
+      (fieldNames&&fieldNames.length?fieldNames:Object.keys(state.fields)).forEach(function(n){ if(n==='SUBJECT / ACTION')return; var v=state.fields[n]; if(v)ov.push('- '+n+': '+camLook(v)); });
       if(ov.length){ L.push(''); L.push('OVERRIDES (change only these; leave everything else to the canon):'); ov.forEach(function(o){L.push(o);}); }
       L.push('');
       L.push('TEXT: no visible words or signs unless asked.');
