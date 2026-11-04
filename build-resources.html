@@ -857,6 +857,18 @@
   .pbg-card[data-mode="edit"] .pbg-view[data-view="edit"]{flex-direction:column;}
   .pbg-view[data-view="edit"]{min-height:0;}
   .pbg-view[data-view="export"],.pbg-view[data-view="history"]{overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:12px 16px 16px;}
+  /* preflight linter: quiet, non-blocking warnings at the top of the build order */
+  .pvb-lint{display:flex; flex-direction:column; gap:7px; margin:0 0 12px;}
+  .pvb-lint-row{display:flex; align-items:flex-start; gap:9px; padding:10px 12px; border-radius:var(--pbg-r-sm);
+    font-size:.8rem; line-height:1.35; backdrop-filter:blur(12px) saturate(140%); -webkit-backdrop-filter:blur(12px) saturate(140%);}
+  .pvb-lint-row .li-ic{flex:0 0 auto; width:17px; height:17px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:800; font-size:.72rem; margin-top:1px;}
+  .pvb-lint-row.warn{color:#ffe7c2; border:1px solid rgba(245,179,1,.4); background:linear-gradient(145deg, rgba(245,179,1,.15), rgba(6,16,16,.25)); box-shadow:inset 0 1px 0 rgba(255,220,150,.14);}
+  .pvb-lint-row.warn .li-ic{background:#f5b301; color:#2a1a00;}
+  .pvb-lint-row.tip{color:#bfeff0; border:1px solid rgba(112,246,246,.3); background:linear-gradient(145deg, rgba(0,184,184,.12), rgba(6,16,16,.22)); box-shadow:inset 0 1px 0 rgba(185,255,255,.12);}
+  .pvb-lint-row.tip .li-ic{background:var(--pvb-teal); color:#04110f;}
+  /* a small amber dot on the wizard forward circle when a hard conflict is flagged */
+  .pbg-wizard.has-lint .wf-circle{position:relative;}
+  .pbg-wizard.has-lint .wf-circle::after{content:''; position:absolute; top:-1px; right:-1px; width:10px; height:10px; border-radius:50%; background:#f5b301; box-shadow:0 0 0 2px rgba(6,16,16,.7);}
   .pbg-edit-scroll{flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:0 16px 4px;}
   .pbg-edit-foot{flex:0 0 auto; padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--pvb-line-soft);
     background:linear-gradient(to top, rgba(6,16,15,.96), rgba(8,22,21,.78)); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);}
@@ -1262,6 +1274,7 @@
           </div>
           <!-- EXPORT view: the final build order (the count lives in the header now) -->
           <div class="pbg-view" data-view="export">
+            <div id="pvb-lint" class="pvb-lint" style="display:none"></div>
             <div id="pvb-checklist"></div>
             <div class="pbg-bo-done" id="pbg-bo-done"><b>Build complete.</b> Everything is in your image gen. Generate your image.</div>
           </div>
@@ -2344,6 +2357,35 @@
       return out;
     }
 
+    // ---- preflight linter: quiet, non-blocking warnings in the build order [audit: reference discipline] ----
+    var CAMERA_BODIES={
+      'items/canon-eos-r5-pro-v1.png':'Canon R5',
+      'items/canon-eos-r50-v1.png':'Canon R50',
+      'items/canon-r5-ii-telephoto-v1.png':'Canon R5 II (black)',
+      'items/canon-r5-ii-white-telephoto-v1.png':'Canon R5 II (white)'
+    };
+    var LINT_PERSON_RE=/\b(she|he|her|his|him|hers|student|students|person|people|photographer|teacher|girl|boy|man|woman|women|men|someone|kid|teen)\b/i;
+    function lintWarnings(){
+      var w=[];
+      try{
+        var cams=(state.items||[]).filter(Boolean).filter(function(f){return CAMERA_BODIES[f];}).map(function(f){return CAMERA_BODIES[f];});
+        if(cams.length>1) w.push({level:'warn', msg:cams.length+' camera bodies selected ('+cams.join(', ')+'). Pick one so the model does not blend them.'});
+        var total=(state.chars||[]).filter(Boolean).length+(state.items||[]).filter(Boolean).length+(state.scene?1:0)+((staged&&staged.length)||0);
+        if(total>5) w.push({level:'tip', msg:total+' references selected. A lot of references can blend and soften identity; keep the ones this shot needs.'});
+        var act=((state.fields&&state.fields['SUBJECT / ACTION'])||'').trim();
+        var hasChar=(state.chars||[]).filter(Boolean).length>0;
+        if(!hasChar && !OUTFIT && cfg && cfg.ptype==='environment' && act && LINT_PERSON_RE.test(act))
+          w.push({level:'tip', msg:'Your scene describes a person but no character sheet is attached. Add one under Cast so the face stays consistent.'});
+      }catch(e){}
+      return w;
+    }
+    function renderLint(){
+      var box=document.getElementById('pvb-lint'); if(!box) return;
+      var w=lintWarnings();
+      if(!w.length){ box.style.display='none'; box.innerHTML=''; }
+      else { box.style.display=''; box.innerHTML=w.map(function(x){ return '<div class="pvb-lint-row '+(x.level==='warn'?'warn':'tip')+'"><span class="li-ic" aria-hidden="true">!</span><span>'+esc(x.msg)+'</span></div>'; }).join(''); }
+      var wiz=document.getElementById('pbg-wizard'); if(wiz) wiz.classList.toggle('has-lint', w.some(function(x){return x.level==='warn';}));
+    }
     function render(){
       preEl.textContent=compose();
       if(window.pvbmSync) pvbmSync();
@@ -2381,6 +2423,7 @@
       if(!attach.length){ checklistEl.appendChild(el('div','pvb-check-empty', cfg.delta?'Drop your master (and optional support headshot) on the left; they show up here to copy in order.':'Add characters, items, or a location above and they appear here as steps 2, 3, and so on.')); }
       var when=new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
       savedEl.innerHTML='Draft saved <b>'+when+'</b>. It restores when you come back.';
+      renderLint();
     }
 
     // ---- reference accordion (larger thumbnails) ----
