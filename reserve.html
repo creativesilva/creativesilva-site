@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=51" />
+<link rel="stylesheet" href="/css/store.css?v=53" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -18,41 +18,48 @@
 <div class="util">
   <div class="wrap util-row">
     <span class="util-l" id="pickupInfo"><b>Equipment pickup</b></span>
-    <a class="util-r" href="sms:+18056310001">Text us: 805-631-0001 <em>(text only)</em></a>
+    <div class="util-right">
+      <!-- EN/ES toggle: hidden until the Spanish layer is fully wired, so a half-translated ES is never exposed. -->
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language / Idioma" hidden>
+        <button type="button" data-lang="en" class="lang-on">EN</button>
+        <button type="button" data-lang="es">ES</button>
+      </div>
+      <a class="util-r" href="sms:+18056310001"><span data-i18n="k_textus">Text us: 805-631-0001</span> <em data-i18n="(text only)">(text only)</em></a>
+    </div>
   </div>
 </div>
 
 <header class="store-nav">
   <div class="wrap">
     <a class="store-logo" href="/reserve.html" aria-label="Pioneer Valley"><img src="/assets/PV_Square_Logo.png" alt="Pioneer Valley" /></a>
-    <div class="store-brand"><b>Pioneer Valley</b><span>Equipment Rental</span><span class="store-stu" id="brandStu" hidden></span></div>
+    <div class="store-brand"><b>Pioneer Valley</b><span data-i18n="Equipment Rental">Equipment Rental</span><span class="store-stu" id="brandStu" hidden></span></div>
     <form class="store-search" id="searchForm" role="search">
-      <input type="search" id="searchIn" placeholder="Search equipment" aria-label="Search equipment" autocomplete="off" />
+      <input type="search" id="searchIn" placeholder="Search equipment" data-i18n-ph="Search equipment" aria-label="Search equipment" autocomplete="off" />
       <button type="submit" aria-label="Search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="20.5" y1="20.5" x2="16.5" y2="16.5"></line></svg></button>
     </form>
     <div class="nav-right">
       <button type="button" class="acct-btn" id="acctBtn">My Account</button>
-      <button type="button" class="cart-btn" id="cartBtn">Equipment Bag <span class="cart-n empty" id="cartN">0</span></button>
+      <button type="button" class="cart-btn" id="cartBtn"><span data-i18n="Equipment Bag">Equipment Bag</span> <span class="cart-n empty" id="cartN">0</span></button>
       <!-- Quick-access dropdown nav (hamburger) -->
       <div class="navmenu-wrap">
         <button type="button" class="nav-burger" id="navBtn" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span></span><span></span><span></span></button>
         <nav class="navmenu" id="navMenu" hidden>
-          <a class="navmenu-link" id="navBackEM" href="/camera-manager.html" hidden>&#8592;&nbsp;Equipment Manager</a>
+          <a class="navmenu-link" id="navBackEM" href="/camera-manager.html" hidden>&#8592;&nbsp;<span data-i18n="Equipment Manager">Equipment Manager</span></a>
           <div class="navmenu-sep" id="navBackSep" hidden></div>
-          <div class="navmenu-lab">Browse</div>
-          <button type="button" data-nav="popular">Popular Rentals</button>
-          <button type="button" data-nav="cat:cameras">Camera Kits</button>
-          <button type="button" data-nav="cat:lenses">Lenses</button>
-          <button type="button" data-nav="cat:lighting">Lighting</button>
-          <button type="button" data-nav="cat:accessories">Accessories</button>
-          <button type="button" data-nav="calendar">Calendar View</button>
+          <div class="navmenu-lab" data-i18n="Browse">Browse</div>
+          <button type="button" data-nav="popular" data-i18n="Popular Rentals">Popular Rentals</button>
+          <button type="button" data-nav="cat:cameras" data-i18n="Camera Kits">Camera Kits</button>
+          <button type="button" data-nav="cat:lenses" data-i18n="Lenses">Lenses</button>
+          <button type="button" data-nav="cat:lighting" data-i18n="Lighting">Lighting</button>
+          <button type="button" data-nav="cat:accessories" data-i18n="Accessories">Accessories</button>
+          <button type="button" data-nav="calendar" data-i18n="Calendar View">Calendar View</button>
           <div class="navmenu-sep"></div>
-          <div class="navmenu-lab">You</div>
-          <button type="button" data-nav="account">My Account</button>
-          <button type="button" data-nav="bag">Equipment Bag</button>
-          <button type="button" data-nav="howitworks">How it works</button>
+          <div class="navmenu-lab" data-i18n="You">You</div>
+          <button type="button" data-nav="account" data-i18n="My Account">My Account</button>
+          <button type="button" data-nav="bag" data-i18n="Equipment Bag">Equipment Bag</button>
+          <button type="button" data-nav="howitworks" data-i18n="How it works">How it works</button>
           <div class="navmenu-sep"></div>
-          <a class="navmenu-link" href="sms:+18056310001">Text us: 805-631-0001</a>
+          <a class="navmenu-link" href="sms:+18056310001" data-i18n="k_textus">Text us: 805-631-0001</a>
         </nav>
       </div>
     </div>
@@ -65,23 +72,23 @@
     <!-- Category nav (teal line-art icons), top-left -->
     <nav class="catnav">
       <div class="catnav-row" id="catnav">
-        <button type="button" class="catn" data-cat="cameras"><span class="catn-ic" style="--ic:url('/assets/Icons/store/camera-v1.png')"></span>Camera Kits</button>
-        <button type="button" class="catn" data-cat="lenses"><span class="catn-ic" style="--ic:url('/assets/Icons/store/lenses-v1.png')"></span>Lenses</button>
-        <button type="button" class="catn" data-cat="lighting"><span class="catn-ic" style="--ic:url('/assets/Icons/store/lighting-v1.png')"></span>Lighting</button>
-        <button type="button" class="catn" data-cat="accessories"><span class="catn-ic" style="--ic:url('/assets/Icons/store/accessories-v1.png')"></span>Accessories</button>
+        <button type="button" class="catn" data-cat="cameras"><span class="catn-ic" style="--ic:url('/assets/Icons/store/camera-v1.png')"></span><span data-i18n="Camera Kits">Camera Kits</span></button>
+        <button type="button" class="catn" data-cat="lenses"><span class="catn-ic" style="--ic:url('/assets/Icons/store/lenses-v1.png')"></span><span data-i18n="Lenses">Lenses</span></button>
+        <button type="button" class="catn" data-cat="lighting"><span class="catn-ic" style="--ic:url('/assets/Icons/store/lighting-v1.png')"></span><span data-i18n="Lighting">Lighting</span></button>
+        <button type="button" class="catn" data-cat="accessories"><span class="catn-ic" style="--ic:url('/assets/Icons/store/accessories-v1.png')"></span><span data-i18n="Accessories">Accessories</span></button>
       </div>
     </nav>
     <!-- One clickable Checkout box steps through day -> pickup -> return time; Return + Days auto-fill -->
     <div class="datebar">
       <div class="datebar-row">
         <div class="datebar-leadwrap">
-          <div class="datebar-lead">When do you need it?</div>
-          <div class="datebar-note">Return is the next school day. Choose your pickup time at checkout.</div>
+          <div class="datebar-lead" data-i18n="When do you need it?">When do you need it?</div>
+          <div class="datebar-note" data-i18n="Return is the next school day. Choose your pickup time at checkout.">Return is the next school day. Choose your pickup time at checkout.</div>
         </div>
         <div class="datecards hero-dates" id="dateCards">
-          <button type="button" class="datecard pick step co" id="dcCheckout" aria-label="Set checkout day, pickup time and return time"><span class="dc-lab">Checkout</span><span class="dc-val" id="dcCheckoutVal"></span></button>
-          <div class="datecard ret step rt"><span class="dc-lab">Return</span><span class="dc-val" id="dcReturnVal"></span></div>
-          <div class="datecard days step"><span class="dc-lab">Days</span><span class="dc-val" id="dcDaysVal"></span></div>
+          <button type="button" class="datecard pick step co" id="dcCheckout" aria-label="Set checkout day, pickup time and return time"><span class="dc-lab" data-i18n="Checkout">Checkout</span><span class="dc-val" id="dcCheckoutVal"></span></button>
+          <div class="datecard ret step rt"><span class="dc-lab" data-i18n="Return">Return</span><span class="dc-val" id="dcReturnVal"></span></div>
+          <div class="datecard days step"><span class="dc-lab" data-i18n="Days">Days</span><span class="dc-val" id="dcDaysVal"></span></div>
         </div>
       </div>
     </div>
@@ -107,7 +114,7 @@
   <!-- Calendar view: a month with per-day free-camera counts. Tap an open day -> sign in -> pickup/return
        times -> pick equipment by category -> Done opens the bag. A visual alternate to browsing. -->
   <details class="calview" id="calview">
-    <summary class="hiw-sum"><span class="bar"></span><span>Calendar view</span><span class="hiw-chev" aria-hidden="true"></span></summary>
+    <summary class="hiw-sum"><span class="bar"></span><span data-i18n="Calendar view">Calendar view</span><span class="hiw-chev" aria-hidden="true"></span></summary>
     <div class="calview-bd">
       <div class="cv-calendar">
         <div class="cv-head">
@@ -115,9 +122,9 @@
           <span class="cv-title" id="cvTitle"></span>
           <button type="button" class="cv-nav" id="cvNext" aria-label="Next month">&rsaquo;</button>
         </div>
-        <div class="cv-dow"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+        <div class="cv-dow"><span data-i18n="Sun">Sun</span><span data-i18n="Mon">Mon</span><span data-i18n="Tue">Tue</span><span data-i18n="Wed">Wed</span><span data-i18n="Thu">Thu</span><span data-i18n="Fri">Fri</span><span data-i18n="Sat">Sat</span></div>
         <div class="cv-grid" id="cvGrid"></div>
-        <div class="cv-legend">Tap a day to see what is reserved. The number is how many cameras are free that day.</div>
+        <div class="cv-legend" data-i18n="Tap a day to see what is reserved. The number is how many cameras are free that day.">Tap a day to see what is reserved. The number is how many cameras are free that day.</div>
       </div>
       <!-- Day detail: what is checked out on the tapped day. Student-facing, so period only (a group), never a name. -->
       <aside class="cv-daypanel" id="cvDayPanel" hidden></aside>
@@ -129,32 +136,32 @@
 <footer class="store-foot">
   <div class="wrap foot-cols">
     <div class="foot-col">
-      <h4>Program Info</h4>
-      <button type="button" class="foot-link" id="footProgram">Digital Arts program</button>
-      <a href="#howitworks" class="foot-link">How it works</a>
-      <button type="button" class="foot-link" id="footRental">Rental agreement</button>
-      <button type="button" class="foot-link" id="footJobs">Jobs</button>
+      <h4 data-i18n="Program Info">Program Info</h4>
+      <button type="button" class="foot-link" id="footProgram" data-i18n="Digital Arts program">Digital Arts program</button>
+      <a href="#howitworks" class="foot-link" data-i18n="How it works">How it works</a>
+      <button type="button" class="foot-link" id="footRental" data-i18n="Rental agreement">Rental agreement</button>
+      <button type="button" class="foot-link" id="footJobs" data-i18n="Jobs">Jobs</button>
     </div>
     <div class="foot-col">
-      <h4>Partners</h4>
+      <h4 data-i18n="Partners">Partners</h4>
       <a href="https://www.creativesilva.com" class="foot-link" target="_blank" rel="noopener">Chris Silva &middot; Photo &#38; Digital Arts</a>
       <a href="https://www.chrisandlaura.com" class="foot-link" target="_blank" rel="noopener">Laura Garcia &middot; Photography</a>
       <span class="foot-static">Rileigh Mankin &middot; Digital Arts</span>
     </div>
     <div class="foot-col">
-      <h4>Get Social</h4>
+      <h4 data-i18n="Get Social">Get Social</h4>
       <a href="https://instagram.com/silvateaches" class="foot-link foot-ig" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 1.8.25 2.2.42.56.22.96.48 1.38.9.42.42.68.82.9 1.38.17.4.36 1 .42 2.2.07 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.06 1.2-.25 1.8-.42 2.2-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.4.17-1 .36-2.2.42-1.3.07-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.06-1.8-.25-2.2-.42a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.17-.4-.36-1-.42-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.06-1.2.25-1.8.42-2.2.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.4-.17 1-.36 2.2-.42C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.14 0-3.5 0-4.74.07-.9.04-1.4.2-1.72.32-.43.17-.74.37-1.06.69-.32.32-.52.63-.69 1.06-.12.32-.28.82-.32 1.72C3.2 8.5 3.2 8.86 3.2 12s0 3.5.07 4.74c.04.9.2 1.4.32 1.72.17.43.37.74.69 1.06.32.32.63.52 1.06.69.32.12.82.28 1.72.32 1.24.07 1.6.07 4.74.07s3.5 0 4.74-.07c.9-.04 1.4-.2 1.72-.32.43-.17.74-.37 1.06-.69.32-.32.52-.63.69-1.06.12-.32.28-.82.32-1.72.07-1.24.07-1.6.07-4.74s0-3.5-.07-4.74c-.04-.9-.2-1.4-.32-1.72a2.9 2.9 0 0 0-.69-1.06 2.9 2.9 0 0 0-1.06-.69c-.32-.12-.82-.28-1.72-.32C15.5 4 15.14 4 12 4zm0 3.06A4.94 4.94 0 1 1 7.06 12 4.94 4.94 0 0 1 12 7.06zm0 1.8A3.14 3.14 0 1 0 15.14 12 3.14 3.14 0 0 0 12 8.86zm6.3-.9a1.15 1.15 0 1 1-1.15-1.15 1.15 1.15 0 0 1 1.15 1.15z"/></svg>@silvateaches</a>
       <a href="https://instagram.com/light_writerz" class="foot-link foot-ig" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 1.8.25 2.2.42.56.22.96.48 1.38.9.42.42.68.82.9 1.38.17.4.36 1 .42 2.2.07 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.06 1.2-.25 1.8-.42 2.2-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.4.17-1 .36-2.2.42-1.3.07-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.06-1.8-.25-2.2-.42a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.17-.4-.36-1-.42-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.06-1.2.25-1.8.42-2.2.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.4-.17 1-.36 2.2-.42C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.14 0-3.5 0-4.74.07-.9.04-1.4.2-1.72.32-.43.17-.74.37-1.06.69-.32.32-.52.63-.69 1.06-.12.32-.28.82-.32 1.72C3.2 8.5 3.2 8.86 3.2 12s0 3.5.07 4.74c.04.9.2 1.4.32 1.72.17.43.37.74.69 1.06.32.32.63.52 1.06.69.32.12.82.28 1.72.32 1.24.07 1.6.07 4.74.07s3.5 0 4.74-.07c.9-.04 1.4-.2 1.72-.32.43-.17.74-.37 1.06-.69.32-.32.52-.63.69-1.06.12-.32.28-.82.32-1.72.07-1.24.07-1.6.07-4.74s0-3.5-.07-4.74c-.04-.9-.2-1.4-.32-1.72a2.9 2.9 0 0 0-.69-1.06 2.9 2.9 0 0 0-1.06-.69c-.32-.12-.82-.28-1.72-.32C15.5 4 15.14 4 12 4zm0 3.06A4.94 4.94 0 1 1 7.06 12 4.94 4.94 0 0 1 12 7.06zm0 1.8A3.14 3.14 0 1 0 15.14 12 3.14 3.14 0 0 0 12 8.86zm6.3-.9a1.15 1.15 0 1 1-1.15-1.15 1.15 1.15 0 0 1 1.15 1.15z"/></svg>@light_writerz</a>
     </div>
     <div class="foot-col">
-      <h4>Contact</h4>
+      <h4 data-i18n="Contact">Contact</h4>
       <a href="mailto:csilva@smjuhsd.org" class="foot-link">csilva@smjuhsd.org</a>
-      <a href="sms:+18056310001" class="foot-link">Text: 805-631-0001</a>
+      <a href="sms:+18056310001" class="foot-link" data-i18n="k_text_num">Text: 805-631-0001</a>
       <span class="foot-addr">Pioneer Valley High School<br>675 Panther Drive<br>Santa Maria, CA 93454</span>
-      <button type="button" class="foot-link" id="footHours">Business hours &#38; bell schedule</button>
+      <button type="button" class="foot-link" id="footHours" data-i18n="Business hours &#38; bell schedule">Business hours &#38; bell schedule</button>
     </div>
   </div>
-  <div class="foot-bar"><div class="wrap">Pioneer Valley High School &middot; Equipment Rental</div></div>
+  <div class="foot-bar"><div class="wrap" data-i18n="k_footbar">Pioneer Valley High School &middot; Equipment Rental</div></div>
 </footer>
 
 <!-- Business hours / bell schedule dialog -->
@@ -204,20 +211,20 @@
     <button type="button" class="sheet-x" data-close="signinOv" aria-label="Close">&times;</button>
     <div class="sheet-bd">
       <div id="siStep1">
-        <h2 id="signinTitle">My Account</h2>
-        <p>Sign in with your student number. No password.</p>
-        <div class="field"><label for="sid">Student number</label><input type="text" id="sid" inputmode="numeric" autocomplete="off" placeholder="e.g. 123456" /></div>
+        <h2 id="signinTitle" data-i18n="My Account">My Account</h2>
+        <p data-i18n="Sign in with your student number. No password.">Sign in with your student number. No password.</p>
+        <div class="field"><label for="sid" data-i18n="Student number">Student number</label><input type="text" id="sid" inputmode="numeric" autocomplete="off" placeholder="e.g. 123456" data-i18n-ph="k_sid_ph" /></div>
         <div class="sheet-msg" id="signinMsg"></div>
-        <button type="button" class="btn block" id="signinGo">Sign in</button>
+        <button type="button" class="btn block" id="signinGo" data-i18n="Sign in">Sign in</button>
       </div>
       <div id="siStep2" style="display:none">
-        <h2>Is this you?</h2>
+        <h2 data-i18n="Is this you?">Is this you?</h2>
         <p id="siWho"></p>
-        <div class="field"><label for="siSc">Your cell</label><input type="tel" id="siSc" inputmode="numeric" autocomplete="off" placeholder="805-555-1234" /></div>
-        <div class="field"><label for="siPg">Parent or guardian name</label><input type="text" id="siPg" autocomplete="off" placeholder="First and last name" /></div>
-        <div class="field"><label for="siPc">Parent or guardian cell</label><input type="tel" id="siPc" inputmode="numeric" autocomplete="off" placeholder="805-555-1234" /></div>
+        <div class="field"><label for="siSc" data-i18n="Your cell">Your cell</label><input type="tel" id="siSc" inputmode="numeric" autocomplete="off" placeholder="805-555-1234" /></div>
+        <div class="field"><label for="siPg" data-i18n="Parent or guardian name">Parent or guardian name</label><input type="text" id="siPg" autocomplete="off" placeholder="First and last name" data-i18n-ph="First and last name" /></div>
+        <div class="field"><label for="siPc" data-i18n="Parent or guardian cell">Parent or guardian cell</label><input type="tel" id="siPc" inputmode="numeric" autocomplete="off" placeholder="805-555-1234" /></div>
         <div class="sheet-msg" id="siMsg2"></div>
-        <button type="button" class="btn block" id="siConfirm">That&#x2019;s me &middot; continue</button>
+        <button type="button" class="btn block" id="siConfirm" data-i18n="k_thatsme">That&#x2019;s me &middot; continue</button>
       </div>
     </div>
   </div>
@@ -227,17 +234,17 @@
 <div class="sov" id="holdOv" aria-hidden="true">
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="holdTitle">
     <div class="sheet-bd">
-      <h2 id="holdTitle">Equipment checkout on hold</h2>
+      <h2 id="holdTitle" data-i18n="Equipment checkout on hold">Equipment checkout on hold</h2>
       <div class="rv-block" id="holdBody"></div>
       <div class="ov-row" id="holdOvRow" style="display:none">
-        <input type="password" id="holdOvc" inputmode="numeric" autocomplete="off" placeholder="Teacher override code" />
-        <button type="button" class="btn sm" id="holdOvGo">Unlock</button>
+        <input type="password" id="holdOvc" inputmode="numeric" autocomplete="off" placeholder="Teacher override code" data-i18n-ph="Teacher override" />
+        <button type="button" class="btn sm" id="holdOvGo" data-i18n="Unlock">Unlock</button>
       </div>
       <div class="sheet-msg" id="holdMsg"></div>
-      <button type="button" class="btn block" id="holdReq">Ask Mr. Silva to approve it anyway</button>
+      <button type="button" class="btn block" id="holdReq" data-i18n="Ask Mr. Silva to approve it anyway">Ask Mr. Silva to approve it anyway</button>
       <div class="sheet-actions">
-        <button type="button" class="btn ghost" data-close="holdOv">Browse equipment</button>
-        <button type="button" class="btn ghost sm" id="holdOvToggle">Teacher override</button>
+        <button type="button" class="btn ghost" data-close="holdOv" data-i18n="Browse equipment">Browse equipment</button>
+        <button type="button" class="btn ghost sm" id="holdOvToggle" data-i18n="Teacher override">Teacher override</button>
       </div>
     </div>
   </div>
@@ -327,6 +334,133 @@
   function fmtPhone(x){ x=String(x||'').replace(/\D/g,''); return x.length===10?(x.slice(0,3)+'-'+x.slice(3,6)+'-'+x.slice(6)):String(x||''); }
   function api(path,body){ return fetch(API+path,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(body||{})}).then(function(r){return r.json();}); }
   var DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  // ===== language (English / Spanish) =====
+  // The store ships fully bilingual. LANG flips every student-facing string at a 5th-grade reading level.
+  // Date arrays (DOW/MON) are mutated in place on a language change so all ~30 date call sites follow with
+  // no edits. t(en) returns the Spanish for an English key (or the English itself if untranslated = safe).
+  var LANG='en';
+  try{ var _lg=sessionStorage.getItem('pv_lang'); if(_lg==='es'||_lg==='en') LANG=_lg; }catch(e){}
+  function saveLang(){ try{ sessionStorage.setItem('pv_lang',LANG); }catch(e){} }
+  var DOW_EN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], DOW_ES=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  var MON_EN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], MON_ES=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  function applyDateLang(){ var d=(LANG==='es')?DOW_ES:DOW_EN, m=(LANG==='es')?MON_ES:MON_EN;
+    DOW.length=0; for(var i=0;i<7;i++) DOW.push(d[i]); MON.length=0; for(var j=0;j<12;j++) MON.push(m[j]); }
+  function t(s){ var e=I18N[s]; return (LANG==='es' && e!=null)?e:s; }
+  function tf(s){ var str=t(s); for(var i=1;i<arguments.length;i++){ str=str.replace('%s', arguments[i]); } return str; }
+  var I18N={
+    // --- chrome / nav ---
+    'Equipment Rental':'Renta de Equipo','Search equipment':'Buscar equipo','My Account':'Mi Cuenta','My account':'Mi cuenta',
+    'Browse':'Explorar','You':'Tú','Popular Rentals':'Rentas Populares','Camera Kits':'Kits de Cámara','Lenses':'Lentes',
+    'Lighting':'Iluminación','Accessories':'Accesorios','Calendar View':'Ver Calendario','Calendar view':'Ver calendario',
+    'How it works':'Cómo funciona','Equipment Manager':'Administrador de Equipo','(text only)':'(solo texto)',
+    'Equipment pickup':'Recoge tu equipo','Classroom pickup':'Recoge en el salón','Equipment Bag':'Bolsa de Equipo',
+    'k_textus':'Envíanos un texto: 805-631-0001','k_text_num':'Texto: 805-631-0001','k_footbar':'Pioneer Valley High School · Renta de Equipo','k_sid_ph':'p. ej. 123456',
+    // --- hero ---
+    'When do you need it?':'¿Cuándo lo necesitas?',
+    'Return is the next school day. Choose your pickup time at checkout.':'La devolución es el siguiente día de clases. Elige tu hora para recoger al finalizar.',
+    'Checkout':'Recoges','Return':'Regresas','Days':'Días','Tap to set times':'Toca para elegir horas','Set at checkout':'Se elige al recoger',
+    // --- guide ---
+    'Sign in':'Inicia sesión','Type your student number. No password needed.':'Escribe tu número de estudiante. No necesitas contraseña.',
+    'Pick your dates':'Elige tus fechas','Choose the day you pick up and the day you bring it back.':'Escoge el día que lo recoges y el día que lo regresas.',
+    'Add your gear':'Agrega tu equipo','Tap a camera or item to put it in your bag.':'Toca una cámara o un artículo para ponerlo en tu bolsa.',
+    'Add gear':'Agregar equipo','Open bag':'Abrir bolsa',
+    'After you reserve':'Después de reservar','guide_after_body':'revisa la lista del kit al recoger, cuida tu equipo y mantenlo seco, y regrésalo todo en la misma bolsa el día de devolución.',
+    'Dates set. Tap any camera or item to add it to your bag.':'Fechas listas. Toca cualquier cámara o artículo para agregarlo a tu bolsa.',
+    'You are signed in. Now pick your dates.':'Iniciaste sesión. Ahora elige tus fechas.',
+    'OK. Pick your dates and gear, then send the request to Mr. Silva.':'Listo. Elige tus fechas y equipo, luego envía la solicitud al Sr. Silva.',
+    // --- sign-in ---
+    'Sign in with your student number. No password.':'Inicia sesión con tu número de estudiante. Sin contraseña.',
+    'Student number':'Número de estudiante','Is this you?':'¿Eres tú?','Your cell':'Tu celular',
+    'Parent or guardian name':'Nombre del padre o tutor','Parent or guardian cell':'Celular del padre o tutor',
+    'First and last name':'Nombre y apellido','k_thatsme':'Soy yo · continuar',
+    'Enter your full student number.':'Escribe tu número de estudiante completo.','Checking…':'Verificando…',
+    'We could not find that student number.':'No encontramos ese número de estudiante.',
+    'Could not reach the server. Try again.':'No se pudo conectar al servidor. Intenta de nuevo.',
+    'your cell number':'tu número de celular','a parent or guardian name':'un nombre de padre o tutor','a parent or guardian cell number':'un número de celular de padre o tutor',
+    // --- planner ---
+    'Checkout day':'Día para recoger','Pick the school day you will check out.':'Elige el día de clases en que lo recogerás.',
+    'Pickup time':'Hora para recoger','Return time':'Hora para regresar','Back':'Atrás','During class':'En tu clase',
+    'No set windows for that day. Ask your teacher.':'No hay horarios para ese día. Pregúntale al Sr. Silva.',
+    'These are the only return times. If you return late, you may lose the chance to check out cameras next time.':'Estas son las únicas horas para regresar. Si lo regresas tarde, puedes perder la oportunidad de sacar cámaras la próxima vez.',
+    'Nutrition':'Nutrición','Lunch':'Almuerzo','After 6th period':'Después del período 6','Before 1st period':'Antes del período 1','Between 1st & 2nd':'Entre período 1 y 2',
+    // --- product cards / detail ---
+    'Add to bag':'Agregar a la bolsa','In bag · remove':'En la bolsa · quitar','Locked · ask teacher':'Bloqueado · pídelo',
+    'None free for your dates':'Ninguno libre para tus fechas','available':'disponibles','View details':'Ver detalles',
+    'Digital Arts only':'Solo Arte Digital','Photo 2 only':'Solo Foto 2','Ask teacher':'Pregúntale',
+    'Pick your camera number':'Elige tu número de cámara','Pick a unit number':'Elige un número de unidad',
+    ' · none free for your dates':' · ninguno libre para tus fechas','Specs':'Especificaciones','Save this one':'Guardar este',
+    // --- bag ---
+    'Your equipment bag is empty. Add gear to get started.':'Tu bolsa de equipo está vacía. Agrega equipo para empezar.',
+    'Pick up':'Recoger','Where':'Dónde','next school day':'siguiente día de clases','Change the day':'Cambiar el día','Change dates':'Cambiar fechas',
+    'No dates yet. Pick when you need the gear, then reserve.':'Aún no hay fechas. Elige cuándo necesitas el equipo, luego reserva.',
+    'Needs OK':'Por aprobar','Remove':'Quitar','Add equipment':'Agregar equipo','Set checkout dates':'Elegir fechas','Save changes':'Guardar cambios',
+    'Reserve this gear':'Reservar este equipo','Send request':'Enviar solicitud','Reserve + request':'Reservar + solicitar',
+    'Special request':'Solicitud especial','New return day':'Nuevo día de devolución',
+    'What do you need, and why? (a few words)':'¿Qué necesitas y por qué? (unas palabras)',
+    'Add a short note first so Mr. Silva knows what you need.':'Agrega una nota corta primero para que el Sr. Silva sepa qué necesitas.',
+    'Add a short note so Mr. Silva knows what you need.':'Agrega una nota corta para que el Sr. Silva sepa qué necesitas.',
+    // --- submit / receipt ---
+    'Reserving…':'Reservando…','Sending…':'Enviando…','Could not reserve. Please try again.':'No se pudo reservar. Intenta de nuevo.',
+    'Request sent!':'¡Solicitud enviada!','Almost there!':'¡Ya casi!','Reserved':'Reservado','Done':'Listo',
+    // --- picker ---
+    'Equipment details':'Detalles del equipo','Pick a category, then add what you need.':'Elige una categoría, luego agrega lo que necesitas.',
+    'All categories':'Todas las categorías','Add other equipment':'Agregar otro equipo',
+    // --- calendar ---
+    'Tap a day to see what is reserved. The number is how many cameras are free that day.':'Toca un día para ver qué está reservado. El número es cuántas cámaras están libres ese día.',
+    'Available to reserve':'Disponible para reservar','Reserved this day':'Reservado este día',
+    'Nothing reserved yet. Everything is open.':'Nada reservado aún. Todo está abierto.','Every item is booked for this day.':'Todo está reservado para este día.',
+    'Reserve for this day':'Reservar para este día','Out':'Afuera','Booked':'Reservado',
+    'Sun':'Dom','Mon':'Lun','Tue':'Mar','Wed':'Mié','Thu':'Jue','Fri':'Vie','Sat':'Sáb',
+    // --- account ---
+    'Parent or guardian':'Padre o tutor','Not set':'Sin poner','Student':'Estudiante','Edit my info':'Editar mi información','Log out':'Cerrar sesión',
+    'My reservations':'Mis reservaciones','Loading…':'Cargando…','Waiting for OK':'Esperando aprobación','Picked up':'Recogido',
+    'Modify':'Modificar','Cancel':'Cancelar','Yes, cancel':'Sí, cancelar','Keep it':'Mantenerla','Cancel this reservation?':'¿Cancelar esta reservación?',
+    'Picked up. Return it to Mr. Silva when you are done.':'Recogido. Regrésalo al Sr. Silva cuando termines.',
+    'You have no reservations right now.':'No tienes reservaciones ahora.','Could not load your reservations. Try again.':'No se pudieron cargar tus reservaciones. Intenta de nuevo.',
+    'Fix anything that is wrong. This updates what is on file for you.':'Corrige lo que esté mal. Esto actualiza lo que tenemos registrado de ti.',
+    'Saved.':'Guardado.','Reservation canceled.':'Reservación cancelada.','Could not cancel. Try again.':'No se pudo cancelar. Intenta de nuevo.','Logged out.':'Sesión cerrada.',
+    // --- hold / gear ---
+    'Enter the teacher code.':'Escribe el código de maestro.','Unlocked by teacher.':'Desbloqueado por el maestro.','That code is not recognized.':'Ese código no se reconoce.',
+    'Equipment checkout on hold':'Préstamo en pausa','Browse equipment':'Ver equipo','Teacher override':'Código de maestro','Unlock':'Desbloquear',
+    'Ask Mr. Silva to approve it anyway':'Pide al Sr. Silva que lo apruebe de todos modos',
+    'Teacher unlock':'Desbloqueo de maestro','This item is for Photo 2 students. A teacher can unlock it with the code, or you can ask Mr. Silva to approve it.':'Este artículo es para estudiantes de Foto 2. Un maestro puede desbloquearlo con el código, o puedes pedir al Sr. Silva que lo apruebe.',
+    'Gear override code':'Código de desbloqueo','Unlock with code':'Desbloquear con código','or':'o','Ask Mr. Silva to approve it':'Pide al Sr. Silva que lo apruebe','Photo 2 gear unlocked.':'Equipo de Foto 2 desbloqueado.',
+    'for Digital Arts':'para Arte Digital','for Photo 2':'para Foto 2',
+    // --- footer / hours / info ---
+    'Program Info':'Información del programa','Digital Arts program':'Programa de Arte Digital','Rental agreement':'Acuerdo de renta','Jobs':'Trabajos',
+    'Partners':'Colaboradores','Get Social':'Redes sociales','Contact':'Contacto','Business hours & bell schedule':'Horario y campanas','Business hours':'Horario',
+    'Schedule unavailable right now.':'Horario no disponible ahora.','No equipment matches that. Try a category above.':'Ningún equipo coincide. Prueba una categoría de arriba.',
+    'Loading popular rentals…':'Cargando rentas populares…'
+  };
+  // Fill static [data-i18n] text + placeholders for the current language; sets <html lang>.
+  // Each element's original English is captured once, so EN restores it exactly (keys may be short codes)
+  // and ES shows t(key). Toggling back and forth is lossless.
+  function applyI18nStatic(root){ root=root||document;
+    root.querySelectorAll('[data-i18n]').forEach(function(el){
+      if(el.getAttribute('data-i18n-en')==null) el.setAttribute('data-i18n-en', el.innerHTML);
+      el.innerHTML=(LANG==='es')?t(el.getAttribute('data-i18n')):el.getAttribute('data-i18n-en');
+    });
+    root.querySelectorAll('[data-i18n-ph]').forEach(function(el){
+      if(el.getAttribute('data-ph-en')==null) el.setAttribute('data-ph-en', el.getAttribute('placeholder')||'');
+      el.setAttribute('placeholder', (LANG==='es')?t(el.getAttribute('data-i18n-ph')):el.getAttribute('data-ph-en'));
+    });
+    document.documentElement.lang=LANG;
+  }
+  function updateLangToggle(){ document.querySelectorAll('#langToggle [data-lang]').forEach(function(b){ b.classList.toggle('lang-on', b.getAttribute('data-lang')===LANG); }); }
+  // Toggle language: flip LANG, re-skin static text + dates, re-render every JS-built view + any open sheet.
+  function applyLang(){
+    applyDateLang(); applyI18nStatic(); updateLangToggle();
+    refreshPickupInfo();
+    refreshAccount();        // acct button, brand line, hold banner, grid cards, guide, bag count
+    renderDates(); renderGuide();
+    if(document.getElementById('planOv').classList.contains('open')) renderPlan();
+    if(document.getElementById('bagOv').classList.contains('open')) renderBag();
+    if(document.getElementById('acctOv').classList.contains('open')) renderAccount();
+    if(pickerOpen) renderPicker();
+    var cv=document.getElementById('calview'); if(cv&&cv.open) renderCalView();
+  }
+  function setLang(l){ if(l!==LANG){ LANG=l; saveLang(); applyLang(); } else { updateLangToggle(); } }
 
   // pickup strip: blank room/teacher until a student authenticates; then their own teacher + room
   function refreshPickupInfo(){
@@ -964,8 +1098,12 @@
   function doAddToBag(name){
     if(BAG.indexOf(name)<0){ BAG.push(name); saveBag(); updateBag(); bagPulse(); }
     if(!PICK[name]){ var free=freeUnitsFor(findItem(name)); if(free && free.length){ PICK[name]=free[0]; savePick(); } }   // quick add: assign the first free unit
-    toast(itemNeedsApproval(name)?'Added. This one needs Mr. Silva&#8217;s OK.':'Added to your bag.');
-    rerender(); if(pickerOpen) renderPicker();
+    toast(itemNeedsApproval(name)?t('Added. This one needs Mr. Silva&#8217;s OK.'):t('Added to your bag.'));
+    rerender();
+    // Keep the workflow going: adding from the grid/detail pops the Equipment Bag open so the next move
+    // (reserve, or add more) is right there. Inside the picker we stay put (it has its own Done -> bag).
+    if(pickerOpen){ renderPicker(); }
+    else { renderBag(); open('bagOv'); }
   }
   function removeFromBag(name){ var i=BAG.indexOf(name); if(i>=0){ BAG.splice(i,1); if(REQ[name]){ delete REQ[name]; saveReq(); } if(PICK[name]){ delete PICK[name]; savePick(); } saveBag(); updateBag(); rerender(); renderBag(); if(pickerOpen) renderPicker(); } }
   function setBagMsg(msg, err){ var n=document.getElementById('bagNote'); if(n){ n.className='sheet-msg'+(err?' err':''); n.innerHTML=msg||''; } }
@@ -1512,6 +1650,10 @@
   document.getElementById('footProgram').onclick=function(){ openInfo('Digital Arts program', '<p>Our Digital Arts program website is coming soon.</p>'); };
 
   // ===== init =====
+  // Language: wire the EN/ES toggle, then skin the page (static text + dates) for the stored choice.
+  document.querySelectorAll('#langToggle [data-lang]').forEach(function(b){ b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); }); });
+  if(LANG==='es') applyDateLang();
+  applyI18nStatic(); updateLangToggle();
   renderDates();
   renderPopular();   // home view = Popular Rentals (not a category)
   refreshAccount();
