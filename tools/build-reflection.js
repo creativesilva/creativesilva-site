@@ -112,6 +112,21 @@ const PVHS_EN = (course) => `${course} · Pioneer Valley High School · Mr. Silv
 const PVHS_ES = (course) => `${course} · Pioneer Valley High School · Sr. Silva`;
 
 const DOCS = [
+  // Make Your Mark (Digital Arts 1A) — short, friendly fill-in frames for a 5th-grade-reading room
+  { ...EN, outfile: 'Make-Your-Mark-Reflection-EN.docx', title: 'Make Your Mark: Reflection', subtitle: PVHS_EN('Digital Arts 1A'),
+    instructions: 'Answer in a few words or a short sentence. There are no wrong answers.', questions: [
+    'What word did you make? Why did you pick it?',
+    'What style did you use? (graffiti, arcade, candy, chrome, fire, or slime)',
+    'What was the hardest part of making all your letters match?',
+    'Which letter is your favorite, and why?',
+  ]},
+  { ...ES, outfile: 'Make-Your-Mark-Reflection-ES.docx', title: 'Make Your Mark: Reflexión', subtitle: PVHS_ES('Arte Digital 1A'),
+    instructions: 'Responde con pocas palabras o una oración corta. No hay respuestas incorrectas.', questions: [
+    '¿Qué palabra hiciste? ¿Por qué la elegiste?',
+    '¿Qué estilo usaste? (grafiti, arcade, dulce, cromo, fuego o baba)',
+    '¿Qué fue lo más difícil de hacer que todas tus letras combinaran?',
+    '¿Cuál letra es tu favorita y por qué?',
+  ]},
   // Self-Portrait (Photography 1A)
   { ...EN, outfile: 'Self-Portrait-Reflection-EN.docx', title: 'Self-Portrait: Reflection', subtitle: PVHS_EN('Photography 1A'), questions: [
     'What was your idea for your self-portrait? What were you trying to show about yourself?',
