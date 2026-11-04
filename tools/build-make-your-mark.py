@@ -218,6 +218,7 @@ def overview():
     en+=card("Learn &middot; the idea","Turn a Word Into a Sticker",
         (float_right(HERO_SCRIPT,"A brush-script vinyl sticker with a white border, held over grass","Your word can become a sticker like this.") if HAVE_ART else "")
         + para("This is an <strong>Adobe Illustrator</strong> project. You will <strong>draw your own letters</strong> and turn a word into a <strong>sticker</strong>.")
+        + para("Your sticker will be printed on a big <strong>wide format sticker printer</strong>, so this project uses print colors (<strong>CMYK</strong>). The file is already set up that way.")
         + para("You are <strong>not</strong> picking a font. You design every letter yourself, from scratch, like a type designer who builds a whole font face.")
         + para("Pick a word you like: your name, a nickname, or any short word. Give every letter the same style, so your word looks like one set.")
         + note("<strong>School appropriate only.</strong> Your word must be clean and okay for school. No bad words, and nothing mean."))
@@ -246,6 +247,7 @@ def overview():
     es+=card("Aprende &middot; la idea","Convierte una Palabra en un Sticker",
         (float_right(HERO_SCRIPT,"Un sticker de letra de pincel con borde blanco, sobre el pasto","Tu palabra puede volverse un sticker as&iacute;.") if HAVE_ART else "")
         + para("Este es un proyecto de <strong>Adobe Illustrator</strong>. Vas a <strong>dibujar tus propias letras</strong> y convertir una palabra en un <strong>sticker</strong>.")
+        + para("Tu sticker se imprimir&aacute; en una <strong>impresora grande de stickers</strong>, por eso este proyecto usa colores de impresi&oacute;n (<strong>CMYK</strong>). El archivo ya est&aacute; listo as&iacute;.")
         + para("<strong>No</strong> est&aacute;s eligiendo una fuente. T&uacute; dise&ntilde;as cada letra, desde cero, como un dise&ntilde;ador que crea una fuente completa.")
         + para("Elige una palabra que te guste: tu nombre, un apodo o cualquier palabra corta. Dale a cada letra el mismo estilo, para que tu palabra se vea como un solo conjunto.")
         + note("<strong>Solo palabras apropiadas para la escuela.</strong> Tu palabra debe ser limpia y adecuada para la clase. Nada de groser&iacute;as, y nada ofensivo."))
@@ -284,12 +286,13 @@ def make_word():
     en+=card("Learn &middot; make it","Make It in Adobe Illustrator",
         scroll_steps(steps([
             ("Open Adobe Illustrator.","Find it in the Dock or in Launchpad."),
-            ("Open the provided file.","In your project folder (from Step 01), open <strong>Design_A_Sticker.ai</strong>. It is already set up for you: the right size and colors."),
+            ("Open the provided file.","In your project folder (from Step 01), open <strong>Design_A_Sticker.ai</strong>. It is already set up for you: the right size, and <strong>CMYK</strong> colors for the sticker printer. Do not change the color mode."),
             ("Sketch your word first.","On paper or your student iPad, draw your word in big letters. Take a photo with your iPad and bring it into Illustrator to trace."),
             ("Draw your letters.","Trace your sketch with the <strong>Pencil</strong> or <strong>Pen</strong> tool. No fonts. Use your one style on every letter, the same thickness."),
             ("Color and outline.","Fill every letter the same way (one color or a pattern). Give every letter the same <strong>black outline</strong>."),
             ("Add the white sticker border.","Put a thick <strong>white border</strong> around the whole word so it looks like a real sticker and pops on any color. Mr. Silva will show you how."),
-            ("Save, then export a JPG.","Click <strong>File &rarr; Save</strong> (your .ai file). Then <strong>File &rarr; Export &rarr; Export As</strong> and pick <strong>JPEG</strong>. This JPG is what you turn in."),
+            ("Save your Illustrator file.","Click <strong>File &rarr; Save</strong> to keep your <strong>.ai</strong> file. You do NOT turn in the .ai file."),
+            ("Save a vector PDF.","Click <strong>File &rarr; Save As</strong> and pick <strong>Adobe PDF</strong>. Choose the <strong>[Press Quality]</strong> preset, then click <strong>Save PDF</strong>. It stays sharp vector art in CMYK. This PDF is what you turn in."),
         ], accent="#00b8b8"))
         + note("On the Mac, press <strong>Cmd</strong> (not Ctrl). Ask Mr. Silva if you get stuck."))
     en+=draw_resource(False)
@@ -303,7 +306,7 @@ def make_word():
             ("Would a new letter fit in?","if yes, your word is a family."),
         ]))
     en+=deliverables_box(False,
-        [("1 image:","your finished <strong>sticker</strong>, saved as a <strong>JPG</strong> (File &rarr; Export &rarr; Export As &rarr; JPEG), uploaded to this Canvas assignment.")])
+        [("1 vector PDF:","your finished <strong>sticker</strong>, saved as a <strong>vector PDF</strong> (File &rarr; Save As &rarr; Adobe PDF &rarr; [Press Quality]), uploaded to this Canvas assignment. <strong>Not</strong> the .ai file, and not a JPG.")])
     en+=next_up("UP NEXT &middot; STEP 03 - Reflection","Tell about your sticker: your style, and the hardest part.")
     # ---- ES ----
     es=banner("M&oacute;dulo 09 &bull; Paso 02","Haz Tu Palabra",
@@ -321,7 +324,8 @@ def make_word():
             ("Dibuja tus letras.","Calca tu boceto con la herramienta <strong>L&aacute;piz</strong> o <strong>Pluma</strong>. Sin fuentes. Usa tu mismo estilo en cada letra, del mismo grosor."),
             ("Color y contorno.","Rellena cada letra igual (un color o un patr&oacute;n). Dale a cada letra el mismo <strong>contorno negro</strong>."),
             ("Agrega el borde blanco del sticker.","Pon un <strong>borde blanco</strong> grueso alrededor de toda la palabra para que se vea como un sticker real y resalte en cualquier color. El Sr. Silva te ense&ntilde;ar&aacute; c&oacute;mo."),
-            ("Guarda y exporta un JPG.","Haz clic en <strong>Archivo &rarr; Guardar</strong> (tu archivo .ai). Luego <strong>Archivo &rarr; Exportar &rarr; Exportar como</strong> y elige <strong>JPEG</strong>. Ese JPG es lo que entregas."),
+            ("Guarda tu archivo de Illustrator.","Haz clic en <strong>Archivo &rarr; Guardar</strong> para conservar tu archivo <strong>.ai</strong>. NO entregas el archivo .ai."),
+            ("Guarda un PDF vectorial.","Haz clic en <strong>Archivo &rarr; Guardar como</strong> y elige <strong>Adobe PDF</strong>. Escoge el ajuste <strong>[Press Quality]</strong> y haz clic en <strong>Guardar PDF</strong>. Queda como arte vectorial n&iacute;tido en CMYK. Ese PDF es lo que entregas."),
         ], accent="#00b8b8"))
         + note("En la Mac, presiona <strong>Cmd</strong> (no Ctrl). Preg&uacute;ntale al Sr. Silva si te atoras."))
     es+=draw_resource(True)
@@ -335,7 +339,7 @@ def make_word():
             ("&iquest;Combinar&iacute;a una letra nueva?","si s&iacute;, tu palabra es una familia."),
         ]))
     es+=deliverables_box(True,
-        [("1 imagen:","tu <strong>sticker</strong> terminado, guardado como <strong>JPG</strong> (Archivo &rarr; Exportar &rarr; Exportar como &rarr; JPEG), subido a esta tarea de Canvas.")])
+        [("1 PDF vectorial:","tu <strong>sticker</strong> terminado, guardado como <strong>PDF vectorial</strong> (Archivo &rarr; Guardar como &rarr; Adobe PDF &rarr; [Press Quality]), subido a esta tarea de Canvas. <strong>No</strong> el archivo .ai, y no un JPG.")])
     es+=next_up("SIGUIENTE &middot; PASO 03 - Reflexi&oacute;n","Cuenta sobre tu sticker: tu estilo y la parte m&aacute;s dif&iacute;cil.")
     stepnav=f'<a href="{S2}" class="silva-step-btn">Step 03 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S2}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
