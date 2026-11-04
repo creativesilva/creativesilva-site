@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=50" />
+<link rel="stylesheet" href="/css/store.css?v=51" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -86,20 +86,12 @@
       </div>
     </div>
   </div>
-  <!-- How it works: a strip across the bottom of the hero image (replaces the old accordion below the hero) -->
+  <!-- Live guide: the 3-step spine of the whole flow. Rendered by renderGuide() so it always shows where the
+       student is (sign in -> pick dates -> add gear) and the one next action. Replaces the old passive 1-5
+       "how it works" carousel; "what happens after you reserve" is the muted after-line below the steps. -->
   <div class="hero-hiw" id="howitworks">
-    <div class="wrap hiw-steps" id="hiwSteps">
-      <div class="hiw-step"><div class="hiw-num">1</div><div class="hiw-body"><b>Pick your dates</b><span>Set your checkout day, pickup time, and return time.</span></div></div>
-      <div class="hiw-step"><div class="hiw-num">2</div><div class="hiw-body"><b>Choose your gear</b><span>Add the cameras and equipment you need to your Equipment Bag.</span></div></div>
-      <div class="hiw-step"><div class="hiw-num">3</div><div class="hiw-body"><b>Check the kit</b><span>At pickup, make sure every item on the kit list is in your bag.</span></div></div>
-      <div class="hiw-step"><div class="hiw-num">4</div><div class="hiw-body"><b>Use it</b><span>Use your gear during your rental period. Keep it safe and dry.</span></div></div>
-      <div class="hiw-step"><div class="hiw-num">5</div><div class="hiw-body"><b>Return it</b><span>Bring it all back in the same bag and condition on your return day.</span></div></div>
-    </div>
-    <div class="wrap hiw-ctrl">
-      <button type="button" class="hiw-arrow" data-dir="-1" aria-label="Previous step">&lsaquo;</button>
-      <div class="hiw-dots"></div>
-      <button type="button" class="hiw-arrow" data-dir="1" aria-label="Next step">&rsaquo;</button>
-    </div>
+    <div class="wrap guide" id="guide"></div>
+    <div class="wrap guide-after" id="guideAfter"></div>
   </div>
 </div>
 
@@ -391,6 +383,7 @@
     document.getElementById('dcDaysVal').innerHTML='<span class="dv-big dv-days">'+days+'</span>';
     document.getElementById('dcCheckout').classList.toggle('todo', !datesReady());
     document.getElementById('dcCheckout').classList.toggle('done', datesReady());
+    renderGuide();   // keep the guide's "pick your dates" step in sync
   }
 
   // ----- the one-box stepped planner: checkout day -> pickup time -> return time, all in place -----
@@ -422,7 +415,8 @@
         if(planMode==='calendar'){ planMode='add'; close('planOv'); openPicker(); return; }   // calendar view: dates set, now pick equipment
         var nm=pendingAdd; pendingAdd=null; close('planOv');
         if(nm){ addToBag(nm); renderBag(); open('bagOv'); }
-        else if(document.getElementById('bagOv').classList.contains('open')) renderBag(); }, 'These are the only return times. If you return late, you may lose the chance to check out cameras next time.');
+        else if(document.getElementById('bagOv').classList.contains('open')) renderBag();
+        else guideGoGear(); }, 'These are the only return times. If you return late, you may lose the chance to check out cameras next time.');
     }
   }
   function renderOpts(opts, pick, note){
@@ -954,11 +948,11 @@
   }
 
   // ===== equipment bag (gated: sign in + pickup/return times first) =====
-  function updateBag(){ var n=document.getElementById('cartN'); n.textContent=BAG.length; n.className='cart-n'+(BAG.length?'':' empty'); }
+  function updateBag(){ var n=document.getElementById('cartN'); n.textContent=BAG.length; n.className='cart-n'+(BAG.length?'':' empty'); renderGuide(); }
   function bagPulse(){ var b=document.getElementById('cartBtn'); b.classList.add('pulse'); setTimeout(function(){ b.classList.remove('pulse'); },320); }
   // skipDay: the checkout day was already chosen (from the calendar view), so jump straight to the pickup-time step.
   function addToBag(name, skipDay){
-    if(!USER){ openSignin(); return; }                                  // confirm student id first
+    if(!USER){ pendingAdd=name; openSignin(); return; }                 // remember the tapped item, confirm student id first, then resume it
     var it=findItem(name);
     if(it && itemLocked(it) && !REQ[name]){ openGear(name); return; }   // off-course gear: unlock with the code OR request it anyway
     if(onHold() && !reqMode()){ openHold(); return; }                   // missing-work hold: browse yes, add no (unless they chose to request)
@@ -1229,6 +1223,50 @@
     } else { hb.style.display='none'; }
   }
 
+  // ===== live guide: the reactive 3-step spine (sign in -> pick dates -> add gear) =====
+  // It always shows where the student is and the ONE next action, so the page never looks "reset".
+  function renderGuide(){
+    var g=document.getElementById('guide'); if(!g) return;
+    var s1=!!USER, s2=s1&&datesReady(), s3=s2&&BAG.length>0;
+    var active=!s1?1:(!s2?2:(!s3?3:0));   // the first incomplete step (0 = all three done)
+    var inbag=BAG.length;
+    var steps=[
+      {n:1,done:s1,title:'Sign in',sub:'Type your student number. No password needed.',cta:'Sign in'},
+      {n:2,done:s2,title:'Pick your dates',sub:'Choose the day you pick up and the day you bring it back.',cta:'Pick dates'},
+      {n:3,done:s3,title:'Add your gear',sub:(s3?(inbag+' item'+(inbag>1?'s':'')+' in your bag. Open it to reserve.'):'Tap a camera or item to put it in your bag.'),cta:(s3?'Open bag':'Add gear')}
+    ];
+    g.innerHTML=steps.map(function(s){
+      var state=s.done?'done':(s.n===active?'active':'todo');
+      var badge=s.done?'<span class="guide-badge" aria-hidden="true">&#10003;</span>':('<span class="guide-badge">'+s.n+'</span>');
+      var showCta=(s.n===active)||(s.n===3&&s.done);
+      var cta=showCta?('<button type="button" class="guide-cta" data-gstep="'+s.n+'">'+s.cta+'</button>'):'';
+      return '<div class="guide-step '+state+'">'+badge+'<div class="guide-body"><b>'+s.title+'</b><span>'+s.sub+'</span>'+cta+'</div></div>';
+    }).join('');
+    g.querySelectorAll('[data-gstep]').forEach(function(b){ b.onclick=function(){
+      var k=b.getAttribute('data-gstep');
+      if(k==='1') openSignin();
+      else if(k==='2'){ if(!USER){ openSignin(); } else { openPlan(1); } }
+      else if(k==='3'){ if(!USER){ openSignin(); } else if(BAG.length){ renderBag(); open('bagOv'); } else { guideGoGear(); } }
+    }; });
+    var af=document.getElementById('guideAfter');
+    if(af) af.innerHTML='<b>After you reserve:</b> check the kit list at pickup, keep your gear safe and dry, and bring it all back in the same bag on your return day.';
+  }
+  // Dates are set: close any planner and point the student at the equipment grid (no blank "now what?" moment).
+  function guideGoGear(){
+    close('planOv');
+    var p=document.querySelector('.products'); if(p) p.scrollIntoView({behavior:'smooth',block:'start'});
+    toast('Dates set. Tap any camera or item to add it to your bag.');
+  }
+  // After the student signs in (or a hold student chooses "request anyway"): continue whatever they were
+  // doing, or walk them straight to the date picker. The next sheet opens BEFORE the auth sheet closes so
+  // the screen never drops to an unlocked/blank state between steps.
+  function walkAfterAuth(fromSheet, dateToast){
+    if(pendingCalDay){ var d=pendingCalDay; pendingCalDay=null; calDayReserve(d); if(fromSheet) close(fromSheet); return; }
+    if(pendingAdd && datesReady()){ var a=pendingAdd; pendingAdd=null; if(fromSheet) close(fromSheet); addToBag(a); return; }
+    if(!datesReady()){ openPlan(1); if(fromSheet) close(fromSheet); if(dateToast) toast(dateToast); return; }   // auto-open the date picker
+    if(fromSheet) close(fromSheet); guideGoGear();   // already have dates + nothing pending: send them to the gear
+  }
+
   // ===== sign-in =====
   function openSignin(){ showStep1(); open('signinOv'); var i=document.getElementById('sid'); if(i){ try{ i.focus(); }catch(e){} } }
   function showStep1(){ document.getElementById('siStep1').style.display=''; document.getElementById('siStep2').style.display='none'; document.getElementById('signinMsg').textContent=''; }
@@ -1280,13 +1318,12 @@
     USER={ id:L.id, label:L.label, name:L.name, period:L.period, course:L.course, pool:L.pool, pools:(L.pools||null), teacher:L.teacher,
            p2_ok:!!L.p2_ok, hold:false, gearUnlocked:false,
            sc:fmtPhone(scD), pg:pg, pc:fmtPhone(pcD) };
-    saveUser(); refreshAccount(); close('signinOv');
+    saveUser(); refreshAccount();
     if(scD.length===10 || pg || pcD.length===10){
       api('/api/camera/student_update',{student_id:L.id, student_cell:USER.sc, parent_guardian:pg, parent_cell:USER.pc}).catch(function(){});
     }
-    resumeCalDay();   // if they tapped a calendar day before signing in, continue into it now
+    walkAfterAuth('signinOv', 'You are signed in. Now pick your dates.');   // close the sheet + walk them to the next step (no blank screen)
   }
-  function resumeCalDay(){ if(pendingCalDay){ var d=pendingCalDay; pendingCalDay=null; setTimeout(function(){ calDayReserve(d); }, 80); } }
   document.getElementById('signinGo').addEventListener('click', doSignin);
   document.getElementById('sid').addEventListener('keydown', function(e){ if(e.key==='Enter') doSignin(); });
   document.getElementById('siConfirm').addEventListener('click', siConfirm);
@@ -1416,9 +1453,8 @@
   });
   document.getElementById('holdReq').addEventListener('click', function(){
     if(USER){ USER.holdRequest=true; saveUser(); }   // whole reservation becomes a pending request
-    refreshAccount(); close('holdOv'); rerender();
-    toast('OK. Add your gear, then send the request to Mr. Silva.');
-    resumeCalDay();   // if they reached the hold from a calendar-day tap, continue into it now
+    refreshAccount(); rerender();
+    walkAfterAuth('holdOv', 'OK. Pick your dates and gear, then send the request to Mr. Silva.');   // same guided walk
   });
   document.getElementById('holdOvGo').addEventListener('click', function(){
     var code=(document.getElementById('holdOvc').value||'').trim(), m=document.getElementById('holdMsg');
@@ -1482,50 +1518,6 @@
   loadCal();
   // Prompt for a student number 3s after the page loads (unless already signed in or the sheet is open).
   if(!USER){ setTimeout(function(){ var ov=document.getElementById('signinOv'); if(!USER && ov && !ov.classList.contains('open')) openSignin(); }, 3000); }
-})();
-</script>
-<script>
-/* How-it-works carousel (narrow view only): position dots, prev/next arrows, mouse drag-to-scroll;
-   native swipe + snap on touch. The control row is hidden by CSS at wide widths. */
-(function(){
-  var steps=document.getElementById('hiwSteps');
-  var ctrl=document.querySelector('.hiw-ctrl');
-  if(!steps||!ctrl) return;
-  var cards=[].slice.call(steps.querySelectorAll('.hiw-step'));
-  if(!cards.length) return;
-  var dotsWrap=ctrl.querySelector('.hiw-dots');
-  var arrows=[].slice.call(ctrl.querySelectorAll('.hiw-arrow'));
-  var dots=cards.map(function(_,i){
-    var d=document.createElement('button');
-    d.type='button'; d.className='hiw-dot'; d.setAttribute('aria-label','Go to step '+(i+1));
-    d.addEventListener('click',function(){ scrollToCard(i); });
-    dotsWrap.appendChild(d); return d;
-  });
-  function current(){
-    var cr=steps.getBoundingClientRect(), cc=cr.left+cr.width/2, best=0, bd=1e9;
-    cards.forEach(function(card,i){ var r=card.getBoundingClientRect(), dd=Math.abs((r.left+r.width/2)-cc); if(dd<bd){bd=dd;best=i;} });
-    return best;
-  }
-  function scrollToCard(i){
-    i=Math.max(0,Math.min(cards.length-1,i));
-    var cr=steps.getBoundingClientRect(), r=cards[i].getBoundingClientRect();
-    steps.scrollTo({left:steps.scrollLeft+((r.left+r.width/2)-(cr.left+cr.width/2)), behavior:'smooth'});
-  }
-  function sync(){
-    var i=current();
-    dots.forEach(function(d,j){ d.classList.toggle('on', j===i); });
-    arrows.forEach(function(a){ var dir=+a.getAttribute('data-dir'); a.disabled=(dir<0&&i<=0)||(dir>0&&i>=cards.length-1); });
-  }
-  arrows.forEach(function(a){ a.addEventListener('click',function(){ scrollToCard(current()+(+a.getAttribute('data-dir'))); }); });
-  var raf; steps.addEventListener('scroll',function(){ cancelAnimationFrame(raf); raf=requestAnimationFrame(sync); });
-  var down=false,sx=0,sl=0,moved=false;
-  steps.addEventListener('pointerdown',function(e){ if(e.pointerType==='touch') return; down=true;moved=false;sx=e.clientX;sl=steps.scrollLeft;steps.classList.add('drag'); try{steps.setPointerCapture(e.pointerId);}catch(_){ } });
-  steps.addEventListener('pointermove',function(e){ if(!down) return; var dx=e.clientX-sx; if(Math.abs(dx)>3)moved=true; steps.scrollLeft=sl-dx; });
-  function end(e){ if(!down)return; down=false; steps.classList.remove('drag'); try{steps.releasePointerCapture(e.pointerId);}catch(_){ } if(moved)scrollToCard(current()); }
-  steps.addEventListener('pointerup',end); steps.addEventListener('pointercancel',end); steps.addEventListener('pointerleave',end);
-  steps.addEventListener('dragstart',function(e){ e.preventDefault(); });
-  sync();
-  window.addEventListener('resize',function(){ cancelAnimationFrame(raf); raf=requestAnimationFrame(sync); });
 })();
 </script>
 </body>

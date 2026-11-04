@@ -207,13 +207,26 @@ img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button
 
 /* ---- how it works: the right-pointing triangle step cards, as a strip across the bottom of the hero image ---- */
 .hero-hiw{margin-top:auto;align-self:stretch;background:linear-gradient(to top, rgba(6,9,9,.8) 0%, rgba(6,9,9,.34) 100%);border-top:1px solid rgba(255,255,255,.12);}
-.hero-hiw .hiw-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px;padding:16px 0;}
-.hiw-step{display:flex;align-items:stretch;background:rgba(14,19,19,.72);border:1px solid var(--surface-bd);min-height:84px;overflow:hidden;}
-.hiw-num{flex:0 0 46px;background:var(--teal);color:#021414;font-family:var(--font-head);font-weight:700;font-size:1.5rem;display:flex;align-items:center;justify-content:center;padding-right:10px;clip-path:polygon(0 0,66% 0,100% 50%,66% 100%,0 100%);}
-.hiw-body{flex:1 1 auto;min-width:0;padding:11px 13px 11px 2px;display:flex;flex-direction:column;gap:3px;justify-content:center;}
-.hiw-body b{font-family:var(--font-head);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.9rem;color:var(--teal-bright);line-height:1.08;}
-.hiw-body span{font-size:.73rem;color:#c3d0d0;line-height:1.34;}
-.hiw-ctrl{display:none;}
+/* ---- live guide: the reactive 3-step spine (sign in -> dates -> gear). States: todo (dim), active
+   (glowing border + CTA), done (check badge). Angular number badge matches the old hiw style. ---- */
+.hero-hiw .guide{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px 0 4px;}
+.guide-step{display:flex;align-items:stretch;background:rgba(14,19,19,.72);border:1px solid var(--surface-bd);min-height:92px;overflow:hidden;position:relative;transition:border-color .15s ease,opacity .15s ease;}
+.guide-badge{flex:0 0 46px;background:var(--teal);color:#021414;font-family:var(--font-head);font-weight:700;font-size:1.5rem;display:flex;align-items:center;justify-content:center;padding-right:10px;clip-path:polygon(0 0,66% 0,100% 50%,66% 100%,0 100%);}
+.guide-body{flex:1 1 auto;min-width:0;padding:11px 14px 12px 4px;display:flex;flex-direction:column;gap:4px;justify-content:center;}
+.guide-body b{font-family:var(--font-head);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.92rem;color:#e7f1f1;line-height:1.1;}
+.guide-body span{font-size:.73rem;color:#c3d0d0;line-height:1.32;}
+.guide-step.todo{opacity:.48;}
+.guide-step.todo .guide-badge{background:#28393a;color:#8aa6a6;}
+.guide-step.done .guide-body b{color:var(--teal-bright);}
+.guide-step.active{border-color:var(--teal-bright);background:rgba(16,28,28,.86);}
+.guide-step.active .guide-badge{background:var(--teal-bright);}
+.guide-step.active .guide-body b{color:#fff;}
+.guide-step.active::after{content:"";position:absolute;inset:0;border:1px solid var(--teal-bright);pointer-events:none;animation:cardtodo 1.5s ease-in-out infinite;}
+.guide-cta{margin-top:7px;align-self:flex-start;font-family:var(--font-head);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.72rem;padding:7px 15px;background:var(--teal-bright);color:#021414;border:0;cursor:pointer;transition:filter .15s ease;}
+.guide-cta:hover{filter:brightness(1.1);}
+.guide-step.done .guide-cta{background:var(--teal);color:#fff;}
+.guide-after{font-size:.72rem;color:var(--gray);line-height:1.4;padding:0 0 15px;}
+.guide-after b{color:#c3d0d0;font-weight:700;}
 
 /* ---- calendar view: month with per-day free-camera counts (collapsed-by-default accordion) ---- */
 .calview{padding:2px 0 18px;}
@@ -560,20 +573,11 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
   /* hero: stack the nav + date band on phones, reveal the image below */
   .store-hero{min-height:0;padding-bottom:0;}
   .hero-top{flex-direction:column;gap:14px;padding-bottom:10px;}
-  /* narrow: the 1-5 steps become a horizontal carousel (one row), not a tall stack.
-     The next card peeks at the right edge, and a control row (arrows + square position
-     dots) under it makes scrolling obvious and mouse-friendly. Drag-to-scroll is wired in JS. */
-  .hero-hiw .hiw-steps{display:flex;overflow-x:auto;gap:10px;padding:12px 0 8px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;cursor:grab;}
-  .hero-hiw .hiw-steps.drag{cursor:grabbing;scroll-snap-type:none;}
-  .hero-hiw .hiw-steps::-webkit-scrollbar{display:none;}
-  .hero-hiw .hiw-step{flex:0 0 82%;max-width:300px;min-width:0;scroll-snap-align:center;}
-  .hiw-ctrl{display:flex;align-items:center;justify-content:center;gap:14px;padding:0 20px 14px;}
-  .hiw-arrow{width:30px;height:30px;flex:0 0 30px;display:flex;align-items:center;justify-content:center;background:rgba(14,19,19,.82);border:1px solid var(--surface-bd);color:var(--teal-bright);font-size:1.35rem;line-height:1;cursor:pointer;font-family:var(--font-head);padding:0 0 3px;transition:opacity .15s ease,border-color .15s ease;}
-  .hiw-arrow:hover{border-color:var(--teal-bright);}
-  .hiw-arrow:disabled{opacity:.28;cursor:default;border-color:var(--surface-bd);}
-  .hiw-dots{display:flex;align-items:center;gap:8px;}
-  .hiw-dot{width:8px;height:8px;flex:0 0 8px;padding:0;background:rgba(255,255,255,.26);border:0;cursor:pointer;transition:width .2s ease,background .2s ease;}
-  .hiw-dot.on{width:22px;background:var(--teal-bright);}
+  /* narrow (phone): the guide stacks vertically, the active step first and tallest. No carousel. */
+  .hero-hiw .guide{grid-template-columns:1fr;gap:9px;padding:13px 0 4px;}
+  .guide-step{min-height:0;}
+  .guide-step.todo{opacity:.55;}
+  .guide-after{font-size:.7rem;padding:0 0 13px;}
   .hero-top .catnav,.hero-top .datebar{flex:1 1 auto;width:100%;}
   .hero-top .datebar-row{flex-wrap:wrap;gap:12px;}
   .util-l,.util-r{font-size:.68rem;}
