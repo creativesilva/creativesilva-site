@@ -15,6 +15,7 @@ CT="Digital Arts 1A"; PFX="digarts1"
 IMGDIR=f"{SITE}/assets/images/digarts1/make-your-mark"
 HERO_SCRIPT=f"{IMGDIR}/example-script-sticker-v1.jpg"  # "Your Text" brush-script sticker on grass -> idea hero
 EX_LOVE=f"{IMGDIR}/example-love-sticker-v1.jpg"         # LOVE bubble/pattern sticker -> Watch & look
+RAIDER=f"{IMGDIR}/example-raider-sticker-v1.jpg"        # RAIDERS chrome mascot sticker -> Step 02 example
 HAVE_ART=True
 
 # style ideas students can DRAW (no fonts): (EN name, ES name, EN desc, ES desc)
@@ -289,6 +290,10 @@ def make_word():
         + para("Here are some <strong>style ideas</strong> to get you started. Pick one, mix them, or <strong>invent your own</strong>. Keep your word <strong>school appropriate</strong>.")
         + (style_ideas(False) if HAVE_ART else "")
         + para("You can <strong>garnish</strong> your letters with fun extras, and add <strong>offset outlines</strong> or a border so your sticker reads well on a <strong>light</strong> and a <strong>dark</strong> surface."))
+    en+=card("Learn &middot; an example","An Example to Aim For",
+        float_right(RAIDER,"A RAIDERS sticker: the whole word in one chrome style with crossed swords and a thick white border","One chrome style across the whole word, with a thick white sticker border.")
+        + para("Look at this <strong>RAIDERS</strong> sticker. Every letter is the <strong>same chrome style</strong>, so it reads like <strong>one font</strong>. The thick <strong>white border</strong> makes it pop on any surface.")
+        + para("Aim for this: pick one style and carry it all the way across, then add your own fun touches."))
     en+=card("Learn &middot; make it","Make It in Adobe Illustrator",
         scroll_steps(steps([
             ("Open Adobe Illustrator.","Find it in the Dock or in Launchpad."),
@@ -322,6 +327,10 @@ def make_word():
         + para("Aqu&iacute; hay <strong>ideas de estilo</strong> para empezar. Elige una, m&eacute;zclalas o <strong>inventa la tuya</strong>. Mant&eacute;n tu palabra <strong>apropiada para la escuela</strong>.")
         + (style_ideas(True) if HAVE_ART else "")
         + para("Puedes <strong>adornar</strong> tus letras con detalles divertidos, y agregar <strong>contornos</strong> o un borde para que tu sticker se lea bien en una superficie <strong>clara</strong> y una <strong>oscura</strong>."))
+    es+=card("Aprende &middot; un ejemplo","Un Ejemplo a Seguir",
+        float_right(RAIDER,"Un sticker de RAIDERS: toda la palabra en un estilo cromado con espadas cruzadas y un borde blanco grueso","Un solo estilo cromado en toda la palabra, con un borde blanco grueso de sticker.")
+        + para("Mira este sticker de <strong>RAIDERS</strong>. Cada letra tiene el <strong>mismo estilo cromado</strong>, por eso se lee como <strong>una sola fuente</strong>. El <strong>borde blanco</strong> grueso hace que resalte en cualquier superficie.")
+        + para("Apunta a esto: elige un estilo y ll&eacute;valo de principio a fin, luego agrega tus propios toques divertidos."))
     es+=card("Aprende &middot; hazlo","Hazlo en Adobe Illustrator",
         scroll_steps(steps([
             ("Abre Adobe Illustrator.","B&uacute;scalo en el Dock o en Launchpad."),
