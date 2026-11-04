@@ -908,8 +908,13 @@
   .pbg-buildorder .bo-arrow{flex:0 0 auto; color:var(--pvb-teal-lt); font-size:1.15rem;}
   .pbg-card[data-ready="1"] .pbg-buildorder{animation:pbgBoGlow 2.4s ease-in-out infinite;}
   @keyframes pbgBoGlow{0%,100%{box-shadow:0 0 0 0 rgba(95,240,240,0);}50%{box-shadow:0 0 18px 2px rgba(95,240,240,.4), 0 0 30px 6px rgba(132,80,226,.22);}}
-  /* always-visible Build Order entry pinned in the phone sheet (desktop uses the card button) */
-  .pbg-sheet-export{display:none;}
+  /* wizard bar pinned in the phone sheet: [back] [Next / Get Ingredients ->] (desktop uses the card + tabs) */
+  .pbg-wizard{display:none; gap:8px; align-items:stretch;}
+  .pbg-wiz-back{flex:0 0 auto; width:48px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer;
+    border-radius:var(--pbg-r-pill); border:1px solid rgba(112,246,246,.3); background:rgba(0,184,184,.12); color:var(--pvb-teal-lt);}
+  .pbg-wiz-back svg{width:18px; height:18px;}
+  .pbg-wiz-back:hover{background:rgba(0,184,184,.24);}
+  .pbg-wiz-back:disabled{opacity:.32; pointer-events:none;}
   .pbg-sheet-export .se-arrow{color:var(--pvb-teal-lt); font-size:1.05rem;}
   .pbg-sheet-export.ready{animation:pbgBoGlow 2.4s ease-in-out infinite;}
   /* build order view */
@@ -1060,8 +1065,9 @@
       border-top:1px solid rgba(112,246,246,.3); box-shadow:0 -10px 30px rgba(0,0,0,.5);
       transition:opacity .4s ease, transform .4s ease;}
     .pbg-tabs{padding-left:max(10px,env(safe-area-inset-left,0)); padding-right:max(10px,env(safe-area-inset-right,0));}
-    .pbg-sheet-export{display:flex; align-items:center; justify-content:center; gap:8px; flex:0 0 auto;
-      margin:0 max(14px,env(safe-area-inset-left,0)) 9px; padding:11px 14px; cursor:pointer; border-radius:var(--pbg-r-pill);
+    .pbg-wizard{display:flex; margin:0 max(14px,env(safe-area-inset-left,0)) 9px;}
+    .pbg-sheet-export{display:inline-flex; align-items:center; justify-content:center; gap:9px; flex:1 1 auto;
+      padding:12px 14px; cursor:pointer; border-radius:var(--pbg-r-pill);
       border:1px solid rgba(112,246,246,.42); background:linear-gradient(135deg, rgba(0,184,184,.34), rgba(132,80,226,.24)); color:#eafeff;
       font-family:var(--pvb-font); font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.78rem;}
     .pbg-sheet-export svg{width:17px; height:17px; flex:0 0 auto;}
@@ -1241,10 +1247,15 @@
       <!-- ---------- controls sheet (phone: draggable; desktop: docked column) ---------- -->
       <div class="pbg-sheet" id="pbg-sheet">
         <button type="button" class="pbg-handle" id="pbg-handle" aria-label="Drag to resize"><span></span></button>
-        <button type="button" class="pbg-sheet-export" id="pbg-sheet-export">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          <span>Ingredients</span><span class="se-sub" id="pbg-se-sub"></span><span class="se-arrow">&rarr;</span>
-        </button>
+        <div class="pbg-wizard" id="pbg-wizard">
+          <button type="button" class="pbg-wiz-back" id="pbg-wiz-back" aria-label="Previous step">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button type="button" class="pbg-sheet-export" id="pbg-sheet-export">
+            <svg id="pbg-se-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span id="pbg-se-main">Next</span><span class="se-sub" id="pbg-se-sub"></span><span class="se-arrow">&rarr;</span>
+          </button>
+        </div>
         <div class="pbg-tabs" id="pbg-tabs" role="tablist"></div>
         <div class="pbg-body" id="pbg-body">
           <!-- Prompt pane: pick a prompt + how to send it + saved setups -->
@@ -2918,6 +2929,7 @@
         [].slice.call(tabsEl.querySelectorAll('.pbg-tab')).forEach(function(b){ var on=b.getAttribute('data-t')===id; b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false'); });
         [].slice.call(dock.querySelectorAll('.pbg-dk')).forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-t')===id); });
         refreshRefs();
+        if(window.pbgWizard) window.pbgWizard();
         if(body) body.scrollTop=0;
         if(isPhone() && openIfClosed && cur>=TY_HALF-2) setTY(TY_HALF,true);
       }
@@ -3001,19 +3013,33 @@
         if(boFill) boFill.style.width=(total?Math.round(done/total*100):0)+'%';
         card.classList.toggle('build-complete', total>0 && done===total); }
       clEl.addEventListener('click',function(e){ var b=e.target.closest('.cimg'); if(!b) return; var row=b.closest('.pvb-checkrow'); if(row){ row.classList.add('done'); setTimeout(updateProgress,20); } });
-      var sheetExportBtn=document.getElementById('pbg-sheet-export'), seSub=document.getElementById('pbg-se-sub');
+      var sheetExportBtn=document.getElementById('pbg-sheet-export'), seSub=document.getElementById('pbg-se-sub'),
+          seMain=document.getElementById('pbg-se-main'), wizBack=document.getElementById('pbg-wiz-back');
+      var TAB_ORDER=TABS.map(function(t){return t[0];}), TAB_LABEL={}; TABS.forEach(function(t){ TAB_LABEL[t[0]]=t[1]; });
+      function refCount(){ var n=0; try{ n=(state.chars||[]).filter(Boolean).length+(state.items||[]).filter(Boolean).length+(state.scene?1:0)+((staged&&staged.length)||0); }catch(e){} return n; }
+      // the pinned sheet button is a wizard: Next walks the tabs, the last tab becomes Get Ingredients
+      window.pbgWizard=function(){
+        if(!sheetExportBtn) return;
+        var i=TAB_ORDER.indexOf(active), last=(i>=TAB_ORDER.length-1);
+        if(last){ sheetExportBtn.setAttribute('data-act','export'); if(seMain)seMain.textContent='Get Ingredients';
+          var n=refCount(); if(seSub)seSub.textContent=n?('('+n+' + prompt)'):''; sheetExportBtn.classList.toggle('ready',n>0); }
+        else { sheetExportBtn.setAttribute('data-act','next'); if(seMain)seMain.textContent='Next';
+          if(seSub)seSub.textContent=TAB_LABEL[TAB_ORDER[i+1]]||''; sheetExportBtn.classList.remove('ready'); }
+        if(wizBack) wizBack.disabled=(i<=0);
+      };
       if(openExportBtn) openExportBtn.addEventListener('click',function(){ setMode('export'); });
-      if(sheetExportBtn) sheetExportBtn.addEventListener('click',function(){ setMode('export'); });
+      if(sheetExportBtn) sheetExportBtn.addEventListener('click',function(){
+        if(sheetExportBtn.getAttribute('data-act')==='next'){ var i=TAB_ORDER.indexOf(active); setTab(TAB_ORDER[Math.min(i+1,TAB_ORDER.length-1)], true); }
+        else setMode('export'); });
+      if(wizBack) wizBack.addEventListener('click',function(){ var i=TAB_ORDER.indexOf(active); if(i>0) setTab(TAB_ORDER[i-1], true); });
       if(backBtn) backBtn.addEventListener('click',function(){ setMode('edit'); });
       if(histBtn) histBtn.addEventListener('click',function(){ setMode('history'); });
-      // readiness glow + build-order subtext (called from pvbmSync on every render)
+      // readiness glow (called from pvbmSync on every render); the sheet button is driven by pbgWizard
       window.pbgCardSync=function(counts){ counts=counts||{}; var nref=(counts.cast||0)+(counts.items||0)+(counts.scene||0);
         try{ nref+=(staged&&staged.length)||0; }catch(e){}
         card.setAttribute('data-ready', nref>0?'1':'0');
-        var sub = nref>0 ? (nref+' reference image'+(nref>1?'s':'')+' + your prompt') : 'Collect everything to copy';
-        if(boSub) boSub.textContent = sub;
-        if(seSub) seSub.textContent = nref>0 ? ('('+nref+' + prompt)') : '';
-        if(sheetExportBtn) sheetExportBtn.classList.toggle('ready', nref>0);
+        if(boSub) boSub.textContent = nref>0 ? (nref+' reference image'+(nref>1?'s':'')+' + your prompt') : 'Collect everything to copy';
+        if(window.pbgWizard) window.pbgWizard();
         if(card.getAttribute('data-mode')==='export') updateProgress(); };
       // ----- history store (auto-saved on copy; pinned ones surface under the Prompt tab) -----
       function histK(){ return NS+'history'; }
