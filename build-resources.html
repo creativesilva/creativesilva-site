@@ -721,7 +721,12 @@
   .pvb-checkrow .th img{width:100%; height:100%; object-fit:contain; display:block;}
   .pvb-checkrow .meta{flex:1 1 auto; min-width:0;}
   .pvb-checkrow .role{font-size:.62rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--pvb-teal-lt);}
-  .pvb-checkrow .fn{font-size:.78rem; color:#dbeeee; word-break:break-all; line-height:1.3;}
+  .pvb-checkrow .fn{font-size:.78rem; color:#dbeeee; overflow-wrap:anywhere; word-break:normal; line-height:1.3;}
+  /* build-order step rows: meta on the top line, the action buttons on their own full-width line below */
+  #pvb-checklist .pvb-checkrow{flex-wrap:wrap;}
+  #pvb-checklist .pvb-checkrow .meta{flex:1 1 120px;}
+  #pvb-checklist .ckacts{flex:1 1 100%; display:flex; gap:8px; margin-top:4px; padding-left:67px;}
+  #pvb-checklist .ckacts .cimg{flex:1 1 auto; text-align:center; padding:10px 10px;}
   .pvb-checkrow .cimg{flex:0 0 auto; font-family:var(--pvb-font); font-size:.66rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
     color:#04110f; background:var(--pvb-teal); border:0; padding:8px 10px; cursor:pointer;}
   .pvb-checkrow .cimg:hover{filter:brightness(1.12);}
@@ -818,8 +823,20 @@
   .pbg-copy svg{width:15px; height:15px;}
   .pbg-copy:hover{filter:brightness(1.08);}
   .pbg-copy.copied{background:#3fd08a;}
-  .pbg-card-body{flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:0 16px 16px;}
+  .pbg-card-body{flex:1 1 auto; min-height:0; overflow:hidden; display:flex; flex-direction:column;}
   .pbg-card-body .pvb-preview{max-height:none; border-radius:var(--pbg-r-sm); border:1px solid var(--pvb-line-soft); border-left:3px solid var(--pvb-teal); background:rgba(2,12,11,.5);}
+  /* the active view fills the body; export/history scroll as a whole, edit splits scroll + pinned footer */
+  .pbg-card[data-mode="edit"] .pbg-view[data-view="edit"]{flex-direction:column;}
+  .pbg-view[data-view="edit"]{min-height:0;}
+  .pbg-view[data-view="export"],.pbg-view[data-view="history"]{overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:0 16px 16px;}
+  .pbg-edit-scroll{flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:0 16px 4px;}
+  .pbg-edit-foot{flex:0 0 auto; padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--pvb-line-soft);
+    background:linear-gradient(to top, rgba(6,16,15,.96), rgba(8,22,21,.78)); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);}
+  .pbg-edit-foot .pbg-buildorder{margin-top:0;}
+  /* editable prompt: click in to tweak the wording, then Copy */
+  #pvb-preview[contenteditable]{cursor:text; outline:none; transition:border-color .15s, box-shadow .15s;}
+  #pvb-preview[contenteditable]:hover{border-left-color:var(--pvb-teal-lt);}
+  #pvb-preview[contenteditable]:focus{border-color:var(--pvb-teal); box-shadow:0 0 0 2px rgba(0,184,184,.25) inset;}
   .pbg-card-acts{display:flex; gap:9px; margin:12px 0 4px;}
   .pbg-card-acts .pvb-btn{border-radius:var(--pbg-r-pill);}
   /* ---------- card modes: edit / build order / history ---------- */
@@ -839,9 +856,9 @@
   .pbg-card[data-mode="history"] #pvb-copytop{display:none;}
   .pbg-card[data-mode="export"] .pbg-title, .pbg-card[data-mode="history"] .pbg-title{font-size:1.02rem;}
   .pbg-view{display:none;}
-  .pbg-card[data-mode="edit"] .pbg-view[data-view="edit"],
+  .pbg-card[data-mode="edit"] .pbg-view[data-view="edit"]{display:flex; flex:1 1 auto; min-height:0; animation:pbgViewIn .34s cubic-bezier(.32,.72,0,1);}
   .pbg-card[data-mode="export"] .pbg-view[data-view="export"],
-  .pbg-card[data-mode="history"] .pbg-view[data-view="history"]{display:block; animation:pbgViewIn .34s cubic-bezier(.32,.72,0,1);}
+  .pbg-card[data-mode="history"] .pbg-view[data-view="history"]{display:block; flex:1 1 auto; min-height:0; animation:pbgViewIn .34s cubic-bezier(.32,.72,0,1);}
   @keyframes pbgViewIn{from{opacity:0; transform:translateY(8px) scale(.992);}to{opacity:1; transform:none;}}
   /* Build Order entry button */
   .pbg-buildorder{display:flex; align-items:center; gap:12px; width:100%; margin:14px 0 8px; padding:13px 15px; cursor:pointer; text-align:left;
@@ -860,6 +877,12 @@
   .pbg-sheet-export .se-arrow{color:var(--pvb-teal-lt); font-size:1.05rem;}
   .pbg-sheet-export.ready{animation:pbgBoGlow 2.4s ease-in-out infinite;}
   /* build order view */
+  /* the progress header stays docked at the top of the build order; steps scroll under it, frosted */
+  .pbg-bo-dock{position:sticky; top:0; z-index:3; margin:0 -16px 12px; padding:12px 16px 10px;
+    background:linear-gradient(to bottom, rgba(6,16,15,.9), rgba(6,16,15,.4)); backdrop-filter:blur(18px) saturate(150%); -webkit-backdrop-filter:blur(18px) saturate(150%);
+    border-bottom:1px solid var(--pvb-line-soft);}
+  .pbg-bo-dock .pbg-bo-top{margin:0;}
+  .pbg-bo-dock .pbg-bo-bar{margin:8px 0 0;}
   .pbg-bo-top{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin:4px 0 8px;}
   .pbg-bo-title{font-family:var(--pvb-font); font-weight:700; letter-spacing:.02em; font-size:1.05rem; color:#fff;}
   .pbg-bo-prog{font-size:.76rem; color:var(--pvb-teal-lt); font-weight:700; letter-spacing:.04em; white-space:nowrap;}
@@ -1141,46 +1164,45 @@
             <button type="button" class="pbg-iconbtn" id="pbg-history-btn" title="Prompt history" aria-label="Prompt history">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
             </button>
-            <button type="button" class="pbg-copy" id="pvb-copytop" title="Copy the prompt to your clipboard">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-              <span>Copy</span>
-            </button>
           </div>
         </div>
         <div class="pbg-card-body" id="pbg-card-body">
-          <!-- EDIT view: the live prompt + a Build Order entry -->
+          <!-- EDIT view: only the prompt scrolls; the actions stay pinned at the bottom -->
           <div class="pbg-view" data-view="edit">
-            <div class="pvb-guide" id="pvb-guide" hidden>
-              <div class="pvb-guide-h">How to use this prompt</div>
-              <div class="pvb-guide-b" id="pvb-guide-body"></div>
+            <div class="pbg-edit-scroll">
+              <div class="pvb-guide" id="pvb-guide" hidden>
+                <div class="pvb-guide-h">How to use this prompt</div>
+                <div class="pvb-guide-b" id="pvb-guide-body"></div>
+              </div>
+              <div class="pvb-preview" id="pvb-preview" contenteditable="true" spellcheck="false" aria-label="Your prompt (editable)">Loading base prompt&#8230;</div>
             </div>
-            <div class="pvb-preview" id="pvb-preview">Loading base prompt&#8230;</div>
-            <button type="button" class="pbg-buildorder" id="pbg-open-export">
-              <span class="bo-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
-              <span class="bo-txt"><b>Build Order</b><span id="pbg-bo-sub">Collect everything to copy</span></span>
-              <span class="bo-arrow">&rarr;</span>
-            </button>
-            <div class="pbg-card-acts">
-              <button class="pvb-btn" id="pvb-copy">Copy prompt</button>
-              <button class="pvb-btn ghost" id="pvb-reset" title="Clear your entries for this prompt">Reset</button>
+            <div class="pbg-edit-foot">
+              <button type="button" class="pbg-buildorder" id="pbg-open-export">
+                <span class="bo-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+                <span class="bo-txt"><b>Build Order</b><span id="pbg-bo-sub">Collect everything to copy</span></span>
+                <span class="bo-arrow">&rarr;</span>
+              </button>
+              <div class="pbg-card-acts">
+                <button class="pvb-btn ghost" id="pvb-reset" title="Clear your entries for this prompt">Reset</button>
+              </div>
+              <div class="pvb-saved" id="pvb-saved">Draft saves automatically.</div>
             </div>
-            <div class="pvb-saved" id="pvb-saved">Draft saves automatically.</div>
           </div>
           <!-- EXPORT view: the final build order, copy straight down the list -->
           <div class="pbg-view" data-view="export">
-            <div class="pbg-bo-top">
-              <div class="pbg-bo-title">Build Order</div>
-              <div class="pbg-bo-prog"><span id="pbg-progress">0 / 0</span> copied</div>
+            <div class="pbg-bo-dock">
+              <div class="pbg-bo-top">
+                <div class="pbg-bo-title">Build Order</div>
+                <div class="pbg-bo-prog"><span id="pbg-progress">0 / 0</span> copied</div>
+              </div>
+              <div class="pbg-bo-bar"><span id="pbg-bo-fill"></span></div>
             </div>
-            <div class="pbg-bo-bar"><span id="pbg-bo-fill"></span></div>
-            <p class="pbg-bo-note">Copy each row in order and paste it into a fresh image-gen chat: the prompt first, then each reference image. For images, <b>Copy</b> puts the picture on your clipboard; <b>Download</b> saves the real file so the name is kept.</p>
             <div id="pvb-checklist"></div>
             <div class="pbg-bo-done" id="pbg-bo-done"><b>Build complete.</b> Everything is in your image gen. Generate your image.</div>
           </div>
           <!-- HISTORY view: past builds, reopen + tweak + re-export -->
           <div class="pbg-view" data-view="history">
-            <div class="pbg-bo-top"><div class="pbg-bo-title">Prompt History</div></div>
-            <p class="pbg-bo-note">Every build you copy is saved here. Reopen one, change what you want, and export it again in a fresh chat.</p>
+            <div class="pbg-bo-dock"><div class="pbg-bo-top"><div class="pbg-bo-title">Prompt History</div></div></div>
             <div id="pbg-history-list"></div>
           </div>
         </div>
@@ -2114,6 +2136,8 @@
     // Two-Pass / Blank) are the instruction itself, so they are sent whole in both modes.
     var DISC=false; try{ DISC=localStorage.getItem(NS+'disc')==='1'; }catch(e){}
     var DISCLAIMER_TEXT='LABEL (add this after the image is generated, do not ask the image model to render tiny text): place one small line of neutral gray fine print in the bottom-left corner at about 50% opacity, kept small and never over the subject: "AI-generated image for private internal world-building and review only. Any exaggerated proportions are intentional. Not for public or external viewing; deleted after inspection."';
+    // what Copy actually copies: the text shown in the preview, so on-the-fly edits are included
+    function promptText(){ return (preEl && typeof preEl.innerText==='string' && preEl.innerText.trim()) ? preEl.innerText : compose(); }
     function compose(){
       var out;
       if(OUTFIT) out=(MODE==='full') ? composeOutfitFull() : composeOutfitProject();
@@ -2241,7 +2265,8 @@
         row.appendChild(el('div','pvb-stepnum',String(step++)));
         var th=el('div','th'); var im=el('img'); im.src=PROMPT_ICON_URL; im.alt='Prompt'; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
         var meta=el('div','meta'); meta.appendChild(el('div','role','Prompt')); meta.appendChild(el('div','fn','Your prompt (paste this first)')); row.appendChild(meta);
-        var cb=el('button','cimg','Copy prompt'); cb.type='button'; cb.addEventListener('click',function(){ copyText(compose(), cb); if(window.pbgPushHistory) pbgPushHistory(); }); row.appendChild(cb);
+        var cb=el('button','cimg','Copy prompt'); cb.type='button'; cb.addEventListener('click',function(){ copyText(promptText(), cb); if(window.pbgPushHistory) pbgPushHistory(); });
+        var cka=el('div','ckacts'); cka.appendChild(cb); row.appendChild(cka);
         checklistEl.appendChild(row);
       })();
       // Steps 2+: images to attach. X2 uses your dropped images; other prompts use catalog references.
@@ -2254,8 +2279,9 @@
         row.appendChild(el('div','pvb-stepnum',String(step++)));
         var th=el('div','th'); var im=el('img'); im.src=a.url; im.alt=a.role; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
         var meta=el('div','meta'); meta.appendChild(el('div','role',esc(a.role))); meta.appendChild(el('div','fn',esc(a.name))); row.appendChild(meta);
-        var cb=el('button','cimg','Copy image'); cb.type='button'; cb.addEventListener('click',function(){ copyImage(a.url,cb); }); row.appendChild(cb);
-        var db=el('button','cimg ghost','Download'); db.type='button'; db.addEventListener('click',function(){ downloadImg(a.url,a.name,db); }); row.appendChild(db);
+        var cb=el('button','cimg','Copy image'); cb.type='button'; cb.addEventListener('click',function(){ copyImage(a.url,cb); });
+        var db=el('button','cimg ghost','Download'); db.type='button'; db.addEventListener('click',function(){ downloadImg(a.url,a.name,db); });
+        var cka=el('div','ckacts'); cka.appendChild(cb); cka.appendChild(db); row.appendChild(cka);
         checklistEl.appendChild(row);
       });
       if(!attach.length){ checklistEl.appendChild(el('div','pvb-check-empty', cfg.delta?'Drop your master (and optional support headshot) on the left; they show up here to copy in order.':'Add characters, items, or a location above and they appear here as steps 2, 3, and so on.')); }
@@ -2748,8 +2774,8 @@
     }
 
     // ---- wire header actions ----
-    copyB.addEventListener('click',function(){ copyText(compose(), copyB); });
-    if(copyTopB) copyTopB.addEventListener('click',function(){ copyText(compose(), copyTopB); });
+    if(copyB) copyB.addEventListener('click',function(){ copyText(promptText(), copyB); });
+    if(copyTopB) copyTopB.addEventListener('click',function(){ copyText(promptText(), copyTopB); });
     function doReset(){ if(!confirm('Clear your entries for this prompt? This cannot be undone.'))return; try{ localStorage.removeItem(NS+'state:'+KEY); }catch(e){} selectPrompt(activeIdx); }
     resetB.addEventListener('click',doReset);
     var resetTopB=document.getElementById('pvb-resettop'); if(resetTopB) resetTopB.addEventListener('click',doReset);
