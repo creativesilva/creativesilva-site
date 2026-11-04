@@ -204,7 +204,7 @@
   .tb-sortbtn{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.62rem;color:var(--muted);background:rgba(255,255,255,.02);border:0;border-left:1px solid var(--line-soft);padding:8px 12px;cursor:pointer;transition:background .15s,color .15s;}
   .tb-sortbtn.on{background:var(--teal);color:#04110f;}
   .tb-sortbtn:hover:not(.on){color:#fff;background:rgba(255,255,255,.06);}
-  .tb-grid{display:flex;flex-direction:column;gap:7px;padding:8px 0 2px;}   /* single column: each reservation is a full-width row, stacked */
+  .tb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:7px;padding:8px 0 2px;align-items:start;}   /* wide-first: cards flow into as many columns as fit (2-3 on a 4K / iPad-landscape board), stacking to 1 column on a phone */
   .tb-grid .tb-bundle{margin:0;min-width:0;}
   .tb-grid.view-out .tb-bundle{border-left-color:var(--gold);}
   .tb-grid.view-in .tb-bundle{border-left-color:var(--teal);}
@@ -1114,7 +1114,6 @@
           <button type="button" class="silva-uni-cattrigger cm-toolsbtn summ-btn" id="cmToolsBtn" aria-haspopup="true" aria-expanded="false">Tools &#9662;</button>
           <div class="cm-toolsmenu" id="cmToolsMenu" hidden>
             <button type="button" class="cm-toolitem" id="reportsBtn" title="Missing kit items to order (opens a printable report)">Missing Items</button>
-            <a class="cm-toolitem" id="studentCalBtn" href="/reserve.html" target="_blank" rel="noopener">Student Store</a>
             <a class="cm-toolitem" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
             <button type="button" class="cm-toolitem" id="leadsBtn" title="Your class leads by period: Equipment Managers, Photo Walk EQs, and Team Attendance Managers">Class Leads</button>
           </div>
@@ -1371,7 +1370,6 @@
   function studentCalURL(abs){ return (abs?'https://www.creativesilva.com':'')+'/calendar.html?teacher='+SELECTED_POOL; }     // embedded MONTH calendar (teacher console calframe)
   function studentStoreURL(abs){ return (abs?'https://www.creativesilva.com':'')+'/reserve.html?teacher='+SELECTED_POOL+'&from=console'; }    // the student reservation STORE (launched 2026-10-26); from=console shows the Back-to-Equipment-Manager link (students never get it)
   function syncStudentCalLink(){
-    var a=document.getElementById('studentCalBtn'); if(a) a.href=studentStoreURL(false);                                     // the Tools link + QR open the STORE now
     var sb=document.getElementById('storeBtn'); if(sb) sb.href=studentStoreURL(true);                                        // prominent header button -> the student store (new tab)
     var f=document.getElementById('calframe'); if(f){ var want=studentCalURL(false)+'&embed=1'; if((f.getAttribute('src')||'')!==want) f.setAttribute('src',want); }   // calframe stays the month calendar
   }
@@ -1512,10 +1510,8 @@
   function statusOf(c){ return c.status||(c.returned?'returned':'out'); }
   // Approval is SHELVED by default (server sends approval_required=false): reservations auto-confirm
   // and the console shows Recent Reservations instead of an approval queue. Flip the env var to restore.
-  function approvalOn(){ return !!(DATA && DATA.approval_required); }
   function isOverdue(c){ return statusOf(c)==='out' && c.due && c.due<todayISO(); }
   function nameOf(c){ return (c.student_name||'').trim() || (c.student_id?('ID '+c.student_id):'Unknown'); }
-  function camCourse(cam){ return P2.indexOf(cam)>=0?'Photo 2 only':'Photo 1 & 2'; }
   // Per-camera asset record (standing note + out-of-service) that follows the physical camera.
   function assetOf(cam){ return (DATA.assets&&DATA.assets[cam])||{}; }
   function isOOS(cam){ return !!assetOf(cam).oos; }
@@ -1574,7 +1570,6 @@
     }
     var ad=document.getElementById('availday'); if(ad){ ad.textContent=(SELDAY===todayISO()?'':'on '+dowShort(SELDAY)+' ')+'· '+fmtMDY(SELDAY); }
   }
-  function daysBetween(a,b){ return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000); }
   // Top-of-console digest: student requests awaiting review (the store's "request anyway" path).
   // Overdue cameras live on the red OVERDUE tag on the Checked out tab, not a separate panel (Chris 2026-10-27).
   function updateDigests(){
@@ -1609,7 +1604,7 @@
       var note=c.request_note?('<div class="req-note">&ldquo;'+esc(c.request_note)+'&rdquo;</div>'):'';
       return '<div class="req-card"><div class="req-top">'+reqReasonChip(c)+'<span class="req-who">'+studentLink(c)+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span></div>'+
         '<div class="req-items">'+items+'</div>'+
-        '<div class="req-dates">'+esc(fmtDoWMD(c.out))+' &rarr; '+esc(fmt(c.due))+'</div>'+note+
+        '<div class="req-dates">'+esc(fmtDoWMD(c.out))+' &rarr; '+esc(fmtDoWMD(c.due))+'</div>'+note+
         '<div class="req-acts"><button type="button" class="btn sm good" data-reqok="'+esc(c.id)+'">Approve</button><button type="button" class="btn sm danger" data-reqno="'+esc(c.id)+'">Deny</button></div></div>';
     }).join('')+'</div>';
   }
@@ -1618,10 +1613,6 @@
   // A reservation = ONE parent record (a camera, or a standalone gear unit) plus any gear linked to a
   // camera by `group`. Scope: Mankin (Digital Arts) sees only her stock (cams 19-21 + her gear); the
   // photo teachers (silva/garcia) see everything else (all Photo 1 + Photo 2).
-  function resvIsMankin(c){
-    var mk=(DATA.pools||{}).mankin||[], mg=(DATA.equipment_pools||{}).mankin||[];
-    return c.kind==='equipment' ? (mg.indexOf(c.item)>=0) : (mk.indexOf(c.camera)>=0);
-  }
   // Who OWNS a reservation = the reserving student's teacher/class, read off the record. Digital Arts 1
   // is Mr. Silva's class and Digital Arts 2 is Ms. Mankin's, but BOTH carry teacher "Ms. Mankin" in the
   // roster (they share room 331), so the SECTION number in the course name is the only reliable splitter;
@@ -1668,7 +1659,6 @@
       .sort(function(a,b){ var ca=(a.kind==='equipment')?1:0, cb=(b.kind==='equipment')?1:0; if(ca!==cb) return ca-cb; return String(a.id)<String(b.id)?-1:1; });
   }
   function resvReturnedCount(parent){ var items=resvItems(parent); return {done:items.filter(function(x){return statusOf(x)==='returned';}).length, total:items.length}; }
-  function resvAllReturned(parent){ var rc=resvReturnedCount(parent); return rc.total>0 && rc.done===rc.total; }
   function resvDate(c){ return c.created || c.out || ''; }
   function resvStatusGroup(c){ var rc=resvReturnedCount(c); if(rc.total>0 && rc.done===rc.total) return 'returned'; return resvItems(c).some(function(x){return statusOf(x)==='out';})?'out':'reserved'; }
   // ---- Today-board sort (Chris 2026-10-23): default = camera-kit NUMBER order; a-la-carte gear (no camera)
@@ -1690,9 +1680,6 @@
   // Student names (data-stu) and item chips (data-camdetail/data-geardetail) use the document-level
   // delegated handlers, so only the action buttons need wiring.
   function itemState(it){ if(statusOf(it)==='returned') return 'returned'; if(isOverdue(it)) return 'overdue'; return statusOf(it)==='out'?'out':'reserved'; }
-  function cartChip(it, forceState){ var isG=it.kind==='equipment'; var lbl=isG?gearLabel(it.item):String(it.camera||'').toUpperCase();
-    var at=isG?('data-geardetail="'+esc(it.item)+'"'):('data-camdetail="'+esc(it.camera)+'"');
-    return '<button type="button" class="cartchip st-'+(forceState||itemState(it))+'" '+at+'>'+esc(lbl)+'</button>'; }
   // Grouped reservations in the selected pool (one row per student + checkout dates).
   function groupedReservations(){ var reps={};
     (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment' && c.group) return; if(!resvInScope(c)) return;
@@ -1700,19 +1687,12 @@
     return Object.keys(reps).map(function(k){ return reps[k]; }); }
   // SELDAY = today: show anything still open on/before today. A FUTURE day: exactly that day, in good
   // faith (assume on-time returns). OUTGOING = reservations to hand out; INCOMING = checkouts to take back.
-  function dayHit(d, iso, isT){ return d ? (isT ? (d<=iso) : (d===iso)) : false; }
   function outgoingFor(iso){ var isT=(iso===todayISO());
     return groupedReservations().filter(function(c){ return resvItems(c).some(function(it){
       if(statusOf(it)==='returned') return false; var o=it.out||'', d=it.due||o;
       return isT ? (statusOf(it)==='reserved' && o && o<=iso)     // today: still to hand out
                  : (o && o<=iso && (!d || d>=iso)); }); })         // future: forecast = projected OUT that day
       .sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; }); }
-  function incomingFor(iso){ var isT=(iso===todayISO());
-    return groupedReservations().filter(function(c){ return resvItems(c).some(function(it){
-      if(statusOf(it)==='returned') return false; var d=it.due||it.out||'';
-      return isT ? (statusOf(it)==='out' && d && d<=iso)          // today: out + due today or overdue
-                 : (d===iso); }); })                               // future: projected returns that day
-      .sort(function(a,b){ return ((a.due||a.out||'')<(b.due||b.out||''))?-1:1; }); }
   // CHECKED OUT = everything physically in a student's hands right now (status out), whatever the due
   // date. Overdue items (past due) sort first so they lead the view and pulse red as a contact nudge.
   function checkedOutFor(){
@@ -2017,38 +1997,9 @@
     var w=activityWindow();
     return [c.out, c.due, (c.created||'').slice(0,10), c.returned_date].some(function(d){ d=d?String(d).slice(0,10):''; return d && d>=w.start && d<=w.end; });
   }
-  function activityReservations(){
-    var reps={};
-    (DATA.checkouts||[]).forEach(function(c){
-      if(c.kind==='equipment' && c.group) return;          // add-on gear folds into its camera's card
-      if(!resvInScope(c) || !resvInWindow(c)) return;
-      var k=resvKey(c);
-      if(!reps[k] || (c.kind!=='equipment' && reps[k].kind==='equipment')) reps[k]=c;   // one card per reservation; prefer a camera as the anchor
-    });
-    return Object.keys(reps).map(function(k){ return reps[k]; }).sort(function(a,b){ return (resvDate(a)<resvDate(b))?1:-1; });   // newest first
-  }
-  function activityCard(c){
-    var items=resvItems(c), rc=resvReturnedCount(c), allRet=rc.done===rc.total;
-    var isG=c.kind==='equipment';
-    var cams=items.filter(function(x){return x.kind!=='equipment';}).length, gear=items.length-cams;
-    var nameLink=isG
-      ? '<button type="button" class="itemlink rc-cam" data-geardetail="'+esc(c.item)+'">'+esc(gearLabel(c.item)).toUpperCase()+'</button>'
-      : '<button type="button" class="itemlink rc-cam" data-camdetail="'+esc(c.camera)+'">'+esc(c.camera).toUpperCase()+'</button>';
-    var count=items.length>1?'<span class="rc-count">'+items.length+' items</span>':'';
-    var sub=items.length<=1?(isG?'1 item':'Kit')
-           :(cams>0?(cams+' camera kit'+(cams>1?'s':'')+(gear>0?(' + '+gear+' gear'):'')):(items.length+' gear items'));
-    var st=resvStatusGroup(c);
-    var prog=(st==='out'&&rc.done>0&&!allRet)?(rc.done+'/'+rc.total+' back'):'';
-    return '<div class="recent-card rr-'+st+'"><div class="rc-hit" data-resv="'+esc(c.id)+'" role="button" tabindex="0"></div>'+
-      '<span class="rc-top">'+nameLink+'<span class="rc-tags">'+count+(prog?('<span class="rc-prog">'+prog+'</span>'):'')+'</span></span>'+
-      '<span class="rc-who">'+studentLink(c)+'</span>'+
-      '<span class="rc-meta">'+sub+' &middot; '+fmt(c.out)+'</span>'+
-    '</div>';
-  }
   // Checked-out gear lists in unit-number order: pull the trailing number from a unit id like
   // "apple_pencil-31" (-> 31). Camera reservations have no unit number (null) and keep their order.
   function raGearNum(c){ if(c&&c.kind==='equipment'&&c.item){ var m=String(c.item).match(/\d+/g); return m?parseInt(m[m.length-1],10):null; } return null; }
-  function raGearNumCmp(a,b){ var na=raGearNum(a),nb=raGearNum(b); if(na==null&&nb==null) return 0; if(na==null) return -1; if(nb==null) return 1; return na-nb; }
   // Reservation Activity hub (date selector + Checked out / Reserved / Returned accordions). Below the calendar.
 
   // ===== Unified reservation window: every item in the bundle + per-item check-in (incremental) =====
@@ -2298,11 +2249,6 @@
     document.getElementById('leadsBody').innerHTML=h;
   }
   (function(){ var b=document.getElementById('leadsBtn'); if(b) b.onclick=openLeads; var x=document.getElementById('leadsx'); if(x) x.onclick=closeLeads; var m=document.getElementById('leadsmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeLeads(); }); })();
-  function resvCheckOutAll(parent){   // mark every still-reserved item picked up at once
-    var res=resvItems(parent).filter(function(x){return statusOf(x)==='reserved';});
-    Promise.all(res.map(function(x){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:x.id,status:'out'})}); }))
-      .then(function(){ return loadBoard(); }).then(function(){ if(resvId) renderResvModal(); }).catch(function(){ if(resvId) renderResvModal(); });
-  }
   function resvSetStatus(id,status){
     camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})})
       .then(function(){ return loadBoard(); }).then(function(){ if(resvId) renderResvModal(); }).catch(function(){ if(resvId) renderResvModal(); });
@@ -2680,18 +2626,6 @@
   // body -> tap the title to open the device's pop-out window. One shape for every camera + gear line.
   //  uid: unique collapse key | sc: status class | titleHtml: clickable title (data-camdetail/data-geardetail)
   //  sub: full-name subtitle | chip: compact right-side status/kit chip | body: expanded content
-  function shell3(uid, sc, titleHtml, sub, chip, body){
-    var open=cardOpen(uid);
-    return '<div class="dcard '+sc+(open?' open':'')+'">'+
-      '<div class="dcard-head" data-cardtoggle="'+esc(uid)+'" role="button" tabindex="0">'+
-        '<span class="dcard-dot"></span>'+
-        '<span class="dcard-id">'+titleHtml+(sub?('<span class="dcard-sub">'+sub+'</span>'):'')+'</span>'+
-        (chip||'')+
-        '<span class="dcard-chev" aria-hidden="true"></span>'+
-      '</div>'+
-      '<div class="dcard-body">'+body+'</div>'+
-    '</div>';
-  }
   // Order everywhere: Available first, then Checked out, then Reserved.
   var SECDEF=[
     {key:'avail',label:'Available',cls:'sec-avail',dot:'avail'},
@@ -2704,7 +2638,6 @@
   // from this session always wins (a section the user opened before stays open on re-render).
   function secOpen(k){ try{ var v=sessionStorage.getItem('csec:'+k); if(v!==null) return v==='1'; }catch(e){} return false; }
   function setSecOpen(k,o){ try{ sessionStorage.setItem('csec:'+k,o?'1':'0'); }catch(e){} }
-  function catOf(cam){ var c=activeFor(cam); if(!c) return isOOS(cam)?'oos':(isNoCard(cam)?'nocard':'avail'); return statusOf(c)==='reserved'?'reserved':'out'; }
 
   // Consolidated camera tile: ONE card per camera, colored by today's status, tap -> full window.
   function camState(cam){ var a=assetOf(cam); if(a.oos||a.no_card) return 'oos'; var c=activeFor(cam); if(!c) return 'avail';
@@ -2713,24 +2646,6 @@
     return 'avail'; }
   function camStateLabel(cam,s){ var a=assetOf(cam); if(s==='oos') return a.oos?'Out of service':'Card missing';
     return {avail:'Available',resv:'Reserved today',out:'Checked out',overdue:'Overdue'}[s]||''; }
-  function camTile(cam){
-    var s=camState(cam), a=assetOf(cam), c=activeFor(cam);
-    var p=kitPct(cam), pcls=(p==null?'na':(p>=100?'':(p>=70?'mid':'low')));
-    var p2=(P2.indexOf(cam)>=0)?'<span class="camtile-p2">P2</span>':'';
-    var sub='';
-    if(s==='out'||s==='overdue') sub=esc(nameOf(c))+' &middot; due '+fmt(c.due);
-    else if(s==='resv') sub=esc(nameOf(c))+' &middot; pickup '+fmt(c.out);
-    else if(s==='oos') sub=a.oos?'Marked out of service':'Memory card missing';
-    else { var fl=[]; if(c && statusOf(c)==='reserved' && c.out) fl.push('reserved '+fmt(c.out)); if(a.issues&&a.issues.length) fl.push(a.issues.length+' open issue'+(a.issues.length>1?'s':'')); sub=fl.length?fl.join(' &middot; '):'In the storage room'; }
-    return '<button type="button" class="camtile gtile cs-'+s+'" data-camdetail="'+esc(cam)+'">'+
-      camThumb(cam)+
-      '<span class="gtile-main">'+
-        '<span class="camtile-top"><span class="camtile-n">'+esc(cam)+'</span>'+p2+'<span class="camtile-badges"><span class="camtile-pct '+pcls+'">'+(p==null?'TBD':(p+'%'))+'</span></span></span>'+
-        '<span class="camtile-status">'+camStateLabel(cam,s)+'</span>'+
-        '<span class="camtile-sub">'+sub+'</span>'+
-      '</span>'+
-    '</button>';
-  }
   // ===== Manage Equipment tiles: condition ONLY (no checkout/checkin status). Chris 2026-10-04:
   // "burry the equipment cards on a manage equipment accordion that has no check out or check in
   // statuses, just kit and contents and condition." Colored by CONDITION (green = complete + no
@@ -2811,11 +2726,6 @@
     '</div>'; }
   // (drum-wheel markSortCenter removed 2026-10-06: Sort is now a plain click-to-select list.)
   // Teacher view toggle: Silva / Garcia / Mankin. Filters the board (cameras + gear) to that pool.
-  function teacherSeg(){
-    return '<div class="tseg">'+[['silva','Silva'],['garcia','Garcia'],['mankin','Mankin']].map(function(o){
-      return '<button type="button" class="tseg-btn'+(SELECTED_POOL===o[0]?' on':'')+'" data-pool="'+o[0]+'">'+o[1]+'</button>';
-    }).join('')+'</div>';
-  }
   // The teacher selector lives in its own bar at the very TOP of the page (#poolbar), above the
   // availability count and the calendar, so it is the first thing seen. It filters the whole view.
   var _lastPoolSig=null;
@@ -3247,15 +3157,6 @@
   }
   // ===== Leave-card slot picker (opened from the return checklist) =====
   var cardCtx=null, cardSlotSel=null;
-  function openCardHold(ctx){
-    cardCtx=ctx; cardSlotSel=null;
-    document.getElementById('cardTitle').textContent='Leave memory card · '+(ctx.camera||'');
-    document.getElementById('cardSub').innerHTML='Pull <b>'+esc(ctx.student_name||'the student')+'</b>&#39;s card from <b>'+esc(ctx.camera||'')+'</b> into a wallet slot. The camera stays out of rotation until you install a fresh card. The student has 24 hours to offload.';
-    document.getElementById('cardNote').value='';
-    var msg=document.getElementById('cardMsg'); msg.className='mmsg'; msg.textContent='';
-    renderCardSlots();
-    document.getElementById('cardmodal').classList.add('open');
-  }
   function renderCardSlots(){
     var cards=DATA.cards||{}, host=document.getElementById('cardSlots'), html='';
     for(var i=1;i<=18;i++){ var taken=!!cards[String(i)]; html+='<button type="button" class="card-slot'+(taken?' taken':'')+(cardSlotSel===i?' sel':'')+'" data-slot="'+i+'"'+(taken?' disabled':'')+'>'+i+'</button>'; }
