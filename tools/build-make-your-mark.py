@@ -28,6 +28,9 @@ STYLE_IDEAS=[
 
 REFL_EN=f"{SITE}/assets/course-documents/Make-Your-Mark-Reflection-EN.docx"
 REFL_ES=f"{SITE}/assets/course-documents/Make-Your-Mark-Reflection-ES.docx"
+# ONE project-folder zip (Chris 2026-11-04): extracts to a Design_A_Sticker/ folder holding the
+# Design_A_Sticker.ai starter file + both reflection docx. Students download this and open the .ai.
+PROJECT_ZIP=f"{SITE}/assets/course-documents/Make-Your-Mark-Project-Folder.zip"
 HAVE_REFL=True
 
 OVER=f"{PFX}-make-your-mark-overview.html"
@@ -166,23 +169,20 @@ def vocab3(es):
 
 def downloads(es):
     if es:
-        heading="Descarga Tu Hoja de Reflexi&oacute;n"
-        lead="Descarga tu hoja de reflexi&oacute;n. La llenas al final, en el Paso 03."
-        lab_en="Reflexi&oacute;n (ingl&eacute;s)"; lab_es="Reflexi&oacute;n (espa&ntilde;ol)"
-        note_t=("<strong style=\"color:#ffb27c;\">Gu&aacute;rdala:</strong> ponla en "
-                f"OneDrive &rarr; {AREA} para que no se te pierda.")
+        heading="Descarga Tu Carpeta del Proyecto"
+        lead="Descarga la carpeta del proyecto. Adentro viene el archivo de Illustrator para empezar y tus dos hojas de reflexi&oacute;n."
+        lab="Carpeta del Proyecto (ZIP)"
+        note_t=("<strong style=\"color:#ffb27c;\">&Uacute;sala:</strong> abre el archivo <strong>Design_A_Sticker.ai</strong> que viene adentro para empezar tu sticker. "
+                f"Gu&aacute;rdala en OneDrive &rarr; {AREA} para que no se te pierda.")
     else:
-        heading="Download Your Reflection Sheet"
-        lead="Download your reflection sheet. You fill it in at the end, on Step 03."
-        lab_en="Reflection (English)"; lab_es="Reflection (Spanish)"
-        note_t=("<strong style=\"color:#ffb27c;\">Keep it:</strong> save it in "
-                f"OneDrive &rarr; {AREA} so you do not lose it.")
-    rows=''
-    if HAVE_REFL:
-        rows=('<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">'
-              + dl_link(REFL_ES if es else REFL_EN, lab_es if es else lab_en, row=True)
-              + dl_link(REFL_EN if es else REFL_ES, lab_en if es else lab_es, row=True)
-              + '</div>')
+        heading="Download Your Project Folder"
+        lead="Download the project folder. Inside you get the Illustrator file to start, plus both reflection sheets."
+        lab="Project Folder (ZIP)"
+        note_t=("<strong style=\"color:#ffb27c;\">Use it:</strong> open the <strong>Design_A_Sticker.ai</strong> file inside to start your sticker. "
+                f"Save the folder in OneDrive &rarr; {AREA} so you do not lose it.")
+    rows=('<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">'
+          + dl_link(PROJECT_ZIP, lab, row=True)
+          + '</div>')
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
           + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
           + para(lead) + rows
@@ -230,7 +230,7 @@ def overview():
         + para("You will add a white border in Step 02. You will check for it before you turn it in."))
     en+=downloads(False)
     en+=card("How It Works / Your Plan","Your Next 2 Steps",
-        para("You are on Step 01 now: read this page and get your reflection sheet. Here are the two steps that follow.")
+        para("You are on Step 01 now: read this page and download your project folder. Here are the two steps that follow.")
         + bullets([
             ("Step 02 &middot; Make Your Word:","pick a style, draw your letters, and add the white sticker border."),
             ("Step 03 &middot; Reflection:","fill in a short sheet about your sticker."),
@@ -257,7 +257,7 @@ def overview():
         + para("Agregar&aacute;s un borde blanco en el Paso 02. Lo revisar&aacute;s antes de entregar."))
     es+=downloads(True)
     es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Siguientes 2 Pasos",
-        para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina y descarga tu hoja de reflexi&oacute;n. Aqu&iacute; est&aacute;n los dos pasos que siguen.")
+        para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina y descarga tu carpeta del proyecto. Aqu&iacute; est&aacute;n los dos pasos que siguen.")
         + bullets([
             ("Paso 02 &middot; Haz Tu Palabra:","elige un estilo, dibuja tus letras y agrega el borde blanco del sticker."),
             ("Paso 03 &middot; Reflexi&oacute;n:","llena una hoja corta sobre tu sticker."),
@@ -280,7 +280,7 @@ def make_word():
     en+=card("Learn &middot; make it","Make It in Adobe Illustrator",
         scroll_steps(steps([
             ("Open Adobe Illustrator.","Find it in the Dock or in Launchpad."),
-            ("Make a new file.","Click <strong>File &rarr; New</strong> (or press Cmd+N). Click the <strong>Web</strong> tab, name it your word, and check that Color Mode is <strong>RGB</strong>. Click <strong>Create</strong>."),
+            ("Open the provided file.","In your project folder (from Step 01), open <strong>Design_A_Sticker.ai</strong>. It is already set up for you: the right size and colors."),
             ("Sketch your word first.","On paper or your student iPad, draw your word in big letters. Take a photo with your iPad and bring it into Illustrator to trace."),
             ("Draw your letters.","Trace your sketch with the <strong>Pencil</strong> or <strong>Pen</strong> tool. No fonts. Use your one style on every letter, the same thickness."),
             ("Color and outline.","Fill every letter the same way (one color or a pattern). Give every letter the same <strong>black outline</strong>."),
@@ -312,7 +312,7 @@ def make_word():
     es+=card("Aprende &middot; hazlo","Hazlo en Adobe Illustrator",
         scroll_steps(steps([
             ("Abre Adobe Illustrator.","B&uacute;scalo en el Dock o en Launchpad."),
-            ("Haz un archivo nuevo.","Haz clic en <strong>Archivo &rarr; Nuevo</strong> (o presiona Cmd+N). Haz clic en la pesta&ntilde;a <strong>Web</strong>, ponle el nombre de tu palabra y revisa que el Modo de Color sea <strong>RGB</strong>. Haz clic en <strong>Crear</strong>."),
+            ("Abre el archivo provisto.","En tu carpeta del proyecto (del Paso 01), abre <strong>Design_A_Sticker.ai</strong>. Ya est&aacute; listo para ti: el tama&ntilde;o y los colores correctos."),
             ("Primero haz un boceto.","En papel o en tu iPad de estudiante, dibuja tu palabra en letras grandes. Toma una foto con tu iPad y ll&eacute;vala a Illustrator para calcarla."),
             ("Dibuja tus letras.","Calca tu boceto con la herramienta <strong>L&aacute;piz</strong> o <strong>Pluma</strong>. Sin fuentes. Usa tu mismo estilo en cada letra, del mismo grosor."),
             ("Color y contorno.","Rellena cada letra igual (un color o un patr&oacute;n). Dale a cada letra el mismo <strong>contorno negro</strong>."),
@@ -343,7 +343,7 @@ def reflection():
         "You made your sticker. Now tell me about it.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_REFLECT)
     en+=card("Learn &middot; last step","Fill In Your Reflection",
         para("You made your sticker. Nice work. Now open your reflection sheet and fill it in. It is short: just finish the sentences.")
-        + para("You downloaded it on Step 01, the Overview. Open the English or the Spanish one, and type right in the boxes."))
+        + para("It is inside your project folder from Step 01. Open the English or the Spanish reflection, and type right in the boxes."))
     en+=deliverables_box(False,
         [("1 reflection:","your finished reflection (.docx), uploaded to this Canvas assignment.")])
     en+=next_up("MODULE COMPLETE","Nice work. You drew your own letters and turned a word into a sticker, just like a real lettering artist.")
@@ -352,7 +352,7 @@ def reflection():
         "Hiciste tu sticker. Ahora cu&eacute;ntame sobre &eacute;l.","#top","Back to English",hicon=HICON_REFLECT)
     es+=card("Aprende &middot; &uacute;ltimo paso","Llena Tu Reflexi&oacute;n",
         para("Hiciste tu sticker. Buen trabajo. Ahora abre tu hoja de reflexi&oacute;n y ll&eacute;nala. Es corta: solo termina las frases.")
-        + para("La descargaste en el Paso 01, el Resumen. Abre la de ingl&eacute;s o la de espa&ntilde;ol y escribe en las cajas."))
+        + para("Est&aacute; dentro de tu carpeta del proyecto del Paso 01. Abre la reflexi&oacute;n de ingl&eacute;s o de espa&ntilde;ol y escribe en las cajas."))
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu reflexi&oacute;n terminada (.docx), subida a esta tarea de Canvas.")])
     es+=next_up("M&Oacute;DULO COMPLETO","Buen trabajo. Dibujaste tus propias letras y convertiste una palabra en un sticker, como un verdadero artista de letras.")
