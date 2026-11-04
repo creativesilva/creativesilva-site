@@ -39,6 +39,9 @@ Copy this `:root` block into any teacher tool to adopt the system. Every value b
   --g-r-lg:20px;      /* cards, sheets, big panels */
   --g-r-md:14px;      /* rows, accordions, secondary panels */
   --g-r-sm:10px;      /* inputs, dropdowns, thumbnails, tool buttons */
+  /* CONTROL HEIGHTS (2 steps, nothing else) */
+  --g-ctrl-h:48px;    /* standard glass button / pill / input */
+  --g-ctrl-h-sm:42px; /* compact row button / dense pill */
   /* GLASS MATERIAL (2 blurs, nothing in between) */
   --g-blur:blur(20px) saturate(150%);       /* panels, pills, controls */
   --g-blur-heavy:blur(28px) saturate(150%); /* the sheet, dock, overlays */
@@ -126,10 +129,12 @@ Tracking tokens, pick one: tight `.02em`, normal `.04em`, wide `.08em`, eyebrow 
 
 Build everything from these. One spec each, no one-offs.
 
-- **Primary button / pill.** `--g-primary` fill, ink text, `--g-r-pill`, padding `13px 18px`, `box-shadow: var(--g-shadow-sm), inset 0 1px 0 rgba(255,255,255,.42)`. Hover: `filter:brightness(1.07)`. The ONE bright thing in a view.
-- **Secondary / glass button.** `--g-glass` fill, `--g-text`, `--g-blur`, `--g-edge`, `--g-r-pill`, same padding, `var(--g-spec)`. Hover: lift the edge + a touch of teal.
-- **Icon button.** Circular (`--g-r-pill`, equal w/h, 44px min on touch) OR a pill half. Glass by default; bright when it is the primary action. Icon only, no label where the meaning is obvious to the owner.
-- **Split pill.** One pill, two icon halves, a hairline divider (`--g-edge-soft`). Left = secondary action (glass), right = primary (bright). Used for download + copy.
+- **Control heights (LOCKED 2026-11-04).** Every glass button / pill / input is ONE of two heights: `--g-ctrl-h` (48px) standard, `--g-ctrl-h-sm` (42px) compact rows. No one-off heights anywhere, so controls line up and read as one system.
+- **Rollover (LOCKED 2026-11-04, the universal glass action).** A glass control at rest is `--g-glass`; on hover/active its face fills `--g-primary` with ink (`#04110f`) text, `transition .16s to .18s ease`. Teal is never a permanent per-control state (that reads harsh); it is the rollover. `:active` adds `filter:brightness(.94)`.
+- **Primary button / pill.** `--g-primary` fill, ink text, `--g-r-pill`, `--g-ctrl-h`, `var(--g-shadow-sm), var(--g-spec)`. Hover `filter:brightness(1.07)`. The ONE bright-at-rest thing in a view (a submit/confirm), used sparingly.
+- **Secondary / glass button.** `--g-glass`, `--g-text`, `--g-blur`, `--g-edge`, `--g-r-pill`, `--g-ctrl-h`, `var(--g-spec)`. Uses the universal rollover above.
+- **Icon button.** Circular (`--g-r-pill`, equal w/h, 44px min on touch) OR a pill half, `--g-ctrl-h`/`-sm`. Glass at rest; the teal fill arrives on the rollover, not as a permanent state. Icon only where the meaning is obvious to the owner.
+- **Split pill (LOCKED 2026-11-04).** ONE glass capsule (`--g-glass`, `--g-blur`, `--g-edge`, `--g-r-pill`, `--g-ctrl-h`/`-sm`) split by a hairline `--g-edge-soft` divider into two equal icon halves: download left, copy right. BOTH halves are glass at rest, no permanently-bright half and no harsh dark→bright break; the teal fills only the HOVERED half (the universal rollover). Success flashes `--g-primary` + a 2px inset ring (`.ok`). The SAME pill is used in the composed-prompt footer and in every build-order row, identical.
 - **Segmented control / tabs.** A pill track; the active segment is a brighter inset glass pill. The count badge is a small teal `--g-r-pill` chip.
 - **Card / panel.** `--g-glass`, `--g-r-lg`, `--g-blur`, `--g-edge`, `var(--g-shadow), var(--g-spec-strong)`. Header row stays put; only the body scrolls.
 - **Row (list item).** `--g-r-md`, `--g-glass` (quiet), `--g-blur`, left controls centered to the row, variable-width content in a reserved width so columns never zig-zag (the no-wave law).

@@ -745,18 +745,17 @@
   #pvb-checklist .pvb-checkrow .fn{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-top:2px;}
   /* build-order actions: ONE glass pill, split into a download icon + a copy icon (no words) */
   #pvb-checklist .ckacts{flex:0 0 auto; width:auto; display:flex;}
-  #pvb-checklist .ckpill{display:inline-flex; align-items:stretch; overflow:hidden; border-radius:var(--pbg-r-pill);
-    border:1px solid rgba(112,246,246,.3);
-    background:linear-gradient(145deg, rgba(0,184,184,.15), rgba(132,80,226,.07) 60%, rgba(6,16,16,.22));
+  /* build-order row pill: same split-glass language as the footer pill, scaled to the compact row height */
+  #pvb-checklist .ckpill{display:inline-flex; align-items:stretch; height:var(--g-ctrl-h-sm); overflow:hidden; border-radius:var(--pbg-r-pill);
+    border:1px solid var(--g-edge); background:var(--g-glass);
     backdrop-filter:blur(13px) saturate(150%); -webkit-backdrop-filter:blur(13px) saturate(150%);
-    box-shadow:0 6px 16px rgba(0,0,0,.22), inset 0 1px 0 rgba(185,255,255,.16);}
-  #pvb-checklist .ckpill button{display:inline-flex; align-items:center; justify-content:center; width:50px; padding:12px 0; cursor:pointer; border:0; background:transparent; color:#eafeff; transition:background .14s, filter .14s, box-shadow .14s;}
+    box-shadow:var(--g-shadow-sm), var(--g-spec);}
+  #pvb-checklist .ckpill button{display:inline-flex; align-items:center; justify-content:center; width:50px; cursor:pointer; border:0; background:transparent; color:var(--pvb-teal-lt); transition:background .16s ease, color .16s ease, box-shadow .16s ease;}
   #pvb-checklist .ckpill button svg{width:19px; height:19px;}
-  #pvb-checklist .ckpill .ckdl{border-right:1px solid rgba(112,246,246,.24);}
-  #pvb-checklist .ckpill .ckdl:hover{background:rgba(0,184,184,.2);}
-  #pvb-checklist .ckpill .cimg{color:#04110f; background:linear-gradient(135deg,var(--pvb-teal-lt),var(--pvb-teal)); box-shadow:inset 0 1px 0 rgba(255,255,255,.4);}
-  #pvb-checklist .ckpill .cimg:hover{filter:brightness(1.08);}
-  #pvb-checklist .ckpill button.ok{box-shadow:inset 0 0 0 2px rgba(130,245,230,.95), inset 0 1px 0 rgba(255,255,255,.4);}
+  #pvb-checklist .ckpill .ckdl{border-right:1px solid var(--g-edge-soft);}
+  #pvb-checklist .ckpill button:hover{background:var(--g-primary); color:#04110f; box-shadow:var(--g-spec);}
+  #pvb-checklist .ckpill button:active{filter:brightness(.94);}
+  #pvb-checklist .ckpill button.ok{background:var(--g-primary); color:#04110f; box-shadow:inset 0 0 0 2px rgba(130,245,230,.95), var(--g-spec);}
   #pvb-checklist .ckpill button.err{box-shadow:inset 0 0 0 2px rgba(255,120,120,.9);}
   .pvb-checkrow .cimg{flex:0 0 auto; font-family:var(--pvb-font); font-size:.66rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
     color:#04110f; background:var(--pvb-teal); border:0; padding:8px 10px; cursor:pointer;}
@@ -807,6 +806,7 @@
     --g-edge:rgba(112,246,246,.30); --g-edge-soft:rgba(112,246,246,.18);
     --g-warn:#f5b301; --g-ok:#3fa863; --g-danger:#ff7a7a;
     --g-r-pill:999px; --g-r-lg:20px; --g-r-md:14px; --g-r-sm:10px;
+    --g-ctrl-h:48px; --g-ctrl-h-sm:42px;   /* LOCKED control heights: standard glass button / compact row button */
     --g-blur:blur(18px) saturate(150%); --g-blur-heavy:blur(28px) saturate(150%);
     --g-glass:linear-gradient(145deg, rgba(0,184,184,.14), rgba(132,80,226,.07) 58%, rgba(6,16,16,.26));
     --g-glass-quiet:linear-gradient(145deg, rgba(0,184,184,.08), rgba(132,80,226,.04) 60%, rgba(6,16,16,.2));
@@ -815,6 +815,9 @@
     --g-shadow-sm:0 6px 16px rgba(0,0,0,.24); --g-shadow:0 12px 30px rgba(0,0,0,.34);
   }
 
+  /* build stamp: fine print, bottom-right; hides with the Build panel (fixed child of a display:none panel) */
+  .pbg-build{position:fixed; right:14px; bottom:9px; z-index:5; pointer-events:none; font-family:var(--pvb-font);
+    font-size:.6rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--g-faint); opacity:.65;}
   /* ---------- galaxy backdrop (fixed; only painted while the Build tab is on screen) ---------- */
   .pbg-bg{position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; background:#06100f;}
   .pbg-mesh{position:absolute; inset:-25%; filter:blur(46px) saturate(128%); mix-blend-mode:screen;
@@ -884,8 +887,7 @@
   .pvb-lint-row.tip{color:#bfeff0; border:1px solid rgba(112,246,246,.3); background:linear-gradient(145deg, rgba(0,184,184,.12), rgba(6,16,16,.22)); box-shadow:inset 0 1px 0 rgba(185,255,255,.12);}
   .pvb-lint-row.tip .li-ic{background:var(--pvb-teal); color:#04110f;}
   /* a small amber dot on the wizard forward circle when a hard conflict is flagged */
-  .pbg-wizard.has-lint .wf-circle{position:relative;}
-  .pbg-wizard.has-lint .wf-circle::after{content:''; position:absolute; top:-1px; right:-1px; width:10px; height:10px; border-radius:50%; background:#f5b301; box-shadow:0 0 0 2px rgba(6,16,16,.7);}
+  /* (removed the cryptic amber dot on the forward circle; the full preflight warning shows in the build order) */
   .pbg-edit-scroll{flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:0 16px 4px;}
   .pbg-edit-foot{flex:0 0 auto; padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--pvb-line-soft);
     background:linear-gradient(to top, rgba(6,16,15,.96), rgba(8,22,21,.78)); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);}
@@ -905,18 +907,17 @@
   /* copy count, right of the title in Build Order mode (no separate bar) */
   .pbg-head-prog{display:none; font-size:.82rem; font-weight:700; letter-spacing:.03em; color:var(--pvb-teal-lt); white-space:nowrap;}
   .pbg-card[data-mode="export"] .pbg-head-prog{display:block;}
-  /* composed-prompt footer: ONE glass pill split into a download icon + a copy icon (no words) */
-  .pbg-promptpill{display:flex; border-radius:var(--pbg-r-pill); overflow:hidden; border:1px solid rgba(112,246,246,.3);
-    background:linear-gradient(145deg, rgba(0,184,184,.15), rgba(132,80,226,.07) 60%, rgba(6,16,16,.22));
-    backdrop-filter:blur(16px) saturate(150%); -webkit-backdrop-filter:blur(16px) saturate(150%);
-    box-shadow:0 8px 22px rgba(0,0,0,.26), inset 0 1px 0 rgba(185,255,255,.18);}
-  .pbg-promptpill button{flex:1 1 0; display:inline-flex; align-items:center; justify-content:center; padding:14px 0; cursor:pointer; border:0; background:transparent; color:#eafeff; transition:background .15s, filter .15s, box-shadow .15s;}
+  /* composed-prompt footer: ONE glass pill split down the middle into a download icon + a copy icon.
+     Both halves sit in the same glass (no harsh dark/bright split); the teal arrives on HOVER only, so
+     the rollover is the cohesive glass action used everywhere. LOCKED sizing: --g-ctrl-h tall icon squares. */
+  .pbg-promptpill{display:flex; height:var(--g-ctrl-h); border-radius:var(--pbg-r-pill); overflow:hidden; border:1px solid var(--g-edge);
+    background:var(--g-glass); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur); box-shadow:var(--g-shadow-sm), var(--g-spec);}
+  .pbg-promptpill button{flex:1 1 0; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; border:0; background:transparent; color:var(--pvb-teal-lt); transition:background .18s ease, color .18s ease, box-shadow .18s ease;}
   .pbg-promptpill button svg{width:20px; height:20px;}
-  .pbg-promptpill .pp-dl{border-right:1px solid rgba(112,246,246,.26);}
-  .pbg-promptpill .pp-dl:hover{background:rgba(0,184,184,.2);}
-  .pbg-promptpill .pp-copy{color:#04110f; background:linear-gradient(135deg,var(--pvb-teal-lt),var(--pvb-teal)); box-shadow:inset 0 1px 0 rgba(255,255,255,.42);}
-  .pbg-promptpill .pp-copy:hover{filter:brightness(1.08);}
-  .pbg-promptpill button.ok{box-shadow:inset 0 0 0 2px rgba(130,245,230,.95), inset 0 1px 0 rgba(255,255,255,.42);}
+  .pbg-promptpill .pp-dl{border-right:1px solid var(--g-edge-soft);}
+  .pbg-promptpill button:hover{background:var(--g-primary); color:#04110f; box-shadow:var(--g-spec);}
+  .pbg-promptpill button:active{filter:brightness(.94);}
+  .pbg-promptpill button.ok{background:var(--g-primary); color:#04110f; box-shadow:inset 0 0 0 2px rgba(130,245,230,.95), var(--g-spec);}
   .pbg-promptpill button.err{box-shadow:inset 0 0 0 2px rgba(255,120,120,.9);}
   /* subtle reset, tucked into the "more" section (was the old RESET half) */
   .pbg-resetlink{align-self:flex-start; margin-top:16px; padding:8px 14px; cursor:pointer; border-radius:var(--pbg-r-pill);
@@ -1266,6 +1267,8 @@
          docked controls). Same 5-tool model (Prompt / Cast / Items / Scene / Options) on every width.
          Every engine container id below is preserved so the existing builder engine drives it unchanged. -->
     <div class="pbg-bg" aria-hidden="true"><div class="pbg-mesh"></div><div class="pbg-glow"></div></div>
+    <!-- build stamp: fine print, bottom-right. Bump PV_PS_BUILD on a major update so Chris can see what is live. -->
+    <div class="pbg-build" id="pbg-build" aria-hidden="true"></div>
 
     <div class="pbg" id="pbg">
       <!-- ---------- composed prompt (always visible) ---------- -->
@@ -3031,6 +3034,9 @@
       var TABS=[['prompt','Prompt'],['cast','Cast'],['items','Items'],['scene','Scene'],['options','Options']];
       var PANE={prompt:'prompt',cast:'refs',items:'refs',scene:'refs',options:'options'};
       var active='cast';
+      // build stamp (fine print, bottom-right): bump PV_PS_BUILD on a MAJOR update so Chris sees what is live
+      var PV_PS_BUILD='v1.0';
+      try{ var _bs=document.getElementById('pbg-build'); if(_bs) _bs.textContent='Prompt Studio '+PV_PS_BUILD; }catch(e){}
       // build tabs + dock
       tabsEl.innerHTML=TABS.map(function(t){return '<button class="pbg-tab" type="button" role="tab" data-t="'+t[0]+'"><span>'+t[1]+'</span><span class="tb" data-bk="'+t[0]+'"></span></button>';}).join('');
       dock.innerHTML=TABS.map(function(t){return '<button class="pbg-dk" type="button" data-t="'+t[0]+'">'+IC[t[0]]+'<span class="l">'+t[1]+'</span><span class="b" data-bk="'+t[0]+'"></span></button>';}).join('');
