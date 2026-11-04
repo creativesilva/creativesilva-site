@@ -602,6 +602,20 @@ For each course selected in Q2, add an entry to the appropriate course array in 
 
 Course slugs in use: `da1b`, `da2b`, `photo1`, `photo2`, `yearbook`.
 
+### 10.1 Module numbering: Overview = Step 01 (LOCKED 2026-11-03)
+
+Every module's **Overview is Step 01**, and work steps are **Step 02, 03, 04...** (there is no bare "Overview" that sits outside the step count, and no "Step 0"). This holds in three places, which must agree:
+- **Page banner eyebrow:** `Module NN &bull; Step 01` on the Overview, `Step 02/03/04` on work steps (ES `Paso`). Builders emit this; mirror `tools/build-aperture-portrait.py`.
+- **Global pager** (silva-nav `buildPager`): reads the banner eyebrow and shows `1, 2, 3, 4`. Self-adapts per module; MRC/legacy (no `Step` in the eyebrow) stay 0-based automatically. Do not renumber the invisible legacy `.silva-nav-inner` dots/breadcrumb (silva-nav strips them).
+- **Catalog row labels** (`curriculum.html` `pageLabel`): numbers by POSITION so the rows read `Step 01 &middot; Overview, Step 02 &middot; <name>...`. Filenames keep the old `overview` / `step01-...` names (renaming them would break pasted Canvas links + the image catalog); the label is derived, not the filename.
+
+### 10.2 "Module Documents" accordion + capture lists (LOCKED 2026-11-03)
+
+A module's downloadable documents appear in the catalog in a gold **Module Documents** sub-accordion after the last step (teacher convenience: grab/reprint without opening the page). It is generated:
+- Store each doc in `assets/course-documents/` named `<Module-Prefix>-<Type>-EN/ES.<ext>`: `-Reflection-`, `-Photo2-Reflection-` (photo2 variant), `-Capture-List-`, `-Project-Folder-Photo1/2.zip`, `-Worksheet-`, `-Guide.pdf`. The prefix matches the module's overview-filename slug (TitleCase-hyphenated); add an alias in `tools/build-module-docs.py` if the slug differs from the doc prefix (e.g. `ocf` -> `Off-Camera-Flash`).
+- Run `python3 tools/build-module-docs.py --write`; it rebuilds the `MODULE_DOCS` map in `curriculum.html`. Slides/syllabi/lab agreements are excluded.
+- **Capture lists** (photo walks) are **separate EN + ES** (never bilingual), a printable **half-sheet 2-up** handout titled "Hunt for These Six" / "Busca Estas Seis" (the six B&W + composition concepts from the module vocab, with a check box each). Name them `<Module-Prefix>-Capture-List-EN.docx` / `-ES.docx`. Backfill the same format for every photo walk.
+
 ---
 
 ## 11. Reference Files
