@@ -120,7 +120,7 @@ Keep these reference roles isolated.
 
 # PRIMARY GOAL
 
-Create a hyper-realistic photograph inside the approved PV Academy of Arts lobby.
+Create a photorealistic photograph inside the approved PV Academy of Arts lobby.
 
 The result should feel like a REAL functioning premium arts-school interior photographed on location with a professional camera.
 
@@ -810,7 +810,7 @@ Character accuracy and architectural integrity must not be sacrificed for decora
 
 Target:
 
-- hyper-realistic professional photography
+- photorealistic professional photography
 - ultra-high resolution
 - full-frame mirrorless-camera realism
 - precise architecture

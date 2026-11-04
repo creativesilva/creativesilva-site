@@ -43,7 +43,7 @@ If the requested view reveals areas not visible in the reference, infer them log
 
 ## PRIMARY GOAL
 
-Create a **hyper-realistic premium digital arts / photography classroom** that feels:
+Create a **photorealistic, premium digital arts / photography classroom** that feels:
 
 - modern
 - luxurious

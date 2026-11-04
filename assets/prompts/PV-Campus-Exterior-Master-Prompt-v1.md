@@ -19,13 +19,13 @@ Fill these first. These override everything else.
 ---
 
 ## PURPOSE
-Create a **high-end, hyper-realistic exterior image** of the **Pioneer Valley / PV Academy of Arts campus**. The image should preserve the established architectural and environmental aesthetic shown in the reference image while allowing the camera position and exact exterior location to vary.
+Create a **high-end, photorealistic exterior photograph** of the **Pioneer Valley / PV Academy of Arts campus**. The image should preserve the established architectural and environmental aesthetic shown in the reference image while allowing the camera position and exact exterior location to vary.
 
 This prompt is intended for **AI image generation** and should prioritize:
 - architectural realism
 - consistency with PV campus visual canon
 - strong environmental design
-- premium cinematic realism
+- premium, real-photograph realism
 - faithful character depiction when characters are included
 
 ---
@@ -39,7 +39,7 @@ The campus should feel:
 - upscale
 - architecturally coherent
 - slightly futuristic but believable
-- polished and visually impressive
+- clean, well-composed, and believable
 - designed for an elite arts academy
 
 The image may remain very close to the **main front entrance** shown in the reference, **or** may shift to another outdoor area on campus, as long as the **same architectural identity and aesthetic system** are preserved.
@@ -114,7 +114,7 @@ All site elements must feel intentional and coordinated with the building design
 ---
 
 ## LIGHTING / TIME OF DAY
-Use **cinematic, flattering exterior lighting** with realistic shadow behavior.
+Use **natural, flattering exterior daylight** with realistic shadow behavior.
 
 Preferred lighting conditions:
 - golden-hour sunlight
@@ -134,7 +134,7 @@ Avoid flat lighting unless specifically requested.
 ---
 
 ## CAMERA / COMPOSITION
-The image should feel like a **professional architectural photograph** or a **cinematic campus establishing shot**.
+The image should feel like a **real, professional architectural photograph** of the campus.
 
 Preferred qualities:
 - strong composition
@@ -153,7 +153,7 @@ The image can be:
 - entrance-focused composition
 - campus-corner perspective
 
-The exact composition may vary, but it must remain visually polished and deliberate.
+The exact composition may vary, but it must remain visually clean and deliberate.
 
 ---
 
@@ -213,11 +213,11 @@ The exterior should still feel alive and intentional even without people.
 ## STYLE TARGET
 The final result should feel like:
 - a premium architecture photograph
-- a cinematic school-brand campaign image
+- a real school-brand campaign photo
 - a luxury educational campus visualization
 - a believable real-world environment
 - ultra-clean but not sterile
-- hyper-realistic and highly polished
+- photorealistic and clean
 
 Avoid anything that feels:
 - low-detail
@@ -233,7 +233,7 @@ Avoid anything that feels:
 ## QUALITY STANDARD
 Target:
 - ultra high resolution
-- hyper-realistic finish
+- photorealistic finish
 - strong architectural detail
 - clean lighting
 - realistic materials
@@ -249,4 +249,4 @@ The result should look like a **finished hero image**, not a rough concept.
 ## FLEXIBLE SHORT FORM VERSION
 If you want a leaner version for fast use, use this:
 
-**Create a hyper-realistic exterior image of the PV Academy of Arts campus, using the provided reference image as the primary guide for architectural language, lighting mood, and overall campus aesthetic. The scene may stay near the main front entrance or shift to another outdoor campus location, but it must clearly belong to the same PV campus world. Preserve the premium modern architecture, glass-heavy facades, clean geometric lines, polished plaza surfaces, refined landscaping, and integrated teal accent lighting. The campus should feel upscale, contemporary, slightly futuristic, and fully believable. Use cinematic natural lighting, strong composition, realistic reflections, and accurate architectural perspective. If selected PV characters are included, they must be depicted with very high fidelity to their character sheets: respect facial identity, hairstyle, skin tone, wardrobe, shoes, accessories, garment fit, fabric behavior, and intentionally exaggerated body proportions. Do not genericize, sanitize, or normalize the characters. Preserve accurate clothing logic and silhouette. Output should be ultra-detailed, high-resolution, polished, and visually premium.**
+**Create a photorealistic exterior image of the PV Academy of Arts campus, using the provided reference image as the primary guide for architectural language, lighting mood, and overall campus aesthetic. The scene may stay near the main front entrance or shift to another outdoor campus location, but it must clearly belong to the same PV campus world. Preserve the premium modern architecture, glass-heavy facades, clean geometric lines, polished plaza surfaces, refined landscaping, and integrated teal accent lighting. The campus should feel upscale, contemporary, slightly futuristic, and fully believable. Use natural lighting, strong composition, realistic reflections, and accurate architectural perspective. If selected PV characters are included, they must be depicted with very high fidelity to their character sheets: respect facial identity, hairstyle, skin tone, wardrobe, shoes, accessories, garment fit, fabric behavior, and intentionally exaggerated body proportions. Do not genericize, sanitize, or normalize the characters. Preserve accurate clothing logic and silhouette. Output should be sharp, high-resolution, and photorealistic.**
