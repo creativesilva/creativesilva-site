@@ -1629,9 +1629,11 @@
   function ownerOf(c){
     var course=String((c&&c.course)||'').toLowerCase(), t=String((c&&c.teacher)||'').toLowerCase();
     if((course.indexOf('digital')>=0 || course.indexOf('art')>=0) && course.indexOf('photo')<0){
-      if(course.indexOf('2')>=0) return 'mankin';               // Digital Arts 2 = Ms. Mankin's class
-      if(course.indexOf('1')>=0) return 'silva';                // Digital Arts 1 = Mr. Silva's class
-      return t.indexOf('mankin')>=0 ? 'mankin' : 'silva';       // no section number: fall back to the listed teacher
+      // Every Digital Arts class carries teacher "Ms. Mankin" (shared room 331), and she teaches several
+      // DA periods INCLUDING a "Digital Arts 1A" at period 3, so the course NUMBER does not tell her classes
+      // from Mr. Silva's. He teaches ONE DA section, PERIOD 2 (period 3 is his prep). So only period-2 DA is
+      // his; every other Digital Arts period is Ms. Mankin's roster and stays off his board (Chris 2026-11-03).
+      return (String((c&&c.period)||'').replace(/\D/g,'')==='2') ? 'silva' : 'mankin';
     }
     if(t.indexOf('garcia')>=0) return 'garcia';
     if(t.indexOf('mankin')>=0) return 'mankin';
