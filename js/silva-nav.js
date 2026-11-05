@@ -620,22 +620,22 @@
     return b;
   }
 
-  // BUILD: quick jump straight to the Build Resources tools hub. Same accent pill as COPY URL /
+  // BUILD: quick jump straight to the AI Studio. Same accent pill as COPY URL /
   // COPY HTML, placed just left of COPY URL. Teacher-only, like the copy pills: it is
   // JS-injected, so it never lands in the HTML pasted into Canvas.
   function makeBuildBtn() {
     var a = document.createElement('a');
     a.className = 'pg-copy pg-build';
-    a.textContent = 'BUILD';
+    a.textContent = 'AI STUDIO';
     a.href = 'https://www.creativesilva.com/build-resources.html';
-    a.title = 'Go to Build Resources tools';
+    a.title = 'Go to AI Studio';
     return a;
   }
 
   // ===== Unified header on module pages (teacher-only, outside #top). =====
   // The SAME two-row header the catalog home shows, so there is ONE header sitewide:
   //   Row 1 (titlebar): CURRICULUM CATALOG title + CALENDAR + search.
-  //   Row 2 (catbar):   CS logo + CATALOG dropdown + BUILD RESOURCES + the module
+  //   Row 2 (catbar):   CS logo + CATALOG dropdown + AI STUDIO + the module
   //                     pager (Prev/Next + page numbers + BUILD / COPY URL / COPY HTML).
   // The pager and copy pills are the "internal module navigation": they only appear
   // here, on a loaded module page, never on the catalog home. Search jumps to the
@@ -696,7 +696,7 @@
     return bar;
   }
 
-  // Row 2: CS logo + one "Catalog" dropdown (all courses -> modules) + Build Resources,
+  // Row 2: CS logo + one "Catalog" dropdown (all courses -> modules) + AI Studio,
   // then the module pager pushed to the right (module pages only).
   function buildCatalogRow() {
     var bar = document.createElement('div');
@@ -751,7 +751,7 @@
     var catBuildR = document.createElement('a');
     catBuildR.href = 'https://www.creativesilva.com/curriculum.html#build-resources';
     catBuildR.className = 'silva-uni-catmod';
-    catBuildR.textContent = 'Build Resources';
+    catBuildR.textContent = 'AI Studio';
     menu.appendChild(catBuildR);
     var catAll = document.createElement('a');
     catAll.href = 'https://www.creativesilva.com/curriculum.html#universal';
@@ -784,8 +784,8 @@
     menu.addEventListener('click', function (e) { if (e.target.closest('a')) { cat.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); } });
     bar.appendChild(cat);
 
-    // No standalone Build Resources button sits directly in row 2 (keeps it to one line: CS logo
-    // + Catalog + the pager). Build Resources is reachable from module pages via the BUILD pill in
+    // No standalone AI Studio button sits directly in row 2 (keeps it to one line: CS logo
+    // + Catalog + the pager). AI Studio is reachable from module pages via the AI STUDIO pill in
     // the pager below (wired 2026-09-29 at Chris's request; the pill jumps to build-resources.html).
 
     // The module pager (Prev/Next + page numbers + BUILD / COPY URL / COPY HTML) is

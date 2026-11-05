@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Build Resources | Chris Silva</title>
+  <title>AI Studio | Chris Silva</title>
   <link rel="icon" type="image/svg+xml" href="/logos/CS_Logo_Only_Teal.svg" />
   <link rel="apple-touch-icon" href="/logos/CS_AppIcon_Teal_180.png" />
   <meta name="description" content="Build & Design resources for PVHS: image generation, cast & campus, templates, graphics, and the prompt studio." />
@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css?v=20260524b" />
   <style>
-    /* Build Resources: its own secondary page. Shares the catalog's chrome (same header, theme,
+    /* AI Studio: its own secondary page. Shares the catalog's chrome (same header, theme,
        gate) so moving between them feels seamless. Theme/header/gate CSS below is copied from
        curriculum.html so this page is self-contained; keep the two in sync if the header changes. */
     :root {
@@ -70,13 +70,14 @@
     /* ── Sticky header (identical to the catalog) ── */
     .catalog-sticky {
       position: sticky; top: 0; z-index: 500; margin: 0;
+      display: flow-root;   /* contain the titlebar's top margin so the frosted bar is flush to the top (no gap) */
       background: linear-gradient(180deg, rgba(6, 16, 16, 0.64) 0%, rgba(6, 16, 16, 0.40) 100%);
       backdrop-filter: blur(28px) saturate(1.5);
       -webkit-backdrop-filter: blur(28px) saturate(1.5);
       border-bottom: 1px solid var(--g-edge-soft);
       box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.6);
     }
-    .catalog-sticky-inner { max-width: var(--max-width, 1200px); margin: 0 auto; padding: 0 32px; }
+    .catalog-sticky-inner { max-width: var(--max-width, 1200px); margin: 0 auto; padding: 0 26px; }
     /* Title block: spans the content width with a gradient that fades out to the right
        (teal-rich left, revealing the teal backdrop on the right). Left teal accent, matching
        the catalog and the cal-hero family. Title left; buttons + clock flow right over the fade. */
@@ -115,7 +116,7 @@
       .page-title { font-size: 1.3rem; }
       .header-clock { width: 130px; }
     }
-    .cal-btn .cb-ic { display: none; align-items: center; justify-content: center; }
+    .cal-btn .cb-ic { display: inline-flex; align-items: center; justify-content: center; }
     .cal-btn .cb-ic svg { width: 18px; height: 18px; }
     /* Compact mobile app-bar: title left, destinations as icon buttons, clock hidden. */
     @media (max-width: 859px) {
@@ -172,34 +173,29 @@
       margin: 16px 0 10px;
     }
     .cat-subgroup:first-child { margin-top: 6px; }
-    .icon-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 10px;
-    }
-    .icon-cell {
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-      text-decoration: none; color: var(--g-muted);
-      background: var(--g-glass-quiet); border: 1px solid var(--g-edge-soft); border-radius: var(--g-r-sm);
-      padding: 12px 8px; transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
-    }
-    .icon-cell:hover { border-color: var(--g-teal-lt); color: var(--g-text); background: rgba(0,184,184,0.12); }
-    .icon-thumb {
-      width: 100%; height: 62px; display: flex; align-items: center; justify-content: center;
-      background: #f4f6f6; padding: 10px; border-radius: var(--g-r-sm);
-    }
-    .icon-thumb img { max-width: 100%; max-height: 100%; display: block; }
-    .icon-thumb img[src$=".svg"] { width: 100%; height: 100%; object-fit: contain; }
-
-    /* color-swatch cards: one icon glyph, colored dots below to switch the variant
-       (swaps the shown image + the download link). */
-    .swatch-dots { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
+    /* color-swatch cards: one glyph, glossy color dots switch the variant (swaps the shown image, the
+       download, copy, copy URL and lightbox). Selected = Apple-style ring with a gap (outline-offset). */
+    .swatch-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 9px; }
     .swatch-dot {
-      width: 18px; height: 18px; border-radius: var(--g-r-pill); padding: 0; cursor: pointer;
-      border: 2px solid rgba(255, 255, 255, 0.22);
-      transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+      position: relative; flex: none; width: 18px; height: 18px; border-radius: var(--g-r-pill); padding: 0; cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.30);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,.38), inset 0 -2px 4px rgba(0,0,0,.26), 0 1px 3px rgba(0,0,0,.35);
+      outline: 1.5px solid transparent; outline-offset: 2px;
+      transition: transform 0.14s ease, outline-color 0.14s ease; -webkit-tap-highlight-color: transparent;
     }
-    .swatch-dot:hover { transform: scale(1.18); }
-    .swatch-dot.active { border-color: #ffffff; box-shadow: 0 0 0 2px rgba(0,184,184,0.5); }
-    .icon-cap { font-size: 0.58rem; letter-spacing: 0.03em; text-align: center; word-break: break-word; line-height: 1.3; color: var(--g-muted); }
+    .swatch-dot::after { content: ""; position: absolute; inset: -7px -5px; }
+    .swatch-dot:hover { transform: scale(1.12); }
+    .swatch-dot.active { outline-color: rgba(255, 255, 255, 0.92); }
+    .swatch-dot:focus-visible { outline-color: var(--g-teal-lt); }
+    /* mini segmented control: PNG | SVG format toggle, and text versions (JPG | RAW, Template | Full Set) */
+    .fmt-tog { display: inline-flex; align-items: stretch; height: 22px; border-radius: var(--g-r-pill); overflow: hidden;
+      border: 1px solid var(--g-edge-soft); background: rgba(0, 0, 0, 0.24); }
+    .fmt-opt, .swatch-seg { flex: none; border: 0; margin: 0; padding: 0 9px; background: transparent; cursor: pointer;
+      font-family: var(--pvb-font); font-size: .56rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; line-height: 1;
+      color: var(--g-muted); transition: background .15s ease, color .15s ease; -webkit-tap-highlight-color: transparent; }
+    .fmt-opt + .fmt-opt, .swatch-seg + .swatch-seg { border-left: 1px solid var(--g-edge-soft); }
+    .fmt-opt:hover, .swatch-seg:hover { color: var(--g-text); background: rgba(0, 184, 184, 0.14); }
+    .fmt-opt.on, .swatch-seg.active { background: var(--g-primary); color: #04110f; }
     .cat-body .logo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(192px, 1fr)); gap: 14px; align-items: stretch; }
     .cat-body .logo-card { display: flex; flex-direction: column; background: var(--g-glass-quiet);
       border: 1px solid var(--g-edge-soft); border-radius: var(--g-r-md); box-shadow: var(--g-shadow-sm), var(--g-spec); overflow: hidden; }
@@ -243,6 +239,65 @@
     .cat-body .hex-btn { flex: 0 0 auto; margin-left: auto; font-family: var(--font-mono, ui-monospace, Menlo, monospace); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; cursor: pointer; border: 1px solid currentColor; border-radius: var(--g-r-sm); background: var(--g-glass-quiet); padding: 6px 10px; line-height: 1; }
     .cat-body .hex-btn:hover { filter: brightness(1.12); }
     .cat-body .hex-btn.copied { color: #0a0a0a !important; background: #fff !important; }
+    /* COLOR PALETTE: compact glass chips (swatch | name + role | hex). The whole chip is the tap target
+       and copies the hex. One column on phones, one row on wide screens. Never a giant color block. */
+    .pal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 10px; }
+    .pal-chip { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: 12px;
+      box-sizing: border-box; width: 100%; height: var(--g-ctrl-h); padding: 0 8px 0 8px; margin: 0; text-align: left; cursor: pointer; font: inherit; line-height: 1.15;
+      color: var(--g-text); background: var(--g-glass-quiet); border: 1px solid var(--g-edge-soft); border-radius: var(--g-r-md);
+      box-shadow: var(--g-shadow-sm), var(--g-spec); -webkit-tap-highlight-color: transparent;
+      transition: border-color .15s ease, background .15s ease, transform .12s ease; }
+    .pal-chip:hover { border-color: var(--g-teal-lt); background: rgba(0, 184, 184, 0.12); }
+    .pal-chip:active { transform: scale(.985); }
+    .pal-sw { width: 32px; height: 32px; border-radius: var(--g-r-pill); background: var(--c);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,.38), inset 0 -2px 5px rgba(0,0,0,.28), 0 0 0 1px rgba(255,255,255,.16),
+                  0 4px 14px color-mix(in srgb, var(--c) 50%, transparent); }
+    .pal-tx { display: flex; flex-direction: column; min-width: 0; }
+    .pal-nm { font-family: var(--pvb-font); font-weight: 700; font-size: .9rem; letter-spacing: .02em; color: var(--g-text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pal-rl { font-family: var(--pvb-font); font-size: .58rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--g-faint); margin-top: 2px; }
+    .pal-hx { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .76rem; font-weight: 600; letter-spacing: .04em;
+      color: var(--g-text); white-space: nowrap; padding: 6px 9px; border-radius: var(--g-r-sm);
+      background: rgba(0, 0, 0, 0.24); border: 1px solid var(--g-edge-soft); transition: background .15s ease, color .15s ease; }
+    .pal-chip:hover .pal-hx { border-color: var(--g-teal-lt); }
+    .pal-hx.copied { background: var(--g-primary); color: #04110f; border-color: var(--g-teal-lt); }
+    /* ICONS: ONE card per icon family (Nike-style colorway logic): the dots swap the icon and every action,
+       hover previews (mouse), click selects; a PNG | SVG toggle only when every color ships both. Deep glow
+       ground for bright glyphs, .tone-light for dark line icons. Every card keeps name, sub-line, selector and
+       pill on the same lines, so rows stay aligned. 2-up on phones, auto-fill up to 9 across on 4K. */
+    .cat-body .logo-grid.ic-grid { grid-template-columns: repeat(auto-fill, minmax(172px, 1fr)); gap: 12px; }
+    .ic-grid .logo-card { min-width: 0; }
+    .ic-grid .logo-tile { height: 116px; padding: 20px;
+      background: radial-gradient(120% 100% at 50% 28%, #15504e 0%, #0b2c2c 58%, #061a1a 100%); }
+    .ic-grid .logo-tile.tone-light { background: radial-gradient(120% 100% at 50% 28%, #ffffff 0%, #eef4f4 60%, #dde8e8 100%); }
+    .ic-grid .logo-tile img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 10px rgba(0,0,0,.30)); }
+    /* multiply melts a preview's white matte into the light ground (no white box inside the tile) */
+    .ic-grid .logo-tile.tone-light { isolation: isolate; }
+    .ic-grid .logo-tile.tone-light img { filter: none; mix-blend-mode: multiply; }
+    .ic-grid .logo-meta { flex-direction: column; flex-wrap: nowrap; gap: 9px; padding: 11px 10px 12px; }
+    .ic-grid .logo-name { flex: none; width: 100%; }
+    .ic-grid .logo-name .ln { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ic-grid .logo-fmt { display: flex; align-items: center; justify-content: center; gap: 6px; height: 22px; margin-top: 4px; white-space: nowrap; }
+    .ic-grid .sw-sep { opacity: .55; }
+    .ic-grid .swatch-dots { flex-wrap: nowrap; align-items: center; height: 26px; margin-bottom: 0; }
+    /* text versions share the pill's footprint: same width, halves split evenly */
+    .ic-grid .swatch-segs { height: 26px; width: 134px; }
+    .ic-grid .swatch-seg { flex: 1 1 0; min-width: 0; padding: 0 4px; font-size: .58rem; letter-spacing: .08em; white-space: nowrap; }
+    /* one fixed pill footprint in every card; a 2-action pill (.ai master) splits the same width */
+    .ic-grid .logo-actions { height: 34px; width: 134px; margin-top: 0; }
+    .ic-grid .logo-dl, .ic-grid .logo-copy { flex: 1 1 0; width: auto; }
+    /* whatever follows the name (selector, or the pill when there is none) takes the free space above it,
+       so selectors and pills sit on the same baselines across a row */
+    .ic-grid .logo-name + * { margin-top: auto; }
+    @media (max-width: 640px) {
+      .cat-body .logo-grid.ic-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .ic-grid .logo-tile { height: 98px; padding: 16px; }
+      .ic-grid .logo-meta { padding: 10px 8px 11px; gap: 8px; }
+      .ic-grid .swatch-dots { gap: 6px; }
+      .ic-grid .swatch-dot { width: 16px; height: 16px; }
+      .ic-grid .logo-actions, .ic-grid .swatch-segs { width: 122px; }
+      .ic-grid .swatch-seg { font-size: .54rem; letter-spacing: .05em; }
+    }
     .char-gate { padding: 8px 0 4px; }
     .char-gate.hidden { display: none; }
     .char-gate-label { font-family: var(--font-head); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
@@ -491,8 +546,8 @@
     #teacher-resources .course-doc-dl { min-width: 82px; box-sizing: border-box; text-align: center; }
     #teacher-resources .course-doc-ico { min-width: 46px; box-sizing: border-box; text-align: center; }
 
-    /* ── Page content wrap (Task 2 fills this with the moved Build Resources sections) ── */
-    .br-main { max-width: var(--max-width, 1200px); margin: 0 auto; padding: 26px 32px 90px; box-sizing: border-box; }
+    /* ── Page content wrap (Task 2 fills this with the moved AI Studio sections) ── */
+    .br-main { max-width: var(--max-width, 1200px); margin: 0 auto; padding: 26px 26px 90px; box-sizing: border-box; }
     @media (max-width: 640px) { .br-main { padding: 20px 16px 60px; } }
     .br-shell-note {
       border: 2px dashed rgba(0, 184, 184, 0.45); background: rgba(0, 184, 184, 0.06);
@@ -639,12 +694,17 @@
   .pvb-refcard .thumb::before{content:''; position:absolute; inset:0; z-index:0;
     background:var(--thumb-img,none) center center / cover no-repeat; filter:blur(20px) saturate(1.2) brightness(.74); transform:scale(1.25);}
   .pvb-refcard .thumb img{position:relative; z-index:1; width:100%; height:100%; object-fit:contain; display:block; filter:drop-shadow(0 2px 10px rgba(0,0,0,.4));}
-  .pvb-rtools{display:flex; gap:4px; padding:0 8px 8px;}
-  .pvb-rtool{flex:1 1 0; display:flex; align-items:center; justify-content:center; height:28px; padding:0; cursor:pointer; border-radius:var(--g-r-sm);
-    background:var(--g-glass); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur); border:1px solid var(--g-edge-soft); color:var(--g-teal-lt); transition:background .12s, color .12s;}
-  .pvb-rtool:hover{background:rgba(0,184,184,.30); color:#eafeff;}
-  .pvb-rtool svg{width:14px; height:14px;}
-  .pvb-rtool.ok{background:var(--g-teal); color:#04110f;}
+  /* reference-card tools = ONE connected glass icon pill (same language as the gallery + build-order pills):
+     hairline-divided segments, teal fill only on the hovered segment. One glass surface per card (no
+     per-button backdrop blur), which is also far lighter to render across the whole library. */
+  .pvb-rtools{display:flex; height:32px; margin:0 8px 8px; border-radius:var(--g-r-pill); overflow:hidden;
+    background:var(--g-glass); border:1px solid var(--g-edge); box-shadow:var(--g-spec);}
+  .pvb-rtool{flex:1 1 0; min-width:0; display:flex; align-items:center; justify-content:center; height:100%; padding:0; margin:0; cursor:pointer;
+    border:0; border-radius:0; background:transparent; color:var(--g-teal-lt); transition:background .15s ease, color .15s ease;}
+  .pvb-rtool + .pvb-rtool{border-left:1px solid var(--g-edge-soft);}
+  .pvb-rtool:hover{background:var(--g-primary); color:#04110f;}
+  .pvb-rtool svg{width:15px; height:15px;}
+  .pvb-rtool.ok{background:var(--g-primary); color:#04110f;}
   .pvb-rtool.err{background:var(--g-danger); color:#2a0000;}
   .pvb-refcard.sel .thumb::after{content:'\2713'; position:absolute; top:6px; right:6px; width:22px; height:22px;
     display:flex; align-items:center; justify-content:center; background:var(--g-teal); color:#04110f;
@@ -756,17 +816,29 @@
   .pvb-checkrow .meta{flex:1 1 auto; min-width:0;}
   .pvb-checkrow .role{font-size:.62rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--pvb-teal-lt);}
   .pvb-checkrow .fn{font-size:.78rem; color:#dbeeee; overflow-wrap:anywhere; word-break:normal; line-height:1.3;}
-  /* build-order step rows: meta on the top line, the action buttons on their own full-width line below */
-  #pvb-checklist .pvb-checkrow{align-items:center; padding:13px; margin-bottom:11px; border:1px solid var(--g-edge-soft);
+  /* INGREDIENT CARD (build order): a two-line grid so nothing can ever overlap, at any width.
+       [ thumb ]  (1) ROLE LABEL                       <- step number inline, label gets the full width
+       [ thumb ]  filename.jpg
+       [ thumb ]  (x) ..................... [ dl | copy ]   <- remove left, pill right
+     The thumbnail is the framework blur-fill: the whole image, never clipped, frosted blur behind. */
+  #pvb-checklist .pvb-checkrow{display:grid; grid-template-columns:64px minmax(0,1fr) auto;
+    grid-template-areas:"th meta meta" "th rm acts"; column-gap:14px; row-gap:10px; align-items:center;
+    padding:12px 14px; margin-bottom:11px; border:1px solid var(--g-edge-soft); border-radius:var(--g-r-md);
     background:linear-gradient(145deg, rgba(0,184,184,.14), rgba(132,80,226,.07) 58%, rgba(6,16,16,.26));
     backdrop-filter:blur(14px) saturate(150%); -webkit-backdrop-filter:blur(14px) saturate(150%);
     box-shadow:0 8px 24px rgba(0,0,0,.26), inset 0 1px 0 rgba(185,255,255,.14);}
-  #pvb-checklist .pvb-checkrow{gap:10px;}
-  #pvb-checklist .pvb-checkrow .meta{flex:1 1 auto; min-width:0;}
-  #pvb-checklist .pvb-checkrow .th{flex:0 0 46px; width:46px; height:46px;}
-  #pvb-checklist .pvb-checkrow .fn{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-top:2px;}
-  /* build-order actions: ONE glass pill, split into a download icon + a copy icon (no words) */
-  #pvb-checklist .ckacts{flex:0 0 auto; width:auto; display:flex;}
+  #pvb-checklist .pvb-checkrow .th{grid-area:th; position:relative; width:64px; height:64px; align-self:center;
+    border-radius:var(--g-r-sm); overflow:hidden; background:#041413; border:1px solid var(--g-edge-soft);}
+  #pvb-checklist .pvb-checkrow .th::before{content:''; position:absolute; inset:0; z-index:0;
+    background:var(--thumb-img,none) center center / cover no-repeat; filter:blur(10px) saturate(1.2) brightness(.7); transform:scale(1.4);}
+  #pvb-checklist .pvb-checkrow .th img{position:relative; z-index:1; width:100%; height:100%; object-fit:contain; display:block;}
+  #pvb-checklist .pvb-checkrow .meta{grid-area:meta; min-width:0; align-self:end;}
+  #pvb-checklist .pvb-checkrow .role{display:flex; align-items:center; gap:8px; min-width:0; white-space:nowrap;}
+  #pvb-checklist .pvb-checkrow .role .rl{min-width:0; overflow:hidden; text-overflow:ellipsis;}
+  #pvb-checklist .pvb-checkrow .role .pvb-stepnum{flex:0 0 20px; width:20px; height:20px; border-radius:var(--g-r-pill); font-size:.64rem; letter-spacing:0;}
+  #pvb-checklist .pvb-checkrow .fn{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-top:4px;}
+  /* build-order actions: ONE glass pill, split into a download icon + a copy icon (no words), pinned right */
+  #pvb-checklist .ckacts{grid-area:acts; justify-self:end; display:flex;}
   /* build-order row pill: same split-glass language as the footer pill, scaled to the compact row height */
   #pvb-checklist .ckpill{display:inline-flex; align-items:stretch; height:var(--g-ctrl-h-sm); overflow:hidden; border-radius:var(--pbg-r-pill);
     border:1px solid var(--g-edge); background:var(--g-glass);
@@ -780,13 +852,13 @@
   #pvb-checklist .ckpill button.ok{background:var(--g-primary); color:#04110f; box-shadow:inset 0 0 0 2px rgba(130,245,230,.95), var(--g-spec);}
   #pvb-checklist .ckpill button.err{box-shadow:inset 0 0 0 2px rgba(255,120,120,.9);}
   /* uncheck/remove a reference from the build order (lives left of the pill; hints red on hover) */
-  #pvb-checklist .ckrm{flex:0 0 auto; width:30px; height:30px; margin-right:9px; align-self:center; display:inline-flex; align-items:center; justify-content:center;
+  #pvb-checklist .ckrm{grid-area:rm; justify-self:start; width:34px; height:34px; margin:0; align-self:center; display:inline-flex; align-items:center; justify-content:center;
     border-radius:var(--g-r-pill); border:1px solid var(--g-edge-soft); background:transparent; color:var(--g-muted); cursor:pointer; padding:0;
     transition:color .15s, border-color .15s, background .15s;}
   #pvb-checklist .ckrm svg{width:13px; height:13px; display:block;}
   #pvb-checklist .ckrm:hover{color:#fff; border-color:var(--g-danger); background:rgba(255,122,122,.14);}
   /* the prompt is the LAST step: a hairline separates it from the references above */
-  #pvb-checklist .pvb-promptrow{margin-top:10px; padding-top:12px; border-top:1px solid var(--g-edge-soft);}
+  #pvb-checklist .pvb-promptrow{margin-top:16px;}
   .pvb-checkrow .cimg{flex:0 0 auto; font-family:var(--pvb-font); font-size:.66rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
     color:#04110f; background:var(--pvb-teal); border:0; padding:8px 10px; cursor:pointer;}
   .pvb-checkrow .cimg:hover{filter:brightness(1.12);}
@@ -851,7 +923,7 @@
     font-size:.56rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--g-faint); opacity:.6;}
   /* ---------- galaxy backdrop (fixed, page-wide: sits behind BOTH tabs so the whole Prompt Studio shares one galaxy-glow glass) ---------- */
   .pbg-bg{position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; background:#06100f;}
-  .pbg-mesh{position:absolute; inset:-25%; filter:blur(46px) saturate(128%); mix-blend-mode:screen;
+  .pbg-mesh{position:absolute; inset:-25%; filter:blur(46px) saturate(128%); mix-blend-mode:screen; will-change:transform; transform:translateZ(0);
     background:
       radial-gradient(38% 30% at 10% 6%, rgba(0,238,224,.80), transparent 66%),
       radial-gradient(30% 25% at 90% 8%, rgba(150,255,255,.58), transparent 70%),
@@ -862,7 +934,7 @@
       radial-gradient(54% 46% at 68% 96%, rgba(0,178,176,.68), transparent 72%),
       radial-gradient(44% 38% at 10% 92%, rgba(0,224,220,.5), transparent 72%);
     animation:pbgDrift 34s ease-in-out infinite alternate;}
-  .pbg-glow{position:absolute; inset:0; mix-blend-mode:screen; filter:blur(1.5px);
+  .pbg-glow{position:absolute; inset:0; mix-blend-mode:screen; filter:blur(1.5px); will-change:opacity;
     background:
       radial-gradient(46px 46px at 15% 10%, rgba(120,255,248,.38), transparent 68%),
       radial-gradient(40px 40px at 90% 13%, rgba(175,220,255,.34), transparent 68%),
@@ -1133,7 +1205,7 @@
   #pvb-panel-build .pvb-dd-btn,#pvb-panel-build .pvb-field textarea,#pvb-panel-build .pvb-otherbox{border-radius:var(--pbg-r-sm);}
   #pvb-panel-build .pvb-dd-menu{border-radius:var(--pbg-r-sm); overflow:hidden;}
   #pvb-panel-build .pvb-charhead .cover{border-radius:var(--g-r-sm);}
-  #pvb-panel-build .pvb-rtool{border-radius:var(--g-r-sm);}
+  #pvb-panel-build .pvb-rtool{border-radius:0;}
   #pvb-panel-build .pvb-chip{border-radius:var(--pbg-r-pill);}
   #pvb-panel-build .pvb-smallbtn{border-radius:var(--pbg-r-pill);}
   #pvb-panel-build .pvb-checkrow{border-radius:var(--pbg-r-sm);}
@@ -1166,7 +1238,9 @@
   /* ============================ DESKTOP / iPAD workspace (>=821px) ============================ */
   /* Desktop + iPad Pro 2-column workspace. Excludes touch phones (incl. phone landscape) so they keep the vertical sheet. */
   @media (min-width:821px) and (not ((pointer:coarse) and (max-width:940px))){
-    .pbg{display:grid; grid-template-columns:minmax(0,1fr) clamp(360px,33vw,460px); gap:22px; align-items:start;
+    /* stretch: the controls pane and the prompt card are ALWAYS one height (the taller of the two, capped to
+       the viewport), so the workspace reads as two balanced panes, never a short pane beside a tall one */
+    .pbg{display:grid; grid-template-columns:minmax(0,1fr) clamp(360px,33vw,460px); gap:22px; align-items:stretch;
       max-width:1500px; margin:0 auto; padding:22px 26px 56px;}
     .pbg-sheet{order:1; position:relative; transform:none !important; border-radius:var(--pbg-r); max-height:calc(100vh - var(--pbg-top) - 44px);}
     .pbg-card{order:2; position:sticky; top:calc(var(--pbg-top) + 14px); max-height:calc(100vh - var(--pbg-top) - 44px);}
@@ -1188,20 +1262,22 @@
   @media (pointer:coarse) and (min-width:941px){
     .pbg-tab{padding-top:11px; padding-bottom:11px;}
     .pvb-dd-btn, .pvb-field textarea, .pvb-field select{padding:13px 14px; font-size:1rem;}
-    .pvb-rtool{height:36px;}
-    .pvb-rtool svg{width:16px; height:16px;}
+    .pvb-rtools{height:38px;}
+    .pvb-rtool svg{width:17px; height:17px;}
     .pbg-wiz-circle{width:48px; height:48px;}
-    .pvb-charhead{padding:11px 6px;}
+    .pvb-charhead{padding:11px 10px;}
   }
 
   /* ===================== MOBILE PHONE (vertical-first): draggable sheet =====================
      Portrait phones (<=820px) AND touch phones in landscape (coarse pointer, <=940px).
      A phone ALWAYS gets the vertical single-column sheet, never the 2-column workspace. */
   @media (max-width:820px), (pointer:coarse) and (max-width:940px){
-    #pvb-panel-build.br-main{position:fixed; top:var(--pbg-top); left:0; right:0; bottom:0; z-index:1; overflow:hidden;}
+    /* the panel is FULL-SCREEN so the sheet can rise clear to the top; the composed card stays below the
+       header. As the sheet passes the header's bottom edge it pushes the header up and off (JS setTY). */
+    #pvb-panel-build.br-main{position:fixed; top:0; left:0; right:0; bottom:0; z-index:1; overflow:hidden;}
     .pbg{position:absolute; inset:0; display:block;}
     .pbg-handle{display:flex;}
-    .pbg-card{position:absolute; inset:0; border-radius:0; border:0; box-shadow:none;}
+    .pbg-card{position:absolute; top:var(--pbg-top); left:0; right:0; bottom:0; border-radius:0; border:0; box-shadow:none;}
     .pbg-card-head{padding:14px max(14px,env(safe-area-inset-left,0)) 10px;}
     .pbg-card-body{padding-left:max(14px,env(safe-area-inset-left,0)); padding-right:max(14px,env(safe-area-inset-right,0)); padding-bottom:120px;}
     .pbg-sheet{position:absolute; left:0; right:0; bottom:0; top:0; z-index:6;
@@ -1225,7 +1301,6 @@
   @media (min-width:821px){
     #pvb-reflib{max-width:1500px; margin-left:auto; margin-right:auto; padding:0 26px;}
   }
-
   /* ---------- polish: redundant title, denser cast, 2-up options ---------- */
   /* the tab already names the section, so drop the engine's lead "Reference files" title */
   .pbg[data-catmode="single"] #pvb-refs > .pvb-gtitle:first-child{display:none;}
@@ -1237,6 +1312,17 @@
     .pbg[data-catmode="single"][data-cat="cast"] #pvb-refs > .pvb-acc[data-cat="cast"] > .pvb-acc-body{display:grid; grid-template-columns:1fr 1fr; gap:4px 18px; align-items:start;}
     .pbg[data-cat="cast"] #pvb-refs .pvb-characc{border-top:0;}
     .pbg[data-cat="cast"] #pvb-refs .pvb-characc.open{grid-column:1 / -1;}
+  }
+  /* 4K / big desktop (>=1900px CSS, e.g. a 27" 4K at "looks like 2560"): use the screen, not a centered island.
+     The extra width goes to the CONTROLS (Cast + Options go three-up); the prompt card stays a comfortable
+     reading width. Header, builder, library and resources all share the one width so every edge aligns.
+     (Kept AFTER the two-up rules above so it wins at equal specificity.) */
+  @media (min-width:1900px){
+    :root{ --max-width:1760px; }
+    .pbg{ max-width:1760px; grid-template-columns:minmax(0,1fr) clamp(440px,26vw,540px); }
+    #pvb-reflib{ max-width:1760px; }
+    .pbg[data-catmode="single"][data-cat="cast"] #pvb-refs > .pvb-acc[data-cat="cast"] > .pvb-acc-body{ grid-template-columns:repeat(3,minmax(0,1fr)); }
+    #pvb-panel-build .pbg-pane[data-pane="options"] .pvb-fields{ grid-template-columns:repeat(3,minmax(0,1fr)); }
   }
 
   /* ---------- galaxy copy confirmation (every copy button flashes on click) ---------- */
@@ -1266,7 +1352,7 @@
   <div id="pin-gate">
     <div class="pin-card">
       <img src="https://www.creativesilva.com/logos/CS_Logo_Vector_TealWhite.svg" alt="Creative Silva" />
-      <h2>Build Resources</h2>
+      <h2>AI Studio</h2>
       <p>Private access only.<br>Enter your code to continue.</p>
       <input type="text" id="pin-input" inputmode="numeric" autocomplete="off" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;" maxlength="10" />
       <button onclick="silvaCheckPin()">Continue</button>
@@ -1314,11 +1400,10 @@
     <div class="catalog-sticky">
       <div class="catalog-sticky-inner">
         <div class="catalog-titlebar">
-          <h1 class="page-title">Build Resources</h1>
+          <h1 class="page-title">AI Studio</h1>
           <div class="titlebar-actions">
-            <a class="cal-btn br-back" href="/curriculum.html" title="Catalog" aria-label="Catalog"><span class="cb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></span><span class="cb-tx">&#8249;&nbsp; Catalog</span></a>
-            <a class="cal-btn" href="/camera-manager.html" title="Equipment Manager" aria-label="Equipment Manager"><span class="cb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span><span class="cb-tx">Equipment Manager</span></a>
-            <a class="cal-btn br-imagegen" href="https://chatgpt.com/g/g-p-6a455e17c5248191b8c24ad354aba9ae-imagegen-pv/project" target="imagegen-pv" rel="noopener" onclick="window.open(this.href,'imagegen-pv','popup=yes,width=1320,height=980');return false;" title="Image Gen" aria-label="Image Gen"><span class="cb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3l2.3 6.2L22 11.5l-6.7 2.3L13 20l-2.3-6.2L4 11.5l6.7-2.3z"/><path d="M5 3v3M3.5 4.5h3M6 18v3M4.5 19.5h3"/></svg></span><span class="cb-tx">Image Gen</span></a>
+            <a class="cal-btn br-back" href="/curriculum.html" title="Catalog" aria-label="Catalog"><span class="cb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></span><span class="cb-tx">Catalog</span></a>
+            <a class="cal-btn br-imagegen" href="https://chatgpt.com/g/g-p-6a455e17c5248191b8c24ad354aba9ae-imagegen-pv/project" target="imagegen-pv" rel="noopener" onclick="window.open(this.href,'imagegen-pv','popup=yes,width=1320,height=980');return false;" title="ChatGPT Image Gen" aria-label="ChatGPT Image Gen"><span class="cb-ic"><svg class="gpt-mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.28 9.82a5.98 5.98 0 0 0-.52-4.91 6.05 6.05 0 0 0-6.51-2.9A6.07 6.07 0 0 0 4.98 4.18a5.98 5.98 0 0 0-3.99 2.9 6.05 6.05 0 0 0 .74 7.1 5.98 5.98 0 0 0 .51 4.91 6.05 6.05 0 0 0 6.52 2.9A5.98 5.98 0 0 0 13.26 22a6.05 6.05 0 0 0 5.77-4.21 5.99 5.99 0 0 0 4-2.9 6.06 6.06 0 0 0-.75-7.07zm-9.02 12.6a4.48 4.48 0 0 1-2.88-1.04l.14-.08 4.78-2.76a.78.78 0 0 0 .39-.68v-6.74l2.02 1.17a.07.07 0 0 1 .04.05v5.58a4.5 4.5 0 0 1-4.5 4.5zM3.6 18.3a4.47 4.47 0 0 1-.53-3l.14.08 4.78 2.76a.77.77 0 0 0 .78 0l5.84-3.37v2.33a.08.08 0 0 1-.03.06L9.74 22a4.5 4.5 0 0 1-6.14-1.65zM2.34 7.9a4.48 4.48 0 0 1 2.34-1.97V11.6a.77.77 0 0 0 .39.68l5.84 3.37-2.02 1.17a.08.08 0 0 1-.07 0l-4.83-2.79A4.5 4.5 0 0 1 2.34 7.9zm16.6 3.86-5.84-3.37L15.12 7.2a.08.08 0 0 1 .07 0l4.83 2.79a4.5 4.5 0 0 1-.68 8.12v-5.67a.77.77 0 0 0-.4-.68zm2.01-3.02-.14-.08-4.78-2.76a.78.78 0 0 0-.78 0L9.33 9.17V6.84a.08.08 0 0 1 .03-.06L14.19 4a4.5 4.5 0 0 1 6.68 4.66zM8.23 12.9l-2.02-1.17a.07.07 0 0 1-.04-.05V6.1a4.5 4.5 0 0 1 7.38-3.46l-.14.08L8.63 5.48a.78.78 0 0 0-.39.68l-.01 6.73zm1.1-2.36 2.6-1.5 2.6 1.5v3l-2.6 1.5-2.6-1.5v-3z"/></svg></span><span class="cb-tx">Image Gen</span></a>
           </div>
           <iframe class="header-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
         </div>
@@ -1562,12 +1647,12 @@
                   <details class="cat-acc">
                         <summary class="cat-head"><span class="cat-name">Color Palette</span><span class="cat-chevron"></span></summary>
                         <div class="cat-body">
-                          <div class="logo-grid">
-                            <div class="logo-card"><div class="logo-tile" style="background:#007474;"></div><div class="logo-meta"><span class="logo-name">Teal <span class="logo-fmt">Content</span></span><button type="button" class="hex-btn" style="color:#007474;background:#ffffff;" onclick="silvaCopyHex('#007474', this)">#007474</button></div></div>
-                            <div class="logo-card"><div class="logo-tile" style="background:#80e0e0;"></div><div class="logo-meta"><span class="logo-name">Light Teal <span class="logo-fmt">Accent</span></span><button type="button" class="hex-btn" style="color:#80e0e0;background:#0f2e2e;" onclick="silvaCopyHex('#80e0e0', this)">#80e0e0</button></div></div>
-                            <div class="logo-card"><div class="logo-tile" style="background:#FF6B1A;"></div><div class="logo-meta"><span class="logo-name">Orange <span class="logo-fmt">Downloads</span></span><button type="button" class="hex-btn" style="color:#FF6B1A;background:#ffffff;" onclick="silvaCopyHex('#FF6B1A', this)">#FF6B1A</button></div></div>
-                            <div class="logo-card"><div class="logo-tile" style="background:#8b5cf6;"></div><div class="logo-meta"><span class="logo-name">Purple <span class="logo-fmt">Resources</span></span><button type="button" class="hex-btn" style="color:#8b5cf6;background:#ffffff;" onclick="silvaCopyHex('#8b5cf6', this)">#8b5cf6</button></div></div>
-                            <div class="logo-card"><div class="logo-tile" style="background:#f5b301;"></div><div class="logo-meta"><span class="logo-name">Gold <span class="logo-fmt">Deliverables</span></span><button type="button" class="hex-btn" style="color:#f5b301;background:#2a2000;" onclick="silvaCopyHex('#f5b301', this)">#f5b301</button></div></div>
+                          <div class="pal-grid">
+                            <button type="button" class="pal-chip" style="--c:#007474" onclick="silvaCopyHex('#007474', this.querySelector('.pal-hx'))" aria-label="Copy Teal hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Teal</span><span class="pal-rl">Content</span></span><span class="pal-hx">#007474</span></button>
+                            <button type="button" class="pal-chip" style="--c:#80e0e0" onclick="silvaCopyHex('#80e0e0', this.querySelector('.pal-hx'))" aria-label="Copy Light Teal hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Light Teal</span><span class="pal-rl">Accent</span></span><span class="pal-hx">#80E0E0</span></button>
+                            <button type="button" class="pal-chip" style="--c:#FF6B1A" onclick="silvaCopyHex('#FF6B1A', this.querySelector('.pal-hx'))" aria-label="Copy Orange hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Orange</span><span class="pal-rl">Downloads</span></span><span class="pal-hx">#FF6B1A</span></button>
+                            <button type="button" class="pal-chip" style="--c:#8b5cf6" onclick="silvaCopyHex('#8b5cf6', this.querySelector('.pal-hx'))" aria-label="Copy Purple hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Purple</span><span class="pal-rl">Resources</span></span><span class="pal-hx">#8B5CF6</span></button>
+                            <button type="button" class="pal-chip" style="--c:#f5b301" onclick="silvaCopyHex('#f5b301', this.querySelector('.pal-hx'))" aria-label="Copy Gold hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Gold</span><span class="pal-rl">Deliverables</span></span><span class="pal-hx">#F5B301</span></button>
                           </div>
                         </div>
                       </details>
@@ -1575,90 +1660,52 @@
                       <details class="cat-acc">
                         <summary class="cat-head"><span class="cat-name">Icons</span><span class="cat-chevron"></span></summary>
                         <div class="cat-body">
-                      <p class="cat-subgroup">Navigation: Teal</p>
-                      <div class="icon-grid">
-                        <a class="icon-cell" href="/assets/Icons/Icons-Teal/Course_Overview_Icon.png" download title="Course_Overview_Icon"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/Course_Overview_Icon.png" alt="Course_Overview_Icon" /></span><span class="icon-cap">Course_Overview_Icon</span></a>
-                        <a class="icon-cell" href="/assets/Icons/Icons-Teal/About_Your_Teacher.png" download title="About_Your_Teacher"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/About_Your_Teacher.png" alt="About_Your_Teacher" /></span><span class="icon-cap">About_Your_Teacher</span></a>
-                        <a class="icon-cell" href="/assets/Icons/Icons-Teal/Learning_Modules.png" download title="Learning_Modules"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/Learning_Modules.png" alt="Learning_Modules" /></span><span class="icon-cap">Learning_Modules</span></a>
-                        <a class="icon-cell" href="/assets/Icons/Icons-Teal/Course_Resources.png" download title="Course_Resources"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/Course_Resources.png" alt="Course_Resources" /></span><span class="icon-cap">Course_Resources</span></a>
-                        <a class="icon-cell" href="/assets/Icons/Icons-Teal/Tech_Essentials_v2.png" download title="Tech_Essentials"><span class="icon-thumb"><img src="/assets/Icons/Icons-Teal/Tech_Essentials_v2.png" alt="Tech_Essentials" /></span><span class="icon-cap">Tech_Essentials</span></a>
-                      </div>
-                      <p class="cat-subgroup">Navigation: White</p>
-                      <div class="icon-grid">
-                        <a class="icon-cell" href="/assets/Icons/Icons-White/Course_Overview_Icon.png" download title="Course_Overview_Icon"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/Icons-White/Course_Overview_Icon.png" alt="Course_Overview_Icon" /></span><span class="icon-cap">Course_Overview_Icon</span></a>
-                        <a class="icon-cell" href="/assets/Icons/Icons-White/About_Your_Teacher.png" download title="About_Your_Teacher"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/Icons-White/About_Your_Teacher.png" alt="About_Your_Teacher" /></span><span class="icon-cap">About_Your_Teacher</span></a>
-                        <a class="icon-cell" href="/assets/Icons/Icons-White/Learning_Modules.png" download title="Learning_Modules"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/Icons-White/Learning_Modules.png" alt="Learning_Modules" /></span><span class="icon-cap">Learning_Modules</span></a>
-                        <a class="icon-cell" href="/assets/Icons/Icons-White/Course_Resources.png" download title="Course_Resources"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/Icons-White/Course_Resources.png" alt="Course_Resources" /></span><span class="icon-cap">Course_Resources</span></a>
-                        <a class="icon-cell" href="/assets/Icons/Icons-White/Tech_Essentials_v2.png" download title="Tech_Essentials"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/Icons-White/Tech_Essentials_v2.png" alt="Tech_Essentials" /></span><span class="icon-cap">Tech_Essentials</span></a>
-                      </div>
-                      <p class="cat-subgroup">Calendar: Colors (PNG)</p>
-                      <div class="icon-grid">
-                        <a class="icon-cell" href="/assets/Icons/assignment/calendar-teal-v1.png" download title="calendar-teal-v1"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/calendar-teal-v1.png" alt="calendar icon, teal" /></span><span class="icon-cap">calendar-teal</span></a>
-                        <a class="icon-cell" href="/assets/Icons/assignment/calendar-orange-v1.png" download title="calendar-orange-v1"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/calendar-orange-v1.png" alt="calendar icon, orange" /></span><span class="icon-cap">calendar-orange</span></a>
-                        <a class="icon-cell" href="/assets/Icons/assignment/calendar-purple-v1.png" download title="calendar-purple-v1"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/calendar-purple-v1.png" alt="calendar icon, purple" /></span><span class="icon-cap">calendar-purple</span></a>
-                        <a class="icon-cell" href="/assets/Icons/assignment/calendar-gold-v1.png" download title="calendar-gold-v1"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/calendar-gold-v1.png" alt="calendar icon, gold" /></span><span class="icon-cap">calendar-gold</span></a>
-                        <a class="icon-cell" href="/assets/Icons/assignment/calendar-red-v1.png" download title="calendar-red-v1"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/calendar-red-v1.png" alt="calendar icon, red" /></span><span class="icon-cap">calendar-red</span></a>
-                        <a class="icon-cell" href="/assets/Icons/assignment/calendar-white-v1.png" download title="calendar-white-v1"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/calendar-white-v1.png" alt="calendar icon, white" /></span><span class="icon-cap">calendar-white</span></a>
-                      </div>
-                      <p class="cat-subgroup">Calendar: Colors (SVG)</p>
-                      <div class="icon-grid">
-                        <a class="icon-cell" href="/assets/Icons/assignment/calendar-teal-v1.svg" download title="calendar-teal-v1"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/calendar-teal-v1.svg" alt="calendar icon, teal, vector" /></span><span class="icon-cap">calendar-teal</span></a>
-                        <a class="icon-cell" href="/assets/Icons/assignment/calendar-orange-v1.svg" download title="calendar-orange-v1"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/calendar-orange-v1.svg" alt="calendar icon, orange, vector" /></span><span class="icon-cap">calendar-orange</span></a>
-                        <a class="icon-cell" href="/assets/Icons/assignment/calendar-purple-v1.svg" download title="calendar-purple-v1"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/calendar-purple-v1.svg" alt="calendar icon, purple, vector" /></span><span class="icon-cap">calendar-purple</span></a>
-                        <a class="icon-cell" href="/assets/Icons/assignment/calendar-gold-v1.svg" download title="calendar-gold-v1"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/calendar-gold-v1.svg" alt="calendar icon, gold, vector" /></span><span class="icon-cap">calendar-gold</span></a>
-                        <a class="icon-cell" href="/assets/Icons/assignment/calendar-red-v1.svg" download title="calendar-red-v1"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/calendar-red-v1.svg" alt="calendar icon, red, vector" /></span><span class="icon-cap">calendar-red</span></a>
-                        <a class="icon-cell" href="/assets/Icons/assignment/calendar-white-v1.svg" download title="calendar-white-v1"><span class="icon-thumb" style="background:#0b2a2a;"><img src="/assets/Icons/assignment/calendar-white-v1.svg" alt="calendar icon, white, vector" /></span><span class="icon-cap">calendar-white</span></a>
-                      </div>
-                      <p class="cat-subgroup">Utility</p>
-                      <div class="icon-grid">
-                        <a class="icon-cell" href="/assets/Icons/book.png" download title="book"><span class="icon-thumb"><img src="/assets/Icons/book.png" alt="book" /></span><span class="icon-cap">book</span></a>
-                        <a class="icon-cell" href="/assets/Icons/bookmark.png" download title="bookmark"><span class="icon-thumb"><img src="/assets/Icons/bookmark.png" alt="bookmark" /></span><span class="icon-cap">bookmark</span></a>
-                        <a class="icon-cell" href="/assets/Icons/flag.png" download title="flag"><span class="icon-thumb"><img src="/assets/Icons/flag.png" alt="flag" /></span><span class="icon-cap">flag</span></a>
-                        <a class="icon-cell" href="/assets/Icons/gear.png" download title="gear"><span class="icon-thumb"><img src="/assets/Icons/gear.png" alt="gear" /></span><span class="icon-cap">gear</span></a>
-                        <a class="icon-cell" href="/assets/Icons/paper.png" download title="paper"><span class="icon-thumb"><img src="/assets/Icons/paper.png" alt="paper" /></span><span class="icon-cap">paper</span></a>
-                        <a class="icon-cell" href="/assets/Icons/book.svg" download title="book (SVG)"><span class="icon-thumb"><img src="/assets/Icons/book.svg" alt="book, vector" /></span><span class="icon-cap">book (SVG)</span></a>
-                        <a class="icon-cell" href="/assets/Icons/bookmark.svg" download title="bookmark (SVG)"><span class="icon-thumb"><img src="/assets/Icons/bookmark.svg" alt="bookmark, vector" /></span><span class="icon-cap">bookmark (SVG)</span></a>
-                        <a class="icon-cell" href="/assets/Icons/flag.svg" download title="flag (SVG)"><span class="icon-thumb"><img src="/assets/Icons/flag.svg" alt="flag, vector" /></span><span class="icon-cap">flag (SVG)</span></a>
-                        <a class="icon-cell" href="/assets/Icons/gear.svg" download title="gear (SVG)"><span class="icon-thumb"><img src="/assets/Icons/gear.svg" alt="gear, vector" /></span><span class="icon-cap">gear (SVG)</span></a>
-                        <a class="icon-cell" href="/assets/Icons/paper.svg" download title="paper (SVG)"><span class="icon-thumb"><img src="/assets/Icons/paper.svg" alt="paper, vector" /></span><span class="icon-cap">paper (SVG)</span></a>
-                        <a class="icon-cell" href="/assets/Icons/lightbulb-orange.svg" download title="lightbulb-orange"><span class="icon-thumb"><img src="/assets/Icons/lightbulb-orange.svg" alt="lightbulb-orange" /></span><span class="icon-cap">lightbulb-orange</span></a>
-                      </div>
-
-                      <p class="cat-subgroup">Contact &amp; Brand (SVG)</p>
-                      <div class="icon-grid">
-                        <a class="icon-cell" href="/assets/Icons/Icon_Address.svg" download title="Address"><span class="icon-thumb"><img src="/assets/Icons/Icon_Address.svg" alt="Address icon" /></span><span class="icon-cap">Address</span></a>
-                        <a class="icon-cell" href="/assets/Icons/Icon_Phone.svg" download title="Phone"><span class="icon-thumb"><img src="/assets/Icons/Icon_Phone.svg" alt="Phone icon" /></span><span class="icon-cap">Phone</span></a>
-                        <a class="icon-cell" href="/assets/Icons/Icon_website.svg" download title="Website"><span class="icon-thumb"><img src="/assets/Icons/Icon_website.svg" alt="Website icon" /></span><span class="icon-cap">Website</span></a>
-                        <a class="icon-cell" href="/assets/Icons/Icon_Instagram.svg" download title="Instagram"><span class="icon-thumb"><img src="/assets/Icons/Icon_Instagram.svg" alt="Instagram icon" /></span><span class="icon-cap">Instagram</span></a>
-                        <a class="icon-cell" href="/assets/Icons/Icon_PV_App.svg" download title="PV App"><span class="icon-thumb"><img src="/assets/Icons/Icon_PV_App.svg" alt="PV App icon" /></span><span class="icon-cap">PV App</span></a>
-                        <a class="icon-cell" href="/assets/Icons/Icon_PV_LOGO.svg" download title="PV Logo"><span class="icon-thumb"><img src="/assets/Icons/Icon_PV_LOGO.svg" alt="PV Logo icon" /></span><span class="icon-cap">PV Logo</span></a>
-                      </div>
-                      <p class="cat-subgroup">Module Icons</p>
-                      <div class="logo-grid">
-                        <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/icon-template-preview-v1.png" alt="Icon template: the base double-ring circle and glyph used to build module icons" /></div><div class="logo-meta"><span class="logo-name">Icon Template <span class="logo-fmt">Vector Master &middot; AI (Illustrator)</span></span><a class="logo-dl" href="/assets/Icons/assignment/icon-template.ai" download>Download</a></div></div>
-                        <div class="logo-card"><div class="logo-tile" style="background:#ffffff;"><img src="/assets/Icons/assignment/icon-template-preview-v1.png" alt="Master Illustrator file holding the full set of module icons" /></div><div class="logo-meta"><span class="logo-name">Master Icons (Full Set) <span class="logo-fmt">Vector Master &middot; AI (Illustrator)</span></span><a class="logo-dl" href="/assets/Icons/Master%20Icons.ai" download>Download</a></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/overview-teal-v1.svg" alt="Module Overview module icon" /></div><div class="logo-meta"><span class="logo-name">Module Overview <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/overview-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/overview-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/overview-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/overview-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/overview-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/content-teal-v1.svg" alt="Content module icon" /></div><div class="logo-meta"><span class="logo-name">Content <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/content-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/content-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/content-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/content-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/content-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/step-check-teal-v1.svg" alt="Step Check module icon" /></div><div class="logo-meta"><span class="logo-name">Step Check <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/step-check-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/step-check-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/step-check-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/step-check-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/step-check-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/next-teal-v1.svg" alt="Up Next module icon" /></div><div class="logo-meta"><span class="logo-name">Up Next <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/next-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/next-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/next-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/next-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/next-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/downloads-orange-v1.svg" alt="Downloads module icon" /></div><div class="logo-meta"><span class="logo-name">Downloads <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/downloads-orange-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot" style="background:#80e0e0" data-src="/assets/Icons/assignment/downloads-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot active" style="background:#ff6b1a" data-src="/assets/Icons/assignment/downloads-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/downloads-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/downloads-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/deliverables-gold-v1.svg" alt="Deliverables module icon" /></div><div class="logo-meta"><span class="logo-name">Deliverables <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/deliverables-gold-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot" style="background:#80e0e0" data-src="/assets/Icons/assignment/deliverables-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/deliverables-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/deliverables-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot active" style="background:#f5b301" data-src="/assets/Icons/assignment/deliverables-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/resources-purple-v1.svg" alt="Resources module icon" /></div><div class="logo-meta"><span class="logo-name">Resources <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/resources-purple-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot" style="background:#80e0e0" data-src="/assets/Icons/assignment/resources-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/resources-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot active" style="background:#8b5cf6" data-src="/assets/Icons/assignment/resources-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/resources-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/camera-kit-white-v1.png" alt="Camera module icon" /></div><div class="logo-meta"><span class="logo-name">Camera <span class="logo-fmt">Module Icon &middot; SVG / PNG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/camera-kit-white-v1.png" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#ffffff" data-src="/assets/Icons/assignment/camera-kit-white-v1.png" title="White" aria-label="White"></button><button type="button" class="swatch-dot" style="background:#80e0e0" data-src="/assets/Icons/assignment/camera-kit-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/camera-kit-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/camera-kit-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/camera-kit-gold-v1.svg" title="Gold" aria-label="Gold"></button><button type="button" class="swatch-dot" style="background:#f90101" data-src="/assets/Icons/assignment/camera-kit-red-v1.png" title="Red" aria-label="Red"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/camera-settings-v1.svg" alt="Camera Settings module icon" /></div><div class="logo-meta"><span class="logo-name">Camera Settings <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/camera-settings-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#f90101" data-src="/assets/Icons/assignment/camera-settings-v1.svg" title="Red" aria-label="Red"></button><button type="button" class="swatch-dot" style="background:#80e0e0" data-src="/assets/Icons/assignment/camera-settings-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/camera-settings-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/camera-settings-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/camera-settings-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/design-teal-v1.svg" alt="Design &amp; Create module icon" /></div><div class="logo-meta"><span class="logo-name">Design &amp; Create <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/design-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/design-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/design-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/design-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/design-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/sketch-teal-v1.svg" alt="Sketch by Hand module icon" /></div><div class="logo-meta"><span class="logo-name">Sketch by Hand <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/sketch-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/sketch-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/sketch-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/sketch-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/sketch-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/edit-teal-v1.svg" alt="Cull &amp; Edit module icon" /></div><div class="logo-meta"><span class="logo-name">Cull &amp; Edit <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/edit-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/edit-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/edit-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/edit-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/edit-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/research-teal-v1.svg" alt="Find &amp; Collect module icon" /></div><div class="logo-meta"><span class="logo-name">Find &amp; Collect <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/research-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/research-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/research-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/research-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/research-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/worksheet-teal-v1.svg" alt="Worksheet module icon" /></div><div class="logo-meta"><span class="logo-name">Worksheet <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/worksheet-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/worksheet-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/worksheet-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/worksheet-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/worksheet-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/reflection-teal-v1.svg" alt="Reflection module icon" /></div><div class="logo-meta"><span class="logo-name">Reflection <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/reflection-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/reflection-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/reflection-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/reflection-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/reflection-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/photo-walk-teal-v1.svg" alt="In-Class Photo Walk module icon" /></div><div class="logo-meta"><span class="logo-name">In-Class Photo Walk <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/photo-walk-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/photo-walk-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/photo-walk-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/photo-walk-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/photo-walk-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/your-device-teal-v1.svg" alt="Your Own Device module icon" /></div><div class="logo-meta"><span class="logo-name">Your Own Device <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/your-device-teal-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-src="/assets/Icons/assignment/your-device-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/your-device-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/your-device-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/your-device-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                        <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/jpg-v2.svg" alt="JPG image-capture format icon, transparent" /></div><div class="logo-meta"><span class="logo-name">JPG (Image Capture) <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl" href="/assets/Icons/assignment/jpg-v2.svg" download>Download</a></div></div>
-                        <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/assignment/raw-v2.png" alt="RAW image-capture format icon, transparent" /></div><div class="logo-meta"><span class="logo-name">RAW (Image Capture) <span class="logo-fmt">Module Icon &middot; PNG</span></span><a class="logo-dl" href="/assets/Icons/assignment/raw-v2.png" download>Download</a></div></div>
-                        <div class="logo-card icon-swatch"><div class="logo-tile" style="background:#0b2a2a;"><img class="swatch-img" src="/assets/Icons/assignment/standards-v1.svg" alt="CTE Standards module icon" /></div><div class="logo-meta"><span class="logo-name">CTE Standards <span class="logo-fmt">Module Icon &middot; SVG</span></span><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/standards-v1.svg" download>Download</a><div class="swatch-dots"><button type="button" class="swatch-dot active" style="background:#26de78" data-src="/assets/Icons/assignment/standards-v1.svg" title="Green" aria-label="Green"></button><button type="button" class="swatch-dot" style="background:#80e0e0" data-src="/assets/Icons/assignment/standards-teal-v1.svg" title="Light Teal" aria-label="Light Teal"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-src="/assets/Icons/assignment/standards-orange-v1.svg" title="Orange" aria-label="Orange"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-src="/assets/Icons/assignment/standards-purple-v1.svg" title="Purple" aria-label="Purple"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-src="/assets/Icons/assignment/standards-gold-v1.svg" title="Gold" aria-label="Gold"></button></div></div></div>
-                      
-                      </div>
+                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Module Icons (20)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid ic-grid">
+                        <div class="logo-card icon-swatch" data-tone="light"><div class="logo-tile tone-light"><img class="swatch-img" src="/assets/Icons/assignment/icon-template-preview-v1.png" alt="Icon template: the base double-ring circle and check glyph" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Icon Masters</span><span class="logo-fmt"><span class="sw-fmt">AI</span></span></span><div class="swatch-segs fmt-tog" role="group" aria-label="Version"><button type="button" class="swatch-seg active" data-name="Template" data-src="/assets/Icons/assignment/icon-template.ai" data-img="/assets/Icons/assignment/icon-template-preview-v1.png" aria-pressed="true">Template</button><button type="button" class="swatch-seg" data-name="Full Set" data-src="/assets/Icons/Master%20Icons.ai" data-img="/assets/Icons/assignment/icon-template-preview-v1.png" aria-pressed="false">Full Set</button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/icon-template.ai" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/overview-teal-v1.svg" alt="Module Overview module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Module Overview</span><span class="logo-fmt"><span class="sw-cname">Light Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/overview-teal-v1.svg" aria-label="Light Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/overview-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/overview-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/overview-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/overview-teal-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/content-teal-v1.svg" alt="Content module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Content</span><span class="logo-fmt"><span class="sw-cname">Light Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/content-teal-v1.svg" aria-label="Light Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/content-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/content-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/content-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/content-teal-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/step-check-teal-v1.svg" alt="Step Check module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Step Check</span><span class="logo-fmt"><span class="sw-cname">Light Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/step-check-teal-v1.svg" aria-label="Light Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/step-check-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/step-check-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/step-check-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/step-check-teal-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/next-teal-v1.svg" alt="Up Next module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Up Next</span><span class="logo-fmt"><span class="sw-cname">Light Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/next-teal-v1.svg" aria-label="Light Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/next-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/next-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/next-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/next-teal-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/downloads-orange-v1.svg" alt="Downloads module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Downloads</span><span class="logo-fmt"><span class="sw-cname">Orange</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/downloads-teal-v1.svg" aria-label="Light Teal" aria-pressed="false"></button><button type="button" class="swatch-dot active" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/downloads-orange-v1.svg" aria-label="Orange" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/downloads-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/downloads-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/downloads-orange-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/deliverables-gold-v1.svg" alt="Deliverables module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Deliverables</span><span class="logo-fmt"><span class="sw-cname">Gold</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/deliverables-teal-v1.svg" aria-label="Light Teal" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/deliverables-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/deliverables-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot active" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/deliverables-gold-v1.svg" aria-label="Gold" aria-pressed="true"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/deliverables-gold-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/resources-purple-v1.svg" alt="Resources module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Resources</span><span class="logo-fmt"><span class="sw-cname">Purple</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/resources-teal-v1.svg" aria-label="Light Teal" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/resources-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot active" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/resources-purple-v1.svg" aria-label="Purple" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/resources-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/resources-purple-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/camera-kit-white-v1.png" alt="Camera module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Camera</span><span class="logo-fmt"><span class="sw-cname">White</span><span class="sw-sep">&middot;</span><span class="sw-fmt">PNG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#ffffff" data-name="White" data-src="/assets/Icons/assignment/camera-kit-white-v1.png" aria-label="White" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/camera-kit-teal-v1.svg" aria-label="Light Teal" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/camera-kit-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/camera-kit-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/camera-kit-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f90101" data-name="Red" data-src="/assets/Icons/assignment/camera-kit-red-v1.png" aria-label="Red" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/camera-kit-white-v1.png" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/camera-settings-v1.svg" alt="Camera Settings module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Camera Settings</span><span class="logo-fmt"><span class="sw-cname">Red</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#f90101" data-name="Red" data-src="/assets/Icons/assignment/camera-settings-v1.svg" aria-label="Red" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/camera-settings-teal-v1.svg" aria-label="Light Teal" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/camera-settings-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/camera-settings-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/camera-settings-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/camera-settings-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/design-teal-v1.svg" alt="Design &amp; Create module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Design &amp; Create</span><span class="logo-fmt"><span class="sw-cname">Light Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/design-teal-v1.svg" aria-label="Light Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/design-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/design-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/design-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/design-teal-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/sketch-teal-v1.svg" alt="Sketch by Hand module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Sketch by Hand</span><span class="logo-fmt"><span class="sw-cname">Light Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/sketch-teal-v1.svg" aria-label="Light Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/sketch-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/sketch-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/sketch-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/sketch-teal-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/edit-teal-v1.svg" alt="Cull &amp; Edit module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Cull &amp; Edit</span><span class="logo-fmt"><span class="sw-cname">Light Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/edit-teal-v1.svg" aria-label="Light Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/edit-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/edit-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/edit-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/edit-teal-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/research-teal-v1.svg" alt="Find &amp; Collect module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Find &amp; Collect</span><span class="logo-fmt"><span class="sw-cname">Light Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/research-teal-v1.svg" aria-label="Light Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/research-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/research-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/research-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/research-teal-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/worksheet-teal-v1.svg" alt="Worksheet module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Worksheet</span><span class="logo-fmt"><span class="sw-cname">Light Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/worksheet-teal-v1.svg" aria-label="Light Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/worksheet-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/worksheet-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/worksheet-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/worksheet-teal-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/reflection-teal-v1.svg" alt="Reflection module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Reflection</span><span class="logo-fmt"><span class="sw-cname">Light Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/reflection-teal-v1.svg" aria-label="Light Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/reflection-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/reflection-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/reflection-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/reflection-teal-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/photo-walk-teal-v1.svg" alt="In-Class Photo Walk module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">In-Class Photo Walk</span><span class="logo-fmt"><span class="sw-cname">Light Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/photo-walk-teal-v1.svg" aria-label="Light Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/photo-walk-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/photo-walk-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/photo-walk-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/photo-walk-teal-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/your-device-teal-v1.svg" alt="Your Own Device module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Your Own Device</span><span class="logo-fmt"><span class="sw-cname">Light Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/your-device-teal-v1.svg" aria-label="Light Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/your-device-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/your-device-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/your-device-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/your-device-teal-v1.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/jpg-v2.svg" alt="Image-capture format icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Capture Format</span><span class="logo-fmt"><span class="sw-fmt">SVG</span></span></span><div class="swatch-segs fmt-tog" role="group" aria-label="Version"><button type="button" class="swatch-seg active" data-name="JPG" data-src="/assets/Icons/assignment/jpg-v2.svg" aria-pressed="true">JPG</button><button type="button" class="swatch-seg" data-name="RAW" data-src="/assets/Icons/assignment/raw-v2.png" aria-pressed="false">RAW</button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/jpg-v2.svg" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/standards-v1.svg" alt="CTE Standards module icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">CTE Standards</span><span class="logo-fmt"><span class="sw-cname">Green</span><span class="sw-sep">&middot;</span><span class="sw-fmt">SVG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#26de78" data-name="Green" data-src="/assets/Icons/assignment/standards-v1.svg" aria-label="Green" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#80e0e0" data-name="Light Teal" data-src="/assets/Icons/assignment/standards-teal-v1.svg" aria-label="Light Teal" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/assignment/standards-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-src="/assets/Icons/assignment/standards-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-src="/assets/Icons/assignment/standards-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/standards-v1.svg" download>Download</a></div></div>
+                      </div></div></details>
+                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Navigation (5)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid ic-grid">
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/Icons-Teal/Course_Overview_Icon.png" alt="Course Overview icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Course Overview</span><span class="logo-fmt"><span class="sw-cname">Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">PNG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#3db8b8" data-name="Teal" data-src="/assets/Icons/Icons-Teal/Course_Overview_Icon.png" aria-label="Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ffffff" data-name="White" data-src="/assets/Icons/Icons-White/Course_Overview_Icon.png" aria-label="White" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/Icons-Teal/Course_Overview_Icon.png" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/Icons-Teal/About_Your_Teacher.png" alt="About Mr. Silva icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">About Mr. Silva</span><span class="logo-fmt"><span class="sw-cname">Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">PNG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#3db8b8" data-name="Teal" data-src="/assets/Icons/Icons-Teal/About_Your_Teacher.png" aria-label="Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ffffff" data-name="White" data-src="/assets/Icons/Icons-White/About_Your_Teacher.png" aria-label="White" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/Icons-Teal/About_Your_Teacher.png" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/Icons-Teal/Learning_Modules.png" alt="Learning Modules icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Learning Modules</span><span class="logo-fmt"><span class="sw-cname">Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">PNG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#3db8b8" data-name="Teal" data-src="/assets/Icons/Icons-Teal/Learning_Modules.png" aria-label="Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ffffff" data-name="White" data-src="/assets/Icons/Icons-White/Learning_Modules.png" aria-label="White" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/Icons-Teal/Learning_Modules.png" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/Icons-Teal/Course_Resources.png" alt="Course Resources icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Course Resources</span><span class="logo-fmt"><span class="sw-cname">Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">PNG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#3db8b8" data-name="Teal" data-src="/assets/Icons/Icons-Teal/Course_Resources.png" aria-label="Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ffffff" data-name="White" data-src="/assets/Icons/Icons-White/Course_Resources.png" aria-label="White" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/Icons-Teal/Course_Resources.png" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/Icons-Teal/Tech_Essentials_v2.png" alt="Tech Essentials icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Tech Essentials</span><span class="logo-fmt"><span class="sw-cname">Teal</span><span class="sw-sep">&middot;</span><span class="sw-fmt">PNG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#3db8b8" data-name="Teal" data-src="/assets/Icons/Icons-Teal/Tech_Essentials_v2.png" aria-label="Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ffffff" data-name="White" data-src="/assets/Icons/Icons-White/Tech_Essentials_v2.png" aria-label="White" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/Icons-Teal/Tech_Essentials_v2.png" download>Download</a></div></div>
+                      </div></div></details>
+                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Utility (7)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid ic-grid">
+                        <div class="logo-card icon-swatch" data-fmt="png"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/assignment/calendar-teal-v1.png" alt="Calendar icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Calendar</span><span class="logo-fmt"><span class="sw-cname">Light Teal</span><span class="sw-sep">&middot;</span><span class="fmt-tog" role="group" aria-label="File format"><button type="button" class="fmt-opt on" data-fmt="png" aria-pressed="true">PNG</button><button type="button" class="fmt-opt" data-fmt="svg" aria-pressed="false">SVG</button></span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#80e0e0" data-name="Light Teal" data-png="/assets/Icons/assignment/calendar-teal-v1.png" data-svg="/assets/Icons/assignment/calendar-teal-v1.svg" aria-label="Light Teal" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#ff6b1a" data-name="Orange" data-png="/assets/Icons/assignment/calendar-orange-v1.png" data-svg="/assets/Icons/assignment/calendar-orange-v1.svg" aria-label="Orange" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#8b5cf6" data-name="Purple" data-png="/assets/Icons/assignment/calendar-purple-v1.png" data-svg="/assets/Icons/assignment/calendar-purple-v1.svg" aria-label="Purple" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#f5b301" data-name="Gold" data-png="/assets/Icons/assignment/calendar-gold-v1.png" data-svg="/assets/Icons/assignment/calendar-gold-v1.svg" aria-label="Gold" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#e0403a" data-name="Red" data-png="/assets/Icons/assignment/calendar-red-v1.png" data-svg="/assets/Icons/assignment/calendar-red-v1.svg" aria-label="Red" aria-pressed="false"></button><button type="button" class="swatch-dot" style="background:#ffffff" data-name="White" data-png="/assets/Icons/assignment/calendar-white-v1.png" data-svg="/assets/Icons/assignment/calendar-white-v1.svg" aria-label="White" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/assignment/calendar-teal-v1.png" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/book.png" alt="Book icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Book</span><span class="logo-fmt"><span class="sw-cname">Orange</span><span class="sw-sep">&middot;</span><span class="sw-fmt">PNG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/book.png" aria-label="Orange" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#545454" data-name="Gray" data-src="/assets/Icons/book.svg" aria-label="Gray" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/book.png" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/bookmark.png" alt="Bookmark icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Bookmark</span><span class="logo-fmt"><span class="sw-cname">Orange</span><span class="sw-sep">&middot;</span><span class="sw-fmt">PNG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/bookmark.png" aria-label="Orange" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#545454" data-name="Gray" data-src="/assets/Icons/bookmark.svg" aria-label="Gray" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/bookmark.png" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/flag.png" alt="Flag icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Flag</span><span class="logo-fmt"><span class="sw-cname">Orange</span><span class="sw-sep">&middot;</span><span class="sw-fmt">PNG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/flag.png" aria-label="Orange" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#545454" data-name="Gray" data-src="/assets/Icons/flag.svg" aria-label="Gray" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/flag.png" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/gear.png" alt="Gear icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Gear</span><span class="logo-fmt"><span class="sw-cname">Orange</span><span class="sw-sep">&middot;</span><span class="sw-fmt">PNG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/gear.png" aria-label="Orange" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#545454" data-name="Gray" data-src="/assets/Icons/gear.svg" aria-label="Gray" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/gear.png" download>Download</a></div></div>
+                        <div class="logo-card icon-swatch"><div class="logo-tile"><img class="swatch-img" src="/assets/Icons/paper.png" alt="Paper icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Paper</span><span class="logo-fmt"><span class="sw-cname">Orange</span><span class="sw-sep">&middot;</span><span class="sw-fmt">PNG</span></span></span><div class="swatch-dots" role="group" aria-label="Color"><button type="button" class="swatch-dot active" style="background:#ff6b1a" data-name="Orange" data-src="/assets/Icons/paper.png" aria-label="Orange" aria-pressed="true"></button><button type="button" class="swatch-dot" style="background:#545454" data-name="Gray" data-src="/assets/Icons/paper.svg" aria-label="Gray" aria-pressed="false"></button></div><a class="logo-dl swatch-dl" href="/assets/Icons/paper.png" download>Download</a></div></div>
+                        <div class="logo-card"><div class="logo-tile"><img src="/assets/Icons/lightbulb-orange.svg" alt="Lightbulb icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Lightbulb</span><span class="logo-fmt"><span class="sw-fmt">SVG</span></span></span><a class="logo-dl" href="/assets/Icons/lightbulb-orange.svg" download>Download</a></div></div>
+                      </div></div></details>
+                      <details class="cat-acc"><summary class="cat-head"><span class="cat-name">Contact &amp; Brand (6)</span><span class="cat-chevron"></span></summary><div class="cat-body"><div class="logo-grid ic-grid">
+                        <div class="logo-card" data-tone="light"><div class="logo-tile tone-light"><img src="/assets/Icons/Icon_Address.svg" alt="Address icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Address</span><span class="logo-fmt"><span class="sw-fmt">SVG</span></span></span><a class="logo-dl" href="/assets/Icons/Icon_Address.svg" download>Download</a></div></div>
+                        <div class="logo-card" data-tone="light"><div class="logo-tile tone-light"><img src="/assets/Icons/Icon_Phone.svg" alt="Phone icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Phone</span><span class="logo-fmt"><span class="sw-fmt">SVG</span></span></span><a class="logo-dl" href="/assets/Icons/Icon_Phone.svg" download>Download</a></div></div>
+                        <div class="logo-card" data-tone="light"><div class="logo-tile tone-light"><img src="/assets/Icons/Icon_website.svg" alt="Website icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Website</span><span class="logo-fmt"><span class="sw-fmt">SVG</span></span></span><a class="logo-dl" href="/assets/Icons/Icon_website.svg" download>Download</a></div></div>
+                        <div class="logo-card" data-tone="light"><div class="logo-tile tone-light"><img src="/assets/Icons/Icon_Instagram.svg" alt="Instagram icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">Instagram</span><span class="logo-fmt"><span class="sw-fmt">SVG</span></span></span><a class="logo-dl" href="/assets/Icons/Icon_Instagram.svg" download>Download</a></div></div>
+                        <div class="logo-card" data-tone="light"><div class="logo-tile tone-light"><img src="/assets/Icons/Icon_PV_App.svg" alt="PV App icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">PV App</span><span class="logo-fmt"><span class="sw-fmt">SVG</span></span></span><a class="logo-dl" href="/assets/Icons/Icon_PV_App.svg" download>Download</a></div></div>
+                        <div class="logo-card" data-tone="light"><div class="logo-tile tone-light"><img src="/assets/Icons/Icon_PV_LOGO.svg" alt="PV Logo icon" /></div><div class="logo-meta"><span class="logo-name"><span class="ln">PV Logo</span><span class="logo-fmt"><span class="sw-fmt">SVG</span></span></span><a class="logo-dl" href="/assets/Icons/Icon_PV_LOGO.svg" download>Download</a></div></div>
+                      </div></div></details>
                         </div>
                       </details>
                       <details class="cat-acc">
@@ -1822,7 +1869,8 @@
         dl.innerHTML = ICON_DL; dl.setAttribute('aria-label', 'Download'); dl.removeAttribute('title');
         dl.parentNode.insertBefore(actions, dl);
         if (view) actions.appendChild(view);
-        actions.appendChild(copy);
+        // copy-as-image only when the file IS an image (an .ai master gets copy URL + download)
+        if (/\.(png|jpe?g|gif|webp|svg)(\?|$)/i.test(url || '')) actions.appendChild(copy);
         actions.appendChild(copyUrl);
         actions.appendChild(dl);
       });
@@ -1889,11 +1937,29 @@
           idx = byUrl[full];
         } else {
           idx = slides.length;
-          slides.push({ full: full, caption: nameEl ? nameEl.textContent.replace(/\s+/g, ' ').trim() : (img.getAttribute('alt') || ''), alt: img.getAttribute('alt') || '' });
+          // LIVE slide: keeps the card refs so the lightbox shows whatever color/format is selected NOW
+          slides.push({ full: full, card: card, tile: tile, img: img, dl: dl, nameEl: nameEl, alt: img.getAttribute('alt') || '' });
           byUrl[full] = idx;
         }
         tile.addEventListener('click', function () { openLightbox(idx); });
       });
+      var lbWrap = lb.querySelector('.cs-lightbox-imgwrap');
+      var IMG_RX = /\.(png|jpe?g|gif|webp|svg)(\?|$)/i;
+      function liveSrc(s) {
+        var dlHref = s.dl ? s.dl.getAttribute('href') : s.full;
+        var view = (s.img && !IMG_RX.test(dlHref || '')) ? s.img.getAttribute('src') : dlHref;
+        return { view: view, dl: dlHref || view };
+      }
+      function capOf(s) {
+        if (!s.nameEl) return s.caption || '';
+        var ln = s.nameEl.querySelector('.ln');
+        if (!ln) return s.nameEl.textContent.replace(/\s+/g, ' ').trim();
+        var parts = [ln.textContent.trim()];
+        var cn = s.card.querySelector('.sw-cname'); if (cn && cn.textContent) parts.push(cn.textContent.trim());
+        var seg = s.card.querySelector('.swatch-seg.active'); if (seg) parts.push(seg.textContent.trim());
+        var m = (liveSrc(s).dl || '').match(/\.([a-z0-9]+)(\?|$)/i); if (m) parts.push(m[1].toUpperCase());
+        return parts.join(' · ');
+      }
 
       var current = -1;
       var multi = slides.length > 1;
@@ -1903,9 +1969,15 @@
       function render() {
         var s = slides[current];
         if (!s) return;
-        lbImg.src = s.full; lbImg.alt = s.alt || s.caption || '';
-        lbCap.textContent = s.caption || '';
-        lbDl.setAttribute('href', s.full);
+        var L = liveSrc(s), cap = capOf(s);
+        lbImg.src = L.view; lbImg.alt = s.alt || cap || '';
+        lbCap.textContent = cap;
+        lbDl.setAttribute('href', L.dl);
+        // the stage ground follows the card tile, so white / light glyphs stay visible; photos keep the default frame
+        var bgc = '', bgi = '';
+        if (s.tile && !s.tile.classList.contains('tile-photo')) { var cs = getComputedStyle(s.tile); bgc = cs.backgroundColor; bgi = cs.backgroundImage; }
+        lbWrap.style.backgroundColor = bgc; lbWrap.style.backgroundImage = (bgi && bgi !== 'none') ? bgi : '';
+        lbCopy.style.display = IMG_RX.test(L.dl || '') ? '' : 'none';
         lbCopy.textContent = 'Copy'; lbCopy.classList.remove('copied');
         lbCopyUrl.textContent = 'Copy URL'; lbCopyUrl.classList.remove('copied');
       }
@@ -1920,10 +1992,10 @@
       lbPrev.addEventListener('click', function () { step(-1); });
       lbNext.addEventListener('click', function () { step(1); });
       lbCopy.addEventListener('click', function () {
-        var s = slides[current]; if (s) copyLogoImage(s.full, lbCopy);
+        var s = slides[current]; if (s) copyLogoImage(liveSrc(s).view, lbCopy);
       });
       lbCopyUrl.addEventListener('click', function () {
-        var s = slides[current]; if (s) copyUrlAction(lbCopyUrl, s.full, 'Copy URL');
+        var s = slides[current]; if (s) copyUrlAction(lbCopyUrl, liveSrc(s).dl, 'Copy URL');
       });
       lb.addEventListener('click', function (e) {
         if (e.target === lb || e.target.closest('.cs-lightbox-close')) closeLightbox();
@@ -1961,21 +2033,53 @@
     })();
   </script>
   <script>
-  /* Color-swatch icon cards: click a dot to swap the shown icon + its download link. */
+  /* Variant cards (Nike-style colorway logic). A card holds every color / version of ONE asset:
+     .swatch-dot (color) or .swatch-seg (text version) carries data-src, or data-png + data-svg when the
+     card has a PNG | SVG toggle (data-fmt on the card). Click selects: swaps the icon, the download,
+     copy, copy URL and the lightbox (they all read the live href). Mouse hover previews; leaving the
+     dots returns to the selection. data-img keeps a preview image for non-image files (.ai). */
   (function () {
+    var EXT_RX = /\.([a-z0-9]+)(\?|$)/i;
+    function srcOf(card, v) {
+      var f = card.getAttribute("data-fmt");
+      return (f && v.getAttribute("data-" + f)) || v.getAttribute("data-src") || v.getAttribute("data-png") || v.getAttribute("data-svg") || "";
+    }
+    function activeOf(card) { return card.querySelector(".swatch-dot.active, .swatch-seg.active") || card.querySelector(".swatch-dot, .swatch-seg"); }
+    function show(card, v, commit) {
+      if (!v) return;
+      var src = srcOf(card, v);
+      var img = card.querySelector(".swatch-img");
+      var view = v.getAttribute("data-img") || src;
+      if (img && img.getAttribute("src") !== view) img.setAttribute("src", view);
+      var tile = card.querySelector(".logo-tile");
+      var tone = v.getAttribute("data-tone") || card.getAttribute("data-tone");
+      if (tile && card.closest(".ic-grid")) tile.classList.toggle("tone-light", tone === "light");
+      var cn = card.querySelector(".sw-cname"); if (cn) cn.textContent = v.getAttribute("data-name") || "";
+      var ft = card.querySelector(".sw-fmt"); var m = src.match(EXT_RX); if (ft && m) ft.textContent = m[1].toUpperCase();
+      if (!commit) return;
+      var dl = card.querySelector(".swatch-dl"); if (dl) dl.setAttribute("href", src);
+      card.querySelectorAll(".swatch-dot, .swatch-seg").forEach(function (d) {
+        var on = d === v; d.classList.toggle("active", on); d.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+    }
     document.addEventListener("click", function (e) {
-      var dot = e.target.closest(".swatch-dot");
+      var opt = e.target.closest(".fmt-opt");
+      if (opt) {
+        var c = opt.closest(".icon-swatch"); if (!c) return;
+        c.setAttribute("data-fmt", opt.getAttribute("data-fmt"));
+        c.querySelectorAll(".fmt-opt").forEach(function (o) { var on = o === opt; o.classList.toggle("on", on); o.setAttribute("aria-pressed", on ? "true" : "false"); });
+        show(c, activeOf(c), true);
+        return;
+      }
+      var dot = e.target.closest(".swatch-dot, .swatch-seg");
       if (!dot) return;
       var card = dot.closest(".icon-swatch");
-      if (!card) return;
-      var src = dot.getAttribute("data-src");
-      var img = card.querySelector(".swatch-img");
-      var dl = card.querySelector(".swatch-dl");
-      if (img) img.src = src;
-      if (dl) dl.setAttribute("href", src);
-      card.querySelectorAll(".swatch-dot").forEach(function (d) {
-        d.classList.toggle("active", d === dot);
-      });
+      if (card) show(card, dot, true);
+    });
+    document.querySelectorAll(".icon-swatch .swatch-dots").forEach(function (row) {
+      var card = row.closest(".icon-swatch");
+      row.addEventListener("pointerover", function (e) { if (e.pointerType !== "mouse") return; var d = e.target.closest(".swatch-dot"); if (d) show(card, d, false); });
+      row.addEventListener("pointerleave", function (e) { if (e.pointerType !== "mouse") return; show(card, activeOf(card), false); });
     });
   })();
   </script>
@@ -2121,7 +2225,7 @@
 
   <script>
   (function(){
-    // (page-level PIN gate handles auth; this builder is embedded in Build Resources)
+    // (page-level PIN gate handles auth; this builder is embedded in AI Studio)
 
     var IMG='https://www.creativesilva.com/assets/images/characters/';
 
@@ -2546,9 +2650,8 @@
       if(staged.length){ attach = attach.concat(staged.map(function(im,i){ return {url:im.url, name:((im.name||'').trim()||'your reference image'), role:((im.role||'').trim()||'Your reference image'), staged:i}; })); }
       attach.forEach(function(a){
         var row=el('div','pvb-checkrow');
-        row.appendChild(el('div','pvb-stepnum',String(step++)));
-        var th=el('div','th'); var im=el('img'); im.src=a.url; im.alt=a.role; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
-        var meta=el('div','meta'); meta.appendChild(el('div','role',esc(a.role))); meta.appendChild(el('div','fn',esc(a.name))); row.appendChild(meta);
+        var th=el('div','th'); th.style.setProperty('--thumb-img','url("'+a.url+'")'); var im=el('img'); im.src=a.url; im.alt=a.role; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
+        var meta=el('div','meta'); meta.appendChild(el('div','role','<span class="pvb-stepnum">'+(step++)+'</span><span class="rl">'+esc(a.role)+'</span>')); meta.appendChild(el('div','fn',esc(a.name))); row.appendChild(meta);
         // uncheck/remove this reference: drops it from the build AND live-updates the prompt + clears any warning
         if(a.kind || a.staged!=null){
           var rm=el('button','ckrm',SVG_X); rm.type='button'; rm.setAttribute('aria-label','Remove '+a.name+' from this build');
@@ -2560,13 +2663,11 @@
         var cka=el('div','ckacts ckpill'); cka.appendChild(db); cka.appendChild(cb); row.appendChild(cka);
         checklistEl.appendChild(row);
       });
-      if(!attach.length){ checklistEl.appendChild(el('div','pvb-check-empty', cfg.delta?'Drop your master (and optional support headshot) on the left; they show up here to copy in order, before the prompt.':'Add characters, items, or a location above and they appear here to attach, in order, before the prompt below.')); }
       // LAST STEP: the prompt text itself (copy it after you have reviewed/removed the references above)
       (function(){
         var row=el('div','pvb-checkrow pvb-promptrow');
-        row.appendChild(el('div','pvb-stepnum',String(step++)));
-        var th=el('div','th'); var im=el('img'); im.src=PROMPT_ICON_URL; im.alt='Prompt'; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
-        var meta=el('div','meta'); meta.appendChild(el('div','role','Prompt')); meta.appendChild(el('div','fn','Copy last &middot; paste this FIRST in ChatGPT')); row.appendChild(meta);
+        var th=el('div','th'); th.style.setProperty('--thumb-img','url("'+PROMPT_ICON_URL+'")'); var im=el('img'); im.src=PROMPT_ICON_URL; im.alt='Prompt'; im.loading='lazy'; th.appendChild(im); row.appendChild(th);
+        var meta=el('div','meta'); meta.appendChild(el('div','role','<span class="pvb-stepnum">'+(step++)+'</span><span class="rl">Prompt</span>')); meta.appendChild(el('div','fn','Copy last &middot; paste this FIRST in ChatGPT')); row.appendChild(meta);
         var dl=el('button','ckdl',SVG_DL); dl.type='button'; dl.title='Download prompt (.txt)'; dl.setAttribute('aria-label','Download prompt'); dl.addEventListener('click',function(){ downloadText(promptText(), promptFile(), dl); });
         var cb=el('button','cimg',SVG_COPY); cb.type='button'; cb.title='Copy prompt'; cb.setAttribute('aria-label','Copy prompt'); cb.addEventListener('click',function(){ copyText(promptText(), cb, true); if(window.pbgPushHistory) pbgPushHistory(); });
         var cka=el('div','ckacts ckpill'); cka.appendChild(dl); cka.appendChild(cb); row.appendChild(cka);
@@ -3153,8 +3254,8 @@
       var PANE={prompt:'prompt',cast:'refs',items:'refs',scene:'refs',options:'options'};
       var active='prompt';   // open on the FIRST tab (Prompt) on load, not Cast
       // build stamp (fine print, bottom-right): bump PV_PS_BUILD on a MAJOR update so Chris sees what is live
-      var PV_PS_BUILD='v1.6';
-      try{ var _bs=document.getElementById('pbg-build'); if(_bs) _bs.textContent='Prompt Studio '+PV_PS_BUILD; }catch(e){}
+      var PV_PS_BUILD='v1.7';
+      try{ var _bs=document.getElementById('pbg-build'); if(_bs) _bs.textContent='AI Studio '+PV_PS_BUILD; }catch(e){}
       // build tabs + dock
       tabsEl.innerHTML=TABS.map(function(t){return '<button class="pbg-tab" type="button" role="tab" data-t="'+t[0]+'"><span>'+t[1]+'</span><span class="tb" data-bk="'+t[0]+'"></span></button>';}).join('');
       dock.innerHTML=TABS.map(function(t){return '<button class="pbg-dk" type="button" data-t="'+t[0]+'">'+IC[t[0]]+'<span class="l">'+t[1]+'</span><span class="b" data-bk="'+t[0]+'"></span></button>';}).join('');
@@ -3197,12 +3298,23 @@
       dock.addEventListener('click',function(e){ var b=e.target.closest('.pbg-dk'); if(b) setTab(b.getAttribute('data-t'), true); });
 
       // ---------- sheet physics (phone only) ----------
-      var H=0, TY_FULL=0, TY_HALF=0, TY_CLOSED=0, cur=0;
-      function measure(){ H=pbg.clientHeight||window.innerHeight; TY_FULL=0; TY_HALF=Math.round(H*0.46); TY_CLOSED=H; }
+      var H=0, HH=0, TY_FULL=0, TY_HALF=0, TY_CLOSED=0, cur=0;
+      var hdrEl=document.querySelector('.catalog-sticky');
+      // The phone panel is a fixed, overflow-hidden frame: it must NEVER scroll itself (iOS scrolls it when an
+      // input inside gets focus, or on scrollIntoView, which shoves the whole layout up). Its children scroll.
+      var panelEl=document.getElementById('pvb-panel-build');
+      if(panelEl) panelEl.addEventListener('scroll',function(){ if(panelEl.scrollTop) panelEl.scrollTop=0; },{passive:true});
+      // The panel is full-screen; the half detent sits where it always did (header + 46% of the rest).
+      // TY_FULL = 0 is CLEAR TO THE TOP: the sheet pushes the header off on the way up.
+      function measure(){ H=pbg.clientHeight||window.innerHeight; HH=headerH(); TY_FULL=0; TY_HALF=Math.round(HH+(H-HH)*0.46); TY_CLOSED=H; }
       function setTY(ty, anim){
         cur=ty;
         sheet.style.transition = anim ? '' : 'none';
         sheet.style.transform='translateY('+ty+'px)';
+        // header rides the sheet's top edge once the sheet rises past it (flush, never overlapping)
+        if(hdrEl){ var off=HH? Math.min(0, (ty-HH)*(HH+10)/HH) : 0;   // reaches -(HH+10) at the top so the shadow clears too
+          hdrEl.style.transition = anim ? 'transform .44s cubic-bezier(.32,.72,0,1)' : 'none';
+          hdrEl.style.transform = off<0 ? 'translateY('+off+'px)' : ''; }
         // dock fades up at full + is present at closed; hidden at half (Chris's ask)
         var dv = ty>=TY_HALF ? (TY_CLOSED-TY_HALF?(ty-TY_HALF)/(TY_CLOSED-TY_HALF):1) : (TY_HALF?(TY_HALF-ty)/TY_HALF:1);
         dv=Math.max(0,Math.min(1,dv));
@@ -3250,11 +3362,18 @@
         document.documentElement.style.setProperty('--pbg-top', headerH()+'px');
         if(isPhone()){ measure(); if(!cur || cur>TY_CLOSED) cur=TY_HALF; setTY(cur,true); }
         else { sheet.style.transform=''; sheet.style.transition=''; dock.style.opacity=''; dock.style.pointerEvents=''; dock.style.zIndex='';
-          sheet.classList.remove('at-full'); tabsEl.style.opacity=''; tabsEl.style.pointerEvents=''; }   // desktop: tabs are the nav
+          sheet.classList.remove('at-full'); tabsEl.style.opacity=''; tabsEl.style.pointerEvents='';   // desktop: tabs are the nav
+          if(hdrEl){ hdrEl.style.transform=''; hdrEl.style.transition=''; } }
         if(window.pbgWizard) window.pbgWizard();   // keep the CTA correct (Get Ingredients on desktop, Next/Get on phone)
       }
       var mq=window.matchMedia('(max-width:820px)');
       if(mq.addEventListener) mq.addEventListener('change',applyMode); else if(mq.addListener) mq.addListener(applyMode);
+      // page tabs: Resources always shows the full header; returning to the builder re-syncs it to the sheet
+      [].slice.call(document.querySelectorAll('.pvb-tab')).forEach(function(t){ t.addEventListener('click',function(){
+        setTimeout(function(){
+          if(t.getAttribute('data-tab')!=='build'){ if(hdrEl){ hdrEl.style.transition='none'; hdrEl.style.transform=''; } }
+          else if(isPhone()){ measure(); setTY(cur,false); }
+        },0); }); });
       window.addEventListener('resize',function(){ document.documentElement.style.setProperty('--pbg-top', headerH()+'px'); if(isPhone()){ var frac=TY_CLOSED?cur/TY_CLOSED:0; measure(); setTY(Math.round(frac*TY_CLOSED),false); } });
 
       // ---------- build order + prompt history (the card morphs between edit / export / history) ----------
