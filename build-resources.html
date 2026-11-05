@@ -1689,8 +1689,22 @@
                   </div>
                 </details>
                   <details class="cat-acc">
-                        <summary class="cat-head"><span class="cat-name">Color Palette</span><span class="cat-chevron"></span></summary>
+                        <summary class="cat-head"><span class="cat-name">Color Palettes</span><span class="cat-chevron"></span></summary>
                         <div class="cat-body">
+                          <p class="cat-subgroup">Silva Galaxy Glass</p>
+                          <div class="pal-grid">
+                            <button type="button" class="pal-chip" style="--c:#050816" onclick="silvaCopyHex('#050816', this.querySelector('.pal-hx'))" aria-label="Copy Abyss hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Abyss</span><span class="pal-rl">Page top</span></span><span class="pal-hx">#050816</span></button>
+                            <button type="button" class="pal-chip" style="--c:#0A1D36" onclick="silvaCopyHex('#0A1D36', this.querySelector('.pal-hx'))" aria-label="Copy Deep Navy hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Deep Navy</span><span class="pal-rl">Galaxy base</span></span><span class="pal-hx">#0A1D36</span></button>
+                            <button type="button" class="pal-chip" style="--c:#00B2B2" onclick="silvaCopyHex('#00B2B2', this.querySelector('.pal-hx'))" aria-label="Copy Nebula Teal hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Nebula Teal</span><span class="pal-rl">Main glow</span></span><span class="pal-hx">#00B2B2</span></button>
+                            <button type="button" class="pal-chip" style="--c:#3FF0E0" onclick="silvaCopyHex('#3FF0E0', this.querySelector('.pal-hx'))" aria-label="Copy Teal Light hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Teal Light</span><span class="pal-rl">Rims + title</span></span><span class="pal-hx">#3FF0E0</span></button>
+                            <button type="button" class="pal-chip" style="--c:#2EE6D6" onclick="silvaCopyHex('#2EE6D6', this.querySelector('.pal-hx'))" aria-label="Copy Horizon hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Horizon</span><span class="pal-rl">Bottom glow</span></span><span class="pal-hx">#2EE6D6</span></button>
+                            <button type="button" class="pal-chip" style="--c:#4E54D6" onclick="silvaCopyHex('#4E54D6', this.querySelector('.pal-hx'))" aria-label="Copy Indigo hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Indigo</span><span class="pal-rl">Second cloud</span></span><span class="pal-hx">#4E54D6</span></button>
+                            <button type="button" class="pal-chip" style="--c:#7B5CFF" onclick="silvaCopyHex('#7B5CFF', this.querySelector('.pal-hx'))" aria-label="Copy Violet hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Violet</span><span class="pal-rl">Accent cloud</span></span><span class="pal-hx">#7B5CFF</span></button>
+                            <button type="button" class="pal-chip" style="--c:#E58FF5" onclick="silvaCopyHex('#E58FF5', this.querySelector('.pal-hx'))" aria-label="Copy Pink Spark hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Pink Spark</span><span class="pal-rl">Sparkles only</span></span><span class="pal-hx">#E58FF5</span></button>
+                            <button type="button" class="pal-chip" style="--c:#5FF0F0" onclick="silvaCopyHex('#5FF0F0', this.querySelector('.pal-hx'))" aria-label="Copy Button Light hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Button Light</span><span class="pal-rl">Button top</span></span><span class="pal-hx">#5FF0F0</span></button>
+                            <button type="button" class="pal-chip" style="--c:#00B8B8" onclick="silvaCopyHex('#00B8B8', this.querySelector('.pal-hx'))" aria-label="Copy Button Teal hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Button Teal</span><span class="pal-rl">Button base</span></span><span class="pal-hx">#00B8B8</span></button>
+                          </div>
+                          <p class="cat-subgroup">Silva Angular Framework</p>
                           <div class="pal-grid">
                             <button type="button" class="pal-chip" style="--c:#007474" onclick="silvaCopyHex('#007474', this.querySelector('.pal-hx'))" aria-label="Copy Teal hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Teal</span><span class="pal-rl">Content</span></span><span class="pal-hx">#007474</span></button>
                             <button type="button" class="pal-chip" style="--c:#80e0e0" onclick="silvaCopyHex('#80e0e0', this.querySelector('.pal-hx'))" aria-label="Copy Light Teal hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Light Teal</span><span class="pal-rl">Accent</span></span><span class="pal-hx">#80E0E0</span></button>
@@ -3298,7 +3312,7 @@
       var PANE={prompt:'prompt',cast:'refs',items:'refs',scene:'refs',options:'options'};
       var active='prompt';   // open on the FIRST tab (Prompt) on load, not Cast
       // build stamp (fine print, bottom-right): bump PV_PS_BUILD on a MAJOR update so Chris sees what is live
-      var PV_PS_BUILD='v1.8.1';
+      var PV_PS_BUILD='v1.8.2';
       try{ var _bs=document.getElementById('pbg-build'); if(_bs) _bs.textContent='AI Studio '+PV_PS_BUILD; }catch(e){}
       // build tabs + dock
       tabsEl.innerHTML=TABS.map(function(t){return '<button class="pbg-tab" type="button" role="tab" data-t="'+t[0]+'"><span>'+t[1]+'</span><span class="tb" data-bk="'+t[0]+'"></span></button>';}).join('');
