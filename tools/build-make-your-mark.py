@@ -36,6 +36,11 @@ REFL_ES=f"{SITE}/assets/course-documents/Design-A-Sticker-Reflection-ES.docx"
 PROJECT_ZIP=f"{SITE}/assets/course-documents/Design-A-Sticker-Project-Folder.zip"
 HAVE_REFL=True
 
+# Live due-date countdown calendar (shared framework helper due_calendar_card; the iframe
+# embed survives Canvas, same trick as the school-day card). DUE_DATE = this module's target
+# completion date, YYYY-MM-DD. PLACEHOLDER date until Chris sets the real one.
+DUE_DATE="2026-11-11"
+
 OVER=f"{PFX}-make-your-mark-overview.html"
 S1=f"{PFX}-make-your-mark-step01-make-your-word.html"
 S2=f"{PFX}-make-your-mark-step02-reflection.html"
@@ -216,6 +221,7 @@ def overview():
     # ---- EN ----
     en=banner("Module 09 &bull; Step 01","Design a Sticker: Start Here",
         "Read this page, then go to Step 02 to make your sticker.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_DESIGN)
+    en+=due_calendar_card(DUE_DATE, False)
     en+=card("Learn &middot; the idea","Turn a Word Into a Sticker",
         (float_right(HERO_SCRIPT,"A brush-script vinyl sticker with a white border, held over grass","Your word can become a sticker like this.") if HAVE_ART else "")
         + para("This is a <strong>type</strong> project. First you explore <strong>typefaces and fonts</strong>. Then you <strong>design your own letters</strong> and turn a word into a <strong>sticker</strong> in Adobe Illustrator.")
@@ -248,6 +254,7 @@ def overview():
     # ---- ES ----
     es=banner("M&oacute;dulo 09 &bull; Paso 01","Dise&ntilde;a un Sticker: Empieza Aqu&iacute;",
         "Lee esta p&aacute;gina y luego ve al Paso 02 para hacer tu sticker.","#top","Back to English",hicon=HICON_DESIGN)
+    es+=due_calendar_card(DUE_DATE, True)
     es+=card("Aprende &middot; la idea","Convierte una Palabra en un Sticker",
         (float_right(HERO_SCRIPT,"Un sticker de letra de pincel con borde blanco, sobre el pasto","Tu palabra puede volverse un sticker as&iacute;.") if HAVE_ART else "")
         + para("Este es un proyecto de <strong>tipograf&iacute;a</strong>. Primero exploras <strong>tipograf&iacute;as y fuentes</strong>. Luego <strong>dise&ntilde;as tus propias letras</strong> y conviertes una palabra en un <strong>sticker</strong> en Adobe Illustrator.")

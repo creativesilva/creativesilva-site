@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Module Due-Date Calendar</title>
+  <!--
+    Live module due-date calendar, embedded via <iframe> on a module Overview page.
+    Canvas keeps the iframe and never sanitizes inside it, so this JS runs live.
+
+    URL parameters:
+      ?due=YYYY-MM-DD   the module due date (required)   e.g. ?due=2026-11-21
+      &lang=en|es       language for labels + sentence    (default en)
+
+    Grid always shows TODAY'S month (Pacific time). The run of days from today
+    through the due date fills with a translucent band that gradates green
+    (today) to red (due). Today = solid green anchor, due = solid red anchor.
+    A plain-language sentence at the top carries the live calendar-day count;
+    the due date is spelled out in the caption so the target is never lost,
+    even when the due date lands in a later month.
+  -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%;
+      background: transparent;
+      font-family: Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .cal {
+      width: 100%; max-width: 360px;
+      min-height: 100%;
+      margin: 0 auto;
+      padding: 13px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      /* Angular nav-tile aesthetic: top-left teal triangle eyebrow over a dark body */
+      background: linear-gradient(135deg, #094043 0, #094043 30px, #041d1c 30px, #041d1c 100%);
+      border: 2px solid transparent;
+      border-image: linear-gradient(135deg, #00b8b8 0%, rgba(0,184,184,0.08) 100%) 1;
+    }
+    .lead {
+      text-align: center;
+      font-size: 12.5px;
+      line-height: 1.35;
+      color: rgba(255, 255, 255, 0.80);
+      padding-bottom: 12px;
+    }
+    .lead b { color: #5eead4; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .lead.due-today b { color: #22c55e; }
+    .lead.past b { color: #e5484d; }
+    .month {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #5eead4;
+      padding-bottom: 9px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .dow {
+      text-align: center;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.40);
+      padding-bottom: 2px;
+    }
+    .cell {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      color: rgba(255, 255, 255, 0.82);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .cell.blank { background: transparent; }
+    .cell.past  { color: rgba(255, 255, 255, 0.28); }
+    .cell.today {
+      background: #22c55e;
+      color: #05210f;
+      font-weight: 700;
+    }
+    .cell.due {
+      background: #e5484d;
+      color: #ffffff;
+      font-weight: 700;
+    }
+    /* Due today: red fill, green ring so both readings show on one cell */
+    .cell.due.today {
+      background: #e5484d;
+      color: #ffffff;
+      box-shadow: inset 0 0 0 2px #22c55e;
+    }
+    .foot {
+      text-align: center;
+      padding-top: 12px;
+      font-size: 10.5px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.55);
+    }
+    .foot b { color: #e5484d; }
+  </style>
+</head>
+<body>
+  <div class="cal">
+    <div class="lead" id="lead">&nbsp;</div>
+    <div class="month" id="month">&nbsp;</div>
+    <div class="grid" id="grid"></div>
+    <div class="foot" id="foot">&nbsp;</div>
+  </div>
+
+  <script>
+    (function () {
+      var q = new URLSearchParams(location.search);
+      var dueStr = (q.get('due') || '').trim();           // YYYY-MM-DD
+      var lang   = (q.get('lang') || 'en').toLowerCase() === 'es' ? 'es' : 'en';
+
+      var T = {
+        en: {
+          months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+          dow: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+          sentN: function (n) { return 'You have <b>' + n + '</b> ' + (n === 1 ? 'day' : 'days') + ' to finish this module.'; },
+          dueToday: 'This module is due <b>today</b>.',
+          pastYesterday: 'This module was due <b>yesterday</b>.',
+          pastN: function (n) { return 'This module was due <b>' + n + '</b> days ago.'; },
+          footDue: 'Due', footPast: 'Was due'
+        },
+        es: {
+          months: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+          dow: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+          sentN: function (n) { return 'Tienes <b>' + n + '</b> ' + (n === 1 ? 'día' : 'días') + ' para terminar este módulo.'; },
+          dueToday: 'Este módulo se entrega <b>hoy</b>.',
+          pastYesterday: 'Este módulo venció <b>ayer</b>.',
+          pastN: function (n) { return 'Este módulo venció hace <b>' + n + '</b> días.'; },
+          footDue: 'Entrega', footPast: 'Venció'
+        }
+      }[lang];
+
+      var leadEl  = document.getElementById('lead');
+      var monthEl = document.getElementById('month');
+      var gridEl  = document.getElementById('grid');
+      var footEl  = document.getElementById('foot');
+
+      // Today in Pacific time, as YYYY-MM-DD.
+      var todayStr = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit'
+      }).format(new Date());
+      var tParts = todayStr.split('-');
+      var tY = +tParts[0], tM = +tParts[1] - 1, tD = +tParts[2];  // month 0-based
+
+      // Parse the due date (noon avoids any DST edge).
+      var dueOK = /^\d{4}-\d{2}-\d{2}$/.test(dueStr);
+      var dParts = dueOK ? dueStr.split('-') : null;
+      var dY = dueOK ? +dParts[0] : null;
+      var dM = dueOK ? +dParts[1] - 1 : null;
+      var dD = dueOK ? +dParts[2] : null;
+
+      var diff = 0;
+      if (dueOK) {
+        var todayNoon = new Date(tY, tM, tD, 12, 0, 0);
+        var dueNoon   = new Date(dY, dM, dD, 12, 0, 0);
+        diff = Math.round((dueNoon - todayNoon) / 86400000);
+      }
+
+      // ---- Top sentence (live count) ----
+      leadEl.className = 'lead';
+      if (!dueOK) {
+        leadEl.innerHTML = '&nbsp;';
+      } else if (diff > 0) {
+        leadEl.innerHTML = T.sentN(diff);
+      } else if (diff === 0) {
+        leadEl.innerHTML = T.dueToday;
+        leadEl.className  = 'lead due-today';
+      } else if (diff === -1) {
+        leadEl.innerHTML = T.pastYesterday;
+        leadEl.className  = 'lead past';
+      } else {
+        leadEl.innerHTML = T.pastN(-diff);
+        leadEl.className  = 'lead past';
+      }
+
+      // ---- Month header ----
+      monthEl.textContent = T.months[tM] + ' ' + tY;
+
+      // ---- Weekday header ----
+      for (var w = 0; w < 7; w++) {
+        var dw = document.createElement('div');
+        dw.className = 'dow';
+        dw.textContent = T.dow[w];
+        gridEl.appendChild(dw);
+      }
+
+      // ---- Day grid for today's month, with the green-to-red band ----
+      var firstDow  = new Date(tY, tM, 1).getDay();        // 0 Sun .. 6 Sat
+      var daysInMon = new Date(tY, tM + 1, 0).getDate();
+      var dueThisMonth = dueOK && dY === tY && dM === tM;
+
+      // Band colors: today green -> due red, interpolated per day, translucent.
+      var GREEN = [34, 197, 94], RED = [229, 72, 77], BAND_ALPHA = 0.22;
+      function band(frac) {
+        var r = Math.round(GREEN[0] + (RED[0] - GREEN[0]) * frac);
+        var g = Math.round(GREEN[1] + (RED[1] - GREEN[1]) * frac);
+        var b = Math.round(GREEN[2] + (RED[2] - GREEN[2]) * frac);
+        return 'rgba(' + r + ',' + g + ',' + b + ',' + BAND_ALPHA + ')';
+      }
+      // How far into this month the band reaches: the due day, or the month edge
+      // when the due date is in a later month. Only drawn when due is today/future.
+      var bandEnd = (diff >= 0) ? (dueThisMonth ? dD : daysInMon) : -1;
+
+      for (var blk = 0; blk < firstDow; blk++) {
+        var blank = document.createElement('div');
+        blank.className = 'cell blank';
+        gridEl.appendChild(blank);
+      }
+      for (var day = 1; day <= daysInMon; day++) {
+        var c = document.createElement('div');
+        c.className = 'cell';
+        if (day < tD) c.className += ' past';
+
+        // Translucent band on the days strictly between today and the due date.
+        if (bandEnd > 0 && day > tD && day <= bandEnd && !(dueThisMonth && day === dD)) {
+          var frac = diff > 0 ? (day - tD) / diff : 0;      // 0 at today .. 1 at due
+          if (frac < 0) frac = 0; if (frac > 1) frac = 1;
+          c.style.background = band(frac);
+        }
+
+        if (dueThisMonth && day === dD) c.className += ' due';
+        if (day === tD) c.className += ' today';
+        c.textContent = day;
+        gridEl.appendChild(c);
+      }
+
+      // ---- Due-date caption (always) ----
+      if (!dueOK) { footEl.innerHTML = '&nbsp;'; return; }
+      var dueNoon2 = new Date(dY, dM, dD, 12, 0, 0);
+      var fmt = new Intl.DateTimeFormat(lang === 'es' ? 'es-MX' : 'en-US', {
+        weekday: 'short', month: 'short', day: 'numeric'
+      }).format(dueNoon2);
+      var footLbl = diff < 0 ? T.footPast : T.footDue;
+      footEl.innerHTML = footLbl + ' &middot; <b>' + fmt + '</b>';
+    })();
+  </script>
+</body>
+</html>

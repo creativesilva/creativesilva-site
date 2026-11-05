@@ -370,6 +370,37 @@ def float_right(src,alt,cap=""):
       + capdiv
       + '<!--/FLOAT-->')
 
+CAL_EMBED_URL=f"{SITE}/assets/embeds/module-calendar.html"
+def due_calendar(due, es=False, w=340, h=420):
+    # Live module due-date calendar as a right-floated block: green = today, red = due,
+    # a translucent green-to-red band fills the days between, and it counts down before the
+    # date then up after it. Embedded via <iframe> so the JS stays live INSIDE Canvas (same
+    # mechanism as the school-day card). .silva-cfloat drops it full width under 640px, so the
+    # copy in its card wraps beside it on desktop and stacks under it on a phone.
+    lang="es" if es else "en"
+    title="Calendario de entrega del m&oacute;dulo" if es else "Module due-date calendar"
+    iframe=(f'<iframe src="{CAL_EMBED_URL}?due={due}&amp;lang={lang}" title="{title}" '
+      f'width="100%" height="{h}" scrolling="no" loading="lazy" '
+      f'style="border:0;display:block;max-width:{w}px;margin:0 auto;"></iframe>')
+    return (f'<div class="silva-cfloat" style="float:right;width:{w}px;max-width:100%;'
+      f'margin:2px 0 16px 30px;">{iframe}</div>')
+
+def due_calendar_card(due, es=False):
+    # Reusable "When It Is Due" section for a module Overview: floats the live calendar and
+    # wraps plain-language copy that teaches the color code. One line per module builder.
+    cal=due_calendar(due, es)
+    if es:
+        body=(cal
+          + para("Termina para el d&iacute;a <strong>rojo</strong>. Esa es la fecha de entrega.")
+          + para("El d&iacute;a <strong>verde</strong> es hoy. Los d&iacute;as entre medio te muestran cu&aacute;nto tiempo te queda.")
+          + para("El n&uacute;mero baja solo cada d&iacute;a, as&iacute; que siempre es correcto."))
+        return card("Aprende &middot; tu fecha de entrega","Cu&aacute;ndo Se Entrega", body)
+    body=(cal
+      + para("Finish by the <strong>red</strong> day. That is the due date.")
+      + para("The <strong>green</strong> day is today. The days in between show how much time you have left.")
+      + para("The number counts down on its own each day, so it is always right."))
+    return card("Learn &middot; your deadline","When It Is Due", body)
+
 def purple_thumb(href,src,alt,cap):
     # Purple-framed clickable thumbnail for a Resources card (slide deck, install video); new tab.
     return (f'<a href="{href}" target="_blank" rel="noopener" style="display:block;background:linear-gradient(135deg,#8b5cf6 0%,rgba(139,92,246,0.08) 100%);padding:2px;">'
