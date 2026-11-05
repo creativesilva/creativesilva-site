@@ -2,7 +2,9 @@
 
 The locked design system for Chris Silva's **operational teacher tools**: the iOS "liquid glass, galaxy glow" look. **AI Studio** (`build-resources.html`, formerly Prompt Studio / Build Resources; renamed 2026-11-04) is the reference implementation, applied end to end across BOTH its tabs (Prompt Builder AND Resources) plus the Reference Library: one page-wide galaxy backdrop, one glass component set, one teal rollover. Roll this out slowly to the teacher portal, Equipment Manager, and other teacher tools.
 
-**Scope.** This is for TEACHER TOOLS only. **Canvas student pages stay angular** (see `SILVA_ANGULAR_FRAMEWORK.md`); do not glass-ify them. The red/white portfolio and lightwriterz.org are untouched.
+**Scope.** This is for TEACHER TOOLS, plus one student-facing app Chris approved: the **student equipment store** (`reserve.html` + `css/store-glass.css`, glass since 2026-11-05). **Canvas student pages stay angular** (see `SILVA_ANGULAR_FRAMEWORK.md`); do not glass-ify them. The red/white portfolio and lightwriterz.org are untouched.
+
+**Student store (shipped 2026-11-05, approved through mockup rounds 1 to 8).** `css/store-glass.css` layers the glass system over `store.css` (which keeps the structure and behavior hooks). Locked choices: the sign-in card is a required gate (no close button, the backdrop does not dismiss it, it reopens on Log out, "Not you?" steps back); no 3-step guide boxes; each fact shows once (the pickup room + teacher live only in the date panel note); pure-white line icons (`assets/Icons/store/*-tile-v2.png` up top, `*-dock-v2.png` on phones, min-line masks rebuilt from the `_src/` masters); on phones the four tiles become a dock anchored edge to edge at the bottom with rounded top corners, its container about 20% darker than the tiles, and ONE galaxy gradient flowing across all four tiles as a single compound shape (`background-size: calc(400% + 24px)`, per-tile `--gx`); the selected tile gets a brighter teal layer ON the gradient + a 2px teal ring + glow, and rollover lives only under `@media (hover:hover)` so it never sticks after a tap; phone product cards are sized by JS (`--card-fit-h`) so the first row ends 12px above the dock; product grids are always 4 equal columns on iPad and desktop (2 on phones) so every category keeps one card size.
 
 **Status: LOCKED 2026-11-04.** Approved on AI Studio (v1.7). Maintain it without being reminded. When a decision changes, update this file in the same session.
 
@@ -216,4 +218,4 @@ Rule of thumb: **phone = sheet + dock, one column; iPad + desktop = two-column w
 5. Audit: glanceable, best-use-of-space, uniform, aligned (measure, 0px wave), cohesive. Run `tools/align-audit.js` on every tab, pane and opened accordion at all five widths and ship only at 0 flags. Fix before shipping.
 6. Verify live on desktop, iPad Pro width, and a phone. Then push and confirm live.
 
-Canvas student pages are out of scope. Teacher tools only.
+Canvas student pages are out of scope. Teacher tools only, plus the student equipment store (Chris approved 2026-11-05).

@@ -9,37 +9,36 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/store.css?v=54" />
+<link rel="stylesheet" href="/css/store-glass.css?v=1" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
 <body>
 
-<!-- Top utility strip: pickup room (blank until a student signs in) + text-only contact -->
-<div class="util">
-  <div class="wrap util-row">
-    <span class="util-l" id="pickupInfo"><b>Equipment pickup</b></span>
-    <div class="util-right">
-      <!-- EN/ES language toggle: flips every student-facing string at a 5th-grade reading level. -->
-      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language / Idioma">
-        <button type="button" data-lang="en" class="lang-on">EN</button>
-        <button type="button" data-lang="es">ES</button>
-      </div>
-      <a class="util-r" href="sms:+18056310001"><span data-i18n="k_textus">Text us: 805-631-0001</span> <em data-i18n="(text only)">(text only)</em></a>
-    </div>
-  </div>
-</div>
+<!-- Silva Galaxy Glass backdrop (Nebula Teal + soft Pink Spark, the AI Studio v1.9 palette). The old top
+     utility strip is gone: the pickup room now lives once, in the date panel note; EN/ES sits in the header;
+     the text-us number lives in the menu, the footer, and the sign-in card. -->
+<div class="galaxy" aria-hidden="true"><div class="galaxy-mesh"></div><div class="galaxy-glow"></div></div>
 
 <header class="store-nav">
   <div class="wrap">
     <a class="store-logo" href="/reserve.html" aria-label="Pioneer Valley"><img src="/assets/PV_Square_Logo.png" alt="Pioneer Valley" /></a>
     <div class="store-brand"><b>Pioneer Valley</b><span data-i18n="Equipment Rental">Equipment Rental</span><span class="store-stu" id="brandStu" hidden></span></div>
-    <form class="store-search" id="searchForm" role="search">
-      <input type="search" id="searchIn" placeholder="Search equipment" data-i18n-ph="Search equipment" aria-label="Search equipment" autocomplete="off" />
-      <button type="submit" aria-label="Search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="20.5" y1="20.5" x2="16.5" y2="16.5"></line></svg></button>
-    </form>
+    <!-- Search + EN/ES travel together: inline in the desktop bar, their own row on phones. -->
+    <div class="store-row2">
+      <form class="store-search" id="searchForm" role="search">
+        <input type="search" id="searchIn" placeholder="Search equipment" data-i18n-ph="Search equipment" aria-label="Search equipment" autocomplete="off" />
+        <button type="submit" aria-label="Search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="20.5" y1="20.5" x2="16.5" y2="16.5"></line></svg></button>
+      </form>
+      <!-- EN/ES language toggle: flips every student-facing string at a 5th-grade reading level. -->
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language / Idioma">
+        <button type="button" data-lang="en" class="lang-on">EN</button>
+        <button type="button" data-lang="es">ES</button>
+      </div>
+    </div>
     <div class="nav-right">
-      <button type="button" class="acct-btn" id="acctBtn">My Account</button>
-      <button type="button" class="cart-btn" id="cartBtn"><span data-i18n="Equipment Bag">Equipment Bag</span> <span class="cart-n empty" id="cartN">0</span></button>
+      <button type="button" class="acct-btn" id="acctBtn"><span class="hb-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 20.5c1.2-3.9 4.1-5.8 7.5-5.8s6.3 1.9 7.5 5.8"></path></svg></span><span class="hb-tx" id="acctTx">My Account</span></button>
+      <button type="button" class="cart-btn" id="cartBtn"><span class="hb-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 12.1a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9z"></path><path d="M9 10.5V7a3 3 0 0 1 6 0v3.5"></path></svg></span><span class="hb-tx" data-i18n="Equipment Bag">Equipment Bag</span> <span class="cart-n empty" id="cartN">0</span></button>
       <!-- Quick-access dropdown nav (hamburger) -->
       <div class="navmenu-wrap">
         <button type="button" class="nav-burger" id="navBtn" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -57,7 +56,6 @@
           <div class="navmenu-lab" data-i18n="You">You</div>
           <button type="button" data-nav="account" data-i18n="My Account">My Account</button>
           <button type="button" data-nav="bag" data-i18n="Equipment Bag">Equipment Bag</button>
-          <button type="button" data-nav="howitworks" data-i18n="How it works">How it works</button>
           <div class="navmenu-sep"></div>
           <a class="navmenu-link" href="sms:+18056310001" data-i18n="k_textus">Text us: 805-631-0001</a>
         </nav>
@@ -69,13 +67,14 @@
 <!-- Equipment header hero: image background; controls in a dark top band (nav left, dates right) -->
 <div class="store-hero">
   <div class="wrap hero-top">
-    <!-- Category nav (teal line-art icons), top-left -->
-    <nav class="catnav">
+    <!-- Category tiles (pure white line art; the icon file per tile + per screen size is set in store-glass.css).
+         Desktop + iPad: four glass tiles up top. Phones: the same four tiles become a dock anchored to the bottom. -->
+    <nav class="catnav" aria-label="Equipment categories">
       <div class="catnav-row" id="catnav">
-        <button type="button" class="catn" data-cat="cameras"><span class="catn-ic" style="--ic:url('/assets/Icons/store/camera-v1.png')"></span><span data-i18n="Camera Kits">Camera Kits</span></button>
-        <button type="button" class="catn" data-cat="lenses"><span class="catn-ic" style="--ic:url('/assets/Icons/store/lenses-v1.png')"></span><span data-i18n="Lenses">Lenses</span></button>
-        <button type="button" class="catn" data-cat="lighting"><span class="catn-ic" style="--ic:url('/assets/Icons/store/lighting-v1.png')"></span><span data-i18n="Lighting">Lighting</span></button>
-        <button type="button" class="catn" data-cat="accessories"><span class="catn-ic" style="--ic:url('/assets/Icons/store/accessories-v1.png')"></span><span data-i18n="Accessories">Accessories</span></button>
+        <button type="button" class="catn" data-cat="cameras"><span class="catn-ic"></span><span data-i18n="Camera Kits">Camera Kits</span></button>
+        <button type="button" class="catn" data-cat="lenses"><span class="catn-ic"></span><span data-i18n="Lenses">Lenses</span></button>
+        <button type="button" class="catn" data-cat="lighting"><span class="catn-ic"></span><span data-i18n="Lighting">Lighting</span></button>
+        <button type="button" class="catn" data-cat="accessories"><span class="catn-ic"></span><span data-i18n="Accessories">Accessories</span></button>
       </div>
     </nav>
     <!-- One clickable Checkout box steps through day -> pickup -> return time; Return + Days auto-fill -->
@@ -83,7 +82,7 @@
       <div class="datebar-row">
         <div class="datebar-leadwrap">
           <div class="datebar-lead" data-i18n="When do you need it?">When do you need it?</div>
-          <div class="datebar-note" data-i18n="Return is the next school day. Choose your pickup time at checkout.">Return is the next school day. Choose your pickup time at checkout.</div>
+          <div class="datebar-note" id="dateNote">Return is the next school day. Choose your pickup time at checkout.</div>
         </div>
         <div class="datecards hero-dates" id="dateCards">
           <button type="button" class="datecard pick step co" id="dcCheckout" aria-label="Set checkout day, pickup time and return time"><span class="dc-lab" data-i18n="Checkout">Checkout</span><span class="dc-val" id="dcCheckoutVal"></span></button>
@@ -93,13 +92,8 @@
       </div>
     </div>
   </div>
-  <!-- Live guide: the 3-step spine of the whole flow. Rendered by renderGuide() so it always shows where the
-       student is (sign in -> pick dates -> add gear) and the one next action. Replaces the old passive 1-5
-       "how it works" carousel; "what happens after you reserve" is the muted after-line below the steps. -->
-  <div class="hero-hiw" id="howitworks">
-    <div class="wrap guide" id="guide"></div>
-    <div class="wrap guide-after" id="guideAfter"></div>
-  </div>
+  <!-- The 3-step guide boxes were retired 2026-11-05 (Chris): the flow already walks each student from one
+       sheet to the next, and on a phone the boxes took too much of the screen. renderGuide() no-ops without #guide. -->
 </div>
 
 <!-- Missing-work hold banner (shown only when the signed-in student is on hold) -->
@@ -138,7 +132,6 @@
     <div class="foot-col">
       <h4 data-i18n="Program Info">Program Info</h4>
       <button type="button" class="foot-link" id="footProgram" data-i18n="Digital Arts program">Digital Arts program</button>
-      <a href="#howitworks" class="foot-link" data-i18n="How it works">How it works</a>
       <button type="button" class="foot-link" id="footRental" data-i18n="Rental agreement">Rental agreement</button>
       <button type="button" class="foot-link" id="footJobs" data-i18n="Jobs">Jobs</button>
     </div>
@@ -205,17 +198,26 @@
   </div>
 </div>
 
-<!-- Sign-in dialog: student number only, no password. Two steps: ID entry, then confirm contact. -->
+<!-- Sign-in GATE (Chris 2026-11-05): required before anyone can browse. No close button and the backdrop
+     does not dismiss it; it opens on load and again after Log out. Student number only, no password.
+     Two steps: ID entry, then confirm contact ("Not you?" returns to step 1). -->
 <div class="sov" id="signinOv" aria-hidden="true">
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="signinTitle">
-    <button type="button" class="sheet-x" data-close="signinOv" aria-label="Close">&times;</button>
     <div class="sheet-bd">
+      <div class="gate-top">
+        <img class="gate-logo" src="/assets/PV_Square_Logo.png" alt="Pioneer Valley" />
+        <div class="lang-toggle gate-lang" role="group" aria-label="Language / Idioma">
+          <button type="button" data-lang="en" class="lang-on">EN</button>
+          <button type="button" data-lang="es">ES</button>
+        </div>
+      </div>
       <div id="siStep1">
-        <h2 id="signinTitle" data-i18n="My Account">My Account</h2>
+        <h2 id="signinTitle" data-i18n="Equipment Rental">Equipment Rental</h2>
         <p data-i18n="Sign in with your student number. No password.">Sign in with your student number. No password.</p>
         <div class="field"><label for="sid" data-i18n="Student number">Student number</label><input type="text" id="sid" inputmode="numeric" autocomplete="off" placeholder="e.g. 123456" data-i18n-ph="k_sid_ph" /></div>
         <div class="sheet-msg" id="signinMsg"></div>
         <button type="button" class="btn block" id="signinGo" data-i18n="Sign in">Sign in</button>
+        <div class="gate-help"><span data-i18n="Need help?">Need help?</span> <a href="sms:+18056310001" data-i18n="k_textus">Text us: 805-631-0001</a></div>
       </div>
       <div id="siStep2" style="display:none">
         <h2 data-i18n="Is this you?">Is this you?</h2>
@@ -225,6 +227,7 @@
         <div class="field"><label for="siPc" data-i18n="Parent or guardian cell">Parent or guardian cell</label><input type="tel" id="siPc" inputmode="numeric" autocomplete="off" placeholder="805-555-1234" /></div>
         <div class="sheet-msg" id="siMsg2"></div>
         <button type="button" class="btn block" id="siConfirm" data-i18n="k_thatsme">That&#x2019;s me &middot; continue</button>
+        <button type="button" class="si-back" id="siBack" data-i18n="Not you? Try another number.">Not you? Try another number.</button>
       </div>
     </div>
   </div>
@@ -359,6 +362,9 @@
     // --- hero ---
     'When do you need it?':'¿Cuándo lo necesitas?',
     'Return is the next school day. Choose your pickup time at checkout.':'La devolución es el siguiente día de clases. Elige tu hora para recoger al finalizar.',
+    'Pick up in %s with %s. Return it the next school day.':'Recógelo en el %s con %s. Devuélvelo el siguiente día de clases.',
+    'Pick up in %s. Return it the next school day.':'Recógelo en el %s. Devuélvelo el siguiente día de clases.',
+    'Need help?':'¿Necesitas ayuda?','Not you? Try another number.':'¿No eres tú? Prueba otro número.',
     'Checkout':'Recoges','Return':'Regresas','Days':'Días','Tap to set times':'Toca para elegir horas','Set at checkout':'Se elige al recoger',
     // --- guide ---
     'Sign in':'Inicia sesión','Type your student number. No password needed.':'Escribe tu número de estudiante. No necesitas contraseña.',
@@ -485,7 +491,7 @@
     });
     document.documentElement.lang=LANG;
   }
-  function updateLangToggle(){ document.querySelectorAll('#langToggle [data-lang]').forEach(function(b){ b.classList.toggle('lang-on', b.getAttribute('data-lang')===LANG); }); }
+  function updateLangToggle(){ document.querySelectorAll('.lang-toggle [data-lang]').forEach(function(b){ b.classList.toggle('lang-on', b.getAttribute('data-lang')===LANG); }); }   // header toggle + the sign-in card's toggle
   // Toggle language: flip LANG, re-skin static text + dates, re-render every JS-built view + any open sheet.
   function applyLang(){
     applyDateLang(); applyI18nStatic(); updateLangToggle();
@@ -500,11 +506,19 @@
   }
   function setLang(l){ if(l!==LANG){ LANG=l; saveLang(); applyLang(); } else { updateLangToggle(); } }
 
-  // pickup strip: blank room/teacher until a student authenticates; then their own teacher + room
+  // The pickup fact lives in ONE place (Chris 2026-11-05, no repeated info): the date panel's note. Signed in,
+  // it names the student's own room + teacher; signed out (behind the sign-in gate) it keeps the general rule.
+  function teacherInSentence(name){   // Spanish sentences take the article: "el Sr. Silva", "la Sra. Garcia-Solorio"
+    if(LANG!=='es') return name;
+    return String(name).replace(/^Mr\.\s*/,'el Sr. ').replace(/^(Ms|Mrs)\.\s*/,'la Sra. ');
+  }
   function refreshPickupInfo(){
-    var el=document.getElementById('pickupInfo'); if(!el) return;
-    if(USER){ var teach=USER.teacher||TEACHER_NAME[USER.pool]||''; el.innerHTML='<b>'+t('Classroom pickup')+'</b>'+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(pickupRoom()); }
-    else { el.innerHTML='<b>'+t('Equipment pickup')+'</b>'; }
+    var el=document.getElementById('dateNote'); if(!el) return;
+    if(!USER){ el.textContent=t('Return is the next school day. Choose your pickup time at checkout.'); return; }
+    var teach=USER.teacher||TEACHER_NAME[USER.pool]||'', room=pickupRoom();
+    if(LANG==='es') room=room.replace(/Salón/g,'salón');   // mid-sentence: "en el salón 322"
+    el.textContent = teach ? tf('Pick up in %s with %s. Return it the next school day.', room, teacherInSentence(teach))
+                           : tf('Pick up in %s. Return it the next school day.', room);
   }
 
   // ----- school-day logic (live from pvhs_tools; weekday fallback if the script is blocked) -----
@@ -556,6 +570,7 @@
     document.getElementById('dcCheckout').classList.toggle('todo', !datesReady());
     document.getElementById('dcCheckout').classList.toggle('done', datesReady());
     renderGuide();   // keep the guide's "pick your dates" step in sync
+    fitCards();      // the date cards can change height; keep the phone cards above the dock
   }
 
   // ----- the one-box stepped planner: checkout day -> pickup time -> return time, all in place -----
@@ -786,7 +801,7 @@
 
   // ===== Calendar-view equipment picker: category -> items -> Add other / Done =====
   var pickerCat=null, pickerItem=null, pickerOpen=false;
-  function catIcon(k){ var m={cameras:'camera',lenses:'lenses',lighting:'lighting',accessories:'accessories'}; return '/assets/Icons/store/'+(m[k]||k)+'-v1.png'; }
+  function catIcon(k){ var m={cameras:'camera',lenses:'lenses',lighting:'lighting',accessories:'accessories'}; return '/assets/Icons/store/'+(m[k]||k)+'-dock-v2.png'; }   // the small pure-white masks (picker box is dock-sized)
   function openPicker(){ pickerCat=null; pickerItem=null; pickerOpen=true; renderPicker(); open('pickerOv'); }
   function pickerDone(){ pickerOpen=false; pickerCat=null; pickerItem=null; close('pickerOv'); renderBag(); open('bagOv'); }
   function renderPicker(){
@@ -1028,7 +1043,7 @@
     var more = SPECS[it.name] ? '<button type="button" class="prod-details" data-detail="'+det+'">'+t('View details')+'</button>' : '';
     return '<div class="prod'+(showLocked?' locked':'')+'">'+
       '<div class="prod-img" data-detail="'+det+'"><img src="'+it.img+'" alt="" loading="lazy" />'+(it.tag&&!showLocked?'<span class="prod-tag">'+esc(t(it.tag))+'</span>':'')+(showLocked?'<span class="prod-lockbadge">'+esc(t(lockReason(it)))+'</span>':'')+'</div>'+
-      '<div class="prod-name" data-detail="'+det+'">'+esc(it.name)+'</div>'+ stock + more + btn + '</div>';
+      '<div class="prod-name" data-detail="'+det+'">'+esc(it.name).replace(/(\S*\d-\d\S*)/g,'<span class="nw">$1</span>')+'</div>'+ stock + more + btn + '</div>';   // "10-18mm" never splits across lines
   }
   function wireCards(g){
     g.querySelectorAll('[data-add]').forEach(function(b){ b.onclick=function(){ addToBag(decodeURIComponent(b.getAttribute('data-add'))); }; });
@@ -1359,29 +1374,30 @@
     var el=document.getElementById(id); el.classList.remove('open'); el.style.zIndex=''; if(id==='planOv') pendingAdd=null; if(id==='pickerOv') pickerOpen=false; syncScrollLock();
   }
   document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ close(b.getAttribute('data-close')); }; });
-  ['signinOv','holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv','pickerOv','acctOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
+  // Tapping the dimmed backdrop closes a sheet. Not the sign-in gate: signing in is required (Chris 2026-11-05).
+  ['holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv','pickerOv','acctOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
   function toast(msg){ var t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2800); }
   function pulseDates(){ var d=document.querySelector('.datebar'); if(!d) return; d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash'); }
 
   // ===== account chip + hold banner =====
-  // Top-left line under "Equipment Rental": the signed-in student's Period | Teacher | Course.
+  // The line under "Pioneer Valley": the signed-in student's Period · Course (e.g. PERIOD 01 · PHOTO 01). The
+  // teacher is named once, in the date panel's pickup note, so it is not repeated here.
   function brandStuLine(u){
     var per=String(u.period||'').replace(/\D/g,''); per=per?(t('Period')+' '+('0'+per).slice(-2)):'';
     var crs=String(u.course||''); var mp=crs.match(/photography\s*(\d)/i); if(mp) crs=t('Photo')+' '+('0'+mp[1]).slice(-2);
-    return [per, u.teacher||'', crs].filter(Boolean).map(esc).join('<i class="bs-sep">|</i>');
+    return [per, crs].filter(Boolean).map(esc).join('<i class="bs-sep">&middot;</i>');
   }
-  // Digital Arts-only students (Mankin pool) get the stylus icon on the Accessories tab; photo students and
-  // dual-pool students (mixed accessories) keep the generic accessories icon.
+  // Digital Arts-only students (Mankin pool) get the stylus icon on the Accessories tile; photo students and
+  // dual-pool students (mixed accessories) keep the generic accessories icon. The icon files live in store-glass.css.
   function applyCatIcons(){
-    var acc=document.querySelector('.catn[data-cat="accessories"] .catn-ic');
+    var acc=document.querySelector('.catn[data-cat="accessories"]');
     if(!acc) return;
-    var da=(USER && hasPool('mankin') && !isMultiPool());
-    acc.style.setProperty('--ic', "url('/assets/Icons/store/"+(da?'stylus-v1':'accessories-v1')+".png')");
+    acc.classList.toggle('is-stylus', !!(USER && hasPool('mankin') && !isMultiPool()));
   }
   function refreshAccount(){
-    var a=document.getElementById('acctBtn');
-    if(USER){ a.classList.add('in'); a.textContent=USER.label||'My account'; }
-    else { a.classList.remove('in'); a.textContent='My Account'; }
+    var a=document.getElementById('acctBtn'), ax=document.getElementById('acctTx');   // the icon stays; only the label changes
+    if(USER){ a.classList.add('in'); ax.textContent=USER.label||t('My account'); }
+    else { a.classList.remove('in'); ax.textContent=t('My Account'); }
     var bs=document.getElementById('brandStu');
     if(bs){ if(USER && (USER.period||USER.teacher||USER.course)){ bs.innerHTML=brandStuLine(USER); bs.hidden=false; } else { bs.hidden=true; bs.innerHTML=''; } }
     applyCatIcons();   // Accessories icon = stylus for Digital Arts students, tripod otherwise
@@ -1400,7 +1416,30 @@
         '<button type="button" class="hb-link" id="hbWhy">'+t('Details')+'</button></div>';
       var w=document.getElementById('hbWhy'); if(w) w.onclick=openHold;
     } else { hb.style.display='none'; }
+    fitCards();   // the hold banner moves the grid down; re-fit the phone cards above the dock
   }
+
+  // ===== phones: product cards fit ABOVE the bottom dock (Chris 2026-11-05: cards never tuck under it) =====
+  // Card height = screen - dock - the first row's top - 12px; the photo flexes to take the room. Row 2 begins
+  // just past the dock edge, so it is clearly "more below". Only while the dock is fixed (phone widths).
+  function fitCards(){
+    var g=document.getElementById('prodGrid'), dock=document.querySelector('.hero-top .catnav'); if(!g||!dock) return;
+    var first=g.querySelector('.prod');
+    if(!first || getComputedStyle(dock).position!=='fixed'){ g.style.removeProperty('--card-fit-h'); return; }
+    var lockedY=document.documentElement.classList.contains('modal-lock')?_lockY:0;   // a sheet is open: body is pinned at -scrollY
+    var top=first.getBoundingClientRect().top+(window.pageYOffset||0)+lockedY;          // the first row's page position
+    var h=window.innerHeight - dock.getBoundingClientRect().height - top - 12;
+    g.style.setProperty('--card-fit-h', Math.max(250, Math.min(520, Math.round(h)))+'px');
+  }
+  (function(){
+    var g=document.getElementById('prodGrid');
+    if(g && window.MutationObserver) new MutationObserver(function(){ fitCards(); }).observe(g, {childList:true});   // every render path (popular, category, search)
+    var lastW=window.innerWidth, rt;
+    window.addEventListener('resize', function(){ if(window.innerWidth===lastW) return; lastW=window.innerWidth; clearTimeout(rt); rt=setTimeout(fitCards,120); });   // width only: the iOS address bar must not resize cards mid-scroll
+    window.addEventListener('orientationchange', function(){ setTimeout(fitCards,250); });
+    window.addEventListener('load', fitCards);
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitCards);
+  })();
 
   // ===== live guide: the reactive 3-step spine (sign in -> pick dates -> add gear) =====
   // It always shows where the student is and the ONE next action, so the page never looks "reset".
@@ -1509,6 +1548,7 @@
   document.getElementById('signinGo').addEventListener('click', doSignin);
   document.getElementById('sid').addEventListener('keydown', function(e){ if(e.key==='Enter') doSignin(); });
   document.getElementById('siConfirm').addEventListener('click', siConfirm);
+  document.getElementById('siBack').addEventListener('click', function(){ window._siLookup=null; showStep1(); var i=document.getElementById('sid'); if(i){ i.value=''; try{ i.focus(); }catch(e){} } });   // wrong person: the gate cannot be closed, so step back to the number
   document.getElementById('acctBtn').addEventListener('click', function(){ if(USER){ openAccount(); } else { openSignin(); } });
   document.getElementById('cartBtn').addEventListener('click', function(){ if(!USER){ openSignin(); return; } renderBag(); open('bagOv'); });
   // Quick-access dropdown nav (hamburger)
@@ -1529,7 +1569,6 @@
       else if(a==='calendar'){ var cv=document.getElementById('calview'); if(cv){ cv.open=true; renderCalView(); cv.scrollIntoView({behavior:'smooth',block:'start'}); } }
       else if(a==='account'){ document.getElementById('acctBtn').click(); }
       else if(a==='bag'){ document.getElementById('cartBtn').click(); }
-      else if(a==='howitworks'){ var h=document.getElementById('howitworks'); if(h) h.scrollIntoView({behavior:'smooth',block:'start'}); }
       closeMenu();
     }); });
     menu.querySelectorAll('.navmenu-link').forEach(function(l){ l.addEventListener('click', closeMenu); });
@@ -1603,7 +1642,7 @@
         resvSectionHtml()+
         '<div class="sheet-actions"><button type="button" class="btn ghost" id="acctEditBtn">'+t('Edit my info')+'</button><button type="button" class="btn" id="acctLogout">'+t('Log out')+'</button></div>';
       document.getElementById('acctEditBtn').onclick=function(){ acctEdit=true; renderAccount(); };
-      document.getElementById('acctLogout').onclick=function(){ USER=null; saveUser(); refreshAccount(); close('acctOv'); rerender(); toast(t('Logged out.')); };
+      document.getElementById('acctLogout').onclick=function(){ USER=null; saveUser(); refreshAccount(); close('acctOv'); rerender(); toast(t('Logged out.')); openSignin(); };   // back to the required sign-in gate
       b.querySelectorAll('[data-cx]').forEach(function(x){ x.onclick=function(){ confirmingCancel=x.getAttribute('data-cx'); renderAccount(); }; });
       b.querySelectorAll('[data-cxno]').forEach(function(x){ x.onclick=function(){ confirmingCancel=null; renderAccount(); }; });
       b.querySelectorAll('[data-cxyes]').forEach(function(x){ x.onclick=function(){ doCancelResv(x.getAttribute('data-cxyes')); }; });
@@ -1714,15 +1753,15 @@
 
   // ===== init =====
   // Language: wire the EN/ES toggle, then skin the page (static text + dates) for the stored choice.
-  document.querySelectorAll('#langToggle [data-lang]').forEach(function(b){ b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); }); });
+  document.querySelectorAll('.lang-toggle [data-lang]').forEach(function(b){ b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); }); });
   if(LANG==='es') applyDateLang();
   applyI18nStatic(); updateLangToggle();
   renderDates();
   renderPopular();   // home view = Popular Rentals (not a category)
   refreshAccount();
   loadCal();
-  // Prompt for a student number 3s after the page loads (unless already signed in or the sheet is open).
-  if(!USER){ setTimeout(function(){ var ov=document.getElementById('signinOv'); if(!USER && ov && !ov.classList.contains('open')) openSignin(); }, 3000); }
+  // Signing in is REQUIRED (Chris 2026-11-05): the gate opens right away and stays until a student signs in.
+  if(!USER) openSignin();
 })();
 </script>
 </body>
