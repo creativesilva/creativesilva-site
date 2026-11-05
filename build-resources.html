@@ -555,10 +555,10 @@
   .pvb-field textarea, .pvb-field select{width:100%; font-family:var(--pvb-body); font-size:.95rem; color:var(--pvb-text);
     background:var(--g-glass-quiet); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur);
     border:1px solid var(--g-edge-soft); border-radius:var(--g-r-sm); box-shadow:var(--g-spec); padding:10px 13px; outline:none; resize:vertical;}
-  .pvb-field textarea{min-height:42px;}
-  .pvb-field select{appearance:none; -webkit-appearance:none; cursor:pointer;
+  .pvb-field textarea{min-height:var(--g-ctrl-h);}   /* LOCKED: single-row controls are --g-ctrl-h tall */
+  .pvb-field select{appearance:none; -webkit-appearance:none; cursor:pointer; height:var(--g-ctrl-h); padding-top:0; padding-bottom:0;
     background-image:linear-gradient(45deg,transparent 50%,var(--pvb-muted) 50%),linear-gradient(135deg,var(--pvb-muted) 50%,transparent 50%);
-    background-position:calc(100% - 18px) 55%, calc(100% - 13px) 55%; background-size:5px 5px,5px 5px; background-repeat:no-repeat; padding-right:34px;}
+    background-position:calc(100% - 19px) 55%, calc(100% - 14px) 55%; background-size:5px 5px,5px 5px; background-repeat:no-repeat; padding-right:34px;}
   .pvb-field textarea:focus, .pvb-field select:focus{border-color:var(--g-edge); box-shadow:var(--g-spec), 0 0 0 3px rgba(0,184,184,.14);}
   .pvb-field select option{background:#0c1414; color:var(--pvb-text);}
   /* Custom teal dropdown: replaces the native <select> popup so the OPEN list matches the
@@ -571,10 +571,10 @@
   .pvb-dd.open{z-index:90;}
   .pvb-titlewrap:has(> .pvb-select-menu:not([hidden])){z-index:90;}
   #cs-incoming-mount{position:relative; z-index:20;}
-  .pvb-dd-btn{width:100%; display:flex; align-items:center; gap:10px; text-align:left; cursor:pointer;
+  .pvb-dd-btn{width:100%; min-height:var(--g-ctrl-h); display:flex; align-items:center; gap:10px; text-align:left; cursor:pointer;
     font-family:var(--pvb-body); font-size:.95rem; color:var(--pvb-text);
     background:var(--g-glass-quiet); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur);
-    border:1px solid var(--g-edge-soft); border-radius:var(--g-r-sm); box-shadow:var(--g-spec); padding:10px 13px;}
+    border:1px solid var(--g-edge-soft); border-radius:var(--g-r-sm); box-shadow:var(--g-spec); padding:6px 14px;}
   .pvb-dd-btn:hover{border-color:var(--g-edge);}
   .pvb-dd.open .pvb-dd-btn, .pvb-dd-btn:focus{border-color:var(--g-teal); outline:none;}
   .pvb-dd-lbl{flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
@@ -588,8 +588,8 @@
   .pvb-acc{background:var(--g-glass-quiet); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur);
     border:1px solid var(--g-edge-soft); border-radius:var(--g-r-md); box-shadow:var(--g-shadow-sm), var(--g-spec); margin-bottom:10px; overflow:hidden;}
   .pvb-acc.open{border-color:var(--g-edge);}
-  .pvb-acc-head{width:100%; display:flex; align-items:center; gap:10px; cursor:pointer; font-family:var(--pvb-font);
-    background:transparent; border:0; color:var(--pvb-text); padding:12px 14px; text-align:left;}
+  .pvb-acc-head{width:100%; min-height:var(--g-ctrl-h); display:flex; align-items:center; gap:10px; cursor:pointer; font-family:var(--pvb-font);
+    background:transparent; border:0; color:var(--pvb-text); padding:6px 14px; text-align:left;}
   .pvb-acc-head .lab{font-weight:600; font-size:.92rem;}
   .pvb-acc-head .cnt{font-size:.7rem; color:var(--pvb-faint); letter-spacing:.04em;}
   .pvb-acc-head .cnt.has{color:var(--pvb-teal);}
@@ -896,8 +896,10 @@
   /* a small amber dot on the wizard forward circle when a hard conflict is flagged */
   /* (removed the cryptic amber dot on the forward circle; the full preflight warning shows in the build order) */
   .pbg-edit-scroll{flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:0 16px 4px;}
-  .pbg-edit-foot{flex:0 0 auto; padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--pvb-line-soft);
-    background:linear-gradient(to top, rgba(6,16,15,.96), rgba(8,22,21,.78)); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);}
+  /* footer is seamless: no border, no dark band. A whisper-soft fade lets the last line of prompt settle
+     under the compact pill instead of hitting a hard rectangle. The pill is centered, not a full-width bar. */
+  .pbg-edit-foot{flex:0 0 auto; display:flex; justify-content:center; padding:8px 16px calc(14px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(to top, rgba(6,16,15,.55), rgba(6,16,15,0));}
   .pbg-edit-foot .pbg-buildorder{margin-top:0;}
   /* editable prompt: click in to tweak the wording, then Copy */
   #pvb-preview[contenteditable]{cursor:text; outline:none; transition:border-color .15s, box-shadow .15s;}
@@ -917,9 +919,9 @@
   /* composed-prompt footer: ONE glass pill split down the middle into a download icon + a copy icon.
      Both halves sit in the same glass (no harsh dark/bright split); the teal arrives on HOVER only, so
      the rollover is the cohesive glass action used everywhere. LOCKED sizing: --g-ctrl-h tall icon squares. */
-  .pbg-promptpill{display:flex; height:var(--g-ctrl-h); border-radius:var(--pbg-r-pill); overflow:hidden; border:1px solid var(--g-edge);
+  .pbg-promptpill{display:inline-flex; height:var(--g-ctrl-h-sm); border-radius:var(--pbg-r-pill); overflow:hidden; border:1px solid var(--g-edge);
     background:var(--g-glass); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur); box-shadow:var(--g-shadow-sm), var(--g-spec);}
-  .pbg-promptpill button{flex:1 1 0; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; border:0; background:transparent; color:var(--pvb-teal-lt); transition:background .18s ease, color .18s ease, box-shadow .18s ease;}
+  .pbg-promptpill button{flex:0 0 auto; width:56px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; border:0; background:transparent; color:var(--pvb-teal-lt); transition:background .18s ease, color .18s ease, box-shadow .18s ease;}
   .pbg-promptpill button svg{width:20px; height:20px;}
   .pbg-promptpill .pp-dl{border-right:1px solid var(--g-edge-soft);}
   .pbg-promptpill button:hover{background:var(--g-primary); color:#04110f; box-shadow:var(--g-spec);}
@@ -936,7 +938,7 @@
   .pbg-more{margin-top:10px; border:1px solid var(--g-edge-soft); border-radius:var(--g-r-md); background:var(--g-glass-quiet);
     backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur); box-shadow:var(--g-shadow-sm), var(--g-spec); overflow:hidden;}
   .pbg-more[open]{border-color:var(--g-edge);}
-  .pbg-more>summary{list-style:none; cursor:pointer; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+  .pbg-more>summary{list-style:none; cursor:pointer; min-height:var(--g-ctrl-h); padding:6px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px;
     font-family:var(--pvb-font); font-weight:600; font-size:.92rem; letter-spacing:.02em; color:var(--pvb-text);}
   .pbg-more>summary::-webkit-details-marker{display:none;}
   .pbg-more>summary::after{content:''; flex:0 0 auto; width:9px; height:9px; border-right:2px solid var(--pvb-muted); border-bottom:2px solid var(--pvb-muted); transform:rotate(45deg); transition:transform .18s;}
@@ -1035,10 +1037,10 @@
   /* at full screen the top tabs dissolve; the bottom dock is the only nav */
   .pbg-sheet.at-full .pbg-tabs{max-height:0; opacity:0; padding-top:0; padding-bottom:0; margin:0; overflow:hidden; pointer-events:none;}
   .pbg-tabs::-webkit-scrollbar{display:none;}
-  .pbg-tab{flex:1 1 0; min-width:max-content; position:relative; display:flex; align-items:center; justify-content:center; gap:7px;
+  .pbg-tab{flex:1 1 0; min-width:max-content; min-height:var(--g-ctrl-h-sm); position:relative; display:flex; align-items:center; justify-content:center; gap:7px;
     font-family:var(--pvb-font); font-weight:700; letter-spacing:.05em; text-transform:uppercase; font-size:.72rem;
     color:var(--pvb-muted); background:transparent; border:1px solid transparent; border-radius:var(--pbg-r-pill);
-    padding:9px 13px; cursor:pointer; transition:color .15s, background .15s, border-color .15s; white-space:nowrap;}
+    padding:0 13px; cursor:pointer; transition:color .15s, background .15s, border-color .15s; white-space:nowrap;}
   .pbg-tab:hover{color:var(--pvb-text);}
   .pbg-tab.on{color:#fff; border-color:rgba(112,246,246,.3);}
   .pbg-tab .tb{min-width:16px; height:16px; padding:0 4px; border-radius:var(--g-r-pill); background:var(--pvb-teal); color:#04110f;
@@ -1087,9 +1089,9 @@
   #pvb-panel-build .pvb-pnav-item{border-radius:var(--pbg-r-sm); border-left:2px solid transparent;}
   #pvb-panel-build .pvb-btn{border-radius:var(--pbg-r-pill);}
   #pvb-panel-build .pvb-quickbtn{border-radius:var(--pbg-r-pill);}
-  /* prompt-nav inside the sheet: plain groups, no outer frame */
-  #pvb-panel-build .pvb-acc.pnav{background:transparent; border:0; margin-bottom:6px;}
-  #pvb-panel-build .pvb-acc.pnav .pvb-acc-head{padding:8px 4px;}
+  /* prompt-nav groups: the SAME glass accordion as every other Prompt-tab card, so all four read as one
+     shape with the chevron at the same 14px inset. (The head uses the base .pvb-acc-head: 48px, 6px 14px.) */
+  #pvb-panel-build .pvb-acc.pnav{background:var(--g-glass-quiet); border:1px solid var(--g-edge-soft); margin-bottom:10px;}
 
   /* ---------- data-cat filtering: Cast / Items / Scene tabs show one ref section ---------- */
   .pbg[data-cat="cast"]  #pvb-refs [data-cat]:not([data-cat="cast"]),
@@ -1133,9 +1135,7 @@
     .pvb-rtool{height:36px;}
     .pvb-rtool svg{width:16px; height:16px;}
     .pbg-wiz-circle{width:48px; height:48px;}
-    .pvb-acc-head{padding:15px 16px;}
     .pvb-charhead{padding:11px 6px;}
-    .pbg-promptpill button, .ckpill button{padding-top:16px; padding-bottom:16px;}
   }
 
   /* ===================== MOBILE PHONE (vertical-first): draggable sheet =====================
