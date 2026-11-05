@@ -879,7 +879,10 @@
   .pbg-copy:hover{filter:brightness(1.08);}
   .pbg-copy.copied{background:#3fd08a;}
   .pbg-card-body{flex:1 1 auto; min-height:0; overflow:hidden; display:flex; flex-direction:column;}
-  .pbg-card-body .pvb-preview{max-height:none; border-radius:var(--pbg-r-sm); border:1px solid var(--pvb-line-soft); border-left:3px solid var(--pvb-teal); background:rgba(2,12,11,.5);}
+  /* the prompt box is a self-contained ROUNDED card that scrolls INSIDE itself, so its top AND bottom
+     corners are always rounded (the text clips to the radius instead of a hard straight scroll edge). */
+  .pbg-card-body .pvb-preview{flex:1 1 auto; min-height:0; max-height:none; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch;
+    border-radius:var(--pbg-r-sm); border:1px solid var(--pvb-line-soft); border-left:3px solid var(--pvb-teal); background:rgba(2,12,11,.5);}
   /* the active view fills the body; export/history scroll as a whole, edit splits scroll + pinned footer */
   .pbg-card[data-mode="edit"] .pbg-view[data-view="edit"]{flex-direction:column;}
   .pbg-view[data-view="edit"]{min-height:0;}
@@ -895,11 +898,11 @@
   .pvb-lint-row.tip .li-ic{background:var(--pvb-teal); color:#04110f;}
   /* a small amber dot on the wizard forward circle when a hard conflict is flagged */
   /* (removed the cryptic amber dot on the forward circle; the full preflight warning shows in the build order) */
-  .pbg-edit-scroll{flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:0 16px 4px;}
-  /* footer is seamless: no border, no dark band. A whisper-soft fade lets the last line of prompt settle
-     under the compact pill instead of hitting a hard rectangle. The pill is centered, not a full-width bar. */
-  .pbg-edit-foot{flex:0 0 auto; display:flex; justify-content:center; padding:8px 16px calc(14px + env(safe-area-inset-bottom,0px));
-    background:linear-gradient(to top, rgba(6,16,15,.55), rgba(6,16,15,0));}
+  /* wrapper no longer scrolls: it is a flex column and the prompt box scrolls inside itself (above) so the
+     box keeps rounded corners on all sides. */
+  .pbg-edit-scroll{flex:1 1 auto; min-height:0; display:flex; flex-direction:column; padding:0 16px 4px;}
+  /* footer just holds the centered compact pill below the rounded box, no band and no hard line. */
+  .pbg-edit-foot{flex:0 0 auto; display:flex; justify-content:center; padding:10px 16px calc(14px + env(safe-area-inset-bottom,0px)); background:transparent;}
   .pbg-edit-foot .pbg-buildorder{margin-top:0;}
   /* editable prompt: click in to tweak the wording, then Copy */
   #pvb-preview[contenteditable]{cursor:text; outline:none; transition:border-color .15s, box-shadow .15s;}
@@ -3061,7 +3064,7 @@
       };
       var TABS=[['prompt','Prompt'],['cast','Cast'],['items','Items'],['scene','Scene'],['options','Options']];
       var PANE={prompt:'prompt',cast:'refs',items:'refs',scene:'refs',options:'options'};
-      var active='cast';
+      var active='prompt';   // open on the FIRST tab (Prompt) on load, not Cast
       // build stamp (fine print, bottom-right): bump PV_PS_BUILD on a MAJOR update so Chris sees what is live
       var PV_PS_BUILD='v1.0';
       try{ var _bs=document.getElementById('pbg-build'); if(_bs) _bs.textContent='Prompt Studio '+PV_PS_BUILD; }catch(e){}
@@ -3255,7 +3258,7 @@
       ['pvb-copy','pvb-copytop'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click',function(){ if(window.pbgPushHistory) pbgPushHistory(); }); });
       if(window.pbgRenderSetups) window.pbgRenderSetups();
 
-      setTab('cast',false);
+      setTab('prompt',false);   // land on the Prompt tab (first tab) on load
       applyMode();
       // start the phone sheet at half so the active tool is in reach
       if(isPhone()) setTY(TY_HALF,false);
