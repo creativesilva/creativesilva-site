@@ -162,7 +162,7 @@ Build everything from these. One spec each, no one-offs.
   - **Action rows:** a CSS grid of equal columns (label on its own line above), never a wrapping flex row that orphans one button.
   - **Stacked controls:** controls stacked in one column share both edges (full width).
   - **The gate:** run `tools/align-audit.js` (`silvaAlignAudit()`) on every tab, pane and opened accordion at 390, 1024, 1366, 1440 and 2560 widths. It flags staggered rows, control or pill drift, mismatched label line counts, ragged card heights and wrapping rows that do not form straight columns. Ship only at 0 flags.
-- **One navigation per tier.** A phone has exactly one nav (the bottom dock); never repeat the same sections in a second strip. iPad and desktop use the in-pane tabs.
+- **One navigation at a time, never none.** On a phone exactly ONE nav shows at rest: the in-sheet tab strip at the half detent (the dock is hidden there, Chris's design) and the bottom dock at full height; they crossfade as the sheet moves. Never both at rest, never neither. The strip is equal columns that always fit the phone width (no sideways scroll, no clipped label). iPad and desktop use the in-pane tabs.
 - **Scroll edge effect.** Scrolling content dissolves at a pane's edges (a soft mask), never a hard slice under a bar; the top fade appears only once the pane is scrolled.
 - **Best use of space.** Design wide-first for a 27" 4K monitor and iPad Pro landscape: a responsive multi-column glass workspace, then reflow to one stacked column at phone width. A single sparse full-width column on a big screen is a FAIL.
 - **Glanceable.** Compact by default, detail on interaction (expand, pop-out). Not a wall of text.

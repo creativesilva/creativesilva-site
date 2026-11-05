@@ -1321,9 +1321,14 @@
       background:linear-gradient(to top, rgba(5,13,12,.98), rgba(7,20,19,.94)); backdrop-filter:blur(26px) saturate(150%); -webkit-backdrop-filter:blur(26px) saturate(150%);
       border-top:1px solid rgba(112,246,246,.3); box-shadow:0 -10px 30px rgba(0,0,0,.5);
       transition:opacity .4s ease, transform .4s ease;}
-    /* ONE navigation on a phone: the bottom dock. The in-sheet tab strip repeated the same five
-       sections (and clipped "Options" at the edge), so it is off on phones; it stays the nav on desktop/iPad. */
-    .pbg-tabs{display:none;}
+    /* ONE navigation at a time on a phone (Chris's design): the in-sheet tab strip is the nav at the HALF
+       detent (the dock is hidden there), and it dissolves as the sheet rises while the dock takes over at FULL.
+       Never hide both. The strip is five EQUAL columns that always fit the width (no sideways scroll, no
+       clipped "Options"), labels in condensed caps with a compact count badge. */
+    .pbg-tabs{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:4px; overflow:visible;
+      padding-left:max(10px,env(safe-area-inset-left,0)); padding-right:max(10px,env(safe-area-inset-right,0));}
+    .pbg-tab{min-width:0; padding:0 4px; gap:4px; font-size:.64rem; letter-spacing:.03em;}
+    .pbg-tab .tb{min-width:14px; height:14px; padding:0 3px; font-size:.54rem;}
     .pbg-wizard{display:flex; margin:0 max(14px,env(safe-area-inset-left,0)) 9px;}
     /* the scroll edge dissolves into the dock's top edge, not behind it */
     .pbg-body{--edge-dock:calc(64px + max(8px, env(safe-area-inset-bottom, 0px))); --edge-fade:26px;}
@@ -3293,7 +3298,7 @@
       var PANE={prompt:'prompt',cast:'refs',items:'refs',scene:'refs',options:'options'};
       var active='prompt';   // open on the FIRST tab (Prompt) on load, not Cast
       // build stamp (fine print, bottom-right): bump PV_PS_BUILD on a MAJOR update so Chris sees what is live
-      var PV_PS_BUILD='v1.8';
+      var PV_PS_BUILD='v1.8.1';
       try{ var _bs=document.getElementById('pbg-build'); if(_bs) _bs.textContent='AI Studio '+PV_PS_BUILD; }catch(e){}
       // build tabs + dock
       tabsEl.innerHTML=TABS.map(function(t){return '<button class="pbg-tab" type="button" role="tab" data-t="'+t[0]+'"><span>'+t[1]+'</span><span class="tb" data-bk="'+t[0]+'"></span></button>';}).join('');
