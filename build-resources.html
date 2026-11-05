@@ -1013,6 +1013,34 @@
   .pbg-bo-done{display:none; margin-top:12px; padding:12px 14px; border-radius:var(--pbg-r-sm); text-align:center; font-size:.86rem; color:#eafeff; line-height:1.4;
     background:linear-gradient(135deg, rgba(0,184,184,.24), rgba(132,80,226,.2)); border:1px solid rgba(112,246,246,.4);}
   .pbg-card.build-complete .pbg-bo-done{display:block; animation:pbgViewIn .4s, pbgCopyFlash 1s ease-out;}
+  /* prompt feedback (logs to Firestore -> prompt_feedback): did the image come out right first try? */
+  .pbg-fb{margin-top:14px; padding:14px 15px 15px; border-radius:var(--pbg-r-sm);
+    background:var(--g-glass-quiet,rgba(255,255,255,.04)); border:1px solid var(--g-edge-soft,rgba(255,255,255,.1));}
+  .pbg-fb-q{font-family:var(--pvb-font); font-weight:700; letter-spacing:.02em; font-size:.92rem; color:#eafeff; text-align:center; margin-bottom:11px;}
+  .pbg-fb-row{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .pbg-fb-btn{height:var(--g-ctrl-h-sm,42px); display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    font-family:var(--pvb-font); font-weight:700; letter-spacing:.04em; text-transform:uppercase; font-size:.8rem; cursor:pointer;
+    color:#eafeff; background:var(--g-glass-quiet,rgba(255,255,255,.05)); border:1px solid var(--g-edge-soft,rgba(255,255,255,.14));
+    border-radius:var(--pbg-r-sm); transition:background .18s ease, border-color .18s ease, color .18s ease, transform .12s ease;}
+  .pbg-fb-btn:hover{border-color:var(--pvb-teal-lt); background:rgba(0,184,184,.16);}
+  .pbg-fb-btn:active{transform:translateY(1px);}
+  .pbg-fb-btn.yes.sel{background:linear-gradient(135deg,var(--pvb-teal-lt),var(--pvb-teal)); border-color:var(--pvb-teal-lt); color:#04201f;}
+  .pbg-fb-btn.no.sel{background:rgba(245,179,1,.18); border-color:var(--pvb-gold); color:#ffe4a3;}
+  .pbg-fb-note{margin-top:11px; display:flex; flex-direction:column; gap:9px;}
+  .pbg-fb-note[hidden],.pbg-fb-done[hidden],.pbg-fb-row[hidden],.pbg-fb-q[hidden]{display:none;}
+  .pbg-fb-text{width:100%; resize:vertical; min-height:74px; padding:10px 12px; border-radius:var(--pbg-r-sm); box-sizing:border-box;
+    font-family:inherit; font-size:.88rem; line-height:1.45; color:#eafeff;
+    background:rgba(0,0,0,.22); border:1px solid var(--g-edge-soft,rgba(255,255,255,.14)); outline:none;}
+  .pbg-fb-text:focus{border-color:var(--pvb-teal-lt); background:rgba(0,0,0,.3);}
+  .pbg-fb-text::placeholder{color:var(--pvb-faint);}
+  .pbg-fb-send{align-self:flex-end; height:var(--g-ctrl-h-sm,42px); padding:0 18px; cursor:pointer;
+    font-family:var(--pvb-font); font-weight:700; letter-spacing:.04em; text-transform:uppercase; font-size:.78rem;
+    color:#04201f; background:linear-gradient(135deg,var(--pvb-teal-lt),var(--pvb-teal)); border:1px solid var(--pvb-teal-lt);
+    border-radius:var(--pbg-r-sm); transition:filter .18s ease, transform .12s ease;}
+  .pbg-fb-send:hover{filter:brightness(1.08);}
+  .pbg-fb-send:active{transform:translateY(1px);}
+  .pbg-fb-done{text-align:center; font-size:.84rem; color:var(--pvb-teal-lt); font-weight:600; line-height:1.4; padding:3px 0;}
+  .pbg-fb.sent{border-color:rgba(112,246,246,.4); background:linear-gradient(135deg, rgba(0,184,184,.14), rgba(132,80,226,.1));}
   #pvb-checklist .pvb-checkrow.done{opacity:.55;}
   #pvb-checklist .pvb-checkrow.done .cimg{background:linear-gradient(135deg,#9af5ea,#2fd4b0);}
   #pvb-checklist .pvb-checkrow.done .pvb-stepnum{background:#17c7b6;}
@@ -1325,6 +1353,21 @@
             <div id="pvb-lint" class="pvb-lint" style="display:none"></div>
             <div id="pvb-checklist"></div>
             <div class="pbg-bo-done" id="pbg-bo-done"><b>Build complete.</b> Everything is in your image gen. Generate your image.</div>
+            <!-- Prompt feedback -> Firestore (creativesilva / prompt_feedback). Logs whether the image came out
+                 first try + an optional note, with the build id + selected references, so Mr. Silva can review
+                 and revise prompts over time. Append-only: the client cannot read or edit past entries. -->
+            <div class="pbg-fb" id="pbg-fb">
+              <div class="pbg-fb-q" id="pbg-fb-q">Did this prompt get the image right on the first try?</div>
+              <div class="pbg-fb-row" id="pbg-fb-row">
+                <button type="button" class="pbg-fb-btn yes" data-fb="yes">Yes</button>
+                <button type="button" class="pbg-fb-btn no" data-fb="no">No</button>
+              </div>
+              <div class="pbg-fb-note" id="pbg-fb-note" hidden>
+                <textarea class="pbg-fb-text" id="pbg-fb-text" rows="3" placeholder="What went wrong, or what would make this prompt better? (this is logged for the next revision)"></textarea>
+                <button type="button" class="pbg-fb-send" id="pbg-fb-send">Send feedback</button>
+              </div>
+              <div class="pbg-fb-done" id="pbg-fb-done" hidden></div>
+            </div>
           </div>
           <!-- HISTORY view: past builds, reopen + tweak + re-export -->
           <div class="pbg-view" data-view="history">
@@ -3177,7 +3220,7 @@
           setupsEl2=document.getElementById('pvb-setups'), clEl=document.getElementById('pvb-checklist'),
           progEl=document.getElementById('pbg-progress'), boFill=document.getElementById('pbg-bo-fill'), boSub=document.getElementById('pbg-bo-sub');
       function setMode(m){ card.setAttribute('data-mode',m);
-        if(m==='export'){ card.classList.remove('build-complete'); clearDone(); updateProgress(); }
+        if(m==='export'){ card.classList.remove('build-complete'); clearDone(); updateProgress(); resetFeedback(); }
         if(m==='history') renderHistoryList();
         if(isPhone()) setTY(m==='edit'?TY_HALF:TY_CLOSED,true);
         if(pbgCardBody) pbgCardBody.scrollTop=0;
@@ -3188,6 +3231,61 @@
         if(boFill) boFill.style.width=(total?Math.round(done/total*100):0)+'%';
         card.classList.toggle('build-complete', total>0 && done===total); }
       clEl.addEventListener('click',function(e){ var b=e.target.closest('.cimg'); if(!b) return; var row=b.closest('.pvb-checkrow'); if(row){ row.classList.add('done'); setTimeout(updateProgress,20); } });
+
+      // ----- prompt feedback -> Firestore (creativesilva / prompt_feedback) -----
+      // Append-only log: did the image come out right first try (yes), or not (no + a note)? Lets Mr. Silva
+      // revise weak prompts over time. If Firebase is unreachable, the entry is queued in localStorage and
+      // flushed on a later visit, so a tap is never lost.
+      var fbWrap=document.getElementById('pbg-fb'), fbQ=document.getElementById('pbg-fb-q'),
+          fbRow=document.getElementById('pbg-fb-row'), fbNote=document.getElementById('pbg-fb-note'),
+          fbText=document.getElementById('pbg-fb-text'), fbSend=document.getElementById('pbg-fb-send'),
+          fbDone=document.getElementById('pbg-fb-done');
+      function resetFeedback(){
+        if(!fbWrap) return;
+        fbWrap.classList.remove('sent');
+        if(fbQ) fbQ.hidden=false;
+        if(fbRow) fbRow.hidden=false;
+        if(fbNote) fbNote.hidden=true;
+        if(fbText) fbText.value='';
+        if(fbDone){ fbDone.hidden=true; fbDone.textContent=''; }
+        [].slice.call(fbWrap.querySelectorAll('.pbg-fb-btn')).forEach(function(b){ b.classList.remove('sel'); });
+      }
+      function fbPayload(ok, note){
+        var refs=[]; try{ refs=selectedRefs().map(function(r){ return r.file; }).filter(Boolean).slice(0,40); }catch(e){}
+        var txt=''; try{ txt=(promptText()||'').slice(0,12000); }catch(e){}
+        var mode=''; try{ mode=(typeof MODE==='string'?MODE:''); }catch(e){}
+        var title=''; try{ title=(cfg&&cfg.title)||''; }catch(e){}
+        var data={ ok:!!ok, prompt:txt, promptTitle:String(title).slice(0,160), mode:mode,
+                   refs:refs, build:(typeof PV_PS_BUILD==='string'?PV_PS_BUILD:''),
+                   page:'prompt-studio', ts:new Date().toISOString() };
+        if(note!=null && String(note).trim()) data.note=String(note).trim().slice(0,4000);
+        return data;
+      }
+      function fbQueueLocal(data){ try{ var k='pvps_fb_queue', a=JSON.parse(localStorage.getItem(k)||'[]');
+        if(!Array.isArray(a)) a=[]; a.push(data); localStorage.setItem(k, JSON.stringify(a.slice(-50))); }catch(e){} }
+      function fbSendData(data){
+        if(fbQ) fbQ.hidden=true; if(fbRow) fbRow.hidden=true; if(fbNote) fbNote.hidden=true;
+        if(fbDone){ fbDone.hidden=false; fbDone.textContent='Saving your feedback…'; }
+        var settled=false;
+        var finish=function(saved){ if(settled) return; settled=true; if(fbWrap) fbWrap.classList.add('sent');
+          if(fbDone) fbDone.textContent = saved ? 'Thank you. This is logged for the next revision.'
+                                               : 'Saved on this device. It will sync next time you open this page.'; };
+        var save=null;
+        try{ if(window.pvFBSave) save=window.pvFBSave('prompt_feedback', data); }catch(e){ save=null; }
+        if(!save){ fbQueueLocal(data); finish(false); return; }
+        // Resolves on server ack (online). A hard rejection (e.g. denied) queues locally so it is not lost.
+        save.then(function(){ finish(true); }, function(){ if(!settled){ fbQueueLocal(data); finish(false); } });
+        // If the ack is slow (offline), confirm optimistically; Firestore delivers the write when back online.
+        setTimeout(function(){ finish(true); }, 2600);
+      }
+      if(fbRow) fbRow.addEventListener('click',function(e){ var b=e.target.closest('.pbg-fb-btn'); if(!b) return;
+        var v=b.getAttribute('data-fb');
+        [].slice.call(fbRow.querySelectorAll('.pbg-fb-btn')).forEach(function(x){ x.classList.toggle('sel', x===b); });
+        if(v==='yes'){ fbSendData(fbPayload(true,null)); }
+        else { if(fbNote) fbNote.hidden=false; if(fbText) setTimeout(function(){ try{ fbText.focus(); }catch(e){} },30); }
+      });
+      if(fbSend) fbSend.addEventListener('click',function(){ fbSendData(fbPayload(false, fbText?fbText.value:'')); });
+
       var sheetExportBtn=document.getElementById('pbg-sheet-export'), seSub=document.getElementById('pbg-se-sub'),
           seMain=document.getElementById('pbg-se-main'), wizBack=document.getElementById('pbg-wiz-back');
       var TAB_ORDER=TABS.map(function(t){return t[0];}), TAB_LABEL={}; TABS.forEach(function(t){ TAB_LABEL[t[0]]=t[1]; });
@@ -3264,6 +3362,57 @@
       if(isPhone()) setTY(TY_HALF,false);
       if(window.pvbmSync) pvbmSync();
     })();
+  })();
+  </script>
+
+  <!-- Firebase (project: creativesilva) - append-only prompt-feedback log for Prompt Studio.
+       This is a PUBLIC client web config (safe to ship). The modular SDK is lazy-loaded only on the
+       first save or when a queued-offline entry needs flushing, so normal visits stay light.
+       Firestore rules allow create on prompt_feedback and deny all client reads/edits. -->
+  <script>
+  (function(){
+    var CFG={
+      apiKey:"AIzaSyBIc_LZiF2_7ZYlurjtKAGbSMAA1W42lQ4",
+      authDomain:"creativesilva.firebaseapp.com",
+      projectId:"creativesilva",
+      storageBucket:"creativesilva.firebasestorage.app",
+      messagingSenderId:"519740311997",
+      appId:"1:519740311997:web:f544e57850ce5523f3ead4"
+    };
+    var _fb=null;
+    function init(){
+      if(_fb) return _fb;
+      _fb=(async function(){
+        var appMod=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+        var fsMod =await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        var app=appMod.initializeApp(CFG);
+        return { fs:fsMod, db:fsMod.getFirestore(app) };
+      })();
+      return _fb;
+    }
+    window.pvFBSave=function(coll, data){
+      return init().then(function(fb){ return fb.fs.addDoc(fb.fs.collection(fb.db, coll), data); });
+    };
+    // One best-effort pass to deliver feedback queued while offline on a past visit.
+    window.pvFBFlushQueue=function(){
+      var k='pvps_fb_queue', a;
+      try{ a=JSON.parse(localStorage.getItem(k)||'[]'); }catch(e){ a=[]; }
+      if(!Array.isArray(a)||!a.length) return;
+      var sig=function(d){ return (d&&d.ts||'')+'|'+(d&&d.ok)+'|'+((d&&d.note)||''); };
+      var pending=a.slice();
+      init().then(function(fb){
+        Promise.all(pending.map(function(d){
+          return fb.fs.addDoc(fb.fs.collection(fb.db,'prompt_feedback'), d).then(function(){return sig(d);},function(){return null;});
+        })).then(function(res){
+          var sent={}; res.forEach(function(s){ if(s) sent[s]=1; });
+          var live; try{ live=JSON.parse(localStorage.getItem(k)||'[]'); }catch(e){ live=[]; }
+          if(!Array.isArray(live)) live=[];
+          try{ localStorage.setItem(k, JSON.stringify(live.filter(function(d){ return !sent[sig(d)]; }))); }catch(e){}
+        });
+      }).catch(function(){});
+    };
+    if(document.readyState==='complete') setTimeout(window.pvFBFlushQueue, 1500);
+    else window.addEventListener('load', function(){ setTimeout(window.pvFBFlushQueue, 1500); });
   })();
   </script>
 </body>
