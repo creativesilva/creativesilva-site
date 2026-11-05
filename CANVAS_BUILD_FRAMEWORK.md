@@ -10,7 +10,7 @@ A repeatable, foolproof spec for building Silva-module Canvas assignment pages o
 
 ## 0. How to Use This Doc
 
-> **Scope note (LOCKED 2026-11-04):** this doc governs **Canvas student pages**, which stay **ANGULAR** (zero radius, bright teal, no glass). It does NOT govern **operational teacher tools** (Prompt Studio / `build-resources.html`, the teacher portal, Equipment Manager), which use the separate **Silva Glass framework** (`SILVA_GLASS_FRAMEWORK.md`: rounded liquid-glass panels over a page-wide galaxy backdrop). Never glass-ify a Canvas page; never make a teacher tool angular.
+> **Scope note (LOCKED 2026-11-04):** this doc governs **Canvas student pages**, which stay **ANGULAR** (zero radius, bright teal, no glass). It does NOT govern **operational teacher tools** (AI Studio / `build-resources.html`, the teacher portal, Equipment Manager), which use the separate **Silva Glass framework** (`SILVA_GLASS_FRAMEWORK.md`: rounded liquid-glass panels over a page-wide galaxy backdrop). Never glass-ify a Canvas page; never make a teacher tool angular.
 
 When the user says "build a new Canvas assignment" (or similar):
 
