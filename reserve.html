@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=53" />
+<link rel="stylesheet" href="/css/store.css?v=54" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -431,6 +431,9 @@
     'Modify':'Modificar','Cancel':'Cancelar','Yes, cancel':'Sí, cancelar','Keep it':'Mantenerla','Cancel this reservation?':'¿Cancelar esta reservación?',
     'Picked up. Return it to Mr. Silva when you are done.':'Recogido. Regrésalo al Sr. Silva cuando termines.',
     'You have no reservations right now.':'No tienes reservaciones ahora.','Could not load your reservations. Try again.':'No se pudieron cargar tus reservaciones. Intenta de nuevo.','Past reservations (%s)':'Reservaciones pasadas (%s)',
+    'Your memory card':'Tu tarjeta de memoria','Slot':'Espacio','Your memory card is safe in wallet slot %s.':'Tu tarjeta de memoria está guardada en el espacio %s de la cartera.',
+    'Held since %s':'Guardada desde el %s','From camera %s':'De la cámara %s',
+    'Ask Mr. Silva for it when you are ready to download your photos.':'Pídesela al Sr. Silva cuando estés listo para descargar tus fotos.',
     'Fix anything that is wrong. This updates what is on file for you.':'Corrige lo que esté mal. Esto actualiza lo que tenemos registrado de ti.',
     'Saved.':'Guardado.','Reservation canceled.':'Reservación cancelada.','Could not cancel. Try again.':'No se pudo cancelar. Intenta de nuevo.','Logged out.':'Sesión cerrada.',
     'Keep at least one item, or cancel the reservation instead.':'Deja al menos un artículo, o mejor cancela la reservación.','Could not read your items. Try again.':'No se pudieron leer tus artículos. Intenta de nuevo.','Reservation updated.':'Reservación actualizada.',
@@ -1538,10 +1541,24 @@
   function fmtResvDate(iso){ if(!iso) return ''; var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate(); }
   function loadMyReservations(){
     api('/api/camera/my_reservations',{student_id:USER.id})
-      .then(function(j){ MYRESV={active:(j&&j.active)||[], history:(j&&j.history)||[]}; if(!acctEdit && document.getElementById('acctOv').classList.contains('open')) renderAccount(); })
+      .then(function(j){ MYRESV={active:(j&&j.active)||[], history:(j&&j.history)||[], cards:(j&&j.held_cards)||[]}; if(!acctEdit && document.getElementById('acctOv').classList.contains('open')) renderAccount(); })
       .catch(function(){ MYRESV={active:[], history:[], err:true}; if(!acctEdit && document.getElementById('acctOv').classList.contains('open')) renderAccount(); });
   }
   function resvItemsLabel(r){ return r.items.map(function(i){ return i.label; }).filter(Boolean).join(', '); }
+  // ===== memory card held in the wallet (set by Mr. Silva in the Camera Manager Card Wallet) =====
+  // The backend returns ONLY this student's own held cards: slot + when + camera. Shown first in My Account.
+  function fmtHeld(iso){ if(!iso) return ''; var d=new Date(iso); if(isNaN(d.getTime())) return ''; return DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate(); }
+  function cardSectionHtml(){
+    var cs=(MYRESV&&MYRESV.cards)||[]; if(!cs.length) return '';
+    return '<div class="acct-sec acct-card-sec"><div class="acct-sec-t">'+t('Your memory card')+'</div>'+cs.map(function(c){
+      var since=fmtHeld(c.held_at), cam=String(c.from_camera||'').replace(/^cam\s*/i,'');
+      var meta=[since?tf('Held since %s', since):'', cam?tf('From camera %s', cam):''].filter(Boolean).map(esc).join(' &middot; ');
+      return '<div class="card-hold"><div class="card-slot" aria-hidden="true"><span class="card-slot-k">'+t('Slot')+'</span><span class="card-slot-n">'+esc(String(c.slot))+'</span></div>'+
+        '<div class="card-hold-tx"><div class="card-hold-h">'+esc(tf('Your memory card is safe in wallet slot %s.', c.slot))+'</div>'+
+        (meta?'<div class="card-hold-m">'+meta+'</div>':'')+
+        '<div class="card-hold-n">'+t('Ask Mr. Silva for it when you are ready to download your photos.')+'</div></div></div>';
+    }).join('')+'</div>';
+  }
   function resvSectionHtml(){
     if(MYRESV===null) return '<div class="acct-sec"><div class="acct-sec-t">'+t('My reservations')+'</div><div class="acct-resv-load">'+t('Loading…')+'</div></div>';
     var a=MYRESV.active||[], h=MYRESV.history||[];
@@ -1576,6 +1593,7 @@
       b.innerHTML='<h2 id="acctTitle">'+t('My account')+'</h2>'+
         '<div class="acct-name">'+esc(USER.name||USER.label||t('Student'))+'</div>'+
         (meta?'<div class="acct-meta">'+meta+'</div>':'')+
+        cardSectionHtml()+
         '<div class="acct-rows">'+
           acctRow(t('Student number'), USER.id)+
           acctRow(t('Your cell'), USER.sc)+
