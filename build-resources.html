@@ -604,20 +604,23 @@
   .pvb-acc-body{display:none; padding:4px 14px 14px;}
   .pvb-acc.open .pvb-acc-body{display:block;}
   /* Characters group: one collapsible sub-panel per person, collapsed to a neutral-face cover */
-  .pvb-characc{border-top:1px solid var(--pvb-line-soft);}
-  .pvb-characc:first-child{border-top:0;}
+  /* Cast / Items person rows: headshot, name left-justified next to it (flexible, ellipsis),
+     count badge + chevron reserved right. Each grid cell is independent (min-width:0, no overflow).
+     The rollover + selected highlight are rounded to match the glass. */
+  .pvb-characc{min-width:0;}
   .pvb-charhead{width:100%; display:flex; align-items:center; gap:11px; cursor:pointer; text-align:left;
-    background:transparent; border:0; color:var(--pvb-text); font-family:var(--pvb-body); padding:8px 4px;}
-  .pvb-charhead:hover{background:rgba(0,184,184,.06);}
+    background:transparent; border:0; border-radius:var(--g-r-md); color:var(--pvb-text); font-family:var(--pvb-body); padding:7px 10px; transition:background .15s ease;}
+  .pvb-charhead:hover{background:rgba(0,184,184,.12);}
+  .pvb-characc.has-sel > .pvb-charhead{background:rgba(0,184,184,.16);}
   .pvb-charhead .cover{flex:0 0 auto; width:44px; height:44px; border-radius:var(--g-r-sm); overflow:hidden; background:#0b2a2a; border:1px solid var(--g-edge-soft);}
   .pvb-charhead .cover img{width:100%; height:100%; object-fit:cover; object-position:center 22%; display:block;}
   .pvb-characc.has-sel .pvb-charhead .cover{border-color:var(--pvb-teal);}
-  .pvb-charhead .cname{flex:0 0 auto; width:106px; font-family:var(--pvb-font); font-weight:600; font-size:.9rem; letter-spacing:.02em;
+  .pvb-charhead .cname{flex:1 1 auto; min-width:0; font-family:var(--pvb-font); font-weight:600; font-size:.9rem; letter-spacing:.02em;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-  .pvb-charhead .pvb-charbadge{flex:0 0 auto; white-space:nowrap; font-size:.62rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
-    color:#04110f; background:var(--g-primary); padding:3px 11px; border-radius:var(--g-r-pill);
+  .pvb-charhead .pvb-charbadge{flex:0 0 auto; white-space:nowrap; font-size:.6rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+    color:#04110f; background:var(--g-primary); padding:3px 10px; border-radius:var(--g-r-pill);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.4);}
-  .pvb-charhead .chev{margin-left:auto; width:8px; height:8px; border-right:2px solid var(--pvb-muted);
+  .pvb-charhead .chev{flex:0 0 auto; margin-left:2px; width:8px; height:8px; border-right:2px solid var(--pvb-muted);
     border-bottom:2px solid var(--pvb-muted); transform:rotate(45deg); transition:transform .18s;}
   .pvb-characc.open .pvb-charhead .chev{transform:rotate(-135deg);}
   .pvb-charbody{display:none; padding:4px 2px 12px;}
@@ -729,10 +732,20 @@
   .pvb-otherbox{margin-top:6px; width:100%; box-sizing:border-box; background:rgba(0,0,0,.28); border:1px solid var(--pvb-line); color:#eafeff; font-family:var(--pvb-body); font-size:.95rem; padding:9px 11px;}
   .pvb-check-toggle{display:flex; align-items:flex-start; gap:9px; font-size:.9rem; color:#dbeeee; cursor:pointer; line-height:1.4;}
   .pvb-check-toggle input{margin-top:2px; accent-color:var(--pvb-teal); width:16px; height:16px; flex:0 0 auto;}
-  .pvb-drop{border:1px dashed var(--pvb-line); background:rgba(0,184,184,.05); padding:18px 14px; text-align:center; cursor:pointer; transition:background .12s,border-color .12s;}
-  .pvb-drop:hover,.pvb-drop.over{border-color:var(--pvb-teal); background:rgba(0,184,184,.14);}
-  .pvb-drop-hint{font-size:.82rem; color:var(--pvb-muted); line-height:1.5; pointer-events:none;}
+  .pvb-staging{margin-top:12px;}
+  .pvb-drop{border:1.5px dashed var(--g-edge-soft); border-radius:var(--g-r-md); background:var(--g-glass-quiet); padding:18px 14px; text-align:center; cursor:pointer; transition:background .12s,border-color .12s;}
+  .pvb-drop:hover,.pvb-drop.over{border-color:var(--g-teal-lt); background:rgba(0,184,184,.14);}
+  .pvb-drop-hint{font-size:.82rem; color:var(--g-faint); line-height:1.5; pointer-events:none;}
   .pvb-drop-list{margin-top:10px;}
+  /* staged "add your own" list rows: glass, rounded, with a circular remove */
+  .pvb-staging .pvb-checkrow{background:var(--g-glass-quiet); border:1px solid var(--g-edge-soft); border-radius:var(--g-r-md); padding:10px; margin-bottom:8px; box-shadow:var(--g-shadow-sm), var(--g-spec);}
+  .pvb-staging .pvb-checkrow .th{flex:0 0 52px; width:52px; height:52px; border-radius:var(--g-r-sm); overflow:hidden; background:#041413;}
+  .pvb-staging .pvb-checkrow .meta{flex:1 1 auto; min-width:0;}
+  .pvb-staging .pvb-otherbox{border:1px solid var(--g-edge-soft);}
+  .pvb-staging .srm{flex:0 0 auto; width:30px; height:30px; align-self:center; display:inline-flex; align-items:center; justify-content:center; padding:0;
+    border-radius:var(--g-r-pill); border:1px solid var(--g-edge-soft); background:transparent; color:var(--g-muted); cursor:pointer; transition:color .15s, border-color .15s, background .15s;}
+  .pvb-staging .srm svg{width:13px; height:13px; display:block;}
+  .pvb-staging .srm:hover{color:#fff; border-color:var(--g-danger); background:rgba(255,122,122,.14);}
   .pvb-checkrow{display:flex; gap:11px; align-items:center; padding:9px; background:rgba(0,184,184,.05); border-left:2px solid var(--pvb-gold); margin-bottom:8px;}
   .pvb-checkrow .th{flex:0 0 56px; width:56px; height:56px; overflow:hidden; background:#041413;}
   .pvb-checkrow .th img{width:100%; height:100%; object-fit:contain; display:block;}
@@ -764,8 +777,9 @@
   #pvb-checklist .ckpill button.err{box-shadow:inset 0 0 0 2px rgba(255,120,120,.9);}
   /* uncheck/remove a reference from the build order (lives left of the pill; hints red on hover) */
   #pvb-checklist .ckrm{flex:0 0 auto; width:30px; height:30px; margin-right:9px; align-self:center; display:inline-flex; align-items:center; justify-content:center;
-    border-radius:var(--g-r-pill); border:1px solid var(--g-edge-soft); background:transparent; color:var(--g-muted); cursor:pointer; font-size:1.05rem; line-height:1;
+    border-radius:var(--g-r-pill); border:1px solid var(--g-edge-soft); background:transparent; color:var(--g-muted); cursor:pointer; padding:0;
     transition:color .15s, border-color .15s, background .15s;}
+  #pvb-checklist .ckrm svg{width:13px; height:13px; display:block;}
   #pvb-checklist .ckrm:hover{color:#fff; border-color:var(--g-danger); background:rgba(255,122,122,.14);}
   /* the prompt is the LAST step: a hairline separates it from the references above */
   #pvb-checklist .pvb-promptrow{margin-top:10px; padding-top:12px; border-top:1px solid var(--g-edge-soft);}
@@ -774,7 +788,7 @@
   .pvb-checkrow .cimg:hover{filter:brightness(1.12);}
   .pvb-checkrow .cimg.copied{background:#3fa863; color:#04110f; border-color:#3fa863;}
   :root{ --font-head:var(--pvb-font); --text:var(--pvb-text); --text-dim:var(--pvb-muted); --text-faint:var(--pvb-faint); }
-  .pvb-tabs{display:flex; gap:4px; flex-wrap:wrap; margin:0; padding:0;}
+  .pvb-tabs{display:flex; align-items:center; gap:4px; flex-wrap:wrap; margin:0; padding:0;}
   .pvb-tab{position:relative; font-family:var(--pvb-font); font-weight:700; letter-spacing:.1em; text-transform:uppercase; font-size:.8rem;
     color:var(--pvb-muted); background:transparent; border:0; border-bottom:3px solid transparent; padding:12px 20px 11px; cursor:pointer; transition:color .15s, border-color .15s, background .15s;}
   .pvb-tab:hover{color:var(--pvb-text); background:rgba(0,184,184,.08);}
@@ -828,8 +842,8 @@
   }
 
   /* build stamp: fine print, bottom-right; hides with the Build panel (fixed child of a display:none panel) */
-  .pbg-build{position:fixed; right:14px; bottom:9px; z-index:5; pointer-events:none; font-family:var(--pvb-font);
-    font-size:.6rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--g-faint); opacity:.65;}
+  .pbg-build{margin-left:auto; align-self:center; white-space:nowrap; pointer-events:none; font-family:var(--pvb-font);
+    font-size:.56rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--g-faint); opacity:.6;}
   /* ---------- galaxy backdrop (fixed, page-wide: sits behind BOTH tabs so the whole Prompt Studio shares one galaxy-glow glass) ---------- */
   .pbg-bg{position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; background:#06100f;}
   .pbg-mesh{position:absolute; inset:-25%; filter:blur(46px) saturate(128%); mix-blend-mode:screen;
@@ -1133,11 +1147,12 @@
   .pbg[data-cat="cast"]  #pvb-refs [data-cat]:not([data-cat="cast"]),
   .pbg[data-cat="items"] #pvb-refs [data-cat]:not([data-cat="items"]),
   .pbg[data-cat="scene"] #pvb-refs [data-cat]:not([data-cat="scene"]){display:none;}
-  /* the lead "Reference files for this prompt" title + trailing "your own" staging only on Scene */
+  /* hide the lead "Reference files" title in single-cat mode, but KEEP the "add your own" staging
+     (.pvb-staging) visible at the bottom of EVERY section (Cast / Items / Scene) */
   .pbg[data-cat="cast"]  #pvb-refs > .pvb-gtitle,
   .pbg[data-cat="items"] #pvb-refs > .pvb-gtitle{display:none;}
-  .pbg[data-cat="cast"]  #pvb-refs > :not([data-cat]):not(.pvb-gtitle),
-  .pbg[data-cat="items"] #pvb-refs > :not([data-cat]):not(.pvb-gtitle){display:none;}
+  .pbg[data-cat="cast"]  #pvb-refs > :not([data-cat]):not(.pvb-gtitle):not(.pvb-staging),
+  .pbg[data-cat="items"] #pvb-refs > :not([data-cat]):not(.pvb-gtitle):not(.pvb-staging){display:none;}
   /* the active ref accordion fills the pane: force open, hide its toggle head */
   .pbg[data-catmode="single"] #pvb-refs > .pvb-acc[data-cat] > .pvb-acc-head{display:none;}
   .pbg[data-catmode="single"] #pvb-refs > .pvb-acc[data-cat] > .pvb-acc-body{display:block; padding-top:8px;}
@@ -1214,7 +1229,7 @@
   #pvb-panel-build .pbg-pane[data-pane="options"] .pvb-field.full{grid-column:1 / -1;}
   /* desktop Cast: show collapsed people two-up; an opened person spans the row with a full image grid */
   @media (min-width:821px){
-    .pbg[data-catmode="single"][data-cat="cast"] #pvb-refs > .pvb-acc[data-cat="cast"] > .pvb-acc-body{display:grid; grid-template-columns:1fr 1fr; gap:0 22px; align-items:start;}
+    .pbg[data-catmode="single"][data-cat="cast"] #pvb-refs > .pvb-acc[data-cat="cast"] > .pvb-acc-body{display:grid; grid-template-columns:1fr 1fr; gap:4px 18px; align-items:start;}
     .pbg[data-cat="cast"] #pvb-refs .pvb-characc{border-top:0;}
     .pbg[data-cat="cast"] #pvb-refs .pvb-characc.open{grid-column:1 / -1;}
   }
@@ -1305,6 +1320,8 @@
         <nav class="pvb-tabs" id="pvb-tabs">
           <button type="button" class="pvb-tab active" data-tab="build">Prompt Builder</button>
           <button type="button" class="pvb-tab" data-tab="resources">Resources</button>
+          <!-- build stamp: fine print, top-right of the tab row (shows on both tabs). Bump PV_PS_BUILD on a major update. -->
+          <div class="pbg-build" id="pbg-build" aria-hidden="true"></div>
         </nav>
       </div>
     </div>
@@ -1315,8 +1332,6 @@
          a bottom dock switches tools. Desktop/iPad: a wide multi-column glass workspace (prompt card +
          docked controls). Same 5-tool model (Prompt / Cast / Items / Scene / Options) on every width.
          Every engine container id below is preserved so the existing builder engine drives it unchanged. -->
-    <!-- build stamp: fine print, bottom-right. Bump PV_PS_BUILD on a major update so Chris can see what is live. -->
-    <div class="pbg-build" id="pbg-build" aria-hidden="true"></div>
 
     <div class="pbg" id="pbg">
       <!-- ---------- composed prompt (always visible) ---------- -->
@@ -2259,6 +2274,7 @@
     var SVG_LINK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"></path><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"></path></svg>';
     var SVG_DL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="M7 12l5 5 5-5"></path><path d="M5 21h14"></path></svg>';
     var SVG_COPY='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="1.7"></rect><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"></path></svg>';
+    var SVG_X='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>';
     var PROMPT_ICON_URL='https://www.creativesilva.com/assets/Icons/prompt-icon-gold-v1.png';
     function rtool(svg, title, fn){ var b=el('button','pvb-rtool',svg); b.type='button'; b.title=title; b.setAttribute('aria-label',title); b.addEventListener('click',function(e){ e.stopPropagation(); fn(b); }); return b; }
     function flashTool(btn, cls){ btn.classList.remove('ok','err'); btn.classList.add(cls); setTimeout(function(){ btn.classList.remove(cls); }, 1300); }
@@ -2267,7 +2283,10 @@
       var png=fetch(url).then(function(r){return r.blob();}).then(function(b){ if(b.type==='image/png')return b;
         return new Promise(function(res,rej){ var im=new Image(); im.crossOrigin='anonymous'; im.onload=function(){ var c=document.createElement('canvas'); c.width=im.naturalWidth; c.height=im.naturalHeight; c.getContext('2d').drawImage(im,0,0); c.toBlob(function(pb){ pb?res(pb):rej(0); },'image/png'); }; im.onerror=rej; im.src=url; }); });
       navigator.clipboard.write([new ClipboardItem({'image/png':png})]).then(function(){flashTool(btn,'ok');},function(){flashTool(btn,'err');}); }
-    function downloadImg(url, file, btn){ fetch(url,{cache:'no-store'}).then(function(r){return r.blob();}).then(function(b){ var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=baseName(file); document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500); flashTool(btn,'ok'); }).catch(function(){ flashTool(btn,'err'); }); }
+    function downloadImg(url, file, btn){ var name=baseName(file||'image');
+      // ensure a clean filename WITH an image extension (so your named references download correctly)
+      if(!/\.[a-z0-9]{2,5}$/i.test(name)){ var m=/^data:image\/([a-z0-9.+-]+)/i.exec(url||''); var ext=m?m[1].toLowerCase().replace('jpeg','jpg').replace('svg+xml','svg').replace(/[^a-z0-9]/g,''):'png'; name=name+'.'+(ext||'png'); }
+      fetch(url,{cache:'no-store'}).then(function(r){return r.blob();}).then(function(b){ var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500); flashTool(btn,'ok'); }).catch(function(){ flashTool(btn,'err'); }); }
     function downloadText(text, file, btn){ try{ var b=new Blob([text||''],{type:'text/plain;charset=utf-8'}); var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=file; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500); flashTool(btn,'ok'); }catch(e){ flashTool(btn,'err'); } }
     function promptFile(){ var s=((cfg&&cfg.title)||'prompt').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); return (s||'prompt')+'.txt'; }
 
@@ -2512,7 +2531,7 @@
         var meta=el('div','meta'); meta.appendChild(el('div','role',esc(a.role))); meta.appendChild(el('div','fn',esc(a.name))); row.appendChild(meta);
         // uncheck/remove this reference: drops it from the build AND live-updates the prompt + clears any warning
         if(a.kind || a.staged!=null){
-          var rm=el('button','ckrm','×'); rm.type='button'; rm.title='Remove from this build'; rm.setAttribute('aria-label','Remove '+a.name+' from this build');
+          var rm=el('button','ckrm',SVG_X); rm.type='button'; rm.setAttribute('aria-label','Remove '+a.name+' from this build');
           rm.addEventListener('click',function(){ if(a.staged!=null){ removeStagedAt(a.staged); } else { removeRef(a.kind,a.file); } });
           row.appendChild(rm);
         }
@@ -2965,10 +2984,12 @@
       });
     }
     function renderStaging(wrap){
-      wrap.appendChild(el('div','pvb-gtitle','Your own reference image'));
-      wrap.appendChild(el('div','pvb-note','Add an outside image you found (upload, drop, or paste). Give it a name and say what it is for. It gets listed in the prompt and added to the copy list below. Stays on this computer only and clears when you reset or reload.'));
+      // "Add your own" lives at the bottom of EVERY section (Cast/Items/Scene). One shared pool of staged
+      // images; each flows into the ingredients with a named Download (paste loses the name, download keeps it).
+      var box=el('div','pvb-staging');
+      box.appendChild(el('div','pvb-gtitle','Add your own reference image'));
       var dz=el('div','pvb-drop');
-      dz.innerHTML='<div class="pvb-drop-hint">Drop or paste an image here, or click to choose.</div>';
+      dz.innerHTML='<div class="pvb-drop-hint">Drop or paste an image, or click to choose.</div>';
       var fi=document.createElement('input'); fi.type='file'; fi.accept='image/*'; fi.multiple=true; fi.style.display='none';
       dz.appendChild(fi);
       dz.addEventListener('click',function(){ fi.click(); });
@@ -2976,22 +2997,22 @@
       dz.addEventListener('dragover',function(e){ e.preventDefault(); dz.classList.add('over'); });
       dz.addEventListener('dragleave',function(){ dz.classList.remove('over'); });
       dz.addEventListener('drop',function(e){ e.preventDefault(); dz.classList.remove('over'); addStagedFiles(e.dataTransfer.files); });
-      wrap.appendChild(dz);
+      box.appendChild(dz);
       var list=el('div','pvb-drop-list');
       staged.forEach(function(im,i){
         var row=el('div','pvb-checkrow');
         var th=el('div','th'); var img=document.createElement('img'); img.src=im.url; img.alt=im.name||'reference'; th.appendChild(img); row.appendChild(th);
         var meta=el('div','meta');
-        var nin=document.createElement('input'); nin.type='text'; nin.className='pvb-otherbox'; nin.placeholder='Name (for example: mood-board.jpg)'; nin.value=im.name||'';
+        var nin=document.createElement('input'); nin.type='text'; nin.className='pvb-otherbox'; nin.placeholder='Name'; nin.value=im.name||'';
         nin.addEventListener('input',function(){ im.name=nin.value; render(); });
-        var rin=document.createElement('input'); rin.type='text'; rin.className='pvb-otherbox'; rin.style.marginTop='6px'; rin.placeholder='What is it for? (for example: mood and colors only, not the people)'; rin.value=im.role||'';
+        var rin=document.createElement('input'); rin.type='text'; rin.className='pvb-otherbox'; rin.style.marginTop='6px'; rin.placeholder='What is it for?'; rin.value=im.role||'';
         rin.addEventListener('input',function(){ im.role=rin.value; render(); });
         meta.appendChild(nin); meta.appendChild(rin); row.appendChild(meta);
-        var cbtn=el('button','cimg','Copy'); cbtn.type='button'; cbtn.addEventListener('click',function(){ copyImage(im.url,cbtn); }); row.appendChild(cbtn);
-        var rm=el('button','cimg','×'); rm.type='button'; rm.title='Remove'; rm.addEventListener('click',function(){ staged.splice(i,1); afterStagedChange(); }); row.appendChild(rm);
+        var rm=el('button','ckrm srm',SVG_X); rm.type='button'; rm.setAttribute('aria-label','Remove'); rm.addEventListener('click',function(){ staged.splice(i,1); afterStagedChange(); }); row.appendChild(rm);
         list.appendChild(row);
       });
-      wrap.appendChild(list);
+      box.appendChild(list);
+      wrap.appendChild(box);
     }
 
     // ---- reusable setups ----
@@ -3112,7 +3133,7 @@
       var PANE={prompt:'prompt',cast:'refs',items:'refs',scene:'refs',options:'options'};
       var active='prompt';   // open on the FIRST tab (Prompt) on load, not Cast
       // build stamp (fine print, bottom-right): bump PV_PS_BUILD on a MAJOR update so Chris sees what is live
-      var PV_PS_BUILD='v1.2';
+      var PV_PS_BUILD='v1.3';
       try{ var _bs=document.getElementById('pbg-build'); if(_bs) _bs.textContent='Prompt Studio '+PV_PS_BUILD; }catch(e){}
       // build tabs + dock
       tabsEl.innerHTML=TABS.map(function(t){return '<button class="pbg-tab" type="button" role="tab" data-t="'+t[0]+'"><span>'+t[1]+'</span><span class="tb" data-bk="'+t[0]+'"></span></button>';}).join('');
