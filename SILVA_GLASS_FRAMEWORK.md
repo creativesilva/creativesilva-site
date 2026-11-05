@@ -1,6 +1,6 @@
 # SILVA GLASS FRAMEWORK
 
-The locked design system for Chris Silva's **operational teacher tools**: the iOS "liquid glass, galaxy glow" look. Prompt Studio (`build-resources.html`) is the reference implementation. Roll this out slowly to the teacher portal, Equipment Manager, and other teacher tools.
+The locked design system for Chris Silva's **operational teacher tools**: the iOS "liquid glass, galaxy glow" look. Prompt Studio (`build-resources.html`) is the reference implementation, applied end to end across BOTH its tabs (Prompt Builder AND Resources) plus the Reference Library: one page-wide galaxy backdrop, one glass component set, one teal rollover. Roll this out slowly to the teacher portal, Equipment Manager, and other teacher tools.
 
 **Scope.** This is for TEACHER TOOLS only. **Canvas student pages stay angular** (see `SILVA_ANGULAR_FRAMEWORK.md`); do not glass-ify them. The red/white portfolio and lightwriterz.org are untouched.
 
@@ -139,7 +139,10 @@ Build everything from these. One spec each, no one-offs.
 - **Card / panel.** `--g-glass`, `--g-r-lg`, `--g-blur`, `--g-edge`, `var(--g-shadow), var(--g-spec-strong)`. Header row stays put; only the body scrolls.
 - **Row (list item).** `--g-r-md`, `--g-glass` (quiet), `--g-blur`, left controls centered to the row, variable-width content in a reserved width so columns never zig-zag (the no-wave law).
 - **Input / dropdown.** `--g-r-sm`, `--g-glass-quiet`, a light `--g-blur`, `--g-edge-soft`; focus lifts the edge to `--g-edge`/teal. NEVER square, never a flat black box. Dropdown menus are glass panels with `--g-r-md`; options are `--g-r-sm` rows with a teal active state.
-- **Accordion.** Glass row header (`--g-r-md`), chevron rotates, body reveals. Ships COLLAPSED; single-open where a group picker. Selected item can ride the collapsed header.
+- **Accordion.** Glass row header (`--g-r-md`, min-height `--g-ctrl-h`), chevron rotates (45deg to -135deg), body reveals. Ships COLLAPSED; single-open where a group picker. Selected item can ride the collapsed header. Nested sub-accordions share the same glass, one step quieter. ALL accordions in one tool read identical: no heavy per-item left-bar accents, just the clean all-around glass edge.
+- **Browse / media card (library + gallery).** A glass frame (`--g-r-md`, `--g-glass-quiet`, `--g-edge-soft`, flex column, uniform height in a `repeat(auto-fill, minmax(~190px, 1fr))` grid). Top = an image tile; keep a LIGHT ground (`#f4f6f6`, or a per-item inline bg) ONLY where a logo / line-art needs it to stay visible (a functional exception to the dark material, bordered off with `--g-edge-soft`). Then name + an uppercase micro-format label, then a centered row of the unified glass **action chips** (Copy / Copy URL / Download), ALL identical (~30px, `--g-r-sm`, glass-quiet, universal teal rollover); never mixed per-action accent colors. Opens a glass lightbox (rounded frame, circular glass close + nav, glass action pills).
+- **Color-swatch dots.** Circular (`--g-r-pill`) color dots under a card that switch a variant (swap the shown image + the download link); active = white ring + a teal halo. The dot's fill IS the color.
+- **Hex chip.** A `--g-r-sm` glass chip whose border is the color it represents (`border-color: currentColor`, color set to the hex); click copies the code. Used in a brand-color palette.
 - **Chip / badge.** `--g-r-pill`, teal fill or teal-tinted glass, micro type.
 - **Warning strip.** Non-blocking. Amber `--g-warn` (caution) or teal (tip) tinted glass row, `--g-r-md`, a round `!` icon. Lives where the user acts (e.g., top of the build order). Never blocks.
 - **Modal / pop-out.** Floats above everything incl. the nav (z-index above the sticky nav). Capped to the viewport as a flex column: header pinned, only the body scrolls. One unified window per item with its full action set. (See the locked pop-out rules in `CLAUDE.md`.)
@@ -179,13 +182,13 @@ Rule of thumb: **phone = sheet + dock, one column; iPad + desktop = two-column w
 
 **Do:** use the tokens; keep teal the only UI hue; give every surface an edge + specular; vary elevation; collapse accordions by default; lead with the content, one bright action per view; measure alignment; test wide AND narrow AND a phone; keep copy plain and short.
 
-**Don't:** `border-radius:0` or square controls; flat black input boxes; a galaxy accent as a UI fill; a second bright action competing with the primary; one-off blur/gradient/radius/type values; a sparse single column on a big screen; emojis in student-facing copy; em dashes anywhere.
+**Don't:** `border-radius:0` or square controls; flat black input boxes; glass panels on a flat-black tab (the galaxy goes behind EVERY tab); a galaxy accent as a UI fill; mixed per-action accent colors on a card's buttons (one unified glass chip); heavy per-item left-bar accents on accordions/rows; a second bright action competing with the primary; one-off blur/gradient/radius/type values; a sparse single column on a big screen; **how-to / instructional copy on a single-user teacher tool (label it, never explain how to use it, the owner knows); emojis in student-facing copy; em dashes anywhere.**
 
 ---
 
 ## 11. Rollout checklist (per teacher tool)
 
-1. Drop in the §1 `:root` tokens and the galaxy backdrop (`.g-bg` + mesh + glow).
+1. Drop in the §1 `:root` tokens and the galaxy backdrop (`.pbg-bg` + mesh + glow) as ONE page-wide fixed layer behind EVERY tab/panel, at `z-index:-1` under all content (a child of `<body>`, never trapped inside one panel). The whole tool (every tab, every scroll region) shares the one galaxy glow; glass panels float on it, never on flat black.
 2. Replace every surface with a §6 component; delete square/flat styles and every `radius:0`.
 3. Collapse radii to the 4 tokens, blur to the 2 tokens, gradients to glass + primary, type to the §5 ramp.
 4. Wire the §8 three tiers; confirm phone = sheet/dock vertical, iPad/desktop = 2-col.
