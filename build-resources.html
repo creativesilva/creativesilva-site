@@ -70,12 +70,11 @@
     /* ── Sticky header (identical to the catalog) ── */
     .catalog-sticky {
       position: sticky; top: 0; z-index: 500; margin: 0;
-      background: linear-gradient(180deg, rgba(4, 13, 13, 0.88) 0%, rgba(3, 23, 23, 0.74) 100%);
-      backdrop-filter: blur(20px) saturate(1.4);
-      -webkit-backdrop-filter: blur(20px) saturate(1.4);
-      border-top: 3px solid #00b8b8;
-      border-bottom: 1px solid rgba(0, 184, 184, 0.22);
-      box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.72);
+      background: linear-gradient(180deg, rgba(6, 16, 16, 0.64) 0%, rgba(6, 16, 16, 0.40) 100%);
+      backdrop-filter: blur(28px) saturate(1.5);
+      -webkit-backdrop-filter: blur(28px) saturate(1.5);
+      border-bottom: 1px solid var(--g-edge-soft);
+      box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.6);
     }
     .catalog-sticky-inner { max-width: var(--max-width, 1200px); margin: 0 auto; padding: 0 32px; }
     /* Title block: spans the content width with a gradient that fades out to the right
@@ -83,9 +82,11 @@
        the catalog and the cal-hero family. Title left; buttons + clock flow right over the fade. */
     .catalog-titlebar {
       display: flex; align-items: center; gap: 16px; flex-wrap: nowrap;
-      padding: 14px 24px 14px 20px; margin: 12px 0 4px;
-      background-image: linear-gradient(90deg, rgba(0, 66, 68, 0.96) 0%, rgba(3, 18, 20, 0.82) 44%, rgba(3, 18, 20, 0) 100%);
-      border-left: 7px solid #00b8b8;
+      padding: 11px 16px; margin: 12px 0 10px;
+      background: var(--g-glass-quiet);
+      backdrop-filter: var(--g-blur); -webkit-backdrop-filter: var(--g-blur);
+      border: 1px solid var(--g-edge-soft); border-radius: var(--g-r-lg);
+      box-shadow: var(--g-shadow-sm), var(--g-spec);
     }
     .catalog-titlebar .page-title {
       margin: 0; text-align: left; flex: 0 0 auto;
@@ -95,18 +96,16 @@
        separate, non-wrapping sibling pinned to the top-right (consistent across teacher pages). */
     .titlebar-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 1 1 auto; justify-content: flex-end; }
     .cal-btn {
-      margin-left: 0; flex: 0 0 auto; height: 34px; box-sizing: border-box;
-      display: inline-flex; align-items: center; padding: 0 15px;
-      font-family: var(--font-head, 'Oswald', sans-serif); font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
-      font-size: 0.78rem; color: #fff; text-decoration: none; white-space: nowrap;
-      background: #007474; border: 1px solid #00b8b8; transition: filter 0.15s ease;
+      margin-left: 0; flex: 0 0 auto; height: 40px; box-sizing: border-box;
+      display: inline-flex; align-items: center; gap: 7px; padding: 0 15px;
+      font-family: var(--pvb-font); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      font-size: 0.72rem; color: var(--g-text); text-decoration: none; white-space: nowrap;
+      background: var(--g-glass-quiet); border: 1px solid var(--g-edge-soft); border-radius: var(--g-r-md);
+      box-shadow: var(--g-spec); transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
     }
-    .cal-btn:hover { filter: brightness(1.18); }
-    /* Back-to-Catalog button: teal glass so it reads as the primary "return" action. */
-    .cal-btn.br-back { background: rgba(0, 184, 184, 0.14); }
-    .cal-btn.br-imagegen { background: rgba(0, 184, 184, 0.22); border-color: rgba(0, 184, 184, 0.55); }
-    /* Try Beta: dashed teal outline so it reads as the new/experimental door without competing with the solid actions. */
-    .cal-btn.br-beta { background: rgba(0, 184, 184, 0.08); border-style: dashed; border-color: rgba(0, 184, 184, 0.6); }
+    .cal-btn:hover { background: rgba(0, 184, 184, 0.18); border-color: var(--g-teal-lt); color: #eafeff; }
+    /* Image Gen is the primary door: a slightly brighter teal-tinted glass. */
+    .cal-btn.br-imagegen { background: rgba(0, 184, 184, 0.16); border-color: var(--g-edge); }
     /* Countdown: locked to the top-right of the header, always visible (consistent across
        every teacher-facing page). margin-left:auto pins it right of the action buttons. */
     .header-clock { flex: 0 0 auto; align-self: center; margin-left: auto; width: 150px; height: 46px; border: 0; background: transparent; display: block; }
@@ -121,10 +120,10 @@
     /* Compact mobile app-bar: title left, destinations as icon buttons, clock hidden. */
     @media (max-width: 859px) {
       .catalog-sticky-inner { padding: 0 12px; }
-      .catalog-titlebar { gap: 9px; padding: 9px 12px; margin: 8px 0 2px; border-left-width: 5px; flex-wrap: nowrap; }
+      .catalog-titlebar { gap: 10px; padding: 9px 12px; margin: 10px 0 8px; flex-wrap: nowrap; }
       .catalog-titlebar .page-title { font-size: 1.12rem; flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .titlebar-actions { flex: 0 0 auto; gap: 7px; flex-wrap: nowrap; justify-content: flex-end; }
-      .cal-btn { width: 38px; height: 38px; padding: 0; justify-content: center; }
+      .titlebar-actions { flex: 0 0 auto; gap: 8px; flex-wrap: nowrap; justify-content: flex-end; }
+      .cal-btn { width: 40px; height: 40px; padding: 0; justify-content: center; }
       .cal-btn .cb-tx { display: none; }
       .cal-btn .cb-ic { display: inline-flex; }
       .header-clock { display: none !important; }
@@ -212,6 +211,12 @@
     }
     .cat-body .logo-tile img { max-width: 100%; max-height: 100%; display: block; }
     .cat-body .logo-tile { position: relative; cursor: zoom-in; }
+    /* PHOTO tiles (course gallery): the image fills large with a frosted blur of itself behind the
+       empty space (no white or black bars). Logos keep their light ground above. Set via JS (--thumb-img). */
+    .cat-body .logo-tile.tile-photo { background: #06100f; padding: 0; height: auto; aspect-ratio: 16 / 11; overflow: hidden; }
+    .cat-body .logo-tile.tile-photo::before { content: ''; position: absolute; inset: 0; z-index: 0;
+      background: var(--thumb-img, none) center center / cover no-repeat; filter: blur(22px) saturate(1.25) brightness(.66); transform: scale(1.3); }
+    .cat-body .logo-tile.tile-photo img { position: relative; z-index: 1; width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 3px 14px rgba(0,0,0,.45)); }
     .cat-body .logo-tile::after {
       content: ""; position: absolute; top: 8px; right: 8px; width: 22px; height: 22px;
        background: rgba(0,0,0,0.55) no-repeat center/12px 12px;
@@ -223,19 +228,18 @@
     .cat-body .logo-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; text-align: center; gap: 9px 8px; padding: 11px 12px 13px; flex: 1 1 auto; }
     .cat-body .logo-name { font-family: var(--pvb-font); font-size: 0.74rem; font-weight: 600; color: var(--g-text); letter-spacing: 0.01em; flex: 1 1 100%; min-width: 0; overflow-wrap: anywhere; }
     .cat-body .logo-fmt { display: block; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--g-faint); margin-top: 3px; font-weight: 600; }
-    /* one unified glass action chip for Copy / Copy URL / Download / View (universal teal rollover) */
+    /* card actions = ONE connected glass icon pill (copy / copy-url / download), hairline-divided,
+       teal fill on the hovered segment (the split-pill language from the builder) */
+    .cat-body .logo-actions { display: inline-flex; align-items: stretch; flex: 0 0 auto; height: 36px; border-radius: var(--g-r-pill); overflow: hidden;
+      border: 1px solid var(--g-edge); background: var(--g-glass); backdrop-filter: var(--g-blur); -webkit-backdrop-filter: var(--g-blur); box-shadow: var(--g-shadow-sm), var(--g-spec); margin-top: 2px; }
     .cat-body .logo-dl, .cat-body .logo-copy, .cat-body .logo-view {
-      flex: 0 0 auto; font-family: var(--pvb-font); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--g-text); text-decoration: none; cursor: pointer;
-      background: var(--g-glass-quiet); border: 1px solid var(--g-edge-soft); border-radius: var(--g-r-sm);
-      height: 30px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center;
-      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-    }
-    .cat-body .logo-dl:hover, .cat-body .logo-copy:hover, .cat-body .logo-view:hover {
-      background: rgba(0,184,184,0.18); border-color: var(--g-teal-lt); color: #eafeff;
-    }
-    .cat-body .logo-copy.copied { color: #04201f; border-color: var(--g-teal-lt); background: var(--g-primary); }
-    .cat-body .logo-actions { display: flex; flex-wrap: wrap; gap: 7px; flex: 1 1 100%; align-items: center; justify-content: center; }
+      flex: 0 0 auto; width: 48px; display: inline-flex; align-items: center; justify-content: center; padding: 0;
+      border: 0; border-radius: 0; background: transparent; color: var(--g-teal-lt); cursor: pointer; text-decoration: none;
+      transition: background 0.16s ease, color 0.16s ease; }
+    .cat-body .logo-actions > * + * { border-left: 1px solid var(--g-edge-soft); }
+    .cat-body .logo-dl svg, .cat-body .logo-copy svg, .cat-body .logo-view svg { width: 17px; height: 17px; display: block; }
+    .cat-body .logo-dl:hover, .cat-body .logo-copy:hover, .cat-body .logo-view:hover { background: var(--g-primary); color: #04110f; }
+    .cat-body .logo-copy.copied { background: var(--g-primary); color: #04110f; box-shadow: inset 0 0 0 2px rgba(130,245,230,.9); }
     .cat-body .hex-btn { flex: 0 0 auto; margin-left: auto; font-family: var(--font-mono, ui-monospace, Menlo, monospace); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; cursor: pointer; border: 1px solid currentColor; border-radius: var(--g-r-sm); background: var(--g-glass-quiet); padding: 6px 10px; line-height: 1; }
     .cat-body .hex-btn:hover { filter: brightness(1.12); }
     .cat-body .hex-btn.copied { color: #0a0a0a !important; background: #fff !important; }
@@ -789,10 +793,10 @@
   .pvb-checkrow .cimg.copied{background:#3fa863; color:#04110f; border-color:#3fa863;}
   :root{ --font-head:var(--pvb-font); --text:var(--pvb-text); --text-dim:var(--pvb-muted); --text-faint:var(--pvb-faint); }
   .pvb-tabs{display:flex; align-items:center; gap:4px; flex-wrap:wrap; margin:0; padding:0;}
-  .pvb-tab{position:relative; font-family:var(--pvb-font); font-weight:700; letter-spacing:.1em; text-transform:uppercase; font-size:.8rem;
-    color:var(--pvb-muted); background:transparent; border:0; border-bottom:3px solid transparent; padding:12px 20px 11px; cursor:pointer; transition:color .15s, border-color .15s, background .15s;}
-  .pvb-tab:hover{color:var(--pvb-text); background:rgba(0,184,184,.08);}
-  .pvb-tab.active{color:var(--pvb-teal-lt); border-bottom-color:var(--pvb-teal);}
+  .pvb-tab{position:relative; font-family:var(--pvb-font); font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:.8rem;
+    color:var(--pvb-muted); background:transparent; border:1px solid transparent; border-radius:var(--g-r-md); padding:9px 18px; cursor:pointer; transition:color .15s, border-color .15s, background .15s;}
+  .pvb-tab:hover{color:var(--pvb-text); background:rgba(0,184,184,.10);}
+  .pvb-tab.active{color:var(--g-teal-lt); background:var(--g-glass-quiet); border-color:var(--g-edge-soft); box-shadow:var(--g-spec);}
   .pvb-tab .tabcount{font-size:.66rem; color:var(--pvb-faint); margin-left:6px; letter-spacing:.04em;}
   .pvb-tabpanel[hidden]{display:none;}
   .pvb-quickrow{display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin:2px 0 16px; padding:12px 14px;
@@ -1741,9 +1745,10 @@
         var original = btn.getAttribute('data-label') || btn.textContent || 'Copy';
         btn.setAttribute('data-label', original);
         function done(ok) {
-          btn.textContent = ok ? 'Copied!' : 'Copy failed';
-          if (ok) { btn.classList.add('copied'); }
-          setTimeout(function () { btn.textContent = original; btn.classList.remove('copied'); }, ok ? 1600 : 2200);
+          var hasIcon = btn.querySelector('svg');
+          btn.classList.toggle('copied', ok);
+          if (!hasIcon) { btn.textContent = ok ? 'Copied!' : 'Copy failed'; }
+          setTimeout(function () { btn.classList.remove('copied'); if (!hasIcon) btn.textContent = original; }, ok ? 1600 : 2200);
         }
         var pngPromise = (async function () {
           var resp = await fetch(url);
@@ -1783,14 +1788,19 @@
       function copyUrlAction(btn, href, label) {
         var url = publicUrl(href);
         var restore = function (msg, ok) {
-          btn.textContent = msg; if (ok) { btn.classList.add('copied'); }
-          setTimeout(function () { btn.textContent = label; btn.classList.remove('copied'); }, ok ? 1600 : 2200);
+          var hasIcon = btn.querySelector('svg');
+          if (ok) { btn.classList.add('copied'); }
+          if (!hasIcon) { btn.textContent = msg; }
+          setTimeout(function () { btn.classList.remove('copied'); if (!hasIcon) btn.textContent = label; }, ok ? 1600 : 2200);
         };
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(url).then(function () { restore('Copied!', true); }).catch(function () { window.prompt('Copy this image URL:', url); });
         } else { window.prompt('Copy this image URL:', url); }
       }
       window.silvaCopyImageUrl = copyUrlAction;
+      var ICON_COPY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="1.7"></rect><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"></path></svg>';
+      var ICON_LINK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 14.5l5-5"></path><path d="M11 6.5l1.2-1.2a3.5 3.5 0 0 1 5 5L16 11.5"></path><path d="M13 17.5l-1.2 1.2a3.5 3.5 0 0 1-5-5L8 12.5"></path></svg>';
+      var ICON_DL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="M7 12l5 5 5-5"></path><path d="M5 21h14"></path></svg>';
       document.querySelectorAll('.logo-card').forEach(function (card) {
         var dl = card.querySelector('.logo-dl');
         if (!dl) return;
@@ -1799,15 +1809,16 @@
         var actions = document.createElement('span');
         actions.className = 'logo-actions';
         var copy = document.createElement('button');
-        copy.type = 'button'; copy.className = 'logo-copy'; copy.textContent = 'Copy';
+        copy.type = 'button'; copy.className = 'logo-copy'; copy.innerHTML = ICON_COPY;
         copy.setAttribute('data-label', 'Copy');
         copy.setAttribute('aria-label', 'Copy image to clipboard');
         copy.addEventListener('click', function () { copyLogoImage(dl.getAttribute('href'), copy); });
         var copyUrl = document.createElement('button');
-        copyUrl.type = 'button'; copyUrl.className = 'logo-copy logo-copyurl'; copyUrl.textContent = 'Copy URL';
+        copyUrl.type = 'button'; copyUrl.className = 'logo-copy logo-copyurl'; copyUrl.innerHTML = ICON_LINK;
         copyUrl.setAttribute('data-label', 'Copy URL');
         copyUrl.setAttribute('aria-label', 'Copy image URL to clipboard');
         copyUrl.addEventListener('click', function () { copyUrlAction(copyUrl, dl.getAttribute('href'), 'Copy URL'); });
+        dl.innerHTML = ICON_DL; dl.setAttribute('aria-label', 'Download'); dl.removeAttribute('title');
         dl.parentNode.insertBefore(actions, dl);
         if (view) actions.appendChild(view);
         actions.appendChild(copy);
@@ -1860,6 +1871,9 @@
       document.querySelectorAll('.logo-card .logo-tile').forEach(function (tile) {
         var img = tile.querySelector('img');
         if (!img) return;
+        // photos (course gallery, under /assets/images/) get the frosted-blur fill; logos keep their light ground
+        var _src = img.getAttribute('src') || '';
+        if (/\/assets\/images\//.test(_src)) { tile.classList.add('tile-photo'); tile.style.setProperty('--thumb-img', 'url("' + _src + '")'); }
         var card = tile.closest('.logo-card');
         var dl = card && card.querySelector('.logo-dl');
         var nameEl = card && card.querySelector('.logo-name');
@@ -3133,7 +3147,7 @@
       var PANE={prompt:'prompt',cast:'refs',items:'refs',scene:'refs',options:'options'};
       var active='prompt';   // open on the FIRST tab (Prompt) on load, not Cast
       // build stamp (fine print, bottom-right): bump PV_PS_BUILD on a MAJOR update so Chris sees what is live
-      var PV_PS_BUILD='v1.3';
+      var PV_PS_BUILD='v1.4';
       try{ var _bs=document.getElementById('pbg-build'); if(_bs) _bs.textContent='Prompt Studio '+PV_PS_BUILD; }catch(e){}
       // build tabs + dock
       tabsEl.innerHTML=TABS.map(function(t){return '<button class="pbg-tab" type="button" role="tab" data-t="'+t[0]+'"><span>'+t[1]+'</span><span class="tb" data-bk="'+t[0]+'"></span></button>';}).join('');
