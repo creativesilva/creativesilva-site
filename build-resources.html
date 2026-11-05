@@ -71,7 +71,7 @@
     .catalog-sticky {
       position: sticky; top: 0; z-index: 500; margin: 0;
       display: flow-root;   /* contain the titlebar's top margin so the frosted bar is flush to the top (no gap) */
-      background: linear-gradient(180deg, rgba(6, 16, 16, 0.64) 0%, rgba(6, 16, 16, 0.40) 100%);
+      background: linear-gradient(180deg, rgba(5, 10, 24, 0.42) 0%, rgba(5, 10, 24, 0.22) 100%);
       backdrop-filter: blur(28px) saturate(1.5);
       -webkit-backdrop-filter: blur(28px) saturate(1.5);
       border-bottom: 1px solid var(--g-edge-soft);
@@ -87,12 +87,15 @@
       background: var(--g-glass-quiet);
       backdrop-filter: var(--g-blur); -webkit-backdrop-filter: var(--g-blur);
       border: 1px solid var(--g-edge-soft); border-radius: var(--g-r-lg);
-      box-shadow: var(--g-shadow-sm), var(--g-spec);
+      box-shadow: var(--g-shadow-sm), var(--g-spec), 0 0 26px rgba(46, 230, 214, 0.10);
     }
     .catalog-titlebar .page-title {
       margin: 0; text-align: left; flex: 0 0 auto;
       font-size: clamp(1.45rem, 2.9vw, 2.05rem); line-height: 1.0; letter-spacing: 0.005em;
     }
+    /* Nebula Teal title: white to teal-light gradient text. The inner span carries the gradient so the
+       h1 keeps its own box (and its phone ellipsis); never put the gradient or flex sizing on the h1. */
+    .page-title .pt-g { background: linear-gradient(92deg, #ffffff 0%, #c9fbf4 42%, #3ff0e0 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
     /* Nav buttons are one right-aligned group that wraps internally; the clock stays a
        separate, non-wrapping sibling pinned to the top-right (consistent across teacher pages). */
     .titlebar-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 1 1 auto; justify-content: flex-end; }
@@ -569,8 +572,8 @@
     --pvb-panel-2:linear-gradient(135deg,rgba(0,184,184,0.17) 0%,rgba(4,20,19,0.5) 100%);
     --pvb-panel-hi:linear-gradient(135deg,rgba(0,184,184,0.26) 0%,rgba(0,184,184,0.06) 100%);
     --pvb-teal:#00b8b8; --pvb-teal-lt:#5ff0f0; --pvb-teal-deep:#007474;
-    --pvb-text:#eafeff; --pvb-muted:rgba(214,247,247,0.82); --pvb-faint:rgba(206,244,244,0.6);
-    --pvb-line:rgba(0,184,184,0.35); --pvb-line-soft:rgba(0,184,184,0.2);
+    --pvb-text:#f3fbff; --pvb-muted:rgba(222,240,250,.82); --pvb-faint:rgba(205,226,240,.62);
+    --pvb-line:rgba(120,220,235,.30); --pvb-line-soft:rgba(120,220,235,.18);
     --pvb-gold:#f5b301; --pvb-gold-bright:#ffd166;
     --pvb-radius:0;
     --pvb-font:'Oswald',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
@@ -632,7 +635,7 @@
   @supports not (grid-template-rows:subgrid){
     .pvb-fields{row-gap:12px;} .pvb-field{display:flex; flex-direction:column; gap:5px; padding-bottom:0;} .pvb-field > label{margin-bottom:0;}
   }
-  .pvb-field label{font-size:.74rem; font-weight:600; letter-spacing:.02em; color:#cfeaea;}
+  .pvb-field label{font-size:.74rem; font-weight:600; letter-spacing:.02em; color:#dcf3f8;}
   .pvb-field textarea, .pvb-field select{width:100%; font-family:var(--pvb-body); font-size:.95rem; color:var(--pvb-text);
     background:var(--g-glass-quiet); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur);
     border:1px solid var(--g-edge-soft); border-radius:var(--g-r-sm); box-shadow:var(--g-spec); padding:10px 13px; outline:none; resize:vertical;}
@@ -667,7 +670,7 @@
   .pvb-dd-opt + .pvb-dd-opt{border-top:1px solid rgba(0,184,184,.14);}
   .pvb-dd-opt:hover, .pvb-dd-opt.active{background:rgba(0,184,184,.20); border-left-color:var(--pvb-teal); color:#fff;}
   .pvb-acc{background:var(--g-glass-quiet); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur);
-    border:1px solid var(--g-edge-soft); border-radius:var(--g-r-md); box-shadow:var(--g-shadow-sm), var(--g-spec); margin-bottom:10px; overflow:hidden;}
+    border:1px solid var(--g-edge-soft); border-radius:var(--g-r-md); box-shadow:var(--g-shadow-sm), var(--g-spec), 0 0 24px rgba(46,230,214,.08); margin-bottom:10px; overflow:hidden;}
   .pvb-acc.open{border-color:var(--g-edge);}
   .pvb-acc-head{width:100%; min-height:var(--g-ctrl-h); display:flex; align-items:center; gap:10px; cursor:pointer; font-family:var(--pvb-font);
     background:transparent; border:0; color:var(--pvb-text); padding:6px 14px; text-align:left;}
@@ -797,7 +800,7 @@
   .pvb-modebtn:hover{background:rgba(0,184,184,.12);}
   .pvb-modebtn.active{background:var(--pvb-teal); color:#04110f;}
   .pvb-modehint{font-size:.72rem; color:var(--pvb-faint); margin:0 0 12px; line-height:1.5;}
-  .pvb-preview{background:#04100f; border:1px solid var(--g-edge-soft); padding:12px 13px; max-height:300px; overflow:auto;
+  .pvb-preview{background:rgba(4,10,26,.55); border:1px solid var(--g-edge-soft); padding:12px 13px; max-height:300px; overflow:auto;
     font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.76rem; line-height:1.5; color:#d7f2f2; white-space:pre-wrap;}
   .pvb-acts{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 4px;}
   .pvb-btn{flex:1 1 auto; font-family:var(--pvb-font); font-size:.74rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
@@ -912,12 +915,12 @@
      ============================================================================ */
   :root{
     --pbg-r:20px; --pbg-r-sm:14px; --pbg-r-pill:999px;
-    --pbg-glass:radial-gradient(130% 86% at 12% -8%, rgba(210,255,255,.20), transparent 52%),
-                linear-gradient(177deg, rgba(120,250,250,.13), rgba(0,184,184,.05) 42%, rgba(6,16,16,.58));
+    --pbg-glass:radial-gradient(130% 86% at 12% -8%, rgba(225,252,255,.24), transparent 52%),
+                linear-gradient(177deg, rgba(90,225,230,.16), rgba(70,76,200,.08) 44%, rgba(5,12,30,.36));
     --pbg-blur:blur(20px) saturate(185%) brightness(1.06);
-    --pbg-edge:1px solid rgba(112,246,246,.30);
-    --pbg-spec:inset 0 2px 0 rgba(224,255,255,.60), inset 1px 0 0 rgba(185,255,255,.20),
-               inset -1px 0 0 rgba(0,0,0,.26), inset 0 -1px 0 rgba(0,0,0,.4);
+    --pbg-edge:1px solid rgba(150,235,245,.32);
+    --pbg-spec:inset 0 2px 0 rgba(230,252,255,.62), inset 1px 0 0 rgba(190,245,255,.22),
+               inset -1px 0 0 rgba(0,0,0,.24), inset 0 -1px 0 rgba(0,0,0,.36);
     --pbg-shadow:0 18px 54px rgba(0,0,0,.5);
     --pbg-top:96px;              /* header height; JS keeps it current on phone */
     --pbg-ty:58%;               /* sheet translateY; JS drives the detents on phone */
@@ -925,16 +928,16 @@
   /* ===== SILVA GLASS FRAMEWORK tokens (canonical; see SILVA_GLASS_FRAMEWORK.md) ===== */
   :root{
     --g-teal:#00b8b8; --g-teal-lt:#5ff0f0; --g-teal-deep:#007474;
-    --g-text:#eafeff; --g-muted:rgba(214,247,247,.82); --g-faint:rgba(206,244,244,.6);
-    --g-edge:rgba(112,246,246,.30); --g-edge-soft:rgba(112,246,246,.18);
+    --g-text:#f3fbff; --g-muted:rgba(222,240,250,.82); --g-faint:rgba(205,226,240,.62);
+    --g-edge:rgba(150,235,245,.30); --g-edge-soft:rgba(150,225,245,.17);
     --g-warn:#f5b301; --g-ok:#3fa863; --g-danger:#ff7a7a;
     --g-r-pill:999px; --g-r-lg:20px; --g-r-md:14px; --g-r-sm:10px;
     --g-ctrl-h:48px; --g-ctrl-h-sm:42px;   /* LOCKED control heights: standard glass button / compact row button */
     --g-blur:blur(18px) saturate(172%) brightness(1.05); --g-blur-heavy:blur(28px) saturate(172%) brightness(1.04);
-    --g-glass:radial-gradient(125% 86% at 14% -10%, rgba(200,255,255,.17), transparent 54%), linear-gradient(160deg, rgba(0,184,184,.16), rgba(132,80,226,.08) 56%, rgba(6,16,16,.30));
-    --g-glass-quiet:radial-gradient(125% 86% at 14% -10%, rgba(200,255,255,.11), transparent 54%), linear-gradient(160deg, rgba(0,184,184,.11), rgba(132,80,226,.055) 58%, rgba(6,16,16,.24));
+    --g-glass:radial-gradient(125% 86% at 14% -10%, rgba(225,252,255,.20), transparent 54%), linear-gradient(160deg, rgba(0,184,184,.16), rgba(96,84,230,.10) 58%, rgba(8,16,40,.22));
+    --g-glass-quiet:radial-gradient(125% 86% at 14% -10%, rgba(225,252,255,.13), transparent 54%), linear-gradient(160deg, rgba(0,184,184,.11), rgba(96,84,230,.07) 58%, rgba(8,16,40,.16));
     --g-primary:linear-gradient(135deg, var(--g-teal-lt), var(--g-teal));
-    --g-spec:inset 0 1px 0 rgba(200,255,255,.26);
+    --g-spec:inset 0 1px 0 rgba(230,252,255,.36);
     --max-width:1500px;
     --g-shadow-sm:0 6px 16px rgba(0,0,0,.24); --g-shadow:0 12px 30px rgba(0,0,0,.34);
   }
@@ -943,30 +946,44 @@
   .pbg-build{margin-left:auto; align-self:center; white-space:nowrap; pointer-events:none; font-family:var(--pvb-font);
     font-size:.56rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--g-faint); opacity:.6;}
   /* ---------- galaxy backdrop (fixed, page-wide: sits behind BOTH tabs so the whole Prompt Studio shares one galaxy-glow glass) ---------- */
-  .pbg-bg{position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; background:#06100f;}
-  .pbg-mesh{position:absolute; inset:-25%; filter:blur(46px) saturate(128%); mix-blend-mode:screen; will-change:transform; transform:translateZ(0);
+  /* NEBULA TEAL + PINK SPARK (LOCKED 2026-11-05, Chris chose option A): a deep indigo-navy galaxy, teal as the
+     main glow, indigo + violet secondary clouds, three SOFT Pink Spark #E58FF5 clouds for the nebula spectrum.
+     The mesh is inset -25%, so a visible position v% sits at mesh 16.7 + 0.666v. Pink layers sit ABOVE indigo/violet
+     but BELOW the main teal glow, so teal always leads. Accents live here only: never a button or panel fill. */
+  .pbg-bg{position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);}
+  .pbg-mesh{position:absolute; inset:-25%; filter:blur(40px) saturate(150%) brightness(1.1); mix-blend-mode:screen; will-change:transform; transform:translateZ(0);
     background:
-      radial-gradient(38% 30% at 10% 6%, rgba(0,238,224,.80), transparent 66%),
-      radial-gradient(30% 25% at 90% 8%, rgba(150,255,255,.58), transparent 70%),
-      radial-gradient(40% 34% at 62% 26%, rgba(56,134,248,.58), transparent 70%),
-      radial-gradient(32% 30% at 94% 40%, rgba(150,92,242,.54), transparent 70%),
-      radial-gradient(30% 26% at 74% 60%, rgba(232,110,206,.3), transparent 72%),
-      radial-gradient(30% 26% at 18% 52%, rgba(24,214,184,.46), transparent 72%),
-      radial-gradient(54% 46% at 68% 96%, rgba(0,178,176,.68), transparent 72%),
-      radial-gradient(44% 38% at 10% 92%, rgba(0,224,220,.5), transparent 72%);
+      radial-gradient(30% 22% at 29% 29%, rgba(0,184,184,.85), transparent 68%),
+      radial-gradient(18% 13% at 72% 24%, rgba(229,143,245,.46), transparent 72%),
+      radial-gradient(24% 18% at 75% 25%, rgba(78,84,214,.70), transparent 70%),
+      radial-gradient(20% 18% at 81% 45%, rgba(123,92,255,.60), transparent 72%),
+      radial-gradient(24% 19% at 79% 55%, rgba(229,143,245,.62), transparent 72%),
+      radial-gradient(34% 24% at 48% 47%, rgba(0,138,146,.70), transparent 70%),
+      radial-gradient(18% 13% at 31% 74%, rgba(229,143,245,.42), transparent 72%),
+      radial-gradient(22% 18% at 22% 58%, rgba(63,240,224,.50), transparent 72%),
+      radial-gradient(28% 22% at 66% 69%, rgba(25,211,197,.62), transparent 72%),
+      radial-gradient(22% 16% at 29% 75%, rgba(96,84,230,.48), transparent 72%),
+      radial-gradient(56% 14% at 50% 84%, rgba(46,230,214,.80), transparent 70%),
+      radial-gradient(30% 7% at 50% 83.5%, rgba(214,255,250,.60), transparent 72%);
     animation:pbgDrift 34s ease-in-out infinite alternate;}
   .pbg-glow{position:absolute; inset:0; mix-blend-mode:screen; filter:blur(1.5px); will-change:opacity;
     background:
-      radial-gradient(46px 46px at 15% 10%, rgba(120,255,248,.38), transparent 68%),
-      radial-gradient(40px 40px at 90% 13%, rgba(175,220,255,.34), transparent 68%),
-      radial-gradient(42px 42px at 95% 42%, rgba(200,165,255,.32), transparent 68%),
-      radial-gradient(9px 9px at 24% 23%, rgba(215,255,255,.95), transparent 64%),
-      radial-gradient(6px 6px at 69% 15%, rgba(170,220,255,.88), transparent 64%),
-      radial-gradient(7px 7px at 86% 44%, rgba(214,185,255,.88), transparent 64%),
-      radial-gradient(6px 6px at 39% 64%, rgba(185,255,255,.9), transparent 64%),
-      radial-gradient(9px 9px at 58% 86%, rgba(135,255,240,.9), transparent 64%),
-      radial-gradient(5px 5px at 12% 70%, rgba(210,235,255,.84), transparent 64%),
-      radial-gradient(6px 6px at 92% 78%, rgba(170,255,255,.86), transparent 64%);
+      radial-gradient(48px 48px at 18% 12%, rgba(120,255,240,.44), transparent 68%),
+      radial-gradient(44px 44px at 86% 13%, rgba(214,165,250,.42), transparent 68%),
+      radial-gradient(48px 48px at 94% 52%, rgba(240,170,250,.50), transparent 68%),
+      radial-gradient(38px 38px at 16% 84%, rgba(236,160,250,.32), transparent 68%),
+      radial-gradient(9px 9px at 24% 23%, rgba(230,255,252,.95), transparent 64%),
+      radial-gradient(6px 6px at 69% 15%, rgba(232,205,255,.9), transparent 64%),
+      radial-gradient(7px 7px at 86% 44%, rgba(242,196,255,.92), transparent 64%),
+      radial-gradient(6px 6px at 80% 26%, rgba(245,200,255,.9), transparent 64%),
+      radial-gradient(6px 6px at 39% 64%, rgba(170,255,245,.9), transparent 64%),
+      radial-gradient(9px 9px at 58% 86%, rgba(200,255,248,.92), transparent 64%),
+      radial-gradient(5px 5px at 12% 70%, rgba(212,226,255,.86), transparent 64%),
+      radial-gradient(6px 6px at 92% 78%, rgba(150,255,240,.88), transparent 64%),
+      radial-gradient(3px 3px at 33% 40%, rgba(255,255,255,.9), transparent 64%),
+      radial-gradient(3px 3px at 77% 33%, rgba(255,255,255,.86), transparent 64%),
+      radial-gradient(2px 2px at 52% 52%, rgba(255,255,255,.8), transparent 64%),
+      radial-gradient(3px 3px at 8% 34%, rgba(255,255,255,.82), transparent 64%);
     animation:pbgGlow 6s ease-in-out infinite alternate;}
   @keyframes pbgDrift{from{transform:translate3d(-2%,-1%,0) scale(1);}to{transform:translate3d(3%,2%,0) scale(1.08);}}
   @keyframes pbgGlow{from{opacity:.6}to{opacity:1}}
@@ -1176,7 +1193,11 @@
   .pbg-hist-empty{font-size:.84rem; color:var(--pvb-faint); padding:16px 2px; text-align:center;}
 
   /* ---------- controls sheet ---------- */
-  .pbg-sheet{border-radius:var(--pbg-r) var(--pbg-r) 0 0; display:flex; flex-direction:column; min-height:0; overflow:hidden;}
+  .pbg-sheet{position:relative; border-radius:var(--pbg-r) var(--pbg-r) 0 0; display:flex; flex-direction:column; min-height:0; overflow:hidden;
+    box-shadow:0 -18px 50px rgba(0,0,0,.42), 0 -6px 34px rgba(46,230,214,.20), var(--pbg-spec);}
+  /* nebula rim: one thin teal to periwinkle to pink light along the sheet's top edge */
+  .pbg-sheet::after{content:''; position:absolute; left:18px; right:18px; top:0; height:1.5px; border-radius:2px; pointer-events:none; z-index:2;
+    background:linear-gradient(90deg, transparent 0%, rgba(63,240,224,.95) 22%, rgba(150,160,255,.85) 52%, rgba(229,143,245,.88) 76%, transparent 100%);}
   .pbg-handle{flex:0 0 auto; display:flex; align-items:center; justify-content:center; height:26px; background:none; border:0; cursor:grab; touch-action:none;}
   .pbg-handle span{width:40px; height:5px; border-radius:var(--g-r-pill); background:rgba(180,245,245,.5);}
   .pbg-handle:active{cursor:grabbing;}
@@ -1314,12 +1335,12 @@
     .pbg-card-body{padding-left:max(14px,env(safe-area-inset-left,0)); padding-right:max(14px,env(safe-area-inset-right,0)); padding-bottom:120px;}
     .pbg-sheet{position:absolute; left:0; right:0; bottom:0; top:0; z-index:6;
       transform:translateY(var(--pbg-ty)); transition:transform .44s cubic-bezier(.32,.72,0,1); will-change:transform;
-      box-shadow:0 -16px 50px rgba(0,0,0,.55), var(--pbg-spec);}
+      box-shadow:0 -18px 50px rgba(0,0,0,.42), 0 -6px 34px rgba(46,230,214,.20), var(--pbg-spec);}
     .pbg-sheet.dragging{transition:none;}
     /* the dock is a SOLID bar on phone (not see-through) so content never hides behind it */
     .pbg-dock{position:absolute; left:0; right:0; bottom:0; z-index:3; padding-bottom:max(8px,env(safe-area-inset-bottom,0));
-      background:linear-gradient(to top, rgba(5,13,12,.98), rgba(7,20,19,.94)); backdrop-filter:blur(26px) saturate(150%); -webkit-backdrop-filter:blur(26px) saturate(150%);
-      border-top:1px solid rgba(112,246,246,.3); box-shadow:0 -10px 30px rgba(0,0,0,.5);
+      background:linear-gradient(to top, rgba(4,10,22,.97), rgba(8,20,40,.92)); backdrop-filter:blur(26px) saturate(150%); -webkit-backdrop-filter:blur(26px) saturate(150%);
+      border-top:1px solid rgba(150,235,245,.26); box-shadow:0 -10px 30px rgba(0,0,0,.5);
       transition:opacity .4s ease, transform .4s ease;}
     /* ONE navigation at a time on a phone (Chris's design): the in-sheet tab strip is the nav at the HALF
        detent (the dock is hidden there), and it dissolves as the sheet rises while the dock takes over at FULL.
@@ -1382,7 +1403,7 @@
   /* ---------- accessibility fallbacks ---------- */
   @media (prefers-reduced-motion:reduce){ .pbg-mesh,.pbg-glow{animation:none;} .pbg-sheet{transition:none;} .pbg-pane.on{animation:none;} }
   @media (prefers-reduced-transparency:reduce){
-    .pbg-card,.pbg-sheet,.pbg-dock,.pbg-tab.on,.pbg-dk.on{backdrop-filter:none; -webkit-backdrop-filter:none; background:rgba(8,26,25,.96);}
+    .pbg-card,.pbg-sheet,.pbg-dock,.pbg-tab.on,.pbg-dk.on{backdrop-filter:none; -webkit-backdrop-filter:none; background:rgba(9,20,40,.96);}
     .pbg-mesh,.pbg-glow{display:none;}
   }
   </style>
@@ -1444,7 +1465,7 @@
     <div class="catalog-sticky">
       <div class="catalog-sticky-inner">
         <div class="catalog-titlebar">
-          <h1 class="page-title">AI Studio</h1>
+          <h1 class="page-title"><span class="pt-g">AI Studio</span></h1>
           <div class="titlebar-actions">
             <a class="cal-btn br-back" href="/curriculum.html" title="Catalog" aria-label="Catalog"><span class="cb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></span><span class="cb-tx">Catalog</span></a>
             <a class="cal-btn br-imagegen" href="https://chatgpt.com/g/g-p-6a455e17c5248191b8c24ad354aba9ae-imagegen-pv/project" target="imagegen-pv" rel="noopener" onclick="window.open(this.href,'imagegen-pv','popup=yes,width=1320,height=980');return false;" title="ChatGPT Image Gen" aria-label="ChatGPT Image Gen"><span class="cb-ic"><svg class="gpt-mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg></span><span class="cb-tx">Image Gen</span></a>
@@ -1700,7 +1721,7 @@
                             <button type="button" class="pal-chip" style="--c:#2EE6D6" onclick="silvaCopyHex('#2EE6D6', this.querySelector('.pal-hx'))" aria-label="Copy Horizon hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Horizon</span><span class="pal-rl">Bottom glow</span></span><span class="pal-hx">#2EE6D6</span></button>
                             <button type="button" class="pal-chip" style="--c:#4E54D6" onclick="silvaCopyHex('#4E54D6', this.querySelector('.pal-hx'))" aria-label="Copy Indigo hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Indigo</span><span class="pal-rl">Second cloud</span></span><span class="pal-hx">#4E54D6</span></button>
                             <button type="button" class="pal-chip" style="--c:#7B5CFF" onclick="silvaCopyHex('#7B5CFF', this.querySelector('.pal-hx'))" aria-label="Copy Violet hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Violet</span><span class="pal-rl">Accent cloud</span></span><span class="pal-hx">#7B5CFF</span></button>
-                            <button type="button" class="pal-chip" style="--c:#E58FF5" onclick="silvaCopyHex('#E58FF5', this.querySelector('.pal-hx'))" aria-label="Copy Pink Spark hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Pink Spark</span><span class="pal-rl">Sparkles only</span></span><span class="pal-hx">#E58FF5</span></button>
+                            <button type="button" class="pal-chip" style="--c:#E58FF5" onclick="silvaCopyHex('#E58FF5', this.querySelector('.pal-hx'))" aria-label="Copy Pink Spark hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Pink Spark</span><span class="pal-rl">Nebula clouds</span></span><span class="pal-hx">#E58FF5</span></button>
                             <button type="button" class="pal-chip" style="--c:#5FF0F0" onclick="silvaCopyHex('#5FF0F0', this.querySelector('.pal-hx'))" aria-label="Copy Button Light hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Button Light</span><span class="pal-rl">Button top</span></span><span class="pal-hx">#5FF0F0</span></button>
                             <button type="button" class="pal-chip" style="--c:#00B8B8" onclick="silvaCopyHex('#00B8B8', this.querySelector('.pal-hx'))" aria-label="Copy Button Teal hex"><span class="pal-sw"></span><span class="pal-tx"><span class="pal-nm">Button Teal</span><span class="pal-rl">Button base</span></span><span class="pal-hx">#00B8B8</span></button>
                           </div>
@@ -3312,7 +3333,7 @@
       var PANE={prompt:'prompt',cast:'refs',items:'refs',scene:'refs',options:'options'};
       var active='prompt';   // open on the FIRST tab (Prompt) on load, not Cast
       // build stamp (fine print, bottom-right): bump PV_PS_BUILD on a MAJOR update so Chris sees what is live
-      var PV_PS_BUILD='v1.8.3';
+      var PV_PS_BUILD='v1.9';
       try{ var _bs=document.getElementById('pbg-build'); if(_bs) _bs.textContent='AI Studio '+PV_PS_BUILD; }catch(e){}
       // build tabs + dock
       tabsEl.innerHTML=TABS.map(function(t){return '<button class="pbg-tab" type="button" role="tab" data-t="'+t[0]+'"><span>'+t[1]+'</span><span class="tb" data-bk="'+t[0]+'"></span></button>';}).join('');

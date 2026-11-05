@@ -6,11 +6,13 @@ The locked design system for Chris Silva's **operational teacher tools**: the iO
 
 **Status: LOCKED 2026-11-04.** Approved on AI Studio (v1.7). Maintain it without being reminded. When a decision changes, update this file in the same session.
 
+**Palette: Nebula Teal + Pink Spark (LOCKED 2026-11-05, AI Studio v1.9).** Chris reviewed a direction board and chose option A: a deep navy galaxy where teal leads the glow, indigo and violet clouds sit behind it, and three SOFT Pink Spark #E58FF5 clouds complete the nebula spectrum. The tokens in §1 and the recipe in §2 are this palette.
+
 ---
 
 ## 0. The feel, in one line
 
-Near-black teal space, lit from within. Soft frosted glass panels with a bright top edge, floating over a slow galaxy mesh. Rounded, calm, cohesive. Nothing square, nothing flat, nothing that reads "AI slop."
+Deep navy galaxy space, lit from within: teal leads the glow, indigo and violet drift behind it, soft pink nebula clouds finish the spectrum. Soft frosted glass panels with a bright top edge, floating over a slow galaxy mesh. Rounded, calm, cohesive. Nothing square, nothing flat, nothing that reads "AI slop."
 
 Three references it synthesizes: Apple iOS 26 Liquid Glass (material + rounded nav), Canva (draggable multi-detent sheets, tasteful gradients), the Alexa app (card-based, one obvious action).
 
@@ -22,16 +24,17 @@ Copy this `:root` block into any teacher tool to adopt the system. Every value b
 
 ```css
 :root{
-  /* INK (page base) */
-  --g-ink:#06100f; --g-ink-2:#041413;
+  /* INK (page base: Abyss at the top, fading to Deep Navy) */
+  --g-ink:#050816; --g-ink-2:#0a1d36;
   /* TEAL BRAND (the only UI hue) */
   --g-teal:#00b8b8; --g-teal-lt:#5ff0f0; --g-teal-deep:#007474;
-  /* GALAXY ACCENTS (backdrop mesh + glow ONLY, never a UI fill) */
-  --g-cyan:#00eee0; --g-blue:#3886f8; --g-violet:#965cf2; --g-pink:#e86ece;
-  /* TEXT */
-  --g-text:#eafeff; --g-muted:rgba(214,247,247,.82); --g-faint:rgba(206,244,244,.6);
+  /* GALAXY ACCENTS: the Nebula Teal palette (backdrop mesh + glow ONLY, never a UI fill).
+     Same values as the "Silva Galaxy Glass" chips in AI Studio > Resources > Color Palettes. */
+  --g-nebula:#00b2b2; --g-teal-glow:#3ff0e0; --g-horizon:#2ee6d6; --g-indigo:#4e54d6; --g-violet:#7b5cff; --g-pink:#e58ff5;
+  /* TEXT (cool white) */
+  --g-text:#f3fbff; --g-muted:rgba(222,240,250,.82); --g-faint:rgba(205,226,240,.62);
   /* EDGES / LINES */
-  --g-edge:rgba(112,246,246,.30); --g-edge-soft:rgba(112,246,246,.18);
+  --g-edge:rgba(150,235,245,.30); --g-edge-soft:rgba(150,225,245,.17);
   /* STATE */
   --g-warn:#f5b301; --g-ok:#3fa863; --g-danger:#ff7a7a;
   /* RADIUS (4 steps, nothing else) */
@@ -46,12 +49,12 @@ Copy this `:root` block into any teacher tool to adopt the system. Every value b
   --g-blur:blur(20px) saturate(150%);       /* panels, pills, controls */
   --g-blur-heavy:blur(28px) saturate(150%); /* the sheet, dock, overlays */
   /* FILLS */
-  --g-glass:linear-gradient(145deg, rgba(0,184,184,.14), rgba(132,80,226,.07) 58%, rgba(6,16,16,.26));  /* panel */
-  --g-glass-quiet:linear-gradient(145deg, rgba(0,184,184,.08), rgba(132,80,226,.04) 60%, rgba(6,16,16,.2)); /* input / calm surface */
+  --g-glass:radial-gradient(125% 86% at 14% -10%, rgba(225,252,255,.20), transparent 54%), linear-gradient(160deg, rgba(0,184,184,.16), rgba(96,84,230,.10) 58%, rgba(8,16,40,.22));  /* panel */
+  --g-glass-quiet:radial-gradient(125% 86% at 14% -10%, rgba(225,252,255,.13), transparent 54%), linear-gradient(160deg, rgba(0,184,184,.11), rgba(96,84,230,.07) 58%, rgba(8,16,40,.16)); /* input / calm surface */
   --g-primary:linear-gradient(135deg, var(--g-teal-lt), var(--g-teal));  /* the one bright action */
   /* SPECULAR + SHADOW (depth) */
-  --g-spec:inset 0 1px 0 rgba(185,255,255,.18);
-  --g-spec-strong:inset 0 2px 0 rgba(224,255,255,.6), inset 1px 0 0 rgba(185,255,255,.2), inset -1px 0 0 rgba(0,0,0,.26), inset 0 -1px 0 rgba(0,0,0,.4);
+  --g-spec:inset 0 1px 0 rgba(230,252,255,.36);
+  --g-spec-strong:inset 0 2px 0 rgba(230,252,255,.62), inset 1px 0 0 rgba(190,245,255,.22), inset -1px 0 0 rgba(0,0,0,.24), inset 0 -1px 0 rgba(0,0,0,.36);
   --g-shadow-sm:0 6px 16px rgba(0,0,0,.24);
   --g-shadow:0 12px 30px rgba(0,0,0,.34);
   --g-shadow-lg:0 18px 54px rgba(0,0,0,.5);
@@ -79,7 +82,11 @@ Every panel, pill, card, control, and chip is built from the same four layers. N
 
 **Hierarchy, not uniformity.** Vary elevation so the eye reads depth: backdrop (mesh) < panel < card < pill < the one bright primary. Don't make every surface the same brightness.
 
-**Galaxy backdrop.** A fixed `.g-bg` with a `.g-mesh` (8 soft radial blobs in teal/cyan/blue/violet/pink, `mix-blend-mode:screen`, slow drift) and a `.g-glow` (tiny star points). Accents live ONLY here, never in a button or panel fill. Paint it only while the tool is on screen.
+**Galaxy backdrop (Nebula Teal, LOCKED 2026-11-05).** One fixed layer behind EVERY tab (`.pbg-bg` in AI Studio): a vertical base gradient `#050816 0%, #07122a 36%, #0a1d36 68%, #0b2a3c 100%`, a `.pbg-mesh` of 12 soft radial clouds (`filter:blur(40px) saturate(150%) brightness(1.1)`, `mix-blend-mode:screen`, inset -25%, slow 34s drift) and a `.pbg-glow` of soft halos plus star points (6s breathe).
+- **Cloud stack, top layer first:** the teal main glow (top-left, the brightest), a soft Pink Spark wisp (top-right), indigo, violet, the Pink Spark cloud (right), deep teal (center), a soft Pink Spark haze (lower-left), teal light (left), teal (lower-right), indigo (lower-left), then the horizon teal glow along the bottom.
+- **Teal always leads.** Pink sits ABOVE indigo/violet but BELOW the main teal. Keep pink SOFT (option A: three clouds at .42 to .62 alpha); it never out-shines the teal, never becomes a UI fill.
+- **Placement math.** The mesh is inset -25%, so a cloud meant for visible position v% goes at mesh 16.7 + 0.666v. Off-screen clouds are wasted paint.
+- **Copy, don't re-derive.** Take `.pbg-bg`, `.pbg-mesh` and `.pbg-glow` from `build-resources.html` verbatim. Accents live ONLY here (plus the one sheet rim), never in a button or panel fill. Paint it only while the tool is on screen.
 
 **Fallbacks (required).** `@media (prefers-reduced-transparency:reduce)` drop blur, use a solid `--g-ink` tint. `@media (prefers-reduced-motion:reduce)` freeze the drift/glow. Reduced transparency must stay legible.
 
@@ -101,7 +108,7 @@ Four radii, nothing else. **Zero `border-radius:0` anywhere.**
 ## 4. Color law
 
 - **Teal is the only UI hue.** `--g-teal` / `--g-teal-lt` / `--g-teal-deep` for actions, accents, active states, edges.
-- **Galaxy accents** (cyan/blue/violet/pink) appear ONLY in the backdrop mesh/glow. Never a button, panel, or text color.
+- **Galaxy accents** (nebula teal, horizon, indigo, violet, Pink Spark) appear ONLY in the backdrop mesh/glow and the one sheet rim. Never a button, panel, or text color.
 - **Text:** `--g-text` for primary, `--g-muted` for secondary, `--g-faint` for tertiary. Bright text on dark glass; keep contrast legible.
 - **State:** amber `--g-warn` for cautions, green `--g-ok` for success, soft red `--g-danger` for errors. These are the ONLY non-teal UI colors, and only for state.
 - On a bright `--g-primary` fill, text/icons are ink `#04110f`, not white.
@@ -136,8 +143,9 @@ Build everything from these. One spec each, no one-offs.
 - **Icon button.** Circular (`--g-r-pill`, equal w/h, 44px min on touch) OR a pill half, `--g-ctrl-h`/`-sm`. Glass at rest; the teal fill arrives on the rollover, not as a permanent state. Icon only where the meaning is obvious to the owner.
 - **Split pill (LOCKED 2026-11-04).** ONE glass capsule (`--g-glass`, `--g-blur`, `--g-edge`, `--g-r-pill`, `--g-ctrl-h`/`-sm`) split by a hairline `--g-edge-soft` divider into two equal icon halves: download left, copy right. BOTH halves are glass at rest, no permanently-bright half and no harsh dark→bright break; the teal fills only the HOVERED half (the universal rollover). Success flashes `--g-primary` + a 2px inset ring (`.ok`). The SAME pill is used in the composed-prompt footer and in every build-order row, identical.
 - **Segmented control / tabs.** A pill track; the active segment is a brighter inset glass pill (`--g-glass-quiet`, `--g-r-md`, teal text + `--g-spec`), NEVER a square box with an underline. Hover is a faint teal wash. The count badge is a small teal `--g-r-pill` chip.
-- **Page header / top bar.** The whole top chrome is glass too (it is the first thing seen; a flat or angular header breaks the theme). The sticky bar is translucent + heavy blur so the galaxy shows through (no bright accent border). The title sits in a rounded frosted glass panel (`--g-r-lg`, `--g-glass-quiet`), NO heavy left-bar accent. Nav destinations are glass buttons (`--g-r-md`, universal teal rollover); the one primary door may be a touch teal-tinted. Scope header overrides to the tool's own page so a shared site header elsewhere (e.g. the angular catalog) is untouched. Keep only the doors the owner uses: AI Studio carries exactly two icon buttons (Catalog, and the real ChatGPT mark drawn in `currentColor` so it takes the glass style).
+- **Page header / top bar.** The whole top chrome is glass too (it is the first thing seen; a flat or angular header breaks the theme). The sticky bar is translucent + heavy blur so the galaxy shows through (no bright accent border). The title sits in a rounded frosted glass panel (`--g-r-lg`, `--g-glass-quiet`), NO heavy left-bar accent. Nav destinations are glass buttons (`--g-r-md`, universal teal rollover); the one primary door may be a touch teal-tinted. Scope header overrides to the tool's own page so a shared site header elsewhere (e.g. the angular catalog) is untouched. Keep only the doors the owner uses: AI Studio carries exactly two icon buttons (Catalog, and the real ChatGPT mark drawn in `currentColor` so it takes the glass style). The title is white to teal-light gradient text (`linear-gradient(92deg,#fff 0%,#c9fbf4 42%,#3ff0e0 100%)`, background-clipped) carried by an inner `<span class="pt-g">`, never by the h1 itself: gradient or flex sizing on the h1 breaks the header row. Brand marks are clean vector paths checked against a reference image of the real mark; never hand-shortened coordinates (the v1.8.3 lesson: a hand-rounded ChatGPT path drew broken).
 - **Card / panel.** `--g-glass`, `--g-r-lg`, `--g-blur`, `--g-edge`, `var(--g-shadow), var(--g-spec-strong)`. Header row stays put; only the body scrolls.
+- **Sheet rim.** The controls sheet carries ONE 1.5px light along its top edge (`.pbg-sheet::after`, inset 18px each side: transparent, teal light `#3FF0E0`, periwinkle, Pink Spark, transparent) and a faint teal halo in its shadow (`0 -6px 34px rgba(46,230,214,.20)`). No other component gets a rim.
 - **Row (list item).** `--g-r-md`, `--g-glass` (quiet), `--g-blur`, left controls centered to the row, variable-width content in a reserved width so columns never zig-zag (the no-wave law).
 - **Input / dropdown.** `--g-r-sm`, `--g-glass-quiet`, a light `--g-blur`, `--g-edge-soft`; focus lifts the edge to `--g-edge`/teal. NEVER square, never a flat black box. Dropdown menus are glass panels with `--g-r-md`; options are `--g-r-sm` rows with a teal active state.
 - **Accordion.** Glass row header (`--g-r-md`, min-height `--g-ctrl-h`), chevron rotates (45deg to -135deg), body reveals. Ships COLLAPSED; single-open where a group picker. Selected item can ride the collapsed header. Nested sub-accordions share the same glass, one step quieter. ALL accordions in one tool read identical: no heavy per-item left-bar accents, just the clean all-around glass edge.
