@@ -156,6 +156,14 @@ Build everything from these. One spec each, no one-offs.
 
 - Spacing comes from the 6-step scale (`--g-s1`..`--g-s6`). Gutters on phone are `--g-s4` (16px) minimum, with safe-area insets.
 - **Alignment / no-wave (LOCKED).** In any repeated row, items line up in straight vertical columns across rows. Vertically center a row's items; give variable-width content (a name, a date, a count) a reserved fixed width + tabular digits so nothing beside it shifts. Verify by measuring `getBoundingClientRect().left` (0px spread), not by eye.
+- **Row lock (LOCKED 2026-11-04, non-negotiable).** A row can never stagger, at any width, in any state. Build it into the structure so it cannot happen, never fix it by nudging:
+  - **Field grids (label over control):** each field is a CSS subgrid of the grid's rows (label / control / optional extra), so every field in a row shares ONE label track and ONE control track; labels bottom-align onto their control. Column count comes from the container's own width (container queries), so every column is about 260px or more and labels stay on ONE line. Phones get ONE column (labels never wrap beside a neighbor).
+  - **Card grids:** media / name block that reserves its lines (two name lines, clamped) / selectors / action pill pinned to the bottom (`margin-top:auto`), cards stretched to one height. A pill or dot row never sits directly under text that can wrap.
+  - **Action rows:** a CSS grid of equal columns (label on its own line above), never a wrapping flex row that orphans one button.
+  - **Stacked controls:** controls stacked in one column share both edges (full width).
+  - **The gate:** run `tools/align-audit.js` (`silvaAlignAudit()`) on every tab, pane and opened accordion at 390, 1024, 1366, 1440 and 2560 widths. It flags staggered rows, control or pill drift, mismatched label line counts, ragged card heights and wrapping rows that do not form straight columns. Ship only at 0 flags.
+- **One navigation per tier.** A phone has exactly one nav (the bottom dock); never repeat the same sections in a second strip. iPad and desktop use the in-pane tabs.
+- **Scroll edge effect.** Scrolling content dissolves at a pane's edges (a soft mask), never a hard slice under a bar; the top fade appears only once the pane is scrolled.
 - **Best use of space.** Design wide-first for a 27" 4K monitor and iPad Pro landscape: a responsive multi-column glass workspace, then reflow to one stacked column at phone width. A single sparse full-width column on a big screen is a FAIL.
 - **Glanceable.** Compact by default, detail on interaction (expand, pop-out). Not a wall of text.
 - **One edge line.** The header and the content share ONE max-width (1500px, 1760px at 4K) and the same 26px gutters, so their left and right edges sit on one line (measure: 0px drift).
@@ -197,7 +205,7 @@ Rule of thumb: **phone = sheet + dock, one column; iPad + desktop = two-column w
 2. Replace every surface with a §6 component; delete square/flat styles and every `radius:0`.
 3. Collapse radii to the 4 tokens, blur to the 2 tokens, gradients to glass + primary, type to the §5 ramp.
 4. Wire the §8 three tiers; confirm phone = sheet/dock vertical, iPad/desktop = 2-col.
-5. Audit: glanceable, best-use-of-space, uniform, aligned (measure, 0px wave), cohesive. Fix before shipping.
+5. Audit: glanceable, best-use-of-space, uniform, aligned (measure, 0px wave), cohesive. Run `tools/align-audit.js` on every tab, pane and opened accordion at all five widths and ship only at 0 flags. Fix before shipping.
 6. Verify live on desktop, iPad Pro width, and a phone. Then push and confirm live.
 
 Canvas student pages are out of scope. Teacher tools only.

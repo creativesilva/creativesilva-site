@@ -221,8 +221,14 @@
     }
     .cat-body .logo-tile:hover::after { opacity: 1; }
     .cat-body .logo-card.pending { border-style: dashed; }
-    .cat-body .logo-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; text-align: center; gap: 9px 8px; padding: 11px 12px 13px; flex: 1 1 auto; }
-    .cat-body .logo-name { font-family: var(--pvb-font); font-size: 0.74rem; font-weight: 600; color: var(--g-text); letter-spacing: 0.01em; flex: 1 1 100%; min-width: 0; overflow-wrap: anywhere; }
+    /* CARD ROW LOCK (LOCKED 2026-11-04): name block (reserves two name lines + the format line) / color
+       dots / action pill pinned to the card bottom. Cards in a row stretch to one height, so every pill
+       (and every dot row) lands on ONE line whether a name wraps or not. Never let a pill follow the name. */
+    .cat-body .logo-meta { display: flex; flex-direction: column; flex-wrap: nowrap; align-items: center; justify-content: flex-start; text-align: center; gap: 9px; padding: 11px 12px 13px; flex: 1 1 auto; }
+    .cat-body .logo-name { font-family: var(--pvb-font); font-size: 0.74rem; font-weight: 600; color: var(--g-text); letter-spacing: 0.01em; flex: none; width: 100%; min-width: 0; overflow-wrap: anywhere; line-height: 1.2; min-height: calc(2.4em + 14px); }
+    .cat-body .logo-meta > .swatch-dots, .cat-body .logo-meta > .swatch-segs { order: 1; margin-top: auto; }
+    .cat-body .logo-meta > .logo-actions { order: 2; margin-top: auto; }
+    .cat-body .logo-meta:has(> .swatch-dots, > .swatch-segs) > .logo-actions { margin-top: 0; }
     .cat-body .logo-fmt { display: block; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--g-faint); margin-top: 3px; font-weight: 600; }
     /* card actions = ONE connected glass icon pill (copy / copy-url / download), hairline-divided,
        teal fill on the hovered segment (the split-pill language from the builder) */
@@ -275,7 +281,7 @@
     .ic-grid .logo-tile.tone-light { isolation: isolate; }
     .ic-grid .logo-tile.tone-light img { filter: none; mix-blend-mode: multiply; }
     .ic-grid .logo-meta { flex-direction: column; flex-wrap: nowrap; gap: 9px; padding: 11px 10px 12px; }
-    .ic-grid .logo-name { flex: none; width: 100%; }
+    .ic-grid .logo-name { flex: none; width: 100%; min-height: 0; }
     .ic-grid .logo-name .ln { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .ic-grid .logo-fmt { display: flex; align-items: center; justify-content: center; gap: 6px; height: 22px; margin-top: 4px; white-space: nowrap; }
     .ic-grid .sw-sep { opacity: .55; }
@@ -539,6 +545,8 @@
     .lwz-tags select option { background: #0c1414; color: #eafafa; }
     /* CS Incoming routing selects use the shared custom teal dropdown (compact, inline) */
     .lwz-tags .pvb-dd { width: auto; min-width: 210px; margin: 0; }
+    /* phone: the routing dropdown and the label field stack, so both span the full row (one left + right edge) */
+    @media (max-width: 640px) { .lwz-tags .pvb-dd, .lwz-tags input { flex: 1 1 100%; width: 100%; min-width: 0; } }
     .lwz-tags .pvb-dd-btn { font-size: 0.82rem; padding: 8px 12px; }
     .lwz-tags .pvb-dd-menu { min-width: 210px; }
     .lwz-tags .pvb-dd-opt { font-size: 0.82rem; padding: 9px 12px; }
@@ -611,10 +619,19 @@
   .pvb-guide-b{font-size:.82rem; color:var(--pvb-muted); line-height:1.55;}
   .pvb-guide-b b{color:#eafeff; font-weight:700;}
   .pvb-smallbtn.copied{background:#3fa863; color:#04110f;}
-  .pvb-fields{display:grid; grid-template-columns:1fr; gap:12px;}
-  @media (max-width:560px){ .pvb-fields{grid-template-columns:1fr;} }
-  .pvb-field{display:flex; flex-direction:column; gap:5px;}
+  /* ROW LOCK (LOCKED 2026-11-04): a field grid can NEVER stagger. Each field is a 3-row SUBGRID
+     (label / control / optional "Other" box), so every field in a row shares ONE label track and ONE
+     control track. If a label ever wraps, the whole row takes that height, labels bottom-align onto
+     their control, and every control still starts on the same line. Columns come from the pane width
+     (container query on the options pane), so labels have room to stay on one line. */
+  .pvb-fields{display:grid; grid-template-columns:minmax(0,1fr); column-gap:14px; row-gap:0;}
+  .pvb-field{display:grid; grid-row:span 3; grid-template-rows:subgrid; row-gap:0; min-width:0; padding-bottom:12px;}
+  .pvb-field > label{align-self:end; margin-bottom:6px;}
+  .pvb-field > .pvb-otherbox{align-self:start;}
   .pvb-field.full{grid-column:1 / -1;}
+  @supports not (grid-template-rows:subgrid){
+    .pvb-fields{row-gap:12px;} .pvb-field{display:flex; flex-direction:column; gap:5px; padding-bottom:0;} .pvb-field > label{margin-bottom:0;}
+  }
   .pvb-field label{font-size:.74rem; font-weight:600; letter-spacing:.02em; color:#cfeaea;}
   .pvb-field textarea, .pvb-field select{width:100%; font-family:var(--pvb-body); font-size:.95rem; color:var(--pvb-text);
     background:var(--g-glass-quiet); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur);
@@ -685,8 +702,11 @@
   .pvb-charbody{display:none; padding:4px 2px 12px;}
   .pvb-characc.open .pvb-charbody{display:block;}
   .pvb-refgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); gap:12px;}
+  /* CARD ROW LOCK (LOCKED 2026-11-04): media / name (always TWO reserved lines, clamped) / tools pill pinned
+     to the bottom. Every card is one size and every pill sits on one line, whether a name wraps or not. */
   .pvb-refcard{cursor:pointer; border-radius:var(--g-r-sm); overflow:hidden; background:var(--g-glass-quiet); border:1px solid var(--g-edge-soft);
-    outline:2px solid transparent; transition:outline-color .12s, transform .05s, box-shadow .12s;}
+    outline:2px solid transparent; transition:outline-color .12s, transform .05s, box-shadow .12s; display:flex; flex-direction:column;}
+  .pvb-refcard > .pvb-rtools{margin-top:auto;}
   .pvb-refcard:hover{transform:translateY(-1px); box-shadow:var(--g-shadow-sm);}
   .pvb-refcard.sel{outline-color:var(--g-teal); box-shadow:0 0 0 3px rgba(0,184,184,.18);}
   .pvb-refcard .thumb{position:relative; width:100%; aspect-ratio:1/1; overflow:hidden; background:#062322;}
@@ -709,7 +729,8 @@
   .pvb-refcard.sel .thumb::after{content:'\2713'; position:absolute; top:6px; right:6px; width:22px; height:22px;
     display:flex; align-items:center; justify-content:center; background:var(--g-teal); color:#04110f;
     font-weight:700; font-size:.8rem; border-radius:var(--g-r-sm); z-index:2;}
-  .pvb-refcard .nm{font-size:.74rem; color:#dbeeee; padding:7px 8px 8px; line-height:1.25;}
+  .pvb-refcard .nm{font-size:.74rem; color:#dbeeee; padding:7px 8px 8px; line-height:1.25;
+    box-sizing:border-box; min-height:calc(2.5em + 15px); display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden;}
   /* Prompt navigation: curriculum-style grouped accordion at the top of the builder */
   .pvb-promptnav{margin:0 0 22px; padding:0 0 18px; border-bottom:1px solid var(--pvb-line);}
   .pvb-pnav-head{display:flex; flex-direction:column; gap:4px; margin:0 0 12px;}
@@ -1173,14 +1194,25 @@
   .pbg-tab .tb{min-width:16px; height:16px; padding:0 4px; border-radius:var(--g-r-pill); background:var(--pvb-teal); color:#04110f;
     font-size:.6rem; font-weight:800; display:none; align-items:center; justify-content:center; letter-spacing:0;}
   .pbg-tab .tb.show{display:inline-flex;}
-  .pbg-body{flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:2px 14px 18px;}
+  .pbg-body{flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:2px 14px 18px;
+    /* SCROLL EDGE EFFECT (Apple): content dissolves at the pane edges instead of being sliced by a hard
+       line. The top edge fades only once the pane is scrolled (.is-scrolled, set in JS), so nothing is
+       faded at rest; the bottom fades out above the dock on phones. */
+    --edge-top:0px; --edge-fade:18px; --edge-dock:0px;
+    -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 var(--edge-top), #000 calc(100% - var(--edge-dock) - var(--edge-fade)), transparent calc(100% - var(--edge-dock)));
+            mask-image:linear-gradient(to bottom, transparent 0, #000 var(--edge-top), #000 calc(100% - var(--edge-dock) - var(--edge-fade)), transparent calc(100% - var(--edge-dock)));}
+  .pbg-body.is-scrolled{--edge-top:20px;}
   .pbg-pane{display:none;}
   .pbg-pane.on{display:block; animation:pbgFade .25s ease;}
   @keyframes pbgFade{from{opacity:0; transform:translateY(4px);}to{opacity:1; transform:none;}}
   .pbg-pane-h{font-family:var(--pvb-font); font-size:1.02rem; font-weight:700; color:#fff; letter-spacing:.01em; margin:6px 0 2px;}
   .pbg-pane-sub{font-size:.8rem; color:var(--pvb-muted); margin:0 0 12px; line-height:1.5;}
-  .pbg-quick{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:16px 0; padding:12px 13px;
+  /* quick copies: label on its own line, then the buttons as ONE row of equal columns (any count). Never a
+     wrapping flex row (that orphaned a button under its neighbor on phones). */
+  .pbg-quick{display:grid; grid-template-columns:repeat(var(--qcols,2), minmax(0,1fr)); align-items:center; gap:8px; margin:16px 0; padding:12px 13px;
     background:rgba(0,184,184,.06); border:1px solid var(--pvb-line-soft); border-radius:var(--pbg-r-sm);}
+  .pbg-quick > .pvb-quicklabel{grid-column:1 / -1;}
+  .pbg-quick > .pvb-quickbtn{width:100%; min-width:0; justify-content:center; text-align:center;}
   .pbg-quick .pvb-quickbtn{border-radius:var(--pbg-r-pill);}
   .pbg-modewrap{margin:16px 0; padding:13px; background:rgba(0,184,184,.05); border:1px solid var(--pvb-line-soft); border-radius:var(--pbg-r-sm);}
   .pbg-modewrap .pvb-modeseg{border-radius:var(--pbg-r-pill); overflow:hidden;}
@@ -1289,8 +1321,12 @@
       background:linear-gradient(to top, rgba(5,13,12,.98), rgba(7,20,19,.94)); backdrop-filter:blur(26px) saturate(150%); -webkit-backdrop-filter:blur(26px) saturate(150%);
       border-top:1px solid rgba(112,246,246,.3); box-shadow:0 -10px 30px rgba(0,0,0,.5);
       transition:opacity .4s ease, transform .4s ease;}
-    .pbg-tabs{padding-left:max(10px,env(safe-area-inset-left,0)); padding-right:max(10px,env(safe-area-inset-right,0));}
+    /* ONE navigation on a phone: the bottom dock. The in-sheet tab strip repeated the same five
+       sections (and clipped "Options" at the edge), so it is off on phones; it stays the nav on desktop/iPad. */
+    .pbg-tabs{display:none;}
     .pbg-wizard{display:flex; margin:0 max(14px,env(safe-area-inset-left,0)) 9px;}
+    /* the scroll edge dissolves into the dock's top edge, not behind it */
+    .pbg-body{--edge-dock:calc(64px + max(8px, env(safe-area-inset-bottom, 0px))); --edge-fade:26px;}
     /* a runway at the bottom of the scroll so every field clears the floating dock (~84px tall) */
     .pbg-body{padding-left:max(14px,env(safe-area-inset-left,0)); padding-right:max(14px,env(safe-area-inset-right,0)); padding-bottom:calc(104px + env(safe-area-inset-bottom,0));}
     /* desktop-only chrome off */
@@ -1304,8 +1340,12 @@
   /* ---------- polish: redundant title, denser cast, 2-up options ---------- */
   /* the tab already names the section, so drop the engine's lead "Reference files" title */
   .pbg[data-catmode="single"] #pvb-refs > .pvb-gtitle:first-child{display:none;}
-  /* option fields two-up (glass dropdowns); full-width text spans the row */
-  #pvb-panel-build .pbg-pane[data-pane="options"] .pvb-fields{grid-template-columns:1fr 1fr; gap:14px;}
+  /* option fields: the column count follows the PANE's own width (container query), never the viewport,
+     so every column is ~260px+ and a label stays on one line: 1 column on phones, 2 from 540px, 3 from
+     860px. Full-width text fields span the row. (Row lock above keeps any row aligned regardless.) */
+  #pvb-panel-build .pbg-pane[data-pane="options"]{container:pvbopts / inline-size;}
+  @container pvbopts (min-width:540px){ #pvb-panel-build .pbg-pane[data-pane="options"] .pvb-fields{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  @container pvbopts (min-width:860px){ #pvb-panel-build .pbg-pane[data-pane="options"] .pvb-fields{grid-template-columns:repeat(3,minmax(0,1fr));} }
   #pvb-panel-build .pbg-pane[data-pane="options"] .pvb-field.full{grid-column:1 / -1;}
   /* desktop Cast: show collapsed people two-up; an opened person spans the row with a full image grid */
   @media (min-width:821px){
@@ -1322,7 +1362,6 @@
     .pbg{ max-width:1760px; grid-template-columns:minmax(0,1fr) clamp(440px,26vw,540px); }
     #pvb-reflib{ max-width:1760px; }
     .pbg[data-catmode="single"][data-cat="cast"] #pvb-refs > .pvb-acc[data-cat="cast"] > .pvb-acc-body{ grid-template-columns:repeat(3,minmax(0,1fr)); }
-    #pvb-panel-build .pbg-pane[data-pane="options"] .pvb-fields{ grid-template-columns:repeat(3,minmax(0,1fr)); }
   }
 
   /* ---------- galaxy copy confirmation (every copy button flashes on click) ---------- */
@@ -3254,7 +3293,7 @@
       var PANE={prompt:'prompt',cast:'refs',items:'refs',scene:'refs',options:'options'};
       var active='prompt';   // open on the FIRST tab (Prompt) on load, not Cast
       // build stamp (fine print, bottom-right): bump PV_PS_BUILD on a MAJOR update so Chris sees what is live
-      var PV_PS_BUILD='v1.7';
+      var PV_PS_BUILD='v1.8';
       try{ var _bs=document.getElementById('pbg-build'); if(_bs) _bs.textContent='AI Studio '+PV_PS_BUILD; }catch(e){}
       // build tabs + dock
       tabsEl.innerHTML=TABS.map(function(t){return '<button class="pbg-tab" type="button" role="tab" data-t="'+t[0]+'"><span>'+t[1]+'</span><span class="tb" data-bk="'+t[0]+'"></span></button>';}).join('');
@@ -3304,6 +3343,9 @@
       // input inside gets focus, or on scrollIntoView, which shoves the whole layout up). Its children scroll.
       var panelEl=document.getElementById('pvb-panel-build');
       if(panelEl) panelEl.addEventListener('scroll',function(){ if(panelEl.scrollTop) panelEl.scrollTop=0; },{passive:true});
+      // scroll edge effect: the top fade appears only once the controls pane is scrolled
+      var bodyEl=pbg.querySelector('.pbg-body');
+      if(bodyEl) bodyEl.addEventListener('scroll',function(){ bodyEl.classList.toggle('is-scrolled', bodyEl.scrollTop>4); },{passive:true});
       // The panel is full-screen; the half detent sits where it always did (header + 46% of the rest).
       // TY_FULL = 0 is CLEAR TO THE TOP: the sheet pushes the header off on the way up.
       function measure(){ H=pbg.clientHeight||window.innerHeight; HH=headerH(); TY_FULL=0; TY_HALF=Math.round(HH+(H-HH)*0.46); TY_CLOSED=H; }
