@@ -837,11 +837,12 @@
     --g-warn:#f5b301; --g-ok:#3fa863; --g-danger:#ff7a7a;
     --g-r-pill:999px; --g-r-lg:20px; --g-r-md:14px; --g-r-sm:10px;
     --g-ctrl-h:48px; --g-ctrl-h-sm:42px;   /* LOCKED control heights: standard glass button / compact row button */
-    --g-blur:blur(18px) saturate(150%); --g-blur-heavy:blur(28px) saturate(150%);
-    --g-glass:linear-gradient(145deg, rgba(0,184,184,.14), rgba(132,80,226,.07) 58%, rgba(6,16,16,.26));
-    --g-glass-quiet:linear-gradient(145deg, rgba(0,184,184,.08), rgba(132,80,226,.04) 60%, rgba(6,16,16,.2));
+    --g-blur:blur(18px) saturate(172%) brightness(1.05); --g-blur-heavy:blur(28px) saturate(172%) brightness(1.04);
+    --g-glass:radial-gradient(125% 86% at 14% -10%, rgba(200,255,255,.17), transparent 54%), linear-gradient(160deg, rgba(0,184,184,.16), rgba(132,80,226,.08) 56%, rgba(6,16,16,.30));
+    --g-glass-quiet:radial-gradient(125% 86% at 14% -10%, rgba(200,255,255,.11), transparent 54%), linear-gradient(160deg, rgba(0,184,184,.11), rgba(132,80,226,.055) 58%, rgba(6,16,16,.24));
     --g-primary:linear-gradient(135deg, var(--g-teal-lt), var(--g-teal));
-    --g-spec:inset 0 1px 0 rgba(185,255,255,.18);
+    --g-spec:inset 0 1px 0 rgba(200,255,255,.26);
+    --max-width:1500px;
     --g-shadow-sm:0 6px 16px rgba(0,0,0,.24); --g-shadow:0 12px 30px rgba(0,0,0,.34);
   }
 
@@ -1871,9 +1872,14 @@
       document.querySelectorAll('.logo-card .logo-tile').forEach(function (tile) {
         var img = tile.querySelector('img');
         if (!img) return;
-        // photos (course gallery, under /assets/images/) get the frosted-blur fill; logos keep their light ground
+        // Blur-fill is the DEFAULT (photos / templates / titles); keep a light ground ONLY for logos / vector marks.
         var _src = img.getAttribute('src') || '';
-        if (/\/assets\/images\//.test(_src)) { tile.classList.add('tile-photo'); tile.style.setProperty('--thumb-img', 'url("' + _src + '")'); }
+        var _sty = tile.getAttribute('style') || '';
+        var _isLogo = /\.svg(\?|$)/i.test(_src)
+          || /\/(logos|icons)\//i.test(_src)
+          || /logo|icon|monogram|watermark|wordmark|smjuhsd|lightwriterz|appicon/i.test(_src)
+          || /background\s*:/i.test(_sty);
+        if (!_isLogo) { tile.classList.add('tile-photo'); tile.style.setProperty('--thumb-img', 'url("' + _src + '")'); }
         var card = tile.closest('.logo-card');
         var dl = card && card.querySelector('.logo-dl');
         var nameEl = card && card.querySelector('.logo-name');
@@ -3147,7 +3153,7 @@
       var PANE={prompt:'prompt',cast:'refs',items:'refs',scene:'refs',options:'options'};
       var active='prompt';   // open on the FIRST tab (Prompt) on load, not Cast
       // build stamp (fine print, bottom-right): bump PV_PS_BUILD on a MAJOR update so Chris sees what is live
-      var PV_PS_BUILD='v1.5';
+      var PV_PS_BUILD='v1.6';
       try{ var _bs=document.getElementById('pbg-build'); if(_bs) _bs.textContent='Prompt Studio '+PV_PS_BUILD; }catch(e){}
       // build tabs + dock
       tabsEl.innerHTML=TABS.map(function(t){return '<button class="pbg-tab" type="button" role="tab" data-t="'+t[0]+'"><span>'+t[1]+'</span><span class="tb" data-bk="'+t[0]+'"></span></button>';}).join('');
