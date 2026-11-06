@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/store.css?v=54" />
-<link rel="stylesheet" href="/css/store-glass.css?v=5" />
+<link rel="stylesheet" href="/css/store-glass.css?v=6" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -22,19 +22,13 @@
 <div class="galaxy" aria-hidden="true"><div class="galaxy-mesh"></div><div class="galaxy-glow"></div></div>
 
 <header class="store-nav">
+  <!-- Gradient galaxy title spanning across the top; the icons sit in the row below it (Chris 2026-11-05). -->
+  <div class="store-title"><span class="pt-g" data-i18n="Pioneer Valley Equipment Reservations">Pioneer Valley Equipment Reservations</span></div>
   <div class="wrap">
-    <a class="store-logo" href="/reserve.html" aria-label="Pioneer Valley"><img src="/assets/PV_Square_Logo.png" alt="Pioneer Valley" /></a>
-    <!-- Profile sits on the LEFT next to the logo; bag + globe + menu on the RIGHT, so the center stays clear
-         of the iPhone notch / Dynamic Island. No store title, no search bar (students browse, not search). -->
-    <button type="button" class="acct-btn" id="acctBtn" aria-label="My Account"><span class="hb-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 20.5c1.2-3.9 4.1-5.8 7.5-5.8s6.3 1.9 7.5 5.8"></path></svg></span><span class="hb-tx" id="acctTx">My Account</span></button>
-    <div class="nav-right">
-      <button type="button" class="cart-btn" id="cartBtn"><span class="hb-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 12.1a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9z"></path><path d="M9 10.5V7a3 3 0 0 1 6 0v3.5"></path></svg></span><span class="hb-tx" data-i18n="Equipment Bag">Equipment Bag</span> <span class="cart-n empty" id="cartN">0</span></button>
-      <!-- Language: a round globe button (iOS keyboard globe). One tap flips EN <-> ES. -->
-      <button type="button" class="lang-globe" id="langGlobe" aria-label="Language / Idioma" title="Language / Idioma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="3" y1="12" x2="21" y2="12"></line><path d="M12 3c2.7 2.5 4.2 5.7 4.2 9s-1.5 6.5-4.2 9c-2.7-2.5-4.2-5.7-4.2-9S9.3 5.5 12 3z"></path></svg></button>
-      <!-- Quick-access dropdown nav (hamburger) -->
-      <div class="navmenu-wrap">
-        <button type="button" class="nav-burger" id="navBtn" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span></span><span></span><span></span></button>
-        <nav class="navmenu" id="navMenu" hidden>
+    <!-- Hamburger menu on the LEFT of the school logo. -->
+    <div class="navmenu-wrap">
+      <button type="button" class="nav-burger" id="navBtn" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span></span><span></span><span></span></button>
+      <nav class="navmenu" id="navMenu" hidden>
           <a class="navmenu-link" id="navBackEM" href="/camera-manager.html" hidden>&#8592;&nbsp;<span data-i18n="Equipment Manager">Equipment Manager</span></a>
           <div class="navmenu-sep" id="navBackSep" hidden></div>
           <div class="navmenu-lab" data-i18n="Browse">Browse</div>
@@ -47,13 +41,19 @@
           <div class="navmenu-sep"></div>
           <div class="navmenu-lab" data-i18n="You">You</div>
           <button type="button" data-nav="account" data-i18n="My Account">My Account</button>
-          <button type="button" data-nav="bag" data-i18n="Equipment Bag">Equipment Bag</button>
+          <button type="button" data-nav="bag" data-i18n="Cart">Cart</button>
           <div class="navmenu-sep"></div>
           <a class="navmenu-link" href="sms:+18056310001" data-i18n="k_textus">Text us: 805-631-0001</a>
         </nav>
       </div>
+      <a class="store-logo" href="/reserve.html" aria-label="Pioneer Valley"><img src="/assets/PV_Square_Logo.png" alt="Pioneer Valley" /></a>
+      <!-- Right side, in order: language globe, profile, cart (Chris 2026-11-05). -->
+      <div class="nav-right">
+        <button type="button" class="lang-globe" id="langGlobe" aria-label="Language / Idioma" title="Language / Idioma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="3" y1="12" x2="21" y2="12"></line><path d="M12 3c2.7 2.5 4.2 5.7 4.2 9s-1.5 6.5-4.2 9c-2.7-2.5-4.2-5.7-4.2-9S9.3 5.5 12 3z"></path></svg></button>
+        <button type="button" class="acct-btn" id="acctBtn" aria-label="My Account"><span class="hb-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 20.5c1.2-3.9 4.1-5.8 7.5-5.8s6.3 1.9 7.5 5.8"></path></svg></span><span class="hb-tx" id="acctTx">My Account</span></button>
+        <button type="button" class="cart-btn" id="cartBtn"><span class="hb-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.3"></circle><circle cx="18" cy="20" r="1.3"></circle><path d="M2.5 3h2.2l2.1 11.3a1.5 1.5 0 0 0 1.5 1.2h8.3a1.5 1.5 0 0 0 1.5-1.2L19.5 8H6"></path></svg></span><span class="hb-tx" data-i18n="Cart">Cart</span> <span class="cart-n empty" id="cartN">0</span></button>
+      </div>
     </div>
-  </div>
 </header>
 
 <!-- Equipment header hero: image background; controls in a dark top band (nav left, dates right) -->
@@ -358,7 +358,7 @@
     'Browse':'Explorar','You':'Tú','Popular Rentals':'Rentas Populares','Camera Kits':'Kits de Cámara','Lenses':'Lentes',
     'Lighting':'Iluminación','Accessories':'Accesorios','Calendar View':'Ver Calendario','Calendar view':'Ver calendario',
     'How it works':'Cómo funciona','Equipment Manager':'Administrador de Equipo','(text only)':'(solo texto)',
-    'Equipment pickup':'Recoge tu equipo','Classroom pickup':'Recoge en el salón','Equipment Bag':'Bolsa de Equipo','Room':'Salón','Photo':'Foto','and':'y','Period':'Período',
+    'Equipment pickup':'Recoge tu equipo','Classroom pickup':'Recoge en el salón','Equipment Bag':'Bolsa de Equipo','Cart':'Carrito','Pioneer Valley Equipment Reservations':'Reservaciones de Equipo Pioneer Valley','Room':'Salón','Photo':'Foto','and':'y','Period':'Período',
     'k_textus':'Envíanos un texto: 805-631-0001','k_text_num':'Texto: 805-631-0001','k_footbar':'Pioneer Valley High School · Renta de Equipo','k_sid_ph':'p. ej. 123456',
     // --- hero ---
     'When do you need it?':'¿Cuándo lo necesitas?',

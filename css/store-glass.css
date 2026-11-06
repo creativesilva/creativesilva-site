@@ -117,12 +117,22 @@ body{overflow-x:clip;}
 .lang-globe{width:40px;height:40px;flex:0 0 auto;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);box-shadow:var(--g-spec);color:#fff;cursor:pointer;backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);transition:background .15s,border-color .15s;}
 .lang-globe svg{width:20px;height:20px;}
 @media (hover:hover){ .lang-globe:hover{background:var(--rollover);border-color:var(--g-teal-lt);} }
+/* Gradient galaxy title spans the full width across the top; the icon row (hamburger + logo on the LEFT,
+   globe + profile + cart on the RIGHT) sits lowered below it (Chris 2026-11-05). */
+.store-nav{display:flex;flex-direction:column;justify-content:center;gap:2px;padding-bottom:7px;}
+.store-nav .wrap{height:auto;}
+.store-title{width:100%;max-width:var(--max);margin:0 auto;padding:7px 20px 1px;text-align:center;box-sizing:border-box;line-height:1.12;}
+.pt-g{font-family:var(--font-head);font-weight:700;letter-spacing:.17em;text-transform:uppercase;font-size:1.05rem;white-space:nowrap;
+  background:linear-gradient(92deg,#ffffff 0%,#c9fbf4 42%,#3ff0e0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;}
+.navmenu{left:0;right:auto;}   /* hamburger moved to the left edge: open the menu downward-right so it stays on screen */
 @media (max-width:720px){
   .store-nav .wrap{flex-wrap:nowrap;}   /* one balanced row: logo+profile | bag+globe+menu */
   .datebar-leadwrap{display:none;}       /* phone: drop the "When do you need it?" heading + note; keep only the 3 cards */
   .store-nav .acct-btn,.store-nav .cart-btn{min-width:40px;padding:0 8px;gap:0;}
   .store-nav .acct-btn .hb-tx,.store-nav .cart-btn .hb-tx{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
   #brandStu.store-stu{font-size:.68rem;}
+  .store-title{padding:6px 14px 1px;}
+  .pt-g{white-space:normal;letter-spacing:.08em;font-size:clamp(.62rem,3.3vw,.84rem);text-wrap:balance;}
 }
 
 /* ---------- hero: the gear photo melts into the galaxy; tiles + date panel float on glass (no step boxes) ---------- */
