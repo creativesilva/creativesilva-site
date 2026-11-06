@@ -25,7 +25,12 @@
   --teal-bright:#3ff0e0; --ink:#f3fbff; --gray:rgba(205,226,240,.66); --line:rgba(150,225,245,.12);
   --paper:rgba(8,16,36,.82); --surface:var(--g-glass-quiet); --surface-bd:var(--g-edge-soft); --teal-wash:rgba(0,184,184,.12);
 }
-body{background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);background-attachment:fixed;color:var(--g-text);}
+body{background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);background-attachment:fixed;color:var(--g-text);min-height:100dvh;}
+/* iOS Safari: dark everywhere + fill the safe areas (viewport-fit=cover), so the status-bar / home-indicator
+   bands show the galaxy, never a white bar; and never let the page pan sideways. (Chris 2026-11-05, iPhone 12 Pro.) */
+html{background:#050816;overflow-x:clip;}
+body{overflow-x:clip;}
+.store-nav{height:auto;min-height:var(--header-h);padding-top:env(safe-area-inset-top,0px);box-sizing:border-box;}
 
 /* ---------- galaxy backdrop (the AI Studio v1.9 recipe, verbatim) ---------- */
 .galaxy{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);}
