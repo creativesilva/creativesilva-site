@@ -210,8 +210,9 @@
   .tb-sortbtn{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.62rem;color:var(--muted);background:rgba(255,255,255,.02);border:0;border-left:1px solid var(--line-soft);padding:8px 12px;cursor:pointer;transition:background .15s,color .15s;}
   .tb-sortbtn.on{background:var(--teal);color:#04110f;}
   .tb-sortbtn:hover:not(.on){color:#fff;background:rgba(255,255,255,.06);}
-  .tb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:8px 0 2px;align-items:start;}   /* at most 2 columns (Chris 2026-11-03: never 3), stacking to 1 column on a phone */
-  .tb-grid .tb-bundle{margin:0;min-width:0;}
+  .tb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:8px 0 2px;align-items:stretch;}   /* at most 2 columns (Chris 2026-11-03: never 3), stacking to 1 column on a phone. Stretch so side-by-side tiles match height: a kit tile (with a gear line) no longer sits taller than a single-item tile. */
+  .tb-grid .tb-bundle{margin:0;min-width:0;height:100%;}
+  .tb-grid .tb-bundle > .til:only-child{flex:1 1 auto;}   /* a lone kit/item tile fills its cell so the date + chevron line up across the row (no wave) */
   .tb-grid.view-out .tb-bundle{border-left-color:var(--gold);}
   .tb-grid.view-in .tb-bundle{border-left-color:var(--teal);}
   .tb-grid.view-checked .tb-bundle{border-left-color:var(--orange);}
@@ -341,7 +342,39 @@
   @keyframes reconFlash{0%,100%{box-shadow:0 0 0 0 rgba(245,179,1,0);background:rgba(245,179,1,.08);}50%{box-shadow:0 0 0 4px rgba(245,179,1,.28);background:rgba(245,179,1,.2);}}
   @media (prefers-reduced-motion:reduce){ .tb-reconcile.flash{animation:none;box-shadow:0 0 0 2px rgba(245,179,1,.3);} }
   /* Double-booked flag inline on a board line. */
-  .til-dup{margin-left:7px;font-family:var(--font);font-weight:700;letter-spacing:.06em;font-size:.56rem;color:#fff;background:var(--red);padding:2px 5px;vertical-align:middle;}
+  .til-dup{display:none;}
+  /* ===== Action queues that LEAD the board: Call (overdue) + Missed pickup. Grouped by student, iPad-first.
+     Flex rows keep the when/acts/chevron cluster pinned to the right edge so nothing waves across rows. ===== */
+  .tb-queue{border:1px solid var(--line-soft);margin-bottom:12px;background:rgba(0,0,0,.28);}
+  .tb-queue.tbq-call{border-color:rgba(224,64,58,.42);border-left:3px solid var(--red);background:linear-gradient(180deg,rgba(224,64,58,.11),rgba(224,64,58,.035)),rgba(0,0,0,.34);}
+  .tb-queue.tbq-miss{border-color:rgba(245,179,1,.4);border-left:3px solid var(--gold);background:linear-gradient(180deg,rgba(245,179,1,.1),rgba(245,179,1,.03)),rgba(0,0,0,.34);}
+  .tbq-head{display:flex;align-items:center;gap:9px;padding:8px 13px;border-bottom:1px solid var(--line-soft);}
+  .tbq-badge{flex:0 0 auto;min-width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;padding:0 6px;font-family:var(--font);font-weight:700;font-size:.78rem;color:#fff;}
+  .tbq-call .tbq-badge{background:var(--red);} .tbq-miss .tbq-badge{background:var(--gold);color:#241a06;}
+  .tbq-t{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.78rem;}
+  .tbq-call .tbq-t{color:#ff9a8a;} .tbq-miss .tbq-t{color:#ffd166;}
+  .tbq-sub{color:var(--faint);font-size:.73rem;}
+  .tbq-row{display:flex;align-items:center;gap:11px;padding:9px 13px;border-top:1px solid rgba(255,255,255,.045);cursor:pointer;color:inherit;}
+  .tbq-row:first-of-type{border-top:0;}
+  .tbq-row:hover{background:rgba(255,255,255,.03);}
+  .tbq-dot{width:9px;height:9px;flex:0 0 auto;}
+  .tbq-dot.overdue{background:var(--red);} .tbq-dot.reserved{background:var(--gold);}
+  .tbq-big{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.02em;font-size:.92rem;color:#fff;white-space:nowrap;}
+  .tbq-big i{color:var(--faint);font-style:normal;margin:0 1px;}
+  .tbq-who{flex:1 1 auto;min-width:0;color:#dfe7e7;font-size:.86rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .tbq-when{flex:0 0 auto;color:var(--muted);font-size:.78rem;white-space:nowrap;text-align:right;min-width:94px;}
+  .tbq-acts{flex:0 0 auto;display:flex;align-items:center;gap:6px;}
+  .tbq-act{display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 12px;font-family:var(--font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.68rem;border:1px solid var(--line-soft);color:var(--muted);text-decoration:none;cursor:pointer;background:rgba(255,255,255,.03);}
+  .tbq-act.call{background:var(--red);border-color:var(--red);color:#fff;}
+  .tbq-act.text{color:#8ff7f7;border-color:rgba(0,184,184,.4);}
+  .tbq-act.stock{color:#ffd166;border-color:rgba(245,179,1,.42);}
+  .tbq-row .til-chev{flex:0 0 auto;color:var(--faint);font-size:1.1rem;}
+  @media (max-width:640px){
+    .tbq-row{flex-wrap:wrap;}
+    .tbq-who{flex:1 1 90px;} .tbq-when{min-width:0;}
+    .tbq-acts{flex:1 1 100%;order:6;justify-content:flex-start;margin-top:4px;}
+    .tbq-row .til-chev{display:none;}
+  }
   /* "i" help button on the board header + the guide popup sections */
   .tb-help{flex:0 0 auto;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;background:rgba(0,184,184,.14);border:1px solid var(--teal);color:var(--teal-lt);font-family:var(--font);font-weight:700;font-style:italic;font-size:.82rem;cursor:pointer;line-height:1;}
   .tb-help:hover{background:var(--teal);color:#04110f;}
@@ -1516,7 +1549,21 @@
   function statusOf(c){ return c.status||(c.returned?'returned':'out'); }
   // Approval is SHELVED by default (server sends approval_required=false): reservations auto-confirm
   // and the console shows Recent Reservations instead of an approval queue. Flip the env var to restore.
-  function isOverdue(c){ return statusOf(c)==='out' && c.due && c.due<todayISO(); }
+  // Overdue is TIME-AWARE (Chris 2026-11-05): a kit out past its chosen RETURN TIME is overdue, not only one
+  // past its due DATE. Due date in the future -> not overdue; in the past -> overdue; due TODAY -> overdue once
+  // the return time has passed (it is late, time to call). The return time lives on the camera record; a gear
+  // item inherits it from its reservation. nowMinutes/hhmmToMin/govTime also drive the missed-pickup queue.
+  function nowMinutes(){ var d=new Date(); return d.getHours()*60+d.getMinutes(); }
+  function hhmmToMin(t){ if(!t) return null; var p=String(t).split(':'); if(p.length<2) return null; var h=parseInt(p[0],10), m=parseInt(p[1],10); if(isNaN(h)||isNaN(m)) return null; return h*60+m; }
+  function govTime(c, field){ if(!c) return ''; if(c[field]) return c[field];
+    if(c.kind==='equipment'){ var key=resvKey(c); var cam=(DATA.checkouts||[]).filter(function(x){ return x.kind!=='equipment' && resvKey(x)===key && x[field]; })[0]; if(cam) return cam[field]; }
+    return ''; }
+  function isOverdue(c){ if(statusOf(c)!=='out' || !c.due) return false; var t=todayISO();
+    if(c.due<t) return true; if(c.due>t) return false;
+    var rt=hhmmToMin(govTime(c,'return_time')); return rt!=null ? nowMinutes()>=rt : false; }
+  function isMissedPickup(c){ if(statusOf(c)!=='reserved') return false; var o=c.out||''; if(!o) return false; var t=todayISO();
+    if(o<t) return true; if(o>t) return false;
+    var pt=hhmmToMin(govTime(c,'pickup_time')); return pt!=null ? nowMinutes()>=pt : false; }
   function nameOf(c){ return (c.student_name||'').trim() || (c.student_id?('ID '+c.student_id):'Unknown'); }
   // Per-camera asset record (standing note + out-of-service) that follows the physical camera.
   function assetOf(cam){ return (DATA.assets&&DATA.assets[cam])||{}; }
@@ -1745,8 +1792,7 @@
     var dISO=inLike?(c.due||c.out||''):(c.out||''), dLbl=inLike?'Due':'Out';
     var date=showDate&&dISO?tilDate(dLbl, dISO, key):'';
     var dot='<span class="til-dot '+itemState(it)+'"></span>';
-    var dup=_DUP[it.id]?'<span class="til-dup" title="This unit is on more than one open reservation">DUP</span>':'';
-    var mid='<span class="til-big">'+esc(itemBig(it)).toUpperCase()+dup+'</span>'+
+    var mid='<span class="til-big">'+esc(itemBig(it)).toUpperCase()+'</span>'+
       '<span class="til-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span>';
     if(TBSEL[key]){ var on=!!TBSELSET[key][it.id];                 // select mode: tap toggles the checkbox, not the card
       return '<div class="til til-selmode'+(on?' on':'')+'" data-selid="'+esc(it.id)+'" data-selcol="'+key+'"><span class="til-chk"></span>'+dot+mid+date+'</div>'; }
@@ -1759,11 +1805,10 @@
     var dISO=inLike?(c.due||c.out||''):(c.out||''), dLbl=inLike?'Due':'Out';
     var date=showDate&&dISO?tilDate(dLbl, dISO, key):'';
     var dot='<span class="til-dot '+itemState(cam)+'"></span>';
-    var dup=_DUP[cam.id]?'<span class="til-dup" title="This unit is on more than one open reservation">DUP</span>':'';
     var kitn=gear.length?'<span class="til-kitn">+'+gear.length+'</span>':'';
-    var gearRow=gear.length?'<span class="til-kitgear">'+gear.map(function(g){ return '<span'+(_DUP[g.id]?' class="dup"':'')+'>'+esc(gearLabel(g.item))+'</span>'; }).join('<i>&middot;</i>')+'</span>':'';
+    var gearRow=gear.length?'<span class="til-kitgear">'+gear.map(function(g){ return '<span>'+esc(gearLabel(g.item))+'</span>'; }).join('<i>&middot;</i>')+'</span>':'';
     // The status dot lives on the kit's top line so it stays beside the camera number on a multi-line kit; single-line kits still center cleanly.
-    var main='<span class="til-kitmain"><span class="til-kittop">'+dot+'<span class="til-big">'+esc((cam.camera||'Camera').toUpperCase())+dup+'</span>'+kitn+
+    var main='<span class="til-kitmain"><span class="til-kittop">'+dot+'<span class="til-big">'+esc((cam.camera||'Camera').toUpperCase())+'</span>'+kitn+
       '<span class="til-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span></span>'+gearRow+'</span>';
     if(TBSEL[key]){ var ids=[cam.id].concat(gear.map(function(g){return g.id;}));
       var on=ids.every(function(id){return TBSELSET[key][id];});
@@ -1794,63 +1839,41 @@
     items.forEach(function(it){ if(it.kind==='equipment' && !cams[it.group]) nAlc++; });
     return nCam+nAlc; }
   var _lastTBSig=null;
-  // Overdue pickups: reserved for a day that has already passed and never collected (a no-show to chase or return to stock).
-  var _odOpen=false;
-  function overduePickups(){ var today=todayISO(), r=[];
-    (DATA.checkouts||[]).forEach(function(c){ if(!resvInScope(c)) return; if(statusOf(c)!=='reserved') return; var o=c.out||''; if(o && o<today) r.push(c); });
-    return r.sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; }); }
-  function overdueAccHtml(odp){
-    if(!odp.length) return '';
-    return '<details class="od-acc"'+(_odOpen?' open':'')+'><summary class="od-sum"><span class="od-badge">'+odp.length+'</span><span class="od-sumt">Overdue pickup'+(odp.length>1?'s':'')+' &middot; reserved, never collected</span><span class="od-chev">&#9662;</span></summary>'+
-      '<div class="od-body">'+odp.map(function(c){ var isCam=c.kind!=='equipment', big=isCam?c.camera:gearLabel(c.item), cell=String(c.student_cell||'').replace(/\D/g,'');
-        return '<div class="od-row"><span class="od-dot overdue"></span><span class="od-big">'+esc(big).toUpperCase()+'</span>'+
-          '<span class="od-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span>'+
-          '<span class="od-when">reserved '+esc(fmtDoWMD(c.out))+'</span>'+
-          (cell?'<a class="od-act text" href="sms:'+esc(cell)+'">Text</a>':'')+
-          '<button type="button" class="od-act stock" data-odstock="'+esc(c.id)+'">Return to stock</button></div>'; }).join('')+'</div></details>';
-  }
-  // ----- Reconcile: duplicates (a unit on two open records), a cart tally, and an end-of-day nudge. -----
-  var _DUP={};                                           // {recordId: unitKey} for every record of a double-booked unit
-  function nextISO(iso){ var d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+1); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
-  // Effective occupancy span [o,d) of an open record. An item physically OUT holds the unit from its out
-  // date until it is marked returned, so if it is still out today it occupies at least through today.
-  function recSpan(c){ var o=c.out||''; if(!o) return null; var d=c.due||o;
-    if(statusOf(c)==='out'){ var tm=nextISO(todayISO()); if(o<=todayISO() && d<tm) d=tm; }
-    return {o:o, d:d}; }
-  function spansOverlap(a,b){ return a.o<b.d && b.o<a.d; }   // half-open: a unit due back on day X may go out again that same day
-  // A unit is double-booked ONLY when two of its open records actually OVERLAP in time (not merely both exist;
-  // the same camera reserved for several different, non-overlapping dates is normal, not a conflict).
-  function openDupes(){ var map={}, dup={};
-    (DATA.checkouts||[]).forEach(function(c){ if(!resvInScope(c)||statusOf(c)==='returned') return; var u=c.kind==='equipment'?('g:'+c.item):('c:'+c.camera); if(u==='c:'||u==='g:') return; var sp=recSpan(c); if(!sp) return; (map[u]=map[u]||[]).push({id:c.id,sp:sp}); });
-    Object.keys(map).forEach(function(u){ var a=map[u]; for(var i=0;i<a.length;i++){ for(var j=i+1;j<a.length;j++){ if(spansOverlap(a[i].sp,a[j].sp)){ dup[a[i].id]=u; dup[a[j].id]=u; } } } });
-    return dup; }
-  function dupUnitCount(){ var s={}; Object.keys(_DUP).forEach(function(id){ s[_DUP[id]]=1; }); return Object.keys(s).length; }
+  // ===== The two action queues that LEAD the board (Chris 2026-11-05): who to chase RIGHT NOW, grouped by
+  //       student, both time-aware. CALL = a kit physically out past its return time (late). MISSED PICKUP =
+  //       a reservation never collected past its pickup time. These replace the old DUP badge + reconcile
+  //       banner: an "overlap" is no longer flagged as a duplicate, it just surfaces the late kit here to call. =====
+  function overdueCallResvs(){ return groupedReservations().filter(function(c){ return resvItems(c).some(isOverdue); })
+      .sort(function(a,b){ return ((a.due||a.out||'')<(b.due||b.out||''))?-1:1; }); }
+  function missedPickupResvs(){ return groupedReservations().filter(function(c){ return isMissedPickup(c); })
+      .sort(function(a,b){ return ((a.out||'')<(b.out||''))?-1:1; }); }
+  function lateLabel(c){ var t=todayISO(); if((c.due||'')<t) return 'due '+fmtDoWMD(c.due); var rt=govTime(c,'return_time'); return 'due '+(rt?fmtTime12(rt):'today'); }
+  function missLabel(c){ var t=todayISO(); if((c.out||'')<t) return 'reserved '+fmtDoWMD(c.out); var pt=govTime(c,'pickup_time'); return 'pickup '+(pt?fmtTime12(pt):'today'); }
+  function queueRow(c, kind){
+    var cell=String(c.student_cell||'').replace(/\D/g,'');
+    var shown=resvItems(c).filter(function(it){ return kind==='call' ? (statusOf(it)==='out'&&isOverdue(it)) : statusOf(it)!=='returned'; });
+    var big=shown.map(function(it){ return esc(itemBig(it)).toUpperCase(); }).join(' <i>&middot;</i> ') || esc(String(c.camera||gearLabel(c.item)||'').toUpperCase());
+    var when=(kind==='call'?lateLabel(c):missLabel(c)), dotCls=(kind==='call'?'overdue':'reserved');
+    var acts=(kind==='call')
+      ? (cell?'<a class="tbq-act call" href="tel:'+cell+'" data-stop="1">Call</a><a class="tbq-act text" href="sms:'+cell+'" data-stop="1">Text</a>':'')
+      : ((cell?'<a class="tbq-act text" href="sms:'+cell+'" data-stop="1">Text</a>':'')+'<button type="button" class="tbq-act stock" data-questock="'+esc(c.id)+'">Return to stock</button>');
+    return '<div class="tbq-row" data-resvopen="'+esc(c.id)+'" role="button" tabindex="0"><span class="tbq-dot '+dotCls+'"></span>'+
+      '<span class="tbq-big">'+big+'</span>'+
+      '<span class="tbq-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span>'+
+      '<span class="tbq-when">'+esc(when)+'</span>'+
+      '<span class="tbq-acts">'+acts+'</span><span class="til-chev">&#8250;</span></div>'; }
+  function queueHtml(list, kind){ if(!list.length) return '';
+    var t=(kind==='call'?'Call &middot; overdue':'Missed pickup'), sub=(kind==='call'?'out past the return time':'reserved, not collected');
+    return '<div class="tb-queue tbq-'+kind+'"><div class="tbq-head"><span class="tbq-badge">'+list.length+'</span><span class="tbq-t">'+t+'</span><span class="tbq-sub">'+sub+'</span></div>'+
+      list.map(function(c){ return queueRow(c, kind); }).join('')+'</div>'; }
   // Cart tally for the selected pool: how many cameras the app thinks are handed out vs still here.
   function cartTally(){ var cams=viewCams(), today=todayISO(), outSet={}, resvSet={};
     (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment'||cams.indexOf(c.camera)<0) return; if(statusOf(c)==='out') outSet[c.camera]=1; });
     (DATA.checkouts||[]).forEach(function(c){ if(c.kind==='equipment'||cams.indexOf(c.camera)<0) return; if(statusOf(c)==='reserved' && c.out && c.out<=today && !outSet[c.camera]) resvSet[c.camera]=1; });
     var out=Object.keys(outSet).length; return {total:cams.length, out:out, here:cams.length-out, resv:Object.keys(resvSet).length}; }
-  // End-of-day = after the LAST bell. Uses the real schedule when it loaded (so it fires at the true last
-  // period, and never on a non-school day); falls back to "weekday after 2:30pm" only if the script is unavailable.
-  function isAfterSchool(){ var d=new Date(), dow=d.getDay(); if(dow===0||dow===6) return false;
-    var nowMin=d.getHours()*60+d.getMinutes();
-    if(typeof getScheduleBlocks==='function'){
-      try{ var blocks=getScheduleBlocks(todayISO());
-        if(!blocks||!blocks.length) return false;                          // no school today -> no nudge
-        var endMin=0; blocks.forEach(function(b){ if(b&&b.e){ var p=String(b.e).split(':'); var m=(+p[0])*60+(+p[1]); if(m>endMin) endMin=m; } });
-        if(endMin) return nowMin>=endMin;
-      }catch(e){}
-    }
-    return nowMin>=(14*60+30); }
   function cartTallyHtml(){ var t=cartTally();
     return '<div class="tb-tally"><span class="tt-k">Cameras</span><span class="tt-v out">'+t.out+'</span> handed out <span class="tt-sep">&middot;</span> <span class="tt-v here">'+t.here+'</span> still here'+
       (t.resv?(' <span class="tt-sep">&middot;</span> <span class="tt-v resv">'+t.resv+'</span> to hand out'):'')+'</div>'; }
-  function reconcileBannerHtml(outItemCount){ var dups=dupUnitCount(), afterSchool=isAfterSchool(), bits=[];
-    if(dups) bits.push(dups+' double-booked');
-    if(afterSchool && outItemCount) bits.push(outItemCount+' not picked up');
-    if(!bits.length) return '';
-    var flash=(afterSchool||dups)?' flash':'';
-    return '<button type="button" class="tb-reconcile'+flash+'" data-reconcile="1"><span class="rc-ic">&#9888;</span><span class="rc-t">Reconcile before you leave &middot; '+bits.join(' &middot; ')+'</span><span class="rc-go">&#8250;</span></button>'; }
   // ===== Available-equipment view (green): inventory by camera MODEL + gear TYPE, each avail/total, drill to units. =====
   function camModel(cam){ var n=parseInt(String(cam).replace(/\D/g,''),10)||0; return n>=19?'R50V':(n===16?'R8':((n>=17&&n<=18)?'RP':'R50')); }
   function modelLabel(m){ return {R50:'Canon EOS R50',RP:'Canon EOS RP',R8:'Canon EOS R8',R50V:'Canon EOS R50 V'}[m]||m; }
@@ -1885,21 +1908,22 @@
         return '<div class="av-unit"><button type="button" class="av-u-main" data-avunit="'+esc(u.id)+'" data-avkind="'+u.kind+'"><span class="av-u-dot '+u.state+'"></span><span class="av-u-nm">'+esc(u.label)+'</span><span class="av-u-st">'+availUnitLabel(u)+'</span></button>'+assign+'</div>'; }).join('');
       return '<div class="av-type'+(open?' open':'')+'"><button type="button" class="av-type-head" data-avexpand="'+esc(row.key)+'"><span class="av-type-nm">'+esc(row.label)+'</span><span class="av-type-ct'+(zero?' zero':'')+'"><b>'+row.avail+'</b> / '+row.total+' free</span><span class="av-type-chev">&#8250;</span></button><div class="av-type-units">'+units+'</div></div>'; }).join('')+'</div>'; }
   function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
-    var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), chk=checkedOutFor(), odp=(isT?overduePickups():[]);
-    var ovr=chk.filter(function(c){ return resvItems(c).some(function(it){ return statusOf(it)==='out' && isOverdue(it); }); });   // checked out AND past due
+    var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), chk=checkedOutFor();
+    var odCall=isT?overdueCallResvs():[], miss=isT?missedPickupResvs():[];        // the two always-on action queues
+    if(isT) out=out.filter(function(c){ return !isMissedPickup(c); });            // missed pickups are elevated to the queue above, not repeated in Outgoing
     var pend=pendingGroups();                                                   // student requests awaiting the teacher's OK
-    _DUP = isT ? openDupes() : {};
     function countLines(resvs,mode){ return resvs.reduce(function(n,c){ return n+bundleLineCount(lineItemsFor(c,mode,isT)); },0); }
-    var nOut=countLines(out,'out'), nIn=countLines(chk,'in'), nOvr=countLines(ovr,'overdue'), nReq=pend.length;
-    var view=(TBVIEW==='in'||TBVIEW==='overdue'||TBVIEW==='avail'||TBVIEW==='requests')?TBVIEW:'out';
+    var nOut=countLines(out,'out'), nIn=countLines(chk,'in'), nReq=pend.length;
+    var view=(TBVIEW==='in'||TBVIEW==='avail'||TBVIEW==='requests')?TBVIEW:'out';
     var inv=(view==='avail')?availInventory():null, availCameras=availCountOnDay(todayISO());
-    var active=(view==='out')?out:(view==='in'?chk:(view==='overdue'?ovr:[])), q=TBQ[view]||'', selMode=TBSEL[view];
+    var active=(view==='out')?out:(view==='in'?chk:[]), q=TBQ[view]||'', selMode=TBSEL[view];
     active=active.slice().sort(tbSortCmp);                      // default: camera-kit number order (a-la-carte after); or by last name
     // Scroll-reset guard: the 7s poll re-renders; skip the rewrite when nothing changed so the open
     // view keeps its scroll position + caret. Actions, view-switch and day-step null _lastTBSig.
     function listSig(resvs,mode){ return resvs.map(function(c){ return c.id+':'+resvStatusGroup(c)+':'+lineItemsFor(c,mode,isT).map(function(x){return (x.camera||x.item)+itemState(x);}).join('.'); }).join(','); }
     var invSig=inv?inv.map(function(r){ return r.key+r.avail+'/'+r.total+':'+r.units.map(function(u){return u.state+(u.rec?('~'+(u.rec.student_id||u.rec.student_name||'')):'');}).join('.'); }).join('|'):'';
-    var sig=view+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+'|od'+odp.map(function(c){return c.id;}).join('.')+'|dup'+Object.keys(_DUP).sort().join('.')+'|n'+nOut+'.'+nIn+'.'+nOvr+'.'+nReq+'|'+listSig(active,view)+'|req'+pend.map(function(g){return g[0].id;}).join('.')+'|av'+(TBAVOPEN||'')+'|'+invSig;
+    var qSig='|call'+odCall.map(function(c){return c.id+resvStatusGroup(c);}).join('.')+'|miss'+miss.map(function(c){return c.id;}).join('.');
+    var sig=view+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+qSig+'|n'+nOut+'.'+nIn+'.'+nReq+'|'+listSig(active,view)+'|req'+pend.map(function(g){return g[0].id;}).join('.')+'|av'+(TBAVOPEN||'')+'|'+invSig;
     if(sig===_lastTBSig && el.innerHTML) return; _lastTBSig=sig;
     // ----- header: title + help + day stepper (Outgoing/Incoming only; Checked out + Available are "right now") -----
     var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY));
@@ -1907,13 +1931,12 @@
       ('<div class="tb-step"><button type="button" class="tb-nav" data-tbday="-1" title="Previous day">&#8249;</button>'+
       '<span class="tb-day">'+esc(dayL)+'</span><button type="button" class="tb-nav" data-tbday="1" title="Next day">&#8250;</button>'+
       (isT?'':'<button type="button" class="tb-today" data-tbtoday="1">Today</button><span class="tb-proj">Projected &middot; assumes on-time returns</span>')+'</div>');
-    // ----- view toggle: Outgoing (gold) / Incoming (teal) / Overdue (red) / Available (green) / Requests (purple) -----
+    // ----- view toggle: Outgoing (gold) / Incoming (teal) / Available (green) / Requests (purple). Overdue is no
+    //       longer a tab; it leads the board as the Call queue above, so it is seen from every tab. -----
     function tg(k,label,cnt){ return '<button type="button" class="tb-tg '+k+(view===k?' on':'')+'" data-tbview="'+k+'">'+label+' <span class="tb-tgn">'+cnt+'</span></button>'; }
-    var ovLabel=nOvr>0?('&#9888;&#xFE0E; '+nOvr):String(nOvr);
     var toggle='<div class="tb-toggle">'+
       tg('out','Outgoing',nOut)+
       tg('in','Incoming',nIn)+
-      '<button type="button" class="tb-tg overdue'+(view==='overdue'?' on':'')+(nOvr>0?' hot':'')+'" data-tbview="overdue">Overdue <span class="tb-tgn'+(nOvr>0?' tb-tgn-od':'')+'">'+ovLabel+'</span></button>'+
       tg('avail','Available',availCameras)+
       '<button type="button" class="tb-tg requests'+(view==='requests'?' on':'')+(nReq>0?' hot':'')+'" data-tbview="requests">Requests <span class="tb-tgn'+(nReq>0?' tb-tgn-req':'')+'">'+nReq+'</span></button>'+
       '</div>';
@@ -1932,8 +1955,8 @@
         body = flat.length ? '<div class="tb-grid view-'+view+' tb-flat">'+flat.map(function(L){ return itemLine(L.c,L.it,view,true); }).join('')+'</div>'
           : '<div class="tb-grid"><div class="tb-empty">No match for &ldquo;'+esc(q.trim())+'&rdquo;.</div></div>';
       } else {                                                 // default: one card per CAMERA KIT (gear folds in); a-la-carte gear keeps its own card
-        var emptyMsg=view==='out'?('Nothing to hand out '+(isT?'today':'that day')+'.'):(view==='overdue'?'Nothing overdue right now.':'Nothing checked out right now.');
-        body = groups.length ? '<div class="tb-grid view-'+view+'">'+groups.map(function(g){ var od=((view==='in'||view==='overdue')&&g.items.some(isOverdue)); return '<div class="tb-bundle'+(od?' tb-od':'')+'">'+renderBundle(g.c, g.items, view, true)+'</div>'; }).join('')+'</div>'
+        var emptyMsg=view==='out'?('Nothing to hand out '+(isT?'today':'that day')+'.'):'Nothing checked out right now.';
+        body = groups.length ? '<div class="tb-grid view-'+view+'">'+groups.map(function(g){ var od=(view==='in'&&g.items.some(isOverdue)); return '<div class="tb-bundle'+(od?' tb-od':'')+'">'+renderBundle(g.c, g.items, view, true)+'</div>'; }).join('')+'</div>'
           : '<div class="tb-grid"><div class="tb-empty">'+emptyMsg+'</div></div>';
       }
       var sortCtl='<div class="tb-sort"><span class="tb-sort-l">Sort</span>'+
@@ -1953,20 +1976,21 @@
       }
     }
     el.className='todayboard tbsec-'+view; el.style.display='';
+    var queues=isT?(queueHtml(odCall,'call')+queueHtml(miss,'miss')):'';
     el.innerHTML='<div class="tb-head"><span class="tb-title">Reservations</span><button type="button" class="tb-help" data-tbhelp="1" title="How this board works" aria-label="How this board works">i</button>'+stepper+'</div>'+
-      toggle+
+      queues+toggle+
       ((view==='avail'||view==='requests') ? body
-        : ((isT?cartTallyHtml():'')+(isT?reconcileBannerHtml(nOut):'')+(view==='out'?overdueAccHtml(odp):'')+search+body+bulk));
+        : ((isT?cartTallyHtml():'')+search+body+bulk));
     el.querySelectorAll('[data-tbview]').forEach(function(b){ b.onclick=function(){ var v=b.getAttribute('data-tbview'); if(v!==TBVIEW){ TBVIEW=v; _lastTBSig=null; renderTodayBoard(); } }; });
     el.querySelectorAll('[data-tbsort]').forEach(function(b){ b.onclick=function(){ var s=b.getAttribute('data-tbsort'); if(s!==TBSORT){ TBSORT=s; try{ sessionStorage.setItem('tbsort',s); }catch(e){} _lastTBSig=null; renderTodayBoard(); } }; });
     // Available view: expand a model/type to its units; tap a unit -> its detail card; Assign a free unit -> check-out flow.
     el.querySelectorAll('[data-avexpand]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-avexpand'); TBAVOPEN=(TBAVOPEN===k)?null:k; _lastTBSig=null; renderTodayBoard(); }; });
     el.querySelectorAll('[data-avunit]').forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-avunit'); if(b.getAttribute('data-avkind')==='camera') openCamDetail(id); else openGearDetail(id); }; });
     el.querySelectorAll('[data-avassign]').forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-avassign'); if(b.getAttribute('data-avkind')==='camera') openReserve(id); else openReserveGear(id); }; });
-    var odAcc=el.querySelector('.od-acc'); if(odAcc) odAcc.addEventListener('toggle',function(){ _odOpen=odAcc.open; });
     var hb=el.querySelector('[data-tbhelp]'); if(hb) hb.onclick=openBoardHelp;
-    var rcb=el.querySelector('[data-reconcile]'); if(rcb) rcb.onclick=openReconcile;
-    el.querySelectorAll('[data-odstock]').forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-odstock'); var c=findRec(id);
+    // Queue rows: Call/Text links must not also open the reservation; Return to stock cancels the no-show.
+    el.querySelectorAll('.tbq-act[data-stop]').forEach(function(a){ a.onclick=function(e){ e.stopPropagation(); }; });
+    el.querySelectorAll('[data-questock]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); var id=b.getAttribute('data-questock'); var c=findRec(id);
       silvaConfirm('Return '+esc(((c&&c.kind!=='equipment')?c.camera:gearLabel(c&&c.item))||'this item')+' to stock? This cancels '+esc(nameOf(c||{}))+'’s reservation so you can check it out to someone else.', {okLabel:'Return to stock',cancelLabel:'Keep'})
         .then(function(ok){ if(ok){ _lastTBSig=null; del(id); } }); }; });
     el.querySelectorAll('[data-resvopen]').forEach(function(b){ b.onclick=function(){ openReservation(b.getAttribute('data-resvopen')); }; });
@@ -2315,40 +2339,9 @@
         && !unitBusyForSpan(function(c){return c.kind==='equipment'&&c.item===u;}, out, due, id); }); }
     openSwapPicker(it, isCam, free);
   }
-  // Tap the reconcile banner -> see exactly which units are double-booked (overlapping records) and fix them.
-  function reconcileGroups(){
-    var dup=openDupes(), byUnit={};
-    Object.keys(dup).forEach(function(id){ (byUnit[dup[id]]=byUnit[dup[id]]||[]).push(id); });
-    return Object.keys(byUnit).map(function(u){
-      var recs=byUnit[u].map(findRec).filter(Boolean).sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; });
-      var label=(u.charAt(0)==='c')?((recs[0]&&recs[0].camera)||u.slice(2)):gearLabel(u.slice(2));
-      return {unit:label, recs:recs};
-    });
-  }
-  function openReconcile(){
-    var groups=reconcileGroups();
-    var body=groups.length ? groups.map(function(g){
-      return '<div class="rec-unit"><div class="rec-unith"><span class="til-dup">DUP</span>'+esc((g.unit||'').toUpperCase())+'</div>'+
-        g.recs.map(function(c){ var st=statusOf(c);
-          return '<div class="rec-rec"><div class="rec-info"><span class="rec-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span>'+
-            '<span class="rec-dates">'+esc(fmtDoWMD(c.out))+' &rarr; '+esc(fmt(c.due))+' &middot; '+({reserved:'Reserved',out:'Checked out'}[st]||st)+'</span></div>'+
-            '<div class="rec-acts"><button type="button" class="btn sm" data-recopen="'+esc(c.id)+'">Open</button>'+
-            (st==='out'?'<button type="button" class="btn sm warn" data-recret="'+esc(c.id)+'">Mark returned</button>':'')+
-            '<button type="button" class="btn sm danger" data-reccancel="'+esc(c.id)+'">Cancel</button></div></div>'; }).join('')+'</div>';
-    }).join('') : '<div class="rec-none">Nothing is actually double-booked. Every unit is on one reservation at a time (the same camera booked for different dates is fine).</div>';
-    var sub=groups.length?'<div class="rec-sub">These units are booked to more than one person for OVERLAPPING dates. Mark the one that is really back as returned, or cancel the booking that should not be there.</div>':'';
-    var ov=document.createElement('div'); ov.className='modal open'; ov.id='reconcilemodal';
-    ov.innerHTML='<div class="mpanel"><div class="mhead"><span class="mtitle">Reconcile double-booked</span><button class="mx" aria-label="Close">&times;</button></div><div class="mbody">'+sub+body+'</div></div>';
-    document.body.appendChild(ov);
-    function close(){ try{ document.body.removeChild(ov); }catch(e){} }
-    ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
-    ov.querySelector('.mx').onclick=close;
-    ov.querySelectorAll('[data-recopen]').forEach(function(b){ b.onclick=function(){ close(); openReservation(b.getAttribute('data-recopen')); }; });
-    ov.querySelectorAll('[data-recret]').forEach(function(b){ b.onclick=function(){ b.disabled=true; _lastTBSig=null; Promise.resolve(setStatus(b.getAttribute('data-recret'),'returned')).then(function(){ close(); openReconcile(); }); }; });
-    ov.querySelectorAll('[data-reccancel]').forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-reccancel'), c=findRec(id);
-      silvaConfirm('Cancel '+esc(nameOf(c||{}))+'’s booking of '+esc(((c&&c.kind!=='equipment')?c.camera:gearLabel(c&&c.item))||'this unit')+'? It is removed from the schedule.', {okLabel:'Cancel booking',cancelLabel:'Keep'}).then(function(ok){ if(!ok) return; b.disabled=true; _lastTBSig=null;
-        camAPI('/api/camera/delete',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id})}).then(function(){ return loadBoard(); }).then(function(){ close(); openReconcile(); }).catch(function(){ silvaToast('Could not cancel. Try again.'); }); }); }; });
-  }
+  // Reconcile (double-booked / DUP) was removed on 2026-11-05: an overlap is no longer treated as a duplicate.
+  // A kit out past its time now surfaces in the Call queue at the top of the board. A deliberate end-of-day
+  // cart reconcile (key in which of 01-15 are on the cart, mark the rest picked up) is planned as its own flow.
   // ===== Special Requests: approve/deny student reservations that need the teacher's OK =====
   // Every record sharing a reservation (a camera + its linked gear) is one request; approve/deny acts on all.
   function reqGroupOf(id){ var c=findRec(id); if(!c) return []; var key=resvKey(c); return (DATA.checkouts||[]).filter(function(x){ return statusOf(x)==='reserved' && x.approved===false && resvKey(x)===key; }); }
@@ -2390,12 +2383,11 @@
   // without any how-to text cluttering the board Chris uses all day).
   function openBoardHelp(){
     var secs=[
+      ['Call &amp; Missed pickup','The two lists at the top are what needs you right now. Call shows any kit still out past its return time, with one tap to call or text the student. Missed pickup shows a reservation nobody collected: text the student, or Return it to stock to free the unit for someone else.'],
       ['Board','Each item is its own line: the big kit or unit number, then the student. A student’s items share a spine and travel together. Tap any line to open that student’s reservation card.'],
       ['Find fast','Type in a column’s search (camera, kit, tripod, flash, lens) and that type floats to the top in number order. Clear it to go back to the grouped view.'],
       ['The card','Picked up marks one item. Pick up all hands over the whole kit in one tap. Done finishes the student and cancels anything they did not take. Swap moves the reservation to a free unit (Cam 03 to Cam 04, flash 03 to 04); only free units show.'],
-      ['Select many','Tap Select on a column for a checkbox on every line, then Select all and Picked up, Mark returned, or Cancel the chosen ones all at once.'],
-      ['Overdue','Anything reserved for a past day that was never collected drops into the red list. Text the student, or Return it to stock to free the unit for someone else.'],
-      ['Reconcile','A red DUP means that unit is on two reservations at once. The tally shows how many cameras are handed out vs still here, and the gold banner reminds you to clear everything before you leave so nothing rolls into tomorrow.']
+      ['Select many','Tap Select on a column for a checkbox on every line, then Select all and Picked up, Mark returned, or Cancel the chosen ones all at once.']
     ];
     var body=secs.map(function(s){ return '<div class="help-sec"><div class="help-h">'+s[0]+'</div><div class="help-t">'+s[1]+'</div></div>'; }).join('');
     var ov=document.createElement('div'); ov.className='modal open'; ov.id='helpmodal';
