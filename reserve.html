@@ -9,8 +9,8 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=54" />
-<link rel="stylesheet" href="/css/store-glass.css?v=7" />
+<link rel="stylesheet" href="/css/store.css?v=55" />
+<link rel="stylesheet" href="/css/store-glass.css?v=8" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -198,10 +198,7 @@
     <div class="sheet-bd">
       <div class="gate-top">
         <img class="gate-logo" src="/assets/PV_Square_Logo.png" alt="Pioneer Valley" />
-        <div class="lang-toggle gate-lang" role="group" aria-label="Language / Idioma">
-          <button type="button" data-lang="en" class="lang-on">EN</button>
-          <button type="button" data-lang="es">ES</button>
-        </div>
+        <button type="button" class="lang-globe gate-lang" aria-label="Language / Idioma" title="Language / Idioma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="3" y1="12" x2="21" y2="12"></line><path d="M12 3c2.7 2.5 4.2 5.7 4.2 9s-1.5 6.5-4.2 9c-2.7-2.5-4.2-5.7-4.2-9S9.3 5.5 12 3z"></path></svg></button>
       </div>
       <div id="siStep1">
         <h2 id="signinTitle" data-i18n="Equipment Rental">Equipment Rental</h2>
@@ -209,7 +206,6 @@
         <div class="field"><label for="sid" data-i18n="Student number">Student number</label><input type="text" id="sid" inputmode="numeric" autocomplete="off" placeholder="e.g. 123456" data-i18n-ph="k_sid_ph" /></div>
         <div class="sheet-msg" id="signinMsg"></div>
         <button type="button" class="btn block" id="signinGo" data-i18n="Sign in">Sign in</button>
-        <div class="gate-help"><span data-i18n="Need help?">Need help?</span> <a href="sms:+18056310001" data-i18n="k_textus">Text us: 805-631-0001</a></div>
       </div>
       <div id="siStep2" style="display:none">
         <h2 data-i18n="Is this you?">Is this you?</h2>
@@ -1793,7 +1789,7 @@
   // ===== init =====
   // Language: wire the EN/ES toggle, then skin the page (static text + dates) for the stored choice.
   document.querySelectorAll('.lang-toggle [data-lang]').forEach(function(b){ b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); }); });
-  var _langGlobe=document.getElementById('langGlobe'); if(_langGlobe) _langGlobe.addEventListener('click', function(){ setLang(LANG==='en'?'es':'en'); });   // round globe in the header flips the language
+  document.querySelectorAll('.lang-globe').forEach(function(g){ g.addEventListener('click', function(){ setLang(LANG==='en'?'es':'en'); }); });   // every round globe (header + sign-in card) flips the language
   if(LANG==='es') applyDateLang();
   applyI18nStatic(); updateLangToggle();
   renderDates();
