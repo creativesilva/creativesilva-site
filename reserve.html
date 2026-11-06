@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/store.css?v=54" />
-<link rel="stylesheet" href="/css/store-glass.css?v=6" />
+<link rel="stylesheet" href="/css/store-glass.css?v=7" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -22,8 +22,6 @@
 <div class="galaxy" aria-hidden="true"><div class="galaxy-mesh"></div><div class="galaxy-glow"></div></div>
 
 <header class="store-nav">
-  <!-- Gradient galaxy title spanning across the top; the icons sit in the row below it (Chris 2026-11-05). -->
-  <div class="store-title"><span class="pt-g" data-i18n="Pioneer Valley Equipment Reservations">Pioneer Valley Equipment Reservations</span></div>
   <div class="wrap">
     <!-- Hamburger menu on the LEFT of the school logo. -->
     <div class="navmenu-wrap">
@@ -47,6 +45,8 @@
         </nav>
       </div>
       <a class="store-logo" href="/reserve.html" aria-label="Pioneer Valley"><img src="/assets/PV_Square_Logo.png" alt="Pioneer Valley" /></a>
+      <!-- Gradient galaxy title: inline-centered between the logo and the icons on desktop; its own tight row on phones (Chris 2026-11-05). -->
+      <div class="store-title"><span class="pt-g" data-i18n="Pioneer Valley Equipment Reservations">Pioneer Valley Equipment Reservations</span></div>
       <!-- Right side, in order: language globe, profile, cart (Chris 2026-11-05). -->
       <div class="nav-right">
         <button type="button" class="lang-globe" id="langGlobe" aria-label="Language / Idioma" title="Language / Idioma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="3" y1="12" x2="21" y2="12"></line><path d="M12 3c2.7 2.5 4.2 5.7 4.2 9s-1.5 6.5-4.2 9c-2.7-2.5-4.2-5.7-4.2-9S9.3 5.5 12 3z"></path></svg></button>
