@@ -108,6 +108,22 @@ body{overflow-x:clip;}
 .lang-toggle button.lang-on{background:var(--g-primary);color:#04110f;}
 .store-nav .lang-toggle{height:40px;padding:3px;align-items:stretch;flex:0 0 auto;}
 .store-nav .lang-toggle button{display:inline-flex;align-items:center;padding:0 13px;font-size:.7rem;}
+/* iPhone header (Chris 2026-11-05): logo + profile on the LEFT, bag + globe + menu on the RIGHT, a clear
+   center so the notch / Dynamic Island never crowds it. No store title, no search bar. */
+.store-nav .wrap{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;}
+.store-nav .acct-btn{flex:0 0 auto;}
+#brandStu.store-stu{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.store-nav .nav-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex:0 0 auto;}
+.lang-globe{width:40px;height:40px;flex:0 0 auto;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);box-shadow:var(--g-spec);color:#fff;cursor:pointer;backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);transition:background .15s,border-color .15s;}
+.lang-globe svg{width:20px;height:20px;}
+@media (hover:hover){ .lang-globe:hover{background:var(--rollover);border-color:var(--g-teal-lt);} }
+@media (max-width:720px){
+  .store-nav .wrap{flex-wrap:nowrap;}   /* one balanced row: logo+profile | bag+globe+menu */
+  .datebar-leadwrap{display:none;}       /* phone: drop the "When do you need it?" heading + note; keep only the 3 cards */
+  .store-nav .acct-btn,.store-nav .cart-btn{min-width:40px;padding:0 8px;gap:0;}
+  .store-nav .acct-btn .hb-tx,.store-nav .cart-btn .hb-tx{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+  #brandStu.store-stu{font-size:.68rem;}
+}
 
 /* ---------- hero: the gear photo melts into the galaxy; tiles + date panel float on glass (no step boxes) ---------- */
 .store-hero{min-height:0;border-bottom:0;background:none;padding:18px 0 4px;}

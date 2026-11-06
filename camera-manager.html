@@ -138,6 +138,14 @@
   @media (max-width:760px){ .tb-cols{grid-template-columns:1fr;} .tb-colbody{max-height:none;} }
   /* ===== Full-width 3-view board: Outgoing (gold) / Incoming (teal) / Checked out (orange) ===== */
   .tb-toggle{display:flex;width:100%;border:1px solid var(--line-soft);margin-bottom:12px;}
+  /* Simple view (Garcia): a Full/Simple toggle + two stacked sections (Hand out / Check in). */
+  .tb-simple-tg{margin-left:auto;background:rgba(0,184,184,.12);border:1px solid var(--line-soft);color:var(--teal-lt);font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.6rem;padding:6px 12px;cursor:pointer;white-space:nowrap;}
+  .tb-simple-tg.on{background:var(--teal);border-color:var(--teal);color:#04110f;}
+  .tb-simple-tg:hover{border-color:var(--teal);}
+  .tb-simplesec{margin-bottom:14px;}
+  .tb-simplehd{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.74rem;padding:2px 2px 8px;margin-bottom:4px;border-bottom:1px solid var(--line-soft);}
+  .sim-out .tb-simplehd{color:#ffd166;} .sim-in .tb-simplehd{color:var(--teal-lt);}
+  .tb-simplehd .tb-pickall{margin:0;}
   .tb-tg{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;font-family:var(--font);font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:.84rem;padding:13px 10px;background:rgba(255,255,255,.015);border:0;border-right:1px solid var(--line-soft);cursor:pointer;transition:background .15s,color .15s;}
   .tb-tg:last-child{border-right:0;}
   .tb-tg.out{color:#ffd889;} .tb-tg.in{color:#8ff7f7;} .tb-tg.checked{color:#ffb380;}
@@ -1937,12 +1945,22 @@
         var assign=u.state==='avail'?'<button type="button" class="av-assign" data-avassign="'+esc(u.id)+'" data-avkind="'+u.kind+'">Assign</button>':'';
         return '<div class="av-unit"><button type="button" class="av-u-main" data-avunit="'+esc(u.id)+'" data-avkind="'+u.kind+'"><span class="av-u-dot '+u.state+'"></span><span class="av-u-nm">'+esc(u.label)+'</span><span class="av-u-st">'+availUnitLabel(u)+'</span></button>'+assign+'</div>'; }).join('');
       return '<div class="av-type'+(open?' open':'')+'"><button type="button" class="av-type-head" data-avexpand="'+esc(row.key)+'"><span class="av-type-nm">'+esc(row.label)+'</span><span class="av-type-ct'+(zero?' zero':'')+'"><b>'+row.avail+'</b> / '+row.total+' free</span><span class="av-type-chev">&#8250;</span></button><div class="av-type-units">'+units+'</div></div>'; }).join('')+'</div>'; }
+  // Simple view (Chris 2026-11-05, for Garcia): a stripped board = the two queues + Hand out + Check in, no
+  // tabs/search/tally. She still taps any item for the full reservation card (modify, edit dates, swap,
+  // cancel, delete). Garcia's pool defaults to simple; a per-session toggle overrides it either way.
+  function isSimple(){ try{ var s=sessionStorage.getItem('tbsimple'); if(s==='1') return true; if(s==='0') return false; }catch(e){} return SELECTED_POOL==='garcia'; }
   function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
     var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), chk=checkedOutFor();
+    var SIMPLE=isSimple();                                                       // Garcia-friendly stripped board (toggle in the header)
     var odCall=isT?overdueCallResvs():[], miss=isT?missedPickupResvs():[];        // the two always-on action queues
     if(isT) out=out.filter(function(c){ return !isMissedPickup(c); });            // missed pickups are elevated to the queue above, not repeated in Outgoing
     var pend=pendingGroups();                                                   // student requests awaiting the teacher's OK
     function countLines(resvs,mode){ return resvs.reduce(function(n,c){ return n+bundleLineCount(lineItemsFor(c,mode,isT)); },0); }
+    // Build the card grid for one list + mode (reused by the full view and by the simple view's two sections).
+    function gridFor(list,mode){ list=list.slice().sort(tbSortCmp);
+      var groups=[]; list.forEach(function(c){ var its=lineItemsFor(c,mode,isT); if(its.length) groups.push({c:c,items:its}); });
+      if(!groups.length){ var em=mode==='out'?('Nothing to hand out '+(isT?'today':'that day')+'.'):'Nothing checked out right now.'; return '<div class="tb-grid"><div class="tb-empty">'+em+'</div></div>'; }
+      return '<div class="tb-grid view-'+mode+'">'+groups.map(function(g){ var od=(mode==='in'&&g.items.some(isOverdue)); return '<div class="tb-bundle'+(od?' tb-od':'')+'">'+renderBundle(g.c,g.items,mode,true)+'</div>'; }).join('')+'</div>'; }
     var nOut=countLines(out,'out'), nIn=countLines(chk,'in'), nReq=pend.length;
     var view=(TBVIEW==='in'||TBVIEW==='avail'||TBVIEW==='requests')?TBVIEW:'out';
     var inv=(view==='avail')?availInventory():null, availCameras=availCountOnDay(todayISO());
@@ -1953,7 +1971,7 @@
     function listSig(resvs,mode){ return resvs.map(function(c){ return c.id+':'+resvStatusGroup(c)+':'+lineItemsFor(c,mode,isT).map(function(x){return (x.camera||x.item)+itemState(x);}).join('.'); }).join(','); }
     var invSig=inv?inv.map(function(r){ return r.key+r.avail+'/'+r.total+':'+r.units.map(function(u){return u.state+(u.rec?('~'+(u.rec.student_id||u.rec.student_name||'')):'');}).join('.'); }).join('|'):'';
     var qSig='|call'+odCall.map(function(c){return c.id+resvStatusGroup(c);}).join('.')+'|miss'+miss.map(function(c){return c.id;}).join('.');
-    var sig=view+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+qSig+'|n'+nOut+'.'+nIn+'.'+nReq+'|'+listSig(active,view)+'|req'+pend.map(function(g){return g[0].id;}).join('.')+'|av'+(TBAVOPEN||'')+'|'+invSig;
+    var sig=(SIMPLE?'SIMPLE':view)+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+qSig+'|n'+nOut+'.'+nIn+'.'+nReq+'|'+(SIMPLE?('so'+listSig(out,'out')+'|sc'+listSig(chk,'in')):listSig(active,view))+'|req'+pend.map(function(g){return g[0].id;}).join('.')+'|av'+(TBAVOPEN||'')+'|'+invSig;
     if(sig===_lastTBSig && el.innerHTML) return; _lastTBSig=sig;
     // ----- header: title + help + day stepper (Outgoing/Incoming only; Checked out + Available are "right now") -----
     var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY));
@@ -2005,13 +2023,22 @@
         bulk='<div class="tb-bulkbar"><button type="button" class="tb-selall" data-tbselall="'+view+'">'+((n>=total&&total>0)?'Clear':'Select all')+'</button><span class="tb-selcount">'+n+' selected</span>'+acts+'</div>';
       }
     }
-    el.className='todayboard tbsec-'+view; el.style.display='';
+    el.className='todayboard '+(SIMPLE?'tbsec-simple':('tbsec-'+view)); el.style.display='';
     var queues=isT?(queueHtml(odCall,'call')+queueHtml(miss,'miss')):'';
-    el.innerHTML='<div class="tb-head"><span class="tb-title">Reservations</span><button type="button" class="tb-help" data-tbhelp="1" title="How this board works" aria-label="How this board works">i</button>'+stepper+'</div>'+
-      queues+toggle+
-      ((view==='avail'||view==='requests') ? body
-        : ((isT?cartTallyHtml():'')+search+body+bulk));
+    var simpleTg='<button type="button" class="tb-simple-tg'+(SIMPLE?' on':'')+'" data-tbsimple="'+(SIMPLE?'0':'1')+'" title="Switch between a simple and a full board">'+(SIMPLE?'Full view':'Simple view')+'</button>';
+    var head='<div class="tb-head"><span class="tb-title">Reservations</span><button type="button" class="tb-help" data-tbhelp="1" title="How this board works" aria-label="How this board works">i</button>'+simpleTg+(SIMPLE?'':stepper)+'</div>';
+    if(SIMPLE){
+      var markAll=(isT&&nOut>0)?'<button type="button" class="tb-pickall" data-tbpickall="1">Mark all picked up</button>':'';
+      el.innerHTML=head+queues+
+        '<div class="tb-simplesec sim-out"><div class="tb-simplehd"><span>Hand out</span>'+markAll+'</div>'+gridFor(out,'out')+'</div>'+
+        '<div class="tb-simplesec sim-in"><div class="tb-simplehd"><span>Check in</span></div>'+gridFor(chk,'in')+'</div>';
+    } else {
+      el.innerHTML=head+queues+toggle+
+        ((view==='avail'||view==='requests') ? body
+          : ((isT?cartTallyHtml():'')+search+body+bulk));
+    }
     el.querySelectorAll('[data-tbview]').forEach(function(b){ b.onclick=function(){ var v=b.getAttribute('data-tbview'); if(v!==TBVIEW){ TBVIEW=v; _lastTBSig=null; renderTodayBoard(); } }; });
+    var _smb=el.querySelector('[data-tbsimple]'); if(_smb) _smb.onclick=function(){ try{ sessionStorage.setItem('tbsimple', _smb.getAttribute('data-tbsimple')); }catch(e){} _lastTBSig=null; renderTodayBoard(); };
     el.querySelectorAll('[data-tbsort]').forEach(function(b){ b.onclick=function(){ var s=b.getAttribute('data-tbsort'); if(s!==TBSORT){ TBSORT=s; try{ sessionStorage.setItem('tbsort',s); }catch(e){} _lastTBSig=null; renderTodayBoard(); } }; });
     // Available view: expand a model/type to its units; tap a unit -> its detail card; Assign a free unit -> check-out flow.
     el.querySelectorAll('[data-avexpand]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-avexpand'); TBAVOPEN=(TBAVOPEN===k)?null:k; _lastTBSig=null; renderTodayBoard(); }; });

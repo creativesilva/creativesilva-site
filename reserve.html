@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/store.css?v=54" />
-<link rel="stylesheet" href="/css/store-glass.css?v=2" />
+<link rel="stylesheet" href="/css/store-glass.css?v=4" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -24,22 +24,13 @@
 <header class="store-nav">
   <div class="wrap">
     <a class="store-logo" href="/reserve.html" aria-label="Pioneer Valley"><img src="/assets/PV_Square_Logo.png" alt="Pioneer Valley" /></a>
-    <div class="store-brand"><b>Pioneer Valley</b><span data-i18n="Equipment Rental">Equipment Rental</span><span class="store-stu" id="brandStu" hidden></span></div>
-    <!-- Search + EN/ES travel together: inline in the desktop bar, their own row on phones. -->
-    <div class="store-row2">
-      <form class="store-search" id="searchForm" role="search">
-        <input type="search" id="searchIn" placeholder="Search equipment" data-i18n-ph="Search equipment" aria-label="Search equipment" autocomplete="off" />
-        <button type="submit" aria-label="Search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="20.5" y1="20.5" x2="16.5" y2="16.5"></line></svg></button>
-      </form>
-      <!-- EN/ES language toggle: flips every student-facing string at a 5th-grade reading level. -->
-      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language / Idioma">
-        <button type="button" data-lang="en" class="lang-on">EN</button>
-        <button type="button" data-lang="es">ES</button>
-      </div>
-    </div>
+    <!-- Profile sits on the LEFT next to the logo; bag + globe + menu on the RIGHT, so the center stays clear
+         of the iPhone notch / Dynamic Island. No store title, no search bar (students browse, not search). -->
+    <button type="button" class="acct-btn" id="acctBtn" aria-label="My Account"><span class="hb-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 20.5c1.2-3.9 4.1-5.8 7.5-5.8s6.3 1.9 7.5 5.8"></path></svg></span><span class="hb-tx" id="acctTx">My Account</span></button>
     <div class="nav-right">
-      <button type="button" class="acct-btn" id="acctBtn"><span class="hb-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 20.5c1.2-3.9 4.1-5.8 7.5-5.8s6.3 1.9 7.5 5.8"></path></svg></span><span class="hb-tx" id="acctTx">My Account</span></button>
       <button type="button" class="cart-btn" id="cartBtn"><span class="hb-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 12.1a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9z"></path><path d="M9 10.5V7a3 3 0 0 1 6 0v3.5"></path></svg></span><span class="hb-tx" data-i18n="Equipment Bag">Equipment Bag</span> <span class="cart-n empty" id="cartN">0</span></button>
+      <!-- Language: a round globe button (iOS keyboard globe). One tap flips EN <-> ES. -->
+      <button type="button" class="lang-globe" id="langGlobe" aria-label="Language / Idioma" title="Language / Idioma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="3" y1="12" x2="21" y2="12"></line><path d="M12 3c2.7 2.5 4.2 5.7 4.2 9s-1.5 6.5-4.2 9c-2.7-2.5-4.2-5.7-4.2-9S9.3 5.5 12 3z"></path></svg></button>
       <!-- Quick-access dropdown nav (hamburger) -->
       <div class="navmenu-wrap">
         <button type="button" class="nav-burger" id="navBtn" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -1114,11 +1105,23 @@
     if(si && si.value.trim()){ renderResults(si.value); return; }
     if(CURVIEW==='popular'){ renderPopular(); } else { renderCat(CURVIEW); } }
   function rerender(){ renderView(); syncCalView(); }
+  // After a dock category tap on a phone, snap the product section up under the sticky header so the date
+  // cards scroll out of the way and the category's items fill the screen. (Chris 2026-11-05.)
+  function scrollProdUnderHeader(){
+    if(window.innerWidth>720) return;
+    requestAnimationFrame(function(){
+      var ph=document.querySelector('.prod-head'), nav=document.querySelector('.store-nav');
+      if(!ph||!nav) return;
+      var y=ph.getBoundingClientRect().top + window.pageYOffset - nav.getBoundingClientRect().height - 4;
+      window.scrollTo({top:Math.max(0,y), behavior:'smooth'});
+    });
+  }
   document.getElementById('catnav').addEventListener('click', function(e){
     var t=e.target.closest('[data-cat]'); if(!t) return;
     var si=document.getElementById('searchIn'); if(si) si.value='';
     document.querySelectorAll('.catn').forEach(function(x){ x.classList.remove('active'); }); t.classList.add('active');
     renderCat(t.getAttribute('data-cat'));
+    scrollProdUnderHeader();
   });
   // Home (the logo or the brand) returns to Popular Rentals in place, no reload.
   (function(){ function goHome(e){ if(e) e.preventDefault(); var si=document.getElementById('searchIn'); if(si) si.value=''; renderPopular(); }
@@ -1790,6 +1793,7 @@
   // ===== init =====
   // Language: wire the EN/ES toggle, then skin the page (static text + dates) for the stored choice.
   document.querySelectorAll('.lang-toggle [data-lang]').forEach(function(b){ b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); }); });
+  var _langGlobe=document.getElementById('langGlobe'); if(_langGlobe) _langGlobe.addEventListener('click', function(){ setLang(LANG==='en'?'es':'en'); });   // round globe in the header flips the language
   if(LANG==='es') applyDateLang();
   applyI18nStatic(); updateLangToggle();
   renderDates();
