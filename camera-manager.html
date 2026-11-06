@@ -361,8 +361,13 @@
   .tbq-dot.overdue{background:var(--red);} .tbq-dot.reserved{background:var(--gold);}
   .tbq-big{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.02em;font-size:.92rem;color:#fff;white-space:nowrap;}
   .tbq-big i{color:var(--faint);font-style:normal;margin:0 1px;}
-  .tbq-who{flex:1 1 auto;min-width:0;color:#dfe7e7;font-size:.86rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .tbq-when{flex:0 0 auto;color:var(--muted);font-size:.78rem;white-space:nowrap;text-align:right;min-width:94px;}
+  .tbq-main{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:9px;}
+  .tbq-name{min-width:0;color:#eef4f4;font-size:.9rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .tbq-per{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.04em;font-size:.72rem;color:var(--teal-lt);background:rgba(0,184,184,.16);border:1px solid rgba(0,184,184,.5);padding:2px 8px;}
+  .tbq-when{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;line-height:1.12;min-width:98px;}
+  .tbq-wlab{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.56rem;color:var(--faint);}
+  .tbq-wval{font-weight:700;font-size:.94rem;white-space:nowrap;}
+  .tbq-call .tbq-wval{color:#ff9a8a;} .tbq-miss .tbq-wval{color:#ffd889;}
   .tbq-acts{flex:0 0 auto;display:flex;align-items:center;gap:6px;}
   .tbq-act{display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 12px;font-family:var(--font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.68rem;border:1px solid var(--line-soft);color:var(--muted);text-decoration:none;cursor:pointer;background:rgba(255,255,255,.03);}
   .tbq-act.call{background:var(--red);border-color:var(--red);color:#fff;}
@@ -371,7 +376,7 @@
   .tbq-row .til-chev{flex:0 0 auto;color:var(--faint);font-size:1.1rem;}
   @media (max-width:640px){
     .tbq-row{flex-wrap:wrap;}
-    .tbq-who{flex:1 1 90px;} .tbq-when{min-width:0;}
+    .tbq-main{flex:1 1 90px;} .tbq-when{min-width:0;}
     .tbq-acts{flex:1 1 100%;order:6;justify-content:flex-start;margin-top:4px;}
     .tbq-row .til-chev{display:none;}
   }
@@ -1847,23 +1852,28 @@
       .sort(function(a,b){ return ((a.due||a.out||'')<(b.due||b.out||''))?-1:1; }); }
   function missedPickupResvs(){ return groupedReservations().filter(function(c){ return isMissedPickup(c); })
       .sort(function(a,b){ return ((a.out||'')<(b.out||''))?-1:1; }); }
-  function lateLabel(c){ var t=todayISO(); if((c.due||'')<t) return 'due '+fmtDoWMD(c.due); var rt=govTime(c,'return_time'); return 'due '+(rt?fmtTime12(rt):'today'); }
-  function missLabel(c){ var t=todayISO(); if((c.out||'')<t) return 'reserved '+fmtDoWMD(c.out); var pt=govTime(c,'pickup_time'); return 'pickup '+(pt?fmtTime12(pt):'today'); }
+  // The time shown on a queue row: a small label + a bold value, so the pickup/return TIME reads at a glance.
+  function whenParts(c, kind){ var t=todayISO();
+    if(kind==='call'){ if((c.due||'')<t) return {lab:'Due', val:fmtDoWMD(c.due)}; var rt=govTime(c,'return_time'); return {lab:'Due', val:(rt?fmtTime12(rt):'today')}; }
+    if((c.out||'')<t) return {lab:'Reserved', val:fmtDoWMD(c.out)};
+    var pt=govTime(c,'pickup_time'); return {lab:'Pickup', val:(pt?fmtTime12(pt):'today')}; }
   function queueRow(c, kind){
     var cell=String(c.student_cell||'').replace(/\D/g,'');
     var shown=resvItems(c).filter(function(it){ return kind==='call' ? (statusOf(it)==='out'&&isOverdue(it)) : statusOf(it)!=='returned'; });
     var big=shown.map(function(it){ return esc(itemBig(it)).toUpperCase(); }).join(' <i>&middot;</i> ') || esc(String(c.camera||gearLabel(c.item)||'').toUpperCase());
-    var when=(kind==='call'?lateLabel(c):missLabel(c)), dotCls=(kind==='call'?'overdue':'reserved');
-    var acts=(kind==='call')
-      ? (cell?'<a class="tbq-act call" href="tel:'+cell+'" data-stop="1">Call</a><a class="tbq-act text" href="sms:'+cell+'" data-stop="1">Text</a>':'')
-      : ((cell?'<a class="tbq-act text" href="sms:'+cell+'" data-stop="1">Text</a>':'')+'<button type="button" class="tbq-act stock" data-questock="'+esc(c.id)+'">Return to stock</button>');
+    var dotCls=(kind==='call'?'overdue':'reserved'), wp=whenParts(c,kind);
+    var per=c.period?'<span class="tbq-per">P'+esc(c.period)+'</span>':'';
+    // Overdue: no Call/Text (the teacher already knows to reach out); the row opens the reservation, which holds the numbers.
+    // Missed pickup: Text the no-show, or Return the unit to stock.
+    var actsHtml=(kind==='call') ? '' :
+      '<span class="tbq-acts">'+(cell?'<a class="tbq-act text" href="sms:'+cell+'" data-stop="1">Text</a>':'')+'<button type="button" class="tbq-act stock" data-questock="'+esc(c.id)+'">Return to stock</button></span>';
     return '<div class="tbq-row" data-resvopen="'+esc(c.id)+'" role="button" tabindex="0"><span class="tbq-dot '+dotCls+'"></span>'+
       '<span class="tbq-big">'+big+'</span>'+
-      '<span class="tbq-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span>'+
-      '<span class="tbq-when">'+esc(when)+'</span>'+
-      '<span class="tbq-acts">'+acts+'</span><span class="til-chev">&#8250;</span></div>'; }
+      '<span class="tbq-main"><span class="tbq-name">'+esc(nameOf(c))+'</span>'+per+'</span>'+
+      '<span class="tbq-when"><span class="tbq-wlab">'+esc(wp.lab)+'</span><span class="tbq-wval">'+esc(wp.val)+'</span></span>'+
+      actsHtml+'<span class="til-chev">&#8250;</span></div>'; }
   function queueHtml(list, kind){ if(!list.length) return '';
-    var t=(kind==='call'?'Call &middot; overdue':'Missed pickup'), sub=(kind==='call'?'out past the return time':'reserved, not collected');
+    var t=(kind==='call'?'Overdue &middot; Contact student':'Missed pickup'), sub=(kind==='call'?'out past the return time':'reserved, not collected');
     return '<div class="tb-queue tbq-'+kind+'"><div class="tbq-head"><span class="tbq-badge">'+list.length+'</span><span class="tbq-t">'+t+'</span><span class="tbq-sub">'+sub+'</span></div>'+
       list.map(function(c){ return queueRow(c, kind); }).join('')+'</div>'; }
   // Cart tally for the selected pool: how many cameras the app thinks are handed out vs still here.
