@@ -1319,7 +1319,6 @@
         <div class="catalog-titlebar">
           <h1 class="page-title">Curriculum Catalog</h1>
           <div class="titlebar-actions">
-            <a class="cal-btn" href="/build-resources.html">AI Studio</a>
             <a class="cal-btn cmd" href="https://command.creativesilva.com" target="_blank" rel="noopener">Command Center</a>
             <a class="cal-btn" href="/inbox.html" title="Today, This Week, Waiting, Events">Inbox Board</a>
             <a class="cal-btn" href="/camera-manager.html">Equipment Manager</a>
@@ -2733,11 +2732,6 @@
       catTeacher.textContent = 'Teacher Resources';
       catTeacher.addEventListener('click', function () { var d = document.getElementById('teacher-resources'); if (d) { d.open = true; } });
       catMenu.appendChild(catTeacher);
-      var catBuildR = document.createElement('a');
-      catBuildR.href = '/build-resources.html';
-      catBuildR.className = 'cbc-mod';
-      catBuildR.textContent = 'AI Studio';
-      catMenu.appendChild(catBuildR);
       var catAll = document.createElement('a');
       catAll.href = '#universal';
       catAll.className = 'cbc-mod';
