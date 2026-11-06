@@ -25,7 +25,12 @@
   --teal-bright:#3ff0e0; --ink:#f3fbff; --gray:rgba(205,226,240,.66); --line:rgba(150,225,245,.12);
   --paper:rgba(8,16,36,.82); --surface:var(--g-glass-quiet); --surface-bd:var(--g-edge-soft); --teal-wash:rgba(0,184,184,.12);
 }
-body{background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);background-attachment:fixed;color:var(--g-text);}
+body{background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);background-attachment:fixed;color:var(--g-text);min-height:100dvh;}
+/* iOS Safari: dark everywhere + fill the safe areas (viewport-fit=cover), so the status-bar / home-indicator
+   bands show the galaxy, never a white bar; and never let the page pan sideways. (Chris 2026-11-05, iPhone 12 Pro.) */
+html{background:#050816;overflow-x:clip;}
+body{overflow-x:clip;}
+.store-nav{height:auto;min-height:var(--header-h);padding-top:env(safe-area-inset-top,0px);box-sizing:border-box;}
 
 /* ---------- galaxy backdrop (the AI Studio v1.9 recipe, verbatim) ---------- */
 .galaxy{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);}
@@ -103,6 +108,32 @@ body{background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3
 .lang-toggle button.lang-on{background:var(--g-primary);color:#04110f;}
 .store-nav .lang-toggle{height:40px;padding:3px;align-items:stretch;flex:0 0 auto;}
 .store-nav .lang-toggle button{display:inline-flex;align-items:center;padding:0 13px;font-size:.7rem;}
+/* iPhone header (Chris 2026-11-05): logo + profile on the LEFT, bag + globe + menu on the RIGHT, a clear
+   center so the notch / Dynamic Island never crowds it. No store title, no search bar. */
+.store-nav .wrap{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;}
+.store-nav .acct-btn{flex:0 0 auto;}
+#brandStu.store-stu{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.store-nav .nav-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex:0 0 auto;}
+.lang-globe{width:40px;height:40px;flex:0 0 auto;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);box-shadow:var(--g-spec);color:#fff;cursor:pointer;backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);transition:background .15s,border-color .15s;}
+.lang-globe svg{width:20px;height:20px;}
+@media (hover:hover){ .lang-globe:hover{background:var(--rollover);border-color:var(--g-teal-lt);} }
+/* Gradient galaxy title: inline-centered in the middle of the bar on desktop (it falls between the logo
+   and the globe and fills the gap), its own tight row above the icons on phones. One compact header with
+   no wasted height: the min-height hugs the content instead of the old 84px band (Chris 2026-11-05). */
+.store-nav{min-height:0;}
+.store-nav .wrap{height:auto;min-height:52px;gap:12px;}
+.store-title{flex:1 1 auto;min-width:0;text-align:center;overflow:hidden;padding:0 8px;}
+.pt-g{font-family:var(--font-head);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:clamp(.74rem,1.55vw,1.06rem);white-space:nowrap;
+  background:linear-gradient(92deg,#ffffff 0%,#c9fbf4 42%,#3ff0e0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;}
+.navmenu{left:0;right:auto;}   /* hamburger moved to the left edge: open the menu downward-right so it stays on screen */
+@media (max-width:720px){
+  .store-title{flex:0 0 100%;order:-1;padding:0;line-height:1.08;overflow:visible;}   /* title on its own tight row above the icons (wrap padding is set in the phone app-bar block below) */
+  .pt-g{white-space:nowrap;letter-spacing:.06em;font-size:clamp(.58rem,3.4vw,.84rem);}
+  .datebar-leadwrap{display:none;}       /* phone: drop the "When do you need it?" heading + note; keep only the 3 cards */
+  .store-nav .acct-btn,.store-nav .cart-btn{min-width:40px;padding:0 8px;gap:0;}
+  .store-nav .acct-btn .hb-tx,.store-nav .cart-btn .hb-tx{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+  #brandStu.store-stu{font-size:.68rem;}
+}
 
 /* ---------- hero: the gear photo melts into the galaxy; tiles + date panel float on glass (no step boxes) ---------- */
 .store-hero{min-height:0;border-bottom:0;background:none;padding:18px 0 4px;}
@@ -250,7 +281,7 @@ body{background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3
 
 /* ---------- phones: one compact app bar + the category DOCK anchored to the bottom ---------- */
 @media (max-width:720px){
-  .store-nav .wrap{flex-wrap:wrap;gap:10px;padding:10px 16px 12px;}
+  .store-nav .wrap{flex-wrap:wrap;row-gap:3px;column-gap:8px;padding:4px 16px 6px;align-content:center;}   /* tight: title row + icon row, no wasted band */
   .store-logo{width:38px;height:38px;flex:0 0 auto;}
   .store-brand{flex:1 1 0;min-width:0;overflow:hidden;}                   /* basis 0: the brand never pushes the buttons to a 2nd row */
   .store-brand b{font-size:1.02rem;white-space:nowrap;}
@@ -261,7 +292,7 @@ body{background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3
   .cart-btn .cart-n{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;font-size:.6rem;}
   .store-row2{display:flex;order:5;flex:1 1 100%;gap:8px;align-items:center;}
   .store-row2 .store-search{order:0;flex:1 1 auto;min-width:0;max-width:none;}
-  .store-hero{padding:14px 0 2px;}
+  .store-hero{padding:7px 0 2px;}
   .hero-top{display:flex;flex-direction:column;gap:0;padding-bottom:4px;}
   .hero-top .datebar{padding:14px;}
   .hero-top .datebar-row{display:flex;flex-direction:column;align-items:stretch;gap:12px;}
@@ -305,12 +336,13 @@ body{background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3
   .catn[data-cat="accessories"] .catn-ic{--ic:url('/assets/Icons/store/accessories-dock-v2.png');}
   .catn[data-cat="accessories"].is-stylus .catn-ic{--ic:url('/assets/Icons/store/stylus-dock-v2.png');}
 
-  /* products fit ABOVE the dock: JS measures --card-fit-h (screen - dock - first row top - 12px); the photo takes the extra height */
+  /* Mobile product cards: natural height with a SQUARE photo (Chris 2026-11-05: do NOT stretch the tiles to
+     fill the space above the dock, it looks elongated). --card-fit-h is no longer used. */
   .products{padding:14px 0 24px;}
   .prod-head{margin-bottom:12px;font-size:1.05rem;}
-  .prod-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:14px;column-gap:10px;}   /* row 2 starts just below the dock edge */
-  .prod{padding:9px;gap:6px;border-radius:var(--g-r-md);height:var(--card-fit-h,auto);}
-  .prod-img{border-radius:var(--g-r-sm);flex:1 1 auto;aspect-ratio:auto;min-height:100px;}
+  .prod-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:14px;column-gap:10px;}
+  .prod{padding:9px;gap:6px;border-radius:var(--g-r-md);height:auto;}
+  .prod-img{border-radius:var(--g-r-sm);aspect-ratio:1/1;}
   .prod-name{font-size:.98rem;line-height:1.08;min-height:calc(2 * 1.08em);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:0;}   /* row lock: 2 lines reserved */
   .prod-stock{margin:4px 0 2px;font-size:.72rem;}
   .prod-details{margin:0 0 6px;font-size:.74rem;}
