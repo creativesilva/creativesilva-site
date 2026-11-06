@@ -137,7 +137,9 @@
   .tb-proj{font-size:.68rem;color:#ffb28a;letter-spacing:.04em;text-transform:uppercase;}
   @media (max-width:760px){ .tb-cols{grid-template-columns:1fr;} .tb-colbody{max-height:none;} }
   /* ===== Full-width 3-view board: Outgoing (gold) / Incoming (teal) / Checked out (orange) ===== */
-  .tb-toggle{display:flex;width:100%;border:1px solid var(--line-soft);margin-bottom:12px;}
+  /* Safari-style browser tabs: a row of rounded-top tabs sitting on the content pane's top line; the active
+     tab is filled with its accent and dips over the line to connect, inactive tabs are recessed. (Chris 2026-11-06) */
+  .tb-toggle{display:flex;gap:4px;width:100%;align-items:flex-end;border-bottom:2px solid var(--line-soft);margin-bottom:14px;}
   /* Simple view (Garcia): a Full/Simple toggle + two stacked sections (Hand out / Check in). */
   .tb-simple-tg{margin-left:auto;background:rgba(0,184,184,.12);border:1px solid var(--line-soft);color:var(--teal-lt);font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.6rem;padding:6px 12px;cursor:pointer;white-space:nowrap;}
   .tb-simple-tg.on{background:var(--teal);border-color:var(--teal);color:#04110f;}
@@ -146,8 +148,8 @@
   .tb-simplehd{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.74rem;padding:2px 2px 8px;margin-bottom:4px;border-bottom:1px solid var(--line-soft);}
   .sim-out .tb-simplehd{color:#ffd166;} .sim-in .tb-simplehd{color:var(--teal-lt);}
   .tb-simplehd .tb-pickall{margin:0;}
-  .tb-tg{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;font-family:var(--font);font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:.84rem;padding:13px 10px;background:rgba(255,255,255,.015);border:0;border-right:1px solid var(--line-soft);cursor:pointer;transition:background .15s,color .15s;}
-  .tb-tg:last-child{border-right:0;}
+  .tb-tg{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;font-family:var(--font);font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:.84rem;padding:12px 10px;background:rgba(255,255,255,.02);border:1px solid var(--line-soft);border-bottom:0;border-radius:9px 9px 0 0;color:inherit;cursor:pointer;opacity:.6;transition:background .15s,color .15s,opacity .15s;}
+  .tb-tg.on{opacity:1;position:relative;z-index:2;margin-bottom:-2px;}
   .tb-tg.out{color:#ffd889;} .tb-tg.in{color:#8ff7f7;} .tb-tg.checked{color:#ffb380;}
   .tb-tg:hover:not(.on){background:rgba(255,255,255,.05);}
   .tb-tgn{font-family:var(--font);font-weight:700;font-size:.72rem;padding:1px 8px;background:rgba(255,255,255,.1);color:var(--text);}
@@ -1952,8 +1954,8 @@
   function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
     var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), chk=checkedOutFor();
     var SIMPLE=isSimple();                                                       // Garcia-friendly stripped board (toggle in the header)
-    var odCall=isT?overdueCallResvs():[], miss=isT?missedPickupResvs():[];        // the two always-on action queues
-    if(isT) out=out.filter(function(c){ return !isMissedPickup(c); });            // missed pickups are elevated to the queue above, not repeated in Outgoing
+    var odCall=overdueCallResvs(), miss=isT?missedPickupResvs():[];               // odCall feeds the Overdue tab (full view) + Garcia's simple queue
+    if(isT && SIMPLE) out=out.filter(function(c){ return !isMissedPickup(c); });  // simple view lifts missed pickups into its queue; the full board keeps them in Outgoing
     var pend=pendingGroups();                                                   // student requests awaiting the teacher's OK
     function countLines(resvs,mode){ return resvs.reduce(function(n,c){ return n+bundleLineCount(lineItemsFor(c,mode,isT)); },0); }
     // Build the card grid for one list + mode (reused by the full view and by the simple view's two sections).
@@ -1962,7 +1964,8 @@
       if(!groups.length){ var em=mode==='out'?('Nothing to hand out '+(isT?'today':'that day')+'.'):'Nothing checked out right now.'; return '<div class="tb-grid"><div class="tb-empty">'+em+'</div></div>'; }
       return '<div class="tb-grid view-'+mode+'">'+groups.map(function(g){ var od=(mode==='in'&&g.items.some(isOverdue)); return '<div class="tb-bundle'+(od?' tb-od':'')+'">'+renderBundle(g.c,g.items,mode,true)+'</div>'; }).join('')+'</div>'; }
     var nOut=countLines(out,'out'), nIn=countLines(chk,'in'), nReq=pend.length;
-    var view=(TBVIEW==='in'||TBVIEW==='avail'||TBVIEW==='requests')?TBVIEW:'out';
+    var nOverdue=odCall.reduce(function(n,c){ return n+resvItems(c).filter(isOverdue).length; },0);   // Overdue tab count
+    var view=(TBVIEW==='in'||TBVIEW==='overdue'||TBVIEW==='avail'||TBVIEW==='requests')?TBVIEW:'out';
     var inv=(view==='avail')?availInventory():null, availCameras=availCountOnDay(todayISO());
     var active=(view==='out')?out:(view==='in'?chk:[]), q=TBQ[view]||'', selMode=TBSEL[view];
     active=active.slice().sort(tbSortCmp);                      // default: camera-kit number order (a-la-carte after); or by last name
@@ -1971,7 +1974,7 @@
     function listSig(resvs,mode){ return resvs.map(function(c){ return c.id+':'+resvStatusGroup(c)+':'+lineItemsFor(c,mode,isT).map(function(x){return (x.camera||x.item)+itemState(x);}).join('.'); }).join(','); }
     var invSig=inv?inv.map(function(r){ return r.key+r.avail+'/'+r.total+':'+r.units.map(function(u){return u.state+(u.rec?('~'+(u.rec.student_id||u.rec.student_name||'')):'');}).join('.'); }).join('|'):'';
     var qSig='|call'+odCall.map(function(c){return c.id+resvStatusGroup(c);}).join('.')+'|miss'+miss.map(function(c){return c.id;}).join('.');
-    var sig=(SIMPLE?'SIMPLE':view)+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+qSig+'|n'+nOut+'.'+nIn+'.'+nReq+'|'+(SIMPLE?('so'+listSig(out,'out')+'|sc'+listSig(chk,'in')):listSig(active,view))+'|req'+pend.map(function(g){return g[0].id;}).join('.')+'|av'+(TBAVOPEN||'')+'|'+invSig;
+    var sig=(SIMPLE?'SIMPLE':view)+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+qSig+'|n'+nOut+'.'+nIn+'.'+nOverdue+'.'+nReq+'|'+(SIMPLE?('so'+listSig(out,'out')+'|sc'+listSig(chk,'in')):listSig(active,view))+'|req'+pend.map(function(g){return g[0].id;}).join('.')+'|av'+(TBAVOPEN||'')+'|'+invSig;
     if(sig===_lastTBSig && el.innerHTML) return; _lastTBSig=sig;
     // ----- header: title + help + day stepper (Outgoing/Incoming only; Checked out + Available are "right now") -----
     var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY));
@@ -1982,9 +1985,10 @@
     // ----- view toggle: Outgoing (gold) / Incoming (teal) / Available (green) / Requests (purple). Overdue is no
     //       longer a tab; it leads the board as the Call queue above, so it is seen from every tab. -----
     function tg(k,label,cnt){ return '<button type="button" class="tb-tg '+k+(view===k?' on':'')+'" data-tbview="'+k+'">'+label+' <span class="tb-tgn">'+cnt+'</span></button>'; }
-    var toggle='<div class="tb-toggle">'+
+    var toggle='<div class="tb-toggle" role="tablist">'+
       tg('out','Outgoing',nOut)+
       tg('in','Incoming',nIn)+
+      '<button type="button" class="tb-tg overdue'+(view==='overdue'?' on':'')+(nOverdue>0?' hot':'')+'" data-tbview="overdue">Overdue <span class="tb-tgn'+(nOverdue>0?' tb-tgn-od':'')+'">'+nOverdue+'</span></button>'+
       tg('avail','Available',availCameras)+
       '<button type="button" class="tb-tg requests'+(view==='requests'?' on':'')+(nReq>0?' hot':'')+'" data-tbview="requests">Requests <span class="tb-tgn'+(nReq>0?' tb-tgn-req':'')+'">'+nReq+'</span></button>'+
       '</div>';
@@ -1994,6 +1998,9 @@
       body=availBodyHtml(inv);
     } else if(view==='requests'){                              // Requests: student asks awaiting the teacher's OK (Approve / Deny inline)
       body=requestsBodyHtml(pend);
+    } else if(view==='overdue'){                               // Overdue: out past the return time; contact-forward rows (student cell + period + due time to call)
+      body=odCall.length ? '<div class="tb-odlist">'+odCall.map(function(c){ return queueRow(c,'call'); }).join('')+'</div>'
+        : '<div class="tb-grid"><div class="tb-empty">Nothing overdue right now.</div></div>';
     } else {
       var groups=[]; active.forEach(function(c){ var its=lineItemsFor(c,view,isT); if(its.length) groups.push({c:c,items:its}); });
       total=groups.reduce(function(n,g){ return n+bundleLineCount(g.items); },0);
@@ -2033,8 +2040,8 @@
         '<div class="tb-simplesec sim-out"><div class="tb-simplehd"><span>Hand out</span>'+markAll+'</div>'+gridFor(out,'out')+'</div>'+
         '<div class="tb-simplesec sim-in"><div class="tb-simplehd"><span>Check in</span></div>'+gridFor(chk,'in')+'</div>';
     } else {
-      el.innerHTML=head+queues+toggle+
-        ((view==='avail'||view==='requests') ? body
+      el.innerHTML=head+toggle+
+        ((view==='avail'||view==='requests'||view==='overdue') ? body
           : ((isT?cartTallyHtml():'')+search+body+bulk));
     }
     el.querySelectorAll('[data-tbview]').forEach(function(b){ b.onclick=function(){ var v=b.getAttribute('data-tbview'); if(v!==TBVIEW){ TBVIEW=v; _lastTBSig=null; renderTodayBoard(); } }; });
