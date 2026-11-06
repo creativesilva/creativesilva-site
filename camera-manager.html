@@ -364,6 +364,8 @@
   .tbq-main{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:9px;}
   .tbq-name{min-width:0;color:#eef4f4;font-size:.9rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .tbq-per{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.04em;font-size:.72rem;color:var(--teal-lt);background:rgba(0,184,184,.16);border:1px solid rgba(0,184,184,.5);padding:2px 8px;}
+  .tbq-tel{flex:0 0 auto;min-width:118px;font-variant-numeric:tabular-nums;font-weight:700;font-size:.92rem;color:#eaf3f3;letter-spacing:.01em;white-space:nowrap;}
+  .tbq-tel.none{color:var(--faint);font-weight:600;font-size:.78rem;}
   .tbq-when{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;line-height:1.12;min-width:98px;}
   .tbq-wlab{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.56rem;color:var(--faint);}
   .tbq-wval{font-weight:700;font-size:.94rem;white-space:nowrap;}
@@ -376,7 +378,7 @@
   .tbq-row .til-chev{flex:0 0 auto;color:var(--faint);font-size:1.1rem;}
   @media (max-width:640px){
     .tbq-row{flex-wrap:wrap;}
-    .tbq-main{flex:1 1 90px;} .tbq-when{min-width:0;}
+    .tbq-main{flex:1 1 90px;} .tbq-when{min-width:0;} .tbq-tel{min-width:0;}
     .tbq-acts{flex:1 1 100%;order:6;justify-content:flex-start;margin-top:4px;}
     .tbq-row .til-chev{display:none;}
   }
@@ -1857,19 +1859,23 @@
     if(kind==='call'){ if((c.due||'')<t) return {lab:'Due', val:fmtDoWMD(c.due)}; var rt=govTime(c,'return_time'); return {lab:'Due', val:(rt?fmtTime12(rt):'today')}; }
     if((c.out||'')<t) return {lab:'Reserved', val:fmtDoWMD(c.out)};
     var pt=govTime(c,'pickup_time'); return {lab:'Pickup', val:(pt?fmtTime12(pt):'today')}; }
+  // Student cell shown right on the row so the teacher can dial from a desk phone without opening the card.
+  function fmtPhone(s){ var d=String(s||'').replace(/\D/g,''); if(d.length===11 && d.charAt(0)==='1') d=d.slice(1); if(d.length===10) return '('+d.slice(0,3)+') '+d.slice(3,6)+'-'+d.slice(6); return String(s||''); }
   function queueRow(c, kind){
     var cell=String(c.student_cell||'').replace(/\D/g,'');
     var shown=resvItems(c).filter(function(it){ return kind==='call' ? (statusOf(it)==='out'&&isOverdue(it)) : statusOf(it)!=='returned'; });
     var big=shown.map(function(it){ return esc(itemBig(it)).toUpperCase(); }).join(' <i>&middot;</i> ') || esc(String(c.camera||gearLabel(c.item)||'').toUpperCase());
     var dotCls=(kind==='call'?'overdue':'reserved'), wp=whenParts(c,kind);
     var per=c.period?'<span class="tbq-per">P'+esc(c.period)+'</span>':'';
-    // Overdue: no Call/Text (the teacher already knows to reach out); the row opens the reservation, which holds the numbers.
+    var telHtml=cell ? '<span class="tbq-tel">'+esc(fmtPhone(c.student_cell))+'</span>' : '<span class="tbq-tel none">No cell</span>';
+    // Overdue: no Call/Text (the teacher already knows to reach out, and dials the number on the row from a desk phone).
     // Missed pickup: Text the no-show, or Return the unit to stock.
     var actsHtml=(kind==='call') ? '' :
       '<span class="tbq-acts">'+(cell?'<a class="tbq-act text" href="sms:'+cell+'" data-stop="1">Text</a>':'')+'<button type="button" class="tbq-act stock" data-questock="'+esc(c.id)+'">Return to stock</button></span>';
     return '<div class="tbq-row" data-resvopen="'+esc(c.id)+'" role="button" tabindex="0"><span class="tbq-dot '+dotCls+'"></span>'+
       '<span class="tbq-big">'+big+'</span>'+
       '<span class="tbq-main"><span class="tbq-name">'+esc(nameOf(c))+'</span>'+per+'</span>'+
+      telHtml+
       '<span class="tbq-when"><span class="tbq-wlab">'+esc(wp.lab)+'</span><span class="tbq-wval">'+esc(wp.val)+'</span></span>'+
       actsHtml+'<span class="til-chev">&#8250;</span></div>'; }
   function queueHtml(list, kind){ if(!list.length) return '';
