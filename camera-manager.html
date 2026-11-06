@@ -137,7 +137,9 @@
   .tb-proj{font-size:.68rem;color:#ffb28a;letter-spacing:.04em;text-transform:uppercase;}
   @media (max-width:760px){ .tb-cols{grid-template-columns:1fr;} .tb-colbody{max-height:none;} }
   /* ===== Full-width 3-view board: Outgoing (gold) / Incoming (teal) / Checked out (orange) ===== */
-  .tb-toggle{display:flex;width:100%;border:1px solid var(--line-soft);margin-bottom:12px;}
+  /* Safari-style browser tabs: a row of rounded-top tabs sitting on the content pane's top line; the active
+     tab is filled with its accent and dips over the line to connect, inactive tabs are recessed. (Chris 2026-11-06) */
+  .tb-toggle{display:flex;gap:4px;width:100%;align-items:flex-end;border-bottom:2px solid var(--line-soft);margin-bottom:14px;}
   /* Simple view (Garcia): a Full/Simple toggle + two stacked sections (Hand out / Check in). */
   .tb-simple-tg{margin-left:auto;background:rgba(0,184,184,.12);border:1px solid var(--line-soft);color:var(--teal-lt);font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.6rem;padding:6px 12px;cursor:pointer;white-space:nowrap;}
   .tb-simple-tg.on{background:var(--teal);border-color:var(--teal);color:#04110f;}
@@ -146,8 +148,8 @@
   .tb-simplehd{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.74rem;padding:2px 2px 8px;margin-bottom:4px;border-bottom:1px solid var(--line-soft);}
   .sim-out .tb-simplehd{color:#ffd166;} .sim-in .tb-simplehd{color:var(--teal-lt);}
   .tb-simplehd .tb-pickall{margin:0;}
-  .tb-tg{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;font-family:var(--font);font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:.84rem;padding:13px 10px;background:rgba(255,255,255,.015);border:0;border-right:1px solid var(--line-soft);cursor:pointer;transition:background .15s,color .15s;}
-  .tb-tg:last-child{border-right:0;}
+  .tb-tg{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;font-family:var(--font);font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:.84rem;padding:12px 10px;background:rgba(255,255,255,.02);border:1px solid var(--line-soft);border-bottom:0;border-radius:9px 9px 0 0;color:inherit;cursor:pointer;opacity:.6;transition:background .15s,color .15s,opacity .15s;}
+  .tb-tg.on{opacity:1;position:relative;z-index:2;margin-bottom:-2px;}
   .tb-tg.out{color:#ffd889;} .tb-tg.in{color:#8ff7f7;} .tb-tg.checked{color:#ffb380;}
   .tb-tg:hover:not(.on){background:rgba(255,255,255,.05);}
   .tb-tgn{font-family:var(--font);font-weight:700;font-size:.72rem;padding:1px 8px;background:rgba(255,255,255,.1);color:var(--text);}
@@ -604,6 +606,46 @@
   .meta.dates{color:var(--text);font-weight:600;}
 
   .histwrap{margin-top:8px;}
+  /* ===== Hamburger menu + console view switching (Board / Manage Equipment / Returned History / Event History). Chris 2026-11-06 ===== */
+  .cm-hamb{position:relative;flex:0 0 auto;}
+  .cm-hambbtn{width:42px;height:42px;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(255,255,255,.04);border:1px solid var(--line-soft);cursor:pointer;}
+  .cm-hambbtn span{display:block;width:18px;height:2px;background:var(--teal);transition:background .15s;}
+  .cm-hambbtn:hover{background:rgba(0,184,184,.12);border-color:var(--teal);}
+  .cm-hambbtn.on{background:var(--teal);border-color:var(--teal);} .cm-hambbtn.on span{background:#04110f;}
+  .cm-hambmenu{position:absolute;top:calc(100% + 6px);left:0;z-index:95;min-width:234px;background:#07171a;border:1px solid var(--line);box-shadow:0 18px 44px -14px rgba(0,0,0,.72);padding:7px;display:flex;flex-direction:column;gap:2px;}
+  .cm-hambmenu[hidden]{display:none;}
+  .cm-hambitem{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:transparent;border:0;color:var(--text);font-family:var(--font);font-size:.92rem;padding:10px 12px;cursor:pointer;}
+  .cm-hambitem:hover{background:rgba(0,184,184,.12);color:#fff;}
+  .cm-hambitem.on{background:rgba(0,184,184,.2);color:#fff;}
+  .cm-hambitem .cmh-ic{flex:0 0 auto;width:18px;text-align:center;color:var(--teal);font-size:.95rem;}
+  .cmh-sep{height:1px;background:var(--line-soft);margin:4px 2px;}
+  .cview-back{display:flex;align-items:center;gap:14px;margin:2px 0 12px;padding:10px 14px;background:rgba(0,184,184,.06);border:1px solid var(--line-soft);border-left:3px solid var(--teal);}
+  .cview-back[hidden]{display:none;}
+  .cview-backbtn{background:rgba(255,255,255,.05);border:1px solid var(--line-soft);color:var(--teal);font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.76rem;padding:8px 14px;cursor:pointer;}
+  .cview-backbtn:hover{background:var(--teal);color:#04110f;}
+  .cview-title{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.9rem;color:#fff;}
+  .wrap.cview-board .manage-hub,.wrap.cview-board .histwrap,.wrap.cview-board #eventsView{display:none;}
+  .wrap.cview-manage #todayBoard,.wrap.cview-manage #calbox,.wrap.cview-manage .wallet-hub,.wrap.cview-manage .histwrap,.wrap.cview-manage #eventsView{display:none;}
+  .wrap.cview-history #todayBoard,.wrap.cview-history #calbox,.wrap.cview-history #board,.wrap.cview-history #eventsView{display:none;}
+  .wrap.cview-events #todayBoard,.wrap.cview-events #calbox,.wrap.cview-events #board,.wrap.cview-events .histwrap{display:none;}
+  .eventsview{margin-top:8px;} .eventsview[hidden]{display:none;}
+  .wrap.cview-events #eventsView{display:block;}   /* events view: reveal the log (beats the default [hidden]) */
+  .ev-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 4px 12px;border-bottom:1px solid var(--line-soft);margin-bottom:8px;}
+  .ev-headtx{display:flex;flex-direction:column;gap:2px;}
+  .ev-code{font-family:var(--font);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:.62rem;color:var(--teal);}
+  .ev-title{font-family:var(--font);font-weight:700;letter-spacing:.03em;font-size:1.2rem;color:#fff;}
+  .ev-headmeta{display:flex;align-items:center;gap:12px;}
+  .ev-sub{color:var(--faint);font-size:.78rem;}
+  .ev-list{display:flex;flex-direction:column;}
+  .ev-row{display:flex;align-items:baseline;gap:12px;padding:9px 6px;border-top:1px solid rgba(255,255,255,.05);}
+  .ev-row:first-child{border-top:0;}
+  .ev-when{flex:0 0 auto;min-width:122px;color:var(--faint);font-size:.76rem;font-variant-numeric:tabular-nums;}
+  .ev-act{flex:0 0 auto;min-width:96px;font-family:var(--font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.72rem;}
+  .ev-act.pickup{color:#ffd889;} .ev-act.return{color:#8ff7f7;} .ev-act.cancel{color:#ff9a8a;} .ev-act.reserve{color:#86e0a6;} .ev-act.edit{color:#d9ccff;} .ev-act.lock{color:#ff9a8a;} .ev-act.other{color:var(--text);}
+  .ev-desc{flex:1 1 auto;min-width:0;color:var(--text);font-size:.9rem;}
+  .ev-who{flex:0 0 auto;color:var(--faint);font-size:.76rem;}
+  .ev-empty{color:var(--faint);padding:18px 6px;}
+  @media (max-width:640px){ .ev-row{flex-wrap:wrap;gap:3px 10px;} .ev-when{min-width:0;flex-basis:100%;order:3;} .ev-desc{flex-basis:100%;order:4;} }
   .hist{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;max-height:280px;overflow-y:auto;padding-right:4px;}
   .hist::-webkit-scrollbar{width:8px;} .hist::-webkit-scrollbar-thumb{background:rgba(0,184,184,.35);} .hist::-webkit-scrollbar-track{background:rgba(0,0,0,.2);}
   .histbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
@@ -1172,6 +1214,18 @@
 
   <div class="status-strip">
     <div class="summary">
+      <!-- Hamburger menu: switches the console between the Board (tabs) and the occasional-reference views
+           (Manage Equipment, Returned History, Event History). Wallet + Calendar stay on the Board. (Chris 2026-11-06) -->
+      <div class="cm-hamb">
+        <button type="button" class="cm-hambbtn" id="cmHambBtn" aria-haspopup="true" aria-expanded="false" aria-label="Menu"><span></span><span></span><span></span></button>
+        <div class="cm-hambmenu" id="cmHambMenu" hidden>
+          <button type="button" class="cm-hambitem" data-cview="board"><span class="cmh-ic">&#9632;</span>Board</button>
+          <div class="cmh-sep"></div>
+          <button type="button" class="cm-hambitem" data-cview="manage"><span class="cmh-ic">&#9636;</span>Manage Equipment</button>
+          <button type="button" class="cm-hambitem" data-cview="history"><span class="cmh-ic">&#8617;</span>Returned History</button>
+          <button type="button" class="cm-hambitem" data-cview="events"><span class="cmh-ic">&#9202;</span>Event History</button>
+        </div>
+      </div>
       <div id="poolbar" class="poolbar-wrap" role="group" aria-label="Teacher view"></div>
       <div class="summ-metric"><span class="big" id="availn">0</span> <span class="lab">of <span id="totn">18</span> <span id="availunit">cameras</span> available <span id="availday">today</span></span></div>
       <div class="summ-right">
@@ -1199,6 +1253,11 @@
     </div>
     <span class="stu-barmsg" id="stuBarMsg"></span>
   </div>
+  <!-- Back bar: shown only in the hamburger views (Manage Equipment / Returned History / Event History). -->
+  <div class="cview-back" id="cviewBack" hidden>
+    <button type="button" class="cview-backbtn" id="cviewBackBtn">&#8592;&nbsp;Board</button>
+    <span class="cview-title" id="cviewTitle"></span>
+  </div>
   <div id="todayBoard" style="display:none;"></div>
 
   <details class="cbox" id="calbox">
@@ -1221,6 +1280,14 @@
       <div class="hist" id="hist"></div>
       </div>
     </details>
+  </div>
+  <!-- Event History: a pool-scoped rolling log of the last 50 teacher actions (read-only). (Chris 2026-11-06) -->
+  <div class="eventsview" id="eventsView" hidden>
+    <div class="ev-head">
+      <div class="ev-headtx"><span class="ev-code">Audit</span><span class="ev-title">Event History</span></div>
+      <div class="ev-headmeta"><span class="ev-sub" id="evSub"></span><button type="button" class="btn sm" id="evRefresh">Refresh</button></div>
+    </div>
+    <div class="ev-list" id="evList"><span class="foot">Loading&#8230;</span></div>
   </div>
 </div>
 
@@ -1494,6 +1561,33 @@
   function tryInject(n){ if(injectHeader()||n<=0) return; setTimeout(function(){ tryInject(n-1); },40); }
   // Close the camera sort dropdown on any click outside it.
   document.addEventListener('click',function(e){ if(!e.target.closest('.camsortdd')){ var o=document.querySelector('.camsortdd.open'); if(o) o.classList.remove('open'); } });
+
+  // ===== Hamburger menu: switch the console between Board / Manage Equipment / Returned History / Event History (Chris 2026-11-06) =====
+  var CVIEW_TITLES={board:'Board',manage:'Manage Equipment',history:'Returned History',events:'Event History'};
+  function mainWrap(){ var tb=document.getElementById('todayBoard'); return tb?tb.closest('.wrap'):document.querySelector('.wrap'); }
+  function setCView(v){ if(!CVIEW_TITLES[v]) v='board'; var w=mainWrap(); if(!w) return;
+    w.classList.remove('cview-board','cview-manage','cview-history','cview-events'); w.classList.add('cview-'+v);
+    var back=document.getElementById('cviewBack'), bt=document.getElementById('cviewTitle');
+    if(back) back.hidden=(v==='board'); if(bt) bt.textContent=CVIEW_TITLES[v]||'';
+    document.querySelectorAll('.cm-hambitem').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-cview')===v); });
+    if(v==='manage'){ setSecOpen('manage',true); var mh=document.querySelector('.manage-hub'); if(mh) mh.classList.add('open'); }
+    if(v==='history'){ var hb=document.getElementById('histbox'); if(hb) hb.open=true; }
+    if(v==='events'){ if(typeof loadEvents==='function') loadEvents(); else { var el=document.getElementById('evList'); if(el) el.innerHTML='<div class="ev-empty">Setting up&#8230;</div>'; } }
+    if(v!=='board'){ try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); } }
+  }
+  (function(){
+    var hb=document.getElementById('cmHambBtn'), hm=document.getElementById('cmHambMenu');
+    if(hb && hm){
+      hb.onclick=function(e){ e.stopPropagation(); var willOpen=hm.hidden; hm.hidden=!willOpen; hb.setAttribute('aria-expanded', willOpen?'true':'false'); hb.classList.toggle('on', willOpen); };
+      hm.addEventListener('click', function(e){ var it=e.target.closest('.cm-hambitem'); if(it){ setCView(it.getAttribute('data-cview')); hm.hidden=true; hb.setAttribute('aria-expanded','false'); hb.classList.remove('on'); } });
+      document.addEventListener('click', function(e){ if(!hm.hidden && !e.target.closest('.cm-hamb')){ hm.hidden=true; hb.setAttribute('aria-expanded','false'); hb.classList.remove('on'); } });
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !hm.hidden){ hm.hidden=true; hb.setAttribute('aria-expanded','false'); hb.classList.remove('on'); } });
+    }
+    var bb=document.getElementById('cviewBackBtn'); if(bb) bb.onclick=function(){ setCView('board'); };
+    var er=document.getElementById('evRefresh'); if(er) er.onclick=function(){ loadEvents(); };
+    setCView('board');   // always boot on the Board; the daily flow is primary
+  })();
+
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ tryInject(60); }); else tryInject(60);
 
   // ---- helpers ----
@@ -1952,8 +2046,8 @@
   function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
     var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), chk=checkedOutFor();
     var SIMPLE=isSimple();                                                       // Garcia-friendly stripped board (toggle in the header)
-    var odCall=isT?overdueCallResvs():[], miss=isT?missedPickupResvs():[];        // the two always-on action queues
-    if(isT) out=out.filter(function(c){ return !isMissedPickup(c); });            // missed pickups are elevated to the queue above, not repeated in Outgoing
+    var odCall=overdueCallResvs(), miss=isT?missedPickupResvs():[];               // odCall feeds the Overdue tab (full view) + Garcia's simple queue
+    if(isT && SIMPLE) out=out.filter(function(c){ return !isMissedPickup(c); });  // simple view lifts missed pickups into its queue; the full board keeps them in Outgoing
     var pend=pendingGroups();                                                   // student requests awaiting the teacher's OK
     function countLines(resvs,mode){ return resvs.reduce(function(n,c){ return n+bundleLineCount(lineItemsFor(c,mode,isT)); },0); }
     // Build the card grid for one list + mode (reused by the full view and by the simple view's two sections).
@@ -1962,7 +2056,8 @@
       if(!groups.length){ var em=mode==='out'?('Nothing to hand out '+(isT?'today':'that day')+'.'):'Nothing checked out right now.'; return '<div class="tb-grid"><div class="tb-empty">'+em+'</div></div>'; }
       return '<div class="tb-grid view-'+mode+'">'+groups.map(function(g){ var od=(mode==='in'&&g.items.some(isOverdue)); return '<div class="tb-bundle'+(od?' tb-od':'')+'">'+renderBundle(g.c,g.items,mode,true)+'</div>'; }).join('')+'</div>'; }
     var nOut=countLines(out,'out'), nIn=countLines(chk,'in'), nReq=pend.length;
-    var view=(TBVIEW==='in'||TBVIEW==='avail'||TBVIEW==='requests')?TBVIEW:'out';
+    var nOverdue=odCall.reduce(function(n,c){ return n+resvItems(c).filter(isOverdue).length; },0);   // Overdue tab count
+    var view=(TBVIEW==='in'||TBVIEW==='overdue'||TBVIEW==='avail'||TBVIEW==='requests')?TBVIEW:'out';
     var inv=(view==='avail')?availInventory():null, availCameras=availCountOnDay(todayISO());
     var active=(view==='out')?out:(view==='in'?chk:[]), q=TBQ[view]||'', selMode=TBSEL[view];
     active=active.slice().sort(tbSortCmp);                      // default: camera-kit number order (a-la-carte after); or by last name
@@ -1971,7 +2066,7 @@
     function listSig(resvs,mode){ return resvs.map(function(c){ return c.id+':'+resvStatusGroup(c)+':'+lineItemsFor(c,mode,isT).map(function(x){return (x.camera||x.item)+itemState(x);}).join('.'); }).join(','); }
     var invSig=inv?inv.map(function(r){ return r.key+r.avail+'/'+r.total+':'+r.units.map(function(u){return u.state+(u.rec?('~'+(u.rec.student_id||u.rec.student_name||'')):'');}).join('.'); }).join('|'):'';
     var qSig='|call'+odCall.map(function(c){return c.id+resvStatusGroup(c);}).join('.')+'|miss'+miss.map(function(c){return c.id;}).join('.');
-    var sig=(SIMPLE?'SIMPLE':view)+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+qSig+'|n'+nOut+'.'+nIn+'.'+nReq+'|'+(SIMPLE?('so'+listSig(out,'out')+'|sc'+listSig(chk,'in')):listSig(active,view))+'|req'+pend.map(function(g){return g[0].id;}).join('.')+'|av'+(TBAVOPEN||'')+'|'+invSig;
+    var sig=(SIMPLE?'SIMPLE':view)+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+qSig+'|n'+nOut+'.'+nIn+'.'+nOverdue+'.'+nReq+'|'+(SIMPLE?('so'+listSig(out,'out')+'|sc'+listSig(chk,'in')):listSig(active,view))+'|req'+pend.map(function(g){return g[0].id;}).join('.')+'|av'+(TBAVOPEN||'')+'|'+invSig;
     if(sig===_lastTBSig && el.innerHTML) return; _lastTBSig=sig;
     // ----- header: title + help + day stepper (Outgoing/Incoming only; Checked out + Available are "right now") -----
     var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY));
@@ -1982,9 +2077,10 @@
     // ----- view toggle: Outgoing (gold) / Incoming (teal) / Available (green) / Requests (purple). Overdue is no
     //       longer a tab; it leads the board as the Call queue above, so it is seen from every tab. -----
     function tg(k,label,cnt){ return '<button type="button" class="tb-tg '+k+(view===k?' on':'')+'" data-tbview="'+k+'">'+label+' <span class="tb-tgn">'+cnt+'</span></button>'; }
-    var toggle='<div class="tb-toggle">'+
+    var toggle='<div class="tb-toggle" role="tablist">'+
       tg('out','Outgoing',nOut)+
       tg('in','Incoming',nIn)+
+      '<button type="button" class="tb-tg overdue'+(view==='overdue'?' on':'')+(nOverdue>0?' hot':'')+'" data-tbview="overdue">Overdue <span class="tb-tgn'+(nOverdue>0?' tb-tgn-od':'')+'">'+nOverdue+'</span></button>'+
       tg('avail','Available',availCameras)+
       '<button type="button" class="tb-tg requests'+(view==='requests'?' on':'')+(nReq>0?' hot':'')+'" data-tbview="requests">Requests <span class="tb-tgn'+(nReq>0?' tb-tgn-req':'')+'">'+nReq+'</span></button>'+
       '</div>';
@@ -1994,6 +2090,9 @@
       body=availBodyHtml(inv);
     } else if(view==='requests'){                              // Requests: student asks awaiting the teacher's OK (Approve / Deny inline)
       body=requestsBodyHtml(pend);
+    } else if(view==='overdue'){                               // Overdue: out past the return time; contact-forward rows (student cell + period + due time to call)
+      body=odCall.length ? '<div class="tb-odlist">'+odCall.map(function(c){ return queueRow(c,'call'); }).join('')+'</div>'
+        : '<div class="tb-grid"><div class="tb-empty">Nothing overdue right now.</div></div>';
     } else {
       var groups=[]; active.forEach(function(c){ var its=lineItemsFor(c,view,isT); if(its.length) groups.push({c:c,items:its}); });
       total=groups.reduce(function(n,g){ return n+bundleLineCount(g.items); },0);
@@ -2033,8 +2132,8 @@
         '<div class="tb-simplesec sim-out"><div class="tb-simplehd"><span>Hand out</span>'+markAll+'</div>'+gridFor(out,'out')+'</div>'+
         '<div class="tb-simplesec sim-in"><div class="tb-simplehd"><span>Check in</span></div>'+gridFor(chk,'in')+'</div>';
     } else {
-      el.innerHTML=head+queues+toggle+
-        ((view==='avail'||view==='requests') ? body
+      el.innerHTML=head+toggle+
+        ((view==='avail'||view==='requests'||view==='overdue') ? body
           : ((isT?cartTallyHtml():'')+search+body+bulk));
     }
     el.querySelectorAll('[data-tbview]').forEach(function(b){ b.onclick=function(){ var v=b.getAttribute('data-tbview'); if(v!==TBVIEW){ TBVIEW=v; _lastTBSig=null; renderTodayBoard(); } }; });
@@ -2562,7 +2661,42 @@
       if(String(dd)==='permanent'){ until='permanent'; } else { var n=parseInt(dd,10)||0; if(n>0){ var d=new Date(); d.setDate(d.getDate()+n); until=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); } }
       var bs=until?{banned:true,permanent:(until==='permanent'),until:until,days_left:(until==='permanent'?null:(parseInt(dd,10)||0))}:{banned:false};
       return Promise.resolve({ok:true,status:200,json:function(){ return Promise.resolve({ok:true,ban:bs}); }}); }
+    else if(path.indexOf('/events')>=0){ return Promise.resolve({ok:true,status:200,json:function(){ return Promise.resolve({events: demoEvents()}); }}); }
     return Promise.resolve({ok:true,status:200,json:function(){ return Promise.resolve({ok:true}); }});
+  }
+  // Synthetic audit events for the ?demo=1 preview (so the Event History view is viewable without the backend).
+  function demoEvents(){ var now=Math.floor(Date.now()/1000);
+    return [
+      {t:now-90,   pool:SELECTED_POOL, action:'pickup',  item:'CAM 02',   student:'Guerrero, Jayden', detail:''},
+      {t:now-480,  pool:SELECTED_POOL, action:'return',  item:'CAM 11',   student:'Reyes, Liam',      detail:''},
+      {t:now-1500, pool:SELECTED_POOL, action:'edit',    item:'CAM 06',   student:'Jimenez, Diego',   detail:'out 2026-11-06 due 2026-11-09'},
+      {t:now-2600, pool:SELECTED_POOL, action:'delete',  item:'Tripod 4', student:'Cole, Maya',       detail:''},
+      {t:now-6200, pool:SELECTED_POOL, action:'lock',    item:'',         student:'Park, Noah',       detail:'until 2026-11-21'},
+      {t:now-91000,pool:SELECTED_POOL, action:'reserve', item:'CAM 09',   student:'Mendoza, Sofia',   detail:''}
+    ];
+  }
+  // ---- Event History (hamburger view): a read-only rolling log of console actions for the selected pool. ----
+  function evActLabel(a){ return {pickup:'Picked up',return:'Returned',reserve:'Reserved',edit:'Edited',delete:'Canceled',lock:'Locked',unlock:'Unlocked'}[a] || (a?a.charAt(0).toUpperCase()+a.slice(1):'Action'); }
+  function evWhen(t){ try{ var d=new Date((t||0)*1000), now=new Date();
+      var tm=d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+      if(d.toDateString()===now.toDateString()) return 'Today '+tm;
+      var y=new Date(now); y.setDate(now.getDate()-1); if(d.toDateString()===y.toDateString()) return 'Yesterday '+tm;
+      return d.toLocaleDateString([], {month:'short',day:'numeric'})+' '+tm; }catch(e){ return ''; } }
+  function renderEvents(evs){ var host=document.getElementById('evList'); if(!host) return;
+    var sub=document.getElementById('evSub'); if(sub) sub.textContent=(evs&&evs.length)?(evs.length+' most recent'):'';
+    if(!evs||!evs.length){ host.innerHTML='<div class="ev-empty">No actions logged yet. Hand out, return, edit, cancel, or lock a reservation and it shows up here.</div>'; return; }
+    host.innerHTML=evs.map(function(e){ var a=String(e.action||'other').toLowerCase();
+      var cls={pickup:'pickup',return:'return',reserve:'reserve',edit:'edit',delete:'cancel',lock:'lock',unlock:'lock'}[a]||'other';
+      var item=e.item?('<b>'+esc(e.item)+'</b>'):'';
+      var who=e.student?('<span class="ev-who">'+esc(e.student)+'</span>'):'';
+      var detail=e.detail?(' <span class="ev-who">'+esc(e.detail)+'</span>'):'';
+      return '<div class="ev-row"><span class="ev-when">'+esc(evWhen(e.t))+'</span><span class="ev-act '+cls+'">'+esc(evActLabel(a))+'</span><span class="ev-desc">'+item+((item&&who)?' &middot; ':'')+who+detail+'</span></div>'; }).join('');
+  }
+  function loadEvents(){ var host=document.getElementById('evList'); if(host) host.innerHTML='<span class="foot">Loading&#8230;</span>';
+    camAPI('/api/camera/events?pool='+encodeURIComponent(SELECTED_POOL),{cache:'no-store'})
+      .then(function(r){ return r.json(); })
+      .then(function(d){ renderEvents((d&&d.events)||[]); })
+      .catch(function(){ var h=document.getElementById('evList'); if(h) h.innerHTML='<div class="ev-empty">Could not load the event history. Try Refresh.</div>'; });
   }
   // Synthetic reservations for the ?demo=1 preview: multi-item bundles, an overdue pickup, a due-back
   // set, and a stale 'out' that duplicates a camera, so every new workflow has data to show.

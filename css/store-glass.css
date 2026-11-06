@@ -255,7 +255,7 @@ body{overflow-x:clip;}
 #signinOv #siStep1 h2{font-size:1.6rem;margin-bottom:6px;background:linear-gradient(92deg,#ffffff 0%,#c9fbf4 50%,#3ff0e0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;}
 .gate-top{position:relative;display:flex;justify-content:center;margin:4px 0 14px;}
 .gate-logo{width:68px;height:68px;object-fit:contain;filter:drop-shadow(0 8px 20px rgba(0,0,0,.5));}
-.gate-lang{position:absolute;top:-6px;right:-4px;}
+.gate-lang{position:absolute;top:0;right:0;}   /* the round globe sits tucked in the card's top-right corner */
 .gate-help{margin-top:16px;font-size:.8rem;color:var(--g-faint);text-align:center;text-wrap:balance;}
 .gate-help a{color:var(--g-teal-lt);font-weight:600;white-space:nowrap;}   /* the phone number never splits */
 .si-back{display:block;margin:12px auto 0;padding:8px 12px;background:none;border:0;color:var(--g-teal-lt);font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;}
