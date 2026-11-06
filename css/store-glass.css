@@ -326,12 +326,13 @@ body{overflow-x:clip;}
   .catn[data-cat="accessories"] .catn-ic{--ic:url('/assets/Icons/store/accessories-dock-v2.png');}
   .catn[data-cat="accessories"].is-stylus .catn-ic{--ic:url('/assets/Icons/store/stylus-dock-v2.png');}
 
-  /* products fit ABOVE the dock: JS measures --card-fit-h (screen - dock - first row top - 12px); the photo takes the extra height */
+  /* Mobile product cards: natural height with a SQUARE photo (Chris 2026-11-05: do NOT stretch the tiles to
+     fill the space above the dock, it looks elongated). --card-fit-h is no longer used. */
   .products{padding:14px 0 24px;}
   .prod-head{margin-bottom:12px;font-size:1.05rem;}
-  .prod-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:14px;column-gap:10px;}   /* row 2 starts just below the dock edge */
-  .prod{padding:9px;gap:6px;border-radius:var(--g-r-md);height:var(--card-fit-h,auto);}
-  .prod-img{border-radius:var(--g-r-sm);flex:1 1 auto;aspect-ratio:auto;min-height:100px;}
+  .prod-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:14px;column-gap:10px;}
+  .prod{padding:9px;gap:6px;border-radius:var(--g-r-md);height:auto;}
+  .prod-img{border-radius:var(--g-r-sm);aspect-ratio:1/1;}
   .prod-name{font-size:.98rem;line-height:1.08;min-height:calc(2 * 1.08em);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:0;}   /* row lock: 2 lines reserved */
   .prod-stock{margin:4px 0 2px;font-size:.72rem;}
   .prod-details{margin:0 0 6px;font-size:.74rem;}
