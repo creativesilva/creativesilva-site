@@ -67,7 +67,8 @@
       { name: 'Elements of Art',      url: '/curriculum/shared/digarts1-elements-of-art-overview.html' },
       { name: 'Character Design: Form & Color', url: '/curriculum/shared/digarts1-character-form-color-overview.html' },
       { name: 'Vector Character Design', url: '/curriculum/shared/digarts1-get-to-know-illustrator-overview.html' },
-      { name: 'Design a Sticker', url: '/curriculum/shared/digarts1-make-your-mark-overview.html' }
+      { name: 'Design a Sticker', url: '/curriculum/shared/digarts1-make-your-mark-overview.html' },
+      { name: 'Cereal Box Group Project', url: '/curriculum/shared/digarts1-cereal-box-overview.html' }
     ]},
     { course: 'Photography 1A', modules: [
       { name: 'Self-Portrait',            url: '/curriculum/shared/photo1-self-portrait-overview.html' },
@@ -260,6 +261,13 @@
     ['/curriculum/shared/digarts1-make-your-mark-overview.html',
      '/curriculum/shared/digarts1-make-your-mark-step01-make-your-word.html',
      '/curriculum/shared/digarts1-make-your-mark-step02-reflection.html'],
+    ['/curriculum/shared/digarts1-cereal-box-overview.html',
+     '/curriculum/shared/digarts1-cereal-box-step02-research.html',
+     '/curriculum/shared/digarts1-cereal-box-step03-design-choices.html',
+     '/curriculum/shared/digarts1-cereal-box-step04-concept-sketch.html',
+     '/curriculum/shared/digarts1-cereal-box-step05-digital-design.html',
+     '/curriculum/shared/digarts1-cereal-box-step06-social-media.html',
+     '/curriculum/shared/digarts1-cereal-box-step07-reflection.html'],
     ['/curriculum/photo1/photo1a-home.html',
      '/curriculum/photo1/photo1a-course-overview.html',
      '/curriculum/photo1/photo1a-syllabus.html'],
