@@ -339,6 +339,9 @@
   .mconf{display:none;margin:-4px 0 13px;padding:8px 10px;border:1px solid rgba(224,64,58,.5);border-left:3px solid var(--red);background:rgba(224,64,58,.12);color:#ffb3aa;font-size:.8rem;line-height:1.38;}
   .mconf.show{display:block;}
   .mconf.free{border-color:rgba(63,168,99,.5);border-left-color:var(--ok);background:rgba(63,168,99,.12);color:#8ff0b0;}
+  .mconf.solve{border-color:rgba(245,179,1,.5);border-left-color:var(--gold);background:rgba(245,179,1,.12);color:#ffd98a;}   /* a one-press fix is available */
+  .mconf b{color:#fff;}
+  .mconf-note{color:var(--faint);font-size:.72rem;}
   .req-card{border:1px solid var(--surface-bd);border-left:3px solid #8b5cf6;background:rgba(0,0,0,.26);padding:11px 12px;margin-bottom:10px;}
   .req-top{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px;}
   .req-who{font-weight:600;color:#fff;font-size:.92rem;}
@@ -3836,21 +3839,81 @@
   // Live multi-day / double-book guard for the Edit modal: recomputes on every date, camera or gear
   // change. Red + Save disabled on any clash (hard stop, Chris 2026-11-02); a quiet green line
   // confirms a clear multi-day extend. The backend re-checks too (defense in depth).
-  function edCheckConflicts(){
-    var box=document.getElementById('ed-conf'), save=document.getElementById('ed-save');
-    if(!box) return;
-    var c=findRec(edId); if(!c){ box.className='mconf'; box.textContent=''; if(save) save.disabled=false; return; }
+  // ===== Conflict resolution (Chris 2026-11-06): when an extend/edit clashes, try to auto-resolve instead
+  //       of just blocking: bump a FUTURE (not-yet-picked-up) holder to a free same-model/type unit, or drop
+  //       an attachable item and keep the rest. One confirm applies the fix AND the edit. Never overbooks. =====
+  var edPlan=null;
+  function edFreeAltFor(hit){                                   // a free same-model camera / same-type unit for THIS holder's own dates
+    var ho=hit.out||'', hd=hit.due||ho, hgid=hit.group||hit.id;
+    if(hit.kind==='equipment'){ var t=(gearUnit(hit.item)||{}).type;
+      var cands=gearPoolIds().filter(function(id){ var u=gearUnit(id); return u&&u.type===t&&id!==hit.item&&!assetOf(id).oos&&!spanConflicts(id,'equipment',ho,hd,hgid).length; });
+      cands.sort(function(a,b){ return (parseInt(eqNum(a),10)||0)-(parseInt(eqNum(b),10)||0); }); return cands[0]||null; }
+    var m=camModel(hit.camera);
+    var cc=viewCams().filter(function(cm){ return camModel(cm)===m&&cm!==hit.camera&&!isOOS(cm)&&!spanConflicts(cm,'camera',ho,hd,hgid).length; });
+    cc.sort(function(a,b){ return (parseInt(eqNum(a),10)||0)-(parseInt(eqNum(b),10)||0); }); return cc[0]||null;
+  }
+  function edResolve(u, hits){
+    var moves=[], canSwap=true;                                 // SWAP: every holder must be a future reservation with a free alternative
+    for(var i=0;i<hits.length;i++){ var h=hits[i];
+      if(statusOf(h)!=='reserved'){ canSwap=false; break; }     // already picked up: cannot bump
+      var alt=edFreeAltFor(h); if(!alt){ canSwap=false; break; }
+      moves.push({hit:h, alt:alt}); }
+    if(canSwap && hits.length) return {type:'swap', moves:moves};
+    if(u.kind==='equipment' && edGearState && edGearState[u.unit] && edGearState[u.unit].on) return {type:'drop', unit:u.unit};
+    return {type:'none'};
+  }
+  function edConflictPlan(){
+    var c=findRec(edId); if(!c) return {conflicts:[], allResolvable:true};
     var out=document.getElementById('ed-out').value, due=document.getElementById('ed-due').value, gid=c.group||c.id;
-    function fail(msg){ box.className='mconf show'; box.textContent=msg; if(save) save.disabled=true; }
-    function ok(msg){ box.className='mconf'+(msg?' show free':''); box.textContent=msg||''; if(save) save.disabled=false; }
-    if(!out||!due){ ok(''); return; }
-    if(due<out){ fail('The return date must be after the checkout date.'); return; }
+    if(!out||!due||due<out) return {conflicts:[], allResolvable:true};
     var units=[];
     if(c.kind==='equipment'){ units.push({unit:c.item, kind:'equipment'}); }
-    else { var cam=edCamDD?edCamDD.value():c.camera; if(cam) units.push({unit:cam, kind:'camera'});
+    else { if(edSelCam) units.push({unit:edSelCam, kind:'camera'});
       if(edGearState) Object.keys(edGearState).forEach(function(id){ if(edGearState[id]&&edGearState[id].on) units.push({unit:id, kind:'equipment'}); }); }
-    for(var i=0;i<units.length;i++){ var u=units[i], hit=spanConflicts(u.unit,u.kind,out,due,gid);
-      if(hit.length){ var label=(u.kind==='equipment'?gearLabel(u.unit):u.unit); fail(label+' is already booked. '+conflictSummary(hit)+' Pick another'+(u.kind==='equipment'?' unit':' camera')+' or a shorter return.'); return; } }
+    var conflicts=[];
+    units.forEach(function(u){ var hits=spanConflicts(u.unit,u.kind,out,due,gid); if(!hits.length) return;
+      conflicts.push({unit:u.unit, kind:u.kind, label:(u.kind==='equipment'?gearLabel(u.unit):u.unit), hits:hits, res:edResolve(u, hits)}); });
+    return {conflicts:conflicts, allResolvable:conflicts.length>0 && conflicts.every(function(x){ return x.res.type!=='none'; })};
+  }
+  function edApplyPlan(plan){                                   // runs on Save: bump holders (server-side), mark drops locally
+    var ops=[];
+    plan.conflicts.forEach(function(cf){
+      if(cf.res.type==='swap'){ cf.res.moves.forEach(function(mv){
+        var body=(mv.hit.kind==='equipment')?{id:mv.hit.id, item:mv.alt}:{id:mv.hit.id, camera:mv.alt};
+        ops.push(camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(body)})
+          .then(function(r){ if(!r.ok) return r.json().then(function(j){ throw new Error((j&&j.error)||'Could not reassign '+nameOf(mv.hit)+'.'); }); })); });
+      } else if(cf.res.type==='drop'){ if(edGearState&&edGearState[cf.unit]) edGearState[cf.unit].on=false; }
+    });
+    return Promise.all(ops);
+  }
+  function edCheckConflicts(){
+    var box=document.getElementById('ed-conf'), save=document.getElementById('ed-save');
+    if(!box) return; edPlan=null;
+    var c=findRec(edId); if(!c){ box.className='mconf'; box.textContent=''; if(save){ save.disabled=false; save.textContent='Save changes'; } return; }
+    var out=document.getElementById('ed-out').value, due=document.getElementById('ed-due').value;
+    function fail(msg){ box.className='mconf show'; box.innerHTML=msg; if(save){ save.disabled=true; save.textContent='Save changes'; } }
+    function ok(msg){ box.className='mconf'+(msg?' show free':''); box.textContent=msg||''; if(save){ save.disabled=false; save.textContent='Save changes'; } }
+    function solve(msg, btn){ box.className='mconf show solve'; box.innerHTML=msg; if(save){ save.disabled=false; save.textContent=btn; } }
+    if(!out||!due){ ok(''); return; }
+    if(due<out){ fail('The return date must be after the checkout date.'); return; }
+    var plan=edConflictPlan();
+    if(plan.conflicts.length){
+      if(plan.allResolvable){
+        edPlan=plan;
+        var anySwap=false, anyDrop=false;
+        var lines=plan.conflicts.map(function(cf){
+          if(cf.res.type==='swap'){ anySwap=true; return cf.res.moves.map(function(mv){
+            return '<b>'+esc(cf.label)+'</b> is reserved for '+esc(nameOf(mv.hit))+' ('+fmt(mv.hit.out)+'). Move them to '+esc(mv.hit.kind==='equipment'?gearLabel(mv.alt):mv.alt)+'.'; }).join(' '); }
+          anyDrop=true; return '<b>'+esc(cf.label)+'</b> is booked on the return day. '+esc(conflictSummary(cf.hits))+' Drop it and keep the rest.';
+        }).join('<br>');
+        var btn=(anySwap&&!anyDrop)?'Swap & extend':((anyDrop&&!anySwap)?'Drop & extend':'Fix & extend');
+        solve(lines+'<br><span class="mconf-note">One press does this and your edit together.</span>', btn);
+      } else {
+        var bad=plan.conflicts.filter(function(x){ return x.res.type==='none'; })[0];
+        fail('<b>'+esc(bad.label)+'</b> is already booked. '+esc(conflictSummary(bad.hits))+(bad.kind==='camera'?' It is already picked up, so it cannot be moved.':'')+' Pick another'+(bad.kind==='equipment'?' unit':' camera')+' or a shorter return.');
+      }
+      return;
+    }
     var normalDue=(typeof nextSchoolDayISO==='function')?nextSchoolDayISO(out):out;
     ok(due>normalDue ? ('Free the whole time. Multi-day rental, due back '+fmt(due)+'.') : '');
   }
@@ -3859,14 +3922,16 @@
     var pid=edId, c=findRec(pid), gear=edGearState;
     var out=document.getElementById('ed-out').value, due=document.getElementById('ed-due').value;
     edCheckConflicts();
-    if(document.getElementById('ed-save').disabled) return;   // hard stop: a clash is showing
+    if(document.getElementById('ed-save').disabled) return;   // hard stop: an unresolvable clash is showing
+    var plan=edPlan;                                          // resolvable clashes to apply first (bump future holders / drop items)
     var status=edStatusDD?edStatusDD.value():statusOf(c);
     var payload={id:pid, camera:edCamDD?edCamDD.value():c.camera, out:out, due:due, status:status};
     var sid=document.getElementById('ed-sid').value.trim();
     var finalSid=sid||String(c.student_id||'');
     if(sid && sid!==String(c.student_id||'')) payload.student_id=sid;
-    var s=document.getElementById('ed-save'); s.disabled=true; s.textContent='Saving…';
-    camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
+    var s=document.getElementById('ed-save'); s.disabled=true; s.textContent=plan?'Fixing…':'Saving…';
+    (plan?edApplyPlan(plan):Promise.resolve())                // reassign the conflicting future holders first, so the unit is free to extend into
+      .then(function(){ return camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)}); })
       .then(function(r){ if(r.ok) return null; return r.json().then(function(j){ throw new Error((j&&j.error)||'Could not save.'); }); })
       .then(function(){ return applyGear(gear, pid, finalSid, out, due, status); })   // attach / detach gear, kept in sync with this checkout
       .then(function(){ closeEdit(); return loadBoard(); }).then(reloadCal)
