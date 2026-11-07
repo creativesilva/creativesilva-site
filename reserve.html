@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/store.css?v=55" />
-<link rel="stylesheet" href="/css/store-glass.css?v=8" />
+<link rel="stylesheet" href="/css/store-glass.css?v=14" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -202,13 +202,12 @@
       </div>
       <div id="siStep1">
         <h2 id="signinTitle" data-i18n="Equipment Rental">Equipment Rental</h2>
-        <p data-i18n="Sign in with your student number. No password.">Sign in with your student number. No password.</p>
+        <p data-i18n="Sign in with your student number.">Sign in with your student number.</p>
         <div class="field"><label for="sid" data-i18n="Student number">Student number</label><input type="text" id="sid" inputmode="numeric" autocomplete="off" placeholder="e.g. 123456" data-i18n-ph="k_sid_ph" /></div>
         <div class="sheet-msg" id="signinMsg"></div>
         <button type="button" class="btn block" id="signinGo" data-i18n="Sign in">Sign in</button>
       </div>
       <div id="siStep2" style="display:none">
-        <h2 data-i18n="Is this you?">Is this you?</h2>
         <p id="siWho"></p>
         <div class="field"><label for="siSc" data-i18n="Your cell">Your cell</label><input type="tel" id="siSc" inputmode="numeric" autocomplete="off" placeholder="805-555-1234" /></div>
         <div class="field"><label for="siPg" data-i18n="Parent or guardian name">Parent or guardian name</label><input type="text" id="siPg" autocomplete="off" placeholder="First and last name" data-i18n-ph="First and last name" /></div>
@@ -364,7 +363,7 @@
     'Need help?':'¿Necesitas ayuda?','Not you? Try another number.':'¿No eres tú? Prueba otro número.',
     'Checkout':'Recoges','Return':'Regresas','Days':'Días','Tap to set times':'Toca para elegir horas','Set at checkout':'Se elige al recoger',
     // --- guide ---
-    'Sign in':'Inicia sesión','Type your student number. No password needed.':'Escribe tu número de estudiante. No necesitas contraseña.',
+    'Sign in':'Inicia sesión','Type your student number.':'Escribe tu número de estudiante.',
     'Pick your dates':'Elige tus fechas','Choose the day you pick up and the day you bring it back.':'Escoge el día que lo recoges y el día que lo regresas.',
     'Add your gear':'Agrega tu equipo','Tap a camera or item to put it in your bag.':'Toca una cámara o un artículo para ponerlo en tu bolsa.',
     'Add gear':'Agregar equipo','Open bag':'Abrir bolsa',
@@ -374,7 +373,7 @@
     'You are signed in. Now pick your dates.':'Iniciaste sesión. Ahora elige tus fechas.',
     'OK. Pick your dates and gear, then send the request to Mr. Silva.':'Listo. Elige tus fechas y equipo, luego envía la solicitud al Sr. Silva.',
     // --- sign-in ---
-    'Sign in with your student number. No password.':'Inicia sesión con tu número de estudiante. Sin contraseña.',
+    'Sign in with your student number.':'Inicia sesión con tu número de estudiante.',
     'Student number':'Número de estudiante','Is this you?':'¿Eres tú?','Your cell':'Tu celular',
     'Parent or guardian name':'Nombre del padre o tutor','Parent or guardian cell':'Celular del padre o tutor',
     'First and last name':'Nombre y apellido','k_thatsme':'Soy yo · continuar',
@@ -812,7 +811,7 @@
       var dc=detailContentHtml(pickerItem);
       body.innerHTML='<button type="button" class="pk-back" id="pkDBack">&lsaquo; '+tf('Back to %s', esc(t((CATS[pickerCat]&&CATS[pickerCat].label)||'list')))+'</button>'+dc.html+
         (dc.free?'<button type="button" class="btn block" id="pkDAdd">'+t('Add to bag')+'</button>':'<button type="button" class="btn block" disabled>'+t('None free for your dates')+'</button>');
-      wireUnitChips(body);
+      wireUnitWheel(body);
       document.getElementById('pkDBack').onclick=function(){ pickerItem=null; renderPicker(); };
       var pa=document.getElementById('pkDAdd'); if(pa) pa.onclick=function(){ var nm=pickerItem; if(detailUnit){ PICK[nm]=detailUnit; savePick(); } pickerItem=null; renderPicker(); addToBag(nm); };
       return;
@@ -1060,16 +1059,24 @@
     var all=allUnitsFor(it), free=freeUnitsFor(it)||[], freeSet={}; free.forEach(function(u){ freeSet[u]=1; });
     detailUnit = (PICK[name] && freeSet[PICK[name]]) ? PICK[name] : (free[0]||null);
     var selLab = camsFor(name) ? t('Pick your camera number') : t('Pick a unit number');
-    var chips = all.map(function(u){ var busy=!freeSet[u]; return '<button type="button" class="unit-chip'+(busy?' busy':'')+(u===detailUnit?' on':'')+'"'+(busy?' disabled aria-disabled="true"':' data-u="'+esc(u)+'"')+'>'+esc(unitNum(it,u))+'</button>'; }).join('');
-    var selector = all.length ? ('<div class="unit-pick"><div class="unit-pick-lab">'+selLab+(free.length?'':t(' &middot; none free for your dates'))+'</div><div class="unit-chips">'+chips+'</div></div>') : '';
+    // iOS UIPickerView pattern: a vertical drum wheel of only the FREE numbers (no greyed clutter), selected one centered.
+    var items = free.map(function(u){ return '<div class="uw-item'+(u===detailUnit?' on':'')+'" data-u="'+esc(u)+'">'+esc(unitNum(it,u))+'</div>'; }).join('');
+    var wheel = free.length ? ('<div class="uw"><div class="uw-scroll" data-uw><div class="uw-pad"></div>'+items+'<div class="uw-pad"></div></div><div class="uw-sel" aria-hidden="true"></div></div>') : '';
+    var selector = all.length ? ('<div class="unit-pick"><div class="unit-pick-lab">'+selLab+(free.length?'':t(' &middot; none free for your dates'))+'</div>'+wheel+'</div>') : '';
     // Specs live in a collapsed accordion (tap to expand) so the card stays compact and the picker + Add button show without scrolling.
     var specAcc = (sp && rows) ? '<details class="spec-acc"><summary class="spec-sum"><span class="bar"></span><span>'+t('Specs')+'</span><span class="hiw-chev" aria-hidden="true"></span></summary><div class="spec-list">'+rows+'</div></details>' : '';
     return { html: img+'<h2 class="detail-title">'+esc(name)+'</h2>'+(sp?'<p class="detail-blurb">'+t(sp.blurb)+'</p>':'')+specAcc+selector, free: free.length };
   }
-  function wireUnitChips(scope){
-    scope.querySelectorAll('.unit-chip[data-u]').forEach(function(b){ b.onclick=function(){
-      detailUnit=b.getAttribute('data-u');
-      scope.querySelectorAll('.unit-chip').forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on'); }; });
+  function wireUnitWheel(scope){
+    var sc=scope.querySelector('[data-uw]'); if(!sc) return;
+    function centered(){ var r=sc.getBoundingClientRect(), cy=r.top+r.height/2, best=null, bd=1e9;
+      sc.querySelectorAll('.uw-item').forEach(function(it){ var ir=it.getBoundingClientRect(), d=Math.abs((ir.top+ir.height/2)-cy); if(d<bd){ bd=d; best=it; } }); return best; }
+    function mark(){ var b=centered(); sc.querySelectorAll('.uw-item').forEach(function(it){ it.classList.toggle('on', it===b); }); if(b) detailUnit=b.getAttribute('data-u'); return b; }
+    var realign=false;
+    sc.querySelectorAll('.uw-item').forEach(function(it){ it.onclick=function(){ realign=true; it.scrollIntoView({block:'center',behavior:'smooth'}); clearTimeout(sc._t); sc._t=setTimeout(function(){ realign=false; mark(); },260); }; });
+    sc.onscroll=function(){ if(realign) return; clearTimeout(sc._t); sc._t=setTimeout(mark,80); };
+    var want=sc.querySelector('.uw-item[data-u="'+String(detailUnit||'').replace(/["\\]/g,'')+'"]')||sc.querySelector('.uw-item');
+    setTimeout(function(){ if(want) want.scrollIntoView({block:'center'}); setTimeout(mark,60); },20);
   }
   // fromBag: opened from the Equipment Bag to change a unit -> Save updates the unit and returns to the bag.
   // fromCalDay: opened from the calendar day panel (day already chosen) -> Add skips the day-picker step.
@@ -1079,7 +1086,7 @@
     var addBtn = c.free ? '<button type="button" class="btn block" id="detailAdd">'+(fromBag?t('Save this one'):t('Add to bag'))+'</button>'
                         : '<button type="button" class="btn block" disabled>'+t('None free for your dates')+'</button>';
     var bd=document.getElementById('detailBody'); bd.innerHTML=c.html+addBtn;
-    wireUnitChips(bd);
+    wireUnitWheel(bd);
     var ab=document.getElementById('detailAdd'); if(ab) ab.onclick=function(){
       if(detailUnit){ PICK[name]=detailUnit; savePick(); }
       var rb=detailReturnToBag; detailReturnToBag=false; close('detailOv');
@@ -1465,7 +1472,7 @@
                                  : (inbag+' item'+(inbag>1?'s':'')+' in your bag. Open it to reserve.'))
                   : t('Tap a camera or item to put it in your bag.');
     var steps=[
-      {n:1,done:s1,title:t('Sign in'),sub:t('Type your student number. No password needed.'),cta:t('Sign in')},
+      {n:1,done:s1,title:t('Sign in'),sub:t('Type your student number.'),cta:t('Sign in')},
       {n:2,done:s2,title:t('Pick your dates'),sub:t('Choose the day you pick up and the day you bring it back.'),cta:t('Pick dates')},
       {n:3,done:s3,title:t('Add your gear'),sub:sub3,cta:(s3?t('Open bag'):t('Add gear'))}
     ];

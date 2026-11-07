@@ -265,7 +265,16 @@ body{overflow-x:clip;}
 .hiw-sum{border-radius:var(--g-r-md);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);box-shadow:var(--g-spec);padding:12px 16px;min-height:var(--g-ctrl-h);font-size:1rem;}
 .store-foot{background:rgba(5,10,24,.34);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--g-edge-soft);}
 .foot-link:hover{color:var(--g-teal-lt);}
-.toast{border-radius:var(--g-r-pill);background:var(--sheet-glass), linear-gradient(rgba(8,16,36,.82),rgba(8,16,36,.82));border:1px solid var(--g-edge);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);}
+/* Popups are centered frosted-glass TILES (rounded rectangle, not a bottom bubble), per Chris 2026-11-06.
+   The TILE ITSELF is frosted glass: its own backdrop-filter blurs only what is directly behind the tile,
+   NOT the whole screen (Chris 2026-11-06: "I just wanted the pop up tile blurred like frosted glass not
+   the entire screen"). Semi-translucent fill so the frosted content reads through it. */
+.toast{border-radius:var(--g-r-lg);top:50%;bottom:auto;left:50%;transform:translate(-50%,-50%) scale(.95);
+  min-width:min(280px,76vw);max-width:min(420px,88vw);padding:18px 26px;font-size:1rem;line-height:1.45;
+  background:linear-gradient(155deg,rgba(26,36,60,.60),rgba(14,20,40,.66));border:1px solid var(--g-edge);
+  backdrop-filter:blur(30px) saturate(1.4);-webkit-backdrop-filter:blur(30px) saturate(1.4);
+  box-shadow:var(--g-shadow-lg), var(--g-spec-strong);}
+.toast.show{transform:translate(-50%,-50%) scale(1);}
 
 /* ---------- iPad portrait + narrow laptops (721-1000px): search + EN/ES get their own header row, and the
    four tiles sit in one row above a full-width date panel (side by side would crush the date panel's text) ---------- */
@@ -349,10 +358,28 @@ body{overflow-x:clip;}
   .prod .btn{height:38px;font-size:.7rem;padding:0 8px;letter-spacing:.03em;line-height:1.1;}   /* "Agregar a la bolsa" fits one line from 360px up */
 }
 
+/* ---------- unit / number drum wheel (iOS UIPickerView): a vertical scroll of the FREE numbers only,
+   selected one centered, like the Photo Walk log + the Equipment Manager card. No grid, no wasted space. ---------- */
+.unit-pick{text-align:center;}
+.unit-pick-lab{text-align:center;}
+.uw{position:relative;height:150px;max-width:150px;margin:2px auto 0;}
+.uw-scroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 26%,#000 74%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 26%,#000 74%,transparent 100%);}
+.uw-scroll::-webkit-scrollbar{display:none;width:0;height:0;}
+.uw-pad{height:53px;flex:0 0 auto;}
+.uw-item{height:44px;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:700;font-size:1.5rem;letter-spacing:.02em;color:var(--g-faint);cursor:pointer;transition:color .14s,transform .14s;font-variant-numeric:tabular-nums;user-select:none;}
+.uw-item.on{color:var(--g-teal-lt);transform:scale(1.14);}
+.uw-sel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:100%;height:46px;border-radius:var(--g-r-md);background:rgba(0,184,184,.10);border:1px solid var(--g-edge);box-shadow:var(--g-spec);pointer-events:none;}
+
+/* ---------- product tiles: center the content (mobile + desktop), per Chris 2026-11-06 ---------- */
+.prod{align-items:center;text-align:center;}
+.prod-name{text-align:center;}
+.prod-details{align-self:center;}
+
 /* ---------- accessibility fallbacks ---------- */
 @media (prefers-reduced-motion:reduce){ .galaxy-mesh,.galaxy-glow{animation:none;} }
 @media (prefers-reduced-transparency:reduce){
   .galaxy-mesh,.galaxy-glow{display:none;}
   .store-nav,.sheet,.prod,.catn,.hero-top .datebar,.navmenu,.toast{backdrop-filter:none;-webkit-backdrop-filter:none;}
-  .sheet,.navmenu{background:rgba(9,20,40,.97);}
+  .sheet,.navmenu,.toast{background:rgba(9,20,40,.97);}
 }

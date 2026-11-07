@@ -31,22 +31,81 @@
      Render backend as the Command Center, so every change syncs in real time. */
   :root{
     --teal:#00b8b8; --teal-lt:#5ff0f0; --teal-deep:#007474;
-    --text:#eafeff; --muted:rgba(206,244,244,0.66); --faint:rgba(206,244,244,0.42);
-    --line:rgba(255,255,255,0.09); --line-soft:rgba(255,255,255,0.06);
-    --ok:#3fa863; --orange:#ff6b1a; --gold:#f5b301; --red:#e0403a; --grayed:rgba(160,180,180,0.34);
-    /* Store-matched frosted-white glass card surface + its border (replaces the old teal-tint panel). */
-    --surface:linear-gradient(160deg,rgba(255,255,255,0.055) 0%,rgba(255,255,255,0.015) 100%); --surface-bd:rgba(255,255,255,0.09);
-    --panel:linear-gradient(160deg,rgba(255,255,255,0.055) 0%,rgba(255,255,255,0.015) 100%);
+    --ok:#3fa863; --orange:#ff6b1a; --gold:#f5b301; --red:#ff7a7a; --grayed:rgba(160,180,180,0.34);
+    /* ===== Silva Glass framework tokens (SILVA_GLASS_FRAMEWORK.md §1, Nebula Teal). Equipment Manager reskin 2026-11-06. ===== */
+    --g-ink:#050816; --g-ink-2:#0a1d36;
+    --g-teal:#00b8b8; --g-teal-lt:#5ff0f0; --g-teal-deep:#007474;
+    --g-nebula:#00b2b2; --g-teal-glow:#3ff0e0; --g-horizon:#2ee6d6; --g-indigo:#4e54d6; --g-violet:#7b5cff; --g-pink:#e58ff5;
+    --g-text:#f3fbff; --g-muted:rgba(222,240,250,.82); --g-faint:rgba(205,226,240,.62);
+    --g-edge:rgba(150,235,245,.30); --g-edge-soft:rgba(150,225,245,.17);
+    --g-warn:#f5b301; --g-ok:#3fa863; --g-danger:#ff7a7a;
+    --g-r-pill:999px; --g-r-lg:20px; --g-r-md:14px; --g-r-sm:10px;
+    --g-ctrl-h:48px; --g-ctrl-h-sm:42px;
+    --g-blur:blur(20px) saturate(150%); --g-blur-heavy:blur(28px) saturate(150%);
+    --g-glass:radial-gradient(125% 86% at 14% -10%, rgba(225,252,255,.20), transparent 54%), linear-gradient(160deg, rgba(0,184,184,.16), rgba(96,84,230,.10) 58%, rgba(8,16,40,.22));
+    --g-glass-quiet:radial-gradient(125% 86% at 14% -10%, rgba(225,252,255,.13), transparent 54%), linear-gradient(160deg, rgba(0,184,184,.11), rgba(96,84,230,.07) 58%, rgba(8,16,40,.16));
+    --g-primary:linear-gradient(135deg, var(--g-teal-lt), var(--g-teal));
+    --g-spec:inset 0 1px 0 rgba(230,252,255,.36);
+    --g-spec-strong:inset 0 2px 0 rgba(230,252,255,.62), inset 1px 0 0 rgba(190,245,255,.22), inset -1px 0 0 rgba(0,0,0,.24), inset 0 -1px 0 rgba(0,0,0,.36);
+    --g-shadow-sm:0 6px 16px rgba(0,0,0,.24); --g-shadow:0 12px 30px rgba(0,0,0,.34); --g-shadow-lg:0 18px 54px rgba(0,0,0,.5);
+    --g-glow:0 0 18px 2px rgba(95,240,240,.4), 0 0 30px 6px rgba(132,80,226,.22);
+    --g-s1:4px; --g-s2:8px; --g-s3:12px; --g-s4:16px; --g-s5:22px; --g-s6:32px;
+    /* Legacy vars remapped onto the glass system so existing surfaces inherit the reskin. */
+    --text:var(--g-text); --muted:var(--g-muted); --faint:var(--g-faint);
+    --line:var(--g-edge-soft); --line-soft:rgba(150,225,245,.10);
+    --surface:var(--g-glass); --surface-bd:var(--g-edge); --panel:var(--g-glass);
+    --rollover:rgba(0,184,184,.22);
+    /* Glass framework type tokens (were referenced but never defined -> the title fell back to the system font). */
+    --g-font:'Oswald',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+    --g-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     --font:'Oswald',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
     --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   }
-  *{box-sizing:border-box;border-radius:0 !important;}
+  *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   /* Installed web-app feel: no sideways scroll or rubber-band bounce (pinch-zoom is off via the viewport meta). */
   html,body{overflow-x:hidden;overscroll-behavior-x:none;max-width:100%;}
-  body{background-color:#0a0d0d;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;}
-  /* Match the student reservation store: a teal radial glow rising from the bottom-right over the black base. */
-  body::before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse 100% 60% at 92% 106%, rgba(0,116,116,.30) 0%, rgba(0,116,116,.10) 40%, transparent 66%);}
+  body{background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);background-attachment:fixed;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;}
+  /* ===== Galaxy backdrop (Silva Glass, the AI Studio v1.9 / student-store Nebula Teal recipe, verbatim) ===== */
+  .galaxy{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);}
+  .galaxy-mesh{position:absolute;inset:-25%;filter:blur(40px) saturate(150%) brightness(1.1);mix-blend-mode:screen;will-change:transform;transform:translateZ(0);
+    background:
+      radial-gradient(30% 22% at 29% 29%, rgba(0,184,184,.85), transparent 68%),
+      radial-gradient(18% 13% at 72% 24%, rgba(229,143,245,.46), transparent 72%),
+      radial-gradient(24% 18% at 75% 25%, rgba(78,84,214,.70), transparent 70%),
+      radial-gradient(20% 18% at 81% 45%, rgba(123,92,255,.60), transparent 72%),
+      radial-gradient(24% 19% at 79% 55%, rgba(229,143,245,.62), transparent 72%),
+      radial-gradient(34% 24% at 48% 47%, rgba(0,138,146,.70), transparent 70%),
+      radial-gradient(18% 13% at 31% 74%, rgba(229,143,245,.42), transparent 72%),
+      radial-gradient(22% 18% at 22% 58%, rgba(63,240,224,.50), transparent 72%),
+      radial-gradient(28% 22% at 66% 69%, rgba(25,211,197,.62), transparent 72%),
+      radial-gradient(22% 16% at 29% 75%, rgba(96,84,230,.48), transparent 72%),
+      radial-gradient(56% 14% at 50% 84%, rgba(46,230,214,.80), transparent 70%),
+      radial-gradient(30% 7% at 50% 83.5%, rgba(214,255,250,.60), transparent 72%);
+    animation:galaxyDrift 34s ease-in-out infinite alternate;}
+  .galaxy-glow{position:absolute;inset:0;mix-blend-mode:screen;filter:blur(1.5px);will-change:opacity;
+    background:
+      radial-gradient(48px 48px at 18% 12%, rgba(120,255,240,.44), transparent 68%),
+      radial-gradient(44px 44px at 86% 13%, rgba(214,165,250,.42), transparent 68%),
+      radial-gradient(48px 48px at 94% 52%, rgba(240,170,250,.50), transparent 68%),
+      radial-gradient(38px 38px at 16% 84%, rgba(236,160,250,.32), transparent 68%),
+      radial-gradient(9px 9px at 24% 23%, rgba(230,255,252,.95), transparent 64%),
+      radial-gradient(6px 6px at 69% 15%, rgba(232,205,255,.9), transparent 64%),
+      radial-gradient(7px 7px at 86% 44%, rgba(242,196,255,.92), transparent 64%),
+      radial-gradient(6px 6px at 80% 26%, rgba(245,200,255,.9), transparent 64%),
+      radial-gradient(6px 6px at 39% 64%, rgba(170,255,245,.9), transparent 64%),
+      radial-gradient(9px 9px at 58% 86%, rgba(200,255,248,.92), transparent 64%),
+      radial-gradient(5px 5px at 12% 70%, rgba(212,226,255,.86), transparent 64%),
+      radial-gradient(6px 6px at 92% 78%, rgba(150,255,240,.88), transparent 64%),
+      radial-gradient(3px 3px at 33% 40%, rgba(255,255,255,.9), transparent 64%),
+      radial-gradient(3px 3px at 77% 33%, rgba(255,255,255,.86), transparent 64%),
+      radial-gradient(2px 2px at 52% 52%, rgba(255,255,255,.8), transparent 64%),
+      radial-gradient(3px 3px at 8% 34%, rgba(255,255,255,.82), transparent 64%);
+    animation:galaxyGlow 6s ease-in-out infinite alternate;}
+  @keyframes galaxyDrift{from{transform:translate3d(-2%,-1%,0) scale(1);}to{transform:translate3d(3%,2%,0) scale(1.08);}}
+  @keyframes galaxyGlow{from{opacity:.6}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){ .galaxy-mesh,.galaxy-glow{animation:none;} }
+  @media (prefers-reduced-transparency:reduce){ .galaxy-mesh,.galaxy-glow{display:none;} body{background:#07122a;} }
 
   .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;filter:brightness(0) invert(1);}
 
@@ -230,7 +289,7 @@
   @keyframes tbOdPulse{0%,100%{box-shadow:0 0 0 0 rgba(224,64,58,0);}50%{box-shadow:0 0 0 3px rgba(224,64,58,.38);}}
   .tb-grid .tb-empty{grid-column:1 / -1;padding:10px 2px;}
   @media (prefers-reduced-motion:reduce){ .tb-grid .tb-bundle.tb-od{animation:none;box-shadow:0 0 0 2px rgba(224,64,58,.45);} }
-  @media (max-width:760px){ .tb-grid{grid-template-columns:1fr;max-height:none;} }
+  @media (max-width:760px){ .tb-grid{grid-template-columns:1fr !important;grid-auto-flow:row !important;grid-template-rows:auto !important;max-height:none;} }
   .tb-row{display:flex;align-items:stretch;gap:10px;min-height:56px;padding:8px 11px;border:1px solid var(--line-soft);border-left:3px solid var(--muted);background:rgba(255,255,255,.025);}
   .tb-row.rr-out{border-left-color:var(--orange);} .tb-row.rr-reserved{border-left-color:var(--gold);} .tb-row.rr-returned{border-left-color:var(--ok);}
   .tb-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:5px;}
@@ -253,7 +312,7 @@
   .tb-sin{width:100%;box-sizing:border-box;background:rgba(0,0,0,.3);border:1px solid var(--line-soft);color:var(--text);font-family:var(--body);font-size:.84rem;padding:7px 30px 7px 10px;}
   .tb-sin::placeholder{color:var(--faint);} .tb-sin:focus{outline:none;border-color:#00b8b8;}
   .tb-sx{position:absolute;right:13px;top:11px;background:none;border:0;color:var(--muted);font-size:1.2rem;line-height:1;cursor:pointer;padding:0 4px;}
-  .tb-bundle{display:flex;flex-direction:column;gap:2px;border-left:3px solid rgba(0,184,184,.55);}
+  .tb-bundle{display:flex;flex-direction:column;gap:2px;}
   .tb-flat{display:flex;flex-direction:column;gap:6px;}
   .til{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--surface-bd);border-left:0;padding:9px 11px;min-height:50px;cursor:pointer;color:var(--text);font-family:var(--body);}
   .til:hover{background:rgba(0,184,184,.08);border-color:rgba(0,184,184,.3);}
@@ -1277,10 +1336,191 @@
   .leads-spring .leads-per-h{color:var(--gold);}
   .leads-srow{display:flex;align-items:center;gap:10px;padding:4px 0;font-size:.82rem;color:var(--muted);}
   .leads-srow .sp{font-size:.56rem;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);white-space:nowrap;}
-  .stu-leadbadge{display:inline-block;margin-top:9px;font-family:var(--font);font-weight:700;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--teal);color:var(--teal-lt);background:rgba(0,184,184,.10);}
+  .stu-leadbadge{display:inline-block;margin-top:9px;font-family:var(--font);font-weight:700;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:var(--g-r-pill);border:1px solid var(--g-edge);color:var(--g-teal-lt);background:rgba(0,184,184,.10);}
+
+  /* =================================================================================================
+     GLASS RESKIN (Silva Glass framework, 2026-11-06). Layered LAST so it wins the cascade, the way
+     store-glass.css layers over store.css. Every surface becomes rounded frosted glass over the galaxy;
+     all 44 left-bar accents become the clean all-around glass edge; tabs/buttons/tiles get the teal
+     rollover. Teal is the only UI hue; amber/green/red stay only as semantic state tints.
+     ================================================================================================= */
+  /* ---- top-level panels: round + glass + drop every left-bar ---- */
+  .summary,.stu-searchbar{border-radius:var(--g-r-lg);border:1px solid var(--g-edge);background:var(--g-glass);box-shadow:var(--g-shadow-sm),var(--g-spec);backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);}
+  .digest{border-radius:var(--g-r-md);border:1px solid var(--g-edge-soft);box-shadow:var(--g-spec);backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);}
+  .digest.overdue-digest{border-color:rgba(255,122,122,.34);}
+  .digest.pending-digest{border-color:rgba(139,92,246,.30);}
+  .camhub,.cbox{border-radius:var(--g-r-lg);border:1px solid var(--g-edge);background:var(--g-glass);box-shadow:var(--g-shadow),var(--g-spec-strong);backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);overflow:hidden;}
+  .camhub-head,.cbox:hover,.cbox[open]{border-color:var(--g-edge);}
+  .cbox[open],.cbox:hover{border-color:var(--g-teal-lt);}
+  .csec{border-radius:var(--g-r-md);border:1px solid var(--g-edge-soft);background:var(--g-glass-quiet);overflow:hidden;}
+  .csec-head{border-left:0;}
+  .av-type{border-radius:var(--g-r-md);border:1px solid var(--g-edge-soft);background:var(--g-glass-quiet);overflow:hidden;}
+  .av-type-head{border-left:0;}
+  .calpanel{border-radius:var(--g-r-md);border:1px solid var(--g-edge);background:rgba(6,14,14,.22);overflow:hidden;}
+  .summary .big{border-radius:var(--g-r-sm);}
+  /* ---- segmented tabs: glass track, active = brighter inset glass pill, teal rollover (no square boxes / underline) ---- */
+  .tb-toggle{border-bottom:0;gap:6px;padding:5px;border-radius:var(--g-r-lg);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);box-shadow:var(--g-spec);backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);align-items:stretch;}
+  .tb-tg{border:0;border-radius:var(--g-r-md);background:transparent;opacity:1;color:var(--g-muted);margin:0 0 0 0;padding:11px 10px;transition:background .16s,color .16s;}
+  .tb-tg:hover:not(.on){background:var(--rollover);color:var(--g-text);}
+  .tb-tg.on{background:var(--g-glass);box-shadow:var(--g-spec),var(--g-shadow-sm);color:var(--g-text);margin-bottom:0;}
+  .tb-tg.out.on{background:linear-gradient(160deg,rgba(245,179,1,.26),rgba(245,179,1,.07));color:#ffd889;}
+  .tb-tg.in.on{background:linear-gradient(160deg,rgba(0,184,184,.28),rgba(0,184,184,.08));color:var(--g-teal-lt);}
+  .tb-tg.checked.on{background:linear-gradient(160deg,rgba(255,107,26,.26),rgba(255,107,26,.07));color:#ffb380;}
+  .tb-tg.overdue.on{background:linear-gradient(160deg,rgba(255,122,122,.28),rgba(255,122,122,.08));color:#ff9a8a;}
+  .tb-tg.avail.on{background:linear-gradient(160deg,rgba(63,168,99,.28),rgba(63,168,99,.08));color:#86e0a6;}
+  .tb-tg.requests.on{background:linear-gradient(160deg,rgba(123,92,255,.28),rgba(123,92,255,.08));color:#c9b8ff;}
+  .tb-toggle .tb-tgn{border-radius:var(--g-r-pill);background:rgba(255,255,255,.14);color:var(--g-text);}
+  .tb-tg.on .tb-tgn{background:rgba(0,0,0,.26);color:#fff;}
+  /* ---- buttons: glass pill at rest, teal rollover (the universal glass action) ---- */
+  .btn{height:var(--g-ctrl-h-sm);border-radius:var(--g-r-pill);background:var(--g-glass);border:1px solid var(--g-edge);color:var(--g-text);box-shadow:var(--g-spec);backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);transition:background .16s,border-color .16s,color .16s,filter .16s;}
+  .btn:hover{background:var(--g-primary);border-color:var(--g-teal-lt);color:#04110f;filter:none;}
+  .btn.sm{height:32px;}
+  .btn.ghost{background:var(--g-glass-quiet);color:var(--g-text);}
+  .btn.warn{background:linear-gradient(135deg,#ffd27a,var(--gold));border-color:var(--gold);color:#2a1e00;}
+  .btn.warn:hover{filter:brightness(1.07);}
+  .btn.danger{background:var(--g-glass-quiet);border-color:rgba(255,122,122,.5);color:#ff9a8a;}
+  .btn.danger:hover{background:rgba(255,122,122,.18);border-color:var(--g-danger);color:#fff;filter:none;}
+  .go{border-radius:var(--g-r-pill);background:var(--g-primary);border:0;color:#04110f;box-shadow:var(--g-shadow-sm),var(--g-spec);}
+  .go:hover{filter:brightness(1.07);}
+  .til-ci,.av-assign{border-radius:var(--g-r-pill);background:var(--g-glass);border:1px solid var(--g-edge);color:var(--g-teal-lt);box-shadow:var(--g-spec);transition:background .16s,color .16s,border-color .16s;}
+  .til-ci:hover,.av-assign:hover{background:var(--g-primary);border-color:var(--g-teal-lt);color:#04110f;filter:none;}
+  /* ---- tiles / rows: rounded glass, teal rollover ---- */
+  .til{position:relative;overflow:hidden;border-radius:var(--g-r-md);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);box-shadow:var(--g-spec);backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);transition:background .16s,border-color .16s;padding-left:17px;}
+  .til:hover{background:var(--rollover);border-color:var(--g-edge);}
+  /* status accent: a rounded highlight hugging the tile's left, clipped to its corner radius (not a line) */
+  .til::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--til-accent,transparent);box-shadow:0 0 13px -1px var(--til-accent,transparent);pointer-events:none;}
+  .til.til-reserved{--til-accent:var(--gold);}
+  .til.til-out{--til-accent:var(--orange);}
+  .til.til-overdue{--til-accent:var(--red);}
+  .til.til-returned{--til-accent:var(--grayed);}
+  .til-dot,.av-u-dot,.csec-dot{border-radius:var(--g-r-pill);}
+  /* ---- inputs: glass, never a flat black box ---- */
+  .stu-searchbar .stu-barin,#stuSearchIn{background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-sm);color:var(--g-text);}
+  .stu-searchbar .stu-barin:focus,#stuSearchIn:focus{border-color:var(--g-teal-lt);}
+  /* ---- chevrons + chips inherit the teal family ---- */
+  .camhub-chev,.cbox-chev,.csec-chev,.av-type-chev{border-color:var(--g-muted);}
+  /* ---- modals: frosted glass sheets over the dim backdrop (the reservation card + every pop-out) ---- */
+  .mpanel{background:var(--g-glass),linear-gradient(rgba(10,16,30,.5),rgba(10,16,30,.5));border:1px solid var(--g-edge);border-radius:var(--g-r-lg);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);}
+  #editmodal .mpanel{background:var(--g-glass),linear-gradient(rgba(10,16,30,.5),rgba(10,16,30,.5));border:1px solid var(--g-edge) !important;border-radius:var(--g-r-lg) !important;box-shadow:var(--g-shadow-lg),var(--g-spec-strong);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);}
+  .eds-grp{background:var(--g-glass-quiet);border-color:var(--g-edge-soft);}
+  .eds-ic{background:rgba(150,225,245,.12);}
+  .eds-datebtn,.eds-dcell .dp-trig{background:rgba(0,184,184,.16);}
+  .mdd-btn{border-radius:var(--g-r-sm);background:var(--g-glass-quiet);border-color:var(--g-edge-soft);}
+  .mdd-menu{border-radius:var(--g-r-md);background:linear-gradient(160deg,rgba(23,31,47,.99),rgba(11,17,31,.995));border-color:var(--g-edge);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);}
+  .mdd-opt{border-radius:var(--g-r-sm);}
+  /* ---- header title: the store's gradient galaxy text (white -> teal-light), at the console's own size ---- */
+  .cmtitle-g{background:linear-gradient(92deg,#ffffff 0%,#c9fbf4 42%,#3ff0e0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;}
+  /* ---- dropdown menus (hamburger + Tools): glass panels, rounded, teal rollover items ---- */
+  .cm-hambbtn{border-radius:var(--g-r-sm);background:var(--g-glass-quiet);border-color:var(--g-edge-soft);}
+  .cm-hambbtn span{background:var(--g-teal-lt);}
+  .cm-hambbtn:hover{background:var(--rollover);border-color:var(--g-teal-lt);}
+  .cm-hambbtn.on{background:var(--g-primary);border-color:var(--g-teal-lt);} .cm-hambbtn.on span{background:#04110f;}
+  .cm-hambmenu{border-radius:var(--g-r-md);background:linear-gradient(160deg,rgba(23,31,47,.99),rgba(11,17,31,.995));border-color:var(--g-edge);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);}
+  .cm-hambitem{border-radius:var(--g-r-sm);}
+  .cm-hambitem:hover{background:var(--rollover);}
+  .cm-hambitem.on{background:rgba(0,184,184,.22);}
+  .cm-hambitem .cmh-ic{color:var(--g-teal-lt);}
+  .cm-toolsmenu{border-radius:var(--g-r-md);background:linear-gradient(160deg,rgba(23,31,47,.99),rgba(11,17,31,.995));border-color:var(--g-edge);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);padding:7px;}
+  .cm-toolitem{border-radius:var(--g-r-sm);}
+  .cm-toolitem:hover{background:var(--rollover);}
+  /* ---- iOS 26 nav-bar header: hamburger + PV crest leading, title + count-subtitle principal, clock trailing ---- */
+  .cmnav{display:flex;align-items:center;gap:16px;padding:12px 22px;position:relative;z-index:60;}
+  .cmnav-lead{display:flex;align-items:center;gap:12px;flex:0 0 auto;}
+  .cmnav .cm-hamb{position:relative;}
+  .cmnav .cm-hambmenu{z-index:160;top:calc(100% + 8px);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);}
+  .cmnav-logo{width:clamp(44px,5.2vw,56px);height:auto;display:block;filter:drop-shadow(0 2px 7px rgba(0,0,0,.42));}
+  .cmnav-title{flex:1 1 auto;min-width:0;text-align:center;}
+  .cmnav-eyebrow{font-family:var(--g-font);font-weight:700;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--g-faint);margin-bottom:5px;}
+  .cmnav-h1{font-size:clamp(17pt,3.7vw,22pt);line-height:1.06;}
+  .cmnav-h1 .cmtitle-g{font-family:var(--g-font);font-weight:700;letter-spacing:.01em;}
+  .cmnav-sub{margin-top:7px;font-family:var(--body);font-weight:600;font-size:.82rem;letter-spacing:.02em;color:var(--g-muted);}
+  .cmnav-sub .sync{color:var(--g-faint);} .cmnav-sub .sync b{color:var(--ok);}
+  .cmnav-counthold{display:none;}
+  .summary.cmctrl .cmctrl-refresh{margin-left:auto;}
+  .cmnav-trail{flex:0 0 auto;display:flex;justify-content:flex-end;align-items:center;}
+  .summary.cmctrl{gap:10px 16px;padding:11px 16px;}
+  @media (max-width:720px){
+    .cmnav{flex-wrap:wrap;justify-content:center;gap:10px 14px;padding:12px 14px;}
+    .cmnav-title{flex:1 1 100%;order:3;}
+    .cmnav-trail{order:2;margin-left:auto;}
+  }
+  /* ---- reservations bar: title left, student search CENTERED, Simple/Full toggle right ---- */
+  .tb-head{align-items:center;gap:10px 14px;position:relative;}
+  .tb-head .tb-title{flex:0 0 auto;}
+  .tb-search{flex:1 1 auto;display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;position:relative;}
+  .tb-search .stu-barin{flex:0 1 460px;min-width:0;height:40px;background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-pill);color:var(--g-text);font-family:var(--body);font-size:.92rem;padding:0 16px;box-shadow:var(--g-spec);backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);}
+  .tb-search .stu-barin::placeholder{color:var(--g-faint);}
+  .tb-search .stu-barin:focus{outline:none;border-color:var(--g-teal-lt);}
+  .tb-search .stu-bargo{flex:0 0 auto;width:40px;height:40px;border-radius:var(--g-r-pill);background:rgba(0,184,184,.2);border:1px solid var(--g-edge);color:#fff;font-size:1.02rem;line-height:1;cursor:pointer;box-shadow:var(--g-spec);transition:background .15s,color .15s;}
+  .tb-search .stu-bargo:hover{background:var(--g-primary);color:#04110f;}
+  .tb-search .stu-barmsg{position:absolute;top:calc(100% + 7px);left:0;right:0;text-align:center;font-size:.8rem;color:var(--g-warn);z-index:4;}
+  .tb-search .stu-barmsg:empty{display:none;}
+  .tb-simple-tg{flex:0 0 auto;}
+  @media (max-width:760px){ .tb-search{order:3;flex:1 1 100%;} .tb-search .stu-barin{flex:1 1 auto;} }
+  /* ---- sort: a sliders-icon pull-down (glass), far left of the control row ---- */
+  .tb-sortmenu{position:relative;flex:0 0 auto;}
+  .tb-sorticon{width:38px;height:38px;border-radius:var(--g-r-pill);background:var(--g-glass);border:1px solid var(--g-edge);color:var(--g-text);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--g-spec);transition:background .15s,color .15s;}
+  .tb-sorticon:hover{background:var(--g-primary);color:#04110f;}
+  .tb-sortpop{position:absolute;top:calc(100% + 6px);left:0;z-index:40;min-width:196px;background:linear-gradient(160deg,rgba(23,31,47,.99),rgba(11,17,31,.995));border:1px solid var(--g-edge);border-radius:var(--g-r-md);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);padding:6px;}
+  .tb-sortpop[hidden]{display:none;}
+  .tb-sortpop-h{font-family:var(--g-font);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.56rem;color:var(--g-faint);padding:5px 10px 6px;}
+  .tb-sortopt{display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;background:transparent;border:0;color:var(--g-text);font-family:var(--body);font-size:.9rem;padding:9px 11px;border-radius:var(--g-r-sm);cursor:pointer;}
+  .tb-sortopt:hover{background:var(--rollover);}
+  .tb-sortopt.on{color:var(--g-teal-lt);}
+  .tb-sortopt.on::after{content:"\2713";font-weight:700;}
+  .tb-ctlrow{display:flex;align-items:center;gap:10px;}
+  .tb-ctlrow .tb-pickall{margin-left:auto;}
+  /* =================================================================================================
+     SQUARE-EDGE SWEEP (Chris 2026-11-06: "lots of angles that should be the sheen and frosted glass
+     tiles not squares"). The first reskin rounded the top-level panels, tabs, buttons, tiles and
+     .mpanel; this pass rounds every legacy card it missed (callouts, catalog + detail sub-cards,
+     receipt / history / recent, both gates, the confirm dialog + toast, the sort/date popups) and
+     turns every hard-rectangle chip into a soft pill. Semantic color stays in the fill tint, the chip,
+     or the status dot, so the straight left/top accent bars are dropped. No backdrop-filter on cards
+     that live inside .mpanel (nested blur cancels); the gates sit over the galaxy, so they keep it. */
+  /* alert / callout cards: keep the semantic tint, round, drop the bar, add the sheen */
+  .od-acc{border-radius:var(--g-r-md);border:1px solid rgba(255,122,122,.34);box-shadow:var(--g-spec);overflow:hidden;}
+  .mconf{border-radius:var(--g-r-sm);border:1px solid rgba(255,122,122,.42);box-shadow:var(--g-spec);}
+  .tb-reconcile{border-radius:var(--g-r-md);border:1px solid rgba(245,179,1,.42);box-shadow:var(--g-spec);}
+  .tb-queue{border-radius:var(--g-r-md);overflow:hidden;box-shadow:var(--g-spec);}
+  .tb-queue.tbq-call{border:1px solid rgba(255,122,122,.42);}
+  .tb-queue.tbq-miss{border:1px solid rgba(245,179,1,.4);}
+  .req-card{border-radius:var(--g-r-md);border:1px solid var(--g-edge-soft);background:var(--g-glass-quiet);box-shadow:var(--g-spec);overflow:hidden;}
+  /* catalog + detail sub-cards: frosted glass, round, drop the bar */
+  .cam,.camlog,.condcard,.dcard,.wslot,.camtile,.cd-cur{border-radius:var(--g-r-md);border:1px solid var(--g-edge-soft);background:var(--g-glass-quiet);box-shadow:var(--g-spec);}
+  .camtile:hover{background:var(--rollover);border-color:var(--g-edge);}
+  /* receipt / history / recent / back-link: individual rounded glass tiles */
+  .resv-item,.recent-card,.cview-back{border-radius:var(--g-r-md);border:1px solid var(--g-edge-soft);background:var(--g-glass-quiet);box-shadow:var(--g-spec);}
+  .hrow{border-radius:var(--g-r-sm);border:1px solid var(--g-edge-soft);background:var(--g-glass-quiet);}
+  /* section-label ticks become plain iOS text labels (no left bar) */
+  .h,.help-sec,.geargroup-h,.recent-grp-h,.rec-unit{border-left:0;padding-left:0;}
+  /* the confirm dialog: rounded glass, top-bar gone */
+  .silva-confirm-panel{border-radius:var(--g-r-lg);border:1px solid var(--g-edge);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);}
+  /* the teacher confirm toast: rounded glass, left-bar gone */
+  .silva-toast{border-radius:var(--g-r-md);border:1px solid rgba(255,122,122,.5);box-shadow:var(--g-shadow-lg),var(--g-spec);}
+  /* receipt segmented control: rounded glass track + inset active pill */
+  .tseg{height:auto;border:1px solid var(--g-edge-soft);border-radius:var(--g-r-pill);background:var(--g-glass-quiet);padding:4px;gap:3px;box-shadow:var(--g-spec);}
+  .tseg-btn{border-right:0;border-radius:var(--g-r-pill);padding:7px 15px;}
+  .tseg-btn.on{background:var(--g-primary);color:#04110f;}
+  .tseg-btn:hover:not(.on){background:var(--rollover);color:var(--g-text);}
+  /* sort + date popups: rounded frosted panels */
+  .dp-pop{border-radius:var(--g-r-md);border-color:var(--g-edge);box-shadow:var(--g-shadow-lg),var(--g-spec);}
+  .dp-pop button{border-radius:var(--g-r-sm);}
+  .camsortdd-trig{border-radius:var(--g-r-pill);border-color:var(--g-edge-soft);}
+  .camsortdd-wheel{border-radius:var(--g-r-md);border-color:var(--g-edge);}
+  /* every chip / badge becomes a soft pill, never a hard rectangle */
+  .req-chip,.resv-chip,.pill,.eqchip,.cartchip,.reteq-chip,.camtile-outchip,.resv-hero-per,.tchip,.od-badge,.tbq-badge,.leads-badge{border-radius:var(--g-r-pill);}
+  /* control buttons the first pass missed: Simple/Full toggle, Mark-all, help dot */
+  .tb-simple-tg,.tb-pickall,.tb-help{border-radius:var(--g-r-pill);}
+  /* the two gates (teacher select + PIN): a frosted card over the galaxy, matching the store sign-in */
+  #gate,#teacherGate{background:rgba(4,9,20,.52);}
+  #gate .card,#teacherGate .card{border-radius:var(--g-r-lg);border:1px solid var(--g-edge);background:linear-gradient(155deg,rgba(26,36,60,.52),rgba(10,16,32,.62));box-shadow:var(--g-shadow-lg),var(--g-spec-strong);backdrop-filter:blur(30px) saturate(1.3);-webkit-backdrop-filter:blur(30px) saturate(1.3);}
+  .tgate-btn{border-radius:var(--g-r-md);border:1px solid var(--g-edge);background:var(--g-glass-quiet);box-shadow:var(--g-spec);transition:background .15s,color .15s,border-color .15s;}
+  .tgate-btn:hover{background:var(--g-primary);border-color:var(--g-teal-lt);color:#04110f;}
 </style>
 </head>
 <body>
+<div class="galaxy" aria-hidden="true"><div class="galaxy-mesh"></div><div class="galaxy-glow"></div></div>
 
 <!-- Camera-scoped password gate. The password IS the server credential (X-Camera-Key),
      validated by the backend, and unlocks camera actions only (not Canvas/grades/roster). -->
@@ -1288,7 +1528,7 @@
   <div class="card">
     <img src="https://www.creativesilva.com/logos/CS_Logo_Vector_TealWhite.svg" alt="Creative Silva" />
     <h2>Equipment Manager</h2>
-    <p>Teacher access. Enter the password to reserve, check out, and return equipment.</p>
+    <p>Teacher access.</p>
     <input type="text" id="pin" class="pinmask" autocomplete="off" autocapitalize="off" spellcheck="false" data-1p-ignore data-lpignore="true" data-form-type="other" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;" aria-label="Camera password" />
     <button class="go" id="pingo">Continue</button>
     <div class="err" id="pinerr"></div>
@@ -1314,30 +1554,15 @@
   <!-- Curriculum-style hero banner: the console header. CS watermark stays in the background.
        The toolbar (.intro buttons + Catalog/QR added by injectHeader) and the teacher switcher
        (#poolbar) sit just below it. -->
-  <div class="cal-hero" style="background-color:#04191a;background-image:linear-gradient(90deg,rgba(3,18,20,0.95) 0%,rgba(0,66,68,0.5) 50%,rgba(3,18,20,0.95) 100%);border-top:2px solid #00b8b8;border-right:2px solid #00b8b8;border-bottom:2px solid #00b8b8;border-left:7px solid #00b8b8;box-sizing:border-box;padding:14px 26px 15px;margin:0 0 13px;">
-    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;">
-      <div style="flex:1 1 150px;display:flex;justify-content:flex-start;align-items:center;">
-        <img src="/assets/Icons/assignment/camera-kit-white-v1.png" alt="Equipment Manager" style="width:clamp(50px,9vw,74px);height:auto;display:block;" />
-      </div>
-      <div style="flex:100 1 260px;min-width:200px;text-align:center;">
-        <div style="margin-bottom:6px;"><span style="font-size:13pt;color:#80e0e0;letter-spacing:0.05em;"><strong>Teacher Console &middot; Pioneer Valley</strong></span></div>
-        <div style="color:#ffffff;font-size:clamp(17pt,4.5vw,23pt);line-height:1.1;"><strong>Equipment Manager</strong></div>
-      </div>
-      <div style="flex:1 1 150px;display:flex;justify-content:flex-end;align-items:center;">
-        <iframe class="cal-hero-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
-      </div>
-    </div>
-  </div>
-  <!-- Toolbar controls now live in the availability row below; .intro stays only as the injectHeader anchor (hidden). -->
-  <div class="intro"><p class="sub">Hand out gear, mark it picked up when the student collects it, and mark it returned when it comes back. Changes sync to the calendar and the Command Center in real time.</p></div>
-
-  <div class="status-strip">
-    <div class="summary">
-      <!-- Hamburger menu: switches the console between the Board (tabs) and the occasional-reference views
-           (Manage Equipment, Returned History, Event History). Wallet + Calendar stay on the Board. (Chris 2026-11-06) -->
+  <!-- iOS 26 nav-bar header (mirrors the student store): hamburger + PV crest leading, title + the
+       availability count as a SUBTITLE principal (iOS 26 puts a count in the subtitle, the Mail pattern),
+       class-period clock trailing. The old tall count strip is gone; the row below holds only the actions. (Chris 2026-11-06) -->
+  <div class="cal-hero cmnav" style="background:var(--g-glass);border:1px solid var(--g-edge);border-radius:var(--g-r-lg);box-shadow:var(--g-shadow),var(--g-spec-strong);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);box-sizing:border-box;">
+    <div class="cmnav-lead">
       <div class="cm-hamb">
         <button type="button" class="cm-hambbtn" id="cmHambBtn" aria-haspopup="true" aria-expanded="false" aria-label="Menu"><span></span><span></span><span></span></button>
         <div class="cm-hambmenu" id="cmHambMenu" hidden>
+          <button type="button" class="cm-hambitem" id="hambReserve"><span class="cmh-ic">+</span>Reserve</button>
           <button type="button" class="cm-hambitem" data-cview="board"><span class="cmh-ic">&#9632;</span>Board</button>
           <div class="cmh-sep"></div>
           <button type="button" class="cm-hambitem" data-cview="manage"><span class="cmh-ic">&#9636;</span>Manage Equipment</button>
@@ -1345,12 +1570,24 @@
           <button type="button" class="cm-hambitem" data-cview="events"><span class="cmh-ic">&#9202;</span>Event History</button>
         </div>
       </div>
+      <img class="cmnav-logo" src="/assets/PV_Square_Logo.png" alt="Pioneer Valley" />
+    </div>
+    <div class="cmnav-title">
+      <div class="cmnav-eyebrow">Teacher Console &middot; Pioneer Valley</div>
+      <div class="cmnav-h1"><span class="cmtitle-g">Equipment Manager</span></div>
+      <div class="cmnav-sub"><span class="sync" id="sync">Connecting&#8230;</span><span class="cmnav-counthold" aria-hidden="true"><span id="availn">0</span><span id="totn">18</span><span id="availunit">cameras</span><span id="availday">today</span></span></div>
+    </div>
+    <div class="cmnav-trail">
+      <iframe class="cal-hero-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
+    </div>
+  </div>
+  <div class="intro"><p class="sub">Hand out gear, mark it picked up when the student collects it, and mark it returned when it comes back. Changes sync to the calendar and the Command Center in real time.</p></div>
+
+  <div class="status-strip">
+    <div class="summary cmctrl">
       <div id="poolbar" class="poolbar-wrap" role="group" aria-label="Teacher view"></div>
-      <div class="summ-metric"><span class="big" id="availn">0</span> <span class="lab">of <span id="totn">18</span> <span id="availunit">cameras</span> available <span id="availday">today</span></span></div>
       <div class="summ-right">
-        <button class="silva-uni-cattrigger summ-btn" id="reserveBtn">Reserve</button>
         <a class="silva-uni-cattrigger summ-btn" id="storeBtn" target="_blank" rel="noopener">Student Store</a>
-        <button class="silva-uni-cattrigger summ-btn summ-ico" id="refreshBtn" title="Reload the latest data now" aria-label="Refresh">&#8635;</button>
         <div class="cm-tools">
           <button type="button" class="silva-uni-cattrigger cm-toolsbtn summ-btn" id="cmToolsBtn" aria-haspopup="true" aria-expanded="false">Tools &#9662;</button>
           <div class="cm-toolsmenu" id="cmToolsMenu" hidden>
@@ -1359,19 +1596,11 @@
             <button type="button" class="cm-toolitem" id="leadsBtn" title="Your class leads by period: Equipment Managers, Photo Walk EQs, and Team Attendance Managers">Class Leads</button>
           </div>
         </div>
-        <div class="sync" id="sync">Connecting&#8230;</div>
+        <button class="silva-uni-cattrigger summ-btn summ-ico cmctrl-refresh" id="refreshBtn" title="Reload the latest data now" aria-label="Refresh">&#8635;</button>
       </div>
     </div>
   </div>
-  <!-- Prominent student lookup: type a name or ID to open that student's profile (contact + current/future/past reservations) in one card. -->
-  <div class="stu-searchbar">
-    <span class="stu-barlabel">Search Student</span>
-    <div class="stu-barfield">
-      <input type="text" id="stuBarIn" class="stu-barin" placeholder="Find a student by name or ID to open their profile, contact &amp; reservations" autocomplete="off" autocapitalize="off" spellcheck="false" />
-      <button type="button" class="stu-bargo" id="stuBarGo">Find</button>
-    </div>
-    <span class="stu-barmsg" id="stuBarMsg"></span>
-  </div>
+  <!-- The student lookup now lives centered inside the Reservations bar (rendered in the board head). -->
   <!-- Back bar: shown only in the hamburger views (Manage Equipment / Returned History / Event History). -->
   <div class="cview-back" id="cviewBack" hidden>
     <button type="button" class="cview-backbtn" id="cviewBackBtn">&#8592;&nbsp;Board</button>
@@ -1944,13 +2173,16 @@
     order.sort(function(a,b){ var ca=byKey[a][0], cb=byKey[b][0]; return (cb.created||'')>(ca.created||'')?1:-1; });
     return order.map(function(k){ return byKey[k].sort(function(a,b){ var ca=(a.kind==='equipment')?1:0, cb=(b.kind==='equipment')?1:0; return ca-cb; }); });
   }
-  function reqReasonLabel(reason){ return reason==='missing'?'Missing work':(reason==='photo2'?'Photo 2':(reason==='digital_arts'?'Digital Arts':(reason==='multiday'?'Multi-day':'Request'))); }
+  // Fewest-words description of what the student is actually asking for / why it needs the teacher's OK
+  // (Chris 2026-11-06). The card already shows the student period + the item + the dates, so the reason
+  // stays a short plain phrase, not a cryptic tag.
+  function reqReasonLabel(reason){ return reason==='missing'?'Missing work':(reason==='photo2'?'Photo 2 camera':(reason==='digital_arts'?'Digital Arts':(reason==='multiday'?'Extra days':'Needs OK'))); }
   function reqReasonChip(c){ var r=(c&&c.request_reason)||''; return '<span class="req-chip req-'+(r||'other')+'">'+reqReasonLabel(r)+'</span>'; }
   function reqItemsLabel(g){ return g.map(function(x){ return x.kind==='equipment'?gearLabel(x.item):x.camera; }).filter(Boolean).join(', '); }
   // Requests view body: one card per pending reservation (reason, student, items, dates) with Approve / Deny inline.
   function requestsBodyHtml(pend){
-    if(!pend.length) return '<div class="tb-grid"><div class="tb-empty">No student requests waiting. When a student asks for gear that needs your OK, it shows up here.</div></div>';
-    var sub='<div class="tb-reqsub">Students asked for gear that needs your OK (missing work, a Photo 2 item, or a multi-day rental). Approve to put it on the board, or Deny to free it up.</div>';
+    if(!pend.length) return '<div class="tb-grid"><div class="tb-empty">No student requests waiting.</div></div>';
+    var sub='';
     return sub+'<div class="tb-reqgrid">'+pend.map(function(g){ var c=g[0];
       var items=g.map(function(x){ return x.kind==='equipment'?('<span class="camnum">'+esc(gearLabel(x.item))+'</span>'):('<span class="camnum" data-camdetail="'+esc(x.camera)+'">'+esc(x.camera)+'</span>'); }).join(' ');
       var note=c.request_note?('<div class="req-note">&ldquo;'+esc(c.request_note)+'&rdquo;</div>'):'';
@@ -2094,9 +2326,9 @@
     var mid='<span class="til-big">'+esc(itemBig(it)).toUpperCase()+'</span>'+
       '<span class="til-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span>';
     if(TBSEL[key]){ var on=!!TBSELSET[key][it.id];                 // select mode: tap toggles the checkbox, not the card
-      return '<div class="til til-selmode'+(on?' on':'')+'" data-selid="'+esc(it.id)+'" data-selcol="'+key+'"><span class="til-chk"></span>'+dot+mid+date+'</div>'; }
+      return '<div class="til til-'+itemState(it)+' til-selmode'+(on?' on':'')+'" data-selid="'+esc(it.id)+'" data-selcol="'+key+'"><span class="til-chk"></span>'+mid+date+'</div>'; }
     var ci=(mode==='in'||mode==='overdue')?'<button type="button" class="til-ci" data-quickret="'+esc(it.id)+'" title="Check this item in">Check in</button>':'';
-    return '<div class="til" data-resvopen="'+esc(c.id)+'" role="button" tabindex="0">'+dot+mid+ci+date+'<span class="til-chev">&#8250;</span></div>'; }
+    return '<div class="til til-'+itemState(it)+'" data-resvopen="'+esc(c.id)+'" role="button" tabindex="0">'+mid+ci+date+'<span class="til-chev">&#8250;</span></div>'; }
   // A camera-kit line: ONE pickup line for the whole kit. The camera carries its linked gear
   // (lens, tripod, remote, lighting) as associated chips, so the teacher packages it as one unit.
   function kitLineHtml(c, cam, gear, mode, showDate){
@@ -2107,13 +2339,13 @@
     var kitn=gear.length?'<span class="til-kitn">+'+gear.length+'</span>':'';
     var gearRow=gear.length?'<span class="til-kitgear">'+gear.map(function(g){ return '<span>'+esc(gearLabel(g.item))+'</span>'; }).join('<i>&middot;</i>')+'</span>':'';
     // The status dot lives on the kit's top line so it stays beside the camera number on a multi-line kit; single-line kits still center cleanly.
-    var main='<span class="til-kitmain"><span class="til-kittop">'+dot+'<span class="til-big">'+esc((cam.camera||'Camera').toUpperCase())+'</span>'+kitn+
+    var main='<span class="til-kitmain"><span class="til-kittop"><span class="til-big">'+esc((cam.camera||'Camera').toUpperCase())+'</span>'+kitn+
       '<span class="til-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span></span>'+gearRow+'</span>';
     if(TBSEL[key]){ var ids=[cam.id].concat(gear.map(function(g){return g.id;}));
       var on=ids.every(function(id){return TBSELSET[key][id];});
-      return '<div class="til til-kit til-selmode'+(on?' on':'')+'" data-selids="'+esc(ids.join(','))+'" data-selcol="'+key+'"><span class="til-chk"></span>'+main+date+'</div>'; }
+      return '<div class="til til-kit til-'+itemState(cam)+' til-selmode'+(on?' on':'')+'" data-selids="'+esc(ids.join(','))+'" data-selcol="'+key+'"><span class="til-chk"></span>'+main+date+'</div>'; }
     var ci=(mode==='in'||mode==='overdue')?'<button type="button" class="til-ci" data-quickci="'+esc(cam.id)+'" title="Check in this kit">Check in</button>':'';
-    return '<div class="til til-kit" data-resvopen="'+esc(c.id)+'" role="button" tabindex="0">'+main+ci+date+'<span class="til-chev">&#8250;</span></div>'; }
+    return '<div class="til til-kit til-'+itemState(cam)+'" data-resvopen="'+esc(c.id)+'" role="button" tabindex="0">'+main+ci+date+'<span class="til-chev">&#8250;</span></div>'; }
   // Split a reservation's visible items into camera KITS (gear folds under its camera via the group link)
   // plus any truly standalone (a-la-carte) gear, which keeps its own line.
   function renderBundle(c, items, mode, firstDate){
@@ -2205,6 +2437,7 @@
       rows.push({key:'gear:'+t, kind:'gear', label:(gtypes[t]&&gtypes[t].label)||t,
         total:units.length, avail:units.filter(function(id){ return gearState(id)==='avail'; }).length,
         units:units.map(function(id){ return {id:id, kind:'gear', label:gearLabel(id), state:gearState(id), rec:gearActiveFor(id)}; }) }); });
+    if(SELECTED_POOL==='mankin') rows=rows.filter(function(r){return r.kind==='gear';}).concat(rows.filter(function(r){return r.kind==='camera';}));  // Digital Arts: lead with the iPad styluses, her few cameras after (Chris 2026-11-06)
     return rows; }
   function availUnitLabel(u){ var who=u.rec?(esc(nameOf(u.rec))+(u.rec.period?(' P'+esc(u.rec.period)):'')):'';
     return u.state==='avail'?'Free':(u.state==='oos'?'Out of service':(u.state==='nocard'?'No memory card':
@@ -2234,7 +2467,8 @@
     var nOut=countLines(out,'out'), nIn=countLines(chk,'in'), nReq=pend.length;
     var nOverdue=odCall.reduce(function(n,c){ return n+resvItems(c).filter(isOverdue).length; },0);   // Overdue tab count
     var view=(TBVIEW==='in'||TBVIEW==='overdue'||TBVIEW==='avail'||TBVIEW==='requests')?TBVIEW:'out';
-    var inv=(view==='avail')?availInventory():null, availCameras=availCountOnDay(todayISO());
+    var inv=(view==='avail')?availInventory():null;
+    var availCameras=(SELECTED_POOL==='mankin') ? gearPoolIds().filter(function(id){ var u=gearUnit(id); return u&&u.type==='apple_pencil'&&gearState(id)==='avail'; }).length : availCountOnDay(todayISO());  // Mankin's Available badge = free iPad styluses, her focus
     var active=(view==='out')?out:(view==='in'?chk:[]), q=TBQ[view]||'', selMode=TBSEL[view];
     active=active.slice().sort(tbSortCmp);                      // default: camera-kit number order (a-la-carte after); or by last name
     // Scroll-reset guard: the 7s poll re-renders; skip the rewrite when nothing changed so the open
@@ -2279,17 +2513,18 @@
           : '<div class="tb-grid"><div class="tb-empty">No match for &ldquo;'+esc(q.trim())+'&rdquo;.</div></div>';
       } else {                                                 // default: one card per CAMERA KIT (gear folds in); a-la-carte gear keeps its own card
         var emptyMsg=view==='out'?('Nothing to hand out '+(isT?'today':'that day')+'.'):'Nothing checked out right now.';
-        body = groups.length ? '<div class="tb-grid view-'+view+'">'+groups.map(function(g){ var od=(view==='in'&&g.items.some(isOverdue)); return '<div class="tb-bundle'+(od?' tb-od':'')+'">'+renderBundle(g.c, g.items, view, true)+'</div>'; }).join('')+'</div>'
+        body = groups.length ? '<div class="tb-grid view-'+view+'" style="grid-auto-flow:column;grid-template-rows:repeat('+Math.max(1,Math.ceil(groups.length/2))+',auto);">'+groups.map(function(g){ var od=(view==='in'&&g.items.some(isOverdue)); return '<div class="tb-bundle'+(od?' tb-od':'')+'">'+renderBundle(g.c, g.items, view, true)+'</div>'; }).join('')+'</div>'
           : '<div class="tb-grid"><div class="tb-empty">'+emptyMsg+'</div></div>';
       }
-      var sortCtl='<div class="tb-sort"><span class="tb-sort-l">Sort</span>'+
-        '<button type="button" class="tb-sortbtn'+(TBSORT==='cam'?' on':'')+'" data-tbsort="cam">Camera #</button>'+
-        '<button type="button" class="tb-sortbtn'+(TBSORT==='name'?' on':'')+'" data-tbsort="name">Last name</button></div>';
-      // Sort + Select only when there is something to sort/select; an empty day shows just the message.
+      // Sort is a sliders-icon pull-down (Apple's canonical Sort control), not a segmented bar. Select is cut:
+      // tap a tile to hand out one, Mark-all covers everyone; a subset mode was overhead for Garcia. (Chris 2026-11-06)
+      var sortCtl='<div class="tb-sortmenu"><button type="button" class="tb-sorticon" data-tbsortopen="1" aria-haspopup="true" aria-label="Sort order" title="Sort order"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.4" fill="currentColor" stroke="none"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.4" fill="currentColor" stroke="none"/></svg></button>'+
+        '<div class="tb-sortpop" hidden><div class="tb-sortpop-h">Sort by</div>'+
+          '<button type="button" class="tb-sortopt'+(TBSORT==='cam'?' on':'')+'" data-tbsort="cam">Camera number</button>'+
+          '<button type="button" class="tb-sortopt'+(TBSORT==='name'?' on':'')+'" data-tbsort="name">Student last name</button></div></div>';
       // End-of-day one-tap sweep (Outgoing + today only): mark every remaining reserved item picked up.
-      var pickAllBtn=(view==='out'&&isT&&!selMode&&total>0)?'<button type="button" class="tb-pickall" data-tbpickall="1">Mark all picked up</button>':'';
-      search = total ? ('<div class="tb-searchrow tb-ctlrow">'+sortCtl+
-        '<button type="button" class="tb-selbtn" data-tbselect="'+view+'">'+(selMode?'Done':'Select')+'</button>'+pickAllBtn+'</div>') : '';
+      var pickAllBtn=(view==='out'&&isT&&total>0)?'<button type="button" class="tb-pickall" data-tbpickall="1">Mark all picked up</button>':'';
+      search = total ? ('<div class="tb-searchrow tb-ctlrow">'+sortCtl+pickAllBtn+'</div>') : '';
       if(selMode){
         var n=Object.keys(TBSELSET[view]).length;
         var acts = n ? ((view==='out')
@@ -2301,7 +2536,11 @@
     el.className='todayboard '+(SIMPLE?'tbsec-simple':('tbsec-'+view)); el.style.display='';
     var queues=isT?(queueHtml(odCall,'call')+queueHtml(miss,'miss')):'';
     var simpleTg='<button type="button" class="tb-simple-tg'+(SIMPLE?' on':'')+'" data-tbsimple="'+(SIMPLE?'0':'1')+'" title="Switch between a simple and a full board">'+(SIMPLE?'Full view':'Simple view')+'</button>';
-    var head='<div class="tb-head"><span class="tb-title">Reservations</span><button type="button" class="tb-help" data-tbhelp="1" title="How this board works" aria-label="How this board works">i</button>'+simpleTg+(SIMPLE?'':stepper)+'</div>';
+    // Reservations bar: title (left) + the student search CENTERED + Simple/Full toggle (right). The i help, the
+    // day stepper and the cart tally are gone: the tab counts carry all the stats (Chris 2026-11-06).
+    var searchBar='<div class="tb-search"><input type="text" id="stuBarIn" class="stu-barin" placeholder="Search a student by name or ID" autocomplete="off" autocapitalize="off" spellcheck="false" /><button type="button" class="stu-bargo" id="stuBarGo" aria-label="Find">&#9906;</button><span class="stu-barmsg" id="stuBarMsg"></span></div>';
+    var head='<div class="tb-head"><span class="tb-title">Reservations</span>'+searchBar+simpleTg+'</div>';
+    var _sbv=(document.getElementById('stuBarIn')||{}).value||'', _sbf=!!(document.activeElement&&document.activeElement.id==='stuBarIn');
     if(SIMPLE){
       var markAll=(isT&&nOut>0)?'<button type="button" class="tb-pickall" data-tbpickall="1">Mark all picked up</button>':'';
       el.innerHTML=head+queues+
@@ -2310,16 +2549,22 @@
     } else {
       el.innerHTML=head+toggle+
         ((view==='avail'||view==='requests'||view==='overdue') ? body
-          : ((isT?cartTallyHtml():'')+search+body+bulk));
+          : (search+body+bulk));
     }
     el.querySelectorAll('[data-tbview]').forEach(function(b){ b.onclick=function(){ var v=b.getAttribute('data-tbview'); if(v!==TBVIEW){ TBVIEW=v; _lastTBSig=null; renderTodayBoard(); } }; });
     var _smb=el.querySelector('[data-tbsimple]'); if(_smb) _smb.onclick=function(){ try{ sessionStorage.setItem('tbsimple', _smb.getAttribute('data-tbsimple')); }catch(e){} _lastTBSig=null; renderTodayBoard(); };
     el.querySelectorAll('[data-tbsort]').forEach(function(b){ b.onclick=function(){ var s=b.getAttribute('data-tbsort'); if(s!==TBSORT){ TBSORT=s; try{ sessionStorage.setItem('tbsort',s); }catch(e){} _lastTBSig=null; renderTodayBoard(); } }; });
+    var _sop=el.querySelector('[data-tbsortopen]'); if(_sop){ _sop.onclick=function(e){ e.stopPropagation(); var pop=el.querySelector('.tb-sortpop'); if(!pop) return; var willOpen=pop.hidden; pop.hidden=!willOpen;
+      if(willOpen){ setTimeout(function(){ document.addEventListener('click', function cl(ev){ if(!ev.target.closest('.tb-sortmenu')){ pop.hidden=true; document.removeEventListener('click',cl); } }); },0); } }; }
     // Available view: expand a model/type to its units; tap a unit -> its detail card; Assign a free unit -> check-out flow.
     el.querySelectorAll('[data-avexpand]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-avexpand'); TBAVOPEN=(TBAVOPEN===k)?null:k; _lastTBSig=null; renderTodayBoard(); }; });
     el.querySelectorAll('[data-avunit]').forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-avunit'); if(b.getAttribute('data-avkind')==='camera') openCamDetail(id); else openGearDetail(id); }; });
     el.querySelectorAll('[data-avassign]').forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-avassign'); if(b.getAttribute('data-avkind')==='camera') openReserve(id); else openReserveGear(id); }; });
     var hb=el.querySelector('[data-tbhelp]'); if(hb) hb.onclick=openBoardHelp;
+    (function(){ var bgo=el.querySelector('#stuBarGo'), bin=el.querySelector('#stuBarIn'), bmsg=el.querySelector('#stuBarMsg');  // student search lives in the bar now; re-wire each render, keep the typed value
+      function bs(){ if(runStuSearch(bin?bin.value:'', bmsg) && bin) bin.value=''; }
+      if(bgo) bgo.onclick=bs;
+      if(bin){ bin.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); bs(); } }); if(_sbv) bin.value=_sbv; if(_sbf) bin.focus(); } })();
     // Queue rows: Call/Text links must not also open the reservation; Return to stock cancels the no-show.
     el.querySelectorAll('.tbq-act[data-stop]').forEach(function(a){ a.onclick=function(e){ e.stopPropagation(); }; });
     el.querySelectorAll('[data-questock]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); var id=b.getAttribute('data-questock'); var c=findRec(id);
@@ -2736,7 +2981,7 @@
         '<div class="req-dates">'+esc(fmtDoWMD(c.out))+' &rarr; '+esc(fmt(c.due))+'</div>'+ note +
         '<div class="req-acts"><button type="button" class="btn sm good" data-reqok="'+esc(c.id)+'">Approve</button><button type="button" class="btn sm danger" data-reqno="'+esc(c.id)+'">Deny</button></div></div>';
     }).join('') : '<div class="rec-none">No student requests right now.</div>';
-    var sub=groups.length?'<div class="rec-sub">Students asked for gear that needs your OK (missing work, a Photo 2 item, or a multi-day rental). Approve to put it on the board, or deny to free it up.</div>':'';
+    var sub='';
     var ov=document.createElement('div'); ov.className='modal open'; ov.id='requestsmodal';
     ov.innerHTML='<div class="mpanel"><div class="mhead"><span class="mtitle">Special Requests</span><button class="mx" aria-label="Close">&times;</button></div><div class="mbody">'+sub+body+'</div></div>';
     document.body.appendChild(ov);
@@ -4262,7 +4507,7 @@
       .catch(function(){ resmsg.className='mmsg err show'; resmsg.textContent='Could not reach the server.'; })
       .then(function(){ rgo.disabled=false; rgo.textContent=doneLabel; });
   };
-  document.getElementById('reserveBtn').onclick=function(){ openReserve(''); };
+  (function(){ var hrb=document.getElementById('hambReserve'); if(hrb) hrb.onclick=function(){ var hm=document.getElementById('cmHambMenu'); if(hm) hm.hidden=true; var hb=document.getElementById('cmHambBtn'); if(hb){ hb.setAttribute('aria-expanded','false'); hb.classList.remove('on'); } openReserve(''); }; })();
   // Lock the page behind any open card/modal (blurred backdrop) so it can't scroll or be swiped through
   // (iPad). Static modals toggle `.open`; the confirm dialog + Requests modal are appended to <body>, so we
   // also watch body's children. Restored on close. Chris 2026-11-03.
