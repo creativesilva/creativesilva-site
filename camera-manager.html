@@ -996,6 +996,51 @@
   .ed-gearavail{flex:0 0 auto;font-size:.68rem;letter-spacing:.03em;text-transform:uppercase;color:var(--faint);white-space:nowrap;}
   .ed-gearitem.on .ed-gearavail{color:var(--teal-lt);}
   .ed-gearitem.none-left:not(.on){opacity:.55;}
+  /* ===== Tabbed equipment picker (edit modal): category tabs -> type rows -> a drum wheel of only the
+     available unit numbers. Replaces the long gear scroll + camera dropdown. Chris 2026-11-06. ===== */
+  .eq-pick{margin-bottom:16px;}
+  .eq-tabs{display:flex;gap:4px;align-items:flex-end;border-bottom:2px solid var(--line-soft);margin-bottom:12px;flex-wrap:wrap;}
+  .eq-tab{flex:1 1 0;min-width:84px;display:flex;align-items:center;justify-content:center;gap:7px;font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.76rem;padding:11px 8px;background:rgba(255,255,255,.02);border:1px solid var(--line-soft);border-bottom:0;border-radius:9px 9px 0 0;color:var(--faint);cursor:pointer;opacity:.62;transition:opacity .15s,background .15s,color .15s;}
+  .eq-tab:hover:not(.on){opacity:.9;background:rgba(255,255,255,.05);}
+  .eq-tab.on{opacity:1;position:relative;z-index:2;margin-bottom:-2px;background:var(--teal);color:#04110f;border-color:var(--teal);}
+  .eq-tabn{font-family:var(--font);font-weight:700;font-size:.66rem;padding:1px 7px;background:rgba(255,255,255,.1);color:var(--text);border-radius:2px;}
+  .eq-tab.on .eq-tabn{background:rgba(0,0,0,.2);color:#04110f;}
+  .eq-rows{display:flex;flex-direction:column;gap:8px;}
+  .eq-row{display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;background:rgba(0,0,0,.28);border:1px solid var(--line);color:var(--text);font-family:var(--body);padding:11px 13px;transition:border-color .15s,background .15s;}
+  .eq-row:hover{border-color:rgba(0,184,184,.5);background:rgba(0,184,184,.06);}
+  .eq-row.on{border-color:var(--teal);background:rgba(0,184,184,.1);}
+  .eq-rthumb{flex:0 0 auto;width:40px;height:40px;background:#0a1c1c center/contain no-repeat;border:1px solid var(--line-soft);}
+  .eq-rmain{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px;}
+  .eq-rname{font-family:var(--font);font-weight:700;letter-spacing:.02em;font-size:.94rem;color:#fff;}
+  .eq-rsel{font-size:.78rem;color:var(--faint);}
+  .eq-row.on .eq-rsel{color:var(--teal-lt);}
+  .eq-rsel b{color:var(--teal-lt);font-weight:700;}
+  .eq-rcount{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.66rem;color:var(--faint);white-space:nowrap;}
+  .eq-rcount.zero{color:#ff9a8a;}
+  .eq-rchev{flex:0 0 auto;color:var(--teal);font-size:1.15rem;line-height:1;}
+  .eq-empty{color:var(--faint);font-size:.84rem;padding:12px 2px;}
+  /* Drum wheel overlay (mirrors the Photo Walk seat wheel): tap a type -> scroll/tap an available number -> Confirm. */
+  .eq-wheelov{position:fixed;inset:0;z-index:150;background:rgba(2,12,12,.74);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;padding:20px;}
+  .eq-wheelov.open{display:flex;}
+  .eq-wheelbox{background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);border-top:3px solid var(--teal);box-shadow:0 24px 60px rgba(0,0,0,.72);width:auto;max-width:94vw;max-height:calc(100vh - 36px);overflow-y:auto;overscroll-behavior:contain;padding:16px 18px 18px;}
+  .eq-wheelhead{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:1rem;color:#fff;}
+  .eq-wheelx{background:none;border:0;color:var(--faint);font-size:1.7rem;line-height:1;cursor:pointer;padding:0 2px;}
+  .eq-wheelx:hover{color:#fff;}
+  .eq-wheelwrap{display:flex;justify-content:center;}
+  .eq-wheel{position:relative;height:198px;width:140px;overflow:hidden;}
+  .eq-wheel::before,.eq-wheel::after{content:"";position:absolute;left:0;right:0;height:77px;pointer-events:none;z-index:2;}
+  .eq-wheel::before{top:0;background:linear-gradient(rgba(4,20,19,.96),rgba(4,20,19,0));}
+  .eq-wheel::after{bottom:0;background:linear-gradient(rgba(4,20,19,0),rgba(4,20,19,.96));}
+  .eq-wheelband{position:absolute;left:0;right:0;top:77px;height:44px;border-top:1px solid var(--teal);border-bottom:1px solid var(--teal);pointer-events:none;z-index:1;}
+  .eq-wheelscroll{height:100%;overflow-y:auto;overflow-x:hidden;touch-action:pan-y;overscroll-behavior:contain;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .eq-wheelscroll::-webkit-scrollbar{display:none;}
+  .eq-wheelpad{height:77px;}
+  .eq-wheelitem{height:44px;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;font-family:var(--font);font-weight:700;font-size:1.35rem;color:var(--faint);cursor:pointer;transition:color .12s,transform .12s;user-select:none;white-space:nowrap;}
+  .eq-wheelitem[data-unit=""]{font-size:.84rem;letter-spacing:.06em;text-transform:uppercase;}
+  .eq-wheelitem:hover{color:#fff;}
+  .eq-wheelitem.on{color:var(--teal-lt);transform:scale(1.1);}
+  .eq-wheelbtns{display:flex;gap:10px;margin-top:14px;}
+  .eq-wheelbtns .go{flex:1 1 auto;}
   input:focus,select:focus{border-color:var(--teal);}
   select{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235ff0f0' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:38px;}
   select option{background:#0c1414;color:var(--text);}
@@ -1445,8 +1490,6 @@
       <label for="ed-sid">Student ID number</label>
       <input type="text" id="ed-sid" inputmode="numeric" placeholder="Student ID" />
       <div class="who-line" id="ed-who" aria-live="polite"></div>
-      <label for="ed-cam">Camera</label>
-      <div id="ed-cam"></div>
       <label for="ed-out">Checkout date</label>
       <input type="date" id="ed-out" />
       <label for="ed-due">Due back</label>
@@ -1454,16 +1497,23 @@
       <div class="mconf" id="ed-conf"></div>
       <label for="ed-status">Status</label>
       <div id="ed-status"></div>
-      <div id="ed-gearwrap" style="display:none">
-        <label>Add equipment</label>
-        <p class="ed-hint">Tap a tripod, lens or flash to add it to this reservation (or tap again to remove). It takes the same student and dates as the camera.</p>
-        <div id="ed-gear" class="ed-gear"></div>
-      </div>
+      <label id="ed-equiplabel">Equipment</label>
+      <p class="ed-hint" id="ed-equiphint">Pick a tab, then tap a type to choose from only the numbers free for these dates.</p>
+      <div id="ed-equip" class="eq-pick"></div>
       <div class="ed-btnrow">
         <button class="go" id="ed-save">Save changes</button>
         <button class="btn danger" id="ed-del" type="button">Delete</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Equipment picker drum wheel (edit modal): tap a type -> scroll/tap an available number -> Confirm. (Chris 2026-11-06) -->
+<div class="eq-wheelov" id="eqWheelOv" aria-hidden="true">
+  <div class="eq-wheelbox" role="dialog" aria-modal="true">
+    <div class="eq-wheelhead"><span id="eqWheelTitle">Pick a unit</span><button type="button" class="eq-wheelx" id="eqWheelX" aria-label="Close">&times;</button></div>
+    <div class="eq-wheelwrap"><div class="eq-wheel"><div class="eq-wheelband"></div><div class="eq-wheelscroll" id="eqWheelScroll"></div></div></div>
+    <div class="eq-wheelbtns"><button type="button" class="go" id="eqWheelConfirm">Confirm</button></div>
   </div>
 </div>
 
@@ -3648,43 +3698,125 @@
     document.getElementById('ed-out').value=c.out||''; document.getElementById('ed-due').value=c.due||'';
     mkDatePicker(document.getElementById('ed-out')); mkDatePicker(document.getElementById('ed-due'));
     document.getElementById('ed-out').onchange=edCheckConflicts; document.getElementById('ed-due').onchange=edCheckConflicts;
-    edCamDD=mkDropdown(document.getElementById('ed-cam'), viewCams().map(function(cm){ return {value:cm,label:cm+(P2.indexOf(cm)>=0?' (Photo 2 only)':'')}; }), c.camera||'', edCheckConflicts);
+    edSelCam=c.camera||''; edCamDD={value:function(){ return edSelCam; }};   // camera now chosen via the equipment picker wheel (edit modal)
     edStatusDD=mkDropdown(document.getElementById('ed-status'), [{value:'reserved',label:'Reserved'},{value:'out',label:'Picked up (out)'},{value:'returned',label:'Returned'}], statusOf(c), null);
-    renderEditGear(c);
+    eqInitGearState(c); edEqTab='camera'; renderEquipPicker(c);
     edCheckConflicts();
     document.getElementById('editmodal').classList.add('open');
   }
-  // Gear attach/detach lives only on a camera checkout (you don't attach gear to gear).
-  function renderEditGear(c){
-    var wrap=document.getElementById('ed-gearwrap'), host=document.getElementById('ed-gear');
-    if(c.kind==='equipment'){ wrap.style.display='none'; host.innerHTML=''; edGearState=null; return; }
-    wrap.style.display=''; host.innerHTML=''; edGearState={};
-    // Which UNITS are already on this checkout: linked by group===this record id, PLUS unlinked gear
-    // (group:'') that shares this reservation's key (same student + out/due) so a broken link still
-    // shows as "Added" and gets RE-LINKED on Save (the Jayden case). See resvKey.
+  // ===== Tabbed equipment picker (edit modal): categories -> type rows -> a drum wheel of only the unit
+  //       numbers free for the current dates. Backs onto edGearState + edSelCam so Save is unchanged. =====
+  var edSelCam='', edEqTab='camera';
+  var EQ_CATS=[
+    {key:'camera',      label:'Camera Kits', types:null},
+    {key:'lenses',      label:'Lenses',      types:['wide','zoom']},
+    {key:'lighting',    label:'Lighting',    types:['speedlite']},
+    {key:'accessories', label:'Accessories', types:['tripod','mankin_tripod','reflector','bluetooth','apple_pencil']}
+  ];
+  function eqNum(id){ var m=String(id).match(/(\d+)\s*$/); return m?String(parseInt(m[1],10)):String(id); }
+  function eqGid(c){ return c.group||c.id; }
+  // Seed edGearState from the units already on this checkout (linked by group, or sharing the reservation key).
+  function eqInitGearState(c){
+    edGearState={};
+    if(c.kind==='equipment') return;
     var camKey=(c.student_id&&c.out)?resvKey(c):null;
-    var attached={}; equipRecs().forEach(function(e){ if(statusOf(e)==='returned') return;
-      if(e.group===edId){ attached[e.item]=e.id; }
-      else if(camKey && !e.group && resvKey(e)===camKey){ attached[e.item]=e.id; } });
-    var gpool=gearPoolIds(), gtypes=gearTypes(), byType={};
-    gpool.forEach(function(id){ var u=gearUnit(id); if(!u) return; (byType[u.type]=byType[u.type]||[]).push(id); });
-    gOrderFor().forEach(function(t){
-      var ids=byType[t]; if(!ids||!ids.length) return;
-      var hd=document.createElement('div'); hd.className='ed-geargrp'; hd.textContent=(gtypes[t]&&gtypes[t].label)||t; host.appendChild(hd);
-      ids.forEach(function(id){
-        var u=gearUnit(id)||{}, on=!!attached[id];
-        var blocked=!on && (!!gearActiveFor(id) || !!assetOf(id).oos);   // taken elsewhere or out of service
-        edGearState[id]={on:on, id:attached[id]||null};
-        var btn=document.createElement('button'); btn.type='button';
-        btn.className='ed-gearitem'+(on?' on':'')+(blocked?' none-left':'');
-        function availText(state){ return state?'Added':(assetOf(id).oos?'Out of service':(gearActiveFor(id)?'Taken':'Free')); }
-        btn.innerHTML='<span class="ed-gearcheck"></span><span class="ed-gearlabel">'+esc(u.label||id)+'</span><span class="ed-gearavail">'+availText(on)+'</span>';
-        if(blocked) btn.disabled=true;
-        btn.addEventListener('click',function(){ if(btn.disabled) return; var s=edGearState[id]; s.on=!s.on; btn.classList.toggle('on',s.on); btn.querySelector('.ed-gearavail').textContent=availText(s.on); edCheckConflicts(); });
-        host.appendChild(btn);
-      });
-    });
+    equipRecs().forEach(function(e){ if(statusOf(e)==='returned') return;
+      if(e.group===edId){ edGearState[e.item]={on:true,id:e.id}; }
+      else if(camKey && !e.group && resvKey(e)===camKey){ edGearState[e.item]={on:true,id:e.id}; } });
   }
+  function eqCurrentUnit(type){
+    if(!edGearState) return '';
+    var found=''; Object.keys(edGearState).forEach(function(id){ if(edGearState[id] && edGearState[id].on){ var u=gearUnit(id); if(u&&u.type===type) found=id; } });
+    return found;
+  }
+  function eqAvailUnits(type, c){
+    var out=document.getElementById('ed-out').value||c.out||'', due=document.getElementById('ed-due').value||c.due||'';
+    var gid=eqGid(c), attached=eqCurrentUnit(type);
+    var free=gearPoolIds().filter(function(id){ var u=gearUnit(id); if(!u||u.type!==type) return false;
+      if(id===attached) return true; if(assetOf(id).oos) return false; return !spanConflicts(id,'equipment',out,due,gid).length; });
+    free.sort(function(a,b){ return (parseInt(eqNum(a),10)||0)-(parseInt(eqNum(b),10)||0); });
+    return free;
+  }
+  function eqAvailCams(c){
+    var out=document.getElementById('ed-out').value||c.out||'', due=document.getElementById('ed-due').value||c.due||'', gid=eqGid(c);
+    var free=viewCams().filter(function(cm){ if(cm===edSelCam) return true; if(isOOS(cm)) return false; return !spanConflicts(cm,'camera',out,due,gid).length; });
+    free.sort(function(a,b){ return (parseInt(eqNum(a),10)||0)-(parseInt(eqNum(b),10)||0); });
+    return free;
+  }
+  function eqCatsForPool(){
+    var have=[], byType={}; gearPoolIds().forEach(function(id){ var u=gearUnit(id); if(u) byType[u.type]=1; });
+    EQ_CATS.forEach(function(cat){
+      if(cat.key==='camera'){ if(viewCams().length) have.push({key:'camera',label:'Camera Kits',types:null}); return; }
+      var types=cat.types.filter(function(t){ return byType[t]; });
+      if(types.length) have.push({key:cat.key,label:cat.label,types:types});
+    });
+    return have;
+  }
+  function eqRowHtml(mode, type, c){
+    if(mode==='camera'){
+      var cams=eqAvailCams(c), sel=edSelCam?('Kit <b>'+esc(eqNum(edSelCam))+'</b>'):'None chosen';
+      return '<button type="button" class="eq-row'+(edSelCam?' on':'')+'" data-eqpick="camera"><span class="eq-rthumb"></span><span class="eq-rmain"><span class="eq-rname">Camera</span><span class="eq-rsel">'+sel+'</span></span><span class="eq-rcount'+(cams.length?'':' zero')+'">'+cams.length+' free</span><span class="eq-rchev">&#8250;</span></button>';
+    }
+    var tlabel=(gearTypes()[type]&&gearTypes()[type].label)||type, units=eqAvailUnits(type,c), curU=eqCurrentUnit(type), th=GEAR_THUMB[type]||'';
+    var sel=curU?(esc(tlabel)+' <b>'+esc(eqNum(curU))+'</b>'):'None';
+    return '<button type="button" class="eq-row'+(curU?' on':'')+'" data-eqpick="gear" data-eqtype="'+esc(type)+'"><span class="eq-rthumb"'+(th?(' style="background-image:url(\''+th+'\')"'):'')+'></span><span class="eq-rmain"><span class="eq-rname">'+esc(tlabel)+'</span><span class="eq-rsel">'+sel+'</span></span><span class="eq-rcount'+(units.length?'':' zero')+'">'+units.length+' free</span><span class="eq-rchev">&#8250;</span></button>';
+  }
+  function renderEquipPicker(c){
+    var host=document.getElementById('ed-equip'), lbl=document.getElementById('ed-equiplabel'), hint=document.getElementById('ed-equiphint');
+    if(!host) return;
+    if(c.kind==='equipment'){ host.style.display='none'; if(lbl)lbl.style.display='none'; if(hint)hint.style.display='none'; return; }   // gear-only reservations: no attach picker (as before)
+    host.style.display=''; if(lbl){ lbl.style.display=''; lbl.textContent='Equipment'; } if(hint){ hint.style.display=''; hint.textContent='Pick a tab, then tap a type to choose from only the numbers free for these dates.'; }
+    var cats=eqCatsForPool();
+    if(!cats.some(function(x){ return x.key===edEqTab; })) edEqTab=(cats[0]&&cats[0].key)||'camera';
+    var tabs='<div class="eq-tabs" role="tablist">'+cats.map(function(cat){
+      var cnt=(cat.key==='camera')?eqAvailCams(c).length:cat.types.reduce(function(n,t){ return n+eqAvailUnits(t,c).length; },0);
+      return '<button type="button" class="eq-tab'+(edEqTab===cat.key?' on':'')+'" data-eqtab="'+cat.key+'">'+esc(cat.label)+' <span class="eq-tabn">'+cnt+'</span></button>';
+    }).join('')+'</div>';
+    var rows;
+    if(edEqTab==='camera'){ rows=eqRowHtml('camera','',c); }
+    else { var cat=cats.filter(function(x){return x.key===edEqTab;})[0]; rows=cat?cat.types.map(function(t){ return eqRowHtml('gear',t,c); }).join(''):''; }
+    host.innerHTML=tabs+'<div class="eq-rows">'+(rows||'<div class="eq-empty">Nothing here for this pool.</div>')+'</div>';
+    host.querySelectorAll('[data-eqtab]').forEach(function(b){ b.onclick=function(){ edEqTab=b.getAttribute('data-eqtab'); renderEquipPicker(c); }; });
+    host.querySelectorAll('[data-eqpick]').forEach(function(b){ b.onclick=function(){ openEquipWheel(b.getAttribute('data-eqpick'), b.getAttribute('data-eqtype')||'', c); }; });
+  }
+  // ---- the drum wheel (mirrors the Photo Walk seat picker) ----
+  var eqWheel={mode:'',type:'',c:null}, eqWheelRealign=false;
+  function openEquipWheel(mode, type, c){
+    eqWheel={mode:mode,type:type,c:c};
+    var title=document.getElementById('eqWheelTitle'), scroll=document.getElementById('eqWheelScroll');
+    var units, cur;
+    if(mode==='camera'){ units=eqAvailCams(c); cur=edSelCam; title.textContent='Choose a camera'; }
+    else { units=eqAvailUnits(type,c); cur=eqCurrentUnit(type); var tl=(gearTypes()[type]&&gearTypes()[type].label)||type; title.textContent='Choose '+tl; }
+    scroll.innerHTML='<div class="eq-wheelpad"></div><div class="eq-wheelitem" data-unit="">None</div>'+
+      units.map(function(id){ return '<div class="eq-wheelitem" data-unit="'+esc(id)+'">'+esc(eqNum(id))+'</div>'; }).join('')+
+      '<div class="eq-wheelpad"></div>';
+    scroll.querySelectorAll('.eq-wheelitem').forEach(function(it){ it.onclick=function(){ eqWheelRealign=true; it.scrollIntoView({block:'center'}); clearTimeout(scroll._t); scroll._t=setTimeout(function(){ eqWheelRealign=false; eqMarkOn(scroll); },180); }; });
+    scroll.onscroll=function(){ if(eqWheelRealign) return; clearTimeout(scroll._t); scroll._t=setTimeout(function(){ eqMarkOn(scroll); },80); };
+    document.getElementById('eqWheelOv').classList.add('open');
+    var want=scroll.querySelector('.eq-wheelitem[data-unit="'+String(cur||'').replace(/["\\]/g,'')+'"]')||scroll.querySelector('.eq-wheelitem[data-unit=""]');
+    setTimeout(function(){ if(want) want.scrollIntoView({block:'center'}); setTimeout(function(){ eqMarkOn(scroll); },60); },30);
+  }
+  function eqCentered(scroll){ var r=scroll.getBoundingClientRect(), cy=r.top+r.height/2, best=null, bd=1e9;
+    scroll.querySelectorAll('.eq-wheelitem').forEach(function(it){ var ir=it.getBoundingClientRect(), d=Math.abs((ir.top+ir.height/2)-cy); if(d<bd){ bd=d; best=it; } });
+    return best?best.getAttribute('data-unit'):''; }
+  function eqMarkOn(scroll){ var v=eqCentered(scroll); scroll.querySelectorAll('.eq-wheelitem').forEach(function(it){ it.classList.toggle('on', it.getAttribute('data-unit')===v); }); return v; }
+  function closeEqWheel(){ document.getElementById('eqWheelOv').classList.remove('open'); }
+  function eqSetGearForType(type, unitId){
+    if(!edGearState) edGearState={};
+    Object.keys(edGearState).forEach(function(id){ var u=gearUnit(id); if(u&&u.type===type && edGearState[id]) edGearState[id].on=false; });
+    if(unitId){ if(edGearState[unitId]) edGearState[unitId].on=true; else edGearState[unitId]={on:true,id:null}; }
+  }
+  function confirmEqWheel(){
+    var scroll=document.getElementById('eqWheelScroll'), v=eqMarkOn(scroll), c=eqWheel.c;
+    if(eqWheel.mode==='camera') edSelCam=v||''; else eqSetGearForType(eqWheel.type, v||'');
+    closeEqWheel(); if(c) renderEquipPicker(c); edCheckConflicts();
+  }
+  (function(){
+    var ov=document.getElementById('eqWheelOv'), x=document.getElementById('eqWheelX'), cf=document.getElementById('eqWheelConfirm');
+    if(x) x.onclick=closeEqWheel;
+    if(cf) cf.onclick=confirmEqWheel;
+    if(ov) ov.addEventListener('click',function(e){ if(e.target===ov) closeEqWheel(); });
+  })();
   function closeEdit(){ document.getElementById('editmodal').classList.remove('open'); edId=null; }
   (function(){
     var x=document.getElementById('ed-x'); if(x) x.onclick=closeEdit;
