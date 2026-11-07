@@ -81,6 +81,11 @@ def doc_entry(prefix, isP2):
     # 1) Capture list (shared EN/ES) -- Chris's priority, listed first
     add("Capture List &middot; English", f"{prefix}-Capture-List-EN.docx")
     add("Capture List &middot; Spanish", f"{prefix}-Capture-List-ES.docx")
+    # 1b) Research + Design Choices worksheets (group project docs, EN/ES)
+    add("Research &middot; English", f"{prefix}-Research-EN.docx")
+    add("Research &middot; Spanish", f"{prefix}-Research-ES.docx")
+    add("Design Choices &middot; English", f"{prefix}-Design-Choices-EN.docx")
+    add("Design Choices &middot; Spanish", f"{prefix}-Design-Choices-ES.docx")
     # 2) Reflection (course-aware: photo2 uses -Photo2- when present)
     if isP2 and has(f"{prefix}-Photo2-Reflection-EN.docx"):
         add("Reflection &middot; English", f"{prefix}-Photo2-Reflection-EN.docx")
@@ -149,7 +154,7 @@ for r in sorted(report):
         print(f"        {r[3]}")
 print(f"\n{len(MODULE_DOCS)} modules with docs.")
 # unused module-type docs (reflection/capture/project/worksheet/guide not matched to any module)
-modish = [d for d in docs if re.search(r"-(Reflection|Capture-List|Project-Folder|Worksheet|Guide|Assets)", d) and "Syllabus" not in d]
+modish = [d for d in docs if re.search(r"-(Reflection|Capture-List|Research|Design-Choices|Project-Folder|Worksheet|Guide|Assets)", d) and "Syllabus" not in d]
 unused = sorted(set(modish) - used)
 print(f"\n=== module-type docs NOT matched to any module ({len(unused)}) ===")
 for u in unused:
