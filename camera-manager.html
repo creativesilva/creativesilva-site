@@ -1044,6 +1044,77 @@
   .eq-wheelitem.on{color:var(--teal-lt);transform:scale(1.1);}
   .eq-wheelbtns{display:flex;gap:10px;margin-top:14px;}
   .eq-wheelbtns .go{flex:1 1 auto;}
+  /* ===== iOS 27 grouped reservation sheet (Chris 2026-11-06): rounded inset-grouped cards, label-left /
+     value-right rows, progressive disclosure, no instructional text. Overrides the global angular radius. ===== */
+  #editmodal .mpanel{max-width:470px;background:linear-gradient(180deg,rgba(20,26,27,.985),rgba(10,13,13,.99));border:1px solid rgba(255,255,255,.10) !important;border-radius:24px !important;}
+  .eds-nav{border-bottom:0 !important;padding:15px 18px 11px !important;}
+  #editmodal .eds-nav .mtitle{font-family:var(--font);font-weight:600;text-transform:none;letter-spacing:.01em;color:var(--text);font-size:1.06rem;}
+  #editmodal .eds-nav .mtitle b{color:var(--teal-lt);font-weight:700;}
+  #editmodal .eds-nav .mx{margin-left:auto;width:34px;height:34px;min-width:34px;min-height:34px;border-radius:50% !important;background:rgba(255,255,255,.08);color:var(--text);font-size:1.25rem;padding:0;}
+  .eds-body{padding:2px 16px 18px !important;}
+  /* student header */
+  .eds-stu{margin:0;}
+  .eds-name-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:2px 2px 0;}
+  .eds-name{font-family:var(--font);font-weight:700;font-size:1.4rem;letter-spacing:.01em;color:#fff;background:none;border:0;padding:0;cursor:pointer;text-align:left;line-height:1.12;}
+  .eds-name:hover{color:var(--teal-lt);}
+  .eds-chip{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.6rem;padding:3px 9px;border-radius:7px !important;white-space:nowrap;}
+  .eds-chip.per{color:var(--teal-lt);background:rgba(0,184,184,.15);}
+  .eds-chip.st-res{color:#ffd27a;background:rgba(245,179,1,.15);}
+  .eds-chip.st-out{color:#9fe6c4;background:rgba(80,200,140,.16);}
+  .eds-chip.st-od{color:#ff9a9a;background:rgba(230,36,41,.18);}
+  .eds-chip.st-ret{color:var(--muted);background:rgba(255,255,255,.08);}
+  .eds-co{color:var(--muted);font-size:.9rem;padding:5px 2px 0;}
+  /* section header + grouped card + rows */
+  .eds-gh{font-family:var(--font);font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:.6rem;color:var(--faint);margin:18px 4px 8px;}
+  .eds-grp{background:#181d1e;border:1px solid rgba(255,255,255,.07);border-radius:16px !important;overflow:hidden;}
+  .eds-grp.mt{margin-top:12px;}
+  .eds-row{position:relative;display:flex;align-items:center;gap:12px;min-height:50px;padding:9px 15px;width:100%;background:none;border:0;cursor:pointer;text-align:left;color:inherit;font:inherit;}
+  .eds-grp .eds-row + .eds-row::before{content:"";position:absolute;left:52px;right:0;top:0;height:1px;background:var(--line);}
+  .eds-ic{width:26px;height:26px;border-radius:8px !important;flex:0 0 auto;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:var(--teal-lt);font-size:.92rem;}
+  .eds-rlab{font-family:var(--body);font-size:1rem;color:var(--text);}
+  .eds-rval{margin-left:auto;color:var(--muted);font-size:.96rem;font-variant-numeric:tabular-nums;}
+  .eds-rval b{color:var(--text);font-weight:700;}
+  .eds-chev{color:var(--faint);font-size:1.15rem;line-height:1;flex:0 0 auto;margin-left:2px;}
+  .eds-row.add .eds-rlab{color:var(--teal-lt);font-weight:600;}
+  .eds-row.add .eds-ic{color:var(--teal-lt);}
+  .eds-call{text-decoration:none;}
+  .eds-tel{margin-left:auto;color:var(--teal-lt);font-weight:700;font-size:.98rem;font-variant-numeric:tabular-nums;}
+  .eds-tel.none{color:var(--faint);font-weight:400;font-size:.86rem;}
+  /* dates: both on one line */
+  .eds-daterow{display:flex;align-items:stretch;gap:14px;padding:11px 15px;}
+  .eds-dcell{display:flex;flex-direction:column;gap:6px;flex:1 1 0;min-width:0;}
+  .eds-dlab{font-family:var(--font);font-weight:700;letter-spacing:.09em;text-transform:uppercase;font-size:.58rem;color:var(--faint);}
+  .eds-dcell .dp{display:block;}
+  .eds-dcell .dp-trig{align-self:flex-start;color:var(--teal-lt);background:rgba(0,184,184,.12);border:0 !important;cursor:pointer;padding:7px 13px;border-radius:9px !important;font-weight:600;font-size:.98rem;font-family:var(--body);font-variant-numeric:tabular-nums;}
+  .eds-dcell .dp-trig:not(.set){color:var(--faint);background:rgba(255,255,255,.06);}
+  /* status row hosts the custom dropdown inline on the right */
+  .eds-statusrow{cursor:default;}
+  .eds-statusdd{margin-left:auto;}
+  .eds-statusdd .mdd{width:auto;margin:0;}
+  .eds-statusdd .mdd-btn{background:none;border:0;padding:4px 2px;color:var(--text);font-weight:700;font-family:var(--font);gap:6px;}
+  .eds-statusdd .mdd-btn:hover{border:0;}
+  .eds-statusdd .mdd-chev{width:8px;height:8px;}
+  /* conflict banner (conditional) */
+  .eds-conf{border-radius:12px !important;border-left-width:4px !important;margin:10px 0 2px;}
+  .eds-conf .go{border-radius:10px !important;width:auto;padding:10px 20px;margin-top:9px;}
+  /* change-student accordion (quiet) */
+  .eds-stu-acc{margin:16px 0 0;border:1px solid var(--line);border-radius:12px !important;background:rgba(0,0,0,.2);overflow:hidden;}
+  .eds-stu-sum{cursor:pointer;padding:12px 15px;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.62rem;color:var(--faint);list-style:none;}
+  .eds-stu-sum::-webkit-details-marker{display:none;}
+  .eds-stu-acc[open] .eds-stu-sum{color:var(--teal-lt);}
+  .eds-stu-body{padding:0 13px 12px;}
+  .eds-stu-body input{width:100%;}
+  /* actions */
+  .eds-actions{margin-top:18px;display:flex;flex-direction:column;gap:9px;}
+  .eds-actions:empty{display:none;}
+  .eds-prim{width:100%;font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:1rem;color:#06201f;background:linear-gradient(180deg,#13c7c7,#009d9d);border:0;border-radius:14px !important;padding:15px;cursor:pointer;}
+  .eds-prim:hover{filter:brightness(1.06);}
+  .eds-prim.checkin{background:linear-gradient(180deg,#5fe0b0,#2bbf88);}
+  .eds-sec{width:100%;font-family:var(--font);font-weight:600;letter-spacing:.05em;text-transform:uppercase;font-size:.84rem;color:var(--text);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:12px !important;padding:12px;cursor:pointer;}
+  .eds-sec:hover{background:rgba(255,255,255,.09);}
+  .eds-cancel-grp{margin-top:4px;}
+  .eds-cancel .eds-rlab{color:#ff6b61;margin:0 auto;font-weight:600;}
+  @media (max-width:520px){ #editmodal .mpanel{max-width:100%;} }
   input:focus,select:focus{border-color:var(--teal);}
   select{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235ff0f0' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:38px;}
   select option{background:#0c1414;color:var(--text);}
@@ -1487,26 +1558,40 @@
 <!-- Edit / move / delete a checkout (double-click a card, or Edit from the camera detail) -->
 <div class="modal" id="editmodal">
   <div class="mpanel">
-    <div class="mhead"><span class="mtitle" id="ed-title">Edit checkout</span><button class="mx" id="ed-x" aria-label="Close">&times;</button></div>
-    <div class="mbody">
+    <div class="mhead eds-nav"><span class="mtitle" id="ed-title">Reservation</span><button class="mx" id="ed-x" aria-label="Close">&times;</button></div>
+    <div class="mbody eds-body">
       <div class="mmsg" id="ed-msg"></div>
-      <label for="ed-sid">Student ID number</label>
-      <input type="text" id="ed-sid" inputmode="numeric" placeholder="Student ID" />
-      <div class="who-line" id="ed-who" aria-live="polite"></div>
-      <label for="ed-out">Checkout date</label>
-      <input type="date" id="ed-out" />
-      <label for="ed-due">Due back</label>
-      <input type="date" id="ed-due" />
-      <div class="mconf" id="ed-conf"></div>
-      <label for="ed-status">Status</label>
-      <div id="ed-status"></div>
-      <label id="ed-equiplabel">Equipment</label>
-      <p class="ed-hint" id="ed-equiphint">Pick a tab, then tap a type to choose from only the numbers free for these dates.</p>
-      <div id="ed-equip" class="eq-pick"></div>
-      <div class="ed-btnrow">
-        <button class="go" id="ed-save">Save changes</button>
-        <button class="btn danger" id="ed-del" type="button">Delete</button>
+      <!-- iOS 27 grouped sheet (Chris 2026-11-06): WHO -> WHAT -> WHEN -> STATUS -> DO, top to bottom.
+           Each row shows its current value; tapping it opens the wheel / date picker / menu. No instructions. -->
+      <div class="eds-stu" id="ed-contact"></div>
+
+      <div class="eds-gh">Equipment</div>
+      <div id="ed-equip" class="eds-grp"></div>
+
+      <div class="eds-gh">Dates</div>
+      <div class="eds-grp">
+        <div class="eds-daterow">
+          <span class="eds-dcell"><span class="eds-dlab">Outgoing</span><input type="date" id="ed-out" data-ph="Set date" /></span>
+          <span class="eds-dcell"><span class="eds-dlab">Incoming</span><input type="date" id="ed-due" data-ph="Set date" /></span>
+        </div>
       </div>
+      <div class="mconf eds-conf" id="ed-conf"></div>
+
+      <div class="eds-gh">Status</div>
+      <div class="eds-grp">
+        <div class="eds-row eds-statusrow"><span class="eds-rlab">Reservation status</span><div class="eds-statusdd" id="ed-status"></div></div>
+      </div>
+
+      <details class="eds-stu-acc">
+        <summary class="eds-stu-sum">Change student number</summary>
+        <div class="eds-stu-body">
+          <input type="text" id="ed-sid" inputmode="numeric" placeholder="Student ID" />
+          <div class="who-line" id="ed-who" aria-live="polite"></div>
+          <button type="button" class="eds-sec" id="ed-sidapply">Update student</button>
+        </div>
+      </details>
+
+      <div class="eds-actions" id="ed-actions"></div>
     </div>
   </div>
 </div>
@@ -2281,9 +2366,15 @@
 
   // ===== Unified reservation window: every item in the bundle + per-item check-in (incremental) =====
   var resvId=null;
-  function openReservation(id){ var c=findRec(id); if(!c) return; resvId=id; renderResvModal(); document.getElementById('resvmodal').classList.add('open'); }
-  function closeResv(){ var m=document.getElementById('resvmodal'); if(m) m.classList.remove('open'); resvId=null; }
+  // Tapping a reservation ANYWHERE now opens the one unified card (the edit card below), which shows the
+  // contact + the day's actions AND lets you change dates/equipment in place. No more detail->edit hop. (Chris 2026-11-06)
+  function openReservation(id){ if(!findRec(id)) return; return openEditCheckout(id); }
+  function closeResv(){
+    var em=document.getElementById('editmodal'); if(em && em.classList.contains('open')){ closeEdit(); resvId=null; return; }   // unified card is the active reservation card
+    var m=document.getElementById('resvmodal'); if(m) m.classList.remove('open'); resvId=null;
+  }
   function renderResvModal(){
+    var em=document.getElementById('editmodal'); if(em && em.classList.contains('open') && edId){ openEditCheckout(edId); return; }   // refresh the unified card after an action
     var parent=findRec(resvId); if(!parent){ closeResv(); return; }
     var items=resvItems(parent), rc=resvReturnedCount(parent);
     var od=items.some(isOverdue);
@@ -3730,20 +3821,54 @@
   // ===== Edit / move / delete a checkout =====
   var edId=null, edCamDD=null, edStatusDD=null, edLookupT=null, edGearState=null;
   function openEditCheckout(id){
-    var c=findRec(id); if(!c) return; edId=id;
+    var c=findRec(id); if(!c) return; edId=id; resvId=id;   // unified card: this IS the reservation card now
     if(document.getElementById('camdetail').classList.contains('open')) closeCamDetail();
-    document.getElementById('ed-title').textContent='Edit checkout · '+(c.camera||c.item||'');
+    document.getElementById('ed-title').innerHTML='Reservation &middot; <b>'+esc(c.camera||gearLabel(c.item)||'')+'</b>';
     var msg=document.getElementById('ed-msg'); msg.className='mmsg'; msg.textContent='';
     document.getElementById('ed-sid').value=c.student_id||'';
     var w=document.getElementById('ed-who'); w.className='who-line'; w.textContent=c.student_name?('Currently: '+c.student_name):'';
     document.getElementById('ed-out').value=c.out||''; document.getElementById('ed-due').value=c.due||'';
     mkDatePicker(document.getElementById('ed-out')); mkDatePicker(document.getElementById('ed-due'));
-    document.getElementById('ed-out').onchange=edCheckConflicts; document.getElementById('ed-due').onchange=edCheckConflicts;
+    document.getElementById('ed-out').onchange=edDateChange; document.getElementById('ed-due').onchange=edDateChange;
     edSelCam=c.camera||''; edCamDD={value:function(){ return edSelCam; }};   // camera now chosen via the equipment picker wheel (edit modal)
-    edStatusDD=mkDropdown(document.getElementById('ed-status'), [{value:'reserved',label:'Reserved'},{value:'out',label:'Picked up (out)'},{value:'returned',label:'Returned'}], statusOf(c), null);
-    eqInitGearState(c); edEqTab='camera'; renderEquipPicker(c);
+    edStatusDD=mkDropdown(document.getElementById('ed-status'), [{value:'reserved',label:'Reserved'},{value:'out',label:'Picked up (out)'},{value:'returned',label:'Returned'}], statusOf(c), function(){ edCommit(false); });
+    eqInitGearState(c); edAdding=false; renderEquipPicker(c);
+    renderEdHeader(c);
     edCheckConflicts();
     document.getElementById('editmodal').classList.add('open');
+  }
+  // The unified card's top: contact pinned (name / period / tap-to-call phone) + the day's actions (Hand out /
+  // Check in / Cancel / Receipt), reusing the existing reservation action functions (which refresh/close this
+  // card via the resvId-aware renderResvModal/closeResv). (Chris 2026-11-06)
+  function renderEdHeader(c){
+    var parent=findRec(edId)||c;
+    var cEl=document.getElementById('ed-contact'); if(!cEl) return;
+    var items=resvItems(parent), anyReserved=items.some(function(x){return statusOf(x)==='reserved';}), anyOut=items.some(function(x){return statusOf(x)==='out';});
+    var allRet=items.length>0&&items.every(function(x){return statusOf(x)==='returned';}), od=items.some(isOverdue);
+    var stCls=od?'od':(anyOut?'out':(allRet?'ret':'res')), stLbl=od?'Overdue':(anyOut?'Out':(allRet?'Returned':'Reserved'));
+    var per=parent.period?('<span class="eds-chip per">Period '+esc(parent.period)+'</span>'):'';
+    var nm=parent.student_id?('<button type="button" class="eds-name" data-edstu="'+esc(parent.student_id)+'" title="Open student profile">'+esc(nameOf(parent))+'</button>'):('<span class="eds-name">'+esc(nameOf(parent))+'</span>');
+    var cellDigits=String(parent.student_cell||'').replace(/\D/g,'');
+    var call=cellDigits
+      ? '<a class="eds-row eds-call" href="tel:'+esc(cellDigits)+'"><span class="eds-ic">&#9742;</span><span class="eds-rlab">Call student</span><span class="eds-tel">'+esc(fmtPhone(parent.student_cell))+'</span></a>'
+      : '<div class="eds-row eds-call"><span class="eds-ic">&#9742;</span><span class="eds-rlab">Phone</span><span class="eds-tel none">No cell on file</span></div>';
+    cEl.innerHTML='<div class="eds-name-row">'+nm+per+'<span class="eds-chip st-'+stCls+'">'+esc(stLbl)+'</span></div>'+
+      (parent.course?('<div class="eds-co">'+esc(parent.course)+'</div>'):'')+
+      '<div class="eds-grp mt">'+call+'</div>';
+    // DO: one primary (Hand out / Check in), Receipt, then Cancel reservation isolated in red.
+    var acts='';
+    if(anyReserved) acts+='<button type="button" class="eds-prim" data-edact="handout">Hand out</button>';
+    if(anyOut) acts+='<button type="button" class="eds-prim checkin" data-edact="checkin">Check in</button>';
+    acts+='<button type="button" class="eds-sec" data-edact="receipt">Receipt</button>';
+    if(anyReserved) acts+='<div class="eds-grp eds-cancel-grp"><button type="button" class="eds-row eds-cancel" data-edact="cancel"><span class="eds-rlab">Cancel reservation</span></button></div>';
+    var aEl=document.getElementById('ed-actions'); aEl.innerHTML=acts;
+    aEl.querySelectorAll('[data-edact]').forEach(function(b){ b.onclick=function(){ var a=b.getAttribute('data-edact');
+      if(a==='handout') resvPickAll(parent);
+      else if(a==='checkin') resvCheckInKit(parent);
+      else if(a==='receipt') openReceipt(parent.id);
+      else if(a==='cancel') resvDone(parent);
+    }; });
+    var sb=cEl.querySelector('[data-edstu]'); if(sb) sb.onclick=function(){ openStudentProfile(sb.getAttribute('data-edstu')); };
   }
   // ===== Tabbed equipment picker (edit modal): categories -> type rows -> a drum wheel of only the unit
   //       numbers free for the current dates. Backs onto edGearState + edSelCam so Save is unchanged. =====
@@ -3755,6 +3880,7 @@
     {key:'accessories', label:'Accessories', types:['tripod','mankin_tripod','reflector','bluetooth','apple_pencil']}
   ];
   function eqNum(id){ var m=String(id).match(/(\d+)\s*$/); return m?String(parseInt(m[1],10)):String(id); }
+  function eqNum2(id){ var n=eqNum(id); return /^\d$/.test(n)?('0'+n):n; }   // unit numbers always read as two digits (01, 02 ...) on the card + wheel (Chris 2026-11-06)
   function eqGid(c){ return c.group||c.id; }
   // Seed edGearState from the units already on this checkout (linked by group, or sharing the reservation key).
   function eqInitGearState(c){
@@ -3802,23 +3928,40 @@
     var sel=curU?(esc(tlabel)+' <b>'+esc(eqNum(curU))+'</b>'):'None';
     return '<button type="button" class="eq-row'+(curU?' on':'')+'" data-eqpick="gear" data-eqtype="'+esc(type)+'"><span class="eq-rthumb"'+(th?(' style="background-image:url(\''+th+'\')"'):'')+'></span><span class="eq-rmain"><span class="eq-rname">'+esc(tlabel)+'</span><span class="eq-rsel">'+sel+'</span></span><span class="eq-rcount'+(units.length?'':' zero')+'">'+units.length+' free</span><span class="eq-rchev">&#8250;</span></button>';
   }
+  function edTypeOrder(t){ var o={wide:1,zoom:2,speedlite:3,tripod:4,mankin_tripod:4,reflector:5,bluetooth:6,apple_pencil:7}; return o[t]||9; }
+  function edGearIcon(t){ var m={wide:'◎',zoom:'◎',speedlite:'☀',tripod:'▲',mankin_tripod:'▲',reflector:'◐',bluetooth:'⌨',apple_pencil:'✎'}; return '<span class="eds-ic">'+(m[t]||'▣')+'</span>'; }
+  function eqAddableTypes(c){
+    var at={}; if(edGearState) Object.keys(edGearState).forEach(function(id){ if(edGearState[id]&&edGearState[id].on){ var u=gearUnit(id); if(u) at[u.type]=1; } });
+    var pt={}; gearPoolIds().forEach(function(id){ var u=gearUnit(id); if(u) pt[u.type]=1; });
+    var out=[]; Object.keys(pt).forEach(function(t){ if(at[t]) return; var n=eqAvailUnits(t,c).length; if(n) out.push({type:t,label:(gearTypes()[t]&&gearTypes()[t].label)||t,n:n}); });
+    out.sort(function(a,b){ return edTypeOrder(a.type)-edTypeOrder(b.type); }); return out;
+  }
+  // The cart: every item on the reservation is one row showing its unit; tap a row to change it on the wheel,
+  // or Add equipment to attach another. No tabs, no hint text: the rows carry themselves. (Chris 2026-11-06)
+  var edAdding=false;
   function renderEquipPicker(c){
-    var host=document.getElementById('ed-equip'), lbl=document.getElementById('ed-equiplabel'), hint=document.getElementById('ed-equiphint');
-    if(!host) return;
-    if(c.kind==='equipment'){ host.style.display='none'; if(lbl)lbl.style.display='none'; if(hint)hint.style.display='none'; return; }   // gear-only reservations: no attach picker (as before)
-    host.style.display=''; if(lbl){ lbl.style.display=''; lbl.textContent='Equipment'; } if(hint){ hint.style.display=''; hint.textContent='Pick a tab, then tap a type to choose from only the numbers free for these dates.'; }
-    var cats=eqCatsForPool();
-    if(!cats.some(function(x){ return x.key===edEqTab; })) edEqTab=(cats[0]&&cats[0].key)||'camera';
-    var tabs='<div class="eq-tabs" role="tablist">'+cats.map(function(cat){
-      var cnt=(cat.key==='camera')?eqAvailCams(c).length:cat.types.reduce(function(n,t){ return n+eqAvailUnits(t,c).length; },0);
-      return '<button type="button" class="eq-tab'+(edEqTab===cat.key?' on':'')+'" data-eqtab="'+cat.key+'">'+esc(cat.label)+' <span class="eq-tabn">'+cnt+'</span></button>';
-    }).join('')+'</div>';
-    var rows;
-    if(edEqTab==='camera'){ rows=eqRowHtml('camera','',c); }
-    else { var cat=cats.filter(function(x){return x.key===edEqTab;})[0]; rows=cat?cat.types.map(function(t){ return eqRowHtml('gear',t,c); }).join(''):''; }
-    host.innerHTML=tabs+'<div class="eq-rows">'+(rows||'<div class="eq-empty">Nothing here for this pool.</div>')+'</div>';
-    host.querySelectorAll('[data-eqtab]').forEach(function(b){ b.onclick=function(){ edEqTab=b.getAttribute('data-eqtab'); renderEquipPicker(c); }; });
+    var host=document.getElementById('ed-equip'); if(!host) return;
+    if(c.kind==='equipment'){                                   // gear-only reservation: the single unit (display only)
+      var t0=(gearUnit(c.item)||{}).type, tl0=(gearTypes()[t0]&&gearTypes()[t0].label)||gearLabel(c.item);
+      host.innerHTML='<div class="eds-row">'+edGearIcon(t0)+'<span class="eds-rlab">'+esc(tl0)+'</span><span class="eds-rval"><b>'+esc(eqNum2(c.item))+'</b></span></div>';
+      return;
+    }
+    var rows='<button type="button" class="eds-row" data-eqpick="camera"><span class="eds-ic">&#9635;</span><span class="eds-rlab">Camera kit</span><span class="eds-rval">'+(edSelCam?('<b>'+esc(eqNum2(edSelCam))+'</b>'):'None')+'</span><span class="eds-chev">&#8250;</span></button>';
+    var attached=[]; if(edGearState) Object.keys(edGearState).forEach(function(id){ if(edGearState[id]&&edGearState[id].on){ var u=gearUnit(id); if(u) attached.push({type:u.type,id:id}); } });
+    attached.sort(function(a,b){ return edTypeOrder(a.type)-edTypeOrder(b.type); });
+    attached.forEach(function(g){ var tl=(gearTypes()[g.type]&&gearTypes()[g.type].label)||g.type;
+      rows+='<button type="button" class="eds-row" data-eqpick="gear" data-eqtype="'+esc(g.type)+'">'+edGearIcon(g.type)+'<span class="eds-rlab">'+esc(tl)+'</span><span class="eds-rval"><b>'+esc(eqNum2(g.id))+'</b></span><span class="eds-chev">&#8250;</span></button>'; });
+    if(edAdding){
+      if(!edSelCam && viewCams().length) rows+='<button type="button" class="eds-row add" data-eqpick="camera"><span class="eds-ic">&#9635;</span><span class="eds-rlab">Camera kit</span><span class="eds-rval">'+eqAvailCams(c).length+' free</span><span class="eds-chev">&#8250;</span></button>';
+      eqAddableTypes(c).forEach(function(a){ rows+='<button type="button" class="eds-row add" data-eqpick="gear" data-eqtype="'+esc(a.type)+'">'+edGearIcon(a.type)+'<span class="eds-rlab">'+esc(a.label)+'</span><span class="eds-rval">'+a.n+' free</span><span class="eds-chev">&#8250;</span></button>'; });
+      rows+='<button type="button" class="eds-row add" data-eqdone="1"><span class="eds-ic">&#10005;</span><span class="eds-rlab">Done adding</span></button>';
+    } else {
+      rows+='<button type="button" class="eds-row add" data-eqadd="1"><span class="eds-ic">+</span><span class="eds-rlab">Add equipment</span><span class="eds-chev">&#8250;</span></button>';
+    }
+    host.innerHTML=rows;
     host.querySelectorAll('[data-eqpick]').forEach(function(b){ b.onclick=function(){ openEquipWheel(b.getAttribute('data-eqpick'), b.getAttribute('data-eqtype')||'', c); }; });
+    var add=host.querySelector('[data-eqadd]'); if(add) add.onclick=function(){ edAdding=true; renderEquipPicker(c); };
+    var dn=host.querySelector('[data-eqdone]'); if(dn) dn.onclick=function(){ edAdding=false; renderEquipPicker(c); };
   }
   // ---- the drum wheel (mirrors the Photo Walk seat picker) ----
   var eqWheel={mode:'',type:'',c:null}, eqWheelRealign=false;
@@ -3829,7 +3972,7 @@
     if(mode==='camera'){ units=eqAvailCams(c); cur=edSelCam; title.textContent='Choose a camera'; }
     else { units=eqAvailUnits(type,c); cur=eqCurrentUnit(type); var tl=(gearTypes()[type]&&gearTypes()[type].label)||type; title.textContent='Choose '+tl; }
     scroll.innerHTML='<div class="eq-wheelpad"></div><div class="eq-wheelitem" data-unit="">None</div>'+
-      units.map(function(id){ return '<div class="eq-wheelitem" data-unit="'+esc(id)+'">'+esc(eqNum(id))+'</div>'; }).join('')+
+      units.map(function(id){ return '<div class="eq-wheelitem" data-unit="'+esc(id)+'">'+esc(eqNum2(id))+'</div>'; }).join('')+
       '<div class="eq-wheelpad"></div>';
     scroll.querySelectorAll('.eq-wheelitem').forEach(function(it){ it.onclick=function(){ eqWheelRealign=true; it.scrollIntoView({block:'center'}); clearTimeout(scroll._t); scroll._t=setTimeout(function(){ eqWheelRealign=false; eqMarkOn(scroll); },180); }; });
     scroll.onscroll=function(){ if(eqWheelRealign) return; clearTimeout(scroll._t); scroll._t=setTimeout(function(){ eqMarkOn(scroll); },80); };
@@ -3850,7 +3993,8 @@
   function confirmEqWheel(){
     var scroll=document.getElementById('eqWheelScroll'), v=eqMarkOn(scroll), c=eqWheel.c;
     if(eqWheel.mode==='camera') edSelCam=v||''; else eqSetGearForType(eqWheel.type, v||'');
-    closeEqWheel(); if(c) renderEquipPicker(c); edCheckConflicts();
+    edAdding=false; closeEqWheel(); if(c) renderEquipPicker(c); edCheckConflicts();
+    if(!edConflictPlan().conflicts.length) edCommit(false);   // no clash: apply the change on the spot; a clash leaves the banner's fix button to commit
   }
   (function(){
     var ov=document.getElementById('eqWheelOv'), x=document.getElementById('eqWheelX'), cf=document.getElementById('eqWheelConfirm');
@@ -3858,11 +4002,12 @@
     if(cf) cf.onclick=confirmEqWheel;
     if(ov) ov.addEventListener('click',function(e){ if(e.target===ov) closeEqWheel(); });
   })();
-  function closeEdit(){ document.getElementById('editmodal').classList.remove('open'); edId=null; }
+  function closeEdit(){ document.getElementById('editmodal').classList.remove('open'); edId=null; resvId=null; }
   (function(){
     var x=document.getElementById('ed-x'); if(x) x.onclick=closeEdit;
     var m=document.getElementById('editmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeEdit(); });
     var sid=document.getElementById('ed-sid'); if(sid) sid.addEventListener('input',function(){ clearTimeout(edLookupT); edLookupT=setTimeout(edLookup,350); });
+    var sa=document.getElementById('ed-sidapply'); if(sa) sa.onclick=function(){ edCommit(false); };
     var s=document.getElementById('ed-save'); if(s) s.onclick=saveEdit;
     var d=document.getElementById('ed-del'); if(d) d.onclick=function(){ if(!edId) return; silvaConfirm('Delete this checkout record? This cannot be undone.',{okLabel:'Delete',cancelLabel:'Cancel',danger:true}).then(function(ok){ if(ok){ del(edId); closeEdit(); } }); };
   })();
@@ -3925,15 +4070,13 @@
     return Promise.all(ops);
   }
   function edCheckConflicts(){
-    var box=document.getElementById('ed-conf'), save=document.getElementById('ed-save');
-    if(!box) return; edPlan=null;
-    var c=findRec(edId); if(!c){ box.className='mconf'; box.textContent=''; if(save){ save.disabled=false; save.textContent='Save changes'; } return; }
+    var box=document.getElementById('ed-conf'); if(!box) return; edPlan=null;
+    var c=findRec(edId); if(!c){ box.className='mconf eds-conf'; box.textContent=''; return; }
     var out=document.getElementById('ed-out').value, due=document.getElementById('ed-due').value;
-    function fail(msg){ box.className='mconf show'; box.innerHTML=msg; if(save){ save.disabled=true; save.textContent='Save changes'; } }
-    function ok(msg){ box.className='mconf'+(msg?' show free':''); box.textContent=msg||''; if(save){ save.disabled=false; save.textContent='Save changes'; } }
-    function solve(msg, btn){ box.className='mconf show solve'; box.innerHTML=msg; if(save){ save.disabled=false; save.textContent=btn; } }
-    if(!out||!due){ ok(''); return; }
-    if(due<out){ fail('The return date must be after the checkout date.'); return; }
+    function fail(msg){ box.className='mconf eds-conf show'; box.innerHTML=msg; }
+    function okLine(msg){ box.className='mconf eds-conf'+(msg?' show free':''); box.textContent=msg||''; }
+    if(!out||!due){ okLine(''); return; }
+    if(due<out){ fail('The return date must be after the outgoing date.'); return; }
     var plan=edConflictPlan();
     if(plan.conflicts.length){
       if(plan.allResolvable){
@@ -3945,7 +4088,9 @@
           anyDrop=true; return '<b>'+esc(cf.label)+'</b> is booked on the return day. '+esc(conflictSummary(cf.hits))+' Drop it and keep the rest.';
         }).join('<br>');
         var btn=(anySwap&&!anyDrop)?'Swap & extend':((anyDrop&&!anySwap)?'Drop & extend':'Fix & extend');
-        solve(lines+'<br><span class="mconf-note">One press does this and your edit together.</span>', btn);
+        box.className='mconf eds-conf show solve';
+        box.innerHTML=lines+'<div><button type="button" class="go" id="ed-fix">'+esc(btn)+'</button></div>';
+        var fx=document.getElementById('ed-fix'); if(fx) fx.onclick=function(){ edCommit(false); };
       } else {
         var bad=plan.conflicts.filter(function(x){ return x.res.type==='none'; })[0];
         fail('<b>'+esc(bad.label)+'</b> is already booked. '+esc(conflictSummary(bad.hits))+(bad.kind==='camera'?' It is already picked up, so it cannot be moved.':'')+' Pick another'+(bad.kind==='equipment'?' unit':' camera')+' or a shorter return.');
@@ -3953,29 +4098,33 @@
       return;
     }
     var normalDue=(typeof nextSchoolDayISO==='function')?nextSchoolDayISO(out):out;
-    ok(due>normalDue ? ('Free the whole time. Multi-day rental, due back '+fmt(due)+'.') : '');
+    okLine(due>normalDue ? ('Free the whole time. Multi-day rental, due back '+fmt(due)+'.') : '');
   }
-  function saveEdit(){
+  // Commit the card's current state. close=true closes the sheet (explicit Save); close=false applies the edit
+  // in place and re-renders the card (direct manipulation: a unit swap, a status change, a clean date change).
+  function edCommit(close){
     if(!edId) return;
-    var pid=edId, c=findRec(pid), gear=edGearState;
+    var pid=edId, c=findRec(pid); if(!c) return; var gear=edGearState;
     var out=document.getElementById('ed-out').value, due=document.getElementById('ed-due').value;
-    edCheckConflicts();
-    if(document.getElementById('ed-save').disabled) return;   // hard stop: an unresolvable clash is showing
-    var plan=edPlan;                                          // resolvable clashes to apply first (bump future holders / drop items)
+    var plan=edConflictPlan();
+    if(plan.conflicts.length && !plan.allResolvable){ edCheckConflicts(); return; }   // hard clash: blocked, the banner explains why
+    var usePlan=(plan.conflicts.length && plan.allResolvable)?plan:null;              // resolvable clash: bump future holders / drop items first
     var status=edStatusDD?edStatusDD.value():statusOf(c);
     var payload={id:pid, camera:edCamDD?edCamDD.value():c.camera, out:out, due:due, status:status};
     var sid=document.getElementById('ed-sid').value.trim();
     var finalSid=sid||String(c.student_id||'');
     if(sid && sid!==String(c.student_id||'')) payload.student_id=sid;
-    var s=document.getElementById('ed-save'); s.disabled=true; s.textContent=plan?'Fixing…':'Saving…';
-    (plan?edApplyPlan(plan):Promise.resolve())                // reassign the conflicting future holders first, so the unit is free to extend into
+    (usePlan?edApplyPlan(usePlan):Promise.resolve())
       .then(function(){ return camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)}); })
       .then(function(r){ if(r.ok) return null; return r.json().then(function(j){ throw new Error((j&&j.error)||'Could not save.'); }); })
       .then(function(){ return applyGear(gear, pid, finalSid, out, due, status); })   // attach / detach gear, kept in sync with this checkout
-      .then(function(){ closeEdit(); return loadBoard(); }).then(reloadCal)
-      .catch(function(e){ var msg=document.getElementById('ed-msg'); msg.className='mmsg err show'; msg.textContent=(e&&e.message)||'Could not save. Try again.'; })
-      .then(function(){ var s2=document.getElementById('ed-save'); if(s2){ s2.disabled=false; s2.textContent='Save changes'; } });
+      .then(function(){ return loadBoard(); }).then(reloadCal)
+      .then(function(){ if(close){ closeEdit(); } else if(edId){ openEditCheckout(edId); } })   // stay open and refresh in place
+      .catch(function(e){ var msg=document.getElementById('ed-msg'); if(msg){ msg.className='mmsg err show'; msg.textContent=(e&&e.message)||'Could not save. Try again.'; } });
   }
+  function saveEdit(){ edCommit(true); }
+  // A date change checks for a clash; if clean it applies on the spot, if resolvable the banner's fix button applies it.
+  function edDateChange(){ edCheckConflicts(); if(!edConflictPlan().conflicts.length) edCommit(false); }
   // Reconcile the toggled gear against what is on the checkout: add new, drop removed, and keep
   // still-attached gear pointing at the same student and dates as its camera.
   function applyGear(gear, pid, sid, out, due, status){
