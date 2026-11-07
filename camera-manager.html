@@ -1641,6 +1641,44 @@
     setCView('board');   // always boot on the Board; the daily flow is primary
   })();
 
+  // ===== Barcode scanner plumbing (built DORMANT; Chris 2026-11-06). A USB/Bluetooth scanner is just a
+  //       keyboard that types the code very fast and presses Enter. This stays invisible and inert until
+  //       flipped on with `?scan=1` in the URL (or sessionStorage `scanon`=`1`), so nothing shows or fires
+  //       until the hardware is here. When on, a machine-fast keystroke burst + Enter is read as a scan,
+  //       resolved to a camera / gear unit, and that unit's card opens (the unified reservation card once it
+  //       lands). Labels encode the unit's OWN id (a camera number like "CAM 02", or the gear unit id); the
+  //       resolver normalizes spacing/punctuation so "CAM02", "CAM 02", "02" all match. No backend change. =====
+  function scanOn(){ try{ if(sessionStorage.getItem('scanon')==='1') return true; }catch(e){} return location.search.indexOf('scan=1')>=0; }
+  function _normScan(s){ return String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,''); }
+  function resolveScan(code){
+    var n=_normScan(code); if(!n) return null;
+    var cams=(typeof CAMERAS!=='undefined'&&CAMERAS&&CAMERAS.length)?CAMERAS:viewCams();
+    for(var i=0;i<cams.length;i++){ var c=cams[i], cn=_normScan(c), num=cn.replace(/\D/g,'');
+      if(n===cn || (num && (n===num || n===('CAM'+num) || n===String(parseInt(num,10))))) return {kind:'camera', id:c}; }
+    var gids=gearPoolIds();
+    for(var j=0;j<gids.length;j++){ if(_normScan(gids[j])===n) return {kind:'gear', id:gids[j]}; }
+    return null;
+  }
+  function handleScan(code){
+    var u=resolveScan(code);
+    if(!u){ if(typeof silvaToast==='function') silvaToast('Scan not recognized: '+String(code)); return; }
+    if(u.kind==='camera'){ var rec=(typeof activeFor==='function')?activeFor(u.id):null;
+      if(rec && typeof openReservation==='function'){ openReservation(rec.group||rec.id); }
+      else if(typeof openCamDetail==='function'){ openCamDetail(u.id); } return; }
+    var grec=(typeof gearActiveFor==='function')?gearActiveFor(u.id):null;
+    if(grec && typeof openReservation==='function'){ openReservation(grec.group||grec.id); }
+    else if(typeof openGearDetail==='function'){ openGearDetail(u.id); }
+  }
+  (function(){   // keyboard-wedge capture: a machine-fast burst of characters ending in Enter is a scan
+    var buf='', last=0, GAP=90;
+    document.addEventListener('keydown', function(e){
+      if(!scanOn()) return;
+      var now=Date.now();
+      if(e.key==='Enter'){ if(buf.length>=3 && (now-last)<GAP*4){ var code=buf; buf=''; handleScan(code); try{ e.preventDefault(); }catch(_){} } buf=''; return; }
+      if(e.key && e.key.length===1){ if(now-last>GAP) buf=''; buf+=e.key; last=now; }
+    }, true);
+  })();
+
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ tryInject(60); }); else tryInject(60);
 
   // ---- helpers ----
