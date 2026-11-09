@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/store.css?v=55" />
-<link rel="stylesheet" href="/css/store-glass.css?v=15" />
+<link rel="stylesheet" href="/css/store-glass.css?v=16" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -1355,7 +1355,7 @@
   function showReceipt(s){
     var teach=USER?(USER.teacher||TEACHER_NAME[USER.pool]||''):'', room=USER?pickupRoom():'';
     var hasReq=s.requested.length>0, hasRes=s.reserved.length>0, pureReq=hasReq && !hasRes;
-    var icon = pureReq ? '<div class="rcpt-check wait">&#8987;</div>' : '<div class="rcpt-check">&#10003;</div>';
+    var icon = pureReq ? '<div class="rcpt-check wait"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg></div>' : '<div class="rcpt-check">&#10003;</div>';
     var head = pureReq ? t('Request sent!') : (hasReq ? t('Almost there!') : t('You&#8217;re all set!'));
     var sub = pureReq ? t('Mr. Silva needs to approve this. You&#8217;ll get your gear once he says yes.')
             : (hasReq ? tf('Your gear is reserved. The %s that need Mr. Silva&#8217;s OK are waiting for him.', s.requested.length>1?t('items'):t('item'))

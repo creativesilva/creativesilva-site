@@ -386,6 +386,6 @@ body{overflow-x:clip;}
 @media (prefers-reduced-motion:reduce){ .galaxy-mesh,.galaxy-glow{animation:none;} }
 @media (prefers-reduced-transparency:reduce){
   .galaxy-mesh,.galaxy-glow{display:none;}
-  .store-nav,.sheet,.prod,.catn,.hero-top .datebar,.navmenu,.toast{backdrop-filter:none;-webkit-backdrop-filter:none;}
-  .sheet,.navmenu,.toast{background:rgba(9,20,40,.97);}
+  .store-nav,.prod,.catn,.hero-top .datebar,.navmenu,.toast{backdrop-filter:none;-webkit-backdrop-filter:none;}
+  .navmenu,.toast{background:rgba(9,20,40,.97);}
 }
