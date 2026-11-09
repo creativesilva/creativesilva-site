@@ -369,7 +369,7 @@ body{overflow-x:clip;}
 .unit-pick{text-align:center;}
 .unit-pick-lab{text-align:center;}
 .uw{position:relative;height:150px;max-width:150px;margin:2px auto 0;}
-.uw-scroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;
+.uw-scroll{height:100%;overflow-y:auto;overflow-x:hidden;touch-action:pan-y;overscroll-behavior:contain;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;
   -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 26%,#000 74%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 26%,#000 74%,transparent 100%);}
 .uw-scroll::-webkit-scrollbar{display:none;width:0;height:0;}
 .uw-pad{height:53px;flex:0 0 auto;}
