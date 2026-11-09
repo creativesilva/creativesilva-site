@@ -420,4 +420,6 @@ body{background-image:radial-gradient(30% 22% at 29% 29%, rgba(0,184,184,.85), t
     radial-gradient(3px 3px at 33% 40%, rgba(255,255,255,.9), transparent 64%),
     radial-gradient(3px 3px at 77% 33%, rgba(255,255,255,.86), transparent 64%),
     radial-gradient(2px 2px at 52% 52%, rgba(255,255,255,.8), transparent 64%),
-    radial-gradient(3px 3px at 8% 34%, rgba(255,255,255,.82), transparent 64%), linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%) !important;background-blend-mode:screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,normal !important;background-attachment:fixed !important;background-repeat:no-repeat !important;}
+    radial-gradient(3px 3px at 8% 34%, rgba(255,255,255,.82), transparent 64%), linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%) !important;background-blend-mode:screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,normal !important;background-attachment:fixed !important;background-size:100% 100vh !important;background-position:center top !important;background-repeat:no-repeat !important;}
+
+.store-hero::after{display:none !important;}  /* no header image on the student store (Chris 2026-11-09) */
