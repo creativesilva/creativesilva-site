@@ -320,7 +320,8 @@
     ['/curriculum/shared/photo1-important-person-overview.html',
      '/curriculum/shared/photo1-important-person-step02-choose-your-person.html',
      '/curriculum/shared/photo1-important-person-step03-mood-board.html',
-     '/curriculum/shared/photo1-important-person-step04-storyboard.html'],
+     '/curriculum/shared/photo1-important-person-step04-storyboard.html',
+     '/curriculum/shared/photo1-important-person-step05-capture-contact.html'],
     ['/curriculum/photo2/photo2a-home.html',
      '/curriculum/photo2/photo2a-course-overview.html',
      '/curriculum/photo2/photo2a-syllabus.html'],
@@ -377,7 +378,8 @@
     ['/curriculum/shared/photo2-important-person-overview.html',
      '/curriculum/shared/photo2-important-person-step02-choose-your-person.html',
      '/curriculum/shared/photo2-important-person-step03-mood-board.html',
-     '/curriculum/shared/photo2-important-person-step04-storyboard.html']
+     '/curriculum/shared/photo2-important-person-step04-storyboard.html',
+     '/curriculum/shared/photo2-important-person-step05-capture-contact.html']
   ];
 
   var SEQUENCE = [];

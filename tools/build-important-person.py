@@ -35,6 +35,10 @@ def ent(s):
 HAVE_HEADER=False    # OFF (Chris 2026-10-21): took down the Silva + Garcia celebration-dinner header image. The "A Note From Mr. Silva" card stays (reworded to no longer reference the photo). assets/images/<course>/important-person/header-v1.jpg
 HAVE_S2_FLOAT=True   # ON: the B&W Mr. Garcia headshot, same reframe (Mr. Silva's example, not the turn-in standard). assets/images/<course>/important-person/journal-float-v1.jpg
 HAVE_S3_FLOAT=False  # Step 03 storyboard float (none supplied yet), assets/images/<course>/important-person/storyboard-float-v1.jpg
+HAVE_S5_FLOAT=False  # Step 05 capture float (none supplied yet), assets/images/<course>/important-person/capture-float-v1.jpg
+# Contact-sheet presets are installed once (Image Series module); same install video, so a student
+# who does not have the 12-Up preset yet can add it.
+CS_INSTALL_VIDEO="https://vimeo.com/1164128764/e1842e523e?share=copy&amp;fl=sv&amp;fe=ci"
 
 STANDARDS=[
   {"code":"SA.17.2","en_tier":"Studio Arts","es_tier":"Artes de Estudio",
@@ -203,6 +207,8 @@ def build(course):
     S2=f"{course}-important-person-step02-choose-your-person.html"
     S3=f"{course}-important-person-step03-mood-board.html"
     S4=f"{course}-important-person-step04-storyboard.html"
+    S5=f"{course}-important-person-step05-capture-contact.html"
+    S5_FLOAT=f"{IMGDIR}/capture-float-v1.jpg"
 
     def nav(current,dots,stepnav):
         return ('      <div class="silva-breadcrumb">\n'
@@ -215,7 +221,7 @@ def build(course):
                 '      <div class="silva-nav-spacer"></div>\n'
                 f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
                 f'      <div class="silva-step-nav">{stepnav}</div>')
-    HREFS=[OVER,S2,S3,S4]; TITLES=[("1","Step 01"),("2","Step 02"),("3","Step 03"),("4","Step 04")]
+    HREFS=[OVER,S2,S3,S4,S5]; TITLES=[("1","Step 01"),("2","Step 02"),("3","Step 03"),("4","Step 04"),("5","Step 05")]
     def dots_for(ai):
         return "".join(dot("" if i==ai else HREFS[i], lab, title, i==ai, module=False) for i,(lab,title) in enumerate(TITLES))
 
@@ -507,7 +513,7 @@ def build(course):
                 ("Take a photo with your student iPad:","fill the frame with the page and keep it straight, so your sketch and plan are easy to read."),
                 ("Upload all three JPGs:","upload one photo for each image, three pages in all."),
             ]))
-        en+=next_up("UP NEXT &middot; CAPTURE YOUR SERIES","With your plan ready, you will photograph your important person: your portrait and two images of them in action. New steps are coming to this project.")
+        en+=next_up("UP NEXT &middot; STEP 05 - Capture &amp; Contact","Photograph your series with your checked-out camera, offload your full take to RAW_Images, and build a 12-up contact sheet.")
 
         es=banner(f"Proyecto {PROJNUM} &bull; Paso 04","Haz el Storyboard de Tus Tres Im&aacute;genes",
             "Planea tu serie en papel antes de tomar la c&aacute;mara. Dibuja cada imagen y escribe su plan.",
@@ -545,13 +551,83 @@ def build(course):
                 ("Toma una foto con tu iPad de estudiante:","llena el encuadre con la p&aacute;gina y mantenla derecha, para que tu dibujo y tu plan se lean f&aacute;cil."),
                 ("Sube las tres JPG:","sube una foto por cada imagen, tres p&aacute;ginas en total."),
             ]))
-        es+=next_up("A CONTINUACI&Oacute;N &middot; CAPTURA TU SERIE","Con tu plan listo, fotografiar&aacute;s a tu persona importante: tu retrato y dos im&aacute;genes de ella en acci&oacute;n. Vienen nuevos pasos a este proyecto.")
+        es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 05 - Captura y Contacto","Fotograf&iacute;a tu serie con tu c&aacute;mara prestada, descarga tu toma completa a RAW_Images y arma una hoja de contactos de 12.")
 
-        stepnav=f'<a href="{S3}" class="silva-step-btn">&#8592; Step 03</a>'
-        bottom=f'<div class="silva-bottom-nav"><a href="{S3}" class="silva-bottom-btn">&#8592; Step 03</a><span></span></div>'
+        stepnav=f'<a href="{S3}" class="silva-step-btn">&#8592; Step 03</a> <a href="{S5}" class="silva-step-btn">Step 05 &#8594;</a>'
+        bottom=f'<div class="silva-bottom-nav"><a href="{S3}" class="silva-bottom-btn">&#8592; Step 03</a><a href="{S5}" class="silva-bottom-btn">Step 05 &#8594;</a></div>'
         return wrap_page(f"Step 4: Storyboard and Treatment | The Important Person Project | {CL_EN} | PVHS", nav("Step 04",dots_for(3),stepnav), top_wrap(en,es), bottom)
 
-    for fname,gen in [(OVER,overview),(S2,step02),(S3,step03),(S4,step04)]:
+    # ================= STEP 05: Capture & Contact (make the photos, offload, 12-up contact sheet) =================
+    def step05():
+        en=banner(f"Project {PROJNUM} &bull; Step 05","Capture &amp; Contact",
+            "Photograph your series, offload your full take, and build a 12-up contact sheet.",
+            "#espanol","Clic para Espa&ntilde;ol", HICON_CAMERA_KIT)
+        en+=card("STEP 05 &middot; MAKE THE PHOTOS","Capture Your Series",
+            (float_right(S5_FLOAT,"A student photographing their important person with a checked-out camera","Follow your storyboard: a portrait and two images in action.") if HAVE_S5_FLOAT else "")
+            + para("Your plan is ready. Now you photograph your important person with your <strong>checked-out camera kit</strong>. Follow your storyboard from Step 04: your portrait and two images of them in action.")
+            + para("Capture a <strong>full take</strong>, more than three photos. Try different angles, distances, and moments so you have strong options to choose from. A real photographer always captures more than they keep.")
+            + note("Make your three planned images, and give yourself extra frames of each. More options now means a stronger final three later."))
+        en+=deliverables_box(False,
+            [("1 contact sheet (high-resolution JPG):","a 12-up contact sheet of your full take, uploaded to this Canvas assignment.")])
+        en+=card("OFFLOAD YOUR PHOTOS","Move Your Full Take to RAW_Images",
+            para("Get every photo off the camera and into your project folder so nothing gets lost.")
+            + steps([
+                ("Connect your camera or card.","Use the cable, or put the memory card in a card reader on your Mac."),
+                ("Open your project folder in Finder.","Find the <strong>Important_Person</strong> folder you downloaded on the Overview."),
+                ("Copy every photo into RAW_Images.","Drag your whole take into the <strong>RAW_Images</strong> folder inside that project folder. Keep them all, not just three."),
+            ])
+            + note("Offload your <strong>full take</strong>, every photo you captured. You choose your best three later, in the next step."))
+        en+=card("BUILD YOUR CONTACT SHEET","Make a 12-Up Contact Sheet",
+            para("A <strong>contact sheet</strong> is one page that shows all your photos as small thumbnails, so you and your teacher can see your whole take at a glance. You make a <strong>12-up</strong> sheet, 12 photos per page.")
+            + steps([
+                ("Import RAW_Images into Lightroom Classic.","Open Lightroom Classic, click Import, and bring in your RAW_Images folder."),
+                ("Select all your photos.","Edit menu &rarr; Select All, so your whole take is on the sheet."),
+                ("Open the Print module and pick the 12-Up Contact Sheet preset.","If you do not see it, install it first (see the resource below)."),
+                ("Print to a high-resolution JPG.","Set Print To: JPEG File, then click Print to File. The preset already saves a high-resolution JPG for you."),
+                ("Name it and upload.","Name it LastName_First_ImportantPerson_ContactSheet.jpg, then upload the JPG to this Canvas assignment."),
+            ])
+            + note("Turn in a <strong>high-resolution JPG</strong>, never a PDF. The contact-sheet preset already saves the right format."))
+        en+=resources_card("Contact Sheet Preset",
+            pnote('Need the 12-Up preset? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>, then add it to Lightroom Classic &rarr; Print module. You set these up back in the Image Series module.'), False)
+        en+=next_up("UP NEXT &middot; STEP 06 - Cull &amp; Edit","Next you cull your full take down to your three strongest images, give them a light edit, and turn in a 6-up contact sheet with your final three.")
+
+        es=banner(f"Proyecto {PROJNUM} &bull; Paso 05","Captura y Contacto",
+            "Fotograf&iacute;a tu serie, descarga tu toma completa y arma una hoja de contactos de 12.",
+            "#top","Back to English", HICON_CAMERA_KIT)
+        es+=card("PASO 05 &middot; HAZ LAS FOTOS","Captura Tu Serie",
+            (float_right(S5_FLOAT,"Un estudiante fotografiando a su persona importante con una c&aacute;mara prestada","Sigue tu storyboard: un retrato y dos im&aacute;genes en acci&oacute;n.") if HAVE_S5_FLOAT else "")
+            + para("Tu plan est&aacute; listo. Ahora fotograf&iacute;as a tu persona importante con tu <strong>kit de c&aacute;mara prestado</strong>. Sigue tu storyboard del Paso 04: tu retrato y dos im&aacute;genes de ella en acci&oacute;n.")
+            + para("Captura una <strong>toma completa</strong>, m&aacute;s de tres fotos. Prueba diferentes &aacute;ngulos, distancias y momentos para tener buenas opciones. Un fot&oacute;grafo de verdad siempre captura m&aacute;s de lo que conserva.")
+            + note("Haz tus tres im&aacute;genes planeadas, y date cuadros extra de cada una. M&aacute;s opciones ahora significan mejores tres finales despu&eacute;s."))
+        es+=deliverables_box(True,
+            [("1 hoja de contactos (JPG de alta resoluci&oacute;n):","una hoja de contactos de 12 de tu toma completa, subida a esta tarea de Canvas.")])
+        es+=card("DESCARGA TUS FOTOS","Mueve Tu Toma Completa a RAW_Images",
+            para("Saca todas las fotos de la c&aacute;mara y ll&eacute;valas a tu carpeta del proyecto para que no se pierda ninguna.")
+            + steps([
+                ("Conecta tu c&aacute;mara o tarjeta.","Usa el cable, o pon la tarjeta de memoria en un lector de tarjetas en tu Mac."),
+                ("Abre tu carpeta del proyecto en Finder.","Busca la carpeta <strong>Important_Person</strong> que descargaste en el Resumen."),
+                ("Copia cada foto a RAW_Images.","Arrastra toda tu toma a la carpeta <strong>RAW_Images</strong> dentro de esa carpeta del proyecto. Cons&eacute;rvalas todas, no solo tres."),
+            ])
+            + note("Descarga tu <strong>toma completa</strong>, cada foto que capturaste. Eliges tus mejores tres despu&eacute;s, en el siguiente paso."))
+        es+=card("ARMA TU HOJA DE CONTACTOS","Haz una Hoja de Contactos de 12",
+            para("Una <strong>hoja de contactos</strong> es una p&aacute;gina que muestra todas tus fotos como miniaturas, para que t&uacute; y tu maestro vean toda tu toma de un vistazo. Haces una hoja de <strong>12</strong>, 12 fotos por p&aacute;gina.")
+            + steps([
+                ("Importa RAW_Images a Lightroom Classic.","Abre Lightroom Classic, haz clic en Import (Importar) y trae tu carpeta RAW_Images."),
+                ("Selecciona todas tus fotos.","Men&uacute; Edit (Editar) &rarr; Select All (Seleccionar todo), para que toda tu toma est&eacute; en la hoja."),
+                ("Abre el m&oacute;dulo Print y elige el ajuste 12-Up Contact Sheet.","Si no lo ves, inst&aacute;lalo primero (mira el recurso de abajo)."),
+                ("Imprime a un JPG de alta resoluci&oacute;n.","Pon Print To: JPEG File, luego haz clic en Print to File. El ajuste ya guarda un JPG de alta resoluci&oacute;n por ti."),
+                ("N&oacute;mbrala y s&uacute;bela.","N&oacute;mbrala LastName_First_ImportantPerson_ContactSheet.jpg, luego sube el JPG a esta tarea de Canvas."),
+            ])
+            + note("Entrega un <strong>JPG de alta resoluci&oacute;n</strong>, nunca un PDF. El ajuste de hoja de contactos ya guarda el formato correcto."))
+        es+=resources_card("Ajuste de Hoja de Contactos",
+            pnote('&iquest;Necesitas el ajuste 12-Up? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Mira el video de instalaci&oacute;n</strong></a>, luego agr&eacute;galo a Lightroom Classic &rarr; m&oacute;dulo Print. Los configuraste en el m&oacute;dulo Image Series.'), True)
+        es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 06 - Selecciona y Edita","Despu&eacute;s eliges tu toma completa hasta tus tres im&aacute;genes m&aacute;s fuertes, les das una edici&oacute;n ligera y entregas una hoja de contactos de 6 con tus tres finales.")
+
+        stepnav=f'<a href="{S4}" class="silva-step-btn">&#8592; Step 04</a>'
+        bottom=f'<div class="silva-bottom-nav"><a href="{S4}" class="silva-bottom-btn">&#8592; Step 04</a><span></span></div>'
+        return wrap_page(f"Step 5: Capture and Contact | The Important Person Project | {CL_EN} | PVHS", nav("Step 05",dots_for(4),stepnav), top_wrap(en,es), bottom)
+
+    for fname,gen in [(OVER,overview),(S2,step02),(S3,step03),(S4,step04),(S5,step05)]:
         html=ent(gen())
         ban_check(html, fname)
         open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
