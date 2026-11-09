@@ -566,7 +566,8 @@ def build(course):
             (float_right(S5_FLOAT,"A student photographing their important person with a checked-out camera","Follow your storyboard: a portrait and two images in action.") if HAVE_S5_FLOAT else "")
             + para("Your plan is ready. Now you photograph your important person with your <strong>checked-out camera kit</strong>. Follow your storyboard from Step 04: your portrait and two images of them in action.")
             + para("Capture a <strong>full take</strong>, more than three photos. Try different angles, distances, and moments so you have strong options to choose from. A real photographer always captures more than they keep.")
-            + note("Make your three planned images, and give yourself extra frames of each. More options now means a stronger final three later."))
+            + note("Make your three planned images, and give yourself extra frames of each. More options now means a stronger final three later.")
+            + (note("<strong>Photo 2: shape the light on every image.</strong> As you planned in your Step 04 treatment, use a light modifier for each photo: a reflector, the Godox AD200 Pro II strobe, or the Smallrig 25W LD RGB panel, or a combination.") if p2 else ""))
         en+=deliverables_box(False,
             [("1 contact sheet (high-resolution JPG):","a 12-up contact sheet of your full take, uploaded to this Canvas assignment.")])
         en+=card("OFFLOAD YOUR PHOTOS","Move Your Full Take to RAW_Images",
@@ -598,7 +599,8 @@ def build(course):
             (float_right(S5_FLOAT,"Un estudiante fotografiando a su persona importante con una c&aacute;mara prestada","Sigue tu storyboard: un retrato y dos im&aacute;genes en acci&oacute;n.") if HAVE_S5_FLOAT else "")
             + para("Tu plan est&aacute; listo. Ahora fotograf&iacute;as a tu persona importante con tu <strong>kit de c&aacute;mara prestado</strong>. Sigue tu storyboard del Paso 04: tu retrato y dos im&aacute;genes de ella en acci&oacute;n.")
             + para("Captura una <strong>toma completa</strong>, m&aacute;s de tres fotos. Prueba diferentes &aacute;ngulos, distancias y momentos para tener buenas opciones. Un fot&oacute;grafo de verdad siempre captura m&aacute;s de lo que conserva.")
-            + note("Haz tus tres im&aacute;genes planeadas, y date cuadros extra de cada una. M&aacute;s opciones ahora significan mejores tres finales despu&eacute;s."))
+            + note("Haz tus tres im&aacute;genes planeadas, y date cuadros extra de cada una. M&aacute;s opciones ahora significan mejores tres finales despu&eacute;s.")
+            + (note("<strong>Foto 2: da forma a la luz en cada imagen.</strong> Como lo planeaste en tu tratamiento del Paso 04, usa un modificador de luz para cada foto: un reflector, el estrobo Godox AD200 Pro II, o el panel Smallrig 25W LD RGB, o una combinaci&oacute;n.") if p2 else ""))
         es+=deliverables_box(True,
             [("1 hoja de contactos (JPG de alta resoluci&oacute;n):","una hoja de contactos de 12 de tu toma completa, subida a esta tarea de Canvas.")])
         es+=card("DESCARGA TUS FOTOS","Mueve Tu Toma Completa a RAW_Images",
