@@ -990,6 +990,15 @@
   .silva-confirm-btn.ok{background:var(--teal);color:#04110f;border-color:var(--teal);}
   .silva-confirm-btn.ok:hover{filter:brightness(1.1);}
   .silva-confirm-btn.ok.danger{background:#e0403a;border-color:#e0403a;color:#fff;}
+  /* Missing-item attribution popup (reuses the silva-confirm glass shell). */
+  .miss-attr-head{margin-bottom:12px;}
+  .miss-attr-eyebrow{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--g-teal-lt,#5ff0f0);}
+  .miss-attr-title{font-family:var(--font);font-size:1.1rem;font-weight:700;color:var(--text);margin-top:3px;line-height:1.2;}
+  .miss-attr-sub{font-size:.72rem;color:var(--muted);letter-spacing:.06em;margin-top:3px;text-transform:uppercase;}
+  .miss-attr-who{border:1px solid var(--g-edge-soft,rgba(150,225,245,.17));border-radius:var(--g-r-md,14px);background:var(--g-glass-quiet,rgba(0,184,184,.07));padding:12px 14px;}
+  .miss-attr-name{font-family:var(--font);font-size:1rem;font-weight:700;color:var(--text);letter-spacing:.01em;}
+  .miss-attr-meta{font-size:.78rem;color:var(--muted);margin-top:3px;}
+  .miss-attr-none{font-size:.86rem;color:var(--muted);line-height:1.5;}
   .qr-x{position:absolute;top:8px;right:10px;background:transparent;border:0;color:var(--muted);font-size:1.5rem;line-height:1;cursor:pointer;padding:4px 9px;transition:color .15s;}
   .qr-x:hover{color:#fff;}
   .silva-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:rgba(4,20,19,.98);border:1px solid #e0403a;border-left:4px solid #e0403a;color:#ffd7d3;font-size:.9rem;line-height:1.4;padding:12px 18px;z-index:420;box-shadow:0 16px 40px rgba(0,0,0,.6);opacity:0;transition:opacity .25s,transform .25s;max-width:90vw;}
@@ -1368,6 +1377,9 @@
   .stu-hrow .d{color:var(--muted);white-space:nowrap;}
   .stu-hrow .st{margin-left:auto;font-size:.56rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:1px 7px;white-space:nowrap;}
   .stu-hrow .st.reserved{color:var(--gold);} .stu-hrow .st.out{color:var(--orange);} .stu-hrow .st.returned{color:var(--grayed);}
+  .stu-hentry{display:flex;flex-direction:column;}
+  .stu-hentry.flagged .stu-hrow{border-bottom:0;}
+  .stu-hmiss{font-size:.68rem;color:#ff9a8a;padding:4px 9px 5px;background:rgba(224,64,58,.08);border:1px solid var(--line-soft);border-top:0;letter-spacing:.02em;line-height:1.35;}
 
   /* ===== Class Leads (fall roles): a pop-out card of each period's student leads ===== */
   #leadsmodal .mpanel{max-width:600px;}
@@ -2953,7 +2965,9 @@
         ? '<button type="button" class="itemlink" data-camdetail="'+esc(lead.camera)+'">'+esc(String(lead.camera).toUpperCase())+'</button>'
         : '<button type="button" class="itemlink" data-geardetail="'+esc(lead.item)+'">'+esc(String(gearLabel(lead.item)).toUpperCase())+'</button>';
       var extra=items.length>1?(' <span class="muted">+'+(items.length-1)+'</span>'):'';
-      return '<div class="stu-hrow"><span class="d">'+fmt(o.out)+' &rarr; '+fmt(o.due)+'</span><span>'+nm+extra+'</span><span class="st '+st+'">'+({reserved:'Reserved',out:'Out',returned:'Returned'}[st]||st)+'</span></div>';
+      var _mn=(o.note&&/missing|not returned|damage|lost/i.test(o.note))?o.note:'';
+      var _mline=_mn?('<div class="stu-hmiss">&#9873; '+esc(_mn)+'</div>'):'';
+      return '<div class="stu-hentry'+(_mn?' flagged':'')+'"><div class="stu-hrow"><span class="d">'+fmt(o.out)+' &rarr; '+fmt(o.due)+'</span><span>'+nm+extra+'</span><span class="st '+st+'">'+({reserved:'Reserved',out:'Out',returned:'Returned'}[st]||st)+'</span></div>'+_mline+'</div>';
     }).join('');
     h+='<div class="stu-sec"><div class="stu-sec-h">Reservation history ('+orders.length+')</div><div class="stu-hist">'+(rows||'<div class="cd-empty">No reservations on record yet.</div>')+'</div></div>';
     var b=document.getElementById('stuBody'); b.innerHTML=h;
@@ -3958,8 +3972,14 @@
         // calendar all mirror what actually came back. Empty = complete (100%).
         var patch={camera:cam,kit:missing};
         if(missing.length||extra) patch.log=nl;
+        // Missing pieces at check-in also flag the returning student's record, so their profile shows it
+        // (Flagged returns + history), not just the camera log. Same attribution as the manual kit toggle.
+        var afterAsset=function(){
+          if(missing.length && c && c.id){ stampMissingOnRecord(c,missing.join(', ')).then(function(){ markReturned(id); }).catch(function(){ markReturned(id); }); }
+          else { markReturned(id); }
+        };
         camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(patch)})
-          .then(function(){ markReturned(id); }).catch(function(){ markReturned(id); });
+          .then(afterAsset).catch(afterAsset);
       } else { markReturned(id); }
       // Linked gear: check in what came back; keep the rest pending (still out) with a note.
       var eqCalls=eqDecisions.map(function(d){
@@ -4212,6 +4232,61 @@
     camAPI('/api/camera/asset',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.assign({camera:cam},patch))})
       .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(function(){ if(then) then(); }).catch(function(){ silvaToast('Could not save. Try again.'); });
   }
+  // ===== Missing-item attribution (Chris 2026-11-08) =====
+  // When a kit piece is flagged Missing, surface the last student who had this camera and offer to log
+  // "Returned missing: <item>" onto THEIR record. The student profile already reads missing from the record
+  // note (stuMissingCount), and /api/camera/update {id,note} is the same partial update the note editor uses,
+  // so this is frontend-only, no backend change.
+  function lastHolder(cam){
+    var recs=(DATA.checkouts||[]).filter(function(c){ return c.kind!=='equipment' && String(c.camera||'')===String(cam) && (c.student_id||c.student_name); });
+    if(!recs.length) return null;
+    recs.sort(function(a,b){ return (resvDate(a)<resvDate(b))?1:-1; });
+    var out=recs.filter(function(c){ return statusOf(c)!=='returned'; });   // someone still has it out -> that's who to flag
+    return out[0]||recs[0];                                                 // else the most recent checkout
+  }
+  function stampMissingOnRecord(rec, itemText){
+    if(!rec||!rec.id) return Promise.resolve();
+    var base=(rec.note||'').trim(), line='Returned missing: '+itemText;
+    if(base && base.toLowerCase().indexOf(line.toLowerCase())>=0) return Promise.resolve();   // already noted
+    var note=base?(base.replace(/[;\s]*$/,'')+'; '+line):line;
+    rec.note=note;                                                          // optimistic local so the profile reflects it at once
+    return camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:rec.id,note:note})});
+  }
+  // Glass choice popup. Resolves 'log' | 'skip' | 'cancel'. Reuses the silva-confirm glass shell + overlay.
+  function missingAttrPopup(cam, item, rec){
+    return new Promise(function(resolve){
+      var ov=document.createElement('div'); ov.className='silva-confirm-ov';
+      var panel=document.createElement('div'); panel.className='silva-confirm-panel'; panel.setAttribute('role','alertdialog'); panel.setAttribute('aria-modal','true'); panel.style.maxWidth='430px'; panel.style.textAlign='left';
+      var first=rec?(nameOf(rec).split(' ')[0]||nameOf(rec)):'';
+      var who;
+      if(rec){
+        var bits=[]; if(rec.period) bits.push('Per '+esc(rec.period)); if(rec.course) bits.push(esc(rec.course)); bits.push('out '+fmt(rec.out||resvDate(rec)));
+        var stLab=statusOf(rec)==='returned'?('returned '+fmt(rec.returned_date||rec.due)):('still out &middot; due '+fmt(rec.due));
+        who='<div class="miss-attr-who"><div class="miss-attr-name">'+esc(nameOf(rec))+'</div><div class="miss-attr-meta">'+bits.join(' &middot; ')+'</div><div class="miss-attr-meta">'+stLab+'</div></div>';
+      } else {
+        who='<div class="miss-attr-none">No checkout is on record for '+esc(String(cam).toUpperCase())+' yet, so there is no student to flag. It will just be marked missing on the camera.</div>';
+      }
+      panel.innerHTML='<div class="miss-attr-head"><div class="miss-attr-eyebrow">Flag missing</div><div class="miss-attr-title">'+esc(item)+'</div><div class="miss-attr-sub">'+esc(String(cam).toUpperCase())+' &middot; last held by</div></div>'+who;
+      var acts=document.createElement('div'); acts.className='silva-confirm-acts'; acts.style.marginTop='18px'; acts.style.flexWrap='wrap';
+      function mk(cls,label){ var b=document.createElement('button'); b.type='button'; b.className='silva-confirm-btn '+cls; b.textContent=label; return b; }
+      var cancel=mk('cancel','Cancel');
+      function done(v){ try{ document.body.removeChild(ov); }catch(e){} document.removeEventListener('keydown',key); resolve(v); }
+      function key(e){ if(e.key==='Escape') done('cancel'); }
+      cancel.onclick=function(){ done('cancel'); };
+      if(rec){
+        var skip=mk('cancel','Just mark missing'), log=mk('ok','Log to '+first);
+        skip.onclick=function(){ done('skip'); }; log.onclick=function(){ done('log'); };
+        acts.appendChild(cancel); acts.appendChild(skip); acts.appendChild(log);
+      } else {
+        var mark=mk('ok','Mark missing'); mark.onclick=function(){ done('skip'); };
+        acts.appendChild(cancel); acts.appendChild(mark);
+      }
+      panel.appendChild(acts); ov.appendChild(panel); document.body.appendChild(ov);
+      ov.addEventListener('click',function(e){ if(e.target===ov) done('cancel'); });
+      document.addEventListener('keydown',key);
+      setTimeout(function(){ (rec?acts.lastChild:acts.lastChild).focus(); },30);
+    });
+  }
   function renderCamDetailModal(){
     var cam=cdCam; if(!cam) return;
     var a=assetOf(cam), c=activeFor(cam), oos=!!a.oos, nc=!!a.no_card, issues=a.issues||[], log=(a.log||[]).slice().reverse();
@@ -4255,7 +4330,24 @@
       '<div class="cd-tabpanel'+(cdTab==='kit'?'':' active')+'" data-panel="details">'+h+'</div>'+
       '<div class="cd-tabpanel'+(cdTab==='kit'?' active':'')+'" data-panel="kit">'+_kit+'</div>';
     document.querySelectorAll('#cd-body .cd-tab').forEach(function(tb){ tb.onclick=function(){ cdTab=tb.getAttribute('data-cdtab'); document.querySelectorAll('#cd-body .cd-tab').forEach(function(x){ x.classList.toggle('active',x===tb); }); document.querySelectorAll('#cd-body .cd-tabpanel').forEach(function(p){ p.classList.toggle('active',p.getAttribute('data-panel')===cdTab); }); }; });
-    document.querySelectorAll('#cd-body .kit-sw').forEach(function(sw){ sw.onclick=function(){ var item=sw.getAttribute('data-kititem'), miss=kitMissing(cam).slice(), i=miss.indexOf(item); if(i>=0) miss.splice(i,1); else miss.push(item); cdTab='kit'; saveAsset(cam,{kit:miss},renderCamDetailModal); }; });
+    document.querySelectorAll('#cd-body .kit-sw').forEach(function(sw){ sw.onclick=function(){
+      var item=sw.getAttribute('data-kititem'), miss=kitMissing(cam).slice(), i=miss.indexOf(item);
+      cdTab='kit';
+      if(i>=0){ miss.splice(i,1); saveAsset(cam,{kit:miss},renderCamDetailModal); return; }   // back in the kit: no popup
+      // Flagging missing: offer to attribute it to the student who had this camera last.
+      var rec=lastHolder(cam);
+      missingAttrPopup(cam,item,rec).then(function(choice){
+        if(choice==='cancel') return;                                                          // leave it in the kit
+        miss.push(item);
+        if(choice==='log' && rec){
+          stampMissingOnRecord(rec,item)
+            .then(function(){ saveAsset(cam,{kit:miss},function(){ renderCamDetailModal(); silvaToast(item+' flagged missing, logged to '+(nameOf(rec).split(' ')[0]||nameOf(rec))); }); })
+            .catch(function(){ saveAsset(cam,{kit:miss},renderCamDetailModal); silvaToast('Flagged missing, but could not log it to the student. Try again.'); });
+        } else {
+          saveAsset(cam,{kit:miss},renderCamDetailModal);
+        }
+      });
+    }; });
     var oosb=document.getElementById('cd-oos'); if(oosb) oosb.onclick=function(){ saveAsset(cam,{oos:!oos},renderCamDetailModal); };
     var ncb=document.getElementById('cd-newcard'); if(ncb) ncb.onclick=function(){ setNoCard(cam,false,ncb); };
     var ec=document.getElementById('cd-editcur'); if(ec) ec.onclick=function(){ openEditCheckout(c.id); };
