@@ -732,7 +732,7 @@
   .cmh-sep{height:1px;background:var(--line-soft);margin:4px 2px;}
   .cview-back{display:flex;align-items:center;gap:14px;margin:2px 0 12px;padding:10px 14px;background:rgba(0,184,184,.06);border:1px solid var(--line-soft);border-left:3px solid var(--teal);}
   .cview-back[hidden]{display:none;}
-  .cview-backbtn{background:rgba(255,255,255,.05);border:1px solid var(--line-soft);color:var(--teal);font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.76rem;padding:8px 14px;cursor:pointer;}
+  .cview-backbtn{background:rgba(255,255,255,.05);border:1px solid var(--line-soft);border-radius:var(--g-r-pill);color:var(--teal);font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.76rem;padding:8px 14px;cursor:pointer;}
   .cview-backbtn:hover{background:var(--teal);color:#04110f;}
   .cview-title{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.9rem;color:#fff;}
   .wrap.cview-board .manage-hub,.wrap.cview-board .histwrap,.wrap.cview-board #eventsView{display:none;}
@@ -766,21 +766,21 @@
   .histbar .histnote:first-child{flex:1 1 220px;min-width:180px;}
   /* Custom framework date picker (replaces native <input type=date>: iOS ignores width + the OS calendar is off-brand) */
   .dp{position:relative;display:inline-flex;flex:0 0 auto;}
-  .dp-trig{height:34px;min-width:132px;display:inline-flex;align-items:center;gap:8px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--muted);font-family:var(--font);font-size:.8rem;letter-spacing:.02em;padding:0 12px;cursor:pointer;text-align:left;white-space:nowrap;transition:border-color .15s,color .15s;}
+  .dp-trig{height:34px;min-width:132px;display:inline-flex;align-items:center;gap:8px;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:var(--g-r-sm);color:var(--muted);font-family:var(--font);font-size:.8rem;letter-spacing:.02em;padding:0 12px;cursor:pointer;text-align:left;white-space:nowrap;transition:border-color .15s,color .15s;}
   .dp-trig::before{content:"";width:15px;height:15px;flex:0 0 auto;background:var(--teal-lt);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Crect x='3' y='4' width='18' height='18'/%3E%3Cpath d='M3 9h18M8 2v4M16 2v4'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Crect x='3' y='4' width='18' height='18'/%3E%3Cpath d='M3 9h18M8 2v4M16 2v4'/%3E%3C/svg%3E") center/contain no-repeat;}
   .dp-trig.set{color:var(--text);border-color:rgba(0,184,184,.35);}
   .dp-trig:hover{border-color:var(--teal);color:var(--text);}
-  .dp-pop{position:absolute;top:calc(100% + 4px);left:0;z-index:60;width:252px;background:linear-gradient(135deg,rgba(0,184,184,.16),rgba(4,20,19,.95));backdrop-filter:blur(18px) saturate(1.14);-webkit-backdrop-filter:blur(18px) saturate(1.14);border:1px solid var(--teal);box-shadow:0 18px 48px rgba(0,0,0,.7);padding:12px;}   /* frosted: blur what's behind so the date grid stays readable over the board (Chris 2026-10-04) */
+  .dp-pop{position:absolute;top:calc(100% + 4px);left:0;z-index:60;width:252px;background:linear-gradient(135deg,rgba(0,184,184,.16),rgba(4,20,19,.95));backdrop-filter:blur(18px) saturate(1.14);-webkit-backdrop-filter:blur(18px) saturate(1.14);border:1px solid var(--teal);border-radius:var(--g-r-md);box-shadow:0 18px 48px rgba(0,0,0,.7);padding:12px;}   /* frosted: blur what's behind so the date grid stays readable over the board (Chris 2026-10-04) */
   .dp-pop.up{top:auto;bottom:calc(100% + 4px);}
   .dp-pop.right{left:auto;right:0;}
   .dp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
   .dp-mtitle{font-family:var(--font);font-weight:700;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-lt);}
-  .dp-nav{width:28px;height:28px;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--text);font-size:1.1rem;line-height:1;cursor:pointer;}
+  .dp-nav{width:28px;height:28px;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:var(--g-r-pill);color:var(--text);font-size:1.1rem;line-height:1;cursor:pointer;}
   .dp-nav:hover{border-color:var(--teal);color:var(--teal-lt);}
   .dp-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:2px;}
   .dp-dow span{text-align:center;font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.04em;color:var(--faint);}
   .dp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
-  .dp-day{height:30px;background:rgba(255,255,255,.03);border:1px solid transparent;color:var(--text);font-family:var(--font);font-size:.8rem;cursor:pointer;padding:0;}
+  .dp-day{height:30px;background:rgba(255,255,255,.03);border:1px solid transparent;border-radius:var(--g-r-sm);color:var(--text);font-family:var(--font);font-size:.8rem;cursor:pointer;padding:0;}
   .dp-day:hover{background:rgba(0,184,184,.16);border-color:var(--teal);}
   .dp-day.om{color:var(--faint);opacity:.5;}
   .dp-day.today{border-color:rgba(0,184,184,.45);}
@@ -998,7 +998,7 @@
   .silva-confirm-panel{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.98));border:1px solid var(--line);border-top:3px solid var(--teal);width:100%;max-width:420px;box-shadow:0 24px 60px rgba(0,0,0,.75);padding:22px 22px 18px;}
   .silva-confirm-msg{color:var(--text);font-size:1rem;line-height:1.5;margin-bottom:18px;}
   .silva-confirm-acts{display:flex;gap:10px;justify-content:flex-end;}
-  .silva-confirm-btn{font-family:var(--font);font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:11px 18px;cursor:pointer;border:1px solid var(--line);}
+  .silva-confirm-btn{font-family:var(--font);font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:11px 18px;cursor:pointer;border:1px solid var(--line);border-radius:var(--g-r-pill);}
   .silva-confirm-btn.cancel{background:rgba(0,0,0,.3);color:var(--muted);}
   .silva-confirm-btn.cancel:hover{color:#fff;border-color:var(--teal);}
   .silva-confirm-btn.ok{background:var(--teal);color:#04110f;border-color:var(--teal);}
@@ -1047,6 +1047,14 @@
   .cd-hist::-webkit-scrollbar{width:8px;} .cd-hist::-webkit-scrollbar-thumb{background:rgba(0,184,184,.35);} .cd-hist::-webkit-scrollbar-track{background:rgba(0,0,0,.2);}
   .cd-histrow{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted);border-bottom:1px solid rgba(0,184,184,.10);padding-bottom:5px;}
   .cd-histwho{font-weight:600;color:#eafeff;flex:1 1 auto;} .cd-histdates{color:var(--faint);white-space:nowrap;}
+  /* Collapsible section (Checkout history): closed until clicked. */
+  .cd-acc>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:9px;}
+  .cd-acc>summary::-webkit-details-marker{display:none;}
+  .cd-acc-sum{margin-bottom:0;}
+  .cd-acc[open] .cd-acc-sum{margin-bottom:10px;}
+  .cd-accn{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.04em;background:rgba(0,184,184,.18);color:var(--teal-lt);padding:1px 7px;border-radius:var(--g-r-pill);}
+  .cd-acc-chev{margin-left:auto;width:8px;height:8px;border-right:2px solid var(--faint);border-bottom:2px solid var(--faint);transform:rotate(45deg);transition:transform .15s;}
+  .cd-acc[open] .cd-acc-chev{transform:rotate(-135deg);}
   .cd-empty{color:var(--faint);font-size:.85rem;}
   /* Camera detail tabs (Details / Kit contents) + kit checklist */
   /* Glass pill track (framework: tabs are a pill track with an inset active pill, never an underline). */
@@ -1073,11 +1081,12 @@
   .kit-row.missing{border-color:rgba(224,64,58,.4);background:rgba(224,64,58,.06);}
   .kit-name{font-family:var(--body);font-size:.9rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:400;}
   .kit-sw{display:inline-flex;align-items:center;gap:9px;background:transparent;border:0;cursor:pointer;padding:0;flex:0 0 auto;}
-  .kit-sw-track{position:relative;width:44px;height:23px;border:1px solid var(--ok);background:rgba(63,168,99,.22);transition:background .15s,border-color .15s;flex:0 0 auto;}
-  .kit-sw-knob{position:absolute;top:2px;left:2px;width:17px;height:17px;background:var(--ok);transition:left .15s,background .15s;}
+  /* Apple-style toggle (same as the return checklist): rounded pill + white circular knob that slides. IN KIT = green, knob right; Missing = gray, knob left. */
+  .kit-sw-track{position:relative;width:48px;height:28px;border-radius:999px;border:1px solid var(--g-edge-soft);background:linear-gradient(180deg,rgba(80,228,142,.9),rgba(40,180,108,.88));box-shadow:inset 0 1px 3px rgba(0,0,0,.4);transition:background .2s;flex:0 0 auto;}
+  .kit-sw-knob{position:absolute;top:3px;left:23px;width:22px;height:22px;border-radius:50%;background:linear-gradient(180deg,#ffffff,#dde8e8);box-shadow:0 2px 5px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.9);transition:left .2s;}
   .kit-sw-lab{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8ff0b0;min-width:52px;text-align:left;}
-  .kit-sw.missing .kit-sw-track{border-color:var(--red);background:rgba(224,64,58,.22);}
-  .kit-sw.missing .kit-sw-knob{left:24px;background:var(--red);}
+  .kit-sw.missing .kit-sw-track{border-color:var(--g-edge-soft);background:linear-gradient(180deg,rgba(116,128,146,.32),rgba(96,108,128,.36));}
+  .kit-sw.missing .kit-sw-knob{left:3px;}
   .kit-sw.missing .kit-sw-lab{color:#ff9a8a;}
   .kit-tbd{color:var(--faint);font-size:.9rem;padding:8px 2px;line-height:1.5;}
   .ed-btnrow{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:4px;}
@@ -1226,8 +1235,8 @@
   .eds-dcell .dp-trig{align-self:flex-start;color:var(--teal-lt);background:rgba(0,184,184,.12);border:0 !important;cursor:pointer;padding:7px 13px;border-radius:9px !important;font-weight:600;font-size:.98rem;font-family:var(--body);font-variant-numeric:tabular-nums;}
   .eds-dcell .dp-trig:not(.set){color:var(--faint);background:rgba(255,255,255,.06);}
   /* conflict banner (conditional) */
-  .eds-conf{border-radius:12px !important;border-left-width:4px !important;margin:10px 0 2px;}
-  .eds-conf .go{border-radius:10px !important;width:auto;padding:10px 20px;margin-top:9px;}
+  .eds-conf{border-radius:var(--g-r-md) !important;border-left-width:1px !important;margin:10px 0 2px;}
+  .eds-conf .go{border-radius:var(--g-r-pill) !important;width:auto;padding:10px 20px;margin-top:9px;}
   /* change-student accordion (quiet) */
   .eds-stu-acc{margin:16px 0 0;border:1px solid var(--line);border-radius:12px !important;background:rgba(0,0,0,.2);overflow:hidden;}
   .eds-stu-sum{cursor:pointer;padding:12px 15px;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.62rem;color:var(--faint);list-style:none;}
@@ -4234,7 +4243,7 @@
     // Kit contents section only for gear that actually HAS a kit; single-piece units (iPad styluses) skip it.
     if(items.length){
       h+='<div class="cd-sec"><div class="cd-h">Kit contents <span class="cd-tabscore '+kitScoreCls(kpct)+'">'+kpct+'%</span></div>';
-      h+='<div class="kit-note">Toggle an item to <b>Missing</b> if it is not with this unit.</div><div class="kit-list">'+
+      h+='<div class="kit-list">'+
         items.map(function(it){ var mm=miss.indexOf(it)>=0;
           return '<div class="kit-row'+(mm?' missing':'')+'"><span class="kit-name">'+esc(it)+'</span><button type="button" class="kit-sw'+(mm?' missing':'')+'" data-gkititem="'+esc(it)+'" aria-pressed="'+(mm?'false':'true')+'"><span class="kit-sw-track"><span class="kit-sw-knob"></span></span><span class="kit-sw-lab">'+(mm?'Missing':'In kit')+'</span></button></div>';
         }).join('')+'</div>';
@@ -4345,7 +4354,7 @@
     h+='<div class="cd-add"><input type="text" id="cd-newissue" placeholder="Add an issue (e.g. sticky zoom ring)"><button class="btn sm" id="cd-addissue">Add</button></div></div>';
     h+='<div class="cd-sec"><div class="cd-h">Standing note</div><textarea id="cd-note" rows="2" placeholder="Always-visible note for this camera">'+esc(a.note||'')+'</textarea><button class="btn sm" id="cd-savenote">Save note</button></div>';
     h+='<div class="cd-sec"><div class="cd-h">History log</div>'+(log.length?('<div class="cd-log">'+log.map(function(e){ return '<div class="cd-logrow"><span class="cd-logdate">'+esc(e.date||'')+'</span> '+esc(e.text||'')+'</div>'; }).join('')+'</div>'):'<div class="cd-empty">No history yet.</div>')+'</div>';
-    h+='<div class="cd-sec"><div class="cd-h">Checkout history</div>'+(hist.length?('<div class="cd-hist">'+hist.map(function(x){ var s=statusOf(x); return '<div class="cd-histrow"><span class="cd-histwho">'+studentLink(x)+'</span><span class="cd-histdates">out '+fmt(x.out)+' &rarr; '+(s==='returned'?('returned '+fmt(x.returned_date||x.due)):('due '+fmt(x.due)+' &middot; '+esc(s)))+'</span><button class="btn sm ghost" data-edithist="'+esc(x.id)+'">Edit</button></div>'; }).join('')+'</div>'):'<div class="cd-empty">No checkouts recorded.</div>')+'</div>';
+    h+='<details class="cd-sec cd-acc"><summary class="cd-h cd-acc-sum">Checkout history'+(hist.length?(' <span class="cd-accn">'+hist.length+'</span>'):'')+'<span class="cd-acc-chev"></span></summary>'+(hist.length?('<div class="cd-hist">'+hist.map(function(x){ var s=statusOf(x); return '<div class="cd-histrow"><span class="cd-histwho">'+studentLink(x)+'</span><span class="cd-histdates">out '+fmt(x.out)+' &rarr; '+(s==='returned'?('returned '+fmt(x.returned_date||x.due)):('due '+fmt(x.due)+' &middot; '+esc(s)))+'</span><button class="btn sm ghost" data-edithist="'+esc(x.id)+'">Edit</button></div>'; }).join('')+'</div>'):'<div class="cd-empty">No checkouts recorded.</div>')+'</details>';
     // ---- Kit contents tab ----
     var _pct=kitPct(cam), _scls=(_pct==null?'':kitScoreCls(_pct)), _kit;
     if(isStdKit(cam)){
@@ -4359,7 +4368,7 @@
         var gmiss=0, rows=g.idx.map(function(i){ var item=KIT_STD[i]; if(_miss.indexOf(item)>=0) gmiss++; return kitRow(item); }).join('');
         return '<details class="retgrp kit-grp"'+(gmiss>0?' open':'')+'><summary><span class="retgrp-name">'+esc(g.name)+'</span><span class="retgrp-status'+(gmiss?' miss':'')+'">'+(gmiss?(gmiss+' missing'):'All here')+'</span><span class="retgrp-chev"></span></summary><div class="retgrp-body kit-grp-body">'+rows+'</div></details>';
       }).join('');
-      _kit='<div class="kit-score '+_scls+'"><div class="kit-score-pct">'+_pct+'%</div><div class="kit-score-meta"><div class="kit-score-lab">'+(KIT_STD.length-_miss.length)+' of '+KIT_STD.length+' items in kit</div><div class="kit-score-bar"><span class="kit-score-fill" style="width:'+_pct+'%"></span></div></div></div><div class="kit-note">Toggle an item to <b>Missing</b> if it is not in the bag. The score updates here and for students on the calendar.</div><div class="kit-list">'+_rows+'</div>';
+      _kit='<div class="kit-score '+_scls+'"><div class="kit-score-pct">'+_pct+'%</div><div class="kit-score-meta"><div class="kit-score-lab">'+(KIT_STD.length-_miss.length)+' of '+KIT_STD.length+' items in kit</div><div class="kit-score-bar"><span class="kit-score-fill" style="width:'+_pct+'%"></span></div></div></div><div class="kit-list">'+_rows+'</div>';
     } else {
       _kit='<div class="kit-tbd">This camera uses a different kit. Its item list will be added soon.</div>';
     }
