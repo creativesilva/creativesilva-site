@@ -1629,6 +1629,9 @@
      both round), never a square button and never the search icon dropped below the field */
   .cmctrl .cmctrl-search .stu-bargo,.summary.cmctrl .cmctrl-refresh{flex:0 0 auto;width:40px;height:40px;min-height:0;padding:0;margin:0;border-radius:var(--g-r-pill);background:var(--g-glass);border:1px solid var(--g-edge);color:var(--g-teal-lt);display:inline-flex;align-items:center;justify-content:center;font-size:1.04rem;line-height:1;box-shadow:var(--g-spec);cursor:pointer;transition:background .15s,color .15s,border-color .15s;}
   .cmctrl .cmctrl-search .stu-bargo:hover,.summary.cmctrl .cmctrl-refresh:hover{background:var(--g-primary);border-color:var(--g-teal-lt);color:#04110f;}
+  /* refresh control = Chris's teal two-arrow icon; on hover the circle fills teal, so flip the icon dark so it stays visible */
+  .summary.cmctrl .cmctrl-refresh img{width:20px;height:20px;display:block;}
+  .summary.cmctrl .cmctrl-refresh:hover img{filter:brightness(0);}
   /* Reservations Queue hub header: worksheet glyph + eyebrow + title, matching the Calendar + Wallet hubs */
   .tb-head{display:flex;align-items:center;gap:14px;padding:4px 6px 14px;border-bottom:0;}
   .tb-qhead{display:flex;align-items:center;gap:14px;min-width:0;}
@@ -1766,7 +1769,7 @@
         <button type="button" class="stu-bargo" id="stuBarGo" aria-label="Find"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M20 20l-4.4-4.4"></path></svg></button>
         <span class="stu-barmsg" id="stuBarMsg"></span>
       </div>
-      <button class="silva-uni-cattrigger summ-btn summ-ico cmctrl-refresh" id="refreshBtn" title="Reload the latest data now" aria-label="Refresh">&#8635;</button>
+      <button class="silva-uni-cattrigger summ-btn summ-ico cmctrl-refresh" id="refreshBtn" title="Reload the latest data now" aria-label="Refresh"><img src="https://www.creativesilva.com/assets/Icons/assignment/refresh-teal-v1.png" alt="" width="20" height="20"></button>
     </div>
   </div>
   <!-- The student lookup now lives centered inside the Reservations bar (rendered in the board head). -->
