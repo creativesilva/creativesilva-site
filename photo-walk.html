@@ -214,10 +214,10 @@
   /* Per-kit note (free text: extra gear taken, a condition issue, etc.). Angular, matches the kit cards. */
   .pw-noterow{display:flex;}
   .pw-notebtn{height:26px;padding:0 10px;font-size:.55rem;color:var(--muted);}
-  .pw-notefield{width:100%;box-sizing:border-box;background:rgba(0,0,0,.34);border:1px solid var(--line);border-left:3px solid var(--teal);color:var(--text);font-family:var(--font);font-size:.82rem;line-height:1.35;padding:7px 9px;resize:vertical;min-height:40px;}
+  .pw-notefield{width:100%;box-sizing:border-box;background:rgba(0,0,0,.34);border:1px solid var(--line);border-radius:var(--g-r-sm);color:var(--text);font-family:var(--font);font-size:.82rem;line-height:1.35;padding:7px 9px;resize:vertical;min-height:40px;}
   .pw-notefield::placeholder{color:var(--muted);opacity:.75;}
   .pw-notefield:focus{outline:none;border-color:var(--teal);}
-  .pw-ronote{font-size:.8rem;color:var(--text);background:rgba(0,0,0,.26);border-left:3px solid var(--teal);padding:6px 9px;line-height:1.35;white-space:pre-wrap;}
+  .pw-ronote{font-size:.8rem;color:var(--text);background:rgba(0,0,0,.26);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-sm);padding:6px 9px;line-height:1.35;white-space:pre-wrap;}
   .pw-mini.done{border-color:rgba(63,168,99,.6);color:#8ff0b0;background:rgba(63,168,99,.14);}
   .pw-mini.done:hover{border-color:var(--ok);color:#fff;}
   .pw-mini{text-decoration:none;}                 /* Edit info is a link styled as a mini button */
@@ -232,7 +232,7 @@
   /* History pop-out: a modal (reuses .pw-wheelov) holding the scrollable list of saved walks. */
   .pw-histbox{background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);border-top:3px solid var(--teal);box-shadow:0 24px 60px rgba(0,0,0,.7);width:600px;max-width:94vw;max-height:calc(100vh - 48px);padding:16px 18px 18px;display:flex;flex-direction:column;}
   .pw-histlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;overflow-y:auto;min-height:0;}
-  .pw-histrow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(0,0,0,.26);border:1px solid var(--line-soft);border-left:3px solid var(--teal-deep);padding:10px 12px;cursor:pointer;transition:background .12s;}
+  .pw-histrow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(0,0,0,.26);border:1px solid var(--line-soft);border-radius:var(--g-r-md);padding:10px 12px;cursor:pointer;transition:background .12s;}
   .pw-histrow:hover{background:rgba(0,184,184,.1);}
   .pw-histopen{flex:1 1 auto;min-width:0;}
   .pw-histdel{flex:0 0 auto;background:transparent;border:0;color:var(--faint);font-size:1.4rem;line-height:1;cursor:pointer;padding:0 4px;transition:color .12s;}
@@ -261,7 +261,7 @@
   #app.on{display:block;}
   .pw-foot{color:var(--faint);font-size:.8rem;margin-top:26px;}
   /* Toast */
-  .pw-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:rgba(4,20,19,.98);border:1px solid var(--teal);border-left:4px solid var(--teal);color:#dfffff;font-size:.9rem;padding:12px 18px;z-index:420;box-shadow:0 16px 40px rgba(0,0,0,.6);opacity:0;transition:opacity .25s,transform .25s;max-width:90vw;}
+  .pw-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:rgba(4,20,19,.98);border:1px solid var(--teal);border-radius:var(--g-r-md);color:#dfffff;font-size:.9rem;padding:12px 18px;z-index:420;box-shadow:0 16px 40px rgba(0,0,0,.6);opacity:0;transition:opacity .25s,transform .25s;max-width:90vw;}
   .pw-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
   .pw-toast.bad{border-color:var(--red);border-left-color:var(--red);color:#ffd7d3;}
   @media (max-width:560px){
