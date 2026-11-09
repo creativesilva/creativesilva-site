@@ -260,6 +260,9 @@
   .tb-tg.requests .tb-tgn.tb-tgn-req{background:#8b5cf6;color:#fff;}
   .tb-tg.overdue.on{background:var(--red);color:#fff;} .tb-tg.overdue.on .tb-tgn{background:rgba(0,0,0,.22);color:#fff;}
   .tb-tg.requests.on{background:#8b5cf6;color:#120a24;} .tb-tg.requests.on .tb-tgn{background:rgba(0,0,0,.2);color:#120a24;}
+  /* The count badge on the ACTIVE tab sits on a dark overlay, so its number is WHITE (it was near-black
+     and unreadable). Last rule, equal specificity, so it wins over the per-tab colors above. (Chris 2026-11-09) */
+  .tb-tg.out.on .tb-tgn,.tb-tg.in.on .tb-tgn,.tb-tg.checked.on .tb-tgn,.tb-tg.avail.on .tb-tgn,.tb-tg.overdue.on .tb-tgn,.tb-tg.requests.on .tb-tgn{background:rgba(0,0,0,.42);color:#fff;}
   /* Quick check-in button on an out-item row (Incoming / Overdue): sits just left of the due date; the rest of the row opens the detail card. */
   .til-ci{flex:0 0 auto;margin-left:auto;font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.62rem;padding:6px 11px;background:rgba(0,184,184,.14);border:1px solid var(--teal);color:var(--teal-lt);cursor:pointer;white-space:nowrap;}
   .til-ci:hover{background:var(--teal);color:#04110f;}
@@ -283,6 +286,17 @@
   .av-u-main{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:10px;background:transparent;border:0;cursor:pointer;color:var(--text);font-family:var(--body);text-align:left;padding:0;}
   .av-u-dot{flex:0 0 auto;width:9px;height:9px;}
   .av-u-dot.avail{background:var(--ok);} .av-u-dot.out{background:var(--orange);} .av-u-dot.overdue{background:var(--red);} .av-u-dot.resv{background:var(--gold);} .av-u-dot.oos,.av-u-dot.nocard{background:var(--grayed);}
+  /* Available view: free units lead; everything else folds into one collapsed accordion. */
+  .av-none{padding:10px 14px 10px 20px;font-size:.82rem;color:var(--faint);border-top:1px solid var(--line-soft);}
+  .av-taken{border-top:1px solid var(--line-soft);}
+  .av-taken-sum{list-style:none;display:flex;align-items:center;gap:9px;padding:10px 14px 10px 20px;cursor:pointer;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.66rem;color:var(--muted);}
+  .av-taken-sum::-webkit-details-marker{display:none;}
+  .av-taken-sum:hover{color:var(--text);}
+  .av-taken-n{flex:0 0 auto;min-width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12);color:var(--text);font-size:.68rem;padding:0 6px;border-radius:var(--g-r-pill);}
+  .av-taken-lab{flex:1 1 auto;min-width:0;}
+  .av-taken-chev{flex:0 0 auto;transition:transform .15s;color:var(--faint);font-size:1rem;}
+  .av-taken[open] .av-taken-chev{transform:rotate(90deg);}
+  .av-taken-body{display:flex;flex-direction:column;}
   .av-u-nm{flex:0 0 auto;font-family:var(--font);font-weight:700;font-size:.96rem;color:#fff;}
   .av-u-st{flex:1 1 auto;min-width:0;font-size:.82rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .av-assign{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.62rem;padding:6px 12px;background:var(--ok);color:#04140a;border:0;cursor:pointer;}
@@ -468,7 +482,7 @@
   .tbq-big i{color:var(--faint);font-style:normal;margin:0 1px;}
   .tbq-main{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:9px;}
   .tbq-name{min-width:0;color:#eef4f4;font-size:.9rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .tbq-per{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.04em;font-size:.72rem;color:var(--teal-lt);background:rgba(0,184,184,.16);border:1px solid rgba(0,184,184,.5);padding:2px 8px;}
+  .tbq-per{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.04em;font-size:.72rem;color:var(--teal-lt);background:rgba(0,184,184,.16);border:1px solid rgba(0,184,184,.5);padding:2px 10px;border-radius:var(--g-r-pill);}
   .tbq-tel{flex:0 0 auto;min-width:118px;font-variant-numeric:tabular-nums;font-weight:700;font-size:.92rem;color:#eaf3f3;letter-spacing:.01em;white-space:nowrap;}
   .tbq-tel.none{color:var(--faint);font-weight:600;font-size:.78rem;}
   .tbq-when{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;line-height:1.12;min-width:98px;}
@@ -1454,7 +1468,7 @@
   .til.til-out{--til-accent:var(--orange);}
   .til.til-overdue{--til-accent:var(--red);}
   .til.til-returned{--til-accent:var(--grayed);}
-  .til-dot,.av-u-dot,.csec-dot{border-radius:var(--g-r-pill);}
+  .til-dot,.av-u-dot,.csec-dot,.tbq-dot{border-radius:var(--g-r-pill);}
   /* ---- inputs: glass, never a flat black box ---- */
   .stu-searchbar .stu-barin,#stuSearchIn{background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-sm);color:var(--g-text);}
   .stu-searchbar .stu-barin:focus,#stuSearchIn:focus{border-color:var(--g-teal-lt);}
@@ -2561,7 +2575,7 @@
     var shown=resvItems(c).filter(function(it){ return kind==='call' ? (statusOf(it)==='out'&&isOverdue(it)) : statusOf(it)!=='returned'; });
     var big=shown.map(function(it){ return esc(itemBig(it)).toUpperCase(); }).join(' <i>&middot;</i> ') || esc(String(c.camera||gearLabel(c.item)||'').toUpperCase());
     var dotCls=(kind==='call'?'overdue':'reserved'), wp=whenParts(c,kind);
-    var per=c.period?'<span class="tbq-per">P'+esc(c.period)+'</span>':'';
+    var per=c.period?'<span class="tbq-per">Period '+esc(('0'+c.period).slice(-2))+'</span>':'';
     var telHtml=cell ? '<span class="tbq-tel">'+esc(fmtPhone(c.student_cell))+'</span>' : '<span class="tbq-tel none">No cell</span>';
     // Overdue: no Call/Text (the teacher already knows to reach out, and dials the number on the row from a desk phone).
     // Missed pickup: Text the no-show, or Return the unit to stock.
@@ -2614,11 +2628,18 @@
     return u.state==='avail'?'Free':(u.state==='oos'?'Out of service':(u.state==='nocard'?'No memory card':
       (u.state==='overdue'?('Overdue &middot; '+who):(u.state==='out'?('Out &middot; '+who):('Reserved &middot; '+who))))); }
   function availBodyHtml(inv){
+    function unitHtml(u){
+      var assign=u.state==='avail'?'<button type="button" class="av-assign" data-avassign="'+esc(u.id)+'" data-avkind="'+u.kind+'">Assign</button>':'';
+      return '<div class="av-unit"><button type="button" class="av-u-main" data-avunit="'+esc(u.id)+'" data-avkind="'+u.kind+'"><span class="av-u-dot '+u.state+'"></span><span class="av-u-nm">'+esc(u.label)+'</span><span class="av-u-st">'+availUnitLabel(u)+'</span></button>'+assign+'</div>';
+    }
     return '<div class="tb-avail">'+inv.map(function(row){ var open=(TBAVOPEN===row.key), zero=row.avail<=0;
-      var units=row.units.map(function(u){
-        var assign=u.state==='avail'?'<button type="button" class="av-assign" data-avassign="'+esc(u.id)+'" data-avkind="'+u.kind+'">Assign</button>':'';
-        return '<div class="av-unit"><button type="button" class="av-u-main" data-avunit="'+esc(u.id)+'" data-avkind="'+u.kind+'"><span class="av-u-dot '+u.state+'"></span><span class="av-u-nm">'+esc(u.label)+'</span><span class="av-u-st">'+availUnitLabel(u)+'</span></button>'+assign+'</div>'; }).join('');
-      return '<div class="av-type'+(open?' open':'')+'"><button type="button" class="av-type-head" data-avexpand="'+esc(row.key)+'"><span class="av-type-nm">'+esc(row.label)+'</span><span class="av-type-ct'+(zero?' zero':'')+'"><b>'+row.avail+'</b> / '+row.total+' free</span><span class="av-type-chev">&#8250;</span></button><div class="av-type-units">'+units+'</div></div>'; }).join('')+'</div>'; }
+      // FREE units lead the list in numerical order (what you can hand out now); everything checked out or
+      // unavailable folds into ONE collapsed accordion below, so the available list is not mixed. (Chris 2026-11-09)
+      var freeU=row.units.filter(function(u){ return u.state==='avail'; });      // availInventory already sorts units by number
+      var takenU=row.units.filter(function(u){ return u.state!=='avail'; });
+      var freeHtml=freeU.length?freeU.map(unitHtml).join(''):'<div class="av-none">None free right now.</div>';
+      var takenHtml=takenU.length?('<details class="av-taken"><summary class="av-taken-sum"><span class="av-taken-n">'+takenU.length+'</span><span class="av-taken-lab">Checked out or unavailable</span><span class="av-taken-chev">&#8250;</span></summary><div class="av-taken-body">'+takenU.map(unitHtml).join('')+'</div></details>'):'';
+      return '<div class="av-type'+(open?' open':'')+'"><button type="button" class="av-type-head" data-avexpand="'+esc(row.key)+'"><span class="av-type-nm">'+esc(row.label)+'</span><span class="av-type-ct'+(zero?' zero':'')+'"><b>'+row.avail+'</b> / '+row.total+' free</span><span class="av-type-chev">&#8250;</span></button><div class="av-type-units">'+freeHtml+takenHtml+'</div></div>'; }).join('')+'</div>'; }
   // Simple view (Chris 2026-11-05, for Garcia): a stripped board = the two queues + Hand out + Check in, no
   // tabs/search/tally. She still taps any item for the full reservation card (modify, edit dates, swap,
   // cancel, delete). Garcia's pool defaults to simple; a per-session toggle overrides it either way.
