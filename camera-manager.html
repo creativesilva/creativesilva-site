@@ -271,36 +271,38 @@
   .tb-reqsub{font-size:.82rem;color:var(--muted);padding:12px 2px 10px;line-height:1.45;}
   .tb-reqgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;padding-bottom:4px;}
   /* Available (green) view: equipment by model/type, avail/total, expandable to units with a quick Assign. */
-  .tb-avail{display:flex;flex-direction:column;gap:7px;padding:8px 0 2px;}
-  .av-type{border:1px solid var(--line-soft);background:var(--surface);}
-  .av-type-head{width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;background:transparent;border:0;border-left:3px solid var(--ok);cursor:pointer;color:var(--text);font-family:var(--body);text-align:left;}
-  .av-type-head:hover{background:rgba(63,168,99,.07);}
-  .av-type-nm{flex:1 1 auto;min-width:0;font-family:var(--font);font-weight:700;letter-spacing:.02em;font-size:1.02rem;color:#fff;}
-  .av-type-ct{flex:0 0 auto;font-family:var(--font);font-weight:700;font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;color:#86e0a6;}
-  .av-type-ct b{font-size:1.1rem;} .av-type-ct.zero{color:#ff9a8a;}
-  .av-type-chev{flex:0 0 auto;color:var(--faint);font-size:1.15rem;transition:transform .15s;}
-  .av-type.open .av-type-chev{transform:rotate(90deg);}
-  .av-type-units{display:none;flex-direction:column;}
-  .av-type.open .av-type-units{display:flex;}
-  .av-unit{display:flex;align-items:center;gap:10px;padding:9px 14px 9px 20px;border-top:1px solid var(--line-soft);}
-  .av-u-main{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:10px;background:transparent;border:0;cursor:pointer;color:var(--text);font-family:var(--body);text-align:left;padding:0;}
+  .tb-avail{display:flex;flex-direction:column;gap:11px;padding:8px 0 2px;}
+  /* Category selector pills (Cameras / Lenses / Lighting / Accessories) lead the Available tab (Chris 2026-11-09). */
+  .av-cats{display:flex;flex-wrap:nowrap;gap:7px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .av-cats::-webkit-scrollbar{display:none;}
+  .av-cat{flex:0 0 auto;white-space:nowrap;display:inline-flex;align-items:center;gap:7px;padding:8px 13px;background:var(--surface);border:1px solid var(--line-soft);color:var(--muted);font-family:var(--font);font-weight:700;letter-spacing:.02em;font-size:.84rem;cursor:pointer;border-radius:var(--g-r-pill);transition:border-color .15s,background .15s,color .15s;}
+  .av-cat:hover{border-color:rgba(63,168,99,.55);color:#fff;}
+  .av-cat.on{background:var(--ok);border-color:var(--ok);color:#04140a;}
+  .av-cat-n{flex:0 0 auto;min-width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;padding:0 5px;background:rgba(0,0,0,.22);color:inherit;font-size:.66rem;font-weight:700;border-radius:var(--g-r-pill);}
+  /* The chosen category: each model/type is a header + a 2-column grid of unit tiles. No accordion: free units
+     lead, checked-out units follow dimmed, so what is free to hand out reads at a glance. */
+  .av-catbody{display:flex;flex-direction:column;gap:13px;}
+  .av-sec{display:flex;flex-direction:column;gap:7px;}
+  .av-sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-left:2px;}
+  .av-sec-nm{font-family:var(--font);font-weight:700;letter-spacing:.02em;font-size:1rem;color:#fff;}
+  .av-sec-ct{flex:0 0 auto;font-family:var(--font);font-weight:700;font-size:.74rem;letter-spacing:.03em;text-transform:uppercase;color:#86e0a6;}
+  .av-sec-ct b{font-size:1.02rem;} .av-sec-ct.zero{color:#ff9a8a;}
+  .av-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;}
+  .av-cell{position:relative;display:flex;align-items:stretch;min-height:52px;background:var(--surface);border:1px solid var(--line-soft);overflow:hidden;transition:border-color .15s,opacity .15s,background .15s;--av-accent:var(--grayed);}
+  .av-cell.avail{--av-accent:var(--ok);}
+  .av-cell.out{--av-accent:var(--orange);} .av-cell.overdue{--av-accent:var(--red);} .av-cell.resv{--av-accent:var(--gold);}
+  .av-cell::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--av-accent);pointer-events:none;z-index:1;}
+  .av-cell.taken{opacity:.6;}
+  .av-cell:hover{border-color:rgba(255,255,255,.22);} .av-cell.taken:hover{opacity:.9;}
+  .av-cell-main{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:9px;background:transparent;border:0;cursor:pointer;color:var(--text);font-family:var(--body);text-align:left;padding:8px 10px 8px 14px;}
   .av-u-dot{flex:0 0 auto;width:9px;height:9px;}
   .av-u-dot.avail{background:var(--ok);} .av-u-dot.out{background:var(--orange);} .av-u-dot.overdue{background:var(--red);} .av-u-dot.resv{background:var(--gold);} .av-u-dot.oos,.av-u-dot.nocard{background:var(--grayed);}
-  /* Available view: free units lead; everything else folds into one collapsed accordion. */
-  .av-none{padding:10px 14px 10px 20px;font-size:.82rem;color:var(--faint);border-top:1px solid var(--line-soft);}
-  .av-taken{border-top:1px solid var(--line-soft);}
-  .av-taken-sum{list-style:none;display:flex;align-items:center;gap:9px;padding:10px 14px 10px 20px;cursor:pointer;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.66rem;color:var(--muted);}
-  .av-taken-sum::-webkit-details-marker{display:none;}
-  .av-taken-sum:hover{color:var(--text);}
-  .av-taken-n{flex:0 0 auto;min-width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12);color:var(--text);font-size:.68rem;padding:0 6px;border-radius:var(--g-r-pill);}
-  .av-taken-lab{flex:1 1 auto;min-width:0;}
-  .av-taken-chev{flex:0 0 auto;transition:transform .15s;color:var(--faint);font-size:1rem;}
-  .av-taken[open] .av-taken-chev{transform:rotate(90deg);}
-  .av-taken-body{display:flex;flex-direction:column;}
-  .av-u-nm{flex:0 0 auto;font-family:var(--font);font-weight:700;font-size:.96rem;color:#fff;}
-  .av-u-st{flex:1 1 auto;min-width:0;font-size:.82rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .av-assign{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.62rem;padding:6px 12px;background:var(--ok);color:#04140a;border:0;cursor:pointer;}
-  .av-assign:hover{filter:brightness(1.08);}
+  .av-cell-body{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px;}
+  .av-cell-nm{font-family:var(--font);font-weight:700;letter-spacing:.01em;font-size:.9rem;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .av-cell-st{font-size:.73rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .av-cell-assign{flex:0 0 auto;align-self:center;margin:0 8px 0 2px;padding:7px 13px;background:var(--ok);color:#04140a;border:0;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.62rem;cursor:pointer;}
+  .av-cell-assign:hover{filter:brightness(1.08);}
+  .av-none{padding:10px 4px;font-size:.82rem;color:var(--faint);}
   .tb-nowlabel{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.72rem;color:#ffb380;}
   .tb-searchrow{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 2px 0;}
   .tb-searchrow .tb-search{flex:1 1 220px;padding:0;}
@@ -336,7 +338,7 @@
   @keyframes tbOdPulse{0%,100%{box-shadow:0 0 0 0 rgba(224,64,58,0);}50%{box-shadow:0 0 0 3px rgba(224,64,58,.38);}}
   .tb-grid .tb-empty{grid-column:1 / -1;padding:10px 2px;}
   @media (prefers-reduced-motion:reduce){ .tb-grid .tb-bundle.tb-od{animation:none;box-shadow:0 0 0 2px rgba(224,64,58,.45);} }
-  @media (max-width:760px){ .tb-grid{grid-template-columns:1fr !important;grid-auto-flow:row !important;grid-template-rows:auto !important;max-height:none;} }
+  @media (max-width:760px){ .tb-grid{grid-template-columns:1fr !important;grid-auto-flow:row !important;grid-template-rows:auto !important;max-height:none;} .av-grid{grid-template-columns:1fr;} }
   .tb-row{display:flex;align-items:stretch;gap:10px;min-height:56px;padding:8px 11px;border:1px solid var(--line-soft);border-left:3px solid var(--muted);background:rgba(255,255,255,.025);}
   .tb-row.rr-out{border-left-color:var(--orange);} .tb-row.rr-reserved{border-left-color:var(--gold);} .tb-row.rr-returned{border-left-color:var(--ok);}
   .tb-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:5px;}
@@ -1162,7 +1164,6 @@
   .eq-row{display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;background:rgba(0,0,0,.28);border:1px solid var(--line);color:var(--text);font-family:var(--body);padding:11px 13px;transition:border-color .15s,background .15s;}
   .eq-row:hover{border-color:rgba(0,184,184,.5);background:rgba(0,184,184,.06);}
   .eq-row.on{border-color:var(--teal);background:rgba(0,184,184,.1);}
-  .eq-rthumb{flex:0 0 auto;width:40px;height:40px;background:#0a1c1c center/contain no-repeat;border:1px solid var(--line-soft);}
   .eq-rmain{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px;}
   .eq-rname{font-family:var(--font);font-weight:700;letter-spacing:.02em;font-size:.94rem;color:#fff;}
   .eq-rsel{font-size:.78rem;color:var(--faint);}
@@ -1219,7 +1220,7 @@
   .eds-grp{background:#181d1e;border:1px solid rgba(255,255,255,.07);border-radius:16px !important;overflow:hidden;}
   .eds-grp.mt{margin-top:12px;}
   .eds-row{position:relative;display:flex;align-items:center;gap:12px;min-height:50px;padding:9px 15px;width:100%;background:none;border:0;cursor:pointer;text-align:left;color:inherit;font:inherit;}
-  .eds-grp .eds-row + .eds-row::before{content:"";position:absolute;left:52px;right:0;top:0;height:1px;background:var(--line);}
+  .eds-grp .eds-row + .eds-row::before{content:"";position:absolute;left:15px;right:0;top:0;height:1px;background:var(--line);}
   .eds-ic{width:26px;height:26px;border-radius:8px !important;flex:0 0 auto;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:var(--teal-lt);font-size:.92rem;}
   .eds-rlab{font-family:var(--body);font-size:1rem;color:var(--text);}
   .eds-rval{margin-left:auto;color:var(--muted);font-size:.96rem;font-variant-numeric:tabular-nums;}
@@ -1228,6 +1229,7 @@
   .eds-rm:hover{background:var(--red);border-color:var(--red);color:#fff;}
   .eds-rval b{color:var(--text);font-weight:700;}
   .eds-chev{color:var(--faint);font-size:1.15rem;line-height:1;flex:0 0 auto;margin-left:2px;}
+  .eds-grp .eds-chev{flex:0 0 28px;width:28px;text-align:center;margin-left:0;}   /* match the remove-X footprint so the value column stays in a straight line (Chris 2026-11-09) */
   .eds-row.add .eds-rlab{color:var(--teal-lt);font-weight:600;}
   .eds-row.add .eds-ic{color:var(--teal-lt);}
   .eds-call{text-decoration:none;}
@@ -1446,8 +1448,14 @@
   .cbox[open],.cbox:hover{border-color:var(--g-teal-lt);}
   .csec{border-radius:var(--g-r-md);border:1px solid var(--g-edge-soft);background:var(--g-glass-quiet);overflow:hidden;}
   .csec-head{border-left:0;}
-  .av-type{border-radius:var(--g-r-md);border:1px solid var(--g-edge-soft);background:var(--g-glass-quiet);overflow:hidden;}
-  .av-type-head{border-left:0;}
+  /* Available tab: category pills + 2-column unit tiles, glass-skinned to match the board (Chris 2026-11-09) */
+  .av-cat{background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);box-shadow:var(--g-spec);color:var(--g-muted);}
+  .av-cat:hover{background:var(--rollover);border-color:var(--g-teal-lt);color:var(--g-text);}
+  .av-cat.on{background:linear-gradient(160deg,rgba(63,168,99,.3),rgba(63,168,99,.08));border-color:rgba(63,168,99,.55);color:#86e0a6;}
+  .av-cat-n{background:rgba(0,0,0,.26);}
+  .av-cell{border-radius:var(--g-r-md);border:1px solid var(--g-edge-soft);background:var(--g-glass-quiet);box-shadow:var(--g-spec);backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);}
+  .av-cell::before{box-shadow:0 0 13px -1px var(--av-accent);}
+  .av-cell:hover{background:var(--rollover);border-color:var(--g-edge);}
   .calpanel{border-radius:var(--g-r-md);border:1px solid var(--g-edge);background:rgba(6,14,14,.22);overflow:hidden;}
   .summary .big{border-radius:var(--g-r-sm);}
   /* ---- segmented tabs: glass track, active = brighter inset glass pill, teal rollover (no square boxes / underline) ---- */
@@ -1474,8 +1482,8 @@
   .btn.danger:hover{background:rgba(255,122,122,.18);border-color:var(--g-danger);color:#fff;filter:none;}
   .go{border-radius:var(--g-r-pill);background:var(--g-primary);border:0;color:#04110f;box-shadow:var(--g-shadow-sm),var(--g-spec);}
   .go:hover{filter:brightness(1.07);}
-  .til-ci,.av-assign{border-radius:var(--g-r-pill);background:var(--g-glass);border:1px solid var(--g-edge);color:var(--g-teal-lt);box-shadow:var(--g-spec);transition:background .16s,color .16s,border-color .16s;}
-  .til-ci:hover,.av-assign:hover{background:var(--g-primary);border-color:var(--g-teal-lt);color:#04110f;filter:none;}
+  .til-ci,.av-assign,.av-cell-assign{border-radius:var(--g-r-pill);background:var(--g-glass);border:1px solid var(--g-edge);color:var(--g-teal-lt);box-shadow:var(--g-spec);transition:background .16s,color .16s,border-color .16s;}
+  .til-ci:hover,.av-assign:hover,.av-cell-assign:hover{background:var(--g-primary);border-color:var(--g-teal-lt);color:#04110f;filter:none;}
   /* ---- tiles / rows: rounded glass, teal rollover ---- */
   .til{position:relative;overflow:hidden;border-radius:var(--g-r-md);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);box-shadow:var(--g-spec);backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);transition:background .16s,border-color .16s;padding-left:17px;}
   .til:hover{background:var(--rollover);border-color:var(--g-edge);}
@@ -1490,7 +1498,7 @@
   .stu-searchbar .stu-barin,#stuSearchIn{background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-sm);color:var(--g-text);}
   .stu-searchbar .stu-barin:focus,#stuSearchIn:focus{border-color:var(--g-teal-lt);}
   /* ---- chevrons + chips inherit the teal family ---- */
-  .camhub-chev,.cbox-chev,.csec-chev,.av-type-chev{border-color:var(--g-muted);}
+  .camhub-chev,.cbox-chev,.csec-chev{border-color:var(--g-muted);}
   /* ---- modals: frosted glass sheets over the dim backdrop (the reservation card + every pop-out) ---- */
   .mpanel{background:var(--g-glass),linear-gradient(rgba(10,16,30,.5),rgba(10,16,30,.5));border:1px solid var(--g-edge);border-radius:var(--g-r-lg);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);}
   #editmodal .mpanel{background:var(--g-glass),linear-gradient(rgba(10,16,30,.5),rgba(10,16,30,.5));border:1px solid var(--g-edge) !important;border-radius:var(--g-r-lg) !important;box-shadow:var(--g-shadow-lg),var(--g-spec-strong);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);}
@@ -2503,7 +2511,7 @@
   var TBQ={out:'',in:'',overdue:'',avail:'',requests:''};           // per-view search text
   var TBSEL={out:false,in:false,overdue:false,avail:false,requests:false};   // multi-select mode per view
   var TBSELSET={out:{},in:{},overdue:{},avail:{},requests:{}};      // {itemId:true} selected per view
-  var TBAVOPEN=null;                                    // Available view: which model/type row is expanded to its units
+  var TBAVCAT=null;                                     // Available view: which category pill (cameras/lenses/lighting/accessories) is selected (Chris 2026-11-09)
   // The items to show in a column: today = reserved (to hand out) / out (to take back); a future day = projected.
   function lineItemsFor(c, mode, isT){
     var items=resvItems(c).filter(function(it){ return statusOf(it)!=='returned'; });
@@ -2657,19 +2665,35 @@
   function availUnitLabel(u){ var who=u.rec?(esc(nameOf(u.rec))+(u.rec.period?(' P'+esc(u.rec.period)):'')):'';
     return u.state==='avail'?'Free':(u.state==='oos'?'Out of service':(u.state==='nocard'?'No memory card':
       (u.state==='overdue'?('Overdue &middot; '+who):(u.state==='out'?('Out &middot; '+who):('Reserved &middot; '+who))))); }
+  // Map an inventory row to one of the four student-store categories, so the Available tab leads with a
+  // category selector instead of one long list (Chris 2026-11-09).
+  function avCatOf(row){
+    if(row.kind==='camera') return 'cameras';
+    var t=(row.key.indexOf('gear:')===0)?row.key.slice(5):'';
+    if(t==='wide'||t==='zoom') return 'lenses';
+    if(t==='speedlite'||t==='godox'||t==='smallrig'||t==='led') return 'lighting';
+    return 'accessories';                                                      // tripod, reflector, bluetooth, iPad stylus, anything else
+  }
+  var AV_CATLABEL={cameras:'Cameras',lenses:'Lenses',lighting:'Lighting',accessories:'Accessories'};
   function availBodyHtml(inv){
     function unitHtml(u){
-      var assign=u.state==='avail'?'<button type="button" class="av-assign" data-avassign="'+esc(u.id)+'" data-avkind="'+u.kind+'">Assign</button>':'';
-      return '<div class="av-unit"><button type="button" class="av-u-main" data-avunit="'+esc(u.id)+'" data-avkind="'+u.kind+'"><span class="av-u-dot '+u.state+'"></span><span class="av-u-nm">'+esc(u.label)+'</span><span class="av-u-st">'+availUnitLabel(u)+'</span></button>'+assign+'</div>';
+      var taken=(u.state!=='avail');
+      var assign=!taken?'<button type="button" class="av-cell-assign" data-avassign="'+esc(u.id)+'" data-avkind="'+u.kind+'">Assign</button>':'';
+      return '<div class="av-cell '+u.state+(taken?' taken':'')+'"><button type="button" class="av-cell-main" data-avunit="'+esc(u.id)+'" data-avkind="'+u.kind+'"><span class="av-u-dot '+u.state+'"></span><span class="av-cell-body"><span class="av-cell-nm">'+esc(u.label)+'</span><span class="av-cell-st">'+availUnitLabel(u)+'</span></span></button>'+assign+'</div>';
     }
-    return '<div class="tb-avail">'+inv.map(function(row){ var open=(TBAVOPEN===row.key), zero=row.avail<=0;
-      // FREE units lead the list in numerical order (what you can hand out now); everything checked out or
-      // unavailable folds into ONE collapsed accordion below, so the available list is not mixed. (Chris 2026-11-09)
-      var freeU=row.units.filter(function(u){ return u.state==='avail'; });      // availInventory already sorts units by number
-      var takenU=row.units.filter(function(u){ return u.state!=='avail'; });
-      var freeHtml=freeU.length?freeU.map(unitHtml).join(''):'<div class="av-none">None free right now.</div>';
-      var takenHtml=takenU.length?('<details class="av-taken"><summary class="av-taken-sum"><span class="av-taken-n">'+takenU.length+'</span><span class="av-taken-lab">Checked out or unavailable</span><span class="av-taken-chev">&#8250;</span></summary><div class="av-taken-body">'+takenU.map(unitHtml).join('')+'</div></details>'):'';
-      return '<div class="av-type'+(open?' open':'')+'"><button type="button" class="av-type-head" data-avexpand="'+esc(row.key)+'"><span class="av-type-nm">'+esc(row.label)+'</span><span class="av-type-ct'+(zero?' zero':'')+'"><b>'+row.avail+'</b> / '+row.total+' free</span><span class="av-type-chev">&#8250;</span></button><div class="av-type-units">'+freeHtml+takenHtml+'</div></div>'; }).join('')+'</div>'; }
+    // Group the inventory by category, keeping the pool's natural row order (so Mankin leads with styluses).
+    var order=[], byCat={};
+    inv.forEach(function(row){ var c=avCatOf(row); if(!byCat[c]){ byCat[c]=[]; order.push(c); } byCat[c].push(row); });
+    if(!order.length) return '<div class="tb-avail"><div class="av-none">No equipment in this view.</div></div>';
+    var cat=(TBAVCAT && byCat[TBAVCAT])?TBAVCAT:order[0];                       // default to the first category present
+    var pills=order.map(function(c){ var n=byCat[c].reduce(function(s,r){ return s+r.avail; },0);
+      return '<button type="button" class="av-cat'+(c===cat?' on':'')+'" data-avcat="'+c+'"><span class="av-cat-nm">'+esc(AV_CATLABEL[c]||c)+'</span><span class="av-cat-n">'+n+'</span></button>'; }).join('');
+    var secs=byCat[cat].map(function(row){ var zero=row.avail<=0;
+      var freeU=row.units.filter(function(u){ return u.state==='avail'; });     // free units lead (sorted by number already)
+      var takenU=row.units.filter(function(u){ return u.state!=='avail'; });    // checked-out/unavailable follow, dimmed, no accordion
+      var cells=freeU.concat(takenU).map(unitHtml).join('')||'<div class="av-none">None in this group.</div>';
+      return '<div class="av-sec"><div class="av-sec-head"><span class="av-sec-nm">'+esc(row.label)+'</span><span class="av-sec-ct'+(zero?' zero':'')+'"><b>'+row.avail+'</b> / '+row.total+' free</span></div><div class="av-grid">'+cells+'</div></div>'; }).join('');
+    return '<div class="tb-avail"><div class="av-cats">'+pills+'</div><div class="av-catbody">'+secs+'</div></div>'; }
   // Simple view (Chris 2026-11-05, for Garcia): a stripped board = the two queues + Hand out + Check in, no
   // tabs/search/tally. She still taps any item for the full reservation card (modify, edit dates, swap,
   // cancel, delete). Everyone (incl. Garcia) now defaults to the full board (Chris 2026-11-09); Simple is a per-session hamburger toggle.
@@ -2698,7 +2722,7 @@
     function listSig(resvs,mode){ return resvs.map(function(c){ return c.id+':'+resvStatusGroup(c)+':'+lineItemsFor(c,mode,isT).map(function(x){return (x.camera||x.item)+itemState(x);}).join('.'); }).join(','); }
     var invSig=inv?inv.map(function(r){ return r.key+r.avail+'/'+r.total+':'+r.units.map(function(u){return u.state+(u.rec?('~'+(u.rec.student_id||u.rec.student_name||'')):'');}).join('.'); }).join('|'):'';
     var qSig='|call'+odCall.map(function(c){return c.id+resvStatusGroup(c);}).join('.')+'|miss'+miss.map(function(c){return c.id;}).join('.');
-    var sig=(SIMPLE?'SIMPLE':view)+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+qSig+'|n'+nOut+'.'+nIn+'.'+nOverdue+'.'+nReq+'|'+(SIMPLE?('so'+listSig(out,'out')+'|sc'+listSig(chk,'in')):listSig(active,view))+'|req'+pend.map(function(g){return g[0].id;}).join('.')+'|av'+(TBAVOPEN||'')+'|'+invSig;
+    var sig=(SIMPLE?'SIMPLE':view)+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+qSig+'|n'+nOut+'.'+nIn+'.'+nOverdue+'.'+nReq+'|'+(SIMPLE?('so'+listSig(out,'out')+'|sc'+listSig(chk,'in')):listSig(active,view))+'|req'+pend.map(function(g){return g[0].id;}).join('.')+'|av'+(TBAVCAT||'')+'|'+invSig;
     if(sig===_lastTBSig && el.innerHTML) return; _lastTBSig=sig;
     // ----- header: title + help + day stepper (Outgoing/Incoming only; Checked out + Available are "right now") -----
     var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY).replace(/(\d{2})(\d{2})$/,'$2')), _past=(SELDAY<todayISO());   // 2-digit year: 11/2/26
@@ -2785,7 +2809,7 @@
     var _sop=el.querySelector('[data-tbsortopen]'); if(_sop){ _sop.onclick=function(e){ e.stopPropagation(); var pop=el.querySelector('.tb-sortpop'); if(!pop) return; var willOpen=pop.hidden; pop.hidden=!willOpen;
       if(willOpen){ setTimeout(function(){ document.addEventListener('click', function cl(ev){ if(!ev.target.closest('.tb-sortmenu')){ pop.hidden=true; document.removeEventListener('click',cl); } }); },0); } }; }
     // Available view: expand a model/type to its units; tap a unit -> its detail card; Assign a free unit -> check-out flow.
-    el.querySelectorAll('[data-avexpand]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-avexpand'); TBAVOPEN=(TBAVOPEN===k)?null:k; _lastTBSig=null; renderTodayBoard(); }; });
+    el.querySelectorAll('[data-avcat]').forEach(function(b){ b.onclick=function(){ TBAVCAT=b.getAttribute('data-avcat'); _lastTBSig=null; renderTodayBoard(); }; });
     el.querySelectorAll('[data-avunit]').forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-avunit'); if(b.getAttribute('data-avkind')==='camera') openCamDetail(id); else openGearDetail(id); }; });
     el.querySelectorAll('[data-avassign]').forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-avassign'); if(b.getAttribute('data-avkind')==='camera') openReserve(id); else openReserveGear(id); }; });
     var hb=el.querySelector('[data-tbhelp]'); if(hb) hb.onclick=openBoardHelp;
@@ -4572,11 +4596,11 @@
   function eqRowHtml(mode, type, c){
     if(mode==='camera'){
       var cams=eqAvailCams(c), sel=edSelCam?('Kit <b>'+esc(eqNum(edSelCam))+'</b>'):'None chosen';
-      return '<button type="button" class="eq-row'+(edSelCam?' on':'')+'" data-eqpick="camera"><span class="eq-rthumb"></span><span class="eq-rmain"><span class="eq-rname">Camera</span><span class="eq-rsel">'+sel+'</span></span><span class="eq-rcount'+(cams.length?'':' zero')+'">'+cams.length+' free</span><span class="eq-rchev">&#8250;</span></button>';
+      return '<button type="button" class="eq-row'+(edSelCam?' on':'')+'" data-eqpick="camera"><span class="eq-rmain"><span class="eq-rname">Camera</span><span class="eq-rsel">'+sel+'</span></span><span class="eq-rcount'+(cams.length?'':' zero')+'">'+cams.length+' free</span><span class="eq-rchev">&#8250;</span></button>';
     }
-    var tlabel=(gearTypes()[type]&&gearTypes()[type].label)||type, units=eqAvailUnits(type,c), curU=eqCurrentUnit(type), th=GEAR_THUMB[type]||'';
+    var tlabel=(gearTypes()[type]&&gearTypes()[type].label)||type, units=eqAvailUnits(type,c), curU=eqCurrentUnit(type);
     var sel=curU?(esc(tlabel)+' <b>'+esc(eqNum(curU))+'</b>'):'None';
-    return '<button type="button" class="eq-row'+(curU?' on':'')+'" data-eqpick="gear" data-eqtype="'+esc(type)+'"><span class="eq-rthumb"'+(th?(' style="background-image:url(\''+th+'\')"'):'')+'></span><span class="eq-rmain"><span class="eq-rname">'+esc(tlabel)+'</span><span class="eq-rsel">'+sel+'</span></span><span class="eq-rcount'+(units.length?'':' zero')+'">'+units.length+' free</span><span class="eq-rchev">&#8250;</span></button>';
+    return '<button type="button" class="eq-row'+(curU?' on':'')+'" data-eqpick="gear" data-eqtype="'+esc(type)+'"><span class="eq-rmain"><span class="eq-rname">'+esc(tlabel)+'</span><span class="eq-rsel">'+sel+'</span></span><span class="eq-rcount'+(units.length?'':' zero')+'">'+units.length+' free</span><span class="eq-rchev">&#8250;</span></button>';
   }
   function edTypeOrder(t){ var o={wide:1,zoom:2,speedlite:3,tripod:4,mankin_tripod:4,reflector:5,bluetooth:6,apple_pencil:7}; return o[t]||9; }
   function edGearIcon(t){   // one-color SVG icons (no emoji) for the edit-reservation gear rows (Chris 2026-11-09)
@@ -4606,20 +4630,20 @@
     var host=document.getElementById('ed-equip'); if(!host) return;
     if(c.kind==='equipment'){                                   // gear-only reservation: the single unit (display only)
       var t0=(gearUnit(c.item)||{}).type, tl0=(gearTypes()[t0]&&gearTypes()[t0].label)||gearLabel(c.item);
-      host.innerHTML='<div class="eds-row">'+edGearIcon(t0)+'<span class="eds-rlab">'+esc(tl0)+'</span><span class="eds-rval"><b>'+esc(eqNum2(c.item))+'</b></span></div>';
+      host.innerHTML='<div class="eds-row"><span class="eds-rlab">'+esc(tl0)+'</span><span class="eds-rval"><b>'+esc(eqNum2(c.item))+'</b></span></div>';
       return;
     }
-    var rows='<button type="button" class="eds-row" data-eqpick="camera"><span class="eds-ic">&#9635;</span><span class="eds-rlab">Camera kit</span><span class="eds-rval">'+(edSelCam?('<b>'+esc(eqNum2(edSelCam))+'</b>'):'None')+'</span><span class="eds-chev">&#8250;</span></button>';
+    var rows='<button type="button" class="eds-row" data-eqpick="camera"><span class="eds-rlab">Camera kit</span><span class="eds-rval">'+(edSelCam?('<b>'+esc(eqNum2(edSelCam))+'</b>'):'None')+'</span><span class="eds-chev">&#8250;</span></button>';
     var attached=[]; if(edGearState) Object.keys(edGearState).forEach(function(id){ if(edGearState[id]&&edGearState[id].on){ var u=gearUnit(id); if(u) attached.push({type:u.type,id:id}); } });
     attached.sort(function(a,b){ return edTypeOrder(a.type)-edTypeOrder(b.type); });
     attached.forEach(function(g){ var tl=(gearTypes()[g.type]&&gearTypes()[g.type].label)||g.type;
-      rows+='<div class="eds-row eds-rowg" data-eqpick="gear" data-eqtype="'+esc(g.type)+'" role="button" tabindex="0" title="Tap to change the number">'+edGearIcon(g.type)+'<span class="eds-rlab">'+esc(tl)+'</span><span class="eds-rval"><b>'+esc(eqNum2(g.id))+'</b></span><button type="button" class="eds-rm" data-edrm="'+esc(g.type)+'" aria-label="Remove '+esc(tl)+'">&times;</button></div>'; });
+      rows+='<div class="eds-row eds-rowg" data-eqpick="gear" data-eqtype="'+esc(g.type)+'" role="button" tabindex="0" title="Tap to change the number"><span class="eds-rlab">'+esc(tl)+'</span><span class="eds-rval"><b>'+esc(eqNum2(g.id))+'</b></span><button type="button" class="eds-rm" data-edrm="'+esc(g.type)+'" aria-label="Remove '+esc(tl)+'">&times;</button></div>'; });
     if(edAdding){
-      if(!edSelCam && viewCams().length) rows+='<button type="button" class="eds-row add" data-eqpick="camera"><span class="eds-ic">&#9635;</span><span class="eds-rlab">Camera kit</span><span class="eds-rval">'+eqAvailCams(c).length+' free</span><span class="eds-chev">&#8250;</span></button>';
-      eqAddableTypes(c).forEach(function(a){ rows+='<button type="button" class="eds-row add" data-eqpick="gear" data-eqtype="'+esc(a.type)+'">'+edGearIcon(a.type)+'<span class="eds-rlab">'+esc(a.label)+'</span><span class="eds-rval">'+a.n+' free</span><span class="eds-chev">&#8250;</span></button>'; });
-      rows+='<button type="button" class="eds-row add" data-eqdone="1"><span class="eds-ic">&#10005;</span><span class="eds-rlab">Done adding</span></button>';
+      if(!edSelCam && viewCams().length) rows+='<button type="button" class="eds-row add" data-eqpick="camera"><span class="eds-rlab">Camera kit</span><span class="eds-rval">'+eqAvailCams(c).length+' free</span><span class="eds-chev">&#8250;</span></button>';
+      eqAddableTypes(c).forEach(function(a){ rows+='<button type="button" class="eds-row add" data-eqpick="gear" data-eqtype="'+esc(a.type)+'"><span class="eds-rlab">'+esc(a.label)+'</span><span class="eds-rval">'+a.n+' free</span><span class="eds-chev">&#8250;</span></button>'; });
+      rows+='<button type="button" class="eds-row add eds-done" data-eqdone="1"><span class="eds-rlab">Done adding</span></button>';
     } else {
-      rows+='<button type="button" class="eds-row add" data-eqadd="1"><span class="eds-ic">+</span><span class="eds-rlab">Add equipment</span><span class="eds-chev">&#8250;</span></button>';
+      rows+='<button type="button" class="eds-row add" data-eqadd="1"><span class="eds-rlab">Add equipment</span><span class="eds-chev">&#8250;</span></button>';
     }
     host.innerHTML=rows;
     host.querySelectorAll('[data-eqpick]').forEach(function(b){ b.onclick=function(){ openEquipWheel(b.getAttribute('data-eqpick'), b.getAttribute('data-eqtype')||'', c); }; });
