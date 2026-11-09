@@ -92,6 +92,8 @@ Every panel, pill, card, control, and chip is built from the same four layers. N
 
 **Fallbacks (required).** `@media (prefers-reduced-transparency:reduce)` drop blur, use a solid `--g-ink` tint. `@media (prefers-reduced-motion:reduce)` freeze the drift/glow. Reduced transparency must stay legible.
 
+**Blur does not nest (LOCKED 2026-11-08).** A `backdrop-filter` inside an element that already has one does nothing: the inner blur samples the already-blurred parent, so the frost reads flat and dead. Any frosted overlay (a menu, popover, sheet, or toast) that lives inside a blurred ancestor (a glass header, a glass card) must be **portaled to `<body>` on open** and positioned with `position:fixed`, or its frost silently fails. This is why the Equipment Manager hamburger menu moves to `<body>` when it opens. Same trap as the `backdrop-filter` dropdown issue noted in memory; the fix is always: lift the overlay out of the blurred ancestor.
+
 ---
 
 ## 3. Radius law
@@ -159,6 +161,7 @@ Build everything from these. One spec each, no one-offs.
 - **Chip / badge.** `--g-r-pill`, teal fill or teal-tinted glass, micro type.
 - **Warning strip.** Non-blocking. Amber `--g-warn` (caution) or teal (tip) tinted glass row, `--g-r-md`, a round `!` icon. Lives where the user acts (e.g., top of the build order). Never blocks.
 - **Modal / pop-out.** Floats above everything incl. the nav (z-index above the sticky nav). Capped to the viewport as a flex column: header pinned, only the body scrolls. One unified window per item with its full action set. (See the locked pop-out rules in `CLAUDE.md`.)
+- **Menu / popover (opened by a button) (LOCKED 2026-11-08).** A menu takes on the **glass of the button that opens it**: the same fill family and tint, translucent and frosted, never a flat near-opaque dark box. The Equipment Manager hamburger menu wears the hamburger button's teal `--g-glass` (a soft teal-to-indigo glass, about 10% lighter than the old dark box). It **portals to `<body>` on open** (see the "Blur does not nest" law in §2) and is positioned `fixed` just under its trigger, so its `backdrop-filter` actually blurs the board behind it; the outside-click handler must exclude BOTH the trigger and the portaled menu so a click inside the menu does not close it. **Framework rule: any menu inherits the properties of the control that deploys it, and lifts out of any blurred ancestor so its own frost works.**
 
 ---
 

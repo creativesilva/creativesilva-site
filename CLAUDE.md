@@ -67,6 +67,10 @@ Chris has had to correct the same quality lapses repeatedly. Do NOT make him be 
 
 This standard is itself LOCKED (Chris, 2026-10-01): maintain it without being reminded. See [[feedback-self-audit-design-standard]].
 
+**Quality and thoroughness over speed, always (LOCKED 2026-11-07).** Chris is anti-slop and explicitly not in a hurry; he has repeatedly received "half-baked slop" and it has to stop. Never ship fast-and-partial. Before showing him ANY visual/UI result, verify it yourself and MEASURE it (vertical AND horizontal alignment via `getBoundingClientRect`, 0px drift; self-audit at wide and narrow widths). A result is not done because it "looks about right" in one screen capture. Measuring first catches the miss before he ever sees it.
+
+**Mockup fidelity: a mockup is a 100% pixel-for-pixel spec, never a partial parse (LOCKED 2026-11-07).** When Chris hands over a mockup, a photoshopped revision, or a reference image, reproduce EVERY visible attribute exactly: layout and order, element placement (e.g. a search icon centered), shape (a control in a circle vs a square), size, color, spacing, radius, typography. Do not drop or approximate any of it. A "45% parse" that catches only some of what he drew is slop and wastes the effort he put into the mockup. Go element-by-element against the mockup before reporting done; for an icon or graphic, render it large and compare side-by-side with his reference, refining the geometry (tooth/tick count, hand angle, ring weight, proportions) until it matches. He is anti-slop and explicitly not in a hurry: accuracy and thoroughness beat speed. If you genuinely know a better way, say so and let him decide, never silently override his design. It is his build. See [[feedback-mockup-pixel-perfect]].
+
 ### Pop-out windows: float above everything, never clip, one unified window per item (LOCKED 2026-10-01)
 
 Applies to every modal / pop-out across the platform (teacher console, calendar, tools):
