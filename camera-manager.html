@@ -9,6 +9,9 @@
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Equipment" />
+<!-- Galaxy chrome: tint the Safari toolbar/tab bar to the galaxy's top color so it reads as one field, and declare the page dark so native controls follow. -->
+<meta name="theme-color" content="#0a1636" />
+<meta name="color-scheme" content="dark" />
 <script>window.SILVA_HIDE_CATALOG=true;window.SILVA_CATALOG_RETURN='/curriculum.html';/* teacher tool: no catalog dropdown, but a plain Return-to-catalog link (curriculum.html prompts for its PIN). Public calendar.html does NOT set this. */</script>
 <meta name="description" content="Teacher back-end for the Pioneer Valley camera checkout: reserve, mark picked up, mark returned." />
 <meta name="robots" content="noindex,nofollow" />
@@ -62,10 +65,31 @@
     --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0;color-scheme:dark;}
   /* Installed web-app feel: no sideways scroll or rubber-band bounce (pinch-zoom is off via the viewport meta). */
   html,body{overflow-x:hidden;overscroll-behavior-x:none;max-width:100%;}
   body{background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);background-attachment:fixed;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;}
+  /* ===== Galaxy window scrollbar (desktop Safari/Chromium). Main page only: a slim teal->violet thumb floating on a transparent track so the galaxy shows through the gutter. Inner panels keep their own class-scoped scrollbars; iOS keeps its overlay. ===== */
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar{width:11px;height:11px;background:transparent;}
+  html::-webkit-scrollbar-track,
+  body::-webkit-scrollbar-track{background:transparent;margin:2px 0;}
+  html::-webkit-scrollbar-thumb,
+  body::-webkit-scrollbar-thumb{
+    border-radius:999px;border:2px solid transparent;background-clip:padding-box;
+    background-color:rgba(70,92,185,.5);
+    background-image:linear-gradient(180deg,rgba(46,230,214,.78),rgba(123,92,255,.82));
+    box-shadow:inset 0 0 6px rgba(46,230,214,.22);
+  }
+  html::-webkit-scrollbar-thumb:hover,
+  body::-webkit-scrollbar-thumb:hover{
+    background-image:linear-gradient(180deg,rgba(92,245,232,1),rgba(150,122,255,1));
+    box-shadow:inset 0 0 7px rgba(120,255,240,.4),0 0 8px rgba(123,92,255,.35);
+  }
+  html::-webkit-scrollbar-corner,
+  body::-webkit-scrollbar-corner{background:transparent;}
+  /* Firefox + standards-prop browsers */
+  @supports (scrollbar-color:auto){ html{scrollbar-color:rgba(104,126,224,.75) transparent;} }
   /* ===== Galaxy backdrop (Silva Glass, the AI Studio v1.9 / student-store Nebula Teal recipe, verbatim) ===== */
   .galaxy{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);}
   .galaxy-mesh{position:absolute;inset:-25%;filter:blur(40px) saturate(150%) brightness(1.1);mix-blend-mode:screen;will-change:transform;transform:translateZ(0);
@@ -114,7 +138,8 @@
   /* The hero banner is the header now, so the shared top nav bar is hidden (silva-nav.js still loads for
      the iOS standalone shim). The toolbar buttons + teacher switcher live in .intro / #poolbar below it. */
   .silva-nav{padding-top:env(safe-area-inset-top);display:none;}
-  .cal-hero-clock{width:150px;height:46px;border:0;background:transparent;display:block;}
+  /* The period clock is a transparent iframe; a glass ancestor's backdrop-filter does not reach behind it, so without its own fill the galaxy glow shows through as a bright "box." Give it a glass chip so it reads as an intentional element. (Chris 2026-11-09) */
+  .cal-hero-clock{width:150px;height:46px;border:1px solid rgba(0,184,184,.42);border-radius:var(--g-r-md);overflow:hidden;display:block;}
   .intro .sub{display:none;}
   .intro{justify-content:center;}
   .intro{display:none;}   /* controls moved into the availability (.summary) row; .intro stays only as the injectHeader anchor */
@@ -172,11 +197,14 @@
   /* Daily checkout flow: a contained block the same width as the Calendar / Manage Equipment sections below it. */
   .todayboard{margin-bottom:16px;border:1px solid var(--line-soft);border-top:3px solid var(--teal);background:rgba(0,0,0,.30);padding:14px 16px 18px;transition:background .2s,border-color .2s;}
   /* Tint the whole reservations section to the active tab's color so it's unmistakable which view you're in (Chris 2026-11-03). */
-  .todayboard.tbsec-out{border-top-color:var(--gold);border-color:rgba(245,179,1,.3);background:linear-gradient(180deg,rgba(245,179,1,.12),rgba(245,179,1,.045)),rgba(0,0,0,.4);}
-  .todayboard.tbsec-in{border-top-color:var(--teal);border-color:rgba(0,184,184,.32);background:linear-gradient(180deg,rgba(0,184,184,.12),rgba(0,184,184,.045)),rgba(0,0,0,.4);}
-  .todayboard.tbsec-overdue{border-top-color:var(--red);border-color:rgba(224,64,58,.34);background:linear-gradient(180deg,rgba(224,64,58,.13),rgba(224,64,58,.05)),rgba(0,0,0,.4);}
-  .todayboard.tbsec-avail{border-top-color:var(--ok);border-color:rgba(63,168,99,.32);background:linear-gradient(180deg,rgba(63,168,99,.12),rgba(63,168,99,.045)),rgba(0,0,0,.4);}
-  .todayboard.tbsec-requests{border-top-color:#8b5cf6;border-color:rgba(139,92,246,.34);background:linear-gradient(180deg,rgba(139,92,246,.13),rgba(139,92,246,.05)),rgba(0,0,0,.4);}
+  /* Balanced light casts (Chris 2026-11-08): the old low-alpha color over 40% black read dark/brown
+     (yellow worst). Each hue now sits at a matching mid strength over ONE neutral base that flattens the
+     galaxy's teal/purple, so no tab overpowers and none is faint. The header below takes the same color. */
+  .todayboard.tbsec-out{border-top-color:#ffd54a;border-color:rgba(255,212,90,.55);background:linear-gradient(180deg,rgba(255,215,100,.36),rgba(255,206,84,.26)),rgba(20,21,27,.30);}
+  .todayboard.tbsec-in{border-top-color:var(--teal);border-color:rgba(0,205,205,.55);background:linear-gradient(180deg,rgba(50,216,216,.36),rgba(34,196,196,.26)),rgba(20,21,27,.30);}
+  .todayboard.tbsec-overdue{border-top-color:var(--red);border-color:rgba(255,118,108,.55);background:linear-gradient(180deg,rgba(255,116,110,.38),rgba(236,90,86,.28)),rgba(20,21,27,.30);}
+  .todayboard.tbsec-avail{border-top-color:var(--ok);border-color:rgba(78,202,130,.55);background:linear-gradient(180deg,rgba(96,212,142,.36),rgba(74,192,124,.26)),rgba(20,21,27,.30);}
+  .todayboard.tbsec-requests{border-top-color:#8b5cf6;border-color:rgba(160,130,250,.55);background:linear-gradient(180deg,rgba(176,150,252,.44),rgba(148,122,240,.32)),rgba(20,21,27,.30);}
   .tb-head{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-bottom:9px;}
   .tb-title{font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;color:#8ff7f7;}
   .tb-n{font-family:var(--font);font-weight:700;font-size:.72rem;padding:1px 8px;color:#001414;background:#00b8b8;}
@@ -189,11 +217,16 @@
   .tb-colh.out{color:#ffd889;border-bottom-color:rgba(245,179,1,.3);} .tb-colh.in{color:#8ff7f7;border-bottom-color:rgba(0,184,184,.3);}
   .tb-cn{font-weight:700;font-size:.7rem;padding:0 7px;color:#001414;background:#7a8a8a;} .tb-colh.out .tb-cn{background:var(--gold);} .tb-colh.in .tb-cn{background:#00b8b8;}
   .tb-colbody{padding:8px;display:flex;flex-direction:column;gap:7px;max-height:46vh;overflow-y:auto;}
-  .tb-step{display:flex;align-items:center;gap:8px;}
-  .tb-nav{font-family:var(--font);font-weight:700;font-size:1rem;line-height:1;padding:2px 10px;border:1px solid var(--line-soft);background:rgba(0,0,0,.3);color:#cfefe9;cursor:pointer;}
-  .tb-day{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem;color:#fff;min-width:118px;text-align:center;}
-  .tb-today{font-family:var(--font);font-weight:700;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border:1px solid #00b8b8;background:transparent;color:#8ff7f7;cursor:pointer;}
+  /* Day stepper: glass circular arrows hugging a compact date, glass "Today" pill (no angular boxes). */
+  .tb-step{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+  .tb-nav{flex:0 0 auto;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--g-font);font-weight:700;font-size:1rem;line-height:1;border-radius:var(--g-r-pill);border:1px solid var(--g-edge-soft);background:var(--g-glass);color:var(--g-teal-lt);box-shadow:var(--g-spec);cursor:pointer;transition:background .16s,color .16s,border-color .16s;}
+  .tb-nav:hover{background:var(--g-primary);color:#04110f;border-color:transparent;}
+  .tb-nav svg{display:block;}
+  .tb-day{font-family:var(--g-font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.82rem;color:var(--g-text);min-width:92px;text-align:center;font-variant-numeric:tabular-nums;}
+  .tb-today{font-family:var(--g-font);font-weight:700;font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;padding:5px 13px;border-radius:var(--g-r-pill);border:1px solid var(--g-edge-soft);background:var(--g-glass);color:var(--g-teal-lt);box-shadow:var(--g-spec);cursor:pointer;margin-left:3px;transition:background .16s,color .16s,border-color .16s;}
+  .tb-today:hover{background:var(--g-primary);color:#04110f;border-color:transparent;}
   .tb-proj{font-size:.68rem;color:#ffb28a;letter-spacing:.04em;text-transform:uppercase;}
+  .tb-proj.past{color:var(--g-faint);}
   @media (max-width:760px){ .tb-cols{grid-template-columns:1fr;} .tb-colbody{max-height:none;} }
   /* ===== Full-width 3-view board: Outgoing (gold) / Incoming (teal) / Checked out (orange) ===== */
   /* Safari-style browser tabs: a row of rounded-top tabs sitting on the content pane's top line; the active
@@ -520,8 +553,10 @@
   /* phone: let the hub header wrap so the date stepper / sort control drop to their own full-width row instead of bleeding off-screen */
   @media (max-width:560px){
     .camhub-head{flex-wrap:wrap;gap:10px 12px;padding:16px 16px 16px 18px;}
+    .camhub-head .camhub-titlebox{flex:1 1 auto;}
+    .camhub-head .camhub-meta{margin-left:auto;}
     .camhub-head .ra-ctl{order:5;flex-basis:100%;justify-content:flex-start;}
-    .camhub-head .camsortdd{order:6;}
+    .camhub-head .camsortdd{order:6;flex-basis:100%;}
   }
   /* Reservation window: the whole bundle + per-item check-in */
   /* Title bar carries the equipment (camera number). Overdue reads red. */
@@ -1022,9 +1057,28 @@
   .kit-tbd{color:var(--faint);font-size:.9rem;padding:8px 2px;line-height:1.5;}
   .ed-btnrow{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:4px;}
   .retsub{color:var(--muted);font-size:.86rem;margin:0 0 12px;}
-  .retitem{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,184,184,.12);font-family:var(--body);font-size:.95rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:400;cursor:pointer;}
-  .retitem input{width:17px;height:17px;accent-color:var(--teal);}
-  #retlist{margin-bottom:14px;}
+  /* Return checklist: collapsed task-group accordions (open a group only to flag a missing piece), iOS-shape
+     GLASS toggles (gray glass off / green glass on, knob slides L->R), and a rounded glass note field. */
+  #retlist{margin-bottom:14px;display:flex;flex-direction:column;gap:9px;}
+  .retgrp{border-radius:var(--g-r-md);border:1px solid var(--g-edge-soft);background:var(--g-glass-quiet);-webkit-backdrop-filter:var(--g-blur);backdrop-filter:var(--g-blur);overflow:hidden;}
+  .retgrp>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:13px 15px;cursor:pointer;}
+  .retgrp>summary::-webkit-details-marker{display:none;}
+  .retgrp-name{flex:1 1 auto;min-width:0;font-family:var(--g-font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.92rem;color:var(--g-text);}
+  .retgrp-status{flex:0 0 auto;font-family:var(--g-font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.6rem;color:#7ee6a6;background:rgba(63,168,99,.16);border:1px solid rgba(63,168,99,.32);padding:3px 9px;border-radius:var(--g-r-pill);}
+  .retgrp-status.miss{color:#ffd27a;background:rgba(245,179,1,.14);border-color:rgba(245,179,1,.42);}
+  .retgrp-chev{flex:0 0 auto;width:8px;height:8px;margin-left:2px;border-right:2px solid var(--g-faint);border-bottom:2px solid var(--g-faint);transform:rotate(45deg);transition:transform .18s;}
+  .retgrp[open] .retgrp-chev{transform:rotate(-135deg);}
+  .retgrp-body{padding:0 15px 10px;}
+  .retitem{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--g-edge-soft);font-family:var(--body);font-size:.95rem;color:var(--g-text);text-transform:none;letter-spacing:0;font-weight:400;cursor:pointer;}
+  .retitem:first-child{border-top:0;}
+  .retitem-name{flex:1 1 auto;min-width:0;}
+  .retitem input[type=checkbox]{-webkit-appearance:none;appearance:none;flex:0 0 auto;margin:0 0 0 auto;cursor:pointer;width:50px;height:30px;border-radius:999px;position:relative;background:linear-gradient(180deg,rgba(116,128,146,.30),rgba(96,108,128,.34));border:1px solid var(--g-edge-soft);box-shadow:inset 0 1px 3px rgba(0,0,0,.42);transition:background .2s,border-color .2s,box-shadow .2s;}
+  .retitem input[type=checkbox]::before{content:'';position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:linear-gradient(180deg,#ffffff,#dde8e8);box-shadow:0 2px 5px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.9);transition:transform .2s ease;}
+  .retitem input[type=checkbox]:checked{background:linear-gradient(180deg,rgba(80,228,142,.92),rgba(40,180,108,.9));border-color:rgba(132,240,176,.5);box-shadow:inset 0 1px 2px rgba(0,0,0,.18),0 0 11px rgba(60,220,130,.4);}
+  .retitem input[type=checkbox]:checked::before{transform:translateX(20px);}
+  #retnote2{width:100%;box-sizing:border-box;background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-md);color:var(--g-text);font-family:var(--body);font-size:.95rem;padding:12px 15px;margin:6px 0 16px;-webkit-backdrop-filter:var(--g-blur);backdrop-filter:var(--g-blur);}
+  #retnote2:focus{outline:none;border-color:var(--g-teal-lt);}
+  #retnote2::placeholder{color:var(--g-faint);}
   /* Return checklist: linked additional gear (returned vs kept pending with a reason). */
   .reteq-h{font-family:var(--font);font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-lt);margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--line-soft);}
   .reteq{border:1px solid var(--line-soft);border-left:3px solid var(--teal-deep);padding:9px 11px;margin-bottom:8px;background:rgba(0,0,0,.2);}
@@ -1146,13 +1200,6 @@
   .eds-dcell .dp{display:block;}
   .eds-dcell .dp-trig{align-self:flex-start;color:var(--teal-lt);background:rgba(0,184,184,.12);border:0 !important;cursor:pointer;padding:7px 13px;border-radius:9px !important;font-weight:600;font-size:.98rem;font-family:var(--body);font-variant-numeric:tabular-nums;}
   .eds-dcell .dp-trig:not(.set){color:var(--faint);background:rgba(255,255,255,.06);}
-  /* status row hosts the custom dropdown inline on the right */
-  .eds-statusrow{cursor:default;}
-  .eds-statusdd{margin-left:auto;}
-  .eds-statusdd .mdd{width:auto;margin:0;}
-  .eds-statusdd .mdd-btn{background:none;border:0;padding:4px 2px;color:var(--text);font-weight:700;font-family:var(--font);gap:6px;}
-  .eds-statusdd .mdd-btn:hover{border:0;}
-  .eds-statusdd .mdd-chev{width:8px;height:8px;}
   /* conflict banner (conditional) */
   .eds-conf{border-radius:12px !important;border-left-width:4px !important;margin:10px 0 2px;}
   .eds-conf .go{border-radius:10px !important;width:auto;padding:10px 20px;margin-top:9px;}
@@ -1415,8 +1462,11 @@
   .cm-hambbtn span{background:var(--g-teal-lt);}
   .cm-hambbtn:hover{background:var(--rollover);border-color:var(--g-teal-lt);}
   .cm-hambbtn.on{background:var(--g-primary);border-color:var(--g-teal-lt);} .cm-hambbtn.on span{background:#04110f;}
-  .cm-hambmenu{border-radius:var(--g-r-md);background:linear-gradient(160deg,rgba(23,31,47,.99),rgba(11,17,31,.995));border-color:var(--g-edge);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);}
-  .cm-hambitem{border-radius:var(--g-r-sm);}
+  /* Frosted glass dropdown (was a flat near-opaque dark box). Text-only items, no icon glyphs (Chris 2026-11-08). */
+  .cm-hambmenu{border-radius:var(--g-r-md);background:radial-gradient(130% 86% at 14% -10%, rgba(220,250,255,.13), transparent 54%), linear-gradient(160deg, rgba(14,22,40,.80), rgba(9,15,30,.84));border-color:var(--g-edge);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);}
+  .cm-hambitem .cmh-ic{display:none;}
+  .cm-hambitem{padding-left:15px;letter-spacing:.01em;}
+  .cm-hambitem{border-radius:var(--g-r-sm);text-decoration:none;}
   .cm-hambitem:hover{background:var(--rollover);}
   .cm-hambitem.on{background:rgba(0,184,184,.22);}
   .cm-hambitem .cmh-ic{color:var(--g-teal-lt);}
@@ -1432,7 +1482,7 @@
   .cmnav-title{flex:1 1 auto;min-width:0;text-align:center;}
   .cmnav-eyebrow{font-family:var(--g-font);font-weight:700;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--g-faint);margin-bottom:5px;}
   .cmnav-h1{font-size:clamp(17pt,3.7vw,22pt);line-height:1.06;}
-  .cmnav-h1 .cmtitle-g{font-family:var(--g-font);font-weight:700;letter-spacing:.01em;}
+  .cmnav-h1 .cmtitle-g{font-family:var(--g-font);font-weight:700;text-transform:uppercase;letter-spacing:.03em;}
   .cmnav-sub{margin-top:7px;font-family:var(--body);font-weight:600;font-size:.82rem;letter-spacing:.02em;color:var(--g-muted);}
   .cmnav-sub .sync{color:var(--g-faint);} .cmnav-sub .sync b{color:var(--ok);}
   .cmnav-counthold{display:none;}
@@ -1517,6 +1567,83 @@
   #gate .card,#teacherGate .card{border-radius:var(--g-r-lg);border:1px solid var(--g-edge);background:linear-gradient(155deg,rgba(26,36,60,.52),rgba(10,16,32,.62));box-shadow:var(--g-shadow-lg),var(--g-spec-strong);backdrop-filter:blur(30px) saturate(1.3);-webkit-backdrop-filter:blur(30px) saturate(1.3);}
   .tgate-btn{border-radius:var(--g-r-md);border:1px solid var(--g-edge);background:var(--g-glass-quiet);box-shadow:var(--g-spec);transition:background .15s,color .15s,border-color .15s;}
   .tgate-btn:hover{background:var(--g-primary);border-color:var(--g-teal-lt);color:#04110f;}
+  /* =================================================================================================
+     BOARD LAYOUT (Chris 2026-11-07 concept): the student search moves up into the control row (big,
+     centered); Student Store + Tools + Simple view fold into the hamburger; the Reservations panel becomes
+     a titled "QUEUE" hub (clock glyph + eyebrow + title) with rounded corners; the stacked panels share
+     one uniform vertical gap, so the header-to-search space equals every other gap. */
+  .summary.cmctrl{gap:10px 14px;}
+  /* control-row search: a clean 40px row so the field + both circles share ONE vertical center.
+     (strip the board-head leftovers: the 8px top padding and the input's 14px bottom margin that
+     were pushing the circles a few px below the field.) */
+  .cmctrl .cmctrl-search{flex:1 1 auto;min-width:0;justify-content:center;align-items:center;flex-wrap:nowrap;gap:10px;padding:0;margin:0;}
+  .cmctrl .cmctrl-search .stu-barin{flex:1 1 auto;max-width:520px;height:40px;margin:0;align-self:center;}
+  .cmctrl .cmctrl-search .stu-bargo{align-self:center;}
+  .summary.cmctrl .cmctrl-refresh{align-self:center;}
+  /* the search action and the refresh are ONE identical teal circle (Chris's concept: both centered,
+     both round), never a square button and never the search icon dropped below the field */
+  .cmctrl .cmctrl-search .stu-bargo,.summary.cmctrl .cmctrl-refresh{flex:0 0 auto;width:40px;height:40px;min-height:0;padding:0;margin:0;border-radius:var(--g-r-pill);background:var(--g-glass);border:1px solid var(--g-edge);color:var(--g-teal-lt);display:inline-flex;align-items:center;justify-content:center;font-size:1.04rem;line-height:1;box-shadow:var(--g-spec);cursor:pointer;transition:background .15s,color .15s,border-color .15s;}
+  .cmctrl .cmctrl-search .stu-bargo:hover,.summary.cmctrl .cmctrl-refresh:hover{background:var(--g-primary);border-color:var(--g-teal-lt);color:#04110f;}
+  /* Reservations Queue hub header: clock glyph + eyebrow + title, matching the Calendar + Wallet hubs */
+  .tb-head{display:flex;align-items:center;gap:14px;padding:4px 6px 14px;border-bottom:0;}
+  .tb-qhead{display:flex;align-items:center;gap:14px;min-width:0;}
+  .tb-qic{flex:0 0 auto;width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;color:var(--g-teal-lt);}
+  .tb-qtitlebox{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .tb-qcode{font-family:var(--font);font-size:.65rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--g-faint);}
+  .tb-qname{font-family:var(--font);font-size:1.25rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;line-height:1.1;color:#5ff0f0;}
+  /* Calendar icon on the queue header: opens a date picker that jumps the board to any day. */
+  .tb-calbtn{margin-left:auto;flex:0 0 auto;width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--g-r-pill);background:var(--g-glass);border:1px solid var(--g-edge);color:var(--g-teal-lt);box-shadow:var(--g-spec);cursor:pointer;-webkit-backdrop-filter:var(--g-blur);backdrop-filter:var(--g-blur);transition:background .16s,color .16s,border-color .16s;}
+  .tb-calbtn:hover{background:var(--g-primary);color:#04110f;border-color:transparent;}
+  .tb-calpop{z-index:90;}
+  /* Queue header (icon + eyebrow + title) takes the ACTIVE tab's cast color, so the whole section reads
+     as one color at a glance. Incoming keeps the default teal above. (Chris 2026-11-08) */
+  .tbsec-out .tb-qic{color:#ffcf33;} .tbsec-out .tb-qname{color:#ffdf80;} .tbsec-out .tb-qcode{color:rgba(255,223,128,.8);}
+  .tbsec-overdue .tb-qic{color:#ff7a7a;} .tbsec-overdue .tb-qname{color:#ff9a8a;} .tbsec-overdue .tb-qcode{color:rgba(255,154,138,.75);}
+  .tbsec-avail .tb-qic{color:#5fd08a;} .tbsec-avail .tb-qname{color:#8ff0b0;} .tbsec-avail .tb-qcode{color:rgba(143,240,176,.75);}
+  .tbsec-requests .tb-qic{color:#a78bfa;} .tbsec-requests .tb-qname{color:#c4b5fd;} .tbsec-requests .tb-qcode{color:rgba(196,181,253,.78);}
+  /* round the Reservations Queue panel (keep its view-tint border: gold=outgoing, red=overdue, ...) */
+  .todayboard{border-radius:var(--g-r-lg);}
+  /* one uniform gap between every stacked panel (header, control row, queue, calendar, wallet) */
+  .cal-hero.cmnav{margin-bottom:14px !important;}
+  .status-strip{margin-bottom:14px !important;}
+  .todayboard{margin-bottom:14px !important;}
+  .cbox{margin-bottom:14px !important;}
+  /* =================================================================================================
+     STUDENT CARD (Chris mockup 54, 2026-11-07): a class chip + LOCKED Student ID line in the header;
+     Status + Reservation History as a 2-up row; Cancel + Hand out as a 2-up row, Receipt full width.
+     Every button shares one height, the framework font, the same size + spacing, ALL CAPS. The student
+     number is display-only (no edit control). */
+  .eds-chip.cls{color:var(--g-teal-lt);background:rgba(0,184,184,.15);}
+  .eds-id{display:flex;align-items:baseline;gap:9px;padding:9px 2px 2px;font-family:var(--g-font);}
+  .eds-idlab{font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:.62rem;color:var(--g-faint);}
+  .eds-idlab::after{content:":";}
+  .eds-idval{font-weight:700;letter-spacing:.09em;font-size:.98rem;color:var(--text);font-variant-numeric:tabular-nums;}
+  .eds-grp-equip{margin-top:12px;}
+  /* Action buttons (status-smart, no dropdown): framework glass pills (SILVA_GLASS_FRAMEWORK, Buttons).
+     Fully rounded + frosted + specular edge. ONE bright teal primary (the main action); every other
+     button is glass at rest and fills teal on hover (the universal rollover). Cancel is the single
+     danger exception (red). Locked 48px height. The action row shows the status-appropriate buttons;
+     Receipt + History always sit on the utility row. */
+  .eds-actions{margin-top:18px;display:flex;flex-direction:column;gap:10px;}
+  .eds-actrow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .eds-actrow.one{grid-template-columns:1fr;}
+  .eds-prim,.eds-danger,.eds-sec{height:var(--g-ctrl-h);min-height:var(--g-ctrl-h);padding:0 18px;display:inline-flex;align-items:center;justify-content:center;width:100%;font-family:var(--g-font);font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:1rem;border-radius:var(--g-r-pill) !important;cursor:pointer;-webkit-backdrop-filter:var(--g-blur);backdrop-filter:var(--g-blur);transition:background .17s ease,color .17s ease,border-color .17s ease,filter .17s ease;}
+  /* The one bright teal primary (Hand out / Check in) */
+  .eds-prim{color:#04110f;background:var(--g-primary);border:0;box-shadow:var(--g-shadow-sm),var(--g-spec);}
+  .eds-prim.checkin{background:var(--g-primary);}
+  .eds-prim:hover{filter:brightness(1.07);}
+  .eds-prim:active{filter:brightness(.94);}
+  /* Glass secondary (Undo pickup / Undo return / Receipt / History): glass at rest, teal rollover */
+  .eds-sec{color:var(--g-text);background:var(--g-glass);border:1px solid var(--g-edge);box-shadow:var(--g-spec);}
+  .eds-sec:hover{background:var(--g-primary);color:#04110f;border-color:transparent;}
+  .eds-sec:active{filter:brightness(.94);}
+  .eds-sec.eds-hist{color:var(--g-teal-lt);}
+  .eds-sec.eds-hist:hover{color:#04110f;}
+  /* Cancel: the single danger exception (red-tinted glass at rest, full red on hover) */
+  .eds-danger{color:#ffdbd7;background:linear-gradient(160deg,rgba(226,86,79,.30),rgba(150,42,38,.22));border:1px solid rgba(255,120,110,.55);box-shadow:var(--g-spec);}
+  .eds-danger:hover{background:linear-gradient(180deg,#e2564f,#b4322c);color:#fff;border-color:transparent;}
+  .eds-danger:active{filter:brightness(.94);}
+  /* Every action row stays 2-up even on phones (the card is a phone-width card). */
 </style>
 </head>
 <body>
@@ -1563,11 +1690,17 @@
         <button type="button" class="cm-hambbtn" id="cmHambBtn" aria-haspopup="true" aria-expanded="false" aria-label="Menu"><span></span><span></span><span></span></button>
         <div class="cm-hambmenu" id="cmHambMenu" hidden>
           <button type="button" class="cm-hambitem" id="hambReserve"><span class="cmh-ic">+</span>Reserve</button>
-          <button type="button" class="cm-hambitem" data-cview="board"><span class="cmh-ic">&#9632;</span>Board</button>
+          <a class="cm-hambitem silva-uni-cattrigger" id="storeBtn" target="_blank" rel="noopener"><span class="cmh-ic">&#8599;</span>Student Store</a>
           <div class="cmh-sep"></div>
+          <button type="button" class="cm-hambitem" data-cview="board"><span class="cmh-ic">&#9632;</span>Board</button>
+          <button type="button" class="cm-hambitem" id="hambSimple"><span class="cmh-ic">&#9707;</span>Simple view</button>
           <button type="button" class="cm-hambitem" data-cview="manage"><span class="cmh-ic">&#9636;</span>Manage Equipment</button>
           <button type="button" class="cm-hambitem" data-cview="history"><span class="cmh-ic">&#8617;</span>Returned History</button>
           <button type="button" class="cm-hambitem" data-cview="events"><span class="cmh-ic">&#9202;</span>Event History</button>
+          <div class="cmh-sep"></div>
+          <button type="button" class="cm-hambitem" id="reportsBtn"><span class="cmh-ic">&#9744;</span>Missing Items</button>
+          <a class="cm-hambitem" id="photoWalkBtn" href="/photo-walk.html"><span class="cmh-ic">&#9873;</span>Photo Walk Log</a>
+          <button type="button" class="cm-hambitem" id="leadsBtn"><span class="cmh-ic">&#9733;</span>Class Leads</button>
         </div>
       </div>
       <img class="cmnav-logo" src="/assets/PV_Square_Logo.png" alt="Pioneer Valley" />
@@ -1578,7 +1711,7 @@
       <div class="cmnav-sub"><span class="sync" id="sync">Connecting&#8230;</span><span class="cmnav-counthold" aria-hidden="true"><span id="availn">0</span><span id="totn">18</span><span id="availunit">cameras</span><span id="availday">today</span></span></div>
     </div>
     <div class="cmnav-trail">
-      <iframe class="cal-hero-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
+      <iframe class="cal-hero-clock" src="/assets/embeds/period-clock.html?chip=1&v=5" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
     </div>
   </div>
   <div class="intro"><p class="sub">Hand out gear, mark it picked up when the student collects it, and mark it returned when it comes back. Changes sync to the calendar and the Command Center in real time.</p></div>
@@ -1586,18 +1719,12 @@
   <div class="status-strip">
     <div class="summary cmctrl">
       <div id="poolbar" class="poolbar-wrap" role="group" aria-label="Teacher view"></div>
-      <div class="summ-right">
-        <a class="silva-uni-cattrigger summ-btn" id="storeBtn" target="_blank" rel="noopener">Student Store</a>
-        <div class="cm-tools">
-          <button type="button" class="silva-uni-cattrigger cm-toolsbtn summ-btn" id="cmToolsBtn" aria-haspopup="true" aria-expanded="false">Tools &#9662;</button>
-          <div class="cm-toolsmenu" id="cmToolsMenu" hidden>
-            <button type="button" class="cm-toolitem" id="reportsBtn" title="Missing kit items to order (opens a printable report)">Missing Items</button>
-            <a class="cm-toolitem" id="photoWalkBtn" href="/photo-walk.html">Photo Walk Log</a>
-            <button type="button" class="cm-toolitem" id="leadsBtn" title="Your class leads by period: Equipment Managers, Photo Walk EQs, and Team Attendance Managers">Class Leads</button>
-          </div>
-        </div>
-        <button class="silva-uni-cattrigger summ-btn summ-ico cmctrl-refresh" id="refreshBtn" title="Reload the latest data now" aria-label="Refresh">&#8635;</button>
+      <div class="cmctrl-search tb-search">
+        <input type="text" id="stuBarIn" class="stu-barin" placeholder="Search a student by name or ID" autocomplete="off" autocapitalize="off" spellcheck="false" />
+        <button type="button" class="stu-bargo" id="stuBarGo" aria-label="Find"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M20 20l-4.4-4.4"></path></svg></button>
+        <span class="stu-barmsg" id="stuBarMsg"></span>
       </div>
+      <button class="silva-uni-cattrigger summ-btn summ-ico cmctrl-refresh" id="refreshBtn" title="Reload the latest data now" aria-label="Refresh">&#8635;</button>
     </div>
   </div>
   <!-- The student lookup now lives centered inside the Reservations bar (rendered in the board head). -->
@@ -1608,10 +1735,8 @@
   </div>
   <div id="todayBoard" style="display:none;"></div>
 
-  <details class="cbox" id="calbox">
-    <summary class="cbox-head"><span class="cbox-titlebox"><span class="cbox-code">Reservations</span><span class="cbox-title">Calendar</span></span><span class="cbox-meta"><span class="hcount" id="calhint">Tap a day to see that day&#8217;s cameras</span><span class="cbox-chev"></span></span></summary>
-    <div class="cbox-body"><div class="calpanel"><iframe id="calframe" src="/calendar.html?embed=1" title="Equipment calendar" loading="lazy"></iframe></div></div>
-  </details>
+  <!-- Reservations Calendar hub removed 2026-11-09 (Chris): the date-picker on the Queue header replaces it. -->
+
 
   <div id="board"><span class="foot">Loading&#8230;</span></div>
 
@@ -1794,8 +1919,7 @@
            Each row shows its current value; tapping it opens the wheel / date picker / menu. No instructions. -->
       <div class="eds-stu" id="ed-contact"></div>
 
-      <div class="eds-gh">Equipment</div>
-      <div id="ed-equip" class="eds-grp"></div>
+      <div id="ed-equip" class="eds-grp eds-grp-equip"></div>
 
       <div class="eds-gh">Dates</div>
       <div class="eds-grp">
@@ -1806,21 +1930,12 @@
       </div>
       <div class="mconf eds-conf" id="ed-conf"></div>
 
-      <div class="eds-gh">Status</div>
-      <div class="eds-grp">
-        <div class="eds-row eds-statusrow"><span class="eds-rlab">Reservation status</span><div class="eds-statusdd" id="ed-status"></div></div>
-      </div>
-
-      <details class="eds-stu-acc">
-        <summary class="eds-stu-sum">Change student number</summary>
-        <div class="eds-stu-body">
-          <input type="text" id="ed-sid" inputmode="numeric" placeholder="Student ID" />
-          <div class="who-line" id="ed-who" aria-live="polite"></div>
-          <button type="button" class="eds-sec" id="ed-sidapply">Update student</button>
-        </div>
-      </details>
-
+      <!-- All actions are status-smart buttons (no status dropdown): renderEdHeader builds only the
+           buttons that match the current status, with Receipt + History always on the utility row.
+           The student number is LOCKED (imported, exact), so there is no edit control. -->
       <div class="eds-actions" id="ed-actions"></div>
+      <!-- hidden: the student number stays locked/display-only; kept so edit JS referencing these never errors -->
+      <input type="hidden" id="ed-sid" /><span id="ed-who" hidden></span>
     </div>
   </div>
 </div>
@@ -2049,6 +2164,30 @@
       input._dpLabel=label;
     }
     if(input._dpLabel) input._dpLabel();
+  }
+  // Queue calendar: tap the calendar icon on the Reservations Queue, pick any day, and the board jumps to
+  // it (a PAST day = that day's history, TODAY = the live queue, a FUTURE day = projected availability,
+  // assuming good-faith returns). Replaces the old embedded month calendar. (Chris 2026-11-08)
+  var _tbCalOut=null;
+  function openBoardDatePicker(anchor){
+    var ex=document.getElementById('tbCalPop'); if(ex){ ex.remove(); if(_tbCalOut) document.removeEventListener('click',_tbCalOut,true); return; }   // toggle closed
+    function iso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+    var cur=SELDAY||todayISO(), vy=+cur.split('-')[0], vm=+cur.split('-')[1]-1;
+    var pop=document.createElement('div'); pop.className='dp-pop right tb-calpop'; pop.id='tbCalPop';
+    function close(){ var p=document.getElementById('tbCalPop'); if(p) p.remove(); if(_tbCalOut) document.removeEventListener('click',_tbCalOut,true); }
+    function draw(){
+      var first=new Date(vy,vm,1), start=new Date(first); start.setDate(1-first.getDay()); var tISO=todayISO();
+      var h='<div class="dp-head"><button type="button" class="dp-nav" data-d="-1">&lsaquo;</button><span class="dp-mtitle">'+MON[vm]+' '+vy+'</span><button type="button" class="dp-nav" data-d="1">&rsaquo;</button></div><div class="dp-dow"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div><div class="dp-grid">';
+      // School days only: dim + disable non-school days (weekends, holidays, vacations), since students
+      // cannot pick up or return on them. Uses the same schoolDays source as the store (isSchoolDayISO).
+      for(var i=0;i<42;i++){ var d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i), di=iso(d), sch=isSchoolDayISO(di); h+='<button type="button" class="dp-day'+(d.getMonth()!==vm?' om':'')+(sch?'':' noschool')+(di===SELDAY?' sel':'')+(di===tISO?' today':'')+'" data-iso="'+di+'"'+(sch?'':' disabled aria-disabled="true"')+'>'+d.getDate()+'</button>'; }
+      h+='</div>'; pop.innerHTML=h;
+      pop.querySelectorAll('.dp-nav').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); vm+=+b.getAttribute('data-d'); if(vm<0){vm=11;vy--;} if(vm>11){vm=0;vy++;} draw(); }; });
+      pop.querySelectorAll('.dp-day').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); SELDAY=b.getAttribute('data-iso'); if(TBVIEW!=='out') TBVIEW='out'; _lastTBSig=null; renderTodayBoard(); updateSummary(); close(); }; });
+    }
+    draw(); anchor.parentNode.appendChild(pop);
+    _tbCalOut=function(e){ if(pop && !pop.contains(e.target) && e.target!==anchor && !anchor.contains(e.target)) close(); };
+    setTimeout(function(){ document.addEventListener('click',_tbCalOut,true); },0);
   }
   // Framework-styled confirm (Promise<bool>) + toast, replacing the native browser confirm/alert.
   function silvaConfirm(message, opts){
@@ -2479,11 +2618,18 @@
     var sig=(SIMPLE?'SIMPLE':view)+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+qSig+'|n'+nOut+'.'+nIn+'.'+nOverdue+'.'+nReq+'|'+(SIMPLE?('so'+listSig(out,'out')+'|sc'+listSig(chk,'in')):listSig(active,view))+'|req'+pend.map(function(g){return g[0].id;}).join('.')+'|av'+(TBAVOPEN||'')+'|'+invSig;
     if(sig===_lastTBSig && el.innerHTML) return; _lastTBSig=sig;
     // ----- header: title + help + day stepper (Outgoing/Incoming only; Checked out + Available are "right now") -----
-    var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY));
+    var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY).replace(/(\d{2})(\d{2})$/,'$2')), _past=(SELDAY<todayISO());   // 2-digit year: 11/2/26
+    // Sort control (sliders pull-down) is built here so it can ride the Outgoing stepper line, left of the date (Chris 2026-11-09).
+    var sortCtl='<div class="tb-sortmenu"><button type="button" class="tb-sorticon" data-tbsortopen="1" aria-haspopup="true" aria-label="Sort order" title="Sort order"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.4" fill="currentColor" stroke="none"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.4" fill="currentColor" stroke="none"/></svg></button>'+
+      '<div class="tb-sortpop" hidden><div class="tb-sortpop-h">Sort by</div>'+
+        '<button type="button" class="tb-sortopt'+(TBSORT==='cam'?' on':'')+'" data-tbsort="cam">Camera number</button>'+
+        '<button type="button" class="tb-sortopt'+(TBSORT==='name'?' on':'')+'" data-tbsort="name">Student last name</button></div></div>';
+    var navL='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
+    var navR='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
     var stepper=(view!=='out')?'<span class="tb-nowlabel">Right now</span>':
-      ('<div class="tb-step"><button type="button" class="tb-nav" data-tbday="-1" title="Previous day">&#8249;</button>'+
-      '<span class="tb-day">'+esc(dayL)+'</span><button type="button" class="tb-nav" data-tbday="1" title="Next day">&#8250;</button>'+
-      (isT?'':'<button type="button" class="tb-today" data-tbtoday="1">Today</button><span class="tb-proj">Projected &middot; assumes on-time returns</span>')+'</div>');
+      ('<div class="tb-step">'+(active.length?sortCtl:'')+'<button type="button" class="tb-nav" data-tbday="-1" title="Previous day" aria-label="Previous day">'+navL+'</button>'+
+      '<span class="tb-day">'+esc(dayL)+'</span><button type="button" class="tb-nav" data-tbday="1" title="Next day" aria-label="Next day">'+navR+'</button>'+
+      (isT?'':'<button type="button" class="tb-today" data-tbtoday="1">Today</button><span class="tb-proj'+(_past?' past':'')+'">'+(_past?'History':'Projected &middot; assumes on-time returns')+'</span>')+'</div>');
     // ----- view toggle: Outgoing (gold) / Incoming (teal) / Available (green) / Requests (purple). Overdue is no
     //       longer a tab; it leads the board as the Call queue above, so it is seen from every tab. -----
     function tg(k,label,cnt){ return '<button type="button" class="tb-tg '+k+(view===k?' on':'')+'" data-tbview="'+k+'">'+label+' <span class="tb-tgn">'+cnt+'</span></button>'; }
@@ -2516,15 +2662,13 @@
         body = groups.length ? '<div class="tb-grid view-'+view+'" style="grid-auto-flow:column;grid-template-rows:repeat('+Math.max(1,Math.ceil(groups.length/2))+',auto);">'+groups.map(function(g){ var od=(view==='in'&&g.items.some(isOverdue)); return '<div class="tb-bundle'+(od?' tb-od':'')+'">'+renderBundle(g.c, g.items, view, true)+'</div>'; }).join('')+'</div>'
           : '<div class="tb-grid"><div class="tb-empty">'+emptyMsg+'</div></div>';
       }
-      // Sort is a sliders-icon pull-down (Apple's canonical Sort control), not a segmented bar. Select is cut:
-      // tap a tile to hand out one, Mark-all covers everyone; a subset mode was overhead for Garcia. (Chris 2026-11-06)
-      var sortCtl='<div class="tb-sortmenu"><button type="button" class="tb-sorticon" data-tbsortopen="1" aria-haspopup="true" aria-label="Sort order" title="Sort order"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.4" fill="currentColor" stroke="none"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.4" fill="currentColor" stroke="none"/></svg></button>'+
-        '<div class="tb-sortpop" hidden><div class="tb-sortpop-h">Sort by</div>'+
-          '<button type="button" class="tb-sortopt'+(TBSORT==='cam'?' on':'')+'" data-tbsort="cam">Camera number</button>'+
-          '<button type="button" class="tb-sortopt'+(TBSORT==='name'?' on':'')+'" data-tbsort="name">Student last name</button></div></div>';
+      // (sortCtl is built above so it can ride the Outgoing stepper line; on Incoming it leads the control row.)
       // End-of-day one-tap sweep (Outgoing + today only): mark every remaining reserved item picked up.
       var pickAllBtn=(view==='out'&&isT&&total>0)?'<button type="button" class="tb-pickall" data-tbpickall="1">Mark all picked up</button>':'';
-      search = total ? ('<div class="tb-searchrow tb-ctlrow">'+sortCtl+pickAllBtn+'</div>') : '';
+      // On Outgoing the sort icon rides the stepper line, so the control row carries only the optional Mark-all (today);
+      // on Incoming there is no stepper, so the sort icon leads this row.
+      var _rowInner=((view==='out')?'':sortCtl)+pickAllBtn;
+      search = _rowInner ? ('<div class="tb-searchrow tb-ctlrow">'+_rowInner+'</div>') : '';
       if(selMode){
         var n=Object.keys(TBSELSET[view]).length;
         var acts = n ? ((view==='out')
@@ -2535,19 +2679,17 @@
     }
     el.className='todayboard '+(SIMPLE?'tbsec-simple':('tbsec-'+view)); el.style.display='';
     var queues=isT?(queueHtml(odCall,'call')+queueHtml(miss,'miss')):'';
-    var simpleTg='<button type="button" class="tb-simple-tg'+(SIMPLE?' on':'')+'" data-tbsimple="'+(SIMPLE?'0':'1')+'" title="Switch between a simple and a full board">'+(SIMPLE?'Full view':'Simple view')+'</button>';
-    // Reservations bar: title (left) + the student search CENTERED + Simple/Full toggle (right). The i help, the
-    // day stepper and the cart tally are gone: the tab counts carry all the stats (Chris 2026-11-06).
-    var searchBar='<div class="tb-search"><input type="text" id="stuBarIn" class="stu-barin" placeholder="Search a student by name or ID" autocomplete="off" autocapitalize="off" spellcheck="false" /><button type="button" class="stu-bargo" id="stuBarGo" aria-label="Find">&#9906;</button><span class="stu-barmsg" id="stuBarMsg"></span></div>';
-    var head='<div class="tb-head"><span class="tb-title">Reservations</span>'+searchBar+simpleTg+'</div>';
-    var _sbv=(document.getElementById('stuBarIn')||{}).value||'', _sbf=!!(document.activeElement&&document.activeElement.id==='stuBarIn');
+    // The Reservations QUEUE panel header: a clock glyph + eyebrow + title, matching the Calendar + Wallet
+    // hubs. The student search moved up into the control row; Simple view moved into the hamburger. (Chris 2026-11-07)
+    var head='<div class="tb-head"><span class="tb-qhead"><span class="tb-qic" aria-hidden="true"><svg viewBox="0 0 220 220" width="40" height="40" fill="currentColor"><path d="M110 12.06c-54.09 0-97.94 43.85-97.94 97.94s43.85 97.94 97.94 97.94 97.94-43.85 97.94-97.94S164.09 12.06 110 12.06m.01 187.47c-49.35 0-89.36-40.01-89.36-89.36s40.01-89.36 89.36-89.36 89.36 40.01 89.36 89.36-40.01 89.36-89.36 89.36"/><path d="M112.34 101.39c3.88 1.84 6.37 4.66 6.55 8.05.21 4.18-2.35 7.26-6.53 9.04l-.02 60.85c-39.42 1.11-71.28-30.43-71.55-68.87s31.77-70.91 71.56-69.84v60.77Zm-4.3 60.49-.24-44.98c-6.67 3.33-13.77 14.51-14.73 9.62-.14-.69.13-2.68.72-3.27l8.65-8.64c-.63-3.54-.66-5.9-.32-9.55L80.76 83.69c-.79-.79-1.06-3.78-.14-3.68l2.98.3 22.38 22.42 2.04-2.59-.09-42.1c-7.62.48-15.41 2.46-21.53 5.87l.61 4.31c.11.76-2.44 1.04-2.92.44l-2.06-2.55c-5.93 4.27-11.49 9.82-15.72 15.71l2.91 2.71c.54.51-.89 2.78-1.61 2.6l-3.72-.92c-3.14 6.53-5.52 14.58-5.41 21.43l4.11 1.6c.56.22-.66 2.32-1.25 2.46l-3.12.74c.5 7.25 2.52 15.32 5.89 21.28l4.29-.61c.75-.11 1.01 2.43.42 2.91l-2.52 2.06c4.27 6.02 9.82 11.68 15.91 15.77l2.54-2.92c.48-.55 2.79.89 2.59 1.59l-1.05 3.62c6.7 3.34 14.01 5.36 21.75 5.72Zm6.41-51.89c0-2.37-1.92-4.29-4.29-4.29s-4.29 1.92-4.29 4.29 1.92 4.29 4.29 4.29 4.29-1.92 4.29-4.29"/><path d="m165.9 119.4-2.76 10.23 11.27 7.81-8.38 14.43-12.31-5.79-7.46 7.24 5.77 12.6-14.66 8.28-7.56-11.3-10.39 2.94c-.04 5.13.13 8.83-1.93 13.32-.86-10.04-.97-19.64-.86-30.74 18.88-3.43 32.26-19.32 32.46-37.95.2-18.65-12.7-35.22-32.28-38.8-.4-10.51-.33-20.48.83-30.6 1.89 5.08 1.69 8.24 1.84 13.13l10.35 2.86 7.52-11.3L152 54.03l-5.72 12.6 7.23 7.25 12.55-5.7 8.29 14.31-11.23 8.02 2.54 9.91 13.78 1.22.04 16.79-13.58.99Z"/></svg></span><span class="tb-qtitlebox"><span class="tb-qcode">Reservations</span><span class="tb-qname">Queue</span></span></span><button type="button" class="tb-calbtn" id="tbCalBtn" title="Jump to a date" aria-label="Jump to a date"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"></rect><path d="M3 9.5h18"></path><path d="M8 2.5v4"></path><path d="M16 2.5v4"></path></svg></button></div>';
+    var _hs=document.getElementById('hambSimple'); if(_hs&&_hs.lastChild) _hs.lastChild.textContent=SIMPLE?'Full view':'Simple view';
     if(SIMPLE){
       var markAll=(isT&&nOut>0)?'<button type="button" class="tb-pickall" data-tbpickall="1">Mark all picked up</button>':'';
       el.innerHTML=head+queues+
         '<div class="tb-simplesec sim-out"><div class="tb-simplehd"><span>Hand out</span>'+markAll+'</div>'+gridFor(out,'out')+'</div>'+
         '<div class="tb-simplesec sim-in"><div class="tb-simplehd"><span>Check in</span></div>'+gridFor(chk,'in')+'</div>';
     } else {
-      el.innerHTML=head+toggle+
+      el.innerHTML=head+toggle+(view==='out'?stepper:'')+
         ((view==='avail'||view==='requests'||view==='overdue') ? body
           : (search+body+bulk));
     }
@@ -2561,10 +2703,7 @@
     el.querySelectorAll('[data-avunit]').forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-avunit'); if(b.getAttribute('data-avkind')==='camera') openCamDetail(id); else openGearDetail(id); }; });
     el.querySelectorAll('[data-avassign]').forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-avassign'); if(b.getAttribute('data-avkind')==='camera') openReserve(id); else openReserveGear(id); }; });
     var hb=el.querySelector('[data-tbhelp]'); if(hb) hb.onclick=openBoardHelp;
-    (function(){ var bgo=el.querySelector('#stuBarGo'), bin=el.querySelector('#stuBarIn'), bmsg=el.querySelector('#stuBarMsg');  // student search lives in the bar now; re-wire each render, keep the typed value
-      function bs(){ if(runStuSearch(bin?bin.value:'', bmsg) && bin) bin.value=''; }
-      if(bgo) bgo.onclick=bs;
-      if(bin){ bin.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); bs(); } }); if(_sbv) bin.value=_sbv; if(_sbf) bin.focus(); } })();
+    // (student search now lives statically in the control row, wired once on load; no per-render rewire)
     // Queue rows: Call/Text links must not also open the reservation; Return to stock cancels the no-show.
     el.querySelectorAll('.tbq-act[data-stop]').forEach(function(a){ a.onclick=function(e){ e.stopPropagation(); }; });
     el.querySelectorAll('[data-questock]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); var id=b.getAttribute('data-questock'); var c=findRec(id);
@@ -2592,6 +2731,7 @@
     var pab=el.querySelector('[data-tbpickall]'); if(pab) pab.onclick=function(){ pickUpAllOutgoing(); };
     el.querySelectorAll('[data-tbday]').forEach(function(b){ b.onclick=function(){ _lastTBSig=null; stepDay(parseInt(b.getAttribute('data-tbday'),10)); }; });
     el.querySelectorAll('[data-tbtoday]').forEach(function(b){ b.onclick=function(){ _lastTBSig=null; SELDAY=todayISO(); renderTodayBoard(); updateSummary(); }; });
+    var _tbcb=document.getElementById('tbCalBtn'); if(_tbcb) _tbcb.onclick=function(e){ e.stopPropagation(); openBoardDatePicker(_tbcb); };
     if(_tbFocus){ var fi=el.querySelector('[data-tbsearch="'+_tbFocus.col+'"]'); if(fi){ try{ fi.focus(); fi.setSelectionRange(_tbFocus.pos,_tbFocus.pos); }catch(e){} } _tbFocus=null; }
   }
   var _tbFocus=null;   // keeps the search box focused + caret in place across the re-render
@@ -2834,13 +2974,22 @@
   function closeStuSearch(){ var ov=document.getElementById('stuSearchOv'); if(ov) ov.classList.remove('open'); }
   // Student search core: a 4+ digit number opens that student's profile; a name matches students on record.
   // Used by BOTH the prominent board search bar and the (legacy) overlay. m = the message element to write into.
+  // Student lookup is scoped to the CURRENT teacher's own students, exactly like the board (resvInScope).
+  // A teacher must never see another teacher's roster: under Silva, a Ms.-Mankin Digital-Arts student
+  // must not surface by name OR by number. (Fix: the search used to scan every record with no scope.)
+  function recsFor(digits){ return (DATA.checkouts||[]).concat(DATA.equipment||[]).filter(function(c){ return String(c.student_id||'')===digits && c.student_name; }); }
   function runStuSearch(v, m){
     v=(v||'').trim(); var digits=v.replace(/\D/g,'');
     function msg(h){ if(m){ m.innerHTML=h; } }
-    if(digits.length>=4){ closeStuSearch(); openStudentProfile(digits); return true; }
+    if(digits.length>=4){
+      var named=recsFor(digits);
+      if(named.length && !named.some(resvInScope)){ msg('That student is on another teacher&#8217;s roster, not yours.'); return false; }
+      closeStuSearch(); openStudentProfile(digits); return true;
+    }
     if(v){
       var lc=v.toLowerCase(), hits={};
-      (DATA.checkouts||[]).concat(DATA.equipment||[]).forEach(function(c){ var nm=(c.student_name||''); if(nm && c.student_id && nm.toLowerCase().indexOf(lc)>-1){ hits[String(c.student_id)]=nm; } });
+      (DATA.checkouts||[]).concat(DATA.equipment||[]).forEach(function(c){ if(!resvInScope(c)) return;   // only THIS teacher's own students; never surface another teacher's roster
+        var nm=(c.student_name||''); if(nm && c.student_id && nm.toLowerCase().indexOf(lc)>-1){ hits[String(c.student_id)]=nm; } });
       var ids=Object.keys(hits);
       if(ids.length===1){ closeStuSearch(); openStudentProfile(ids[0]); return true; }
       if(ids.length>1){ msg('Did you mean: '+ids.map(function(id){ return '<button type="button" class="stulink" data-stu="'+esc(id)+'" data-closesearch="1">'+esc(hits[id])+'</button>'; }).join(' &middot; ')); return false; }
@@ -2922,6 +3071,27 @@
     if(!res.length){ closeResv(); return; }
     Promise.all(res.map(function(x){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:x.id,status:'out'})}); }))
       .then(function(){ return loadBoard(); }).then(function(){ closeResv(); silvaToast('Picked up '+res.length+' item'+(res.length>1?'s':'')+'.'); }).catch(function(){ silvaToast('Could not update. Try again.'); });
+  }
+  // Revert every item at one status to another: the status-smart corrections from the student card
+  // (Undo pickup = out -> reserved, Undo return = returned -> out). Refresh the card in place so it
+  // re-renders with the new status's buttons.
+  function resvSetAll(parent, from, to, msg){
+    var hit=resvItems(parent).filter(function(x){return statusOf(x)===from;});
+    if(!hit.length){ return; }
+    Promise.all(hit.map(function(x){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:x.id,status:to})}); }))
+      .then(function(){ return loadBoard(); }).then(reloadCal)
+      .then(function(){ if(edId) openEditCheckout(edId); if(msg) silvaToast(msg); })
+      .catch(function(){ silvaToast('Could not update. Try again.'); });
+  }
+  // Would undoing this return double-book anything? True if ANY unit in the kit has since gone back out
+  // or been reserved to someone else over its span. "Undo return" is hidden whenever this is true, so it
+  // can never create a conflict (it stays available only while the whole kit is still free).
+  function resvReopenBlocked(parent){
+    return resvItems(parent).some(function(it){
+      var o=it.out||parent.out, d=it.due||parent.due;
+      if(it.kind==='equipment') return unitBusyForSpan(function(c){return c.kind==='equipment'&&c.item===it.item;}, o, d, it.id);
+      return unitBusyForSpan(function(c){return c.kind!=='equipment'&&c.camera===it.camera;}, o, d, it.id);
+    });
   }
   // Done: finish this student. Anything still reserved (not picked up) is cancelled so a no-show never stays linked to them.
   function resvDone(parent){
@@ -3404,16 +3574,27 @@
     var eopen=secOpen('equip'), gpool=gearPoolIds(), gtypes=gearTypes();
     var gByType={}; gpool.forEach(function(id){ var u=gearUnit(id); if(!u) return; (gByType[u.type]=gByType[u.type]||[]).push(id); });
     var gOrder=gOrderFor();
-    var gearHtml='';
-    gOrder.forEach(function(t){ var ids=gByType[t]; if(!ids||!ids.length) return;
-      var tl=(gtypes[t]&&gtypes[t].label)||t;
-      gearHtml+='<div class="geargroup"><div class="geargroup-h">'+esc(tl)+'<span class="geargroup-n">'+ids.length+'</span></div>'+
-        '<div class="camgrid">'+ids.map(manageGearTile).join('')+'</div></div>';
-    });
-    var equipSection='<div class="csec sec-equip'+(eopen?' open':'')+'">'+
-      '<button class="csec-head" type="button" data-sectoggle="equip"><span class="csec-dot equip"></span>Additional equipment <span class="csec-n">'+gpool.length+' units</span><span class="csec-chev"></span></button>'+
-      '<div class="csec-body">'+(gearHtml||'<div class="foot">No equipment units yet.</div>')+'</div>'+
-    '</div>';
+    // Equipment pool grouped into real categories (Chris 2026-11-09): Tripods / Lenses / Lighting /
+    // Accessories, each its own accordion. Any gear type not mapped falls into Accessories so new gear
+    // never disappears. (Replaces the single "Additional equipment" blob.)
+    var GEAR_CAT={tripod:'Tripods',mankin_tripod:'Tripods',wide:'Lenses',zoom:'Lenses',speedlite:'Lighting',godox:'Lighting',smallrig:'Lighting',smallrig_panel:'Lighting',led_panel:'Lighting',led:'Lighting',reflector:'Accessories',bluetooth:'Accessories',apple_pencil:'iPad Styluses'};
+    var CAT_ORDER=['Tripods','Lenses','Lighting','Accessories','iPad Styluses'];
+    function catSectionsHtml(skip){ skip=skip||{};
+      var buckets={};
+      function add(t){ if(skip[t]||!gByType[t]||!gByType[t].length) return; var cat=GEAR_CAT[t]||'Accessories'; (buckets[cat]=buckets[cat]||[]).push(t); }
+      gOrder.forEach(add);
+      Object.keys(gByType).forEach(function(t){ if(gOrder.indexOf(t)<0) add(t); });   // types present but not in gOrder
+      var out='';
+      CAT_ORDER.forEach(function(cat){ var types=buckets[cat]; if(!types||!types.length) return;
+        var n=0, grid=''; types.forEach(function(t){ gByType[t].forEach(function(id){ grid+=manageGearTile(id); n++; }); });
+        var sk='gcat'+cat;
+        out+='<div class="csec sec-equip'+(secOpen(sk)?' open':'')+'">'+
+          '<button class="csec-head" type="button" data-sectoggle="'+sk+'"><span class="csec-dot equip"></span>'+esc(cat)+' <span class="csec-n">'+n+'</span><span class="csec-chev"></span></button>'+
+          '<div class="csec-body"><div class="camgrid">'+grid+'</div></div>'+
+        '</div>';
+      });
+      return out||'<div class="foot">No additional equipment yet.</div>';
+    }
     // Mankin's board is three ordered sections: iPad styluses (expanded) -> Cameras (compressed) ->
     // Additional equipment. The photo teachers keep the camera grid first, then their gear.
     var mbody;
@@ -3441,7 +3622,7 @@
       '</div>';
       mbody=pencilsSection+camsSection+addlSection;
     } else {
-      mbody=mgrid+equipSection;
+      mbody=mgrid+catSectionsHtml();
     }
     var mOpen=secOpen('manage');
     var manageHtml='<div class="camhub manage-hub'+(mOpen?' open':'')+'">'+
@@ -3572,7 +3753,7 @@
     if(ok) s.innerHTML='<b>&#10003; Live</b> &middot; synced '+new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
     else s.textContent='Reconnecting…';
   }
-  function reloadCal(){ try{ var f=document.getElementById('calframe'); f.contentWindow.location.reload(); }catch(e){ var f2=document.getElementById('calframe'); f2.src=f2.src; } }
+  function reloadCal(){ var f=document.getElementById('calframe'); if(!f) return; try{ f.contentWindow.location.reload(); }catch(e){ try{ f.src=f.src; }catch(_){} } }
   // The embedded calendar posts its content height and we size the iframe to it EXACTLY, so the whole
   // month shows with NO inner scrollbar: the page scrolls as one, never a scroll-within-a-scroll
   // (Chris 2026-10-04, superseding the earlier viewport-cap). Grows and shrinks with the month.
@@ -3688,7 +3869,20 @@
     var c=findRec(id); if(!c) return; retId=id;
     document.getElementById('retTitle').textContent='Return checklist · '+(c.camera||'Camera');
     var _kitMiss=(assetOf(c.camera).kit||[]);   // pre-check from the camera's current kit state (already-missing items start unchecked)
-    document.getElementById('retlist').innerHTML=KIT_STD.map(function(k,i){ var here=_kitMiss.indexOf(k)<0; return '<label class="retitem"><input type="checkbox" id="ret_'+i+'"'+(here?' checked':'')+'> '+esc(k)+'</label>'; }).join('');
+    // Grouped into 4 collapsed task accordions (open a group only to flag a missing piece), 50mm first in the
+    // lens groups. The checkbox IDs stay ret_<KIT_STD index>, so the confirm logic below is unchanged.
+    var RET_GROUPS=[{name:'Camera Body',idx:[0,11,12,10]},{name:'Lenses',idx:[2,1,3]},{name:'Lens Caps',idx:[5,4,6]},{name:'Lens Filters',idx:[8,7,9]}];
+    document.getElementById('retlist').innerHTML=RET_GROUPS.map(function(g){
+      var miss=0, rows=g.idx.map(function(i){ var k=KIT_STD[i], here=_kitMiss.indexOf(k)<0; if(!here) miss++;
+        return '<label class="retitem"><span class="retitem-name">'+esc(k)+'</span><input type="checkbox" id="ret_'+i+'"'+(here?' checked':'')+'></label>'; }).join('');
+      return '<details class="retgrp"'+(miss>0?' open':'')+'><summary><span class="retgrp-name">'+esc(g.name)+'</span>'+
+        '<span class="retgrp-status'+(miss?' miss':'')+'">'+(miss?(miss+' missing'):'All here')+'</span><span class="retgrp-chev"></span></summary>'+
+        '<div class="retgrp-body">'+rows+'</div></details>'; }).join('');
+    // Live-update each group's "All here / N missing" pill as its toggles change.
+    document.getElementById('retlist').querySelectorAll('.retgrp').forEach(function(d){ var s=d.querySelector('.retgrp-status');
+      d.querySelectorAll('input[type=checkbox]').forEach(function(b){ b.addEventListener('change',function(){ var miss=0;
+        d.querySelectorAll('input[type=checkbox]').forEach(function(x){ if(!x.checked) miss++; });
+        s.textContent=miss?(miss+' missing'):'All here'; s.classList.toggle('miss',!!miss); }); }); });
     // Linked additional gear checked out with this kit: verify each piece comes back with it.
     retEquip=(DATA.checkouts||[]).filter(function(e){ return e.kind==='equipment' && e.group===id && statusOf(e)!=='returned'; });
     var eq=document.getElementById('retequip');
@@ -3743,7 +3937,10 @@
       // every finding is written to the permanent history LOG. Then check the kit in (markReturned commits immediately).
       if(cam){
         var a=assetOf(cam), nl=(a.log||[]).slice(), today=fmt(todayISO());
-        missing.forEach(function(m){ nl.push({date:today,text:'Returned missing: '+m}); });
+        // Stamp the returning student onto each missing piece so the Missing Items report can trace it to
+        // the student who had it last. (Chris 2026-11-08)
+        var _stu=(c&&(nameOf(c)||c.student_name))||'';
+        missing.forEach(function(m){ nl.push({date:today,text:'Returned missing: '+m+(_stu?(' (last held by '+_stu+')'):''),item:m,student:_stu,missing:true}); });
         if(extra) nl.push({date:today,text:extra});
         // Check-in SETS the camera's kit state, so the Kit Contents tab, the kit score, and the student
         // calendar all mirror what actually came back. Empty = complete (100%).
@@ -4076,7 +4273,7 @@
     mkDatePicker(document.getElementById('ed-out')); mkDatePicker(document.getElementById('ed-due'));
     document.getElementById('ed-out').onchange=edDateChange; document.getElementById('ed-due').onchange=edDateChange;
     edSelCam=c.camera||''; edCamDD={value:function(){ return edSelCam; }};   // camera now chosen via the equipment picker wheel (edit modal)
-    edStatusDD=mkDropdown(document.getElementById('ed-status'), [{value:'reserved',label:'Reserved'},{value:'out',label:'Picked up (out)'},{value:'returned',label:'Returned'}], statusOf(c), function(){ edCommit(false); });
+    edStatusDD=null;   // status is driven by the status-smart action buttons now, not a dropdown (edCommit falls back to the record's own status)
     eqInitGearState(c); edAdding=false; renderEquipPicker(c);
     renderEdHeader(c);
     edCheckConflicts();
@@ -4085,33 +4282,57 @@
   // The unified card's top: contact pinned (name / period / tap-to-call phone) + the day's actions (Hand out /
   // Check in / Cancel / Receipt), reusing the existing reservation action functions (which refresh/close this
   // card via the resvId-aware renderResvModal/closeResv). (Chris 2026-11-06)
+  // Short class chip: "Photography 1" -> "PHOTO 1" (matches Chris's mockup); other courses just upper-cased.
+  function classChip(course){ var c=String(course||'').trim(); if(!c) return ''; return c.replace(/photography/ig,'Photo').toUpperCase(); }
   function renderEdHeader(c){
     var parent=findRec(edId)||c;
     var cEl=document.getElementById('ed-contact'); if(!cEl) return;
     var items=resvItems(parent), anyReserved=items.some(function(x){return statusOf(x)==='reserved';}), anyOut=items.some(function(x){return statusOf(x)==='out';});
     var allRet=items.length>0&&items.every(function(x){return statusOf(x)==='returned';}), od=items.some(isOverdue);
     var stCls=od?'od':(anyOut?'out':(allRet?'ret':'res')), stLbl=od?'Overdue':(anyOut?'Out':(allRet?'Returned':'Reserved'));
+    var cls=classChip(parent.course), clsChip=cls?('<span class="eds-chip cls">'+esc(cls)+'</span>'):'';
     var per=parent.period?('<span class="eds-chip per">Period '+esc(parent.period)+'</span>'):'';
     var nm=parent.student_id?('<button type="button" class="eds-name" data-edstu="'+esc(parent.student_id)+'" title="Open student profile">'+esc(nameOf(parent))+'</button>'):('<span class="eds-name">'+esc(nameOf(parent))+'</span>');
+    // Student number is LOCKED (imported from the district sheet, exact): shown, never editable.
+    var sid=parent.student_id?('<div class="eds-id"><span class="eds-idlab">Student ID</span><span class="eds-idval">'+esc(parent.student_id)+'</span></div>'):'';
     var cellDigits=String(parent.student_cell||'').replace(/\D/g,'');
     var call=cellDigits
       ? '<a class="eds-row eds-call" href="tel:'+esc(cellDigits)+'"><span class="eds-ic">&#9742;</span><span class="eds-rlab">Call student</span><span class="eds-tel">'+esc(fmtPhone(parent.student_cell))+'</span></a>'
       : '<div class="eds-row eds-call"><span class="eds-ic">&#9742;</span><span class="eds-rlab">Phone</span><span class="eds-tel none">No cell on file</span></div>';
-    cEl.innerHTML='<div class="eds-name-row">'+nm+per+'<span class="eds-chip st-'+stCls+'">'+esc(stLbl)+'</span></div>'+
-      (parent.course?('<div class="eds-co">'+esc(parent.course)+'</div>'):'')+
-      '<div class="eds-grp mt">'+call+'</div>';
-    // DO: one primary (Hand out / Check in), Receipt, then Cancel reservation isolated in red.
+    cEl.innerHTML='<div class="eds-name-row">'+nm+clsChip+per+'<span class="eds-chip st-'+stCls+'">'+esc(stLbl)+'</span></div>'+
+      sid+'<div class="eds-grp mt">'+call+'</div>';
+    // Status-smart actions (no dropdown): show only the buttons that match the current status. The
+    // primary (teal) flips Hand out -> Check in once it is out; the status-appropriate correction is a
+    // glass button (Undo pickup when out, Undo return when returned, Cancel when reserved). Receipt + History
+    // always sit on a utility row. (Chris 2026-11-08)
+    var primary='', secondary='';
+    if(anyOut){                  // handed out (includes overdue): take it back, or correct a mistaken pickup
+      primary='<button type="button" class="eds-prim checkin" data-edact="checkin">Check in</button>';
+      secondary = anyReserved    // partial pickup: let them cancel what the student never picked up
+        ? '<button type="button" class="eds-danger" data-edact="cancel">Cancel</button>'
+        : '<button type="button" class="eds-sec" data-edact="undo">Undo pickup</button>';
+    } else if(anyReserved){      // still reserved: hand out, or cancel the reservation
+      primary='<button type="button" class="eds-prim" data-edact="handout">Hand out</button>';
+      secondary='<button type="button" class="eds-danger" data-edact="cancel">Cancel</button>';
+    } else if(allRet){           // returned: offer "Undo return" ONLY while the kit is still free. If any
+                                 // unit has since gone back out or been reserved to someone else, undoing
+                                 // would double-book, so the button disappears (no conflict is ever possible).
+      if(!resvReopenBlocked(parent)) secondary='<button type="button" class="eds-sec" data-edact="reopen">Undo return</button>';
+    }
     var acts='';
-    if(anyReserved) acts+='<button type="button" class="eds-prim" data-edact="handout">Hand out</button>';
-    if(anyOut) acts+='<button type="button" class="eds-prim checkin" data-edact="checkin">Check in</button>';
-    acts+='<button type="button" class="eds-sec" data-edact="receipt">Receipt</button>';
-    if(anyReserved) acts+='<div class="eds-grp eds-cancel-grp"><button type="button" class="eds-row eds-cancel" data-edact="cancel"><span class="eds-rlab">Cancel reservation</span></button></div>';
+    if(primary||secondary) acts+='<div class="eds-actrow'+((primary&&secondary)?'':' one')+'">'+secondary+primary+'</div>';
+    acts+='<div class="eds-actrow">'
+      +'<button type="button" class="eds-sec eds-receipt" data-edact="receipt">Receipt</button>'
+      +'<button type="button" class="eds-sec eds-hist" data-edact="history">History</button></div>';
     var aEl=document.getElementById('ed-actions'); aEl.innerHTML=acts;
     aEl.querySelectorAll('[data-edact]').forEach(function(b){ b.onclick=function(){ var a=b.getAttribute('data-edact');
       if(a==='handout') resvPickAll(parent);
       else if(a==='checkin') resvCheckInKit(parent);
-      else if(a==='receipt') openReceipt(parent.id);
+      else if(a==='undo') resvSetAll(parent,'out','reserved','Moved back to reserved.');
+      else if(a==='reopen') resvSetAll(parent,'returned','out','Return undone (back to out).');
       else if(a==='cancel') resvDone(parent);
+      else if(a==='receipt') openReceipt(parent.id);
+      else if(a==='history'){ if(parent.student_id) openStudentProfile(parent.student_id); }
     }; });
     var sb=cEl.querySelector('[data-edstu]'); if(sb) sb.onclick=function(){ openStudentProfile(sb.getAttribute('data-edstu')); };
   }
@@ -4508,6 +4729,7 @@
       .then(function(){ rgo.disabled=false; rgo.textContent=doneLabel; });
   };
   (function(){ var hrb=document.getElementById('hambReserve'); if(hrb) hrb.onclick=function(){ var hm=document.getElementById('cmHambMenu'); if(hm) hm.hidden=true; var hb=document.getElementById('cmHambBtn'); if(hb){ hb.setAttribute('aria-expanded','false'); hb.classList.remove('on'); } openReserve(''); }; })();
+  (function(){ var hs=document.getElementById('hambSimple'); if(hs) hs.onclick=function(){ var cur=(typeof isSimple==='function')?isSimple():false; try{ sessionStorage.setItem('tbsimple', cur?'0':'1'); }catch(e){} var hm=document.getElementById('cmHambMenu'); if(hm) hm.hidden=true; var hb=document.getElementById('cmHambBtn'); if(hb){ hb.setAttribute('aria-expanded','false'); hb.classList.remove('on'); } if(typeof _lastTBSig!=='undefined') _lastTBSig=null; if(typeof renderTodayBoard==='function') renderTodayBoard(); }; })();
   // Lock the page behind any open card/modal (blurred backdrop) so it can't scroll or be swiped through
   // (iPad). Static modals toggle `.open`; the confirm dialog + Requests modal are appended to <body>, so we
   // also watch body's children. Restored on close. Chris 2026-11-03.
@@ -4525,17 +4747,19 @@
   (function(){ var rp=document.getElementById('reportsBtn'); if(rp) rp.onclick=openMissingItemsReport; })();
   // ---- Missing Items report: every missing kit piece across cameras + gear units, grouped for ordering.
   // Opens a clean printable page in a NEW TAB (use the browser's Print to save as PDF).
+  // For a unit's missing item, the student who returned it when it was last flagged missing (from the log).
+  function lastMissingStudent(assetId,item){ var lg=(assetOf(assetId).log)||[]; for(var i=lg.length-1;i>=0;i--){ var e=lg[i]; if(e&&e.missing&&e.item===item&&e.student) return e.student; } return ''; }
   function missingItemsData(){
-    var byItem={};   // item label -> [unit labels missing it]
-    viewCams().forEach(function(cam){ ((assetOf(cam).kit)||[]).forEach(function(it){ (byItem[it]=byItem[it]||[]).push(cam); }); });
-    gearPoolIds().forEach(function(id){ var u=gearUnit(id); ((assetOf(id).kit)||[]).forEach(function(it){ (byItem[it]=byItem[it]||[]).push((u&&u.label)||id); }); });
+    var byItem={};   // item label -> [{unit, student}] missing it
+    viewCams().forEach(function(cam){ ((assetOf(cam).kit)||[]).forEach(function(it){ (byItem[it]=byItem[it]||[]).push({unit:cam,student:lastMissingStudent(cam,it)}); }); });
+    gearPoolIds().forEach(function(id){ var u=gearUnit(id); ((assetOf(id).kit)||[]).forEach(function(it){ (byItem[it]=byItem[it]||[]).push({unit:(u&&u.label)||id,student:lastMissingStudent(id,it)}); }); });
     return byItem;
   }
   function openMissingItemsReport(){
     var byItem=missingItemsData(), items=Object.keys(byItem).sort();
     var total=items.reduce(function(n,it){ return n+byItem[it].length; },0);
     var who={silva:'Silva',garcia:'Garcia',mankin:'Mankin',all:'All'}[SELECTED_POOL]||'Silva';
-    var rows=items.length ? items.map(function(it){ var u=byItem[it]; return '<tr><td>'+esc(it)+'</td><td class="num">'+u.length+'</td><td>'+u.map(esc).join(', ')+'</td></tr>'; }).join('')
+    var rows=items.length ? items.map(function(it){ var u=byItem[it]; return '<tr><td>'+esc(it)+'</td><td class="num">'+u.length+'</td><td>'+u.map(function(x){ return esc(x.unit)+(x.student?(' &middot; <b>'+esc(x.student)+'</b>'):''); }).join('<br>')+'</td></tr>'; }).join('')
       : '<tr><td colspan="3" class="empty">No missing items. Every kit is complete.</td></tr>';
     var when=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
     var html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Missing Items Report</title><style>'+
@@ -4547,7 +4771,7 @@
       '</style></head><body>'+
       '<h1>Missing Items Report &middot; '+esc(who)+'</h1>'+
       '<div class="sub">Pioneer Valley Photography &middot; '+esc(when)+'</div>'+
-      '<table><thead><tr><th>Item to order</th><th>Qty needed</th><th>Missing from</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+      '<table><thead><tr><th>Item to order</th><th>Qty needed</th><th>Missing from &middot; last held by</th></tr></thead><tbody>'+rows+'</tbody></table>'+
       (items.length?('<div class="tot">Total pieces to order: <b>'+total+'</b> across '+items.length+' item type'+(items.length>1?'s':'')+'.</div>'):'')+
       '<div class="hint">Use your browser&#39;s Print (Cmd+P) to save this as a PDF.</div>'+
       '</body></html>';
