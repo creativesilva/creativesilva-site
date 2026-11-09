@@ -87,7 +87,7 @@
   @media (prefers-reduced-motion:reduce){ .galaxy-mesh,.galaxy-glow{animation:none;} }
   .silva-nav{display:none;}
   .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;filter:brightness(0) invert(1);}
-  .cal-hero-clock{width:150px;height:46px;border:0;background:transparent;display:block;}
+  .cal-hero-clock{width:150px;height:46px;border:1px solid rgba(0,184,184,.42);border-radius:var(--g-r-md);overflow:hidden;display:block;}
   /* Safe-area insets keep the title clear of the iPad status bar when launched as a Home Screen web app. */
   .wrap{max-width:1500px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right)) 60px calc(20px + env(safe-area-inset-left));}
   .pw-back{flex:0 0 auto;}
@@ -289,8 +289,16 @@
   .pw-ddopt{ border-bottom:1px solid var(--g-edge-soft); }
   .pw-ddopt:hover{ background:var(--rollover); }
   .pw-chip, .pw-badge, .pw-p2, .pw-pct, button.pw-pct, .pw-live, .pw-auto, .tog{ border-radius:var(--g-r-pill); }
-  .pw-notefield, .pw-field, #gate input{ border-radius:var(--g-r-sm); border:1px solid var(--g-edge); background:rgba(6,12,26,.5); }
-  .pw-notefield:focus, .pw-field:focus, #gate input:focus{ border-color:var(--g-teal); outline:none; }
+  .pw-knum-btn{ border-radius:var(--g-r-sm); background:var(--g-glass-quiet); border:1px solid var(--g-edge-soft); }
+  .pw-knum-btn:hover{ border-color:var(--g-teal); background:var(--rollover); }
+  .pw-notefield, #gate input{ border-radius:var(--g-r-sm); border:1px solid var(--g-edge); background:rgba(6,12,26,.5); }
+  .pw-notefield:focus, #gate input:focus{ border-color:var(--g-teal); outline:none; }
+  /* Header (.cal-hero) is inline-styled angular; override to frosted glass (drop the hard teal borders) and
+     set Oswald so the title stops falling back to the system font. */
+  .cal-hero{ background:var(--g-glass) !important; border:1px solid var(--g-edge-soft) !important; border-radius:var(--g-r-lg) !important; box-shadow:var(--g-spec), var(--g-shadow); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur); font-family:var(--font); }
+  .cal-hero [style*="23pt"], .cal-hero [style*="23pt"] strong{ letter-spacing:.02em; }
+  /* Read-only "viewing a saved walk" banner: glass, drop the purple left bar. */
+  .pw-ro{ border:1px solid rgba(139,92,246,.4) !important; border-radius:var(--g-r-md); background:rgba(139,92,246,.12); }
   #gate{ background:rgba(4,9,20,.55); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); }
   #gate .card{ border:1px solid var(--g-edge); border-radius:var(--g-r-lg); box-shadow:var(--g-spec), var(--g-shadow-lg); backdrop-filter:var(--g-blur-heavy); -webkit-backdrop-filter:var(--g-blur-heavy); }
   .pw-wheelov{ background:rgba(2,8,18,.5); }
@@ -323,7 +331,7 @@
           <div style="color:#ffffff;font-size:clamp(17pt,4.5vw,23pt);line-height:1.1;"><strong>Photo Walk Log</strong></div>
         </div>
         <div style="flex:1 1 150px;display:flex;justify-content:flex-end;align-items:center;">
-          <iframe class="cal-hero-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
+          <iframe class="cal-hero-clock" src="/assets/embeds/period-clock.html?chip=1&v=4" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
         </div>
       </div>
     </div>
