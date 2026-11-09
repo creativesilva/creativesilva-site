@@ -22,7 +22,7 @@
   --sheet-glass:radial-gradient(130% 86% at 12% -8%, rgba(225,252,255,.24), transparent 52%), linear-gradient(177deg, rgba(90,225,230,.16), rgba(70,76,200,.08) 44%, rgba(5,12,30,.36));
   --rollover:rgba(0,184,184,.18);
   /* store.css tokens remapped onto glass */
-  --teal-bright:#3ff0e0; --ink:#f3fbff; --gray:rgba(205,226,240,.66); --line:rgba(150,225,245,.12);
+  --teal:#00b8b8; --teal-bright:#5ff0f0; --teal-deep:#007474; --ink:#f3fbff; --gray:rgba(205,226,240,.66); --line:rgba(150,225,245,.12);
   --paper:rgba(8,16,36,.82); --surface:var(--g-glass-quiet); --surface-bd:var(--g-edge-soft); --teal-wash:rgba(0,184,184,.12);
 }
 body{background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);background-attachment:fixed;color:var(--g-text);min-height:100dvh;}
