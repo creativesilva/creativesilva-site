@@ -9,8 +9,8 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=55" />
-<link rel="stylesheet" href="/css/store-glass.css?v=21" />
+<link rel="stylesheet" href="/css/store.css?v=56" />
+<link rel="stylesheet" href="/css/store-glass.css?v=22" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -405,6 +405,7 @@
     'Needs OK':'Por aprobar','Remove':'Quitar','Add equipment':'Agregar equipo','Set checkout dates':'Elegir fechas','Save changes':'Guardar cambios',
     'Reserve this gear':'Reservar este equipo','Send request':'Enviar solicitud','Reserve + request':'Reservar + solicitar',
     'Special request':'Solicitud especial','New return day':'Nuevo día de devolución','return':'regresar','days':'días','needs Mr. Silva&#8217;s OK':'necesita el visto bueno del Sr. Silva',
+    'How long do you need it?':'¿Por cuántos días lo necesitas?','Taken':'Ocupado',
     'Reservations on hold':'Reservaciones en pausa','You returned a camera very late, and other students were waiting to use it.':'Devolviste una cámara muy tarde y otros estudiantes la estaban esperando.','%s put your equipment reservations on hold.':'%s puso tus reservaciones de equipo en pausa.','%s turned off your equipment reservations. Please see %s in class.':'%s desactivó tus reservaciones de equipo. Por favor habla con %s en clase.','You can reserve again in %s%s.':'Podrás reservar de nuevo en %s%s.','Talk to %s if you have a question.':'Habla con %s si tienes una pregunta.','You can only reserve one camera per day.':'Solo puedes reservar una cámara por día.','day':'día',
     'Need something different, like keeping it longer for a project? Add a note and pick a new return day. Mr. Silva reviews it.':'¿Necesitas algo diferente, como tenerlo más tiempo para un proyecto? Agrega una nota y elige un nuevo día de devolución. El Sr. Silva lo revisa.',
     'Heads up:':'Aviso:','is not free for the whole time. Pick a shorter return or swap it out.':'no está libre todo el tiempo. Elige una devolución más corta o cámbialo.',
@@ -554,6 +555,7 @@
   if(!isSchoolDay(checkout)) checkout=nextSchoolDay(checkout);   // default checkout = today if a school day, else the next
   var pickup=null, returnTime=null, returnDay=null;
   var MULTI=null, MULTI_REASON='', multiOpen=false;   // student multi-day request: chosen return Date + why + the opt-in panel state. One-day stays the default; a multi-day booking is always a teacher-approved request.
+  var STYLUS_DAYS=1;   // iPad-stylus self-service rental length, 1-3 school days, NO teacher OK (Chris 2026-11-09). Only applies when the bag is nothing but styluses; any camera/other gear reverts to the normal one-day return.
   function datesReady(){ return !!(pickup && returnTime); }   // checkout day is always set; times are the gate
   function boxDay(d, timeObj, prompt){
     var sub = timeObj ? ('<span class="dv-sub">'+esc(t(timeObj.label))+' &middot; '+f12(timeObj.s)+'</span>')
@@ -561,7 +563,8 @@
     return '<span class="dv-top">'+DOW[d.getDay()]+'</span><span class="dv-big">'+MON[d.getMonth()]+' '+d.getDate()+'</span>'+sub;
   }
   function renderDates(){
-    returnDay=MULTI||nextSchoolDay(checkout);   // a chosen multi-day return overrides the normal next-school-day; the whole store (availability, bag, submit) keys off returnDay, so it stays span-aware
+    if(!stylusOnlyBag() && STYLUS_DAYS!==1) STYLUS_DAYS=1;   // a mixed bag (any camera/other gear) never keeps the stylus self-service span: revert to one day
+    returnDay=MULTI||stylusDayReturn()||nextSchoolDay(checkout);   // a teacher-approved multi-day request OR a self-service stylus span overrides the normal next-school-day; the whole store (availability, bag, submit) keys off returnDay, so it stays span-aware
     var days=Math.round((returnDay-checkout)/86400000);
     document.getElementById('dcCheckoutVal').innerHTML=boxDay(checkout, pickup, t('Tap to set times'));
     document.getElementById('dcReturnVal').innerHTML=boxDay(returnDay, returnTime, t('Set at checkout'));
@@ -576,9 +579,24 @@
   var calView=new Date(checkout.getFullYear(), checkout.getMonth(), 1), planStep=1;
   var pendingAdd=null;   // an item waiting on the checkout-date flow; added to the bag once dates are set
   var planMode='add';    // 'add' = normal (date flow -> add pendingAdd to bag); 'calendar' = calendar view (date flow -> equipment picker)
-  function openPlan(atStep){ planMode='add'; MULTI=null; MULTI_REASON=''; multiOpen=false; planStep=atStep||1; renderPlan(); open('planOv'); }   // atStep 2 skips the day picker (day already chosen). Redoing dates always resets to a one-day rental.
+  function openPlan(atStep){ planMode='add'; MULTI=null; MULTI_REASON=''; multiOpen=false; STYLUS_DAYS=1; planStep=atStep||1; renderPlan(); open('planOv'); }   // atStep 2 skips the day picker (day already chosen). Redoing dates always resets to a one-day rental.
   // The multi-day return choices: the 2nd..5th school day after checkout (one-day is the normal, non-multi default).
   function multiDayOptions(){ var out=[], d=new Date(checkout); for(var n=1;n<=5;n++){ d=nextSchoolDay(d); if(n>=2) out.push({d:new Date(d), iso:isoOf(d), n:n}); } return out; }
+  // The iPad stylus rents self-service for 1-3 school days (no teacher OK, Chris 2026-11-09). These ONLY apply
+  // when the bag is nothing but styluses; adding a camera or other gear reverts to the normal one-day return.
+  function stylusOnlyBag(){ return BAG.length>0 && BAG.every(function(nm){ return EQTYPE[nm]==='apple_pencil'; }); }
+  function nthSchoolDay(n){ var d=new Date(checkout); for(var i=0;i<n;i++){ d=nextSchoolDay(d); } return d; }   // n=1 -> the next school day (the one-day default)
+  function stylusDayReturn(){ return (stylusOnlyBag() && STYLUS_DAYS>1) ? nthSchoolDay(STYLUS_DAYS) : null; }
+  function stylusFreeForReturn(retDate){   // is at least one stylus free for the span checkout..retDate?
+    if(!CAL) return true;
+    var co=isoOf(checkout), ret=isoOf(retDate), eu=CAL.equipment_units||{};
+    var units=Object.keys(eu).filter(function(u){ return eu[u] && eu[u].type==='apple_pencil'; });
+    if(!units.length) return true;
+    var busy={}; (CAL.equipment_oos||[]).forEach(function(u){ if(eu[u] && eu[u].type==='apple_pencil') busy[u]=1; });
+    (CAL.equipment||[]).forEach(function(c){ if(!c.returned && eu[c.item] && eu[c.item].type==='apple_pencil' && overlaps(c.out,c.due,co,ret)) busy[c.item]=1; });
+    return units.filter(function(u){ return !busy[u]; }).length>0;
+  }
+  function stylusDayOptions(){ var out=[]; for(var n=1;n<=3;n++){ var d=nthSchoolDay(n); out.push({n:n, d:d, iso:isoOf(d), free:stylusFreeForReturn(d)}); } return out; }
   function renderPlan(){
     document.getElementById('planProg').innerHTML=[1,2,3].map(function(n){ return '<span class="pd'+(n===planStep?' on':(n<planStep?' done':''))+'">'+n+'</span>'; }).join('');
     document.getElementById('planBack').style.display=(planStep>1)?'':'none';
@@ -1168,6 +1186,7 @@
     if(free && !free.length){ toast(name+' '+t('is not free for your dates.')); return; }   // every unit is booked for the chosen span: do not add
     // One camera per day: block a second camera model in the bag (gear types are single catalog items; the backend enforces the rest).
     if(camsFor(name) && BAG.some(function(b){ return b!==name && camsFor(b); })){ toast(t('You can only reserve one camera per day.')); return; }
+    if(EQTYPE[name]!=='apple_pencil' && STYLUS_DAYS>1){ STYLUS_DAYS=1; renderDates(); }   // adding anything but a stylus cancels the stylus self-service span, so this item is checked/booked for one day
     doAddToBag(name);
   }
   function doAddToBag(name){
@@ -1191,11 +1210,11 @@
   }
   // ----- modify an existing reservation (edit dates / add / remove) -----
   var modifyMode=false, editingResvId=null;
-  function exitModify(){ modifyMode=false; editingResvId=null; MULTI=null; MULTI_REASON=''; multiOpen=false; }
+  function exitModify(){ modifyMode=false; editingResvId=null; MULTI=null; MULTI_REASON=''; multiOpen=false; STYLUS_DAYS=1; }
   // Load a reservation back into the bag as an edit session; Save writes it back via /api/camera/modify.
   function modifyReservation(resv){
     if(!resv) return;
-    MULTI=null; MULTI_REASON=''; multiOpen=false;   // editing an existing reservation is its own flow (uses /api/camera/modify), never the multi-day request path
+    MULTI=null; MULTI_REASON=''; multiOpen=false; STYLUS_DAYS=1;   // editing an existing reservation is its own flow (uses /api/camera/modify), never the multi-day request path
     BAG=[]; PICK={};
     (resv.items||[]).forEach(function(it){
       var unit=it.unit, model=null;
@@ -1264,7 +1283,14 @@
     // Special request: a lowkey accordion (mostly hidden). Opening it reveals a note + a new return-day option.
     var multi='';
     if(!modifyMode && datesReady()){
-      if(MULTI){
+      if(stylusOnlyBag()){   // iPad stylus: self-service 1-3 school days, no teacher OK (replaces the Special-request accordion)
+        var sdopts=stylusDayOptions().map(function(o){
+          var un=(!o.free && o.n>1), cls='bsd-opt'+(o.n===STYLUS_DAYS?' on':'')+(un?' busy':'');
+          var sub=un?t('Taken'):(DOW[o.d.getDay()]+' '+MON[o.d.getMonth()]+' '+o.d.getDate());
+          return '<button type="button" class="'+cls+'" data-styday="'+o.n+'"'+(un?' disabled':'')+'><b>'+o.n+' '+t(o.n===1?'day':'days')+'</b><span>'+sub+'</span></button>';
+        }).join('');
+        multi='<div class="bag-stydays"><div class="bsd-lab">'+t('How long do you need it?')+'</div><div class="bsd-opts">'+sdopts+'</div></div>';
+      } else if(MULTI){
         multi='<div class="bag-special done"><div class="bsp-chosen"><span class="bsp-ctext">'+t('Special request')+' &middot; '+t('return')+' <b>'+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+'</b> &middot; '+t('needs Mr. Silva&#8217;s OK')+(MULTI_REASON?('<br>&ldquo;'+esc(MULTI_REASON)+'&rdquo;'):'')+'</span><button type="button" class="bsp-clear" id="bagMultiClear">'+t('Remove')+'</button></div></div>';
       } else {
         var mbody='';
@@ -1295,6 +1321,11 @@
       multiOpen=false; renderDates(); rerender(); renderBag();
       var gone=BAG.filter(function(nm){ var it=findItem(nm); var fu=freeUnitsFor(it); return !(fu&&fu.length); });
       if(gone.length) setBagMsg(t('Heads up:')+' <b>'+gone.map(esc).join(', ')+'</b> '+t('is not free for the whole time. Pick a shorter return or swap it out.'), true);
+    }; });
+    // iPad stylus self-service length: tap 1/2/3 days -> set the return span on the spot, no note, no approval.
+    w.querySelectorAll('[data-styday]').forEach(function(b){ b.onclick=function(){
+      var n=+b.getAttribute('data-styday'); if(n===STYLUS_DAYS) return;
+      STYLUS_DAYS=n; renderDates(); rerender(); renderBag();
     }; });
     setBagMsg('');
   }
@@ -1348,7 +1379,7 @@
       var summary={ reserved:resolved.filter(function(r){return !r.req;}).map(disp),
                     requested:resolved.filter(function(r){return r.req;}).map(disp),
                     checkout:new Date(checkout), returnDay:new Date(returnDay), pickup:pickup, returnTime:returnTime };
-      BAG=[]; saveBag(); REQ={}; saveReq(); MULTI=null; MULTI_REASON=''; multiOpen=false; if(USER){ USER.holdRequest=false; saveUser(); }
+      BAG=[]; saveBag(); REQ={}; saveReq(); MULTI=null; MULTI_REASON=''; multiOpen=false; STYLUS_DAYS=1; if(USER){ USER.holdRequest=false; saveUser(); }
       updateBag(); refreshAccount(); close('bagOv'); showReceipt(summary); loadCal(); rerender();
     }).catch(function(){ setBagMsg(t('Could not reach the server. Try again.'), true); if(rv){ rv.disabled=false; rv.textContent=t(lbl); } });
   }

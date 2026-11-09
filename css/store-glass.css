@@ -236,6 +236,11 @@ body{overflow-x:clip;}
 .pk-cat-ic{background:#fff;}
 .pd{border-radius:var(--g-r-pill);}
 .pd.on{background:var(--g-primary);border-color:transparent;color:#04110f;}
+/* iPad-stylus self-service day picker: glass chips, teal-gradient when chosen (Chris 2026-11-09) */
+.bsd-opt{border-radius:var(--g-r-sm);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);box-shadow:var(--g-spec);}
+.bsd-opt.on{background:var(--g-primary);border-color:transparent;}
+.bsd-opt.on b,.bsd-opt.on span{color:#04110f;}
+@media (hover:hover){ .bsd-opt:hover:not(.on):not(.busy){background:var(--rollover);border-color:var(--g-teal-lt);} }
 .cal-nav,.cv-nav,.cv-dp-x{border-radius:var(--g-r-pill);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);}
 .plan-note,.rv-block,.bag-reqnote,.bag-modnote,.bsp-chosen,.bag-nodates{border-radius:var(--g-r-sm);}
 /* Drop the heavy left-accent bars on note/info boxes to match the teacher console's square-edge sweep:
