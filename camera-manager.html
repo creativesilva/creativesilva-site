@@ -1223,6 +1223,9 @@
   .eds-ic{width:26px;height:26px;border-radius:8px !important;flex:0 0 auto;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:var(--teal-lt);font-size:.92rem;}
   .eds-rlab{font-family:var(--body);font-size:1rem;color:var(--text);}
   .eds-rval{margin-left:auto;color:var(--muted);font-size:.96rem;font-variant-numeric:tabular-nums;}
+  .eds-rowg{position:relative;}
+  .eds-rm{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:rgba(230,36,41,.14);border:1px solid rgba(230,36,41,.38);color:#ff9a9a;font-size:1.2rem;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;transition:background .15s,color .15s,border-color .15s;}
+  .eds-rm:hover{background:var(--red);border-color:var(--red);color:#fff;}
   .eds-rval b{color:var(--text);font-weight:700;}
   .eds-chev{color:var(--faint);font-size:1.15rem;line-height:1;flex:0 0 auto;margin-left:2px;}
   .eds-row.add .eds-rlab{color:var(--teal-lt);font-weight:600;}
@@ -2427,6 +2430,7 @@
   // Garcia 01-15 (no Photo-2 clutter), Mankin 19-21 + her gear (every Digital Arts return in her room).
   function resvInScope(c){
     if(SELECTED_POOL==='silva'){ var o=ownerOf(c); return o==='silva' || o==='garcia'; }
+    if(SELECTED_POOL==='garcia' && ownerOf(c)==='silva') return true;   // Garcia covers Silva: his camera reservations show on her board so she can check them in/out when he is away (Chris 2026-11-09)
     var ps=scopePools(), inCam=false, inGear=false;           // union across every subject this view teaches
     ps.forEach(function(p){ if(((DATA.pools||{})[p]||[]).indexOf(c.camera)>=0) inCam=true; if(((DATA.equipment_pools||{})[p]||[]).indexOf(c.item)>=0) inGear=true; });
     return c.kind==='equipment' ? inGear : inCam;
@@ -2536,7 +2540,8 @@
       '<span class="til-who">'+esc(nameOf(c))+(c.period?' <span class="til-per">P'+esc(c.period)+'</span>':'')+'</span>';
     if(TBSEL[key]){ var on=!!TBSELSET[key][it.id];                 // select mode: tap toggles the checkbox, not the card
       return '<div class="til til-'+itemState(it)+' til-selmode'+(on?' on':'')+'" data-selid="'+esc(it.id)+'" data-selcol="'+key+'"><span class="til-chk"></span>'+mid+date+'</div>'; }
-    var ci=(mode==='in'||mode==='overdue')?'<button type="button" class="til-ci" data-quickret="'+esc(it.id)+'" title="Check this item in">Check in</button>':'';
+    var ci=(mode==='in'||mode==='overdue')?'<button type="button" class="til-ci" data-quickret="'+esc(it.id)+'" title="Check this item in">Check in</button>'
+          :(mode==='out'?'<button type="button" class="til-ci" data-quickpick="'+esc(it.id)+'" title="Hand this out">Hand out</button>':'');
     return '<div class="til til-'+itemState(it)+'" data-resvopen="'+esc(c.id)+'" role="button" tabindex="0">'+mid+ci+date+'<span class="til-chev">&#8250;</span></div>'; }
   // A camera-kit line: ONE pickup line for the whole kit. The camera carries its linked gear
   // (lens, tripod, remote, lighting) as associated chips, so the teacher packages it as one unit.
@@ -2553,7 +2558,8 @@
     if(TBSEL[key]){ var ids=[cam.id].concat(gear.map(function(g){return g.id;}));
       var on=ids.every(function(id){return TBSELSET[key][id];});
       return '<div class="til til-kit til-'+itemState(cam)+' til-selmode'+(on?' on':'')+'" data-selids="'+esc(ids.join(','))+'" data-selcol="'+key+'"><span class="til-chk"></span>'+main+date+'</div>'; }
-    var ci=(mode==='in'||mode==='overdue')?'<button type="button" class="til-ci" data-quickci="'+esc(cam.id)+'" title="Check in this kit">Check in</button>':'';
+    var ci=(mode==='in'||mode==='overdue')?'<button type="button" class="til-ci" data-quickci="'+esc(cam.id)+'" title="Check in this kit">Check in</button>'
+          :(mode==='out'?'<button type="button" class="til-ci" data-quickpick="'+esc([cam.id].concat(gear.map(function(g){return g.id;})).join(','))+'" title="Hand out this kit">Hand out</button>':'');
     return '<div class="til til-kit til-'+itemState(cam)+'" data-resvopen="'+esc(c.id)+'" role="button" tabindex="0">'+main+ci+date+'<span class="til-chev">&#8250;</span></div>'; }
   // Split a reservation's visible items into camera KITS (gear folds under its camera via the group link)
   // plus any truly standalone (a-la-carte) gear, which keeps its own line.
@@ -2793,6 +2799,8 @@
     // Quick check-in right on the row (left of the due date): a kit opens its return checklist; a standalone gear piece marks returned. The rest of the row still opens the detail card.
     el.querySelectorAll('[data-quickci]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); openReturnChecklist(b.getAttribute('data-quickci')); }; });
     el.querySelectorAll('[data-quickret]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); resvSetStatus(b.getAttribute('data-quickret'),'returned'); silvaToast('Checked in.'); }; });
+    // Hand out right on the Outgoing row (mirrors Check in on Incoming): mark the whole kit (camera + its gear) picked up.
+    el.querySelectorAll('[data-quickpick]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); handOutKit(b.getAttribute('data-quickpick')); }; });
     // Requests view: Approve puts it on the board, Deny frees the gear (both reload the board).
     el.querySelectorAll('[data-reqok]').forEach(function(b){ b.onclick=function(){ approveRequest(b.getAttribute('data-reqok'), b); }; });
     el.querySelectorAll('[data-reqno]').forEach(function(b){ b.onclick=function(){ denyRequest(b.getAttribute('data-reqno'), b); }; });
@@ -3125,6 +3133,14 @@
   function resvSetStatus(id,status){
     camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})})
       .then(function(){ return loadBoard(); }).then(function(){ if(resvId) renderResvModal(); }).catch(function(){ if(resvId) renderResvModal(); });
+  }
+  // Hand out a whole kit from the Outgoing row: mark every id (camera + its gear) picked up in one go.
+  function handOutKit(ids){
+    var arr=String(ids||'').split(',').filter(Boolean); if(!arr.length) return;
+    Promise.all(arr.map(function(id){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:'out'})}); }))
+      .then(function(){ return loadBoard(); }).then(reloadCal)
+      .then(function(){ silvaToast(arr.length>1?('Handed out · '+arr.length+' pieces'):'Handed out.'); })
+      .catch(function(){ silvaToast('Could not hand out. Try again.'); });
   }
   function resvMissing(id){
     var reason=window.prompt('What is missing or wrong with this item?','Not returned');
@@ -4563,7 +4579,20 @@
     return '<button type="button" class="eq-row'+(curU?' on':'')+'" data-eqpick="gear" data-eqtype="'+esc(type)+'"><span class="eq-rthumb"'+(th?(' style="background-image:url(\''+th+'\')"'):'')+'></span><span class="eq-rmain"><span class="eq-rname">'+esc(tlabel)+'</span><span class="eq-rsel">'+sel+'</span></span><span class="eq-rcount'+(units.length?'':' zero')+'">'+units.length+' free</span><span class="eq-rchev">&#8250;</span></button>';
   }
   function edTypeOrder(t){ var o={wide:1,zoom:2,speedlite:3,tripod:4,mankin_tripod:4,reflector:5,bluetooth:6,apple_pencil:7}; return o[t]||9; }
-  function edGearIcon(t){ var m={wide:'◎',zoom:'◎',speedlite:'☀',tripod:'▲',mankin_tripod:'▲',reflector:'◐',bluetooth:'⌨',apple_pencil:'✎'}; return '<span class="eds-ic">'+(m[t]||'▣')+'</span>'; }
+  function edGearIcon(t){   // one-color SVG icons (no emoji) for the edit-reservation gear rows (Chris 2026-11-09)
+    var S='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+    var m={
+      wide:S+'<circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.6"/></svg>',
+      zoom:S+'<circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="4.4"/></svg>',
+      speedlite:S+'<path d="M13 2.5 5 13.5h5l-1 8 8-11h-5z"/></svg>',
+      tripod:S+'<path d="M12 3.5v7.5M9 6h6M12 11 6.5 20.5M12 11l5.5 9.5"/></svg>',
+      mankin_tripod:S+'<path d="M12 3.5v7.5M9 6h6M12 11 6.5 20.5M12 11l5.5 9.5"/></svg>',
+      reflector:S+'<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17"/></svg>',
+      bluetooth:S+'<path d="M8 7.2 16 16.8l-4 3V4.2l4 3L8 16.8"/></svg>',
+      apple_pencil:S+'<path d="M4 20.2 5.3 15.8 15.8 5.3 18.7 8.2 8.2 18.7z"/><path d="M14.3 6.8 17.2 9.7"/></svg>'
+    };
+    return '<span class="eds-ic">'+(m[t]||(S+'<rect x="4.5" y="4.5" width="15" height="15" rx="3"/></svg>'))+'</span>';
+  }
   function eqAddableTypes(c){
     var at={}; if(edGearState) Object.keys(edGearState).forEach(function(id){ if(edGearState[id]&&edGearState[id].on){ var u=gearUnit(id); if(u) at[u.type]=1; } });
     var pt={}; gearPoolIds().forEach(function(id){ var u=gearUnit(id); if(u) pt[u.type]=1; });
@@ -4584,7 +4613,7 @@
     var attached=[]; if(edGearState) Object.keys(edGearState).forEach(function(id){ if(edGearState[id]&&edGearState[id].on){ var u=gearUnit(id); if(u) attached.push({type:u.type,id:id}); } });
     attached.sort(function(a,b){ return edTypeOrder(a.type)-edTypeOrder(b.type); });
     attached.forEach(function(g){ var tl=(gearTypes()[g.type]&&gearTypes()[g.type].label)||g.type;
-      rows+='<button type="button" class="eds-row" data-eqpick="gear" data-eqtype="'+esc(g.type)+'">'+edGearIcon(g.type)+'<span class="eds-rlab">'+esc(tl)+'</span><span class="eds-rval"><b>'+esc(eqNum2(g.id))+'</b></span><span class="eds-chev">&#8250;</span></button>'; });
+      rows+='<div class="eds-row eds-rowg" data-eqpick="gear" data-eqtype="'+esc(g.type)+'" role="button" tabindex="0" title="Tap to change the number">'+edGearIcon(g.type)+'<span class="eds-rlab">'+esc(tl)+'</span><span class="eds-rval"><b>'+esc(eqNum2(g.id))+'</b></span><button type="button" class="eds-rm" data-edrm="'+esc(g.type)+'" aria-label="Remove '+esc(tl)+'">&times;</button></div>'; });
     if(edAdding){
       if(!edSelCam && viewCams().length) rows+='<button type="button" class="eds-row add" data-eqpick="camera"><span class="eds-ic">&#9635;</span><span class="eds-rlab">Camera kit</span><span class="eds-rval">'+eqAvailCams(c).length+' free</span><span class="eds-chev">&#8250;</span></button>';
       eqAddableTypes(c).forEach(function(a){ rows+='<button type="button" class="eds-row add" data-eqpick="gear" data-eqtype="'+esc(a.type)+'">'+edGearIcon(a.type)+'<span class="eds-rlab">'+esc(a.label)+'</span><span class="eds-rval">'+a.n+' free</span><span class="eds-chev">&#8250;</span></button>'; });
@@ -4594,6 +4623,8 @@
     }
     host.innerHTML=rows;
     host.querySelectorAll('[data-eqpick]').forEach(function(b){ b.onclick=function(){ openEquipWheel(b.getAttribute('data-eqpick'), b.getAttribute('data-eqtype')||'', c); }; });
+    // Tap-X to drop a piece of gear from the reservation (Chris 2026-11-09): detach it, then save (which confirms).
+    host.querySelectorAll('[data-edrm]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); eqSetGearForType(b.getAttribute('data-edrm'),''); renderEquipPicker(c); edCheckConflicts(); if(!edConflictPlan().conflicts.length) edCommit(false); }; });
     var add=host.querySelector('[data-eqadd]'); if(add) add.onclick=function(){ edAdding=true; renderEquipPicker(c); };
     var dn=host.querySelector('[data-eqdone]'); if(dn) dn.onclick=function(){ edAdding=false; renderEquipPicker(c); };
   }
@@ -4753,7 +4784,7 @@
       .then(function(r){ if(r.ok) return null; return r.json().then(function(j){ throw new Error((j&&j.error)||'Could not save.'); }); })
       .then(function(){ return applyGear(gear, pid, finalSid, out, due, status); })   // attach / detach gear, kept in sync with this checkout
       .then(function(){ return loadBoard(); }).then(reloadCal)
-      .then(function(){ if(close){ closeEdit(); } else if(edId){ openEditCheckout(edId); } })   // stay open and refresh in place
+      .then(function(){ silvaToast('Reservation updated.'); if(close){ closeEdit(); } else if(edId){ openEditCheckout(edId); } })   // confirm the save, then stay open and refresh in place (Chris 2026-11-09)
       .catch(function(e){ var msg=document.getElementById('ed-msg'); if(msg){ msg.className='mmsg err show'; msg.textContent=(e&&e.message)||'Could not save. Try again.'; } });
   }
   function saveEdit(){ edCommit(true); }
