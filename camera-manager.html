@@ -1529,12 +1529,14 @@
   .tb-sortmenu{position:relative;flex:0 0 auto;}
   .tb-sorticon{width:38px;height:38px;border-radius:var(--g-r-pill);background:var(--g-glass);border:1px solid var(--g-edge);color:var(--g-text);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--g-spec);transition:background .15s,color .15s;}
   .tb-sorticon:hover{background:var(--g-primary);color:#04110f;}
-  .tb-sortpop{position:absolute;top:calc(100% + 6px);left:0;z-index:40;min-width:196px;background:linear-gradient(160deg,rgba(23,31,47,.99),rgba(11,17,31,.995));border:1px solid var(--g-edge);border-radius:var(--g-r-md);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);padding:6px;}
+  /* Menu takes on the sort BUTTON's glass (teal, translucent, frosted) so it reads as one with the button
+     and the galaxy behind it tints it, per the SILVA_GLASS_FRAMEWORK menu rule. */
+  .tb-sortpop{position:absolute;top:calc(100% + 6px);left:0;z-index:40;min-width:200px;border-radius:var(--g-r-md);background:radial-gradient(130% 86% at 14% -10%, rgba(222,250,255,.18), transparent 54%), linear-gradient(160deg, rgba(0,150,162,.46), rgba(44,60,132,.40) 58%, rgba(10,20,42,.60));border:1px solid var(--g-edge);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);padding:6px;}
   .tb-sortpop[hidden]{display:none;}
   .tb-sortpop-h{font-family:var(--g-font);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.56rem;color:var(--g-faint);padding:5px 10px 6px;}
   .tb-sortopt{display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;background:transparent;border:0;color:var(--g-text);font-family:var(--body);font-size:.9rem;padding:9px 11px;border-radius:var(--g-r-sm);cursor:pointer;}
   .tb-sortopt:hover{background:var(--rollover);}
-  .tb-sortopt.on{color:var(--g-teal-lt);}
+  .tb-sortopt.on{color:var(--g-teal-lt);background:rgba(0,184,184,.16);}
   .tb-sortopt.on::after{content:"\2713";font-weight:700;}
   .tb-ctlrow{display:flex;align-items:center;gap:10px;}
   .tb-ctlrow .tb-pickall{margin-left:auto;}
@@ -2442,10 +2444,11 @@
       return isT ? (statusOf(it)==='reserved' && o && o<=iso)     // today: still to hand out
                  : (o && o<=iso && (!d || d>=iso)); }); })         // future: forecast = projected OUT that day
       .sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; }); }
-  // CHECKED OUT = everything physically in a student's hands right now (status out), whatever the due
-  // date. Overdue items (past due) sort first so they lead the view and pulse red as a contact nudge.
-  function checkedOutFor(){
-    return groupedReservations().filter(function(c){ return resvItems(c).some(function(it){ return statusOf(it)==='out'; }); })
+  // INCOMING = pieces DUE BACK on the selected day (day-scoped, Chris 2026-11-09). An item out but due a
+  // different day is not here: past due goes to the Overdue tab, a future return shows when the day is
+  // stepped to it. Overdue-today pieces still sort first and pulse red as a contact nudge.
+  function checkedOutFor(iso){ iso=iso||todayISO();
+    return groupedReservations().filter(function(c){ return resvItems(c).some(function(it){ return statusOf(it)==='out' && (it.due||c.due||it.out||c.out||'')===iso; }); })
       .sort(function(a,b){ var ao=resvItems(a).some(isOverdue), bo=resvItems(b).some(isOverdue);
         if(ao!==bo) return ao?-1:1; return ((a.due||a.out||'')<(b.due||b.out||''))?-1:1; }); }
   function stepDay(n){ var d=new Date(SELDAY+'T00:00:00'); d.setDate(d.getDate()+n);
@@ -2464,7 +2467,10 @@
     var items=resvItems(c).filter(function(it){ return statusOf(it)!=='returned'; });
     // Incoming = everything in a student's hands right now (the old Checked out), each shown with its due date.
     // Overdue = the out items past their due date. Both are "right now", not day-scoped.
-    if(mode==='checked' || mode==='in') return items.filter(function(it){ return statusOf(it)==='out'; });
+    if(mode==='checked') return items.filter(function(it){ return statusOf(it)==='out'; });
+    // Incoming is DAY-SCOPED: only pieces due back on the selected day (Chris 2026-11-09). Past-due pieces
+    // live in the Overdue tab; future returns appear when the day is stepped forward.
+    if(mode==='in') return items.filter(function(it){ return statusOf(it)==='out' && (it.due||c.due||it.out||c.out||'')===SELDAY; });
     if(mode==='overdue') return items.filter(function(it){ return statusOf(it)==='out' && isOverdue(it); });
     // Outgoing: today = still to hand out (reserved); a future day = projected out that day.
     if(isT) return items.filter(function(it){ return statusOf(it)==='reserved'; });
@@ -2618,7 +2624,7 @@
   // cancel, delete). Garcia's pool defaults to simple; a per-session toggle overrides it either way.
   function isSimple(){ try{ var s=sessionStorage.getItem('tbsimple'); if(s==='1') return true; if(s==='0') return false; }catch(e){} return SELECTED_POOL==='garcia'; }
   function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
-    var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), chk=checkedOutFor();
+    var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), chk=checkedOutFor(SELDAY);
     var SIMPLE=isSimple();                                                       // Garcia-friendly stripped board (toggle in the header)
     var odCall=overdueCallResvs(), miss=isT?missedPickupResvs():[];               // odCall feeds the Overdue tab (full view) + Garcia's simple queue
     if(isT && SIMPLE) out=out.filter(function(c){ return !isMissedPickup(c); });  // simple view lifts missed pickups into its queue; the full board keeps them in Outgoing
@@ -2627,7 +2633,7 @@
     // Build the card grid for one list + mode (reused by the full view and by the simple view's two sections).
     function gridFor(list,mode){ list=list.slice().sort(tbSortCmp);
       var groups=[]; list.forEach(function(c){ var its=lineItemsFor(c,mode,isT); if(its.length) groups.push({c:c,items:its}); });
-      if(!groups.length){ var em=mode==='out'?('Nothing to hand out '+(isT?'today':'that day')+'.'):'Nothing checked out right now.'; return '<div class="tb-grid"><div class="tb-empty">'+em+'</div></div>'; }
+      if(!groups.length){ var em=mode==='out'?('Nothing to hand out '+(isT?'today':'that day')+'.'):('Nothing due back '+(isT?'today':'that day')+'.'); return '<div class="tb-grid"><div class="tb-empty">'+em+'</div></div>'; }
       return '<div class="tb-grid view-'+mode+'">'+groups.map(function(g){ var od=(mode==='in'&&g.items.some(isOverdue)); return '<div class="tb-bundle'+(od?' tb-od':'')+'">'+renderBundle(g.c,g.items,mode,true)+'</div>'; }).join('')+'</div>'; }
     var nOut=countLines(out,'out'), nIn=countLines(chk,'in'), nReq=pend.length;
     var nOverdue=odCall.reduce(function(n,c){ return n+resvItems(c).filter(isOverdue).length; },0);   // Overdue tab count
@@ -2648,11 +2654,11 @@
     // Sort control (sliders pull-down) is built here so it can ride the Outgoing stepper line, left of the date (Chris 2026-11-09).
     var sortCtl='<div class="tb-sortmenu"><button type="button" class="tb-sorticon" data-tbsortopen="1" aria-haspopup="true" aria-label="Sort order" title="Sort order"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.4" fill="currentColor" stroke="none"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.4" fill="currentColor" stroke="none"/></svg></button>'+
       '<div class="tb-sortpop" hidden><div class="tb-sortpop-h">Sort by</div>'+
-        '<button type="button" class="tb-sortopt'+(TBSORT==='cam'?' on':'')+'" data-tbsort="cam">Camera number</button>'+
+        '<button type="button" class="tb-sortopt'+(TBSORT==='cam'?' on':'')+'" data-tbsort="cam">Equipment number</button>'+
         '<button type="button" class="tb-sortopt'+(TBSORT==='name'?' on':'')+'" data-tbsort="name">Student last name</button></div></div>';
     var navL='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
     var navR='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
-    var stepper=(view!=='out')?'<span class="tb-nowlabel">Right now</span>':
+    var stepper=(view!=='out'&&view!=='in')?'<span class="tb-nowlabel">Right now</span>':
       ('<div class="tb-step">'+(active.length?sortCtl:'')+'<button type="button" class="tb-nav" data-tbday="-1" title="Previous day" aria-label="Previous day">'+navL+'</button>'+
       '<span class="tb-day">'+esc(dayL)+'</span><button type="button" class="tb-nav" data-tbday="1" title="Next day" aria-label="Next day">'+navR+'</button>'+
       (isT?'':'<button type="button" class="tb-today" data-tbtoday="1">Today</button><span class="tb-proj'+(_past?' past':'')+'">'+(_past?'History':'Projected &middot; assumes on-time returns')+'</span>')+'</div>');
@@ -2671,10 +2677,13 @@
     if(view==='avail'){                                        // Available: equipment inventory by model/type (no search/sort/select)
       body=availBodyHtml(inv);
     } else if(view==='requests'){                              // Requests: student asks awaiting the teacher's OK (Approve / Deny inline)
-      body=requestsBodyHtml(pend);
+      var _reqSorted=pend.slice().sort(function(a,b){ return tbSortCmp(a[0]||a,b[0]||b); });   // same sort control as the lists
+      body=(pend.length?('<div class="tb-searchrow tb-ctlrow">'+sortCtl+'</div>'):'')+requestsBodyHtml(_reqSorted);
     } else if(view==='overdue'){                               // Overdue: out past the return time; contact-forward rows (student cell + period + due time to call)
-      body=odCall.length ? '<div class="tb-odlist">'+odCall.map(function(c){ return queueRow(c,'call'); }).join('')+'</div>'
-        : '<div class="tb-grid"><div class="tb-empty">Nothing overdue right now.</div></div>';
+      var _odSorted=odCall.slice().sort(tbSortCmp);                                            // respect the sort button (equipment number / student name)
+      body=(odCall.length?('<div class="tb-searchrow tb-ctlrow">'+sortCtl+'</div>'):'')+
+        (_odSorted.length ? '<div class="tb-odlist">'+_odSorted.map(function(c){ return queueRow(c,'call'); }).join('')+'</div>'
+          : '<div class="tb-grid"><div class="tb-empty">Nothing overdue right now.</div></div>');
     } else {
       var groups=[]; active.forEach(function(c){ var its=lineItemsFor(c,view,isT); if(its.length) groups.push({c:c,items:its}); });
       total=groups.reduce(function(n,g){ return n+bundleLineCount(g.items); },0);
@@ -2684,16 +2693,16 @@
         body = flat.length ? '<div class="tb-grid view-'+view+' tb-flat">'+flat.map(function(L){ return itemLine(L.c,L.it,view,true); }).join('')+'</div>'
           : '<div class="tb-grid"><div class="tb-empty">No match for &ldquo;'+esc(q.trim())+'&rdquo;.</div></div>';
       } else {                                                 // default: one card per CAMERA KIT (gear folds in); a-la-carte gear keeps its own card
-        var emptyMsg=view==='out'?('Nothing to hand out '+(isT?'today':'that day')+'.'):'Nothing checked out right now.';
+        var emptyMsg=view==='out'?('Nothing to hand out '+(isT?'today':'that day')+'.'):('Nothing due back '+(isT?'today':'that day')+'.');
         body = groups.length ? '<div class="tb-grid view-'+view+'" style="grid-auto-flow:column;grid-template-rows:repeat('+Math.max(1,Math.ceil(groups.length/2))+',auto);">'+groups.map(function(g){ var od=(view==='in'&&g.items.some(isOverdue)); return '<div class="tb-bundle'+(od?' tb-od':'')+'">'+renderBundle(g.c, g.items, view, true)+'</div>'; }).join('')+'</div>'
           : '<div class="tb-grid"><div class="tb-empty">'+emptyMsg+'</div></div>';
       }
-      // (sortCtl is built above so it can ride the Outgoing stepper line; on Incoming it leads the control row.)
+      // (sortCtl rides the Outgoing/Incoming stepper line; Overdue + Requests place it in their own body.)
       // End-of-day one-tap sweep (Outgoing + today only): mark every remaining reserved item picked up.
       var pickAllBtn=(view==='out'&&isT&&total>0)?'<button type="button" class="tb-pickall" data-tbpickall="1">Mark all picked up</button>':'';
-      // On Outgoing the sort icon rides the stepper line, so the control row carries only the optional Mark-all (today);
-      // on Incoming there is no stepper, so the sort icon leads this row.
-      var _rowInner=((view==='out')?'':sortCtl)+pickAllBtn;
+      // On Outgoing AND Incoming the sort icon rides the stepper line, so the control row carries only the
+      // optional Mark-all (Outgoing, today). Overdue + Requests place the same sort control in their own body.
+      var _rowInner=((view==='out'||view==='in')?'':sortCtl)+pickAllBtn;
       search = _rowInner ? ('<div class="tb-searchrow tb-ctlrow">'+_rowInner+'</div>') : '';
       if(selMode){
         var n=Object.keys(TBSELSET[view]).length;
@@ -2715,7 +2724,7 @@
         '<div class="tb-simplesec sim-out"><div class="tb-simplehd"><span>Hand out</span>'+markAll+'</div>'+gridFor(out,'out')+'</div>'+
         '<div class="tb-simplesec sim-in"><div class="tb-simplehd"><span>Check in</span></div>'+gridFor(chk,'in')+'</div>';
     } else {
-      el.innerHTML=head+toggle+(view==='out'?stepper:'')+
+      el.innerHTML=head+toggle+((view==='out'||view==='in')?stepper:'')+
         ((view==='avail'||view==='requests'||view==='overdue') ? body
           : (search+body+bulk));
     }
