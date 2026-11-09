@@ -2200,9 +2200,9 @@
       var wrap=document.createElement('span'); wrap.className='dp';
       var trig=document.createElement('button'); trig.type='button'; trig.className='dp-trig';
       input.parentNode.insertBefore(wrap, input.nextSibling); wrap.appendChild(trig);
-      var pop=null;
+      var pop=null, place=null;
       function label(){ var v=input.value; if(!v){ trig.textContent=input.getAttribute('data-ph')||'Pick a date'; trig.classList.remove('set'); } else { var p=v.split('-'); trig.textContent=MON[+p[1]-1]+' '+(+p[2])+', '+p[0]; trig.classList.add('set'); } }
-      function close(){ if(pop){ pop.remove(); pop=null; document.removeEventListener('click',out,true); } }
+      function close(){ if(pop){ pop.remove(); pop=null; document.removeEventListener('click',out,true); if(place){ window.removeEventListener('scroll',place,true); window.removeEventListener('resize',place); place=null; } } }
       function out(e){ if(pop && !pop.contains(e.target) && e.target!==trig) close(); }
       function open(){
         if(pop){ close(); return; }
@@ -2216,10 +2216,14 @@
           pop.querySelectorAll('.dp-nav').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); vm+=+b.getAttribute('data-d'); if(vm<0){vm=11;vy--;} if(vm>11){vm=0;vy++;} draw(); }; });
           pop.querySelectorAll('.dp-day').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); input.value=b.getAttribute('data-iso'); try{ input.dispatchEvent(new Event('change',{bubbles:true})); }catch(_){} label(); close(); }; });
         }
-        draw(); wrap.appendChild(pop);
-        var pr=pop.getBoundingClientRect();
-        if(pr.bottom>window.innerHeight-6) pop.classList.add('up');       // flip above the trigger near the bottom
-        if(pr.right>window.innerWidth-6) pop.classList.add('right');      // align right near the edge
+        // Portal the popup to <body> as a FIXED layer so the edit modal's overflow never clips it and it
+        // always stacks above the modal. It was appended inside the modal at z-index 60, so it rendered
+        // behind the modal and got cut off, making it unclickable. (Chris 2026-11-09)
+        place=function(){ if(!pop) return; var r=trig.getBoundingClientRect(), w=pop.offsetWidth||252, h=pop.offsetHeight||302, left=r.left, top=r.bottom+4; if(left+w>window.innerWidth-6) left=Math.max(6,r.right-w); if(top+h>window.innerHeight-6){ var up=r.top-h-4; top=up>6?up:Math.max(6,window.innerHeight-h-6); } pop.style.left=left+'px'; pop.style.top=top+'px'; };
+        draw(); document.body.appendChild(pop);
+        pop.style.position='fixed'; pop.style.zIndex='200';              // above the edit modal (141), below silva-confirm (400)
+        place();
+        window.addEventListener('scroll',place,true); window.addEventListener('resize',place);
         setTimeout(function(){ document.addEventListener('click',out,true); },0);
       }
       trig.onclick=function(e){ e.stopPropagation(); open(); };
