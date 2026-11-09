@@ -25,10 +25,10 @@
      bright glass galaxy header (Equipment Manager). A transparent iframe there punches through to
      the galaxy, so the host cannot darken it from outside; it must come from inside the embed.
      Consumers that do not pass chip=1 (catalog, home) stay fully transparent. (Chris 2026-11-09) */
-  /* Neutral translucent fill: it mutes the galaxy glow behind the (otherwise transparent) iframe but
-     keeps its LOCAL hue, so the chip takes on whatever color sits next to it and recedes into the
-     header instead of standing out. (Chris 2026-11-09) */
-  html.chip { background: linear-gradient(160deg, rgba(14,20,38,.36), rgba(10,15,28,.44)); }
+  /* Same treatment as the SILVA pool pill: a light 26% black over the (otherwise transparent) iframe,
+     so the galaxy behind it shows through and tints it, just slightly darker than its surroundings.
+     The teal border lives on the host iframe. (Chris 2026-11-09) */
+  html.chip { background: rgba(0,0,0,.26); }
   body { font-family: 'Oswald', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
   .clock {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
