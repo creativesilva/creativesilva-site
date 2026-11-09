@@ -155,6 +155,13 @@
   .pw-mini:hover{border-color:var(--teal);color:#fff;}
   .pw-mini.warn{border-color:rgba(245,179,1,.5);color:#ffd889;}
   .pw-mini.ret{border-color:var(--teal);color:var(--teal-lt);}
+  /* Per-kit note (free text: extra gear taken, a condition issue, etc.). Angular, matches the kit cards. */
+  .pw-noterow{display:flex;}
+  .pw-notebtn{height:26px;padding:0 10px;font-size:.55rem;color:var(--muted);}
+  .pw-notefield{width:100%;box-sizing:border-box;background:rgba(0,0,0,.34);border:1px solid var(--line);border-left:3px solid var(--teal);color:var(--text);font-family:var(--font);font-size:.82rem;line-height:1.35;padding:7px 9px;resize:vertical;min-height:40px;}
+  .pw-notefield::placeholder{color:var(--muted);opacity:.75;}
+  .pw-notefield:focus{outline:none;border-color:var(--teal);}
+  .pw-ronote{font-size:.8rem;color:var(--text);background:rgba(0,0,0,.26);border-left:3px solid var(--teal);padding:6px 9px;line-height:1.35;white-space:pre-wrap;}
   .pw-mini.done{border-color:rgba(63,168,99,.6);color:#8ff0b0;background:rgba(63,168,99,.14);}
   .pw-mini.done:hover{border-color:var(--ok);color:#fff;}
   .pw-mini{text-decoration:none;}                 /* Edit info is a link styled as a mini button */
@@ -337,6 +344,7 @@
 
   // ----- state -----
   var SEATMAP={}, BOARD={cameras:[],checkouts:[],assets:{}}, PERIOD=null, PW={}, RO=null, LOCKED=false;  // RO = read-only past log; LOCKED = this period locked in (view-only until Unlock)
+  var noteOpen={};  // which live kit cards have their note field expanded (UI only; reset per period)
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function camAPI(path,opts){ opts=opts||{}; opts.headers=opts.headers||{}; opts.headers['X-Camera-Key']=KEY; opts.headers['Content-Type']='text/plain'; return fetch(API+path,opts); }
@@ -360,10 +368,11 @@
   function whoOf(c){ return (c&&(c.student_name||c.name))||'Checked out'; }
 
   // ----- build the per-kit working state for the selected period -----
-  function buildPW(){ PW={}; CAMS.forEach(function(cam){
+  function buildPW(){ PW={}; noteOpen={}; CAMS.forEach(function(cam){
       // Every camera 1-18 is present and assignable; its console checkout status is ignored here,
       // because students take cameras off campus during class and this log just records who had which.
-      PW[cam]={ status:'open', seats:[], names:[], ids:[] };
+      // note = a free-text note for this kit on this walk (e.g. "took Tripod 02", "back without a lens cap").
+      PW[cam]={ status:'open', seats:[], names:[], ids:[], note:'' };
     });
   }
   function seatsForPeriod(){ var pd=SEATMAP[PERIOD]; return (pd&&pd.seats)||{}; }
@@ -420,6 +429,8 @@
     grid.innerHTML=CAMS.map(liveKitCard).join('');
     grid.querySelectorAll('[data-assign]').forEach(function(b){ b.onclick=function(){ openSeatModal(b.getAttribute('data-assign')); }; });   // tap the camera number -> seat picker
     grid.querySelectorAll('[data-kit]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); openKitModal(b.getAttribute('data-kit')); }; });
+    grid.querySelectorAll('[data-noteopen]').forEach(function(b){ b.onclick=function(){ var c=b.getAttribute('data-noteopen'); noteOpen[c]=true; renderGrid(); var ta=document.querySelector('[data-notefield="'+c+'"]'); if(ta){ ta.focus(); try{ ta.setSelectionRange(ta.value.length, ta.value.length); }catch(e){} } }; });   // Note button -> expand the field
+    grid.querySelectorAll('[data-notefield]').forEach(function(ta){ ta.oninput=function(){ var c=ta.getAttribute('data-notefield'); if(PW[c]){ PW[c].note=ta.value; scheduleSave(); } }; });   // typing a note saves it (debounced), no re-render so focus holds
   }
   // The % chip opens the kit editor as a pop-up right here in the walk (no leaving the page),
   // so Silva can flip missing/in-bag items on the fly and the % updates live. See openKitModal.
@@ -471,14 +482,21 @@
     var names = (LOCKED && !hasAny)
       ? '<div class="pw-names"><span class="empty">No one</span></div>'
       : '<div class="pw-names">'+namesLine(k)+'</div>';
-    return '<div class="pw-kit"><div class="pw-khead">'+numHtml+pctChip(cam)+'</div>'+names+'</div>';
+    // Note: a free-text note per kit for this walk (extra gear taken, a condition issue, etc.). Opens from
+    // the Note button; shows the field whenever a note exists; read-only once the period is locked in.
+    var note=(k.note||''), noteSec='';
+    if(LOCKED){ if(note) noteSec='<div class="pw-ronote">'+esc(note)+'</div>'; }
+    else if(note || noteOpen[cam]){ noteSec='<textarea class="pw-notefield" data-notefield="'+esc(cam)+'" rows="2" placeholder="Note for this kit (e.g. took Tripod 02, back without a lens cap)">'+esc(note)+'</textarea>'; }
+    else { noteSec='<div class="pw-noterow"><button type="button" class="pw-mini pw-notebtn" data-noteopen="'+esc(cam)+'">Note</button></div>'; }
+    return '<div class="pw-kit"><div class="pw-khead">'+numHtml+pctChip(cam)+'</div>'+names+noteSec+'</div>';
   }
   function roKitCard(k){
     var p2=(P2.indexOf(k.cam)>=0)?'<span class="pw-p2">PHOTO 2</span>':'';
     var head='<div class="pw-khead"><span class="pw-knum">'+esc(k.cam)+p2+'</span><span class="pw-pct">'+(k.pct==null?'TBD':(k.pct+'%'))+'</span></div>';
     var who=(k.seats||[]).filter(function(x){return x&&x.label;}).map(function(x){ return '<span class="sn">#'+esc(x.seat)+'</span> '+stuDeep(x.id||'',esc(x.label)); });
     var body='<div class="pw-names">'+(who.length?who.join('<br>'):'<span class="empty">No one</span>')+'</div>';
-    return '<div class="pw-kit">'+head+body+'</div>';
+    var roNote = k.note ? '<div class="pw-ronote">'+esc(k.note)+'</div>' : '';
+    return '<div class="pw-kit">'+head+body+roNote+'</div>';
   }
 
   // ----- seat modal: tap a camera number -> one vertical wheel per seat (+ add more) + Confirm -----
@@ -554,6 +572,7 @@
         LOCKED = !!(j.log.locked);   // restore the locked-in state so a finalized period opens view-only
         (j.log.kits||[]).forEach(function(kk){ var pw=PW[kk.cam]; if(!pw) return;
           if(kk.seats&&kk.seats.length){ pw.seats=kk.seats.map(function(s){return seatNum(s.seat);}); pw.names=kk.seats.map(function(s){return s.label||'';}); pw.ids=kk.seats.map(function(s){return s.id||'';}); pw.status='used'; }
+          pw.note=kk.note||'';
         });
         render();
         if(announce) toast('Loaded the saved log for Period '+p+'.');
@@ -572,7 +591,7 @@
   }
   function buildKits(){ return CAMS.map(function(cam){ var k=PW[cam];
       var seats=[]; (k.seats||[]).forEach(function(v0,i){ var v=seatNum(v0); if(v) seats.push({seat:v, id:k.ids[i]||'', label:k.names[i]||''}); });
-      return {cam:cam, pct:kitPct(cam), status:(seats.length?'used':'unassigned'), seats:seats};
+      return {cam:cam, pct:kitPct(cam), status:(seats.length?'used':'unassigned'), seats:seats, note:(k.note||'')};
     }); }
   function liveSave(){ if(RO||!PERIOD) return; var p=PERIOD, key=todayISO()+'|'+p;
     camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'save',date:todayISO(),period:p,course:courseForPeriod(),kits:buildKits(),locked:LOCKED})})
