@@ -1434,7 +1434,10 @@
   .cm-hambbtn span{background:var(--g-teal-lt);}
   .cm-hambbtn:hover{background:var(--rollover);border-color:var(--g-teal-lt);}
   .cm-hambbtn.on{background:var(--g-primary);border-color:var(--g-teal-lt);} .cm-hambbtn.on span{background:#04110f;}
-  .cm-hambmenu{border-radius:var(--g-r-md);background:linear-gradient(160deg,rgba(23,31,47,.99),rgba(11,17,31,.995));border-color:var(--g-edge);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);}
+  /* Frosted glass dropdown (was a flat near-opaque dark box). Text-only items, no icon glyphs (Chris 2026-11-08). */
+  .cm-hambmenu{border-radius:var(--g-r-md);background:radial-gradient(130% 86% at 14% -10%, rgba(220,250,255,.13), transparent 54%), linear-gradient(160deg, rgba(14,22,40,.80), rgba(9,15,30,.84));border-color:var(--g-edge);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);}
+  .cm-hambitem .cmh-ic{display:none;}
+  .cm-hambitem{padding-left:15px;letter-spacing:.01em;}
   .cm-hambitem{border-radius:var(--g-r-sm);text-decoration:none;}
   .cm-hambitem:hover{background:var(--rollover);}
   .cm-hambitem.on{background:rgba(0,184,184,.22);}
