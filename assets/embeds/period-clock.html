@@ -21,6 +21,11 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { background: transparent; }
+  /* ?chip=1 : paint a dark glass fill so the clock reads as a solid chip when it sits over a
+     bright glass galaxy header (Equipment Manager). A transparent iframe there punches through to
+     the galaxy, so the host cannot darken it from outside; it must come from inside the embed.
+     Consumers that do not pass chip=1 (catalog, home) stay fully transparent. (Chris 2026-11-09) */
+  html.chip { background: linear-gradient(160deg, rgba(18,120,122,.82), rgba(10,78,84,.88)); }
   body { font-family: 'Oswald', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
   .clock {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -53,6 +58,8 @@
   <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
   <script>
     (function () {
+      // Dark glass chip variant for the Equipment Manager header (see html.chip CSS).
+      try { if (new URLSearchParams(location.search).get('chip') === '1') document.documentElement.classList.add('chip'); } catch (e) {}
       var descEl = document.getElementById('desc');
       var digEl  = document.getElementById('digits');
 
