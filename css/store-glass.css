@@ -34,7 +34,7 @@ body{overflow-x:clip;}
 
 /* ---------- galaxy backdrop (the AI Studio v1.9 recipe, verbatim) ---------- */
 .galaxy{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);}
-.galaxy-mesh{position:absolute;inset:-25%;filter:blur(40px) saturate(150%) brightness(1.1);mix-blend-mode:screen;will-change:transform;transform:translateZ(0);
+.galaxy-mesh{position:absolute;inset:-25%;filter:blur(40px) saturate(150%) brightness(1.1);background-blend-mode:screen;will-change:transform;transform:translateZ(0);
   background:
     radial-gradient(30% 22% at 29% 29%, rgba(0,184,184,.85), transparent 68%),
     radial-gradient(18% 13% at 72% 24%, rgba(229,143,245,.46), transparent 72%),
@@ -49,7 +49,7 @@ body{overflow-x:clip;}
     radial-gradient(56% 14% at 50% 84%, rgba(46,230,214,.80), transparent 70%),
     radial-gradient(30% 7% at 50% 83.5%, rgba(214,255,250,.60), transparent 72%);
   animation:galaxyDrift 34s ease-in-out infinite alternate;}
-.galaxy-glow{position:absolute;inset:0;mix-blend-mode:screen;filter:blur(1.5px);will-change:opacity;
+.galaxy-glow{position:absolute;inset:0;background-blend-mode:screen;filter:blur(1.5px);will-change:opacity;
   background:
     radial-gradient(48px 48px at 18% 12%, rgba(120,255,240,.44), transparent 68%),
     radial-gradient(44px 44px at 86% 13%, rgba(214,165,250,.42), transparent 68%),
