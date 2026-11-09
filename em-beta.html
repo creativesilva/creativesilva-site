@@ -9,6 +9,9 @@
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Equipment" />
+<!-- Galaxy chrome: tint the Safari toolbar/tab bar to the galaxy's top color so it reads as one field, and declare the page dark so native controls follow. -->
+<meta name="theme-color" content="#050816" />
+<meta name="color-scheme" content="dark" />
 <script>window.SILVA_HIDE_CATALOG=true;window.SILVA_CATALOG_RETURN='/curriculum.html';/* teacher tool: no catalog dropdown, but a plain Return-to-catalog link (curriculum.html prompts for its PIN). Public calendar.html does NOT set this. */</script>
 <meta name="description" content="Teacher back-end for the Pioneer Valley camera checkout: reserve, mark picked up, mark returned." />
 <meta name="robots" content="noindex,nofollow" />
@@ -62,10 +65,31 @@
     --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0;color-scheme:dark;}
   /* Installed web-app feel: no sideways scroll or rubber-band bounce (pinch-zoom is off via the viewport meta). */
   html,body{overflow-x:hidden;overscroll-behavior-x:none;max-width:100%;}
   body{background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);background-attachment:fixed;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;}
+  /* ===== Galaxy window scrollbar (desktop Safari/Chromium). Main page only: a slim teal->violet thumb floating on a transparent track so the galaxy shows through the gutter. Inner panels keep their own class-scoped scrollbars; iOS keeps its overlay. ===== */
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar{width:11px;height:11px;background:transparent;}
+  html::-webkit-scrollbar-track,
+  body::-webkit-scrollbar-track{background:transparent;margin:2px 0;}
+  html::-webkit-scrollbar-thumb,
+  body::-webkit-scrollbar-thumb{
+    border-radius:999px;border:2px solid transparent;background-clip:padding-box;
+    background-color:rgba(70,92,185,.5);
+    background-image:linear-gradient(180deg,rgba(46,230,214,.78),rgba(123,92,255,.82));
+    box-shadow:inset 0 0 6px rgba(46,230,214,.22);
+  }
+  html::-webkit-scrollbar-thumb:hover,
+  body::-webkit-scrollbar-thumb:hover{
+    background-image:linear-gradient(180deg,rgba(92,245,232,1),rgba(150,122,255,1));
+    box-shadow:inset 0 0 7px rgba(120,255,240,.4),0 0 8px rgba(123,92,255,.35);
+  }
+  html::-webkit-scrollbar-corner,
+  body::-webkit-scrollbar-corner{background:transparent;}
+  /* Firefox + standards-prop browsers */
+  @supports (scrollbar-color:auto){ html{scrollbar-color:rgba(104,126,224,.75) transparent;} }
   /* ===== Galaxy backdrop (Silva Glass, the AI Studio v1.9 / student-store Nebula Teal recipe, verbatim) ===== */
   .galaxy{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);}
   .galaxy-mesh{position:absolute;inset:-25%;filter:blur(40px) saturate(150%) brightness(1.1);mix-blend-mode:screen;will-change:transform;transform:translateZ(0);
@@ -1454,7 +1478,7 @@
   .cmnav-title{flex:1 1 auto;min-width:0;text-align:center;}
   .cmnav-eyebrow{font-family:var(--g-font);font-weight:700;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--g-faint);margin-bottom:5px;}
   .cmnav-h1{font-size:clamp(17pt,3.7vw,22pt);line-height:1.06;}
-  .cmnav-h1 .cmtitle-g{font-family:var(--g-font);font-weight:700;letter-spacing:.01em;}
+  .cmnav-h1 .cmtitle-g{font-family:var(--g-font);font-weight:700;text-transform:uppercase;letter-spacing:.03em;}
   .cmnav-sub{margin-top:7px;font-family:var(--body);font-weight:600;font-size:.82rem;letter-spacing:.02em;color:var(--g-muted);}
   .cmnav-sub .sync{color:var(--g-faint);} .cmnav-sub .sync b{color:var(--ok);}
   .cmnav-counthold{display:none;}
