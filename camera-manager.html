@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Equipment" />
 <!-- Galaxy chrome: tint the Safari toolbar/tab bar to the galaxy's top color so it reads as one field, and declare the page dark so native controls follow. -->
-<meta name="theme-color" content="#0a1636" />
+<meta name="theme-color" content="#0a6a72" />
 <meta name="color-scheme" content="dark" />
 <script>window.SILVA_HIDE_CATALOG=true;window.SILVA_CATALOG_RETURN='/curriculum.html';/* teacher tool: no catalog dropdown, but a plain Return-to-catalog link (curriculum.html prompts for its PIN). Public calendar.html does NOT set this. */</script>
 <meta name="description" content="Teacher back-end for the Pioneer Valley camera checkout: reserve, mark picked up, mark returned." />
@@ -1463,7 +1463,11 @@
   .cm-hambbtn:hover{background:var(--rollover);border-color:var(--g-teal-lt);}
   .cm-hambbtn.on{background:var(--g-primary);border-color:var(--g-teal-lt);} .cm-hambbtn.on span{background:#04110f;}
   /* Frosted glass dropdown (was a flat near-opaque dark box). Text-only items, no icon glyphs (Chris 2026-11-08). */
-  .cm-hambmenu{border-radius:var(--g-r-md);background:radial-gradient(130% 86% at 14% -10%, rgba(220,250,255,.13), transparent 54%), linear-gradient(160deg, rgba(14,22,40,.80), rgba(9,15,30,.84));border-color:var(--g-edge);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);}
+  /* Menu takes on the hamburger BUTTON's glass (teal --g-glass), translucent + frosted. The menu is
+     portaled to <body> on open (see the JS) so this backdrop-filter actually blurs the board behind it.
+     FRAMEWORK RULE: a menu inherits the glass of the button that opens it, and portals out of any
+     backdrop-filter ancestor so its own frost works. (Chris 2026-11-08) */
+  .cm-hambmenu{border-radius:var(--g-r-md);background:radial-gradient(130% 86% at 14% -10%, rgba(222,250,255,.16), transparent 54%), linear-gradient(160deg, rgba(0,150,162,.32), rgba(50,66,142,.26) 58%, rgba(10,20,42,.46));border-color:var(--g-edge);backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);}
   .cm-hambitem .cmh-ic{display:none;}
   .cm-hambitem{padding-left:15px;letter-spacing:.01em;}
   .cm-hambitem{border-radius:var(--g-r-sm);text-decoration:none;}
@@ -2060,9 +2064,17 @@
   (function(){
     var hb=document.getElementById('cmHambBtn'), hm=document.getElementById('cmHambMenu');
     if(hb && hm){
-      hb.onclick=function(e){ e.stopPropagation(); var willOpen=hm.hidden; hm.hidden=!willOpen; hb.setAttribute('aria-expanded', willOpen?'true':'false'); hb.classList.toggle('on', willOpen); };
+      hb.onclick=function(e){ e.stopPropagation(); var willOpen=hm.hidden;
+        if(willOpen){
+          // Portal the menu to <body> so its backdrop-filter isn't canceled by the header's glass
+          // (a backdrop-filter nested inside another one does nothing). Position it under the button.
+          if(hm.parentElement!==document.body) document.body.appendChild(hm);
+          var r=hb.getBoundingClientRect();
+          hm.style.position='fixed'; hm.style.top=(r.bottom+8)+'px'; hm.style.left=r.left+'px'; hm.style.right='auto';
+        }
+        hm.hidden=!willOpen; hb.setAttribute('aria-expanded', willOpen?'true':'false'); hb.classList.toggle('on', willOpen); };
       hm.addEventListener('click', function(e){ var it=e.target.closest('.cm-hambitem'); if(it){ setCView(it.getAttribute('data-cview')); hm.hidden=true; hb.setAttribute('aria-expanded','false'); hb.classList.remove('on'); } });
-      document.addEventListener('click', function(e){ if(!hm.hidden && !e.target.closest('.cm-hamb')){ hm.hidden=true; hb.setAttribute('aria-expanded','false'); hb.classList.remove('on'); } });
+      document.addEventListener('click', function(e){ if(!hm.hidden && !e.target.closest('.cm-hamb') && !e.target.closest('.cm-hambmenu')){ hm.hidden=true; hb.setAttribute('aria-expanded','false'); hb.classList.remove('on'); } });
       document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !hm.hidden){ hm.hidden=true; hb.setAttribute('aria-expanded','false'); hb.classList.remove('on'); } });
     }
     var bb=document.getElementById('cviewBackBtn'); if(bb) bb.onclick=function(){ setCView('board'); };
