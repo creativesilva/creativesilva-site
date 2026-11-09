@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Photo Walk Log | Pioneer Valley Photography</title>
+<!-- Safari toolbar tint: a saturated brand teal so it clearly takes on the theme (a dark navy reads like Safari's default gray). -->
+<meta name="theme-color" content="#0a6a72" />
 <script>window.SILVA_HIDE_CATALOG=true;window.SILVA_CATALOG_RETURN='/curriculum.html';</script>
 <meta name="description" content="Mr. Silva's per-period photo walk log: which kit each seat took and its completion that day." />
 <meta name="robots" content="noindex,nofollow" />
@@ -26,14 +28,68 @@
     --panel:linear-gradient(135deg,rgba(0,184,184,0.10) 0%,rgba(4,20,19,0.55) 100%);
     --font:'Oswald',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
     --body:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    /* ===== Silva Glass framework tokens (SILVA_GLASS_FRAMEWORK.md §1, Nebula Teal). Photo Walk reskin 2026-11-09. ===== */
+    --g-teal:#00b8b8; --g-teal-lt:#5ff0f0; --g-teal-deep:#007474;
+    --g-text:#f3fbff; --g-muted:rgba(222,240,250,.82); --g-faint:rgba(205,226,240,.62);
+    --g-edge:rgba(150,235,245,.30); --g-edge-soft:rgba(150,225,245,.17);
+    --g-r-pill:999px; --g-r-lg:20px; --g-r-md:14px; --g-r-sm:10px;
+    --g-blur:blur(20px) saturate(150%); --g-blur-heavy:blur(28px) saturate(150%);
+    --g-glass:radial-gradient(125% 86% at 14% -10%, rgba(225,252,255,.20), transparent 54%), linear-gradient(160deg, rgba(0,184,184,.16), rgba(96,84,230,.10) 58%, rgba(8,16,40,.22));
+    --g-glass-quiet:radial-gradient(125% 86% at 14% -10%, rgba(225,252,255,.13), transparent 54%), linear-gradient(160deg, rgba(0,184,184,.11), rgba(96,84,230,.07) 58%, rgba(8,16,40,.16));
+    --g-primary:linear-gradient(135deg, var(--g-teal-lt), var(--g-teal));
+    --g-spec:inset 0 1px 0 rgba(230,252,255,.36);
+    --g-shadow:0 12px 30px rgba(0,0,0,.34); --g-shadow-lg:0 18px 54px rgba(0,0,0,.5);
+    --rollover:rgba(0,184,184,.22);
+    /* Legacy vars remapped onto the glass system so the existing surfaces inherit the reskin automatically. */
+    --text:var(--g-text); --muted:var(--g-muted); --faint:var(--g-faint);
+    --line:var(--g-edge-soft); --line-soft:rgba(150,225,245,.10);
+    --panel:var(--g-glass);
   }
   *{box-sizing:border-box;}
-  body{background-color:#060f0f;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;margin:0;}
-  /* Teal gradient backdrop (Silva teacher-tool treatment, matches the Equipment Manager). */
-  body::before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%);}
+  body{background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);background-attachment:fixed;color:var(--text);font-family:var(--body);min-height:100vh;line-height:1.5;margin:0;}
+  html,body{color-scheme:dark;}
+  /* ===== Galaxy backdrop (Silva Glass, matches the Equipment Manager / store). ===== */
+  .galaxy{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);}
+  .galaxy-mesh{position:absolute;inset:-25%;filter:blur(40px) saturate(150%) brightness(1.1);mix-blend-mode:screen;will-change:transform;transform:translateZ(0);
+    background:
+      radial-gradient(30% 22% at 29% 29%, rgba(0,184,184,.85), transparent 68%),
+      radial-gradient(18% 13% at 72% 24%, rgba(229,143,245,.46), transparent 72%),
+      radial-gradient(24% 18% at 75% 25%, rgba(78,84,214,.70), transparent 70%),
+      radial-gradient(20% 18% at 81% 45%, rgba(123,92,255,.60), transparent 72%),
+      radial-gradient(24% 19% at 79% 55%, rgba(229,143,245,.62), transparent 72%),
+      radial-gradient(34% 24% at 48% 47%, rgba(0,138,146,.70), transparent 70%),
+      radial-gradient(18% 13% at 31% 74%, rgba(229,143,245,.42), transparent 72%),
+      radial-gradient(22% 18% at 22% 58%, rgba(63,240,224,.50), transparent 72%),
+      radial-gradient(28% 22% at 66% 69%, rgba(25,211,197,.62), transparent 72%),
+      radial-gradient(22% 16% at 29% 75%, rgba(96,84,230,.48), transparent 72%),
+      radial-gradient(56% 14% at 50% 84%, rgba(46,230,214,.80), transparent 70%),
+      radial-gradient(30% 7% at 50% 83.5%, rgba(214,255,250,.60), transparent 72%);
+    animation:galaxyDrift 34s ease-in-out infinite alternate;}
+  .galaxy-glow{position:absolute;inset:0;mix-blend-mode:screen;filter:blur(1.5px);will-change:opacity;
+    background:
+      radial-gradient(48px 48px at 18% 12%, rgba(120,255,240,.44), transparent 68%),
+      radial-gradient(44px 44px at 86% 13%, rgba(214,165,250,.42), transparent 68%),
+      radial-gradient(48px 48px at 94% 52%, rgba(240,170,250,.50), transparent 68%),
+      radial-gradient(38px 38px at 16% 84%, rgba(236,160,250,.32), transparent 68%),
+      radial-gradient(9px 9px at 24% 23%, rgba(230,255,252,.95), transparent 64%),
+      radial-gradient(6px 6px at 69% 15%, rgba(232,205,255,.9), transparent 64%),
+      radial-gradient(7px 7px at 86% 44%, rgba(242,196,255,.92), transparent 64%),
+      radial-gradient(6px 6px at 80% 26%, rgba(245,200,255,.9), transparent 64%),
+      radial-gradient(6px 6px at 39% 64%, rgba(170,255,245,.9), transparent 64%),
+      radial-gradient(9px 9px at 58% 86%, rgba(200,255,248,.92), transparent 64%),
+      radial-gradient(5px 5px at 12% 70%, rgba(212,226,255,.86), transparent 64%),
+      radial-gradient(6px 6px at 92% 78%, rgba(150,255,240,.88), transparent 64%),
+      radial-gradient(3px 3px at 33% 40%, rgba(255,255,255,.9), transparent 64%),
+      radial-gradient(3px 3px at 77% 33%, rgba(255,255,255,.86), transparent 64%),
+      radial-gradient(2px 2px at 52% 52%, rgba(255,255,255,.8), transparent 64%),
+      radial-gradient(3px 3px at 8% 34%, rgba(255,255,255,.82), transparent 64%);
+    animation:galaxyGlow 6s ease-in-out infinite alternate;}
+  @keyframes galaxyDrift{from{transform:translate3d(-2%,-1%,0) scale(1);}to{transform:translate3d(3%,2%,0) scale(1.08);}}
+  @keyframes galaxyGlow{from{opacity:.6}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){ .galaxy-mesh,.galaxy-glow{animation:none;} }
   .silva-nav{display:none;}
   .cal-title-icon{height:1.02em;width:auto;margin-right:.42em;vertical-align:-0.16em;filter:brightness(0) invert(1);}
-  .cal-hero-clock{width:150px;height:46px;border:0;background:transparent;display:block;}
+  .cal-hero-clock{width:150px;height:46px;border:1px solid rgba(0,184,184,.42);border-radius:var(--g-r-md);overflow:hidden;display:block;}
   /* Safe-area insets keep the title clear of the iPad status bar when launched as a Home Screen web app. */
   .wrap{max-width:1500px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right)) 60px calc(20px + env(safe-area-inset-left));}
   .pw-back{flex:0 0 auto;}
@@ -155,6 +211,13 @@
   .pw-mini:hover{border-color:var(--teal);color:#fff;}
   .pw-mini.warn{border-color:rgba(245,179,1,.5);color:#ffd889;}
   .pw-mini.ret{border-color:var(--teal);color:var(--teal-lt);}
+  /* Per-kit note (free text: extra gear taken, a condition issue, etc.). Angular, matches the kit cards. */
+  .pw-noterow{display:flex;}
+  .pw-notebtn{height:26px;padding:0 10px;font-size:.55rem;color:var(--muted);}
+  .pw-notefield{width:100%;box-sizing:border-box;background:rgba(0,0,0,.34);border:1px solid var(--line);border-radius:var(--g-r-sm);color:var(--text);font-family:var(--font);font-size:.82rem;line-height:1.35;padding:7px 9px;resize:vertical;min-height:40px;}
+  .pw-notefield::placeholder{color:var(--muted);opacity:.75;}
+  .pw-notefield:focus{outline:none;border-color:var(--teal);}
+  .pw-ronote{font-size:.8rem;color:var(--text);background:rgba(0,0,0,.26);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-sm);padding:6px 9px;line-height:1.35;white-space:pre-wrap;}
   .pw-mini.done{border-color:rgba(63,168,99,.6);color:#8ff0b0;background:rgba(63,168,99,.14);}
   .pw-mini.done:hover{border-color:var(--ok);color:#fff;}
   .pw-mini{text-decoration:none;}                 /* Edit info is a link styled as a mini button */
@@ -169,7 +232,7 @@
   /* History pop-out: a modal (reuses .pw-wheelov) holding the scrollable list of saved walks. */
   .pw-histbox{background:linear-gradient(135deg,rgba(0,184,184,.12),rgba(4,20,19,.99));border:1px solid var(--teal);border-top:3px solid var(--teal);box-shadow:0 24px 60px rgba(0,0,0,.7);width:600px;max-width:94vw;max-height:calc(100vh - 48px);padding:16px 18px 18px;display:flex;flex-direction:column;}
   .pw-histlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;overflow-y:auto;min-height:0;}
-  .pw-histrow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(0,0,0,.26);border:1px solid var(--line-soft);border-left:3px solid var(--teal-deep);padding:10px 12px;cursor:pointer;transition:background .12s;}
+  .pw-histrow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(0,0,0,.26);border:1px solid var(--line-soft);border-radius:var(--g-r-md);padding:10px 12px;cursor:pointer;transition:background .12s;}
   .pw-histrow:hover{background:rgba(0,184,184,.1);}
   .pw-histopen{flex:1 1 auto;min-width:0;}
   .pw-histdel{flex:0 0 auto;background:transparent;border:0;color:var(--faint);font-size:1.4rem;line-height:1;cursor:pointer;padding:0 4px;transition:color .12s;}
@@ -198,7 +261,7 @@
   #app.on{display:block;}
   .pw-foot{color:var(--faint);font-size:.8rem;margin-top:26px;}
   /* Toast */
-  .pw-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:rgba(4,20,19,.98);border:1px solid var(--teal);border-left:4px solid var(--teal);color:#dfffff;font-size:.9rem;padding:12px 18px;z-index:420;box-shadow:0 16px 40px rgba(0,0,0,.6);opacity:0;transition:opacity .25s,transform .25s;max-width:90vw;}
+  .pw-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:rgba(4,20,19,.98);border:1px solid var(--teal);border-radius:var(--g-r-md);color:#dfffff;font-size:.9rem;padding:12px 18px;z-index:420;box-shadow:0 16px 40px rgba(0,0,0,.6);opacity:0;transition:opacity .25s,transform .25s;max-width:90vw;}
   .pw-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
   .pw-toast.bad{border-color:var(--red);border-left-color:var(--red);color:#ffd7d3;}
   @media (max-width:560px){
@@ -210,9 +273,42 @@
     .cal-hero img{width:46px !important;}
     .cal-hero-clock{width:120px !important;height:42px !important;}
   }
+  /* ===== GLASS RESKIN (photo-walk, Chris 2026-11-09): rounded frosted glass over the galaxy. The
+     legacy-var remap in :root already glasses the backgrounds/edges; this adds shape, blur, and pills. ===== */
+  .pw-bar, .pw-kit, .pw-kitcard, .pw-seatbox, .pw-histbox, .pw-warnbox{ border:1px solid var(--g-edge-soft); border-radius:var(--g-r-md); box-shadow:var(--g-spec), var(--g-shadow); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur); }
+  .pw-kitcard, .pw-seatbox{ border-radius:var(--g-r-lg); }
+  .pw-kit{ box-shadow:var(--g-spec); background:var(--g-glass-quiet); }
+  .pw-h{ border-left:0; padding-left:0; }
+  .btn{ border-radius:var(--g-r-pill); background:var(--g-primary); border-color:transparent; color:#04110f; box-shadow:var(--g-spec); }
+  .btn:hover{ filter:brightness(1.06); }
+  .btn.ghost{ background:var(--g-glass); color:var(--g-text); border:1px solid var(--g-edge); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur); }
+  .btn.ghost:hover{ background:var(--g-primary); color:#04110f; border-color:transparent; }
+  .pw-mini, .pw-back, .pw-addseat{ border-radius:var(--g-r-pill); background:var(--g-glass); border:1px solid var(--g-edge); color:var(--g-text); box-shadow:var(--g-spec); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur); }
+  .pw-mini:hover, .pw-back:hover, .pw-addseat:hover{ background:var(--g-primary); color:#04110f; border-color:transparent; }
+  .pw-mini.warn{ background:rgba(245,179,1,.14); color:#ffd889; border-color:rgba(245,179,1,.42); }
+  .pw-ddtrig{ border-radius:var(--g-r-pill); background:var(--g-glass); border:1px solid var(--g-edge); box-shadow:var(--g-spec); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur); }
+  .pw-ddmenu{ border-radius:var(--g-r-md); border:1px solid var(--g-edge); backdrop-filter:var(--g-blur-heavy); -webkit-backdrop-filter:var(--g-blur-heavy); box-shadow:var(--g-shadow-lg); }
+  .pw-ddopt{ border-bottom:1px solid var(--g-edge-soft); }
+  .pw-ddopt:hover{ background:var(--rollover); }
+  .pw-chip, .pw-badge, .pw-p2, .pw-pct, button.pw-pct, .pw-live, .pw-auto, .tog{ border-radius:var(--g-r-pill); }
+  .pw-knum-btn{ border-radius:var(--g-r-sm); background:var(--g-glass-quiet); border:1px solid var(--g-edge-soft); }
+  .pw-knum-btn:hover{ border-color:var(--g-teal); background:var(--rollover); }
+  .pw-notefield, #gate input{ border-radius:var(--g-r-sm); border:1px solid var(--g-edge); background:rgba(6,12,26,.5); }
+  .pw-notefield:focus, #gate input:focus{ border-color:var(--g-teal); outline:none; }
+  /* Header (.cal-hero) is inline-styled angular; override to frosted glass (drop the hard teal borders) and
+     set Oswald so the title stops falling back to the system font. */
+  .cal-hero{ background:var(--g-glass) !important; border:1px solid var(--g-edge-soft) !important; border-radius:var(--g-r-lg) !important; box-shadow:var(--g-spec), var(--g-shadow); backdrop-filter:var(--g-blur); -webkit-backdrop-filter:var(--g-blur); font-family:var(--font); }
+  .cal-hero [style*="23pt"], .cal-hero [style*="23pt"] strong{ letter-spacing:.02em; }
+  /* Read-only "viewing a saved walk" banner: glass, drop the purple left bar. */
+  .pw-ro{ border:1px solid rgba(139,92,246,.4) !important; border-radius:var(--g-r-md); background:rgba(139,92,246,.12); }
+  #gate{ background:rgba(4,9,20,.55); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); }
+  #gate .card{ border:1px solid var(--g-edge); border-radius:var(--g-r-lg); box-shadow:var(--g-spec), var(--g-shadow-lg); backdrop-filter:var(--g-blur-heavy); -webkit-backdrop-filter:var(--g-blur-heavy); }
+  .pw-wheelov{ background:rgba(2,8,18,.5); }
+  .pw-wheelcenter{ border-top:1px solid var(--g-edge); border-bottom:1px solid var(--g-edge); }
 </style>
 </head>
 <body>
+<div class="galaxy" aria-hidden="true"><div class="galaxy-mesh"></div><div class="galaxy-glow"></div></div>
 <div id="gate">
   <div class="card">
     <img src="/logos/CS_Logo_Only_Teal.svg" alt="Creative Silva" />
@@ -237,7 +333,7 @@
           <div style="color:#ffffff;font-size:clamp(17pt,4.5vw,23pt);line-height:1.1;"><strong>Photo Walk Log</strong></div>
         </div>
         <div style="flex:1 1 150px;display:flex;justify-content:flex-end;align-items:center;">
-          <iframe class="cal-hero-clock" src="/assets/embeds/period-clock.html" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
+          <iframe class="cal-hero-clock" src="/assets/embeds/period-clock.html?chip=1&v=5" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
         </div>
       </div>
     </div>
@@ -337,6 +433,7 @@
 
   // ----- state -----
   var SEATMAP={}, BOARD={cameras:[],checkouts:[],assets:{}}, PERIOD=null, PW={}, RO=null, LOCKED=false;  // RO = read-only past log; LOCKED = this period locked in (view-only until Unlock)
+  var noteOpen={};  // which live kit cards have their note field expanded (UI only; reset per period)
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function camAPI(path,opts){ opts=opts||{}; opts.headers=opts.headers||{}; opts.headers['X-Camera-Key']=KEY; opts.headers['Content-Type']='text/plain'; return fetch(API+path,opts); }
@@ -360,10 +457,11 @@
   function whoOf(c){ return (c&&(c.student_name||c.name))||'Checked out'; }
 
   // ----- build the per-kit working state for the selected period -----
-  function buildPW(){ PW={}; CAMS.forEach(function(cam){
+  function buildPW(){ PW={}; noteOpen={}; CAMS.forEach(function(cam){
       // Every camera 1-18 is present and assignable; its console checkout status is ignored here,
       // because students take cameras off campus during class and this log just records who had which.
-      PW[cam]={ status:'open', seats:[], names:[], ids:[] };
+      // note = a free-text note for this kit on this walk (e.g. "took Tripod 02", "back without a lens cap").
+      PW[cam]={ status:'open', seats:[], names:[], ids:[], note:'' };
     });
   }
   function seatsForPeriod(){ var pd=SEATMAP[PERIOD]; return (pd&&pd.seats)||{}; }
@@ -420,6 +518,8 @@
     grid.innerHTML=CAMS.map(liveKitCard).join('');
     grid.querySelectorAll('[data-assign]').forEach(function(b){ b.onclick=function(){ openSeatModal(b.getAttribute('data-assign')); }; });   // tap the camera number -> seat picker
     grid.querySelectorAll('[data-kit]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); openKitModal(b.getAttribute('data-kit')); }; });
+    grid.querySelectorAll('[data-noteopen]').forEach(function(b){ b.onclick=function(){ var c=b.getAttribute('data-noteopen'); noteOpen[c]=true; renderGrid(); var ta=document.querySelector('[data-notefield="'+c+'"]'); if(ta){ ta.focus(); try{ ta.setSelectionRange(ta.value.length, ta.value.length); }catch(e){} } }; });   // Note button -> expand the field
+    grid.querySelectorAll('[data-notefield]').forEach(function(ta){ ta.oninput=function(){ var c=ta.getAttribute('data-notefield'); if(PW[c]){ PW[c].note=ta.value; scheduleSave(); } }; });   // typing a note saves it (debounced), no re-render so focus holds
   }
   // The % chip opens the kit editor as a pop-up right here in the walk (no leaving the page),
   // so Silva can flip missing/in-bag items on the fly and the % updates live. See openKitModal.
@@ -471,14 +571,21 @@
     var names = (LOCKED && !hasAny)
       ? '<div class="pw-names"><span class="empty">No one</span></div>'
       : '<div class="pw-names">'+namesLine(k)+'</div>';
-    return '<div class="pw-kit"><div class="pw-khead">'+numHtml+pctChip(cam)+'</div>'+names+'</div>';
+    // Note: a free-text note per kit for this walk (extra gear taken, a condition issue, etc.). Opens from
+    // the Note button; shows the field whenever a note exists; read-only once the period is locked in.
+    var note=(k.note||''), noteSec='';
+    if(LOCKED){ if(note) noteSec='<div class="pw-ronote">'+esc(note)+'</div>'; }
+    else if(note || noteOpen[cam]){ noteSec='<textarea class="pw-notefield" data-notefield="'+esc(cam)+'" rows="2" placeholder="Note for this kit (e.g. took Tripod 02, back without a lens cap)">'+esc(note)+'</textarea>'; }
+    else { noteSec='<div class="pw-noterow"><button type="button" class="pw-mini pw-notebtn" data-noteopen="'+esc(cam)+'">Note</button></div>'; }
+    return '<div class="pw-kit"><div class="pw-khead">'+numHtml+pctChip(cam)+'</div>'+names+noteSec+'</div>';
   }
   function roKitCard(k){
     var p2=(P2.indexOf(k.cam)>=0)?'<span class="pw-p2">PHOTO 2</span>':'';
     var head='<div class="pw-khead"><span class="pw-knum">'+esc(k.cam)+p2+'</span><span class="pw-pct">'+(k.pct==null?'TBD':(k.pct+'%'))+'</span></div>';
     var who=(k.seats||[]).filter(function(x){return x&&x.label;}).map(function(x){ return '<span class="sn">#'+esc(x.seat)+'</span> '+stuDeep(x.id||'',esc(x.label)); });
     var body='<div class="pw-names">'+(who.length?who.join('<br>'):'<span class="empty">No one</span>')+'</div>';
-    return '<div class="pw-kit">'+head+body+'</div>';
+    var roNote = k.note ? '<div class="pw-ronote">'+esc(k.note)+'</div>' : '';
+    return '<div class="pw-kit">'+head+body+roNote+'</div>';
   }
 
   // ----- seat modal: tap a camera number -> one vertical wheel per seat (+ add more) + Confirm -----
@@ -554,6 +661,7 @@
         LOCKED = !!(j.log.locked);   // restore the locked-in state so a finalized period opens view-only
         (j.log.kits||[]).forEach(function(kk){ var pw=PW[kk.cam]; if(!pw) return;
           if(kk.seats&&kk.seats.length){ pw.seats=kk.seats.map(function(s){return seatNum(s.seat);}); pw.names=kk.seats.map(function(s){return s.label||'';}); pw.ids=kk.seats.map(function(s){return s.id||'';}); pw.status='used'; }
+          pw.note=kk.note||'';
         });
         render();
         if(announce) toast('Loaded the saved log for Period '+p+'.');
@@ -572,7 +680,7 @@
   }
   function buildKits(){ return CAMS.map(function(cam){ var k=PW[cam];
       var seats=[]; (k.seats||[]).forEach(function(v0,i){ var v=seatNum(v0); if(v) seats.push({seat:v, id:k.ids[i]||'', label:k.names[i]||''}); });
-      return {cam:cam, pct:kitPct(cam), status:(seats.length?'used':'unassigned'), seats:seats};
+      return {cam:cam, pct:kitPct(cam), status:(seats.length?'used':'unassigned'), seats:seats, note:(k.note||'')};
     }); }
   function liveSave(){ if(RO||!PERIOD) return; var p=PERIOD, key=todayISO()+'|'+p;
     camAPI('/api/camera/photowalk',{method:'POST',body:JSON.stringify({action:'save',date:todayISO(),period:p,course:courseForPeriod(),kits:buildKits(),locked:LOCKED})})

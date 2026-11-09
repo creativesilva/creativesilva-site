@@ -21,6 +21,14 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { background: transparent; }
+  /* ?chip=1 : paint a dark glass fill so the clock reads as a solid chip when it sits over a
+     bright glass galaxy header (Equipment Manager). A transparent iframe there punches through to
+     the galaxy, so the host cannot darken it from outside; it must come from inside the embed.
+     Consumers that do not pass chip=1 (catalog, home) stay fully transparent. (Chris 2026-11-09) */
+  /* Same treatment as the SILVA pool pill: a light 26% black over the (otherwise transparent) iframe,
+     so the galaxy behind it shows through and tints it, just slightly darker than its surroundings.
+     The teal border lives on the host iframe. (Chris 2026-11-09) */
+  html.chip { background: radial-gradient(120% 85% at 16% -8%, rgba(220,228,255,.11), transparent 52%), linear-gradient(165deg, rgba(50,26,146,.85), rgba(40,20,126,.88)); }
   body { font-family: 'Oswald', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
   .clock {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -53,6 +61,8 @@
   <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
   <script>
     (function () {
+      // Dark glass chip variant for the Equipment Manager header (see html.chip CSS).
+      try { if (new URLSearchParams(location.search).get('chip') === '1') document.documentElement.classList.add('chip'); } catch (e) {}
       var descEl = document.getElementById('desc');
       var digEl  = document.getElementById('digits');
 
