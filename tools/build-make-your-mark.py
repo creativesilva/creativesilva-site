@@ -42,8 +42,14 @@ HAVE_REFL=True
 DUE_DATE="2026-11-11"
 
 OVER=f"{PFX}-make-your-mark-overview.html"
-S1=f"{PFX}-make-your-mark-step01-make-your-word.html"
-S2=f"{PFX}-make-your-mark-step02-reflection.html"
+# Extra-credit sketchbook step inserted as Step 02 (Chris 2026-11-09). The existing step files keep
+# their old names so no links break; labels/positions renumber (Make Your Word -> Step 03,
+# Reflection -> Step 04). pageLabel numbers by position, so the filename step number is cosmetic.
+SKETCH=f"{PFX}-make-your-mark-step02-sketchbook.html"  # Step 02 (extra credit)
+S1=f"{PFX}-make-your-mark-step01-make-your-word.html"  # Step 03 (Make Your Word)
+S2=f"{PFX}-make-your-mark-step02-reflection.html"      # Step 04 (Reflection)
+HAVE_SKETCH_FLOAT=False  # Step 02 sketch float (none supplied yet), assets/images/digarts1/make-your-mark/sketch-float-v1.jpg
+SKETCH_FLOAT=f"{IMGDIR}/sketch-float-v1.jpg"
 
 def ent(s):
     m={"á":"&aacute;","é":"&eacute;","í":"&iacute;","ó":"&oacute;","ú":"&uacute;",
@@ -209,9 +215,9 @@ def nav(current,dots,stepnav):
             '      <div class="silva-nav-spacer"></div>\n'
             f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
             f'      <div class="silva-step-nav">{stepnav}</div>')
-DT=[("1","Step 01"),("2","Step 02"),("3","Step 03")]
+DT=[("1","Step 01"),("2","Step 02"),("3","Step 03"),("4","Step 04")]
 def dots_for(active):
-    hrefs=[OVER,S1,S2]; r=""
+    hrefs=[OVER,SKETCH,S1,S2]; r=""
     for i,(lab,title) in enumerate(DT):
         r+=dot("" if i==active else hrefs[i], lab, title, i==active, module=False)
     return r
@@ -243,14 +249,15 @@ def overview():
         para("This project has two parts. Right now is the <strong>design draft</strong>: you explore type, design your letters, and make your sticker art.")
         + para("In the <strong>next project</strong>, we print a whole sheet of everyone&rsquo;s stickers on the sticker printer, and you learn to cut out your own. You are making the art now so it is ready to print later."))
     en+=downloads(False)
-    en+=card("How It Works / Your Plan","Your Next 2 Steps",
-        para("You are on Step 01 now: read this page and download your project folder. Here are the two steps that follow.")
+    en+=card("How It Works / Your Plan","Your Next 3 Steps",
+        para("You are on Step 01 now: read this page and download your project folder. Here are the three steps that follow.")
         + bullets([
-            ("Step 02 &middot; Make Your Word:","pick a style, draw your letters, and add the white sticker border."),
-            ("Step 03 &middot; Reflection:","fill in a short sheet about your sticker."),
+            ("Step 02 &middot; Sketchbook Sketch (extra credit):","sketch your sticker by hand first for bonus points."),
+            ("Step 03 &middot; Make Your Word:","pick a style, draw your letters, and add the white sticker border."),
+            ("Step 04 &middot; Reflection:","fill in a short sheet about your sticker."),
         ]))
     en+=standards_box(False, MYM_STANDARDS)
-    en+=next_up("UP NEXT &middot; STEP 02 - Make Your Word","Pick a style, draw a word you like, and turn it into a sticker.")
+    en+=next_up("UP NEXT &middot; STEP 02 - Sketchbook Sketch (Extra Credit)","Sketch your sticker by hand first for bonus points, then build it digitally.")
     # ---- ES ----
     es=banner("M&oacute;dulo 09 &bull; Paso 01","Dise&ntilde;a un Sticker: Empieza Aqu&iacute;",
         "Lee esta p&aacute;gina y luego ve al Paso 02 para hacer tu sticker.","#top","Back to English",hicon=HICON_DESIGN)
@@ -276,21 +283,79 @@ def overview():
         para("Este proyecto tiene dos partes. Ahora es el <strong>borrador de dise&ntilde;o</strong>: exploras tipograf&iacute;a, dise&ntilde;as tus letras y haces el arte de tu sticker.")
         + para("En el <strong>siguiente proyecto</strong>, imprimimos una hoja completa con los stickers de todos en la impresora de stickers, y aprendes a recortar el tuyo. Est&aacute;s creando el arte ahora para que est&eacute; listo para imprimir despu&eacute;s."))
     es+=downloads(True)
-    es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Siguientes 2 Pasos",
-        para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina y descarga tu carpeta del proyecto. Aqu&iacute; est&aacute;n los dos pasos que siguen.")
+    es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Siguientes 3 Pasos",
+        para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina y descarga tu carpeta del proyecto. Aqu&iacute; est&aacute;n los tres pasos que siguen.")
         + bullets([
-            ("Paso 02 &middot; Haz Tu Palabra:","elige un estilo, dibuja tus letras y agrega el borde blanco del sticker."),
-            ("Paso 03 &middot; Reflexi&oacute;n:","llena una hoja corta sobre tu sticker."),
+            ("Paso 02 &middot; Boceto en el Cuaderno (cr&eacute;dito extra):","dibuja tu sticker a mano primero para puntos extra."),
+            ("Paso 03 &middot; Haz Tu Palabra:","elige un estilo, dibuja tus letras y agrega el borde blanco del sticker."),
+            ("Paso 04 &middot; Reflexi&oacute;n:","llena una hoja corta sobre tu sticker."),
         ]))
     es+=standards_box(True, MYM_STANDARDS)
-    es+=next_up("SIGUIENTE &middot; PASO 02 - Haz Tu Palabra","Elige un estilo, dibuja una palabra que te guste y convi&eacute;rtela en un sticker.")
-    stepnav=f'<a href="{S1}" class="silva-step-btn">Step 02 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S1}" class="silva-bottom-btn">Next: Step 02 &#8594;</a></div>'
+    es+=next_up("SIGUIENTE &middot; PASO 02 - Boceto en el Cuaderno (Cr&eacute;dito Extra)","Dibuja tu sticker a mano primero para puntos extra, luego hazlo en digital.")
+    stepnav=f'<a href="{SKETCH}" class="silva-step-btn">Step 02 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><span></span><a href="{SKETCH}" class="silva-bottom-btn">Next: Step 02 &#8594;</a></div>'
     return wrap_page(f"Design a Sticker | {CT} | PVHS", nav("Step 01",dots_for(0),stepnav), top_wrap(en,es), bottom)
+
+def sketch():
+    # Step 02: EXTRA CREDIT sketchbook drawing of the sticker (plan by hand first), scanned with the
+    # student iPad and turned in as a JPG. Optional; float gated off until Chris supplies one.
+    # ---- EN ----
+    en=banner("Module 09 &bull; Step 02","Sketchbook Sketch",
+        "Extra credit: sketch your sticker by hand before you go digital.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_SKETCH)
+    en+=card("Learn &middot; plan on paper first","Sketch Your Sticker by Hand",
+        (float_right(SKETCH_FLOAT,"A sketchbook page with a hand-drawn sticker word and a white border around it","Plan your word, your style, and your white border on paper.") if HAVE_SKETCH_FLOAT else "")
+        + note("<strong>This step is extra credit.</strong> It is optional, but doing it earns you bonus points and makes your sticker stronger.")
+        + para("Before you design on the computer, <strong>draw your sticker by hand in your sketchbook</strong>. Plan your word, your letter style, and your white border on paper first.")
+        + para("A good sketch makes the digital part faster and better. You will trace from a sketch like this in Step 03."))
+    en+=deliverables_box(False,
+        [("1 sketch (JPG):","a photo of your sketchbook drawing, scanned with your student iPad and uploaded to this Canvas assignment. Extra credit.")])
+    en+=card("Learn &middot; what to draw","Put It All on the Page",
+        bullets([
+            ("Your whole word","sketch the word you will make, in big letters."),
+            ("One letter style","try your single style on every letter: bubble, script, block, outline, or patterns."),
+            ("The white border","draw the white sticker border around the whole word."),
+            ("Fun extras","add any garnish or offset outline ideas you want to try."),
+        ]))
+    en+=card("HOW TO TURN IT IN","Scan Your Sketch With Your iPad",
+        para("Your sketch is on paper, so take a photo of it to turn it in. Use your <strong>school student iPad</strong> as a camera. This is how we scan paper work in this class.")
+        + bullets([
+            ("Lay your page flat:","good light, with no shadow across your drawing."),
+            ("Take a photo with your student iPad:","fill the frame with your sketch and keep it straight, so it is easy to read."),
+            ("Upload the JPG:","upload your photo to this Canvas assignment."),
+        ]))
+    en+=next_up("UP NEXT &middot; STEP 03 - Make Your Word","Take your sketch into Adobe Illustrator and build your sticker.")
+    # ---- ES ----
+    es=banner("M&oacute;dulo 09 &bull; Paso 02","Boceto en el Cuaderno",
+        "Cr&eacute;dito extra: dibuja tu sticker a mano antes de pasar a lo digital.","#top","Back to English",hicon=HICON_SKETCH)
+    es+=card("Aprende &middot; planea en papel primero","Dibuja Tu Sticker a Mano",
+        (float_right(SKETCH_FLOAT,"Una p&aacute;gina de cuaderno con un sticker dibujado a mano y un borde blanco alrededor","Planea tu palabra, tu estilo y tu borde blanco en papel.") if HAVE_SKETCH_FLOAT else "")
+        + note("<strong>Este paso es cr&eacute;dito extra.</strong> Es opcional, pero hacerlo te da puntos extra y hace tu sticker m&aacute;s fuerte.")
+        + para("Antes de dise&ntilde;ar en la computadora, <strong>dibuja tu sticker a mano en tu cuaderno</strong>. Planea tu palabra, el estilo de tus letras y tu borde blanco en papel primero.")
+        + para("Un buen boceto hace que la parte digital sea m&aacute;s r&aacute;pida y mejor. En el Paso 03 vas a calcar desde un boceto como este."))
+    es+=deliverables_box(True,
+        [("1 boceto (JPG):","una foto de tu dibujo del cuaderno, escaneada con tu iPad de estudiante y subida a esta tarea de Canvas. Cr&eacute;dito extra.")])
+    es+=card("Aprende &middot; qu&eacute; dibujar","Pon Todo en la P&aacute;gina",
+        bullets([
+            ("Toda tu palabra","dibuja la palabra que vas a hacer, en letras grandes."),
+            ("Un solo estilo","prueba tu mismo estilo en cada letra: burbuja, pincel, bloque, contorno o patrones."),
+            ("El borde blanco","dibuja el borde blanco del sticker alrededor de toda la palabra."),
+            ("Detalles divertidos","agrega cualquier adorno o idea de contorno que quieras probar."),
+        ]))
+    es+=card("C&Oacute;MO ENTREGARLO","Escanea Tu Boceto con Tu iPad",
+        para("Tu boceto est&aacute; en papel, as&iacute; que toma una foto para entregarlo. Usa tu <strong>iPad escolar de estudiante</strong> como c&aacute;mara. As&iacute; escaneamos el trabajo en papel en esta clase.")
+        + bullets([
+            ("Pon tu p&aacute;gina plana:","buena luz, sin que una sombra cruce tu dibujo."),
+            ("Toma una foto con tu iPad de estudiante:","llena el encuadre con tu boceto y mantenlo derecho, para que se lea f&aacute;cil."),
+            ("Sube el JPG:","sube tu foto a esta tarea de Canvas."),
+        ]))
+    es+=next_up("SIGUIENTE &middot; PASO 03 - Haz Tu Palabra","Lleva tu boceto a Adobe Illustrator y arma tu sticker.")
+    stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a> <a href="{S1}" class="silva-step-btn">Step 03 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S1}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
+    return wrap_page(f"Step 2: Sketchbook Sketch | Design a Sticker | {CT} | PVHS", nav("Step 02",dots_for(1),stepnav), top_wrap(en,es), bottom)
 
 def make_word():
     # ---- EN ----
-    en=banner("Module 09 &bull; Step 02","Make Your Word",
+    en=banner("Module 09 &bull; Step 03","Make Your Word",
         "Draw your letters and turn your word into a sticker.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_DESIGN)
     en+=card("Learn &middot; explore a style","Explore a Style to Draw",
         note("You are <strong>designing</strong> the letters yourself, not choosing a font. You have <strong>creative freedom</strong>. The one rule: all your letters match and look like <strong>one font</strong>, not random letters put together.")
@@ -325,9 +390,9 @@ def make_word():
         ]))
     en+=deliverables_box(False,
         [("1 vector PDF:","your finished <strong>sticker</strong>, saved as a <strong>vector PDF</strong> (File &rarr; Save As &rarr; Adobe PDF &rarr; [Press Quality]), uploaded to this Canvas assignment. <strong>Not</strong> the .ai file, and not a JPG.")])
-    en+=next_up("UP NEXT &middot; STEP 03 - Reflection","Tell about your sticker: your style, and the hardest part.")
+    en+=next_up("UP NEXT &middot; STEP 04 - Reflection","Tell about your sticker: your style, and the hardest part.")
     # ---- ES ----
-    es=banner("M&oacute;dulo 09 &bull; Paso 02","Haz Tu Palabra",
+    es=banner("M&oacute;dulo 09 &bull; Paso 03","Haz Tu Palabra",
         "Dibuja tus letras y convierte tu palabra en un sticker.","#top","Back to English",hicon=HICON_DESIGN)
     es+=card("Aprende &middot; explora un estilo","Explora un Estilo para Dibujar",
         note("T&uacute; <strong>dise&ntilde;as</strong> las letras, no eliges una fuente. Tienes <strong>libertad creativa</strong>. La &uacute;nica regla: que todas tus letras combinen y se vean como <strong>una sola fuente</strong>, no letras al azar.")
@@ -362,14 +427,14 @@ def make_word():
         ]))
     es+=deliverables_box(True,
         [("1 PDF vectorial:","tu <strong>sticker</strong> terminado, guardado como <strong>PDF vectorial</strong> (Archivo &rarr; Guardar como &rarr; Adobe PDF &rarr; [Press Quality]), subido a esta tarea de Canvas. <strong>No</strong> el archivo .ai, y no un JPG.")])
-    es+=next_up("SIGUIENTE &middot; PASO 03 - Reflexi&oacute;n","Cuenta sobre tu sticker: tu estilo y la parte m&aacute;s dif&iacute;cil.")
-    stepnav=f'<a href="{S2}" class="silva-step-btn">Step 03 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S2}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
-    return wrap_page(f"Step 2: Make Your Word | Design a Sticker | {CT} | PVHS", nav("Step 02",dots_for(1),stepnav), top_wrap(en,es), bottom)
+    es+=next_up("SIGUIENTE &middot; PASO 04 - Reflexi&oacute;n","Cuenta sobre tu sticker: tu estilo y la parte m&aacute;s dif&iacute;cil.")
+    stepnav=f'<a href="{SKETCH}" class="silva-step-btn">&#8592; Step 02</a> <a href="{S2}" class="silva-step-btn">Step 04 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{SKETCH}" class="silva-bottom-btn">&#8592; Step 02</a><a href="{S2}" class="silva-bottom-btn">Step 04 &#8594;</a></div>'
+    return wrap_page(f"Step 3: Make Your Word | Design a Sticker | {CT} | PVHS", nav("Step 03",dots_for(2),stepnav), top_wrap(en,es), bottom)
 
 def reflection():
     # ---- EN ----
-    en=banner("Module 09 &bull; Step 03","Reflection",
+    en=banner("Module 09 &bull; Step 04","Reflection",
         "You made your sticker. Now tell me about it.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_REFLECT)
     en+=card("Learn &middot; last step","Fill In Your Reflection",
         para("You made your sticker. Nice work. Now open your reflection sheet and fill it in. It is short: just finish the sentences.")
@@ -378,7 +443,7 @@ def reflection():
         [("1 reflection:","your finished reflection (.docx), uploaded to this Canvas assignment.")])
     en+=next_up("MODULE COMPLETE","Nice work. You drew your own letters and turned a word into a sticker, just like a real lettering artist.")
     # ---- ES ----
-    es=banner("M&oacute;dulo 09 &bull; Paso 03","Reflexi&oacute;n",
+    es=banner("M&oacute;dulo 09 &bull; Paso 04","Reflexi&oacute;n",
         "Hiciste tu sticker. Ahora cu&eacute;ntame sobre &eacute;l.","#top","Back to English",hicon=HICON_REFLECT)
     es+=card("Aprende &middot; &uacute;ltimo paso","Llena Tu Reflexi&oacute;n",
         para("Hiciste tu sticker. Buen trabajo. Ahora abre tu hoja de reflexi&oacute;n y ll&eacute;nala. Es corta: solo termina las frases.")
@@ -386,12 +451,12 @@ def reflection():
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu reflexi&oacute;n terminada (.docx), subida a esta tarea de Canvas.")])
     es+=next_up("M&Oacute;DULO COMPLETO","Buen trabajo. Dibujaste tus propias letras y convertiste una palabra en un sticker, como un verdadero artista de letras.")
-    stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 02</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 02</a><span></span></div>'
-    return wrap_page(f"Step 3: Reflection | Design a Sticker | {CT} | PVHS", nav("Step 03",dots_for(2),stepnav), top_wrap(en,es), bottom)
+    stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 03</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 03</a><span></span></div>'
+    return wrap_page(f"Step 4: Reflection | Design a Sticker | {CT} | PVHS", nav("Step 04",dots_for(3),stepnav), top_wrap(en,es), bottom)
 
 # ================= BUILD =================
-for fname,gen in [(OVER,overview),(S1,make_word),(S2,reflection)]:
+for fname,gen in [(OVER,overview),(SKETCH,sketch),(S1,make_word),(S2,reflection)]:
     html=ent(gen())
     assert "—" not in html and "&mdash;" not in html, "em dash in "+fname
     assert "–" not in html and "&ndash;" not in html, "en dash in "+fname

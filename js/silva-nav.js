@@ -259,6 +259,7 @@
      '/curriculum/shared/digarts1-get-to-know-illustrator-step05-character-scene.html',
      '/curriculum/shared/digarts1-get-to-know-illustrator-step06-comic-cover.html'],
     ['/curriculum/shared/digarts1-make-your-mark-overview.html',
+     '/curriculum/shared/digarts1-make-your-mark-step02-sketchbook.html',
      '/curriculum/shared/digarts1-make-your-mark-step01-make-your-word.html',
      '/curriculum/shared/digarts1-make-your-mark-step02-reflection.html'],
     ['/curriculum/shared/digarts1-cereal-box-overview.html',
