@@ -822,7 +822,7 @@
   .mx:hover{color:#fff;}
   .mbody{padding:16px 18px 20px;flex:1 1 auto;overflow-y:auto;min-height:0;}
   label{display:block;font-family:var(--font);font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#cfeaea;margin:0 0 6px;}
-  input[type=text],input[type=date],select,textarea{width:100%;background:rgba(0,0,0,.30);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:1.02rem;padding:11px 12px;outline:none;margin-bottom:14px;}
+  input[type=text],input[type=date],select,textarea{width:100%;background:rgba(0,0,0,.30);border:1px solid var(--line);border-radius:var(--g-r-sm);color:var(--text);font-family:var(--body);font-size:1.02rem;padding:11px 12px;outline:none;margin-bottom:14px;}
   textarea{resize:vertical;min-height:96px;line-height:1.4;}
   /* equipment summary chips + note lines */
   .eqsummary{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;}
@@ -1049,10 +1049,11 @@
   .cd-histwho{font-weight:600;color:#eafeff;flex:1 1 auto;} .cd-histdates{color:var(--faint);white-space:nowrap;}
   .cd-empty{color:var(--faint);font-size:.85rem;}
   /* Camera detail tabs (Details / Kit contents) + kit checklist */
-  .cd-tabs{display:flex;gap:4px;border-bottom:1px solid rgba(255,255,255,.10);margin-bottom:16px;}
-  .cd-tab{font-family:var(--font);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);background:transparent;border:0;border-bottom:2px solid transparent;padding:10px 14px;margin-bottom:-1px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;}
+  /* Glass pill track (framework: tabs are a pill track with an inset active pill, never an underline). */
+  .cd-tabs{display:flex;gap:4px;background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-pill);padding:4px;margin-bottom:16px;}
+  .cd-tab{font-family:var(--font);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);background:transparent;border:0;border-radius:var(--g-r-pill);padding:9px 16px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;flex:1 1 0;transition:background .15s,color .15s;}
   .cd-tab:hover{color:var(--muted);}
-  .cd-tab.active{color:var(--teal-lt);border-bottom-color:var(--teal);}
+  .cd-tab.active{color:var(--g-teal-lt);background:rgba(0,184,184,.2);box-shadow:var(--g-spec);}
   .cd-tabscore{font-family:var(--font);font-size:.58rem;font-weight:700;letter-spacing:.06em;padding:2px 6px;background:rgba(63,168,99,.18);color:#8ff0b0;}
   .cd-tabscore.low{background:rgba(245,179,1,.18);color:#ffd889;} .cd-tabscore.crit{background:rgba(224,64,58,.20);color:#ff9a8a;}
   .cd-tabpanel{display:none;} .cd-tabpanel.active{display:block;}
@@ -1066,7 +1067,8 @@
   .kit-score.low .kit-score-fill{background:#f5b301;} .kit-score.crit .kit-score-fill{background:var(--red);}
   .kit-note{font-size:.82rem;color:var(--muted);margin-bottom:12px;line-height:1.5;}
   .kit-note b{color:#ff9a8a;}
-  .kit-list{display:flex;flex-direction:column;gap:3px;}
+  .kit-list{display:flex;flex-direction:column;gap:8px;}
+  .kit-grp-body{display:flex;flex-direction:column;gap:6px;padding-top:2px;}
   .kit-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px;background:rgba(255,255,255,.03);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-md);}
   .kit-row.missing{border-color:rgba(224,64,58,.4);background:rgba(224,64,58,.06);}
   .kit-name{font-family:var(--body);font-size:.9rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:400;}
@@ -4348,8 +4350,14 @@
     var _pct=kitPct(cam), _scls=(_pct==null?'':kitScoreCls(_pct)), _kit;
     if(isStdKit(cam)){
       var _miss=kitMissing(cam);
-      var _rows=KIT_STD.map(function(item){ var mm=_miss.indexOf(item)>=0;
-        return '<div class="kit-row'+(mm?' missing':'')+'"><span class="kit-name">'+esc(item)+'</span><button type="button" class="kit-sw'+(mm?' missing':'')+'" data-kititem="'+esc(item)+'" aria-pressed="'+(mm?'false':'true')+'"><span class="kit-sw-track"><span class="kit-sw-knob"></span></span><span class="kit-sw-lab">'+(mm?'Missing':'In kit')+'</span></button></div>';
+      // Grouped like the return checklist: Camera Body (+ SD card, battery, charger), Lenses, Lens Caps, Lens
+      // Filters. Each group is a collapsed glass accordion that opens when it holds a missing piece. (Chris 2026-11-09)
+      var KIT_GROUPS=[{name:'Camera Body',idx:[0,11,12,10]},{name:'Lenses',idx:[2,1,3]},{name:'Lens Caps',idx:[5,4,6]},{name:'Lens Filters',idx:[8,7,9]}];
+      function kitRow(item){ var mm=_miss.indexOf(item)>=0;
+        return '<div class="kit-row'+(mm?' missing':'')+'"><span class="kit-name">'+esc(item)+'</span><button type="button" class="kit-sw'+(mm?' missing':'')+'" data-kititem="'+esc(item)+'" aria-pressed="'+(mm?'false':'true')+'"><span class="kit-sw-track"><span class="kit-sw-knob"></span></span><span class="kit-sw-lab">'+(mm?'Missing':'In kit')+'</span></button></div>'; }
+      var _rows=KIT_GROUPS.map(function(g){
+        var gmiss=0, rows=g.idx.map(function(i){ var item=KIT_STD[i]; if(_miss.indexOf(item)>=0) gmiss++; return kitRow(item); }).join('');
+        return '<details class="retgrp kit-grp"'+(gmiss>0?' open':'')+'><summary><span class="retgrp-name">'+esc(g.name)+'</span><span class="retgrp-status'+(gmiss?' miss':'')+'">'+(gmiss?(gmiss+' missing'):'All here')+'</span><span class="retgrp-chev"></span></summary><div class="retgrp-body kit-grp-body">'+rows+'</div></details>';
       }).join('');
       _kit='<div class="kit-score '+_scls+'"><div class="kit-score-pct">'+_pct+'%</div><div class="kit-score-meta"><div class="kit-score-lab">'+(KIT_STD.length-_miss.length)+' of '+KIT_STD.length+' items in kit</div><div class="kit-score-bar"><span class="kit-score-fill" style="width:'+_pct+'%"></span></div></div></div><div class="kit-note">Toggle an item to <b>Missing</b> if it is not in the bag. The score updates here and for students on the calendar.</div><div class="kit-list">'+_rows+'</div>';
     } else {
