@@ -35,7 +35,8 @@
           <button type="button" data-nav="cat:lenses" data-i18n="Lenses">Lenses</button>
           <button type="button" data-nav="cat:lighting" data-i18n="Lighting">Lighting</button>
           <button type="button" data-nav="cat:accessories" data-i18n="Accessories">Accessories</button>
-          <button type="button" data-nav="calendar" data-i18n="Calendar View">Calendar View</button>
+          <!-- SHELVED 2026-11-09 (Chris): calendar view hidden from students for now. To restore, remove style="display:none" here AND on #calview below. -->
+          <button type="button" data-nav="calendar" data-i18n="Calendar View" style="display:none">Calendar View</button>
           <div class="navmenu-sep"></div>
           <div class="navmenu-lab" data-i18n="You">You</div>
           <button type="button" data-nav="account" data-i18n="My Account">My Account</button>
@@ -99,7 +100,7 @@
   </section>
   <!-- Calendar view: a month with per-day free-camera counts. Tap an open day -> sign in -> pickup/return
        times -> pick equipment by category -> Done opens the bag. A visual alternate to browsing. -->
-  <details class="calview" id="calview">
+  <details class="calview" id="calview" style="display:none"><!-- SHELVED 2026-11-09 (Chris): hidden from students; remove this style + the nav button's to restore -->
     <summary class="hiw-sum"><span class="bar"></span><span data-i18n="Calendar view">Calendar view</span><span class="hiw-chev" aria-hidden="true"></span></summary>
     <div class="calview-bd">
       <div class="cv-calendar">
