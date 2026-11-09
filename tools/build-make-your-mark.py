@@ -296,6 +296,13 @@ def overview():
     bottom=f'<div class="silva-bottom-nav"><span></span><a href="{SKETCH}" class="silva-bottom-btn">Next: Step 02 &#8594;</a></div>'
     return wrap_page(f"Design a Sticker | {CT} | PVHS", nav("Step 01",dots_for(0),stepnav), top_wrap(en,es), bottom)
 
+def extra_credit_chip(es):
+    # Gold "EXTRA CREDIT" badge, so the optional step is unmistakable at the top of the card.
+    t="Cr&eacute;dito Extra" if es else "Extra Credit"
+    return ('<div style="display:inline-block;background:#f5b301;color:#3a2600;font-size:10.5pt;'
+            'font-weight:bold;letter-spacing:0.14em;text-transform:uppercase;padding:6px 14px;margin:0 0 14px;">'
+            + t + '</div>')
+
 def sketch():
     # Step 02: EXTRA CREDIT sketchbook drawing of the sticker (plan by hand first), scanned with the
     # student iPad and turned in as a JPG. Optional; float gated off until Chris supplies one.
@@ -303,7 +310,8 @@ def sketch():
     en=banner("Module 09 &bull; Step 02","Sketchbook Sketch",
         "Extra credit: sketch your sticker by hand before you go digital.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_SKETCH)
     en+=card("Learn &middot; plan on paper first","Sketch Your Sticker by Hand",
-        (float_right(SKETCH_FLOAT,"A sketchbook page with a hand-drawn sticker word and a white border around it","Plan your word, your style, and your white border on paper.") if HAVE_SKETCH_FLOAT else "")
+        extra_credit_chip(False)
+        + (float_right(SKETCH_FLOAT,"A sketchbook page with a hand-drawn sticker word and a white border around it","Plan your word, your style, and your white border on paper.") if HAVE_SKETCH_FLOAT else "")
         + note("<strong>This step is extra credit.</strong> It is optional, but doing it earns you bonus points and makes your sticker stronger.")
         + para("Before you design on the computer, <strong>draw your sticker by hand in your sketchbook</strong>. Plan your word, your letter style, and your white border on paper first.")
         + para("A good sketch makes the digital part faster and better. You will trace from a sketch like this in Step 03."))
@@ -328,7 +336,8 @@ def sketch():
     es=banner("M&oacute;dulo 09 &bull; Paso 02","Boceto en el Cuaderno",
         "Cr&eacute;dito extra: dibuja tu sticker a mano antes de pasar a lo digital.","#top","Back to English",hicon=HICON_SKETCH)
     es+=card("Aprende &middot; planea en papel primero","Dibuja Tu Sticker a Mano",
-        (float_right(SKETCH_FLOAT,"Una p&aacute;gina de cuaderno con un sticker dibujado a mano y un borde blanco alrededor","Planea tu palabra, tu estilo y tu borde blanco en papel.") if HAVE_SKETCH_FLOAT else "")
+        extra_credit_chip(True)
+        + (float_right(SKETCH_FLOAT,"Una p&aacute;gina de cuaderno con un sticker dibujado a mano y un borde blanco alrededor","Planea tu palabra, tu estilo y tu borde blanco en papel.") if HAVE_SKETCH_FLOAT else "")
         + note("<strong>Este paso es cr&eacute;dito extra.</strong> Es opcional, pero hacerlo te da puntos extra y hace tu sticker m&aacute;s fuerte.")
         + para("Antes de dise&ntilde;ar en la computadora, <strong>dibuja tu sticker a mano en tu cuaderno</strong>. Planea tu palabra, el estilo de tus letras y tu borde blanco en papel primero.")
         + para("Un buen boceto hace que la parte digital sea m&aacute;s r&aacute;pida y mejor. En el Paso 03 vas a calcar desde un boceto como este."))
