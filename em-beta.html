@@ -553,8 +553,10 @@
   /* phone: let the hub header wrap so the date stepper / sort control drop to their own full-width row instead of bleeding off-screen */
   @media (max-width:560px){
     .camhub-head{flex-wrap:wrap;gap:10px 12px;padding:16px 16px 16px 18px;}
+    .camhub-head .camhub-titlebox{flex:1 1 auto;}
+    .camhub-head .camhub-meta{margin-left:auto;}
     .camhub-head .ra-ctl{order:5;flex-basis:100%;justify-content:flex-start;}
-    .camhub-head .camsortdd{order:6;}
+    .camhub-head .camsortdd{order:6;flex-basis:100%;}
   }
   /* Reservation window: the whole bundle + per-item check-in */
   /* Title bar carries the equipment (camera number). Overdue reads red. */
@@ -3572,16 +3574,27 @@
     var eopen=secOpen('equip'), gpool=gearPoolIds(), gtypes=gearTypes();
     var gByType={}; gpool.forEach(function(id){ var u=gearUnit(id); if(!u) return; (gByType[u.type]=gByType[u.type]||[]).push(id); });
     var gOrder=gOrderFor();
-    var gearHtml='';
-    gOrder.forEach(function(t){ var ids=gByType[t]; if(!ids||!ids.length) return;
-      var tl=(gtypes[t]&&gtypes[t].label)||t;
-      gearHtml+='<div class="geargroup"><div class="geargroup-h">'+esc(tl)+'<span class="geargroup-n">'+ids.length+'</span></div>'+
-        '<div class="camgrid">'+ids.map(manageGearTile).join('')+'</div></div>';
-    });
-    var equipSection='<div class="csec sec-equip'+(eopen?' open':'')+'">'+
-      '<button class="csec-head" type="button" data-sectoggle="equip"><span class="csec-dot equip"></span>Additional equipment <span class="csec-n">'+gpool.length+' units</span><span class="csec-chev"></span></button>'+
-      '<div class="csec-body">'+(gearHtml||'<div class="foot">No equipment units yet.</div>')+'</div>'+
-    '</div>';
+    // Equipment pool grouped into real categories (Chris 2026-11-09): Tripods / Lenses / Lighting /
+    // Accessories, each its own accordion. Any gear type not mapped falls into Accessories so new gear
+    // never disappears. (Replaces the single "Additional equipment" blob.)
+    var GEAR_CAT={tripod:'Tripods',mankin_tripod:'Tripods',wide:'Lenses',zoom:'Lenses',speedlite:'Lighting',godox:'Lighting',smallrig:'Lighting',smallrig_panel:'Lighting',led_panel:'Lighting',led:'Lighting',reflector:'Accessories',bluetooth:'Accessories',apple_pencil:'iPad Styluses'};
+    var CAT_ORDER=['Tripods','Lenses','Lighting','Accessories','iPad Styluses'];
+    function catSectionsHtml(skip){ skip=skip||{};
+      var buckets={};
+      function add(t){ if(skip[t]||!gByType[t]||!gByType[t].length) return; var cat=GEAR_CAT[t]||'Accessories'; (buckets[cat]=buckets[cat]||[]).push(t); }
+      gOrder.forEach(add);
+      Object.keys(gByType).forEach(function(t){ if(gOrder.indexOf(t)<0) add(t); });   // types present but not in gOrder
+      var out='';
+      CAT_ORDER.forEach(function(cat){ var types=buckets[cat]; if(!types||!types.length) return;
+        var n=0, grid=''; types.forEach(function(t){ gByType[t].forEach(function(id){ grid+=manageGearTile(id); n++; }); });
+        var sk='gcat'+cat;
+        out+='<div class="csec sec-equip'+(secOpen(sk)?' open':'')+'">'+
+          '<button class="csec-head" type="button" data-sectoggle="'+sk+'"><span class="csec-dot equip"></span>'+esc(cat)+' <span class="csec-n">'+n+'</span><span class="csec-chev"></span></button>'+
+          '<div class="csec-body"><div class="camgrid">'+grid+'</div></div>'+
+        '</div>';
+      });
+      return out||'<div class="foot">No additional equipment yet.</div>';
+    }
     // Mankin's board is three ordered sections: iPad styluses (expanded) -> Cameras (compressed) ->
     // Additional equipment. The photo teachers keep the camera grid first, then their gear.
     var mbody;
@@ -3609,7 +3622,7 @@
       '</div>';
       mbody=pencilsSection+camsSection+addlSection;
     } else {
-      mbody=mgrid+equipSection;
+      mbody=mgrid+catSectionsHtml();
     }
     var mOpen=secOpen('manage');
     var manageHtml='<div class="camhub manage-hub'+(mOpen?' open':'')+'">'+
