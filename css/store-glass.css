@@ -387,3 +387,37 @@ body{overflow-x:clip;}
 /* Reduce-transparency intentionally does NOT strip the galaxy glass: the galaxy backdrop + frosted
    panels are the brand aesthetic and must render regardless of the macOS/iOS "Reduce Transparency"
    setting, to match the teacher console. Motion is still calmed by the reduced-motion query. (Chris 2026-11-09) */
+
+/* GALAXY ON THE PAGE BACKGROUND (Chris 2026-11-09): the .galaxy element sat at z-index:-1, which
+   Safari paints BEHIND the page background, so the galaxy never showed (flat navy) no matter the
+   blend mode. Paint the galaxy on the body background instead - it always renders, every browser.
+   html keeps its own background so the body background is NOT propagated to the canvas, letting
+   background-blend-mode:screen apply. */
+.galaxy{display:none !important;}
+body{background-image:radial-gradient(30% 22% at 29% 29%, rgba(0,184,184,.85), transparent 68%),
+    radial-gradient(18% 13% at 72% 24%, rgba(229,143,245,.46), transparent 72%),
+    radial-gradient(24% 18% at 75% 25%, rgba(78,84,214,.70), transparent 70%),
+    radial-gradient(20% 18% at 81% 45%, rgba(123,92,255,.60), transparent 72%),
+    radial-gradient(24% 19% at 79% 55%, rgba(229,143,245,.62), transparent 72%),
+    radial-gradient(34% 24% at 48% 47%, rgba(0,138,146,.70), transparent 70%),
+    radial-gradient(18% 13% at 31% 74%, rgba(229,143,245,.42), transparent 72%),
+    radial-gradient(22% 18% at 22% 58%, rgba(63,240,224,.50), transparent 72%),
+    radial-gradient(28% 22% at 66% 69%, rgba(25,211,197,.62), transparent 72%),
+    radial-gradient(22% 16% at 29% 75%, rgba(96,84,230,.48), transparent 72%),
+    radial-gradient(56% 14% at 50% 84%, rgba(46,230,214,.80), transparent 70%),
+    radial-gradient(30% 7% at 50% 83.5%, rgba(214,255,250,.60), transparent 72%), radial-gradient(48px 48px at 18% 12%, rgba(120,255,240,.44), transparent 68%),
+    radial-gradient(44px 44px at 86% 13%, rgba(214,165,250,.42), transparent 68%),
+    radial-gradient(48px 48px at 94% 52%, rgba(240,170,250,.50), transparent 68%),
+    radial-gradient(38px 38px at 16% 84%, rgba(236,160,250,.32), transparent 68%),
+    radial-gradient(9px 9px at 24% 23%, rgba(230,255,252,.95), transparent 64%),
+    radial-gradient(6px 6px at 69% 15%, rgba(232,205,255,.9), transparent 64%),
+    radial-gradient(7px 7px at 86% 44%, rgba(242,196,255,.92), transparent 64%),
+    radial-gradient(6px 6px at 80% 26%, rgba(245,200,255,.9), transparent 64%),
+    radial-gradient(6px 6px at 39% 64%, rgba(170,255,245,.9), transparent 64%),
+    radial-gradient(9px 9px at 58% 86%, rgba(200,255,248,.92), transparent 64%),
+    radial-gradient(5px 5px at 12% 70%, rgba(212,226,255,.86), transparent 64%),
+    radial-gradient(6px 6px at 92% 78%, rgba(150,255,240,.88), transparent 64%),
+    radial-gradient(3px 3px at 33% 40%, rgba(255,255,255,.9), transparent 64%),
+    radial-gradient(3px 3px at 77% 33%, rgba(255,255,255,.86), transparent 64%),
+    radial-gradient(2px 2px at 52% 52%, rgba(255,255,255,.8), transparent 64%),
+    radial-gradient(3px 3px at 8% 34%, rgba(255,255,255,.82), transparent 64%), linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%) !important;background-blend-mode:screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,normal !important;background-attachment:fixed !important;background-repeat:no-repeat !important;}
