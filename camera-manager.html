@@ -1118,19 +1118,19 @@
   #retnote2::placeholder{color:var(--g-faint);}
   /* Return checklist: linked additional gear (returned vs kept pending with a reason). */
   .reteq-h{font-family:var(--font);font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-lt);margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--line-soft);}
-  .reteq{border:1px solid var(--line-soft);border-left:3px solid var(--teal-deep);padding:9px 11px;margin-bottom:8px;background:rgba(0,0,0,.2);}
+  .reteq{border:1px solid var(--line-soft);border-radius:var(--g-r-md);padding:9px 11px;margin-bottom:8px;background:rgba(0,0,0,.2);}
   .reteq-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
   .reteq-name{font-weight:600;color:#eafeff;font-size:.9rem;}
-  .reteq-toggle{display:inline-flex;flex:0 0 auto;}
-  .reteq-btn{font-family:var(--font);font-size:.64rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:6px 10px;cursor:pointer;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--muted);}
-  .reteq-btn+.reteq-btn{border-left:0;}
+  .reteq-toggle{display:inline-flex;flex:0 0 auto;border-radius:var(--g-r-pill);overflow:hidden;border:1px solid var(--line);}
+  .reteq-btn{font-family:var(--font);font-size:.64rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:6px 13px;cursor:pointer;background:rgba(0,0,0,.3);border:0;color:var(--muted);}
+  .reteq-btn+.reteq-btn{border-left:1px solid var(--line);}
   .reteq-btn.ret.active{background:var(--ok);color:#04110f;border-color:var(--ok);}
   .reteq-btn.miss.active{background:var(--red);color:#fff;border-color:var(--red);}
   .reteq-reason{margin-top:9px;display:flex;flex-wrap:wrap;gap:6px;}
   .reteq-chip{font-family:var(--body);font-size:.72rem;padding:6px 10px;cursor:pointer;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--muted);}
   .reteq-chip:hover{border-color:var(--teal);color:#fff;}
   .reteq-chip.active{background:rgba(224,64,58,.2);border-color:var(--red);color:#ffd7d3;}
-  .reteq-note{flex:1 1 100%;margin-top:4px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--text);font-family:var(--body);font-size:.9rem;padding:8px 10px;box-sizing:border-box;}
+  .reteq-note{flex:1 1 100%;margin-top:4px;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:var(--g-r-sm);color:var(--text);font-family:var(--body);font-size:.9rem;padding:8px 10px;box-sizing:border-box;}
   /* Pending gear (kit returned, this piece not fully back). */
   .cam.pending{border-left-color:var(--gold);background:rgba(245,179,1,.05);}
   .pill.pending{background:rgba(245,179,1,.22);color:#ffd889;}
