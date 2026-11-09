@@ -90,7 +90,7 @@ body{overflow-x:clip;}
 .cart-n{border-radius:var(--g-r-pill);background:var(--g-primary);color:#04110f;min-width:20px;height:20px;}
 .nav-burger{width:40px;height:40px;border-radius:var(--g-r-md);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);box-shadow:var(--g-spec);}
 .nav-burger span{background:#fff;border-radius:2px;}
-.navmenu{border-radius:var(--g-r-md);background:var(--sheet-glass), linear-gradient(rgba(8,16,36,.72),rgba(8,16,36,.72));backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);
+.navmenu{border-radius:var(--g-r-md);background:var(--sheet-glass), linear-gradient(rgba(8,16,36,.84),rgba(8,16,36,.86));backdrop-filter:var(--g-blur-heavy);-webkit-backdrop-filter:var(--g-blur-heavy);
   border:1px solid var(--g-edge);box-shadow:var(--g-shadow-lg), var(--g-spec-strong);padding:8px;}
 .navmenu button,.navmenu-link{border-radius:var(--g-r-sm);}
 /* search + language travel together: inline in the desktop bar, their own row on phones; every header control is 40px */
@@ -238,6 +238,12 @@ body{overflow-x:clip;}
 .pd.on{background:var(--g-primary);border-color:transparent;color:#04110f;}
 .cal-nav,.cv-nav,.cv-dp-x{border-radius:var(--g-r-pill);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);}
 .plan-note,.rv-block,.bag-reqnote,.bag-modnote,.bsp-chosen,.bag-nodates{border-radius:var(--g-r-sm);}
+/* Drop the heavy left-accent bars on note/info boxes to match the teacher console's square-edge sweep:
+   the semantic color stays as a soft all-around border + fill tint, never a left bar. (Chris 2026-11-09) */
+.plan-note,.bsp-chosen{border:1px solid rgba(245,179,1,.34);}
+.bag-reqnote{border-left:1px solid rgba(245,179,1,.4);}
+.bag-modnote{border-left:1px solid rgba(25,211,197,.3);}
+.rv-block{border-left:1px solid rgba(224,64,58,.34);}
 .spec-list,.acct-rows{border-radius:var(--g-r-md);overflow:hidden;}
 .bag-dates,.rcpt-card,.resv-card,.card-hold,.cv-daypanel{border-radius:var(--g-r-md);}
 .card-slot{border-radius:var(--g-r-sm);background:var(--g-primary);}
