@@ -813,6 +813,9 @@
   html.modal-lock body{position:fixed;left:0;right:0;width:100%;overflow:hidden;overscroll-behavior:none;}
   /* The return checklist can open on top of the reservation card (footer Check in), so it must out-rank it. */
   #retmodal{z-index:141;}
+  /* The return checklist names WHO is returning it, right under the title. */
+  #retmodal .retwho{font-weight:700;color:var(--g-teal-lt);}
+  #retmodal .retwho-per{font-weight:600;color:var(--g-faint);}
   /* Pop-outs NEVER clip: cap the panel to the viewport and make it a flex column so the header
      (title + close) is always visible and only the body scrolls. Applies to every modal. */
   .mpanel{background:linear-gradient(160deg,rgba(255,255,255,.06) 0%,rgba(10,13,13,.98) 60%);border:1px solid var(--surface-bd);border-top:3px solid var(--teal);width:100%;max-width:440px;box-shadow:0 24px 60px rgba(0,0,0,.6);max-height:calc(100vh - 40px);display:flex;flex-direction:column;overflow:hidden;}
@@ -2659,8 +2662,8 @@
       return '<div class="av-type'+(open?' open':'')+'"><button type="button" class="av-type-head" data-avexpand="'+esc(row.key)+'"><span class="av-type-nm">'+esc(row.label)+'</span><span class="av-type-ct'+(zero?' zero':'')+'"><b>'+row.avail+'</b> / '+row.total+' free</span><span class="av-type-chev">&#8250;</span></button><div class="av-type-units">'+freeHtml+takenHtml+'</div></div>'; }).join('')+'</div>'; }
   // Simple view (Chris 2026-11-05, for Garcia): a stripped board = the two queues + Hand out + Check in, no
   // tabs/search/tally. She still taps any item for the full reservation card (modify, edit dates, swap,
-  // cancel, delete). Garcia's pool defaults to simple; a per-session toggle overrides it either way.
-  function isSimple(){ try{ var s=sessionStorage.getItem('tbsimple'); if(s==='1') return true; if(s==='0') return false; }catch(e){} return SELECTED_POOL==='garcia'; }
+  // cancel, delete). Everyone (incl. Garcia) now defaults to the full board (Chris 2026-11-09); Simple is a per-session hamburger toggle.
+  function isSimple(){ try{ var s=sessionStorage.getItem('tbsimple'); if(s==='1') return true; if(s==='0') return false; }catch(e){} return false; }   // default = full view for everyone incl. Garcia (Chris 2026-11-09); Simple stays a hamburger toggle
   function renderTodayBoard(){ var el=document.getElementById('todayBoard'); if(!el) return;
     var isT=(SELDAY===todayISO()), out=outgoingFor(SELDAY), chk=checkedOutFor(SELDAY);
     var SIMPLE=isSimple();                                                       // Garcia-friendly stripped board (toggle in the header)
@@ -3943,6 +3946,8 @@
   function openReturnChecklist(id){
     var c=findRec(id); if(!c) return; retId=id;
     document.getElementById('retTitle').textContent='Return checklist · '+(c.camera||'Camera');
+    var _retsub=document.querySelector('#retmodal .retsub');   // name WHO is returning it, right under the title (Chris 2026-11-09)
+    if(_retsub) _retsub.innerHTML='<span class="retwho">'+esc(nameOf(c))+'</span>'+(c.period?' <span class="retwho-per">&middot; Period '+esc(('0'+c.period).slice(-2))+'</span>':'')+' is returning this. Check off what came back. Anything left unchecked is saved as missing on this camera.';
     var _kitMiss=(assetOf(c.camera).kit||[]);   // pre-check from the camera's current kit state (already-missing items start unchecked)
     // Grouped into 4 collapsed task accordions (open a group only to flag a missing piece), 50mm first in the
     // lens groups. The checkbox IDs stay ret_<KIT_STD index>, so the confirm logic below is unchanged.
