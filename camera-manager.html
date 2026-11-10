@@ -787,6 +787,26 @@
   .dp-day.om{color:var(--faint);opacity:.5;}
   .dp-day.today{border-color:rgba(0,184,184,.45);}
   .dp-day.sel{background:var(--teal);color:#04110f;border-color:var(--teal);font-weight:700;}
+  /* ===== Lock Dates calendar (Chris 2026-11-10): green = open for checkout, dark-teal = closed, lock = teacher-closed ===== */
+  .lockcal-panel{max-width:440px;}
+  .lc-legend{display:flex;gap:18px;justify-content:center;margin-bottom:14px;font-size:.74rem;color:var(--muted);}
+  .lc-lg{display:inline-flex;align-items:center;gap:7px;}
+  .lc-sw{width:15px;height:15px;border-radius:5px;display:inline-block;flex:0 0 auto;}
+  .lc-sw.open{background:var(--ok);}
+  .lc-sw.locked{background:linear-gradient(rgba(4,20,19,.55),rgba(4,20,19,.55)),rgba(0,184,184,.18);border:1px solid var(--line-soft);position:relative;}
+  .lc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .lc-mtitle{font-family:var(--font);font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-lt);}
+  .lc-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+  .lc-day,.lc-cell{position:relative;height:46px;display:flex;align-items:center;justify-content:center;border-radius:var(--g-r-sm);font-family:var(--font);font-size:.92rem;border:1px solid transparent;color:var(--text);padding:0;}
+  .lc-cell.off{background:linear-gradient(rgba(4,20,19,.5),rgba(4,20,19,.5)),rgba(0,184,184,.14);color:var(--faint);}
+  .lc-day.open{background:rgba(63,168,99,.26);border-color:rgba(63,168,99,.5);color:#e4fced;cursor:pointer;}
+  .lc-day.open:hover{background:rgba(63,168,99,.42);border-color:var(--ok);}
+  .lc-day.locked{background:linear-gradient(rgba(4,20,19,.55),rgba(4,20,19,.55)),rgba(0,184,184,.16);color:var(--muted);cursor:pointer;}
+  .lc-day.locked:hover{border-color:var(--teal);color:var(--teal-lt);}
+  .lc-lockic{position:absolute;top:4px;right:5px;width:11px;height:11px;opacity:.85;}
+  .lc-day.today{box-shadow:inset 0 0 0 1.5px var(--teal-lt);}
+  .lc-day.om,.lc-cell.om{opacity:.42;}
+  .lc-n{line-height:1;}
   .hrow{background:rgba(0,0,0,.18);border:1px solid rgba(160,180,180,.14);border-left:3px solid var(--grayed);padding:9px 11px;color:var(--grayed);font-size:.78rem;}
   .hrow .hc{font-family:var(--font);font-weight:600;color:rgba(200,220,220,.66);}
   .hrow .hre{font-size:.68rem;}
@@ -1765,6 +1785,7 @@
           <button type="button" class="cm-hambitem" id="reportsBtn"><span class="cmh-ic">&#9744;</span>Missing Items</button>
           <a class="cm-hambitem" id="photoWalkBtn" href="/photo-walk.html"><span class="cmh-ic">&#9873;</span>Photo Walk Log</a>
           <button type="button" class="cm-hambitem" id="leadsBtn"><span class="cmh-ic">&#9733;</span>Class Leads</button>
+          <button type="button" class="cm-hambitem" id="lockDatesBtn"><span class="cmh-ic">&#9638;</span>Lock Dates</button>
         </div>
       </div>
       <img class="cmnav-logo" src="/assets/PV_Square_Logo.png" alt="Pioneer Valley" />
@@ -1917,6 +1938,20 @@
   <div class="mpanel">
     <div class="mhead"><span class="mtitle">Class Leads &middot; Fall 2026</span><button class="mx" id="leadsx" aria-label="Close">&times;</button></div>
     <div class="mbody" id="leadsBody"></div>
+  </div>
+</div>
+
+<!-- Lock Dates: a month calendar to close/open days to student checkouts (blackouts). Green = open for
+     checkout, dark-teal = closed/weekend/past, a lock = a day the teacher closed. (Chris 2026-11-10) -->
+<div class="modal" id="lockcalmodal">
+  <div class="mpanel lockcal-panel">
+    <div class="mhead"><span class="mtitle">Lock Dates</span><button class="mx" id="lockcalx" aria-label="Close">&times;</button></div>
+    <div class="mbody">
+      <div class="lc-legend"><span class="lc-lg"><i class="lc-sw open"></i>Open for checkout</span><span class="lc-lg"><i class="lc-sw locked"></i>Locked</span></div>
+      <div class="lc-head"><button type="button" class="dp-nav" id="lcPrev" aria-label="Previous month">&lsaquo;</button><span class="lc-mtitle" id="lcTitle"></span><button type="button" class="dp-nav" id="lcNext" aria-label="Next month">&rsaquo;</button></div>
+      <div class="dp-dow"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
+      <div class="lc-grid" id="lcGrid"></div>
+    </div>
   </div>
 </div>
 
@@ -3154,6 +3189,47 @@
     document.getElementById('leadsBody').innerHTML=h;
   }
   (function(){ var b=document.getElementById('leadsBtn'); if(b) b.onclick=openLeads; var x=document.getElementById('leadsx'); if(x) x.onclick=closeLeads; var m=document.getElementById('leadsmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeLeads(); }); })();
+
+  // ===== Lock Dates calendar (Chris 2026-11-10) =====
+  // A month grid to close/open days to student checkouts. GREEN = open for checkout (a school day, today or
+  // later, not locked). Dark-teal = closed: weekend/holiday/past, or LOCKED (a day the teacher closed, shown
+  // with a lock, tap to reopen). Tap an open day to lock it. Persisted through the existing /api/camera/blackout
+  // endpoint; the feed's DATA.blackouts drives the locked state (global across pools, matching the backend).
+  var LC_LOCK_SVG='<svg class="lc-lockic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+  var _lcY=null, _lcM=null;
+  function lcLockedSet(){ var s={}; (DATA.blackouts||[]).forEach(function(d){ s[String(d)]=1; }); return s; }
+  function lcISO(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function lcFmt(di){ var p=di.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+' '+MON[+p[1]-1]+' '+(+p[2]); }
+  function openLockCal(){ var t=todayISO().split('-'); _lcY=+t[0]; _lcM=+t[1]-1; renderLockCal(); document.getElementById('lockcalmodal').classList.add('open'); }
+  function closeLockCal(){ document.getElementById('lockcalmodal').classList.remove('open'); }
+  function renderLockCal(){
+    var grid=document.getElementById('lcGrid'); if(!grid) return;
+    var tt=document.getElementById('lcTitle'); if(tt) tt.textContent=MON[_lcM]+' '+_lcY;
+    var first=new Date(_lcY,_lcM,1), start=new Date(first); start.setDate(1-first.getDay());
+    var tISO=todayISO(), locks=lcLockedSet(), h='';
+    for(var i=0;i<42;i++){
+      var d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i), di=lcISO(d);
+      var om=(d.getMonth()!==_lcM)?' om':'', tod=(di===tISO)?' today':'', locked=!!locks[di], canLock=isSchoolDayISO(di)&&di>=tISO;
+      if(locked){ h+='<button type="button" class="lc-day locked'+om+tod+'" data-lock="'+di+'"><span class="lc-n">'+d.getDate()+'</span>'+LC_LOCK_SVG+'</button>'; }
+      else if(canLock){ h+='<button type="button" class="lc-day open'+om+tod+'" data-lock="'+di+'"><span class="lc-n">'+d.getDate()+'</span></button>'; }
+      else { h+='<span class="lc-cell off'+om+'"><span class="lc-n">'+d.getDate()+'</span></span>'; }
+    }
+    grid.innerHTML=h;
+    grid.querySelectorAll('[data-lock]').forEach(function(b){ b.onclick=function(){ lcToggle(b.getAttribute('data-lock')); }; });
+  }
+  function lcToggle(di){
+    var on=!lcLockedSet()[di];
+    camAPI('/api/camera/blackout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({date:di,on:on})})
+      .then(function(r){ if(!r.ok) throw new Error(); return loadBoard(); })
+      .then(function(){ renderLockCal(); silvaToast(lcFmt(di)+(on?' locked':' reopened')); })
+      .catch(function(){ silvaToast('Could not update. Try again.'); });
+  }
+  (function(){ var b=document.getElementById('lockDatesBtn'); if(b) b.onclick=openLockCal;
+    var x=document.getElementById('lockcalx'); if(x) x.onclick=closeLockCal;
+    var m=document.getElementById('lockcalmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeLockCal(); });
+    var pv=document.getElementById('lcPrev'); if(pv) pv.onclick=function(){ _lcM--; if(_lcM<0){_lcM=11;_lcY--;} renderLockCal(); };
+    var nx=document.getElementById('lcNext'); if(nx) nx.onclick=function(){ _lcM++; if(_lcM>11){_lcM=0;_lcY++;} renderLockCal(); };
+  })();
   function resvSetStatus(id,status){
     camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})})
       .then(function(){ return loadBoard(); }).then(function(){ if(resvId) renderResvModal(); }).catch(function(){ if(resvId) renderResvModal(); });
@@ -3381,6 +3457,7 @@
       var bs=until?{banned:true,permanent:(until==='permanent'),until:until,days_left:(until==='permanent'?null:(parseInt(dd,10)||0))}:{banned:false};
       return Promise.resolve({ok:true,status:200,json:function(){ return Promise.resolve({ok:true,ban:bs}); }}); }
     else if(path.indexOf('/events')>=0){ return Promise.resolve({ok:true,status:200,json:function(){ return Promise.resolve({events: demoEvents()}); }}); }
+    else if(path.indexOf('/blackout')>=0){ DEMO_DATA.blackouts=DEMO_DATA.blackouts||[]; var _bd=String(body.date||''); var _bi=DEMO_DATA.blackouts.indexOf(_bd); if(body.on){ if(_bi<0) DEMO_DATA.blackouts.push(_bd); } else if(_bi>=0){ DEMO_DATA.blackouts.splice(_bi,1); } }
     return Promise.resolve({ok:true,status:200,json:function(){ return Promise.resolve({ok:true}); }});
   }
   // Synthetic audit events for the ?demo=1 preview (so the Event History view is viewable without the backend).
@@ -3476,7 +3553,7 @@
       pools:{silva:cams,garcia:cams.slice(0,15),mankin:['Cam 19','Cam 20','Cam 21']},
       equipment_pools:{silva:gpool,garcia:[],mankin:mkStyli},equipment_units:units,
       equipment_types:{tripod:{label:'Tripod'},speedlite:{label:'Speedlite'},reflector:{label:'Reflector'},wide:{label:'Ultra-Wide'},zoom:{label:'Ultra-Zoom'},bluetooth:{label:'Bluetooth Remote'},apple_pencil:{label:'iPad Stylus'}},
-      p2_grants:[]};
+      p2_grants:[],blackouts:[]};
   }
 
   // ---- board ----
