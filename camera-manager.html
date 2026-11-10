@@ -1547,6 +1547,8 @@
   .cm-hambitem:hover{background:var(--rollover);}
   .cm-hambitem.on{background:rgba(0,184,184,.22);}
   .cm-hambitem .cmh-ic{color:var(--g-teal-lt);}
+  /* Uniform menu typography: every item the same weight + uppercase, so none reads as a header (Chris 2026-11-10). */
+  .cm-hambmenu .cm-hambitem{font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
   .cm-toolsmenu{border-radius:var(--g-r-md);background:linear-gradient(160deg,rgba(23,31,47,.99),rgba(11,17,31,.995));border-color:var(--g-edge);box-shadow:var(--g-shadow-lg),var(--g-spec-strong);padding:7px;}
   .cm-toolitem{border-radius:var(--g-r-sm);}
   .cm-toolitem:hover{background:var(--rollover);}
@@ -1809,7 +1811,7 @@
         <button type="button" class="stu-bargo" id="stuBarGo" aria-label="Find"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M20 20l-4.4-4.4"></path></svg></button>
         <span class="stu-barmsg" id="stuBarMsg"></span>
       </div>
-      <a class="cmctrl-store cmctrl-pw" id="pwBtnTop" href="/photo-walk.html" title="Open the Photo Walk Log" aria-label="Photo Walk"><span class="cmstore-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z"></path><path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z"></path><path d="M16 17h4"></path><path d="M4 13h4"></path></svg></span><span class="cmstore-tx">Photo Walk</span></a>
+      <a class="cmctrl-store cmctrl-pw" id="pwBtnTop" href="/photo-walk.html" title="Open the Photo Walk Log" aria-label="Photo Walk"><span class="cmstore-tx">Photo Walk</span></a>
       <button type="button" class="cmctrl-store" id="storeBtnTop" title="Open the store (new tab)" aria-label="Store"><span class="cmstore-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.3"></circle><circle cx="18" cy="20" r="1.3"></circle><path d="M2.5 3h2.2l2.1 11.3a1.5 1.5 0 0 0 1.5 1.2h8.3a1.5 1.5 0 0 0 1.5-1.2L19.5 8H6"></path></svg></span><span class="cmstore-tx">Store</span></button>
       <button class="silva-uni-cattrigger summ-btn summ-ico cmctrl-refresh" id="refreshBtn" title="Reload the latest data now" aria-label="Refresh"><img src="https://www.creativesilva.com/assets/Icons/assignment/refresh-teal-v1.png" alt="" width="20" height="20"></button>
     </div>
