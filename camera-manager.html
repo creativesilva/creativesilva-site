@@ -363,7 +363,7 @@
   .tb-grid.view-out .tb-bundle{border-left-color:var(--gold);}
   .tb-grid.view-in .tb-bundle{border-left-color:var(--teal);}
   .tb-grid.view-checked .tb-bundle{border-left-color:var(--orange);}
-  .tb-grid.view-checked .tb-bundle.tb-od{border-left-color:var(--red);animation:tbOdPulse 1.5s ease-in-out infinite;}
+  .tb-grid.view-in .tb-bundle.tb-od{border-left-color:var(--red);animation:tbOdPulse 1.5s ease-in-out infinite;}   /* overdue pieces shown inside Incoming: red + pulse (Chris 2026-11-11). Was mis-scoped to the dead .view-checked grid. */
   @keyframes tbOdPulse{0%,100%{box-shadow:0 0 0 0 rgba(224,64,58,0);}50%{box-shadow:0 0 0 3px rgba(224,64,58,.38);}}
   .tb-grid .tb-empty{grid-column:1 / -1;padding:10px 2px;}
   @media (prefers-reduced-motion:reduce){ .tb-grid .tb-bundle.tb-od{animation:none;box-shadow:0 0 0 2px rgba(224,64,58,.45);} }
@@ -2628,11 +2628,12 @@
       return isT ? (statusOf(it)==='reserved' && o && o<=iso)     // today: still to hand out
                  : (o && o<=iso && (!d || d>=iso)); }); })         // future: forecast = projected OUT that day
       .sort(function(a,b){ return (a.out||'')<(b.out||'')?-1:1; }); }
-  // INCOMING = pieces DUE BACK on the selected day (day-scoped, Chris 2026-11-09). An item out but due a
-  // different day is not here: past due goes to the Overdue tab, a future return shows when the day is
-  // stepped to it. Overdue-today pieces still sort first and pulse red as a contact nudge.
-  function checkedOutFor(iso){ iso=iso||todayISO();
-    return groupedReservations().filter(function(c){ return resvItems(c).some(function(it){ return statusOf(it)==='out' && (it.due||c.due||it.out||c.out||'')===iso; }); })
+  // INCOMING = pieces DUE BACK on the selected day, PLUS (today only) anything still out PAST its due date,
+  // so an overdue camera stays in Incoming (flagged red) until it is actually checked in, and shows in BOTH
+  // Incoming and the Overdue tab (Chris 2026-11-11, supersedes the 2026-11-09 strict day-scope). A future or
+  // past day stays strictly day-scoped (no overdue backlog bleeds into a forecast). Overdue pieces sort first.
+  function checkedOutFor(iso){ iso=iso||todayISO(); var isT=(iso===todayISO());
+    return groupedReservations().filter(function(c){ return resvItems(c).some(function(it){ return statusOf(it)==='out' && ((it.due||c.due||it.out||c.out||'')===iso || (isT && isOverdue(it))); }); })
       .sort(function(a,b){ var ao=resvItems(a).some(isOverdue), bo=resvItems(b).some(isOverdue);
         if(ao!==bo) return ao?-1:1; return ((a.due||a.out||'')<(b.due||b.out||''))?-1:1; }); }
   function stepDay(n){ var d=new Date(SELDAY+'T00:00:00'); d.setDate(d.getDate()+n);
@@ -2652,9 +2653,10 @@
     // Incoming = everything in a student's hands right now (the old Checked out), each shown with its due date.
     // Overdue = the out items past their due date. Both are "right now", not day-scoped.
     if(mode==='checked') return items.filter(function(it){ return statusOf(it)==='out'; });
-    // Incoming is DAY-SCOPED: only pieces due back on the selected day (Chris 2026-11-09). Past-due pieces
-    // live in the Overdue tab; future returns appear when the day is stepped forward.
-    if(mode==='in') return items.filter(function(it){ return statusOf(it)==='out' && (it.due||c.due||it.out||c.out||'')===SELDAY; });
+    // Incoming = pieces due back on the selected day, PLUS (when viewing today) any piece still out past its
+    // due date. An overdue camera therefore shows in BOTH Incoming (flagged red) and the Overdue tab, and
+    // stays in Incoming until it is actually checked in (Chris 2026-11-11). A future/past day stays day-scoped.
+    if(mode==='in') return items.filter(function(it){ return statusOf(it)==='out' && ((it.due||c.due||it.out||c.out||'')===SELDAY || (isT && isOverdue(it))); });
     if(mode==='overdue') return items.filter(function(it){ return statusOf(it)==='out' && isOverdue(it); });
     // Outgoing: today = still to hand out (reserved); a future day = projected out that day.
     if(isT) return items.filter(function(it){ return statusOf(it)==='reserved'; });
