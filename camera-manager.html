@@ -263,6 +263,35 @@
   /* The count badge on the ACTIVE tab sits on a dark overlay, so its number is WHITE (it was near-black
      and unreadable). Last rule, equal specificity, so it wins over the per-tab colors above. (Chris 2026-11-09) */
   .tb-tg.out.on .tb-tgn,.tb-tg.in.on .tb-tgn,.tb-tg.checked.on .tb-tgn,.tb-tg.avail.on .tb-tgn,.tb-tg.overdue.on .tb-tgn,.tb-tg.requests.on .tb-tgn{background:rgba(0,0,0,.42);color:#fff;}
+  /* ===== Cancellations tab (Chris 2026-11-11): darker red, glowing/pulsing to be addressed; only rendered when it has cards ===== */
+  .tb-tg.canceled{color:#ff9a8a;background:rgba(190,40,36,.2);border-color:rgba(224,64,58,.5);opacity:1;animation:cancPulse 1.6s ease-in-out infinite;}
+  .tb-tg.canceled .tb-tgn.tb-tgn-canc{background:var(--red);color:#fff;}
+  .tb-tg.canceled.on{background:#b3201c;color:#fff;animation:none;border-color:#b3201c;}
+  .tb-tg.canceled.on .tb-tgn.tb-tgn-canc{background:rgba(0,0,0,.3);color:#fff;}
+  @keyframes cancPulse{0%,100%{box-shadow:0 0 0 0 rgba(224,64,58,0);} 50%{box-shadow:0 0 15px 1px rgba(224,64,58,.6);}}
+  /* Cancellation cards: one red row per canceled reservation + a Notified button that clears it. */
+  .tb-canclist{display:flex;flex-direction:column;gap:8px;}
+  .tbc-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--g-r-md);background:linear-gradient(135deg,rgba(224,64,58,.17),rgba(4,20,19,.6));border:1px solid rgba(224,64,58,.42);box-shadow:var(--g-spec);}
+  .tbc-dot{flex:0 0 auto;width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 8px rgba(224,64,58,.8);}
+  .tbc-big{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.02em;font-size:1.04rem;color:#fff;white-space:nowrap;}
+  .tbc-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px;overflow:hidden;}
+  .tbc-name{font-size:.92rem;color:#ffd9d4;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .tbc-per{font-size:.66rem;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;}
+  .tbc-when{font-size:.7rem;color:var(--faint);}
+  .tbc-tel{flex:0 0 auto;font-size:.82rem;color:#8ff7f7;text-decoration:none;white-space:nowrap;}
+  .tbc-tel.none{color:var(--faint);}
+  .tbc-notif{flex:0 0 auto;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.7rem;padding:8px 15px;border-radius:var(--g-r-pill);background:var(--g-glass);border:1px solid var(--g-edge);color:var(--g-teal-lt);cursor:pointer;box-shadow:var(--g-spec);white-space:nowrap;transition:background .15s,color .15s,border-color .15s;}
+  .tbc-notif:hover{background:var(--g-primary);border-color:var(--g-teal-lt);color:#04110f;}
+  @media(max-width:560px){ .tbc-when{display:none;} .tbc-row{gap:9px;padding:10px 11px;} }
+  /* KEEP | CANCEL slider in the lock sheet: Keep (default, neutral) vs Cancel (red). */
+  .ls-resv{margin-top:18px;padding-top:16px;border-top:1px solid var(--g-edge-soft);}
+  .ls-resv-lab{text-align:center;font-family:var(--font);font-size:.82rem;font-weight:600;letter-spacing:.03em;color:var(--muted);margin-bottom:12px;}
+  .ls-keepsw:not(.locked) .lsw-track{background:linear-gradient(180deg,rgba(116,128,146,.4),rgba(96,108,128,.42));}
+  .ls-keepsw:not(.locked) .ls-end.l{color:#e9f3f3;}
+  .ls-keepsw .ls-end.r{color:#ff9a8a;}
+  /* Phone: the queue tab bar wraps to rows instead of cramming 6 tabs into one; cards stack cleanly. */
+  @media(max-width:640px){ .tb-toggle{flex-wrap:wrap;} .tb-tg{flex:1 1 calc(33.33% - 3px);min-width:0;font-size:.72rem;padding:9px 4px;letter-spacing:.03em;} .tb-tg .tb-tgn{font-size:.62rem;padding:1px 6px;} }
+  @media(max-width:560px){ .tbc-per{white-space:nowrap;} .tbc-row{flex-wrap:wrap;gap:4px 10px;} .tbc-main{flex:1 1 56%;min-width:0;} .tbc-tel{margin-left:auto;} .tbc-notif{flex:1 1 100%;margin-top:2px;text-align:center;} }
   /* Quick check-in button on an out-item row (Incoming / Overdue): sits just left of the due date; the rest of the row opens the detail card. */
   .til-ci{flex:0 0 auto;margin-left:auto;font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.62rem;padding:6px 11px;background:rgba(0,184,184,.14);border:1px solid var(--teal);color:var(--teal-lt);cursor:pointer;white-space:nowrap;}
   .til-ci:hover{background:var(--teal);color:#04110f;}
@@ -1985,6 +2014,14 @@
         <button type="button" class="lsw" id="lsToggle" role="switch" aria-checked="false" aria-label="Lock or unlock this day"><span class="lsw-track"><span class="lsw-knob"></span></span></button>
         <span class="ls-end r">Lock</span>
       </div>
+      <div class="ls-resv" id="lsResvSec" hidden>
+        <div class="ls-resv-lab" id="lsResvLab">reservations this day</div>
+        <div class="ls-switch ls-keepsw" id="lsKeepSwitch">
+          <span class="ls-end l">Keep</span>
+          <button type="button" class="lsw" id="lsKeepToggle" role="switch" aria-checked="false" aria-label="Keep or cancel the reservations this day"><span class="lsw-track"><span class="lsw-knob"></span></span></button>
+          <span class="ls-end r">Cancel</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -2512,6 +2549,34 @@
     ps.forEach(function(p){ if(((DATA.pools||{})[p]||[]).indexOf(c.camera)>=0) inCam=true; if(((DATA.equipment_pools||{})[p]||[]).indexOf(c.item)>=0) inGear=true; });
     return c.kind==='equipment' ? inGear : inCam;
   }
+  // Canceled reservations (a teacher locked a day + chose Cancel) scoped to the current pool, so the
+  // Cancellations tab shows only this teacher's to-notify list. (Chris 2026-11-11)
+  function canceledInScope(){ return (DATA.canceled||[]).filter(function(c){ return resvInScope(c); }); }
+  // Cancellations body: one red card per canceled reservation, with the student + what was canceled + the cell
+  // to reach them, and a single "Notified" button that clears the card once the teacher has made contact.
+  function canceledBodyHtml(){
+    var list=canceledInScope();
+    if(!list.length) return '<div class="tb-grid"><div class="tb-empty">No cancellations to address.</div></div>';
+    list=list.slice().sort(function(a,b){ return String(a.out||'')<String(b.out||'')?-1:1; });
+    return '<div class="tb-canclist">'+list.map(function(c){
+      var cell=String(c.student_cell||'').replace(/\D/g,'');
+      var big=esc(String(c.camera||gearLabel(c.item)||'').toUpperCase());
+      var per=c.period?'<span class="tbc-per">Period '+esc(('0'+c.period).slice(-2))+'</span>':'';
+      var tel=cell?('<a class="tbc-tel" href="tel:'+cell+'">'+esc(fmtPhone(c.student_cell))+'</a>'):'<span class="tbc-tel none">No cell</span>';
+      var when=c.out?'<span class="tbc-when">Was booked '+esc(fmt(c.out))+'</span>':'';
+      return '<div class="tbc-row"><span class="tbc-dot"></span>'+
+        '<span class="tbc-big">'+big+'</span>'+
+        '<span class="tbc-main"><span class="tbc-name">'+esc(nameOf(c))+'</span>'+per+when+'</span>'+
+        tel+
+        '<button type="button" class="tbc-notif" data-cancnotif="'+esc(c.id)+'">Notified</button></div>';
+    }).join('')+'</div>';
+  }
+  function cancelNotified(id){
+    camAPI('/api/camera/cancel_resv',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'notified',id:id})})
+      .then(function(r){ if(!r.ok) throw new Error(); return loadBoard(); })
+      .then(function(){ if(!canceledInScope().length && TBVIEW==='canceled') TBVIEW='out'; _lastTBSig=null; renderTodayBoard(); silvaToast('Cleared. Student notified.'); })
+      .catch(function(){ silvaToast('Could not update. Try again.'); });
+  }
   // Reservation key: the SAME student with the SAME checkout and return dates is ONE reservation,
   // however many cameras and gear units it holds. (The group field still links add-on gear to its
   // camera for the kit return checklist.) Falls back to camera + linked gear when a record is
@@ -2781,7 +2846,8 @@
       return '<div class="tb-grid view-'+mode+'">'+groups.map(function(g){ var od=(mode==='in'&&g.items.some(isOverdue)); return '<div class="tb-bundle'+(od?' tb-od':'')+'">'+renderBundle(g.c,g.items,mode,true)+'</div>'; }).join('')+'</div>'; }
     var nOut=countLines(out,'out'), nIn=countLines(chk,'in'), nReq=pend.length;
     var nOverdue=odCall.reduce(function(n,c){ return n+resvItems(c).filter(isOverdue).length; },0);   // Overdue tab count
-    var view=(TBVIEW==='in'||TBVIEW==='overdue'||TBVIEW==='avail'||TBVIEW==='requests')?TBVIEW:'out';
+    var nCanceled=canceledInScope().length;                    // locked-day cancellations awaiting a "Notified"
+    var view=(TBVIEW==='in'||TBVIEW==='overdue'||TBVIEW==='avail'||TBVIEW==='requests'||(TBVIEW==='canceled'&&nCanceled>0))?TBVIEW:'out';
     var inv=(view==='avail')?availInventory():null;
     var availCameras=(SELECTED_POOL==='mankin') ? gearPoolIds().filter(function(id){ var u=gearUnit(id); return u&&u.type==='apple_pencil'&&gearState(id)==='avail'; }).length : availCountOnDay(todayISO());  // Mankin's Available badge = free iPad styluses, her focus
     var active=(view==='out')?out:(view==='in'?chk:[]), q=TBQ[view]||'', selMode=TBSEL[view];
@@ -2791,7 +2857,7 @@
     function listSig(resvs,mode){ return resvs.map(function(c){ return c.id+':'+resvStatusGroup(c)+':'+lineItemsFor(c,mode,isT).map(function(x){return (x.camera||x.item)+itemState(x);}).join('.'); }).join(','); }
     var invSig=inv?inv.map(function(r){ return r.key+r.avail+'/'+r.total+':'+r.units.map(function(u){return u.state+(u.rec?('~'+(u.rec.student_id||u.rec.student_name||'')):'');}).join('.'); }).join('|'):'';
     var qSig='|call'+odCall.map(function(c){return c.id+resvStatusGroup(c);}).join('.')+'|miss'+miss.map(function(c){return c.id;}).join('.');
-    var sig=(SIMPLE?'SIMPLE':view)+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+qSig+'|n'+nOut+'.'+nIn+'.'+nOverdue+'.'+nReq+'|'+(SIMPLE?('so'+listSig(out,'out')+'|sc'+listSig(chk,'in')):listSig(active,view))+'|req'+pend.map(function(g){return g[0].id;}).join('.')+'|av'+(TBAVCAT||'')+'|'+invSig;
+    var sig=(SIMPLE?'SIMPLE':view)+'|'+TBSORT+'|'+SELDAY+'|'+q+'|'+(selMode?'S':'')+'|'+Object.keys(TBSELSET[view]||{}).length+qSig+'|n'+nOut+'.'+nIn+'.'+nOverdue+'.'+nReq+'.'+nCanceled+'|'+(SIMPLE?('so'+listSig(out,'out')+'|sc'+listSig(chk,'in')):listSig(active,view))+'|req'+pend.map(function(g){return g[0].id;}).join('.')+'|av'+(TBAVCAT||'')+'|'+invSig;
     if(sig===_lastTBSig && el.innerHTML) return; _lastTBSig=sig;
     // ----- header: title + help + day stepper (Outgoing/Incoming only; Checked out + Available are "right now") -----
     var dayL=isT?'Today':(dowShort(SELDAY)+' '+fmtMDY(SELDAY).replace(/(\d{2})(\d{2})$/,'$2')), _past=(SELDAY<todayISO());   // 2-digit year: 11/2/26
@@ -2815,6 +2881,9 @@
       '<button type="button" class="tb-tg overdue'+(view==='overdue'?' on':'')+(nOverdue>0?' hot':'')+'" data-tbview="overdue">Overdue <span class="tb-tgn'+(nOverdue>0?' tb-tgn-od':'')+'">'+nOverdue+'</span></button>'+
       tg('avail','Available',availCameras)+
       '<button type="button" class="tb-tg requests'+(view==='requests'?' on':'')+(nReq>0?' hot':'')+'" data-tbview="requests">Requests <span class="tb-tgn'+(nReq>0?' tb-tgn-req':'')+'">'+nReq+'</span></button>'+
+      // Cancellations tab: ONLY rendered when there is something to address; it glows/pulses to be worked, and
+      // vanishes again once every card is cleared with Notified. (Chris 2026-11-11)
+      (nCanceled>0?('<button type="button" class="tb-tg canceled'+(view==='canceled'?' on':'')+'" data-tbview="canceled">Cancellations <span class="tb-tgn tb-tgn-canc">'+nCanceled+'</span></button>'):'')+
       '</div>';
     // ----- active-view body: a full-width responsive grid of cards (or flat search results) -----
     var body, total=0, search='', bulk='';
@@ -2828,6 +2897,8 @@
       body=(odCall.length?('<div class="tb-searchrow tb-ctlrow">'+sortCtl+'</div>'):'')+
         (_odSorted.length ? '<div class="tb-odlist">'+_odSorted.map(function(c){ return queueRow(c,'call'); }).join('')+'</div>'
           : '<div class="tb-grid"><div class="tb-empty">Nothing overdue right now.</div></div>');
+    } else if(view==='canceled'){                              // Cancellations: locked-day reservations to notify; each clears on Notified
+      body=canceledBodyHtml();
     } else {
       var groups=[]; active.forEach(function(c){ var its=lineItemsFor(c,view,isT); if(its.length) groups.push({c:c,items:its}); });
       total=groups.reduce(function(n,g){ return n+bundleLineCount(g.items); },0);
@@ -2873,6 +2944,7 @@
           : (search+body+bulk));
     }
     el.querySelectorAll('[data-tbview]').forEach(function(b){ b.onclick=function(){ var v=b.getAttribute('data-tbview'); if(v!==TBVIEW){ TBVIEW=v; _lastTBSig=null; renderTodayBoard(); } }; });
+    el.querySelectorAll('[data-cancnotif]').forEach(function(b){ b.onclick=function(){ cancelNotified(b.getAttribute('data-cancnotif')); }; });
     var _smb=el.querySelector('[data-tbsimple]'); if(_smb) _smb.onclick=function(){ try{ sessionStorage.setItem('tbsimple', _smb.getAttribute('data-tbsimple')); }catch(e){} _lastTBSig=null; renderTodayBoard(); };
     el.querySelectorAll('[data-tbsort]').forEach(function(b){ b.onclick=function(){ var s=b.getAttribute('data-tbsort'); if(s!==TBSORT){ TBSORT=s; try{ sessionStorage.setItem('tbsort',s); }catch(e){} _lastTBSig=null; renderTodayBoard(); } }; });
     var _sop=el.querySelector('[data-tbsortopen]'); if(_sop){ _sop.onclick=function(e){ e.stopPropagation(); var pop=el.querySelector('.tb-sortpop'); if(!pop) return; var willOpen=pop.hidden; pop.hidden=!willOpen;
@@ -3257,10 +3329,27 @@
   // persisted via /api/camera/blackout; reverts on failure. Locked days read RED (vs dark = school-calendar closed).
   function openLockSheet(di){ _lsDate=di; var el=document.getElementById('lsDate'); if(el) el.textContent=lcFmtLong(di); lcRenderSheet(); document.getElementById('locksheet').classList.add('open'); }
   function closeLockSheet(){ document.getElementById('locksheet').classList.remove('open'); _lsDate=null; }
+  // Reservations already booked for a day are cancelable (not yet picked up, this pool). KEEP (default) honors
+  // them; CANCEL flags + snapshots them into the Cancellations tab and frees the cameras. (Chris 2026-11-11)
+  function lcCancelableOn(di){ return (DATA.checkouts||[]).filter(function(c){ return statusOf(c)==='reserved' && String(c.out||'')===di && resvInScope(c); }); }
+  function lcCancelCount(di){ var s={}; lcCancelableOn(di).forEach(function(c){ s[c.student_id||c.id]=1; }); return Object.keys(s).length; }
   function lcRenderSheet(){ if(_lsDate==null) return; var on=!!_lcLocks[_lsDate];
     var sw=document.getElementById('lsSwitch'); if(sw) sw.classList.toggle('locked',on);
     var tg=document.getElementById('lsToggle'); if(tg) tg.setAttribute('aria-checked',on?'true':'false');
-    var st=document.getElementById('lsStatus'); if(st){ st.textContent=on?'Locked · closed to checkouts':'Open for checkout'; st.className='ls-status'+(on?' locked':''); } }
+    var st=document.getElementById('lsStatus'); if(st){ st.textContent=on?'Locked · closed to checkouts':'Open for checkout'; st.className='ls-status'+(on?' locked':''); }
+    var n=lcCancelCount(_lsDate), sec=document.getElementById('lsResvSec');   // KEEP|CANCEL only when the day has reservations
+    if(sec){ if(n>0){ sec.hidden=false; var lab=document.getElementById('lsResvLab'); if(lab) lab.textContent=n+' reservation'+(n>1?'s':'')+' booked this day'; var ksw=document.getElementById('lsKeepSwitch'); if(ksw) ksw.classList.remove('locked'); } else { sec.hidden=true; } } }
+  function lcCancelResvs(di){
+    var recs=lcCancelableOn(di); if(!recs.length){ lcRenderSheet(); return; }
+    var n=lcCancelCount(di), ids=recs.map(function(c){ return c.id; });
+    silvaConfirm('Cancel '+n+' reservation'+(n>1?'s':'')+' booked for '+lcFmtLong(di)+'? The student'+(n>1?'s':'')+' will show in the Cancellations tab for you to notify.',{okLabel:'Cancel them',cancelLabel:'Keep',danger:true}).then(function(ok){
+      if(!ok){ lcRenderSheet(); return; }
+      camAPI('/api/camera/cancel_resv',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'cancel',ids:ids})})
+        .then(function(r){ if(!r.ok) throw new Error(); return loadBoard(); })
+        .then(function(){ _lastTBSig=null; lcRenderSheet(); renderLockCal(); renderTodayBoard(); silvaToast('Canceled '+n+' reservation'+(n>1?'s':'')+'. See the Cancellations tab.'); })
+        .catch(function(){ lcRenderSheet(); silvaToast('Could not cancel. Try again.'); });
+    });
+  }
   function lcSetLock(di,on){
     if(on) _lcLocks[di]=1; else delete _lcLocks[di];                       // optimistic: flip the color at once
     lcRenderSheet(); renderLockCal();
@@ -3276,6 +3365,7 @@
     var lx=document.getElementById('lsX'); if(lx) lx.onclick=closeLockSheet;
     var lsm=document.getElementById('locksheet'); if(lsm) lsm.addEventListener('click',function(e){ if(e.target===lsm) closeLockSheet(); });
     var lt=document.getElementById('lsToggle'); if(lt) lt.onclick=function(){ if(_lsDate!=null) lcSetLock(_lsDate, !_lcLocks[_lsDate]); };
+    var kt=document.getElementById('lsKeepToggle'); if(kt) kt.onclick=function(){ if(_lsDate==null) return; var ksw=document.getElementById('lsKeepSwitch'); if(ksw) ksw.classList.add('locked'); lcCancelResvs(_lsDate); };
   })();
   function resvSetStatus(id,status){
     camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})})
@@ -3505,6 +3595,11 @@
       return Promise.resolve({ok:true,status:200,json:function(){ return Promise.resolve({ok:true,ban:bs}); }}); }
     else if(path.indexOf('/events')>=0){ return Promise.resolve({ok:true,status:200,json:function(){ return Promise.resolve({events: demoEvents()}); }}); }
     else if(path.indexOf('/blackout')>=0){ DEMO_DATA.blackouts=DEMO_DATA.blackouts||[]; var _bd=String(body.date||''); var _bi=DEMO_DATA.blackouts.indexOf(_bd); if(body.on){ if(_bi<0) DEMO_DATA.blackouts.push(_bd); } else if(_bi>=0){ DEMO_DATA.blackouts.splice(_bi,1); } }
+    else if(path.indexOf('/cancel_resv')>=0){ DEMO_DATA.canceled=DEMO_DATA.canceled||[];
+      if(String(body.action||'cancel')==='notified'){ DEMO_DATA.canceled=DEMO_DATA.canceled.filter(function(x){ return String(x.id)!==String(body.id); }); }
+      else { var _cids=(body.ids||[]).map(String), _have={}; DEMO_DATA.canceled.forEach(function(x){ _have[String(x.id)]=1; });
+        DEMO_DATA.checkouts.filter(function(c){ return _cids.indexOf(String(c.id))>=0; }).forEach(function(c){ if(!_have[String(c.id)]){ var s={}; for(var k in c) s[k]=c[k]; s.canceled_at=todayISO()+'T00:00:00Z'; DEMO_DATA.canceled.push(s); } });
+        DEMO_DATA.checkouts=DEMO_DATA.checkouts.filter(function(c){ return _cids.indexOf(String(c.id))<0; }); } }
     return Promise.resolve({ok:true,status:200,json:function(){ return Promise.resolve({ok:true}); }});
   }
   // Synthetic audit events for the ?demo=1 preview (so the Event History view is viewable without the backend).
@@ -3596,11 +3691,14 @@
     // Mankin (Digital Arts): 38 iPad styluses, one checked out, so her summary reads "37 of 38 iPad styluses".
     var mkStyli=[]; for(var ps=1;ps<=38;ps++){ var pid='apple_pencil-'+('0'+ps).slice(-2); units[pid]={type:'apple_pencil',label:'iPad Stylus '+ps,pool:'mankin',kit:''}; mkStyli.push(pid); }
     recs.push({id:nid(),kind:'equipment',item:'apple_pencil-04',group:'',camera:'',student_id:'1013001',student_name:'Noa Kim',period:1,course:'Digital Arts',teacher:'Mankin',out:tod,due:tmr,status:'out',picked_up_date:tod,returned:false,returned_date:'',note:'',created:tod+'T15:00:00Z'});
+    // Two reservations booked for a near-future day (so locking that day surfaces the KEEP|CANCEL slider in the demo).
+    recs.push({id:'rc_fut1',kind:'camera',item:'',group:'',camera:'Cam 04',student_id:'1012360',student_name:'Ava Nguyen',period:6,course:'Photo 1',teacher:'Silva',out:iso(2),due:iso(3),status:'reserved',picked_up_date:'',returned:false,returned_date:'',student_cell:'8055550142',note:'',created:tod+'T09:00:00Z'});
+    recs.push({id:'rc_fut2',kind:'camera',item:'',group:'',camera:'Cam 08',student_id:'1012361',student_name:'Leo Park',period:6,course:'Photo 1',teacher:'Silva',out:iso(2),due:iso(3),status:'reserved',picked_up_date:'',returned:false,returned_date:'',student_cell:'8055550188',note:'',created:tod+'T09:00:00Z'});
     return {cameras:cams,checkouts:recs,assets:{},cards:{},
       pools:{silva:cams,garcia:cams.slice(0,15),mankin:['Cam 19','Cam 20','Cam 21']},
       equipment_pools:{silva:gpool,garcia:[],mankin:mkStyli},equipment_units:units,
       equipment_types:{tripod:{label:'Tripod'},speedlite:{label:'Speedlite'},reflector:{label:'Reflector'},wide:{label:'Ultra-Wide'},zoom:{label:'Ultra-Zoom'},bluetooth:{label:'Bluetooth Remote'},apple_pencil:{label:'iPad Stylus'}},
-      p2_grants:[],blackouts:[]};
+      p2_grants:[],blackouts:[],canceled:[]};
   }
 
   // ---- board ----
@@ -4026,7 +4124,7 @@
       return r.json();
     }).then(function(d){
       DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{},
-            pools:d.pools||{},equipment_pools:d.equipment_pools||{},equipment_units:d.equipment_units||{},equipment_types:d.equipment_types||{},p2_grants:d.p2_grants||[],blackouts:d.blackouts||[]};
+            pools:d.pools||{},equipment_pools:d.equipment_pools||{},equipment_units:d.equipment_units||{},equipment_types:d.equipment_types||{},p2_grants:d.p2_grants||[],blackouts:d.blackouts||[],canceled:d.canceled||[]};
       renderBoard(); markSync(true);
       if(_pendingStu){ var _s=_pendingStu; _pendingStu=null; try{ openStudentProfile(_s); }catch(e){} }
     }).catch(function(e){ if(String(e.message)!=='401') markSync(false); });
