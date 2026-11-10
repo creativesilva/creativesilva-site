@@ -3993,11 +3993,12 @@
     var _retsub=document.querySelector('#retmodal .retsub');   // name WHO is returning it, right under the title (Chris 2026-11-09)
     if(_retsub) _retsub.innerHTML='<span class="retwho">'+esc(nameOf(c))+'</span>'+(c.period?' <span class="retwho-per">&middot; Period '+esc(('0'+c.period).slice(-2))+'</span>':'')+' is returning this. Check off what came back. Anything left unchecked is saved as missing on this camera.';
     var _kitMiss=(assetOf(c.camera).kit||[]);   // pre-check from the camera's current kit state (already-missing items start unchecked)
-    // Grouped into 4 collapsed task accordions (open a group only to flag a missing piece), 50mm first in the
-    // lens groups. The checkbox IDs stay ret_<KIT_STD index>, so the confirm logic below is unchanged.
-    var RET_GROUPS=[{name:'Camera Body',idx:[0,11,12,10]},{name:'Lenses',idx:[2,1,3]},{name:'Lens Caps',idx:[5,4,6]},{name:'Lens Filters',idx:[8,7,9]}];
+    // Grouped into collapsed task accordions (open a group only to flag a missing piece), 50mm first in the
+    // lens groups. Model-aware: R50 V (Cam 19-21) has its own list + groups; others fall back to KIT_STD. The
+    // checkbox IDs stay ret_<kit index> into THIS camera's list, so the confirm logic below stays in sync.
+    var RET_KIT=kitListFor(c.camera)||KIT_STD, RET_GROUPS=kitGroupsFor(c.camera);
     document.getElementById('retlist').innerHTML=RET_GROUPS.map(function(g){
-      var miss=0, rows=g.idx.map(function(i){ var k=KIT_STD[i], here=_kitMiss.indexOf(k)<0; if(!here) miss++;
+      var miss=0, rows=g.idx.map(function(i){ var k=RET_KIT[i], here=_kitMiss.indexOf(k)<0; if(!here) miss++;
         return '<label class="retitem"><span class="retitem-name">'+esc(k)+'</span><input type="checkbox" id="ret_'+i+'"'+(here?' checked':'')+'></label>'; }).join('');
       return '<details class="retgrp"'+(miss>0?' open':'')+'><summary><span class="retgrp-name">'+esc(g.name)+'</span>'+
         '<span class="retgrp-status'+(miss?' miss':'')+'">'+(miss?(miss+' missing'):'All here')+'</span><span class="retgrp-chev"></span></summary>'+
@@ -4047,7 +4048,7 @@
     var rvm=document.getElementById('resvmodal'); if(rvm) rvm.addEventListener('click',function(e){ if(e.target===rvm) closeResv(); });
     var g=document.getElementById('retgo'); if(g) g.onclick=function(){
       if(!retId) return; var id=retId, c=findRec(id), cam=c?c.camera:'';
-      var missing=[]; KIT_STD.forEach(function(k,i){ var el=document.getElementById('ret_'+i); if(el && !el.checked) missing.push(k); });
+      var missing=[]; (kitListFor(cam)||KIT_STD).forEach(function(k,i){ var el=document.getElementById('ret_'+i); if(el && !el.checked) missing.push(k); });
       var extra=document.getElementById('retnote2').value.trim();
       // Capture each linked-gear decision before closing: returned, or kept pending with a reason.
       var eqDecisions=(retEquip||[]).map(function(e){
@@ -4260,12 +4261,22 @@
 
   // ===== Camera detail modal (click a camera number): issues, note, history log, checkouts =====
   var cdCam=null, cdTab='details';
-  // Standard camera kit (Cam 1-15). Cam 16/17/18 (P2) are different kits, added later.
-  // Lead with the item TYPE + size so a missing piece is unmistakable and orderable (which cap, which filter).
+  // Camera kits are model-specific. Cam 1-15 (R50) use KIT_STD; Mankin's Cam 19-21 (R50 V) use KIT_R50V.
+  // Cam 16/17/18 (P2: R8/RP) have no item list yet ("added soon"). Lead each item with its TYPE + size so a
+  // missing piece is unmistakable and orderable (which cap, which filter).
   var KIT_STD=['Camera Body (Canon EOS R50)','Lens 18-45mm (RF-S kit)','Lens 50mm (RF)','Lens 55-210mm (RF-S)','Lens Cap 18-45mm','Lens Cap 50mm','Lens Cap 55-210mm','Lens Filter 18-45mm','Lens Filter 50mm','Lens Filter 55-210mm','SD Memory Card','Battery (Canon LP-E17)','Charger (Canon LC-E17)'];
-  function isStdKit(cam){ return P2.indexOf(cam)<0; }
-  function kitMissing(cam){ var a=assetOf(cam); return (a.kit||[]).filter(function(x){ return KIT_STD.indexOf(x)>=0; }); }
-  function kitPct(cam){ if(!isStdKit(cam)) return null; var m=kitMissing(cam).length; return Math.round((KIT_STD.length-m)/KIT_STD.length*100); }
+  // Mankin's Canon EOS R50 V kit (Cam 19-21): RF-S 14-30mm PZ + RF 50mm f/1.8 + RF-S 55-210mm lenses, two K&F
+  // USB-C batteries (charge in-camera over USB-C, so no wall charger), SD card + reader, Canon BR-E1 remote.
+  var KIT_R50V=['Camera Body (Canon EOS R50 V)','Lens 14-30mm (RF-S PZ kit)','Lens 50mm (RF f/1.8)','Lens 55-210mm (RF-S)','Lens Cap 14-30mm (58mm)','Lens Cap 50mm (43mm)','Lens Cap 55-210mm (55mm)','Lens Filter 14-30mm (58mm)','Lens Filter 50mm (43mm)','Lens Filter 55-210mm (55mm)','SD Memory Card','SD Card Reader','Bluetooth Remote (Canon BR-E1)','Battery 1 (K&F USB-C)','Battery 2 (K&F USB-C)'];
+  // Return-checklist / Kit-tab accordion groups, by index into the camera's own kit list (50mm lens first).
+  var KIT_GROUPS_STD=[{name:'Camera Body',idx:[0,11,12,10]},{name:'Lenses',idx:[2,1,3]},{name:'Lens Caps',idx:[5,4,6]},{name:'Lens Filters',idx:[8,7,9]}];
+  var KIT_GROUPS_R50V=[{name:'Camera Body',idx:[0,13,14,10]},{name:'Lenses',idx:[2,1,3]},{name:'Lens Caps',idx:[5,4,6]},{name:'Lens Filters',idx:[8,7,9]},{name:'Accessories',idx:[11,12]}];
+  function kitListFor(cam){ var m=camModel(cam); return m==='R50V'?KIT_R50V:(m==='R50'?KIT_STD:null); }   // R8/RP (Cam 16-18): no list yet
+  function kitGroupsFor(cam){ return camModel(cam)==='R50V'?KIT_GROUPS_R50V:KIT_GROUPS_STD; }
+  function hasKit(cam){ return !!kitListFor(cam); }
+  function isStdKit(cam){ return camModel(cam)==='R50'; }
+  function kitMissing(cam){ var L=kitListFor(cam)||[], a=assetOf(cam); return (a.kit||[]).filter(function(x){ return L.indexOf(x)>=0; }); }
+  function kitPct(cam){ var L=kitListFor(cam); if(!L) return null; var m=kitMissing(cam).length; return Math.round((L.length-m)/L.length*100); }
   function kitScoreCls(pct){ return pct>=100?'':(pct>=80?'low':'crit'); }
   function openCamDetail(cam, tab){ cdCam=cam; cdTab=(tab==='kit'?'kit':'details'); renderCamDetailModal(); document.getElementById('camdetail').classList.add('open'); }
   function closeCamDetail(){ document.getElementById('camdetail').classList.remove('open'); cdCam=null; gdKey=null; }
@@ -4412,18 +4423,18 @@
     h+='<details class="cd-sec cd-acc"><summary class="cd-h cd-acc-sum">Checkout history'+(hist.length?(' <span class="cd-accn">'+hist.length+'</span>'):'')+'<span class="cd-acc-chev"></span></summary>'+(hist.length?('<div class="cd-hist">'+hist.map(function(x){ var s=statusOf(x); return '<div class="cd-histrow"><span class="cd-histwho">'+studentLink(x)+'</span><span class="cd-histdates">out '+fmt(x.out)+' &rarr; '+(s==='returned'?('returned '+fmt(x.returned_date||x.due)):('due '+fmt(x.due)+' &middot; '+esc(s)))+'</span><button class="btn sm ghost" data-edithist="'+esc(x.id)+'">Edit</button></div>'; }).join('')+'</div>'):'<div class="cd-empty">No checkouts recorded.</div>')+'</details>';
     // ---- Kit contents tab ----
     var _pct=kitPct(cam), _scls=(_pct==null?'':kitScoreCls(_pct)), _kit;
-    if(isStdKit(cam)){
-      var _miss=kitMissing(cam);
-      // Grouped like the return checklist: Camera Body (+ SD card, battery, charger), Lenses, Lens Caps, Lens
-      // Filters. Each group is a collapsed glass accordion that opens when it holds a missing piece. (Chris 2026-11-09)
-      var KIT_GROUPS=[{name:'Camera Body',idx:[0,11,12,10]},{name:'Lenses',idx:[2,1,3]},{name:'Lens Caps',idx:[5,4,6]},{name:'Lens Filters',idx:[8,7,9]}];
+    if(hasKit(cam)){
+      var _miss=kitMissing(cam), _KIT=kitListFor(cam), _KGRPS=kitGroupsFor(cam);
+      // Grouped like the return checklist: Camera Body (+ SD card + battery/charger), Lenses, Lens Caps, Lens
+      // Filters, and on the R50 V an Accessories group (SD card reader + Bluetooth remote). Each group is a
+      // collapsed glass accordion that opens when it holds a missing piece. (Chris 2026-11-09)
       function kitRow(item){ var mm=_miss.indexOf(item)>=0;
         return '<div class="kit-row'+(mm?' missing':'')+'"><span class="kit-name">'+esc(item)+'</span><button type="button" class="kit-sw'+(mm?' missing':'')+'" data-kititem="'+esc(item)+'" aria-pressed="'+(mm?'false':'true')+'"><span class="kit-sw-track"><span class="kit-sw-knob"></span></span><span class="kit-sw-lab">'+(mm?'Missing':'In kit')+'</span></button></div>'; }
-      var _rows=KIT_GROUPS.map(function(g){
-        var gmiss=0, rows=g.idx.map(function(i){ var item=KIT_STD[i]; if(_miss.indexOf(item)>=0) gmiss++; return kitRow(item); }).join('');
+      var _rows=_KGRPS.map(function(g){
+        var gmiss=0, rows=g.idx.map(function(i){ var item=_KIT[i]; if(_miss.indexOf(item)>=0) gmiss++; return kitRow(item); }).join('');
         return '<details class="retgrp kit-grp"'+(gmiss>0?' open':'')+'><summary><span class="retgrp-name">'+esc(g.name)+'</span><span class="retgrp-status'+(gmiss?' miss':'')+'">'+(gmiss?(gmiss+' missing'):'All here')+'</span><span class="retgrp-chev"></span></summary><div class="retgrp-body kit-grp-body">'+rows+'</div></details>';
       }).join('');
-      _kit='<div class="kit-score '+_scls+'"><div class="kit-score-pct">'+_pct+'%</div><div class="kit-score-meta"><div class="kit-score-lab">'+(KIT_STD.length-_miss.length)+' of '+KIT_STD.length+' items in kit</div><div class="kit-score-bar"><span class="kit-score-fill" style="width:'+_pct+'%"></span></div></div></div><div class="kit-list">'+_rows+'</div>';
+      _kit='<div class="kit-score '+_scls+'"><div class="kit-score-pct">'+_pct+'%</div><div class="kit-score-meta"><div class="kit-score-lab">'+(_KIT.length-_miss.length)+' of '+_KIT.length+' items in kit</div><div class="kit-score-bar"><span class="kit-score-fill" style="width:'+_pct+'%"></span></div></div></div><div class="kit-list">'+_rows+'</div>';
     } else {
       _kit='<div class="kit-tbd">This camera uses a different kit. Its item list will be added soon.</div>';
     }
