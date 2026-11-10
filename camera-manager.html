@@ -793,7 +793,7 @@
   .lc-lg{display:inline-flex;align-items:center;gap:7px;}
   .lc-sw{width:15px;height:15px;border-radius:5px;display:inline-block;flex:0 0 auto;}
   .lc-sw.open{background:var(--ok);}
-  .lc-sw.locked{background:linear-gradient(rgba(4,20,19,.55),rgba(4,20,19,.55)),rgba(0,184,184,.18);border:1px solid var(--line-soft);position:relative;}
+  .lc-sw.locked{background:linear-gradient(rgba(224,64,58,.34),rgba(224,64,58,.34)),rgba(4,20,19,.6);border:1px solid rgba(255,122,122,.5);position:relative;}
   .lc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
   .lc-mtitle{font-family:var(--font);font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-lt);}
   .lc-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
@@ -801,11 +801,27 @@
   .lc-cell.off{background:linear-gradient(rgba(4,20,19,.5),rgba(4,20,19,.5)),rgba(0,184,184,.14);color:var(--faint);}
   .lc-day.open{background:rgba(63,168,99,.26);border-color:rgba(63,168,99,.5);color:#e4fced;cursor:pointer;}
   .lc-day.open:hover{background:rgba(63,168,99,.42);border-color:var(--ok);}
-  .lc-day.locked{background:linear-gradient(rgba(4,20,19,.55),rgba(4,20,19,.55)),rgba(0,184,184,.16);color:var(--muted);cursor:pointer;}
-  .lc-day.locked:hover{border-color:var(--teal);color:var(--teal-lt);}
+  .lc-day.locked{background:linear-gradient(rgba(224,64,58,.24),rgba(224,64,58,.12)),rgba(4,20,19,.62);border-color:rgba(255,122,122,.5);color:#ffc9c2;cursor:pointer;}
+  .lc-day.locked:hover{border-color:#ff7a7a;background:linear-gradient(rgba(224,64,58,.36),rgba(224,64,58,.2)),rgba(4,20,19,.62);}
+  .lc-day.locked .lc-lockic{color:#ff9a8a;}
   .lc-lockic{position:absolute;top:4px;right:5px;width:11px;height:11px;opacity:.85;}
   .lc-day.today{box-shadow:inset 0 0 0 1.5px var(--teal-lt);}
   .lc-day.om,.lc-cell.om{opacity:.42;}
+  /* Per-day lock sheet (tap a day): date + X + an Unlock|Lock slider styled like the kit toggle. (Chris 2026-11-11) */
+  #locksheet{z-index:140;}
+  .lock-sheet{max-width:360px;}
+  .ls-status{text-align:center;font-family:var(--font);font-size:.98rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#8ff0b0;margin:2px 0 18px;}
+  .ls-status.locked{color:#ff9a8a;}
+  .ls-switch{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:6px;}
+  .ls-end{font-family:var(--font);font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);transition:color .2s;min-width:58px;}
+  .ls-end.l{text-align:right;} .ls-end.r{text-align:left;}
+  .ls-switch:not(.locked) .ls-end.l{color:#8ff0b0;}
+  .ls-switch.locked .ls-end.r{color:#ff9a8a;}
+  .lsw{background:transparent;border:0;cursor:pointer;padding:0;display:inline-flex;align-items:center;flex:0 0 auto;}
+  .lsw-track{position:relative;width:64px;height:32px;border-radius:999px;border:1px solid var(--g-edge-soft);background:linear-gradient(180deg,rgba(80,228,142,.92),rgba(40,180,108,.9));box-shadow:inset 0 1px 3px rgba(0,0,0,.4);transition:background .2s;}
+  .lsw-knob{position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:linear-gradient(180deg,#fff,#dde8e8);box-shadow:0 2px 5px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.9);transition:left .2s;}
+  .ls-switch.locked .lsw-track{background:linear-gradient(180deg,rgba(255,126,114,.95),rgba(214,56,50,.92));}
+  .ls-switch.locked .lsw-knob{left:35px;}
   .lc-n{line-height:1;}
   .hrow{background:rgba(0,0,0,.18);border:1px solid rgba(160,180,180,.14);border-left:3px solid var(--grayed);padding:9px 11px;color:var(--grayed);font-size:.78rem;}
   .hrow .hc{font-family:var(--font);font-weight:600;color:rgba(200,220,220,.66);}
@@ -1954,6 +1970,21 @@
       <div class="lc-head"><button type="button" class="dp-nav" id="lcPrev" aria-label="Previous month">&lsaquo;</button><span class="lc-mtitle" id="lcTitle"></span><button type="button" class="dp-nav" id="lcNext" aria-label="Next month">&rsaquo;</button></div>
       <div class="dp-dow"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
       <div class="lc-grid" id="lcGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Lock sheet: tap a day in the Lock Dates calendar -> this sheet with the date + an Unlock|Lock slider. (Chris 2026-11-11) -->
+<div class="modal" id="locksheet">
+  <div class="mpanel lock-sheet">
+    <div class="mhead"><span class="mtitle" id="lsDate">Date</span><button class="mx" id="lsX" aria-label="Close">&times;</button></div>
+    <div class="mbody">
+      <div class="ls-status" id="lsStatus">Open for checkout</div>
+      <div class="ls-switch" id="lsSwitch">
+        <span class="ls-end l">Unlock</span>
+        <button type="button" class="lsw" id="lsToggle" role="switch" aria-checked="false" aria-label="Lock or unlock this day"><span class="lsw-track"><span class="lsw-knob"></span></span></button>
+        <span class="ls-end r">Lock</span>
+      </div>
     </div>
   </div>
 </div>
@@ -3199,39 +3230,52 @@
   // with a lock, tap to reopen). Tap an open day to lock it. Persisted through the existing /api/camera/blackout
   // endpoint; the feed's DATA.blackouts drives the locked state (global across pools, matching the backend).
   var LC_LOCK_SVG='<svg class="lc-lockic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
-  var _lcY=null, _lcM=null;
-  function lcLockedSet(){ var s={}; (DATA.blackouts||[]).forEach(function(d){ s[String(d)]=1; }); return s; }
+  var _lcY=null, _lcM=null, _lcLocks={}, _lsDate=null;
+  function lcSeedLocks(){ _lcLocks={}; (DATA.blackouts||[]).forEach(function(d){ _lcLocks[String(d)]=1; }); }   // seed from the feed on open
   function lcISO(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
-  function lcFmt(di){ var p=di.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+' '+MON[+p[1]-1]+' '+(+p[2]); }
-  function openLockCal(){ var t=todayISO().split('-'); _lcY=+t[0]; _lcM=+t[1]-1; renderLockCal(); document.getElementById('lockcalmodal').classList.add('open'); }
+  var _LCDOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], _LCDOWL=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  function lcFmt(di){ var p=di.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return _LCDOW[d.getDay()]+' '+MON[+p[1]-1]+' '+(+p[2]); }
+  function lcFmtLong(di){ var p=di.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return _LCDOWL[d.getDay()]+', '+MON[+p[1]-1]+' '+(+p[2]); }
+  function openLockCal(){ var t=todayISO().split('-'); _lcY=+t[0]; _lcM=+t[1]-1; lcSeedLocks(); renderLockCal(); document.getElementById('lockcalmodal').classList.add('open'); }
   function closeLockCal(){ document.getElementById('lockcalmodal').classList.remove('open'); }
   function renderLockCal(){
     var grid=document.getElementById('lcGrid'); if(!grid) return;
     var tt=document.getElementById('lcTitle'); if(tt) tt.textContent=MON[_lcM]+' '+_lcY;
     var first=new Date(_lcY,_lcM,1), start=new Date(first); start.setDate(1-first.getDay());
-    var tISO=todayISO(), locks=lcLockedSet(), h='';
+    var tISO=todayISO(), h='';
     for(var i=0;i<42;i++){
       var d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i), di=lcISO(d);
-      var om=(d.getMonth()!==_lcM)?' om':'', tod=(di===tISO)?' today':'', locked=!!locks[di], canLock=isSchoolDayISO(di)&&di>=tISO;
+      var om=(d.getMonth()!==_lcM)?' om':'', tod=(di===tISO)?' today':'', locked=!!_lcLocks[di], canLock=isSchoolDayISO(di)&&di>=tISO;
       if(locked){ h+='<button type="button" class="lc-day locked'+om+tod+'" data-lock="'+di+'"><span class="lc-n">'+d.getDate()+'</span>'+LC_LOCK_SVG+'</button>'; }
       else if(canLock){ h+='<button type="button" class="lc-day open'+om+tod+'" data-lock="'+di+'"><span class="lc-n">'+d.getDate()+'</span></button>'; }
       else { h+='<span class="lc-cell off'+om+'"><span class="lc-n">'+d.getDate()+'</span></span>'; }
     }
     grid.innerHTML=h;
-    grid.querySelectorAll('[data-lock]').forEach(function(b){ b.onclick=function(){ lcToggle(b.getAttribute('data-lock')); }; });
+    grid.querySelectorAll('[data-lock]').forEach(function(b){ b.onclick=function(){ openLockSheet(b.getAttribute('data-lock')); }; });
   }
-  function lcToggle(di){
-    var on=!lcLockedSet()[di];
+  // Tap a day -> a sheet with the date + an Unlock|Lock slider. Optimistic (the color flips at once), then
+  // persisted via /api/camera/blackout; reverts on failure. Locked days read RED (vs dark = school-calendar closed).
+  function openLockSheet(di){ _lsDate=di; var el=document.getElementById('lsDate'); if(el) el.textContent=lcFmtLong(di); lcRenderSheet(); document.getElementById('locksheet').classList.add('open'); }
+  function closeLockSheet(){ document.getElementById('locksheet').classList.remove('open'); _lsDate=null; }
+  function lcRenderSheet(){ if(_lsDate==null) return; var on=!!_lcLocks[_lsDate];
+    var sw=document.getElementById('lsSwitch'); if(sw) sw.classList.toggle('locked',on);
+    var tg=document.getElementById('lsToggle'); if(tg) tg.setAttribute('aria-checked',on?'true':'false');
+    var st=document.getElementById('lsStatus'); if(st){ st.textContent=on?'Locked · closed to checkouts':'Open for checkout'; st.className='ls-status'+(on?' locked':''); } }
+  function lcSetLock(di,on){
+    if(on) _lcLocks[di]=1; else delete _lcLocks[di];                       // optimistic: flip the color at once
+    lcRenderSheet(); renderLockCal();
     camAPI('/api/camera/blackout',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({date:di,on:on})})
-      .then(function(r){ if(!r.ok) throw new Error(); return loadBoard(); })
-      .then(function(){ renderLockCal(); silvaToast(lcFmt(di)+(on?' locked':' reopened')); })
-      .catch(function(){ silvaToast('Could not update. Try again.'); });
+      .then(function(r){ if(!r.ok) throw new Error(); silvaToast(lcFmt(di)+(on?' locked':' reopened')); return loadBoard(); })
+      .catch(function(){ if(on) delete _lcLocks[di]; else _lcLocks[di]=1; lcRenderSheet(); renderLockCal(); silvaToast('Could not update. Try again.'); });   // revert on failure
   }
   (function(){ var b=document.getElementById('lockDatesBtn'); if(b) b.onclick=openLockCal;
     var x=document.getElementById('lockcalx'); if(x) x.onclick=closeLockCal;
     var m=document.getElementById('lockcalmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeLockCal(); });
     var pv=document.getElementById('lcPrev'); if(pv) pv.onclick=function(){ _lcM--; if(_lcM<0){_lcM=11;_lcY--;} renderLockCal(); };
     var nx=document.getElementById('lcNext'); if(nx) nx.onclick=function(){ _lcM++; if(_lcM>11){_lcM=0;_lcY++;} renderLockCal(); };
+    var lx=document.getElementById('lsX'); if(lx) lx.onclick=closeLockSheet;
+    var lsm=document.getElementById('locksheet'); if(lsm) lsm.addEventListener('click',function(e){ if(e.target===lsm) closeLockSheet(); });
+    var lt=document.getElementById('lsToggle'); if(lt) lt.onclick=function(){ if(_lsDate!=null) lcSetLock(_lsDate, !_lcLocks[_lsDate]); };
   })();
   function resvSetStatus(id,status){
     camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})})
@@ -3982,7 +4026,7 @@
       return r.json();
     }).then(function(d){
       DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{},
-            pools:d.pools||{},equipment_pools:d.equipment_pools||{},equipment_units:d.equipment_units||{},equipment_types:d.equipment_types||{},p2_grants:d.p2_grants||[]};
+            pools:d.pools||{},equipment_pools:d.equipment_pools||{},equipment_units:d.equipment_units||{},equipment_types:d.equipment_types||{},p2_grants:d.p2_grants||[],blackouts:d.blackouts||[]};
       renderBoard(); markSync(true);
       if(_pendingStu){ var _s=_pendingStu; _pendingStu=null; try{ openStudentProfile(_s); }catch(e){} }
     }).catch(function(e){ if(String(e.message)!=='401') markSync(false); });
@@ -5124,7 +5168,7 @@
     var v=pin.value.trim(); if(!v){ pinerr.textContent='Enter the password.'; return; }
     pinerr.textContent='Checking…'; KEY=v;
     camAPI('/api/camera/checkouts',{cache:'no-store'}).then(function(r){
-      if(r.ok){ try{ sessionStorage.setItem('silva-cam-key',v); }catch(e){} return r.json().then(function(d){ DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{}}; renderBoard(); markSync(true); startApp(); }); }
+      if(r.ok){ try{ sessionStorage.setItem('silva-cam-key',v); }catch(e){} return r.json().then(function(d){ DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{},blackouts:d.blackouts||[]}; renderBoard(); markSync(true); startApp(); }); }
       if(r.status===401){ KEY=''; pinerr.textContent='That password did not work.'; return; }
       pinerr.textContent='Server error. Try again.';
     }).catch(function(){ pinerr.textContent='Could not reach the server.'; });
@@ -5135,7 +5179,7 @@
 
   // if we already have a stored key, try it silently; otherwise show the gate
   if(DEMO){ gate.style.display='none'; loadBoard(); }
-  else if(KEY){ camAPI('/api/camera/checkouts',{cache:'no-store'}).then(function(r){ if(r.ok){ return r.json().then(function(d){ DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{},pools:d.pools||{},equipment_pools:d.equipment_pools||{},equipment_units:d.equipment_units||{},equipment_types:d.equipment_types||{},p2_grants:d.p2_grants||[]}; renderBoard(); markSync(true); startApp(); }); } else { showGate(''); } }).catch(function(){ showGate(''); }); }
+  else if(KEY){ camAPI('/api/camera/checkouts',{cache:'no-store'}).then(function(r){ if(r.ok){ return r.json().then(function(d){ DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{},pools:d.pools||{},equipment_pools:d.equipment_pools||{},equipment_units:d.equipment_units||{},equipment_types:d.equipment_types||{},p2_grants:d.p2_grants||[],blackouts:d.blackouts||[]}; renderBoard(); markSync(true); startApp(); }); } else { showGate(''); } }).catch(function(){ showGate(''); }); }
   else { showGate(''); }
 })();
 </script>
