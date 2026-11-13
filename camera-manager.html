@@ -965,6 +965,26 @@
   .csw-item:hover{background:rgba(0,184,184,.10);color:#fff;}
   .csw-item.on{color:var(--teal-lt);background:rgba(0,184,184,.14);}
   .camgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(204px,1fr));gap:9px;margin-bottom:10px;}
+  /* ===== Update Inventory Log (physical reconciliation): a HERE|OUT slider per camera kit (Chris 2026-11-13). ===== */
+  .mh-toolbar{display:flex;justify-content:flex-start;margin:0 0 12px;}
+  .mh-invlog{display:inline-flex;align-items:center;gap:9px;font-family:var(--font);font-weight:700;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:#5ff0f0;background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-md);padding:11px 16px;cursor:pointer;transition:border-color .18s,background .18s;}
+  .mh-invlog:hover{border-color:rgba(0,184,184,.5);background:rgba(0,184,184,.08);}
+  .mh-invlog svg{width:17px;height:17px;flex:0 0 auto;}
+  .invlog-intro{font-size:.9rem;color:var(--muted);line-height:1.45;margin:0 0 14px;}
+  .invlog-list{display:flex;flex-direction:column;gap:7px;}
+  .invlog-row{display:flex;align-items:center;gap:12px;padding:10px 13px;border:1px solid var(--g-edge-soft);border-radius:var(--g-r-md);background:var(--g-glass-quiet);}
+  .invlog-cam{font-family:var(--body);font-weight:700;font-size:1.05rem;color:#fff;min-width:66px;flex:0 0 auto;}
+  .invlog-st{flex:1 1 auto;min-width:0;font-size:.8rem;color:var(--muted);line-height:1.3;}
+  .invlog-st .who{color:#cfe8e8;font-weight:600;}
+  .invlog-st.state-out{color:#ffd2c2;} .invlog-st.state-overdue{color:#ff9a8a;} .invlog-st.state-avail{color:#8ff0b0;} .invlog-st.state-resv{color:#ffd889;} .invlog-st.state-oos{color:var(--faint);}
+  .invlog-row.changed{border-color:rgba(0,184,184,.55);background:rgba(0,184,184,.08);}
+  .invlog-missing{display:flex;flex-direction:column;gap:8px;}
+  .invlog-mrow{display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid rgba(224,64,58,.4);border-radius:var(--g-r-md);background:rgba(224,64,58,.08);}
+  .invlog-mrow.done{border-color:var(--g-edge-soft);background:var(--g-glass-quiet);opacity:.72;}
+  .invlog-mcam{font-family:var(--body);font-weight:700;font-size:1rem;color:#fff;min-width:62px;flex:0 0 auto;}
+  .invlog-mwho{flex:1 1 auto;min-width:0;font-size:.82rem;color:#ffd2c2;line-height:1.3;}
+  .invlog-mwho b{color:#fff;} .invlog-mwho .muted{color:var(--muted);}
+  .invlog-mrow .btn.sm{flex:0 0 auto;}
   .camtile{display:flex;flex-direction:column;gap:5px;align-items:flex-start;text-align:left;width:100%;background:var(--surface);border:1px solid var(--surface-bd);border-left:4px solid var(--grayed);padding:11px 13px;cursor:pointer;font-family:inherit;color:var(--text);transition:border-color .12s,background .12s;backdrop-filter:blur(5px) saturate(1.04);-webkit-backdrop-filter:blur(5px) saturate(1.04);}
   .camtile:hover{background:rgba(0,184,184,.07);}
   .camtile-top{display:flex;align-items:center;gap:6px 8px;width:100%;flex-wrap:wrap;}
@@ -1976,6 +1996,14 @@
       <input type="text" id="retnote2" placeholder="e.g. small scratch on the screen" />
       <button class="go" id="retgo">Confirm return</button>
     </div>
+  </div>
+</div>
+
+<!-- Update Inventory Log: reconcile the board to what is physically on hand (HERE|OUT per camera kit). Chris 2026-11-13. -->
+<div class="modal" id="invlogmodal">
+  <div class="mpanel">
+    <div class="mhead"><span class="mtitle" id="invlogTitle">Update Inventory Log</span><button class="mx" id="invlogx" aria-label="Close">&times;</button></div>
+    <div class="mbody" id="invlogBody"></div>
   </div>
 </div>
 
@@ -3719,6 +3747,8 @@
     // Two reservations booked for a near-future day (so locking that day surfaces the KEEP|CANCEL slider in the demo).
     recs.push({id:'rc_fut1',kind:'camera',item:'',group:'',camera:'Cam 04',student_id:'1012360',student_name:'Ava Nguyen',period:6,course:'Photo 1',teacher:'Silva',out:iso(2),due:iso(3),status:'reserved',picked_up_date:'',returned:false,returned_date:'',student_cell:'8055550142',note:'',created:tod+'T09:00:00Z'});
     recs.push({id:'rc_fut2',kind:'camera',item:'',group:'',camera:'Cam 08',student_id:'1012361',student_name:'Leo Park',period:6,course:'Photo 1',teacher:'Silva',out:iso(2),due:iso(3),status:'reserved',picked_up_date:'',returned:false,returned_date:'',student_cell:'8055550188',note:'',created:tod+'T09:00:00Z'});
+    // A returned reservation on an otherwise-available camera, so the Inventory Log can show "last held by" + send-to-overdue in the demo.
+    recs.push({id:'rc_ret1',kind:'camera',item:'',group:'',camera:'Cam 05',student_id:'1012351',student_name:'Ivy Chen',period:4,course:'Photo 2',teacher:'Silva',student_cell:'(805) 555-0144',parent_guardian:'Ivy’s parent',parent_cell:'(805) 555-0244',out:y2,due:yst,status:'returned',picked_up_date:y2,returned:true,returned_date:yst,note:'',created:y2+'T15:00:00Z'});
     // Demo-only held cards across BOTH wallets (slots 2,5,9 in wallet 1; 11,16 in wallet 2), some empty,
     // two past 24h (expired -> red "format"), so the two-wallet 3x3 layout is exercised in ?demo=1.
     var demoCards=(function(){ function h(hr){ return new Date(Date.now()-hr*3600*1000).toISOString(); } return {
@@ -4003,13 +4033,16 @@
       mbody=mgrid+catSectionsHtml();
     }
     var mOpen=secOpen('manage');
+    // Update Inventory Log button: opens the physical-reconciliation sliders (camera kits). Sits at the top of
+    // the Manage Equipment body so Save returns right here.
+    var invLogBtn='<div class="mh-toolbar"><button type="button" class="mh-invlog" data-invlog="1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Update Inventory Log</button></div>';
     var manageHtml='<div class="camhub manage-hub'+(mOpen?' open':'')+'">'+
       '<div class="camhub-head" data-sectoggle="manage">'+
         '<span class="camhub-titlebox"><span class="camhub-code">Catalog</span><span class="camhub-title">Manage Equipment</span></span>'+
         camSortDropdown()+
         '<span class="camhub-meta"><span class="csec-n">'+mcams.length+' cameras &middot; '+gpool.length+' units</span><span class="camhub-chev"></span></span>'+
       '</div>'+
-      '<div class="camhub-body">'+mbody+'</div>'+
+      '<div class="camhub-body">'+invLogBtn+mbody+'</div>'+
     '</div>';
     // ===== MEMORY CARD WALLET: its own hub. Silva + Garcia only (Mankin has no card wallet). =====
     var walletHtml='';
@@ -4071,6 +4104,7 @@
     // Pooled gear: mark one unit out for repair (down+1) / bring one back (down-1). Availability follows.
     b.querySelectorAll('[data-cardreturn]').forEach(function(el){ el.onclick=function(){ silvaConfirm('Card returned to the student and offloaded? This clears the slot.',{okLabel:'Clear slot',cancelLabel:'Cancel'}).then(function(ok){ if(ok) cardReturn(el.getAttribute('data-cardreturn'), el); }); }; });
     b.querySelectorAll('[data-cardadd]').forEach(function(el){ el.onclick=function(){ openAdHocCard(+el.getAttribute('data-cardadd')); }; });
+    b.querySelectorAll('[data-invlog]').forEach(function(el){ el.onclick=function(){ openInventoryLog(); }; });
     // Wallet accordion: open the tapped wallet, close the other (one open at a time). Pure class toggle, no re-render.
     b.querySelectorAll('[data-cwallet]').forEach(function(el){ el.onclick=function(){ var n=+el.getAttribute('data-cwallet'); var hub=el.closest('.wallet-hub'); if(hub){ hub.querySelectorAll('.cwallet').forEach(function(w){ var on=(+w.getAttribute('data-cw')===n); w.classList.toggle('open',on); var hd=w.querySelector('.cwallet-head'); if(hd) hd.setAttribute('aria-expanded',on?'true':'false'); }); } setCardWalletOpen(n); }; });
     b.querySelectorAll('[data-approve]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-approve'), el); }; });
@@ -4405,6 +4439,102 @@
       .then(function(r){ if(!r.ok) throw new Error(); }).then(function(){ return loadBoard(); }).then(reloadCal)
       .catch(function(){ silvaToast('Could not update. Try again.'); if(btn) btn.disabled=false; });
   }
+  // ===== Update Inventory Log: reconcile the board to what is physically on hand (camera kits). Chris 2026-11-13.
+  // Tap a HERE|OUT slider per camera (pre-set to what the board believes), Save, and the board fixes itself:
+  // a kit you mark HERE that is still checked out gets checked in (today); a kit you mark OUT that nobody has
+  // reserved is flagged, and you choose per kit whether to send it to Overdue under its last holder. Uses only
+  // the existing status API (no backend change). =====
+  var invLogState=null;   // {cam:'here'|'out'} while the log is open
+  function invLogSysState(cam){ var s=camState(cam); return (s==='out'||s==='overdue')?'out':'here'; }   // the board's current belief, as a slider position
+  function invLogLastHolder(cam){
+    var recs=(DATA.checkouts||[]).filter(function(c){ return c.camera===cam && c.kind!=='equipment' && statusOf(c)==='returned'; });
+    recs.sort(function(a,b){ return (b.returned_date||b.created||'')>(a.returned_date||a.created||'')?1:-1; });
+    return recs[0]||null;
+  }
+  function invLogStatusHtml(cam){
+    var s=camState(cam), c=activeFor(cam);
+    var who=c?('<span class="who">'+esc(nameOf(c))+(c.period?(' P'+esc(c.period)):'')+'</span>'):'';
+    if(s==='overdue') return {cls:'state-overdue', html:'Overdue &middot; '+who+(c&&c.due?(' &middot; due '+fmt(c.due)):'')};
+    if(s==='out')     return {cls:'state-out',     html:'Checked out &middot; '+who+(c&&c.due?(' &middot; due '+fmt(c.due)):'')};
+    if(s==='resv')    return {cls:'state-resv',    html:'Reserved today &middot; '+who};
+    if(s==='oos'){ var a=assetOf(cam); return {cls:'state-oos', html:a.oos?'Out of service':'Card missing'}; }
+    return {cls:'state-avail', html:'Available &middot; in stock'};
+  }
+  function openInventoryLog(){
+    invLogState={}; displayCams().forEach(function(cam){ invLogState[cam]=invLogSysState(cam); });
+    renderInventoryLog(); document.getElementById('invlogmodal').classList.add('open');
+  }
+  function closeInventoryLog(){ document.getElementById('invlogmodal').classList.remove('open'); invLogState=null; }
+  function renderInventoryLog(){
+    var rows=displayCams().map(function(cam){
+      var st=invLogStatusHtml(cam), here=(invLogState[cam]!=='out'), changed=(invLogState[cam]!==invLogSysState(cam));
+      return '<div class="invlog-row'+(changed?' changed':'')+'" data-invrow="'+esc(cam)+'">'+
+        '<span class="invlog-cam">'+esc(cam)+'</span>'+
+        '<span class="invlog-st '+st.cls+'">'+st.html+'</span>'+
+        '<button type="button" class="kit-sw'+(here?'':' missing')+'" data-invslide="'+esc(cam)+'" aria-pressed="'+(here?'true':'false')+'"><span class="kit-sw-track"><span class="kit-sw-knob"></span></span><span class="kit-sw-lab">'+(here?'Here':'Out')+'</span></button>'+
+      '</div>';
+    }).join('');
+    var body='<p class="invlog-intro">Slide each camera to match what is <b>physically on hand</b> right now. Each one starts on what the board believes, so just flip the ones that are wrong. On Save: a camera you mark <b>Here</b> that is still checked out gets checked in; a camera you mark <b>Out</b> that nobody has reserved gets flagged so you can send it to Overdue.</p>'+
+      '<div class="invlog-list">'+rows+'</div>'+
+      '<button class="go" id="invlogSave">Save</button>';
+    var el=document.getElementById('invlogBody'); el.innerHTML=body;
+    el.querySelectorAll('[data-invslide]').forEach(function(sw){ sw.onclick=function(){ var cam=sw.getAttribute('data-invslide'); invLogState[cam]=(invLogState[cam]==='out')?'here':'out'; renderInventoryLog(); }; });
+    document.getElementById('invlogSave').onclick=invLogSave;
+  }
+  function invLogSave(){
+    var checkIns=[], pickups=[], missing=[];
+    displayCams().forEach(function(cam){ var want=invLogState[cam], sys=camState(cam);
+      if(want==='here' && (sys==='out'||sys==='overdue')) checkIns.push(cam);
+      else if(want==='out' && sys==='avail') missing.push(cam);
+      else if(want==='out' && sys==='resv') pickups.push(cam);
+      else if(want==='out' && sys==='oos') missing.push(cam);
+    });
+    if(!checkIns.length && !pickups.length && !missing.length){ silvaToast('Nothing to update: the log matches the board.'); return; }
+    var parts=[];
+    if(checkIns.length) parts.push('check in '+checkIns.length+' ('+checkIns.join(', ')+')');
+    if(pickups.length) parts.push('mark '+pickups.length+' picked up ('+pickups.join(', ')+')');
+    if(missing.length) parts.push('flag '+missing.length+' as unaccounted to work next');
+    silvaConfirm('Update the board to match? This will '+parts.join('; ')+'.',{okLabel:'Update board',cancelLabel:'Keep editing'}).then(function(ok){
+      if(!ok) return;
+      var jobs=[];
+      function post(id,status){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})}); }
+      checkIns.forEach(function(cam){ var c=activeFor(cam); if(!c) return; resvItems(c).forEach(function(it){ if(statusOf(it)!=='returned') jobs.push(post(it.id,'returned')); }); });
+      pickups.forEach(function(cam){ var c=activeFor(cam); if(!c) return; resvItems(c).forEach(function(it){ if(statusOf(it)==='reserved') jobs.push(post(it.id,'out')); }); });
+      var save=document.getElementById('invlogSave'); if(save){ save.disabled=true; save.textContent='Saving…'; }
+      Promise.all(jobs).then(function(){ return loadBoard(); }).then(reloadCal).then(function(){
+        var done=checkIns.length+pickups.length;
+        if(missing.length){ invLogRenderMissing(missing); silvaToast(done?('Updated '+done+' · now work the unaccounted cameras'):'Now work the unaccounted cameras'); }
+        else { silvaToast(done?('Inventory updated · '+done+' camera'+(done>1?'s':'')):'Inventory updated'); closeInventoryLog(); }
+      }).catch(function(){ if(save){ save.disabled=false; save.textContent='Save'; } silvaToast('Could not save. Try again.'); });
+    });
+  }
+  function invLogRenderMissing(missing){
+    var rows=missing.map(function(cam){ var lh=invLogLastHolder(cam);
+      var who=lh?('<b>'+esc(nameOf(lh))+'</b>'+(lh.period?(' P'+esc(lh.period)):'')+(lh.student_cell?(' &middot; '+esc(lh.student_cell)):'')+(lh.due?(' <span class="muted">&middot; last out, due '+fmt(lh.due)+'</span>'):'')):'<span class="muted">No checkout history on file for this camera.</span>';
+      var btn=lh?'<button type="button" class="btn sm" data-invover="'+esc(cam)+'">Send to Overdue</button>':'';
+      return '<div class="invlog-mrow" data-invmrow="'+esc(cam)+'"><span class="invlog-mcam">'+esc(cam)+'</span><span class="invlog-mwho">'+who+'</span>'+btn+'</div>';
+    }).join('');
+    var body='<p class="invlog-intro">These cameras are gone but nobody has them reserved. Here is who had each one last. Send it to the Overdue queue to chase, or close when you are done.</p>'+
+      '<div class="invlog-missing">'+rows+'</div>'+
+      '<button class="go" id="invlogDone">Done</button>';
+    var el=document.getElementById('invlogBody'); el.innerHTML=body;
+    el.querySelectorAll('[data-invover]').forEach(function(bt){ bt.onclick=function(){ invLogSendOverdue(bt.getAttribute('data-invover'), bt); }; });
+    document.getElementById('invlogDone').onclick=closeInventoryLog;
+  }
+  function invLogSendOverdue(cam, btn){
+    var lh=invLogLastHolder(cam); if(!lh) return;
+    if(btn){ btn.disabled=true; btn.textContent='Sending…'; }
+    // Reopen the last holder as still-out: its due date is in the past, so it lands in the Overdue queue with their contact.
+    camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:lh.id,status:'out'})})
+      .then(function(){ return loadBoard(); }).then(reloadCal).then(function(){
+        var row=document.querySelector('[data-invmrow="'+cam+'"]');
+        if(row){ row.classList.add('done'); var b=row.querySelector('[data-invover]'); if(b) b.outerHTML='<span class="invlog-mwho muted">Sent to Overdue</span>'; }
+        silvaToast(cam+' sent to Overdue under '+nameOf(lh)+'.');
+      }).catch(function(){ if(btn){ btn.disabled=false; btn.textContent='Send to Overdue'; } silvaToast('Could not send. Try again.'); });
+  }
+  (function(){ var x=document.getElementById('invlogx'); if(x) x.onclick=closeInventoryLog;
+    var m=document.getElementById('invlogmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeInventoryLog(); }); })();
+
   // ===== Leave-card slot picker (opened from the return checklist) =====
   var cardCtx=null, cardSlotSel=null;
   function renderCardSlots(){
