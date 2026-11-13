@@ -766,7 +766,9 @@
   .cview-backbtn{background:rgba(255,255,255,.05);border:1px solid var(--line-soft);border-radius:var(--g-r-pill);color:var(--teal);font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.76rem;padding:8px 14px;cursor:pointer;}
   .cview-backbtn:hover{background:var(--teal);color:#04110f;}
   .cview-title{font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.9rem;color:#fff;}
-  .wrap.cview-board .manage-hub,.wrap.cview-board .histwrap,.wrap.cview-board #eventsView{display:none;}
+  .wrap.cview-board:not(.pool-silva) .manage-hub,.wrap.cview-board .histwrap,.wrap.cview-board #eventsView{display:none;}   /* Silva sees a Manage Equipment bar in the board view (below the wallet); other pools reach it via the menu (Chris 2026-11-13) */
+  .wrap.cview-manage .manage-hub .camhub-body{display:block;}   /* full Manage view: catalog always expanded, independent of the board-view bar's collapse state */
+  .wrap.cview-manage .manage-hub .camhub-chev{transform:rotate(45deg);}
   .wrap.cview-manage #todayBoard,.wrap.cview-manage #calbox,.wrap.cview-manage .wallet-hub,.wrap.cview-manage .histwrap,.wrap.cview-manage #eventsView{display:none;}
   .wrap.cview-history #todayBoard,.wrap.cview-history #calbox,.wrap.cview-history #board,.wrap.cview-history #eventsView{display:none;}
   .wrap.cview-events #todayBoard,.wrap.cview-events #calbox,.wrap.cview-events #board,.wrap.cview-events .histwrap{display:none;}
@@ -991,7 +993,7 @@
   .camtile-badges{margin-left:auto;display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;}
   .camtile-dot{width:10px;height:10px;flex:0 0 auto;background:var(--grayed);}
   .camtile-n{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.05rem;color:#fff;flex:0 1 auto;min-width:0;overflow-wrap:break-word;}
-  .camtile-p2{font-family:var(--font);font-size:.5rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#ffb28a;border:1px solid rgba(255,107,26,.5);padding:1px 4px;}
+  .camtile-p2{font-family:var(--font);font-size:.5rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#ffb28a;border:1px solid rgba(255,107,26,.5);padding:1px 4px;white-space:nowrap;}
   /* Manage Equipment stays CONDITION-colored (locked 2026-10-04); this is the one checkout signal there:
      a small orange OUT chip on a gear unit that is physically checked out, leaving condition color intact. */
   .camtile-outchip{font-family:var(--font);font-size:.5rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#1a0f05;background:var(--orange);border:1px solid var(--orange);padding:1px 6px;}
@@ -2274,7 +2276,8 @@
     var back=document.getElementById('cviewBack'), bt=document.getElementById('cviewTitle');
     if(back) back.hidden=(v==='board'); if(bt) bt.textContent=CVIEW_TITLES[v]||'';
     document.querySelectorAll('.cm-hambitem').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-cview')===v); });
-    if(v==='manage'){ setSecOpen('manage',true); var mh=document.querySelector('.manage-hub'); if(mh) mh.classList.add('open'); }
+    // The full Manage view shows the catalog via the cview-manage CSS, so we do NOT persist the hub open here;
+    // that keeps the Silva board-view Manage Equipment bar collapsed by default (Chris 2026-11-13).
     if(v==='history'){ var hb=document.getElementById('histbox'); if(hb) hb.open=true; }
     if(v==='events'){ if(typeof loadEvents==='function') loadEvents(); else { var el=document.getElementById('evList'); if(el) el.innerHTML='<div class="ev-empty">Setting up&#8230;</div>'; } }
     if(v!=='board'){ try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); } }
@@ -3894,11 +3897,11 @@
   function manageTile(cam){
     if(camLocked(cam)){   // Garcia's Photo-2 cameras: shown grayed + view-only (not hers to hand out)
       return '<div class="camtile gtile mt-locked" title="Photo 2 only">'+camThumb(cam)+
-        '<span class="gtile-main"><span class="camtile-top"><span class="camtile-n">'+esc(cam)+'</span><span class="camtile-p2">P2</span></span>'+
+        '<span class="gtile-main"><span class="camtile-top"><span class="camtile-n">'+esc(cam)+'</span><span class="camtile-p2">Photo 2</span></span>'+
         '<span class="camtile-status mt-cond">Photo 2 only</span></span></div>';
     }
     var cond=camCond(cam), p=kitPct(cam), pcls=(p==null?'na':(p>=100?'':(p>=70?'mid':'low')));
-    var p2=(P2.indexOf(cam)>=0)?'<span class="camtile-p2">P2</span>':'';
+    var p2=(P2.indexOf(cam)>=0)?'<span class="camtile-p2">Photo 2</span>':'';
     return '<button type="button" class="camtile gtile mt-'+cond+'" data-camdetail="'+esc(cam)+'">'+
       camThumb(cam)+
       '<span class="gtile-main">'+
@@ -3974,6 +3977,7 @@
   function renderBoard(){
     var host=document.getElementById('board'); if(!host) return;
     renderPoolBar();
+    var _w=mainWrap(); if(_w){ _w.classList.remove('pool-silva','pool-garcia','pool-mankin','pool-all'); _w.classList.add('pool-'+SELECTED_POOL); }   // gates the Silva-only inline Manage Equipment bar (below the wallet in the board view)
     // ===== MANAGE EQUIPMENT (buried catalog): every camera + gear unit as a CONDITION tile, with NO
     // checkout/checkin status (Chris 2026-10-04). Cameras grid first, then Additional equipment
     // grouped by type. Tap any tile -> its full window to update the kit / log an issue / mark complete.
@@ -4068,7 +4072,7 @@
     }
     // Reservation Activity (date selector + Checked out / Reserved / Returned accordions) sits ON TOP
     // as the daily glanceable status, then the buried Manage Equipment catalog, then the card wallet.
-    var html=manageHtml+walletHtml;   // Reservation Activity retired: the two-column Today board (above) replaces it.
+    var html=walletHtml+manageHtml;   // wallet first, then Manage Equipment BELOW it (the Silva board-view bar, Chris 2026-11-13). In the full Manage view the wallet is hidden, so order there is moot.
     // Flicker fix (Chris, 2026-09-29): the 7s poll used to replace #board on every tick, which
     // re-composited every backdrop-filter card over the fixed CS-logo background and read as a
     // periodic flicker. Only touch the DOM (and rebind) when the rendered board actually changed.
