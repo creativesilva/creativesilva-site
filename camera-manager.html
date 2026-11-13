@@ -1049,18 +1049,20 @@
   .gthumb.csec-thumb{width:28px;height:28px;flex:0 0 auto;margin:0 9px 0 2px;vertical-align:middle;}
   .wallet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:stretch;}   /* FIXED 3 across to mirror the physical 3x3 Pixel Pocket Rocket wallet; slots never reflow or re-sort (Chris 2026-11-13) */
   .wallet-grid .wslot{height:100%;}
-  .wslot{background:rgba(0,0,0,.3);border:1px solid var(--line-soft);border-left:4px solid rgba(160,180,180,.3);padding:10px 11px;display:flex;flex-direction:row;align-items:flex-start;gap:9px;min-height:74px;}
-  .wslot-main{display:flex;flex-direction:column;gap:5px;flex:1 1 auto;min-width:0;}
-  .wslot-sd{flex:0 0 auto;width:42px;height:42px;object-fit:contain;}
+  .wslot{background:rgba(0,0,0,.3);border:1px solid var(--line-soft);border-left:4px solid rgba(160,180,180,.3);padding:11px 12px;display:flex;flex-direction:column;align-items:stretch;gap:9px;min-height:74px;}
+  .wslot-top{display:flex;flex-direction:row;align-items:flex-start;gap:11px;width:100%;}   /* thumb + info; the Card returned button sits below, centered across the whole tile */
+  .wslot-main{display:flex;flex-direction:column;gap:4px;flex:1 1 auto;min-width:0;}
+  .wslot-sd{flex:0 0 auto;width:46px;height:46px;object-fit:contain;margin-top:1px;}
   .wslot.filled{border-left-color:#f5b301;background:rgba(245,179,1,.06);}
-  .wslot-n{font-family:var(--font);font-weight:700;font-size:.72rem;color:var(--faint);letter-spacing:.08em;text-transform:uppercase;}
-  /* The SLOT # stands out: name font, white, larger. "· PER X" keeps the status color + small size. */
-  .wslot-slot{font-family:var(--body);font-weight:700;font-size:1rem;color:#fff;letter-spacing:0;text-transform:none;}
-  .wslot.filled .wslot-n{color:#ffd889;}
+  .wslot-n{font-family:var(--body);display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;}
+  /* Slot # and the period callout read at the SAME size; the period stays yellow (Chris 2026-11-13). */
+  .wslot-slot{font-family:var(--body);font-weight:700;font-size:1.02rem;color:#fff;letter-spacing:0;}
+  .wslot-per{font-family:var(--body);font-weight:700;font-size:1.02rem;color:#ffd889;letter-spacing:0;}
   .wslot-who{font-weight:600;color:#fff;font-size:.9rem;line-height:1.2;}
-  .wslot-meta{font-size:.72rem;color:var(--muted);}
-  .wslot-count{font-size:.7rem;font-weight:700;letter-spacing:.02em;}
+  .wslot-meta{font-size:.82rem;color:var(--muted);line-height:1.35;}
+  .wslot-count{font-size:.86rem;font-weight:700;letter-spacing:.02em;margin-top:1px;}
   .wslot-count.ok{color:#8ff0b0;} .wslot-count.over{color:#ff9a8a;}
+  .wslot-ret{width:100%;margin-top:1px;}   /* Card returned: full width, centered across the whole tile, not offset by the card icon */
   .wslot-empty{color:var(--faint);font-size:.78rem;margin:auto 0;}
   /* Empty slot is a click target: type a student ID to hold a card ad-hoc. */
   .wslot-add{text-align:left;width:100%;font-family:inherit;color:inherit;cursor:pointer;transition:border-color .12s,background .12s;}
@@ -1098,16 +1100,16 @@
   /* Card tile: the student NAME is the link to the one full profile; the student NUMBER sits right below it. */
   .wslot-name{font-weight:700;color:#fff;font-size:.95rem;line-height:1.2;background:none;border:0;padding:0;text-align:left;cursor:pointer;font-family:inherit;display:block;}
   .wslot-name:hover{color:var(--teal-lt);text-decoration:underline;text-decoration-color:rgba(0,184,184,.5);text-underline-offset:3px;}
-  .wslot-sid{font-family:var(--body);font-size:.74rem;font-weight:600;color:var(--muted);letter-spacing:.02em;margin-top:-1px;}
+  .wslot-sid{font-family:var(--body);font-size:.95rem;font-weight:600;color:var(--muted);letter-spacing:.02em;margin-top:0;}   /* same size as the student name (Chris 2026-11-13) */
   /* Phone: KEEP the 3x3 (so screen position still matches the wallet) but condense the tile so three fit. */
   @media (max-width:600px){
     .wallet-grid{gap:6px;}
-    .wslot{padding:8px 7px;gap:6px;min-height:62px;}
+    .wslot{padding:9px 8px;gap:7px;min-height:62px;}
     .wslot-sd{display:none;}
-    .wslot-name{font-size:.82rem;}
-    .wslot-sid{font-size:.68rem;}
-    .wslot-meta,.wslot-count,.wslot-fmtsub{font-size:.64rem;}
-    .wslot-format{font-size:.72rem;}
+    .wslot-slot,.wslot-per{font-size:.9rem;}
+    .wslot-name,.wslot-sid{font-size:.8rem;}
+    .wslot-meta,.wslot-count,.wslot-fmtsub{font-size:.7rem;}
+    .wslot-format{font-size:.74rem;}
     .cwallet-sub{display:none;}
     .cwallet-head{padding:11px 13px;gap:9px;}
   }
@@ -4413,29 +4415,37 @@
     }
     return out;
   }
+  // Student name shown LAST name first, then first name (Chris 2026-11-13). Handles both roster formats.
+  function lastFirst(name){ name=String(name||'').trim(); if(!name) return 'Unknown';
+    if(name.indexOf(',')>=0) return name;                 // already "Last, First"
+    var p=name.split(/\s+/); if(p.length<2) return name;  // single token
+    return p[p.length-1]+', '+p.slice(0,p.length-1).join(' '); }
   function walletCardHtml(i, c){
     var rem=cardHoursLeft(c.held_at), expired=(rem<=0);
-    var nm=esc(c.student_name || 'Unknown');
+    var nm=esc(lastFirst(c.student_name));
     var sid=c.student_id?esc(String(c.student_id)):'';
-    var per=(c.period!=null && String(c.period).trim()!=='')?(' &middot; Per '+esc(String(c.period))):'';
+    var per=(c.period!=null && String(c.period).trim()!=='')?('<span class="wslot-per">Per '+esc(String(c.period))+'</span>'):'';
     var meta=(c.from_camera?('from '+esc(c.from_camera)+' &middot; '):'')+'held '+fmtHeld(c.held_at);
-    // Name taps through to the ONE full student profile (data-stu, same profile used everywhere); the
-    // student number sits directly below the name.
+    // Name (Last, First) taps through to the ONE full student profile; the student number sits below it.
     var nameBlock=sid
       ? '<button type="button" class="wslot-name" data-stu="'+sid+'" title="Open full student profile">'+nm+'</button><div class="wslot-sid">'+sid+'</div>'
       : '<div class="wslot-name" style="cursor:default">'+nm+'</div>';
-    var body='<div class="wslot-n"><span class="wslot-slot">Slot '+i+'</span>'+per+'</div>'+
+    var info='<div class="wslot-n"><span class="wslot-slot">Slot '+i+'</span>'+per+'</div>'+
       nameBlock+
       '<div class="wslot-meta">'+meta+'</div>'+
       (c.note?'<div class="wslot-meta">'+esc(c.note)+'</div>':'');
     if(expired){
-      body+='<div class="wslot-format">&#9888; Format card</div>'+
+      info+='<div class="wslot-format">&#9888; Format card</div>'+
             '<div class="wslot-fmtsub">Pull &amp; format it, or reach out to the student.</div>';
     } else {
-      body+='<div class="wslot-count ok">'+rem+'h left to offload</div>';
+      info+='<div class="wslot-count ok">'+rem+'h left to offload</div>';
     }
-    body+='<button class="btn sm" data-cardreturn="'+i+'">Card returned</button>';
-    return '<div class="wslot filled'+(expired?' expired':'')+'"><img class="wslot-sd" src="'+esc(SD_THUMB)+'" alt="" /><span class="wslot-main">'+body+'</span></div>';
+    // Column tile: thumb + info on top, then the Card returned button centered across the WHOLE tile (the
+    // top-left card icon no longer pulls the button off-center).
+    return '<div class="wslot filled'+(expired?' expired':'')+'">'+
+      '<div class="wslot-top"><img class="wslot-sd" src="'+esc(SD_THUMB)+'" alt="" /><span class="wslot-main">'+info+'</span></div>'+
+      '<button class="btn sm wslot-ret" data-cardreturn="'+i+'">Card returned</button>'+
+    '</div>';
   }
   function cardReturn(slot, btn){
     if(btn) btn.disabled=true;
