@@ -1025,7 +1025,8 @@
   .card-slot.sel{background:var(--teal);color:#04110f;border-color:var(--teal);}
   .card-slot.taken{opacity:.45;cursor:not-allowed;background:rgba(245,179,1,.12);border-color:rgba(245,179,1,.3);color:#ffd889;}
   .gthumb.csec-thumb{width:28px;height:28px;flex:0 0 auto;margin:0 9px 0 2px;vertical-align:middle;}
-  .wallet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:10px;}
+  .wallet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:stretch;}   /* FIXED 3 across to mirror the physical 3x3 Pixel Pocket Rocket wallet; slots never reflow or re-sort (Chris 2026-11-13) */
+  .wallet-grid .wslot{height:100%;}
   .wslot{background:rgba(0,0,0,.3);border:1px solid var(--line-soft);border-left:4px solid rgba(160,180,180,.3);padding:10px 11px;display:flex;flex-direction:row;align-items:flex-start;gap:9px;min-height:74px;}
   .wslot-main{display:flex;flex-direction:column;gap:5px;flex:1 1 auto;min-width:0;}
   .wslot-sd{flex:0 0 auto;width:42px;height:42px;object-fit:contain;}
@@ -1057,6 +1058,37 @@
   /* Held-card student name is a click target -> contact + period + teacher. */
   .wslot-wholink{font-weight:600;color:#fff;font-size:.9rem;line-height:1.2;background:none;border:0;padding:0;text-align:left;cursor:pointer;font-family:inherit;text-decoration:underline;text-decoration-color:rgba(0,184,184,.45);text-underline-offset:3px;}
   .wslot-wholink:hover{color:var(--teal-lt);}
+  /* ===== Two-wallet accordion: mirrors the two physical Pixel Pocket Rocket wallets (1-9, 10-18); ONE open at a time (Chris 2026-11-13). ===== */
+  .cwallet{margin-bottom:10px;}
+  .cwallet:last-child{margin-bottom:0;}
+  .cwallet-head{width:100%;display:flex;align-items:center;gap:12px;cursor:pointer;background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-md);color:var(--text);font-family:var(--font);padding:13px 16px;text-align:left;transition:border-color .18s ease,background .18s ease;}
+  .cwallet-head:hover{border-color:rgba(0,184,184,.45);}
+  .cwallet.open .cwallet-head{border-color:rgba(0,184,184,.5);background:rgba(0,184,184,.08);border-bottom-left-radius:0;border-bottom-right-radius:0;}
+  .cwallet-nm{font-family:var(--font);font-weight:700;font-size:1rem;letter-spacing:.05em;text-transform:uppercase;color:#5ff0f0;}
+  .cwallet-sub{font-family:var(--body);font-size:.82rem;color:var(--muted);letter-spacing:.02em;}
+  .cwallet-meta{margin-left:auto;display:flex;align-items:center;gap:13px;}
+  .cwallet-held{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);white-space:nowrap;}
+  .cwallet-held b{color:#ffd889;font-size:.95rem;letter-spacing:0;}
+  .cwallet-chev{width:9px;height:9px;border-right:2px solid var(--g-muted);border-bottom:2px solid var(--g-muted);transform:rotate(-45deg);transition:transform .2s ease;flex-shrink:0;}
+  .cwallet.open .cwallet-chev{transform:rotate(45deg);}
+  .cwallet-body{display:none;padding:12px 2px 2px;}
+  .cwallet.open .cwallet-body{display:block;animation:camAccOpen .22s ease;}
+  /* Card tile: the student NAME is the link to the one full profile; the student NUMBER sits right below it. */
+  .wslot-name{font-weight:700;color:#fff;font-size:.95rem;line-height:1.2;background:none;border:0;padding:0;text-align:left;cursor:pointer;font-family:inherit;display:block;}
+  .wslot-name:hover{color:var(--teal-lt);text-decoration:underline;text-decoration-color:rgba(0,184,184,.5);text-underline-offset:3px;}
+  .wslot-sid{font-family:var(--body);font-size:.74rem;font-weight:600;color:var(--muted);letter-spacing:.02em;margin-top:-1px;}
+  /* Phone: KEEP the 3x3 (so screen position still matches the wallet) but condense the tile so three fit. */
+  @media (max-width:600px){
+    .wallet-grid{gap:6px;}
+    .wslot{padding:8px 7px;gap:6px;min-height:62px;}
+    .wslot-sd{display:none;}
+    .wslot-name{font-size:.82rem;}
+    .wslot-sid{font-size:.68rem;}
+    .wslot-meta,.wslot-count,.wslot-fmtsub{font-size:.64rem;}
+    .wslot-format{font-size:.72rem;}
+    .cwallet-sub{display:none;}
+    .cwallet-head{padding:11px 13px;gap:9px;}
+  }
   .ci-status{font-family:var(--font);font-weight:700;font-size:.82rem;letter-spacing:.02em;margin-bottom:12px;}
   .ci-status.ok{color:#8ff0b0;} .ci-status.over{color:#ff6b60;}
   .ci-grid{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:.9rem;}
@@ -2060,16 +2092,7 @@
 </div>
 
 <!-- Held-card student info: contact + period + teacher, to reach out about an un-offloaded card. -->
-<div class="modal" id="cardinfomodal">
-  <div class="mpanel">
-    <div class="mhead"><span class="mtitle" id="ciTitle">Student</span><button class="mx" id="cix" aria-label="Close">&times;</button></div>
-    <div class="mbody">
-      <div class="ci-status" id="ciStatus"></div>
-      <div id="ciBody"></div>
-      <p class="retsub" style="margin-top:12px;">Reach out if they forget to grab the card to offload it.</p>
-    </div>
-  </div>
-</div>
+<!-- (Card-only info popup retired 2026-11-13: the card tile name opens the one full student profile instead.) -->
 
 <!-- Camera detail: click a camera number. Condition issues (resolve when fixed), standing note,
      permanent history log, and the camera's checkout history. -->
@@ -3696,7 +3719,16 @@
     // Two reservations booked for a near-future day (so locking that day surfaces the KEEP|CANCEL slider in the demo).
     recs.push({id:'rc_fut1',kind:'camera',item:'',group:'',camera:'Cam 04',student_id:'1012360',student_name:'Ava Nguyen',period:6,course:'Photo 1',teacher:'Silva',out:iso(2),due:iso(3),status:'reserved',picked_up_date:'',returned:false,returned_date:'',student_cell:'8055550142',note:'',created:tod+'T09:00:00Z'});
     recs.push({id:'rc_fut2',kind:'camera',item:'',group:'',camera:'Cam 08',student_id:'1012361',student_name:'Leo Park',period:6,course:'Photo 1',teacher:'Silva',out:iso(2),due:iso(3),status:'reserved',picked_up_date:'',returned:false,returned_date:'',student_cell:'8055550188',note:'',created:tod+'T09:00:00Z'});
-    return {cameras:cams,checkouts:recs,assets:{},cards:{},
+    // Demo-only held cards across BOTH wallets (slots 2,5,9 in wallet 1; 11,16 in wallet 2), some empty,
+    // two past 24h (expired -> red "format"), so the two-wallet 3x3 layout is exercised in ?demo=1.
+    var demoCards=(function(){ function h(hr){ return new Date(Date.now()-hr*3600*1000).toISOString(); } return {
+      '2':{student_id:'1012345',student_name:'Diego Jimenez',period:3,course:'Photo 1',teacher:'Silva',student_cell:'(805) 555-0103',parent_guardian:'Diego’s parent',parent_cell:'(805) 555-0203',from_camera:'Cam 06',held_at:h(5),note:''},
+      '5':{student_id:'1012347',student_name:'Sofia Mendoza',period:4,course:'Photo 2',teacher:'Silva',student_cell:'(805) 555-0104',from_camera:'Cam 09',held_at:h(10),note:''},
+      '9':{student_id:'1012348',student_name:'Mia Torres',period:1,course:'Photo 2',teacher:'Silva',from_camera:'Cam 03',held_at:h(30),note:'Left for the weekend'},
+      '11':{student_id:'1012346',student_name:'Liam Reyes',period:5,course:'Photo 1',teacher:'Silva',from_camera:'Cam 11',held_at:h(3),note:''},
+      '16':{student_id:'1012350',student_name:'Noah Park',period:2,course:'Photo 1',teacher:'Silva',from_camera:'Cam 06',held_at:h(28),note:''}
+    }; })();
+    return {cameras:cams,checkouts:recs,assets:{},cards:demoCards,
       pools:{silva:cams,garcia:cams.slice(0,15),mankin:['Cam 19','Cam 20','Cam 21']},
       equipment_pools:{silva:gpool,garcia:[],mankin:mkStyli},equipment_units:units,
       equipment_types:{tripod:{label:'Tripod'},speedlite:{label:'Speedlite'},reflector:{label:'Reflector'},wide:{label:'Ultra-Wide'},zoom:{label:'Ultra-Zoom'},bluetooth:{label:'Bluetooth Remote'},apple_pencil:{label:'iPad Stylus'}},
@@ -3982,13 +4014,23 @@
     // ===== MEMORY CARD WALLET: its own hub. Silva + Garcia only (Mankin has no card wallet). =====
     var walletHtml='';
     if(SELECTED_POOL!=='mankin'){
-      var wheld=Object.keys(DATA.cards||{}).length, wOpen=secOpen('wallet');
+      var wheld=Object.keys(DATA.cards||{}).length, wOpen=secOpen('wallet'), cwOpen=cardWalletOpen();
+      // One wallet section (physical wallet 1 = slots 1-9, wallet 2 = slots 10-18). ONE open at a time.
+      function cwalletHtml(n, lo, hi){ var open=(cwOpen===n);
+        return '<div class="cwallet'+(open?' open':'')+'" data-cw="'+n+'">'+
+          '<button type="button" class="cwallet-head" data-cwallet="'+n+'" aria-expanded="'+(open?'true':'false')+'">'+
+            '<span class="cwallet-nm">Wallet '+n+'</span>'+
+            '<span class="cwallet-sub">Cards '+lo+'-'+hi+'</span>'+
+            '<span class="cwallet-meta"><span class="cwallet-held"><b>'+walletHeld(lo,hi)+'</b> held</span><span class="cwallet-chev"></span></span>'+
+          '</button>'+
+          '<div class="cwallet-body"><div class="wallet-grid">'+walletRangeHtml(lo,hi)+'</div></div>'+
+        '</div>'; }
       walletHtml='<div class="camhub wallet-hub'+(wOpen?' open':'')+'">'+
         '<div class="camhub-head" data-sectoggle="wallet">'+
           '<span class="camhub-titlebox"><span class="camhub-code">Holding</span><span class="camhub-title">Memory Card Wallet</span></span>'+
           '<span class="camhub-meta"><span class="csec-n">'+wheld+' held</span><span class="camhub-chev"></span></span>'+
         '</div>'+
-        '<div class="camhub-body"><div class="wallet-grid">'+walletSlotsHtml()+'</div></div>'+
+        '<div class="camhub-body">'+cwalletHtml(1,1,9)+cwalletHtml(2,10,18)+'</div>'+
       '</div>';
     }
     // Reservation Activity (date selector + Checked out / Reserved / Returned accordions) sits ON TOP
@@ -4029,7 +4071,8 @@
     // Pooled gear: mark one unit out for repair (down+1) / bring one back (down-1). Availability follows.
     b.querySelectorAll('[data-cardreturn]').forEach(function(el){ el.onclick=function(){ silvaConfirm('Card returned to the student and offloaded? This clears the slot.',{okLabel:'Clear slot',cancelLabel:'Cancel'}).then(function(ok){ if(ok) cardReturn(el.getAttribute('data-cardreturn'), el); }); }; });
     b.querySelectorAll('[data-cardadd]').forEach(function(el){ el.onclick=function(){ openAdHocCard(+el.getAttribute('data-cardadd')); }; });
-    b.querySelectorAll('[data-cardinfo]').forEach(function(el){ el.onclick=function(){ openCardInfo(el.getAttribute('data-cardinfo')); }; });
+    // Wallet accordion: open the tapped wallet, close the other (one open at a time). Pure class toggle, no re-render.
+    b.querySelectorAll('[data-cwallet]').forEach(function(el){ el.onclick=function(){ var n=+el.getAttribute('data-cwallet'); var hub=el.closest('.wallet-hub'); if(hub){ hub.querySelectorAll('.cwallet').forEach(function(w){ var on=(+w.getAttribute('data-cw')===n); w.classList.toggle('open',on); var hd=w.querySelector('.cwallet-head'); if(hd) hd.setAttribute('aria-expanded',on?'true':'false'); }); } setCardWalletOpen(n); }; });
     b.querySelectorAll('[data-approve]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-approve'), el); }; });
     // Reservation Activity: styled date picker, +/- one week arrows, and open-the-bundle taps.
     var _rd=b.querySelector('#ra-date');
@@ -4316,29 +4359,35 @@
   // ===== Memory card wallet: 18 slots holding cards students left to offload later =====
   function cardHoursLeft(held){ if(!held) return 0; var t=new Date(held).getTime(); if(isNaN(t)) return 0; return Math.round((t+24*3600*1000-Date.now())/3600000); }
   function fmtHeld(iso){ if(!iso) return ''; var d=new Date(iso); if(isNaN(d.getTime())) return iso; return (d.getMonth()+1)+'/'+d.getDate()+' '+d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}); }
-  function walletSlotsHtml(){
-    var cards=DATA.cards||{}, filled=[], empty=[];
-    for(var i=1;i<=18;i++){ if(cards[String(i)]) filled.push(i); else empty.push(i); }
-    // Sort held cards by PERIOD so Silva can offload / contact students period by period (unknown last).
-    // Each card still shows its physical slot number, so the card is easy to find in the wallet.
-    filled.sort(function(x,y){
-      var px=parseInt(cards[String(x)].period,10), py=parseInt(cards[String(y)].period,10);
-      var ax=isNaN(px)?999:px, ay=isNaN(py)?999:py;
-      return ax!==ay?ax-ay:x-y;
-    });
-    var out='';
-    filled.forEach(function(i){ out+=walletCardHtml(i, cards[String(i)]); });
-    // Empty slots after, in slot order. Click to hold a card ad-hoc (type the student ID, starts the 24h clock).
-    empty.forEach(function(i){ out+='<button type="button" class="wslot wslot-add" data-cardadd="'+i+'"><span class="wslot-main"><div class="wslot-n"><span class="wslot-slot">Slot '+i+'</span></div><div class="wslot-empty">Empty</div><div class="wslot-addhint">+ Hold a card</div></span></button>'; });
+  // Which physical wallet is expanded (1 or 2); default 1. Mutually exclusive, persisted per session.
+  function cardWalletOpen(){ try{ var v=parseInt(sessionStorage.getItem('cwopen'),10); if(v===1||v===2) return v; }catch(e){} return 1; }
+  function setCardWalletOpen(n){ try{ sessionStorage.setItem('cwopen',String(n)); }catch(e){} }
+  function walletHeld(lo, hi){ var cards=DATA.cards||{}, n=0; for(var i=lo;i<=hi;i++){ if(cards[String(i)]) n++; } return n; }
+  // A wallet renders slots lo..hi in FIXED physical order (3 across), so the screen matches the real wallet
+  // slot for slot. A slot NEVER moves or re-sorts: filled shows the card, empty stays put as a vacant slot
+  // ("housing unit" model, Chris 2026-11-13) ready for the next card.
+  function walletRangeHtml(lo, hi){
+    var cards=DATA.cards||{}, out='';
+    for(var i=lo;i<=hi;i++){
+      var c=cards[String(i)];
+      if(c){ out+=walletCardHtml(i, c); }
+      else { out+='<button type="button" class="wslot wslot-add" data-cardadd="'+i+'"><span class="wslot-main"><div class="wslot-n"><span class="wslot-slot">Slot '+i+'</span></div><div class="wslot-empty">Empty</div><div class="wslot-addhint">+ Hold a card</div></span></button>'; }
+    }
     return out;
   }
   function walletCardHtml(i, c){
     var rem=cardHoursLeft(c.held_at), expired=(rem<=0);
-    var who=esc(c.student_name || (c.student_id?('ID '+c.student_id):'Unknown'));
+    var nm=esc(c.student_name || 'Unknown');
+    var sid=c.student_id?esc(String(c.student_id)):'';
     var per=(c.period!=null && String(c.period).trim()!=='')?(' &middot; Per '+esc(String(c.period))):'';
     var meta=(c.from_camera?('from '+esc(c.from_camera)+' &middot; '):'')+'held '+fmtHeld(c.held_at);
+    // Name taps through to the ONE full student profile (data-stu, same profile used everywhere); the
+    // student number sits directly below the name.
+    var nameBlock=sid
+      ? '<button type="button" class="wslot-name" data-stu="'+sid+'" title="Open full student profile">'+nm+'</button><div class="wslot-sid">'+sid+'</div>'
+      : '<div class="wslot-name" style="cursor:default">'+nm+'</div>';
     var body='<div class="wslot-n"><span class="wslot-slot">Slot '+i+'</span>'+per+'</div>'+
-      '<button type="button" class="wslot-who wslot-wholink" data-cardinfo="'+i+'" title="View contact, period &amp; teacher">'+who+'</button>'+
+      nameBlock+
       '<div class="wslot-meta">'+meta+'</div>'+
       (c.note?'<div class="wslot-meta">'+esc(c.note)+'</div>':'');
     if(expired){
@@ -4425,33 +4474,10 @@
   })();
 
   // ===== Held-card student info: contact + period + teacher (reach out about an un-offloaded card) =====
-  function openCardInfo(slot){
-    var c=(DATA.cards||{})[String(slot)]; if(!c) return;
-    var rem=cardHoursLeft(c.held_at);
-    var who=esc(c.student_name || (c.student_id?('ID '+c.student_id):'Unknown'));
-    function row(k,v,pop){ return '<div class="ci-k">'+k+'</div><div class="ci-v'+(pop?' pop':'')+'">'+(v?esc(v):'<span class="ci-none">Not on file</span>')+'</div>'; }
-    var grid=row('Slot','Slot '+slot,true)+
-      row('Period', c.period?('Period '+c.period):'')+
-      row('Class', c.course||'')+
-      row('Teacher', c.teacher||'')+
-      row('Student cell', c.student_cell||'')+
-      row('Parent / guardian', c.parent_guardian||'')+
-      row('Parent cell', c.parent_cell||'')+
-      (c.from_camera?row('From camera', c.from_camera):'')+
-      row('Held', fmtHeld(c.held_at))+
-      (c.note?row('Note', c.note):'');
-    document.getElementById('ciTitle').textContent=who;
-    var st=document.getElementById('ciStatus');
-    st.textContent=rem>0?(rem+'h left to offload'):('Overdue by '+(-rem)+'h · ready to format');
-    st.className='ci-status '+(rem>0?'ok':'over');
-    document.getElementById('ciBody').innerHTML='<div class="ci-grid">'+grid+'</div>';
-    document.getElementById('cardinfomodal').classList.add('open');
-  }
-  function closeCardInfo(){ document.getElementById('cardinfomodal').classList.remove('open'); }
-  (function(){
-    var x=document.getElementById('cix'); if(x) x.onclick=closeCardInfo;
-    var m=document.getElementById('cardinfomodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeCardInfo(); });
-  })();
+  // The card-only info popup (openCardInfo / #cardinfomodal) was RETIRED 2026-11-13: the card tile name now
+  // opens the ONE full student profile (openStudentProfile via data-stu), so there is a single profile and
+  // no risk of two diverging ones (Chris). The card-context fields that popup used to add (slot, held time,
+  // from-camera, note) already live on the tile itself.
 
   // ===== Downloadable detailed history (CSV, opens in Excel), any date range =====
   function csvCell(v){ v=(v==null?'':String(v)); return /[",\n]/.test(v)?('"'+v.replace(/"/g,'""')+'"'):v; }
