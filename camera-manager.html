@@ -1063,7 +1063,8 @@
   .wslot-count{font-size:.86rem;font-weight:700;letter-spacing:.02em;margin-top:1px;}
   .wslot-count.ok{color:#8ff0b0;} .wslot-count.over{color:#ff9a8a;}
   .wslot-ret{width:100%;margin-top:1px;}   /* Card returned: full width, centered across the whole tile, not offset by the card icon */
-  .wslot-empty{color:var(--faint);font-size:.78rem;margin:auto 0;}
+  .wslot-empty{color:var(--faint);font-size:.82rem;margin:1px 0 0;}
+  .wslot-sd-dim{opacity:.32;}   /* empty-slot card icon: ghosted so the slot still reads as empty (Chris 2026-11-13) */
   /* Empty slot is a click target: type a student ID to hold a card ad-hoc. */
   .wslot-add{text-align:left;width:100%;font-family:inherit;color:inherit;cursor:pointer;transition:border-color .12s,background .12s;}
   .wslot-add:hover{border-color:var(--teal);border-left-color:var(--teal);background:rgba(0,184,184,.08);}
@@ -3757,7 +3758,7 @@
     // Demo-only held cards across BOTH wallets (slots 2,5,9 in wallet 1; 11,16 in wallet 2), some empty,
     // two past 24h (expired -> red "format"), so the two-wallet 3x3 layout is exercised in ?demo=1.
     var demoCards=(function(){ function h(hr){ return new Date(Date.now()-hr*3600*1000).toISOString(); } return {
-      '2':{student_id:'1012345',student_name:'Diego Antonio Jimenez',period:3,course:'Photo 1',teacher:'Silva',student_cell:'(805) 555-0103',parent_guardian:'Diego’s parent',parent_cell:'(805) 555-0203',from_camera:'Cam 06',held_at:h(5),note:''},
+      '2':{student_id:'1012345',student_name:'Jimenez Garcia, Diego',period:3,course:'Photo 1',teacher:'Silva',student_cell:'(805) 555-0103',parent_guardian:'Diego’s parent',parent_cell:'(805) 555-0203',from_camera:'Cam 06',held_at:h(5),note:''},
       '5':{student_id:'1012347',student_name:'Sofia Mendoza',period:4,course:'Photo 2',teacher:'Silva',student_cell:'(805) 555-0104',from_camera:'Cam 09',held_at:h(10),note:''},
       '9':{student_id:'1012348',student_name:'Mia Torres',period:1,course:'Photo 2',teacher:'Silva',from_camera:'Cam 03',held_at:h(30),note:'Left for the weekend'},
       '11':{student_id:'1012346',student_name:'Liam Reyes',period:5,course:'Photo 1',teacher:'Silva',from_camera:'Cam 11',held_at:h(3),note:''},
@@ -4411,20 +4412,22 @@
     for(var i=lo;i<=hi;i++){
       var c=cards[String(i)];
       if(c){ out+=walletCardHtml(i, c); }
-      else { out+='<button type="button" class="wslot wslot-add" data-cardadd="'+i+'"><span class="wslot-main"><div class="wslot-n"><span class="wslot-slot">Slot '+i+'</span></div><div class="wslot-empty">Empty</div><div class="wslot-addhint">+ Hold a card</div></span></button>'; }
+      else { out+='<div class="wslot wslot-emptytile">'+
+        '<div class="wslot-top"><img class="wslot-sd wslot-sd-dim" src="'+esc(SD_THUMB)+'" alt="" /><span class="wslot-main"><div class="wslot-n"><span class="wslot-slot">Slot '+i+'</span></div><div class="wslot-empty">Empty</div></span></div>'+
+        '<button class="btn sm wslot-ret" data-cardadd="'+i+'">Hold card</button>'+
+      '</div>'; }
     }
     return out;
   }
-  // Student name: FULL last name first, then full first name, middle name(s) as initials (Chris 2026-11-13):
-  // "Jimenez, Diego A." The ENTIRE last name is always kept, including compound surnames from the roster's
-  // "Last, First" format (everything before the comma is the surname).
+  // Student name LAST name first, shown IN FULL, no abbreviation, so the ENTIRE last name always appears
+  // (Chris 2026-11-13). The roster already stores "Last, First" (server resolve_student = last_name + ', ' +
+  // first_name), so a comma-format name is already correct and shown verbatim (compound surnames stay whole);
+  // a plain "First Last" is just reordered. Earlier middle-initial logic wrongly clipped a surname on
+  // two-surname names, so it was removed.
   function lastFirst(name){ name=String(name||'').trim(); if(!name) return 'Unknown';
-    var last, rest;
-    if(name.indexOf(',')>=0){ var cp=name.split(','); last=cp[0].trim(); rest=cp.slice(1).join(',').trim(); }
-    else { var tk=name.split(/\s+/); if(tk.length<2) return name; last=tk[tk.length-1]; rest=tk.slice(0,tk.length-1).join(' '); }
-    var r=rest.split(/\s+/).filter(Boolean); if(!r.length) return last;
-    var mids=r.slice(1).map(function(m){ return m.charAt(0).toUpperCase()+'.'; });
-    return last+', '+r[0]+(mids.length?(' '+mids.join(' ')):''); }
+    if(name.indexOf(',')>=0) return name;                 // roster "Last, First" - already correct + full
+    var p=name.split(/\s+/); if(p.length<2) return name;  // single token
+    return p[p.length-1]+', '+p.slice(0,p.length-1).join(' '); }
   function walletCardHtml(i, c){
     var rem=cardHoursLeft(c.held_at), expired=(rem<=0);
     var nm=esc(lastFirst(c.student_name));
@@ -4449,7 +4452,7 @@
     // top-left card icon no longer pulls the button off-center).
     return '<div class="wslot filled'+(expired?' expired':'')+'">'+
       '<div class="wslot-top"><img class="wslot-sd" src="'+esc(SD_THUMB)+'" alt="" /><span class="wslot-main">'+info+'</span></div>'+
-      '<button class="btn sm wslot-ret" data-cardreturn="'+i+'">Card returned</button>'+
+      '<button class="btn sm wslot-ret" data-cardreturn="'+i+'">Return card</button>'+
     '</div>';
   }
   function cardReturn(slot, btn){
