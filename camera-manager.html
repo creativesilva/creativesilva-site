@@ -1071,11 +1071,11 @@
   .wslot-add:hover .wslot-addhint{opacity:1;}
   /* Overdue card (past 24h): flashing red translucent glow = pull &amp; format it. */
   .wslot.expired{border-color:rgba(224,64,58,.55);border-left-color:#e0403a;animation:cardFlash 1.5s ease-in-out infinite;}
-  @keyframes cardFlash{0%,100%{box-shadow:0 0 0 0 rgba(224,64,58,0);background:rgba(224,64,58,.06);}50%{box-shadow:0 0 0 4px rgba(224,64,58,.30);background:rgba(224,64,58,.20);}}
+  @keyframes cardFlash{0%,100%{box-shadow:0 0 0 0 rgba(224,64,58,0);background:rgba(224,64,58,.11);}50%{box-shadow:0 0 0 5px rgba(224,64,58,.44);background:rgba(224,64,58,.32);}}   /* red pulse a bit more noticeable (Chris 2026-11-13) */
   .wslot.expired .wslot-n{color:#ff9a8a;}
   .wslot-format{font-family:var(--font);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ff6b60;font-size:.82rem;display:flex;align-items:center;gap:6px;}
   .wslot-fmtsub{font-size:.68rem;color:#ffb3a6;line-height:1.35;}
-  @media (prefers-reduced-motion:reduce){ .wslot.expired{animation:none;box-shadow:0 0 0 2px rgba(224,64,58,.32);} }
+  @media (prefers-reduced-motion:reduce){ .wslot.expired{animation:none;box-shadow:0 0 0 3px rgba(224,64,58,.48);background:rgba(224,64,58,.18);} }
   /* Ad-hoc hold: live student-name confirmation line. */
   .ca-who{min-height:1.1em;font-size:.86rem;color:var(--muted);margin:2px 0 10px;}
   .ca-who.ok{color:#8ff0b0;} .ca-who.warn{color:#ffb28a;}
@@ -3757,7 +3757,7 @@
     // Demo-only held cards across BOTH wallets (slots 2,5,9 in wallet 1; 11,16 in wallet 2), some empty,
     // two past 24h (expired -> red "format"), so the two-wallet 3x3 layout is exercised in ?demo=1.
     var demoCards=(function(){ function h(hr){ return new Date(Date.now()-hr*3600*1000).toISOString(); } return {
-      '2':{student_id:'1012345',student_name:'Diego Jimenez',period:3,course:'Photo 1',teacher:'Silva',student_cell:'(805) 555-0103',parent_guardian:'Diego’s parent',parent_cell:'(805) 555-0203',from_camera:'Cam 06',held_at:h(5),note:''},
+      '2':{student_id:'1012345',student_name:'Diego Antonio Jimenez',period:3,course:'Photo 1',teacher:'Silva',student_cell:'(805) 555-0103',parent_guardian:'Diego’s parent',parent_cell:'(805) 555-0203',from_camera:'Cam 06',held_at:h(5),note:''},
       '5':{student_id:'1012347',student_name:'Sofia Mendoza',period:4,course:'Photo 2',teacher:'Silva',student_cell:'(805) 555-0104',from_camera:'Cam 09',held_at:h(10),note:''},
       '9':{student_id:'1012348',student_name:'Mia Torres',period:1,course:'Photo 2',teacher:'Silva',from_camera:'Cam 03',held_at:h(30),note:'Left for the weekend'},
       '11':{student_id:'1012346',student_name:'Liam Reyes',period:5,course:'Photo 1',teacher:'Silva',from_camera:'Cam 11',held_at:h(3),note:''},
@@ -4415,11 +4415,16 @@
     }
     return out;
   }
-  // Student name shown LAST name first, then first name (Chris 2026-11-13). Handles both roster formats.
+  // Student name: FULL last name first, then full first name, middle name(s) as initials (Chris 2026-11-13):
+  // "Jimenez, Diego A." The ENTIRE last name is always kept, including compound surnames from the roster's
+  // "Last, First" format (everything before the comma is the surname).
   function lastFirst(name){ name=String(name||'').trim(); if(!name) return 'Unknown';
-    if(name.indexOf(',')>=0) return name;                 // already "Last, First"
-    var p=name.split(/\s+/); if(p.length<2) return name;  // single token
-    return p[p.length-1]+', '+p.slice(0,p.length-1).join(' '); }
+    var last, rest;
+    if(name.indexOf(',')>=0){ var cp=name.split(','); last=cp[0].trim(); rest=cp.slice(1).join(',').trim(); }
+    else { var tk=name.split(/\s+/); if(tk.length<2) return name; last=tk[tk.length-1]; rest=tk.slice(0,tk.length-1).join(' '); }
+    var r=rest.split(/\s+/).filter(Boolean); if(!r.length) return last;
+    var mids=r.slice(1).map(function(m){ return m.charAt(0).toUpperCase()+'.'; });
+    return last+', '+r[0]+(mids.length?(' '+mids.join(' ')):''); }
   function walletCardHtml(i, c){
     var rem=cardHoursLeft(c.held_at), expired=(rem<=0);
     var nm=esc(lastFirst(c.student_name));
