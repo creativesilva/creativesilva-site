@@ -526,6 +526,8 @@
   .tbq-act.call{background:var(--red);border-color:var(--red);color:#fff;}
   .tbq-act.text{color:#8ff7f7;border-color:rgba(0,184,184,.4);}
   .tbq-act.stock{color:#ffd166;border-color:rgba(245,179,1,.42);}
+  .tbq-clear{flex:0 0 auto;display:inline-flex;align-items:center;height:30px;padding:0 14px;border-radius:var(--g-r-pill);border:1px solid rgba(0,184,184,.45);background:rgba(0,184,184,.08);color:var(--g-teal-lt);font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.66rem;cursor:pointer;transition:background .15s,color .15s,border-color .15s;}
+  .tbq-clear:hover{background:var(--g-primary);color:#04110f;border-color:transparent;}
   .tbq-row .til-chev{flex:0 0 auto;color:var(--faint);font-size:1.1rem;}
   @media (max-width:640px){
     .tbq-row{flex-wrap:wrap;}
@@ -1779,6 +1781,8 @@
   /* Reservations Queue hub header: worksheet glyph + eyebrow + title, matching the Calendar + Wallet hubs */
   .tb-head{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px 14px;padding:4px 6px 14px;border-bottom:0;}   /* title | centered day cluster | spacer (Chris 2026-11-13) */
   .tb-headspacer{min-width:0;}
+  .tb-clearall{justify-self:end;display:inline-flex;align-items:center;height:36px;padding:0 17px;border-radius:var(--g-r-pill);border:1px solid rgba(224,64,58,.5);background:rgba(224,64,58,.13);color:#ff9a8a;font-family:var(--font);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.72rem;cursor:pointer;transition:background .16s,color .16s,border-color .16s;white-space:nowrap;}   /* Overdue tab only: clear all the inaccurate overdues (Chris 2026-11-13) */
+  .tb-clearall:hover{background:var(--red);color:#fff;border-color:transparent;}
   .tb-daynav{display:flex;align-items:center;gap:9px;justify-self:center;flex-wrap:nowrap;}   /* [sort] <  day  > [calendar], centered in the header */
   .tb-calmenu{position:relative;flex:0 0 auto;display:inline-flex;}   /* positioning context so the date popup opens directly under the calendar button (Chris 2026-11-13) */
   .tb-daycap{display:flex;align-items:center;justify-content:center;gap:11px;margin:-2px 0 9px;}   /* off-today: Today pill + Projected/History note, centered below the header */
@@ -2808,6 +2812,24 @@
     var pt=govTime(c,'pickup_time'); return {lab:'Pickup', val:(pt?fmtTime12(pt):'today')}; }
   // Student cell shown right on the row so the teacher can dial from a desk phone without opening the card.
   function fmtPhone(s){ var d=String(s||'').replace(/\D/g,''); if(d.length===11 && d.charAt(0)==='1') d=d.slice(1); if(d.length===10) return '('+d.slice(0,3)+') '+d.slice(3,6)+'-'+d.slice(6); return String(s||''); }
+  // Clear an inaccurate overdue: mark its whole kit returned (frees the camera, keeps history). Chris 2026-11-13.
+  function clearOverdue(id, btn){
+    var c=findRec(id); if(!c) return;
+    if(btn) btn.disabled=true;
+    var items=resvItems(c).filter(function(it){ return statusOf(it)!=='returned'; });
+    _lastTBSig=null;
+    Promise.all(items.map(function(it){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:it.id,status:'returned'})}); }))
+      .then(function(){ return loadBoard(); }).then(reloadCal).then(function(){ silvaToast('Cleared.'); })
+      .catch(function(){ if(btn) btn.disabled=false; silvaToast('Could not clear. Try again.'); });
+  }
+  function clearAllOverdue(){
+    var all=overdueCallResvs(); if(!all.length) return;
+    silvaConfirm('Clear all '+all.length+' overdue '+(all.length===1?'camera':'cameras')+'? Each is marked returned and freed. Use this for false overdues, not for ones a student still physically has.', {okLabel:'Clear all',cancelLabel:'Cancel',danger:true}).then(function(ok){ if(!ok) return;
+      var jobs=[]; all.forEach(function(c){ resvItems(c).forEach(function(it){ if(statusOf(it)!=='returned') jobs.push(camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:it.id,status:'returned'})})); }); });
+      _lastTBSig=null;
+      Promise.all(jobs).then(function(){ return loadBoard(); }).then(reloadCal).then(function(){ silvaToast('Cleared '+all.length+' overdue.'); }).catch(function(){ silvaToast('Could not clear all. Try again.'); });
+    });
+  }
   function queueRow(c, kind){
     var cell=String(c.student_cell||'').replace(/\D/g,'');
     var shown=resvItems(c).filter(function(it){ return kind==='call' ? (statusOf(it)==='out'&&isOverdue(it)) : statusOf(it)!=='returned'; });
@@ -2819,10 +2841,13 @@
     // Missed pickup: Text the no-show, or Return the unit to stock.
     var actsHtml=(kind==='call') ? '' :
       '<span class="tbq-acts">'+(cell?'<a class="tbq-act text" href="sms:'+cell+'" data-stop="1">Text</a>':'')+'<button type="button" class="tbq-act stock" data-questock="'+esc(c.id)+'">Return to stock</button></span>';
+    // Overdue only: a Clear button LEFT of the phone number, to clear an inaccurate overdue (marks the kit
+    // returned and frees the camera) (Chris 2026-11-13).
+    var clearBtn=(kind==='call') ? '<button type="button" class="tbq-clear" data-quclear="'+esc(c.id)+'" data-stop="1" title="Clear this overdue (mark it returned and free the camera)">Clear</button>' : '';
     return '<div class="tbq-row" data-resvopen="'+esc(c.id)+'" role="button" tabindex="0"><span class="tbq-dot '+dotCls+'"></span>'+
       '<span class="tbq-big">'+big+'</span>'+
       '<span class="tbq-main"><span class="tbq-name">'+esc(nameOf(c))+'</span>'+per+'</span>'+
-      telHtml+
+      clearBtn+telHtml+
       '<span class="tbq-when"><span class="tbq-wlab">'+esc(wp.lab)+'</span><span class="tbq-wval">'+esc(wp.val)+'</span></span>'+
       actsHtml+'<span class="til-chev">&#8250;</span></div>'; }
   function queueHtml(list, kind){ if(!list.length) return '';
@@ -3002,7 +3027,9 @@
     var queues=isT?(queueHtml(odCall,'call')+queueHtml(miss,'miss')):'';
     // The Reservations QUEUE panel header: a worksheet glyph + eyebrow + title, matching the Calendar + Wallet
     // hubs. The student search moved up into the control row; Simple view moved into the hamburger. (Chris 2026-11-07)
-    var head='<div class="tb-head"><span class="tb-qhead"><span class="tb-qic" aria-hidden="true"><img src="https://www.creativesilva.com/assets/Icons/assignment/worksheet-teal-v1.svg" alt="" width="40" height="40"></span><span class="tb-qtitlebox"><span class="tb-qcode">Reservations</span><span class="tb-qname">Queue</span></span></span>'+daynav+'<span class="tb-headspacer" aria-hidden="true"></span></div>'+dayCaption;
+    // Clear-all sits in the header's right zone (opposite the day cluster), only on the Overdue tab (Chris 2026-11-13).
+    var clearAllBtn=(view==='overdue' && nOverdue>0) ? '<button type="button" class="tb-clearall" data-quclearall="1" title="Clear all overdue (mark them returned)">Clear all</button>' : '<span class="tb-headspacer" aria-hidden="true"></span>';
+    var head='<div class="tb-head"><span class="tb-qhead"><span class="tb-qic" aria-hidden="true"><img src="https://www.creativesilva.com/assets/Icons/assignment/worksheet-teal-v1.svg" alt="" width="40" height="40"></span><span class="tb-qtitlebox"><span class="tb-qcode">Reservations</span><span class="tb-qname">Queue</span></span></span>'+daynav+clearAllBtn+'</div>'+dayCaption;
     var _hs=document.getElementById('hambSimple'); if(_hs&&_hs.lastChild) _hs.lastChild.textContent=SIMPLE?'Full view':'Simple view';
     if(SIMPLE){
       var markAll=(isT&&nOut>0)?'<button type="button" class="tb-pickall" data-tbpickall="1">Mark all picked up</button>':'';
@@ -3031,6 +3058,8 @@
     el.querySelectorAll('[data-questock]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); var id=b.getAttribute('data-questock'); var c=findRec(id);
       silvaConfirm('Return '+esc(((c&&c.kind!=='equipment')?c.camera:gearLabel(c&&c.item))||'this item')+' to stock? This cancels '+esc(nameOf(c||{}))+'’s reservation so you can check it out to someone else.', {okLabel:'Return to stock',cancelLabel:'Keep'})
         .then(function(ok){ if(ok){ _lastTBSig=null; del(id); } }); }; });
+    el.querySelectorAll('[data-quclear]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); clearOverdue(b.getAttribute('data-quclear'), b); }; });   // clear one inaccurate overdue
+    var _qca=el.querySelector('[data-quclearall]'); if(_qca) _qca.onclick=function(e){ e.stopPropagation(); clearAllOverdue(); };   // clear-all in the header (overdue only)
     el.querySelectorAll('[data-resvopen]').forEach(function(b){ b.onclick=function(){ openReservation(b.getAttribute('data-resvopen')); }; });
     // Quick check-in right on the row (left of the due date): a kit opens its return checklist; a standalone gear piece marks returned. The rest of the row still opens the detail card.
     el.querySelectorAll('[data-quickci]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); openReturnChecklist(b.getAttribute('data-quickci')); }; });
