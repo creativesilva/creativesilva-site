@@ -253,13 +253,13 @@
   .tb-tg.avail.on{background:var(--ok);color:#04140a;} .tb-tg.avail.on .tb-tgn{background:rgba(0,0,0,.2);color:#04140a;}
   /* Overdue (red) + Requests (purple) tabs ALWAYS forecast their section color in the label + count square (like Outgoing=gold, Incoming=teal, Available=green). The .hot state adds a background tint when something is waiting; .on is the active view (rules last so they win). */
   .tb-tg.overdue{color:#d49b94;} .tb-tg.overdue.hot{color:#ff9a8a;background:rgba(224,64,58,.12);}
-  .tb-tg.requests{color:#bdaee8;} .tb-tg.requests.hot{color:#d9ccff;background:rgba(139,92,246,.14);}
+  .tb-tg.requests{color:#bdaee8;} .tb-tg.requests.hot{color:#d9ccff;background:rgba(139,92,246,.16);border-color:rgba(139,92,246,.55);animation:reqPulse 1.6s ease-in-out infinite;}   /* glows/pulses purple while there are requests to approve (Chris 2026-11-13) */
   .tb-tg.overdue .tb-tgn{background:rgba(224,64,58,.2);color:#ffb3aa;}
   .tb-tg.requests .tb-tgn{background:rgba(139,92,246,.26);color:#d9ccff;}
   .tb-tg.overdue .tb-tgn.tb-tgn-od{background:var(--red);color:#fff;}
   .tb-tg.requests .tb-tgn.tb-tgn-req{background:#8b5cf6;color:#fff;}
   .tb-tg.overdue.on{background:var(--red);color:#fff;} .tb-tg.overdue.on .tb-tgn{background:rgba(0,0,0,.22);color:#fff;}
-  .tb-tg.requests.on{background:#8b5cf6;color:#120a24;} .tb-tg.requests.on .tb-tgn{background:rgba(0,0,0,.2);color:#120a24;}
+  .tb-tg.requests.on{background:#8b5cf6;color:#120a24;animation:none;border-color:#8b5cf6;} .tb-tg.requests.on .tb-tgn{background:rgba(0,0,0,.2);color:#120a24;}
   /* The count badge on the ACTIVE tab sits on a dark overlay, so its number is WHITE (it was near-black
      and unreadable). Last rule, equal specificity, so it wins over the per-tab colors above. (Chris 2026-11-09) */
   .tb-tg.out.on .tb-tgn,.tb-tg.in.on .tb-tgn,.tb-tg.checked.on .tb-tgn,.tb-tg.avail.on .tb-tgn,.tb-tg.overdue.on .tb-tgn,.tb-tg.requests.on .tb-tgn{background:rgba(0,0,0,.42);color:#fff;}
@@ -269,6 +269,7 @@
   .tb-tg.canceled.on{background:#b3201c;color:#fff;animation:none;border-color:#b3201c;}
   .tb-tg.canceled.on .tb-tgn.tb-tgn-canc{background:rgba(0,0,0,.3);color:#fff;}
   @keyframes cancPulse{0%,100%{box-shadow:0 0 0 0 rgba(224,64,58,0);} 50%{box-shadow:0 0 15px 1px rgba(224,64,58,.6);}}
+  @keyframes reqPulse{0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,0);} 50%{box-shadow:0 0 15px 1px rgba(139,92,246,.65);}}   /* Requests tab glow while there are asks to approve (Chris 2026-11-13) */
   /* Cancellation cards: one red row per canceled reservation + a Notified button that clears it. */
   .tb-canclist{display:flex;flex-direction:column;gap:8px;}
   .tbc-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--g-r-md);background:linear-gradient(135deg,rgba(224,64,58,.17),rgba(4,20,19,.6));border:1px solid rgba(224,64,58,.42);box-shadow:var(--g-spec);}
