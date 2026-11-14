@@ -1889,11 +1889,11 @@
           <button type="button" class="cm-hambitem" id="hambSimple"><span class="cmh-ic">&#9707;</span>Simple view</button>
           <button type="button" class="cm-hambitem" data-cview="manage"><span class="cmh-ic">&#9636;</span>Manage Equipment</button>
           <button type="button" class="cm-hambitem" data-cview="history"><span class="cmh-ic">&#8617;</span>Returned History</button>
-          <button type="button" class="cm-hambitem" data-cview="events"><span class="cmh-ic">&#9202;</span>Event History</button>
+          <button type="button" class="cm-hambitem" data-cview="events"><span class="cmh-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></span>Event History</button>
           <div class="cmh-sep"></div>
-          <button type="button" class="cm-hambitem" id="reportsBtn"><span class="cmh-ic">&#9744;</span>Missing Items</button>
-          <a class="cm-hambitem" id="photoWalkBtn" href="/photo-walk.html"><span class="cmh-ic">&#9873;</span>Photo Walk Log</a>
-          <button type="button" class="cm-hambitem" id="leadsBtn"><span class="cmh-ic">&#9733;</span>Class Leads</button>
+          <button type="button" class="cm-hambitem" id="reportsBtn"><span class="cmh-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6a1 1 0 0 1 1 1v1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h2V5a1 1 0 0 1 1-1z"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span>Missing Items</button>
+          <a class="cm-hambitem" id="photoWalkBtn" href="/photo-walk.html"><span class="cmh-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.5"/></svg></span>Photo Walk Log</a>
+          <button type="button" class="cm-hambitem" id="leadsBtn"><span class="cmh-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2.5 15 9 22 9.7 16.5 14.3 18.2 21 12 17.3 5.8 21 7.5 14.3 2 9.7 9 9"/></svg></span>Class Leads</button>
           <button type="button" class="cm-hambitem" id="lockDatesBtn"><span class="cmh-ic">&#9638;</span>Lock Dates</button>
         </div>
       </div>
@@ -3265,7 +3265,7 @@
         : '<button type="button" class="itemlink" data-geardetail="'+esc(lead.item)+'">'+esc(String(gearLabel(lead.item)).toUpperCase())+'</button>';
       var extra=items.length>1?(' <span class="muted">+'+(items.length-1)+'</span>'):'';
       var _mn=(o.note&&/missing|not returned|damage|lost/i.test(o.note))?o.note:'';
-      var _mline=_mn?('<div class="stu-hmiss">&#9873; '+esc(_mn)+'</div>'):'';
+      var _mline=_mn?('<div class="stu-hmiss"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px;margin-right:5px"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>'+esc(_mn)+'</div>'):'';
       return '<div class="stu-hentry'+(_mn?' flagged':'')+'"><div class="stu-hrow"><span class="d">'+fmt(o.out)+' &rarr; '+fmt(o.due)+'</span><span>'+nm+extra+'</span><span class="st '+st+'">'+({reserved:'Reserved',out:'Out',returned:'Returned'}[st]||st)+'</span></div>'+_mline+'</div>';
     }).join('');
     h+='<div class="stu-sec"><div class="stu-sec-h">Reservation history ('+orders.length+')</div><div class="stu-hist">'+(rows||'<div class="cd-empty">No reservations on record yet.</div>')+'</div></div>';
@@ -4191,7 +4191,7 @@
 
   function markSync(ok){
     var s=document.getElementById('sync');
-    if(ok) s.innerHTML='<b>&#10003; Live</b> &middot; synced '+new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+    if(ok) s.innerHTML='<b><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px;margin-right:3px"><polyline points="20 6 9 17 4 12"/></svg>Live</b> &middot; synced '+new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
     else s.textContent='Reconnecting…';
   }
   function reloadCal(){ var f=document.getElementById('calframe'); if(!f) return; try{ f.contentWindow.location.reload(); }catch(e){ try{ f.src=f.src; }catch(_){} } }
@@ -4454,7 +4454,7 @@
       '<div class="wslot-meta">'+meta+'</div>'+
       (c.note?'<div class="wslot-meta">'+esc(c.note)+'</div>':'');
     if(expired){
-      info+='<div class="wslot-format">&#9888; Format card</div>'+
+      info+='<div class="wslot-format"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Format card</div>'+
             '<div class="wslot-fmtsub">Pull &amp; format it, or reach out to the student.</div>';
     } else {
       info+='<div class="wslot-count ok">'+rem+'h left to offload</div>';
@@ -4816,7 +4816,7 @@
     var hist=(DATA.checkouts||[]).filter(function(x){ return x.camera===cam && x.kind!=='equipment'; }).sort(function(x,y){ return (x.out||'')<(y.out||'')?1:-1; });
     var statusPill=oos?'<span class="pill oos">Out of service</span>':(c?(statusOf(c)==='reserved'?'<span class="pill reserved">Reserved</span>':'<span class="pill '+(isOverdue(c)?'overdue':'out')+'">'+(isOverdue(c)?'Overdue':'Checked out')+'</span>'):(nc?'<span class="pill nocard">Memory card missing</span>':'<span class="pill avail">Available</span>'));
     var h='<div class="cd-row"><div>'+statusPill+(P2.indexOf(cam)>=0?' <span class="camlog-p2">Photo 2 only</span>':'')+'</div><button class="btn sm '+(oos?'':'danger')+'" id="cd-oos">'+(oos?'Return to service':'Mark out of service')+'</button></div>';
-    if(nc) h+='<div class="cd-cur" style="border-left-color:#f5b301;"><div class="cd-cur-note" style="color:#ffd889;">&#9888; Memory card missing. This kit is out of rotation until a fresh card is installed.</div><div class="cd-cur-acts"><button class="btn sm" id="cd-newcard">New card installed</button></div></div>';
+    if(nc) h+='<div class="cd-cur" style="border-left-color:#f5b301;"><div class="cd-cur-note" style="color:#ffd889;"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:5px"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Memory card missing. This kit is out of rotation until a fresh card is installed.</div><div class="cd-cur-acts"><button class="btn sm" id="cd-newcard">New card installed</button></div></div>';
     if(c){
       var cdPend=(statusOf(c)==='reserved' && c.approved===false);
       var cdPendMsg=cdPend?'<div class="cd-cur-note" style="color:#c9b8ff;">Student request &middot; approve to confirm this reservation, or deny to free the camera.</div>':'';
@@ -4928,9 +4928,10 @@
     // Student number is LOCKED (imported from the district sheet, exact): shown, never editable.
     var sid=parent.student_id?('<div class="eds-id"><span class="eds-idlab">Student ID</span><span class="eds-idval">'+esc(parent.student_id)+'</span></div>'):'';
     var cellDigits=String(parent.student_cell||'').replace(/\D/g,'');
-    var call=cellDigits
-      ? '<a class="eds-row eds-call" href="tel:'+esc(cellDigits)+'"><span class="eds-ic">&#9742;</span><span class="eds-rlab">Call student</span><span class="eds-tel">'+esc(fmtPhone(parent.student_cell))+'</span></a>'
-      : '<div class="eds-row eds-call"><span class="eds-ic">&#9742;</span><span class="eds-rlab">Phone</span><span class="eds-tel none">No cell on file</span></div>';
+    // Student cellphone: a one-color teal phone icon (no emoji), labeled "Student Cellphone", DISPLAY only
+    // (no tel: auto-dial) (Chris 2026-11-13).
+    var _phoneIc='<span class="eds-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>';
+    var call='<div class="eds-row eds-call">'+_phoneIc+'<span class="eds-rlab">Student Cellphone</span><span class="eds-tel'+(cellDigits?'':' none')+'">'+(cellDigits?esc(fmtPhone(parent.student_cell)):'No cell on file')+'</span></div>';
     cEl.innerHTML='<div class="eds-name-row">'+nm+clsChip+per+'<span class="eds-chip st-'+stCls+'">'+esc(stLbl)+'</span></div>'+
       sid+'<div class="eds-grp mt">'+call+'</div>';
     // Status-smart actions (no dropdown): show only the buttons that match the current status. The
