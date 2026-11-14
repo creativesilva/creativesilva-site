@@ -1532,6 +1532,20 @@
   .stu-lock-st{font-size:.76rem;color:#ff9a8a;font-weight:700;}
   .stu-lock-opts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px;}
   .stu-lock-opts[hidden]{display:none;}
+  /* Teacher contact edit on the profile card: pencil button in the section header + an inline form. */
+  .stu-sec-hrow{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .stu-edit{display:inline-flex;align-items:center;gap:5px;font-family:var(--font);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.55rem;color:var(--teal-lt);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-sm);padding:5px 10px;cursor:pointer;transition:border-color .15s,color .15s;}
+  .stu-edit:hover{border-color:var(--teal);color:#fff;}
+  .stu-edit svg{width:12px;height:12px;flex:0 0 auto;}
+  .stu-cedit{display:flex;flex-direction:column;gap:11px;}
+  .stu-fld{display:flex;flex-direction:column;gap:4px;}
+  .stu-flab{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.6rem;color:var(--faint);}
+  .stu-cedit input{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-sm);color:var(--text);font-family:var(--body);font-size:.95rem;padding:9px 11px;outline:none;margin:0;transition:border-color .15s;}
+  .stu-cedit input:focus{border-color:var(--teal);}
+  .stu-cedit-acts{display:flex;gap:9px;justify-content:flex-end;margin-top:3px;}
+  .stu-cbtn{font-family:var(--font);font-weight:700;font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;color:#04201f;background:linear-gradient(180deg,#19d3d3,#07b2b2);border:0;border-radius:var(--g-r-md);padding:10px 18px;cursor:pointer;}
+  .stu-cbtn.ghost{color:var(--muted);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);}
+  .stu-cbtn:disabled{opacity:.6;cursor:default;}
   .stu-banb{font-family:var(--font);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.6rem;padding:8px 6px;border-radius:var(--g-r-sm);border:1px solid var(--g-edge-soft);background:var(--g-glass-quiet);color:var(--muted);cursor:pointer;}
   .stu-banb:hover{border-color:var(--teal);color:#fff;}
   .stu-banb.perm{border-color:rgba(224,64,58,.4);color:#ff9a8a;}
@@ -3239,7 +3253,10 @@
   function stuRecs(sid){ return (DATA.checkouts||[]).filter(function(c){ return String(c.student_id||'')===String(sid); }); }
   function stuOrders(sid){ return stuRecs(sid).filter(function(c){ return !c.group; }).sort(function(a,b){ return (resvDate(a)<resvDate(b))?1:-1; }); }
   function stuMissingCount(sid){ return stuRecs(sid).filter(function(c){ return c.pending || (c.note && /missing|not returned|damage|lost/i.test(c.note)); }).length; }
-  function openStudentProfile(sid){ if(!sid) return; closeResv(); closeCamDetail(); closeReceipt(); if(typeof closeLeads==='function') closeLeads(); stuId=sid;
+  // Teacher contact edit on the profile card: a session overlay of saved contact (so the card reflects a save
+  // instantly, even for a student with no reservation records to carry it), plus the open/closed edit flag.
+  var stuEditContact=false, STU_CONTACT={};
+  function openStudentProfile(sid){ if(!sid) return; closeResv(); closeCamDetail(); closeReceipt(); if(typeof closeLeads==='function') closeLeads(); stuId=sid; stuEditContact=false;
     // Always open the card, even if one piece of the render trips on odd data, so a click never silently does nothing.
     try{ renderStudentProfile(); }catch(e){ try{ console.error('student profile render', e); document.getElementById('stuTitle').textContent='Student '+sid; document.getElementById('stuBody').innerHTML='<div class="cd-empty">Could not load the full profile for this student.</div>'; }catch(_){} }
     document.getElementById('stumodal').classList.add('open'); }
@@ -3257,10 +3274,28 @@
     var sub=['ID '+esc(sid)]; if(ref.period) sub.push('Per '+esc(ref.period)); if(ref.teacher) sub.push(esc(ref.teacher)); if(ref.course) sub.push(esc(ref.course));
     var h='<div class="stu-sub">'+sub.join(' &middot; ')+'</div>';
     var _lb=leadsById()[sid]; if(_lb){ h+='<div class="stu-leadbadge">Class Lead &middot; '+esc(_lb.role)+' (Per '+esc(_lb.period)+')</div>'; }
-    h+='<div class="stu-sec"><div class="stu-sec-h">Contact on file</div><div class="stu-kv">'+
-       '<span class="k">Student cell</span><span>'+cc(ref.student_cell)+'</span>'+
-       '<span class="k">Parent</span><span>'+cc(ref.parent_guardian)+'</span>'+
-       '<span class="k">Parent cell</span><span>'+cc(ref.parent_cell)+'</span></div></div>';
+    // Effective contact = the newest record's fields, overlaid with any just-saved edit (STU_CONTACT),
+    // so a save shows instantly even for a student with no reservation record to carry it.
+    var _ov=STU_CONTACT[String(sid)]||{};
+    var ccSc=('student_cell' in _ov)?_ov.student_cell:ref.student_cell;
+    var ccPg=('parent_guardian' in _ov)?_ov.parent_guardian:ref.parent_guardian;
+    var ccPc=('parent_cell' in _ov)?_ov.parent_cell:ref.parent_cell;
+    if(stuEditContact){
+      var _pencilPh='(805) 555-';
+      h+='<div class="stu-sec"><div class="stu-sec-h">Edit contact</div><div class="stu-cedit">'+
+         '<label class="stu-fld"><span class="stu-flab">Student cell</span><input id="ecSc" type="text" inputmode="tel" autocomplete="off" value="'+esc(ccSc||'')+'" placeholder="'+_pencilPh+'0100"></label>'+
+         '<label class="stu-fld"><span class="stu-flab">Parent or guardian</span><input id="ecPg" type="text" autocomplete="off" value="'+esc(ccPg||'')+'" placeholder="Parent name"></label>'+
+         '<label class="stu-fld"><span class="stu-flab">Parent cell</span><input id="ecPc" type="text" inputmode="tel" autocomplete="off" value="'+esc(ccPc||'')+'" placeholder="'+_pencilPh+'0200"></label>'+
+         '<div class="stu-cedit-acts"><button type="button" class="stu-cbtn ghost" id="ecCancel">Cancel</button><button type="button" class="stu-cbtn" id="ecSave">Save contact</button></div>'+
+       '</div></div>';
+    } else {
+      var _pencil='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
+      h+='<div class="stu-sec"><div class="stu-sec-h stu-sec-hrow"><span>Contact on file</span>'+
+         '<button type="button" class="stu-edit" id="stuEditBtn">'+_pencil+'Edit</button></div><div class="stu-kv">'+
+         '<span class="k">Student cell</span><span>'+cc(ccSc)+'</span>'+
+         '<span class="k">Parent</span><span>'+cc(ccPg)+'</span>'+
+         '<span class="k">Parent cell</span><span>'+cc(ccPc)+'</span></div></div>';
+    }
     // Photo-2 access: Mr. Silva can grant this student the Photo-2 cameras (16-18) from here. Not shown
     // in Mankin's view (she has no Photo-2 cameras).
     if(SELECTED_POOL!=='mankin'){
@@ -3301,6 +3336,24 @@
     }).join('');
     h+='<div class="stu-sec"><div class="stu-sec-h">Reservation history ('+orders.length+')</div><div class="stu-hist">'+(rows||'<div class="cd-empty">No reservations on record yet.</div>')+'</div></div>';
     var b=document.getElementById('stuBody'); b.innerHTML=h;
+    // Contact edit (teacher): pencil -> inline form -> Save writes to the persistent overrides store via the
+    // existing authed /api/camera/student_override, then overlays the new values so the card updates at once.
+    var _ecEdit=document.getElementById('stuEditBtn');
+    if(_ecEdit){ _ecEdit.onclick=function(){ stuEditContact=true; renderStudentProfile(); var f=document.getElementById('ecSc'); if(f){ try{ f.focus(); }catch(e){} } }; }
+    var _ecCancel=document.getElementById('ecCancel');
+    if(_ecCancel){ _ecCancel.onclick=function(){ stuEditContact=false; renderStudentProfile(); }; }
+    var _ecSave=document.getElementById('ecSave');
+    if(_ecSave){ _ecSave.onclick=function(){
+      var sc=(document.getElementById('ecSc')||{}).value||'', pg=(document.getElementById('ecPg')||{}).value||'', pc=(document.getElementById('ecPc')||{}).value||'';
+      _ecSave.disabled=true; _ecSave.textContent='Saving…';
+      camAPI('/api/camera/student_override',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:sid,student_cell:sc,parent_guardian:pg,parent_cell:pc})})
+        .then(function(r){ return r.ok?r.json():Promise.reject(); })
+        .then(function(j){ if(!j||!j.ok) return Promise.reject();
+          STU_CONTACT[String(sid)]={student_cell:j.student_cell||'',parent_guardian:j.parent_guardian||'',parent_cell:j.parent_cell||''};
+          (DATA.checkouts||[]).forEach(function(c){ if(String(c.student_id||'')===String(sid)){ c.student_cell=j.student_cell||''; c.parent_guardian=j.parent_guardian||''; c.parent_cell=j.parent_cell||''; } });
+          stuEditContact=false; renderStudentProfile(); silvaToast('Contact updated.');
+        })
+        .catch(function(){ _ecSave.disabled=false; _ecSave.textContent='Save contact'; silvaToast('Could not save. Try again.'); }); }; }
     var _p2=document.getElementById('stuP2');
     if(_p2){ _p2.onchange=function(){ var on=_p2.checked; _p2.disabled=true;
       camAPI('/api/camera/student_override',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({student_id:sid,p2:on})})
@@ -3701,6 +3754,12 @@
       else { var _cids=(body.ids||[]).map(String), _have={}; DEMO_DATA.canceled.forEach(function(x){ _have[String(x.id)]=1; });
         DEMO_DATA.checkouts.filter(function(c){ return _cids.indexOf(String(c.id))>=0; }).forEach(function(c){ if(!_have[String(c.id)]){ var s={}; for(var k in c) s[k]=c[k]; s.canceled_at=todayISO()+'T00:00:00Z'; DEMO_DATA.canceled.push(s); } });
         DEMO_DATA.checkouts=DEMO_DATA.checkouts.filter(function(c){ return _cids.indexOf(String(c.id))<0; }); } }
+    else if(path.indexOf('/student_override')>=0 && ('student_cell' in body || 'parent_guardian' in body || 'parent_cell' in body)){
+      // Teacher contact edit: patch this student's demo records + echo the saved values back (mirrors the server).
+      var _sid=String(body.student_id||'');
+      DEMO_DATA.checkouts.forEach(function(c){ if(String(c.student_id||'')===_sid){ if('student_cell' in body) c.student_cell=body.student_cell; if('parent_guardian' in body) c.parent_guardian=body.parent_guardian; if('parent_cell' in body) c.parent_cell=body.parent_cell; } });
+      return Promise.resolve({ok:true,status:200,json:function(){ return Promise.resolve({ok:true,student_cell:body.student_cell||'',parent_guardian:body.parent_guardian||'',parent_cell:body.parent_cell||''}); }});
+    }
     return Promise.resolve({ok:true,status:200,json:function(){ return Promise.resolve({ok:true}); }});
   }
   // Synthetic audit events for the ?demo=1 preview (so the Event History view is viewable without the backend).
