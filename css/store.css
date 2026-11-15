@@ -549,6 +549,17 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
 .bsp-ctext b{color:#fff;font-weight:600;}
 .bsp-clear{background:transparent;border:0;color:#ffd98a;font-family:var(--font-head);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.6rem;cursor:pointer;padding:0;white-space:nowrap;}
 .bsp-clear:hover{color:#fff;}
+/* iPad stylus: self-service 1-3 school-day rental (no teacher OK). A clean segmented picker, three equal columns. */
+.bag-stydays{margin:-2px 0 14px;border-top:1px solid var(--line);padding-top:11px;}
+.bsd-lab{font-family:var(--font-head);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.58rem;color:var(--gray);margin-bottom:8px;}
+.bsd-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.bsd-opt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:52px;padding:9px 6px;background:var(--surface);border:1px solid var(--surface-bd);color:#fff;font-family:var(--font-body);line-height:1.15;text-align:center;cursor:pointer;transition:border-color .12s,background .12s;}
+.bsd-opt b{font-family:var(--font-head);font-weight:700;letter-spacing:.02em;color:#fff;font-size:.9rem;}
+.bsd-opt span{color:var(--gray);font-size:.68rem;}
+.bsd-opt:hover:not(.on):not(.busy){border-color:var(--teal-bright);}
+.bsd-opt.on{background:var(--teal);border-color:var(--teal);}
+.bsd-opt.on b,.bsd-opt.on span{color:#fff;}
+.bsd-opt.busy{opacity:.34;cursor:not-allowed;}
 .sheet-or{text-align:center;font-family:var(--font-head);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.62rem;color:var(--gray);margin:10px 0 8px;}
 .rcpt-check.wait{border-color:#f5b301;color:#f5b301;}
 
