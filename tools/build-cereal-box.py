@@ -727,7 +727,10 @@ def build_your_box():
         (float_right(BUILD_FLOAT,"Two students building their finished Panther Paws cereal box, cutting and gluing the printed panels") if HAVE_FLOATS else "")
         + para("This is the moment the whole project builds to. You print your finished design, then cut, fold, and glue it into a <strong>real cereal box you can hold</strong>. Your screen work becomes a real product.")
         + para("Your group builds <strong>one box</strong> together. Take your time and build it clean. A rushed box hides great design."))
-    en+=deliverables_box(False,[("1 photo (JPG):","a clear, bright photo of your finished, built cereal box, uploaded to this Canvas assignment.")])
+    en+=deliverables_box(False,[("Photo 1 (JPG):","the Front of your box, angled so the Left side shows too."),
+                                ("Photo 2 (JPG):","the Back of your box, angled so the Right side shows too."),
+                                ("Photo 3 (JPG):","the Top of your box."),
+                                ("Photo 4 (JPG):","the Bottom of your box.")])
     en+=card("Gather your supplies","What You Need",
         bullets([("Your print template","the 2 printed sheets from your Step 05 PDFs, on thick cardstock (13 x 19)."),
                  ("Scissors","to cut out your box shape."),
@@ -741,15 +744,18 @@ def build_your_box():
                ("Glue the tabs.","Add hot glue to one tab at a time, press, and hold until it sets. Work panel by panel."),
                ("Stand it up.","Set it on the table and fix any loose edge so it looks like a real shelf product.")])
         + note_orange("<strong>Hot glue is hot.</strong> Ask your teacher first, keep the gun on its stand, and keep your fingers off the tip. It burns fast."))
-    en+=card("Turn it in","Take the Photo",
-        para("When your box is built, use your <strong>school iPad</strong> to take a clear, bright photo of the front of your box, then upload the JPG to this Canvas assignment. Your group built one box, so each of you uploads a photo of it."))
+    en+=card("Turn it in","Take Four Photos",
+        para("When your box is built, use your <strong>student iPad</strong> to take <strong>four</strong> clear, bright photos so every side shows: the Front angled with the Left, the Back angled with the Right, then the Top and the Bottom. Your group built one box, so each of you uploads all four JPGs to this Canvas assignment."))
     en+=next_up("UP NEXT &middot; STEP 07 - Launch &amp; Reflect","Post your cereal on Instagram, then look back at the whole project.")
     es=banner("M&oacute;dulo 10 &bull; Paso 06","Arma Tu Caja","Impr&iacute;mela. C&oacute;rtala. D&oacute;blala. Sost&eacute;n tu caja de cereal real.","#top","Back to English",hicon=HICON_DESIGN)
     es+=card("Aprende &middot; la recompensa","La Mejor Parte: La Armas de Verdad",
         (float_right(BUILD_FLOAT,"Dos estudiantes armando su caja de cereal Panther Paws terminada, cortando y pegando los paneles impresos") if HAVE_FLOATS else "")
         + para("Este es el momento al que llega todo el proyecto. Imprimes tu dise&ntilde;o terminado, luego cortas, doblas y pegas para armar una <strong>caja de cereal real que puedes sostener</strong>. Tu trabajo en pantalla se vuelve un producto real.")
         + para("Tu grupo arma <strong>una caja</strong> juntos. T&oacute;mate tu tiempo y &aacute;rmala limpia. Una caja apurada esconde un buen dise&ntilde;o."))
-    es+=deliverables_box(True,[("1 foto (JPG):","una foto clara y brillante de tu caja de cereal terminada, subida a esta tarea de Canvas.")])
+    es+=deliverables_box(True,[("Foto 1 (JPG):","el Frente de tu caja, en &aacute;ngulo para que tambi&eacute;n se vea el lado Izquierdo."),
+                               ("Foto 2 (JPG):","la parte de Atr&aacute;s de tu caja, en &aacute;ngulo para que tambi&eacute;n se vea el lado Derecho."),
+                               ("Foto 3 (JPG):","la parte de Arriba de tu caja."),
+                               ("Foto 4 (JPG):","la parte de Abajo de tu caja.")])
     es+=card("Re&uacute;ne tus materiales","Lo Que Necesitas",
         bullets([("Tu plantilla de impresi&oacute;n","las 2 hojas impresas de tus PDF del Paso 05, en cartulina gruesa (13 x 19)."),
                  ("Tijeras","para recortar la forma de tu caja."),
@@ -763,8 +769,8 @@ def build_your_box():
                ("Pega las pesta&ntilde;as.","Pon silicona caliente en una pesta&ntilde;a a la vez, presiona y sost&eacute;n hasta que pegue. Trabaja panel por panel."),
                ("Ponla de pie.","Col&oacute;cala en la mesa y arregla cualquier borde suelto para que se vea como un producto de estante real.")])
         + note_orange("<strong>La silicona caliente quema.</strong> Pregunta a tu maestro primero, deja la pistola en su base y no toques la punta. Quema r&aacute;pido."))
-    es+=card("Entr&eacute;galo","Toma la Foto",
-        para("Cuando tu caja est&eacute; armada, usa tu <strong>iPad de la escuela</strong> para tomar una foto clara y brillante del frente de tu caja, luego sube el JPG a esta tarea de Canvas. Tu grupo arm&oacute; una caja, as&iacute; que cada uno sube una foto de ella."))
+    es+=card("Entr&eacute;galo","Toma Cuatro Fotos",
+        para("Cuando tu caja est&eacute; armada, usa tu <strong>iPad de la escuela</strong> para tomar <strong>cuatro</strong> fotos claras y brillantes para que se vea cada lado: el Frente en &aacute;ngulo con el Izquierdo, Atr&aacute;s en &aacute;ngulo con el Derecho, luego Arriba y Abajo. Tu grupo arm&oacute; una caja, as&iacute; que cada uno sube los cuatro JPG a esta tarea de Canvas."))
     es+=next_up("SIGUIENTE &middot; PASO 07 - Lanza y Reflexiona","Publica tu cereal en Instagram, luego reflexiona sobre todo el proyecto.")
     return wrap_page(f"Step 6: Build Your Box | Cereal Box Group Project | {CT} | PVHS", nav("Step 06",dots_for(5),step_topnav(5)), top_wrap(en,es), step_bottom(5))
 
