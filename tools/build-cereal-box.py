@@ -317,22 +317,10 @@ def nav(current,dots,stepnav):
                '        <span class="bc-sep bc-hide-sm">&rsaquo;</span>\n'
                f'        <span class="bc-current">{current}</span>\n'
                '      </div>\n')
-    tools=''
-    if MODE=="std":
-        # Teacher share tools: Copy URL / Copy HTML / Download All, exactly like the catalog pager
-        # but with NO catalog link and no site nav. Catalog-free, so a teacher never reaches the
-        # curriculum menu. Wired by the inline script in wrap_standalone. (Chris 2026-11-15)
-        tools=('\n      <div class="silva-share-tools" aria-label="Teacher tools">'
-               '<span class="stt-label">Teacher tools</span>'
-               '<button type="button" class="share-btn" data-act="url">Copy URL</button>'
-               '<button type="button" class="share-btn" data-act="html">Copy HTML</button>'
-               '<button type="button" class="share-btn" data-act="all">Download All</button>'
-               '</div>')
     return (crumb
             + '      <div class="silva-nav-spacer"></div>\n'
             + f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
-            + f'      <div class="silva-step-nav">{stepnav}</div>'
-            + tools)
+            + f'      <div class="silva-step-nav">{stepnav}</div>')
 
 def wrap_standalone(title, nav_inner, top_html, bottom):
     # Self-contained page: the module's own css + a minimal internal nav, NO silva-nav.js (so no
@@ -345,13 +333,16 @@ def wrap_standalone(title, nav_inner, top_html, bottom):
     pages_js='['+','.join('"'+f+'"' for f in FILES_STD)+']'
     name_js='"'+SHARE_NAME.replace('\\','\\\\').replace('"','\\"')+'"'
     share_css=(
-      ".silva-share-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%;"
-      "margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.10);}"
-      ".silva-share-tools .stt-label{font-size:11px;font-weight:700;letter-spacing:0.12em;"
+      # Teacher tools ride in their OWN full-width bar UNDER the nav row (not inside the nav's
+      # nowrap flex row, which squeezed + misaligned them). Thin divider, label + three pills,
+      # wraps cleanly on phones. (Chris 2026-11-15)
+      ".silva-share-bar{border-top:1px solid rgba(255,255,255,0.08);}"
+      ".silva-share-inner{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:9px 10px;}"
+      ".silva-share-inner .stt-label{font-size:11px;font-weight:700;letter-spacing:0.12em;"
       "text-transform:uppercase;color:#80e0e0;margin-right:4px;}"
       ".share-btn{font-family:Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.04em;"
       "color:#eafeff;background:rgba(0,184,184,0.14);border:1px solid rgba(0,184,184,0.55);"
-      "padding:7px 13px;cursor:pointer;border-radius:0;transition:background .15s;}"
+      "padding:7px 13px;cursor:pointer;border-radius:0;line-height:1.1;transition:background .15s;}"
       ".share-btn:hover{background:rgba(0,184,184,0.28);}"
       ".share-btn.ok{background:#00b8b8;color:#04201f;border-color:#00b8b8;}")
     share_js=(
@@ -386,6 +377,7 @@ def wrap_standalone(title, nav_inner, top_html, bottom):
     <div class="silva-nav-inner">
 {nav_inner}
     </div>
+    <div class="silva-share-bar"><div class="silva-share-inner"><span class="stt-label">Teacher tools</span><button type="button" class="share-btn" data-act="url">Copy URL</button><button type="button" class="share-btn" data-act="html">Copy HTML</button><button type="button" class="share-btn" data-act="all">Download All</button></div></div>
   </nav>
   <div class="silva-page">
   <div id="silva-module-content">
