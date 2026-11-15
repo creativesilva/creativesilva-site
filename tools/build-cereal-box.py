@@ -25,7 +25,7 @@ CATS=f"{SITE}/assets/images/cereal/cereal-categories-v2.png" # the four category
 HAVE_ART=True
 # Step content photos (right-floated, magazine-wrap). Chris 2026-11-15.
 SKETCH_FLOAT=f"{SITE}/assets/images/cereal/cereal-sketch-float.jpg"  # Step 04: two students sketching the Panther Paws box
-BUILD_FLOAT=f"{SITE}/assets/images/cereal/cereal-build-float.jpg"    # Step 05: two students building the printed box
+BUILD_FLOAT=f"{SITE}/assets/images/cereal/cereal-build-float-v2.jpg" # Step 05: two students building the printed box (v2, Chris 2026-11-15)
 HAVE_FLOATS=True
 
 # Project folder download: the DA folder = the 7 Illustrator templates (6 panels + print template)
