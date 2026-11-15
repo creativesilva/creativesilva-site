@@ -290,6 +290,7 @@ MODE="cur"
 FILES_CUR=[OVER,S02,S03,S04,S05,S06,S07]
 FILES_STD=["index.html","step02-research.html","step03-design-choices.html","step04-concept-sketch.html",
            "step05-digital-design.html","step06-build-your-box.html","step07-launch-reflect.html"]
+SHARE_NAME="Cereal Box Group Project"  # label for the standalone teacher tools (Download All filename + heading)
 HREFS=FILES_CUR
 OVER_LINK=OVER
 DT=[("1","Step 01 &middot; Overview"),("2","Step 02 &middot; Research"),("3","Step 03 &middot; Design Choices"),
@@ -316,16 +317,59 @@ def nav(current,dots,stepnav):
                '        <span class="bc-sep bc-hide-sm">&rsaquo;</span>\n'
                f'        <span class="bc-current">{current}</span>\n'
                '      </div>\n')
+    tools=''
+    if MODE=="std":
+        # Teacher share tools: Copy URL / Copy HTML / Download All, exactly like the catalog pager
+        # but with NO catalog link and no site nav. Catalog-free, so a teacher never reaches the
+        # curriculum menu. Wired by the inline script in wrap_standalone. (Chris 2026-11-15)
+        tools=('\n      <div class="silva-share-tools" aria-label="Teacher tools">'
+               '<span class="stt-label">Teacher tools</span>'
+               '<button type="button" class="share-btn" data-act="url">Copy URL</button>'
+               '<button type="button" class="share-btn" data-act="html">Copy HTML</button>'
+               '<button type="button" class="share-btn" data-act="all">Download All</button>'
+               '</div>')
     return (crumb
             + '      <div class="silva-nav-spacer"></div>\n'
             + f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
-            + f'      <div class="silva-step-nav">{stepnav}</div>')
+            + f'      <div class="silva-step-nav">{stepnav}</div>'
+            + tools)
 
 def wrap_standalone(title, nav_inner, top_html, bottom):
     # Self-contained page: the module's own css + a minimal internal nav, NO silva-nav.js (so no
     # site nav / Equipment Manager / Catalog), NO builder buttons, NO links out. Internal step links
     # only. Language toggle kept (inline JS runs on the hosted page). Assets load absolute from the
     # whitelisted domain so the page works from the /share/ path.
+    # Teacher share tools (Copy URL / Copy HTML / Download All): catalog-free, inline, reusable for
+    # any module's std pass. The page list + module name are embedded so Download All bundles exactly
+    # this module's pages.
+    pages_js='['+','.join('"'+f+'"' for f in FILES_STD)+']'
+    name_js='"'+SHARE_NAME.replace('\\','\\\\').replace('"','\\"')+'"'
+    share_css=(
+      ".silva-share-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%;"
+      "margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.10);}"
+      ".silva-share-tools .stt-label{font-size:11px;font-weight:700;letter-spacing:0.12em;"
+      "text-transform:uppercase;color:#80e0e0;margin-right:4px;}"
+      ".share-btn{font-family:Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.04em;"
+      "color:#eafeff;background:rgba(0,184,184,0.14);border:1px solid rgba(0,184,184,0.55);"
+      "padding:7px 13px;cursor:pointer;border-radius:0;transition:background .15s;}"
+      ".share-btn:hover{background:rgba(0,184,184,0.28);}"
+      ".share-btn.ok{background:#00b8b8;color:#04201f;border-color:#00b8b8;}")
+    share_js=(
+      "(function(){"
+      "var btns=document.querySelectorAll('.share-btn');if(!btns.length){return;}"
+      "var PAGES="+pages_js+";var NAME="+name_js+";"
+      "var base=location.pathname.replace(/[^/]*$/,'');"
+      "function flash(b,msg){var o=b.getAttribute('data-orig')||b.textContent;b.setAttribute('data-orig',o);b.textContent=msg;b.classList.add('ok');setTimeout(function(){b.textContent=b.getAttribute('data-orig');b.classList.remove('ok');},2200);}"
+      "function copy(t,b){navigator.clipboard.writeText(t).then(function(){flash(b,'Copied!');}).catch(function(){alert('Copy failed.');});}"
+      "function dlAll(b){var o=b.textContent;b.textContent='Building...';"
+      "Promise.all(PAGES.map(function(u){return fetch(base+u).then(function(r){return r.text();}).then(function(h){var d=new DOMParser().parseFromString(h,'text/html');var t=d.querySelector('title');var pt=t?t.textContent.split('|')[0].trim():u;var top=d.getElementById('top');return{t:pt,code:top?top.outerHTML:h};}).catch(function(){return{t:u,code:'(could not load this page)'};});})).then(function(ps){"
+      "var md='# '+NAME+'\\n\\n_All pages, downloaded '+new Date().toISOString().slice(0,10)+' from creativesilva.com._\\n\\nEach section holds that page Canvas-pasteable HTML (the same code the Copy HTML button copies).\\n\\n';"
+      "ps.forEach(function(p,i){md+='---\\n\\n## '+(i+1)+'. '+p.t+'\\n\\n```html\\n'+p.code+'\\n```\\n\\n';});"
+      "var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown;charset=utf-8'}));a.download=NAME.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')+'-all-pages.md';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);"
+      "b.textContent=o;flash(b,'Downloaded');"
+      "}).catch(function(){b.textContent=o;alert('Download failed.');});}"
+      "for(var i=0;i<btns.length;i++){(function(b){b.addEventListener('click',function(){var act=b.getAttribute('data-act');if(act==='url'){copy(location.href,b);}else if(act==='html'){var el=document.getElementById('top');if(el){copy(el.outerHTML,b);}}else if(act==='all'){dlAll(b);}});})(btns[i]);}"
+      "})();")
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -333,7 +377,8 @@ def wrap_standalone(title, nav_inner, top_html, bottom):
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <link rel="icon" type="image/svg+xml" href="https://www.creativesilva.com/logos/CS_Logo_Only.svg" />
-  <style>:root {{ --course-accent: #007474; }}</style>
+  <style>:root {{ --course-accent: #007474; }}
+  {share_css}</style>
   <link rel="stylesheet" href="https://www.creativesilva.com/css/silva-module.css" />
 </head>
 <body>
@@ -360,6 +405,7 @@ def wrap_standalone(title, nav_inner, top_html, bottom):
     bind('#top a[href="#espanol"]',true);
     bind('#top a[href="#top"]',false);
   }})();
+  {share_js}
   </script>
 </body>
 </html>'''

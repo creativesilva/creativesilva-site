@@ -2644,6 +2644,44 @@
       `;
     }
 
+    // ── Shared Modules: independent PUBLIC links Chris can send to other teachers. Each points at the
+    //    standalone /share/<slug>/ copy, which carries its own Copy URL / Copy HTML / Download All and
+    //    never links back to this catalog. To publish another module: build its /share/ copy, then add
+    //    an entry here. Each link is fully independent. (Chris 2026-11-15)
+    var SHARED_MODULES = [
+      { name: "Cereal Box Group Project", course: "Digital Arts",
+        desc: "Groups of 2 invent a cereal brand, design all six box panels in Illustrator, build the real box by hand, then launch it. 7 steps, bilingual EN and ES.",
+        url: "/share/cereal-box/" }
+    ];
+    function copyShareLink(url, btn) {
+      var full = location.origin + url;
+      navigator.clipboard.writeText(full).then(function () {
+        var o = btn.textContent; btn.textContent = "Copied!"; btn.classList.add("copied");
+        setTimeout(function () { btn.textContent = o; btn.classList.remove("copied"); }, 2000);
+      }).catch(function () { window.prompt("Copy this link:", full); });
+    }
+    function buildSharedModules() {
+      if (!SHARED_MODULES.length) return "";
+      var rows = SHARED_MODULES.map(function (m) {
+        return '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.08);">'
+          + '<div style="flex:1 1 300px;min-width:0;">'
+          +   '<div style="font-size:15px;font-weight:700;color:#eafeff;">' + m.name
+          +     ' <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#80e0e0;background:rgba(0,116,116,0.25);padding:2px 8px;margin-left:4px;">' + m.course + '</span></div>'
+          +   '<div style="font-size:13px;color:rgba(255,255,255,0.68);line-height:1.5;margin-top:4px;">' + m.desc + '</div>'
+          +   '<a href="' + m.url + '" target="_blank" rel="noopener" style="display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#80e0e0;margin-top:6px;word-break:break-all;">' + location.host + m.url + '</a>'
+          + '</div>'
+          + '<div style="display:flex;gap:8px;flex:0 0 auto;">'
+          +   '<button type="button" class="pg-btn" onclick="copyShareLink(\'' + m.url + '\', this)">Copy Link</button>'
+          +   '<a class="pg-btn pg-view" href="' + m.url + '" target="_blank" rel="noopener">Open</a>'
+          + '</div></div>';
+      }).join("");
+      return '<details class="cat-acc" id="shared-modules"><summary class="cat-head">'
+        + '<span class="cat-name">Shared Modules <span style="opacity:0.55;font-weight:400;">&middot; Public Links (' + SHARED_MODULES.length + ')</span></span>'
+        + '<span class="cat-chevron"></span></summary><div class="cat-body">'
+        + '<p style="margin:2px 0 14px;color:rgba(255,255,255,0.68);font-size:13.5px;line-height:1.5;">Independent public links to send to other teachers. Each page is self-contained with its own Copy URL, Copy HTML, and Download All, and never links back to this catalog.</p>'
+        + '<div>' + rows + '</div></div></details>';
+    }
+
     (function renderCourses() {
       const grid = document.getElementById("course-grid");
       const active = COURSES.filter(c => !c.archived && !c.inactive);
@@ -2655,6 +2693,8 @@
       if (br) grid.appendChild(br);
       // Teacher Resources (operational tools) sits right after Build Resources.
       grid.insertAdjacentHTML("beforeend", buildTeacherResources());
+      // Shared Modules: the public links Chris sends to other teachers (appears when any module is published).
+      grid.insertAdjacentHTML("beforeend", buildSharedModules());
       // Non Active: inactive course cards, plus any inactive standalone pages (e.g. seasonal announcements).
       const inactiveMods = MODULES.filter(m => m.inactive && m.status === "published");
       {
