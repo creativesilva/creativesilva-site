@@ -1,4 +1,4 @@
-// Cereal Box Group Project docs (Word .docx), DA1A Module 10. CLAUDE.md hard rule #9 template:
+// Cereal Box Group Project docs (Word .docx), Digital Arts Module 10. CLAUDE.md hard rule #9 template:
 // square PV logo floating behind the top-left, centered teal title + gray subtitle, teal rule,
 // Name/Period/Date row, then each question as a teal bar above a bordered answer box.
 // SEPARATE EN + ES docs (never bilingual). UNIVERSAL module (shared with other PVHS teachers),
@@ -102,9 +102,10 @@ function buildDoc(cfg) {
 
 const EN = { nameLabel: 'Name:', periodLabel: 'Period:', dateLabel: 'Date:', placeholder: 'Type your answer here.' };
 const ES = { nameLabel: 'Nombre:', periodLabel: 'Periodo:', dateLabel: 'Fecha:', placeholder: 'Escribe tu respuesta aquí.' };
-// Universal module: subtitle carries the course + school, NO teacher name.
-const SUB_EN = 'Digital Arts 1A · Pioneer Valley High School';
-const SUB_ES = 'Arte Digital 1A · Pioneer Valley High School';
+// Universal module (Chris 2026-11-15): subtitle is "Digital Arts" with NO course number (not 1A/2A)
+// and NO teacher name, so any Digital Arts teacher can use it.
+const SUB_EN = 'Digital Arts · Pioneer Valley High School';
+const SUB_ES = 'Arte Digital · Pioneer Valley High School';
 
 const DOCS = [
   // ---- Research ----
