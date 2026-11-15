@@ -21,7 +21,7 @@ CT="Digital Arts 1A"; PFX="digarts1"
 
 # Images (reused from the MRC build; hosted on the whitelisted domain).
 HERO=f"{SITE}/assets/images/cereal/cereal-header-v2.jpg"  # two students presenting a PV Panther Paws cereal box in a design studio (Chris 2026-11-15)
-CATS=f"{SITE}/assets/images/cereal/cereal-categories.png" # the four category lanes
+CATS=f"{SITE}/assets/images/cereal/cereal-categories-v2.png" # the four category lanes (updated infographic, Chris 2026-11-15)
 HAVE_ART=True
 
 # Project folder download: the DA folder = the 7 Illustrator templates (6 panels + print template)
@@ -398,8 +398,7 @@ def research():
     en+=card("How to finish this step","Three Steps to Finish",
         steps([("Pick one cold cereal.","Pick a real cold cereal you can study. Look in your kitchen or use a clear store photo."),
                ("Fill the Research doc.","Open the Research doc from your project folder. Answer every question in full sentences. Add a clear front-of-box photo where the doc asks."),
-               ("Save and submit.","Save it to OneDrive, then upload the .docx to this Canvas assignment.")])
-        + note("<strong>Name your file:</strong> CerealBoxResearch_LastName_FirstName.docx (example: CerealBoxResearch_Silva_Chris.docx)."))
+               ("Save and submit.","Save it to OneDrive, then upload the .docx to this Canvas assignment.")]))
     en+=card("What the doc asks","The Eight Research Questions",
         para("Here is what the Research doc asks. Answer each one with full sentences.")
         + bullets([("Q1 Cereal Name:","the full name, exactly as it is on the box."),
@@ -424,8 +423,7 @@ def research():
     es+=card("C&oacute;mo terminar este paso","Tres Pasos para Terminar",
         steps([("Elige un cereal fr&iacute;o.","Elige un cereal fr&iacute;o real que puedas estudiar. Busca en tu cocina o usa una foto clara de la tienda."),
                ("Llena el documento.","Abre el documento de Investigaci&oacute;n de tu carpeta del proyecto. Contesta cada pregunta en oraciones completas. Agrega una foto clara del frente de la caja donde el documento la pide."),
-               ("Guarda y entrega.","Gu&aacute;rdalo en OneDrive, luego sube el .docx a esta tarea de Canvas.")])
-        + note("<strong>Nombra tu archivo:</strong> CerealBoxResearch_LastName_FirstName.docx (ejemplo: CerealBoxResearch_Silva_Chris.docx)."))
+               ("Guarda y entrega.","Gu&aacute;rdalo en OneDrive, luego sube el .docx a esta tarea de Canvas.")]))
     es+=card("Qu&eacute; pide el documento","Las Ocho Preguntas",
         para("Esto es lo que pide el documento de Investigaci&oacute;n. Contesta cada una con oraciones completas.")
         + bullets([("P1 Nombre del Cereal:","el nombre completo, tal como est&aacute; en la caja."),
@@ -455,8 +453,7 @@ def design_choices():
     en+=card("How to finish this step","Three Steps to Finish",
         steps([("Partner huddle.","Talk through every choice and decide who is Designer 1 and who is Designer 2. Do not stop until you both agree."),
                ("Fill your own doc.","Every student fills out their own copy. Same answers as your partner. Same HEX codes. Same font names."),
-               ("Save and submit.","Save to OneDrive, then upload the .docx to this Canvas assignment.")])
-        + note("<strong>Name your file:</strong> CerealBoxDesignChoices_LastName_FirstName.docx."))
+               ("Save and submit.","Save to OneDrive, then upload the .docx to this Canvas assignment.")]))
     en+=card("What the doc locks in","The Six Group Decisions",
         bullets([("Cereal Name","short, fun, easy to say. Write it exactly how it goes on the box."),
                  ("Target Audience","who is it for? Write the age group and the lifestyle."),
@@ -476,8 +473,7 @@ def design_choices():
     es+=card("C&oacute;mo terminar este paso","Tres Pasos para Terminar",
         steps([("Re&uacute;nanse.","Hablen de cada decisi&oacute;n y decidan qui&eacute;n es el Dise&ntilde;ador 1 y qui&eacute;n el Dise&ntilde;ador 2. No paren hasta estar de acuerdo."),
                ("Llena tu propio documento.","Cada estudiante llena su propia copia. Las mismas respuestas que tu compa&ntilde;ero. Los mismos c&oacute;digos HEX. Los mismos nombres de fuentes."),
-               ("Guarda y entrega.","Guarda en OneDrive, luego sube el .docx a esta tarea de Canvas.")])
-        + note("<strong>Nombra tu archivo:</strong> CerealBoxDesignChoices_LastName_FirstName.docx."))
+               ("Guarda y entrega.","Guarda en OneDrive, luego sube el .docx a esta tarea de Canvas.")]))
     es+=card("Qu&eacute; define el documento","Las Seis Decisiones del Grupo",
         bullets([("Nombre del Cereal","corto, divertido, f&aacute;cil de decir. Escr&iacute;belo tal como ir&aacute; en la caja."),
                  ("P&uacute;blico Meta","&iquest;para qui&eacute;n es? Escribe la edad y el estilo de vida."),
@@ -629,8 +625,8 @@ def social_media():
                  ("Build the Story.","Create an Instagram Story (1080 x 1920). Add your name, logo, one image, and a call to action."),
                  ("Animate it.","Click an element, then Animate, so your text or logo moves. Keep it 5 to 15 seconds."),
                  ("Build the Post.","Create an Instagram Post (1080 x 1080). One clean image with your cereal, logo, and one clear message."),
-                 ("Export the Story.","Share, then Download, then pick MP4 Video. Name it LastName_Cereal_Story.mp4."),
-                 ("Export the Post.","Share, then Download, then pick JPG. Name it LastName_Cereal_Post.jpg."),
+                 ("Export the Story.","Share, then Download, then pick MP4 Video."),
+                 ("Export the Post.","Share, then Download, then pick JPG."),
                  ("Submit both.","Upload your MP4 and your JPG to this Canvas assignment in one submission.")]))
     en+=card("Pro tip","Give People a Call to Action",
         para("A call to action tells the viewer what to do next. It is short and easy to see. Both your Story and your Post need one.")
@@ -654,8 +650,8 @@ def social_media():
                  ("Arma la historia.","Crea una historia de Instagram (1080 x 1920). Agrega tu nombre, logo, una imagen y un llamado a la acci&oacute;n."),
                  ("Anim&aacute;la.","Haz clic en un elemento, luego Animar, para que tu texto o logo se mueva. Mant&eacute;nla de 5 a 15 segundos."),
                  ("Arma la publicaci&oacute;n.","Crea una publicaci&oacute;n de Instagram (1080 x 1080). Una imagen limpia con tu cereal, logo y un mensaje claro."),
-                 ("Exporta la historia.","Compartir, luego Descargar, luego elige Video MP4. Nombra: LastName_Cereal_Story.mp4."),
-                 ("Exporta la publicaci&oacute;n.","Compartir, luego Descargar, luego elige JPG. Nombra: LastName_Cereal_Post.jpg."),
+                 ("Exporta la historia.","Compartir, luego Descargar, luego elige Video MP4."),
+                 ("Exporta la publicaci&oacute;n.","Compartir, luego Descargar, luego elige JPG."),
                  ("Entrega ambos.","Sube tu MP4 y tu JPG a esta tarea de Canvas en una sola entrega.")]))
     es+=card("Consejo","Dale a la Gente un Llamado a la Acci&oacute;n",
         para("Un llamado a la acci&oacute;n le dice al espectador qu&eacute; hacer. Es corto y f&aacute;cil de ver. Tu historia y tu publicaci&oacute;n necesitan uno.")
@@ -678,8 +674,7 @@ def reflection():
     en+=card("How to finish this step","Three Steps to Finish",
         steps([("Open the reflection doc.","Open the Reflection doc from your project folder."),
                ("Answer every prompt.","Read each prompt and write in full sentences. No one-word answers."),
-               ("Save and submit.","Save with your name in the file title, then upload the .docx to this Canvas assignment.")])
-        + note("<strong>Name your file:</strong> CerealBoxReflection_LastName_FirstName.docx."))
+               ("Save and submit.","Save it, then upload the .docx to this Canvas assignment.")]))
     en+=card("Preview of the prompts","Six Things to Reflect On",
         bullets([("My design choices","what choices did you make on your panels, and why those colors, fonts, or images?"),
                  ("What went right","what part went best, and why did it work?"),
@@ -696,8 +691,7 @@ def reflection():
     es+=card("C&oacute;mo terminar este paso","Tres Pasos para Terminar",
         steps([("Abre el documento de reflexi&oacute;n.","Abre el documento de Reflexi&oacute;n de tu carpeta del proyecto."),
                ("Contesta cada pregunta.","Lee cada pregunta y escribe en oraciones completas. Nada de respuestas de una palabra."),
-               ("Guarda y entrega.","Guarda con tu nombre en el t&iacute;tulo del archivo, luego sube el .docx a esta tarea de Canvas.")])
-        + note("<strong>Nombra tu archivo:</strong> CerealBoxReflection_LastName_FirstName.docx."))
+               ("Guarda y entrega.","Gu&aacute;rdalo, luego sube el .docx a esta tarea de Canvas.")]))
     es+=card("Vista previa de las preguntas","Seis Cosas para Reflexionar",
         bullets([("Mis decisiones de dise&ntilde;o","&iquest;qu&eacute; decisiones tomaste en tus paneles, y por qu&eacute; esos colores, fuentes o im&aacute;genes?"),
                  ("Qu&eacute; sali&oacute; bien","&iquest;qu&eacute; parte sali&oacute; mejor, y por qu&eacute; funcion&oacute;?"),
