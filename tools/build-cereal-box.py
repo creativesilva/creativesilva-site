@@ -599,40 +599,40 @@ def concept_sketch():
         (float_right(SKETCH_FLOAT,"Two students sketching their Panther Paws cereal box in a sketchbook with colored pencils") if HAVE_FLOATS else "")
         + para("In this step you sketch a plan for the panels you are designing. This helps you figure out your ideas before you open Adobe Illustrator.")
         + para("You and your partner already picked colors, fonts, and style in Step 03. Now you sketch your three assigned sides so all six sides look like one brand. Real designers sketch every project before they open software."))
-    en+=deliverables_box(False,[("1 PDF:","one PDF of your three sketch pages, after your teacher approves them, uploaded to this Canvas assignment.")])
+    en+=deliverables_box(False,[("1 JPG:","a clear photo of your approved hero sketch, the main panel you were assigned (Designer 1 turns in the Front, Designer 2 turns in the Back). Take the photo with your student iPad and upload the JPG to this Canvas assignment.")])
     en+=card("Designer roles","Who Sketches What",
         roles_split(False) + roles_detail(False))
     en+=card("How to finish this step","Three Steps to Finish",
         steps([("Check your sides.","Confirm which three sides are yours before you draw anything."),
                ("Sketch your three sides.","Sketch each side on its own sketchbook page. Show where pictures, text, and the logo go."),
-               ("Get approval, then submit.","Show your teacher your sketches for approval. Then scan them to one PDF and upload to Canvas.")])
+               ("Get approval, then submit.","Show your teacher your sketches for approval. Then use your student iPad to take a clear photo of your hero sketch (Designer 1 the Front, Designer 2 the Back) and upload the JPG to Canvas.")])
         + note("<strong>Get your teacher&rsquo;s approval before Step 05.</strong> Show your teacher your sketches in person. No approval means no Illustrator. This saves you from designing in the wrong direction for hours."))
     en+=card("Make your sketch useful","Sketching Tips",
         bullets([("Map it out","show where every piece goes: name, mascot, tagline, bullets, logo. Use boxes to block out space."),
                  ("Add color notes","write the HEX codes from your group palette next to each area."),
                  ("Talk to your partner","make sure your sides feel like the same brand as your partner&rsquo;s."),
                  ("Clear as a map","it does not have to be perfect, but it must be clear. You will use it as a map in Illustrator.")])
-        + note("<strong>No scanner needed.</strong> Use your school iPad to take a clear, bright photo of each sketchbook page (this is how you scan it), then save the pages as one PDF."))
+        + note("<strong>No scanner needed.</strong> Use your student iPad to take a clear, bright photo of your hero sketchbook page (this is how you scan it), then upload that photo as a JPG."))
     en+=next_up("UP NEXT &middot; STEP 05 - Digital Design","Build your three approved panels in Adobe Illustrator.")
     es=banner("M&oacute;dulo 10 &bull; Paso 04","Boceto del Concepto","Dibuja los lados de tu caja a mano. Boceta primero. Dise&ntilde;a mejor.","#top","Back to English",hicon=HICON_SKETCH)
     es+=card("Aprende &middot; planea antes de hacer clic","Por Qu&eacute; Bocetas Primero",
         (float_right(SKETCH_FLOAT,"Dos estudiantes dibujando su caja de cereal Panther Paws en un cuaderno con l&aacute;pices de colores") if HAVE_FLOATS else "")
         + para("En este paso dibujas un plan de los paneles que vas a dise&ntilde;ar. Esto te ayuda a resolver tus ideas antes de abrir Adobe Illustrator.")
         + para("T&uacute; y tu compa&ntilde;ero ya eligieron colores, fuentes y estilo en el Paso 03. Ahora dibujas tus tres lados para que los seis lados se vean como una sola marca. Los dise&ntilde;adores reales bocetan cada proyecto antes de abrir el programa."))
-    es+=deliverables_box(True,[("1 PDF:","un PDF de tus tres p&aacute;ginas de boceto, despu&eacute;s de que tu maestro las apruebe, subido a esta tarea de Canvas.")])
+    es+=deliverables_box(True,[("1 JPG:","una foto clara de tu boceto principal aprobado, el panel principal que te toc&oacute; (el Dise&ntilde;ador 1 entrega el Frente, el Dise&ntilde;ador 2 entrega la parte de Atr&aacute;s). Toma la foto con tu iPad de la escuela y sube el JPG a esta tarea de Canvas.")])
     es+=card("Roles de dise&ntilde;ador","Qui&eacute;n Dibuja Qu&eacute;",
         roles_split(True) + roles_detail(True))
     es+=card("C&oacute;mo terminar este paso","Tres Pasos para Terminar",
         steps([("Revisa tus lados.","Confirma cu&aacute;les tres lados son tuyos antes de dibujar."),
                ("Dibuja tus tres lados.","Dibuja cada lado en su propia p&aacute;gina del cuaderno. Muestra d&oacute;nde van las im&aacute;genes, el texto y el logo."),
-               ("Recibe aprobaci&oacute;n y entrega.","Mu&eacute;strale tus bocetos a tu maestro para que los apruebe. Luego esc&aacute;nealos en un PDF y s&uacute;belo a Canvas.")])
+               ("Recibe aprobaci&oacute;n y entrega.","Mu&eacute;strale tus bocetos a tu maestro para que los apruebe. Luego usa tu iPad de la escuela para tomar una foto clara de tu boceto principal (el Dise&ntilde;ador 1 el Frente, el Dise&ntilde;ador 2 la parte de Atr&aacute;s) y sube el JPG a Canvas.")])
         + note("<strong>Recibe la aprobaci&oacute;n de tu maestro antes del Paso 05.</strong> Mu&eacute;strale tus bocetos en persona. Sin aprobaci&oacute;n no hay Illustrator. Esto te evita dise&ntilde;ar en la direcci&oacute;n equivocada por horas."))
     es+=card("Haz &uacute;til tu boceto","Consejos para Bocetar",
         bullets([("Ubica todo","muestra d&oacute;nde va cada parte: nombre, mascota, eslogan, vi&ntilde;etas, logo. Usa cajas para bloquear el espacio."),
                  ("Agrega notas de color","escribe los c&oacute;digos HEX de la paleta de tu grupo junto a cada &aacute;rea."),
                  ("Habla con tu compa&ntilde;ero","aseg&uacute;rate de que tus lados se sientan de la misma marca que los de tu compa&ntilde;ero."),
                  ("Claro como un mapa","no tiene que ser perfecto, pero debe ser claro. Lo usar&aacute;s como mapa en Illustrator.")])
-        + note("<strong>No se necesita esc&aacute;ner.</strong> Usa tu iPad de la escuela para tomar una foto clara y brillante de cada p&aacute;gina del cuaderno (as&iacute; la escaneas), luego guarda las p&aacute;ginas en un solo PDF."))
+        + note("<strong>No se necesita esc&aacute;ner.</strong> Usa tu iPad de la escuela para tomar una foto clara y brillante de la p&aacute;gina de tu boceto principal (as&iacute; la escaneas), luego sube esa foto como un JPG."))
     es+=next_up("SIGUIENTE &middot; PASO 05 - Dise&ntilde;o Digital","Arma tus tres paneles aprobados en Adobe Illustrator.")
     return wrap_page(f"Step 4: Concept Sketch | Cereal Box Group Project | {CT} | PVHS", nav("Step 04",dots_for(3),step_topnav(3)), top_wrap(en,es), step_bottom(3))
 
