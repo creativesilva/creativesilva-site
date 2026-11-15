@@ -29,6 +29,7 @@ CHOICES_FLOAT=f"{SITE}/assets/images/cereal/cereal-choices-float.jpg" # Step 03:
 SKETCH_FLOAT=f"{SITE}/assets/images/cereal/cereal-sketch-float.jpg"  # Step 04: two students sketching the Panther Paws box
 DESIGN_FLOAT=f"{SITE}/assets/images/cereal/cereal-design-float.jpg"  # Step 05: a student designing the box in Illustrator on an iMac
 BUILD_FLOAT=f"{SITE}/assets/images/cereal/cereal-build-float-v2.jpg" # Step 06: two students building the printed box (v2, Chris 2026-11-15)
+LAUNCH_FLOAT=f"{SITE}/assets/images/cereal/cereal-launch-float.jpg"  # Step 07: two students presenting the finished Panther Paws box
 HAVE_FLOATS=True
 
 # Project folder download: the DA folder = the 7 Illustrator templates (6 panels + print template)
@@ -771,7 +772,8 @@ def build_your_box():
 def launch_reflect():
     en=banner("Module 10 &bull; Step 07","Launch &amp; Reflect","Post it. Pitch it. Look back at what you built.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_REFLECT)
     en+=card("Learn &middot; take it to market","Launch Your Brand, Then Look Back",
-        para("Real brands do not stop at the box. They post online to get people excited, then they look back to learn. You do both here.")
+        (float_right(LAUNCH_FLOAT,"Two students proudly presenting their finished Panther Paws Protein Puffs cereal box") if HAVE_FLOATS else "")
+        + para("Real brands do not stop at the box. They post online to get people excited, then they look back to learn. You do both here.")
         + para("First you make one <strong>Instagram post</strong> for your cereal in <strong>Canva</strong>. Then you fill out a short <strong>reflection</strong> about the whole project."))
     en+=deliverables_box(False,[("Instagram Post (.jpg):","one clean square image, 1080 x 1080, with your cereal, your logo, and one clear message."),
                                 ("1 reflection (.docx):","your completed Cereal Box Reflection doc, uploaded to this Canvas assignment.")])
@@ -801,7 +803,8 @@ def launch_reflect():
     en+=next_up("MODULE COMPLETE","Nice work. You built a real brand, designed a six-panel box, built it by hand, and took it to market, just like a working package designer.")
     es=banner("M&oacute;dulo 10 &bull; Paso 07","Lanza y Reflexiona","Publ&iacute;calo. Convence. Reflexiona sobre lo que armaste.","#top","Back to English",hicon=HICON_REFLECT)
     es+=card("Aprende &middot; ll&eacute;valo al mercado","Lanza Tu Marca, Luego Reflexiona",
-        para("Las marcas reales no paran en la caja. Publican en l&iacute;nea para emocionar a la gente, luego miran hacia atr&aacute;s para aprender. Aqu&iacute; haces las dos cosas.")
+        (float_right(LAUNCH_FLOAT,"Dos estudiantes presentando con orgullo su caja de cereal Panther Paws Protein Puffs terminada") if HAVE_FLOATS else "")
+        + para("Las marcas reales no paran en la caja. Publican en l&iacute;nea para emocionar a la gente, luego miran hacia atr&aacute;s para aprender. Aqu&iacute; haces las dos cosas.")
         + para("Primero haces una <strong>publicaci&oacute;n de Instagram</strong> para tu cereal en <strong>Canva</strong>. Luego llenas una <strong>reflexi&oacute;n</strong> corta sobre todo el proyecto."))
     es+=deliverables_box(True,[("Publicaci&oacute;n (.jpg):","una imagen cuadrada limpia, 1080 x 1080, con tu cereal, tu logo y un mensaje claro."),
                                ("1 reflexi&oacute;n (.docx):","tu documento de Reflexi&oacute;n terminado, subido a esta tarea de Canvas.")])
