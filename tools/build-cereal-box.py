@@ -20,7 +20,7 @@ AREA="Digital Arts Folder"
 CT="Digital Arts 1A"; PFX="digarts1"
 
 # Images (reused from the MRC build; hosted on the whitelisted domain).
-HERO=f"{SITE}/assets/images/cereal/cereal-header.png"     # row of cereal boxes on a shelf
+HERO=f"{SITE}/assets/images/cereal/cereal-header-v2.jpg"  # two students presenting a PV Panther Paws cereal box in a design studio (Chris 2026-11-15)
 CATS=f"{SITE}/assets/images/cereal/cereal-categories.png" # the four category lanes
 HAVE_ART=True
 
@@ -318,7 +318,7 @@ def overview():
         "Team up. Build a brand. Win the shelf.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_DESIGN)
     en+=type_card("overview","The Module Overview","What You Will Make",
         para("You and one partner invent your own brand of cereal. Together you name it, draw a mascot, pick the colors, and design all <strong>six sides</strong> of the box in <strong>Adobe Illustrator</strong>. Make it so good a real shopper would grab it off the shelf.")
-        + (framed(HERO,"A row of bright, colorful cereal boxes on a grocery shelf") if HAVE_ART else "")
+        + (framed(HERO,"Two students in a design studio showing their finished Panther Paws cereal box") if HAVE_ART else "")
         + note("<strong>Keep it school appropriate.</strong> Your brand, your name, and your mascot must be clean and okay for school."))
     en+=downloads(False)
     en+=card("Learn &middot; pick a lane","Four Cereal Lanes to Pick From",
@@ -342,7 +342,7 @@ def overview():
         "Hagan equipo. Creen una marca. Ganen el estante.","#top","Back to English",hicon=HICON_DESIGN)
     es+=type_card("overview","El Resumen del M&oacute;dulo","Lo Que Vas a Crear",
         para("T&uacute; y un compa&ntilde;ero inventan su propia marca de cereal. Juntos le ponen nombre, dibujan una mascota, eligen los colores y dise&ntilde;an los <strong>seis lados</strong> de la caja en <strong>Adobe Illustrator</strong>. H&aacute;ganla tan buena que un comprador de verdad la tome del estante.")
-        + (framed(HERO,"Una fila de cajas de cereal coloridas en un estante de tienda") if HAVE_ART else "")
+        + (framed(HERO,"Dos estudiantes en un estudio de dise&ntilde;o mostrando su caja de cereal Panther Paws terminada") if HAVE_ART else "")
         + note("<strong>Mant&eacute;nlo apropiado para la escuela.</strong> Tu marca, tu nombre y tu mascota deben ser limpios y adecuados para la clase."))
     es+=downloads(True)
     es+=card("Aprende &middot; elige una categor&iacute;a","Cuatro Categor&iacute;as para Elegir",
