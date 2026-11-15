@@ -25,6 +25,7 @@ CATS=f"{SITE}/assets/images/cereal/cereal-categories-v3.png" # the four category
 HAVE_ART=True
 # Step content photos (right-floated, magazine-wrap). Chris 2026-11-15.
 RESEARCH_FLOAT=f"{SITE}/assets/images/cereal/cereal-research-float.jpg" # Step 02: a student studying a real cereal brand website on an iMac
+CHOICES_FLOAT=f"{SITE}/assets/images/cereal/cereal-choices-float.jpg" # Step 03: two students picking a color palette with a Pantone deck
 SKETCH_FLOAT=f"{SITE}/assets/images/cereal/cereal-sketch-float.jpg"  # Step 04: two students sketching the Panther Paws box
 DESIGN_FLOAT=f"{SITE}/assets/images/cereal/cereal-design-float.jpg"  # Step 05: a student designing the box in Illustrator on an iMac
 BUILD_FLOAT=f"{SITE}/assets/images/cereal/cereal-build-float-v2.jpg" # Step 06: two students building the printed box (v2, Chris 2026-11-15)
@@ -548,7 +549,8 @@ def research():
 def design_choices():
     en=banner("Module 10 &bull; Step 03","Design Choices","Partner huddle. Lock in the name, mascot, colors, and fonts.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_DESIGN)
     en+=card("Learn &middot; the big choices","Make the Big Choices Together",
-        para("Now you and your partner make the big design choices for your box. Agree on the name, the category, the shopper, the mascot, the colors, the fonts, and the tagline.")
+        (float_right(CHOICES_FLOAT,"Two students choosing a brand color palette with a Pantone swatch deck at an iMac") if HAVE_FLOATS else "")
+        + para("Now you and your partner make the big design choices for your box. Agree on the name, the category, the shopper, the mascot, the colors, the fonts, and the tagline.")
         + para("Lock in these choices now so all six panels look like one brand, even though you each design three. Different colors and fonts on each side ruin the brand.")
         + para("You fill out the Design Choices doc so you both leave with the same plan, the same HEX colors, and the same font names."))
     en+=deliverables_box(False,[("1 design doc:","your completed Cereal Box Design Choices doc (.docx), uploaded to this Canvas assignment.")])
@@ -568,7 +570,8 @@ def design_choices():
     en+=next_up("UP NEXT &middot; STEP 04 - Concept Sketch","Sketch your three box sides by hand, then get your concept approved before you go digital.")
     es=banner("M&oacute;dulo 10 &bull; Paso 03","Decisiones de Dise&ntilde;o","Re&uacute;nanse. Definan el nombre, la mascota, los colores y las fuentes.","#top","Back to English",hicon=HICON_DESIGN)
     es+=card("Aprende &middot; las grandes decisiones","Tomen las Grandes Decisiones Juntos",
-        para("Ahora t&uacute; y tu compa&ntilde;ero toman las grandes decisiones de dise&ntilde;o para su caja. Pongan de acuerdo el nombre, la categor&iacute;a, el comprador, la mascota, los colores, las fuentes y el eslogan.")
+        (float_right(CHOICES_FLOAT,"Dos estudiantes eligiendo la paleta de colores de la marca con un abanico Pantone en una iMac") if HAVE_FLOATS else "")
+        + para("Ahora t&uacute; y tu compa&ntilde;ero toman las grandes decisiones de dise&ntilde;o para su caja. Pongan de acuerdo el nombre, la categor&iacute;a, el comprador, la mascota, los colores, las fuentes y el eslogan.")
         + para("Definan estas decisiones ahora para que los seis paneles se vean como una sola marca, aunque cada uno dise&ntilde;e tres. Colores y fuentes distintos en cada lado arruinan la marca.")
         + para("Llenan el documento de Decisiones de Dise&ntilde;o para que ambos salgan con el mismo plan, los mismos colores HEX y los mismos nombres de fuentes."))
     es+=deliverables_box(True,[("1 documento:","tu documento de Decisiones de Dise&ntilde;o terminado (.docx), subido a esta tarea de Canvas.")])
