@@ -618,6 +618,31 @@ A module's downloadable documents appear in the catalog in a gold **Module Docum
 - Run `python3 tools/build-module-docs.py --write`; it rebuilds the `MODULE_DOCS` map in `curriculum.html`. Slides/syllabi/lab agreements are excluded.
 - **Capture lists** (photo walks) are **separate EN + ES** (never bilingual), a printable **half-sheet 2-up** handout titled "Hunt for These Six" / "Busca Estas Seis" (the six B&W + composition concepts from the module vocab, with a check box each). Name them `<Module-Prefix>-Capture-List-EN.docx` / `-ES.docx`. Backfill the same format for every photo walk.
 
+### 10.3 Publishing a Module to Teachers (Public Share, LOCKED 2026-11-15)
+
+Any module can be given an **independent public link** to hand to another teacher: a self-contained copy that carries its OWN Copy URL / Copy HTML / Download All tools and has **zero links back to the curriculum catalog** or teacher tools. Do this **ONLY when Chris asks** ("publish module X" / "make it public" / "share it with a teacher"). Canonical build: `tools/build-cereal-box.py`; live example **www.creativesilva.com/share/cereal-box/**. See [[silva-framework-shared-module]], [[cereal-box-module]].
+
+**Two-pass builder.** The module builder runs twice via a `MODE` global and writes two coherent copies from the SAME step functions, so the student-facing content stays identical on both surfaces:
+- `MODE="cur"` &rarr; `curriculum/shared/<slug>-*.html`: the in-catalog module (site nav + catalog breadcrumb via `silva-nav.js`).
+- `MODE="std"` &rarr; `share/<slug>/` (`index.html` + `step0N-*.html`): the public copy, wrapped by a local `wrap_standalone` (module CSS only, **NO `silva-nav.js`**, no site nav / Equipment Manager / Catalog, no catalog breadcrumb, internal step links only, language toggle kept). Assets load absolute from `www.creativesilva.com` so it works from the `/share/` path. The `#top` content block is **byte-identical** between the two copies: when asked for parity, verify by diffing `#top` of the `cur` vs `std` page.
+
+**Catalog-free teacher toolbar (std pass only).** `wrap_standalone` renders a `.silva-share-bar` **UNDER** the nav row (its own full-width strip; do NOT put it inside the nav's `nowrap` flex row, which squeezes it and misaligns it). It shows a **Teacher tools** label + three teal pills, wired by an inline script:
+- **Copy URL** = `location.href`.
+- **Copy HTML** = the `#top` outerHTML (the same Canvas-pasteable block the catalog's Copy HTML copies).
+- **Download All** = fetches every page's `#top` and bundles them into one `<slug>-all-pages.md` (each page in a fenced `html` block). The page list (`FILES_STD`) + module name (`SHARE_NAME`) are embedded so it bundles exactly that module's pages.
+
+**To make another module shareable:** port the two-pass pattern into its builder (the `MODE` global, `FILES_STD`, `SHARE_NAME`, and the `wrap_standalone` + `.silva-share-bar` toolbar + inline script), then build both passes. Crib verbatim from `build-cereal-box.py`. Nothing on the public copy may link back to the catalog or site nav.
+
+**Internal hub: the catalog "Shared Modules" section.** When Chris publishes a module, add one entry to the `SHARED_MODULES` array in `curriculum.html`:
+
+```javascript
+{ name: "Cereal Box Group Project", course: "Digital Arts",
+  desc: "One-line description for the card.",
+  url: "/share/<slug>/" }
+```
+
+`buildSharedModules()` (called in `renderCourses`, right after Teacher Resources) renders a gated **"Shared Modules &middot; Public Links"** accordion: each module is a row with its description, its independent public `/share/` link, **Copy Link**, and **Open**. Every link is independent of the others. This section is Chris's own view (behind the catalog gate); the `/share/` links themselves are public, no gate.
+
 ---
 
 ## 11. Reference Files
