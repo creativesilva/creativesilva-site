@@ -24,7 +24,7 @@ HERO=f"{SITE}/assets/images/cereal/cereal-header-v2.jpg"  # two students present
 CATS=f"{SITE}/assets/images/cereal/cereal-categories-v3.png" # the four category lanes (v3 infographic, Chris 2026-11-15)
 HAVE_ART=True
 # Step content photos (right-floated, magazine-wrap). Chris 2026-11-15.
-RESEARCH_FLOAT=f"{SITE}/assets/images/cereal/cereal-research-float.jpg" # Step 02: a student studying a real cereal brand website on an iMac
+RESEARCH_FLOAT=f"{SITE}/assets/images/cereal/cereal-research-float-v2.jpg" # Step 02: a student studying a real cereal brand website on an iMac (v2, Chris 2026-11-15)
 CHOICES_FLOAT=f"{SITE}/assets/images/cereal/cereal-choices-float.jpg" # Step 03: two students picking a color palette with a Pantone deck
 SKETCH_FLOAT=f"{SITE}/assets/images/cereal/cereal-sketch-float.jpg"  # Step 04: two students sketching the Panther Paws box
 DESIGN_FLOAT=f"{SITE}/assets/images/cereal/cereal-design-float-v2.jpg" # Step 05: a student designing the box in Illustrator on an iMac (v2, Chris 2026-11-15)
