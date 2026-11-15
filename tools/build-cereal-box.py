@@ -21,11 +21,12 @@ CT="Digital Arts 1A"; PFX="digarts1"
 
 # Images (reused from the MRC build; hosted on the whitelisted domain).
 HERO=f"{SITE}/assets/images/cereal/cereal-header-v2.jpg"  # two students presenting a PV Panther Paws cereal box in a design studio (Chris 2026-11-15)
-CATS=f"{SITE}/assets/images/cereal/cereal-categories-v2.png" # the four category lanes (updated infographic, Chris 2026-11-15)
+CATS=f"{SITE}/assets/images/cereal/cereal-categories-v3.png" # the four category lanes (v3 infographic, Chris 2026-11-15)
 HAVE_ART=True
 # Step content photos (right-floated, magazine-wrap). Chris 2026-11-15.
 RESEARCH_FLOAT=f"{SITE}/assets/images/cereal/cereal-research-float.jpg" # Step 02: a student studying a real cereal brand website on an iMac
 SKETCH_FLOAT=f"{SITE}/assets/images/cereal/cereal-sketch-float.jpg"  # Step 04: two students sketching the Panther Paws box
+DESIGN_FLOAT=f"{SITE}/assets/images/cereal/cereal-design-float.jpg"  # Step 05: a student designing the box in Illustrator on an iMac
 BUILD_FLOAT=f"{SITE}/assets/images/cereal/cereal-build-float-v2.jpg" # Step 06: two students building the printed box (v2, Chris 2026-11-15)
 HAVE_FLOATS=True
 
@@ -635,7 +636,8 @@ def concept_sketch():
 def digital_design():
     en=banner("Module 10 &bull; Step 05","Digital Design","Design. Export. Build the print template.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_DESIGN)
     en+=card("Learn &middot; from sketch to Illustrator","Design It in Illustrator",
-        para("Your sketches are approved. Now you design the final cereal box in <strong>Adobe Illustrator</strong>. You design only the three sides you were assigned. You and your partner share JPG exports so you both build the same print template.")
+        (float_right(DESIGN_FLOAT,"A student designing the Panther Paws cereal box in Adobe Illustrator on an iMac in the design lab") if HAVE_FLOATS else "")
+        + para("Your sketches are approved. Now you design the final cereal box in <strong>Adobe Illustrator</strong>. You design only the three sides you were assigned. You and your partner share JPG exports so you both build the same print template.")
         + para("You print and build the real box in Step 06. Here you make it print-ready: clean panels, real color, real type."))
     en+=deliverables_box(False,[("4 PDFs:","the print template plus the three panels you designed. Export each as a PDF and upload all four to this Canvas assignment.")],files=4)
     en+=card("Open your project folder","Start From Your Templates",
@@ -674,7 +676,8 @@ def digital_design():
     en+=next_up("UP NEXT &middot; STEP 06 - Build Your Box","Print your design, then cut, fold, and glue it into a real cereal box you can hold.")
     es=banner("M&oacute;dulo 10 &bull; Paso 05","Dise&ntilde;o Digital","Dise&ntilde;a. Exporta. Arma la plantilla de impresi&oacute;n.","#top","Back to English",hicon=HICON_DESIGN)
     es+=card("Aprende &middot; del boceto a Illustrator","Dise&ntilde;a en Illustrator",
-        para("Tus bocetos est&aacute;n aprobados. Ahora dise&ntilde;as la caja final en <strong>Adobe Illustrator</strong>. Dise&ntilde;as solo los tres lados que te tocaron. T&uacute; y tu compa&ntilde;ero comparten exportaciones JPG para armar la misma plantilla de impresi&oacute;n.")
+        (float_right(DESIGN_FLOAT,"Una estudiante dise&ntilde;ando la caja de cereal Panther Paws en Adobe Illustrator en una iMac en el laboratorio de dise&ntilde;o") if HAVE_FLOATS else "")
+        + para("Tus bocetos est&aacute;n aprobados. Ahora dise&ntilde;as la caja final en <strong>Adobe Illustrator</strong>. Dise&ntilde;as solo los tres lados que te tocaron. T&uacute; y tu compa&ntilde;ero comparten exportaciones JPG para armar la misma plantilla de impresi&oacute;n.")
         + para("Imprimes y armas la caja real en el Paso 06. Aqu&iacute; la dejas lista para imprimir: paneles limpios, color real, tipograf&iacute;a real."))
     es+=deliverables_box(True,[("4 PDFs:","la plantilla de impresi&oacute;n m&aacute;s los tres paneles que dise&ntilde;aste. Exporta cada uno como PDF y sube los cuatro a esta tarea de Canvas.")],files=4)
     es+=card("Abre tu carpeta del proyecto","Empieza con Tus Plantillas",
