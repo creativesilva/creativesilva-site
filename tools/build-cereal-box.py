@@ -24,8 +24,9 @@ HERO=f"{SITE}/assets/images/cereal/cereal-header-v2.jpg"  # two students present
 CATS=f"{SITE}/assets/images/cereal/cereal-categories-v2.png" # the four category lanes (updated infographic, Chris 2026-11-15)
 HAVE_ART=True
 # Step content photos (right-floated, magazine-wrap). Chris 2026-11-15.
+RESEARCH_FLOAT=f"{SITE}/assets/images/cereal/cereal-research-float.jpg" # Step 02: a student studying a real cereal brand website on an iMac
 SKETCH_FLOAT=f"{SITE}/assets/images/cereal/cereal-sketch-float.jpg"  # Step 04: two students sketching the Panther Paws box
-BUILD_FLOAT=f"{SITE}/assets/images/cereal/cereal-build-float-v2.jpg" # Step 05: two students building the printed box (v2, Chris 2026-11-15)
+BUILD_FLOAT=f"{SITE}/assets/images/cereal/cereal-build-float-v2.jpg" # Step 06: two students building the printed box (v2, Chris 2026-11-15)
 HAVE_FLOATS=True
 
 # Project folder download: the DA folder = the 7 Illustrator templates (6 panels + print template)
@@ -490,7 +491,8 @@ def roles_detail(es):
 def research():
     en=banner("Module 10 &bull; Step 02","Cereal Box Research","Pick a real cereal. Study the box. Learn why it sells.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_DESIGN)
     en+=card("Learn &middot; why designers research","Start Like a Real Designer",
-        para("Before you draw a single line, you study what already works. Real designers do this on every project. They look at what is on the shelf and ask why it sells.")
+        (float_right(RESEARCH_FLOAT,"A student studying a real cereal brand website on an iMac in the design lab") if HAVE_FLOATS else "")
+        + para("Before you draw a single line, you study what already works. Real designers do this on every project. They look at what is on the shelf and ask why it sells.")
         + para("You and your partner pick <strong>one real cereal</strong> in your category. You study how its box is designed, who it is made for, and how the design helps it sell. Everything you learn here goes into your own brand later."))
     en+=deliverables_box(False,[("1 research doc:","your completed Cereal Box Research doc (.docx), uploaded to this Canvas assignment.")])
     en+=card("How to finish this step","Three Steps to Finish",
@@ -515,7 +517,8 @@ def research():
     en+=next_up("UP NEXT &middot; STEP 03 - Design Choices","Huddle with your partner and lock in your cereal name, mascot, colors, and fonts.")
     es=banner("M&oacute;dulo 10 &bull; Paso 02","Investigaci&oacute;n de la Caja","Elige un cereal real. Estudia la caja. Aprende por qu&eacute; se vende.","#top","Back to English",hicon=HICON_DESIGN)
     es+=card("Aprende &middot; por qu&eacute; se investiga","Empieza Como un Dise&ntilde;ador Real",
-        para("Antes de dibujar una sola l&iacute;nea, estudias lo que ya funciona. Los dise&ntilde;adores reales hacen esto en cada proyecto. Miran lo que hay en el estante y preguntan por qu&eacute; se vende.")
+        (float_right(RESEARCH_FLOAT,"Una estudiante estudiando el sitio web de una marca de cereal real en una iMac en el laboratorio de dise&ntilde;o") if HAVE_FLOATS else "")
+        + para("Antes de dibujar una sola l&iacute;nea, estudias lo que ya funciona. Los dise&ntilde;adores reales hacen esto en cada proyecto. Miran lo que hay en el estante y preguntan por qu&eacute; se vende.")
         + para("T&uacute; y tu compa&ntilde;ero eligen <strong>un cereal real</strong> de su categor&iacute;a. Estudian c&oacute;mo est&aacute; dise&ntilde;ada su caja, para qui&eacute;n se hizo y c&oacute;mo el dise&ntilde;o ayuda a venderlo. Todo lo que aprendas aqu&iacute; se usa en tu propia marca despu&eacute;s."))
     es+=deliverables_box(True,[("1 documento:","tu documento de Investigaci&oacute;n terminado (.docx), subido a esta tarea de Canvas.")])
     es+=card("C&oacute;mo terminar este paso","Tres Pasos para Terminar",
