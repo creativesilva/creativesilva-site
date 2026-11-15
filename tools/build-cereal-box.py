@@ -780,24 +780,25 @@ def launch_reflect():
     en+=card("Learn &middot; take it to market","Launch Your Brand, Then Look Back",
         (float_right(LAUNCH_FLOAT,"Two students proudly presenting their finished Panther Paws Protein Puffs cereal box") if HAVE_FLOATS else "")
         + para("Real brands do not stop at the box. They post online to get people excited, then they look back to learn. You do both here.")
-        + para("First you make one <strong>Instagram post</strong> for your cereal in <strong>Canva</strong>. Then you fill out a short <strong>reflection</strong> about the whole project."))
-    en+=deliverables_box(False,[("Instagram Post (.jpg):","one clean square image, 1080 x 1080, with your cereal, your logo, and one clear message."),
+        + para("You and your partner launch your brand with <strong>two social media assets</strong> that work together: an <strong>Instagram Post</strong> and a vertical <strong>Story</strong> that moves. Each of you picks one to build in <strong>Canva</strong>. Then you fill out a short <strong>reflection</strong> about the whole project."))
+    en+=deliverables_box(False,[("Your launch asset (pick one):","an Instagram Post (.jpg, 1080 x 1080) or a vertical animated Story (.mp4, 1080 x 1920). You and your partner pick different ones so your brand launches with both. Build it in Canva from your Illustrator design, and give it a clear call to action."),
                                 ("1 reflection (.docx):","your completed Cereal Box Reflection doc, uploaded to this Canvas assignment.")])
-    en+=card("Launch &middot; make your post","Build It in Canva",
-        para("Canva is free with your school Google login. It has ready-made Instagram sizes and fonts.")
+    en+=card("Launch &middot; post or story","Build Your Asset in Canva",
+        para("Canva is free with your school Google login. First, with your partner, decide who makes the <strong>Post</strong> and who makes the <strong>Story</strong>. Each of you builds one, and they must look like one brand.")
         + steps([("Log in.","Go to canva.com and click Log in with Google. Use your school account."),
-                 ("Upload your brand.","In the Uploads tab, add your logo, mascot, and box images from Step 05."),
-                 ("Make the post.","Create an Instagram Post (1080 x 1080). One clean image with your cereal, your logo, and one clear message."),
-                 ("Export it.","Share, then Download, then pick JPG. Upload it to this Canvas assignment.")])
-        + note("<strong>Want extra?</strong> Make a 5 to 15 second animated Story too (1080 x 1920): click an element, then Animate, then Share, Download, and pick MP4 Video."))
-    en+=card("Pitch it","Sell It in One Line",
-        para("Your post needs a <strong>pitch</strong>: one short line that tells the shopper why to buy it. Make it easy to see and easy to say.")
-        + bullets([("","&ldquo;Try it today.&rdquo;"),("","&ldquo;Fuel your game.&rdquo;"),("","&ldquo;New flavor, out now.&rdquo;"),("","&ldquo;Find it at your store.&rdquo;")]))
-    en+=card("Stay on brand","Use Your Own Cereal Brand",
-        bullets([("Same logo","use the exact logo from your box."),
-                 ("Same colors","use the same HEX colors from your Step 03 doc."),
-                 ("Same fonts","pick Canva fonts that match your box style."),
-                 ("Same mascot","if your box has a mascot, put it in your post too.")]))
+                 ("Bring in your design.","In the Uploads tab, add your logo, mascot, and panel images from your Step 05 Illustrator file. Build on your real brand, do not start over."),
+                 ("Set your size.","Post: an Instagram Post, 1080 x 1080 square. Story: an Instagram Story, 1080 x 1920 tall."),
+                 ("Make the Story move.","If you picked the Story, click an element, then Animate, so your text or logo moves. Keep it 5 to 15 seconds."),
+                 ("Add your call to action.","one short line that tells people what to do next."),
+                 ("Export and submit.","Post: Share, Download, JPG. Story: Share, Download, MP4 Video. Upload your file to this Canvas assignment.")]))
+    en+=card("Make it sell","Check All the Boxes for a Strong Ad",
+        para("Good ads all do the same things. Before you turn in your asset, make sure it checks every box, and that it matches your partner&rsquo;s so the two look like one launch.")
+        + bullets([("Stops the scroll","a bold image or color that makes people stop and look."),
+                   ("One clear message","say one thing, not ten. The main idea reads in a second."),
+                   ("A clear call to action","tell people what to do next: &ldquo;Try it today.&rdquo; &ldquo;Fuel your game.&rdquo; &ldquo;Find it at your store.&rdquo;"),
+                   ("On brand","same logo, colors, fonts, and mascot as your box and your partner&rsquo;s asset."),
+                   ("Easy to read","big text, strong contrast, nothing crowded."),
+                   ("Made for the feed","the Post is square, the Story is tall and moves. Right size, right place.")]))
     en+=card("Reflect &middot; look back","Reflect on What You Built",
         para("Last, open the <strong>Reflection doc</strong> from your project folder and answer every prompt in full sentences. Be honest. Be specific. Then upload the .docx.")
         + bullets([("My design choices","what choices did you make, and why those colors, fonts, or images?"),
@@ -811,24 +812,25 @@ def launch_reflect():
     es+=card("Aprende &middot; ll&eacute;valo al mercado","Lanza Tu Marca, Luego Reflexiona",
         (float_right(LAUNCH_FLOAT,"Dos estudiantes presentando con orgullo su caja de cereal Panther Paws Protein Puffs terminada") if HAVE_FLOATS else "")
         + para("Las marcas reales no paran en la caja. Publican en l&iacute;nea para emocionar a la gente, luego miran hacia atr&aacute;s para aprender. Aqu&iacute; haces las dos cosas.")
-        + para("Primero haces una <strong>publicaci&oacute;n de Instagram</strong> para tu cereal en <strong>Canva</strong>. Luego llenas una <strong>reflexi&oacute;n</strong> corta sobre todo el proyecto."))
-    es+=deliverables_box(True,[("Publicaci&oacute;n (.jpg):","una imagen cuadrada limpia, 1080 x 1080, con tu cereal, tu logo y un mensaje claro."),
+        + para("T&uacute; y tu compa&ntilde;ero lanzan su marca con <strong>dos recursos de redes sociales</strong> que trabajan juntos: una <strong>publicaci&oacute;n de Instagram</strong> y una <strong>historia</strong> vertical con movimiento. Cada uno elige uno para armar en <strong>Canva</strong>. Luego llenas una <strong>reflexi&oacute;n</strong> corta sobre todo el proyecto."))
+    es+=deliverables_box(True,[("Tu recurso de lanzamiento (elige uno):","una Publicaci&oacute;n de Instagram (.jpg, 1080 x 1080) o una Historia vertical animada (.mp4, 1080 x 1920). T&uacute; y tu compa&ntilde;ero eligen distintos para que su marca se lance con los dos. Arma en Canva desde tu dise&ntilde;o de Illustrator y dale un llamado a la acci&oacute;n claro."),
                                ("1 reflexi&oacute;n (.docx):","tu documento de Reflexi&oacute;n terminado, subido a esta tarea de Canvas.")])
-    es+=card("Lanza &middot; haz tu publicaci&oacute;n","Arma en Canva",
-        para("Canva es gratis con tu cuenta Google de la escuela. Tiene tama&ntilde;os de Instagram listos y fuentes.")
+    es+=card("Lanza &middot; publicaci&oacute;n o historia","Arma Tu Recurso en Canva",
+        para("Canva es gratis con tu cuenta Google de la escuela. Primero, con tu compa&ntilde;ero, decidan qui&eacute;n hace la <strong>Publicaci&oacute;n</strong> y qui&eacute;n la <strong>Historia</strong>. Cada uno arma uno, y deben verse como una sola marca.")
         + steps([("Inicia sesi&oacute;n.","Ve a canva.com y haz clic en Iniciar sesi&oacute;n con Google. Usa tu cuenta de la escuela."),
-                 ("Sube tu marca.","En la pesta&ntilde;a Subidas, agrega tu logo, mascota e im&aacute;genes de la caja del Paso 05."),
-                 ("Haz la publicaci&oacute;n.","Crea una publicaci&oacute;n de Instagram (1080 x 1080). Una imagen limpia con tu cereal, tu logo y un mensaje claro."),
-                 ("Exp&oacute;rtala.","Compartir, luego Descargar, luego elige JPG. S&uacute;bela a esta tarea de Canvas.")])
-        + note("<strong>&iquest;Quieres extra?</strong> Haz tambi&eacute;n una historia animada de 5 a 15 segundos (1080 x 1920): haz clic en un elemento, luego Animar, luego Compartir, Descargar y elige Video MP4."))
-    es+=card("Convence","V&eacute;ndelo en una L&iacute;nea",
-        para("Tu publicaci&oacute;n necesita un <strong>pitch</strong>: una l&iacute;nea corta que le dice al comprador por qu&eacute; comprarlo. Hazla f&aacute;cil de ver y f&aacute;cil de decir.")
-        + bullets([("","&ldquo;Pru&eacute;balo hoy.&rdquo;"),("","&ldquo;Dale energ&iacute;a a tu juego.&rdquo;"),("","&ldquo;Nuevo sabor, ya disponible.&rdquo;"),("","&ldquo;B&uacute;scalo en tu tienda.&rdquo;")]))
-    es+=card("Mant&eacute;n la marca","Usa Tu Propia Marca de Cereal",
-        bullets([("Mismo logo","usa el logo exacto de tu caja."),
-                 ("Mismos colores","usa los mismos colores HEX de tu documento del Paso 03."),
-                 ("Mismas fuentes","elige fuentes de Canva que combinen con el estilo de tu caja."),
-                 ("Misma mascota","si tu caja tiene mascota, ponla tambi&eacute;n en tu publicaci&oacute;n.")]))
+                 ("Trae tu dise&ntilde;o.","En la pesta&ntilde;a Subidas, agrega tu logo, mascota e im&aacute;genes de los paneles de tu archivo de Illustrator del Paso 05. Arma sobre tu marca real, no empieces de cero."),
+                 ("Elige tu tama&ntilde;o.","Publicaci&oacute;n: una Publicaci&oacute;n de Instagram, 1080 x 1080 cuadrada. Historia: una Historia de Instagram, 1080 x 1920 vertical."),
+                 ("Haz que la Historia se mueva.","Si elegiste la Historia, haz clic en un elemento, luego Animar, para que tu texto o logo se mueva. Mant&eacute;nla de 5 a 15 segundos."),
+                 ("Agrega tu llamado a la acci&oacute;n.","una l&iacute;nea corta que le dice a la gente qu&eacute; hacer."),
+                 ("Exporta y entrega.","Publicaci&oacute;n: Compartir, Descargar, JPG. Historia: Compartir, Descargar, Video MP4. Sube tu archivo a esta tarea de Canvas.")]))
+    es+=card("Hazlo vender","Cumple Todos los Puntos de un Buen Anuncio",
+        para("Los buenos anuncios hacen lo mismo. Antes de entregar tu recurso, aseg&uacute;rate de que cumpla cada punto, y que combine con el de tu compa&ntilde;ero para que los dos se vean como un solo lanzamiento.")
+        + bullets([("Detiene el scroll","una imagen o color llamativo que hace que la gente se detenga a mirar."),
+                   ("Un mensaje claro","di una cosa, no diez. La idea principal se entiende en un segundo."),
+                   ("Un llamado a la acci&oacute;n claro","dile a la gente qu&eacute; hacer: &ldquo;Pru&eacute;balo hoy.&rdquo; &ldquo;Dale energ&iacute;a a tu juego.&rdquo; &ldquo;B&uacute;scalo en tu tienda.&rdquo;"),
+                   ("En la marca","el mismo logo, colores, fuentes y mascota que tu caja y el recurso de tu compa&ntilde;ero."),
+                   ("F&aacute;cil de leer","texto grande, buen contraste, nada amontonado."),
+                   ("Hecho para el feed","la Publicaci&oacute;n es cuadrada, la Historia es vertical y se mueve. Tama&ntilde;o correcto, lugar correcto.")]))
     es+=card("Reflexiona &middot; mira hacia atr&aacute;s","Reflexiona sobre Lo Que Armaste",
         para("Por &uacute;ltimo, abre el <strong>documento de Reflexi&oacute;n</strong> de tu carpeta del proyecto y contesta cada pregunta en oraciones completas. S&eacute; honesto. S&eacute; espec&iacute;fico. Luego sube el .docx.")
         + bullets([("Mis decisiones de dise&ntilde;o","&iquest;qu&eacute; decisiones tomaste, y por qu&eacute; esos colores, fuentes o im&aacute;genes?"),
