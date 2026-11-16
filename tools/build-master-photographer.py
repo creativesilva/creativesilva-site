@@ -205,8 +205,8 @@ def _res_btn(url,label):
     # the min-width honest; flex:0 1 = sits at half width and a lone odd item stays half width (never
     # stretches back into a bar); min-width:240px drops it to one column on a phone.
     return (f'<a href="{url}" target="_blank" rel="noopener" '
-      'style="flex:0 1 45%;min-width:min(240px,100%);box-sizing:border-box;display:flex;align-items:center;'
-      'text-decoration:none;background:#8b5cf6;color:#ffffff;padding:12px 18px;border-top:2px solid #c4b5fd;'
+      'style="flex:0 0 auto;width:min(372px,100%);box-sizing:border-box;display:flex;align-items:center;justify-content:center;'
+      'text-align:center;text-decoration:none;background:#8b5cf6;color:#ffffff;padding:12px 18px;border-top:2px solid #c4b5fd;'
       f'font-size:11pt;letter-spacing:0.02em;line-height:1.35;"><strong>{label}</strong></a>')
 
 def reslist(es):
@@ -215,10 +215,12 @@ def reslist(es):
     ph_head="Tu Fot&oacute;grafo Maestro" if es else "Your Master Photographer"
     gen_head="Sitios de Investigaci&oacute;n" if es else "Research Sites"
     def rows(pairs):
-        # 2-column grid: each button is 45% wide and space-between pushes the two columns to the outer
-        # edges, so a clear gutter opens between them. Reflows to one full-width column on a phone; a
-        # lone odd item sits left at 45% (space-between leaves a single item at flex-start).
-        out='<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:stretch;gap:12px;margin:8px 0 4px;">'
+        # 2 columns of uniform compact buttons, each sized to the LONGEST label (372px; the longest is
+        # "Sebasti&atilde;o Salgado, Amazonas Images studio" at ~363px) with centered text. The row is
+        # capped at 2*372 + 40px gutter so only two columns ever show, even on a 4K monitor, and it
+        # reflows to one full-width column on a phone (width:min(372px,100%)). A lone odd item sits in
+        # the left column (flex-start).
+        out='<div style="display:flex;flex-wrap:wrap;align-items:stretch;gap:12px 40px;max-width:784px;margin:8px 0 4px;">'
         for url,lab in pairs: out+=_res_btn(url,lab)
         return out+'</div>'
     return (para(lead)
