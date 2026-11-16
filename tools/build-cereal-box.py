@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Cereal Box Group Project: DA1A Module 10 (promoted from the MRC track into the current angular
 # DA framework). Groups of 2 invent a cereal brand (name, mascot, colors), design all six box
-# panels, then take it to social media. Bilingual EN + ES, teal angular look, PV crest.
+# panels, then pitch it to the class. Bilingual EN + ES, teal angular look, PV crest.
 # Direction (Chris, 2026-11-06):
 #   - Elements of Art is DROPPED (covered in the Character Design project): no standalone EoA page
 #     and no "sketch the elements" step, and the overview loses the seven-elements framing.
@@ -101,8 +101,8 @@ ROADMAP=[
    "Print your design, then cut, fold, and glue it into a real box you can hold. This is the best part.",
    "Imprime tu dise&ntilde;o, luego corta, dobla y pega para armar una caja real que puedes sostener. Esta es la mejor parte."),
   ("Step 07 &middot; Launch &amp; Reflect","Paso 07 &middot; Lanza y Reflexiona",
-   "Post your cereal on Instagram, then look back and write about what you learned.",
-   "Publica tu cereal en Instagram, luego reflexiona y escribe qu&eacute; aprendiste."),
+   "Pitch your finished box to the class, then look back and write about what you learned.",
+   "Presenta tu caja terminada a la clase, luego reflexiona y escribe qu&eacute; aprendiste."),
 ]
 
 # ---- Standards: real NCAS Media Arts (HS Proficient, .HSI) + CA CTE AME Design, Visual & Media
@@ -202,7 +202,7 @@ def downloads(es):
     else:
         heading="Download the Project Folder"
         lead=("Grab everything in one folder: the <strong>6 Illustrator panel templates</strong> (Front, Back, Top, Bottom, Left, Right), the "
-              "<strong>Print Template</strong>, and your <strong>3 Word docs</strong> (Research, Design Choices, Reflection).")
+              "<strong>Print Template</strong>, and your <strong>3 Word docs</strong> (Design Detective, Design Choices, Reflection).")
         lab="Project Folder (ZIP)"
     rows=('<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">'
           + (dl_link(PROJECT_ZIP, lab, row=True) if HAVE_ZIP else "")
@@ -497,21 +497,17 @@ def research():
         (float_right(RESEARCH_FLOAT,"A student studying a real cereal brand website on an iMac in the design lab") if HAVE_FLOATS else "")
         + para("Before you draw a single line, you study what already works. Real designers do this on every project. They look at what is on the shelf and ask why it sells.")
         + para("You and your partner pick <strong>one real cereal</strong> in your category. You study how its box is designed, who it is made for, and how the design helps it sell. Everything you learn here goes into your own brand later."))
-    en+=deliverables_box(False,[("1 research doc:","your completed Cereal Box Research doc (.docx), uploaded to this Canvas assignment.")])
+    en+=deliverables_box(False,[("1 worksheet:","your completed Cereal Box Design Detective worksheet (.docx), uploaded to this Canvas assignment.")])
     en+=card("How to finish this step","Three Steps to Finish",
         steps([("Pick one cold cereal.","Pick a real cold cereal you can study. Look in your kitchen or use a clear store photo."),
-               ("Fill the Research doc.","Open the Research doc from your project folder. Answer every question in full sentences. Add a clear front-of-box photo where the doc asks."),
+               ("Fill the Design Detective worksheet.","Open the Design Detective worksheet from your project folder. Answer every question in full sentences. Add a clear front-of-box photo where it asks."),
                ("Save and submit.","Save it to OneDrive, then upload the .docx to this Canvas assignment.")]))
-    en+=card("What the doc asks","The Eight Research Questions",
-        para("Here is what the Research doc asks. Answer each one with full sentences.")
-        + bullets([("Q1 Cereal Name:","the full name, exactly as it is on the box."),
-                   ("Q2 Front Photo:","a clear photo of the front of the box, with the words easy to read."),
-                   ("Q3 Official Website:","find the brand&rsquo;s website and paste the link."),
-                   ("Q4 Target Audience:","who is it selling to (kids, parents, athletes, busy adults)? Explain why."),
-                   ("Q5 Colors &amp; Type:","what colors and fonts does the box use, and what mood do they create?"),
-                   ("Q6 Two Competitors:","find two cereals that compete with it. What do they have in common?"),
-                   ("Q7 How Design Sells:","how does the box design help it sell? Use words like contrast, typography, and layout."),
-                   ("Q8 Your Hot Take:","would you buy it? Why or why not? What would you change?")]))
+    en+=card("Learn &middot; what to look for","Hierarchy, Color, and Type",
+        para("As you study the box, look for three things. The most important is <strong>visual hierarchy</strong>: the order the design makes your eye travel.")
+        + bullets([("Visual hierarchy (most important):","do the 3-second test. Have your partner show you the front for 3 seconds, then hide it. What did you notice 1st, 2nd, and 3rd? That order is the hierarchy. See how <strong>size, contrast, and placement</strong> make the big, bold things jump out first and the small print come last."),
+                   ("Color scheme:","name the main color and the accent colors. What mood do they create, and who do they pull in?"),
+                   ("Typefaces:","look at the fonts. Is the title fun, bold, or classic? Is the small text easy to read? How do the fonts fit the cereal&rsquo;s personality?")])
+        + note("Hierarchy is the big idea here: good packaging does not just look cool, it tells your eye where to look."))
     en+=card("Score higher","Tips for Strong Answers",
         bullets([("Complete sentences","no one-word answers."),
                  ("Be specific","point at exact words, colors, or pictures on the box."),
@@ -523,21 +519,17 @@ def research():
         (float_right(RESEARCH_FLOAT,"Una estudiante estudiando el sitio web de una marca de cereal real en una iMac en el laboratorio de dise&ntilde;o") if HAVE_FLOATS else "")
         + para("Antes de dibujar una sola l&iacute;nea, estudias lo que ya funciona. Los dise&ntilde;adores reales hacen esto en cada proyecto. Miran lo que hay en el estante y preguntan por qu&eacute; se vende.")
         + para("T&uacute; y tu compa&ntilde;ero eligen <strong>un cereal real</strong> de su categor&iacute;a. Estudian c&oacute;mo est&aacute; dise&ntilde;ada su caja, para qui&eacute;n se hizo y c&oacute;mo el dise&ntilde;o ayuda a venderlo. Todo lo que aprendas aqu&iacute; se usa en tu propia marca despu&eacute;s."))
-    es+=deliverables_box(True,[("1 documento:","tu documento de Investigaci&oacute;n terminado (.docx), subido a esta tarea de Canvas.")])
+    es+=deliverables_box(True,[("1 hoja de trabajo:","tu hoja de trabajo Detective del Dise&ntilde;o terminada (.docx), subida a esta tarea de Canvas.")])
     es+=card("C&oacute;mo terminar este paso","Tres Pasos para Terminar",
         steps([("Elige un cereal fr&iacute;o.","Elige un cereal fr&iacute;o real que puedas estudiar. Busca en tu cocina o usa una foto clara de la tienda."),
-               ("Llena el documento.","Abre el documento de Investigaci&oacute;n de tu carpeta del proyecto. Contesta cada pregunta en oraciones completas. Agrega una foto clara del frente de la caja donde el documento la pide."),
+               ("Llena la hoja de trabajo.","Abre la hoja de trabajo Detective del Dise&ntilde;o de tu carpeta del proyecto. Contesta cada pregunta en oraciones completas. Agrega una foto clara del frente de la caja donde la pide."),
                ("Guarda y entrega.","Gu&aacute;rdalo en OneDrive, luego sube el .docx a esta tarea de Canvas.")]))
-    es+=card("Qu&eacute; pide el documento","Las Ocho Preguntas",
-        para("Esto es lo que pide el documento de Investigaci&oacute;n. Contesta cada una con oraciones completas.")
-        + bullets([("P1 Nombre del Cereal:","el nombre completo, tal como est&aacute; en la caja."),
-                   ("P2 Foto del Frente:","una foto clara del frente de la caja, con las palabras f&aacute;ciles de leer."),
-                   ("P3 Sitio Web Oficial:","busca el sitio web de la marca y pega el enlace."),
-                   ("P4 P&uacute;blico Meta:","&iquest;a qui&eacute;n le vende (ni&ntilde;os, pap&aacute;s, deportistas, adultos ocupados)? Explica por qu&eacute;."),
-                   ("P5 Colores y Tipograf&iacute;a:","&iquest;qu&eacute; colores y fuentes usa la caja, y qu&eacute; sensaci&oacute;n crean?"),
-                   ("P6 Dos Competidores:","busca dos cereales que compitan con este. &iquest;Qu&eacute; tienen en com&uacute;n?"),
-                   ("P7 C&oacute;mo Vende el Dise&ntilde;o:","&iquest;c&oacute;mo ayuda el dise&ntilde;o a venderlo? Usa palabras como contraste, tipograf&iacute;a y composici&oacute;n."),
-                   ("P8 Tu Opini&oacute;n:","&iquest;lo comprar&iacute;as? &iquest;Por qu&eacute; s&iacute; o por qu&eacute; no? &iquest;Qu&eacute; cambiar&iacute;as?")]))
+    es+=card("Aprende &middot; qu&eacute; observar","Jerarqu&iacute;a, Color y Tipograf&iacute;a",
+        para("Al estudiar la caja, busca tres cosas. La m&aacute;s importante es la <strong>jerarqu&iacute;a visual</strong>: el orden en que el dise&ntilde;o hace viajar tu ojo.")
+        + bullets([("Jerarqu&iacute;a visual (lo m&aacute;s importante):","haz la prueba de 3 segundos. Pide a tu compa&ntilde;ero que te muestre el frente por 3 segundos, luego que lo esconda. &iquest;Qu&eacute; notaste 1ro, 2do y 3ro? Ese orden es la jerarqu&iacute;a. Observa c&oacute;mo el <strong>tama&ntilde;o, el contraste y la ubicaci&oacute;n</strong> hacen que lo grande y llamativo salte primero y la letra peque&ntilde;a quede al final."),
+                   ("Esquema de color:","nombra el color principal y los colores de acento. &iquest;Qu&eacute; &aacute;nimo crean y a qui&eacute;n atraen?"),
+                   ("Tipograf&iacute;as:","mira las fuentes. &iquest;El t&iacute;tulo es divertido, fuerte o cl&aacute;sico? &iquest;El texto peque&ntilde;o es f&aacute;cil de leer? &iquest;C&oacute;mo combinan con la personalidad del cereal?")])
+        + note("La jerarqu&iacute;a es la idea clave: un buen empaque no solo se ve bien, le dice a tu ojo d&oacute;nde mirar."))
     es+=card("Sube tu calificaci&oacute;n","Consejos para Buenas Respuestas",
         bullets([("Oraciones completas","nada de respuestas de una palabra."),
                  ("S&eacute; espec&iacute;fico","se&ntilde;ala palabras, colores o im&aacute;genes exactas de la caja."),
@@ -776,29 +768,20 @@ def build_your_box():
 
 # ---------- Step 07: Launch & Reflect (capstone) ----------
 def launch_reflect():
-    en=banner("Module 10 &bull; Step 07","Launch &amp; Reflect","Post it. Pitch it. Look back at what you built.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_REFLECT)
+    en=banner("Module 10 &bull; Step 07","Launch &amp; Reflect","Pitch it to the class. Look back at what you built.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_REFLECT)
     en+=card("Learn &middot; take it to market","Launch Your Brand, Then Look Back",
         (float_right(LAUNCH_FLOAT,"Two students proudly presenting their finished Panther Paws Protein Puffs cereal box") if HAVE_FLOATS else "")
-        + para("Real brands do not stop at the box. They post online to get people excited, then they look back to learn. You do both here.")
-        + para("You and your partner launch your brand with <strong>two social media assets</strong> that work together: an <strong>Instagram Post</strong> and a vertical <strong>Story</strong> that moves. Each of you picks one to build in <strong>Canva</strong>. Then you fill out a short <strong>reflection</strong> about the whole project."))
-    en+=deliverables_box(False,[("Your launch asset (pick one):","an Instagram Post (.jpg, 1080 x 1080) or a vertical animated Story (.mp4, 1080 x 1920). You and your partner pick different ones so your brand launches with both. Build it in Canva from your Illustrator design, and give it a clear call to action."),
-                                ("1 reflection (.docx):","your completed Cereal Box Reflection doc, uploaded to this Canvas assignment.")])
-    en+=card("Launch &middot; post or story","Build Your Asset in Canva",
-        para("Canva is free with your school Google login. First, with your partner, decide who makes the <strong>Post</strong> and who makes the <strong>Story</strong>. Each of you builds one, and they must look like one brand.")
-        + steps([("Log in.","Go to canva.com and click Log in with Google. Use your school account."),
-                 ("Bring in your design.","In the Uploads tab, add your logo, mascot, and panel images from your Step 05 Illustrator file. Build on your real brand, do not start over."),
-                 ("Set your size.","Post: an Instagram Post, 1080 x 1080 square. Story: an Instagram Story, 1080 x 1920 tall."),
-                 ("Make the Story move.","If you picked the Story, click an element, then Animate, so your text or logo moves. Keep it 5 to 15 seconds."),
-                 ("Add your call to action.","one short line that tells people what to do next."),
-                 ("Export and submit.","Post: Share, Download, JPG. Story: Share, Download, MP4 Video. Upload your file to this Canvas assignment.")]))
-    en+=card("Make it sell","Check All the Boxes for a Strong Ad",
-        para("Good ads all do the same things. Before you turn in your asset, make sure it checks every box, and that it matches your partner&rsquo;s so the two look like one launch.")
-        + bullets([("Stops the scroll","a bold image or color that makes people stop and look."),
-                   ("One clear message","say one thing, not ten. The main idea reads in a second."),
-                   ("A clear call to action","tell people what to do next: &ldquo;Try it today.&rdquo; &ldquo;Fuel your game.&rdquo; &ldquo;Find it at your store.&rdquo;"),
-                   ("On brand","same logo, colors, fonts, and mascot as your box and your partner&rsquo;s asset."),
-                   ("Easy to read","big text, strong contrast, nothing crowded."),
-                   ("Made for the feed","the Post is square, the Story is tall and moves. Right size, right place.")]))
+        + para("Real brands do not stop at the box. They <strong>show it off</strong> to get people excited, then they look back to learn. You do both here.")
+        + para("You and your partner <strong>pitch your cereal box to the class</strong>: hold up your finished box, name your brand, say who it is for, and show off your best design choice. Then each of you fills out a short <strong>reflection</strong> about the whole project."))
+    en+=deliverables_box(False,[("1 reflection (.docx):","your completed Cereal Box Reflection doc, uploaded to this Canvas assignment. Your in-class pitch is part of this step too.")])
+    en+=card("Launch &middot; pitch to the class","Pitch Your Box to the Class",
+        para("With your partner, give a short pitch. You are the brand team showing your product to the room. Keep it to about a minute, and both partners talk.")
+        + steps([("Hold up your box.","show your finished six-panel box so everyone can see the front."),
+                 ("Name your brand.","say your cereal name and your tagline."),
+                 ("Say who it is for.","name your target audience and why your design fits them."),
+                 ("Show your best choice.","point to one design choice you are proud of: a color, a font, the mascot, or the hierarchy on the front."),
+                 ("Take a question.","answer one question from the class or your teacher.")])
+        + note("This is a quick, friendly pitch, not a big speech. Show off the brand you built."))
     en+=card("Reflect &middot; look back","Reflect on What You Built",
         para("Last, open the <strong>Reflection doc</strong> from your project folder and answer every prompt in full sentences. Be honest. Be specific. Then upload the .docx.")
         + bullets([("My design choices","what choices did you make, and why those colors, fonts, or images?"),
@@ -807,30 +790,21 @@ def launch_reflect():
                    ("Partner wins","what did you and your partner do well together? Name something specific."),
                    ("What was hard","what was the hardest part, and how did you handle it?"),
                    ("Real-world connect","how is what you did the same as a real package designer&rsquo;s job?")]))
-    en+=next_up("MODULE COMPLETE","Nice work. You built a real brand, designed a six-panel box, built it by hand, and took it to market, just like a working package designer.")
-    es=banner("M&oacute;dulo 10 &bull; Paso 07","Lanza y Reflexiona","Publ&iacute;calo. Convence. Reflexiona sobre lo que armaste.","#top","Back to English",hicon=HICON_REFLECT)
+    en+=next_up("MODULE COMPLETE","Nice work. You built a real brand, designed a six-panel box, built it by hand, and pitched it to the class, just like a working package designer shows their work.")
+    es=banner("M&oacute;dulo 10 &bull; Paso 07","Lanza y Reflexiona","Convence a la clase. Reflexiona sobre lo que armaste.","#top","Back to English",hicon=HICON_REFLECT)
     es+=card("Aprende &middot; ll&eacute;valo al mercado","Lanza Tu Marca, Luego Reflexiona",
         (float_right(LAUNCH_FLOAT,"Dos estudiantes presentando con orgullo su caja de cereal Panther Paws Protein Puffs terminada") if HAVE_FLOATS else "")
-        + para("Las marcas reales no paran en la caja. Publican en l&iacute;nea para emocionar a la gente, luego miran hacia atr&aacute;s para aprender. Aqu&iacute; haces las dos cosas.")
-        + para("T&uacute; y tu compa&ntilde;ero lanzan su marca con <strong>dos recursos de redes sociales</strong> que trabajan juntos: una <strong>publicaci&oacute;n de Instagram</strong> y una <strong>historia</strong> vertical con movimiento. Cada uno elige uno para armar en <strong>Canva</strong>. Luego llenas una <strong>reflexi&oacute;n</strong> corta sobre todo el proyecto."))
-    es+=deliverables_box(True,[("Tu recurso de lanzamiento (elige uno):","una Publicaci&oacute;n de Instagram (.jpg, 1080 x 1080) o una Historia vertical animada (.mp4, 1080 x 1920). T&uacute; y tu compa&ntilde;ero eligen distintos para que su marca se lance con los dos. Arma en Canva desde tu dise&ntilde;o de Illustrator y dale un llamado a la acci&oacute;n claro."),
-                               ("1 reflexi&oacute;n (.docx):","tu documento de Reflexi&oacute;n terminado, subido a esta tarea de Canvas.")])
-    es+=card("Lanza &middot; publicaci&oacute;n o historia","Arma Tu Recurso en Canva",
-        para("Canva es gratis con tu cuenta Google de la escuela. Primero, con tu compa&ntilde;ero, decidan qui&eacute;n hace la <strong>Publicaci&oacute;n</strong> y qui&eacute;n la <strong>Historia</strong>. Cada uno arma uno, y deben verse como una sola marca.")
-        + steps([("Inicia sesi&oacute;n.","Ve a canva.com y haz clic en Iniciar sesi&oacute;n con Google. Usa tu cuenta de la escuela."),
-                 ("Trae tu dise&ntilde;o.","En la pesta&ntilde;a Subidas, agrega tu logo, mascota e im&aacute;genes de los paneles de tu archivo de Illustrator del Paso 05. Arma sobre tu marca real, no empieces de cero."),
-                 ("Elige tu tama&ntilde;o.","Publicaci&oacute;n: una Publicaci&oacute;n de Instagram, 1080 x 1080 cuadrada. Historia: una Historia de Instagram, 1080 x 1920 vertical."),
-                 ("Haz que la Historia se mueva.","Si elegiste la Historia, haz clic en un elemento, luego Animar, para que tu texto o logo se mueva. Mant&eacute;nla de 5 a 15 segundos."),
-                 ("Agrega tu llamado a la acci&oacute;n.","una l&iacute;nea corta que le dice a la gente qu&eacute; hacer."),
-                 ("Exporta y entrega.","Publicaci&oacute;n: Compartir, Descargar, JPG. Historia: Compartir, Descargar, Video MP4. Sube tu archivo a esta tarea de Canvas.")]))
-    es+=card("Hazlo vender","Cumple Todos los Puntos de un Buen Anuncio",
-        para("Los buenos anuncios hacen lo mismo. Antes de entregar tu recurso, aseg&uacute;rate de que cumpla cada punto, y que combine con el de tu compa&ntilde;ero para que los dos se vean como un solo lanzamiento.")
-        + bullets([("Detiene el scroll","una imagen o color llamativo que hace que la gente se detenga a mirar."),
-                   ("Un mensaje claro","di una cosa, no diez. La idea principal se entiende en un segundo."),
-                   ("Un llamado a la acci&oacute;n claro","dile a la gente qu&eacute; hacer: &ldquo;Pru&eacute;balo hoy.&rdquo; &ldquo;Dale energ&iacute;a a tu juego.&rdquo; &ldquo;B&uacute;scalo en tu tienda.&rdquo;"),
-                   ("En la marca","el mismo logo, colores, fuentes y mascota que tu caja y el recurso de tu compa&ntilde;ero."),
-                   ("F&aacute;cil de leer","texto grande, buen contraste, nada amontonado."),
-                   ("Hecho para el feed","la Publicaci&oacute;n es cuadrada, la Historia es vertical y se mueve. Tama&ntilde;o correcto, lugar correcto.")]))
+        + para("Las marcas reales no paran en la caja. La <strong>muestran con orgullo</strong> para emocionar a la gente, luego miran hacia atr&aacute;s para aprender. Aqu&iacute; haces las dos cosas.")
+        + para("T&uacute; y tu compa&ntilde;ero <strong>presentan su caja de cereal a la clase</strong>: levanten su caja terminada, digan el nombre de su marca, para qui&eacute;n es, y muestren su mejor decisi&oacute;n de dise&ntilde;o. Luego cada uno llena una <strong>reflexi&oacute;n</strong> corta sobre todo el proyecto."))
+    es+=deliverables_box(True,[("1 reflexi&oacute;n (.docx):","tu documento de Reflexi&oacute;n terminado, subido a esta tarea de Canvas. Tu presentaci&oacute;n en clase tambi&eacute;n es parte de este paso.")])
+    es+=card("Lanza &middot; presenta a la clase","Presenta Tu Caja a la Clase",
+        para("Con tu compa&ntilde;ero, da una presentaci&oacute;n corta. Son el equipo de la marca mostrando su producto al sal&oacute;n. Que dure como un minuto, y hablen los dos.")
+        + steps([("Levanta tu caja.","muestra tu caja de seis paneles terminada para que todos vean el frente."),
+                 ("Di el nombre de tu marca.","di el nombre de tu cereal y tu eslogan."),
+                 ("Di para qui&eacute;n es.","nombra tu p&uacute;blico meta y por qu&eacute; tu dise&ntilde;o le queda."),
+                 ("Muestra tu mejor decisi&oacute;n.","se&ntilde;ala una decisi&oacute;n de dise&ntilde;o de la que est&aacute;s orgulloso: un color, una fuente, la mascota o la jerarqu&iacute;a del frente."),
+                 ("Responde una pregunta.","contesta una pregunta de la clase o de tu maestro.")])
+        + note("Es una presentaci&oacute;n corta y amistosa, no un discurso largo. Muestra con orgullo la marca que armaste."))
     es+=card("Reflexiona &middot; mira hacia atr&aacute;s","Reflexiona sobre Lo Que Armaste",
         para("Por &uacute;ltimo, abre el <strong>documento de Reflexi&oacute;n</strong> de tu carpeta del proyecto y contesta cada pregunta en oraciones completas. S&eacute; honesto. S&eacute; espec&iacute;fico. Luego sube el .docx.")
         + bullets([("Mis decisiones de dise&ntilde;o","&iquest;qu&eacute; decisiones tomaste, y por qu&eacute; esos colores, fuentes o im&aacute;genes?"),
@@ -839,7 +813,7 @@ def launch_reflect():
                    ("Logros con tu compa&ntilde;ero","&iquest;qu&eacute; hicieron bien juntos? Nombra algo espec&iacute;fico."),
                    ("Qu&eacute; fue dif&iacute;cil","&iquest;cu&aacute;l fue la parte m&aacute;s dif&iacute;cil, y c&oacute;mo la resolviste?"),
                    ("Conexi&oacute;n real","&iquest;en qu&eacute; se parece tu trabajo al de un dise&ntilde;ador de empaques real?")]))
-    es+=next_up("M&Oacute;DULO COMPLETO","Buen trabajo. Creaste una marca real, dise&ntilde;aste una caja de seis paneles, la armaste a mano y la llevaste al mercado, como un dise&ntilde;ador de empaques profesional.")
+    es+=next_up("M&Oacute;DULO COMPLETO","Buen trabajo. Creaste una marca real, dise&ntilde;aste una caja de seis paneles, la armaste a mano y la presentaste a la clase, como un dise&ntilde;ador de empaques profesional muestra su trabajo.")
     return wrap_page(f"Step 7: Launch &amp; Reflect | Cereal Box Group Project | {CT} | PVHS", nav("Step 07",dots_for(6),step_topnav(6)), top_wrap(en,es), step_bottom(6))
 
 # ================= BUILD =================

@@ -81,7 +81,9 @@ def doc_entry(prefix, isP2):
     # 1) Capture list (shared EN/ES) -- Chris's priority, listed first
     add("Capture List &middot; English", f"{prefix}-Capture-List-EN.docx")
     add("Capture List &middot; Spanish", f"{prefix}-Capture-List-ES.docx")
-    # 1b) Research + Design Choices worksheets (group project docs, EN/ES)
+    # 1b) Design Detective audit worksheet, Research + Design Choices (group project docs, EN/ES)
+    add("Design Detective &middot; English", f"{prefix}-Design-Detective-EN.docx")
+    add("Design Detective &middot; Spanish", f"{prefix}-Design-Detective-ES.docx")
     add("Research &middot; English", f"{prefix}-Research-EN.docx")
     add("Research &middot; Spanish", f"{prefix}-Research-ES.docx")
     add("Design Choices &middot; English", f"{prefix}-Design-Choices-EN.docx")
