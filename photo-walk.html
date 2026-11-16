@@ -132,6 +132,8 @@
   /* Every camera card is identical (Chris 2026-11-03): no status color; just number + kit % + who has it. */
   .pw-kit{background:rgba(0,0,0,.34);border:1px solid var(--line-soft);border-left:4px solid var(--teal);padding:12px 13px;display:flex;flex-direction:column;gap:9px;backdrop-filter:blur(5px) saturate(1.04);-webkit-backdrop-filter:blur(5px) saturate(1.04);}
   .pw-grid.locked .pw-kit{border-left-color:var(--grayed);}   /* whole period locked in: uniform + muted, view-only */
+  /* Assigned a camera -> highlight the tile orange so it is clear at a glance who has one and who does not (Chris 2026-11-10). */
+  .pw-grid:not(.locked) .pw-kit.assigned{border-color:rgba(255,107,26,.55);border-left:4px solid #ff6b1a;background:linear-gradient(135deg,rgba(255,107,26,.16),rgba(4,20,19,.92));}
   .pw-khead{display:flex;align-items:center;justify-content:space-between;gap:8px;}
   .pw-knum{font-family:var(--font);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1.08rem;color:#fff;}
   /* The camera number reads as a real button (box + outline), not just an underline. */
@@ -577,7 +579,7 @@
     if(LOCKED){ if(note) noteSec='<div class="pw-ronote">'+esc(note)+'</div>'; }
     else if(note || noteOpen[cam]){ noteSec='<textarea class="pw-notefield" data-notefield="'+esc(cam)+'" rows="2" placeholder="Note for this kit (e.g. took Tripod 02, back without a lens cap)">'+esc(note)+'</textarea>'; }
     else { noteSec='<div class="pw-noterow"><button type="button" class="pw-mini pw-notebtn" data-noteopen="'+esc(cam)+'">Note</button></div>'; }
-    return '<div class="pw-kit"><div class="pw-khead">'+numHtml+pctChip(cam)+'</div>'+names+noteSec+'</div>';
+    return '<div class="pw-kit'+(hasAny?' assigned':'')+'"><div class="pw-khead">'+numHtml+pctChip(cam)+'</div>'+names+noteSec+'</div>';
   }
   function roKitCard(k){
     var p2=(P2.indexOf(k.cam)>=0)?'<span class="pw-p2">PHOTO 2</span>':'';
