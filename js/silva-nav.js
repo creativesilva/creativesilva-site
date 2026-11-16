@@ -325,7 +325,7 @@
      '/curriculum/shared/photo1-important-person-step04-storyboard.html',
      '/curriculum/shared/photo1-important-person-step05-capture-contact.html'],
     ['/curriculum/shared/photo1-master-photographer-overview.html',
-     '/curriculum/shared/photo1-master-photographer-step02-meet-the-five.html',
+     '/curriculum/shared/photo1-master-photographer-step02-choose-your-master.html',
      '/curriculum/shared/photo1-master-photographer-step03-capture-contact.html',
      '/curriculum/shared/photo1-master-photographer-step04-cull-edit.html',
      '/curriculum/shared/photo1-master-photographer-step05-presentation-reflection.html'],

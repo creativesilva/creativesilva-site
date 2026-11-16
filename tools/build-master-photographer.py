@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Photography 1A - Project 02: Master Photographer.
-# Pick one of five master photographers, study HOW they make images (style, technique, impact),
+# Pick one master photographer from a roster of 20 (4 genres), study HOW they make images,
 # then capture and edit three of your own photos in that style and present master + student work
 # side by side in a slide deck. Standard photo arc: study -> capture & contact -> cull & edit ->
 # presentation (reflection is the deck's closing slide). Five pages, bilingual EN/ES, 5th-grade.
@@ -90,49 +90,17 @@ VOCAB_ES=[
  ("Influence (Influencia)","Cuando el estilo de un artista da forma al trabajo de otro. Tu fot&oacute;grafo maestro influye en tus tres fotos."),
 ]
 
-# ---------------- The five masters (genre, summary, what to look for) ----------------
-MASTERS_EN=[
- ("Landscape","Ansel Adams",
-  "Ansel Adams took huge black-and-white photos of the American West: mountains, rivers, and national parks like Yosemite. He is famous for razor-sharp detail and a full range of tones, from deep black to bright white. He planned his exposure and printing with a method he helped invent called the Zone System.",
-  "Look at how he uses the whole range from pure black to pure white. Notice the sharp focus from the front of the photo all the way to the back."),
- ("Documentary","Sebasti&atilde;o Salgado",
-  "Sebasti&atilde;o Salgado is a photographer from Brazil. He spends years on big black-and-white projects about workers, people who had to leave their homes, and the natural world. His photos use strong light and deep shadows to make real life feel powerful and important.",
-  "Look at the dramatic light and the high contrast. Notice how he photographs real people and real moments with respect."),
- ("Portrait / Editorial","Annie Leibovitz",
-  "Annie Leibovitz is known for famous portraits of musicians, actors, and leaders. She often builds a whole scene with bold color and dramatic light, so the photo tells a story about the person. Her pictures appear on magazine covers.",
-  "Look at how she builds a scene around the person and uses color and light. Notice how the setting tells you who they are."),
- ("Portrait / Close-up","Platon",
-  "Platon makes tight, close-up portraits of world leaders and famous people. He uses a plain background and strong, simple studio light, so there is nothing to look at but the person&rsquo;s face and eyes. His photos feel honest and powerful.",
-  "Look at how close he gets and how simple the background is. Notice the direct eye contact and the strong light on the face."),
- ("Street / Documentary","Henri Cartier-Bresson",
-  "Henri Cartier-Bresson was a photographer from France. He walked the streets with a small camera and waited for &lsquo;the decisive moment,&rsquo; the exact second when everything in the frame lines up into one strong photo. His black-and-white street photos are famous for perfect timing and clean composition.",
-  "Look for perfect timing and clean composition. Notice how people, shapes, and lines all come together at the right second."),
-]
-MASTERS_ES=[
- ("Paisaje","Ansel Adams",
-  "Ansel Adams tomaba enormes fotos en blanco y negro del Oeste de Estados Unidos: monta&ntilde;as, r&iacute;os y parques nacionales como Yosemite. Es famoso por el detalle muy n&iacute;tido y un rango completo de tonos, del negro profundo al blanco brillante. Planeaba su exposici&oacute;n y su impresi&oacute;n con un m&eacute;todo que ayud&oacute; a inventar, el Sistema de Zonas.",
-  "Mira c&oacute;mo usa todo el rango del negro puro al blanco puro. Fíjate en el enfoque n&iacute;tido desde el frente de la foto hasta el fondo."),
- ("Documental","Sebasti&atilde;o Salgado",
-  "Sebasti&atilde;o Salgado es un fot&oacute;grafo de Brasil. Pasa a&ntilde;os en grandes proyectos en blanco y negro sobre trabajadores, personas que tuvieron que dejar su hogar y la naturaleza. Sus fotos usan luz fuerte y sombras profundas para que la vida real se sienta poderosa e importante.",
-  "Mira la luz dram&aacute;tica y el alto contraste. Fíjate en c&oacute;mo fotograf&iacute;a a personas y momentos reales con respeto."),
- ("Retrato / Editorial","Annie Leibovitz",
-  "Annie Leibovitz es conocida por retratos famosos de m&uacute;sicos, actores y l&iacute;deres. Muchas veces arma toda una escena con color fuerte y luz dram&aacute;tica, para que la foto cuente una historia sobre la persona. Sus im&aacute;genes salen en portadas de revistas.",
-  "Mira c&oacute;mo arma una escena alrededor de la persona y usa el color y la luz. Fíjate en c&oacute;mo el lugar te dice qui&eacute;n es."),
- ("Retrato / Primer Plano","Platon",
-  "Platon hace retratos cerrados y de primer plano de l&iacute;deres del mundo y personas famosas. Usa un fondo simple y una luz de estudio fuerte y sencilla, para que no haya nada que mirar m&aacute;s que la cara y los ojos de la persona. Sus fotos se sienten honestas y poderosas.",
-  "Mira qu&eacute; tan cerca llega y qu&eacute; tan simple es el fondo. Fíjate en el contacto directo con los ojos y la luz fuerte en la cara."),
- ("Calle / Documental","Henri Cartier-Bresson",
-  "Henri Cartier-Bresson fue un fot&oacute;grafo de Francia. Caminaba por las calles con una c&aacute;mara peque&ntilde;a y esperaba &lsquo;el momento decisivo,&rsquo; el segundo exacto en que todo en el encuadre se alinea en una sola foto fuerte. Sus fotos de calle en blanco y negro son famosas por el momento perfecto y la composici&oacute;n limpia.",
-  "Busca el momento perfecto y la composici&oacute;n limpia. Fíjate en c&oacute;mo las personas, las formas y las l&iacute;neas se juntan en el segundo correcto."),
+# ---------------- The master photographers (20, grouped by genre) ----------------
+# Students choose ONE from this roster. 4 genre groups x 5 = 20. Names are proper nouns (shared
+# EN/ES); only the genre label swaps. Rebuilt 2026-11-16 from Chris's original "Master
+# Photographer List" Canvas page (the full roster, restored into the current module).
+ROSTER=[
+ ("Landscape","Paisaje",["Ansel Adams","Robert Adams","Stephen Shore","Richard Misrach","Paul Strand"]),
+ ("Portrait","Retrato",["Annie Leibovitz","Martin Schoeller","Platon","Brandon Stanton","Chris Buck"]),
+ ("Still Life","Naturaleza Muerta",["Karl Blossfeldt","Irving Penn","Jan Groover","Josef Sudek","Laura Letinsky"]),
+ ("On Location","En Locaci&oacute;n",["Joe McNally","Lindsay Adler","Scott Kelby","Lara Jade","Sebasti&atilde;o Salgado"]),
 ]
 
-RESLINKS=[
- ("https://anseladams.com/","Ansel Adams, official site"),
- ("https://www.amazonasimages.com/sebastiao-salgado/","Sebasti&atilde;o Salgado, Amazonas Images studio"),
- ("https://www.artsy.net/artist/annie-leibovitz","Annie Leibovitz on Artsy"),
- ("https://platonphoto.com/","Platon, official site"),
- ("https://www.henricartierbresson.org/en/","Henri Cartier-Bresson Foundation"),
-]
 GENERAL_SITES=[
  ("https://www.artsy.net/","Artsy.net"),
  ("https://www.moma.org/","MoMA.org"),
@@ -198,36 +166,49 @@ def project_downloads(es):
       + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">' + dl_link(PROJECT_ZIP, label, row=True) + '</div>'
       + note_orange(note_t) + '</div>')
 
-def _res_btn(url,label):
-    # Compact PURPLE resource button: the filled-pill look of the orange download button (dl_link),
-    # recolored purple (fill #8b5cf6, white bold text, lighter #c4b5fd top accent) so it reads as a
-    # real button, not a full-width bar. Lives in the 2-up grid below. box-sizing:border-box keeps
-    # the min-width honest; flex:0 1 = sits at half width and a lone odd item stays half width (never
-    # stretches back into a bar); min-width:240px drops it to one column on a phone.
+def _site_pill(url,label):
+    # Compact PURPLE research-site chip: hugs its label (not a full-width bar). A small set of
+    # general research sites sit in a wrapping row; opens in a new tab.
     return (f'<a href="{url}" target="_blank" rel="noopener" '
-      'style="flex:0 0 auto;width:min(372px,100%);box-sizing:border-box;display:flex;align-items:center;justify-content:center;'
-      'text-align:center;text-decoration:none;background:#8b5cf6;color:#ffffff;padding:12px 18px;border-top:2px solid #c4b5fd;'
-      f'font-size:11pt;letter-spacing:0.02em;line-height:1.35;"><strong>{label}</strong></a>')
+      'style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;'
+      'background:#8b5cf6;color:#ffffff;padding:11px 20px;border-top:2px solid #c4b5fd;'
+      f'font-size:11.5pt;line-height:1.3;"><strong>{label}</strong></a>')
+
+def roster_grid(es):
+    # The 20 master photographers in a 4-column genre grid (Landscape / Portrait / Still Life /
+    # On Location), reflowing 4 -> 2 -> 1 columns. Scoped .mp-* styles ride with the page (linked
+    # module, so the <style> survives). Equal grid tracks = straight columns, no wave.
+    style=('<style>.mp-roster{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:12px 0 4px;}'
+      '@media (max-width:1024px){.mp-roster{grid-template-columns:repeat(2,minmax(0,1fr));}}'
+      '@media (max-width:560px){.mp-roster{grid-template-columns:minmax(0,1fr);}}'
+      '.mp-cat{background:linear-gradient(180deg,rgba(0,116,116,0.16) 0%,rgba(0,116,116,0.05) 100%);'
+      'border:1px solid rgba(0,184,184,0.22);border-top:3px solid #00b8b8;padding:16px 18px 18px;box-sizing:border-box;}'
+      '.mp-cat-h{font-size:11pt;letter-spacing:0.08em;text-transform:uppercase;color:#80e0e0;'
+      'padding-bottom:9px;margin-bottom:10px;border-bottom:1px solid rgba(0,184,184,0.22);}'
+      '.mp-cat-n{font-size:13.5pt;color:rgba(255,255,255,0.90);line-height:1.95;}</style>')
+    cards=""
+    for en_l,es_l,names in ROSTER:
+        label=es_l if es else en_l
+        rows="".join(f'<div>{n}</div>' for n in names)
+        cards+=(f'<div class="mp-cat"><div class="mp-cat-h"><strong>{label}</strong></div>'
+          f'<div class="mp-cat-n">{rows}</div></div>')
+    return style+f'<div class="mp-roster">{cards}</div>'
 
 def reslist(es):
-    lead=("Buenos lugares para ver fotos y leer sobre fot&oacute;grafos. Empieza con el sitio de tu maestro, luego explora los dem&aacute;s."
-          if es else "Good places to see photos and read about photographers. Start with your master&rsquo;s own site, then explore the rest.")
-    ph_head="Tu Fot&oacute;grafo Maestro" if es else "Your Master Photographer"
-    gen_head="Sitios de Investigaci&oacute;n" if es else "Research Sites"
-    def rows(pairs):
-        # 2 columns of uniform compact buttons, each sized to the LONGEST label (372px; the longest is
-        # "Sebasti&atilde;o Salgado, Amazonas Images studio" at ~363px) with centered text. The row is
-        # capped at 2*372 + 40px gutter so only two columns ever show, even on a 4K monitor, and it
-        # reflows to one full-width column on a phone (width:min(372px,100%)). A lone odd item sits in
-        # the left column (flex-start).
-        out='<div style="display:flex;flex-wrap:wrap;align-items:stretch;gap:12px 40px;max-width:784px;margin:8px 0 4px;">'
-        for url,lab in pairs: out+=_res_btn(url,lab)
-        return out+'</div>'
-    return (para(lead)
-      + f'<div style="font-size:10.5pt;font-weight:bold;letter-spacing:0.08em;text-transform:uppercase;color:#c4b5fd;margin:14px 0 2px;">{ph_head}</div>'
-      + rows(RESLINKS)
-      + f'<div style="font-size:10.5pt;font-weight:bold;letter-spacing:0.08em;text-transform:uppercase;color:#c4b5fd;margin:16px 0 2px;">{gen_head}</div>'
-      + rows(GENERAL_SITES))
+    # General research sites only (5-7 total, NOT one per photographer): a tidy wrapping row of
+    # purple chips + a tip to search each photographer\'s own official site. Lives in the purple
+    # "Recommended Research Websites" resource card on Step 02.
+    lead=("Buenos lugares para ver fotos y leer sobre fot&oacute;grafos. Empieza aqu&iacute;, luego busca el sitio oficial de tu fot&oacute;grafo."
+          if es else "Good places to see photos and read about photographers. Start here, then search your photographer&rsquo;s own official website.")
+    tip=("Consejo: para fot&oacute;grafos de hoy, busca tambi&eacute;n su sitio web oficial para ver su trabajo m&aacute;s reciente."
+         if es else "Tip: for today&rsquo;s photographers, also search for their official website to see their most recent work.")
+    pills='<div style="display:flex;flex-wrap:wrap;align-items:stretch;gap:12px 14px;margin:10px 0 2px;">'
+    for url,lab in GENERAL_SITES: pills+=_site_pill(url,lab)
+    pills+='</div>'
+    tip_box=('<div style="background:rgba(139,92,246,0.10);border:1px solid rgba(139,92,246,0.30);'
+      'border-left:4px solid #8b5cf6;padding:11px 14px;margin:12px 0 2px;font-size:12pt;'
+      f'color:rgba(255,255,255,0.90);"><strong>{tip}</strong></div>')
+    return para(lead)+pills+tip_box
 
 def deck_showcase(es):
     heading="Tu Plantilla de Presentaci&oacute;n" if es else "Your Slide Deck Template"
@@ -338,11 +319,11 @@ def wrap_standalone(title, nav_inner, top_html, bottom, files_std, share_name):
 def build(mode):
     cur = (mode == "cur")
     OVER="photo1-master-photographer-overview.html"
-    S2="photo1-master-photographer-step02-meet-the-five.html"
+    S2="photo1-master-photographer-step02-choose-your-master.html"
     S3="photo1-master-photographer-step03-capture-contact.html"
     S4="photo1-master-photographer-step04-cull-edit.html"
     S5="photo1-master-photographer-step05-presentation-reflection.html"
-    FILES_STD=["index.html","step02-meet-the-five.html","step03-capture-contact.html",
+    FILES_STD=["index.html","step02-choose-your-master.html","step03-capture-contact.html",
                "step04-cull-edit.html","step05-presentation-reflection.html"]
     FILES = [OVER,S2,S3,S4,S5] if cur else FILES_STD
     HREFS = FILES
@@ -393,28 +374,20 @@ def build(mode):
     def dots_for(ai):
         return "".join(dot("" if i==ai else HREFS[i], lab, title, i==ai, module=False) for i,(lab,title) in enumerate(TITLES))
 
-    def master_cards(es):
-        data=MASTERS_ES if es else MASTERS_EN
-        look=("Qu&eacute; observar:" if es else "What to look for:")
-        out=""
-        for genre,name,summary,watch in data:
-            out+=card(genre,name, para(summary)+note(f"<strong>{look}</strong> {watch}"))
-        return out
-
     # ================= OVERVIEW (Step 01) =================
     def overview():
         en=banner(f"{PROJ_LABEL} &bull;Step 01","Master Photographer",
             "Study one master photographer, then capture and present three photos in their style. Read this page, then go to Step 02.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_CAMERA_KIT)
         en+=type_card("overview","Step 01 &middot; Overview","Learn From a Master, Then Make Your Own",
-            para("In this project you pick <strong>one of five master photographers</strong> and study <strong>how they make their images</strong>. This is not a report about their life. You study their <strong>style, technique, and impact</strong>: how they compose, light, and edit their photos.")
+            para("In this project you pick <strong>one master photographer</strong> and study <strong>how they make their images</strong>. This is not a report about their life. You study their <strong>style, technique, and impact</strong>: how they compose, light, and edit their photos.")
             + para("Then you become the photographer. You <strong>capture three of your own photos</strong> in that style with the school camera kit, edit your best three, and present your master&rsquo;s work and your work <strong>side by side</strong> in a slideshow.")
-            + (framed(HERO,"Five master photographers, each with a camera: the five you choose from in this project") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Five masters, five different styles. You pick one to study and bring into your own photos.</div>' if HAVE_HERO else ""))
+            + (framed(HERO,"Master photographers, each with a camera: the styles you choose from in this project") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Many styles, many photographers. You pick one to study and bring into your own photos.</div>' if HAVE_HERO else ""))
         en+=project_downloads(False)
         en+=card("HOW THIS PROJECT WORKS","From Studying a Master to Your Own Photos",
             para("You are on Step 01 now: read this page so you understand the project. Here is the path.")
             + bullets([
-                ("Step 02 &middot; Meet the Five &amp; Choose:","meet the five master photographers, pick one, and start your slide deck with three of their images."),
+                ("Step 02 &middot; Choose Your Master:","meet the master photographers, pick one, and start your slide deck with three of their images."),
                 ("Step 03 &middot; Capture &amp; Contact:","capture a full take of your own photos in your master&rsquo;s style, then build a contact sheet."),
                 ("Step 04 &middot; Cull &amp; Edit:","select your three strongest images and edit them to match the look you studied."),
                 ("Step 05 &middot; Presentation &amp; Reflection:","finish your slideshow, present it to the class, and answer the reflection on the closing slide."),
@@ -428,20 +401,20 @@ def build(mode):
             vocab_grid("On the Quiz",
               "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
               VOCAB_EN), False)
-        en+=next_up("UP NEXT &middot; STEP 02 - Meet the Five &amp; Choose","Meet the five master photographers, pick the one whose work pulls you in, and start your deck.")
+        en+=next_up("UP NEXT &middot; STEP 02 - Choose Your Master","Meet the master photographers, pick the one whose work pulls you in, and start your deck.")
 
         es=banner(f"{PROJ_LABEL_ES} &bull;Paso 01","Fot&oacute;grafo Maestro",
             "Estudia a un fot&oacute;grafo maestro, luego captura y presenta tres fotos en su estilo. Lee esta p&aacute;gina y ve al Paso 02.",
             "#top","Back to English", HICON_CAMERA_KIT)
         es+=type_card("overview","Paso 01 &middot; Resumen","Aprende de un Maestro, Luego Haz lo Tuyo",
-            para("En este proyecto eliges a <strong>uno de cinco fot&oacute;grafos maestros</strong> y estudias <strong>c&oacute;mo hacen sus im&aacute;genes</strong>. Esto no es un reporte sobre su vida. Estudias su <strong>estilo, su t&eacute;cnica y su impacto</strong>: c&oacute;mo componen, iluminan y editan sus fotos.")
+            para("En este proyecto eliges a <strong>un fot&oacute;grafo maestro</strong> y estudias <strong>c&oacute;mo hacen sus im&aacute;genes</strong>. Esto no es un reporte sobre su vida. Estudias su <strong>estilo, su t&eacute;cnica y su impacto</strong>: c&oacute;mo componen, iluminan y editan sus fotos.")
             + para("Luego t&uacute; te vuelves el fot&oacute;grafo. <strong>Capturas tres fotos propias</strong> en ese estilo con el kit de c&aacute;mara de la escuela, editas tus mejores tres y presentas el trabajo de tu maestro y el tuyo <strong>lado a lado</strong> en una presentaci&oacute;n.")
-            + (framed(HERO,"Cinco fot&oacute;grafos maestros, cada uno con una c&aacute;mara: los cinco entre los que eliges en este proyecto") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Cinco maestros, cinco estilos distintos. Eliges a uno para estudiarlo y traerlo a tus propias fotos.</div>' if HAVE_HERO else ""))
+            + (framed(HERO,"Fot&oacute;grafos maestros, cada uno con una c&aacute;mara: los estilos entre los que eliges en este proyecto") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Muchos estilos, muchos fot&oacute;grafos. Eliges a uno para estudiarlo y traerlo a tus propias fotos.</div>' if HAVE_HERO else ""))
         es+=project_downloads(True)
         es+=card("C&Oacute;MO FUNCIONA ESTE PROYECTO","De Estudiar a un Maestro a Tus Propias Fotos",
             para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina para entender el proyecto. Este es el camino.")
             + bullets([
-                ("Paso 02 &middot; Conoce a los Cinco y Elige:","conoce a los cinco fot&oacute;grafos maestros, elige a uno y empieza tu presentaci&oacute;n con tres de sus im&aacute;genes."),
+                ("Paso 02 &middot; Elige a Tu Maestro:","conoce a los fot&oacute;grafos maestros, elige a uno y empieza tu presentaci&oacute;n con tres de sus im&aacute;genes."),
                 ("Paso 03 &middot; Captura y Contacto:","captura una toma completa de tus propias fotos en el estilo de tu maestro, luego arma una hoja de contactos."),
                 ("Paso 04 &middot; Selecciona y Edita:","elige tus tres im&aacute;genes m&aacute;s fuertes y ed&iacute;talas para igualar el estilo que estudiaste."),
                 ("Paso 05 &middot; Presentaci&oacute;n y Reflexi&oacute;n:","termina tu presentaci&oacute;n, pres&eacute;ntala a la clase y responde la reflexi&oacute;n en la diapositiva final."),
@@ -455,24 +428,26 @@ def build(mode):
             vocab_grid("En el Examen",
               "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
               VOCAB_ES), True)
-        es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Conoce a los Cinco y Elige","Conoce a los cinco fot&oacute;grafos maestros, elige al que m&aacute;s te atraiga y empieza tu presentaci&oacute;n.")
+        es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Elige a Tu Maestro","Conoce a los fot&oacute;grafos maestros, elige al que m&aacute;s te atraiga y empieza tu presentaci&oacute;n.")
 
         return wrap_page(f"Master Photographer | {CL_EN} | PVHS", nav("Step 01",dots_for(0),step_topnav(0)), top_wrap(en,es), step_bottom(0))
 
-    # ================= STEP 02: Meet the Five & Choose =================
+    # ================= STEP 02: Choose Your Master =================
     def step02():
-        en=banner(f"{PROJ_LABEL} &bull;Step 02","Meet the Five &amp; Choose",
-            "Meet the five master photographers, pick one, and start your slide deck with three of their images.",
+        en=banner(f"{PROJ_LABEL} &bull;Step 02","Choose Your Master",
+            "Meet the master photographers, pick one, and start your slide deck with three of their images.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
         en+=card("STEP 02 &middot; STUDY YOUR MASTER","Pick One, Then Study How They Work",
             (float_right(RESEARCH_FLOAT,"A student researching a master photographer on a lab computer","Study their style online before you choose. Look at a lot of their photos.") if HAVE_RESEARCH else "")
-            + para("Below are your <strong>five master photographers</strong>. Each one works in a different style. Read all five, look at their photos online, then <strong>pick the one</strong> whose work pulls you in the most.")
+            + para("You will study <strong>one master photographer</strong> and bring their style into your own photos. First, meet the photographers below and <strong>pick the one</strong> whose work pulls you in the most.")
             + para("You are studying <strong>how they make images</strong>, not their life story. For your master, look closely at their <strong>composition, light, subjects, and editing</strong>. These are the ideas you will bring into your own three photos.")
             + note("Choose the photographer you would most want to photograph like. The more their work excites you, the stronger your own photos will be."))
         en+=deliverables_box(False,
             [("Your deck, started (PDF):","download the slide template, fill the <strong>Cover slide</strong> and your <strong>3 Master Photographer slides</strong> (one image you chose on each, plus your technique note), export it as a PDF, and upload it to this Canvas assignment.")])
-        en+=master_cards(False)
-        en+=resources_card("Where to See Their Work", reslist(False), False)
+        en+=card("CHOOSE YOUR MASTER","Master Photographers",
+            para("Here are your master photographers, grouped into four styles: <strong>Landscape, Portrait, Still Life, and On Location</strong>. Look through all four groups, then pick the one whose work pulls you in the most.")
+            + roster_grid(False))
+        en+=resources_card("Recommended Research Websites", reslist(False), False)
         en+=card("GATHER YOUR THREE IMAGES / START YOUR DECK","Choose 3 Images and Start Your Slideshow",
             para("Now build the first part of your slideshow. Open the <strong>slide template</strong> from your project folder, then do this:")
             + steps([
@@ -485,18 +460,20 @@ def build(mode):
             + note("These three images are your <strong>master photographer&rsquo;s</strong> work, from online. You capture your <strong>own</strong> photos next, in Step 03."))
         en+=next_up("UP NEXT &middot; STEP 03 - Capture &amp; Contact","Check out a camera kit and capture a full take of your own photos in your master&rsquo;s style.")
 
-        es=banner(f"{PROJ_LABEL_ES} &bull;Paso 02","Conoce a los Cinco y Elige",
-            "Conoce a los cinco fot&oacute;grafos maestros, elige a uno y empieza tu presentaci&oacute;n con tres de sus im&aacute;genes.",
+        es=banner(f"{PROJ_LABEL_ES} &bull;Paso 02","Elige a Tu Maestro",
+            "Conoce a los fot&oacute;grafos maestros, elige a uno y empieza tu presentaci&oacute;n con tres de sus im&aacute;genes.",
             "#top","Back to English", HICON_DESIGN)
         es+=card("PASO 02 &middot; ESTUDIA A TU MAESTRO","Elige a Uno y Estudia C&oacute;mo Trabaja",
             (float_right(RESEARCH_FLOAT,"Una estudiante investigando a un fot&oacute;grafo maestro en una computadora del laboratorio","Estudia su estilo en internet antes de elegir. Mira muchas de sus fotos.") if HAVE_RESEARCH else "")
-            + para("Abajo est&aacute;n tus <strong>cinco fot&oacute;grafos maestros</strong>. Cada uno trabaja en un estilo distinto. Lee los cinco, mira sus fotos en internet y luego <strong>elige al que m&aacute;s te atraiga</strong>.")
+            + para("Vas a estudiar a <strong>un fot&oacute;grafo maestro</strong> y traer su estilo a tus propias fotos. Primero, conoce a los fot&oacute;grafos de abajo y <strong>elige al que m&aacute;s te atraiga</strong>.")
             + para("Est&aacute;s estudiando <strong>c&oacute;mo hacen im&aacute;genes</strong>, no su biograf&iacute;a. Para tu maestro, observa de cerca su <strong>composici&oacute;n, luz, sujetos y edici&oacute;n</strong>. Estas son las ideas que traer&aacute;s a tus propias tres fotos.")
             + note("Elige al fot&oacute;grafo como el que m&aacute;s te gustar&iacute;a fotografiar. Entre m&aacute;s te emocione su trabajo, m&aacute;s fuertes ser&aacute;n tus propias fotos."))
         es+=deliverables_box(True,
             [("Tu presentaci&oacute;n, empezada (PDF):","descarga la plantilla, llena la <strong>diapositiva de portada</strong> y tus <strong>3 diapositivas del fot&oacute;grafo maestro</strong> (una imagen que elegiste en cada una, m&aacute;s tu nota de t&eacute;cnica), exp&oacute;rtala como PDF y s&uacute;bela a esta tarea de Canvas.")])
-        es+=master_cards(True)
-        es+=resources_card("D&oacute;nde Ver Su Trabajo", reslist(True), True)
+        es+=card("ELIGE A TU MAESTRO","Fot&oacute;grafos Maestros",
+            para("Aqu&iacute; est&aacute;n tus fot&oacute;grafos maestros, en cuatro estilos: <strong>Paisaje, Retrato, Naturaleza Muerta y En Locaci&oacute;n</strong>. Mira los cuatro grupos y luego elige al que m&aacute;s te atraiga.")
+            + roster_grid(True))
+        es+=resources_card("Sitios de Investigaci&oacute;n Recomendados", reslist(True), True)
         es+=card("RE&Uacute;NE TUS TRES IM&Aacute;GENES / EMPIEZA TU PRESENTACI&Oacute;N","Elige 3 Im&aacute;genes y Empieza Tu Presentaci&oacute;n",
             para("Ahora construye la primera parte de tu presentaci&oacute;n. Abre la <strong>plantilla de diapositivas</strong> de tu carpeta del proyecto y haz esto:")
             + steps([
@@ -509,7 +486,7 @@ def build(mode):
             + note("Estas tres im&aacute;genes son el trabajo de <strong>tu fot&oacute;grafo maestro</strong>, de internet. T&uacute; capturas tus <strong>propias</strong> fotos despu&eacute;s, en el Paso 03."))
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Captura y Contacto","Pide un kit de c&aacute;mara y captura una toma completa de tus propias fotos en el estilo de tu maestro.")
 
-        return wrap_page(f"Step 2: Meet the Five | Master Photographer | {CL_EN} | PVHS", nav("Step 02",dots_for(1),step_topnav(1)), top_wrap(en,es), step_bottom(1))
+        return wrap_page(f"Step 2: Choose Your Master | Master Photographer | {CL_EN} | PVHS", nav("Step 02",dots_for(1),step_topnav(1)), top_wrap(en,es), step_bottom(1))
 
     # ================= STEP 03: Capture & Contact =================
     def step03():
