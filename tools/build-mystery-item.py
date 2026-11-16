@@ -207,11 +207,19 @@ def build_course(C):
                 ("Take a full take:","capture many photos, not just two or three. Both partners participate."),
             ])
             + note("Capture a lot now. In Step 03 you cull down to your strongest image, so give yourself plenty to choose from."))
-        en+=card("OFFLOAD &amp; BUILD / CONTACT SHEET","Offload, Then Make Your Contact Sheet",
-            para("Move your photos to your computer, then make one <strong>contact sheet</strong> that shows your whole take in a grid. On a Mac, Adobe Bridge builds it for you.")
+        en+=card("SHARE THE CAMERA / KEEP YOUR OWN PHOTOS","Both of You, One Camera",
+            para("This is a <strong>group project with a partner</strong>, and the two of you share <strong>one camera</strong>. So you have to be careful to keep your own photos separate from your partner&rsquo;s. Here is the plan.")
             + steps([
-                ("Offload your photos:","copy your raw files from the camera kit into your <strong>Photography folder on OneDrive</strong>. Each partner keeps their own copy."),
-                ("Open Adobe Bridge:","open Bridge and go to your project folder. Select all of your raw images for this project."),
+                ("Take turns on every setup.","set up your item, then <strong>you</strong> take your photos of it. Next, <strong>your partner</strong> takes their photos of the same setup. Trade off like this each time you change the setup."),
+                ("Import ALL the photos to your own computer.","when you offload, copy <strong>every</strong> photo from the camera into your <strong>Photography folder on OneDrive</strong>. The camera holds both of your photos, so you will see yours and your partner&rsquo;s together."),
+                ("Keep only YOUR photos.","look through them and keep the ones <strong>you</strong> took. <strong>Delete your partner&rsquo;s</strong> from your folder, so your folder has only your own work."),
+                ("Edit and turn in your own.","each of you edits your own photos and turns in your own. You never turn in your partner&rsquo;s work."),
+            ])
+            + note("Share the camera, but keep your files your own: your folder, your photos, your grade."))
+        en+=card("BUILD / CONTACT SHEET","Make Your Contact Sheet",
+            para("Now that <strong>your own photos</strong> are in your project folder, make one <strong>contact sheet</strong> that shows your whole take in a grid. On a Mac, Adobe Bridge builds it for you.")
+            + steps([
+                ("Open Adobe Bridge:","open Bridge and go to your project folder. Select all of <strong>your</strong> raw images for this project."),
                 ("Make the contact sheet:","go to <strong>Tools &rsaquo; Photoshop &rsaquo; Contact Sheet II</strong>. Let it build one sheet of all your images in Photoshop."),
                 ("Save as a JPG:","in Photoshop, go to <strong>File &rsaquo; Export &rsaquo; Save a Copy</strong> and save your contact sheet as a high-resolution JPG, then upload it here."),
             ])
@@ -237,11 +245,19 @@ def build_course(C):
                 ("Haz una toma completa:","captura muchas fotos, no solo dos o tres. Los dos compa&ntilde;eros participan."),
             ])
             + note("Captura bastante ahora. En el Paso 03 seleccionas tu imagen m&aacute;s fuerte, as&iacute; que date muchas opciones."))
-        es+=card("DESCARGA Y ARMA / HOJA DE CONTACTOS","Descarga, Luego Arma Tu Hoja de Contactos",
-            para("Pasa tus fotos a tu computadora, luego arma una <strong>hoja de contactos</strong> que muestre todo tu trabajo en una cuadr&iacute;cula. En una Mac, Adobe Bridge la arma por ti.")
+        es+=card("COMPARTAN LA C&Aacute;MARA / GUARDA TUS PROPIAS FOTOS","Los Dos, Una C&aacute;mara",
+            para("Este es un <strong>proyecto en grupo con un compa&ntilde;ero</strong>, y los dos comparten <strong>una c&aacute;mara</strong>. Por eso tienes que tener cuidado de mantener tus propias fotos separadas de las de tu compa&ntilde;ero. Este es el plan.")
             + steps([
-                ("Descarga tus fotos:","copia tus archivos RAW del kit de c&aacute;mara a tu <strong>carpeta de Fotograf&iacute;a en OneDrive</strong>. Cada compa&ntilde;ero guarda su propia copia."),
-                ("Abre Adobe Bridge:","abre Bridge y ve a la carpeta de tu proyecto. Selecciona todas tus im&aacute;genes RAW de este proyecto."),
+                ("Tomen turnos en cada arreglo.","acomoda tu objeto, luego <strong>t&uacute;</strong> tomas tus fotos. Despu&eacute;s, <strong>tu compa&ntilde;ero</strong> toma sus fotos del mismo arreglo. Tur&uacute;nense as&iacute; cada vez que cambien el arreglo."),
+                ("Importa TODAS las fotos a tu propia computadora.","cuando descargues, copia <strong>todas</strong> las fotos de la c&aacute;mara a tu <strong>carpeta de Fotograf&iacute;a en OneDrive</strong>. La c&aacute;mara tiene las fotos de los dos, as&iacute; que ver&aacute;s las tuyas y las de tu compa&ntilde;ero juntas."),
+                ("Guarda solo TUS fotos.","rev&iacute;salas y guarda las que <strong>t&uacute;</strong> tomaste. <strong>Borra las de tu compa&ntilde;ero</strong> de tu carpeta, para que tu carpeta tenga solo tu propio trabajo."),
+                ("Edita y entrega lo tuyo.","cada uno edita sus propias fotos y entrega las suyas. Nunca entregues el trabajo de tu compa&ntilde;ero."),
+            ])
+            + note("Compartan la c&aacute;mara, pero mant&eacute;n tus archivos propios: tu carpeta, tus fotos, tu calificaci&oacute;n."))
+        es+=card("ARMA / HOJA DE CONTACTOS","Arma Tu Hoja de Contactos",
+            para("Ahora que <strong>tus propias fotos</strong> est&aacute;n en la carpeta de tu proyecto, arma una <strong>hoja de contactos</strong> que muestre todo tu trabajo en una cuadr&iacute;cula. En una Mac, Adobe Bridge la arma por ti.")
+            + steps([
+                ("Abre Adobe Bridge:","abre Bridge y ve a la carpeta de tu proyecto. Selecciona todas <strong>tus</strong> im&aacute;genes RAW de este proyecto."),
                 ("Arma la hoja de contactos:","ve a <strong>Tools &rsaquo; Photoshop &rsaquo; Contact Sheet II</strong>. Deja que arme una hoja con todas tus im&aacute;genes en Photoshop."),
                 ("Guarda como JPG:","en Photoshop, ve a <strong>File &rsaquo; Export &rsaquo; Save a Copy</strong> y guarda tu hoja de contactos como un JPG de alta resoluci&oacute;n, luego s&uacute;bela aqu&iacute;."),
             ])
