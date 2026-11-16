@@ -128,7 +128,7 @@ MASTERS_ES=[
 
 RESLINKS=[
  ("https://anseladams.com/","Ansel Adams, official site"),
- ("https://www.amazonasimages.com/","Sebasti&atilde;o Salgado, Amazonas Images studio"),
+ ("https://www.amazonasimages.com/sebastiao-salgado/","Sebasti&atilde;o Salgado, Amazonas Images studio"),
  ("https://www.artsy.net/artist/annie-leibovitz","Annie Leibovitz on Artsy"),
  ("https://platonphoto.com/","Platon, official site"),
  ("https://www.henricartierbresson.org/en/","Henri Cartier-Bresson Foundation"),
