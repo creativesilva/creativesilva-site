@@ -17,7 +17,7 @@ HERO=f"{SITE}/assets/images/mystery-item/mystery-item-hero-v1.jpg"
 # doc + project folder zip) are gated OFF until the assets exist. A missing image renders nothing,
 # never a placeholder box. Flip a flag and drop the file in when it is ready.
 HAVE_HERO=True
-HAVE_S2_FLOAT=False; HAVE_S3_FLOAT=False; HAVE_S4_FLOAT=False
+HAVE_S2_FLOAT=True; HAVE_S3_FLOAT=False; HAVE_S4_FLOAT=False
 HAVE_DOWNLOADS=False
 
 COURSES=[
