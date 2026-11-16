@@ -186,8 +186,8 @@ def build_course(C):
 
     # ================= STEP 02: Capture & Contact =================
     def step_capture():
-        float2_en=float_right(f"{SITE}/assets/images/mystery-item/capture-float-v1.jpg","A student photographing a mystery item with the camera kit","Try different angles, distances, and lighting.") if HAVE_S2_FLOAT else ""
-        float2_es=float_right(f"{SITE}/assets/images/mystery-item/capture-float-v1.jpg","Un estudiante fotografiando un objeto misterioso con el kit de c&aacute;mara","Prueba distintos &aacute;ngulos, distancias e iluminaci&oacute;n.") if HAVE_S2_FLOAT else ""
+        float2_en=float_right(f"{SITE}/assets/images/mystery-item/capture-float-v2.jpg","A student photographing a mystery item with the camera kit","Try different angles, distances, and lighting.") if HAVE_S2_FLOAT else ""
+        float2_es=float_right(f"{SITE}/assets/images/mystery-item/capture-float-v2.jpg","Un estudiante fotografiando un objeto misterioso con el kit de c&aacute;mara","Prueba distintos &aacute;ngulos, distancias e iluminaci&oacute;n.") if HAVE_S2_FLOAT else ""
         en=banner(f"Module {MOD} &bull; Step 02","Capture &amp; Contact","Open your bag, choose an approach, photograph your item in Manual mode, and build a contact sheet.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
         en+=type_card("photo-walk","Step 02 &middot; Capture","Open Your Bag and Make a Plan",
             float2_en
