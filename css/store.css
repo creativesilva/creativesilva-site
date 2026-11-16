@@ -442,6 +442,12 @@ button.cal-cell:hover{border-color:var(--teal-bright);} .cal-cell.sel{background
 .btn.sm.resv-cancel{color:#ff9a8a;border:1px solid rgba(255,154,138,.4);background:transparent;}
 .btn.sm.resv-cancel:hover{border-color:#ff9a8a;background:rgba(255,154,138,.08);filter:none;}
 .bag-modnote{background:var(--teal-wash);border:1px solid rgba(25,211,197,.3);border-left:4px solid var(--teal-bright);padding:10px 12px;font-size:.84rem;color:var(--ink);line-height:1.4;margin-bottom:14px;}
+/* modify: live availability line (red = a unit is taken for the chosen day, green = all free) + Cancel + disabled Save */
+.bag-modconf{background:rgba(230,36,41,.12);border:1px solid rgba(230,36,41,.4);border-left:4px solid #e62429;color:#ffb3b6;font-size:.82rem;line-height:1.4;padding:9px 12px;margin:-4px 0 14px;border-radius:var(--g-r-sm,10px);}
+.bag-modconf b{color:#fff;}
+.bag-modok{background:rgba(25,211,197,.1);border:1px solid rgba(25,211,197,.3);border-left:4px solid var(--teal-bright);color:#bfeee9;font-size:.82rem;line-height:1.4;padding:9px 12px;margin:-4px 0 14px;border-radius:var(--g-r-sm,10px);}
+.bag-cancelmod{width:100%;margin-top:10px;}
+.bag-reserve[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.3);pointer-events:none;}
 .resv-confirm{display:flex;flex-direction:column;gap:8px;}
 .resv-confirm>span{font-size:.82rem;color:#ff9a8a;}
 .resv-confirm-btns{display:flex;gap:8px;}

@@ -9,7 +9,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=55" />
+<link rel="stylesheet" href="/css/store.css?v=56" />
 <link rel="stylesheet" href="/css/store-glass.css?v=16" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
@@ -298,6 +298,14 @@
   </div>
 </div>
 
+<!-- Reservation change confirmation: after a modify saves, a popup of exactly what changed -->
+<div class="sov" id="chgOv" aria-hidden="true">
+  <div class="sheet rcpt" role="dialog" aria-modal="true">
+    <button type="button" class="sheet-x" data-close="chgOv" aria-label="Close">&times;</button>
+    <div class="sheet-bd" id="chgBody"></div>
+  </div>
+</div>
+
 <!-- Calendar-view equipment picker: category -> item -> Add other / Done -->
 <div class="sov" id="pickerOv" aria-hidden="true">
   <div class="sheet picker" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
@@ -429,6 +437,13 @@
     'Mr. Silva needs to approve this. You&#8217;ll get your gear once he says yes.':'El Sr. Silva debe aprobar esto. Recibirás tu equipo cuando él diga que sí.',
     'Your gear is reserved. The %s that need Mr. Silva&#8217;s OK are waiting for him.':'Tu equipo está reservado. El/los %s que necesitan el visto bueno del Sr. Silva lo están esperando.',
     'Your reservation is on its way to %s.':'Tu reservación va en camino a %s.','item':'artículo','items':'artículos',
+    // --- modify a reservation (draft + live availability + change popup) ---
+    'Everything is free for your day.':'Todo está libre para tu día.',
+    '%s is taken for that day. Pick a different number or day.':'%s está ocupado ese día. Elige otro número u otro día.',
+    'Some gear is taken for that day. Fix the items in red, then save.':'Algo del equipo está ocupado ese día. Corrige lo que está en rojo y luego guarda.',
+    'No changes to save.':'No hay cambios que guardar.','Could not update. Try again.':'No se pudo actualizar. Intenta de nuevo.',
+    'Reservation updated':'Reservación actualizada','Here is what changed.':'Esto es lo que cambió.',
+    'Day':'Día','Swapped':'Cambiado','Added':'Agregado','Removed':'Quitado',
     // --- reservation pass (save to Photos) ---
     'RESERVATION CONFIRMED':'RESERVACIÓN CONFIRMADA','REQUEST SENT':'SOLICITUD ENVIADA',
     'Show this to your teacher at pickup':'Muéstrale esto a tu maestro(a) al recoger',
@@ -692,7 +707,7 @@
     if(!CAL) return null;
     var cams=studentCams(), busy={};
     (CAL.oos||[]).concat(CAL.no_card||[]).forEach(function(cm){ busy[cm]=1; });
-    (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && c.out && c.due && c.out<=iso && c.due>=iso) busy[c.camera]=1; });
+    (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && c.out && c.due && c.out<=iso && c.due>=iso && !ownEditBooking(c,true)) busy[c.camera]=1; });
     return cams.filter(function(cm){ return !busy[cm]; }).length;
   }
   function renderCalView(){
@@ -751,7 +766,7 @@
     var cams=camsFor(it.name);
     if(cams){
       var busy={}; (CAL.oos||[]).concat(CAL.no_card||[]).forEach(function(cm){ if(cams.indexOf(cm)>=0) busy[cm]=1; });
-      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && c.out && c.due && c.out<=iso && c.due>=iso) busy[c.camera]=1; });
+      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && c.out && c.due && c.out<=iso && c.due>=iso && !ownEditBooking(c,true)) busy[c.camera]=1; });
       return {free:cams.filter(function(cm){return !busy[cm];}).length, total:cams.length};
     }
     var type=EQTYPE[it.name], eu=CAL.equipment_units||{};
@@ -925,20 +940,29 @@
   // matching the server: a same-day handoff is allowed, so an item reserved FROM the day you return it is
   // still available to you. (Closed intervals wrongly flagged the return-day boundary as a conflict.)
   function overlaps(out,due,co,ret){ return out && due && out<ret && due>co; }   // ISO date strings compare lexicographically
+  // While a student edits ONE of their own reservations, that reservation's OWN gear must read as FREE
+  // (so keeping your camera while you move the day is never flagged "taken"). The calendar feed carries
+  // no group id, so a booking is "the edited reservation's own" when its unit + original dates match.
+  var editResvOrig=null;   // {out, due, units:[...], map:{model:unit}} snapshot, set while modifying
+  function ownEditBooking(c, isCam){
+    if(!modifyMode || !editResvOrig) return false;
+    var u=isCam?c.camera:c.item;
+    return editResvOrig.units.indexOf(u)>=0 && c.out===editResvOrig.out && c.due===editResvOrig.due;
+  }
   function stockFor(it){
     if(!CAL) return null;
     var co=isoOf(checkout), ret=isoOf(returnDay||nextSchoolDay(checkout));
     var cams=camsFor(it.name);
     if(cams){
       var busy={}; (CAL.oos||[]).concat(CAL.no_card||[]).forEach(function(cm){ if(cams.indexOf(cm)>=0) busy[cm]=1; });
-      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && overlaps(c.out,c.due,co,ret)) busy[c.camera]=1; });
+      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && overlaps(c.out,c.due,co,ret) && !ownEditBooking(c,true)) busy[c.camera]=1; });
       return {free:cams.filter(function(cm){return !busy[cm];}).length, total:cams.length};
     }
     var type=EQTYPE[it.name], eu=CAL.equipment_units||{};
     if(type){
       var units=Object.keys(eu).filter(function(u){ return eu[u] && eu[u].type===type; });
       var eb={}; (CAL.equipment_oos||[]).forEach(function(u){ if(eu[u] && eu[u].type===type) eb[u]=1; });
-      (CAL.equipment||[]).forEach(function(c){ if(!c.returned && eu[c.item] && eu[c.item].type===type && overlaps(c.out,c.due,co,ret)) eb[c.item]=1; });
+      (CAL.equipment||[]).forEach(function(c){ if(!c.returned && eu[c.item] && eu[c.item].type===type && overlaps(c.out,c.due,co,ret) && !ownEditBooking(c,false)) eb[c.item]=1; });
       return {free:units.filter(function(u){return !eb[u];}).length, total:units.length};
     }
     return null;
@@ -951,14 +975,14 @@
     var cams=camsFor(it.name);
     if(cams){
       var busy={}; (CAL.oos||[]).concat(CAL.no_card||[]).forEach(function(cm){ if(cams.indexOf(cm)>=0) busy[cm]=1; });
-      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && overlaps(c.out,c.due,co,ret)) busy[c.camera]=1; });
+      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && overlaps(c.out,c.due,co,ret) && !ownEditBooking(c,true)) busy[c.camera]=1; });
       return cams.filter(function(cm){ return !busy[cm]; });
     }
     var type=EQTYPE[it.name], eu=CAL.equipment_units||{};
     if(type){
       var units=Object.keys(eu).filter(function(u){ return eu[u] && eu[u].type===type; });
       var eb={}; (CAL.equipment_oos||[]).forEach(function(u){ if(eu[u] && eu[u].type===type) eb[u]=1; });
-      (CAL.equipment||[]).forEach(function(c){ if(!c.returned && eu[c.item] && eu[c.item].type===type && overlaps(c.out,c.due,co,ret)) eb[c.item]=1; });
+      (CAL.equipment||[]).forEach(function(c){ if(!c.returned && eu[c.item] && eu[c.item].type===type && overlaps(c.out,c.due,co,ret) && !ownEditBooking(c,false)) eb[c.item]=1; });
       return units.filter(function(u){ return !eb[u]; });
     }
     return null;
@@ -1224,36 +1248,85 @@
   }
   // ----- modify an existing reservation (edit dates / add / remove) -----
   var modifyMode=false, editingResvId=null;
-  function exitModify(){ modifyMode=false; editingResvId=null; MULTI=null; MULTI_REASON=''; multiOpen=false; STYLUS_DAYS=1; }
+  function exitModify(){ modifyMode=false; editingResvId=null; editResvOrig=null; MULTI=null; MULTI_REASON=''; multiOpen=false; STYLUS_DAYS=1; }
   // Load a reservation back into the bag as an edit session; Save writes it back via /api/camera/modify.
   function modifyReservation(resv){
     if(!resv) return;
     MULTI=null; MULTI_REASON=''; multiOpen=false; STYLUS_DAYS=1;   // editing an existing reservation is its own flow (uses /api/camera/modify), never the multi-day request path
     BAG=[]; PICK={};
+    var origUnits=[], origMap={};
     (resv.items||[]).forEach(function(it){
       var unit=it.unit, model=null;
       if(it.kind==='camera'){ model=modelOfCam(unit); }
       else { var u=(CAL&&CAL.equipment_units&&CAL.equipment_units[unit]); model=u?modelOfType(u.type):null; }
-      if(model && findItem(model)){ if(BAG.indexOf(model)<0) BAG.push(model); PICK[model]=unit; }
+      if(model && findItem(model)){ if(BAG.indexOf(model)<0) BAG.push(model); PICK[model]=unit; origMap[model]=unit; if(unit) origUnits.push(unit); }
     });
     saveBag(); savePick();
+    // snapshot the original reservation: lets availability free its OWN gear, and feeds the "what changed" popup.
+    editResvOrig={ out:String(resv.out||''), due:String(resv.due||''), units:origUnits, map:origMap };
     var p=String(resv.out).split('-'); checkout=new Date(+p[0],+p[1]-1,+p[2]); checkout.setHours(0,0,0,0);
     pickup=null; returnTime=null; renderDates();   // returnDay = the next school day, as the store always books
     modifyMode=true; editingResvId=resv.id;
     updateBag(); rerender();
     close('acctOv'); renderBag(); open('bagOv');
   }
-  // Save the edited reservation: send the complete unit set + dates to the modify endpoint.
+  // ---- modify: live availability, change summary, confirmation popup ----
+  // Bag items with NO free unit for the chosen day (own reservation's gear excluded, de-duped within the bag).
+  // Drives the red/green line in the bag and gates Save, so a student can never overbook someone else.
+  function modifyConflicts(){
+    var used={}, bad=[];
+    BAG.forEach(function(nm){ var it=findItem(nm); if(!it) return;
+      var free=freeUnitsFor(it)||[], unit=PICK[nm];
+      if(unit){ if(free.indexOf(unit)<0 || used[unit]) bad.push(nm); else used[unit]=1; }
+      else { var av=free.filter(function(u){ return !used[u]; }); if(!av.length) bad.push(nm); else used[av[0]]=1; }
+    });
+    return bad;
+  }
+  function isoLabel(iso){ if(!iso) return ''; var p=String(iso).split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate(); }
+  // Diff the edited bag against the original snapshot: day move, unit swaps, items added/removed.
+  function buildChangeSummary(newOut, newMap){
+    var o=editResvOrig||{map:{},out:''}, added=[], removed=[], swapped=[];
+    Object.keys(o.map).forEach(function(m){
+      if(newMap[m]==null) removed.push(unitFull(m,o.map[m])||m);
+      else if(newMap[m]!==o.map[m]) swapped.push({from:unitFull(m,o.map[m]), to:unitFull(m,newMap[m])});
+    });
+    Object.keys(newMap).forEach(function(m){ if(o.map[m]==null) added.push(unitFull(m,newMap[m])||m); });
+    return { dayChanged:!!(o.out && o.out!==newOut), fromOut:o.out, toOut:newOut, added:added, removed:removed, swapped:swapped };
+  }
+  function chgRow(k,v){ return '<div class="rcpt-row"><span class="rcpt-k">'+k+'</span><span class="rcpt-v">'+v+'</span></div>'; }
+  function showChangePopup(s){
+    var rows='';
+    if(s.dayChanged) rows+=chgRow(t('Day'), isoLabel(s.fromOut)+' &rarr; '+isoLabel(s.toOut));
+    s.swapped.forEach(function(sw){ rows+=chgRow(t('Swapped'), esc(sw.from)+' &rarr; '+esc(sw.to)); });
+    if(s.added.length) rows+=chgRow(t('Added'), esc(s.added.join(', ')));
+    if(s.removed.length) rows+=chgRow(t('Removed'), esc(s.removed.join(', ')));
+    document.getElementById('chgBody').innerHTML=
+      '<div class="rcpt-check">&#10003;</div>'+
+      '<h2 class="rcpt-h">'+t('Reservation updated')+'</h2>'+
+      '<p class="rcpt-sub">'+t('Here is what changed.')+'</p>'+
+      '<div class="rcpt-card">'+rows+'</div>'+
+      '<button type="button" class="btn block" id="chgDone">'+t('Done')+'</button>';
+    document.getElementById('chgDone').onclick=function(){ close('chgOv'); openAccount(); };
+    open('chgOv');
+  }
+  function cancelModify(){ close('bagOv'); openAccount(); }   // the bag's close handler reverts the edit (exitModify)
+  // Save the edited reservation: send the complete unit set + dates to the modify endpoint, then show what changed.
   function saveModify(){
     if(!BAG.length){ setBagMsg(t('Keep at least one item, or cancel the reservation instead.'), true); return; }
-    var co=isoOf(checkout), ret=isoOf(returnDay), units=[], seen={};
+    if(modifyConflicts().length){ setBagMsg(t('Some gear is taken for that day. Fix the items in red, then save.'), true); return; }
+    var co=isoOf(checkout), ret=isoOf(returnDay), units=[], seen={}, newMap={};
     BAG.forEach(function(nm){ var it=findItem(nm); if(!it) return;
       var unit=PICK[nm]; if(!unit){ var f=freeUnitsFor(it)||[]; unit=f[0]; }
       if(!unit || seen[unit]) return; seen[unit]=1;
+      newMap[nm]=unit;
       units.push({ kind: camsFor(nm)?'camera':'equipment', unit: unit }); });
     if(!units.length){ setBagMsg(t('Could not read your items. Try again.'), true); return; }
+    var summary=buildChangeSummary(co, newMap);
+    if(!summary.dayChanged && !summary.added.length && !summary.removed.length && !summary.swapped.length){
+      setBagMsg(t('No changes to save.'), true); return;
+    }
     api('/api/camera/modify',{student_id:USER.id, id:editingResvId, out:co, due:ret, units:units}).then(function(j){
-      if(j&&j.ok){ toast(t('Reservation updated.')); exitModify(); BAG=[]; PICK={}; saveBag(); savePick(); updateBag(); close('bagOv'); loadCal(); openAccount(); }
+      if(j&&j.ok){ exitModify(); BAG=[]; PICK={}; saveBag(); savePick(); updateBag(); close('bagOv'); loadCal(); showChangePopup(summary); }
       else { setBagMsg((j&&j.error)||t('Could not update. Try again.'), true); }
     }).catch(function(){ setBagMsg(t('Could not update. Try again.'), true); });
   }
@@ -1278,6 +1351,13 @@
         '<div class="bag-drow"><span class="bag-dk">'+t('Where')+'</span><span class="bag-dv">'+t('Classroom pickup')+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div>'+
         '<button type="button" class="bag-editdates" id="bagEditDates">'+t('Change dates')+'</button></div>';
     } else { dates='<div class="bag-nodates">'+t('No dates yet. Pick when you need the gear, then reserve.')+'</div>'; }
+    // Modify: a live red/green line that reflects whether the current gear + day is free (own reservation excluded).
+    var modConf = modifyMode ? modifyConflicts() : [];
+    var confLine = modifyMode
+      ? (modConf.length
+          ? '<div class="bag-modconf">'+tf('%s is taken for that day. Pick a different number or day.', modConf.map(function(n){ return '<b>'+esc(PICK[n]?unitFull(n,PICK[n]):n)+'</b>'; }).join(', '))+'</div>'
+          : '<div class="bag-modok">'+t('Everything is free for your day.')+'</div>')
+      : '';
     // Each item is tappable to change its unit (opens its detail), like clicking a cart item's options.
     var items='<div class="bag-items">'+BAG.map(function(nm){ var it=findItem(nm);
       var tag = (!reqMode() && REQ[nm]) ? '<span class="bag-reqtag">'+t('Needs OK')+'</span>' : '';
@@ -1289,11 +1369,12 @@
         '</button>'+
         '<button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">'+t('Remove')+'</button></div>'; }).join('')+'</div>';
     var primary = modifyMode
-      ? '<button type="button" class="btn bag-reserve" id="bagSave">'+t('Save changes')+'</button>'
+      ? '<button type="button" class="btn bag-reserve" id="bagSave"'+(modConf.length?' disabled':'')+'>'+t('Save changes')+'</button>'
       : (datesReady()
           ? '<button type="button" class="btn bag-reserve" id="bagReserve">'+t(reserveLabel())+'</button>'
           : '<button type="button" class="btn" id="bagSetDates">'+t('Set checkout dates')+'</button>');
-    var action = '<div class="bag-actions"><button type="button" class="btn ghost bag-addmore" id="bagAddMore">'+t('Add equipment')+'</button>'+primary+'</div>';
+    var action = '<div class="bag-actions"><button type="button" class="btn ghost bag-addmore" id="bagAddMore">'+t('Add equipment')+'</button>'+primary+'</div>'
+      + (modifyMode ? '<button type="button" class="btn ghost bag-cancelmod" id="bagCancelMod">'+t('Cancel')+'</button>' : '');
     // Special request: a lowkey accordion (mostly hidden). Opening it reveals a note + a new return-day option.
     var multi='';
     if(!modifyMode && datesReady()){
@@ -1317,7 +1398,7 @@
         multi='<div class="bag-special'+(multiOpen?' open':'')+'"><button type="button" class="bsp-toggle" id="bagMultiOpen">'+t('Special request')+' <span class="bsp-chev">&rsaquo;</span></button>'+mbody+'</div>';
       }
     }
-    w.innerHTML=note+dates+multi+items+action;
+    w.innerHTML=note+dates+confLine+multi+items+action;
     w.querySelectorAll('[data-bx]').forEach(function(b){ b.onclick=function(){ removeFromBag(decodeURIComponent(b.getAttribute('data-bx'))); }; });
     w.querySelectorAll('[data-edit]').forEach(function(b){ b.onclick=function(){ openDetail(decodeURIComponent(b.getAttribute('data-edit')), true); }; });   // detail opens ON TOP of the bag
     var ed=document.getElementById('bagEditDates'); if(ed) ed.onclick=function(){ pendingAdd=null; openPlan(); };
@@ -1325,6 +1406,7 @@
     var am=document.getElementById('bagAddMore'); if(am) am.onclick=function(){ openPicker(); };   // continue shopping: the picker opens on top; Done returns here
     var rv=document.getElementById('bagReserve'); if(rv) rv.onclick=submitReservation;
     var sv=document.getElementById('bagSave'); if(sv) sv.onclick=saveModify;
+    var cmb=document.getElementById('bagCancelMod'); if(cmb) cmb.onclick=cancelModify;
     var mOpen=document.getElementById('bagMultiOpen'); if(mOpen) mOpen.onclick=function(){ multiOpen=!multiOpen; renderBag(); };   // accordion toggle
     var mClear=document.getElementById('bagMultiClear'); if(mClear) mClear.onclick=function(){ MULTI=null; MULTI_REASON=''; multiOpen=false; renderDates(); rerender(); renderBag(); };
     var mReason=document.getElementById('bagMultiReason'); if(mReason) mReason.addEventListener('input',function(){ MULTI_REASON=mReason.value; });
@@ -1558,7 +1640,7 @@
   }
   document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ close(b.getAttribute('data-close')); }; });
   // Tapping the dimmed backdrop closes a sheet. Not the sign-in gate: signing in is required (Chris 2026-11-05).
-  ['holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv','passOv','pickerOv','acctOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
+  ['holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv','passOv','chgOv','pickerOv','acctOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
   function toast(msg){ var t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2800); }
   function pulseDates(){ var d=document.querySelector('.datebar'); if(!d) return; d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash'); }
 
