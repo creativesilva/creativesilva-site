@@ -13,6 +13,7 @@
 # Project 01); to make it "Module 13" instead, change PROJ_KIND / PROJNUM below and the catalog label.
 import os
 from silva_framework import *   # shared angular chrome: banner, cards, sections, vocab, deliverables, standards
+import silva_framework as _sf    # for the original wrap_page (the std pass overrides wrap_page locally)
 
 ROOT="/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 AREA="Photography Folder"
@@ -26,7 +27,10 @@ def ent(s):
        "“":"&ldquo;","”":"&rdquo;","‘":"&lsquo;","’":"&rsquo;","–":"-","•":"&bull;","×":"&times;"}
     return "".join(m.get(c, c if ord(c)<128 else "&#x{:X};".format(ord(c))) for c in s)
 
-PROJNUM="02"            # Project 02 (change to a module number if Chris reclassifies it)
+PROJNUM="02"            # catalog label is "Project 02" (change to a module number to reclassify)
+# Student-facing banner eyebrow (Chris 2026-11-15: this is the Fall Final Project).
+PROJ_LABEL="Fall Final Project"
+PROJ_LABEL_ES="Proyecto Final de Oto&ntilde;o"
 CL_EN="Photography 1A"
 IMGDIR=f"{SITE}/assets/images/master-photographer"
 HERO=f"{IMGDIR}/master-photographer-hero-v1.jpg"
@@ -240,25 +244,136 @@ def deck_showcase(es):
       + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;">' + dl_link(DECK_PPTX, label, row=True) + '</div>')
     return resources_card(heading, inner, es)
 
-def build():
+def wrap_standalone(title, nav_inner, top_html, bottom, files_std, share_name):
+    # Self-contained share page: the module's own css + a minimal internal nav, NO silva-nav.js (so no
+    # site nav / Equipment Manager / Catalog), NO builder buttons, NO links out. Internal step links
+    # only. Language toggle kept (inline JS runs on the hosted page). Assets load absolute from the
+    # whitelisted domain so the page works from the /share/ path. Teacher tools (Copy URL / Copy HTML /
+    # Download All) ride in their own full-width bar UNDER the nav row. Locked pattern, see framework 10.3.
+    pages_js='['+','.join('"'+f+'"' for f in files_std)+']'
+    name_js='"'+share_name.replace('\\','\\\\').replace('"','\\"')+'"'
+    share_css=(
+      ".silva-share-bar{border-top:1px solid rgba(255,255,255,0.08);}"
+      ".silva-share-inner{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:9px 10px;}"
+      ".silva-share-inner .stt-label{font-size:11px;font-weight:700;letter-spacing:0.12em;"
+      "text-transform:uppercase;color:#80e0e0;margin-right:4px;}"
+      ".share-btn{font-family:Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.04em;"
+      "color:#eafeff;background:rgba(0,184,184,0.14);border:1px solid rgba(0,184,184,0.55);"
+      "padding:7px 13px;cursor:pointer;border-radius:0;line-height:1.1;transition:background .15s;}"
+      ".share-btn:hover{background:rgba(0,184,184,0.28);}"
+      ".share-btn.ok{background:#00b8b8;color:#04201f;border-color:#00b8b8;}")
+    share_js=(
+      "(function(){"
+      "var btns=document.querySelectorAll('.share-btn');if(!btns.length){return;}"
+      "var PAGES="+pages_js+";var NAME="+name_js+";"
+      "var base=location.pathname.replace(/[^/]*$/,'');"
+      "function flash(b,msg){var o=b.getAttribute('data-orig')||b.textContent;b.setAttribute('data-orig',o);b.textContent=msg;b.classList.add('ok');setTimeout(function(){b.textContent=b.getAttribute('data-orig');b.classList.remove('ok');},2200);}"
+      "function copy(t,b){navigator.clipboard.writeText(t).then(function(){flash(b,'Copied!');}).catch(function(){alert('Copy failed.');});}"
+      "function dlAll(b){var o=b.textContent;b.textContent='Building...';"
+      "Promise.all(PAGES.map(function(u){return fetch(base+u).then(function(r){return r.text();}).then(function(h){var d=new DOMParser().parseFromString(h,'text/html');var t=d.querySelector('title');var pt=t?t.textContent.split('|')[0].trim():u;var top=d.getElementById('top');return{t:pt,code:top?top.outerHTML:h};}).catch(function(){return{t:u,code:'(could not load this page)'};});})).then(function(ps){"
+      "var md='# '+NAME+'\\n\\n_All pages, downloaded '+new Date().toISOString().slice(0,10)+' from creativesilva.com._\\n\\nEach section holds that page Canvas-pasteable HTML (the same code the Copy HTML button copies).\\n\\n';"
+      "ps.forEach(function(p,i){md+='---\\n\\n## '+(i+1)+'. '+p.t+'\\n\\n```html\\n'+p.code+'\\n```\\n\\n';});"
+      "var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown;charset=utf-8'}));a.download=NAME.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')+'-all-pages.md';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);"
+      "b.textContent=o;flash(b,'Downloaded');"
+      "}).catch(function(){b.textContent=o;alert('Download failed.');});}"
+      "for(var i=0;i<btns.length;i++){(function(b){b.addEventListener('click',function(){var act=b.getAttribute('data-act');if(act==='url'){copy(location.href,b);}else if(act==='html'){var el=document.getElementById('top');if(el){copy(el.outerHTML,b);}}else if(act==='all'){dlAll(b);}});})(btns[i]);}"
+      "})();")
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <link rel="icon" type="image/svg+xml" href="https://www.creativesilva.com/logos/CS_Logo_Only.svg" />
+  <style>:root {{ --course-accent: #007474; }}
+  {share_css}</style>
+  <link rel="stylesheet" href="https://www.creativesilva.com/css/silva-module.css" />
+</head>
+<body>
+  <nav class="silva-nav" aria-label="Module navigation">
+    <div class="silva-nav-inner">
+{nav_inner}
+    </div>
+    <div class="silva-share-bar"><div class="silva-share-inner"><span class="stt-label">Teacher tools</span><button type="button" class="share-btn" data-act="url">Copy URL</button><button type="button" class="share-btn" data-act="html">Copy HTML</button><button type="button" class="share-btn" data-act="all">Download All</button></div></div>
+  </nav>
+  <div class="silva-page">
+  <div id="silva-module-content">
+  {top_html}
+  </div>
+  {bottom}
+  </div>
+  <script>
+  (function(){{
+    var lang=document.querySelector('details.silva-langbar');
+    if(!lang){{return;}}
+    lang.addEventListener('toggle',function(){{
+      if(lang.open){{requestAnimationFrame(function(){{lang.scrollIntoView({{behavior:'smooth',block:'start'}});}});}}
+      else{{requestAnimationFrame(function(){{window.scrollTo({{top:0,behavior:'smooth'}});}});}}
+    }});
+    function bind(sel,op){{var ls=document.querySelectorAll(sel);for(var i=0;i<ls.length;i++){{ls[i].addEventListener('click',function(e){{e.preventDefault();lang.open=op;}});}}}}
+    bind('#top a[href="#espanol"]',true);
+    bind('#top a[href="#top"]',false);
+  }})();
+  {share_js}
+  </script>
+</body>
+</html>'''
+
+def build(mode):
+    cur = (mode == "cur")
     OVER="photo1-master-photographer-overview.html"
     S2="photo1-master-photographer-step02-meet-the-five.html"
     S3="photo1-master-photographer-step03-capture-contact.html"
     S4="photo1-master-photographer-step04-cull-edit.html"
     S5="photo1-master-photographer-step05-presentation-reflection.html"
-    HREFS=[OVER,S2,S3,S4,S5]; TITLES=[("1","Step 01"),("2","Step 02"),("3","Step 03"),("4","Step 04"),("5","Step 05")]
+    FILES_STD=["index.html","step02-meet-the-five.html","step03-capture-contact.html",
+               "step04-cull-edit.html","step05-presentation-reflection.html"]
+    FILES = [OVER,S2,S3,S4,S5] if cur else FILES_STD
+    HREFS = FILES
+    TITLES=[("1","Step 01"),("2","Step 02"),("3","Step 03"),("4","Step 04"),("5","Step 05")]
+    STEPNUM=["01","02","03","04","05"]
+    SHARE_NAME="Master Photographer"
+
+    def wrap_page(title, nav_inner, top_html, bottom):
+        if cur:
+            return _sf.wrap_page(title, nav_inner, top_html, bottom)
+        return wrap_standalone(title, nav_inner, top_html, bottom, FILES_STD, SHARE_NAME)
+
+    def step_topnav(i):
+        parts=[]
+        if i>0: parts.append(f'<a href="{HREFS[i-1]}" class="silva-step-btn">&#8592; Step {STEPNUM[i-1]}</a>')
+        if i<4: parts.append(f'<a href="{HREFS[i+1]}" class="silva-step-btn">Step {STEPNUM[i+1]} &#8594;</a>')
+        return ' '.join(parts)
+
+    def step_bottom(i):
+        left = f'<a href="{HREFS[i-1]}" class="silva-bottom-btn">&#8592; Step {STEPNUM[i-1]}</a>' if i>0 else '<span></span>'
+        if i<4:
+            lab = f'Next: Step {STEPNUM[i+1]} &#8594;' if i==0 else f'Step {STEPNUM[i+1]} &#8594;'
+            right = f'<a href="{HREFS[i+1]}" class="silva-bottom-btn">{lab}</a>'
+        else:
+            right = '<span></span>'
+        return f'<div class="silva-bottom-nav">{left}{right}</div>'
 
     def nav(current,dots,stepnav):
-        return ('      <div class="silva-breadcrumb">\n'
-                '        <a href="/curriculum.html">Curriculum Catalog</a>\n'
-                '        <span class="bc-sep">&rsaquo;</span>\n'
-                f'        <a href="{OVER}" class="bc-hide-sm">Master Photographer</a>\n'
-                '        <span class="bc-sep bc-hide-sm">&rsaquo;</span>\n'
-                f'        <span class="bc-current">{current}</span>\n'
-                '      </div>\n'
-                '      <div class="silva-nav-spacer"></div>\n'
-                f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
-                f'      <div class="silva-step-nav">{stepnav}</div>')
+        if cur:
+            crumb=('      <div class="silva-breadcrumb">\n'
+                   '        <a href="/curriculum.html">Curriculum Catalog</a>\n'
+                   '        <span class="bc-sep">&rsaquo;</span>\n'
+                   f'        <a href="{OVER}" class="bc-hide-sm">Master Photographer</a>\n'
+                   '        <span class="bc-sep bc-hide-sm">&rsaquo;</span>\n'
+                   f'        <span class="bc-current">{current}</span>\n'
+                   '      </div>\n')
+        else:
+            # Standalone share copy: NO catalog link, nothing links back out.
+            crumb=('      <div class="silva-breadcrumb">\n'
+                   '        <span class="bc-current">Master Photographer</span>\n'
+                   '        <span class="bc-sep bc-hide-sm">&rsaquo;</span>\n'
+                   f'        <span class="bc-current">{current}</span>\n'
+                   '      </div>\n')
+        return (crumb
+                + '      <div class="silva-nav-spacer"></div>\n'
+                + f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
+                + f'      <div class="silva-step-nav">{stepnav}</div>')
     def dots_for(ai):
         return "".join(dot("" if i==ai else HREFS[i], lab, title, i==ai, module=False) for i,(lab,title) in enumerate(TITLES))
 
@@ -272,7 +387,7 @@ def build():
 
     # ================= OVERVIEW (Step 01) =================
     def overview():
-        en=banner(f"Project {PROJNUM} &bull; Step 01","Master Photographer",
+        en=banner(f"{PROJ_LABEL} &bull;Step 01","Master Photographer",
             "Study one master photographer, then capture and present three photos in their style. Read this page, then go to Step 02.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_CAMERA_KIT)
         en+=type_card("overview","Step 01 &middot; Overview","Learn From a Master, Then Make Your Own",
@@ -299,7 +414,7 @@ def build():
               VOCAB_EN), False)
         en+=next_up("UP NEXT &middot; STEP 02 - Meet the Five &amp; Choose","Meet the five master photographers, pick the one whose work pulls you in, and start your deck.")
 
-        es=banner(f"Proyecto {PROJNUM} &bull; Paso 01","Fot&oacute;grafo Maestro",
+        es=banner(f"{PROJ_LABEL_ES} &bull;Paso 01","Fot&oacute;grafo Maestro",
             "Estudia a un fot&oacute;grafo maestro, luego captura y presenta tres fotos en su estilo. Lee esta p&aacute;gina y ve al Paso 02.",
             "#top","Back to English", HICON_CAMERA_KIT)
         es+=type_card("overview","Paso 01 &middot; Resumen","Aprende de un Maestro, Luego Haz lo Tuyo",
@@ -326,13 +441,11 @@ def build():
               VOCAB_ES), True)
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Conoce a los Cinco y Elige","Conoce a los cinco fot&oacute;grafos maestros, elige al que m&aacute;s te atraiga y empieza tu presentaci&oacute;n.")
 
-        stepnav=f'<a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
-        bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S2}" class="silva-bottom-btn">Next: Step 02 &#8594;</a></div>'
-        return wrap_page(f"Master Photographer | {CL_EN} | PVHS", nav("Step 01",dots_for(0),stepnav), top_wrap(en,es), bottom)
+        return wrap_page(f"Master Photographer | {CL_EN} | PVHS", nav("Step 01",dots_for(0),step_topnav(0)), top_wrap(en,es), step_bottom(0))
 
     # ================= STEP 02: Meet the Five & Choose =================
     def step02():
-        en=banner(f"Project {PROJNUM} &bull; Step 02","Meet the Five &amp; Choose",
+        en=banner(f"{PROJ_LABEL} &bull;Step 02","Meet the Five &amp; Choose",
             "Meet the five master photographers, pick one, and start your slide deck with three of their images.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
         en+=card("STEP 02 &middot; STUDY YOUR MASTER","Pick One, Then Study How They Work",
@@ -356,7 +469,7 @@ def build():
             + note("These three images are your <strong>master photographer&rsquo;s</strong> work, from online. You capture your <strong>own</strong> photos next, in Step 03."))
         en+=next_up("UP NEXT &middot; STEP 03 - Capture &amp; Contact","Check out a camera kit and capture a full take of your own photos in your master&rsquo;s style.")
 
-        es=banner(f"Proyecto {PROJNUM} &bull; Paso 02","Conoce a los Cinco y Elige",
+        es=banner(f"{PROJ_LABEL_ES} &bull;Paso 02","Conoce a los Cinco y Elige",
             "Conoce a los cinco fot&oacute;grafos maestros, elige a uno y empieza tu presentaci&oacute;n con tres de sus im&aacute;genes.",
             "#top","Back to English", HICON_DESIGN)
         es+=card("PASO 02 &middot; ESTUDIA A TU MAESTRO","Elige a Uno y Estudia C&oacute;mo Trabaja",
@@ -380,13 +493,11 @@ def build():
             + note("Estas tres im&aacute;genes son el trabajo de <strong>tu fot&oacute;grafo maestro</strong>, de internet. T&uacute; capturas tus <strong>propias</strong> fotos despu&eacute;s, en el Paso 03."))
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Captura y Contacto","Pide un kit de c&aacute;mara y captura una toma completa de tus propias fotos en el estilo de tu maestro.")
 
-        stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a> <a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
-        bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
-        return wrap_page(f"Step 2: Meet the Five | Master Photographer | {CL_EN} | PVHS", nav("Step 02",dots_for(1),stepnav), top_wrap(en,es), bottom)
+        return wrap_page(f"Step 2: Meet the Five | Master Photographer | {CL_EN} | PVHS", nav("Step 02",dots_for(1),step_topnav(1)), top_wrap(en,es), step_bottom(1))
 
     # ================= STEP 03: Capture & Contact =================
     def step03():
-        en=banner(f"Project {PROJNUM} &bull; Step 03","Capture &amp; Contact",
+        en=banner(f"{PROJ_LABEL} &bull;Step 03","Capture &amp; Contact",
             "Capture a full take of your own photos in your master&rsquo;s style, then build a contact sheet.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_CAMERA_KIT)
         en+=card("STEP 03 &middot; MAKE YOUR PHOTOS","Capture in Your Master&rsquo;s Style",
@@ -429,7 +540,7 @@ def build():
             pnote_mp('Need the 12-Up preset? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>, then add it to Lightroom Classic &rarr; Print module. You set these up back in the Image Series module.'), False)
         en+=next_up("UP NEXT &middot; STEP 04 - Cull &amp; Edit","Select your three strongest images and edit them to match the look you studied.")
 
-        es=banner(f"Proyecto {PROJNUM} &bull; Paso 03","Captura y Contacto",
+        es=banner(f"{PROJ_LABEL_ES} &bull;Paso 03","Captura y Contacto",
             "Captura una toma completa de tus propias fotos en el estilo de tu maestro, luego arma una hoja de contactos.",
             "#top","Back to English", HICON_CAMERA_KIT)
         es+=card("PASO 03 &middot; HAZ TUS FOTOS","Captura en el Estilo de Tu Maestro",
@@ -472,13 +583,11 @@ def build():
             pnote_mp('&iquest;Necesitas el ajuste 12-Up? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Mira el video de instalaci&oacute;n</strong></a>, luego agr&eacute;galo a Lightroom Classic &rarr; m&oacute;dulo Print. Los configuraste en el m&oacute;dulo Image Series.'), True)
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 04 - Selecciona y Edita","Elige tus tres im&aacute;genes m&aacute;s fuertes y ed&iacute;talas para igualar el estilo que estudiaste.")
 
-        stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a> <a href="{S4}" class="silva-step-btn">Step 04 &#8594;</a>'
-        bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><a href="{S4}" class="silva-bottom-btn">Step 04 &#8594;</a></div>'
-        return wrap_page(f"Step 3: Capture and Contact | Master Photographer | {CL_EN} | PVHS", nav("Step 03",dots_for(2),stepnav), top_wrap(en,es), bottom)
+        return wrap_page(f"Step 3: Capture and Contact | Master Photographer | {CL_EN} | PVHS", nav("Step 03",dots_for(2),step_topnav(2)), top_wrap(en,es), step_bottom(2))
 
     # ================= STEP 04: Cull & Edit =================
     def step04():
-        en=banner(f"Project {PROJNUM} &bull; Step 04","Cull &amp; Edit",
+        en=banner(f"{PROJ_LABEL} &bull;Step 04","Cull &amp; Edit",
             "Select your three strongest images and edit them to match the look you studied.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
         en+=card("STEP 04 &middot; CHOOSE AND EDIT","Select Your Best Three, Then Edit",
@@ -513,7 +622,7 @@ def build():
             ]))
         en+=next_up("UP NEXT &middot; STEP 05 - Presentation &amp; Reflection","Finish your slideshow, present it to the class, and answer the reflection on the closing slide.")
 
-        es=banner(f"Proyecto {PROJNUM} &bull; Paso 04","Selecciona y Edita",
+        es=banner(f"{PROJ_LABEL_ES} &bull;Paso 04","Selecciona y Edita",
             "Elige tus tres im&aacute;genes m&aacute;s fuertes y ed&iacute;talas para igualar el estilo que estudiaste.",
             "#top","Back to English", HICON_DESIGN)
         es+=card("PASO 04 &middot; ELIGE Y EDITA","Selecciona Tus Mejores Tres y Luego Edita",
@@ -548,13 +657,11 @@ def build():
             ]))
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 05 - Presentaci&oacute;n y Reflexi&oacute;n","Termina tu presentaci&oacute;n, pres&eacute;ntala a la clase y responde la reflexi&oacute;n en la diapositiva final.")
 
-        stepnav=f'<a href="{S3}" class="silva-step-btn">&#8592; Step 03</a> <a href="{S5}" class="silva-step-btn">Step 05 &#8594;</a>'
-        bottom=f'<div class="silva-bottom-nav"><a href="{S3}" class="silva-bottom-btn">&#8592; Step 03</a><a href="{S5}" class="silva-bottom-btn">Step 05 &#8594;</a></div>'
-        return wrap_page(f"Step 4: Cull and Edit | Master Photographer | {CL_EN} | PVHS", nav("Step 04",dots_for(3),stepnav), top_wrap(en,es), bottom)
+        return wrap_page(f"Step 4: Cull and Edit | Master Photographer | {CL_EN} | PVHS", nav("Step 04",dots_for(3),step_topnav(3)), top_wrap(en,es), step_bottom(3))
 
     # ================= STEP 05: Presentation & Reflection =================
     def step05():
-        en=banner(f"Project {PROJNUM} &bull; Step 05","Presentation &amp; Reflection",
+        en=banner(f"{PROJ_LABEL} &bull;Step 05","Presentation &amp; Reflection",
             "Finish your slideshow, present it to the class, and answer the reflection on the closing slide.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
         en+=card("STEP 05 &middot; FINISH AND PRESENT","Put Master and Student Work Side by Side",
@@ -590,7 +697,7 @@ def build():
             ]))
         en+=next_up("YOU DID IT &middot; PROJECT COMPLETE","You studied a master, made the style your own, and presented it. That is how real photographers grow.")
 
-        es=banner(f"Proyecto {PROJNUM} &bull; Paso 05","Presentaci&oacute;n y Reflexi&oacute;n",
+        es=banner(f"{PROJ_LABEL_ES} &bull;Paso 05","Presentaci&oacute;n y Reflexi&oacute;n",
             "Termina tu presentaci&oacute;n, pres&eacute;ntala a la clase y responde la reflexi&oacute;n en la diapositiva final.",
             "#top","Back to English", HICON_REFLECT)
         es+=card("PASO 05 &middot; TERMINA Y PRESENTA","Pon el Trabajo del Maestro y el Tuyo Lado a Lado",
@@ -626,19 +733,22 @@ def build():
             ]))
         es+=next_up("LO LOGRASTE &middot; PROYECTO COMPLETO","Estudiaste a un maestro, hiciste tuyo el estilo y lo presentaste. As&iacute; crecen los fot&oacute;grafos de verdad.")
 
-        stepnav=f'<a href="{S4}" class="silva-step-btn">&#8592; Step 04</a>'
-        bottom=f'<div class="silva-bottom-nav"><a href="{S4}" class="silva-bottom-btn">&#8592; Step 04</a><span></span></div>'
-        return wrap_page(f"Step 5: Presentation and Reflection | Master Photographer | {CL_EN} | PVHS", nav("Step 05",dots_for(4),stepnav), top_wrap(en,es), bottom)
+        return wrap_page(f"Step 5: Presentation and Reflection | Master Photographer | {CL_EN} | PVHS", nav("Step 05",dots_for(4),step_topnav(4)), top_wrap(en,es), step_bottom(4))
 
-    for fname,gen in [(OVER,overview),(S2,step02),(S3,step03),(S4,step04),(S5,step05)]:
+    outdir = os.path.join(ROOT,"curriculum/shared") if cur else os.path.join(ROOT,"share/master-photographer")
+    os.makedirs(outdir, exist_ok=True)
+    for fname,gen in zip(FILES,[overview,step02,step03,step04,step05]):
         html=ent(gen())
+        assert "—" not in html and "&mdash;" not in html, "em dash in "+fname
+        assert "–" not in html and "&ndash;" not in html, "en dash in "+fname
         ban_check(html, fname)
-        open(os.path.join(ROOT,"curriculum/shared",fname),"w",encoding="utf-8").write(html)
-        print("wrote", fname, len(html), "bytes")
+        open(os.path.join(outdir,fname),"w",encoding="utf-8").write(html)
+        print(f"wrote {mode}", fname, len(html), "bytes")
 
 # Purple note helper (for callouts inside a purple resources_card).
 def pnote_mp(t):
     return (f'<div style="background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.30);border-left:4px solid #8b5cf6;padding:11px 14px;margin:8px 0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
 
 if __name__=="__main__":
-    build()
+    build("cur")   # in-curriculum module (catalog breadcrumb + site nav via silva-nav.js)
+    build("std")   # standalone public share copy at share/master-photographer/ (no catalog, no site nav)
