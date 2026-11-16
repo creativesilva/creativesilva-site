@@ -18,7 +18,7 @@ HERO=f"{SITE}/assets/images/mystery-item/mystery-item-hero-v1.jpg"
 # never a placeholder box. Flip a flag and drop the file in when it is ready.
 HAVE_HERO=True
 HAVE_S2_FLOAT=True; HAVE_S3_FLOAT=False; HAVE_S4_FLOAT=False
-HAVE_DOWNLOADS=False
+HAVE_DOWNLOADS=True
 
 COURSES=[
   {"prefix":"photo1","label":"Photography 1A","mod":"13",
@@ -26,8 +26,8 @@ COURSES=[
    "reflect_es":f"{SITE}/assets/course-documents/Mystery-Item-Reflection-ES.docx",
    "zip":f"{SITE}/assets/templates/mystery-item/Mystery-Item-Project-Folder.zip"},
   {"prefix":"photo2","label":"Photography 2A","mod":"13",
-   "reflect_en":f"{SITE}/assets/course-documents/Mystery-Item-Photo2-Reflection-EN.docx",
-   "reflect_es":f"{SITE}/assets/course-documents/Mystery-Item-Photo2-Reflection-ES.docx",
+   "reflect_en":f"{SITE}/assets/course-documents/Mystery-Item-Reflection-EN.docx",
+   "reflect_es":f"{SITE}/assets/course-documents/Mystery-Item-Reflection-ES.docx",
    "zip":f"{SITE}/assets/templates/mystery-item/Mystery-Item-Project-Folder.zip"},
 ]
 
@@ -76,6 +76,27 @@ APPROACHES_ES=[
   ("Tu propia idea","cualquier enfoque pensado y a prop&oacute;sito que puedas explicar."),
 ]
 
+def mystery_camera_settings(es):
+    # Red camera-settings section for the Mystery Item product session: the LOCKED capture_panel graphic
+    # with the STARTING-POINT values (50mm lens in the lead, f/2.8 / 1-125 / ISO 800 / RAW in the panel).
+    # Custom lead/note (not the locked photo-walk "only change one setting" text): these are a start,
+    # students adjust for mood + lighting. change_field="iso" tags ISO as the quick balance control.
+    red="#f90101"
+    if es:
+        title="Ajustes de C&aacute;mara"
+        lead=("Trabaja en modo Manual (M). Aqu&iacute; tienes un buen <strong>punto de partida</strong> para tu objeto misterioso: un <strong>lente de 50mm</strong> en <strong>f/2.8</strong>, obturador <strong>1/125</strong> e <strong>ISO 800</strong>, capturando en RAW.")
+        note_t=("Esto es un punto de partida, no una regla. Cambia tus ajustes seg&uacute;n el <strong>ambiente</strong> que quieras y seg&uacute;n tu <strong>luz</strong>: la luz del sal&oacute;n, una ventana, y cualquier luz LED o reflector que agregues. Observa tu expos&iacute;metro y ajusta tu ISO (y lo dem&aacute;s) hasta que tu foto se vea bien.")
+    else:
+        title="Camera Settings"
+        lead=("Work in Manual mode (M). Here is a good <strong>starting point</strong> for your mystery item: a <strong>50mm lens</strong> at <strong>f/2.8</strong>, shutter <strong>1/125</strong>, and <strong>ISO 800</strong>, captured in RAW.")
+        note_t=("This is a starting point, not a rule. Change your settings for the <strong>mood</strong> you want and for your <strong>light</strong>: the room light, a window, and any LED light or reflector you add. Watch your light meter and adjust your ISO (and the rest) until your photo looks right.")
+    lead_html=f'<div style="margin-bottom:14px;line-height:1.7;"><span style="font-size:14pt;color:rgba(255,255,255,0.88);">{lead}</span></div>'
+    note_box=(f'<div style="background:rgba(249,1,1,0.10);border:1px solid rgba(249,1,1,0.30);border-left:4px solid {red};padding:11px 14px;margin:0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.55;">{note_t}</div>')
+    return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
+      + section_header(CAMSET_ICON, title, "#f90101", "#ff8f8f")
+      + f'<div class="silva-cfloat" style="float:right;width:50%;min-width:400px;margin:2px 0 16px 30px;">{capture_panel("RAW", "1/125", "f/2.8", "800", "iso")}</div>'
+      + lead_html + note_box + '</div>')
+
 def build_course(C):
     OVER=f"{C['prefix']}-mystery-item-overview.html"
     S2=f"{C['prefix']}-mystery-item-step02-capture-contact.html"
@@ -111,8 +132,8 @@ def build_course(C):
 
     def downloads_block(es):
         heading="Descarga Tus Archivos" if es else "Download Your Files"
-        lead=("Descarga la carpeta del proyecto del M&oacute;dulo Mystery Item. Trae el documento de reflexi&oacute;n en Word que llenar&aacute;s al final."
-              if es else "Download the Mystery Item project folder. It holds the Word reflection document you will fill out at the end.")
+        lead=("Descarga la carpeta del proyecto Mystery Item. Adentro tienes una carpeta <strong>Inspo Images</strong> para tu inspiraci&oacute;n, una carpeta <strong>RAW Images</strong> para tus fotos, y el documento de <strong>reflexi&oacute;n</strong> que llenas al final."
+              if es else "Download the Mystery Item project folder. Inside you have an <strong>Inspo Images</strong> folder for your inspiration, a <strong>RAW Images</strong> folder for your photos, and the <strong>reflection</strong> document you fill out at the end.")
         ziplabel="Carpeta del Proyecto Mystery Item (ZIP)" if es else "Mystery Item Project Folder (ZIP)"
         reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
         ref=C['reflect_es'] if es else C['reflect_en']
@@ -193,10 +214,11 @@ def build_course(C):
             float2_en
             + para("Match your <strong>camera kit number</strong> to the <strong>brown paper bag</strong> with the same number. Only use the item from your matching bag. Open it with your partner and see your mystery item for the first time.")
             + para("Talk together: what kind of photo fits this item? Look back at the approaches on Step 01, then pick one. You can ask Mr. Silva for an <strong>LED light or a reflector</strong> if you want to try creative lighting.")
+            + para("Before you capture, get inspired: look up a few photos of products or objects in the style you picked. Save <strong>2 or 3</strong> into the <strong>Inspo Images</strong> folder in your project folder, and use them as a guide for your angles, your light, and your background.")
             + note("Both partners take photos. You plan together, but each of you ends up with your own set of images to edit."))
         en+=deliverables_box(False,
             [("1 contact sheet:","a contact sheet of your raw images, turned in as a high-resolution JPG. Each partner turns in their own, even though you worked together.")])
-        en+=capture_note("raw","Work in Manual mode (M) with a balanced exposure: watch your light meter and keep it near the middle. Capture in {fmt} so you keep all the camera&rsquo;s data and have the most room to edit.", False)
+        en+=mystery_camera_settings(False)
         en+=card("PHOTOGRAPH YOUR ITEM / WORK THE ANGLES","Take Lots of Photos, On Purpose",
             para("Photograph your item today. You can work in the classroom or just outside. Take <strong>many photos</strong> and try different ideas, so you have strong options to choose from later.")
             + steps([
@@ -231,10 +253,11 @@ def build_course(C):
             float2_es
             + para("Haz coincidir tu <strong>n&uacute;mero de kit de c&aacute;mara</strong> con la <strong>bolsa de papel caf&eacute;</strong> del mismo n&uacute;mero. Usa solo el objeto de tu bolsa. &Aacute;brela con tu compa&ntilde;ero y ve tu objeto misterioso por primera vez.")
             + para("Hablen juntos: &iquest;qu&eacute; tipo de foto va con este objeto? Mira los enfoques del Paso 01 y luego elige uno. Puedes pedirle a Mr. Silva una <strong>luz LED o un reflector</strong> si quieres probar iluminaci&oacute;n creativa.")
+            + para("Antes de capturar, b&uacute;scate ideas: busca unas fotos de productos u objetos en el estilo que elegiste. Guarda <strong>2 o 3</strong> en la carpeta <strong>Inspo Images</strong> de tu carpeta del proyecto, y &uacute;salas como gu&iacute;a para tus &aacute;ngulos, tu luz y tu fondo.")
             + note("Los dos compa&ntilde;eros toman fotos. Planean juntos, pero cada uno termina con su propio grupo de im&aacute;genes para editar."))
         es+=deliverables_box(True,
             [("1 hoja de contactos:","una hoja de contactos de tus im&aacute;genes RAW, entregada como un JPG de alta resoluci&oacute;n. Cada compa&ntilde;ero entrega la suya, aunque trabajaron juntos.")])
-        es+=capture_note("raw","Trabaja en modo Manual (M) con una exposici&oacute;n equilibrada: observa tu expos&iacute;metro y mant&eacute;nlo cerca del centro. Captura en {fmt} para guardar todos los datos de la c&aacute;mara y tener el mayor espacio para editar.", True)
+        es+=mystery_camera_settings(True)
         es+=card("FOTOGRAF&Iacute;A TU OBJETO / TRABAJA LOS &Aacute;NGULOS","Toma Muchas Fotos, a Prop&oacute;sito",
             para("Fotograf&iacute;a tu objeto hoy. Puedes trabajar en el sal&oacute;n o justo afuera. Toma <strong>muchas fotos</strong> y prueba distintas ideas, para tener buenas opciones despu&eacute;s.")
             + steps([

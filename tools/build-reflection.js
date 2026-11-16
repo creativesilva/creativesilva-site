@@ -573,6 +573,26 @@ const DOCS = [
     '¿Qué notaste en el fondo y en la profundidad de campo al abrir de f/22 a f/1.8?',
     '¿Qué número f te dio el estilo que más te gustó, y por qué?',
   ]},
+  // Mystery Item (Photography 1A + 2A): 2-student group, one shared camera, product-style photo of a
+  // surprise object. One shared reflection for both courses (neutral 'Photography' subtitle).
+  { ...EN, outfile: 'Mystery-Item-Reflection-EN.docx', title: 'Mystery Item: Reflection', subtitle: PVHS_EN('Photography'),
+    instructions: 'Write your own reflection in full sentences. You worked with a partner, but this is about your own photos and your own choices.', questions: [
+      'Your Idea: What approach did you choose for your mystery item, and why did it fit the object?',
+      'Your Process: How did you photograph your item? Talk about your angles, your light, and your Manual settings (your f-stop, shutter, and ISO).',
+      'Sharing the Camera: You shared one camera with your partner. How did you take turns and keep your own photos separate from your partner’s?',
+      'What Worked: What are you most proud of in your final photo, and why does it work?',
+      'What Was Hard: What was the hardest part of working with a surprise object, and how did you handle it?',
+      'Like a Pro: How is what you did the same as what a real product photographer does on the job?',
+    ] },
+  { ...ES, outfile: 'Mystery-Item-Reflection-ES.docx', title: 'Objeto Misterioso: Reflexión', subtitle: PVHS_ES('Fotografía'),
+    instructions: 'Escribe tu propia reflexión en oraciones completas. Trabajaste con un compañero, pero esto es sobre tus propias fotos y tus propias decisiones.', questions: [
+      'Tu Idea: ¿Qué enfoque elegiste para tu objeto misterioso y por qué le quedó bien al objeto?',
+      'Tu Proceso: ¿Cómo fotografiaste tu objeto? Habla de tus ángulos, tu luz y tus ajustes en Manual (tu número f, obturador e ISO).',
+      'Compartir la Cámara: Compartiste una cámara con tu compañero. ¿Cómo tomaron turnos y mantuviste tus fotos separadas de las de tu compañero?',
+      'Qué Funcionó: ¿De qué estás más orgulloso en tu foto final y por qué funciona?',
+      'Qué Fue Difícil: ¿Cuál fue la parte más difícil de trabajar con un objeto sorpresa y cómo la resolviste?',
+      'Como un Profesional: ¿En qué se parece lo que hiciste a lo que hace un fotógrafo de producto en su trabajo?',
+    ] },
 ];
 
 (async () => { for (const d of DOCS) await buildDoc(d); })();
