@@ -1136,6 +1136,21 @@
   .silva-confirm-ov{position:fixed;inset:0;background:rgba(2,12,12,.74);backdrop-filter:blur(9px) saturate(1.1);-webkit-backdrop-filter:blur(9px) saturate(1.1);display:flex;align-items:center;justify-content:center;padding:20px;z-index:400;}
   .silva-confirm-panel{background:linear-gradient(135deg,rgba(0,184,184,.10),rgba(4,20,19,.98));border:1px solid var(--line);border-top:3px solid var(--teal);width:100%;max-width:420px;box-shadow:0 24px 60px rgba(0,0,0,.75);padding:22px 22px 18px;}
   .silva-confirm-msg{color:var(--text);font-size:1rem;line-height:1.5;margin-bottom:18px;}
+  /* Itemized date-change review popup (extend/change dates): per-item free/swap list + Approve */
+  .edrev-panel{text-align:left;max-width:384px;}
+  .edrev-h{font-weight:700;font-size:1.02rem;color:#fff;margin-bottom:5px;}
+  .edrev-dates{font-size:.82rem;color:var(--faint);margin-bottom:13px;}
+  .edrev-list{display:flex;flex-direction:column;gap:7px;margin-bottom:12px;}
+  .edrev-row{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:var(--g-r-sm);border:1px solid var(--g-edge-soft);background:rgba(255,255,255,.04);}
+  .edrev-row.ok{border-color:rgba(63,168,99,.34);}
+  .edrev-row.sw{border-color:rgba(245,179,1,.42);background:rgba(245,179,1,.09);}
+  .edrev-ic{font-size:1rem;flex:0 0 auto;line-height:1;}
+  .edrev-row.ok .edrev-ic{color:var(--ok);}
+  .edrev-row.sw .edrev-ic{color:var(--gold);}
+  .edrev-lab{flex:1 1 auto;color:#fff;font-size:.9rem;font-weight:600;}
+  .edrev-to{flex:0 0 auto;font-size:.82rem;color:var(--faint);}
+  .edrev-row.sw .edrev-to{color:#ffd98a;font-weight:700;}
+  .edrev-note{font-size:.74rem;color:var(--faint);margin:-3px 0 13px;}
   .silva-confirm-acts{display:flex;gap:10px;justify-content:flex-end;}
   .silva-confirm-btn{font-family:var(--font);font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:11px 18px;cursor:pointer;border:1px solid var(--line);border-radius:var(--g-r-pill);}
   .silva-confirm-btn.cancel{background:rgba(0,0,0,.3);color:var(--muted);}
@@ -5048,6 +5063,7 @@
     document.getElementById('ed-sid').value=c.student_id||'';
     var w=document.getElementById('ed-who'); w.className='who-line'; w.textContent=c.student_name?('Currently: '+c.student_name):'';
     document.getElementById('ed-out').value=c.out||''; document.getElementById('ed-due').value=c.due||'';
+    edOrigOut=c.out||''; edOrigDue=c.due||'';   // baseline for the date-change review popup + its Cancel-revert
     mkDatePicker(document.getElementById('ed-out')); mkDatePicker(document.getElementById('ed-due'));
     document.getElementById('ed-out').onchange=edDateChange; document.getElementById('ed-due').onchange=edDateChange;
     edSelCam=c.camera||''; edCamDD={value:function(){ return edSelCam; }};   // camera now chosen via the equipment picker wheel (edit modal)
@@ -5285,7 +5301,7 @@
   // ===== Conflict resolution (Chris 2026-11-06): when an extend/edit clashes, try to auto-resolve instead
   //       of just blocking: bump a FUTURE (not-yet-picked-up) holder to a free same-model/type unit, or drop
   //       an attachable item and keep the rest. One confirm applies the fix AND the edit. Never overbooks. =====
-  var edPlan=null;
+  var edPlan=null, edReviewT=null, edOrigOut='', edOrigDue='';
   function edFreeAltFor(hit){                                   // a free same-model camera / same-type unit for THIS holder's own dates
     var ho=hit.out||'', hd=hit.due||ho, hgid=hit.group||hit.id;
     if(hit.kind==='equipment'){ var t=(gearUnit(hit.item)||{}).type;
@@ -5383,8 +5399,84 @@
       .catch(function(e){ var msg=document.getElementById('ed-msg'); if(msg){ msg.className='mmsg err show'; msg.textContent=(e&&e.message)||'Could not save. Try again.'; } });
   }
   function saveEdit(){ edCommit(true); }
-  // A date change checks for a clash; if clean it applies on the spot, if resolvable the banner's fix button applies it.
-  function edDateChange(){ edCheckConflicts(); if(!edConflictPlan().conflicts.length) edCommit(false); }
+  // ===== Itemized date-change review (Chris 2026-11-16): changing/extending a NOT-yet-picked-up reservation
+  //       opens a popup listing each item's status for the new dates and auto-suggesting a swap of THIS
+  //       reservation's clashing unit to the next free one (the other student is never touched). One Approve
+  //       applies the dates + swaps. If any unit has NO free alternative, it falls through to the existing
+  //       move-the-other-holder / drop banner, so that fallback is preserved. =====
+  function edSelfAltFor(u, out, due, gid, exclude){   // next free same-model camera / same-type unit for THIS reservation's new dates
+    exclude=exclude||{};
+    if(u.kind==='equipment'){ var t=(gearUnit(u.unit)||{}).type;
+      var cands=gearPoolIds().filter(function(id){ var g=gearUnit(id); return g&&g.type===t&&!exclude[id]&&!assetOf(id).oos&&!spanConflicts(id,'equipment',out,due,gid).length; });
+      cands.sort(function(a,b){ return (parseInt(eqNum(a),10)||0)-(parseInt(eqNum(b),10)||0); }); return cands[0]||null; }
+    var m=camModel(u.unit);
+    var cc=viewCams().filter(function(cm){ return camModel(cm)===m&&!exclude[cm]&&!isOOS(cm)&&!spanConflicts(cm,'camera',out,due,gid).length; });
+    cc.sort(function(a,b){ return (parseInt(eqNum(a),10)||0)-(parseInt(eqNum(b),10)||0); }); return cc[0]||null;
+  }
+  function edReview(out, due){
+    var c=findRec(edId); if(!c) return {resolvable:false, items:[]};
+    var gid=c.group||c.id, units=[], onUnits={};
+    if(c.kind==='equipment'){ units.push({unit:c.item, kind:'equipment'}); onUnits[c.item]=1; }
+    else { if(edSelCam){ units.push({unit:edSelCam, kind:'camera'}); onUnits[edSelCam]=1; }
+      if(edGearState) Object.keys(edGearState).forEach(function(id){ if(edGearState[id]&&edGearState[id].on){ units.push({unit:id, kind:'equipment'}); onUnits[id]=1; } }); }
+    var items=[], resolvable=true, used={};
+    units.forEach(function(u){
+      var label=(u.kind==='equipment'?gearLabel(u.unit):u.unit);
+      if(!spanConflicts(u.unit,u.kind,out,due,gid).length){ items.push({unit:u.unit, kind:u.kind, label:label, status:'free'}); return; }
+      var exclude={}; Object.keys(onUnits).forEach(function(k){ exclude[k]=1; }); Object.keys(used).forEach(function(k){ exclude[k]=1; });
+      var alt=edSelfAltFor(u, out, due, gid, exclude);
+      if(alt){ used[alt]=1; items.push({unit:u.unit, kind:u.kind, label:label, status:'swap', to:alt, toLabel:(u.kind==='equipment'?gearLabel(alt):alt)}); }
+      else { items.push({unit:u.unit, kind:u.kind, label:label, status:'block'}); resolvable=false; }
+    });
+    return {resolvable:resolvable, items:items};
+  }
+  function edRevertDates(){ var c=findRec(edId); if(!c) return;
+    document.getElementById('ed-out').value=edOrigOut||c.out||''; document.getElementById('ed-due').value=edOrigDue||c.due||''; edCheckConflicts(); }
+  function edApplyReview(out, due, r){
+    r.items.forEach(function(it){ if(it.status==='swap'){
+      if(it.kind==='camera'){ edSelCam=it.to; }
+      else if(edGearState){ if(edGearState[it.unit]) edGearState[it.unit].on=false; edGearState[it.to]={on:true}; }
+    }});
+    document.getElementById('ed-out').value=out; document.getElementById('ed-due').value=due;
+    edCommit(false);   // rebuilds the payload from the now-free units + dates; saves cleanly and refreshes the card in place
+  }
+  function showEditReview(out, due, r){
+    var anySwap=r.items.some(function(it){ return it.status==='swap'; });
+    var ov=document.createElement('div'); ov.className='silva-confirm-ov';
+    var panel=document.createElement('div'); panel.className='silva-confirm-panel edrev-panel'; panel.setAttribute('role','alertdialog'); panel.setAttribute('aria-modal','true');
+    var rows=r.items.map(function(it){
+      if(it.status==='swap') return '<div class="edrev-row sw"><span class="edrev-ic">&#8646;</span><span class="edrev-lab">'+esc(it.label)+'</span><span class="edrev-to">&rarr; '+esc(it.toLabel)+'</span></div>';
+      return '<div class="edrev-row ok"><span class="edrev-ic">&#10003;</span><span class="edrev-lab">'+esc(it.label)+'</span><span class="edrev-to">free</span></div>';
+    }).join('');
+    panel.innerHTML='<div class="edrev-h">'+(anySwap?'Change these to extend?':'Extend the dates?')+'</div>'+
+      '<div class="edrev-dates">'+esc(fmt(out))+' &rarr; <b>'+esc(fmt(due))+'</b></div>'+
+      '<div class="edrev-list">'+rows+'</div>'+
+      (anySwap?'<div class="edrev-note">The other reservations stay exactly as they are.</div>':'')+
+      '<div class="silva-confirm-acts"><button type="button" class="silva-confirm-btn cancel" id="edrev-x">Cancel</button><button type="button" class="silva-confirm-btn ok" id="edrev-go">'+(anySwap?'Approve':'Apply')+'</button></div>';
+    ov.appendChild(panel); document.body.appendChild(ov);
+    function shut(){ try{ document.body.removeChild(ov); }catch(e){} document.removeEventListener('keydown',key); }
+    function key(e){ if(e.key==='Escape'){ shut(); edRevertDates(); } else if(e.key==='Enter'){ shut(); edApplyReview(out,due,r); } }
+    ov.addEventListener('click',function(e){ if(e.target===ov){ shut(); edRevertDates(); } });
+    document.getElementById('edrev-x').onclick=function(){ shut(); edRevertDates(); };
+    document.getElementById('edrev-go').onclick=function(){ shut(); edApplyReview(out,due,r); };
+    document.addEventListener('keydown',key); setTimeout(function(){ var g=document.getElementById('edrev-go'); if(g) g.focus(); },30);
+  }
+  // A date change on a NOT-picked-up reservation opens the review popup (debounced so out+due coalesce into one);
+  // a picked-up or invalid-date change keeps the existing inline banner + auto-apply behavior.
+  function edDateChange(){
+    var c=findRec(edId), out=document.getElementById('ed-out').value, due=document.getElementById('ed-due').value;
+    var pickedUp=c?resvItems(c).some(function(x){ return statusOf(x)==='out'; }):false;
+    if(!c || pickedUp || !out || !due || due<out){ edCheckConflicts(); if(c && !pickedUp && out && due && due>=out && !edConflictPlan().conflicts.length) edCommit(false); return; }
+    clearTimeout(edReviewT); edReviewT=setTimeout(function(){
+      if(!document.getElementById('editmodal').classList.contains('open')) return;
+      var o=document.getElementById('ed-out').value, d=document.getElementById('ed-due').value;
+      if(!o||!d||d<o){ edCheckConflicts(); return; }
+      if(o===(edOrigOut||'') && d===(edOrigDue||'')){ edCheckConflicts(); return; }   // no real change yet
+      var r=edReview(o,d);
+      if(!r.resolvable){ edCheckConflicts(); return; }   // a unit has no free alternative: use the existing move-other / drop banner
+      showEditReview(o, d, r);
+    }, 350);
+  }
   // Reconcile the toggled gear against what is on the checkout: add new, drop removed, and keep
   // still-attached gear pointing at the same student and dates as its camera.
   function applyGear(gear, pid, sid, out, due, status){
