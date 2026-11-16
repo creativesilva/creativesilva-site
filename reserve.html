@@ -9,8 +9,8 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=56" />
-<link rel="stylesheet" href="/css/store-glass.css?v=22" />
+<link rel="stylesheet" href="/css/store.css?v=55" />
+<link rel="stylesheet" href="/css/store-glass.css?v=16" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -290,6 +290,14 @@
   </div>
 </div>
 
+<!-- Reservation pass fallback: when the iPad share sheet is unavailable, show the pass to long-press -> Add to Photos -->
+<div class="sov" id="passOv" aria-hidden="true">
+  <div class="sheet rcpt" role="dialog" aria-modal="true">
+    <button type="button" class="sheet-x" data-close="passOv" aria-label="Close">&times;</button>
+    <div class="sheet-bd" id="passBody"></div>
+  </div>
+</div>
+
 <!-- Calendar-view equipment picker: category -> item -> Add other / Done -->
 <div class="sov" id="pickerOv" aria-hidden="true">
   <div class="sheet picker" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
@@ -421,6 +429,12 @@
     'Mr. Silva needs to approve this. You&#8217;ll get your gear once he says yes.':'El Sr. Silva debe aprobar esto. Recibirás tu equipo cuando él diga que sí.',
     'Your gear is reserved. The %s that need Mr. Silva&#8217;s OK are waiting for him.':'Tu equipo está reservado. El/los %s que necesitan el visto bueno del Sr. Silva lo están esperando.',
     'Your reservation is on its way to %s.':'Tu reservación va en camino a %s.','item':'artículo','items':'artículos',
+    // --- reservation pass (save to Photos) ---
+    'RESERVATION CONFIRMED':'RESERVACIÓN CONFIRMADA','REQUEST SENT':'SOLICITUD ENVIADA',
+    'Show this to your teacher at pickup':'Muéstrale esto a tu maestro(a) al recoger',
+    'Save to Photos':'Guardar en Fotos','Your reservation pass':'Tu pase de reservación','Save image':'Guardar imagen',
+    'Press and hold the pass, then tap Add to Photos.':'Mantén presionado el pase y toca Agregar a Fotos.',
+    'Equipment Reservation':'Reservación de equipo','Could not make the pass. Try again.':'No se pudo crear el pase. Intenta de nuevo.',
     // --- picker ---
     'Equipment details':'Detalles del equipo','Pick a category, then add what you need.':'Elige una categoría, luego agrega lo que necesitas.',
     'All categories':'Todas las categorías','Add other equipment':'Agregar otro equipo','Back to %s':'Volver a %s','list':'lista',
@@ -1383,6 +1397,119 @@
       updateBag(); refreshAccount(); close('bagOv'); showReceipt(summary); loadCal(); rerender();
     }).catch(function(){ setBagMsg(t('Could not reach the server. Try again.'), true); if(rv){ rv.disabled=false; rv.textContent=t(lbl); } });
   }
+  // ===== Reservation pass (save to Photos) =====
+  // Draws a branded, shareable "pass" to an off-screen canvas from an already-localized data object, so EN and
+  // ES both flow through unchanged. Pure vector + text (no external images), so the canvas is never tainted and
+  // toDataURL works on every device. Students save it to their camera roll and show it to their teacher at pickup.
+  function drawReservationPass(d){
+    var S=2, W=760, PX=52;                       // 2x retina; logical width; side padding
+    var cvs=document.createElement('canvas'), ctx=cvs.getContext('2d'), CT=W-PX*2;
+    function F(px,wt){ return (wt||'400')+' '+px+'px "Helvetica Neue",Helvetica,Arial,sans-serif'; }
+    function wrap(text,font,maxw){ ctx.font=font; var ws=String(text).split(' '),lines=[],cur='';
+      for(var i=0;i<ws.length;i++){ var tryl=cur?cur+' '+ws[i]:ws[i]; if(ctx.measureText(tryl).width>maxw && cur){ lines.push(cur); cur=ws[i]; } else cur=tryl; }
+      if(cur) lines.push(cur); return lines; }
+    // ---- measure pass: compute height from wrapped content ----
+    var y=0; y+=58; y+=30; y+=14;
+    var nameLines=wrap(d.name, F(46,'800'), CT); y+=nameLines.length*54;
+    if(d.period){ y+=10; y+=34; }
+    if(d.meta){ y+=6; y+=28; }
+    y+=30; var perf1=y; y+=42;
+    var rows=[];
+    function addRow(k,vLines){ rows.push({k:k,v:vLines}); }
+    (d.groups||[]).forEach(function(gp){
+      var itemLines=[]; (gp.items||[]).forEach(function(it){ wrap(it, F(29,'600'), CT-30).forEach(function(l,idx){ itemLines.push({t:l,first:idx===0}); }); });
+      if(itemLines.length) rows.push({k:gp.k, items:itemLines});
+    });
+    addRow(d.pickupK, wrap(d.pickupV, F(29,'600'), CT));
+    addRow(d.returnK, wrap(d.returnV, F(29,'600'), CT));
+    addRow(d.whereK, wrap(d.whereV, F(29,'600'), CT));
+    var ry=y; rows.forEach(function(r){ ry+=26; ry+=(r.items?r.items.length:r.v.length)*40; ry+=20; });
+    y=ry; y+=14; var perf2=y; y+=42; y+=d.footLead?60:0; y+=46; y+=40;
+    var H=Math.ceil(y);
+    // ---- draw ----
+    cvs.width=W*S; cvs.height=H*S; ctx.scale(S,S);
+    function rr(x,yy,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,yy); ctx.arcTo(x+w,yy,x+w,yy+h,r); ctx.arcTo(x+w,yy+h,x,yy+h,r); ctx.arcTo(x,yy+h,x,yy,r); ctx.arcTo(x,yy,x+w,yy,r); ctx.closePath(); }
+    var R=40;
+    var g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'#071024'); g.addColorStop(.42,'#081a33'); g.addColorStop(1,'#0a2a3e');
+    rr(0,0,W,H,R); ctx.fillStyle=g; ctx.fill();
+    var gl=ctx.createRadialGradient(W*0.16,H*0.02,0,W*0.16,H*0.02,W*0.7); gl.addColorStop(0,'rgba(63,240,224,.22)'); gl.addColorStop(.5,'rgba(0,184,184,.07)'); gl.addColorStop(1,'rgba(0,0,0,0)');
+    rr(0,0,W,H,R); ctx.save(); ctx.clip(); ctx.fillStyle=gl; ctx.fillRect(0,0,W,H*0.6);
+    var gv=ctx.createRadialGradient(W*0.9,H*0.98,0,W*0.9,H*0.98,W*0.8); gv.addColorStop(0,'rgba(124,108,230,.20)'); gv.addColorStop(.55,'rgba(96,84,230,.06)'); gv.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=gv; ctx.fillRect(0,H*0.4,W,H*0.6); ctx.restore();
+    rr(1,1,W-2,H-2,R-1); ctx.lineWidth=1.5; ctx.strokeStyle='rgba(150,235,245,.30)'; ctx.stroke();
+    ctx.textBaseline='alphabetic';
+    var cy=58;
+    (function(){ var tx=PX, s=d.eyebrow; ctx.font=F(20,'800'); ctx.fillStyle='#5ff0f0'; for(var i=0;i<s.length;i++){ ctx.fillText(s[i],tx,cy+22); tx+=ctx.measureText(s[i]).width+3; } })();
+    cy+=30+14;
+    ctx.fillStyle='#f3fbff'; ctx.font=F(46,'800');
+    nameLines.forEach(function(l){ cy+=46; ctx.fillText(l,PX,cy); cy+=8; }); cy-=8;
+    if(d.period){ cy+=10; cy+=34; ctx.fillStyle='#5ff0f0'; ctx.font=F(32,'800'); ctx.fillText(d.period,PX,cy); }
+    if(d.meta){ cy+=6; cy+=28; ctx.fillStyle='rgba(222,240,250,.82)'; ctx.font=F(25,'500'); ctx.fillText(d.meta,PX,cy); }
+    cy+=30;
+    function perforation(py){
+      ctx.save(); ctx.setLineDash([3,9]); ctx.lineWidth=2; ctx.strokeStyle='rgba(150,225,245,.34)';
+      ctx.beginPath(); ctx.moveTo(PX,py); ctx.lineTo(W-PX,py); ctx.stroke(); ctx.restore();
+      ctx.fillStyle='#061024';                    // edge notches read like a torn ticket
+      ctx.beginPath(); ctx.arc(0,py,16,-Math.PI/2,Math.PI/2); ctx.fill();
+      ctx.beginPath(); ctx.arc(W,py,16,Math.PI/2,Math.PI*1.5); ctx.fill();
+    }
+    perforation(perf1+21); cy=perf1+42;
+    rows.forEach(function(r){
+      cy+=26; ctx.font=F(18,'800'); ctx.fillStyle='rgba(205,226,240,.62)';
+      (function(){ var tx=PX, s=r.k.toUpperCase(); for(var i=0;i<s.length;i++){ ctx.fillText(s[i],tx,cy); tx+=ctx.measureText(s[i]).width+2; } })();
+      if(r.items){
+        r.items.forEach(function(ln){ cy+=40; if(ln.first){ ctx.fillStyle='#3ff0e0'; ctx.beginPath(); ctx.arc(PX+5,cy-9,5,0,Math.PI*2); ctx.fill(); }
+          ctx.fillStyle='#f3fbff'; ctx.font=F(29,'600'); ctx.fillText(ln.t,PX+30,cy); });
+      } else { ctx.fillStyle='#f3fbff'; ctx.font=F(29,'600'); r.v.forEach(function(l){ cy+=40; ctx.fillText(l,PX,cy); }); }
+      cy+=20;
+    });
+    cy+=14; perforation(perf2+21); cy=perf2+42;
+    ctx.textAlign='center';
+    if(d.footLead){ cy+=40; ctx.fillStyle='#5ff0f0'; ctx.font=F(26,'800'); ctx.fillText(d.footLead,W/2,cy); cy+=20; }
+    cy+=34; ctx.fillStyle='rgba(205,226,240,.6)'; ctx.font=F(21,'600'); ctx.fillText(d.code+'     '+d.stamp,W/2,cy);
+    ctx.textAlign='left';
+    return cvs;
+  }
+  function passCode(){ try{ return 'PV-'+(Date.now().toString(36).toUpperCase().slice(-4)); }catch(e){ return 'PV-0000'; } }
+  function passStamp(){ var n=new Date(), h=n.getHours(), m=n.getMinutes(), ap=h>=12?'PM':'AM', h12=h%12||12;
+    return MON[n.getMonth()]+' '+n.getDate()+', '+n.getFullYear()+'   '+h12+':'+('0'+m).slice(-2)+' '+ap; }
+  function buildPassData(s){
+    var hasReq=s.requested.length>0, hasRes=s.reserved.length>0, pureReq=hasReq && !hasRes;
+    var per=String(USER&&USER.period||'').replace(/\D/g,''); per=per?(t('Period')+' '+('0'+per).slice(-2)):'';
+    var crs=String(USER&&USER.course||''), room=USER?pickupRoom():'';
+    var meta=[crs, t('Student')+' #'+((USER&&USER.id)||'')].filter(Boolean).join(' · ');
+    function dstr(dt,win){ return DOW[dt.getDay()]+' '+MON[dt.getMonth()]+' '+dt.getDate()+' · '+t(win.label)+' ('+f12(win.s)+')'; }
+    var groups=[];
+    if(hasRes) groups.push({k:t('Reserved'), items:s.reserved});
+    if(hasReq) groups.push({k:t('Needs OK'), items:s.requested});
+    return { eyebrow: pureReq?t('REQUEST SENT'):t('RESERVATION CONFIRMED'),
+      name:(USER&&(USER.name||USER.label))||t('Student'), period:per, meta:meta, groups:groups,
+      pickupK:t('Pick up'), pickupV:dstr(s.checkout, s.pickup),
+      returnK:t('Return'), returnV:dstr(s.returnDay, s.returnTime),
+      whereK:t('Where'), whereV:t('Classroom pickup')+(room?(' · '+room):''),
+      footLead:t('Show this to your teacher at pickup'), code:passCode(), stamp:passStamp() };
+  }
+  function savePass(s){
+    var cvs; try{ cvs=drawReservationPass(buildPassData(s)); }catch(e){ try{console.error('pass draw',e);}catch(_){ } toast(t('Could not make the pass. Try again.')); return; }
+    var durl; try{ durl=cvs.toDataURL('image/png'); }catch(e){ toast(t('Could not make the pass. Try again.')); return; }
+    // Build the File synchronously (no async toBlob gap) so iOS keeps the tap gesture and lets us open the share sheet.
+    var file=null;
+    try{ var b=atob(durl.split(',')[1]), u8=new Uint8Array(b.length); for(var i=0;i<b.length;i++) u8[i]=b.charCodeAt(i); file=new File([u8],'reservation-pass.png',{type:'image/png'}); }catch(e){ file=null; }
+    if(file && navigator.canShare && navigator.canShare({files:[file]}) && navigator.share){
+      try{ navigator.share({files:[file], title:t('Equipment Reservation')}).catch(function(err){ if(err && err.name==='AbortError') return; passFallback(durl); }); }
+      catch(e){ passFallback(durl); }
+    } else { passFallback(durl); }
+  }
+  function passFallback(durl){
+    document.getElementById('passBody').innerHTML=
+      '<h2 class="rcpt-h" style="margin-top:4px">'+t('Your reservation pass')+'</h2>'+
+      '<img class="pass-img" alt="'+esc(t('Your reservation pass'))+'" src="'+durl+'">'+
+      '<p class="pass-hint">'+t('Press and hold the pass, then tap Add to Photos.')+'</p>'+
+      '<a class="btn block" href="'+durl+'" download="reservation-pass.png">'+t('Save image')+'</a>'+
+      '<button type="button" class="btn block ghost" id="passClose" style="margin-top:10px">'+t('Done')+'</button>';
+    var db=document.getElementById('passClose'); if(db) db.onclick=function(){ close('passOv'); };
+    open('passOv');
+  }
   function showReceipt(s){
     var teach=USER?(USER.teacher||TEACHER_NAME[USER.pool]||''):'', room=USER?pickupRoom():'';
     var hasReq=s.requested.length>0, hasRes=s.reserved.length>0, pureReq=hasReq && !hasRes;
@@ -1401,7 +1528,11 @@
         '<div class="rcpt-row"><span class="rcpt-k">'+t('Pick up')+'</span><span class="rcpt-v">'+DOW[s.checkout.getDay()]+' '+MON[s.checkout.getMonth()]+' '+s.checkout.getDate()+' &middot; '+esc(t(s.pickup.label))+' ('+f12(s.pickup.s)+')</span></div>'+
         '<div class="rcpt-row"><span class="rcpt-k">'+t('Return')+'</span><span class="rcpt-v">'+DOW[s.returnDay.getDay()]+' '+MON[s.returnDay.getMonth()]+' '+s.returnDay.getDate()+' &middot; '+esc(t(s.returnTime.label))+' ('+f12(s.returnTime.s)+')</span></div>'+
         '<div class="rcpt-row"><span class="rcpt-k">'+t('Where')+'</span><span class="rcpt-v">'+t('Classroom pickup')+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div></div>'+
-      '<button type="button" class="btn block" id="rcptDone">'+t('Done')+'</button>';
+      '<div class="rcpt-actions">'+
+        '<button type="button" class="btn block" id="rcptSave">'+t('Save to Photos')+'</button>'+
+        '<button type="button" class="btn block ghost" id="rcptDone">'+t('Done')+'</button>'+
+      '</div>';
+    document.getElementById('rcptSave').onclick=function(){ savePass(s); };
     document.getElementById('rcptDone').onclick=function(){ close('rcptOv'); renderPopular(); };
     open('rcptOv');
   }
@@ -1427,7 +1558,7 @@
   }
   document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ close(b.getAttribute('data-close')); }; });
   // Tapping the dimmed backdrop closes a sheet. Not the sign-in gate: signing in is required (Chris 2026-11-05).
-  ['holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv','pickerOv','acctOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
+  ['holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv','passOv','pickerOv','acctOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
   function toast(msg){ var t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2800); }
   function pulseDates(){ var d=document.querySelector('.datebar'); if(!d) return; d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash'); }
 
