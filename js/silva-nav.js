@@ -83,7 +83,8 @@
       { name: 'Spell Your Name Photo Walk', url: '/curriculum/shared/photo1-spell-your-name-overview.html' },
       { name: 'Spooky Portraits',           url: '/curriculum/shared/photo1-spooky-portraits-overview.html' },
       { name: 'Monochromatic Photography',  url: '/curriculum/shared/photo1-monochromatic-photography-overview.html' },
-      { name: 'The Important Person Project', url: '/curriculum/shared/photo1-important-person-overview.html' }
+      { name: 'The Important Person Project', url: '/curriculum/shared/photo1-important-person-overview.html' },
+      { name: 'Master Photographer',          url: '/curriculum/shared/photo1-master-photographer-overview.html' }
     ]},
     { course: 'Photography 2A', modules: [
       { name: 'Composition Photo Walk', url: '/curriculum/shared/photo2-composition-overview.html' },
@@ -323,6 +324,11 @@
      '/curriculum/shared/photo1-important-person-step03-mood-board.html',
      '/curriculum/shared/photo1-important-person-step04-storyboard.html',
      '/curriculum/shared/photo1-important-person-step05-capture-contact.html'],
+    ['/curriculum/shared/photo1-master-photographer-overview.html',
+     '/curriculum/shared/photo1-master-photographer-step02-meet-the-five.html',
+     '/curriculum/shared/photo1-master-photographer-step03-capture-contact.html',
+     '/curriculum/shared/photo1-master-photographer-step04-cull-edit.html',
+     '/curriculum/shared/photo1-master-photographer-step05-presentation-reflection.html'],
     ['/curriculum/photo2/photo2a-home.html',
      '/curriculum/photo2/photo2a-course-overview.html',
      '/curriculum/photo2/photo2a-syllabus.html'],
