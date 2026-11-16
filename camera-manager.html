@@ -2479,6 +2479,26 @@
     setTimeout(function(){ t.classList.add('show'); },10);
     setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ try{ document.body.removeChild(t); }catch(e){} },300); },3400);
   }
+  // Is any pop-out (reservation card, return checklist, camera window, confirm) open right now?
+  function anyModalOpen(){ return !!(document.querySelector('.modal.open') || document.querySelector('.silva-confirm-ov')); }
+  // ===== Crash net (Chris 2026-11-16): Garcia hit a blank "white page" on the iPad while checking a kit in.
+  // On an iOS home-screen webview an uncaught error (or a memory/render stall) could leave the page blank with
+  // no way back. This keeps the console alive: catch any uncaught error or rejected promise, keep what is on
+  // screen, show a plain toast, remember the message so a repeat is reportable, and quietly re-sync the board. =====
+  (function(){
+    var _last=0, _n=0;
+    function net(what){
+      try{ window.__lastConsoleError={ msg:String(what||'error').slice(0,300), at:new Date().toISOString() }; }catch(_){}
+      try{ console.error('[crash-net]', what); }catch(_){}
+      _n++; var now=Date.now(); if(now-_last<5000) return; _last=now;   // one toast per 5s, never a loop
+      // Teacher-only console: show a short error detail so a recurrence can be reported (and pinpointed) instead of a blank page.
+      var _d=String(what||'').replace(/\s+/g,' ').slice(0,90);
+      try{ if(typeof silvaToast==='function') silvaToast('That action hit a snag, but the board is still here. If it keeps happening, tell Mr. Silva'+(_d?(': '+_d):' what you tapped')+'.'); }catch(_){}
+      try{ if(typeof loadBoard==='function') loadBoard(); }catch(_){}   // best-effort self-heal (re-pull the data)
+    }
+    try{ window.addEventListener('error', function(e){ if(e&&e.target&&e.target.tagName&&/^(IMG|SCRIPT|LINK|IFRAME)$/.test(e.target.tagName)) return; net(e&&e.message); }); }catch(_){}
+    try{ window.addEventListener('unhandledrejection', function(e){ var r=e&&e.reason; net((r&&(r.message||r))||'promise rejection'); }); }catch(_){}
+  })();
   function statusOf(c){ return c.status||(c.returned?'returned':'out'); }
   // Approval is SHELVED by default (server sends approval_required=false): reservations auto-confirm
   // and the console shows Recent Reservations instead of an approval queue. Flip the env var to restore.
@@ -4194,7 +4214,14 @@
     // Flicker fix (Chris, 2026-09-29): the 7s poll used to replace #board on every tick, which
     // re-composited every backdrop-filter card over the fixed CS-logo background and read as a
     // periodic flicker. Only touch the DOM (and rebind) when the rendered board actually changed.
-    if(html!==_lastBoardSig){ _lastBoardSig=html; host.innerHTML=html; bindBoard(); }
+    // While a pop-out is open, DON'T swap the whole board underneath it: re-compositing the full glass board
+    // behind a modal is the heaviest moment on an iPad (the check-in crash context) and is invisible anyway.
+    // Defer it (force the next render) so the expensive DOM replace never lands mid-action, and wrap it so a
+    // bad render can never blank the page. (Chris 2026-11-16)
+    if(html!==_lastBoardSig){
+      if(anyModalOpen()){ _lastBoardSig=null; }                       // leave the board as-is; re-render on modal close / next poll
+      else { try{ _lastBoardSig=html; host.innerHTML=html; bindBoard(); }catch(e){ _lastBoardSig=null; try{ console.error('renderBoard swap', e); }catch(_){} } }
+    }
     updateSummary();
     updateDigests();
     try{ renderTodayBoard(); }catch(e){ console.warn('today board render error:', e); }   // never let it break the board
@@ -4416,7 +4443,7 @@
     if(t==='bluetooth') return ['Forgot at home','Missing battery','Damaged'];
     return ['Forgot at home','Missing part','Damaged'];
   }
-  function openReturnChecklist(id){
+  function openReturnChecklist(id){ try{
     var c=findRec(id); if(!c) return; retId=id;
     document.getElementById('retTitle').textContent='Return checklist · '+(c.camera||'Camera');
     var _retsub=document.querySelector('#retmodal .retsub');   // name WHO is returning it, right under the title (Chris 2026-11-09)
@@ -4468,14 +4495,14 @@
     } else { eq.innerHTML=''; }
     document.getElementById('retnote2').value='';
     document.getElementById('retmodal').classList.add('open');
-  }
+  }catch(e){ try{ console.error('openReturnChecklist', e); }catch(_){} silvaToast('Could not open the return checklist. Try again.'); } }
   function closeReturn(){ document.getElementById('retmodal').classList.remove('open'); retId=null; }
   (function(){
     var x=document.getElementById('retx'); if(x) x.onclick=closeReturn;
     var m=document.getElementById('retmodal'); if(m) m.addEventListener('click',function(e){ if(e.target===m) closeReturn(); });
     var rvx=document.getElementById('resvx'); if(rvx) rvx.onclick=closeResv;
     var rvm=document.getElementById('resvmodal'); if(rvm) rvm.addEventListener('click',function(e){ if(e.target===rvm) closeResv(); });
-    var g=document.getElementById('retgo'); if(g) g.onclick=function(){
+    var g=document.getElementById('retgo'); if(g) g.onclick=function(){ try{
       if(!retId) return; var id=retId, c=findRec(id), cam=c?c.camera:'';
       var missing=[]; (kitListFor(cam)||KIT_STD).forEach(function(k,i){ var el=document.getElementById('ret_'+i); if(el && !el.checked) missing.push(k); });
       var extra=document.getElementById('retnote2').value.trim();
@@ -4515,7 +4542,7 @@
         return camAPI('/api/camera/update',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:d.id,status:'out',pending:true,note:d.note||'Not returned with the kit'})});
       });
       if(eqCalls.length) Promise.all(eqCalls).then(function(){ return loadBoard(); }).then(function(){ if(resvId) renderResvModal(); }).catch(function(){ loadBoard(); });
-    };
+    }catch(e){ try{ console.error('confirm return', e); }catch(_){} try{ closeReturn(); }catch(_){} silvaToast('Could not finish the check-in. The board was refreshed, please try again.'); try{ loadBoard(); }catch(_){} } };
   })();
 
   // ===== Memory card wallet: 18 slots holding cards students left to offload later =====
