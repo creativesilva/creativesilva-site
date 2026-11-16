@@ -198,14 +198,26 @@ def project_downloads(es):
       + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">' + dl_link(PROJECT_ZIP, label, row=True) + '</div>'
       + note_orange(note_t) + '</div>')
 
+def _res_btn(url,label):
+    # Compact PURPLE resource button: the filled-pill look of the orange download button (dl_link),
+    # recolored purple (fill #8b5cf6, white bold text, lighter #c4b5fd top accent) so it reads as a
+    # real button, not a full-width bar. Lives in the 2-up grid below. box-sizing:border-box keeps
+    # the min-width honest; flex:0 1 = sits at half width and a lone odd item stays half width (never
+    # stretches back into a bar); min-width:240px drops it to one column on a phone.
+    return (f'<a href="{url}" target="_blank" rel="noopener" '
+      'style="flex:0 1 calc(50% - 6px);min-width:min(240px,100%);box-sizing:border-box;display:flex;align-items:center;'
+      'text-decoration:none;background:#8b5cf6;color:#ffffff;padding:12px 18px;border-top:2px solid #c4b5fd;'
+      f'font-size:11pt;letter-spacing:0.02em;line-height:1.35;"><strong>{label}</strong></a>')
+
 def reslist(es):
     lead=("Buenos lugares para ver fotos y leer sobre fot&oacute;grafos. Empieza con el sitio de tu maestro, luego explora los dem&aacute;s."
           if es else "Good places to see photos and read about photographers. Start with your master&rsquo;s own site, then explore the rest.")
     ph_head="Tu Fot&oacute;grafo Maestro" if es else "Your Master Photographer"
     gen_head="Sitios de Investigaci&oacute;n" if es else "Research Sites"
     def rows(pairs):
-        out='<div style="display:flex;flex-direction:column;gap:8px;margin:8px 0 4px;">'
-        for url,lab in pairs: out+=reslink(url,lab)
+        # 2-column grid (flex-wrap, two half-width cells per row) that reflows to one column on a phone.
+        out='<div style="display:flex;flex-wrap:wrap;align-items:stretch;gap:12px;margin:8px 0 4px;">'
+        for url,lab in pairs: out+=_res_btn(url,lab)
         return out+'</div>'
     return (para(lead)
       + f'<div style="font-size:10.5pt;font-weight:bold;letter-spacing:0.08em;text-transform:uppercase;color:#c4b5fd;margin:14px 0 2px;">{ph_head}</div>'
