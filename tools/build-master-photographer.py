@@ -122,6 +122,7 @@ GENERAL_SITES=[
 ]
 
 # ---------------- Student rubric (collapsed gold accordion on the Overview) ----------------
+WORKSHEET_GOLD=f"{SITE}/assets/Icons/assignment/worksheet-gold-v1.svg"   # rubric icon (Garcia share only)
 RUBRIC_EN=[
  ("Study &amp; Analysis","You clearly explain how your master photographer makes images, naming real techniques, not just &lsquo;I like it.&rsquo;"),
  ("Three Master Images","You choose three strong images and write a true technique note for each one."),
@@ -140,7 +141,7 @@ RUBRIC_ES=[
  ("Presentaci&oacute;n","Tu presentaci&oacute;n es limpia y f&aacute;cil de leer, y presentas con claridad y a tiempo."),
  ("Reflexi&oacute;n","Tu diapositiva final es honesta y reflexiva sobre lo que aprendiste."),
 ]
-def rubric_box(es):
+def rubric_box(es, share=False):
     rows=RUBRIC_ES if es else RUBRIC_EN
     heading="C&oacute;mo Te Van a Calificar" if es else "How You Will Be Graded"
     sub=("&Aacute;brelo para ver qu&eacute; hace un trabajo de nivel m&aacute;ximo en cada parte." if es
@@ -152,6 +153,19 @@ def rubric_box(es):
           f'<div style="font-size:10.5pt;font-weight:bold;letter-spacing:0.08em;text-transform:uppercase;color:#ffd166;margin-bottom:3px;">{name}</div>'
           f'<div style="font-size:12pt;color:rgba(255,255,255,0.90);line-height:1.5;"><strong style="color:#f5b301;">{fm}</strong> {desc}</div>'
           '</div>')
+    if share:
+        # Garcia public share only (Chris, 2026-11-17): a proper UP-NEXT-style GOLD title bar
+        # (section_header + the worksheet-gold icon) that is itself the accordion summary, so the
+        # bar expands to the rubric points. to_light() recolors it for the light share. Silva's
+        # Canvas rubric (below) is unchanged.
+        summary=('<summary style="list-style:none;cursor:pointer;">'
+          + section_header(WORKSHEET_GOLD, heading, "#f5b301", "#ffd166")
+          + f'<div style="font-size:11.5pt;color:rgba(255,255,255,0.72);line-height:1.5;margin:-4px 2px 0;">{sub}</div>'
+          + '</summary>')
+        return ('<details style="background:linear-gradient(180deg,rgba(245,179,1,0.12) 0%,rgba(245,179,1,0.03) 100%);border:1px solid rgba(245,179,1,0.35);border-left:6px solid #f5b301;padding:22px 26px 24px;overflow:hidden;margin-bottom:24px;">'
+          + summary
+          + f'<div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(245,179,1,0.22);">{items}</div>'
+          + '</details>')
     summary=(f'<summary style="list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;">'
       f'<img src="{DELIVER_ICON}" alt="" style="width:40px;height:40px;flex:0 0 auto;display:block;" />'
       f'<span style="display:block;"><span style="display:block;font-size:10.5pt;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;color:#ffd166;">{"R&Uacute;BRICA" if es else "RUBRIC"}</span>'
@@ -593,7 +607,7 @@ def build(mode, C):
         en+=card("WHY THIS MATTERS","See Like a Pro",
             para("Understanding <strong>how professional photographers make their images</strong> helps you make stronger choices in your own work. When you can name what makes a photo great, you can do it on purpose.")
             + note("You keep your three master images and your three photos together, so everyone can see where your ideas came from and how you made them your own."))
-        en+=rubric_box(False)
+        en+=rubric_box(False, share=not cur)          # Garcia share gets the gold title-bar + worksheet icon; Canvas keeps the plain rubric
         if cur: en+=standards_box(False, STANDARDS)   # CTE Standards: Canvas pages only; Garcia's public share drops it (Chris, 2026-11-17)
         en+=resources_card("Key Words",
             vocab_grid("On the Quiz",
@@ -621,7 +635,7 @@ def build(mode, C):
         es+=card("POR QU&Eacute; IMPORTA","Mira Como un Profesional",
             para("Entender <strong>c&oacute;mo los fot&oacute;grafos profesionales hacen sus im&aacute;genes</strong> te ayuda a tomar mejores decisiones en tu propio trabajo. Cuando puedes nombrar lo que hace grande a una foto, puedes hacerlo a prop&oacute;sito.")
             + note("Mantienes tus tres im&aacute;genes del maestro y tus tres fotos juntas, para que todos vean de d&oacute;nde vinieron tus ideas y c&oacute;mo las hiciste tuyas."))
-        es+=rubric_box(True)
+        es+=rubric_box(True, share=not cur)          # Garcia share gets the gold title-bar + worksheet icon; Canvas keeps the plain rubric
         if cur: es+=standards_box(True, STANDARDS)   # CTE Standards: Canvas pages only; Garcia's public share drops it (Chris, 2026-11-17)
         es+=resources_card("Palabras Clave",
             vocab_grid("En el Examen",
