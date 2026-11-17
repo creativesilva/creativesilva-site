@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+# RETIRED 2026-11-16. This generated the ORIGINAL deck template. Chris now maintains the decks by
+# hand in Google Drive (one per course, EN; he recolored MY WORK gray and added the PV logo), and
+# the Spanish decks + both course project folders are zipped into assets/templates/master-photographer/
+# by the Master Photographer workflow. The student deck ships only inside those project-folder ZIPs,
+# hosted on each course Overview. Do NOT re-run this to regenerate the student deck; it would overwrite
+# nothing the site uses. Kept for reference only. See the Master Photographer project memory.
 # Generic 16:9 student slide-deck TEMPLATE for the Master Photographer project (Photography 1).
 # A clean starting point students duplicate and customize. 8-slide spine:
 #   1 Cover -> 2,3,4 Master photographer images (technique studied)

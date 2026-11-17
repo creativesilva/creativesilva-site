@@ -101,6 +101,7 @@
       { name: 'Spooky Portraits',           url: '/curriculum/shared/photo2-spooky-portraits-overview.html' },
       { name: 'Monochromatic Photography',  url: '/curriculum/shared/photo2-monochromatic-photography-overview.html' },
       { name: 'The Important Person Project', url: '/curriculum/shared/photo2-important-person-overview.html' },
+      { name: 'Master Photographer',          url: '/curriculum/shared/photo2-master-photographer-overview.html' },
       { name: 'Mystery Item',                 url: '/curriculum/shared/photo2-mystery-item-overview.html' }
     ]}
   ];
@@ -393,6 +394,11 @@
      '/curriculum/shared/photo2-important-person-step03-mood-board.html',
      '/curriculum/shared/photo2-important-person-step04-storyboard.html',
      '/curriculum/shared/photo2-important-person-step05-capture-contact.html'],
+    ['/curriculum/shared/photo2-master-photographer-overview.html',
+     '/curriculum/shared/photo2-master-photographer-step02-choose-your-master.html',
+     '/curriculum/shared/photo2-master-photographer-step03-capture-contact.html',
+     '/curriculum/shared/photo2-master-photographer-step04-cull-edit.html',
+     '/curriculum/shared/photo2-master-photographer-step05-presentation-reflection.html'],
     ['/curriculum/shared/photo2-mystery-item-overview.html',
      '/curriculum/shared/photo2-mystery-item-step02-capture-contact.html',
      '/curriculum/shared/photo2-mystery-item-step03-cull-edit.html',

@@ -27,21 +27,33 @@ def ent(s):
        "“":"&ldquo;","”":"&rdquo;","‘":"&lsquo;","’":"&rsquo;","–":"-","•":"&bull;","×":"&times;"}
     return "".join(m.get(c, c if ord(c)<128 else "&#x{:X};".format(ord(c))) for c in s)
 
-PROJNUM="02"            # catalog label is "Project 02" (change to a module number to reclassify)
+PROJNUM="02"            # catalog label is "Project 02" in BOTH courses (Fall Final Project)
 # Student-facing banner eyebrow (Chris 2026-11-15: this is the Fall Final Project).
 PROJ_LABEL="Fall Final Project"
 PROJ_LABEL_ES="Proyecto Final de Oto&ntilde;o"
-CL_EN="Photography 1A"
 IMGDIR=f"{SITE}/assets/images/master-photographer"
+TPLDIR=f"{SITE}/assets/templates/master-photographer"
 HERO=f"{IMGDIR}/master-photographer-hero-v2.jpg"
 RESEARCH_FLOAT=f"{IMGDIR}/research-float-v1.jpg"       # Step 02 (student researching at the iMac)
 CULL_FLOAT=f"{IMGDIR}/cull-float-v1.jpg"               # Step 04 (student with her three selected prints)
 PRESENT_FLOAT=f"{IMGDIR}/presentation-float-v1.jpg"    # Step 05 (student presenting selected works)
-DECK_PREVIEW=f"{IMGDIR}/deck-template-preview-v1.jpg"  # 2x2 preview of the slide template
-PROJECT_ZIP=f"{SITE}/assets/templates/master-photographer/Master-Photographer-Project-Folder.zip"
-DECK_PPTX=f"{SITE}/assets/templates/master-photographer/Master-Photographer-Slide-Template.pptx"
 # Contact-sheet presets are installed once (Image Series module); same install video.
 CS_INSTALL_VIDEO="https://vimeo.com/1164128764/e1842e523e?share=copy&amp;fl=sv&amp;fe=ci"
+
+# Two courses, one module (Chris 2026-11-16). Each course hosts its OWN project-folder ZIP on its
+# OWN Overview, and the Overview is the ONLY download host (no standalone deck .pptx anywhere). The
+# deck now lives only inside that ZIP (English + Spanish). Each course's deck preview is rendered
+# from Chris's current deck (gray MY WORK header, correct course label on the cover). Photo 2 adds
+# the growth / no-repeat disclaimer. The Drive project folders are completed + zipped into TPLDIR by
+# hand; see the Master Photographer project memory. The std/share pass is built from Photo 1.
+COURSES=[
+ {"prefix":"photo1","cl":"Photography 1A","p2":False,
+  "zip":f"{TPLDIR}/Master-Photographer-Photo-1-Project-Folder.zip",
+  "deck_preview":f"{IMGDIR}/deck-template-preview-v2.jpg"},
+ {"prefix":"photo2","cl":"Photography 2A","p2":True,
+  "zip":f"{TPLDIR}/Master-Photographer-Photo-2-Project-Folder.zip",
+  "deck_preview":f"{IMGDIR}/deck-template-preview-photo2-v1.jpg"},
+]
 
 HAVE_HERO=True
 HAVE_RESEARCH=True
@@ -150,21 +162,48 @@ def rubric_box(es):
       + f'<div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(245,179,1,0.22);">{items}</div>'
       + '</details>')
 
-def project_downloads(es):
+def project_downloads(es, zip_url):
     heading="Descarga Tu Carpeta del Proyecto" if es else "Download Your Project Folder"
     if es:
-        lead="Descarga la carpeta del proyecto Master_Photographer. Trae tu plantilla de presentaci&oacute;n de 16:9 y una carpeta RAW_Images donde ir&aacute;n tus fotos cuando las captures."
-        label="Carpeta del Proyecto Master_Photographer (ZIP)"
-        note_t="Despu&eacute;s de que se descargue, descompr&iacute;mela y mueve la carpeta Master_Photographer a OneDrive &rarr; Carpeta de Fotograf&iacute;a. Esa es tu carpeta para todo este proyecto."
+        lead="Descarga la carpeta de tu proyecto. Trae tu plantilla de presentaci&oacute;n de 16:9 (en ingl&eacute;s y espa&ntilde;ol), una carpeta de Im&aacute;genes de Referencia para las fotos de tu maestro, y una carpeta RAW_Images para tus propias fotos cuando las captures."
+        label="Carpeta del Proyecto del Fot&oacute;grafo Maestro (ZIP)"
+        note_t="Despu&eacute;s de que se descargue, descompr&iacute;mela y mueve la carpeta del proyecto a OneDrive &rarr; Carpeta de Fotograf&iacute;a. Esa es tu carpeta para todo este proyecto."
     else:
-        lead="Download the Master_Photographer project folder. It holds your 16:9 slideshow template and a RAW_Images folder where your photos will go once you capture them."
-        label="Master_Photographer Project Folder (ZIP)"
-        note_t="After it downloads, unzip it and move the Master_Photographer folder into OneDrive &rarr; Photography Folder. That is your folder for this whole project."
+        lead="Download your project folder. It holds your 16:9 slideshow template (English and Spanish), a Reference Images folder for your master photographer&rsquo;s photos, and a RAW_Images folder for your own photos once you capture them."
+        label="Master Photographer Project Folder (ZIP)"
+        note_t="After it downloads, unzip it and move the project folder into OneDrive &rarr; Photography Folder. That is your folder for this whole project."
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
       + para(lead)
-      + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">' + dl_link(PROJECT_ZIP, label, row=True) + '</div>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">' + dl_link(zip_url, label, row=True) + '</div>'
       + note_orange(note_t) + '</div>')
+
+def growth_box(es):
+    # Photo 2 ONLY: firm + motivational growth disclaimer (Chris 2026-11-16). Red accent = important
+    # rule. First person (Mr. Silva voice). No repeating last year's master; raise the bar.
+    if es:
+        eyebrow="FOTO 2 &middot; SUBE EL NIVEL"
+        heading="Muestra Tu Crecimiento"
+        body=(para("Ahora est&aacute;s en Fotograf&iacute;a 2. Ya tienes habilidad de verdad, y este proyecto debe mostrar cu&aacute;nto has avanzado.")
+          + para("<strong>Elige un fot&oacute;grafo maestro NUEVO.</strong> No puedes elegir el mismo que estudiaste el a&ntilde;o pasado. Si entregas el mismo fot&oacute;grafo del a&ntilde;o pasado, no lo voy a aceptar.")
+          + para("Este a&ntilde;o el nivel es m&aacute;s alto. Espero un trabajo m&aacute;s planeado, m&aacute;s cuidadoso y de mejor calidad que el a&ntilde;o pasado. T&oacute;mate tu tiempo, toma decisiones fuertes a prop&oacute;sito y mu&eacute;strame el fot&oacute;grafo en que te has convertido."))
+    else:
+        eyebrow="PHOTO 2 &middot; RAISE THE BAR"
+        heading="Show Your Growth"
+        body=(para("You are in Photography 2 now. You have real skill, and this project should show how far you have come.")
+          + para("<strong>Choose a NEW master photographer.</strong> You may not choose the same one you studied last year. If you turn in the same photographer as last year, I will not accept it.")
+          + para("This year the bar is higher. I expect work that is more planned, more careful, and higher quality than last year. Slow down, make strong choices on purpose, and show me the photographer you have become."))
+    return ('<div style="background:linear-gradient(180deg,rgba(230,36,41,0.12) 0%,rgba(230,36,41,0.03) 100%);border:1px solid rgba(230,36,41,0.32);border-left:6px solid #E62429;padding:26px 30px;overflow:hidden;margin-bottom:24px;">'
+      + f'<div style="font-size:10.5pt;font-weight:bold;letter-spacing:0.12em;text-transform:uppercase;color:#ff8a8d;margin-bottom:4px;">{eyebrow}</div>'
+      + f'<div style="font-size:17pt;font-weight:bold;color:#ffffff;line-height:1.25;margin-bottom:10px;">{heading}</div>'
+      + body + '</div>')
+
+def growth_reminder(es):
+    # Compact Photo 2 reminder placed where students actually choose (Step 02).
+    t=("<strong>Recordatorio de Foto 2:</strong> elige un maestro NUEVO, no el que estudiaste el a&ntilde;o pasado."
+       if es else "<strong>Photo 2 reminder:</strong> choose a NEW master, not the one you studied last year.")
+    return ('<div style="background:rgba(230,36,41,0.10);border:1px solid rgba(230,36,41,0.30);border-left:4px solid #E62429;'
+      f'padding:11px 14px;margin:0 0 14px;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.92);">{t}</div>')
 
 def _site_pill(url,label):
     # Compact PURPLE research-site chip: hugs its label (not a full-width bar). A small set of
@@ -210,7 +249,7 @@ def reslist(es):
       f'color:rgba(255,255,255,0.90);"><strong>{tip}</strong></div>')
     return para(lead)+pills+tip_box
 
-def deck_showcase(es):
+def deck_showcase(es, deck_preview):
     heading="Tu Plantilla de Presentaci&oacute;n" if es else "Your Slide Deck Template"
     if es:
         lead="Usa esta plantilla de 16:9 como punto de partida. Du&eacute;rala y hazla tuya. Tiene todo lo que necesitas:"
@@ -220,8 +259,7 @@ def deck_showcase(es):
             ("3 diapositivas de tu trabajo:","una de tus fotos editadas por diapositiva, con c&oacute;mo usaste lo que aprendiste."),
             ("Diapositiva de reflexi&oacute;n:","la diapositiva final, donde respondes la reflexi&oacute;n."),
         ]
-        inside="La plantilla ya est&aacute; dentro de la carpeta del proyecto que descargaste, o puedes bajarla directo aqu&iacute;."
-        label="Plantilla de Presentaci&oacute;n (.pptx)"
+        inside="La plantilla ya est&aacute; dentro de la carpeta del proyecto que descargaste en el Resumen, en ingl&eacute;s y espa&ntilde;ol."
         cap="Las 8 diapositivas de la plantilla: portada, tres del maestro, tres de tu trabajo y la reflexi&oacute;n."
     else:
         lead="Use this 16:9 template as your starting point. Duplicate it and make it yours. It has everything you need:"
@@ -231,14 +269,12 @@ def deck_showcase(es):
             ("3 of-your-work slides:","one of your edited photos per slide, with how you used what you learned."),
             ("Reflection slide:","the closing slide, where you answer the reflection."),
         ]
-        inside="The template is already inside the project folder you downloaded, or you can grab it straight here."
-        label="Slide Deck Template (.pptx)"
+        inside="The template is already inside the project folder you downloaded on the Overview, in both English and Spanish."
         cap="All 8 template slides: cover, three master, three of your work, and the reflection."
     inner=(para(lead)+bullets(items,accent="#8b5cf6")
-      + (framed(DECK_PREVIEW, "A preview of the eight-slide Master Photographer template: cover, three master slides, three student slides, and the reflection")
+      + (framed(deck_preview, "A preview of the eight-slide Master Photographer template: cover, three master slides, three student slides, and the reflection")
          + f'<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">{cap}</div>' if HAVE_DECK_PREVIEW else "")
-      + para(inside)
-      + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;">' + dl_link(DECK_PPTX, label, row=True) + '</div>')
+      + para(inside))
     return resources_card(heading, inner, es)
 
 def wrap_standalone(title, nav_inner, top_html, bottom, files_std, share_name):
@@ -316,13 +352,14 @@ def wrap_standalone(title, nav_inner, top_html, bottom, files_std, share_name):
 </body>
 </html>'''
 
-def build(mode):
+def build(mode, C):
     cur = (mode == "cur")
-    OVER="photo1-master-photographer-overview.html"
-    S2="photo1-master-photographer-step02-choose-your-master.html"
-    S3="photo1-master-photographer-step03-capture-contact.html"
-    S4="photo1-master-photographer-step04-cull-edit.html"
-    S5="photo1-master-photographer-step05-presentation-reflection.html"
+    CL=C["cl"]; PREFIX=C["prefix"]; ZIP=C["zip"]; DECKPREV=C["deck_preview"]; IS_P2=C["p2"]
+    OVER=f"{PREFIX}-master-photographer-overview.html"
+    S2=f"{PREFIX}-master-photographer-step02-choose-your-master.html"
+    S3=f"{PREFIX}-master-photographer-step03-capture-contact.html"
+    S4=f"{PREFIX}-master-photographer-step04-cull-edit.html"
+    S5=f"{PREFIX}-master-photographer-step05-presentation-reflection.html"
     FILES_STD=["index.html","step02-choose-your-master.html","step03-capture-contact.html",
                "step04-cull-edit.html","step05-presentation-reflection.html"]
     FILES = [OVER,S2,S3,S4,S5] if cur else FILES_STD
@@ -383,7 +420,8 @@ def build(mode):
             para("In this project you pick <strong>one master photographer</strong> and study <strong>how they make their images</strong>. This is not a report about their life. You study their <strong>style, technique, and impact</strong>: how they compose, light, and edit their photos.")
             + para("Then you become the photographer. You <strong>capture three of your own photos</strong> in that style with the school camera kit, edit your best three, and present your master&rsquo;s work and your work <strong>side by side</strong> in a slideshow.")
             + (framed(HERO,"Master photographers, each with a camera: the styles you choose from in this project") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Many styles, many photographers. You pick one to study and bring into your own photos.</div>' if HAVE_HERO else ""))
-        en+=project_downloads(False)
+        if IS_P2: en+=growth_box(False)
+        en+=project_downloads(False, ZIP)
         en+=card("HOW THIS PROJECT WORKS","From Studying a Master to Your Own Photos",
             para("You are on Step 01 now: read this page so you understand the project. Here is the path.")
             + bullets([
@@ -410,7 +448,8 @@ def build(mode):
             para("En este proyecto eliges a <strong>un fot&oacute;grafo maestro</strong> y estudias <strong>c&oacute;mo hacen sus im&aacute;genes</strong>. Esto no es un reporte sobre su vida. Estudias su <strong>estilo, su t&eacute;cnica y su impacto</strong>: c&oacute;mo componen, iluminan y editan sus fotos.")
             + para("Luego t&uacute; te vuelves el fot&oacute;grafo. <strong>Capturas tres fotos propias</strong> en ese estilo con el kit de c&aacute;mara de la escuela, editas tus mejores tres y presentas el trabajo de tu maestro y el tuyo <strong>lado a lado</strong> en una presentaci&oacute;n.")
             + (framed(HERO,"Fot&oacute;grafos maestros, cada uno con una c&aacute;mara: los estilos entre los que eliges en este proyecto") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Muchos estilos, muchos fot&oacute;grafos. Eliges a uno para estudiarlo y traerlo a tus propias fotos.</div>' if HAVE_HERO else ""))
-        es+=project_downloads(True)
+        if IS_P2: es+=growth_box(True)
+        es+=project_downloads(True, ZIP)
         es+=card("C&Oacute;MO FUNCIONA ESTE PROYECTO","De Estudiar a un Maestro a Tus Propias Fotos",
             para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina para entender el proyecto. Este es el camino.")
             + bullets([
@@ -430,7 +469,7 @@ def build(mode):
               VOCAB_ES), True)
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Elige a Tu Maestro","Conoce a los fot&oacute;grafos maestros, elige al que m&aacute;s te atraiga y empieza tu presentaci&oacute;n.")
 
-        return wrap_page(f"Master Photographer | {CL_EN} | PVHS", nav("Step 01",dots_for(0),step_topnav(0)), top_wrap(en,es), step_bottom(0))
+        return wrap_page(f"Master Photographer | {CL} | PVHS", nav("Step 01",dots_for(0),step_topnav(0)), top_wrap(en,es), step_bottom(0))
 
     # ================= STEP 02: Choose Your Master =================
     def step02():
@@ -446,6 +485,7 @@ def build(mode):
             [("Your deck, started (PDF):","download the slide template, fill the <strong>Cover slide</strong> and your <strong>3 Master Photographer slides</strong> (one image you chose on each, plus your technique note), export it as a PDF, and upload it to this Canvas assignment.")])
         en+=card("CHOOSE YOUR MASTER","Master Photographers",
             para("Here are your master photographers, grouped into four styles: <strong>Landscape, Portrait, Still Life, and On Location</strong>. Look through all four groups, then pick the one whose work pulls you in the most.")
+            + (growth_reminder(False) if IS_P2 else "")
             + roster_grid(False))
         en+=resources_card("Recommended Research Websites", reslist(False), False)
         en+=card("GATHER YOUR THREE IMAGES / START YOUR DECK","Choose 3 Images and Start Your Slideshow",
@@ -472,6 +512,7 @@ def build(mode):
             [("Tu presentaci&oacute;n, empezada (PDF):","descarga la plantilla, llena la <strong>diapositiva de portada</strong> y tus <strong>3 diapositivas del fot&oacute;grafo maestro</strong> (una imagen que elegiste en cada una, m&aacute;s tu nota de t&eacute;cnica), exp&oacute;rtala como PDF y s&uacute;bela a esta tarea de Canvas.")])
         es+=card("ELIGE A TU MAESTRO","Fot&oacute;grafos Maestros",
             para("Aqu&iacute; est&aacute;n tus fot&oacute;grafos maestros, en cuatro estilos: <strong>Paisaje, Retrato, Naturaleza Muerta y En Locaci&oacute;n</strong>. Mira los cuatro grupos y luego elige al que m&aacute;s te atraiga.")
+            + (growth_reminder(True) if IS_P2 else "")
             + roster_grid(True))
         es+=resources_card("Sitios de Investigaci&oacute;n Recomendados", reslist(True), True)
         es+=card("RE&Uacute;NE TUS TRES IM&Aacute;GENES / EMPIEZA TU PRESENTACI&Oacute;N","Elige 3 Im&aacute;genes y Empieza Tu Presentaci&oacute;n",
@@ -486,7 +527,7 @@ def build(mode):
             + note("Estas tres im&aacute;genes son el trabajo de <strong>tu fot&oacute;grafo maestro</strong>, de internet. T&uacute; capturas tus <strong>propias</strong> fotos despu&eacute;s, en el Paso 03."))
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Captura y Contacto","Pide un kit de c&aacute;mara y captura una toma completa de tus propias fotos en el estilo de tu maestro.")
 
-        return wrap_page(f"Step 2: Choose Your Master | Master Photographer | {CL_EN} | PVHS", nav("Step 02",dots_for(1),step_topnav(1)), top_wrap(en,es), step_bottom(1))
+        return wrap_page(f"Step 2: Choose Your Master | Master Photographer | {CL} | PVHS", nav("Step 02",dots_for(1),step_topnav(1)), top_wrap(en,es), step_bottom(1))
 
     # ================= STEP 03: Capture & Contact =================
     def step03():
@@ -515,7 +556,7 @@ def build(mode):
             para("Get every photo off the camera and into your project folder so nothing gets lost.")
             + steps([
                 ("Connect your camera or card.","Use the cable, or put the memory card in a card reader on your Mac."),
-                ("Open your project folder in Finder.","Find the <strong>Master_Photographer</strong> folder you downloaded on the Overview."),
+                ("Open your project folder in Finder.","Find the <strong>project folder</strong> you downloaded on the Overview."),
                 ("Copy every photo into RAW_Images.","Drag your whole take into the <strong>RAW_Images</strong> folder inside that project folder. Keep them all, not just three."),
             ])
             + note("Offload your <strong>full take</strong>, every photo you captured. You select your best three later, in the next step."))
@@ -558,7 +599,7 @@ def build(mode):
             para("Saca todas las fotos de la c&aacute;mara y ll&eacute;valas a tu carpeta del proyecto para que no se pierda ninguna.")
             + steps([
                 ("Conecta tu c&aacute;mara o tarjeta.","Usa el cable, o pon la tarjeta de memoria en un lector de tarjetas en tu Mac."),
-                ("Abre tu carpeta del proyecto en Finder.","Busca la carpeta <strong>Master_Photographer</strong> que descargaste en el Resumen."),
+                ("Abre tu carpeta del proyecto en Finder.","Busca la <strong>carpeta del proyecto</strong> que descargaste en el Resumen."),
                 ("Copia cada foto a RAW_Images.","Arrastra toda tu toma a la carpeta <strong>RAW_Images</strong> dentro de esa carpeta del proyecto. Cons&eacute;rvalas todas, no solo tres."),
             ])
             + note("Descarga tu <strong>toma completa</strong>, cada foto que capturaste. Seleccionas tus mejores tres despu&eacute;s, en el siguiente paso."))
@@ -576,7 +617,7 @@ def build(mode):
             pnote_mp('&iquest;Necesitas el ajuste 12-Up? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Mira el video de instalaci&oacute;n</strong></a>, luego agr&eacute;galo a Lightroom Classic &rarr; m&oacute;dulo Print. Los configuraste en el m&oacute;dulo Image Series.'), True)
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 04 - Selecciona y Edita","Elige tus tres im&aacute;genes m&aacute;s fuertes y ed&iacute;talas para igualar el estilo que estudiaste.")
 
-        return wrap_page(f"Step 3: Capture and Contact | Master Photographer | {CL_EN} | PVHS", nav("Step 03",dots_for(2),step_topnav(2)), top_wrap(en,es), step_bottom(2))
+        return wrap_page(f"Step 3: Capture and Contact | Master Photographer | {CL} | PVHS", nav("Step 03",dots_for(2),step_topnav(2)), top_wrap(en,es), step_bottom(2))
 
     # ================= STEP 04: Cull & Edit =================
     def step04():
@@ -650,7 +691,7 @@ def build(mode):
             ]))
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 05 - Presentaci&oacute;n y Reflexi&oacute;n","Termina tu presentaci&oacute;n, pres&eacute;ntala a la clase y responde la reflexi&oacute;n en la diapositiva final.")
 
-        return wrap_page(f"Step 4: Cull and Edit | Master Photographer | {CL_EN} | PVHS", nav("Step 04",dots_for(3),step_topnav(3)), top_wrap(en,es), step_bottom(3))
+        return wrap_page(f"Step 4: Cull and Edit | Master Photographer | {CL} | PVHS", nav("Step 04",dots_for(3),step_topnav(3)), top_wrap(en,es), step_bottom(3))
 
     # ================= STEP 05: Presentation & Reflection =================
     def step05():
@@ -663,7 +704,7 @@ def build(mode):
             + para("Your deck shows your master photographer&rsquo;s work and your work <strong>side by side</strong>, so everyone can see what you studied and how you made it your own."))
         en+=deliverables_box(False,
             [("Your finished deck (.pptx or .key):","the full slideshow (cover, 3 master slides, your 3 edited photos, and the reflection closing slide), presented to the class and uploaded to this Canvas assignment.")])
-        en+=deck_showcase(False)
+        en+=deck_showcase(False, DECKPREV)
         en+=card("BUILD THE REST OF YOUR DECK","Add Your Photos and Your Notes",
             para("Open the deck you started in Step 02 and finish it.")
             + steps([
@@ -699,7 +740,7 @@ def build(mode):
             + para("Tu presentaci&oacute;n muestra el trabajo de tu fot&oacute;grafo maestro y el tuyo <strong>lado a lado</strong>, para que todos vean qu&eacute; estudiaste y c&oacute;mo lo hiciste tuyo."))
         es+=deliverables_box(True,
             [("Tu presentaci&oacute;n terminada (.pptx o .key):","la presentaci&oacute;n completa (portada, 3 diapositivas del maestro, tus 3 fotos editadas y la diapositiva final de reflexi&oacute;n), presentada a la clase y subida a esta tarea de Canvas.")])
-        es+=deck_showcase(True)
+        es+=deck_showcase(True, DECKPREV)
         es+=card("CONSTRUYE EL RESTO DE TU PRESENTACI&Oacute;N","Agrega Tus Fotos y Tus Notas",
             para("Abre la presentaci&oacute;n que empezaste en el Paso 02 y term&iacute;nala.")
             + steps([
@@ -726,7 +767,7 @@ def build(mode):
             ]))
         es+=next_up("LO LOGRASTE &middot; PROYECTO COMPLETO","Estudiaste a un maestro, hiciste tuyo el estilo y lo presentaste. As&iacute; crecen los fot&oacute;grafos de verdad.")
 
-        return wrap_page(f"Step 5: Presentation and Reflection | Master Photographer | {CL_EN} | PVHS", nav("Step 05",dots_for(4),step_topnav(4)), top_wrap(en,es), step_bottom(4))
+        return wrap_page(f"Step 5: Presentation and Reflection | Master Photographer | {CL} | PVHS", nav("Step 05",dots_for(4),step_topnav(4)), top_wrap(en,es), step_bottom(4))
 
     outdir = os.path.join(ROOT,"curriculum/shared") if cur else os.path.join(ROOT,"share/master-photographer")
     os.makedirs(outdir, exist_ok=True)
@@ -743,5 +784,6 @@ def pnote_mp(t):
     return (f'<div style="background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.30);border-left:4px solid #8b5cf6;padding:11px 14px;margin:8px 0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
 
 if __name__=="__main__":
-    build("cur")   # in-curriculum module (catalog breadcrumb + site nav via silva-nav.js)
-    build("std")   # standalone public share copy at share/master-photographer/ (no catalog, no site nav)
+    for C in COURSES:
+        build("cur", C)        # in-curriculum module for each course (photo1 + photo2)
+    build("std", COURSES[0])   # standalone public share copy at share/master-photographer/ (built from Photo 1)
