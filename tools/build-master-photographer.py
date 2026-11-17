@@ -804,7 +804,8 @@ def build(mode, C):
             + para("Then <strong>edit</strong> your three selections in Lightroom to match the look you studied: the tones, the contrast, the mood. Make them feel like they belong next to your master&rsquo;s work.")
             + note("Pick the three that are strongest together as a set, not just three nice photos. They should all point to the same style."))
         en+=deliverables_box(False,
-            [("3 edited images (high-resolution JPG):","your three final selections, edited in Lightroom and exported as high-resolution JPGs, uploaded to this Canvas assignment.")], files=3)
+            [("3 edited images (high-resolution JPG):","your three final selections, edited in Lightroom and exported as high-resolution JPGs."),
+             ("1 contact sheet (high-resolution JPG):","a 6-up contact sheet with your three edited images on it, printed to file as a high-resolution JPG.")], files=4)
         en+=card("CULL YOUR TAKE","Select Your Three Strongest Images",
             para("Work in Lightroom Classic to find your best three.")
             + steps([
@@ -826,8 +827,19 @@ def build(mode, C):
                 ("Select your three edited photos.","In the Library, click all three."),
                 ("Export as JPG.","File &rarr; Export. Set the format to JPEG and the quality high."),
                 ("Name them by last name and number.","LastName_First_MasterPhotographer_1.jpg, LastName_First_MasterPhotographer_2.jpg, LastName_First_MasterPhotographer_3.jpg."),
-                ("Upload all three.","Upload your three JPG files to this Canvas assignment."),
+                ("Upload all three.","Upload your three edited JPG files to this Canvas assignment."),
             ]))
+        en+=card("BUILD YOUR CONTACT SHEET","Make a 6-Up Contact Sheet",
+            para("Last, make a <strong>6-up contact sheet</strong> with your three edited images on it. This shows your three final photos together on one page.")
+            + steps([
+                ("Load your three edited images.","In Lightroom Classic, select your three final edited photos in the Library."),
+                ("Open the Print module and pick the 6-Up Contact Sheet preset.","If you do not see it, install it first (see the resource below)."),
+                ("Print to file as a JPG.","Click Print to File. The preset already saves a high-resolution JPG, so you never choose the format."),
+                ("Name it and upload.","Name it LastName_First_MasterPhotographer_ContactSheet.jpg, then upload the JPG to this Canvas assignment."),
+            ])
+            + note("Turn in a <strong>high-resolution JPG</strong>, never a PDF. The contact-sheet preset already saves the right format."))
+        en+=resources_card("Contact Sheet Preset",
+            pnote_mp('Need the 6-Up preset? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>, then add it to Lightroom Classic &rarr; Print module. You set these up back in the Image Series module.'), False)
         en+=next_up("UP NEXT &middot; STEP 05 - Presentation &amp; Reflection","Finish your slideshow, present it to the class, and answer the reflection on the closing slide.")
 
         es=banner(f"{PROJ_LABEL_ES} &bull;Paso 04","Selecciona y Edita",
@@ -839,7 +851,8 @@ def build(mode, C):
             + para("Luego <strong>edita</strong> tus tres selecciones en Lightroom para igualar el estilo que estudiaste: los tonos, el contraste, el ambiente. Haz que se sientan como que pertenecen junto al trabajo de tu maestro.")
             + note("Elige las tres que sean m&aacute;s fuertes juntas como conjunto, no solo tres fotos bonitas. Todas deben apuntar al mismo estilo."))
         es+=deliverables_box(True,
-            [("3 im&aacute;genes editadas (JPG de alta resoluci&oacute;n):","tus tres selecciones finales, editadas en Lightroom y exportadas como JPG de alta resoluci&oacute;n, subidas a esta tarea de Canvas.")], files=3)
+            [("3 im&aacute;genes editadas (JPG de alta resoluci&oacute;n):","tus tres selecciones finales, editadas en Lightroom y exportadas como JPG de alta resoluci&oacute;n."),
+             ("1 hoja de contactos (JPG de alta resoluci&oacute;n):","una hoja de contactos de 6 con tus tres im&aacute;genes editadas, impresa a archivo como JPG de alta resoluci&oacute;n.")], files=4)
         es+=card("SELECCIONA TU TOMA","Elige Tus Tres Im&aacute;genes M&aacute;s Fuertes",
             para("Trabaja en Lightroom Classic para encontrar tus mejores tres.")
             + steps([
@@ -861,8 +874,19 @@ def build(mode, C):
                 ("Selecciona tus tres fotos editadas.","En la Biblioteca, haz clic en las tres."),
                 ("Exporta como JPG.","File (Archivo) &rarr; Export (Exportar). Pon el formato en JPEG y la calidad alta."),
                 ("N&oacute;mbralas por apellido y n&uacute;mero.","LastName_First_MasterPhotographer_1.jpg, LastName_First_MasterPhotographer_2.jpg, LastName_First_MasterPhotographer_3.jpg."),
-                ("Sube las tres.","Sube tus tres archivos JPG a esta tarea de Canvas."),
+                ("Sube las tres.","Sube tus tres archivos JPG editados a esta tarea de Canvas."),
             ]))
+        es+=card("ARMA TU HOJA DE CONTACTOS","Haz una Hoja de Contactos de 6",
+            para("Por &uacute;ltimo, haz una <strong>hoja de contactos de 6</strong> con tus tres im&aacute;genes editadas. Muestra tus tres fotos finales juntas en una p&aacute;gina.")
+            + steps([
+                ("Carga tus tres im&aacute;genes editadas.","En Lightroom Classic, selecciona tus tres fotos finales editadas en la Biblioteca."),
+                ("Abre el m&oacute;dulo Print y elige el ajuste 6-Up Contact Sheet.","Si no lo ves, inst&aacute;lalo primero (mira el recurso de abajo)."),
+                ("Imprime a archivo como JPG.","Haz clic en Print to File (Imprimir a archivo). El ajuste ya guarda un JPG de alta resoluci&oacute;n, as&iacute; que nunca eliges el formato."),
+                ("N&oacute;mbrala y s&uacute;bela.","N&oacute;mbrala LastName_First_MasterPhotographer_ContactSheet.jpg, luego sube el JPG a esta tarea de Canvas."),
+            ])
+            + note("Entrega un <strong>JPG de alta resoluci&oacute;n</strong>, nunca un PDF. El ajuste de hoja de contactos ya guarda el formato correcto."))
+        es+=resources_card("Ajuste de Hoja de Contactos",
+            pnote_mp('&iquest;Necesitas el ajuste 6-Up? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Mira el video de instalaci&oacute;n</strong></a>, luego agr&eacute;galo a Lightroom Classic &rarr; m&oacute;dulo Print. Los configuraste en el m&oacute;dulo Image Series.'), True)
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 05 - Presentaci&oacute;n y Reflexi&oacute;n","Termina tu presentaci&oacute;n, pres&eacute;ntala a la clase y responde la reflexi&oacute;n en la diapositiva final.")
 
         return wrap_page(f"Step 4: Cull and Edit | Master Photographer | {CL} | PVHS", nav("Step 04",dots_for(3),step_topnav(3)), top_wrap(en,es), step_bottom(3))
