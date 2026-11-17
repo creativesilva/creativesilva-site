@@ -7,6 +7,8 @@ session to bring it up to speed on the exact build style.
 Master reference page: `curriculum/shared/da-finals-quiz-prep.html`.
 Generator: `tools/build-da-finals.py`.
 
+**Verification viewports (Chris, LOCKED 2026-11-17).** These Canvas student pages are viewed almost entirely on the **newest A16 base student iPad** (portrait ~820px, landscape ~1180px) and **27" 4K monitors**; students seldom open Canvas on a phone. So verify (and show Chris) at **iPad portrait + iPad landscape + 4K**, NOT at 390px phone. Phone-width checks are not required for Canvas modules and need not be shown. (The one phone-first student surface is the equipment store `reserve.html`, see `RESERVE_STORE_FRAMEWORK.md`.) Still build responsively; this is about where to aim and what to verify, not a license to break narrow layouts.
+
 ---
 
 ## 1. Non-Negotiable Rules
