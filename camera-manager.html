@@ -1151,6 +1151,38 @@
   .edrev-to{flex:0 0 auto;font-size:.82rem;color:var(--faint);}
   .edrev-row.sw .edrev-to{color:#ffd98a;font-weight:700;}
   .edrev-note{font-size:.74rem;color:var(--faint);margin:-3px 0 13px;}
+  /* ---- Alerts: bell + dropdown panel + slide-in banners (foreground notifications while the app is open) ---- */
+  .notif-wrap{position:relative;display:flex;align-items:center;}
+  .notif-bell{position:relative;width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--g-r-md);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);box-shadow:var(--g-spec);color:#eafcff;cursor:pointer;-webkit-backdrop-filter:var(--g-blur);backdrop-filter:var(--g-blur);transition:background .15s,border-color .15s;}
+  @media (hover:hover){ .notif-bell:hover{background:var(--rollover);border-color:var(--g-teal-lt);} }
+  .notif-bell.has{border-color:var(--g-edge);color:#fff;}
+  .notif-badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:var(--red);color:#fff;font-size:.64rem;font-weight:800;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.45);}
+  .notif-panel{position:absolute;top:50px;right:0;width:324px;max-width:86vw;max-height:60vh;overflow-y:auto;z-index:140;border-radius:var(--g-r-md);background:linear-gradient(rgba(8,16,36,.93),rgba(8,16,36,.96));border:1px solid var(--g-edge);box-shadow:var(--g-shadow-lg),var(--g-spec);-webkit-backdrop-filter:var(--g-blur-heavy);backdrop-filter:var(--g-blur-heavy);}
+  .notif-phead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 13px;border-bottom:1px solid var(--g-edge-soft);position:sticky;top:0;background:linear-gradient(rgba(10,18,40,.98),rgba(10,18,40,.96));}
+  .notif-ptitle{font-weight:800;font-size:.76rem;color:#fff;letter-spacing:.06em;text-transform:uppercase;}
+  .notif-pacts{display:flex;gap:6px;}
+  .notif-mute,.notif-readall{background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-pill);color:var(--muted);font-size:.68rem;font-weight:700;padding:4px 9px;cursor:pointer;white-space:nowrap;}
+  .notif-mute.muted{color:#ffb3aa;border-color:rgba(255,122,122,.42);}
+  .notif-list{padding:5px;}
+  .notif-empty{padding:20px 13px;text-align:center;color:var(--faint);font-size:.78rem;}
+  .notif-item{display:flex;gap:9px;align-items:flex-start;width:100%;text-align:left;padding:9px 10px;border-radius:var(--g-r-sm);background:transparent;border:0;cursor:pointer;}
+  @media (hover:hover){ .notif-item:hover{background:rgba(255,255,255,.05);} }
+  .notif-item.unread{background:rgba(0,184,184,.10);}
+  .notif-idot{flex:0 0 auto;width:8px;height:8px;border-radius:50%;margin-top:5px;background:var(--teal);}
+  .notif-item.t-request .notif-idot{background:#8b5cf6;}
+  .notif-ibody{flex:1 1 auto;min-width:0;}
+  .notif-ititle{display:block;color:#fff;font-size:.82rem;font-weight:700;line-height:1.3;}
+  .notif-isub{display:block;color:var(--muted);font-size:.74rem;line-height:1.3;margin-top:1px;overflow:hidden;text-overflow:ellipsis;}
+  .notif-time{display:block;color:var(--faint);font-size:.66rem;margin-top:2px;}
+  .notif-banners{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:430;display:flex;flex-direction:column;gap:8px;width:min(420px,92vw);pointer-events:none;}
+  .notif-banner{pointer-events:auto;display:flex;gap:11px;align-items:center;width:100%;text-align:left;padding:12px 14px;border-radius:var(--g-r-md);background:linear-gradient(135deg,rgba(0,184,184,.17),rgba(8,20,40,.97));border:1px solid var(--g-edge);box-shadow:var(--g-shadow-lg),var(--g-spec);-webkit-backdrop-filter:var(--g-blur-heavy);backdrop-filter:var(--g-blur-heavy);color:#fff;cursor:pointer;opacity:0;transform:translateY(-12px);transition:opacity .28s,transform .28s;}
+  .notif-banner.show{opacity:1;transform:translateY(0);}
+  .notif-banner.nb-request{border-left:4px solid #8b5cf6;}
+  .notif-banner.nb-reservation{border-left:4px solid var(--teal);}
+  .nb-ic{flex:0 0 auto;width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12);color:#eafcff;}
+  .nb-txt{flex:1 1 auto;min-width:0;}
+  .nb-title{display:block;font-size:.88rem;font-weight:700;line-height:1.3;}
+  .nb-sub{display:block;font-size:.76rem;color:var(--muted);line-height:1.3;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .silva-confirm-acts{display:flex;gap:10px;justify-content:flex-end;}
   .silva-confirm-btn{font-family:var(--font);font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:11px 18px;cursor:pointer;border:1px solid var(--line);border-radius:var(--g-r-pill);}
   .silva-confirm-btn.cancel{background:rgba(0,0,0,.3);color:var(--muted);}
@@ -1948,9 +1980,26 @@
       <div class="cmnav-sub"><span class="sync" id="sync">Connecting&#8230;</span><span class="cmnav-counthold" aria-hidden="true"><span id="availn">0</span><span id="totn">18</span><span id="availunit">cameras</span><span id="availday">today</span></span></div>
     </div>
     <div class="cmnav-trail">
+      <div class="notif-wrap">
+        <button type="button" class="notif-bell" id="notifBell" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="notif-badge" id="notifBadge" hidden>0</span>
+        </button>
+        <div class="notif-panel" id="notifPanel" hidden>
+          <div class="notif-phead">
+            <span class="notif-ptitle">Alerts</span>
+            <div class="notif-pacts">
+              <button type="button" class="notif-mute" id="notifMuteBtn" aria-label="Toggle sound"><span class="notif-mlab">Sound on</span></button>
+              <button type="button" class="notif-readall" id="notifReadAll">Mark all read</button>
+            </div>
+          </div>
+          <div class="notif-list" id="notifList"></div>
+        </div>
+      </div>
       <iframe class="cal-hero-clock" src="/assets/embeds/period-clock.html?chip=1&v=5" title="Class period countdown" scrolling="no" loading="lazy"></iframe>
     </div>
   </div>
+  <div class="notif-banners" id="notifBanners" aria-live="polite"></div>
   <div class="intro"><p class="sub">Hand out gear, mark it picked up when the student collects it, and mark it returned when it comes back. Changes sync to the calendar and the Command Center in real time.</p></div>
 
   <div class="status-strip">
@@ -4366,15 +4415,80 @@
   (function(){ var f=document.getElementById('calframe'); if(f) f.addEventListener('load',pushKey); })();
 
   var polling=false;
+  // ===== Alerts (foreground notifications while the app is open, Chris 2026-11-16): each 7s poll diffs the
+  //       in-scope reservations; a brand-new reservation, or a new request needing your OK, slides in a banner
+  //       + a soft chime (armed on unlock, mutable) and lands in the bell's dropdown. =====
+  var NOTIFS=[], notifSeen=null, notifMuted=false, notifAC=null, notifArmed=false, notifPanelOpen=false;
+  try{ notifMuted=(localStorage.getItem('cm_notif_mute')==='1'); }catch(e){}
+  function armNotifAudio(){ try{ if(!notifAC){ var AC=window.AudioContext||window.webkitAudioContext; if(AC) notifAC=new AC(); } if(notifAC && notifAC.state==='suspended') notifAC.resume(); notifArmed=true; }catch(e){} }
+  function notifChime(){ if(notifMuted||!notifArmed||!notifAC) return; try{ var t=notifAC.currentTime;
+    [880,1174.66].forEach(function(f,i){ var o=notifAC.createOscillator(), g=notifAC.createGain(); o.type='sine'; o.frequency.value=f; o.connect(g); g.connect(notifAC.destination); var s=t+i*0.13; g.gain.setValueAtTime(0.0001,s); g.gain.exponentialRampToValueAtTime(0.16,s+0.02); g.gain.exponentialRampToValueAtTime(0.0001,s+0.34); o.start(s); o.stop(s+0.36); }); }catch(e){} }
+  function notifUnread(){ return NOTIFS.filter(function(n){ return !n.read; }).length; }
+  function notifIcon(type){ return type==='request' ? '!' : '&#9679;'; }
+  function notifTimeAgo(ms){ var s=Math.floor((Date.now()-ms)/1000); if(s<60) return 'just now'; var m=Math.floor(s/60); if(m<60) return m+'m ago'; var h=Math.floor(m/60); return h+'h ago'; }
+  function pushNotif(type, title, sub, sid){
+    var n={id:'n'+Date.now()+Math.random().toString(36).slice(2,5), type:type, title:title, sub:sub||'', sid:sid||'', at:Date.now(), read:false};
+    NOTIFS.unshift(n); if(NOTIFS.length>40) NOTIFS.length=40;
+    notifBanner(n); notifChime(); renderNotifBell();
+    try{ if(navigator.setAppBadge) navigator.setAppBadge(notifUnread()); }catch(e){}
+  }
+  function notifOpen(n){ n.read=true; renderNotifBell();
+    try{ if(n.type==='request'){ if(typeof openRequests==='function') openRequests(); }
+      else if(n.sid && typeof openStudentProfile==='function'){ openStudentProfile(n.sid); } }catch(e){}
+  }
+  function notifBanner(n){
+    var host=document.getElementById('notifBanners'); if(!host) return;
+    var el=document.createElement('button'); el.type='button'; el.className='notif-banner nb-'+n.type;
+    el.innerHTML='<span class="nb-ic">'+notifIcon(n.type)+'</span><span class="nb-txt"><span class="nb-title">'+esc(n.title)+'</span>'+(n.sub?'<span class="nb-sub">'+esc(n.sub)+'</span>':'')+'</span>';
+    var to=setTimeout(dismiss,9000);
+    function dismiss(){ clearTimeout(to); el.classList.remove('show'); setTimeout(function(){ try{ host.removeChild(el); }catch(e){} },300); }
+    el.onclick=function(){ notifOpen(n); dismiss(); };
+    host.appendChild(el); requestAnimationFrame(function(){ el.classList.add('show'); });
+  }
+  function renderNotifBell(){
+    var u=notifUnread(), b=document.getElementById('notifBadge'), bell=document.getElementById('notifBell');
+    if(b){ b.textContent=u>9?'9+':String(u); b.hidden=(u===0); }
+    if(bell) bell.classList.toggle('has', u>0);
+    var mt=document.getElementById('notifMuteBtn'); if(mt){ mt.classList.toggle('muted', notifMuted); var ml=mt.querySelector('.notif-mlab'); if(ml) ml.textContent=notifMuted?'Muted':'Sound on'; }
+    if(notifPanelOpen){ var list=document.getElementById('notifList'); if(list){
+      list.innerHTML = NOTIFS.length ? NOTIFS.map(function(n){
+        return '<button type="button" class="notif-item t-'+n.type+(n.read?'':' unread')+'" data-nid="'+n.id+'"><span class="notif-idot"></span><span class="notif-ibody"><span class="notif-ititle">'+esc(n.title)+'</span>'+(n.sub?'<span class="notif-isub">'+esc(n.sub)+'</span>':'')+'<span class="notif-time">'+notifTimeAgo(n.at)+'</span></span></button>';
+      }).join('') : '<div class="notif-empty">No alerts yet. New reservations and requests show up here.</div>';
+      list.querySelectorAll('[data-nid]').forEach(function(bn){ bn.onclick=function(){ var n=NOTIFS.filter(function(x){ return x.id===bn.getAttribute('data-nid'); })[0]; if(n){ notifOpen(n); closeNotifPanel(); } }; });
+    } }
+  }
+  function openNotifPanel(){ notifPanelOpen=true; var p=document.getElementById('notifPanel'); if(p) p.hidden=false; renderNotifBell(); }
+  function closeNotifPanel(){ notifPanelOpen=false; var p=document.getElementById('notifPanel'); if(p) p.hidden=true; }
+  (function(){
+    var bell=document.getElementById('notifBell'); if(bell) bell.onclick=function(e){ e.stopPropagation(); notifPanelOpen?closeNotifPanel():openNotifPanel(); };
+    var mt=document.getElementById('notifMuteBtn'); if(mt) mt.onclick=function(e){ e.stopPropagation(); notifMuted=!notifMuted; try{ localStorage.setItem('cm_notif_mute', notifMuted?'1':'0'); }catch(_){} if(!notifMuted) armNotifAudio(); renderNotifBell(); };
+    var ra=document.getElementById('notifReadAll'); if(ra) ra.onclick=function(e){ e.stopPropagation(); NOTIFS.forEach(function(n){ n.read=true; }); try{ if(navigator.clearAppBadge) navigator.clearAppBadge(); }catch(_){} renderNotifBell(); };
+    document.addEventListener('click', function(e){ if(!notifPanelOpen) return; var w=document.querySelector('.notif-wrap'); if(w && !w.contains(e.target)) closeNotifPanel(); });
+  })();
+  // Diff the in-scope reservations each poll. A key that is NEW (and not already returned) is a fresh
+  // reservation, or a request if it needs approval. The first poll seeds silently (no load-time spam).
+  function checkNotifs(){
+    try{
+      var byKey={}; (DATA.checkouts||[]).forEach(function(c){ if(!resvInScope(c)) return; var k=resvKey(c); if(!byKey[k]) byKey[k]=[]; byKey[k].push(c); });
+      var cur={}; Object.keys(byKey).forEach(function(k){ var g=byKey[k];
+        cur[k]={ req:g.some(function(x){ return x.approved===false; }), ret:g.every(function(x){ return statusOf(x)==='returned'; }), name:nameOf(g[0]), items:reqItemsLabel(g), sid:String(g[0].student_id||'') }; });
+      if(notifSeen===null){ notifSeen=cur; return; }
+      Object.keys(cur).forEach(function(k){ if(notifSeen[k] || cur[k].ret) return;
+        if(cur[k].req) pushNotif('request', cur[k].name+' needs your OK', cur[k].items, cur[k].sid);
+        else pushNotif('reservation', 'New reservation · '+cur[k].name, cur[k].items, cur[k].sid);
+      });
+      notifSeen=cur;
+    }catch(e){}
+  }
   function loadBoard(){
-    if(DEMO){ if(!DEMO_DATA) DEMO_DATA=buildDemoData(); DATA=DEMO_DATA; renderBoard(); markSync(true); return Promise.resolve(); }
+    if(DEMO){ if(!DEMO_DATA) DEMO_DATA=buildDemoData(); DATA=DEMO_DATA; renderBoard(); checkNotifs(); markSync(true); return Promise.resolve(); }
     return camAPI('/api/camera/checkouts',{cache:'no-store'}).then(function(r){
       if(r.status===401){ showGate('That password did not work.'); throw new Error('401'); }
       return r.json();
     }).then(function(d){
       DATA={cameras:d.cameras||[],checkouts:d.checkouts||[],assets:d.assets||{},cards:d.cards||{},
             pools:d.pools||{},equipment_pools:d.equipment_pools||{},equipment_units:d.equipment_units||{},equipment_types:d.equipment_types||{},p2_grants:d.p2_grants||[],blackouts:d.blackouts||[],canceled:d.canceled||[]};
-      renderBoard(); markSync(true);
+      renderBoard(); checkNotifs(); markSync(true);
       if(_pendingStu){ var _s=_pendingStu; _pendingStu=null; try{ openStudentProfile(_s); }catch(e){} }
     }).catch(function(e){ if(String(e.message)!=='401') markSync(false); });
   }
@@ -5677,7 +5791,7 @@
   // ---- PIN gate (the password is validated by the server) ----
   var gate=document.getElementById('gate'), pin=document.getElementById('pin'), pinerr=document.getElementById('pinerr');
   function showGate(msg){ KEY=''; try{ sessionStorage.removeItem('silva-cam-key'); }catch(e){} gate.style.display='flex'; pinerr.textContent=msg||''; pin.value=''; setTimeout(function(){ pin.focus(); },50); }
-  function startApp(){ gate.style.display='none'; if(!polling){ polling=true; setInterval(loadBoard,7000); } loadBoard(); pushKey(); maybeDeepLinkCam(); showTeacherGate(); }
+  function startApp(){ gate.style.display='none'; armNotifAudio(); if(!polling){ polling=true; setInterval(loadBoard,7000); } loadBoard(); pushKey(); maybeDeepLinkCam(); showTeacherGate(); }
   // EDIT INFO deep-link from the Photo Walk Log: /camera-manager.html?cam=Cam%2001 opens that camera's window.
   var _deepLinked=false, _pendingStu=null;
   function maybeDeepLinkCam(){ if(_deepLinked) return; _deepLinked=true;
