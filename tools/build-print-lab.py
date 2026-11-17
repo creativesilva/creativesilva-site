@@ -21,7 +21,7 @@ DELIVER_ICON = f"{SITE}/assets/Icons/assignment/deliverables-v4.png"
 # the hero can't be swapped client-side: instead the builder writes TWO otherwise-identical pages, one
 # per hero, and the da1a catalog entry links the DA page. Photo = students reviewing big photo prints;
 # DA = the same lab with illustrated poster/comic designs. Reusing one date block keeps both in sync.
-HERO_PHOTO = f"{SITE}/assets/images/print-lab/print-lab-hero-v1.jpg"
+HERO_PHOTO = f"{SITE}/assets/images/print-lab/print-lab-hero-v2.jpg"
 HERO_DA    = f"{SITE}/assets/images/print-lab/print-lab-hero-da-v1.jpg"
 HAVE_HERO = True
 
