@@ -305,14 +305,38 @@ def _balanced_div_end(html, start):
                 return k
     return len(html)
 
+_BANNER_DARK_FILL="background-color:#04191a;background-image:linear-gradient(90deg,rgba(3,18,20,0.95) 0%,rgba(0,66,68,0.5) 50%,rgba(3,18,20,0.95) 100%)"
+_BANNER_TEAL_FILL="background-color:#0a6e6e;background-image:linear-gradient(90deg,#0a6a6a 0%,#128a8a 50%,#0a6a6a 100%)"
+_BANNER_TEXTCOL='<div style="flex:100 1 260px;min-width:200px;text-align:center;">'
+
 def _recolor_banner(block):
     # Lighten ONLY the outer masthead fill; inner white text / crown / eyebrow stay.
-    return block.replace(
-        "background-color:#04191a;background-image:linear-gradient(90deg,rgba(3,18,20,0.95) 0%,rgba(0,66,68,0.5) 50%,rgba(3,18,20,0.95) 100%)",
-        "background-color:#0a6e6e;background-image:linear-gradient(90deg,#0a6a6a 0%,#128a8a 50%,#0a6a6a 100%)")
+    block = block.replace(_BANNER_DARK_FILL, _BANNER_TEAL_FILL)
+    # Brand the public light module with the teacher of record (Mrs. Garcia, this share only).
+    teacher = "Sra. Garcia" if "Proyecto" in block else "Mrs. Garcia"
+    credit = ('<div style="margin-top:9px;"><span style="font-size:10.5pt;color:#d6fbfb;'
+              'letter-spacing:0.05em;"><strong>' + teacher + ' &middot; Pioneer Valley High School'
+              '</strong></span></div>')
+    i = block.find(_BANNER_TEXTCOL)
+    if i >= 0:
+        depth = 1; k = i + len(_BANNER_TEXTCOL)
+        while k < len(block) and depth > 0:
+            nd = block.find('<div', k); cd = block.find('</div>', k)
+            if cd == -1: break
+            if nd != -1 and nd < cd: depth += 1; k = nd + 4
+            else:
+                depth -= 1; k = cd + 6
+        close = k - 6               # position of the column's matching </div>
+        block = block[:close] + credit + block[close:]
+    return block
 
 # Ordered (find, replace) inline-token map: dark content tokens -> light equivalents.
 _LIGHT_MAP = [
+    # section-header icons: the light-teal (#80E1E1) PNGs wash out on a light bar, so swap in
+    # deep-teal (#007474) variants (share only; the dark Canvas pages keep the light-teal ones).
+    ("Icons/assignment/next-teal-v2.png", "Icons/assignment/next-deep-v1.png"),
+    ("Icons/assignment/overview-teal-v1.png", "Icons/assignment/overview-deep-v1.png"),
+    ("Icons/assignment/step-check-teal-v3.png", "Icons/assignment/step-check-deep-v1.png"),
     # page wrapper: strip the watermark image, lighten the page
     (",url('https://www.creativesilva.com/assets/PV_Panther_Watermark.png')", ""),
     ("linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%)",
