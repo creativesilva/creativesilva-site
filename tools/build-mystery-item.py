@@ -135,13 +135,11 @@ def build_course(C):
         lead=("Descarga la carpeta del proyecto Mystery Item. Adentro tienes una carpeta <strong>Inspo Images</strong> para tu inspiraci&oacute;n, una carpeta <strong>RAW Images</strong> para tus fotos, y el documento de <strong>reflexi&oacute;n</strong> que llenas al final."
               if es else "Download the Mystery Item project folder. Inside you have an <strong>Inspo Images</strong> folder for your inspiration, a <strong>RAW Images</strong> folder for your photos, and the <strong>reflection</strong> document you fill out at the end.")
         ziplabel="Carpeta del Proyecto Mystery Item (ZIP)" if es else "Mystery Item Project Folder (ZIP)"
-        reflabel="Documento de Reflexi&oacute;n (Word)" if es else "Reflection Document (Word)"
-        ref=C['reflect_es'] if es else C['reflect_en']
         return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
           + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
           + para(lead)
           + '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">'
-          + dl_link(C['zip'],ziplabel,row=True) + dl_link(ref,reflabel,row=True)
+          + dl_link(C['zip'],ziplabel,row=True)
           + '</div>'
           + folder_note(es, AREA) + '</div>')
 
@@ -361,9 +359,9 @@ def build_course(C):
 
     # ================= STEP 04: Reflection =================
     def step_reflect():
-        ref_note_en=("Open the reflection document from your project folder (Step 01, the Overview). Before you open it, move it from your Downloads folder into your project folder."
+        ref_note_en=("Open the reflection document inside your Mystery Item project folder. It is already in the folder you downloaded on Step 01, the Overview."
                      if HAVE_DOWNLOADS else "Your teacher will give you the reflection Word document to fill out. Save it in your Mystery Item project folder before you start.")
-        ref_note_es=("Abre el documento de reflexi&oacute;n de tu carpeta del proyecto (Paso 01, el Resumen). Antes de abrirlo, mu&eacute;velo de tu carpeta de Descargas a tu carpeta del proyecto."
+        ref_note_es=("Abre el documento de reflexi&oacute;n que est&aacute; dentro de tu carpeta del proyecto Mystery Item. Ya viene en la carpeta que descargaste en el Paso 01, el Resumen."
                      if HAVE_DOWNLOADS else "Tu maestro te dar&aacute; el documento de reflexi&oacute;n de Word para llenar. Gu&aacute;rdalo en tu carpeta del proyecto Mystery Item antes de empezar.")
         en=banner(f"Module {MOD} &bull; Step 04","Reflection","Tell your idea, how you photographed your mystery item, and what worked and what was hard.","#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
         en+=card("STEP 04 / REFLECT","Complete and Upload the Reflection",
