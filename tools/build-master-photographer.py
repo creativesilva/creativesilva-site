@@ -277,7 +277,140 @@ def deck_showcase(es, deck_preview):
       + para(inside))
     return resources_card(heading, inner, es)
 
-def wrap_standalone(title, nav_inner, top_html, bottom, files_std, share_name):
+# ============================================================================
+# LIGHT-MODE SKIN FOR THE PUBLIC SHARE COPY ONLY (Chris, one-time teacher request,
+# 2026-11-16). Applies ONLY in the std/share pass. The Canvas (cur) output, the
+# shared silva_framework.py, and css/silva-module.css are ALL left untouched, so the
+# locked dark angular framework is unchanged. This takes the generated dark #top
+# content and recolors it to a clean light theme: watermark removed, light page,
+# white content cards, dark ink, accent color-coding kept. The EN + ES banner
+# mastheads are protected from the body recolor and lightened to a teal masthead
+# (white crown + title + eyebrow kept, nothing removed, no new assets). Done by exact
+# inline-token replacement so the conversion is complete, not partial.
+# ============================================================================
+_BANNER_SIG = "background-color:#04191a;background-image:linear-gradient(90deg,rgba(3,18,20,0.95)"
+
+def _balanced_div_end(html, start):
+    """Index just past the </div> that closes the <div> opening at `start`."""
+    depth = 0; k = start
+    while k < len(html):
+        nd = html.find('<div', k); cd = html.find('</div>', k)
+        if cd == -1:
+            return len(html)
+        if nd != -1 and nd < cd:
+            depth += 1; k = nd + 4
+        else:
+            depth -= 1; k = cd + 6
+            if depth == 0:
+                return k
+    return len(html)
+
+def _recolor_banner(block):
+    # Lighten ONLY the outer masthead fill; inner white text / crown / eyebrow stay.
+    return block.replace(
+        "background-color:#04191a;background-image:linear-gradient(90deg,rgba(3,18,20,0.95) 0%,rgba(0,66,68,0.5) 50%,rgba(3,18,20,0.95) 100%)",
+        "background-color:#0a6e6e;background-image:linear-gradient(90deg,#0a6a6a 0%,#128a8a 50%,#0a6a6a 100%)")
+
+# Ordered (find, replace) inline-token map: dark content tokens -> light equivalents.
+_LIGHT_MAP = [
+    # page wrapper: strip the watermark image, lighten the page
+    (",url('https://www.creativesilva.com/assets/PV_Panther_Watermark.png')", ""),
+    ("linear-gradient(180deg,rgba(8,8,8,0.97) 0%,rgba(0,56,56,0.94) 50%,rgba(8,8,8,0.97) 100%)",
+     "linear-gradient(180deg,#f2f7f7 0%,#e8f1f1 100%)"),
+    ("background-color:#080808", "background-color:#eef4f4"),
+    ("background-color:#04191a", "background-color:#ffffff"),   # any stray non-banner dark card
+    # section-header dark fade -> subtle neutral fade (keeps the left accent bar)
+    ("background:linear-gradient(90deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%)",
+     "background:linear-gradient(90deg,rgba(0,0,0,0.06) 0%,rgba(0,0,0,0.03) 45%,rgba(0,0,0,0) 100%)"),
+    ("background:linear-gradient(90deg,rgba(0,0,0,0.48) 0%,rgba(0,0,0,0.28) 45%,rgba(0,0,0,0) 100%)",
+     "background:linear-gradient(90deg,rgba(0,0,0,0.06) 0%,rgba(0,0,0,0.03) 45%,rgba(0,0,0,0) 100%)"),
+    # dark inset -> light inset
+    ("background:rgba(0,0,0,0.40)", "background:rgba(0,0,0,0.045)"),
+    # dark purple angular block -> light purple angular
+    ("linear-gradient(135deg,#241d3a 0,#241d3a 30px,#140f24 30px,#140f24 100%)",
+     "linear-gradient(135deg,#efeafc 0,#efeafc 30px,#f7f4fe 30px,#f7f4fe 100%)"),
+    # light-accent top stripes -> solid accent so they read on white
+    ("border-top:2px solid #c4b5fd", "border-top:2px solid #8b5cf6"),
+    ("border-top:2px solid #ffb27c", "border-top:2px solid #FF6B1A"),
+    # body text: white -> dark ink
+    ("color:#ffffff", "color:#16211f"),
+    ("color:rgba(255,255,255,0.92)", "color:rgba(22,33,31,0.93)"),
+    ("color:rgba(255,255,255,0.90)", "color:rgba(22,33,31,0.92)"),
+    ("color:rgba(255,255,255,0.88)", "color:rgba(22,33,31,0.90)"),
+    ("color:rgba(255,255,255,0.85)", "color:rgba(22,33,31,0.85)"),
+    ("color:rgba(255,255,255,0.82)", "color:rgba(22,33,31,0.80)"),
+    ("color:rgba(255,255,255,0.72)", "color:rgba(22,33,31,0.64)"),
+    # accent text: lighten-for-dark -> darken-for-light (color meaning kept)
+    ("color:#80e0e0", "color:#0b7777"),
+    ("color:#a9f2f2", "color:#0b7777"),
+    ("color:#00b8b8", "color:#007474"),
+    ("color:#c4b5fd", "color:#6d28d9"),
+    ("color:#ffd166", "color:#9a6a00"),
+    ("color:#f5b301", "color:#8a5a00"),
+    ("color:#7bf0a8", "color:#13803f"),
+    ("color:#26de78", "color:#12803f"),
+    ("color:#8b5cf6", "color:#6d28d9"),
+    ("color:#ffb27c", "color:#c2480f"),
+    ("color:#FF6B1A", "color:#c2480f"),
+    # hairlines: white -> dark
+    ("solid rgba(255,255,255,0.08)", "solid rgba(0,0,0,0.10)"),
+    ("solid rgba(255,255,255,0.12)", "solid rgba(0,0,0,0.12)"),
+    ("rgba(255,255,255,0.08)", "rgba(0,0,0,0.10)"),
+    ("rgba(255,255,255,0.12)", "rgba(0,0,0,0.12)"),
+]
+
+def to_light(html):
+    # 1) pull the banner mastheads out so the body recolor can't touch their text
+    parts=[]; banners=[]; i=0
+    while True:
+        j = html.find(_BANNER_SIG, i)
+        if j < 0:
+            parts.append(html[i:]); break
+        ds = html.rfind('<div', 0, j)
+        parts.append(html[i:ds])
+        end = _balanced_div_end(html, ds)
+        banners.append(html[ds:end])
+        parts.append("\x00B%d\x00" % (len(banners)-1))
+        i = end
+    body = "".join(parts)
+    # 2) recolor the content to light
+    for a,b in _LIGHT_MAP:
+        body = body.replace(a,b)
+    # 3) tidy the now single-layer wrapper background (watermark layer removed)
+    body = body.replace("background-position:center center,center center", "background-position:center center")
+    body = body.replace("background-repeat:no-repeat,no-repeat", "background-repeat:no-repeat")
+    body = body.replace("background-attachment:fixed,fixed", "background-attachment:fixed")
+    # 4) reinsert the (lightened) banner mastheads
+    for n,blk in enumerate(banners):
+        body = body.replace("\x00B%d\x00" % n, _recolor_banner(blk))
+    return body
+
+# Light skin for the standalone chrome (nav / step dots / step buttons / bottom nav /
+# teacher-tools bar). Emitted AFTER the silva-module.css link so it wins by source order
+# without !important. Share pages only.
+LIGHT_CHROME = (
+    "body{background:#eef4f4;color:#13211f;}"
+    ".silva-nav{background:rgba(255,255,255,0.82);border-bottom:1px solid rgba(0,0,0,0.08);}"
+    ".silva-breadcrumb a{color:#007474;}"
+    ".silva-breadcrumb a:hover{color:#005a5a;}"
+    ".silva-breadcrumb .bc-sep{color:rgba(0,116,116,0.5);}"
+    ".silva-breadcrumb .bc-current{color:#2a3a38;}"
+    ".sdot{border-color:rgba(0,0,0,0.18);color:rgba(0,0,0,0.22);}"
+    ".sdot-link{border-color:rgba(0,116,116,0.45);color:rgba(0,116,116,0.70);}"
+    ".sdot-link:hover{border-color:#007474;color:#007474;background:rgba(0,116,116,0.08);}"
+    ".sdot-active{background:#007474;border-color:#007474;color:#fff;}"
+    ".silva-step-btn{background:#fff;border:1px solid rgba(0,116,116,0.35);color:#0a6a6a;}"
+    ".silva-step-btn:hover{background:rgba(0,116,116,0.08);color:#005a5a;border-color:#007474;}"
+    ".silva-bottom-nav{border-top:1px solid rgba(0,0,0,0.10);}"
+    ".silva-bottom-btn{background:#fff;border:1px solid rgba(0,116,116,0.35);color:#0a6a6a;}"
+    ".silva-bottom-btn:hover{background:rgba(0,116,116,0.08);color:#005a5a;border-color:#007474;}"
+    ".silva-share-bar{border-top:1px solid rgba(0,0,0,0.08);}"
+    ".silva-share-inner .stt-label{color:#0a7777;}"
+    ".share-btn{color:#06403f;background:rgba(0,184,184,0.12);border:1px solid rgba(0,116,116,0.50);}"
+    ".share-btn:hover{background:rgba(0,184,184,0.22);}"
+    ".share-btn.ok{background:#00b8b8;color:#04201f;border-color:#00b8b8;}")
+
+def wrap_standalone(title, nav_inner, top_html, bottom, files_std, share_name, light=False):
     # Self-contained share page: the module's own css + a minimal internal nav, NO silva-nav.js (so no
     # site nav / Equipment Manager / Catalog), NO builder buttons, NO links out. Internal step links
     # only. Language toggle kept (inline JS runs on the hosted page). Assets load absolute from the
@@ -321,6 +454,7 @@ def wrap_standalone(title, nav_inner, top_html, bottom, files_std, share_name):
   <style>:root {{ --course-accent: #007474; }}
   {share_css}</style>
   <link rel="stylesheet" href="https://www.creativesilva.com/css/silva-module.css" />
+  {('<style id="silva-light-skin">'+LIGHT_CHROME+'</style>') if light else ''}
 </head>
 <body>
   <nav class="silva-nav" aria-label="Module navigation">
@@ -371,7 +505,9 @@ def build(mode, C):
     def wrap_page(title, nav_inner, top_html, bottom):
         if cur:
             return _sf.wrap_page(title, nav_inner, top_html, bottom)
-        return wrap_standalone(title, nav_inner, top_html, bottom, FILES_STD, SHARE_NAME)
+        # Public share copy is LIGHT MODE (Chris, one-time request): recolor the dark
+        # content and emit the light chrome skin. Canvas (cur) output is unchanged.
+        return wrap_standalone(title, nav_inner, to_light(top_html), bottom, FILES_STD, SHARE_NAME, light=True)
 
     def step_topnav(i):
         parts=[]
