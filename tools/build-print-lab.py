@@ -14,11 +14,15 @@ from silva_framework import *      # banner, card, para, bullets, steps, note, s
 import silva_framework as _sf
 
 ROOT = "/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
-OUT  = os.path.join(ROOT, "curriculum/shared/print-lab.html")
+OUT     = os.path.join(ROOT, "curriculum/shared/print-lab.html")      # Photo 1 + Photo 2 (photo hero)
+OUT_DA  = os.path.join(ROOT, "curriculum/shared/print-lab-da.html")   # Digital Arts 1 (illustrated-designs hero)
 DELIVER_ICON = f"{SITE}/assets/Icons/assignment/deliverables-v4.png"
-# 21:9 header/hero (Chris's "Print your work header v3": two students reviewing big prints by the
-# wide-format printer in the photo lab). Shared page, so one hero for Photo 1 + Photo 2 + Digital Arts.
-HERO = f"{SITE}/assets/images/print-lab/print-lab-hero-v1.jpg"
+# 21:9 header/hero (Chris's "Print your work header" art). Canvas strips JS when a page is pasted, so
+# the hero can't be swapped client-side: instead the builder writes TWO otherwise-identical pages, one
+# per hero, and the da1a catalog entry links the DA page. Photo = students reviewing big photo prints;
+# DA = the same lab with illustrated poster/comic designs. Reusing one date block keeps both in sync.
+HERO_PHOTO = f"{SITE}/assets/images/print-lab/print-lab-hero-v1.jpg"
+HERO_DA    = f"{SITE}/assets/images/print-lab/print-lab-hero-da-v1.jpg"
 HAVE_HERO = True
 
 # ============================================================================
@@ -156,7 +160,7 @@ def closing(ready_d, es=False):
         return note(f"Listas <strong>{ready_d}.</strong> Recoge con el Sr. Silva. Env&iacute;a tu mejor trabajo: al Sr. Silva le encanta ver las fotos de las que est&aacute;s orgulloso.")
     return note(f"Prints ready <strong>{ready_d}.</strong> Pick up from Mr. Silva. Send your best work. Mr. Silva loves seeing the photos you are proud of.")
 
-def build():
+def build(out, hero, hero_alt_en, hero_alt_es, title):
     # ---------- English ----------
     en  = banner("Print Your Best Work", "Print Lab",
                  "Send your 3 best photos. Mr. Silva prints them big, 11 by 17 inches, to take home. Free. Not graded.",
@@ -166,7 +170,7 @@ def build():
                     "<strong>11 by 17 inches</strong>, for you to take home. This is <strong>free</strong> and <strong>not graded.</strong>")
              + para("Send up to <strong>three</strong> photos before the print queue closes. First crop each one to the "
                     "11 x 17 shape, then upload it here. That is it.")
-             + (framed(HERO, "Two students in the photo lab looking at large printed photos next to a wide format printer") if HAVE_HERO else ""))
+             + (framed(hero, hero_alt_en) if HAVE_HERO else ""))
     en += window_box(OPEN_EN, CLOSE_EN, READY_EN, es=False)
     en += submit_box(CLOSE_EN, es=False)
     en += crop_card(es=False)
@@ -181,7 +185,7 @@ def build():
                     "<strong>11 por 17 pulgadas</strong>, para llevar a casa. Es <strong>gratis</strong> y <strong>sin calificaci&oacute;n.</strong>")
              + para("Env&iacute;a hasta <strong>tres</strong> fotos antes de que cierre la cola de impresi&oacute;n. Primero recorta cada una a la "
                     "forma de 11 x 17 y luego s&uacute;bela aqu&iacute;. Eso es todo.")
-             + (framed(HERO, "Dos estudiantes en el laboratorio de foto viendo fotos impresas grandes junto a una impresora de gran formato") if HAVE_HERO else ""))
+             + (framed(hero, hero_alt_es) if HAVE_HERO else ""))
     es += window_box(OPEN_ES, CLOSE_ES, READY_ES, es=True)
     es += submit_box(CLOSE_ES, es=True)
     es += crop_card(es=True)
@@ -194,11 +198,20 @@ def build():
                  '      </div>\n'
                  '      <div class="silva-nav-spacer"></div>')
 
-    html = wrap_page("Print Lab | PVHS Photography", nav_inner, top_wrap(en, es), "")
-    ban_check(html, "print-lab.html")
-    with open(OUT, "w", encoding="utf-8") as f:
+    html = wrap_page(title, nav_inner, top_wrap(en, es), "")
+    ban_check(html, os.path.basename(out))
+    with open(out, "w", encoding="utf-8") as f:
         f.write(html)
-    print("wrote", OUT, os.path.getsize(html if False else OUT), "bytes")
+    print("wrote", out, os.path.getsize(out), "bytes")
 
 if __name__ == "__main__":
-    build()
+    # Photo 1 + Photo 2 (photo prints hero)
+    build(OUT, HERO_PHOTO,
+          "Two students in the photo lab looking at large printed photos next to a wide format printer",
+          "Dos estudiantes en el laboratorio de foto viendo fotos impresas grandes junto a una impresora de gran formato",
+          "Print Lab | PVHS Photography")
+    # Digital Arts 1 (illustrated designs hero)
+    build(OUT_DA, HERO_DA,
+          "Two students in the digital arts lab looking at large printed illustration designs next to a wide format printer",
+          "Dos estudiantes en el laboratorio de arte digital viendo dise&ntilde;os ilustrados impresos grandes junto a una impresora de gran formato",
+          "Print Lab | PVHS Digital Arts")
