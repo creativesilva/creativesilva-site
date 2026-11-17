@@ -16,7 +16,9 @@ IMGDIR=f"{SITE}/assets/images/digarts1/make-your-mark"
 HERO_SCRIPT=f"{IMGDIR}/example-script-sticker-v1.jpg"  # "Your Text" brush-script sticker on grass -> idea hero
 EX_LOVE=f"{IMGDIR}/example-love-sticker-v1.jpg"         # LOVE bubble/pattern sticker -> Watch & look
 RAIDER=f"{IMGDIR}/example-raider-sticker-v1.jpg"        # RAIDERS chrome mascot sticker -> Step 02 example
+CONTOUR=f"{IMGDIR}/contour-cut-example-v1.png"          # monster sticker: white border + red cut line -> Step 04 print float
 HAVE_ART=True
+HAVE_CONTOUR=True
 
 # style ideas students can DRAW (no fonts): (EN name, ES name, EN desc, ES desc)
 STYLE_IDEAS=[
@@ -47,7 +49,8 @@ OVER=f"{PFX}-make-your-mark-overview.html"
 # Reflection -> Step 04). pageLabel numbers by position, so the filename step number is cosmetic.
 SKETCH=f"{PFX}-make-your-mark-step02-sketchbook.html"  # Step 02 (extra credit)
 S1=f"{PFX}-make-your-mark-step01-make-your-word.html"  # Step 03 (Make Your Word)
-S2=f"{PFX}-make-your-mark-step02-reflection.html"      # Step 04 (Reflection)
+PRINT=f"{PFX}-make-your-mark-step04-print-setup.html"  # Step 04 (Set Up for Print / CutContour cut path)
+S2=f"{PFX}-make-your-mark-step02-reflection.html"      # Step 05 (Reflection)
 HAVE_SKETCH_FLOAT=False  # Step 02 sketch float (none supplied yet), assets/images/digarts1/make-your-mark/sketch-float-v1.jpg
 SKETCH_FLOAT=f"{IMGDIR}/sketch-float-v1.jpg"
 
@@ -215,9 +218,9 @@ def nav(current,dots,stepnav):
             '      <div class="silva-nav-spacer"></div>\n'
             f'      <div class="silva-dots" aria-label="Module progress">{dots}</div>\n'
             f'      <div class="silva-step-nav">{stepnav}</div>')
-DT=[("1","Step 01"),("2","Step 02"),("3","Step 03"),("4","Step 04")]
+DT=[("1","Step 01"),("2","Step 02"),("3","Step 03"),("4","Step 04"),("5","Step 05")]
 def dots_for(active):
-    hrefs=[OVER,SKETCH,S1,S2]; r=""
+    hrefs=[OVER,SKETCH,S1,PRINT,S2]; r=""
     for i,(lab,title) in enumerate(DT):
         r+=dot("" if i==active else hrefs[i], lab, title, i==active, module=False)
     return r
@@ -249,12 +252,13 @@ def overview():
         para("This project has two parts. Right now is the <strong>design draft</strong>: you explore type, design your letters, and make your sticker art.")
         + para("In the <strong>next project</strong>, we print a whole sheet of everyone&rsquo;s stickers on the sticker printer, and you learn to cut out your own. You are making the art now so it is ready to print later."))
     en+=downloads(False)
-    en+=card("How It Works / Your Plan","Your Next 3 Steps",
-        para("You are on Step 01 now: read this page and download your project folder. Here are the three steps that follow.")
+    en+=card("How It Works / Your Plan","Your Next 4 Steps",
+        para("You are on Step 01 now: read this page and download your project folder. Here are the four steps that follow.")
         + bullets([
             ("Step 02 &middot; Sketchbook Sketch (extra credit):","sketch your sticker by hand first for bonus points."),
             ("Step 03 &middot; Make Your Word:","pick a style, draw your letters, and add the white sticker border."),
-            ("Step 04 &middot; Reflection:","fill in a short sheet about your sticker."),
+            ("Step 04 &middot; Set Up for Print:","add your cut path and save your print ready PDF."),
+            ("Step 05 &middot; Reflection:","fill in a short sheet about your sticker."),
         ]))
     en+=standards_box(False, MYM_STANDARDS)
     en+=next_up("UP NEXT &middot; STEP 02 - Sketchbook Sketch (Extra Credit)","Sketch your sticker by hand first for bonus points, then build it digitally.")
@@ -283,12 +287,13 @@ def overview():
         para("Este proyecto tiene dos partes. Ahora es el <strong>borrador de dise&ntilde;o</strong>: exploras tipograf&iacute;a, dise&ntilde;as tus letras y haces el arte de tu sticker.")
         + para("En el <strong>siguiente proyecto</strong>, imprimimos una hoja completa con los stickers de todos en la impresora de stickers, y aprendes a recortar el tuyo. Est&aacute;s creando el arte ahora para que est&eacute; listo para imprimir despu&eacute;s."))
     es+=downloads(True)
-    es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Siguientes 3 Pasos",
-        para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina y descarga tu carpeta del proyecto. Aqu&iacute; est&aacute;n los tres pasos que siguen.")
+    es+=card("C&Oacute;MO FUNCIONA / TU PLAN","Tus Siguientes 4 Pasos",
+        para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina y descarga tu carpeta del proyecto. Aqu&iacute; est&aacute;n los cuatro pasos que siguen.")
         + bullets([
             ("Paso 02 &middot; Boceto en el Cuaderno (cr&eacute;dito extra):","dibuja tu sticker a mano primero para puntos extra."),
             ("Paso 03 &middot; Haz Tu Palabra:","elige un estilo, dibuja tus letras y agrega el borde blanco del sticker."),
-            ("Paso 04 &middot; Reflexi&oacute;n:","llena una hoja corta sobre tu sticker."),
+            ("Paso 04 &middot; Prepara para Imprimir:","agrega tu l&iacute;nea de corte y guarda tu PDF listo para imprimir."),
+            ("Paso 05 &middot; Reflexi&oacute;n:","llena una hoja corta sobre tu sticker."),
         ]))
     es+=standards_box(True, MYM_STANDARDS)
     es+=next_up("SIGUIENTE &middot; PASO 02 - Boceto en el Cuaderno (Cr&eacute;dito Extra)","Dibuja tu sticker a mano primero para puntos extra, luego hazlo en digital.")
@@ -383,8 +388,8 @@ def make_word():
             ("Draw your letters.","Trace your sketch with the <strong>Pencil</strong> or <strong>Pen</strong> tool. No fonts. Use your one style on every letter, the same thickness."),
             ("Color and outline.","Fill every letter the same way (one color or a pattern). Give every letter the same <strong>black outline</strong>."),
             ("Add the white sticker border.","Put a thick <strong>white border</strong> around the whole word so it looks like a real sticker and pops on any color. Mr. Silva will show you how."),
-            ("Save your Illustrator file.","Click <strong>File &rarr; Save</strong> to keep your <strong>.ai</strong> file. You do NOT turn in the .ai file."),
-            ("Save a vector PDF.","Click <strong>File &rarr; Save As</strong> and pick <strong>Adobe PDF</strong>. Choose the <strong>[Press Quality]</strong> preset, then click <strong>Save PDF</strong>. It stays sharp vector art in CMYK. This PDF is what you turn in."),
+            ("Save your master .ai file.","Click <strong>File &rarr; Save</strong> to keep your <strong>.ai</strong> file. Keep it in <strong>OneDrive &rarr; Digital Arts Folder</strong>. You do NOT turn in the .ai. Keep it so you can change your sticker later."),
+            ("Save a proof PDF.","Click <strong>File &rarr; Save As</strong> and pick <strong>Adobe PDF</strong>. Choose the <strong>[Press Quality]</strong> preset, then click <strong>Save PDF</strong>. It stays sharp vector art in CMYK. This proof PDF is what you turn in for this step."),
         ], accent="#00b8b8"))
         + note("On the Mac, press <strong>Cmd</strong> (not Ctrl). Ask Mr. Silva if you get stuck."))
     en+=draw_resource(False)
@@ -398,8 +403,8 @@ def make_word():
             ("Would a new letter fit in?","if yes, your word is a family."),
         ]))
     en+=deliverables_box(False,
-        [("1 vector PDF:","your finished <strong>sticker</strong>, saved as a <strong>vector PDF</strong> (File &rarr; Save As &rarr; Adobe PDF &rarr; [Press Quality]), uploaded to this Canvas assignment. <strong>Not</strong> the .ai file, and not a JPG.")])
-    en+=next_up("UP NEXT &middot; STEP 04 - Reflection","Tell about your sticker: your style, and the hardest part.")
+        [("1 proof PDF:","your finished <strong>sticker design</strong>, saved as a <strong>vector PDF</strong> (File &rarr; Save As &rarr; Adobe PDF &rarr; [Press Quality]), uploaded to this Canvas assignment. Keep your master <strong>.ai</strong> in OneDrive. <strong>Not</strong> the .ai file, and not a JPG.")])
+    en+=next_up("UP NEXT &middot; STEP 04 - Set Up for Print","Add a cut path and save your print ready PDF.")
     # ---- ES ----
     es=banner("M&oacute;dulo 09 &bull; Paso 03","Haz Tu Palabra",
         "Dibuja tus letras y convierte tu palabra en un sticker.","#top","Back to English",hicon=HICON_DESIGN)
@@ -420,8 +425,8 @@ def make_word():
             ("Dibuja tus letras.","Calca tu boceto con la herramienta <strong>L&aacute;piz</strong> o <strong>Pluma</strong>. Sin fuentes. Usa tu mismo estilo en cada letra, del mismo grosor."),
             ("Color y contorno.","Rellena cada letra igual (un color o un patr&oacute;n). Dale a cada letra el mismo <strong>contorno negro</strong>."),
             ("Agrega el borde blanco del sticker.","Pon un <strong>borde blanco</strong> grueso alrededor de toda la palabra para que se vea como un sticker real y resalte en cualquier color. El Sr. Silva te ense&ntilde;ar&aacute; c&oacute;mo."),
-            ("Guarda tu archivo de Illustrator.","Haz clic en <strong>Archivo &rarr; Guardar</strong> para conservar tu archivo <strong>.ai</strong>. NO entregas el archivo .ai."),
-            ("Guarda un PDF vectorial.","Haz clic en <strong>Archivo &rarr; Guardar como</strong> y elige <strong>Adobe PDF</strong>. Escoge el ajuste <strong>[Press Quality]</strong> y haz clic en <strong>Guardar PDF</strong>. Queda como arte vectorial n&iacute;tido en CMYK. Ese PDF es lo que entregas."),
+            ("Guarda tu archivo maestro .ai.","Haz clic en <strong>Archivo &rarr; Guardar</strong> para conservar tu archivo <strong>.ai</strong>. Gu&aacute;rdalo en <strong>OneDrive &rarr; Digital Arts Folder</strong>. NO entregas el .ai. Gu&aacute;rdalo para poder cambiar tu sticker despu&eacute;s."),
+            ("Guarda un PDF de prueba.","Haz clic en <strong>Archivo &rarr; Guardar como</strong> y elige <strong>Adobe PDF</strong>. Escoge el ajuste <strong>[Press Quality]</strong> y haz clic en <strong>Guardar PDF</strong>. Queda como arte vectorial n&iacute;tido en CMYK. Ese PDF de prueba es lo que entregas en este paso."),
         ], accent="#00b8b8"))
         + note("En la Mac, presiona <strong>Cmd</strong> (no Ctrl). Preg&uacute;ntale al Sr. Silva si te atoras."))
     es+=draw_resource(True)
@@ -435,15 +440,116 @@ def make_word():
             ("&iquest;Combinar&iacute;a una letra nueva?","si s&iacute;, tu palabra es una familia."),
         ]))
     es+=deliverables_box(True,
-        [("1 PDF vectorial:","tu <strong>sticker</strong> terminado, guardado como <strong>PDF vectorial</strong> (Archivo &rarr; Guardar como &rarr; Adobe PDF &rarr; [Press Quality]), subido a esta tarea de Canvas. <strong>No</strong> el archivo .ai, y no un JPG.")])
-    es+=next_up("SIGUIENTE &middot; PASO 04 - Reflexi&oacute;n","Cuenta sobre tu sticker: tu estilo y la parte m&aacute;s dif&iacute;cil.")
-    stepnav=f'<a href="{SKETCH}" class="silva-step-btn">&#8592; Step 02</a> <a href="{S2}" class="silva-step-btn">Step 04 &#8594;</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{SKETCH}" class="silva-bottom-btn">&#8592; Step 02</a><a href="{S2}" class="silva-bottom-btn">Step 04 &#8594;</a></div>'
+        [("1 PDF de prueba:","tu <strong>dise&ntilde;o de sticker</strong> terminado, guardado como <strong>PDF vectorial</strong> (Archivo &rarr; Guardar como &rarr; Adobe PDF &rarr; [Press Quality]), subido a esta tarea de Canvas. Guarda tu archivo maestro <strong>.ai</strong> en OneDrive. <strong>No</strong> el archivo .ai, y no un JPG.")])
+    es+=next_up("SIGUIENTE &middot; PASO 04 - Prepara para Imprimir","Agrega una l&iacute;nea de corte y guarda tu PDF listo para imprimir.")
+    stepnav=f'<a href="{SKETCH}" class="silva-step-btn">&#8592; Step 02</a> <a href="{PRINT}" class="silva-step-btn">Step 04 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{SKETCH}" class="silva-bottom-btn">&#8592; Step 02</a><a href="{PRINT}" class="silva-bottom-btn">Step 04 &#8594;</a></div>'
     return wrap_page(f"Step 3: Make Your Word | Design a Sticker | {CT} | PVHS", nav("Step 03",dots_for(2),stepnav), top_wrap(en,es), bottom)
+
+def print_setup():
+    # Step 04: get the finished design print-ready and add the CutContour cut path, then export the
+    # FINAL print PDF. The master .ai stays on OneDrive (keep it to edit later); only PDFs are turned in.
+    # Illustrator steps verified against current Adobe docs + print-shop/forum best practice (spot swatch
+    # named CutContour, stroke 0.25pt, no fill, Overprint on, Save As PDF with editing capabilities off so
+    # the spot color survives). CutContour = the exact spot name RIP/cutter software looks for (Chris).
+    teal="#00b8b8"; th="#5ff0f0"
+    # ---- EN ----
+    en_inner=(subhead("First: the right file and CMYK", th)
+        + steps([
+            ("Open your sticker in the provided file.","You should be working in <strong>Design_A_Sticker.ai</strong>. If you drew your sticker in a different file, open Design_A_Sticker.ai, then copy your art (<strong>Cmd+C</strong>) and paste it in (<strong>Cmd+V</strong>). Move your whole design into the provided file."),
+            ("Check your colors are CMYK.","Click <strong>File &rarr; Document Color Mode</strong>. Make sure <strong>CMYK Color</strong> has the check. The sticker printer prints in CMYK. The provided file is already CMYK, so if you started there you are set."),
+        ], accent=teal)
+        + subhead("Then: make your cut path", th)
+        + steps([
+            ("Make a new CutContour swatch.","Open <strong>Window &rarr; Swatches</strong>. Click the <strong>New Swatch</strong> button. Name it exactly <strong>CutContour</strong>. Set <strong>Color Type</strong> to <strong>Spot Color</strong>. Set the sliders to <strong>C 0, M 100, Y 0, K 0</strong> (100% magenta, nothing else). Click OK."),
+            ("Know what this means.","The bright magenta is only so you can see the line. The <strong>spot color named CutContour</strong> is the exact name the sticker printer looks for, so it knows &ldquo;this is a cut line, do not print it.&rdquo;"),
+            ("Select your white border.","Click the <strong>white border</strong> shape around your word. If your border is more than one piece, select the pieces and click <strong>Window &rarr; Pathfinder &rarr; Unite</strong> to make one shape first."),
+            ("Offset a cut line around it.","Click <strong>Object &rarr; Path &rarr; Offset Path</strong>. Set the Offset to a small amount, like <strong>0.0625 in</strong>, so the cut sits just outside the white. Click OK. This makes one new line around your sticker."),
+            ("Give the line no fill.","With the new line selected, set the <strong>Fill</strong> to <strong>None</strong> (the white box with the red slash). A cut line never has a fill."),
+            ("Give the line the CutContour stroke.","Set the <strong>Stroke</strong> to your <strong>CutContour</strong> swatch. Set the stroke weight to <strong>0.25 pt</strong> (in the Stroke box at the top, or Window &rarr; Stroke)."),
+            ("Turn on Overprint.","Open <strong>Window &rarr; Attributes</strong> and check <strong>Overprint Stroke</strong>. This keeps your cut line from leaving a white gap in your art."),
+            ("Keep it to one clean line.","You should have <strong>one</strong> closed cut line around your whole sticker: no fill, no double lines, no gaps."),
+            ("Check it is a real spot color.","Open <strong>Window &rarr; Separations Preview</strong> and check the box. Turn Cyan, Magenta, Yellow, and Black off one at a time. When all four are off, only your CutContour line should still show. That proves it will cut, not print. Turn the plates back on when you finish."),
+        ], accent=teal)
+        + subhead("Last: save your files", th)
+        + steps([
+            ("Save your master .ai file.","Click <strong>File &rarr; Save</strong> to keep your <strong>.ai</strong> file. Keep this master in <strong>OneDrive &rarr; Digital Arts Folder</strong>. You do NOT turn in the .ai. Keep it so you can change your sticker later."),
+            ("Save your final print PDF.","Click <strong>File &rarr; Save As</strong> and pick <strong>Adobe PDF</strong>. Choose the <strong>[Press Quality]</strong> preset. On the General tab, <strong>uncheck</strong> &ldquo;Preserve Illustrator Editing Capabilities&rdquo; so your CutContour spot color stays safe. Click <strong>Save PDF</strong>. This vector PDF has your art and your cut path, ready for the printer. This is what you turn in."),
+        ], accent=teal))
+    en=banner("Module 09 &bull; Step 04","Set Up for Print",
+        "Add a cut path and make your file print ready, then turn in your final print file.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_DESIGN)
+    en+=card("Learn &middot; what this step is","Get Your File Ready to Print",
+        (float_right(CONTOUR,"A cartoon monster sticker with a white border and a red cut line around the outside, showing where the machine will cut","The cut line goes around the outside of your white border. That is where the machine cuts.") if HAVE_CONTOUR else "")
+        + para("Your sticker design is done. Nice work. Now you get the file ready for the big <strong>wide format sticker printer</strong>.")
+        + para("The printer needs two things: the right colors (<strong>CMYK</strong>) and a <strong>cut path</strong>. A cut path is a thin line that tells the machine exactly where to cut out your sticker.")
+        + para("You keep your master Illustrator file (<strong>.ai</strong>) for yourself on OneDrive. You only turn in a <strong>PDF</strong>."))
+    en+=card("Learn &middot; step by step","Set Up Your File and Cut Path",
+        para("Follow these steps in order. Scroll inside the box to see them all. Mr. Silva will demo it first.")
+        + scroll_steps(en_inner))
+    en+=card("Learn &middot; check yourself","Before You Turn It In",
+        para("Check all five before you save your final PDF.")
+        + bullets([
+            ("Right file","you are in Design_A_Sticker.ai, or you moved your art into it."),
+            ("CMYK","your Document Color Mode is CMYK."),
+            ("CutContour swatch","a spot color named CutContour, 100% magenta."),
+            ("Cut line","one closed line around your sticker: 0.25 pt stroke, no fill, Overprint on."),
+            ("Print PDF","saved as a vector PDF, [Press Quality], with editing capabilities unchecked."),
+        ]))
+    en+=deliverables_box(False,
+        [("1 final print PDF:","your print ready sticker, saved as a <strong>vector PDF</strong> (File &rarr; Save As &rarr; Adobe PDF &rarr; [Press Quality]) with your <strong>CutContour</strong> cut path, uploaded to this Canvas assignment. Keep your master <strong>.ai</strong> in OneDrive. <strong>Not</strong> the .ai file, and not a JPG.")])
+    en+=next_up("UP NEXT &middot; STEP 05 - Reflection","Tell about your sticker: your style, and the hardest part.")
+    # ---- ES ----
+    es_inner=(subhead("Primero: el archivo correcto y CMYK", th)
+        + steps([
+            ("Abre tu sticker en el archivo provisto.","Debes trabajar en <strong>Design_A_Sticker.ai</strong>. Si dibujaste tu sticker en otro archivo, abre Design_A_Sticker.ai, luego copia tu arte (<strong>Cmd+C</strong>) y p&eacute;galo (<strong>Cmd+V</strong>). Mueve todo tu dise&ntilde;o al archivo provisto."),
+            ("Revisa que tus colores sean CMYK.","Haz clic en <strong>Archivo &rarr; Modo de color del documento</strong>. Aseg&uacute;rate de que <strong>Color CMYK</strong> tenga la palomita. La impresora imprime en CMYK. El archivo provisto ya es CMYK, as&iacute; que si empezaste ah&iacute; ya est&aacute;s listo."),
+        ], accent=teal)
+        + subhead("Luego: haz tu l&iacute;nea de corte", th)
+        + steps([
+            ("Haz una muestra nueva llamada CutContour.","Abre <strong>Ventana &rarr; Muestras</strong>. Haz clic en el bot&oacute;n <strong>Nueva muestra</strong>. Ll&aacute;mala exactamente <strong>CutContour</strong>. Pon <strong>Tipo de color</strong> en <strong>Color plano</strong> (Spot Color). Pon los valores en <strong>C 0, M 100, Y 0, K 0</strong> (100% magenta, nada m&aacute;s). Haz clic en OK."),
+            ("Entiende qu&eacute; significa.","El magenta brillante es solo para que veas la l&iacute;nea. El <strong>color plano llamado CutContour</strong> es el nombre exacto que busca la impresora de stickers, para saber: &ldquo;esta es una l&iacute;nea de corte, no la imprimas.&rdquo;"),
+            ("Selecciona tu borde blanco.","Haz clic en la forma del <strong>borde blanco</strong> alrededor de tu palabra. Si tu borde tiene m&aacute;s de una pieza, selecciona las piezas y haz clic en <strong>Ventana &rarr; Buscatrazos &rarr; Unir</strong> para hacer una sola forma."),
+            ("Crea una l&iacute;nea de corte alrededor.","Haz clic en <strong>Objeto &rarr; Trazado &rarr; Desplazamiento de trazado</strong>. Pon el desplazamiento en un n&uacute;mero peque&ntilde;o, como <strong>0.0625 in</strong>, para que el corte quede justo afuera del blanco. Haz clic en OK. Esto crea una l&iacute;nea nueva alrededor de tu sticker."),
+            ("Deja la l&iacute;nea sin relleno.","Con la l&iacute;nea nueva seleccionada, pon el <strong>Relleno</strong> en <strong>Ninguno</strong> (la caja blanca con la l&iacute;nea roja). Una l&iacute;nea de corte nunca tiene relleno."),
+            ("Dale a la l&iacute;nea el trazo CutContour.","Pon el <strong>Trazo</strong> en tu muestra <strong>CutContour</strong>. Pon el grosor del trazo en <strong>0.25 pt</strong> (en la caja de Trazo arriba, o Ventana &rarr; Trazo)."),
+            ("Activa Sobreimprimir.","Abre <strong>Ventana &rarr; Atributos</strong> y marca <strong>Sobreimprimir trazo</strong>. Esto evita que tu l&iacute;nea de corte deje un hueco blanco en tu arte."),
+            ("Deja solo una l&iacute;nea limpia.","Debes tener <strong>una</strong> l&iacute;nea de corte cerrada alrededor de todo tu sticker: sin relleno, sin l&iacute;neas dobles, sin huecos."),
+            ("Comprueba que sea un color plano real.","Abre <strong>Ventana &rarr; Previsualizaci&oacute;n de separaciones</strong> y marca la caja. Apaga Cian, Magenta, Amarillo y Negro uno por uno. Cuando los cuatro est&eacute;n apagados, solo tu l&iacute;nea CutContour debe seguir visible. Eso prueba que se va a cortar, no a imprimir. Vuelve a encender las placas cuando termines."),
+        ], accent=teal)
+        + subhead("Al final: guarda tus archivos", th)
+        + steps([
+            ("Guarda tu archivo maestro .ai.","Haz clic en <strong>Archivo &rarr; Guardar</strong> para conservar tu archivo <strong>.ai</strong>. Gu&aacute;rdalo en <strong>OneDrive &rarr; Digital Arts Folder</strong>. NO entregas el .ai. Gu&aacute;rdalo para poder cambiar tu sticker despu&eacute;s."),
+            ("Guarda tu PDF final para imprimir.","Haz clic en <strong>Archivo &rarr; Guardar como</strong> y elige <strong>Adobe PDF</strong>. Escoge el ajuste <strong>[Press Quality]</strong>. En la pesta&ntilde;a General, <strong>desmarca</strong> &ldquo;Conservar funciones de edici&oacute;n de Illustrator&rdquo; para que tu color plano CutContour no se da&ntilde;e. Haz clic en <strong>Guardar PDF</strong>. Ese PDF vectorial tiene tu arte y tu l&iacute;nea de corte, listo para la impresora. Eso es lo que entregas."),
+        ], accent=teal))
+    es=banner("M&oacute;dulo 09 &bull; Paso 04","Prepara para Imprimir",
+        "Agrega una l&iacute;nea de corte y deja tu archivo listo para imprimir, luego entrega tu archivo final.","#top","Back to English",hicon=HICON_DESIGN)
+    es+=card("Aprende &middot; qu&eacute; es este paso","Deja Tu Archivo Listo para Imprimir",
+        (float_right(CONTOUR,"Un sticker de monstruo de caricatura con un borde blanco y una l&iacute;nea de corte roja por fuera, que muestra d&oacute;nde la m&aacute;quina va a cortar","La l&iacute;nea de corte va por fuera de tu borde blanco. Ah&iacute; es donde la m&aacute;quina corta.") if HAVE_CONTOUR else "")
+        + para("El dise&ntilde;o de tu sticker ya est&aacute; listo. Buen trabajo. Ahora preparas el archivo para la gran <strong>impresora de stickers</strong>.")
+        + para("La impresora necesita dos cosas: los colores correctos (<strong>CMYK</strong>) y una <strong>l&iacute;nea de corte</strong>. La l&iacute;nea de corte le dice a la m&aacute;quina exactamente d&oacute;nde recortar tu sticker.")
+        + para("Guardas tu archivo maestro de Illustrator (<strong>.ai</strong>) para ti en OneDrive. Solo entregas un <strong>PDF</strong>."))
+    es+=card("Aprende &middot; paso a paso","Prepara Tu Archivo y Tu L&iacute;nea de Corte",
+        para("Sigue estos pasos en orden. Desliza dentro de la caja para verlos todos. El Sr. Silva lo mostrar&aacute; primero.")
+        + scroll_steps(es_inner))
+    es+=card("Aprende &middot; rev&iacute;sate","Antes de Entregar",
+        para("Revisa las cinco antes de guardar tu PDF final.")
+        + bullets([
+            ("Archivo correcto","est&aacute;s en Design_A_Sticker.ai, o moviste tu arte ah&iacute;."),
+            ("CMYK","tu Modo de color del documento es CMYK."),
+            ("Muestra CutContour","un color plano llamado CutContour, 100% magenta."),
+            ("L&iacute;nea de corte","una l&iacute;nea cerrada alrededor de tu sticker: trazo de 0.25 pt, sin relleno, Sobreimprimir activado."),
+            ("PDF para imprimir","guardado como PDF vectorial, [Press Quality], sin las funciones de edici&oacute;n."),
+        ]))
+    es+=deliverables_box(True,
+        [("1 PDF final para imprimir:","tu sticker listo para imprimir, guardado como <strong>PDF vectorial</strong> (Archivo &rarr; Guardar como &rarr; Adobe PDF &rarr; [Press Quality]) con tu l&iacute;nea de corte <strong>CutContour</strong>, subido a esta tarea de Canvas. Guarda tu archivo maestro <strong>.ai</strong> en OneDrive. <strong>No</strong> el archivo .ai, y no un JPG.")])
+    es+=next_up("SIGUIENTE &middot; PASO 05 - Reflexi&oacute;n","Cuenta sobre tu sticker: tu estilo y la parte m&aacute;s dif&iacute;cil.")
+    stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 03</a> <a href="{S2}" class="silva-step-btn">Step 05 &#8594;</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 03</a><a href="{S2}" class="silva-bottom-btn">Step 05 &#8594;</a></div>'
+    return wrap_page(f"Step 4: Set Up for Print | Design a Sticker | {CT} | PVHS", nav("Step 04",dots_for(3),stepnav), top_wrap(en,es), bottom)
 
 def reflection():
     # ---- EN ----
-    en=banner("Module 09 &bull; Step 04","Reflection",
+    en=banner("Module 09 &bull; Step 05","Reflection",
         "You made your sticker. Now tell me about it.","#espanol","Clic para Espa&ntilde;ol",hicon=HICON_REFLECT)
     en+=card("Learn &middot; last step","Fill In Your Reflection",
         para("You made your sticker. Nice work. Now open your reflection sheet and fill it in. It is short: just finish the sentences.")
@@ -452,7 +558,7 @@ def reflection():
         [("1 reflection:","your finished reflection (.docx), uploaded to this Canvas assignment.")])
     en+=next_up("MODULE COMPLETE","Nice work. You drew your own letters and turned a word into a sticker, just like a real lettering artist.")
     # ---- ES ----
-    es=banner("M&oacute;dulo 09 &bull; Paso 04","Reflexi&oacute;n",
+    es=banner("M&oacute;dulo 09 &bull; Paso 05","Reflexi&oacute;n",
         "Hiciste tu sticker. Ahora cu&eacute;ntame sobre &eacute;l.","#top","Back to English",hicon=HICON_REFLECT)
     es+=card("Aprende &middot; &uacute;ltimo paso","Llena Tu Reflexi&oacute;n",
         para("Hiciste tu sticker. Buen trabajo. Ahora abre tu hoja de reflexi&oacute;n y ll&eacute;nala. Es corta: solo termina las frases.")
@@ -460,12 +566,12 @@ def reflection():
     es+=deliverables_box(True,
         [("1 reflexi&oacute;n:","tu reflexi&oacute;n terminada (.docx), subida a esta tarea de Canvas.")])
     es+=next_up("M&Oacute;DULO COMPLETO","Buen trabajo. Dibujaste tus propias letras y convertiste una palabra en un sticker, como un verdadero artista de letras.")
-    stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 03</a>'
-    bottom=f'<div class="silva-bottom-nav"><a href="{S1}" class="silva-bottom-btn">&#8592; Step 03</a><span></span></div>'
-    return wrap_page(f"Step 4: Reflection | Design a Sticker | {CT} | PVHS", nav("Step 04",dots_for(3),stepnav), top_wrap(en,es), bottom)
+    stepnav=f'<a href="{PRINT}" class="silva-step-btn">&#8592; Step 04</a>'
+    bottom=f'<div class="silva-bottom-nav"><a href="{PRINT}" class="silva-bottom-btn">&#8592; Step 04</a><span></span></div>'
+    return wrap_page(f"Step 5: Reflection | Design a Sticker | {CT} | PVHS", nav("Step 05",dots_for(4),stepnav), top_wrap(en,es), bottom)
 
 # ================= BUILD =================
-for fname,gen in [(OVER,overview),(SKETCH,sketch),(S1,make_word),(S2,reflection)]:
+for fname,gen in [(OVER,overview),(SKETCH,sketch),(S1,make_word),(PRINT,print_setup),(S2,reflection)]:
     html=ent(gen())
     assert "—" not in html and "&mdash;" not in html, "em dash in "+fname
     assert "–" not in html and "&ndash;" not in html, "en dash in "+fname
