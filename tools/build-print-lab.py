@@ -16,6 +16,10 @@ import silva_framework as _sf
 ROOT = "/Users/riva/RIVA_CODE/01_CREATIVE_Coding/creativesilva-site"
 OUT  = os.path.join(ROOT, "curriculum/shared/print-lab.html")
 DELIVER_ICON = f"{SITE}/assets/Icons/assignment/deliverables-v4.png"
+# 21:9 header/hero (Chris's "Print your work header v3": two students reviewing big prints by the
+# wide-format printer in the photo lab). Shared page, so one hero for Photo 1 + Photo 2 + Digital Arts.
+HERO = f"{SITE}/assets/images/print-lab/print-lab-hero-v1.jpg"
+HAVE_HERO = True
 
 # ============================================================================
 # PRINT WINDOW  --  the ONLY thing to edit when you reopen Print Lab.
@@ -161,7 +165,8 @@ def build():
                para("You have made photos you are proud of. Pick your best and Mr. Silva will print them big, "
                     "<strong>11 by 17 inches</strong>, for you to take home. This is <strong>free</strong> and <strong>not graded.</strong>")
              + para("Send up to <strong>three</strong> photos before the print queue closes. First crop each one to the "
-                    "11 x 17 shape, then upload it here. That is it."))
+                    "11 x 17 shape, then upload it here. That is it.")
+             + (framed(HERO, "Two students in the photo lab looking at large printed photos next to a wide format printer") if HAVE_HERO else ""))
     en += window_box(OPEN_EN, CLOSE_EN, READY_EN, es=False)
     en += submit_box(CLOSE_EN, es=False)
     en += crop_card(es=False)
@@ -175,7 +180,8 @@ def build():
                para("Has hecho fotos de las que est&aacute;s orgulloso. Elige tu mejor trabajo y el Sr. Silva lo imprime grande, "
                     "<strong>11 por 17 pulgadas</strong>, para llevar a casa. Es <strong>gratis</strong> y <strong>sin calificaci&oacute;n.</strong>")
              + para("Env&iacute;a hasta <strong>tres</strong> fotos antes de que cierre la cola de impresi&oacute;n. Primero recorta cada una a la "
-                    "forma de 11 x 17 y luego s&uacute;bela aqu&iacute;. Eso es todo."))
+                    "forma de 11 x 17 y luego s&uacute;bela aqu&iacute;. Eso es todo.")
+             + (framed(HERO, "Dos estudiantes en el laboratorio de foto viendo fotos impresas grandes junto a una impresora de gran formato") if HAVE_HERO else ""))
     es += window_box(OPEN_ES, CLOSE_ES, READY_ES, es=True)
     es += submit_box(CLOSE_ES, es=True)
     es += crop_card(es=True)
