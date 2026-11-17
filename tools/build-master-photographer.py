@@ -594,7 +594,7 @@ def build(mode, C):
             para("Understanding <strong>how professional photographers make their images</strong> helps you make stronger choices in your own work. When you can name what makes a photo great, you can do it on purpose.")
             + note("You keep your three master images and your three photos together, so everyone can see where your ideas came from and how you made them your own."))
         en+=rubric_box(False)
-        en+=standards_box(False, STANDARDS)
+        if cur: en+=standards_box(False, STANDARDS)   # CTE Standards: Canvas pages only; Garcia's public share drops it (Chris, 2026-11-17)
         en+=resources_card("Key Words",
             vocab_grid("On the Quiz",
               "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
@@ -622,7 +622,7 @@ def build(mode, C):
             para("Entender <strong>c&oacute;mo los fot&oacute;grafos profesionales hacen sus im&aacute;genes</strong> te ayuda a tomar mejores decisiones en tu propio trabajo. Cuando puedes nombrar lo que hace grande a una foto, puedes hacerlo a prop&oacute;sito.")
             + note("Mantienes tus tres im&aacute;genes del maestro y tus tres fotos juntas, para que todos vean de d&oacute;nde vinieron tus ideas y c&oacute;mo las hiciste tuyas."))
         es+=rubric_box(True)
-        es+=standards_box(True, STANDARDS)
+        if cur: es+=standards_box(True, STANDARDS)   # CTE Standards: Canvas pages only; Garcia's public share drops it (Chris, 2026-11-17)
         es+=resources_card("Palabras Clave",
             vocab_grid("En el Examen",
               "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
