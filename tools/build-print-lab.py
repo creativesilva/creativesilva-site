@@ -32,9 +32,10 @@ def subhead(t):
             f'margin:18px 0 8px;"><strong>{t}</strong></div>')
 
 def scroller(inner):
-    # Inline overflow survives Canvas (classes are stripped); the silva-scroll class only
-    # prettifies the scrollbar on the live/linked page.
-    return ('<div class="silva-scroll" style="max-height:430px;overflow-y:auto;padding:14px 16px 18px;'
+    # Compact VERTICAL scroller: a short fixed-height box so the steps scroll inside it and the
+    # page stays short. Inline overflow survives Canvas (classes are stripped); the silva-scroll
+    # class only prettifies the scrollbar on the live/linked page.
+    return ('<div class="silva-scroll" style="max-height:270px;overflow-y:auto;overflow-x:hidden;padding:14px 16px 18px;'
             'border:1px solid rgba(0,184,184,0.30);background:linear-gradient(180deg,rgba(0,116,116,0.10) 0%,rgba(0,116,116,0.03) 100%);'
             'margin:4px 0 10px;box-sizing:border-box;">' + inner + '</div>')
 
