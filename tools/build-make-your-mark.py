@@ -40,8 +40,9 @@ HAVE_REFL=True
 
 # Live due-date countdown calendar (shared framework helper due_calendar_card; the iframe
 # embed survives Canvas, same trick as the school-day card). DUE_DATE = this module's target
-# completion date, YYYY-MM-DD. PLACEHOLDER date until Chris sets the real one.
-DUE_DATE="2026-11-11"
+# completion date, YYYY-MM-DD. Chris set it to Thu 2026-11-19 after the print/cut-path step
+# was added (everything due that Thursday).
+DUE_DATE="2026-11-19"
 
 OVER=f"{PFX}-make-your-mark-overview.html"
 # Extra-credit sketchbook step inserted as Step 02 (Chris 2026-11-09). The existing step files keep
