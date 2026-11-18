@@ -822,22 +822,29 @@ def build(mode, C):
             + note("Off-load your <strong>full take</strong>, every photo you captured. You select your best three later, in the next step."))
         en+=card("BUILD YOUR CONTACT SHEET","Make Your 12-Up Contact Sheet",
             para("A <strong>12-up contact sheet</strong> shows your whole take as small thumbnails on one page, 12 per page. Make it <strong>before you edit</strong>: this is your <strong>unedited</strong> take, and it shows your camera settings.")
-            + para("First, bring your photos into Lightroom Classic and put them in a collection. Follow each step:")
-            + scroll_steps(steps([
-                ("Open Lightroom Classic.","Open the app on your Mac."),
-                ("Click Import.","Click the <strong>Import</strong> button at the bottom-left."),
-                ("Pick your RAW_Images folder.","On the left, open your project folder in OneDrive and click the <strong>RAW_Images</strong> folder. Your photos show in the middle."),
-                ("Import every photo.","Make sure all your photos are checked, then click <strong>Import</strong> at the bottom-right."),
-                ("Select all your photos.","Go to the Library. Press <strong>Cmd + A</strong> to select every imported photo."),
-                ("Make a collection called Master Photographer.","Right-click your selected photos and choose <strong>Create Collection</strong>. Name it <strong>Master Photographer</strong>, then click Create. This keeps your take together."),
-            ]), rgb="0,184,184")
-            + para("Now make your 12-up contact sheet:")
-            + steps([
-                ("Open the Print module.","Open your <strong>Master Photographer</strong> collection, then go to the <strong>Print</strong> module."),
-                ("Pick the 12-Up Contact Sheet preset.","Choose it from your User Templates. If you do not see it, install it on the Overview first."),
-                ("Print to a high-resolution JPG.","Set Print To: JPEG File, then click Print to File. The preset already saves a high-resolution JPG for you."),
-                ("Name it and upload.","Name it <strong>12 Up Master Photographer</strong> plus your name, like <strong>12 Up Master Photographer Jane Smith</strong>. Then upload the JPG to this Canvas assignment."),
-            ])
+            + ((para("First, bring your photos into Lightroom Classic and put them in a collection. Follow each step:")
+                + scroll_steps(steps([
+                    ("Open Lightroom Classic.","Open the app on your Mac."),
+                    ("Click Import.","Click the <strong>Import</strong> button at the bottom-left."),
+                    ("Pick your RAW_Images folder.","On the left, open your project folder in OneDrive and click the <strong>RAW_Images</strong> folder. Your photos show in the middle."),
+                    ("Import every photo.","Make sure all your photos are checked, then click <strong>Import</strong> at the bottom-right."),
+                    ("Select all your photos.","Go to the Library. Press <strong>Cmd + A</strong> to select every imported photo."),
+                    ("Make a collection called Master Photographer.","Right-click your selected photos and choose <strong>Create Collection</strong>. Name it <strong>Master Photographer</strong>, then click Create. This keeps your take together."),
+                ]), rgb="0,184,184")
+                + para("Now make your 12-up contact sheet:")
+                + steps([
+                    ("Open the Print module.","Open your <strong>Master Photographer</strong> collection, then go to the <strong>Print</strong> module."),
+                    ("Pick the 12-Up Contact Sheet preset.","Choose it from your User Templates. If you do not see it, install it on the Overview first."),
+                    ("Print to a high-resolution JPG.","Set Print To: JPEG File, then click Print to File. The preset already saves a high-resolution JPG for you."),
+                    ("Name it and upload.","Name it <strong>12 Up Master Photographer</strong> plus your name, like <strong>12 Up Master Photographer Jane Smith</strong>. Then upload the JPG to this Canvas assignment."),
+                ])) if not cur else
+               steps([
+                    ("Import RAW_Images into Lightroom Classic.","Open Lightroom Classic, click Import, and bring in your RAW_Images folder."),
+                    ("Select all your photos.","Edit menu &rarr; Select All, so your whole take is on the sheet."),
+                    ("Open the Print module and pick the 12-Up Contact Sheet preset.","If you do not see it, install it on the Overview first."),
+                    ("Print to a high-resolution JPG.","Set Print To: JPEG File, then click Print to File. The preset already saves a high-resolution JPG for you."),
+                    ("Name it and upload.","Name it <strong>12 Up Master Photographer</strong> plus your name, like <strong>12 Up Master Photographer Jane Smith</strong>. Then upload the JPG to this Canvas assignment."),
+               ]))
             + note("Turn in a <strong>high-resolution JPG</strong>, never a PDF. The contact-sheet preset already saves the right format.")
             + (note("Do not let the name fool you. Put <strong>every</strong> photo from your take in. The 12-up fits 12 per page, but it is not a minimum. More than 12? Lightroom just makes more pages. 8 photos or 32, all good.") if not cur else ""))
         en+=next_up("UP NEXT &middot; STEP 04 - Cull &amp; Edit","Select your three strongest images and edit them to match the look you studied.")
@@ -877,22 +884,29 @@ def build(mode, C):
             + note("Descarga tu <strong>toma completa</strong>, cada foto que capturaste. Seleccionas tus mejores tres despu&eacute;s, en el siguiente paso."))
         es+=card("ARMA TU HOJA DE CONTACTOS","Haz Tu Hoja de Contactos de 12",
             para("Una <strong>hoja de contactos de 12</strong> muestra toda tu toma como miniaturas en una p&aacute;gina, 12 por p&aacute;gina. Hazla <strong>antes de editar</strong>: esta es tu toma <strong>sin editar</strong>, y muestra tus ajustes de c&aacute;mara.")
-            + para("Primero, trae tus fotos a Lightroom Classic y ponlas en una colecci&oacute;n. Sigue cada paso:")
-            + scroll_steps(steps([
-                ("Abre Lightroom Classic.","Abre la app en tu Mac."),
-                ("Haz clic en Import.","Haz clic en el bot&oacute;n <strong>Import</strong> (Importar), abajo a la izquierda."),
-                ("Elige tu carpeta RAW_Images.","A la izquierda, abre tu carpeta del proyecto en OneDrive y haz clic en la carpeta <strong>RAW_Images</strong>. Tus fotos aparecen en el centro."),
-                ("Importa cada foto.","Aseg&uacute;rate de que todas tus fotos est&eacute;n marcadas, luego haz clic en <strong>Import</strong> abajo a la derecha."),
-                ("Selecciona todas tus fotos.","Ve a la Biblioteca. Presiona <strong>Cmd + A</strong> para seleccionar cada foto importada."),
-                ("Haz una colecci&oacute;n llamada Master Photographer.","Haz clic derecho en tus fotos seleccionadas y elige <strong>Create Collection</strong> (Crear colecci&oacute;n). N&oacute;mbrala <strong>Master Photographer</strong>, luego haz clic en Create. As&iacute; tu toma se queda junta."),
-            ]), rgb="0,184,184")
-            + para("Ahora haz tu hoja de contactos de 12:")
-            + steps([
-                ("Abre el m&oacute;dulo Print.","Abre tu colecci&oacute;n <strong>Master Photographer</strong>, luego ve al m&oacute;dulo <strong>Print</strong>."),
-                ("Elige el ajuste 12-Up Contact Sheet.","El&iacute;gelo de tus User Templates. Si no lo ves, inst&aacute;lalo primero en el Resumen."),
-                ("Imprime a un JPG de alta resoluci&oacute;n.","Pon Print To: JPEG File, luego haz clic en Print to File. El ajuste ya guarda un JPG de alta resoluci&oacute;n por ti."),
-                ("N&oacute;mbrala y s&uacute;bela.","N&oacute;mbrala <strong>12 Up Master Photographer</strong> y tu nombre, como <strong>12 Up Master Photographer Jane Smith</strong>. Luego sube el JPG a esta tarea de Canvas."),
-            ])
+            + ((para("Primero, trae tus fotos a Lightroom Classic y ponlas en una colecci&oacute;n. Sigue cada paso:")
+                + scroll_steps(steps([
+                    ("Abre Lightroom Classic.","Abre la app en tu Mac."),
+                    ("Haz clic en Import.","Haz clic en el bot&oacute;n <strong>Import</strong> (Importar), abajo a la izquierda."),
+                    ("Elige tu carpeta RAW_Images.","A la izquierda, abre tu carpeta del proyecto en OneDrive y haz clic en la carpeta <strong>RAW_Images</strong>. Tus fotos aparecen en el centro."),
+                    ("Importa cada foto.","Aseg&uacute;rate de que todas tus fotos est&eacute;n marcadas, luego haz clic en <strong>Import</strong> abajo a la derecha."),
+                    ("Selecciona todas tus fotos.","Ve a la Biblioteca. Presiona <strong>Cmd + A</strong> para seleccionar cada foto importada."),
+                    ("Haz una colecci&oacute;n llamada Master Photographer.","Haz clic derecho en tus fotos seleccionadas y elige <strong>Create Collection</strong> (Crear colecci&oacute;n). N&oacute;mbrala <strong>Master Photographer</strong>, luego haz clic en Create. As&iacute; tu toma se queda junta."),
+                ]), rgb="0,184,184")
+                + para("Ahora haz tu hoja de contactos de 12:")
+                + steps([
+                    ("Abre el m&oacute;dulo Print.","Abre tu colecci&oacute;n <strong>Master Photographer</strong>, luego ve al m&oacute;dulo <strong>Print</strong>."),
+                    ("Elige el ajuste 12-Up Contact Sheet.","El&iacute;gelo de tus User Templates. Si no lo ves, inst&aacute;lalo primero en el Resumen."),
+                    ("Imprime a un JPG de alta resoluci&oacute;n.","Pon Print To: JPEG File, luego haz clic en Print to File. El ajuste ya guarda un JPG de alta resoluci&oacute;n por ti."),
+                    ("N&oacute;mbrala y s&uacute;bela.","N&oacute;mbrala <strong>12 Up Master Photographer</strong> y tu nombre, como <strong>12 Up Master Photographer Jane Smith</strong>. Luego sube el JPG a esta tarea de Canvas."),
+                ])) if not cur else
+               steps([
+                    ("Importa RAW_Images a Lightroom Classic.","Abre Lightroom Classic, haz clic en Import (Importar) y trae tu carpeta RAW_Images."),
+                    ("Selecciona todas tus fotos.","Men&uacute; Edit (Editar) &rarr; Select All (Seleccionar todo), para que toda tu toma est&eacute; en la hoja."),
+                    ("Abre el m&oacute;dulo Print y elige el ajuste 12-Up Contact Sheet.","Si no lo ves, inst&aacute;lalo primero en el Resumen."),
+                    ("Imprime a un JPG de alta resoluci&oacute;n.","Pon Print To: JPEG File, luego haz clic en Print to File. El ajuste ya guarda un JPG de alta resoluci&oacute;n por ti."),
+                    ("N&oacute;mbrala y s&uacute;bela.","N&oacute;mbrala <strong>12 Up Master Photographer</strong> y tu nombre, como <strong>12 Up Master Photographer Jane Smith</strong>. Luego sube el JPG a esta tarea de Canvas."),
+               ]))
             + note("Entrega un <strong>JPG de alta resoluci&oacute;n</strong>, nunca un PDF. El ajuste de hoja de contactos ya guarda el formato correcto.")
             + (note("No dejes que el nombre te confunda. Pon <strong>cada</strong> foto de tu toma. La hoja de 12 cabe 12 por p&aacute;gina, pero no es un m&iacute;nimo. &iquest;M&aacute;s de 12? Lightroom hace m&aacute;s p&aacute;ginas solo. 8 fotos o 32, todo bien.") if not cur else ""))
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 04 - Selecciona y Edita","Elige tus tres im&aacute;genes m&aacute;s fuertes y ed&iacute;talas para igualar el estilo que estudiaste.")
