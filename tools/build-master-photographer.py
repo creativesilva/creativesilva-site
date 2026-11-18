@@ -37,8 +37,7 @@ HERO=f"{IMGDIR}/master-photographer-hero-v2.jpg"
 RESEARCH_FLOAT=f"{IMGDIR}/research-float-v1.jpg"       # Step 02 (student researching at the iMac)
 CULL_FLOAT=f"{IMGDIR}/cull-float-v1.jpg"               # Step 04 (student with her three selected prints)
 PRESENT_FLOAT=f"{IMGDIR}/presentation-float-v1.jpg"    # Step 05 (student presenting selected works)
-# Contact-sheet presets are installed once (Image Series module); same install video.
-CS_INSTALL_VIDEO="https://vimeo.com/1164128764/e1842e523e?share=copy&amp;fl=sv&amp;fe=ci"
+# Contact-sheet presets are installed once (Image Series module); install is easy, no video.
 
 # Two courses, one module (Chris 2026-11-16). Each course hosts its OWN project-folder ZIP on its
 # OWN Overview, and the Overview is the ONLY download host (no standalone deck .pptx anywhere). The
@@ -48,10 +47,12 @@ CS_INSTALL_VIDEO="https://vimeo.com/1164128764/e1842e523e?share=copy&amp;fl=sv&a
 # hand; see the Master Photographer project memory. The std/share pass is built from Photo 1.
 COURSES=[
  {"prefix":"photo1","cl":"Photography 1A","p2":False,
-  "zip":f"{TPLDIR}/Master-Photographer-Photo-1-Project-Folder.zip",
+  "zip_en":f"{TPLDIR}/Master-Photographer-Photo-1-Project-Folder-EN.zip",
+  "zip_es":f"{TPLDIR}/Master-Photographer-Photo-1-Project-Folder-ES.zip",
   "deck_preview":f"{IMGDIR}/deck-template-preview-v2.jpg"},
  {"prefix":"photo2","cl":"Photography 2A","p2":True,
-  "zip":f"{TPLDIR}/Master-Photographer-Photo-2-Project-Folder.zip",
+  "zip_en":f"{TPLDIR}/Master-Photographer-Photo-2-Project-Folder-EN.zip",
+  "zip_es":f"{TPLDIR}/Master-Photographer-Photo-2-Project-Folder-ES.zip",
   "deck_preview":f"{IMGDIR}/deck-template-preview-photo2-v1.jpg"},
 ]
 
@@ -86,19 +87,19 @@ STANDARDS=[
 ]
 
 VOCAB_EN=[
- ("Master Photographer","A photographer whose work is studied and respected around the world. You pick one to study in this project."),
- ("Composition","How you arrange everything inside the frame: where the subject sits, what is behind them, and what you leave out."),
+ ("Full Take","A photographer&rsquo;s &lsquo;take&rsquo; is all the photos they capture for one project. Your full take is every photo, before you cull."),
+ ("Contact Sheet","One page that shows many photos as small thumbnails, so you can see your whole take at a glance."),
+ ("Cull","To go through your take and keep your strongest photos, letting the rest go."),
+ ("Export","To save your edited photos out of Lightroom as new files, like high-resolution JPGs, that you can turn in."),
  ("The Decisive Moment","The exact instant when everything in the frame lines up into one strong photo. Henri Cartier-Bresson made this idea famous."),
- ("Tonal Range","All the shades from pure black to pure white in a photo. Ansel Adams was a master of a full tonal range in black and white."),
- ("Environmental Portrait","A photo of a person in their own space, so the place around them helps tell who they are."),
  ("Influence","When one artist&rsquo;s style shapes another artist&rsquo;s work. Your master photographer influences your three photos."),
 ]
 VOCAB_ES=[
- ("Master Photographer (Fot&oacute;grafo Maestro)","Un fot&oacute;grafo cuyo trabajo se estudia y se respeta en todo el mundo. Eliges a uno para estudiarlo en este proyecto."),
- ("Composition (Composici&oacute;n)","C&oacute;mo acomodas todo dentro del encuadre: d&oacute;nde est&aacute; el sujeto, qu&eacute; hay detr&aacute;s y qu&eacute; dejas fuera."),
+ ("Full Take (Toma Completa)","La &lsquo;toma&rsquo; de un fot&oacute;grafo son todas las fotos que captura para un proyecto. Tu toma completa es cada foto, antes de seleccionar."),
+ ("Contact Sheet (Hoja de Contactos)","Una p&aacute;gina que muestra muchas fotos como miniaturas peque&ntilde;as, para ver toda tu toma de un vistazo."),
+ ("Cull (Seleccionar)","Revisar tu toma y quedarte con tus fotos m&aacute;s fuertes, dejando ir el resto."),
+ ("Export (Exportar)","Guardar tus fotos editadas fuera de Lightroom como archivos nuevos, como JPG de alta resoluci&oacute;n, que puedes entregar."),
  ("The Decisive Moment (El Momento Decisivo)","El instante exacto en que todo en el encuadre se alinea en una sola foto fuerte. Henri Cartier-Bresson hizo famosa esta idea."),
- ("Tonal Range (Rango Tonal)","Todos los tonos desde el negro puro hasta el blanco puro en una foto. Ansel Adams fue un maestro del rango tonal completo en blanco y negro."),
- ("Environmental Portrait (Retrato Ambiental)","Una foto de una persona en su propio espacio, para que el lugar a su alrededor ayude a contar qui&eacute;n es."),
  ("Influence (Influencia)","Cuando el estilo de un artista da forma al trabajo de otro. Tu fot&oacute;grafo maestro influye en tus tres fotos."),
 ]
 
@@ -110,7 +111,7 @@ ROSTER=[
  ("Landscape","Paisaje",["Ansel Adams","Robert Adams","Stephen Shore","Richard Misrach","Paul Strand"]),
  ("Portrait","Retrato",["Annie Leibovitz","Martin Schoeller","Platon","Brandon Stanton","Chris Buck"]),
  ("Still Life","Naturaleza Muerta",["Karl Blossfeldt","Irving Penn","Jan Groover","Josef Sudek","Laura Letinsky"]),
- ("On Location","En Locaci&oacute;n",["Joe McNally","Lindsay Adler","Scott Kelby","Lara Jade","Sebasti&atilde;o Salgado"]),
+ ("On Location","En Locaci&oacute;n",["Joe McNally","Henri Cartier-Bresson","Scott Kelby","Lara Jade","Sebasti&atilde;o Salgado"]),
 ]
 
 GENERAL_SITES=[
@@ -179,12 +180,12 @@ def rubric_box(es, share=False):
 def project_downloads(es, zip_url):
     heading="Descarga Tu Carpeta del Proyecto" if es else "Download Your Project Folder"
     if es:
-        lead="Descarga la carpeta de tu proyecto. Trae tu plantilla de PowerPoint de 16:9 (en ingl&eacute;s y espa&ntilde;ol), una carpeta de Im&aacute;genes de Referencia para las fotos de tu maestro, y una carpeta RAW_Images para tus propias fotos cuando las captures."
-        label="Carpeta del Proyecto del Fot&oacute;grafo Maestro (ZIP)"
+        lead="Descarga tu carpeta del proyecto <strong>en espa&ntilde;ol</strong>. Trae tu plantilla de PowerPoint de 16:9, una carpeta de Im&aacute;genes de Referencia para las fotos de tu maestro, y una carpeta RAW_Images para tus propias fotos cuando las captures."
+        label="Carpeta del Proyecto en Espa&ntilde;ol (ZIP)"
         note_t="Despu&eacute;s de que se descargue, descompr&iacute;mela y mueve la carpeta del proyecto a OneDrive &rarr; Carpeta de Fotograf&iacute;a. Esa es tu carpeta para todo este proyecto."
     else:
-        lead="Download your project folder. It holds your 16:9 PowerPoint template (English and Spanish), a Reference Images folder for your master photographer&rsquo;s photos, and a RAW_Images folder for your own photos once you capture them."
-        label="Master Photographer Project Folder (ZIP)"
+        lead="Download your project folder <strong>in English</strong>. It holds your 16:9 PowerPoint template, a Reference Images folder for your master photographer&rsquo;s photos, and a RAW_Images folder for your own photos once you capture them."
+        label="Project Folder in English (ZIP)"
         note_t="After it downloads, unzip it and move the project folder into OneDrive &rarr; Photography Folder. That is your folder for this whole project."
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       + section_header(DL_ICON, heading, "#FF6B1A", "#ffb27c")
@@ -273,7 +274,7 @@ def deck_showcase(es, deck_preview):
             ("3 p&aacute;ginas de tu trabajo:","una de tus fotos editadas por p&aacute;gina, con c&oacute;mo usaste lo que aprendiste."),
             ("P&aacute;gina de reflexi&oacute;n:","la p&aacute;gina final, donde respondes la reflexi&oacute;n."),
         ]
-        inside="La plantilla ya est&aacute; dentro de la carpeta del proyecto que descargaste en el Resumen, en ingl&eacute;s y espa&ntilde;ol."
+        inside="La plantilla ya est&aacute; dentro de la carpeta del proyecto que descargaste en el Resumen."
         cap="Las 8 p&aacute;ginas del PowerPoint: portada, tres del maestro, tres de tu trabajo y la reflexi&oacute;n."
     else:
         lead="Use this 16:9 template as your starting point. It has everything you need:"
@@ -283,7 +284,7 @@ def deck_showcase(es, deck_preview):
             ("3 of-your-work pages:","one of your edited photos per page, with how you used what you learned."),
             ("Reflection page:","the closing page, where you answer the reflection."),
         ]
-        inside="The template is already inside the project folder you downloaded on the Overview, in both English and Spanish."
+        inside="The template is already inside the project folder you downloaded on the Overview."
         cap="All 8 PowerPoint pages: cover, three master, three of your work, and the reflection."
     inner=(para(lead)+bullets(items,accent="#8b5cf6")
       + (framed(deck_preview, "A preview of the eight-page Master Photographer PowerPoint template: cover, three master pages, three student pages, and the reflection")
@@ -325,8 +326,7 @@ def contact_sheets_setup(es, cur):
                 ("Haz doble clic en el ajuste 12-Up.","Aparece un cuadro que dice instalar ajuste. Haz clic en OK. Se instala en segundos."),
                 ("Haz doble clic en el ajuste 6-Up y haz clic en OK.","Haz lo mismo con el segundo."),
                 ("B&uacute;scalos en el m&oacute;dulo Print, en tus User Templates.","Los dos estar&aacute;n ah&iacute; cuando los necesites."),
-            ])
-            + pnote_mp('&iquest;Quieres verlo? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Mira el video de instalaci&oacute;n</strong></a>.'), True)
+            ]), True)
     else:
         out += resources_card("Install Your Contact Sheet Presets",
             para("Your two contact sheet presets come inside the project folder you downloaded above. Install them once and they stay in Lightroom.")
@@ -336,8 +336,7 @@ def contact_sheets_setup(es, cur):
                 ("Double-click the 12-Up preset.","A box pops up that says install preset. Click OK. It installs in seconds."),
                 ("Double-click the 6-Up preset and click OK.","Do the same for the second one."),
                 ("Find them in the Print module, under your User Templates.","Both will be there when you need them."),
-            ])
-            + pnote_mp('Want to see it? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>.'), False)
+            ]), False)
     return out
 
 def scroll_steps(inner, rgb="139,92,246"):
@@ -583,7 +582,7 @@ def wrap_standalone(title, nav_inner, top_html, bottom, files_std, share_name, l
 
 def build(mode, C):
     cur = (mode == "cur")
-    CL=C["cl"]; PREFIX=C["prefix"]; ZIP=C["zip"]; DECKPREV=C["deck_preview"]; IS_P2=C["p2"]
+    CL=C["cl"]; PREFIX=C["prefix"]; ZIP_EN=C["zip_en"]; ZIP_ES=C["zip_es"]; DECKPREV=C["deck_preview"]; IS_P2=C["p2"]
     OVER=f"{PREFIX}-master-photographer-overview.html"
     S2=f"{PREFIX}-master-photographer-step02-choose-your-master.html"
     S3=f"{PREFIX}-master-photographer-step03-capture-contact.html"
@@ -652,7 +651,7 @@ def build(mode, C):
             + para("Then you become the photographer. You <strong>capture three of your own photos</strong> in that style with the school camera kit, edit your best three, and present your master&rsquo;s work and your work <strong>side by side</strong> in a PowerPoint.")
             + (framed(HERO,"Master photographers, each with a camera: the styles you choose from in this project") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Many styles, many photographers. You pick one to study and bring into your own photos.</div>' if HAVE_HERO else ""))
         if IS_P2: en+=growth_box(False)
-        en+=project_downloads(False, ZIP)
+        en+=project_downloads(False, ZIP_EN)
         en+=contact_sheets_setup(False, cur)
         en+=card("HOW THIS PROJECT WORKS","From Studying a Master to Your Own Photos",
             para("You are on Step 01 now: read this page so you understand the project. Here is the path.")
@@ -668,9 +667,9 @@ def build(mode, C):
         en+=rubric_box(False, share=not cur)          # Garcia share gets the gold title-bar + worksheet icon; Canvas keeps the plain rubric
         if cur: en+=standards_box(False, STANDARDS)   # CTE Standards: Canvas pages only; Garcia's public share drops it (Chris, 2026-11-17)
         en+=resources_card("Key Words",
-            vocab_grid("On the Quiz",
-              "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
-              VOCAB_EN), False)
+            vocab_grid("Know These Words",
+              "These key words are important for this project. Tap each one to see what it means.",
+              VOCAB_EN, es=False), False)
         en+=next_up("UP NEXT &middot; STEP 02 - Choose Your Master","Meet the master photographers, pick the one whose work pulls you in, and start your PowerPoint.")
 
         es=banner(f"{PROJ_LABEL_ES} &bull;Paso 01","Fot&oacute;grafo Maestro",
@@ -681,7 +680,7 @@ def build(mode, C):
             + para("Luego t&uacute; te vuelves el fot&oacute;grafo. <strong>Capturas tres fotos propias</strong> en ese estilo con el kit de c&aacute;mara de la escuela, editas tus mejores tres y presentas el trabajo de tu maestro y el tuyo <strong>lado a lado</strong> en un PowerPoint.")
             + (framed(HERO,"Fot&oacute;grafos maestros, cada uno con una c&aacute;mara: los estilos entre los que eliges en este proyecto") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Muchos estilos, muchos fot&oacute;grafos. Eliges a uno para estudiarlo y traerlo a tus propias fotos.</div>' if HAVE_HERO else ""))
         if IS_P2: es+=growth_box(True)
-        es+=project_downloads(True, ZIP)
+        es+=project_downloads(True, ZIP_ES)
         es+=contact_sheets_setup(True, cur)
         es+=card("C&Oacute;MO FUNCIONA ESTE PROYECTO","De Estudiar a un Maestro a Tus Propias Fotos",
             para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina para entender el proyecto. Este es el camino.")
@@ -697,9 +696,9 @@ def build(mode, C):
         es+=rubric_box(True, share=not cur)          # Garcia share gets the gold title-bar + worksheet icon; Canvas keeps the plain rubric
         if cur: es+=standards_box(True, STANDARDS)   # CTE Standards: Canvas pages only; Garcia's public share drops it (Chris, 2026-11-17)
         es+=resources_card("Palabras Clave",
-            vocab_grid("En el Examen",
-              "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
-              VOCAB_ES), True)
+            vocab_grid("Conoce Estas Palabras",
+              "Estas palabras clave son importantes para este proyecto. Toca cada una para ver qu&eacute; significa.",
+              VOCAB_ES, es=True), True)
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Elige a Tu Maestro","Conoce a los fot&oacute;grafos maestros, elige al que m&aacute;s te atraiga y empieza tu PowerPoint.")
 
         return wrap_page(f"Master Photographer | {CL} | PVHS", nav("Step 01",dots_for(0),step_topnav(0)), top_wrap(en,es), step_bottom(0))

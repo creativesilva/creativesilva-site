@@ -423,12 +423,14 @@ def dl_row(url,label):
       f'<img src="{DL_ICON}" alt="" style="width:42px;height:42px;flex:0 0 auto;display:block;" />'
       + dl_link(url,label,row=True) + '</div>')
 
-def vocab_grid(quiz_label, quiz_body, terms):
+def vocab_grid(quiz_label, quiz_body, terms, es=None):
     # Key Words is a PURPLE Resource (vocab is technically a resource). Collapsible accordion: each
     # term is a native <details> the student taps to reveal the definition. TWO columns (flex-wrap)
     # on iPad/desktop, one column when narrow. Native <details>, no JS: works on the linked page
     # view. NOTE: Canvas's paste sanitizer strips <details>, so use it on LINKED modules.
-    es = "Examen" in quiz_label
+    # Language: caller may pass es= explicitly (so the eyebrow need not contain "Examen");
+    # otherwise fall back to the legacy detection so every existing caller is unchanged.
+    es = ("Examen" in quiz_label) if es is None else es
     hint = "Toca una palabra para abrir su significado." if es else "Tap a word to open its meaning."
     note_box=('<div style="background:rgba(139,92,246,0.10);border:1px solid rgba(139,92,246,0.30);border-left:4px solid #8b5cf6;padding:12px 16px;margin-bottom:14px;">'
       f'<div style="font-size:9.5pt;letter-spacing:0.2em;text-transform:uppercase;color:#c4b5fd;margin-bottom:5px;"><strong>{quiz_label}</strong></div>'
