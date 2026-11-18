@@ -9,7 +9,7 @@
 <link rel="icon" href="/assets/PV_Square_Logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/css/store.css?v=55" />
+<link rel="stylesheet" href="/css/store.css?v=56" />
 <link rel="stylesheet" href="/css/store-glass.css?v=16" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
@@ -290,6 +290,22 @@
   </div>
 </div>
 
+<!-- Reservation pass fallback: when the iPad share sheet is unavailable, show the pass to long-press -> Add to Photos -->
+<div class="sov" id="passOv" aria-hidden="true">
+  <div class="sheet rcpt" role="dialog" aria-modal="true">
+    <button type="button" class="sheet-x" data-close="passOv" aria-label="Close">&times;</button>
+    <div class="sheet-bd" id="passBody"></div>
+  </div>
+</div>
+
+<!-- Reservation change confirmation: after a modify saves, a popup of exactly what changed -->
+<div class="sov" id="chgOv" aria-hidden="true">
+  <div class="sheet rcpt" role="dialog" aria-modal="true">
+    <button type="button" class="sheet-x" data-close="chgOv" aria-label="Close">&times;</button>
+    <div class="sheet-bd" id="chgBody"></div>
+  </div>
+</div>
+
 <!-- Calendar-view equipment picker: category -> item -> Add other / Done -->
 <div class="sov" id="pickerOv" aria-hidden="true">
   <div class="sheet picker" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
@@ -405,6 +421,7 @@
     'Needs OK':'Por aprobar','Remove':'Quitar','Add equipment':'Agregar equipo','Set checkout dates':'Elegir fechas','Save changes':'Guardar cambios',
     'Reserve this gear':'Reservar este equipo','Send request':'Enviar solicitud','Reserve + request':'Reservar + solicitar',
     'Special request':'Solicitud especial','New return day':'Nuevo día de devolución','return':'regresar','days':'días','needs Mr. Silva&#8217;s OK':'necesita el visto bueno del Sr. Silva',
+    'How long do you need it?':'¿Por cuántos días lo necesitas?','Taken':'Ocupado',
     'Reservations on hold':'Reservaciones en pausa','You returned a camera very late, and other students were waiting to use it.':'Devolviste una cámara muy tarde y otros estudiantes la estaban esperando.','%s put your equipment reservations on hold.':'%s puso tus reservaciones de equipo en pausa.','%s turned off your equipment reservations. Please see %s in class.':'%s desactivó tus reservaciones de equipo. Por favor habla con %s en clase.','You can reserve again in %s%s.':'Podrás reservar de nuevo en %s%s.','Talk to %s if you have a question.':'Habla con %s si tienes una pregunta.','You can only reserve one camera per day.':'Solo puedes reservar una cámara por día.','day':'día',
     'Need something different, like keeping it longer for a project? Add a note and pick a new return day. Mr. Silva reviews it.':'¿Necesitas algo diferente, como tenerlo más tiempo para un proyecto? Agrega una nota y elige un nuevo día de devolución. El Sr. Silva lo revisa.',
     'Heads up:':'Aviso:','is not free for the whole time. Pick a shorter return or swap it out.':'no está libre todo el tiempo. Elige una devolución más corta o cámbialo.',
@@ -420,6 +437,19 @@
     'Mr. Silva needs to approve this. You&#8217;ll get your gear once he says yes.':'El Sr. Silva debe aprobar esto. Recibirás tu equipo cuando él diga que sí.',
     'Your gear is reserved. The %s that need Mr. Silva&#8217;s OK are waiting for him.':'Tu equipo está reservado. El/los %s que necesitan el visto bueno del Sr. Silva lo están esperando.',
     'Your reservation is on its way to %s.':'Tu reservación va en camino a %s.','item':'artículo','items':'artículos',
+    // --- modify a reservation (draft + live availability + change popup) ---
+    'Everything is free for your day.':'Todo está libre para tu día.',
+    '%s is taken for that day. Pick a different number or day.':'%s está ocupado ese día. Elige otro número u otro día.',
+    'Some gear is taken for that day. Fix the items in red, then save.':'Algo del equipo está ocupado ese día. Corrige lo que está en rojo y luego guarda.',
+    'No changes to save.':'No hay cambios que guardar.','Could not update. Try again.':'No se pudo actualizar. Intenta de nuevo.',
+    'Reservation updated':'Reservación actualizada','Here is what changed.':'Esto es lo que cambió.',
+    'Day':'Día','Swapped':'Cambiado','Added':'Agregado','Removed':'Quitado',
+    // --- reservation pass (save to Photos) ---
+    'RESERVATION CONFIRMED':'RESERVACIÓN CONFIRMADA','REQUEST SENT':'SOLICITUD ENVIADA',
+    'Show this to your teacher at pickup':'Muéstrale esto a tu maestro(a) al recoger',
+    'Save to Photos':'Guardar en Fotos','Your reservation pass':'Tu pase de reservación','Save image':'Guardar imagen',
+    'Press and hold the pass, then tap Add to Photos.':'Mantén presionado el pase y toca Agregar a Fotos.',
+    'Equipment Reservation':'Reservación de equipo','Could not make the pass. Try again.':'No se pudo crear el pase. Intenta de nuevo.',
     // --- picker ---
     'Equipment details':'Detalles del equipo','Pick a category, then add what you need.':'Elige una categoría, luego agrega lo que necesitas.',
     'All categories':'Todas las categorías','Add other equipment':'Agregar otro equipo','Back to %s':'Volver a %s','list':'lista',
@@ -554,6 +584,7 @@
   if(!isSchoolDay(checkout)) checkout=nextSchoolDay(checkout);   // default checkout = today if a school day, else the next
   var pickup=null, returnTime=null, returnDay=null;
   var MULTI=null, MULTI_REASON='', multiOpen=false;   // student multi-day request: chosen return Date + why + the opt-in panel state. One-day stays the default; a multi-day booking is always a teacher-approved request.
+  var STYLUS_DAYS=1;   // iPad-stylus self-service rental length, 1-3 school days, NO teacher OK (Chris 2026-11-09). Only applies when the bag is nothing but styluses; any camera/other gear reverts to the normal one-day return.
   function datesReady(){ return !!(pickup && returnTime); }   // checkout day is always set; times are the gate
   function boxDay(d, timeObj, prompt){
     var sub = timeObj ? ('<span class="dv-sub">'+esc(t(timeObj.label))+' &middot; '+f12(timeObj.s)+'</span>')
@@ -561,7 +592,8 @@
     return '<span class="dv-top">'+DOW[d.getDay()]+'</span><span class="dv-big">'+MON[d.getMonth()]+' '+d.getDate()+'</span>'+sub;
   }
   function renderDates(){
-    returnDay=MULTI||nextSchoolDay(checkout);   // a chosen multi-day return overrides the normal next-school-day; the whole store (availability, bag, submit) keys off returnDay, so it stays span-aware
+    if(!stylusOnlyBag() && STYLUS_DAYS!==1) STYLUS_DAYS=1;   // a mixed bag (any camera/other gear) never keeps the stylus self-service span: revert to one day
+    returnDay=MULTI||stylusDayReturn()||nextSchoolDay(checkout);   // a teacher-approved multi-day request OR a self-service stylus span overrides the normal next-school-day; the whole store (availability, bag, submit) keys off returnDay, so it stays span-aware
     var days=Math.round((returnDay-checkout)/86400000);
     document.getElementById('dcCheckoutVal').innerHTML=boxDay(checkout, pickup, t('Tap to set times'));
     document.getElementById('dcReturnVal').innerHTML=boxDay(returnDay, returnTime, t('Set at checkout'));
@@ -576,9 +608,24 @@
   var calView=new Date(checkout.getFullYear(), checkout.getMonth(), 1), planStep=1;
   var pendingAdd=null;   // an item waiting on the checkout-date flow; added to the bag once dates are set
   var planMode='add';    // 'add' = normal (date flow -> add pendingAdd to bag); 'calendar' = calendar view (date flow -> equipment picker)
-  function openPlan(atStep){ planMode='add'; MULTI=null; MULTI_REASON=''; multiOpen=false; planStep=atStep||1; renderPlan(); open('planOv'); }   // atStep 2 skips the day picker (day already chosen). Redoing dates always resets to a one-day rental.
+  function openPlan(atStep){ planMode='add'; MULTI=null; MULTI_REASON=''; multiOpen=false; STYLUS_DAYS=1; planStep=atStep||1; renderPlan(); open('planOv'); }   // atStep 2 skips the day picker (day already chosen). Redoing dates always resets to a one-day rental.
   // The multi-day return choices: the 2nd..5th school day after checkout (one-day is the normal, non-multi default).
   function multiDayOptions(){ var out=[], d=new Date(checkout); for(var n=1;n<=5;n++){ d=nextSchoolDay(d); if(n>=2) out.push({d:new Date(d), iso:isoOf(d), n:n}); } return out; }
+  // The iPad stylus rents self-service for 1-3 school days (no teacher OK, Chris 2026-11-09). These ONLY apply
+  // when the bag is nothing but styluses; adding a camera or other gear reverts to the normal one-day return.
+  function stylusOnlyBag(){ return BAG.length>0 && BAG.every(function(nm){ return EQTYPE[nm]==='apple_pencil'; }); }
+  function nthSchoolDay(n){ var d=new Date(checkout); for(var i=0;i<n;i++){ d=nextSchoolDay(d); } return d; }   // n=1 -> the next school day (the one-day default)
+  function stylusDayReturn(){ return (stylusOnlyBag() && STYLUS_DAYS>1) ? nthSchoolDay(STYLUS_DAYS) : null; }
+  function stylusFreeForReturn(retDate){   // is at least one stylus free for the span checkout..retDate?
+    if(!CAL) return true;
+    var co=isoOf(checkout), ret=isoOf(retDate), eu=CAL.equipment_units||{};
+    var units=Object.keys(eu).filter(function(u){ return eu[u] && eu[u].type==='apple_pencil'; });
+    if(!units.length) return true;
+    var busy={}; (CAL.equipment_oos||[]).forEach(function(u){ if(eu[u] && eu[u].type==='apple_pencil') busy[u]=1; });
+    (CAL.equipment||[]).forEach(function(c){ if(!c.returned && eu[c.item] && eu[c.item].type==='apple_pencil' && overlaps(c.out,c.due,co,ret)) busy[c.item]=1; });
+    return units.filter(function(u){ return !busy[u]; }).length>0;
+  }
+  function stylusDayOptions(){ var out=[]; for(var n=1;n<=3;n++){ var d=nthSchoolDay(n); out.push({n:n, d:d, iso:isoOf(d), free:stylusFreeForReturn(d)}); } return out; }
   function renderPlan(){
     document.getElementById('planProg').innerHTML=[1,2,3].map(function(n){ return '<span class="pd'+(n===planStep?' on':(n<planStep?' done':''))+'">'+n+'</span>'; }).join('');
     document.getElementById('planBack').style.display=(planStep>1)?'':'none';
@@ -660,7 +707,7 @@
     if(!CAL) return null;
     var cams=studentCams(), busy={};
     (CAL.oos||[]).concat(CAL.no_card||[]).forEach(function(cm){ busy[cm]=1; });
-    (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && c.out && c.due && c.out<=iso && c.due>=iso) busy[c.camera]=1; });
+    (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && c.out && c.due && c.out<=iso && c.due>=iso && !ownEditBooking(c,true)) busy[c.camera]=1; });
     return cams.filter(function(cm){ return !busy[cm]; }).length;
   }
   function renderCalView(){
@@ -719,7 +766,7 @@
     var cams=camsFor(it.name);
     if(cams){
       var busy={}; (CAL.oos||[]).concat(CAL.no_card||[]).forEach(function(cm){ if(cams.indexOf(cm)>=0) busy[cm]=1; });
-      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && c.out && c.due && c.out<=iso && c.due>=iso) busy[c.camera]=1; });
+      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && c.out && c.due && c.out<=iso && c.due>=iso && !ownEditBooking(c,true)) busy[c.camera]=1; });
       return {free:cams.filter(function(cm){return !busy[cm];}).length, total:cams.length};
     }
     var type=EQTYPE[it.name], eu=CAL.equipment_units||{};
@@ -893,20 +940,29 @@
   // matching the server: a same-day handoff is allowed, so an item reserved FROM the day you return it is
   // still available to you. (Closed intervals wrongly flagged the return-day boundary as a conflict.)
   function overlaps(out,due,co,ret){ return out && due && out<ret && due>co; }   // ISO date strings compare lexicographically
+  // While a student edits ONE of their own reservations, that reservation's OWN gear must read as FREE
+  // (so keeping your camera while you move the day is never flagged "taken"). The calendar feed carries
+  // no group id, so a booking is "the edited reservation's own" when its unit + original dates match.
+  var editResvOrig=null;   // {out, due, units:[...], map:{model:unit}} snapshot, set while modifying
+  function ownEditBooking(c, isCam){
+    if(!modifyMode || !editResvOrig) return false;
+    var u=isCam?c.camera:c.item;
+    return editResvOrig.units.indexOf(u)>=0 && c.out===editResvOrig.out && c.due===editResvOrig.due;
+  }
   function stockFor(it){
     if(!CAL) return null;
     var co=isoOf(checkout), ret=isoOf(returnDay||nextSchoolDay(checkout));
     var cams=camsFor(it.name);
     if(cams){
       var busy={}; (CAL.oos||[]).concat(CAL.no_card||[]).forEach(function(cm){ if(cams.indexOf(cm)>=0) busy[cm]=1; });
-      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && overlaps(c.out,c.due,co,ret)) busy[c.camera]=1; });
+      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && overlaps(c.out,c.due,co,ret) && !ownEditBooking(c,true)) busy[c.camera]=1; });
       return {free:cams.filter(function(cm){return !busy[cm];}).length, total:cams.length};
     }
     var type=EQTYPE[it.name], eu=CAL.equipment_units||{};
     if(type){
       var units=Object.keys(eu).filter(function(u){ return eu[u] && eu[u].type===type; });
       var eb={}; (CAL.equipment_oos||[]).forEach(function(u){ if(eu[u] && eu[u].type===type) eb[u]=1; });
-      (CAL.equipment||[]).forEach(function(c){ if(!c.returned && eu[c.item] && eu[c.item].type===type && overlaps(c.out,c.due,co,ret)) eb[c.item]=1; });
+      (CAL.equipment||[]).forEach(function(c){ if(!c.returned && eu[c.item] && eu[c.item].type===type && overlaps(c.out,c.due,co,ret) && !ownEditBooking(c,false)) eb[c.item]=1; });
       return {free:units.filter(function(u){return !eb[u];}).length, total:units.length};
     }
     return null;
@@ -919,14 +975,14 @@
     var cams=camsFor(it.name);
     if(cams){
       var busy={}; (CAL.oos||[]).concat(CAL.no_card||[]).forEach(function(cm){ if(cams.indexOf(cm)>=0) busy[cm]=1; });
-      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && overlaps(c.out,c.due,co,ret)) busy[c.camera]=1; });
+      (CAL.checkouts||[]).forEach(function(c){ if(!c.returned && cams.indexOf(c.camera)>=0 && overlaps(c.out,c.due,co,ret) && !ownEditBooking(c,true)) busy[c.camera]=1; });
       return cams.filter(function(cm){ return !busy[cm]; });
     }
     var type=EQTYPE[it.name], eu=CAL.equipment_units||{};
     if(type){
       var units=Object.keys(eu).filter(function(u){ return eu[u] && eu[u].type===type; });
       var eb={}; (CAL.equipment_oos||[]).forEach(function(u){ if(eu[u] && eu[u].type===type) eb[u]=1; });
-      (CAL.equipment||[]).forEach(function(c){ if(!c.returned && eu[c.item] && eu[c.item].type===type && overlaps(c.out,c.due,co,ret)) eb[c.item]=1; });
+      (CAL.equipment||[]).forEach(function(c){ if(!c.returned && eu[c.item] && eu[c.item].type===type && overlaps(c.out,c.due,co,ret) && !ownEditBooking(c,false)) eb[c.item]=1; });
       return units.filter(function(u){ return !eb[u]; });
     }
     return null;
@@ -1168,6 +1224,7 @@
     if(free && !free.length){ toast(name+' '+t('is not free for your dates.')); return; }   // every unit is booked for the chosen span: do not add
     // One camera per day: block a second camera model in the bag (gear types are single catalog items; the backend enforces the rest).
     if(camsFor(name) && BAG.some(function(b){ return b!==name && camsFor(b); })){ toast(t('You can only reserve one camera per day.')); return; }
+    if(EQTYPE[name]!=='apple_pencil' && STYLUS_DAYS>1){ STYLUS_DAYS=1; renderDates(); }   // adding anything but a stylus cancels the stylus self-service span, so this item is checked/booked for one day
     doAddToBag(name);
   }
   function doAddToBag(name){
@@ -1191,36 +1248,85 @@
   }
   // ----- modify an existing reservation (edit dates / add / remove) -----
   var modifyMode=false, editingResvId=null;
-  function exitModify(){ modifyMode=false; editingResvId=null; MULTI=null; MULTI_REASON=''; multiOpen=false; }
+  function exitModify(){ modifyMode=false; editingResvId=null; editResvOrig=null; MULTI=null; MULTI_REASON=''; multiOpen=false; STYLUS_DAYS=1; }
   // Load a reservation back into the bag as an edit session; Save writes it back via /api/camera/modify.
   function modifyReservation(resv){
     if(!resv) return;
-    MULTI=null; MULTI_REASON=''; multiOpen=false;   // editing an existing reservation is its own flow (uses /api/camera/modify), never the multi-day request path
+    MULTI=null; MULTI_REASON=''; multiOpen=false; STYLUS_DAYS=1;   // editing an existing reservation is its own flow (uses /api/camera/modify), never the multi-day request path
     BAG=[]; PICK={};
+    var origUnits=[], origMap={};
     (resv.items||[]).forEach(function(it){
       var unit=it.unit, model=null;
       if(it.kind==='camera'){ model=modelOfCam(unit); }
       else { var u=(CAL&&CAL.equipment_units&&CAL.equipment_units[unit]); model=u?modelOfType(u.type):null; }
-      if(model && findItem(model)){ if(BAG.indexOf(model)<0) BAG.push(model); PICK[model]=unit; }
+      if(model && findItem(model)){ if(BAG.indexOf(model)<0) BAG.push(model); PICK[model]=unit; origMap[model]=unit; if(unit) origUnits.push(unit); }
     });
     saveBag(); savePick();
+    // snapshot the original reservation: lets availability free its OWN gear, and feeds the "what changed" popup.
+    editResvOrig={ out:String(resv.out||''), due:String(resv.due||''), units:origUnits, map:origMap };
     var p=String(resv.out).split('-'); checkout=new Date(+p[0],+p[1]-1,+p[2]); checkout.setHours(0,0,0,0);
     pickup=null; returnTime=null; renderDates();   // returnDay = the next school day, as the store always books
     modifyMode=true; editingResvId=resv.id;
     updateBag(); rerender();
     close('acctOv'); renderBag(); open('bagOv');
   }
-  // Save the edited reservation: send the complete unit set + dates to the modify endpoint.
+  // ---- modify: live availability, change summary, confirmation popup ----
+  // Bag items with NO free unit for the chosen day (own reservation's gear excluded, de-duped within the bag).
+  // Drives the red/green line in the bag and gates Save, so a student can never overbook someone else.
+  function modifyConflicts(){
+    var used={}, bad=[];
+    BAG.forEach(function(nm){ var it=findItem(nm); if(!it) return;
+      var free=freeUnitsFor(it)||[], unit=PICK[nm];
+      if(unit){ if(free.indexOf(unit)<0 || used[unit]) bad.push(nm); else used[unit]=1; }
+      else { var av=free.filter(function(u){ return !used[u]; }); if(!av.length) bad.push(nm); else used[av[0]]=1; }
+    });
+    return bad;
+  }
+  function isoLabel(iso){ if(!iso) return ''; var p=String(iso).split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); return DOW[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate(); }
+  // Diff the edited bag against the original snapshot: day move, unit swaps, items added/removed.
+  function buildChangeSummary(newOut, newMap){
+    var o=editResvOrig||{map:{},out:''}, added=[], removed=[], swapped=[];
+    Object.keys(o.map).forEach(function(m){
+      if(newMap[m]==null) removed.push(unitFull(m,o.map[m])||m);
+      else if(newMap[m]!==o.map[m]) swapped.push({from:unitFull(m,o.map[m]), to:unitFull(m,newMap[m])});
+    });
+    Object.keys(newMap).forEach(function(m){ if(o.map[m]==null) added.push(unitFull(m,newMap[m])||m); });
+    return { dayChanged:!!(o.out && o.out!==newOut), fromOut:o.out, toOut:newOut, added:added, removed:removed, swapped:swapped };
+  }
+  function chgRow(k,v){ return '<div class="rcpt-row"><span class="rcpt-k">'+k+'</span><span class="rcpt-v">'+v+'</span></div>'; }
+  function showChangePopup(s){
+    var rows='';
+    if(s.dayChanged) rows+=chgRow(t('Day'), isoLabel(s.fromOut)+' &rarr; '+isoLabel(s.toOut));
+    s.swapped.forEach(function(sw){ rows+=chgRow(t('Swapped'), esc(sw.from)+' &rarr; '+esc(sw.to)); });
+    if(s.added.length) rows+=chgRow(t('Added'), esc(s.added.join(', ')));
+    if(s.removed.length) rows+=chgRow(t('Removed'), esc(s.removed.join(', ')));
+    document.getElementById('chgBody').innerHTML=
+      '<div class="rcpt-check">&#10003;</div>'+
+      '<h2 class="rcpt-h">'+t('Reservation updated')+'</h2>'+
+      '<p class="rcpt-sub">'+t('Here is what changed.')+'</p>'+
+      '<div class="rcpt-card">'+rows+'</div>'+
+      '<button type="button" class="btn block" id="chgDone">'+t('Done')+'</button>';
+    document.getElementById('chgDone').onclick=function(){ close('chgOv'); openAccount(); };
+    open('chgOv');
+  }
+  function cancelModify(){ close('bagOv'); openAccount(); }   // the bag's close handler reverts the edit (exitModify)
+  // Save the edited reservation: send the complete unit set + dates to the modify endpoint, then show what changed.
   function saveModify(){
     if(!BAG.length){ setBagMsg(t('Keep at least one item, or cancel the reservation instead.'), true); return; }
-    var co=isoOf(checkout), ret=isoOf(returnDay), units=[], seen={};
+    if(modifyConflicts().length){ setBagMsg(t('Some gear is taken for that day. Fix the items in red, then save.'), true); return; }
+    var co=isoOf(checkout), ret=isoOf(returnDay), units=[], seen={}, newMap={};
     BAG.forEach(function(nm){ var it=findItem(nm); if(!it) return;
       var unit=PICK[nm]; if(!unit){ var f=freeUnitsFor(it)||[]; unit=f[0]; }
       if(!unit || seen[unit]) return; seen[unit]=1;
+      newMap[nm]=unit;
       units.push({ kind: camsFor(nm)?'camera':'equipment', unit: unit }); });
     if(!units.length){ setBagMsg(t('Could not read your items. Try again.'), true); return; }
+    var summary=buildChangeSummary(co, newMap);
+    if(!summary.dayChanged && !summary.added.length && !summary.removed.length && !summary.swapped.length){
+      setBagMsg(t('No changes to save.'), true); return;
+    }
     api('/api/camera/modify',{student_id:USER.id, id:editingResvId, out:co, due:ret, units:units}).then(function(j){
-      if(j&&j.ok){ toast(t('Reservation updated.')); exitModify(); BAG=[]; PICK={}; saveBag(); savePick(); updateBag(); close('bagOv'); loadCal(); openAccount(); }
+      if(j&&j.ok){ exitModify(); BAG=[]; PICK={}; saveBag(); savePick(); updateBag(); close('bagOv'); loadCal(); showChangePopup(summary); }
       else { setBagMsg((j&&j.error)||t('Could not update. Try again.'), true); }
     }).catch(function(){ setBagMsg(t('Could not update. Try again.'), true); });
   }
@@ -1245,6 +1351,13 @@
         '<div class="bag-drow"><span class="bag-dk">'+t('Where')+'</span><span class="bag-dv">'+t('Classroom pickup')+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div>'+
         '<button type="button" class="bag-editdates" id="bagEditDates">'+t('Change dates')+'</button></div>';
     } else { dates='<div class="bag-nodates">'+t('No dates yet. Pick when you need the gear, then reserve.')+'</div>'; }
+    // Modify: a live red/green line that reflects whether the current gear + day is free (own reservation excluded).
+    var modConf = modifyMode ? modifyConflicts() : [];
+    var confLine = modifyMode
+      ? (modConf.length
+          ? '<div class="bag-modconf">'+tf('%s is taken for that day. Pick a different number or day.', modConf.map(function(n){ return '<b>'+esc(PICK[n]?unitFull(n,PICK[n]):n)+'</b>'; }).join(', '))+'</div>'
+          : '<div class="bag-modok">'+t('Everything is free for your day.')+'</div>')
+      : '';
     // Each item is tappable to change its unit (opens its detail), like clicking a cart item's options.
     var items='<div class="bag-items">'+BAG.map(function(nm){ var it=findItem(nm);
       var tag = (!reqMode() && REQ[nm]) ? '<span class="bag-reqtag">'+t('Needs OK')+'</span>' : '';
@@ -1256,15 +1369,23 @@
         '</button>'+
         '<button type="button" class="bag-x" data-bx="'+encodeURIComponent(nm)+'">'+t('Remove')+'</button></div>'; }).join('')+'</div>';
     var primary = modifyMode
-      ? '<button type="button" class="btn bag-reserve" id="bagSave">'+t('Save changes')+'</button>'
+      ? '<button type="button" class="btn bag-reserve" id="bagSave"'+(modConf.length?' disabled':'')+'>'+t('Save changes')+'</button>'
       : (datesReady()
           ? '<button type="button" class="btn bag-reserve" id="bagReserve">'+t(reserveLabel())+'</button>'
           : '<button type="button" class="btn" id="bagSetDates">'+t('Set checkout dates')+'</button>');
-    var action = '<div class="bag-actions"><button type="button" class="btn ghost bag-addmore" id="bagAddMore">'+t('Add equipment')+'</button>'+primary+'</div>';
+    var action = '<div class="bag-actions"><button type="button" class="btn ghost bag-addmore" id="bagAddMore">'+t('Add equipment')+'</button>'+primary+'</div>'
+      + (modifyMode ? '<button type="button" class="btn ghost bag-cancelmod" id="bagCancelMod">'+t('Cancel')+'</button>' : '');
     // Special request: a lowkey accordion (mostly hidden). Opening it reveals a note + a new return-day option.
     var multi='';
     if(!modifyMode && datesReady()){
-      if(MULTI){
+      if(stylusOnlyBag()){   // iPad stylus: self-service 1-3 school days, no teacher OK (replaces the Special-request accordion)
+        var sdopts=stylusDayOptions().map(function(o){
+          var un=(!o.free && o.n>1), cls='bsd-opt'+(o.n===STYLUS_DAYS?' on':'')+(un?' busy':'');
+          var sub=un?t('Taken'):(DOW[o.d.getDay()]+' '+MON[o.d.getMonth()]+' '+o.d.getDate());
+          return '<button type="button" class="'+cls+'" data-styday="'+o.n+'"'+(un?' disabled':'')+'><b>'+o.n+' '+t(o.n===1?'day':'days')+'</b><span>'+sub+'</span></button>';
+        }).join('');
+        multi='<div class="bag-stydays"><div class="bsd-lab">'+t('How long do you need it?')+'</div><div class="bsd-opts">'+sdopts+'</div></div>';
+      } else if(MULTI){
         multi='<div class="bag-special done"><div class="bsp-chosen"><span class="bsp-ctext">'+t('Special request')+' &middot; '+t('return')+' <b>'+DOW[returnDay.getDay()]+' '+MON[returnDay.getMonth()]+' '+returnDay.getDate()+'</b> &middot; '+t('needs Mr. Silva&#8217;s OK')+(MULTI_REASON?('<br>&ldquo;'+esc(MULTI_REASON)+'&rdquo;'):'')+'</span><button type="button" class="bsp-clear" id="bagMultiClear">'+t('Remove')+'</button></div></div>';
       } else {
         var mbody='';
@@ -1277,7 +1398,7 @@
         multi='<div class="bag-special'+(multiOpen?' open':'')+'"><button type="button" class="bsp-toggle" id="bagMultiOpen">'+t('Special request')+' <span class="bsp-chev">&rsaquo;</span></button>'+mbody+'</div>';
       }
     }
-    w.innerHTML=note+dates+multi+items+action;
+    w.innerHTML=note+dates+confLine+multi+items+action;
     w.querySelectorAll('[data-bx]').forEach(function(b){ b.onclick=function(){ removeFromBag(decodeURIComponent(b.getAttribute('data-bx'))); }; });
     w.querySelectorAll('[data-edit]').forEach(function(b){ b.onclick=function(){ openDetail(decodeURIComponent(b.getAttribute('data-edit')), true); }; });   // detail opens ON TOP of the bag
     var ed=document.getElementById('bagEditDates'); if(ed) ed.onclick=function(){ pendingAdd=null; openPlan(); };
@@ -1285,6 +1406,7 @@
     var am=document.getElementById('bagAddMore'); if(am) am.onclick=function(){ openPicker(); };   // continue shopping: the picker opens on top; Done returns here
     var rv=document.getElementById('bagReserve'); if(rv) rv.onclick=submitReservation;
     var sv=document.getElementById('bagSave'); if(sv) sv.onclick=saveModify;
+    var cmb=document.getElementById('bagCancelMod'); if(cmb) cmb.onclick=cancelModify;
     var mOpen=document.getElementById('bagMultiOpen'); if(mOpen) mOpen.onclick=function(){ multiOpen=!multiOpen; renderBag(); };   // accordion toggle
     var mClear=document.getElementById('bagMultiClear'); if(mClear) mClear.onclick=function(){ MULTI=null; MULTI_REASON=''; multiOpen=false; renderDates(); rerender(); renderBag(); };
     var mReason=document.getElementById('bagMultiReason'); if(mReason) mReason.addEventListener('input',function(){ MULTI_REASON=mReason.value; });
@@ -1295,6 +1417,11 @@
       multiOpen=false; renderDates(); rerender(); renderBag();
       var gone=BAG.filter(function(nm){ var it=findItem(nm); var fu=freeUnitsFor(it); return !(fu&&fu.length); });
       if(gone.length) setBagMsg(t('Heads up:')+' <b>'+gone.map(esc).join(', ')+'</b> '+t('is not free for the whole time. Pick a shorter return or swap it out.'), true);
+    }; });
+    // iPad stylus self-service length: tap 1/2/3 days -> set the return span on the spot, no note, no approval.
+    w.querySelectorAll('[data-styday]').forEach(function(b){ b.onclick=function(){
+      var n=+b.getAttribute('data-styday'); if(n===STYLUS_DAYS) return;
+      STYLUS_DAYS=n; renderDates(); rerender(); renderBag();
     }; });
     setBagMsg('');
   }
@@ -1348,9 +1475,122 @@
       var summary={ reserved:resolved.filter(function(r){return !r.req;}).map(disp),
                     requested:resolved.filter(function(r){return r.req;}).map(disp),
                     checkout:new Date(checkout), returnDay:new Date(returnDay), pickup:pickup, returnTime:returnTime };
-      BAG=[]; saveBag(); REQ={}; saveReq(); MULTI=null; MULTI_REASON=''; multiOpen=false; if(USER){ USER.holdRequest=false; saveUser(); }
+      BAG=[]; saveBag(); REQ={}; saveReq(); MULTI=null; MULTI_REASON=''; multiOpen=false; STYLUS_DAYS=1; if(USER){ USER.holdRequest=false; saveUser(); }
       updateBag(); refreshAccount(); close('bagOv'); showReceipt(summary); loadCal(); rerender();
     }).catch(function(){ setBagMsg(t('Could not reach the server. Try again.'), true); if(rv){ rv.disabled=false; rv.textContent=t(lbl); } });
+  }
+  // ===== Reservation pass (save to Photos) =====
+  // Draws a branded, shareable "pass" to an off-screen canvas from an already-localized data object, so EN and
+  // ES both flow through unchanged. Pure vector + text (no external images), so the canvas is never tainted and
+  // toDataURL works on every device. Students save it to their camera roll and show it to their teacher at pickup.
+  function drawReservationPass(d){
+    var S=2, W=760, PX=52;                       // 2x retina; logical width; side padding
+    var cvs=document.createElement('canvas'), ctx=cvs.getContext('2d'), CT=W-PX*2;
+    function F(px,wt){ return (wt||'400')+' '+px+'px "Helvetica Neue",Helvetica,Arial,sans-serif'; }
+    function wrap(text,font,maxw){ ctx.font=font; var ws=String(text).split(' '),lines=[],cur='';
+      for(var i=0;i<ws.length;i++){ var tryl=cur?cur+' '+ws[i]:ws[i]; if(ctx.measureText(tryl).width>maxw && cur){ lines.push(cur); cur=ws[i]; } else cur=tryl; }
+      if(cur) lines.push(cur); return lines; }
+    // ---- measure pass: compute height from wrapped content ----
+    var y=0; y+=58; y+=30; y+=14;
+    var nameLines=wrap(d.name, F(46,'800'), CT); y+=nameLines.length*54;
+    if(d.period){ y+=10; y+=34; }
+    if(d.meta){ y+=6; y+=28; }
+    y+=30; var perf1=y; y+=42;
+    var rows=[];
+    function addRow(k,vLines){ rows.push({k:k,v:vLines}); }
+    (d.groups||[]).forEach(function(gp){
+      var itemLines=[]; (gp.items||[]).forEach(function(it){ wrap(it, F(29,'600'), CT-30).forEach(function(l,idx){ itemLines.push({t:l,first:idx===0}); }); });
+      if(itemLines.length) rows.push({k:gp.k, items:itemLines});
+    });
+    addRow(d.pickupK, wrap(d.pickupV, F(29,'600'), CT));
+    addRow(d.returnK, wrap(d.returnV, F(29,'600'), CT));
+    addRow(d.whereK, wrap(d.whereV, F(29,'600'), CT));
+    var ry=y; rows.forEach(function(r){ ry+=26; ry+=(r.items?r.items.length:r.v.length)*40; ry+=20; });
+    y=ry; y+=14; var perf2=y; y+=42; y+=d.footLead?60:0; y+=46; y+=40;
+    var H=Math.ceil(y);
+    // ---- draw ----
+    cvs.width=W*S; cvs.height=H*S; ctx.scale(S,S);
+    function rr(x,yy,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,yy); ctx.arcTo(x+w,yy,x+w,yy+h,r); ctx.arcTo(x+w,yy+h,x,yy+h,r); ctx.arcTo(x,yy+h,x,yy,r); ctx.arcTo(x,yy,x+w,yy,r); ctx.closePath(); }
+    var R=40;
+    var g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'#071024'); g.addColorStop(.42,'#081a33'); g.addColorStop(1,'#0a2a3e');
+    rr(0,0,W,H,R); ctx.fillStyle=g; ctx.fill();
+    var gl=ctx.createRadialGradient(W*0.16,H*0.02,0,W*0.16,H*0.02,W*0.7); gl.addColorStop(0,'rgba(63,240,224,.22)'); gl.addColorStop(.5,'rgba(0,184,184,.07)'); gl.addColorStop(1,'rgba(0,0,0,0)');
+    rr(0,0,W,H,R); ctx.save(); ctx.clip(); ctx.fillStyle=gl; ctx.fillRect(0,0,W,H*0.6);
+    var gv=ctx.createRadialGradient(W*0.9,H*0.98,0,W*0.9,H*0.98,W*0.8); gv.addColorStop(0,'rgba(124,108,230,.20)'); gv.addColorStop(.55,'rgba(96,84,230,.06)'); gv.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=gv; ctx.fillRect(0,H*0.4,W,H*0.6); ctx.restore();
+    rr(1,1,W-2,H-2,R-1); ctx.lineWidth=1.5; ctx.strokeStyle='rgba(150,235,245,.30)'; ctx.stroke();
+    ctx.textBaseline='alphabetic';
+    var cy=58;
+    (function(){ var tx=PX, s=d.eyebrow; ctx.font=F(20,'800'); ctx.fillStyle='#5ff0f0'; for(var i=0;i<s.length;i++){ ctx.fillText(s[i],tx,cy+22); tx+=ctx.measureText(s[i]).width+3; } })();
+    cy+=30+14;
+    ctx.fillStyle='#f3fbff'; ctx.font=F(46,'800');
+    nameLines.forEach(function(l){ cy+=46; ctx.fillText(l,PX,cy); cy+=8; }); cy-=8;
+    if(d.period){ cy+=10; cy+=34; ctx.fillStyle='#5ff0f0'; ctx.font=F(32,'800'); ctx.fillText(d.period,PX,cy); }
+    if(d.meta){ cy+=6; cy+=28; ctx.fillStyle='rgba(222,240,250,.82)'; ctx.font=F(25,'500'); ctx.fillText(d.meta,PX,cy); }
+    cy+=30;
+    function perforation(py){
+      ctx.save(); ctx.setLineDash([3,9]); ctx.lineWidth=2; ctx.strokeStyle='rgba(150,225,245,.34)';
+      ctx.beginPath(); ctx.moveTo(PX,py); ctx.lineTo(W-PX,py); ctx.stroke(); ctx.restore();
+      ctx.fillStyle='#061024';                    // edge notches read like a torn ticket
+      ctx.beginPath(); ctx.arc(0,py,16,-Math.PI/2,Math.PI/2); ctx.fill();
+      ctx.beginPath(); ctx.arc(W,py,16,Math.PI/2,Math.PI*1.5); ctx.fill();
+    }
+    perforation(perf1+21); cy=perf1+42;
+    rows.forEach(function(r){
+      cy+=26; ctx.font=F(18,'800'); ctx.fillStyle='rgba(205,226,240,.62)';
+      (function(){ var tx=PX, s=r.k.toUpperCase(); for(var i=0;i<s.length;i++){ ctx.fillText(s[i],tx,cy); tx+=ctx.measureText(s[i]).width+2; } })();
+      if(r.items){
+        r.items.forEach(function(ln){ cy+=40; if(ln.first){ ctx.fillStyle='#3ff0e0'; ctx.beginPath(); ctx.arc(PX+5,cy-9,5,0,Math.PI*2); ctx.fill(); }
+          ctx.fillStyle='#f3fbff'; ctx.font=F(29,'600'); ctx.fillText(ln.t,PX+30,cy); });
+      } else { ctx.fillStyle='#f3fbff'; ctx.font=F(29,'600'); r.v.forEach(function(l){ cy+=40; ctx.fillText(l,PX,cy); }); }
+      cy+=20;
+    });
+    cy+=14; perforation(perf2+21); cy=perf2+42;
+    ctx.textAlign='center';
+    if(d.footLead){ cy+=40; ctx.fillStyle='#5ff0f0'; ctx.font=F(26,'800'); ctx.fillText(d.footLead,W/2,cy); cy+=20; }
+    cy+=34; ctx.fillStyle='rgba(205,226,240,.6)'; ctx.font=F(21,'600'); ctx.fillText(d.code+'     '+d.stamp,W/2,cy);
+    ctx.textAlign='left';
+    return cvs;
+  }
+  function passCode(){ try{ return 'PV-'+(Date.now().toString(36).toUpperCase().slice(-4)); }catch(e){ return 'PV-0000'; } }
+  function passStamp(){ var n=new Date(), h=n.getHours(), m=n.getMinutes(), ap=h>=12?'PM':'AM', h12=h%12||12;
+    return MON[n.getMonth()]+' '+n.getDate()+', '+n.getFullYear()+'   '+h12+':'+('0'+m).slice(-2)+' '+ap; }
+  function buildPassData(s){
+    var hasReq=s.requested.length>0, hasRes=s.reserved.length>0, pureReq=hasReq && !hasRes;
+    var per=String(USER&&USER.period||'').replace(/\D/g,''); per=per?(t('Period')+' '+('0'+per).slice(-2)):'';
+    var crs=String(USER&&USER.course||''), room=USER?pickupRoom():'';
+    var meta=[crs, t('Student')+' #'+((USER&&USER.id)||'')].filter(Boolean).join(' · ');
+    function dstr(dt,win){ return DOW[dt.getDay()]+' '+MON[dt.getMonth()]+' '+dt.getDate()+' · '+t(win.label)+' ('+f12(win.s)+')'; }
+    var groups=[];
+    if(hasRes) groups.push({k:t('Reserved'), items:s.reserved});
+    if(hasReq) groups.push({k:t('Needs OK'), items:s.requested});
+    return { eyebrow: pureReq?t('REQUEST SENT'):t('RESERVATION CONFIRMED'),
+      name:(USER&&(USER.name||USER.label))||t('Student'), period:per, meta:meta, groups:groups,
+      pickupK:t('Pick up'), pickupV:dstr(s.checkout, s.pickup),
+      returnK:t('Return'), returnV:dstr(s.returnDay, s.returnTime),
+      whereK:t('Where'), whereV:t('Classroom pickup')+(room?(' · '+room):''),
+      footLead:t('Show this to your teacher at pickup'), code:passCode(), stamp:passStamp() };
+  }
+  function savePass(s){
+    var cvs; try{ cvs=drawReservationPass(buildPassData(s)); }catch(e){ try{console.error('pass draw',e);}catch(_){ } toast(t('Could not make the pass. Try again.')); return; }
+    var durl; try{ durl=cvs.toDataURL('image/png'); }catch(e){ toast(t('Could not make the pass. Try again.')); return; }
+    // Build the File synchronously (no async toBlob gap) so iOS keeps the tap gesture and lets us open the share sheet.
+    var file=null;
+    try{ var b=atob(durl.split(',')[1]), u8=new Uint8Array(b.length); for(var i=0;i<b.length;i++) u8[i]=b.charCodeAt(i); file=new File([u8],'reservation-pass.png',{type:'image/png'}); }catch(e){ file=null; }
+    if(file && navigator.canShare && navigator.canShare({files:[file]}) && navigator.share){
+      try{ navigator.share({files:[file], title:t('Equipment Reservation')}).catch(function(err){ if(err && err.name==='AbortError') return; passFallback(durl); }); }
+      catch(e){ passFallback(durl); }
+    } else { passFallback(durl); }
+  }
+  function passFallback(durl){
+    document.getElementById('passBody').innerHTML=
+      '<h2 class="rcpt-h" style="margin-top:4px">'+t('Your reservation pass')+'</h2>'+
+      '<img class="pass-img" alt="'+esc(t('Your reservation pass'))+'" src="'+durl+'">'+
+      '<p class="pass-hint">'+t('Press and hold the pass, then tap Add to Photos.')+'</p>'+
+      '<a class="btn block" href="'+durl+'" download="reservation-pass.png">'+t('Save image')+'</a>'+
+      '<button type="button" class="btn block ghost" id="passClose" style="margin-top:10px">'+t('Done')+'</button>';
+    var db=document.getElementById('passClose'); if(db) db.onclick=function(){ close('passOv'); };
+    open('passOv');
   }
   function showReceipt(s){
     var teach=USER?(USER.teacher||TEACHER_NAME[USER.pool]||''):'', room=USER?pickupRoom():'';
@@ -1370,7 +1610,11 @@
         '<div class="rcpt-row"><span class="rcpt-k">'+t('Pick up')+'</span><span class="rcpt-v">'+DOW[s.checkout.getDay()]+' '+MON[s.checkout.getMonth()]+' '+s.checkout.getDate()+' &middot; '+esc(t(s.pickup.label))+' ('+f12(s.pickup.s)+')</span></div>'+
         '<div class="rcpt-row"><span class="rcpt-k">'+t('Return')+'</span><span class="rcpt-v">'+DOW[s.returnDay.getDay()]+' '+MON[s.returnDay.getMonth()]+' '+s.returnDay.getDate()+' &middot; '+esc(t(s.returnTime.label))+' ('+f12(s.returnTime.s)+')</span></div>'+
         '<div class="rcpt-row"><span class="rcpt-k">'+t('Where')+'</span><span class="rcpt-v">'+t('Classroom pickup')+(teach?(' &middot; '+esc(teach)):'')+' &middot; '+esc(room)+'</span></div></div>'+
-      '<button type="button" class="btn block" id="rcptDone">'+t('Done')+'</button>';
+      '<div class="rcpt-actions">'+
+        '<button type="button" class="btn block" id="rcptSave">'+t('Save to Photos')+'</button>'+
+        '<button type="button" class="btn block ghost" id="rcptDone">'+t('Done')+'</button>'+
+      '</div>';
+    document.getElementById('rcptSave').onclick=function(){ savePass(s); };
     document.getElementById('rcptDone').onclick=function(){ close('rcptOv'); renderPopular(); };
     open('rcptOv');
   }
@@ -1396,7 +1640,7 @@
   }
   document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ close(b.getAttribute('data-close')); }; });
   // Tapping the dimmed backdrop closes a sheet. Not the sign-in gate: signing in is required (Chris 2026-11-05).
-  ['holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv','pickerOv','acctOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
+  ['holdOv','gearOv','bagOv','planOv','hoursOv','infoOv','detailOv','rcptOv','passOv','chgOv','pickerOv','acctOv'].forEach(function(id){ var o=document.getElementById(id); o.addEventListener('click', function(e){ if(e.target===o) close(id); }); });
   function toast(msg){ var t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2800); }
   function pulseDates(){ var d=document.querySelector('.datebar'); if(!d) return; d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash'); }
 
