@@ -266,9 +266,9 @@ def reslist(es):
 def deck_showcase(es, deck_preview):
     heading="Tu Plantilla de PowerPoint" if es else "Your PowerPoint Template"
     if es:
-        lead="Usa esta plantilla de 16:9 como punto de partida. Du&eacute;rala y hazla tuya. Tiene todo lo que necesitas:"
+        lead="Usa esta plantilla de 16:9 como punto de partida. Tiene todo lo que necesitas:"
         items=[
-            ("Portada:","el nombre de tu fot&oacute;grafo maestro, tu nombre, tu periodo y el curso."),
+            ("Portada:","un retrato de tu fot&oacute;grafo maestro, un autorretrato tuyo, y tu nombre, tu periodo y el curso."),
             ("3 p&aacute;ginas del maestro:","una imagen de tu maestro por p&aacute;gina, con la t&eacute;cnica que estudiaste."),
             ("3 p&aacute;ginas de tu trabajo:","una de tus fotos editadas por p&aacute;gina, con c&oacute;mo usaste lo que aprendiste."),
             ("P&aacute;gina de reflexi&oacute;n:","la p&aacute;gina final, donde respondes la reflexi&oacute;n."),
@@ -276,9 +276,9 @@ def deck_showcase(es, deck_preview):
         inside="La plantilla ya est&aacute; dentro de la carpeta del proyecto que descargaste en el Resumen, en ingl&eacute;s y espa&ntilde;ol."
         cap="Las 8 p&aacute;ginas del PowerPoint: portada, tres del maestro, tres de tu trabajo y la reflexi&oacute;n."
     else:
-        lead="Use this 16:9 template as your starting point. Duplicate it and make it yours. It has everything you need:"
+        lead="Use this 16:9 template as your starting point. It has everything you need:"
         items=[
-            ("Cover page:","your master photographer&rsquo;s name, your name, your period, and the course."),
+            ("Cover page:","a headshot of your master photographer, a self-portrait of you, and your name, period, and course."),
             ("3 master pages:","one master image per page, with the technique you studied."),
             ("3 of-your-work pages:","one of your edited photos per page, with how you used what you learned."),
             ("Reflection page:","the closing page, where you answer the reflection."),
@@ -339,6 +339,14 @@ def contact_sheets_setup(es, cur):
             ])
             + pnote_mp('Want to see it? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>.'), False)
     return out
+
+def scroll_steps(inner, rgb="139,92,246"):
+    # Contained vertical scroller, so a long how-to never looks like a tall,
+    # intimidating stack (easier for a 5th-grade / IEP reader). Purple default to
+    # sit inside a Resources card. to_light recolors it for the Garcia share.
+    return (f'<div class="silva-scroll" style="max-height:300px;overflow-y:auto;padding:14px 16px 20px;'
+            f'border:1px solid rgba({rgb},0.30);background:linear-gradient(to bottom, rgba(0,0,0,0.14) 0%, '
+            f'rgba(0,0,0,0.14) 88%, rgba({rgb},0.14) 100%);">' + inner + '</div>')
 
 # ============================================================================
 # LIGHT-MODE SKIN FOR THE PUBLIC SHARE COPY ONLY (Chris, one-time teacher request,
@@ -707,22 +715,34 @@ def build(mode, C):
             + para("You are studying <strong>how they make images</strong>, not their life story. For your master, look closely at their <strong>composition, light, subjects, and editing</strong>. These are the ideas you will bring into your own three photos.")
             + note("Choose the photographer you would most want to photograph like. The more their work excites you, the stronger your own photos will be."))
         en+=deliverables_box(False,
-            [("Your PowerPoint, started (PDF):","download the PowerPoint template, fill the <strong>Cover page</strong> and your <strong>3 Master Photographer pages</strong> (one image you chose on each, plus your technique note), export it as a PDF, and upload it to this Canvas assignment.")])
+            [("Pages 1 to 4 as a PDF (not the whole PowerPoint yet):","fill just your <strong>first 4 pages</strong>: the <strong>Cover page</strong> (a headshot of your master, a self-portrait of you, and your name, period, and course) and your <strong>3 Master Photographer pages</strong> (one of their photos and a technique note on each). Export <strong>only pages 1 to 4</strong> as a PDF and upload it. You finish the other pages in Step 05.")])
         en+=card("CHOOSE YOUR MASTER","Master Photographers",
-            para("Here are your master photographers, grouped into four styles: <strong>Landscape, Portrait, Still Life, and On Location</strong>. Look through all four groups, then pick the one whose work pulls you in the most.")
+            para("Here are your master photographers in four styles: <strong>Landscape, Portrait, Still Life, and On Location</strong>. Look through all four groups before you choose.")
             + (growth_reminder(False) if IS_P2 else "")
             + roster_grid(False))
         en+=resources_card("Recommended Research Websites", reslist(False), False)
-        en+=card("GATHER YOUR THREE IMAGES / START YOUR POWERPOINT","Choose 3 Images and Start Your PowerPoint",
-            para("Now build the first part of your PowerPoint. Open the <strong>PowerPoint template</strong> from your project folder, then do this:")
+        en+=card("START YOUR POWERPOINT","Build Your First 4 Pages",
+            para("Now build the <strong>first 4 pages</strong> of your PowerPoint: the cover and your 3 master photographer pages. You are <strong>not</strong> finishing the whole PowerPoint yet. You finish the rest in Step 05.")
             + steps([
-                ("Fill the Cover page.","Type your master photographer&rsquo;s name, your name, your period, and the course."),
-                ("Find three strong images by your master.","Search online for three of their photos that best show their style. Save them in your project folder."),
-                ("Place one image on each Master page.","Put one image on each of the three Master Photographer pages in the template."),
-                ("Write your technique note on each.","On each page, name the technique you see: composition, lighting, the moment, tonal range, or editing. Say why it works."),
-                ("Export a PDF and upload.","Go to File &gt; Export To &gt; PDF (or File &gt; Save a Copy as PDF), then upload the PDF to this Canvas assignment."),
+                ("Open the PowerPoint template.","It is in the project folder you downloaded on the Overview."),
+                ("Fill in the Cover page.","Add a <strong>headshot of your master photographer</strong>, a <strong>self-portrait of you</strong> (a photo of yourself), and type your name, period, and course."),
+                ("Find three photos by your master.","Search online for three of their best photos, the ones that show their style. Save them in your project folder."),
+                ("Put one photo on each Master page.","One master photo per page, on pages 2, 3, and 4."),
+                ("Write your technique note on each.","Name the technique you see: composition, lighting, the moment, tonal range, or editing. Say why it works."),
+                ("Export only pages 1 to 4 as a PDF.","Follow the steps in the box below, then upload the PDF to this Canvas assignment."),
             ])
-            + note("These three images are your <strong>master photographer&rsquo;s</strong> work, from online. You capture your <strong>own</strong> photos next, in Step 03."))
+            + note("It is OK that pages 5 to 8 are still empty. You only turn in these first 4 pages now. The photos on your master pages are <strong>their</strong> work, from online. You capture your <strong>own</strong> photos next, in Step 03."))
+        en+=resources_card("How to Export Only Pages 1 to 4 as a PDF (Mac)",
+            para("On a Mac, <strong>File &gt; Export</strong> sends every page. To pick just pages 1 to 4, you use <strong>Print</strong>. Follow each step:")
+            + scroll_steps(steps([
+                ("Save your PowerPoint first.","Press Cmd + S so your work is safe."),
+                ("Open the Print window.","Go to <strong>File &gt; Print</strong>."),
+                ("Choose only pages 1 to 4.","Find the page range and set it to print <strong>From 1 To 4</strong>. That is your cover and your 3 master pages."),
+                ("Click the PDF button.","It is at the <strong>bottom-left</strong> of the Print window."),
+                ("Choose Save as PDF.","Pick it from the little menu that pops up."),
+                ("Name it and save.","Name it LastName_First_MasterPhotographer_Start.pdf, then click Save."),
+                ("Upload the PDF to Canvas.","Turn it in to this Canvas assignment."),
+            ])), False)
         en+=next_up("UP NEXT &middot; STEP 03 - Capture &amp; Contact","Check out a camera kit and capture a full take of your own photos in your master&rsquo;s style.")
 
         es=banner(f"{PROJ_LABEL_ES} &bull;Paso 02","Elige a Tu Maestro",
@@ -734,22 +754,34 @@ def build(mode, C):
             + para("Est&aacute;s estudiando <strong>c&oacute;mo hacen im&aacute;genes</strong>, no su biograf&iacute;a. Para tu maestro, observa de cerca su <strong>composici&oacute;n, luz, sujetos y edici&oacute;n</strong>. Estas son las ideas que traer&aacute;s a tus propias tres fotos.")
             + note("Elige al fot&oacute;grafo como el que m&aacute;s te gustar&iacute;a fotografiar. Entre m&aacute;s te emocione su trabajo, m&aacute;s fuertes ser&aacute;n tus propias fotos."))
         es+=deliverables_box(True,
-            [("Tu PowerPoint, empezado (PDF):","descarga la plantilla de PowerPoint, llena la <strong>p&aacute;gina de portada</strong> y tus <strong>3 p&aacute;ginas del fot&oacute;grafo maestro</strong> (una imagen que elegiste en cada una, m&aacute;s tu nota de t&eacute;cnica), exp&oacute;rtalo como PDF y s&uacute;belo a esta tarea de Canvas.")])
+            [("P&aacute;ginas 1 a 4 como PDF (a&uacute;n no todo el PowerPoint):","llena solo tus <strong>primeras 4 p&aacute;ginas</strong>: la <strong>p&aacute;gina de portada</strong> (un retrato de tu maestro, un autorretrato tuyo, y tu nombre, tu periodo y el curso) y tus <strong>3 p&aacute;ginas del fot&oacute;grafo maestro</strong> (una de sus fotos y una nota de t&eacute;cnica en cada una). Exporta <strong>solo las p&aacute;ginas 1 a 4</strong> como PDF y s&uacute;belo. Terminas las dem&aacute;s p&aacute;ginas en el Paso 05.")])
         es+=card("ELIGE A TU MAESTRO","Fot&oacute;grafos Maestros",
-            para("Aqu&iacute; est&aacute;n tus fot&oacute;grafos maestros, en cuatro estilos: <strong>Paisaje, Retrato, Naturaleza Muerta y En Locaci&oacute;n</strong>. Mira los cuatro grupos y luego elige al que m&aacute;s te atraiga.")
+            para("Aqu&iacute; est&aacute;n tus fot&oacute;grafos maestros en cuatro estilos: <strong>Paisaje, Retrato, Naturaleza Muerta y En Locaci&oacute;n</strong>. Mira los cuatro grupos antes de elegir.")
             + (growth_reminder(True) if IS_P2 else "")
             + roster_grid(True))
         es+=resources_card("Sitios de Investigaci&oacute;n Recomendados", reslist(True), True)
-        es+=card("RE&Uacute;NE TUS TRES IM&Aacute;GENES / EMPIEZA TU POWERPOINT","Elige 3 Im&aacute;genes y Empieza Tu PowerPoint",
-            para("Ahora construye la primera parte de tu PowerPoint. Abre la <strong>plantilla de PowerPoint</strong> de tu carpeta del proyecto y haz esto:")
+        es+=card("EMPIEZA TU POWERPOINT","Arma Tus Primeras 4 P&aacute;ginas",
+            para("Ahora arma las <strong>primeras 4 p&aacute;ginas</strong> de tu PowerPoint: la portada y tus 3 p&aacute;ginas del fot&oacute;grafo maestro. <strong>No</strong> terminas todo el PowerPoint todav&iacute;a. Terminas el resto en el Paso 05.")
             + steps([
-                ("Llena la p&aacute;gina de portada.","Escribe el nombre de tu fot&oacute;grafo maestro, tu nombre, tu periodo y el curso."),
-                ("Busca tres im&aacute;genes fuertes de tu maestro.","Busca en internet tres de sus fotos que mejor muestren su estilo. Gu&aacute;rdalas en tu carpeta del proyecto."),
-                ("Pon una imagen en cada p&aacute;gina del maestro.","Coloca una imagen en cada una de las tres p&aacute;ginas del fot&oacute;grafo maestro de la plantilla."),
-                ("Escribe tu nota de t&eacute;cnica en cada una.","En cada p&aacute;gina, nombra la t&eacute;cnica que ves: composici&oacute;n, iluminaci&oacute;n, el momento, el rango tonal o la edici&oacute;n. Di por qu&eacute; funciona."),
-                ("Exporta un PDF y s&uacute;belo.","Ve a Archivo &gt; Exportar a &gt; PDF (o Archivo &gt; Guardar una copia como PDF), luego sube el PDF a esta tarea de Canvas."),
+                ("Abre la plantilla de PowerPoint.","Est&aacute; en la carpeta del proyecto que descargaste en el Resumen."),
+                ("Llena la p&aacute;gina de portada.","Agrega un <strong>retrato de tu fot&oacute;grafo maestro</strong>, un <strong>autorretrato tuyo</strong> (una foto de ti), y escribe tu nombre, tu periodo y el curso."),
+                ("Busca tres fotos de tu maestro.","Busca en internet tres de sus mejores fotos, las que muestran su estilo. Gu&aacute;rdalas en tu carpeta del proyecto."),
+                ("Pon una foto en cada p&aacute;gina del maestro.","Una foto del maestro por p&aacute;gina, en las p&aacute;ginas 2, 3 y 4."),
+                ("Escribe tu nota de t&eacute;cnica en cada una.","Nombra la t&eacute;cnica que ves: composici&oacute;n, iluminaci&oacute;n, el momento, el rango tonal o la edici&oacute;n. Di por qu&eacute; funciona."),
+                ("Exporta solo las p&aacute;ginas 1 a 4 como PDF.","Sigue los pasos del recuadro de abajo, luego sube el PDF a esta tarea de Canvas."),
             ])
-            + note("Estas tres im&aacute;genes son el trabajo de <strong>tu fot&oacute;grafo maestro</strong>, de internet. T&uacute; capturas tus <strong>propias</strong> fotos despu&eacute;s, en el Paso 03."))
+            + note("Est&aacute; bien que las p&aacute;ginas 5 a 8 sigan vac&iacute;as. Solo entregas estas primeras 4 p&aacute;ginas ahora. Las fotos de tus p&aacute;ginas del maestro son <strong>su</strong> trabajo, de internet. T&uacute; capturas tus <strong>propias</strong> fotos despu&eacute;s, en el Paso 03."))
+        es+=resources_card("C&oacute;mo Exportar Solo las P&aacute;ginas 1 a 4 como PDF (Mac)",
+            para("En una Mac, <strong>File &gt; Export</strong> (Archivo &gt; Exportar) env&iacute;a todas las p&aacute;ginas. Para elegir solo las p&aacute;ginas 1 a 4, usas <strong>Print</strong> (Imprimir). Sigue cada paso:")
+            + scroll_steps(steps([
+                ("Guarda tu PowerPoint primero.","Presiona Cmd + S para que tu trabajo est&eacute; seguro."),
+                ("Abre la ventana de imprimir.","Ve a <strong>File &gt; Print</strong> (Archivo &gt; Imprimir)."),
+                ("Elige solo las p&aacute;ginas 1 a 4.","Busca el rango de p&aacute;ginas y ponlo en <strong>From 1 To 4</strong> (Desde 1 Hasta 4). Esa es tu portada y tus 3 p&aacute;ginas del maestro."),
+                ("Haz clic en el bot&oacute;n PDF.","Est&aacute; <strong>abajo a la izquierda</strong> de la ventana de imprimir."),
+                ("Elige Save as PDF.","Esc&oacute;gelo del men&uacute; que aparece."),
+                ("N&oacute;mbralo y gu&aacute;rdalo.","N&oacute;mbralo LastName_First_MasterPhotographer_Start.pdf, luego haz clic en Save (Guardar)."),
+                ("Sube el PDF a Canvas.","Entr&eacute;galo en esta tarea de Canvas."),
+            ])), True)
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 03 - Captura y Contacto","Pide un kit de c&aacute;mara y captura una toma completa de tus propias fotos en el estilo de tu maestro.")
 
         return wrap_page(f"Step 2: Choose Your Master | Master Photographer | {CL} | PVHS", nav("Step 02",dots_for(1),step_topnav(1)), top_wrap(en,es), step_bottom(1))
@@ -945,7 +977,7 @@ def build(mode, C):
             "#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
         en+=card("STEP 05 &middot; FINISH AND PRESENT","Put Master and Student Work Side by Side",
             (float_right(PRESENT_FLOAT,"A student presenting their master photographer PowerPoint to the class","Present your master&rsquo;s work and your own, side by side.") if HAVE_PRESENT else "")
-            + para("Time to finish your PowerPoint. You already have your Cover and three Master pages from Step 02. Now add your <strong>three edited photos</strong> and your <strong>reflection</strong>, then present the whole thing to the class.")
+            + para("Time to finish your PowerPoint. This is your <strong>Fall Final</strong>, and your presentation <strong>is</strong> the final. You already have your Cover and three Master pages from Step 02. Now add your <strong>three edited photos</strong> and your <strong>reflection</strong>, then present the whole thing to the class.")
             + para("Your PowerPoint shows your master photographer&rsquo;s work and your work <strong>side by side</strong>, so everyone can see what you studied and how you made it your own."))
         en+=deliverables_box(False,
             [("Your finished PowerPoint, exported as a PDF:","finish all 8 pages (cover, 3 master pages, your 3 edited photos, and the reflection closing page), export your PowerPoint as a PDF, upload the PDF to this Canvas assignment, and present your PowerPoint to the class.")])
@@ -959,15 +991,15 @@ def build(mode, C):
                 ("Check every page.","Make sure your name is on the cover and all six images are in place."),
                 ("Export a PDF and upload.","In PowerPoint, go to File &gt; Export and choose PDF, then upload the PDF to this Canvas assignment."),
             ]))
-        en+=card("PRESENT TO THE CLASS","Share Your Work Out Loud",
-            para("You will present your PowerPoint to the class. Keep it short and clear, about <strong>3 to 5 minutes</strong>.")
+        en+=card("PRESENT ON FINAL DAY","Share Your Work Out Loud",
+            para("On the <strong>day of the Fall Final</strong>, you present your PowerPoint to the class. This presentation <strong>is</strong> your final. Keep it short and clear, about <strong>3 to 5 minutes</strong>.")
             + bullets([
                 ("Introduce your master:","who they are and the style you studied."),
                 ("Walk through your three master images:","name the technique on each one."),
                 ("Show your three photos:","explain how each one shows your master&rsquo;s influence."),
                 ("End with your reflection:","what you learned and what you will carry forward."),
             ])
-            + note("Speak clearly and look up at your classmates. You know your work better than anyone in the room."))
+            + note("Come ready on final day: your PowerPoint finished, your PDF turned in, and your part practiced. Speak clearly and look up at your classmates. You know your work better than anyone in the room."))
         en+=card("REFLECTION &middot; CLOSING PAGE","Finish With an Honest Reflection",
             para("Your last page is your <strong>reflection</strong>. Answer these three questions in a few honest sentences:")
             + bullets([
@@ -982,7 +1014,7 @@ def build(mode, C):
             "#top","Back to English", HICON_REFLECT)
         es+=card("PASO 05 &middot; TERMINA Y PRESENTA","Pon el Trabajo del Maestro y el Tuyo Lado a Lado",
             (float_right(PRESENT_FLOAT,"Una estudiante presentando su PowerPoint del fot&oacute;grafo maestro a la clase","Presenta el trabajo de tu maestro y el tuyo, lado a lado.") if HAVE_PRESENT else "")
-            + para("Hora de terminar tu PowerPoint. Ya tienes tu portada y tus tres p&aacute;ginas del maestro del Paso 02. Ahora agrega tus <strong>tres fotos editadas</strong> y tu <strong>reflexi&oacute;n</strong>, luego presenta todo a la clase.")
+            + para("Hora de terminar tu PowerPoint. Este es tu <strong>Final de Oto&ntilde;o</strong>, y tu presentaci&oacute;n <strong>es</strong> el examen final. Ya tienes tu portada y tus tres p&aacute;ginas del maestro del Paso 02. Ahora agrega tus <strong>tres fotos editadas</strong> y tu <strong>reflexi&oacute;n</strong>, luego presenta todo a la clase.")
             + para("Tu PowerPoint muestra el trabajo de tu fot&oacute;grafo maestro y el tuyo <strong>lado a lado</strong>, para que todos vean qu&eacute; estudiaste y c&oacute;mo lo hiciste tuyo."))
         es+=deliverables_box(True,
             [("Tu PowerPoint terminado, exportado como PDF:","termina las 8 p&aacute;ginas (portada, 3 p&aacute;ginas del maestro, tus 3 fotos editadas y la p&aacute;gina final de reflexi&oacute;n), exporta tu PowerPoint como PDF, sube el PDF a esta tarea de Canvas y presenta tu PowerPoint a la clase.")])
@@ -996,15 +1028,15 @@ def build(mode, C):
                 ("Revisa cada p&aacute;gina.","Aseg&uacute;rate de que tu nombre est&eacute; en la portada y las seis im&aacute;genes est&eacute;n en su lugar."),
                 ("Exporta un PDF y s&uacute;belo.","En PowerPoint, ve a File (Archivo) &gt; Export (Exportar) y elige PDF, luego sube el PDF a esta tarea de Canvas."),
             ]))
-        es+=card("PRESENTA A LA CLASE","Comparte Tu Trabajo en Voz Alta",
-            para("Presentar&aacute;s tu PowerPoint a la clase. Que sea corto y claro, como <strong>3 a 5 minutos</strong>.")
+        es+=card("PRESENTA EL D&Iacute;A DEL FINAL","Comparte Tu Trabajo en Voz Alta",
+            para("El <strong>d&iacute;a del Final de Oto&ntilde;o</strong>, presentas tu PowerPoint a la clase. Esta presentaci&oacute;n <strong>es</strong> tu examen final. Que sea corto y claro, como <strong>3 a 5 minutos</strong>.")
             + bullets([
                 ("Presenta a tu maestro:","qui&eacute;n es y el estilo que estudiaste."),
                 ("Recorre tus tres im&aacute;genes del maestro:","nombra la t&eacute;cnica en cada una."),
                 ("Muestra tus tres fotos:","explica c&oacute;mo cada una muestra la influencia de tu maestro."),
                 ("Termina con tu reflexi&oacute;n:","qu&eacute; aprendiste y qu&eacute; vas a llevarte contigo."),
             ])
-            + note("Habla con claridad y mira a tus compa&ntilde;eros. T&uacute; conoces tu trabajo mejor que nadie en el sal&oacute;n."))
+            + note("Ven listo el d&iacute;a del final: tu PowerPoint terminado, tu PDF entregado y tu parte practicada. Habla con claridad y mira a tus compa&ntilde;eros. T&uacute; conoces tu trabajo mejor que nadie en el sal&oacute;n."))
         es+=card("REFLEXI&Oacute;N &middot; P&Aacute;GINA FINAL","Termina con una Reflexi&oacute;n Honesta",
             para("Tu &uacute;ltima p&aacute;gina es tu <strong>reflexi&oacute;n</strong>. Responde estas tres preguntas en unas cuantas oraciones honestas:")
             + bullets([
