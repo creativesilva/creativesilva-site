@@ -2,8 +2,10 @@
 # Build the MYSTERY ITEM module (Photo 1A = Module 13, Photo 2A = Module 13).
 # Partners get a camera kit number that matches a numbered brown paper bag. They open the bag to
 # find a surprise object, choose a photography approach that fits it, capture it in Manual mode
-# (RAW), build a contact sheet, cull and edit their strongest image in Adobe Camera Raw + Photoshop,
-# and finish with a reflection. Two days: Day 1 capture + offload, Day 2 edit + reflect + submit.
+# (RAW), build a 12-up contact sheet of their full take in Lightroom Classic, cull and edit their
+# best three in Lightroom Classic, build a 6-up contact sheet of the three edited images, and finish
+# with a reflection. Same Lightroom Classic workflow as every other photo module (never Bridge).
+# Two days: Day 1 capture + offload, Day 2 edit + reflect + submit.
 # Pages: Step 01 Overview + Step 02 Capture & Contact + Step 03 Cull & Edit + Step 04 Reflection.
 # Dark teal angular framework, bilingual EN/ES, 5th-grade. Portal-only (no public share copy).
 import os, re
@@ -50,8 +52,8 @@ MYSTERY_STANDARDS=[
    "es_desc":"Capturas tu objeto en modo Manual, controlando la exposici&oacute;n, el &aacute;ngulo y la luz a prop&oacute;sito."},
   {"code":"MA:Cr3.1","en_tier":"Media Arts","es_tier":"Artes Medi&aacute;ticas",
    "en_title":"Refine &amp; Complete","es_title":"Refina y Completa",
-   "en_desc":"You cull your take and edit your strongest image in Adobe Camera Raw and Photoshop to finish a clean, polished photo.",
-   "es_desc":"Seleccionas de tu trabajo y editas tu imagen m&aacute;s fuerte en Adobe Camera Raw y Photoshop para terminar una foto limpia y pulida."},
+   "en_desc":"You cull your take and edit your strongest three images in Lightroom Classic to finish clean, polished photos.",
+   "es_desc":"Seleccionas de tu trabajo y editas tus tres im&aacute;genes m&aacute;s fuertes en Lightroom Classic para terminar fotos limpias y pulidas."},
   {"code":"AME.A4.0","en_tier":"CTE","es_tier":"CTE",
    "en_title":"Analyze &amp; Problem-Solve","es_title":"Analiza y Resuelve Problemas",
    "en_desc":"You solve a creative problem with a partner, planning and making decisions together to photograph a surprise object.",
@@ -156,8 +158,8 @@ def build_course(C):
         en+=card("HOW THIS WORKS / YOUR PLAN","From the Bag to Your Finished Photo",
             para("You are on Step 01 now: read this page so you understand the project. This module runs over <strong>two days</strong>. Here is the path.")
             + bullets([
-                ("Step 02 &middot; Capture &amp; Contact:","open your bag, pick an approach, and photograph your item in Manual mode. Then build a contact sheet of your raw images."),
-                ("Step 03 &middot; Cull &amp; Edit:","choose your strongest image, edit it in Adobe Camera Raw and Photoshop, and export your final JPEG."),
+                ("Step 02 &middot; Capture &amp; Contact:","open your bag, pick an approach, and photograph your item in Manual mode. Then build a 12-up contact sheet of your full take in Lightroom Classic."),
+                ("Step 03 &middot; Cull &amp; Edit:","cull to your best three, edit them in Lightroom Classic, export your three final JPEGs, and build a 6-up contact sheet of your edited images."),
                 ("Step 04 &middot; Reflection:","tell your idea, how you photographed your item, and what worked and what was hard."),
             ])
             + note("Day 1 is capture and offload. Day 2 is edit, reflect, and submit. You work with a partner, but each of you turns in your own photos and your own reflection."))
@@ -169,8 +171,8 @@ def build_course(C):
                ("Raw File","A large photo file that keeps all the camera&rsquo;s data, so you have the most room to edit later."),
                ("Contact Sheet","One image that shows all your photos in a grid, so you and your teacher can see your whole take at once."),
                ("Culling","Looking through all your photos and choosing your strongest one or ones, letting the rest go."),
-               ("Adobe Camera Raw","The Adobe tool where you open and edit raw photos: exposure, contrast, color, and cropping.")]))
-        en+=next_up("UP NEXT &middot; STEP 02 - Capture &amp; Contact","Open your bag, choose an approach, photograph your item, and build a contact sheet of your raw images.")
+               ("Lightroom Classic","The Adobe app where you import, cull, and edit your photos and build your contact sheets.")]))
+        en+=next_up("UP NEXT &middot; STEP 02 - Capture &amp; Contact","Open your bag, choose an approach, photograph your item, and build a 12-up contact sheet of your full take in Lightroom Classic.")
 
         es=banner(f"M&oacute;dulo {MOD} &bull; Paso 01","Objeto Misterioso: Empieza Aqu&iacute;","Abre tu bolsa misteriosa con tu compa&ntilde;ero, elige un enfoque de fotograf&iacute;a y captura tu objeto sorpresa. Lee esta p&aacute;gina y ve al Paso 02.","#top","Back to English", HICON_PHOTO_WALK)
         es+=type_card("overview","Paso 01 &middot; Resumen","Una Sorpresa en la Bolsa",
@@ -183,8 +185,8 @@ def build_course(C):
         es+=card("C&Oacute;MO FUNCIONA / TU PLAN","De la Bolsa a Tu Foto Terminada",
             para("Ahora est&aacute;s en el Paso 01: lee esta p&aacute;gina para entender el proyecto. Este m&oacute;dulo dura <strong>dos d&iacute;as</strong>. Este es el camino.")
             + bullets([
-                ("Paso 02 &middot; Captura y Contacto:","abre tu bolsa, elige un enfoque y fotograf&iacute;a tu objeto en modo Manual. Luego arma una hoja de contactos de tus im&aacute;genes RAW."),
-                ("Paso 03 &middot; Selecci&oacute;n y Edici&oacute;n:","elige tu imagen m&aacute;s fuerte, ed&iacute;tala en Adobe Camera Raw y Photoshop, y exporta tu JPEG final."),
+                ("Paso 02 &middot; Captura y Contacto:","abre tu bolsa, elige un enfoque y fotograf&iacute;a tu objeto en modo Manual. Luego arma una hoja de contactos 12-up de toda tu toma en Lightroom Classic."),
+                ("Paso 03 &middot; Selecci&oacute;n y Edici&oacute;n:","selecciona tus tres mejores, ed&iacute;talas en Lightroom Classic, exporta tus tres JPEG finales y arma una hoja de contactos 6-up de tus im&aacute;genes editadas."),
                 ("Paso 04 &middot; Reflexi&oacute;n:","cuenta tu idea, c&oacute;mo fotografiaste tu objeto, y qu&eacute; funcion&oacute; y qu&eacute; fue dif&iacute;cil."),
             ])
             + note("El D&iacute;a 1 es capturar y descargar. El D&iacute;a 2 es editar, reflexionar y entregar. Trabajas con un compa&ntilde;ero, pero cada uno entrega sus propias fotos y su propia reflexi&oacute;n."))
@@ -196,8 +198,8 @@ def build_course(C):
                ("Raw File (Archivo RAW)","Un archivo de foto grande que guarda todos los datos de la c&aacute;mara, as&iacute; tienes el mayor espacio para editar despu&eacute;s."),
                ("Contact Sheet (Hoja de Contactos)","Una sola imagen que muestra todas tus fotos en una cuadr&iacute;cula, para que t&uacute; y tu maestro vean todo tu trabajo de una vez."),
                ("Culling (Selecci&oacute;n)","Revisar todas tus fotos y elegir tu m&aacute;s fuerte o fuertes, dejando ir el resto."),
-               ("Adobe Camera Raw","La herramienta de Adobe donde abres y editas fotos RAW: exposici&oacute;n, contraste, color y recorte.")]))
-        es+=next_up("SIGUIENTE &middot; PASO 02 - Captura y Contacto","Abre tu bolsa, elige un enfoque, fotograf&iacute;a tu objeto y arma una hoja de contactos de tus im&aacute;genes RAW.")
+               ("Lightroom Classic","La app de Adobe donde importas, seleccionas y editas tus fotos y armas tus hojas de contactos.")]))
+        es+=next_up("SIGUIENTE &middot; PASO 02 - Captura y Contacto","Abre tu bolsa, elige un enfoque, fotograf&iacute;a tu objeto y arma una hoja de contactos 12-up de toda tu toma en Lightroom Classic.")
 
         stepnav=f'<a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
         bottom=f'<div class="silva-bottom-nav"><span></span><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
@@ -207,7 +209,7 @@ def build_course(C):
     def step_capture():
         float2_en=float_right(f"{SITE}/assets/images/mystery-item/capture-float-v3.jpg","A student photographing a mystery item with the camera kit","Try different angles, distances, and lighting.") if HAVE_S2_FLOAT else ""
         float2_es=float_right(f"{SITE}/assets/images/mystery-item/capture-float-v3.jpg","Un estudiante fotografiando un objeto misterioso con el kit de c&aacute;mara","Prueba distintos &aacute;ngulos, distancias e iluminaci&oacute;n.") if HAVE_S2_FLOAT else ""
-        en=banner(f"Module {MOD} &bull; Step 02","Capture &amp; Contact","Open your bag, choose an approach, photograph your item in Manual mode, and build a contact sheet.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
+        en=banner(f"Module {MOD} &bull; Step 02","Capture &amp; Contact","Open your bag, choose an approach, photograph your item in Manual mode, and build a 12-up contact sheet in Lightroom Classic.","#espanol","Clic para Espa&ntilde;ol", HICON_PHOTO_WALK)
         en+=type_card("photo-walk","Step 02 &middot; Capture","Open Your Bag and Make a Plan",
             float2_en
             + para("Match your <strong>camera kit number</strong> to the <strong>brown paper bag</strong> with the same number. Only use the item from your matching bag. Open it with your partner and see your mystery item for the first time.")
@@ -215,7 +217,7 @@ def build_course(C):
             + para("Before you capture, get inspired: look up a few photos of products or objects in the style you picked. Save <strong>2 or 3</strong> into the <strong>Inspo Images</strong> folder in your project folder, and use them as a guide for your angles, your light, and your background.")
             + note("Both partners take photos. You plan together, but each of you ends up with your own set of images to edit."))
         en+=deliverables_box(False,
-            [("1 contact sheet:","a contact sheet of your raw images, turned in as a high-resolution JPG. Each partner turns in their own, even though you worked together.")])
+            [("1 contact sheet (12-up):","a 12-up contact sheet of your full take, unedited, printed to a high-resolution JPG. Name it <strong>12 Up Mystery Item</strong> plus your name, like <strong>12 Up Mystery Item Maria G</strong>. Each partner turns in their own, even though you worked together.")])
         en+=mystery_camera_settings(False)
         en+=card("PHOTOGRAPH YOUR ITEM / WORK THE ANGLES","Take Lots of Photos, On Purpose",
             para("Photograph your item today. You can work in the classroom or just outside. Take <strong>many photos</strong> and try different ideas, so you have strong options to choose from later.")
@@ -236,17 +238,18 @@ def build_course(C):
                 ("Edit and turn in your own.","each of you edits your own photos and turns in your own. You never turn in your partner&rsquo;s work."),
             ])
             + note("Share the camera, but keep your files your own: your folder, your photos, your grade."))
-        en+=card("BUILD / CONTACT SHEET","Make Your Contact Sheet",
-            para("Now that <strong>your own photos</strong> are in your project folder, make one <strong>contact sheet</strong> that shows your whole take in a grid. On a Mac, Adobe Bridge builds it for you.")
+        en+=card("BUILD / 12-UP CONTACT SHEET","Make Your 12-Up Contact Sheet",
+            para("Now that <strong>your own photos</strong> are in your project folder, make one <strong>12-up contact sheet</strong> that shows your whole take as small thumbnails on one page. Make it <strong>before you edit</strong>: this is your <strong>unedited</strong> full take, and it shows your camera settings. You build it in <strong>Lightroom Classic</strong>, the same as every other photo project.")
             + steps([
-                ("Open Adobe Bridge:","open Bridge and go to your project folder. Select all of <strong>your</strong> raw images for this project."),
-                ("Make the contact sheet:","go to <strong>Tools &rsaquo; Photoshop &rsaquo; Contact Sheet II</strong>. Let it build one sheet of all your images in Photoshop."),
-                ("Save as a JPG:","in Photoshop, go to <strong>File &rsaquo; Export &rsaquo; Save a Copy</strong> and save your contact sheet as a high-resolution JPG, then upload it here."),
+                ("Import your photos into Lightroom Classic.","open Lightroom Classic, click <strong>Import</strong>, and bring in your own raw images from your project folder."),
+                ("Open the Print module and pick the 12-Up Contact Sheet preset.","select your images, go to the <strong>Print</strong> module, and choose the <strong>12-Up Contact Sheet</strong> preset from your User Templates. If you do not see it, install it from the Course Overview."),
+                ("Print to a high-resolution JPG.","set <strong>Print To: JPEG File</strong>, then click <strong>Print to File</strong>. The preset already saves a high-resolution JPG for you."),
+                ("Name it and upload.","name it <strong>12 Up Mystery Item</strong> plus your name, like <strong>12 Up Mystery Item Maria G</strong>. Then upload the JPG to this Canvas assignment."),
             ])
-            + note("Contact sheets are always turned in as a high-resolution JPG. Do not edit your photos yet, that happens in Step 03."))
-        en+=next_up("UP NEXT &middot; STEP 03 - Cull &amp; Edit","Choose your strongest image, edit it in Adobe Camera Raw and Photoshop, and export your final JPEG.")
+            + note("The number is a maximum, not a minimum: a 12-up with 8 photos or with extra pages is fine. Contact sheets are always turned in as a high-resolution JPG. Do not edit your photos yet, that happens in Step 03."))
+        en+=next_up("UP NEXT &middot; STEP 03 - Cull &amp; Edit","Cull to your strongest three, edit them in Lightroom Classic, export your three final JPEGs, and build a 6-up contact sheet.")
 
-        es=banner(f"M&oacute;dulo {MOD} &bull; Paso 02","Captura y Contacto","Abre tu bolsa, elige un enfoque, fotograf&iacute;a tu objeto en modo Manual y arma una hoja de contactos.","#top","Back to English", HICON_PHOTO_WALK)
+        es=banner(f"M&oacute;dulo {MOD} &bull; Paso 02","Captura y Contacto","Abre tu bolsa, elige un enfoque, fotograf&iacute;a tu objeto en modo Manual y arma una hoja de contactos 12-up en Lightroom Classic.","#top","Back to English", HICON_PHOTO_WALK)
         es+=type_card("photo-walk","Paso 02 &middot; Captura","Abre Tu Bolsa y Haz un Plan",
             float2_es
             + para("Haz coincidir tu <strong>n&uacute;mero de kit de c&aacute;mara</strong> con la <strong>bolsa de papel caf&eacute;</strong> del mismo n&uacute;mero. Usa solo el objeto de tu bolsa. &Aacute;brela con tu compa&ntilde;ero y ve tu objeto misterioso por primera vez.")
@@ -254,7 +257,7 @@ def build_course(C):
             + para("Antes de capturar, b&uacute;scate ideas: busca unas fotos de productos u objetos en el estilo que elegiste. Guarda <strong>2 o 3</strong> en la carpeta <strong>Inspo Images</strong> de tu carpeta del proyecto, y &uacute;salas como gu&iacute;a para tus &aacute;ngulos, tu luz y tu fondo.")
             + note("Los dos compa&ntilde;eros toman fotos. Planean juntos, pero cada uno termina con su propio grupo de im&aacute;genes para editar."))
         es+=deliverables_box(True,
-            [("1 hoja de contactos:","una hoja de contactos de tus im&aacute;genes RAW, entregada como un JPG de alta resoluci&oacute;n. Cada compa&ntilde;ero entrega la suya, aunque trabajaron juntos.")])
+            [("1 hoja de contactos (12-up):","una hoja de contactos 12-up de toda tu toma, sin editar, impresa como un JPG de alta resoluci&oacute;n. N&oacute;mbrala <strong>12 Up Mystery Item</strong> y tu nombre, como <strong>12 Up Mystery Item Maria G</strong>. Cada compa&ntilde;ero entrega la suya, aunque trabajaron juntos.")])
         es+=mystery_camera_settings(True)
         es+=card("FOTOGRAF&Iacute;A TU OBJETO / TRABAJA LOS &Aacute;NGULOS","Toma Muchas Fotos, a Prop&oacute;sito",
             para("Fotograf&iacute;a tu objeto hoy. Puedes trabajar en el sal&oacute;n o justo afuera. Toma <strong>muchas fotos</strong> y prueba distintas ideas, para tener buenas opciones despu&eacute;s.")
@@ -275,15 +278,16 @@ def build_course(C):
                 ("Edita y entrega lo tuyo.","cada uno edita sus propias fotos y entrega las suyas. Nunca entregues el trabajo de tu compa&ntilde;ero."),
             ])
             + note("Compartan la c&aacute;mara, pero mant&eacute;n tus archivos propios: tu carpeta, tus fotos, tu calificaci&oacute;n."))
-        es+=card("ARMA / HOJA DE CONTACTOS","Arma Tu Hoja de Contactos",
-            para("Ahora que <strong>tus propias fotos</strong> est&aacute;n en la carpeta de tu proyecto, arma una <strong>hoja de contactos</strong> que muestre todo tu trabajo en una cuadr&iacute;cula. En una Mac, Adobe Bridge la arma por ti.")
+        es+=card("ARMA / HOJA DE CONTACTOS 12-UP","Arma Tu Hoja de Contactos 12-Up",
+            para("Ahora que <strong>tus propias fotos</strong> est&aacute;n en la carpeta de tu proyecto, arma una <strong>hoja de contactos 12-up</strong> que muestre todo tu trabajo como miniaturas en una p&aacute;gina. Arma esto <strong>antes de editar</strong>: esta es tu toma completa <strong>sin editar</strong>, y muestra tus ajustes de c&aacute;mara. La armas en <strong>Lightroom Classic</strong>, igual que en todos los dem&aacute;s proyectos de foto.")
             + steps([
-                ("Abre Adobe Bridge:","abre Bridge y ve a la carpeta de tu proyecto. Selecciona todas <strong>tus</strong> im&aacute;genes RAW de este proyecto."),
-                ("Arma la hoja de contactos:","ve a <strong>Tools &rsaquo; Photoshop &rsaquo; Contact Sheet II</strong>. Deja que arme una hoja con todas tus im&aacute;genes en Photoshop."),
-                ("Guarda como JPG:","en Photoshop, ve a <strong>File &rsaquo; Export &rsaquo; Save a Copy</strong> y guarda tu hoja de contactos como un JPG de alta resoluci&oacute;n, luego s&uacute;bela aqu&iacute;."),
+                ("Importa tus fotos a Lightroom Classic.","abre Lightroom Classic, haz clic en <strong>Import</strong> (Importar) y trae tus propias im&aacute;genes RAW desde la carpeta de tu proyecto."),
+                ("Abre el m&oacute;dulo Print y elige el ajuste 12-Up Contact Sheet.","selecciona tus im&aacute;genes, ve al m&oacute;dulo <strong>Print</strong> y elige el ajuste <strong>12-Up Contact Sheet</strong> de tus User Templates. Si no lo ves, inst&aacute;lalo desde el Resumen del Curso."),
+                ("Imprime a un JPG de alta resoluci&oacute;n.","pon <strong>Print To: JPEG File</strong>, luego haz clic en <strong>Print to File</strong>. El ajuste ya guarda un JPG de alta resoluci&oacute;n por ti."),
+                ("N&oacute;mbrala y s&uacute;bela.","n&oacute;mbrala <strong>12 Up Mystery Item</strong> y tu nombre, como <strong>12 Up Mystery Item Maria G</strong>. Luego sube el JPG a esta tarea de Canvas."),
             ])
-            + note("Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n. No edites tus fotos todav&iacute;a, eso es en el Paso 03."))
-        es+=next_up("SIGUIENTE &middot; PASO 03 - Selecci&oacute;n y Edici&oacute;n","Elige tu imagen m&aacute;s fuerte, ed&iacute;tala en Adobe Camera Raw y Photoshop, y exporta tu JPEG final.")
+            + note("El n&uacute;mero es un m&aacute;ximo, no un m&iacute;nimo: una 12-up con 8 fotos o con p&aacute;ginas de m&aacute;s est&aacute; bien. Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n. No edites tus fotos todav&iacute;a, eso es en el Paso 03."))
+        es+=next_up("SIGUIENTE &middot; PASO 03 - Selecci&oacute;n y Edici&oacute;n","Selecciona tus tres mejores, ed&iacute;talas en Lightroom Classic, exporta tus tres JPEG finales y arma una hoja de contactos 6-up.")
 
         stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a> <a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
         bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Step 01</a><a href="{S3}" class="silva-bottom-btn">Step 03 &#8594;</a></div>'
@@ -291,66 +295,86 @@ def build_course(C):
 
     # ================= STEP 03: Cull & Edit =================
     def step_edit():
-        float3_en=float_right(f"{SITE}/assets/images/mystery-item/edit-float-v1.jpg","A student editing a mystery item photo in Adobe Camera Raw","Cull first, then edit your strongest image.") if HAVE_S3_FLOAT else ""
-        float3_es=float_right(f"{SITE}/assets/images/mystery-item/edit-float-v1.jpg","Un estudiante editando una foto del objeto misterioso en Adobe Camera Raw","Selecciona primero, luego edita tu imagen m&aacute;s fuerte.") if HAVE_S3_FLOAT else ""
-        en=banner(f"Module {MOD} &bull; Step 03","Cull &amp; Edit","Choose your strongest image, edit it in Adobe Camera Raw and Photoshop, and export your final JPEG.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
-        en+=type_card("edit","Step 03 &middot; Cull","Choose Your Strongest Image",
+        float3_en=float_right(f"{SITE}/assets/images/mystery-item/edit-float-v1.jpg","A student editing a mystery item photo in Lightroom Classic","Cull first, then edit your strongest three.") if HAVE_S3_FLOAT else ""
+        float3_es=float_right(f"{SITE}/assets/images/mystery-item/edit-float-v1.jpg","Un estudiante editando una foto del objeto misterioso en Lightroom Classic","Selecciona primero, luego edita tus tres m&aacute;s fuertes.") if HAVE_S3_FLOAT else ""
+        en=banner(f"Module {MOD} &bull; Step 03","Cull &amp; Edit","Cull to your strongest three, edit them in Lightroom Classic, export your three final JPEGs, and build a 6-up contact sheet.","#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
+        en+=type_card("edit","Step 03 &middot; Cull","Choose Your Strongest Three",
             float3_en
-            + para("Open your raw images in <strong>Adobe Camera Raw</strong> and look through your whole take. <strong>Cull</strong> means you choose your strongest work and let the rest go. Rate your best with stars and reject the ones you will not use.")
+            + para("Open your raw images in <strong>Lightroom Classic</strong> and look through your whole take. <strong>Cull</strong> means you choose your strongest work and let the rest go. Rate your best with stars and reject the ones you will not use.")
             + bullets([
-                ("Open in Camera Raw:","load your raw files from your OneDrive project folder into Adobe Camera Raw."),
+                ("Open in Lightroom Classic:","load your raw files from your OneDrive project folder into Lightroom Classic."),
                 ("Cull your take:","give your strongest images stars; reject the weak or blurry ones."),
-                ("Pick one, or a small set:","choose your single strongest image, or a few if your idea works better as a short series."),
+                ("Pick your best three:","choose the three strongest images that show your idea the best."),
             ])
             + note("Call these your selections, not &ldquo;picks.&rdquo; Choose on purpose, based on your idea."))
         en+=deliverables_box(False,
-            [("Your final photo(s):","your strongest edited image, exported as a high-resolution JPG. If your idea is a short series, export each final image. Name each file with your <strong>first name and last initial</strong>."),
-             ("Turn in your own:","each partner edits and submits their own final image(s), even though you worked together.")])
-        en+=card("EDIT IT / CAMERA RAW + PHOTOSHOP","Make Your Image Its Best",
-            para("Edit your selection in <strong>Adobe Camera Raw</strong> and <strong>Adobe Photoshop</strong>. Your edits should support your idea, not fight it.")
+            [("1 contact sheet (6-up):","a 6-up contact sheet with your 3 best edited images on it (3 empty spots is fine), printed to a high-resolution JPG. Name it <strong>6 Up Mystery Item</strong> plus your name."),
+             ("3 final edited images (JPG):","each of your 3 finished edited images, exported as high-resolution JPGs. Name each file with your <strong>first name and last initial</strong>."),
+             ("Turn in your own:","each partner edits and submits their own 4 files, even though you worked together.")], files=4)
+        en+=card("EDIT THEM / LIGHTROOM CLASSIC","Make Your Three Images Their Best",
+            para("Edit your three selections in <strong>Lightroom Classic</strong>. Your edits should support your idea, not fight it.")
             + steps([
                 ("Set your exposure and color:","adjust exposure, contrast, highlights, shadows, and white balance until the light looks right."),
                 ("Add clarity and crop:","sharpen or add clarity if it helps, then crop to clean your composition and edges."),
-                ("Remove distractions:","in Photoshop, remove things that pull the eye away (a stray object, debris, a mark) if it makes the photo stronger."),
+                ("Remove distractions:","use the Healing tool in Lightroom Classic to take out things that pull the eye away (a stray object, debris, a mark) if it makes the photo stronger."),
                 ("Keep it honest:","edit to make your item look its best. Do not change it into something it is not."),
             ]))
-        en+=card("EXPORT / SAVE YOUR FINAL JPEG","Name It and Save It Right",
+        en+=card("EXPORT / SAVE YOUR 3 FINAL JPEGS","Name Them and Save Them Right",
             steps([
-                ("Export as JPEG:","in Camera Raw or Photoshop, save or export your final image as a high-resolution <strong>JPEG</strong>."),
-                ("Name your file:","start the file name with your <strong>first name and last initial</strong> (like <strong>MariaG</strong>)."),
-                ("Save in your folder:","save it in your Mystery Item project folder on OneDrive, then upload it to this Canvas assignment."),
+                ("Export as JPEGs:","in Lightroom Classic, export your <strong>three</strong> final edited images as high-resolution <strong>JPEGs</strong>."),
+                ("Name your files:","start each file name with your <strong>first name and last initial</strong> (like <strong>MariaG</strong>)."),
+                ("Save in your folder:","save them in your Mystery Item project folder on OneDrive, then upload all three to this Canvas assignment."),
             ])
-            + note("Turn in your final JPEG(s) only, your best edited work."))
+            + note("Turn in your three final JPEGs, your best edited work."))
+        en+=card("BUILD / 6-UP CONTACT SHEET","Make Your 6-Up Contact Sheet",
+            para("Last, make a <strong>6-up contact sheet</strong> with your <strong>3 edited images</strong> on it. The number is a <strong>maximum, not a minimum</strong>: three images with three empty spots is completely fine. You build it in <strong>Lightroom Classic</strong>, the same as the 12-up.")
+            + steps([
+                ("Load your 3 edited images.","in Lightroom Classic, select your three final edited photos in the Library."),
+                ("Open the Print module and pick the 6-Up Contact Sheet preset.","choose it from your User Templates. If you do not see it, install it from the Course Overview."),
+                ("Print to file as a JPG.","click <strong>Print to File</strong>. The preset already saves a high-resolution JPG, so you never choose the format."),
+                ("Name it and upload.","name it <strong>6 Up Mystery Item</strong> plus your name, like <strong>6 Up Mystery Item Maria G</strong>. Then upload the JPG to this Canvas assignment."),
+            ])
+            + note("Contact sheets are always turned in as a high-resolution JPG."))
         en+=next_up("UP NEXT &middot; STEP 04 - Reflection","Tell your idea, how you photographed your item, and what worked and what was hard.")
 
-        es=banner(f"M&oacute;dulo {MOD} &bull; Paso 03","Selecci&oacute;n y Edici&oacute;n","Elige tu imagen m&aacute;s fuerte, ed&iacute;tala en Adobe Camera Raw y Photoshop, y exporta tu JPEG final.","#top","Back to English", HICON_DESIGN)
-        es+=type_card("edit","Paso 03 &middot; Selecci&oacute;n","Elige Tu Imagen M&aacute;s Fuerte",
+        es=banner(f"M&oacute;dulo {MOD} &bull; Paso 03","Selecci&oacute;n y Edici&oacute;n","Selecciona tus tres mejores, ed&iacute;talas en Lightroom Classic, exporta tus tres JPEG finales y arma una hoja de contactos 6-up.","#top","Back to English", HICON_DESIGN)
+        es+=type_card("edit","Paso 03 &middot; Selecci&oacute;n","Elige Tus Tres M&aacute;s Fuertes",
             float3_es
-            + para("Abre tus im&aacute;genes RAW en <strong>Adobe Camera Raw</strong> y revisa todo tu trabajo. <strong>Seleccionar</strong> significa elegir tu trabajo m&aacute;s fuerte y dejar ir el resto. Marca tus mejores con estrellas y rechaza las que no vas a usar.")
+            + para("Abre tus im&aacute;genes RAW en <strong>Lightroom Classic</strong> y revisa todo tu trabajo. <strong>Seleccionar</strong> significa elegir tu trabajo m&aacute;s fuerte y dejar ir el resto. Marca tus mejores con estrellas y rechaza las que no vas a usar.")
             + bullets([
-                ("Abre en Camera Raw:","carga tus archivos RAW desde tu carpeta de proyecto en OneDrive a Adobe Camera Raw."),
+                ("Abre en Lightroom Classic:","carga tus archivos RAW desde tu carpeta de proyecto en OneDrive a Lightroom Classic."),
                 ("Selecciona de tu trabajo:","dale estrellas a tus im&aacute;genes m&aacute;s fuertes; rechaza las d&eacute;biles o borrosas."),
-                ("Elige una, o un grupo peque&ntilde;o:","elige tu imagen m&aacute;s fuerte, o unas pocas si tu idea funciona mejor como una serie corta."),
+                ("Elige tus tres mejores:","elige las tres im&aacute;genes m&aacute;s fuertes que muestran mejor tu idea."),
             ])
             + note("Llama a estas tus selecciones. Elige a prop&oacute;sito, seg&uacute;n tu idea."))
         es+=deliverables_box(True,
-            [("Tu foto(s) final(es):","tu imagen editada m&aacute;s fuerte, exportada como un JPG de alta resoluci&oacute;n. Si tu idea es una serie corta, exporta cada imagen final. Nombra cada archivo con tu <strong>primer nombre e inicial del apellido</strong>."),
-             ("Entrega lo tuyo:","cada compa&ntilde;ero edita y entrega sus propias im&aacute;genes finales, aunque trabajaron juntos.")])
-        es+=card("ED&Iacute;TALA / CAMERA RAW + PHOTOSHOP","Haz que Tu Imagen se Vea lo Mejor",
-            para("Edita tu selecci&oacute;n en <strong>Adobe Camera Raw</strong> y <strong>Adobe Photoshop</strong>. Tus ediciones deben apoyar tu idea, no pelear con ella.")
+            [("1 hoja de contactos (6-up):","una hoja de contactos 6-up con tus 3 mejores im&aacute;genes editadas (3 espacios vac&iacute;os est&aacute; bien), impresa como un JPG de alta resoluci&oacute;n. N&oacute;mbrala <strong>6 Up Mystery Item</strong> y tu nombre."),
+             ("3 im&aacute;genes finales editadas (JPG):","cada una de tus 3 im&aacute;genes editadas terminadas, exportadas como JPG de alta resoluci&oacute;n. Nombra cada archivo con tu <strong>primer nombre e inicial del apellido</strong>."),
+             ("Entrega lo tuyo:","cada compa&ntilde;ero edita y entrega sus propios 4 archivos, aunque trabajaron juntos.")], files=4)
+        es+=card("ED&Iacute;TALAS / LIGHTROOM CLASSIC","Haz que Tus Tres Im&aacute;genes se Vean lo Mejor",
+            para("Edita tus tres selecciones en <strong>Lightroom Classic</strong>. Tus ediciones deben apoyar tu idea, no pelear con ella.")
             + steps([
                 ("Ajusta exposici&oacute;n y color:","ajusta la exposici&oacute;n, el contraste, las luces, las sombras y el balance de blancos hasta que la luz se vea bien."),
                 ("Agrega claridad y recorta:","aumenta la nitidez o la claridad si ayuda, luego recorta para limpiar tu composici&oacute;n y tus bordes."),
-                ("Quita distracciones:","en Photoshop, quita lo que jala la mirada (un objeto perdido, basura, una marca) si hace m&aacute;s fuerte la foto."),
+                ("Quita distracciones:","usa la herramienta Healing (Correcci&oacute;n) en Lightroom Classic para quitar lo que jala la mirada (un objeto perdido, basura, una marca) si hace m&aacute;s fuerte la foto."),
                 ("Mant&eacute;nla honesta:","edita para que tu objeto se vea lo mejor. No lo cambies en algo que no es."),
             ]))
-        es+=card("EXPORTA / GUARDA TU JPEG FINAL","Nombr&aacute;lo y Gu&aacute;rdalo Bien",
+        es+=card("EXPORTA / GUARDA TUS 3 JPEG FINALES","Nombr&aacute;los y Gu&aacute;rdalos Bien",
             steps([
-                ("Exporta como JPEG:","en Camera Raw o Photoshop, guarda o exporta tu imagen final como un <strong>JPEG</strong> de alta resoluci&oacute;n."),
-                ("Nombra tu archivo:","empieza el nombre del archivo con tu <strong>primer nombre e inicial del apellido</strong> (como <strong>MariaG</strong>)."),
-                ("Gu&aacute;rdalo en tu carpeta:","gu&aacute;rdalo en tu carpeta del proyecto Mystery Item en OneDrive, luego s&uacute;belo a esta tarea de Canvas."),
+                ("Exporta como JPEG:","en Lightroom Classic, exporta tus <strong>tres</strong> im&aacute;genes finales editadas como <strong>JPEG</strong> de alta resoluci&oacute;n."),
+                ("Nombra tus archivos:","empieza cada nombre de archivo con tu <strong>primer nombre e inicial del apellido</strong> (como <strong>MariaG</strong>)."),
+                ("Gu&aacute;rdalos en tu carpeta:","gu&aacute;rdalos en tu carpeta del proyecto Mystery Item en OneDrive, luego sube los tres a esta tarea de Canvas."),
             ])
-            + note("Entrega solo tu JPEG final, tu mejor trabajo editado."))
+            + note("Entrega tus tres JPEG finales, tu mejor trabajo editado."))
+        es+=card("ARMA / HOJA DE CONTACTOS 6-UP","Arma Tu Hoja de Contactos 6-Up",
+            para("Por &uacute;ltimo, arma una <strong>hoja de contactos 6-up</strong> con tus <strong>3 im&aacute;genes editadas</strong>. El n&uacute;mero es un <strong>m&aacute;ximo, no un m&iacute;nimo</strong>: tres im&aacute;genes con tres espacios vac&iacute;os est&aacute; perfecto. La armas en <strong>Lightroom Classic</strong>, igual que la 12-up.")
+            + steps([
+                ("Carga tus 3 im&aacute;genes editadas.","en Lightroom Classic, selecciona tus tres fotos finales editadas en la Biblioteca."),
+                ("Abre el m&oacute;dulo Print y elige el ajuste 6-Up Contact Sheet.","el&iacute;gelo de tus User Templates. Si no lo ves, inst&aacute;lalo desde el Resumen del Curso."),
+                ("Imprime a archivo como JPG.","haz clic en <strong>Print to File</strong> (Imprimir a archivo). El ajuste ya guarda un JPG de alta resoluci&oacute;n, as&iacute; que nunca eliges el formato."),
+                ("N&oacute;mbrala y s&uacute;bela.","n&oacute;mbrala <strong>6 Up Mystery Item</strong> y tu nombre, como <strong>6 Up Mystery Item Maria G</strong>. Luego sube el JPG a esta tarea de Canvas."),
+            ])
+            + note("Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n."))
         es+=next_up("SIGUIENTE &middot; PASO 04 - Reflexi&oacute;n","Cuenta tu idea, c&oacute;mo fotografiaste tu objeto, y qu&eacute; funcion&oacute; y qu&eacute; fue dif&iacute;cil.")
 
         stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a> <a href="{S4}" class="silva-step-btn">Step 04 &#8594;</a>'
