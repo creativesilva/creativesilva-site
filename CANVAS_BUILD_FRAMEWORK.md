@@ -415,6 +415,9 @@ The hero image is the showcase. Width 52%, no max-width cap, strong shadow. The 
 - The `repeat(auto-fit, minmax(180px, 1fr))` grid is responsive: 3 cols on desktop, 2 cols on tablet, 1 col on phone. No media queries needed.
 
 ### C. Project File Download Card (optional)
+
+**Separate EN / ES download folders, never one combined bilingual ZIP (LOCKED 2026-11-17).** When a module offers a downloadable project folder (or any multi-file download) and the page is bilingual, the **English section's download links an English-only ZIP and the Spanish section's download links a Spanish-only ZIP**. Each ZIP holds only that language's files (its PowerPoint, its READMEs) plus any language-neutral shared files (image folders, Lightroom presets). Do NOT ship one ZIP that bundles both languages. It is more efficient for students (they grab only what they read) and is a HARD RULE. Canonical: Master Photographer (`Master-Photographer-Photo-N-Project-Folder-EN.zip` / `-ES.zip`). See [[project-folder-download]], [[master-photographer-module]].
+
 ```html
 <div style="background:linear-gradient(180deg,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.04) 100%);border:1px solid rgba(255,255,255,0.08);border-left:6px solid #5f8fbf;border-radius:24px;padding:24px 30px;margin-bottom:24px;">
   <div style="margin-bottom:8px;"><span style="font-size:14pt;color:#9ecbff;"><strong>Project File</strong></span></div>
