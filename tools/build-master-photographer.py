@@ -291,6 +291,55 @@ def deck_showcase(es, deck_preview):
       + para(inside))
     return resources_card(heading, inner, es)
 
+def contact_sheets_setup(es, cur):
+    """Overview contact-sheet block. Install steps + video go to ALL versions
+    (Chris moved the video off Steps 3/4, 2026-11-17). The deep 'what is a
+    contact sheet / 12-up vs 6-up' primer is Garcia's public share ONLY
+    (not cur): her students are new to contact sheets; Silva's already know.
+    Names no teacher (shared module + ES 'maestro' already means the master)."""
+    out = ""
+    if not cur:   # deep primer: Garcia public share only
+        if es:
+            out += card("HOJAS DE CONTACTOS &middot; QU&Eacute; SON","Dos Hojas, Dos Trabajos",
+                para("Una <strong>hoja de contactos</strong> es una sola p&aacute;gina que muestra muchas fotos como miniaturas peque&ntilde;as, todas juntas, para ver todo tu trabajo de un vistazo. En este proyecto usas <strong>dos</strong>:")
+                + bullets([
+                    ("Hoja de 12 (fondo blanco), tu toma SIN editar:","aqu&iacute; va <strong>toda</strong> tu toma, cada foto que tomaste para este proyecto, <strong>antes</strong> de editar. Muestra tus ajustes de c&aacute;mara."),
+                    ("Hoja de 6 (fondo negro), tu trabajo YA editado:","aqu&iacute; van solo tus <strong>fotos finales editadas</strong>, listas para presentar."),
+                ], accent="#007474")
+                + note("No dejes que el nombre te confunda. El <strong>12</strong> y el <strong>6</strong> solo dicen cu&aacute;ntas fotos caben en una p&aacute;gina, no cu&aacute;ntas necesitas. Tu hoja de 12 puede tener 8 fotos o 32; Lightroom hace m&aacute;s p&aacute;ginas solo. En este proyecto, tu hoja de 6 lleva solo tus <strong>3</strong> fotos editadas, y est&aacute; bien dejar 3 espacios vac&iacute;os."))
+        else:
+            out += card("CONTACT SHEETS &middot; WHAT THEY ARE","Two Sheets, Two Jobs",
+                para("A <strong>contact sheet</strong> is one page that shows a lot of photos as small thumbnails, all together, so your whole take is easy to see at a glance. In this project you use <strong>two</strong>:")
+                + bullets([
+                    ("12-up (white background), your UNEDITED take:","this holds your <strong>whole</strong> take, every photo you took for this project, <strong>before</strong> you edit. It shows your camera settings."),
+                    ("6-up (black background), your EDITED work:","this holds only your <strong>final edited photos</strong>, ready to present."),
+                ], accent="#007474")
+                + note("Do not let the name fool you. <strong>12</strong> and <strong>6</strong> only say how many photos fit on one page, not how many you need. Your 12-up can have 8 photos or 32; Lightroom just makes more pages. In this project, your 6-up holds only your <strong>3</strong> edited photos, and it is fine to leave 3 empty spaces."))
+    # install steps + video: ALL versions
+    if es:
+        out += resources_card("Instala Tus Ajustes de Hoja de Contactos",
+            para("Tus dos ajustes de hoja de contactos vienen dentro de la carpeta del proyecto que descargaste arriba. Inst&aacute;lalos una vez y se quedan en Lightroom.")
+            + steps([
+                ("Abre Lightroom Classic.","D&eacute;jalo abierto mientras instalas."),
+                ("Abre tu carpeta del proyecto y entra a la carpeta Contact Sheet Templates.","Es la carpeta que descargaste arriba."),
+                ("Haz doble clic en el ajuste 12-Up.","Aparece un cuadro que dice instalar ajuste. Haz clic en OK. Se instala en segundos."),
+                ("Haz doble clic en el ajuste 6-Up y haz clic en OK.","Haz lo mismo con el segundo."),
+                ("B&uacute;scalos en el m&oacute;dulo Print, en tus User Templates.","Los dos estar&aacute;n ah&iacute; cuando los necesites."),
+            ])
+            + pnote_mp('&iquest;Quieres verlo? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Mira el video de instalaci&oacute;n</strong></a>.'), True)
+    else:
+        out += resources_card("Install Your Contact Sheet Presets",
+            para("Your two contact sheet presets come inside the project folder you downloaded above. Install them once and they stay in Lightroom.")
+            + steps([
+                ("Open Lightroom Classic.","Leave it open while you install."),
+                ("Open your project folder and go into the Contact Sheet Templates folder.","It is the folder you downloaded above."),
+                ("Double-click the 12-Up preset.","A box pops up that says install preset. Click OK. It installs in seconds."),
+                ("Double-click the 6-Up preset and click OK.","Do the same for the second one."),
+                ("Find them in the Print module, under your User Templates.","Both will be there when you need them."),
+            ])
+            + pnote_mp('Want to see it? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>.'), False)
+    return out
+
 # ============================================================================
 # LIGHT-MODE SKIN FOR THE PUBLIC SHARE COPY ONLY (Chris, one-time teacher request,
 # 2026-11-16). Applies ONLY in the std/share pass. The Canvas (cur) output, the
@@ -596,6 +645,7 @@ def build(mode, C):
             + (framed(HERO,"Master photographers, each with a camera: the styles you choose from in this project") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Many styles, many photographers. You pick one to study and bring into your own photos.</div>' if HAVE_HERO else ""))
         if IS_P2: en+=growth_box(False)
         en+=project_downloads(False, ZIP)
+        en+=contact_sheets_setup(False, cur)
         en+=card("HOW THIS PROJECT WORKS","From Studying a Master to Your Own Photos",
             para("You are on Step 01 now: read this page so you understand the project. Here is the path.")
             + bullets([
@@ -624,6 +674,7 @@ def build(mode, C):
             + (framed(HERO,"Fot&oacute;grafos maestros, cada uno con una c&aacute;mara: los estilos entre los que eliges en este proyecto") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Muchos estilos, muchos fot&oacute;grafos. Eliges a uno para estudiarlo y traerlo a tus propias fotos.</div>' if HAVE_HERO else ""))
         if IS_P2: es+=growth_box(True)
         es+=project_downloads(True, ZIP)
+        es+=contact_sheets_setup(True, cur)
         es+=card("C&Oacute;MO FUNCIONA ESTE PROYECTO","De Estudiar a un Maestro a Tus Propias Fotos",
             para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina para entender el proyecto. Este es el camino.")
             + bullets([
@@ -735,17 +786,16 @@ def build(mode, C):
             ])
             + note("Offload your <strong>full take</strong>, every photo you captured. You select your best three later, in the next step."))
         en+=card("BUILD YOUR CONTACT SHEET","Make a 12-Up Contact Sheet",
-            para("A <strong>contact sheet</strong> is one page that shows all your photos as small thumbnails, so you and your teacher can see your whole take at a glance. You make a <strong>12-up</strong> sheet, 12 photos per page.")
+            para("A <strong>12-up contact sheet</strong> shows your whole take as small thumbnails on one page, 12 per page. Make it <strong>before you edit</strong>: this is your <strong>unedited</strong> take, and it shows your camera settings.")
             + steps([
                 ("Import RAW_Images into Lightroom Classic.","Open Lightroom Classic, click Import, and bring in your RAW_Images folder."),
                 ("Select all your photos.","Edit menu &rarr; Select All, so your whole take is on the sheet."),
-                ("Open the Print module and pick the 12-Up Contact Sheet preset.","If you do not see it, install it first (see the resource below)."),
+                ("Open the Print module and pick the 12-Up Contact Sheet preset.","If you do not see it, install it on the Overview first."),
                 ("Print to a high-resolution JPG.","Set Print To: JPEG File, then click Print to File. The preset already saves a high-resolution JPG for you."),
                 ("Name it and upload.","Name it LastName_First_MasterPhotographer_ContactSheet.jpg, then upload the JPG to this Canvas assignment."),
             ])
-            + note("Turn in a <strong>high-resolution JPG</strong>, never a PDF. The contact-sheet preset already saves the right format."))
-        en+=resources_card("Contact Sheet Preset",
-            pnote_mp('Need the 12-Up preset? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>, then add it to Lightroom Classic &rarr; Print module. You set these up back in the Image Series module.'), False)
+            + note("Turn in a <strong>high-resolution JPG</strong>, never a PDF. The contact-sheet preset already saves the right format.")
+            + (note("Do not let the name fool you. Put <strong>every</strong> photo from your take in. The 12-up fits 12 per page, but it is not a minimum. More than 12? Lightroom just makes more pages. 8 photos or 32, all good.") if not cur else ""))
         en+=next_up("UP NEXT &middot; STEP 04 - Cull &amp; Edit","Select your three strongest images and edit them to match the look you studied.")
 
         es=banner(f"{PROJ_LABEL_ES} &bull;Paso 03","Captura y Contacto",
@@ -778,17 +828,16 @@ def build(mode, C):
             ])
             + note("Descarga tu <strong>toma completa</strong>, cada foto que capturaste. Seleccionas tus mejores tres despu&eacute;s, en el siguiente paso."))
         es+=card("ARMA TU HOJA DE CONTACTOS","Haz una Hoja de Contactos de 12",
-            para("Una <strong>hoja de contactos</strong> es una p&aacute;gina que muestra todas tus fotos como miniaturas, para que t&uacute; y tu maestro vean toda tu toma de un vistazo. Haces una hoja de <strong>12</strong>, 12 fotos por p&aacute;gina.")
+            para("Una <strong>hoja de contactos de 12</strong> muestra toda tu toma como miniaturas en una p&aacute;gina, 12 por p&aacute;gina. Hazla <strong>antes de editar</strong>: esta es tu toma <strong>sin editar</strong>, y muestra tus ajustes de c&aacute;mara.")
             + steps([
                 ("Importa RAW_Images a Lightroom Classic.","Abre Lightroom Classic, haz clic en Import (Importar) y trae tu carpeta RAW_Images."),
                 ("Selecciona todas tus fotos.","Men&uacute; Edit (Editar) &rarr; Select All (Seleccionar todo), para que toda tu toma est&eacute; en la hoja."),
-                ("Abre el m&oacute;dulo Print y elige el ajuste 12-Up Contact Sheet.","Si no lo ves, inst&aacute;lalo primero (mira el recurso de abajo)."),
+                ("Abre el m&oacute;dulo Print y elige el ajuste 12-Up Contact Sheet.","Si no lo ves, inst&aacute;lalo primero en el Resumen."),
                 ("Imprime a un JPG de alta resoluci&oacute;n.","Pon Print To: JPEG File, luego haz clic en Print to File. El ajuste ya guarda un JPG de alta resoluci&oacute;n por ti."),
                 ("N&oacute;mbrala y s&uacute;bela.","N&oacute;mbrala LastName_First_MasterPhotographer_ContactSheet.jpg, luego sube el JPG a esta tarea de Canvas."),
             ])
-            + note("Entrega un <strong>JPG de alta resoluci&oacute;n</strong>, nunca un PDF. El ajuste de hoja de contactos ya guarda el formato correcto."))
-        es+=resources_card("Ajuste de Hoja de Contactos",
-            pnote_mp('&iquest;Necesitas el ajuste 12-Up? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Mira el video de instalaci&oacute;n</strong></a>, luego agr&eacute;galo a Lightroom Classic &rarr; m&oacute;dulo Print. Los configuraste en el m&oacute;dulo Image Series.'), True)
+            + note("Entrega un <strong>JPG de alta resoluci&oacute;n</strong>, nunca un PDF. El ajuste de hoja de contactos ya guarda el formato correcto.")
+            + (note("No dejes que el nombre te confunda. Pon <strong>cada</strong> foto de tu toma. La hoja de 12 cabe 12 por p&aacute;gina, pero no es un m&iacute;nimo. &iquest;M&aacute;s de 12? Lightroom hace m&aacute;s p&aacute;ginas solo. 8 fotos o 32, todo bien.") if not cur else ""))
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 04 - Selecciona y Edita","Elige tus tres im&aacute;genes m&aacute;s fuertes y ed&iacute;talas para igualar el estilo que estudiaste.")
 
         return wrap_page(f"Step 3: Capture and Contact | Master Photographer | {CL} | PVHS", nav("Step 03",dots_for(2),step_topnav(2)), top_wrap(en,es), step_bottom(2))
@@ -833,13 +882,12 @@ def build(mode, C):
             para("Last, make a <strong>6-up contact sheet</strong> with your three edited images on it. This shows your three final photos together on one page.")
             + steps([
                 ("Load your three edited images.","In Lightroom Classic, select your three final edited photos in the Library."),
-                ("Open the Print module and pick the 6-Up Contact Sheet preset.","If you do not see it, install it first (see the resource below)."),
+                ("Open the Print module and pick the 6-Up Contact Sheet preset.","If you do not see it, install it on the Overview first."),
                 ("Print to file as a JPG.","Click Print to File. The preset already saves a high-resolution JPG, so you never choose the format."),
                 ("Name it and upload.","Name it LastName_First_MasterPhotographer_ContactSheet.jpg, then upload the JPG to this Canvas assignment."),
             ])
-            + note("Turn in a <strong>high-resolution JPG</strong>, never a PDF. The contact-sheet preset already saves the right format."))
-        en+=resources_card("Contact Sheet Preset",
-            pnote_mp('Need the 6-Up preset? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>, then add it to Lightroom Classic &rarr; Print module. You set these up back in the Image Series module.'), False)
+            + note("Turn in a <strong>high-resolution JPG</strong>, never a PDF. The contact-sheet preset already saves the right format.")
+            + (note("Your 6-up is for your <strong>edited, finished</strong> work, on a black background. It is called 6-up because 6 fit per page, but here you only need your <strong>3</strong> edited photos. Three empty spaces is fine.") if not cur else ""))
         en+=next_up("UP NEXT &middot; STEP 05 - Presentation &amp; Reflection","Finish your PowerPoint, present it to the class, and answer the reflection on the closing page.")
 
         es=banner(f"{PROJ_LABEL_ES} &bull;Paso 04","Selecciona y Edita",
@@ -880,13 +928,12 @@ def build(mode, C):
             para("Por &uacute;ltimo, haz una <strong>hoja de contactos de 6</strong> con tus tres im&aacute;genes editadas. Muestra tus tres fotos finales juntas en una p&aacute;gina.")
             + steps([
                 ("Carga tus tres im&aacute;genes editadas.","En Lightroom Classic, selecciona tus tres fotos finales editadas en la Biblioteca."),
-                ("Abre el m&oacute;dulo Print y elige el ajuste 6-Up Contact Sheet.","Si no lo ves, inst&aacute;lalo primero (mira el recurso de abajo)."),
+                ("Abre el m&oacute;dulo Print y elige el ajuste 6-Up Contact Sheet.","Si no lo ves, inst&aacute;lalo primero en el Resumen."),
                 ("Imprime a archivo como JPG.","Haz clic en Print to File (Imprimir a archivo). El ajuste ya guarda un JPG de alta resoluci&oacute;n, as&iacute; que nunca eliges el formato."),
                 ("N&oacute;mbrala y s&uacute;bela.","N&oacute;mbrala LastName_First_MasterPhotographer_ContactSheet.jpg, luego sube el JPG a esta tarea de Canvas."),
             ])
-            + note("Entrega un <strong>JPG de alta resoluci&oacute;n</strong>, nunca un PDF. El ajuste de hoja de contactos ya guarda el formato correcto."))
-        es+=resources_card("Ajuste de Hoja de Contactos",
-            pnote_mp('&iquest;Necesitas el ajuste 6-Up? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Mira el video de instalaci&oacute;n</strong></a>, luego agr&eacute;galo a Lightroom Classic &rarr; m&oacute;dulo Print. Los configuraste en el m&oacute;dulo Image Series.'), True)
+            + note("Entrega un <strong>JPG de alta resoluci&oacute;n</strong>, nunca un PDF. El ajuste de hoja de contactos ya guarda el formato correcto.")
+            + (note("Tu hoja de 6 es para tu trabajo <strong>editado y terminado</strong>, con fondo negro. Se llama de 6 porque 6 caben por p&aacute;gina, pero aqu&iacute; solo necesitas tus <strong>3</strong> fotos editadas. Est&aacute; bien dejar 3 espacios vac&iacute;os.") if not cur else ""))
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 05 - Presentaci&oacute;n y Reflexi&oacute;n","Termina tu PowerPoint, pres&eacute;ntalo a la clase y responde la reflexi&oacute;n en la p&aacute;gina final.")
 
         return wrap_page(f"Step 4: Cull and Edit | Master Photographer | {CL} | PVHS", nav("Step 04",dots_for(3),step_topnav(3)), top_wrap(en,es), step_bottom(3))
@@ -901,7 +948,7 @@ def build(mode, C):
             + para("Time to finish your PowerPoint. You already have your Cover and three Master pages from Step 02. Now add your <strong>three edited photos</strong> and your <strong>reflection</strong>, then present the whole thing to the class.")
             + para("Your PowerPoint shows your master photographer&rsquo;s work and your work <strong>side by side</strong>, so everyone can see what you studied and how you made it your own."))
         en+=deliverables_box(False,
-            [("Your finished PowerPoint (.pptx):","the full PowerPoint (cover, 3 master pages, your 3 edited photos, and the reflection closing page), presented to the class and uploaded to this Canvas assignment.")])
+            [("Your finished PowerPoint, exported as a PDF:","finish all 8 pages (cover, 3 master pages, your 3 edited photos, and the reflection closing page), export your PowerPoint as a PDF, upload the PDF to this Canvas assignment, and present your PowerPoint to the class.")])
         en+=deck_showcase(False, DECKPREV)
         en+=card("BUILD THE REST OF YOUR POWERPOINT","Add Your Photos and Your Notes",
             para("Open the PowerPoint you started in Step 02 and finish it.")
@@ -910,6 +957,7 @@ def build(mode, C):
                 ("Write how you used your master&rsquo;s style.","On each page, say what you borrowed: composition, light, the moment, tonal range, or editing."),
                 ("Fill the reflection page.","Answer the three reflection questions on the closing page."),
                 ("Check every page.","Make sure your name is on the cover and all six images are in place."),
+                ("Export a PDF and upload.","In PowerPoint, go to File &gt; Export and choose PDF, then upload the PDF to this Canvas assignment."),
             ]))
         en+=card("PRESENT TO THE CLASS","Share Your Work Out Loud",
             para("You will present your PowerPoint to the class. Keep it short and clear, about <strong>3 to 5 minutes</strong>.")
@@ -937,7 +985,7 @@ def build(mode, C):
             + para("Hora de terminar tu PowerPoint. Ya tienes tu portada y tus tres p&aacute;ginas del maestro del Paso 02. Ahora agrega tus <strong>tres fotos editadas</strong> y tu <strong>reflexi&oacute;n</strong>, luego presenta todo a la clase.")
             + para("Tu PowerPoint muestra el trabajo de tu fot&oacute;grafo maestro y el tuyo <strong>lado a lado</strong>, para que todos vean qu&eacute; estudiaste y c&oacute;mo lo hiciste tuyo."))
         es+=deliverables_box(True,
-            [("Tu PowerPoint terminado (.pptx):","el PowerPoint completo (portada, 3 p&aacute;ginas del maestro, tus 3 fotos editadas y la p&aacute;gina final de reflexi&oacute;n), presentado a la clase y subido a esta tarea de Canvas.")])
+            [("Tu PowerPoint terminado, exportado como PDF:","termina las 8 p&aacute;ginas (portada, 3 p&aacute;ginas del maestro, tus 3 fotos editadas y la p&aacute;gina final de reflexi&oacute;n), exporta tu PowerPoint como PDF, sube el PDF a esta tarea de Canvas y presenta tu PowerPoint a la clase.")])
         es+=deck_showcase(True, DECKPREV)
         es+=card("CONSTRUYE EL RESTO DE TU POWERPOINT","Agrega Tus Fotos y Tus Notas",
             para("Abre el PowerPoint que empezaste en el Paso 02 y term&iacute;nalo.")
@@ -946,6 +994,7 @@ def build(mode, C):
                 ("Escribe c&oacute;mo usaste el estilo de tu maestro.","En cada p&aacute;gina, di qu&eacute; tomaste prestado: composici&oacute;n, luz, el momento, el rango tonal o la edici&oacute;n."),
                 ("Llena la p&aacute;gina de reflexi&oacute;n.","Responde las tres preguntas de reflexi&oacute;n en la p&aacute;gina final."),
                 ("Revisa cada p&aacute;gina.","Aseg&uacute;rate de que tu nombre est&eacute; en la portada y las seis im&aacute;genes est&eacute;n en su lugar."),
+                ("Exporta un PDF y s&uacute;belo.","En PowerPoint, ve a File (Archivo) &gt; Export (Exportar) y elige PDF, luego sube el PDF a esta tarea de Canvas."),
             ]))
         es+=card("PRESENTA A LA CLASE","Comparte Tu Trabajo en Voz Alta",
             para("Presentar&aacute;s tu PowerPoint a la clase. Que sea corto y claro, como <strong>3 a 5 minutos</strong>.")
