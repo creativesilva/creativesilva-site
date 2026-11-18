@@ -808,22 +808,35 @@ def build(mode, C):
                 ("Catch a moment on the move (like Cartier-Bresson):","use a faster shutter speed, like 1/500, so the action stays sharp."),
             ])
             + note("These are starting points, not rules. Match the feeling of your master&rsquo;s work."))
-        en+=card("OFFLOAD YOUR PHOTOS","Move Your Full Take to RAW_Images",
-            para("Get every photo off the camera and into your project folder so nothing gets lost.")
-            + steps([
-                ("Connect your camera or card.","Use the cable, or put the memory card in a card reader on your Mac."),
-                ("Open your project folder in Finder.","Find the <strong>project folder</strong> you downloaded on the Overview."),
-                ("Copy every photo into RAW_Images.","Drag your whole take into the <strong>RAW_Images</strong> folder inside that project folder. Keep them all, not just three."),
-            ])
-            + note("Offload your <strong>full take</strong>, every photo you captured. You select your best three later, in the next step."))
-        en+=card("BUILD YOUR CONTACT SHEET","Make a 12-Up Contact Sheet",
+        en+=card("OFFLOAD YOUR PHOTOS","Copy Your Card to RAW_Images",
+            para("You do not use a cable. You <strong>off-load</strong> your SD card with the <strong>card reader</strong> on your desk, then copy every photo into your project folder. Follow each step:")
+            + scroll_steps(steps([
+                ("Put your SD card in the card reader.","Use the card reader mounted to your desk."),
+                ("Open the card, then DCIM, then 100CANON.","Open your SD card in Finder, open the <strong>DCIM</strong> folder, then open <strong>100CANON</strong>. Your photos are here."),
+                ("Select all, then copy.","Press <strong>Cmd + A</strong> to select every photo. Right-click and choose <strong>Copy</strong>."),
+                ("Open your RAW_Images folder.","In OneDrive, open your project folder, then open the <strong>RAW_Images</strong> folder."),
+                ("Paste them in.","Press <strong>Cmd + V</strong> to paste every photo into RAW_Images."),
+                ("Check the count matches.","Wait for every photo to finish. The number of photos in RAW_Images must match the number on your card."),
+                ("Eject, return, and format.","Eject the card, put it back in the camera, and format the card so it is clean for next time."),
+            ]), rgb="0,184,184")
+            + note("Off-load your <strong>full take</strong>, every photo you captured. You select your best three later, in the next step."))
+        en+=card("BUILD YOUR CONTACT SHEET","Make Your 12-Up Contact Sheet",
             para("A <strong>12-up contact sheet</strong> shows your whole take as small thumbnails on one page, 12 per page. Make it <strong>before you edit</strong>: this is your <strong>unedited</strong> take, and it shows your camera settings.")
+            + para("First, bring your photos into Lightroom Classic and put them in a collection. Follow each step:")
+            + scroll_steps(steps([
+                ("Open Lightroom Classic.","Open the app on your Mac."),
+                ("Click Import.","Click the <strong>Import</strong> button at the bottom-left."),
+                ("Pick your RAW_Images folder.","On the left, open your project folder in OneDrive and click the <strong>RAW_Images</strong> folder. Your photos show in the middle."),
+                ("Import every photo.","Make sure all your photos are checked, then click <strong>Import</strong> at the bottom-right."),
+                ("Select all your photos.","Go to the Library. Press <strong>Cmd + A</strong> to select every imported photo."),
+                ("Make a collection called Master Photographer.","Right-click your selected photos and choose <strong>Create Collection</strong>. Name it <strong>Master Photographer</strong>, then click Create. This keeps your take together."),
+            ]), rgb="0,184,184")
+            + para("Now make your 12-up contact sheet:")
             + steps([
-                ("Import RAW_Images into Lightroom Classic.","Open Lightroom Classic, click Import, and bring in your RAW_Images folder."),
-                ("Select all your photos.","Edit menu &rarr; Select All, so your whole take is on the sheet."),
-                ("Open the Print module and pick the 12-Up Contact Sheet preset.","If you do not see it, install it on the Overview first."),
+                ("Open the Print module.","Open your <strong>Master Photographer</strong> collection, then go to the <strong>Print</strong> module."),
+                ("Pick the 12-Up Contact Sheet preset.","Choose it from your User Templates. If you do not see it, install it on the Overview first."),
                 ("Print to a high-resolution JPG.","Set Print To: JPEG File, then click Print to File. The preset already saves a high-resolution JPG for you."),
-                ("Name it and upload.","Name it LastName_First_MasterPhotographer_ContactSheet.jpg, then upload the JPG to this Canvas assignment."),
+                ("Name it and upload.","Name it <strong>12 Up Master Photographer</strong> plus your name, like <strong>12 Up Master Photographer Jane Smith</strong>. Then upload the JPG to this Canvas assignment."),
             ])
             + note("Turn in a <strong>high-resolution JPG</strong>, never a PDF. The contact-sheet preset already saves the right format.")
             + (note("Do not let the name fool you. Put <strong>every</strong> photo from your take in. The 12-up fits 12 per page, but it is not a minimum. More than 12? Lightroom just makes more pages. 8 photos or 32, all good.") if not cur else ""))
@@ -850,22 +863,35 @@ def build(mode, C):
                 ("Atrapar un momento en movimiento (como Cartier-Bresson):","usa una velocidad m&aacute;s r&aacute;pida, como 1/500, para que la acci&oacute;n quede n&iacute;tida."),
             ])
             + note("Son puntos de partida, no reglas. Iguala el sentimiento del trabajo de tu maestro."))
-        es+=card("DESCARGA TUS FOTOS","Mueve Tu Toma Completa a RAW_Images",
-            para("Saca todas las fotos de la c&aacute;mara y ll&eacute;valas a tu carpeta del proyecto para que no se pierda ninguna.")
-            + steps([
-                ("Conecta tu c&aacute;mara o tarjeta.","Usa el cable, o pon la tarjeta de memoria en un lector de tarjetas en tu Mac."),
-                ("Abre tu carpeta del proyecto en Finder.","Busca la <strong>carpeta del proyecto</strong> que descargaste en el Resumen."),
-                ("Copia cada foto a RAW_Images.","Arrastra toda tu toma a la carpeta <strong>RAW_Images</strong> dentro de esa carpeta del proyecto. Cons&eacute;rvalas todas, no solo tres."),
-            ])
+        es+=card("DESCARGA TUS FOTOS","Copia Tu Tarjeta a RAW_Images",
+            para("No usas un cable. <strong>Descargas</strong> tu tarjeta SD con el <strong>lector de tarjetas</strong> de tu escritorio, luego copias cada foto a tu carpeta del proyecto. Sigue cada paso:")
+            + scroll_steps(steps([
+                ("Pon tu tarjeta SD en el lector de tarjetas.","Usa el lector de tarjetas que est&aacute; en tu escritorio."),
+                ("Abre la tarjeta, luego DCIM, luego 100CANON.","Abre tu tarjeta SD en Finder, abre la carpeta <strong>DCIM</strong>, luego abre <strong>100CANON</strong>. Tus fotos est&aacute;n aqu&iacute;."),
+                ("Selecciona todo y copia.","Presiona <strong>Cmd + A</strong> para seleccionar cada foto. Haz clic derecho y elige <strong>Copy</strong> (Copiar)."),
+                ("Abre tu carpeta RAW_Images.","En OneDrive, abre tu carpeta del proyecto, luego abre la carpeta <strong>RAW_Images</strong>."),
+                ("P&eacute;galas ah&iacute;.","Presiona <strong>Cmd + V</strong> para pegar cada foto en RAW_Images."),
+                ("Revisa que el n&uacute;mero coincida.","Espera a que terminen todas. El n&uacute;mero de fotos en RAW_Images debe coincidir con el n&uacute;mero de tu tarjeta."),
+                ("Expulsa, regresa y formatea.","Expulsa la tarjeta, ponla de nuevo en la c&aacute;mara y formatea la tarjeta para que est&eacute; limpia para la pr&oacute;xima vez."),
+            ]), rgb="0,184,184")
             + note("Descarga tu <strong>toma completa</strong>, cada foto que capturaste. Seleccionas tus mejores tres despu&eacute;s, en el siguiente paso."))
-        es+=card("ARMA TU HOJA DE CONTACTOS","Haz una Hoja de Contactos de 12",
+        es+=card("ARMA TU HOJA DE CONTACTOS","Haz Tu Hoja de Contactos de 12",
             para("Una <strong>hoja de contactos de 12</strong> muestra toda tu toma como miniaturas en una p&aacute;gina, 12 por p&aacute;gina. Hazla <strong>antes de editar</strong>: esta es tu toma <strong>sin editar</strong>, y muestra tus ajustes de c&aacute;mara.")
+            + para("Primero, trae tus fotos a Lightroom Classic y ponlas en una colecci&oacute;n. Sigue cada paso:")
+            + scroll_steps(steps([
+                ("Abre Lightroom Classic.","Abre la app en tu Mac."),
+                ("Haz clic en Import.","Haz clic en el bot&oacute;n <strong>Import</strong> (Importar), abajo a la izquierda."),
+                ("Elige tu carpeta RAW_Images.","A la izquierda, abre tu carpeta del proyecto en OneDrive y haz clic en la carpeta <strong>RAW_Images</strong>. Tus fotos aparecen en el centro."),
+                ("Importa cada foto.","Aseg&uacute;rate de que todas tus fotos est&eacute;n marcadas, luego haz clic en <strong>Import</strong> abajo a la derecha."),
+                ("Selecciona todas tus fotos.","Ve a la Biblioteca. Presiona <strong>Cmd + A</strong> para seleccionar cada foto importada."),
+                ("Haz una colecci&oacute;n llamada Master Photographer.","Haz clic derecho en tus fotos seleccionadas y elige <strong>Create Collection</strong> (Crear colecci&oacute;n). N&oacute;mbrala <strong>Master Photographer</strong>, luego haz clic en Create. As&iacute; tu toma se queda junta."),
+            ]), rgb="0,184,184")
+            + para("Ahora haz tu hoja de contactos de 12:")
             + steps([
-                ("Importa RAW_Images a Lightroom Classic.","Abre Lightroom Classic, haz clic en Import (Importar) y trae tu carpeta RAW_Images."),
-                ("Selecciona todas tus fotos.","Men&uacute; Edit (Editar) &rarr; Select All (Seleccionar todo), para que toda tu toma est&eacute; en la hoja."),
-                ("Abre el m&oacute;dulo Print y elige el ajuste 12-Up Contact Sheet.","Si no lo ves, inst&aacute;lalo primero en el Resumen."),
+                ("Abre el m&oacute;dulo Print.","Abre tu colecci&oacute;n <strong>Master Photographer</strong>, luego ve al m&oacute;dulo <strong>Print</strong>."),
+                ("Elige el ajuste 12-Up Contact Sheet.","El&iacute;gelo de tus User Templates. Si no lo ves, inst&aacute;lalo primero en el Resumen."),
                 ("Imprime a un JPG de alta resoluci&oacute;n.","Pon Print To: JPEG File, luego haz clic en Print to File. El ajuste ya guarda un JPG de alta resoluci&oacute;n por ti."),
-                ("N&oacute;mbrala y s&uacute;bela.","N&oacute;mbrala LastName_First_MasterPhotographer_ContactSheet.jpg, luego sube el JPG a esta tarea de Canvas."),
+                ("N&oacute;mbrala y s&uacute;bela.","N&oacute;mbrala <strong>12 Up Master Photographer</strong> y tu nombre, como <strong>12 Up Master Photographer Jane Smith</strong>. Luego sube el JPG a esta tarea de Canvas."),
             ])
             + note("Entrega un <strong>JPG de alta resoluci&oacute;n</strong>, nunca un PDF. El ajuste de hoja de contactos ya guarda el formato correcto.")
             + (note("No dejes que el nombre te confunda. Pon <strong>cada</strong> foto de tu toma. La hoja de 12 cabe 12 por p&aacute;gina, pero no es un m&iacute;nimo. &iquest;M&aacute;s de 12? Lightroom hace m&aacute;s p&aacute;ginas solo. 8 fotos o 32, todo bien.") if not cur else ""))
@@ -915,7 +941,7 @@ def build(mode, C):
                 ("Load your three edited images.","In Lightroom Classic, select your three final edited photos in the Library."),
                 ("Open the Print module and pick the 6-Up Contact Sheet preset.","If you do not see it, install it on the Overview first."),
                 ("Print to file as a JPG.","Click Print to File. The preset already saves a high-resolution JPG, so you never choose the format."),
-                ("Name it and upload.","Name it LastName_First_MasterPhotographer_ContactSheet.jpg, then upload the JPG to this Canvas assignment."),
+                ("Name it and upload.","Name it <strong>6 Up Master Photographer</strong> plus your name, like <strong>6 Up Master Photographer Jane Smith</strong>. Then upload the JPG to this Canvas assignment."),
             ])
             + note("Turn in a <strong>high-resolution JPG</strong>, never a PDF. The contact-sheet preset already saves the right format.")
             + (note("Your 6-up is for your <strong>edited, finished</strong> work, on a black background. It is called 6-up because 6 fit per page, but here you only need your <strong>3</strong> edited photos. Three empty spaces is fine.") if not cur else ""))
@@ -961,7 +987,7 @@ def build(mode, C):
                 ("Carga tus tres im&aacute;genes editadas.","En Lightroom Classic, selecciona tus tres fotos finales editadas en la Biblioteca."),
                 ("Abre el m&oacute;dulo Print y elige el ajuste 6-Up Contact Sheet.","Si no lo ves, inst&aacute;lalo primero en el Resumen."),
                 ("Imprime a archivo como JPG.","Haz clic en Print to File (Imprimir a archivo). El ajuste ya guarda un JPG de alta resoluci&oacute;n, as&iacute; que nunca eliges el formato."),
-                ("N&oacute;mbrala y s&uacute;bela.","N&oacute;mbrala LastName_First_MasterPhotographer_ContactSheet.jpg, luego sube el JPG a esta tarea de Canvas."),
+                ("N&oacute;mbrala y s&uacute;bela.","N&oacute;mbrala <strong>6 Up Master Photographer</strong> y tu nombre, como <strong>6 Up Master Photographer Jane Smith</strong>. Luego sube el JPG a esta tarea de Canvas."),
             ])
             + note("Entrega un <strong>JPG de alta resoluci&oacute;n</strong>, nunca un PDF. El ajuste de hoja de contactos ya guarda el formato correcto.")
             + (note("Tu hoja de 6 es para tu trabajo <strong>editado y terminado</strong>, con fondo negro. Se llama de 6 porque 6 caben por p&aacute;gina, pero aqu&iacute; solo necesitas tus <strong>3</strong> fotos editadas. Est&aacute; bien dejar 3 espacios vac&iacute;os.") if not cur else ""))
@@ -976,10 +1002,10 @@ def build(mode, C):
             "#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
         en+=card("STEP 05 &middot; FINISH AND PRESENT","Put Master and Student Work Side by Side",
             (float_right(PRESENT_FLOAT,"A student presenting their master photographer PowerPoint to the class","Present your master&rsquo;s work and your own, side by side.") if HAVE_PRESENT else "")
-            + para("Time to finish your PowerPoint. This is your <strong>Fall Final</strong>, and your presentation <strong>is</strong> the final. You already have your Cover and three Master pages from Step 02. Now add your <strong>three edited photos</strong> and your <strong>reflection</strong>, then present the whole thing to the class.")
+            + para("Time to finish your PowerPoint. This is your <strong>Fall Final</strong>. You already have your Cover and three Master pages from Step 02. Now add your <strong>three edited photos</strong> and your <strong>reflection</strong>, turn in your PDF, and present on the day of the final.")
             + para("Your PowerPoint shows your master photographer&rsquo;s work and your work <strong>side by side</strong>, so everyone can see what you studied and how you made it your own."))
         en+=deliverables_box(False,
-            [("Your finished PowerPoint, exported as a PDF:","finish all 8 pages (cover, 3 master pages, your 3 edited photos, and the reflection closing page), export your PowerPoint as a PDF, upload the PDF to this Canvas assignment, and present your PowerPoint to the class.")])
+            [("Your finished PowerPoint, exported as a PDF (due before the final):","finish all 8 pages (cover, 3 master pages, your 3 edited photos, and the reflection closing page), export it as a PDF, and upload the PDF <strong>before the day of the final</strong>. Turning it in early lets the presentation order be ready for final day. You present your PowerPoint to the class on the day of the final.")])
         en+=deck_showcase(False, DECKPREV)
         en+=card("BUILD THE REST OF YOUR POWERPOINT","Add Your Photos and Your Notes",
             para("Open the PowerPoint you started in Step 02 and finish it.")
@@ -991,14 +1017,14 @@ def build(mode, C):
                 ("Export a PDF and upload.","In PowerPoint, go to File &gt; Export and choose PDF, then upload the PDF to this Canvas assignment."),
             ]))
         en+=card("PRESENT ON FINAL DAY","Share Your Work Out Loud",
-            para("On the <strong>day of the Fall Final</strong>, you present your PowerPoint to the class. This presentation <strong>is</strong> your final. Keep it short and clear, about <strong>3 to 5 minutes</strong>.")
+            para("On the <strong>day of the Fall Final</strong>, you present your PowerPoint to the class. Your PDF is already turned in, so today you just present. This presentation <strong>is</strong> your final. Keep it short and clear, about <strong>3 to 5 minutes</strong>.")
             + bullets([
                 ("Introduce your master:","who they are and the style you studied."),
                 ("Walk through your three master images:","name the technique on each one."),
                 ("Show your three photos:","explain how each one shows your master&rsquo;s influence."),
                 ("End with your reflection:","what you learned and what you will carry forward."),
             ])
-            + note("Come ready on final day: your PowerPoint finished, your PDF turned in, and your part practiced. Speak clearly and look up at your classmates. You know your work better than anyone in the room."))
+            + note("Come ready on final day: your PDF already turned in before today, and your part practiced. Speak clearly and look up at your classmates. You know your work better than anyone in the room."))
         en+=card("REFLECTION &middot; CLOSING PAGE","Finish With an Honest Reflection",
             para("Your last page is your <strong>reflection</strong>. Answer these three questions in a few honest sentences:")
             + bullets([
@@ -1013,10 +1039,10 @@ def build(mode, C):
             "#top","Back to English", HICON_REFLECT)
         es+=card("PASO 05 &middot; TERMINA Y PRESENTA","Pon el Trabajo del Maestro y el Tuyo Lado a Lado",
             (float_right(PRESENT_FLOAT,"Una estudiante presentando su PowerPoint del fot&oacute;grafo maestro a la clase","Presenta el trabajo de tu maestro y el tuyo, lado a lado.") if HAVE_PRESENT else "")
-            + para("Hora de terminar tu PowerPoint. Este es tu <strong>Final de Oto&ntilde;o</strong>, y tu presentaci&oacute;n <strong>es</strong> el examen final. Ya tienes tu portada y tus tres p&aacute;ginas del maestro del Paso 02. Ahora agrega tus <strong>tres fotos editadas</strong> y tu <strong>reflexi&oacute;n</strong>, luego presenta todo a la clase.")
+            + para("Hora de terminar tu PowerPoint. Este es tu <strong>Final de Oto&ntilde;o</strong>. Ya tienes tu portada y tus tres p&aacute;ginas del maestro del Paso 02. Ahora agrega tus <strong>tres fotos editadas</strong> y tu <strong>reflexi&oacute;n</strong>, entrega tu PDF y presenta el d&iacute;a del final.")
             + para("Tu PowerPoint muestra el trabajo de tu fot&oacute;grafo maestro y el tuyo <strong>lado a lado</strong>, para que todos vean qu&eacute; estudiaste y c&oacute;mo lo hiciste tuyo."))
         es+=deliverables_box(True,
-            [("Tu PowerPoint terminado, exportado como PDF:","termina las 8 p&aacute;ginas (portada, 3 p&aacute;ginas del maestro, tus 3 fotos editadas y la p&aacute;gina final de reflexi&oacute;n), exporta tu PowerPoint como PDF, sube el PDF a esta tarea de Canvas y presenta tu PowerPoint a la clase.")])
+            [("Tu PowerPoint terminado, exportado como PDF (se entrega antes del final):","termina las 8 p&aacute;ginas (portada, 3 p&aacute;ginas del maestro, tus 3 fotos editadas y la p&aacute;gina final de reflexi&oacute;n), exp&oacute;rtalo como PDF y sube el PDF <strong>antes del d&iacute;a del final</strong>. Entregarlo temprano deja listo el orden de las presentaciones para el d&iacute;a del final. Presentas tu PowerPoint a la clase el d&iacute;a del final.")])
         es+=deck_showcase(True, DECKPREV)
         es+=card("CONSTRUYE EL RESTO DE TU POWERPOINT","Agrega Tus Fotos y Tus Notas",
             para("Abre el PowerPoint que empezaste en el Paso 02 y term&iacute;nalo.")
@@ -1028,14 +1054,14 @@ def build(mode, C):
                 ("Exporta un PDF y s&uacute;belo.","En PowerPoint, ve a File (Archivo) &gt; Export (Exportar) y elige PDF, luego sube el PDF a esta tarea de Canvas."),
             ]))
         es+=card("PRESENTA EL D&Iacute;A DEL FINAL","Comparte Tu Trabajo en Voz Alta",
-            para("El <strong>d&iacute;a del Final de Oto&ntilde;o</strong>, presentas tu PowerPoint a la clase. Esta presentaci&oacute;n <strong>es</strong> tu examen final. Que sea corto y claro, como <strong>3 a 5 minutos</strong>.")
+            para("El <strong>d&iacute;a del Final de Oto&ntilde;o</strong>, presentas tu PowerPoint a la clase. Tu PDF ya est&aacute; entregado, as&iacute; que hoy solo presentas. Esta presentaci&oacute;n <strong>es</strong> tu examen final. Que sea corto y claro, como <strong>3 a 5 minutos</strong>.")
             + bullets([
                 ("Presenta a tu maestro:","qui&eacute;n es y el estilo que estudiaste."),
                 ("Recorre tus tres im&aacute;genes del maestro:","nombra la t&eacute;cnica en cada una."),
                 ("Muestra tus tres fotos:","explica c&oacute;mo cada una muestra la influencia de tu maestro."),
                 ("Termina con tu reflexi&oacute;n:","qu&eacute; aprendiste y qu&eacute; vas a llevarte contigo."),
             ])
-            + note("Ven listo el d&iacute;a del final: tu PowerPoint terminado, tu PDF entregado y tu parte practicada. Habla con claridad y mira a tus compa&ntilde;eros. T&uacute; conoces tu trabajo mejor que nadie en el sal&oacute;n."))
+            + note("Ven listo el d&iacute;a del final: tu PDF ya entregado antes de hoy, y tu parte practicada. Habla con claridad y mira a tus compa&ntilde;eros. T&uacute; conoces tu trabajo mejor que nadie en el sal&oacute;n."))
         es+=card("REFLEXI&Oacute;N &middot; P&Aacute;GINA FINAL","Termina con una Reflexi&oacute;n Honesta",
             para("Tu &uacute;ltima p&aacute;gina es tu <strong>reflexi&oacute;n</strong>. Responde estas tres preguntas en unas cuantas oraciones honestas:")
             + bullets([
