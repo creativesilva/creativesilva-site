@@ -2,8 +2,8 @@
 # Photography 1A - Project 02: Master Photographer.
 # Pick one master photographer from a roster of 20 (4 genres), study HOW they make images,
 # then capture and edit three of your own photos in that style and present master + student work
-# side by side in a slide deck. Standard photo arc: study -> capture & contact -> cull & edit ->
-# presentation (reflection is the deck's closing slide). Five pages, bilingual EN/ES, 5th-grade.
+# side by side in a PowerPoint. Standard photo arc: study -> capture & contact -> cull & edit ->
+# presentation (reflection is the PowerPoint's closing page). Five pages, bilingual EN/ES, 5th-grade.
 # Dark teal angular framework via silva_framework. Camera-kit capture (no fresh-photos note).
 # Points 15 / 25 / 25 / 35. Photo 1 only for now; Photo 2 is a separate pass later.
 #
@@ -77,8 +77,8 @@ STANDARDS=[
    "es_desc":"Capturas una toma completa, luego seleccionas y editas hasta tus tres im&aacute;genes finales m&aacute;s fuertes."},
   {"code":"MA:Pr6.1.HSI","en_tier":"NCAS Media Arts","es_tier":"Artes de Medios NCAS",
    "en_title":"Present &amp; Share","es_title":"Presentar y Compartir",
-   "en_desc":"You build a slideshow and present it to the class, showing how your photos connect to your master photographer.",
-   "es_desc":"Creas una presentaci&oacute;n y la presentas a la clase, mostrando c&oacute;mo tus fotos se conectan con tu fot&oacute;grafo maestro."},
+   "en_desc":"You build a PowerPoint and present it to the class, showing how your photos connect to your master photographer.",
+   "es_desc":"Creas un PowerPoint y lo presentas a la clase, mostrando c&oacute;mo tus fotos se conectan con tu fot&oacute;grafo maestro."},
   {"code":"CTE AME A4.0","en_tier":"CA CTE, Arts Media &amp; Entertainment","es_tier":"CTE de California, Artes y Medios",
    "en_title":"Analyze &amp; Assess Work","es_title":"Analizar y Evaluar el Trabajo",
    "en_desc":"You judge photographs using the elements of art, the principles of design, and professional industry standards.",
@@ -129,8 +129,8 @@ RUBRIC_EN=[
  ("Capture","Your full take shows the style of your master photographer and gives you strong options."),
  ("Cull &amp; Edit","Your three final images are your strongest, well selected, and edited to match the look you studied."),
  ("Style Connection","Your photos clearly show the influence of your master photographer."),
- ("Presentation","Your deck is clean and easy to read, and you present clearly and on time."),
- ("Reflection","Your closing slide is honest and thoughtful about what you learned."),
+ ("Presentation","Your PowerPoint is clean and easy to read, and you present clearly and on time."),
+ ("Reflection","Your closing page is honest and thoughtful about what you learned."),
 ]
 RUBRIC_ES=[
  ("Estudio y An&aacute;lisis","Explicas con claridad c&oacute;mo tu fot&oacute;grafo maestro hace im&aacute;genes, nombrando t&eacute;cnicas reales, no solo &lsquo;me gusta.&rsquo;"),
@@ -138,8 +138,8 @@ RUBRIC_ES=[
  ("Captura","Tu toma completa muestra el estilo de tu fot&oacute;grafo maestro y te da buenas opciones."),
  ("Selecci&oacute;n y Edici&oacute;n","Tus tres im&aacute;genes finales son las m&aacute;s fuertes, bien seleccionadas y editadas para igualar el estilo que estudiaste."),
  ("Conexi&oacute;n de Estilo","Tus fotos muestran con claridad la influencia de tu fot&oacute;grafo maestro."),
- ("Presentaci&oacute;n","Tu presentaci&oacute;n es limpia y f&aacute;cil de leer, y presentas con claridad y a tiempo."),
- ("Reflexi&oacute;n","Tu diapositiva final es honesta y reflexiva sobre lo que aprendiste."),
+ ("Presentaci&oacute;n","Tu PowerPoint es limpio y f&aacute;cil de leer, y presentas con claridad y a tiempo."),
+ ("Reflexi&oacute;n","Tu p&aacute;gina final es honesta y reflexiva sobre lo que aprendiste."),
 ]
 def rubric_box(es, share=False):
     rows=RUBRIC_ES if es else RUBRIC_EN
@@ -179,11 +179,11 @@ def rubric_box(es, share=False):
 def project_downloads(es, zip_url):
     heading="Descarga Tu Carpeta del Proyecto" if es else "Download Your Project Folder"
     if es:
-        lead="Descarga la carpeta de tu proyecto. Trae tu plantilla de presentaci&oacute;n de 16:9 (en ingl&eacute;s y espa&ntilde;ol), una carpeta de Im&aacute;genes de Referencia para las fotos de tu maestro, y una carpeta RAW_Images para tus propias fotos cuando las captures."
+        lead="Descarga la carpeta de tu proyecto. Trae tu plantilla de PowerPoint de 16:9 (en ingl&eacute;s y espa&ntilde;ol), una carpeta de Im&aacute;genes de Referencia para las fotos de tu maestro, y una carpeta RAW_Images para tus propias fotos cuando las captures."
         label="Carpeta del Proyecto del Fot&oacute;grafo Maestro (ZIP)"
         note_t="Despu&eacute;s de que se descargue, descompr&iacute;mela y mueve la carpeta del proyecto a OneDrive &rarr; Carpeta de Fotograf&iacute;a. Esa es tu carpeta para todo este proyecto."
     else:
-        lead="Download your project folder. It holds your 16:9 slideshow template (English and Spanish), a Reference Images folder for your master photographer&rsquo;s photos, and a RAW_Images folder for your own photos once you capture them."
+        lead="Download your project folder. It holds your 16:9 PowerPoint template (English and Spanish), a Reference Images folder for your master photographer&rsquo;s photos, and a RAW_Images folder for your own photos once you capture them."
         label="Master Photographer Project Folder (ZIP)"
         note_t="After it downloads, unzip it and move the project folder into OneDrive &rarr; Photography Folder. That is your folder for this whole project."
     return ('<div style="background:linear-gradient(180deg,rgba(255,107,26,0.12) 0%,rgba(255,107,26,0.03) 100%);border:1px solid rgba(255,107,26,0.30);border-left:6px solid #FF6B1A;padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
@@ -264,29 +264,29 @@ def reslist(es):
     return para(lead)+pills+tip_box
 
 def deck_showcase(es, deck_preview):
-    heading="Tu Plantilla de Presentaci&oacute;n" if es else "Your Slide Deck Template"
+    heading="Tu Plantilla de PowerPoint" if es else "Your PowerPoint Template"
     if es:
         lead="Usa esta plantilla de 16:9 como punto de partida. Du&eacute;rala y hazla tuya. Tiene todo lo que necesitas:"
         items=[
             ("Portada:","el nombre de tu fot&oacute;grafo maestro, tu nombre, tu periodo y el curso."),
-            ("3 diapositivas del maestro:","una imagen de tu maestro por diapositiva, con la t&eacute;cnica que estudiaste."),
-            ("3 diapositivas de tu trabajo:","una de tus fotos editadas por diapositiva, con c&oacute;mo usaste lo que aprendiste."),
-            ("Diapositiva de reflexi&oacute;n:","la diapositiva final, donde respondes la reflexi&oacute;n."),
+            ("3 p&aacute;ginas del maestro:","una imagen de tu maestro por p&aacute;gina, con la t&eacute;cnica que estudiaste."),
+            ("3 p&aacute;ginas de tu trabajo:","una de tus fotos editadas por p&aacute;gina, con c&oacute;mo usaste lo que aprendiste."),
+            ("P&aacute;gina de reflexi&oacute;n:","la p&aacute;gina final, donde respondes la reflexi&oacute;n."),
         ]
         inside="La plantilla ya est&aacute; dentro de la carpeta del proyecto que descargaste en el Resumen, en ingl&eacute;s y espa&ntilde;ol."
-        cap="Las 8 diapositivas de la plantilla: portada, tres del maestro, tres de tu trabajo y la reflexi&oacute;n."
+        cap="Las 8 p&aacute;ginas del PowerPoint: portada, tres del maestro, tres de tu trabajo y la reflexi&oacute;n."
     else:
         lead="Use this 16:9 template as your starting point. Duplicate it and make it yours. It has everything you need:"
         items=[
-            ("Cover slide:","your master photographer&rsquo;s name, your name, your period, and the course."),
-            ("3 master slides:","one master image per slide, with the technique you studied."),
-            ("3 of-your-work slides:","one of your edited photos per slide, with how you used what you learned."),
-            ("Reflection slide:","the closing slide, where you answer the reflection."),
+            ("Cover page:","your master photographer&rsquo;s name, your name, your period, and the course."),
+            ("3 master pages:","one master image per page, with the technique you studied."),
+            ("3 of-your-work pages:","one of your edited photos per page, with how you used what you learned."),
+            ("Reflection page:","the closing page, where you answer the reflection."),
         ]
         inside="The template is already inside the project folder you downloaded on the Overview, in both English and Spanish."
-        cap="All 8 template slides: cover, three master, three of your work, and the reflection."
+        cap="All 8 PowerPoint pages: cover, three master, three of your work, and the reflection."
     inner=(para(lead)+bullets(items,accent="#8b5cf6")
-      + (framed(deck_preview, "A preview of the eight-slide Master Photographer template: cover, three master slides, three student slides, and the reflection")
+      + (framed(deck_preview, "A preview of the eight-page Master Photographer PowerPoint template: cover, three master pages, three student pages, and the reflection")
          + f'<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">{cap}</div>' if HAVE_DECK_PREVIEW else "")
       + para(inside))
     return resources_card(heading, inner, es)
@@ -592,17 +592,17 @@ def build(mode, C):
             "#espanol","Clic para Espa&ntilde;ol", HICON_CAMERA_KIT)
         en+=type_card("overview","Step 01 &middot; Overview","Learn From a Master, Then Make Your Own",
             para("In this project you pick <strong>one master photographer</strong> and study <strong>how they make their images</strong>. This is not a report about their life. You study their <strong>style, technique, and impact</strong>: how they compose, light, and edit their photos.")
-            + para("Then you become the photographer. You <strong>capture three of your own photos</strong> in that style with the school camera kit, edit your best three, and present your master&rsquo;s work and your work <strong>side by side</strong> in a slideshow.")
+            + para("Then you become the photographer. You <strong>capture three of your own photos</strong> in that style with the school camera kit, edit your best three, and present your master&rsquo;s work and your work <strong>side by side</strong> in a PowerPoint.")
             + (framed(HERO,"Master photographers, each with a camera: the styles you choose from in this project") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Many styles, many photographers. You pick one to study and bring into your own photos.</div>' if HAVE_HERO else ""))
         if IS_P2: en+=growth_box(False)
         en+=project_downloads(False, ZIP)
         en+=card("HOW THIS PROJECT WORKS","From Studying a Master to Your Own Photos",
             para("You are on Step 01 now: read this page so you understand the project. Here is the path.")
             + bullets([
-                ("Step 02 &middot; Choose Your Master:","meet the master photographers, pick one, and start your slide deck with three of their images."),
+                ("Step 02 &middot; Choose Your Master:","meet the master photographers, pick one, and start your PowerPoint with three of their images."),
                 ("Step 03 &middot; Capture &amp; Contact:","capture a full take of your own photos in your master&rsquo;s style, then build a contact sheet."),
                 ("Step 04 &middot; Cull &amp; Edit:","select your three strongest images and edit them to match the look you studied."),
-                ("Step 05 &middot; Presentation &amp; Reflection:","finish your slideshow, present it to the class, and answer the reflection on the closing slide."),
+                ("Step 05 &middot; Presentation &amp; Reflection:","finish your PowerPoint, present it to the class, and answer the reflection on the closing page."),
             ]))
         en+=card("WHY THIS MATTERS","See Like a Pro",
             para("Understanding <strong>how professional photographers make their images</strong> helps you make stronger choices in your own work. When you can name what makes a photo great, you can do it on purpose.")
@@ -613,24 +613,24 @@ def build(mode, C):
             vocab_grid("On the Quiz",
               "Heads up: these key words will show up on your quizzes, the mid-semester quiz and the end-of-semester quiz before finals. Learn them now, not the night before.",
               VOCAB_EN), False)
-        en+=next_up("UP NEXT &middot; STEP 02 - Choose Your Master","Meet the master photographers, pick the one whose work pulls you in, and start your deck.")
+        en+=next_up("UP NEXT &middot; STEP 02 - Choose Your Master","Meet the master photographers, pick the one whose work pulls you in, and start your PowerPoint.")
 
         es=banner(f"{PROJ_LABEL_ES} &bull;Paso 01","Fot&oacute;grafo Maestro",
             "Estudia a un fot&oacute;grafo maestro, luego captura y presenta tres fotos en su estilo. Lee esta p&aacute;gina y ve al Paso 02.",
             "#top","Back to English", HICON_CAMERA_KIT)
         es+=type_card("overview","Paso 01 &middot; Resumen","Aprende de un Maestro, Luego Haz lo Tuyo",
             para("En este proyecto eliges a <strong>un fot&oacute;grafo maestro</strong> y estudias <strong>c&oacute;mo hacen sus im&aacute;genes</strong>. Esto no es un reporte sobre su vida. Estudias su <strong>estilo, su t&eacute;cnica y su impacto</strong>: c&oacute;mo componen, iluminan y editan sus fotos.")
-            + para("Luego t&uacute; te vuelves el fot&oacute;grafo. <strong>Capturas tres fotos propias</strong> en ese estilo con el kit de c&aacute;mara de la escuela, editas tus mejores tres y presentas el trabajo de tu maestro y el tuyo <strong>lado a lado</strong> en una presentaci&oacute;n.")
+            + para("Luego t&uacute; te vuelves el fot&oacute;grafo. <strong>Capturas tres fotos propias</strong> en ese estilo con el kit de c&aacute;mara de la escuela, editas tus mejores tres y presentas el trabajo de tu maestro y el tuyo <strong>lado a lado</strong> en un PowerPoint.")
             + (framed(HERO,"Fot&oacute;grafos maestros, cada uno con una c&aacute;mara: los estilos entre los que eliges en este proyecto") + '<div style="font-size:11pt;color:#80e0e0;text-align:center;margin-top:8px;opacity:0.9;line-height:1.45;">Muchos estilos, muchos fot&oacute;grafos. Eliges a uno para estudiarlo y traerlo a tus propias fotos.</div>' if HAVE_HERO else ""))
         if IS_P2: es+=growth_box(True)
         es+=project_downloads(True, ZIP)
         es+=card("C&Oacute;MO FUNCIONA ESTE PROYECTO","De Estudiar a un Maestro a Tus Propias Fotos",
             para("Est&aacute;s en el Paso 01 ahora: lee esta p&aacute;gina para entender el proyecto. Este es el camino.")
             + bullets([
-                ("Paso 02 &middot; Elige a Tu Maestro:","conoce a los fot&oacute;grafos maestros, elige a uno y empieza tu presentaci&oacute;n con tres de sus im&aacute;genes."),
+                ("Paso 02 &middot; Elige a Tu Maestro:","conoce a los fot&oacute;grafos maestros, elige a uno y empieza tu PowerPoint con tres de sus im&aacute;genes."),
                 ("Paso 03 &middot; Captura y Contacto:","captura una toma completa de tus propias fotos en el estilo de tu maestro, luego arma una hoja de contactos."),
                 ("Paso 04 &middot; Selecciona y Edita:","elige tus tres im&aacute;genes m&aacute;s fuertes y ed&iacute;talas para igualar el estilo que estudiaste."),
-                ("Paso 05 &middot; Presentaci&oacute;n y Reflexi&oacute;n:","termina tu presentaci&oacute;n, pres&eacute;ntala a la clase y responde la reflexi&oacute;n en la diapositiva final."),
+                ("Paso 05 &middot; Presentaci&oacute;n y Reflexi&oacute;n:","termina tu PowerPoint, pres&eacute;ntalo a la clase y responde la reflexi&oacute;n en la p&aacute;gina final."),
             ]))
         es+=card("POR QU&Eacute; IMPORTA","Mira Como un Profesional",
             para("Entender <strong>c&oacute;mo los fot&oacute;grafos profesionales hacen sus im&aacute;genes</strong> te ayuda a tomar mejores decisiones en tu propio trabajo. Cuando puedes nombrar lo que hace grande a una foto, puedes hacerlo a prop&oacute;sito.")
@@ -641,14 +641,14 @@ def build(mode, C):
             vocab_grid("En el Examen",
               "Atenci&oacute;n: estas palabras clave aparecer&aacute;n en tus ex&aacute;menes, el examen de mitad de semestre y el de fin de semestre antes de los finales. Apr&eacute;ndelas ahora, no la noche anterior.",
               VOCAB_ES), True)
-        es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Elige a Tu Maestro","Conoce a los fot&oacute;grafos maestros, elige al que m&aacute;s te atraiga y empieza tu presentaci&oacute;n.")
+        es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 02 - Elige a Tu Maestro","Conoce a los fot&oacute;grafos maestros, elige al que m&aacute;s te atraiga y empieza tu PowerPoint.")
 
         return wrap_page(f"Master Photographer | {CL} | PVHS", nav("Step 01",dots_for(0),step_topnav(0)), top_wrap(en,es), step_bottom(0))
 
     # ================= STEP 02: Choose Your Master =================
     def step02():
         en=banner(f"{PROJ_LABEL} &bull;Step 02","Choose Your Master",
-            "Meet the master photographers, pick one, and start your slide deck with three of their images.",
+            "Meet the master photographers, pick one, and start your PowerPoint with three of their images.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_DESIGN)
         en+=card("STEP 02 &middot; STUDY YOUR MASTER","Pick One, Then Study How They Work",
             (float_right(RESEARCH_FLOAT,"A student researching a master photographer on a lab computer","Study their style online before you choose. Look at a lot of their photos.") if HAVE_RESEARCH else "")
@@ -656,26 +656,26 @@ def build(mode, C):
             + para("You are studying <strong>how they make images</strong>, not their life story. For your master, look closely at their <strong>composition, light, subjects, and editing</strong>. These are the ideas you will bring into your own three photos.")
             + note("Choose the photographer you would most want to photograph like. The more their work excites you, the stronger your own photos will be."))
         en+=deliverables_box(False,
-            [("Your deck, started (PDF):","download the slide template, fill the <strong>Cover slide</strong> and your <strong>3 Master Photographer slides</strong> (one image you chose on each, plus your technique note), export it as a PDF, and upload it to this Canvas assignment.")])
+            [("Your PowerPoint, started (PDF):","download the PowerPoint template, fill the <strong>Cover page</strong> and your <strong>3 Master Photographer pages</strong> (one image you chose on each, plus your technique note), export it as a PDF, and upload it to this Canvas assignment.")])
         en+=card("CHOOSE YOUR MASTER","Master Photographers",
             para("Here are your master photographers, grouped into four styles: <strong>Landscape, Portrait, Still Life, and On Location</strong>. Look through all four groups, then pick the one whose work pulls you in the most.")
             + (growth_reminder(False) if IS_P2 else "")
             + roster_grid(False))
         en+=resources_card("Recommended Research Websites", reslist(False), False)
-        en+=card("GATHER YOUR THREE IMAGES / START YOUR DECK","Choose 3 Images and Start Your Slideshow",
-            para("Now build the first part of your slideshow. Open the <strong>slide template</strong> from your project folder, then do this:")
+        en+=card("GATHER YOUR THREE IMAGES / START YOUR POWERPOINT","Choose 3 Images and Start Your PowerPoint",
+            para("Now build the first part of your PowerPoint. Open the <strong>PowerPoint template</strong> from your project folder, then do this:")
             + steps([
-                ("Fill the Cover slide.","Type your master photographer&rsquo;s name, your name, your period, and the course."),
+                ("Fill the Cover page.","Type your master photographer&rsquo;s name, your name, your period, and the course."),
                 ("Find three strong images by your master.","Search online for three of their photos that best show their style. Save them in your project folder."),
-                ("Place one image on each Master slide.","Put one image on each of the three Master Photographer slides in the template."),
-                ("Write your technique note on each.","On each slide, name the technique you see: composition, lighting, the moment, tonal range, or editing. Say why it works."),
+                ("Place one image on each Master page.","Put one image on each of the three Master Photographer pages in the template."),
+                ("Write your technique note on each.","On each page, name the technique you see: composition, lighting, the moment, tonal range, or editing. Say why it works."),
                 ("Export a PDF and upload.","Go to File &gt; Export To &gt; PDF (or File &gt; Save a Copy as PDF), then upload the PDF to this Canvas assignment."),
             ])
             + note("These three images are your <strong>master photographer&rsquo;s</strong> work, from online. You capture your <strong>own</strong> photos next, in Step 03."))
         en+=next_up("UP NEXT &middot; STEP 03 - Capture &amp; Contact","Check out a camera kit and capture a full take of your own photos in your master&rsquo;s style.")
 
         es=banner(f"{PROJ_LABEL_ES} &bull;Paso 02","Elige a Tu Maestro",
-            "Conoce a los fot&oacute;grafos maestros, elige a uno y empieza tu presentaci&oacute;n con tres de sus im&aacute;genes.",
+            "Conoce a los fot&oacute;grafos maestros, elige a uno y empieza tu PowerPoint con tres de sus im&aacute;genes.",
             "#top","Back to English", HICON_DESIGN)
         es+=card("PASO 02 &middot; ESTUDIA A TU MAESTRO","Elige a Uno y Estudia C&oacute;mo Trabaja",
             (float_right(RESEARCH_FLOAT,"Una estudiante investigando a un fot&oacute;grafo maestro en una computadora del laboratorio","Estudia su estilo en internet antes de elegir. Mira muchas de sus fotos.") if HAVE_RESEARCH else "")
@@ -683,19 +683,19 @@ def build(mode, C):
             + para("Est&aacute;s estudiando <strong>c&oacute;mo hacen im&aacute;genes</strong>, no su biograf&iacute;a. Para tu maestro, observa de cerca su <strong>composici&oacute;n, luz, sujetos y edici&oacute;n</strong>. Estas son las ideas que traer&aacute;s a tus propias tres fotos.")
             + note("Elige al fot&oacute;grafo como el que m&aacute;s te gustar&iacute;a fotografiar. Entre m&aacute;s te emocione su trabajo, m&aacute;s fuertes ser&aacute;n tus propias fotos."))
         es+=deliverables_box(True,
-            [("Tu presentaci&oacute;n, empezada (PDF):","descarga la plantilla, llena la <strong>diapositiva de portada</strong> y tus <strong>3 diapositivas del fot&oacute;grafo maestro</strong> (una imagen que elegiste en cada una, m&aacute;s tu nota de t&eacute;cnica), exp&oacute;rtala como PDF y s&uacute;bela a esta tarea de Canvas.")])
+            [("Tu PowerPoint, empezado (PDF):","descarga la plantilla de PowerPoint, llena la <strong>p&aacute;gina de portada</strong> y tus <strong>3 p&aacute;ginas del fot&oacute;grafo maestro</strong> (una imagen que elegiste en cada una, m&aacute;s tu nota de t&eacute;cnica), exp&oacute;rtalo como PDF y s&uacute;belo a esta tarea de Canvas.")])
         es+=card("ELIGE A TU MAESTRO","Fot&oacute;grafos Maestros",
             para("Aqu&iacute; est&aacute;n tus fot&oacute;grafos maestros, en cuatro estilos: <strong>Paisaje, Retrato, Naturaleza Muerta y En Locaci&oacute;n</strong>. Mira los cuatro grupos y luego elige al que m&aacute;s te atraiga.")
             + (growth_reminder(True) if IS_P2 else "")
             + roster_grid(True))
         es+=resources_card("Sitios de Investigaci&oacute;n Recomendados", reslist(True), True)
-        es+=card("RE&Uacute;NE TUS TRES IM&Aacute;GENES / EMPIEZA TU PRESENTACI&Oacute;N","Elige 3 Im&aacute;genes y Empieza Tu Presentaci&oacute;n",
-            para("Ahora construye la primera parte de tu presentaci&oacute;n. Abre la <strong>plantilla de diapositivas</strong> de tu carpeta del proyecto y haz esto:")
+        es+=card("RE&Uacute;NE TUS TRES IM&Aacute;GENES / EMPIEZA TU POWERPOINT","Elige 3 Im&aacute;genes y Empieza Tu PowerPoint",
+            para("Ahora construye la primera parte de tu PowerPoint. Abre la <strong>plantilla de PowerPoint</strong> de tu carpeta del proyecto y haz esto:")
             + steps([
-                ("Llena la diapositiva de portada.","Escribe el nombre de tu fot&oacute;grafo maestro, tu nombre, tu periodo y el curso."),
+                ("Llena la p&aacute;gina de portada.","Escribe el nombre de tu fot&oacute;grafo maestro, tu nombre, tu periodo y el curso."),
                 ("Busca tres im&aacute;genes fuertes de tu maestro.","Busca en internet tres de sus fotos que mejor muestren su estilo. Gu&aacute;rdalas en tu carpeta del proyecto."),
-                ("Pon una imagen en cada diapositiva del maestro.","Coloca una imagen en cada una de las tres diapositivas del fot&oacute;grafo maestro de la plantilla."),
-                ("Escribe tu nota de t&eacute;cnica en cada una.","En cada diapositiva, nombra la t&eacute;cnica que ves: composici&oacute;n, iluminaci&oacute;n, el momento, el rango tonal o la edici&oacute;n. Di por qu&eacute; funciona."),
+                ("Pon una imagen en cada p&aacute;gina del maestro.","Coloca una imagen en cada una de las tres p&aacute;ginas del fot&oacute;grafo maestro de la plantilla."),
+                ("Escribe tu nota de t&eacute;cnica en cada una.","En cada p&aacute;gina, nombra la t&eacute;cnica que ves: composici&oacute;n, iluminaci&oacute;n, el momento, el rango tonal o la edici&oacute;n. Di por qu&eacute; funciona."),
                 ("Exporta un PDF y s&uacute;belo.","Ve a Archivo &gt; Exportar a &gt; PDF (o Archivo &gt; Guardar una copia como PDF), luego sube el PDF a esta tarea de Canvas."),
             ])
             + note("Estas tres im&aacute;genes son el trabajo de <strong>tu fot&oacute;grafo maestro</strong>, de internet. T&uacute; capturas tus <strong>propias</strong> fotos despu&eacute;s, en el Paso 03."))
@@ -840,7 +840,7 @@ def build(mode, C):
             + note("Turn in a <strong>high-resolution JPG</strong>, never a PDF. The contact-sheet preset already saves the right format."))
         en+=resources_card("Contact Sheet Preset",
             pnote_mp('Need the 6-Up preset? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>, then add it to Lightroom Classic &rarr; Print module. You set these up back in the Image Series module.'), False)
-        en+=next_up("UP NEXT &middot; STEP 05 - Presentation &amp; Reflection","Finish your slideshow, present it to the class, and answer the reflection on the closing slide.")
+        en+=next_up("UP NEXT &middot; STEP 05 - Presentation &amp; Reflection","Finish your PowerPoint, present it to the class, and answer the reflection on the closing page.")
 
         es=banner(f"{PROJ_LABEL_ES} &bull;Paso 04","Selecciona y Edita",
             "Elige tus tres im&aacute;genes m&aacute;s fuertes y ed&iacute;talas para igualar el estilo que estudiaste.",
@@ -887,32 +887,32 @@ def build(mode, C):
             + note("Entrega un <strong>JPG de alta resoluci&oacute;n</strong>, nunca un PDF. El ajuste de hoja de contactos ya guarda el formato correcto."))
         es+=resources_card("Ajuste de Hoja de Contactos",
             pnote_mp('&iquest;Necesitas el ajuste 6-Up? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Mira el video de instalaci&oacute;n</strong></a>, luego agr&eacute;galo a Lightroom Classic &rarr; m&oacute;dulo Print. Los configuraste en el m&oacute;dulo Image Series.'), True)
-        es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 05 - Presentaci&oacute;n y Reflexi&oacute;n","Termina tu presentaci&oacute;n, pres&eacute;ntala a la clase y responde la reflexi&oacute;n en la diapositiva final.")
+        es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 05 - Presentaci&oacute;n y Reflexi&oacute;n","Termina tu PowerPoint, pres&eacute;ntalo a la clase y responde la reflexi&oacute;n en la p&aacute;gina final.")
 
         return wrap_page(f"Step 4: Cull and Edit | Master Photographer | {CL} | PVHS", nav("Step 04",dots_for(3),step_topnav(3)), top_wrap(en,es), step_bottom(3))
 
     # ================= STEP 05: Presentation & Reflection =================
     def step05():
         en=banner(f"{PROJ_LABEL} &bull;Step 05","Presentation &amp; Reflection",
-            "Finish your slideshow, present it to the class, and answer the reflection on the closing slide.",
+            "Finish your PowerPoint, present it to the class, and answer the reflection on the closing page.",
             "#espanol","Clic para Espa&ntilde;ol", HICON_REFLECT)
         en+=card("STEP 05 &middot; FINISH AND PRESENT","Put Master and Student Work Side by Side",
-            (float_right(PRESENT_FLOAT,"A student presenting their master photographer slides to the class","Present your master&rsquo;s work and your own, side by side.") if HAVE_PRESENT else "")
-            + para("Time to finish your slideshow. You already have your Cover and three Master slides from Step 02. Now add your <strong>three edited photos</strong> and your <strong>reflection</strong>, then present the whole thing to the class.")
-            + para("Your deck shows your master photographer&rsquo;s work and your work <strong>side by side</strong>, so everyone can see what you studied and how you made it your own."))
+            (float_right(PRESENT_FLOAT,"A student presenting their master photographer PowerPoint to the class","Present your master&rsquo;s work and your own, side by side.") if HAVE_PRESENT else "")
+            + para("Time to finish your PowerPoint. You already have your Cover and three Master pages from Step 02. Now add your <strong>three edited photos</strong> and your <strong>reflection</strong>, then present the whole thing to the class.")
+            + para("Your PowerPoint shows your master photographer&rsquo;s work and your work <strong>side by side</strong>, so everyone can see what you studied and how you made it your own."))
         en+=deliverables_box(False,
-            [("Your finished deck (.pptx or .key):","the full slideshow (cover, 3 master slides, your 3 edited photos, and the reflection closing slide), presented to the class and uploaded to this Canvas assignment.")])
+            [("Your finished PowerPoint (.pptx):","the full PowerPoint (cover, 3 master pages, your 3 edited photos, and the reflection closing page), presented to the class and uploaded to this Canvas assignment.")])
         en+=deck_showcase(False, DECKPREV)
-        en+=card("BUILD THE REST OF YOUR DECK","Add Your Photos and Your Notes",
-            para("Open the deck you started in Step 02 and finish it.")
+        en+=card("BUILD THE REST OF YOUR POWERPOINT","Add Your Photos and Your Notes",
+            para("Open the PowerPoint you started in Step 02 and finish it.")
             + steps([
-                ("Add your three edited photos.","Place one of your final JPGs on each of the three My Work slides."),
-                ("Write how you used your master&rsquo;s style.","On each slide, say what you borrowed: composition, light, the moment, tonal range, or editing."),
-                ("Fill the reflection slide.","Answer the three reflection questions on the closing slide."),
-                ("Check every slide.","Make sure your name is on the cover and all six images are in place."),
+                ("Add your three edited photos.","Place one of your final JPGs on each of the three My Work pages."),
+                ("Write how you used your master&rsquo;s style.","On each page, say what you borrowed: composition, light, the moment, tonal range, or editing."),
+                ("Fill the reflection page.","Answer the three reflection questions on the closing page."),
+                ("Check every page.","Make sure your name is on the cover and all six images are in place."),
             ]))
         en+=card("PRESENT TO THE CLASS","Share Your Work Out Loud",
-            para("You will present your slideshow to the class. Keep it short and clear, about <strong>3 to 5 minutes</strong>.")
+            para("You will present your PowerPoint to the class. Keep it short and clear, about <strong>3 to 5 minutes</strong>.")
             + bullets([
                 ("Introduce your master:","who they are and the style you studied."),
                 ("Walk through your three master images:","name the technique on each one."),
@@ -920,8 +920,8 @@ def build(mode, C):
                 ("End with your reflection:","what you learned and what you will carry forward."),
             ])
             + note("Speak clearly and look up at your classmates. You know your work better than anyone in the room."))
-        en+=card("REFLECTION &middot; CLOSING SLIDE","Finish With an Honest Reflection",
-            para("Your last slide is your <strong>reflection</strong>. Answer these three questions in a few honest sentences:")
+        en+=card("REFLECTION &middot; CLOSING PAGE","Finish With an Honest Reflection",
+            para("Your last page is your <strong>reflection</strong>. Answer these three questions in a few honest sentences:")
             + bullets([
                 ("What you learned:","what is the most important thing you learned from your master photographer?"),
                 ("What changed:","how did studying their work change the way you capture or edit your own photos?"),
@@ -930,25 +930,25 @@ def build(mode, C):
         en+=next_up("YOU DID IT &middot; PROJECT COMPLETE","You studied a master, made the style your own, and presented it. That is how real photographers grow.")
 
         es=banner(f"{PROJ_LABEL_ES} &bull;Paso 05","Presentaci&oacute;n y Reflexi&oacute;n",
-            "Termina tu presentaci&oacute;n, pres&eacute;ntala a la clase y responde la reflexi&oacute;n en la diapositiva final.",
+            "Termina tu PowerPoint, pres&eacute;ntalo a la clase y responde la reflexi&oacute;n en la p&aacute;gina final.",
             "#top","Back to English", HICON_REFLECT)
         es+=card("PASO 05 &middot; TERMINA Y PRESENTA","Pon el Trabajo del Maestro y el Tuyo Lado a Lado",
-            (float_right(PRESENT_FLOAT,"Una estudiante presentando sus diapositivas del fot&oacute;grafo maestro a la clase","Presenta el trabajo de tu maestro y el tuyo, lado a lado.") if HAVE_PRESENT else "")
-            + para("Hora de terminar tu presentaci&oacute;n. Ya tienes tu portada y tus tres diapositivas del maestro del Paso 02. Ahora agrega tus <strong>tres fotos editadas</strong> y tu <strong>reflexi&oacute;n</strong>, luego presenta todo a la clase.")
-            + para("Tu presentaci&oacute;n muestra el trabajo de tu fot&oacute;grafo maestro y el tuyo <strong>lado a lado</strong>, para que todos vean qu&eacute; estudiaste y c&oacute;mo lo hiciste tuyo."))
+            (float_right(PRESENT_FLOAT,"Una estudiante presentando su PowerPoint del fot&oacute;grafo maestro a la clase","Presenta el trabajo de tu maestro y el tuyo, lado a lado.") if HAVE_PRESENT else "")
+            + para("Hora de terminar tu PowerPoint. Ya tienes tu portada y tus tres p&aacute;ginas del maestro del Paso 02. Ahora agrega tus <strong>tres fotos editadas</strong> y tu <strong>reflexi&oacute;n</strong>, luego presenta todo a la clase.")
+            + para("Tu PowerPoint muestra el trabajo de tu fot&oacute;grafo maestro y el tuyo <strong>lado a lado</strong>, para que todos vean qu&eacute; estudiaste y c&oacute;mo lo hiciste tuyo."))
         es+=deliverables_box(True,
-            [("Tu presentaci&oacute;n terminada (.pptx o .key):","la presentaci&oacute;n completa (portada, 3 diapositivas del maestro, tus 3 fotos editadas y la diapositiva final de reflexi&oacute;n), presentada a la clase y subida a esta tarea de Canvas.")])
+            [("Tu PowerPoint terminado (.pptx):","el PowerPoint completo (portada, 3 p&aacute;ginas del maestro, tus 3 fotos editadas y la p&aacute;gina final de reflexi&oacute;n), presentado a la clase y subido a esta tarea de Canvas.")])
         es+=deck_showcase(True, DECKPREV)
-        es+=card("CONSTRUYE EL RESTO DE TU PRESENTACI&Oacute;N","Agrega Tus Fotos y Tus Notas",
-            para("Abre la presentaci&oacute;n que empezaste en el Paso 02 y term&iacute;nala.")
+        es+=card("CONSTRUYE EL RESTO DE TU POWERPOINT","Agrega Tus Fotos y Tus Notas",
+            para("Abre el PowerPoint que empezaste en el Paso 02 y term&iacute;nalo.")
             + steps([
-                ("Agrega tus tres fotos editadas.","Coloca uno de tus JPG finales en cada una de las tres diapositivas de Tu Trabajo."),
-                ("Escribe c&oacute;mo usaste el estilo de tu maestro.","En cada diapositiva, di qu&eacute; tomaste prestado: composici&oacute;n, luz, el momento, el rango tonal o la edici&oacute;n."),
-                ("Llena la diapositiva de reflexi&oacute;n.","Responde las tres preguntas de reflexi&oacute;n en la diapositiva final."),
-                ("Revisa cada diapositiva.","Aseg&uacute;rate de que tu nombre est&eacute; en la portada y las seis im&aacute;genes est&eacute;n en su lugar."),
+                ("Agrega tus tres fotos editadas.","Coloca uno de tus JPG finales en cada una de las tres p&aacute;ginas de Tu Trabajo."),
+                ("Escribe c&oacute;mo usaste el estilo de tu maestro.","En cada p&aacute;gina, di qu&eacute; tomaste prestado: composici&oacute;n, luz, el momento, el rango tonal o la edici&oacute;n."),
+                ("Llena la p&aacute;gina de reflexi&oacute;n.","Responde las tres preguntas de reflexi&oacute;n en la p&aacute;gina final."),
+                ("Revisa cada p&aacute;gina.","Aseg&uacute;rate de que tu nombre est&eacute; en la portada y las seis im&aacute;genes est&eacute;n en su lugar."),
             ]))
         es+=card("PRESENTA A LA CLASE","Comparte Tu Trabajo en Voz Alta",
-            para("Presentar&aacute;s tu presentaci&oacute;n a la clase. Que sea corta y clara, como <strong>3 a 5 minutos</strong>.")
+            para("Presentar&aacute;s tu PowerPoint a la clase. Que sea corto y claro, como <strong>3 a 5 minutos</strong>.")
             + bullets([
                 ("Presenta a tu maestro:","qui&eacute;n es y el estilo que estudiaste."),
                 ("Recorre tus tres im&aacute;genes del maestro:","nombra la t&eacute;cnica en cada una."),
@@ -956,8 +956,8 @@ def build(mode, C):
                 ("Termina con tu reflexi&oacute;n:","qu&eacute; aprendiste y qu&eacute; vas a llevarte contigo."),
             ])
             + note("Habla con claridad y mira a tus compa&ntilde;eros. T&uacute; conoces tu trabajo mejor que nadie en el sal&oacute;n."))
-        es+=card("REFLEXI&Oacute;N &middot; DIAPOSITIVA FINAL","Termina con una Reflexi&oacute;n Honesta",
-            para("Tu &uacute;ltima diapositiva es tu <strong>reflexi&oacute;n</strong>. Responde estas tres preguntas en unas cuantas oraciones honestas:")
+        es+=card("REFLEXI&Oacute;N &middot; P&Aacute;GINA FINAL","Termina con una Reflexi&oacute;n Honesta",
+            para("Tu &uacute;ltima p&aacute;gina es tu <strong>reflexi&oacute;n</strong>. Responde estas tres preguntas en unas cuantas oraciones honestas:")
             + bullets([
                 ("Qu&eacute; aprendiste:","&iquest;qu&eacute; es lo m&aacute;s importante que aprendiste de tu fot&oacute;grafo maestro?"),
                 ("Qu&eacute; cambi&oacute;:","&iquest;c&oacute;mo cambi&oacute; estudiar su trabajo la forma en que capturas o editas tus propias fotos?"),
