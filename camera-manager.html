@@ -4837,7 +4837,7 @@
     var rem=cardHoursLeft(c.held_at), expired=(rem<=0);
     var nm=esc(lastFirst(c.student_name));
     var sid=c.student_id?esc(String(c.student_id)):'';
-    var per=(c.period!=null && String(c.period).trim()!=='')?('<span class="wslot-per">Per '+esc(String(c.period))+'</span>'):'';
+    var per=(c.period!=null && String(c.period).trim()!=='')?('<span class="wslot-per">Period '+esc(('0'+String(c.period).trim()).slice(-2))+'</span>'):'';
     var meta=(c.from_camera?('from '+esc(c.from_camera)+' &middot; '):'')+'held '+fmtHeld(c.held_at);
     // Name (Last, First) taps through to the ONE full student profile; the student number sits below it.
     var nameBlock=sid
