@@ -991,7 +991,8 @@
   .inv-st .who{color:#cfe8e8;font-weight:700;}
   .inv-st.state-out{color:#ffd2c2;} .inv-st.state-overdue{color:#ff9a8a;} .inv-st.state-avail{color:#8ff0b0;} .inv-st.state-resv{color:#ffd889;} .inv-st.state-oos{color:var(--faint);}
   .camtile.inv-tile{cursor:default;border-left-color:var(--g-edge-soft);}
-  .camtile.inv-tile .kit-sw{margin-top:4px;}
+  .camtile.inv-tile .kit-sw{margin-top:auto;}   /* pin the HERE/OUT toggle to the tile bottom so every toggle in a row lines up (grid stretches tiles to equal height), no matter how long the status text is */
+  .camtile.inv-missing .inv-over,.camtile.inv-missing .inv-sent{margin-top:auto;}   /* same bottom-pin for the Send to Overdue action in the missing phase */
   .camtile.inv-changed{border-left-color:#19d3d3;border-color:rgba(0,184,184,.5);background:rgba(0,184,184,.07);}
   .camtile.inv-missing{cursor:default;border-left-color:var(--red);border-color:rgba(224,64,58,.5);background:rgba(224,64,58,.1);animation:cardFlash 1.5s ease-in-out infinite;}
   @media (prefers-reduced-motion:reduce){ .camtile.inv-missing{animation:none;box-shadow:0 0 0 2px rgba(224,64,58,.3);} }
@@ -4105,6 +4106,12 @@
     '</button>';
   }
   function manageGearTile(id){
+    // Update Inventory Log, IN-PLACE: a gear unit tile becomes a HERE/OUT toggle (edit phase), or a red
+    // "unaccounted" tile after Save, exactly like the camera tiles (Chris 2026-11-19: gear added to the reconcile).
+    if(INVLOG_MODE){
+      if(INVLOG_PHASE==='missing'){ if(invLogMissing[id]) return invGearMissingTile(id); /* non-flagged units fall through to the normal tile */ }
+      else return invGearToggleTile(id);
+    }
     var u=gearUnit(id)||{}, cond=gearCond(id), hk=gearHasKit(id);
     var p=gearKitPct(id), pcls=(p==null?'na':(p>=100?'':(p>=70?'mid':'low')));
     // Kit-less gear (iPad styluses) carries no kit % chip and no "complete" kit rating: just the unit,
@@ -4194,7 +4201,7 @@
       CAT_ORDER.forEach(function(cat){ var types=buckets[cat]; if(!types||!types.length) return;
         var n=0, grid=''; types.forEach(function(t){ gByType[t].forEach(function(id){ grid+=manageGearTile(id); n++; }); });
         var sk='gcat'+cat;
-        out+='<div class="csec sec-equip'+(secOpen(sk)?' open':'')+'">'+
+        out+='<div class="csec sec-equip'+((INVLOG_MODE||secOpen(sk))?' open':'')+'">'+
           '<button class="csec-head" type="button" data-sectoggle="'+sk+'"><span class="csec-dot equip"></span>'+esc(cat)+' <span class="csec-n">'+n+'</span><span class="csec-chev"></span></button>'+
           '<div class="csec-body"><div class="camgrid">'+grid+'</div></div>'+
         '</div>';
@@ -4208,11 +4215,11 @@
       var pIds=gByType['apple_pencil']||[];
       var pLab=(gtypes['apple_pencil']&&gtypes['apple_pencil'].label)||'iPad Stylus';
       var pTitle=pLab+(/s$/i.test(pLab)?'es':'s');
-      var pencilsSection='<div class="csec sec-equip'+(secOpen('mkpencils')?' open':'')+'">'+
+      var pencilsSection='<div class="csec sec-equip'+((INVLOG_MODE||secOpen('mkpencils'))?' open':'')+'">'+
         '<button class="csec-head" type="button" data-sectoggle="mkpencils"><span class="csec-dot equip"></span>'+esc(pTitle)+' <span class="csec-n">'+pIds.length+' units</span><span class="csec-chev"></span></button>'+
         '<div class="csec-body"><div class="camgrid">'+(pIds.length?pIds.map(manageGearTile).join(''):'<div class="foot">None yet.</div>')+'</div></div>'+
       '</div>';
-      var camsSection='<div class="csec sec-equip'+(secOpen('mkcams')?' open':'')+'">'+
+      var camsSection='<div class="csec sec-equip'+((INVLOG_MODE||secOpen('mkcams'))?' open':'')+'">'+
         '<button class="csec-head" type="button" data-sectoggle="mkcams"><span class="csec-dot equip"></span>Cameras <span class="csec-n">'+mcams.length+'</span><span class="csec-chev"></span></button>'+
         '<div class="csec-body">'+mgrid+'</div>'+
       '</div>';
@@ -4222,7 +4229,7 @@
         restHtml+='<div class="geargroup"><div class="geargroup-h">'+esc(tl)+'<span class="geargroup-n">'+ids.length+'</span></div>'+
           '<div class="camgrid">'+ids.map(manageGearTile).join('')+'</div></div>';
       });
-      var addlSection='<div class="csec sec-equip'+(eopen?' open':'')+'">'+
+      var addlSection='<div class="csec sec-equip'+((INVLOG_MODE||eopen)?' open':'')+'">'+
         '<button class="csec-head" type="button" data-sectoggle="equip"><span class="csec-dot equip"></span>Additional equipment <span class="csec-n">'+(gpool.length-pIds.length)+' units</span><span class="csec-chev"></span></button>'+
         '<div class="csec-body">'+(restHtml||'<div class="foot">No equipment units yet.</div>')+'</div>'+
       '</div>';
@@ -4236,9 +4243,9 @@
     var invLogBtn;
     if(INVLOG_MODE && INVLOG_PHASE==='missing'){
       var _mk=Object.keys(invLogMissing), _ms=_mk.filter(function(k){ return invLogMissing[k].sent; }).length;
-      invLogBtn='<div class="mh-invbar phase-missing"><span class="mh-invbar-txt">The cameras in <b>red</b> are gone and nobody has them reserved. Send each to the Overdue queue under its last holder, or tap Done. <b>'+_ms+' of '+_mk.length+' sent.</b></span><span class="mh-invbar-acts"><button type="button" class="mh-invsave" data-invdone="1">Done</button></span></div>';
+      invLogBtn='<div class="mh-invbar phase-missing"><span class="mh-invbar-txt">The items in <b>red</b> are gone and nobody has them reserved. Send each to the Overdue queue under its last holder, or tap Done. <b>'+_ms+' of '+_mk.length+' sent.</b></span><span class="mh-invbar-acts"><button type="button" class="mh-invsave" data-invdone="1">Done</button></span></div>';
     } else if(INVLOG_MODE){
-      invLogBtn='<div class="mh-invbar"><span class="mh-invbar-txt">Flip each camera to <b>Here</b> or <b>Out</b> to match what is physically on hand, then Save. One marked <b>Here</b> that is still out gets checked in; one marked <b>Out</b> that nobody reserved gets flagged to send to Overdue.</span><span class="mh-invbar-acts"><button type="button" class="mh-invcancel" data-invcancel="1">Cancel</button><button type="button" class="mh-invsave" data-invsave="1">Save inventory</button></span></div>';
+      invLogBtn='<div class="mh-invbar"><span class="mh-invbar-txt">Flip each item to <b>Here</b> or <b>Out</b> to match what is physically on hand, then Save. One marked <b>Here</b> that is still out gets checked in; one marked <b>Out</b> that nobody reserved gets flagged to send to Overdue.</span><span class="mh-invbar-acts"><button type="button" class="mh-invcancel" data-invcancel="1">Cancel</button><button type="button" class="mh-invsave" data-invsave="1">Save inventory</button></span></div>';
     } else {
       invLogBtn='<div class="mh-toolbar"><button type="button" class="mh-invlog" data-invlog="1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Update Inventory Log</button></div>';
     }
@@ -4748,19 +4755,22 @@
   var INVLOG_MODE=false, INVLOG_PHASE='edit';   // 'edit' = flip toggles; 'missing' = work the flagged red tiles
   var invLogState=null;                          // {cam:'here'|'out'} while the overlay is open
   var invLogMissing={};                          // {cam:{holder:rec|null, sent:bool}} after Save: the unaccounted kits
-  function invLogSysState(cam){ var s=camState(cam); return (s==='out'||s==='overdue')?'out':'here'; }   // the board's current belief, as a toggle position
-  function invLogLastHolder(cam){
-    var recs=(DATA.checkouts||[]).filter(function(c){ return c.camera===cam && c.kind!=='equipment' && statusOf(c)==='returned'; });
+  function invIsGear(id){ return !!gearUnit(id); }   // a gear unit id vs a camera id (separate registries, never collide)
+  function invLogSysState(id){ var s=invIsGear(id)?gearState(id):camState(id); return (s==='out'||s==='overdue')?'out':'here'; }   // the board's current belief, as a toggle position
+  function invLogLastHolder(id){
+    var isG=invIsGear(id);
+    var recs=(DATA.checkouts||[]).filter(function(c){ return isG ? (c.kind==='equipment' && c.item===id && statusOf(c)==='returned')
+                                                                   : (c.camera===id && c.kind!=='equipment' && statusOf(c)==='returned'); });
     recs.sort(function(a,b){ return (b.returned_date||b.created||'')>(a.returned_date||a.created||'')?1:-1; });
     return recs[0]||null;
   }
-  function invLogStatusHtml(cam){
-    var s=camState(cam), c=activeFor(cam);
+  function invLogStatusHtml(id){
+    var isG=invIsGear(id), s=isG?gearState(id):camState(id), c=isG?gearActiveFor(id):activeFor(id);
     var who=c?('<span class="who">'+esc(nameOf(c))+(c.period?(' P'+esc(c.period)):'')+'</span>'):'';
     if(s==='overdue') return {cls:'state-overdue', html:'Overdue &middot; '+who+(c&&c.due?(' &middot; due '+fmt(c.due)):'')};
     if(s==='out')     return {cls:'state-out',     html:'Checked out &middot; '+who+(c&&c.due?(' &middot; due '+fmt(c.due)):'')};
     if(s==='resv')    return {cls:'state-resv',    html:'Reserved today &middot; '+who};
-    if(s==='oos'){ var a=assetOf(cam); return {cls:'state-oos', html:a.oos?'Out of service':'Card missing'}; }
+    if(s==='oos'){ var a=assetOf(id); return {cls:'state-oos', html:isG?'Out of service':(a.oos?'Out of service':'Card missing')}; }
     return {cls:'state-avail', html:'Available &middot; in stock'};
   }
   // Edit phase: the camera tile shows its checkout status + a HERE|OUT toggle, pre-set to the board's belief.
@@ -4790,9 +4800,36 @@
       '</span>'+
     '</div>';
   }
+  // Gear (per-unit) mirrors of the camera reconcile tiles: a HERE|OUT toggle in edit phase, a red
+  // unaccounted tile in missing phase. Reuses the same .inv-* / .kit-sw styling as the cameras.
+  function invGearToggleTile(id){
+    var u=gearUnit(id)||{};
+    var here=(invLogState&&invLogState[id]!=='out'), changed=(invLogState&&invLogState[id]!==invLogSysState(id));
+    var st=invLogStatusHtml(id);
+    return '<div class="camtile gtile inv-tile'+(changed?' inv-changed':'')+'">'+gearThumb(u.type)+
+      '<span class="gtile-main">'+
+        '<span class="camtile-top"><span class="camtile-n">'+esc(u.label||id)+'</span></span>'+
+        '<span class="inv-st '+st.cls+'">'+st.html+'</span>'+
+        '<button type="button" class="kit-sw'+(here?'':' missing')+'" data-invslide="'+esc(id)+'" data-stop="1" aria-pressed="'+(here?'true':'false')+'"><span class="kit-sw-track"><span class="kit-sw-knob"></span></span><span class="kit-sw-lab">'+(here?'Here':'Out')+'</span></button>'+
+      '</span>'+
+    '</div>';
+  }
+  function invGearMissingTile(id){
+    var u=gearUnit(id)||{}, mi=invLogMissing[id]||{}, lh=mi.holder;
+    var who=lh?('<b>'+esc(nameOf(lh))+'</b>'+(lh.period?(' &middot; P'+esc(lh.period)):'')+(lh.student_cell?(' &middot; '+esc(lh.student_cell)):'')):'<span class="muted">No checkout history on file</span>';
+    var act=mi.sent?'<span class="inv-sent">Sent to Overdue</span>'
+      :(lh?'<button type="button" class="inv-over" data-invover="'+esc(id)+'" data-stop="1">Send to Overdue</button>':'<span class="inv-sent muted">Nothing to chase</span>');
+    return '<div class="camtile gtile inv-missing">'+gearThumb(u.type)+
+      '<span class="gtile-main">'+
+        '<span class="camtile-top"><span class="camtile-n">'+esc(u.label||id)+'</span><span class="inv-flag">Unaccounted</span></span>'+
+        '<span class="inv-last">Last out: '+who+'</span>'+
+        act+
+      '</span>'+
+    '</div>';
+  }
   function startInventoryLog(){
     INVLOG_MODE=true; INVLOG_PHASE='edit'; invLogMissing={};
-    invLogState={}; displayCams().forEach(function(cam){ invLogState[cam]=invLogSysState(cam); });
+    invLogState={}; displayCams().concat(gearPoolIds()).forEach(function(id){ invLogState[id]=invLogSysState(id); });
     setSecOpen('manage',true); setSecOpen('mkcams',true);   // keep the Manage hub (and Mankin's camera accordion) open
     _lastBoardSig=null; renderBoard();
     var hub=document.querySelector('.manage-hub'); if(hub) hub.scrollIntoView({behavior:'smooth',block:'start'});
@@ -4800,33 +4837,54 @@
   function exitInventoryLog(){ INVLOG_MODE=false; INVLOG_PHASE='edit'; invLogState=null; invLogMissing={}; _lastBoardSig=null; renderBoard(); }
   function invLogSave(){
     if(!invLogState) return;
+    var units=displayCams().concat(gearPoolIds());
     var checkIns=[], pickups=[], missing=[];
-    displayCams().forEach(function(cam){ var want=invLogState[cam], sys=camState(cam);
-      if(want==='here' && (sys==='out'||sys==='overdue')) checkIns.push(cam);
-      else if(want==='out' && sys==='avail') missing.push(cam);
-      else if(want==='out' && sys==='resv') pickups.push(cam);
-      else if(want==='out' && sys==='oos') missing.push(cam);
+    units.forEach(function(id){ var want=invLogState[id]; if(!want) return; var sys=invIsGear(id)?gearState(id):camState(id);
+      if(want==='here' && (sys==='out'||sys==='overdue')) checkIns.push(id);
+      else if(want==='out' && sys==='resv') pickups.push(id);
+      else if(want==='out' && (sys==='avail'||sys==='oos')) missing.push(id);
     });
     if(!checkIns.length && !pickups.length && !missing.length){ silvaToast('Nothing to update: the log matches the board.'); return; }
+    function unitLabel(id){ return invIsGear(id)?gearLabel(id):id; }
+    function labelList(arr){ return arr.map(unitLabel).join(', '); }
     var parts=[];
-    if(checkIns.length) parts.push('check in '+checkIns.length+' ('+checkIns.join(', ')+')');
-    if(pickups.length) parts.push('mark '+pickups.length+' picked up ('+pickups.join(', ')+')');
+    if(checkIns.length) parts.push('check in '+checkIns.length+' ('+labelList(checkIns)+')');
+    if(pickups.length) parts.push('mark '+pickups.length+' picked up ('+labelList(pickups)+')');
     if(missing.length) parts.push('flag '+missing.length+' as unaccounted to work next');
     silvaConfirm('Update the board to match? This will '+parts.join('; ')+'.',{okLabel:'Update board',cancelLabel:'Keep editing'}).then(function(ok){
       if(!ok) return;
-      var jobs=[];
-      function post(id,status){ return camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})}); }
-      checkIns.forEach(function(cam){ var c=activeFor(cam); if(!c) return; resvItems(c).forEach(function(it){ if(statusOf(it)!=='returned') jobs.push(post(it.id,'returned')); }); });
-      pickups.forEach(function(cam){ var c=activeFor(cam); if(!c) return; resvItems(c).forEach(function(it){ if(statusOf(it)==='reserved') jobs.push(post(it.id,'out')); }); });
+      var jobs=[], posted={};
+      function post(id,status){ if(posted[id]) return; posted[id]=1; jobs.push(camAPI('/api/camera/status',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({id:id,status:status})})); }
+      // Cameras keep their kit behavior: checking a camera in returns its whole bundle, EXCEPT any gear the
+      // teacher explicitly left Out. Gear flipped on its own (a-la-carte, or kept while its camera stays out)
+      // runs through its own branch. The dedupe guard means a unit swept by its camera never posts twice.
+      checkIns.forEach(function(id){
+        if(invIsGear(id)){ var g=gearActiveFor(id); if(g && statusOf(g)==='out') post(g.id,'returned'); return; }
+        var c=activeFor(id); if(!c) return;
+        resvItems(c).forEach(function(it){
+          if(statusOf(it)==='returned') return;
+          if(it.kind==='equipment' && invLogState[it.item]==='out') return;   // teacher says this gear is still out
+          post(it.id,'returned');
+        });
+      });
+      pickups.forEach(function(id){
+        if(invIsGear(id)){ var g=gearActiveFor(id); if(g && statusOf(g)==='reserved') post(g.id,'out'); return; }
+        var c=activeFor(id); if(!c) return;
+        resvItems(c).forEach(function(it){
+          if(statusOf(it)!=='reserved') return;
+          if(it.kind==='equipment' && invLogState[it.item]==='here') return;   // teacher says this gear stayed behind
+          post(it.id,'out');
+        });
+      });
       var save=document.querySelector('[data-invsave]'); if(save){ save.disabled=true; save.textContent='Saving…'; }
       Promise.all(jobs).then(function(){ return loadBoard(); }).then(reloadCal).then(function(){
         var done=checkIns.length+pickups.length;
         if(missing.length){
-          invLogMissing={}; missing.forEach(function(cam){ invLogMissing[cam]={holder:invLogLastHolder(cam),sent:false}; });
+          invLogMissing={}; missing.forEach(function(id){ invLogMissing[id]={holder:invLogLastHolder(id),sent:false}; });
           INVLOG_PHASE='missing'; _lastBoardSig=null; renderBoard();
-          silvaToast(done?('Updated '+done+' &middot; now work the cameras in red'):'Now work the cameras in red');
+          silvaToast(done?('Updated '+done+' &middot; now work the items in red'):'Now work the items in red');
         } else {
-          silvaToast(done?('Inventory updated &middot; '+done+' camera'+(done>1?'s':'')):'Inventory updated'); exitInventoryLog();
+          silvaToast(done?('Inventory updated &middot; '+done+' item'+(done>1?'s':'')):'Inventory updated'); exitInventoryLog();
         }
       }).catch(function(){ if(save){ save.disabled=false; save.textContent='Save inventory'; } silvaToast('Could not save. Try again.'); });
     });
@@ -4839,7 +4897,7 @@
       .then(function(){ return loadBoard(); }).then(reloadCal).then(function(){
         if(invLogMissing[cam]) invLogMissing[cam].sent=true;
         _lastBoardSig=null; renderBoard();
-        silvaToast(cam+' sent to Overdue under '+nameOf(lh)+'.');
+        silvaToast((invIsGear(cam)?gearLabel(cam):cam)+' sent to Overdue under '+nameOf(lh)+'.');
       }).catch(function(){ if(btn){ btn.disabled=false; btn.textContent='Send to Overdue'; } silvaToast('Could not send. Try again.'); });
   }
 
