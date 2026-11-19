@@ -432,13 +432,16 @@ body{background-image:radial-gradient(30% 22% at 29% 29%, rgba(0,184,184,.85), t
 /* ===== Holiday / maintenance closure notice (Chris 2026-11-19): a prominent frosted-glass banner at the top of the
    store, amber-accented so it reads as an important notice over the teal UI. JS auto-hides it after the break. ===== */
 .store-notice{position:relative;z-index:2;margin:14px 0 2px;}
-.store-notice .sn-row{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;border-radius:var(--g-r-lg);background:var(--g-glass);border:1px solid rgba(245,179,1,.42);border-left:4px solid #f5b301;box-shadow:0 10px 30px rgba(4,8,20,.28),inset 0 1px 0 rgba(255,255,255,.12);backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);}
-.store-notice .sn-ic{flex:0 0 auto;width:30px;height:30px;color:#ffcf5a;margin-top:1px;}
+.store-notice .sn-row{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;border-radius:var(--g-r-lg);border:1px solid rgba(224,64,58,.5);border-left:4px solid #e0403a;backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);animation:snFlash 1.6s ease-in-out infinite;}
+/* Same pulsing red glow as an SD card that needs formatting (Chris 2026-11-19): a red ring + red wash breathe over the frosted glass. */
+@keyframes snFlash{0%,100%{background:linear-gradient(160deg,rgba(224,64,58,.10),rgba(224,64,58,.05)),var(--g-glass);box-shadow:0 0 0 0 rgba(224,64,58,0),0 10px 30px rgba(4,8,20,.28),inset 0 1px 0 rgba(255,255,255,.1);}50%{background:linear-gradient(160deg,rgba(224,64,58,.20),rgba(224,64,58,.10)),var(--g-glass);box-shadow:0 0 20px 3px rgba(224,64,58,.34),0 0 0 1px rgba(224,64,58,.45),0 10px 30px rgba(4,8,20,.28),inset 0 1px 0 rgba(255,255,255,.1);}}
+@media (prefers-reduced-motion:reduce){.store-notice .sn-row{animation:none;background:linear-gradient(160deg,rgba(224,64,58,.16),rgba(224,64,58,.08)),var(--g-glass);box-shadow:0 0 0 2px rgba(224,64,58,.4),0 10px 30px rgba(4,8,20,.3);}}
+.store-notice .sn-ic{flex:0 0 auto;width:30px;height:30px;color:#ff6b60;margin-top:1px;}
 .store-notice .sn-ic svg{width:100%;height:100%;display:block;}
 .store-notice .sn-text{display:flex;flex-direction:column;gap:5px;min-width:0;}
-.store-notice .sn-eyebrow{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1rem;color:#ffd77a;line-height:1.25;}
+.store-notice .sn-eyebrow{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1rem;color:#ff6b60;line-height:1.25;}
 .store-notice .sn-body{font-size:.92rem;line-height:1.5;color:var(--g-muted);}
-.store-notice .sn-body b{color:#ffe3a0;font-weight:700;white-space:nowrap;}
+.store-notice .sn-body b{color:#ffb3a6;font-weight:700;white-space:nowrap;}
 @media (max-width:640px){
   .store-notice{margin:10px 0 0;}
   .store-notice .sn-row{padding:13px 14px;gap:11px;}
