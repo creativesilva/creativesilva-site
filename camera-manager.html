@@ -1096,21 +1096,22 @@
   /* Held-card student name is a click target -> contact + period + teacher. */
   .wslot-wholink{font-weight:600;color:#fff;font-size:.9rem;line-height:1.2;background:none;border:0;padding:0;text-align:left;cursor:pointer;font-family:inherit;text-decoration:underline;text-decoration-color:rgba(0,184,184,.45);text-underline-offset:3px;}
   .wslot-wholink:hover{color:var(--teal-lt);}
-  /* ===== Two-wallet accordion: mirrors the two physical Pixel Pocket Rocket wallets (1-9, 10-18); ONE open at a time (Chris 2026-11-13). ===== */
-  .cwallet{margin-bottom:10px;}
-  .cwallet:last-child{margin-bottom:0;}
-  .cwallet-head{width:100%;display:flex;align-items:center;gap:12px;cursor:pointer;background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-md);color:var(--text);font-family:var(--font);padding:13px 16px;text-align:left;transition:border-color .18s ease,background .18s ease;}
-  .cwallet-head:hover{border-color:rgba(0,184,184,.45);}
-  .cwallet.open .cwallet-head{border-color:rgba(0,184,184,.5);background:rgba(0,184,184,.08);border-bottom-left-radius:0;border-bottom-right-radius:0;}
-  .cwallet-nm{font-family:var(--font);font-weight:700;font-size:1rem;letter-spacing:.05em;text-transform:uppercase;color:#5ff0f0;}
-  .cwallet-sub{font-family:var(--body);font-size:.82rem;color:var(--muted);letter-spacing:.02em;}
-  .cwallet-meta{margin-left:auto;display:flex;align-items:center;gap:13px;}
-  .cwallet-held{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);white-space:nowrap;}
-  .cwallet-held b{color:#ffd889;font-size:.95rem;letter-spacing:0;}
-  .cwallet-chev{width:9px;height:9px;border-right:2px solid var(--g-muted);border-bottom:2px solid var(--g-muted);transform:rotate(-45deg);transition:transform .2s ease;flex-shrink:0;}
-  .cwallet.open .cwallet-chev{transform:rotate(45deg);}
-  .cwallet-body{display:none;padding:12px 2px 2px;}
-  .cwallet.open .cwallet-body{display:block;animation:camAccOpen .22s ease;}
+  /* ===== Memory Card Wallet: ONE wallet shown at a time, chosen by an iOS segmented toggle; switching SLIDES the two 3x3 grids horizontally (wallet 1 = slots 1-9, wallet 2 = slots 10-18). Chris 2026-11-19. ===== */
+  .cwrap{display:flex;flex-direction:column;gap:12px;}
+  .cwswitch{position:relative;display:grid;grid-template-columns:1fr 1fr;padding:4px;background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-md);}
+  .cwseg-ind{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:calc(var(--g-r-md) - 3px);background:rgba(0,184,184,.16);border:1px solid rgba(0,184,184,.5);box-shadow:var(--g-spec);transition:transform .34s cubic-bezier(.4,0,.2,1);pointer-events:none;z-index:0;}
+  .cwrap[data-cwactive="2"] .cwseg-ind{transform:translateX(100%);}
+  .cwseg{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:50px;padding:8px 10px;background:transparent;border:0;cursor:pointer;font-family:inherit;text-align:center;}
+  .cwseg-nm{font-family:var(--font);font-weight:700;font-size:.92rem;letter-spacing:.05em;text-transform:uppercase;color:var(--g-muted);transition:color .2s ease;}
+  .cwseg.on .cwseg-nm{color:#5ff0f0;}
+  .cwseg-sub{font-family:var(--body);font-size:.74rem;letter-spacing:.02em;color:var(--faint);transition:color .2s ease;}
+  .cwseg.on .cwseg-sub{color:var(--muted);}
+  .cwseg-sub b{color:#ffd889;font-weight:700;}
+  .cwviewport{overflow:hidden;width:100%;}
+  .cwtrack{display:flex;width:200%;transition:transform .34s cubic-bezier(.4,0,.2,1);will-change:transform;}
+  .cwrap[data-cwactive="2"] .cwtrack{transform:translateX(-50%);}
+  .cwpane{flex:0 0 50%;width:50%;min-width:0;}
+  @media (prefers-reduced-motion:reduce){ .cwseg-ind,.cwtrack{transition:none;} }
   /* Card tile: the student NAME is the link to the one full profile; the student NUMBER sits right below it. */
   .wslot-name{font-weight:700;color:#fff;font-size:.95rem;line-height:1.2;background:none;border:0;padding:0;text-align:left;cursor:pointer;font-family:inherit;display:block;}
   .wslot-name:hover{color:var(--teal-lt);text-decoration:underline;text-decoration-color:rgba(0,184,184,.5);text-underline-offset:3px;}
@@ -1124,8 +1125,9 @@
     .wslot-name,.wslot-sid{font-size:.8rem;}
     .wslot-meta,.wslot-count,.wslot-fmtsub{font-size:.7rem;}
     .wslot-format{font-size:.74rem;}
-    .cwallet-sub{display:none;}
-    .cwallet-head{padding:11px 13px;gap:9px;}
+    .cwseg{min-height:46px;padding:7px 8px;}
+    .cwseg-nm{font-size:.84rem;}
+    .cwseg-sub{font-size:.68rem;}
   }
   .ci-status{font-family:var(--font);font-weight:700;font-size:.82rem;letter-spacing:.02em;margin-bottom:12px;}
   .ci-status.ok{color:#8ff0b0;} .ci-status.over{color:#ff6b60;}
@@ -4260,23 +4262,29 @@
     // ===== MEMORY CARD WALLET: its own hub. Silva + Garcia only (Mankin has no card wallet). =====
     var walletHtml='';
     if(SELECTED_POOL!=='mankin'){
-      var wheld=Object.keys(DATA.cards||{}).length, wOpen=secOpen('wallet'), cwOpen=cardWalletOpen();
-      // One wallet section (physical wallet 1 = slots 1-9, wallet 2 = slots 10-18). ONE open at a time.
-      function cwalletHtml(n, lo, hi){ var open=(cwOpen===n);
-        return '<div class="cwallet'+(open?' open':'')+'" data-cw="'+n+'">'+
-          '<button type="button" class="cwallet-head" data-cwallet="'+n+'" aria-expanded="'+(open?'true':'false')+'">'+
-            '<span class="cwallet-nm">Wallet '+n+'</span>'+
-            '<span class="cwallet-sub">Cards '+lo+'-'+hi+'</span>'+
-            '<span class="cwallet-meta"><span class="cwallet-held"><b>'+walletHeld(lo,hi)+'</b> held</span><span class="cwallet-chev"></span></span>'+
-          '</button>'+
-          '<div class="cwallet-body"><div class="wallet-grid">'+walletRangeHtml(lo,hi)+'</div></div>'+
-        '</div>'; }
+      var wheld=Object.keys(DATA.cards||{}).length, wOpen=secOpen('wallet'), cwActive=cardWalletOpen();
+      // ONE wallet shown at a time, chosen by an iOS segmented toggle; switching slides the two 3x3
+      // grids horizontally (physical wallet 1 = slots 1-9, wallet 2 = slots 10-18). Chris 2026-11-19.
+      function pad2(x){ return ('0'+x).slice(-2); }
+      function cwseg(n, lo, hi){ var on=(cwActive===n);
+        return '<button type="button" class="cwseg'+(on?' on':'')+'" data-cwallet="'+n+'" aria-pressed="'+(on?'true':'false')+'">'+
+          '<span class="cwseg-nm">Wallet '+n+'</span>'+
+          '<span class="cwseg-sub">'+pad2(lo)+'-'+pad2(hi)+' &middot; <b>'+walletHeld(lo,hi)+'</b> held</span>'+
+        '</button>'; }
       walletHtml='<div class="camhub wallet-hub'+(wOpen?' open':'')+'">'+
         '<div class="camhub-head" data-sectoggle="wallet">'+
           '<span class="camhub-titlebox"><span class="camhub-code">Holding</span><span class="camhub-title">Memory Card Wallet</span></span>'+
           '<span class="camhub-meta"><span class="csec-n">'+wheld+' held</span><span class="camhub-chev"></span></span>'+
         '</div>'+
-        '<div class="camhub-body">'+cwalletHtml(1,1,9)+cwalletHtml(2,10,18)+'</div>'+
+        '<div class="camhub-body">'+
+          '<div class="cwrap" data-cwactive="'+cwActive+'">'+
+            '<div class="cwswitch"><span class="cwseg-ind"></span>'+cwseg(1,1,9)+cwseg(2,10,18)+'</div>'+
+            '<div class="cwviewport"><div class="cwtrack">'+
+              '<div class="cwpane"><div class="wallet-grid">'+walletRangeHtml(1,9)+'</div></div>'+
+              '<div class="cwpane"><div class="wallet-grid">'+walletRangeHtml(10,18)+'</div></div>'+
+            '</div></div>'+
+          '</div>'+
+        '</div>'+
       '</div>';
     }
     // Reservation Activity (date selector + Checked out / Reserved / Returned accordions) sits ON TOP
@@ -4332,7 +4340,7 @@
     b.querySelectorAll('[data-invslide]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); var cam=el.getAttribute('data-invslide'); if(!invLogState) return; invLogState[cam]=(invLogState[cam]==='out')?'here':'out'; _lastBoardSig=null; renderBoard(); }; });
     b.querySelectorAll('[data-invover]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); invLogSendOverdue(el.getAttribute('data-invover'), el); }; });
     // Wallet accordion: open the tapped wallet, close the other (one open at a time). Pure class toggle, no re-render.
-    b.querySelectorAll('[data-cwallet]').forEach(function(el){ el.onclick=function(){ var n=+el.getAttribute('data-cwallet'); var hub=el.closest('.wallet-hub'); if(hub){ hub.querySelectorAll('.cwallet').forEach(function(w){ var on=(+w.getAttribute('data-cw')===n); w.classList.toggle('open',on); var hd=w.querySelector('.cwallet-head'); if(hd) hd.setAttribute('aria-expanded',on?'true':'false'); }); } setCardWalletOpen(n); }; });
+    b.querySelectorAll('[data-cwallet]').forEach(function(el){ el.onclick=function(){ var n=+el.getAttribute('data-cwallet'); var rap=el.closest('.cwrap'); if(rap){ rap.setAttribute('data-cwactive',n); rap.querySelectorAll('.cwseg').forEach(function(s){ var on=(+s.getAttribute('data-cwallet')===n); s.classList.toggle('on',on); s.setAttribute('aria-pressed',on?'true':'false'); }); } setCardWalletOpen(n); }; });
     b.querySelectorAll('[data-approve]').forEach(function(el){ el.onclick=function(){ approve(el.getAttribute('data-approve'), el); }; });
     // Reservation Activity: styled date picker, +/- one week arrows, and open-the-bundle taps.
     var _rd=b.querySelector('#ra-date');
