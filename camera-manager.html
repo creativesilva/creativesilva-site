@@ -1955,6 +1955,56 @@
   .att-fsbtn:hover{border-color:rgba(0,184,184,.5);color:#5ff0f0;}
   .att-fsbtn.on{color:#5ff0f0;border-color:rgba(0,184,184,.5);background:rgba(0,184,184,.12);}
   .att-fsbtn svg{width:19px;height:19px;}
+  /* Right-side control cluster: tally + See Log + lock slider + full screen, grouped so they wrap as a unit. */
+  .att-right{margin-left:auto;display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+  .att-right .att-tally{margin-left:0;}
+  .att-lockstamp{font-family:var(--font);font-weight:700;font-size:.64rem;letter-spacing:.05em;text-transform:uppercase;color:#ffcf8a;background:rgba(245,179,1,.14);border:1px solid rgba(245,179,1,.4);border-radius:var(--g-r-pill);padding:3px 9px;margin-left:6px;white-space:nowrap;}
+  .att-logbtn{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;font-family:var(--font);font-weight:700;font-size:.76rem;letter-spacing:.03em;color:var(--g-muted);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-pill);cursor:pointer;transition:border-color .16s,background .16s,color .16s;}
+  .att-logbtn:hover{border-color:rgba(0,184,184,.5);color:#5ff0f0;}
+  .att-logbtn svg{width:16px;height:16px;flex:0 0 auto;}
+  /* Slide-to-lock the roll: a padlock rides the knob (open -> closed), track turns teal when locked. */
+  .att-lock{flex:0 0 auto;position:relative;width:56px;height:32px;padding:0;border:1px solid var(--g-edge-soft);border-radius:999px;background:var(--g-glass-quiet);cursor:pointer;transition:background .2s,border-color .2s;}
+  .att-lock .att-lock-knob{position:absolute;top:2px;left:2px;width:26px;height:26px;border-radius:50%;background:#e9f6f6;color:#0a2440;display:flex;align-items:center;justify-content:center;transition:left .22s cubic-bezier(.4,0,.2,1),background .2s,color .2s;box-shadow:0 2px 6px rgba(0,0,0,.4);}
+  .att-lock .att-lock-knob svg{width:14px;height:14px;}
+  .att-lock.on{background:var(--g-teal-lt);border-color:transparent;}
+  .att-lock.on .att-lock-knob{left:28px;background:#04110f;color:#9ff3f3;}
+  @media (prefers-reduced-motion:reduce){ .att-lock .att-lock-knob{transition:none;} }
+  /* Frozen grid when the roll is locked. */
+  .att-sheet.att-locked .att-box{pointer-events:none;}
+  .att-sheet.att-locked .att-box:not(.on){opacity:.28;}
+  /* See Log report (portaled to body, floats above the full-screen hub + nav). */
+  .att-logmodal{position:fixed;inset:0;z-index:135;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(2,12,12,.66);backdrop-filter:blur(8px) saturate(1.1);-webkit-backdrop-filter:blur(8px) saturate(1.1);opacity:0;transition:opacity .18s;}
+  .att-logmodal.open{opacity:1;}
+  .att-logpanel{display:flex;flex-direction:column;width:580px;max-width:100%;max-height:calc(100vh - 40px);border-radius:var(--g-r-lg,18px);background:radial-gradient(130% 80% at 12% -8%, rgba(222,250,255,.14), transparent 52%), linear-gradient(162deg, rgba(10,30,54,.97), rgba(8,18,40,.98));border:1px solid var(--g-edge);box-shadow:var(--g-shadow-lg,0 30px 80px rgba(0,0,0,.6));}
+  .att-loghead{flex:0 0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 20px 12px;border-bottom:1px solid var(--g-edge-soft);}
+  .att-logtitle{display:flex;flex-direction:column;gap:3px;min-width:0;}
+  .att-logtitle b{font-family:var(--font);font-size:1.08rem;letter-spacing:.02em;color:#eafafa;}
+  .att-logtitle span{font-family:var(--body);font-size:.84rem;color:var(--g-muted);}
+  .att-logx{flex:0 0 auto;width:34px;height:34px;border:1px solid var(--g-edge-soft);background:var(--g-glass-quiet);color:var(--g-muted);border-radius:var(--g-r-sm,10px);font-size:1.3rem;line-height:1;cursor:pointer;}
+  .att-logx:hover{color:#fff;border-color:rgba(0,184,184,.5);}
+  .att-logbody{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 20px;}
+  .att-logstatus{font-family:var(--font);font-weight:700;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--g-muted);margin-bottom:12px;}
+  .att-logstatus.on{color:#8ff0bf;}
+  .att-logsum{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;font-family:var(--font);font-weight:700;font-size:.74rem;letter-spacing:.03em;}
+  .att-logsum span{padding:5px 11px;border-radius:var(--g-r-pill);border:1px solid var(--g-edge-soft);}
+  .att-sum-p{color:#8ff0bf;}.att-sum-a{color:#ff9d9d;}.att-sum-t{color:#ffd27a;}.att-sum-l{color:#ffb27a;}
+  .att-lognote{font-family:var(--body);font-size:.82rem;color:var(--g-muted);margin-bottom:10px;}
+  .att-logtbl{display:flex;flex-direction:column;gap:4px;}
+  .att-logrow{display:grid;grid-template-columns:2.2rem 1fr 4.8rem 2.4rem 5.4rem;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--g-edge-soft);font-family:var(--body);font-size:.86rem;color:#dfeeee;}
+  .att-logrow.att-loghd{background:none;border:none;padding:2px 10px;font-family:var(--font);font-weight:700;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--g-muted);}
+  .att-lg-ae{font-family:var(--font);font-weight:700;font-variant-numeric:tabular-nums;color:#9fd9ff;}
+  .att-lg-nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .att-lg-id,.att-lg-st{font-variant-numeric:tabular-nums;color:var(--g-muted);}
+  .att-lg-mk{font-family:var(--font);font-weight:700;font-size:.7rem;letter-spacing:.02em;text-align:center;padding:4px 0;border-radius:var(--g-r-pill);}
+  .att-mk-A{color:#ff9d9d;background:rgba(230,36,41,.16);}.att-mk-T{color:#ffd27a;background:rgba(245,179,1,.16);}.att-mk-L{color:#ffb27a;background:rgba(255,107,26,.16);}
+  .att-logempty{padding:24px 10px;text-align:center;line-height:1.6;font-family:var(--body);font-size:.95rem;color:var(--g-muted);}
+  .att-logacts{flex:0 0 auto;display:flex;gap:10px;padding:14px 20px 18px;border-top:1px solid var(--g-edge-soft);}
+  .att-copybtn,.att-dlbtn{flex:1 1 auto;height:46px;font-family:var(--font);font-weight:700;font-size:.86rem;letter-spacing:.03em;border-radius:var(--g-r-md,12px);cursor:pointer;transition:filter .16s,background .16s,border-color .16s,color .16s;}
+  .att-copybtn{background:var(--g-teal-lt);color:#04110f;border:none;}
+  .att-copybtn:hover{filter:brightness(1.08);}
+  .att-copybtn.ok{background:#8ff0bf;}
+  .att-dlbtn{background:var(--g-glass-quiet);color:#dfeeee;border:1px solid var(--g-edge-soft);}
+  .att-dlbtn:hover{border-color:rgba(0,184,184,.5);color:#fff;}
   /* Full-screen lock: the card fills the whole viewport (reliable on iPad); native fullscreen rides on top where supported. */
   .attend-hub.att-fs{position:fixed;inset:0;z-index:124;margin:0;border-radius:0;overflow-y:auto;-webkit-overflow-scrolling:touch;background:linear-gradient(180deg,#050816 0%,#0a1a34 55%,#0b2440 100%);box-shadow:none;}
   .attend-hub.att-fs .camhub-head{display:none;}
@@ -5963,12 +6013,18 @@
       ['14',null,'15','30',null,null]
     ]}
   };
-  var ATT_PERIOD=null, ATT_ROSTER=null, ATT_MARKS={}, ATT_DATES=[], ATT_LOADED=false, ATT_FETCHING=false, ATT_FS=false;
+  var ATT_PERIOD=null, ATT_ROSTER=null, ATT_MARKS={}, ATT_LOCKS={}, ATT_DATES=[], ATT_LOADED=false, ATT_FETCHING=false, ATT_FS=false;
   function attToday(){ return todayISO(); }
   function attMarksFor(period){ return ATT_MARKS[period]||{}; }
+  // Lock state for the open day: {period: epoch_ms}. A locked period's roll is finalized (boxes frozen,
+  // report "taken at" stamped); slide the lock off to reopen it for edits.
+  function attIsLocked(period){ return !!(ATT_LOCKS && ATT_LOCKS[period]); }
+  function attLockedAt(period){ return (ATT_LOCKS && ATT_LOCKS[period]) || 0; }
+  function attFmtTime(ms){ if(!ms) return ''; try{ return new Date(+ms).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}).replace(/\s?([AP])M/i,function(_,x){return x.toLowerCase();}); }catch(e){ return ''; } }
   // Set/clear one A/T/L mark: in-memory (source of truth for the open day) + a localStorage cache (offline)
   // + the authed backend (persists per period+date, all semester). Re-tapping the active mark clears to Present.
   function attSetMark(period, sid, mark){
+    if(attIsLocked(period)) return (ATT_MARKS[period]&&ATT_MARKS[period][sid])||'';   // roll finalized: ignore taps
     ATT_MARKS[period]=ATT_MARKS[period]||{};
     var next=(mark && ATT_MARKS[period][sid]!==mark)?mark:'';
     if(next) ATT_MARKS[period][sid]=next; else delete ATT_MARKS[period][sid];
@@ -5979,10 +6035,10 @@
   // Load the roster + the open day's marks: the authed backend in production, synthetic in demo.
   function attFetchFeed(){
     if(ATT_FETCHING) return; ATT_FETCHING=true;
-    if(DEMO){ ATT_ROSTER=attDemoRoster(); try{ ATT_MARKS=JSON.parse(localStorage.getItem('att_cache_'+attToday())||'{}'); }catch(e){ ATT_MARKS={}; } ATT_LOADED=true; ATT_FETCHING=false; return; }
+    if(DEMO){ ATT_ROSTER=attDemoRoster(); try{ ATT_MARKS=JSON.parse(localStorage.getItem('att_cache_'+attToday())||'{}'); }catch(e){ ATT_MARKS={}; } try{ ATT_LOCKS=JSON.parse(localStorage.getItem('att_lock_'+attToday())||'{}'); }catch(e){ ATT_LOCKS={}; } ATT_LOADED=true; ATT_FETCHING=false; return; }
     camAPI('/api/camera/attendance',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({op:'get',date:attToday()})})
       .then(function(r){ return r.json(); })
-      .then(function(d){ ATT_ROSTER=d.roster||{}; ATT_MARKS=d.marks||{}; ATT_DATES=d.dates||[]; try{ localStorage.setItem('att_cache_'+attToday(), JSON.stringify(ATT_MARKS)); }catch(e){} ATT_LOADED=true; ATT_FETCHING=false; _lastBoardSig=null; renderBoard(); })
+      .then(function(d){ ATT_ROSTER=d.roster||{}; ATT_MARKS=d.marks||{}; ATT_LOCKS=d.locks||{}; ATT_DATES=d.dates||[]; try{ localStorage.setItem('att_cache_'+attToday(), JSON.stringify(ATT_MARKS)); }catch(e){} ATT_LOADED=true; ATT_FETCHING=false; _lastBoardSig=null; renderBoard(); })
       .catch(function(){ ATT_ROSTER=ATT_ROSTER||{}; try{ ATT_MARKS=JSON.parse(localStorage.getItem('att_cache_'+attToday())||'{}'); }catch(e){} ATT_LOADED=true; ATT_FETCHING=false; _lastBoardSig=null; renderBoard(); });
   }
   function attMinOf(hhmm){ var p=String(hhmm).split(':'); return (+p[0])*60+(+p[1]); }
@@ -6017,20 +6073,20 @@
   function attInitials(s){ return ((s.first||'?').slice(0,1)+(s.last||'?').slice(0,1)).toUpperCase(); }
   function attAvatarHue(sid){ var h=0,str=String(sid); for(var i=0;i<str.length;i++) h=(h*31+str.charCodeAt(i))%360; return h; }
   // One seat tile: initials avatar, first name + last initial, seat #, and the A / T / L boxes.
-  function attSeatTile(period, s, mark){
+  function attSeatTile(period, s, mark, locked){
     var hue=attAvatarHue(s.sid);
     return '<div class="att-seat'+(mark?(' att-m-'+mark):'')+'" data-attseat="'+esc(s.sid)+'">'+
       '<span class="att-seatno">'+esc(s.seat)+'</span>'+
       '<span class="att-av" style="--ah:'+hue+'">'+esc(attInitials(s))+'</span>'+
       '<span class="att-nm"><span class="att-fn">'+esc(s.first||'')+'</span><span class="att-ln">'+esc(s.last||'')+'</span></span>'+
       '<span class="att-boxes">'+
-        ['A','T','L'].map(function(k){ return '<button type="button" class="att-box att-box-'+k+(mark===k?' on':'')+'" data-attmark="'+esc(s.sid)+'|'+k+'" aria-pressed="'+(mark===k?'true':'false')+'">'+k+'</button>'; }).join('')+
+        ['A','T','L'].map(function(k){ return '<button type="button" class="att-box att-box-'+k+(mark===k?' on':'')+'" data-attmark="'+esc(s.sid)+'|'+k+'" aria-pressed="'+(mark===k?'true':'false')+'"'+(locked?' disabled tabindex="-1"':'')+'>'+k+'</button>'; }).join('')+
       '</span>'+
     '</div>';
   }
   function attSeatingHtml(period){
     if(!ATT_LOADED) return '<div class="att-page"><div class="att-sheet"><div class="att-loading">Loading your roster&hellip;</div></div></div>';
-    var meta=attPeriodMeta(period), lay=ATT_LAYOUTS[meta.room]||{cols:'1fr',grid:[]}, roster=attRoster(period), marks=attMarksFor(period);
+    var meta=attPeriodMeta(period), lay=ATT_LAYOUTS[meta.room]||{cols:'1fr',grid:[]}, roster=attRoster(period), marks=attMarksFor(period), locked=attIsLocked(period);
     var bySeat={}; roster.forEach(function(s){ bySeat[String(parseInt(s.seat,10))]=s; });
     var rows=lay.grid.map(function(row){
       return '<div class="att-row" style="grid-template-columns:'+lay.cols+'">'+row.map(function(cell){
@@ -6038,7 +6094,7 @@
         if(cell==='desk') return '<span class="att-desk">Mr. Silva</span>';
         var s=bySeat[String(parseInt(cell,10))];
         if(!s) return '<span class="att-empty">'+esc(cell)+'</span>';
-        return attSeatTile(period, s, marks[s.sid]||'');
+        return attSeatTile(period, s, marks[s.sid]||'', locked);
       }).join('')+'</div>';
     }).join('');
     var tally={A:0,T:0,L:0}; roster.forEach(function(s){ var mk=marks[s.sid]; if(mk) tally[mk]++; });
@@ -6046,12 +6102,16 @@
     var tabs=ATT_PERIODS.map(function(P){ return '<button type="button" class="att-ptab'+(P.p===period?' on':'')+'" data-attperiod="'+P.p+'">P'+P.p+'</button>'; }).join('');
     return '<div class="att-page">'+
       '<div class="att-rotate"><div class="att-rotate-card"><span class="att-rot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 18h6"/><path d="M2 9l2-2 2 2"/><path d="M4 7a8 8 0 0 1 8 8"/></svg></span><b>Rotate your iPad to portrait</b><span>Turn the iPad upright to take roll on the full seating chart.</span></div></div>'+
-      '<div class="att-sheet">'+
+      '<div class="att-sheet'+(locked?' att-locked':'')+'">'+
         '<div class="att-head">'+
           '<div class="att-ptabs">'+tabs+'</div>'+
-          '<div class="att-meta"><b>Period '+esc(period)+'</b> &middot; '+esc(meta.course)+' &middot; Room '+esc(meta.room)+'<span class="att-date">'+esc(fmt(attToday()))+'</span></div>'+
-          '<div class="att-tally"><span class="att-t-p">'+present+' present</span><span class="att-t-a">'+tally.A+' A</span><span class="att-t-t">'+tally.T+' T</span><span class="att-t-l">'+tally.L+' L</span></div>'+
-          '<button type="button" class="att-fsbtn'+(ATT_FS?' on':'')+'" data-attfs="1" aria-label="'+(ATT_FS?'Exit full screen':'Full screen')+'" title="'+(ATT_FS?'Exit full screen':'Full screen')+'">'+attFsIcon()+'</button>'+
+          '<div class="att-meta"><b>Period '+esc(period)+'</b> &middot; '+esc(meta.course)+' &middot; Room '+esc(meta.room)+'<span class="att-date">'+esc(fmt(attToday()))+'</span>'+(locked?'<span class="att-lockstamp">Locked '+esc(attFmtTime(attLockedAt(period)))+'</span>':'')+'</div>'+
+          '<div class="att-right">'+
+            '<div class="att-tally"><span class="att-t-p">'+present+' present</span><span class="att-t-a">'+tally.A+' A</span><span class="att-t-t">'+tally.T+' T</span><span class="att-t-l">'+tally.L+' L</span></div>'+
+            '<button type="button" class="att-logbtn" data-attlog="1" aria-label="See attendance log">'+attLogIcon()+'<span>See Log</span></button>'+
+            '<button type="button" class="att-lock'+(locked?' on':'')+'" data-attlock="1" role="switch" aria-checked="'+(locked?'true':'false')+'" aria-label="'+(locked?'Roll locked':'Lock roll')+'"><span class="att-lock-knob">'+attLockIcon(locked)+'</span></button>'+
+            '<button type="button" class="att-fsbtn'+(ATT_FS?' on':'')+'" data-attfs="1" aria-label="'+(ATT_FS?'Exit full screen':'Full screen')+'" title="'+(ATT_FS?'Exit full screen':'Full screen')+'">'+attFsIcon()+'</button>'+
+          '</div>'+
         '</div>'+
         '<div class="att-grid">'+rows+'</div>'+
         '<div class="att-note">Unmarked seats count as <b>Present</b>. Initials show until your student photos are added.</div>'+
@@ -6106,10 +6166,111 @@
     root.querySelectorAll('[data-attperiod]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); ATT_PERIOD=el.getAttribute('data-attperiod'); setSecOpen('attend',true); attRefresh(); }; });
     root.querySelectorAll('[data-attmark]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); var pm=el.getAttribute('data-attmark').split('|'); attTapMark(pm[0], pm[1]); }; });
     root.querySelectorAll('[data-attfs]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); attToggleFullscreen(); }; });
+    root.querySelectorAll('[data-attlock]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); attToggleLock(ATT_PERIOD); }; });
+    root.querySelectorAll('[data-attlog]').forEach(function(el){ el.onclick=function(e){ e.stopPropagation(); attShowLog(ATT_PERIOD); }; });
   }
   // Sync the button if the user leaves native full screen via Esc or the OS gesture.
   document.addEventListener('fullscreenchange', function(){ if(ATT_FS && !document.fullscreenElement){ ATT_FS=false; attRefresh(); } });
   document.addEventListener('webkitfullscreenchange', function(){ if(ATT_FS && !document.webkitFullscreenElement){ ATT_FS=false; attRefresh(); } });
+
+  // ---- Lock roll + See Log (Stage 3) ----
+  function attLockIcon(closed){
+    return closed
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="11" width="15" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="11" width="15" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.6-1.3"/></svg>';
+  }
+  function attLogIcon(){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h9M8 12h9M8 18h9"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg>';
+  }
+  function attMarkLabel(k){ return k==='A'?'Absent':(k==='T'?'Tardy':(k==='L'?'Late':'')); }
+  function attMarkLong(k){ return k==='A'?'Absent':(k==='T'?'Tardy (15 min or less)':(k==='L'?'Late (more than 15 min)':'')); }
+  function attLongDate(iso){ var p=String(iso).split('-'); if(p.length!==3) return iso; var dt=new Date(+p[0],+p[1]-1,+p[2]); try{ return dt.toLocaleDateString([], {weekday:'short', month:'short', day:'numeric', year:'numeric'}); }catch(e){ return iso; } }
+  // Slide-to-lock one period's roll. Locking freezes the boxes, stamps the time, persists, and opens the
+  // report so it is generated the moment you lock. Slide off to reopen for edits.
+  function attToggleLock(period){
+    var willLock=!attIsLocked(period);
+    if(willLock) ATT_LOCKS[period]=Date.now(); else delete ATT_LOCKS[period];
+    try{ localStorage.setItem('att_lock_'+attToday(), JSON.stringify(ATT_LOCKS)); }catch(e){}
+    if(!DEMO){ camAPI('/api/camera/attendance',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({op:(willLock?'lock':'unlock'),date:attToday(),period:period})})
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(d&&willLock&&d.at){ ATT_LOCKS[period]=d.at; } })
+      .catch(function(){}); }   // optimistic: stays set locally if the write fails; next fetch reconciles
+    attRefresh();
+    if(willLock) attShowLog(period);
+  }
+  // Exceptions (A/T/L) for a period, sorted by the 2-digit Aeries #, with the running counts.
+  function attLogData(period){
+    var roster=attRoster(period), marks=attMarksFor(period), ex=[], c={A:0,T:0,L:0};
+    roster.forEach(function(s){ var mk=marks[s.sid]; if(mk==='A'||mk==='T'||mk==='L'){ c[mk]++; ex.push({aeries:s.aeries, name:(s.last||'')+', '+(s.first||''), sid:s.sid, seat:s.seat, mark:mk}); } });
+    ex.sort(function(a,b){ return (+a.aeries)-(+b.aeries); });
+    return {roster:roster, ex:ex, counts:c, present:roster.length-(c.A+c.T+c.L)};
+  }
+  // Aeries-ready markdown: exceptions table ordered by Aeries #, for pasting into a chat that drives Aeries.
+  function attBuildMarkdown(period){
+    var meta=attPeriodMeta(period), data=attLogData(period), locked=attIsLocked(period), L=[];
+    L.push('# Attendance · Period '+period+' · '+attLongDate(attToday()));
+    L.push('Room '+meta.room+' · '+meta.course+' · Mr. Silva');
+    L.push(locked ? ('Roll locked '+attFmtTime(attLockedAt(period))) : 'Draft (not locked yet)');
+    L.push(''); L.push('Exceptions only. Everyone not listed is Present.'); L.push('');
+    if(!data.ex.length){ L.push('All students present.'); }
+    else {
+      L.push('| Aeries # | Student | ID | Seat | Status |');
+      L.push('| - | - | - | - | - |');
+      data.ex.forEach(function(r){ L.push('| '+r.aeries+' | '+r.name+' | '+r.sid+' | '+r.seat+' | '+attMarkLong(r.mark)+' |'); });
+      L.push('');
+    }
+    L.push('Totals: '+data.present+' Present · '+data.counts.A+' Absent · '+data.counts.T+' Tardy · '+data.counts.L+' Late');
+    return L.join('\n');
+  }
+  function attCopyFallback(text){ try{ var ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }catch(e){} }
+  function attCopyLog(period, btn){
+    var md=attBuildMarkdown(period);
+    function ok(){ if(btn){ var t=btn.getAttribute('data-lbl')||btn.textContent; btn.setAttribute('data-lbl',t); btn.textContent='Copied'; btn.classList.add('ok'); setTimeout(function(){ btn.textContent=t; btn.classList.remove('ok'); },1400); } }
+    try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(md).then(ok, function(){ attCopyFallback(md); ok(); }); return; } }catch(e){}
+    attCopyFallback(md); ok();
+  }
+  function attDownloadLog(period){
+    var md=attBuildMarkdown(period), blob=new Blob([md],{type:'text/markdown'}), url=URL.createObjectURL(blob);
+    var a=document.createElement('a'); a.href=url; a.download='attendance-P'+period+'-'+attToday()+'.md'; document.body.appendChild(a); a.click();
+    setTimeout(function(){ try{ document.body.removeChild(a); URL.revokeObjectURL(url); }catch(e){} },120);
+  }
+  function attCloseLog(){ var ov=document.querySelector('.att-logmodal'); if(ov){ if(ov._attkey) document.removeEventListener('keydown', ov._attkey); try{ document.body.removeChild(ov); }catch(e){} } }
+  // The report: a receipt-style exceptions list + Aeries export. Portaled to <body> so it floats above the
+  // full-screen hub + the site nav (pop-out rule: header always visible, only the body scrolls).
+  function attShowLog(period){
+    attCloseLog();
+    var meta=attPeriodMeta(period), data=attLogData(period), locked=attIsLocked(period);
+    var statusTxt=locked ? ('Roll locked '+esc(attFmtTime(attLockedAt(period)))) : 'Draft · not locked yet';
+    var sum='<span class="att-sum-p">'+data.present+' Present</span><span class="att-sum-a">'+data.counts.A+' Absent</span><span class="att-sum-t">'+data.counts.T+' Tardy</span><span class="att-sum-l">'+data.counts.L+' Late</span>';
+    var tbl;
+    if(!data.ex.length){ tbl='<div class="att-logempty">Everyone is marked <b>Present</b>.<br>No absences, tardies, or lates.</div>'; }
+    else {
+      var head='<div class="att-logrow att-loghd"><span>#</span><span>Student</span><span>ID</span><span>Seat</span><span>Status</span></div>';
+      var rowsx=data.ex.map(function(r){ return '<div class="att-logrow"><span class="att-lg-ae">'+esc(r.aeries)+'</span><span class="att-lg-nm">'+esc(r.name)+'</span><span class="att-lg-id">'+esc(r.sid)+'</span><span class="att-lg-st">'+esc(r.seat)+'</span><span class="att-lg-mk att-mk-'+r.mark+'">'+attMarkLabel(r.mark)+'</span></div>'; }).join('');
+      tbl='<div class="att-logtbl">'+head+rowsx+'</div>';
+    }
+    var ov=document.createElement('div'); ov.className='att-logmodal'; ov.setAttribute('role','dialog'); ov.setAttribute('aria-modal','true');
+    ov.innerHTML='<div class="att-logpanel">'+
+      '<div class="att-loghead"><div class="att-logtitle"><b>Attendance Log</b><span>Period '+esc(period)+' · '+esc(meta.course)+' · Room '+esc(meta.room)+'</span></div><button type="button" class="att-logx" aria-label="Close">&times;</button></div>'+
+      '<div class="att-logbody">'+
+        '<div class="att-logstatus'+(locked?' on':'')+'">'+statusTxt+' · '+esc(attLongDate(attToday()))+'</div>'+
+        '<div class="att-logsum">'+sum+'</div>'+
+        '<div class="att-lognote">Exceptions only. Everyone not listed is <b>Present</b>.</div>'+
+        tbl+
+      '</div>'+
+      '<div class="att-logacts"><button type="button" class="att-copybtn" data-attcopy="'+esc(period)+'">Copy for Aeries</button><button type="button" class="att-dlbtn" data-attdl="'+esc(period)+'">Download .md</button></div>'+
+    '</div>';
+    document.body.appendChild(ov);
+    function done(){ attCloseLog(); }
+    ov.addEventListener('click', function(e){ if(e.target===ov) done(); });
+    ov.querySelector('.att-logx').onclick=done;
+    ov.querySelector('[data-attcopy]').onclick=function(){ attCopyLog(period, this); };
+    ov.querySelector('[data-attdl]').onclick=function(){ attDownloadLog(period); };
+    ov._attkey=function(e){ if(e.key==='Escape') done(); };
+    document.addEventListener('keydown', ov._attkey);
+    requestAnimationFrame(function(){ ov.classList.add('open'); });
+  }
+
   // Mark a seat (A/T/L), update the tile + the running tally in place (no full board re-render).
   function attTapMark(sid, k){
     var now=attSetMark(ATT_PERIOD, sid, k);
