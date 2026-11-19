@@ -77,9 +77,10 @@ CAMSET_ICON=f"{SITE}/assets/Icons/assignment/camera-settings-v1.svg"
 RAW_BADGE=f"{SITE}/assets/Icons/assignment/raw-v2.png"
 JPG_BADGE=f"{SITE}/assets/Icons/assignment/jpg-v2.svg"
 
-def capture_panel(quality="RAW", shutter="1/500", aperture="F6.3", iso="100", change_field="shutter"):
-    # LOCKED graphic template. Only the three values (shutter/aperture/iso) and which cell wears the
-    # "CHANGE THIS" tag + "adjust to balance the light meter" sub (change_field) vary per module.
+def capture_panel(quality="RAW", shutter="1/500", aperture="F6.3", iso="100", change_field="shutter", meter_label="Balanced (outdoors)"):
+    # LOCKED graphic template. Only the three values (shutter/aperture/iso), which cell wears the
+    # "CHANGE THIS" tag + "adjust to balance the light meter" sub (change_field), and the light-meter
+    # context label (meter_label, e.g. "Balanced (indoors)" for an indoor module) vary per module.
     # Layout, cells (Shutter / Aperture / ISO / Light Meter / Image Quality) and styling are fixed.
     red="#f90101"
     boxtd=(f'border:2px solid {red};background:rgba(0,0,0,0.55);box-sizing:border-box;'
@@ -121,7 +122,7 @@ def capture_panel(quality="RAW", shutter="1/500", aperture="F6.3", iso="100", ch
       '<div style="text-align:center;margin-top:9px;"><span style="display:inline-block;width:0;height:0;'
       'border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:11px solid #26de78;"></span></div>'
       '<div style="text-align:center;margin-top:6px;font-family:Arial,sans-serif;font-size:9pt;'
-      'letter-spacing:0.12em;text-transform:uppercase;color:#26de78;"><strong>Balanced (outdoors)</strong></div>')
+      f'letter-spacing:0.12em;text-transform:uppercase;color:#26de78;"><strong>{meter_label}</strong></div>')
     badge=RAW_BADGE if quality=="RAW" else JPG_BADGE
     qalt="RAW image-capture format" if quality=="RAW" else "JPG image-capture format"
     iq=(f'{label("Image Quality")}'

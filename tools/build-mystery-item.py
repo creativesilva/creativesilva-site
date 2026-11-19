@@ -96,7 +96,7 @@ def mystery_camera_settings(es):
     note_box=(f'<div style="background:rgba(249,1,1,0.10);border:1px solid rgba(249,1,1,0.30);border-left:4px solid {red};padding:11px 14px;margin:0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.92);line-height:1.55;">{note_t}</div>')
     return (f'<div style="background:linear-gradient(180deg,rgba(249,1,1,0.06) 0%,rgba(249,1,1,0.02) 100%);border:1px solid rgba(249,1,1,0.26);border-left:6px solid {red};padding:30px;overflow:hidden;position:relative;margin-bottom:24px;">'
       + section_header(CAMSET_ICON, title, "#f90101", "#ff8f8f")
-      + f'<div class="silva-cfloat" style="float:right;width:50%;min-width:400px;margin:2px 0 16px 30px;">{capture_panel("RAW", "1/125", "f/2.8", "800", "iso")}</div>'
+      + f'<div class="silva-cfloat" style="float:right;width:50%;min-width:400px;margin:2px 0 16px 30px;">{capture_panel("RAW", "1/125", "f/2.8", "800", "iso", meter_label="Balanced (indoors)")}</div>'
       + lead_html + note_box + '</div>')
 
 def build_course(C):
@@ -220,7 +220,7 @@ def build_course(C):
             [("1 contact sheet (12-up):","a 12-up contact sheet of your full take, unedited, printed to a high-resolution JPG. Name it <strong>12 Up Mystery Item</strong> plus your name, like <strong>12 Up Mystery Item Maria G</strong>. Each partner turns in their own, even though you worked together.")])
         en+=mystery_camera_settings(False)
         en+=card("PHOTOGRAPH YOUR ITEM / WORK THE ANGLES","Take Lots of Photos, On Purpose",
-            para("Photograph your item today. You can work in the classroom or just outside. Take <strong>many photos</strong> and try different ideas, so you have strong options to choose from later.")
+            para("Photograph your item today, <strong>indoors in the classroom</strong>. Take <strong>many photos</strong> and try different ideas, so you have strong options to choose from later.")
             + steps([
                 ("Set Manual mode:","turn the Mode dial to <strong>M</strong>. Balance your exposure so the photo is not too dark or too bright."),
                 ("Try different angles:","photograph from above, from the side, and up close. Move around your item."),
@@ -260,7 +260,7 @@ def build_course(C):
             [("1 hoja de contactos (12-up):","una hoja de contactos 12-up de toda tu toma, sin editar, impresa como un JPG de alta resoluci&oacute;n. N&oacute;mbrala <strong>12 Up Mystery Item</strong> y tu nombre, como <strong>12 Up Mystery Item Maria G</strong>. Cada compa&ntilde;ero entrega la suya, aunque trabajaron juntos.")])
         es+=mystery_camera_settings(True)
         es+=card("FOTOGRAF&Iacute;A TU OBJETO / TRABAJA LOS &Aacute;NGULOS","Toma Muchas Fotos, a Prop&oacute;sito",
-            para("Fotograf&iacute;a tu objeto hoy. Puedes trabajar en el sal&oacute;n o justo afuera. Toma <strong>muchas fotos</strong> y prueba distintas ideas, para tener buenas opciones despu&eacute;s.")
+            para("Fotograf&iacute;a tu objeto hoy, <strong>adentro en el sal&oacute;n</strong>. Toma <strong>muchas fotos</strong> y prueba distintas ideas, para tener buenas opciones despu&eacute;s.")
             + steps([
                 ("Pon el modo Manual:","gira el dial de modo a <strong>M</strong>. Equilibra tu exposici&oacute;n para que la foto no quede muy oscura ni muy brillante."),
                 ("Prueba distintos &aacute;ngulos:","fotograf&iacute;a desde arriba, desde el lado y bien de cerca. Mu&eacute;vete alrededor de tu objeto."),
