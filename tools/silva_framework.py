@@ -347,6 +347,22 @@ def note(t):
     # overflow:hidden = its own BFC, so it never slides under a right-floated content photo.
     return (f'<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.30);border-left:4px solid #00b8b8;padding:11px 14px;margin:8px 0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
 
+def cs_note_12up(es):
+    # STANDARD 12-Up contact-sheet disclaimer (Chris, LOCKED 2026-11-19). The 12-Up ALWAYS holds the
+    # student's ENTIRE take: fewer OR more than 12 is fine (Lightroom just adds pages). ONE wording on
+    # every 12-Up build card in every module, so students never read the number as a quota.
+    if es:
+        return note("12-Up es solo el nombre de la plantilla, no un l&iacute;mite. Pon toda tu toma, sea menos o m&aacute;s de 12 (Lightroom agrega p&aacute;ginas si tienes m&aacute;s). Entr&eacute;gala como un JPG de alta resoluci&oacute;n.")
+    return note("12-Up is just the template name, not a limit. Put your whole take on it, whether that is fewer or more than 12 (Lightroom just adds pages if you have more). Turn it in as a high-resolution JPG.")
+
+def cs_note_6up(es):
+    # STANDARD 6-Up contact-sheet disclaimer (Chris, LOCKED 2026-11-19). The 6-Up holds ONLY the
+    # finished images THIS MODULE'S deliverables call for (3, 5, 8, whatever is asked): empty spots are
+    # fine. The count comes from the Deliverables, never the template name. ONE wording everywhere.
+    if es:
+        return note("6-Up es solo el nombre de la plantilla, no un l&iacute;mite. Pon solo tus im&aacute;genes terminadas, la cantidad que piden tus Entregables. Los espacios vac&iacute;os est&aacute;n bien. Entr&eacute;gala como un JPG de alta resoluci&oacute;n.")
+    return note("6-Up is just the template name, not a limit. Put in only your finished images, the number your Deliverables ask for. Empty spots are fine. Turn it in as a high-resolution JPG.")
+
 def framed(src,alt):
     return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;">'
       f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>')

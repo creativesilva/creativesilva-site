@@ -287,7 +287,7 @@ def build(course):
             ]))
         en+=card("CONTACT SHEET / YOUR FULL TAKE","Build Your 12-Up Contact Sheet",
             para("Bring the camera to a computer and import your full take into Lightroom Classic, into your project folder. Then build a 12-Up contact sheet that shows your whole take, every letter photo you captured.")
-            + note("12-Up is just the name of the contact sheet template. Your sheet can show more or fewer than 12 photos, that is fine. It just shows your full take.")
+            + cs_note_12up(False)
             + bullets([
                 ("Import first:","import your photos into Lightroom, into your Photography project folder."),
                 ("Use the 12-Up preset:","make the contact sheet with the 12-Up preset, already installed in Lightroom."),
@@ -311,7 +311,7 @@ def build(course):
             ]))
         es+=card("HOJA DE CONTACTOS / TU TOMA COMPLETA","Crea Tu Hoja de Contactos 12-Up",
             para("Lleva la c&aacute;mara a una computadora e importa tu toma completa a Lightroom Classic, a tu carpeta del proyecto. Luego crea una hoja de contactos 12-Up que muestre toda tu toma, cada foto de letra que capturaste.")
-            + note("12-Up es solo el nombre de la plantilla de la hoja de contactos. Tu hoja puede mostrar m&aacute;s o menos de 12 fotos, eso est&aacute; bien. Solo muestra tu toma completa.")
+            + cs_note_12up(True)
             + bullets([
                 ("Importa primero:","importa tus fotos a Lightroom, a tu carpeta del proyecto de Fotograf&iacute;a."),
                 ("Usa el preset 12-Up:","crea la hoja de contactos con el preset 12-Up, ya instalado en Lightroom."),
@@ -346,7 +346,7 @@ def build(course):
             ]))
         en+=card("CONTACT SHEET + EXPORT / YOUR FINALS","Build a 6-Up Sheet, Then Export Each Letter",
             para("Make a 6-Up contact sheet of your final edited letters, then export each final letter on its own.")
-            + note("6-Up is just the name of the template. Your sheet can show more or fewer than 6 letters, as long as it shows your finished letters.")
+            + cs_note_6up(False)
             + bullets([
                 ("6-Up contact sheet:","build a 6-Up contact sheet of your final letters and export it as a high-resolution JPG."),
                 ("Export each letter:","export each final letter image on its own as a JPG. Name them so they stay in order, like 1_C.jpg, 2_H.jpg."),
@@ -376,7 +376,7 @@ def build(course):
             ]))
         es+=card("HOJA DE CONTACTOS + EXPORTAR / TUS FINALES","Crea una Hoja 6-Up y Luego Exporta Cada Letra",
             para("Crea una hoja de contactos 6-Up de tus letras finales editadas, luego exporta cada letra final por separado.")
-            + note("6-Up es solo el nombre de la plantilla. Tu hoja puede mostrar m&aacute;s o menos de 6 letras, siempre que muestre tus letras terminadas.")
+            + cs_note_6up(True)
             + bullets([
                 ("Hoja de contactos 6-Up:","crea una hoja de contactos 6-Up de tus letras finales y exp&oacute;rtala como JPG de alta resoluci&oacute;n."),
                 ("Exporta cada letra:","exporta cada letra final por separado como JPG. Nómbralas para que queden en orden, como 1_C.jpg, 2_H.jpg."),

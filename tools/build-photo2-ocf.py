@@ -318,7 +318,8 @@ def step02():
             ("","Select your 3 strongest portraits that clearly use off-camera flash and edit them to a polished finish."),
         ])
         + teal_callout("The Rule","Off-camera flash must be clearly visible in your 3 final portraits.")
-        + note("The contact sheet preset is on this module&rsquo;s Overview page (marked M at the top)."))
+        + note("The contact sheet preset is on this module&rsquo;s Overview page (marked M at the top).")
+        + cs_note_12up(False))
     en+=deliverables_box(False,
         [("1 contact sheet (high-resolution JPG):","your 12-Up contact sheet (or sheets), uploaded to this Canvas assignment."),
          ("3 edited portraits (JPG):","your 3 polished, edited portraits that clearly use off-camera flash, uploaded to this Canvas assignment.")])
@@ -338,7 +339,8 @@ def step02():
             ("","Elige tus 3 retratos m&aacute;s fuertes que usen claramente el flash fuera de c&aacute;mara y ed&iacute;talos a un acabado pulido."),
         ])
         + teal_callout("La Regla","El flash fuera de c&aacute;mara debe verse claramente en tus 3 retratos finales.")
-        + note("El ajuste de la hoja de contactos est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."))
+        + note("El ajuste de la hoja de contactos est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
+        + cs_note_12up(True))
     es+=deliverables_box(True,
         [("1 hoja de contactos (JPG de alta resoluci&oacute;n):","tu hoja de contactos 12-Up (o varias hojas), subida a esta tarea de Canvas."),
          ("3 retratos editados (JPG):","tus 3 retratos pulidos y editados que usen claramente el flash fuera de c&aacute;mara, subidos a esta tarea de Canvas.")])

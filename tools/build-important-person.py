@@ -587,7 +587,7 @@ def build(course):
                 ("Print to a high-resolution JPG.","Set Print To: JPEG File, then click Print to File. The preset already saves a high-resolution JPG for you."),
                 ("Name it and upload.","Name it LastName_First_ImportantPerson_ContactSheet.jpg, then upload the JPG to this Canvas assignment."),
             ])
-            + note("Turn in a <strong>high-resolution JPG</strong>, never a PDF. The contact-sheet preset already saves the right format."))
+            + cs_note_12up(False))
         en+=resources_card("Contact Sheet Preset",
             pnote('Need the 12-Up preset? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Watch the install video</strong></a>, then add it to Lightroom Classic &rarr; Print module. You set these up back in the Image Series module.'), False)
         en+=next_up("UP NEXT &middot; STEP 06 - Cull &amp; Edit","Next you cull your full take down to your three strongest images, give them a light edit, and turn in a 6-up contact sheet with your final three.")
@@ -620,7 +620,7 @@ def build(course):
                 ("Imprime a un JPG de alta resoluci&oacute;n.","Pon Print To: JPEG File, luego haz clic en Print to File. El ajuste ya guarda un JPG de alta resoluci&oacute;n por ti."),
                 ("N&oacute;mbrala y s&uacute;bela.","N&oacute;mbrala LastName_First_ImportantPerson_ContactSheet.jpg, luego sube el JPG a esta tarea de Canvas."),
             ])
-            + note("Entrega un <strong>JPG de alta resoluci&oacute;n</strong>, nunca un PDF. El ajuste de hoja de contactos ya guarda el formato correcto."))
+            + cs_note_12up(True))
         es+=resources_card("Ajuste de Hoja de Contactos",
             pnote('&iquest;Necesitas el ajuste 12-Up? <a href="'+CS_INSTALL_VIDEO+'" target="_blank" rel="noopener" style="color:#c4b5fd;"><strong>Mira el video de instalaci&oacute;n</strong></a>, luego agr&eacute;galo a Lightroom Classic &rarr; m&oacute;dulo Print. Los configuraste en el m&oacute;dulo Image Series.'), True)
         es+=next_up("A CONTINUACI&Oacute;N &middot; PASO 06 - Selecciona y Edita","Despu&eacute;s eliges tu toma completa hasta tus tres im&aacute;genes m&aacute;s fuertes, les das una edici&oacute;n ligera y entregas una hoja de contactos de 6 con tus tres finales.")

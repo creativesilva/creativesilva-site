@@ -285,7 +285,7 @@ def build_course(C):
                 ("Use the 12-Up preset:","in the Print module, choose the 12-Up contact sheet preset (you installed it in Image Series)."),
                 ("Print to JPG:","use Print to File so it saves as a high-resolution JPG, then upload it here."),
             ])
-            + note("Contact sheets are always turned in as a high-resolution JPG."))
+            + cs_note_12up(False))
         en+=next_up("UP NEXT &middot; STEP 03 - Edit &amp; Submit",("Develop each photo, fine-tune your preset, crop, and turn in a 6-Up plus six edited JPGs." if RAW else "Pick your best one at each f-stop, crop, and turn in a 6-Up plus six final JPGs."))
 
         es=banner(f"M&oacute;dulo {MOD} &bull; Paso 02","Captura y Hoja de Contactos","Encuadra un sujeto, ve de f/22 hasta f/1.8, y arma una hoja de contactos de 12.","#top","Back to English", HICON_PHOTO_WALK)
@@ -318,7 +318,7 @@ def build_course(C):
                 ("Usa el ajuste de 12:","en el m&oacute;dulo Print, elige el ajuste de hoja de contactos de 12 (lo instalaste en Serie de Im&aacute;genes)."),
                 ("Imprime a JPG:","usa Print to File para que se guarde como un JPG de alta resoluci&oacute;n, luego s&uacute;belo aqu&iacute;."),
             ])
-            + note("Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n."))
+            + cs_note_12up(True))
         es+=next_up("SIGUIENTE &middot; PASO 03 - Edita y Entrega",("Revela cada foto, ajusta tu preset, recorta y entrega una hoja de 6 m&aacute;s seis JPG editados." if RAW else "Elige tu mejor foto en cada n&uacute;mero f, recorta y entrega una hoja de 6 m&aacute;s seis JPG finales."))
 
         stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a> <a href="{S2}" class="silva-step-btn">Step 03 &#8594;</a>'
@@ -363,7 +363,7 @@ def build_course(C):
                 ("Export the 6 JPGs:","go to File &rsaquo; Export and export your six finals as high-resolution JPGs into your project folder."),
                 ("Upload 7 files:","turn in the 6-Up contact sheet plus the six final JPGs."),
             ])
-            + note("Contact sheets are always turned in as a high-resolution JPG."))
+            + cs_note_6up(False))
         en+=next_up("UP NEXT &middot; STEP 04 - Reflection","Tell what you learned about balancing your exposure across the range.")
 
         es=banner(f"M&oacute;dulo {MOD} &bull; Paso 03","Edita y Entrega",("Revela cada foto, ajusta tu preset, recorta y entrega una hoja de 6 m&aacute;s seis JPG editados." if RAW else "Elige tu mejor foto en cada n&uacute;mero f, recorta y entrega una hoja de 6 m&aacute;s seis JPG finales."),"#top","Back to English", HICON_PHOTO_WALK)
@@ -402,7 +402,7 @@ def build_course(C):
                 ("Exporta los 6 JPG:","ve a File &rsaquo; Export y exporta tus seis finales como JPG de alta resoluci&oacute;n a la carpeta de tu proyecto."),
                 ("Sube 7 archivos:","entrega la hoja de contactos de 6 m&aacute;s los seis JPG finales."),
             ])
-            + note("Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n."))
+            + cs_note_6up(True))
         es+=next_up("SIGUIENTE &middot; PASO 04 - Reflexi&oacute;n","Cuenta qu&eacute; aprendiste sobre equilibrar tu exposici&oacute;n en el rango.")
 
         stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 02</a> <a href="{S3}" class="silva-step-btn">Step 04 &#8594;</a>'

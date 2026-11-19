@@ -183,7 +183,8 @@ def step01():
             ("Select your 12:","select the images from your culled series."),
             ("Use the 12-Up layout:","in the Print module, choose the 12-Up contact sheet."),
             ("Save the page:","export the contact sheet as a high-resolution JPG to turn in."),
-        ]))
+        ])
+        + cs_note_12up(False))
     en+=deliverables_box(False,
         [("1 contact sheet:","your 12-image contact sheet (high-resolution JPG), showing your culled series, uploaded to this Canvas assignment.")])
 
@@ -218,7 +219,8 @@ def step01():
             ("Selecciona tus 12:","elige las im&aacute;genes de tu serie seleccionada."),
             ("Usa el dise&ntilde;o de 12:","en el m&oacute;dulo Imprimir, elige la hoja de contactos de 12."),
             ("Guarda la p&aacute;gina:","exporta la hoja de contactos como JPG de alta resoluci&oacute;n para entregar."),
-        ]))
+        ])
+        + cs_note_12up(True))
 
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
@@ -305,7 +307,8 @@ def step03():
             ("Select your best 6:","choose the 6 strongest photos from your synced series."),
             ("Export high-resolution:","export the 6 as high-quality JPGs."),
             ("Make the 6-Up contact sheet:","use the 6-Up layout in the Print module, then save it as a high-resolution JPG."),
-        ]))
+        ])
+        + cs_note_6up(False))
     en+=deliverables_box(False,
         [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG)."),
          ("6 high-resolution images:","your 6 best photos, exported as high-resolution JPGs, uploaded to this Canvas assignment.")])
@@ -336,7 +339,8 @@ def step03():
             ("Elige tus mejores 6:","escoge las 6 fotos m&aacute;s fuertes de tu serie sincronizada."),
             ("Exporta en alta resoluci&oacute;n:","exporta las 6 como JPG de alta calidad."),
             ("Crea la hoja de 6:","usa el dise&ntilde;o de 6 en el m&oacute;dulo Imprimir y gu&aacute;rdala como JPG de alta resoluci&oacute;n."),
-        ]))
+        ])
+        + cs_note_6up(True))
 
     stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a><a href="{S4}" class="silva-step-btn">Step 04 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{S2}" class="silva-bottom-btn">&#8592; Step 02</a><a href="{S4}" class="silva-bottom-btn">Step 04 &#8594;</a></div>'

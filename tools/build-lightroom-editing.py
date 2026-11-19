@@ -321,7 +321,7 @@ def cull_export():
             ("Print to file as JPG:","the preset saves your page as a high-resolution JPG. This is one of your 7 files."),
         ])
         + note("You installed the contact sheet presets earlier this year, so they are ready in your Print module. If you ever need them again, they are on the Photography Course Resources page.")
-        + note("Contact sheets are always saved as a high-resolution JPG, never a PDF. The preset already sets this for you."))
+        + cs_note_6up(False))
     en+=card("EXPORT / DELIVER YOUR FINALS","Export Your 6 Finals as High-Resolution JPEGs",
         para("Last, export your 6 edited images as high-resolution JPEGs. These are your finished photos.")
         + steps([
@@ -355,7 +355,7 @@ def cull_export():
             ("Imprime a archivo como JPG:","el ajuste guarda tu p&aacute;gina como JPG de alta resoluci&oacute;n. Este es uno de tus 7 archivos."),
         ])
         + note("Instalaste los ajustes de hoja de contactos antes este a&ntilde;o, as&iacute; que ya est&aacute;n listos en tu m&oacute;dulo Imprimir. Si alguna vez los necesitas de nuevo, est&aacute;n en la p&aacute;gina de Recursos del Curso de Fotograf&iacute;a.")
-        + note("Las hojas de contactos siempre se guardan como JPG de alta resoluci&oacute;n, nunca como PDF. El ajuste ya lo hace por ti."))
+        + cs_note_6up(True))
     es+=card("EXPORTA / ENTREGA TUS FINALES","Exporta Tus 6 Finales como JPEG de Alta Resoluci&oacute;n",
         para("Por &uacute;ltimo, exporta tus 6 im&aacute;genes editadas como JPEG de alta resoluci&oacute;n. Estas son tus fotos terminadas.")
         + steps([

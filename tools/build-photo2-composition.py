@@ -192,7 +192,8 @@ def step01():
         + para("Capture one strong image for each of the 6 concepts. If you and your partner share one camera, keep all of your photos together on the same card.")
         + para("When the walk is done, import all of your RAW files into Lightroom and back them up.")
         + para("Then build a 12-Up contact sheet that shows your ENTIRE take: every image you and your partner captured together. Export it as a high-resolution JPG. If you have more than 12 images, turn in more than one sheet so every photo is shown.")
-        + note("The contact sheet preset is on this module&rsquo;s Overview page (marked M at the top)."))
+        + note("The contact sheet preset is on this module&rsquo;s Overview page (marked M at the top).")
+        + cs_note_12up(False))
     en+=deliverables_box(False,
         [("Contact sheet(s), high-resolution JPG:","your 12-Up contact sheet(s) showing your entire take: all the images you and your partner captured.")])
 
@@ -204,7 +205,8 @@ def step01():
         + para("Captura una imagen fuerte para cada uno de los 6 conceptos. Si t&uacute; y tu compa&ntilde;ero comparten una c&aacute;mara, mant&eacute;n todas sus tomas juntas en la misma tarjeta.")
         + para("Al terminar la caminata, importa todos tus archivos RAW a Lightroom y haz una copia de seguridad.")
         + para("Luego arma una hoja de contactos 12-Up que muestre TODA tu toma: cada imagen que t&uacute; y tu compa&ntilde;ero capturaron juntos. Exp&oacute;rtala como JPG de alta resoluci&oacute;n. Si tienes m&aacute;s de 12 im&aacute;genes, entrega m&aacute;s de una hoja para que se vean todas.")
-        + note("El ajuste de la hoja de contactos est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."))
+        + note("El ajuste de la hoja de contactos est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
+        + cs_note_12up(True))
     es+=deliverables_box(True,
         [("Hoja(s) de contactos, JPG de alta resoluci&oacute;n:","tu hoja o hojas de contactos 12-Up que muestren toda tu toma: todas las im&aacute;genes que t&uacute; y tu compa&ntilde;ero capturaron.")])
 
@@ -237,7 +239,8 @@ def step02():
             ("","Aim to make each image unique and present it at its very best."),
           ])
         + para("Rename each file with the name of the composition rule it shows (for example: rule-of-thirds.jpg). Export all six as JPGs. Then build a 6-Up contact sheet of your final six with the 6-Up preset.")
-        + note("The contact sheet preset is on this module&rsquo;s Overview page (marked M at the top)."))
+        + note("The contact sheet preset is on this module&rsquo;s Overview page (marked M at the top).")
+        + cs_note_6up(False))
     en+=deliverables_box(False,
         [("7 files:","one 6-Up contact sheet of your final 6, plus the 6 individual JPGs, each named by its rule.")])
 
@@ -263,7 +266,8 @@ def step02():
             ("","Busca que cada imagen sea &uacute;nica y pres&eacute;ntala en su mejor versi&oacute;n."),
           ])
         + para("Renombra cada archivo con el nombre de la regla que muestra (por ejemplo: regla-de-los-tercios.jpg). Exporta las seis como JPG. Luego arma una hoja de contactos 6-Up de tus seis finales con el ajuste 6-Up.")
-        + note("El ajuste de la hoja de contactos est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba)."))
+        + note("El ajuste de la hoja de contactos est&aacute; en la p&aacute;gina de Resumen de este m&oacute;dulo (marcada con M arriba).")
+        + cs_note_6up(True))
     es+=deliverables_box(True,
         [("7 archivos:","una hoja de contactos 6-Up de tus 6 finales, m&aacute;s los 6 JPG individuales, cada uno con el nombre de su regla.")])
 

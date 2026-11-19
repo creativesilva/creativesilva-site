@@ -246,7 +246,7 @@ def build_course(C):
                 ("Print to a high-resolution JPG.","set <strong>Print To: JPEG File</strong>, then click <strong>Print to File</strong>. The preset already saves a high-resolution JPG for you."),
                 ("Name it and upload.","name it <strong>12 Up Mystery Item</strong> plus your name, like <strong>12 Up Mystery Item Maria G</strong>. Then upload the JPG to this Canvas assignment."),
             ])
-            + note("The number is a maximum, not a minimum: a 12-up with 8 photos or with extra pages is fine. Contact sheets are always turned in as a high-resolution JPG. Do not edit your photos yet, that happens in Step 03."))
+            + cs_note_12up(False))
         en+=next_up("UP NEXT &middot; STEP 03 - Cull &amp; Edit","Cull to your strongest three, edit them in Lightroom Classic, export your three final JPEGs, and build a 6-up contact sheet.")
 
         es=banner(f"M&oacute;dulo {MOD} &bull; Paso 02","Captura y Contacto","Abre tu bolsa, elige un enfoque, fotograf&iacute;a tu objeto en modo Manual y arma una hoja de contactos 12-up en Lightroom Classic.","#top","Back to English", HICON_PHOTO_WALK)
@@ -286,7 +286,7 @@ def build_course(C):
                 ("Imprime a un JPG de alta resoluci&oacute;n.","pon <strong>Print To: JPEG File</strong>, luego haz clic en <strong>Print to File</strong>. El ajuste ya guarda un JPG de alta resoluci&oacute;n por ti."),
                 ("N&oacute;mbrala y s&uacute;bela.","n&oacute;mbrala <strong>12 Up Mystery Item</strong> y tu nombre, como <strong>12 Up Mystery Item Maria G</strong>. Luego sube el JPG a esta tarea de Canvas."),
             ])
-            + note("El n&uacute;mero es un m&aacute;ximo, no un m&iacute;nimo: una 12-up con 8 fotos o con p&aacute;ginas de m&aacute;s est&aacute; bien. Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n. No edites tus fotos todav&iacute;a, eso es en el Paso 03."))
+            + cs_note_12up(True))
         es+=next_up("SIGUIENTE &middot; PASO 03 - Selecci&oacute;n y Edici&oacute;n","Selecciona tus tres mejores, ed&iacute;talas en Lightroom Classic, exporta tus tres JPEG finales y arma una hoja de contactos 6-up.")
 
         stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a> <a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'
@@ -327,14 +327,14 @@ def build_course(C):
             ])
             + note("Turn in your three final JPEGs, your best edited work."))
         en+=card("BUILD / 6-UP CONTACT SHEET","Make Your 6-Up Contact Sheet",
-            para("Last, make a <strong>6-up contact sheet</strong> with your <strong>3 edited images</strong> on it. The number is a <strong>maximum, not a minimum</strong>: three images with three empty spots is completely fine. You build it in <strong>Lightroom Classic</strong>, the same as the 12-up.")
+            para("Last, make a <strong>6-up contact sheet</strong> with your <strong>3 edited images</strong> on it. You build it in <strong>Lightroom Classic</strong>, the same as the 12-up.")
             + steps([
                 ("Load your 3 edited images.","in Lightroom Classic, select your three final edited photos in the Library."),
                 ("Open the Print module and pick the 6-Up Contact Sheet preset.","choose it from your User Templates. If you do not see it, install it from the Course Overview."),
                 ("Print to file as a JPG.","click <strong>Print to File</strong>. The preset already saves a high-resolution JPG, so you never choose the format."),
                 ("Name it and upload.","name it <strong>6 Up Mystery Item</strong> plus your name, like <strong>6 Up Mystery Item Maria G</strong>. Then upload the JPG to this Canvas assignment."),
             ])
-            + note("Contact sheets are always turned in as a high-resolution JPG."))
+            + cs_note_6up(False))
         en+=next_up("UP NEXT &middot; STEP 04 - Reflection","Tell your idea, how you photographed your item, and what worked and what was hard.")
 
         es=banner(f"M&oacute;dulo {MOD} &bull; Paso 03","Selecci&oacute;n y Edici&oacute;n","Selecciona tus tres mejores, ed&iacute;talas en Lightroom Classic, exporta tus tres JPEG finales y arma una hoja de contactos 6-up.","#top","Back to English", HICON_DESIGN)
@@ -367,14 +367,14 @@ def build_course(C):
             ])
             + note("Entrega tus tres JPEG finales, tu mejor trabajo editado."))
         es+=card("ARMA / HOJA DE CONTACTOS 6-UP","Arma Tu Hoja de Contactos 6-Up",
-            para("Por &uacute;ltimo, arma una <strong>hoja de contactos 6-up</strong> con tus <strong>3 im&aacute;genes editadas</strong>. El n&uacute;mero es un <strong>m&aacute;ximo, no un m&iacute;nimo</strong>: tres im&aacute;genes con tres espacios vac&iacute;os est&aacute; perfecto. La armas en <strong>Lightroom Classic</strong>, igual que la 12-up.")
+            para("Por &uacute;ltimo, arma una <strong>hoja de contactos 6-up</strong> con tus <strong>3 im&aacute;genes editadas</strong>. La armas en <strong>Lightroom Classic</strong>, igual que la 12-up.")
             + steps([
                 ("Carga tus 3 im&aacute;genes editadas.","en Lightroom Classic, selecciona tus tres fotos finales editadas en la Biblioteca."),
                 ("Abre el m&oacute;dulo Print y elige el ajuste 6-Up Contact Sheet.","el&iacute;gelo de tus User Templates. Si no lo ves, inst&aacute;lalo desde el Resumen del Curso."),
                 ("Imprime a archivo como JPG.","haz clic en <strong>Print to File</strong> (Imprimir a archivo). El ajuste ya guarda un JPG de alta resoluci&oacute;n, as&iacute; que nunca eliges el formato."),
                 ("N&oacute;mbrala y s&uacute;bela.","n&oacute;mbrala <strong>6 Up Mystery Item</strong> y tu nombre, como <strong>6 Up Mystery Item Maria G</strong>. Luego sube el JPG a esta tarea de Canvas."),
             ])
-            + note("Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n."))
+            + cs_note_6up(True))
         es+=next_up("SIGUIENTE &middot; PASO 04 - Reflexi&oacute;n","Cuenta tu idea, c&oacute;mo fotografiaste tu objeto, y qu&eacute; funcion&oacute; y qu&eacute; fue dif&iacute;cil.")
 
         stepnav=f'<a href="{S2}" class="silva-step-btn">&#8592; Step 02</a> <a href="{S4}" class="silva-step-btn">Step 04 &#8594;</a>'

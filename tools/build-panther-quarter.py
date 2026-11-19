@@ -303,7 +303,7 @@ def step01():
             ("Use the 12-Up template:","in the Print module, choose the 12-Up contact sheet template with your full take loaded."),
             ("Print to JPG:","use Print to File so it saves as a high-resolution JPG, then upload it here."),
         ])
-        + note("Contact sheets are always turned in as a high-resolution JPG. Turn in your full take, every frame your group captured."))
+        + cs_note_12up(False))
     en+=next_up("UP NEXT &middot; STEP 03 - Cull, Edit &amp; Deliver","Choose your best waist and best chest for each honoree, edit to the client standard, and export your JPGs.")
 
     es=banner("M&oacute;dulo 10 &bull; Paso 02","Captura y Hoja de Contactos",
@@ -344,7 +344,7 @@ def step01():
             ("Usa la plantilla de 12:","en el m&oacute;dulo Print, elige la plantilla de hoja de contactos de 12 con todo tu trabajo cargado."),
             ("Imprime a JPG:","usa Print to File para que se guarde como un JPG de alta resoluci&oacute;n, luego s&uacute;belo aqu&iacute;."),
         ])
-        + note("Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n. Entrega todo tu trabajo, cada imagen que tu grupo captur&oacute;."))
+        + cs_note_12up(True))
     es+=next_up("SIGUIENTE &middot; PASO 03 - Selecciona, Edita y Entrega","Elige tu mejor cintura y tu mejor pecho de cada homenajeado, edita al est&aacute;ndar del cliente y exporta tus JPG.")
 
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a> <a href="{S2}" class="silva-step-btn">Step 03 &#8594;</a>'

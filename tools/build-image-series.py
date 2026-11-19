@@ -183,6 +183,18 @@ def note(t):
     # overflow:hidden = its own BFC, so it never slides under a right-floated content photo.
     return (f'<div style="background:rgba(0,184,184,0.10);border:1px solid rgba(0,184,184,0.30);border-left:4px solid #00b8b8;padding:11px 14px;margin:8px 0;overflow:hidden;font-size:12pt;color:rgba(255,255,255,0.90);"><strong>{t}</strong></div>')
 
+def cs_note_12up(es):
+    # STANDARD 12-Up contact-sheet disclaimer (mirrors silva_framework; this builder imports selectively).
+    if es:
+        return note("12-Up es solo el nombre de la plantilla, no un l&iacute;mite. Pon toda tu toma, sea menos o m&aacute;s de 12 (Lightroom agrega p&aacute;ginas si tienes m&aacute;s). Entr&eacute;gala como un JPG de alta resoluci&oacute;n.")
+    return note("12-Up is just the template name, not a limit. Put your whole take on it, whether that is fewer or more than 12 (Lightroom just adds pages if you have more). Turn it in as a high-resolution JPG.")
+
+def cs_note_6up(es):
+    # STANDARD 6-Up contact-sheet disclaimer (mirrors silva_framework; this builder imports selectively).
+    if es:
+        return note("6-Up es solo el nombre de la plantilla, no un l&iacute;mite. Pon solo tus im&aacute;genes terminadas, la cantidad que piden tus Entregables. Los espacios vac&iacute;os est&aacute;n bien. Entr&eacute;gala como un JPG de alta resoluci&oacute;n.")
+    return note("6-Up is just the template name, not a limit. Put in only your finished images, the number your Deliverables ask for. Empty spots are fine. Turn it in as a high-resolution JPG.")
+
 def framed(src,alt):
     return (f'<div style="background:linear-gradient(135deg,#00b8b8 0%,rgba(0,184,184,0.08) 100%);padding:2px;margin:6px 0 4px;">'
       f'<img src="{src}" alt="{alt}" style="display:block;width:100%;height:auto;" /></div>')
@@ -617,7 +629,8 @@ def step01():
             ("Select your images:","select the photos from your imported series."),
             ("Use the 12-Up layout:","in the Print module, choose the 12-Up contact sheet."),
             ("Save the page:","export the contact sheet as a high-resolution JPG to turn in."),
-        ]))
+        ])
+        + cs_note_12up(False))
     en+=deliverables_box(False,
         [("1 contact sheet:","your 12-image contact sheet (high-resolution JPG), showing your imported series, uploaded to this Canvas assignment.")])
 
@@ -663,7 +676,8 @@ def step01():
             ("Selecciona tus im&aacute;genes:","elige las fotos de tu serie importada."),
             ("Usa el dise&ntilde;o de 12:","en el m&oacute;dulo Imprimir, elige la hoja de contactos de 12."),
             ("Guarda la p&aacute;gina:","exporta la hoja de contactos como JPG de alta resoluci&oacute;n para entregar."),
-        ]))
+        ])
+        + cs_note_12up(True))
 
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Overview</a><a href="{S2}" class="silva-step-btn">Step 02 &#8594;</a>'
     bottom=f'<div class="silva-bottom-nav"><a href="{OVER}" class="silva-bottom-btn">&#8592; Overview</a><a href="{S2}" class="silva-bottom-btn">Step 02 &#8594;</a></div>'
@@ -695,7 +709,8 @@ def step02():
             ("Select your 6:","select your 6 edited images."),
             ("Use the 6-Up layout:","in the Print module, choose the 6-Up contact sheet."),
             ("Save the page:","export the contact sheet as a high-resolution JPG to turn in."),
-        ]))
+        ])
+        + cs_note_6up(False))
     en+=deliverables_box(False,
         [("1 contact sheet:","your 6-image contact sheet (high-resolution JPG), showing your 6 edited selections."),
          ("6 JPGs:","your 6 edited photos, exported as high-resolution JPGs (see the export steps below). Upload all of this to this Canvas assignment.")])
@@ -729,7 +744,8 @@ def step02():
             ("Selecciona tus 6:","elige tus 6 im&aacute;genes editadas."),
             ("Usa el dise&ntilde;o de 6:","en el m&oacute;dulo Imprimir, elige la hoja de contactos de 6."),
             ("Guarda la p&aacute;gina:","exporta la hoja de contactos como JPG de alta resoluci&oacute;n para entregar."),
-        ]))
+        ])
+        + cs_note_6up(True))
     es+=export_box(True)
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 01</a><a href="{S3}" class="silva-step-btn">Step 03 &#8594;</a>'

@@ -418,7 +418,7 @@ def build_course(c):
                 ("Use your 6-up template:","in the Print module, choose your <strong>6-up contact sheet template</strong> and load your photos into it."),
                 ("Print to file:","use Print to File so it saves as a high-resolution JPG, then upload it here."),
             ])
-            + note("Contact sheets are always turned in as a high-resolution JPG."))
+            + cs_note_6up(False))
         en+=card("EXPORT &amp; RENAME / ONE JPG PER PHOTO","Export Each Photo, Named by Concept",
             steps([
                 ("Export full-resolution JPGs:",f"go to File &rsaquo; Export and export your {NF} edited photos as full-resolution JPGs into your project folder."),
@@ -458,7 +458,7 @@ def build_course(c):
                 ("Usa tu plantilla de 6:","en el m&oacute;dulo Print, elige tu <strong>plantilla de hoja de contactos de 6</strong> y carga tus fotos."),
                 ("Imprime a archivo:","usa Print to File para que se guarde como un JPG de alta resoluci&oacute;n, luego s&uacute;belo aqu&iacute;."),
             ])
-            + note("Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n."))
+            + cs_note_6up(True))
         es+=card("EXPORTA Y RENOMBRA / UN JPG POR FOTO","Exporta Cada Foto, Nombrada por Concepto",
             steps([
                 ("Exporta JPG a resoluci&oacute;n completa:",f"ve a File &rsaquo; Export y exporta tus {NF} fotos editadas como JPG a resoluci&oacute;n completa a la carpeta de tu proyecto."),

@@ -267,7 +267,7 @@ def step01():
             ("Use the 12-Up preset:","in the Print module, choose the 12-Up contact sheet preset."),
             ("Print to JPG:","use Print to File so it saves as a high-resolution JPG, then upload it here."),
         ])
-        + note("Contact sheets are always turned in as a high-resolution JPG."))
+        + cs_note_12up(False))
     en+=next_up("UP NEXT &middot; STEP 03 - Cull, Edit &amp; Submit","Pick your best three, run and refine your preset, and turn in a 6-Up plus three polished portraits.")
 
     es=banner("M&oacute;dulo 07 &bull; Paso 02","Captura y Hoja de Contactos","Captura a tu compa&ntilde;ero en RAW en f/8, f/4 y f/2, y arma una hoja de contactos de 12.","#top","Back to English", HICON_PHOTO_WALK)
@@ -302,7 +302,7 @@ def step01():
             ("Usa el ajuste de 12:","en el m&oacute;dulo Print, elige el ajuste de hoja de contactos de 12."),
             ("Imprime a JPG:","usa Print to File para que se guarde como un JPG de alta resoluci&oacute;n, luego s&uacute;belo aqu&iacute;."),
         ])
-        + note("Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n."))
+        + cs_note_12up(True))
     es+=next_up("SIGUIENTE &middot; PASO 03 - Selecciona, Edita y Entrega","Elige tus tres mejores, corre y refina tu preset, y entrega una hoja de 6 m&aacute;s tres retratos pulidos.")
 
     stepnav=f'<a href="{OVER}" class="silva-step-btn">&#8592; Step 01</a> <a href="{S2}" class="silva-step-btn">Step 03 &#8594;</a>'
@@ -342,7 +342,7 @@ def step02():
             ("Export the 3 JPGs:","go to File &rsaquo; Export and export your three polished portraits as high-resolution JPGs into your project folder."),
             ("Upload 4 files:","turn in the 6-Up contact sheet plus the three polished JPGs."),
         ])
-        + note("Contact sheets are always turned in as a high-resolution JPG."))
+        + cs_note_6up(False))
     en+=next_up("UP NEXT &middot; STEP 04 - Reflection","Tell whether your preset held up this session and what you changed.")
 
     es=banner("M&oacute;dulo 07 &bull; Paso 03","Selecciona, Edita y Entrega","Elige tus tres mejores, corre y refina tu preset, y entrega una hoja de 6 m&aacute;s tres retratos pulidos.","#top","Back to English", HICON_PHOTO_WALK)
@@ -376,7 +376,7 @@ def step02():
             ("Exporta los 3 JPG:","ve a File &rsaquo; Export y exporta tus tres retratos pulidos como JPG de alta resoluci&oacute;n a la carpeta de tu proyecto."),
             ("Sube 4 archivos:","entrega la hoja de contactos de 6 m&aacute;s los tres JPG pulidos."),
         ])
-        + note("Las hojas de contactos siempre se entregan como un JPG de alta resoluci&oacute;n."))
+        + cs_note_6up(True))
     es+=next_up("SIGUIENTE &middot; PASO 04 - Reflexi&oacute;n","Cuenta si tu preset funcion&oacute; esta sesi&oacute;n y qu&eacute; cambiaste.")
 
     stepnav=f'<a href="{S1}" class="silva-step-btn">&#8592; Step 02</a> <a href="{S3}" class="silva-step-btn">Step 04 &#8594;</a>'
