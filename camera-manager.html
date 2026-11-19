@@ -1060,7 +1060,7 @@
   .card-slot.sel{background:var(--teal);color:#04110f;border-color:var(--teal);}
   .card-slot.taken{opacity:.45;cursor:not-allowed;background:rgba(245,179,1,.12);border-color:rgba(245,179,1,.3);color:#ffd889;}
   .gthumb.csec-thumb{width:28px;height:28px;flex:0 0 auto;margin:0 9px 0 2px;vertical-align:middle;}
-  .wallet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:stretch;}   /* FIXED 3 across to mirror the physical 3x3 Pixel Pocket Rocket wallet; slots never reflow or re-sort (Chris 2026-11-13) */
+  .wallet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr;gap:10px;align-items:stretch;}   /* FIXED 3 across to mirror the physical 3x3 Pixel Pocket Rocket wallet; slots never reflow or re-sort (Chris 2026-11-13). grid-auto-rows:1fr = EVERY row the same height so EVERY tile is identical, empty or filled (Chris 2026-11-19, non-negotiable). */
   .wallet-grid .wslot{height:100%;}
   .wslot{background:rgba(0,0,0,.3);border:1px solid var(--line-soft);border-left:4px solid rgba(160,180,180,.3);padding:11px 12px;display:flex;flex-direction:column;align-items:stretch;gap:9px;min-height:74px;}
   .wslot-top{display:flex;flex-direction:row;align-items:flex-start;gap:11px;width:100%;}   /* thumb + info; the Card returned button sits below, centered across the whole tile */
@@ -1110,7 +1110,8 @@
   .cwviewport{overflow:hidden;width:100%;}
   .cwtrack{display:flex;width:200%;transition:transform .34s cubic-bezier(.4,0,.2,1);will-change:transform;}
   .cwrap[data-cwactive="2"] .cwtrack{transform:translateX(-50%);}
-  .cwpane{flex:0 0 50%;width:50%;min-width:0;}
+  .cwpane{flex:0 0 50%;width:50%;min-width:0;display:flex;flex-direction:column;}
+  .cwpane>.wallet-grid{flex:1 1 auto;min-height:0;}   /* each wallet's grid fills its pane; the flex track stretches both panes to the taller one, so BOTH wallets' tiles end up the same height (no height jump on slide, Chris 2026-11-19) */
   @media (prefers-reduced-motion:reduce){ .cwseg-ind,.cwtrack{transition:none;} }
   /* Card tile: the student NAME is the link to the one full profile; the student NUMBER sits right below it. */
   .wslot-name{font-weight:700;color:#fff;font-size:.95rem;line-height:1.2;background:none;border:0;padding:0;text-align:left;cursor:pointer;font-family:inherit;display:block;}
