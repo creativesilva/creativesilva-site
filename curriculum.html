@@ -1917,7 +1917,15 @@
       // was a POPULATED chart (student names/photos/SSA flags), not a blank template; never host
       // one until a BLANK template exists.
       documents: {
-        rollsheet: { url: "https://command.creativesilva.com/#reports", label: "Class Roll Sheet (Command Center, sign in required)" },
+        rollsheet: { url: "https://command.creativesilva.com/#reports", label: "Class Roll Sheet (Command Center, always current)" },
+        // Same roll sheet as a quick print-from-any-computer copy. This is a LINK to the PDF in
+        // Chris's PRIVATE Google Drive (file owned by creativesilva1@gmail.com, visibility PRIVATE,
+        // owner-only permission verified 2026-11-19), NOT a hosted asset. The repo only holds the
+        // opaque Drive URL; the PDF never lands in /assets/ or git history. Opening it requires
+        // Chris's Google sign-in, so the full-names roster stays FERPA-safe. If the roster is
+        // regenerated, replace THIS Drive file's contents (same file id keeps the link live) or
+        // repoint the url; the Command Center row above is always auto-current as the backstop.
+        rosterdrive: { url: "https://drive.google.com/file/d/1gZMxfMgauU4MgBSQ4xvA6F7LNn-sDDPB/view", label: "Class Roll Sheet PDF (Google Drive, sign in required)" },
         // Seating chart has student photos = PII: LOCAL-file link only, never hosted. Opens the PSD in Photoshop when the catalog is opened locally.
         seatingchart: { path: "file:///Users/riva/RIVA_CODE/01_TEACHING/Class%20Rosters%20&%20Seating%20Charts/9-22-26_Seating_Chart_Template_322-331.psd", label: "Seating Chart Template (322-331, PSD)" },
         // Substitute AERIES logins (usernames + passwords, extremely confidential): LOCAL-file
@@ -2423,6 +2431,7 @@
       // Documents sub-section
       const d = t.documents || {};
       const docRows = (d.rollsheet ? appRow(d.rollsheet.url, d.rollsheet.label) : "")
+        + (d.rosterdrive ? appRow(d.rosterdrive.url, d.rosterdrive.label) : "")
         + (d.seatingchart ? rosterRow(d.seatingchart.path, d.seatingchart.label) : "")
         + (d.subaeries ? rosterRow(d.subaeries.path, d.subaeries.label) : "")
         + (d.subplan ? wordDocRow(d.subplan.docx, d.subplan.pdf, d.subplan.label) : "")
@@ -2431,7 +2440,7 @@
         + (d.fieldtrip ? wordDocRow(d.fieldtrip.docx, d.fieldtrip.pdf, d.fieldtrip.label) : "")
         + (d.purchaseorder ? docRow(d.purchaseorder.pdf, d.purchaseorder.label) : "")
         + (d.signature ? signatureRow(d.signature.url, d.signature.label) : "");
-      const nD = [d.rollsheet, d.seatingchart, d.subaeries, d.subplan, d.bathroomlog, d.permission, d.fieldtrip, d.purchaseorder, d.signature].filter(Boolean).length;
+      const nD = [d.rollsheet, d.rosterdrive, d.seatingchart, d.subaeries, d.subplan, d.bathroomlog, d.permission, d.fieldtrip, d.purchaseorder, d.signature].filter(Boolean).length;
       const docs = docRows ? subAcc("Documents", `${nD} file${nD === 1 ? "" : "s"}`, docRows) : "";
       // Links sub-section: external sites grouped Resources + Vendors, each a Visit button.
       const lk = t.links || {};
