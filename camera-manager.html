@@ -2008,7 +2008,7 @@
   /* Full-screen lock: the card fills the whole viewport (reliable on iPad); native fullscreen rides on top where supported. */
   /* Full screen = the SAME card, enlarged: keep the card's own glass surface and let the real galaxy
      backdrop show through (raised below, via body.att-fs-on). No new background or color scheme. */
-  .attend-hub.att-fs{position:fixed;inset:0;z-index:124;margin:0;border:none;border-radius:0;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:none;}
+  .attend-hub.att-fs{position:fixed;inset:0;z-index:124;margin:0;border:none;border-radius:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;box-shadow:none;}
   .attend-hub.att-fs .camhub-head{display:none;}
   .attend-hub.att-fs .camhub-body{display:block;}
   .attend-hub.att-fs .att-body{padding:14px 16px 28px;}
@@ -2017,6 +2017,9 @@
   /* While an attendance card is full screen, lift the galaxy backdrop above the rest of the page so it
      (not the other hubs) is what shows through the card, identical to the normal view. */
   body.att-fs-on .galaxy{z-index:122;}
+  /* Lock the page behind the full-screen card: no body scroll, no drifting galaxy scrollbar behind it.
+     The card still scrolls its own content (overscroll-behavior:contain stops it chaining to the page). */
+  html.att-fs-on, body.att-fs-on{overflow:hidden;overscroll-behavior:none;}
   /* Rotate-to-portrait gate: shown while the iPad is landscape; the sheet behind frosts until he turns upright. */
   .att-rotate{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:20px;border-radius:var(--g-r-lg);background:rgba(6,16,32,.42);backdrop-filter:blur(10px) saturate(150%);-webkit-backdrop-filter:blur(10px) saturate(150%);}
   .att-rotate-card{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;max-width:320px;padding:26px 26px 28px;border-radius:var(--g-r-lg);background:var(--g-glass);border:1px solid var(--g-edge);box-shadow:var(--g-spec),0 18px 50px rgba(2,8,20,.5);}
@@ -6164,6 +6167,7 @@
     var hub=document.querySelector('.attend-hub'); if(!hub){ _lastBoardSig=null; renderBoard(); return; }
     hub.classList.toggle('att-fs', ATT_FS);
     document.body.classList.toggle('att-fs-on', ATT_FS);   // lifts the galaxy backdrop so it shows through in full screen
+    document.documentElement.classList.toggle('att-fs-on', ATT_FS);   // locks page scroll so no scrollbar drifts behind the card
     if(ATT_FS && !hub.classList.contains('open')) hub.classList.add('open');
     var body=hub.querySelector('.att-body'); if(body) body.innerHTML=attSeatingHtml(ATT_PERIOD);
     var chip=hub.querySelector('.camhub-head .csec-n'); if(chip) chip.textContent='Period '+ATT_PERIOD;
