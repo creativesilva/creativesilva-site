@@ -2564,7 +2564,11 @@
       </div>`;
     }
     // One module-document row: label + Download (reflection docs, capture lists, project folders...).
-    function docRow(d) {
+    // NOTE: named moduleDocRow, NOT docRow. There is a separate top-level docRow(url, label) above
+    // (the Teacher Resources hosted-file row, e.g. the Purchase Order). Two same-named function
+    // declarations in this one script would collide (hoisting keeps only the last), which silently
+    // broke the Purchase Order row ("undefined" label + dead Download). Keep these names distinct.
+    function moduleDocRow(d) {
       return `<div class="page-row page-row-doc">
         <a class="page-name" href="${d.file}" download>${d.label}</a>
         <span class="page-acts"><a class="pg-btn pg-view" href="${d.file}" download>Download</a></span>
@@ -2577,7 +2581,7 @@
       if (!docs.length) return "";
       return `<details class="module-acc module-docs-acc">
         <summary class="module-acc-head"><span class="module-row-name">Module Documents</span><span class="module-page-count">${docs.length}</span><span class="macc-chev"></span></summary>
-        <div class="module-acc-body">${docs.map(docRow).join("")}</div>
+        <div class="module-acc-body">${docs.map(moduleDocRow).join("")}</div>
       </details>`;
     }
     function moduleAcc(m) {
