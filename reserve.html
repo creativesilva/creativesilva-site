@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/store.css?v=56" />
-<link rel="stylesheet" href="/css/store-glass.css?v=16" />
+<link rel="stylesheet" href="/css/store-glass.css?v=17" />
 <!-- Live PVHS school calendar (next school day + the pickup/return time windows). Mirrored to creativesilva.com in production. -->
 <script src="https://creativesilva.github.io/pvhs_tools/schedule-data.js"></script>
 </head>
@@ -56,6 +56,20 @@
       </div>
     </div>
 </header>
+
+<!-- Holiday / maintenance closure notice (Chris 2026-11-19). Visible to everyone at the top of the store (no sign-in
+     needed); auto-hides on/after HOLIDAY_NOTICE_UNTIL via applyHolidayNotice(). Bilingual via the two custom i18n keys. -->
+<div class="store-notice" id="holidayNotice" role="status">
+  <div class="wrap">
+    <div class="sn-row">
+      <span class="sn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></span>
+      <div class="sn-text">
+        <span class="sn-eyebrow" data-i18n="holidayBreakEyebrow">Equipment room closed for Thanksgiving break</span>
+        <span class="sn-body" data-i18n="holidayBreakBody">All reservations for <b>Friday, November 20</b> are canceled. Over the break, Mr. Silva will carefully service every camera and kit: cleaning lenses and sensors and updating the inventory so your gear is clean, working, and accounted for. We are sorry for the trouble. Reservations start again when we return on <b>Monday, November 30</b>. Thank you for understanding. You can still reserve cameras for future dates right now.</span>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Equipment header hero: image background; controls in a dark top band (nav left, dates right) -->
 <div class="store-hero">
@@ -503,7 +517,10 @@
     'The Godox AD200 Pro II, a 200Ws pocket flash for studio-style light anywhere. Comes with the Canon trigger and a light stand. Photo 2 only.':'El Godox AD200 Pro II, un flash de bolsillo de 200Ws para luz de estudio en cualquier lugar. Incluye el disparador Canon y un tripié de luz. Solo Foto 2.',
     'A SmallRig RM 25C RGB LED panel with a Magic Arm clamp attached. Clamp the light to anything to light a scene or a product photo. Full RGB color, so you can add color too.':'Un panel LED RGB SmallRig RM 25C con un brazo mágico incluido. Sujeta la luz a cualquier cosa para iluminar una escena o una foto de producto. Color RGB completo, para agregar color también.',
     'A Canon BR-E1 wireless remote. Fire the shutter from a distance for group photos, self-portraits, and sharp long exposures without touching the camera.':'Un control remoto inalámbrico Canon BR-E1. Dispara el obturador a distancia para fotos de grupo, autorretratos y exposiciones largas nítidas sin tocar la cámara.',
-    'A stylus for the class iPads. Draw, sketch, and design right on the screen. For Digital Arts.':'Un lápiz para los iPads de la clase. Dibuja, boceta y diseña directo en la pantalla. Para Arte Digital.'
+    'A stylus for the class iPads. Draw, sketch, and design right on the screen. For Digital Arts.':'Un lápiz para los iPads de la clase. Dibuja, boceta y diseña directo en la pantalla. Para Arte Digital.',
+    // Holiday / maintenance closure banner (Chris 2026-11-19). Short custom keys; the English lives in the markup (data-i18n-en).
+    'holidayBreakEyebrow':'Sala de equipo cerrada por las vacaciones de Thanksgiving',
+    'holidayBreakBody':'Todas las reservaciones del <b>viernes 20 de noviembre</b> están canceladas. Durante las vacaciones, el Sr. Silva va a revisar con cuidado cada cámara y kit: limpiando los lentes y los sensores y actualizando el inventario para que tu equipo esté limpio, funcional y contado. Lamentamos las molestias. Las reservaciones vuelven cuando regresemos el <b>lunes 30 de noviembre</b>. Gracias por tu comprensión. Todavía puedes reservar cámaras para fechas futuras ahora mismo.'
   };
   // Fill static [data-i18n] text + placeholders for the current language; sets <html lang>.
   // Each element's original English is captured once, so EN restores it exactly (keys may be short codes)
@@ -2038,12 +2055,19 @@
   document.getElementById('footRental').onclick=function(){ openInfo(t('Rental agreement'), '<p>'+t('The equipment rental agreement will be posted here soon. Ask your teacher for a copy in the meantime.')+'</p>'); };
   document.getElementById('footProgram').onclick=function(){ openInfo(t('Digital Arts program'), '<p>'+t('Our Digital Arts program website is coming soon.')+'</p>'); };
 
+  // Holiday / maintenance closure banner (Chris 2026-11-19): shown by default, auto-hides on/after this date so it
+  // clears itself the morning reservations resume. To take it down sooner, delete the #holidayNotice markup.
+  var HOLIDAY_NOTICE_UNTIL='2026-11-30';
+  function applyHolidayNotice(){ var el=document.getElementById('holidayNotice'); if(!el) return;
+    el.style.display=(isoOf(new Date())<HOLIDAY_NOTICE_UNTIL)?'':'none'; }
+
   // ===== init =====
   // Language: wire the EN/ES toggle, then skin the page (static text + dates) for the stored choice.
   document.querySelectorAll('.lang-toggle [data-lang]').forEach(function(b){ b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); }); });
   document.querySelectorAll('.lang-globe').forEach(function(g){ g.addEventListener('click', function(){ setLang(LANG==='en'?'es':'en'); }); });   // every round globe (header + sign-in card) flips the language
   if(LANG==='es') applyDateLang();
   applyI18nStatic(); updateLangToggle();
+  applyHolidayNotice();
   renderDates();
   renderPopular();   // home view = Popular Rentals (not a category)
   refreshAccount();
