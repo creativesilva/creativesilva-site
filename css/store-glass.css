@@ -34,7 +34,7 @@ body{overflow-x:clip;}
 
 /* ---------- galaxy backdrop (the AI Studio v1.9 recipe, verbatim) ---------- */
 .galaxy{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%);}
-.galaxy-mesh{position:absolute;inset:-25%;filter:blur(40px) saturate(150%) brightness(1.1);mix-blend-mode:screen;will-change:transform;transform:translateZ(0);
+.galaxy-mesh{position:absolute;inset:-25%;filter:blur(40px) saturate(150%) brightness(1.1);background-blend-mode:screen;will-change:transform;transform:translateZ(0);
   background:
     radial-gradient(30% 22% at 29% 29%, rgba(0,184,184,.85), transparent 68%),
     radial-gradient(18% 13% at 72% 24%, rgba(229,143,245,.46), transparent 72%),
@@ -49,7 +49,7 @@ body{overflow-x:clip;}
     radial-gradient(56% 14% at 50% 84%, rgba(46,230,214,.80), transparent 70%),
     radial-gradient(30% 7% at 50% 83.5%, rgba(214,255,250,.60), transparent 72%);
   animation:galaxyDrift 34s ease-in-out infinite alternate;}
-.galaxy-glow{position:absolute;inset:0;mix-blend-mode:screen;filter:blur(1.5px);will-change:opacity;
+.galaxy-glow{position:absolute;inset:0;background-blend-mode:screen;filter:blur(1.5px);will-change:opacity;
   background:
     radial-gradient(48px 48px at 18% 12%, rgba(120,255,240,.44), transparent 68%),
     radial-gradient(44px 44px at 86% 13%, rgba(214,165,250,.42), transparent 68%),
@@ -236,6 +236,11 @@ body{overflow-x:clip;}
 .pk-cat-ic{background:#fff;}
 .pd{border-radius:var(--g-r-pill);}
 .pd.on{background:var(--g-primary);border-color:transparent;color:#04110f;}
+/* iPad-stylus self-service day picker: glass chips, teal-gradient when chosen (Chris 2026-11-09) */
+.bsd-opt{border-radius:var(--g-r-sm);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);box-shadow:var(--g-spec);}
+.bsd-opt.on{background:var(--g-primary);border-color:transparent;}
+.bsd-opt.on b,.bsd-opt.on span{color:#04110f;}
+@media (hover:hover){ .bsd-opt:hover:not(.on):not(.busy){background:var(--rollover);border-color:var(--g-teal-lt);} }
 .cal-nav,.cv-nav,.cv-dp-x{border-radius:var(--g-r-pill);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);}
 .plan-note,.rv-block,.bag-reqnote,.bag-modnote,.bsp-chosen,.bag-nodates{border-radius:var(--g-r-sm);}
 /* Drop the heavy left-accent bars on note/info boxes to match the teacher console's square-edge sweep:
@@ -369,7 +374,7 @@ body{overflow-x:clip;}
 .unit-pick{text-align:center;}
 .unit-pick-lab{text-align:center;}
 .uw{position:relative;height:150px;max-width:150px;margin:2px auto 0;}
-.uw-scroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;
+.uw-scroll{height:100%;overflow-y:auto;overflow-x:hidden;touch-action:pan-y;overscroll-behavior:contain;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;
   -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 26%,#000 74%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 26%,#000 74%,transparent 100%);}
 .uw-scroll::-webkit-scrollbar{display:none;width:0;height:0;}
 .uw-pad{height:53px;flex:0 0 auto;}
@@ -384,8 +389,63 @@ body{overflow-x:clip;}
 
 /* ---------- accessibility fallbacks ---------- */
 @media (prefers-reduced-motion:reduce){ .galaxy-mesh,.galaxy-glow{animation:none;} }
-@media (prefers-reduced-transparency:reduce){
-  .galaxy-mesh,.galaxy-glow{display:none;}
-  .store-nav,.prod,.catn,.hero-top .datebar,.navmenu,.toast{backdrop-filter:none;-webkit-backdrop-filter:none;}
-  .navmenu,.toast{background:rgba(9,20,40,.97);}
+/* Reduce-transparency intentionally does NOT strip the galaxy glass: the galaxy backdrop + frosted
+   panels are the brand aesthetic and must render regardless of the macOS/iOS "Reduce Transparency"
+   setting, to match the teacher console. Motion is still calmed by the reduced-motion query. (Chris 2026-11-09) */
+
+/* GALAXY ON THE PAGE BACKGROUND (Chris 2026-11-09): the .galaxy element sat at z-index:-1, which
+   Safari paints BEHIND the page background, so the galaxy never showed (flat navy) no matter the
+   blend mode. Paint the galaxy on the body background instead - it always renders, every browser.
+   html keeps its own background so the body background is NOT propagated to the canvas, letting
+   background-blend-mode:screen apply. */
+.galaxy{display:none !important;}
+body{background-image:radial-gradient(30% 22% at 29% 29%, rgba(0,184,184,.85), transparent 68%),
+    radial-gradient(18% 13% at 72% 24%, rgba(229,143,245,.46), transparent 72%),
+    radial-gradient(24% 18% at 75% 25%, rgba(78,84,214,.70), transparent 70%),
+    radial-gradient(20% 18% at 81% 45%, rgba(123,92,255,.60), transparent 72%),
+    radial-gradient(24% 19% at 79% 55%, rgba(229,143,245,.62), transparent 72%),
+    radial-gradient(34% 24% at 48% 47%, rgba(0,138,146,.70), transparent 70%),
+    radial-gradient(18% 13% at 31% 74%, rgba(229,143,245,.42), transparent 72%),
+    radial-gradient(22% 18% at 22% 58%, rgba(63,240,224,.50), transparent 72%),
+    radial-gradient(28% 22% at 66% 69%, rgba(25,211,197,.62), transparent 72%),
+    radial-gradient(22% 16% at 29% 75%, rgba(96,84,230,.48), transparent 72%),
+    radial-gradient(56% 14% at 50% 84%, rgba(46,230,214,.80), transparent 70%),
+    radial-gradient(30% 7% at 50% 83.5%, rgba(214,255,250,.60), transparent 72%), radial-gradient(48px 48px at 18% 12%, rgba(120,255,240,.44), transparent 68%),
+    radial-gradient(44px 44px at 86% 13%, rgba(214,165,250,.42), transparent 68%),
+    radial-gradient(48px 48px at 94% 52%, rgba(240,170,250,.50), transparent 68%),
+    radial-gradient(38px 38px at 16% 84%, rgba(236,160,250,.32), transparent 68%),
+    radial-gradient(9px 9px at 24% 23%, rgba(230,255,252,.95), transparent 64%),
+    radial-gradient(6px 6px at 69% 15%, rgba(232,205,255,.9), transparent 64%),
+    radial-gradient(7px 7px at 86% 44%, rgba(242,196,255,.92), transparent 64%),
+    radial-gradient(6px 6px at 80% 26%, rgba(245,200,255,.9), transparent 64%),
+    radial-gradient(6px 6px at 39% 64%, rgba(170,255,245,.9), transparent 64%),
+    radial-gradient(9px 9px at 58% 86%, rgba(200,255,248,.92), transparent 64%),
+    radial-gradient(5px 5px at 12% 70%, rgba(212,226,255,.86), transparent 64%),
+    radial-gradient(6px 6px at 92% 78%, rgba(150,255,240,.88), transparent 64%),
+    radial-gradient(3px 3px at 33% 40%, rgba(255,255,255,.9), transparent 64%),
+    radial-gradient(3px 3px at 77% 33%, rgba(255,255,255,.86), transparent 64%),
+    radial-gradient(2px 2px at 52% 52%, rgba(255,255,255,.8), transparent 64%),
+    radial-gradient(3px 3px at 8% 34%, rgba(255,255,255,.82), transparent 64%), linear-gradient(180deg,#050816 0%,#07122a 36%,#0a1d36 68%,#0b2a3c 100%) !important;background-blend-mode:screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,screen,normal !important;background-attachment:fixed !important;background-size:100% 100vh !important;background-position:center top !important;background-repeat:no-repeat !important;}
+
+.store-hero::after{display:none !important;}  /* no header image on the student store (Chris 2026-11-09) */
+
+/* ===== Holiday / maintenance closure notice (Chris 2026-11-19): a prominent frosted-glass banner at the top of the
+   store, amber-accented so it reads as an important notice over the teal UI. JS auto-hides it after the break. ===== */
+.store-notice{position:relative;z-index:2;margin:14px 0 2px;}
+.store-notice .sn-row{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;border-radius:var(--g-r-lg);border:1px solid rgba(224,64,58,.5);border-left:4px solid #e0403a;backdrop-filter:var(--g-blur);-webkit-backdrop-filter:var(--g-blur);animation:snFlash 1.6s ease-in-out infinite;}
+/* Same pulsing red glow as an SD card that needs formatting (Chris 2026-11-19): a red ring + red wash breathe over the frosted glass. */
+@keyframes snFlash{0%,100%{background:linear-gradient(160deg,rgba(224,64,58,.10),rgba(224,64,58,.05)),var(--g-glass);box-shadow:0 0 0 0 rgba(224,64,58,0),0 10px 30px rgba(4,8,20,.28),inset 0 1px 0 rgba(255,255,255,.1);}50%{background:linear-gradient(160deg,rgba(224,64,58,.20),rgba(224,64,58,.10)),var(--g-glass);box-shadow:0 0 20px 3px rgba(224,64,58,.34),0 0 0 1px rgba(224,64,58,.45),0 10px 30px rgba(4,8,20,.28),inset 0 1px 0 rgba(255,255,255,.1);}}
+@media (prefers-reduced-motion:reduce){.store-notice .sn-row{animation:none;background:linear-gradient(160deg,rgba(224,64,58,.16),rgba(224,64,58,.08)),var(--g-glass);box-shadow:0 0 0 2px rgba(224,64,58,.4),0 10px 30px rgba(4,8,20,.3);}}
+.store-notice .sn-ic{flex:0 0 auto;width:30px;height:30px;color:#ff6b60;margin-top:1px;}
+.store-notice .sn-ic svg{width:100%;height:100%;display:block;}
+.store-notice .sn-text{display:flex;flex-direction:column;gap:5px;min-width:0;}
+.store-notice .sn-eyebrow{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:1rem;color:#ff6b60;line-height:1.25;}
+.store-notice .sn-body{font-size:.92rem;line-height:1.5;color:var(--g-muted);}
+.store-notice .sn-body b{color:#ffb3a6;font-weight:700;white-space:nowrap;}
+@media (max-width:640px){
+  .store-notice{margin:10px 0 0;}
+  .store-notice .sn-row{padding:13px 14px;gap:11px;}
+  .store-notice .sn-ic{width:25px;height:25px;}
+  .store-notice .sn-eyebrow{font-size:.92rem;}
+  .store-notice .sn-body{font-size:.85rem;}
 }
