@@ -1920,7 +1920,6 @@
   /* ===== Attendance Manager (Mr. Silva only, Chris 2026-11-19): a portrait roll-taker on the real seating chart. ===== */
   .att-body{padding-top:4px;}
   .att-page{position:relative;}
-  .att-sheet{transition:filter .25s ease;}
   .att-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:2px 2px 12px;}
   .att-ptabs{display:inline-flex;gap:6px;flex-wrap:wrap;}
   .att-ptab{font-family:var(--font);font-weight:700;font-size:.82rem;letter-spacing:.04em;color:var(--g-muted);background:var(--g-glass-quiet);border:1px solid var(--g-edge-soft);border-radius:var(--g-r-pill);padding:7px 13px;cursor:pointer;transition:border-color .16s,background .16s,color .16s;}
@@ -2020,19 +2019,9 @@
   /* Lock the page behind the full-screen card: no body scroll, no drifting galaxy scrollbar behind it.
      The card still scrolls its own content (overscroll-behavior:contain stops it chaining to the page). */
   html.att-fs-on, body.att-fs-on{overflow:hidden;overscroll-behavior:none;}
-  /* Rotate-to-portrait gate: shown while the iPad is landscape; the sheet behind frosts until he turns upright. */
-  .att-rotate{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:20px;border-radius:var(--g-r-lg);background:rgba(6,16,32,.42);backdrop-filter:blur(10px) saturate(150%);-webkit-backdrop-filter:blur(10px) saturate(150%);}
-  .att-rotate-card{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;max-width:320px;padding:26px 26px 28px;border-radius:var(--g-r-lg);background:var(--g-glass);border:1px solid var(--g-edge);box-shadow:var(--g-spec),0 18px 50px rgba(2,8,20,.5);}
-  .att-rotate-card b{font-family:var(--font);font-weight:700;font-size:1.05rem;letter-spacing:.02em;color:#5ff0f0;}
-  .att-rotate-card span:last-child{font-family:var(--body);font-size:.9rem;color:var(--g-muted);line-height:1.45;}
-  .att-rot-ic{width:42px;height:42px;color:#5ff0f0;animation:attRot 2.4s ease-in-out infinite;}
-  .att-rot-ic svg{width:100%;height:100%;}
-  @keyframes attRot{0%,55%,100%{transform:rotate(0)} 72%,88%{transform:rotate(-90deg)}}
-  .att-body .att-sheet{filter:blur(5px) brightness(.8);}   /* landscape default: frosted until portrait */
-  @media (orientation:portrait){ .att-rotate{display:none;} .att-body .att-sheet{filter:none;} }
-  /* Landscape (gate up): cap the page so the frosted sheet is a tidy band and the Rotate card centers in view. */
-  @media (orientation:landscape){ .att-body .att-page{max-height:72vh;overflow:hidden;border-radius:var(--g-r-lg);} }
-  @media (prefers-reduced-motion:reduce){ .att-rot-ic{animation:none;} }
+  /* Orientation gate removed (Chris 2026-11-19): the roll-taker works in any orientation now. The console's
+     primary surface is iPad landscape, so the full seating chart shows sharp in portrait AND landscape, no
+     blur, no cap, no rotate prompt. */
   @media (max-width:560px){ .att-row{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;} .att-seat{padding:7px 4px;gap:3px;} .att-av{width:30px;height:30px;font-size:.72rem;} .att-nm{font-size:.72rem;} .att-box{min-height:28px;font-size:.72rem;padding:5px 0;} }
 </style>
 </head>
@@ -6110,7 +6099,6 @@
     var present=roster.length-(tally.A+tally.T+tally.L);
     var tabs=ATT_PERIODS.map(function(P){ return '<button type="button" class="att-ptab'+(P.p===period?' on':'')+'" data-attperiod="'+P.p+'">P'+P.p+'</button>'; }).join('');
     return '<div class="att-page">'+
-      '<div class="att-rotate"><div class="att-rotate-card"><span class="att-rot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 18h6"/><path d="M2 9l2-2 2 2"/><path d="M4 7a8 8 0 0 1 8 8"/></svg></span><b>Rotate your iPad to portrait</b><span>Turn the iPad upright to take roll on the full seating chart.</span></div></div>'+
       '<div class="att-sheet'+(locked?' att-locked':'')+'">'+
         '<div class="att-head">'+
           '<div class="att-ptabs">'+tabs+'</div>'+
